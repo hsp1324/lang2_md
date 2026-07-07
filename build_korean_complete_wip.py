@@ -11,6 +11,7 @@ import build_korean_chapter1 as chapter1
 import build_korean_chapter1_natural_jamo as chapter1_natural
 import build_korean_chapter1_setup_complete as setup
 import build_korean_machine_jamo as base
+import build_korean_machine_jamo_fixedfont as fixedfont
 
 
 OUT = Path("Langrisser II (Korean Complete WIP).md")
@@ -824,6 +825,14 @@ SAFE_WIDE_UI_TERMS = {
 
 DIRECT_WIDE_UI_PATCHES: list[tuple[int, int, str]] = []
 DIRECT_TILEMAP16_PATCHES: list[tuple[int, int, str]] = []
+DIRECT_TILEBYTE_PATCHES: list[tuple[int, int, str]] = [
+    (0x9B26D, len("Player"), "아군"),
+    (0xA1089, len("Player"), "아군"),
+    (0xA2DC4, len("Player"), "아군"),
+    (0x9B278, len("Enemy"), "적군"),
+    (0xA2E53, len("Enemy"), "적군"),
+    (0x9B2A3, len("NPC"), "중립"),
+]
 EXTRA_WIDE_FIXED_PATCHES = [
     (0x1B9418, len("Warlock"), "워록"),
     (0x1B95EC, len("Warlock"), "워록"),
@@ -835,7 +844,37 @@ EXTRA_WIDE_FIXED_PATCHES = [
     (0x1BBB39, len("Warlock"), "워록"),
 ]
 ROUTE_MENU_TILE_GLYPHS: dict[str, int] = {}
-ROUTE_MENU_TILEMAP16_PATCHES: list[tuple[int, int, str]] = []
+CUSTOM_FIXED_TILE_GLYPHS: dict[str, int] = {
+    "아": 0x90,
+    "중": 0x91,
+    "립": 0x92,
+    "금": 0x93,
+    "고": 0x94,
+}
+DIALOGUE_NAME_GLYPHS = ("헤", "인")
+ROUTE_MENU_TILEMAP16_PATCHES: list[tuple[int, int, str]] = [
+    (0x1E7EC8, len("Arrange"), "배치"),
+    (0x1E7ED8, len("Reorder"), "순서"),
+    (0x1E7EE8, len("Auto-Arrange"), "자동"),
+    (0x1E7F02, len("Examine Enemy"), "적군"),
+    (0x1E7F1E, len("Sortie"), "출격"),
+]
+NAME_ENTRY_GRID_START = 0xA3948
+NAME_ENTRY_GRID_END = 0xA3ABC
+NAME_ENTRY_DONE_OFFSET = 0xA3AB8
+NAME_ENTRY_DONE_LENGTH = len("Done")
+NAME_ENTRY_GRID_TEXT_BYTES = (
+    set(range(0x30, 0x3A))
+    | set(range(0x41, 0x5B))
+    | set(range(0xB1, 0xCB))
+    | {0x2C, 0x2D, 0x3F, 0xD0, 0xD1, 0xD2, 0xD5, 0xD6, 0xD7, 0xD8}
+)
+DIALOGUE_FIXED_CODE_CANDIDATES = tuple(
+    list(range(0x98, 0xA4))
+    + list(range(0xA9, 0xB0))
+    + list(range(0xB0, 0xC0))
+    + [0xCB, 0xCC, 0xD7, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF]
+)
 NARROW_UI_GLYPHS = {
     "병",
     "사",
@@ -869,6 +908,7 @@ NARROW_UI_GLYPHS = {
     "자",
     "동",
     "적",
+    "군",
     "출",
     "격",
     "볼",
@@ -891,7 +931,7 @@ CONDITION_FIXED_GLYPHS = (
     "처",
 )
 EXPERIENCE_BAR_TILES = set(range(0xD0, 0xE8))
-DIALOGUE_ASCII_RESERVED_TEXT = "LVATDFHPMVRangeAdjust0123456789 .,!?:;-'\"/|+ADx"
+DIALOGUE_ASCII_RESERVED_TEXT = "LVATDFHPMVRangeAdjustDone0123456789 .,!?:;-'\"/|+ADx"
 
 
 def complete_wide_tilemap16_patches() -> list[tuple[int, int, str]]:
@@ -921,6 +961,8 @@ def complete_wide_tilebyte_patches() -> list[tuple[int, int, str]]:
 def complete_wide_fixed_patches() -> list[tuple[int, int, str]]:
     patches: list[tuple[int, int, str]] = []
     for offset, length, text in setup.WIDE_FIXED_PATCHES:
+        if text == "헤인":
+            continue
         if text == "전사":
             text = "전사"
         if text == "솔저":
@@ -987,15 +1029,34 @@ def collect_opening_hangul() -> list[str]:
     return chars
 
 
-def assign_vwf_codes(chars: list[str], opening_chars: list[str]) -> tuple[dict[str, int], dict[str, int]]:
+def assign_vwf_codes(
+    chars: list[str],
+    opening_chars: list[str],
+    preferred_jamo_map: dict[str, int] | None = None,
+) -> tuple[dict[str, int], dict[str, int]]:
     reserved = set(VWF_ASCII_RESERVED) | set(VWF_RESERVED)
-    pool = [code for code in range(0x21, 0x7F) if code not in reserved]
-    required = len(chars) + len(opening_chars)
-    if required > len(pool):
-        raise ValueError(f"Need {required} VWF slots, only {len(pool)} UI-safe slots")
-    jamo_map = {ch: pool[idx] for idx, ch in enumerate(chars)}
-    phrase_start = len(chars)
-    opening_map = {ch: pool[phrase_start + idx] for idx, ch in enumerate(opening_chars)}
+    if preferred_jamo_map is None:
+        pool = [code for code in range(0x21, 0x7F) if code not in reserved]
+        required = len(chars) + len(opening_chars)
+        if required > len(pool):
+            raise ValueError(f"Need {required} VWF slots, only {len(pool)} UI-safe slots")
+        jamo_map = {ch: pool[idx] for idx, ch in enumerate(chars)}
+    else:
+        missing = [ch for ch in chars if ch not in preferred_jamo_map]
+        if missing:
+            raise ValueError(f"Missing preferred VWF codes for {missing}")
+        jamo_map = {ch: preferred_jamo_map[ch] for ch in chars}
+        bad_codes = [code for code in jamo_map.values() if code in reserved or not (0x21 <= code < 0x7F)]
+        if bad_codes:
+            raise ValueError(f"Preferred VWF codes are not VWF-safe: {bad_codes}")
+        if len(set(jamo_map.values())) != len(jamo_map):
+            raise ValueError("Preferred VWF jamo codes collide")
+
+    used = reserved | set(jamo_map.values())
+    opening_pool = [code for code in range(0x21, 0x7F) if code not in used]
+    if len(opening_chars) > len(opening_pool):
+        raise ValueError(f"Need {len(opening_chars)} opening VWF slots, only {len(opening_pool)} available")
+    opening_map = {ch: opening_pool[idx] for idx, ch in enumerate(opening_chars)}
     return jamo_map, opening_map
 
 
@@ -1132,6 +1193,8 @@ def collect_wide_glyphs(texts: list[str], first_glyphs: tuple[str, ...] = ()) ->
             value = ord(ch)
             if value < 0x20 or ch == " " or 0x20 <= value <= 0x7E or 0xC0 <= value <= 0xDF:
                 continue
+            if ch in CUSTOM_FIXED_TILE_GLYPHS:
+                continue
             if ch not in seen:
                 seen.add(ch)
                 glyphs.append(ch)
@@ -1157,6 +1220,7 @@ def fixed_code_pool(
     if extra_reserved_tiles:
         reserved_tiles.update(extra_reserved_tiles)
     reserved_codes = set(extra_reserved_codes or ())
+    reserved_tiles.update(chapter1.map_fixed_tile(code) for code in reserved_codes)
     code_pool: list[int] = []
     used_tiles: set[int] = set()
     source_codes = list(range(0x21, 0x7F)) if ascii_only else chapter1.CODE_POOL + list(range(0xC0, 0x100))
@@ -1169,11 +1233,13 @@ def fixed_code_pool(
     return code_pool
 
 
-def assign_dialogue_fixed_codes(chars: list[str]) -> dict[str, int]:
-    code_pool = fixed_code_pool(ascii_only=True)
-    if len(chars) > len(code_pool):
-        raise ValueError(f"Need {len(chars)} dialogue glyph slots, only {len(code_pool)} ASCII-safe slots")
-    return {ch: code_pool[idx] for idx, ch in enumerate(chars)}
+def assign_dialogue_fixed_codes(chars: list[str], extra_reserved_codes: set[int] | None = None) -> dict[str, int]:
+    code_pool = fixed_code_pool(ascii_only=True, extra_reserved_codes=extra_reserved_codes)
+    glyphs = list(chars)
+    glyphs.extend(glyph for glyph in DIALOGUE_NAME_GLYPHS if glyph not in glyphs)
+    if len(glyphs) > len(code_pool):
+        raise ValueError(f"Need {len(glyphs)} dialogue glyph slots, only {len(code_pool)} ASCII-safe slots")
+    return {ch: code_pool[idx] for idx, ch in enumerate(glyphs)}
 
 
 def assign_extended_fixed_codes(
@@ -1256,6 +1322,17 @@ def patch_extended_fixed_font(
             raise ValueError(f"unsupported fixed glyph width for {glyph!r}: {codes}")
 
 
+def patch_custom_fixed_tiles(rom: bytearray, used_tiles: dict[int, str] | None = None) -> None:
+    if used_tiles is None:
+        used_tiles = {}
+    for glyph, tile in CUSTOM_FIXED_TILE_GLYPHS.items():
+        if tile in used_tiles and used_tiles[tile] != glyph:
+            raise ValueError(f"custom tile collision: {glyph!r} and {used_tiles[tile]!r} -> 0x{tile:02x}")
+        used_tiles[tile] = glyph
+        tile_off = chapter1.FIXED_FONT_BASE + tile * chapter1.FIXED_TILE_SIZE
+        rom[tile_off : tile_off + chapter1.FIXED_TILE_SIZE] = render_narrow_fixed_glyph(glyph)
+
+
 def patch_wide_text_mixed_at(
     rom: bytearray, offset: int, length: int, text: str, code_map: dict[str, tuple[int, ...]]
 ) -> None:
@@ -1289,6 +1366,8 @@ def encode_mixed_tile_ids(text: str, code_map: dict[str, tuple[int, ...]]) -> li
     for ch in text:
         if ch == " ":
             tiles.append(0x20)
+        elif ch in CUSTOM_FIXED_TILE_GLYPHS:
+            tiles.append(CUSTOM_FIXED_TILE_GLYPHS[ch])
         elif 0x20 <= ord(ch) <= 0x7E:
             tiles.append(chapter1.map_fixed_tile(ord(ch)))
         else:
@@ -1322,6 +1401,8 @@ def route_menu_tile_ids(text: str, code_map: dict[str, tuple[int, ...]]) -> list
     for ch in text:
         if ch == " ":
             tiles.append(0x20)
+        elif ch in CUSTOM_FIXED_TILE_GLYPHS:
+            tiles.append(CUSTOM_FIXED_TILE_GLYPHS[ch])
         elif ch in ROUTE_MENU_TILE_GLYPHS:
             tiles.append(ROUTE_MENU_TILE_GLYPHS[ch])
         elif 0x20 <= ord(ch) <= 0x7E:
@@ -1351,6 +1432,31 @@ def patch_route_menu(rom: bytearray, code_map: dict[str, tuple[int, ...]]) -> in
     patched = 0
     for offset, length, text in ROUTE_MENU_TILEMAP16_PATCHES:
         patch_route_menu_tilemap16_at(rom, offset, length, text, code_map)
+        patched += 1
+    return patched
+
+
+def patch_name_entry_display(rom: bytearray, code_map: dict[str, tuple[int, ...]]) -> int:
+    patched = 0
+    for offset in range(NAME_ENTRY_GRID_START, NAME_ENTRY_GRID_END):
+        if NAME_ENTRY_DONE_OFFSET <= offset < NAME_ENTRY_DONE_OFFSET + NAME_ENTRY_DONE_LENGTH:
+            continue
+        if rom[offset] in NAME_ENTRY_GRID_TEXT_BYTES:
+            rom[offset] = 0x20
+            patched += 1
+
+    # Keep the default first initial visible. The Done command stays byte-for-byte
+    # original because the name-entry logic uses this script for selection.
+    # The selection table remains original, so the existing input flow still works.
+    rom[NAME_ENTRY_GRID_START] = ord("A")
+    return patched + 1
+
+
+def patch_dialogue_name_tables(rom: bytearray, dialogue_code_map: dict[str, int]) -> int:
+    hein = bytes([dialogue_code_map["헤"], dialogue_code_map["인"], 0x20, 0x20])
+    patched = 0
+    for offset in (0x1B8E22, 0x1B9C21, 0x1BC1F5):
+        rom[offset : offset + len("Hein")] = hein
         patched += 1
     return patched
 
@@ -1449,6 +1555,7 @@ def apply_full_wide_ui_patches(
     used_tiles: dict[int, str] = {}
     patch_extended_fixed_font(rom, condition_code_map, used_tiles)
     patch_extended_fixed_font(rom, code_map, used_tiles)
+    patch_custom_fixed_tiles(rom, used_tiles)
     patches = complete_wide_fixed_patches()
     patches.extend(build_search_ui_patches(source_rom))
     seen: set[tuple[int, int]] = set()
@@ -1465,6 +1572,9 @@ def apply_full_wide_ui_patches(
         applied += 1
     for offset, length, text in DIRECT_TILEMAP16_PATCHES:
         patch_mixed_tilemap16_at(rom, offset, length, text, code_map)
+        applied += 1
+    for offset, length, text in DIRECT_TILEBYTE_PATCHES:
+        patch_mixed_tilebytes_at(rom, offset, length, text, code_map)
         applied += 1
     for offset, length, text in complete_wide_tilemap16_patches():
         patch_mixed_tilemap16_at(rom, offset, length, text, code_map)
@@ -1489,7 +1599,10 @@ def main() -> int:
 
     vwf_chars = collect_vwf_jamo(records)
     opening_chars = collect_opening_hangul()
+    vwf_reserved = set(VWF_ASCII_RESERVED) | set(VWF_RESERVED)
+    dialogue_code_map = assign_dialogue_fixed_codes(vwf_chars, extra_reserved_codes=vwf_reserved)
     vwf_code_map, opening_code_map = assign_vwf_codes(vwf_chars, opening_chars)
+    dialogue_fixed_tiles = {chapter1.map_fixed_tile(code) for code in dialogue_code_map.values()}
 
     ui_patch_texts = [text for _, _, text in complete_wide_fixed_patches()]
     ui_patch_texts.extend(SAFE_WIDE_UI_TERMS.values())
@@ -1497,8 +1610,15 @@ def main() -> int:
     ui_patch_texts.extend(text for _, _, text in complete_wide_tilemap16_patches())
     ui_patch_texts.extend(text for _, _, text in complete_wide_tilebyte_patches())
     ui_patch_texts.extend(text for _, _, text in DIRECT_TILEMAP16_PATCHES)
+    ui_patch_texts.extend(text for _, _, text in DIRECT_TILEBYTE_PATCHES)
+    ui_patch_texts.extend(text for _, _, text in ROUTE_MENU_TILEMAP16_PATCHES)
     wide_chars = collect_wide_glyphs(ui_patch_texts)
-    wide_code_map, condition_code_map = assign_extended_fixed_codes(wide_chars, CONDITION_FIXED_GLYPHS)
+    wide_code_map, condition_code_map = assign_extended_fixed_codes(
+        wide_chars,
+        CONDITION_FIXED_GLYPHS,
+        extra_reserved_codes=set(dialogue_code_map.values()),
+        extra_reserved_tiles=dialogue_fixed_tiles,
+    )
 
     rom = bytearray(source_rom)
     font_vwf = ImageFont.truetype(str(base.FONT_PATH), 16 * 8)
@@ -1525,13 +1645,16 @@ def main() -> int:
         rom[font_cursor:cursor_end] = glyph
         font_cursor = cursor_end + (cursor_end & 1)
 
+    font_fixed_dialogue = ImageFont.truetype(str(base.FONT_PATH), 8 * 8)
+    fixed_dialogue_mapped = fixedfont.patch_fixed_dialogue_font(rom, dialogue_code_map, font_fixed_dialogue)
+
     old_to_new: dict[int, int] = {}
     script_cursor = base.SCRIPT_BASE
     rom[base.SCRIPT_BASE : base.SCRIPT_LIMIT] = b"\xff" * (base.SCRIPT_LIMIT - base.SCRIPT_BASE)
     for record in records:
         old = int(str(record["address"]), 16)
         prefix = bytes.fromhex(str(record["prefix"]))
-        encoded = prefix + encode_vwf_text(str(record["translation"]), vwf_code_map) + b"\xff\xff"
+        encoded = prefix + encode_vwf_text(str(record["translation"]), dialogue_code_map) + b"\xff\xff"
         old_to_new[old] = script_cursor
         rom[script_cursor : script_cursor + len(encoded)] = encoded
         script_cursor += len(encoded)
@@ -1568,12 +1691,14 @@ def main() -> int:
         raise ValueError(f"script overflow: 0x{data_cursor:x} >= 0x{base.SCRIPT_LIMIT:x}")
 
     ui_patches = apply_full_wide_ui_patches(rom, source_rom, wide_code_map, condition_code_map)
+    dialogue_name_patches = patch_dialogue_name_tables(rom, dialogue_code_map)
     combined_condition_map = {**wide_code_map, **condition_code_map}
     condition_text_patches = patch_condition_texts(rom, combined_condition_map)
     condition_heading_patches = patch_condition_headings(rom, condition_code_map)
     condition_label_patches = patch_condition_screen_labels(rom, combined_condition_map)
     condition_number_patches = patch_condition_number_loop(rom)
     route_menu_patches = patch_route_menu(rom, combined_condition_map)
+    name_entry_patches = patch_name_entry_display(rom, combined_condition_map)
 
     base.update_checksum_and_header(rom)
     OUT.write_bytes(rom)
@@ -1583,7 +1708,6 @@ def main() -> int:
         for record in records
         if re.search(r"[A-Za-z]{2,}", str(record["translation"]))
     ]
-    vwf_reserved = set(VWF_ASCII_RESERVED) | set(VWF_RESERVED)
     vwf_pool_size = len(set(range(0x21, 0x7F)) - vwf_reserved)
     print(f"wrote {OUT} ({len(rom)} bytes)")
     print(f"records: {len(records)}")
@@ -1595,11 +1719,14 @@ def main() -> int:
     )
     print(f"wide UI glyphs: {len(wide_chars)} / condition glyphs {len(CONDITION_FIXED_GLYPHS)} / tile slots {fixed_slots}")
     print(f"wide UI patches: {ui_patches}")
+    print(f"fixed dialogue tiles patched: {len(fixed_dialogue_mapped)}")
+    print(f"dialogue name patches: {dialogue_name_patches}")
     print(f"condition label patches: {condition_label_patches}")
     print(f"condition number patches: {condition_number_patches}")
     print(f"condition text patches: {condition_text_patches}")
     print(f"condition heading patches: {condition_heading_patches}")
     print(f"route menu patches: {route_menu_patches}")
+    print(f"name entry display patches: {name_entry_patches}")
     print(f"dialogue English residue records: {len(english_residue)}")
     print(f"font relocated: 0x{base.RELOCATED_BITMAP_TABLE:x}-0x{font_cursor:x}")
     print(f"script: 0x{base.SCRIPT_BASE:x}-0x{script_cursor:x}")
