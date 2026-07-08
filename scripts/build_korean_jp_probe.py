@@ -290,7 +290,7 @@ CONDITION_SCREENS = [
 ]
 
 ITEM_NAME_PATCHES = [
-    "나이프",
+    "단검",
     "워해머",
     "그레이트소드",
     "완드",
@@ -331,7 +331,7 @@ ITEM_NAME_PATCHES = [
 ]
 
 ITEM_DESCRIPTION_PATCHES = [
-    "호신용 나이프\nAT+1",
+    "호신용 단검\nAT+1",
     "묵직한 워해머\nAT+2",
     "그레이트소드\nAT+4",
     "마력을 높이는 완드\n사거리+2 마법+1",
