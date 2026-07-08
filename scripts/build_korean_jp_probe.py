@@ -36,11 +36,25 @@ SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 CLASS_BYTE_POINTER_TABLE = 0x05E6D8
 CLASS_BYTE_RECORD_COUNT = 156
+DEFAULT_HERO_NAME_OFFSET = 0x061AC5
 
 SPACE_GLYPH = 0x0054
 CUSTOM_GLYPH_START = 0x0260
 CUSTOM_GLYPH_END = 0x07FF
-CUSTOM_GLYPH_RESERVED = {0x039C}
+CUSTOM_GLYPH_RESERVED = {0x039C, 0x03B3}
+DEFAULT_HERO_NAME_CODES = {
+    "엘": 0x80,
+    "윈": 0x81,
+}
+NAME_ENTRY_REUSED_GLYPH_CODES = {
+    "엘": 0x0003,
+    "윈": 0x002A,
+}
+OPENING_PROBE_GLYPH_CODES = {
+    "후": 0x001D,  # フ
+}
+OPENING_PROBE_BLANK_GLYPH_CODES = [0x0021]  # ッ
+OPENING_SPACE_GLYPH = 0x03B3
 CLASS_BYTE_GLYPH_CODES = [
     *range(0x01, 0x20),
     *range(0x21, 0x7F),
@@ -176,6 +190,9 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x97656: "파이어스",
 }
 
+NAME_ENTRY_DEFAULT_WORD_OFFSET = 0x0A3B0C
+NAME_ENTRY_DEFAULT_WORDS = 5
+
 DIRECT_FIXED_STRING_PATCHES = {
     0x9702C: (4, "출격준비"),
     0x97034: (4, "용병고용"),
@@ -191,6 +208,43 @@ DIRECT_FIXED_STRING_PATCHES = {
     0x97078: (2, "소환"),
     0x9707C: (2, "치료"),
     0x97080: (2, "명령"),
+    0xA37A0: (4, "시나리오"),
+    0xA37AA: (5, "합계"),
+    0xA37B6: (3, "턴"),
+    0xA37BE: (20, "이름을정해주세요"),
+}
+
+DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
+    0xA10E0: (5, "진군루트"),
+}
+
+OPENING_TEXT_LIST_PATCHES = OrderedDict(
+    [
+        (0xA6B20, (0x21, "후후후…")),
+        (0xA6B54, (0x2A, "알하자드… 전설의마검… 내가 바라던 무한한 힘…")),
+        (0xA6BA8, (0x40, "대륙을... 아니 세계를 모두 내 손에 넣겠다!!")),
+        (0xA6BEA, (0x40, "싸움은 아무것도 낳지 않는다. 남는 것은 슬픔뿐...")),
+        (0xA6C2A, (0x40, "하늘이... 하늘이 어두워지고 있어... 모든 것이 끝난 걸까...")),
+        (0xA6CA6, (0x40, "엘윈, 조심해. 무언가 심상치 않은 기운이 느껴져.")),
+        (0xA6CEC, (0x40, "제국군이 마을로 오고 있어! 리아나가 위험해!")),
+        (0xA6D5E, (0x40, "알겠어. 지금 바로 가자. 더 늦기 전에 막아야 해.")),
+        (0xA6DB8, (0x40, "리아나를 구하고, 이 싸움의 이유를 알아내겠어.")),
+        (0xA6DFE, (0x40, "검을 들어라. 운명은 이미 움직이기 시작했다.")),
+        (0xA6E80, (0x40, "누구도 피할 수 없는 전란의 그림자가 대륙을 덮는다.")),
+        (0xA6F02, (0x40, "그리고 성검 랑그릿사의 전설이 다시 깨어난다.")),
+    ]
+)
+
+SCENARIO0_TITLE = "시나리오 1"
+SCENARIO0_SUBTITLE = "서장"
+SCENARIO0_BODY = (
+    "엘윈은 살라스의 작은 마을에서 잠시 쉬고 있었다. "
+    "그때 헤인이 달려와 제국군의 습격과 리아나의 위기를 알렸다. "
+    "엘윈은 리아나를 구하기 위해 검을 들었다."
+)
+
+SCENARIO_TEXT_OVERRIDES = {
+    0: f"{SCENARIO0_TITLE}\n{SCENARIO0_SUBTITLE}\n{SCENARIO0_BODY}",
 }
 
 CONDITION_SCREENS = [
@@ -473,12 +527,16 @@ def glyph_list_capacity_words(data: bytes | bytearray, table_offset: int, index:
 def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont, blank_template: bytes) -> bytes:
     img = Image.new("L", (16, 16), 255)
     draw = ImageDraw.Draw(img)
-    bbox = draw.textbbox((0, 0), char, font=font)
-    w = bbox[2] - bbox[0]
-    h = bbox[3] - bbox[1]
-    x = (16 - w) // 2 - bbox[0]
-    y = (16 - h) // 2 - bbox[1] - 1
-    draw.text((x, y), char, font=font, fill=0)
+    if char == "…":
+        for x in (4, 7, 10):
+            draw.rectangle((x, 12, x + 1, 13), fill=0)
+    else:
+        bbox = draw.textbbox((0, 0), char, font=font)
+        w = bbox[2] - bbox[0]
+        h = bbox[3] - bbox[1]
+        x = (16 - w) // 2 - bbox[0]
+        y = (16 - h) // 2 - bbox[1] - 1
+        draw.text((x, y), char, font=font, fill=0)
 
     # Convert one 16x16 bitmap into the Japanese source format consumed by
     # routine 0x2C390: four 8x8 tiles, each row stored as two identical 1bpp
@@ -543,6 +601,9 @@ def make_record_encoding(text: str, glyph_by_char: dict[str, int]) -> tuple[list
         if char == "\n":
             tokens.append(0xFFFE)
             continue
+        if char == "\f":
+            tokens.extend([0xFFF7, 0x0001])
+            continue
         glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
         if glyph not in local_by_glyph:
             local_by_glyph[glyph] = len(glyphs)
@@ -604,6 +665,57 @@ def make_scenario_title_screen(text: str, glyph_by_char: dict[str, int]) -> tupl
     return glyphs, tokens
 
 
+def make_controlled_scenario_record(
+    original_tokens: list[int],
+    title: str,
+    subtitle: str,
+    body: str,
+    glyph_by_char: dict[str, int],
+) -> tuple[list[int], list[int]]:
+    glyphs: list[int] = [SPACE_GLYPH]
+    local_by_glyph = {SPACE_GLYPH: 0}
+
+    def local_index(char: str) -> int:
+        glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
+        if glyph not in local_by_glyph:
+            local_by_glyph[glyph] = len(glyphs)
+            glyphs.append(glyph)
+        return local_by_glyph[glyph]
+
+    tokens = list(original_tokens)
+    if tokens[-1] != 0xFFFF:
+        raise ValueError("scenario source record must include terminator")
+
+    fff7_params = {
+        index + 1
+        for index, token in enumerate(tokens[:-1])
+        if token == 0xFFF7 and index + 1 < len(tokens)
+    }
+
+    def fill_span(start: int, end: int, text: str) -> None:
+        width = end - start
+        if len(text) > width:
+            raise ValueError(f"controlled scenario span too short ({width}): {text!r}")
+        padded = text.center(width)
+        for pos, char in zip(range(start, end), padded):
+            tokens[pos] = local_index(char)
+
+    fill_span(1, 14, title)
+    fill_span(15, 26, subtitle)
+
+    body_chars = [char for char in body if char != "\n"]
+    body_pos = 0
+    for pos, token in enumerate(tokens):
+        if pos < 28 or pos in fff7_params or token >= 0xFF00:
+            continue
+        char = body_chars[body_pos] if body_pos < len(body_chars) else " "
+        tokens[pos] = local_index(char)
+        body_pos += 1
+    if body_pos < len(body_chars):
+        raise ValueError("controlled scenario body did not fit original record")
+    return glyphs, tokens[:-1]
+
+
 def wrap_korean(text: str, width: int = 18) -> list[str]:
     lines: list[str] = []
     for paragraph in text.split("\n"):
@@ -648,7 +760,7 @@ def fixed_text_tokens(
     return tokens
 
 
-def load_scenario_titles() -> list[str]:
+def load_scenario_texts() -> list[str]:
     src = Path("build_korean_complete_wip.py").read_text()
     module = ast.parse(src)
     for node in module.body:
@@ -659,14 +771,17 @@ def load_scenario_titles() -> list[str]:
                 descriptions = ast.literal_eval(node.value)
                 if len(descriptions) != 31:
                     raise ValueError(f"expected 31 scenario descriptions, got {len(descriptions)}")
-                titles = []
+                scenario_texts = []
                 for index, description in enumerate(descriptions):
                     lines = [line.strip() for line in description.splitlines() if line.strip()]
                     if len(lines) < 2:
                         raise ValueError(f"scenario {index + 1} has no title line")
+                    if index in SCENARIO_TEXT_OVERRIDES:
+                        scenario_texts.append(SCENARIO_TEXT_OVERRIDES[index])
+                        continue
                     title = "서장" if index == 0 else lines[1]
-                    titles.append(f"{lines[0]}\n{title}")
-                return titles
+                    scenario_texts.append(f"{lines[0]}\n{title}")
+                return scenario_texts
     raise ValueError("SCENARIO_DESCRIPTIONS not found")
 
 
@@ -703,19 +818,43 @@ def patch_conditions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
 
 
 def normalize_scenario_text(text: str) -> str:
-    normalized_lines: list[str] = []
-    for line in text.splitlines():
-        if not line.strip():
-            normalized_lines.append("")
-            continue
-        normalized_lines.extend(wrapped.center(18) for wrapped in wrap_korean(line, 18))
-    return "\n".join(normalized_lines)
+    normalized_pages: list[str] = []
+    for page in text.split("\f"):
+        normalized_lines: list[str] = []
+        for line in page.splitlines():
+            if not line.strip():
+                normalized_lines.append("")
+                continue
+            normalized_lines.extend(wrapped.center(18) for wrapped in wrap_korean(line, 18))
+        normalized_pages.append("\n".join(normalized_lines))
+    return "\f".join(normalized_pages)
 
 
 def patch_scenario(data: bytearray, index: int, text: str, glyph_by_char: dict[str, int]) -> None:
-    glyphs, tokens = make_scenario_title_screen(text, glyph_by_char)
     glyph_ptr = be32(data, SCENARIO_GLYPH_LIST_TABLE + index * 4)
     token_ptr = be32(data, SCENARIO_POINTER_TABLE + index * 4)
+    if index in SCENARIO_TEXT_OVERRIDES:
+        original_tokens = []
+        pos = token_ptr
+        while True:
+            token = be16(data, pos)
+            original_tokens.append(token)
+            pos += 2
+            if token == 0xFFFF:
+                break
+        if index == 0:
+            glyphs, tokens = make_controlled_scenario_record(
+                original_tokens,
+                SCENARIO0_TITLE,
+                SCENARIO0_SUBTITLE,
+                SCENARIO0_BODY,
+                glyph_by_char,
+            )
+        else:
+            scenario_text = normalize_scenario_text(text)
+            glyphs, tokens = make_record_encoding(scenario_text, glyph_by_char)
+    else:
+        glyphs, tokens = make_scenario_title_screen(text, glyph_by_char)
     write_word_list(
         data,
         glyph_ptr,
@@ -745,6 +884,16 @@ def patch_direct_strings(
         write_direct_string(data, offset, text, glyph_by_char)
     for offset, (max_words, text) in fixed_patches.items():
         write_fixed_direct_string(data, offset, max_words, text, glyph_by_char)
+
+
+def patch_route_title(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    for offset, (max_words, text) in DIRECT_FIXED_ROUTE_TITLE_PATCHES.items():
+        values = [glyph_by_char[char] for char in text]
+        if len(values) > max_words:
+            raise ValueError(f"route title needs {len(values)} glyphs, only {max_words}: {text!r}")
+        values.extend([OPENING_SPACE_GLYPH] * (max_words - len(values)))
+        for i, value in enumerate(values):
+            put16(data, offset + i * 2, value)
 
 
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -849,6 +998,72 @@ def patch_class_byte_table(data: bytearray) -> None:
         write_byte_string(data, ptr, values, capacity)
 
 
+def patch_default_hero_name(data: bytearray) -> None:
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    for char, code in DEFAULT_HERO_NAME_CODES.items():
+        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+
+    original_capacity = byte_string_capacity(data, DEFAULT_HERO_NAME_OFFSET)
+    values = [DEFAULT_HERO_NAME_CODES["엘"], DEFAULT_HERO_NAME_CODES["윈"]]
+    write_byte_string(data, DEFAULT_HERO_NAME_OFFSET, values, original_capacity)
+
+
+def patch_name_entry_default_word_buffer(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    values = [glyph_by_char["엘"], glyph_by_char["윈"]]
+    values.extend([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_WORDS - len(values)))
+    for i, value in enumerate(values):
+        put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
+
+
+def patch_name_entry_reused_glyphs(data: bytearray) -> None:
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    for char, code in NAME_ENTRY_REUSED_GLYPH_CODES.items():
+        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+
+    values = [
+        NAME_ENTRY_REUSED_GLYPH_CODES["엘"],
+        NAME_ENTRY_REUSED_GLYPH_CODES["윈"],
+        *([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_WORDS - 2)),
+    ]
+    for i, value in enumerate(values):
+        put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
+
+
+def patch_opening_glyph_probe(data: bytearray) -> None:
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    for char, code in OPENING_PROBE_GLYPH_CODES.items():
+        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+    for code in OPENING_PROBE_BLANK_GLYPH_CODES:
+        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        data[offset : offset + GLYPH_BYTES] = blank_template
+
+
+def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    for offset, (capacity, text) in OPENING_TEXT_LIST_PATCHES.items():
+        values = [OPENING_SPACE_GLYPH if char == " " else glyph_by_char[char] for char in text]
+        if len(values) > capacity:
+            raise ValueError(
+                f"opening text list at 0x{offset:06X} needs {len(values)} glyphs, only {capacity}: {text!r}"
+            )
+        values.extend([OPENING_SPACE_GLYPH] * (capacity - len(values)))
+        for i, value in enumerate(values):
+            put16(data, offset + i * 2, value)
+        # Keep the original terminator for records that have one immediately
+        # after the counted range. The renderer primarily uses the count, but
+        # later maintenance tools can still stop cleanly on FFFF.
+        if offset + capacity * 2 + 1 < len(data) and be16(data, offset + capacity * 2) == 0xFFFF:
+            put16(data, offset + capacity * 2, 0xFFFF)
+
+
 def update_md_checksum(data: bytearray) -> int:
     checksum = 0
     for offset in range(0x200, len(data), 2):
@@ -880,41 +1095,77 @@ def main() -> None:
         action="store_true",
         help="patch JP one-byte class/mercenary labels; experimental because shared byte slots collide with unpatched JP UI",
     )
+    parser.add_argument(
+        "--patch-default-name",
+        action="store_true",
+        help="experimental: patch the byte-string default hero name; not used by the visible JP name-entry buffer yet",
+    )
+    parser.add_argument(
+        "--patch-name-entry-default",
+        action="store_true",
+        help="experimental: patch the visible JP name-entry default name word buffer",
+    )
+    parser.add_argument(
+        "--patch-name-entry-reused-glyphs",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="experimental: render Elwin as Korean by reusing existing JP name-entry glyph slots",
+    )
+    parser.add_argument(
+        "--patch-opening-glyph-probe",
+        action="store_true",
+        help="experimental: replace JP opening フ/ッ glyphs to verify the opening font path",
+    )
     args = parser.parse_args()
 
     data = bytearray(IN_ROM.read_bytes())
-    scenario_titles = load_scenario_titles()
-    if not 0 <= args.scenario_count <= len(scenario_titles):
-        raise ValueError(f"--scenario-count must be 0..{len(scenario_titles)}")
+    scenario_texts = load_scenario_texts()
+    if not 0 <= args.scenario_count <= len(scenario_texts):
+        raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
     active_condition_chars = "" if args.skip_condition else "\n".join(
         line for screen in CONDITION_SCREENS for line in screen
     )
-    active_descriptions = [] if args.skip_scenarios else scenario_titles[: args.scenario_count]
+    active_descriptions = [] if args.skip_scenarios else scenario_texts[: args.scenario_count]
     direct_patches = {} if args.skip_direct else dict(DIRECT_STRING_PATCHES)
     fixed_patches = {} if args.skip_direct else dict(DIRECT_FIXED_STRING_PATCHES)
+    route_title_patches = {} if args.skip_direct else dict(DIRECT_FIXED_ROUTE_TITLE_PATCHES)
     if args.include_unsafe_direct_names:
         direct_patches.update(UNSAFE_DIRECT_NAME_PATCHES)
     active_direct_strings = list(direct_patches.values())
     active_fixed_strings = [text for _, text in fixed_patches.values()]
+    active_route_title_strings = [text for _, text in route_title_patches.values()]
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
+    active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,
         *active_descriptions,
         *active_direct_strings,
         *active_fixed_strings,
+        *active_route_title_strings,
         *active_item_names,
         *active_item_descriptions,
+        *active_opening_texts,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
+    if args.patch_default_name:
+        patch_default_hero_name(data)
+    if args.patch_name_entry_default:
+        patch_name_entry_default_word_buffer(data, glyph_by_char)
+    if args.patch_name_entry_reused_glyphs:
+        patch_name_entry_reused_glyphs(data)
+    if args.patch_opening_glyph_probe:
+        patch_opening_glyph_probe(data)
+    patch_opening_text_lists(data, glyph_by_char)
     if args.patch_class_byte_table:
         patch_class_byte_table(data)
     if not args.skip_condition:
         patch_conditions(data, glyph_by_char)
     if not args.skip_scenarios:
-        patch_scenarios(data, scenario_titles[: args.scenario_count], glyph_by_char)
+        patch_scenarios(data, scenario_texts[: args.scenario_count], glyph_by_char)
     if not args.skip_direct:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches)
+        patch_route_title(data, glyph_by_char)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)
