@@ -10,8 +10,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 
-DEFAULT_ROM = Path("Langrisser II (Japan).md")
-OUT_DIR = Path("analysis_tiles/jpfont_probe")
+DEFAULT_ROM = Path("roms/original/Langrisser II (Japan).md")
+OUT_DIR = Path("captures/analysis/jpfont_probe")
 
 JP_FONT_BASE = 0x40000
 CONDITION_TABLE = 0x98D7A

@@ -1,6 +1,7 @@
 # ROM binaries and generated ROM builds. The .md extension is Mega Drive ROM
 # here, not Markdown.
 /Langrisser II*.md
+/roms/**/*.md
 
 # Emulator binaries, downloaded archives, and external reference packages.
 /tools/blastem/
@@ -10,11 +11,12 @@
 # Test captures and analysis output.
 /run*/
 /analysis_tiles/
+/captures/
 *.xwd
 *.log
 
 # Python/runtime cache.
 /__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
-

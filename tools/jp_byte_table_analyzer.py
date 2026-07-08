@@ -8,9 +8,9 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 
-JP_ROM = Path("Langrisser II (Japan).md")
-EN_ROM = Path("Langrisser II (English).md")
-OUT_DIR = Path("analysis_tiles/jp_byte_tables")
+JP_ROM = Path("roms/original/Langrisser II (Japan).md")
+EN_ROM = Path("roms/original/Langrisser II (English).md")
+OUT_DIR = Path("captures/analysis/jp_byte_tables")
 
 CLASS_POINTER_TABLE = 0x05E6D8
 CLASS_POINTER_COUNT = 156

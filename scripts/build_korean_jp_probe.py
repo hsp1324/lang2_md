@@ -10,8 +10,8 @@ import unicodedata
 from PIL import Image, ImageDraw, ImageFont
 
 
-IN_ROM = Path("Langrisser II (Japan).md")
-OUT_ROM = Path("Langrisser II (Korean JP Probe).md")
+IN_ROM = Path("roms/original/Langrisser II (Japan).md")
+OUT_ROM = Path("roms/builds/Langrisser II (Korean JP Probe).md")
 FONT_PATH = Path("tools/fonts/Galmuri9.ttf")
 
 JP_FONT_BASE = 0x40000
@@ -764,6 +764,7 @@ def main() -> None:
     patch_item_names(data, glyph_by_char)
     patch_item_descriptions(data, glyph_by_char)
     checksum = update_md_checksum(data)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_bytes(data)
     print(f"wrote {args.out}")
     used = sorted(glyph_by_char.values())
