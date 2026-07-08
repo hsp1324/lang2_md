@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from collections import OrderedDict
+import ast
 from pathlib import Path
 import unicodedata
 
@@ -21,8 +22,9 @@ SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 
 SPACE_GLYPH = 0x0054
-CUSTOM_GLYPH_START = 0x03A0
+CUSTOM_GLYPH_START = 0x0260
 CUSTOM_GLYPH_END = 0x03FF
+CUSTOM_GLYPH_RESERVED = {0x039C}
 
 
 def be16(data: bytes | bytearray, offset: int) -> int:
@@ -88,12 +90,16 @@ def glyph_list_capacity_words(data: bytes | bytearray, table_offset: int, index:
     start = be32(data, table_offset + index * 4)
     if index + 1 < record_count:
         end = be32(data, table_offset + (index + 1) * 4)
+    elif table_offset == SCENARIO_GLYPH_LIST_TABLE:
+        end = SCENARIO_POINTER_TABLE
+    elif table_offset == CONDITION_GLYPH_LIST_TABLE:
+        end = CONDITION_POINTER_TABLE
     else:
         end = start + 0x100
     return (end - start) // 2
 
 
-def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont) -> bytes:
+def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont, blank_template: bytes) -> bytes:
     img = Image.new("L", (16, 16), 255)
     draw = ImageDraw.Draw(img)
     bbox = draw.textbbox((0, 0), char, font=font)
@@ -106,13 +112,14 @@ def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont) -> bytes:
     # Convert one 16x16 bitmap into the Japanese source format consumed by
     # routine 0x2C390: four 8x8 tiles, each row stored as two identical 1bpp
     # planes so the resulting 2bpp pixel is solid dark.
-    out = bytearray(GLYPH_BYTES)
+    out = bytearray(blank_template)
     for tile in range(4):
         tx = tile % 2
         ty = tile // 2
         for row in range(8):
-            high = 0
-            low = 0
+            source_row = tile * 8 + row
+            high = out[source_row * 2]
+            low = out[source_row * 2 + 1]
             for x in range(8):
                 px = tx * 8 + x
                 py = ty * 8 + row
@@ -120,7 +127,6 @@ def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont) -> bytes:
                 if dark:
                     high |= 1 << (7 - x)
                     low |= 1 << (7 - x)
-            source_row = tile * 8 + row
             out[source_row * 2] = high
             out[source_row * 2 + 1] = low
     return bytes(out)
@@ -139,16 +145,22 @@ def collect_chars(*texts: str) -> list[str]:
 
 
 def install_custom_glyphs(data: bytearray, chars: list[str]) -> dict[str, int]:
-    available = CUSTOM_GLYPH_END - CUSTOM_GLYPH_START + 1
-    if len(chars) > available:
-        raise ValueError(f"need {len(chars)} custom glyphs, only {available} reserved slots")
+    glyph_ids = [
+        glyph_id
+        for glyph_id in range(CUSTOM_GLYPH_START, CUSTOM_GLYPH_END + 1)
+        if glyph_id not in CUSTOM_GLYPH_RESERVED
+    ]
+    if len(chars) > len(glyph_ids):
+        raise ValueError(f"need {len(chars)} custom glyphs, only {len(glyph_ids)} reserved slots")
     font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     mapping: dict[str, int] = {}
     for i, char in enumerate(chars):
-        glyph_id = CUSTOM_GLYPH_START + i
+        glyph_id = glyph_ids[i]
         mapping[char] = glyph_id
         offset = JP_FONT_BASE + glyph_id * GLYPH_BYTES
-        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font)
+        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
     return mapping
 
 
@@ -215,6 +227,21 @@ def wrap_korean(text: str, width: int = 18) -> list[str]:
     return lines
 
 
+def load_scenario_descriptions() -> list[str]:
+    src = Path("build_korean_complete_wip.py").read_text()
+    module = ast.parse(src)
+    for node in module.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id == "SCENARIO_DESCRIPTIONS":
+                descriptions = ast.literal_eval(node.value)
+                if len(descriptions) != 31:
+                    raise ValueError(f"expected 31 scenario descriptions, got {len(descriptions)}")
+                return descriptions
+    raise ValueError("SCENARIO_DESCRIPTIONS not found")
+
+
 def patch_condition_1(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     glyphs, tokens = make_condition_screen(glyph_by_char)
     glyph_ptr = be32(data, CONDITION_GLYPH_LIST_TABLE)
@@ -233,61 +260,52 @@ def patch_condition_1(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     )
 
 
-def patch_scenario_1(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    scenario_text = "\n".join(
-        wrap_korean(
-            """시나리오 1
-서장
+def normalize_scenario_text(text: str) -> str:
+    normalized_lines: list[str] = []
+    for line in text.splitlines():
+        if not line.strip():
+            normalized_lines.append("")
+            continue
+        normalized_lines.extend(wrap_korean(line, 18))
+    return "\n".join(normalized_lines)
 
-정처 없이 홀로 여행하던 엘윈은
-살라스의 작은 마을에서 잠시 쉬고 있었다.
-마을에는 어린 마법사 헤인이 있었고,
-둘은 곧 친구가 되었다.
 
-어느 날 헤인이 다급히 뛰어왔다.
-제국군이 마을을 습격하고,
-리아나가 위험하다는 소식이었다.
-
-엘윈은 검을 들고 그녀를 구하러 나섰다.
-
-*승리조건
-볼도 처치
-*패배조건
-엘윈 사망
-볼도 도주"""
-        )
-    )
+def patch_scenario(data: bytearray, index: int, text: str, glyph_by_char: dict[str, int]) -> None:
+    scenario_text = normalize_scenario_text(text)
     glyphs, tokens = make_record_encoding(scenario_text, glyph_by_char)
-    glyph_ptr = be32(data, SCENARIO_GLYPH_LIST_TABLE)
-    token_ptr = be32(data, SCENARIO_POINTER_TABLE)
+    glyph_ptr = be32(data, SCENARIO_GLYPH_LIST_TABLE + index * 4)
+    token_ptr = be32(data, SCENARIO_POINTER_TABLE + index * 4)
     write_word_list(
         data,
         glyph_ptr,
         glyphs,
-        glyph_list_capacity_words(data, SCENARIO_GLYPH_LIST_TABLE, 0, 31),
+        glyph_list_capacity_words(data, SCENARIO_GLYPH_LIST_TABLE, index, 31),
     )
     write_token_stream(
         data,
         token_ptr,
         tokens,
-        capacity_words(data, SCENARIO_POINTER_TABLE, 0, 31),
+        capacity_words(data, SCENARIO_POINTER_TABLE, index, 31),
     )
+
+
+def patch_scenarios(data: bytearray, descriptions: list[str], glyph_by_char: dict[str, int]) -> None:
+    for index, text in enumerate(descriptions):
+        patch_scenario(data, index, text, glyph_by_char)
 
 
 def main() -> None:
     data = bytearray(IN_ROM.read_bytes())
+    descriptions = load_scenario_descriptions()
     condition_chars = "승리조건-볼도 처치패배주인공 사망도주"
-    scenario_text = """시나리오 1 서장 정처 없이 홀로 여행하던 엘윈은 살라스의 작은 마을에서 잠시 쉬고 있었다.
-마을에는 어린 마법사 헤인이 있었고, 둘은 곧 친구가 되었다.
-어느 날 헤인이 다급히 뛰어왔다. 제국군이 마을을 습격하고, 리아나가 위험하다는 소식이었다.
-엘윈은 검을 들고 그녀를 구하러 나섰다. *승리조건 볼도 처치 *패배조건 엘윈 사망 볼도 도주"""
-    chars = collect_chars(condition_chars, scenario_text)
+    chars = collect_chars(condition_chars, *descriptions)
     glyph_by_char = install_custom_glyphs(data, chars)
     patch_condition_1(data, glyph_by_char)
-    patch_scenario_1(data, glyph_by_char)
+    patch_scenarios(data, descriptions, glyph_by_char)
     OUT_ROM.write_bytes(data)
     print(f"wrote {OUT_ROM}")
-    print(f"custom glyphs: {len(glyph_by_char)} ({CUSTOM_GLYPH_START:04X}-{CUSTOM_GLYPH_START + len(glyph_by_char) - 1:04X})")
+    used = sorted(glyph_by_char.values())
+    print(f"custom glyphs: {len(glyph_by_char)} ({used[0]:04X}-{used[-1]:04X})")
 
 
 if __name__ == "__main__":
