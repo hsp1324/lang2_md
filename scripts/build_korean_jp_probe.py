@@ -49,6 +49,22 @@ CLASS_BYTE_GLYPH_CODES = [
 ]
 
 DIRECT_STRING_PATCHES = {
+    0x96086: "잘가!",
+    0x96248: "잘가!",
+    0x96390: "그럼잘있어!",
+    0x96502: "잠깐기다려",
+    0x96788: "고마웠어…",
+    0x967EC: "돌아오길기다렸어…",
+    0x96868: "평화를위해떠나야해…",
+    0x96898: "나도같이가도돼?",
+    0x968B6: "뭐?!",
+    0x968DA: "네가갈곳으로…",
+    0x968F4: "……",
+    0x9693E: "그럼걱정돼?",
+    0x96988: "위험한눈에띄기싫어!",
+    0x96A2A: "함께가게해줘!",
+    0x96A64: "그래너혼자는아니야…",
+    0x96C48: "조심해…",
     0x82BFE: "마법화살",
     0x82C0E: "블래스트",
     0x82C18: "썬더",
@@ -434,6 +450,8 @@ def capacity_words(data: bytes | bytearray, table_offset: int, index: int, recor
     start = be32(data, table_offset + index * 4)
     if index + 1 < record_count:
         end = be32(data, table_offset + (index + 1) * 4)
+    elif table_offset == SCENARIO_POINTER_TABLE:
+        return direct_string_capacity_words(data, start)
     else:
         end = start + 0x400
     return (end - start) // 2
@@ -560,6 +578,32 @@ def make_condition_screen(lines: list[str], glyph_by_char: dict[str, int]) -> tu
     return glyphs, tokens
 
 
+def make_scenario_title_screen(text: str, glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if len(lines) > 2:
+        raise ValueError(f"scenario title screen supports at most 2 lines: {text!r}")
+    rows = [[" "] * 18 for _ in range(6)]
+    start_row = 1
+    for row_offset, line in enumerate(lines):
+        if len(line) > 18:
+            raise ValueError(f"scenario title row too long ({len(line)} > 18): {line!r}")
+        col = (18 - len(line)) // 2
+        for i, char in enumerate(line):
+            rows[start_row + row_offset][col + i] = char
+
+    glyphs: list[int] = [SPACE_GLYPH]
+    local_by_glyph = {SPACE_GLYPH: 0}
+    tokens: list[int] = []
+    for row in rows:
+        for char in row:
+            glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
+            if glyph not in local_by_glyph:
+                local_by_glyph[glyph] = len(glyphs)
+                glyphs.append(glyph)
+            tokens.append(local_by_glyph[glyph])
+    return glyphs, tokens
+
+
 def wrap_korean(text: str, width: int = 18) -> list[str]:
     lines: list[str] = []
     for paragraph in text.split("\n"):
@@ -604,7 +648,7 @@ def fixed_text_tokens(
     return tokens
 
 
-def load_scenario_descriptions() -> list[str]:
+def load_scenario_titles() -> list[str]:
     src = Path("build_korean_complete_wip.py").read_text()
     module = ast.parse(src)
     for node in module.body:
@@ -615,7 +659,14 @@ def load_scenario_descriptions() -> list[str]:
                 descriptions = ast.literal_eval(node.value)
                 if len(descriptions) != 31:
                     raise ValueError(f"expected 31 scenario descriptions, got {len(descriptions)}")
-                return descriptions
+                titles = []
+                for index, description in enumerate(descriptions):
+                    lines = [line.strip() for line in description.splitlines() if line.strip()]
+                    if len(lines) < 2:
+                        raise ValueError(f"scenario {index + 1} has no title line")
+                    title = "서장" if index == 0 else lines[1]
+                    titles.append(f"{lines[0]}\n{title}")
+                return titles
     raise ValueError("SCENARIO_DESCRIPTIONS not found")
 
 
@@ -657,13 +708,12 @@ def normalize_scenario_text(text: str) -> str:
         if not line.strip():
             normalized_lines.append("")
             continue
-        normalized_lines.extend(wrap_korean(line, 18))
+        normalized_lines.extend(wrapped.center(18) for wrapped in wrap_korean(line, 18))
     return "\n".join(normalized_lines)
 
 
 def patch_scenario(data: bytearray, index: int, text: str, glyph_by_char: dict[str, int]) -> None:
-    scenario_text = normalize_scenario_text(text)
-    glyphs, tokens = make_record_encoding(scenario_text, glyph_by_char)
+    glyphs, tokens = make_scenario_title_screen(text, glyph_by_char)
     glyph_ptr = be32(data, SCENARIO_GLYPH_LIST_TABLE + index * 4)
     token_ptr = be32(data, SCENARIO_POINTER_TABLE + index * 4)
     write_word_list(
@@ -833,13 +883,13 @@ def main() -> None:
     args = parser.parse_args()
 
     data = bytearray(IN_ROM.read_bytes())
-    descriptions = load_scenario_descriptions()
-    if not 0 <= args.scenario_count <= len(descriptions):
-        raise ValueError(f"--scenario-count must be 0..{len(descriptions)}")
+    scenario_titles = load_scenario_titles()
+    if not 0 <= args.scenario_count <= len(scenario_titles):
+        raise ValueError(f"--scenario-count must be 0..{len(scenario_titles)}")
     active_condition_chars = "" if args.skip_condition else "\n".join(
         line for screen in CONDITION_SCREENS for line in screen
     )
-    active_descriptions = [] if args.skip_scenarios else descriptions[: args.scenario_count]
+    active_descriptions = [] if args.skip_scenarios else scenario_titles[: args.scenario_count]
     direct_patches = {} if args.skip_direct else dict(DIRECT_STRING_PATCHES)
     fixed_patches = {} if args.skip_direct else dict(DIRECT_FIXED_STRING_PATCHES)
     if args.include_unsafe_direct_names:
@@ -862,7 +912,7 @@ def main() -> None:
     if not args.skip_condition:
         patch_conditions(data, glyph_by_char)
     if not args.skip_scenarios:
-        patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
+        patch_scenarios(data, scenario_titles[: args.scenario_count], glyph_by_char)
     if not args.skip_direct:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches)
     if not args.skip_items:

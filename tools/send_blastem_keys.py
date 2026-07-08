@@ -38,6 +38,20 @@ def find_blastem_window(display: Display):
     raise RuntimeError("could not find BlastEm window")
 
 
+def wait_for_blastem_window(display: Display, timeout: float):
+    deadline = time.monotonic() + timeout
+    last_error: Exception | None = None
+    while time.monotonic() <= deadline:
+        try:
+            return find_blastem_window(display)
+        except Exception as exc:
+            last_error = exc
+            time.sleep(0.1)
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("could not find BlastEm window")
+
+
 def press(display: Display, key: str, hold: float) -> None:
     if key not in KEYSYMS:
         raise ValueError(f"unknown key: {key}")
@@ -54,10 +68,11 @@ def main() -> int:
     parser.add_argument("keys", nargs="+", help="key[:wait], e.g. start:1 c left up")
     parser.add_argument("--hold", type=float, default=0.08)
     parser.add_argument("--ready-delay", type=float, default=0.0)
+    parser.add_argument("--wait-window", type=float, default=5.0)
     args = parser.parse_args()
 
     display = Display()
-    window = find_blastem_window(display)
+    window = wait_for_blastem_window(display, args.wait_window)
     window.set_input_focus(X.RevertToParent, X.CurrentTime)
     window.configure(stack_mode=X.Above)
     display.sync()
