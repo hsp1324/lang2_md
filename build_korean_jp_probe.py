@@ -20,6 +20,10 @@ GLYPH_BYTES = 64
 CONDITION_POINTER_TABLE = 0x98D7A
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
 CONDITION_GLYPH_LIST_RELOC_BASE = 0x1E7000
+ITEM_GLYPH_LIST_BASE = 0xA14AC
+ITEM_GLYPH_LIST_REFS = (0x21C6E, 0x26924)
+ITEM_NAME_POINTER_TABLE = 0xA1902
+ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x1E7800
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 
@@ -178,6 +182,47 @@ CONDITION_SCREENS = [
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
 ]
 
+ITEM_NAME_PATCHES = [
+    "단검",
+    "워해머",
+    "대검",
+    "완드",
+    "플레임랜스",
+    "데빌액스",
+    "용살검",
+    "랑그릿사",
+    "랑그릿사",
+    "메사이어소드",
+    "철아령",
+    "홀리로드",
+    "다크로드",
+    "알하자드",
+    "롱보우",
+    "아발레스트",
+    "소방패",
+    "대방패",
+    "체인메일",
+    "플레이트아머",
+    "어설트수츠",
+    "로브",
+    "드래곤스케일",
+    "환영로브",
+    "오딘방패",
+    "룬스톤",
+    "크로스",
+    "목걸이",
+    "오브",
+    "스피드부츠",
+    "크라운",
+    "오로라",
+    "천사날개",
+    "카벙클",
+    "그레이프닐",
+    "갸라르혼",
+    "부적",
+    "홀리로드",
+]
+
 
 def be16(data: bytes | bytearray, offset: int) -> int:
     return (data[offset] << 8) | data[offset + 1]
@@ -241,6 +286,18 @@ def write_token_stream(data: bytearray, offset: int, tokens: list[int], max_word
     put16(data, offset + len(tokens) * 2, 0xFFFF)
     for i in range(len(tokens) + 1, max_words):
         put16(data, offset + i * 2, 0xFFFF)
+
+
+def read_pointer_table_until(data: bytes | bytearray, offset: int, low: int, high: int) -> list[int]:
+    ptrs: list[int] = []
+    pos = offset
+    while pos + 3 < len(data):
+        ptr = be32(data, pos)
+        if not (low <= ptr < high):
+            break
+        ptrs.append(ptr)
+        pos += 4
+    return ptrs
 
 
 def direct_string_capacity_words(data: bytes | bytearray, offset: int) -> int:
@@ -474,7 +531,7 @@ def patch_conditions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     glyph_cursor = CONDITION_GLYPH_LIST_RELOC_BASE
     for index, lines in enumerate(CONDITION_SCREENS):
         glyph_cursor = patch_condition(data, index, lines, glyph_by_char, glyph_cursor)
-    if glyph_cursor >= 0x1E8000:
+    if glyph_cursor >= ITEM_NAME_GLYPH_LIST_RELOC_BASE:
         raise ValueError(f"relocated condition glyph lists overflow: 0x{glyph_cursor:06X}")
 
 
@@ -519,6 +576,37 @@ def patch_direct_strings(data: bytearray, glyph_by_char: dict[str, int]) -> None
         write_fixed_direct_string(data, offset, max_words, text, glyph_by_char)
 
 
+def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
+    if len(ptrs) != len(ITEM_NAME_PATCHES):
+        raise ValueError(f"expected {len(ITEM_NAME_PATCHES)} item name pointers, got {len(ptrs)}")
+
+    item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
+    local_by_glyph = {glyph: i for i, glyph in enumerate(item_glyphs)}
+
+    def local_index(char: str) -> int:
+        glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
+        if glyph not in local_by_glyph:
+            local_by_glyph[glyph] = len(item_glyphs)
+            item_glyphs.append(glyph)
+        return local_by_glyph[glyph]
+
+    for ptr, text in zip(ptrs, ITEM_NAME_PATCHES):
+        capacity = direct_string_capacity_words(data, ptr)
+        tokens = [local_index(char) for char in text if char != " "]
+        if len(tokens) + 1 > capacity:
+            raise ValueError(
+                f"item name at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
+            )
+        write_token_stream(data, ptr, tokens, capacity)
+
+    for ref in ITEM_GLYPH_LIST_REFS:
+        put32(data, ref, ITEM_NAME_GLYPH_LIST_RELOC_BASE)
+    end = write_word_list_exact(data, ITEM_NAME_GLYPH_LIST_RELOC_BASE, item_glyphs)
+    if end >= 0x1E8000:
+        raise ValueError(f"relocated item glyph list overflow: 0x{end:06X}")
+
+
 def update_md_checksum(data: bytearray) -> int:
     checksum = 0
     for offset in range(0x200, len(data), 2):
@@ -551,12 +639,14 @@ def main() -> None:
         *descriptions[: args.scenario_count],
         *DIRECT_STRING_PATCHES.values(),
         *(text for _, text in DIRECT_FIXED_STRING_PATCHES.values()),
+        *ITEM_NAME_PATCHES,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if not args.skip_condition:
         patch_conditions(data, glyph_by_char)
     patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
     patch_direct_strings(data, glyph_by_char)
+    patch_item_names(data, glyph_by_char)
     checksum = update_md_checksum(data)
     args.out.write_bytes(data)
     print(f"wrote {args.out}")
