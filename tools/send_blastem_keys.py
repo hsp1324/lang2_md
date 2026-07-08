@@ -19,6 +19,7 @@ KEYSYMS = {
     "down": XK.XK_Down,
     "left": XK.XK_Left,
     "right": XK.XK_Right,
+    "save": XK.XK_grave,
 }
 
 
