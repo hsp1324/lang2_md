@@ -17,31 +17,37 @@ from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
 IN_ROM = Path("roms/original/Langrisser II (Japan).md")
 OUT_ROM = Path("roms/builds/Langrisser II (Korean JP Probe).md")
 FONT_PATH = Path("tools/fonts/Galmuri9.ttf")
+EXPANDED_ROM_SIZE = 0x400000
 
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
 
 CONDITION_POINTER_TABLE = 0x98D7A
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
-CONDITION_GLYPH_LIST_RELOC_BASE = 0x1E7000
+CONDITION_GLYPH_LIST_RELOC_BASE = 0x280000
 ITEM_GLYPH_LIST_BASE = 0xA14AC
 ITEM_GLYPH_LIST_REFS = (0x21C6E, 0x26924)
 ITEM_NAME_POINTER_TABLE = 0xA1902
-ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x1E7800
+ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x282000
 ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
 ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
 ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
-ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x1E9000
+ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x286000
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
+SCENARIO_GLYPH_LIST_RELOC_BASE = 0x270000
+SCENARIO_GLYPH_LIST_RELOC_LIMIT = 0x280000
 CLASS_BYTE_POINTER_TABLE = 0x05E6D8
 CLASS_BYTE_RECORD_COUNT = 156
 DEFAULT_HERO_NAME_OFFSET = 0x061AC5
+PREP_AND_NAME_GLYPH_REF_RANGE = (0x96FC0, 0x97680)
+COMMON_GLYPH_PROTECT_LIMIT = 0x0060
 
 SPACE_GLYPH = 0x0054
-CUSTOM_GLYPH_START = 0x0260
-CUSTOM_GLYPH_END = 0x07FF
-CUSTOM_GLYPH_RESERVED = {0x039C, 0x03B3}
+CUSTOM_GLYPH_RANGES = (
+    (0x7000, 0x71FE),
+)
+CUSTOM_GLYPH_RESERVED = {0x71FF}
 DEFAULT_HERO_NAME_CODES = {
     "엘": 0x80,
     "윈": 0x81,
@@ -54,7 +60,7 @@ OPENING_PROBE_GLYPH_CODES = {
     "후": 0x001D,  # フ
 }
 OPENING_PROBE_BLANK_GLYPH_CODES = [0x0021]  # ッ
-OPENING_SPACE_GLYPH = 0x03B3
+OPENING_SPACE_GLYPH = 0x71FF
 CLASS_BYTE_GLYPH_CODES = [
     *range(0x01, 0x20),
     *range(0x21, 0x7F),
@@ -238,13 +244,14 @@ OPENING_TEXT_LIST_PATCHES = OrderedDict(
 SCENARIO0_TITLE = "시나리오 1"
 SCENARIO0_SUBTITLE = "서장"
 SCENARIO0_BODY = (
-    "엘윈은 살라스의 작은 마을에서 잠시 쉬고 있었다. "
-    "그때 헤인이 달려와 제국군의 습격과 리아나의 위기를 알렸다. "
-    "엘윈은 리아나를 구하기 위해 검을 들었다."
+    "엘윈은 살라스 마을에서 쉬고 있었다. "
+    "그때 헤인이 달려와 리아나의 위기를 알렸다. "
+    "엘윈은 그녀를 구하고 검을 들었다."
 )
+SCENARIO0_CONDITIONS = "승리조건\n-볼도 격파\n패배조건\n-주인공 사망\n-볼도 우하단 도주"
 
 SCENARIO_TEXT_OVERRIDES = {
-    0: f"{SCENARIO0_TITLE}\n{SCENARIO0_SUBTITLE}\n{SCENARIO0_BODY}",
+    0: f"{SCENARIO0_TITLE}\n{SCENARIO0_SUBTITLE}\n{SCENARIO0_BODY}\n{SCENARIO0_CONDITIONS}",
 }
 
 CONDITION_SCREENS = [
@@ -391,6 +398,26 @@ def put32(data: bytearray, offset: int, value: int) -> None:
     data[offset + 1] = (value >> 16) & 0xFF
     data[offset + 2] = (value >> 8) & 0xFF
     data[offset + 3] = value & 0xFF
+
+
+def expand_rom(data: bytearray) -> None:
+    if len(data) > EXPANDED_ROM_SIZE:
+        raise ValueError(f"ROM is larger than expansion target: 0x{len(data):X}")
+    data.extend([0xFF] * (EXPANDED_ROM_SIZE - len(data)))
+    # Mega Drive header ROM end address. The checksum is updated separately.
+    put32(data, 0x1A4, EXPANDED_ROM_SIZE - 1)
+
+
+def glyph_data_offset(glyph_id: int) -> int:
+    return JP_FONT_BASE + glyph_id * GLYPH_BYTES
+
+
+def install_blank_custom_space(data: bytearray) -> None:
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
+    opening_space_offset = glyph_data_offset(OPENING_SPACE_GLYPH)
+    data[opening_space_offset : opening_space_offset + GLYPH_BYTES] = data[
+        blank_offset : blank_offset + GLYPH_BYTES
+    ]
 
 
 def read_word_list(data: bytes | bytearray, offset: int) -> list[int]:
@@ -576,26 +603,33 @@ def collect_chars(*texts: str) -> list[str]:
 def install_custom_glyphs(data: bytearray, chars: list[str]) -> dict[str, int]:
     glyph_ids = [
         glyph_id
-        for glyph_id in range(CUSTOM_GLYPH_START, CUSTOM_GLYPH_END + 1)
+        for start, end in CUSTOM_GLYPH_RANGES
+        for glyph_id in range(start, end + 1)
         if glyph_id not in CUSTOM_GLYPH_RESERVED
     ]
     if len(chars) > len(glyph_ids):
         raise ValueError(f"need {len(chars)} custom glyphs, only {len(glyph_ids)} reserved slots")
     font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     mapping: dict[str, int] = {}
     for i, char in enumerate(chars):
         glyph_id = glyph_ids[i]
         mapping[char] = glyph_id
-        offset = JP_FONT_BASE + glyph_id * GLYPH_BYTES
+        offset = glyph_data_offset(glyph_id)
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
     return mapping
 
 
-def make_record_encoding(text: str, glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
-    glyphs: list[int] = [SPACE_GLYPH]
-    local_by_glyph = {SPACE_GLYPH: 0}
+def make_record_encoding(
+    text: str,
+    glyph_by_char: dict[str, int],
+    base_glyphs: list[int] | None = None,
+) -> tuple[list[int], list[int]]:
+    glyphs: list[int] = list(base_glyphs) if base_glyphs is not None else [SPACE_GLYPH]
+    if SPACE_GLYPH not in glyphs:
+        glyphs.insert(0, SPACE_GLYPH)
+    local_by_glyph = {glyph: index for index, glyph in enumerate(glyphs)}
     tokens: list[int] = []
     for char in text:
         if char == "\n":
@@ -609,6 +643,41 @@ def make_record_encoding(text: str, glyph_by_char: dict[str, int]) -> tuple[list
             local_by_glyph[glyph] = len(glyphs)
             glyphs.append(glyph)
         tokens.append(local_by_glyph[glyph])
+    return glyphs, tokens
+
+
+def make_record_encoding_reusing_slots(
+    text: str,
+    glyph_by_char: dict[str, int],
+    base_glyphs: list[int],
+) -> tuple[list[int], list[int]]:
+    glyphs = list(base_glyphs)
+    if not glyphs:
+        raise ValueError("cannot reuse slots from an empty glyph list")
+    if glyphs[0] != SPACE_GLYPH:
+        glyphs[0] = SPACE_GLYPH
+    char_to_local: dict[str, int] = {" ": 0}
+    next_slot = 1
+    tokens: list[int] = []
+    for char in text:
+        if char == "\n":
+            tokens.append(0xFFFE)
+            continue
+        if char == "\f":
+            tokens.extend([0xFFF7, 0x0001])
+            continue
+        if char == " ":
+            tokens.append(0)
+            continue
+        if char not in char_to_local:
+            if next_slot >= len(glyphs):
+                raise ValueError(
+                    f"record needs more reusable glyph slots than available ({len(glyphs)}): {text!r}"
+                )
+            char_to_local[char] = next_slot
+            glyphs[next_slot] = glyph_by_char[char]
+            next_slot += 1
+        tokens.append(char_to_local[char])
     return glyphs, tokens
 
 
@@ -639,7 +708,11 @@ def make_condition_screen(lines: list[str], glyph_by_char: dict[str, int]) -> tu
     return glyphs, tokens
 
 
-def make_scenario_title_screen(text: str, glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
+def make_scenario_title_screen(
+    text: str,
+    glyph_by_char: dict[str, int],
+    base_glyphs: list[int] | None = None,
+) -> tuple[list[int], list[int]]:
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     if len(lines) > 2:
         raise ValueError(f"scenario title screen supports at most 2 lines: {text!r}")
@@ -652,8 +725,10 @@ def make_scenario_title_screen(text: str, glyph_by_char: dict[str, int]) -> tupl
         for i, char in enumerate(line):
             rows[start_row + row_offset][col + i] = char
 
-    glyphs: list[int] = [SPACE_GLYPH]
-    local_by_glyph = {SPACE_GLYPH: 0}
+    glyphs: list[int] = list(base_glyphs) if base_glyphs is not None else [SPACE_GLYPH]
+    if SPACE_GLYPH not in glyphs:
+        glyphs.insert(0, SPACE_GLYPH)
+    local_by_glyph = {glyph: index for index, glyph in enumerate(glyphs)}
     tokens: list[int] = []
     for row in rows:
         for char in row:
@@ -671,16 +746,26 @@ def make_controlled_scenario_record(
     subtitle: str,
     body: str,
     glyph_by_char: dict[str, int],
+    base_glyphs: list[int] | None = None,
 ) -> tuple[list[int], list[int]]:
-    glyphs: list[int] = [SPACE_GLYPH]
-    local_by_glyph = {SPACE_GLYPH: 0}
+    glyphs: list[int] = list(base_glyphs) if base_glyphs is not None else [SPACE_GLYPH]
+    if not glyphs:
+        glyphs = [SPACE_GLYPH]
+    glyphs[0] = SPACE_GLYPH
+    local_by_char: dict[str, int] = {" ": 0}
+    next_slot = 1
 
     def local_index(char: str) -> int:
-        glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
-        if glyph not in local_by_glyph:
-            local_by_glyph[glyph] = len(glyphs)
-            glyphs.append(glyph)
-        return local_by_glyph[glyph]
+        nonlocal next_slot
+        if char == " ":
+            return 0
+        if char not in local_by_char:
+            if next_slot >= len(glyphs):
+                raise ValueError("controlled scenario has no reusable glyph slots left")
+            local_by_char[char] = next_slot
+            glyphs[next_slot] = glyph_by_char[char]
+            next_slot += 1
+        return local_by_char[char]
 
     tokens = list(original_tokens)
     if tokens[-1] != 0xFFFF:
@@ -713,6 +798,77 @@ def make_controlled_scenario_record(
         body_pos += 1
     if body_pos < len(body_chars):
         raise ValueError("controlled scenario body did not fit original record")
+    return glyphs, tokens[:-1]
+
+
+def make_scenario0_record(
+    original_tokens: list[int],
+    glyph_by_char: dict[str, int],
+    base_glyphs: list[int],
+    protected_slots: set[int] | None = None,
+) -> tuple[list[int], list[int]]:
+    glyphs = list(base_glyphs)
+    glyphs[0] = SPACE_GLYPH
+    local_by_char: dict[str, int] = {" ": 0}
+    next_slot = 1
+    protected_slots = set(protected_slots or set()) | {0}
+
+
+    def local_index(char: str) -> int:
+        nonlocal next_slot
+        if char == " ":
+            return 0
+        if char not in local_by_char:
+            while next_slot in protected_slots:
+                next_slot += 1
+            if next_slot >= len(glyphs):
+                raise ValueError("scenario 0 has no reusable glyph slots left")
+            local_by_char[char] = next_slot
+            glyphs[next_slot] = glyph_by_char[char]
+            next_slot += 1
+        return local_by_char[char]
+
+    tokens = list(original_tokens)
+    if tokens[-1] != 0xFFFF:
+        raise ValueError("scenario 0 source record must include terminator")
+
+    def fill_span(start: int, end: int, text: str, center: bool = False) -> None:
+        width = end - start
+        if len(text) > width:
+            raise ValueError(f"scenario 0 span too short ({width}): {text!r}")
+        padded = text.center(width) if center else text.ljust(width)
+        for pos, char in zip(range(start, end), padded):
+            tokens[pos] = local_index(char)
+
+    def fill_positions(positions: list[int], text: str) -> None:
+        if len(text) > len(positions):
+            raise ValueError(f"scenario 0 body too long ({len(text)} > {len(positions)})")
+        padded = text.ljust(len(positions))
+        for pos, char in zip(positions, padded):
+            tokens[pos] = local_index(char)
+
+    fill_span(1, 14, SCENARIO0_TITLE, center=True)
+    fill_span(15, 26, SCENARIO0_SUBTITLE, center=True)
+
+    control_param_positions = {
+        pos
+        for pos, token in enumerate(tokens[:-1])
+        if token == 0xFFF7
+        for pos in (pos, pos + 1)
+    }
+    body_positions = [
+        pos
+        for pos in [*range(28, 165), *range(166, 256), *range(257, 283)]
+        if pos not in control_param_positions
+    ]
+    body_text = SCENARIO0_BODY.replace("\n", " ")
+    fill_positions(body_positions, body_text)
+
+    fill_span(285, 290, "승리조건", center=True)
+    fill_span(291, 300, "-볼도격파", center=False)
+    fill_span(301, 306, "패배조건", center=True)
+    fill_span(307, 314, "-엘윈사망", center=False)
+    fill_span(315, 330, "-볼도우하단도주", center=False)
     return glyphs, tokens[:-1]
 
 
@@ -830,9 +986,25 @@ def normalize_scenario_text(text: str) -> str:
     return "\f".join(normalized_pages)
 
 
-def patch_scenario(data: bytearray, index: int, text: str, glyph_by_char: dict[str, int]) -> None:
+def patch_scenario(
+    data: bytearray,
+    index: int,
+    text: str,
+    glyph_by_char: dict[str, int],
+    glyph_cursor: int | None = None,
+) -> int | None:
     glyph_ptr = be32(data, SCENARIO_GLYPH_LIST_TABLE + index * 4)
     token_ptr = be32(data, SCENARIO_POINTER_TABLE + index * 4)
+    original_glyphs = read_word_list(data, glyph_ptr)
+    original_glyph_to_local = {glyph: slot for slot, glyph in enumerate(original_glyphs)}
+    protected_slots: set[int] = {
+        slot for slot, glyph in enumerate(original_glyphs) if glyph < COMMON_GLYPH_PROTECT_LIMIT
+    }
+    for pos in range(*PREP_AND_NAME_GLYPH_REF_RANGE, 2):
+        value = be16(data, pos)
+        slot = original_glyph_to_local.get(value)
+        if slot is not None:
+            protected_slots.add(slot)
     if index in SCENARIO_TEXT_OVERRIDES:
         original_tokens = []
         pos = token_ptr
@@ -843,35 +1015,46 @@ def patch_scenario(data: bytearray, index: int, text: str, glyph_by_char: dict[s
             if token == 0xFFFF:
                 break
         if index == 0:
-            glyphs, tokens = make_controlled_scenario_record(
-                original_tokens,
-                SCENARIO0_TITLE,
-                SCENARIO0_SUBTITLE,
-                SCENARIO0_BODY,
-                glyph_by_char,
+            glyphs, tokens = make_scenario0_record(
+                original_tokens, glyph_by_char, original_glyphs, protected_slots
             )
         else:
             scenario_text = normalize_scenario_text(text)
-            glyphs, tokens = make_record_encoding(scenario_text, glyph_by_char)
+            glyphs, tokens = make_record_encoding_reusing_slots(
+                scenario_text, glyph_by_char, original_glyphs
+            )
     else:
-        glyphs, tokens = make_scenario_title_screen(text, glyph_by_char)
-    write_word_list(
-        data,
-        glyph_ptr,
-        glyphs,
-        glyph_list_capacity_words(data, SCENARIO_GLYPH_LIST_TABLE, index, 31),
-    )
+        scenario_text = "\n".join(line for line in text.splitlines() if line.strip())
+        glyphs, tokens = make_record_encoding_reusing_slots(
+            normalize_scenario_text(scenario_text), glyph_by_char, original_glyphs
+        )
+    if glyph_cursor is None:
+        write_word_list(
+            data,
+            glyph_ptr,
+            glyphs,
+            glyph_list_capacity_words(data, SCENARIO_GLYPH_LIST_TABLE, index, 31),
+        )
+    else:
+        put32(data, SCENARIO_GLYPH_LIST_TABLE + index * 4, glyph_cursor)
+        glyph_cursor = write_word_list_exact(data, glyph_cursor, glyphs)
+        if glyph_cursor & 1:
+            glyph_cursor += 1
     write_token_stream(
         data,
         token_ptr,
         tokens,
         capacity_words(data, SCENARIO_POINTER_TABLE, index, 31),
     )
+    return glyph_cursor
 
 
 def patch_scenarios(data: bytearray, descriptions: list[str], glyph_by_char: dict[str, int]) -> None:
+    glyph_cursor = SCENARIO_GLYPH_LIST_RELOC_BASE
     for index, text in enumerate(descriptions):
-        patch_scenario(data, index, text, glyph_by_char)
+        glyph_cursor = patch_scenario(data, index, text, glyph_by_char, glyph_cursor)
+    if glyph_cursor is not None and glyph_cursor >= SCENARIO_GLYPH_LIST_RELOC_LIMIT:
+        raise ValueError(f"relocated scenario glyph lists overflow: 0x{glyph_cursor:06X}")
 
 
 def patch_direct_strings(
@@ -923,7 +1106,7 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     for ref in ITEM_GLYPH_LIST_REFS:
         put32(data, ref, ITEM_NAME_GLYPH_LIST_RELOC_BASE)
     end = write_word_list_exact(data, ITEM_NAME_GLYPH_LIST_RELOC_BASE, item_glyphs)
-    if end >= 0x1E8000:
+    if end >= ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE:
         raise ValueError(f"relocated item glyph list overflow: 0x{end:06X}")
 
 
@@ -963,7 +1146,7 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
 
     put32(data, ITEM_DESCRIPTION_GLYPH_LIST_REF, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE)
     end = write_word_list_exact(data, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE, desc_glyphs)
-    if end >= 0x1EA000:
+    if end >= EXPANDED_ROM_SIZE:
         raise ValueError(f"relocated item description glyph list overflow: 0x{end:06X}")
 
 
@@ -979,11 +1162,11 @@ def patch_class_byte_table(data: bytearray) -> None:
         )
 
     font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     code_by_char = {char: CLASS_BYTE_GLYPH_CODES[i] for i, char in enumerate(chars)}
     for char, code in code_by_char.items():
-        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        offset = glyph_data_offset(code)
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
 
     for index, text in enumerate(labels):
@@ -1000,10 +1183,10 @@ def patch_class_byte_table(data: bytearray) -> None:
 
 def patch_default_hero_name(data: bytearray) -> None:
     font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     for char, code in DEFAULT_HERO_NAME_CODES.items():
-        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        offset = glyph_data_offset(code)
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
 
     original_capacity = byte_string_capacity(data, DEFAULT_HERO_NAME_OFFSET)
@@ -1020,10 +1203,10 @@ def patch_name_entry_default_word_buffer(data: bytearray, glyph_by_char: dict[st
 
 def patch_name_entry_reused_glyphs(data: bytearray) -> None:
     font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     for char, code in NAME_ENTRY_REUSED_GLYPH_CODES.items():
-        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        offset = glyph_data_offset(code)
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
 
     values = [
@@ -1037,13 +1220,13 @@ def patch_name_entry_reused_glyphs(data: bytearray) -> None:
 
 def patch_opening_glyph_probe(data: bytearray) -> None:
     font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     for char, code in OPENING_PROBE_GLYPH_CODES.items():
-        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        offset = glyph_data_offset(code)
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
     for code in OPENING_PROBE_BLANK_GLYPH_CODES:
-        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        offset = glyph_data_offset(code)
         data[offset : offset + GLYPH_BYTES] = blank_template
 
 
@@ -1081,7 +1264,12 @@ def main() -> None:
         default=31,
         help="number of scenario description records to patch from the start",
     )
-    parser.add_argument("--skip-condition", action="store_true")
+    parser.add_argument(
+        "--skip-condition",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="skip standalone condition-screen table patching; enabled by default because that table shares prep UI state",
+    )
     parser.add_argument("--skip-scenarios", action="store_true")
     parser.add_argument("--skip-direct", action="store_true")
     parser.add_argument(
@@ -1108,8 +1296,11 @@ def main() -> None:
     parser.add_argument(
         "--patch-name-entry-reused-glyphs",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="experimental: render Elwin as Korean by reusing existing JP name-entry glyph slots",
+        default=False,
+        help=(
+            "experimental: render Elwin as Korean by reusing existing JP name-entry glyph slots; "
+            "disabled by default because those slots are shared with other JP text"
+        ),
     )
     parser.add_argument(
         "--patch-opening-glyph-probe",
@@ -1119,6 +1310,8 @@ def main() -> None:
     args = parser.parse_args()
 
     data = bytearray(IN_ROM.read_bytes())
+    expand_rom(data)
+    install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     if not 0 <= args.scenario_count <= len(scenario_texts):
         raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
