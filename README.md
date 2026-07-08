@@ -75,6 +75,12 @@ env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "Langrisser II (Kore
 Start, Start, C, B(A 선택), Left, Up, C(Done), C
 ```
 
+일본판 기반 probe에서는 이름 입력 화면의 기본 이름을 그대로 쓸 수 있으므로 이름 화면에서 `Start`를 누르면 바로 진행됩니다.
+
+```text
+Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
+```
+
 ## 현재 상태
 
 ### 일본판 기반 새 방향

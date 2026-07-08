@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections import OrderedDict
 import ast
+import argparse
 from pathlib import Path
 import unicodedata
 
@@ -25,6 +26,20 @@ SPACE_GLYPH = 0x0054
 CUSTOM_GLYPH_START = 0x0260
 CUSTOM_GLYPH_END = 0x03FF
 CUSTOM_GLYPH_RESERVED = {0x039C}
+
+DIRECT_STRING_PATCHES = {
+    0x97404: "엘윈",
+    0x97410: "리아나",
+    0x97418: "라나",
+    0x97420: "쉐리",
+    0x9742A: "헤인",
+    0x97504: "지휘관",
+    0x9750C: "병사",
+    0x97512: "주민",
+    0x97518: "해적",
+    0x9751E: "자경단",
+    0x9764E: "제국병",
+}
 
 
 def be16(data: bytes | bytearray, offset: int) -> int:
@@ -75,6 +90,26 @@ def write_token_stream(data: bytearray, offset: int, tokens: list[int], max_word
     put16(data, offset + len(tokens) * 2, 0xFFFF)
     for i in range(len(tokens) + 1, max_words):
         put16(data, offset + i * 2, 0xFFFF)
+
+
+def direct_string_capacity_words(data: bytes | bytearray, offset: int) -> int:
+    pos = offset
+    while pos + 1 < len(data):
+        value = be16(data, pos)
+        pos += 2
+        if value == 0xFFFF:
+            return (pos - offset) // 2
+    raise ValueError(f"unterminated direct string at 0x{offset:06X}")
+
+
+def write_direct_string(data: bytearray, offset: int, text: str, glyph_by_char: dict[str, int]) -> None:
+    values = [glyph_by_char[char] for char in text if char != " "]
+    capacity = direct_string_capacity_words(data, offset)
+    if len(values) + 1 > capacity:
+        raise ValueError(
+            f"direct string at 0x{offset:06X} needs {len(values) + 1} words, only {capacity}"
+        )
+    write_word_list(data, offset, values, capacity)
 
 
 def capacity_words(data: bytes | bytearray, table_offset: int, index: int, record_count: int) -> int:
@@ -294,18 +329,56 @@ def patch_scenarios(data: bytearray, descriptions: list[str], glyph_by_char: dic
         patch_scenario(data, index, text, glyph_by_char)
 
 
+def patch_direct_strings(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    for offset, text in DIRECT_STRING_PATCHES.items():
+        write_direct_string(data, offset, text, glyph_by_char)
+
+
+def update_md_checksum(data: bytearray) -> int:
+    checksum = 0
+    for offset in range(0x200, len(data), 2):
+        checksum = (checksum + be16(data, offset)) & 0xFFFF
+    put16(data, 0x18E, checksum)
+    return checksum
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", type=Path, default=OUT_ROM)
+    parser.add_argument(
+        "--scenario-count",
+        type=int,
+        default=31,
+        help="number of scenario description records to patch from the start",
+    )
+    parser.add_argument("--skip-condition", action="store_true")
+    args = parser.parse_args()
+
     data = bytearray(IN_ROM.read_bytes())
     descriptions = load_scenario_descriptions()
+    if not 0 <= args.scenario_count <= len(descriptions):
+        raise ValueError(f"--scenario-count must be 0..{len(descriptions)}")
     condition_chars = "승리조건-볼도 처치패배주인공 사망도주"
-    chars = collect_chars(condition_chars, *descriptions)
+    active_condition_chars = "" if args.skip_condition else condition_chars
+    chars = collect_chars(
+        active_condition_chars,
+        *descriptions[: args.scenario_count],
+        *DIRECT_STRING_PATCHES.values(),
+    )
     glyph_by_char = install_custom_glyphs(data, chars)
-    patch_condition_1(data, glyph_by_char)
-    patch_scenarios(data, descriptions, glyph_by_char)
-    OUT_ROM.write_bytes(data)
-    print(f"wrote {OUT_ROM}")
+    if not args.skip_condition:
+        patch_condition_1(data, glyph_by_char)
+    patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
+    patch_direct_strings(data, glyph_by_char)
+    checksum = update_md_checksum(data)
+    args.out.write_bytes(data)
+    print(f"wrote {args.out}")
     used = sorted(glyph_by_char.values())
-    print(f"custom glyphs: {len(glyph_by_char)} ({used[0]:04X}-{used[-1]:04X})")
+    if used:
+        print(f"custom glyphs: {len(glyph_by_char)} ({used[0]:04X}-{used[-1]:04X})")
+    else:
+        print("custom glyphs: 0")
+    print(f"checksum: {checksum:04X}")
 
 
 if __name__ == "__main__":
