@@ -19,27 +19,111 @@ GLYPH_BYTES = 64
 
 CONDITION_POINTER_TABLE = 0x98D7A
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
+CONDITION_GLYPH_LIST_RELOC_BASE = 0x1E7000
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 
 SPACE_GLYPH = 0x0054
 CUSTOM_GLYPH_START = 0x0260
-CUSTOM_GLYPH_END = 0x03FF
+CUSTOM_GLYPH_END = 0x07FF
 CUSTOM_GLYPH_RESERVED = {0x039C}
 
 DIRECT_STRING_PATCHES = {
+    0x82BFE: "마법화살",
+    0x82C0E: "블래스트",
+    0x82C18: "썬더",
+    0x82C22: "파이어볼",
+    0x82C34: "메테오",
+    0x82C3C: "블리자드",
+    0x82C48: "토네이도",
+    0x82C54: "턴언데드",
+    0x82C66: "어스퀘이크",
+    0x82C76: "힐1",
+    0x82C80: "힐2",
+    0x82C8A: "포스힐1",
+    0x82C9C: "포스힐2",
+    0x82CAE: "수면",
+    0x82CB8: "침묵",
+    0x82CC2: "보호",
+    0x82CD2: "공격",
+    0x82CDC: "존",
+    0x82CE4: "순간이동",
+    0x82CF0: "환영",
+    0x82D00: "저항",
+    0x82D0A: "매혹",
+    0x82D14: "소환마법",
+    0x82D5A: "파이크",
+    0x82D62: "팔랑크스",
+    0x82D70: "솔저",
+    0x82D7C: "검투사",
+    0x82D8E: "장갑병",
+    0x82DA0: "기병",
+    0x82DAC: "중기병",
+    0x82DBE: "드라군",
+    0x82DCA: "엘프",
+    0x82DD2: "발리스타",
+    0x82DDC: "몽크",
+    0x82DE4: "가드맨",
+    0x82DF0: "머맨",
+    0x82DFA: "그리폰",
+    0x82E06: "엔젤",
     0x97404: "엘윈",
     0x97410: "리아나",
     0x97418: "라나",
     0x97420: "쉐리",
     0x9742A: "헤인",
+    0x97432: "스코트",
+    0x9743C: "키스",
+    0x97444: "아론",
+    0x9744E: "레스터",
+    0x97458: "제시카",
+    0x97462: "가면기사",
+    0x9746C: "레온",
+    0x97474: "베른하르트",
+    0x97482: "발가스",
+    0x9748C: "보젤",
+    0x97496: "레아드",
+    0x974A0: "볼도",
+    0x974AA: "졸름",
+    0x974B2: "에그베르트",
+    0x974BE: "이멜다",
+    0x974C8: "모건",
+    0x974D2: "기잠",
+    0x974DA: "클레이머",
+    0x974E6: "세이갈",
+    0x974F0: "폴거",
     0x974FC: "일반병",
     0x97504: "지휘관",
     0x9750C: "사제",
     0x97512: "주민",
     0x97518: "해적",
     0x9751E: "자경단",
+    0x97526: "로렌",
+    0x97530: "아돈",
+    0x97538: "삼손",
+    0x97542: "바란",
+    0x9754A: "제국군지휘관",
+    0x97558: "웨어울프",
+    0x97566: "그레이트슬라임",
+    0x97578: "스큐라",
+    0x97582: "아이언골렘",
+    0x97594: "리치",
+    0x9759C: "리빙아머",
+    0x975AE: "뱀파이어로드",
+    0x975C0: "고스트",
+    0x975CA: "케르베로스",
+    0x975D6: "마스터디노",
+    0x975E8: "와이번",
+    0x975F4: "대드래곤",
+    0x97606: "미노타우로스",
+    0x97614: "크라켄",
+    0x97620: "서큐버스",
+    0x9762C: "데몬로드",
+    0x9763C: "형님",
+    0x97642: "마녀",
+    0x97648: "신관",
     0x9764E: "제국병",
+    0x97656: "파이어스",
 }
 
 DIRECT_FIXED_STRING_PATCHES = {
@@ -59,6 +143,41 @@ DIRECT_FIXED_STRING_PATCHES = {
     0x97080: (2, "명령"),
 }
 
+CONDITION_SCREENS = [
+    ["승리조건", "-볼도 격파", "", "패배조건", "-주인공 사망", "-볼도 우하단 도주"],
+    ["승리조건", "-리아나 북쪽 도착", "-적 전멸", "패배조건", "-리아나 사망", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-리아나 사망", "-주인공 사망"],
+    ["승리조건", "-모건 격파", "", "패배조건", "-신관 전멸", "-리아나/주인공 사망"],
+    ["승리조건", "-2턴 안에 적 전멸", "-주인공 목표 이동", "패배조건", "-턴 오버", "-주인공 사망"],
+    ["승리조건", "-목표 적 격파", "-맵 위쪽 도착", "패배조건", "-시민 전멸", "-주인공 사망"],
+    ["승리조건", "-기잠 격파", "", "패배조건", "-조비리안 전멸", "-주인공 사망"],
+    ["승리조건", "-3턴 안에 클레이머 격파", "", "패배조건", "-턴 오버", "-주인공 사망"],
+    ["승리조건", "-레아드 격파", "", "패배조건", "-NPC 전멸", "-주인공 사망"],
+    ["승리조건", "-레스터 격파", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망", "-제시카 사망"],
+    ["승리조건", "-적 전멸", "-다크로드 획득", "패배조건", "-주인공 사망"],
+    ["승리조건", "-발가스 장군 격파", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-랑그릿사 도달", "-레온 격파", "패배조건", "-레온 도달", "-주인공 사망"],
+    ["승리조건", "-이멜다 장군 격파", "-주인공 아래 이동", "패배조건", "-주인공 사망"],
+    ["승리조건", "-레온 격파", "-성문으로 이동", "패배조건", "-주인공 사망"],
+    ["승리조건", "-베른하르트 격파", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-레드드래곤 격파", "-프린세스 격파", "패배조건", "-주인공 사망", "-주민 전멸"],
+    ["승리조건", "-3턴 안에 이멜다 격파", "", "패배조건", "-턴 오버", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망", "-제시카 사망"],
+    ["승리조건", "-소드마스터 도달", "-적 전멸", "패배조건", "-롯시 납치", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-에그베르트 격파", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-베른하르트 격파", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-마녀 격파", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+]
+
 
 def be16(data: bytes | bytearray, offset: int) -> int:
     return (data[offset] << 8) | data[offset + 1]
@@ -76,6 +195,13 @@ def be32(data: bytes | bytearray, offset: int) -> int:
 def put16(data: bytearray, offset: int, value: int) -> None:
     data[offset] = (value >> 8) & 0xFF
     data[offset + 1] = value & 0xFF
+
+
+def put32(data: bytearray, offset: int, value: int) -> None:
+    data[offset] = (value >> 24) & 0xFF
+    data[offset + 1] = (value >> 16) & 0xFF
+    data[offset + 2] = (value >> 8) & 0xFF
+    data[offset + 3] = value & 0xFF
 
 
 def read_word_list(data: bytes | bytearray, offset: int) -> list[int]:
@@ -98,6 +224,13 @@ def write_word_list(data: bytearray, offset: int, values: list[int], max_words: 
     put16(data, offset + len(values) * 2, 0xFFFF)
     for i in range(len(values) + 1, max_words):
         put16(data, offset + i * 2, 0xFFFF)
+
+
+def write_word_list_exact(data: bytearray, offset: int, values: list[int]) -> int:
+    for i, value in enumerate(values):
+        put16(data, offset + i * 2, value)
+    put16(data, offset + len(values) * 2, 0xFFFF)
+    return offset + (len(values) + 1) * 2
 
 
 def write_token_stream(data: bytearray, offset: int, tokens: list[int], max_words: int) -> None:
@@ -250,18 +383,19 @@ def make_record_encoding(text: str, glyph_by_char: dict[str, int]) -> tuple[list
     return glyphs, tokens
 
 
-def make_condition_screen(glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
+def make_condition_screen(lines: list[str], glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
+    if len(lines) > 6:
+        raise ValueError("condition screen supports at most 6 rows")
     rows = [[" "] * 18 for _ in range(6)]
 
     def put(row: int, col: int, text: str) -> None:
+        if len(text) > 18:
+            raise ValueError(f"condition row too long ({len(text)} > 18): {text!r}")
         for i, char in enumerate(text):
             rows[row][col + i] = char
 
-    put(0, 0, "승리조건")
-    put(1, 1, "-볼도 처치")
-    put(3, 0, "패배조건")
-    put(4, 1, "-볼도 도주")
-    put(5, 1, "-주인공 사망")
+    for row, line in enumerate(lines):
+        put(row, 0, line)
 
     glyphs: list[int] = [SPACE_GLYPH]
     local_by_glyph = {SPACE_GLYPH: 0}
@@ -312,22 +446,36 @@ def load_scenario_descriptions() -> list[str]:
     raise ValueError("SCENARIO_DESCRIPTIONS not found")
 
 
-def patch_condition_1(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    glyphs, tokens = make_condition_screen(glyph_by_char)
-    glyph_ptr = be32(data, CONDITION_GLYPH_LIST_TABLE)
-    token_ptr = be32(data, CONDITION_POINTER_TABLE)
-    write_word_list(
-        data,
-        glyph_ptr,
-        glyphs,
-        glyph_list_capacity_words(data, CONDITION_GLYPH_LIST_TABLE, 0, 32),
-    )
+def patch_condition(
+    data: bytearray,
+    index: int,
+    lines: list[str],
+    glyph_by_char: dict[str, int],
+    glyph_cursor: int,
+) -> int:
+    glyphs, tokens = make_condition_screen(lines, glyph_by_char)
+    token_ptr = be32(data, CONDITION_POINTER_TABLE + index * 4)
+    put32(data, CONDITION_GLYPH_LIST_TABLE + index * 4, glyph_cursor)
+    glyph_cursor = write_word_list_exact(data, glyph_cursor, glyphs)
+    if glyph_cursor & 1:
+        glyph_cursor += 1
     write_token_stream(
         data,
         token_ptr,
         tokens,
-        capacity_words(data, CONDITION_POINTER_TABLE, 0, 32),
+        capacity_words(data, CONDITION_POINTER_TABLE, index, 32),
     )
+    return glyph_cursor
+
+
+def patch_conditions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    if len(CONDITION_SCREENS) != 32:
+        raise ValueError(f"expected 32 condition screens, got {len(CONDITION_SCREENS)}")
+    glyph_cursor = CONDITION_GLYPH_LIST_RELOC_BASE
+    for index, lines in enumerate(CONDITION_SCREENS):
+        glyph_cursor = patch_condition(data, index, lines, glyph_by_char, glyph_cursor)
+    if glyph_cursor >= 0x1E8000:
+        raise ValueError(f"relocated condition glyph lists overflow: 0x{glyph_cursor:06X}")
 
 
 def normalize_scenario_text(text: str) -> str:
@@ -395,8 +543,9 @@ def main() -> None:
     descriptions = load_scenario_descriptions()
     if not 0 <= args.scenario_count <= len(descriptions):
         raise ValueError(f"--scenario-count must be 0..{len(descriptions)}")
-    condition_chars = "승리조건-볼도 처치패배주인공 사망도주"
-    active_condition_chars = "" if args.skip_condition else condition_chars
+    active_condition_chars = "" if args.skip_condition else "\n".join(
+        line for screen in CONDITION_SCREENS for line in screen
+    )
     chars = collect_chars(
         active_condition_chars,
         *descriptions[: args.scenario_count],
@@ -405,7 +554,7 @@ def main() -> None:
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if not args.skip_condition:
-        patch_condition_1(data, glyph_by_char)
+        patch_conditions(data, glyph_by_char)
     patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
     patch_direct_strings(data, glyph_by_char)
     checksum = update_md_checksum(data)
