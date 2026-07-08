@@ -18,8 +18,9 @@ OUT = Path("Langrisser II (Korean Complete WIP).md")
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_COUNT = 31
 
-# Keep the original English VWF entries needed by the title screen.
-VWF_RESERVED = b"PressStartButtonNCSCorp"
+# Keep the original English VWF entries needed by the title screen and any
+# short labels that do not yet fit the jamo encoding budget.
+VWF_RESERVED = b"PressStartButtonNCSCorpSave"
 VWF_ASCII_RESERVED = b" .,!?:0123456789"
 COMPOUND_JAMO_FALLBACKS = {
     "ㄲ": "ㄱㄱ",
@@ -819,19 +820,17 @@ UI_TERMS = {
 # Wide fixed-font UI has only 56 safe tile slots when the name entry screen's
 # English alphabet is preserved. The chapter 1 preparation UI already consumes
 # most of that budget, so only add terms that fit within the remaining glyphs.
-SAFE_WIDE_UI_TERMS = {
-    "Shop": "상점",
-}
+SAFE_WIDE_UI_TERMS: dict[str, str] = {}
 
 DIRECT_WIDE_UI_PATCHES: list[tuple[int, int, str]] = []
 DIRECT_TILEMAP16_PATCHES: list[tuple[int, int, str]] = []
 DIRECT_TILEBYTE_PATCHES: list[tuple[int, int, str]] = [
-    (0x9B26D, len("Player"), "아군"),
-    (0xA1089, len("Player"), "아군"),
-    (0xA2DC4, len("Player"), "아군"),
-    (0x9B278, len("Enemy"), "적군"),
-    (0xA2E53, len("Enemy"), "적군"),
-    (0x9B2A3, len("NPC"), "중립"),
+    (0x9B26D, len("Player"), "P"),
+    (0xA1089, len("Player"), "P"),
+    (0xA2DC4, len("Player"), "P"),
+    (0x9B278, len("Enemy"), "E"),
+    (0xA2E53, len("Enemy"), "E"),
+    (0x9B2A3, len("NPC"), "NPC"),
 ]
 EXTRA_WIDE_FIXED_PATCHES = [
     (0x1B9418, len("Warlock"), "워록"),
@@ -845,20 +844,26 @@ EXTRA_WIDE_FIXED_PATCHES = [
 ]
 ROUTE_MENU_TILE_GLYPHS: dict[str, int] = {}
 CUSTOM_FIXED_TILE_GLYPHS: dict[str, int] = {
-    "아": 0x90,
-    "중": 0x91,
-    "립": 0x92,
-    "금": 0x93,
-    "고": 0x94,
+    "자": 0x90,
+    "금": 0x91,
+    "고": 0x92,
+    "상": 0x93,
+    "점": 0x94,
 }
 DIALOGUE_NAME_GLYPHS = ("헤", "인")
-ROUTE_MENU_TILEMAP16_PATCHES: list[tuple[int, int, str]] = [
-    (0x1E7EC8, len("Arrange"), "배치"),
-    (0x1E7ED8, len("Reorder"), "순서"),
-    (0x1E7EE8, len("Auto-Arrange"), "자동"),
-    (0x1E7F02, len("Examine Enemy"), "적군"),
-    (0x1E7F1E, len("Sortie"), "출격"),
-]
+TITLE_FIXED_RESERVED_TEXT = "StartLoadPressButtonNCSCorp"
+TITLE_FIXED_RESERVED_CODES = (
+    0xB1,
+    0xB5,
+    0xBE,
+    0xBF,
+    0xC0,
+    0xC2,
+    0xC3,
+    0xC4,
+    0xC5,
+)
+ROUTE_MENU_TILEMAP16_PATCHES: list[tuple[int, int, str]] = []
 NAME_ENTRY_GRID_START = 0xA3948
 NAME_ENTRY_GRID_END = 0xA3ABC
 NAME_ENTRY_DONE_OFFSET = 0xA3AB8
@@ -929,9 +934,10 @@ CONDITION_FIXED_GLYPHS = (
     "도",
     "주",
     "처",
+    "치",
 )
 EXPERIENCE_BAR_TILES = set(range(0xD0, 0xE8))
-DIALOGUE_ASCII_RESERVED_TEXT = "LVATDFHPMVRangeAdjustDone0123456789 .,!?:;-'\"/|+ADx"
+DIALOGUE_ASCII_RESERVED_TEXT = "LVATDFHPMVRangeAdjustDone0123456789 .,!?:;-'\"/|+ADxE"
 
 
 def complete_wide_tilemap16_patches() -> list[tuple[int, int, str]]:
@@ -1144,7 +1150,7 @@ def patch_condition_fixed_inline_at(
 
 def patch_condition_screen_labels(rom: bytearray, code_map: dict[str, tuple[int, ...]]) -> int:
     patch_condition_fixed_inline_at(rom, 0xAD7F3, len("Conditions"), "조건", code_map)
-    patch_condition_fixed_inline_at(rom, 0xAD80B, len("Scenario"), "1장", code_map)
+    patch_condition_fixed_inline_at(rom, 0xAD80B, len("Scenario"), "1", code_map)
     return 2
 
 
@@ -1209,6 +1215,10 @@ def fixed_code_pool(
 ) -> list[int]:
     reserved_tiles = {ord(ch) for ch in DIALOGUE_ASCII_RESERVED_TEXT}
     reserved_tiles.update(chapter1.map_fixed_tile(ord(ch)) for ch in DIALOGUE_ASCII_RESERVED_TEXT)
+    reserved_tiles.update(ord(ch) for ch in TITLE_FIXED_RESERVED_TEXT)
+    reserved_tiles.update(chapter1.map_fixed_tile(ord(ch)) for ch in TITLE_FIXED_RESERVED_TEXT)
+    reserved_tiles.update(TITLE_FIXED_RESERVED_CODES)
+    reserved_tiles.update(chapter1.map_fixed_tile(code) for code in TITLE_FIXED_RESERVED_CODES)
     # The status panels and UI frames use several non-ASCII fixed tiles.
     # F=0x24, V=0x26, P=0x28; 0x29/0x3C/0x3D/0x40/0x7B are visible frame
     # or separator tiles on route/conditions/prep screens.
