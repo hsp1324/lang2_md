@@ -4,8 +4,12 @@ from __future__ import annotations
 import argparse
 import csv
 from pathlib import Path
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from tools.jp_text_font_analyzer import JP_FONT_BASE, render_jp_2bpp16_glyph
 
 
 JP_ROM = Path("roms/original/Langrisser II (Japan).md")
@@ -276,6 +280,61 @@ def command_sheet(args: argparse.Namespace) -> None:
     print(args.out)
 
 
+def render_byte_string(data: bytes, values: bytes, scale: int) -> Image.Image:
+    width = max(1, len(values)) * 16 * scale
+    height = 16 * scale
+    img = Image.new("RGB", (width, height), "white")
+    for i, value in enumerate(values):
+        if value == 0x20:
+            continue
+        glyph = render_jp_2bpp16_glyph(data, JP_FONT_BASE + value * 64, scale)
+        img.paste(glyph, (i * 16 * scale, 0))
+    return img
+
+
+def command_render_rom(args: argparse.Namespace) -> None:
+    rom = args.rom.read_bytes()
+    en_rom = args.en_rom.read_bytes()
+    font = ImageFont.truetype(str(args.font), args.font_size)
+    row_h = max(args.font_size + 8, 16 * args.scale + 8)
+    widths = [52, 80, 150, 180, 16 * args.scale * args.max_chars + 12]
+    width = sum(widths)
+    height = row_h * (CLASS_POINTER_COUNT + 1)
+    img = Image.new("RGB", (width, height), (245, 245, 245))
+    draw = ImageDraw.Draw(img)
+    headers = ["idx", "ptr", "en", "ko target", "rom glyphs"]
+    x = 0
+    for w, header in zip(widths, headers):
+        draw.rectangle((x, 0, x + w - 1, row_h - 1), fill=(220, 220, 220))
+        draw.text((x + 4, 4), header, font=font, fill=(0, 0, 0))
+        x += w
+
+    for index in range(CLASS_POINTER_COUNT):
+        ptr = word_swapped_pointer(rom, CLASS_POINTER_TABLE + index * 4)
+        raw = read_byte_string(rom, ptr, 0xFF)
+        en_ptr = word_swapped_pointer(en_rom, CLASS_POINTER_TABLE + index * 4)
+        en_raw = read_byte_string(en_rom, en_ptr, 0xFF)
+        values = [
+            f"{index:03d}",
+            f"{ptr:06X}",
+            en_raw.decode("ascii", errors="replace").replace("\x00", " "),
+            KOREAN_CLASS_LABELS[index],
+        ]
+        y = (index + 1) * row_h
+        x = 0
+        for w, value in zip(widths[:4], values):
+            draw.rectangle((x, y, x + w - 1, y + row_h - 1), outline=(225, 225, 225))
+            draw.text((x + 4, y + 4), value, font=font, fill=(0, 0, 0))
+            x += w
+        draw.rectangle((x, y, x + widths[4] - 1, y + row_h - 1), outline=(225, 225, 225))
+        glyph_img = render_byte_string(rom, raw[: args.max_chars], args.scale)
+        img.paste(glyph_img, (x + 4, y + 4))
+
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(args.out)
+    print(args.out)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--jp-rom", type=Path, default=JP_ROM)
@@ -294,6 +353,15 @@ def main() -> None:
     sheet.add_argument("--font", type=Path, default=Path("tools/fonts/Galmuri9.ttf"))
     sheet.add_argument("--font-size", type=int, default=16)
     sheet.set_defaults(func=command_sheet)
+
+    render = sub.add_parser("render-rom")
+    render.add_argument("--rom", type=Path, required=True)
+    render.add_argument("--out", type=Path, default=OUT_DIR / "class_table_rendered.png")
+    render.add_argument("--font", type=Path, default=Path("tools/fonts/Galmuri9.ttf"))
+    render.add_argument("--font-size", type=int, default=16)
+    render.add_argument("--scale", type=int, default=2)
+    render.add_argument("--max-chars", type=int, default=12)
+    render.set_defaults(func=command_render_rom)
 
     args = parser.parse_args()
     args.func(args)

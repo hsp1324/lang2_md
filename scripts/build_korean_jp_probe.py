@@ -6,8 +6,12 @@ import ast
 import argparse
 from pathlib import Path
 import unicodedata
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
 
 
 IN_ROM = Path("roms/original/Langrisser II (Japan).md")
@@ -30,11 +34,18 @@ ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
 ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x1E9000
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
+CLASS_BYTE_POINTER_TABLE = 0x05E6D8
+CLASS_BYTE_RECORD_COUNT = 156
 
 SPACE_GLYPH = 0x0054
 CUSTOM_GLYPH_START = 0x0260
 CUSTOM_GLYPH_END = 0x07FF
 CUSTOM_GLYPH_RESERVED = {0x039C}
+CLASS_BYTE_GLYPH_CODES = [
+    *range(0x80, 0xDE),
+    *range(0xE0, 0xFF),
+    *range(0x01, 0x20),
+]
 
 DIRECT_STRING_PATCHES = {
     0x82BFE: "마법화살",
@@ -288,6 +299,10 @@ def be32(data: bytes | bytearray, offset: int) -> int:
     )
 
 
+def word_swapped_pointer(data: bytes | bytearray, offset: int) -> int:
+    return (be16(data, offset + 2) << 16) | be16(data, offset)
+
+
 def put16(data: bytearray, offset: int, value: int) -> None:
     data[offset] = (value >> 8) & 0xFF
     data[offset + 1] = value & 0xFF
@@ -337,6 +352,25 @@ def write_token_stream(data: bytearray, offset: int, tokens: list[int], max_word
     put16(data, offset + len(tokens) * 2, 0xFFFF)
     for i in range(len(tokens) + 1, max_words):
         put16(data, offset + i * 2, 0xFFFF)
+
+
+def byte_string_capacity(data: bytes | bytearray, offset: int) -> int:
+    pos = offset
+    while pos < len(data):
+        value = data[pos]
+        pos += 1
+        if value == 0xFF:
+            return pos - offset
+    raise ValueError(f"unterminated byte string at 0x{offset:06X}")
+
+
+def write_byte_string(data: bytearray, offset: int, values: list[int], capacity: int) -> None:
+    if len(values) + 1 > capacity:
+        raise ValueError(f"byte string needs {len(values) + 1} bytes, only {capacity} available")
+    data[offset : offset + len(values)] = bytes(values)
+    data[offset + len(values)] = 0xFF
+    for pos in range(offset + len(values) + 1, offset + capacity):
+        data[pos] = 0xFF
 
 
 def read_pointer_table_until(data: bytes | bytearray, offset: int, low: int, high: int) -> list[int]:
@@ -721,6 +755,37 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
         raise ValueError(f"relocated item description glyph list overflow: 0x{end:06X}")
 
 
+def patch_class_byte_table(data: bytearray) -> None:
+    labels = KOREAN_CLASS_LABELS
+    if len(labels) != CLASS_BYTE_RECORD_COUNT:
+        raise ValueError(f"expected {CLASS_BYTE_RECORD_COUNT} class labels, got {len(labels)}")
+
+    chars = collect_chars(*labels)
+    if len(chars) > len(CLASS_BYTE_GLYPH_CODES):
+        raise ValueError(
+            f"class byte table needs {len(chars)} glyph codes, only {len(CLASS_BYTE_GLYPH_CODES)} available"
+        )
+
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = JP_FONT_BASE + SPACE_GLYPH * GLYPH_BYTES
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    code_by_char = {char: CLASS_BYTE_GLYPH_CODES[i] for i, char in enumerate(chars)}
+    for char, code in code_by_char.items():
+        offset = JP_FONT_BASE + code * GLYPH_BYTES
+        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+
+    for index, text in enumerate(labels):
+        ptr = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        capacity = byte_string_capacity(data, ptr)
+        values = [0x20 if char == " " else code_by_char[char] for char in text]
+        if len(values) + 1 > capacity:
+            raise ValueError(
+                f"class byte string {index} at 0x{ptr:06X} needs {len(values) + 1} bytes, "
+                f"only {capacity}: {text!r}"
+            )
+        write_byte_string(data, ptr, values, capacity)
+
+
 def update_md_checksum(data: bytearray) -> int:
     checksum = 0
     for offset in range(0x200, len(data), 2):
@@ -757,6 +822,7 @@ def main() -> None:
         *ITEM_DESCRIPTION_PATCHES,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
+    patch_class_byte_table(data)
     if not args.skip_condition:
         patch_conditions(data, glyph_by_char)
     patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
