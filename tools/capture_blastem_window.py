@@ -8,6 +8,8 @@ import subprocess
 from pathlib import Path
 
 from PIL import Image
+from Xlib import X
+from Xlib.display import Display
 
 
 def find_blastem_window() -> int:
@@ -93,14 +95,25 @@ def read_xwd(data: bytes) -> Image.Image:
     return img
 
 
+def capture_with_xlib(window_id: int) -> Image.Image:
+    display = Display()
+    window = display.create_resource_object("window", window_id)
+    geom = window.get_geometry()
+    image = window.get_image(0, 0, geom.width, geom.height, X.ZPixmap, 0xFFFFFFFF)
+    return Image.frombytes("RGB", (geom.width, geom.height), image.data, "raw", "BGRX")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
 
     window = find_blastem_window()
-    xwd = subprocess.check_output(["xwd", "-silent", "-id", f"{window:#x}"])
-    img = read_xwd(xwd)
+    try:
+        xwd = subprocess.check_output(["xwd", "-silent", "-id", f"{window:#x}"])
+        img = read_xwd(xwd)
+    except subprocess.CalledProcessError:
+        img = capture_with_xlib(window)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     img.save(args.output)
     print(args.output)

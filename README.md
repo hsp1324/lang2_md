@@ -17,6 +17,8 @@
 - `build_korean_complete_wip.py`: 영어판 고정 폰트 기반 초기 실험 빌더입니다.
 - `tools/jp_text_font_analyzer.py`: 일본판 16비트 텍스트 스트림, glyph 목록, `0x40000` JP font 포맷을 오프라인 분석/렌더링하는 도구입니다.
 - `tools/jp_byte_table_analyzer.py`: 클래스/용병/몬스터명 8비트 문자열 테이블 분석 도구입니다.
+- `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
+- `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
 - `script_extract/korean_records_google.json`: 기계 번역 기반 전체 대사 레코드입니다.
@@ -37,6 +39,24 @@ python3 scripts/build_korean_jp_probe.py
 ```text
 roms/builds/Langrisser II (Korean JP Probe).md
 ```
+
+패치 원인 분리용 옵션:
+
+```bash
+python3 scripts/build_korean_jp_probe.py --skip-condition
+python3 scripts/build_korean_jp_probe.py --skip-scenarios
+python3 scripts/build_korean_jp_probe.py --skip-direct
+python3 scripts/build_korean_jp_probe.py --skip-items
+```
+
+실험용 옵션:
+
+```bash
+python3 scripts/build_korean_jp_probe.py --patch-class-byte-table
+python3 scripts/build_korean_jp_probe.py --include-unsafe-direct-names
+```
+
+두 실험 옵션은 기본 빌드에서 꺼져 있습니다. `--patch-class-byte-table`은 일본어 UI가 공유하는 1바이트 폰트 슬롯과 충돌할 수 있고, `--include-unsafe-direct-names`는 `0x974xx` 후보 이름 테이블을 건드려 이름 확정 이후 진행을 깨뜨릴 수 있습니다.
 
 기존 영어판 기반 WIP:
 
@@ -82,6 +102,12 @@ Start, Start, C, B(A 선택), Left, Up, C(Done), C
 Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
 ```
 
+BlastEm이 기존 SRAM을 자동으로 불러오면 ROM 변경과 별개로 이름 입력/진행 테스트 결과가 달라질 수 있습니다. 테스트가 이상하면 아래 파일을 백업 후 새로 시작합니다.
+
+```text
+~/.local/share/blastem/Langrisser II (Korean JP Probe)/save.sram
+```
+
 ## 현재 상태
 
 ### 일본판 기반 새 방향
@@ -100,6 +126,7 @@ Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
 - 아이템명은 `0xA14AC` glyph 목록과 `0xA1902` 포인터 테이블을 함께 사용합니다. glyph 목록을 `0x1E7800` 근처 빈 공간으로 재배치하고, 원본 glyph 목록 뒤에 한글 glyph를 추가해 아이템명을 한국어로 바꿉니다.
 - 아이템 설명문은 별도 glyph 목록 `0xA152E`와 포인터 테이블 `0xA1D7C`를 사용합니다. glyph 목록 참조 `0x272BC`를 `0x1E9000`으로 재배치하고, 37개 설명 레코드를 45칸 고정 레이아웃에 맞춰 한국어로 교체합니다.
 - 상태 메시지 중 `MP不足です`, `眠らされています`, `魔法を封じられています`는 `마나부족`, `수면상태`, `마법봉인`으로 교체합니다.
+- `0x97404` 이후 직접 문자열 후보는 렌더링상 캐릭터/몬스터명처럼 보이지만, 이름 화면의 실제 표시 테이블은 아니며 이름 확정 이후 진행과 충돌할 수 있습니다. 기본 빌드에서는 `UNSAFE_DIRECT_NAME_PATCHES`로 분리해 제외합니다.
 - 클래스/용병/몬스터 이름 테이블은 별도 8비트 문자열 테이블입니다.
   - 포인터 테이블: `0x05E6D8`
   - 문자열 영역: `0x05E94A` 이후
@@ -142,3 +169,4 @@ python3 tools/jp_byte_table_analyzer.py sheet
 - `!`, `?` 같은 문장부호는 대사 의미에 중요하므로 보존해야 합니다.
 - 영어판 고정 폰트에 한글을 계속 밀어 넣는 방식은 이름 입력, 타이틀, 명령 아이콘, 상태창 glyph와 충돌이 많습니다. 최종 방향은 일본판 glyph 시스템을 이용하는 방식이 더 적합합니다.
 - 일본판도 모든 텍스트가 16x16 glyph 시스템은 아닙니다. 클래스/용병/몬스터 이름은 반각 가나용 8비트 렌더러를 사용하므로, 한글화하려면 이 렌더러의 폰트 위치 또는 로딩 경로를 별도로 찾아야 합니다.
+- 스캔 결과가 텍스트처럼 보여도 바로 덮어쓰지 않습니다. `0x974xx`처럼 다른 게임 데이터와 겹치거나 진행 코드가 참조하는 영역일 수 있으므로, 포인터 소유권과 실제 화면 반영을 확인한 뒤 패치합니다.

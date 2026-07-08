@@ -42,9 +42,10 @@ CUSTOM_GLYPH_START = 0x0260
 CUSTOM_GLYPH_END = 0x07FF
 CUSTOM_GLYPH_RESERVED = {0x039C}
 CLASS_BYTE_GLYPH_CODES = [
-    *range(0x80, 0xDE),
-    *range(0xE0, 0xFF),
     *range(0x01, 0x20),
+    *range(0x21, 0x7F),
+    *range(0x80, 0xA1),
+    *range(0xE0, 0xFF),
 ]
 
 DIRECT_STRING_PATCHES = {
@@ -93,6 +94,13 @@ DIRECT_STRING_PATCHES = {
     0xA16D4: "버릴아이템선택",
     0xA16F2: "버리겠습니까예아니오",
     0xA1716: "구입판매더이상소지불가",
+}
+
+# These candidate strings were found by scanning, but they are not the visible
+# name table used by the JP name-entry screen. Patching them can break the flow
+# after name confirmation, so they stay out of the default build until their
+# renderer/data ownership is identified.
+UNSAFE_DIRECT_NAME_PATCHES = {
     0x97404: "엘윈",
     0x97410: "리아나",
     0x97418: "라나",
@@ -677,10 +685,15 @@ def patch_scenarios(data: bytearray, descriptions: list[str], glyph_by_char: dic
         patch_scenario(data, index, text, glyph_by_char)
 
 
-def patch_direct_strings(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    for offset, text in DIRECT_STRING_PATCHES.items():
+def patch_direct_strings(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    direct_patches: dict[int, str],
+    fixed_patches: dict[int, tuple[int, str]],
+) -> None:
+    for offset, text in direct_patches.items():
         write_direct_string(data, offset, text, glyph_by_char)
-    for offset, (max_words, text) in DIRECT_FIXED_STRING_PATCHES.items():
+    for offset, (max_words, text) in fixed_patches.items():
         write_fixed_direct_string(data, offset, max_words, text, glyph_by_char)
 
 
@@ -804,6 +817,19 @@ def main() -> None:
         help="number of scenario description records to patch from the start",
     )
     parser.add_argument("--skip-condition", action="store_true")
+    parser.add_argument("--skip-scenarios", action="store_true")
+    parser.add_argument("--skip-direct", action="store_true")
+    parser.add_argument(
+        "--include-unsafe-direct-names",
+        action="store_true",
+        help="patch the 0x974xx candidate name table; experimental and can break name confirmation",
+    )
+    parser.add_argument("--skip-items", action="store_true")
+    parser.add_argument(
+        "--patch-class-byte-table",
+        action="store_true",
+        help="patch JP one-byte class/mercenary labels; experimental because shared byte slots collide with unpatched JP UI",
+    )
     args = parser.parse_args()
 
     data = bytearray(IN_ROM.read_bytes())
@@ -813,22 +839,35 @@ def main() -> None:
     active_condition_chars = "" if args.skip_condition else "\n".join(
         line for screen in CONDITION_SCREENS for line in screen
     )
+    active_descriptions = [] if args.skip_scenarios else descriptions[: args.scenario_count]
+    direct_patches = {} if args.skip_direct else dict(DIRECT_STRING_PATCHES)
+    fixed_patches = {} if args.skip_direct else dict(DIRECT_FIXED_STRING_PATCHES)
+    if args.include_unsafe_direct_names:
+        direct_patches.update(UNSAFE_DIRECT_NAME_PATCHES)
+    active_direct_strings = list(direct_patches.values())
+    active_fixed_strings = [text for _, text in fixed_patches.values()]
+    active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
+    active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
     chars = collect_chars(
         active_condition_chars,
-        *descriptions[: args.scenario_count],
-        *DIRECT_STRING_PATCHES.values(),
-        *(text for _, text in DIRECT_FIXED_STRING_PATCHES.values()),
-        *ITEM_NAME_PATCHES,
-        *ITEM_DESCRIPTION_PATCHES,
+        *active_descriptions,
+        *active_direct_strings,
+        *active_fixed_strings,
+        *active_item_names,
+        *active_item_descriptions,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
-    patch_class_byte_table(data)
+    if args.patch_class_byte_table:
+        patch_class_byte_table(data)
     if not args.skip_condition:
         patch_conditions(data, glyph_by_char)
-    patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
-    patch_direct_strings(data, glyph_by_char)
-    patch_item_names(data, glyph_by_char)
-    patch_item_descriptions(data, glyph_by_char)
+    if not args.skip_scenarios:
+        patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
+    if not args.skip_direct:
+        patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches)
+    if not args.skip_items:
+        patch_item_names(data, glyph_by_char)
+        patch_item_descriptions(data, glyph_by_char)
     checksum = update_md_checksum(data)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_bytes(data)
