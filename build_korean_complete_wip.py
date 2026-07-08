@@ -842,7 +842,19 @@ EXTRA_WIDE_FIXED_PATCHES = [
     (0x1BB98C, len("Warlock"), "워록"),
     (0x1BBB39, len("Warlock"), "워록"),
 ]
-ROUTE_MENU_TILE_GLYPHS: dict[str, int] = {}
+ROUTE_MENU_TILE_GLYPHS: dict[str, int] = {
+    # Route menu labels need more Korean glyphs than the shared fixed-font pool
+    # can hold after title/status tiles are reserved. These tile IDs are blank
+    # in the original fixed font and are not referenced by the route-menu text
+    # tilemap itself.
+    "순": 0x8B,
+    "서": 0x8C,
+    "동": 0x8D,
+    "적": 0x8E,
+    "군": 0x8F,
+    "출": 0xCF,
+    "격": 0xF9,
+}
 CUSTOM_FIXED_TILE_GLYPHS: dict[str, int] = {
     "자": 0x90,
     "금": 0x91,
@@ -863,7 +875,13 @@ TITLE_FIXED_RESERVED_CODES = (
     0xC4,
     0xC5,
 )
-ROUTE_MENU_TILEMAP16_PATCHES: list[tuple[int, int, str]] = []
+ROUTE_MENU_TILEMAP16_PATCHES: list[tuple[int, int, str]] = [
+    (0x1E7EC8, len("Arrange"), "배치"),
+    (0x1E7ED8, len("Reorder"), "순서"),
+    (0x1E7EE8, len("Auto-Arrange"), "자동"),
+    (0x1E7F02, len("Examine Enemy"), "적군"),
+    (0x1E7F1E, len("Sortie"), "출격"),
+]
 NAME_ENTRY_GRID_START = 0xA3948
 NAME_ENTRY_GRID_END = 0xA3ABC
 NAME_ENTRY_DONE_OFFSET = 0xA3AB8
@@ -1200,6 +1218,8 @@ def collect_wide_glyphs(texts: list[str], first_glyphs: tuple[str, ...] = ()) ->
             if value < 0x20 or ch == " " or 0x20 <= value <= 0x7E or 0xC0 <= value <= 0xDF:
                 continue
             if ch in CUSTOM_FIXED_TILE_GLYPHS:
+                continue
+            if ch in ROUTE_MENU_TILE_GLYPHS:
                 continue
             if ch not in seen:
                 seen.add(ch)
