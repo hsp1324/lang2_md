@@ -99,6 +99,12 @@ Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
 - 아이템명은 `0xA14AC` glyph 목록과 `0xA1902` 포인터 테이블을 함께 사용합니다. glyph 목록을 `0x1E7800` 근처 빈 공간으로 재배치하고, 원본 glyph 목록 뒤에 한글 glyph를 추가해 아이템명을 한국어로 바꿉니다.
 - 아이템 설명문은 별도 glyph 목록 `0xA152E`와 포인터 테이블 `0xA1D7C`를 사용합니다. glyph 목록 참조 `0x272BC`를 `0x1E9000`으로 재배치하고, 37개 설명 레코드를 45칸 고정 레이아웃에 맞춰 한국어로 교체합니다.
 - 상태 메시지 중 `MP不足です`, `眠らされています`, `魔法を封じられています`는 `마나부족`, `수면상태`, `마법봉인`으로 교체합니다.
+- 클래스/용병/몬스터 이름 테이블은 별도 8비트 문자열 테이블입니다.
+  - 포인터 테이블: `0x05E6D8`
+  - 문자열 영역: `0x05E94A` 이후
+  - 포인터는 `E953 0005`처럼 16비트 워드가 뒤집힌 형식이며 실제 주소는 `0x0005E953`입니다.
+  - 문자열 종료값은 `0xFF`이고, 일본판은 CP932 반각 가나를 사용합니다.
+  - `tools/jp_byte_table_analyzer.py`로 일본어 원문, 영어판 대응명, 한국어 후보명을 CSV/이미지로 확인합니다.
 
 분석 예시:
 
@@ -108,6 +114,8 @@ python3 tools/jp_text_font_analyzer.py render-text --table scenarios --index 0 -
 python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md" render-text --table conditions --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
 python3 tools/jp_text_font_analyzer.py render-direct-strings --start 0x97000 --end 0x97800 --scale 3
 python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md" render-pointer-text --pointer-table 0xA1D7C --low 0xA1E10 --high 0xA2C00 --glyph-list 0x1E9000 --cols 15 --scale 3 --out item_descriptions_korean_probe_cols15.png
+python3 tools/jp_byte_table_analyzer.py csv
+python3 tools/jp_byte_table_analyzer.py sheet
 ```
 
 ### 영어판 기반 WIP
@@ -132,3 +140,4 @@ python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md
 - 타이틀의 `Press Start Button`, `Start`, `Load`, `NCS Corp.`에 쓰이는 고정 타일은 보호 대상입니다. 이 타일을 한글로 덮으면 시작 화면이 바로 깨집니다.
 - `!`, `?` 같은 문장부호는 대사 의미에 중요하므로 보존해야 합니다.
 - 영어판 고정 폰트에 한글을 계속 밀어 넣는 방식은 이름 입력, 타이틀, 명령 아이콘, 상태창 glyph와 충돌이 많습니다. 최종 방향은 일본판 glyph 시스템을 이용하는 방식이 더 적합합니다.
+- 일본판도 모든 텍스트가 16x16 glyph 시스템은 아닙니다. 클래스/용병/몬스터 이름은 반각 가나용 8비트 렌더러를 사용하므로, 한글화하려면 이 렌더러의 폰트 위치 또는 로딩 경로를 별도로 찾아야 합니다.
