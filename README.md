@@ -1,17 +1,21 @@
 # Langrisser II Korean ROM Hack WIP
 
-랑그릿사 II 메가드라이브 영어판을 기준으로 한국어화를 진행 중인 작업 폴더입니다.
+랑그릿사 II 메가드라이브 한국어화를 진행 중인 작업 폴더입니다.
+
+초기 작업은 영어판 고정 폰트를 기준으로 진행했지만, 슬롯 충돌이 많아 일본판의 16x16 glyph 로딩 시스템을 분석하는 방향으로 전환했습니다. 일본판은 각 텍스트 레코드가 사용할 glyph 목록을 먼저 VRAM에 올리고, 본문은 그 목록의 로컬 인덱스를 참조합니다.
 
 ## 필요한 파일
 
 이 저장소는 ROM 바이너리를 추적하지 않습니다. 빌드하려면 작업 폴더 루트에 아래 파일을 직접 두어야 합니다.
 
 - `Langrisser II (English).md`
-- `Langrisser II (Japan).md`는 비교용이며 현재 빌드에는 필수는 아닙니다.
+- `Langrisser II (Japan).md`
 
 ## 주요 파일
 
 - `build_korean_complete_wip.py`: 현재 메인 빌더입니다.
+- `build_korean_jp_probe.py`: 일본판 텍스트/glyph 시스템을 사용하는 새 프로토타입 빌더입니다.
+- `tools/jp_text_font_analyzer.py`: 일본판 16비트 텍스트 스트림, glyph 목록, `0x40000` JP font 포맷을 오프라인 분석/렌더링하는 도구입니다.
 - `build_korean_chapter1_natural_jamo.py`: 1장 자연스러운 한국어 대사 override가 들어 있습니다.
 - `build_korean_machine_jamo.py`: VWF 대사 재배치와 한글 자모 인코딩 기반 코드입니다.
 - `build_korean_machine_jamo_fixedfont.py`: 전투 대사 고정 폰트 패치 실험 코드입니다.
@@ -20,6 +24,20 @@
 - `romhack_capture.py`: BlastEm 자동 입력/캡처 보조 스크립트입니다.
 
 ## 빌드
+
+일본판 기반 probe:
+
+```bash
+python3 build_korean_jp_probe.py
+```
+
+출력 파일:
+
+```text
+Langrisser II (Korean JP Probe).md
+```
+
+기존 영어판 기반 WIP:
 
 ```bash
 python3 build_korean_complete_wip.py
@@ -39,6 +57,12 @@ BlastEm이 `tools/blastem/`에 있는 경우:
 env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "Langrisser II (Korean Complete WIP).md"
 ```
 
+일본판 기반 probe를 실행하려면 ROM 이름만 바꿉니다.
+
+```bash
+env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "Langrisser II (Korean JP Probe).md"
+```
+
 현재 확인된 기본 키:
 
 - `Return`: Start
@@ -52,6 +76,26 @@ Start, Start, C, B(A 선택), Left, Up, C(Done), C
 ```
 
 ## 현재 상태
+
+### 일본판 기반 새 방향
+
+- 일본판 텍스트 포인터 테이블을 확인했습니다.
+  - 조건 화면: 포인터 테이블 `0x98D7A`, glyph 목록 테이블 `0x986C6`
+  - 시나리오 설명: 포인터 테이블 `0x9CF7C`, glyph 목록 테이블 `0x9B2FC`
+- 일본판 glyph 원본은 `0x40000`부터 시작하며, glyph 1개는 64바이트입니다.
+- 실제 변환은 ROM의 `0x2C390` 루틴과 일치합니다. 각 glyph는 16비트 행 32개를 2bpp 8x8 타일 4개로 변환하고, 화면에서는 2x2 타일로 배치됩니다.
+- `tools/jp_text_font_analyzer.py`로 에뮬레이터 실행 없이 원문/폰트/패치 결과를 이미지로 확인할 수 있습니다.
+- `build_korean_jp_probe.py`는 일본판 ROM에 한글 glyph를 `0x3A0` 이후 빈 슬롯에 넣고, 1장 조건 화면과 시나리오 설명을 한국어로 바꾸는 프로토타입입니다.
+
+분석 예시:
+
+```bash
+python3 tools/jp_text_font_analyzer.py report --samples 2
+python3 tools/jp_text_font_analyzer.py render-text --table scenarios --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
+python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md" render-text --table conditions --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
+```
+
+### 영어판 기반 WIP
 
 - 오프닝 일부 한글 출력 확인됨.
 - 1장 준비 화면의 기본 항목은 한국어로 표시됩니다.
@@ -72,3 +116,4 @@ Start, Start, C, B(A 선택), Left, Up, C(Done), C
 - UI 슬롯이 매우 빡빡합니다. `자/금/고/상/점`처럼 일부 글자는 코드표 슬롯 대신 직접 고정 타일에 배치하고, 전투 경로 메뉴 전용 글자는 별도 빈 타일 후보에 분리합니다.
 - 타이틀의 `Press Start Button`, `Start`, `Load`, `NCS Corp.`에 쓰이는 고정 타일은 보호 대상입니다. 이 타일을 한글로 덮으면 시작 화면이 바로 깨집니다.
 - `!`, `?` 같은 문장부호는 대사 의미에 중요하므로 보존해야 합니다.
+- 영어판 고정 폰트에 한글을 계속 밀어 넣는 방식은 이름 입력, 타이틀, 명령 아이콘, 상태창 glyph와 충돌이 많습니다. 최종 방향은 일본판 glyph 시스템을 이용하는 방식이 더 적합합니다.
