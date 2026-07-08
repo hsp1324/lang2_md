@@ -24,6 +24,10 @@ ITEM_GLYPH_LIST_BASE = 0xA14AC
 ITEM_GLYPH_LIST_REFS = (0x21C6E, 0x26924)
 ITEM_NAME_POINTER_TABLE = 0xA1902
 ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x1E7800
+ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
+ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
+ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
+ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x1E9000
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 
@@ -71,6 +75,9 @@ DIRECT_STRING_PATCHES = {
     0x82DF0: "머맨",
     0x82DFA: "그리폰",
     0x82E06: "엔젤",
+    0x971F4: "마나부족",
+    0x97202: "수면상태",
+    0x97214: "마법봉인",
     0x97404: "엘윈",
     0x97410: "리아나",
     0x97418: "라나",
@@ -221,6 +228,46 @@ ITEM_NAME_PATCHES = [
     "갸라르혼",
     "부적",
     "홀리로드",
+]
+
+ITEM_DESCRIPTION_PATCHES = [
+    "호신용 단검\nAT+1",
+    "묵직한 망치\nAT+2",
+    "손잡이가 긴 대검\nAT+4",
+    "마력을 높이는 완드\n사거리+2 마법+1",
+    "마법의 창\nAT+6",
+    "저주받은 대형도끼\nAT+8 DF-3",
+    "용을 쓰러뜨린 검\nAT+7",
+    "루시리스의 성검\nAT+4 DF+1",
+    "빛의 성검\nAT+9 DF+2",
+    "전설의 검\nAT-4 DF-3",
+    "몸을 단련하는 추\nAT+1 MV-1",
+    "랑그릿사를 깨우는\n성스러운 로드",
+    "알하자드를 깨우는\n어둠의 로드",
+    "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
+    "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
+    "나무판 방패\nDF+1",
+    "무거운 철 방패\nDF+2",
+    "고리로 엮은 갑옷\nDF+3",
+    "판금 갑옷\nDF+4",
+    "인형 같은 철 갑옷\nAT+10 DF+10",
+    "낡은 옷\nDF+1 마법저항+10",
+    "용비늘 갑옷\nDF+4",
+    "방어력을 높이는 로브\nDF+2 마법저항+20",
+    "강한 수호의 방패\nDF+3 D보정+1",
+    "불가사의한 룬스톤\n레벨10",
+    "신의 가호를 받은 십자가\nD보정+2",
+    "마석으로 만든 목걸이\nD보정+3",
+    "마력을 봉한 수정\nMP소모2배 마법+3",
+    "발이 빨라지는 부츠\nMV+2",
+    "아름다운 왕관\n지휘범위+3 A+2",
+    "빛의 오로라\nAT+2",
+    "성천사의 날개\n마법저항+10",
+    "신비한 링\n마법대미지+2",
+    "네 가지 보석\n소환부대+1",
+    "신의 부적\nA보정+2 D보정+2",
+    "루시리스의 부적\n마법저항+15",
+    "성스러운 로드\n마법능력 상승",
 ]
 
 
@@ -488,6 +535,29 @@ def wrap_korean(text: str, width: int = 18) -> list[str]:
     return lines
 
 
+def fixed_text_tokens(
+    text: str,
+    width: int,
+    rows: int,
+    local_index,
+    space_index: int,
+) -> list[int]:
+    wrapped: list[str] = []
+    for paragraph in text.splitlines():
+        wrapped.extend(wrap_korean(paragraph, width))
+    if len(wrapped) > rows:
+        raise ValueError(f"fixed text has too many rows ({len(wrapped)} > {rows}): {text!r}")
+
+    tokens: list[int] = []
+    for row in range(rows):
+        line = wrapped[row] if row < len(wrapped) else ""
+        if len(line) > width:
+            raise ValueError(f"fixed text row too long ({len(line)} > {width}): {line!r}")
+        tokens.extend(local_index(char) for char in line)
+        tokens.extend([space_index] * (width - len(line)))
+    return tokens
+
+
 def load_scenario_descriptions() -> list[str]:
     src = Path("build_korean_complete_wip.py").read_text()
     module = ast.parse(src)
@@ -607,6 +677,46 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         raise ValueError(f"relocated item glyph list overflow: 0x{end:06X}")
 
 
+def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    ptrs = read_pointer_table_until(data, ITEM_DESCRIPTION_POINTER_TABLE, 0xA1E10, 0xA2C00)
+    if len(ptrs) != len(ITEM_DESCRIPTION_PATCHES):
+        raise ValueError(
+            f"expected {len(ITEM_DESCRIPTION_PATCHES)} item description pointers, got {len(ptrs)}"
+        )
+
+    desc_glyphs = read_word_list(data, ITEM_DESCRIPTION_GLYPH_LIST_BASE)
+    local_by_glyph = {glyph: i for i, glyph in enumerate(desc_glyphs)}
+    if SPACE_GLYPH not in local_by_glyph:
+        raise ValueError("item description glyph list has no known space glyph")
+    space_index = local_by_glyph[SPACE_GLYPH]
+
+    def local_index(char: str) -> int:
+        glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
+        if glyph not in local_by_glyph:
+            local_by_glyph[glyph] = len(desc_glyphs)
+            desc_glyphs.append(glyph)
+        return local_by_glyph[glyph]
+
+    for i, (ptr, text) in enumerate(zip(ptrs, ITEM_DESCRIPTION_PATCHES)):
+        if i + 1 < len(ptrs):
+            capacity = (ptrs[i + 1] - ptr) // 2
+        else:
+            capacity = direct_string_capacity_words(data, ptr)
+        if capacity < 46:
+            raise ValueError(f"item description at 0x{ptr:06X} is too small: {capacity} words")
+        tokens = fixed_text_tokens(text, 15, 3, local_index, space_index)
+        if len(tokens) + 1 > capacity:
+            raise ValueError(
+                f"item description at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
+            )
+        write_token_stream(data, ptr, tokens, capacity)
+
+    put32(data, ITEM_DESCRIPTION_GLYPH_LIST_REF, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE)
+    end = write_word_list_exact(data, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE, desc_glyphs)
+    if end >= 0x1EA000:
+        raise ValueError(f"relocated item description glyph list overflow: 0x{end:06X}")
+
+
 def update_md_checksum(data: bytearray) -> int:
     checksum = 0
     for offset in range(0x200, len(data), 2):
@@ -640,6 +750,7 @@ def main() -> None:
         *DIRECT_STRING_PATCHES.values(),
         *(text for _, text in DIRECT_FIXED_STRING_PATCHES.values()),
         *ITEM_NAME_PATCHES,
+        *ITEM_DESCRIPTION_PATCHES,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if not args.skip_condition:
@@ -647,6 +758,7 @@ def main() -> None:
     patch_scenarios(data, descriptions[: args.scenario_count], glyph_by_char)
     patch_direct_strings(data, glyph_by_char)
     patch_item_names(data, glyph_by_char)
+    patch_item_descriptions(data, glyph_by_char)
     checksum = update_md_checksum(data)
     args.out.write_bytes(data)
     print(f"wrote {args.out}")

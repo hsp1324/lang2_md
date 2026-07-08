@@ -97,7 +97,8 @@ Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
 - 조건 화면 32개는 glyph 목록 포인터를 `0x1E7000` 근처 빈 공간으로 재배치해서 한국어 화면으로 교체합니다. 원본 glyph 목록 공간이 짧은 조건도 있어서 재배치가 필요합니다.
 - `0x82BFE` 근처 마법명과 `0x82D5A` 근처 용병명은 `FFFF` 종료 직접 문자열로 확인되어 한국어로 교체합니다.
 - 아이템명은 `0xA14AC` glyph 목록과 `0xA1902` 포인터 테이블을 함께 사용합니다. glyph 목록을 `0x1E7800` 근처 빈 공간으로 재배치하고, 원본 glyph 목록 뒤에 한글 glyph를 추가해 아이템명을 한국어로 바꿉니다.
-- 아이템 설명문도 같은 glyph 목록을 참조할 가능성이 있으므로, 원본 glyph 목록은 새 목록의 앞부분에 그대로 보존합니다. 설명문 번역은 별도 토큰 스트림 분석 후 진행해야 합니다.
+- 아이템 설명문은 별도 glyph 목록 `0xA152E`와 포인터 테이블 `0xA1D7C`를 사용합니다. glyph 목록 참조 `0x272BC`를 `0x1E9000`으로 재배치하고, 37개 설명 레코드를 45칸 고정 레이아웃에 맞춰 한국어로 교체합니다.
+- 상태 메시지 중 `MP不足です`, `眠らされています`, `魔法を封じられています`는 `마나부족`, `수면상태`, `마법봉인`으로 교체합니다.
 
 분석 예시:
 
@@ -106,6 +107,7 @@ python3 tools/jp_text_font_analyzer.py report --samples 2
 python3 tools/jp_text_font_analyzer.py render-text --table scenarios --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
 python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md" render-text --table conditions --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
 python3 tools/jp_text_font_analyzer.py render-direct-strings --start 0x97000 --end 0x97800 --scale 3
+python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md" render-pointer-text --pointer-table 0xA1D7C --low 0xA1E10 --high 0xA2C00 --glyph-list 0x1E9000 --cols 15 --scale 3 --out item_descriptions_korean_probe_cols15.png
 ```
 
 ### 영어판 기반 WIP

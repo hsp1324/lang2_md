@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from dataclasses import dataclass
+import os
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -69,6 +70,18 @@ def read_pointer_table(data: bytes, table: TextTable) -> list[int]:
                 f"{table.name}[{i}] pointer {ptr:06X} is outside ROM size {len(data):06X}"
             )
         ptrs.append(ptr)
+    return ptrs
+
+
+def read_pointer_table_until(data: bytes, offset: int, low: int, high: int) -> list[int]:
+    ptrs: list[int] = []
+    pos = offset
+    while pos + 3 < len(data):
+        ptr = be32(data, pos)
+        if not (low <= ptr < high):
+            break
+        ptrs.append(ptr)
+        pos += 4
     return ptrs
 
 
@@ -462,6 +475,56 @@ def command_render_direct_strings(args: argparse.Namespace) -> None:
         print(f"0x{offset:06X}: {' '.join(f'{value:04X}' for value in values)}")
 
 
+def command_render_pointer_text(args: argparse.Namespace) -> None:
+    data = load_rom(args.rom)
+    if args.count is None:
+        if args.low is None or args.high is None:
+            raise ValueError("--count or both --low/--high are required")
+        ptrs = read_pointer_table_until(data, args.pointer_table, args.low, args.high)
+    else:
+        ptrs = [be32(data, args.pointer_table + i * 4) for i in range(args.count)]
+    if args.limit_entries:
+        ptrs = ptrs[: args.limit_entries]
+    glyph_list = read_word_list(data, args.glyph_list, args.glyph_limit)
+
+    entries: list[tuple[int, list[int]]] = []
+    for ptr in ptrs:
+        entries.append((ptr, read_token_stream(data, ptr, args.limit_tokens)))
+
+    gw, gh, _ = glyph_dimensions(args.format)
+    cell_w = gw * args.scale
+    cell_h = gh * args.scale
+    label_w = 84
+    entry_gap = 8
+    rendered: list[tuple[int, Image.Image]] = []
+    tmp = OUT_DIR / f"_tmp_pointer_text_{os.getpid()}_{args.pointer_table:06X}_{args.cols}.png"
+    for ptr, tokens in entries:
+        render_text_sample(data, tokens, args.base, args.format, args.scale, args.cols, tmp, glyph_list)
+        out = Image.open(tmp).copy()
+        rendered.append((ptr, out))
+    if tmp.exists():
+        tmp.unlink()
+
+    width = label_w + max((img.width for _, img in rendered), default=args.cols * cell_w)
+    height = max(1, sum(img.height + entry_gap for _, img in rendered))
+    sheet = Image.new("RGB", (width, height), (245, 245, 245))
+    draw = ImageDraw.Draw(sheet)
+    y = 0
+    for ptr, img in rendered:
+        draw.text((2, y + 2), f"{ptr:06X}", fill=(0, 0, 0))
+        sheet.paste(img, (label_w, y))
+        y += img.height + entry_gap
+        draw.line((0, y - 1, width, y - 1), fill=(220, 220, 220))
+
+    out = OUT_DIR / args.out
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out)
+    print(out)
+    print(f"entries={len(entries)} glyphs={len(glyph_list)}")
+    for i, (ptr, tokens) in enumerate(entries[: args.print_entries]):
+        print(f"{i:02d} 0x{ptr:06X}: {' '.join(f'{token:04X}' for token in tokens[:args.print_tokens])}")
+
+
 def parse_int(value: str) -> int:
     return int(value, 0)
 
@@ -550,6 +613,37 @@ def main() -> None:
     direct.add_argument("--max-words", type=int, default=24)
     direct.add_argument("--limit", type=int, default=0)
     direct.set_defaults(func=command_render_direct_strings)
+
+    pointer_text = sub.add_parser("render-pointer-text")
+    pointer_text.add_argument("--pointer-table", type=parse_int, required=True)
+    pointer_text.add_argument("--count", type=int)
+    pointer_text.add_argument("--low", type=parse_int)
+    pointer_text.add_argument("--high", type=parse_int)
+    pointer_text.add_argument("--glyph-list", type=parse_int, required=True)
+    pointer_text.add_argument("--glyph-limit", type=int, default=4096)
+    pointer_text.add_argument("--base", type=parse_int, default=JP_FONT_BASE)
+    pointer_text.add_argument(
+        "--format",
+        choices=(
+            "1bpp16",
+            "1bpp16-invert",
+            "1bpp16x32",
+            "1bpp16x32-invert",
+            "jp2bpp16",
+            "jp2bpp16-swap",
+            "md4-8",
+            "md4-16",
+        ),
+        default="jp2bpp16",
+    )
+    pointer_text.add_argument("--limit-tokens", type=int, default=512)
+    pointer_text.add_argument("--limit-entries", type=int, default=0)
+    pointer_text.add_argument("--cols", type=int, default=32)
+    pointer_text.add_argument("--scale", type=int, default=3)
+    pointer_text.add_argument("--out", type=Path, default=Path("pointer_text.png"))
+    pointer_text.add_argument("--print-entries", type=int, default=8)
+    pointer_text.add_argument("--print-tokens", type=int, default=96)
+    pointer_text.set_defaults(func=command_render_pointer_text)
 
     args = parser.parse_args()
     args.func(args)
