@@ -13,8 +13,8 @@
 
 ## 주요 파일
 
-- `build_korean_complete_wip.py`: 현재 메인 빌더입니다.
-- `build_korean_jp_probe.py`: 일본판 텍스트/glyph 시스템을 사용하는 새 프로토타입 빌더입니다.
+- `build_korean_jp_probe.py`: 현재 우선 진행 중인 일본판 텍스트/glyph 시스템 기반 빌더입니다.
+- `build_korean_complete_wip.py`: 영어판 고정 폰트 기반 초기 실험 빌더입니다.
 - `tools/jp_text_font_analyzer.py`: 일본판 16비트 텍스트 스트림, glyph 목록, `0x40000` JP font 포맷을 오프라인 분석/렌더링하는 도구입니다.
 - `build_korean_chapter1_natural_jamo.py`: 1장 자연스러운 한국어 대사 override가 들어 있습니다.
 - `build_korean_machine_jamo.py`: VWF 대사 재배치와 한글 자모 인코딩 기반 코드입니다.
@@ -69,7 +69,7 @@ env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "Langrisser II (Kore
 - `d`: C / 결정
 - `s`: B / 취소
 
-1장 진입 테스트 흐름:
+영어판 기반 WIP의 1장 진입 테스트 흐름:
 
 ```text
 Start, Start, C, B(A 선택), Left, Up, C(Done), C
@@ -91,7 +91,9 @@ Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
 - 일본판 glyph 원본은 `0x40000`부터 시작하며, glyph 1개는 64바이트입니다.
 - 실제 변환은 ROM의 `0x2C390` 루틴과 일치합니다. 각 glyph는 16비트 행 32개를 2bpp 8x8 타일 4개로 변환하고, 화면에서는 2x2 타일로 배치됩니다.
 - `tools/jp_text_font_analyzer.py`로 에뮬레이터 실행 없이 원문/폰트/패치 결과를 이미지로 확인할 수 있습니다.
-- `build_korean_jp_probe.py`는 일본판 ROM에 한글 glyph를 `0x3A0` 이후 빈 슬롯에 넣고, 1장 조건 화면과 시나리오 설명을 한국어로 바꾸는 프로토타입입니다.
+- `build_korean_jp_probe.py`는 일본판 ROM에 한글 glyph를 `0x260` 이후 슬롯에 넣고, 시나리오 설명/조건 화면/직접 문자열 일부를 한국어로 바꾸는 프로토타입입니다.
+- 직접 문자열 중 일부는 `FFFF` 종료 문자열이 아니라 고정 길이 문자열입니다. 예: `0x97034=兵士配属`, `0x9703C=アイテム装備`, `0x97048=ショップ`, `0x97050=指揮官配置`.
+- 현재 일본판 기반 probe에서 준비 메뉴 `용병고용`, `장비착용`, `상점`, `지휘관배치`, 상점 `구입/판매/취소`, 전투 명령 `이동/공격/마법/소환/치료/명령`을 고정 길이 패치로 처리합니다.
 
 분석 예시:
 
@@ -99,6 +101,7 @@ Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C
 python3 tools/jp_text_font_analyzer.py report --samples 2
 python3 tools/jp_text_font_analyzer.py render-text --table scenarios --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
 python3 tools/jp_text_font_analyzer.py --rom "Langrisser II (Korean JP Probe).md" render-text --table conditions --index 0 --base 0x40000 --format jp2bpp16 --mapped --cols 18 --scale 4
+python3 tools/jp_text_font_analyzer.py render-direct-strings --start 0x97000 --end 0x97800 --scale 3
 ```
 
 ### 영어판 기반 WIP

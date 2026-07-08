@@ -12,6 +12,7 @@ from PIL import Image, ImageDraw
 DEFAULT_ROM = Path("Langrisser II (Japan).md")
 OUT_DIR = Path("analysis_tiles/jpfont_probe")
 
+JP_FONT_BASE = 0x40000
 CONDITION_TABLE = 0x98D7A
 CONDITION_COUNT = 32
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
@@ -329,6 +330,70 @@ def render_text_sample(
     img.save(out_path)
 
 
+def scan_direct_strings(
+    data: bytes,
+    start: int,
+    end: int,
+    min_words: int,
+    max_words: int,
+) -> list[tuple[int, list[int]]]:
+    entries: list[tuple[int, list[int]]] = []
+    pos = start
+    while pos + 1 < end:
+        values: list[int] = []
+        cursor = pos
+        valid = True
+        while cursor + 1 < end and len(values) <= max_words:
+            value = be16(data, cursor)
+            cursor += 2
+            if value == 0xFFFF:
+                break
+            if value >= 0xFF00:
+                valid = False
+                break
+            values.append(value)
+        else:
+            valid = False
+        if valid and min_words <= len(values) <= max_words:
+            entries.append((pos, values))
+            pos = cursor
+        else:
+            pos += 2
+    return entries
+
+
+def render_direct_string_sheet(
+    data: bytes,
+    entries: list[tuple[int, list[int]]],
+    base: int,
+    fmt: str,
+    scale: int,
+    out_path: Path,
+) -> None:
+    gw, gh, _ = glyph_dimensions(fmt)
+    label_w = 72
+    max_words = max((len(values) for _, values in entries), default=1)
+    row_h = gh * scale + 8
+    width = label_w + max_words * gw * scale + 8
+    height = max(1, len(entries)) * row_h
+    img = Image.new("RGB", (width, height), (245, 245, 245))
+    draw = ImageDraw.Draw(img)
+    for row_idx, (offset, values) in enumerate(entries):
+        y = row_idx * row_h
+        draw.text((2, y + 2), f"{offset:06X}", fill=(0, 0, 0))
+        for col_idx, glyph_code in enumerate(values):
+            x = label_w + col_idx * gw * scale
+            try:
+                glyph = render_glyph(data, base, glyph_code, fmt, scale)
+                img.paste(glyph, (x, y))
+            except Exception:
+                draw.rectangle((x, y, x + gw * scale - 1, y + gh * scale - 1), outline=(255, 0, 0))
+                draw.text((x + 1, y + 1), f"{glyph_code:04X}", fill=(255, 0, 0))
+        draw.line((0, y + row_h - 1, width, y + row_h - 1), fill=(220, 220, 220))
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out_path)
+
+
 def command_report(args: argparse.Namespace) -> None:
     data = load_rom(args.rom)
     for table in TEXT_TABLES.values():
@@ -383,6 +448,18 @@ def command_render_text(args: argparse.Namespace) -> None:
     print("tokens:", " ".join(f"{x:04X}" for x in tokens[: args.print_tokens]))
     if glyph_list is not None:
         print("glyph-list:", " ".join(f"{x:04X}" for x in glyph_list[: args.print_tokens]))
+
+
+def command_render_direct_strings(args: argparse.Namespace) -> None:
+    data = load_rom(args.rom)
+    entries = scan_direct_strings(data, args.start, args.end, args.min_words, args.max_words)
+    if args.limit:
+        entries = entries[: args.limit]
+    out = OUT_DIR / f"direct_{args.start:06X}_{args.end:06X}_{args.format}.png"
+    render_direct_string_sheet(data, entries, args.base, args.format, args.scale, out)
+    print(out)
+    for offset, values in entries:
+        print(f"0x{offset:06X}: {' '.join(f'{value:04X}' for value in values)}")
 
 
 def parse_int(value: str) -> int:
@@ -449,6 +526,30 @@ def main() -> None:
     text.add_argument("--print-tokens", type=int, default=96)
     text.add_argument("--mapped", action="store_true", help="render through the per-record glyph loading list")
     text.set_defaults(func=command_render_text)
+
+    direct = sub.add_parser("render-direct-strings")
+    direct.add_argument("--start", type=parse_int, required=True)
+    direct.add_argument("--end", type=parse_int, required=True)
+    direct.add_argument("--base", type=parse_int, default=JP_FONT_BASE)
+    direct.add_argument(
+        "--format",
+        choices=(
+            "1bpp16",
+            "1bpp16-invert",
+            "1bpp16x32",
+            "1bpp16x32-invert",
+            "jp2bpp16",
+            "jp2bpp16-swap",
+            "md4-8",
+            "md4-16",
+        ),
+        default="jp2bpp16",
+    )
+    direct.add_argument("--scale", type=int, default=2)
+    direct.add_argument("--min-words", type=int, default=2)
+    direct.add_argument("--max-words", type=int, default=24)
+    direct.add_argument("--limit", type=int, default=0)
+    direct.set_defaults(func=command_render_direct_strings)
 
     args = parser.parse_args()
     args.func(args)

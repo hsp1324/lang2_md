@@ -33,12 +33,30 @@ DIRECT_STRING_PATCHES = {
     0x97418: "라나",
     0x97420: "쉐리",
     0x9742A: "헤인",
+    0x974FC: "일반병",
     0x97504: "지휘관",
-    0x9750C: "병사",
+    0x9750C: "사제",
     0x97512: "주민",
     0x97518: "해적",
     0x9751E: "자경단",
     0x9764E: "제국병",
+}
+
+DIRECT_FIXED_STRING_PATCHES = {
+    0x9702C: (4, "출격준비"),
+    0x97034: (4, "용병고용"),
+    0x9703C: (6, "장비착용"),
+    0x97048: (4, "상점"),
+    0x97050: (5, "지휘관배치"),
+    0x9705A: (2, "구입"),
+    0x9705E: (2, "판매"),
+    0x97062: (3, "취소"),
+    0x9706C: (2, "이동"),
+    0x97070: (2, "공격"),
+    0x97074: (2, "마법"),
+    0x97078: (2, "소환"),
+    0x9707C: (2, "치료"),
+    0x97080: (2, "명령"),
 }
 
 
@@ -110,6 +128,23 @@ def write_direct_string(data: bytearray, offset: int, text: str, glyph_by_char: 
             f"direct string at 0x{offset:06X} needs {len(values) + 1} words, only {capacity}"
         )
     write_word_list(data, offset, values, capacity)
+
+
+def write_fixed_direct_string(
+    data: bytearray,
+    offset: int,
+    max_words: int,
+    text: str,
+    glyph_by_char: dict[str, int],
+) -> None:
+    values = [SPACE_GLYPH if char == " " else glyph_by_char[char] for char in text]
+    if len(values) > max_words:
+        raise ValueError(
+            f"fixed direct string at 0x{offset:06X} needs {len(values)} words, only {max_words}"
+        )
+    values.extend([SPACE_GLYPH] * (max_words - len(values)))
+    for i, value in enumerate(values):
+        put16(data, offset + i * 2, value)
 
 
 def capacity_words(data: bytes | bytearray, table_offset: int, index: int, record_count: int) -> int:
@@ -332,6 +367,8 @@ def patch_scenarios(data: bytearray, descriptions: list[str], glyph_by_char: dic
 def patch_direct_strings(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     for offset, text in DIRECT_STRING_PATCHES.items():
         write_direct_string(data, offset, text, glyph_by_char)
+    for offset, (max_words, text) in DIRECT_FIXED_STRING_PATCHES.items():
+        write_fixed_direct_string(data, offset, max_words, text, glyph_by_char)
 
 
 def update_md_checksum(data: bytearray) -> int:
@@ -364,6 +401,7 @@ def main() -> None:
         active_condition_chars,
         *descriptions[: args.scenario_count],
         *DIRECT_STRING_PATCHES.values(),
+        *(text for _, text in DIRECT_FIXED_STRING_PATCHES.values()),
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if not args.skip_condition:
