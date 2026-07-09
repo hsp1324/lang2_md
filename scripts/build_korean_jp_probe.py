@@ -33,6 +33,10 @@ ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
 ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
 ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
 ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x286000
+BYTE_UI_FONT_RESOURCE_TABLE = 0x0B0000
+BYTE_UI_FONT_RESOURCE_INDEX = 1
+BYTE_UI_FONT_RESOURCE_RELOC_BASE = 0x290000
+BYTE_UI_FONT_RESOURCE_RELOC_LIMIT = 0x2A0000
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 SCENARIO_GLYPH_LIST_RELOC_BASE = 0x270000
@@ -1052,6 +1056,77 @@ def render_halfwidth_hangul_glyph(
     return bytes(out)
 
 
+def render_byte_ui_tile(char: str, font: ImageFont.FreeTypeFont) -> bytes:
+    img = Image.new("1", (8, 8), 0)
+    draw = ImageDraw.Draw(img)
+    bbox = draw.textbbox((0, 0), char, font=font)
+    width = bbox[2] - bbox[0]
+    height = bbox[3] - bbox[1]
+    x = max(0, (8 - width) // 2 - bbox[0])
+    y = max(-1, (8 - height) // 2 - bbox[1])
+    draw.text((x, y), char, font=font, fill=1)
+
+    out = bytearray()
+    for row in range(8):
+        pixels = []
+        for col in range(8):
+            pixels.append(3 if img.getpixel((col, row)) else 1)
+        for col in range(0, 8, 2):
+            out.append((pixels[col] << 4) | pixels[col + 1])
+    return bytes(out)
+
+
+def decompress_9dfe(data: bytes | bytearray, offset: int, max_output: int = 0x40000) -> bytes:
+    remaining = be16(data, offset)
+    if remaining <= 0 or remaining > max_output:
+        raise ValueError(f"invalid 0x9DFE output length at 0x{offset:06X}: 0x{remaining:X}")
+    pos = offset + 2
+    ring = bytearray([0x20] * 0x1000)
+    ring_pos = 0x0FEE
+    out = bytearray()
+    while remaining > 0:
+        flags = data[pos]
+        pos += 1
+        for _ in range(8):
+            if flags & 1:
+                value = data[pos]
+                pos += 1
+                ring[ring_pos] = value
+                ring_pos = (ring_pos + 1) & 0x0FFF
+                out.append(value)
+                remaining -= 1
+            else:
+                lo = data[pos]
+                hi = data[pos + 1]
+                pos += 2
+                source = lo | ((hi << 4) & 0x0F00)
+                count = (hi & 0x0F) + 3
+                for _ in range(count):
+                    value = ring[source]
+                    source = (source + 1) & 0x0FFF
+                    ring[ring_pos] = value
+                    ring_pos = (ring_pos + 1) & 0x0FFF
+                    out.append(value)
+                    remaining -= 1
+                    if remaining <= 0:
+                        break
+            flags >>= 1
+            if remaining <= 0:
+                break
+    return bytes(out)
+
+
+def compress_9dfe_literals(payload: bytes) -> bytes:
+    if len(payload) > 0xFFFF:
+        raise ValueError(f"literal 0x9DFE payload too large: 0x{len(payload):X}")
+    out = bytearray(len(payload).to_bytes(2, "big"))
+    for pos in range(0, len(payload), 8):
+        chunk = payload[pos : pos + 8]
+        out.append((1 << len(chunk)) - 1)
+        out.extend(chunk)
+    return bytes(out)
+
+
 def collect_chars(*texts: str) -> list[str]:
     chars: OrderedDict[str, None] = OrderedDict()
     for text in texts:
@@ -1697,14 +1772,29 @@ def patch_byte_ui_strings(data: bytearray) -> None:
 
     half_font = Path("tools/fonts/Galmuri7.ttf")
     font = ImageFont.truetype(str(half_font if half_font.exists() else FONT_PATH), 8)
-    blank_offset = glyph_data_offset(SPACE_GLYPH)
-    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     code_by_char = {char: BYTE_UI_GLYPH_CODES[i] for i, char in enumerate(chars)}
-    for char, code in code_by_char.items():
-        offset = glyph_data_offset(code)
-        data[offset : offset + GLYPH_BYTES] = render_halfwidth_hangul_glyph(
-            char, font, blank_template
+
+    resource_table_entry = BYTE_UI_FONT_RESOURCE_TABLE + BYTE_UI_FONT_RESOURCE_INDEX * 4
+    resource_offset = be32(data, resource_table_entry) & 0x00FFFFFF
+    if data[resource_offset] != 0x03:
+        raise ValueError(
+            f"byte UI font resource #{BYTE_UI_FONT_RESOURCE_INDEX} at 0x{resource_offset:06X} "
+            f"uses unsupported type 0x{data[resource_offset]:02X}"
         )
+    font_tiles = bytearray(decompress_9dfe(data, resource_offset + 1))
+    for char, code in code_by_char.items():
+        tile_offset = code * 32
+        if tile_offset + 32 > len(font_tiles):
+            raise ValueError(f"byte UI glyph code 0x{code:02X} is outside font resource")
+        font_tiles[tile_offset : tile_offset + 32] = render_byte_ui_tile(char, font)
+
+    relocated_resource = bytes([0x03]) + compress_9dfe_literals(bytes(font_tiles))
+    if BYTE_UI_FONT_RESOURCE_RELOC_BASE + len(relocated_resource) >= BYTE_UI_FONT_RESOURCE_RELOC_LIMIT:
+        raise ValueError("relocated byte UI font resource overlaps scenario relocation area")
+    data[
+        BYTE_UI_FONT_RESOURCE_RELOC_BASE : BYTE_UI_FONT_RESOURCE_RELOC_BASE + len(relocated_resource)
+    ] = relocated_resource
+    put32(data, resource_table_entry, BYTE_UI_FONT_RESOURCE_RELOC_BASE)
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
         capacity = byte_string_capacity(data, offset)
@@ -1861,11 +1951,10 @@ def main() -> None:
     parser.add_argument(
         "--patch-byte-ui-strings",
         action=argparse.BooleanOptionalAction,
-        default=False,
+        default=True,
         help=(
-            "experimental: patch prep/shop one-byte UI strings. Disabled by default until the "
-            "separate low-index 8x8 system font source is patched; otherwise the Korean byte "
-            "codes render as unrelated Japanese glyphs."
+            "patch prep/shop one-byte UI strings and relocate the matching low-index 8x8 "
+            "system font resource"
         ),
     )
     args = parser.parse_args()

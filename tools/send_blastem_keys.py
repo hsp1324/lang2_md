@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import subprocess
 import time
 
 from Xlib import XK, X
@@ -40,6 +41,16 @@ def find_blastem_window(display: Display):
     raise RuntimeError("could not find BlastEm window")
 
 
+def find_blastem_window_xwininfo(display: Display):
+    tree = subprocess.check_output(["xwininfo", "-root", "-tree"], text=True, errors="ignore")
+    for line in tree.splitlines():
+        if '("blastem" "blastem")' not in line:
+            continue
+        window_id = int(line.split()[0], 16)
+        return display.create_resource_object("window", window_id)
+    raise RuntimeError("could not find BlastEm window via xwininfo")
+
+
 def wait_for_blastem_window(display: Display, timeout: float):
     deadline = time.monotonic() + timeout
     last_error: Exception | None = None
@@ -48,7 +59,11 @@ def wait_for_blastem_window(display: Display, timeout: float):
             return find_blastem_window(display)
         except Exception as exc:
             last_error = exc
-            time.sleep(0.1)
+        try:
+            return find_blastem_window_xwininfo(display)
+        except Exception as exc:
+            last_error = exc
+        time.sleep(0.1)
     if last_error is not None:
         raise last_error
     raise RuntimeError("could not find BlastEm window")
