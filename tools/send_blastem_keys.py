@@ -71,6 +71,20 @@ def activate_window(display: Display, window) -> None:
     display.sync()
 
 
+def click_window_center(display: Display, window) -> None:
+    root = display.screen().root
+    geom = window.get_geometry()
+    coords = window.translate_coords(root, geom.width // 2, geom.height // 2)
+    xtest.fake_input(display, X.MotionNotify, x=coords.x, y=coords.y)
+    display.sync()
+    time.sleep(0.05)
+    xtest.fake_input(display, X.ButtonPress, 1)
+    display.sync()
+    time.sleep(0.05)
+    xtest.fake_input(display, X.ButtonRelease, 1)
+    display.sync()
+
+
 def press(display: Display, key: str, hold: float) -> None:
     if key not in KEYSYMS:
         raise ValueError(f"unknown key: {key}")
@@ -88,11 +102,18 @@ def main() -> int:
     parser.add_argument("--hold", type=float, default=0.08)
     parser.add_argument("--ready-delay", type=float, default=0.0)
     parser.add_argument("--wait-window", type=float, default=5.0)
+    parser.add_argument(
+        "--click-window",
+        action="store_true",
+        help="click the BlastEm window center before sending keys to force SDL focus",
+    )
     args = parser.parse_args()
 
     display = Display()
     window = wait_for_blastem_window(display, args.wait_window)
     activate_window(display, window)
+    if args.click_window:
+        click_window_center(display, window)
     time.sleep(args.ready_delay)
 
     for spec in args.keys:

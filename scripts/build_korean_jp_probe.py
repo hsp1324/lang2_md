@@ -210,6 +210,10 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x97656: "파이어스",
 }
 
+DIRECT_ELWIN_NAME_PATCH = {
+    0x97404: "엘윈",
+}
+
 NAME_ENTRY_DEFAULT_WORD_OFFSET = 0x0A3B0C
 NAME_ENTRY_DEFAULT_WORDS = 5
 
@@ -1368,6 +1372,11 @@ def main() -> None:
         action="store_true",
         help="patch the 0x974xx candidate name table; experimental and can break name confirmation",
     )
+    parser.add_argument(
+        "--patch-elwin-name-only",
+        action="store_true",
+        help="experimental: patch only the first 0x974xx Elwin name entry",
+    )
     parser.add_argument("--skip-items", action="store_true")
     parser.add_argument(
         "--patch-class-byte-table",
@@ -1424,6 +1433,8 @@ def main() -> None:
     route_title_patches = {} if args.skip_direct else dict(DIRECT_FIXED_ROUTE_TITLE_PATCHES)
     if args.include_unsafe_direct_names:
         direct_patches.update(UNSAFE_DIRECT_NAME_PATCHES)
+    elif args.patch_elwin_name_only:
+        direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
     active_direct_strings = list(direct_patches.values())
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_route_title_strings = [text for _, text in route_title_patches.values()]
