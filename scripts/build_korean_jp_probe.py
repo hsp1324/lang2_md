@@ -84,7 +84,6 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
     0xCD,
     0xB2,
     0xCA,
-    0xDE,
     0xC4,
     0xB0,
     0xCC,
@@ -94,7 +93,6 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
     0xDB,
     0xAF,
     0xB8,
-    0xDF,
     0xD7,
     0xBD,
     0xBF,
@@ -147,10 +145,7 @@ BYTE_UI_STRING_PATCHES = {
     0x0A18F8: "아이템",
 }
 
-BYTE_UI_FIXED_STRING_PATCHES = {
-    0x0A2E22: (8, "소지금"),
-    0x0A3AC9: (3, "끝"),
-}
+BYTE_UI_FIXED_STRING_PATCHES = {}
 
 DIRECT_WORD_SEQUENCE_PATCHES = {
     0x09ABC2: (8, "소지금"),
