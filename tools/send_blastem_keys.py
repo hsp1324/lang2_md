@@ -85,10 +85,34 @@ def click_window_center(display: Display, window) -> None:
     display.sync()
 
 
-def press(display: Display, key: str, hold: float) -> None:
+def press(display: Display, window, key: str, hold: float, send_event: bool) -> None:
     if key not in KEYSYMS:
         raise ValueError(f"unknown key: {key}")
     keycode = display.keysym_to_keycode(KEYSYMS[key])
+
+    if send_event:
+        root = display.screen().root
+        for event_type in (X.KeyPress, X.KeyRelease):
+            key_event = event.KeyPress(
+                time=X.CurrentTime,
+                root=root,
+                window=window,
+                same_screen=1,
+                child=X.NONE,
+                root_x=0,
+                root_y=0,
+                event_x=10,
+                event_y=10,
+                state=0,
+                detail=keycode,
+            )
+            key_event.type = event_type
+            window.send_event(key_event, propagate=True)
+            display.sync()
+            if event_type == X.KeyPress:
+                time.sleep(hold)
+        return
+
     xtest.fake_input(display, X.KeyPress, keycode)
     display.sync()
     time.sleep(hold)
@@ -107,6 +131,11 @@ def main() -> int:
         action="store_true",
         help="click the BlastEm window center before sending keys to force SDL focus",
     )
+    parser.add_argument(
+        "--send-event",
+        action="store_true",
+        help="send KeyPress/KeyRelease events directly to the BlastEm window instead of global XTest input",
+    )
     args = parser.parse_args()
 
     display = Display()
@@ -122,7 +151,7 @@ def main() -> int:
             wait = float(wait_text)
         else:
             key, wait = spec, 0.2
-        press(display, key, args.hold)
+        press(display, window, key, args.hold, args.send_event)
         time.sleep(wait)
     return 0
 

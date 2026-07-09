@@ -497,8 +497,8 @@ DIRECT_PREFIX_STRING_PATCHES = {
     # Shop message records start with control words.  Writing them as plain text
     # makes the buy/sell window render the message text as if it were a menu
     # title, e.g. "구입판매더이...".
-    0xA16B0: ([0x0000, 0x0001, 0x0012, 0x0020], "소지품가득찼음"),
-    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "더이상소지불가"),
+    0xA16B0: ([0x0000, 0x0001, 0x0012, 0x0020], "가득찼음"),
+    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "소지불가"),
 }
 
 # These candidate strings were found by scanning, but they are not the visible
@@ -600,7 +600,7 @@ DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
 OPENING_TEXT_LIST_PATCHES = OrderedDict(
     [
         (0xA6B20, (0x21, "후후후…")),
-        (0xA6B54, (0x2A, "알하자드… 전설의마검… 내가 바라던 무한한 힘…")),
+        (0xA6B54, (0x2A, "알하자드… 전설의마검… 바라던 무한한 힘…")),
         (0xA6BA8, (0x40, "대륙을... 아니 세계를 모두 내 손에 넣겠다!!")),
         (0xA6BEA, (0x40, "싸움은 아무것도 낳지 않는다. 남는 것은 슬픔뿐...")),
         (0xA6C2A, (0x40, "하늘이... 하늘이 어두워지고 있어... 모든 것이 끝난 걸까...")),
@@ -1822,6 +1822,15 @@ def main() -> None:
         action="store_true",
         help="experimental: replace JP opening フ/ッ glyphs to verify the opening font path",
     )
+    parser.add_argument(
+        "--patch-byte-ui-strings",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "patch prep/shop one-byte UI strings and their JP font slots; use "
+            "--no-patch-byte-ui-strings to isolate regressions."
+        ),
+    )
     args = parser.parse_args()
 
     data = bytearray(IN_ROM.read_bytes())
@@ -1870,7 +1879,8 @@ def main() -> None:
     if args.patch_opening_glyph_probe:
         patch_opening_glyph_probe(data)
     patch_opening_text_lists(data, glyph_by_char)
-    patch_byte_ui_strings(data)
+    if args.patch_byte_ui_strings:
+        patch_byte_ui_strings(data)
     if args.patch_class_byte_table:
         patch_class_byte_table(data)
     elif args.patch_class_byte_subset:
