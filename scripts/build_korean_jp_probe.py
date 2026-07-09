@@ -147,7 +147,9 @@ BYTE_UI_STRING_PATCHES = {
 
 BYTE_UI_FIXED_STRING_PATCHES = {}
 
-DIRECT_WORD_SEQUENCE_PATCHES = {}
+DIRECT_WORD_SEQUENCE_PATCHES = {
+    0x9706A: (12, "이동공격마법소환치료명령"),
+}
 
 ITEM_TITLE_TEXT = "아이템소지"
 
@@ -168,10 +170,14 @@ DIRECT_STRING_PATCHES = {
     0x96A2A: "함께가게해줘!",
     0x96A64: "그래너혼자는아니야…",
     0x96C48: "조심해…",
-    0x18488A: "마을밖에제국군이쳐들어왔어!",
-    0x184884: "왜?",
+    0x9742A: "헤인",
+    0x184858: "큰일이야!\n엘윈!",
+    0x184872: "무슨일이야?",
+    0x18488A: "제국군이왔어!\n마을밖이야!",
+    0x184884: "",
     0x1848C0: "마을밖?\n리아나가있는곳아냐?",
-    0x184918: "맞아!\n그곳이야!\n제발도와줘!",
+    0x184918: "맞아!\n그대로두면위험해!\n도와줘!",
+    0x18499A: "물론이지.\n어서가자!",
     0x1849A4: "바로가자!",
     0x1849CA: "찾았습니다!",
     0x1849E0: "서둘러.",
@@ -619,16 +625,46 @@ DIRECT_FIXED_STRING_PATCHES = {
     0x9705A: (2, "구입"),
     0x9705E: (2, "판매"),
     0x97062: (3, "취소"),
-    0x9706C: (2, "이동"),
-    0x97070: (2, "공격"),
-    0x97074: (2, "마법"),
-    0x97078: (2, "소환"),
-    0x9707C: (2, "치료"),
-    0x97080: (2, "명령"),
     0xA37A0: (4, "시나리오"),
     0xA37AA: (5, "합계"),
     0xA37B6: (3, "턴"),
     0xA37BE: (20, "이름을정해주세요"),
+    0xA1700: (3, "소지"),
+    0xA1716: (8, "아이템소지"),
+    0xA2B72: (5, "지휘관배치"),
+    0xA2B7C: (5, "순서변경"),
+    0xA2B86: (4, "자동배치"),
+    0xA2B8E: (5, "부대보기"),
+    0xA2B98: (2, "출격"),
+}
+
+ARRANGE_MENU_GLYPH_SHAPE_PATCHES = {
+    # 指揮官配置
+    0x00DB: "지",
+    0x00DC: "휘",
+    0x014E: "관",
+    0x0189: "배",
+    0x01C8: "치",
+    # 移動順変更
+    0x00E4: "이",
+    0x0134: "동",
+    0x008A: "순",
+    0x00FB: "변",
+    0x007D: "경",
+    # 自動配置
+    0x0125: "자",
+    0x0118: "동",
+    0x02AB: "배",
+    0x0381: "치",
+    # 部隊を見る
+    0x0094: "부",
+    0x02D1: "대",
+    0x01F8: "보",
+    0x0074: "기",
+    0x00A9: " ",
+    # 出撃
+    0x0063: "출",
+    0x0079: "격",
 }
 
 DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
@@ -1647,6 +1683,8 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     if len(item_title_glyphs) > 6:
         raise ValueError(f"item title is too long for the original token stream: {ITEM_TITLE_TEXT!r}")
     item_glyphs[:6] = item_title_glyphs + [SPACE_GLYPH] * (6 - len(item_title_glyphs))
+    for i, glyph in enumerate(item_glyphs[:6]):
+        put16(data, ITEM_GLYPH_LIST_BASE + i * 2, glyph)
     local_by_glyph = {glyph: i for i, glyph in enumerate(item_glyphs)}
 
     def local_index(char: str) -> int:
@@ -1855,6 +1893,18 @@ def patch_name_entry_reused_glyphs(data: bytearray) -> None:
     ]
     for i, value in enumerate(values):
         put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
+
+
+def patch_arrange_menu_glyph_shapes(data: bytearray) -> None:
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    for glyph_id, char in ARRANGE_MENU_GLYPH_SHAPE_PATCHES.items():
+        offset = glyph_data_offset(glyph_id)
+        if char == " ":
+            data[offset : offset + GLYPH_BYTES] = blank_template
+        else:
+            data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
 
 
 def patch_opening_glyph_probe(data: bytearray) -> None:

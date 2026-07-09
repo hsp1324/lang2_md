@@ -16,7 +16,9 @@ KEYSYMS = {
     "start": XK.XK_Return,
     "a": XK.XK_a,
     "b": XK.XK_s,
+    "s": XK.XK_s,
     "c": XK.XK_d,
+    "d": XK.XK_d,
     "up": XK.XK_Up,
     "down": XK.XK_Down,
     "left": XK.XK_Left,
@@ -82,7 +84,6 @@ def activate_window(display: Display, window) -> None:
         event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask,
     )
     window.configure(stack_mode=X.Above)
-    window.set_input_focus(X.RevertToParent, X.CurrentTime)
     display.sync()
 
 
@@ -137,7 +138,11 @@ def press(display: Display, window, key: str, hold: float, send_event: bool) -> 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("keys", nargs="+", help="key[:wait], e.g. start:1 c left up")
+    parser.add_argument(
+        "keys",
+        nargs="+",
+        help="key[@hold][:wait], e.g. start:0.35 c b@5:0.1 down",
+    )
     parser.add_argument("--hold", type=float, default=0.08)
     parser.add_argument("--ready-delay", type=float, default=0.0)
     parser.add_argument("--wait-window", type=float, default=5.0)
@@ -161,12 +166,18 @@ def main() -> int:
     time.sleep(args.ready_delay)
 
     for spec in args.keys:
+        hold = args.hold
         if ":" in spec:
-            key, wait_text = spec.split(":", 1)
+            key_hold, wait_text = spec.split(":", 1)
             wait = float(wait_text)
         else:
-            key, wait = spec, 0.2
-        press(display, window, key, args.hold, args.send_event)
+            key_hold, wait = spec, 0.2
+        if "@" in key_hold:
+            key, hold_text = key_hold.split("@", 1)
+            hold = float(hold_text)
+        else:
+            key = key_hold
+        press(display, window, key, hold, args.send_event)
         time.sleep(wait)
     return 0
 
