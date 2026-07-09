@@ -7,8 +7,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 
-JP_FONT_BASE = 0x40000
-GLYPH_BYTES = 64
+BYTE_UI_FONT_RESOURCE_TABLE = 0x0B0000
+BYTE_UI_FONT_RESOURCE_INDEX = 1
 
 
 def parse_int(text: str) -> int:
@@ -19,26 +19,84 @@ def be16(data: bytes, offset: int) -> int:
     return (data[offset] << 8) | data[offset + 1]
 
 
-def render_glyph_left_half(data: bytes, code: int, scale: int) -> Image.Image:
-    offset = JP_FONT_BASE + code * GLYPH_BYTES
-    img = Image.new("RGB", (8 * scale, 16 * scale), "white")
-    palette = [
-        (255, 255, 255),
-        (170, 170, 170),
-        (90, 90, 90),
-        (0, 0, 0),
-    ]
-    for source_row in range(32):
-        if source_row // 8 not in (0, 2):
-            continue
-        word = be16(data, offset + source_row * 2)
-        row = source_row % 8
-        y = row if source_row < 8 else row + 8
-        for x in range(8):
-            hi = (word >> (15 - x)) & 1
-            lo = (word >> (7 - x)) & 1
-            color = palette[(hi << 1) | lo]
-            img.paste(color, (x * scale, y * scale, (x + 1) * scale, (y + 1) * scale))
+def be32(data: bytes, offset: int) -> int:
+    return (
+        (data[offset] << 24)
+        | (data[offset + 1] << 16)
+        | (data[offset + 2] << 8)
+        | data[offset + 3]
+    )
+
+
+def decompress_9dfe(data: bytes, offset: int) -> bytes:
+    remaining = be16(data, offset)
+    pos = offset + 2
+    ring = bytearray([0x20] * 0x1000)
+    ring_pos = 0x0FEE
+    out = bytearray()
+    while remaining > 0:
+        flags = data[pos]
+        pos += 1
+        for _ in range(8):
+            if flags & 1:
+                value = data[pos]
+                pos += 1
+                ring[ring_pos] = value
+                ring_pos = (ring_pos + 1) & 0x0FFF
+                out.append(value)
+                remaining -= 1
+            else:
+                lo = data[pos]
+                hi = data[pos + 1]
+                pos += 2
+                source = lo | ((hi << 4) & 0x0F00)
+                count = (hi & 0x0F) + 3
+                for _ in range(count):
+                    value = ring[source]
+                    source = (source + 1) & 0x0FFF
+                    ring[ring_pos] = value
+                    ring_pos = (ring_pos + 1) & 0x0FFF
+                    out.append(value)
+                    remaining -= 1
+                    if remaining <= 0:
+                        break
+            flags >>= 1
+            if remaining <= 0:
+                break
+    return bytes(out)
+
+
+def load_byte_ui_tiles(data: bytes) -> bytes:
+    entry = BYTE_UI_FONT_RESOURCE_TABLE + BYTE_UI_FONT_RESOURCE_INDEX * 4
+    resource_offset = be32(data, entry) & 0x00FFFFFF
+    if data[resource_offset] != 0x03:
+        raise ValueError(f"unsupported byte UI font resource type at 0x{resource_offset:06X}")
+    return decompress_9dfe(data, resource_offset + 1)
+
+
+def render_glyph_tile(font_tiles: bytes, code: int, scale: int) -> Image.Image:
+    offset = code * 32
+    img = Image.new("RGB", (8 * scale, 8 * scale), "white")
+    palette = {
+        0x0: (0, 0, 0),
+        0x1: (0, 0, 88),
+        0x2: (160, 160, 160),
+        0x3: (255, 255, 255),
+        0x4: (255, 96, 96),
+        0x5: (255, 255, 96),
+        0x9: (96, 96, 96),
+        0xB: (120, 120, 255),
+        0xC: (255, 120, 120),
+        0xD: (120, 255, 120),
+        0xF: (255, 255, 255),
+    }
+    for y in range(8):
+        for byte_x in range(4):
+            value = font_tiles[offset + y * 4 + byte_x]
+            for nibble_x, color_index in enumerate(((value >> 4) & 0x0F, value & 0x0F)):
+                x = byte_x * 2 + nibble_x
+                color = palette.get(color_index, (255, 0, 255))
+                img.paste(color, (x * scale, y * scale, (x + 1) * scale, (y + 1) * scale))
     return img
 
 
@@ -52,11 +110,11 @@ def read_byte_string(data: bytes, offset: int, max_len: int) -> list[int]:
     return values
 
 
-def render_string(data: bytes, values: list[int], scale: int) -> Image.Image:
+def render_string(font_tiles: bytes, values: list[int], scale: int) -> Image.Image:
     width = max(1, len(values)) * 8 * scale
-    img = Image.new("RGB", (width, 16 * scale), "white")
+    img = Image.new("RGB", (width, 8 * scale), (0, 0, 88))
     for index, value in enumerate(values):
-        glyph = render_glyph_left_half(data, value, scale)
+        glyph = render_glyph_tile(font_tiles, value, scale)
         img.paste(glyph, (index * 8 * scale, 0))
     return img
 
@@ -71,22 +129,23 @@ def main() -> int:
     args = parser.parse_args()
 
     data = args.rom.read_bytes()
+    font_tiles = load_byte_ui_tiles(data)
     rows: list[tuple[int, list[int], Image.Image]] = []
     for offset in args.offset:
         values = read_byte_string(data, offset, args.max_len)
-        rows.append((offset, values, render_string(data, values, args.scale)))
+        rows.append((offset, values, render_string(font_tiles, values, args.scale)))
 
     label_width = 120
     gap = 8
     width = max(label_width + row[2].width for row in rows)
-    height = max(1, len(rows)) * (16 * args.scale + gap) - gap
+    height = max(1, len(rows)) * (8 * args.scale + gap) - gap
     sheet = Image.new("RGB", (width, height), (240, 240, 240))
     draw = ImageDraw.Draw(sheet)
     y = 0
     for offset, values, image in rows:
         draw.text((4, y + 4), f"0x{offset:06X} " + " ".join(f"{v:02X}" for v in values), fill=(0, 0, 0))
         sheet.paste(image, (label_width, y))
-        y += 16 * args.scale + gap
+        y += 8 * args.scale + gap
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(args.out)
