@@ -17,6 +17,7 @@
 - `build_korean_complete_wip.py`: 영어판 고정 폰트 기반 초기 실험 빌더입니다.
 - `tools/jp_text_font_analyzer.py`: 일본판 16비트 텍스트 스트림, glyph 목록, `0x40000` JP font 포맷을 오프라인 분석/렌더링하는 도구입니다.
 - `tools/jp_byte_table_analyzer.py`: 클래스/용병/몬스터명 8비트 문자열 테이블 분석 도구입니다.
+- `tools/render_jp_byte_strings.py`: 준비창/상점처럼 1바이트 문자열을 쓰는 작은 UI 텍스트를 오프라인 렌더링하는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
