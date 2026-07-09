@@ -99,6 +99,19 @@ DIRECT_STRING_PATCHES = {
     0x96A2A: "함께가게해줘!",
     0x96A64: "그래너혼자는아니야…",
     0x96C48: "조심해…",
+    0x18488A: "마을밖에제국군이쳐들어왔어!",
+    0x184884: "왜?",
+    0x1848C0: "마을밖?\n리아나가있는곳아냐?",
+    0x184918: "맞아!\n그곳이야!\n제발도와줘!",
+    0x1849A4: "바로가자!",
+    0x1849CA: "찾았습니다!",
+    0x1849E0: "서둘러.",
+    0x184A1C: "진심이야!",
+    0x184A52: "일단서두르자!",
+    0x184A98: "진군하며싸워라!",
+    0x184AF2: "거짓은아닌듯하다.",
+    0x184B14: "여기까지…",
+    0x184B24: "여기까지!",
     0x82BFE: "마법화살",
     0x82C0E: "블래스트",
     0x82C18: "썬더",
@@ -533,7 +546,17 @@ def direct_string_capacity_words(data: bytes | bytearray, offset: int) -> int:
 
 
 def write_direct_string(data: bytearray, offset: int, text: str, glyph_by_char: dict[str, int]) -> None:
-    values = [glyph_by_char[char] for char in text if char != " "]
+    values = []
+    for char in text:
+        if char == " ":
+            continue
+        if char == "\n":
+            values.append(0xFFFE)
+            continue
+        if char == "\f":
+            values.append(0xFFFD)
+            continue
+        values.append(glyph_by_char[char])
     capacity = direct_string_capacity_words(data, offset)
     if len(values) + 1 > capacity:
         raise ValueError(
