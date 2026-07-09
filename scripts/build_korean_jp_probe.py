@@ -1346,7 +1346,7 @@ def fixed_text_tokens(
 
 
 def load_scenario_texts() -> list[str]:
-    src = Path("build_korean_complete_wip.py").read_text()
+    src = Path("scripts/legacy/build_korean_complete_wip.py").read_text()
     module = ast.parse(src)
     for node in module.body:
         if not isinstance(node, ast.Assign):

@@ -17,6 +17,46 @@ import build_korean_machine_jamo_fixedfont as fixedfont
 OUT = Path("Langrisser II (Korean Complete WIP).md")
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_COUNT = 31
+DIALOGUE_COPY_LIMIT_OFFSET = 0xA8735
+DIALOGUE_COPY_LIMIT = 0xFE
+DIALOGUE_MAPPER_START_OFFSET = 0xA874A
+DIALOGUE_MAPPER_END_OFFSET = 0xA8816
+DIALOGUE_MAPPER_HOOK_OFFSET = 0xAF7E8
+DIALOGUE_CUSTOM_CODES = tuple(range(0xD9, 0xF4)) + (0xF9,)
+DIALOGUE_CUSTOM_TILES = (
+    0x21,
+    0x22,
+    0x23,
+    0x25,
+    0x27,
+    0x2A,
+    0x2E,
+    0x2F,
+    0x3A,
+    0xCD,
+    0x5B,
+    0x5C,
+    0x5D,
+    0x5E,
+    0x5F,
+    0x60,
+    0x6D,
+    0x62,
+    0x63,
+    0x64,
+    0x71,
+    0x66,
+    0x67,
+    0x68,
+    0x69,
+    0x6A,
+    0x6B,
+    0x6C,
+)
+if len(DIALOGUE_CUSTOM_CODES) != len(DIALOGUE_CUSTOM_TILES):
+    raise ValueError("dialogue custom code/tile table size mismatch")
+DIALOGUE_CUSTOM_TILE_BY_CODE = dict(zip(DIALOGUE_CUSTOM_CODES, DIALOGUE_CUSTOM_TILES))
+USE_EXTENDED_DIALOGUE_CODES = True
 
 # Keep the original English VWF entries needed by the title screen and any
 # short labels that do not yet fit the jamo encoding budget.
@@ -1242,7 +1282,24 @@ def fixed_code_pool(
     # The status panels and UI frames use several non-ASCII fixed tiles.
     # F=0x24, V=0x26, P=0x28; 0x29/0x3C/0x3D/0x40/0x7B are visible frame
     # or separator tiles on route/conditions/prep screens.
-    reserved_tiles.update({0x24, 0x26, 0x28, 0x29, 0x3C, 0x3D, 0x40, 0x7B, 0xF8})
+    # Raw/mapped lowercase-v tiles are also visible in the name entry grid.
+    reserved_tiles.update(
+        {
+            0x24,
+            0x26,
+            0x28,
+            0x29,
+            0x3B,
+            0x3C,
+            0x3D,
+            0x40,
+            0x76,
+            0x7B,
+            0xC6,
+            0xF8,
+        }
+    )
+    reserved_tiles.update(range(0x41, 0x5B))
     # These fixed-font tiles are also used as the move/fight/guard/manual
     # order icons on unit sprites. Overwriting them turns the icons into text.
     reserved_tiles.update(range(0xF4, 0xF8))
@@ -1263,13 +1320,105 @@ def fixed_code_pool(
     return code_pool
 
 
-def assign_dialogue_fixed_codes(chars: list[str], extra_reserved_codes: set[int] | None = None) -> dict[str, int]:
+def assign_ascii_dialogue_fixed_codes(chars: list[str], extra_reserved_codes: set[int] | None = None) -> dict[str, int]:
     code_pool = fixed_code_pool(ascii_only=True, extra_reserved_codes=extra_reserved_codes)
     glyphs = list(chars)
     glyphs.extend(glyph for glyph in DIALOGUE_NAME_GLYPHS if glyph not in glyphs)
     if len(glyphs) > len(code_pool):
         raise ValueError(f"Need {len(glyphs)} dialogue glyph slots, only {len(code_pool)} ASCII-safe slots")
     return {ch: code_pool[idx] for idx, ch in enumerate(glyphs)}
+
+
+def assign_extended_dialogue_fixed_codes(
+    chars: list[str],
+    *,
+    extra_reserved_codes: set[int] | None = None,
+    extra_reserved_tiles: set[int] | None = None,
+) -> dict[str, int]:
+    reserved_codes = set(extra_reserved_codes or ())
+    reserved_codes.update({0xFE, 0xFF})
+    reserved_tiles = set(extra_reserved_tiles or ())
+    reserved_tiles.update(NAME_ENTRY_GRID_TEXT_BYTES)
+    reserved_tiles.update(TITLE_FIXED_RESERVED_CODES)
+    reserved_tiles.update(chapter1.map_fixed_tile(code) for code in TITLE_FIXED_RESERVED_CODES)
+    reserved_tiles.update(chapter1.map_fixed_tile(code) for code in DIALOGUE_ASCII_RESERVED_TEXT.encode("ascii"))
+    reserved_tiles.update(chapter1.map_fixed_tile(code) for code in TITLE_FIXED_RESERVED_TEXT.encode("ascii"))
+    reserved_tiles.update({0x24, 0x26, 0x28, 0x29, 0x3B, 0x3C, 0x3D, 0x40, 0x77, 0x7B, 0xB0, 0xCB, 0xF8, 0xFA})
+    reserved_tiles.update(range(0x80, 0x8B))
+    reserved_tiles.update(range(0x95, 0xA9))
+    reserved_tiles.update(range(0xF4, 0xF9))
+    reserved_tiles.update(EXPERIENCE_BAR_TILES)
+
+    code_pool: list[int] = []
+    used_tiles: set[int] = set()
+    for code, tile in zip(DIALOGUE_CUSTOM_CODES, DIALOGUE_CUSTOM_TILES):
+        tile = dialogue_fixed_tile(code)
+        if code in reserved_codes or tile in reserved_tiles or tile in used_tiles:
+            continue
+        used_tiles.add(tile)
+        code_pool.append(code)
+
+    glyphs = list(chars)
+    glyphs.extend(glyph for glyph in DIALOGUE_NAME_GLYPHS if glyph not in glyphs)
+    if len(glyphs) > len(code_pool):
+        raise ValueError(f"Need {len(glyphs)} dialogue glyph slots, only {len(code_pool)} extended slots")
+    return {ch: code_pool[idx] for idx, ch in enumerate(glyphs)}
+
+
+def dialogue_fixed_tile(code: int) -> int:
+    if USE_EXTENDED_DIALOGUE_CODES and code in DIALOGUE_CUSTOM_TILE_BY_CODE:
+        return DIALOGUE_CUSTOM_TILE_BY_CODE[code]
+    return chapter1.map_fixed_tile(code)
+
+
+def patch_dialogue_copy_limit(rom: bytearray) -> int:
+    if not USE_EXTENDED_DIALOGUE_CODES:
+        return 0
+    if rom[DIALOGUE_COPY_LIMIT_OFFSET] != 0x7F:
+        raise ValueError(f"unexpected dialogue copy limit byte: 0x{rom[DIALOGUE_COPY_LIMIT_OFFSET]:02x}")
+    rom[DIALOGUE_COPY_LIMIT_OFFSET] = DIALOGUE_COPY_LIMIT
+    return 1
+
+
+def patch_dialogue_tile_mapper(rom: bytearray) -> int:
+    if not USE_EXTENDED_DIALOGUE_CODES:
+        return 0
+    original = bytes(rom[DIALOGUE_MAPPER_START_OFFSET:DIALOGUE_MAPPER_END_OFFSET])
+    expected_prefix = bytes.fromhex("b0 3c 00 0e 67 72")
+    if not original.startswith(expected_prefix):
+        raise ValueError(f"unexpected dialogue mapper prefix: {original[:6].hex(' ')}")
+    hook_len = len(DIALOGUE_CUSTOM_TILES) * 12 + len(original)
+    hook_end = DIALOGUE_MAPPER_HOOK_OFFSET + hook_len
+    if any(byte != 0xFF for byte in rom[DIALOGUE_MAPPER_HOOK_OFFSET:hook_end]):
+        raise ValueError("dialogue mapper hook space is not empty")
+
+    hook = bytearray()
+    for code, tile in zip(DIALOGUE_CUSTOM_CODES, DIALOGUE_CUSTOM_TILES):
+        # cmp.b #code,d0; bne.s +6; move.b #tile,d0; rts
+        hook.extend((0xB0, 0x3C, 0x00, code, 0x66, 0x06, 0x10, 0x3C, 0x00, tile, 0x4E, 0x75))
+    hook.extend(original)
+
+    rom[DIALOGUE_MAPPER_HOOK_OFFSET:hook_end] = hook
+    rom[DIALOGUE_MAPPER_START_OFFSET : DIALOGUE_MAPPER_START_OFFSET + 6] = (
+        b"\x4E\xF9" + DIALOGUE_MAPPER_HOOK_OFFSET.to_bytes(4, "big")
+    )
+    return len(hook) + 6
+
+
+def patch_dialogue_fixed_font(
+    rom: bytearray, code_map: dict[str, int], font: ImageFont.FreeTypeFont
+) -> list[tuple[str, int, int]]:
+    mapped: list[tuple[str, int, int]] = []
+    used_tiles: dict[int, str] = {}
+    for glyph, code in code_map.items():
+        tile = dialogue_fixed_tile(code)
+        if tile in used_tiles:
+            raise ValueError(f"dialogue tile collision: {glyph!r} and {used_tiles[tile]!r} -> 0x{tile:02x}")
+        used_tiles[tile] = glyph
+        tile_off = chapter1.FIXED_FONT_BASE + tile * chapter1.FIXED_TILE_SIZE
+        rom[tile_off : tile_off + chapter1.FIXED_TILE_SIZE] = fixedfont.render_fixed_glyph(glyph, font)
+        mapped.append((glyph, code, tile))
+    return mapped
 
 
 def assign_extended_fixed_codes(
@@ -1467,6 +1616,9 @@ def patch_route_menu(rom: bytearray, code_map: dict[str, tuple[int, ...]]) -> in
 
 
 def patch_name_entry_display(rom: bytearray, code_map: dict[str, tuple[int, ...]]) -> int:
+    if USE_EXTENDED_DIALOGUE_CODES:
+        return 0
+
     patched = 0
     for offset in range(NAME_ENTRY_GRID_START, NAME_ENTRY_GRID_END):
         if NAME_ENTRY_DONE_OFFSET <= offset < NAME_ENTRY_DONE_OFFSET + NAME_ENTRY_DONE_LENGTH:
@@ -1630,9 +1782,7 @@ def main() -> int:
     vwf_chars = collect_vwf_jamo(records)
     opening_chars = collect_opening_hangul()
     vwf_reserved = set(VWF_ASCII_RESERVED) | set(VWF_RESERVED)
-    dialogue_code_map = assign_dialogue_fixed_codes(vwf_chars, extra_reserved_codes=vwf_reserved)
     vwf_code_map, opening_code_map = assign_vwf_codes(vwf_chars, opening_chars)
-    dialogue_fixed_tiles = {chapter1.map_fixed_tile(code) for code in dialogue_code_map.values()}
 
     ui_patch_texts = [text for _, _, text in complete_wide_fixed_patches()]
     ui_patch_texts.extend(SAFE_WIDE_UI_TERMS.values())
@@ -1646,11 +1796,23 @@ def main() -> int:
     wide_code_map, condition_code_map = assign_extended_fixed_codes(
         wide_chars,
         CONDITION_FIXED_GLYPHS,
-        extra_reserved_codes=set(dialogue_code_map.values()),
-        extra_reserved_tiles=dialogue_fixed_tiles,
+        extra_reserved_codes=set(DIALOGUE_CUSTOM_CODES),
+        extra_reserved_tiles=set(DIALOGUE_CUSTOM_TILES),
+    )
+    ui_dialogue_reserved_tiles = set(CUSTOM_FIXED_TILE_GLYPHS.values()) | set(ROUTE_MENU_TILE_GLYPHS.values())
+    ui_dialogue_reserved_tiles.update(chapter1.map_fixed_tile(code) for codes in wide_code_map.values() for code in codes)
+    ui_dialogue_reserved_tiles.update(
+        chapter1.map_fixed_tile(code) for codes in condition_code_map.values() for code in codes
+    )
+    dialogue_code_map = assign_extended_dialogue_fixed_codes(
+        vwf_chars,
+        extra_reserved_codes=vwf_reserved,
+        extra_reserved_tiles=ui_dialogue_reserved_tiles,
     )
 
     rom = bytearray(source_rom)
+    dialogue_copy_limit_patches = patch_dialogue_copy_limit(rom)
+    dialogue_tile_mapper_patches = patch_dialogue_tile_mapper(rom)
     font_vwf = ImageFont.truetype(str(base.FONT_PATH), 16 * 8)
 
     copy_size = base.font_copy_size(rom)
@@ -1676,7 +1838,7 @@ def main() -> int:
         font_cursor = cursor_end + (cursor_end & 1)
 
     font_fixed_dialogue = ImageFont.truetype(str(base.FONT_PATH), 8 * 8)
-    fixed_dialogue_mapped = fixedfont.patch_fixed_dialogue_font(rom, dialogue_code_map, font_fixed_dialogue)
+    fixed_dialogue_mapped = patch_dialogue_fixed_font(rom, dialogue_code_map, font_fixed_dialogue)
 
     old_to_new: dict[int, int] = {}
     script_cursor = base.SCRIPT_BASE
@@ -1750,6 +1912,8 @@ def main() -> int:
     print(f"wide UI glyphs: {len(wide_chars)} / condition glyphs {len(CONDITION_FIXED_GLYPHS)} / tile slots {fixed_slots}")
     print(f"wide UI patches: {ui_patches}")
     print(f"fixed dialogue tiles patched: {len(fixed_dialogue_mapped)}")
+    print(f"dialogue copy limit patches: {dialogue_copy_limit_patches}")
+    print(f"dialogue tile mapper patches: {dialogue_tile_mapper_patches}")
     print(f"dialogue name patches: {dialogue_name_patches}")
     print(f"condition label patches: {condition_label_patches}")
     print(f"condition number patches: {condition_number_patches}")

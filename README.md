@@ -14,7 +14,7 @@
 ## 주요 파일
 
 - `scripts/build_korean_jp_probe.py`: 현재 우선 진행 중인 일본판 텍스트/glyph 시스템 기반 빌더입니다.
-- `build_korean_complete_wip.py`: 영어판 고정 폰트 기반 초기 실험 빌더입니다.
+- `scripts/legacy/build_korean_complete_wip.py`: 영어판 고정 폰트 기반 초기 실험 빌더입니다.
 - `tools/jp_text_font_analyzer.py`: 일본판 16비트 텍스트 스트림, glyph 목록, `0x40000` JP font 포맷을 오프라인 분석/렌더링하는 도구입니다.
 - `tools/jp_byte_table_analyzer.py`: 클래스/용병/몬스터명 8비트 문자열 테이블 분석 도구입니다.
 - `tools/render_jp_byte_strings.py`: 준비창/상점처럼 1바이트 문자열을 쓰는 작은 UI 텍스트를 오프라인 렌더링하는 도구입니다.
@@ -61,10 +61,10 @@ python3 scripts/build_korean_jp_probe.py --include-unsafe-direct-names
 
 이 실험 옵션들은 기본 빌드에서 꺼져 있습니다. `--patch-class-byte-table`과 `--patch-class-byte-subset`은 전체 클래스/용병명 1바이트 문자열을 넓게 건드리는 실험용입니다. 현재 기본 빌드는 1장 확인에 필요한 이름/클래스/용병/아이템 라벨만 별도 `BYTE_UI_STRING_PATCHES`로 제한해서 패치합니다. 문제가 생길 때는 `--no-patch-byte-ui-strings`로 작은 UI 문자열 패치만 빼서 원인을 분리합니다. `--include-unsafe-direct-names`는 `0x974xx` 후보 이름 테이블을 건드려 이름 확정 이후 진행을 깨뜨릴 수 있습니다.
 
-기존 영어판 기반 WIP:
+기존 영어판 기반 WIP는 참고용 legacy입니다:
 
 ```bash
-python3 build_korean_complete_wip.py
+python3 scripts/legacy/build_korean_complete_wip.py
 ```
 
 출력 파일:
@@ -76,12 +76,6 @@ Langrisser II (Korean Complete WIP).md
 ## 실행
 
 BlastEm이 `tools/blastem/`에 있는 경우:
-
-```bash
-env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "Langrisser II (Korean Complete WIP).md"
-```
-
-일본판 기반 probe를 실행하려면 ROM 이름만 바꿉니다.
 
 ```bash
 env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "roms/builds/Langrisser II (Korean JP Probe).md"
