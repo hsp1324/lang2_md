@@ -149,6 +149,8 @@ BYTE_UI_FIXED_STRING_PATCHES = {}
 
 DIRECT_WORD_SEQUENCE_PATCHES = {}
 
+ITEM_TITLE_TEXT = "아이템소지"
+
 DIRECT_STRING_PATCHES = {
     0x96086: "잘가!",
     0x96248: "잘가!",
@@ -1641,6 +1643,10 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         raise ValueError(f"expected {len(ITEM_NAME_PATCHES)} item name pointers, got {len(ptrs)}")
 
     item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
+    item_title_glyphs = [glyph_by_char[char] for char in ITEM_TITLE_TEXT]
+    if len(item_title_glyphs) > 6:
+        raise ValueError(f"item title is too long for the original token stream: {ITEM_TITLE_TEXT!r}")
+    item_glyphs[:6] = item_title_glyphs + [SPACE_GLYPH] * (6 - len(item_title_glyphs))
     local_by_glyph = {glyph: i for i, glyph in enumerate(item_glyphs)}
 
     def local_index(char: str) -> int:
@@ -1991,6 +1997,7 @@ def main() -> None:
     active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
+    active_item_title = "" if args.skip_items else ITEM_TITLE_TEXT
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,
@@ -2002,6 +2009,7 @@ def main() -> None:
         *active_word_sequence_strings,
         *active_item_names,
         *active_item_descriptions,
+        active_item_title,
         *active_opening_texts,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
