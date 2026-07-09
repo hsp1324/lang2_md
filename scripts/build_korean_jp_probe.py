@@ -68,7 +68,42 @@ CLASS_BYTE_GLYPH_CODES = [
     *range(0xE0, 0xFF),
 ]
 CLASS_BYTE_SAFE_GLYPH_CODES = list(range(0xA1, 0xE0))
-BYTE_UI_GLYPH_CODES = list(range(0xA1, 0xE0))
+BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
+    0xB4,
+    0xD9,
+    0xB3,
+    0xA8,
+    0xDD,
+    0xD8,
+    0xB1,
+    0xC5,
+    0xCD,
+    0xB2,
+    0xCA,
+    0xDE,
+    0xC4,
+    0xB0,
+    0xCC,
+    0xA7,
+    0xC0,
+    0xAB,
+    0xDB,
+    0xAF,
+    0xB8,
+    0xDF,
+    0xD7,
+    0xBD,
+    0xBF,
+    0xBC,
+    0xAC,
+    0xB6,
+    0xCF,
+    0xCB,
+]
+BYTE_UI_GLYPH_CODES = [
+    *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
+    *(code for code in range(0xA1, 0xE0) if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES),
+]
 CLASS_BYTE_SUBSET_LABELS = {
     1: "파이터",
     3: "워록",
@@ -1805,13 +1840,14 @@ def main() -> None:
     )
     parser.add_argument(
         "--patch-name-entry-default",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
+        default=False,
         help="experimental: patch the visible JP name-entry default name word buffer",
     )
     parser.add_argument(
         "--patch-name-entry-reused-glyphs",
         action=argparse.BooleanOptionalAction,
-        default=False,
+        default=True,
         help=(
             "experimental: render Elwin as Korean by reusing existing JP name-entry glyph slots; "
             "disabled by default because those slots are shared with other JP text"
