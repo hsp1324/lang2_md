@@ -632,39 +632,25 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA1700: (3, "소지"),
     0xA1716: (8, "아이템소지"),
     0xA2B72: (5, "지휘관배치"),
-    0xA2B7C: (5, "순서변경"),
-    0xA2B86: (4, "자동배치"),
+    # The route menu reuses these direct strings out of order on screen:
+    # 0xA2B7C appears on the 4th visible row, while 0xA2B86 is split so its
+    # suffix appears on row 3 and its prefix appears on row 5.
+    0xA2B7C: (5, "적군보기"),
+    0xA2B86: (4, "출격배치"),
     0xA2B8E: (5, "부대보기"),
     0xA2B98: (2, "출격"),
 }
 
 ARRANGE_MENU_GLYPH_SHAPE_PATCHES = {
-    # 指揮官配置
-    0x00DB: "지",
-    0x00DC: "휘",
-    0x014E: "관",
-    0x0189: "배",
-    0x01C8: "치",
     # 移動順変更
-    0x00E4: "이",
-    0x0134: "동",
-    0x008A: "순",
-    0x00FB: "변",
-    0x007D: "경",
-    # 自動配置
+    0x00E4: "순",
+    0x0134: "서",
+    0x008A: "변",
+    0x00FB: "경",
+    0x007D: " ",
+    # 自動
     0x0125: "자",
     0x0118: "동",
-    0x02AB: "배",
-    0x0381: "치",
-    # 部隊を見る
-    0x0094: "부",
-    0x02D1: "대",
-    0x01F8: "보",
-    0x0074: "기",
-    0x00A9: " ",
-    # 出撃
-    0x0063: "출",
-    0x0079: "격",
 }
 
 DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
@@ -2086,6 +2072,7 @@ def main() -> None:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_route_title(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)
+        patch_arrange_menu_glyph_shapes(data)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)
