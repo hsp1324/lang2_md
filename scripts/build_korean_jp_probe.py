@@ -145,7 +145,14 @@ BYTE_UI_STRING_PATCHES = {
     0x0A18F8: "아이템",
 }
 
-BYTE_UI_FIXED_STRING_PATCHES = {}
+BYTE_UI_FIXED_STRING_PATCHES = {
+    0x09B26D: (6, "아군"),
+    0x09B278: (5, "적군"),
+    0x09B2A3: (3, "중립"),
+    0x0A1099: (6, "아군"),
+    0x0A2DD4: (6, "아군"),
+    0x0A2E63: (5, "적군"),
+}
 
 DIRECT_WORD_SEQUENCE_PATCHES = {
     0x9706A: (12, "이동공격마법소환치료명령"),
