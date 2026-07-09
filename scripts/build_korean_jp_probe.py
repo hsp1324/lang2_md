@@ -68,6 +68,7 @@ CLASS_BYTE_GLYPH_CODES = [
     *range(0xE0, 0xFF),
 ]
 CLASS_BYTE_SAFE_GLYPH_CODES = list(range(0xA1, 0xE0))
+BYTE_UI_GLYPH_CODES = list(range(0xA1, 0xE0))
 CLASS_BYTE_SUBSET_LABELS = {
     1: "파이터",
     3: "워록",
@@ -80,6 +81,36 @@ CLASS_BYTE_SUBSET_LABELS = {
     102: "아머솔저",
     109: "가드맨",
     113: "시민",
+}
+
+BYTE_UI_STRING_PATCHES = {
+    # Commander/NPC names. These are the actual half-width JP byte strings used
+    # by the prep/status UI, unlike the experimental 0x974xx direct-string scan.
+    0x061AC5: "엘윈",
+    0x061ACB: "리아나",
+    0x061AD8: "헤인",
+    0x061B1C: "볼도",
+    # Early commander classes and mercenary names.
+    0x05E953: "파이터",
+    0x05E95F: "워록",
+    0x05EA98: "파이터",
+    0x05EA9E: "파이터",
+    0x05EAAA: "워록",
+    0x05EC31: "파이크",
+    0x05EC36: "팔랑크스",
+    0x05EC3D: "솔저",
+    0x05EC7E: "가드맨",
+    0x05EC99: "시민",
+    # Item labels shown by the byte-string equipment/shop renderer.
+    0x060405: "단검",
+    0x0A18E0: "무기",
+    0x0A18EC: "방어구",
+    0x0A18F8: "아이템",
+}
+
+BYTE_UI_FIXED_STRING_PATCHES = {
+    0x0A2E22: (8, "소지금"),
+    0x0A3AC9: (3, "끝"),
 }
 
 DIRECT_STRING_PATCHES = {
@@ -458,10 +489,16 @@ DIRECT_STRING_PATCHES = {
     0x971F4: "마나부족",
     0x97202: "수면상태",
     0x97214: "마법봉인",
-    0xA16B0: "아이템가득찼음버리세요",
     0xA16D4: "버릴아이템선택",
     0xA16F2: "버리겠습니까예아니오",
-    0xA1716: "구입판매더이상소지불가",
+}
+
+DIRECT_PREFIX_STRING_PATCHES = {
+    # Shop message records start with control words.  Writing them as plain text
+    # makes the buy/sell window render the message text as if it were a menu
+    # title, e.g. "구입판매더이...".
+    0xA16B0: ([0x0000, 0x0001, 0x0012, 0x0020], "소지품가득찼음"),
+    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "더이상소지불가"),
 }
 
 # These candidate strings were found by scanning, but they are not the visible
@@ -1453,9 +1490,20 @@ def patch_direct_strings(
     glyph_by_char: dict[str, int],
     direct_patches: dict[int, str],
     fixed_patches: dict[int, tuple[int, str]],
+    prefix_patches: dict[int, tuple[list[int], str]],
 ) -> None:
     for offset, text in direct_patches.items():
         write_direct_string(data, offset, text, glyph_by_char)
+    for offset, (prefix, text) in prefix_patches.items():
+        capacity = direct_string_capacity_words(data, offset)
+        values = list(prefix)
+        values.extend(glyph_by_char[char] for char in text if char != " ")
+        if len(values) + 1 > capacity:
+            raise ValueError(
+                f"prefix direct string at 0x{offset:06X} needs {len(values) + 1} words, "
+                f"only {capacity}: {text!r}"
+            )
+        write_word_list(data, offset, values, capacity)
     for offset, (max_words, text) in fixed_patches.items():
         write_fixed_direct_string(data, offset, max_words, text, glyph_by_char)
 
@@ -1602,6 +1650,36 @@ def patch_class_byte_subset(data: bytearray) -> None:
                 f"only {capacity}: {text!r}"
             )
         write_byte_string(data, ptr, values, capacity)
+
+
+def patch_byte_ui_strings(data: bytearray) -> None:
+    fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
+    chars = collect_chars(*BYTE_UI_STRING_PATCHES.values(), *fixed_texts)
+    if len(chars) > len(BYTE_UI_GLYPH_CODES):
+        raise ValueError(
+            f"byte UI strings need {len(chars)} glyph codes, only {len(BYTE_UI_GLYPH_CODES)} available"
+        )
+
+    half_font = Path("tools/fonts/Galmuri7.ttf")
+    font = ImageFont.truetype(str(half_font if half_font.exists() else FONT_PATH), 8)
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    code_by_char = {char: BYTE_UI_GLYPH_CODES[i] for i, char in enumerate(chars)}
+    for char, code in code_by_char.items():
+        offset = glyph_data_offset(code)
+        data[offset : offset + GLYPH_BYTES] = render_halfwidth_hangul_glyph(
+            char, font, blank_template
+        )
+
+    for offset, text in BYTE_UI_STRING_PATCHES.items():
+        capacity = byte_string_capacity(data, offset)
+        values = [code_by_char[char] for char in text]
+        write_byte_string(data, offset, values, capacity)
+    for offset, (width, text) in BYTE_UI_FIXED_STRING_PATCHES.items():
+        values = [code_by_char[char] for char in text if char != " "]
+        if len(values) > width:
+            raise ValueError(f"byte fixed string at 0x{offset:06X} needs {len(values)} bytes, only {width}")
+        data[offset : offset + width] = bytes(values + [0x20] * (width - len(values)))
 
 
 def patch_default_hero_name(data: bytearray) -> None:
@@ -1758,6 +1836,7 @@ def main() -> None:
     active_descriptions = [] if args.skip_scenarios else scenario_texts[: args.scenario_count]
     direct_patches = {} if args.skip_direct else dict(DIRECT_STRING_PATCHES)
     fixed_patches = {} if args.skip_direct else dict(DIRECT_FIXED_STRING_PATCHES)
+    prefix_patches = {} if args.skip_direct else dict(DIRECT_PREFIX_STRING_PATCHES)
     route_title_patches = {} if args.skip_direct else dict(DIRECT_FIXED_ROUTE_TITLE_PATCHES)
     if args.include_unsafe_direct_names:
         direct_patches.update(UNSAFE_DIRECT_NAME_PATCHES)
@@ -1765,6 +1844,7 @@ def main() -> None:
         direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
     active_direct_strings = list(direct_patches.values())
     active_fixed_strings = [text for _, text in fixed_patches.values()]
+    active_prefix_strings = [text for _, text in prefix_patches.values()]
     active_route_title_strings = [text for _, text in route_title_patches.values()]
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
@@ -1774,6 +1854,7 @@ def main() -> None:
         *active_descriptions,
         *active_direct_strings,
         *active_fixed_strings,
+        *active_prefix_strings,
         *active_route_title_strings,
         *active_item_names,
         *active_item_descriptions,
@@ -1789,6 +1870,7 @@ def main() -> None:
     if args.patch_opening_glyph_probe:
         patch_opening_glyph_probe(data)
     patch_opening_text_lists(data, glyph_by_char)
+    patch_byte_ui_strings(data)
     if args.patch_class_byte_table:
         patch_class_byte_table(data)
     elif args.patch_class_byte_subset:
@@ -1798,7 +1880,7 @@ def main() -> None:
     if not args.skip_scenarios:
         patch_scenarios(data, scenario_texts[: args.scenario_count], glyph_by_char)
     if not args.skip_direct:
-        patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches)
+        patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_route_title(data, glyph_by_char)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
