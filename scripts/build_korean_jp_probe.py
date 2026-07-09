@@ -1861,10 +1861,11 @@ def main() -> None:
     parser.add_argument(
         "--patch-byte-ui-strings",
         action=argparse.BooleanOptionalAction,
-        default=True,
+        default=False,
         help=(
-            "patch prep/shop one-byte UI strings and their JP font slots; use "
-            "--no-patch-byte-ui-strings to isolate regressions."
+            "experimental: patch prep/shop one-byte UI strings. Disabled by default until the "
+            "separate low-index 8x8 system font source is patched; otherwise the Korean byte "
+            "codes render as unrelated Japanese glyphs."
         ),
     )
     args = parser.parse_args()
