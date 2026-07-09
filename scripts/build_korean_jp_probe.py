@@ -612,6 +612,7 @@ NAME_ENTRY_DEFAULT_WORD_OFFSET = 0x0A3B0C
 NAME_ENTRY_DEFAULT_WORDS = 5
 
 DIRECT_FIXED_STRING_PATCHES = {
+    0xA186E: (6, "아이템소지"),
     0x9702C: (4, "출격준비"),
     0x97034: (4, "용병고용"),
     0x9703C: (6, "장비착용"),
@@ -1633,7 +1634,7 @@ def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) 
         values = [glyph_by_char[char] for char in text]
         if len(values) > max_words:
             raise ValueError(f"direct word sequence needs {len(values)} glyphs, only {max_words}: {text!r}")
-        values.extend([SPACE_GLYPH] * (max_words - len(values)))
+        values.extend([0x0020] * (max_words - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
 
