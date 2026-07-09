@@ -152,6 +152,11 @@ BYTE_UI_FIXED_STRING_PATCHES = {
     0x0A3AC9: (3, "끝"),
 }
 
+DIRECT_WORD_SEQUENCE_PATCHES = {
+    0x09ABC2: (8, "소지금"),
+    0x0A1896: (8, "소지금"),
+}
+
 DIRECT_STRING_PATCHES = {
     0x96086: "잘가!",
     0x96248: "잘가!",
@@ -1628,6 +1633,16 @@ def patch_route_title(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             put16(data, offset + i * 2, value)
 
 
+def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    for offset, (max_words, text) in DIRECT_WORD_SEQUENCE_PATCHES.items():
+        values = [glyph_by_char[char] for char in text]
+        if len(values) > max_words:
+            raise ValueError(f"direct word sequence needs {len(values)} glyphs, only {max_words}: {text!r}")
+        values.extend([SPACE_GLYPH] * (max_words - len(values)))
+        for i, value in enumerate(values):
+            put16(data, offset + i * 2, value)
+
+
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
     if len(ptrs) != len(ITEM_NAME_PATCHES):
@@ -1981,6 +1996,7 @@ def main() -> None:
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_prefix_strings = [text for _, text in prefix_patches.values()]
     active_route_title_strings = [text for _, text in route_title_patches.values()]
+    active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
@@ -1991,6 +2007,7 @@ def main() -> None:
         *active_fixed_strings,
         *active_prefix_strings,
         *active_route_title_strings,
+        *active_word_sequence_strings,
         *active_item_names,
         *active_item_descriptions,
         *active_opening_texts,
@@ -2018,6 +2035,7 @@ def main() -> None:
     if not args.skip_direct:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_route_title(data, glyph_by_char)
+        patch_direct_word_sequences(data, glyph_by_char)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)
