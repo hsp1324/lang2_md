@@ -130,10 +130,10 @@ BYTE_UI_STRING_PATCHES = {
     0x061AD8: "헤인",
     0x061B1C: "볼도",
     # Early commander classes and mercenary names.
-    0x05E953: "파이터",
+    0x05E953: "전사",
     0x05E95F: "워록",
-    0x05EA98: "파이터",
-    0x05EA9E: "파이터",
+    0x05EA98: "전사",
+    0x05EA9E: "전사",
     0x05EAAA: "워록",
     0x05EC31: "파이크",
     0x05EC36: "팔랑크스",
