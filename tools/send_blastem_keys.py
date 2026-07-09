@@ -7,6 +7,7 @@ import time
 from Xlib import XK, X
 from Xlib.display import Display
 from Xlib.ext import xtest
+from Xlib.protocol import event
 
 
 KEYSYMS = {
@@ -53,6 +54,23 @@ def wait_for_blastem_window(display: Display, timeout: float):
     raise RuntimeError("could not find BlastEm window")
 
 
+def activate_window(display: Display, window) -> None:
+    root = display.screen().root
+    net_active_window = display.intern_atom("_NET_ACTIVE_WINDOW")
+    message = event.ClientMessage(
+        window=window,
+        client_type=net_active_window,
+        data=(32, [2, X.CurrentTime, 0, 0, 0]),
+    )
+    root.send_event(
+        message,
+        event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask,
+    )
+    window.configure(stack_mode=X.Above)
+    window.set_input_focus(X.RevertToParent, X.CurrentTime)
+    display.sync()
+
+
 def press(display: Display, key: str, hold: float) -> None:
     if key not in KEYSYMS:
         raise ValueError(f"unknown key: {key}")
@@ -74,9 +92,7 @@ def main() -> int:
 
     display = Display()
     window = wait_for_blastem_window(display, args.wait_window)
-    window.set_input_focus(X.RevertToParent, X.CurrentTime)
-    window.configure(stack_mode=X.Above)
-    display.sync()
+    activate_window(display, window)
     time.sleep(args.ready_delay)
 
     for spec in args.keys:

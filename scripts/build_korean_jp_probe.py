@@ -67,7 +67,7 @@ CLASS_BYTE_GLYPH_CODES = [
     *range(0x80, 0xA1),
     *range(0xE0, 0xFF),
 ]
-CLASS_BYTE_SAFE_GLYPH_CODES = list(range(0x80, 0xA1))
+CLASS_BYTE_SAFE_GLYPH_CODES = list(range(0xA1, 0xE0))
 CLASS_BYTE_SUBSET_LABELS = {
     1: "파이터",
     3: "워록",
@@ -611,6 +611,38 @@ def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont, blank_template:
                 if dark:
                     high |= 1 << (7 - x)
                     low |= 1 << (7 - x)
+            out[source_row * 2] = high
+            out[source_row * 2 + 1] = low
+    return bytes(out)
+
+
+def render_halfwidth_hangul_glyph(
+    char: str,
+    font: ImageFont.FreeTypeFont,
+    blank_template: bytes,
+) -> bytes:
+    img = Image.new("L", (8, 16), 255)
+    draw = ImageDraw.Draw(img)
+    bbox = draw.textbbox((0, 0), char, font=font)
+    w = bbox[2] - bbox[0]
+    h = bbox[3] - bbox[1]
+    x = (8 - w) // 2 - bbox[0]
+    y = (16 - h) // 2 - bbox[1] - 1
+    draw.text((x, y), char, font=font, fill=0)
+
+    out = bytearray(blank_template)
+    # Half-width JP UI strings consume the left 8x16 column from the same
+    # 16x16 source glyph format. Keep the right column blank.
+    for tile, y_base in ((0, 0), (2, 8)):
+        for row in range(8):
+            source_row = tile * 8 + row
+            high = out[source_row * 2]
+            low = out[source_row * 2 + 1]
+            for x_pos in range(8):
+                dark = img.getpixel((x_pos, y_base + row)) < 180
+                if dark:
+                    high |= 1 << (7 - x_pos)
+                    low |= 1 << (7 - x_pos)
             out[source_row * 2] = high
             out[source_row * 2 + 1] = low
     return bytes(out)
@@ -1217,13 +1249,16 @@ def patch_class_byte_subset(data: bytearray) -> None:
             f"only {len(CLASS_BYTE_SAFE_GLYPH_CODES)} available"
         )
 
-    font = ImageFont.truetype(str(FONT_PATH), 16)
+    half_font = Path("tools/fonts/Galmuri7.ttf")
+    font = ImageFont.truetype(str(half_font if half_font.exists() else FONT_PATH), 8)
     blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
     code_by_char = {char: CLASS_BYTE_SAFE_GLYPH_CODES[i] for i, char in enumerate(chars)}
     for char, code in code_by_char.items():
         offset = glyph_data_offset(code)
-        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+        data[offset : offset + GLYPH_BYTES] = render_halfwidth_hangul_glyph(
+            char, font, blank_template
+        )
 
     for index, text in labels.items():
         ptr = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
