@@ -168,6 +168,9 @@ focus.
   - `엘윈`, `헤인`
   - `전사`
   - `용병고용`, `장비착용`, `상점`, `지휘관배치`
+- One-byte UI Korean glyph codes are stabilized in
+  `BYTE_UI_STABLE_CODE_BY_CHAR`. This prevents a new byte UI patch from shifting
+  existing labels such as `엘윈` into unrelated glyphs such as `아이`.
 - Prep status panel bottom labels are fixed:
   - original `シキハイ` / 指揮範囲 -> `지휘범위`
   - original `シュウセイ` / 修正 -> `수정`
@@ -265,7 +268,9 @@ Result: offline byte UI rendering changed, but the live shop title did not
 become correct. Worse, adding this string at the front of the byte UI patch set
 shifted the generated one-byte Korean glyph-code assignment. In the live game,
 `엘윈` then rendered as `아이` in shop/prep UI. This was reverted and the build
-returned to checksum `8034`.
+returned to checksum `8034`. A second attempt inserted the patch at the end of
+the dictionary, preserving `엘윈/헤인`, but the live shop title still stayed
+`アイテム소지`, so this address is not the visible title owner for that screen.
 
 Conclusion: do not patch `0x018082` by simply adding it to the shared byte UI
 patch dictionary. If revisiting it, keep byte-code allocation stable or give the

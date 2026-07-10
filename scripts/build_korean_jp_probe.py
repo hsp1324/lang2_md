@@ -106,6 +106,50 @@ BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
     *(code for code in range(0xA1, 0xE0) if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES),
 ]
+BYTE_UI_STABLE_CODE_BY_CHAR = {
+    "엘": 0xB4,
+    "윈": 0xD9,
+    "리": 0xB3,
+    "아": 0xA8,
+    "나": 0xDD,
+    "헤": 0xD8,
+    "인": 0xB1,
+    "볼": 0xC5,
+    "도": 0xCD,
+    "전": 0xB2,
+    "사": 0xCA,
+    "워": 0xC4,
+    "록": 0xB0,
+    "파": 0xCC,
+    "이": 0xA7,
+    "크": 0xC0,
+    "팔": 0xAB,
+    "랑": 0xDB,
+    "스": 0xAF,
+    "솔": 0xB8,
+    "저": 0xD7,
+    "가": 0xBD,
+    "드": 0xBF,
+    "맨": 0xBC,
+    "시": 0xAC,
+    "민": 0xB6,
+    "무": 0xCF,
+    "기": 0xCB,
+    "방": 0xA1,
+    "어": 0xA2,
+    "구": 0xA3,
+    "템": 0xA4,
+    "군": 0xA5,
+    "적": 0xA6,
+    "중": 0xA9,
+    "립": 0xAA,
+    "지": 0xAD,
+    "휘": 0xAE,
+    "범": 0xB5,
+    "위": 0xB7,
+    "수": 0xB9,
+    "정": 0xBA,
+}
 CLASS_BYTE_SUBSET_LABELS = {
     1: "파이터",
     3: "워록",
@@ -1856,14 +1900,24 @@ def patch_byte_ui_strings(data: bytearray) -> None:
     fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
     word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
     chars = collect_chars(*BYTE_UI_STRING_PATCHES.values(), *fixed_texts, *word_texts)
-    if len(chars) > len(BYTE_UI_GLYPH_CODES):
+    code_by_char: dict[str, int] = {}
+    used_codes: set[int] = set()
+    for char in chars:
+        if char in BYTE_UI_STABLE_CODE_BY_CHAR:
+            code = BYTE_UI_STABLE_CODE_BY_CHAR[char]
+            code_by_char[char] = code
+            used_codes.add(code)
+    available_codes = [code for code in BYTE_UI_GLYPH_CODES if code not in used_codes]
+    remaining_chars = [char for char in chars if char not in code_by_char]
+    if len(remaining_chars) > len(available_codes):
         raise ValueError(
-            f"byte UI strings need {len(chars)} glyph codes, only {len(BYTE_UI_GLYPH_CODES)} available"
+            f"byte UI strings need {len(remaining_chars)} additional glyph codes, only {len(available_codes)} available"
         )
+    for char, code in zip(remaining_chars, available_codes):
+        code_by_char[char] = code
 
     half_font = Path("tools/fonts/Galmuri7.ttf")
     font = ImageFont.truetype(str(half_font if half_font.exists() else FONT_PATH), 8)
-    code_by_char = {char: BYTE_UI_GLYPH_CODES[i] for i, char in enumerate(chars)}
 
     resource_table_entry = BYTE_UI_FONT_RESOURCE_TABLE + BYTE_UI_FONT_RESOURCE_INDEX * 4
     resource_offset = be32(data, resource_table_entry) & 0x00FFFFFF
