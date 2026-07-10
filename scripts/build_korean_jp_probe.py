@@ -576,7 +576,7 @@ DIRECT_PREFIX_STRING_PATCHES = {
     # makes the buy/sell window render the message text as if it were a menu
     # title, e.g. "구입판매더이...".
     0xA16B0: ([0x0000, 0x0001, 0x0012, 0x0020], "가득찼음"),
-    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "소지불가"),
+    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "아이템구입"),
 }
 
 # These candidate strings were found by scanning, but they are not the visible
@@ -663,9 +663,9 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA37AA: (5, "합계"),
     0xA37B6: (3, "턴"),
     0xA37BE: (20, "이름을정해주세요"),
-    # Do not patch the item possession title by overwriting 0xA16F8 directly:
-    # that address lives inside the shop/discard message block and shares layout
-    # control words with the post-purchase possession popup.
+    # Do not patch the item possession title by overwriting the shop/discard
+    # message block. In particular, 0xA1716 is a control-word message record,
+    # not a title string.
     0xA2B72: (5, "지휘관배치"),
     # The route menu reuses these direct strings out of order on screen:
     # 0xA2B7C appears on the 4th visible row, while 0xA2B86 is split so its
