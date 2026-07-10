@@ -186,6 +186,7 @@ DIRECT_WORD_SEQUENCE_PATCHES = {
 }
 
 ITEM_TITLE_TEXT = "아이템구입"
+ITEM_POSSESSION_TITLE_TEXT = "아이템소지"
 
 DIRECT_STRING_PATCHES = {
     0x96086: "잘가!",
@@ -576,7 +577,7 @@ DIRECT_PREFIX_STRING_PATCHES = {
     # makes the buy/sell window render the message text as if it were a menu
     # title, e.g. "구입판매더이...".
     0xA16B0: ([0x0000, 0x0001, 0x0012, 0x0020], "가득찼음"),
-    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "아이템구입"),
+    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "소지불가"),
 }
 
 # These candidate strings were found by scanning, but they are not the visible
@@ -663,9 +664,8 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA37AA: (5, "합계"),
     0xA37B6: (3, "턴"),
     0xA37BE: (20, "이름을정해주세요"),
-    # Do not patch the item possession title by overwriting the shop/discard
-    # message block. In particular, 0xA1716 is a control-word message record,
-    # not a title string.
+    # Do not patch item possession title message words directly: that renderer
+    # uses the item local glyph list, and 0xA1716 is a purchase-popup message.
     0xA2B72: (5, "지휘관배치"),
     # The route menu reuses these direct strings out of order on screen:
     # 0xA2B7C appears on the 4th visible row, while 0xA2B86 is split so its
@@ -1690,11 +1690,18 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         raise ValueError(f"expected {len(ITEM_NAME_PATCHES)} item name pointers, got {len(ptrs)}")
 
     item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
-    # The shop item list only loads the original local glyph window. Keep the
-    # first item on its original ナイフ slots instead of appending new slots.
-    item_glyphs[0] = glyph_by_char["단"]
-    item_glyphs[1] = glyph_by_char["검"]
-    item_glyphs[2] = SPACE_GLYPH
+    item_title_glyphs = [glyph_by_char[char] for char in ITEM_POSSESSION_TITLE_TEXT]
+    if len(item_title_glyphs) > 6:
+        raise ValueError(
+            f"item possession title is too long for the original token stream: {ITEM_POSSESSION_TITLE_TEXT!r}"
+        )
+    item_glyphs[:6] = item_title_glyphs + [SPACE_GLYPH] * (6 - len(item_title_glyphs))
+    # The live shop/possession list only loads the low local glyph window for
+    # the visible first item. Keep "단검" inside that window, but away from the
+    # six title slots above.
+    item_glyphs[6] = glyph_by_char["단"]
+    item_glyphs[7] = glyph_by_char["검"]
+    item_glyphs[8] = SPACE_GLYPH
     local_by_glyph = {glyph: i for i, glyph in enumerate(item_glyphs)}
 
     def local_index(char: str) -> int:
@@ -1707,7 +1714,7 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     for index, (ptr, text) in enumerate(zip(ptrs, ITEM_NAME_PATCHES)):
         capacity = direct_string_capacity_words(data, ptr)
         if index == 0:
-            tokens = [0, 1, 2]
+            tokens = [6, 7, 8]
         else:
             tokens = [local_index(char) for char in text if char != " "]
         if len(tokens) + 1 > capacity:
@@ -2105,7 +2112,7 @@ def main() -> None:
     active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
-    active_item_title = "" if args.skip_items else ITEM_TITLE_TEXT
+    active_item_title = "" if args.skip_items else ITEM_TITLE_TEXT + ITEM_POSSESSION_TITLE_TEXT
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,

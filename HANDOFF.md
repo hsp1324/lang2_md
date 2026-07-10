@@ -312,7 +312,8 @@ first item/description.
 
 Conclusion: for Scenario 1 shop, reuse original low local slots:
 
-- item name tokens `0,1,2`;
+- possession title slots `0..5` for `아이템소지`;
+- first item name tokens `6,7,8` for `단검` plus space;
 - description slots `0..7` for `호신용 단검`;
 - keep original `AT+1` slots available instead of replacing them.
 
@@ -329,7 +330,7 @@ Result: wrong. `0xA1716` is a shop message record with control words
 to show a stray `입` after `단검`.
 
 Conclusion: preserve `0xA1716` through `DIRECT_PREFIX_STRING_PATCHES` as
-`소지불가`. In build checksum `A3C7`, the first-item purchase popup shows
+`소지불가`. In build checksum `8034`, the first-item purchase popup shows
 `단검 소지` instead of `단검  입`.
 
 ### Status Panel Labels
