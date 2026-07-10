@@ -31,6 +31,21 @@ SEQUENCES = {
         "c:0.8",
     ],
     # Scenario 1 shop, first item selected/purchased-confirm screen.
+    "shop-buy-list": [
+        "start:2.0",
+        "start:1.0",
+        "c:0.8",
+        "c:0.8",
+        "c:1.4",
+        "s@3.0:0.8",
+        "c:1.2",
+        "down:0.8",
+        "down:0.8",
+        "c:0.8",
+        "c:0.8",
+    ],
+    # Scenario 1 shop, one step past the buy list. This enters the follow-up
+    # item/possession path and is not the first shop title check.
     "shop": [
         "start:2.0",
         "start:1.0",
@@ -59,6 +74,32 @@ SEQUENCES = {
         "c:0.8",
         "c:0.8",
         "c:0.8",
+        "c:0.8",
+    ],
+    # Scenario 1 full shop regression path:
+    # buy the first dagger, close the popup, re-enter the shop, enter sell, and
+    # select the bought dagger. This sequence was manually verified by the user
+    # on 2026-07-10; do not retime it unless focus/input behavior changes.
+    "shop-buy-sell": [
+        "start:2.0",
+        "start:1.0",
+        "c:0.8",
+        "c:0.8",
+        "c:1.4",
+        "s@3.0:0.8",
+        "c:1.2",
+        "down:0.8",
+        "down:0.8",
+        "c:0.8",
+        "c:3.0",
+        "c:0.8",
+        "b:0.8",
+        "b:3.0",
+        "down:0.8",
+        "down:0.8",
+        "c:0.8",
+        "down:0.8",
+        "c:3.0",
         "c:0.8",
     ],
     # Scenario 1 commander arrangement screen.

@@ -89,7 +89,7 @@ Do not assume system packages are installed on the next PC.
 Last verified build during this handoff:
 
 ```text
-checksum: 8034
+checksum: B572
 ```
 
 Build command:
@@ -129,6 +129,8 @@ Automation scripts:
 ```bash
 python3 tools/run_blastem_sequence.py prep
 python3 tools/run_blastem_sequence.py shop
+python3 tools/run_blastem_sequence.py shop-buy-list
+python3 tools/run_blastem_sequence.py shop-buy-sell
 python3 tools/run_blastem_sequence.py arrange
 python3 tools/run_blastem_sequence.py deploy-dialogue
 python3 tools/run_blastem_sequence.py name-entry
@@ -174,10 +176,12 @@ focus.
 - Prep status panel bottom labels are fixed:
   - original `シキハイ` / 指揮範囲 -> `지휘범위`
   - original `シュウセイ` / 修正 -> `수정`
-- Shop item purchase screen currently shows:
-  - title `아이템구입`
+- Shop item purchase path has working item text:
   - first item `단검`
   - description `호신용 단검` and `AT+1`
+- Shop sell-title tile loader `0xA181C` has identified title slots for the
+  direct token stream at `0xA17B8`; the current build writes the visible slots as
+  `아이템판매` without changing the token stream.
 - Name entry screen currently defaults to `엘윈`, and it is a useful probe for
   seeing which Japanese byte/glyph slots now render as Korean.
 
@@ -187,10 +191,12 @@ focus.
   - `移動順変更`
   - `自動배치`
   - Rows already working: `지휘관배치`, `적군보기`, `출격`.
-- Shop possession title no longer shows the Japanese `アイテム` prefix. It now
-  shows `소지` by patching the direct token stream at `0xA17A4` to skip tokens
-  0-2. A full `아이템소지` title still needs the tile source for token blocks
-  0-2 to be identified.
+- Shop purchase/possession title is not fully solved. Do not restore the old
+  `0xA17A4` token-shortening hack: it only hid the Japanese prefix and produced
+  incomplete titles such as `소지`. The purchase script near `0xA177E` contains
+  an `FFF9`-controlled substream; treating the following words as plain glyph IDs
+  can blank/freeze the shop entry path. The sell path is safer: `0xA17B8` maps
+  tokens directly to tile blocks and `0xA181C` supplies the glyph slots.
 - Some route/menu titles still show English/Japanese, such as `SCENARIO 1`.
 - Only Scenario 1 gameplay path has been heavily tested. The script contains
   broader item/class/scenario patches, but many later screens remain unverified.
@@ -275,6 +281,30 @@ the dictionary, preserving `엘윈/헤인`, but the live shop title still stayed
 Conclusion: do not patch `0x018082` by simply adding it to the shared byte UI
 patch dictionary. If revisiting it, keep byte-code allocation stable or give the
 title a dedicated code path.
+
+### Shop Title Tile Loader
+
+Found: routine `0x2792E` chooses the direct title token stream at `0xA17A4` or
+`0xA17B8`, then writes tile IDs as `0x680 + token*4`. This bypasses the normal
+local text renderer.
+
+Tried: shorten `0xA17A4` to tokens `3,4,5` to hide the Japanese `アイテム`
+prefix.
+
+Result: it removed the prefix but produced incomplete titles such as `소지`, so
+it was removed from the active build.
+
+Tried: patch the purchase-side script at `0xA177E` by treating the words after
+the apparent loader header as plain glyph IDs.
+
+Result: unsafe. That script includes an `FFF9`-controlled substream. In a test
+build it reached the title normally but could blank/freeze while entering the
+shop. Do not use this as the purchase-title fix without disassembling the
+substream ownership.
+
+Current: the sell-side script at `0xA181C` is safer and has been patched only at
+the slots referenced by `0xA17B8` to prepare `아이템판매`. The purchase title
+still needs its correct tile/glyph source isolated.
 
 ### Name Entry Default
 

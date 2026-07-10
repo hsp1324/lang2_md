@@ -230,15 +230,12 @@ DIRECT_WORD_SEQUENCE_PATCHES = {
 }
 
 DIRECT_TOKEN_STREAM_PATCHES = {
-    # Shop possession title. This renderer maps tokens directly to VRAM tile
-    # blocks at 0x680 + token*4 instead of using the item glyph list. Tokens 0-2
-    # still draw Japanese "アイテム", while 3-4 draw Korean "소지". Until the
-    # tile source for 0-2 is found, show the Korean-only title at the left.
-    0xA17A4: [0x0003, 0x0004, 0x0005],
 }
 
 ITEM_TITLE_TEXT = "아이템구입"
 ITEM_POSSESSION_TITLE_TEXT = "아이템소지"
+ITEM_SELL_TITLE_TEXT = "아이템판매"
+SHOP_SELL_TITLE_GLYPH_LIST = 0xA1826
 
 DIRECT_STRING_PATCHES = {
     0x96086: "잘가!",
@@ -1742,6 +1739,27 @@ def patch_direct_token_streams(data: bytearray) -> None:
         write_token_stream(data, offset, tokens, capacity)
 
 
+def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    # The shop title renderer does not read normal text records.  Routine
+    # 0x2792E writes tile blocks directly as 0x680 + token*4 from the token
+    # stream at 0xA17B8.  Keep that token stream and its control structure
+    # intact; replace only the glyph IDs loaded into the referenced tile slots.
+    #
+    # Do not patch the similar-looking 0xA177E purchase script here: it contains
+    # an FFF9-controlled substream, and treating its following words as plain
+    # glyph IDs can blank/freeze the shop entry path.
+    sell_values_by_slot = {
+        0: glyph_by_char["아"],
+        1: glyph_by_char["이"],
+        2: glyph_by_char["템"],
+        3: glyph_by_char["판"],
+        6: glyph_by_char["매"],
+        7: SPACE_GLYPH,
+    }
+    for slot, value in sell_values_by_slot.items():
+        put16(data, SHOP_SELL_TITLE_GLYPH_LIST + slot * 2, value)
+
+
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
     if len(ptrs) != len(ITEM_NAME_PATCHES):
@@ -2180,7 +2198,7 @@ def main() -> None:
     active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
-    active_item_title = "" if args.skip_items else ITEM_TITLE_TEXT + ITEM_POSSESSION_TITLE_TEXT
+    active_item_title = "" if args.skip_items else ITEM_TITLE_TEXT + ITEM_POSSESSION_TITLE_TEXT + ITEM_SELL_TITLE_TEXT
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,
@@ -2225,6 +2243,7 @@ def main() -> None:
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)
+        patch_shop_title_glyph_loaders(data, glyph_by_char)
     if not args.skip_direct:
         patch_direct_token_streams(data)
     checksum = update_md_checksum(data)
