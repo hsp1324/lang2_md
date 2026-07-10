@@ -177,10 +177,6 @@ focus.
 
 ## Known Remaining Problems
 
-- Purchase popup after buying the first item still has bad text layout:
-  - observed as `단검  입` with the item icon and a stray `입`.
-  - This likely uses a separate fixed/prefix message path, not the same item
-    list/description path.
 - Commander arrangement route menu still has Japanese on two rows:
   - `移動順変更`
   - `自動배치`
@@ -277,6 +273,16 @@ and reused out-of-order fragments.
 
 Conclusion: do not patch that menu as a simple continuous grid. The remaining
 `移動順変更` and `自動...` rows need VRAM/sprite/tile-resource tracing.
+
+2026-07-10 follow-up: on build `BC63`, the remaining visible Japanese came from
+VRAM plane C tile IDs:
+
+- `移動順変更`: tile IDs `5A0-5B3`;
+- `自動` prefix: tile IDs `5B4-5B7`;
+- the menu window nametable starts at VRAM plane C around `0xC000`.
+
+Searching raw ROM bytes and the `0x0B0000` 4-byte graphics resource table did
+not find these tile bytes, so the source is likely another compressed/tile path.
 
 ### Arrangement Menu Glyph-Shape Substitution
 
