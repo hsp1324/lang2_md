@@ -16,6 +16,8 @@ SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 
 
 SEQUENCES = {
+    # Opening/title into the name entry screen. Useful as a glyph/code probe.
+    "name-entry": ["start:2.0", "start:1.0", "c:0.8"],
     # Opening/title/name/route into the scenario description screen.
     "scenario": ["start:2.0", "start:1.0", "c:0.8", "c:0.8", "c:0.8"],
     # Scenario screen into the commander preparation screen.

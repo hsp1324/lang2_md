@@ -89,7 +89,7 @@ Do not assume system packages are installed on the next PC.
 Last verified build during this handoff:
 
 ```text
-checksum: A5DC
+checksum: 8034
 ```
 
 Build command:
@@ -131,6 +131,7 @@ python3 tools/run_blastem_sequence.py prep
 python3 tools/run_blastem_sequence.py shop
 python3 tools/run_blastem_sequence.py arrange
 python3 tools/run_blastem_sequence.py deploy-dialogue
+python3 tools/run_blastem_sequence.py name-entry
 python3 tools/capture_blastem_window.py captures/run/example.png
 python3 tools/send_blastem_keys.py c:0.8
 ```
@@ -174,6 +175,8 @@ focus.
   - title `아이템구입`
   - first item `단검`
   - description `호신용 단검` and `AT+1`
+- Name entry screen currently defaults to `엘윈`, and it is a useful probe for
+  seeing which Japanese byte/glyph slots now render as Korean.
 
 ## Known Remaining Problems
 
@@ -181,6 +184,10 @@ focus.
   - `移動順変更`
   - `自動배치`
   - Rows already working: `지휘관배치`, `적군보기`, `출격`.
+- Shop possession/purchase screen still has an unresolved Japanese prefix in
+  the title path on some screens, e.g. `アイテム소지`. The popup/body area is
+  mostly Korean, but this title is not fully owned by the relocated item glyph
+  list.
 - Some route/menu titles still show English/Japanese, such as `SCENARIO 1`.
 - Only Scenario 1 gameplay path has been heavily tested. The script contains
   broader item/class/scenario patches, but many later screens remain unverified.
@@ -248,6 +255,21 @@ name confirmation.
 
 Conclusion: keep `UNSAFE_DIRECT_NAME_PATCHES` disabled unless revalidated with a
 specific screen and save-state comparison.
+
+### `0x018082` Shop Title Attempt
+
+Tried: add `0x018082` (`ｱｲﾃﾑ ｾﾝﾀｸ`) to `BYTE_UI_STRING_PATCHES` as
+`아이템소지` to remove the remaining shop title prefix.
+
+Result: offline byte UI rendering changed, but the live shop title did not
+become correct. Worse, adding this string at the front of the byte UI patch set
+shifted the generated one-byte Korean glyph-code assignment. In the live game,
+`엘윈` then rendered as `아이` in shop/prep UI. This was reverted and the build
+returned to checksum `8034`.
+
+Conclusion: do not patch `0x018082` by simply adding it to the shared byte UI
+patch dictionary. If revisiting it, keep byte-code allocation stable or give the
+title a dedicated code path.
 
 ### Name Entry Default
 
