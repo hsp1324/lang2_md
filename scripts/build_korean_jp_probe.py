@@ -138,11 +138,17 @@ BYTE_UI_STRING_PATCHES = {
     0x05EC3D: "솔저",
     0x05EC7E: "가드맨",
     0x05EC99: "시민",
-    # Item labels shown by the byte-string equipment/shop renderer.
-    0x060405: "단검",
+    # Item category labels shown by the byte-string equipment/shop renderer.
     0x0A18E0: "무기",
     0x0A18EC: "방어구",
     0x0A18F8: "아이템",
+}
+
+RAW_BYTE_STRING_PATCHES = {
+    # Keep the original ナイフ byte-code shape/length for the shop item name
+    # renderer. It filters/positions the original half-width code path, so
+    # arbitrary replacement byte codes can vanish on screen.
+    0x060405: [0xC5, 0xB2, 0xCC],
 }
 
 BYTE_UI_FIXED_STRING_PATCHES = {
@@ -167,11 +173,19 @@ BYTE_UI_WORD_STRING_PATCHES = {
     0x09ACF0: (6, " 수정"),
 }
 
+WIDE_BYTE_GLYPH_PATCHES = {
+    # 0x060405 "ナイフ" item name is rendered through a 16x16 one-byte glyph
+    # path in the shop, not the relocated 8x8 byte UI font resource.
+    0xC5: "단",
+    0xB2: "검",
+    0xCC: " ",
+}
+
 DIRECT_WORD_SEQUENCE_PATCHES = {
     0x9706A: (12, "이동공격마법소환치료명령"),
 }
 
-ITEM_TITLE_TEXT = "아이템소지"
+ITEM_TITLE_TEXT = "아이템구입"
 
 DIRECT_STRING_PATCHES = {
     0x96086: "잘가!",
@@ -650,7 +664,7 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA37B6: (3, "턴"),
     0xA37BE: (20, "이름을정해주세요"),
     0xA1700: (3, "소지"),
-    0xA1716: (8, "아이템소지"),
+    0xA1716: (8, "아이템구입"),
     0xA2B72: (5, "지휘관배치"),
     # The route menu reuses these direct strings out of order on screen:
     # 0xA2B7C appears on the 4th visible row, while 0xA2B86 is split so its
@@ -1675,12 +1689,11 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         raise ValueError(f"expected {len(ITEM_NAME_PATCHES)} item name pointers, got {len(ptrs)}")
 
     item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
-    item_title_glyphs = [glyph_by_char[char] for char in ITEM_TITLE_TEXT]
-    if len(item_title_glyphs) > 6:
-        raise ValueError(f"item title is too long for the original token stream: {ITEM_TITLE_TEXT!r}")
-    item_glyphs[:6] = item_title_glyphs + [SPACE_GLYPH] * (6 - len(item_title_glyphs))
-    for i, glyph in enumerate(item_glyphs[:6]):
-        put16(data, ITEM_GLYPH_LIST_BASE + i * 2, glyph)
+    # The shop item list only loads the original local glyph window. Keep the
+    # first item on its original ナイフ slots instead of appending new slots.
+    item_glyphs[0] = glyph_by_char["단"]
+    item_glyphs[1] = glyph_by_char["검"]
+    item_glyphs[2] = SPACE_GLYPH
     local_by_glyph = {glyph: i for i, glyph in enumerate(item_glyphs)}
 
     def local_index(char: str) -> int:
@@ -1690,9 +1703,12 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             item_glyphs.append(glyph)
         return local_by_glyph[glyph]
 
-    for ptr, text in zip(ptrs, ITEM_NAME_PATCHES):
+    for index, (ptr, text) in enumerate(zip(ptrs, ITEM_NAME_PATCHES)):
         capacity = direct_string_capacity_words(data, ptr)
-        tokens = [local_index(char) for char in text if char != " "]
+        if index == 0:
+            tokens = [0, 1, 2]
+        else:
+            tokens = [local_index(char) for char in text if char != " "]
         if len(tokens) + 1 > capacity:
             raise ValueError(
                 f"item name at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
@@ -1714,6 +1730,20 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
         )
 
     desc_glyphs = read_word_list(data, ITEM_DESCRIPTION_GLYPH_LIST_BASE)
+    # Scenario 1 shop only has Knife. The shop description renderer also uses
+    # the original local glyph window, so keep the first description in the
+    # original low local slots instead of moving it behind the original list.
+    for slot, char in {
+        0: "호",
+        1: "신",
+        2: "용",
+        3: " ",
+        4: "단",
+        5: "검",
+        6: " ",
+        7: " ",
+    }.items():
+        desc_glyphs[slot] = SPACE_GLYPH if char == " " else glyph_by_char[char]
     local_by_glyph = {glyph: i for i, glyph in enumerate(desc_glyphs)}
     if SPACE_GLYPH not in local_by_glyph:
         raise ValueError("item description glyph list has no known space glyph")
@@ -1733,7 +1763,12 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
             capacity = direct_string_capacity_words(data, ptr)
         if capacity < 46:
             raise ValueError(f"item description at 0x{ptr:06X} is too small: {capacity} words")
-        tokens = fixed_text_tokens(text, 15, 3, local_index, space_index)
+        if i == 0:
+            tokens = [0, 1, 2, 3, 4, 5, space_index, space_index]
+            tokens.extend([space_index, 9, 10, 11, 12])
+            tokens.extend([space_index] * (45 - len(tokens)))
+        else:
+            tokens = fixed_text_tokens(text, 15, 3, local_index, space_index)
         if len(tokens) + 1 > capacity:
             raise ValueError(
                 f"item description at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
@@ -1860,6 +1895,24 @@ def patch_byte_ui_strings(data: bytearray) -> None:
         values.extend([0x0020] * (width - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
+
+
+def patch_raw_byte_strings(data: bytearray) -> None:
+    for offset, values in RAW_BYTE_STRING_PATCHES.items():
+        capacity = byte_string_capacity(data, offset)
+        write_byte_string(data, offset, values, capacity)
+
+
+def patch_wide_byte_glyphs(data: bytearray) -> None:
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    for code, char in WIDE_BYTE_GLYPH_PATCHES.items():
+        offset = glyph_data_offset(code)
+        if char == " ":
+            data[offset : offset + GLYPH_BYTES] = blank_template
+        else:
+            data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
 
 
 def patch_default_hero_name(data: bytearray) -> None:
@@ -2078,6 +2131,8 @@ def main() -> None:
     patch_opening_text_lists(data, glyph_by_char)
     if args.patch_byte_ui_strings:
         patch_byte_ui_strings(data)
+    patch_raw_byte_strings(data)
+    patch_wide_byte_glyphs(data)
     if args.patch_class_byte_table:
         patch_class_byte_table(data)
     elif args.patch_class_byte_subset:
