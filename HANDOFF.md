@@ -382,6 +382,10 @@ check focus first.
   than the rows already patched.
 - `SCENARIO 1` route/menu title: not yet patched. It may be tied to system menu
   strings and should not be changed blindly.
+- `SCENARIO` at ROM `0x0D48E` and `TURN` at `0x05E351` are ASCII strings, but
+  patching them through the byte UI fixed-string path did not affect the live
+  in-map `SCENARIO 1` / `TURN 1` banners on build `795E`; those banners also
+  use a different tile/graphic path.
 - Later scenarios/items/classes are not live-tested. The build script contains
   broad data, but Scenario 1 is the only heavily verified path.
 
