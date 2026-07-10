@@ -28,13 +28,8 @@ def render_tile(data: bytes, offset: int, scale: int) -> Image.Image:
         if len(row) < 4:
             break
         for x in range(8):
-            shift = 7 - x
-            value = (
-                (((row[0] >> shift) & 1) << 3)
-                | (((row[1] >> shift) & 1) << 2)
-                | (((row[2] >> shift) & 1) << 1)
-                | ((row[3] >> shift) & 1)
-            )
+            packed = row[x // 2]
+            value = (packed >> 4) & 0x0F if x % 2 == 0 else packed & 0x0F
             color = palette[min(value, len(palette) - 1)]
             img.paste(color, (x * scale, y * scale, (x + 1) * scale, (y + 1) * scale))
     return img

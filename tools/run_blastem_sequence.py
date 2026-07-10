@@ -3,16 +3,23 @@ from __future__ import annotations
 
 import argparse
 import os
+import platform
+import shutil
 import subprocess
 import sys
 import time
 from pathlib import Path
+
+from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
 BLASTEM = ROOT / "tools/blastem/blastem"
 SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
+CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
+RUNTIME_ROOT = ROOT / "captures/runtime"
+LOG_ROOT = ROOT / "captures/run"
 
 
 SEQUENCES = {
@@ -77,9 +84,8 @@ SEQUENCES = {
         "c:0.8",
     ],
     # Scenario 1 full shop regression path:
-    # buy the first dagger, close the popup, re-enter the shop, enter sell, and
-    # select the bought dagger. This sequence was manually verified by the user
-    # on 2026-07-10; do not retime it unless focus/input behavior changes.
+    # Buy the first dagger, confirm the completion popup with C, leave the item
+    # list with B, re-enter the shop, enter sell, and select the bought dagger.
     "shop-buy-sell": [
         "start:2.0",
         "start:1.0",
@@ -93,7 +99,7 @@ SEQUENCES = {
         "c:0.8",
         "c:3.0",
         "c:0.8",
-        "b:0.8",
+        "c:0.8",
         "b:3.0",
         "down:0.8",
         "down:0.8",
@@ -139,6 +145,59 @@ SEQUENCES = {
     ],
 }
 
+# Same regression path, stopped on the sell list before confirming the dagger.
+SEQUENCES["shop-sell-list"] = list(SEQUENCES["shop-buy-sell"][:-1])
+
+# This sequence uses the deploy/dialogue inputs, then advances one confirmation
+# at a time until the full command menu is detected. Fixed confirmation counts
+# are timing-sensitive and can accidentally choose Move on faster hosts.
+SEQUENCES["battle-command"] = list(SEQUENCES["deploy-dialogue"])
+SEQUENCES["first-turn-dialogue"] = list(SEQUENCES["deploy-dialogue"])
+
+
+def make_key_command(args: argparse.Namespace, keys: list[str]) -> list[str]:
+    command = [
+        sys.executable,
+        str(SEND_KEYS),
+        "--hold",
+        str(args.hold),
+        *keys,
+    ]
+    if args.send_event:
+        command.insert(2, "--send-event")
+    if args.click_window:
+        command.insert(2, "--click-window")
+    return command
+
+
+def battle_command_menu_visible(path: Path) -> bool:
+    image = Image.open(path).convert("RGB").crop((15, 25, 95, 110))
+    pixels = image.load()
+    blue_pixels = 0
+    for y in range(image.height):
+        for x in range(image.width):
+            red, green, blue = pixels[x, y]
+            if blue > 70 and blue > red * 1.3 and blue > green * 1.2:
+                blue_pixels += 1
+    return blue_pixels > 3200
+
+
+def advance_to_battle_command(args: argparse.Namespace) -> int:
+    probe = LOG_ROOT / "battle_command_probe.png"
+    for step in range(1, 16):
+        status = subprocess.call(make_key_command(args, ["c:0.9"]), cwd=ROOT)
+        if status:
+            return status
+        subprocess.check_call(
+            [sys.executable, str(CAPTURE_WINDOW), str(probe)],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+        )
+        if battle_command_menu_visible(probe):
+            print(f"battle command menu detected after {step} confirmations")
+            return 0
+    raise RuntimeError("battle command menu was not detected after 15 confirmations")
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -150,43 +209,91 @@ def main() -> int:
     parser.add_argument("--window-height", type=int, default=240)
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument("--send-event", action="store_true", help="send direct window events instead of global XTest input")
+    parser.add_argument(
+        "--reuse-runtime-state",
+        action="store_true",
+        help="reuse the isolated test SRAM/save-state directory for this sequence",
+    )
     parser.add_argument("--no-launch", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     if not args.no_launch:
+        runtime_home = RUNTIME_ROOT / args.sequence
+        if not args.reuse_runtime_state:
+            shutil.rmtree(runtime_home, ignore_errors=True)
+        runtime_home.mkdir(parents=True, exist_ok=True)
+        config_dir = runtime_home / ".config/blastem"
+        config_dir.mkdir(parents=True, exist_ok=True)
+        default_config = (BLASTEM.parent / "default.cfg").read_text(encoding="utf-8")
+        test_config = default_config.replace("state_format native", "state_format gst")
+        (config_dir / "blastem.cfg").write_text(test_config, encoding="utf-8")
+        LOG_ROOT.mkdir(parents=True, exist_ok=True)
+        log_path = LOG_ROOT / f"blastem_{args.sequence}.log"
+
         env = os.environ.copy()
         env["LD_LIBRARY_PATH"] = str(ROOT / "tools/blastem/lib")
-        command = [str(BLASTEM), str(args.rom), str(args.window_width), str(args.window_height)]
+        env["HOME"] = str(runtime_home)
+        if "microsoft" in platform.release().lower():
+            env.setdefault("SDL_AUDIODRIVER", "dummy")
+        command = [
+            str(BLASTEM),
+            str(args.rom.resolve()),
+            str(args.window_width),
+            str(args.window_height),
+        ]
         if args.dry_run:
             print("launch:", " ".join(command))
+            print("runtime home:", runtime_home)
+            print("log:", log_path)
         else:
-            subprocess.Popen(
-                command,
-                cwd=ROOT,
-                env=env,
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                start_new_session=True,
-            )
+            with log_path.open("w", encoding="utf-8") as log_file:
+                process = subprocess.Popen(
+                    command,
+                    cwd=BLASTEM.parent,
+                    env=env,
+                    stdin=subprocess.DEVNULL,
+                    stdout=log_file,
+                    stderr=subprocess.STDOUT,
+                    start_new_session=True,
+                )
             time.sleep(args.initial_delay)
+            if process.poll() is not None:
+                log_tail = log_path.read_text(encoding="utf-8", errors="replace")[-4000:]
+                raise RuntimeError(
+                    f"BlastEm exited with status {process.returncode} before input; "
+                    f"log: {log_path}\n{log_tail}"
+                )
 
-    key_command = [
-        sys.executable,
-        str(SEND_KEYS),
-        "--hold",
-        str(args.hold),
-        *SEQUENCES[args.sequence],
-    ]
-    if args.send_event:
-        key_command.insert(2, "--send-event")
-    if args.click_window:
-        key_command.insert(2, "--click-window")
+    key_command = make_key_command(args, SEQUENCES[args.sequence])
     if args.dry_run:
         print("keys:", " ".join(key_command))
+        if args.sequence in {"battle-command", "first-turn-dialogue"}:
+            print("then: confirm and capture until the full command menu is detected")
+        if args.sequence == "first-turn-dialogue":
+            print("then: close the unit menu and choose Start > 턴 종료")
         return 0
-    return subprocess.call(key_command, cwd=ROOT)
+    status = subprocess.call(key_command, cwd=ROOT)
+    if status or args.sequence not in {"battle-command", "first-turn-dialogue"}:
+        return status
+    status = advance_to_battle_command(args)
+    if status or args.sequence == "battle-command":
+        return status
+    return subprocess.call(
+        make_key_command(
+            args,
+            [
+                "b:0.8",
+                "start:1.0",
+                "down:0.8",
+                "down:0.8",
+                "down:0.8",
+                "down:1.0",
+                "c:4.0",
+            ],
+        ),
+        cwd=ROOT,
+    )
 
 
 if __name__ == "__main__":

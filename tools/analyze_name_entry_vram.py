@@ -34,13 +34,8 @@ def md_4bpp_tile(vram: bytes, tile_id: int) -> list[list[int]]:
     for y in range(8):
         row = vram[offset + y * 4 : offset + y * 4 + 4]
         for x in range(8):
-            shift = 7 - x
-            pixels[y][x] = (
-                (((row[0] >> shift) & 1) << 3)
-                | (((row[1] >> shift) & 1) << 2)
-                | (((row[2] >> shift) & 1) << 1)
-                | ((row[3] >> shift) & 1)
-            )
+            value = row[x // 2]
+            pixels[y][x] = (value >> 4) & 0x0F if x % 2 == 0 else value & 0x0F
     return pixels
 
 

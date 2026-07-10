@@ -170,7 +170,7 @@ BYTE_UI_STRING_PATCHES = {
     0x061AC5: "엘윈",
     0x061ACB: "리아나",
     0x061AD8: "헤인",
-    0x061B1C: "볼도",
+    0x061B1C: "발드",
     # Early commander classes and mercenary names.
     0x05E953: "전사",
     0x05E95F: "워록",
@@ -213,8 +213,25 @@ BYTE_UI_WORD_STRING_PATCHES = {
     0x09ACA8: (5, "지휘범위"),
     # Prep status panel bottom right label. This path writes 16-bit tile IDs
     # directly, not an FF-terminated byte string: original "シュウセイ" / 修正.
-    0x09AB8C: (6, " 수정"),
-    0x09ACF0: (6, " 수정"),
+    # Keep this at five words: the following FFFE is a newline control. The old
+    # six-word patch overwrote it and pulled A+ onto the label row.
+    0x09AB8C: (5, "수정"),
+    0x09ACF0: (5, "수정"),
+    # Status abbreviations in the two prep/shop panel variants.
+    0x09AB22: (2, "공격"),
+    0x09AB2C: (2, "방어"),
+    0x09AB5E: (2, "레벨"),
+    0x09AB6C: (2, "이동"),
+    0x09AB7E: (2, "마나"),
+    0x09AC8E: (2, "공격"),
+    0x09AC98: (2, "방어"),
+    0x09ACC8: (2, "레벨"),
+    0x09ACD2: (2, "이동"),
+    0x09ACE0: (2, "마나"),
+    # Money label in the prep and shop layouts. Preserve the leading 0x2F
+    # currency icon and replace only the five-letter POINT field.
+    0x09ABC2: (5, "소지금"),
+    0x0A1896: (5, "소지금"),
 }
 
 WIDE_BYTE_GLYPH_PATCHES = {
@@ -230,12 +247,22 @@ DIRECT_WORD_SEQUENCE_PATCHES = {
 }
 
 DIRECT_TOKEN_STREAM_PATCHES = {
+    # These suffixes are appended after the selected item name. They switch to
+    # the shop glyph list loaded at VRAM 0xD000 before reading these indexes.
+    0xA17C8: [6, 7, 8, 9, 10],       # "을 구입함"
+    0xA17D8: [6, 7, 11, 12, 10],     # "을 판매함"
 }
 
 ITEM_TITLE_TEXT = "아이템구입"
 ITEM_POSSESSION_TITLE_TEXT = "아이템소지"
 ITEM_SELL_TITLE_TEXT = "아이템판매"
-SHOP_SELL_TITLE_GLYPH_LIST = 0xA1826
+SHOP_PURCHASE_MESSAGE_TEXT = "을 구입함"
+SHOP_SELL_MESSAGE_TEXT = "을 판매함"
+SHOP_SELL_GLYPH_LIST = 0xA16D4
+SHOP_SELL_TITLE_TOKEN_STREAM = 0xA17B8
+START_MENU_GLYPH_LIST = 0x970D4
+START_MENU_TOKEN_STREAM = 0x9AD88
+START_MENU_TEXTS = ("저장", "불러오기", "승리조건", "게임설정", "턴 종료")
 
 DIRECT_STRING_PATCHES = {
     0x96086: "잘가!",
@@ -280,9 +307,9 @@ DIRECT_STRING_PATCHES = {
     0x184C5A: "죽기싫으면비켜!",
     0x184C84: "너희나라로돌아가!",
     0x184CA2: "살려줘!",
-    0x184CD0: "우리움직임을봤나?",
-    0x184D06: "우리임무는살인이아니다.",
-    0x184D38: "붙잡아!",
+    0x184CB0: "레온님! 주민들은요?\n우리 움직임을 봤습니다!",
+    0x184CEE: "살생은 금지다.\n우리 임무는 살인이 아니다.",
+    0x184D24: "너는 발드의 퇴로를 막아!",
     0x184D46: "예!",
     0x184D5A: "비켜!방해다!",
     0x184D6C: "꺄악!살려줘!",
@@ -617,17 +644,15 @@ DIRECT_STRING_PATCHES = {
     0x971F4: "마나부족",
     0x97202: "수면상태",
     0x97214: "마법봉인",
-    0xA16D4: "버릴아이템선택",
+    # Verified on Scenario 1 first-turn event dialogue speaker labels.
+    0x9746C: "레온",
+    0x97496: "레아드",
+    0x97512: "주민",
+    0x9754A: "제국군지휘관",
     0xA16F2: "버리겠습니까예아니오",
 }
 
-DIRECT_PREFIX_STRING_PATCHES = {
-    # Shop message records start with control words.  Writing them as plain text
-    # makes the buy/sell window render the message text as if it were a menu
-    # title, e.g. "구입판매더이...".
-    0xA16B0: ([0x0000, 0x0001, 0x0012, 0x0020], "가득찼음"),
-    0xA1716: ([0x0000, 0x0001, 0x0012, 0x0020], "소지불가"),
-}
+DIRECT_PREFIX_STRING_PATCHES = {}
 
 # These candidate strings were found by scanning, but they are not the visible
 # name table used by the JP name-entry screen. Patching them can break the flow
@@ -645,12 +670,10 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x9744E: "레스터",
     0x97458: "제시카",
     0x97462: "가면기사",
-    0x9746C: "레온",
     0x97474: "베른하르트",
     0x97482: "발가스",
     0x9748C: "보젤",
-    0x97496: "레아드",
-    0x974A0: "볼도",
+    0x974A0: "발드",
     0x974AA: "졸름",
     0x974B2: "에그베르트",
     0x974BE: "이멜다",
@@ -662,14 +685,12 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x974FC: "일반병",
     0x97504: "지휘관",
     0x9750C: "사제",
-    0x97512: "주민",
     0x97518: "해적",
     0x9751E: "자경단",
     0x97526: "로렌",
     0x97530: "아돈",
     0x97538: "삼손",
     0x97542: "바란",
-    0x9754A: "제국군지휘관",
     0x97558: "웨어울프",
     0x97566: "그레이트슬라임",
     0x97578: "스큐라",
@@ -725,7 +746,14 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA2B98: (2, "출격"),
 }
 
-ARRANGE_MENU_GLYPH_SHAPE_PATCHES = {}
+# Screen-local glyph loader for the two route-menu rows that do not use the
+# direct strings above. The original list at 0xA2BAC is:
+#   移 動 順 変 更 自
+# The row scripts reuse 動 for 自動, so six Korean glyphs cover both
+# "이동순변경" and the "자동" prefix without changing the global JP font.
+ARRANGE_MENU_GLYPH_LIST_PATCHES = {
+    0xA2BAC: "이동순변경자",
+}
 
 DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
     0xA10E0: (5, "진군루트"),
@@ -750,12 +778,17 @@ OPENING_TEXT_LIST_PATCHES = OrderedDict(
 
 SCENARIO0_TITLE = "시나리오 1"
 SCENARIO0_SUBTITLE = "서장"
-SCENARIO0_BODY = (
-    "엘윈은 살라스 마을에서 쉬고 있었다. "
-    "그때 헤인이 달려와 리아나의 위기를 알렸다. "
-    "엘윈은 그녀를 구하고 검을 들었다."
+SCENARIO0_BODY_SEGMENTS = (
+    "여행 중이던 젊은이의 이름은 바로 ",
+    "이었다. 살라스 영지의 마을에 머물던 어느 날, 헤인이 다급히 여관으로 뛰어들었다. "
+    "제국 기사단이 마을 외곽에 나타났다는 소식이었다. 그 말을 들은 ",
+    "은 리아나가 위험하다는 말에 망설이지 않았다. 그는 곧바로 검을 챙긴 ",
+    "은 동료와 마을 밖으로 달려 나갔다. 적장은 발드였다. 이 싸움이 훗날 대륙의 운명을 "
+    "바꿀 긴 전쟁의 시작이 되리라는 것을 누구도 몰랐다. 이제 ",
+    "은 발드를 쓰러뜨려 리아나를 지켜야 한다.",
 )
-SCENARIO0_CONDITIONS = "승리조건\n-볼도 격파\n패배조건\n-주인공 사망\n-볼도 우하단 도주"
+SCENARIO0_BODY = "".join(SCENARIO0_BODY_SEGMENTS)
+SCENARIO0_CONDITIONS = "※승리조건\n·발드 격파\n※패배조건\n·엘윈 사망\n·발드가 우하단 도주"
 
 SCENARIO_TEXT_OVERRIDES = {
     0: f"{SCENARIO0_TITLE}\n{SCENARIO0_SUBTITLE}\n{SCENARIO0_BODY}\n{SCENARIO0_CONDITIONS}",
@@ -776,7 +809,7 @@ SCENARIO_TEXT_OVERRIDES = {
 }
 
 CONDITION_SCREENS = [
-    ["승리조건", "-볼도 격파", "", "패배조건", "-주인공 사망", "-볼도 우하단 도주"],
+    ["승리조건", "-발드 격파", "", "패배조건", "-주인공 사망", "-발드가 우하단 도주"],
     ["승리조건", "-리아나 북쪽 도착", "-적 전멸", "패배조건", "-리아나 사망", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-리아나 사망", "-주인공 사망"],
     ["승리조건", "-모건 격파", "", "패배조건", "-신관 전멸", "-리아나/주인공 사망"],
@@ -1495,14 +1528,40 @@ def make_scenario0_record(
         for pos in [*range(28, 165), *range(166, 256), *range(257, 283)]
         if pos not in control_param_positions
     ]
+    body_name_controls = [
+        pos
+        for pos, token in enumerate(tokens[:283])
+        if token == 0xFFF7 and 28 <= pos < 283
+    ]
+    actual_name_offsets = [
+        sum(body_pos < control_pos for body_pos in body_positions)
+        for control_pos in body_name_controls
+    ]
+    expected_name_offsets: list[int] = []
+    body_cursor = 0
+    for segment in SCENARIO0_BODY_SEGMENTS[:-1]:
+        body_cursor += len(segment)
+        expected_name_offsets.append(body_cursor)
+    if actual_name_offsets != expected_name_offsets:
+        raise ValueError(
+            "scenario 0 dynamic-name boundaries changed: "
+            f"{actual_name_offsets!r} != {expected_name_offsets!r}"
+        )
     body_text = SCENARIO0_BODY.replace("\n", " ")
+    if len(body_text) < len(body_positions) - 2:
+        raise ValueError(
+            "scenario 0 body is too short and would leave name-control pages blank "
+            f"({len(body_text)} < {len(body_positions) - 2})"
+        )
     fill_positions(body_positions, body_text)
 
-    fill_span(285, 290, "승리조건", center=True)
-    fill_span(291, 300, "-볼도격파", center=False)
-    fill_span(301, 306, "패배조건", center=True)
-    fill_span(307, 314, "-엘윈사망", center=False)
-    fill_span(315, 330, "-볼도우하단도주", center=False)
+    # Preserve the original five-cell heading and bullet layout instead of
+    # centering shorter Korean labels into visually uneven rows.
+    fill_span(285, 290, "※승리조건", center=False)
+    fill_span(291, 300, "·발드 격파", center=False)
+    fill_span(301, 306, "※패배조건", center=False)
+    fill_span(307, 314, "·엘윈 사망", center=False)
+    fill_span(315, 330, "·발드가 우하단 도주", center=False)
     return glyphs, tokens[:-1]
 
 
@@ -1648,8 +1707,11 @@ def patch_scenario(
             if token == 0xFFFF:
                 break
         if index == 0:
+            # Scenario 1's list is relocated before it is written, so all of
+            # its original local slots are available to this record. Global
+            # glyph shapes and the original list used by other UI stay intact.
             glyphs, tokens = make_scenario0_record(
-                original_tokens, glyph_by_char, original_glyphs, protected_slots
+                original_tokens, glyph_by_char, original_glyphs, set()
             )
         else:
             scenario_text = normalize_scenario_text(text)
@@ -1740,24 +1802,116 @@ def patch_direct_token_streams(data: bytearray) -> None:
 
 
 def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    # The shop title renderer does not read normal text records.  Routine
-    # 0x2792E writes tile blocks directly as 0x680 + token*4 from the token
-    # stream at 0xA17B8.  Keep that token stream and its control structure
-    # intact; replace only the glyph IDs loaded into the referenced tile slots.
-    #
-    # Do not patch the similar-looking 0xA177E purchase script here: it contains
-    # an FFF9-controlled substream, and treating its following words as plain
-    # glyph IDs can blank/freeze the shop entry path.
+    # Routine 0x272A6 loads all 31 glyphs at 0xA1716 into VRAM 0xD000. The
+    # purchase title uses slots 0..5, while the completion suffixes at 0xA17C8
+    # and 0xA17D8 use slots 6..12. Preserve the rest of the shared list so later
+    # shop messages never read missing/uninitialized tile data.
+    possession_glyphs = read_word_list(data, 0xA1716)
+    if len(possession_glyphs) != 31:
+        raise ValueError(
+            f"shop possession glyph list has {len(possession_glyphs)} slots, expected 31"
+        )
+    purchase_values_by_slot = {
+        0: glyph_by_char["아"],
+        1: glyph_by_char["이"],
+        2: glyph_by_char["템"],
+        3: SPACE_GLYPH,
+        4: glyph_by_char["구"],
+        5: glyph_by_char["입"],
+        6: glyph_by_char["을"],
+        7: SPACE_GLYPH,
+        8: glyph_by_char["구"],
+        9: glyph_by_char["입"],
+        10: glyph_by_char["함"],
+        11: glyph_by_char["판"],
+        12: glyph_by_char["매"],
+    }
+    for slot, value in purchase_values_by_slot.items():
+        put16(data, 0xA1716 + slot * 2, value)
+
+    # The sell path at 0x26256 initially loads the 14-glyph list at 0xA16D4
+    # into VRAM 0xD000. Item handling later reloads 0xD000 from the shared list
+    # at 0xA1716, however, while the title renderer at 0x2792E keeps using the
+    # sell token stream at 0xA17B8. Slots 11 and 12 are available in both lists,
+    # so use that stable pair for "판매" instead of the original 6 and 7.
+    sell_glyphs = read_word_list(data, SHOP_SELL_GLYPH_LIST)
+    if len(sell_glyphs) != 14:
+        raise ValueError(f"shop sell glyph list has {len(sell_glyphs)} slots, expected 14")
     sell_values_by_slot = {
         0: glyph_by_char["아"],
         1: glyph_by_char["이"],
         2: glyph_by_char["템"],
-        3: glyph_by_char["판"],
-        6: glyph_by_char["매"],
-        7: SPACE_GLYPH,
+        3: SPACE_GLYPH,
+        11: glyph_by_char["판"],
+        12: glyph_by_char["매"],
     }
     for slot, value in sell_values_by_slot.items():
-        put16(data, SHOP_SELL_TITLE_GLYPH_LIST + slot * 2, value)
+        put16(data, SHOP_SELL_GLYPH_LIST + slot * 2, value)
+
+    original_title_tokens = [0, 1, 2, 3, 6, 7]
+    actual_title_tokens = [
+        be16(data, SHOP_SELL_TITLE_TOKEN_STREAM + slot * 2)
+        for slot in range(len(original_title_tokens))
+    ]
+    if actual_title_tokens != original_title_tokens:
+        raise ValueError(
+            "unexpected shop sell title token stream: "
+            f"{actual_title_tokens!r} != {original_title_tokens!r}"
+        )
+    for slot, token in enumerate([0, 1, 2, 3, 11, 12]):
+        put16(data, SHOP_SELL_TITLE_TOKEN_STREAM + slot * 2, token)
+
+
+def patch_start_menu(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    glyphs = read_word_list(data, START_MENU_GLYPH_LIST)
+    if len(glyphs) != 41:
+        raise ValueError(f"start-menu glyph list has {len(glyphs)} slots, expected 41")
+
+    glyph_values_by_slot = {
+        0: glyph_by_char["턴"],
+        2: glyph_by_char["종"],
+        3: glyph_by_char["료"],
+        6: glyph_by_char["승"],
+        7: glyph_by_char["리"],
+        8: glyph_by_char["조"],
+        9: glyph_by_char["건"],
+        10: glyph_by_char["저"],
+        11: glyph_by_char["장"],
+        14: glyph_by_char["불"],
+        15: glyph_by_char["러"],
+        16: glyph_by_char["오"],
+        17: glyph_by_char["기"],
+        19: glyph_by_char["게"],
+        20: glyph_by_char["임"],
+        21: glyph_by_char["설"],
+        22: glyph_by_char["정"],
+    }
+    for slot, glyph in glyph_values_by_slot.items():
+        put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph)
+
+    original_rows = [
+        [10, 11, 12, 13, 0x3F, 0x3F],
+        [14, 15, 11, 16, 0x3F, 0x3F],
+        [6, 7, 8, 9, 0x3F, 0x3F],
+        [17, 18, 19, 20, 21, 0x3F],
+        [0, 1, 2, 3, 4, 5],
+    ]
+    patched_rows = [
+        [10, 11, 0x3F, 0x3F, 0x3F, 0x3F],
+        [14, 15, 16, 17, 0x3F, 0x3F],
+        [6, 7, 8, 9, 0x3F, 0x3F],
+        [19, 20, 21, 22, 0x3F, 0x3F],
+        [0, 0x3F, 2, 3, 0x3F, 0x3F],
+    ]
+    for row, (expected, replacement) in enumerate(zip(original_rows, patched_rows)):
+        row_offset = START_MENU_TOKEN_STREAM + row * 12
+        actual = [be16(data, row_offset + index * 2) for index in range(6)]
+        if actual != expected:
+            raise ValueError(
+                f"unexpected start-menu row {row}: {actual!r} != {expected!r}"
+            )
+        for index, token in enumerate(replacement):
+            put16(data, row_offset + index * 2, token)
 
 
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -1790,7 +1944,10 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     for index, (ptr, text) in enumerate(zip(ptrs, ITEM_NAME_PATCHES)):
         capacity = direct_string_capacity_words(data, ptr)
         if index == 0:
-            tokens = [6, 7, 8]
+            # The original Japanese name has three glyphs, but Korean "단검"
+            # has two. Ending here also lets popup suffixes attach the particle
+            # without an unwanted blank: "단검을 구입함".
+            tokens = [6, 7]
         else:
             tokens = [local_index(char) for char in text if char != " "]
         if len(tokens) + 1 > capacity:
@@ -2046,16 +2203,19 @@ def patch_name_entry_reused_glyphs(data: bytearray) -> None:
         put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
 
 
-def patch_arrange_menu_glyph_shapes(data: bytearray) -> None:
-    font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = glyph_data_offset(SPACE_GLYPH)
-    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
-    for glyph_id, char in ARRANGE_MENU_GLYPH_SHAPE_PATCHES.items():
-        offset = glyph_data_offset(glyph_id)
-        if char == " ":
-            data[offset : offset + GLYPH_BYTES] = blank_template
-        else:
-            data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+def patch_arrange_menu_glyph_lists(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+) -> None:
+    for offset, text in ARRANGE_MENU_GLYPH_LIST_PATCHES.items():
+        original = read_word_list(data, offset)
+        if len(original) != len(text):
+            raise ValueError(
+                f"arrange glyph list at 0x{offset:06X} has {len(original)} slots, "
+                f"needs {len(text)} for {text!r}"
+            )
+        for index, char in enumerate(text):
+            put16(data, offset + index * 2, glyph_by_char[char])
 
 
 def patch_opening_glyph_probe(data: bytearray) -> None:
@@ -2196,9 +2356,20 @@ def main() -> None:
     active_prefix_strings = [text for _, text in prefix_patches.values()]
     active_route_title_strings = [text for _, text in route_title_patches.values()]
     active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
+    active_arrange_glyph_strings = list(ARRANGE_MENU_GLYPH_LIST_PATCHES.values())
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
-    active_item_title = "" if args.skip_items else ITEM_TITLE_TEXT + ITEM_POSSESSION_TITLE_TEXT + ITEM_SELL_TITLE_TEXT
+    active_item_title = (
+        ""
+        if args.skip_items
+        else (
+            ITEM_TITLE_TEXT
+            + ITEM_POSSESSION_TITLE_TEXT
+            + ITEM_SELL_TITLE_TEXT
+            + SHOP_PURCHASE_MESSAGE_TEXT
+            + SHOP_SELL_MESSAGE_TEXT
+        )
+    )
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,
@@ -2208,9 +2379,11 @@ def main() -> None:
         *active_prefix_strings,
         *active_route_title_strings,
         *active_word_sequence_strings,
+        *active_arrange_glyph_strings,
         *active_item_names,
         *active_item_descriptions,
         active_item_title,
+        *START_MENU_TEXTS,
         *active_opening_texts,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
@@ -2239,7 +2412,8 @@ def main() -> None:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_route_title(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)
-        patch_arrange_menu_glyph_shapes(data)
+        patch_arrange_menu_glyph_lists(data, glyph_by_char)
+        patch_start_menu(data, glyph_by_char)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)

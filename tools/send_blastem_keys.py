@@ -24,6 +24,8 @@ KEYSYMS = {
     "left": XK.XK_Left,
     "right": XK.XK_Right,
     "save": XK.XK_grave,
+    "vram": XK.XK_v,
+    "plane": XK.XK_b,
 }
 
 
@@ -64,10 +66,6 @@ def wait_for_blastem_window(display: Display, timeout: float):
     while time.monotonic() <= deadline:
         try:
             return find_blastem_window(display)
-        except Exception as exc:
-            last_error = exc
-        try:
-            return find_blastem_window_xwininfo(display)
         except Exception as exc:
             last_error = exc
         time.sleep(0.1)

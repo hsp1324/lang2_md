@@ -89,7 +89,7 @@ Do not assume system packages are installed on the next PC.
 Last verified build during this handoff:
 
 ```text
-checksum: B572
+checksum: 87B6
 ```
 
 Build command:
@@ -112,6 +112,44 @@ b4276bb Stabilize JP probe input and early UI patches
 This document may have later commits after `d89ff79`; always start with
 `git log --oneline -5` and inspect the latest `HANDOFF.md`.
 
+## Durable Localization Direction
+
+These requirements come from the user's running localization review and remain
+in force across goal resumes:
+
+- The Japanese ROM is the active base. Keep the old English-ROM path intact,
+  but do not require an English ROM to build or verify the JP probe.
+- Finish the current verifiable milestone first: the complete Scenario 1 play
+  path and every prep/shop/arrangement/battle-command screen reachable from it.
+  Continue toward full-game Korean localization after that milestone instead of
+  treating Scenario 1 as the final project boundary.
+- Preserve familiar compact game abbreviations such as `LV`, `AT`, and `DF`.
+  They do not need Korean replacements when the original notation is clearer.
+- Use `발드` consistently. Do not reintroduce `볼도` or `불도`. Scenario 1's
+  escape condition must read `발드가 우하단 도주`.
+- Match the Japanese condition-screen layout: victory/defeat headings and their
+  entries must align cleanly, with no isolated dynamic `엘윈` name pages or
+  unrelated oversized names before the conditions.
+- Purchase and sale flows must be checked after the action, not only at menu
+  entry. Expected messages include `단검을 구입함` and `단검을 판매함`, with
+  no trailing corrupt glyphs.
+- Scenario 1 verification must continue through the first completed player
+  turn. Use the in-game end-turn command/input, advance the event that follows,
+  and verify every resulting dialogue page. Localize any Japanese or corrupt
+  text found there before considering the active goal complete.
+- The in-battle `Start` menu is part of the same milestone. Its visible rows
+  must read `저장`, `불러오기`, `승리조건`, `게임설정`, and `턴 종료` without
+  Japanese remnants or broken glyphs. Verify `턴 종료` by using it to complete
+  the first player turn, not only by inspecting the menu text.
+- Treat the mixed Japanese/Korean name-entry grid as a mapping aid. Capture it
+  when useful and compare visible glyphs with byte/tile codes rather than
+  globally replacing shared font slots.
+- The current WSLg environment is the only required runtime target. Emulator
+  keyboard input and screenshots must work here; separate Ubuntu/Windows
+  implementations are not required.
+- Commit and push coherent verified checkpoints. Do not commit experimental ROM
+  probes or broken intermediate builds.
+
 ## Emulator Input
 
 BlastEm default keyboard mapping in this repo:
@@ -130,9 +168,13 @@ Automation scripts:
 python3 tools/run_blastem_sequence.py prep
 python3 tools/run_blastem_sequence.py shop
 python3 tools/run_blastem_sequence.py shop-buy-list
+python3 tools/run_blastem_sequence.py shop-buy
 python3 tools/run_blastem_sequence.py shop-buy-sell
+python3 tools/run_blastem_sequence.py shop-sell-list
 python3 tools/run_blastem_sequence.py arrange
 python3 tools/run_blastem_sequence.py deploy-dialogue
+python3 tools/run_blastem_sequence.py battle-command
+python3 tools/run_blastem_sequence.py first-turn-dialogue
 python3 tools/run_blastem_sequence.py name-entry
 python3 tools/capture_blastem_window.py captures/run/example.png
 python3 tools/send_blastem_keys.py c:0.8
@@ -158,10 +200,12 @@ focus.
   - `후후후...`
   - `알하자드... 전설의 마검...`
   - `바라던 무한한 힘...`
-- Scenario 1 description and the first dialogue are readable in Korean.
+- Scenario 1 description preserves the original dynamic hero-name controls, but
+  aligns all four insertions with natural Korean sentences. There are no blank
+  or isolated `엘윈` pages.
 - Scenario condition labels show Korean:
-  - `승리조건`
-  - `패배조건`
+  - `※승리조건`, `·발드 격파`
+  - `※패배조건`, `·엘윈 사망`, `·발드가 우하단 도주`
 - Force labels on condition screens were localized:
   - `아군`
   - `적군`
@@ -179,27 +223,34 @@ focus.
 - Shop item purchase path has working item text:
   - first item `단검`
   - description `호신용 단검` and `AT+1`
-- Shop sell-title tile loader `0xA181C` has identified title slots for the
-  direct token stream at `0xA17B8`; the current build writes the visible slots as
-  `아이템판매` without changing the token stream.
+- Shop purchase/sale paths are verified:
+  - titles `아이템 구입`, `아이템 판매`
+  - completion messages `단검을 구입함`, `단검을 판매함`
+  - no corrupt tile after the dagger name
+- Commander arrangement shows all five Korean rows: `지휘관배치`,
+  `이동순변경`, `자동배치`, `적군보기`, `출격`.
+- The in-battle Start menu shows `저장`, `불러오기`, `승리조건`, `게임설정`,
+  `턴 종료`.
+- Battle commands are live-verified for both commanders: Elwin shows
+  `이동/공격/치료/명령`, and Hein shows `이동/공격/마법/치료/명령`. `소환` is
+  patched in the same contiguous command stream but is unavailable to their
+  current Scenario 1 classes.
+- `first-turn-dialogue` reaches the Scenario 1 post-turn event. Its five pages
+  show Korean speaker names/body text (`주민`, `제국군지휘관`, `레온`,
+  `레아드`) and continue into `ENEMY PHASE`.
 - Name entry screen currently defaults to `엘윈`, and it is a useful probe for
   seeing which Japanese byte/glyph slots now render as Korean.
 
 ## Known Remaining Problems
 
-- Commander arrangement route menu still has Japanese on two rows:
-  - `移動順変更`
-  - `自動배치`
-  - Rows already working: `지휘관배치`, `적군보기`, `출격`.
-- Shop purchase/possession title is not fully solved. Do not restore the old
-  `0xA17A4` token-shortening hack: it only hid the Japanese prefix and produced
-  incomplete titles such as `소지`. The purchase script near `0xA177E` contains
-  an `FFF9`-controlled substream; treating the following words as plain glyph IDs
-  can blank/freeze the shop entry path. The sell path is safer: `0xA17B8` maps
-  tokens directly to tile blocks and `0xA181C` supplies the glyph slots.
-- Some route/menu titles still show English/Japanese, such as `SCENARIO 1`.
+- Some established route/in-map banners remain English, such as `SCENARIO 1`,
+  `TURN 1`, and `ENEMY PHASE`. The user explicitly allows familiar compact game
+  notation; these are not blockers for the Scenario 1 milestone.
 - Only Scenario 1 gameplay path has been heavily tested. The script contains
   broader item/class/scenario patches, but many later screens remain unverified.
+- Xlib capture can catch BlastEm's clearing half-frame and produce a mostly
+  black PNG even while gameplay is stable. Capture a second frame about one
+  second later before treating it as a game black-screen regression.
 - Do not overwrite broad font slots casually. Previous attempts broke title
   screen text, name entry, command icons, and status labels.
 
@@ -302,9 +353,11 @@ build it reached the title normally but could blank/freeze while entering the
 shop. Do not use this as the purchase-title fix without disassembling the
 substream ownership.
 
-Current: the sell-side script at `0xA181C` is safer and has been patched only at
-the slots referenced by `0xA17B8` to prepare `아이템판매`. The purchase title
-still needs its correct tile/glyph source isolated.
+Current: `0xA1716` is a 31-glyph VRAM list, not a short message string. It owns
+the purchase title and both completion suffixes. The sale screen initially loads
+`0xA16D4`, then reloads `0xA1716`; therefore `0xA17B8` now uses common slots 11
+and 12 for `판매`. This is verified as `아이템 판매` in the live sale list and
+completion popup.
 
 ### Name Entry Default
 
@@ -315,9 +368,9 @@ Result: visible behavior was inconsistent. Japanese name entry and later game
 state do not use one simple string path. Some attempts showed Korean in one
 place but caused black screen/reset after confirming the name.
 
-Conclusion: do not spend time on the name-entry grid unless it becomes a real
-gameplay blocker. Current test flow can start the game without solving the whole
-name-entry alphabet screen.
+Current: the default name and prompt are Korean (`엘윈`, `이름을 정해주세요`).
+The mixed Japanese/Korean grid is intentionally retained as a glyph/code mapping
+probe; do not globally rewrite it at the expense of shared font safety.
 
 ### Arrangement Route Menu As Linear Grid
 
@@ -328,8 +381,7 @@ Result: wrong. It scrambled rows into combinations like `관배치순서`, while
 `移動順変更` still remained. The menu mixes direct strings, sprite/tile paths,
 and reused out-of-order fragments.
 
-Conclusion: do not patch that menu as a simple continuous grid. The remaining
-`移動順変更` and `自動...` rows need VRAM/sprite/tile-resource tracing.
+Conclusion: do not patch that menu as a simple continuous grid.
 
 2026-07-10 follow-up: on build `BC63`, the remaining visible Japanese came from
 VRAM plane C tile IDs:
@@ -340,6 +392,10 @@ VRAM plane C tile IDs:
 
 Searching raw ROM bytes and the `0x0B0000` 4-byte graphics resource table did
 not find these tile bytes, so the source is likely another compressed/tile path.
+
+Resolved follow-up: both rows ultimately use the screen-local glyph list at
+`0xA2BAC`. Patching only that six-glyph list produces `이동순변경` and
+`자동배치` without touching global glyph shapes.
 
 ### Arrangement Menu Glyph-Shape Substitution
 
@@ -392,9 +448,9 @@ Result: wrong. `0xA1716` is a shop message record with control words
 `0000 0001 0012 0020`. Overwriting it as a title caused the post-purchase popup
 to show a stray `입` after `단검`.
 
-Conclusion: preserve `0xA1716` through `DIRECT_PREFIX_STRING_PATCHES` as
-`소지불가`. In build checksum `8034`, the first-item purchase popup shows
-`단검 소지` instead of `단검  입`.
+Conclusion: do not truncate `0xA1716`. Preserve all 31 entries and patch only
+the owned slots. The current build shows `단검을 구입함` and `단검을 판매함`
+without a trailing corrupt tile.
 
 ### Status Panel Labels
 
@@ -434,9 +490,6 @@ check focus first.
 
 ## Still Unclear / Needs Investigation
 
-- Commander arrangement rows `移動順変更` and `自動...`: remaining Japanese likely
-  comes from sprite/tile-resource paths or a different direct-string ownership
-  than the rows already patched.
 - `SCENARIO 1` route/menu title: not yet patched. It may be tied to system menu
   strings and should not be changed blindly.
 - `SCENARIO` at ROM `0x0D48E` and `TURN` at `0x05E351` are ASCII strings, but
@@ -561,15 +614,8 @@ GST VRAM starts at `0x12478` for these BlastEm save states.
 
 ## Suggested Next Step
 
-Continue with the remaining route/arrangement menu labels. Reproduce the
-commander arrangement screen:
-
-```bash
-python3 tools/run_blastem_sequence.py arrange
-python3 tools/capture_blastem_window.py captures/run/arrange_current.png
-```
-
-Known remaining Japanese/English in this path includes `SCENARIO 1` and some
-arrangement rows such as `移動順変更` / `自動配置`. Do not patch these as one
-continuous grid; earlier attempts scrambled the menu because rows are sourced
-from mixed string/tile paths.
+After the verified Scenario 1 milestone, continue later-scenario live testing
+in order. Keep `SCENARIO 1`/`TURN 1` banner work separate from normal text: the
+known ASCII tables do not own those live graphics. Use the existing per-screen
+glyph/list approach and add a reproducible sequence before enabling any broad
+name/font table patch.

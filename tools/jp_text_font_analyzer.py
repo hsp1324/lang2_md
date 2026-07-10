@@ -160,13 +160,8 @@ def md_4bpp_tile(data: bytes, offset: int) -> list[list[int]]:
         if len(row) < 4:
             break
         for x in range(8):
-            shift = 7 - x
-            pixels[y][x] = (
-                (((row[0] >> shift) & 1) << 3)
-                | (((row[1] >> shift) & 1) << 2)
-                | (((row[2] >> shift) & 1) << 1)
-                | ((row[3] >> shift) & 1)
-            )
+            value = row[x // 2]
+            pixels[y][x] = (value >> 4) & 0x0F if x % 2 == 0 else value & 0x0F
     return pixels
 
 

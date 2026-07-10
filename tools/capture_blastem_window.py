@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import re
 import struct
 import subprocess
 from pathlib import Path
@@ -12,12 +11,35 @@ from Xlib import X
 from Xlib.display import Display
 
 
+def find_blastem_window_xlib() -> int:
+    display = Display()
+    stack = [display.screen().root]
+    while stack:
+        window = stack.pop()
+        try:
+            name = window.get_wm_name() or ""
+            cls = window.get_wm_class() or ()
+            if "BlastEm" in name or "Langrisser" in name or any(
+                part.lower() == "blastem" for part in cls
+            ):
+                return window.id
+            stack.extend(window.query_tree().children)
+        except Exception:
+            continue
+    raise RuntimeError("could not find BlastEm window via Xlib")
+
+
 def find_blastem_window() -> int:
-    tree = subprocess.check_output(["xwininfo", "-root", "-tree"], text=True, errors="ignore")
+    try:
+        tree = subprocess.check_output(
+            ["xwininfo", "-root", "-tree"], text=True, errors="ignore"
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return find_blastem_window_xlib()
     for line in tree.splitlines():
         if "BlastEm" in line or "Langrisser" in line:
             return int(line.strip().split()[0], 16)
-    raise RuntimeError("could not find BlastEm window")
+    return find_blastem_window_xlib()
 
 
 def read_xwd(data: bytes) -> Image.Image:
@@ -112,7 +134,7 @@ def main() -> int:
     try:
         xwd = subprocess.check_output(["xwd", "-silent", "-id", f"{window:#x}"])
         img = read_xwd(xwd)
-    except subprocess.CalledProcessError:
+    except (FileNotFoundError, subprocess.CalledProcessError, RuntimeError):
         img = capture_with_xlib(window)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     img.save(args.output)
