@@ -101,13 +101,16 @@ python3 scripts/build_korean_jp_probe.py
 Important recent local commits:
 
 ```text
+d89ff79 Document English ROM attempt and JP pivot
+3b06e43 Document handoff and stabilize shop knife text
 c857911 Localize prep status labels
 989ad65 Localize condition force labels
 20ee84f Improve route menu and battle command patches
 b4276bb Stabilize JP probe input and early UI patches
 ```
 
-This handoff commit adds the current shop item fixes after `c857911`.
+This document may have later commits after `d89ff79`; always start with
+`git log --oneline -5` and inspect the latest `HANDOFF.md`.
 
 ## Emulator Input
 
@@ -182,6 +185,191 @@ focus.
   broader item/class/scenario patches, but many later screens remain unverified.
 - Do not overwrite broad font slots casually. Previous attempts broke title
   screen text, name entry, command icons, and status labels.
+
+## Tried And Rejected / Do Not Repeat Blindly
+
+This section records dead ends and partially disproven assumptions. Use it before
+trying a "simple" patch.
+
+### English ROM Fixed-Font Patch
+
+Tried: replace English fixed font tiles with Korean syllables and patch English
+strings directly.
+
+Result: worked for some early visible text, but broke too many shared tiles.
+Typical regressions were:
+
+- title screen `Press Start Button`, `Start`, `Load` became mixed Korean/garbage;
+- name entry screen lost most letters or showed Korean syllables in the alphabet
+  grid;
+- `LV`, `MV`, `DF`, `P/F/V`-style status letters changed shape or disappeared;
+- order icons/command markers became Korean syllables;
+- dialogue and menu fonts did not share one renderer, so fixing one screen often
+  damaged another.
+
+Conclusion: do not continue broad English fixed-font replacement as the main
+path. The Japanese ROM path is the active path.
+
+### "Just Double The ROM Size"
+
+Tried/considered: expand the ROM and place every Korean asset after the original
+data.
+
+Result: expansion is useful for relocated glyph lists and resources, but not
+sufficient by itself. Many game routines still load only an original local
+glyph/tile window or expect indexes within a fixed range. In earlier tests,
+references outside expected windows could produce black screens, resets, or
+unmapped address fatal errors.
+
+Conclusion: use expansion only when the code path has been verified to follow a
+relocated pointer. Do not assume any renderer can see new high-offset data.
+
+### Global Japanese Glyph Replacement
+
+Tried/considered: find Japanese font slots and replace them globally with Korean.
+
+Result: unsafe. Japanese glyph slots are shared by unrelated text, UI, and
+possibly tile/icon-like uses. It can make one screen readable while corrupting
+another. Some "Japanese-looking" text on screen is not read from the main 16x16
+glyph table at all.
+
+Conclusion: identify the actual renderer and local glyph list per screen. Patch
+specific strings/lists, not the whole Japanese font blindly.
+
+### `0x974xx` Direct Name Candidates
+
+Tried: patch direct strings around `0x97404` because offline rendering looked
+like character/monster names.
+
+Result: these candidates are not the visible JP name-entry table and can collide
+with data/control paths. Earlier unsafe name patches could break progress after
+name confirmation.
+
+Conclusion: keep `UNSAFE_DIRECT_NAME_PATCHES` disabled unless revalidated with a
+specific screen and save-state comparison.
+
+### Name Entry Default
+
+Tried: patch default hero name to Korean through byte-string/default buffer
+paths.
+
+Result: visible behavior was inconsistent. Japanese name entry and later game
+state do not use one simple string path. Some attempts showed Korean in one
+place but caused black screen/reset after confirming the name.
+
+Conclusion: do not spend time on the name-entry grid unless it becomes a real
+gameplay blocker. Current test flow can start the game without solving the whole
+name-entry alphabet screen.
+
+### Arrangement Route Menu As Linear Grid
+
+Tried: treat the commander arrangement route menu as five rows of five 16x16
+glyph slots and overwrite a continuous range near `0xA2B6E`.
+
+Result: wrong. It scrambled rows into combinations like `관배치순서`, while
+`移動順変更` still remained. The menu mixes direct strings, sprite/tile paths,
+and reused out-of-order fragments.
+
+Conclusion: do not patch that menu as a simple continuous grid. The remaining
+`移動順変更` and `自動...` rows need VRAM/sprite/tile-resource tracing.
+
+### Arrangement Menu Glyph-Shape Substitution
+
+Tried: replace glyph shapes for suspected original glyph IDs in
+`ARRANGE_MENU_GLYPH_SHAPE_PATCHES`.
+
+Result: did not remove all visible Japanese, and can affect unrelated text if
+those glyphs are shared.
+
+Conclusion: current build leaves `ARRANGE_MENU_GLYPH_SHAPE_PATCHES = {}`. Use a
+screen-specific source trace instead.
+
+### Shop Item Name By Arbitrary Byte Codes
+
+Tried: replace `0x060405` (`ナイフ`) with arbitrary Korean byte UI codes for
+`단검`.
+
+Result: the item name disappeared from the live shop list. Offline tools could
+render some data, but the shop renderer did not display the new arbitrary code
+path.
+
+Conclusion: preserve raw bytes `C5 B2 CC` at `0x060405` and change the wide
+16x16 glyph shapes for those original byte codes instead.
+
+### Item Name/Description By Appending New Local Glyph Slots
+
+Tried: append Korean glyphs to the relocated item glyph list and point the first
+item name/description at the new slots.
+
+Result: offline render tools showed Korean, but the live shop screen did not.
+The live shop only loaded the original low local glyph window for the visible
+first item/description.
+
+Conclusion: for Scenario 1 shop, reuse original low local slots:
+
+- item name tokens `0,1,2`;
+- description slots `0..7` for `호신용 단검`;
+- keep original `AT+1` slots available instead of replacing them.
+
+### Item Purchase Title
+
+Tried: use `ITEM_TITLE_TEXT` alone to control the shop title.
+
+Result: the live purchase screen title actually followed fixed direct string
+`0xA1716`, not only the item glyph-list title patch.
+
+Conclusion: current visible purchase title is patched at `0xA1716` to
+`아이템구입`. Be careful because other inventory/possession screens may need a
+different title path later.
+
+### Status Panel Labels
+
+Tried: patch only byte layout string `0x0A3D15` for `シキハイ`.
+
+Result: the live prep status panel still showed Japanese. The actual visible
+panel also uses 16-bit tile ID sequences.
+
+Conclusion: the working patch includes all of:
+
+- `0x0A3D15` byte layout string -> `지휘범위`;
+- `0x09AB36`, `0x09ACA8` word/tile sequences -> `지휘범위`;
+- `0x09AB8C`, `0x09ACF0` word/tile sequences -> `수정`.
+
+### VDP/VRAM Rendering Tool Pitfall
+
+Tried: inspect VRAM with the old `tools/render_md_vram_tiles.py` output.
+
+Result: that renderer displayed vertical stripe artifacts for some Mega Drive
+tiles because it treated the 4bpp tile bytes like bitplanes. A quick custom
+nibble-based renderer showed the screen correctly.
+
+Conclusion: if VRAM images look like vertical bars, do not trust that output for
+glyph identification. Use a correct Mega Drive 4bpp nibble renderer or fix
+`render_md_vram_tiles.py` before making conclusions.
+
+### BlastEm Input Timing
+
+Tried: send keys step-by-step while inspecting each intermediate screen.
+
+Result: slow inspection lets the attract/cutscene loop start and desynchronizes
+the sequence. Also, Barrier or another focused window can steal key input.
+
+Conclusion: for repeatable tests, use `tools/run_blastem_sequence.py` and avoid
+mid-sequence screenshots unless debugging timing itself. If input seems ignored,
+check focus first.
+
+## Still Unclear / Needs Investigation
+
+- Purchase popup after buying `단검`: known bad display `단검  입`. It likely has
+  separate prefix/control words. Do not assume it is the same as the item list or
+  item description renderer.
+- Commander arrangement rows `移動順変更` and `自動...`: remaining Japanese likely
+  comes from sprite/tile-resource paths or a different direct-string ownership
+  than the rows already patched.
+- `SCENARIO 1` route/menu title: not yet patched. It may be tied to system menu
+  strings and should not be changed blindly.
+- Later scenarios/items/classes are not live-tested. The build script contains
+  broad data, but Scenario 1 is the only heavily verified path.
 
 ## Important Implementation Notes
 
