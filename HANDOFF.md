@@ -135,6 +135,11 @@ python3 tools/capture_blastem_window.py captures/run/example.png
 python3 tools/send_blastem_keys.py c:0.8
 ```
 
+`tools/run_blastem_sequence.py` launches BlastEm with `320 240` width/height
+arguments by default so automated tests do not occupy the full desktop after the
+monitor-layout change. Use `--window-width 640 --window-height 480` when a
+larger window is useful.
+
 The reliable startup timing found on this PC is encoded in
 `tools/run_blastem_sequence.py`: after launching, wait around 12 seconds, then
 send `Start`, wait, `Start`, then `C` inputs. The user observed that sending the
@@ -311,16 +316,21 @@ Conclusion: for Scenario 1 shop, reuse original low local slots:
 - description slots `0..7` for `호신용 단검`;
 - keep original `AT+1` slots available instead of replacing them.
 
-### Item Purchase Title
+### Item Purchase / Possession Messages
 
 Tried: use `ITEM_TITLE_TEXT` alone to control the shop title.
 
-Result: the live purchase screen title actually followed fixed direct string
-`0xA1716`, not only the item glyph-list title patch.
+Result: this did not control every live shop/possession overlay.
 
-Conclusion: current visible purchase title is patched at `0xA1716` to
-`아이템구입`. Be careful because other inventory/possession screens may need a
-different title path later.
+Tried: patch `0xA1716` as a fixed title string.
+
+Result: wrong. `0xA1716` is a shop message record with control words
+`0000 0001 0012 0020`. Overwriting it as a title caused the post-purchase popup
+to show a stray `입` after `단검`.
+
+Conclusion: preserve `0xA1716` through `DIRECT_PREFIX_STRING_PATCHES` as
+`소지불가`. In build checksum `A3C7`, the first-item purchase popup shows
+`단검 소지` instead of `단검  입`.
 
 ### Status Panel Labels
 
@@ -360,9 +370,6 @@ check focus first.
 
 ## Still Unclear / Needs Investigation
 
-- Purchase popup after buying `단검`: known bad display `단검  입`. It likely has
-  separate prefix/control words. Do not assume it is the same as the item list or
-  item description renderer.
 - Commander arrangement rows `移動順変更` and `自動...`: remaining Japanese likely
   comes from sprite/tile-resource paths or a different direct-string ownership
   than the rows already patched.
@@ -486,14 +493,15 @@ GST VRAM starts at `0x12478` for these BlastEm save states.
 
 ## Suggested Next Step
 
-Fix the purchase popup. Reproduce from the shop screen:
+Continue with the remaining route/arrangement menu labels. Reproduce the
+commander arrangement screen:
 
 ```bash
-python3 tools/run_blastem_sequence.py shop
-python3 tools/send_blastem_keys.py c:0.8
-python3 tools/capture_blastem_window.py captures/run/purchase_popup.png
+python3 tools/run_blastem_sequence.py arrange
+python3 tools/capture_blastem_window.py captures/run/arrange_current.png
 ```
 
-The popup currently appears after buying the first item and shows the item name
-plus a stray `입`. Search for the original Japanese purchase message path and
-patch it separately, preserving any prefix/control words.
+Known remaining Japanese/English in this path includes `SCENARIO 1` and some
+arrangement rows such as `移動順変更` / `自動配置`. Do not patch these as one
+continuous grid; earlier attempts scrambled the menu because rows are sourced
+from mixed string/tile paths.

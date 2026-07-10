@@ -28,6 +28,11 @@ KEYSYMS = {
 
 
 def find_blastem_window(display: Display):
+    try:
+        return find_blastem_window_xwininfo(display)
+    except Exception:
+        pass
+
     root = display.screen().root
     stack = [root]
     while stack:
@@ -83,8 +88,13 @@ def activate_window(display: Display, window) -> None:
         message,
         event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask,
     )
-    window.configure(stack_mode=X.Above)
+    window.configure(x=40, y=40, stack_mode=X.Above)
+    try:
+        window.set_input_focus(X.RevertToParent, X.CurrentTime)
+    except Exception:
+        pass
     display.sync()
+    time.sleep(0.1)
 
 
 def click_window_center(display: Display, window) -> None:

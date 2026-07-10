@@ -663,8 +663,9 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA37AA: (5, "합계"),
     0xA37B6: (3, "턴"),
     0xA37BE: (20, "이름을정해주세요"),
-    0xA1700: (3, "소지"),
-    0xA1716: (8, "아이템구입"),
+    # Do not patch the item possession title by overwriting 0xA16F8 directly:
+    # that address lives inside the shop/discard message block and shares layout
+    # control words with the post-purchase possession popup.
     0xA2B72: (5, "지휘관배치"),
     # The route menu reuses these direct strings out of order on screen:
     # 0xA2B7C appears on the 4th visible row, while 0xA2B86 is split so its

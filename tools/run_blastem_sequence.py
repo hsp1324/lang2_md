@@ -103,6 +103,8 @@ def main() -> int:
     parser.add_argument("--rom", type=Path, default=DEFAULT_ROM)
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--hold", type=float, default=0.08)
+    parser.add_argument("--window-width", type=int, default=320)
+    parser.add_argument("--window-height", type=int, default=240)
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument("--send-event", action="store_true", help="send direct window events instead of global XTest input")
     parser.add_argument("--no-launch", action="store_true")
@@ -112,7 +114,7 @@ def main() -> int:
     if not args.no_launch:
         env = os.environ.copy()
         env["LD_LIBRARY_PATH"] = str(ROOT / "tools/blastem/lib")
-        command = [str(BLASTEM), str(args.rom)]
+        command = [str(BLASTEM), str(args.rom), str(args.window_width), str(args.window_height)]
         if args.dry_run:
             print("launch:", " ".join(command))
         else:
