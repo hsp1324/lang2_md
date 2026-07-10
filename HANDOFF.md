@@ -13,6 +13,45 @@ It writes:
 roms/builds/Langrisser II (Korean JP Probe).md
 ```
 
+## Why The Work Moved From English ROM To Japanese ROM
+
+The project originally started on the English ROM because the first visible
+English fixed-width font was easy to replace. That approach produced early wins:
+the opening `후후후...` text and some Scenario 1 prep/menu text appeared in
+Korean.
+
+However, the English-ROM approach caused repeated slot collisions:
+
+- title screen letters such as `Press Start Button`, `Start`, `Load` broke when
+  shared English font tiles were reused for Korean;
+- `LV`, `MV`, `DF`, `P/F/V`-like status letters broke because some UI letters
+  used alternate/shared glyph slots;
+- command icons and order markers started showing Korean syllables because icon
+  tiles and text tiles overlapped;
+- the name entry screen and some dialogue paths used different fixed-font
+  renderers, so fixing one screen often broke another;
+- expanding the ROM alone did not solve the problem, because the game still
+  referenced original indexed glyph/tile windows and sometimes restarted or
+  crashed when code/data references pointed outside the expected range.
+
+The Japanese ROM was chosen as the new base because it already has a 16x16
+glyph-list text system that is closer to Korean text layout. Each text record
+loads a local glyph list and the body uses local indexes. This makes it possible
+to insert Korean glyphs into controlled high slots while preserving the original
+screen code paths.
+
+Important: the Japanese ROM is not one single text system. It still has multiple
+paths:
+
+- 16x16 Japanese glyph-list text for scenario/condition/large menus;
+- small 8x8 byte UI font for prep/shop names and labels;
+- one-byte 16x16 item/class/name paths in some shop/prep screens;
+- sprite/tile resource paths for some route menu rows and popups.
+
+So the current direction is not "replace every Japanese character globally".
+Instead, identify the exact renderer/path for each screen, then patch only that
+path.
+
 ## Files Not In Git
 
 The repository intentionally ignores ROMs, generated builds, emulator binaries,
