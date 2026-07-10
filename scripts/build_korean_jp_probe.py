@@ -229,6 +229,14 @@ DIRECT_WORD_SEQUENCE_PATCHES = {
     0x9706A: (12, "이동공격마법소환치료명령"),
 }
 
+DIRECT_TOKEN_STREAM_PATCHES = {
+    # Shop possession title. This renderer maps tokens directly to VRAM tile
+    # blocks at 0x680 + token*4 instead of using the item glyph list. Tokens 0-2
+    # still draw Japanese "アイテム", while 3-4 draw Korean "소지". Until the
+    # tile source for 0-2 is found, show the Korean-only title at the left.
+    0xA17A4: [0x0003, 0x0004, 0x0005],
+}
+
 ITEM_TITLE_TEXT = "아이템구입"
 ITEM_POSSESSION_TITLE_TEXT = "아이템소지"
 
@@ -1728,6 +1736,12 @@ def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) 
             put16(data, offset + i * 2, value)
 
 
+def patch_direct_token_streams(data: bytearray) -> None:
+    for offset, tokens in DIRECT_TOKEN_STREAM_PATCHES.items():
+        capacity = direct_string_capacity_words(data, offset)
+        write_token_stream(data, offset, tokens, capacity)
+
+
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
     if len(ptrs) != len(ITEM_NAME_PATCHES):
@@ -2211,6 +2225,8 @@ def main() -> None:
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)
+    if not args.skip_direct:
+        patch_direct_token_streams(data)
     checksum = update_md_checksum(data)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_bytes(data)

@@ -187,10 +187,10 @@ focus.
   - `移動順変更`
   - `自動배치`
   - Rows already working: `지휘관배치`, `적군보기`, `출격`.
-- Shop possession/purchase screen still has an unresolved Japanese prefix in
-  the title path on some screens, e.g. `アイテム소지`. The popup/body area is
-  mostly Korean, but this title is not fully owned by the relocated item glyph
-  list.
+- Shop possession title no longer shows the Japanese `アイテム` prefix. It now
+  shows `소지` by patching the direct token stream at `0xA17A4` to skip tokens
+  0-2. A full `아이템소지` title still needs the tile source for token blocks
+  0-2 to be identified.
 - Some route/menu titles still show English/Japanese, such as `SCENARIO 1`.
 - Only Scenario 1 gameplay path has been heavily tested. The script contains
   broader item/class/scenario patches, but many later screens remain unverified.
