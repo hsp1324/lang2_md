@@ -152,6 +152,19 @@ BYTE_UI_FIXED_STRING_PATCHES = {
     0x0A1099: (6, "아군"),
     0x0A2DD4: (6, "아군"),
     0x0A2E63: (5, "적군"),
+    # Prep status panel bottom labels. The left label is a 5-byte inline UI
+    # string in the panel layout script: original "シキハイ" / 指揮範囲.
+    0x0A3D15: (5, "지휘범위"),
+}
+
+BYTE_UI_WORD_STRING_PATCHES = {
+    # Prep status panel bottom left label: original "シキハイ" / 指揮範囲.
+    0x09AB36: (5, "지휘범위"),
+    0x09ACA8: (5, "지휘범위"),
+    # Prep status panel bottom right label. This path writes 16-bit tile IDs
+    # directly, not an FF-terminated byte string: original "シュウセイ" / 修正.
+    0x09AB8C: (6, " 수정"),
+    0x09ACF0: (6, " 수정"),
 }
 
 DIRECT_WORD_SEQUENCE_PATCHES = {
@@ -648,17 +661,7 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA2B98: (2, "출격"),
 }
 
-ARRANGE_MENU_GLYPH_SHAPE_PATCHES = {
-    # 移動順変更
-    0x00E4: "순",
-    0x0134: "서",
-    0x008A: "변",
-    0x00FB: "경",
-    0x007D: " ",
-    # 自動
-    0x0125: "자",
-    0x0118: "동",
-}
+ARRANGE_MENU_GLYPH_SHAPE_PATCHES = {}
 
 DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
     0xA10E0: (5, "진군루트"),
@@ -1808,7 +1811,8 @@ def patch_class_byte_subset(data: bytearray) -> None:
 
 def patch_byte_ui_strings(data: bytearray) -> None:
     fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
-    chars = collect_chars(*BYTE_UI_STRING_PATCHES.values(), *fixed_texts)
+    word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
+    chars = collect_chars(*BYTE_UI_STRING_PATCHES.values(), *fixed_texts, *word_texts)
     if len(chars) > len(BYTE_UI_GLYPH_CODES):
         raise ValueError(
             f"byte UI strings need {len(chars)} glyph codes, only {len(BYTE_UI_GLYPH_CODES)} available"
@@ -1849,6 +1853,13 @@ def patch_byte_ui_strings(data: bytearray) -> None:
         if len(values) > width:
             raise ValueError(f"byte fixed string at 0x{offset:06X} needs {len(values)} bytes, only {width}")
         data[offset : offset + width] = bytes(values + [0x20] * (width - len(values)))
+    for offset, (width, text) in BYTE_UI_WORD_STRING_PATCHES.items():
+        values = [0x0020 if char == " " else code_by_char[char] for char in text]
+        if len(values) > width:
+            raise ValueError(f"byte word string at 0x{offset:06X} needs {len(values)} words, only {width}")
+        values.extend([0x0020] * (width - len(values)))
+        for i, value in enumerate(values):
+            put16(data, offset + i * 2, value)
 
 
 def patch_default_hero_name(data: bytearray) -> None:
