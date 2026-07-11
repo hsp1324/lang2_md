@@ -913,3 +913,19 @@ full-game Korean localization, split into six stages in
 - 67 of 117 name IDs intentionally still have a null Korean target in this
   inventory. Identify each from the Japanese source ID before assigning a
   Korean label; do not infer it from sprite appearance.
+
+### Shared 16-bit Word Resources
+
+- `tools/jp_resource_inventory.py` records the other known global text paths
+  without treating byte changes as proof of completion. Every entry has
+  explicit `reviewed` and `live_verified` flags, initially false.
+- Current modified baselines are: conditions 1/32, scenario descriptions
+  31/31, item names 38/38, item descriptions 37/37, magic names 23/23,
+  mercenary battle names 15/15, and battle status messages 3/3.
+- Scenario descriptions 2-31 came from legacy machine-translated material.
+  Their 31/31 byte-change count is not a translation-quality result.
+- Conditions remain the clearest missing shared resource: only Scenario 1 is
+  patched. Summoned creature labels are class-table IDs and stay tracked in
+  `localization/global_strings.json` rather than a fabricated summon table.
+- Machine-readable details are in `localization/shared_word_resources.json`;
+  the summary is `docs/shared_word_resource_inventory.md`.

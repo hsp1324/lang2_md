@@ -10,6 +10,8 @@ documented, committed, and pushed independently.
 - Generate a per-scenario event-page inventory and Japanese-residue report.
 - Inventory shared class, item, and actor/NPC/monster byte-string tables, including
   raw-string changes and global-font collision risks.
+- Inventory shared condition, scenario-description, item, magic, summon-class,
+  mercenary-battle-name, and status-message word resources with explicit review flags.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names
