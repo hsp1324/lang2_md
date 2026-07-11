@@ -44,6 +44,6 @@ Live condition captures made through the real scenario index:
 - `captures/run/8c4d_scenario14_conditions_live.png`
 - `captures/run/8c4d_scenario23_conditions_live.png`
 
-The Load screen and scenario-select suffix are still Japanese, and the Korean
-save confirmation choice box overlaps. Those are UI localization defects, not
-SRAM failures, and remain separate follow-up work.
+The title-screen Load path and scenario-select suffix are still Japanese. The
+in-battle Start > Load path and save confirmation were fixed separately at
+checksum `F639`; those UI issues are independent from SRAM mapping.

@@ -357,6 +357,8 @@ START_MENU_TOKEN_STREAM = 0x9AD88
 START_MENU_TEXTS = ("저장", "불러오기", "승리조건", "게임설정", "턴 종료")
 START_SUBMENU_TEXTS = (
     "저장할까요?",
+    # Retain these syllables in the stable custom-glyph allocation even though
+    # the tight live choice box uses compact original Latin YES/NO glyphs.
     "예",
     "아니오",
     "게임속도",
@@ -368,7 +370,7 @@ START_SUBMENU_TEXTS = (
     "끄기",
     "설정완료",
     "불러올 데이터를 선택하세요",
-    "시나리오",
+    "장",
     "턴",
     "손상된 데이터",
     "데이터 없음",
@@ -2343,9 +2345,6 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
         13: "까",
         18: "요",
         23: "?",
-        24: "예",
-        25: "아",
-        26: "니",
         27: "속",
         28: "도",
         29: "빠",
@@ -2364,15 +2363,28 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
     for slot, char in main_slot_chars.items():
         put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph_by_char[char])
 
+    # Compact English confirmation choices are familiar game UI and fit the
+    # original overlapping windows. Copy the Japanese ROM's original Latin
+    # glyph IDs into five slots no longer used by the localized main menu.
+    save_choice_glyphs = {
+        1: 0x02C6,   # Y
+        4: 0x0326,   # E
+        5: 0x0061,   # S
+        24: 0x01B0,  # N
+        25: 0x02C3,  # O
+    }
+    for slot, glyph in save_choice_glyphs.items():
+        put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph)
+
     def put_tokens(offset: int, values: list[int]) -> None:
         for index, token in enumerate(values):
             put16(data, offset + index * 2, token)
 
     # 8-cell save prompt and two 3-cell choice rows.
     put_tokens(0x9AE44, [10, 11, 12, 13, 18, 23, 0x3F, 0x3F])
-    # Preserve the original 0x0003/0x0002 layout header. The following six
-    # cells wrap as two three-cell choices.
-    put_tokens(0x9AE56, [0x0003, 0x0002, 24, 0x3F, 0x3F, 25, 26, 16])
+    # Preserve FFFD at 0x9AE56 and the original 0x0003/0x0002 layout header.
+    # The following six cells wrap as two three-cell choices.
+    put_tokens(0x9AE58, [0x0003, 0x0002, 1, 4, 5, 24, 25, 0x3F])
 
     config_rows = (
         (0x9AE74, [19, 20, 27, 28, 0x3F, 0x3F]),
@@ -2388,7 +2400,7 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
 
     # Load uses its own loader at 0x2301E. Preserve slots 34..43 because the
     # loader routine writes save numbers through that digit range.
-    load_chars = "불러올데이터를선택하세요시나리오턴손상된없음"
+    load_chars = "불러올데이터를선택하세요장턴손상된없음"
     load_slot_by_char: dict[str, int] = {}
     next_slot = 0
     for char in load_chars:
@@ -2406,8 +2418,11 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
             raise ValueError(f"load-menu text is too long for {width} cells: {text!r}")
         return values + [0x3F] * (width - len(values))
 
-    put_tokens(0x9B066, load_tokens("불러올 데이터를 선택하세요", 17))
-    put_tokens(0x9B084, load_tokens("시나리오", 7))
+    # This record has 14 cells followed by FFFF at 0x9B082. The previous
+    # 17-cell write crossed the terminator and corrupted the following records.
+    put_tokens(0x9B066, load_tokens("불러올 데이터를 선택하세요", 14))
+    # Continue rows draw the dynamic scenario number before this suffix.
+    put_tokens(0x9B084, load_tokens("장", 7))
     put_tokens(0x9B092, load_tokens("턴", 5))
     put_tokens(0x9B09C, load_tokens("손상된 데이터", 9))
     put_tokens(0x9B0AE, load_tokens("데이터 없음", 9))

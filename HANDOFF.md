@@ -1120,8 +1120,8 @@ The earlier default-name-only conclusion is superseded by the live-verified
   It did not persist because the 4 MiB ROM overlapped the original 2 MiB SRAM
   base. Checksum `8C4D` relocates SRAM and all verified absolute save addresses
   to `0x400001..0x403FFF`; Japanese saves now load and Korean saves persist.
-  The confirmation still has overlapping/mixed `YES/NO` choice glyphs, so keep
-  that as an explicit UI regression rather than an SRAM failure.
+  The earlier confirmation had overlapping/mixed choice glyphs; checksum
+  `F639` fixes that UI independently from the SRAM mapping.
 
 ### SRAM And Real-Index Condition Verification (2026-07-12)
 
@@ -1140,5 +1140,22 @@ The earlier default-name-only conclusion is superseded by the live-verified
   rod-carrier/escape conditions are live-verified in
   `captures/run/8c4d_scenario23_conditions_live.png`.
 - The same run exposes remaining full-localization work: Scenario 14 event
-  dialogue is still Japanese, Load slot/status text is Japanese, the scenario
-  selector suffix is Japanese, and save confirmation choices overlap.
+  dialogue is still Japanese, the title-screen Load path is Japanese, and the
+  scenario-selector suffix is Japanese.
+
+### Start Save/Load Record Boundaries (2026-07-12)
+
+- The Load prompt at `0x09B066` has 14 cells and a mandatory `FFFF` at
+  `0x09B082`. The previous 17-cell patch crossed that terminator and the next
+  record. Checksum `F639` limits the prompt to 14 cells and preserves every
+  following fixed record boundary.
+- The save-choice record has `FFFD` at `0x09AE56`, then its `0003 0002`
+  layout header at `0x09AE58`. Writing from `0x09AE56` had erased the control
+  word. The corrected patch writes after it and uses compact original Latin
+  glyphs for clear `YES/NO`, which the user permits for familiar game UI.
+- `captures/run/40db_save_prompt_live.png` verifies the clean confirmation.
+  `captures/run/f639_ingame_load.png` verifies `불러올 데이터를 선택하세요`,
+  dynamic `23장`, `턴 1`, and `손상된 데이터` in the in-battle Load screen.
+- `tests/test_start_submenus.py` guards the control words, terminators, record
+  widths, and Latin glyph IDs. The separate title-screen Load display remains
+  Japanese and must not be marked complete from this in-battle capture.
