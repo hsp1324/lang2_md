@@ -2,7 +2,7 @@ from pathlib import Path
 import unittest
 
 from scripts import build_korean_jp_probe as builder
-from tools.jp_compressed_resource_inventory import inventory, resource_pointers
+from tools.jp_compressed_resource_inventory import direct_load_calls, inventory, resource_pointers
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,11 +23,19 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(pointers[0], 0x0B06B4)
         self.assertEqual(pointers[-1], 0x13807E)
 
-    def test_all_resources_decompress_and_types_match(self):
+    def test_all_headers_and_type3_decoding_match(self):
         self.assertEqual(self.result["entry_count"], 429)
         self.assertEqual(self.result["type_counts"], {"1": 2, "2": 248, "3": 179})
+        self.assertEqual(self.result["decoded_type3_count"], 179)
         self.assertTrue(
-            all(entry["original_decompressed_size"] > 0 for entry in self.result["entries"])
+            all(entry["original_declared_output_size"] > 0 for entry in self.result["entries"])
+        )
+        self.assertTrue(
+            all(
+                (entry["original_decoded_sha256"] is not None)
+                == (entry["original_type"] == 3)
+                for entry in self.result["entries"]
+            )
         )
 
     def test_only_byte_ui_font_is_relocated_and_modified(self):
@@ -39,10 +47,22 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(entry["current_pointer"], "0x290000")
         self.assertEqual(entry["original_type"], 3)
         self.assertEqual(entry["current_type"], 3)
-        self.assertEqual(entry["original_decompressed_size"], 8192)
-        self.assertEqual(entry["current_decompressed_size"], 8192)
+        self.assertEqual(entry["original_declared_output_size"], 8192)
+        self.assertEqual(entry["current_declared_output_size"], 8192)
         self.assertTrue(entry["pointer_modified"])
         self.assertTrue(entry["content_modified"])
+
+    def test_direct_loader_calls_are_mapped_without_guessing_dynamic_ids(self):
+        calls = direct_load_calls(self.japanese)
+        self.assertEqual(len(calls), 75)
+        self.assertEqual(sum(call["immediate_resource"] for call in calls), 64)
+        self.assertEqual(self.result["dynamic_load_call_count"], 11)
+        self.assertEqual(self.result["immediate_referenced_resource_count"], 50)
+        font_calls = self.result["entries"][builder.BYTE_UI_FONT_RESOURCE_INDEX][
+            "direct_immediate_calls"
+        ]
+        self.assertEqual(len(font_calls), 6)
+        self.assertTrue(all(call["high_bit_flag"] for call in font_calls))
 
 
 if __name__ == "__main__":

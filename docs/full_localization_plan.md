@@ -16,6 +16,8 @@ documented, committed, and pushed independently.
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
 - Parse and decompress the complete resource table independently of UI assumptions;
   record type, size, hash, and pointer changes while leaving unknown ownership unknown.
+- Link immediate resource-loader call sites to table IDs and retain dynamic call sites
+  without guessing their runtime-selected IDs.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known
   owners, and require render/code-reference proof before patching unknown candidates.
 - Keep full ending-dialogue pages and character epilogues as explicit translation

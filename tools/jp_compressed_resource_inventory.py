@@ -13,6 +13,16 @@ from scripts import build_korean_jp_probe as builder
 
 
 RESOURCE_TABLE = builder.BYTE_UI_FONT_RESOURCE_TABLE
+RESOURCE_LOAD_ROUTINE = 0x0099B2
+RESOURCE_DISPATCH_ROUTINE = 0x0099FA
+RESOURCE_LOOKUP_ROUTINE = 0x009A0E
+RESOURCE_DECODER_ROUTINES = {
+    0: 0x009A20,
+    1: 0x009A38,
+    2: 0x009C10,
+    3: 0x009DFE,
+    4: 0x009AAA,
+}
 KNOWN_OWNERS = {
     builder.BYTE_UI_FONT_RESOURCE_INDEX: "byte_ui_font",
 }
@@ -20,6 +30,10 @@ KNOWN_OWNERS = {
 
 def be32(data: bytes, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 4], "big")
+
+
+def be16(data: bytes, offset: int) -> int:
+    return int.from_bytes(data[offset : offset + 2], "big")
 
 
 def resource_pointers(data: bytes) -> list[int]:
@@ -47,30 +61,98 @@ def sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def direct_load_calls(data: bytes) -> list[dict[str, object]]:
+    jsr = bytes.fromhex("4E B9") + RESOURCE_LOAD_ROUTINE.to_bytes(4, "big")
+    calls = []
+    offset = 0
+    while True:
+        call_site = data.find(jsr, offset)
+        if call_site < 0:
+            return calls
+        prefix = data[call_site - 8 : call_site]
+        row: dict[str, object] = {
+            "call_site": f"0x{call_site:06X}",
+            "immediate_resource": False,
+            "resource_index": None,
+            "raw_resource_id": None,
+            "high_bit_flag": None,
+            "destination": None,
+        }
+        if (
+            len(prefix) == 8
+            and prefix[0:2] == bytes.fromhex("30 3C")
+            and prefix[4:6] == bytes.fromhex("32 7C")
+        ):
+            raw_id = int.from_bytes(prefix[2:4], "big")
+            row.update(
+                {
+                    "immediate_resource": True,
+                    "resource_index": raw_id & 0x7FFF,
+                    "raw_resource_id": f"0x{raw_id:04X}",
+                    "high_bit_flag": bool(raw_id & 0x8000),
+                    "destination": f"0x{int.from_bytes(prefix[6:8], 'big'):04X}",
+                }
+            )
+        calls.append(row)
+        offset = call_site + 1
+
+
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     original_pointers = resource_pointers(japanese)
     count = len(original_pointers)
+    calls = direct_load_calls(japanese)
+    calls_by_index: dict[int, list[dict[str, object]]] = {}
+    for call in calls:
+        if call["immediate_resource"]:
+            calls_by_index.setdefault(int(call["resource_index"]), []).append(call)
     current_pointers = [
         be32(korean, RESOURCE_TABLE + index * 4) & 0x00FFFFFF
         for index in range(count)
     ]
     entries = []
     type_counts: dict[str, int] = {}
-    total_decompressed_bytes = 0
+    total_declared_output_bytes = 0
+    decoded_type3_count = 0
     for index, (original_pointer, current_pointer) in enumerate(
         zip(original_pointers, current_pointers)
     ):
         original_type = japanese[original_pointer]
         current_type = korean[current_pointer]
-        original_payload = builder.decompress_9dfe(japanese, original_pointer + 1)
-        current_payload = builder.decompress_9dfe(korean, current_pointer + 1)
-        original_hash = sha256(original_payload)
-        current_hash = sha256(current_payload)
+        original_size = be16(japanese, original_pointer + 1)
+        current_size = be16(korean, current_pointer + 1)
+        original_hash = None
+        current_hash = None
+        if original_type == 3:
+            original_payload = builder.decompress_9dfe(japanese, original_pointer + 1)
+            original_hash = sha256(original_payload)
+            if len(original_payload) != original_size:
+                raise ValueError(f"type 3 resource {index} output length mismatch")
+            decoded_type3_count += 1
+        if current_type == 3:
+            current_payload = builder.decompress_9dfe(korean, current_pointer + 1)
+            current_hash = sha256(current_payload)
+            if len(current_payload) != current_size:
+                raise ValueError(f"current type 3 resource {index} output length mismatch")
         pointer_modified = original_pointer != current_pointer
-        content_modified = original_type != current_type or original_hash != current_hash
+        if original_type != current_type or original_size != current_size:
+            content_modified: bool | None = True
+        elif original_hash is not None and current_hash is not None:
+            content_modified = original_hash != current_hash
+        elif pointer_modified:
+            content_modified = None
+        else:
+            block_end = (
+                original_pointers[index + 1]
+                if index + 1 < count
+                else len(japanese)
+            )
+            content_modified = (
+                japanese[original_pointer:block_end]
+                != korean[original_pointer:block_end]
+            )
         type_key = str(original_type)
         type_counts[type_key] = type_counts.get(type_key, 0) + 1
-        total_decompressed_bytes += len(original_payload)
+        total_declared_output_bytes += original_size
         entries.append(
             {
                 "index": index,
@@ -79,31 +161,50 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "current_pointer": f"0x{current_pointer:06X}",
                 "original_type": original_type,
                 "current_type": current_type,
-                "original_decompressed_size": len(original_payload),
-                "current_decompressed_size": len(current_payload),
-                "original_decompressed_sha256": original_hash,
-                "current_decompressed_sha256": current_hash,
+                "decoder_routine": f"0x{RESOURCE_DECODER_ROUTINES[original_type]:06X}",
+                "original_declared_output_size": original_size,
+                "current_declared_output_size": current_size,
+                "original_decoded_sha256": original_hash,
+                "current_decoded_sha256": current_hash,
                 "pointer_modified": pointer_modified,
                 "content_modified": content_modified,
-                "modified": pointer_modified or content_modified,
+                "modified": pointer_modified or content_modified is True,
                 "owner": KNOWN_OWNERS.get(index),
+                "direct_immediate_call_count": len(calls_by_index.get(index, [])),
+                "direct_immediate_calls": calls_by_index.get(index, []),
                 "reviewed": False,
                 "live_verified": False,
             }
         )
     return {
         "warning": (
-            "A successfully decompressed resource is not necessarily text or UI. "
+            "A valid resource record is not necessarily text or UI. Only type 3 "
+            "records are decoded by this tool. "
             "Ownership is recorded only when established independently."
         ),
         "resource_table": f"0x{RESOURCE_TABLE:06X}",
         "table_end": f"0x{original_pointers[0]:06X}",
         "entry_count": count,
         "type_counts": type_counts,
-        "total_original_decompressed_bytes": total_decompressed_bytes,
+        "total_original_declared_output_bytes": total_declared_output_bytes,
+        "decoded_type3_count": decoded_type3_count,
         "modified_count": sum(bool(entry["modified"]) for entry in entries),
         "known_owner_count": sum(entry["owner"] is not None for entry in entries),
         "unknown_owner_count": sum(entry["owner"] is None for entry in entries),
+        "loader_routines": {
+            "load": f"0x{RESOURCE_LOAD_ROUTINE:06X}",
+            "dispatch": f"0x{RESOURCE_DISPATCH_ROUTINE:06X}",
+            "lookup": f"0x{RESOURCE_LOOKUP_ROUTINE:06X}",
+            "decoders": {
+                str(resource_type): f"0x{routine:06X}"
+                for resource_type, routine in RESOURCE_DECODER_ROUTINES.items()
+            },
+        },
+        "direct_load_call_count": len(calls),
+        "immediate_load_call_count": sum(bool(call["immediate_resource"]) for call in calls),
+        "dynamic_load_call_count": sum(not bool(call["immediate_resource"]) for call in calls),
+        "immediate_referenced_resource_count": len(calls_by_index),
+        "direct_load_calls": calls,
         "entries": entries,
     }
 
@@ -114,17 +215,38 @@ def markdown_report(result: dict[str, object]) -> str:
         "",
         "Generated by `python3 tools/jp_compressed_resource_inventory.py`.",
         "",
-        "The table boundary is derived from its first pointer. Every listed block was",
-        "successfully decompressed with the game's `0x9DFE` decoder. Decompression alone",
-        "does not establish that a block contains text or UI data.",
+        "The table boundary is derived from its first pointer. All records have a valid",
+        "type and declared output size. Type 3 records are decoded with `0x9DFE`; type 1",
+        "and 2 records use different game routines and remain header-inventoried only.",
+        "A valid record does not establish that it contains text or UI data.",
         "",
         f"- Resource table: `{result['resource_table']}`",
         f"- Table end / first resource: `{result['table_end']}`",
         f"- Entries: {result['entry_count']}",
-        f"- Original decompressed bytes: {result['total_original_decompressed_bytes']:,}",
+        f"- Total declared output bytes: {result['total_original_declared_output_bytes']:,}",
+        f"- Type 3 records decoded and hashed: {result['decoded_type3_count']}",
         f"- Modified resources in current build: {result['modified_count']}",
         f"- Known owners: {result['known_owner_count']}",
         f"- Unknown owners: {result['unknown_owner_count']}",
+        f"- Direct loader calls: {result['direct_load_call_count']}",
+        f"- Immediate-ID calls: {result['immediate_load_call_count']}",
+        f"- Dynamic-ID calls: {result['dynamic_load_call_count']}",
+        f"- Resources reached by immediate ID: {result['immediate_referenced_resource_count']}",
+        "",
+        "## Loader Code",
+        "",
+        f"- Load wrapper: `{result['loader_routines']['load']}`",
+        f"- Type dispatcher: `{result['loader_routines']['dispatch']}`",
+        f"- Table lookup: `{result['loader_routines']['lookup']}`",
+        "- Decoder routines: "
+        + ", ".join(
+            f"type {resource_type} `{address}`"
+            for resource_type, address in result["loader_routines"]["decoders"].items()
+        ),
+        "",
+        "The lookup routine masks the high flag bit, multiplies the remaining ID by four,",
+        "and reads `0x0B0000[index]`. Immediate calls are linked to resource entries; dynamic",
+        "calls remain listed by code address without a guessed resource owner.",
         "",
         "## Type Distribution",
         "",
@@ -153,13 +275,13 @@ def markdown_report(result: dict[str, object]) -> str:
         lines.append(
             f"| {entry['index']} | {entry['owner'] or ''} | `{entry['original_pointer']}` | "
             f"`{entry['current_pointer']}` | `0x{entry['original_type']:02X}` | "
-            f"{entry['original_decompressed_size']} | {entry['pointer_modified']} | "
+            f"{entry['original_declared_output_size']} | {entry['pointer_modified']} | "
             f"{entry['content_modified']} |"
         )
     lines.extend(
         [
             "",
-            "All pointers, sizes, decompressed hashes, ownership fields, and review flags",
+            "All pointers, declared sizes, type 3 decoded hashes, ownership fields, and review flags",
             "are in `localization/compressed_resources.json`.",
             "",
         ]
@@ -168,7 +290,7 @@ def markdown_report(result: dict[str, object]) -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Inventory the 0x9DFE compressed resource table")
+    parser = argparse.ArgumentParser(description="Inventory the typed compressed resource table")
     parser.add_argument("--jp-rom", type=Path, default=Path("roms/original/Langrisser II (Japan).md"))
     parser.add_argument(
         "--ko-rom",
@@ -184,7 +306,7 @@ def main() -> None:
     args.markdown.parent.mkdir(parents=True, exist_ok=True)
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
     print(
-        f"{result['entry_count']} resources decompressed; "
+        f"{result['entry_count']} resources inventoried; {result['decoded_type3_count']} type 3 decoded; "
         f"{result['modified_count']} modified; {result['unknown_owner_count']} owners unknown"
     )
 

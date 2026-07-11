@@ -32,7 +32,7 @@
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
-- `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 전부 해제해 타입·크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
+- `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스 타입·출력 크기·포인터 변경과 확인된 소유권을 기록하고, 타입 3만 전용 디코더로 해제·해시합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
