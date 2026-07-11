@@ -147,7 +147,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",
             "all equipment and shop variants beyond declared Scenario 1 paths",
-            "all compressed UI resources other than byte-font resource index 1",
+            "ownership and purpose of 428 compressed resources beyond byte-font resource index 1",
             "all executable-embedded strings not yet represented by a builder patch declaration",
         ],
     }

@@ -14,6 +14,8 @@ documented, committed, and pushed independently.
   mercenary-battle-name, and status-message word resources with explicit review flags.
 - Inventory every builder-declared UI patch and compressed byte-font relocation;
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
+- Parse and decompress the complete resource table independently of UI assumptions;
+  record type, size, hash, and pointer changes while leaving unknown ownership unknown.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known
   owners, and require render/code-reference proof before patching unknown candidates.
 - Keep full ending-dialogue pages and character epilogues as explicit translation

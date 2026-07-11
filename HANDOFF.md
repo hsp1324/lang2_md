@@ -939,17 +939,36 @@ full-game Korean localization, split into six stages in
 
 ### Declared UI Patch Surfaces And Gaps
 
-- `tools/jp_ui_surface_inventory.py` inventories 74 UI patch declarations
-  already present in the builder. 73 change bytes in the current build; the
+- `tools/jp_ui_surface_inventory.py` inventories 75 UI patch declarations
+  already present in the builder. 74 change bytes in the current build; the
   unchanged declaration is the intentionally retained `NPC` abbreviation.
 - The compressed 8x8 byte-UI font is resource table `0x0B0000`, index 1. Its
   table entry at `0x0B0004` moves from `0x0B0A84` to `0x290000`.
 - This is a declared-patch inventory, not a whole-ROM proof. The report keeps
   explicit gaps for class-change UI, save/load variants, ending/credits UI,
-  magic/summon prompts, non-Scenario-1 equipment/shop variants, other
-  compressed UI resources, and undeclared executable-embedded strings.
+  magic/summon prompts, non-Scenario-1 equipment/shop variants, ownership of
+  other compressed resources, and undeclared executable-embedded strings.
 - Details are in `localization/ui_patch_surfaces.json`; the summary and gap
   list are in `docs/ui_patch_surface_inventory.md`.
+
+### Complete Compressed Resource Table
+
+- `tools/jp_compressed_resource_inventory.py` derives the resource count from
+  the first pointer in table `0x0B0000`. The first block begins at `0x0B06B4`,
+  so the table contains exactly 429 strictly increasing pointers; its last
+  original pointer is `0x13807E`.
+- All 429 blocks decompress successfully with the builder's `0x9DFE` decoder.
+  Their type-byte distribution is type 1: 2, type 2: 248, and type 3: 179;
+  together they expand to 8,099,366 bytes.
+- Only index 1 differs in the current build. It is the independently confirmed
+  8,192-byte small UI font, relocated from `0x0B0A84` to `0x290000` with its
+  decompressed glyph content changed. The other 428 owners remain deliberately
+  unknown; successful decompression is not evidence that a resource is UI or text.
+- Full pointers, types, decompressed sizes and SHA-256 values are in
+  `localization/compressed_resources.json`; the summary is
+  `docs/compressed_resource_inventory.md`. Tests enforce the table boundary,
+  type counts, full decompression, and the single known relocation.
+- No emulator or desktop input was used for this checkpoint.
 
 ### Direct Word-String Candidate Scan
 
