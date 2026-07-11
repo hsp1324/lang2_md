@@ -86,11 +86,16 @@ Do not assume system packages are installed on the next PC.
 
 ## Current Build Status
 
-Last verified build during this handoff:
+Last live-verified build during this handoff:
 
 ```text
-checksum: ABF6
+checksum: 686D
 ```
+
+The current source builds checksum `7C92`. It adds the explicit Scenario 1
+class-156 `ﾌﾟﾘｰｽﾄ` -> `프리스트` mapping and corrects the class pointer-table
+base. It passed build and offline tests, but was not re-run in BlastEm because
+the user requested that emulator work stop while they use the computer.
 
 Build command:
 
@@ -181,7 +186,9 @@ Keep every item below in scope when the Codex goal is resumed:
 
 ### July 11 Verified Result
 
-Build `ABF6` completes this checklist in the WSLg BlastEm runtime:
+Build `ABF6` completed this checklist in the WSLg BlastEm runtime. Its compact
+money label was `소지G`; the later live-verified build `686D` restores it to
+`소지금`:
 
 - The Scenario 1 banner is `프롤로그`; the dagger shows `호신용 단검`, `AT+1`,
   and its real `50P` price without the stray `4`.
@@ -197,14 +204,15 @@ Build `ABF6` completes this checklist in the WSLg BlastEm runtime:
 - Commander and adjacent troop inspection confirms Elwin, Hein, Liana, Leon,
   Laird, Bald, militia/NPC labels, `솔저`, `가드맨`, `헤비호스맨`, and
   `로얄호스` on the Scenario 1 path. The shop uses compact `ITEM`, `WPN`,
-  `ARMOR`, and `소지G` labels to stay within the safe one-byte font slots.
+  `ARMOR`, and the then-current `소지G` label to stay within the safe one-byte
+  font slots.
 - The complete first-turn event was advanced page by page. The formerly mixed
   imperial-command line now reads `지금부터 발드님의 퇴로를
   확보하겠습니다!` (`final_924a_event_52.png`). The game reaches `TURN 2`
   (`final_924a_event_64.png`) and displays the following Hein and Elwin dialogue
   (`final_924a_event_65.png`, `final_924a_event_66.png`) without a reset, freeze,
   or black-screen failure.
-- The class pointer table at `0x05E6D8` is now the source of truth. The builder
+- The class pointer table at `0x05E6D6` is now the source of truth. The builder
   validates each active class's original CP932 string before writing Korean, so
   an inferred label cannot silently replace a different Japanese class. Live
   verification confirms Laird's troop is original `ﾍﾋﾞｰﾎｰｽﾏﾝ` ->
@@ -372,7 +380,7 @@ specific strings/lists, not the whole Japanese font blindly.
 
 ### Scenario 1 Class Names And Byte-Font Slot Limits
 
-Source of truth: the word-swapped class pointer table at `0x05E6D8`. Read each
+Source of truth: the big-endian class pointer table at `0x05E6D6`. Read each
 original `0xFF`-terminated byte string as CP932. Do not infer a class from the
 sprite or translate every mounted unit generically as `기병`.
 
@@ -395,11 +403,12 @@ are not safe text slots in the battle renderer and were removed. Codes
 `0xA1`, `0xA2`, and `0xA4` and the `0xE0..0xFF` range are likewise reserved by
 live status graphics. Do not re-enable them based only on offline font output.
 
-The verified safe pool has exactly 60 Hangul codes in build `ABF6`. To preserve
-the exact Scenario 1 class names, compact familiar UI labels use `WPN`, `ARMOR`,
-and `NPC`. Later-scenario classes outside `BYTE_UI_SCENARIO1_CLASS_INDEXES` are
-not claimed as verified; add them only after checking their original table
-entry and live renderer, then rebalance the safe glyph budget deliberately.
+The byte-font pool is renderer-dependent and must be rechecked after every new
+syllable. To preserve the exact Scenario 1 class names, compact familiar UI
+labels use `WPN`, `ARMOR`, and `NPC`. Later-scenario classes outside
+`BYTE_UI_SCENARIO1_CLASS_INDEXES` are not claimed as verified; add them only
+after checking their original table entry and live renderer, then rebalance the
+safe glyph budget deliberately.
 
 ### `0x974xx` Direct Name Candidates
 
@@ -716,3 +725,122 @@ in order. Keep `SCENARIO 1`/`TURN 1` banner work separate from normal text: the
 known ASCII tables do not own those live graphics. Use the existing per-screen
 glyph/list approach and add a reproducible sequence before enabling any broad
 name/font table patch.
+
+## July 11 Continued Regression And Scenario Editor
+
+This section is the newest source of truth. It records work after build `ABF6`.
+
+### Naming Policy
+
+- The MD Japanese ROM determines the class/mercenary ID, original name, and
+  three-tier MD composition. Do not copy a PC/remake composition onto MD data.
+- Use Namu Wiki's Langrisser 2, mercenary, class, and class-change pages for
+  established Korean spelling after the ROM identity is known. The URLs are
+  recorded in `README.md`.
+- The MD source confirms Scenario 1 Leon as class `0x45` (`나이트마스터`)
+  with mercenary `0x7B` (`로얄호스`), and Laird as class `0x37`
+  (`매직나이트`) with two `0x7A` (`헤비호스맨`) slots.
+
+### Money And `제` Glyph Regression
+
+- `POINT` fields at `0x09ABC2` and `0x0A1896` now render `소지금`; the leading
+  currency icon is not overwritten. Live build `686D` verified this in prep
+  and shop.
+- Byte-font code `0xA3` is unsafe for dynamically assigned glyphs in the full
+  battle renderer. It caused broken `제` in `제국지휘관`/`사제`, just as
+  `0xA1`, `0xA2`, and `0xA4` caused status icon collisions. `제` is pinned to
+  the live-stable `0xC0` slot. Existing screen-specific `구`/`템` assignments
+  remain fixed until their shop paths are deliberately reworked.
+- Do not expand the apparently free byte-code pool based only on offline font
+  output. Verify every new slot in the complete commander/status panel.
+
+### First-Turn Support Event
+
+- Event page `0x185664..0x18568A` is patched to
+  `기다려!\n이 마을에서 멋대로 못해!`. A 21-character draft exceeded the
+  20-character record and failed the build; the current 19-character text fits.
+- Build `686D` was advanced through the support event. The militia commander
+  displayed `민병대 / 로드`; the priest commander displayed a clean Korean
+  class label; the support dialogue no longer contained Japanese.
+- Reverse engineering later proved the priest source record is class `0x9C`,
+  whose original class pointer is `ﾌﾟﾘｰｽﾄ`. The current source therefore maps
+  it explicitly to `프리스트`, not `하이프리스트`. This correction produces
+  build `7C92` and still needs one live check when emulator work is allowed.
+- Dialogue speaker `자경단` is the original `自警団` speaker label. The map
+  unit name `민병대` is a separate compact unit label; keeping both is
+  intentional.
+
+### Class Pointer Table Correction
+
+- Runtime code loads normal big-endian pointers from `0x05E6D6`. The former
+  analyzer started at `0x05E6D8` and reconstructed each pointer from adjacent
+  16-bit words. That happened to work through class 155 but read garbage for
+  final class 156 because no following pointer supplied the high word.
+- `scripts/build_korean_jp_probe.py` and `tools/jp_byte_table_analyzer.py` now
+  use `0x05E6D6`, 157 entries (`0..156`), and direct big-endian reads.
+
+### Scenario Fixed-Placement Format
+
+The scenario header pointer table is `0x18005E` and has 31 valid entries. For
+each header, the long pointer at `header + 0x0C` leads to a two-byte record count
+followed by fixed-placement records of `0x24` bytes each.
+
+Verified record fields:
+
+```text
++0x0E  level
++0x12  AT
++0x13  DF
++0x18  initial X (FF when waiting for an event)
++0x19  initial Y (FF when waiting for an event)
++0x1A  name ID
++0x1B  class ID
++0x1E  mercenary class ID slot 1
+...
++0x23  mercenary class ID slot 6
+```
+
+Scenario 1's list is at `0x1801B6`, count 12, records at `0x1801B8`. Known
+enemy records are:
+
+```text
+index  ROM       name          class  LV  AT  DF  mercenaries
+8      0x1802D8  발드          0x2E    4  21  18  0x72 x6
+9      0x1802FC  레온          0x45    4  40  31  0x7B
+10     0x180320  레아드        0x37    6  33  25  0x7A x2
+11     0x180344  제국지휘관    0x2D    1  19  18  0x72 x6
+```
+
+The first-turn support records are hidden initially (`X=Y=0xFF`): militia at
+`0x180200`, class `0x99` (`로드`), and priest at `0x180224`, class `0x9C`
+(`프리스트`). These values come from ROM records, not sprite inference.
+
+### Scenario Editor
+
+- `tools/scenario_data.py` parses all 31 fixed-placement lists and only writes
+  verified fields. Unknown flags and coordinates remain read-only.
+- `editor/server.py` plus `editor/static/` provides a local UI for scenario
+  selection and class/LV/AT/DF/six-mercenary editing.
+- It reads either the latest Korean build or Japanese source and writes
+  `roms/builds/Langrisser II (Korean Scenario Edit).md`; it never overwrites the
+  input ROM. The Mega Drive checksum is recalculated.
+- `tests/test_scenario_data.py` validates all 31 list pointers, exact Scenario 1
+  Leon/Laird data, field patching, and checksum output.
+- A no-change editor build was byte-identical to Korean build `7C92`. Desktop
+  and mobile screenshots were checked before the user asked to stop GUI work.
+- This is deliberately a data editor, not yet a map/event editor. Do not expose
+  unknown record bytes until their runtime ownership is proven.
+
+### Automation Attempt And Remaining Live Check
+
+- `battle_command_menu_visible` previously mistook blue portrait/cutscene
+  frames for the command menu. Bottom status-bar and dark-panel checks plus a
+  delayed second capture were added. The delayed check was increased from 0.7
+  to 2.0 seconds; this is detector confirmation time, not game input delay.
+- The improved detector still encountered transient cutscene candidates during
+  the last attempt. Do not treat that interrupted run as a ROM reset result.
+- Per the user's current request, no emulator/browser/keyboard/mouse automation
+  should run while they use this PC. When allowed again, first verify build
+  `7C92` at the support priest (`사제 / 프리스트`) and complete the first-turn
+  event once. Then finish the detector using saved frame classification, not
+  repeated foreground input experiments.

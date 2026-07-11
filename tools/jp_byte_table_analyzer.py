@@ -16,8 +16,8 @@ JP_ROM = Path("roms/original/Langrisser II (Japan).md")
 EN_ROM = Path("roms/original/Langrisser II (English).md")
 OUT_DIR = Path("captures/analysis/jp_byte_tables")
 
-CLASS_POINTER_TABLE = 0x05E6D8
-CLASS_POINTER_COUNT = 156
+CLASS_POINTER_TABLE = 0x05E6D6
+CLASS_POINTER_COUNT = 157
 
 
 KOREAN_CLASS_LABELS = [
@@ -177,11 +177,16 @@ KOREAN_CLASS_LABELS = [
     "로드",
     "파이레츠",
     "하이로드",
+    "프리스트",
 ]
 
 
 def be16(data: bytes, offset: int) -> int:
     return (data[offset] << 8) | data[offset + 1]
+
+
+def be32(data: bytes, offset: int) -> int:
+    return int.from_bytes(data[offset : offset + 4], "big")
 
 
 def word_swapped_pointer(data: bytes, offset: int) -> int:
@@ -203,9 +208,9 @@ def read_byte_string(data: bytes, offset: int, terminator: int) -> bytes:
 def read_class_entries(jp_rom: bytes, en_rom: bytes) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for index in range(CLASS_POINTER_COUNT):
-        ptr = word_swapped_pointer(jp_rom, CLASS_POINTER_TABLE + index * 4)
+        ptr = be32(jp_rom, CLASS_POINTER_TABLE + index * 4)
         jp_raw = read_byte_string(jp_rom, ptr, 0xFF)
-        en_ptr = word_swapped_pointer(en_rom, CLASS_POINTER_TABLE + index * 4)
+        en_ptr = be32(en_rom, CLASS_POINTER_TABLE + index * 4)
         en_raw = read_byte_string(en_rom, en_ptr, 0xFF)
         english = en_raw.decode("ascii", errors="replace").replace("\x00", "␀")
         rows.append(

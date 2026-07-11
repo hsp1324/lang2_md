@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>랑그릿사 II 시나리오 편집기</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>랑그릿사 II 시나리오 편집기</h1>
+      <p id="sourcePath">ROM 정보를 읽는 중</p>
+    </div>
+    <button id="buildButton" type="button">편집 ROM 빌드</button>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="시나리오 선택">
+      <label>시나리오
+        <select id="scenarioSelect"></select>
+      </label>
+      <label>기준 ROM
+        <select id="romSelect">
+          <option value="korean">한국어 최신 빌드</option>
+          <option value="japanese">일본어 원본</option>
+        </select>
+      </label>
+      <label>표시
+        <select id="filterSelect">
+          <option value="all">전체 배치</option>
+          <option value="enemy">적군</option>
+          <option value="event">NPC / 이벤트</option>
+        </select>
+      </label>
+      <span id="recordSummary" class="summary"></span>
+    </section>
+
+    <div id="notice" class="notice" hidden></div>
+    <section class="tableWrap" aria-label="배치 데이터">
+      <table>
+        <thead>
+          <tr>
+            <th>배치</th><th>이름</th><th>클래스</th><th>LV</th>
+            <th>AT</th><th>DF</th><th>좌표</th><th>용병 1</th><th>용병 2</th><th>용병 3</th>
+            <th>용병 4</th><th>용병 5</th><th>용병 6</th><th>ROM</th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

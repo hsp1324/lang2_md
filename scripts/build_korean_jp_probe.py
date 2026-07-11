@@ -41,8 +41,8 @@ SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 SCENARIO_GLYPH_LIST_RELOC_BASE = 0x270000
 SCENARIO_GLYPH_LIST_RELOC_LIMIT = 0x280000
-CLASS_BYTE_POINTER_TABLE = 0x05E6D8
-CLASS_BYTE_RECORD_COUNT = 156
+CLASS_BYTE_POINTER_TABLE = 0x05E6D6
+CLASS_BYTE_RECORD_COUNT = 157
 DEFAULT_HERO_NAME_OFFSET = 0x061AC5
 PREP_AND_NAME_GLYPH_REF_RANGE = (0x96FC0, 0x97680)
 COMMON_GLYPH_PROTECT_LIMIT = 0x0060
@@ -110,7 +110,7 @@ BYTE_UI_GLYPH_CODES = [
         code
         for code in range(0xA1, 0xE0)
         if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES
-        and code not in (0xA1, 0xA2, 0xA4)
+        and code not in (0xA1, 0xA2, 0xA3, 0xA4)
     ),
 ]
 BYTE_UI_STABLE_CODE_BY_CHAR = {
@@ -129,7 +129,7 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "록": 0xB0,
     "파": 0xCC,
     "이": 0xA7,
-    "크": 0xC0,
+    "제": 0xC0,
     "팔": 0xAB,
     "랑": 0xDB,
     "스": 0xAF,
@@ -179,22 +179,24 @@ CLASS_BYTE_SUBSET_LABELS = {
 # Classes reachable in Scenario 1. These strings use the relocated 8x8 byte UI
 # font in the live map status bar, not the global 16x16 JP font.
 BYTE_UI_SCENARIO1_CLASS_INDEXES = (
-    1, 2, 3, 13, 45, 46, 47, 48, 55, 56, 57, 69, 73,
-    98, 99, 100, 103, 104, 109, 113, 114, 121, 122, 123, 151,
+    1, 2, 3, 4, 13, 17, 22, 45, 46, 47, 48, 50, 55, 56, 57, 69,
+    100, 103, 104, 109, 113, 114, 121, 122, 123, 151, 153, 156,
 )
 BYTE_UI_SCENARIO1_CLASS_LABELS = {
     index: KOREAN_CLASS_LABELS[index] for index in BYTE_UI_SCENARIO1_CLASS_INDEXES
 }
 SCENARIO1_EXPECTED_JP_CLASS_LABELS = {
-    1: "ﾌｧｲﾀｰ", 2: "ｸﾚﾘｯｸ", 3: "ｳｫｰﾛｯｸ", 13: "ﾏｼﾞｯｸﾅｲﾄ",
+    1: "ﾌｧｲﾀｰ", 2: "ｸﾚﾘｯｸ", 3: "ｳｫｰﾛｯｸ", 4: "ﾛｰﾄﾞ",
+    13: "ﾏｼﾞｯｸﾅｲﾄ", 17: "ﾌﾟﾘｰｽﾄ",
     45: "ﾌｧｲﾀｰ", 46: "ﾌｧｲﾀｰ", 47: "ｸﾚﾘｯｸ", 48: "ｳｫｰﾛｯｸ",
-    55: "ﾏｼﾞｯｸﾅｲﾄ",
-    56: "ﾏｼﾞｯｸﾅｲﾄ", 57: "ｿｰﾄﾞﾏﾝ", 69: "ﾅｲﾄﾏｽﾀｰ", 73: "ｼﾞｪﾈﾗﾙ",
-    98: "ﾊﾟｲｸ", 99: "ﾌｧﾗﾝｸｽ", 100: "ｿﾙｼﾞｬｰ", 103: "ﾎｰｽﾏﾝ",
+    50: "ﾛｰﾄﾞ", 55: "ﾏｼﾞｯｸﾅｲﾄ",
+    22: "ﾊｲﾌﾟﾘｰｽﾄ", 56: "ﾏｼﾞｯｸﾅｲﾄ", 57: "ｿｰﾄﾞﾏﾝ",
+    69: "ﾅｲﾄﾏｽﾀｰ",
+    100: "ｿﾙｼﾞｬｰ", 103: "ﾎｰｽﾏﾝ",
     104: "ﾍﾋﾞｰﾎｰｽﾏﾝ", 109: "ｶﾞｰﾄﾞﾏﾝ", 113: "ｼﾋﾞﾘｱﾝ",
     114: "ｿﾙｼﾞｬｰ", 121: "ﾎｰｽﾏﾝ", 122: "ﾍﾋﾞｰﾎｰｽﾏﾝ",
     123: "ﾛｲﾔﾙﾎｰｽ",
-    151: "ｸﾚﾘｯｸ",
+    151: "ｸﾚﾘｯｸ", 153: "ﾛｰﾄﾞ", 156: "ﾌﾟﾘｰｽﾄ",
 }
 
 BYTE_UI_STRING_PATCHES = {
@@ -261,8 +263,8 @@ BYTE_UI_WORD_STRING_PATCHES = {
     0x09ACE0: (2, "마나"),
     # Money label in the prep and shop layouts. Preserve the leading 0x2F
     # currency icon and replace only the five-letter POINT field.
-    0x09ABC2: (5, "소지G"),
-    0x0A1896: (5, "소지G"),
+    0x09ABC2: (5, "소지금"),
+    0x0A1896: (5, "소지금"),
 }
 
 WIDE_BYTE_GLYPH_PATCHES = {
@@ -339,6 +341,7 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
     0x1854D8: (0x1854FC, "…미안하다.\n협조에 감사한다."),
     0x185608: (0x185640, "좋아, 본진으로 모셔라.\n정중히 대하도록."),
     0x185642: (0x185662, "예…\n앞으로 조심하겠습니다."),
+    0x185664: (0x18568A, "기다려!\n이 마을에서 멋대로 못해!"),
     0x18568C: (0x1856AC, "레온님!\n자경단이 왔습니다!"),
     0x1856AE: (0x185700, "빠르군… 하지만 자경단쯤은\n신경 쓸 필요 없다.\n작전을 계속한다!"),
     0x185702: (0x185734, "고작 몇 기로 오다니!\n후회하게 해주마!"),
@@ -2289,7 +2292,7 @@ def patch_class_byte_table(data: bytearray) -> None:
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
 
     for index, text in enumerate(labels):
-        ptr = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        ptr = be32(data, CLASS_BYTE_POINTER_TABLE + index * 4)
         capacity = byte_string_capacity(data, ptr)
         values = [0x20 if char == " " else code_by_char[char] for char in text]
         if len(values) + 1 > capacity:
@@ -2321,7 +2324,7 @@ def patch_class_byte_subset(data: bytearray) -> None:
         )
 
     for index, text in labels.items():
-        ptr = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        ptr = be32(data, CLASS_BYTE_POINTER_TABLE + index * 4)
         capacity = byte_string_capacity(data, ptr)
         values = [code_by_char[char] for char in text]
         if len(values) + 1 > capacity:
@@ -2334,7 +2337,7 @@ def patch_class_byte_subset(data: bytearray) -> None:
 
 def validate_scenario1_class_sources(data: bytes | bytearray) -> None:
     for index, expected in SCENARIO1_EXPECTED_JP_CLASS_LABELS.items():
-        offset = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        offset = be32(data, CLASS_BYTE_POINTER_TABLE + index * 4)
         capacity = byte_string_capacity(data, offset)
         actual = bytes(data[offset : offset + capacity - 1]).decode("cp932")
         if actual != expected:
@@ -2406,7 +2409,7 @@ def patch_byte_ui_strings(data: bytearray) -> None:
         values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)
     for index, text in BYTE_UI_SCENARIO1_CLASS_LABELS.items():
-        offset = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        offset = be32(data, CLASS_BYTE_POINTER_TABLE + index * 4)
         capacity = byte_string_capacity(data, offset)
         values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)

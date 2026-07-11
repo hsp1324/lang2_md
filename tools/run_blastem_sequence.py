@@ -184,12 +184,28 @@ def battle_command_menu_visible(path: Path) -> bool:
     )
     pixels = image.load()
     blue_pixels = 0
+    dark_panel_pixels = 0
     for y in range(image.height):
         for x in range(image.width):
             red, green, blue = pixels[x, y]
             if blue > 70 and blue > red * 1.3 and blue > green * 1.2:
                 blue_pixels += 1
-    return blue_pixels > 3200 * scale_x * scale_y
+            if 50 <= blue <= 180 and red < 45 and green < 65 and blue > red * 2 and blue > green * 1.8:
+                dark_panel_pixels += 1
+    # Portrait cut-ins also have a broad blue background and used to trigger
+    # this detector early. A real command menu is only available with the blue
+    # battle status bar visible across the bottom of the frame.
+    status = frame.crop((0, round(195 * scale_y), frame.width, round(235 * scale_y)))
+    status_blue_pixels = sum(
+        1
+        for red, green, blue in status.get_flattened_data()
+        if blue > 70 and blue > red * 1.3 and blue > green * 1.2
+    )
+    return (
+        blue_pixels > 3200 * scale_x * scale_y
+        and dark_panel_pixels > 1000 * scale_x * scale_y
+        and status_blue_pixels > status.width * status.height * 0.5
+    )
 
 
 def advance_to_battle_command(args: argparse.Namespace) -> int:
@@ -204,8 +220,15 @@ def advance_to_battle_command(args: argparse.Namespace) -> int:
             stdout=subprocess.DEVNULL,
         )
         if battle_command_menu_visible(probe):
-            print(f"battle command menu detected after {step} confirmations")
-            return 0
+            time.sleep(2.0)
+            subprocess.check_call(
+                [sys.executable, str(CAPTURE_WINDOW), str(probe)],
+                cwd=ROOT,
+                stdout=subprocess.DEVNULL,
+            )
+            if battle_command_menu_visible(probe):
+                print(f"battle command menu detected after {step} confirmations")
+                return 0
     raise RuntimeError("battle command menu was not detected after 15 confirmations")
 
 
