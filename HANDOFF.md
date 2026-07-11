@@ -89,7 +89,7 @@ Do not assume system packages are installed on the next PC.
 Last verified build during this handoff:
 
 ```text
-checksum: 924A
+checksum: 81ED
 ```
 
 Build command:
@@ -204,6 +204,12 @@ Build `924A` completes this checklist in the WSLg BlastEm runtime:
   (`final_924a_event_64.png`) and displays the following Hein and Elwin dialogue
   (`final_924a_event_65.png`, `final_924a_event_66.png`) without a reset, freeze,
   or black-screen failure.
+- A follow-up map inspection found that byte-font code `0xA4` is an icon slot in
+  the mercenary status path. Build `81ED` excludes it and pins `병` to the safe
+  `0xCF` slot. Laird's adjacent troop now renders `중기병`
+  (`merc_fix_81ed_laird_merc.png`) and Leon's renders `기병`
+  (`merc_fix_81ed_leon_merc2.png`) without the trailing icon fragment. The
+  former `무기` category uses the equivalent label `병기` to free that slot.
 
 ## Emulator Input
 

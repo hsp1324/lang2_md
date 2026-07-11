@@ -109,7 +109,8 @@ BYTE_UI_GLYPH_CODES = [
     *(
         code
         for code in range(0xA1, 0xE0)
-        if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES and code not in (0xA1, 0xA2)
+        if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES
+        and code not in (0xA1, 0xA2, 0xA4)
     ),
 ]
 BYTE_UI_STABLE_CODE_BY_CHAR = {
@@ -139,7 +140,7 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "맨": 0xBC,
     "시": 0xAC,
     "민": 0xB6,
-    "무": 0xCF,
+    "병": 0xCF,
     "기": 0xCB,
     # A1/A2 are reused by the portrait/status layout and become icon fragments
     # in the live commander panel. Use established high byte-font slots.
@@ -240,7 +241,7 @@ BYTE_UI_STRING_PATCHES = {
     0x05EC7E: "가드",
     0x05EC99: "시민",
     # Item category labels shown by the byte-string equipment/shop renderer.
-    0x0A18E0: "무기",
+    0x0A18E0: "병기",
     0x0A18EC: "방어구",
     0x0A18F8: "ITEM",
 }
