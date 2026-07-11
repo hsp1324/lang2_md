@@ -171,7 +171,17 @@ def make_key_command(args: argparse.Namespace, keys: list[str]) -> list[str]:
 
 
 def battle_command_menu_visible(path: Path) -> bool:
-    image = Image.open(path).convert("RGB").crop((15, 25, 95, 110))
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+    image = frame.crop(
+        (
+            round(15 * scale_x),
+            round(25 * scale_y),
+            round(95 * scale_x),
+            round(110 * scale_y),
+        )
+    )
     pixels = image.load()
     blue_pixels = 0
     for y in range(image.height):
@@ -179,7 +189,7 @@ def battle_command_menu_visible(path: Path) -> bool:
             red, green, blue = pixels[x, y]
             if blue > 70 and blue > red * 1.3 and blue > green * 1.2:
                 blue_pixels += 1
-    return blue_pixels > 3200
+    return blue_pixels > 3200 * scale_x * scale_y
 
 
 def advance_to_battle_command(args: argparse.Namespace) -> int:

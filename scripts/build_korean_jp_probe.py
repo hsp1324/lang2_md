@@ -104,7 +104,13 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
 ]
 BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
-    *(code for code in range(0xA1, 0xE0) if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES),
+    # E0-FF draw the EXP/status gauge and other panel graphics. Replacing them
+    # makes stray Hangul (for example `머서버`) appear below the level meter.
+    *(
+        code
+        for code in range(0xA1, 0xE0)
+        if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES and code not in (0xA1, 0xA2)
+    ),
 ]
 BYTE_UI_STABLE_CODE_BY_CHAR = {
     "엘": 0xB4,
@@ -135,8 +141,10 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "민": 0xB6,
     "무": 0xCF,
     "기": 0xCB,
-    "방": 0xA1,
-    "어": 0xA2,
+    # A1/A2 are reused by the portrait/status layout and become icon fragments
+    # in the live commander panel. Use established high byte-font slots.
+    "방": 0xC5,
+    "어": 0xCD,
     "구": 0xA3,
     "템": 0xA4,
     "군": 0xA5,
@@ -149,6 +157,9 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "위": 0xB7,
     "수": 0xB9,
     "정": 0xBA,
+    # A1/A2 become icon fragments in the full commander panel.
+    "레": 0xD1,
+    "온": 0xD2,
 }
 CLASS_BYTE_SUBSET_LABELS = {
     1: "파이터",
@@ -164,13 +175,59 @@ CLASS_BYTE_SUBSET_LABELS = {
     113: "시민",
 }
 
+# Classes reachable in Scenario 1. These strings use the relocated 8x8 byte UI
+# font in the live map status bar, not the global 16x16 JP font.
+BYTE_UI_SCENARIO1_CLASS_LABELS = {
+    1: "전사",
+    2: "클레릭",
+    3: "워록",
+    13: "매직나이트",
+    45: "전사",
+    47: "클레릭",
+    48: "워록",
+    55: "매직나이트",
+    56: "매직나이트",
+    57: "소드",
+    69: "나이트마스터",
+    73: "지휘관",
+    98: "파이크",
+    99: "팔랑크스",
+    100: "솔저",
+    103: "기병",
+    104: "중기병",
+    109: "가드",
+    113: "시민",
+    114: "솔저",
+    115: "중병",
+    116: "전사",
+    117: "전사",
+    118: "전사",
+    119: "사수",
+    120: "리자드",
+    121: "기병",
+    122: "중기병",
+    123: "기병",
+    124: "가드",
+    125: "기병",
+    151: "클레릭",
+}
+
 BYTE_UI_STRING_PATCHES = {
     # Commander/NPC names. These are the actual half-width JP byte strings used
     # by the prep/status UI, unlike the experimental 0x974xx direct-string scan.
     0x061AC5: "엘윈",
     0x061ACB: "리아나",
     0x061AD8: "헤인",
+    0x061AFC: "레온",
+    0x061B16: "레아드",
     0x061B1C: "발드",
+    # Generic Scenario 1 actors used by the map status bar.
+    0x061B54: "병사",
+    0x061B5C: "지휘관",
+    0x061B61: "사제",
+    0x061B65: "주민",
+    0x061B71: "자경단",
+    0x061B8D: "제국지휘관",
     # Early commander classes and mercenary names.
     0x05E953: "전사",
     0x05E95F: "워록",
@@ -180,12 +237,12 @@ BYTE_UI_STRING_PATCHES = {
     0x05EC31: "파이크",
     0x05EC36: "팔랑크스",
     0x05EC3D: "솔저",
-    0x05EC7E: "가드맨",
+    0x05EC7E: "가드",
     0x05EC99: "시민",
     # Item category labels shown by the byte-string equipment/shop renderer.
     0x0A18E0: "무기",
     0x0A18EC: "방어구",
-    0x0A18F8: "아이템",
+    0x0A18F8: "ITEM",
 }
 
 RAW_BYTE_STRING_PATCHES = {
@@ -230,8 +287,8 @@ BYTE_UI_WORD_STRING_PATCHES = {
     0x09ACE0: (2, "마나"),
     # Money label in the prep and shop layouts. Preserve the leading 0x2F
     # currency icon and replace only the five-letter POINT field.
-    0x09ABC2: (5, "소지금"),
-    0x0A1896: (5, "소지금"),
+    0x09ABC2: (5, "소지G"),
+    0x0A1896: (5, "소지G"),
 }
 
 WIDE_BYTE_GLYPH_PATCHES = {
@@ -245,6 +302,13 @@ WIDE_BYTE_GLYPH_PATCHES = {
 DIRECT_WORD_SEQUENCE_PATCHES = {
     0x9706A: (12, "이동공격마법소환치료명령"),
 }
+
+ORDER_SUBMENU_GLYPH_SLOTS = {
+    22: "방",
+    23: "어",
+    24: "자",
+}
+ORDER_SUBMENU_TOKEN_STREAM = 0x9768C
 
 DIRECT_TOKEN_STREAM_PATCHES = {
     # These suffixes are appended after the selected item name. They switch to
@@ -263,8 +327,63 @@ SHOP_SELL_TITLE_TOKEN_STREAM = 0xA17B8
 START_MENU_GLYPH_LIST = 0x970D4
 START_MENU_TOKEN_STREAM = 0x9AD88
 START_MENU_TEXTS = ("저장", "불러오기", "승리조건", "게임설정", "턴 종료")
+START_SUBMENU_TEXTS = (
+    "저장할까요?",
+    "예",
+    "아니오",
+    "게임속도",
+    "빠름",
+    "보통",
+    "표시속도",
+    "전투장면",
+    "켜기",
+    "끄기",
+    "설정완료",
+    "불러올 데이터를 선택하세요",
+    "시나리오",
+    "턴",
+    "손상된 데이터",
+    "데이터 없음",
+)
+LOAD_MENU_GLYPH_LIST = 0x97128
+SCENARIO_HEADER_TEXT = "프롤로그"
+# Scenario 1 event pages use both FFFF (page end) and FFFD (event end).
+# Older suffix-only patches left the beginning of these pages in Japanese.
+# Keep the original terminator at its fixed address and replace the whole body.
+SCENARIO1_EVENT_PAGE_PATCHES = {
+    0x185272: (0x1852C8, "네가 리아나인가.\n다치기 싫으면 우리와 함께\n제국으로 가 줘야겠다."),
+    0x1852CA: (0x1852E0, "저한테 무슨 일이죠?"),
+    0x1852E2: (0x1852FA, "갑자기 미안하다."),
+    0x1852FC: (0x185358, "나는 레이갈드 제국 청룡기사단을\n이끄는 레온이다.\n너를 데리러 왔다."),
+    0x18535A: (0x185364, "나를…?"),
+    0x185366: (0x1853A2, "베른하르트 폐하께서\n기다리신다.\n제도로 함께 가겠나?"),
+    0x1853A4: (0x1853AC, "……"),
+    0x1853AE: (0x1853F4, "내가 동행하면 주민들을\n건드리지 않겠다고 약속하지.\n괜찮겠나?"),
+    0x1853F6: (0x185464, "물론이다.\n여성을 납치하는 불명예에\n무고한 주민까지\n해치진 않겠다."),
+    0x185466: (0x1854AA, "다만 우리에게 검을 겨누는 자는\n누구든 베겠다."),
+    0x1854AC: (0x1854D6, "알겠습니다…\n따라가겠습니다."),
+    0x1854D8: (0x1854FC, "…미안하다.\n협조에 감사한다."),
+    0x185608: (0x185640, "좋아, 본진으로 모셔라.\n정중히 대하도록."),
+    0x185642: (0x185662, "예…\n앞으로 조심하겠습니다."),
+    0x18568C: (0x1856AC, "레온님!\n자경단이 왔습니다!"),
+    0x1856AE: (0x185700, "빠르군… 하지만 자경단쯤은\n신경 쓸 필요 없다.\n작전을 계속한다!"),
+    0x185702: (0x185734, "고작 몇 기로 오다니!\n후회하게 해주마!"),
+    0x185736: (0x185748, "훗, 재미있군."),
+    0x18574A: (0x185766, "자, 얌전히 따라와라!"),
+    0x185768: (0x1857A0, "아파!\n그렇게 세게 끌지 않아도\n따라갈게요!"),
+    0x1857A2: (0x1857C8, "쳇! 포로 주제에 건방지군!"),
+    0x185E50: (0x185E7E, "지금부터 발드님의\n퇴로를 확보하겠습니다!"),
+    0x185E80: (0x185EA4, "…첫 전투였지.\n잘 싸웠다."),
+    0x185EA6: (0x185EDA, "하지만 납치전이라\n미안하게 됐군."),
+    0x185EDC: (0x185F22, "신경 쓰지 마십시오.\n레온님과 함께 싸울 수 있어\n영광입니다."),
+    0x185F24: (0x185F44, "미안하다.\n무리하지 마라."),
+    0x184E10: (0x184E36, "레아드는 따라와!\n적을 쓸어버려라!"),
+}
 
 DIRECT_STRING_PATCHES = {
+    # The dialogue renderer appends this one-glyph direct string after every
+    # speaker name. It is the actual Japanese opening quote, not font slot 50.
+    0x97400: ":",
     0x96086: "잘가!",
     0x96248: "잘가!",
     0x96390: "그럼잘있어!",
@@ -290,13 +409,13 @@ DIRECT_STRING_PATCHES = {
     0x184918: "맞아!\n그대로두면위험해!\n도와줘!",
     0x18499A: "물론이지.\n어서가자!",
     0x1849A4: "바로가자!",
-    0x1849CA: "찾았습니다!",
+    0x1849B4: "레온님, 찾던 소녀를\n발견했습니다!",
     0x1849E0: "서둘러.",
-    0x184A1C: "진심이야!",
-    0x184A52: "일단서두르자!",
-    0x184A98: "진군하며싸워라!",
-    0x184AF2: "거짓은아닌듯하다.",
-    0x184B14: "여기까지…",
+    0x1849EE: "큰일이야! 제국군이\n리아나를 데려가려 해!",
+    0x184A2A: "대체 왜지? 생각은 나중이다.\n일단 서두르자!",
+    0x184A64: "적이 강하다! 영주님이 올 때까지\n회복하며 싸우자!",
+    0x184AAC: "그렇군. 파이크병도 상대가 안 된다니\n최강 기사단이라는 소문은 사실인가 보군.",
+    0x184B0A: "큭… 여기까지인가…",
     0x184B24: "여기까지!",
     0x184B96: "그래…",
     0x184BAE: "반드시구하겠어.",
@@ -645,9 +764,12 @@ DIRECT_STRING_PATCHES = {
     0x97202: "수면상태",
     0x97214: "마법봉인",
     # Verified on Scenario 1 first-turn event dialogue speaker labels.
+    0x97410: "리아나",
     0x9746C: "레온",
     0x97496: "레아드",
+    0x974A0: "발드",
     0x97512: "주민",
+    0x9751E: "자경단",
     0x9754A: "제국군지휘관",
     0xA16F2: "버리겠습니까예아니오",
 }
@@ -759,6 +881,11 @@ DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
     0xA10E0: (5, "진군루트"),
 }
 
+DIRECT_FIXED_SCENARIO_HEADER_PATCHES = {
+    # Five global glyph words loaded directly by routine 0x25680.
+    0x9B1B6: (5, SCENARIO_HEADER_TEXT),
+}
+
 OPENING_TEXT_LIST_PATCHES = OrderedDict(
     [
         (0xA6B20, (0x21, "후후후…")),
@@ -809,7 +936,7 @@ SCENARIO_TEXT_OVERRIDES = {
 }
 
 CONDITION_SCREENS = [
-    ["승리조건", "-발드 격파", "", "패배조건", "-주인공 사망", "-발드가 우하단 도주"],
+    ["승리조건", "-발드 격파", "", "패배조건", "-엘윈 사망", "-발드가 우하단 도주"],
     ["승리조건", "-리아나 북쪽 도착", "-적 전멸", "패배조건", "-리아나 사망", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-리아나 사망", "-주인공 사망"],
     ["승리조건", "-모건 격파", "", "패배조건", "-신관 전멸", "-리아나/주인공 사망"],
@@ -1072,6 +1199,34 @@ def write_direct_string(data: bytearray, offset: int, text: str, glyph_by_char: 
             f"direct string at 0x{offset:06X} needs {len(values) + 1} words, only {capacity}"
         )
     write_word_list(data, offset, values, capacity)
+
+
+def patch_scenario1_event_pages(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    for start, (end, text) in SCENARIO1_EVENT_PAGE_PATCHES.items():
+        terminal = be16(data, end)
+        if terminal not in (0xFFFF, 0xFFFD):
+            raise ValueError(
+                f"Scenario 1 event page at 0x{start:06X} has unexpected "
+                f"terminator 0x{terminal:04X} at 0x{end:06X}"
+            )
+        values: list[int] = []
+        for char in text:
+            if char == "\n":
+                values.append(0xFFFE)
+            elif char == " ":
+                values.append(SPACE_GLYPH)
+            else:
+                values.append(glyph_by_char[char])
+        capacity = (end - start) // 2
+        if len(values) > capacity:
+            raise ValueError(
+                f"Scenario 1 event page at 0x{start:06X} needs {len(values)} "
+                f"words, only {capacity}: {text!r}"
+            )
+        values.extend([SPACE_GLYPH] * (capacity - len(values)))
+        for index, value in enumerate(values):
+            put16(data, start + index * 2, value)
+        put16(data, end, terminal)
 
 
 def write_fixed_direct_string(
@@ -1351,16 +1506,18 @@ def make_record_encoding_reusing_slots(
 def make_condition_screen(lines: list[str], glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
     if len(lines) > 6:
         raise ValueError("condition screen supports at most 6 rows")
-    rows = [[" "] * 18 for _ in range(6)]
+    # The original record is seven 16-cell rows. The last row is blank, and
+    # each condition entry is indented one cell below its heading.
+    rows = [[" "] * 16 for _ in range(7)]
 
     def put(row: int, col: int, text: str) -> None:
-        if len(text) > 18:
-            raise ValueError(f"condition row too long ({len(text)} > 18): {text!r}")
+        if col + len(text) > 16:
+            raise ValueError(f"condition row too long ({col + len(text)} > 16): {text!r}")
         for i, char in enumerate(text):
             rows[row][col + i] = char
 
     for row, line in enumerate(lines):
-        put(row, 0, line)
+        put(row, 0 if row in (0, 2, 3) else 1, line)
 
     glyphs: list[int] = [SPACE_GLYPH]
     local_by_glyph = {SPACE_GLYPH: 0}
@@ -1638,14 +1795,23 @@ def patch_condition(
     index: int,
     lines: list[str],
     glyph_by_char: dict[str, int],
-    glyph_cursor: int,
-) -> int:
+    glyph_cursor: int | None,
+) -> int | None:
     glyphs, tokens = make_condition_screen(lines, glyph_by_char)
     token_ptr = be32(data, CONDITION_POINTER_TABLE + index * 4)
-    put32(data, CONDITION_GLYPH_LIST_TABLE + index * 4, glyph_cursor)
-    glyph_cursor = write_word_list_exact(data, glyph_cursor, glyphs)
-    if glyph_cursor & 1:
-        glyph_cursor += 1
+    if glyph_cursor is None:
+        glyph_ptr = be32(data, CONDITION_GLYPH_LIST_TABLE + index * 4)
+        write_word_list(
+            data,
+            glyph_ptr,
+            glyphs,
+            glyph_list_capacity_words(data, CONDITION_GLYPH_LIST_TABLE, index, 32),
+        )
+    else:
+        put32(data, CONDITION_GLYPH_LIST_TABLE + index * 4, glyph_cursor)
+        glyph_cursor = write_word_list_exact(data, glyph_cursor, glyphs)
+        if glyph_cursor & 1:
+            glyph_cursor += 1
     write_token_stream(
         data,
         token_ptr,
@@ -1658,11 +1824,13 @@ def patch_condition(
 def patch_conditions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     if len(CONDITION_SCREENS) != 32:
         raise ValueError(f"expected 32 condition screens, got {len(CONDITION_SCREENS)}")
-    glyph_cursor = CONDITION_GLYPH_LIST_RELOC_BASE
-    for index, lines in enumerate(CONDITION_SCREENS):
-        glyph_cursor = patch_condition(data, index, lines, glyph_by_char, glyph_cursor)
-    if glyph_cursor >= ITEM_NAME_GLYPH_LIST_RELOC_BASE:
-        raise ValueError(f"relocated condition glyph lists overflow: 0x{glyph_cursor:06X}")
+    # Scenario 1 needs only 22 glyph slots and fits its original 28-word list.
+    # Keeping the list in place is required: the prep renderer also touches
+    # this table and blanks its large menu when the pointer is relocated above
+    # the original 2 MiB ROM window.
+    result = patch_condition(data, 0, CONDITION_SCREENS[0], glyph_by_char, None)
+    if result is not None:
+        raise AssertionError("in-place Scenario 1 condition patch unexpectedly relocated")
 
 
 def normalize_scenario_text(text: str) -> str:
@@ -1785,6 +1953,18 @@ def patch_route_title(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             put16(data, offset + i * 2, value)
 
 
+def patch_scenario_header(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    for offset, (max_words, text) in DIRECT_FIXED_SCENARIO_HEADER_PATCHES.items():
+        values = [glyph_by_char[char] for char in text]
+        if len(values) > max_words:
+            raise ValueError(
+                f"scenario header needs {len(values)} glyphs, only {max_words}: {text!r}"
+            )
+        values.extend([SPACE_GLYPH] * (max_words - len(values)))
+        for i, value in enumerate(values):
+            put16(data, offset + i * 2, value)
+
+
 def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     for offset, (max_words, text) in DIRECT_WORD_SEQUENCE_PATCHES.items():
         values = [glyph_by_char[char] for char in text]
@@ -1793,6 +1973,14 @@ def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) 
         values.extend([0x0020] * (max_words - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
+
+    for slot, char in ORDER_SUBMENU_GLYPH_SLOTS.items():
+        put16(data, 0x9706A + slot * 2, glyph_by_char[char])
+    order_rows = ([0, 1], [2, 3], [22, 23], [24, 1])
+    for row, tokens in enumerate(order_rows):
+        row_offset = ORDER_SUBMENU_TOKEN_STREAM + row * 6
+        put16(data, row_offset, tokens[0])
+        put16(data, row_offset + 2, tokens[1])
 
 
 def patch_direct_token_streams(data: bytearray) -> None:
@@ -1914,6 +2102,84 @@ def patch_start_menu(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             put16(data, row_offset + index * 2, token)
 
 
+def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    # Save and config reuse the main Start-menu loader. All assignments below
+    # use slots that the localized five-row menu no longer references.
+    main_slot_chars = {
+        12: "할",
+        13: "까",
+        18: "요",
+        23: "?",
+        24: "예",
+        25: "아",
+        26: "니",
+        27: "속",
+        28: "도",
+        29: "빠",
+        30: "름",
+        31: "보",
+        32: "통",
+        33: "표",
+        34: "시",
+        35: "전",
+        36: "투",
+        37: "면",
+        38: "켜",
+        39: "끄",
+        40: "완",
+    }
+    for slot, char in main_slot_chars.items():
+        put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph_by_char[char])
+
+    def put_tokens(offset: int, values: list[int]) -> None:
+        for index, token in enumerate(values):
+            put16(data, offset + index * 2, token)
+
+    # 8-cell save prompt and two 3-cell choice rows.
+    put_tokens(0x9AE44, [10, 11, 12, 13, 18, 23, 0x3F, 0x3F])
+    # Preserve the original 0x0003/0x0002 layout header. The following six
+    # cells wrap as two three-cell choices.
+    put_tokens(0x9AE56, [0x0003, 0x0002, 24, 0x3F, 0x3F, 25, 26, 16])
+
+    config_rows = (
+        (0x9AE74, [19, 20, 27, 28, 0x3F, 0x3F]),
+        (0x9AE80, [29, 30, 0x3F, 31, 32, 0x3F]),
+        (0x9AE8C, [33, 34, 27, 28, 0x3F, 0x3F]),
+        (0x9AE98, [29, 30, 0x3F, 31, 32, 0x3F]),
+        (0x9AEA4, [35, 36, 11, 37, 0x3F, 0x3F]),
+        (0x9AEB0, [38, 17, 0x3F, 39, 17, 0x3F]),
+        (0x9AEBC, [21, 22, 40, 3, 0x3F, 0x3F]),
+    )
+    for offset, tokens in config_rows:
+        put_tokens(offset, tokens)
+
+    # Load uses its own loader at 0x2301E. Preserve slots 34..43 because the
+    # loader routine writes save numbers through that digit range.
+    load_chars = "불러올데이터를선택하세요시나리오턴손상된없음"
+    load_slot_by_char: dict[str, int] = {}
+    next_slot = 0
+    for char in load_chars:
+        if char in load_slot_by_char:
+            continue
+        while 34 <= next_slot <= 43:
+            next_slot = 44
+        load_slot_by_char[char] = next_slot
+        put16(data, LOAD_MENU_GLYPH_LIST + next_slot * 2, glyph_by_char[char])
+        next_slot += 1
+
+    def load_tokens(text: str, width: int) -> list[int]:
+        values = [0x3F if char == " " else load_slot_by_char[char] for char in text]
+        if len(values) > width:
+            raise ValueError(f"load-menu text is too long for {width} cells: {text!r}")
+        return values + [0x3F] * (width - len(values))
+
+    put_tokens(0x9B066, load_tokens("불러올 데이터를 선택하세요", 17))
+    put_tokens(0x9B084, load_tokens("시나리오", 7))
+    put_tokens(0x9B092, load_tokens("턴", 5))
+    put_tokens(0x9B09C, load_tokens("손상된 데이터", 9))
+    put_tokens(0x9B0AE, load_tokens("데이터 없음", 9))
+
+
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
     if len(ptrs) != len(ITEM_NAME_PATCHES):
@@ -1986,9 +2252,10 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
     }.items():
         desc_glyphs[slot] = SPACE_GLYPH if char == " " else glyph_by_char[char]
     local_by_glyph = {glyph: i for i, glyph in enumerate(desc_glyphs)}
-    if SPACE_GLYPH not in local_by_glyph:
-        raise ValueError("item description glyph list has no known space glyph")
-    space_index = local_by_glyph[SPACE_GLYPH]
+    # Slot 8 is the original description renderer's dedicated blank. Slots
+    # 0..7 share the numeric status window at runtime; using slot 6 made the
+    # padding turn into the digit 5 below AT+1.
+    space_index = 8
 
     def local_index(char: str) -> int:
         glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
@@ -1998,6 +2265,7 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
         return local_by_glyph[glyph]
 
     for i, (ptr, text) in enumerate(zip(ptrs, ITEM_DESCRIPTION_PATCHES)):
+        original_tokens = read_word_list(data, ptr)
         if i + 1 < len(ptrs):
             capacity = (ptrs[i + 1] - ptr) // 2
         else:
@@ -2010,6 +2278,11 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
             tokens.extend([space_index] * (45 - len(tokens)))
         else:
             tokens = fixed_text_tokens(text, 15, 3, local_index, space_index)
+        # Shop prices render their leading digits dynamically but keep the
+        # trailing "0P" in the last two description cells. Preserve that tail
+        # or a 50P knife is displayed as the unexplained number 5.
+        if len(tokens) >= 2 and original_tokens[-2:] == [13, 14]:
+            tokens[-2:] = [13, 14]
         if len(tokens) + 1 > capacity:
             raise ValueError(
                 f"item description at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
@@ -2088,7 +2361,16 @@ def patch_class_byte_subset(data: bytearray) -> None:
 def patch_byte_ui_strings(data: bytearray) -> None:
     fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
     word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
-    chars = collect_chars(*BYTE_UI_STRING_PATCHES.values(), *fixed_texts, *word_texts)
+    chars = [
+        char
+        for char in collect_chars(
+            *BYTE_UI_STRING_PATCHES.values(),
+            *BYTE_UI_SCENARIO1_CLASS_LABELS.values(),
+            *fixed_texts,
+            *word_texts,
+        )
+        if ord(char) > 0x7F
+    ]
     code_by_char: dict[str, int] = {}
     used_codes: set[int] = set()
     for char in chars:
@@ -2132,7 +2414,12 @@ def patch_byte_ui_strings(data: bytearray) -> None:
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
         capacity = byte_string_capacity(data, offset)
-        values = [code_by_char[char] for char in text]
+        values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
+        write_byte_string(data, offset, values, capacity)
+    for index, text in BYTE_UI_SCENARIO1_CLASS_LABELS.items():
+        offset = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        capacity = byte_string_capacity(data, offset)
+        values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)
     for offset, (width, text) in BYTE_UI_FIXED_STRING_PATCHES.items():
         values = [code_by_char[char] for char in text if char != " "]
@@ -2140,7 +2427,12 @@ def patch_byte_ui_strings(data: bytearray) -> None:
             raise ValueError(f"byte fixed string at 0x{offset:06X} needs {len(values)} bytes, only {width}")
         data[offset : offset + width] = bytes(values + [0x20] * (width - len(values)))
     for offset, (width, text) in BYTE_UI_WORD_STRING_PATCHES.items():
-        values = [0x0020 if char == " " else code_by_char[char] for char in text]
+        values = [
+            0x0020
+            if char == " "
+            else (ord(char) if ord(char) < 0x80 else code_by_char[char])
+            for char in text
+        ]
         if len(values) > width:
             raise ValueError(f"byte word string at 0x{offset:06X} needs {len(values)} words, only {width}")
         values.extend([0x0020] * (width - len(values)))
@@ -2267,8 +2559,8 @@ def main() -> None:
     parser.add_argument(
         "--skip-condition",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="skip standalone condition-screen table patching; enabled by default because that table shares prep UI state",
+        default=False,
+        help="skip standalone condition-screen table patching",
     )
     parser.add_argument("--skip-scenarios", action="store_true")
     parser.add_argument("--skip-direct", action="store_true")
@@ -2352,10 +2644,15 @@ def main() -> None:
     elif args.patch_elwin_name_only:
         direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
     active_direct_strings = list(direct_patches.values())
+    active_event_page_strings = [text for _, text in SCENARIO1_EVENT_PAGE_PATCHES.values()]
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_prefix_strings = [text for _, text in prefix_patches.values()]
     active_route_title_strings = [text for _, text in route_title_patches.values()]
+    active_scenario_header_strings = [
+        text for _, text in DIRECT_FIXED_SCENARIO_HEADER_PATCHES.values()
+    ]
     active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
+    active_order_submenu_strings = list(ORDER_SUBMENU_GLYPH_SLOTS.values())
     active_arrange_glyph_strings = list(ARRANGE_MENU_GLYPH_LIST_PATCHES.values())
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
@@ -2375,15 +2672,19 @@ def main() -> None:
         active_condition_chars,
         *active_descriptions,
         *active_direct_strings,
+        *active_event_page_strings,
         *active_fixed_strings,
         *active_prefix_strings,
         *active_route_title_strings,
+        *active_scenario_header_strings,
         *active_word_sequence_strings,
+        *active_order_submenu_strings,
         *active_arrange_glyph_strings,
         *active_item_names,
         *active_item_descriptions,
         active_item_title,
         *START_MENU_TEXTS,
+        *START_SUBMENU_TEXTS,
         *active_opening_texts,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
@@ -2410,10 +2711,13 @@ def main() -> None:
         patch_scenarios(data, scenario_texts[: args.scenario_count], glyph_by_char)
     if not args.skip_direct:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
+        patch_scenario1_event_pages(data, glyph_by_char)
         patch_route_title(data, glyph_by_char)
+        patch_scenario_header(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)
         patch_arrange_menu_glyph_lists(data, glyph_by_char)
         patch_start_menu(data, glyph_by_char)
+        patch_start_submenus(data, glyph_by_char)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)

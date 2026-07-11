@@ -89,7 +89,7 @@ Do not assume system packages are installed on the next PC.
 Last verified build during this handoff:
 
 ```text
-checksum: 87B6
+checksum: 924A
 ```
 
 Build command:
@@ -149,6 +149,61 @@ in force across goal resumes:
   implementations are not required.
 - Commit and push coherent verified checkpoints. Do not commit experimental ROM
   probes or broken intermediate builds.
+
+## Active Scenario 1 Regression Checklist
+
+The July 11 user playtest found that the Scenario 1 milestone is not complete.
+Keep every item below in scope when the Codex goal is resumed:
+
+- Localize the Japanese `Prologue` banner at the top of the Scenario 1 briefing.
+- Fix the dagger description so no stray `4` appears below `AT+1`, and explain
+  only real item statistics.
+- Localize all four choices below Elwin's `명령` command, not only `이동`.
+- Repair the broken `방어` label in the commander status window.
+- Finish every Start-menu child screen: save confirmation and choices, load
+  prompt and slot statuses, victory/defeat conditions, and game settings.
+- Replace the opening Japanese dialogue quote mark after speaker names with a
+  natural Korean separator such as `:` on every dialogue page.
+- Localize Scenario 1's commander, NPC, enemy, class, and adjacent mercenary
+  names. Verify Elwin, Hein, Liana, Leon, Laird, Bald, villagers, militia, enemy
+  commanders, and every visible hired/default troop through cursor inspection.
+- Repair the stray/corrupt `머서버` text shown below `레벨 1` in the upper-right
+  area of Elwin's full commander status panel. Compare the same location with
+  the original Japanese ROM before changing the owning byte-font/class slot.
+- Keep the shared `레` glyph intact in both `레벨` and the cleric-class label;
+  the A1/A2 status-icon slots must not be used for `레` or `온`.
+- Advance the first player turn one page at a time and translate all remaining
+  Japanese dialogue, including Leon, Laird, and Liana pages and job labels.
+- Reproduce and fix the reset that occurs after advancing Laird's post-turn
+  dialogue. A reset, freeze, black screen, or skipped page is a release blocker.
+- Rebuild the ROM and verify every path above in BlastEm with screenshots before
+  marking the active goal complete; then commit and push the verified checkpoint.
+
+### July 11 Verified Result
+
+Build `924A` completes this checklist in the WSLg BlastEm runtime:
+
+- The Scenario 1 banner is `프롤로그`; the dagger shows `호신용 단검`, `AT+1`,
+  and its real `50P` price without the stray `4`.
+- Elwin's command panel and `명령` submenu render `이동/공격/치료/명령` and
+  `이동/공격/방어/자동`; the full status panel renders `공격`, `방어`, `레벨`,
+  and `지휘범위` without the former corrupt `머서버` text.
+- Exact Scenario 1 class names are `클레릭` for Liana, `매직나이트` for Laird,
+  and `나이트마스터` for Leon. `레` remains intact in both `클레릭` and
+  `레벨`; live captures are `final_0228_elwin_status.png`,
+  `final_0228_laird.png`, and `final_0228_leon.png`.
+- The Start-menu save, load, condition, and config child screens are localized.
+  Dialogue speaker names use `:` instead of the Japanese quote glyph.
+- Commander and adjacent troop inspection confirms Elwin, Hein, Liana, Leon,
+  Laird, Bald, militia/NPC labels, `솔저`, `중기병`, and `기병` on the Scenario
+  1 map. The shop uses compact `ITEM` and `소지G` labels to stay within the safe
+  one-byte font slots.
+- The complete first-turn event was advanced page by page. The formerly mixed
+  imperial-command line now reads `지금부터 발드님의 퇴로를
+  확보하겠습니다!` (`final_924a_event_52.png`). The game reaches `TURN 2`
+  (`final_924a_event_64.png`) and displays the following Hein and Elwin dialogue
+  (`final_924a_event_65.png`, `final_924a_event_66.png`) without a reset, freeze,
+  or black-screen failure.
 
 ## Emulator Input
 
