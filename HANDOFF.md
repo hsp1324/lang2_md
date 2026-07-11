@@ -867,3 +867,28 @@ The first-turn support records are hidden initially (`X=Y=0xFF`): militia at
 - Intermediate build `3079` proved the NPC suffix but left the enemy prefix
   Japanese. Build `3024` fixed the enemy prefix but did not yet blank the
   shared trailing `す`. Final build `5B8A` contains both corrections.
+
+## Full Localization Goal And Stage 1 Inventory
+
+The Scenario 1 goal was completed at build `5B8A`. The active follow-up Goal is
+full-game Korean localization, split into six stages in
+`docs/full_localization_plan.md`: inventory, shared UI/global names, Scenarios
+2-10, Scenarios 11-20, Scenarios 21-31/endings, and final regression/release.
+
+- The 31-entry event-block pointer table is `0x18011A`. Scenario 1 begins at
+  `0x18416A`; Scenario 31 begins at `0x1B8378`. The current conservative end of
+  event data is `0x1B9000`.
+- `tools/jp_event_inventory.py` finds in-block 32-bit references whose targets
+  parse as at least three glyph IDs (`0x0000..0x07FF`) plus `FFF7`/`FFFE`
+  controls and an `FFFD`/`FFFF` terminator.
+- The baseline inventory contains 2,968 candidate pages. The current build
+  differs from the Japanese ROM at 272: Scenario 1 is 107/121, Scenario 2 is
+  91/110, Scenario 3 is 74/89, and Scenarios 4-31 are 0 modified pages.
+- A modified page is not automatically complete Korean. Existing Scenario 2/3
+  patches came from older partial work and must be reviewed for full-page text,
+  natural translation, terminator safety, and live behavior.
+- Machine-readable page addresses, source references, terminators, and glyph
+  token streams are in `localization/event_pages.json`; the coverage table is
+  `docs/full_localization_inventory.md`.
+- English extraction JSON remains legacy reference material. Its addresses and
+  control layout are not authoritative for Japanese-ROM writes.
