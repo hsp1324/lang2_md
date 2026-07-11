@@ -23,6 +23,7 @@
 - `tools/find_decompressed_tile.py`: `0x9DFE` 그래픽 압축 블록에서 특정 VRAM 타일 원본을 찾는 분석 도구입니다.
 - `tools/analyze_name_entry_vram.py`: GST 저장 상태에서 VRAM/plane CSV와 렌더 이미지를 뽑아 이름 입력 화면과 메뉴 타일 배치를 추적합니다.
 - `docs/name_entry_analysis.md`: 일본판 이름 입력 레이아웃, 84자 한글 선택표, 저장 바이트, 확정 시 인덱스→글리프 변환 훅과 실기 검증 기록입니다.
+- `docs/sram_relocation.md`: 4 MiB ROM 확장으로 겹친 SRAM을 `0x400001`로 옮긴 주소 패치와 저장/불러오기 실기 검증 기록입니다.
 - `docs/class_change_analysis.md`: 클래스 체인지 15슬롯 공유 글리프와 두 레이아웃의 인덱스 소유권 및 한국어 슬롯 배치를 기록합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
@@ -49,6 +50,10 @@
 ```bash
 python3 scripts/build_korean_jp_probe.py
 ```
+
+빌더는 ROM 끝을 `0x3FFFFF`로 확장하면서 원본 SRAM과 검증된 저장 루틴
+절대주소를 `0x400001..0x403FFF`로 함께 옮깁니다. 원본 `0x200001` 주소를
+유지하면 확장 ROM과 겹쳐 저장 파일이 기록되지 않습니다.
 
 출력 파일:
 

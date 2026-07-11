@@ -23,6 +23,9 @@ LOG_ROOT = ROOT / "captures/run"
 
 
 SEQUENCES = {
+    # Opening/title into the game's load-slot screen. Copy or retain a runtime
+    # SRAM with at least one valid scenario save before using scenario select.
+    "load-screen": ["start:2.0", "start:1.0", "down:0.8", "c:1.5"],
     # Opening/title into the name entry screen. Useful as a glyph/code probe.
     "name-entry": ["start:2.0", "start:1.0", "c:0.8"],
     # Opening/title/name/route into the scenario description screen.

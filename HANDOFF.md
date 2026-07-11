@@ -250,8 +250,10 @@ python3 tools/run_blastem_sequence.py deploy-dialogue
 python3 tools/run_blastem_sequence.py battle-command
 python3 tools/run_blastem_sequence.py first-turn-dialogue
 python3 tools/run_blastem_sequence.py name-entry
+python3 tools/run_blastem_sequence.py load-screen --reuse-runtime-state
 python3 tools/capture_blastem_window.py captures/run/example.png
 python3 tools/send_blastem_keys.py c:0.8
+python3 tools/send_blastem_keys.py left:0.2 right:0.2 start+c@0.2:0.8
 ```
 
 `tools/run_blastem_sequence.py` launches BlastEm with `320 240` width/height
@@ -1114,3 +1116,29 @@ The earlier default-name-only conclusion is superseded by the live-verified
   numbers, and all four large preparation labels remain visible. Automated
   tests also assert that entry 32's pointer, glyph list, and 113-word stream
   remain byte-for-byte Japanese-original data.
+- A fresh Scenario 1 in-game save was created from the live `8AAD` Start menu.
+  It did not persist because the 4 MiB ROM overlapped the original 2 MiB SRAM
+  base. Checksum `8C4D` relocates SRAM and all verified absolute save addresses
+  to `0x400001..0x403FFF`; Japanese saves now load and Korean saves persist.
+  The confirmation still has overlapping/mixed `YES/NO` choice glyphs, so keep
+  that as an explicit UI regression rather than an SRAM failure.
+
+### SRAM And Real-Index Condition Verification (2026-07-12)
+
+- Root cause and all patched addresses are in `docs/sram_relocation.md`.
+  `tests/test_sram_relocation.py` guards the expanded-ROM/SRAM boundary and all
+  13 verified long-address operands/table entries.
+- A Japanese valid autosave appears as `CONTINUE 1` on checksum `8C4D`.
+  A subsequent Korean save changed the runtime SRAM hash and increased its
+  nonzero byte count, verifying both load and store paths.
+- Scenario select requires a manual slot, not `CONTINUE`. Highlight slot 1-4,
+  enter Left, Right, Start, C, choose the scenario with Up/Down, and confirm.
+  `tools/send_blastem_keys.py` now also supports chord syntax such as
+  `start+c@0.2`, although the working code was the documented sequential input.
+- Scenario 14's seven-row conditions are live-verified in
+  `captures/run/8c4d_scenario14_conditions_live.png`. Scenario 23's long
+  rod-carrier/escape conditions are live-verified in
+  `captures/run/8c4d_scenario23_conditions_live.png`.
+- The same run exposes remaining full-localization work: Scenario 14 event
+  dialogue is still Japanese, Load slot/status text is Japanese, the scenario
+  selector suffix is Japanese, and save confirmation choices overlap.

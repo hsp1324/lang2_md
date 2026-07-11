@@ -19,6 +19,26 @@ IN_ROM = Path("roms/original/Langrisser II (Japan).md")
 OUT_ROM = Path("roms/builds/Langrisser II (Korean JP Probe).md")
 FONT_PATH = Path("tools/fonts/Galmuri9.ttf")
 EXPANDED_ROM_SIZE = 0x400000
+ORIGINAL_SRAM_START = 0x200001
+ORIGINAL_SRAM_END = 0x203FFF
+RELOCATED_SRAM_START = 0x400001
+RELOCATED_SRAM_END = 0x403FFF
+SRAM_ADDRESS_DELTA = RELOCATED_SRAM_START - ORIGINAL_SRAM_START
+SRAM_LONG_PATCHES = {
+    0x01DDD4: 0x203FE1,
+    0x01DE06: 0x203FDD,
+    0x01DE18: 0x200001,
+    0x01DE30: 0x203FDD,
+    0x01DEA0: 0x203FE1,
+    0x01DF56: 0x203FE1,
+    0x01DFAC: 0x203FE1,
+    0x01E004: 0x200009,
+    0x01E008: 0x20329D,
+    0x01E00C: 0x2035ED,
+    0x01E010: 0x20393D,
+    0x01E014: 0x203C8D,
+    0x01E06A: 0x203FE1,
+}
 
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
@@ -1201,6 +1221,24 @@ def expand_rom(data: bytearray) -> None:
     data.extend([0xFF] * (EXPANDED_ROM_SIZE - len(data)))
     # Mega Drive header ROM end address. The checksum is updated separately.
     put32(data, 0x1A4, EXPANDED_ROM_SIZE - 1)
+    relocate_sram(data)
+
+
+def relocate_sram(data: bytearray) -> None:
+    if be32(data, 0x1B4) != ORIGINAL_SRAM_START:
+        raise ValueError("unexpected original SRAM start address")
+    if be32(data, 0x1B8) != ORIGINAL_SRAM_END:
+        raise ValueError("unexpected original SRAM end address")
+    put32(data, 0x1B4, RELOCATED_SRAM_START)
+    put32(data, 0x1B8, RELOCATED_SRAM_END)
+    for offset, expected in SRAM_LONG_PATCHES.items():
+        actual = be32(data, offset)
+        if actual != expected:
+            raise ValueError(
+                f"unexpected SRAM address at 0x{offset:06X}: "
+                f"0x{actual:06X} != 0x{expected:06X}"
+            )
+        put32(data, offset, expected + SRAM_ADDRESS_DELTA)
 
 
 def glyph_data_offset(glyph_id: int) -> int:

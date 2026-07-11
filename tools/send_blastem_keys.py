@@ -145,6 +145,21 @@ def press(display: Display, window, key: str, hold: float, send_event: bool) -> 
     display.sync()
 
 
+def press_chord(display: Display, keys: list[str], hold: float) -> None:
+    keycodes = []
+    for key in keys:
+        if key not in KEYSYMS:
+            raise ValueError(f"unknown key: {key}")
+        keycodes.append(display.keysym_to_keycode(KEYSYMS[key]))
+    for keycode in keycodes:
+        xtest.fake_input(display, X.KeyPress, keycode)
+        display.sync()
+    time.sleep(hold)
+    for keycode in reversed(keycodes):
+        xtest.fake_input(display, X.KeyRelease, keycode)
+        display.sync()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -186,7 +201,12 @@ def main() -> int:
             hold = float(hold_text)
         else:
             key = key_hold
-        press(display, window, key, hold, args.send_event)
+        if "+" in key:
+            if args.send_event:
+                raise ValueError("key chords require XTest input")
+            press_chord(display, key.split("+"), hold)
+        else:
+            press(display, window, key, hold, args.send_event)
         time.sleep(wait)
     return 0
 
