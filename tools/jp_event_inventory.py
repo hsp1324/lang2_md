@@ -41,6 +41,29 @@ def read_text_page(data: bytes, offset: int, limit: int) -> list[int] | None:
     return None
 
 
+def read_physical_segments(data: bytes, start: int, limit: int) -> list[tuple[int, list[int]]] | None:
+    segments: list[tuple[int, list[int]]] = []
+    offset = start
+    while offset < limit:
+        segment_start = offset
+        words: list[int] = []
+        for _ in range(256):
+            if offset + 2 > limit:
+                return None
+            word = be16(data, offset)
+            words.append(word)
+            offset += 2
+            if word in TEXT_TERMINATORS:
+                segments.append((segment_start, words))
+                break
+            if word in TEXT_CONTROLS or word <= MAX_GLYPH_ID:
+                continue
+            return None
+        else:
+            return None
+    return segments if offset == limit else None
+
+
 def event_block_starts(data: bytes) -> list[int]:
     starts = [
         be32(data, EVENT_POINTER_TABLE + index * 4)
@@ -88,7 +111,48 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             page["modified_word_count"] = changed_words
             modified += bool(changed_words)
 
-        ordered_pages = [pages[address] for address in sorted(pages)]
+        ordered_addresses = sorted(pages)
+        ordered_pages = [pages[address] for address in ordered_addresses]
+        physical_page_count = 0
+        modified_physical_page_count = 0
+        for page_index, (target, page) in enumerate(zip(ordered_addresses, ordered_pages)):
+            next_target = (
+                ordered_addresses[page_index + 1]
+                if page_index + 1 < len(ordered_addresses)
+                else target + int(page["word_count"]) * 2
+            )
+            first_end = target + int(page["word_count"]) * 2
+            segments = (
+                read_physical_segments(japanese, target, next_target)
+                if next_target >= first_end
+                else None
+            )
+            if segments is None:
+                original_words = [int(word, 16) for word in str(page["tokens"]).split()]
+                segments = [(target, original_words)]
+            segment_rows: list[dict[str, object]] = []
+            for segment_start, words in segments:
+                byte_count = len(words) * 2
+                original = japanese[segment_start : segment_start + byte_count]
+                patched = korean[segment_start : segment_start + byte_count]
+                changed_words = sum(
+                    original[index : index + 2] != patched[index : index + 2]
+                    for index in range(0, byte_count, 2)
+                )
+                segment_rows.append(
+                    {
+                        "address": f"0x{segment_start:06X}",
+                        "word_count": len(words),
+                        "terminator": f"0x{words[-1]:04X}",
+                        "tokens": " ".join(f"{word:04X}" for word in words),
+                        "modified": bool(changed_words),
+                        "modified_word_count": changed_words,
+                    }
+                )
+                modified_physical_page_count += bool(changed_words)
+            page["physical_page_count"] = len(segment_rows)
+            page["physical_pages"] = segment_rows
+            physical_page_count += len(segment_rows)
         scenarios.append(
             {
                 "scenario": number,
@@ -97,6 +161,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "page_count": len(ordered_pages),
                 "modified_page_count": modified,
                 "unchanged_page_count": len(ordered_pages) - modified,
+                "physical_page_count": physical_page_count,
+                "modified_physical_page_count": modified_physical_page_count,
+                "unchanged_physical_page_count": physical_page_count - modified_physical_page_count,
                 "pages": ordered_pages,
             }
         )
@@ -107,6 +174,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "scenario_count": SCENARIO_COUNT,
         "page_count": sum(int(item["page_count"]) for item in scenarios),
         "modified_page_count": sum(int(item["modified_page_count"]) for item in scenarios),
+        "physical_page_count": sum(int(item["physical_page_count"]) for item in scenarios),
+        "modified_physical_page_count": sum(
+            int(item["modified_physical_page_count"]) for item in scenarios
+        ),
         "scenarios": scenarios,
     }
 
@@ -123,9 +194,11 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Event pointer table: `{result['event_pointer_table']}`",
         f"- Scenarios: {result['scenario_count']}",
         f"- Candidate text pages: {result['page_count']}",
-        f"- Modified candidate pages: {result['modified_page_count']}",
+        f"- Modified candidate records: {result['modified_page_count']}",
+        f"- Physical pages in exactly parseable record spans: {result['physical_page_count']}",
+        f"- Modified physical pages: {result['modified_physical_page_count']}",
         "",
-        "| Scenario | Event block | Pages | Modified | Unchanged | Status |",
+        "| Scenario | Event block | Records | Physical pages | Modified physical | Status |",
         "| ---: | --- | ---: | ---: | ---: | --- |",
     ]
     for item in result["scenarios"]:
@@ -134,7 +207,8 @@ def markdown_report(result: dict[str, object]) -> str:
         status = "unstarted" if modified == 0 else ("modified" if modified < total else "all modified")
         lines.append(
             f"| {item['scenario']} | `{item['block_start']}..{item['block_end']}` | "
-            f"{total} | {modified} | {item['unchanged_page_count']} | {status} |"
+            f"{total} | {item['physical_page_count']} | "
+            f"{item['modified_physical_page_count']} | {status} |"
         )
     lines.extend(
         [

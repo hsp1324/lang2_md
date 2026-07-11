@@ -29,13 +29,33 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[0]["modified_page_count"], 107)
         self.assertEqual(scenarios[1]["page_count"], 110)
         self.assertEqual(scenarios[2]["page_count"], 89)
-        self.assertTrue(all(item["modified_page_count"] == 0 for item in scenarios[3:]))
+        self.assertEqual(scenarios[13]["modified_page_count"], 44)
+        self.assertEqual(self.result["physical_page_count"], 3561)
+        self.assertEqual(self.result["modified_physical_page_count"], 394)
+        self.assertEqual(scenarios[13]["physical_page_count"], 161)
+        self.assertEqual(scenarios[13]["modified_physical_page_count"], 69)
+        self.assertTrue(
+            all(
+                item["modified_page_count"] == 0
+                for index, item in enumerate(scenarios[3:], 3)
+                if index != 13
+            )
+        )
 
     def test_first_known_page_and_terminator(self):
         first = self.result["scenarios"][0]["pages"][0]
         self.assertEqual(first["address"], "0x184858")
         self.assertEqual(first["terminator"], "0xFFFF")
         self.assertIn("0x18430E", first["source_refs"])
+
+    def test_scenario_14_long_record_exposes_all_physical_pages(self):
+        record = self.result["scenarios"][13]["pages"][5]
+        self.assertEqual(record["address"], "0x19D020")
+        self.assertEqual(record["physical_page_count"], 5)
+        self.assertEqual(
+            [page["address"] for page in record["physical_pages"]],
+            ["0x19D020", "0x19D08C", "0x19D0E6", "0x19D13E", "0x19D17A"],
+        )
 
 
 if __name__ == "__main__":

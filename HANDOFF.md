@@ -1179,3 +1179,45 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - `machine_korean_reference` is the old Google output and is explicitly marked
   `reference_only`. It is useful for rough meaning only and must never be shipped
   without natural Korean review and Japanese control preservation.
+
+### Scenario 14 Reviewed Dialogue Start (2026-07-12)
+
+- A candidate pointer target is not always one visible dialogue page. Long
+  records contain consecutive `FFFD`-terminated physical pages before the final
+  `FFFF`. The original inventory counted 2,968 candidate records but hid these
+  continuations. `tools/jp_event_inventory.py` now expands only spans that parse
+  exactly up to the next candidate target: 3,561 physical pages are exposed.
+  Scenario 14 has 125 candidate records and 161 physical pages.
+- `localization/event_dialogue_ko.json` stores reviewed text and `{NNNN}` dynamic
+  name placeholders. The builder verifies every original address, capacity,
+  terminator, and `FFF7` actor ID before writing. The first Scenario 14 block now
+  covers 44 pointer records plus 25 continuation pages, 69 physical pages total.
+- The first attempt patched only pointer targets. Build `F5BF` showed Japanese
+  continuation pages after the first Korean Jessica page. This was not a reset;
+  it proved the physical-page omission. Build `6EDC` translated the continuations
+  and reached Aaron/Hein and the battle map without a reset, but one blank page
+  remained because forced Korean newlines pushed fixed padding to another screen.
+- Build `92CB` removes those forced newlines. The production build also promotes
+  only four isolated Scenario 14 speaker names into the safe direct patch set:
+  `쉐리` (`0x97420`), `아론` (`0x97444`), `레스터` (`0x9744E`), and `제시카`
+  (`0x97458`). `captures/analysis/921f_s14_speakers.png` verifies 쉐리, 레스터,
+  제시카, 엘윈, and 헤인 labels before the final newline adjustment.
+- `captures/analysis/92cb_s14_intro_verified.png` is the final consecutive live
+  sequence. The first Jessica lore page proceeds directly to `그래서 왕은…`
+  with no blank box; the sequence reaches Korean Aaron/Hein and the interior
+  event without a reset. The interior capture shows Japanese `エルウィン`
+  because the scenario-selector manual slot was created from an old Japanese
+  save and that event inserts the saved custom protagonist name. A fresh Korean
+  name-entry/default-name confirmation is independently verified by the `92CB`
+  name-entry captures; do not mistake the diagnostic SRAM payload for a fixed
+  speaker-table regression.
+- Do not enable the entire `UNSAFE_DIRECT_NAME_PATCHES` map. Probe `1E28` entered
+  a black screen during Scenario 14. A two-name probe `4212` proved `제시카`
+  alone rendered correctly; the four-name production subset then passed the
+  name-entry grid and default-name confirmation at checksum `92CB` in
+  `captures/run/92cb_name_entry.png` and `captures/run/92cb_name_confirmed.png`.
+  Continue isolating later names in scenario-sized batches.
+- `tools/render_event_pages.py --scenario 14` renders address-labelled physical
+  pages. A local `/tmp` Tesseract Japanese package was used only as an OCR aid;
+  rendered source images remain the authority because OCR frequently misreads
+  the Mega Drive font.

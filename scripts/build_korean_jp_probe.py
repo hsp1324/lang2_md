@@ -4,8 +4,10 @@ from __future__ import annotations
 from collections import OrderedDict
 import ast
 import argparse
+import json
 import hashlib
 from pathlib import Path
+import re
 import unicodedata
 import sys
 
@@ -417,6 +419,9 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
     0x184E10: (0x184E36, "레아드는 따라와!\n적을 쓸어버려라!"),
 }
 
+EVENT_DIALOGUE_TRANSLATIONS = Path("localization/event_dialogue_ko.json")
+EVENT_NAME_CONTROL_RE = re.compile(r"\{([0-9A-Fa-f]{4})\}")
+
 DIRECT_STRING_PATCHES = {
     # The dialogue renderer appends this one-glyph direct string after every
     # speaker name. It is the actual Japanese opening quote, not font slot 50.
@@ -813,6 +818,12 @@ DIRECT_STRING_PATCHES = {
     0x97202: "수면상태",
     0x97214: "마법봉인",
     # Verified on Scenario 1 first-turn event dialogue speaker labels.
+    # Scenario 14 uses the same fixed speaker-name table. Keep only the names
+    # isolated from the formerly all-or-nothing unsafe probe here.
+    0x97420: "쉐리",
+    0x97444: "아론",
+    0x9744E: "레스터",
+    0x97458: "제시카",
     0x97410: "리아나",
     0x9746C: "레온",
     0x97496: "레아드",
@@ -1381,6 +1392,104 @@ def patch_scenario1_event_pages(data: bytearray, glyph_by_char: dict[str, int]) 
         for index, value in enumerate(values):
             put16(data, start + index * 2, value)
         put16(data, end, terminal)
+
+
+def load_reviewed_event_translations(
+    path: Path = EVENT_DIALOGUE_TRANSLATIONS,
+) -> list[dict[str, object]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    scenarios = payload.get("scenarios")
+    if not isinstance(scenarios, dict):
+        raise ValueError(f"event translations in {path} have no scenario map")
+    rows: list[dict[str, object]] = []
+    seen_addresses: set[int] = set()
+    for scenario_text, entries in scenarios.items():
+        scenario = int(scenario_text)
+        if not 1 <= scenario <= 31 or not isinstance(entries, list):
+            raise ValueError(f"invalid event translation scenario {scenario_text!r}")
+        for entry in entries:
+            row = dict(entry)
+            address = int(str(row["address"]), 16)
+            if address in seen_addresses:
+                raise ValueError(f"duplicate reviewed event address 0x{address:06X}")
+            seen_addresses.add(address)
+            row["scenario"] = scenario
+            row["address_int"] = address
+            rows.append(row)
+    return rows
+
+
+def reviewed_event_visible_text(text: str) -> str:
+    return EVENT_NAME_CONTROL_RE.sub("", text)
+
+
+def event_page_layout(data: bytes | bytearray, start: int) -> tuple[int, int, list[tuple[int, int]]]:
+    controls: list[tuple[int, int]] = []
+    pos = start
+    for _ in range(256):
+        word = be16(data, pos)
+        if word in (0xFFFD, 0xFFFF):
+            return (pos - start) // 2, word, controls
+        if word == 0xFFF7:
+            actor_id = be16(data, pos + 2)
+            controls.append((word, actor_id))
+            pos += 4
+        else:
+            pos += 2
+    raise ValueError(f"reviewed event page at 0x{start:06X} has no terminator")
+
+
+def encode_reviewed_event_text(text: str, glyph_by_char: dict[str, int]) -> tuple[list[int], list[tuple[int, int]]]:
+    values: list[int] = []
+    controls: list[tuple[int, int]] = []
+    cursor = 0
+    for match in EVENT_NAME_CONTROL_RE.finditer(text):
+        for char in text[cursor : match.start()]:
+            if char == "\n":
+                values.append(0xFFFE)
+            elif char == " ":
+                values.append(SPACE_GLYPH)
+            else:
+                values.append(glyph_by_char[char])
+        actor_id = int(match.group(1), 16)
+        control = (0xFFF7, actor_id)
+        controls.append(control)
+        values.extend(control)
+        cursor = match.end()
+    for char in text[cursor:]:
+        if char == "\n":
+            values.append(0xFFFE)
+        elif char == " ":
+            values.append(SPACE_GLYPH)
+        else:
+            values.append(glyph_by_char[char])
+    return values, controls
+
+
+def patch_reviewed_event_pages(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    rows: list[dict[str, object]],
+) -> None:
+    for row in rows:
+        start = int(row["address_int"])
+        capacity, terminator, original_controls = event_page_layout(data, start)
+        text = str(row["text"])
+        values, translated_controls = encode_reviewed_event_text(text, glyph_by_char)
+        if translated_controls != original_controls:
+            raise ValueError(
+                f"reviewed event controls changed at 0x{start:06X}: "
+                f"{translated_controls!r} != {original_controls!r}"
+            )
+        if len(values) > capacity:
+            raise ValueError(
+                f"reviewed event page at 0x{start:06X} needs {len(values)} words, "
+                f"only {capacity}: {text!r}"
+            )
+        values.extend([SPACE_GLYPH] * (capacity - len(values)))
+        for index, value in enumerate(values):
+            put16(data, start + index * 2, value)
+        put16(data, start + capacity * 2, terminator)
 
 
 def write_fixed_direct_string(
@@ -3083,6 +3192,7 @@ def main() -> None:
     expand_rom(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
+    reviewed_event_rows = load_reviewed_event_translations()
     if not 0 <= args.scenario_count <= len(scenario_texts):
         raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
     active_condition_chars = "" if args.skip_condition else "\n".join(
@@ -3093,12 +3203,25 @@ def main() -> None:
     fixed_patches = {} if args.skip_direct else dict(DIRECT_FIXED_STRING_PATCHES)
     prefix_patches = {} if args.skip_direct else dict(DIRECT_PREFIX_STRING_PATCHES)
     route_title_patches = {} if args.skip_direct else dict(DIRECT_FIXED_ROUTE_TITLE_PATCHES)
+    stable_direct_patches = dict(direct_patches)
+    if args.patch_elwin_name_only:
+        stable_direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
+    late_direct_strings: list[str] = []
     if args.include_unsafe_direct_names:
+        direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
         direct_patches.update(UNSAFE_DIRECT_NAME_PATCHES)
+        late_direct_strings = [
+            text
+            for offset, text in UNSAFE_DIRECT_NAME_PATCHES.items()
+            if stable_direct_patches.get(offset) != text
+        ]
     elif args.patch_elwin_name_only:
         direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
-    active_direct_strings = list(direct_patches.values())
+    active_direct_strings = list(stable_direct_patches.values())
     active_event_page_strings = [text for _, text in SCENARIO1_EVENT_PAGE_PATCHES.values()]
+    active_reviewed_event_strings = [
+        reviewed_event_visible_text(str(row["text"])) for row in reviewed_event_rows
+    ]
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_prefix_strings = [text for _, text in prefix_patches.values()]
     active_route_title_strings = [text for _, text in route_title_patches.values()]
@@ -3144,6 +3267,10 @@ def main() -> None:
         *START_SUBMENU_TEXTS,
         *active_opening_texts,
         NAME_ENTRY_GRID_CHARS,
+        *late_direct_strings,
+        # Append newly reviewed event vocabulary after every existing glyph
+        # consumer so established UI/name-entry IDs remain stable.
+        *active_reviewed_event_strings,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
@@ -3173,6 +3300,7 @@ def main() -> None:
     if not args.skip_direct:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_scenario1_event_pages(data, glyph_by_char)
+        patch_reviewed_event_pages(data, glyph_by_char, reviewed_event_rows)
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)

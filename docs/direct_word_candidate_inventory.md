@@ -8,11 +8,11 @@ a candidate, not proof that the data is visible text.
 
 - Scan range: `0x000000..0x180000`
 - Candidates: 783
-- Modified candidates: 317
+- Modified candidates: 321
 - Exact pointer-table records: 105
 - Pointer-table record interiors: 95
-- Existing declared direct patches: 106
-- Known unsafe name records: 44
+- Existing declared direct patches: 110
+- Known unsafe name records: 40
 - Confirmed unpatched system messages: 1
 - Confirmed unresolved direct messages: 1
 - Declared UI surfaces: 10

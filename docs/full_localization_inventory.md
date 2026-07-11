@@ -8,41 +8,43 @@ that page. It does not by itself prove that the whole page is translated or live
 - Event pointer table: `0x18011A`
 - Scenarios: 31
 - Candidate text pages: 2968
-- Modified candidate pages: 272
+- Modified candidate records: 316
+- Physical pages in exactly parseable record spans: 3561
+- Modified physical pages: 394
 
-| Scenario | Event block | Pages | Modified | Unchanged | Status |
+| Scenario | Event block | Records | Physical pages | Modified physical | Status |
 | ---: | --- | ---: | ---: | ---: | --- |
-| 1 | `0x18416A..0x1860C0` | 121 | 107 | 14 | modified |
-| 2 | `0x1860C0..0x1881AE` | 110 | 91 | 19 | modified |
-| 3 | `0x1881AE..0x189BA6` | 89 | 74 | 15 | modified |
-| 4 | `0x189BA6..0x18C056` | 129 | 0 | 129 | unstarted |
-| 5 | `0x18C056..0x18D5F2` | 79 | 0 | 79 | unstarted |
-| 6 | `0x18D5F2..0x18F29A` | 102 | 0 | 102 | unstarted |
-| 7 | `0x18F29A..0x190D0A` | 101 | 0 | 101 | unstarted |
-| 8 | `0x190D0A..0x192B72` | 103 | 0 | 103 | unstarted |
-| 9 | `0x192B72..0x195490` | 147 | 0 | 147 | unstarted |
-| 10 | `0x195490..0x197060` | 108 | 0 | 108 | unstarted |
-| 11 | `0x197060..0x198DE0` | 96 | 0 | 96 | unstarted |
-| 12 | `0x198DE0..0x19A964` | 88 | 0 | 88 | unstarted |
-| 13 | `0x19A964..0x19C736` | 96 | 0 | 96 | unstarted |
-| 14 | `0x19C736..0x19EFA2` | 125 | 0 | 125 | unstarted |
-| 15 | `0x19EFA2..0x1A0AA6` | 110 | 0 | 110 | unstarted |
-| 16 | `0x1A0AA6..0x1A1FE2` | 87 | 0 | 87 | unstarted |
-| 17 | `0x1A1FE2..0x1A4200` | 108 | 0 | 108 | unstarted |
-| 18 | `0x1A4200..0x1A5DE6` | 95 | 0 | 95 | unstarted |
-| 19 | `0x1A5DE6..0x1A7876` | 98 | 0 | 98 | unstarted |
-| 20 | `0x1A7876..0x1A94F4` | 88 | 0 | 88 | unstarted |
-| 21 | `0x1A94F4..0x1AA8CA` | 71 | 0 | 71 | unstarted |
-| 22 | `0x1AA8CA..0x1AD382` | 151 | 0 | 151 | unstarted |
-| 23 | `0x1AD382..0x1AF50E` | 83 | 0 | 83 | unstarted |
-| 24 | `0x1AF50E..0x1B03D6` | 53 | 0 | 53 | unstarted |
-| 25 | `0x1B03D6..0x1B2012` | 100 | 0 | 100 | unstarted |
-| 26 | `0x1B2012..0x1B3872` | 71 | 0 | 71 | unstarted |
-| 27 | `0x1B3872..0x1B5506` | 97 | 0 | 97 | unstarted |
-| 28 | `0x1B5506..0x1B6B70` | 104 | 0 | 104 | unstarted |
-| 29 | `0x1B6B70..0x1B7686` | 49 | 0 | 49 | unstarted |
-| 30 | `0x1B7686..0x1B8378` | 65 | 0 | 65 | unstarted |
-| 31 | `0x1B8378..0x1B9000` | 44 | 0 | 44 | unstarted |
+| 1 | `0x18416A..0x1860C0` | 121 | 145 | 127 | modified |
+| 2 | `0x1860C0..0x1881AE` | 110 | 137 | 109 | modified |
+| 3 | `0x1881AE..0x189BA6` | 89 | 106 | 89 | modified |
+| 4 | `0x189BA6..0x18C056` | 129 | 155 | 0 | unstarted |
+| 5 | `0x18C056..0x18D5F2` | 79 | 87 | 0 | unstarted |
+| 6 | `0x18D5F2..0x18F29A` | 102 | 122 | 0 | unstarted |
+| 7 | `0x18F29A..0x190D0A` | 101 | 118 | 0 | unstarted |
+| 8 | `0x190D0A..0x192B72` | 103 | 127 | 0 | unstarted |
+| 9 | `0x192B72..0x195490` | 147 | 168 | 0 | unstarted |
+| 10 | `0x195490..0x197060` | 108 | 112 | 0 | unstarted |
+| 11 | `0x197060..0x198DE0` | 96 | 117 | 0 | unstarted |
+| 12 | `0x198DE0..0x19A964` | 88 | 113 | 0 | unstarted |
+| 13 | `0x19A964..0x19C736` | 96 | 126 | 0 | unstarted |
+| 14 | `0x19C736..0x19EFA2` | 125 | 161 | 69 | modified |
+| 15 | `0x19EFA2..0x1A0AA6` | 110 | 118 | 0 | unstarted |
+| 16 | `0x1A0AA6..0x1A1FE2` | 87 | 97 | 0 | unstarted |
+| 17 | `0x1A1FE2..0x1A4200` | 108 | 134 | 0 | unstarted |
+| 18 | `0x1A4200..0x1A5DE6` | 95 | 117 | 0 | unstarted |
+| 19 | `0x1A5DE6..0x1A7876` | 98 | 116 | 0 | unstarted |
+| 20 | `0x1A7876..0x1A94F4` | 88 | 111 | 0 | unstarted |
+| 21 | `0x1A94F4..0x1AA8CA` | 71 | 80 | 0 | unstarted |
+| 22 | `0x1AA8CA..0x1AD382` | 151 | 190 | 0 | unstarted |
+| 23 | `0x1AD382..0x1AF50E` | 83 | 92 | 0 | unstarted |
+| 24 | `0x1AF50E..0x1B03D6` | 53 | 65 | 0 | unstarted |
+| 25 | `0x1B03D6..0x1B2012` | 100 | 132 | 0 | unstarted |
+| 26 | `0x1B2012..0x1B3872` | 71 | 102 | 0 | unstarted |
+| 27 | `0x1B3872..0x1B5506` | 97 | 126 | 0 | unstarted |
+| 28 | `0x1B5506..0x1B6B70` | 104 | 116 | 0 | unstarted |
+| 29 | `0x1B6B70..0x1B7686` | 49 | 55 | 0 | unstarted |
+| 30 | `0x1B7686..0x1B8378` | 65 | 70 | 0 | unstarted |
+| 31 | `0x1B8378..0x1B9000` | 44 | 46 | 0 | unstarted |
 
 Detailed addresses, source references, terminators, and original glyph-token streams
 are stored in `localization/event_pages.json`.

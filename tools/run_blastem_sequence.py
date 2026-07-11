@@ -30,6 +30,10 @@ SEQUENCES = {
     "name-entry": ["start:2.0", "start:1.0", "c:0.8"],
     # Opening/title/name/route into the scenario description screen.
     "scenario": ["start:2.0", "start:1.0", "c:0.8", "c:0.8", "c:0.8"],
+    # Filled from --scenario-number after argument parsing. This uses a valid
+    # manual save in the load-screen runtime SRAM to enter the built-in
+    # Left, Right, Start, C scenario selector.
+    "scenario-select": [],
     # Scenario screen into the commander preparation screen.
     "prep": [
         "start:2.0",
@@ -243,6 +247,7 @@ def main() -> int:
     parser.add_argument("--hold", type=float, default=0.08)
     parser.add_argument("--window-width", type=int, default=320)
     parser.add_argument("--window-height", type=int, default=240)
+    parser.add_argument("--scenario-number", type=int, default=14)
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument("--send-event", action="store_true", help="send direct window events instead of global XTest input")
     parser.add_argument(
@@ -254,8 +259,23 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
+    if not 1 <= args.scenario_number <= 31:
+        raise ValueError("--scenario-number must be 1..31")
+    if args.sequence == "scenario-select":
+        SEQUENCES[args.sequence] = [
+            *SEQUENCES["load-screen"],
+            "down:0.8",
+            "left:0.8",
+            "right:0.8",
+            "start:0.8",
+            "c:1.2",
+            *(["down:0.35"] * (args.scenario_number - 1)),
+            "c:4.0",
+        ]
+
     if not args.no_launch:
-        runtime_home = RUNTIME_ROOT / args.sequence
+        runtime_name = "load-screen" if args.sequence == "scenario-select" else args.sequence
+        runtime_home = RUNTIME_ROOT / runtime_name
         if not args.reuse_runtime_state:
             shutil.rmtree(runtime_home, ignore_errors=True)
         runtime_home.mkdir(parents=True, exist_ok=True)

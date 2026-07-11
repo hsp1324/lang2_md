@@ -1,12 +1,12 @@
 {
   "scan_range": "0x000000..0x180000",
   "candidate_count": 783,
-  "modified_candidate_count": 317,
+  "modified_candidate_count": 321,
   "ownership_counts": {
     "pointer_table_record": 105,
     "pointer_table_record_interior": 95,
-    "declared_direct_patch": 106,
-    "known_unsafe_name_record": 44,
+    "declared_direct_patch": 110,
+    "known_unsafe_name_record": 40,
     "confirmed_unpatched_system_message": 1,
     "confirmed_unresolved_direct_message": 1,
     "declared_ui_surface": 10,
@@ -3765,13 +3765,13 @@
     },
     {
       "address": "0x097420",
-      "ownership": "known_unsafe_name_record",
+      "ownership": "declared_direct_patch",
       "owner": null,
       "target_korean": "쉐리",
       "original_word_count": 5,
       "original_tokens": "000B 004E 0029 004A FFFF",
-      "current_tokens": "000B 004E 0029 004A FFFF",
-      "modified": false,
+      "current_tokens": "7040 7001 FFFF",
+      "modified": true,
       "reviewed": false
     },
     {
@@ -3809,35 +3809,35 @@
     },
     {
       "address": "0x097444",
-      "ownership": "known_unsafe_name_record",
+      "ownership": "declared_direct_patch",
       "owner": null,
       "target_korean": "아론",
       "original_word_count": 5,
       "original_tokens": "0000 004A 002C 0027 FFFF",
-      "current_tokens": "0000 004A 002C 0027 FFFF",
-      "modified": false,
+      "current_tokens": "7015 70E9 FFFF",
+      "modified": true,
       "reviewed": false
     },
     {
       "address": "0x09744E",
-      "ownership": "known_unsafe_name_record",
+      "ownership": "declared_direct_patch",
       "owner": null,
       "target_korean": "레스터",
       "original_word_count": 5,
       "original_tokens": "002B 000C 000F 004A FFFF",
-      "current_tokens": "002B 000C 000F 004A FFFF",
-      "modified": false,
+      "current_tokens": "7030 7036 7037 FFFF",
+      "modified": true,
       "reviewed": false
     },
     {
       "address": "0x097458",
-      "ownership": "known_unsafe_name_record",
+      "ownership": "declared_direct_patch",
       "owner": null,
       "target_korean": "제시카",
       "original_word_count": 5,
       "original_tokens": "0033 004E 000B 0005 FFFF",
-      "current_tokens": "0033 004E 000B 0005 FFFF",
-      "modified": false,
+      "current_tokens": "7026 702A 7038 FFFF",
+      "modified": true,
       "reviewed": false
     },
     {
