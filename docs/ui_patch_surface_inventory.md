@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 74
-- Byte-modified declarations: 73
+- Declared patches: 75
+- Byte-modified declarations: 74
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -22,6 +22,7 @@ closed merely because every known patch declaration changed bytes.
 | arrange_glyph_lists | 1 | 1 |
 | opening_text_lists | 12 | 12 |
 | global_wide_glyphs | 3 | 3 |
+| class_change_glyph_list | 1 | 1 |
 
 ## Compressed Byte UI Font
 
@@ -32,7 +33,7 @@ Resource table `0x0B0000` index 1 uses entry
 ## Remaining Inventory Gaps
 
 - complete Korean selectable name-entry grid beyond the default Elwin buffer
-- all class-change screens and prompts
+- runtime verification of class-change navigation and dynamic class candidates
 - all save/load slot states and error variants
 - all ending and credits UI outside known opening/ending dialogue patches
 - all magic/summon targeting and result prompts

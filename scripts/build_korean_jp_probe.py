@@ -345,6 +345,12 @@ START_SUBMENU_TEXTS = (
 )
 LOAD_MENU_GLYPH_LIST = 0x97128
 SCENARIO_HEADER_TEXT = "프롤로그"
+CLASS_CHANGE_GLYPH_LIST = 0x0A3C9C
+CLASS_CHANGE_GLYPH_TEXT = "클래스체인지 가능  용병마법"
+CLASS_CHANGE_EXPECTED_GLYPHS = (
+    0x0007, 0x0028, 0x000C, 0x0010, 0x004E, 0x0027, 0x0033,
+    0x0074, 0x0072, 0x0092, 0x00A9, 0x039B, 0x0147, 0x0088, 0x008F,
+)
 # Scenario 1 event pages use both FFFF (page end) and FFFD (event end).
 # Older suffix-only patches left the beginning of these pages in Japanese.
 # Keep the original terminator at its fixed address and replace the whole body.
@@ -2037,6 +2043,7 @@ def patch_scenario_header(data: bytearray, glyph_by_char: dict[str, int]) -> Non
 
 
 def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    patch_class_change_glyph_list(data, glyph_by_char)
     for offset, (max_words, text) in DIRECT_WORD_SEQUENCE_PATCHES.items():
         values = [glyph_by_char[char] for char in text]
         if len(values) > max_words:
@@ -2099,6 +2106,23 @@ def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) 
     localized_acted_tokens = [45, 1, 48, 49, 0x3F, 39, 40, 41, 42, 16]
     for index, token in enumerate(localized_acted_tokens):
         put16(data, ACTED_UNIT_NOTICE_TOKEN_STREAM + index * 2, token)
+
+
+def patch_class_change_glyph_list(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    actual = tuple(
+        be16(data, CLASS_CHANGE_GLYPH_LIST + index * 2)
+        for index in range(len(CLASS_CHANGE_EXPECTED_GLYPHS))
+    )
+    if actual != CLASS_CHANGE_EXPECTED_GLYPHS:
+        raise ValueError(
+            f"class-change glyph source changed: expected "
+            f"{CLASS_CHANGE_EXPECTED_GLYPHS!r}, got {actual!r}"
+        )
+    if len(CLASS_CHANGE_GLYPH_TEXT) != len(CLASS_CHANGE_EXPECTED_GLYPHS):
+        raise ValueError("class-change Korean glyph layout must keep all 15 slots")
+    for index, char in enumerate(CLASS_CHANGE_GLYPH_TEXT):
+        glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
+        put16(data, CLASS_CHANGE_GLYPH_LIST + index * 2, glyph)
 
 
 def patch_direct_token_streams(data: bytearray) -> None:
@@ -2832,6 +2856,7 @@ def main() -> None:
         *active_word_sequence_strings,
         *active_order_submenu_strings,
         *active_unit_notice_strings,
+        CLASS_CHANGE_GLYPH_TEXT,
         *active_arrange_glyph_strings,
         *active_item_names,
         *active_item_descriptions,

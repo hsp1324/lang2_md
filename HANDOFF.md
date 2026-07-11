@@ -1015,3 +1015,18 @@ full-game Korean localization, split into six stages in
   name; it is not a complete Korean input grid.
 - Do not replace the Japanese selectable grid until cursor/page behavior is
   live-verified. No emulator was launched during this analysis.
+
+### Class-Change Static Patch
+
+- Code `0x02BB60` loads the 15-slot glyph list at `0x0A3C9C`. Layout
+  `0x0A3CBA` uses slots 0..10 for `クラスチェンジできます`; layout
+  `0x0A3CDC` uses 0..6 for the title, and slots 11..14 are `傭兵/魔法`.
+- The Korean slot plan is `클래스체인지`, space, `가능`, two spaces,
+  `용병마법`. It preserves every existing token index and renders the long
+  prompt, short title, and detail labels without code/layout changes.
+- The builder validates the complete original 15-word tuple. Static build
+  checksum is `DBE1`; offline output is
+  `captures/analysis/jpfont_probe/class_change_a3c9c_korean.png`.
+- Tests cover the three direct code references, shared-index plan, source
+  rejection, and patched word layout. Emulator navigation and dynamic class
+  candidate rendering remain not `live_verified` at the user's request.

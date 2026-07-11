@@ -97,6 +97,22 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "live_verified": False,
             }
         )
+    rows.append(
+        {
+            "group": "class_change_glyph_list",
+            "address": f"0x{builder.CLASS_CHANGE_GLYPH_LIST:06X}",
+            "size_bytes": len(builder.CLASS_CHANGE_EXPECTED_GLYPHS) * 2,
+            "target_korean": builder.CLASS_CHANGE_GLYPH_TEXT,
+            "modified": changed(
+                japanese,
+                korean,
+                builder.CLASS_CHANGE_GLYPH_LIST,
+                len(builder.CLASS_CHANGE_EXPECTED_GLYPHS) * 2,
+            ),
+            "reviewed": False,
+            "live_verified": False,
+        }
+    )
 
     resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
     original_resource = int.from_bytes(japanese[resource_entry : resource_entry + 4], "big")
@@ -126,7 +142,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "declared_patches": rows,
         "remaining_inventory_gaps": [
             "complete Korean selectable name-entry grid beyond the default Elwin buffer",
-            "all class-change screens and prompts",
+            "runtime verification of class-change navigation and dynamic class candidates",
             "all save/load slot states and error variants",
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",

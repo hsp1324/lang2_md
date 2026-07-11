@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 74)
-        self.assertEqual(self.result["modified_patch_count"], 73)
+        self.assertEqual(self.result["declared_patch_count"], 75)
+        self.assertEqual(self.result["modified_patch_count"], 74)
 
     def test_compressed_byte_font_is_relocated(self):
         font = self.result["compressed_byte_ui_font"]

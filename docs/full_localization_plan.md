@@ -22,6 +22,8 @@ documented, committed, and pushed independently.
   validate source hashes and duplicate-pointer semantics before writing them.
 - Map name-entry initialization, editable-buffer, selectable-grid, and confirmation
   resources separately; a Korean default name is not completion of Korean input.
+- Preserve shared class-change glyph indexes so the long prompt, short title,
+  mercenary label, and magic label can be localized without rewriting layout code.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names

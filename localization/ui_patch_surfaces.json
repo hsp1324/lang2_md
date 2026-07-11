@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 74,
-  "modified_patch_count": 73,
+  "declared_patch_count": 75,
+  "modified_patch_count": 74,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 15,
@@ -41,6 +41,10 @@
     "global_wide_glyphs": {
       "entry_count": 3,
       "modified_count": 3
+    },
+    "class_change_glyph_list": {
+      "entry_count": 1,
+      "modified_count": 1
     }
   },
   "compressed_byte_ui_font": {
@@ -719,11 +723,20 @@
       "modified": true,
       "reviewed": false,
       "live_verified": false
+    },
+    {
+      "group": "class_change_glyph_list",
+      "address": "0x0A3C9C",
+      "size_bytes": 30,
+      "target_korean": "클래스체인지 가능  용병마법",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
     }
   ],
   "remaining_inventory_gaps": [
     "complete Korean selectable name-entry grid beyond the default Elwin buffer",
-    "all class-change screens and prompts",
+    "runtime verification of class-change navigation and dynamic class candidates",
     "all save/load slot states and error variants",
     "all ending and credits UI outside known opening/ending dialogue patches",
     "all magic/summon targeting and result prompts",
