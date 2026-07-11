@@ -892,3 +892,24 @@ full-game Korean localization, split into six stages in
   `docs/full_localization_inventory.md`.
 - English extraction JSON remains legacy reference material. Its addresses and
   control layout are not authoritative for Japanese-ROM writes.
+
+### Global Byte-String Inventory Checkpoint
+
+- `tools/jp_global_inventory.py` inventories three genuine FF-terminated
+  pointer tables: 157 classes at `0x05E6D6`, 38 item entries at `0x060364`,
+  and 117 actor/NPC/monster names at `0x0618E8`.
+- `tools/scenario_data.py` previously stopped the name table at 105 entries.
+  The verified count is 117 (`0x75`); the editor/parser limit was corrected.
+- Current direct byte-string changes are classes 28/157, items 0/38, and names
+  25/117. These are coverage signals, not verified translation counts.
+- The inventory separately compares the original byte codes' 16x16 global
+  font pixels. The knife keeps original codes `C5 B2 CC` while those glyphs
+  render `단`, `검`, and blank. Twelve other item strings reuse at least one of
+  those codes, so their alternate byte-font render paths are collision risks,
+  not localized entries.
+- Detailed original hex/text, pointers, capacities, known Korean targets, and
+  affected font codes are in `localization/global_strings.json`; the summary is
+  `docs/global_localization_inventory.md`.
+- 67 of 117 name IDs intentionally still have a null Korean target in this
+  inventory. Identify each from the Japanese source ID before assigning a
+  Korean label; do not infer it from sprite appearance.

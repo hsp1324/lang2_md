@@ -8,6 +8,8 @@ documented, committed, and pushed independently.
 
 - Identify every text pointer, glyph list, token stream, and compressed UI resource.
 - Generate a per-scenario event-page inventory and Japanese-residue report.
+- Inventory shared class, item, and actor/NPC/monster byte-string tables, including
+  raw-string changes and global-font collision risks.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names

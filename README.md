@@ -27,6 +27,7 @@
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치합니다.
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
+- `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
@@ -68,11 +69,12 @@ roms/builds/Langrisser II (Korean Scenario Edit).md
 정적 검증:
 
 ```bash
-python3 -m unittest tests.test_scenario_data tests.test_jp_event_inventory
+python3 -m unittest tests.test_scenario_data tests.test_jp_event_inventory tests.test_jp_global_inventory
 python3 tools/jp_event_inventory.py
+python3 tools/jp_global_inventory.py
 ```
 
-전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. `modified` 페이지는 일본판과 바이트가 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
+전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
 
 패치 원인 분리용 옵션:
 
