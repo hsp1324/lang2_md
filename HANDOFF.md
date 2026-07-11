@@ -883,12 +883,13 @@ full-game Korean localization, split into six stages in
 - `tools/jp_event_inventory.py` finds in-block 32-bit references whose targets
   parse as at least three glyph IDs (`0x0000..0x07FF`) plus `FFF7`/`FFFE`
   controls and an `FFFD`/`FFFF` terminator.
-- The baseline inventory contains 2,968 candidate pages. The current build
-  differs from the Japanese ROM at 272: Scenario 1 is 107/121, Scenario 2 is
-  91/110, Scenario 3 is 74/89, and Scenarios 4-31 are 0 modified pages.
-- A modified page is not automatically complete Korean. Existing Scenario 2/3
-  patches came from older partial work and must be reviewed for full-page text,
-  natural translation, terminator safety, and live behavior.
+- The baseline inventory contains 2,968 candidate records and 3,567 physical
+  pages. Build `2DBE` modifies 416 candidate records and 515 physical pages:
+  Scenario 1 is 107/121 records, Scenario 2 is 110/110, Scenario 3 is 74/89,
+  and Scenario 14 is 125/125. Scenarios 4-13 and 15-31 are unstarted.
+- A modified page is not automatically complete Korean. Scenario 2 and 14 now
+  have reviewed full-page data; Scenario 1/3 still contain older partial work
+  and must be reviewed for complete natural text and control safety.
 - Machine-readable page addresses, source references, terminators, and glyph
   token streams are in `localization/event_pages.json`; the coverage table is
   `docs/full_localization_inventory.md`.
@@ -1238,3 +1239,41 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - A local `/tmp` Tesseract Japanese package was used only as an OCR aid; rendered
   source images remain the authority because OCR frequently misreads the Mega
   Drive font.
+
+### Scenario 2 Reviewed Dialogue (2026-07-12)
+
+- `localization/event_dialogue_ko.json` now covers all 110 Scenario 2 pointer
+  records and 27 continuation pages, 137 physical pages total. Primary pages
+  align one-to-one with English reference records `1991..2100`; Japanese ROM
+  pages and controls remain authoritative. All declared page addresses exactly
+  equal the modified physical-page set in automated tests.
+- The old suffix-only direct patches did more than leave mixed Japanese/Korean
+  lines: patch `0x18698E` overwrote the actor ID following `FFF7` at
+  `0x186976`. `patch_reviewed_event_pages` now validates capacities,
+  terminators, and actor IDs against the untouched Japanese ROM rather than the
+  already-mutated build buffer, then rewrites the complete page. This restores
+  every Scenario 2 dynamic-name control to the original value.
+- The first live pass at checksum `7637` exposed blank padding boxes between
+  continuation pages. Scenario 2's reviewed physical pages are at most 58
+  words, so explicit Korean newlines were unnecessary; fixed-length space
+  padding after those newlines crossed a display boundary. Removing all forced
+  newlines produced checksum `99D3` and eliminated the blank boxes throughout
+  the consecutive night sequence. Captures are
+  `captures/analysis/99d3_s02_intro_00_29.png` and the two morning sheets
+  `captures/analysis/99d3_s02_intro_30_49.png` / `_50_69.png`.
+- Scenario-sized safe speaker-name promotion adds `스코트` (`0x97432`),
+  `발가스` (`0x97482`), `졸름` (`0x974AA`), `지휘관` (`0x97504`), and
+  `로렌` (`0x97526`). Checksum `2DBE` live-verifies 로렌, 스코트, 지휘관 and
+  the dynamic 발가스/졸름 names in `captures/analysis/2dbe_s02_morning_00_24.png`
+  and `captures/analysis/2dbe_s02_names.png`. The same build opens the Korean
+  name-entry grid normally in `captures/run/2dbe_name_entry.png`; do not promote
+  the remaining unsafe-name map as one batch.
+- The scenario-select manual slot was created by the Japanese ROM, so saved
+  custom protagonist insertions still render `エルウィン` during this diagnostic
+  run. Fixed speaker names and a fresh Korean default-name path are independent;
+  the latter remains verified by the name-entry capture. Do not record the old
+  SRAM payload as a current name-table failure.
+- Live verification reaches the entire night conversation, morning meeting,
+  imperial ambush, and the first playable command without reset or freeze.
+  Optional combat, defeat, item, rescue, and ending branches are translated and
+  statically rendered but remain open for route-specific live capture.

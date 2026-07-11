@@ -443,6 +443,12 @@ DIRECT_STRING_PATCHES = {
     0x96A64: "그래너혼자는아니야…",
     0x96C48: "조심해…",
     0x9742A: "헤인",
+    # Scenario 2 fixed speaker names, isolated and live-reached as one batch.
+    0x97432: "스코트",
+    0x97482: "발가스",
+    0x974AA: "졸름",
+    0x97504: "지휘관",
+    0x97526: "로렌",
     0x184858: "큰일이야!\n엘윈!",
     0x184872: "무슨일이야?",
     0x18488A: "제국군이왔어!\n마을밖이야!",
@@ -1468,12 +1474,13 @@ def encode_reviewed_event_text(text: str, glyph_by_char: dict[str, int]) -> tupl
 
 def patch_reviewed_event_pages(
     data: bytearray,
+    reference_data: bytes,
     glyph_by_char: dict[str, int],
     rows: list[dict[str, object]],
 ) -> None:
     for row in rows:
         start = int(row["address_int"])
-        capacity, terminator, original_controls = event_page_layout(data, start)
+        capacity, terminator, original_controls = event_page_layout(reference_data, start)
         text = str(row["text"])
         values, translated_controls = encode_reviewed_event_text(text, glyph_by_char)
         if translated_controls != original_controls:
@@ -3300,7 +3307,7 @@ def main() -> None:
     if not args.skip_direct:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_scenario1_event_pages(data, glyph_by_char)
-        patch_reviewed_event_pages(data, glyph_by_char, reviewed_event_rows)
+        patch_reviewed_event_pages(data, IN_ROM.read_bytes(), glyph_by_char, reviewed_event_rows)
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)
