@@ -1,0 +1,733 @@
+{
+  "declared_patch_count": 74,
+  "modified_patch_count": 73,
+  "groups": {
+    "byte_ff_strings": {
+      "entry_count": 15,
+      "modified_count": 15
+    },
+    "fixed_byte_strings": {
+      "entry_count": 7,
+      "modified_count": 6
+    },
+    "fixed_word_strings": {
+      "entry_count": 16,
+      "modified_count": 16
+    },
+    "direct_word_sequences": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "fixed_direct_strings": {
+      "entry_count": 17,
+      "modified_count": 17
+    },
+    "route_titles": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "scenario_headers": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "arrange_glyph_lists": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "opening_text_lists": {
+      "entry_count": 12,
+      "modified_count": 12
+    },
+    "global_wide_glyphs": {
+      "entry_count": 3,
+      "modified_count": 3
+    }
+  },
+  "compressed_byte_ui_font": {
+    "resource_table": "0x0B0000",
+    "resource_index": 1,
+    "table_entry": "0x0B0004",
+    "original_pointer": "0x0B0A84",
+    "current_pointer": "0x290000",
+    "relocated": true,
+    "reviewed": false,
+    "live_verified": false
+  },
+  "declared_patches": [
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AC5",
+      "size_bytes": 6,
+      "target_korean": "엘윈",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061ACB",
+      "size_bytes": 4,
+      "target_korean": "리아나",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AD8",
+      "size_bytes": 4,
+      "target_korean": "헤인",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AFC",
+      "size_bytes": 4,
+      "target_korean": "레온",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B16",
+      "size_bytes": 6,
+      "target_korean": "레아드",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B1C",
+      "size_bytes": 7,
+      "target_korean": "발드",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B54",
+      "size_bytes": 8,
+      "target_korean": "병사",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B5C",
+      "size_bytes": 5,
+      "target_korean": "지휘관",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B61",
+      "size_bytes": 4,
+      "target_korean": "사제",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B65",
+      "size_bytes": 6,
+      "target_korean": "주민",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B71",
+      "size_bytes": 8,
+      "target_korean": "민병대",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B8D",
+      "size_bytes": 9,
+      "target_korean": "제국지휘관",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x0A18E0",
+      "size_bytes": 10,
+      "target_korean": "WPN",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x0A18EC",
+      "size_bytes": 10,
+      "target_korean": "ARMOR",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x0A18F8",
+      "size_bytes": 10,
+      "target_korean": "ITEM",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x09B26D",
+      "size_bytes": 6,
+      "target_korean": "아군",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x09B278",
+      "size_bytes": 5,
+      "target_korean": "적군",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x09B2A3",
+      "size_bytes": 3,
+      "target_korean": "NPC",
+      "modified": false,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x0A1099",
+      "size_bytes": 6,
+      "target_korean": "아군",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x0A2DD4",
+      "size_bytes": 6,
+      "target_korean": "아군",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x0A2E63",
+      "size_bytes": 5,
+      "target_korean": "적군",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_byte_strings",
+      "address": "0x0A3D15",
+      "size_bytes": 5,
+      "target_korean": "지휘범위",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB36",
+      "size_bytes": 10,
+      "target_korean": "지휘범위",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09ACA8",
+      "size_bytes": 10,
+      "target_korean": "지휘범위",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB8C",
+      "size_bytes": 10,
+      "target_korean": "수정",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09ACF0",
+      "size_bytes": 10,
+      "target_korean": "수정",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB22",
+      "size_bytes": 4,
+      "target_korean": "공격",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB2C",
+      "size_bytes": 4,
+      "target_korean": "방어",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB5E",
+      "size_bytes": 4,
+      "target_korean": "레벨",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB6C",
+      "size_bytes": 4,
+      "target_korean": "이동",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AB7E",
+      "size_bytes": 4,
+      "target_korean": "마나",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AC8E",
+      "size_bytes": 4,
+      "target_korean": "공격",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09AC98",
+      "size_bytes": 4,
+      "target_korean": "방어",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09ACC8",
+      "size_bytes": 4,
+      "target_korean": "레벨",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09ACD2",
+      "size_bytes": 4,
+      "target_korean": "이동",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09ACE0",
+      "size_bytes": 4,
+      "target_korean": "마나",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x09ABC2",
+      "size_bytes": 10,
+      "target_korean": "소지금",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_word_strings",
+      "address": "0x0A1896",
+      "size_bytes": 10,
+      "target_korean": "소지금",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "direct_word_sequences",
+      "address": "0x09706A",
+      "size_bytes": 24,
+      "target_korean": "이동공격마법소환치료명령",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x09702C",
+      "size_bytes": 8,
+      "target_korean": "출격준비",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x097034",
+      "size_bytes": 8,
+      "target_korean": "용병고용",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x09703C",
+      "size_bytes": 12,
+      "target_korean": "장비착용",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x097048",
+      "size_bytes": 8,
+      "target_korean": "상점",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x097050",
+      "size_bytes": 10,
+      "target_korean": "지휘관배치",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x09705A",
+      "size_bytes": 4,
+      "target_korean": "구입",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x09705E",
+      "size_bytes": 4,
+      "target_korean": "판매",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x097062",
+      "size_bytes": 6,
+      "target_korean": "취소",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A37A0",
+      "size_bytes": 8,
+      "target_korean": "시나리오",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A37AA",
+      "size_bytes": 10,
+      "target_korean": "합계",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A37B6",
+      "size_bytes": 6,
+      "target_korean": "턴",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A37BE",
+      "size_bytes": 40,
+      "target_korean": "이름을정해주세요",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A2B72",
+      "size_bytes": 10,
+      "target_korean": "지휘관배치",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A2B7C",
+      "size_bytes": 10,
+      "target_korean": "적군보기",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A2B86",
+      "size_bytes": 8,
+      "target_korean": "출격배치",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A2B8E",
+      "size_bytes": 10,
+      "target_korean": "부대보기",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "fixed_direct_strings",
+      "address": "0x0A2B98",
+      "size_bytes": 4,
+      "target_korean": "출격",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "route_titles",
+      "address": "0x0A10E0",
+      "size_bytes": 10,
+      "target_korean": "진군루트",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "scenario_headers",
+      "address": "0x09B1B6",
+      "size_bytes": 10,
+      "target_korean": "프롤로그",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "arrange_glyph_lists",
+      "address": "0x0A2BAC",
+      "size_bytes": 12,
+      "target_korean": "이동순변경자",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6B20",
+      "size_bytes": 66,
+      "target_korean": "후후후…",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6B54",
+      "size_bytes": 84,
+      "target_korean": "알하자드… 전설의마검… 바라던 무한한 힘…",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6BA8",
+      "size_bytes": 128,
+      "target_korean": "대륙을... 아니 세계를 모두 내 손에 넣겠다!!",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6BEA",
+      "size_bytes": 128,
+      "target_korean": "싸움은 아무것도 낳지 않는다. 남는 것은 슬픔뿐...",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6C2A",
+      "size_bytes": 128,
+      "target_korean": "하늘이... 하늘이 어두워지고 있어... 모든 것이 끝난 걸까...",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6CA6",
+      "size_bytes": 128,
+      "target_korean": "엘윈, 조심해. 무언가 심상치 않은 기운이 느껴져.",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6CEC",
+      "size_bytes": 128,
+      "target_korean": "제국군이 마을로 오고 있어! 리아나가 위험해!",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6D5E",
+      "size_bytes": 128,
+      "target_korean": "알겠어. 지금 바로 가자. 더 늦기 전에 막아야 해.",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6DB8",
+      "size_bytes": 128,
+      "target_korean": "리아나를 구하고, 이 싸움의 이유를 알아내겠어.",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6DFE",
+      "size_bytes": 128,
+      "target_korean": "검을 들어라. 운명은 이미 움직이기 시작했다.",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6E80",
+      "size_bytes": 128,
+      "target_korean": "누구도 피할 수 없는 전란의 그림자가 대륙을 덮는다.",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "opening_text_lists",
+      "address": "0x0A6F02",
+      "size_bytes": 128,
+      "target_korean": "그리고 성검 랑그릿사의 전설이 다시 깨어난다.",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "global_wide_glyphs",
+      "address": "0x043140",
+      "size_bytes": 64,
+      "target_korean": "단",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "global_wide_glyphs",
+      "address": "0x042C80",
+      "size_bytes": 64,
+      "target_korean": "검",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "global_wide_glyphs",
+      "address": "0x043300",
+      "size_bytes": 64,
+      "target_korean": " ",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    }
+  ],
+  "remaining_inventory_gaps": [
+    "all class-change screens and prompts",
+    "all save/load slot states and error variants",
+    "all ending and credits UI outside known opening/ending dialogue patches",
+    "all magic/summon targeting and result prompts",
+    "all equipment and shop variants beyond declared Scenario 1 paths",
+    "all compressed UI resources other than byte-font resource index 1",
+    "all executable-embedded strings not yet represented by a builder patch declaration"
+  ]
+}

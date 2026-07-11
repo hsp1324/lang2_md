@@ -1,0 +1,206 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_korean_jp_probe as builder
+
+
+def changed(japanese: bytes, korean: bytes, offset: int, size: int) -> bool:
+    return japanese[offset : offset + size] != korean[offset : offset + size]
+
+
+def byte_string_size(data: bytes, offset: int, limit: int = 64) -> int:
+    end = data.find(b"\xff", offset, offset + limit)
+    if end < 0:
+        raise ValueError(f"missing FF terminator at 0x{offset:06X}")
+    return end - offset + 1
+
+
+def add_rows(
+    rows: list[dict[str, object]],
+    japanese: bytes,
+    korean: bytes,
+    group: str,
+    patches: dict[int, object],
+    unit: int,
+    fixed_width: bool,
+) -> None:
+    for offset, spec in patches.items():
+        if fixed_width:
+            width, target = spec
+            size = int(width) * unit
+        else:
+            target = spec
+            size = byte_string_size(japanese, offset)
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": False,
+                "live_verified": False,
+            }
+        )
+
+
+def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
+    rows: list[dict[str, object]] = []
+    add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)
+    add_rows(rows, japanese, korean, "fixed_byte_strings", builder.BYTE_UI_FIXED_STRING_PATCHES, 1, True)
+    add_rows(rows, japanese, korean, "fixed_word_strings", builder.BYTE_UI_WORD_STRING_PATCHES, 2, True)
+    add_rows(rows, japanese, korean, "direct_word_sequences", builder.DIRECT_WORD_SEQUENCE_PATCHES, 2, True)
+    add_rows(rows, japanese, korean, "fixed_direct_strings", builder.DIRECT_FIXED_STRING_PATCHES, 2, True)
+    add_rows(rows, japanese, korean, "route_titles", builder.DIRECT_FIXED_ROUTE_TITLE_PATCHES, 2, True)
+    add_rows(rows, japanese, korean, "scenario_headers", builder.DIRECT_FIXED_SCENARIO_HEADER_PATCHES, 2, True)
+    for offset, text in builder.ARRANGE_MENU_GLYPH_LIST_PATCHES.items():
+        rows.append(
+            {
+                "group": "arrange_glyph_lists",
+                "address": f"0x{offset:06X}",
+                "size_bytes": len(text) * 2,
+                "target_korean": text,
+                "modified": changed(japanese, korean, offset, len(text) * 2),
+                "reviewed": False,
+                "live_verified": False,
+            }
+        )
+    for offset, (capacity, text) in builder.OPENING_TEXT_LIST_PATCHES.items():
+        rows.append(
+            {
+                "group": "opening_text_lists",
+                "address": f"0x{offset:06X}",
+                "size_bytes": capacity * 2,
+                "target_korean": text,
+                "modified": changed(japanese, korean, offset, capacity * 2),
+                "reviewed": False,
+                "live_verified": False,
+            }
+        )
+    for code, text in builder.WIDE_BYTE_GLYPH_PATCHES.items():
+        offset = builder.JP_FONT_BASE + code * builder.GLYPH_BYTES
+        rows.append(
+            {
+                "group": "global_wide_glyphs",
+                "address": f"0x{offset:06X}",
+                "size_bytes": builder.GLYPH_BYTES,
+                "target_korean": text,
+                "modified": changed(japanese, korean, offset, builder.GLYPH_BYTES),
+                "reviewed": False,
+                "live_verified": False,
+            }
+        )
+
+    resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
+    original_resource = int.from_bytes(japanese[resource_entry : resource_entry + 4], "big")
+    current_resource = int.from_bytes(korean[resource_entry : resource_entry + 4], "big")
+    compressed = {
+        "resource_table": f"0x{builder.BYTE_UI_FONT_RESOURCE_TABLE:06X}",
+        "resource_index": builder.BYTE_UI_FONT_RESOURCE_INDEX,
+        "table_entry": f"0x{resource_entry:06X}",
+        "original_pointer": f"0x{original_resource:06X}",
+        "current_pointer": f"0x{current_resource:06X}",
+        "relocated": original_resource != current_resource,
+        "reviewed": False,
+        "live_verified": False,
+    }
+
+    group_summary = {}
+    for row in rows:
+        summary = group_summary.setdefault(row["group"], {"entry_count": 0, "modified_count": 0})
+        summary["entry_count"] += 1
+        summary["modified_count"] += bool(row["modified"])
+
+    return {
+        "declared_patch_count": len(rows),
+        "modified_patch_count": sum(bool(row["modified"]) for row in rows),
+        "groups": group_summary,
+        "compressed_byte_ui_font": compressed,
+        "declared_patches": rows,
+        "remaining_inventory_gaps": [
+            "all class-change screens and prompts",
+            "all save/load slot states and error variants",
+            "all ending and credits UI outside known opening/ending dialogue patches",
+            "all magic/summon targeting and result prompts",
+            "all equipment and shop variants beyond declared Scenario 1 paths",
+            "all compressed UI resources other than byte-font resource index 1",
+            "all executable-embedded strings not yet represented by a builder patch declaration",
+        ],
+    }
+
+
+def markdown_report(result: dict[str, object]) -> str:
+    lines = [
+        "# Declared UI Patch Surface Inventory",
+        "",
+        "Generated by `python3 tools/jp_ui_surface_inventory.py`.",
+        "",
+        "This report inventories UI surfaces already declared by the builder. It is not a",
+        "complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being",
+        "closed merely because every known patch declaration changed bytes.",
+        "",
+        f"- Declared patches: {result['declared_patch_count']}",
+        f"- Byte-modified declarations: {result['modified_patch_count']}",
+        "- The unchanged `NPC` declaration is an intentional retained abbreviation.",
+        "",
+        "| Group | Entries | Modified |",
+        "| --- | ---: | ---: |",
+    ]
+    for name, group in result["groups"].items():
+        lines.append(f"| {name} | {group['entry_count']} | {group['modified_count']} |")
+    font = result["compressed_byte_ui_font"]
+    lines.extend(
+        [
+            "",
+            "## Compressed Byte UI Font",
+            "",
+            f"Resource table `{font['resource_table']}` index {font['resource_index']} uses entry",
+            f"`{font['table_entry']}` and is relocated from `{font['original_pointer']}` to",
+            f"`{font['current_pointer']}` in the current build.",
+            "",
+            "## Remaining Inventory Gaps",
+            "",
+        ]
+    )
+    lines.extend(f"- {gap}" for gap in result["remaining_inventory_gaps"])
+    lines.extend(
+        [
+            "",
+            "Detailed declarations are in `localization/ui_patch_surfaces.json`.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Inventory UI patches declared by the builder")
+    parser.add_argument("--jp-rom", type=Path, default=Path("roms/original/Langrisser II (Japan).md"))
+    parser.add_argument(
+        "--ko-rom",
+        type=Path,
+        default=Path("roms/builds/Langrisser II (Korean JP Probe).md"),
+    )
+    parser.add_argument("--json", type=Path, default=Path("localization/ui_patch_surfaces.json"))
+    parser.add_argument("--markdown", type=Path, default=Path("docs/ui_patch_surface_inventory.md"))
+    args = parser.parse_args()
+    result = inventory(args.jp_rom.read_bytes(), args.ko_rom.read_bytes())
+    args.json.parent.mkdir(parents=True, exist_ok=True)
+    args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    args.markdown.parent.mkdir(parents=True, exist_ok=True)
+    args.markdown.write_text(markdown_report(result), encoding="utf-8")
+    print(
+        f"{result['modified_patch_count']}/{result['declared_patch_count']} declared patches modified; "
+        f"{len(result['remaining_inventory_gaps'])} explicit inventory gaps"
+    )
+
+
+if __name__ == "__main__":
+    main()

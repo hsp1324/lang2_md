@@ -929,3 +929,17 @@ full-game Korean localization, split into six stages in
   `localization/global_strings.json` rather than a fabricated summon table.
 - Machine-readable details are in `localization/shared_word_resources.json`;
   the summary is `docs/shared_word_resource_inventory.md`.
+
+### Declared UI Patch Surfaces And Gaps
+
+- `tools/jp_ui_surface_inventory.py` inventories 74 UI patch declarations
+  already present in the builder. 73 change bytes in the current build; the
+  unchanged declaration is the intentionally retained `NPC` abbreviation.
+- The compressed 8x8 byte-UI font is resource table `0x0B0000`, index 1. Its
+  table entry at `0x0B0004` moves from `0x0B0A84` to `0x290000`.
+- This is a declared-patch inventory, not a whole-ROM proof. The report keeps
+  explicit gaps for class-change UI, save/load variants, ending/credits UI,
+  magic/summon prompts, non-Scenario-1 equipment/shop variants, other
+  compressed UI resources, and undeclared executable-embedded strings.
+- Details are in `localization/ui_patch_surfaces.json`; the summary and gap
+  list are in `docs/ui_patch_surface_inventory.md`.

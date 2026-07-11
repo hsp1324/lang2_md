@@ -12,6 +12,8 @@ documented, committed, and pushed independently.
   raw-string changes and global-font collision risks.
 - Inventory shared condition, scenario-description, item, magic, summon-class,
   mercenary-battle-name, and status-message word resources with explicit review flags.
+- Inventory every builder-declared UI patch and compressed byte-font relocation;
+  keep unresolved UI discovery categories explicit until their ROM ownership is proven.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names
