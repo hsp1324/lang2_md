@@ -89,7 +89,7 @@ Do not assume system packages are installed on the next PC.
 Last verified build during this handoff:
 
 ```text
-checksum: 81ED
+checksum: ABF6
 ```
 
 Build command:
@@ -181,7 +181,7 @@ Keep every item below in scope when the Codex goal is resumed:
 
 ### July 11 Verified Result
 
-Build `924A` completes this checklist in the WSLg BlastEm runtime:
+Build `ABF6` completes this checklist in the WSLg BlastEm runtime:
 
 - The Scenario 1 banner is `프롤로그`; the dagger shows `호신용 단검`, `AT+1`,
   and its real `50P` price without the stray `4`.
@@ -195,21 +195,26 @@ Build `924A` completes this checklist in the WSLg BlastEm runtime:
 - The Start-menu save, load, condition, and config child screens are localized.
   Dialogue speaker names use `:` instead of the Japanese quote glyph.
 - Commander and adjacent troop inspection confirms Elwin, Hein, Liana, Leon,
-  Laird, Bald, militia/NPC labels, `솔저`, `중기병`, and `기병` on the Scenario
-  1 map. The shop uses compact `ITEM` and `소지G` labels to stay within the safe
-  one-byte font slots.
+  Laird, Bald, militia/NPC labels, `솔저`, `가드맨`, `헤비호스맨`, and
+  `로얄호스` on the Scenario 1 path. The shop uses compact `ITEM`, `WPN`,
+  `ARMOR`, and `소지G` labels to stay within the safe one-byte font slots.
 - The complete first-turn event was advanced page by page. The formerly mixed
   imperial-command line now reads `지금부터 발드님의 퇴로를
   확보하겠습니다!` (`final_924a_event_52.png`). The game reaches `TURN 2`
   (`final_924a_event_64.png`) and displays the following Hein and Elwin dialogue
   (`final_924a_event_65.png`, `final_924a_event_66.png`) without a reset, freeze,
   or black-screen failure.
-- A follow-up map inspection found that byte-font code `0xA4` is an icon slot in
-  the mercenary status path. Build `81ED` excludes it and pins `병` to the safe
-  `0xCF` slot. Laird's adjacent troop now renders `중기병`
-  (`merc_fix_81ed_laird_merc.png`) and Leon's renders `기병`
-  (`merc_fix_81ed_leon_merc2.png`) without the trailing icon fragment. The
-  former `무기` category uses the equivalent label `병기` to free that slot.
+- The class pointer table at `0x05E6D8` is now the source of truth. The builder
+  validates each active class's original CP932 string before writing Korean, so
+  an inferred label cannot silently replace a different Japanese class. Live
+  verification confirms Laird's troop is original `ﾍﾋﾞｰﾎｰｽﾏﾝ` ->
+  `헤비호스맨` (`class_exact_abf6_laird_merc2.png`) and Leon's blue troop is
+  class 123, original `ﾛｲﾔﾙﾎｰｽ` -> `로얄호스`
+  (`class_exact_abf6_leon_merc.png`). Leon himself remains `나이트마스터`.
+- Scenario 1 prep hiring was also checked: Elwin offers original `ｿﾙｼﾞｬｰ` ->
+  `솔저` (`class_exact_abf6_hire_list.png`), and Hein offers original
+  `ｶﾞｰﾄﾞﾏﾝ` -> `가드맨` (`class_exact_abf6_hain_hire_list.png`). A resident
+  renders `시민`, and an imperial foot unit renders `솔저` on the map.
 
 ## Emulator Input
 
@@ -364,6 +369,37 @@ glyph table at all.
 
 Conclusion: identify the actual renderer and local glyph list per screen. Patch
 specific strings/lists, not the whole Japanese font blindly.
+
+### Scenario 1 Class Names And Byte-Font Slot Limits
+
+Source of truth: the word-swapped class pointer table at `0x05E6D8`. Read each
+original `0xFF`-terminated byte string as CP932. Do not infer a class from the
+sprite or translate every mounted unit generically as `기병`.
+
+Incorrect attempt: class 103/104 and 121/122/123 were initially shortened to
+`기병`/`중기병`. This also hid the fact that Leon's blue adjacent troop uses
+class 123 (`ﾛｲﾔﾙﾎｰｽ`), not class 103 (`ﾎｰｽﾏﾝ`). The corrected active mappings
+are enforced by `SCENARIO1_EXPECTED_JP_CLASS_LABELS`; important examples are:
+
+```text
+103  ﾎｰｽﾏﾝ        -> 호스맨
+104  ﾍﾋﾞｰﾎｰｽﾏﾝ    -> 헤비호스맨
+109  ｶﾞｰﾄﾞﾏﾝ       -> 가드맨
+123  ﾛｲﾔﾙﾎｰｽ      -> 로얄호스
+```
+
+Failed slot attempt: build `C833` temporarily added byte codes `0x80..0xA0`
+to fit more Hangul syllables. The build succeeded offline, but the live full
+status panel rendered the first syllable of `공격` as a red icon. Those codes
+are not safe text slots in the battle renderer and were removed. Codes
+`0xA1`, `0xA2`, and `0xA4` and the `0xE0..0xFF` range are likewise reserved by
+live status graphics. Do not re-enable them based only on offline font output.
+
+The verified safe pool has exactly 60 Hangul codes in build `ABF6`. To preserve
+the exact Scenario 1 class names, compact familiar UI labels use `WPN`, `ARMOR`,
+and `NPC`. Later-scenario classes outside `BYTE_UI_SCENARIO1_CLASS_INDEXES` are
+not claimed as verified; add them only after checking their original table
+entry and live renderer, then rebalance the safe glyph budget deliberately.
 
 ### `0x974xx` Direct Name Candidates
 

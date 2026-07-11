@@ -178,39 +178,23 @@ CLASS_BYTE_SUBSET_LABELS = {
 
 # Classes reachable in Scenario 1. These strings use the relocated 8x8 byte UI
 # font in the live map status bar, not the global 16x16 JP font.
+BYTE_UI_SCENARIO1_CLASS_INDEXES = (
+    1, 2, 3, 13, 45, 46, 47, 48, 55, 56, 57, 69, 73,
+    98, 99, 100, 103, 104, 109, 113, 114, 121, 122, 123, 151,
+)
 BYTE_UI_SCENARIO1_CLASS_LABELS = {
-    1: "전사",
-    2: "클레릭",
-    3: "워록",
-    13: "매직나이트",
-    45: "전사",
-    47: "클레릭",
-    48: "워록",
-    55: "매직나이트",
-    56: "매직나이트",
-    57: "소드",
-    69: "나이트마스터",
-    73: "지휘관",
-    98: "파이크",
-    99: "팔랑크스",
-    100: "솔저",
-    103: "기병",
-    104: "중기병",
-    109: "가드",
-    113: "시민",
-    114: "솔저",
-    115: "중병",
-    116: "전사",
-    117: "전사",
-    118: "전사",
-    119: "사수",
-    120: "리자드",
-    121: "기병",
-    122: "중기병",
-    123: "기병",
-    124: "가드",
-    125: "기병",
-    151: "클레릭",
+    index: KOREAN_CLASS_LABELS[index] for index in BYTE_UI_SCENARIO1_CLASS_INDEXES
+}
+SCENARIO1_EXPECTED_JP_CLASS_LABELS = {
+    1: "ﾌｧｲﾀｰ", 2: "ｸﾚﾘｯｸ", 3: "ｳｫｰﾛｯｸ", 13: "ﾏｼﾞｯｸﾅｲﾄ",
+    45: "ﾌｧｲﾀｰ", 46: "ﾌｧｲﾀｰ", 47: "ｸﾚﾘｯｸ", 48: "ｳｫｰﾛｯｸ",
+    55: "ﾏｼﾞｯｸﾅｲﾄ",
+    56: "ﾏｼﾞｯｸﾅｲﾄ", 57: "ｿｰﾄﾞﾏﾝ", 69: "ﾅｲﾄﾏｽﾀｰ", 73: "ｼﾞｪﾈﾗﾙ",
+    98: "ﾊﾟｲｸ", 99: "ﾌｧﾗﾝｸｽ", 100: "ｿﾙｼﾞｬｰ", 103: "ﾎｰｽﾏﾝ",
+    104: "ﾍﾋﾞｰﾎｰｽﾏﾝ", 109: "ｶﾞｰﾄﾞﾏﾝ", 113: "ｼﾋﾞﾘｱﾝ",
+    114: "ｿﾙｼﾞｬｰ", 121: "ﾎｰｽﾏﾝ", 122: "ﾍﾋﾞｰﾎｰｽﾏﾝ",
+    123: "ﾛｲﾔﾙﾎｰｽ",
+    151: "ｸﾚﾘｯｸ",
 }
 
 BYTE_UI_STRING_PATCHES = {
@@ -227,22 +211,11 @@ BYTE_UI_STRING_PATCHES = {
     0x061B5C: "지휘관",
     0x061B61: "사제",
     0x061B65: "주민",
-    0x061B71: "자경단",
+    0x061B71: "민병대",
     0x061B8D: "제국지휘관",
-    # Early commander classes and mercenary names.
-    0x05E953: "전사",
-    0x05E95F: "워록",
-    0x05EA98: "전사",
-    0x05EA9E: "전사",
-    0x05EAAA: "워록",
-    0x05EC31: "파이크",
-    0x05EC36: "팔랑크스",
-    0x05EC3D: "솔저",
-    0x05EC7E: "가드",
-    0x05EC99: "시민",
     # Item category labels shown by the byte-string equipment/shop renderer.
-    0x0A18E0: "병기",
-    0x0A18EC: "방어구",
+    0x0A18E0: "WPN",
+    0x0A18EC: "ARMOR",
     0x0A18F8: "ITEM",
 }
 
@@ -256,7 +229,7 @@ RAW_BYTE_STRING_PATCHES = {
 BYTE_UI_FIXED_STRING_PATCHES = {
     0x09B26D: (6, "아군"),
     0x09B278: (5, "적군"),
-    0x09B2A3: (3, "중립"),
+    0x09B2A3: (3, "NPC"),
     0x0A1099: (6, "아군"),
     0x0A2DD4: (6, "아군"),
     0x0A2E63: (5, "적군"),
@@ -2359,7 +2332,22 @@ def patch_class_byte_subset(data: bytearray) -> None:
         write_byte_string(data, ptr, values, capacity)
 
 
+def validate_scenario1_class_sources(data: bytes | bytearray) -> None:
+    for index, expected in SCENARIO1_EXPECTED_JP_CLASS_LABELS.items():
+        offset = word_swapped_pointer(data, CLASS_BYTE_POINTER_TABLE + index * 4)
+        capacity = byte_string_capacity(data, offset)
+        actual = bytes(data[offset : offset + capacity - 1]).decode("cp932")
+        if actual != expected:
+            raise ValueError(
+                f"Scenario 1 class {index} source changed: "
+                f"expected {expected!r}, got {actual!r} at 0x{offset:06X}"
+            )
+
+
 def patch_byte_ui_strings(data: bytearray) -> None:
+    # Keep localized class names tied to the Japanese source table rather than
+    # inferred unit appearance or generic cavalry/infantry descriptions.
+    validate_scenario1_class_sources(data)
     fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
     word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
     chars = [
@@ -2423,7 +2411,11 @@ def patch_byte_ui_strings(data: bytearray) -> None:
         values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)
     for offset, (width, text) in BYTE_UI_FIXED_STRING_PATCHES.items():
-        values = [code_by_char[char] for char in text if char != " "]
+        values = [
+            ord(char) if ord(char) < 0x80 else code_by_char[char]
+            for char in text
+            if char != " "
+        ]
         if len(values) > width:
             raise ValueError(f"byte fixed string at 0x{offset:06X} needs {len(values)} bytes, only {width}")
         data[offset : offset + width] = bytes(values + [0x20] * (width - len(values)))
