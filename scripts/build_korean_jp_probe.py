@@ -113,6 +113,17 @@ BYTE_UI_GLYPH_CODES = [
         if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES
         and code not in (0xA1, 0xA2, 0xA3, 0xA4)
     ),
+    # Lowercase Latin is not used by the localized byte UI. It supplies a
+    # private extension for the name-entry grid without touching uppercase
+    # LV/AT/DF/ITEM labels or the 0x80-A4/E0-FF status graphics.
+    *range(0x61, 0x7B),
+    *range(0x5B, 0x61),
+    *range(0x7B, 0x7F),
+    0x3B,
+    0x3C,
+    0x3D,
+    0x3E,
+    0x40,
 ]
 BYTE_UI_STABLE_CODE_BY_CHAR = {
     "엘": 0xB4,
@@ -358,12 +369,12 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
     0x185272: (0x1852C8, "네가 리아나인가.\n다치기 싫으면 우리와 함께\n제국으로 가 줘야겠다."),
     0x1852CA: (0x1852E0, "저한테 무슨 일이죠?"),
     0x1852E2: (0x1852FA, "갑자기 미안하다."),
-    0x1852FC: (0x185358, "나는 레이갈드 제국 청룡기사단을\n이끄는 레온이다.\n너를 데리러 왔다."),
+    0x1852FC: (0x185358, "나는 레이갈드 제국의 청룡기사단장 레온이다. 너를 데리러 왔다."),
     0x18535A: (0x185364, "나를…?"),
     0x185366: (0x1853A2, "베른하르트 폐하께서\n기다리신다.\n제도로 함께 가겠나?"),
     0x1853A4: (0x1853AC, "……"),
     0x1853AE: (0x1853F4, "내가 동행하면 주민들을\n건드리지 않겠다고 약속하지.\n괜찮겠나?"),
-    0x1853F6: (0x185464, "물론이다.\n여성을 납치하는 불명예에\n무고한 주민까지\n해치진 않겠다."),
+    0x1853F6: (0x185464, "물론이다. 여성을 납치하는 불명예에 무고한 주민까지 해치진 않겠다."),
     0x185466: (0x1854AA, "다만 우리에게 검을 겨누는 자는\n누구든 베겠다."),
     0x1854AC: (0x1854D6, "알겠습니다…\n따라가겠습니다."),
     0x1854D8: (0x1854FC, "…미안하다.\n협조에 감사한다."),
@@ -371,7 +382,7 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
     0x185642: (0x185662, "예…\n앞으로 조심하겠습니다."),
     0x185664: (0x18568A, "기다려!\n이 마을에서 멋대로 못해!"),
     0x18568C: (0x1856AC, "레온님!\n자경단이 왔습니다!"),
-    0x1856AE: (0x185700, "빠르군… 하지만 자경단쯤은\n신경 쓸 필요 없다.\n작전을 계속한다!"),
+    0x1856AE: (0x185700, "빠르군… 자경단쯤은 신경 쓸 것 없다. 작전을 계속한다!"),
     0x185702: (0x185734, "고작 몇 기로 오다니!\n후회하게 해주마!"),
     0x185736: (0x185748, "훗, 재미있군."),
     0x18574A: (0x185766, "자, 얌전히 따라와라!"),
@@ -431,7 +442,7 @@ DIRECT_STRING_PATCHES = {
     0x184C5A: "죽기싫으면비켜!",
     0x184C84: "너희나라로돌아가!",
     0x184CA2: "살려줘!",
-    0x184CB0: "레온님! 주민들은요?\n우리 움직임을 봤습니다!",
+    0x184CB0: "레온님! 주민들이\n우리 움직임을 봤습니다!",
     0x184CEE: "살생은 금지다.\n우리 임무는 살인이 아니다.",
     0x184D24: "너는 발드의 퇴로를 막아!",
     0x184D46: "예!",
@@ -877,6 +888,40 @@ NAME_ENTRY_DEFAULT_COPY_WORDS = 8
 NAME_ENTRY_DEFAULT_EXPECTED_WORDS = (
     0x0003, 0x002A, 0x0002, 0x004C, 0x0027, 0x0054, 0x0054, 0x0054,
 )
+NAME_ENTRY_GLYPH_LIST = 0x0A37E6
+NAME_ENTRY_GLYPH_COUNT = 95
+NAME_ENTRY_LAYOUT = 0x0A38E0
+NAME_ENTRY_LAYOUT_END = 0x0A3B0B
+NAME_ENTRY_LAYOUT_SHA256 = "bd71d36d26f9866d92b272c15c54fefb3253810c94d3f6565b0725e118eb403d"
+NAME_ENTRY_BYTE_VALUE_TABLE = 0x0A3B3E
+NAME_ENTRY_BYTE_VALUE_SHA256 = "50d1a1959f5d98185873049d2b4555315a1433f35ee960b87d6e3902beb9fb9a"
+NAME_ENTRY_MAX_SAFE_CUSTOM_GLYPH = 0x7262
+NAME_ENTRY_CONFIRM_COPY_HOOK = 0x02B046
+NAME_ENTRY_CONFIRM_COPY_ORIGINAL = bytes.fromhex(
+    "41 F8 D1 A8 43 F8 A5 DE 30 18 32 C0 0C 40 FF FF 66 F6"
+)
+NAME_ENTRY_CONFIRM_COPY_ROUTINE = 0x2A0000
+NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES = bytes.fromhex(
+    "41 F8 D1 A8"          # lea     $D1A8.w,a0
+    "43 F8 A5 DE"          # lea     $A5DE.w,a1
+    "45 F9 00 0A 37 E6"    # lea     $0A37E6.l,a2
+    "30 18"                # loop: move.w (a0)+,d0
+    "0C 40 FF FF"          # cmpi.w  #$FFFF,d0
+    "67 0A"                # beq.s   done
+    "D0 40"                # add.w   d0,d0
+    "30 32 00 00"          # move.w  (a2,d0.w),d0
+    "32 C0"                # move.w  d0,(a1)+
+    "60 EE"                # bra.s   loop
+    "32 BC FF FF"          # done: move.w #$FFFF,(a1)
+    "4E 75"                # rts
+)
+# 84 selectable syllables. Index 0x54 is intentionally left as the game's
+# hard-coded blank/delete value; indices 0x55..0x5E remain spare blanks.
+NAME_ENTRY_GRID_CHARS = (
+    "가관국나대드레로록리릭마매맨민발병비사소솔스시아얄엘온워윈이인저제주지직클터트파프하헤호휘"
+    "라쉐코키론카면기베른르보젤졸름에그멜다모건잠머세갈폴거렌돈삼손바란진행뒤김박최"
+)
+NAME_ENTRY_GRID_INDICES = (*range(0, 70), *range(71, 84), 85)
 
 DIRECT_FIXED_STRING_PATCHES = {
     0x9702C: (4, "출격준비"),
@@ -954,6 +999,13 @@ SCENARIO0_CONDITIONS = "※승리조건\n·발드 격파\n※패배조건\n·엘
 
 SCENARIO_TEXT_OVERRIDES = {
     0: f"{SCENARIO0_TITLE}\n{SCENARIO0_SUBTITLE}\n{SCENARIO0_BODY}\n{SCENARIO0_CONDITIONS}",
+    4: (
+        "시나리오 5\n"
+        "짐승의 포효\n"
+        "빛의 신전은 큰 피해를 입었다. 제국이 다시 쳐들어오면 리아나를 "
+        "지키기 어려웠다. 게다가 모건은 근처 마을로 달아나 모두를 "
+        "해치려 했다. 엘윈 일행은 쉐리와 리아나와 함께 모건을 뒤쫓았다."
+    ),
     10: (
         "시나리오 11\n"
         "불길 속에서\n"
@@ -967,6 +1019,15 @@ SCENARIO_TEXT_OVERRIDES = {
         "레온을 물리친 엘윈 일행은 벨제리아 성의 지하 신전으로 향했다. "
         "넓은 홀에 이르자 에그베르트가 기다리고 있었다. "
         "사방의 적과 강한 마법이 일행을 덮쳤다."
+    ),
+    30: (
+        "시나리오 X4\n"
+        "죽음의 탑\n"
+        "에그베르트의 도전에 응한 일행은 죽음의 탑에 들어섰다. "
+        "그곳에는 베른하르트와 강력한 병사들이 기다렸다. 알하자드와 "
+        "에그베르트의 마법 때문에 적은 평소보다 더욱 강해 보였다. "
+        "게다가 동료들이 곳곳에 감금되어 있었다. 헤인과 남은 엘윈은 "
+        "작전만으로 이 탑을 돌파해야 했다."
     ),
 }
 
@@ -2512,7 +2573,7 @@ def validate_scenario1_class_sources(data: bytes | bytearray) -> None:
             )
 
 
-def patch_byte_ui_strings(data: bytearray) -> None:
+def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
     # Keep localized class names tied to the Japanese source table rather than
     # inferred unit appearance or generic cavalry/infantry descriptions.
     validate_scenario1_class_sources(data)
@@ -2525,6 +2586,8 @@ def patch_byte_ui_strings(data: bytearray) -> None:
             *BYTE_UI_SCENARIO1_CLASS_LABELS.values(),
             *fixed_texts,
             *word_texts,
+            NAME_ENTRY_GRID_CHARS,
+            "진행뒤로",
         )
         if ord(char) > 0x7F
     ]
@@ -2599,6 +2662,7 @@ def patch_byte_ui_strings(data: bytearray) -> None:
         values.extend([0x0020] * (width - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
+    return code_by_char
 
 
 def patch_raw_byte_strings(data: bytearray) -> None:
@@ -2640,22 +2704,192 @@ def patch_name_entry_default_word_buffer(data: bytearray, glyph_by_char: dict[st
         put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
 
 
-def patch_name_entry_reused_glyphs(data: bytearray) -> None:
-    validate_name_entry_default_source(data)
-    font = ImageFont.truetype(str(FONT_PATH), 16)
-    blank_offset = glyph_data_offset(SPACE_GLYPH)
-    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
-    for char, code in NAME_ENTRY_REUSED_GLYPH_CODES.items():
-        offset = glyph_data_offset(code)
-        data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
+def decode_byte_tilemap_sources(
+    data: bytes | bytearray, offset: int
+) -> tuple[int, int, list[tuple[int, int, str]]]:
+    width = be16(data, offset + 2)
+    height = be16(data, offset + 4)
+    pos = offset + 6
+    palette = 0
+    offset_a = 0
+    offset_b = 0
+    repeat = 0
+    repeat_value = 0
+    repeat_source = 0
+    cells: list[tuple[int, int, str]] = []
+    while len(cells) < width * height:
+        if repeat:
+            value = repeat_value
+            source = repeat_source
+            source_kind = "repeat"
+            repeat -= 1
+        else:
+            while True:
+                opcode_offset = pos
+                value = data[pos]
+                pos += 1
+                if value == 0xF7:
+                    source = pos
+                    value = data[pos]
+                    pos += 1
+                    source_kind = "escape"
+                    break
+                if value == 0xF8:
+                    offset_a = data[pos]
+                    pos += 1
+                    continue
+                if value == 0xF9:
+                    encoded = data[pos]
+                    pos += 1
+                    offset_b = ((encoded >> 3) | ((encoded & 7) << 13)) & 0xFFFF
+                    continue
+                if value in (0xFA, 0xFB, 0xFC, 0xFD):
+                    palette = (value - 0xFA) * 0x0800
+                    continue
+                if value == 0xFE:
+                    repeat = data[pos]
+                    repeat_source = pos + 1
+                    repeat_value = data[pos + 1]
+                    pos += 2
+                    value = repeat_value
+                    source = repeat_source
+                    source_kind = "repeat"
+                    repeat -= 1
+                    break
+                if value == 0xFF:
+                    raise ValueError(f"tilemap at 0x{offset:06X} ended before {width}x{height}")
+                source = opcode_offset
+                source_kind = "literal"
+                break
+        tile = ((value + 0xA000 + offset_a + offset_b) ^ palette) & 0xFFFF
+        cells.append((tile, source, source_kind))
+    if data[pos] != 0xFF:
+        raise ValueError(f"tilemap at 0x{offset:06X} lacks final FF at 0x{pos:06X}")
+    return width, height, cells
 
-    values = [
-        NAME_ENTRY_REUSED_GLYPH_CODES["엘"],
-        NAME_ENTRY_REUSED_GLYPH_CODES["윈"],
+
+def patch_name_entry_grid(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    byte_code_by_char: dict[str, int],
+) -> None:
+    validate_name_entry_default_source(data)
+    original_layout = bytes(data[NAME_ENTRY_LAYOUT:NAME_ENTRY_LAYOUT_END])
+    if hashlib.sha256(original_layout).hexdigest() != NAME_ENTRY_LAYOUT_SHA256:
+        raise ValueError("name-entry tilemap source changed")
+    original_glyphs = tuple(
+        be16(data, NAME_ENTRY_GLYPH_LIST + index * 2)
+        for index in range(NAME_ENTRY_GLYPH_COUNT)
+    )
+    if original_glyphs != tuple(range(NAME_ENTRY_GLYPH_COUNT)):
+        raise ValueError("name-entry selectable glyph list changed")
+    if be16(data, NAME_ENTRY_GLYPH_LIST + NAME_ENTRY_GLYPH_COUNT * 2) != 0xFFFF:
+        raise ValueError("name-entry selectable glyph list terminator changed")
+    if len(NAME_ENTRY_GRID_CHARS) != 0x54 or len(set(NAME_ENTRY_GRID_CHARS)) != 0x54:
+        raise ValueError("name-entry Korean grid must contain 84 unique syllables")
+    original_byte_values = bytes(
+        data[
+            NAME_ENTRY_BYTE_VALUE_TABLE :
+            NAME_ENTRY_BYTE_VALUE_TABLE + NAME_ENTRY_GLYPH_COUNT
+        ]
+    )
+    if hashlib.sha256(original_byte_values).hexdigest() != NAME_ENTRY_BYTE_VALUE_SHA256:
+        raise ValueError("name-entry byte value table changed")
+
+    unsafe_name_glyphs = {
+        char: glyph_by_char[char]
+        for char in NAME_ENTRY_GRID_CHARS
+        if glyph_by_char[char] > NAME_ENTRY_MAX_SAFE_CUSTOM_GLYPH
+    }
+    if unsafe_name_glyphs:
+        raise ValueError(f"name-entry glyph IDs exceed safe range: {unsafe_name_glyphs!r}")
+
+    width, height, cells = decode_byte_tilemap_sources(data, NAME_ENTRY_LAYOUT)
+    if (width, height) != (40, 28):
+        raise ValueError(f"unexpected name-entry tilemap size {width}x{height}")
+
+    coordinates = []
+    rows = (10, 12, 14, 16, 18, 20, 22)
+    for columns in ((4, 6, 8, 10, 12), (15, 17, 19, 21, 23)):
+        coordinates.extend((x, y) for y in rows for x in columns)
+    coordinates.extend(
+        (x, y)
+        for y in (10, 12, 14, 16, 18)
+        for x in (26, 28, 30, 32, 34)
+    )
+    if len(coordinates) != NAME_ENTRY_GLYPH_COUNT:
+        raise AssertionError("name-entry coordinate count mismatch")
+    if len(NAME_ENTRY_GRID_INDICES) != len(NAME_ENTRY_GRID_CHARS):
+        raise ValueError("name-entry selectable index map length mismatch")
+    if 70 in NAME_ENTRY_GRID_INDICES or SPACE_GLYPH in NAME_ENTRY_GRID_INDICES:
+        raise ValueError("name-entry special index 70 and blank index 0x54 must remain reserved")
+    char_by_index = dict(zip(NAME_ENTRY_GRID_INDICES, NAME_ENTRY_GRID_CHARS))
+
+    def patch_cell(x: int, y: int, value: int) -> None:
+        tile, source, source_kind = cells[y * width + x]
+        if source_kind != "literal":
+            if (tile & 0x07FF) == value:
+                return
+            raise ValueError(f"name-entry cell {x},{y} is not independently patchable")
+        data[source] = value
+
+    for index, (x, y) in enumerate(coordinates):
+        if index in char_by_index:
+            char = char_by_index[index]
+            patch_cell(x, y, byte_code_by_char[char])
+            put16(data, NAME_ENTRY_GLYPH_LIST + index * 2, glyph_by_char[char])
+            data[NAME_ENTRY_BYTE_VALUE_TABLE + index] = byte_code_by_char[char]
+        else:
+            patch_cell(x, y, 0x20)
+            put16(data, NAME_ENTRY_GLYPH_LIST + index * 2, SPACE_GLYPH)
+            data[NAME_ENTRY_BYTE_VALUE_TABLE + index] = 0x20
+
+    # The Japanese grid draws dakuten/handakuten on rows between base kana.
+    # Clear those auxiliary cells now that every Korean syllable is one tile.
+    for x, y in [
+        (26, 9),
+        (33, 19),
+        *((x, y) for y in (13, 15, 17, 19, 21) for x in (15, 17, 19, 21, 23)),
+    ]:
+        patch_cell(x, y, 0x20)
+
+    # Preserve the third-column navigation functions with compact Korean labels.
+    for x, value in zip((26, 27, 28), (byte_code_by_char["진"], 0x20, byte_code_by_char["행"])):
+        patch_cell(x, 20, value)
+    for x, value in zip((32, 33, 34), (byte_code_by_char["뒤"], 0x20, byte_code_by_char["로"])):
+        patch_cell(x, 20, value)
+
+    default_values = [
+        NAME_ENTRY_GRID_INDICES[NAME_ENTRY_GRID_CHARS.index("엘")],
+        NAME_ENTRY_GRID_INDICES[NAME_ENTRY_GRID_CHARS.index("윈")],
         *([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_COPY_WORDS - 2)),
     ]
-    for i, value in enumerate(values):
-        put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
+    for index, value in enumerate(default_values):
+        put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + index * 2, value)
+
+    patch_name_entry_confirm_copy(data)
+
+
+def patch_name_entry_confirm_copy(data: bytearray) -> None:
+    """Translate selection indexes to glyph IDs when committing the hero name."""
+    hook_end = NAME_ENTRY_CONFIRM_COPY_HOOK + len(NAME_ENTRY_CONFIRM_COPY_ORIGINAL)
+    if bytes(data[NAME_ENTRY_CONFIRM_COPY_HOOK:hook_end]) != NAME_ENTRY_CONFIRM_COPY_ORIGINAL:
+        raise ValueError("name-entry confirmation copy routine changed")
+
+    # The editable buffer must retain grid indexes because the following byte
+    # conversion indexes 0x0A3B3E with those values. Only the dialogue glyph
+    # list at RAM 0xA5DE needs the relocated 0x7000-series glyph IDs.
+    routine = NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES
+    routine_end = NAME_ENTRY_CONFIRM_COPY_ROUTINE + len(routine)
+    if any(value != 0xFF for value in data[NAME_ENTRY_CONFIRM_COPY_ROUTINE:routine_end]):
+        raise ValueError("name-entry confirmation trampoline area is not empty")
+    data[NAME_ENTRY_CONFIRM_COPY_ROUTINE:routine_end] = routine
+
+    hook = bytes.fromhex("4E B9") + NAME_ENTRY_CONFIRM_COPY_ROUTINE.to_bytes(4, "big")
+    hook += bytes.fromhex("4E 71") * ((len(NAME_ENTRY_CONFIRM_COPY_ORIGINAL) - len(hook)) // 2)
+    if len(hook) != len(NAME_ENTRY_CONFIRM_COPY_ORIGINAL):
+        raise AssertionError("name-entry confirmation hook length mismatch")
+    data[NAME_ENTRY_CONFIRM_COPY_HOOK:hook_end] = hook
 
 
 def validate_name_entry_default_source(data: bytes | bytearray) -> None:
@@ -2780,8 +3014,8 @@ def main() -> None:
         action=argparse.BooleanOptionalAction,
         default=True,
         help=(
-            "experimental: render Elwin as Korean by reusing existing JP name-entry glyph slots; "
-            "disabled by default because those slots are shared with other JP text"
+            "patch the selectable JP name-entry grid, local glyph list, navigation labels, "
+            "and default Elwin name as one Korean resource set"
         ),
     )
     parser.add_argument(
@@ -2864,19 +3098,23 @@ def main() -> None:
         *START_MENU_TEXTS,
         *START_SUBMENU_TEXTS,
         *active_opening_texts,
+        NAME_ENTRY_GRID_CHARS,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
         patch_default_hero_name(data)
     if args.patch_name_entry_default:
         patch_name_entry_default_word_buffer(data, glyph_by_char)
-    if args.patch_name_entry_reused_glyphs:
-        patch_name_entry_reused_glyphs(data)
     if args.patch_opening_glyph_probe:
         patch_opening_glyph_probe(data)
     patch_opening_text_lists(data, glyph_by_char)
+    byte_ui_code_by_char: dict[str, int] = {}
     if args.patch_byte_ui_strings:
-        patch_byte_ui_strings(data)
+        byte_ui_code_by_char = patch_byte_ui_strings(data)
+    if args.patch_name_entry_reused_glyphs:
+        if not byte_ui_code_by_char:
+            raise ValueError("Korean name-entry grid requires byte UI font patching")
+        patch_name_entry_grid(data, glyph_by_char, byte_ui_code_by_char)
     patch_raw_byte_strings(data)
     patch_wide_byte_glyphs(data)
     if args.patch_class_byte_table:

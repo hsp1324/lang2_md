@@ -24,6 +24,7 @@ KEYSYMS = {
     "left": XK.XK_Left,
     "right": XK.XK_Right,
     "save": XK.XK_grave,
+    "load": XK.XK_l,
     "vram": XK.XK_v,
     "plane": XK.XK_b,
 }

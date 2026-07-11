@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 75,
-  "modified_patch_count": 74,
+  "declared_patch_count": 81,
+  "modified_patch_count": 80,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 15,
@@ -43,6 +43,30 @@
       "modified_count": 3
     },
     "class_change_glyph_list": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "name_entry_default_buffer": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "name_entry_glyph_list": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "name_entry_layout": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "name_entry_byte_values": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "name_entry_confirm_hook": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "name_entry_confirm_routine": {
       "entry_count": 1,
       "modified_count": 1
     }
@@ -732,10 +756,64 @@
       "modified": true,
       "reviewed": false,
       "live_verified": false
+    },
+    {
+      "group": "name_entry_default_buffer",
+      "address": "0x0A3B0C",
+      "size_bytes": 16,
+      "target_korean": "엘윈 + blank cells",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "name_entry_glyph_list",
+      "address": "0x0A37E6",
+      "size_bytes": 190,
+      "target_korean": "84 selectable Korean syllables",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "name_entry_layout",
+      "address": "0x0A38E0",
+      "size_bytes": 555,
+      "target_korean": "Korean grid and navigation labels",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "name_entry_byte_values",
+      "address": "0x0A3B3E",
+      "size_bytes": 95,
+      "target_korean": "selection index to Korean byte-font code",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "name_entry_confirm_hook",
+      "address": "0x02B046",
+      "size_bytes": 18,
+      "target_korean": "selection index to dialogue glyph lookup call",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "name_entry_confirm_routine",
+      "address": "0x2A0000",
+      "size_bytes": 38,
+      "target_korean": "relocated index-to-glyph conversion routine",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
     }
   ],
   "remaining_inventory_gaps": [
-    "complete Korean selectable name-entry grid beyond the default Elwin buffer",
+    "arbitrary-Hangul composition beyond the 84 live-verified name-entry syllables",
     "runtime verification of class-change navigation and dynamic class candidates",
     "all save/load slot states and error variants",
     "all ending and credits UI outside known opening/ending dialogue patches",

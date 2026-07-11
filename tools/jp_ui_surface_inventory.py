@@ -113,6 +113,55 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "live_verified": False,
         }
     )
+    for group, offset, size, target in (
+        (
+            "name_entry_default_buffer",
+            builder.NAME_ENTRY_DEFAULT_WORD_OFFSET,
+            builder.NAME_ENTRY_DEFAULT_COPY_WORDS * 2,
+            "엘윈 + blank cells",
+        ),
+        (
+            "name_entry_glyph_list",
+            builder.NAME_ENTRY_GLYPH_LIST,
+            builder.NAME_ENTRY_GLYPH_COUNT * 2,
+            f"{len(builder.NAME_ENTRY_GRID_CHARS)} selectable Korean syllables",
+        ),
+        (
+            "name_entry_layout",
+            builder.NAME_ENTRY_LAYOUT,
+            builder.NAME_ENTRY_LAYOUT_END - builder.NAME_ENTRY_LAYOUT,
+            "Korean grid and navigation labels",
+        ),
+        (
+            "name_entry_byte_values",
+            builder.NAME_ENTRY_BYTE_VALUE_TABLE,
+            builder.NAME_ENTRY_GLYPH_COUNT,
+            "selection index to Korean byte-font code",
+        ),
+        (
+            "name_entry_confirm_hook",
+            builder.NAME_ENTRY_CONFIRM_COPY_HOOK,
+            len(builder.NAME_ENTRY_CONFIRM_COPY_ORIGINAL),
+            "selection index to dialogue glyph lookup call",
+        ),
+        (
+            "name_entry_confirm_routine",
+            builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE,
+            len(builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES),
+            "relocated index-to-glyph conversion routine",
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
 
     resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
     original_resource = int.from_bytes(japanese[resource_entry : resource_entry + 4], "big")
@@ -141,7 +190,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "compressed_byte_ui_font": compressed,
         "declared_patches": rows,
         "remaining_inventory_gaps": [
-            "complete Korean selectable name-entry grid beyond the default Elwin buffer",
+            "arbitrary-Hangul composition beyond the 84 live-verified name-entry syllables",
             "runtime verification of class-change navigation and dynamic class candidates",
             "all save/load slot states and error variants",
             "all ending and credits UI outside known opening/ending dialogue patches",

@@ -22,7 +22,7 @@
 - `tools/render_jp_byte_strings.py`: 준비창/상점처럼 1바이트 문자열을 쓰는 작은 UI 텍스트를 오프라인 렌더링하는 도구입니다.
 - `tools/find_decompressed_tile.py`: `0x9DFE` 그래픽 압축 블록에서 특정 VRAM 타일 원본을 찾는 분석 도구입니다.
 - `tools/analyze_name_entry_vram.py`: GST 저장 상태에서 VRAM/plane CSV와 렌더 이미지를 뽑아 이름 입력 화면과 메뉴 타일 배치를 추적합니다.
-- `docs/name_entry_analysis.md`: 일본판 이름 입력 초기화·확정 코드가 참조하는 레이아웃, 기본 버퍼, 선택 문자 리소스의 정적 소유권 지도입니다.
+- `docs/name_entry_analysis.md`: 일본판 이름 입력 레이아웃, 84자 한글 선택표, 저장 바이트, 확정 시 인덱스→글리프 변환 훅과 실기 검증 기록입니다.
 - `docs/class_change_analysis.md`: 클래스 체인지 15슬롯 공유 글리프와 두 레이아웃의 인덱스 소유권 및 한국어 슬롯 배치를 기록합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
@@ -165,6 +165,7 @@ Start, Start, C, B(A 선택), Left, Up, C(Done), C
 ```
 
 일본판 기반 probe에서는 이름 입력 화면의 기본 이름을 그대로 쓸 수 있으므로 이름 화면에서 `Start`를 누르면 바로 진행됩니다.
+현재 이름 입력표는 게임 고유명사에 필요한 84개 한글 음절을 선택할 수 있습니다. 기본 `엘윈`뿐 아니라 `폴`을 직접 선택해 준비창과 출격 대화까지 유지되는 것을 BlastEm에서 검증했습니다. 임의의 모든 한글 조합을 지원하는 조합형 입력기는 아직 범위 밖입니다.
 
 ```text
 Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C

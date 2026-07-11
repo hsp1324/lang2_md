@@ -1035,19 +1035,9 @@ full-game Korean localization, split into six stages in
 
 ### Name-Entry Static Ownership
 
-- `docs/name_entry_analysis.md` records direct 68000 references from the
-  initialization and confirmation routines. Important targets are layout
-  `0x0A38E0`, prompt `0x0A37BE`, initial tokens `0x0A38A6`, default buffer
-  `0x0A3B0C`, confirmation glyphs `0x0A3BB0`, and confirmation layout
-  `0x0A3BC0`.
-- Code `0x02AC48..0x02AC4E` copies eight words from the default buffer. Five
-  are editable name cells and three are padding. The builder now validates all
-  eight source words and writes `엘윈` plus six spaces deterministically.
-- `0x0A3864` and `0x0A3C5A` contain 32-entry English/number and Japanese
-  selectable glyph resources. The existing patch changes only the default
-  name; it is not a complete Korean input grid.
-- Do not replace the Japanese selectable grid until cursor/page behavior is
-  live-verified. No emulator was launched during this analysis.
+The earlier default-name-only conclusion is superseded by the live-verified
+84-syllable grid and confirmation hook documented below and in
+`docs/name_entry_analysis.md`.
 
 ### Class-Change Static Patch
 
@@ -1063,3 +1053,42 @@ full-game Korean localization, split into six stages in
 - Tests cover the three direct code references, shared-index plan, source
   rejection, and patched word layout. Emulator navigation and dynamic class
   candidate rendering remain not `live_verified` at the user's request.
+
+### Korean Name Grid And Scenario 1 Turn-Event Regression (2026-07-12)
+
+- The name-entry layout is the byte-tilemap at `0x0A38E0..0x0A3B0A`; its
+  decoded size is 40x28. The selectable glyph list is `0x0A37E6` (95 words)
+  and the selection-to-byte table is `0x0A3B3E` (95 bytes).
+- The active grid exposes 84 unique Korean syllables at indexes 0..69,
+  71..83, and 85. Keep index 70 reserved: the original `ヴ` handling is a
+  special composite path. Keep index `0x54` as blank/delete and 86..94 blank.
+- Failed approach: storing `0x7000`-series glyph IDs directly in the editable
+  name buffer. Code `0x02B070` treats that word as an index into `0x0A3B3E`,
+  so high values blanked or destabilized the screen. Low fallback glyph IDs
+  avoided that lookup failure but corrupted shared glyphs such as shop digits.
+- Correct approach: keep selection indexes in RAM `0xD1A8`. Hook the original
+  18-byte confirmation copy at `0x02B046` and call the relocated routine at
+  `0x2A0000`, which writes `0x0A37E6[index]` into dialogue glyph RAM `0xA5DE`.
+  The following original conversion still writes stable byte values to
+  `0xA5CC`.
+- Before the hook, the default speaker rendered as Japanese `ハヘ` even though
+  prep/status showed `엘윈`. Checksum `0E8A` verifies `엘윈` in dialogue and
+  a manually selected high custom name `폴` through route, prep, and dialogue:
+  `captures/run/0e8a_dynamic_name_fixed.png`,
+  `captures/run/0e8a_name_selected_pol.png`,
+  `captures/run/0e8a_pol_prep.png`, and
+  `captures/run/0e8a_pol_dialogue_3.png`.
+- The first-turn event was advanced one input at a time through residents,
+  imperial officers, Leon/Laird/Bald/Liana, militia support, enemy movement,
+  and Elwin/Hein response. No reset occurred after Laird. The initial capture
+  sequence is `captures/analysis/0e8a_turn1_events_sheet.png` and later event
+  sheets use the same checksum prefix.
+- Two blank pages followed long Leon records because explicit translated
+  newlines plus fixed-length padding pushed blank cells onto another screen.
+  Removing those forced newlines, and shortening the militia response, fixes
+  the layout. Checksum `8A01` is reverified in
+  `captures/analysis/8a01_event_00_23.png`; the previously blank positions now
+  contain the next dialogue immediately.
+- `tools/send_blastem_keys.py` now accepts `load` for BlastEm's `L` state-load
+  binding. Automated command-menu detection is still timing-sensitive; a
+  failed detector can select Move even when the game itself is healthy.

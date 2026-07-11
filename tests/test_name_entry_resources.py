@@ -42,7 +42,13 @@ class NameEntryResourceTests(unittest.TestCase):
 
     def test_default_patch_blanks_full_copied_buffer(self):
         data = bytearray(self.rom)
-        builder.patch_name_entry_reused_glyphs(data)
+        builder.expand_rom(data)
+        builder.install_blank_custom_space(data)
+        glyphs = builder.install_custom_glyphs(
+            data, builder.collect_chars(builder.NAME_ENTRY_GRID_CHARS)
+        )
+        byte_codes = builder.patch_byte_ui_strings(data)
+        builder.patch_name_entry_grid(data, glyphs, byte_codes)
         words = [
             int.from_bytes(
                 data[
@@ -53,8 +59,74 @@ class NameEntryResourceTests(unittest.TestCase):
             )
             for index in range(builder.NAME_ENTRY_DEFAULT_COPY_WORDS)
         ]
-        self.assertEqual(words[:2], [0x0003, 0x002A])
+        self.assertEqual(
+            words[:2],
+            [
+                builder.NAME_ENTRY_GRID_INDICES[
+                    builder.NAME_ENTRY_GRID_CHARS.index("엘")
+                ],
+                builder.NAME_ENTRY_GRID_INDICES[
+                    builder.NAME_ENTRY_GRID_CHARS.index("윈")
+                ],
+            ],
+        )
         self.assertEqual(words[2:], [builder.SPACE_GLYPH] * 6)
+
+        glyph_list = [
+            int.from_bytes(
+                data[
+                    builder.NAME_ENTRY_GLYPH_LIST + index * 2 :
+                    builder.NAME_ENTRY_GLYPH_LIST + index * 2 + 2
+                ],
+                "big",
+            )
+            for index in range(builder.NAME_ENTRY_GLYPH_COUNT)
+        ]
+        self.assertEqual(glyph_list[70], builder.SPACE_GLYPH)
+        self.assertEqual(glyph_list[builder.SPACE_GLYPH], builder.SPACE_GLYPH)
+        self.assertTrue(all(value == builder.SPACE_GLYPH for value in glyph_list[86:]))
+        self.assertTrue(
+            all(
+                glyph_list[index] <= builder.NAME_ENTRY_MAX_SAFE_CUSTOM_GLYPH
+                for index in builder.NAME_ENTRY_GRID_INDICES
+            )
+        )
+        for index, char in zip(
+            builder.NAME_ENTRY_GRID_INDICES, builder.NAME_ENTRY_GRID_CHARS
+        ):
+            self.assertEqual(glyph_list[index], glyphs[char])
+            self.assertEqual(
+                data[builder.NAME_ENTRY_BYTE_VALUE_TABLE + index],
+                byte_codes[char],
+            )
+        hook = data[
+            builder.NAME_ENTRY_CONFIRM_COPY_HOOK :
+            builder.NAME_ENTRY_CONFIRM_COPY_HOOK
+            + len(builder.NAME_ENTRY_CONFIRM_COPY_ORIGINAL)
+        ]
+        self.assertEqual(
+            hook[:6],
+            bytes.fromhex("4E B9")
+            + builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE.to_bytes(4, "big"),
+        )
+        self.assertEqual(hook[6:], bytes.fromhex("4E 71") * 6)
+        self.assertEqual(
+            data[
+                builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE :
+                builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE
+                + len(builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES)
+            ],
+            builder.NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES,
+        )
+
+    def test_name_entry_layout_decoder_and_grid_capacity(self):
+        width, height, cells = builder.decode_byte_tilemap_sources(
+            self.rom, builder.NAME_ENTRY_LAYOUT
+        )
+        self.assertEqual((width, height, len(cells)), (40, 28, 1120))
+        self.assertEqual(len(builder.NAME_ENTRY_GRID_CHARS), 84)
+        self.assertEqual(len(set(builder.NAME_ENTRY_GRID_CHARS)), 84)
+        self.assertEqual(len(builder.BYTE_UI_GLYPH_CODES), 100)
 
 
 if __name__ == "__main__":
