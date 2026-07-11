@@ -43,6 +43,11 @@ class JapaneseGlobalInventoryTests(unittest.TestCase):
         self.assertEqual(final_named["id"], 115)
         self.assertTrue(final_named["jp"])
 
+    def test_every_name_id_has_a_source_based_korean_target(self):
+        names = self.result["tables"]["names"]
+        self.assertEqual(names["known_korean_target_count"], 117)
+        self.assertTrue(all(entry["target_korean"] is not None for entry in names["entries"]))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -118,6 +118,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
 
 def markdown_report(result: dict[str, object]) -> str:
+    unknown_name_targets = (
+        int(result["tables"]["names"]["entry_count"])
+        - int(result["tables"]["names"]["known_korean_target_count"])
+    )
     lines = [
         "# Global String Localization Inventory",
         "",
@@ -148,7 +152,11 @@ def markdown_report(result: dict[str, object]) -> str:
             "- Classes and names are shared by preparation, status, map, and editor paths.",
             "- The item byte table is separate from the relocated 16x16 item-name and description tables.",
             "- The Scenario 1 knife intentionally keeps its original byte codes while their glyph pixels render `단검`.",
-            "- Unknown Korean name targets remain `null`; they must be identified from the Japanese ID before translation.",
+            (
+                f"- {unknown_name_targets} Korean name targets remain `null`; identify them from the Japanese ID before translation."
+                if unknown_name_targets
+                else "- All 117 name IDs now have source-based Korean targets; this does not mean every ROM render path is patched."
+            ),
             "",
         ]
     )

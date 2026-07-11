@@ -10,7 +10,7 @@ Neither flag proves that the displayed result is translated or live-verified.
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | classes | `0x05E6D6` | 157 | 157 | 28 | 74 | 91 | 157 |
 | items | `0x060364` | 38 | 37 | 0 | 13 | 13 | 38 |
-| names | `0x0618E8` | 117 | 58 | 25 | 41 | 52 | 50 |
+| names | `0x0618E8` | 117 | 58 | 25 | 41 | 52 | 117 |
 
 Detailed IDs, original text/hex, capacities, targets, and changed font codes are in
 `localization/global_strings.json`.
@@ -20,4 +20,4 @@ Detailed IDs, original text/hex, capacities, targets, and changed font codes are
 - Classes and names are shared by preparation, status, map, and editor paths.
 - The item byte table is separate from the relocated 16x16 item-name and description tables.
 - The Scenario 1 knife intentionally keeps its original byte codes while their glyph pixels render `단검`.
-- Unknown Korean name targets remain `null`; they must be identified from the Japanese ID before translation.
+- All 117 name IDs now have source-based Korean targets; this does not mean every ROM render path is patched.

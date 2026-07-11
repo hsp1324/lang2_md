@@ -1,7 +1,7 @@
 from pathlib import Path
 import unittest
 
-from tools.scenario_data import patch_scenario, read_scenario, scenario_layout
+from tools.scenario_data import KOREAN_NAME_BY_ID, NAME_COUNT, patch_scenario, read_scenario, scenario_layout
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +28,12 @@ class ScenarioDataTests(unittest.TestCase):
         self.assertEqual((leon["name"]["ko"], leon["class"]["ko"]), ("레온", "나이트마스터"))
         self.assertEqual((leon["at"], leon["df"], leon["mercenaries"][0]), (40, 31, 123))
         self.assertEqual((laird["name"]["ko"], laird["class"]["ko"]), ("레아드", "매직나이트"))
+
+    def test_all_name_ids_have_explicit_labels(self):
+        self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
+        self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")
+        self.assertEqual(KOREAN_NAME_BY_ID[0x68], "형님")
+        self.assertEqual(KOREAN_NAME_BY_ID[0x73], "파이어스")
 
     def test_patch_is_limited_to_requested_fields_and_checksum(self):
         data = bytearray(self.rom)

@@ -910,9 +910,16 @@ full-game Korean localization, split into six stages in
 - Detailed original hex/text, pointers, capacities, known Korean targets, and
   affected font codes are in `localization/global_strings.json`; the summary is
   `docs/global_localization_inventory.md`.
-- 67 of 117 name IDs intentionally still have a null Korean target in this
-  inventory. Identify each from the Japanese source ID before assigning a
-  Korean label; do not infer it from sprite appearance.
+- All 117 name IDs now have explicit Korean targets in `tools/scenario_data.py`.
+  Repeated Japanese pointers retain one consistent label: monster runs cover
+  Werewolf through Demon Lord, IDs 104-109 map the custom `qyu` bytes to the
+  separately rendered Japanese `アニキ` (`형님`), and IDs 110-115 cover
+  witch, priest, imperial soldier, and Faias. ID 116 is the repeated blank.
+  This completes metadata identification, not live ROM patching of every path.
+- The user-provided Namu Wiki pages were retried during this checkpoint but
+  were inaccessible to the web tool and returned no searchable results. No
+  names were changed from unreliable snippets; Japanese ROM IDs remained
+  authoritative.
 
 ### Shared 16-bit Word Resources
 
