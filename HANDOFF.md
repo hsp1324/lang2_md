@@ -999,3 +999,19 @@ full-game Korean localization, split into six stages in
 - Candidate classification recognizes pointer-record starts/interiors, credits,
   name-entry resources, ending/epilogue pages, screen-local battle tokens, and
   structured-data false positives. The current unclassified count is zero.
+
+### Name-Entry Static Ownership
+
+- `docs/name_entry_analysis.md` records direct 68000 references from the
+  initialization and confirmation routines. Important targets are layout
+  `0x0A38E0`, prompt `0x0A37BE`, initial tokens `0x0A38A6`, default buffer
+  `0x0A3B0C`, confirmation glyphs `0x0A3BB0`, and confirmation layout
+  `0x0A3BC0`.
+- Code `0x02AC48..0x02AC4E` copies eight words from the default buffer. Five
+  are editable name cells and three are padding. The builder now validates all
+  eight source words and writes `엘윈` plus six spaces deterministically.
+- `0x0A3864` and `0x0A3C5A` contain 32-entry English/number and Japanese
+  selectable glyph resources. The existing patch changes only the default
+  name; it is not a complete Korean input grid.
+- Do not replace the Japanese selectable grid until cursor/page behavior is
+  live-verified. No emulator was launched during this analysis.

@@ -20,6 +20,8 @@ documented, committed, and pushed independently.
   work even when a shorter suffix inside the same page has already been patched.
 - Track word-swapped pointer tables separately from normal big-endian pointers;
   validate source hashes and duplicate-pointer semantics before writing them.
+- Map name-entry initialization, editable-buffer, selectable-grid, and confirmation
+  resources separately; a Korean default name is not completion of Korean input.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names

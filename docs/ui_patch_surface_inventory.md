@@ -31,6 +31,7 @@ Resource table `0x0B0000` index 1 uses entry
 
 ## Remaining Inventory Gaps
 
+- complete Korean selectable name-entry grid beyond the default Elwin buffer
 - all class-change screens and prompts
 - all save/load slot states and error variants
 - all ending and credits UI outside known opening/ending dialogue patches

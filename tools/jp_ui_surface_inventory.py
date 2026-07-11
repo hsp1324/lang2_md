@@ -125,6 +125,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "compressed_byte_ui_font": compressed,
         "declared_patches": rows,
         "remaining_inventory_gaps": [
+            "complete Korean selectable name-entry grid beyond the default Elwin buffer",
             "all class-change screens and prompts",
             "all save/load slot states and error variants",
             "all ending and credits UI outside known opening/ending dialogue patches",

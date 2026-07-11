@@ -867,6 +867,10 @@ DIRECT_ELWIN_NAME_PATCH = {
 
 NAME_ENTRY_DEFAULT_WORD_OFFSET = 0x0A3B0C
 NAME_ENTRY_DEFAULT_WORDS = 5
+NAME_ENTRY_DEFAULT_COPY_WORDS = 8
+NAME_ENTRY_DEFAULT_EXPECTED_WORDS = (
+    0x0003, 0x002A, 0x0002, 0x004C, 0x0027, 0x0054, 0x0054, 0x0054,
+)
 
 DIRECT_FIXED_STRING_PATCHES = {
     0x9702C: (4, "출격준비"),
@@ -2605,13 +2609,15 @@ def patch_default_hero_name(data: bytearray) -> None:
 
 
 def patch_name_entry_default_word_buffer(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    validate_name_entry_default_source(data)
     values = [glyph_by_char["엘"], glyph_by_char["윈"]]
-    values.extend([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_WORDS - len(values)))
+    values.extend([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_COPY_WORDS - len(values)))
     for i, value in enumerate(values):
         put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
 
 
 def patch_name_entry_reused_glyphs(data: bytearray) -> None:
+    validate_name_entry_default_source(data)
     font = ImageFont.truetype(str(FONT_PATH), 16)
     blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
@@ -2622,10 +2628,22 @@ def patch_name_entry_reused_glyphs(data: bytearray) -> None:
     values = [
         NAME_ENTRY_REUSED_GLYPH_CODES["엘"],
         NAME_ENTRY_REUSED_GLYPH_CODES["윈"],
-        *([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_WORDS - 2)),
+        *([SPACE_GLYPH] * (NAME_ENTRY_DEFAULT_COPY_WORDS - 2)),
     ]
     for i, value in enumerate(values):
         put16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + i * 2, value)
+
+
+def validate_name_entry_default_source(data: bytes | bytearray) -> None:
+    actual = tuple(
+        be16(data, NAME_ENTRY_DEFAULT_WORD_OFFSET + index * 2)
+        for index in range(NAME_ENTRY_DEFAULT_COPY_WORDS)
+    )
+    if actual != NAME_ENTRY_DEFAULT_EXPECTED_WORDS:
+        raise ValueError(
+            f"name-entry default source changed: expected "
+            f"{NAME_ENTRY_DEFAULT_EXPECTED_WORDS!r}, got {actual!r}"
+        )
 
 
 def patch_arrange_menu_glyph_lists(
