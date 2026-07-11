@@ -1159,3 +1159,23 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - `tests/test_start_submenus.py` guards the control words, terminators, record
   widths, and Latin glyph IDs. The separate title-screen Load display remains
   Japanese and must not be marked complete from this in-battle capture.
+
+### Legacy English Dialogue Ownership Map (2026-07-12)
+
+- `script_extract/english_records.json` contains 3,082 records. The first three
+  bytes preserved in each record are an event continuation value, not the
+  address of its Japanese text page. Never write to the Japanese ROM by treating
+  `prefix` as a string pointer.
+- `tools/english_dialogue_inventory.py` classifies those continuation values
+  against the 31 Japanese event blocks. It assigns 2,978 records to scenarios
+  and 104 records to ending/epilogue data outside the event blocks. Exact rows
+  are in `localization/english_dialogue_mapping.json`; the summary is
+  `docs/english_dialogue_mapping.md`.
+- Scenario 14 owns one contiguous English reference run, indexes `383..510`
+  (128 records), while its conservative Japanese pointer scan finds 125 text
+  pages. Other scenarios also differ by a few records. Aligning lists solely by
+  ordinal position is therefore unsafe; controls and visible Japanese text must
+  be checked at each insertion/deletion point.
+- `machine_korean_reference` is the old Google output and is explicitly marked
+  `reference_only`. It is useful for rough meaning only and must never be shipped
+  without natural Korean review and Japanese control preservation.

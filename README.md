@@ -30,6 +30,7 @@
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치합니다.
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
+- `tools/english_dialogue_inventory.py`: 레거시 영문 추출본의 3바이트 이벤트 복귀값으로 2,978개 시나리오 대사와 104개 엔딩/에필로그 대사를 분류합니다. 이 값은 일본판 문자열 주소가 아니며 영문/기계번역은 검토용 참고 자료입니다.
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
