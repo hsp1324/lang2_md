@@ -17,8 +17,8 @@ def parse_int(text: str) -> int:
     return int(text, 0)
 
 
-def parse_tokens(text: str) -> list[int]:
-    return [int(value, 16) for value in text.split()]
+def be16(data: bytes, offset: int) -> int:
+    return int.from_bytes(data[offset : offset + 2], "big")
 
 
 def render_scenario_pages(
@@ -41,7 +41,11 @@ def render_scenario_pages(
     ]
     for page_index, page in enumerate(physical_pages):
         address = str(page["address"])
-        tokens = parse_tokens(str(page["tokens"]))
+        start = int(address, 16)
+        tokens = [
+            be16(rom, start + word_index * 2)
+            for word_index in range(int(page["word_count"]))
+        ]
         page_path = page_dir / f"{page_index:03d}_{address[2:]}.png"
         render_text_sample(
             rom,

@@ -1180,18 +1180,22 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `reference_only`. It is useful for rough meaning only and must never be shipped
   without natural Korean review and Japanese control preservation.
 
-### Scenario 14 Reviewed Dialogue Start (2026-07-12)
+### Scenario 14 Reviewed Dialogue (2026-07-12)
 
 - A candidate pointer target is not always one visible dialogue page. Long
   records contain consecutive `FFFD`-terminated physical pages before the final
   `FFFF`. The original inventory counted 2,968 candidate records but hid these
   continuations. `tools/jp_event_inventory.py` now expands only spans that parse
-  exactly up to the next candidate target: 3,561 physical pages are exposed.
-  Scenario 14 has 125 candidate records and 161 physical pages.
+  exactly up to the next candidate target. The final candidate in each block is
+  followed only through its first `FFFF`, not blindly to the block boundary:
+  3,567 physical pages are exposed. Scenario 14 has 125 candidate records and
+  162 physical pages.
 - `localization/event_dialogue_ko.json` stores reviewed text and `{NNNN}` dynamic
   name placeholders. The builder verifies every original address, capacity,
-  terminator, and `FFF7` actor ID before writing. The first Scenario 14 block now
-  covers 44 pointer records plus 25 continuation pages, 69 physical pages total.
+  terminator, and `FFF7` actor ID before writing. Scenario 14 now covers all 125
+  pointer records plus 37 continuation pages, 162 physical pages total. The
+  aligned English references are records `385..395` and `397..510`; record 396
+  is the verified insertion/deletion boundary and is intentionally skipped.
 - The first attempt patched only pointer targets. Build `F5BF` showed Japanese
   continuation pages after the first Korean Jessica page. This was not a reset;
   it proved the physical-page omission. Build `6EDC` translated the continuations
@@ -1218,6 +1222,19 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `captures/run/92cb_name_entry.png` and `captures/run/92cb_name_confirmed.png`.
   Continue isolating later names in scenario-sized batches.
 - `tools/render_event_pages.py --scenario 14` renders address-labelled physical
-  pages. A local `/tmp` Tesseract Japanese package was used only as an OCR aid;
-  rendered source images remain the authority because OCR frequently misreads
-  the Mega Drive font.
+  pages from the ROM passed with `--rom`, rather than echoing inventory-source
+  tokens. Checksum `F9AC` renders all 162 Korean pages under
+  `captures/analysis/event_pages_ko/` and the 14 contact sheets cover the entire
+  scenario. Automated tests prove that the declared address set exactly equals
+  the modified physical-page set and that all controls, dynamic actor IDs, page
+  terminators, and fixed capacities are preserved. Build, both inventories,
+  and all 65 tests pass.
+- Live verification currently covers the opening Jessica/Aaron/Hein sequence,
+  transition into the map, and absence of the former blank page/reset. Later
+  battle branches (Runestone, Langrisser attempts/competition, retreat/death
+  quotes, and the scenario ending) are translated and statically rendered but
+  are not yet all reached by live play. Keep them open in the scenario checklist
+  until each reachable path is captured without a reset or freeze.
+- A local `/tmp` Tesseract Japanese package was used only as an OCR aid; rendered
+  source images remain the authority because OCR frequently misreads the Mega
+  Drive font.

@@ -19,18 +19,18 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             ROOT / "localization/event_dialogue_ko.json"
         )
 
-    def test_scenario_14_intro_has_44_reviewed_pages(self):
+    def test_scenario_14_has_all_reviewed_physical_pages(self):
         primary = [row for row in self.rows if not row.get("continuation")]
         continuations = [row for row in self.rows if row.get("continuation")]
-        self.assertEqual(len(self.rows), 69)
-        self.assertEqual(len(primary), 44)
-        self.assertEqual(len(continuations), 25)
+        self.assertEqual(len(self.rows), 162)
+        self.assertEqual(len(primary), 125)
+        self.assertEqual(len(continuations), 37)
         self.assertTrue(all(row["scenario"] == 14 for row in self.rows))
         self.assertEqual(primary[0]["address"], "0x19CF7C")
-        self.assertEqual(primary[-1]["address"], "0x19DFF8")
+        self.assertEqual(primary[-1]["address"], "0x19EF02")
         self.assertEqual(
             [row["english_record"] for row in primary],
-            [*range(385, 396), *range(397, 430)],
+            [*range(385, 396), *range(397, 511)],
         )
 
     def test_dynamic_name_controls_and_terminators_are_preserved(self):

@@ -3,9 +3,9 @@
   "event_data_end": "0x1B9000",
   "scenario_count": 31,
   "page_count": 2968,
-  "modified_page_count": 316,
-  "physical_page_count": 3561,
-  "modified_physical_page_count": 394,
+  "modified_page_count": 397,
+  "physical_page_count": 3567,
+  "modified_physical_page_count": 487,
   "scenarios": [
     {
       "scenario": 1,
@@ -17299,9 +17299,9 @@
       "page_count": 103,
       "modified_page_count": 0,
       "unchanged_page_count": 103,
-      "physical_page_count": 127,
+      "physical_page_count": 128,
       "modified_physical_page_count": 0,
-      "unchanged_physical_page_count": 127,
+      "unchanged_physical_page_count": 128,
       "pages": [
         {
           "address": "0x191416",
@@ -19749,13 +19749,21 @@
           ],
           "modified": false,
           "modified_word_count": 0,
-          "physical_page_count": 1,
+          "physical_page_count": 2,
           "physical_pages": [
             {
               "address": "0x192B14",
               "word_count": 21,
               "terminator": "0xFFFD",
               "tokens": "0099 0096 0099 0075 FFF7 000F 0132 0122 006C FFFE 0092 00EF 0265 018A 00C2 0149 008E 00E7 00A9 0047 FFFD",
+              "modified": false,
+              "modified_word_count": 0
+            },
+            {
+              "address": "0x192B3E",
+              "word_count": 26,
+              "terminator": "0xFFFF",
+              "tokens": "0099 0096 0080 0138 00C2 0096 0073 0082 0147 008A 0287 007B 0065 FFFE 007C 007D 0074 00C2 0081 0082 0092 016F 00B8 0096 0047 FFFF",
               "modified": false,
               "modified_word_count": 0
             }
@@ -19770,9 +19778,9 @@
       "page_count": 147,
       "modified_page_count": 0,
       "unchanged_page_count": 147,
-      "physical_page_count": 168,
+      "physical_page_count": 169,
       "modified_physical_page_count": 0,
-      "unchanged_physical_page_count": 168,
+      "unchanged_physical_page_count": 169,
       "pages": [
         {
           "address": "0x1934B0",
@@ -23164,13 +23172,21 @@
           ],
           "modified": false,
           "modified_word_count": 0,
-          "physical_page_count": 1,
+          "physical_page_count": 2,
           "physical_pages": [
             {
               "address": "0x195426",
               "word_count": 34,
               "terminator": "0xFFFD",
               "tokens": "00D3 0078 0073 007B 0064 00BF 00F6 00FF 0063 FFFE 00E9 016F 007C 008A 00C2 00BF 0091 0078 0093 0080 0075 01A2 0118 008A FFFE 0096 00C4 007D 0099 0096 0073 007C 0047 FFFD",
+              "modified": false,
+              "modified_word_count": 0
+            },
+            {
+              "address": "0x19546A",
+              "word_count": 19,
+              "terminator": "0xFFFF",
+              "tokens": "00F0 00F5 007A 0197 0063 0023 0011 00BF 007A 0093 00E8 008C 008A FFFE 00CB 00A9 0252 0047 FFFF",
               "modified": false,
               "modified_word_count": 0
             }
@@ -32411,11 +32427,11 @@
       "block_start": "0x19C736",
       "block_end": "0x19EFA2",
       "page_count": 125,
-      "modified_page_count": 44,
-      "unchanged_page_count": 81,
-      "physical_page_count": 161,
-      "modified_physical_page_count": 69,
-      "unchanged_physical_page_count": 92,
+      "modified_page_count": 125,
+      "unchanged_page_count": 0,
+      "physical_page_count": 162,
+      "modified_physical_page_count": 162,
+      "unchanged_physical_page_count": 0,
       "pages": [
         {
           "address": "0x19CF7C",
@@ -33593,8 +33609,8 @@
           "source_refs": [
             "0x19CB64"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 13,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33602,8 +33618,8 @@
               "word_count": 14,
               "terminator": "0xFFFF",
               "tokens": "002A 004A 0027 000C 0013 004A 0027 008A 00FB 008D 00C4 0064 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 13
             }
           ]
         },
@@ -33615,8 +33631,8 @@
           "source_refs": [
             "0x19CB74"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 32,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33624,8 +33640,8 @@
               "word_count": 34,
               "terminator": "0xFFFF",
               "tokens": "00D3 009C 0079 01D8 01D9 0063 00EA 0087 0028 0027 002F 0029 0053 000A 004A 0096 00AA 00AA 006C FFFE 0073 01F0 0096 0073 008D 0096 0099 007C 00F5 0079 00A9 007D 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 32
             }
           ]
         },
@@ -33637,8 +33653,8 @@
           "source_refs": [
             "0x19CB96"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 22,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33646,8 +33662,8 @@
               "word_count": 23,
               "terminator": "0xFFFF",
               "tokens": "00AA 00AA 00D3 009C 00D3 00E1 0079 0075 FFFE 0081 0063 0028 0027 002F 0029 0053 000A 004A 0073 0063 018C 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 22
             }
           ]
         },
@@ -33659,8 +33675,8 @@
           "source_refs": [
             "0x19CBB8"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 35,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33668,8 +33684,8 @@
               "word_count": 36,
               "terminator": "0xFFFF",
               "tokens": "0028 0027 002F 0053 0029 000A 004A 00AA 00AA 006C FFFE 0092 0064 013B 0108 0084 007A 00A9 007D 01A1 0079 0072 0065 FFFE 0099 0092 007B 0064 0063 0074 00A9 018C 00AA 00AA 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 35
             }
           ]
         },
@@ -33681,8 +33697,8 @@
           "source_refs": [
             "0x19CBDA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 37,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -33690,16 +33706,16 @@
               "word_count": 38,
               "terminator": "0xFFFD",
               "tokens": "00D3 009C 0079 0028 0027 002F 0029 0053 000A 004A 006C FFFE 012D 0063 011F 00B8 0065 008D 0080 0073 007C 0087 00EF 00C4 00E8 FFFE 00E1 00B8 0073 007A 00A9 0210 007C 0063 0096 0073 0048 FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 37
             },
             {
               "address": "0x19E154",
               "word_count": 11,
               "terminator": "0xFFFF",
               "tokens": "0081 009C 0048 FFFE 01A7 00C4 0073 007C 00CC 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 10
             }
           ]
         },
@@ -33711,8 +33727,8 @@
           "source_refs": [
             "0x19CBEA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 17,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -33720,16 +33736,16 @@
               "word_count": 18,
               "terminator": "0xFFFD",
               "tokens": "00CC 0078 00E7 00A6 FFFE 00D3 00D3 0092 0074 0072 0064 00CC 0078 00CE 025D 0063 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 17
             },
             {
               "address": "0x19E18E",
               "word_count": 25,
               "terminator": "0xFFFF",
               "tokens": "0048 FFFE 0091 0096 0099 007C 00AA 00AA 006C FFFE 009B 0099 007A 00C2 01A7 00C4 00B8 00CC 0078 00CE 025D 0079 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 24
             }
           ]
         },
@@ -33741,8 +33757,8 @@
           "source_refs": [
             "0x19CBFA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 10,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -33750,16 +33766,16 @@
               "word_count": 11,
               "terminator": "0xFFFD",
               "tokens": "00D3 009C 0079 01D8 01D9 0063 0087 00AA 00AA 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 10
             },
             {
               "address": "0x19E1D6",
               "word_count": 18,
               "terminator": "0xFFFF",
               "tokens": "018D 007B 0075 01A7 00C4 0073 007C 0047 FFFE 00E8 0078 007C 0078 0124 00EF 0047 0048 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 16
             }
           ]
         },
@@ -33771,8 +33787,8 @@
           "source_refs": [
             "0x19CC0A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 24,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -33780,16 +33796,16 @@
               "word_count": 26,
               "terminator": "0xFFFD",
               "tokens": "00D3 009C 0079 01D8 01D9 0063 0087 0096 006C FFFE 00CB 007B 00CB 0093 0080 00BF 007B 0065 0146 00BF 0096 0095 0078 01F0 0047 FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 24
             },
             {
               "address": "0x19E22E",
               "word_count": 15,
               "terminator": "0xFFFF",
               "tokens": "01AD 007B 0075 01A7 00C4 0073 007C 0047 FFFE 0073 00B8 0074 00EF 0048 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 13
             }
           ]
         },
@@ -33801,8 +33817,8 @@
           "source_refs": [
             "0x19CC1A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 27,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33810,8 +33826,8 @@
               "word_count": 28,
               "terminator": "0xFFFF",
               "tokens": "0092 0146 007C 0252 0047 FFFE 00D3 0063 0092 0092 0074 00C2 0023 0011 00BF 007A 01CB 008A FFFE 00D3 00CB 009C 0065 0099 0092 0078 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 27
             }
           ]
         },
@@ -33823,8 +33839,8 @@
           "source_refs": [
             "0x19CC30"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 22,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33832,8 +33848,8 @@
               "word_count": 25,
               "terminator": "0xFFFF",
               "tokens": "FFF7 000D 0202 0047 FFFE 00D3 0063 0092 0092 0074 00C2 01CB 008A 00D3 00CB 009C 0065 FFFE 0099 0092 007C 0092 00A9 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 22
             }
           ]
         },
@@ -33845,8 +33861,8 @@
           "source_refs": [
             "0x19CC38"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 4,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33854,8 +33870,8 @@
               "word_count": 5,
               "terminator": "0xFFFF",
               "tokens": "0010 0001 0053 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 4
             }
           ]
         },
@@ -33867,8 +33883,8 @@
           "source_refs": [
             "0x19CC4C"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 26,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33876,8 +33892,8 @@
               "word_count": 27,
               "terminator": "0xFFFF",
               "tokens": "0092 0146 007C 0252 0047 FFFE 012D 0093 0099 0065 0080 0023 0011 00BF 0063 016A 010F 008A FFFE 00A6 007C 0093 008C 0095 0047 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 26
             }
           ]
         },
@@ -33889,8 +33905,8 @@
           "source_refs": [
             "0x19CC56"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 18,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33898,8 +33914,8 @@
               "word_count": 19,
               "terminator": "0xFFFF",
               "tokens": "00D0 007B 00AA 00AA 006C FFFE 00D3 009C 0079 0028 0027 002F 0029 0053 000A 004A 0096 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 18
             }
           ]
         },
@@ -33911,8 +33927,8 @@
           "source_refs": [
             "0x19CC62"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 14,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33920,8 +33936,8 @@
               "word_count": 15,
               "terminator": "0xFFFF",
               "tokens": "0028 0027 002F 0029 0053 000A 004A 008A 0084 007A 016B 009C 0064 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 14
             }
           ]
         },
@@ -33933,8 +33949,8 @@
           "source_refs": [
             "0x19CC6A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 30,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33942,8 +33958,8 @@
               "word_count": 32,
               "terminator": "0xFFFF",
               "tokens": "00BE 0149 00C2 0239 0283 0099 0064 006C FFFE 00D3 009C 015A 00B0 0063 0149 007C 00C2 0123 0282 018E 00EF 006C FFFE 0139 0122 014B 02E0 00A9 007D 0252 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 30
             }
           ]
         },
@@ -33955,8 +33971,8 @@
           "source_refs": [
             "0x19CC72"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 5,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33964,8 +33980,8 @@
               "word_count": 6,
               "terminator": "0xFFFF",
               "tokens": "019F 0065 FFF7 000D 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 5
             }
           ]
         },
@@ -33977,8 +33993,8 @@
           "source_refs": [
             "0x19CC7A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 5,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -33986,8 +34002,8 @@
               "word_count": 6,
               "terminator": "0xFFFF",
               "tokens": "00CB 00BF 00E0 00EF 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 5
             }
           ]
         },
@@ -33999,8 +34015,8 @@
           "source_refs": [
             "0x19CC88"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 11,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34008,8 +34024,8 @@
               "word_count": 12,
               "terminator": "0xFFFF",
               "tokens": "00A6 007B 0075 FFFE 00D3 00D3 0092 0074 0096 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 11
             }
           ]
         },
@@ -34021,8 +34037,8 @@
           "source_refs": [
             "0x19CC94"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 6,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34030,8 +34046,8 @@
               "word_count": 7,
               "terminator": "0xFFFF",
               "tokens": "019C 008A 0081 00C4 0095 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 6
             }
           ]
         },
@@ -34043,8 +34059,8 @@
           "source_refs": [
             "0x19CC9E"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 27,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34052,8 +34068,8 @@
               "word_count": 28,
               "terminator": "0xFFFF",
               "tokens": "0164 00FF 0099 0074 FFFE 0028 0027 002F 0029 0053 000A 004A 0079 0084 007A 016B 007B 0064 0093 FFFE 007C 0078 0063 007A 00AA 00AA 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 27
             }
           ]
         },
@@ -34065,8 +34081,8 @@
           "source_refs": [
             "0x19CCAC"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 15,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34074,8 +34090,8 @@
               "word_count": 16,
               "terminator": "0xFFFF",
               "tokens": "0078 0078 00AA 00AA 006C FFFE 0210 008C 00B8 00CC 0075 0110 00B8 0073 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 15
             }
           ]
         },
@@ -34087,8 +34103,8 @@
           "source_refs": [
             "0x19CCB6"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 18,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34096,8 +34112,8 @@
               "word_count": 19,
               "terminator": "0xFFFF",
               "tokens": "0071 0124 0073 01A1 007A 028D 007B 0065 FFFE 00E7 00BF 009C 007D 0073 00B8 0065 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 18
             }
           ]
         },
@@ -34109,8 +34125,8 @@
           "source_refs": [
             "0x19CCC0"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 20,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34118,8 +34134,8 @@
               "word_count": 21,
               "terminator": "0xFFFF",
               "tokens": "0168 007C 0064 0082 0093 01C0 008E 00E8 FFFE 000A 003D 008D 007C 0065 00C2 0091 00BF 00B8 0252 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 20
             }
           ]
         },
@@ -34131,8 +34147,8 @@
           "source_refs": [
             "0x19CCCA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 27,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34140,8 +34156,8 @@
               "word_count": 28,
               "terminator": "0xFFFF",
               "tokens": "0248 007B 0047 0048 FFFE 012E 0079 0096 00A9 00B8 0074 0075 010F 0118 0079 00CC 00C4 009C 00B8 FFFE 0096 007B 0064 0096 00AA 00AA 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 27
             }
           ]
         },
@@ -34153,8 +34169,8 @@
           "source_refs": [
             "0x19CCD4"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 18,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34162,8 +34178,8 @@
               "word_count": 19,
               "terminator": "0xFFFF",
               "tokens": "00A6 007B 0047 FFFE 00FF 0099 00E0 0096 0082 0148 007A 0125 0303 00E9 0064 0096 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 18
             }
           ]
         },
@@ -34175,8 +34191,8 @@
           "source_refs": [
             "0x19CCDE"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 14,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34184,8 +34200,8 @@
               "word_count": 15,
               "terminator": "0xFFFF",
               "tokens": "00A6 00E1 007B 0047 FFFE 0216 01FA 007A 02E1 0082 00A9 00E9 0064 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 14
             }
           ]
         },
@@ -34197,8 +34213,8 @@
           "source_refs": [
             "0x19CCEE"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 38,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34206,8 +34222,8 @@
               "word_count": 39,
               "terminator": "0xFFFF",
               "tokens": "008D 0092 0082 0075 00EF 009C 0079 FFFE 0081 0063 0087 008A 01CE 0082 007A 014C 00A6 0063 0096 0075 00BE 0149 008A FFFE 0121 0065 0073 00C4 009C 00E0 0073 00BF 0073 007C 009B 00C4 0096 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 38
             }
           ]
         },
@@ -34219,8 +34235,8 @@
           "source_refs": [
             "0x19CCF6"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 7,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34228,8 +34244,8 @@
               "word_count": 8,
               "terminator": "0xFFFF",
               "tokens": "00E1 0063 0236 0082 0074 00A9 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 7
             }
           ]
         },
@@ -34241,8 +34257,8 @@
           "source_refs": [
             "0x19CD00"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 16,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34250,8 +34266,8 @@
               "word_count": 17,
               "terminator": "0xFFFF",
               "tokens": "0265 0079 00D6 007C 0125 008A 023A 00CB 016F 00C2 FFFE 0099 0092 016F 00B8 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 16
             }
           ]
         },
@@ -34263,8 +34279,8 @@
           "source_refs": [
             "0x19CD0A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 20,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34272,8 +34288,8 @@
               "word_count": 21,
               "terminator": "0xFFFF",
               "tokens": "007C 00C4 0073 007C 00AA 00AA FFFE 0262 0079 00E7 00BF 009C 0065 0099 0092 007B 0065 00C2 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 20
             }
           ]
         },
@@ -34285,8 +34301,8 @@
           "source_refs": [
             "0x19CD14"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 36,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -34294,16 +34310,16 @@
               "word_count": 37,
               "terminator": "0xFFFD",
               "tokens": "00D3 0063 0149 01C4 00C2 0285 01C4 0079 FFFE 0188 007C 006C 00D3 0063 0124 00C2 0183 00B0 00E4 0134 007A 0093 007B 0065 FFFE 0096 0073 0082 0072 0108 0099 007C 00C2 0146 00EF 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 36
             },
             {
               "address": "0x19E5D0",
               "word_count": 44,
               "terminator": "0xFFFF",
               "tokens": "00D3 00D3 00C2 0265 018A 0107 014C 00E4 0134 007A 0093 007B 0065 0075 FFFE 01E4 008B 0063 0149 01C4 0047 FFFE 014C 00A6 0252 0075 0023 0011 00BF 007A 0081 0063 0087 008A FFFE 019E 0099 0065 00C2 0073 00BF 00B8 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 43
             }
           ]
         },
@@ -34315,8 +34331,8 @@
           "source_refs": [
             "0x19CD1E"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 32,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34324,8 +34340,8 @@
               "word_count": 36,
               "terminator": "0xFFFF",
               "tokens": "FFF7 000D 0202 0047 FFFE 0265 018A 0079 0138 0063 016A 010F 008A 02C7 007C 01B9 008C 0065 007C 007D FFFE 0163 007A 0075 0081 0063 0087 008A 0091 01CE 0082 00E5 00CB 007C 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 32
             }
           ]
         },
@@ -34337,8 +34353,8 @@
           "source_refs": [
             "0x19CD26"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 7,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34346,8 +34362,8 @@
               "word_count": 8,
               "terminator": "0xFFFF",
               "tokens": "0078 018D 006C 012C 018D 0252 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 7
             }
           ]
         },
@@ -34359,8 +34375,8 @@
           "source_refs": [
             "0x19CD30"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 31,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34368,8 +34384,8 @@
               "word_count": 32,
               "terminator": "0xFFFF",
               "tokens": "0087 00C2 01CE 00BF 016F 00B8 0047 FFFE 00E1 009C 015A 00B0 0148 007A 01A5 018D 0073 00BF 0075 011C 008A FFFE 0096 00A6 0210 00A9 007D 0124 00EF 0073 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 31
             }
           ]
         },
@@ -34381,8 +34397,8 @@
           "source_refs": [
             "0x19CD3A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 8,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34390,8 +34406,8 @@
               "word_count": 9,
               "terminator": "0xFFFF",
               "tokens": "00E1 00B8 0073 003C 0005 0073 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 8
             }
           ]
         },
@@ -34403,8 +34419,8 @@
           "source_refs": [
             "0x19CD44"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 8,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34412,8 +34428,8 @@
               "word_count": 9,
               "terminator": "0xFFFF",
               "tokens": "0216 01FA 007A 02E1 007D 0073 00CC 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 8
             }
           ]
         },
@@ -34425,8 +34441,8 @@
           "source_refs": [
             "0x19CD4E"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 7,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34434,8 +34450,8 @@
               "word_count": 8,
               "terminator": "0xFFFF",
               "tokens": "0002 002D 004B 004B 004A 0053 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 7
             }
           ]
         },
@@ -34447,8 +34463,8 @@
           "source_refs": [
             "0x19CD58"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 3,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34456,8 +34472,8 @@
               "word_count": 6,
               "terminator": "0xFFFF",
               "tokens": "FFF7 000D 0202 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 3
             }
           ]
         },
@@ -34469,8 +34485,8 @@
           "source_refs": [
             "0x19CD66"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 18,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34478,8 +34494,8 @@
               "word_count": 19,
               "terminator": "0xFFFF",
               "tokens": "00E8 0078 00EF 007B 0047 FFFE 00D3 009C 0079 0196 0154 010C 010D 010E 0063 0089 00EF 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 18
             }
           ]
         },
@@ -34491,8 +34507,8 @@
           "source_refs": [
             "0x19CD70"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 5,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34500,8 +34516,8 @@
               "word_count": 6,
               "terminator": "0xFFFF",
               "tokens": "0080 00BF 007B 0064 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 5
             }
           ]
         },
@@ -34513,8 +34529,8 @@
           "source_refs": [
             "0x19CD7A"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 20,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34522,8 +34538,8 @@
               "word_count": 21,
               "terminator": "0xFFFF",
               "tokens": "0099 0075 023D 00CE 00BF 009C 00B8 006C FFFE 00D3 0063 0262 0079 026D 00C4 007D 0063 0096 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 20
             }
           ]
         },
@@ -34535,8 +34551,8 @@
           "source_refs": [
             "0x19CD84"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 28,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34544,8 +34560,8 @@
               "word_count": 29,
               "terminator": "0xFFFF",
               "tokens": "00D3 00D3 0074 0265 018A 0093 FFFE 0149 009B 0073 00C4 009C 00E0 0073 00BF 0248 0093 00C2 0075 FFFE 0081 009B 009C 0073 0023 0011 008C 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 28
             }
           ]
         },
@@ -34557,8 +34573,8 @@
           "source_refs": [
             "0x19CD8E"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 4,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34566,8 +34582,8 @@
               "word_count": 5,
               "terminator": "0xFFFF",
               "tokens": "01AD 00D0 007B 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 4
             }
           ]
         },
@@ -34579,8 +34595,8 @@
           "source_refs": [
             "0x19CD98"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 14,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34588,8 +34604,8 @@
               "word_count": 15,
               "terminator": "0xFFFF",
               "tokens": "00D3 00D3 00C2 0262 0079 0091 00CB 008E 0065 FFFE 0110 016F 007D 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 14
             }
           ]
         },
@@ -34601,8 +34617,8 @@
           "source_refs": [
             "0x19CDA2"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 6,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34610,8 +34626,8 @@
               "word_count": 7,
               "terminator": "0xFFFF",
               "tokens": "00CB 00A9 0079 018C 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 6
             }
           ]
         },
@@ -34623,8 +34639,8 @@
           "source_refs": [
             "0x19CDAC"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 5,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34632,8 +34648,8 @@
               "word_count": 6,
               "terminator": "0xFFFF",
               "tokens": "0078 01AD 01AD 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 5
             }
           ]
         },
@@ -34645,8 +34661,8 @@
           "source_refs": [
             "0x19CDB6"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 4,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34654,8 +34670,8 @@
               "word_count": 5,
               "terminator": "0xFFFF",
               "tokens": "0002 002F 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 4
             }
           ]
         },
@@ -34667,8 +34683,8 @@
           "source_refs": [
             "0x19CDC0"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 8,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34676,8 +34692,8 @@
               "word_count": 9,
               "terminator": "0xFFFF",
               "tokens": "0260 0079 0121 0064 018C 004E 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 8
             }
           ]
         },
@@ -34689,8 +34705,8 @@
           "source_refs": [
             "0x19CDCA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 29,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -34698,16 +34714,16 @@
               "word_count": 33,
               "terminator": "0xFFFD",
               "tokens": "FFF7 0014 0063 01B3 00EF 0093 0075 FFFE 0081 0063 0087 00C2 0262 007A 0099 0096 01A7 00C4 0073 007C 0093 007C 0078 FFFE 0124 00EF 007B 0064 0073 00AA 00AA 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 29
             },
             {
               "address": "0x19E836",
               "word_count": 29,
               "terminator": "0xFFFF",
               "tokens": "0107 014C 00E4 0134 00C2 0138 0063 0285 008A 01B9 008C 0075 FFFE 0262 0079 0087 008A 01A7 00A6 0064 008C 0063 01A1 0163 008A 00BE 009C 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 28
             }
           ]
         },
@@ -34719,8 +34735,8 @@
           "source_refs": [
             "0x19CDD8"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 4,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34728,8 +34744,8 @@
               "word_count": 5,
               "terminator": "0xFFFF",
               "tokens": "00C8 0282 007A 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 4
             }
           ]
         },
@@ -34741,8 +34757,8 @@
           "source_refs": [
             "0x19CDE6"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 16,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34750,8 +34766,8 @@
               "word_count": 19,
               "terminator": "0xFFFF",
               "tokens": "FFF7 0011 00C2 FFFE 0107 014C 00E4 0134 008A 01A2 0119 0099 0064 0138 008A 01D0 016F 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 16
             }
           ]
         },
@@ -34763,8 +34779,8 @@
           "source_refs": [
             "0x19CDEE"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 3,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34772,8 +34788,8 @@
               "word_count": 4,
               "terminator": "0xFFFF",
               "tokens": "0019 0053 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 3
             }
           ]
         },
@@ -34785,8 +34801,8 @@
           "source_refs": [
             "0x19CDF6"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 45,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -34794,16 +34810,16 @@
               "word_count": 49,
               "terminator": "0xFFFD",
               "tokens": "FFF7 0001 00CC 006C FFFE 0150 024B 0073 00BF 00E0 0006 000A 001E 0093 0063 01CF 014D 008A FFFE 008D 00C4 0064 007C 0093 00D3 0095 00EF 0079 0075 01BA 025F 00C2 FFFE 0028 0027 002F 0029 0053 000A 004A 0063 016B 0084 0079 01CB 01CF 00EF 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 45
             },
             {
               "address": "0x19E90A",
               "word_count": 32,
               "terminator": "0xFFFF",
               "tokens": "00EF 0079 02BA 009C 007D 0073 0047 FFFE 0006 000A 001E 0093 0063 01CF 014D 00C2 0075 007C 0146 009C FFFE 008D 00C4 0065 00E7 007D 0047 01B4 0146 0073 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 31
             }
           ]
         },
@@ -34815,8 +34831,8 @@
           "source_refs": [
             "0x19CE00"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 10,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -34824,16 +34840,16 @@
               "word_count": 11,
               "terminator": "0xFFFD",
               "tokens": "00A6 007B 0075 FFFE 00E0 0096 0073 00AA 00AA 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 10
             },
             {
               "address": "0x19E960",
               "word_count": 7,
               "terminator": "0xFFFF",
               "tokens": "0139 0122 0288 014B 00EF 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 6
             }
           ]
         },
@@ -34845,8 +34861,8 @@
           "source_refs": [
             "0x19CE0E"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 27,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34854,8 +34870,8 @@
               "word_count": 28,
               "terminator": "0xFFFF",
               "tokens": "00D0 0078 00AA 00AA 006C FFFE 00D3 009C 0074 018B 0246 0099 0065 0028 0027 002F 0029 0053 000A 004A 0079 FFFE 01CE 009C 007D 0073 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 27
             }
           ]
         },
@@ -34867,8 +34883,8 @@
           "source_refs": [
             "0x19CE24"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 39,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34876,8 +34892,8 @@
               "word_count": 42,
               "terminator": "0xFFFF",
               "tokens": "FFF7 0011 0075 FFFE 0080 0078 00CE 020A 0078 00CF 00B8 00EF 006C FFFE 00D3 00D3 0092 0074 00A6 009C 00E0 0075 0092 0146 0023 0011 00BF 007A FFFE 0187 0088 00CB 009C 007D 0124 00C2 0081 007D 0092 007C 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 39
             }
           ]
         },
@@ -34889,8 +34905,8 @@
           "source_refs": [
             "0x19CE2C"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 16,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34898,8 +34914,8 @@
               "word_count": 17,
               "terminator": "0xFFFF",
               "tokens": "0019 0053 0047 FFFE 0074 00C2 0138 0063 0203 0118 007A 0166 0082 0092 00A9 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 16
             }
           ]
         },
@@ -34911,8 +34927,8 @@
           "source_refs": [
             "0x19CE34"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 6,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34920,8 +34936,8 @@
               "word_count": 7,
               "terminator": "0xFFFF",
               "tokens": "0078 018D 0075 012C 018D 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 6
             }
           ]
         },
@@ -34933,8 +34949,8 @@
           "source_refs": [
             "0x19CE48"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 7,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34942,8 +34958,8 @@
               "word_count": 8,
               "terminator": "0xFFFF",
               "tokens": "00A6 007B 0075 00E7 007D 0073 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 7
             }
           ]
         },
@@ -34955,8 +34971,8 @@
           "source_refs": [
             "0x19CE50"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 14,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34964,8 +34980,8 @@
               "word_count": 16,
               "terminator": "0xFFFF",
               "tokens": "0123 0274 00C2 00A9 007D 0073 006C FFFE 00A9 01AD 007A 00E5 0079 009C 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 14
             }
           ]
         },
@@ -34977,8 +34993,8 @@
           "source_refs": [
             "0x19CE58"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 4,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -34986,8 +35002,8 @@
               "word_count": 5,
               "terminator": "0xFFFF",
               "tokens": "0019 0053 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 4
             }
           ]
         },
@@ -34999,8 +35015,8 @@
           "source_refs": [
             "0x19CE66"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 46,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35008,8 +35024,8 @@
               "word_count": 47,
               "terminator": "0xFFFF",
               "tokens": "003C 0075 003C 0005 0073 0047 0048 FFFE 00D3 009C 0077 00E8 0063 0094 00CB 0093 00C2 00AA 00AA 006C FFFE 00EF 0079 00D3 00D3 0074 011C 0248 009B 00C4 007A 00C2 007C 0096 0248 006C FFFE 007C 007B 0064 00B8 014B 02E0 00EF 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 46
             }
           ]
         },
@@ -35021,8 +35037,8 @@
           "source_refs": [
             "0x19CE78"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 29,
           "physical_page_count": 2,
           "physical_pages": [
             {
@@ -35030,16 +35046,16 @@
               "word_count": 30,
               "terminator": "0xFFFD",
               "tokens": "0028 0027 002F 0029 0053 000A 004A 00C2 FFFE 009D 01D4 0063 01D5 01D6 015A 0109 0063 009A 007A 00C2 0067 008E 0073 007C FFFE 0063 0074 00A9 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 29
             },
             {
               "address": "0x19EAFE",
               "word_count": 21,
               "terminator": "0xFFFF",
               "tokens": "0262 015A 0109 007A 00C2 0075 FFF7 0004 0096 FFFE FFF7 0001 0099 0096 0067 008E 0092 016F 00B8 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 19
             }
           ]
         },
@@ -35051,8 +35067,8 @@
           "source_refs": [
             "0x19CE88"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 15,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35060,8 +35076,8 @@
               "word_count": 16,
               "terminator": "0xFFFF",
               "tokens": "0021 000A 0001 0023 0027 000E 004A 003B 008A 0084 007A 016B 009C 0064 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 15
             }
           ]
         },
@@ -35073,8 +35089,8 @@
           "source_refs": [
             "0x19CE92"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 26,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35082,8 +35098,8 @@
               "word_count": 27,
               "terminator": "0xFFFF",
               "tokens": "00D3 009C 00C2 0048 FFFE 0028 0027 002F 0029 0053 000A 004A 00CE 025D 0073 007C 0252 0048 FFFE 025C 0073 0087 00EF 0079 00AA 00AA FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 26
             }
           ]
         },
@@ -35095,8 +35111,8 @@
           "source_refs": [
             "0x19CEA4"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 14,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35104,8 +35120,8 @@
               "word_count": 15,
               "terminator": "0xFFFF",
               "tokens": "0028 0027 002F 0029 0053 000A 004A 008A 0084 007A 016B 009C 0064 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 14
             }
           ]
         },
@@ -35117,8 +35133,8 @@
           "source_refs": [
             "0x19CECC"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 15,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35126,8 +35142,8 @@
               "word_count": 16,
               "terminator": "0xFFFF",
               "tokens": "0010 004C 0053 0047 FFFE 0163 007A 0178 009B 0073 0096 007B 0064 0096 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 15
             }
           ]
         },
@@ -35139,8 +35155,8 @@
           "source_refs": [
             "0x19CEDA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 27,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35148,8 +35164,8 @@
               "word_count": 30,
               "terminator": "0xFFFF",
               "tokens": "FFF7 000D 0202 0075 0140 007C 0074 0023 0011 008A FFFE 01D0 0099 0092 0099 0083 0078 006C FFFE 01BA 0073 00BF 0163 007A 0178 007C 0092 00A9 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 27
             }
           ]
         },
@@ -35161,8 +35177,8 @@
           "source_refs": [
             "0x19CEE2"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 43,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35170,8 +35186,8 @@
               "word_count": 44,
               "terminator": "0xFFFF",
               "tokens": "00E7 008C 0065 0091 00C4 0047 FFFE 0081 0063 0087 0063 0088 0089 0079 01B5 00BF 0073 007C 0078 0086 007A FFFE 018D 00E7 0110 007A 01A2 007B 0153 018D 0063 00C2 0130 0131 00EF 006C FFFE 0288 014B 00A9 007D 0252 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 43
             }
           ]
         },
@@ -35183,8 +35199,8 @@
           "source_refs": [
             "0x19CEEA"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 3,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35192,8 +35208,8 @@
               "word_count": 4,
               "terminator": "0xFFFF",
               "tokens": "0019 0053 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 3
             }
           ]
         },
@@ -35205,8 +35221,8 @@
           "source_refs": [
             "0x19CEF8"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 54,
           "physical_page_count": 3,
           "physical_pages": [
             {
@@ -35214,24 +35230,24 @@
               "word_count": 55,
               "terminator": "0xFFFD",
               "tokens": "01BA 0073 00BF 00E0 0023 0011 008A 01D0 0099 0075 FFFE 0087 008A 01D2 0078 0124 0080 0074 0072 0073 00A6 00C2 0073 007C 0079 0075 FFFE 0081 0063 0087 0063 0088 0089 0079 01B5 00BF 0073 007C 0078 008E 007A FFFE 00E4 0134 0063 02D3 0161 0080 0071 0072 007C 00AA 00AA 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 54
             },
             {
               "address": "0x19ECC6",
               "word_count": 15,
               "terminator": "0xFFFD",
               "tokens": "00D3 00D3 00C2 0288 014B 00A9 007D 0099 0096 0073 007C 0073 00AA 00AA FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 14
             },
             {
               "address": "0x19ECE4",
               "word_count": 39,
               "terminator": "0xFFFF",
               "tokens": "FFF7 0001 00CC 006C FFFE 00D3 0063 0114 026D 00C2 0091 0081 0146 00C4 00EF 0047 FFFE 01BA 01FD 0297 007B 0064 0093 0072 00D3 00E1 0075 0091 0148 008A FFFE 01D0 0099 0065 0110 016F 007D 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 36
             }
           ]
         },
@@ -35243,8 +35259,8 @@
           "source_refs": [
             "0x19CF02"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 12,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35252,8 +35268,8 @@
               "word_count": 13,
               "terminator": "0xFFFF",
               "tokens": "0196 0154 010C 010D 010E FFFE FFF7 000D 0096 00AA 00AA 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 12
             }
           ]
         },
@@ -35265,8 +35281,8 @@
           "source_refs": [
             "0x19CF10"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 23,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35274,8 +35290,8 @@
               "word_count": 24,
               "terminator": "0xFFFF",
               "tokens": "00D3 0063 0087 0079 017D 0063 0087 007A FFFE 00B2 0279 0074 0072 007D 0304 00F0 0063 0195 01FE 0073 0063 018C 0048 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 23
             }
           ]
         },
@@ -35287,8 +35303,8 @@
           "source_refs": [
             "0x19CF18"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 29,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35296,8 +35312,8 @@
               "word_count": 30,
               "terminator": "0xFFFF",
               "tokens": "00E1 0099 0065 00D3 009C 008A 0067 007C FFFE 00D3 0073 016F 007D 0063 00C2 0075 009D 01D4 0063 01D5 01D6 00EF 00C4 FFFE 0073 0063 0074 00A9 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 29
             }
           ]
         },
@@ -35309,8 +35325,8 @@
           "source_refs": [
             "0x19CF26"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 23,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35318,8 +35334,8 @@
               "word_count": 24,
               "terminator": "0xFFFF",
               "tokens": "0216 01FA 00F2 007C 0065 0072 0064 0252 0047 FFFE 00D3 0063 0092 0092 00F0 00F5 007A 010F 008C 0153 0080 0078 0047 FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 23
             }
           ]
         },
@@ -35331,8 +35347,8 @@
           "source_refs": [
             "0x19CF34"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 39,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35340,8 +35356,8 @@
               "word_count": 40,
               "terminator": "0xFFFF",
               "tokens": "0138 0063 0081 009B 0065 01AD 0081 007C 008A FFFE 00FB 007D 0093 0075 0092 00EF 0000 002A 0019 0032 004A 003B 00C2 FFFE 00E1 0063 0089 008A 0243 00DC 0074 0072 0248 00CC 0078 00CE 025D 0073 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 39
             }
           ]
         },
@@ -35353,8 +35369,8 @@
           "source_refs": [
             "0x19CF42"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 39,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35362,8 +35378,8 @@
               "word_count": 41,
               "terminator": "0xFFFF",
               "tokens": "0138 0063 0081 009B 0065 01AD 0081 007C 0096 00BF FFFE 00FB 007D 0093 0075 0092 00EF 0000 002A 0019 0032 004A 003B 00C2 FFFE 00E1 0063 0089 008A 0243 00DC 0074 0072 0073 007C 00CC 0078 00EF 0073 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 39
             }
           ]
         },
@@ -35375,8 +35391,8 @@
           "source_refs": [
             "0x19CF50"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 22,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35384,8 +35400,8 @@
               "word_count": 23,
               "terminator": "0xFFFF",
               "tokens": "010F 008C 0153 018D 0073 00BF 00E0 0075 01BA 008A FFFE 0091 007C 0065 01EB 007A 0081 0082 0092 016F 0248 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 22
             }
           ]
         },
@@ -35397,8 +35413,8 @@
           "source_refs": [
             "0x19CF5E"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 17,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35406,8 +35422,8 @@
               "word_count": 18,
               "terminator": "0xFFFF",
               "tokens": "010F 008C 0153 018D 0073 00BF 00E0 FFFE 01BA 0099 0096 0073 007C 00EF 0095 0078 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 17
             }
           ]
         },
@@ -35419,8 +35435,8 @@
           "source_refs": [
             "0x19CF6C"
           ],
-          "modified": false,
-          "modified_word_count": 0,
+          "modified": true,
+          "modified_word_count": 18,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -35428,8 +35444,8 @@
               "word_count": 19,
               "terminator": "0xFFFF",
               "tokens": "007C 00CC 007C 00CC 00EF 0073 006C FFFE 0026 0007 0026 0007 0099 0065 0072 0064 01F0 006C FFFF",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 18
             }
           ]
         },
@@ -35441,17 +35457,25 @@
           "source_refs": [
             "0x19CF74"
           ],
-          "modified": false,
-          "modified_word_count": 0,
-          "physical_page_count": 1,
+          "modified": true,
+          "modified_word_count": 29,
+          "physical_page_count": 2,
           "physical_pages": [
             {
               "address": "0x19EF02",
               "word_count": 30,
               "terminator": "0xFFFD",
               "tokens": "012D 0079 0081 0095 0078 0093 0080 FFFE 0000 002A 0019 0032 004A 003B 0063 00DF 01DE 008A 00AD 0096 016F 0065 00C2 FFFE 0073 00BF 0073 007C 006C FFFD",
-              "modified": false,
-              "modified_word_count": 0
+              "modified": true,
+              "modified_word_count": 29
+            },
+            {
+              "address": "0x19EF3E",
+              "word_count": 50,
+              "terminator": "0xFFFF",
+              "tokens": "0023 0011 00BF 0063 01B6 01B7 008A 0078 0086 00A6 00EF 00A6 0064 008C FFFE 009F 0087 0028 0027 002F 0029 0053 000A 004A 0063 00D9 0069 0063 0230 007A FFFE 0149 0091 0078 0047 FFFE 00E1 0099 0065 FFF7 0002 008A 0112 00C4 0125 00A9 00B8 00EF 0047 FFFF",
+              "modified": true,
+              "modified_word_count": 49
             }
           ]
         }
@@ -37962,9 +37986,9 @@
       "page_count": 87,
       "modified_page_count": 0,
       "unchanged_page_count": 87,
-      "physical_page_count": 97,
+      "physical_page_count": 98,
       "modified_physical_page_count": 0,
-      "unchanged_physical_page_count": 97,
+      "unchanged_physical_page_count": 98,
       "pages": [
         {
           "address": "0x1A1058",
@@ -39948,13 +39972,21 @@
           ],
           "modified": false,
           "modified_word_count": 0,
-          "physical_page_count": 1,
+          "physical_page_count": 2,
           "physical_pages": [
             {
               "address": "0x1A1F78",
               "word_count": 33,
               "terminator": "0xFFFD",
               "tokens": "00CC 0099 0047 FFFE 00D3 0063 0092 0092 00F0 00F5 007A 010F 008C 00D3 018D 0252 0047 FFFE 00E1 0099 0065 010A 01F1 FFF7 000E 008A FFFE 01D0 00A9 00B8 00EF 0047 FFFD",
+              "modified": false,
+              "modified_word_count": 0
+            },
+            {
+              "address": "0x1A1FBA",
+              "word_count": 20,
+              "terminator": "0xFFFF",
+              "tokens": "00E1 0099 0065 00AA 00AA 0075 FFF7 0002 0080 FFFE 01B4 0146 01E2 007B 0065 0110 016F 007D 0047 FFFF",
               "modified": false,
               "modified_word_count": 0
             }
@@ -39969,9 +40001,9 @@
       "page_count": 108,
       "modified_page_count": 0,
       "unchanged_page_count": 108,
-      "physical_page_count": 134,
+      "physical_page_count": 135,
       "modified_physical_page_count": 0,
-      "unchanged_physical_page_count": 134,
+      "unchanged_physical_page_count": 135,
       "pages": [
         {
           "address": "0x1A2716",
@@ -42545,13 +42577,21 @@
           ],
           "modified": false,
           "modified_word_count": 0,
-          "physical_page_count": 1,
+          "physical_page_count": 2,
           "physical_pages": [
             {
               "address": "0x1A416E",
               "word_count": 52,
               "terminator": "0xFFFD",
               "tokens": "01E3 02B0 00EF 0079 0075 007C 0092 00C2 0091 0148 0093 FFFE 0064 009B 018D 009C 0065 007C 007D 001A 001E 00C2 0073 007C 006C FFFE 0262 0063 0089 0079 0194 0139 007A 025F 0176 0099 0064 01A1 007A FFFE 0106 0084 008A 0099 0065 00E7 0095 0078 00AA 00AA 006C FFFD",
+              "modified": false,
+              "modified_word_count": 0
+            },
+            {
+              "address": "0x1A41D6",
+              "word_count": 21,
+              "terminator": "0xFFFF",
+              "tokens": "00E1 009C 0074 00C2 0092 0064 0297 0091 0078 0075 FFFE 009D 01D4 0063 01D5 01D6 00E8 0080 00CC 006C FFFF",
               "modified": false,
               "modified_word_count": 0
             }
@@ -50938,9 +50978,9 @@
       "page_count": 151,
       "modified_page_count": 0,
       "unchanged_page_count": 151,
-      "physical_page_count": 190,
+      "physical_page_count": 191,
       "modified_physical_page_count": 0,
-      "unchanged_physical_page_count": 190,
+      "unchanged_physical_page_count": 191,
       "pages": [
         {
           "address": "0x1AB182",
@@ -54564,13 +54604,21 @@
           ],
           "modified": false,
           "modified_word_count": 0,
-          "physical_page_count": 1,
+          "physical_page_count": 2,
           "physical_pages": [
             {
               "address": "0x1AD326",
               "word_count": 27,
               "terminator": "0xFFFD",
               "tokens": "00CC 0099 0075 FFFE 0092 0146 001D 004A 0029 004A 002C 0053 003B 008A FFFE 0084 007A 016B 009C 007D 0099 0096 0073 007C 0073 006C FFFD",
+              "modified": false,
+              "modified_word_count": 0
+            },
+            {
+              "address": "0x1AD35C",
+              "word_count": 19,
+              "terminator": "0xFFFF",
+              "tokens": "00E1 009C 0096 00BF 0140 007C 0074 FFFE FFF7 000A 0063 01E2 0125 007A 014C 00A6 0252 0047 FFFF",
               "modified": false,
               "modified_word_count": 0
             }

@@ -64,6 +64,21 @@ def read_physical_segments(data: bytes, start: int, limit: int) -> list[tuple[in
     return segments if offset == limit else None
 
 
+def final_record_chain_end(data: bytes, start: int, block_end: int) -> int:
+    offset = start
+    for _ in range(4096):
+        if offset + 2 > block_end:
+            return start
+        word = be16(data, offset)
+        offset += 2
+        if word == 0xFFFF:
+            return offset
+        if word == 0xFFFD or word in TEXT_CONTROLS or word <= MAX_GLYPH_ID:
+            continue
+        return start
+    return start
+
+
 def event_block_starts(data: bytes) -> list[int]:
     starts = [
         be32(data, EVENT_POINTER_TABLE + index * 4)
@@ -119,7 +134,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             next_target = (
                 ordered_addresses[page_index + 1]
                 if page_index + 1 < len(ordered_addresses)
-                else target + int(page["word_count"]) * 2
+                else final_record_chain_end(japanese, target, end)
             )
             first_end = target + int(page["word_count"]) * 2
             segments = (
