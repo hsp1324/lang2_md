@@ -14,6 +14,8 @@ documented, committed, and pushed independently.
   mercenary-battle-name, and status-message word resources with explicit review flags.
 - Inventory every builder-declared UI patch and compressed byte-font relocation;
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
+- Scan direct `FFFF` word-string candidates outside event blocks, classify known
+  owners, and require render/code-reference proof before patching unknown candidates.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names

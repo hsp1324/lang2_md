@@ -30,6 +30,7 @@
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
+- `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
@@ -76,9 +77,10 @@ python3 tools/jp_event_inventory.py
 python3 tools/jp_global_inventory.py
 python3 tools/jp_resource_inventory.py
 python3 tools/jp_ui_surface_inventory.py
+python3 tools/jp_direct_string_inventory.py
 ```
 
-전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
+전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에, 직접 문자열 후보는 `docs/direct_word_candidate_inventory.md`, `localization/direct_word_candidates.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
 
 패치 원인 분리용 옵션:
 

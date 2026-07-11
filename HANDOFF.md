@@ -943,3 +943,18 @@ full-game Korean localization, split into six stages in
   compressed UI resources, and undeclared executable-embedded strings.
 - Details are in `localization/ui_patch_surfaces.json`; the summary and gap
   list are in `docs/ui_patch_surface_inventory.md`.
+
+### Direct Word-String Candidate Scan
+
+- `tools/jp_direct_string_inventory.py` scans `0x000000..0x180000` for at
+  least three glyph IDs (`0000..07FF`), known controls, and `FFFF` termination.
+  Scenario event blocks are covered separately by `jp_event_inventory.py`.
+- Baseline: 783 candidates, of which 73 exactly match known pointer-table
+  records, 59 match declared direct patches, and 651 remain unclassified.
+  The current build differs at 209 candidate starts.
+- Unclassified matches can be executable data or graphics metadata. Render or
+  cross-reference them from 68000 code before adding a patch; never bulk-write
+  all candidates.
+- Detailed tokens and ownership are in
+  `localization/direct_word_candidates.json`; the summary is
+  `docs/direct_word_candidate_inventory.md`.
