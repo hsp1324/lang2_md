@@ -89,13 +89,13 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 686D
+checksum: 5B8A
 ```
 
-The current source builds checksum `7C92`. It adds the explicit Scenario 1
-class-156 `ﾌﾟﾘｰｽﾄ` -> `프리스트` mapping and corrects the class pointer-table
-base. It passed build and offline tests, but was not re-run in BlastEm because
-the user requested that emulator work stop while they use the computer.
+The current source also builds checksum `5B8A`. It includes the Scenario 1
+class-156 `ﾌﾟﾘｰｽﾄ` -> `프리스트` correction and localizes the shared unit-type
+notices. A clean BlastEm run reached `TURN 2` and verified the support priest as
+`사제 / 프리스트` with `NPC 유닛입니다`.
 
 Build command:
 
@@ -831,7 +831,7 @@ The first-turn support records are hidden initially (`X=Y=0xFF`): militia at
 - This is deliberately a data editor, not yet a map/event editor. Do not expose
   unknown record bytes until their runtime ownership is proven.
 
-### Automation Attempt And Remaining Live Check
+### Automation Attempt And Final Live Check
 
 - `battle_command_menu_visible` previously mistook blue portrait/cutscene
   frames for the command menu. Bottom status-bar and dark-panel checks plus a
@@ -839,8 +839,31 @@ The first-turn support records are hidden initially (`X=Y=0xFF`): militia at
   to 2.0 seconds; this is detector confirmation time, not game input delay.
 - The improved detector still encountered transient cutscene candidates during
   the last attempt. Do not treat that interrupted run as a ROM reset result.
-- Per the user's current request, no emulator/browser/keyboard/mouse automation
-  should run while they use this PC. When allowed again, first verify build
-  `7C92` at the support priest (`사제 / 프리스트`) and complete the first-turn
-  event once. Then finish the detector using saved frame classification, not
-  repeated foreground input experiments.
+- Build `7C92` captured every post-turn confirmation as
+  `captures/run/regression_7c92_postturn_01.png` through `_75.png`. It reached
+  `TURN 2` at `_67.png`, then displayed the Hein/Elwin dialogue without a reset.
+  Empty dialogue boxes at `_17.png` and `_23.png` are transition frames before
+  full-screen narration, not missing text pages.
+- Final build `5B8A` independently reached `TURN 2` in
+  `regression_5b8a_turn2_banner.png`. The final support status is
+  `regression_5b8a_support_priest_status2.png`: `사제 / 프리스트` and
+  `NPC 유닛입니다` are intact. The enemy notice is verified in
+  `regression_5b8a_enemy_notice2.png` as `적군 유닛입니다`, with the leading
+  `제` in `제국지휘관` intact.
+- The active localization goal's runtime checks are complete. The command-menu
+  detector can still be improved later using saved-frame classification, but
+  it is no longer a release blocker for Scenario 1.
+
+### Shared Unit-Type Notices
+
+- The battle UI glyph list at `0x9706A` is shared by commands and unit notices.
+  Its original slots 39..42, 16, and 17 spell `ユニットです`.
+- Notice token streams are enemy `0x09AEE4`, NPC `0x09AF04`, and already-acted
+  `0x09AF26`. Their original prefixes are `敵の`, `NPC`, and `行動済み`.
+- The builder validates every original token sequence before writing
+  `적군 유닛입니다`, `NPC 유닛입니다`, and `행동완료 유닛입니다`. Slot 17
+  is explicitly changed to the global space glyph so other notices cannot end
+  in a stray Japanese `す`.
+- Intermediate build `3079` proved the NPC suffix but left the enemy prefix
+  Japanese. Build `3024` fixed the enemy prefix but did not yet blank the
+  shared trailing `す`. Final build `5B8A` contains both corrections.

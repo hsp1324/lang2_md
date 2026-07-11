@@ -286,6 +286,27 @@ ORDER_SUBMENU_GLYPH_SLOTS = {
 }
 ORDER_SUBMENU_TOKEN_STREAM = 0x9768C
 
+# Unit-type notices share the battle UI glyph list at 0x9706A. Slots 39..42,
+# 16, and 17 originally spell `ユニットです`. The enemy and already-acted
+# prefixes also have dedicated slots in this list, while slot 1 already holds
+# `동` for the battle command menu.
+UNIT_NOTICE_GLYPH_SLOTS = {
+    39: "유",
+    40: "닛",
+    41: "입",
+    42: "니",
+    16: "다",
+    43: "적",
+    38: "군",
+    45: "행",
+    48: "완",
+    49: "료",
+}
+UNIT_NOTICE_BLANK_GLYPH_SLOTS = (17,)
+ENEMY_UNIT_NOTICE_TOKEN_STREAM = 0x09AEE4
+NPC_UNIT_NOTICE_TOKEN_STREAM = 0x09AF04
+ACTED_UNIT_NOTICE_TOKEN_STREAM = 0x09AF26
+
 DIRECT_TOKEN_STREAM_PATCHES = {
     # These suffixes are appended after the selected item name. They switch to
     # the shop glyph list loaded at VRAM 0xD000 before reading these indexes.
@@ -1959,6 +1980,53 @@ def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) 
         put16(data, row_offset, tokens[0])
         put16(data, row_offset + 2, tokens[1])
 
+    for slot, char in UNIT_NOTICE_GLYPH_SLOTS.items():
+        put16(data, 0x9706A + slot * 2, glyph_by_char[char])
+    for slot in UNIT_NOTICE_BLANK_GLYPH_SLOTS:
+        put16(data, 0x9706A + slot * 2, SPACE_GLYPH)
+
+    expected_enemy_tokens = [43, 38, 39, 40, 41, 42, 16, 17]
+    actual_enemy_tokens = [
+        be16(data, ENEMY_UNIT_NOTICE_TOKEN_STREAM + index * 2)
+        for index in range(len(expected_enemy_tokens))
+    ]
+    if actual_enemy_tokens != expected_enemy_tokens:
+        raise ValueError(
+            f"unexpected enemy unit notice tokens: {actual_enemy_tokens!r} "
+            f"!= {expected_enemy_tokens!r}"
+        )
+    localized_enemy_tokens = [43, 38, 0x3F, 39, 40, 41, 42, 16]
+    for index, token in enumerate(localized_enemy_tokens):
+        put16(data, ENEMY_UNIT_NOTICE_TOKEN_STREAM + index * 2, token)
+
+    expected_npc_tokens = [50, 13, 51, 39, 40, 41, 42, 16, 17]
+    actual_npc_tokens = [
+        be16(data, NPC_UNIT_NOTICE_TOKEN_STREAM + index * 2)
+        for index in range(len(expected_npc_tokens))
+    ]
+    if actual_npc_tokens != expected_npc_tokens:
+        raise ValueError(
+            f"unexpected NPC unit notice tokens: {actual_npc_tokens!r} "
+            f"!= {expected_npc_tokens!r}"
+        )
+    localized_npc_tokens = [50, 13, 51, 0x3F, 39, 40, 41, 42, 16]
+    for index, token in enumerate(localized_npc_tokens):
+        put16(data, NPC_UNIT_NOTICE_TOKEN_STREAM + index * 2, token)
+
+    expected_acted_tokens = [45, 1, 48, 49, 39, 40, 41, 42, 16, 17]
+    actual_acted_tokens = [
+        be16(data, ACTED_UNIT_NOTICE_TOKEN_STREAM + index * 2)
+        for index in range(len(expected_acted_tokens))
+    ]
+    if actual_acted_tokens != expected_acted_tokens:
+        raise ValueError(
+            f"unexpected acted unit notice tokens: {actual_acted_tokens!r} "
+            f"!= {expected_acted_tokens!r}"
+        )
+    localized_acted_tokens = [45, 1, 48, 49, 0x3F, 39, 40, 41, 42, 16]
+    for index, token in enumerate(localized_acted_tokens):
+        put16(data, ACTED_UNIT_NOTICE_TOKEN_STREAM + index * 2, token)
+
 
 def patch_direct_token_streams(data: bytearray) -> None:
     for offset, tokens in DIRECT_TOKEN_STREAM_PATCHES.items():
@@ -2649,6 +2717,7 @@ def main() -> None:
     ]
     active_word_sequence_strings = [text for _, text in DIRECT_WORD_SEQUENCE_PATCHES.values()]
     active_order_submenu_strings = list(ORDER_SUBMENU_GLYPH_SLOTS.values())
+    active_unit_notice_strings = list(UNIT_NOTICE_GLYPH_SLOTS.values())
     active_arrange_glyph_strings = list(ARRANGE_MENU_GLYPH_LIST_PATCHES.values())
     active_item_names = [] if args.skip_items else ITEM_NAME_PATCHES
     active_item_descriptions = [] if args.skip_items else ITEM_DESCRIPTION_PATCHES
@@ -2675,6 +2744,7 @@ def main() -> None:
         *active_scenario_header_strings,
         *active_word_sequence_strings,
         *active_order_submenu_strings,
+        *active_unit_notice_strings,
         *active_arrange_glyph_strings,
         *active_item_names,
         *active_item_descriptions,
