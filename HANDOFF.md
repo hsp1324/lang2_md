@@ -949,12 +949,20 @@ full-game Korean localization, split into six stages in
 - `tools/jp_direct_string_inventory.py` scans `0x000000..0x180000` for at
   least three glyph IDs (`0000..07FF`), known controls, and `FFFF` termination.
   Scenario event blocks are covered separately by `jp_event_inventory.py`.
-- Baseline: 783 candidates, of which 73 exactly match known pointer-table
-  records, 59 match declared direct patches, and 651 remain unclassified.
-  The current build differs at 209 candidate starts.
-- Unclassified matches can be executable data or graphics metadata. Render or
-  cross-reference them from 68000 code before adding a patch; never bulk-write
-  all candidates.
+- Baseline remains 783 candidates. After offline rendering and pointer-interval
+  ownership analysis, all 783 are classified and zero remain unclassified.
+  The current build differs at 256 candidate starts.
+- Classification exposed 14 mostly untranslated full ending-dialogue pages at
+  `0x09600E..0x096BD8` and 97 untranslated character-epilogue page chunks at
+  `0x0896DE..0x095E52`. Short suffix patches inside an ending page do not make
+  the full page translated.
+- Other candidates are assigned to exact pointer records/interiors, declared
+  patches, unsafe name records, credits, name-entry resources, local UI token
+  streams, item/shop resources, or render-confirmed code/structured-data false
+  positives. The combined unclassified render sheet is
+  `captures/analysis/jpfont_probe/direct_unclassified_jp2bpp16.png`.
+- New matches still require rendering or code-reference proof before patching;
+  never bulk-write a scanner result merely because it matches the byte pattern.
 - Detailed tokens and ownership are in
   `localization/direct_word_candidates.json`; the summary is
   `docs/direct_word_candidate_inventory.md`.
@@ -981,6 +989,6 @@ full-game Korean localization, split into six stages in
 - No emulator was launched for this checkpoint at the user's request. These
   entries are statically rendered but not `live_verified`; stop before any GUI
   or input automation until the user is ready.
-- Candidate classification now recognizes pointer-record interiors, credits,
-  name-entry resources, screen-local battle tokens, and structured-data false
-  positives. The current unclassified direct-candidate count is 314.
+- Candidate classification recognizes pointer-record starts/interiors, credits,
+  name-entry resources, ending/epilogue pages, screen-local battle tokens, and
+  structured-data false positives. The current unclassified count is zero.

@@ -26,16 +26,10 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
         self.assertEqual(row["target_korean"], "마법화살")
         self.assertTrue(row["modified"])
 
-    def test_unclassified_candidates_remain_unreviewed(self):
+    def test_every_conservative_candidate_has_an_inventory_owner(self):
         counts = self.result["ownership_counts"]
-        self.assertGreater(counts["unclassified_candidate"], 0)
-        self.assertTrue(
-            all(
-                not row["reviewed"]
-                for row in self.result["candidates"]
-                if row["ownership"] == "unclassified_candidate"
-            )
-        )
+        self.assertEqual(counts["unclassified_candidate"], 0)
+        self.assertTrue(all(row["ownership"] for row in self.result["candidates"]))
 
     def test_render_confirmed_system_message_is_now_declared_and_modified(self):
         row = next(row for row in self.result["candidates"] if row["address"] == "0x082ACE")
@@ -82,6 +76,51 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
             if row["ownership"] == "pointer_table_record_interior"
         )
         self.assertIsNotNone(interior["target_korean"])
+
+    def test_condition_glyph_pointer_starts_are_owned_records(self):
+        row = next(row for row in self.result["candidates"] if row["address"] == "0x098746")
+        self.assertEqual(row["ownership"], "pointer_table_record")
+        self.assertEqual(row["owner"], "condition_glyph_lists[0]")
+
+    def test_rendered_item_and_magic_data_ranges_are_classified(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        self.assertEqual(
+            rows["0x060128"]["ownership"], "structured_game_data_false_positive"
+        )
+        self.assertEqual(rows["0x0A14AC"]["ownership"], "item_shop_local_resource")
+        self.assertEqual(
+            rows["0x082562"]["ownership"], "structured_game_data_false_positive"
+        )
+        self.assertEqual(
+            rows["0x082B78"]["ownership"], "confirmed_unresolved_direct_message"
+        )
+
+    def test_full_ending_pages_are_not_hidden_by_suffix_patches(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        self.assertEqual(
+            rows["0x09600E"]["ownership"], "confirmed_untranslated_ending_page"
+        )
+        self.assertTrue(rows["0x09600E"]["modified"])
+
+    def test_character_epilogues_are_tracked_as_untranslated_pages(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        self.assertEqual(
+            rows["0x0896DE"]["ownership"], "confirmed_untranslated_epilogue_page"
+        )
+        self.assertGreater(
+            self.result["ownership_counts"]["confirmed_untranslated_epilogue_page"],
+            90,
+        )
+
+    def test_final_rendered_gibberish_candidates_are_data_false_positives(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        self.assertEqual(
+            rows["0x010976"]["ownership"], "executable_code_or_table_false_positive"
+        )
+        self.assertEqual(rows["0x09B006"]["ownership"], "local_token_stream")
+        self.assertEqual(
+            rows["0x0D09DC"]["ownership"], "structured_map_event_data_false_positive"
+        )
 
 
 if __name__ == "__main__":

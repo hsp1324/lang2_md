@@ -35,6 +35,10 @@ CONFIRMED_UNPATCHED_SYSTEM_MESSAGES = {
     0x082B90: "을 장비했다.",
 }
 
+CONFIRMED_UNRESOLVED_DIRECT_MESSAGES = {
+    0x082B78: "비기/디버그성 문구 `面をしないだすー` (실행 문맥 미확정)",
+}
+
 
 def scan_candidates(data: bytes, start: int = 0, end: int = SCAN_END) -> list[tuple[int, list[int]]]:
     entries = []
@@ -87,6 +91,13 @@ def pointer_owners(data: bytes) -> dict[int, str]:
         "item_descriptions": (0x0A1D7C, 37),
     }
     for name, (table, count) in groups.items():
+        for index in range(count):
+            owners[be32(data, table + index * 4)] = f"{name}[{index}]"
+    glyph_groups = {
+        "condition_glyph_lists": (0x0986C6, 32),
+        "scenario_description_glyph_lists": (0x09B2FC, 31),
+    }
+    for name, (table, count) in glyph_groups.items():
         for index in range(count):
             owners[be32(data, table + index * 4)] = f"{name}[{index}]"
     return owners
@@ -148,6 +159,7 @@ def declared_ui_surfaces() -> dict[int, str]:
             builder.START_MENU_GLYPH_LIST: "Start 메뉴 글리프 목록",
             builder.LOAD_MENU_GLYPH_LIST: "불러오기 메뉴 글리프 목록",
             builder.ORDER_SUBMENU_TOKEN_STREAM: "명령 하위 메뉴 토큰",
+            0x0971A2: "게임 설정/검색 메뉴 공통 글리프 목록",
         }
     )
     return surfaces
@@ -168,12 +180,46 @@ NAME_ENTRY_RESOURCES = {
 
 
 def range_ownership(offset: int) -> tuple[str, str | None] | None:
+    if offset < 0x040000:
+        return "executable_code_or_table_false_positive", "68000 실행 코드/포인터·수치 테이블"
+    if 0x082000 <= offset < 0x082900:
+        return "structured_game_data_false_positive", "마법/전투 수치 배열"
     if 0x05F000 <= offset < 0x060000:
         return "structured_game_data_false_positive", "클래스/유닛 수치 레코드"
+    if 0x060000 <= offset < 0x061000:
+        return "structured_game_data_false_positive", "아이템 수치/효과/그래픽 데이터"
+    if 0x087000 <= offset < 0x089000:
+        return "structured_game_data_false_positive", "엔딩 캐릭터 상태/분기 수치·포인터 배열"
+    if 0x089100 <= offset < 0x089600:
+        return "structured_game_data_false_positive", "엔딩 후일담 포인터/선택 데이터"
+    if 0x089600 <= offset < 0x096000:
+        return "confirmed_untranslated_epilogue_page", "인물별 엔딩 후일담 전체 번역 필요"
+    if 0x096000 <= offset < 0x096D00:
+        return "confirmed_untranslated_ending_page", "엔딩 대사 전체 페이지 번역 필요"
+    if 0x096D00 <= offset < 0x096F00:
+        return "structured_game_data_false_positive", "엔딩 선택/레이아웃 데이터"
+    if 0x096F00 <= offset < 0x097000:
+        return "local_token_stream", "공통 UI 글리프/토큰 목록"
     if 0x09A000 <= offset < 0x09B000:
         return "local_token_stream", "전투 UI 화면별 로컬 토큰/레이아웃"
+    if 0x09B000 <= offset < 0x09B2FC:
+        return "local_token_stream", "시스템 UI 화면별 글리프·로컬 토큰"
+    if 0x0A1000 <= offset < 0x0A2000:
+        return "item_shop_local_resource", "아이템/상점 화면별 글리프·토큰·포인터"
+    if 0x0A2B00 <= offset < 0x0A3000:
+        return "local_token_stream", "지휘관 배치/출격 화면별 글리프·토큰"
+    if 0x0A30D6 <= offset <= 0x0A3154:
+        return "name_entry_resource", "이름 입력 일본어 문자 선택 보조표"
+    if offset in (0x0A342A, 0x0A3788):
+        return "confirmed_credits_record", "제작진 크레딧 보조표"
     if 0x0A344A <= offset <= 0x0A3752:
         return "confirmed_credits_record", "제작진 크레딧"
+    if 0x0A3D00 <= offset < 0x0A4000:
+        return "structured_game_data_false_positive", "준비/상태 UI 레이아웃 데이터"
+    if 0x0A6B20 <= offset < 0x0A7000:
+        return "pointer_table_record_interior", "오프닝 텍스트 리소스 내부"
+    if 0x0D0000 <= offset < SCAN_END:
+        return "structured_map_event_data_false_positive", "맵/이벤트 구조·그래픽 데이터"
     return None
 
 
@@ -199,6 +245,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             ownership = "known_unsafe_name_record"
         elif offset in CONFIRMED_UNPATCHED_SYSTEM_MESSAGES:
             ownership = "confirmed_unpatched_system_message"
+        elif offset in CONFIRMED_UNRESOLVED_DIRECT_MESSAGES:
+            ownership = "confirmed_unresolved_direct_message"
         elif offset in ui_surfaces:
             ownership = "declared_ui_surface"
         elif offset in NAME_ENTRY_RESOURCES:
@@ -222,6 +270,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     targets.get(offset)
                     or unsafe_targets.get(offset)
                     or CONFIRMED_UNPATCHED_SYSTEM_MESSAGES.get(offset)
+                    or CONFIRMED_UNRESOLVED_DIRECT_MESSAGES.get(offset)
                     or ui_surfaces.get(offset)
                     or NAME_ENTRY_RESOURCES.get(offset)
                     or (ranged[1] if ranged else None)
@@ -241,11 +290,17 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "declared_direct_patch",
             "known_unsafe_name_record",
             "confirmed_unpatched_system_message",
+            "confirmed_unresolved_direct_message",
             "declared_ui_surface",
             "name_entry_resource",
             "confirmed_credits_record",
+            "confirmed_untranslated_ending_page",
+            "confirmed_untranslated_epilogue_page",
             "local_token_stream",
+            "item_shop_local_resource",
             "structured_game_data_false_positive",
+            "executable_code_or_table_false_positive",
+            "structured_map_event_data_false_positive",
             "unclassified_candidate",
         )
     }
@@ -282,11 +337,17 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- Existing declared direct patches: {counts['declared_direct_patch']}",
             f"- Known unsafe name records: {counts['known_unsafe_name_record']}",
             f"- Confirmed unpatched system messages: {counts['confirmed_unpatched_system_message']}",
+            f"- Confirmed unresolved direct messages: {counts['confirmed_unresolved_direct_message']}",
             f"- Declared UI surfaces: {counts['declared_ui_surface']}",
             f"- Name-entry resources: {counts['name_entry_resource']}",
             f"- Credits records: {counts['confirmed_credits_record']}",
+            f"- Untranslated ending pages: {counts['confirmed_untranslated_ending_page']}",
+            f"- Untranslated epilogue pages: {counts['confirmed_untranslated_epilogue_page']}",
             f"- Screen-local token streams: {counts['local_token_stream']}",
+            f"- Item/shop local resources: {counts['item_shop_local_resource']}",
             f"- Structured-data false positives: {counts['structured_game_data_false_positive']}",
+            f"- Executable/table false positives: {counts['executable_code_or_table_false_positive']}",
+            f"- Map/event-data false positives: {counts['structured_map_event_data_false_positive']}",
             f"- Unclassified candidates: {counts['unclassified_candidate']}",
             "",
             "Unclassified records must be rendered or cross-referenced from code before they are",

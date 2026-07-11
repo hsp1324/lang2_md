@@ -82,6 +82,11 @@ python3 tools/jp_direct_string_inventory.py
 
 전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에, 직접 문자열 후보는 `docs/direct_word_candidate_inventory.md`, `localization/direct_word_candidates.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
 
+직접 문자열 후보 783개는 모두 포인터 레코드, 선언된 패치, 엔딩/후일담,
+이름 입력·크레딧·화면별 토큰, 또는 렌더로 확인한 데이터 오탐으로 분류했습니다.
+이 과정에서 부분 패치로 가려졌던 미번역 엔딩 대사 14페이지와 인물별 후일담
+97페이지를 별도 작업 대상으로 확인했습니다.
+
 패치 원인 분리용 옵션:
 
 ```bash

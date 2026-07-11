@@ -16,6 +16,8 @@ documented, committed, and pushed independently.
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known
   owners, and require render/code-reference proof before patching unknown candidates.
+- Keep full ending-dialogue pages and character epilogues as explicit translation
+  work even when a shorter suffix inside the same page has already been patched.
 - Track word-swapped pointer tables separately from normal big-endian pointers;
   validate source hashes and duplicate-pointer semantics before writing them.
 - Keep machine-readable addresses and a human-readable coverage table.

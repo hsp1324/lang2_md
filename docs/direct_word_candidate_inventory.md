@@ -9,17 +9,23 @@ a candidate, not proof that the data is visible text.
 - Scan range: `0x000000..0x180000`
 - Candidates: 783
 - Modified candidates: 256
-- Exact pointer-table records: 73
-- Pointer-table record interiors: 94
+- Exact pointer-table records: 105
+- Pointer-table record interiors: 95
 - Existing declared direct patches: 106
 - Known unsafe name records: 44
 - Confirmed unpatched system messages: 1
-- Declared UI surfaces: 9
-- Name-entry resources: 8
-- Credits records: 58
-- Screen-local token streams: 24
-- Structured-data false positives: 52
-- Unclassified candidates: 314
+- Confirmed unresolved direct messages: 1
+- Declared UI surfaces: 10
+- Name-entry resources: 16
+- Credits records: 60
+- Untranslated ending pages: 14
+- Untranslated epilogue pages: 97
+- Screen-local token streams: 41
+- Item/shop local resources: 19
+- Structured-data false positives: 111
+- Executable/table false positives: 22
+- Map/event-data false positives: 41
+- Unclassified candidates: 0
 
 Unclassified records must be rendered or cross-referenced from code before they are
 added to the builder. Detailed tokens and ownership are in
