@@ -926,13 +926,14 @@ full-game Korean localization, split into six stages in
 - `tools/jp_resource_inventory.py` records the other known global text paths
   without treating byte changes as proof of completion. Every entry has
   explicit `reviewed` and `live_verified` flags, initially false.
-- Current modified baselines are: conditions 1/32, scenario descriptions
+- Current modified baselines are: conditions 31/32 (the final record is shared
+  preparation UI and intentionally preserved), scenario descriptions
   31/31, item names 38/38, item descriptions 37/37, magic names 23/23,
   mercenary battle names 15/15, and battle status messages 3/3.
 - Scenario descriptions 2-31 came from legacy machine-translated material.
   Their 31/31 byte-change count is not a translation-quality result.
-- Conditions remain the clearest missing shared resource: only Scenario 1 is
-  patched. Summoned creature labels are class-table IDs and stay tracked in
+- All 31 scenario conditions are statically patched; later scenarios still
+  need real-index live verification. Summoned creature labels are class-table IDs and stay tracked in
   `localization/global_strings.json` rather than a fabricated summon table.
 - Machine-readable details are in `localization/shared_word_resources.json`;
   the summary is `docs/shared_word_resource_inventory.md`.
@@ -1092,3 +1093,24 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - `tools/send_blastem_keys.py` now accepts `load` for BlastEm's `L` state-load
   binding. Automated command-menu detection is still timing-sensitive; a
   failed detector can select Move even when the game itself is healthy.
+
+### Condition-Table Relocation Probe Warning (2026-07-12)
+
+- Do not test a later condition by replacing condition/glyph pointer table
+  entry 0 with a later entry. Scenario 1 preparation also depends on entry 0;
+  the pointer-only probe made its large menu blank and eventually restarted.
+- Later condition screens must be reached through the game's real scenario
+  index (normal save progression or the built-in scenario-select command).
+  Static pointer/token rendering does not justify marking them live verified.
+- Live subset testing isolated the real boundary: condition entries 1-31 can
+  all be patched in place and keep preparation intact; changing entry 32 alone
+  blanks the large preparation-menu labels. The game has 31 scenarios, so the
+  final table entry is a shared preparation resource rather than another
+  scenario condition. The corrected patch leaves entry 32 byte-for-byte
+  original and translates entries 1-31 at their original pointers. Failed
+  relocation variants were never committed.
+- Final ROM checksum `8AAD` is byte-identical to the successful 1-31 subset
+  probe. `captures/run/condition_first_31_prep2.png` verifies that names,
+  numbers, and all four large preparation labels remain visible. Automated
+  tests also assert that entry 32's pointer, glyph list, and 113-word stream
+  remain byte-for-byte Japanese-original data.

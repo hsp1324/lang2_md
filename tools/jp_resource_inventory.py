@@ -67,7 +67,10 @@ def stream_hex(values: list[int]) -> str:
 
 def pointer_targets() -> dict[str, list[object]]:
     return {
-        "conditions": CONDITION_SCREENS,
+        # The pointer table has one final preparation-UI record after the 31
+        # scenario condition records. Keep it visible in inventory without
+        # assigning a translation target.
+        "conditions": [*CONDITION_SCREENS, None],
         "scenario_descriptions": load_scenario_texts(),
         "item_names": ITEM_NAME_PATCHES,
         "item_descriptions": ITEM_DESCRIPTION_PATCHES,

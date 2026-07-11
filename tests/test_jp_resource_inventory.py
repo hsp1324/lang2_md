@@ -17,7 +17,7 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
     def test_resource_counts(self):
         groups = self.result["groups"]
         expected = {
-            "conditions": (32, 1),
+            "conditions": (32, 31),
             "scenario_descriptions": (31, 31),
             "item_names": (38, 38),
             "item_descriptions": (37, 37),

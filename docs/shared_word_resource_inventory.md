@@ -7,7 +7,7 @@ descriptions originate from legacy machine-translated material and require revie
 
 | Resource | Entries | Modified | Reviewed | Live verified |
 | --- | ---: | ---: | ---: | ---: |
-| conditions | 32 | 1 | 0 | 0 |
+| conditions | 32 | 31 | 0 | 0 |
 | scenario_descriptions | 31 | 31 | 0 | 0 |
 | item_names | 38 | 38 | 0 | 0 |
 | item_descriptions | 37 | 37 | 0 | 0 |

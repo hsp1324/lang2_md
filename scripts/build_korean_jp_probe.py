@@ -25,7 +25,6 @@ GLYPH_BYTES = 64
 
 CONDITION_POINTER_TABLE = 0x98D7A
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
-CONDITION_GLYPH_LIST_RELOC_BASE = 0x280000
 ITEM_GLYPH_LIST_BASE = 0xA14AC
 ITEM_GLYPH_LIST_REFS = (0x21C6E, 0x26924)
 ITEM_NAME_POINTER_TABLE = 0xA1902
@@ -1036,25 +1035,25 @@ CONDITION_SCREENS = [
     ["승리조건", "-리아나 북쪽 도착", "-적 전멸", "패배조건", "-리아나 사망", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-리아나 사망", "-주인공 사망"],
     ["승리조건", "-모건 격파", "", "패배조건", "-신관 전멸", "-리아나/주인공 사망"],
-    ["승리조건", "-2턴 안에 적 전멸", "-주인공 목표 이동", "패배조건", "-턴 오버", "-주인공 사망"],
-    ["승리조건", "-목표 적 격파", "-맵 위쪽 도착", "패배조건", "-시민 전멸", "-주인공 사망"],
-    ["승리조건", "-기잠 격파", "", "패배조건", "-조비리안 전멸", "-주인공 사망"],
-    ["승리조건", "-3턴 안에 클레이머 격파", "", "패배조건", "-턴 오버", "-주인공 사망"],
+    ["승리조건", "-22턴 내 적 전멸", "-22턴 내 북쪽 도착", "패배조건", "-제한 턴 초과", "-주인공 사망"],
+    ["승리조건", "-적 격파", "", "패배조건", "-시민 전멸", "-주인공 사망"],
+    ["승리조건", "-기남 격파", "", "패배조건", "-시민 전멸", "-주인공 사망"],
+    ["승리조건", "-23턴 내 크레이머 격파", "", "패배조건", "-제한 턴 초과", "-주인공 사망"],
     ["승리조건", "-레아드 격파", "", "패배조건", "-NPC 전멸", "-주인공 사망"],
     ["승리조건", "-레스터 격파", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망", "-제시카 사망"],
     ["승리조건", "-적 전멸", "-다크로드 획득", "패배조건", "-주인공 사망"],
     ["승리조건", "-발가스 장군 격파", "", "패배조건", "-주인공 사망"],
-    ["승리조건", "-랑그릿사 도달", "-레온 격파", "패배조건", "-레온 도달", "-주인공 사망"],
+    ["승리조건", "-엘윈·제시카·쉐리 중", "-한 명이 랑그릿사 도착", "-레온 격파", "패배조건", "-레온이 랑그릿사 도착", "-주인공 사망"],
     ["승리조건", "-이멜다 장군 격파", "-주인공 아래 이동", "패배조건", "-주인공 사망"],
     ["승리조건", "-레온 격파", "-성문으로 이동", "패배조건", "-주인공 사망"],
     ["승리조건", "-베른하르트 격파", "", "패배조건", "-주인공 사망"],
-    ["승리조건", "-레드드래곤 격파", "-프린세스 격파", "패배조건", "-주인공 사망", "-주민 전멸"],
-    ["승리조건", "-3턴 안에 이멜다 격파", "", "패배조건", "-턴 오버", "-주인공 사망"],
+    ["승리조건", "-그레이트드래곤 격파", "-다크프린세스 격파", "패배조건", "-주인공 사망", "-주민 전멸"],
+    ["승리조건", "-23턴 내 이멜다 격파", "", "패배조건", "-제한 턴 초과", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망", "-제시카 사망"],
-    ["승리조건", "-소드마스터 도달", "-적 전멸", "패배조건", "-롯시 납치", "-주인공 사망"],
+    ["승리조건", "-로드 소지자 하단 도착", "-적 전멸", "패배조건", "-로드 탈취 후 상단 도주", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-에그베르트 격파", "", "패배조건", "-주인공 사망"],
@@ -1062,7 +1061,6 @@ CONDITION_SCREENS = [
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-마녀 격파", "", "패배조건", "-주인공 사망"],
-    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
 ]
 
@@ -1619,11 +1617,14 @@ def make_record_encoding_reusing_slots(
     return glyphs, tokens
 
 
-def make_condition_screen(lines: list[str], glyph_by_char: dict[str, int]) -> tuple[list[int], list[int]]:
-    if len(lines) > 6:
-        raise ValueError("condition screen supports at most 6 rows")
-    # The original record is seven 16-cell rows. The last row is blank, and
-    # each condition entry is indented one cell below its heading.
+def make_condition_screen(
+    lines: list[str],
+    glyph_by_char: dict[str, int],
+) -> tuple[list[int], list[int]]:
+    if len(lines) > 7:
+        raise ValueError("condition screen supports at most 7 rows")
+    # Every original record is seven 16-cell rows. Most screens leave the last
+    # row blank, but longer original conditions (notably Scenario 14) use it.
     rows = [[" "] * 16 for _ in range(7)]
 
     def put(row: int, col: int, text: str) -> None:
@@ -1633,9 +1634,9 @@ def make_condition_screen(lines: list[str], glyph_by_char: dict[str, int]) -> tu
             rows[row][col + i] = char
 
     for row, line in enumerate(lines):
-        put(row, 0 if row in (0, 2, 3) else 1, line)
+        put(row, 0 if not line or line in ("승리조건", "패배조건") else 1, line)
 
-    glyphs: list[int] = [SPACE_GLYPH]
+    glyphs = [SPACE_GLYPH]
     local_by_glyph = {SPACE_GLYPH: 0}
     tokens: list[int] = []
     for row in rows:
@@ -1911,42 +1912,33 @@ def patch_condition(
     index: int,
     lines: list[str],
     glyph_by_char: dict[str, int],
-    glyph_cursor: int | None,
-) -> int | None:
-    glyphs, tokens = make_condition_screen(lines, glyph_by_char)
+) -> None:
     token_ptr = be32(data, CONDITION_POINTER_TABLE + index * 4)
-    if glyph_cursor is None:
-        glyph_ptr = be32(data, CONDITION_GLYPH_LIST_TABLE + index * 4)
-        write_word_list(
-            data,
-            glyph_ptr,
-            glyphs,
-            glyph_list_capacity_words(data, CONDITION_GLYPH_LIST_TABLE, index, 32),
-        )
-    else:
-        put32(data, CONDITION_GLYPH_LIST_TABLE + index * 4, glyph_cursor)
-        glyph_cursor = write_word_list_exact(data, glyph_cursor, glyphs)
-        if glyph_cursor & 1:
-            glyph_cursor += 1
+    glyphs, tokens = make_condition_screen(lines, glyph_by_char)
+    glyph_ptr = be32(data, CONDITION_GLYPH_LIST_TABLE + index * 4)
+    write_word_list(
+        data,
+        glyph_ptr,
+        glyphs,
+        glyph_list_capacity_words(data, CONDITION_GLYPH_LIST_TABLE, index, 32),
+    )
     write_token_stream(
         data,
         token_ptr,
         tokens,
         capacity_words(data, CONDITION_POINTER_TABLE, index, 32),
     )
-    return glyph_cursor
 
 
 def patch_conditions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    if len(CONDITION_SCREENS) != 32:
-        raise ValueError(f"expected 32 condition screens, got {len(CONDITION_SCREENS)}")
-    # Scenario 1 needs only 22 glyph slots and fits its original 28-word list.
-    # Keeping the list in place is required: the prep renderer also touches
-    # this table and blanks its large menu when the pointer is relocated above
-    # the original 2 MiB ROM window.
-    result = patch_condition(data, 0, CONDITION_SCREENS[0], glyph_by_char, None)
-    if result is not None:
-        raise AssertionError("in-place Scenario 1 condition patch unexpectedly relocated")
+    if len(CONDITION_SCREENS) != 31:
+        raise ValueError(f"expected 31 condition screens, got {len(CONDITION_SCREENS)}")
+    # The tables have 32 entries, but the game has 31 scenarios. Entry 32 is
+    # shared by the preparation renderer; patching it blanks the large prep
+    # menu. Every translated scenario record fits its original glyph list, so
+    # patch entries 1-31 in place and leave the final shared record untouched.
+    for index, lines in enumerate(CONDITION_SCREENS):
+        patch_condition(data, index, lines, glyph_by_char)
 
 
 def normalize_scenario_text(text: str) -> str:

@@ -8,7 +8,7 @@ a candidate, not proof that the data is visible text.
 
 - Scan range: `0x000000..0x180000`
 - Candidates: 783
-- Modified candidates: 257
+- Modified candidates: 317
 - Exact pointer-table records: 105
 - Pointer-table record interiors: 95
 - Existing declared direct patches: 106
