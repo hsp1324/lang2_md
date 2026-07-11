@@ -958,3 +958,29 @@ full-game Korean localization, split into six stages in
 - Detailed tokens and ownership are in
   `localization/direct_word_candidates.json`; the summary is
   `docs/direct_word_candidate_inventory.md`.
+
+### Static System And Word-Item Localization Checkpoint
+
+- Offline rendering identified shared system fragments at `0x082ACE..0x082B90`:
+  level/AT/DF/MP increase, one/two-point increase, spell learned/usable, item
+  obtained, Treasure-kun label, and item equipped. The builder verifies every
+  original token tuple before writing Korean.
+- `GAME OVER` at `0x082B3C` intentionally remains conventional English. The
+  Japanese secret/debug-style message at `0x082B78` rendered as
+  `面をしないだすー`; web searches did not establish its runtime context, so
+  it remains untouched rather than guessed.
+- A separate word-swapped 37-entry item-name pointer table starts at `0x001068`.
+  Its strings span `0x0010FE..0x0012E8`; two Langrisser IDs share `0x00115E`,
+  leaving 36 unique strings. The builder validates source block SHA-256
+  `16d62e68434c815650971ceb5a0a4d87d354698a653952888ce8861611ff5da4`
+  and the complete pointer tuple before patching all 37 IDs.
+- Build checksum after these static patches is `9B03`. Offline captures are
+  `captures/analysis/jpfont_probe/direct_082ACE_082B9F_jp2bpp16.png`,
+  `direct_0010F0_0012F6_jp2bpp16.png`, and the exact knife capture
+  `direct_0010FE_001106_jp2bpp16.png`.
+- No emulator was launched for this checkpoint at the user's request. These
+  entries are statically rendered but not `live_verified`; stop before any GUI
+  or input automation until the user is ready.
+- Candidate classification now recognizes pointer-record interiors, credits,
+  name-entry resources, screen-local battle tokens, and structured-data false
+  positives. The current unclassified direct-candidate count is 314.

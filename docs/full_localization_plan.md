@@ -16,6 +16,8 @@ documented, committed, and pushed independently.
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known
   owners, and require render/code-reference proof before patching unknown candidates.
+- Track word-swapped pointer tables separately from normal big-endian pointers;
+  validate source hashes and duplicate-pointer semantics before writing them.
 - Keep machine-readable addresses and a human-readable coverage table.
 
 ## Stage 2: Shared UI And Global Names

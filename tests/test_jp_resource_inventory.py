@@ -21,6 +21,8 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
             "scenario_descriptions": (31, 31),
             "item_names": (38, 38),
             "item_descriptions": (37, 37),
+            "item_word_names": (37, 37),
+            "level_item_system_messages": (11, 11),
             "magic_names": (23, 23),
             "mercenary_battle_names": (15, 15),
             "battle_status_messages": (3, 3),

@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections import OrderedDict
 import ast
 import argparse
+import hashlib
 from pathlib import Path
 import unicodedata
 import sys
@@ -720,6 +721,18 @@ DIRECT_STRING_PATCHES = {
     0x189B0E: "아닐까.",
     0x189B44: "우리는에스토르로간다.",
     0x189B92: "바로눈앞입니다.",
+    # Shared level-up, acquisition, and equipment message fragments.
+    0x82ACE: "레벨이 올랐다.",
+    0x82AE2: "AT가",
+    0x82AEA: "DF가",
+    0x82AF2: "MP가",
+    0x82AFA: "1 올랐다.",
+    0x82B08: "2 올랐다.",
+    0x82B16: "을 배웠다.",
+    0x82B22: "을 사용할 수 있게 됐다.",
+    0x82B56: "을 손에 넣었다!",
+    0x82B66: "트레저군:",
+    0x82B90: "을 장비했다.",
     0x82BFE: "마법화살",
     0x82C0E: "블래스트",
     0x82C18: "썬더",
@@ -770,6 +783,20 @@ DIRECT_STRING_PATCHES = {
     0x9751E: "자경단",
     0x9754A: "제국군지휘관",
     0xA16F2: "버리겠습니까예아니오",
+}
+
+SYSTEM_MESSAGE_EXPECTED_WORDS = {
+    0x082ACE: (0x002B, 0x003F, 0x002A, 0x0079, 0x00B0, 0x0079, 0x007B, 0x0064, 0x006C),
+    0x082AE2: (0x006D, 0x006E, 0x0079),
+    0x082AEA: (0x005F, 0x0097, 0x0079),
+    0x082AF2: (0x00AB, 0x0070, 0x0079),
+    0x082AFA: (0x0055, 0x00B0, 0x0079, 0x007B, 0x0064, 0x006C),
+    0x082B08: (0x0056, 0x00B0, 0x0079, 0x007B, 0x0064, 0x006C),
+    0x082B16: (0x008A, 0x02B8, 0x008E, 0x0064, 0x006C),
+    0x082B22: (0x008A, 0x00E7, 0x0093, 0x008E, 0x007D, 0x00CC, 0x0078, 0x007A, 0x0073, 0x007B, 0x0064, 0x006C),
+    0x082B56: (0x008A, 0x0084, 0x007A, 0x016B, 0x009C, 0x0064, 0x0047),
+    0x082B66: (0x0013, 0x002B, 0x0033, 0x0050, 0x004A, 0x00A6, 0x00B8, 0x00EB),
+    0x082B90: (0x008A, 0x00A7, 0x00A8, 0x0099, 0x0092, 0x0099, 0x0064, 0x006C),
 }
 
 DIRECT_PREFIX_STRING_PATCHES = {}
@@ -1008,6 +1035,26 @@ ITEM_NAME_PATCHES = [
     "아뮬렛",
     "홀리로드",
 ]
+
+# Early executable code uses a separate word-swapped pointer table for the 37
+# normal item names. It is independent from both the one-byte item table at
+# 0x060364 and the relocated shop/item token table at 0x0A1902.
+WORD_ITEM_NAME_POINTER_TABLE = 0x001068
+WORD_ITEM_NAME_POINTERS = (
+    0x0010FE, 0x001106, 0x001116, 0x001126, 0x00112E, 0x00113E,
+    0x00114E, 0x00115E, 0x00115E, 0x00116E, 0x001180, 0x00118A,
+    0x00119A, 0x0011A8, 0x0011B6, 0x0011C2, 0x0011D0, 0x0011DE,
+    0x0011EC, 0x0011FC, 0x00120E, 0x00121E, 0x001226, 0x001238,
+    0x00124A, 0x00125C, 0x00126C, 0x001274, 0x001280, 0x001288,
+    0x001298, 0x0012A2, 0x0012AE, 0x0012B8, 0x0012C6, 0x0012D6,
+    0x0012E8,
+)
+WORD_ITEM_NAME_SOURCE_RANGE = (0x001068, 0x0012F6)
+WORD_ITEM_NAME_SOURCE_SHA256 = "16d62e68434c815650971ceb5a0a4d87d354698a653952888ce8861611ff5da4"
+if len(WORD_ITEM_NAME_POINTERS) != 37 or len(ITEM_NAME_PATCHES) < 37:
+    raise ValueError("word item-name table/target count changed")
+WORD_ITEM_NAME_PATCHES = dict(zip(WORD_ITEM_NAME_POINTERS, ITEM_NAME_PATCHES[:37]))
+DIRECT_STRING_PATCHES.update(WORD_ITEM_NAME_PATCHES)
 
 ITEM_DESCRIPTION_PATCHES = [
     "호신용 단검\nAT+1",
@@ -1925,6 +1972,28 @@ def patch_direct_strings(
     fixed_patches: dict[int, tuple[int, str]],
     prefix_patches: dict[int, tuple[list[int], str]],
 ) -> None:
+    if any(offset in direct_patches for offset in WORD_ITEM_NAME_PATCHES):
+        start, end = WORD_ITEM_NAME_SOURCE_RANGE
+        digest = hashlib.sha256(bytes(data[start:end])).hexdigest()
+        if digest != WORD_ITEM_NAME_SOURCE_SHA256:
+            raise ValueError(
+                f"word item-name source changed: expected {WORD_ITEM_NAME_SOURCE_SHA256}, got {digest}"
+            )
+        actual_pointers = tuple(
+            word_swapped_pointer(data, WORD_ITEM_NAME_POINTER_TABLE + index * 4)
+            for index in range(len(WORD_ITEM_NAME_POINTERS))
+        )
+        if actual_pointers != WORD_ITEM_NAME_POINTERS:
+            raise ValueError("word item-name pointer table changed")
+    for offset, expected in SYSTEM_MESSAGE_EXPECTED_WORDS.items():
+        if offset not in direct_patches:
+            continue
+        actual = tuple(read_word_list(data, offset))
+        if actual != expected:
+            raise ValueError(
+                f"system message source changed at 0x{offset:06X}: "
+                f"expected {expected!r}, got {actual!r}"
+            )
     for offset, text in direct_patches.items():
         write_direct_string(data, offset, text, glyph_by_char)
     for offset, (prefix, text) in prefix_patches.items():

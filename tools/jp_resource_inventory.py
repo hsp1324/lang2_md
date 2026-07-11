@@ -13,6 +13,8 @@ from scripts.build_korean_jp_probe import (
     DIRECT_STRING_PATCHES,
     ITEM_DESCRIPTION_PATCHES,
     ITEM_NAME_PATCHES,
+    SYSTEM_MESSAGE_EXPECTED_WORDS,
+    WORD_ITEM_NAME_POINTERS,
     load_scenario_texts,
 )
 from tools.jp_text_font_analyzer import be16, be32
@@ -31,6 +33,8 @@ GLYPH_POINTER_GROUPS = {
 }
 
 DIRECT_GROUPS = {
+    "item_word_names": WORD_ITEM_NAME_POINTERS,
+    "level_item_system_messages": tuple(SYSTEM_MESSAGE_EXPECTED_WORDS),
     "magic_names": (
         0x082BFE, 0x082C0E, 0x082C18, 0x082C22, 0x082C34, 0x082C3C,
         0x082C48, 0x082C54, 0x082C66, 0x082C76, 0x082C80, 0x082C8A,
