@@ -61,6 +61,135 @@ def sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def resource_output_size(data: bytes, pointer: int) -> int:
+    resource_type = data[pointer]
+    if resource_type in (1, 3):
+        return be16(data, pointer + 1)
+    if resource_type == 2:
+        header = data[pointer + 1]
+        width = header & 0x7F
+        length_offset = pointer + 2 + (8 if header & 0x80 else 0)
+        encoded_plane_length = be16(data, length_offset)
+        return width * encoded_plane_length * 8
+    raise ValueError(f"unsupported resource type {resource_type} at 0x{pointer:06X}")
+
+
+def decompress_type1(data: bytes, pointer: int) -> bytes:
+    expected_size = be16(data, pointer + 1)
+    pos = pointer + 3
+    high_nibble = True
+    previous = 0x7F
+    nibbles: list[int] = []
+
+    def read_nibble() -> int:
+        nonlocal pos, high_nibble
+        if high_nibble:
+            value = data[pos] >> 4
+            high_nibble = False
+        else:
+            value = data[pos] & 0x0F
+            pos += 1
+            high_nibble = True
+        return value
+
+    while len(nibbles) < expected_size * 2:
+        value = read_nibble()
+        if value == previous:
+            nibbles.extend([previous] * (read_nibble() + 1))
+        else:
+            previous = value
+            nibbles.append(value)
+    if len(nibbles) != expected_size * 2:
+        raise ValueError(f"type 1 resource at 0x{pointer:06X} overruns its output size")
+    return bytes(
+        (nibbles[index] << 4) | nibbles[index + 1]
+        for index in range(0, len(nibbles), 2)
+    )
+
+
+def decompress_type2(data: bytes, pointer: int) -> bytes:
+    header = data[pointer + 1]
+    width = header & 0x7F
+    if width not in (1, 2, 4):
+        raise ValueError(f"unsupported type 2 width {width} at 0x{pointer:06X}")
+    pos = pointer + 2
+    palette = None
+    if header & 0x80:
+        palette = []
+        for value in data[pos : pos + 8]:
+            palette.extend((value >> 4, value & 0x0F))
+        pos += 8
+    mask_length = be16(data, pos)
+    pos += 2
+    mask_pos = pos
+    mask_end = mask_pos + mask_length
+    value_pos = mask_end
+    groups_per_tile = {1: 4, 2: 2, 4: 1}[width]
+    output = bytearray()
+
+    def shift_word(workspace: bytearray, offset: int) -> int:
+        value = (workspace[offset] << 8) | workspace[offset + 1]
+        carry = (value >> 15) & 1
+        value = (value << 1) & 0xFFFF
+        workspace[offset] = value >> 8
+        workspace[offset + 1] = value & 0xFF
+        return carry
+
+    while mask_pos < mask_end:
+        workspace = bytearray()
+        for _ in range(groups_per_tile):
+            mask = data[mask_pos]
+            mask_pos += 1
+            for _ in range(8):
+                if mask & 0x80:
+                    workspace.extend(data[value_pos : value_pos + width])
+                    value_pos += width
+                else:
+                    workspace.extend(bytes(width))
+                mask = (mask << 1) & 0xFF
+        if len(workspace) != 32:
+            raise ValueError(f"type 2 workspace length mismatch at 0x{pointer:06X}")
+
+        for base in range(0, 8, 2):
+            if palette is None:
+                for _ in range(4):
+                    value = 0
+                    for _ in range(4):
+                        for plane_offset in (24, 8, 16, 0):
+                            value = (value << 1) | shift_word(workspace, base + plane_offset)
+                    output.extend(value.to_bytes(2, "big"))
+            else:
+                for _ in range(4):
+                    value = 0
+                    for _ in range(4):
+                        palette_index = 0
+                        for plane_offset in (24, 8, 16, 0):
+                            palette_index = (
+                                (palette_index << 1)
+                                | shift_word(workspace, base + plane_offset)
+                            )
+                        value = (value << 4) | palette[palette_index]
+                    output.extend(value.to_bytes(2, "big"))
+
+    expected_size = resource_output_size(data, pointer)
+    if len(output) != expected_size:
+        raise ValueError(
+            f"type 2 resource at 0x{pointer:06X} produced {len(output)}, expected {expected_size}"
+        )
+    return bytes(output)
+
+
+def decoded_payload(data: bytes, pointer: int) -> bytes | None:
+    resource_type = data[pointer]
+    if resource_type == 1:
+        return decompress_type1(data, pointer)
+    if resource_type == 2:
+        return decompress_type2(data, pointer)
+    if resource_type == 3:
+        return builder.decompress_9dfe(data, pointer + 1)
+    return None
+
+
 def direct_load_calls(data: bytes) -> list[dict[str, object]]:
     jsr = bytes.fromhex("4E B9") + RESOURCE_LOAD_ROUTINE.to_bytes(4, "big")
     calls = []
@@ -111,28 +240,26 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ]
     entries = []
     type_counts: dict[str, int] = {}
-    total_declared_output_bytes = 0
-    decoded_type3_count = 0
+    total_output_bytes = 0
+    decoded_counts: dict[str, int] = {}
     for index, (original_pointer, current_pointer) in enumerate(
         zip(original_pointers, current_pointers)
     ):
         original_type = japanese[original_pointer]
         current_type = korean[current_pointer]
-        original_size = be16(japanese, original_pointer + 1)
-        current_size = be16(korean, current_pointer + 1)
-        original_hash = None
-        current_hash = None
-        if original_type == 3:
-            original_payload = builder.decompress_9dfe(japanese, original_pointer + 1)
-            original_hash = sha256(original_payload)
+        original_size = resource_output_size(japanese, original_pointer)
+        current_size = resource_output_size(korean, current_pointer)
+        original_payload = decoded_payload(japanese, original_pointer)
+        current_payload = decoded_payload(korean, current_pointer)
+        original_hash = None if original_payload is None else sha256(original_payload)
+        current_hash = None if current_payload is None else sha256(current_payload)
+        if original_payload is not None:
             if len(original_payload) != original_size:
-                raise ValueError(f"type 3 resource {index} output length mismatch")
-            decoded_type3_count += 1
-        if current_type == 3:
-            current_payload = builder.decompress_9dfe(korean, current_pointer + 1)
-            current_hash = sha256(current_payload)
-            if len(current_payload) != current_size:
-                raise ValueError(f"current type 3 resource {index} output length mismatch")
+                raise ValueError(f"resource {index} output length mismatch")
+            type_key = str(original_type)
+            decoded_counts[type_key] = decoded_counts.get(type_key, 0) + 1
+        if current_payload is not None and len(current_payload) != current_size:
+            raise ValueError(f"current resource {index} output length mismatch")
         pointer_modified = original_pointer != current_pointer
         if original_type != current_type or original_size != current_size:
             content_modified: bool | None = True
@@ -152,7 +279,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             )
         type_key = str(original_type)
         type_counts[type_key] = type_counts.get(type_key, 0) + 1
-        total_declared_output_bytes += original_size
+        total_output_bytes += original_size
         entries.append(
             {
                 "index": index,
@@ -162,8 +289,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "original_type": original_type,
                 "current_type": current_type,
                 "decoder_routine": f"0x{RESOURCE_DECODER_ROUTINES[original_type]:06X}",
-                "original_declared_output_size": original_size,
-                "current_declared_output_size": current_size,
+                "original_output_size": original_size,
+                "current_output_size": current_size,
                 "original_decoded_sha256": original_hash,
                 "current_decoded_sha256": current_hash,
                 "pointer_modified": pointer_modified,
@@ -178,16 +305,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         )
     return {
         "warning": (
-            "A valid resource record is not necessarily text or UI. Only type 3 "
-            "records are decoded by this tool. "
+            "A valid resource record is not necessarily text or UI. Type 1 RLE, "
+            "type 2 tile-plane, and type 3 LZSS records are decoded by this tool. "
             "Ownership is recorded only when established independently."
         ),
         "resource_table": f"0x{RESOURCE_TABLE:06X}",
         "table_end": f"0x{original_pointers[0]:06X}",
         "entry_count": count,
         "type_counts": type_counts,
-        "total_original_declared_output_bytes": total_declared_output_bytes,
-        "decoded_type3_count": decoded_type3_count,
+        "total_original_output_bytes": total_output_bytes,
+        "decoded_counts": decoded_counts,
         "modified_count": sum(bool(entry["modified"]) for entry in entries),
         "known_owner_count": sum(entry["owner"] is not None for entry in entries),
         "unknown_owner_count": sum(entry["owner"] is None for entry in entries),
@@ -216,15 +343,19 @@ def markdown_report(result: dict[str, object]) -> str:
         "Generated by `python3 tools/jp_compressed_resource_inventory.py`.",
         "",
         "The table boundary is derived from its first pointer. All records have a valid",
-        "type and declared output size. Type 3 records are decoded with `0x9DFE`; type 1",
-        "and 2 records use different game routines and remain header-inventoried only.",
+        "type and output size. Type 1 RLE, type 2 tile-plane, and type 3 `0x9DFE`",
+        "records are all decoded and hashed with their format-specific routines.",
         "A valid record does not establish that it contains text or UI data.",
         "",
         f"- Resource table: `{result['resource_table']}`",
         f"- Table end / first resource: `{result['table_end']}`",
         f"- Entries: {result['entry_count']}",
-        f"- Total declared output bytes: {result['total_original_declared_output_bytes']:,}",
-        f"- Type 3 records decoded and hashed: {result['decoded_type3_count']}",
+        f"- Total calculated output bytes: {result['total_original_output_bytes']:,}",
+        "- Decoded and hashed by type: "
+        + ", ".join(
+            f"type {resource_type}: {count}"
+            for resource_type, count in sorted(result["decoded_counts"].items())
+        ),
         f"- Modified resources in current build: {result['modified_count']}",
         f"- Known owners: {result['known_owner_count']}",
         f"- Unknown owners: {result['unknown_owner_count']}",
@@ -275,13 +406,13 @@ def markdown_report(result: dict[str, object]) -> str:
         lines.append(
             f"| {entry['index']} | {entry['owner'] or ''} | `{entry['original_pointer']}` | "
             f"`{entry['current_pointer']}` | `0x{entry['original_type']:02X}` | "
-            f"{entry['original_declared_output_size']} | {entry['pointer_modified']} | "
+            f"{entry['original_output_size']} | {entry['pointer_modified']} | "
             f"{entry['content_modified']} |"
         )
     lines.extend(
         [
             "",
-            "All pointers, declared sizes, type 3 decoded hashes, ownership fields, and review flags",
+            "All pointers, output sizes, decoded hashes, ownership fields, and review flags",
             "are in `localization/compressed_resources.json`.",
             "",
         ]
@@ -306,7 +437,8 @@ def main() -> None:
     args.markdown.parent.mkdir(parents=True, exist_ok=True)
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
     print(
-        f"{result['entry_count']} resources inventoried; {result['decoded_type3_count']} type 3 decoded; "
+        f"{result['entry_count']} resources inventoried; "
+        f"{sum(result['decoded_counts'].values())} decoded; "
         f"{result['modified_count']} modified; {result['unknown_owner_count']} owners unknown"
     )
 

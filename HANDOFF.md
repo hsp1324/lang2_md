@@ -957,24 +957,28 @@ full-game Korean localization, split into six stages in
   the first pointer in table `0x0B0000`. The first block begins at `0x0B06B4`,
   so the table contains exactly 429 strictly increasing pointers; its last
   original pointer is `0x13807E`.
-- The type-byte distribution is type 1: 2, type 2: 248, and type 3: 179;
-  together their headers declare 8,099,366 output bytes. Dispatcher `0x0099FA`
+- The type-byte distribution is type 1: 2, type 2: 248, and type 3: 179.
+  Dispatcher `0x0099FA`
   routes type 1 to `0x009A38`, type 2 to `0x009C10`, and only type 3 to the
-  builder-equivalent `0x009DFE` decoder. All 179 type 3 blocks decode and hash
-  successfully; type 1/2 remain header-inventoried until their distinct formats
-  are implemented. Do not repeat the earlier incorrect assumption that every
-  table entry uses `0x009DFE`.
+  builder-equivalent `0x009DFE` decoder. Type 1 is verified 4-bit RLE; its two
+  blocks decode to 384 and 224 bytes. All 179 type 3 blocks also decode and hash.
+  Type 2 reconstructs 32-byte work tiles from a width-1/2/4 mask stream, then
+  performs the game's four-plane bit transpose and optional 16-nibble palette
+  remap. All 248 type 2 blocks decode and hash. The 429 resources produce
+  903,296 bytes in total. Do not repeat the earlier incorrect assumption that
+  every table entry uses `0x009DFE`.
 - Only index 1 differs in the current build. It is the independently confirmed
   8,192-byte small UI font, relocated from `0x0B0A84` to `0x290000` with its
   decompressed glyph content changed. The other 428 owners remain deliberately
   unknown; successful decompression is not evidence that a resource is UI or text.
-- Full pointers, types, declared sizes and type 3 decoded SHA-256 values are in
+- Full pointers, types, output sizes and decoded SHA-256 values are in
   `localization/compressed_resources.json`; the summary is
   `docs/compressed_resource_inventory.md`. Tests enforce the table boundary,
-  type counts, type 3 decoding, and the single known relocation.
+  type counts, all three decoders, a fixed type 2 sample hash, and the single
+  known relocation.
 - Loader wrapper `0x0099B2` calls lookup `0x009A0E`, which masks the high flag
   bit, multiplies the resource ID by four, and reads `0x0B0000[index]`; the
-  actual decompressor is `0x009DFE`. There are 75 direct calls to the wrapper:
+  type 3 decompressor is `0x009DFE`. There are 75 direct calls to the wrapper:
   64 use an immediate ID and map 50 distinct resources, while 11 choose their
   ID dynamically. The inventory records all call addresses, immediate IDs,
   high-bit flags, and destinations without inventing IDs for dynamic calls.

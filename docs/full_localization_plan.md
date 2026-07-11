@@ -14,8 +14,9 @@ documented, committed, and pushed independently.
   mercenary-battle-name, and status-message word resources with explicit review flags.
 - Inventory every builder-declared UI patch and compressed byte-font relocation;
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
-- Parse and decompress the complete resource table independently of UI assumptions;
-  record type, size, hash, and pointer changes while leaving unknown ownership unknown.
+- Parse and decompress the complete resource table with its type-specific RLE,
+  tile-plane, and LZSS paths independently of UI assumptions; record size, hash,
+  and pointer changes while leaving unknown ownership unknown.
 - Link immediate resource-loader call sites to table IDs and retain dynamic call sites
   without guessing their runtime-selected IDs.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known
