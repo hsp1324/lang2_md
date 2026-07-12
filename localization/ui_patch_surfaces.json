@@ -1,10 +1,10 @@
 {
-  "declared_patch_count": 81,
-  "modified_patch_count": 80,
+  "declared_patch_count": 82,
+  "modified_patch_count": 81,
   "groups": {
     "byte_ff_strings": {
-      "entry_count": 15,
-      "modified_count": 15
+      "entry_count": 16,
+      "modified_count": 16
     },
     "fixed_byte_strings": {
       "entry_count": 7,
@@ -114,6 +114,15 @@
       "address": "0x061AFC",
       "size_bytes": 4,
       "target_korean": "레온",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B00",
+      "size_bytes": 8,
+      "target_korean": "베른하르트",
       "modified": true,
       "reviewed": false,
       "live_verified": false

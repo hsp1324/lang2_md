@@ -1301,3 +1301,37 @@ The earlier default-name-only conclusion is superseded by the live-verified
   own live route captures. The diagnostic scenario-select SRAM continues to
   insert its old Japanese custom protagonist name; fresh Korean name entry was
   independently verified at checksum `2DBE`.
+
+### Scenario 1 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 1 now owns all 121 Japanese pointer records and all 145 physical
+  pages in `localization/event_dialogue_ko.json`. The English reference has 122
+  records because it split Japanese record `0x1849B4` and its second physical
+  page `0x1849DA` into records 2107 and 2108. Address-based alignment therefore
+  uses primary references `2101..2107, 2109..2222`, with 2108 attached only to
+  continuation page `0x1849DA`; ordinal alignment after that point is invalid.
+- Every reviewed page preserves its Japanese-ROM `FFF7` actor IDs and
+  `FFFD`/`FFFF` terminator, contains no forced newline, and fits the original
+  word capacity. The complete Korean render is under
+  `captures/analysis/event_pages_ko/scenario_01/`, with 13 contact sheets named
+  `scenario_01_pages_00.png` through `_12.png`.
+- Checksum `A964` was live-tested from the diagnostic scenario-select SRAM
+  through the opening dialogue, first command, Start > turn end, NPC/enemy
+  phases, Leon/Liana abduction dialogue, and Laird's reinforcement arrival.
+  It did not reset at the former post-Laird failure. Captures are in
+  `captures/analysis/a964_s01_intro/`, `a964_s01_intro_sheet.png`,
+  `a964_s01_turn1/`, and `a964_s01_turn1_sheet.png`.
+- The diagnostic SRAM still supplies Japanese cached names to `FFF7` for the
+  saved protagonist and Bernhardt. The ROM byte-name entry for name ID 14 at
+  `0x061B00` is now patched to `베른하르트`; checksum `3647` passes all 69
+  tests. Re-entering through the same diagnostic save still showed the cached
+  Japanese name, so that run cannot validate the new ROM entry. A clean
+  `first-turn-dialogue` macro attempt ended on a black frame before reaching
+  the command detector. Do not treat either result as proof that the fresh-game
+  dynamic insertion is broken or fixed; repeat this check from a freshly made
+  Korean save.
+- Current event inventory is 2,968 candidate records / 3,567 physical pages,
+  with 445 candidate records / 550 physical pages modified. Complete reviewed
+  scenarios are now 1, 2, 3, and 14. Optional Scenario 1 combat/death/item and
+  victory branches are statically translated but still need route-specific
+  live captures.

@@ -239,6 +239,7 @@ BYTE_UI_STRING_PATCHES = {
     0x061ACB: "리아나",
     0x061AD8: "헤인",
     0x061AFC: "레온",
+    0x061B00: "베른하르트",
     0x061B16: "레아드",
     0x061B1C: "발드",
     # Generic Scenario 1 actors used by the map status bar.
