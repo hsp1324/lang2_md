@@ -1427,3 +1427,29 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `captures/analysis/58db_arrange_warning_live.png` and passes 75 tests.
 - Inventory is now 656/2,968 candidate records and 786/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 14, 24, 29, 30, and 31.
+
+### Scenario 21 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 21 now covers all 71 Japanese pointer records and all 80 physical
+  pages. The primary records align in order with English `912..980` followed
+  by `1168/1169`; nine Japanese records continue onto additional physical
+  pages. Every `{0002}`, `{0010}`, `{0014}`, and `{0060}` dynamic-name control
+  is retained at its original address.
+- Checksum `A813` preserves every `FFF7` control and `FFFD`/`FFFF` terminator,
+  fits every original page capacity, and uses no forced newline. Seven Korean
+  sheets are in `captures/analysis/event_pages_ko/scenario_21/` and
+  `scenario_21_pages_00.png` through `_06.png`.
+- Selector row 21 entered the correct `SCENARIO 21` ship map. Automatic
+  deployment reached `TURN 1`, and the live opening displayed Aaron's
+  `호오… 여기가 벨제리아인가.` followed by Scott's `서둘러 상륙하자.` before
+  returning to player control. Captures are under
+  `captures/analysis/a813_s21_intro/`.
+- The first live run exposed a `battle_command_menu_visible()` false positive:
+  the broad blue sea in `advance_02.png` was mistaken for a command panel.
+  The detector now rejects crops over 85% blue and accepts the ornate status
+  bar at a 45% blue threshold. Synthetic tests and the real captures classify
+  Scenario 30's `22.png` as a command menu and Scenario 21's water cursor as
+  plain control. The run stopped before issuing another confirmation.
+- Inventory is now 727/2,968 candidate records and 866/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 14, 21, 24, 29, 30,
+  and 31.

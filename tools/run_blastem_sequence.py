@@ -210,8 +210,14 @@ def battle_command_menu_visible(path: Path) -> bool:
     )
     return (
         blue_pixels > 3200 * scale_x * scale_y
+        # Water-heavy maps can fill this entire crop with blue pixels. A real
+        # command panel also contains its gold frame, labels, and portrait/map
+        # content, so reject nearly solid-blue backgrounds.
+        and blue_pixels < image.width * image.height * 0.85
         and dark_panel_pixels > 1000 * scale_x * scale_y
-        and status_blue_pixels > status.width * status.height * 0.5
+        # The ornate status-bar frame occupies a little over half of this
+        # crop on some maps; 45% still distinguishes it from dialogue views.
+        and status_blue_pixels > status.width * status.height * 0.45
     )
 
 
