@@ -132,6 +132,36 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertTrue(primary[-1]["japanese_only"])
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_24_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 24]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 65)
+        self.assertEqual(len(primary), 53)
+        self.assertEqual(len(continuations), 12)
+        self.assertEqual(primary[0]["address"], "0x1AF8E8")
+        self.assertEqual(primary[-1]["address"], "0x1B03A8")
+        # The English project split and merged several physical Japanese
+        # pages differently. Records 1569..1571 are stray mappings, while
+        # the Japanese block ends in two source-only resolution lines.
+        self.assertEqual(
+            [row["english_record"] for row in rows[:63]],
+            [
+                1435, 1436, 1437, 1438, 1439, 1440, 1441, 1442,
+                1443, 1443, 1444, 1445, 1446, 1447, 1447, 1447,
+                1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455,
+                1456, 1457, 1458, 1459, 1460, 1461, 1462, 1463,
+                1464, 1465, 1466, 1466, 1467, 1468, 1469, 1470,
+                1471, 1472, 1472, 1473, 1474, 1475, 1476, 1476,
+                1477, 1477, 1478, 1479, 1479, 1480, 1481, 1481,
+                1482, 1482, 1482, 1483, 1484, 1485, 1486,
+            ],
+        )
+        self.assertTrue(
+            all(row["english_record"] is None and row["japanese_only"] for row in rows[63:])
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:
             address = int(row["address_int"])
@@ -147,7 +177,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 14, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 14, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]

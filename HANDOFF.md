@@ -1397,3 +1397,33 @@ The earlier default-name-only conclusion is superseded by the live-verified
   saved protagonist name remains Japanese as previously documented.
 - Inventory is now 603/2,968 candidate records and 721/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 14, 29, 30, and 31.
+
+### Scenario 24 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 24 now covers all 53 Japanese pointer records and 65 physical
+  pages. The English project splits Japanese physical pages 6 and 7 into
+  different records and merges several later continuations, so the mapping is
+  stored per physical address rather than by ordinal. English records
+  `1569..1571` are stray rows that do not occur in this Japanese block.
+- Japanese pages `0x1B037A` and `0x1B03A8` have no English equivalents. They
+  preserve the closing resolve not to let the peaceful world end and to set
+  out to restore it, with `english_record: null` and `japanese_only: true`.
+- All 65 pages preserve their Japanese `FFF7` controls and `FFFD`/`FFFF`
+  terminators, fit their original capacities, and contain no forced newline.
+  The complete static render and six sheets are in
+  `captures/analysis/event_pages_ko/scenario_24/` and
+  `scenario_24_pages_00.png` through `_05.png`.
+- Checksum `DC6D` was entered through selector row 24, commander preparation,
+  automatic deployment, and the live `SCENARIO 24 / TURN 1` map without a
+  reset or blank screen. Captures are under
+  `captures/analysis/dc6d_s24_intro/`. The translated event pages are mostly
+  conditional combat/seal events, so their individual live routes remain to
+  be exercised even though every physical page is statically verified.
+- That run exposed the mixed warning `지휘관배치가終了していません`. Its
+  local stream is `0x0A2C2E`; unused local glyph slots 32..39 at `0x0A2B9C`
+  now hold `가끝나않았습니다`, and the stream renders
+  `지휘관배치가끝나지않았습니다`. The patch validates both original arrays
+  before writing. Checksum `58DB` was live-captured at
+  `captures/analysis/58db_arrange_warning_live.png` and passes 75 tests.
+- Inventory is now 656/2,968 candidate records and 786/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 14, 24, 29, 30, and 31.

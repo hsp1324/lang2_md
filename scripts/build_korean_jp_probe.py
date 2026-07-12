@@ -998,6 +998,27 @@ ARRANGE_MENU_GLYPH_LIST_PATCHES = {
     0xA2BAC: "이동순변경자",
 }
 
+# The incomplete-arrangement warning at 0xA2C2E uses indexes into the same
+# screen-local glyph list. Slots 32..39 are otherwise unused by the Korean
+# menu, so they can carry the suffix without changing any global glyph IDs.
+ARRANGE_WARNING_GLYPH_OFFSET = 0xA2B9C
+ARRANGE_WARNING_GLYPH_TEXT = "가끝나않았습니다"
+ARRANGE_WARNING_ORIGINAL_GLYPHS = (
+    0x0239, 0x0283, 0x0099, 0x0065, 0x007C, 0x0092, 0x016F, 0x00B8,
+)
+ARRANGE_WARNING_TOKEN_OFFSET = 0xA2C2E
+ARRANGE_WARNING_ORIGINAL_TOKENS = (
+    0x0001, 0x000B, 0x000C, 0x000D, 0x001E, 0x000E, 0x000F, 0x001F,
+    0x0020, 0x0021, 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0027,
+)
+ARRANGE_WARNING_KOREAN_TOKENS = (
+    0x0001,  # renderer control/prefix
+    0x000B, 0x000C, 0x000D, 0x000E, 0x000F,  # 지휘관배치
+    0x0020, 0x0021, 0x0022, 0x000B,  # 가끝나지
+    0x0023, 0x0024, 0x0025, 0x0026, 0x0027,  # 않았습니다
+    0x0014,  # existing blank slot
+)
+
 DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
     0xA10E0: (5, "진군루트"),
 }
@@ -3082,6 +3103,27 @@ def patch_arrange_menu_glyph_lists(
         for index, char in enumerate(text):
             put16(data, offset + index * 2, glyph_by_char[char])
 
+    original_glyphs = tuple(
+        be16(data, ARRANGE_WARNING_GLYPH_OFFSET + index * 2)
+        for index in range(len(ARRANGE_WARNING_ORIGINAL_GLYPHS))
+    )
+    if original_glyphs != ARRANGE_WARNING_ORIGINAL_GLYPHS:
+        raise ValueError(
+            f"arrange warning glyph slots changed: {original_glyphs!r}"
+        )
+    original_tokens = tuple(
+        be16(data, ARRANGE_WARNING_TOKEN_OFFSET + index * 2)
+        for index in range(len(ARRANGE_WARNING_ORIGINAL_TOKENS))
+    )
+    if original_tokens != ARRANGE_WARNING_ORIGINAL_TOKENS:
+        raise ValueError(
+            f"arrange warning token stream changed: {original_tokens!r}"
+        )
+    for index, char in enumerate(ARRANGE_WARNING_GLYPH_TEXT):
+        put16(data, ARRANGE_WARNING_GLYPH_OFFSET + index * 2, glyph_by_char[char])
+    for index, token in enumerate(ARRANGE_WARNING_KOREAN_TOKENS):
+        put16(data, ARRANGE_WARNING_TOKEN_OFFSET + index * 2, token)
+
 
 def patch_opening_glyph_probe(data: bytearray) -> None:
     font = ImageFont.truetype(str(FONT_PATH), 16)
@@ -3270,6 +3312,7 @@ def main() -> None:
         *active_unit_notice_strings,
         CLASS_CHANGE_GLYPH_TEXT,
         *active_arrange_glyph_strings,
+        ARRANGE_WARNING_GLYPH_TEXT,
         *active_item_names,
         *active_item_descriptions,
         active_item_title,
