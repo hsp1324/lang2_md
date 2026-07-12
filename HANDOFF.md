@@ -1610,3 +1610,27 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - Inventory is now 1,194/2,968 candidate records and 1,396/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 15, 16, 17, 21,
   23, 24, 29, 30, and 31.
+
+### Scenario 18 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 18 now covers all 95 Japanese pointer records and all 117 physical
+  pages. The primary records align with English `707..801`, but the English
+  project split several post-battle pages differently after `0x1A5882`.
+  Korean text follows the physical Japanese order for the Mireil departure,
+  Dark Princess identity, dispelling chant, failure, and route-variant harbor
+  explanations rather than mechanically copying those English page breaks.
+- Every original dynamic-name control and `FFFD`/`FFFF` terminator is preserved
+  in order. All pages fit their source capacity and use no forced newline. Ten
+  complete Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_18/`.
+- Checksum `B333` entered the Korean Scenario 18 briefing, preparation screen,
+  automatic deployment, the first resident line, and Lana's opening line
+  without a reset. That pass exposed fixed speaker `ラーナ` at `0x097418`.
+- Final checksum `932F` promotes only that live-reached slot to `라나` and
+  verifies `라나: 아하하하! 도망쳐라! 안 그러면 죽는다!` live. The
+  direct-string inventory now classifies Lana as a declared patch while keeping
+  unpromoted candidates such as `0x097462` explicitly unsafe. Captures are under
+  `captures/run/932f_s18_*.png`; the full suite passes 89 tests.
+- Inventory is now 1,289/2,968 candidate records and 1,513/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 15, 16, 17, 18,
+  21, 23, 24, 29, 30, and 31.

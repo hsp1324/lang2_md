@@ -49,10 +49,16 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "word item-name source changed"):
             builder.patch_direct_strings(data, {}, {0x0010FE: ""}, {}, {})
 
-    def test_known_unsafe_name_table_is_not_unclassified(self):
+    def test_live_promoted_lana_name_is_declared(self):
         row = next(row for row in self.result["candidates"] if row["address"] == "0x097418")
-        self.assertEqual(row["ownership"], "known_unsafe_name_record")
+        self.assertEqual(row["ownership"], "declared_direct_patch")
         self.assertEqual(row["target_korean"], "라나")
+        self.assertTrue(row["modified"])
+
+    def test_known_unsafe_name_table_is_not_unclassified(self):
+        row = next(row for row in self.result["candidates"] if row["address"] == "0x097462")
+        self.assertEqual(row["ownership"], "known_unsafe_name_record")
+        self.assertEqual(row["target_korean"], "가면기사")
 
     def test_rendered_non_global_ranges_are_classified(self):
         rows = {row["address"]: row for row in self.result["candidates"]}

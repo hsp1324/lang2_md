@@ -833,6 +833,7 @@ DIRECT_STRING_PATCHES = {
     # Scenario 14 uses the same fixed speaker-name table. Keep only the names
     # isolated from the formerly all-or-nothing unsafe probe here.
     0x97404: "엘윈",
+    0x97418: "라나",
     0x97420: "쉐리",
     0x97444: "아론",
     0x9744E: "레스터",

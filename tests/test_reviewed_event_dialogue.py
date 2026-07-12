@@ -234,6 +234,21 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_18_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 18]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 117)
+        self.assertEqual(len(primary), 95)
+        self.assertEqual(len(continuations), 22)
+        self.assertEqual(primary[0]["address"], "0x1A48AA")
+        self.assertEqual(primary[-1]["address"], "0x1A5DD0")
+        self.assertEqual(
+            [row["english_record"] for row in primary],
+            list(range(707, 802)),
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_5_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 5]
         primary = [row for row in rows if not row.get("continuation")]
@@ -284,7 +299,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 17, 21, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 17, 18, 21, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -301,6 +316,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
     def test_live_reached_scenario_speaker_names_are_in_safe_patch_set(self):
         expected = {
             0x97404: "엘윈",
+            0x97418: "라나",
             0x97420: "쉐리",
             0x97432: "스코트",
             0x9743C: "키스",
