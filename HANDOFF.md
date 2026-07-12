@@ -2008,3 +2008,19 @@ The earlier default-name-only conclusion is superseded by the live-verified
   Inventory is now 2,411/2,968 candidate records and 2,851/3,567 physical
   pages modified. Conditional battle, fire-trap, and ending branches remain in
   the later whole-game route regression pass.
+
+### Scenario 12 Alignment In Progress (2026-07-13)
+
+- The Japanese Scenario 12 block contains 88 logical records and 113 physical
+  pages at `0x199344..0x19A93E`. Ten visually reviewed source sheets are under
+  `captures/analysis/event_pages_jp/scenario_12/scenario_12_pages_00.png`
+  through `_09.png`.
+- English record `95`, whose source prefix is `0x198E12`, is Scenario 11's
+  final instruction to escape across the river and is not part of Scenario 12.
+  All 88 Japanese primary records then align positionally with English
+  `200..287`; this block has no Japanese-only trailing record.
+- The block covers the Reitel guardians, Egbert's Alhazard plans and
+  reincarnation history, Dark Rod acquisition and theft branches, guardian and
+  Imperial battle reactions, the hidden shrine, Liana's kidnapping aftermath,
+  Jessica's regret, Hein's view of magic, and Jessica's promise to accept him
+  as an apprentice. Translation data has not yet been added.
