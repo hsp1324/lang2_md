@@ -884,12 +884,12 @@ full-game Korean localization, split into six stages in
   parse as at least three glyph IDs (`0x0000..0x07FF`) plus `FFF7`/`FFFE`
   controls and an `FFFD`/`FFFF` terminator.
 - The baseline inventory contains 2,968 candidate records and 3,567 physical
-  pages. Build `2DBE` modifies 416 candidate records and 515 physical pages:
-  Scenario 1 is 107/121 records, Scenario 2 is 110/110, Scenario 3 is 74/89,
+  pages. Build `1DD0` modifies 431 candidate records and 532 physical pages:
+  Scenario 1 is 107/121 records, Scenario 2 is 110/110, Scenario 3 is 89/89,
   and Scenario 14 is 125/125. Scenarios 4-13 and 15-31 are unstarted.
-- A modified page is not automatically complete Korean. Scenario 2 and 14 now
-  have reviewed full-page data; Scenario 1/3 still contain older partial work
-  and must be reviewed for complete natural text and control safety.
+- A modified page is not automatically complete Korean. Scenarios 2, 3, and 14
+  now have reviewed full-page data; Scenario 1 still contains older partial
+  work and must be reviewed for complete natural text and control safety.
 - Machine-readable page addresses, source references, terminators, and glyph
   token streams are in `localization/event_pages.json`; the coverage table is
   `docs/full_localization_inventory.md`.
@@ -1277,3 +1277,27 @@ The earlier default-name-only conclusion is superseded by the live-verified
   imperial ambush, and the first playable command without reset or freeze.
   Optional combat, defeat, item, rescue, and ending branches are translated and
   statically rendered but remain open for route-specific live capture.
+
+### Scenario 3 Reviewed Dialogue (2026-07-12)
+
+- All 89 pointer records plus 17 continuations are reviewed, for 106 physical
+  pages total. Primary pages align with English references `2223..2311`, while
+  Japanese page images determine wording and control placement. The build keeps
+  all original `FFF7` IDs and `FFFD`/`FFFF` terminators and uses no forced
+  newlines, preventing the Scenario 2 blank-padding regression.
+- Checksum `1DD0` renders the complete Korean scenario under
+  `captures/analysis/event_pages_ko/scenario_03/` and nine contact sheets. The
+  address-set test proves that all 89 candidates and all 106 physical pages are
+  declared and modified; all 67 tests pass.
+- Live Scenario 3 selection, Korean briefing, deployment, opening mountain-pass
+  conversation, default `YES` escort choice, Korean `졸름` speaker label, and
+  first playable command are captured in
+  `captures/analysis/1dd0_s03_intro_00_19.png`. The repeated command-menu frames
+  in `_20_39.png` are automation continuing to press C after dialogue ended,
+  not a game loop or freeze.
+- The default escort branch reaches play without a blank page or reset. Other
+  escort choices, combat deaths/retreats, Attack-magic hint, ambush, and ending
+  conversations are translated and statically rendered but still need their
+  own live route captures. The diagnostic scenario-select SRAM continues to
+  insert its old Japanese custom protagonist name; fresh Korean name entry was
+  independently verified at checksum `2DBE`.
