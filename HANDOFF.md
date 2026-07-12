@@ -1358,3 +1358,23 @@ The earlier default-name-only conclusion is superseded by the live-verified
   129 Japanese records / 155 physical pages, but its English-ROM order diverges
   from Japanese after several branches; translate it from Japanese renders and
   use English only as a semantic reference.
+
+### Scenario 29 Complete Reviewed Dialogue (2026-07-12)
+
+- All 49 Japanese pointer records and 55 physical pages are reviewed. English
+  records 198/199 are unrelated rows incorrectly grouped into this scenario;
+  Japanese records 0..46 align with English `1170..1216`. The final two
+  Japanese-only lines at `0x1B761C` and `0x1B764C` describe the strange defeated
+  squad and the completed ship preparations for Velzeria, and are translated
+  directly from the Japanese render with `english_record: null`.
+- Checksum `A434` preserves every control/terminator and passes all 72 tests.
+  Complete Korean renders and five sheets are under
+  `captures/analysis/event_pages_ko/scenario_29/` and
+  `scenario_29_pages_00.png` through `_04.png`.
+- The diagnostic selector invoked with `--scenario-number 29` entered an ending
+  montage instead of Japanese event block 29. The selector's late-row ordering
+  is not the event-block numbering, so this is not a dialogue crash. Scenario
+  29 remains statically verified and needs a valid route save or corrected
+  selector-row map for live entry.
+- Inventory is now 538/2,968 candidate records and 651/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 14, 29, and 31.
