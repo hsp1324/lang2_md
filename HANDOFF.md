@@ -1972,7 +1972,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   pages modified. Conditional battle and ending branches remain in the later
   whole-game route regression pass.
 
-### Scenario 11 Alignment In Progress (2026-07-13)
+### Scenario 11 Complete Reviewed Dialogue (2026-07-13)
 
 - The Japanese Scenario 11 block contains 96 logical records and 117 physical
   pages at `0x197680..0x198D98`. Ten visually reviewed source sheets are under
@@ -1988,4 +1988,23 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - The block covers Jessica's Dark Rod explanation, Egbert's raid, Runestone
   reward, oil and fire trap, unit-death branches, Hein's request to study under
   Jessica, Sherry's tiara and royal lineage, escape variants, and the route to
-  Reitel. Translation data has not yet been added.
+  Reitel. All original dynamic-name controls and `FFFD`/`FFFF` terminators stay
+  on their source pages without forced newlines.
+- The first draft requested eight new syllables after the shared font had
+  reached 766/766 slots. Equivalent wording removed all eight rather than
+  consuming shared byte-UI graphics. Four over-capacity pages were shortened
+  without changing their meaning. Ten reviewed Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_11/scenario_11_pages_00.png`
+  through `_09.png`.
+- Live verification entered the real Scenario 11, showed its Korean briefing
+  and preparation screens, automatically deployed, reached `TURN 1`, and
+  advanced the Jessica meeting. The first pass exposed an orphaned final
+  syllable in Lester's opening and a split `다크/로드`; both lines were
+  shortened. `captures/run/da67_s11_opening_final.png` and
+  `da67_s11_dark_rod_wrap.png` verify the corrected wrapping. Other evidence
+  includes `da67_s11_prep_arrange_selected.png`, `da67_s11_auto_selected.png`,
+  and `da67_s11_deployed.png`.
+- Final checksum `DA67` uses 766/766 custom glyphs and passes all 101 tests.
+  Inventory is now 2,411/2,968 candidate records and 2,851/3,567 physical
+  pages modified. Conditional battle, fire-trap, and ending branches remain in
+  the later whole-game route regression pass.

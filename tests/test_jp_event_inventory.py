@@ -24,7 +24,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
 
     def test_candidate_page_baseline_is_stable(self):
         self.assertEqual(self.result["page_count"], 2968)
-        self.assertEqual(self.result["modified_page_count"], 2315)
+        self.assertEqual(self.result["modified_page_count"], 2411)
         scenarios = self.result["scenarios"]
         self.assertEqual(scenarios[0]["page_count"], 121)
         self.assertEqual(scenarios[0]["modified_page_count"], 121)
@@ -34,7 +34,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[2]["modified_page_count"], 89)
         self.assertEqual(scenarios[13]["modified_page_count"], 125)
         self.assertEqual(self.result["physical_page_count"], 3567)
-        self.assertEqual(self.result["modified_physical_page_count"], 2734)
+        self.assertEqual(self.result["modified_physical_page_count"], 2851)
         self.assertEqual(scenarios[0]["physical_page_count"], 145)
         self.assertEqual(scenarios[0]["modified_physical_page_count"], 145)
         self.assertEqual(scenarios[1]["physical_page_count"], 137)
@@ -107,6 +107,10 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[9]["modified_page_count"], 108)
         self.assertEqual(scenarios[9]["physical_page_count"], 112)
         self.assertEqual(scenarios[9]["modified_physical_page_count"], 112)
+        self.assertEqual(scenarios[10]["page_count"], 96)
+        self.assertEqual(scenarios[10]["modified_page_count"], 96)
+        self.assertEqual(scenarios[10]["physical_page_count"], 117)
+        self.assertEqual(scenarios[10]["modified_physical_page_count"], 117)
         self.assertEqual(scenarios[22]["page_count"], 83)
         self.assertEqual(scenarios[22]["modified_page_count"], 83)
         self.assertEqual(scenarios[22]["physical_page_count"], 92)
@@ -127,7 +131,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
             all(
                 item["modified_page_count"] == 0
                 for index, item in enumerate(scenarios[3:], 3)
-                if index not in (3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
+                if index not in (3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
             )
         )
 
