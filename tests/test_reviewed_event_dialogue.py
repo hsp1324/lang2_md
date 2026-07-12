@@ -379,6 +379,26 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_8_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 8]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 128)
+        self.assertEqual(len(primary), 103)
+        self.assertEqual(len(continuations), 25)
+        self.assertEqual(primary[0]["address"], "0x191416")
+        self.assertEqual(primary[-1]["address"], "0x192B14")
+        # English 2723/2724 physically close Scenario 7. The first 102
+        # Japanese records then align with 2725..2826; the final two-page
+        # observation exists only in the Japanese event block.
+        self.assertEqual(
+            [row["english_record"] for row in primary[:-1]],
+            list(range(2725, 2827)),
+        )
+        self.assertIsNone(primary[-1]["english_record"])
+        self.assertTrue(primary[-1]["japanese_only"])
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_23_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 23]
         primary = [row for row in rows if not row.get("continuation")]
@@ -412,7 +432,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -443,6 +463,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x974B2: "에그베르트",
             0x974BE: "이멜다",
             0x974C8: "모건",
+            0x974DA: "크레이머",
             0x97504: "지휘관",
             0x97526: "로렌",
             0x97648: "신관",

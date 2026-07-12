@@ -1859,3 +1859,40 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `captures/run/ac20_s07_repro_late_3.png`, proving it is not a blank ROM page.
   Other evidence includes `ac20_s07_arrange.png`, `ac20_s07_deploy.png`, and
   `ac20_s07_dialogue_1.png` through `_18.png`.
+
+### Scenario 8 Complete Reviewed Dialogue (2026-07-13)
+
+- Scenario 8 covers all 103 Japanese pointer records and all 128 physical
+  pages at `0x191416..0x192B3E`. English `2723/2724` are Scenario 7 residue;
+  the first 102 Japanese records align positionally with English
+  `2725..2826`. The final record at `0x192B14`, continued at `0x192B3E`, is a
+  Japanese-only report that the enemy has also lost many soldiers.
+- The Japanese sheets are authoritative for the bridge-demolition countdown,
+  flying/cavalry two-wave attack, bridge-collapse branches, flying and elf
+  tactics, Imperial knight assistance, commander deaths and retreats,
+  Kalzath aftermath, and Blue Dragon Knight branches. Every dynamic-name
+  control and `FFFD`/`FFFF` terminator remains on its original physical page.
+- Initial Korean wording exceeded 32 physical-page capacities and requested
+  ten new syllables after the shared 16x16 font had reached 766/766 slots.
+  Equivalent shorter wording removed every overflow and every new glyph.
+  Eleven reviewed sheets are under
+  `captures/analysis/event_pages_ko/scenario_08/scenario_08_pages_00.png`
+  through `_10.png`.
+- Live verification entered the real `SCENARIO 8`, showed the Korean
+  `프롤로그`, preparation and arrangement screens, automatically deployed,
+  reached `TURN 1`, and advanced the bridge opening without a reset. The first
+  fixed speaker was still `クレイマー`; its live-reached direct-name record
+  `0x974DA` is now safely promoted as `크레이머`. The final proof is
+  `captures/run/305d_s08_opening_kramer_final.png`; subsequent Korean pages are
+  in `captures/run/305d_s08_opening_pages/`.
+- A broader attempt to add map-status names `스코트`, `키스`, and `크레이머`
+  at `0x061ADC`, `0x061AE1`, and `0x061B41` was rejected and reverted. It needs
+  33 extra byte-font glyph codes while only 29 collision-free codes remain.
+  Reusing more ASCII/status tiles would reintroduce the already fixed faction
+  animation and terrain corruption. These later-scenario map names require a
+  screen-specific font swap or a larger safe byte-font design; the direct
+  dialogue names are already Korean.
+- Final checksum `305D` uses 766/766 custom glyphs and passes all 98 tests.
+  Inventory is now 2,060/2,968 candidate records and 2,453/3,567 physical
+  pages modified. Scenario 8 is static-complete with its opening live-verified;
+  conditional battle routes remain in the whole-game regression pass.
