@@ -1662,3 +1662,34 @@ The earlier default-name-only conclusion is superseded by the live-verified
   19 and verify the briefing, preparation, automatic deployment, opening
   dialogue, conditional reinforcements, item pickups, departure paths, and
   first playable turn before promoting it to live complete.
+
+### Scenario 20 Static Reviewed Dialogue (Live Verification Pending, 2026-07-12)
+
+- Scenario 20 statically covers all 88 Japanese pointer records and all 111
+  physical pages. English `1078..1080` are the three final Scenario 19
+  garrison reports. The Japanese ship-battle block then covers English
+  `1081..1167`; physical grouping differs around monster cries, Faias's
+  multi-page battle dialogue, and the post-battle route variants. All three
+  final Japanese approach warnings deliberately reference English `1167`.
+- All ten Japanese sheets were compared address by address rather than using
+  English page breaks mechanically. The Korean pass covers the boarding
+  attack, golem tactics, kraken tactics, Faias/Doren confrontation, every
+  battle reaction, Bozel warning, Doren aftermath, Elwin's crisis, landing
+  calls, and the three Velzeria approach variants. Every `{0001}`, `{0002}`,
+  `{0004}`, `{0006}`, `{0007}`, `{0010}`, `{0060}`, and `{0073}` control and
+  every `FFFD`/`FFFF` terminator is preserved in its original physical page.
+- The full font was already at 765/766 slots. Scenario 20 keeps the canonical
+  `골렘` spelling without exceeding the table by changing Scenario 21's unique
+  `무릎 꿇어라` wording to the equivalent `굴복해라`; all other new one-off
+  syllables were avoided through natural synonyms. Every page fits its source
+  capacity, no forced newline is used, and final static checksum `C1BA` still
+  uses 765 custom glyphs. Ten Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_20/` and
+  `scenario_20_pages_00.png` through `_09.png`.
+- Inventory is now 1,475/2,968 candidate records and 1,740/3,567 physical pages
+  modified, with 91 passing tests. Scenario 20 remains live-pending because
+  the user requested background-only work; BlastEm and all foreground input
+  were left untouched. Resume with selector row 20 and verify the briefing,
+  preparation, automatic deployment, golem/kraken event branches, Faias
+  confrontations, victory dialogue, and the first controllable turn before
+  marking this scenario live complete.

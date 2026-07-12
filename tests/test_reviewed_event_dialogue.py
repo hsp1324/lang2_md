@@ -272,6 +272,28 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_20_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 20]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 111)
+        self.assertEqual(len(primary), 88)
+        self.assertEqual(len(continuations), 23)
+        self.assertEqual(primary[0]["address"], "0x1A7E02")
+        self.assertEqual(primary[-1]["address"], "0x1A94BA")
+        # English 1078..1080 physically close Scenario 19. Japanese page
+        # grouping differs around multi-page battle lines, and three final
+        # route variants deliberately share the closest English row 1167.
+        self.assertEqual(
+            {row["english_record"] for row in rows},
+            set(range(1081, 1168)),
+        )
+        self.assertEqual(
+            [row["english_record"] for row in primary[-3:]],
+            [1167, 1167, 1167],
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_5_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 5]
         primary = [row for row in rows if not row.get("continuation")]
@@ -322,7 +344,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 17, 18, 19, 21, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
