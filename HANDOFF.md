@@ -2047,3 +2047,20 @@ The earlier default-name-only conclusion is superseded by the live-verified
   Inventory is now 2,499/2,968 candidate records and 2,964/3,567 physical
   pages modified. Conditional battle, shrine, and return branches remain in
   the later whole-game route regression pass.
+
+### Scenario 13 Alignment In Progress (2026-07-13)
+
+- The Japanese Scenario 13 block contains 96 logical records and 126 physical
+  pages at `0x19AEE0..0x19C6F4`. Eleven visually reviewed source sheets are
+  under `captures/analysis/event_pages_jp/scenario_13/`, ending at
+  `scenario_13_pages_10.png`.
+- English record `288`, whose source prefix is `0x19A9B8`, is Scenario 12's
+  final departure line and is not part of Scenario 13. Japanese primary
+  records 0..93 align positionally with English `289..382`.
+- The final Japanese primaries at `0x19C6EC` and `0x19C6F4` are source-only:
+  the first is the unit's affirmative response, and the second vows not to die
+  but to win and return to Eliza and the speaker's child.
+- The block covers the Fire Dragon corps blockade, ballista/griphon/flying
+  tactics, Keith and Sherry branches, Kalzath rescue, Dark Rod/Liana ritual,
+  Langrisser discovery, and the Imperial commander's family and honor speech.
+  Translation data has not yet been added.
