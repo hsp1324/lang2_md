@@ -447,9 +447,11 @@ DIRECT_STRING_PATCHES = {
     0x9742A: "헤인",
     # Scenario 2 fixed speaker names, isolated and live-reached as one batch.
     0x97432: "스코트",
+    0x9743C: "키스",
     0x97482: "발가스",
     0x974AA: "졸름",
     0x974B2: "에그베르트",
+    0x974BE: "이멜다",
     0x974C8: "모건",
     0x97504: "지휘관",
     0x97526: "로렌",

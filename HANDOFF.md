@@ -1505,7 +1505,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
 
 - Scenario 16 now covers all 87 Japanese pointer records and all 98 physical
   pages. Japanese primaries 0..85 align with English records `511..596`.
-  English `705/706` are previous-scenario residue; the final Japanese record
+  English `705/706` physically complete Scenario 15; the final Japanese record
   at `0x1A1F78` is a source-only two-page resolve to defeat the Emperor and
   rescue the controlled ally.
 - Every dynamic-name control and every `FFFD`/`FFFF` terminator remains on its
@@ -1530,3 +1530,49 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - Inventory is now 976/2,968 candidate records and 1,143/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 16, 21, 23, 24,
   29, 30, and 31.
+
+### Scenario 15 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 15 now covers all 110 Japanese pointer records and all 118 physical
+  pages. English `598..704` are grouped under Scenario 15, while `705/706`
+  were grouped under Scenario 16 even though their Rayguard-castle advance
+  lines physically close this Japanese block. Repeated short Japanese battle
+  reactions deliberately reuse their closest semantic English reference.
+- All dynamic-name controls and every `FFFD`/`FFFF` terminator remain on their
+  source physical page. Every page fits its original capacity and uses no
+  forced newline. Ten complete Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_15/`.
+- Checksum `7596` entered Scenario 15 preparation, automatic deployment,
+  `TURN 1`, Jessica's opening line, the river camera movement, and Imelda's
+  first response without a reset. This exposed fixed speaker `イメルダ` at
+  `0x0974BE`; checksum `C5C3` verifies the isolated `이멜다` promotion live in
+  `captures/analysis/c5c3_s15_intro/imelda_fixed.png`.
+- The next live pass exposed fixed speaker `キース` at `0x09743C`. Final build
+  `A64F` promotes only that isolated slot to `키스` and passes the full test
+  suite. Live re-entry was stopped before the final Keith frame when the user
+  needed the machine; do not claim that one final frame as captured yet.
+- Inventory is now 1,086/2,968 candidate records and 1,261/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 15, 16, 21, 23,
+  24, 29, 30, and 31.
+
+### Diagnostic SRAM Default-Name Migration (2026-07-12)
+
+- The Scenario 15 preparation screen showed `엘윈리아나`, but the ROM name
+  table at `0x061AC5` was correctly terminated. A Japanese-ROM comparison
+  proved the source screen displays only `エルウィン`. The diagnostic manual
+  save cached the original five byte codes `B4 D9 B3 A8 DD FF`; after the byte
+  UI font replacement those codes render as `엘윈리아나`.
+- Directly changing the six name bytes made the manual slot fail its checksum,
+  so that attempt was restored. Manual slots are 0x1A8 bytes; the checksum at
+  `slot+0x1A6` is the big-endian 16-bit-word sum of `slot[0:0x1A4]`.
+- `tools/run_blastem_sequence.py` now migrates only valid manual slots whose
+  name exactly matches the Japanese default, and only when launching the
+  Korean production ROM through `scenario-select`. It writes
+  `B4 D9 FF FF FF FF`, recalculates the slot checksum, and leaves custom names,
+  invalid slots, original-ROM runs, and user SRAM outside the isolated runtime
+  untouched. `tests/test_blastem_sram_migration.py` covers success and invalid
+  checksum rejection.
+- The real diagnostic slot migrated once and remained visible as a valid
+  manual Scenario 1 slot on the Load screen. A final preparation-screen visual
+  confirmation was not completed before emulator shutdown; resume from the
+  migrated runtime when interactive testing is available again.

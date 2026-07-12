@@ -186,7 +186,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(len(continuations), 11)
         self.assertEqual(primary[0]["address"], "0x1A1058")
         self.assertEqual(primary[-1]["address"], "0x1A1F78")
-        # English 705/706 are previous-scenario residue. The final Japanese
+        # English 705/706 physically complete Scenario 15. The final Japanese
         # record is a source-only two-page resolve to defeat the Emperor and
         # rescue the controlled ally.
         self.assertEqual(
@@ -195,6 +195,26 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertIsNone(primary[-1]["english_record"])
         self.assertTrue(primary[-1]["japanese_only"])
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
+    def test_scenario_15_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 15]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 118)
+        self.assertEqual(len(primary), 110)
+        self.assertEqual(len(continuations), 8)
+        self.assertEqual(primary[0]["address"], "0x19F782")
+        self.assertEqual(primary[-1]["address"], "0x1A0A6E")
+        # The English project grouped 598..704 under Scenario 15 and the two
+        # final Rayguard-castle lines 705/706 under Scenario 16. The Japanese
+        # event block proves that all 109 records belong to this scenario;
+        # duplicate short Japanese battle reactions reuse their closest
+        # semantic English reference.
+        self.assertEqual(primary[0]["english_record"], 598)
+        self.assertEqual(primary[-2]["english_record"], 705)
+        self.assertEqual(primary[-1]["english_record"], 706)
+        self.assertTrue(all(row["english_record"] is not None for row in rows))
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
     def test_scenario_5_has_all_reviewed_physical_pages(self):
@@ -247,7 +267,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 5, 14, 16, 21, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 21, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -265,12 +285,14 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         expected = {
             0x97420: "쉐리",
             0x97432: "스코트",
+            0x9743C: "키스",
             0x97444: "아론",
             0x9744E: "레스터",
             0x97458: "제시카",
             0x97482: "발가스",
             0x974AA: "졸름",
             0x974B2: "에그베르트",
+            0x974BE: "이멜다",
             0x974C8: "모건",
             0x97504: "지휘관",
             0x97526: "로렌",

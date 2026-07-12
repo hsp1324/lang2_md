@@ -8,9 +8,9 @@ that page. It does not by itself prove that the whole page is translated or live
 - Event pointer table: `0x18011A`
 - Scenarios: 31
 - Candidate text pages: 2968
-- Modified candidate records: 976
+- Modified candidate records: 1086
 - Physical pages in exactly parseable record spans: 3567
-- Modified physical pages: 1143
+- Modified physical pages: 1261
 
 | Scenario | Event block | Records | Physical pages | Modified physical | Status |
 | ---: | --- | ---: | ---: | ---: | --- |
@@ -28,7 +28,7 @@ that page. It does not by itself prove that the whole page is translated or live
 | 12 | `0x198DE0..0x19A964` | 88 | 113 | 0 | unstarted |
 | 13 | `0x19A964..0x19C736` | 96 | 126 | 0 | unstarted |
 | 14 | `0x19C736..0x19EFA2` | 125 | 162 | 162 | all modified |
-| 15 | `0x19EFA2..0x1A0AA6` | 110 | 118 | 0 | unstarted |
+| 15 | `0x19EFA2..0x1A0AA6` | 110 | 118 | 118 | all modified |
 | 16 | `0x1A0AA6..0x1A1FE2` | 87 | 98 | 98 | all modified |
 | 17 | `0x1A1FE2..0x1A4200` | 108 | 135 | 0 | unstarted |
 | 18 | `0x1A4200..0x1A5DE6` | 95 | 117 | 0 | unstarted |

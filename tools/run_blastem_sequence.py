@@ -21,6 +21,13 @@ CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
 RUNTIME_ROOT = ROOT / "captures/runtime"
 LOG_ROOT = ROOT / "captures/run"
 
+MANUAL_SLOT_BASES = (0x194E, 0x1AF6, 0x1C9E, 0x1E46)
+MANUAL_SLOT_CHECKSUM_DATA_SIZE = 0x1A4
+MANUAL_SLOT_CHECKSUM_OFFSET = 0x1A6
+MANUAL_SLOT_HERO_NAME_OFFSET = 0x130
+JP_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 B3 A8 DD FF")
+KO_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 FF FF FF FF")
+
 
 SEQUENCES = {
     # Opening/title into the game's load-slot screen. Copy or retain a runtime
@@ -162,6 +169,42 @@ SEQUENCES["battle-command"] = list(SEQUENCES["deploy-dialogue"])
 SEQUENCES["first-turn-dialogue"] = list(SEQUENCES["deploy-dialogue"])
 
 
+def manual_slot_checksum(data: bytes | bytearray, base: int) -> int:
+    end = base + MANUAL_SLOT_CHECKSUM_DATA_SIZE
+    return sum(
+        int.from_bytes(data[offset : offset + 2], "big")
+        for offset in range(base, end, 2)
+    ) & 0xFFFF
+
+
+def migrate_scenario_select_default_name(path: Path) -> int:
+    if not path.exists():
+        return 0
+    data = bytearray(path.read_bytes())
+    migrated = 0
+    for base in MANUAL_SLOT_BASES:
+        name_start = base + MANUAL_SLOT_HERO_NAME_OFFSET
+        name_end = name_start + len(JP_DEFAULT_HERO_NAME)
+        if data[name_start:name_end] != JP_DEFAULT_HERO_NAME:
+            continue
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        stored = int.from_bytes(data[checksum_offset : checksum_offset + 2], "big")
+        calculated = manual_slot_checksum(data, base)
+        if stored != calculated:
+            raise ValueError(
+                f"manual slot at 0x{base:04X} has invalid checksum "
+                f"0x{stored:04X} != 0x{calculated:04X}"
+            )
+        data[name_start:name_end] = KO_DEFAULT_HERO_NAME
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+        migrated += 1
+    if migrated:
+        path.write_bytes(data)
+    return migrated
+
+
 def make_key_command(args: argparse.Namespace, keys: list[str]) -> list[str]:
     command = [
         sys.executable,
@@ -285,6 +328,14 @@ def main() -> int:
         if not args.reuse_runtime_state:
             shutil.rmtree(runtime_home, ignore_errors=True)
         runtime_home.mkdir(parents=True, exist_ok=True)
+        if args.sequence == "scenario-select" and args.rom.resolve() == DEFAULT_ROM.resolve():
+            sram_path = (
+                runtime_home
+                / ".local/share/blastem/Langrisser II (Korean JP Probe)/save.sram"
+            )
+            migrated = migrate_scenario_select_default_name(sram_path)
+            if migrated:
+                print(f"migrated Japanese default hero name in {migrated} manual slot(s)")
         config_dir = runtime_home / ".config/blastem"
         config_dir.mkdir(parents=True, exist_ok=True)
         default_config = (BLASTEM.parent / "default.cfg").read_text(encoding="utf-8")
