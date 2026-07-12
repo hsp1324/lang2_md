@@ -1378,3 +1378,22 @@ The earlier default-name-only conclusion is superseded by the live-verified
   selector-row map for live entry.
 - Inventory is now 538/2,968 candidate records and 651/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 14, 29, and 31.
+
+### Scenario 30 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 30 / X3 now covers all 65 Japanese pointer records and 70 physical
+  pages. English records 1217/1218 are the two Japanese-only Scenario 29 ending
+  lines grouped on the wrong side of the English extraction; Japanese records
+  0..63 align with English `1370..1433`. The last Japanese record at `0x1B832A`
+  has no English equivalent and tells the party to leave the transformed girl
+  alone and escape the dangerous cave.
+- Checksum `2D3A` passes all 73 tests. Six complete Korean contact sheets are in
+  `captures/analysis/event_pages_ko/scenario_30/`.
+- Live scenario-selector row 30 correctly enters X3. The run passed briefing,
+  deployment, cave discovery, the girl encounter, dragon encirclement, and the
+  first playable command without a blank page or reset. Captures are under
+  `captures/analysis/2d3a_s30_intro/`, with the command menu at frame 22. Fixed
+  speakers such as Lester and Liana render in Korean; the diagnostic SRAM's
+  saved protagonist name remains Japanese as previously documented.
+- Inventory is now 603/2,968 candidate records and 721/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 14, 29, 30, and 31.
