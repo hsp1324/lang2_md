@@ -25,8 +25,14 @@ MANUAL_SLOT_BASES = (0x194E, 0x1AF6, 0x1C9E, 0x1E46)
 MANUAL_SLOT_CHECKSUM_DATA_SIZE = 0x1A4
 MANUAL_SLOT_CHECKSUM_OFFSET = 0x1A6
 MANUAL_SLOT_HERO_NAME_OFFSET = 0x130
+MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET = 0x142
 JP_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 B3 A8 DD FF")
 KO_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 FF FF FF FF")
+JP_DEFAULT_HERO_DIALOGUE_NAME = bytes.fromhex(
+    "00 03 00 2A 00 02 00 4C 00 27"
+)
+DIRECT_ELWIN_NAME_OFFSET = 0x97404
+SAVED_DIALOGUE_NAME_SIZE = 10
 
 
 SEQUENCES = {
@@ -177,15 +183,51 @@ def manual_slot_checksum(data: bytes | bytearray, base: int) -> int:
     ) & 0xFFFF
 
 
-def migrate_scenario_select_default_name(path: Path) -> int:
+def korean_default_dialogue_name(rom: Path = DEFAULT_ROM) -> bytes:
+    data = rom.read_bytes()
+    encoded = bytearray()
+    for offset in range(
+        DIRECT_ELWIN_NAME_OFFSET,
+        DIRECT_ELWIN_NAME_OFFSET + SAVED_DIALOGUE_NAME_SIZE,
+        2,
+    ):
+        word = data[offset : offset + 2]
+        encoded.extend(word)
+        if word == b"\xFF\xFF":
+            return bytes(encoded).ljust(SAVED_DIALOGUE_NAME_SIZE, b"\xFF")
+    raise ValueError("built ROM Elwin speaker name has no terminator")
+
+
+def migrate_scenario_select_default_name(
+    path: Path,
+    korean_dialogue_name: bytes | None = None,
+) -> int:
     if not path.exists():
         return 0
+    if korean_dialogue_name is None:
+        korean_dialogue_name = korean_default_dialogue_name()
+    if len(korean_dialogue_name) != SAVED_DIALOGUE_NAME_SIZE:
+        raise ValueError("saved dialogue name must occupy five words")
     data = bytearray(path.read_bytes())
     migrated = 0
     for base in MANUAL_SLOT_BASES:
         name_start = base + MANUAL_SLOT_HERO_NAME_OFFSET
         name_end = name_start + len(JP_DEFAULT_HERO_NAME)
-        if data[name_start:name_end] != JP_DEFAULT_HERO_NAME:
+        dialogue_start = base + MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET
+        dialogue_end = dialogue_start + len(JP_DEFAULT_HERO_DIALOGUE_NAME)
+        byte_name = bytes(data[name_start:name_end])
+        dialogue_name = bytes(data[dialogue_start:dialogue_end])
+        if byte_name not in (JP_DEFAULT_HERO_NAME, KO_DEFAULT_HERO_NAME):
+            continue
+        if dialogue_name not in (
+            JP_DEFAULT_HERO_DIALOGUE_NAME,
+            korean_dialogue_name,
+        ):
+            continue
+        if (
+            byte_name == KO_DEFAULT_HERO_NAME
+            and dialogue_name == korean_dialogue_name
+        ):
             continue
         checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
         stored = int.from_bytes(data[checksum_offset : checksum_offset + 2], "big")
@@ -195,7 +237,10 @@ def migrate_scenario_select_default_name(path: Path) -> int:
                 f"manual slot at 0x{base:04X} has invalid checksum "
                 f"0x{stored:04X} != 0x{calculated:04X}"
             )
-        data[name_start:name_end] = KO_DEFAULT_HERO_NAME
+        if byte_name == JP_DEFAULT_HERO_NAME:
+            data[name_start:name_end] = KO_DEFAULT_HERO_NAME
+        if dialogue_name == JP_DEFAULT_HERO_DIALOGUE_NAME:
+            data[dialogue_start:dialogue_end] = korean_dialogue_name
         data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
             data, base
         ).to_bytes(2, "big")

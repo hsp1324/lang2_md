@@ -829,15 +829,19 @@ DIRECT_STRING_PATCHES = {
     0x971F4: "마나부족",
     0x97202: "수면상태",
     0x97214: "마법봉인",
-    # Verified on Scenario 1 first-turn event dialogue speaker labels.
+    # Verified on Scenario 1 and 17 event dialogue speaker labels.
     # Scenario 14 uses the same fixed speaker-name table. Keep only the names
     # isolated from the formerly all-or-nothing unsafe probe here.
+    0x97404: "엘윈",
     0x97420: "쉐리",
     0x97444: "아론",
     0x9744E: "레스터",
     0x97458: "제시카",
     0x97410: "리아나",
     0x9746C: "레온",
+    # Scenario 17 throne-room dialogue, promoted only after live reach.
+    0x97474: "베른하르트",
+    0x9748C: "보젤",
     0x97496: "레아드",
     0x974A0: "발드",
     0x97512: "주민",

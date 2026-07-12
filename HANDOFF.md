@@ -1576,3 +1576,37 @@ The earlier default-name-only conclusion is superseded by the live-verified
   manual Scenario 1 slot on the Load screen. A final preparation-screen visual
   confirmation was not completed before emulator shutdown; resume from the
   migrated runtime when interactive testing is available again.
+
+### Scenario 17 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 17 now covers all 108 Japanese pointer records and all 135 physical
+  pages. English record 597 is the final Scenario 16 resolve; the Japanese
+  Rayguard throne block aligns one-for-one with English `804..911`.
+- Every dynamic-name control and `FFFD`/`FFFF` terminator remains on its source
+  physical page. All text fits the original capacity and uses no forced
+  newline. Twelve complete Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_17/`.
+- The first complete build was checksum `6BBC`. Its live pass reached the
+  route map, scrolling Korean briefing, preparation screen, automatic
+  deployment, `SCENARIO 17`, `TURN 1`, and the opening throne dialogue without
+  a reset. It exposed the fixed Japanese speaker labels for Bernhardt and
+  Bozel, now isolated at `0x097474` and `0x09748C` and promoted to the safe
+  direct patch set.
+- An intermediate `7D4E` pass verified `베른하르트` but showed Japanese
+  `エルウィン`. Patching direct candidate `0x097404` alone did not affect that
+  diagnostic frame: the built-in scenario selector stores a second, 16-bit
+  dialogue copy of the hero name at manual-slot offset `+0x142` in addition to
+  the byte UI copy at `+0x130`.
+- `tools/run_blastem_sequence.py` now migrates both exact Japanese default-name
+  representations, derives the current Korean dialogue words from the built
+  ROM instead of hard-coding custom glyph IDs, and recalculates the manual-slot
+  checksum. It accepts an already migrated half, skips custom names, and still
+  rejects invalid checksums. The real diagnostic slot now contains byte name
+  `B4 D9 FF FF FF FF`, dialogue name `700B 700C FFFF FFFF FFFF`, and matching
+  checksum `2C21`.
+- Final checksum `5CC0` live-verifies `베른하르트`, migrated `엘윈`, `쉐리`,
+  and `보젤` speaker labels plus their opening Korean lines. Captures are under
+  `captures/run/5cc0_s17_*.png`. The full suite passes 87 tests.
+- Inventory is now 1,194/2,968 candidate records and 1,396/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 15, 16, 17, 21,
+  23, 24, 29, 30, and 31.

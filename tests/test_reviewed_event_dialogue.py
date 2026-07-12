@@ -217,6 +217,23 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertTrue(all(row["english_record"] is not None for row in rows))
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_17_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 17]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 135)
+        self.assertEqual(len(primary), 108)
+        self.assertEqual(len(continuations), 27)
+        self.assertEqual(primary[0]["address"], "0x1A2716")
+        self.assertEqual(primary[-1]["address"], "0x1A416E")
+        # English 597 is the final Scenario 16 resolve. The Japanese throne
+        # battle then aligns one-for-one with English records 804..911.
+        self.assertEqual(
+            [row["english_record"] for row in primary],
+            list(range(804, 912)),
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_5_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 5]
         primary = [row for row in rows if not row.get("continuation")]
@@ -267,7 +284,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 21, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 5, 14, 15, 16, 17, 21, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -283,13 +300,16 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_live_reached_scenario_speaker_names_are_in_safe_patch_set(self):
         expected = {
+            0x97404: "엘윈",
             0x97420: "쉐리",
             0x97432: "스코트",
             0x9743C: "키스",
             0x97444: "아론",
             0x9744E: "레스터",
             0x97458: "제시카",
+            0x97474: "베른하르트",
             0x97482: "발가스",
+            0x9748C: "보젤",
             0x974AA: "졸름",
             0x974B2: "에그베르트",
             0x974BE: "이멜다",
