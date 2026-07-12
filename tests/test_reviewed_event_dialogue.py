@@ -458,6 +458,27 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertTrue(primary[-1]["japanese_only"])
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_12_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 12]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 113)
+        self.assertEqual(len(primary), 88)
+        self.assertEqual(len(continuations), 25)
+        self.assertEqual(primary[0]["address"], "0x199344")
+        self.assertEqual(primary[-1]["address"], "0x19A93E")
+        # English 95 closes Scenario 11. The opening 28 Japanese records align
+        # with English 200..227; later death and route branches diverge in
+        # order, including source-only illness and Liana-return variants.
+        self.assertEqual(
+            [row["english_record"] for row in primary[:28]],
+            list(range(200, 228)),
+        )
+        self.assertTrue(primary[30]["japanese_only"])
+        self.assertTrue(primary[86]["japanese_only"])
+        self.assertEqual(primary[-1]["english_record"], 287)
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_23_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 23]
         primary = [row for row in rows if not row.get("continuation")]
@@ -491,7 +512,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -525,6 +546,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x974DA: "크레이머",
             0x97504: "지휘관",
             0x97526: "로렌",
+            0x97594: "리치",
             0x97648: "신관",
         }
         for address, text in expected.items():

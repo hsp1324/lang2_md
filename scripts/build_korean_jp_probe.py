@@ -850,6 +850,8 @@ DIRECT_STRING_PATCHES = {
     0x97512: "주민",
     0x9751E: "자경단",
     0x9754A: "제국군지휘관",
+    # Scenario 12 Reitel guardian, promoted after live dialogue reach.
+    0x97594: "리치",
     0xA16F2: "버리겠습니까예아니오",
 }
 

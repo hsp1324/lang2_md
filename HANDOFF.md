@@ -2009,7 +2009,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   pages modified. Conditional battle, fire-trap, and ending branches remain in
   the later whole-game route regression pass.
 
-### Scenario 12 Alignment In Progress (2026-07-13)
+### Scenario 12 Complete Reviewed Dialogue (2026-07-13)
 
 - The Japanese Scenario 12 block contains 88 logical records and 113 physical
   pages at `0x199344..0x19A93E`. Ten visually reviewed source sheets are under
@@ -2017,10 +2017,33 @@ The earlier default-name-only conclusion is superseded by the live-verified
   through `_09.png`.
 - English record `95`, whose source prefix is `0x198E12`, is Scenario 11's
   final instruction to escape across the river and is not part of Scenario 12.
-  All 88 Japanese primary records then align positionally with English
-  `200..287`; this block has no Japanese-only trailing record.
+  Japanese primary records 0..27 align with English `200..227`; after that,
+  battle deaths, guardian cries, Dark Rod theft, and conditional return routes
+  split and merge differently. The Japanese address order is authoritative.
+- Source-only material includes a chronic-illness death at `0x199BC8` and the
+  repeated Liana-abduction return variant at `0x19A87E..0x19A8F4`. English-only
+  short reactions are not inserted into unrelated Japanese pages.
 - The block covers the Reitel guardians, Egbert's Alhazard plans and
   reincarnation history, Dark Rod acquisition and theft branches, guardian and
   Imperial battle reactions, the hidden shrine, Liana's kidnapping aftermath,
   Jessica's regret, Hein's view of magic, and Jessica's promise to accept him
-  as an apprentice. Translation data has not yet been added.
+  as an apprentice. All 113 physical pages are translated; every dynamic-name
+  control and `FFFD`/`FFFF` terminator remains on its source page without
+  forced newlines.
+- The first draft requested ten new syllables after the shared font had reached
+  766/766 slots. Equivalent wording removed every new glyph rather than
+  consuming shared byte-UI graphics. Ten reviewed Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_12/scenario_12_pages_00.png`
+  through `_09.png`.
+- Live verification entered the real Scenario 12, showed its Korean briefing
+  and preparation screens, automatically deployed, reached `TURN 1`, and
+  advanced the Elwin/Reitel-guardian opening. The first pass exposed fixed
+  speaker `リッチ` and an orphaned punctuation line. Direct-name slot
+  `0x97594` is now safely promoted as `리치`, and the warning was shortened.
+  `captures/run/9543_s12_lich_final.png` verifies both fixes; other evidence
+  includes `e737_s12_briefing.png`, `e737_s12_prep.png`,
+  `e737_s12_deployed.png`, and `9543_s12_after_turn.png`.
+- Final checksum `9543` uses 766/766 custom glyphs and passes all 102 tests.
+  Inventory is now 2,499/2,968 candidate records and 2,964/3,567 physical
+  pages modified. Conditional battle, shrine, and return branches remain in
+  the later whole-game route regression pass.
