@@ -1897,7 +1897,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   pages modified. Scenario 8 is static-complete with its opening live-verified;
   conditional battle routes remain in the whole-game regression pass.
 
-### Scenario 9 Alignment In Progress (2026-07-13)
+### Scenario 9 Complete Reviewed Dialogue (2026-07-13)
 
 - The Japanese Scenario 9 block contains 147 logical pointer records and 169
   physical pages at `0x1934B0..0x19546A`. Fifteen source contact sheets are in
@@ -1911,5 +1911,26 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - The block covers the Kalzath siege, monster diversion, Sherry's relief
   force, siege-unit tactics and deaths, multiple castle-defense outcomes,
   Liana and Jessica's Alhazard/Dark Rod explanation, and renewed Imperial
-  assaults. Translation data has not yet been added; preserve the alignment
-  above when creating Scenario 9 rows.
+  assaults. All 169 physical pages are translated from the Japanese ordering;
+  dynamic-name controls and `FFFD`/`FFFF` terminators stay on their source
+  pages without forced newlines.
+- The first draft produced multiple capacity overflows and fourteen one-off
+  glyph requests across its two editing passes. Equivalent concise wording
+  removed every overflow and every new glyph, preserving the full 766/766
+  shared-font budget. Fifteen reviewed Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_09/scenario_09_pages_00.png`
+  through `_14.png`.
+- Live verification entered the real Scenario 9, showed its Korean briefing
+  and preparation screens, automatically deployed, reached `TURN 1`, and
+  advanced the opening Leon/Reard/Imperial-commander sequence without a reset.
+  The first live pass exposed an orphaned `?` after automatic wrapping; the
+  source page at `0x1934B0` was shortened to `공성 부대 상황은? 보고하라.`.
+  `captures/run/3fa7_s09_opening_final.png` verifies the corrected wrapping on
+  the final ROM.
+  Captures include `captures/run/91a2_s09_briefing_end.png`,
+  `91a2_s09_prep.png`, `91a2_s09_deployed.png`, `91a2_s09_turn.png`, and the
+  sequence under `captures/run/91a2_s09_opening_pages/`.
+- Final checksum `3FA7` uses 766/766 custom glyphs and passes all 99 tests.
+  Inventory is now 2,207/2,968 candidate records and 2,622/3,567 physical
+  pages modified. Conditional mid-map and ending branches remain part of the
+  later whole-game route regression pass.
