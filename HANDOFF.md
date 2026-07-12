@@ -1934,3 +1934,21 @@ The earlier default-name-only conclusion is superseded by the live-verified
   Inventory is now 2,207/2,968 candidate records and 2,622/3,567 physical
   pages modified. Conditional mid-map and ending branches remain part of the
   later whole-game route regression pass.
+
+### Scenario 10 Alignment In Progress (2026-07-13)
+
+- The Japanese Scenario 10 block contains 108 logical records and 112 physical
+  pages at `0x195CB6..0x197046`. Ten visually reviewed source sheets are under
+  `captures/analysis/event_pages_jp/scenario_10/scenario_10_pages_00.png`
+  through `_09.png`.
+- English record `2974` is Scenario 9's final risky-assault order and is not
+  part of this block. Japanese primary records 0..103 align positionally with
+  English `2975..3078`.
+- Japanese primary records 104..107 are source-only: a subordinate acknowledges
+  the order, offers a necklace at `0x196FFC`, receives thanks at `0x197028`,
+  and the final record `0x197046` awards the Necklace. Preserve these four
+  records when creating the Scenario 10 translation rows.
+- The block covers the river crossing, monster ambush, water/land tactics,
+  many ally and monster death branches, Dark Rod intelligence, the magician's
+  location, several temporary-party departure variants, and the Japanese-only
+  Necklace reward. Translation data has not yet been added.
