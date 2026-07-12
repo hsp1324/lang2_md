@@ -1795,3 +1795,34 @@ The earlier default-name-only conclusion is superseded by the live-verified
   modified. Scenario 4 is static-complete with its opening path live-verified;
   conditional combat and ending branches remain in the whole-game regression
   pass.
+
+### Scenario 6 Complete Reviewed Dialogue (2026-07-13)
+
+- Scenario 6 now covers all 102 Japanese pointer records and all 122 physical
+  pages at `0x18DCC0..0x18F24C`. English `2521..2622` supply a complete
+  one-to-one record reference, but the Japanese order diverges around the
+  Runestone, village-defense deaths, sword-master reunion, and post-battle
+  holy/demon sword explanation. Those sections follow the Japanese contact
+  sheets rather than the English page order.
+- The translation covers Morgan's parchment search, the village elder and
+  Aaron, every civilian/cultist death reaction, the Shika-speaking troops,
+  Morgan and Zold battle branches, Aaron's recruitment, Langrisser and
+  Alhazard history, both village-damage outcomes, and the Amulet reward. All
+  dynamic-name controls and `FFFD`/`FFFF` terminators remain on their original
+  physical pages; no forced newline is used.
+- Eight one-off syllables initially exceeded the shared font budget. Equivalent
+  Korean wording removed all eight rather than consuming byte-UI graphics.
+  Final checksum `7044` uses 765/766 custom glyphs. Eleven Korean sheets are in
+  `captures/analysis/event_pages_ko/scenario_06_pages_00.png` through `_10.png`.
+- The full static suite passes 95 tests. Inventory is now 1,857/2,968 candidate
+  records and 2,208/3,567 physical pages modified. Live verification entered
+  the real `SCENARIO 6`, completed automatic deployment, reached `TURN 1`, and
+  advanced the opening Morgan/village-elder sequence without a blank page,
+  reset, or bad dynamic-name substitution. Captures include
+  `captures/run/7044_s06_arrange_live.png`, `7044_s06_deploy_start.png`, and
+  `7044_s06_dialogue_1.png` through `_12.png`.
+- A failed first selector attempt exposed that `scenario-select` deleted its
+  own manual-slot runtime unless `--reuse-runtime-state` was passed. A valid
+  slot was recreated through the documented diagnostic save branch, and
+  `tools/run_blastem_sequence.py` now preserves `captures/runtime/load-screen`
+  by default. Do not remove that runtime before selector-based live checks.

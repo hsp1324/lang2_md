@@ -165,6 +165,7 @@ python3 tools/run_blastem_sequence.py shop
 - 예전 성공 캡처(`captures/run/font_resource_08_conditions.png` -> `font_resource_11_shop_knife.png`)는 빠른 진입과 `B` 길게 누르기를 분리해서 보낸 흐름입니다. 현재 도구는 키별 hold를 지원하므로 같은 흐름을 한 명령으로 재현할 수 있습니다.
 - 현재 확인된 일본판 시작 타이밍은 `load ROM` 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`입니다. 이보다 빠르면 첫 입력이 씹히고, 늦으면 타이틀 idle 컷신으로 들어갑니다.
 - 자동 입력은 최소 0.8초 간격을 둡니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
+- `scenario-select`는 선택기 진입에 필요한 수동 세이브 슬롯을 보존하기 위해 `captures/runtime/load-screen`을 기본 초기화하지 않습니다. 다른 시퀀스의 격리 런타임은 기존처럼 `--reuse-runtime-state`를 주지 않으면 새로 만듭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:
 

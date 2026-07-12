@@ -345,6 +345,21 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_6_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 6]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 122)
+        self.assertEqual(len(primary), 102)
+        self.assertEqual(len(continuations), 20)
+        self.assertEqual(primary[0]["address"], "0x18DCC0")
+        self.assertEqual(primary[-1]["address"], "0x18F24C")
+        self.assertEqual(
+            [row["english_record"] for row in primary],
+            list(range(2521, 2623)),
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_23_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 23]
         primary = [row for row in rows if not row.get("continuation")]

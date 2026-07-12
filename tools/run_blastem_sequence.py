@@ -370,7 +370,9 @@ def main() -> int:
     if not args.no_launch:
         runtime_name = "load-screen" if args.sequence == "scenario-select" else args.sequence
         runtime_home = RUNTIME_ROOT / runtime_name
-        if not args.reuse_runtime_state:
+        # The scenario selector requires a valid manual save slot. Preserve its
+        # dedicated runtime by default; recreating it requires an in-game save.
+        if not args.reuse_runtime_state and args.sequence != "scenario-select":
             shutil.rmtree(runtime_home, ignore_errors=True)
         runtime_home.mkdir(parents=True, exist_ok=True)
         if args.sequence == "scenario-select" and args.rom.resolve() == DEFAULT_ROM.resolve():

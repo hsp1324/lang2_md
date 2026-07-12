@@ -24,6 +24,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
 
     def test_candidate_page_baseline_is_stable(self):
         self.assertEqual(self.result["page_count"], 2968)
+        self.assertEqual(self.result["modified_page_count"], 1857)
         scenarios = self.result["scenarios"]
         self.assertEqual(scenarios[0]["page_count"], 121)
         self.assertEqual(scenarios[0]["modified_page_count"], 121)
@@ -33,7 +34,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[2]["modified_page_count"], 89)
         self.assertEqual(scenarios[13]["modified_page_count"], 125)
         self.assertEqual(self.result["physical_page_count"], 3567)
-        self.assertEqual(self.result["modified_physical_page_count"], 2086)
+        self.assertEqual(self.result["modified_physical_page_count"], 2208)
         self.assertEqual(scenarios[0]["physical_page_count"], 145)
         self.assertEqual(scenarios[0]["modified_physical_page_count"], 145)
         self.assertEqual(scenarios[1]["physical_page_count"], 137)
@@ -86,6 +87,10 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[4]["modified_page_count"], 79)
         self.assertEqual(scenarios[4]["physical_page_count"], 87)
         self.assertEqual(scenarios[4]["modified_physical_page_count"], 87)
+        self.assertEqual(scenarios[5]["page_count"], 102)
+        self.assertEqual(scenarios[5]["modified_page_count"], 102)
+        self.assertEqual(scenarios[5]["physical_page_count"], 122)
+        self.assertEqual(scenarios[5]["modified_physical_page_count"], 122)
         self.assertEqual(scenarios[22]["page_count"], 83)
         self.assertEqual(scenarios[22]["modified_page_count"], 83)
         self.assertEqual(scenarios[22]["physical_page_count"], 92)
@@ -106,7 +111,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
             all(
                 item["modified_page_count"] == 0
                 for index, item in enumerate(scenarios[3:], 3)
-                if index not in (3, 4, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
+                if index not in (3, 4, 5, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
             )
         )
 
