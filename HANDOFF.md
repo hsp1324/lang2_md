@@ -1335,3 +1335,26 @@ The earlier default-name-only conclusion is superseded by the live-verified
   scenarios are now 1, 2, 3, and 14. Optional Scenario 1 combat/death/item and
   victory branches are statically translated but still need route-specific
   live captures.
+
+### Scenario 31 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 31 / X4 Death Tower now owns all 44 Japanese pointer records and 46
+  physical pages. The English map contains a stray cross-scenario record 1434;
+  Japanese screenshots show that the real contiguous mapping is English
+  records `1572..1615`. Do not align this scenario from the first English row.
+- All pages preserve their original controls and terminators, fit the Japanese
+  capacity, and use no forced newlines. The full Korean render and four contact
+  sheets are in `captures/analysis/event_pages_ko/scenario_31/` and
+  `scenario_31_pages_00.png` through `_03.png`.
+- Checksum `F3B0` was entered through the scenario selector and reached the
+  Death Tower map and first Korean Egbert dialogue without a blank page or
+  reset. That run exposed the still-Japanese Egbert speaker label. The fixed
+  16-bit speaker entry `0x974B2` and byte-name ID 20 at `0x061B28` are now
+  patched to `에그베르트`; checksum `E96D` passes all 71 tests. A follow-up
+  navigation attempt stopped in commander preparation before re-reaching the
+  dialogue, so the new speaker label still needs one direct live capture.
+- Inventory is now 489/2,968 candidate records and 596/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 14, and 31. Scenario 4 has
+  129 Japanese records / 155 physical pages, but its English-ROM order diverges
+  from Japanese after several branches; translate it from Japanese renders and
+  use English only as a semantic reference.

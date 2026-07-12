@@ -1,10 +1,10 @@
 {
-  "declared_patch_count": 82,
-  "modified_patch_count": 81,
+  "declared_patch_count": 83,
+  "modified_patch_count": 82,
   "groups": {
     "byte_ff_strings": {
-      "entry_count": 16,
-      "modified_count": 16
+      "entry_count": 17,
+      "modified_count": 17
     },
     "fixed_byte_strings": {
       "entry_count": 7,
@@ -123,6 +123,15 @@
       "address": "0x061B00",
       "size_bytes": 8,
       "target_korean": "베른하르트",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B28",
+      "size_bytes": 8,
+      "target_korean": "에그베르트",
       "modified": true,
       "reviewed": false,
       "live_verified": false

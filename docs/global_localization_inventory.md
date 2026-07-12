@@ -10,7 +10,7 @@ Neither flag proves that the displayed result is translated or live-verified.
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | classes | `0x05E6D6` | 157 | 157 | 28 | 74 | 91 | 157 |
 | items | `0x060364` | 38 | 37 | 0 | 13 | 13 | 38 |
-| names | `0x0618E8` | 117 | 58 | 26 | 41 | 53 | 117 |
+| names | `0x0618E8` | 117 | 58 | 27 | 41 | 54 | 117 |
 
 Detailed IDs, original text/hex, capacities, targets, and changed font codes are in
 `localization/global_strings.json`.

@@ -80,6 +80,23 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_31_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 31]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 46)
+        self.assertEqual(len(primary), 44)
+        self.assertEqual(len(continuations), 2)
+        self.assertEqual(primary[0]["address"], "0x1B87C2")
+        self.assertEqual(primary[-1]["address"], "0x1B8D1A")
+        # English record 1434 is a stray cross-scenario mapping. The 44
+        # Japanese records align with the contiguous Death Tower run instead.
+        self.assertEqual(
+            [row["english_record"] for row in primary],
+            list(range(1572, 1616)),
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:
             address = int(row["address_int"])
@@ -95,7 +112,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 14):
+        for scenario_number in (1, 2, 3, 14, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -118,6 +135,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x97458: "제시카",
             0x97482: "발가스",
             0x974AA: "졸름",
+            0x974B2: "에그베르트",
             0x97504: "지휘관",
             0x97526: "로렌",
         }

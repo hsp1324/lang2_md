@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 82)
-        self.assertEqual(self.result["modified_patch_count"], 81)
+        self.assertEqual(self.result["declared_patch_count"], 83)
+        self.assertEqual(self.result["modified_patch_count"], 82)
         name_rows = [
             row
             for row in self.result["declared_patches"]

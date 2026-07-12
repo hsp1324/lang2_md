@@ -240,6 +240,7 @@ BYTE_UI_STRING_PATCHES = {
     0x061AD8: "헤인",
     0x061AFC: "레온",
     0x061B00: "베른하르트",
+    0x061B28: "에그베르트",
     0x061B16: "레아드",
     0x061B1C: "발드",
     # Generic Scenario 1 actors used by the map status bar.
@@ -448,6 +449,7 @@ DIRECT_STRING_PATCHES = {
     0x97432: "스코트",
     0x97482: "발가스",
     0x974AA: "졸름",
+    0x974B2: "에그베르트",
     0x97504: "지휘관",
     0x97526: "로렌",
     0x184858: "큰일이야!\n엘윈!",
