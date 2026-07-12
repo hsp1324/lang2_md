@@ -1478,3 +1478,25 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - Inventory is now 806/2,968 candidate records and 953/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 21, 24, 29, 30,
   and 31.
+
+### Scenario 23 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 23 now covers all 83 Japanese pointer records and 92 physical
+  pages. English record `1369` is previous-scenario residue. Japanese
+  primaries 0..79 align with `1489..1568`; the three final Langrisser seal
+  lines were incorrectly grouped under English Scenario 24 as `1569..1571`,
+  but physically complete this block. The real mapping is therefore the
+  contiguous range `1489..1571`.
+- All `{0001}`, `{0003}`, `{000D}`, `{0010}`, and `{0011}` controls and all
+  `FFFD`/`FFFF` terminators are preserved, every page fits its source capacity,
+  and no forced newline is used. Eight complete sheets are under
+  `captures/analysis/event_pages_ko/scenario_23/`.
+- Checksum `8C6B` entered selector row 23, automatic deployment, the Holy Rod
+  temple map, and `TURN 1`. Laird's opening line and the following imperial
+  commander line render in Korean, followed by the room-search camera motion
+  without a reset or blank screen. The command-menu detector did not fire
+  during 15 confirmations; the final frames are plain map control, so input
+  stopped there. Captures are under `captures/analysis/8c6b_s23_intro/`.
+- Inventory is now 889/2,968 candidate records and 1,045/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 21, 23, 24, 29,
+  30, and 31.
