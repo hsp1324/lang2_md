@@ -212,27 +212,27 @@
       "group": "byte_ff_strings",
       "address": "0x0A18E0",
       "size_bytes": 10,
-      "target_korean": "WPN",
+      "target_korean": "무기",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "group": "byte_ff_strings",
       "address": "0x0A18EC",
       "size_bytes": 10,
-      "target_korean": "ARMOR",
+      "target_korean": "방어구",
       "modified": true,
-      "reviewed": false,
+      "reviewed": true,
       "live_verified": false
     },
     {
       "group": "byte_ff_strings",
       "address": "0x0A18F8",
       "size_bytes": 10,
-      "target_korean": "ITEM",
+      "target_korean": "장신구",
       "modified": true,
-      "reviewed": false,
+      "reviewed": true,
       "live_verified": false
     },
     {

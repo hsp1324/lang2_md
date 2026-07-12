@@ -203,9 +203,9 @@ money label was `소지G`; the later live-verified build `686D` restores it to
   Dialogue speaker names use `:` instead of the Japanese quote glyph.
 - Commander and adjacent troop inspection confirms Elwin, Hein, Liana, Leon,
   Laird, Bald, militia/NPC labels, `솔저`, `가드맨`, `헤비호스맨`, and
-  `로얄호스` on the Scenario 1 path. The shop uses compact `ITEM`, `WPN`,
-  `ARMOR`, and the then-current `소지G` label to stay within the safe one-byte
-  font slots.
+  `로얄호스` on the Scenario 1 path. At that historical verification point the
+  shop still used compact `ITEM`, `WPN`, `ARMOR`, and `소지G`; the later
+  live-verified state replaces them with `장신구/무기/방어구` and `소지금`.
 - The complete first-turn event was advanced page by page. The formerly mixed
   imperial-command line now reads `지금부터 발드님의 퇴로를
   확보하겠습니다!` (`final_924a_event_52.png`). The game reaches `TURN 2`
@@ -450,8 +450,9 @@ are not safe text slots in the battle renderer and were removed. Codes
 live status graphics. Do not re-enable them based only on offline font output.
 
 The byte-font pool is renderer-dependent and must be rechecked after every new
-syllable. To preserve the exact Scenario 1 class names, compact familiar UI
-labels use `WPN`, `ARMOR`, and `NPC`. Later-scenario classes outside
+syllable. The equipment labels use `무기/방어구/장신구` through the explicit
+safe uppercase-tile exception documented above; `NPC` remains compact where
+needed. Later-scenario classes outside
 `BYTE_UI_SCENARIO1_CLASS_INDEXES` are not claimed as verified; add them only
 after checking their original table entry and live renderer, then rebalance the
 safe glyph budget deliberately.
@@ -1935,7 +1936,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   pages modified. Conditional mid-map and ending branches remain part of the
   later whole-game route regression pass.
 
-### Scenario 10 Alignment In Progress (2026-07-13)
+### Scenario 10 Complete Reviewed Dialogue (2026-07-13)
 
 - The Japanese Scenario 10 block contains 108 logical records and 112 physical
   pages at `0x195CB6..0x197046`. Ten visually reviewed source sheets are under
@@ -1946,9 +1947,27 @@ The earlier default-name-only conclusion is superseded by the live-verified
   English `2975..3078`.
 - Japanese primary records 104..107 are source-only: a subordinate acknowledges
   the order, offers a necklace at `0x196FFC`, receives thanks at `0x197028`,
-  and the final record `0x197046` awards the Necklace. Preserve these four
-  records when creating the Scenario 10 translation rows.
+  and the final record `0x197046` awards the Necklace. All four are translated
+  in their original order.
 - The block covers the river crossing, monster ambush, water/land tactics,
   many ally and monster death branches, Dark Rod intelligence, the magician's
   location, several temporary-party departure variants, and the Japanese-only
-  Necklace reward. Translation data has not yet been added.
+  Necklace reward. All original dynamic-name controls and terminators remain
+  on their source pages without forced newlines.
+- Initial wording exceeded several physical-page capacities and requested six
+  new syllables. Equivalent concise wording removed every overflow and every
+  new glyph, preserving the full 766/766 shared-font budget. Ten reviewed
+  Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_10/scenario_10_pages_00.png`
+  through `_09.png`.
+- Live verification entered the real Scenario 10, showed the Korean briefing,
+  deployed, reached its opening event, and advanced nine dialogue/event pages.
+  Dynamic Keith substitution renders correctly in Sherry's first line; no
+  Japanese dialogue, blank page, reset, or freeze appeared. Captures include
+  `captures/run/2c48_s10_briefing_end.png`, `2c48_s10_deployed.png`,
+  `2c48_s10_opening_00.png`, and the sequence under
+  `captures/run/2c48_s10_opening_pages/`.
+- Final checksum `2C48` uses 766/766 custom glyphs and passes all 100 tests.
+  Inventory is now 2,315/2,968 candidate records and 2,734/3,567 physical
+  pages modified. Conditional battle and ending branches remain in the later
+  whole-game route regression pass.
