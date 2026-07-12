@@ -1971,3 +1971,21 @@ The earlier default-name-only conclusion is superseded by the live-verified
   Inventory is now 2,315/2,968 candidate records and 2,734/3,567 physical
   pages modified. Conditional battle and ending branches remain in the later
   whole-game route regression pass.
+
+### Scenario 11 Alignment In Progress (2026-07-13)
+
+- The Japanese Scenario 11 block contains 96 logical records and 117 physical
+  pages at `0x197680..0x198D98`. Ten visually reviewed source sheets are under
+  `captures/analysis/event_pages_jp/scenario_11/scenario_11_pages_00.png`
+  through `_09.png`.
+- English records `3079..3081`, whose source prefixes are
+  `0x197068..0x1970A2`, are Scenario 10's acknowledgement and Necklace reward;
+  they are not part of Scenario 11. The English extractor then wraps to record
+  zero because its numbering follows ROM-bank order rather than scenario order.
+- Japanese primary records 0..94 align positionally with English `0..94`.
+  The final Japanese primary record at `0x198D98` is source-only: the fire will
+  not follow the river current, so the party must hurry to the opposite bank.
+- The block covers Jessica's Dark Rod explanation, Egbert's raid, Runestone
+  reward, oil and fire trap, unit-death branches, Hein's request to study under
+  Jessica, Sherry's tiara and royal lineage, escape variants, and the route to
+  Reitel. Translation data has not yet been added.
