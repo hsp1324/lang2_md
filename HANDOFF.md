@@ -1500,3 +1500,33 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - Inventory is now 889/2,968 candidate records and 1,045/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 21, 23, 24, 29,
   30, and 31.
+
+### Scenario 16 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 16 now covers all 87 Japanese pointer records and all 98 physical
+  pages. Japanese primaries 0..85 align with English records `511..596`.
+  English `705/706` are previous-scenario residue; the final Japanese record
+  at `0x1A1F78` is a source-only two-page resolve to defeat the Emperor and
+  rescue the controlled ally.
+- Every dynamic-name control and every `FFFD`/`FFFF` terminator remains on its
+  original physical page. All text fits the original capacity and uses no
+  forced newline. Nine complete Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_16/`.
+- Build `7183` first reached the Scenario 16 route map, preparation screen,
+  automatic deployment, `TURN 1`, and four opening dialogue steps without a
+  reset. That live pass exposed the particle-sensitive form `エルウィン와`.
+  The reviewed text now avoids dynamic-name particle errors throughout this
+  scenario, including `과`, `만`, `따윈`, and `폐하` phrasing.
+- Final checksum `0E2D` was re-entered one input step at a time and verifies
+  the first line plus `하지만 덕분에 エルウィン과 다시 맞설 기회가 왔다!`.
+  The Japanese names in these diagnostic frames come from the old Japanese
+  manual-save roster used by the built-in scenario selector, not the fixed
+  speaker table. Fresh Korean name entry was independently verified earlier,
+  so do not enable the unsafe whole `0x974xx` patch set for this symptom.
+  Captures are under `captures/analysis/0e2d_s16_intro/`.
+- A fast combined input attempt on `0E2D` ran ahead of screen transitions and
+  returned to the opening sequence. Re-entering with staged inputs succeeded;
+  treat this as automation timing, not a ROM reset regression.
+- Inventory is now 976/2,968 candidate records and 1,143/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 16, 21, 23, 24,
+  29, 30, and 31.
