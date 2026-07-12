@@ -1896,3 +1896,20 @@ The earlier default-name-only conclusion is superseded by the live-verified
   Inventory is now 2,060/2,968 candidate records and 2,453/3,567 physical
   pages modified. Scenario 8 is static-complete with its opening live-verified;
   conditional battle routes remain in the whole-game regression pass.
+
+### Scenario 9 Alignment In Progress (2026-07-13)
+
+- The Japanese Scenario 9 block contains 147 logical pointer records and 169
+  physical pages at `0x1934B0..0x19546A`. Fifteen source contact sheets are in
+  `captures/analysis/event_pages_jp/scenario_09/scenario_09_pages_00.png`
+  through `_14.png`; all were visually reviewed before translation.
+- English record `2827` is the final Scenario 8 bridge report and does not
+  belong to this block. Japanese primary records 0..145 align positionally
+  with English `2828..2973`. The final Japanese primary record at `0x195426`,
+  continued at `0x19546A`, is source-only: even if some casualties are caused,
+  the commander orders a direct assault and concentration on the castle.
+- The block covers the Kalzath siege, monster diversion, Sherry's relief
+  force, siege-unit tactics and deaths, multiple castle-defense outcomes,
+  Liana and Jessica's Alhazard/Dark Rod explanation, and renewed Imperial
+  assaults. Translation data has not yet been added; preserve the alignment
+  above when creating Scenario 9 rows.
