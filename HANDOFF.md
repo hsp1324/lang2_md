@@ -296,6 +296,7 @@ focus.
 - Prep status panel bottom labels are fixed:
   - original `シキハイ` / 指揮範囲 -> `지휘범위`
   - original `シュウセイ` / 修正 -> `수정`
+  - stats use the conventional compact labels `AT`, `DF`, `LV`, `MV`, `MP`
 - Shop item purchase path has working item text:
   - first item `단검`
   - description `호신용 단검` and `AT+1`
@@ -316,6 +317,40 @@ focus.
   `레아드`) and continue into `ENEMY PHASE`.
 - Name entry screen currently defaults to `엘윈`, and it is a useful probe for
   seeing which Japanese byte/glyph slots now render as Korean.
+
+### Byte UI Graphic Collision Regression (2026-07-13)
+
+- User testing found Korean-looking fragments cycling in the blue, red, and
+  green unit overlays (`키/코/론`, `젤/름`, `보/카/면`, and `손`) plus an
+  apparent `박` near the terrain percentage and another preparation-screen
+  fragment. This was not dialogue corruption. The expanded name-entry grid had
+  assigned Hangul to ASCII byte-font codes `0x3B`, `0x5B..0x7E`, even though
+  the live game also uses those font-resource tiles for animated faction,
+  terrain, and panel graphics.
+- Rejected assumption: lowercase Latin was unused because localized UI strings
+  do not print it. ROM text searches are insufficient for this resource; the
+  renderer addresses the same tile numbers as graphics.
+- Fix: `BYTE_UI_GLYPH_CODES` is now exactly the verified half-width-kana window
+  `0xA5..0xDF`. Prep stats use `AT/DF/LV/MV/MP`, which the user explicitly
+  accepts, and the Korean name-entry grid is temporarily limited to 57 unique
+  syllables with unused cells blank. Its navigation labels use ASCII `OK/NO`.
+  A future full Hangul name grid needs a screen-specific font-resource swap;
+  it must not expand into shared ASCII/status tiles again.
+- Automated regression: `test_byte_ui_patch_preserves_ascii_and_status_graphics`
+  decompresses the original and patched byte-font resources and asserts every
+  tile in `0x00..0xA4` and `0xE0..0xFF` is byte-identical. All byte UI Hangul
+  mappings must remain within `0xA5..0xDF`.
+- Fresh-boot live verification used the rebuilt ROM, not a GST carrying old
+  VRAM. Captures under `captures/analysis/safe_byte_font_s1/` cover the allied
+  animation (`fresh_blue_00.png` through `_15.png`), enemy
+  (`fresh_enemy_00.png` through `_11.png`), NPC (`fresh_npc_00.png` through
+  `_11.png`), preparation (`fresh_prep.png`), and equipment
+  (`fresh_equipment_open.png`). No reported Hangul fragments remain, terrain
+  `%` graphics are intact, and the prep/equipment panels show no extra glyph.
+- Build after the fix: checksum `C56C`, 763 custom 16x16 glyphs. The name-entry
+  resource test suite passes 6 tests. The full suite has one expected baseline
+  failure because the uncommitted Scenario 22 translation raises the modified
+  physical-page count from 1,740 to 1,812; do not mistake that for this UI fix.
 
 ## Known Remaining Problems
 

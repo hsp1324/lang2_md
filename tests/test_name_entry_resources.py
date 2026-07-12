@@ -84,7 +84,14 @@ class NameEntryResourceTests(unittest.TestCase):
         ]
         self.assertEqual(glyph_list[70], builder.SPACE_GLYPH)
         self.assertEqual(glyph_list[builder.SPACE_GLYPH], builder.SPACE_GLYPH)
-        self.assertTrue(all(value == builder.SPACE_GLYPH for value in glyph_list[86:]))
+        used_indexes = set(builder.NAME_ENTRY_GRID_INDICES)
+        self.assertTrue(
+            all(
+                value == builder.SPACE_GLYPH
+                for index, value in enumerate(glyph_list)
+                if index not in used_indexes
+            )
+        )
         self.assertTrue(
             all(
                 glyph_list[index] <= builder.NAME_ENTRY_MAX_SAFE_CUSTOM_GLYPH
@@ -124,9 +131,29 @@ class NameEntryResourceTests(unittest.TestCase):
             self.rom, builder.NAME_ENTRY_LAYOUT
         )
         self.assertEqual((width, height, len(cells)), (40, 28, 1120))
-        self.assertEqual(len(builder.NAME_ENTRY_GRID_CHARS), 84)
-        self.assertEqual(len(set(builder.NAME_ENTRY_GRID_CHARS)), 84)
-        self.assertEqual(len(builder.BYTE_UI_GLYPH_CODES), 100)
+        self.assertEqual(len(builder.NAME_ENTRY_GRID_CHARS), 57)
+        self.assertEqual(len(set(builder.NAME_ENTRY_GRID_CHARS)), 57)
+        self.assertEqual(set(builder.BYTE_UI_GLYPH_CODES), set(range(0xA5, 0xE0)))
+
+    def test_byte_ui_patch_preserves_ascii_and_status_graphics(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
+        original_offset = builder.be32(data, resource_entry) & 0x00FFFFFF
+        original_tiles = builder.decompress_9dfe(data, original_offset + 1)
+
+        codes = builder.patch_byte_ui_strings(data)
+        patched_offset = builder.be32(data, resource_entry) & 0x00FFFFFF
+        patched_tiles = builder.decompress_9dfe(data, patched_offset + 1)
+
+        self.assertTrue(all(0xA5 <= code <= 0xDF for code in codes.values()))
+        for code in (*range(0x00, 0xA5), *range(0xE0, 0x100)):
+            start = code * 32
+            self.assertEqual(
+                patched_tiles[start : start + 32],
+                original_tiles[start : start + 32],
+                f"byte UI graphic tile 0x{code:02X} changed",
+            )
 
 
 if __name__ == "__main__":

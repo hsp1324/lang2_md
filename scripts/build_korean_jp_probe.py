@@ -134,17 +134,6 @@ BYTE_UI_GLYPH_CODES = [
         if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES
         and code not in (0xA1, 0xA2, 0xA3, 0xA4)
     ),
-    # Lowercase Latin is not used by the localized byte UI. It supplies a
-    # private extension for the name-entry grid without touching uppercase
-    # LV/AT/DF/ITEM labels or the 0x80-A4/E0-FF status graphics.
-    *range(0x61, 0x7B),
-    *range(0x5B, 0x61),
-    *range(0x7B, 0x7F),
-    0x3B,
-    0x3C,
-    0x3D,
-    0x3E,
-    0x40,
 ]
 BYTE_UI_STABLE_CODE_BY_CHAR = {
     "엘": 0xB4,
@@ -286,16 +275,19 @@ BYTE_UI_WORD_STRING_PATCHES = {
     0x09AB8C: (5, "수정"),
     0x09ACF0: (5, "수정"),
     # Status abbreviations in the two prep/shop panel variants.
-    0x09AB22: (2, "공격"),
-    0x09AB2C: (2, "방어"),
-    0x09AB5E: (2, "레벨"),
-    0x09AB6C: (2, "이동"),
-    0x09AB7E: (2, "마나"),
-    0x09AC8E: (2, "공격"),
-    0x09AC98: (2, "방어"),
-    0x09ACC8: (2, "레벨"),
-    0x09ACD2: (2, "이동"),
-    0x09ACE0: (2, "마나"),
+    # These compact stat abbreviations are conventional in this game and keep
+    # the byte-font patch inside the safe half-width-kana tile window. ASCII
+    # lowercase and punctuation tiles are live faction/terrain graphics.
+    0x09AB22: (2, "AT"),
+    0x09AB2C: (2, "DF"),
+    0x09AB5E: (2, "LV"),
+    0x09AB6C: (2, "MV"),
+    0x09AB7E: (2, "MP"),
+    0x09AC8E: (2, "AT"),
+    0x09AC98: (2, "DF"),
+    0x09ACC8: (2, "LV"),
+    0x09ACD2: (2, "MV"),
+    0x09ACE0: (2, "MP"),
     # Money label in the prep and shop layouts. Preserve the leading 0x2F
     # currency icon and replace only the five-letter POINT field.
     0x09ABC2: (5, "소지금"),
@@ -964,13 +956,15 @@ NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES = bytes.fromhex(
     "32 BC FF FF"          # done: move.w #$FFFF,(a1)
     "4E 75"                # rts
 )
-# 84 selectable syllables. Index 0x54 is intentionally left as the game's
-# hard-coded blank/delete value; indices 0x55..0x5E remain spare blanks.
+# The byte-font resource shares ASCII tile codes with faction animations,
+# terrain symbols, and status graphics. Keep the selectable Korean set inside
+# the verified 0xA5-0xDF half-width-kana window and blank unused grid cells.
+# Index 0x54 remains the game's hard-coded blank/delete value.
 NAME_ENTRY_GRID_CHARS = (
-    "가관국나대드레로록리릭마매맨민발병비사소솔스시아얄엘온워윈이인저제주지직클터트파프하헤호휘"
-    "라쉐코키론카면기베른르보젤졸름에그멜다모건잠머세갈폴거렌돈삼손바란진행뒤김박최"
+    "엘윈리아나헤인레온베른하르트에그드발병사지휘관제주민대국"
+    "파이터클릭워록로매직프스소맨마솔저호비가시얄군적범위수정금"
 )
-NAME_ENTRY_GRID_INDICES = (*range(0, 70), *range(71, 84), 85)
+NAME_ENTRY_GRID_INDICES = (*range(0, 54), *range(55, 58))
 
 DIRECT_FIXED_STRING_PATCHES = {
     0x9702C: (4, "출격준비"),
@@ -2780,7 +2774,6 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
             *fixed_texts,
             *word_texts,
             NAME_ENTRY_GRID_CHARS,
-            "진행뒤로",
         )
         if ord(char) > 0x7F
     ]
@@ -2978,8 +2971,8 @@ def patch_name_entry_grid(
         raise ValueError("name-entry selectable glyph list changed")
     if be16(data, NAME_ENTRY_GLYPH_LIST + NAME_ENTRY_GLYPH_COUNT * 2) != 0xFFFF:
         raise ValueError("name-entry selectable glyph list terminator changed")
-    if len(NAME_ENTRY_GRID_CHARS) != 0x54 or len(set(NAME_ENTRY_GRID_CHARS)) != 0x54:
-        raise ValueError("name-entry Korean grid must contain 84 unique syllables")
+    if len(NAME_ENTRY_GRID_CHARS) != len(set(NAME_ENTRY_GRID_CHARS)):
+        raise ValueError("name-entry Korean grid must contain unique syllables")
     original_byte_values = bytes(
         data[
             NAME_ENTRY_BYTE_VALUE_TABLE :
@@ -3046,10 +3039,11 @@ def patch_name_entry_grid(
     ]:
         patch_cell(x, y, 0x20)
 
-    # Preserve the third-column navigation functions with compact Korean labels.
-    for x, value in zip((26, 27, 28), (byte_code_by_char["진"], 0x20, byte_code_by_char["행"])):
+    # Preserve the third-column navigation functions without consuming shared
+    # byte-font graphics slots.
+    for x, value in zip((26, 27, 28), (ord("O"), 0x20, ord("K"))):
         patch_cell(x, 20, value)
-    for x, value in zip((32, 33, 34), (byte_code_by_char["뒤"], 0x20, byte_code_by_char["로"])):
+    for x, value in zip((32, 33, 34), (ord("N"), 0x20, ord("O"))):
         patch_cell(x, 20, value)
 
     default_values = [
