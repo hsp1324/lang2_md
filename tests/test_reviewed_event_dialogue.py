@@ -80,6 +80,21 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_4_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 4]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 155)
+        self.assertEqual(len(primary), 129)
+        self.assertEqual(len(continuations), 26)
+        self.assertEqual(primary[0]["address"], "0x18A3A0")
+        self.assertEqual(primary[-1]["address"], "0x18C028")
+        self.assertEqual(
+            [row["english_record"] for row in primary],
+            list(range(2312, 2441)),
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_31_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 31]
         primary = [row for row in rows if not row.get("continuation")]
@@ -396,6 +411,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x974C8: "모건",
             0x97504: "지휘관",
             0x97526: "로렌",
+            0x97648: "신관",
         }
         for address, text in expected.items():
             self.assertEqual(builder.DIRECT_STRING_PATCHES[address], text)

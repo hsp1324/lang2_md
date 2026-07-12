@@ -453,6 +453,8 @@ DIRECT_STRING_PATCHES = {
     0x974C8: "모건",
     0x97504: "지휘관",
     0x97526: "로렌",
+    # Scenario 4 sanctuary dialogue, promoted after a live-reached `神官` label.
+    0x97648: "신관",
     0x184858: "큰일이야!\n엘윈!",
     0x184872: "무슨일이야?",
     0x18488A: "제국군이왔어!\n마을밖이야!",

@@ -1767,3 +1767,31 @@ The earlier default-name-only conclusion is superseded by the live-verified
   modified. Scenario 22 is static-complete with its opening path live-verified;
   conditional mid-map branches remain part of the later whole-game route
   regression pass.
+
+### Scenario 4 Complete Reviewed Dialogue (2026-07-13)
+
+- Scenario 4 now covers all 129 Japanese pointer records and all 155 physical
+  pages. English `2312..2440` align with the 129 primary Japanese records;
+  English `2441` is outside this block. The later escape, Sherry, and controlled
+  Liana branches diverge substantially in physical order, so translations from
+  `0x18B7E8` onward follow the Japanese sheets rather than English sequencing.
+- The Japanese original also differs in meaning at several points. Morgan says
+  that surrendering the tablet would only have earned a painless death, not
+  survival as the English reference implies. This and the sanctuary, tablet,
+  Alhazard seal, Dark Elf tactics, mind-control spell, rescue, pursuit, Sherry
+  recruitment, Cross reward, and branch aftermath were translated from source.
+- Every dynamic-name control and `FFFD`/`FFFF` terminator remains in its original
+  physical page. No forced newline or new custom glyph was needed; the build
+  remains at 765/766 glyphs. Thirteen Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_04_pages_00.png` through `_12.png`.
+- Live verification exposed fixed speaker `神官` at `0x97648`. Only that
+  live-reached slot was promoted to `신관`; the unsafe full direct-name map stays
+  disabled. Final checksum `4793` passes all 94 tests and live-verifies the
+  Korean briefing, preparation, automatic deployment, `TURN 1`, Morgan's
+  opening pages, and the corrected `신관` label. Relevant captures are
+  `captures/run/693e_s04_*.png`, `captures/run/693e_s04_opening_pages/`, and
+  `captures/run/4793_s04_priest_speaker_final.png`.
+- Inventory is now 1,755/2,968 candidate records and 2,086/3,567 physical pages
+  modified. Scenario 4 is static-complete with its opening path live-verified;
+  conditional combat and ending branches remain in the whole-game regression
+  pass.
