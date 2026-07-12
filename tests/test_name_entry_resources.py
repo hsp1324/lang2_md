@@ -133,7 +133,10 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual((width, height, len(cells)), (40, 28, 1120))
         self.assertEqual(len(builder.NAME_ENTRY_GRID_CHARS), 57)
         self.assertEqual(len(set(builder.NAME_ENTRY_GRID_CHARS)), 57)
-        self.assertEqual(set(builder.BYTE_UI_GLYPH_CODES), set(range(0xA5, 0xE0)))
+        self.assertEqual(
+            set(builder.BYTE_UI_GLYPH_CODES),
+            set(range(0xA5, 0xE0)) | set(builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES),
+        )
 
     def test_byte_ui_patch_preserves_ascii_and_status_graphics(self):
         data = bytearray(self.rom)
@@ -146,8 +149,16 @@ class NameEntryResourceTests(unittest.TestCase):
         patched_offset = builder.be32(data, resource_entry) & 0x00FFFFFF
         patched_tiles = builder.decompress_9dfe(data, patched_offset + 1)
 
-        self.assertTrue(all(0xA5 <= code <= 0xDF for code in codes.values()))
+        self.assertTrue(
+            all(
+                0xA5 <= code <= 0xDF
+                or code in builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES
+                for code in codes.values()
+            )
+        )
         for code in (*range(0x00, 0xA5), *range(0xE0, 0x100)):
+            if code in builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES:
+                continue
             start = code * 32
             self.assertEqual(
                 patched_tiles[start : start + 32],

@@ -124,6 +124,11 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
     0xCF,
     0xCB,
 ]
+# These are visibly ordinary uppercase glyphs in the original byte-font
+# resource and are not used by the retained compact labels (AT/DF/LV/MV/MP,
+# WPN/ARMOR/ITEM are no longer needed). Lowercase/punctuation codes are not
+# equivalent: they contain live faction and terrain graphics.
+BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JKQUZ"]
 BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
     # E0-FF draw the EXP/status gauge and other panel graphics. Replacing them
@@ -134,6 +139,7 @@ BYTE_UI_GLYPH_CODES = [
         if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES
         and code not in (0xA1, 0xA2, 0xA3, 0xA4)
     ),
+    *BYTE_UI_PRIVATE_ASCII_GLYPH_CODES,
 ]
 BYTE_UI_STABLE_CODE_BY_CHAR = {
     "엘": 0xB4,
@@ -240,9 +246,9 @@ BYTE_UI_STRING_PATCHES = {
     0x061B71: "민병대",
     0x061B8D: "제국지휘관",
     # Item category labels shown by the byte-string equipment/shop renderer.
-    0x0A18E0: "WPN",
-    0x0A18EC: "ARMOR",
-    0x0A18F8: "ITEM",
+    0x0A18E0: "무기",
+    0x0A18EC: "방어구",
+    0x0A18F8: "장신구",
 }
 
 RAW_BYTE_STRING_PATCHES = {
@@ -2780,7 +2786,10 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
     code_by_char: dict[str, int] = {}
     used_codes: set[int] = set()
     for char in chars:
-        if char in BYTE_UI_STABLE_CODE_BY_CHAR:
+        if (
+            char in BYTE_UI_STABLE_CODE_BY_CHAR
+            and BYTE_UI_STABLE_CODE_BY_CHAR[char] in BYTE_UI_GLYPH_CODES
+        ):
             code = BYTE_UI_STABLE_CODE_BY_CHAR[char]
             code_by_char[char] = code
             used_codes.add(code)

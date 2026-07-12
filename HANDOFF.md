@@ -330,16 +330,21 @@ focus.
 - Rejected assumption: lowercase Latin was unused because localized UI strings
   do not print it. ROM text searches are insufficient for this resource; the
   renderer addresses the same tile numbers as graphics.
-- Fix: `BYTE_UI_GLYPH_CODES` is now exactly the verified half-width-kana window
+- Fix: `BYTE_UI_GLYPH_CODES` uses the verified half-width-kana window
   `0xA5..0xDF`. Prep stats use `AT/DF/LV/MV/MP`, which the user explicitly
   accepts, and the Korean name-entry grid is temporarily limited to 57 unique
   syllables with unused cells blank. Its navigation labels use ASCII `OK/NO`.
+  The equipment categories are now `무기/방어구/장신구`; their five overflow
+  glyphs use only original uppercase letter tiles `J/K/Q/U/Z`, visually
+  confirmed as ordinary alphabet shapes. Do not extend this exception to `X`
+  (`EXP`) or to lowercase/punctuation graphics.
   A future full Hangul name grid needs a screen-specific font-resource swap;
   it must not expand into shared ASCII/status tiles again.
 - Automated regression: `test_byte_ui_patch_preserves_ascii_and_status_graphics`
   decompresses the original and patched byte-font resources and asserts every
-  tile in `0x00..0xA4` and `0xE0..0xFF` is byte-identical. All byte UI Hangul
-  mappings must remain within `0xA5..0xDF`.
+  tile in `0x00..0xA4` except the five declared uppercase extensions, and every
+  tile in `0xE0..0xFF`, is byte-identical. All byte UI Hangul mappings must
+  remain within `0xA5..0xDF` or the explicit `J/K/Q/U/Z` set.
 - Fresh-boot live verification used the rebuilt ROM, not a GST carrying old
   VRAM. Captures under `captures/analysis/safe_byte_font_s1/` cover the allied
   animation (`fresh_blue_00.png` through `_15.png`), enemy
@@ -347,6 +352,10 @@ focus.
   `_11.png`), preparation (`fresh_prep.png`), and equipment
   (`fresh_equipment_open.png`). No reported Hangul fragments remain, terrain
   `%` graphics are intact, and the prep/equipment panels show no extra glyph.
+- Korean equipment-category verification is under the same directory:
+  `korean_categories_equipment.png` live-verifies `무기`, while
+  `korean_equipment_categories_offline.png` renders all three owning strings
+  (`0x0A18E0`, `0x0A18EC`, `0x0A18F8`) as `무기/방어구/장신구`.
 - Build after the fix: checksum `C56C`, 763 custom 16x16 glyphs. The name-entry
   resource test suite passes 6 tests. The full suite has one expected baseline
   failure because the uncommitted Scenario 22 translation raises the modified
