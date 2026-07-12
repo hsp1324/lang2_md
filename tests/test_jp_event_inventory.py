@@ -24,7 +24,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
 
     def test_candidate_page_baseline_is_stable(self):
         self.assertEqual(self.result["page_count"], 2968)
-        self.assertEqual(self.result["modified_page_count"], 1857)
+        self.assertEqual(self.result["modified_page_count"], 1957)
         scenarios = self.result["scenarios"]
         self.assertEqual(scenarios[0]["page_count"], 121)
         self.assertEqual(scenarios[0]["modified_page_count"], 121)
@@ -34,7 +34,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[2]["modified_page_count"], 89)
         self.assertEqual(scenarios[13]["modified_page_count"], 125)
         self.assertEqual(self.result["physical_page_count"], 3567)
-        self.assertEqual(self.result["modified_physical_page_count"], 2208)
+        self.assertEqual(self.result["modified_physical_page_count"], 2325)
         self.assertEqual(scenarios[0]["physical_page_count"], 145)
         self.assertEqual(scenarios[0]["modified_physical_page_count"], 145)
         self.assertEqual(scenarios[1]["physical_page_count"], 137)
@@ -91,6 +91,10 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[5]["modified_page_count"], 102)
         self.assertEqual(scenarios[5]["physical_page_count"], 122)
         self.assertEqual(scenarios[5]["modified_physical_page_count"], 122)
+        self.assertEqual(scenarios[6]["page_count"], 101)
+        self.assertEqual(scenarios[6]["modified_page_count"], 100)
+        self.assertEqual(scenarios[6]["physical_page_count"], 118)
+        self.assertEqual(scenarios[6]["modified_physical_page_count"], 117)
         self.assertEqual(scenarios[22]["page_count"], 83)
         self.assertEqual(scenarios[22]["modified_page_count"], 83)
         self.assertEqual(scenarios[22]["physical_page_count"], 92)
@@ -111,9 +115,19 @@ class JapaneseEventInventoryTests(unittest.TestCase):
             all(
                 item["modified_page_count"] == 0
                 for index, item in enumerate(scenarios[3:], 3)
-                if index not in (3, 4, 5, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
+                if index not in (3, 4, 5, 6, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
             )
         )
+
+    def test_scenario_7_structured_pointer_candidate_is_untouched(self):
+        record = self.result["scenarios"][6]["pages"][0]
+        self.assertEqual(record["address"], "0x18F610")
+        self.assertEqual(record["source_refs"], ["0x18F358"])
+        self.assertEqual(
+            record["tokens"],
+            "0202 0601 0019 0200 0201 0101 0019 020C 0202 0601 0019 0242 FFFF",
+        )
+        self.assertFalse(record["modified"])
 
     def test_first_known_page_and_terminator(self):
         first = self.result["scenarios"][0]["pages"][0]

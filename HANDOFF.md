@@ -1826,3 +1826,36 @@ The earlier default-name-only conclusion is superseded by the live-verified
   slot was recreated through the documented diagnostic save branch, and
   `tools/run_blastem_sequence.py` now preserves `captures/runtime/load-screen`
   by default. Do not remove that runtime before selector-based live checks.
+
+### Scenario 7 Complete Reviewed Dialogue (2026-07-13)
+
+- Scenario 7 contains 101 pointer candidates and 118 physical candidates, but
+  `0x18F610` is not text: it is a 12-word structured record beginning
+  `0202 0601 0019 0200` and reached from `0x18F358`. It remains byte-identical
+  and has an explicit regression test. The 100 real Japanese records at
+  `0x18F88A..0x190CEC` cover 117 physical pages.
+- English `2623/2624` are Scenario 6 aftermath residue. The 98 reference rows
+  `2625..2722` are retained in positional order because English splits and
+  merges the princess arrival, civilian deaths, and Kalzath aerial-unit lines
+  differently. Japanese-only `0x190CDE` and `0x190CEC` provide the final thanks
+  and Runestone acquisition message.
+- The Japanese sheets are authoritative for the Kalzath warning, cemetery
+  necromancy, Zolm's attack, undead/slime tactics tutorial, all civilian and
+  unit death branches, Keith's arrival variants, post-battle Blue Dragon
+  Knight report, Kalzath strategy explanation, and Runestone reward. Every
+  original dynamic-name control and terminator is preserved without forced
+  newlines.
+- The only new glyph retained is `켈` for the canonical class name
+  `스켈레톤`; equivalent wording removed sixteen other one-off syllables.
+  Checksum `AC20` therefore uses the complete 766/766 glyph budget. Ten Korean
+  sheets are under `captures/analysis/event_pages_ko/scenario_07_pages_00.png`
+  through `_09.png`. Inventory is now 1,957/2,968 candidate records and
+  2,325/3,567 physical pages modified, with 97 passing tests.
+- Live verification entered the real `SCENARIO 7`, completed automatic
+  deployment, reached `TURN 1`, displayed the elder/Sherry/Zolm opening, and
+  reached the first playable Elwin command without a reset or corrupt name.
+  The first pass captured Elwin's short page during its empty transition
+  frame; a clean replay captured `시키겠나!` at the same point in
+  `captures/run/ac20_s07_repro_late_3.png`, proving it is not a blank ROM page.
+  Other evidence includes `ac20_s07_arrange.png`, `ac20_s07_deploy.png`, and
+  `ac20_s07_dialogue_1.png` through `_18.png`.
