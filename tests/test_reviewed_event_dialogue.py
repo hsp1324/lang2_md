@@ -177,6 +177,23 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_5_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 5]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 87)
+        self.assertEqual(len(primary), 79)
+        self.assertEqual(len(continuations), 8)
+        self.assertEqual(primary[0]["address"], "0x18C6D2")
+        self.assertEqual(primary[-1]["address"], "0x18D5C4")
+        # English 2442/2443 are previous-scenario residue. Its single final
+        # village line 2520 represents three route-specific Japanese rows.
+        self.assertEqual(
+            [row["english_record"] for row in primary],
+            [*range(2444, 2521), 2520, 2520],
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:
             address = int(row["address_int"])
@@ -192,7 +209,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 14, 21, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 5, 14, 21, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
@@ -216,6 +233,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x97482: "발가스",
             0x974AA: "졸름",
             0x974B2: "에그베르트",
+            0x974C8: "모건",
             0x97504: "지휘관",
             0x97526: "로렌",
         }

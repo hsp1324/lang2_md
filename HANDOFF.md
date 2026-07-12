@@ -1453,3 +1453,28 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - Inventory is now 727/2,968 candidate records and 866/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 14, 21, 24, 29, 30,
   and 31.
+
+### Scenario 5 Complete Reviewed Dialogue (2026-07-12)
+
+- Scenario 5 now covers all 79 Japanese pointer records and all 87 physical
+  pages. English `2442/2443` are previous-scenario residue; Japanese primaries
+  0..75 align with `2444..2519`. English has only one final village pursuit
+  row (`2520`), while Japanese primaries 76..78 are three route-specific
+  variants, so all three deliberately reference `2520`.
+- Every `{0001}` and `{0016}` name control and every `FFFD`/`FFFF` terminator
+  is preserved, all pages fit their original capacity, and no forced newline
+  is used. Eight Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_05/`.
+- Checksum `7E02` entered selector row 5, commander preparation, automatic
+  deployment, `SCENARIO 5 / TURN 1`, and the first translated pursuit line.
+  This exposed the Japanese fixed speaker `モーガン` even though the dialogue
+  body was Korean. Live evidence promoted only the isolated candidate
+  `0x0974C8` to `모건`; the rest of the formerly unsafe name-table batch stays
+  untouched.
+- Checksum `5D62` was then re-entered through the same path and shows `모건:
+  서둘러! 빨리 달아나지 않으면 놈들이 따라잡을 거야.` correctly. Captures
+  are in `captures/analysis/7e02_s05_intro/` and the final fixed frame is
+  `captures/analysis/5d62_s05_morgan_live.png`.
+- Inventory is now 806/2,968 candidate records and 953/3,567 physical pages
+  modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 21, 24, 29, 30,
+  and 31.
