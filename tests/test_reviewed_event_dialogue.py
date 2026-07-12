@@ -177,6 +177,25 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_22_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 22]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 191)
+        self.assertEqual(len(primary), 151)
+        self.assertEqual(len(continuations), 40)
+        self.assertEqual(primary[0]["address"], "0x1AB182")
+        self.assertEqual(primary[-1]["address"], "0x1AD326")
+        # English 981/982 are cross-scenario residue. The 150 aligned records
+        # are 1219..1368, followed by one Japanese-only resolution record.
+        self.assertEqual(
+            [row["english_record"] for row in primary[:150]],
+            list(range(1219, 1369)),
+        )
+        self.assertIsNone(primary[-1]["english_record"])
+        self.assertTrue(primary[-1]["japanese_only"])
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_16_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 16]
         primary = [row for row in rows if not row.get("continuation")]

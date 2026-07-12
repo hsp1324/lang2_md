@@ -1737,3 +1737,33 @@ The earlier default-name-only conclusion is superseded by the live-verified
   preparation, automatic deployment, golem/kraken event branches, Faias
   confrontations, victory dialogue, and the first controllable turn before
   marking this scenario live complete.
+
+### Scenario 22 Complete Reviewed Dialogue (2026-07-13)
+
+- Scenario 22 now covers all 151 Japanese pointer records and all 191 physical
+  pages. The English mapping begins with two Scenario 21 residue records
+  (`981/982`); the actual aligned run is `1219..1368`. The final Japanese
+  resolution record at `0x1AD326`/`0x1AD35C` has no English counterpart and is
+  explicitly marked `japanese_only`.
+- All Japanese contact sheets were checked address by address. The translation
+  covers the Dark Temple approach, Alhazard ritual variants, Bozel/Egbert
+  betrayal branches, both transport-spell explanations, Lana/Liana reunion,
+  Alhazard tracking, Langrisser's sealed power, Holy Rod objective, and the
+  Dragon's Lair branch. Every original dynamic-name control and `FFFD`/`FFFF`
+  terminator is preserved; no forced newline is used.
+- The 765/766 custom-glyph budget remains unchanged. New one-off syllables were
+  avoided with equivalent wording, and every physical page fits its original
+  word capacity. Sixteen Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_22_pages_00.png` through `_15.png`.
+- Final build checksum `3B53` passes all 93 tests. Live verification entered
+  Scenario 22 through the built-in selector, displayed both Korean briefing
+  pages, entered preparation and automatic deployment, reached `TURN 1`, and
+  advanced the first nine event pages without a reset, blank page, or corrupt
+  control. Captures include `captures/run/3b53_s22_briefing.png`,
+  `3b53_s22_after_confirm.png`, `3b53_s22_prep.png`,
+  `3b53_s22_first_dialogue.png`, and the sequence under
+  `captures/run/3b53_s22_opening_pages/`.
+- Inventory is now 1,626/2,968 candidate records and 1,931/3,567 physical pages
+  modified. Scenario 22 is static-complete with its opening path live-verified;
+  conditional mid-map branches remain part of the later whole-game route
+  regression pass.

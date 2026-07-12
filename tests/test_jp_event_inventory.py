@@ -33,7 +33,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[2]["modified_page_count"], 89)
         self.assertEqual(scenarios[13]["modified_page_count"], 125)
         self.assertEqual(self.result["physical_page_count"], 3567)
-        self.assertEqual(self.result["modified_physical_page_count"], 1740)
+        self.assertEqual(self.result["modified_physical_page_count"], 1931)
         self.assertEqual(scenarios[0]["physical_page_count"], 145)
         self.assertEqual(scenarios[0]["modified_physical_page_count"], 145)
         self.assertEqual(scenarios[1]["physical_page_count"], 137)
@@ -74,6 +74,10 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[20]["modified_page_count"], 71)
         self.assertEqual(scenarios[20]["physical_page_count"], 80)
         self.assertEqual(scenarios[20]["modified_physical_page_count"], 80)
+        self.assertEqual(scenarios[21]["page_count"], 151)
+        self.assertEqual(scenarios[21]["modified_page_count"], 151)
+        self.assertEqual(scenarios[21]["physical_page_count"], 191)
+        self.assertEqual(scenarios[21]["modified_physical_page_count"], 191)
         self.assertEqual(scenarios[4]["page_count"], 79)
         self.assertEqual(scenarios[4]["modified_page_count"], 79)
         self.assertEqual(scenarios[4]["physical_page_count"], 87)
@@ -98,7 +102,7 @@ class JapaneseEventInventoryTests(unittest.TestCase):
             all(
                 item["modified_page_count"] == 0
                 for index, item in enumerate(scenarios[3:], 3)
-                if index not in (4, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 28, 29, 30)
+                if index not in (4, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28, 29, 30)
             )
         )
 
