@@ -1634,3 +1634,31 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - Inventory is now 1,289/2,968 candidate records and 1,513/3,567 physical pages
   modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 15, 16, 17, 18,
   21, 23, 24, 29, 30, and 31.
+
+### Scenario 19 Static Reviewed Dialogue (Live Verification Pending, 2026-07-12)
+
+- Scenario 19 statically covers all 98 Japanese pointer records and all 116
+  physical pages. English `802/803` are Scenario 18 residue; Japanese primaries
+  0..94 align with English `983..1077`. The final three Japanese sortie-delay
+  lines at `0x1A781A`, `0x1A783C`, and `0x1A7868` have no English counterparts
+  and are deliberately marked `japanese_only`.
+- Static comparison against all ten Japanese contact sheets corrected several
+  misleading English-reference translations. Notable fixes include the
+  Imelda departure line whose meaning had been reversed, the approaching
+  reinforcements, Lana's reinforcement offer, mast/anchor orders expressed as
+  natural Korean departure commands, and the final garrison status reports.
+  Item messages now match the established direct-name table as `갸라르혼` and
+  `아우로라` rather than the inconsistent `갸라르의 뿔` and `아우라`.
+- Every original dynamic-name control and `FFFD`/`FFFF` terminator remains in
+  order, every page fits its source capacity, and no forced newline or new
+  custom glyph was required. Final static build checksum is `5300`, with 765
+  custom glyphs and 90 passing tests. Ten Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_19/` and
+  `scenario_19_pages_00.png` through `_09.png`.
+- Inventory is now 1,387/2,968 candidate records and 1,629/3,567 physical pages
+  modified. Scenario 19 is intentionally not added to the live-complete list:
+  the user requested background-only work, so BlastEm was not launched and no
+  keyboard, mouse, or foreground window was touched. Resume with selector row
+  19 and verify the briefing, preparation, automatic deployment, opening
+  dialogue, conditional reinforcements, item pickups, departure paths, and
+  first playable turn before promoting it to live complete.
