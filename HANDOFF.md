@@ -2085,3 +2085,27 @@ The earlier default-name-only conclusion is superseded by the live-verified
   Inventory is now 2,595/2,968 candidate records and 3,090/3,567 physical
   pages modified. Conditional battle, family, Langrisser, and ending branches
   remain in the later whole-game route regression pass.
+
+### Scenario 25 Alignment In Progress (2026-07-13)
+
+- Scenario 25 has 100 pointer candidates and 132 physical candidates in the
+  event block `0x1B03D6..0x1B2012`. Candidate `0x1B0518` is not text: it is a
+  17-word structured record beginning `0001 0001 001B 0544`; keep it
+  byte-identical. The 99 real Japanese dialogue records begin at `0x1B0982`
+  and cover 131 physical pages.
+- English records `1487/1488` are Scenario 24 aftermath residue. The actual
+  Scenario 25 reference run is `1799..1898`. Japanese logical record 1 splits
+  across English `1799/1800`, logical record 16 ends with a separate English
+  `1816` exclamation, and logical record 91 ends with separate English `1892`.
+  All other shared records retain positional order after accounting for those
+  three splits.
+- Japanese logical records 98 and 99 at `0x1B1FAA` and `0x1B1FE6` are
+  source-only. They identify Alhazard beneath the castle, probably in the
+  underground shrine, and order the party to advance and end the battle as
+  quickly as possible.
+- Eleven reviewed Japanese source sheets are under
+  `captures/analysis/event_pages_jp/scenario_25/`, ending at
+  `scenario_25_pages_10.png`. They cover Bosel's hostage scene, the Alhazard
+  faction, Leon and the Blue Dragon Knights' final battle and conditional
+  deaths/retreats, Imperial unity ideology, and the route toward the
+  underground shrine. Translation data has not yet been added.
