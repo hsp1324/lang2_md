@@ -2048,7 +2048,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   pages modified. Conditional battle, shrine, and return branches remain in
   the later whole-game route regression pass.
 
-### Scenario 13 Alignment In Progress (2026-07-13)
+### Scenario 13 Complete Reviewed Dialogue (2026-07-13)
 
 - The Japanese Scenario 13 block contains 96 logical records and 126 physical
   pages at `0x19AEE0..0x19C6F4`. Eleven visually reviewed source sheets are
@@ -2063,4 +2063,25 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - The block covers the Fire Dragon corps blockade, ballista/griphon/flying
   tactics, Keith and Sherry branches, Kalzath rescue, Dark Rod/Liana ritual,
   Langrisser discovery, and the Imperial commander's family and honor speech.
-  Translation data has not yet been added.
+  All 126 physical pages are translated in Japanese ROM order. Original
+  dynamic-name controls and `FFFD`/`FFFF` terminators remain on their source
+  pages without forced newlines.
+- The first draft requested eight new syllables after the shared font had
+  reached 766/766 slots. Equivalent wording removed all eight instead of
+  consuming byte-UI/status graphics. One dynamic-name control was moved back
+  to its original physical page, and two over-capacity pages were shortened
+  without changing their meaning. Eleven reviewed Korean sheets are under
+  `captures/analysis/event_pages_ko/scenario_13/`, ending at
+  `scenario_13_pages_10.png`.
+- Live verification entered the real Scenario 13, displayed its Korean
+  briefing and preparation screens, automatically deployed, reached `TURN 1`,
+  and completed the opening event. Keith, Elwin, Lester, Hein, Aaron, and
+  Sherry all render with Korean speaker names; dialogue wrapping, unit
+  movement, and return to player control are normal, with no Japanese text,
+  blank page, reset, or freeze. Evidence includes
+  `captures/run/bd7f_s13_briefing2.png`, `bd7f_s13_arrange.png`,
+  and `bd7f_s13_opening_02.png` through `_09.png`.
+- Final checksum `BD7F` uses 766/766 custom glyphs and passes all 103 tests.
+  Inventory is now 2,595/2,968 candidate records and 3,090/3,567 physical
+  pages modified. Conditional battle, family, Langrisser, and ending branches
+  remain in the later whole-game route regression pass.

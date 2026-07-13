@@ -479,6 +479,26 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(primary[-1]["english_record"], 287)
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_13_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 13]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 126)
+        self.assertEqual(len(primary), 96)
+        self.assertEqual(len(continuations), 30)
+        self.assertEqual(primary[0]["address"], "0x19AEE0")
+        self.assertEqual(primary[-1]["address"], "0x19C6F4")
+        # English 288 closes Scenario 12. Japanese 0..93 align with
+        # English 289..382, followed by two source-only final vows.
+        self.assertEqual(
+            [row["english_record"] for row in primary[:94]],
+            list(range(289, 383)),
+        )
+        self.assertTrue(
+            all(row["english_record"] is None and row["japanese_only"] for row in primary[94:])
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_scenario_23_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 23]
         primary = [row for row in rows if not row.get("continuation")]
@@ -512,7 +532,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]
