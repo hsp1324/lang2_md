@@ -2226,5 +2226,19 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `captures/analysis/event_pages_jp/scenario_28/`, ending at
   `scenario_28_pages_09.png`. They cover the bodybuilding-brother opening,
   Brotherly Love conversion branches, Man Beam countdown, combat/death and
-  item branches, Samson/Adon lines, and the post-battle exchange. Translation,
-  Korean sheet review, build tests, and live opening verification are pending.
+  item branches, Samson/Adon lines, and the post-battle exchange. All 116
+  translated physical pages were reviewed in the matching Korean sheets under
+  `captures/analysis/event_pages_ko/scenario_28/`; none are blank, over
+  capacity, or missing their original dynamic-name and continuation controls.
+- The translation uses `형님교단`, `이다텐과 변재천`, `남자광선`,
+  `모히모히푸`, `보디빌드`, `삼손/아돈`, `당가드`, and `철아령`. These
+  choices fit the original record capacities without adding glyphs to the
+  already-full shared font. In particular, `남자광선` is the capacity-safe
+  rendering of `メンズビーム`; the more literal loanword needs unavailable
+  `빔/즈` glyph slots.
+- The static Scenario 28 build has checksum `14C8`, keeps the shared Hangul
+  font at 766/766 slots, and passes all 108 tests. Inventory is now
+  2,966/2,968 logical candidates and 3,565/3,567 physical pages modified. The
+  only two untouched candidates are the known structured non-dialogue records
+  in Scenarios 7 and 25. Live selector/opening verification and conditional
+  route regression remain pending.
