@@ -92,14 +92,14 @@ Last live-verified build during this handoff:
 checksum: 80E6
 ```
 
-The current source builds checksum `5361`. It includes the earlier
+The current source builds checksum `9599`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-63 of 90 character epilogue records. The latest live regression verified exact
+72 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The Aaron, Lester, and Hein epilogues added after that live run have only static
-record-sheet and automated verification so far; do not describe checksum `5361` as live
+The Aaron, Lester, Hein, and Jessica epilogues added after that live run have only
+static record-sheet and automated verification so far; do not describe checksum `9599` as live
 verified.
 
 Build command:
@@ -2571,3 +2571,25 @@ contains 57 safe syllables as documented below and in
   epilogue fragments, 783 classified direct candidates, and zero unclassified
   candidates. All 134 tests pass. No emulator or input automation was used;
   live playback through the stock ending renderer remains pending.
+
+### Jessica Epilogue Outcomes (2026-07-13)
+
+- Jessica's nine outcome records at `0x09158C..0x092612` are translated in
+  `localization/epilogue_dialogue_ko.json`. Japanese source sheets 06 and 07
+  in `captures/analysis/epilogue_records_jp_original/` were the translation
+  authority, with English records `E1925..E1933` used only to cross-check
+  continuity. Full source hashes, capacities, and original 4-5 page-break
+  counts are enforced for every record.
+- The branches preserve whether Hein becomes Jessica's apprentice, whether
+  she writes an advanced or beginner-friendly grimoire, establishes the Rahl
+  River School or history's first university of magic, fades from history,
+  leaves the world temporarily through reincarnation, or departs on a journey
+  for knowledge and spiritual discipline.
+- Checksum `9599` uses 821 custom glyphs through `0x7335`. Static sheets are in
+  `captures/analysis/epilogue_records_ko_9599_jessica/`; records 63-71 on
+  sheet 05 contain Korean authored text without visible blank pages, clipping,
+  or Japanese residue.
+- Inventories now report 72 translated epilogues, 18 confirmed untranslated
+  epilogue fragments, 783 classified direct candidates, and zero unclassified
+  candidates. All 134 tests pass. No emulator or input automation was used;
+  stock ending playback remains pending.

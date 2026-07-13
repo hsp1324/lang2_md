@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 63,
+  "translated_record_count": 72,
   "records": [
     {
       "address": "0x0895A2",
@@ -840,7 +840,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nReturning once again to her\nlaboratory near Rahl River,\nshe resumed the study of\nmagic, which was her hobby.\nHowever, wizards who had heard\nrumors about began to\nflock to her, and they became\nher apprentices.\nBefore long, the apprentices\nbegan to teach 's magic\nin each of their own lands, and\nher name was known throughout\nthe continent.\nShe then wrote a book which\ncompiled all her knowledge thus\nfar. It became very influential\nand was regarded as a handbook\nfor wizards.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f랄강가의연구소로돌아온그녀는\n취미였던마법연구를다시시작했다.\f소문을들은마법사들이모여들어\n제시카의제자가됐다.\f얼마뒤제자들은각지에서그녀의마법을\n가르쳤고이름은대륙에널리퍼졌다.\f제시카가모든지식을정리한마도서는\n큰영향을끼쳐마법사들의\n필독서가됐다."
     },
     {
       "address": "0x091790",
@@ -852,7 +853,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nShe rebuilt her laboratory near\nRahl River to allow even more\nwizards to do research, and\nalso opened a school of magic.\nEven though it was in a remote\nregion, in the blink of an eye\ncountless wizards came to visit.\nThe lectures given by ,\nwho possessed a great deal of\nlong-forgotten knowledge, were\nconsidered priceless by the\nmagicians.\nOver time, wizards throughout\nthe continent wanted to take\n's classes, and she was\nunable to handle the volume of\nstudents in her tiny laboratory.\nEventually the school grew to\nbecome the first university of\nmagic in history.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f더많은마법사가연구할수있게랄강가의\n연구소를고치고마법학교도열었다.\f외진곳인데도수많은마법사가\n순식간에몰려들었다.\f잊힌지식을많이지닌제시카의강의는\n마법사들에게값으로매길수없었다.\f대륙의마법사들이모두수업을원해\n작은연구소로는제자를\n감당할수없게됐다.\f마침내학교는역사상최초의\n마법대학으로발전했다."
     },
     {
       "address": "0x0919F4",
@@ -864,7 +866,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nShe rebuilt her laboratory near\nRahl River to allow even more\nwizards to do research, and\nalso opened a school of magic.\nEven though it was in a remote\nregion, in the blink of an eye\ncountless wizards came to visit.\nThe lectures given by ,\nwho possessed a great deal of\nlong-forgotten knowledge, were\nconsidered priceless by the\nmagicians.\nOver time, wizards throughout\nthe continent wanted to take\n's classes, and it soon\ndeveloped into the first magic\nuniversity in history.\nNowadays, having been blessed\nwith excellent apprentices,\nthey say she spends each day\nlazily attending to research.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f더많은마법사가연구할수있게랄강가의\n연구소를고치고마법학교도열었다.\f외진곳인데도수많은마법사가\n순식간에몰려들었다.\f잊힌지식을많이지닌제시카의강의는\n마법사들에게값으로매길수없었다.\f대륙의마법사들이모두수업을원해\n학교는역사상최초의\n마법대학으로발전했다.\f뛰어난제자들에게복을받은제시카는\n느긋하게연구를돌보며\n나날을보낸다고한다."
     },
     {
       "address": "0x091C48",
@@ -876,7 +879,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nUnable to forget her single\ndefeat, returned once\nmore to her laboratory near Rahl\nRiver to acquire more knowledge.\nAlong with , who had become\nher apprentice, she then wrote a\nbook which compiled the results\nof her research.\nHowever, the extremely difficult\ncontents were too much for most\nwizards to comprehend, and only\na few of them took much pleasure\nin reading it.\nNowadays she is working on a\nrevision of the book that is\neasier to understand.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f단한번의패배를잊지못한제시카는\n지식을더쌓으려고랄강가의\n연구소로돌아왔다.\f제자가된헤인을조수로삼아\n연구성과를모은마도서를썼다.\f하지만내용이너무어려워대부분의\n마법사는이해하지못했고\n즐겨읽는사람도적었다.\f지금은더알기쉬운마도서로\n고쳐쓰고있다고한다."
     },
     {
       "address": "0x091E24",
@@ -888,7 +892,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nUnable to forget her single\ndefeat, returned once\nmore to her laboratory near Rahl\nRiver to acquire more knowledge.\nAlong with , who had become\nher apprentice, she then wrote a\nbook which compiled the results\nof her research.\nThe easy-to-comprehend writing\nand low-level material was well\nreceived by those desiring to be\nwizards, and there were many who\nsought to learn from her.\nThey say that now has\nmany apprentices studying under\nher.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f단한번의패배를잊지못한제시카는\n지식을더쌓으려고랄강가의\n연구소로돌아왔다.\f제자가된헤인을조수로삼아\n연구성과를모은마도서를썼다.\f알기쉬운글과초급내용은마법사를\n꿈꾸는이들에게호평을받아\n직접가르침을청하는이도많았다.\f지금은수많은제자가제시카밑에서\n마법을배운다고한다."
     },
     {
       "address": "0x09200A",
@@ -900,7 +905,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nUnable to forget her single\ndefeat, returned once\nmore to her laboratory near Rahl\nRiver to acquire more knowledge.\nShe then wrote a book which\ncompiled the results of her\nresearch, which soon became\nthe standard for magicians\neverywhere.\nAs a result, 's name\nspread throughout the land,\nand those who wish to study\nunder her directly arrive\nconstantly, even now.\nAlthough small, her rebuilt\nlaboratory is known today as\nthe Rahl River School of Magic.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f단한번의패배를잊지못한제시카는\n지식을더쌓으려고랄강가의\n연구소로돌아왔다.\f연구성과를모아쓴마도서는\n곧모든마법사의기준이됐다.\f그결과제시카의이름은대륙에퍼졌고\n직접배우려는사람이\n지금도끊임없이찾아온다.\f작지만다시세운그연구소는오늘날\n랄강마법학교라불린다."
     },
     {
       "address": "0x0921F2",
@@ -912,7 +918,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nDeeply regretting the fact that\nshe was not very useful during\nthe war, returned to\nher laboratory near Rahl River.\n, who had convinced\nherself that she was basically\npowerless, worked diligently on\nher magic research in order to\nimprove herself.\nAfter , who had come for\nmagic training, disappeared,\nhardly anyone came to visit\nher anymore.\nAs truth fades away into legend,\nso too has her name faded from\nthe memory of history.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f전쟁에서별도움이되지못한것을\n뉘우치며랄강가의연구소로돌아왔다.\f무력함을느낀제시카는자신을\n단련하려마법연구에온힘을쏟았다.\f마법을배우러온헤인이사라진뒤\n그녀를찾는사람도거의없어졌다.\f사실이전설속으로사라지듯\n제시카의이름도역사의기억에서\n사라지고말았다."
     },
     {
       "address": "0x092400",
@@ -924,7 +931,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nHowever, having experienced one\ndefeat after another, futility\nwas all that remained in her\nheart.\nBelieving that magic only causes\nsuffering, , who had\nembraced doubt, resumed her\nresearch in a new direction\nafter returning to Rahl River.\nDespite long, arduous research,\nshe felt that no answer would\never be forthcoming, so she\ntemporarily departed from this\nworld with reincarnation magic.\nThey say that the only thing\nthat remained in her laboratory\nwas the book in which she had\ndetailed all her research up\nto the very end.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f하지만거듭된패배로마음에는\n허무함만남았다.\f마법은사람을상처입힐뿐인지의심한\n제시카는랄강으로돌아와\n새로운방향의연구를시작했다.\f오랜연구에도답을찾지못하자\n환생마법으로잠시이세상을떠났다.\f연구소에는마지막까지의성과를\n상세히적은마도서만남았다고한다."
     },
     {
       "address": "0x092612",
@@ -936,7 +944,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the curtain finally fallen\non the constant conflict over\nLangrisser, she was liberated\nfrom the fate of leading the\nDescendants of Light.\nhad experienced numerous\ncrises, but in her own way she\nended up proving the greatness\nof magic.\nBelieving that magic shouldn't\nbe used just to hurt others, she\nresumed her research in a new\ndirection after returning to her\nRahl River laboratory.\nDespite long, arduous research,\nshe felt that no answer would\never be forthcoming, but without\nrealizing it she had done quite\na lot of magic research.\nAfter condensing it all into\na magic book, she vacated the\nlaboratory and left on a quest\nfor knowledge to train her mind.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "랑그릿사를둘러싼오랜싸움이끝나\n제시카는빛의후예를이끌숙명에서\n마침내해방됐다.\f수많은위기를겪었지만제시카는\n자기방식으로마법의위대함을증명했다.\f마법은남을해치기위한것이아니라며\n랄강연구소에서새방향의\n연구를시작했다.\f긴연구에도답은없었지만어느새\n상당한마법성과가쌓여있었다.\f그성과를마도서로정리한제시카는\n연구소를비우고마음을닦으며지식을\n찾는여행을떠났다."
     },
     {
       "address": "0x092820",
