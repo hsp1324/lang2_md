@@ -2173,3 +2173,22 @@ The earlier default-name-only conclusion is superseded by the live-verified
   106 tests. Inventory is now 2,765/2,968 candidate records and 3,323/3,567
   physical pages modified. Conditional battle, death, Runestone, rematch, and
   ending branches remain part of the later whole-game route regression pass.
+
+### Scenario 27 Dialogue Alignment (2026-07-13)
+
+- Scenario 27 contains 97 logical Japanese records and 126 physical pages in
+  `0x1B3DF2..0x1B54D4`, inside event block `0x1B3872..0x1B5506`. All 97
+  candidates are dialogue.
+- English records `1685/1686` are Scenario 26's two source-only final battle
+  lines and are cross-scenario residue here. Japanese logical records 0..94
+  align positionally with English `1687..1782`.
+- Japanese logical records 95 and 96 at `0x1B54A4` and `0x1B54D4` are
+  source-only. They call for ending the age of war and state that this will be
+  Langrisser's final duty.
+- Eleven reviewed Japanese source sheets are under
+  `captures/analysis/event_pages_jp/scenario_27/`, ending at
+  `scenario_27_pages_10.png`. They cover the final confrontation with
+  Bernhardt, Imperial officer and monster battle/death branches, Bernhardt's
+  ideology and death, Leon/Imelda route variants, and the Alhazard aftermath.
+  Translation, Korean sheet review, build tests, and live opening verification
+  are still pending.
