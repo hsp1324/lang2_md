@@ -2211,3 +2211,20 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `16a0_s27_arrange.png`, `16a0_s27_dialogue1.png`,
   `16a0_s27_opening_step04.png`, `16a0_s27_opening_step10.png`,
   `16a0_s27_opening_step20.png`, and `16a0_s27_opening_step22.png`.
+
+### Scenario 28 Dialogue Alignment (2026-07-13)
+
+- Scenario 28 contains 104 logical Japanese dialogue records and 116 physical
+  pages in `0x1B5B7A..0x1B6B4C`, inside event block
+  `0x1B5506..0x1B6B70`.
+- English records `1783/1784` repeat Scenario 27's two Japanese-only closing
+  lines and are cross-scenario residue. Japanese logical records 0..101 align
+  positionally with English `96..197`. Japanese logical records 102 and 103 at
+  `0x1B6B04` and `0x1B6B4C` are source-only closing jokes about slime/bug
+  muscles and keeping up the mood while departing.
+- Ten reviewed Japanese source sheets are under
+  `captures/analysis/event_pages_jp/scenario_28/`, ending at
+  `scenario_28_pages_09.png`. They cover the bodybuilding-brother opening,
+  Brotherly Love conversion branches, Man Beam countdown, combat/death and
+  item branches, Samson/Adon lines, and the post-battle exchange. Translation,
+  Korean sheet review, build tests, and live opening verification are pending.
