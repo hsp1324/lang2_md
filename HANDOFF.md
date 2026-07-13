@@ -89,15 +89,18 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 8A46
+checksum: 80E6
 ```
 
-The current source also builds checksum `8A46`. It includes the earlier
+The current source builds checksum `5696`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-36 of 90 character epilogue records. The latest live regression verified exact
+45 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
+The nine Aaron epilogues added after that live run have only static record-sheet
+and automated verification so far; do not describe checksum `5696` as live
+verified.
 
 Build command:
 
@@ -108,11 +111,11 @@ python3 scripts/build_korean_jp_probe.py
 Important recent local commits:
 
 ```text
-d89ff79 Document English ROM attempt and JP pivot
-3b06e43 Document handoff and stabilize shop knife text
-c857911 Localize prep status labels
-989ad65 Localize condition force labels
-20ee84f Improve route menu and battle command patches
+1e9401c Add stock epilogue playback probe
+72de5e9 Translate Lana character epilogues
+efb6083 Translate Keith character epilogues
+f21e0c3 Translate Sherry epilogues and restore battle UI
+e1e2931 Translate Scott character epilogues
 b4276bb Stabilize JP probe input and early UI patches
 ```
 
@@ -2495,3 +2498,30 @@ contains 57 safe syllables as documented below and in
 - Live playback remains pending. The user explicitly requested no emulator,
   mouse, or keyboard activity while doing other work, so no BlastEm process was
   started during this analysis.
+
+### Aaron Epilogue Outcomes (2026-07-13)
+
+- Aaron's nine outcome records at `0x08DF62..0x08EED6` are translated in
+  `localization/epilogue_dialogue_ko.json`. The Japanese record sheets
+  `captures/analysis/epilogue_records_jp_original/direct_record_03.png` and
+  `direct_record_04.png` were read directly; English records `E1961..E1969`
+  were used only to resolve continuity. Each translation is bound to the full
+  Japanese source SHA-256 and preserves its original 4-5 page breaks and
+  in-place capacity.
+- The distinct branches remain separate: a peaceful retirement teaching
+  children, a nationally famous school influenced by Sherry, victory over
+  challengers despite Aaron's age, accidental death during live-blade
+  training, returning to battle to seek a place to die, mutual death against
+  an evil dragon, poverty without pupils, death before gathered disciples, and
+  retirement from swordsmanship while warmly watching the children train.
+- Checksum `5696` uses 805 custom glyphs through `0x7325`. Complete static
+  sheets are under `captures/analysis/epilogue_records_ko_5696_aaron/`;
+  records 36-44 on sheets 03 and 04 show Korean authored text with no visible
+  blank page, clipping, or Japanese residue.
+- Inventories now report 45 translated epilogues, 45 confirmed untranslated
+  epilogue fragments, 783 classified direct candidates, and zero unclassified
+  candidates. All 134 tests pass.
+- No emulator, mouse, or keyboard automation was used for this group because
+  the user requested background-only work. Actual playback through the stock
+  ending renderer remains pending and must use the ignored probe after emulator
+  use is explicitly permitted.
