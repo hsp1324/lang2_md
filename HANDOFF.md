@@ -2180,8 +2180,12 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `0x1B3DF2..0x1B54D4`, inside event block `0x1B3872..0x1B5506`. All 97
   candidates are dialogue.
 - English records `1685/1686` are Scenario 26's two source-only final battle
-  lines and are cross-scenario residue here. Japanese logical records 0..94
-  align positionally with English `1687..1782`.
+  lines and are cross-scenario residue here. Japanese logical records 0..81
+  align with English `1687..1768`; the short continuation at `0x1B51F0`
+  corresponds to English `1769`; logical records 82..94 align with English
+  `1770..1782`. This content-based boundary supersedes the earlier impossible
+  shorthand `0..94 -> 1687..1782`, which had overlooked that one English
+  record belongs to a Japanese physical continuation.
 - Japanese logical records 95 and 96 at `0x1B54A4` and `0x1B54D4` are
   source-only. They call for ending the age of war and state that this will be
   Langrisser's final duty.
@@ -2190,5 +2194,10 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `scenario_27_pages_10.png`. They cover the final confrontation with
   Bernhardt, Imperial officer and monster battle/death branches, Bernhardt's
   ideology and death, Leon/Imelda route variants, and the Alhazard aftermath.
-  Translation, Korean sheet review, build tests, and live opening verification
-  are still pending.
+  All 126 translated physical pages were reviewed in the matching Korean
+  sheets under `captures/analysis/event_pages_ko/scenario_27/`; none are blank,
+  over capacity, or missing their original dynamic-name controls.
+- The static Scenario 27 build has checksum `16A0`, keeps the shared Hangul
+  font at 766/766 slots, and passes all 107 tests. Inventory is now
+  2,862/2,968 logical candidates and 3,449/3,567 physical pages modified.
+  Live opening verification and conditional route regression remain pending.
