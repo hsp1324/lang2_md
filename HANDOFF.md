@@ -2156,9 +2156,20 @@ The earlier default-name-only conclusion is superseded by the live-verified
   removed all seven rather than consuming byte-UI/status graphics. Static
   sheet review also shortened lines that split words or left punctuation alone
   at the 32-glyph display edge.
-- Checksum `188E` keeps the shared font at 766/766 slots and passes all 106
-  tests. Inventory is now 2,765/2,968 candidate records and 3,323/3,567
-  physical pages modified. Live briefing, deployment, and opening-event
-  verification remain pending; AVNC interference must be handled by checking
-  state after every input rather than treating a divergent selection as a ROM
-  failure.
+- The first live pass exposed two periods wrapping onto a line by themselves in
+  the narrower portrait dialogue box. The affected death offer and magic-circle
+  challenge were shortened, then re-entered through the selector and verified
+  in the final ROM.
+- Live verification displayed the Korean route/briefing and preparation
+  screens, completed automatic deployment, reached `SCENARIO 26` and `TURN 1`,
+  and advanced the complete opening Egbert/Elwin/Lester exchange back to player
+  control. Dynamic Jessica and Egbert names render correctly; no Japanese text,
+  blank page, reset, or freeze appeared. Evidence includes
+  `captures/run/76ca_s26_prep2.png`, `76ca_s26_arrange.png`,
+  `76ca_s26_dialogue1.png`, `76ca_s26_dialogue3.png`,
+  `76ca_s26_dialogue_magic_circle.png`, and
+  `76ca_s26_player_control.png`.
+- Final checksum `76CA` keeps the shared font at 766/766 slots and passes all
+  106 tests. Inventory is now 2,765/2,968 candidate records and 3,323/3,567
+  physical pages modified. Conditional battle, death, Runestone, rematch, and
+  ending branches remain part of the later whole-game route regression pass.

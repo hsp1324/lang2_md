@@ -3106,11 +3106,11 @@
     "26": [
       {"address": "0x1B2494", "english_record": 1616, "text": "…역시 오셨군요… {000A}님…"},
       {"address": "0x1B24C0", "english_record": 1616, "continuation": true, "text": "스승이던 당신과 싸우긴 내키지 않지만 여기까지 오셨으니 어쩔 수 없군요."},
-      {"address": "0x1B2526", "english_record": 1616, "continuation": true, "text": "적어도 편히 죽게 해 드리죠."},
+      {"address": "0x1B2526", "english_record": 1616, "continuation": true, "text": "편히 죽게 해 드리죠."},
       {"address": "0x1B2550", "english_record": 1617, "text": "{0014}군."},
       {"address": "0x1B255A", "english_record": 1618, "text": "너희와 직접 싸우는 건 처음이군…"},
       {"address": "0x1B2588", "english_record": 1619, "text": "곧 동료들 곁으로 보내 주지."},
-      {"address": "0x1B25AA", "english_record": 1620, "text": "호오… 기세가 좋군. 이 마법진을 돌파할 수 있을까?"},
+      {"address": "0x1B25AA", "english_record": 1620, "text": "기세가 좋군. 이 마법진을 돌파할 수 있을까?"},
       {"address": "0x1B25FA", "english_record": 1621, "text": "이곳은 침입자를 막는 홀. 즉 너희는 내 함정에 빠졌다."},
       {"address": "0x1B265E", "english_record": 1621, "continuation": true, "text": "{000A}님… {000D}에게 쓰러지길 바라면서도 살아 여기까지 오길 바랐습니다."},
       {"address": "0x1B26C4", "english_record": 1621, "continuation": true, "text": "결국 내가 당신들을 쓰러뜨려야 한다니 이것도 운명이겠죠."},
