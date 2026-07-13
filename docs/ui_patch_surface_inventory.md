@@ -38,7 +38,7 @@ Resource table `0x0B0000` index 1 uses entry
 
 ## Remaining Inventory Gaps
 
-- arbitrary-Hangul composition beyond the 84 live-verified name-entry syllables
+- arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
 - runtime verification of class-change navigation and dynamic class candidates
 - all save/load slot states and error variants
 - all ending and credits UI outside known opening/ending dialogue patches

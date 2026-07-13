@@ -27,18 +27,20 @@ the indexes for `엘`, `윈`, then six `0x0054` blank/delete values.
   40x28. The builder validates SHA-256
   `bd71d36d26f9866d92b272c15c54fefb3253810c94d3f6565b0725e118eb403d`
   before patching its independently encoded cells.
-- `0x0A37E6` contains 95 word glyph IDs. Indexes 0..69, 71..83, and 85 expose
-  84 Korean syllables. Index 70 is a Japanese composite-character special
-  case, index `0x54` is the engine's blank/delete command, and 86..94 remain
-  blank.
+- `0x0A37E6` contains 95 word glyph IDs. The production grid exposes 57 Korean
+  syllables at indexes 0..53 and 55..57. Every other selectable cell is blank.
+  Index 70 is a Japanese composite-character special case and index `0x54` is
+  the engine's blank/delete command, so neither may be repurposed.
 - `0x0A3B3E` contains the corresponding 95 saved byte values. It is validated
   against SHA-256
   `50d1a1959f5d98185873049d2b4555315a1433f35ee960b87d6e3902beb9fb9a`.
-- The small byte-font allocator now has 100 protected codes. Uppercase
-  `LV/AT/DF/ITEM`, digits, status graphics `0x80..0xA4`, and gauge/icon graphics
+- The small byte-font allocator is limited to the verified 64-code pool:
+  half-width-kana codes `0xA5..0xDF` plus original uppercase tiles
+  `J/Q/W/Y/Z`. `B/K/U` remain original for `BGM`, name-entry `OK`, and the
+  in-map `TURN` label. Digits, status/faction graphics, and gauge/icon graphics
   `0xE0..0xFF` are not reused.
-- Japanese dakuten helper cells are cleared. The action labels are `진행`,
-  `뒤로`, and the conventional `END` label.
+- Japanese dakuten helper cells are cleared. The action labels are the
+  conventional ASCII `OK`, `NO`, and `END` labels.
 
 ## Index-To-Glyph Confirmation Hook
 
@@ -55,17 +57,20 @@ list with `FFFF`.
 
 ## Live Verification
 
-- Build checksum `0E8A`: default `엘윈` renders in the grid, preparation UI,
-  battle status, and dialogue speaker label.
-- A non-default high custom glyph was selected as `폴`, confirmed through the
-  route screen, and verified in preparation and dialogue without a reset:
-  `captures/run/0e8a_name_selected_pol.png`,
-  `captures/run/0e8a_pol_prep.png`, and
-  `captures/run/0e8a_pol_dialogue_3.png`.
-- Build checksum `8A01` keeps the hook and removes two blank Scenario 1 event
-  pages caused by translated line controls. The verified sequence is in
-  `captures/analysis/8a01_event_00_23.png`.
+- Current build checksum `0267` renders the default `엘윈`, intact `OK/NO`,
+  and confirms through the route screen without a reset. Evidence is
+  `captures/run/0267_name_entry.png`,
+  `captures/run/0267_name_confirm.png`, and
+  `captures/run/0267_name_confirm_route.png`.
+- The same fresh boot reached Scenario 1 and preserved the Start-menu save
+  prompt and its `YES/NO` labels in `captures/run/0267_save_confirm.png`.
+- Earlier checksum `0E8A` proved the confirmation hook with a manually selected
+  high custom name `폴` through route, preparation, and dialogue. Its former
+  84-syllable grid was later retired because it consumed byte-font codes owned
+  by live status, faction, and icon graphics. The historical captures remain
+  under `captures/run/0e8a_*`.
 
-This is a practical 84-syllable palette for game names, not arbitrary Hangul
-composition. Expanding it requires a new page/composition design; do not reuse
-the reserved indexes or status/icon byte codes.
+The production screen is a practical 57-syllable palette for game names, not
+arbitrary Hangul composition. Expanding it requires a screen-specific font
+resource or a new page/composition design; do not reuse reserved indexes or
+shared status/icon byte codes.

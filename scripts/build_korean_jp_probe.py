@@ -126,10 +126,10 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
 ]
 # These are visibly ordinary uppercase glyphs in the original byte-font
 # resource and are not used by the retained compact labels (AT/DF/LV/MV/MP;
-# WPN is no longer needed). Keep B/U intact for BGM and TURN.
+# WPN is no longer needed). Keep B/K/U intact for BGM, OK, and TURN.
 # Lowercase/punctuation codes are not equivalent: they contain live faction
 # and terrain graphics.
-BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JKQWZ"]
+BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JQWYZ"]
 BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
     # E0-FF draw the EXP/status gauge and other panel graphics. Replacing them

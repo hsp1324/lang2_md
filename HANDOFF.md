@@ -335,8 +335,8 @@ focus.
   accepts, and the Korean name-entry grid is temporarily limited to 57 unique
   syllables with unused cells blank. Its navigation labels use ASCII `OK/NO`.
   The equipment categories are now `무기/방어구/장신구`; their five overflow
-  glyphs use only original uppercase letter tiles `J/K/Q/W/Z`. `B/U` remain
-  original for `BGM` and the small in-map `TURN` label. Do not extend
+  glyphs use only original uppercase letter tiles `J/Q/W/Y/Z`. `B/K/U` remain
+  original for `BGM`, `OK`, and the small in-map `TURN` label. Do not extend
   this exception to `X` (`EXP`) or to lowercase/punctuation graphics.
   A future full Hangul name grid needs a screen-specific font-resource swap;
   it must not expand into shared ASCII/status tiles again.
@@ -344,7 +344,7 @@ focus.
   decompresses the original and patched byte-font resources and asserts every
   tile in `0x00..0xA4` except the five declared uppercase extensions, and every
   tile in `0xE0..0xFF`, is byte-identical. All byte UI Hangul mappings must
-  remain within `0xA5..0xDF` or the explicit `J/K/Q/W/Z` set.
+  remain within `0xA5..0xDF` or the explicit `J/Q/W/Y/Z` set.
 - Fresh-boot live verification used the rebuilt ROM, not a GST carrying old
   VRAM. Captures under `captures/analysis/safe_byte_font_s1/` cover the allied
   animation (`fresh_blue_00.png` through `_15.png`), enemy
@@ -1084,8 +1084,10 @@ full-game Korean localization, split into six stages in
 
 ### Name-Entry Static Ownership
 
-The earlier default-name-only conclusion is superseded by the live-verified
-84-syllable grid and confirmation hook documented below and in
+The earlier default-name-only conclusion was superseded by a live-verified
+confirmation hook. The former 84-syllable experiment is historical: it reused
+shared byte-font status/icon codes and was retired. The current production grid
+contains 57 safe syllables as documented below and in
 `docs/name_entry_analysis.md`.
 
 ### Class-Change Static Patch
@@ -1103,14 +1105,17 @@ The earlier default-name-only conclusion is superseded by the live-verified
   rejection, and patched word layout. Emulator navigation and dynamic class
   candidate rendering remain not `live_verified` at the user's request.
 
-### Korean Name Grid And Scenario 1 Turn-Event Regression (2026-07-12)
+### Korean Name Grid And Scenario 1 Turn-Event Regression (2026-07-12; superseded grid size)
 
 - The name-entry layout is the byte-tilemap at `0x0A38E0..0x0A3B0A`; its
   decoded size is 40x28. The selectable glyph list is `0x0A37E6` (95 words)
   and the selection-to-byte table is `0x0A3B3E` (95 bytes).
-- The active grid exposes 84 unique Korean syllables at indexes 0..69,
-  71..83, and 85. Keep index 70 reserved: the original `ヴ` handling is a
-  special composite path. Keep index `0x54` as blank/delete and 86..94 blank.
+- This section originally verified an 84-syllable grid. That allocation is no
+  longer active because later whole-UI testing proved that it overwrote shared
+  status, faction, and icon byte-font tiles. The production grid now exposes
+  57 unique Korean syllables at indexes 0..53 and 55..57; all other cells stay
+  blank. Keep index 70 reserved for the original `ヴ` composite path and index
+  `0x54` as blank/delete.
 - Failed approach: storing `0x7000`-series glyph IDs directly in the editable
   name buffer. Code `0x02B070` treats that word as an index into `0x0A3B3E`,
   so high values blanked or destabilized the screen. Low fallback glyph IDs
@@ -2252,8 +2257,9 @@ The earlier default-name-only conclusion is superseded by the live-verified
   class labels were compacted to `마전사`, `기사장`, `무장기병`, `수호병`,
   `주민`, and `R기병`, preserving class IDs while keeping the byte font inside
   64/64 safe slots. A first allocation reused uppercase `U` and visibly broke
-  the small in-map `TURN`; the final `J/K/Q/W/Z` allocation preserves `B/U`
-  and fixes that regression.
+  the small in-map `TURN`; a second allocation reused `K` and rendered the
+  name-entry action as `O프`. The final `J/Q/W/Y/Z` allocation preserves
+  `B/K/U` and fixes both regressions.
 - Fresh-boot live selector row 28 displayed `근육의 신전`, entered preparation,
   completed automatic deployment, and reached the original secret-stage label
   `SCENARIO ?1` / `TURN 1`. The unconditional opening advanced through Baran,
@@ -2266,6 +2272,10 @@ The earlier default-name-only conclusion is superseded by the live-verified
   under `captures/run/6782_s28_slow/`. A final fresh boot after the terminology
   adjustment reconfirmed the Korean speaker/status label in
   `captures/run/452c_s28_baran.png` and retained the intact small `TURN` label.
-- Final checksum `452C` uses 765/766 shared custom glyph slots and passes all
-  109 tests. Conditional combat, conversion, item, death, and post-battle
-  branches remain part of the whole-game route regression pass.
+- Final checksum `0267` uses 765/766 shared custom glyph slots and passes all
+  109 tests. A fresh Scenario 1 boot also preserved name-entry `OK/NO`, reached
+  the route screen, and rendered the Start-menu save prompt with intact
+  `YES/NO`; see `captures/run/0267_name_entry.png`,
+  `0267_name_confirm_route.png`, and `0267_save_confirm.png`. Conditional
+  combat, conversion, item, death, and post-battle branches remain part of the
+  whole-game route regression pass.

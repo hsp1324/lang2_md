@@ -190,7 +190,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "compressed_byte_ui_font": compressed,
         "declared_patches": rows,
         "remaining_inventory_gaps": [
-            "arbitrary-Hangul composition beyond the 84 live-verified name-entry syllables",
+            "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
             "runtime verification of class-change navigation and dynamic class candidates",
             "all save/load slot states and error variants",
             "all ending and credits UI outside known opening/ending dialogue patches",
