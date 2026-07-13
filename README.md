@@ -38,7 +38,8 @@
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
-- `tools/build_epilogue_probe_rom.py`: 원본 엔딩 선택 루틴의 조건표만 임시로 바꿔 지정한 후일담 레코드를 실제 엔딩 렌더러로 확인할 개발용 ROM을 만듭니다. 생성 ROM은 배포·커밋하지 않습니다. 구조와 사용 순서는 `docs/epilogue_probe.md`에 기록합니다.
+- `tools/build_epilogue_probe_rom.py`: 원본 엔딩 선택 루틴의 조건표를 임시로 바꿔 지정한 후일담 레코드를 실제 엔딩 렌더러로 확인할 개발용 ROM을 만듭니다. `--start-slot 14/15`로 리아나·세계 특수 경로부터 시작할 수 있습니다.
+- `tools/build_scenario27_ending_probe_rom.py`: 시나리오 27의 베른하르트를 엘윈 바로 위에 두고 능력치와 용병만 제한해 원작 결말·후일담을 한 번의 전투로 검증합니다. 두 프로브 ROM은 배포·커밋하지 않으며 구조와 사용 순서는 `docs/epilogue_probe.md`에 기록합니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
@@ -103,8 +104,9 @@ python3 tools/jp_direct_string_inventory.py
 이름 입력·크레딧·화면별 토큰, 또는 렌더로 확인한 데이터 오탐으로 분류했습니다.
 이 과정에서 부분 패치로 가려졌던 엔딩 대사 14페이지와 인물별·세계 후일담
 90개 레코드를 별도 작업 대상으로 확인했습니다. 현재 90개 레코드는 원본
-해시·페이지 경계·용량을 보존해 정적 번역과 렌더 검증을 마쳤지만, 실제 엔딩
-재생은 아직 검증하지 않았습니다. 개발용 재생 절차는
+해시·페이지 경계·용량을 보존해 정적 번역과 렌더 검증을 마쳤습니다. 또한
+시나리오 27 원작 결말을 거쳐 일반 캐릭터, 리아나, 세계 후일담 선택·렌더러
+경로를 실제 BlastEm에서 검증했습니다. 재현 절차와 체크섬은
 `docs/epilogue_probe.md`를 참고합니다.
 
 패치 원인 분리용 옵션:

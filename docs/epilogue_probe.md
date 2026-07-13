@@ -51,6 +51,13 @@ descriptor. Liana and world records retain their special stock paths and have
 their small direct-pointer table redirected to the requested record. The Mega
 Drive checksum is recalculated.
 
+`--start-slot` can replace the stock `CLR.W $FFFFAE90` at `0x01C7A8` with an
+equal-length `MOVE.W #slot,$AE90.W`. This keeps the original ending loop and
+callbacks intact while avoiding unrelated character transitions. Slot 14 is
+Liana and slot 15 is the world outcome. This is safer than editing the RAM
+index in an active GST state because the currently installed callback may
+already belong to the previous character.
+
 Example, without launching an emulator:
 
 ```bash
@@ -70,20 +77,52 @@ An address may be used instead:
 python3 tools/build_epilogue_probe_rom.py --address 0x08B8C4
 ```
 
-## Remaining Runtime Step
+Special-path examples:
 
-The selector patch is statically tested, but live playback is not yet proven.
-A valid Scenario 27 end-state or quicksave immediately before the character
-epilogues is still required. After the user permits emulator use:
+```bash
+python3 tools/build_epilogue_probe_rom.py --record-index 78 --start-slot 14
+python3 tools/build_epilogue_probe_rom.py --record-index 86 --start-slot 15
+```
 
-1. enter Scenario 27 (`전설의 끝`) through the existing scenario selector;
-2. create a non-distribution easy-clear patch or save immediately before the
-   ending epilogue loop;
-3. load that state with a generated probe ROM;
-4. advance every page of the requested record and confirm layout, punctuation,
-   termination, and transition to the next ending state;
-5. retain screenshots and record the exact probe index/checksum in
-   `HANDOFF.md`.
+## Scenario 27 Ending Probe
 
-Until this pass is done, offline record sheets remain static evidence only and
-must not be described as live ending verification.
+`tools/build_scenario27_ending_probe_rom.py` can be applied after the selected
+epilogue probe. It validates the complete Scenario 27 layout and exact Japanese
+Bernhardt record, then moves an unguarded AT/DF 0 Bernhardt directly above the
+first automatic Elwin position. This preserves the stock final-battle event and
+ending path while making the battle end after one attack.
+
+```bash
+python3 tools/build_epilogue_probe_rom.py --record-index 78 --start-slot 14
+python3 tools/build_scenario27_ending_probe_rom.py \
+  --input-rom 'roms/builds/Langrisser II (Epilogue Probe 78).md'
+```
+
+Both outputs are ignored non-distribution ROMs.
+
+## Runtime Verification
+
+The stock path was exercised in BlastEm on 2026-07-14:
+
+- production checksum `451C` plus the Scenario 27 probe produced checksum
+  `9B8E`; Scenario 27 opening, Bernhardt's defeat, the complete closing event,
+  ending art, history screens, normal character epilogues, and their transition
+  all ran without a reset;
+- this run exposed Japanese `敵撃破数` / `撤退回数` at glyph list `0x089146`;
+  the production builder now writes `격파횟수` / `퇴각횟수`, verified live in
+  `captures/run/9b8e_epilogue_labels_live2.png`;
+- Liana record 78 used `--start-slot 14` and combined checksum `94FE`; its
+  Korean special-selector page is captured in
+  `captures/run/94fe_liana78_transition1.png`;
+- world record 86 used `--start-slot 15` and combined checksum `CEDD`; its
+  Korean final page is captured in
+  `captures/run/cedd_world86_transition1.png`.
+
+GST saves are ROM-content-specific in BlastEm. Loading the pre-epilogue GST
+after swapping to another probe ROM was rejected, and changing `AE90` inside an
+already-running GST altered the active callback flow and ended the sequence
+early. Rebuild the combined probe and replay Scenario 27 instead.
+
+This proves the normal, Liana, and world selector/renderer classes. It does not
+prove every one of the 90 records live; all 90 retain separate static hash,
+capacity, page-boundary, and rendered-sheet checks.

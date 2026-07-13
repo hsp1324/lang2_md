@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 86,
-  "modified_patch_count": 85,
+  "declared_patch_count": 87,
+  "modified_patch_count": 86,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 20,
@@ -15,8 +15,8 @@
       "modified_count": 16
     },
     "direct_word_sequences": {
-      "entry_count": 1,
-      "modified_count": 1
+      "entry_count": 2,
+      "modified_count": 2
     },
     "fixed_direct_strings": {
       "entry_count": 17,
@@ -185,7 +185,7 @@
       "group": "byte_ff_strings",
       "address": "0x061B65",
       "size_bytes": 6,
-      "target_korean": "주민",
+      "target_korean": "시민",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -194,7 +194,7 @@
       "group": "byte_ff_strings",
       "address": "0x061B71",
       "size_bytes": 8,
-      "target_korean": "민병대",
+      "target_korean": "민병",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -477,6 +477,15 @@
       "modified": true,
       "reviewed": false,
       "live_verified": false
+    },
+    {
+      "group": "direct_word_sequences",
+      "address": "0x089146",
+      "size_bytes": 16,
+      "target_korean": "격파횟수퇴각횟수",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "group": "fixed_direct_strings",

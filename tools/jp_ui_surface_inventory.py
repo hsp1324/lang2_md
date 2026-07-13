@@ -57,6 +57,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     add_rows(rows, japanese, korean, "fixed_byte_strings", builder.BYTE_UI_FIXED_STRING_PATCHES, 1, True)
     add_rows(rows, japanese, korean, "fixed_word_strings", builder.BYTE_UI_WORD_STRING_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "direct_word_sequences", builder.DIRECT_WORD_SEQUENCE_PATCHES, 2, True)
+    for row in rows:
+        if row["address"] == f"0x{builder.ENDING_STATUS_GLYPH_LIST:06X}":
+            row["reviewed"] = True
+            row["live_verified"] = True
     add_rows(rows, japanese, korean, "fixed_direct_strings", builder.DIRECT_FIXED_STRING_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "route_titles", builder.DIRECT_FIXED_ROUTE_TITLE_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "scenario_headers", builder.DIRECT_FIXED_SCENARIO_HEADER_PATCHES, 2, True)

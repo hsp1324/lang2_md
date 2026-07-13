@@ -2673,3 +2673,36 @@ contains 57 safe syllables as documented below and in
   It does not complete the full-game Goal: no emulator or input automation was
   used, stock ending playback is still pending, and all routes still require
   runtime regression checks before the localization can be called complete.
+
+### Scenario 27 Ending And Live Epilogue Paths (2026-07-14)
+
+- `tools/build_scenario27_ending_probe_rom.py` validates Scenario 27 header
+  `0x1830CC`, deployment table `0x1830F2`, Elwin's automatic position `(15,16)`,
+  and the exact Bernhardt record at `0x18323E`. Its ignored output moves an
+  unguarded AT/DF 0 Bernhardt to `(15,15)` so the stock ending starts after one
+  Elwin attack. Tests reject changed layout/records and verify the checksum.
+- The production checksum after the ending-label fix is `451C`. Its Scenario 27
+  probe checksum `9B8E` ran through the Korean route, prologue, preparation,
+  22-screen opening, Bernhardt battle, complete closing event, ending art,
+  history pages, and multiple normal character epilogues without reset.
+- Live playback exposed the stock Japanese epilogue labels `敵撃破数` and
+  `撤退回数`. The dedicated eight-word glyph list at `0x089146` is now validated
+  before the builder writes `격파횟수퇴각횟수`. The corrected screen is
+  `captures/run/9b8e_epilogue_labels_live2.png`.
+- `tools/build_epilogue_probe_rom.py --start-slot` replaces the six-byte
+  `CLR.W $FFFFAE90` at `0x01C7A8` with an equal-length absolute-short
+  initializer. Slot 14 starts Liana and slot 15 starts the world record while
+  retaining the stock callbacks. Tests cover valid and rejected initializers.
+- Liana record 78 used start slot 14 and combined checksum `94FE`. Its direct
+  eight-pointer path, portrait/background, Korean `격파횟수/퇴각횟수`, and Korean
+  record text were confirmed in `captures/run/94fe_liana78_transition1.png`.
+- World record 86 used start slot 15 and combined checksum `CEDD`. Its direct
+  four-pointer path and final Korean `그리고 모든 것은 전설이 됐다...` page were
+  confirmed in `captures/run/cedd_world86_transition1.png`.
+- BlastEm GST files are ROM-content-specific, so swapping probe ROMs under a
+  pre-epilogue GST failed. Editing RAM index `0xAE90` in an active GST also
+  changed the already-installed callback flow and ended early. Do not repeat
+  either approach; rebuild the combined probe and replay Scenario 27.
+- The same run exposed Japanese credit overlays between ending scenes. Credits
+  remain a full-localization task even though all 90 epilogue records are
+  statically translated and all three selector classes now have live evidence.

@@ -25,6 +25,8 @@ LIANA_POINTER_TABLE = 0x089572
 LIANA_RECORD_COUNT = 8
 WORLD_POINTER_TABLE = 0x089592
 WORLD_RECORD_COUNT = 4
+ENDING_CHARACTER_INDEX_INIT = 0x01C7A8
+ENDING_CHARACTER_INDEX_CLEAR = bytes.fromhex("4279 FFFF AE90")
 
 # The normal ending selector reads four inclusive stat bounds followed by a
 # 32-bit record pointer. These descriptors live only in an ignored probe ROM.
@@ -123,7 +125,36 @@ def install_probe_descriptors(probe: bytearray, record_address: int) -> None:
     put32(probe, FORCE_DESCRIPTOR + 8, record_address)
 
 
-def patch_probe(probe: bytearray, source: bytes, index: int, row: dict[str, object]) -> int:
+def patch_start_slot(probe: bytearray, source: bytes, start_slot: int | None) -> None:
+    if start_slot is None:
+        return
+    if not 0 <= start_slot <= 15:
+        raise ValueError(f"ending start slot outside 0..15: {start_slot}")
+    start = ENDING_CHARACTER_INDEX_INIT
+    end = start + len(ENDING_CHARACTER_INDEX_CLEAR)
+    if source[start:end] != ENDING_CHARACTER_INDEX_CLEAR:
+        raise ValueError("Japanese ending character index initializer changed")
+    if probe[start:end] != ENDING_CHARACTER_INDEX_CLEAR:
+        raise ValueError(
+            "input ending character index initializer differs from Japanese source"
+        )
+
+    # MOVE.W #slot,$AE90.W. Absolute-short addressing sign-extends AE90 to
+    # FFFFAE90 and fits exactly over the stock CLR.W absolute-long instruction.
+    probe[start:end] = (
+        bytes.fromhex("31FC")
+        + start_slot.to_bytes(2, "big")
+        + bytes.fromhex("AE90")
+    )
+
+
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    index: int,
+    row: dict[str, object],
+    start_slot: int | None = None,
+) -> int:
     address, _ = validate_record_source(source, row)
     validate_selector_tables(probe, source)
     if address + 2 > len(probe):
@@ -149,6 +180,7 @@ def patch_probe(probe: bytearray, source: bytes, index: int, row: dict[str, obje
         for item in range(WORLD_RECORD_COUNT):
             put32(probe, WORLD_POINTER_TABLE + item * 4, address)
 
+    patch_start_slot(probe, source, start_slot)
     return builder.update_md_checksum(probe)
 
 
@@ -162,6 +194,13 @@ def parse_args() -> argparse.Namespace:
     selection = parser.add_mutually_exclusive_group(required=True)
     selection.add_argument("--record-index", type=int)
     selection.add_argument("--address", type=lambda value: int(value, 0))
+    parser.add_argument(
+        "--start-slot",
+        type=int,
+        choices=range(16),
+        metavar="0..15",
+        help="start the stock ending loop at one character slot (14=Liana, 15=world)",
+    )
     parser.add_argument("--output-rom", type=Path)
     return parser.parse_args()
 
@@ -184,11 +223,13 @@ def main() -> int:
 
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source, index, row)
+    checksum = patch_probe(probe, source, index, row, args.start_slot)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_bytes(probe)
     print(f"record {index:02d}: 0x{address:06X} / E{row['english_record']}")
     print(f"ending character slot: {character_slot_for_record(index)}")
+    if args.start_slot is not None:
+        print(f"ending loop start slot: {args.start_slot}")
     print(f"checksum: {checksum:04X}")
     print(output)
     return 0

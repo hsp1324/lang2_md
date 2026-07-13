@@ -35,7 +35,7 @@ documented, committed, and pushed independently.
 
 - Finish character, NPC, class, mercenary, item, magic, summon, and system-message names.
 - Finish prep, hire, equipment, shop, deployment, battle, Start, save/load, class-change,
-  ending, and error/status UI paths.
+  ending, credits, and error/status UI paths.
 - Preserve the verified Scenario 1 byte-font slots and shared graphics.
 
 ## Stage 3: Scenarios 2-10

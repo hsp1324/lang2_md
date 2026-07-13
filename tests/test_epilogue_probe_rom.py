@@ -97,6 +97,28 @@ class EpilogueProbeRomTests(unittest.TestCase):
         ) & 0xFFFF
         self.assertEqual(builder.be16(data, 0x18E), expected)
 
+    def test_probe_can_start_stock_ending_loop_at_special_slot(self):
+        index = 78
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            index,
+            self.records[index],
+            start_slot=14,
+        )
+        start = probe_builder.ENDING_CHARACTER_INDEX_INIT
+        self.assertEqual(data[start : start + 6], bytes.fromhex("31FC 000E AE90"))
+
+    def test_probe_rejects_invalid_or_changed_start_slot_initializer(self):
+        with self.assertRaisesRegex(ValueError, "outside 0..15"):
+            probe_builder.patch_start_slot(bytearray(self.built), self.source, 16)
+
+        data = bytearray(self.built)
+        data[probe_builder.ENDING_CHARACTER_INDEX_INIT] ^= 1
+        with self.assertRaisesRegex(ValueError, "differs from Japanese source"):
+            probe_builder.patch_start_slot(data, self.source, 14)
+
 
 if __name__ == "__main__":
     unittest.main()

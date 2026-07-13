@@ -334,7 +334,16 @@ WIDE_BYTE_GLYPH_PATCHES = {
 
 DIRECT_WORD_SEQUENCE_PATCHES = {
     0x9706A: (12, "이동공격마법소환치료명령"),
+    # Ending/epilogue status panel. The stock tilemap indexes these eight
+    # glyph-list slots as two fixed four-glyph labels.
+    0x89146: (8, "격파횟수퇴각횟수"),
 }
+
+ENDING_STATUS_GLYPH_LIST = 0x89146
+ENDING_STATUS_EXPECTED_GLYPHS = (
+    0x0138, 0x0118, 0x0119, 0x00F7,  # 敵撃破数
+    0x0288, 0x014B, 0x025F, 0x00F7,  # 撤退回数
+)
 
 ORDER_SUBMENU_GLYPH_SLOTS = {
     22: "방",
@@ -2518,6 +2527,15 @@ def patch_scenario_header(data: bytearray, glyph_by_char: dict[str, int]) -> Non
 
 def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     patch_class_change_glyph_list(data, glyph_by_char)
+    actual_ending_glyphs = tuple(
+        be16(data, ENDING_STATUS_GLYPH_LIST + index * 2)
+        for index in range(len(ENDING_STATUS_EXPECTED_GLYPHS))
+    )
+    if actual_ending_glyphs != ENDING_STATUS_EXPECTED_GLYPHS:
+        raise ValueError(
+            "ending status glyph list changed: "
+            f"{actual_ending_glyphs!r} != {ENDING_STATUS_EXPECTED_GLYPHS!r}"
+        )
     for offset, (max_words, text) in DIRECT_WORD_SEQUENCE_PATCHES.items():
         values = [glyph_by_char[char] for char in text]
         if len(values) > max_words:
