@@ -538,6 +538,27 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_26_has_all_reviewed_physical_pages(self):
+        rows = [row for row in self.rows if row["scenario"] == 26]
+        primary = [row for row in rows if not row.get("continuation")]
+        continuations = [row for row in rows if row.get("continuation")]
+        self.assertEqual(len(rows), 102)
+        self.assertEqual(len(primary), 71)
+        self.assertEqual(len(continuations), 31)
+        self.assertEqual(primary[0]["address"], "0x1B2494")
+        self.assertEqual(primary[-1]["address"], "0x1B3832")
+        self.assertEqual(
+            [row["english_record"] for row in primary[:69]],
+            list(range(1616, 1685)),
+        )
+        self.assertTrue(
+            all(
+                row["english_record"] is None and row["japanese_only"]
+                for row in primary[69:]
+            )
+        )
+        self.assertTrue(all("\n" not in row["text"] for row in rows))
+
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:
             address = int(row["address_int"])
@@ -553,7 +574,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
     def test_declared_complete_scenarios_match_modified_pages(self):
         result = inventory(self.japanese, self.korean)
-        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31):
+        for scenario_number in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 29, 30, 31):
             rows = [row for row in self.rows if row["scenario"] == scenario_number]
             scenario = result["scenarios"][scenario_number - 1]
             modified = [page["address"] for page in scenario["pages"] if page["modified"]]

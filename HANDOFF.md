@@ -2129,7 +2129,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `captures/run/7361_s25_briefing1.png`, `7361_s25_briefing2.png`, and
   `7361_s25_arrange2.png`.
 
-### Scenario 26 Dialogue Alignment (2026-07-13)
+### Scenario 26 Static Dialogue Complete (2026-07-13)
 
 - Scenario 26 contains 71 logical Japanese records and 102 physical pages in
   `0x1B2494..0x1B3832`, inside event block `0x1B2012..0x1B3872`. All 71
@@ -2146,7 +2146,19 @@ The earlier default-name-only conclusion is superseded by the live-verified
   the battle. They correspond to Scenario 25's source-only final records and
   are cross-scenario residue in the English Scenario 26 mapping; do not apply
   them to the two Japanese-only Scenario 26 records.
-- Nine reviewed Japanese source sheets are under
-  `captures/analysis/event_pages_jp/scenario_26/`, ending at
-  `scenario_26_pages_08.png`. Translation, Korean sheet review, build tests,
-  and live deployment/opening verification are still pending.
+- All 102 physical dialogue pages are translated in Japanese ROM order.
+  Original dynamic-name controls and `FFFD`/`FFFF` terminators remain on their
+  source pages without forced newlines. Nine reviewed Japanese source sheets
+  are under `captures/analysis/event_pages_jp/scenario_26/`, ending at
+  `scenario_26_pages_08.png`; the corresponding reviewed Korean sheets are
+  under `captures/analysis/event_pages_ko/scenario_26/`.
+- The first draft requested seven new shared-font syllables. Equivalent wording
+  removed all seven rather than consuming byte-UI/status graphics. Static
+  sheet review also shortened lines that split words or left punctuation alone
+  at the 32-glyph display edge.
+- Checksum `188E` keeps the shared font at 766/766 slots and passes all 106
+  tests. Inventory is now 2,765/2,968 candidate records and 3,323/3,567
+  physical pages modified. Live briefing, deployment, and opening-event
+  verification remain pending; AVNC interference must be handled by checking
+  state after every input rather than treating a divergent selection as a ROM
+  failure.
