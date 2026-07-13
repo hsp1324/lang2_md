@@ -2086,7 +2086,7 @@ The earlier default-name-only conclusion is superseded by the live-verified
   pages modified. Conditional battle, family, Langrisser, and ending branches
   remain in the later whole-game route regression pass.
 
-### Scenario 25 Alignment In Progress (2026-07-13)
+### Scenario 25 Static Dialogue Complete (2026-07-13)
 
 - Scenario 25 has 100 pointer candidates and 132 physical candidates in the
   event block `0x1B03D6..0x1B2012`. Candidate `0x1B0518` is not text: it is a
@@ -2108,4 +2108,23 @@ The earlier default-name-only conclusion is superseded by the live-verified
   `scenario_25_pages_10.png`. They cover Bosel's hostage scene, the Alhazard
   faction, Leon and the Blue Dragon Knights' final battle and conditional
   deaths/retreats, Imperial unity ideology, and the route toward the
-  underground shrine. Translation data has not yet been added.
+  underground shrine.
+- All 131 real physical dialogue pages are translated in Japanese ROM order.
+  Original dynamic-name controls and `FFFD`/`FFFF` terminators remain on their
+  source pages without forced newlines. The structured candidate remains
+  byte-identical and has an explicit regression test. Eleven reviewed Korean
+  sheets are under `captures/analysis/event_pages_ko/scenario_25/`, ending at
+  `scenario_25_pages_10.png`.
+- The first draft requested six new shared-font syllables. Equivalent wording
+  removed all six rather than consuming byte-UI/status graphics. Checksum
+  `7361` keeps the shared font at 766/766 slots and passes all 105 tests.
+  Inventory is now 2,694/2,968 candidate records and 3,221/3,567 physical
+  pages modified; Scenario 25 intentionally reports 99/100 and 131/132
+  because its first candidate is structured data.
+- Live verification entered the real Scenario 25 and displayed both Korean
+  briefing pages and the Korean preparation/arrangement screens. Concurrent
+  AVNC focus/input caused arrangement-menu selections to diverge from sent
+  keys, so deployment and opening-event verification are still pending rather
+  than being treated as a ROM failure. Evidence includes
+  `captures/run/7361_s25_briefing1.png`, `7361_s25_briefing2.png`, and
+  `7361_s25_arrange2.png`.
