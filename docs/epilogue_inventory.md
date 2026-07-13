@@ -8,7 +8,7 @@ owner and a complete `FFFF`-terminated source record. Japanese remains the
 translation authority.
 
 - Records: 90
-- Translated records: 45
+- Translated records: 54
 - Text range: `0x0895A2..0x0954E2`
 - Pointer search range: `0x087000..0x089600`
 - Capacity range: 218..544 words

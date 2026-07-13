@@ -92,14 +92,14 @@ Last live-verified build during this handoff:
 checksum: 80E6
 ```
 
-The current source builds checksum `5696`. It includes the earlier
+The current source builds checksum `64BF`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-45 of 90 character epilogue records. The latest live regression verified exact
+54 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The nine Aaron epilogues added after that live run have only static record-sheet
-and automated verification so far; do not describe checksum `5696` as live
+The Aaron and Lester epilogues added after that live run have only static
+record-sheet and automated verification so far; do not describe checksum `64BF` as live
 verified.
 
 Build command:
@@ -2525,3 +2525,26 @@ contains 57 safe syllables as documented below and in
   the user requested background-only work. Actual playback through the stock
   ending renderer remains pending and must use the ignored probe after emulator
   use is explicitly permitted.
+
+### Lester Epilogue Outcomes (2026-07-13)
+
+- Lester's nine outcome records at `0x08F0B0..0x090104` are translated in
+  `localization/epilogue_dialogue_ko.json`. Japanese sheets 04 and 05 in
+  `captures/analysis/epilogue_records_jp_original/` were the translation
+  authority; English records `E1952..E1960` were continuity references only.
+  Every full source SHA-256, capacity, and original 3-6 page-break count is
+  checked before the builder writes a record.
+- The translations keep the original branches distinct: returning to piracy
+  and becoming the Pirate King, choosing an honest life before defeating a sea
+  monster or pirate fleet, disappearing after a reckless solo attack, mutual
+  financial ruin between pirate groups, dying after defeating the enemy
+  leader, being cut down after turning to robbery, returning to Jessica and
+  guarding the Rahl River, and dying in that river while protecting her.
+- Checksum `64BF` uses 810 custom glyphs through `0x732A`. Static sheets are in
+  `captures/analysis/epilogue_records_ko_64bf_lester/`; records 45-53 span
+  sheets 03-05 and show Korean authored text without visible blank pages,
+  clipping, or Japanese residue.
+- Inventories now report 54 translated epilogues, 36 confirmed untranslated
+  epilogue fragments, 783 classified direct candidates, and zero unclassified
+  candidates. All 134 tests pass. This is static evidence only; no emulator or
+  input automation was used, and stock ending playback is still pending.
