@@ -89,13 +89,13 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 80E6
+checksum: 4CAF
 ```
 
-The current source also builds checksum `80E6`. It includes the earlier
+The current source also builds checksum `4CAF`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-18 of 90 character epilogue records. The latest live regression verified exact
+27 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
 
@@ -2423,3 +2423,26 @@ contains 57 safe syllables as documented below and in
   unclassified), and the complete test suite passes all 129 tests. A live
   final-route Sherry epilogue check is still pending alongside the other
   ending-route checks.
+
+### Keith Epilogue Outcomes (2026-07-13)
+
+- Keith's nine outcome records at `0x08B8C4..0x08C9AA` are translated in
+  `localization/epilogue_dialogue_ko.json`. They are English cross-reference
+  records `E1901..E1909`; the Japanese ROM records and pointer owners remain
+  authoritative. Source SHA-256, capacity, and exact page-break counts are
+  enforced for every entry.
+- The outcomes preserve the original condition differences: Keith's reputation
+  as a surviving warrior or Kalzath's greatest knight, protection and rebuilding
+  of Kalzath, domestic or continental monster eradication, marriage, unit
+  disbandment and solitary wandering, failure to save a woman, and Keith's own
+  death. The low-performance branches do not borrow the success text.
+- Checksum `4CAF` uses 794 custom glyphs through `0x731A`. The complete Korean
+  record render is under
+  `captures/analysis/epilogue_records_ko_4caf_keith/`; records 18-26 on sheets
+  01 and 02 contain Korean authored text with all original page markers and no
+  visible clipping or Japanese residue. The inventories report 27 translated
+  epilogues out of 90, 63 confirmed untranslated epilogue fragments, and zero
+  unclassified direct candidates. All 129 tests pass.
+- This is still static record verification. A temporary ending/epilogue selector
+  or natural final-route playthrough must verify these pages in the actual
+  ending renderer before full-game completion can be claimed.

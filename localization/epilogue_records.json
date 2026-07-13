@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 18,
+  "translated_record_count": 27,
   "records": [
     {
       "address": "0x0895A2",
@@ -255,7 +255,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "'s reputation spread as an\noutstanding warrior who could\nsurvive without losing his cool\neven in difficult situations.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand so Kalzath soon began to\nreturn to its former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nOne day he rescued a beautiful\nwoman who was being attacked\nby a monster, and they fell\nin love.\nAfter the monster eradication\noperation ended, the two of\nthem were married.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "어려운전황에서도침착함을잃지않고\n확실히살아남는뛰어난무장으로\n키스의명성은널리퍼졌다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구했고두사람은\n서로사랑하게됐다.\f몬스터토벌작전이끝난뒤\n두사람은마침내결혼했다."
     },
     {
       "address": "0x08BAD2",
@@ -267,7 +268,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": ", who had lived through\ncountless battles, became\nwell-known as a warrior of\nKalzath.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand so Kalzath soon began to\nreturn to its former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nOne day he rescued a beautiful\nwoman who was being attacked\nby a monster; they fell in love\nand soon got married.\nWithin several years, nearly all\nthe monsters within the kingdom\nof Kalzath had been eradicated,\nthanks to the energetic .",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "수많은무공을세운키스는\n칼자스제일의무장으로\n이름을널리알렸다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구했고두사람은\n사랑에빠져결혼했다.\f몇년뒤키스의활약덕분에\n칼자스국내의몬스터는\n거의모두사라졌다."
     },
     {
       "address": "0x08BCF8",
@@ -279,7 +281,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Having survived many battles, he\nwas considered such an excellent\nwarrior that none of the knights\nof Kalzath in all its history\ncould compare to him.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand Kalzath soon exceeded\nits former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nOne day he rescued a village\nunder attack by monsters and met\na beautiful woman living there.\nThe two came to love each other\nand eventually married.\nMany years later, thanks to\n's energetic work, nearly\nall of the monsters on the\ncontinent had been wiped out.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "수많은무공을세운키스는\n칼자스역대기사중최강이라불릴\n만큼뛰어난무장으로이름을떨쳤다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는옛번영을넘어\n전보다더욱눈부시게발전했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f그러던어느날몬스터에게습격당한\n마을에서아름다운여인을만났고\n두사람은사랑에빠져결혼했다.\f몇년뒤키스의활약덕분에\n대륙의몬스터는거의모두\n사라졌다고한다."
     },
     {
       "address": "0x08BF60",
@@ -291,7 +294,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "They were expected to be the\nfinest flying unit in the\ncontinent, but they returned\namidst whispers of cowardice.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand so Kalzath soon began to\nreturn to its former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nHowever, unable to achieve good\nresults due to many failures in\nhis tactics, 's unit was\neventually disbanded.\nHaving lost his purpose in life,\nthey say he abandoned his role\nas a knight and began wandering\nby himself.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "대륙제일의비행부대라기대받았지만\n겁쟁이라는뒷말만남긴채\n키스는전쟁을마쳤다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f하지만작전은기대한성과를내지못해\n결국키스의부대는해산됐다.\f살아갈목표를잃은그는기사의지위를\n버리고홀로여행을떠났다고한다."
     },
     {
       "address": "0x08C182",
@@ -303,7 +307,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "They were expected to be the\nfinest aerial unit in all of\nKalzath, but they were unable\nto rise above mediocrity.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand so Kalzath soon began to\nreturn to its former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nWhile the results were not\nspectacular, 's unit\nsucceeded in wiping out the\nmonsters in the nearby areas.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "칼자스제일의비행부대라기대받았지만\n키스는눈에띄는성과를\n거두지못했다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f눈부신성과는아니었지만작전은성공해\n인근의몬스터를모두소탕했다."
     },
     {
       "address": "0x08C358",
@@ -315,7 +320,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "They were said to be the finest\nflying unit in all Kalzath, and\nthey commanded the strength to\nmeet those expectations.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand so Kalzath soon began to\nreturn to its former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nOne day he rescued a beautiful\nwoman who was being attacked\nby a monster; they fell in love\nand soon got married.\nWhile some casualties were\nsustained, the mission yielded\ndecent results, and after a few\nyears nearly all the monsters in\nthe kingdom were wiped out.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "칼자스제일의비행부대라불린키스는\n기대에걸맞은힘을발휘했다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며거리복구에\n온힘을쏟아훌륭히재건했다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구했고두사람은\n사랑에빠져결혼했다.\f피해도조금있었지만작전은성과를내\n몇년뒤국내의몬스터는\n거의모두사라졌다."
     },
     {
       "address": "0x08C57E",
@@ -327,7 +333,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "They were expected to be the\nfinest flying unit in the\ncontinent, but they ended up\nbeing ridiculed as cowards.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith other soldiers to rebuild\nthe damaged towns, but despite\nhis best efforts, things did\nnot improve much.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nHowever, his strategies having\ndone nothing but backfire, the\nend result was a net loss.\nOne day he attempted to rescue\na beautiful woman who was being\nchased by monsters, but wound\nup losing his own life in the\nprocess.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "칼자스제일의비행부대라기대받았지만\n겁쟁이라는뒷말만남긴채\n키스는전쟁을마쳤다.\f성으로돌아온뒤거리복구에\n온힘을쏟았다.\f하지만아무리애써도\n상황은나아지지않았다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f하지만그의작전은번번이빗나가\n피해만늘어나는상황이됐다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구하려다가\n자신도목숨을잃고말았다."
     },
     {
       "address": "0x08C790",
@@ -339,7 +346,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "They were expected to be the\nfinest flying unit in the\ncontinent, but they returned\namidst whispers of cowardice.\nAfter returning to town,\nput in all his effort to help\nrebuild, and before long Kalzath\nshowed signs of revival.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nHowever, his strategies having\ndone nothing but backfire, the\nend result was a net loss.\nOne day he attempted to rescue\na beautiful woman who was being\nchased by monsters, but as he\nwas no match for them, the woman\ngot killed.\nIt is said that, ashamed of his\nlack of ability, began\nwandering by himself.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "유능한비행부대라기대받았지만\n겁쟁이라는뒷말만남긴채\n키스는전쟁을마쳤다.\f성으로돌아온뒤거리복구에온힘을쏟아\n칼자스에재건의기미가보이기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f하지만작전은번번이빗나가\n피해에비해성과가거의없었다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구하려했지만힘이달려\n여인은목숨을잃고말았다.\f미숙함을부끄러워한키스는\n그뒤홀로여행을떠났다고한다."
     },
     {
       "address": "0x08C9AA",
@@ -351,7 +359,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "They were said to be the finest\nflying unit in all Kalzath, and\nthey commanded the strength to\nmeet those expectations, despite\ncriticism for heavy casualties.\nAfter returning to the castle,\nhe would constantly protect it\nduring the many absences of the\nprincess.\nHe also worked night and day\nwith the other soldiers to\nrebuild the damaged towns,\nand so Kalzath soon began to\nreturn to its former glory.\nAfterwards, in order to make the\nworld safer, he led an offensive\nto rid the land of the remaining\nmonsters.\nAlthough many casualties were\nsustained, the monsters in the\nsurrounding areas were on the\nverge of being wiped out thanks\nto 's strategy.\nOne day, while attempting to\nrescue a beautiful woman being\npursued by monsters, he wound\nup losing his own life.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "칼자스제일의비행부대라불린키스는\n기대에걸맞은힘을발휘했지만\n큰피해를내는작전은비난을샀다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f피해도컸지만키스의작전덕분에\n인근의몬스터는거의모두\n소탕되기직전까지몰렸다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구하려다가\n자신도목숨을잃고말았다."
     },
     {
       "address": "0x08CBCE",
