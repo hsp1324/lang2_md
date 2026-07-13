@@ -35,6 +35,25 @@ class CustomGlyphStorageTests(unittest.TestCase):
             builder.SCENARIO_GLYPH_LIST_RELOC_BASE,
         )
 
+    def test_period_and_comma_use_dialogue_baseline(self):
+        font = builder.ImageFont.truetype(str(ROOT / builder.FONT_PATH), 16)
+        blank_offset = builder.glyph_data_offset(builder.SPACE_GLYPH)
+        blank = self.original[blank_offset : blank_offset + builder.GLYPH_BYTES]
+
+        def dark_rows(char: str) -> set[int]:
+            payload = builder.render_hangul_glyph(char, font, blank)
+            rows = set()
+            for tile in range(4):
+                y_base = (tile // 2) * 8
+                for row in range(8):
+                    source = (tile * 8 + row) * 2
+                    if payload[source : source + 2] != blank[source : source + 2]:
+                        rows.add(y_base + row)
+            return rows
+
+        self.assertEqual(dark_rows("."), {12, 13})
+        self.assertEqual(dark_rows(","), {11, 12, 13, 14})
+
 
 if __name__ == "__main__":
     unittest.main()

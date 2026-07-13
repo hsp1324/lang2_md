@@ -108,7 +108,6 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
     0xB2,
     0xCA,
     0xC4,
-    0xB0,
     0xCC,
     0xA7,
     0xC0,
@@ -130,7 +129,7 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
 # WPN is no longer needed). Keep B/K/U intact for BGM, OK, and TURN.
 # Lowercase/punctuation codes are not equivalent: they contain live faction
 # and terrain graphics.
-BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JQWYZ"]
+BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "IJQWYZ"]
 BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
     # E0-FF draw the EXP/status gauge and other panel graphics. Replacing them
@@ -139,7 +138,7 @@ BYTE_UI_GLYPH_CODES = [
         code
         for code in range(0xA1, 0xE0)
         if code not in BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES
-        and code not in (0xA1, 0xA2, 0xA3, 0xA4)
+        and code not in (0xA1, 0xA2, 0xA3, 0xA4, 0xB0)
     ),
     *BYTE_UI_PRIVATE_ASCII_GLYPH_CODES,
 ]
@@ -156,7 +155,9 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "전": 0xB2,
     "사": 0xCA,
     "워": 0xC4,
-    "록": 0xB0,
+    # 0xB0 is a live battle-result decoration around AT/DF/formation labels.
+    # Replacing it made those rows render as `록AT록` and `록DF록`.
+    "록": ord("I"),
     "파": 0xCC,
     "이": 0xA7,
     "제": 0xC0,
@@ -219,13 +220,13 @@ BYTE_UI_SCENARIO1_CLASS_LABELS = {
 # labels for six classes so the secret-scenario names can occupy those tiles
 # without touching faction/terrain graphics or changing any class IDs.
 BYTE_UI_SCENARIO1_CLASS_LABELS.update({
-    13: "마전사",       # Magic Knight
-    69: "기사장",       # Knight Master
-    55: "마전사",       # Magic Knight
-    56: "마전사",       # Magic Knight
+    13: "매직나이트",   # Magic Knight
+    69: "나이트마스터", # Knight Master
+    55: "매직나이트",   # Magic Knight
+    56: "매직나이트",   # Magic Knight
     104: "무장기병",    # Heavy Horseman
     109: "수호병",      # Guardman
-    113: "주민",        # Civilian
+    113: "시민",        # Civilian
     122: "무장기병",    # Heavy Horseman
     123: "R기병",       # Royal Horse
 })
@@ -258,8 +259,10 @@ BYTE_UI_STRING_PATCHES = {
     0x061B54: "병사",
     0x061B5C: "지휘관",
     0x061B61: "사제",
-    0x061B65: "주민",
-    0x061B71: "민병대",
+    0x061B65: "시민",
+    # The direct 16x16 speaker/name table keeps the full `민병대`. Only this
+    # narrow map-status label is compacted to keep battle decoration 0xB0 safe.
+    0x061B71: "민병",
     # Secret Scenario ?1 speakers. These byte-name records feed both the map
     # status bar and the dynamic speaker-name control in event dialogue.
     0x061B7E: "아돈",
@@ -1050,8 +1053,8 @@ NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES = bytes.fromhex(
 # the verified 0xA5-0xDF half-width-kana window and blank unused grid cells.
 # Index 0x54 remains the game's hard-coded blank/delete value.
 NAME_ENTRY_GRID_CHARS = (
-    "엘윈리아나헤인레온베른하르트에그드발병사지휘관제주민대국"
-    "파이터클릭워록로마전프스소맨삼솔저호손바란돈군적범위수정금"
+    "엘윈리아나헤인레온베른하르트에그드발병사지휘관제시민국"
+    "파이터클릭워록로마매직프스소맨삼솔저호손바란돈군적범위수정금"
 )
 NAME_ENTRY_GRID_INDICES = (*range(0, 54), *range(55, 58))
 
@@ -1793,7 +1796,13 @@ def glyph_list_capacity_words(data: bytes | bytearray, table_offset: int, index:
 def render_hangul_glyph(char: str, font: ImageFont.FreeTypeFont, blank_template: bytes) -> bytes:
     img = Image.new("L", (16, 16), 255)
     draw = ImageDraw.Draw(img)
-    if char == "…":
+    if char == ".":
+        draw.rectangle((7, 12, 8, 13), fill=0)
+    elif char == ",":
+        draw.rectangle((7, 11, 8, 12), fill=0)
+        draw.point((6, 13), fill=0)
+        draw.point((6, 14), fill=0)
+    elif char == "…":
         for x in (4, 7, 10):
             draw.rectangle((x, 12, x + 1, 13), fill=0)
     else:

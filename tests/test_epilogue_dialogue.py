@@ -17,11 +17,11 @@ class EpilogueDialogueTests(unittest.TestCase):
             ROOT / builder.EPILOGUE_DIALOGUE_TRANSLATIONS
         )
 
-    def test_first_character_outcome_group_is_complete(self):
-        self.assertEqual(len(self.rows), 9)
+    def test_first_two_character_outcome_groups_are_complete(self):
+        self.assertEqual(len(self.rows), 18)
         self.assertEqual(
             {int(row["english_record"]) for row in self.rows},
-            set(range(1934, 1943)),
+            set(range(1934, 1943)) | set(range(1910, 1919)),
         )
 
     def test_controls_page_breaks_capacity_and_glyphs(self):

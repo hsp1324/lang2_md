@@ -135,7 +135,8 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(len(set(builder.NAME_ENTRY_GRID_CHARS)), 57)
         self.assertEqual(
             set(builder.BYTE_UI_GLYPH_CODES),
-            set(range(0xA5, 0xE0)) | set(builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES),
+            (set(range(0xA5, 0xE0)) - {0xB0})
+            | set(builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES),
         )
 
     def test_byte_ui_patch_preserves_ascii_and_status_graphics(self):
@@ -165,6 +166,20 @@ class NameEntryResourceTests(unittest.TestCase):
                 original_tiles[start : start + 32],
                 f"byte UI graphic tile 0x{code:02X} changed",
             )
+        start = 0xB0 * 32
+        self.assertEqual(
+            patched_tiles[start : start + 32],
+            original_tiles[start : start + 32],
+            "battle-result decoration tile 0xB0 changed",
+        )
+
+    def test_scenario_one_status_classes_keep_exact_source_names(self):
+        labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS
+        self.assertEqual(labels[13], "매직나이트")
+        self.assertEqual(labels[55], "매직나이트")
+        self.assertEqual(labels[56], "매직나이트")
+        self.assertEqual(labels[69], "나이트마스터")
+        self.assertEqual(labels[113], "시민")
 
 
 if __name__ == "__main__":

@@ -89,13 +89,15 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 5B8A
+checksum: 80E6
 ```
 
-The current source also builds checksum `5B8A`. It includes the Scenario 1
-class-156 `ﾌﾟﾘｰｽﾄ` -> `프리스트` correction and localizes the shared unit-type
-notices. A clean BlastEm run reached `TURN 2` and verified the support priest as
-`사제 / 프리스트` with `NPC 유닛입니다`.
+The current source also builds checksum `80E6`. It includes the earlier
+Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
+dialogue work, the complete direct-name and ending-visit tables, and the first
+18 of 90 character epilogue records. The latest live regression verified exact
+`매직나이트`/`나이트마스터` status labels and restored the original battle
+result decorations around `AT`, `DF`, and formation after a byte-font collision.
 
 Build command:
 
@@ -2378,3 +2380,46 @@ contains 57 safe syllables as documented below and in
   `captures/analysis/epilogue_records_ko_052e_scott/` with no Japanese text in
   authored content. A live final-route epilogue check is still pending; do not
   treat static rendering alone as complete end-to-end verification.
+
+### Sherry Epilogues, Baseline Punctuation, And Battle Font Recovery (2026-07-13)
+
+- Sherry's nine outcome records at `0x08A73A..0x08B6D8` are translated in
+  `localization/epilogue_dialogue_ko.json`. The source records are refs
+  `E1910..E1918`; each entry records the full Japanese SHA-256 and preserves
+  ordered actor controls, page breaks, terminators, and in-place capacity.
+  Original sheets are under
+  `captures/analysis/epilogue_records_jp_sherry/`, and the Korean render is
+  `captures/analysis/epilogue_records_ko_80e6_sherry/`. This brings the
+  epilogue inventory to 18 translated records out of 90.
+- Custom 16x16 `.` and `,` glyphs previously inherited centered font metrics,
+  so dialogue punctuation floated at mid-cell height. `render_hangul_glyph()`
+  now draws them explicitly on rows 12-13 and 11-14 respectively, matching the
+  existing bottom-aligned ellipsis. `test_period_and_comma_use_dialogue_baseline`
+  prevents this regression.
+- Japanese class table `0x05E6D6` proves Scenario 1 Laird uses class IDs
+  13/55/56 `ﾏｼﾞｯｸﾅｲﾄ` and Leon uses class 69 `ﾅｲﾄﾏｽﾀｰ`. Their byte-status
+  labels are therefore the exact `매직나이트` and `나이트마스터`, not the
+  earlier abbreviations `마전사` and `기사장`. Fresh live evidence is
+  `captures/run/80e6_laird_map_status.png` and
+  `captures/run/80e6_leon_map_status.png`. Class 113 `シビリアン` is `시민`;
+  only the narrow map-status record for `민병대` is compacted to `민병` to fit
+  the verified 64-slot byte-font budget. The direct 16x16 name remains
+  `민병대`.
+- Failed attempt and root cause: byte-font code `0xB0` had been assigned to
+  Korean `록`. That tile is live decoration in the battle result renderer, so
+  the center rows became `록AT록`, `록DF록`, and a similarly corrupted
+  formation row. `0xB0` is now excluded from the Korean byte-font pool and
+  `록` uses the verified private ASCII tile `I`. The builder test compares the
+  patched `0xB0` tile byte-for-byte with the original ROM.
+- Live verification used an ignored temporary ROM that moved the Scenario 1
+  imperial commander adjacent to Elwin without changing the committed game
+  data. The resulting battle screen displays the original `-AT-`, `-DF-`, and
+  formation decorations with no Korean intrusion; evidence is
+  `captures/run/80e6_battle_result_decoration_fixed.png`. The temporary ROM
+  `/tmp/lang2_battle_ui_probe.md` is not a distributable artifact and must not
+  be committed.
+- Checksum `80E6` uses 790 custom glyphs through `0x7316`. Both inventories
+  regenerate cleanly (`90` epilogue records, `783` direct candidates, zero
+  unclassified), and the complete test suite passes all 129 tests. A live
+  final-route Sherry epilogue check is still pending alongside the other
+  ending-route checks.
