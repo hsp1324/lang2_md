@@ -92,14 +92,14 @@ Last live-verified build during this handoff:
 checksum: 80E6
 ```
 
-The current source builds checksum `7E98`. It includes the earlier
+The current source builds checksum `D39F`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
-dialogue work, the complete direct-name and ending-visit tables, and the first
-86 of 90 character epilogue records. The latest live regression verified exact
+dialogue work, the complete direct-name and ending-visit tables, and all
+90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The Aaron-through-Liana epilogues added after that live run have only static
-record-sheet and automated verification so far; do not describe checksum `7E98` as live
+The Aaron-through-world epilogues added after that live run have only static
+record-sheet and automated verification so far; do not describe checksum `D39F` as live
 verified.
 
 Build command:
@@ -2643,3 +2643,33 @@ contains 57 safe syllables as documented below and in
   world-epilogue fragments, 783 classified direct candidates, and zero
   unclassified candidates. All 134 tests pass. No emulator or input automation
   was used; stock ending playback remains pending.
+
+### World Epilogue Outcomes And Static Completion (2026-07-13)
+
+- The four world-outcome records at `0x0947E0..0x094F1A` are translated in
+  `localization/epilogue_dialogue_ko.json`. Japanese source sheet 08 in
+  `captures/analysis/epilogue_records_jp_original/` was the translation
+  authority; English records `E1987..E1990` were continuity references only.
+  Full hashes, capacities, original six or ten page-break counts, and all
+  ordered protagonist-name controls are enforced.
+- The four branches distinguish recognizing inexperience and leaving on a new
+  adventure, becoming a silver-wing-tiara hero in later legends, ending a war
+  on another continent after substantial growth, and the long final reflection
+  on wartime losses, trust, false peace through force, and traveling with Liana
+  to build a world without war.
+- These records use the original four-pointer world table at `0x089592`.
+  `tools/build_epilogue_probe_rom.py` retains and tests this path separately
+  from both normal character descriptors and Liana's eight-pointer table.
+- Checksum `D39F` uses 834 custom glyphs through `0x7342`. Complete static
+  sheets are under `captures/analysis/epilogue_records_ko_d39f_complete/`;
+  records 86-89 on sheet 07 contain Korean authored text without visible blank
+  pages, clipping, or Japanese residue. Visible `CTL` markers are intentional
+  representations of dynamic-name controls.
+- The character-epilogue inventory now reports all 90 records translated. The
+  direct inventory reports zero untranslated epilogue fragments, 90 declared
+  epilogue translation fragments, 783 classified candidates, and zero
+  unclassified candidates. All 134 tests pass.
+- This completes static translation of the 90-record epilogue resource only.
+  It does not complete the full-game Goal: no emulator or input automation was
+  used, stock ending playback is still pending, and all routes still require
+  runtime regression checks before the localization can be called complete.

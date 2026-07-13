@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 86,
+  "translated_record_count": 90,
   "records": [
     {
       "address": "0x0895A2",
@@ -1162,7 +1162,8 @@
       "page_break_count": 6,
       "line_break_count": 0,
       "english_reference": "The conflict between Light and\nDarkness that had taken place\nsince time immemorial finally\ncame to an end, all thanks to\nand the others.\nDuring the war he had acquired\nsomething important: friends he\ncould trust. They were able to\nshare not only their hearts,\nbut their lives as well.\nWithin his heart, the images of\nevery one of them came vividly\nback to life.\nBut despite being victorious,\nthe war had made him realize\nhis own inexperience.\nWhen they came to visit him\nearly one morning, they found\nhis bed empty. Seeking lands\nyet unseen, he had started\nout on a new adventure.\nAnd so it all became legend...",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "먼옛날부터이어진빛과어둠의대결은\n{0001}일행의활약으로\n마침내막을내렸다.\f{0001}은이번전쟁에서무엇보다\n소중한것을얻었다.\f말뿐아니라목숨까지함께하며얻은\n믿을수있는동료들이었다.\f{0001}의눈에는동료들의모습이\n또렷하게떠올랐다.\f하지만동료들의도움으로승리한전쟁은\n자신의미숙함도깨닫게했다.\f어느이른아침사람들이찾아왔을때\n침대는비어있었다.보지못한땅을찾아\n새로운모험을떠난것이다.\f그리고모든것은\n전설이됐다…"
     },
     {
       "address": "0x094A1E",
@@ -1178,7 +1179,8 @@
       "page_break_count": 6,
       "line_break_count": 0,
       "english_reference": "The conflict between Light and\nDarkness that had taken place\nsince time immemorial finally\ncame to an end, all thanks to\nand the others.\nDuring the war he had acquired\nsomething important: friends he\ncould trust. They were able to\nshare not only their hearts,\nbut their lives as well.\nWithin his heart, the images of\nevery one of them came vividly\nback to life.\nHowever, as his was a nature\naverse to staying in one spot\nfor very long, he disappeared\nat some point. He likely went\non another adventure.\nLater on, legends of a single\nhero who had accomplished many\ngreat deeds arose in every part\nof the continent...\nThey say that the young man wore\na silver tiara in the shape of\nwings.\nAnd so it all became legend...",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "먼옛날부터이어진빛과어둠의대결은\n{0001}일행의활약으로\n마침내막을내렸다.\f{0001}은이번전쟁에서무엇보다\n소중한것을얻었다.\f말뿐아니라목숨까지함께하며얻은\n믿을수있는동료들이었다.\f{0001}의눈에는동료들의모습이\n또렷하게떠올랐다.\f한곳에오래머물지못하는성격이라\n어느새사라져또다른모험을\n떠난듯했다.\f그뒤대륙곳곳에수많은위업을세운\n영웅의전설이전해졌다.그젊은이는\n날개모양은빛티아라를썼다고한다.\f그리고모든것은\n전설이됐다…"
     },
     {
       "address": "0x094CA2",
@@ -1193,7 +1195,8 @@
       "page_break_count": 6,
       "line_break_count": 0,
       "english_reference": "The conflict between Light and\nDarkness that had taken place\nsince time immemorial finally\ncame to an end, all thanks to\nand the others.\nThroughout the many battles\nboth his swordsmanship and\nhe himself greatly matured.\nYet he had acquired something\neven more important: friends he\ncould trust. They were able to\nshare not only their hearts,\nbut their lives as well.\nWithin his heart, the images of\nevery one of them came vividly\nback to life.\nHowever, as his was a nature\naverse to staying in one spot\nfor very long, he disappeared\nat some point. He likely went\non another adventure.\nMany years later, an intense war\noccurred in a nearby continent.\nThey say a young man appeared\nthere and single-handedly ended\nthe war.\nThe man didn't even give his\nname, but it is said that he\nwore a silver tiara in the\nshape of wings.\nAnd so it all became legend...",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "먼옛날부터이어진빛과어둠의대결은\n{0001}일행의활약으로\n마침내막을내렸다.\f수많은싸움을거치며검술뿐아니라\n{0001}자신도크게성장했다.\f그보다더소중한믿을수있는동료도\n얻었다.말뿐아니라목숨까지\n함께할수있는이들이었다.\f그의눈에는동료들의모습이\n또렷하게떠올랐다.\f한곳에오래머물지못하는성격이라\n어느새사라져또다른모험을\n떠난듯했다.\f몇년뒤이웃대륙에서큰전쟁이일어났고\n한젊은이가나타나홀로전쟁을끝냈다.\f이름조차밝히지않은그는날개모양\n은빛티아라를썼다고한다.\n그리고모든것은전설이됐다…"
     },
     {
       "address": "0x094F1A",
@@ -1210,7 +1213,8 @@
       "page_break_count": 10,
       "line_break_count": 0,
       "english_reference": "The conflict between Light and\nDarkness that had taken place\nsince time immemorial finally\ncame to an end, all thanks to\nand the others.\nThe bodies of enemies, allies,\nand countless soldiers had lain\nstrewn about. Even in the towns\nand villages, the number of\nvictims was great.\nThe lands and houses had burned\nto cinders, and many people lost\ntheir parents and loved ones.\nAll that sadness will likely\nspawn a new war.\nThe ravages of the war with\nthe Empire seem like wounds\nthat will never fully heal.\nDuring the war, gained\nsomething even greater than mere\nvictory. It was the trust of his\nfriends that came from uniting\ntheir hearts.\nWithin his heart, the images of\nevery one of them came vividly\nback to life, every single day.\n]Men's hearts are weak, and\nthose who don't believe in\nanyone will hurt others.\"\nhad not been able\nto achieve a world without war\nthrough force. That would not\nhave been true peace.\ntruly understood the\npreciousness of hearts capable\nof trusting friends and others.\nHe accompanied on a\njourney in order to build\nan ideal world in which all\npeople could trust each other...\n...To build a world in which\nwars would never happen again.\nAnd so it all became legend...",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "먼옛날부터이어진빛과어둠의대결은\n{0001}일행의활약으로\n마침내막을내렸다.\f적과아군수많은병사의시신이널렸고\n전장이된마을과도시에도\n희생자가가득했다.\f집과땅은불타고부모와사랑하는이를\n잃은사람들의슬픔은또다른전쟁을\n낳을지도모른다.\f제국과의전쟁이남긴상처는\n아직도아물지않고사람들의마음에\n남아있는듯했다.\f{0001}은승리보다더소중한것을얻었다.\n마음을하나로모아생긴\n동료들과의신뢰였다.\f{0001}의눈에는날마다동료들의모습이\n또렷하게떠올랐다.\f사람의마음은약하다.아무도믿지못해\n서로를상처입힌다는말이있다.\f{0001}은힘만으로전쟁없는세상을\n만들수없었다.그것은진정한평화가\n아니라는것을깨달았다.\f동료와사람을믿는마음이얼마나\n소중한지진심으로이해했다.\f모든사람이서로믿을수있는세상을\n만들려고리아나와함께\n여행을떠났다.\f다시는전쟁이없는평화로운세상을위해…\n그리고지금모든것은전설이됐다…"
     }
   ]
 }

@@ -119,27 +119,27 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
         )
         self.assertTrue(rows["0x09600E"]["modified"])
 
-    def test_character_epilogue_fragments_are_tracked_separately(self):
+    def test_character_epilogue_fragments_are_owned_by_full_translations(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
         self.assertEqual(
-            rows["0x09499C"]["ownership"], "confirmed_untranslated_epilogue_fragment"
+            rows["0x09499C"]["ownership"], "declared_epilogue_translation"
         )
         self.assertEqual(
             rows["0x0896DE"]["ownership"], "declared_epilogue_translation"
         )
         self.assertEqual(
             self.result["ownership_counts"]["confirmed_untranslated_epilogue_fragment"],
-            4,
+            0,
         )
         self.assertEqual(
             self.result["ownership_counts"]["declared_epilogue_translation"],
-            86,
+            90,
         )
 
     def test_ending_boundary_starts_at_first_ending_dialogue_record(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
         self.assertEqual(
-            rows["0x09525E"]["ownership"], "confirmed_untranslated_epilogue_fragment"
+            rows["0x09525E"]["ownership"], "declared_epilogue_translation"
         )
         self.assertEqual(
             rows["0x095594"]["ownership"], "declared_ending_translation"
