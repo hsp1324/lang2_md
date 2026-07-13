@@ -28,7 +28,7 @@ class JapaneseGlobalInventoryTests(unittest.TestCase):
         tables = self.result["tables"]
         self.assertEqual(tables["classes"]["raw_modified_count"], 28)
         self.assertEqual(tables["items"]["raw_modified_count"], 0)
-        self.assertEqual(tables["names"]["raw_modified_count"], 27)
+        self.assertEqual(tables["names"]["raw_modified_count"], 30)
 
     def test_scenario_1_dynamic_bernhardt_name_is_patched(self):
         bernhardt = self.result["tables"]["names"]["entries"][14]
@@ -43,6 +43,19 @@ class JapaneseGlobalInventoryTests(unittest.TestCase):
         self.assertEqual(egbert["original_text"], "ｴｸﾞﾍﾞﾙﾄ")
         self.assertEqual(egbert["target_korean"], "에그베르트")
         self.assertTrue(egbert["raw_modified"])
+
+    def test_secret_scenario_speakers_are_patched(self):
+        expected = {
+            39: ("0x061B7E", "아돈"),
+            40: ("0x061B83", "삼손"),
+            41: ("0x061B88", "바란"),
+        }
+        entries = self.result["tables"]["names"]["entries"]
+        for name_id, (pointer, korean) in expected.items():
+            entry = entries[name_id]
+            self.assertEqual(entry["pointer"], pointer)
+            self.assertEqual(entry["target_korean"], korean)
+            self.assertTrue(entry["raw_modified"])
 
     def test_knife_is_detected_through_modified_font_pixels(self):
         knife = self.result["tables"]["items"]["entries"][1]

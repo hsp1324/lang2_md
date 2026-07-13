@@ -125,10 +125,11 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
     0xCB,
 ]
 # These are visibly ordinary uppercase glyphs in the original byte-font
-# resource and are not used by the retained compact labels (AT/DF/LV/MV/MP,
-# WPN/ARMOR/ITEM are no longer needed). Lowercase/punctuation codes are not
-# equivalent: they contain live faction and terrain graphics.
-BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JKQUZ"]
+# resource and are not used by the retained compact labels (AT/DF/LV/MV/MP;
+# WPN is no longer needed). Keep B/U intact for BGM and TURN.
+# Lowercase/punctuation codes are not equivalent: they contain live faction
+# and terrain graphics.
+BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JKQWZ"]
 BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
     # E0-FF draw the EXP/status gauge and other panel graphics. Replacing them
@@ -213,6 +214,20 @@ BYTE_UI_SCENARIO1_CLASS_INDEXES = (
 BYTE_UI_SCENARIO1_CLASS_LABELS = {
     index: KOREAN_CLASS_LABELS[index] for index in BYTE_UI_SCENARIO1_CLASS_INDEXES
 }
+# The shared byte-font has no spare safe tiles. Use compact Korean status-bar
+# labels for six classes so the secret-scenario names can occupy those tiles
+# without touching faction/terrain graphics or changing any class IDs.
+BYTE_UI_SCENARIO1_CLASS_LABELS.update({
+    13: "마전사",       # Magic Knight
+    69: "기사장",       # Knight Master
+    55: "마전사",       # Magic Knight
+    56: "마전사",       # Magic Knight
+    104: "무장기병",    # Heavy Horseman
+    109: "수호병",      # Guardman
+    113: "주민",        # Civilian
+    122: "무장기병",    # Heavy Horseman
+    123: "R기병",       # Royal Horse
+})
 SCENARIO1_EXPECTED_JP_CLASS_LABELS = {
     1: "ﾌｧｲﾀｰ", 2: "ｸﾚﾘｯｸ", 3: "ｳｫｰﾛｯｸ", 4: "ﾛｰﾄﾞ",
     13: "ﾏｼﾞｯｸﾅｲﾄ", 17: "ﾌﾟﾘｰｽﾄ",
@@ -244,6 +259,11 @@ BYTE_UI_STRING_PATCHES = {
     0x061B61: "사제",
     0x061B65: "주민",
     0x061B71: "민병대",
+    # Secret Scenario ?1 speakers. These byte-name records feed both the map
+    # status bar and the dynamic speaker-name control in event dialogue.
+    0x061B7E: "아돈",
+    0x061B83: "삼손",
+    0x061B88: "바란",
     0x061B8D: "제국지휘관",
     # Item category labels shown by the byte-string equipment/shop renderer.
     0x0A18E0: "무기",
@@ -455,6 +475,11 @@ DIRECT_STRING_PATCHES = {
     0x974DA: "크레이머",
     0x97504: "지휘관",
     0x97526: "로렌",
+    # Secret Scenario ?1 names, promoted after live-reaching both their byte
+    # status labels and their separate 16x16 dialogue-speaker records.
+    0x97530: "아돈",
+    0x97538: "삼손",
+    0x97542: "바란",
     # Scenario 4 sanctuary dialogue, promoted after a live-reached `神官` label.
     0x97648: "신관",
     0x184858: "큰일이야!\n엘윈!",
@@ -974,7 +999,7 @@ NAME_ENTRY_CONFIRM_COPY_ROUTINE_BYTES = bytes.fromhex(
 # Index 0x54 remains the game's hard-coded blank/delete value.
 NAME_ENTRY_GRID_CHARS = (
     "엘윈리아나헤인레온베른하르트에그드발병사지휘관제주민대국"
-    "파이터클릭워록로매직프스소맨마솔저호비가시얄군적범위수정금"
+    "파이터클릭워록로마전프스소맨삼솔저호손바란돈군적범위수정금"
 )
 NAME_ENTRY_GRID_INDICES = (*range(0, 54), *range(55, 58))
 

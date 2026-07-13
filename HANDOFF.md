@@ -335,16 +335,16 @@ focus.
   accepts, and the Korean name-entry grid is temporarily limited to 57 unique
   syllables with unused cells blank. Its navigation labels use ASCII `OK/NO`.
   The equipment categories are now `무기/방어구/장신구`; their five overflow
-  glyphs use only original uppercase letter tiles `J/K/Q/U/Z`, visually
-  confirmed as ordinary alphabet shapes. Do not extend this exception to `X`
-  (`EXP`) or to lowercase/punctuation graphics.
+  glyphs use only original uppercase letter tiles `J/K/Q/W/Z`. `B/U` remain
+  original for `BGM` and the small in-map `TURN` label. Do not extend
+  this exception to `X` (`EXP`) or to lowercase/punctuation graphics.
   A future full Hangul name grid needs a screen-specific font-resource swap;
   it must not expand into shared ASCII/status tiles again.
 - Automated regression: `test_byte_ui_patch_preserves_ascii_and_status_graphics`
   decompresses the original and patched byte-font resources and asserts every
   tile in `0x00..0xA4` except the five declared uppercase extensions, and every
   tile in `0xE0..0xFF`, is byte-identical. All byte UI Hangul mappings must
-  remain within `0xA5..0xDF` or the explicit `J/K/Q/U/Z` set.
+  remain within `0xA5..0xDF` or the explicit `J/K/Q/W/Z` set.
 - Fresh-boot live verification used the rebuilt ROM, not a GST carrying old
   VRAM. Captures under `captures/analysis/safe_byte_font_s1/` cover the allied
   animation (`fresh_blue_00.png` through `_15.png`), enemy
@@ -2240,5 +2240,32 @@ The earlier default-name-only conclusion is superseded by the live-verified
   font at 766/766 slots, and passes all 108 tests. Inventory is now
   2,966/2,968 logical candidates and 3,565/3,567 physical pages modified. The
   only two untouched candidates are the known structured non-dialogue records
-  in Scenarios 7 and 25. Live selector/opening verification and conditional
-  route regression remain pending.
+  in Scenarios 7 and 25.
+- The first live pass exposed two distinct name renderers: byte-name records
+  `0x061B7E/0x061B83/0x061B88` own the map status labels, while direct-word
+  records `0x97530/0x97538/0x97542` own the 16x16 dialogue speaker labels.
+  Patching only the byte records produced Korean `바란` in the status bar but
+  Japanese `バラン` in dialogue. All six records are now patched and covered
+  by inventory tests.
+- Adding the five new byte-name syllables initially exceeded the verified safe
+  byte-font pool. Expanding into shared graphics was rejected. Status-only
+  class labels were compacted to `마전사`, `기사장`, `무장기병`, `수호병`,
+  `주민`, and `R기병`, preserving class IDs while keeping the byte font inside
+  64/64 safe slots. A first allocation reused uppercase `U` and visibly broke
+  the small in-map `TURN`; the final `J/K/Q/W/Z` allocation preserves `B/U`
+  and fixes that regression.
+- Fresh-boot live selector row 28 displayed `근육의 신전`, entered preparation,
+  completed automatic deployment, and reached the original secret-stage label
+  `SCENARIO ?1` / `TURN 1`. The unconditional opening advanced through Baran,
+  Adon, Samson, Lester, Sherry, and Jessica and returned to Elwin's command
+  menu. No Japanese text, blank dialogue, reset, or freeze remained. A supposed
+  one-character Baran page was reproduced with a ten-second wait and proved to
+  be a capture taken during portrait/typewriter animation; the complete line
+  rendered normally. Evidence includes `captures/run/6782_s28_turn1.png`,
+  `6782_s28_baran.png`, `6782_s28_row8_wait10.png`, and the per-input sequence
+  under `captures/run/6782_s28_slow/`. A final fresh boot after the terminology
+  adjustment reconfirmed the Korean speaker/status label in
+  `captures/run/452c_s28_baran.png` and retained the intact small `TURN` label.
+- Final checksum `452C` uses 765/766 shared custom glyph slots and passes all
+  109 tests. Conditional combat, conversion, item, death, and post-battle
+  branches remain part of the whole-game route regression pass.

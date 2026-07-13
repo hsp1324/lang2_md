@@ -1,10 +1,10 @@
 {
-  "declared_patch_count": 83,
-  "modified_patch_count": 82,
+  "declared_patch_count": 86,
+  "modified_patch_count": 85,
   "groups": {
     "byte_ff_strings": {
-      "entry_count": 17,
-      "modified_count": 17
+      "entry_count": 20,
+      "modified_count": 20
     },
     "fixed_byte_strings": {
       "entry_count": 7,
@@ -201,6 +201,33 @@
     },
     {
       "group": "byte_ff_strings",
+      "address": "0x061B7E",
+      "size_bytes": 5,
+      "target_korean": "아돈",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B83",
+      "size_bytes": 5,
+      "target_korean": "삼손",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061B88",
+      "size_bytes": 5,
+      "target_korean": "바란",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
       "address": "0x061B8D",
       "size_bytes": 9,
       "target_korean": "제국지휘관",
@@ -214,8 +241,8 @@
       "size_bytes": 10,
       "target_korean": "무기",
       "modified": true,
-      "reviewed": true,
-      "live_verified": true
+      "reviewed": false,
+      "live_verified": false
     },
     {
       "group": "byte_ff_strings",
@@ -223,7 +250,7 @@
       "size_bytes": 10,
       "target_korean": "방어구",
       "modified": true,
-      "reviewed": true,
+      "reviewed": false,
       "live_verified": false
     },
     {
@@ -232,7 +259,7 @@
       "size_bytes": 10,
       "target_korean": "장신구",
       "modified": true,
-      "reviewed": true,
+      "reviewed": false,
       "live_verified": false
     },
     {
@@ -338,7 +365,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AB22",
       "size_bytes": 4,
-      "target_korean": "공격",
+      "target_korean": "AT",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -347,7 +374,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AB2C",
       "size_bytes": 4,
-      "target_korean": "방어",
+      "target_korean": "DF",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -356,7 +383,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AB5E",
       "size_bytes": 4,
-      "target_korean": "레벨",
+      "target_korean": "LV",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -365,7 +392,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AB6C",
       "size_bytes": 4,
-      "target_korean": "이동",
+      "target_korean": "MV",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -374,7 +401,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AB7E",
       "size_bytes": 4,
-      "target_korean": "마나",
+      "target_korean": "MP",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -383,7 +410,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AC8E",
       "size_bytes": 4,
-      "target_korean": "공격",
+      "target_korean": "AT",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -392,7 +419,7 @@
       "group": "fixed_word_strings",
       "address": "0x09AC98",
       "size_bytes": 4,
-      "target_korean": "방어",
+      "target_korean": "DF",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -401,7 +428,7 @@
       "group": "fixed_word_strings",
       "address": "0x09ACC8",
       "size_bytes": 4,
-      "target_korean": "레벨",
+      "target_korean": "LV",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -410,7 +437,7 @@
       "group": "fixed_word_strings",
       "address": "0x09ACD2",
       "size_bytes": 4,
-      "target_korean": "이동",
+      "target_korean": "MV",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -419,7 +446,7 @@
       "group": "fixed_word_strings",
       "address": "0x09ACE0",
       "size_bytes": 4,
-      "target_korean": "마나",
+      "target_korean": "MP",
       "modified": true,
       "reviewed": false,
       "live_verified": false
@@ -788,7 +815,7 @@
       "group": "name_entry_glyph_list",
       "address": "0x0A37E6",
       "size_bytes": 190,
-      "target_korean": "84 selectable Korean syllables",
+      "target_korean": "57 selectable Korean syllables",
       "modified": true,
       "reviewed": true,
       "live_verified": true
