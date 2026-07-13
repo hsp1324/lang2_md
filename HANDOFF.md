@@ -2200,4 +2200,14 @@ The earlier default-name-only conclusion is superseded by the live-verified
 - The static Scenario 27 build has checksum `16A0`, keeps the shared Hangul
   font at 766/766 slots, and passes all 107 tests. Inventory is now
   2,862/2,968 logical candidates and 3,449/3,567 physical pages modified.
-  Live opening verification and conditional route regression remain pending.
+  Conditional route regression remains pending.
+- Live selector row 27 displayed the Korean route screen and `전설의 끝`
+  prologue, entered preparation, completed automatic deployment, and reached
+  `SCENARIO 27` / `TURN 1`. The complete unconditional opening event advanced
+  through Lana, Liana, Sherry, Elwin, and Bernhardt and returned to Elwin's
+  `이동/공격/치료/명령` command menu. The dynamic Bernhardt insertion rendered
+  correctly, and no Japanese text, blank dialogue, reset, or freeze appeared.
+  Evidence includes `captures/run/16a0_s27_briefing.png`,
+  `16a0_s27_arrange.png`, `16a0_s27_dialogue1.png`,
+  `16a0_s27_opening_step04.png`, `16a0_s27_opening_step10.png`,
+  `16a0_s27_opening_step20.png`, and `16a0_s27_opening_step22.png`.
