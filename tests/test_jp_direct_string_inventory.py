@@ -55,10 +55,21 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
         self.assertEqual(row["target_korean"], "라나")
         self.assertTrue(row["modified"])
 
-    def test_known_unsafe_name_table_is_not_unclassified(self):
+    def test_promoted_name_table_record_is_declared_and_modified(self):
         row = next(row for row in self.result["candidates"] if row["address"] == "0x097462")
-        self.assertEqual(row["ownership"], "known_unsafe_name_record")
+        self.assertEqual(row["ownership"], "declared_direct_patch")
         self.assertEqual(row["target_korean"], "가면기사")
+        self.assertTrue(row["modified"])
+
+    def test_late_name_batch_is_stable_and_unsafe_flag_is_idempotent(self):
+        self.assertEqual(len(builder.LATE_DIRECT_NAME_GLYPH_OFFSETS), 26)
+        for address in builder.LATE_DIRECT_NAME_GLYPH_OFFSETS:
+            self.assertIn(address, builder.DIRECT_STRING_PATCHES)
+        for address, text in builder.UNSAFE_DIRECT_NAME_PATCHES.items():
+            self.assertEqual(
+                text,
+                builder.DIRECT_STRING_PATCHES[address],
+            )
 
     def test_rendered_non_global_ranges_are_classified(self):
         rows = {row["address"]: row for row in self.result["candidates"]}

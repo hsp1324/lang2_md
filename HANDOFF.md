@@ -2279,3 +2279,33 @@ contains 57 safe syllables as documented below and in
   `0267_name_confirm_route.png`, and `0267_save_confirm.png`. Conditional
   combat, conversion, item, death, and post-battle branches remain part of the
   whole-game route regression pass.
+
+### Complete Direct Speaker And Monster Name Table (2026-07-13)
+
+- The original direct 16x16 name table at `0x097404..0x09765E` was rendered
+  from the Japanese ROM and checked address by address. It contains 57 records
+  covering named characters, generic speakers, and monster names. Evidence is
+  `captures/analysis/jpfont_probe/direct_097400_097660_jp_original.png`.
+- The 26 previously deferred records are now default patches. They include
+  `가면기사`, `기잠`, `세이갈`, `폴거`, `일반병`, `사제`, `해적`, every
+  monster record from `웨어울프` through `데몬로드`, and
+  `형님/마녀/제국병/파이어스`. `グレートドラゴン` is rendered without the
+  old abbreviation as `그레이트드래곤`. The complete Korean sheet is
+  `captures/analysis/jpfont_probe/direct_097400_097660_ko_4dc7.png`.
+- Five new syllables were required: `폴/큐/뱀/켄/몬`. Four single-use dialogue
+  syllables were removed with meaning-preserving edits at
+  `0x186B2C`, `0x189868`, `0x1A039C`, and `0x1AF90E`. The resulting pages were
+  rebuilt and inspected under `captures/analysis/event_pages_ko/` for
+  Scenarios 2, 3, 15, and 24; none are blank or clipped.
+- Failed allocation order: putting the new direct-name strings before the
+  established name-entry consumers kept the total at 766 but shifted `릭` to
+  glyph `0x7267`, beyond the verified name-entry ceiling `0x7262`. The builder
+  rejected that ROM. `LATE_DIRECT_NAME_GLYPH_OFFSETS` now allocates the 26
+  promoted records after the name-entry set, preserving all established UI
+  IDs while still patching the same direct records.
+- Current checksum `4DC7` uses exactly 766/766 custom 16x16 glyph slots. The
+  legacy `--include-unsafe-direct-names` build is now idempotent and produces
+  the same checksum. All 110 tests pass, the direct candidate inventory has
+  zero unclassified and zero unsafe name records, and a fresh boot confirmed
+  intact `엘윈`, `OK/NO`, and route entry in
+  `captures/run/4dc7_name_entry.png` and `4dc7_name_confirm.png`.

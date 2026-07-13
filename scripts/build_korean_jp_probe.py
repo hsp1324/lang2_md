@@ -877,8 +877,51 @@ DIRECT_STRING_PATCHES = {
     0x9754A: "제국군지휘관",
     # Scenario 12 Reitel guardian, promoted after live dialogue reach.
     0x97594: "리치",
+    # Remaining fixed name-table records, promoted as one no-overflow batch
+    # after rendering and checking the original 0x97400..0x97656 table. Four
+    # single-use dialogue syllables were reworded to make room for the five
+    # required name glyphs without expanding beyond 766 custom glyph slots.
+    0x97462: "가면기사",
+    0x974D2: "기잠",
+    0x974E6: "세이갈",
+    0x974F0: "폴거",
+    0x974FC: "일반병",
+    0x9750C: "사제",
+    0x97518: "해적",
+    0x97558: "웨어울프",
+    0x97566: "그레이트슬라임",
+    0x97578: "스큐라",
+    0x97582: "아이언골렘",
+    0x9759C: "리빙아머",
+    0x975AE: "뱀파이어로드",
+    0x975C0: "고스트",
+    0x975CA: "케르베로스",
+    0x975D6: "마스터디노",
+    0x975E8: "와이번",
+    0x975F4: "그레이트드래곤",
+    0x97606: "미노타우로스",
+    0x97614: "크라켄",
+    0x97620: "서큐버스",
+    0x9762C: "데몬로드",
+    0x9763C: "형님",
+    0x97642: "마녀",
+    0x9764E: "제국병",
+    0x97656: "파이어스",
     0xA16F2: "버리겠습니까예아니오",
 }
+
+# Keep these newly promoted name-table strings after the established UI and
+# name-entry glyph consumers. Their records are stable direct patches, but
+# allocating their five new syllables earlier would shift the name-entry
+# `릭` glyph beyond NAME_ENTRY_MAX_SAFE_CUSTOM_GLYPH.
+LATE_DIRECT_NAME_GLYPH_OFFSETS = (
+    0x97462, 0x974D2, 0x974E6, 0x974F0, 0x974FC,
+    0x9750C, 0x97518, 0x97558, 0x97566, 0x97578,
+    0x97582, 0x9759C, 0x975AE, 0x975C0, 0x975CA,
+    0x975D6, 0x975E8, 0x975F4, 0x97606, 0x97614,
+    0x97620, 0x9762C, 0x9763C, 0x97642, 0x9764E,
+    0x97656,
+)
 
 SYSTEM_MESSAGE_EXPECTED_WORDS = {
     0x082ACE: (0x002B, 0x003F, 0x002A, 0x0079, 0x00B0, 0x0079, 0x007B, 0x0064, 0x006C),
@@ -896,10 +939,10 @@ SYSTEM_MESSAGE_EXPECTED_WORDS = {
 
 DIRECT_PREFIX_STRING_PATCHES = {}
 
-# These candidate strings were found by scanning, but they are not the visible
-# name table used by the JP name-entry screen. Patching them can break the flow
-# after name confirmation, so they stay out of the default build until their
-# renderer/data ownership is identified.
+# Historical all-at-once name-table probe. Every value now matches the stable
+# default direct patch at the same address. Keep this mirror and its CLI flag
+# idempotent so old verification commands cannot reintroduce the former
+# name-confirmation regression.
 UNSAFE_DIRECT_NAME_PATCHES = {
     0x97404: "엘윈",
     0x97410: "리아나",
@@ -921,7 +964,7 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x974BE: "이멜다",
     0x974C8: "모건",
     0x974D2: "기잠",
-    0x974DA: "클레이머",
+    0x974DA: "크레이머",
     0x974E6: "세이갈",
     0x974F0: "폴거",
     0x974FC: "일반병",
@@ -944,7 +987,7 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x975CA: "케르베로스",
     0x975D6: "마스터디노",
     0x975E8: "와이번",
-    0x975F4: "대드래곤",
+    0x975F4: "그레이트드래곤",
     0x97606: "미노타우로스",
     0x97614: "크라켄",
     0x97620: "서큐버스",
@@ -3224,7 +3267,7 @@ def main() -> None:
     parser.add_argument(
         "--include-unsafe-direct-names",
         action="store_true",
-        help="patch the 0x974xx candidate name table; experimental and can break name confirmation",
+        help="compatibility alias for the now-promoted 0x974xx direct name table",
     )
     parser.add_argument(
         "--patch-elwin-name-only",
@@ -3300,18 +3343,27 @@ def main() -> None:
     stable_direct_patches = dict(direct_patches)
     if args.patch_elwin_name_only:
         stable_direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
-    late_direct_strings: list[str] = []
+    late_direct_strings = [
+        stable_direct_patches[offset]
+        for offset in LATE_DIRECT_NAME_GLYPH_OFFSETS
+        if offset in stable_direct_patches
+    ]
     if args.include_unsafe_direct_names:
         direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
         direct_patches.update(UNSAFE_DIRECT_NAME_PATCHES)
-        late_direct_strings = [
+        late_direct_strings.extend(
             text
             for offset, text in UNSAFE_DIRECT_NAME_PATCHES.items()
             if stable_direct_patches.get(offset) != text
-        ]
+        )
     elif args.patch_elwin_name_only:
         direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
-    active_direct_strings = list(stable_direct_patches.values())
+    late_direct_name_offsets = set(LATE_DIRECT_NAME_GLYPH_OFFSETS)
+    active_direct_strings = [
+        text
+        for offset, text in stable_direct_patches.items()
+        if offset not in late_direct_name_offsets
+    ]
     active_event_page_strings = [text for _, text in SCENARIO1_EVENT_PAGE_PATCHES.values()]
     active_reviewed_event_strings = [
         reviewed_event_visible_text(str(row["text"])) for row in reviewed_event_rows
