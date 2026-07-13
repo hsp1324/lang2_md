@@ -1041,10 +1041,14 @@ full-game Korean localization, split into six stages in
 - Baseline remains 783 candidates. After offline rendering and pointer-interval
   ownership analysis, all 783 are classified and zero remain unclassified.
   The current build differs at 256 candidate starts.
-- Classification exposed 14 mostly untranslated full ending-dialogue pages at
-  `0x09600E..0x096BD8` and 97 untranslated character-epilogue page chunks at
-  `0x0896DE..0x095E52`. Short suffix patches inside an ending page do not make
-  the full page translated.
+- The old 14/97 counts were conservative scanner suffix matches, not complete
+  dialogue-record counts. Pointer tracing proved that the 14 ending visit
+  records begin at `0x0954E2`; their long `FFFF`-terminated bodies continue
+  through `0x096C58`, with nine shorter Liana-branch records linked from the
+  same script table at `0x09540C..0x0954DF`. The remaining 90 matches below
+  `0x0954E2` are still-untranslated character-epilogue fragments. The inventory
+  now classifies all 22 ending suffix matches under their 23 complete translated
+  records instead of calling them untranslated pages.
 - Other candidates are assigned to exact pointer records/interiors, declared
   patches, unsafe name records, credits, name-entry resources, local UI token
   streams, item/shop resources, or render-confirmed code/structured-data false
@@ -2309,3 +2313,38 @@ contains 57 safe syllables as documented below and in
   zero unclassified and zero unsafe name records, and a fresh boot confirmed
   intact `엘윈`, `OK/NO`, and route entry in
   `captures/run/4dc7_name_entry.png` and `4dc7_name_confirm.png`.
+
+### Complete Ending Visit Dialogue Records (2026-07-13)
+
+- The ending visit script at `0x09540C..0x0954DF` points to 14 main Japanese
+  records corresponding to English reference records 1785-1798. The Liana
+  travel ending additionally chains nine short response records. All 23 source
+  records are now translated in `localization/ending_dialogue_ko.json`.
+- Japanese ROM text and pointers remain authoritative. The English extraction
+  was used only to cross-check long-record continuity. Each translation records
+  the complete source SHA-256 and preserves the original ordered `FFF7` actor
+  IDs and exact `FFFD` page-break count. The builder rejects a changed source,
+  missing name control, altered page count, or record overflow.
+- The earlier direct inventory mistook suffixes such as `0x09600E` for complete
+  pages because its conservative scanner stops after 64 words. Full-record
+  tracing found actual starts including `0x0954E2`, `0x096090`, `0x0963A4`,
+  `0x096518`, `0x0967A4`, and `0x096A84`. Sixteen old suffix probes were retired
+  as write targets. Their text remains allocation-only compatibility input so
+  established UI and name-entry glyph IDs do not move.
+- The 68000 converter at `0x02C390` masks the glyph ID to all 16 bits and shifts
+  it by 64 bytes from font base `0x040000`. Static relocation analysis proves
+  that glyph `0x7300` begins at ROM `0x20C000`, before the next relocated data
+  at `0x270000`. `CUSTOM_GLYPH_RANGES` therefore extends through `0x73FE`, with
+  an overlap guard and `tests/test_custom_glyph_storage.py`. The translated
+  ending needs only eight new syllables and ends at glyph `0x7306`.
+- Checksum `69D4` uses 774/1021 available custom glyph slots and passes all 120
+  tests. Complete original and Korean record sheets are under
+  `captures/analysis/ending_records_jp_original/` and
+  `captures/analysis/ending_records_ko_69d4/`; all 23 records render Korean,
+  fit at most 24 visible cells per authored line, and contain no Japanese glyph
+  IDs outside preserved dynamic-name arguments. A fresh `69D4` boot preserved
+  the `엘윈` default, `OK/NO`, the 57-character name grid, route entry, and the
+  `시나리오 1 / 서장` screen without a reset; see
+  `captures/run/69d4_name_entry.png`, `69d4_name_confirm.png`, and
+  `69d4_scenario1.png`. Live ending-route verification remains required before
+  the ending translation itself can be promoted beyond static review.

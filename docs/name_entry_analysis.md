@@ -64,11 +64,18 @@ list with `FFFF`.
   `captures/run/0267_name_confirm_route.png`.
 - The same fresh boot reached Scenario 1 and preserved the Start-menu save
   prompt and its `YES/NO` labels in `captures/run/0267_save_confirm.png`.
-- Current checksum `4DC7` fills the shared 16x16 pool to 766/766 after the full
-  direct name-table promotion. A fresh boot again preserved `엘윈`, `OK/NO`,
-  and confirmation through the route screen in
+- Checksum `4DC7` filled the original `0x7000..0x72FE` 16x16 pool to 766/766
+  after the full direct name-table promotion. A fresh boot preserved `엘윈`,
+  `OK/NO`, and confirmation through the route screen in
   `captures/run/4dc7_name_entry.png` and
   `captures/run/4dc7_name_confirm.png`.
+- Static build `69D4` extends only the word-text font storage through `0x73FE`
+  for ending/epilogue work while preserving every established name-entry glyph
+  ID. `tests/test_custom_glyph_storage.py` proves the full-16-bit converter and
+  non-overlap with relocated resources. A fresh live boot preserved `엘윈`,
+  `OK/NO`, the full grid, route entry, and Scenario 1 in
+  `captures/run/69d4_name_entry.png`, `69d4_name_confirm.png`, and
+  `69d4_scenario1.png`.
 - Earlier checksum `0E8A` proved the confirmation hook with a manually selected
   high custom name `폴` through route, preparation, and dialogue. Its former
   84-syllable grid was later retired because it consumed byte-font codes owned

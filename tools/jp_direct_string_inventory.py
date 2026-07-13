@@ -192,10 +192,10 @@ def range_ownership(offset: int) -> tuple[str, str | None] | None:
         return "structured_game_data_false_positive", "엔딩 캐릭터 상태/분기 수치·포인터 배열"
     if 0x089100 <= offset < 0x089600:
         return "structured_game_data_false_positive", "엔딩 후일담 포인터/선택 데이터"
-    if 0x089600 <= offset < 0x096000:
-        return "confirmed_untranslated_epilogue_page", "인물별 엔딩 후일담 전체 번역 필요"
-    if 0x096000 <= offset < 0x096D00:
-        return "confirmed_untranslated_ending_page", "엔딩 대사 전체 페이지 번역 필요"
+    if 0x089600 <= offset < 0x0954E2:
+        return "confirmed_untranslated_epilogue_fragment", "인물별 후일담 레코드 조각 번역 필요"
+    if 0x0954E2 <= offset < 0x096D00:
+        return "confirmed_untranslated_ending_fragment", "엔딩 대화 레코드 조각 번역 필요"
     if 0x096D00 <= offset < 0x096F00:
         return "structured_game_data_false_positive", "엔딩 선택/레이아웃 데이터"
     if 0x096F00 <= offset < 0x097000:
@@ -233,6 +233,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     targets = declared_targets()
     unsafe_targets = builder.UNSAFE_DIRECT_NAME_PATCHES
     ui_surfaces = declared_ui_surfaces()
+    ending_intervals = []
+    for row in builder.load_ending_dialogue_translations():
+        start = int(row["address_int"])
+        capacity, _, _ = builder.direct_record_layout(japanese, start)
+        ending_intervals.append((start, start + capacity * 2, str(row["text"])))
     rows = []
     for offset, original in scan_candidates(japanese):
         current = read_current_stream(korean, offset)
@@ -259,7 +264,21 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             if interior:
                 ranged = ("pointer_table_record_interior", interior)
             else:
-                ranged = range_ownership(offset)
+                ending = next(
+                    (
+                        (start, text)
+                        for start, end, text in ending_intervals
+                        if start <= offset < end
+                    ),
+                    None,
+                )
+                if ending:
+                    ranged = (
+                        "declared_ending_translation",
+                        f"엔딩 번역 레코드 0x{ending[0]:06X}: {ending[1]}",
+                    )
+                else:
+                    ranged = range_ownership(offset)
             ownership = ranged[0] if ranged else "unclassified_candidate"
         rows.append(
             {
@@ -294,8 +313,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "declared_ui_surface",
             "name_entry_resource",
             "confirmed_credits_record",
-            "confirmed_untranslated_ending_page",
-            "confirmed_untranslated_epilogue_page",
+            "confirmed_untranslated_ending_fragment",
+            "confirmed_untranslated_epilogue_fragment",
+            "declared_ending_translation",
             "local_token_stream",
             "item_shop_local_resource",
             "structured_game_data_false_positive",
@@ -341,8 +361,9 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- Declared UI surfaces: {counts['declared_ui_surface']}",
             f"- Name-entry resources: {counts['name_entry_resource']}",
             f"- Credits records: {counts['confirmed_credits_record']}",
-            f"- Untranslated ending pages: {counts['confirmed_untranslated_ending_page']}",
-            f"- Untranslated epilogue pages: {counts['confirmed_untranslated_epilogue_page']}",
+            f"- Untranslated ending fragments: {counts['confirmed_untranslated_ending_fragment']}",
+            f"- Untranslated epilogue fragments: {counts['confirmed_untranslated_epilogue_fragment']}",
+            f"- Declared ending translation fragments: {counts['declared_ending_translation']}",
             f"- Screen-local token streams: {counts['local_token_stream']}",
             f"- Item/shop local resources: {counts['item_shop_local_resource']}",
             f"- Structured-data false positives: {counts['structured_game_data_false_positive']}",

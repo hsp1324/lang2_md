@@ -8,18 +8,19 @@ a candidate, not proof that the data is visible text.
 
 - Scan range: `0x000000..0x180000`
 - Candidates: 783
-- Modified candidates: 362
+- Modified candidates: 369
 - Exact pointer-table records: 105
 - Pointer-table record interiors: 95
-- Existing declared direct patches: 150
+- Existing declared direct patches: 149
 - Known unsafe name records: 0
 - Confirmed unpatched system messages: 1
 - Confirmed unresolved direct messages: 1
 - Declared UI surfaces: 10
 - Name-entry resources: 16
 - Credits records: 60
-- Untranslated ending pages: 14
-- Untranslated epilogue pages: 97
+- Untranslated ending fragments: 0
+- Untranslated epilogue fragments: 90
+- Declared ending translation fragments: 22
 - Screen-local token streams: 41
 - Item/shop local resources: 19
 - Structured-data false positives: 111

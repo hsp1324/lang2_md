@@ -112,21 +112,30 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
             rows["0x082B78"]["ownership"], "confirmed_unresolved_direct_message"
         )
 
-    def test_full_ending_pages_are_not_hidden_by_suffix_patches(self):
+    def test_ending_fragments_are_owned_by_full_record_translations(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
         self.assertEqual(
-            rows["0x09600E"]["ownership"], "confirmed_untranslated_ending_page"
+            rows["0x09600E"]["ownership"], "declared_ending_translation"
         )
         self.assertTrue(rows["0x09600E"]["modified"])
 
-    def test_character_epilogues_are_tracked_as_untranslated_pages(self):
+    def test_character_epilogue_fragments_are_tracked_separately(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
         self.assertEqual(
-            rows["0x0896DE"]["ownership"], "confirmed_untranslated_epilogue_page"
+            rows["0x0896DE"]["ownership"], "confirmed_untranslated_epilogue_fragment"
         )
-        self.assertGreater(
-            self.result["ownership_counts"]["confirmed_untranslated_epilogue_page"],
+        self.assertEqual(
+            self.result["ownership_counts"]["confirmed_untranslated_epilogue_fragment"],
             90,
+        )
+
+    def test_ending_boundary_starts_at_first_ending_dialogue_record(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        self.assertEqual(
+            rows["0x09525E"]["ownership"], "confirmed_untranslated_epilogue_fragment"
+        )
+        self.assertEqual(
+            rows["0x095594"]["ownership"], "declared_ending_translation"
         )
 
     def test_final_rendered_gibberish_candidates_are_data_false_positives(self):

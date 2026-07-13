@@ -71,9 +71,10 @@ COMMON_GLYPH_PROTECT_LIMIT = 0x0060
 
 SPACE_GLYPH = 0x0054
 CUSTOM_GLYPH_RANGES = (
-    (0x7000, 0x72FE),
+    (0x7000, 0x73FE),
 )
 CUSTOM_GLYPH_RESERVED = {0x71FF}
+CUSTOM_GLYPH_STORAGE_LIMIT = SCENARIO_GLYPH_LIST_RELOC_BASE
 DEFAULT_HERO_NAME_CODES = {
     "엘": 0x80,
     "윈": 0x81,
@@ -440,28 +441,13 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
 }
 
 EVENT_DIALOGUE_TRANSLATIONS = Path("localization/event_dialogue_ko.json")
+ENDING_DIALOGUE_TRANSLATIONS = Path("localization/ending_dialogue_ko.json")
 EVENT_NAME_CONTROL_RE = re.compile(r"\{([0-9A-Fa-f]{4})\}")
 
 DIRECT_STRING_PATCHES = {
     # The dialogue renderer appends this one-glyph direct string after every
     # speaker name. It is the actual Japanese opening quote, not font slot 50.
     0x97400: ":",
-    0x96086: "잘가!",
-    0x96248: "잘가!",
-    0x96390: "그럼잘있어!",
-    0x96502: "잠깐기다려",
-    0x96788: "고마웠어…",
-    0x967EC: "돌아오길기다렸어…",
-    0x96868: "평화를위해떠나야해…",
-    0x96898: "나도같이가도돼?",
-    0x968B6: "뭐?!",
-    0x968DA: "네가갈곳으로…",
-    0x968F4: "……",
-    0x9693E: "그럼걱정돼?",
-    0x96988: "위험한눈에띄기싫어!",
-    0x96A2A: "함께가게해줘!",
-    0x96A64: "그래너혼자는아니야…",
-    0x96C48: "조심해…",
     0x9742A: "헤인",
     # Scenario 2 fixed speaker names, isolated and live-reached as one batch.
     0x97432: "스코트",
@@ -909,6 +895,28 @@ DIRECT_STRING_PATCHES = {
     0x97656: "파이어스",
     0xA16F2: "버리겠습니까예아니오",
 }
+
+# These strings were the first safe suffix probes inside long ending records.
+# Keep their character-allocation order so established UI/name-entry glyph IDs
+# remain byte-for-byte stable, while the complete ending records own all writes.
+RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS = (
+    "잘가!",
+    "잘가!",
+    "그럼잘있어!",
+    "잠깐기다려",
+    "고마웠어…",
+    "돌아오길기다렸어…",
+    "평화를위해떠나야해…",
+    "나도같이가도돼?",
+    "뭐?!",
+    "네가갈곳으로…",
+    "……",
+    "그럼걱정돼?",
+    "위험한눈에띄기싫어!",
+    "함께가게해줘!",
+    "그래너혼자는아니야…",
+    "조심해…",
+)
 
 # Keep these newly promoted name-table strings after the established UI and
 # name-entry glyph consumers. Their records are stable direct patches, but
@@ -1535,6 +1543,30 @@ def reviewed_event_visible_text(text: str) -> str:
     return EVENT_NAME_CONTROL_RE.sub("", text)
 
 
+def load_ending_dialogue_translations(
+    path: Path = ENDING_DIALOGUE_TRANSLATIONS,
+) -> list[dict[str, object]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entries = payload.get("records")
+    if not isinstance(entries, list):
+        raise ValueError(f"ending translations in {path} have no record list")
+    rows: list[dict[str, object]] = []
+    seen_addresses: set[int] = set()
+    for entry in entries:
+        row = dict(entry)
+        address = int(str(row["address"]), 16)
+        if address in seen_addresses:
+            raise ValueError(f"duplicate ending dialogue address 0x{address:06X}")
+        seen_addresses.add(address)
+        row["address_int"] = address
+        rows.append(row)
+    return rows
+
+
+def ending_dialogue_visible_text(text: str) -> str:
+    return EVENT_NAME_CONTROL_RE.sub("", text)
+
+
 def event_page_layout(data: bytes | bytearray, start: int) -> tuple[int, int, list[tuple[int, int]]]:
     controls: list[tuple[int, int]] = []
     pos = start
@@ -1576,6 +1608,97 @@ def encode_reviewed_event_text(text: str, glyph_by_char: dict[str, int]) -> tupl
         else:
             values.append(glyph_by_char[char])
     return values, controls
+
+
+def encode_ending_dialogue_text(
+    text: str,
+    glyph_by_char: dict[str, int],
+) -> tuple[list[int], list[tuple[int, int]]]:
+    values: list[int] = []
+    controls: list[tuple[int, int]] = []
+    cursor = 0
+
+    def append_text(fragment: str) -> None:
+        for char in fragment:
+            if char == "\n":
+                values.append(0xFFFE)
+            elif char == "\f":
+                values.append(0xFFFD)
+            elif char == " ":
+                values.append(SPACE_GLYPH)
+            else:
+                values.append(glyph_by_char[char])
+
+    for match in EVENT_NAME_CONTROL_RE.finditer(text):
+        append_text(text[cursor : match.start()])
+        actor_id = int(match.group(1), 16)
+        control = (0xFFF7, actor_id)
+        controls.append(control)
+        values.extend(control)
+        cursor = match.end()
+    append_text(text[cursor:])
+    return values, controls
+
+
+def direct_record_layout(
+    data: bytes | bytearray,
+    start: int,
+) -> tuple[int, list[tuple[int, int]], int]:
+    controls: list[tuple[int, int]] = []
+    page_breaks = 0
+    pos = start
+    for _ in range(1024):
+        word = be16(data, pos)
+        if word == 0xFFFF:
+            return (pos - start) // 2 + 1, controls, page_breaks
+        if word == 0xFFF7:
+            actor_id = be16(data, pos + 2)
+            controls.append((word, actor_id))
+            pos += 4
+        else:
+            if word == 0xFFFD:
+                page_breaks += 1
+            pos += 2
+    raise ValueError(f"direct record at 0x{start:06X} has no terminator")
+
+
+def patch_ending_dialogue_records(
+    data: bytearray,
+    reference_data: bytes,
+    glyph_by_char: dict[str, int],
+    rows: list[dict[str, object]],
+) -> None:
+    for row in rows:
+        start = int(row["address_int"])
+        capacity, original_controls, original_page_breaks = direct_record_layout(
+            reference_data, start
+        )
+        source_bytes = reference_data[start : start + capacity * 2]
+        source_digest = hashlib.sha256(source_bytes).hexdigest()
+        if source_digest != row["source_sha256"]:
+            raise ValueError(
+                f"ending source changed at 0x{start:06X}: "
+                f"{source_digest} != {row['source_sha256']}"
+            )
+        text = str(row["text"])
+        values, translated_controls = encode_ending_dialogue_text(text, glyph_by_char)
+        if translated_controls != original_controls:
+            raise ValueError(
+                f"ending controls changed at 0x{start:06X}: "
+                f"{translated_controls!r} != {original_controls!r}"
+            )
+        translated_page_breaks = values.count(0xFFFD)
+        if translated_page_breaks != original_page_breaks:
+            raise ValueError(
+                f"ending page breaks changed at 0x{start:06X}: "
+                f"{translated_page_breaks} != {original_page_breaks}"
+            )
+        if len(values) + 1 > capacity:
+            raise ValueError(
+                f"ending record at 0x{start:06X} needs {len(values) + 1} words, "
+                f"only {capacity}: {text!r}"
+            )
+        write_word_list(data, start, values, capacity)
 
 
 def patch_reviewed_event_pages(
@@ -1807,6 +1930,12 @@ def install_custom_glyphs(data: bytearray, chars: list[str]) -> dict[str, int]:
     ]
     if len(chars) > len(glyph_ids):
         raise ValueError(f"need {len(chars)} custom glyphs, only {len(glyph_ids)} reserved slots")
+    storage_end = glyph_data_offset(max(glyph_ids)) + GLYPH_BYTES
+    if storage_end > CUSTOM_GLYPH_STORAGE_LIMIT:
+        raise ValueError(
+            f"custom glyph storage overlaps relocated resources: "
+            f"0x{storage_end:06X} > 0x{CUSTOM_GLYPH_STORAGE_LIMIT:06X}"
+        )
     font = ImageFont.truetype(str(FONT_PATH), 16)
     blank_offset = glyph_data_offset(SPACE_GLYPH)
     blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
@@ -3330,6 +3459,7 @@ def main() -> None:
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()
+    ending_dialogue_rows = load_ending_dialogue_translations()
     if not 0 <= args.scenario_count <= len(scenario_texts):
         raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
     active_condition_chars = "" if args.skip_condition else "\n".join(
@@ -3359,14 +3489,18 @@ def main() -> None:
     elif args.patch_elwin_name_only:
         direct_patches.update(DIRECT_ELWIN_NAME_PATCH)
     late_direct_name_offsets = set(LATE_DIRECT_NAME_GLYPH_OFFSETS)
-    active_direct_strings = [
-        text
-        for offset, text in stable_direct_patches.items()
-        if offset not in late_direct_name_offsets
-    ]
+    active_direct_strings = []
+    for offset, text in stable_direct_patches.items():
+        if offset not in late_direct_name_offsets:
+            active_direct_strings.append(text)
+        if offset == 0x97400:
+            active_direct_strings.extend(RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS)
     active_event_page_strings = [text for _, text in SCENARIO1_EVENT_PAGE_PATCHES.values()]
     active_reviewed_event_strings = [
         reviewed_event_visible_text(str(row["text"])) for row in reviewed_event_rows
+    ]
+    active_ending_dialogue_strings = [
+        ending_dialogue_visible_text(str(row["text"])) for row in ending_dialogue_rows
     ]
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_prefix_strings = [text for _, text in prefix_patches.values()]
@@ -3418,6 +3552,9 @@ def main() -> None:
         # Append newly reviewed event vocabulary after every existing glyph
         # consumer so established UI/name-entry IDs remain stable.
         *active_reviewed_event_strings,
+        # Ending-only vocabulary occupies the new 0x7300+ bank and cannot
+        # perturb established scenario/UI/name-entry glyph IDs.
+        *active_ending_dialogue_strings,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
@@ -3448,6 +3585,9 @@ def main() -> None:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_scenario1_event_pages(data, glyph_by_char)
         patch_reviewed_event_pages(data, IN_ROM.read_bytes(), glyph_by_char, reviewed_event_rows)
+        patch_ending_dialogue_records(
+            data, IN_ROM.read_bytes(), glyph_by_char, ending_dialogue_rows
+        )
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)
