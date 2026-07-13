@@ -122,11 +122,18 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
     def test_character_epilogue_fragments_are_tracked_separately(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
         self.assertEqual(
-            rows["0x0896DE"]["ownership"], "confirmed_untranslated_epilogue_fragment"
+            rows["0x08A8A0"]["ownership"], "confirmed_untranslated_epilogue_fragment"
+        )
+        self.assertEqual(
+            rows["0x0896DE"]["ownership"], "declared_epilogue_translation"
         )
         self.assertEqual(
             self.result["ownership_counts"]["confirmed_untranslated_epilogue_fragment"],
-            90,
+            81,
+        )
+        self.assertEqual(
+            self.result["ownership_counts"]["declared_epilogue_translation"],
+            9,
         )
 
     def test_ending_boundary_starts_at_first_ending_dialogue_record(self):

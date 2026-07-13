@@ -1,0 +1,66 @@
+import json
+from pathlib import Path
+import unittest
+
+from tools.jp_epilogue_inventory import build_inventory
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class JapaneseEpilogueInventoryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        japanese = (ROOT / "roms/original/Langrisser II (Japan).md").read_bytes()
+        mapping = json.loads(
+            (ROOT / "localization/english_dialogue_mapping.json").read_text(encoding="utf-8")
+        )
+        translations = json.loads(
+            (ROOT / "localization/epilogue_dialogue_ko.json").read_text(encoding="utf-8")
+        )
+        cls.result = build_inventory(japanese, mapping, translations)
+
+    def test_ninety_complete_records_are_owned(self):
+        self.assertEqual(self.result["record_count"], 90)
+        self.assertEqual(len(self.result["records"]), 90)
+        self.assertEqual(
+            len({row["address"] for row in self.result["records"]}),
+            90,
+        )
+        self.assertEqual(
+            len({row["pointer_reference"] for row in self.result["records"]}),
+            90,
+        )
+
+    def test_expected_source_extent_is_stable(self):
+        addresses = {row["address"] for row in self.result["records"]}
+        self.assertIn("0x0895A2", addresses)
+        self.assertIn("0x094F1A", addresses)
+        capacities = [row["capacity_words"] for row in self.result["records"]]
+        self.assertEqual(min(capacities), 218)
+        self.assertEqual(max(capacities), 544)
+
+    def test_english_reference_indices_are_complete(self):
+        self.assertEqual(
+            {row["english_record"] for row in self.result["records"]},
+            set(range(1901, 1991)),
+        )
+
+    def test_translation_progress_is_explicit(self):
+        self.assertEqual(self.result["translated_record_count"], 9)
+        translated = {
+            row["address"]
+            for row in self.result["records"]
+            if row["translation_status"] == "translated"
+        }
+        self.assertEqual(
+            translated,
+            {
+                "0x0895A2", "0x089760", "0x089950", "0x089B70", "0x089D50",
+                "0x089F2C", "0x08A13A", "0x08A354", "0x08A566",
+            },
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()

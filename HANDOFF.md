@@ -2348,3 +2348,33 @@ contains 57 safe syllables as documented below and in
   `captures/run/69d4_name_entry.png`, `69d4_name_confirm.png`, and
   `69d4_scenario1.png`. Live ending-route verification remains required before
   the ending translation itself can be promoted beyond static review.
+
+### Character Epilogue Inventory And Scott Outcomes (2026-07-13)
+
+- The character epilogue resource is 90 complete Japanese records in
+  `0x0895A2..0x0954E2`, not the short suffix fragments previously reported by
+  the conservative direct-string scan. `tools/jp_epilogue_inventory.py`
+  accepts an English-map address only after the Japanese ROM proves exactly
+  one pointer owner and a complete `FFFF`-terminated record. The resulting
+  source hashes, capacities, controls, and pointer owners are in
+  `localization/epilogue_records.json` and `docs/epilogue_inventory.md`.
+- Pointer order groups the records as Scott 0-8, Sherry 9-17, Keith 18-26,
+  Lana 27-35, Aaron 36-44, Lester 45-53, Hein 54-62, Jessica 63-71,
+  Imperial/villain outcomes 72-77, Liana 78-85, and world outcomes 86-89.
+  The original sheets are under
+  `captures/analysis/epilogue_records_jp_original/`.
+- Scott's nine outcome records at `0x0895A2..0x08A566` are translated in
+  `localization/epilogue_dialogue_ko.json`. They cover his different growth,
+  survival, family, Salrath, and monster-attack outcomes. The builder validates
+  each full Japanese source SHA-256, ordered dynamic controls, exact page-break
+  count, and in-place capacity before writing it.
+- The direct inventory now classifies the nine translated Scott suffixes as
+  `declared_epilogue_translation` and leaves the remaining 81 explicitly
+  `confirmed_untranslated_epilogue_fragment`; it has zero unclassified
+  candidates. `tools/render_direct_inventory_pages.py --record-inventory`
+  supports complete-record sheets rather than only conservative suffixes.
+- Checksum `052E` uses 782 custom glyphs through `0x730E` and passes all 127
+  tests. All nine Korean Scott records were rendered in
+  `captures/analysis/epilogue_records_ko_052e_scott/` with no Japanese text in
+  authored content. A live final-route epilogue check is still pending; do not
+  treat static rendering alone as complete end-to-end verification.

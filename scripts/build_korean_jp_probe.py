@@ -442,6 +442,7 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
 
 EVENT_DIALOGUE_TRANSLATIONS = Path("localization/event_dialogue_ko.json")
 ENDING_DIALOGUE_TRANSLATIONS = Path("localization/ending_dialogue_ko.json")
+EPILOGUE_DIALOGUE_TRANSLATIONS = Path("localization/epilogue_dialogue_ko.json")
 EVENT_NAME_CONTROL_RE = re.compile(r"\{([0-9A-Fa-f]{4})\}")
 
 DIRECT_STRING_PATCHES = {
@@ -1557,6 +1558,26 @@ def load_ending_dialogue_translations(
         address = int(str(row["address"]), 16)
         if address in seen_addresses:
             raise ValueError(f"duplicate ending dialogue address 0x{address:06X}")
+        seen_addresses.add(address)
+        row["address_int"] = address
+        rows.append(row)
+    return rows
+
+
+def load_epilogue_dialogue_translations(
+    path: Path = EPILOGUE_DIALOGUE_TRANSLATIONS,
+) -> list[dict[str, object]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entries = payload.get("records")
+    if not isinstance(entries, list):
+        raise ValueError(f"epilogue translations in {path} have no record list")
+    rows: list[dict[str, object]] = []
+    seen_addresses: set[int] = set()
+    for entry in entries:
+        row = dict(entry)
+        address = int(str(row["address"]), 16)
+        if address in seen_addresses:
+            raise ValueError(f"duplicate epilogue dialogue address 0x{address:06X}")
         seen_addresses.add(address)
         row["address_int"] = address
         rows.append(row)
@@ -3460,6 +3481,7 @@ def main() -> None:
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()
     ending_dialogue_rows = load_ending_dialogue_translations()
+    epilogue_dialogue_rows = load_epilogue_dialogue_translations()
     if not 0 <= args.scenario_count <= len(scenario_texts):
         raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
     active_condition_chars = "" if args.skip_condition else "\n".join(
@@ -3501,6 +3523,9 @@ def main() -> None:
     ]
     active_ending_dialogue_strings = [
         ending_dialogue_visible_text(str(row["text"])) for row in ending_dialogue_rows
+    ]
+    active_epilogue_dialogue_strings = [
+        ending_dialogue_visible_text(str(row["text"])) for row in epilogue_dialogue_rows
     ]
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_prefix_strings = [text for _, text in prefix_patches.values()]
@@ -3555,6 +3580,7 @@ def main() -> None:
         # Ending-only vocabulary occupies the new 0x7300+ bank and cannot
         # perturb established scenario/UI/name-entry glyph IDs.
         *active_ending_dialogue_strings,
+        *active_epilogue_dialogue_strings,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
@@ -3587,6 +3613,9 @@ def main() -> None:
         patch_reviewed_event_pages(data, IN_ROM.read_bytes(), glyph_by_char, reviewed_event_rows)
         patch_ending_dialogue_records(
             data, IN_ROM.read_bytes(), glyph_by_char, ending_dialogue_rows
+        )
+        patch_ending_dialogue_records(
+            data, IN_ROM.read_bytes(), glyph_by_char, epilogue_dialogue_rows
         )
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)

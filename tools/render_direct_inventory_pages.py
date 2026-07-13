@@ -155,6 +155,7 @@ def main() -> None:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--ownership")
     source.add_argument("--address", action="append", type=parse_int)
+    source.add_argument("--record-inventory", type=Path)
     parser.add_argument(
         "--out-dir",
         type=Path,
@@ -177,6 +178,18 @@ def main() -> None:
             pages_per_sheet=args.pages_per_sheet,
         )
         source_label = f"{len(args.address)} direct records"
+    elif args.record_inventory:
+        record_inventory = json.loads(args.record_inventory.read_text(encoding="utf-8"))
+        addresses = [int(str(row["address"]), 16) for row in record_inventory["records"]]
+        sheets = render_address_pages(
+            rom,
+            addresses,
+            args.out_dir,
+            scale=args.scale,
+            cols=args.cols,
+            pages_per_sheet=args.pages_per_sheet,
+        )
+        source_label = f"{len(addresses)} records from {args.record_inventory}"
     else:
         sheets = render_inventory_pages(
             rom,
