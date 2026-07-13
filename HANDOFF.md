@@ -2128,3 +2128,25 @@ The earlier default-name-only conclusion is superseded by the live-verified
   than being treated as a ROM failure. Evidence includes
   `captures/run/7361_s25_briefing1.png`, `7361_s25_briefing2.png`, and
   `7361_s25_arrange2.png`.
+
+### Scenario 26 Dialogue Alignment (2026-07-13)
+
+- Scenario 26 contains 71 logical Japanese records and 102 physical pages in
+  `0x1B2494..0x1B3832`, inside event block `0x1B2012..0x1B3872`. All 71
+  candidates are dialogue; unlike Scenario 25, this set has no structured
+  non-text candidate that must be excluded.
+- Japanese logical records 0..68 align positionally with English records
+  `1616..1684`. They cover Egbert's trap and confrontation with Jessica,
+  their history, the Runestone reward, unit-death branches, the optional Death
+  Tower rematch, Egbert's death, and Jessica's aftermath.
+- Japanese logical records 69 and 70 at `0x1B380A` and `0x1B3832` are
+  source-only. The former orders the party to end the age of Darkness; the
+  latter is an enemy battle taunt asking for a more entertaining fight.
+- English records `1899/1900` describe Alhazard below the castle and finishing
+  the battle. They correspond to Scenario 25's source-only final records and
+  are cross-scenario residue in the English Scenario 26 mapping; do not apply
+  them to the two Japanese-only Scenario 26 records.
+- Nine reviewed Japanese source sheets are under
+  `captures/analysis/event_pages_jp/scenario_26/`, ending at
+  `scenario_26_pages_08.png`. Translation, Korean sheet review, build tests,
+  and live deployment/opening verification are still pending.
