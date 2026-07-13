@@ -38,6 +38,7 @@
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
+- `tools/build_epilogue_probe_rom.py`: 원본 엔딩 선택 루틴의 조건표만 임시로 바꿔 지정한 후일담 레코드를 실제 엔딩 렌더러로 확인할 개발용 ROM을 만듭니다. 생성 ROM은 배포·커밋하지 않습니다. 구조와 사용 순서는 `docs/epilogue_probe.md`에 기록합니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.

@@ -2470,3 +2470,28 @@ contains 57 safe syllables as documented below and in
   unclassified candidates. All 129 tests pass. Actual playback through the
   ending renderer is not yet proven; the next development task is an ignored,
   non-distribution epilogue selector/harness for BlastEm verification.
+
+### Stock Ending Epilogue Probe (2026-07-13)
+
+- Static disassembly found the actual normal-character epilogue selector at
+  `0x01DC64`. It reads character index RAM `0xFFFFAE90`, indexes the group table
+  at `0x08916E`, evaluates two inclusive statistic ranges, and passes the
+  selected record pointer to the stock text object created by `0x0094DC` with
+  callback `0x37E4`.
+- `tools/build_epilogue_probe_rom.py` builds an ignored ROM that keeps this
+  original renderer but redirects the selected character slot to one requested
+  record. Other normal slots use a synthetic `FFFF` skip descriptor. Liana's
+  eight-pointer table at `0x089572` and the four world outcomes at `0x089592`
+  are handled separately, matching the original branches.
+- The two synthetic descriptors occupy verified `FF` space at `0x3FF000` in
+  the expanded probe copy only. The tool validates the Japanese record hash,
+  original selector tables, record presence, reserved free space, and updates
+  the Mega Drive checksum. Record 18 produced an ignored checksum `4D2F` ROM
+  without launching BlastEm.
+- `tests/test_epilogue_probe_rom.py` covers all 90 record-to-character-slot
+  mappings, normal and special pointer rewrites, Japanese source rejection,
+  and checksum regeneration. Detailed usage and the remaining Scenario 27
+  end-state step are in `docs/epilogue_probe.md`.
+- Live playback remains pending. The user explicitly requested no emulator,
+  mouse, or keyboard activity while doing other work, so no BlastEm process was
+  started during this analysis.
