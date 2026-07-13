@@ -19,9 +19,9 @@ a candidate, not proof that the data is visible text.
 - Name-entry resources: 16
 - Credits records: 60
 - Untranslated ending fragments: 0
-- Untranslated epilogue fragments: 63
+- Untranslated epilogue fragments: 54
 - Declared ending translation fragments: 22
-- Declared epilogue translation fragments: 27
+- Declared epilogue translation fragments: 36
 - Screen-local token streams: 41
 - Item/shop local resources: 19
 - Structured-data false positives: 111

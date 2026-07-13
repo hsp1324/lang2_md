@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 27,
+  "translated_record_count": 36,
   "records": [
     {
       "address": "0x0895A2",
@@ -372,7 +372,8 @@
       "page_break_count": 6,
       "line_break_count": 0,
       "english_reference": "Rejecting the grievous harm she\ncaused while being manipulated\nby , joined the Great\nTemple of Light in Estol as a\nSister.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent...\nEstol, being no exception, was\nalso exposed to the terrible\nplague, but thanks to 's\ntireless research, a curative\npotion was developed.\nAnd so the continent was able to\novercome the plague.\nShe was appointed archbishop of\nEstol, not just for meritorious\ndeeds, but also because of her\nstrong religious faith, vast\nknowledge, and gentle heart.\nShe devoted the rest of her life\nto creating a world without war.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친상처를딛고라나는에스톨의\n빛의대신전에수녀로들어갔다.\f그곳에서사람들의행복을위해\n봉사하는나날을보냈다.\f그뒤대륙전역에\n무서운역병이퍼지기시작했다.\f에스톨도역병을피하지못했지만\n라나의필사적인연구끝에\n특효약이개발됐다.\f그덕분에대륙은역병을\n극복할수있었다.\f공적뿐아니라깊은신앙과지식\n따뜻한마음을인정받은라나는\n에스톨의대주교로임명됐다.\f그뒤전쟁없는세상을만들기위해\n평생을바쳤다."
     },
     {
       "address": "0x08CE08",
@@ -384,7 +385,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Rejecting the grievous harm she\ncaused while being manipulated\nby , joined the Great\nTemple of Light in Estol as a\nSister.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent...\nEstol, being no exception, was\nalso exposed to the terrible\nplague, but thanks to 's\ntireless research, magic that\ncould heal it was invented.\nAnd so the continent was able to\novercome the plague.\nShe was appointed archbishop of\nEstol, not just for meritorious\ndeeds, but also because of her\nstrong religious faith, vast\nknowledge, and gentle heart.\nShe devoted the rest of her life\nto creating a world without war.\nShe came to be known by future\ngenerations as a surpassing\narchbishop who brought peace\nto the continent.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친상처를딛고라나는에스톨의\n빛의대신전에수녀로들어갔다.\n그곳에서사람들의행복을위해봉사했다.\f대륙에역병이퍼져에스톨도\n위기에빠졌지만라나의연구끝에\n치료마법이탄생했다.\f그덕분에대륙은역병을\n극복할수있었다.\f공적뿐아니라깊은신앙과지식\n따뜻한마음을인정받은라나는\n에스톨의대주교로임명됐다.\f그뒤전쟁없는세상을만들기위해\n평생을바쳤다.\f대륙에평화를가져온가장위대한\n대주교로후세에전해졌다."
     },
     {
       "address": "0x08D062",
@@ -396,7 +398,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Rejecting the grievous harm she\ncaused while being manipulated\nby , joined the Great\nTemple of Light in Estol as a\nSister.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent...\nEstol, being no exception, was\nalso exposed to the terrible\nplague, but thanks to 's\ntireless research, magic that\ncould heal it was invented.\nWith that one act, she had\neliminated the plague before\nit could cause severe damage.\nShe later became the pope of\nEstol, not just for meritorious\ndeeds, but also because of her\nstrong religious faith, vast\nknowledge, and gentle heart.\nShe devoted the rest of her life\nto creating a world without war.\nHer teachings, full of kindness,\nspread across the continent and\neven brought forth peace.\nHaving earned the respect of\ncountless nations, she came\nto be regarded by subsequent\ngenerations as a holy woman.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친상처를딛고라나는에스톨의\n빛의대신전에수녀로들어갔다.\n그곳에서사람들의행복을위해봉사했다.\f대륙에역병이퍼져에스톨도\n위기에빠졌지만라나의연구끝에\n치료마법이탄생했다.\f큰피해가생기기도전에\n역병은자취를감췄다.\f공적뿐아니라깊은신앙과지식\n따뜻한마음을인정받은라나는\n에스톨의교황으로임명됐다.\f자비로운가르침은대륙에퍼져\n평화를가져왔고라나는전쟁없는\n세상을위해평생을바쳤다.\f수많은나라의존경을받은라나는\n위대한성녀로후세에전해졌다."
     },
     {
       "address": "0x08D2D8",
@@ -408,7 +411,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Sadly, 's mental anguish\nover harming innocent people\nwhile being manipulated by\nhad not yet healed.\nIn order to help alleviate her\npain, she became a Sister at the\nGreat Temple of Light in Estol.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent...\nEstol, being no exception, was\nalso exposed to the terrible\nplague. worked tirelessly\nat her research, but tragically\nit all came to naught.\nHowever, since Alhazard was lost\nand the powers of Darkness were\ncut off, at least being able to\nregain her prior gentle nature\nis something to be thankful for.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친마음의상처는아직\n아물지않은듯했다.\f상처를이겨내고자라나는에스톨의\n빛의대신전에서수녀가되어\n사람들의행복을위해봉사했다.\f그뒤대륙전역에역병이퍼졌고\n에스톨도그위협을피하지못했다.\f라나는필사적으로연구했지만\n안타깝게도아무성과도얻지못했다.\f그래도알하자드와보젤이사라져\n어둠의힘에서벗어나본래의\n따뜻한마음을되찾은것은다행이었다."
     },
     {
       "address": "0x08D4DA",
@@ -420,7 +424,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Sadly, 's mental anguish\nover harming innocent people\nwhile being manipulated by\nhad not yet healed.\nIn order to help alleviate her\npain, she became a Sister at the\nGreat Temple of Light in Estol.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent...\nEstol, being no exception, was\nalso exposed to the terrible\nplague, but thanks to 's\ntireless research, a curative\npotion was developed.\nThe medicine was not always\ncompletely effective, but it\nwas said that approximately\nhalf the people were saved.\nBecause of this meritorious\ndeed, the name of Sister\ncame to be spoken of by future\ngenerations.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친마음의상처는아직\n아물지않은듯했다.\f상처를이겨내고자라나는에스톨의\n빛의대신전에서수녀가되어\n사람들의행복을위해봉사했다.\f그뒤대륙전역에\n무서운역병이퍼지기시작했다.\f에스톨도역병을피하지못했지만\n라나의필사적인연구끝에\n치료약이개발됐다.\f완전한약은아니었지만\n사람들의절반가량을구했다고한다.\f그공적으로수녀라나의이름은\n후세에길이전해졌다."
     },
     {
       "address": "0x08D6F0",
@@ -432,7 +437,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Sadly, 's mental anguish\nover harming innocent people\nwhile being manipulated by\nhad not yet healed.\nIn order to help alleviate her\npain, she became a Sister at the\nGreat Temple of Light in Estol.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent...\nEstol, being no exception, was\nalso exposed to the terrible\nplague, but thanks to 's\ntireless research, a curative\npotion was developed.\nThe medicine was not perfect,\ncausing serious side effects\nsuch as blindness, but because\nof it the people were able to\novercome the plague.\nIf had not been able to\ninvent the medicine, it is\nbelieved that approximately\nhalf of the total population\nwould have perished.\nBecause of her meritorious deed,\nthe name of Sister was\nknown for generations to come.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친마음의상처는아직\n아물지않은듯했다.\f상처를이겨내고자라나는에스톨의\n빛의대신전에서수녀가되어\n사람들의행복을위해봉사했다.\f그뒤대륙전역에\n무서운역병이퍼지기시작했다.\f에스톨도역병을피하지못했지만\n라나의필사적인연구끝에\n치료약이개발됐다.\f실명같은심각한부작용이있었지만\n그약덕분에역병을극복했다.\n약이없었다면인구절반이죽었을것이다.\f그공적으로수녀라나의이름은\n후세에길이전해졌다."
     },
     {
       "address": "0x08D940",
@@ -444,7 +450,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Sadly, 's mental anguish\nover harming innocent people\nwhile being manipulated by\nhad not yet healed.\nIn order to help alleviate her\npain, she became a Sister at the\nGreat Temple of Light in Estol.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent... Estol,\nbeing no exception, was also\nexposed to this terrible plague.\nworked tirelessly to find\na cure, but overexerted herself\nand ended up getting infected\nas well, passing away before\nanything could come of it.\nFor , who had never once\nknown any sort of happiness,\nthe curtain fell on her short\nlife, which had been filled\nwith so much sadness.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친마음의상처는아직\n아물지않은듯했다.\f상처를이겨내고자라나는에스톨의\n빛의대신전에서수녀가되어\n사람들의행복을위해봉사했다.\f그뒤대륙에역병이퍼졌고\n에스톨도그위협을피하지못했다.\f라나는치료법을찾으려무리한끝에\n자신도감염되어아무성과도\n남기지못한채숨을거뒀다.\f한번도행복을누리지못한라나의\n슬픔으로가득한짧은생은\n그렇게막을내렸다."
     },
     {
       "address": "0x08DB40",
@@ -456,7 +463,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Sadly, 's mental anguish\nover harming innocent people\nwhile being manipulated by\nhad not yet healed.\nIn order to help alleviate her\npain, she became a Sister at the\nGreat Temple of Light in Estol.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent... Estol,\nnot surprisingly, also felt the\neffects of this terrible plague.\nworked tirelessly to find\na cure, but overexerted herself\nand ended up getting infected\nas well.\nHowever, at the brink of death,\nshe succeeded in developing a\npreventative potion, and wound\nup saving the continent.\nAfter seeing the effect of the\nmedicine with her own eyes, she\nbreathed her last breath. It is\nsaid that she had a smile of\nhappiness on her face.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친마음의상처는아직\n아물지않은듯했다.\f상처를이겨내고자라나는에스톨의\n빛의대신전에서수녀가되어\n사람들의행복을위해봉사했다.\f그뒤대륙에역병이퍼졌고\n에스톨도그위협을피하지못했다.\f라나는치료법을찾으려무리한끝에\n자신도역병에감염되고말았다.\f하지만죽음직전에예방약을완성해\n대륙을구하는데성공했다.\f약의효과를두눈으로확인한라나는\n행복한미소를지은채\n마지막숨을거뒀다고한다."
     },
     {
       "address": "0x08DD68",
@@ -468,7 +476,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Sadly, 's mental anguish\nover harming innocent people\nwhile being manipulated by\nhad not yet healed.\nIn order to help alleviate her\npain, she became a Sister at the\nGreat Temple of Light in Estol.\nThere she spent each day working\ntowards the happiness of people.\nOne day a plague began sweeping\nacross the continent... Estol,\nnot surprisingly, also felt the\neffects of this terrible plague.\nBut thanks to 's tireless\nresearch, a healing potion was\ncreated. It was not all that\neffective, but was able to lower\nthe death rate a little bit.\nwas dubbed a Mirror of\nthe Sisters for her actions.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "보젤에게조종당해죄없는이들을\n해친마음의상처는아직\n아물지않은듯했다.\f상처를이겨내고자라나는에스톨의\n빛의대신전에서수녀가되어\n사람들의행복을위해봉사했다.\f그뒤대륙에역병이퍼졌고\n에스톨도그위협을피하지못했다.\f라나의필사적인연구끝에치료약이\n개발됐다.효과는약했지만\n사망자를조금이나마줄였다.\f그헌신으로라나는\n수녀의귀감이라불렸다."
     },
     {
       "address": "0x08DF62",

@@ -47,7 +47,7 @@ class JapaneseEpilogueInventoryTests(unittest.TestCase):
         )
 
     def test_translation_progress_is_explicit(self):
-        self.assertEqual(self.result["translated_record_count"], 27)
+        self.assertEqual(self.result["translated_record_count"], 36)
         translated = {
             row["address"]
             for row in self.result["records"]
@@ -62,6 +62,8 @@ class JapaneseEpilogueInventoryTests(unittest.TestCase):
                 "0x08B106", "0x08B314", "0x08B50C", "0x08B6D8",
                 "0x08B8C4", "0x08BAD2", "0x08BCF8", "0x08BF60", "0x08C182",
                 "0x08C358", "0x08C57E", "0x08C790", "0x08C9AA",
+                "0x08CBCE", "0x08CE08", "0x08D062", "0x08D2D8", "0x08D4DA",
+                "0x08D6F0", "0x08D940", "0x08DB40", "0x08DD68",
             },
         )
 

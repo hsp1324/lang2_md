@@ -89,13 +89,13 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 4CAF
+checksum: 8A46
 ```
 
-The current source also builds checksum `4CAF`. It includes the earlier
+The current source also builds checksum `8A46`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-27 of 90 character epilogue records. The latest live regression verified exact
+36 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
 
@@ -2446,3 +2446,27 @@ contains 57 safe syllables as documented below and in
 - This is still static record verification. A temporary ending/epilogue selector
   or natural final-route playthrough must verify these pages in the actual
   ending renderer before full-game completion can be claimed.
+
+### Lana Epilogue Outcomes (2026-07-13)
+
+- Lana's nine outcome records at `0x08CBCE..0x08DD68` are translated in
+  `localization/epilogue_dialogue_ko.json` from Japanese ROM source records,
+  with English records `E1943..E1951` used only as continuity references.
+  Every source hash, in-place capacity, and original 4-6 page-break count is
+  enforced before the builder writes the record.
+- The translations keep the original outcome distinctions: medicine versus
+  healing magic, partial or complete plague recovery, blindness as a serious
+  side effect, appointment as archbishop or pope, failure to find a cure,
+  infection and death without results, completing a preventative medicine at
+  the cost of Lana's life, and the modest result that earns her recognition as
+  a model sister.
+- Checksum `8A46` uses 799 custom glyphs through `0x731F`. The rendered record
+  sheets are under `captures/analysis/epilogue_records_ko_8a46_lana/`;
+  records 27-35 on sheets 02 and 03 contain Korean text through Lana's final
+  outcome, while record 36 correctly begins the still-untranslated Aaron
+  group. No blank page, clipping, or authored Japanese residue was visible.
+- Inventories now report 36 translated epilogues out of 90, 54 confirmed
+  untranslated epilogue fragments, 783 classified direct candidates, and zero
+  unclassified candidates. All 129 tests pass. Actual playback through the
+  ending renderer is not yet proven; the next development task is an ignored,
+  non-distribution epilogue selector/harness for BlastEm verification.
