@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 78,
+  "translated_record_count": 86,
   "records": [
     {
       "address": "0x0895A2",
@@ -1052,7 +1052,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nThis orphanage, which she had\nstarted as a charity enterprise,\nfell into financial trouble, and\noperating it became difficult.\nBut the prince of a neighboring\nkingdom, who had fallen in love\nwith 's beauty, started\nfinancing it.\nBecause of this, the war orphans\ngrew up in good health and began\na movement to prevent children\nfrom suffering the same fate as\nthem.\nIt is said that finally\naccepted the many passionate\nproposals of the prince. They\nmarried and lived in happiness.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f자선으로시작한고아원은자금난에빠져\n운영하기어려워졌다.\f리아나의아름다움에반한이웃나라왕자가\n고아원을돕기시작했다.\f그덕분에고아들은건강하게자라\n같은처지의아이를없애려는\n운동을시작했다.\f리아나는왕자의여러차례에걸친\n진심어린청혼을마침내받아들였다.\f두사람은결혼해\n행복하게살았다고한다."
     },
     {
       "address": "0x0939BC",
@@ -1066,7 +1067,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nTogether with , who\nhad returned to her, she\nlater went to each area\nof the continent to build\na peaceful world.\nBefore long, the many people who\nrelied on her character came to\nfinance her, and the orphanage\nturned into a learning center.\nTime passed, and the orphans,\nwho had grown up well, also came\nto help her. Eventually her wish\nwas fulfilled; she had succeeded\nin ending war on the continent.\nThey were revered as the ones\nwho finally brought peace.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f돌아온{0001}과함께평화로운세상을\n만들려고대륙각지를돌아다녔다.\f리아나의인품을믿은수많은사람이\n후원해고아원은교육기관으로발전했다.\f성장한고아들도힘을보태리아나의꿈은\n이뤄졌고대륙의전쟁은끝났다.\f두사람은마침내평화를가져온이로\n존경받았다고한다."
     },
     {
       "address": "0x093BCE",
@@ -1078,7 +1080,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nHowever, there was no one at\nthat time who would finance\nsuch an unprofitable enterprise.\nOne day, a messenger from the\ncastle of a neighboring kingdom\napproached , who was lost\nin thought at the moment.\nA king who had heard rumors of\nher beauty wanted her to marry\nhis son. He said that if she\naccepted, he would finance the\norphanage.\nShe seemed to be quite troubled,\nbut having no other options, she\nhad no choice but to accept.\nBut thanks to her selflessness,\nmany orphans were saved. As if\nto show their gratitude for all\nshe had done, they grew into\nfine adults.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f하지만이익이없는사업에돈을낼사람은\n당시에는아무도없었다.\f고민하던리아나에게어느날\n이웃나라성의사자가찾아왔다.\f미모의소문을들은왕이아들과결혼하면\n고아원에돈을대겠다고했다.\f리아나는무척고민했지만다른방법이없어\n결국제안을받아들일수밖에없었다.\f그희생으로많은고아가구원받아\n은혜에보답하듯훌륭한어른으로자랐다."
     },
     {
       "address": "0x093DE4",
@@ -1090,7 +1093,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nThis orphanage, which she had\nstarted as a charity enterprise,\nfell into financial trouble, and\noperating it became difficult.\nBut a wealthy aristocrat, who\nhad taken a liking to some\ntime ago, started financing it.\nAnd thus the orphanage developed\ninto a learning center;\nwas able to save and teach many\nwar orphans.\nIt is said that finally\naccepted the many passionate\nproposals of the man. They were\nmarried and lived in happiness.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f자선으로시작한고아원은자금난에빠져\n운영하기어려워졌다.\f예전부터리아나를마음에둔부유한\n귀족이고아원을돕기시작했다.\f고아원은교육기관으로발전해많은\n전쟁고아를구하고가르칠수있었다.\f리아나는그남자의진심어린청혼을\n마침내받아들여결혼했고\n행복하게살았다고한다."
     },
     {
       "address": "0x093FAA",
@@ -1102,7 +1106,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nThis orphanage, which she had\nstarted as a charity enterprise,\nfell into financial trouble, and\noperating it became difficult.\nBefore long, the many people who\nrelied on her character came to\nfinance her, and the orphanage\nturned into a learning center.\nBecause of this, the war orphans\ngrew up in good health and began\na movement to prevent children\nfrom suffering the same fate as\nthem.\nShe came to be revered by future\ngenerations as a holy woman.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f자선으로시작한고아원은자금난에빠져\n운영하기어려워졌다.\f리아나의인품을믿은수많은사람이\n후원해고아원은교육기관으로발전했다.\f그덕분에고아들은건강하게자라\n같은처지의아이를없애려는\n운동을시작했다.\f리아나는후세에\n성녀로추앙받게됐다."
     },
     {
       "address": "0x09419A",
@@ -1114,7 +1119,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nHowever, there was no one at\nthat time who would finance\nsuch an unprofitable enterprise.\nBut could not stand by and\nwatch as the war orphans died of\nstarvation.\nUndertaking physical labor, she\nchose to do arduous jobs and\nsomehow managed to scrape the\nmoney together.\nBut , suffering from\nstarvation and having put\ntoo much strain on her body,\neventually collapsed.\nUnable to realize her dream,\nshe breathed her last breath.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f하지만이익이없는사업에돈을낼사람은\n당시에는아무도없었다.\f리아나는고아들이굶어죽는것을\n그저보고만있을수없었다.\f힘든육체노동을하며어떻게든\n운영비를마련했다.\f그러나굶주림과과로를견디지못해\n꿈을이루지못한채\n마지막숨을거뒀다."
     },
     {
       "address": "0x09438A",
@@ -1126,7 +1132,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nHowever, there was no one at\nthat time who would finance\nsuch an unprofitable enterprise.\nBut then a well-mannered man who\nhad been wooing her promised to\nfinance it if she married him.\n, who was pure of heart and\ndidn't know how to be wary of\npeople, married him.\nBut the man had never intended\nto finance the orphanage from\nthe very beginning; he was only\nusing her.\n, finally realizing that\nshe had been tricked, grew tired\nof her life and is said to have\ngone on a journey alone.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f하지만이익이없는사업에돈을낼사람은\n당시에는아무도없었다.\f구혼하던신사와결혼하면고아원을\n돕겠다는약속을받았다.\f사람을의심할줄모르는순수한리아나는\n그남자와결혼했다.\f하지만그는처음부터리아나를이용했을뿐\n속았음을안그녀는삶에지쳐\n홀로여행을떠났다고한다."
     },
     {
       "address": "0x09458C",
@@ -1138,7 +1145,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Returning to her home village,\nstarted an orphanage for\nthose who had lost their parents\nduring the war.\nHowever, there was no one at\nthat time who would finance\nsuch an unprofitable enterprise.\nBut then a well-mannered man who\nhad been wooing her promised to\nfinance it if she married him.\n, who was pure of heart and\ndidn't know how to be wary of\npeople, married him.\nBut the man had never intended\nto finance the orphanage from\nthe very beginning; he was only\nusing her.\n, finally realizing that\nshe had been tricked, became\nindependent once again and\nmanaged the orphanage herself.\nHowever the constant exhaustion\nended up ruining her health, and\nshe quietly passed away.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "고향으로돌아온리아나는전쟁으로\n부모를잃은아이들을위해\n고아원을세웠다.\f하지만이익이없는사업에돈을낼사람은\n당시에는아무도없었다.\f구혼하던신사와결혼하면고아원을\n돕겠다는약속을받았다.\f사람을의심할줄모르는순수한리아나는\n그남자와결혼했다.\f하지만그는처음부터리아나를\n이용하려했을뿐이었다.\f속았음을안리아나는다시홀로서서\n직접고아원을운영했지만과로로\n몸이무너져조용히숨을거뒀다."
     },
     {
       "address": "0x0947E0",

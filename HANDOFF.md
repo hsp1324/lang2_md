@@ -92,14 +92,14 @@ Last live-verified build during this handoff:
 checksum: 80E6
 ```
 
-The current source builds checksum `3E98`. It includes the earlier
+The current source builds checksum `7E98`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-78 of 90 character epilogue records. The latest live regression verified exact
+86 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The Aaron-through-villain epilogues added after that live run have only static
-record-sheet and automated verification so far; do not describe checksum `3E98` as live
+The Aaron-through-Liana epilogues added after that live run have only static
+record-sheet and automated verification so far; do not describe checksum `7E98` as live
 verified.
 
 Build command:
@@ -2618,3 +2618,28 @@ contains 57 safe syllables as documented below and in
   epilogue fragments, 783 classified direct candidates, and zero unclassified
   candidates. All 134 tests pass. No emulator or input automation was used;
   stock ending playback remains pending.
+
+### Liana Epilogue Outcomes (2026-07-13)
+
+- Liana's eight special-selector records at `0x0937B2..0x09458C` are
+  translated in `localization/epilogue_dialogue_ko.json`. Japanese source
+  sheets 07 and 08 in `captures/analysis/epilogue_records_jp_original/` were
+  the translation authority; English records `E1970..E1977` were continuity
+  references only. Full hashes, capacities, original 4-5 page-break counts,
+  and record 79's single dynamic protagonist-name control are enforced.
+- The branches distinguish royal or noble support and marriage, working with
+  the returning protagonist to end war, accepting a political marriage to fund
+  the orphanage, becoming revered as a saint, death from starvation and
+  overwork, abandonment after a fraudulent marriage, and independent orphanage
+  management ending in death from exhaustion.
+- These records use the original direct eight-pointer table at `0x089572`, not
+  the normal statistic descriptor groups. `tools/build_epilogue_probe_rom.py`
+  and its tests retain this separate selector path.
+- Checksum `7E98` uses 833 custom glyphs through `0x7341`. Static sheets are in
+  `captures/analysis/epilogue_records_ko_7e98_liana/`; records 78-85 on sheets
+  06 and 07 contain Korean authored text without visible blank pages, clipping,
+  or Japanese residue.
+- Inventories now report 86 translated epilogues, four confirmed untranslated
+  world-epilogue fragments, 783 classified direct candidates, and zero
+  unclassified candidates. All 134 tests pass. No emulator or input automation
+  was used; stock ending playback remains pending.

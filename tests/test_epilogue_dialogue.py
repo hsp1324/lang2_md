@@ -17,8 +17,8 @@ class EpilogueDialogueTests(unittest.TestCase):
             ROOT / builder.EPILOGUE_DIALOGUE_TRANSLATIONS
         )
 
-    def test_normal_character_and_villain_outcomes_are_complete(self):
-        self.assertEqual(len(self.rows), 78)
+    def test_character_villain_and_liana_outcomes_are_complete(self):
+        self.assertEqual(len(self.rows), 86)
         self.assertEqual(
             {int(row["english_record"]) for row in self.rows},
             set(range(1934, 1943))
@@ -29,7 +29,8 @@ class EpilogueDialogueTests(unittest.TestCase):
             | set(range(1952, 1961))
             | set(range(1978, 1987))
             | set(range(1925, 1934))
-            | set(range(1919, 1925)),
+            | set(range(1919, 1925))
+            | set(range(1970, 1978)),
         )
 
     def test_controls_page_breaks_capacity_and_glyphs(self):
