@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 72,
+  "translated_record_count": 78,
   "records": [
     {
       "address": "0x0895A2",
@@ -957,7 +957,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": ", the Prince of Darkness,\nhad tried countless times to\nensnare the world in a ruinous\ncataclysm.\nWith the manipulation of Emperor\n, his plans appeared to\nbe succeeding but were stopped\njust before completion.\nIronically, his loss had\nnot been at the hands of the\nDescendants of Light but rather\nand the evil sword\nAlhazard.\nThe flesh and soul of his\nimmortal body became the power\nof Darkness and were absorbed\nby Alhazard, which was then\nvanquished from this world.\nWith his death the threat of\nDarkness lifted, but as long as\nthis conflict is remembered in\nlegend, , the Prince of\nDarkness, will live on.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "어둠의왕자보젤은수없이세상을\n파멸의위기에빠뜨리려했다.\f베른하르트황제를조종해계획은\n성공직전까지갔지만막판에저지됐다.\f아이러니하게그를쓰러뜨린것은\n빛의후예가아니라베른하르트와\n마검알하자드였다.\f불사의몸과영혼은어둠의힘이되어\n알하자드에흡수된뒤\n이세상에서사라졌다.\f그의죽음으로어둠의위협은걷혔지만\n전설이남는한어둠의왕자보젤의\n공포도계속전해질것이다."
     },
     {
       "address": "0x092A1C",
@@ -973,7 +974,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "The brave General , head\nof the Fire Dragon Army, had\nstood in the way of\nand the others countless times.\nHe was a big threat due to his\nexpert tactics refined through\nactual battlefield experience.\nHis last conflict was the land\nbattle within the town of Lunam.\nIt was the clash with\nin which used the Flame\nDragons to buy time to\nabscond with .\nLeaving Eliza, who was near\nchildbirth, rushed into\nthe battlefield when the Flame\nDragon Army was exposed to\ndanger.\nTo rescue his men,\ndisregarded his own safety and\nthrew himself into the frenzy of\nbattle. His life was cut short\nat the hand of .\nIn the present age, in which the\nconflict over the two swords has\nlong ended, his name is only\nremembered by history.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "염룡병단을이끈맹장발가스는\n실전에서다듬은전술로{0001}일행을\n수없이가로막은강적이었다.\f그의마지막전장은루나무에서벌어진\n시가전이었다.\f에그베르트가리아나를납치할시간을\n벌려고염룡병단은{0001}일행과\n루나무에서싸움을이어갔다.\f출산을앞둔엘리자를남겨둔발가스는\n부대가위기에빠지자전장으로달려갔다.\f부하들을구하려몸을돌보지않고\n난전속에뛰어들었지만\n{0000}의손에목숨을잃었다.\f두검의싸움이먼옛일이된지금\n그의이름만역사에남아있다."
     },
     {
       "address": "0x092C50",
@@ -988,7 +990,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": ", general of the Empire's\nIce Dragon Navy, had feigned\nhaving a personality that was\nthe exact opposite of .\nHer cool-headed and cruel\ndisposition, which did not match\nher gorgeous appearance, greatly\nmagnified the fear of her within\nthe Imperial armies.\nHowever, while setting sail to\nreturn to Emperor 's\ncastle, she was attacked by\nand the others.\nAs the fighting had begun much\nearlier than she anticipated,\nher reinforcements did not make\nit in time, and her life came to\nan end by 's blow.\nWith her death, the morale of\nthe surviving members of the\nIce Dragon Navy vanished, and\nthe unit collapsed.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "제국수룡병단의여장군이멜다는\n발가스와정반대의성격을\n가진듯행동했다.\f화려한외모와달리냉정하고잔혹해\n제국군조차그녀를두려워했다.\f베른하르트황제의성으로돌아가려고\n출항했지만{0001}일행의습격을받았다.\f예상보다이른전투에원군은오지못했고\n이멜다는{0000}의일격에쓰러졌다.\f그녀가죽자남은수룡병단은\n사기를잃고그대로무너졌다."
     },
     {
       "address": "0x092E50",
@@ -1004,7 +1007,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "'s life changed forever\nafter meeting , who\npossessed immense strength and\nthe charisma to charm people.\nThey both dreamed of a peaceful,\nunified continent, and so he bet\neverything on the man who would\nbe Emperor.\nAlthough young, , who had\nboth ingenuity and unusual skill\nwith the sword, was appointed\nthe commander of the glorious\nBlue Dragon Knights.\nHe was popular among his troops\nfor his good character, and his\ndeeds of valor and undefeated\ncombat record won him the trust\nof the Emperor.\nHowever, the Empire, its plans\ncrushed by the resistance of\n's group, began to fall\ninto decline.\nIn a battle to the death with\n, was unable to\ndefeat him and his comrades\nof surpassing skill.\nThen, knowing that it was the\nend for the Empire, he chose the\nsame fate as the Emperor he had\nbelieved in.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "강한힘과사람을사로잡는카리스마를\n지닌베른하르트와의만남은\n레온의삶을바꿨다.\f대륙통일과평화라는같은꿈을위해\n레온은황제가될남자에게\n모든것을걸었다.\f젊지만지략과뛰어난검술을갖춘그는\n청룡기사단의지휘관으로임명됐다.\f훌륭한인품으로부하의신망을얻고\n수많은무공과무패기록으로\n황제의신뢰를받았다.\f하지만{0001}일행의저항에계획이\n무너지며제국은쇠퇴하기시작했다.\f{0001}과의결전에서{0001}의동료들을\n이기지못한레온은제국의끝을깨닫고\n믿었던황제와같은운명을택했다."
     },
     {
       "address": "0x0930B6",
@@ -1020,7 +1024,8 @@
       "page_break_count": 7,
       "line_break_count": 0,
       "english_reference": "The Great Wizard . He led\nthe Black Dragon Sorcerers, and\nsecretly supported the Rayguard\nEmpire while pretending to serve\n.\n's real strength was his\nimmense magical power, said to\nbe the best on the continent,\nand his trenchant insights;\nhe excelled even in politics.\nAs staff officer of the Emperor,\nhe had complete control. This\ntoo was a task well suited to\nhis abundant knowledge and\ncleverness.\nThe one who had seen through\n's machinations and who had\nlaid out a brilliant stratagem\nwas none other than .\nHe obtained the evil sword\nAlhazard and succeeded in\nbestowing upon\nits unlimited power.\nHowever, he was opposed by the\nmany allies of , who had\nacquired Langrisser.\nWhen they fell into his trap,\nshowered upon them the\nconcentrated magic attacks of\nthe Black Dragon Sorcerers.\nBut due to a single attack by\n, who found a momentary\nopening, he died a heroic death.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "대마법사에그베르트는흑룡마도사단을\n이끌며그림자속에서레이갈드제국을\n떠받쳤다.\f대륙최고라불린막대한마력과\n날카로운통찰이진정한힘이었고\n정치에도뛰어났다.\f황제의참모로서전권을쥔것도\n풍부한지식과지혜를지닌그에게\n어울리는역할이었다.\f보젤의계략을간파해멋진작전을\n세운이도에그베르트였다.\f마검알하자드를손에넣어그무한한힘을\n베른하르트에게주는일에성공했다.\f하지만랑그릿사를얻은{0001}과\n{0001}의동료들이그앞을가로막았다.\f함정에빠진그들에게흑룡마도사단의\n집중마법공격을퍼부었다.\f그러나한순간의틈을찾은{0000}의\n일격을받고장렬히죽었다."
     },
     {
       "address": "0x093370",
@@ -1034,7 +1039,8 @@
       "page_break_count": 10,
       "line_break_count": 0,
       "english_reference": "Emperor , ruler of the\nGrand Empire Rayguard, in but a\nsingle generation revived the\nkingdom and thereafter conquered\nthe majority of the continent.\nHis charisma brought him not\nonly his four generals but also\na great many superbly-skilled\nsubordinates. Their performance\nalways met his expectations.\nHaving acquired Alhazard by\ndefeating , the Prince of\nDarkness who tried to manipulate\nhim, then became the\nstrongest man in the continent.\n]Men's hearts are weak, and\nthose who don't believe in\nanyone will hurt others.\"\nBecause he recognized human\nweaknesses, sought\nunification through military\nmight. But some might consider\nthat to be a ]reign of terror\".\nTo acquire the strength in which\nhe could be supreme in any kind\nof conflict, the war escalated\nand a great deal of innocent\nblood was spilt.\nBut with Langrisser in the\npossession of the Descendants of\nLight, who joined their hearts\ninto one, his dream collapsed...\nhad found himself\nin a decisive battle against\nwithin the underground\ntemple in the innermost depths\nof Velzeria Castle.\nHe suffered heavy, fatal wounds.\nWhen he realized that it was\nover for him, with his own hand\nthe once-mighty Emperor caused\nAlhazard to go out of control.\nIt was as if he had made the\ndistinction between right and\nwrong of the war he started\nhimself.\nFinally, he put an end to his\nlife, which had been full of\ntroublesome ups and downs.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "레이갈드대제국의황제베른하르트는\n한세대만에나라를되살린뒤\n대륙의절반이상을손에넣었다.\f네장군뿐아니라수많은유능한부하가\n그의카리스마에모여들었고\n항상기대에맞는활약을보였다.\f자신을조종하려던어둠의왕자보젤을\n쓰러뜨리고알하자드를얻은그는\n대륙최강의남자가됐다.\f사람의마음은약하다.아무도믿지못해\n서로에게상처를주는그약함을알기에\n무력으로통일하려했다.\f하지만보는이에따라그것은\n공포정치였을지도모른다.\f어떤싸움에도군림할힘을얻으려전쟁은\n격해졌고무고한피가끝없이흘렀다.\f마음을하나로모은빛의후예가\n랑그릿사를얻자그의꿈은무너졌다.\f벨제리아성가장깊은지하신전에서\n베른하르트는{0001}과\n마지막결전을벌였다.\f치명적인깊은상처를입은그는\n자신의끝을깨달았다.\f한때대륙을호령한황제는자기손으로\n알하자드를폭주시켰다.\f자신이일으킨전쟁의옳고그름을\n가리려는듯파란만장한삶을\n스스로끝냈다."
     },
     {
       "address": "0x0937B2",

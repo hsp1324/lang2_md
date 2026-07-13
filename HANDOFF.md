@@ -92,14 +92,14 @@ Last live-verified build during this handoff:
 checksum: 80E6
 ```
 
-The current source builds checksum `9599`. It includes the earlier
+The current source builds checksum `3E98`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-72 of 90 character epilogue records. The latest live regression verified exact
+78 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The Aaron, Lester, Hein, and Jessica epilogues added after that live run have only
-static record-sheet and automated verification so far; do not describe checksum `9599` as live
+The Aaron-through-villain epilogues added after that live run have only static
+record-sheet and automated verification so far; do not describe checksum `3E98` as live
 verified.
 
 Build command:
@@ -2590,6 +2590,31 @@ contains 57 safe syllables as documented below and in
   sheet 05 contain Korean authored text without visible blank pages, clipping,
   or Japanese residue.
 - Inventories now report 72 translated epilogues, 18 confirmed untranslated
+  epilogue fragments, 783 classified direct candidates, and zero unclassified
+  candidates. All 134 tests pass. No emulator or input automation was used;
+  stock ending playback remains pending.
+
+### Imperial And Villain Epilogue Outcomes (2026-07-13)
+
+- The six normal-selector villain records at `0x092820..0x093370` are
+  translated in `localization/epilogue_dialogue_ko.json`: Bozel, Vargas,
+  Imelda, Leon, Egbert, and Bernhardt. Japanese source sheet 07 in
+  `captures/analysis/epilogue_records_jp_original/` was the translation
+  authority; English records `E1919..E1924` were continuity references only.
+- Full Japanese hashes, capacities, original 4-10 page-break counts, and the
+  ordered `FFF7` protagonist-name controls are enforced. The Korean records
+  preserve all controls for Vargas (three), Imelda (two), Leon (three), Egbert
+  (three), and Bernhardt (one); Bozel has no dynamic-name control.
+- The outcomes retain the original causes and relationships: Bozel absorbed by
+  Alhazard, Vargas dying while rescuing his men, Imelda's Ice Dragon Navy
+  collapsing, Leon sharing Bernhardt's fate, Egbert's Black Dragon magic and
+  death, and Bernhardt's final battle and deliberate Alhazard runaway.
+- Checksum `3E98` uses 831 custom glyphs through `0x733F`. Static sheets are in
+  `captures/analysis/epilogue_records_ko_3e98_villains/`; records 72-77 on
+  sheet 06 contain Korean authored text without visible blank pages, clipping,
+  or Japanese residue. The visible `CTL` markers are intentional renderings of
+  preserved dynamic-name controls, not text corruption.
+- Inventories now report 78 translated epilogues, 12 confirmed untranslated
   epilogue fragments, 783 classified direct candidates, and zero unclassified
   candidates. All 134 tests pass. No emulator or input automation was used;
   stock ending playback remains pending.
