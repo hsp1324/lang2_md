@@ -92,14 +92,14 @@ Last live-verified build during this handoff:
 checksum: 80E6
 ```
 
-The current source builds checksum `64BF`. It includes the earlier
+The current source builds checksum `5361`. It includes the earlier
 Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
 dialogue work, the complete direct-name and ending-visit tables, and the first
-54 of 90 character epilogue records. The latest live regression verified exact
+63 of 90 character epilogue records. The latest live regression verified exact
 `매직나이트`/`나이트마스터` status labels and restored the original battle
 result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The Aaron and Lester epilogues added after that live run have only static
-record-sheet and automated verification so far; do not describe checksum `64BF` as live
+The Aaron, Lester, and Hein epilogues added after that live run have only static
+record-sheet and automated verification so far; do not describe checksum `5361` as live
 verified.
 
 Build command:
@@ -2548,3 +2548,26 @@ contains 57 safe syllables as documented below and in
   epilogue fragments, 783 classified direct candidates, and zero unclassified
   candidates. All 134 tests pass. This is static evidence only; no emulator or
   input automation was used, and stock ending playback is still pending.
+
+### Hein Epilogue Outcomes (2026-07-13)
+
+- Hein's nine outcome records at `0x090300..0x09135E` are translated in
+  `localization/epilogue_dialogue_ko.json`. The Japanese source sheets 05 and
+  06 in `captures/analysis/epilogue_records_jp_original/` were read directly;
+  English records `E1978..E1986` served only as continuity references. Full
+  source hashes, capacities, and the original 4-5 page-break counts are
+  enforced for all nine records.
+- The branches retain their separate outcomes: practical magic and helping
+  people, discovering ancient spells and becoming a Great Wizard, founding a
+  continental wizard guild, producing useless novelty magic, fortune-telling
+  and finding royal treasure, weather control that enriches the continent,
+  failed reincarnation, being dragged into the demon realm by a forbidden
+  summon, and death caused by greed over weather-magic fees.
+- Checksum `5361` uses 819 custom glyphs through `0x7333`. Static sheets are in
+  `captures/analysis/epilogue_records_ko_5361_hein/`; records 54-62 on sheets
+  04 and 05 contain Korean authored text without visible blank pages,
+  clipping, or Japanese residue.
+- Inventories now report 63 translated epilogues, 27 confirmed untranslated
+  epilogue fragments, 783 classified direct candidates, and zero unclassified
+  candidates. All 134 tests pass. No emulator or input automation was used;
+  live playback through the stock ending renderer remains pending.

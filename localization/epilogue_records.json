@@ -3,7 +3,7 @@
   "record_count": 90,
   "text_range": "0x0895A2..0x0954E2",
   "pointer_search_range": "0x087000..0x089600",
-  "translated_record_count": 54,
+  "translated_record_count": 63,
   "records": [
     {
       "address": "0x0895A2",
@@ -723,7 +723,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "With the fighting over, he left\nhis home village and moved into\n's laboratory to be her\napprentice, in order to conduct\nmagical research.\nSince he was unable to perform\nany great feats in battle, he\nprimarily studied practical\nmagic, rather than theory.\nAs he learned greater and\ngreater magic, he steadily\ngrew stronger.\nEventually his talents awoke,\nand he became able to handle\nthings like the discovery of\nlong-lost ancient magic and even\nthe development of new spells.\nHe later left on a journey in\norder to help people with his\nmagic. It is said that he saved\ncountless lives and was welcomed\nby everyone wherever he went.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "전쟁이끝나자헤인은고향을떠나\n제시카의제자가되어그녀의연구소에서\n마법을연구하기시작했다.\f전장에서큰활약을못한그는화려함보다\n실용적인마법을주로연구하며\n꾸준히힘을길렀다.\f마침내재능이깨어나고대마법을찾고\n새로운마법까지개발할수있게됐다.\f그뒤마법으로사람들을돕고자\n여행을떠났다.\f수많은목숨을구한헤인은\n가는곳마다환영받았다고한다."
     },
     {
       "address": "0x09050E",
@@ -735,7 +736,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "Leaving the village he had grown\nup in, he worked hard on magical\nresearch at 's laboratory\nas her apprentice.\nThere, he not only discovered\npowerful, ancient magic, but he\nalso developed new spells, and\nso a great deal of new magic\ncame into being.\nHalf of it required the kind of\npower that only a small group of\npeople could control, but thanks\nto him the art of magic had been\nsignificantly advanced.\nA great revolution in magic was\nborn, and the teachings of\nbecame the basis for magic on\nthe continent.\nAnd thus acquired the title\nof Great Wizard at a young age.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "헤인은고향을떠나제시카의제자가되어\n그녀의연구소에서마법연구에힘썼다.\f강력한고대마법을발견하고새마법도\n개발해수많은마법이탄생했다.\f그중절반은일부천재만다룰수있었지만\n헤인덕분에마법기술은\n크게발전했다.\f마법의대혁명이일어나헤인의가르침은\n대륙마법의기초가됐다.\f그렇게헤인은젊은나이에\n대마법사라불리게됐다."
     },
     {
       "address": "0x090702",
@@ -747,7 +749,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Leaving the village he had grown\nup in, he worked hard on magical\nresearch at 's laboratory\nas her apprentice.\nThere, he not only discovered\npowerful, ancient magic, but he\nalso developed new spells, and\nso a great deal of new magic\ncame into being.\nHalf of it required the kind of\npower that only a small group of\npeople could control, but thanks\nto him the art of magic had been\nsignificantly advanced.\nCountless wizards flocked to\nhim, and before long a wizard\nguild on a continental scale\nhad been formed.\nThrough the energetic actions\nof this guild, magic became\neven more refined and advanced.\nAnd so, became known as\nthe finest Great Wizard in all\nof history.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "헤인은고향을떠나제시카의제자가되어\n그녀의연구소에서마법연구에힘썼다.\f강력한고대마법을발견하고새마법도\n개발해수많은마법이탄생했다.\f그중절반은일부천재만다룰수있었지만\n헤인덕분에마법기술은\n크게발전했다.\f수많은마법사가헤인에게모여들어\n마침내대륙규모의\n마술사길드가탄생했다.\f길드의활발한활동으로마법은\n더욱정교하고강력하게발전했다.\f헤인은역사상최고의대마법사로\n후세에이름을남겼다."
     },
     {
       "address": "0x090932",
@@ -759,7 +762,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "With the fighting over, he left\nhis home village and moved into\n's laboratory to be her\napprentice, in order to conduct\nmagical research.\nSince he was unable to perform\nany great feats in battle, he\nprimarily studied practical\nmagic, rather than theory.\nAt one point he tried to study\neven higher-level practical\nmagic, but it seemed to elude\nhis powers of comprehension.\nEventually he started dabbling\nin the research of new magic,\nbut all he produced was useless,\nchildish spells.\nPerhaps this was because he did\nnot understand the fundamental\nnature of magic very well.\nSeemingly content with his\nabilities, it is said that\nhe continued developing\nweird spells.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "전쟁이끝나자헤인은고향을떠나\n제시카의제자가되어그녀의연구소에서\n마법을연구하기시작했다.\f전장에서큰활약을못한그는화려함보다\n실용적인마법을주로연구했다.\f더높은수준의실용마법에도전했지만\n그의이해력으로는역부족이었다.\f새마법연구에도손을댔지만\n쓸모없는어린애장난같은\n마법만만들어냈다.\f마법의본질을제대로이해하지\n못한탓일것이다.\f그래도자기능력에만족한헤인은\n기묘한마법을계속개발했다고한다."
     },
     {
       "address": "0x090B5A",
@@ -771,7 +775,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "With the fighting over, he left\nhis home village and moved into\n's laboratory to be her\napprentice, in order to conduct\nmagical research.\n, who had recognized his own\ninexperience, studied various\nkinds of magic under .\nAt one point he thought up\na simple method of fortune-\ntelling using magic.\nHe would then do things like\npredict the following day's\nweather or look up healing\nremedies for people who were\nsick.\nBecause his success rate was\nhigh, he was revered by the\npeople in his area.\nEventually he used this skill to\nfind an ancient royal treasure.\nHe became very rich, and lived\nan extravagant life.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "전쟁이끝나자헤인은고향을떠나\n제시카의제자가되어그녀의연구소에서\n마법을연구하기시작했다.\f미숙함을깨달은헤인은제시카밑에서\n여러마법을배웠다.\f그러다마법을이용한간단한\n점술방법을생각해냈다.\f다음날날씨를맞히거나환자에게맞는\n치료법을점쳐주곤했다.\f적중률이높아근처사람들의\n큰존경을받았다.\f마침내그힘으로고대왕국의보물을찾아\n큰부자가되어호화롭게살았다."
     },
     {
       "address": "0x090D5E",
@@ -783,7 +788,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Leaving the village he had grown\nup in, he worked hard on magical\nresearch at 's laboratory\nas her apprentice.\n, who had recognized his own\ninexperience, studied various\nkinds of magic under .\nOn the side, he started to work\non the rediscovery of ancient\nmagic, and eventually he was\nrewarded.\nHe found a powerful spell to\ncontrol the climate at will,\nand became able to prevent crop\nfailures caused by things like\ndroughts.\nNews spread, and he was summoned\nby the kings and aristocrats to\nmanipulate the weather in each\nkingdom.\nIt is said that, thanks to him,\nthe entire continent became\nprosperous and countless people\nwere able to live in happiness.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "헤인은고향을떠나제시카의제자가되어\n그녀의연구소에서마법연구에힘썼다.\f미숙함을깨달은헤인은제시카밑에서\n여러마법을배웠다.\f한편으로고대마법을다시찾는연구에도\n손을댔고마침내성과를거뒀다.\f날씨를마음대로다루는강력한마법으로\n가뭄같은흉작을막을수있게됐다.\f소문을들은각국의왕과귀족들은\n날씨를바꾸려고헤인을불렀다.\f그덕분에대륙전체가풍요로워져\n수많은사람이행복하게살았다고한다."
     },
     {
       "address": "0x090F64",
@@ -795,7 +801,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "had confidence in his own\nmagic, but because of his poor\nperformance during the war,\nhe eventually admitted his own\npowerlessness.\nTo him who dreamed of becoming\na first-class wizard, the shock\nwas unbearable.\nHe regained his determination\nand began to consider starting\nhis magical education over from\nbirth.\nSo he studied the reincarnation\nmagic that could use\nnaturally, and bet everything\non his next life.\nBut, being incompetent, that\nsort of high-level magic was\nbeyond his ken, so nobody has\nheard of his reappearance yet.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "마법에자신이있던헤인은전쟁에서\n처참한결과를내자자신의무력함을\n깨닫고말았다.\f일류마법사를꿈꾸던그에게\n그충격은견딜수없는것이었다.\f각오를다진헤인은아예태어날때부터\n마법을다시배울생각을했다.\f제시카가쓰는환생마법을익혀\n다음생에모든것을걸었다.\f하지만그런고등마법은헤인에게\n무리였는지환생했다는소식은\n아직도들리지않는다."
     },
     {
       "address": "0x091144",
@@ -807,7 +814,8 @@
       "page_break_count": 4,
       "line_break_count": 0,
       "english_reference": "had confidence in his own\nmagic, but because of his poor\nperformance during the war,\nhe eventually realized his\nlack of experience.\nSo became an apprentice\nof and studied various\nkinds of magic under her.\nEventually, he too started to\nacquire some power and became\nable to control intermediate-\nlevel magic, which gave him\nconfidence.\nBecause of this, he wanted to\ntry a spell that had\ntold him to stay away from,\nand so, in secret, he tried\ncasting the magic.\nIt was a forbidden spell that\nsummoned a mighty demon. ,\nwho had failed to control the\nmonster, was dragged into the\nnetherworld.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "마법에자신이있던헤인은전쟁에서\n큰성과를내지못해자신의미숙함을\n깨닫고말았다.\f제시카의제자가되어그녀에게\n여러마법을배웠다.\f마침내중급마법을다룰힘을얻자\n헤인은자신감을되찾았다.\f그는제시카가금지한마법을써보고싶어\n몰래주문을외웠다.\f강력한데몬을부르는금단의주문이었다.\n마물을제어하지못한헤인은\n마계로끌려가고말았다."
     },
     {
       "address": "0x09135E",
@@ -819,7 +827,8 @@
       "page_break_count": 5,
       "line_break_count": 0,
       "english_reference": "Leaving the village he had grown\nup in, he worked hard on magical\nresearch at 's laboratory\nas her apprentice.\nHaving completely forgotten\nthe defeats he suffered in the\nwar, would only remember\nhis great accomplishments.\nBecause of that, he developed\ndelusions of grandeur and wound\nup with an arrogant and selfish\npersonality.\nHe eventually found a powerful\nspell to control the climate at\nwill, and became able to prevent\ncrop failures caused by things\nlike droughts.\nHe offered to manipulate the\nweather of each area, but his\nasking price was extremely\nsteep, which caused a great\ndeal of animosity.\nOne day he lost his life to the\nsword of a person who had been\ndriven temporarily insane out\nof anger at the outrageous sums\ndemanded.",
-      "translation_status": "untranslated"
+      "translation_status": "translated",
+      "target_korean": "헤인은고향을떠나제시카의제자가되어\n그녀의연구소에서마법연구에힘썼다.\f패배는모두잊고활약만기억한헤인은\n자기재능에취해버렸다.\f그결과과대망상에빠져오만하고\n이기적인성격이됐다.\f마침내날씨를마음대로다루는\n강력한마법을발견해가뭄같은\n흉작을막을수있게됐다.\f각지역의날씨를바꿔주겠다며나섰지만\n요구하는돈이너무비싸\n사람들의큰반감을샀다.\f터무니없는값에분노해제정신을잃은\n사람의칼에맞아헤인은\n목숨을잃고말았다."
     },
     {
       "address": "0x09158C",
