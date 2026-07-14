@@ -154,6 +154,7 @@ class NameEntryResourceTests(unittest.TestCase):
             all(
                 0xA5 <= code <= 0xDF
                 or code in builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES
+                or code in builder.BYTE_UI_EXT_CODE_BY_CHAR.values()
                 for code in codes.values()
             )
         )
@@ -172,6 +173,107 @@ class NameEntryResourceTests(unittest.TestCase):
             original_tiles[start : start + 32],
             "battle-result decoration tile 0xB0 changed",
         )
+
+    def test_playable_names_use_verified_sources_and_stable_extension_codes(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+
+        expected_names = {
+            0x061AC5: "엘윈",
+            0x061ACB: "리아나",
+            0x061ACF: "라나",
+            0x061AD3: "셰리",
+            0x061AD8: "헤인",
+            0x061ADC: "스코트",
+            0x061AE1: "키스",
+            0x061AE5: "아론",
+            0x061AEA: "레스터",
+            0x061AEF: "제시카",
+        }
+        for offset, text in expected_names.items():
+            capacity = builder.byte_string_capacity(self.rom, offset)
+            expected = bytes(codes[char] for char in text) + b"\xFF"
+            self.assertEqual(data[offset : offset + len(expected)], expected)
+            self.assertTrue(
+                all(value == 0xFF for value in data[offset + len(expected) : offset + capacity])
+            )
+        self.assertEqual(
+            {char: codes[char] for char in builder.BYTE_UI_EXT_CODE_BY_CHAR},
+            builder.BYTE_UI_EXT_CODE_BY_CHAR,
+        )
+
+    def test_extended_font_resource_and_renderer_hooks_are_installed(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+
+        self.assertEqual(
+            builder.be32(data, builder.BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION + 2),
+            builder.BYTE_UI_EXT_RESOURCE_TABLE,
+        )
+        self.assertEqual(
+            builder.be32(
+                data,
+                builder.BYTE_UI_EXT_RESOURCE_TABLE
+                + builder.BYTE_UI_EXT_RESOURCE_INDEX * 4,
+            ),
+            builder.BYTE_UI_EXT_RESOURCE_BASE,
+        )
+        self.assertEqual(data[builder.BYTE_UI_EXT_RESOURCE_BASE], 3)
+        tiles = builder.decompress_9dfe(data, builder.BYTE_UI_EXT_RESOURCE_BASE + 1)
+        self.assertEqual(len(tiles), builder.BYTE_UI_EXT_TILE_COUNT * 32)
+        self.assertEqual(
+            len({tiles[index * 32 : index * 32 + 32] for index in range(6)}),
+            6,
+        )
+        for offset in builder.BYTE_UI_FONT_LOAD_CALLS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9") + builder.BYTE_UI_FONT_LOAD_ROUTINE.to_bytes(4, "big"),
+            )
+        for offset in builder.BYTE_UI_PLANE_RENDER_CALLS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_PLANE_RENDER_ROUTINE.to_bytes(4, "big"),
+            )
+        for offset in builder.BYTE_UI_PANEL_RENDER_HOOKS:
+            self.assertEqual(
+                data[offset : offset + len(builder.BYTE_UI_PANEL_RENDER_ORIGINAL)],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_PANEL_RENDER_ROUTINE.to_bytes(4, "big")
+                + bytes.fromhex("4E 71"),
+            )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_PREP_ROSTER_HOOK :
+                builder.BYTE_UI_PREP_ROSTER_HOOK
+                + len(builder.BYTE_UI_PREP_ROSTER_ORIGINAL)
+            ],
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_PREP_ROSTER_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 71"),
+        )
+        for offset in builder.BYTE_UI_WORD_RENDER_CALLS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9") + builder.BYTE_UI_WORD_RENDER_ROUTINE.to_bytes(4, "big"),
+            )
+        for offset in builder.BYTE_UI_TILE_RENDER_CALLS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9") + builder.BYTE_UI_TILE_RENDER_ROUTINE.to_bytes(4, "big"),
+            )
+
+    def test_extension_renderer_maps_only_escape_bytes(self):
+        def mapped(value):
+            return value + 0x300 if builder.BYTE_UI_EXT_CODE_FIRST <= value <= builder.BYTE_UI_EXT_CODE_LAST else value
+
+        self.assertEqual(mapped(0xEF), 0xEF)
+        self.assertEqual(mapped(0xF0), 0x3F0)
+        self.assertEqual(mapped(0xF5), 0x3F5)
+        self.assertEqual(mapped(0xFE), 0x3FE)
 
     def test_scenario_one_status_classes_keep_exact_source_names(self):
         labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS

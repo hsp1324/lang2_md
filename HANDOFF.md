@@ -2757,5 +2757,28 @@ contains 57 safe syllables as documented below and in
 - The safe fix is an engine-level/context-specific byte-font bank or renderer
   extension, followed by patching every byte-name and class pointer from the
   Japanese source tables. A probe-only glyph swap or abbreviation is not a
-  production fix. Keep this regression open until later-scenario names and
-  classes are live-verified without changing the established Scenario 1 UI.
+  production fix.
+- The production fix relocates the 429-entry compressed-resource table to
+  `0x2B2000`, appends resource `429` at `0x2B2800`, and loads its 15 tiles at
+  VRAM `0x3F0..0x3FE`. Localized FF-terminated byte strings use `F0..FE` only
+  as escape values; the original `F0..FE` tiles remain untouched because they
+  contain live status graphics. The six currently used extension syllables
+  are `라/론/셰/카/코/키`.
+- Two approaches were rejected by live testing. Loading extension tiles into
+  `F0..FE` only for preparation was overwritten by later common font loads at
+  `CC80`, `C920`, and `CA70`. Mapping the roster path at `0x295B0` also did not
+  affect the visible five-name list because that is a different UI builder.
+  BlastEm `-l` writes unique executed block addresses to
+  `tools/blastem/address.log`; it identified the actual preparation list
+  builder at `0x22496`.
+- The left roster reads the name pointer table at `0x618E8` and writes ordinary
+  characters through `0x2251A`. Hook `0x22502` now preserves the DE/DF mark
+  path and maps `F0..FE` to `3F0..3FE` before the store. Other byte-name paths
+  are covered by the common word/tile/plane and status-panel render hooks in
+  `install_byte_ui_extension()`.
+- Checksum `524D` live-verifies Scenario 27 preparation as
+  `엘윈/헤인/셰리/아론/키스`; the plane rows contain `3F2`, `3F1`, and `3F5`
+  rather than raw `F2`, `F1`, and `F5`. Capture:
+  `captures/run/524d_s27_prep_names2.png`. Scenario 1 still shows
+  `엘윈/헤인` with the LV/status graphics intact in
+  `captures/run/524d_s01_prep2.png`. All 148 tests pass.

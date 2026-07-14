@@ -6,13 +6,13 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 87
-- Byte-modified declarations: 86
+- Declared patches: 94
+- Byte-modified declarations: 93
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
 | --- | ---: | ---: |
-| byte_ff_strings | 20 | 20 |
+| byte_ff_strings | 27 | 27 |
 | fixed_byte_strings | 7 | 6 |
 | fixed_word_strings | 16 | 16 |
 | direct_word_sequences | 2 | 2 |

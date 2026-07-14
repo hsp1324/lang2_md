@@ -1,10 +1,10 @@
 {
-  "declared_patch_count": 87,
-  "modified_patch_count": 86,
+  "declared_patch_count": 94,
+  "modified_patch_count": 93,
   "groups": {
     "byte_ff_strings": {
-      "entry_count": 20,
-      "modified_count": 20
+      "entry_count": 27,
+      "modified_count": 27
     },
     "fixed_byte_strings": {
       "entry_count": 7,
@@ -102,9 +102,72 @@
     },
     {
       "group": "byte_ff_strings",
+      "address": "0x061ACF",
+      "size_bytes": 4,
+      "target_korean": "라나",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AD3",
+      "size_bytes": 5,
+      "target_korean": "셰리",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
       "address": "0x061AD8",
       "size_bytes": 4,
       "target_korean": "헤인",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061ADC",
+      "size_bytes": 5,
+      "target_korean": "스코트",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AE1",
+      "size_bytes": 4,
+      "target_korean": "키스",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AE5",
+      "size_bytes": 5,
+      "target_korean": "아론",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AEA",
+      "size_bytes": 5,
+      "target_korean": "레스터",
+      "modified": true,
+      "reviewed": false,
+      "live_verified": false
+    },
+    {
+      "group": "byte_ff_strings",
+      "address": "0x061AEF",
+      "size_bytes": 6,
+      "target_korean": "제시카",
       "modified": true,
       "reviewed": false,
       "live_verified": false

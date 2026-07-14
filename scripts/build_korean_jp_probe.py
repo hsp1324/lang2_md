@@ -59,6 +59,15 @@ BYTE_UI_FONT_RESOURCE_TABLE = 0x0B0000
 BYTE_UI_FONT_RESOURCE_INDEX = 1
 BYTE_UI_FONT_RESOURCE_RELOC_BASE = 0x290000
 BYTE_UI_FONT_RESOURCE_RELOC_LIMIT = 0x2A0000
+BYTE_UI_RESOURCE_COUNT = 429
+BYTE_UI_EXT_RESOURCE_INDEX = BYTE_UI_RESOURCE_COUNT
+BYTE_UI_EXT_RESOURCE_TABLE = 0x2B2000
+BYTE_UI_EXT_RESOURCE_BASE = 0x2B2800
+BYTE_UI_EXT_RESOURCE_LIMIT = 0x2B3000
+BYTE_UI_EXT_ROUTINE_BASE = 0x2B3000
+BYTE_UI_EXT_ROUTINE_LIMIT = 0x2B3400
+BYTE_UI_EXT_VRAM_TILE = 0x03F0
+BYTE_UI_EXT_VRAM_ADDRESS = BYTE_UI_EXT_VRAM_TILE * 32
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 SCENARIO_GLYPH_LIST_RELOC_BASE = 0x270000
@@ -193,6 +202,69 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "레": 0xD1,
     "온": 0xD2,
 }
+# F0-FE remain untouched in the original 256-tile byte font because those
+# tiles contain live status graphics. In localized FF-terminated name strings
+# they instead act as escape codes for a second 8x8 font bank at VRAM 3F0-3FE.
+# Original half-width Japanese name/class records never use F0-FE.
+BYTE_UI_EXT_CODE_BY_CHAR = {
+    "라": 0xF0,
+    "론": 0xF1,
+    "셰": 0xF2,
+    "카": 0xF3,
+    "코": 0xF4,
+    "키": 0xF5,
+}
+BYTE_UI_EXT_CODE_FIRST = 0xF0
+BYTE_UI_EXT_CODE_LAST = 0xFE
+BYTE_UI_EXT_TILE_COUNT = BYTE_UI_EXT_CODE_LAST - BYTE_UI_EXT_CODE_FIRST + 1
+BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION = 0x009A10
+BYTE_UI_RESOURCE_LOOKUP_BASE_ORIGINAL = bytes.fromhex("20 7C 00 0B 00 00")
+BYTE_UI_FONT_LOAD_CALLS = (
+    0x00C920,
+    0x00CA70,
+    0x00CC80,
+    0x029D8E,
+    0x02D664,
+    0x02F718,
+)
+BYTE_UI_FONT_LOAD_CALL_ORIGINAL = bytes.fromhex("4E B9 00 00 99 B2")
+BYTE_UI_WORD_RENDER_CALLS = (0x0292CA, 0x029308, 0x029444, 0x02C1C8, 0x02C256)
+BYTE_UI_WORD_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 42 72")
+BYTE_UI_TILE_RENDER_CALLS = (0x0254EC, 0x02BEE4, 0x02C004, 0x02C040)
+BYTE_UI_TILE_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 54 F6")
+BYTE_UI_PLANE_RENDER_CALLS = (0x025CF6,)
+BYTE_UI_PLANE_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 43 86")
+BYTE_UI_PANEL_RENDER_HOOKS = (0x0222A4, 0x0222C6)
+BYTE_UI_PANEL_RENDER_ORIGINAL = bytes.fromhex("80 78 E3 90 36 FC FF F8")
+BYTE_UI_PREP_ROSTER_HOOK = 0x022502
+BYTE_UI_PREP_ROSTER_ORIGINAL = bytes.fromhex("0C 00 00 DF 66 00 00 12")
+BYTE_UI_ROSTER_RENDER_HOOK = 0x0295B0
+BYTE_UI_ROSTER_RENDER_ORIGINAL = bytes.fromhex("34 C0 51 CE FF D0")
+BYTE_UI_STATUS_RENDER_HOOK = 0x029B24
+BYTE_UI_STATUS_RENDER_ORIGINAL = bytes.fromhex(
+    "00 40 80 00 34 FC FF F8 34 C1 34 FC 00 01 34 C0 D2 FC 00 02 60 BC"
+)
+BYTE_UI_WORD_RENDER_ROUTINE = 0x2B3000
+BYTE_UI_TILE_RENDER_ROUTINE = 0x2B3100
+BYTE_UI_FONT_LOAD_ROUTINE = 0x2B3200
+BYTE_UI_ROSTER_RENDER_ROUTINE = 0x2B3240
+BYTE_UI_STATUS_RENDER_ROUTINE = 0x2B3280
+BYTE_UI_PLANE_RENDER_ROUTINE = 0x2B32C0
+BYTE_UI_PANEL_RENDER_ROUTINE = 0x2B3340
+BYTE_UI_PREP_ROSTER_ROUTINE = 0x2B3380
+
+BYTE_UI_PLAYABLE_NAME_SOURCES = {
+    0x061AC5: "ｴﾙｳｨﾝ",
+    0x061ACB: "ﾘｱﾅ",
+    0x061ACF: "ﾗｰﾅ",
+    0x061AD3: "ｼｪﾘｰ",
+    0x061AD8: "ﾍｲﾝ",
+    0x061ADC: "ｽｺｯﾄ",
+    0x061AE1: "ｷｰｽ",
+    0x061AE5: "ｱｰﾛﾝ",
+    0x061AEA: "ﾚｽﾀｰ",
+    0x061AEF: "ｼﾞｪｼｶ",
+}
 CLASS_BYTE_SUBSET_LABELS = {
     1: "파이터",
     3: "워록",
@@ -249,7 +321,14 @@ BYTE_UI_STRING_PATCHES = {
     # by the prep/status UI, unlike the experimental 0x974xx direct-string scan.
     0x061AC5: "엘윈",
     0x061ACB: "리아나",
+    0x061ACF: "라나",
+    0x061AD3: "셰리",
     0x061AD8: "헤인",
+    0x061ADC: "스코트",
+    0x061AE1: "키스",
+    0x061AE5: "아론",
+    0x061AEA: "레스터",
+    0x061AEF: "제시카",
     0x061AFC: "레온",
     0x061B00: "베른하르트",
     0x061B28: "에그베르트",
@@ -3130,10 +3209,303 @@ def validate_scenario1_class_sources(data: bytes | bytearray) -> None:
             )
 
 
+class _M68KCode:
+    def __init__(self) -> None:
+        self.code = bytearray()
+        self.labels: dict[str, int] = {}
+        self.fixups: list[tuple[int, str]] = []
+
+    def emit(self, payload: str | bytes) -> None:
+        self.code.extend(bytes.fromhex(payload) if isinstance(payload, str) else payload)
+
+    def label(self, name: str) -> None:
+        if name in self.labels:
+            raise ValueError(f"duplicate M68K label {name}")
+        self.labels[name] = len(self.code)
+
+    def branch_word(self, opcode: int, label: str) -> None:
+        self.code.extend(opcode.to_bytes(2, "big"))
+        self.fixups.append((len(self.code), label))
+        self.code.extend(b"\x00\x00")
+
+    def finish(self) -> bytes:
+        for displacement_offset, label in self.fixups:
+            if label not in self.labels:
+                raise ValueError(f"undefined M68K label {label}")
+            # 68000 word-branch displacements are relative to the extension
+            # word address (PC after reading the opcode), not after the full
+            # four-byte instruction.
+            displacement = self.labels[label] - displacement_offset
+            if not -0x8000 <= displacement <= 0x7FFF:
+                raise ValueError(f"M68K branch to {label} is out of range")
+            self.code[displacement_offset : displacement_offset + 2] = (
+                displacement & 0xFFFF
+            ).to_bytes(2, "big")
+        return bytes(self.code)
+
+
+def _build_byte_ui_word_renderer() -> bytes:
+    code = _M68KCode()
+    code.label("loop")
+    code.emit("70 00 10 18 0C 00 00 FF")
+    code.branch_word(0x6700, "done")  # beq.w
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "base")  # bcs.w
+    code.emit("06 40 03 00")
+    code.branch_word(0x6000, "store")
+    code.label("base")
+    code.emit("0C 00 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("34 C0 52 41")
+    code.branch_word(0x6000, "loop")
+    code.label("mark")
+    code.emit("53 41 53 42 34 FC FF FB 34 C1 34 C2 34 C0 52 41 52 42")
+    code.emit("34 FC FF FB 34 C1 34 C2")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_tile_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("48 E7 00 60")
+    code.label("loop")
+    code.emit("42 40 10 18 0C 00 00 FF")
+    code.branch_word(0x6700, "done")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 40 03 00")
+    code.branch_word(0x6000, "store")
+    code.label("base")
+    code.emit("0C 00 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("32 C0")
+    code.branch_word(0x6000, "loop")
+    code.label("mark")
+    code.emit("24 49 94 C1 94 C1 94 FC 00 02 34 80")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("4C DF 06 00 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_plane_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("48 E7 00 C0 32 09 22 78 81 C4")
+    code.label("loop")
+    code.emit("42 42 14 18 0C 02 00 FF")
+    code.branch_word(0x6700, "done")
+    code.emit("0C 02 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 42 03 00")
+    code.label("base")
+    code.emit(
+        "D4 78 E3 90 32 FC FF F8 32 C1 32 FC 00 01 32 C2 54 41"
+    )
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("21 C9 81 C4 4E B9 00 00 8A 6C 4C DF 03 00 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_prep_roster_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "store")
+    code.emit("06 40 03 00")
+    code.label("store")
+    code.emit("2E BC 00 02 25 1A 4E 75")
+    code.label("mark")
+    code.emit("2E BC 00 02 25 0A 4E 75")
+    return code.finish()
+
+
+def validate_byte_ui_playable_name_sources(data: bytes | bytearray) -> None:
+    for offset, expected in BYTE_UI_PLAYABLE_NAME_SOURCES.items():
+        capacity = byte_string_capacity(data, offset)
+        actual = bytes(data[offset : offset + capacity - 1]).decode("cp932")
+        if actual != expected:
+            raise ValueError(
+                f"playable name source changed at 0x{offset:06X}: "
+                f"expected {expected!r}, got {actual!r}"
+            )
+
+
+def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> None:
+    first_pointer = be32(data, BYTE_UI_FONT_RESOURCE_TABLE) & 0x00FFFFFF
+    table_size = first_pointer - BYTE_UI_FONT_RESOURCE_TABLE
+    if table_size != BYTE_UI_RESOURCE_COUNT * 4:
+        raise ValueError(
+            f"compressed resource table changed: expected {BYTE_UI_RESOURCE_COUNT} entries, "
+            f"got {table_size // 4}"
+        )
+
+    table_end = BYTE_UI_EXT_RESOURCE_TABLE + (BYTE_UI_RESOURCE_COUNT + 1) * 4
+    if table_end > BYTE_UI_EXT_RESOURCE_BASE:
+        raise ValueError("relocated compressed resource table overlaps extension resource")
+    if any(value != 0xFF for value in data[BYTE_UI_EXT_RESOURCE_TABLE:table_end]):
+        raise ValueError("relocated compressed resource table area is not blank")
+
+    for index in range(BYTE_UI_RESOURCE_COUNT):
+        put32(
+            data,
+            BYTE_UI_EXT_RESOURCE_TABLE + index * 4,
+            be32(data, BYTE_UI_FONT_RESOURCE_TABLE + index * 4),
+        )
+    put32(
+        data,
+        BYTE_UI_EXT_RESOURCE_TABLE + BYTE_UI_EXT_RESOURCE_INDEX * 4,
+        BYTE_UI_EXT_RESOURCE_BASE,
+    )
+
+    blank_tile = render_byte_ui_tile(" ", font)
+    tiles = bytearray(blank_tile * BYTE_UI_EXT_TILE_COUNT)
+    for char, code in BYTE_UI_EXT_CODE_BY_CHAR.items():
+        tile_index = code - BYTE_UI_EXT_CODE_FIRST
+        tiles[tile_index * 32 : tile_index * 32 + 32] = render_byte_ui_tile(char, font)
+    resource = bytes([0x03]) + compress_9dfe_literals(bytes(tiles))
+    resource_end = BYTE_UI_EXT_RESOURCE_BASE + len(resource)
+    if resource_end > BYTE_UI_EXT_RESOURCE_LIMIT:
+        raise ValueError("byte UI extension resource exceeds reserved bank")
+    if any(value != 0xFF for value in data[BYTE_UI_EXT_RESOURCE_BASE:resource_end]):
+        raise ValueError("byte UI extension resource area is not blank")
+    data[BYTE_UI_EXT_RESOURCE_BASE:resource_end] = resource
+
+    if data[
+        BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION :
+        BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION + 6
+    ] != BYTE_UI_RESOURCE_LOOKUP_BASE_ORIGINAL:
+        raise ValueError("compressed resource lookup base instruction changed")
+    data[
+        BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION :
+        BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION + 6
+    ] = bytes.fromhex("20 7C") + BYTE_UI_EXT_RESOURCE_TABLE.to_bytes(4, "big")
+
+    word_renderer = _build_byte_ui_word_renderer()
+    tile_renderer = _build_byte_ui_tile_renderer()
+    font_loader = bytes.fromhex(
+        "4E B9 00 00 99 B2"      # load the original 256-tile byte font
+        "48 E7 80 40"            # preserve d0/a1
+        "30 3C 81 AD"            # extension resource 429, queued DMA
+        "32 7C 7E 00"            # VRAM byte address for tile 3F0
+        "4E B9 00 00 99 B2"
+        "4C DF 02 01"
+        "4E 75"
+    )
+    plane_renderer = _build_byte_ui_plane_renderer()
+    panel_renderer = bytes.fromhex(
+        "0C 40 00 F0"            # extended escape word?
+        "65 04"                  # bcs.s base
+        "06 40 03 00"            # map F0-FE to 3F0-3FE
+        "80 78 E3 90"            # base: apply the active tile attributes
+        "36 FC FF F8"            # preserve the replaced command write
+        "4E 75"
+    )
+    prep_roster_renderer = _build_byte_ui_prep_roster_renderer()
+    roster_renderer = bytes.fromhex(
+        "0C 00 00 F0"            # extended escape byte?
+        "65 04"                  # bcs.s base
+        "06 40 03 00"            # map F0-FE to 3F0-3FE
+        "34 C0"                  # base: move.w d0,(a2)+
+        "53 46"                  # emulate dbra d6
+        "0C 46 FF FF"
+        "67 06"
+        "2E BC 00 02 95 84"      # branch target via the JSR return address
+        "4E 75"
+    )
+    status_renderer = bytes.fromhex(
+        "0C 00 00 F0"
+        "65 04"
+        "06 40 03 00"
+        "00 40 80 00"
+        "34 FC FF F8 34 C1 34 FC 00 01 34 C0"
+        "D2 FC 00 02"
+        "2E BC 00 02 9A F6"
+        "4E 75"
+    )
+    routines = {
+        BYTE_UI_WORD_RENDER_ROUTINE: word_renderer,
+        BYTE_UI_TILE_RENDER_ROUTINE: tile_renderer,
+        BYTE_UI_FONT_LOAD_ROUTINE: font_loader,
+        BYTE_UI_ROSTER_RENDER_ROUTINE: roster_renderer,
+        BYTE_UI_STATUS_RENDER_ROUTINE: status_renderer,
+        BYTE_UI_PLANE_RENDER_ROUTINE: plane_renderer,
+        BYTE_UI_PANEL_RENDER_ROUTINE: panel_renderer,
+        BYTE_UI_PREP_ROSTER_ROUTINE: prep_roster_renderer,
+    }
+    for offset, payload in routines.items():
+        if offset + len(payload) > BYTE_UI_EXT_ROUTINE_LIMIT:
+            raise ValueError("byte UI extension routine exceeds reserved bank")
+        if any(value != 0xFF for value in data[offset : offset + len(payload)]):
+            raise ValueError(f"byte UI routine area at 0x{offset:06X} is not blank")
+        data[offset : offset + len(payload)] = payload
+
+    for offset in BYTE_UI_FONT_LOAD_CALLS:
+        if data[offset : offset + 6] != BYTE_UI_FONT_LOAD_CALL_ORIGINAL:
+            raise ValueError(f"byte-font load call changed at 0x{offset:06X}")
+        data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_FONT_LOAD_ROUTINE.to_bytes(4, "big")
+    for offset in BYTE_UI_WORD_RENDER_CALLS:
+        if data[offset : offset + 6] != BYTE_UI_WORD_RENDER_CALL_ORIGINAL:
+            raise ValueError(f"byte word-render call changed at 0x{offset:06X}")
+        data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_WORD_RENDER_ROUTINE.to_bytes(4, "big")
+    for offset in BYTE_UI_TILE_RENDER_CALLS:
+        if data[offset : offset + 6] != BYTE_UI_TILE_RENDER_CALL_ORIGINAL:
+            raise ValueError(f"byte tile-render call changed at 0x{offset:06X}")
+        data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_TILE_RENDER_ROUTINE.to_bytes(4, "big")
+    for offset in BYTE_UI_PLANE_RENDER_CALLS:
+        if data[offset : offset + 6] != BYTE_UI_PLANE_RENDER_CALL_ORIGINAL:
+            raise ValueError(f"byte plane-render call changed at 0x{offset:06X}")
+        data[offset : offset + 6] = (
+            bytes.fromhex("4E B9")
+            + BYTE_UI_PLANE_RENDER_ROUTINE.to_bytes(4, "big")
+        )
+    for offset in BYTE_UI_PANEL_RENDER_HOOKS:
+        hook_end = offset + len(BYTE_UI_PANEL_RENDER_ORIGINAL)
+        if data[offset:hook_end] != BYTE_UI_PANEL_RENDER_ORIGINAL:
+            raise ValueError(f"byte panel-render hook changed at 0x{offset:06X}")
+        data[offset:hook_end] = (
+            bytes.fromhex("4E B9")
+            + BYTE_UI_PANEL_RENDER_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 71")
+        )
+    prep_roster_hook_end = BYTE_UI_PREP_ROSTER_HOOK + len(BYTE_UI_PREP_ROSTER_ORIGINAL)
+    if data[BYTE_UI_PREP_ROSTER_HOOK:prep_roster_hook_end] != BYTE_UI_PREP_ROSTER_ORIGINAL:
+        raise ValueError("prep commander roster hook changed")
+    data[BYTE_UI_PREP_ROSTER_HOOK:prep_roster_hook_end] = (
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_ROSTER_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 71")
+    )
+
+    if data[
+        BYTE_UI_ROSTER_RENDER_HOOK : BYTE_UI_ROSTER_RENDER_HOOK + 6
+    ] != BYTE_UI_ROSTER_RENDER_ORIGINAL:
+        raise ValueError("prep roster renderer hook changed")
+    data[BYTE_UI_ROSTER_RENDER_HOOK : BYTE_UI_ROSTER_RENDER_HOOK + 6] = (
+        bytes.fromhex("4E B9") + BYTE_UI_ROSTER_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    status_hook_end = BYTE_UI_STATUS_RENDER_HOOK + len(BYTE_UI_STATUS_RENDER_ORIGINAL)
+    if data[BYTE_UI_STATUS_RENDER_HOOK:status_hook_end] != BYTE_UI_STATUS_RENDER_ORIGINAL:
+        raise ValueError("commander status renderer hook changed")
+    status_hook = bytes.fromhex("4E B9") + BYTE_UI_STATUS_RENDER_ROUTINE.to_bytes(4, "big")
+    status_hook += bytes.fromhex("4E 71") * ((len(BYTE_UI_STATUS_RENDER_ORIGINAL) - 6) // 2)
+    data[BYTE_UI_STATUS_RENDER_HOOK:status_hook_end] = status_hook
+
+
 def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
     # Keep localized class names tied to the Japanese source table rather than
     # inferred unit appearance or generic cavalry/infantry descriptions.
     validate_scenario1_class_sources(data)
+    validate_byte_ui_playable_name_sources(data)
     fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
     word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
     chars = [
@@ -3147,7 +3519,9 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         )
         if ord(char) > 0x7F
     ]
-    code_by_char: dict[str, int] = {}
+    code_by_char: dict[str, int] = {
+        char: code for char, code in BYTE_UI_EXT_CODE_BY_CHAR.items() if char in chars
+    }
     used_codes: set[int] = set()
     for char in chars:
         if (
@@ -3178,6 +3552,8 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         )
     font_tiles = bytearray(decompress_9dfe(data, resource_offset + 1))
     for char, code in code_by_char.items():
+        if char in BYTE_UI_EXT_CODE_BY_CHAR:
+            continue
         tile_offset = code * 32
         if tile_offset + 32 > len(font_tiles):
             raise ValueError(f"byte UI glyph code 0x{code:02X} is outside font resource")
@@ -3190,6 +3566,7 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         BYTE_UI_FONT_RESOURCE_RELOC_BASE : BYTE_UI_FONT_RESOURCE_RELOC_BASE + len(relocated_resource)
     ] = relocated_resource
     put32(data, resource_table_entry, BYTE_UI_FONT_RESOURCE_RELOC_BASE)
+    install_byte_ui_extension(data, font)
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
         capacity = byte_string_capacity(data, offset)
