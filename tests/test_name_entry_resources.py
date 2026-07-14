@@ -1,6 +1,8 @@
 from pathlib import Path
 import unittest
 
+from PIL import ImageFont
+
 from scripts import build_korean_jp_probe as builder
 from tools.jp_text_font_analyzer import read_word_list
 
@@ -179,6 +181,17 @@ class NameEntryResourceTests(unittest.TestCase):
         builder.expand_rom(data)
         codes = builder.patch_byte_ui_strings(data)
 
+        resource_entry = (
+            builder.BYTE_UI_FONT_RESOURCE_TABLE
+            + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
+        )
+        font_offset = builder.be32(data, resource_entry) & 0x00FFFFFF
+        font_tiles = builder.decompress_9dfe(data, font_offset + 1)
+        extension_tiles = builder.decompress_9dfe(
+            data, builder.BYTE_UI_EXT_RESOURCE_BASE + 1
+        )
+        font = ImageFont.truetype(str(ROOT / "tools/fonts/Galmuri7.ttf"), 8)
+
         expected_names = {
             0x061AC5: "엘윈",
             0x061ACB: "리아나",
@@ -198,6 +211,15 @@ class NameEntryResourceTests(unittest.TestCase):
             self.assertTrue(
                 all(value == 0xFF for value in data[offset + len(expected) : offset + capacity])
             )
+            for char in text:
+                code = codes[char]
+                expected_tile = builder.render_byte_ui_tile(char, font)
+                if char in builder.BYTE_UI_EXT_CODE_BY_CHAR:
+                    tile_index = code - builder.BYTE_UI_EXT_CODE_FIRST
+                    actual_tile = extension_tiles[tile_index * 32 : tile_index * 32 + 32]
+                else:
+                    actual_tile = font_tiles[code * 32 : code * 32 + 32]
+                self.assertEqual(actual_tile, expected_tile, f"wrong tile for {char!r}")
         self.assertEqual(
             {char: codes[char] for char in builder.BYTE_UI_EXT_CODE_BY_CHAR},
             builder.BYTE_UI_EXT_CODE_BY_CHAR,
