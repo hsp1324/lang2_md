@@ -2739,13 +2739,13 @@ contains 57 safe syllables as documented below and in
 
 - Live checksum `3BC3` Scenario 27 preparation displayed correct `엘윈/헤인`
   but corrupt-looking remaining roster rows. The source roster is
-  `엘윈, 헤인, 셰리, 아론, 레스터`; the bad rows are the original Japanese
+  `엘윈, 헤인, 셰리, 아론, 키스`; the bad rows are the original Japanese
   byte-name records being drawn through the partially replaced Korean 8x8
   font. This is not an SRAM checksum failure or a 16x16 credits-glyph collision.
 - The actual byte-name pointer table is `0x0618E8`. Relevant unpatched records
   are `0x061AD3=シェリー`, `0x061AE5=アーロン`, and
-  `0x061AEA=レスター`. With the current global mapping those bytes render as
-  strings resembling `맨립헤-`, `인-랑나`, and `レ가제-`; capture evidence is
+  `0x061AE1=キース`. With the current global mapping those bytes render as
+  strings resembling `맨립헤-`, `인-랑나`, and a corrupt `키스`; capture evidence is
   `captures/run/3bc3_current_commander_names.png`.
 - The production byte-font pool is already 64/64. Exact playable-name coverage
   needs six additional syllables (`라/론/셰/카/코/키`) beyond the currently
