@@ -2706,3 +2706,56 @@ contains 57 safe syllables as documented below and in
 - The same run exposed Japanese credit overlays between ending scenes. Credits
   remain a full-localization task even though all 90 epilogue records are
   statically translated and all three selector classes now have live evidence.
+
+### Korean Credits And Three-Line Ending Windows (2026-07-14)
+
+- The credits pointer table is `0x0A333A`, with 60 ordered big-endian pointers
+  to records at `0x0A342A..0x0A3752`. The table SHA-256 is
+  `b2081d5421643bcce3dccf67ec6dc241177addd81184e85a7a945abc95141ebf`;
+  concatenated source records hash to
+  `3f01aa3cb7858ef4e62efb88e490552313310430cff4d0b93ca00f76d6404ac8`.
+- `localization/credits_ko.json` owns all 60 records. The builder validates both
+  hashes and every source address, relocates the records to
+  `0x2B0000..0x2B2000`, updates the pointer table, and preserves the final
+  `COPYRIGHT 1994 NCS` record plus the unrelated digit helper at `0x0A3788`.
+  Offline evidence is under `captures/analysis/credits_ko_relocated/`.
+- Live Scenario 27 playback exposed a real soft-lock at ending record
+  `0x0954E2`: a Korean page contained four explicit lines, but the stock visit
+  window only accepts three lines per form-feed page. Eleven ending pages and
+  two epilogue pages had the same risk. All were reflowed to at most three
+  lines, and both test modules now enforce the renderer limit in addition to
+  the existing 24-character line limit and control preservation.
+- The rebuilt production checksum is `E551`; the Scenario 27 ending probe is
+  `3BC3`. The full 145-test suite passes. A final live replay of the corrected
+  page and relocated credits remains required before committing this unit.
+- `tools/send_blastem_keys.py` now names BlastEm's right-Control keyboard
+  capture toggle as `capture`, Escape as `menu`, and Tab as `tab`. XTest input
+  can be lost after remote-desktop focus changes while direct game-key events
+  still work. BlastEm also supports `-s FILE` for startup GST loading, but GST
+  files are ROM-content-specific; do not use a state from another checksum as
+  proof of a current build.
+
+### Later-Scenario Commander Name Regression (2026-07-14)
+
+- Live checksum `3BC3` Scenario 27 preparation displayed correct `엘윈/헤인`
+  but corrupt-looking remaining roster rows. The source roster is
+  `엘윈, 헤인, 셰리, 아론, 레스터`; the bad rows are the original Japanese
+  byte-name records being drawn through the partially replaced Korean 8x8
+  font. This is not an SRAM checksum failure or a 16x16 credits-glyph collision.
+- The actual byte-name pointer table is `0x0618E8`. Relevant unpatched records
+  are `0x061AD3=シェリー`, `0x061AE5=アーロン`, and
+  `0x061AEA=レスター`. With the current global mapping those bytes render as
+  strings resembling `맨립헤-`, `인-랑나`, and `レ가제-`; capture evidence is
+  `captures/run/3bc3_current_commander_names.png`.
+- The production byte-font pool is already 64/64. Exact playable-name coverage
+  needs six additional syllables (`라/론/셰/카/코/키`) beyond the currently
+  allocated set. Blindly appending them would displace verified glyphs used by
+  `소지금`, equipment categories, `클레릭`, `나이트마스터`, and secret-stage
+  names. Do not fix this by re-enabling `0x80..0xA4`, `0xB0`, lowercase, or
+  `0xE0..0xFF`; those ranges previously corrupted faction, terrain, status,
+  battle-result, and gauge graphics.
+- The safe fix is an engine-level/context-specific byte-font bank or renderer
+  extension, followed by patching every byte-name and class pointer from the
+  Japanese source tables. A probe-only glyph swap or abbreviation is not a
+  production fix. Keep this regression open until later-scenario names and
+  classes are live-verified without changing the established Scenario 1 UI.

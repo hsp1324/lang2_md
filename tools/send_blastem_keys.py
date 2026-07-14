@@ -27,6 +27,11 @@ KEYSYMS = {
     "load": XK.XK_l,
     "vram": XK.XK_v,
     "plane": XK.XK_b,
+    # BlastEm's default config binds right Ctrl to keyboard-capture toggle.
+    # This is needed after remote desktop or another application steals focus.
+    "capture": XK.XK_Control_R,
+    "menu": XK.XK_Escape,
+    "tab": XK.XK_Tab,
 }
 
 

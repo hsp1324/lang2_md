@@ -156,6 +156,16 @@ def main() -> None:
     source.add_argument("--ownership")
     source.add_argument("--address", action="append", type=parse_int)
     source.add_argument("--record-inventory", type=Path)
+    source.add_argument(
+        "--pointer-table",
+        type=parse_int,
+        help="render direct records addressed by a big-endian 32-bit pointer table",
+    )
+    parser.add_argument(
+        "--pointer-count",
+        type=parse_int,
+        help="number of entries to read with --pointer-table",
+    )
     parser.add_argument(
         "--out-dir",
         type=Path,
@@ -168,7 +178,29 @@ def main() -> None:
 
     inventory = json.loads(args.inventory.read_text(encoding="utf-8"))
     rom = args.rom.read_bytes()
-    if args.address:
+    if args.pointer_table is not None:
+        if args.pointer_count is None or args.pointer_count <= 0:
+            parser.error("--pointer-table requires a positive --pointer-count")
+        addresses = [
+            int.from_bytes(
+                rom[args.pointer_table + index * 4 : args.pointer_table + index * 4 + 4],
+                "big",
+            )
+            for index in range(args.pointer_count)
+        ]
+        sheets = render_address_pages(
+            rom,
+            addresses,
+            args.out_dir,
+            scale=args.scale,
+            cols=args.cols,
+            pages_per_sheet=args.pages_per_sheet,
+        )
+        source_label = (
+            f"{len(addresses)} records from pointer table "
+            f"0x{args.pointer_table:06X}"
+        )
+    elif args.address:
         sheets = render_address_pages(
             rom,
             args.address,

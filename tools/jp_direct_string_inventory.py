@@ -243,10 +243,28 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         start = int(row["address_int"])
         capacity, _, _ = builder.direct_record_layout(japanese, start)
         epilogue_intervals.append((start, start + capacity * 2, str(row["text"])))
+    credits_intervals = []
+    credits = builder.load_credits_translations()
+    for index, row in enumerate(credits["records"]):
+        start = int(row["source_address_int"])
+        capacity, _, _ = builder.direct_record_layout(japanese, start)
+        relocated = be32(
+            korean, builder.CREDITS_POINTER_TABLE + index * 4
+        )
+        credits_intervals.append(
+            (
+                start,
+                start + capacity * 2,
+                str(row["target_korean"]),
+                relocated,
+                index,
+            )
+        )
     rows = []
     for offset, original in scan_candidates(japanese):
         current = read_current_stream(korean, offset)
         ranged = None
+        credits_record = None
         if offset in owners:
             ownership = "pointer_table_record"
         elif offset in targets:
@@ -285,6 +303,14 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     ),
                     None,
                 )
+                credits_record = next(
+                    (
+                        (start, target, relocated, index)
+                        for start, end, target, relocated, index in credits_intervals
+                        if start <= offset < end
+                    ),
+                    None,
+                )
                 if ending:
                     ranged = (
                         "declared_ending_translation",
@@ -294,6 +320,12 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     ranged = (
                         "declared_epilogue_translation",
                         f"후일담 번역 레코드 0x{epilogue[0]:06X}: {epilogue[1]}",
+                    )
+                elif credits_record:
+                    ranged = (
+                        "declared_credits_translation",
+                        f"크레딧 번역 레코드 {credits_record[3]:02d} "
+                        f"0x{credits_record[0]:06X}: {credits_record[1]}",
                     )
                 else:
                     ranged = range_ownership(offset)
@@ -315,7 +347,13 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "original_word_count": len(original),
                 "original_tokens": tokens(original),
                 "current_tokens": tokens(current),
-                "modified": current != original,
+                "relocated_pointer": (
+                    f"0x{credits_record[2]:06X}" if credits_record else None
+                ),
+                # Relocated credits intentionally leave the source bytes intact.
+                # Their reachable pointer changed even when this stale source
+                # interval remains byte-identical.
+                "modified": current != original or credits_record is not None,
                 "reviewed": False,
             }
         )
@@ -335,6 +373,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "confirmed_untranslated_epilogue_fragment",
             "declared_ending_translation",
             "declared_epilogue_translation",
+            "declared_credits_translation",
             "local_token_stream",
             "item_shop_local_resource",
             "structured_game_data_false_positive",
@@ -380,6 +419,7 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- Declared UI surfaces: {counts['declared_ui_surface']}",
             f"- Name-entry resources: {counts['name_entry_resource']}",
             f"- Credits records: {counts['confirmed_credits_record']}",
+            f"- Declared credits translation fragments: {counts['declared_credits_translation']}",
             f"- Untranslated ending fragments: {counts['confirmed_untranslated_ending_fragment']}",
             f"- Untranslated epilogue fragments: {counts['confirmed_untranslated_epilogue_fragment']}",
             f"- Declared ending translation fragments: {counts['declared_ending_translation']}",

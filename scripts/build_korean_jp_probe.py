@@ -455,6 +455,13 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
 EVENT_DIALOGUE_TRANSLATIONS = Path("localization/event_dialogue_ko.json")
 ENDING_DIALOGUE_TRANSLATIONS = Path("localization/ending_dialogue_ko.json")
 EPILOGUE_DIALOGUE_TRANSLATIONS = Path("localization/epilogue_dialogue_ko.json")
+CREDITS_TRANSLATIONS = Path("localization/credits_ko.json")
+CREDITS_POINTER_TABLE = 0x0A333A
+CREDITS_RECORD_COUNT = 60
+CREDITS_RELOC_BASE = 0x2B0000
+CREDITS_RELOC_LIMIT = 0x2B2000
+CREDITS_DIGIT_HELPER = 0x0A3788
+CREDITS_DIGIT_HELPER_SIZE = 0x18
 EVENT_NAME_CONTROL_RE = re.compile(r"\{([0-9A-Fa-f]{4})\}")
 
 DIRECT_STRING_PATCHES = {
@@ -1596,6 +1603,34 @@ def load_epilogue_dialogue_translations(
     return rows
 
 
+def load_credits_translations(
+    path: Path = CREDITS_TRANSLATIONS,
+) -> dict[str, object]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entries = payload.get("records")
+    if not isinstance(entries, list) or len(entries) != CREDITS_RECORD_COUNT:
+        raise ValueError(
+            f"credits translations in {path} need {CREDITS_RECORD_COUNT} records"
+        )
+    pointer_table = int(str(payload.get("pointer_table")), 16)
+    if pointer_table != CREDITS_POINTER_TABLE:
+        raise ValueError(
+            f"unexpected credits pointer table 0x{pointer_table:06X}"
+        )
+    rows: list[dict[str, object]] = []
+    seen_addresses: set[int] = set()
+    for entry in entries:
+        row = dict(entry)
+        address = int(str(row["source_address"]), 16)
+        if address in seen_addresses:
+            raise ValueError(f"duplicate credits address 0x{address:06X}")
+        seen_addresses.add(address)
+        row["source_address_int"] = address
+        rows.append(row)
+    payload["records"] = rows
+    return payload
+
+
 def ending_dialogue_visible_text(text: str) -> str:
     return EVENT_NAME_CONTROL_RE.sub("", text)
 
@@ -1732,6 +1767,84 @@ def patch_ending_dialogue_records(
                 f"only {capacity}: {text!r}"
             )
         write_word_list(data, start, values, capacity)
+
+
+def patch_credits_records(
+    data: bytearray,
+    reference_data: bytes,
+    glyph_by_char: dict[str, int],
+    payload: dict[str, object],
+) -> int:
+    table_end = CREDITS_POINTER_TABLE + CREDITS_RECORD_COUNT * 4
+    pointer_table_bytes = reference_data[CREDITS_POINTER_TABLE:table_end]
+    pointer_digest = hashlib.sha256(pointer_table_bytes).hexdigest()
+    if pointer_digest != payload["pointer_table_sha256"]:
+        raise ValueError(
+            f"credits pointer table changed: {pointer_digest} != "
+            f"{payload['pointer_table_sha256']}"
+        )
+
+    rows = payload["records"]
+    assert isinstance(rows, list)
+    source_records: list[bytes] = []
+    source_addresses: list[int] = []
+    for index in range(CREDITS_RECORD_COUNT):
+        source_address = be32(
+            reference_data, CREDITS_POINTER_TABLE + index * 4
+        )
+        row_address = int(rows[index]["source_address_int"])
+        if source_address != row_address:
+            raise ValueError(
+                f"credits pointer {index} changed: 0x{source_address:06X} != "
+                f"0x{row_address:06X}"
+            )
+        capacity, controls, page_breaks = direct_record_layout(
+            reference_data, source_address
+        )
+        if controls or page_breaks:
+            raise ValueError(
+                f"credits record {index} at 0x{source_address:06X} has controls"
+            )
+        source_addresses.append(source_address)
+        source_records.append(
+            reference_data[source_address : source_address + capacity * 2]
+        )
+    source_digest = hashlib.sha256(b"".join(source_records)).hexdigest()
+    if source_digest != payload["source_records_sha256"]:
+        raise ValueError(
+            f"credits source records changed: {source_digest} != "
+            f"{payload['source_records_sha256']}"
+        )
+
+    digit_helper = reference_data[
+        CREDITS_DIGIT_HELPER : CREDITS_DIGIT_HELPER + CREDITS_DIGIT_HELPER_SIZE
+    ]
+    cursor = CREDITS_RELOC_BASE
+    for index, row in enumerate(rows):
+        put32(data, CREDITS_POINTER_TABLE + index * 4, cursor)
+        if row.get("preserve_original"):
+            encoded = source_records[index]
+        else:
+            values = [
+                SPACE_GLYPH if char == " " else glyph_by_char[char]
+                for char in str(row["target_korean"])
+            ]
+            encoded = b"".join(value.to_bytes(2, "big") for value in values)
+            encoded += b"\xFF\xFF"
+        end = cursor + len(encoded)
+        if end > CREDITS_RELOC_LIMIT:
+            raise ValueError(
+                f"credits relocation overflow: 0x{end:06X} > "
+                f"0x{CREDITS_RELOC_LIMIT:06X}"
+            )
+        data[cursor:end] = encoded
+        cursor = end
+
+    if data[
+        CREDITS_DIGIT_HELPER : CREDITS_DIGIT_HELPER + CREDITS_DIGIT_HELPER_SIZE
+    ] != digit_helper:
+        raise ValueError("credits digit helper was modified")
+    return cursor
 
 
 def patch_reviewed_event_pages(
@@ -3509,6 +3622,7 @@ def main() -> None:
     reviewed_event_rows = load_reviewed_event_translations()
     ending_dialogue_rows = load_ending_dialogue_translations()
     epilogue_dialogue_rows = load_epilogue_dialogue_translations()
+    credits_payload = load_credits_translations()
     if not 0 <= args.scenario_count <= len(scenario_texts):
         raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
     active_condition_chars = "" if args.skip_condition else "\n".join(
@@ -3553,6 +3667,11 @@ def main() -> None:
     ]
     active_epilogue_dialogue_strings = [
         ending_dialogue_visible_text(str(row["text"])) for row in epilogue_dialogue_rows
+    ]
+    active_credits_strings = [
+        str(row["target_korean"])
+        for row in credits_payload["records"]
+        if not row.get("preserve_original")
     ]
     active_fixed_strings = [text for _, text in fixed_patches.values()]
     active_prefix_strings = [text for _, text in prefix_patches.values()]
@@ -3608,6 +3727,8 @@ def main() -> None:
         # perturb established scenario/UI/name-entry glyph IDs.
         *active_ending_dialogue_strings,
         *active_epilogue_dialogue_strings,
+        # Credits are relocated and appended last so no established glyph ID shifts.
+        *active_credits_strings,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
@@ -3643,6 +3764,9 @@ def main() -> None:
         )
         patch_ending_dialogue_records(
             data, IN_ROM.read_bytes(), glyph_by_char, epilogue_dialogue_rows
+        )
+        patch_credits_records(
+            data, IN_ROM.read_bytes(), glyph_by_char, credits_payload
         )
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)

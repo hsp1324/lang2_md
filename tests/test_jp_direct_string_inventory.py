@@ -84,7 +84,11 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
 
     def test_credits_and_name_entry_resources_are_classified(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
-        self.assertEqual(rows["0x0A344A"]["ownership"], "confirmed_credits_record")
+        credit = rows["0x0A344A"]
+        self.assertEqual(credit["ownership"], "declared_credits_translation")
+        self.assertIn("시부야 미치오", credit["target_korean"])
+        self.assertTrue(credit["modified"])
+        self.assertTrue(credit["relocated_pointer"].startswith("0x2B"))
         self.assertEqual(rows["0x0A38A6"]["ownership"], "name_entry_resource")
 
     def test_pointer_record_interiors_are_not_counted_as_unknown_text(self):

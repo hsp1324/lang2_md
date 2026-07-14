@@ -8,7 +8,7 @@ a candidate, not proof that the data is visible text.
 
 - Scan range: `0x000000..0x180000`
 - Candidates: 783
-- Modified candidates: 460
+- Modified candidates: 519
 - Exact pointer-table records: 105
 - Pointer-table record interiors: 95
 - Existing declared direct patches: 149
@@ -17,7 +17,8 @@ a candidate, not proof that the data is visible text.
 - Confirmed unresolved direct messages: 1
 - Declared UI surfaces: 10
 - Name-entry resources: 16
-- Credits records: 60
+- Credits records: 1
+- Declared credits translation fragments: 59
 - Untranslated ending fragments: 0
 - Untranslated epilogue fragments: 0
 - Declared ending translation fragments: 22

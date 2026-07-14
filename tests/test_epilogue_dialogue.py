@@ -56,9 +56,18 @@ class EpilogueDialogueTests(unittest.TestCase):
 
     def test_authored_lines_fit_the_dialogue_window(self):
         for row in self.rows:
-            for line in str(row["text"]).replace("\f", "\n").splitlines():
-                visible = builder.EVENT_NAME_CONTROL_RE.sub("이름", line)
-                self.assertLessEqual(len(visible), 24, f"{row['address']}: {visible!r}")
+            for page_number, page in enumerate(str(row["text"]).split("\f"), 1):
+                lines = page.splitlines()
+                self.assertLessEqual(
+                    len(lines),
+                    3,
+                    f"{row['address']} page {page_number} has too many lines",
+                )
+                for line in lines:
+                    visible = builder.EVENT_NAME_CONTROL_RE.sub("이름", line)
+                    self.assertLessEqual(
+                        len(visible), 24, f"{row['address']}: {visible!r}"
+                    )
 
 
 if __name__ == "__main__":
