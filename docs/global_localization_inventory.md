@@ -8,9 +8,9 @@ Neither flag proves that the displayed result is translated or live-verified.
 
 | Table | Pointer table | Entries | Unique strings | Raw modified | Font glyph modified | Render path touched | Known KO targets |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| classes | `0x05E6D6` | 157 | 157 | 28 | 74 | 91 | 157 |
+| classes | `0x05E6D6` | 157 | 157 | 157 | 74 | 157 | 157 |
 | items | `0x060364` | 38 | 37 | 0 | 13 | 13 | 38 |
-| names | `0x0618E8` | 117 | 58 | 30 | 41 | 57 | 117 |
+| names | `0x0618E8` | 117 | 58 | 117 | 41 | 117 | 117 |
 
 Detailed IDs, original text/hex, capacities, targets, and changed font codes are in
 `localization/global_strings.json`.

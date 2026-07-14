@@ -26,9 +26,9 @@ class JapaneseGlobalInventoryTests(unittest.TestCase):
 
     def test_current_raw_modification_baseline(self):
         tables = self.result["tables"]
-        self.assertEqual(tables["classes"]["raw_modified_count"], 28)
+        self.assertEqual(tables["classes"]["raw_modified_count"], 157)
         self.assertEqual(tables["items"]["raw_modified_count"], 0)
-        self.assertEqual(tables["names"]["raw_modified_count"], 38)
+        self.assertEqual(tables["names"]["raw_modified_count"], 117)
 
     def test_scenario_1_dynamic_bernhardt_name_is_patched(self):
         bernhardt = self.result["tables"]["names"]["entries"][14]

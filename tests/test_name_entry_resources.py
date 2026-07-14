@@ -196,7 +196,7 @@ class NameEntryResourceTests(unittest.TestCase):
             0x061AC5: "엘윈",
             0x061ACB: "리아나",
             0x061ACF: "라나",
-            0x061AD3: "셰리",
+            0x061AD3: "쉐리",
             0x061AD8: "헤인",
             0x061ADC: "스코트",
             0x061AE1: "키스",
@@ -287,6 +287,102 @@ class NameEntryResourceTests(unittest.TestCase):
                 data[offset : offset + 6],
                 bytes.fromhex("4E B9") + builder.BYTE_UI_TILE_RENDER_ROUTINE.to_bytes(4, "big"),
             )
+        for offset in builder.BYTE_UI_MAP_INFO_RENDER_CALLS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big"),
+            )
+        for offset in builder.BYTE_UI_DIRECT_MAP_RENDER_CALLS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+            )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_DIRECT_MAP_RENDER_HOOK :
+                builder.BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
+            ],
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+
+    def test_all_name_and_class_records_use_localized_pair_encoding(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
+        char_by_index = {index: char for char, index in index_by_char.items()}
+
+        def decode(pointer):
+            chars = []
+            cursor = pointer
+            while data[cursor] != 0xFF:
+                self.assertEqual(data[cursor], builder.BYTE_UI_LOCAL_MARKER)
+                chars.append(char_by_index[data[cursor + 1]])
+                cursor += 2
+            return "".join(chars)
+
+        for index, expected in enumerate(builder.KOREAN_CLASS_LABELS):
+            pointer = builder.be32(
+                data, builder.CLASS_BYTE_POINTER_TABLE + index * 4
+            )
+            self.assertTrue(
+                builder.BYTE_UI_CLASS_STRING_RELOC_BASE
+                <= pointer
+                < builder.BYTE_UI_CLASS_STRING_RELOC_LIMIT
+            )
+            self.assertEqual(decode(pointer), expected)
+        for index in range(builder.NAME_BYTE_RECORD_COUNT):
+            pointer = builder.be32(
+                data, builder.NAME_BYTE_POINTER_TABLE + index * 4
+            )
+            self.assertTrue(
+                builder.BYTE_UI_NAME_STRING_RELOC_BASE
+                <= pointer
+                < builder.BYTE_UI_NAME_STRING_RELOC_LIMIT
+            )
+            self.assertEqual(decode(pointer), builder.KOREAN_NAME_BY_ID[index])
+
+        self.assertLessEqual(len(tile_by_index), 0x100)
+        table_words = [
+            builder.be16(data, builder.BYTE_UI_LOCAL_TILE_TABLE + index * 2)
+            for index in range(len(tile_by_index))
+        ]
+        self.assertEqual(table_words, tile_by_index)
+
+    def test_full_extension_resources_cover_each_reserved_vram_segment(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
+        char_by_tile = {
+            tile_by_index[index]: char for char, index in index_by_char.items()
+        }
+        font = ImageFont.truetype(str(ROOT / "tools/fonts/Galmuri7.ttf"), 8)
+
+        for segment_index, (tile_start, tile_count) in enumerate(
+            builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS
+        ):
+            resource_index = (
+                builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+            )
+            resource_pointer = builder.be32(
+                data,
+                builder.BYTE_UI_EXT_RESOURCE_TABLE + resource_index * 4,
+            )
+            tiles = builder.decompress_9dfe(data, resource_pointer + 1)
+            self.assertEqual(len(tiles), tile_count * 32)
+            for tile in range(tile_start, tile_start + tile_count):
+                char = char_by_tile.get(tile)
+                if char is None:
+                    continue
+                start = (tile - tile_start) * 32
+                self.assertEqual(
+                    tiles[start : start + 32],
+                    builder.render_byte_ui_tile(char, font),
+                )
 
     def test_extension_renderer_maps_only_escape_bytes(self):
         def mapped(value):

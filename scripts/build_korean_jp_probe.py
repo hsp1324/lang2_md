@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
+from tools.scenario_data import KOREAN_NAME_BY_ID
 
 
 IN_ROM = Path("roms/original/Langrisser II (Japan).md")
@@ -64,16 +65,40 @@ BYTE_UI_EXT_RESOURCE_INDEX = BYTE_UI_RESOURCE_COUNT
 BYTE_UI_EXT_RESOURCE_TABLE = 0x2B2000
 BYTE_UI_EXT_RESOURCE_BASE = 0x2B2800
 BYTE_UI_EXT_RESOURCE_LIMIT = 0x2B3000
-BYTE_UI_EXT_ROUTINE_BASE = 0x2B3000
-BYTE_UI_EXT_ROUTINE_LIMIT = 0x2B3400
+BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX = BYTE_UI_EXT_RESOURCE_INDEX + 1
+BYTE_UI_FULL_EXT_RESOURCE_BASE = 0x2B4000
+BYTE_UI_FULL_EXT_RESOURCE_LIMIT = 0x2B7000
+BYTE_UI_EXT_ROUTINE_BASE = 0x2B7000
+BYTE_UI_EXT_ROUTINE_LIMIT = 0x2B8000
+BYTE_UI_LOCAL_TILE_TABLE = 0x2B8000
+BYTE_UI_LOCAL_TILE_TABLE_LIMIT = 0x2B8400
+BYTE_UI_CLASS_STRING_RELOC_BASE = 0x2B9000
+BYTE_UI_CLASS_STRING_RELOC_LIMIT = 0x2BA000
+BYTE_UI_NAME_STRING_RELOC_BASE = 0x2BA000
+BYTE_UI_NAME_STRING_RELOC_LIMIT = 0x2BB000
 BYTE_UI_EXT_VRAM_TILE = 0x03F0
 BYTE_UI_EXT_VRAM_ADDRESS = BYTE_UI_EXT_VRAM_TILE * 32
+BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
+    (0x0340, 8),
+    (0x0398, 24),
+    (0x0440, 8),
+    (0x0498, 24),
+    (0x04D8, 24),
+    (0x05D8, 28),
+)
+BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 SCENARIO_GLYPH_LIST_RELOC_BASE = 0x270000
 SCENARIO_GLYPH_LIST_RELOC_LIMIT = 0x280000
 CLASS_BYTE_POINTER_TABLE = 0x05E6D6
 CLASS_BYTE_RECORD_COUNT = 157
+NAME_BYTE_POINTER_TABLE = 0x0618E8
+NAME_BYTE_RECORD_COUNT = 117
+CLASS_BYTE_POINTER_TABLE_SHA256 = "a7b0e33ac6b662df0f496004bca7bb551d46fd5379cabd4d4a77a535c97a91ab"
+CLASS_BYTE_RECORDS_SHA256 = "593ebb9203b097856d85ba2a1116ee40e8cd7fc8263581fe32568541f7810497"
+NAME_BYTE_POINTER_TABLE_SHA256 = "c9e1c69fa2e09897f976493e8113cf70ba8a832754619b53c58f81c96f85cd56"
+NAME_BYTE_RECORDS_SHA256 = "1d55dadad9cf310f6ee5ec344622b777012403522d379c1268d383b090e02ad5"
 DEFAULT_HERO_NAME_OFFSET = 0x061AC5
 PREP_AND_NAME_GLYPH_REF_RANGE = (0x96FC0, 0x97680)
 COMMON_GLYPH_PROTECT_LIMIT = 0x0060
@@ -209,7 +234,7 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
 BYTE_UI_EXT_CODE_BY_CHAR = {
     "라": 0xF0,
     "론": 0xF1,
-    "셰": 0xF2,
+    "쉐": 0xF2,
     "카": 0xF3,
     "코": 0xF4,
     "키": 0xF5,
@@ -244,14 +269,23 @@ BYTE_UI_STATUS_RENDER_HOOK = 0x029B24
 BYTE_UI_STATUS_RENDER_ORIGINAL = bytes.fromhex(
     "00 40 80 00 34 FC FF F8 34 C1 34 FC 00 01 34 C0 D2 FC 00 02 60 BC"
 )
-BYTE_UI_WORD_RENDER_ROUTINE = 0x2B3000
-BYTE_UI_TILE_RENDER_ROUTINE = 0x2B3100
-BYTE_UI_FONT_LOAD_ROUTINE = 0x2B3200
-BYTE_UI_ROSTER_RENDER_ROUTINE = 0x2B3240
-BYTE_UI_STATUS_RENDER_ROUTINE = 0x2B3280
-BYTE_UI_PLANE_RENDER_ROUTINE = 0x2B32C0
-BYTE_UI_PANEL_RENDER_ROUTINE = 0x2B3340
-BYTE_UI_PREP_ROSTER_ROUTINE = 0x2B3380
+BYTE_UI_WORD_RENDER_ROUTINE = 0x2B7000
+BYTE_UI_TILE_RENDER_ROUTINE = 0x2B7100
+BYTE_UI_FONT_LOAD_ROUTINE = 0x2B7200
+BYTE_UI_ROSTER_RENDER_ROUTINE = 0x2B7400
+BYTE_UI_STATUS_RENDER_ROUTINE = 0x2B7480
+BYTE_UI_PLANE_RENDER_ROUTINE = 0x2B7500
+BYTE_UI_PANEL_RENDER_ROUTINE = 0x2B7600
+BYTE_UI_PREP_ROSTER_ROUTINE = 0x2B7680
+BYTE_UI_MAP_INFO_RENDER_ROUTINE = 0x2B7700
+BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
+BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
+BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
+BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
+BYTE_UI_DIRECT_MAP_RENDER_CALLS = (0x01B546, 0x01CBA6, 0x01CBBC)
+BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 01 05 BC")
+BYTE_UI_DIRECT_MAP_RENDER_HOOK = 0x0105BC
+BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL = bytes.fromhex("48 E7 C0 60 B3 FC")
 
 BYTE_UI_PLAYABLE_NAME_SOURCES = {
     0x061AC5: "ｴﾙｳｨﾝ",
@@ -322,7 +356,7 @@ BYTE_UI_STRING_PATCHES = {
     0x061AC5: "엘윈",
     0x061ACB: "리아나",
     0x061ACF: "라나",
-    0x061AD3: "셰리",
+    0x061AD3: "쉐리",
     0x061AD8: "헤인",
     0x061ADC: "스코트",
     0x061AE1: "키스",
@@ -3249,6 +3283,12 @@ def _build_byte_ui_word_renderer() -> bytes:
     code.label("loop")
     code.emit("70 00 10 18 0C 00 00 FF")
     code.branch_word(0x6700, "done")  # beq.w
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")  # bne.w
+    code.emit("42 40 10 18")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
     code.emit("0C 00 00 F0")
     code.branch_word(0x6500, "base")  # bcs.w
     code.emit("06 40 03 00")
@@ -3276,6 +3316,12 @@ def _build_byte_ui_tile_renderer() -> bytes:
     code.label("loop")
     code.emit("42 40 10 18 0C 00 00 FF")
     code.branch_word(0x6700, "done")
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
     code.emit("0C 00 00 F0")
     code.branch_word(0x6500, "base")
     code.emit("06 40 03 00")
@@ -3302,6 +3348,13 @@ def _build_byte_ui_plane_renderer() -> bytes:
     code.label("loop")
     code.emit("42 42 14 18 0C 02 00 FF")
     code.branch_word(0x6700, "done")
+    code.emit("0C 02 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit("34 00")
+    code.branch_word(0x6000, "base")
+    code.label("legacy")
     code.emit("0C 02 00 F0")
     code.branch_word(0x6500, "base")
     code.emit("06 42 03 00")
@@ -3317,6 +3370,12 @@ def _build_byte_ui_plane_renderer() -> bytes:
 
 def _build_byte_ui_prep_roster_renderer() -> bytes:
     code = _M68KCode()
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
     code.emit("0C 00 00 DF")
     code.branch_word(0x6700, "mark")
     code.emit("0C 00 00 F0")
@@ -3326,6 +3385,127 @@ def _build_byte_ui_prep_roster_renderer() -> bytes:
     code.emit("2E BC 00 02 25 1A 4E 75")
     code.label("mark")
     code.emit("2E BC 00 02 25 0A 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_panel_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("0C 40 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 19")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "base")
+    code.label("legacy")
+    code.emit("0C 40 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 40 03 00")
+    code.label("base")
+    code.emit("80 78 E3 90 36 FC FF F8 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_roster_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "store")
+    code.emit("06 40 03 00")
+    code.label("store")
+    code.emit("34 C0 53 46 0C 46 FF FF")
+    code.branch_word(0x6700, "done")
+    code.emit("2E BC 00 02 95 84")
+    code.label("done")
+    code.emit("4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_status_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "store")
+    code.emit("06 40 03 00")
+    code.label("store")
+    code.emit("00 40 80 00 34 FC FF F8 34 C1 34 FC 00 01 34 C0 D2 FC 00 02")
+    code.emit("2E BC 00 02 9A F6 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_map_info_renderer() -> bytes:
+    code = _M68KCode()
+    code.label("loop")
+    code.emit("70 00 10 19 0C 00 00 FF")
+    code.branch_word(0x6700, "done")
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 19")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 40 03 00")
+    code.branch_word(0x6000, "store")
+    code.label("base")
+    code.emit("0C 00 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("30 C0 52 41")
+    code.branch_word(0x6000, "loop")
+    code.label("mark")
+    code.emit("53 41 53 42 30 FC FF FB 30 C1 30 C2 30 C0 52 41 52 42")
+    code.emit("30 FC FF FB 30 C1 30 C2")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("30 FC FF FE 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_direct_map_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("48 E7 C0 60")
+    code.emit("B3 FC 00 06 18 E8")
+    code.branch_word(0x6600, "deref")
+    code.emit("0C 01 00 01")
+    code.branch_word(0x6600, "deref")
+    code.emit("43 F8 A5 CC")
+    code.branch_word(0x6000, "loop")
+    code.label("deref")
+    code.emit("02 41 00 FF D2 41 D2 41 22 71 10 00")
+    code.label("loop")
+    code.emit("42 41 12 19 0C 01 00 FF")
+    code.branch_word(0x6700, "done")
+    code.emit("0C 01 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("2F 00 42 40 10 19")
+    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit("32 00 20 1F")
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 01 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 01 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("02 41 00 FF D4 FC 00 02 35 81 00 00")
+    code.branch_word(0x6000, "loop")
+    code.label("mark")
+    code.emit("02 41 00 FF 34 81")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("4C DF 06 03 4E 75")
     return code.finish()
 
 
@@ -3340,7 +3520,118 @@ def validate_byte_ui_playable_name_sources(data: bytes | bytearray) -> None:
             )
 
 
-def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> None:
+def validate_byte_ui_name_and_class_tables(data: bytes | bytearray) -> None:
+    tables = (
+        (
+            "class",
+            CLASS_BYTE_POINTER_TABLE,
+            CLASS_BYTE_RECORD_COUNT,
+            CLASS_BYTE_POINTER_TABLE_SHA256,
+            CLASS_BYTE_RECORDS_SHA256,
+        ),
+        (
+            "name",
+            NAME_BYTE_POINTER_TABLE,
+            NAME_BYTE_RECORD_COUNT,
+            NAME_BYTE_POINTER_TABLE_SHA256,
+            NAME_BYTE_RECORDS_SHA256,
+        ),
+    )
+    for label, table, count, expected_table_hash, expected_records_hash in tables:
+        table_bytes = bytes(data[table : table + count * 4])
+        actual_table_hash = hashlib.sha256(table_bytes).hexdigest()
+        if actual_table_hash != expected_table_hash:
+            raise ValueError(
+                f"{label} byte pointer table changed: {actual_table_hash} != {expected_table_hash}"
+            )
+        records = []
+        for index in range(count):
+            pointer = be32(data, table + index * 4)
+            capacity = byte_string_capacity(data, pointer)
+            records.append(bytes(data[pointer : pointer + capacity]))
+        actual_records_hash = hashlib.sha256(b"".join(records)).hexdigest()
+        if actual_records_hash != expected_records_hash:
+            raise ValueError(
+                f"{label} byte records changed: {actual_records_hash} != {expected_records_hash}"
+            )
+
+
+def build_byte_ui_local_mapping(
+    code_by_char: dict[str, int],
+) -> tuple[dict[str, int], list[int]]:
+    texts = [KOREAN_CLASS_LABELS[index] for index in range(CLASS_BYTE_RECORD_COUNT)]
+    texts.extend(KOREAN_NAME_BY_ID[index] for index in range(NAME_BYTE_RECORD_COUNT))
+    chars = [" ", *collect_chars(*texts)]
+    extension_tiles = [
+        tile
+        for start, count in BYTE_UI_FULL_EXT_VRAM_SEGMENTS
+        for tile in range(start, start + count)
+    ]
+    next_extension = iter(extension_tiles)
+    index_by_char: dict[str, int] = {}
+    tile_by_index: list[int] = []
+    for char in chars:
+        if char == " ":
+            tile = 0x20
+        elif char in code_by_char:
+            code = code_by_char[char]
+            tile = (
+                BYTE_UI_EXT_VRAM_TILE + code - BYTE_UI_EXT_CODE_FIRST
+                if BYTE_UI_EXT_CODE_FIRST <= code <= BYTE_UI_EXT_CODE_LAST
+                else code
+            )
+        else:
+            try:
+                tile = next(next_extension)
+            except StopIteration as exc:
+                raise ValueError(
+                    f"full byte UI needs more than {len(extension_tiles)} extension tiles"
+                ) from exc
+        index_by_char[char] = len(tile_by_index)
+        tile_by_index.append(tile)
+    if len(tile_by_index) > 0x100:
+        raise ValueError(f"full byte UI mapping needs {len(tile_by_index)} byte indexes")
+    return index_by_char, tile_by_index
+
+
+def relocate_byte_ui_name_and_class_tables(
+    data: bytearray, index_by_char: dict[str, int]
+) -> None:
+    tables = (
+        (
+            CLASS_BYTE_POINTER_TABLE,
+            [KOREAN_CLASS_LABELS[index] for index in range(CLASS_BYTE_RECORD_COUNT)],
+            BYTE_UI_CLASS_STRING_RELOC_BASE,
+            BYTE_UI_CLASS_STRING_RELOC_LIMIT,
+        ),
+        (
+            NAME_BYTE_POINTER_TABLE,
+            [KOREAN_NAME_BY_ID[index] for index in range(NAME_BYTE_RECORD_COUNT)],
+            BYTE_UI_NAME_STRING_RELOC_BASE,
+            BYTE_UI_NAME_STRING_RELOC_LIMIT,
+        ),
+    )
+    for table, texts, cursor, limit in tables:
+        for index, text in enumerate(texts):
+            payload = bytearray()
+            for char in text:
+                payload.extend((BYTE_UI_LOCAL_MARKER, index_by_char[char]))
+            payload.append(0xFF)
+            if cursor + len(payload) > limit:
+                raise ValueError(f"localized byte string table at 0x{table:06X} overflowed")
+            if any(value != 0xFF for value in data[cursor : cursor + len(payload)]):
+                raise ValueError(f"localized byte string area at 0x{cursor:06X} is not blank")
+            put32(data, table + index * 4, cursor)
+            data[cursor : cursor + len(payload)] = payload
+            cursor += len(payload)
+
+
+def install_byte_ui_extension(
+    data: bytearray,
+    font: ImageFont.FreeTypeFont,
+    index_by_char: dict[str, int],
+    tile_by_index: list[int],
+) -> None:
     first_pointer = be32(data, BYTE_UI_FONT_RESOURCE_TABLE) & 0x00FFFFFF
     table_size = first_pointer - BYTE_UI_FONT_RESOURCE_TABLE
     if table_size != BYTE_UI_RESOURCE_COUNT * 4:
@@ -3349,7 +3640,8 @@ def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> 
             f"got {table_size // 4}"
         )
 
-    table_end = BYTE_UI_EXT_RESOURCE_TABLE + (BYTE_UI_RESOURCE_COUNT + 1) * 4
+    resource_count = BYTE_UI_RESOURCE_COUNT + 1 + len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS)
+    table_end = BYTE_UI_EXT_RESOURCE_TABLE + resource_count * 4
     if table_end > BYTE_UI_EXT_RESOURCE_BASE:
         raise ValueError("relocated compressed resource table overlaps extension resource")
     if any(value != 0xFF for value in data[BYTE_UI_EXT_RESOURCE_TABLE:table_end]):
@@ -3380,6 +3672,38 @@ def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> 
         raise ValueError("byte UI extension resource area is not blank")
     data[BYTE_UI_EXT_RESOURCE_BASE:resource_end] = resource
 
+    char_by_tile = {
+        tile_by_index[index]: char for char, index in index_by_char.items()
+    }
+    resource_cursor = BYTE_UI_FULL_EXT_RESOURCE_BASE
+    for segment_index, (tile_start, tile_count) in enumerate(BYTE_UI_FULL_EXT_VRAM_SEGMENTS):
+        tiles = bytearray(blank_tile * tile_count)
+        for tile in range(tile_start, tile_start + tile_count):
+            char = char_by_tile.get(tile)
+            if char is not None:
+                start = (tile - tile_start) * 32
+                tiles[start : start + 32] = render_byte_ui_tile(char, font)
+        segment_resource = bytes([0x03]) + compress_9dfe_literals(bytes(tiles))
+        if resource_cursor + len(segment_resource) > BYTE_UI_FULL_EXT_RESOURCE_LIMIT:
+            raise ValueError("full byte UI extension resources exceed reserved bank")
+        if any(
+            value != 0xFF
+            for value in data[resource_cursor : resource_cursor + len(segment_resource)]
+        ):
+            raise ValueError(f"full byte UI resource area at 0x{resource_cursor:06X} is not blank")
+        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+        put32(data, BYTE_UI_EXT_RESOURCE_TABLE + resource_index * 4, resource_cursor)
+        data[resource_cursor : resource_cursor + len(segment_resource)] = segment_resource
+        resource_cursor += len(segment_resource)
+
+    tile_table_end = BYTE_UI_LOCAL_TILE_TABLE + len(tile_by_index) * 2
+    if tile_table_end > BYTE_UI_LOCAL_TILE_TABLE_LIMIT:
+        raise ValueError("full byte UI tile lookup table exceeds reserved bank")
+    if any(value != 0xFF for value in data[BYTE_UI_LOCAL_TILE_TABLE:tile_table_end]):
+        raise ValueError("full byte UI tile lookup table area is not blank")
+    for index, tile in enumerate(tile_by_index):
+        put16(data, BYTE_UI_LOCAL_TILE_TABLE + index * 2, tile)
+
     if data[
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION :
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION + 6
@@ -3392,44 +3716,32 @@ def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> 
 
     word_renderer = _build_byte_ui_word_renderer()
     tile_renderer = _build_byte_ui_tile_renderer()
-    font_loader = bytes.fromhex(
+    font_loader = bytearray(bytes.fromhex(
         "4E B9 00 00 99 B2"      # load the original 256-tile byte font
         "48 E7 80 40"            # preserve d0/a1
         "30 3C 81 AD"            # extension resource 429, queued DMA
         "32 7C 7E 00"            # VRAM byte address for tile 3F0
         "4E B9 00 00 99 B2"
-        "4C DF 02 01"
-        "4E 75"
-    )
+    ))
+    for segment_index, (tile_start, _) in enumerate(BYTE_UI_FULL_EXT_VRAM_SEGMENTS):
+        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+        font_loader.extend(bytes.fromhex("30 3C") + (0x8000 | resource_index).to_bytes(2, "big"))
+        font_loader.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
+        font_loader.extend(bytes.fromhex("4E B9 00 00 99 B2"))
+    font_loader.extend(bytes.fromhex("4C DF 02 01 4E 75"))
     plane_renderer = _build_byte_ui_plane_renderer()
-    panel_renderer = bytes.fromhex(
-        "0C 40 00 F0"            # extended escape word?
-        "65 04"                  # bcs.s base
-        "06 40 03 00"            # map F0-FE to 3F0-3FE
-        "80 78 E3 90"            # base: apply the active tile attributes
-        "36 FC FF F8"            # preserve the replaced command write
-        "4E 75"
-    )
+    panel_renderer = _build_byte_ui_panel_renderer()
     prep_roster_renderer = _build_byte_ui_prep_roster_renderer()
-    roster_renderer = bytes.fromhex(
-        "0C 00 00 F0"            # extended escape byte?
-        "65 04"                  # bcs.s base
-        "06 40 03 00"            # map F0-FE to 3F0-3FE
-        "34 C0"                  # base: move.w d0,(a2)+
-        "53 46"                  # emulate dbra d6
-        "0C 46 FF FF"
-        "67 06"
-        "2E BC 00 02 95 84"      # branch target via the JSR return address
-        "4E 75"
-    )
-    status_renderer = bytes.fromhex(
-        "0C 00 00 F0"
-        "65 04"
-        "06 40 03 00"
-        "00 40 80 00"
-        "34 FC FF F8 34 C1 34 FC 00 01 34 C0"
-        "D2 FC 00 02"
-        "2E BC 00 02 9A F6"
+    roster_renderer = _build_byte_ui_roster_renderer()
+    status_renderer = _build_byte_ui_status_renderer()
+    map_info_renderer = _build_byte_ui_map_info_renderer()
+    direct_map_renderer = _build_byte_ui_direct_map_renderer()
+    lookup_renderer = bytes.fromhex(
+        "2F 09"                  # preserve a1
+        "D0 40"                  # word index -> word-table offset
+        "43 F9 00 2B 80 00"      # a1 = localized tile table
+        "30 31 00 00"            # d0 = tile[index]
+        "22 5F"                  # restore a1
         "4E 75"
     )
     routines = {
@@ -3441,6 +3753,9 @@ def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> 
         BYTE_UI_PLANE_RENDER_ROUTINE: plane_renderer,
         BYTE_UI_PANEL_RENDER_ROUTINE: panel_renderer,
         BYTE_UI_PREP_ROSTER_ROUTINE: prep_roster_renderer,
+        BYTE_UI_MAP_INFO_RENDER_ROUTINE: map_info_renderer,
+        BYTE_UI_DIRECT_MAP_RENDER_ROUTINE: direct_map_renderer,
+        BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
     }
     for offset, payload in routines.items():
         if offset + len(payload) > BYTE_UI_EXT_ROUTINE_LIMIT:
@@ -3461,6 +3776,27 @@ def install_byte_ui_extension(data: bytearray, font: ImageFont.FreeTypeFont) -> 
         if data[offset : offset + 6] != BYTE_UI_TILE_RENDER_CALL_ORIGINAL:
             raise ValueError(f"byte tile-render call changed at 0x{offset:06X}")
         data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_TILE_RENDER_ROUTINE.to_bytes(4, "big")
+    for offset in BYTE_UI_MAP_INFO_RENDER_CALLS:
+        if data[offset : offset + 6] != BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL:
+            raise ValueError(f"map-info byte render call changed at 0x{offset:06X}")
+        data[offset : offset + 6] = (
+            bytes.fromhex("4E B9")
+            + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
+        )
+    for offset in BYTE_UI_DIRECT_MAP_RENDER_CALLS:
+        if data[offset : offset + 6] != BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL:
+            raise ValueError(f"direct-map byte render call changed at 0x{offset:06X}")
+        data[offset : offset + 6] = (
+            bytes.fromhex("4E B9")
+            + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+        )
+    if data[
+        BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
+    ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:
+        raise ValueError("direct-map byte renderer entry changed")
+    data[
+        BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
+    ] = bytes.fromhex("4E F9") + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
     for offset in BYTE_UI_PLANE_RENDER_CALLS:
         if data[offset : offset + 6] != BYTE_UI_PLANE_RENDER_CALL_ORIGINAL:
             raise ValueError(f"byte plane-render call changed at 0x{offset:06X}")
@@ -3506,6 +3842,7 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
     # inferred unit appearance or generic cavalry/infantry descriptions.
     validate_scenario1_class_sources(data)
     validate_byte_ui_playable_name_sources(data)
+    validate_byte_ui_name_and_class_tables(data)
     fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
     word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
     chars = [
@@ -3527,6 +3864,7 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         if (
             char in BYTE_UI_STABLE_CODE_BY_CHAR
             and BYTE_UI_STABLE_CODE_BY_CHAR[char] in BYTE_UI_GLYPH_CODES
+            and BYTE_UI_STABLE_CODE_BY_CHAR[char] not in used_codes
         ):
             code = BYTE_UI_STABLE_CODE_BY_CHAR[char]
             code_by_char[char] = code
@@ -3566,14 +3904,12 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         BYTE_UI_FONT_RESOURCE_RELOC_BASE : BYTE_UI_FONT_RESOURCE_RELOC_BASE + len(relocated_resource)
     ] = relocated_resource
     put32(data, resource_table_entry, BYTE_UI_FONT_RESOURCE_RELOC_BASE)
-    install_byte_ui_extension(data, font)
+    local_index_by_char, local_tile_by_index = build_byte_ui_local_mapping(code_by_char)
+    install_byte_ui_extension(
+        data, font, local_index_by_char, local_tile_by_index
+    )
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
-        capacity = byte_string_capacity(data, offset)
-        values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
-        write_byte_string(data, offset, values, capacity)
-    for index, text in BYTE_UI_SCENARIO1_CLASS_LABELS.items():
-        offset = be32(data, CLASS_BYTE_POINTER_TABLE + index * 4)
         capacity = byte_string_capacity(data, offset)
         values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)
@@ -3598,6 +3934,7 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         values.extend([0x0020] * (width - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
+    relocate_byte_ui_name_and_class_tables(data, local_index_by_char)
     return code_by_char
 
 

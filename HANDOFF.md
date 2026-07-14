@@ -89,18 +89,17 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 80E6
+checksum: 988E
 ```
 
-The current source builds checksum `D39F`. It includes the earlier
-Scenario 1 `프리스트` and shared unit-type corrections, 31-scenario static
-dialogue work, the complete direct-name and ending-visit tables, and all
-90 character epilogue records. The latest live regression verified exact
-`매직나이트`/`나이트마스터` status labels and restored the original battle
-result decorations around `AT`, `DF`, and formation after a byte-font collision.
-The Aaron-through-world epilogues added after that live run have only static
-record-sheet and automated verification so far; do not describe checksum `D39F` as live
-verified.
+The current source builds checksum `988E` and passes all 152 tests. It
+includes all 31 scenarios' static event translations, the complete direct-name,
+ending-visit, credits, and 90-record epilogue resources, plus the extended 8x8
+commander-name font bank. Live regressions include Scenario 1 core UI, the
+Scenario 27 ending/epilogue paths, Scenario 19 and 20 openings, and Scenario 25
+through its complete unconditional opening. Static translation does not prove
+all conditional event branches; the scenario sections below state the exact
+remaining runtime gaps.
 
 Build command:
 
@@ -2156,12 +2155,24 @@ contains 57 safe syllables as documented below and in
   pages modified; Scenario 25 intentionally reports 99/100 and 131/132
   because its first candidate is structured data.
 - Live verification entered the real Scenario 25 and displayed both Korean
-  briefing pages and the Korean preparation/arrangement screens. Concurrent
-  AVNC focus/input caused arrangement-menu selections to diverge from sent
-  keys, so deployment and opening-event verification are still pending rather
-  than being treated as a ROM failure. Evidence includes
+  briefing pages and the Korean preparation/arrangement screens. The earlier
+  pass stopped there because concurrent AVNC focus/input caused arrangement
+  selections to diverge from sent keys; this was an automation failure, not a
+  ROM failure. Evidence from that pass includes
   `captures/run/7361_s25_briefing1.png`, `7361_s25_briefing2.png`, and
   `7361_s25_arrange2.png`.
+- Checksum `53AD` subsequently repeated the route and briefing, displayed the
+  preparation roster as `엘윈/헤인/쉐리/아론/키스`, performed automatic
+  deployment, and reached `SCENARIO 25` / `TURN 1`. Twenty-five paced event
+  advances covered the complete unconditional Egbert, Elwin, Liana, Leon,
+  Jessica, and Imperial commander exchange and returned to Elwin's Korean
+  `이동/공격/치료/명령` menu. No Japanese text, joined commander name, blank
+  page, reset, or freeze appeared. Evidence is
+  `captures/analysis/53ad_s25_opening_sheet.png` and
+  `captures/run/53ad_s25_opening_03.png` through `_27.png`.
+- Scenario 25 is not fully live-complete. Conditional hostage, Leon/Blue Dragon
+  battle and death/retreat paths, item events, victory/defeat outcomes, and the
+  underground-shrine transition still require runtime traversal.
 
 ### Scenario 26 Static Dialogue Complete (2026-07-13)
 
@@ -2827,3 +2838,41 @@ contains 57 safe syllables as documented below and in
   supports `--replace-existing`, and enables keyboard capture once on a fresh
   `--click-window` launch. This specifically addresses remote-desktop focus
   loss without silently choosing the wrong emulator window.
+
+### Full Byte Name And Class Tables (2026-07-15)
+
+- The six-tile `F0..FE` extension was not sufficient for the complete game.
+  All 157 class records and 117 name records together require 171 distinct
+  glyph entries including space. The production builder now validates the
+  original pointer tables and concatenated source records by SHA-256, relocates
+  every Korean record to `0x2B9000..0x2BB000`, and encodes each glyph as
+  `00,index` followed by the original `FF` terminator. Original JP strings do
+  not use `00`, so untouched strings remain distinguishable.
+- A 16-bit index-to-VRAM table at `0x2B8000` reuses verified base glyphs and
+  allocates the remaining glyphs across six map/preparation VRAM segments:
+  `340..347`, `398..3AF`, `440..447`, `498..4AF`, `4D8..4EF`, and
+  `5D8..5F3`. Resources 430 through 435 are appended to the relocated compressed
+  resource table and loaded with the normal byte font. Resource 429 and the
+  `F0..FE -> 3F0..3FE` name-entry compatibility path remain intact.
+- Every known byte-string renderer now recognizes the pair encoding. The map
+  commander popup needed its separate `0x2115E` path redirected from calls
+  `0x20EDA/0x20F08`. The bottom map status bar also reaches `0x105BC` through
+  relative `BSR` calls at `0x1042E/0x10444`, so patching only three absolute
+  callers was insufficient; the `0x105BC` entry itself now jumps to the
+  localized renderer. Do not repeat the partial-call-site approach.
+- Checksum `988E` live-verifies Scenario 1 preparation `엘윈/파이터` and the
+  map popup plus bottom status bar for `제국지휘관/파이터`, `주민/클레릭`,
+  `레아드/매직나이트`, and `레온/나이트마스터`. It also verifies the
+  source-ID mercenary labels `로얄호스` for Leon and `헤비호스맨` for Laird.
+  Captures are `captures/run/c228_prep.png`,
+  `captures/run/988e_enemy_bottom.png`, `988e_npc_status.png`,
+  `988e_leard_status.png`, `988e_leon_status.png`,
+  `988e_leon_merc_status3.png`, and `988e_leard_merc.png`.
+- Earlier checksum `C228` proved the relocated preparation roster but exposed
+  raw local indexes in the map popup; `9A7B` fixed that popup but still exposed
+  raw indexes in the bottom bar. These are failed intermediate builds, not
+  release candidates. The current full test suite has 152 passing tests.
+- Korean spelling is intentionally `쉐리` per project direction. Scenario 1's
+  JP class IDs confirm Laird as `ﾏｼﾞｯｸﾅｲﾄ`, Leon as `ﾅｲﾄﾏｽﾀｰ`, Leon's
+  mercenary as `ﾛｲﾔﾙﾎｰｽ`, and Laird's as `ﾍﾋﾞｰﾎｰｽﾏﾝ`; these labels are not
+  inferred from sprite appearance.
