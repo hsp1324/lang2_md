@@ -2425,7 +2425,7 @@
       {"address": "0x1A7E02", "english_record": 1081, "text": "적 요격대입니다! 저쪽 배가 빨라 달아날 수 없습니다!"},
       {"address": "0x1A7E46", "english_record": 1082, "text": "맞서 싸우죠! 다른 방법은 없어요!"},
       {"address": "0x1A7E70", "english_record": 1083, "text": "역시 빛의 후예인가. {0010}님과 맞서고도 살아 있다니 제법이군."},
-      {"address": "0x1A7EC2", "english_record": 1083, "continuation": true, "text": "하지만 벨제리아에는 못 간다. {0010}님의 방해는 내가 용서 못 해!"},
+      {"address": "0x1A7EC2", "english_record": 1083, "continuation": true, "text": "하지만 벨제리아엔 못 간다. {0010}님을 방해하면 내가 용서 못 해!"},
       {"address": "0x1A7F10", "english_record": 1084, "text": "어쩔 수 없군. 돌파할 수밖에!"},
       {"address": "0x1A7F3A", "english_record": 1085, "text": "재미있군… 예전 상처가 나았는지 너희와 싸워 시험해 보지."},
       {"address": "0x1A7F8A", "english_record": 1086, "text": "적진의 저 이상한 석상은 골렘인가?"},

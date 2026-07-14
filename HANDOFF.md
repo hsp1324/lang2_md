@@ -1694,7 +1694,7 @@ contains 57 safe syllables as documented below and in
   modified. Complete reviewed scenarios are 1, 2, 3, 5, 14, 15, 16, 17, 18,
   21, 23, 24, 29, 30, and 31.
 
-### Scenario 19 Static Reviewed Dialogue (Live Verification Pending, 2026-07-12)
+### Scenario 19 Static Review And Opening Live Verification (2026-07-14)
 
 - Scenario 19 statically covers all 98 Japanese pointer records and all 116
   physical pages. English `802/803` are Scenario 18 residue; Japanese primaries
@@ -1714,15 +1714,21 @@ contains 57 safe syllables as documented below and in
   custom glyphs and 90 passing tests. Ten Korean sheets are under
   `captures/analysis/event_pages_ko/scenario_19/` and
   `scenario_19_pages_00.png` through `_09.png`.
-- Inventory is now 1,387/2,968 candidate records and 1,629/3,567 physical pages
-  modified. Scenario 19 is intentionally not added to the live-complete list:
-  the user requested background-only work, so BlastEm was not launched and no
-  keyboard, mouse, or foreground window was touched. Resume with selector row
-  19 and verify the briefing, preparation, automatic deployment, opening
-  dialogue, conditional reinforcements, item pickups, departure paths, and
-  first playable turn before promoting it to live complete.
+- Inventory at the static-review point was 1,387/2,968 candidate records and
+  1,629/3,567 physical pages modified. Checksum `524D` subsequently entered
+  selector row 19, the Korean briefing and preparation screens, automatic
+  deployment, the ship map, and the complete opening sequence. Imelda, the
+  Imperial commander, Hein, Keith, and Lester all displayed Korean names and
+  dialogue, `SCENARIO 19`/`TURN 1` appeared, and 15 paced confirmations returned
+  to the playable command menu without a reset, freeze, blank page, or visible
+  Japanese residue. Evidence is
+  `captures/analysis/524d_s19_opening_sheet.png` and
+  `captures/run/524d_s19_opening/01.png` through `15.png`.
+- Scenario 19 is not fully live-complete yet. Conditional reinforcements, item
+  pickups, departure paths, and victory/defeat variants still need runtime
+  traversal; do not infer their runtime safety from the verified opening.
 
-### Scenario 20 Static Reviewed Dialogue (Live Verification Pending, 2026-07-12)
+### Scenario 20 Static Review And Opening Live Verification (2026-07-14)
 
 - Scenario 20 statically covers all 88 Japanese pointer records and all 111
   physical pages. English `1078..1080` are the three final Scenario 19
@@ -1745,13 +1751,27 @@ contains 57 safe syllables as documented below and in
   uses 765 custom glyphs. Ten Korean sheets are under
   `captures/analysis/event_pages_ko/scenario_20/` and
   `scenario_20_pages_00.png` through `_09.png`.
-- Inventory is now 1,475/2,968 candidate records and 1,740/3,567 physical pages
-  modified, with 91 passing tests. Scenario 20 remains live-pending because
-  the user requested background-only work; BlastEm and all foreground input
-  were left untouched. Resume with selector row 20 and verify the briefing,
-  preparation, automatic deployment, golem/kraken event branches, Faias
-  confrontations, victory dialogue, and the first controllable turn before
-  marking this scenario live complete.
+- Inventory at the static-review point was 1,475/2,968 candidate records and
+  1,740/3,567 physical pages modified, with 91 passing tests. Checksum `524D`
+  subsequently entered selector row 20, the Korean briefing and preparation
+  screens, automatic deployment, the ship map, and every opening page. A slow
+  capture pass verified Scott, Sherry, Faias, and Elwin names/dialogue and a
+  clean return to the playable map; evidence is
+  `captures/analysis/524d_s20_opening_slow_sheet.png` and
+  `captures/run/524d_s20_opening_slow/01.png` through `08.png`.
+- That live pass exposed a semantic error at `0x1A7EC2`. Japanese
+  `{0010}様の邪魔だけは、俺がゆるさん` means Faias will not forgive anyone
+  interfering with Bozel, but the first Korean wording incorrectly made Bozel
+  the interfering subject. The corrected capacity-safe text is
+  `하지만 벨제리아엔 못 간다. {0010}님을 방해하면 내가 용서 못 해!`.
+  Rebuilt checksum `53AD` live-verifies the corrected page in
+  `captures/run/53ad_s20_dialogue_04.png`, the remaining Elwin/Faias pages in
+  `53ad_s20_dialogue_05.png` and `53ad_s20_dialogue_06.png`, and the playable
+  Korean `엘윈` command panel in `53ad_s20_command_menu.png`. No reset, freeze,
+  blank page, or visible Japanese residue occurred in the full opening.
+- Scenario 20 is not fully live-complete yet. The conditional golem/kraken
+  events, later Faias/Doren confrontations, victory dialogue, and route
+  variants still require runtime traversal.
 
 ### Scenario 22 Complete Reviewed Dialogue (2026-07-13)
 
