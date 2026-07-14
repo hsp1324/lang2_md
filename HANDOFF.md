@@ -2782,3 +2782,28 @@ contains 57 safe syllables as documented below and in
   `captures/run/524d_s27_prep_names2.png`. Scenario 1 still shows
   `엘윈/헤인` with the LV/status graphics intact in
   `captures/run/524d_s01_prep2.png`. All 148 tests pass.
+
+### Remaining Playable-Name And Automation Verification (2026-07-14)
+
+- A non-distribution renderer probe copied the production ROM and replaced
+  only the five Scenario 27 preparation name records. It live-rendered
+  `제시카/스코트/레스터/라나` through the same `0x22502` roster hook without
+  changing the production ROM or diagnostic SRAM. Evidence is
+  `captures/run/5a88_s27_step9.png`; the earlier variant with `라나/스코트/
+  레스터/리아나` is `captures/run/345a_s27_step3.png`.
+- `레스터` is encoded as `D1 AF AB`; decompressed production tile `D1`
+  byte-for-byte matches a fresh Galmuri7 `레` render. At native 8x8 size it can
+  resemble `리`, but this is not a font collision. Offline comparison is
+  `captures/analysis/524d_re_ri_tiles.png`.
+- A stale address-trace process launched as `./blastem -l` remained alive while
+  later commands searched only for the absolute executable path. The capture
+  helper therefore selected the old pre-extension window and appeared to show
+  a regression. Use process name `blastem`, not a command-line path substring,
+  when checking or terminating test instances.
+- The Scenario Select cheat is timing-sensitive: 0.8-second waits between
+  Left, Right, Start, C perform an ordinary load, while 0.12-second holds and
+  0.05-second gaps reliably expose the `로드01` suffix. The automation now
+  uses that timing, refuses to launch beside an existing BlastEm by default,
+  supports `--replace-existing`, and enables keyboard capture once on a fresh
+  `--click-window` launch. This specifically addresses remote-desktop focus
+  loss without silently choosing the wrong emulator window.

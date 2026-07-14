@@ -32,7 +32,7 @@
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
 - `tools/english_dialogue_inventory.py`: 레거시 영문 추출본의 3바이트 이벤트 복귀값으로 2,978개 시나리오 대사와 104개 엔딩/에필로그 대사를 분류합니다. 이 값은 일본판 문자열 주소가 아니며 영문/기계번역은 검토용 참고 자료입니다.
 - `tools/render_event_pages.py`: 시나리오별 일본판 대사 후보를 주소와 제어코드가 보이는 개별 PNG 및 묶음 시트로 렌더링합니다. 예: `python3 tools/render_event_pages.py --scenario 14`.
-- 수동 저장 슬롯이 든 `load-screen` 테스트 SRAM을 재사용해 특정 장으로 바로 들어갈 때는 `python3 tools/run_blastem_sequence.py scenario-select --scenario-number 14 --reuse-runtime-state --click-window`를 사용합니다.
+- 수동 저장 슬롯이 든 `load-screen` 테스트 SRAM을 재사용해 특정 장으로 바로 들어갈 때는 `python3 tools/run_blastem_sequence.py scenario-select --scenario-number 14 --reuse-runtime-state --click-window --replace-existing`을 사용합니다.
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
@@ -170,8 +170,9 @@ python3 tools/run_blastem_sequence.py shop
 - 자동 테스트 실행은 BlastEm에 `320 240` 크기 인자를 넘겨 작은 창으로 띄웁니다. 큰 창이 필요하면 `tools/run_blastem_sequence.py`에 `--window-width 640 --window-height 480`을 명시합니다.
 - 예전 성공 캡처(`captures/run/font_resource_08_conditions.png` -> `font_resource_11_shop_knife.png`)는 빠른 진입과 `B` 길게 누르기를 분리해서 보낸 흐름입니다. 현재 도구는 키별 hold를 지원하므로 같은 흐름을 한 명령으로 재현할 수 있습니다.
 - 현재 확인된 일본판 시작 타이밍은 `load ROM` 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`입니다. 이보다 빠르면 첫 입력이 씹히고, 늦으면 타이틀 idle 컷신으로 들어갑니다.
-- 자동 입력은 최소 0.8초 간격을 둡니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
+- 일반 화면 전환 자동 입력은 최소 0.8초 간격을 둡니다. 단, 시나리오 선택 비기의 `Left, Right, Start, C` 네 키는 0.05초 간격이어야 하며 도구가 이 타이밍을 별도로 적용합니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
 - `scenario-select`는 선택기 진입에 필요한 수동 세이브 슬롯을 보존하기 위해 `captures/runtime/load-screen`을 기본 초기화하지 않습니다. 다른 시퀀스의 격리 런타임은 기존처럼 `--reuse-runtime-state`를 주지 않으면 새로 만듭니다.
+- 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:
 

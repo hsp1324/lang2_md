@@ -11,6 +11,7 @@ from tools.run_blastem_sequence import (
     MANUAL_SLOT_HERO_NAME_OFFSET,
     manual_slot_checksum,
     migrate_scenario_select_default_name,
+    scenario_select_keys,
 )
 
 
@@ -111,6 +112,28 @@ class BlastEmSramMigrationTests(unittest.TestCase):
                 0,
             )
             self.assertEqual(path.read_bytes(), data)
+
+
+class BlastEmScenarioSelectTests(unittest.TestCase):
+    def test_selector_cheat_uses_short_verified_key_intervals(self):
+        keys = scenario_select_keys(27)
+        cheat_start = keys.index("left@0.12:0.05")
+        self.assertEqual(
+            keys[cheat_start : cheat_start + 4],
+            [
+                "left@0.12:0.05",
+                "right@0.12:0.05",
+                "start@0.12:0.05",
+                "c@0.12:0.8",
+            ],
+        )
+        self.assertEqual(keys.count("down:0.08"), 26)
+        self.assertEqual(keys[-1], "c:4.0")
+
+    def test_selector_rejects_out_of_range_scenario(self):
+        for scenario_number in (0, 32):
+            with self.assertRaisesRegex(ValueError, "1..31"):
+                scenario_select_keys(scenario_number)
 
 
 if __name__ == "__main__":

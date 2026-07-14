@@ -175,6 +175,36 @@ SEQUENCES["battle-command"] = list(SEQUENCES["deploy-dialogue"])
 SEQUENCES["first-turn-dialogue"] = list(SEQUENCES["deploy-dialogue"])
 
 
+def scenario_select_keys(scenario_number: int) -> list[str]:
+    if not 1 <= scenario_number <= 31:
+        raise ValueError("scenario number must be 1..31")
+    # The game accepts this cheat as a short sequence. Human-scale waits such
+    # as 0.8 seconds between these four keys silently perform a normal load.
+    cheat = [
+        "left@0.12:0.05",
+        "right@0.12:0.05",
+        "start@0.12:0.05",
+        "c@0.12:0.8",
+    ]
+    return [
+        *SEQUENCES["load-screen"],
+        "down:0.8",
+        *cheat,
+        *(["down:0.08"] * (scenario_number - 1)),
+        "c:4.0",
+    ]
+
+
+def running_blastem_pids() -> list[int]:
+    result = subprocess.run(
+        ["pgrep", "-x", "blastem"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return [int(line) for line in result.stdout.splitlines() if line.strip()]
+
+
 def manual_slot_checksum(data: bytes | bytearray, base: int) -> int:
     end = base + MANUAL_SLOT_CHECKSUM_DATA_SIZE
     return sum(
@@ -343,6 +373,11 @@ def main() -> int:
     parser.add_argument("--window-height", type=int, default=240)
     parser.add_argument("--scenario-number", type=int, default=14)
     parser.add_argument("--click-window", action="store_true")
+    parser.add_argument(
+        "--replace-existing",
+        action="store_true",
+        help="terminate existing BlastEm processes before launching the test window",
+    )
     parser.add_argument("--send-event", action="store_true", help="send direct window events instead of global XTest input")
     parser.add_argument(
         "--reuse-runtime-state",
@@ -356,18 +391,20 @@ def main() -> int:
     if not 1 <= args.scenario_number <= 31:
         raise ValueError("--scenario-number must be 1..31")
     if args.sequence == "scenario-select":
-        SEQUENCES[args.sequence] = [
-            *SEQUENCES["load-screen"],
-            "down:0.8",
-            "left:0.8",
-            "right:0.8",
-            "start:0.8",
-            "c:1.2",
-            *(["down:0.35"] * (args.scenario_number - 1)),
-            "c:4.0",
-        ]
+        SEQUENCES[args.sequence] = scenario_select_keys(args.scenario_number)
 
     if not args.no_launch:
+        if not args.dry_run:
+            existing_pids = running_blastem_pids()
+            if existing_pids and not args.replace_existing:
+                raise RuntimeError(
+                    "BlastEm is already running (PID "
+                    + ", ".join(str(pid) for pid in existing_pids)
+                    + "); close it or pass --replace-existing"
+                )
+            if existing_pids:
+                subprocess.run(["pkill", "-x", "blastem"], check=True)
+                time.sleep(0.5)
         runtime_name = "load-screen" if args.sequence == "scenario-select" else args.sequence
         runtime_home = RUNTIME_ROOT / runtime_name
         # The scenario selector requires a valid manual save slot. Preserve its
@@ -425,7 +462,12 @@ def main() -> int:
                     f"log: {log_path}\n{log_tail}"
                 )
 
-    key_command = make_key_command(args, SEQUENCES[args.sequence])
+    initial_keys = list(SEQUENCES[args.sequence])
+    if not args.no_launch and args.click_window:
+        # A fresh SDL window starts with keyboard capture disabled. Remote
+        # desktop focus changes can otherwise make the complete sequence vanish.
+        initial_keys.insert(0, "capture:0.4")
+    key_command = make_key_command(args, initial_keys)
     if args.dry_run:
         print("keys:", " ".join(key_command))
         if args.sequence in {"battle-command", "first-turn-dialogue"}:
