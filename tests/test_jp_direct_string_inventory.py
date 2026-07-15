@@ -139,6 +139,8 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
             self.result["ownership_counts"]["declared_epilogue_translation"],
             90,
         )
+        self.assertTrue(rows["0x09499C"]["modified"])
+        self.assertTrue(rows["0x09499C"]["relocated_pointer"].startswith("0x2C"))
 
     def test_ending_boundary_starts_at_first_ending_dialogue_record(self):
         rows = {row["address"]: row for row in self.result["candidates"]}

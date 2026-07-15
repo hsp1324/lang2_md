@@ -56,7 +56,9 @@ class EpilogueProbeRomTests(unittest.TestCase):
         self.assertEqual(builder.be16(data, force + 6), 0xFFFF)
         self.assertEqual(
             probe_builder.be32(data, force + 8),
-            int(self.records[index]["address"], 16),
+            probe_builder.be32(
+                self.built, int(self.records[index]["pointer_reference"], 16)
+            ),
         )
 
     def test_liana_and_world_tables_force_the_selected_record(self):
@@ -65,7 +67,9 @@ class EpilogueProbeRomTests(unittest.TestCase):
             (86, probe_builder.WORLD_POINTER_TABLE, probe_builder.WORLD_RECORD_COUNT),
         ):
             data = self.patched(index)
-            address = int(self.records[index]["address"], 16)
+            address = probe_builder.be32(
+                self.built, int(self.records[index]["pointer_reference"], 16)
+            )
             self.assertEqual(
                 [probe_builder.be32(data, table + item * 4) for item in range(count)],
                 [address] * count,

@@ -283,6 +283,16 @@ def migrate_scenario_select_default_name(
     return migrated
 
 
+def disable_host_gamepad_bindings(config: str) -> str:
+    start_marker = "\tpads {"
+    end_marker = "\tmice {"
+    start = config.find(start_marker)
+    end = config.find(end_marker, start + len(start_marker))
+    if start < 0 or end < 0:
+        raise ValueError("BlastEm config gamepad binding block was not found")
+    return config[:start] + "\tpads {\n\t}\n" + config[end:]
+
+
 def make_key_command(args: argparse.Namespace, keys: list[str]) -> list[str]:
     command = [
         sys.executable,
@@ -438,7 +448,9 @@ def main() -> int:
         config_dir = runtime_home / ".config/blastem"
         config_dir.mkdir(parents=True, exist_ok=True)
         default_config = (BLASTEM.parent / "default.cfg").read_text(encoding="utf-8")
-        test_config = default_config.replace("state_format native", "state_format gst")
+        test_config = disable_host_gamepad_bindings(default_config).replace(
+            "state_format native", "state_format gst"
+        )
         (config_dir / "blastem.cfg").write_text(test_config, encoding="utf-8")
         LOG_ROOT.mkdir(parents=True, exist_ok=True)
         log_path = LOG_ROOT / f"blastem_{args.sequence}.log"

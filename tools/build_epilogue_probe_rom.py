@@ -100,12 +100,6 @@ def validate_selector_tables(probe: bytes, source: bytes) -> None:
     normal_end = GROUP_POINTER_TABLE + NORMAL_CHARACTER_SLOTS * 4
     if probe[GROUP_POINTER_TABLE:normal_end] != source[GROUP_POINTER_TABLE:normal_end]:
         raise ValueError("input ROM normal epilogue group table differs from Japanese source")
-    liana_end = LIANA_POINTER_TABLE + LIANA_RECORD_COUNT * 4
-    if probe[LIANA_POINTER_TABLE:liana_end] != source[LIANA_POINTER_TABLE:liana_end]:
-        raise ValueError("input ROM Liana epilogue table differs from Japanese source")
-    world_end = WORLD_POINTER_TABLE + WORLD_RECORD_COUNT * 4
-    if probe[WORLD_POINTER_TABLE:world_end] != source[WORLD_POINTER_TABLE:world_end]:
-        raise ValueError("input ROM world epilogue table differs from Japanese source")
     reserved = probe[PROBE_DESCRIPTOR_BASE:DESCRIPTOR_RESERVATION_END]
     if reserved != b"\xFF" * len(reserved):
         raise ValueError("probe descriptor reservation is not empty")
@@ -155,11 +149,21 @@ def patch_probe(
     row: dict[str, object],
     start_slot: int | None = None,
 ) -> int:
-    address, _ = validate_record_source(source, row)
+    source_address, _ = validate_record_source(source, row)
     validate_selector_tables(probe, source)
-    if address + 2 > len(probe):
-        raise ValueError(f"record 0x{address:06X} lies outside input ROM")
-    if builder.be16(probe, address) == 0xFFFF:
+    pointer_reference = int(str(row["pointer_reference"]), 16)
+    if be32(source, pointer_reference) != source_address:
+        raise ValueError(
+            f"Japanese pointer 0x{pointer_reference:06X} no longer targets "
+            f"0x{source_address:06X}"
+        )
+    address = be32(probe, pointer_reference)
+    if not builder.EPILOGUE_RELOC_BASE <= address < builder.EPILOGUE_RELOC_LIMIT:
+        raise ValueError(
+            f"input epilogue pointer 0x{pointer_reference:06X} is not relocated: "
+            f"0x{address:06X}"
+        )
+    if address + 2 > len(probe) or builder.be16(probe, address) == 0xFFFF:
         raise ValueError(f"input record 0x{address:06X} is unexpectedly empty")
 
     install_probe_descriptors(probe, address)

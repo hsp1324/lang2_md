@@ -212,7 +212,23 @@ def main() -> None:
         source_label = f"{len(args.address)} direct records"
     elif args.record_inventory:
         record_inventory = json.loads(args.record_inventory.read_text(encoding="utf-8"))
-        addresses = [int(str(row["address"]), 16) for row in record_inventory["records"]]
+        addresses = []
+        for row in record_inventory["records"]:
+            source_address = int(str(row["address"]), 16)
+            pointer_reference = row.get("pointer_reference")
+            pointer_offset = (
+                int(str(pointer_reference), 16)
+                if pointer_reference is not None
+                else None
+            )
+            addresses.append(
+                int.from_bytes(
+                    rom[pointer_offset : pointer_offset + 4],
+                    "big",
+                )
+                if pointer_offset is not None
+                else source_address
+            )
         sheets = render_address_pages(
             rom,
             addresses,

@@ -37,10 +37,18 @@ slot 15    four world outcomes at 0x089592
 
 ## Probe ROM
 
+The production build validates all 90 Japanese records against the full source
+SHA-256 values in `localization/epilogue_records.json`. It also checks each
+individual selector pointer, control sequence, and page count. The Korean
+records are variable length so natural word spacing is possible; they are
+written consecutively from `0x2C0000` and each original selector pointer is
+updated to the corresponding relocated record. The original compact records
+are retained but are no longer reachable.
+
 `tools/build_epilogue_probe_rom.py` copies the current Korean build, validates
-the selected record against the full Japanese source SHA-256 in
-`localization/epilogue_records.json`, and writes two descriptors into the
-otherwise-unused expanded-ROM range at `0x3FF000`:
+the selected Japanese source record, follows its pointer reference to the
+relocated Korean record, and writes two descriptors into the otherwise-unused
+expanded-ROM range at `0x3FF000`:
 
 - a skip descriptor beginning with `FFFF`, which makes the stock routine return
   without creating a text object;
@@ -48,8 +56,8 @@ otherwise-unused expanded-ROM range at `0x3FF000`:
 
 All other normal character groups are temporarily redirected to the skip
 descriptor. Liana and world records retain their special stock paths and have
-their small direct-pointer table redirected to the requested record. The Mega
-Drive checksum is recalculated.
+their small direct-pointer table redirected to the relocated requested record.
+The Mega Drive checksum is recalculated.
 
 `--start-slot` can replace the stock `CLR.W $FFFFAE90` at `0x01C7A8` with an
 equal-length `MOVE.W #slot,$AE90.W`. This keeps the original ending loop and
@@ -91,8 +99,14 @@ epilogue probe. It validates the complete Scenario 27 layout and exact Japanese
 Bernhardt record, then moves an unguarded Bernhardt directly above the first
 automatic Elwin position. Scenario AT/DF bytes are signed modifiers rather than
 final values, so the probe writes `-12/-4` to cancel Emperor's `AT 12/DF 4`
-class bases. Live status is therefore `AT 0/DF 0`. This preserves the stock
-final-battle event and ending path while making the battle end after one attack.
+class bases. Live status is therefore `AT 0/DF 0`.
+
+AT/DF 0 alone does not guarantee a one-attack defeat: combat variance can leave
+Bernhardt at HP 1 even when a diagnostic save raises Elwin from AT 23 to AT 64.
+Save a BlastEm state at the command menu immediately before selecting Attack.
+If the result is HP 1, load that state, wait a different number of frames to
+advance the battle RNG, and retry. Do not change the production ROM or a normal
+user SRAM to force the result.
 
 ```bash
 python3 tools/build_epilogue_probe_rom.py --record-index 78 --start-slot 14
@@ -111,6 +125,9 @@ python3 tools/build_epilogue_probe_rom.py \
   --input-rom 'roms/builds/Langrisser II (Scenario 27 Ending Probe).md' \
   --record-index 86 --start-slot 15 \
   --output-rom 'roms/builds/Langrisser II (Scenario 27 Final Credit Probe).md'
+python3 tools/run_blastem_sequence.py scenario-select \
+  --rom 'roms/builds/Langrisser II (Scenario 27 Final Credit Probe).md' \
+  --scenario-number 27 --send-event
 ```
 
 ## Runtime Verification
@@ -135,7 +152,8 @@ The stock path was exercised in BlastEm on 2026-07-14:
   live status was `AT 0/DF 0`, the stock world epilogue completed, and the
   final two-record credit group displayed `COPYRIGHT 1994 NCS` together with
   `한국어화 hsp1324`. Evidence is
-  `captures/run/f2fc_credit_final_watch/324.png`.
+  `captures/run/f2fc_credit_final_watch/324.png`. That run proved the ending
+  route, but did not prove AT/DF 0 makes the first combat deterministic.
 
 GST saves are ROM-content-specific in BlastEm. Loading the pre-epilogue GST
 after swapping to another probe ROM was rejected, and changing `AE90` inside an
@@ -145,3 +163,44 @@ early. Rebuild the combined probe and replay Scenario 27 instead.
 This proves the normal, Liana, and world selector/renderer classes. It does not
 prove every one of the 90 records live; all 90 retain separate static hash,
 capacity, page-boundary, and rendered-sheet checks.
+
+## Relocated Spaced Records
+
+The earlier no-space Korean epilogues were a conservative response to each
+original record's fixed capacity, not a renderer requirement. On 2026-07-15 all
+90 records were reflowed with normal Korean word spacing and relocated into the
+reserved `0x2C0000..0x2D0000` range. The current set starts at `0x2C0000`; its
+last record starts at `0x2CA54E`. Unit tests require all 90 relocated pointers
+to be unique and increasing, preserve source controls and page breaks, and keep
+every authored page within three lines of 24 visible cells.
+
+Production checksum `E6F4` and combined Scenario 27/slot 15 checksum `BE4C`
+completed the stock closing event, world epilogue, credits, and `Fin` without a
+reset. The 340-step evidence set is
+`captures/run/be4c_epilogue_watch/001.png` through `340.png`; frame 300 visibly
+confirms ordinary spaces. Frame 270 exposed one remaining authored adjacency,
+`{0001}일행`, which rendered as `엘윈일행`. All eight occurrences were changed
+to `{0001} 일행`, guarded by a regression test, and the corrected production
+checksum is `EA22`. A final `EA22` combined-probe playback is required before
+calling the corrected wording live-verified.
+
+The first corrected-checksum attempt used production `EA22`, Scenario probe
+`3590`, and combined checksum `C176` without boosting the diagnostic save.
+Bernhardt displayed AT/DF 0 but survived at HP 1; evidence is
+`captures/run/c176_probe_failure_current.png`. The 133 frames under
+`captures/run/c176_epilogue_watch/` are an aborted battle attempt, not epilogue
+verification evidence. A second diagnostic attempt raised Elwin to AT 64 but
+the same damage cap still left Bernhardt at HP 1, captured at
+`captures/run/c176_at64_second_failure_current.png`. The 150 frames under
+`captures/run/c176_at64_epilogue_watch/` are also aborted battle evidence. The
+next runtime attempt must use a pre-attack save-state and varied-delay retries.
+
+Under the current WSLg/remote-focus state, global XTest input could leave the
+frame unchanged even after raising the window. Direct window events through
+`tools/send_blastem_keys.py --send-event` were reliable and were used for the
+complete `BE4C` playback. Treat an unchanged capture as input-delivery failure
+before changing ROM logic.
+
+Automation configs remove the host `pads` binding block while retaining the
+keyboard-to-emulated-pad mappings used by direct events. An Xbox controller can
+therefore be used by another application without steering the test emulator.

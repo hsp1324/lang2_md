@@ -238,11 +238,19 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         start = int(row["address_int"])
         capacity, _, _ = builder.direct_record_layout(japanese, start)
         ending_intervals.append((start, start + capacity * 2, str(row["text"])))
+    epilogue_inventory_by_address = {
+        int(row["address_int"]): row
+        for row in builder.load_epilogue_record_inventory()
+    }
     epilogue_intervals = []
     for row in builder.load_epilogue_dialogue_translations():
         start = int(row["address_int"])
         capacity, _, _ = builder.direct_record_layout(japanese, start)
-        epilogue_intervals.append((start, start + capacity * 2, str(row["text"])))
+        inventory = epilogue_inventory_by_address[start]
+        relocated = be32(korean, int(inventory["pointer_reference_int"]))
+        epilogue_intervals.append(
+            (start, start + capacity * 2, str(row["text"]), relocated)
+        )
     credits_intervals = []
     credits = builder.load_credits_translations()
     for index, row in enumerate(credits["records"]):
@@ -266,6 +274,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     for offset, original in scan_candidates(japanese):
         current = read_current_stream(korean, offset)
         ranged = None
+        epilogue_record = None
         credits_record = None
         if offset in owners:
             ownership = "pointer_table_record"
@@ -297,10 +306,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     ),
                     None,
                 )
-                epilogue = next(
+                epilogue_record = next(
                     (
-                        (start, text)
-                        for start, end, text in epilogue_intervals
+                        (start, text, relocated)
+                        for start, end, text, relocated in epilogue_intervals
                         if start <= offset < end
                     ),
                     None,
@@ -318,10 +327,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                         "declared_ending_translation",
                         f"엔딩 번역 레코드 0x{ending[0]:06X}: {ending[1]}",
                     )
-                elif epilogue:
+                elif epilogue_record:
                     ranged = (
                         "declared_epilogue_translation",
-                        f"후일담 번역 레코드 0x{epilogue[0]:06X}: {epilogue[1]}",
+                        f"후일담 번역 레코드 0x{epilogue_record[0]:06X}: "
+                        f"{epilogue_record[1]}",
                     )
                 elif credits_record:
                     ranged = (
@@ -350,12 +360,22 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "original_tokens": tokens(original),
                 "current_tokens": tokens(current),
                 "relocated_pointer": (
-                    f"0x{credits_record[2]:06X}" if credits_record else None
+                    f"0x{credits_record[2]:06X}"
+                    if credits_record
+                    else (
+                        f"0x{epilogue_record[2]:06X}"
+                        if epilogue_record
+                        else None
+                    )
                 ),
-                # Relocated credits intentionally leave the source bytes intact.
+                # Relocated records intentionally leave source bytes intact.
                 # Their reachable pointer changed even when this stale source
                 # interval remains byte-identical.
-                "modified": current != original or credits_record is not None,
+                "modified": (
+                    current != original
+                    or epilogue_record is not None
+                    or credits_record is not None
+                ),
                 "reviewed": False,
             }
         )

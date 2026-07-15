@@ -627,6 +627,9 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
 EVENT_DIALOGUE_TRANSLATIONS = Path("localization/event_dialogue_ko.json")
 ENDING_DIALOGUE_TRANSLATIONS = Path("localization/ending_dialogue_ko.json")
 EPILOGUE_DIALOGUE_TRANSLATIONS = Path("localization/epilogue_dialogue_ko.json")
+EPILOGUE_RECORD_INVENTORY = Path("localization/epilogue_records.json")
+EPILOGUE_RELOC_BASE = 0x2C0000
+EPILOGUE_RELOC_LIMIT = 0x2D0000
 CREDITS_TRANSLATIONS = Path("localization/credits_ko.json")
 CREDITS_POINTER_TABLE = 0x0A333A
 CREDITS_SOURCE_RECORD_COUNT = 60
@@ -1789,6 +1792,34 @@ def load_epilogue_dialogue_translations(
     return rows
 
 
+def load_epilogue_record_inventory(
+    path: Path = EPILOGUE_RECORD_INVENTORY,
+) -> list[dict[str, object]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entries = payload.get("records")
+    if not isinstance(entries, list) or len(entries) != 90:
+        raise ValueError(f"epilogue inventory in {path} needs 90 records")
+    rows: list[dict[str, object]] = []
+    seen_addresses: set[int] = set()
+    seen_references: set[int] = set()
+    for entry in entries:
+        row = dict(entry)
+        address = int(str(row["address"]), 16)
+        pointer_reference = int(str(row["pointer_reference"]), 16)
+        if address in seen_addresses:
+            raise ValueError(f"duplicate epilogue address 0x{address:06X}")
+        if pointer_reference in seen_references:
+            raise ValueError(
+                f"duplicate epilogue pointer reference 0x{pointer_reference:06X}"
+            )
+        seen_addresses.add(address)
+        seen_references.add(pointer_reference)
+        row["address_int"] = address
+        row["pointer_reference_int"] = pointer_reference
+        rows.append(row)
+    return rows
+
+
 def load_credits_translations(
     path: Path = CREDITS_TRANSLATIONS,
 ) -> dict[str, object]:
@@ -1964,6 +1995,87 @@ def patch_ending_dialogue_records(
                 f"only {capacity}: {text!r}"
             )
         write_word_list(data, start, values, capacity)
+
+
+def patch_relocated_epilogue_dialogue_records(
+    data: bytearray,
+    reference_data: bytes,
+    glyph_by_char: dict[str, int],
+    rows: list[dict[str, object]],
+    inventory_rows: list[dict[str, object]],
+) -> int:
+    inventory_by_address = {
+        int(row["address_int"]): row for row in inventory_rows
+    }
+    if len(rows) != len(inventory_by_address) or {
+        int(row["address_int"]) for row in rows
+    } != set(inventory_by_address):
+        raise ValueError("epilogue translations and pointer inventory differ")
+
+    encoded: list[tuple[dict[str, object], list[int]]] = []
+    required_bytes = 0
+    for row in rows:
+        start = int(row["address_int"])
+        inventory = inventory_by_address[start]
+        capacity, original_controls, original_page_breaks = direct_record_layout(
+            reference_data, start
+        )
+        if capacity != int(inventory["capacity_words"]):
+            raise ValueError(
+                f"epilogue capacity changed at 0x{start:06X}: "
+                f"{capacity} != {inventory['capacity_words']}"
+            )
+        source_bytes = reference_data[start : start + capacity * 2]
+        source_digest = hashlib.sha256(source_bytes).hexdigest()
+        if (
+            source_digest != row["source_sha256"]
+            or source_digest != inventory["source_sha256"]
+        ):
+            raise ValueError(
+                f"epilogue source changed at 0x{start:06X}: {source_digest}"
+            )
+        text = str(row["text"])
+        values, translated_controls = encode_ending_dialogue_text(text, glyph_by_char)
+        if translated_controls != original_controls:
+            raise ValueError(
+                f"epilogue controls changed at 0x{start:06X}: "
+                f"{translated_controls!r} != {original_controls!r}"
+            )
+        translated_page_breaks = values.count(0xFFFD)
+        if translated_page_breaks != original_page_breaks:
+            raise ValueError(
+                f"epilogue page breaks changed at 0x{start:06X}: "
+                f"{translated_page_breaks} != {original_page_breaks}"
+            )
+        pointer_reference = int(inventory["pointer_reference_int"])
+        if be32(reference_data, pointer_reference) != start:
+            raise ValueError(
+                f"Japanese epilogue pointer 0x{pointer_reference:06X} no longer "
+                f"targets 0x{start:06X}"
+            )
+        if be32(data, pointer_reference) != start:
+            raise ValueError(
+                f"working epilogue pointer 0x{pointer_reference:06X} changed "
+                "before relocation"
+            )
+        encoded.append((inventory, values))
+        required_bytes += (len(values) + 1) * 2
+
+    relocation_end = EPILOGUE_RELOC_BASE + required_bytes
+    if relocation_end > EPILOGUE_RELOC_LIMIT:
+        raise ValueError(
+            f"epilogue relocation needs 0x{required_bytes:X} bytes, exceeds "
+            f"0x{EPILOGUE_RELOC_LIMIT - EPILOGUE_RELOC_BASE:X}"
+        )
+    if data[EPILOGUE_RELOC_BASE:relocation_end] != b"\xFF" * required_bytes:
+        raise ValueError("epilogue relocation target is not empty")
+
+    cursor = EPILOGUE_RELOC_BASE
+    for inventory, values in encoded:
+        pointer_reference = int(inventory["pointer_reference_int"])
+        put32(data, pointer_reference, cursor)
+        cursor = write_word_list_exact(data, cursor, values)
+    return cursor
 
 
 def patch_credits_records(
@@ -4693,6 +4805,7 @@ def main() -> None:
     reviewed_event_rows = load_reviewed_event_translations()
     ending_dialogue_rows = load_ending_dialogue_translations()
     epilogue_dialogue_rows = load_epilogue_dialogue_translations()
+    epilogue_inventory_rows = load_epilogue_record_inventory()
     credits_payload = load_credits_translations()
     if not 0 <= args.scenario_count <= len(scenario_texts):
         raise ValueError(f"--scenario-count must be 0..{len(scenario_texts)}")
@@ -4833,8 +4946,12 @@ def main() -> None:
         patch_ending_dialogue_records(
             data, IN_ROM.read_bytes(), glyph_by_char, ending_dialogue_rows
         )
-        patch_ending_dialogue_records(
-            data, IN_ROM.read_bytes(), glyph_by_char, epilogue_dialogue_rows
+        patch_relocated_epilogue_dialogue_records(
+            data,
+            IN_ROM.read_bytes(),
+            glyph_by_char,
+            epilogue_dialogue_rows,
+            epilogue_inventory_rows,
         )
         patch_credits_records(
             data, IN_ROM.read_bytes(), glyph_by_char, credits_payload

@@ -33,8 +33,9 @@ BERNHARDT_RECORD_OFFSET = 0x18323E
 PROBE_BERNHARDT_X = 15
 PROBE_BERNHARDT_Y = 15
 # Scenario stat bytes are signed modifiers applied after class base stats.
-# Emperor contributes AT 12 / DF 4, so zero bytes still leave a survivable
-# target. Cancel those base values to make the ending probe deterministic.
+# Emperor contributes AT 12 / DF 4, so zero bytes still leave a much stronger
+# target. Cancel those base values. Combat variance can still leave an AT/DF 0
+# commander at one HP, so runtime verification retries from a pre-attack state.
 PROBE_BERNHARDT_AT_MODIFIER = -12
 PROBE_BERNHARDT_DF_MODIFIER = -4
 

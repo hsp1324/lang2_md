@@ -2710,8 +2710,10 @@ contains 57 safe syllables as documented below and in
 - `tools/build_scenario27_ending_probe_rom.py` validates Scenario 27 header
   `0x1830CC`, deployment table `0x1830F2`, Elwin's automatic position `(15,16)`,
   and the exact Bernhardt record at `0x18323E`. Its ignored output moves an
-  unguarded AT/DF 0 Bernhardt to `(15,15)` so the stock ending starts after one
-  Elwin attack. Tests reject changed layout/records and verify the checksum.
+  unguarded AT/DF 0 Bernhardt to `(15,15)`. Tests reject changed layout/records
+  and verify the checksum. AT/DF 0 does not by itself guarantee a one-attack
+  defeat; save immediately before Attack and retry from that state as documented
+  below.
 - The production checksum after the ending-label fix is `451C`. Its Scenario 27
   probe checksum `9B8E` ran through the Korean route, prologue, preparation,
   22-screen opening, Bernhardt battle, complete closing event, ending art,
@@ -2927,9 +2929,9 @@ contains 57 safe syllables as documented below and in
 
 - Scenario 27 stat bytes are signed class modifiers, not final AT/DF values.
   Writing zero left Emperor's `AT 12/DF 4`, allowed Bernhardt to survive at
-  one HP, and could trigger healing. The ending probe now writes `-12/-4`;
-  checksum `BFAD` live-verifies actual `AT 0/DF 0` and deterministic defeat in
-  one Elwin attack. Do not restore literal zero bytes.
+  one HP, and could trigger healing. The ending probe now writes `-12/-4` and
+  checksum `BFAD` live-verifies actual `AT 0/DF 0`. Do not restore literal zero
+  bytes, but do not treat the displayed zeroes as deterministic damage either.
 - Applying `tools/build_epilogue_probe_rom.py --record-index 86 --start-slot 15`
   to `BFAD` produces ignored checksum `F2FC`. The complete route was replayed
   through the closing event, ending art, all scenario-history pages, world
@@ -2971,3 +2973,46 @@ contains 57 safe syllables as documented below and in
 - Production checksum `8AD6` live-verifies `매직애로우` in Hein's battle
   magic list and preserves the bottom status labels `헤인/워록` in
   `captures/run/8ad6_s01_magic_namu_names.png`.
+
+### Relocated Epilogues With Word Spacing (2026-07-15)
+
+- The former no-space epilogue text was a conservative fixed-capacity choice,
+  not a proven text-window restriction. All 90 Korean character and world
+  records now use normal word spacing and are relocated consecutively from
+  `0x2C0000`; the last record starts at `0x2CA54E`.
+- `patch_relocated_epilogue_dialogue_records()` validates each Japanese source
+  SHA-256, original capacity, name controls, page-break count, and individual
+  pointer before writing. It rejects occupied relocation storage and changed
+  working pointers. Tests also enforce unique increasing pointers and the
+  three-line/24-cell window limit.
+- The probe builder and static inventory/render tools now follow each record's
+  pointer reference. This keeps Japanese rendering on the original addresses
+  and Korean rendering on the relocated records. The direct inventory remains
+  at 783 classified candidates with zero unclassified entries.
+- Automated Korean spacing was manually reviewed. Corrections include compound
+  nouns such as `근위기사`, `기사단장`, `제국군`, `마왕`, `마검`, and broken
+  phrase/page boundaries. Production checksum `E6F4` plus the Scenario 27
+  ending/slot 15 probe produced checksum `BE4C` and completed the entire route
+  through `Fin`; evidence is `captures/run/be4c_epilogue_watch/001.png` through
+  `340.png`.
+- Live frame 270 showed that `{0001}일행` becomes `엘윈일행`. All eight dynamic
+  name occurrences were changed to `{0001} 일행` and a regression assertion
+  now rejects the joined form. Corrected production checksum is `EA22`; repeat
+  the final combined-probe playback before treating this exact wording as live
+  verified.
+- Global XTest was unreliable in the current remote/focus state, while direct
+  window events via `tools/send_blastem_keys.py --send-event` worked. Unchanged
+  frames during automation should be diagnosed as input delivery first.
+- The corrected production checksum `EA22`, Scenario probe `3590`, and combined
+  checksum `C176` exposed a false probe assumption: the first Elwin combat left
+  AT/DF 0 Bernhardt at HP 1. `captures/run/c176_probe_failure_current.png` is
+  the evidence; `captures/run/c176_epilogue_watch/` was aborted after 133 frames
+  and is not epilogue evidence. A second isolated-save experiment raised Elwin
+  from AT 23 to AT 64, but the combat cap still left Bernhardt at HP 1 in
+  `captures/run/c176_at64_second_failure_current.png`; its 150-frame watch
+  directory is also invalid as epilogue evidence. Do not repeat AT boosting.
+  Save state at the command menu, then load and retry with different pre-attack
+  delays until the damage roll reaches 10.
+- Automated BlastEm configs remove host gamepad bindings but retain keyboard
+  mappings used by direct X events. This prevents an Xbox controller used in
+  another game from steering the localization test emulator.
