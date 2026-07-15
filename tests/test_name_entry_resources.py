@@ -307,6 +307,32 @@ class NameEntryResourceTests(unittest.TestCase):
             bytes.fromhex("4E F9")
             + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
         )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK :
+                builder.BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK + 6
+            ],
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+        prep_selected_name_renderer = builder._build_byte_ui_prep_selected_name_renderer()
+        self.assertTrue(prep_selected_name_renderer.endswith(bytes.fromhex("4E F9 00 02 7A 98")))
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK :
+                builder.BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK + 6
+            ],
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK :
+                builder.BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK + 6
+            ],
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
 
     def test_all_name_and_class_records_use_localized_pair_encoding(self):
         data = bytearray(self.rom)

@@ -2876,3 +2876,37 @@ contains 57 safe syllables as documented below and in
   JP class IDs confirm Laird as `ﾏｼﾞｯｸﾅｲﾄ`, Leon as `ﾅｲﾄﾏｽﾀｰ`, Leon's
   mercenary as `ﾛｲﾔﾙﾎｰｽ`, and Laird's as `ﾍﾋﾞｰﾎｰｽﾏﾝ`; these labels are not
   inferred from sprite appearance.
+
+### Preparation Selected Names And Hire Classes (2026-07-15)
+
+- Full-table checksum `988E` exposed two more direct byte readers in Scenario
+  27 preparation. The selected commander summary at the lower left rendered
+  pair indexes as `Z !`, `6 T`, `P 7`, and `3 D`; the hire list rendered a
+  class as a lone `E`. These were not magic or equipment names.
+- The lower-left refresh routine is `0x229F4`, called after the selected unit
+  pointer is resolved at `0x22978`. It now jumps to the pair-aware command
+  stream builder at `0x2B7A00`. The separate preparation/deployment name copy
+  at `0x27A64` also jumps to `0x2B7900` so later arrangement rows do not expose
+  the same indexes.
+- The hire-list builder reads the class pointer table directly at `0x22AF2`
+  and formerly copied bytes from `0x22AFC`. That loop now jumps to `0x2B7B00`,
+  preserving its eight-cell padding and dakuten control behavior while mapping
+  localized pairs.
+- Checksum `F153` live-verifies `키스`, `헤인`, `쉐리`, and `아론` in both the
+  roster/status panel and lower-left selected-name panel. It also verifies
+  Keith's original-source hire classes as `솔저` and `그리폰`. Scenario 1 was
+  re-entered on the same build and still displays `엘윈/파이터` plus the
+  lower-left `엘윈` without corrupting `소지금`. Evidence:
+  `captures/run/f153_s27_direct_down.png`, `f153_s27_sherry.png`,
+  `f153_s27_hein.png`, `f153_s27_aaron_verified.png`, and
+  `f153_s27_hire_class2.png`, plus `f153_s01_prep.png`.
+- Global XTest input was ignored after a WSLg/remote-focus transition even
+  though the window was raised. `tools/send_blastem_keys.py --send-event`
+  delivered the same D-pad/C inputs directly to the BlastEm window and allowed
+  deterministic verification. Treat unchanged frames as an input-delivery
+  issue before changing game logic.
+### Project Credit
+
+- Project developer ID: `hsp1324`.
+- Keep this ID in the repository credit and add it to the localized in-game
+  staff roll before the full-localization goal is marked complete.

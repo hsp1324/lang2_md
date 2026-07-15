@@ -279,6 +279,9 @@ BYTE_UI_PANEL_RENDER_ROUTINE = 0x2B7600
 BYTE_UI_PREP_ROSTER_ROUTINE = 0x2B7680
 BYTE_UI_MAP_INFO_RENDER_ROUTINE = 0x2B7700
 BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
+BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
+BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
+BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
 BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
@@ -286,6 +289,18 @@ BYTE_UI_DIRECT_MAP_RENDER_CALLS = (0x01B546, 0x01CBA6, 0x01CBBC)
 BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 01 05 BC")
 BYTE_UI_DIRECT_MAP_RENDER_HOOK = 0x0105BC
 BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL = bytes.fromhex("48 E7 C0 60 B3 FC")
+BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
+BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
+    "42 40 10 18 0C 00"
+)
+BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK = 0x0229F4
+BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK_ORIGINAL = bytes.fromhex(
+    "32 3C C9 06 22 78"
+)
+BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK = 0x022AFC
+BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK_ORIGINAL = bytes.fromhex(
+    "36 3C 00 07 70 00"
+)
 
 BYTE_UI_PLAYABLE_NAME_SOURCES = {
     0x061AC5: "ｴﾙｳｨﾝ",
@@ -3509,6 +3524,127 @@ def _build_byte_ui_direct_map_renderer() -> bytes:
     return code.finish()
 
 
+def _build_byte_ui_prep_selected_name_renderer() -> bytes:
+    code = _M68KCode()
+    code.label("loop")
+    code.emit("42 40 10 18 0C 00 00 FF")
+    code.branch_word(0x6700, "done")
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 40 03 00")
+    code.branch_word(0x6000, "store")
+    code.label("base")
+    code.emit("0C 00 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("00 40 80 00 34 C0")
+    code.branch_word(0x6000, "loop")
+    code.label("mark")
+    code.emit("94 FC 00 22 00 40 80 00 34 80 D4 FC 00 22")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("4E F9 00 02 7A 98")
+    return code.finish()
+
+
+def _build_byte_ui_prep_selected_panel_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit(
+        "32 3C C9 06 22 78 81 C4 04 41 00 80 "
+        "32 FC FF F5 32 C1 32 FC 80 20 32 FC 00 08 32 FC 00 02 "
+        "06 41 00 80 3E 3C 00 08"
+    )
+    code.label("loop")
+    code.emit("70 00 10 18 0C 00 00 FF")
+    code.branch_word(0x6700, "fill")
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 18")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 40 03 00")
+    code.branch_word(0x6000, "store")
+    code.label("base")
+    code.emit("0C 00 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("00 40 80 00 32 FC FF F8 32 C1 32 FC 00 01 32 C0 54 41")
+    code.branch_word(0x51CF, "loop")
+    code.branch_word(0x6000, "done")
+    code.label("mark")
+    code.emit(
+        "00 40 80 00 04 41 00 82 32 FC FF F8 32 C1 "
+        "32 FC 00 01 32 C0 06 41 00 82"
+    )
+    code.branch_word(0x6000, "loop")
+    code.label("fill")
+    code.emit("32 FC FF F8 32 C1 32 FC 00 01 32 FC 80 20 54 41")
+    code.branch_word(0x51CF, "fill")
+    code.label("done")
+    code.emit("21 C9 81 C4 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_prep_hire_class_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit("36 3C 00 07")
+    code.label("loop")
+    code.emit("70 00 10 19 0C 00 00 FF")
+    code.branch_word(0x6700, "pad_check")
+    code.emit("0C 00 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("42 40 10 19")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.branch_word(0x6000, "store")
+    code.label("legacy")
+    code.emit("0C 00 00 F0")
+    code.branch_word(0x6500, "base")
+    code.emit("06 40 03 00")
+    code.branch_word(0x6000, "store")
+    code.label("base")
+    code.emit("0C 00 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 00 00 DE")
+    code.branch_word(0x6600, "store")
+    code.label("mark")
+    code.emit("30 FC FF FA 30 FC FF F9 30 C0 30 3C FF F8 52 43")
+    code.label("store")
+    code.emit("30 C0")
+    code.branch_word(0x51CB, "loop")
+    code.branch_word(0x6000, "done")
+    code.label("pad_check")
+    code.emit("0C 43 FF FF")
+    code.branch_word(0x6700, "done")
+    code.label("pad")
+    code.emit("30 FC 00 20")
+    code.branch_word(0x51CB, "pad")
+    code.label("done")
+    code.emit("4E F9 00 02 2B 4A")
+    return code.finish()
+
+
 def validate_byte_ui_playable_name_sources(data: bytes | bytearray) -> None:
     for offset, expected in BYTE_UI_PLAYABLE_NAME_SOURCES.items():
         capacity = byte_string_capacity(data, offset)
@@ -3736,6 +3872,9 @@ def install_byte_ui_extension(
     status_renderer = _build_byte_ui_status_renderer()
     map_info_renderer = _build_byte_ui_map_info_renderer()
     direct_map_renderer = _build_byte_ui_direct_map_renderer()
+    prep_selected_name_renderer = _build_byte_ui_prep_selected_name_renderer()
+    prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
+    prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -3755,6 +3894,9 @@ def install_byte_ui_extension(
         BYTE_UI_PREP_ROSTER_ROUTINE: prep_roster_renderer,
         BYTE_UI_MAP_INFO_RENDER_ROUTINE: map_info_renderer,
         BYTE_UI_DIRECT_MAP_RENDER_ROUTINE: direct_map_renderer,
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE: prep_selected_name_renderer,
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE: prep_hire_class_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
     }
     for offset, payload in routines.items():
@@ -3797,6 +3939,42 @@ def install_byte_ui_extension(
     data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
     ] = bytes.fromhex("4E F9") + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+    if data[
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK :
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK + 6
+    ] != BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL:
+        raise ValueError("prep selected-name renderer entry changed")
+    data[
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK :
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK + 6
+    ] = (
+        bytes.fromhex("4E F9")
+        + BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    if data[
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK :
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK + 6
+    ] != BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK_ORIGINAL:
+        raise ValueError("prep selected-panel renderer entry changed")
+    data[
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK :
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK + 6
+    ] = (
+        bytes.fromhex("4E F9")
+        + BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    if data[
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK :
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK + 6
+    ] != BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK_ORIGINAL:
+        raise ValueError("prep hire-class renderer entry changed")
+    data[
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK :
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK + 6
+    ] = (
+        bytes.fromhex("4E F9")
+        + BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE.to_bytes(4, "big")
+    )
     for offset in BYTE_UI_PLANE_RENDER_CALLS:
         if data[offset : offset + 6] != BYTE_UI_PLANE_RENDER_CALL_ORIGINAL:
             raise ValueError(f"byte plane-render call changed at 0x{offset:06X}")
