@@ -3073,10 +3073,10 @@ contains 57 safe syllables as documented below and in
 - The battle-result decoration fix remains guarded in the current source by
   `test_byte_ui_patch_preserves_ascii_and_status_graphics`, including an exact
   byte comparison of tile `0xB0`. The direct live battle-screen evidence is
-  still the checksum `80E6` capture
+  checksum `80E6` capture
   `captures/run/80e6_battle_result_decoration_fixed.png`; do not relabel that
-  older capture as an `EA22` live battle-screen check. A fresh current-build
-  combat-window capture remains part of the broader runtime checklist.
+  older capture as an `EA22` live battle-screen check. A later
+  current-production-derived probe capture is recorded below.
 
 ### REV00 Debug Magic Inventory And Revision-Specific Probes (2026-07-16)
 
@@ -3134,3 +3134,48 @@ contains 57 safe syllables as documented below and in
   `d177_debug_summon_page2.png` verifies `요르문간드/형님`, with no Japanese
   residue, clipping, reset, or freeze. This completes the live name-list
   rendering check but does not justify shipping the forced-command branch.
+
+### Current EA22 Turn 1 And Scenario 27 Preparation Regression (2026-07-16)
+
+- A fresh production `EA22` `first-turn-dialogue` run ended the first player
+  turn and was advanced one direct C event at a time. Captures
+  `captures/run/ea22_first_turn_step_01.png` through `_73.png` cover the
+  resident warning, imperial withdrawal, Leon/Laird orders, Liana/Leon/Bald
+  exchange, enemy movement, and the following Hein/Elwin event. The route
+  reached `TURN 2` without reset, freeze, Japanese residue, or damaged dynamic
+  names; the stable map is `ea22_s01_turn2_map.png`. Some intermediate frames
+  were captured while text was still typing and are not authoritative wording
+  samples. The first enemy phase did not enter the battle presentation.
+- Production `EA22` also entered Scenario 27 through the built-in selector.
+  `ea22_s27_roster_sheet.png` verifies the five preparation commanders and
+  current classes: `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
+  `아론/파이터`, and `키스/호크나이트`. It also preserves `소지금` and all
+  four main preparation labels.
+- The Scenario 27 equipment path cycles through `무기`, `방어구`, and
+  `장신구` without the former `WPN` abbreviation or corrupt leading glyph.
+  Evidence is `ea22_s27_equipment_current2.png`,
+  `ea22_s27_equipment_weapon_list.png`, and
+  `ea22_s27_equipment_accessory.png`.
+- The same current run bought and sold daggers. `ea22_s27_shop_buy_list.png`
+  shows `아이템 구입`, `단검`, `호신용 단검`, `AT+1`, and `50P` with no stray
+  `4`; `ea22_s27_shop_buy_message.png` shows `단검을 구입함`.
+  `ea22_s27_shop_sell_list.png` and `ea22_s27_shop_sell_message2.png` verify
+  `아이템 판매`, the real `40P` sale value, and `단검을 판매함`.
+- Preparation navigation has two focus levels. Down while the left commander
+  list owns focus changes the selected commander and does not move the main
+  command cursor. Press Right once to transfer focus to the right-hand list,
+  then use Down. The hire submenu exits through its explicit `END` row; B on
+  an empty hire list does not return to the main preparation commands. The
+  equipment flow completes after confirming all three slots and then returns
+  to the main command list. These observed rules explain the discarded
+  unchanged-frame navigation probes and should be reused by automation.
+- Rebuilding `tools/build_scenario27_ending_probe_rom.py` directly from
+  production `EA22` produced checksum `3590`; its only gameplay changes are
+  the documented Scenario 27 Bernhardt placement/stat/mercenary fields. The
+  stock battle renderer was entered through the normal Elwin attack path.
+  `captures/run/3590_battle_live_078.png` and `_083.png` verify the current
+  localization code in the battle presentation: portrait names, numeric stats,
+  `-AT-`, `-DF-`, and the original formation/modifier decoration are intact.
+  The third center-row mark is original graphic decoration, not untranslated
+  Japanese text. It must remain byte-identical rather than be overwritten with
+  another Hangul glyph.
