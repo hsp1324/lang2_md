@@ -57,6 +57,9 @@ documented, committed, and pushed independently.
 
 - Reduce the Japanese-residue report to zero intentional untranslated entries.
 - Run all static checks and full-route emulator regression captures.
+- Keep `localization/runtime_verification.json` and the generated
+  `docs/runtime_verification_inventory.md` current; static modification does
+  not replace per-scenario live verification.
 - Expand the scenario editor only for fields whose runtime ownership is proven.
 - Produce the final documented build, commit, and push.
 

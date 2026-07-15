@@ -3179,3 +3179,10 @@ contains 57 safe syllables as documented below and in
   The third center-row mark is original graphic decoration, not untranslated
   Japanese text. It must remain byte-identical rather than be overwritten with
   another Hangul glyph.
+- Runtime status is now separated from static translation coverage in
+  `localization/runtime_verification.json`. The generated
+  `docs/runtime_verification_inventory.md` tracks eight live surfaces for all
+  31 scenarios and keeps unreviewed scenarios explicitly pending. Run
+  `python3 tools/runtime_verification_inventory.py` after accepting new live
+  evidence; `tests/test_runtime_verification_inventory.py` rejects missing,
+  reordered, or invalid scenario/status entries and stale generated Markdown.

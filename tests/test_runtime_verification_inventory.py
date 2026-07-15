@@ -1,0 +1,41 @@
+from pathlib import Path
+import unittest
+
+from tools import runtime_verification_inventory as inventory
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class RuntimeVerificationInventoryTests(unittest.TestCase):
+    def test_inventory_has_all_scenarios_and_surfaces(self):
+        data = inventory.load_inventory()
+        self.assertEqual(
+            [entry["scenario"] for entry in data["scenarios"]],
+            list(range(1, 32)),
+        )
+        for entry in data["scenarios"]:
+            for surface in data["surfaces"]:
+                self.assertIn(entry.get(surface, "pending"), data["states"])
+
+    def test_current_evidence_matches_production_checksum(self):
+        data = inventory.load_inventory()
+        self.assertEqual(data["production_checksum"], "EA22")
+        scenario1 = data["scenarios"][0]
+        scenario27 = data["scenarios"][26]
+        self.assertEqual(scenario1["turn_events"], "verified_current")
+        self.assertEqual(scenario27["preparation"], "verified_current")
+        self.assertEqual(scenario27["completion"], "verified_probe")
+        for evidence in data["global_evidence"]:
+            self.assertIn(evidence["state"], data["states"])
+            self.assertTrue(evidence["captures"])
+
+    def test_generated_markdown_is_current(self):
+        data = inventory.load_inventory()
+        expected = inventory.render_markdown(data)
+        actual = inventory.OUTPUT.read_text(encoding="utf-8")
+        self.assertEqual(actual, expected)
+
+
+if __name__ == "__main__":
+    unittest.main()
