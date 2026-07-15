@@ -3077,3 +3077,60 @@ contains 57 safe syllables as documented below and in
   `captures/run/80e6_battle_result_decoration_fixed.png`; do not relabel that
   older capture as an `EA22` live battle-screen check. A fresh current-build
   combat-window capture remains part of the broader runtime checklist.
+
+### REV00 Debug Magic Inventory And Revision-Specific Probes (2026-07-16)
+
+- The project Japanese source is REV00: MD5
+  `9be7bdb4892eb716ea80bb1de4d660e4`, SHA-1
+  `4bbc2502784a61eedf45eca5303dc68062964ff4`, CRC32 `7F891DFC`.
+  Public Game Genie pages mix REV00, REV01, and later-revision codes. A code
+  decoding to an in-range address does not prove revision compatibility.
+- Published REV01 `All Spells` code `AJKA-EA7E` decodes to
+  `0x0212A4:6002`. Applying it alone to REV00 checksum `8456`, or together
+  with `RGJA-Y6X2` in checksum `21B3`, resets when Hein opens the magic list.
+  `RGJA-Y6X2` alone (checksum `3894`) opens only Hein's normal one-spell list.
+  `RGJA-Y6ZG` did not add a summon command. These are failed revision probes;
+  do not repeat them or promote them to build presets.
+- `tools/game_genie.py` retains the verified Genesis decoder, including the
+  published Sonic example `SCRA-BJX0 -> 0x009C76:5478`.
+  `tools/build_game_genie_probe_rom.py` requires explicit `--code` values,
+  validates that localization did not already alter each source word, prints
+  the source SHA-1, and writes only an ignored probe ROM. It deliberately has
+  no named Langrisser presets because the names implied unsupported REV00
+  compatibility.
+- On an empty Scenario 1 map cell, the original in-game debug sequence
+  `Up, Left, Up, Right, A, Left, Down, B, Down, Right, A, B, Down, Right, A`
+  activated on production `EA22`. It permits enemy control and exposes all
+  spells only on units that already own a magic command. Hein's list was
+  captured without a reset across four pages:
+  `ea22_debug_all_magic_page1_retry.png`, `ea22_debug_magic_page2.png`,
+  `ea22_debug_magic_page3.png`, and `ea22_debug_magic_page4.png` under
+  `captures/run/`. The 22 rows are, in order:
+  `매직애로우/블래스트/썬더/파이어볼/메테오/블리져드`,
+  `토네이도/턴언데드/어스퀘이크/힐1/힐2/포스힐1`,
+  `포스힐2/슬립/뮤트/프로텍션/어택/존`, and
+  `텔레포트/일루전/레지스트/참`. All were Korean and fit their rows.
+  Right changes list pages; Down only changes the selected row, so
+  `ea22_debug_magic_scroll_sheet.png` is a discarded selection-cycle probe.
+- The same debug mode proved that class ID is not the magic/summon ability
+  owner. Scenario 1 record 11 changed from Fighter to Summoner and displayed
+  `서머너`, but still had only `이동/공격/치료/명령`. A second probe changed
+  record 10 Laird from Magic Knight to Summoner; live capture
+  `captures/run/ea13_laird_command.png` again showed `레아드/서머너` with
+  only those four commands. Class-only editing must not be described as
+  granting class abilities.
+- Command builder `0x020CB0` tests bit 0 of the runtime unit long at `+0x50`
+  before adding command ID 2 (magic), then bit 17 of the same long before
+  adding command ID 3 (summon). The mapping from Scenario fixed-record bytes
+  to this runtime ownership long is not yet proven, so it is not exposed by
+  the editor.
+- An ignored checksum `D177` probe changed only the conditional branch at
+  `0x020DFA` from `671C` to `4E71`, forcing the summon command to be offered
+  without changing production `EA22`. After activating the original in-game
+  debug sequence, Liana's command menu displayed both `마법` and `소환` in
+  `captures/run/d177_debug_liana_command.png`. The debug summon path populates
+  all eight IDs. `d177_debug_summon_page1.png` live-verifies
+  `엘리멘탈/프레이야/화이트드래곤/발키리/슬레이프니르/펜릴`, and
+  `d177_debug_summon_page2.png` verifies `요르문간드/형님`, with no Japanese
+  residue, clipping, reset, or freeze. This completes the live name-list
+  rendering check but does not justify shipping the forced-command branch.
