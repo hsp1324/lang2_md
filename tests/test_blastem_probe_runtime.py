@@ -1,7 +1,12 @@
 from pathlib import Path
 import unittest
 
-from tools.run_blastem_sequence import disable_host_gamepad_bindings
+from argparse import Namespace
+
+from tools.run_blastem_sequence import (
+    detection_capture_path,
+    disable_host_gamepad_bindings,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +20,13 @@ class BlastEmProbeRuntimeTests(unittest.TestCase):
         self.assertEqual(pads, "\tpads {\n\t}\n")
         self.assertIn("up gamepads.1.up", patched)
         self.assertIn("\tmice {", patched)
+
+    def test_detection_capture_prefix_numbers_frames(self):
+        args = Namespace(capture_prefix=Path("captures/run/s03_brief.png"))
+        self.assertEqual(
+            detection_capture_path(args, Path("fallback.png"), 7),
+            Path("captures/run/s03_brief_07.png"),
+        )
 
 
 if __name__ == "__main__":

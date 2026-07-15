@@ -3208,3 +3208,29 @@ contains 57 safe syllables as documented below and in
   source data changed. Future cross-scenario automation must detect the
   preparation panel and stop confirmations before navigating it; do not use a
   fixed briefing count across scenarios.
+
+### Current EA22 Scenario 3 Entry Regression (2026-07-16)
+
+- `tools/run_blastem_sequence.py detect-prep` now recognizes the stable
+  preparation layout from its left roster, right command panel, gold divider,
+  and bottom-left money panel. It checks before every C press, so a detected
+  preparation frame cannot spill into commander selection or hiring. Synthetic
+  tests reject briefing, battle, and condition-like layouts. The optional
+  `--capture-prefix` retains every detector frame and works for both
+  `detect-prep` and `detect-command`.
+- Production `EA22` Scenario 3 stopped at preparation after 13 confirmations.
+  `captures/run/ea22_s03_brief_live_01.png` through `_13.png` were individually
+  reviewed: `시나리오 3 / 조름의 반격`, the complete Korean description, and
+  the `엘윈/파이터` preparation panel are intact with no Japanese residue.
+- Automatic deployment reached `ea22_s03_deploy_banner.png`. All 24 opening
+  detector frames (`ea22_s03_opening_live_01.png` through `_24.png`) were
+  reviewed through the Korean Liana escort choice and the full
+  `이동/공격/치료/명령` panel. Names and classes in dialogue, the status bar,
+  and the selected commander panel remained intact.
+- `ea22_s03_conditions.png` verifies `적 전멸` as the victory condition and
+  `리아나 사망` / `주인공 사망` as defeat conditions. Ending the first turn
+  entered `ENEMY PHASE`; eight separately captured confirmations showed the
+  Liana-position prompt and escort choice and returned to a valid command panel
+  (`ea22_s03_turn1_live_01.png` through `_08.png`) without reset or freeze.
+  This is current first-turn progression evidence, not a scenario clear or
+  complete later-turn review.

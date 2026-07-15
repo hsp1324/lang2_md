@@ -13,7 +13,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | historical | current | historical | current | probe | current | pending | pending | 5 |
 | 2 | current | current | current | progressed | probe | pending | pending | pending | 7 |
-| 3 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 3 | current | current | current | current | probe | progressed | pending | pending | 10 |
 | 4 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 5 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 6 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -66,6 +66,21 @@ Description, preparation names, and conditions were visually reviewed. Opening e
 - `captures/run/ea22_s02_deploy_banner.png`
 - `captures/run/ea22_s02_command_ready.png`
 - `captures/run/ea22_s02_conditions.png`
+
+### Scenario 3
+
+All 13 briefing/preparation frames and all 24 opening frames were visually reviewed on production EA22. First-turn progression entered ENEMY PHASE, displayed the Liana-position choice, and returned to the command menu after eight captured confirmations without reset; later turns and completion remain pending.
+
+- `captures/run/ea22_s03_selector_map.png`
+- `captures/run/ea22_s03_brief_live_01.png`
+- `captures/run/ea22_s03_brief_live_12.png`
+- `captures/run/ea22_s03_brief_live_13.png`
+- `captures/run/ea22_s03_deploy_banner.png`
+- `captures/run/ea22_s03_opening_live_02.png`
+- `captures/run/ea22_s03_opening_live_24.png`
+- `captures/run/ea22_s03_conditions.png`
+- `captures/run/ea22_s03_turn1_live_02.png`
+- `captures/run/ea22_s03_turn1_live_08.png`
 
 ### Scenario 27
 

@@ -183,6 +183,7 @@ python3 tools/run_blastem_sequence.py shop
 - 예전 성공 캡처(`captures/run/font_resource_08_conditions.png` -> `font_resource_11_shop_knife.png`)는 빠른 진입과 `B` 길게 누르기를 분리해서 보낸 흐름입니다. 현재 도구는 키별 hold를 지원하므로 같은 흐름을 한 명령으로 재현할 수 있습니다.
 - 현재 확인된 일본판 시작 타이밍은 `load ROM` 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`입니다. 이보다 빠르면 첫 입력이 씹히고, 늦으면 타이틀 idle 컷신으로 들어갑니다.
 - 일반 화면 전환 자동 입력은 최소 0.8초 간격을 둡니다. 단, 시나리오 선택 비기의 `Left, Right, Start, C` 네 키는 0.05초 간격이어야 하며 도구가 이 타이밍을 별도로 적용합니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
+- 다른 장의 설명을 넘길 때는 고정 횟수로 C를 누르지 말고, 실행 중인 창에 `python3 tools/run_blastem_sequence.py detect-prep --no-launch --send-event --capture-prefix captures/run/sNN_brief.png`를 사용합니다. 준비창의 좌우 패널과 소지금 패널을 감지한 즉시 멈추며 `--capture-prefix`는 탐지 과정의 모든 화면을 번호별로 보존합니다. 같은 옵션은 `detect-command`의 오프닝/턴 이벤트 검수에도 사용할 수 있습니다.
 - `scenario-select`는 선택기 진입에 필요한 수동 세이브 슬롯을 보존하기 위해 `captures/runtime/load-screen`을 기본 초기화하지 않습니다. 다른 시퀀스의 격리 런타임은 기존처럼 `--reuse-runtime-state`를 주지 않으면 새로 만듭니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 

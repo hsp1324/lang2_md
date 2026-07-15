@@ -176,6 +176,10 @@ SEQUENCES["first-turn-dialogue"] = list(SEQUENCES["deploy-dialogue"])
 # Reuse an already running emulator and advance only until a full unit command
 # panel is visible. This is useful for later scenarios with long opening events.
 SEQUENCES["detect-command"] = []
+# Reuse an already running emulator and advance briefing pages only until the
+# commander preparation panel appears. Unlike fixed C loops, this cannot spill
+# into commander selection or hire actions when briefing lengths differ.
+SEQUENCES["detect-prep"] = []
 
 
 def scenario_select_keys(scenario_number: int) -> list[str]:
@@ -355,25 +359,106 @@ def battle_command_menu_visible(path: Path) -> bool:
     )
 
 
+def preparation_screen_visible(path: Path) -> bool:
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+
+    def crop(box: tuple[int, int, int, int]) -> Image.Image:
+        left, top, right, bottom = box
+        return frame.crop(
+            (
+                round(left * scale_x),
+                round(top * scale_y),
+                round(right * scale_x),
+                round(bottom * scale_y),
+            )
+        )
+
+    def ratios(image: Image.Image) -> tuple[float, float]:
+        pixels = list(image.get_flattened_data())
+        dark_blue = sum(
+            1
+            for red, green, blue in pixels
+            if 50 <= blue <= 180
+            and red < 45
+            and green < 65
+            and blue > red * 2
+            and blue > green * 1.8
+        )
+        gold = sum(
+            1
+            for red, green, blue in pixels
+            if red > 100 and green > 70 and blue < 80 and red > blue * 1.5
+        )
+        return dark_blue / len(pixels), gold / len(pixels)
+
+    top_left_blue, _ = ratios(crop((10, 32, 142, 136)))
+    command_blue, _ = ratios(crop((145, 115, 318, 214)))
+    money_blue, _ = ratios(crop((10, 214, 142, 239)))
+    divider_blue, divider_gold = ratios(crop((141, 32, 147, 215)))
+
+    # The preparation UI has two large blue columns split by a continuous gold
+    # divider and a small blue money panel at bottom left. Briefings have no
+    # money panel; battle/status screens lack the narrow gold divider.
+    return (
+        top_left_blue > 0.8
+        and command_blue > 0.75
+        and money_blue > 0.23
+        and divider_blue < 0.25
+        and divider_gold > 0.18
+    )
+
+
+def capture_window(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.check_call(
+        [sys.executable, str(CAPTURE_WINDOW), str(path)],
+        cwd=ROOT,
+        stdout=subprocess.DEVNULL,
+    )
+
+
+def detection_capture_path(args: argparse.Namespace, fallback: Path, step: int) -> Path:
+    if args.capture_prefix is None:
+        return fallback
+    prefix = args.capture_prefix
+    suffix = prefix.suffix or ".png"
+    stem = prefix.stem if prefix.suffix else prefix.name
+    return prefix.with_name(f"{stem}_{step:02d}{suffix}")
+
+
+def advance_to_preparation_screen(args: argparse.Namespace) -> int:
+    probe = LOG_ROOT / "preparation_probe.png"
+    for step in range(args.max_confirmations + 1):
+        frame = detection_capture_path(args, probe, step)
+        capture_window(frame)
+        if preparation_screen_visible(frame):
+            print(f"preparation screen detected after {step} confirmations")
+            return 0
+        if step == args.max_confirmations:
+            break
+        status = subprocess.call(make_key_command(args, ["c:0.9"]), cwd=ROOT)
+        if status:
+            return status
+    raise RuntimeError(
+        "preparation screen was not detected after "
+        f"{args.max_confirmations} confirmations"
+    )
+
+
 def advance_to_battle_command(args: argparse.Namespace) -> int:
     probe = LOG_ROOT / "battle_command_probe.png"
     for step in range(1, args.max_confirmations + 1):
         status = subprocess.call(make_key_command(args, ["c:0.9"]), cwd=ROOT)
         if status:
             return status
-        subprocess.check_call(
-            [sys.executable, str(CAPTURE_WINDOW), str(probe)],
-            cwd=ROOT,
-            stdout=subprocess.DEVNULL,
-        )
-        if battle_command_menu_visible(probe):
+        frame = detection_capture_path(args, probe, step)
+        capture_window(frame)
+        if battle_command_menu_visible(frame):
             time.sleep(2.0)
-            subprocess.check_call(
-                [sys.executable, str(CAPTURE_WINDOW), str(probe)],
-                cwd=ROOT,
-                stdout=subprocess.DEVNULL,
-            )
-            if battle_command_menu_visible(probe):
+            capture_window(frame)
+            if battle_command_menu_visible(frame):
                 print(f"battle command menu detected after {step} confirmations")
                 return 0
     raise RuntimeError(
@@ -395,7 +480,7 @@ def main() -> int:
         "--max-confirmations",
         type=int,
         default=80,
-        help="maximum single C presses used while detecting a battle command menu",
+        help="maximum single C presses used by a screen-detection sequence",
     )
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument(
@@ -411,6 +496,11 @@ def main() -> int:
     )
     parser.add_argument("--no-launch", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--capture-prefix",
+        type=Path,
+        help="retain each screen-detection frame as PREFIX_NN.png",
+    )
     args = parser.parse_args()
 
     if not 1 <= args.scenario_number <= 31:
@@ -497,12 +587,20 @@ def main() -> int:
     key_command = make_key_command(args, initial_keys)
     if args.dry_run:
         print("keys:", " ".join(key_command))
-        if args.sequence in {"battle-command", "first-turn-dialogue", "detect-command"}:
+        if args.sequence in {
+            "battle-command",
+            "first-turn-dialogue",
+            "detect-command",
+        }:
             print("then: confirm and capture until the full command menu is detected")
+        if args.sequence == "detect-prep":
+            print("then: confirm and capture until the preparation screen is detected")
         if args.sequence == "first-turn-dialogue":
             print("then: close the unit menu and choose Start > 턴 종료")
         return 0
     status = subprocess.call(key_command, cwd=ROOT) if initial_keys else 0
+    if not status and args.sequence == "detect-prep":
+        return advance_to_preparation_screen(args)
     if status or args.sequence not in {
         "battle-command",
         "first-turn-dialogue",

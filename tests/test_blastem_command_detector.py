@@ -4,7 +4,10 @@ import unittest
 
 from PIL import Image
 
-from tools.run_blastem_sequence import battle_command_menu_visible
+from tools.run_blastem_sequence import (
+    battle_command_menu_visible,
+    preparation_screen_visible,
+)
 
 
 class BlastemCommandDetectorTests(unittest.TestCase):
@@ -39,6 +42,39 @@ class BlastemCommandDetectorTests(unittest.TestCase):
             frame.save(path)
             self.assertFalse(battle_command_menu_visible(path))
 
+
+class BlastemPreparationDetectorTests(unittest.TestCase):
+    @staticmethod
+    def make_preparation_shape(path: Path) -> Image.Image:
+        frame = Image.new("RGB", (320, 240), (0, 0, 0))
+        frame.paste((0, 0, 119), (10, 32, 142, 136))
+        frame.paste((0, 0, 119), (145, 115, 318, 214))
+        frame.paste((0, 0, 119), (10, 214, 142, 239))
+        frame.paste((180, 130, 20), (141, 32, 147, 215))
+        frame.save(path)
+        return frame
+
+    def test_accepts_preparation_panel_shape(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "preparation.png"
+            self.make_preparation_shape(path)
+            self.assertTrue(preparation_screen_visible(path))
+
+    def test_rejects_briefing_without_money_panel(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "briefing.png"
+            frame = self.make_preparation_shape(path)
+            frame.paste((0, 0, 0), (10, 214, 142, 239))
+            frame.save(path)
+            self.assertFalse(preparation_screen_visible(path))
+
+    def test_rejects_battle_panel_without_gold_divider(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "battle.png"
+            frame = self.make_preparation_shape(path)
+            frame.paste((0, 0, 119), (141, 32, 147, 215))
+            frame.save(path)
+            self.assertFalse(preparation_screen_visible(path))
 
 if __name__ == "__main__":
     unittest.main()
