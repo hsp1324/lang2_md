@@ -33,6 +33,7 @@ KEYSYMS = {
     "menu": XK.XK_Escape,
     "tab": XK.XK_Tab,
     "pause": XK.XK_F7,
+    "debug": XK.XK_u,
 }
 
 

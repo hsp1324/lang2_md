@@ -46,6 +46,50 @@ SRAM_LONG_PATCHES = {
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
 
+# The battle magic/summon list does not use the direct strings at 0x082BFE.
+# Routine 0x021686 treats this byte table as per-name glyph counts and loads a
+# dedicated, contiguous font run beginning at glyph 0x03C0. Each row has six
+# visible slots; shorter names are padded by the renderer with glyph 0x0054.
+MAGIC_LIST_LENGTH_TABLE = 0x09B0F4
+MAGIC_LIST_GLYPH_START = 0x03C0
+MAGIC_LIST_GLYPH_CAPACITY = 130
+MAGIC_LIST_MAX_VISIBLE_GLYPHS = 6
+MAGIC_LIST_NAMES = (
+    "매직애로우",
+    "블래스트",
+    "썬더",
+    "파이어볼",
+    "메테오",
+    "블리져드",
+    "토네이도",
+    "턴언데드",
+    "어스퀘이크",
+    "힐1",
+    "힐2",
+    "포스힐1",
+    "포스힐2",
+    "슬립",
+    "뮤트",
+    "프로텍션",
+    "어택",
+    "존",
+    "텔레포트",
+    "일루전",
+    "레지스트",
+    "참",
+    "소환",
+    "엘리멘탈",
+    "프레이야",
+    "화이트드래곤",
+    "발키리",
+    "슬레이프니르",
+    "펜릴",
+    "요르문간드",
+    "형님",
+)
+MAGIC_LIST_LENGTH_TABLE_SHA256 = "0abc36078334989c05e47e7e9abf6dd4a64c62bdb1609ad4c202c7d19dc31f6a"
+MAGIC_LIST_GLYPH_SOURCE_SHA256 = "2f186a1afc569e0ba1c90279cd2af2425bdca7a112d2439ad89c8a260f8425e9"
+
 CONDITION_POINTER_TABLE = 0x98D7A
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
 ITEM_GLYPH_LIST_BASE = 0xA14AC
@@ -963,12 +1007,12 @@ DIRECT_STRING_PATCHES = {
     0x82B56: "을 손에 넣었다!",
     0x82B66: "트레저군:",
     0x82B90: "을 장비했다.",
-    0x82BFE: "마법화살",
+    0x82BFE: "매직애로우",
     0x82C0E: "블래스트",
     0x82C18: "썬더",
     0x82C22: "파이어볼",
     0x82C34: "메테오",
-    0x82C3C: "블리자드",
+    0x82C3C: "블리져드",
     0x82C48: "토네이도",
     0x82C54: "턴언데드",
     0x82C66: "어스퀘이크",
@@ -976,16 +1020,16 @@ DIRECT_STRING_PATCHES = {
     0x82C80: "힐2",
     0x82C8A: "포스힐1",
     0x82C9C: "포스힐2",
-    0x82CAE: "수면",
-    0x82CB8: "침묵",
-    0x82CC2: "보호",
-    0x82CD2: "공격",
+    0x82CAE: "슬립",
+    0x82CB8: "뮤트",
+    0x82CC2: "프로텍션",
+    0x82CD2: "어택",
     0x82CDC: "존",
-    0x82CE4: "순간이동",
-    0x82CF0: "환영",
-    0x82D00: "저항",
-    0x82D0A: "매혹",
-    0x82D14: "소환마법",
+    0x82CE4: "텔레포트",
+    0x82CF0: "일루전",
+    0x82D00: "레지스트",
+    0x82D0A: "참",
+    0x82D14: "소환",
     0x82D5A: "파이크",
     0x82D62: "팔랑크스",
     0x82D70: "솔저",
@@ -2314,6 +2358,53 @@ def install_custom_glyphs(data: bytearray, chars: list[str]) -> dict[str, int]:
         offset = glyph_data_offset(glyph_id)
         data[offset : offset + GLYPH_BYTES] = render_hangul_glyph(char, font, blank_template)
     return mapping
+
+
+def patch_magic_list_names(data: bytearray) -> None:
+    length_end = MAGIC_LIST_LENGTH_TABLE + len(MAGIC_LIST_NAMES)
+    original_lengths = bytes(data[MAGIC_LIST_LENGTH_TABLE:length_end])
+    length_digest = hashlib.sha256(original_lengths).hexdigest()
+    if length_digest != MAGIC_LIST_LENGTH_TABLE_SHA256:
+        raise ValueError(
+            "magic-list length table changed: "
+            f"{length_digest} != {MAGIC_LIST_LENGTH_TABLE_SHA256}"
+        )
+
+    glyph_start = glyph_data_offset(MAGIC_LIST_GLYPH_START)
+    glyph_end = glyph_start + MAGIC_LIST_GLYPH_CAPACITY * GLYPH_BYTES
+    original_glyphs = bytes(data[glyph_start:glyph_end])
+    glyph_digest = hashlib.sha256(original_glyphs).hexdigest()
+    if glyph_digest != MAGIC_LIST_GLYPH_SOURCE_SHA256:
+        raise ValueError(
+            "magic-list glyph source changed: "
+            f"{glyph_digest} != {MAGIC_LIST_GLYPH_SOURCE_SHA256}"
+        )
+
+    lengths = [len(name) for name in MAGIC_LIST_NAMES]
+    too_wide = [
+        name for name in MAGIC_LIST_NAMES if len(name) > MAGIC_LIST_MAX_VISIBLE_GLYPHS
+    ]
+    if too_wide:
+        raise ValueError(f"magic-list names exceed six glyphs: {too_wide}")
+    if sum(lengths) > MAGIC_LIST_GLYPH_CAPACITY:
+        raise ValueError(
+            f"magic-list names need {sum(lengths)} glyphs, "
+            f"only {MAGIC_LIST_GLYPH_CAPACITY} available"
+        )
+
+    data[MAGIC_LIST_LENGTH_TABLE:length_end] = bytes(lengths)
+    font = ImageFont.truetype(str(FONT_PATH), 16)
+    blank_offset = glyph_data_offset(SPACE_GLYPH)
+    blank_template = bytes(data[blank_offset : blank_offset + GLYPH_BYTES])
+    data[glyph_start:glyph_end] = blank_template * MAGIC_LIST_GLYPH_CAPACITY
+
+    cursor = glyph_start
+    for name in MAGIC_LIST_NAMES:
+        for char in name:
+            data[cursor : cursor + GLYPH_BYTES] = render_hangul_glyph(
+                char, font, blank_template
+            )
+            cursor += GLYPH_BYTES
 
 
 def make_record_encoding(
@@ -4752,6 +4843,7 @@ def main() -> None:
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)
+        patch_magic_list_names(data)
         patch_arrange_menu_glyph_lists(data, glyph_by_char)
         patch_start_menu(data, glyph_by_char)
         patch_start_submenus(data, glyph_by_char)

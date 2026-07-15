@@ -23,7 +23,7 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
     def test_known_magic_string_is_declared(self):
         row = next(row for row in self.result["candidates"] if row["address"] == "0x082BFE")
         self.assertEqual(row["ownership"], "declared_direct_patch")
-        self.assertEqual(row["target_korean"], "마법화살")
+        self.assertEqual(row["target_korean"], "매직애로우")
         self.assertTrue(row["modified"])
 
     def test_every_conservative_candidate_has_an_inventory_owner(self):

@@ -2947,3 +2947,27 @@ contains 57 safe syllables as documented below and in
   preparation shape. Scenario 27 still requires three confirmations after the
   scenario map before navigating the preparation menu; a fixed two-confirm
   batch enters soldier hire and must not be used.
+
+### Battle Magic And Summon List Font (2026-07-15)
+
+- The `FFFF`-terminated records at `0x082BFE..0x082D1E` are used by shared
+  acquisition/system-message paths, but they do not draw the in-battle magic
+  selection list. Blank-record probes left that list Japanese, so do not repeat
+  the direct-string-only approach.
+- Renderer `0x021686` reads 31 per-entry glyph counts from `0x09B0F4`, sums
+  them to find each entry, and draws a dedicated contiguous font run beginning
+  at glyph `0x03C0` (ROM `0x04F000`). The first 23 entries are magic and the
+  last eight are summons. Each row can show at most six glyphs; the original
+  run reserves 130 glyphs through `0x0441`.
+- `patch_magic_list_names()` hash-validates both the original 31-byte length
+  table and all 130 source glyphs, rewrites the length table, renders the
+  localized names, and clears the unused tail. Tests enforce the six-glyph row
+  limit and total capacity.
+- Magic terminology follows the referenced Langrisser 2 magic page, with
+  spaces removed where the fixed-width game list requires it: `매직애로우`,
+  `블래스트`, `파이어볼`, `블리져드`, `턴언데드`, `포스힐1`, `슬립`,
+  `뮤트`, `프로텍션`, `어택`, `텔레포트`, `일루전`, `레지스트`, and `참`.
+  The direct acquisition strings use the same names.
+- Production checksum `8AD6` live-verifies `매직애로우` in Hein's battle
+  magic list and preserves the bottom status labels `헤인/워록` in
+  `captures/run/8ad6_s01_magic_namu_names.png`.

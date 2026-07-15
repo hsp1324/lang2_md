@@ -40,7 +40,7 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
 
     def test_known_magic_and_mercenary_targets(self):
         groups = self.result["groups"]
-        self.assertEqual(groups["magic_names"]["entries"][0]["target_korean"], "마법화살")
+        self.assertEqual(groups["magic_names"]["entries"][0]["target_korean"], "매직애로우")
         self.assertEqual(groups["mercenary_battle_names"]["entries"][0]["target_korean"], "파이크")
 
 

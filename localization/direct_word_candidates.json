@@ -105,7 +105,7 @@
       "target_korean": "플레임랜스",
       "original_word_count": 8,
       "original_tokens": "001B 002B 0001 0020 0028 0027 000C FFFF",
-      "current_tokens": "7227 7030 71B4 7228 7036 FFFF",
+      "current_tokens": "722B 7030 71B4 722C 7036 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -117,7 +117,7 @@
       "target_korean": "데빌액스",
       "original_word_count": 8,
       "original_tokens": "003A 003D 002A 0000 0053 0007 000C FFFF",
-      "current_tokens": "70AC 7229 722A 7036 FFFF",
+      "current_tokens": "70AC 722D 722E 7036 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -129,7 +129,7 @@
       "target_korean": "D슬레이어",
       "original_word_count": 8,
       "original_tokens": "005F 0049 000C 002B 0001 0023 004A FFFF",
-      "current_tokens": "7214 722B 7030 7031 7071 FFFF",
+      "current_tokens": "7214 721D 7030 7031 7071 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -153,7 +153,7 @@
       "target_korean": "메사이얀소드",
       "original_word_count": 9,
       "original_tokens": "0021 000A 0001 0023 0027 000E 004A 003B FFFF",
-      "current_tokens": "721A 700D 7031 722C 7055 7006 FFFF",
+      "current_tokens": "721A 700D 7031 722F 7055 7006 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -165,7 +165,7 @@
       "target_korean": "철아령",
       "original_word_count": 5,
       "original_tokens": "0060 0000 002B 0001 FFFF",
-      "current_tokens": "71D8 7015 722D FFFF",
+      "current_tokens": "71D8 7015 7230 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -213,7 +213,7 @@
       "target_korean": "롱보우",
       "original_word_count": 6,
       "original_tokens": "002C 0027 002F 0040 0002 FFFF",
-      "current_tokens": "722E 70C1 7010 FFFF",
+      "current_tokens": "7231 70C1 7010 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -237,7 +237,7 @@
       "target_korean": "소형방패",
       "original_word_count": 7,
       "original_tokens": "0061 0049 000B 004A 002A 003B FFFF",
-      "current_tokens": "7055 722F 711A 7009 FFFF",
+      "current_tokens": "7055 7232 711A 7009 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -249,7 +249,7 @@
       "target_korean": "대형방패",
       "original_word_count": 7,
       "original_tokens": "0062 0049 000B 004A 002A 003B FFFF",
-      "current_tokens": "7095 722F 711A 7009 FFFF",
+      "current_tokens": "7095 7232 711A 7009 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -273,7 +273,7 @@
       "target_korean": "플레이트아머",
       "original_word_count": 9,
       "original_tokens": "0043 002B 004A 0013 0000 004A 001E 004A FFFF",
-      "current_tokens": "7227 7030 7031 7050 7015 7032 FFFF",
+      "current_tokens": "722B 7030 7031 7050 7015 7032 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -285,7 +285,7 @@
       "target_korean": "어설트슈츠",
       "original_word_count": 8,
       "original_tokens": "0000 000A 002A 0013 000C 004A 0011 FFFF",
-      "current_tokens": "7071 7084 7050 7230 71EA FFFF",
+      "current_tokens": "7071 7084 7050 7233 71EA FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -297,7 +297,7 @@
       "target_korean": "로브",
       "original_word_count": 4,
       "original_tokens": "002C 004A 003E FFFF",
-      "current_tokens": "703A 7231 FFFF",
+      "current_tokens": "703A 7234 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -309,7 +309,7 @@
       "target_korean": "드래곤스케일",
       "original_word_count": 9,
       "original_tokens": "003B 0028 0031 0027 000C 0008 0001 002A FFFF",
-      "current_tokens": "7006 7048 7051 7036 7232 70AF FFFF",
+      "current_tokens": "7006 7048 7051 7036 7235 70AF FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -321,7 +321,7 @@
       "target_korean": "미라쥬로브",
       "original_word_count": 9,
       "original_tokens": "001F 0028 004A 0033 0051 002C 004A 003E FFFF",
-      "current_tokens": "70D3 706D 7233 703A 7231 FFFF",
+      "current_tokens": "70D3 706D 7236 703A 7234 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -345,7 +345,7 @@
       "target_korean": "룬스톤",
       "original_word_count": 8,
       "original_tokens": "002A 004A 0027 000C 0013 004A 0027 FFFF",
-      "current_tokens": "7234 7036 7235 FFFF",
+      "current_tokens": "7237 7036 7238 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -381,7 +381,7 @@
       "target_korean": "오브",
       "original_word_count": 4,
       "original_tokens": "0004 004A 003E FFFF",
-      "current_tokens": "705F 7231 FFFF",
+      "current_tokens": "705F 7234 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -429,7 +429,7 @@
       "target_korean": "천사날개",
       "original_word_count": 5,
       "original_tokens": "0066 0067 0063 0068 FFFF",
-      "current_tokens": "7236 700D 7073 7237 FFFF",
+      "current_tokens": "7239 700D 7073 723A FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -441,7 +441,7 @@
       "target_korean": "카벙클",
       "original_word_count": 7,
       "original_tokens": "0005 004A 003C 0027 0007 002A FFFF",
-      "current_tokens": "7038 7238 7239 FFFF",
+      "current_tokens": "7038 723B 723C FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -465,7 +465,7 @@
       "target_korean": "갸라르혼",
       "original_word_count": 9,
       "original_tokens": "002E 0050 0028 002A 0063 001D 002A 0027 FFFF",
-      "current_tokens": "723A 706D 704F 7104 FFFF",
+      "current_tokens": "723D 706D 704F 7104 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -477,7 +477,7 @@
       "target_korean": "아뮬렛",
       "original_word_count": 7,
       "original_tokens": "0000 001F 0051 002B 0053 0013 FFFF",
-      "current_tokens": "7015 723B 723C FFFF",
+      "current_tokens": "7015 723E 723F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1758,10 +1758,10 @@
       "address": "0x082BFE",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "마법화살",
+      "target_korean": "매직애로우",
       "original_word_count": 8,
       "original_tokens": "001E 0033 0053 0007 0000 002C 004A FFFF",
-      "current_tokens": "705D 7130 70FC 706C FFFF",
+      "current_tokens": "70ED 70B5 71CE 703A 7010 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1818,10 +1818,10 @@
       "address": "0x082C3C",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "블리자드",
+      "target_korean": "블리져드",
       "original_word_count": 6,
       "original_tokens": "003E 0029 0032 004A 003B FFFF",
-      "current_tokens": "7218 7001 7057 7006 FFFF",
+      "current_tokens": "7218 7001 70BF 7006 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1914,10 +1914,10 @@
       "address": "0x082CAE",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "수면",
+      "target_korean": "슬립",
       "original_word_count": 5,
       "original_tokens": "000C 0029 004A 0043 FFFF",
-      "current_tokens": "70C9 70D0 FFFF",
+      "current_tokens": "721D 721E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1926,10 +1926,10 @@
       "address": "0x082CB8",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "침묵",
+      "target_korean": "뮤트",
       "original_word_count": 5,
       "original_tokens": "001F 0051 004A 0013 FFFF",
-      "current_tokens": "7169 721D FFFF",
+      "current_tokens": "721F 7050 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1938,10 +1938,10 @@
       "address": "0x082CC2",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "보호",
+      "target_korean": "프로텍션",
       "original_word_count": 8,
       "original_tokens": "0043 002C 0012 0007 000B 0052 0027 FFFF",
-      "current_tokens": "70C1 7128 FFFF",
+      "current_tokens": "7052 703A 7220 7221 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1950,10 +1950,10 @@
       "address": "0x082CD2",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "공격",
+      "target_korean": "어택",
       "original_word_count": 5,
       "original_tokens": "0000 000F 0053 0007 FFFF",
-      "current_tokens": "701E 7007 FFFF",
+      "current_tokens": "7071 70A9 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1965,7 +1965,7 @@
       "target_korean": "존",
       "original_word_count": 4,
       "original_tokens": "0036 004A 0027 FFFF",
-      "current_tokens": "721E FFFF",
+      "current_tokens": "7222 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1974,10 +1974,10 @@
       "address": "0x082CE4",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "순간이동",
+      "target_korean": "텔레포트",
       "original_word_count": 6,
       "original_tokens": "0012 002B 0045 004A 0013 FFFF",
-      "current_tokens": "7164 70EB 7031 7049 FFFF",
+      "current_tokens": "7133 7030 70BD 7050 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1986,10 +1986,10 @@
       "address": "0x082CF0",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "환영",
+      "target_korean": "일루전",
       "original_word_count": 8,
       "original_tokens": "0001 0029 0051 004A 0033 0052 0027 FFFF",
-      "current_tokens": "721F 706E FFFF",
+      "current_tokens": "70AF 7223 701B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1998,10 +1998,10 @@
       "address": "0x082D00",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "저항",
+      "target_korean": "레지스트",
       "original_word_count": 5,
       "original_tokens": "002B 0033 000C 0013 FFFF",
-      "current_tokens": "70A8 7160 FFFF",
+      "current_tokens": "7030 7056 7036 7050 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2010,10 +2010,10 @@
       "address": "0x082D0A",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "매혹",
+      "target_korean": "참",
       "original_word_count": 5,
       "original_tokens": "0010 0050 004A 0020 FFFF",
-      "current_tokens": "70ED 7220 FFFF",
+      "current_tokens": "715B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2022,10 +2022,10 @@
       "address": "0x082D14",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "소환마법",
+      "target_korean": "소환",
       "original_word_count": 5,
       "original_tokens": "00BA 00BB 0088 008F FFFF",
-      "current_tokens": "7055 721F 705D 7130 FFFF",
+      "current_tokens": "7055 7224 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2049,7 +2049,7 @@
       "target_korean": "팔랑크스",
       "original_word_count": 7,
       "original_tokens": "001B 004B 0028 0027 0007 000C FFFF",
-      "current_tokens": "7221 7043 702F 7036 FFFF",
+      "current_tokens": "7225 7043 702F 7036 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2061,7 +2061,7 @@
       "target_korean": "솔저",
       "original_word_count": 6,
       "original_tokens": "000E 002A 0033 0050 004A FFFF",
-      "current_tokens": "7222 70A8 FFFF",
+      "current_tokens": "7226 70A8 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2157,7 +2157,7 @@
       "target_korean": "몽크",
       "original_word_count": 4,
       "original_tokens": "0022 0027 0007 FFFF",
-      "current_tokens": "7223 702F FFFF",
+      "current_tokens": "7227 702F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2169,7 +2169,7 @@
       "target_korean": "가드맨",
       "original_word_count": 6,
       "original_tokens": "002D 004A 003B 001E 0027 FFFF",
-      "current_tokens": "700F 7006 7224 FFFF",
+      "current_tokens": "700F 7006 7228 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2181,7 +2181,7 @@
       "target_korean": "머맨",
       "original_word_count": 5,
       "original_tokens": "001E 004A 001E 0027 FFFF",
-      "current_tokens": "7032 7224 FFFF",
+      "current_tokens": "7032 7228 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2193,7 +2193,7 @@
       "target_korean": "그리폰",
       "original_word_count": 6,
       "original_tokens": "002F 0029 001B 004F 0027 FFFF",
-      "current_tokens": "7044 7001 7225 FFFF",
+      "current_tokens": "7044 7001 7229 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2349,7 +2349,7 @@
       "target_korean": "엔딩 후일담 포인터/선택 데이터",
       "original_word_count": 21,
       "original_tokens": "0002 0138 0118 0119 00F7 0288 014B 025F 00F7 0098 005E 0055 0056 0057 0058 0059 005A 005B 005C 005D FFFF",
-      "current_tokens": "0002 7007 7008 724C 70C9 71B6 71AA 724C 70C9 0098 005E 0055 0056 0057 0058 0059 005A 005B 005C 005D FFFF",
+      "current_tokens": "0002 7007 7008 724E 70C9 71B6 71AA 724E 70C9 0098 005E 0055 0056 0057 0058 0059 005A 005B 005C 005D FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2565,7 +2565,7 @@
       "target_korean": "후일담 번역 레코드 0x089760: 크게성장해아버지의기대를\n훌쩍넘어선스코트는\n부모가기다리는살라스로돌아왔다.\f여러나라에서기사단장으로\n초청했지만,스코트는\n아직부족하다며정중히거절했다.\f3년후,몬스터무리가살라스를\n습격했으나스코트가신속히\n조직한부대가적을물리쳤다.\f마을은큰피해를입지않았고\n스코트는살라스를구한\n위대한영웅으로이름을알렸다.\f그후마을을다스리게된그는\f살라스를번영으로이끌었다.",
       "original_word_count": 65,
       "original_tokens": "01E2 007B 0064 033E 033F 0093 0099 0065 0075 00CC 0082 007C 007B 00E1 0078 0075 0128 0063 0152 02B5 00C2 00FC 009C 019E 007D 0124 0093 0073 007B 0064 006C FFFD 0054 00E1 0063 0164 02C9 008A 01D7 008C 007D 0124 007A 0073 0082 0075 000A 002A 0028 000C 008A 00C2 00B8 028F 007A 0155 007C 0064 0063 0074 0081 007B 0064 006C FFFF",
-      "current_tokens": "7243 706A 7039 706B FFFF",
+      "current_tokens": "7246 706A 7039 706B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2769,7 +2769,7 @@
       "target_korean": "후일담 번역 레코드 0x08B8C4: 어려운전황에서도침착함을잃지않고\n확실히살아남는뛰어난무장으로\n키스의명성은널리퍼졌다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구했고두사람은\n서로사랑하게됐다.\f몬스터토벌작전이끝난뒤\n두사람은마침내결혼했다.",
       "original_word_count": 65,
       "original_tokens": "004A 007A 0204 009B 009C 0096 00C4 0065 007C 0064 00A4 0099 007C 0111 00D2 008A 0112 00C4 0075 0091 0233 007C 007A 0323 0099 0178 0078 00CC 0078 007A 0073 007B 0064 006C FFFD 0054 00E1 0099 0065 0022 0027 000C 000F 004A 0063 026C 029F 00BE 0149 0063 0164 007A 0227 00CD 00C2 02BD 00E0 009C 007D 0124 0093 0073 007D 006C FFFF",
-      "current_tokens": "7031 7175 7148 70E4 FFFE 70E2 700D 70F1 7066 705D 7169 7025 7276 7104 70B4 7039 706B FFFF",
+      "current_tokens": "7031 7175 7148 70E4 FFFE 70E2 700D 70F1 7066 705D 7169 7025 7279 7104 70B4 7039 706B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -2865,7 +2865,7 @@
       "target_korean": "후일담 번역 레코드 0x08C9AA: 칼자스제일의비행부대라불린키스는\n기대에걸맞은힘을발휘했지만\n큰피해를내는작전은비난을샀다.\f성으로돌아온뒤에는자주자리를비운\n왕녀를대신해성을지키며병사들과\n밤낮없이거리복구에힘썼다.\f그노력으로칼자스는마침내\n옛번영을되찾기시작했다.\f평화롭고안전한세상을앞당기고자\n키스는몬스터토벌작전을지휘했다.\f피해도컸지만키스의작전덕분에\n인근의몬스터는거의모두\n소탕되기직전까지몰렸다.\f그러던어느날몬스터에게쫓기던\n아름다운여인을구하려다가\n자신도목숨을잃고말았다.",
       "original_word_count": 65,
       "original_tokens": "00F0 026C 00CB 009C 00CC 0078 0093 0099 0065 007C 0064 006C FFFD 0054 00E1 00B8 0073 0081 007D 00F8 006C 0022 0027 000C 000F 004A 007A 0143 009B 009C 0065 007C 0064 00A4 0099 007C 0111 00D2 008A 0112 00C4 007D 0064 008C 0075 023C 00BF 0063 0270 008A 01A0 0093 0099 0065 0099 0092 0078 0063 0074 0081 007D 00AA 00AA 006C FFFF",
-      "current_tokens": "7015 7068 7039 7097 7062 701D 706F 709E 7011 708F 7039 700F FFFE 7057 7020 7013 7106 71E7 706F 7287 70B6 7081 7086 7039 706B FFFF",
+      "current_tokens": "7015 7068 7039 7097 7062 701D 706F 709E 7011 708F 7039 700F FFFE 7057 7020 7013 7106 71E7 706F 728A 70B6 7081 7086 7039 706B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3021,7 +3021,7 @@
       "target_korean": "후일담 번역 레코드 0x08E520: 마을로돌아온아론은전과다름없이\n은거생활을시작했다.\f아직죽기엔기운이넘친아론은\n좋아하는아이들을위해\n검술도장을열었다.\f검술과체력만이아니라바른마음까지\n길러주려힘썼다.\f한편으로전쟁이야기도들려줘\n아이들은그시간을즐거워했다.\f그러던어느날진검수련도중\n지나치게열중한제자의칼에상처를입어\n그대로목숨을잃고말았다.\f하지만전장이아닌아이들에게둘러싸여\n죽을수있었던것을아론은진심으로\n기뻐했을것이라고한다.",
       "original_word_count": 65,
       "original_tokens": "0099 0092 007C 0075 00E1 0063 015B 0079 030A 0357 0074 0270 008A 01A0 0093 00A9 006C FFFD 0054 00EF 0079 0128 00C2 0075 0149 01C4 0074 00C2 0073 00A6 0075 01FA 02B6 0126 007A 00DE 0092 009C 0073 0079 00BF 011C 018C 007D 0124 007A 0075 038C 02AE 007A 00CC 0095 00D3 00B8 00EF 0093 01D8 008E 00BF 009C 0065 007C 007D 006C FFFF",
-      "current_tokens": "7064 709C 706F 7015 70E9 7066 710B 71A0 704C 703A FFFE 702C 72C8 70B4 706F 709C 7031 706D 70B6 7027 7039 706B FFFF",
+      "current_tokens": "7064 709C 706F 7015 70E9 7066 710B 71A0 704C 703A FFFE 702C 72CB 70B4 706F 709C 7031 706D 70B6 7027 7039 706B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3705,7 +3705,7 @@
       "target_korean": "엔딩 번역 레코드 0x095D7C: 오, {0001}님. 잘왔네.\n실컷싸웠더니당분간은\n검을잡고싶지도않구먼.\f이제마을아이들에게\n검술을가르치며\n느긋하게여생을보낼걸세.\f하지만언젠가는검을쓰는법따윈\n몰라도되는세상이오겠지.\n자네라면꼭만들수있다고믿네.\f좋은추억을남겨줘서고맙네…",
       "original_word_count": 65,
       "original_tokens": "FFFE 00FC 00BF 0073 00A6 0065 0080 00CC 007C 02CD 0063 00F9 007A 0075 FFFE 0073 007B 0065 0077 0099 007C 0080 0063 00CE 025D 006C FFFD 0091 0127 0073 00BF 01B4 0146 0075 00E7 007B 0065 00A6 009C 007D 0093 FFFE 023D 00CE 0065 0091 007D 0252 006C FFFE 007C 007C 00D6 007C 0125 008A 0081 0082 0079 0093 0078 0073 00AA 00AA FFFF",
-      "current_tokens": "7166 706B FFFD 71E5 7066 70C2 7285 706F 702D 70C7 719F 7061 70B6 7282 7166 7197 FFFF",
+      "current_tokens": "7166 706B FFFD 71E5 7066 70C2 7288 706F 702D 70C7 719F 7061 70B6 7285 7166 7197 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3741,7 +3741,7 @@
       "target_korean": "엔딩 번역 레코드 0x096252: 이봐! 누가멋대로들어와!\n뭐야, {0001}이잖아.\f여러일이있어서\n다시한동안{000A}님곁에\n머물기로했어.\f짧은시간이었지만\n널알게돼서정말좋았어.\n친동생처럼느껴진다니까.\f{000A}님께가보려고?\n지금은{0005}도함께\n연구하고있을거야.\f그럼잘지내라. 잘가!",
       "original_word_count": 65,
       "original_tokens": "007B 0064 01F0 006C FFFE 02A4 0063 02EB 0063 00CC 0078 007A 00D6 008E 0065 0073 00AA 00AA FFFD FFF7 000A 0202 0063 01C5 011F 014C 00A6 0063 0096 007C 0048 FFFE 01BA 00C2 FFF7 0005 0080 007C 007B 0099 0083 007A 02E5 02E6 008A FFFE 0099 0065 007D 00C2 0146 00EF 01F0 006C FFFD 00CE 025D 0081 0073 0075 0081 00E0 00CC 0047 FFFF",
-      "current_tokens": "FFFE 726C 709E 7011 70B6 70B7 706F 711B 70A6 706B FFFD 7044 7195 7193 7056 7025 706D 706B 0054 7193 700F 7194 FFFF",
+      "current_tokens": "FFFE 726F 709E 7011 70B6 70B7 706F 711B 70A6 706B FFFD 7044 7195 7193 7056 7025 706D 706B 0054 7193 700F 7194 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3777,7 +3777,7 @@
       "target_korean": "엔딩 번역 레코드 0x0967A4: {0001}… 돌아와줬구나…\n아이들을돌보면서계속\n네가돌아오길기다렸어…",
       "original_word_count": 52,
       "original_tokens": "FFF7 0001 00AA 00AA 006C FFFE 019A 007B 0065 024B 0065 00A6 009C 0064 0063 018C 00AA 00AA 006C FFFE 0340 0341 0126 0063 01F8 01D0 008A 0110 0073 0079 00BF 0075 0146 007B 0093 FFFE 0081 0073 0064 0063 0264 0082 008A 019F 007B 0065 007C 0064 0063 00AA 00AA FFFF",
-      "current_tokens": "FFF7 0001 7197 0054 710D 7015 708C 728F 709E 7016 7197 FFFE 7015 7031 7079 706F 710D 70C1 70D0 7061 71CB 70FE FFFE 7166 700F 710D 7015 705F 710E 702C 7039 713F 7071 7197 FFFF",
+      "current_tokens": "FFF7 0001 7197 0054 710D 7015 708C 7292 709E 7016 7197 FFFE 7015 7031 7079 706F 710D 70C1 70D0 7061 71CB 70FE FFFE 7166 700F 710D 7015 705F 710E 702C 7039 713F 7071 7197 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3837,7 +3837,7 @@
       "target_korean": "엔딩 번역 레코드 0x0968FA: 절대짐이되지않을게!\n그러니까…\f아니면…나같은여자는\n방해가되는거야?",
       "original_word_count": 49,
       "original_tokens": "01CF 0099 0065 008C 007C 009B 00A6 00C2 0096 00C4 0073 007C FFFE 0096 00BF 00AA 00AA 006C FFFD 00E1 009C 0093 0080 00AA 00AA 0075 0262 0063 00CC 0078 0073 0111 0079 FFFE 007C 0064 0063 0074 00C2 0075 008C 007C 009B 00A6 0074 00A9 0096 0048 FFFF",
-      "current_tokens": "729B 7095 70D9 7031 709B 7056 7085 706F 70D6 7194 FFFE 7044 70A3 7143 70AA 7197 FFFD 7015 7143 70D0 7197 7016 70FF 7066 7062 7057 707F FFFE 711A 70DC 700F 709B 707F 711B 70A6 719A FFFF",
+      "current_tokens": "729E 7095 70D9 7031 709B 7056 7085 706F 70D6 7194 FFFE 7044 70A3 7143 70AA 7197 FFFD 7015 7143 70D0 7197 7016 70FF 7066 7062 7057 707F FFFE 711A 70DC 700F 709B 707F 711B 70A6 719A FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3849,7 +3849,7 @@
       "target_korean": "엔딩 번역 레코드 0x09695C: 그런게아니야!\n널소중히여기기에\n위험한일을겪게하고싶지않아!",
       "original_word_count": 38,
       "original_tokens": "00E1 0078 00CE 025D 0073 007C 0047 FFFE 0072 0110 008A 0071 0124 007A 00D6 0078 0096 00BF 00D3 00E1 0075 FFFE 0130 0131 0073 012E 007A 0081 009B 016F 0064 00A6 0073 007C 00B8 00EF 0047 FFFF",
-      "current_tokens": "7044 71BD 70D6 7015 7143 70A6 7194 FFFE 726D 7055 7041 7077 7062 702C 702C 705C FFFE 7082 7083 7027 70AF 706F 7300 70D6 7011 70B6 728D 7056 7085 7015 7194 FFFF",
+      "current_tokens": "7044 71BD 70D6 7015 7143 70A6 7194 FFFE 7270 7055 7041 7077 7062 702C 702C 705C FFFE 7082 7083 7027 70AF 706F 7304 70D6 7011 70B6 7290 7056 7085 7015 7194 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3861,7 +3861,7 @@
       "target_korean": "엔딩 번역 레코드 0x0969A8: 고마워, {0001}.\n하지만…\f난더는혼자인게싫어!!\n믿는사람과…\f사랑하는사람과함께\n살아가고싶어! 부탁이야, {0001}.\n네곁에있게해줘!",
       "original_word_count": 65,
       "original_tokens": "0080 0078 00F0 00CD 00C2 0001 0023 0047 0047 FFFE 0262 00C2 023D 00CE 007D 00CD 0093 00AA 00AA FFFD 0323 00A9 007D 00CD 0093 007C 007B 0099 0083 007A 007A 0191 0072 0065 FFFE 007C 0072 0064 007C 0063 0047 FFFE 0091 0261 007C 0075 FFF7 0001 006C FFFE 0081 0073 0064 0093 007C 007B 0099 0083 007A 007C 00CB 016F 0065 0047 FFFF",
-      "current_tokens": "7190 707F 7104 7057 701D 70D6 719E 7071 7194 7194 FFFE 716A 707F 700D 70F1 7029 7197 FFFD 700D 7043 7011 707F 700D 70F1 7029 70E3 70CC FFFE 706C 7015 700F 70B6 728D 7071 7194 0054 70B8 71F3 7031 70A6 7074 0054 FFF7 0001 706B FFFE 7166 7153 705C 70B7 70D6 70DC 719F 7194 FFFF",
+      "current_tokens": "7190 707F 7104 7057 701D 70D6 719E 7071 7194 7194 FFFE 716A 707F 700D 70F1 7029 7197 FFFD 700D 7043 7011 707F 700D 70F1 7029 70E3 70CC FFFE 706C 7015 700F 70B6 7290 7071 7194 0054 70B8 71F3 7031 70A6 7074 0054 FFF7 0001 706B FFFE 7166 7153 705C 70B7 70D6 70DC 719F 7194 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3873,7 +3873,7 @@
       "target_korean": "엔딩 번역 레코드 0x096A48: 넌혼자가아니야, {0002}.\n그래,이제혼자가아니야…",
       "original_word_count": 30,
       "original_tokens": "0080 0078 00F0 00CD 00CE 025D 0073 007C 00CB 0075 FFF7 0002 006C FFFE 00E1 0078 0075 0080 0078 00F0 00CD 0073 00B8 0096 00CE 025D 0073 007C 00AA FFFF",
-      "current_tokens": "726B 7104 7057 700F 7015 7143 70A6 7074 0054 FFF7 0002 706B FFFE 7044 7048 7074 7031 7026 7104 7057 700F 7015 7143 70A6 7197 FFFF",
+      "current_tokens": "726E 7104 7057 700F 7015 7143 70A6 7074 0054 FFF7 0002 706B FFFE 7044 7048 7074 7031 7026 7104 7057 700F 7015 7143 70A6 7197 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3981,7 +3981,7 @@
       "target_korean": "출격준비",
       "original_word_count": 31,
       "original_tokens": "0125 0118 020C 00A8 0147 010D 0189 00CA 0000 0001 0012 0020 00A7 00A8 000B 0052 0053 0043 00DB 00DC 014E 0189 01C8 0322 0078 035E 007D 0099 0073 007C FFFF",
-      "current_tokens": "7163 7007 7161 711D 711E 70E8 70B6 711E 703D 711D 7019 711E 0054 0054 705B 7248 0054 0054 7056 7184 7021 700A 70BA 709E 70DD 7249 70ED 7059 7055 0054 FFFF",
+      "current_tokens": "7163 7007 7161 711D 711E 70E8 70B6 711E 703D 711D 7019 711E 0054 0054 705B 724B 0054 0054 7056 7184 7021 700A 70BA 709E 70DD 724C 70ED 7059 7055 0054 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -3993,7 +3993,7 @@
       "target_korean": "이동공격마법소환치료명령",
       "original_word_count": 53,
       "original_tokens": "0166 0167 010F 0118 0088 008F 00BA 00BB 01D7 0382 00DB 0271 00AB 0070 00D5 0285 0074 00A9 02FA 0383 01E4 0071 0149 017F 00C7 00C8 0084 00E1 00D3 007A 00C2 0125 024B 0092 016F 00B8 018E 0136 0063 0024 0015 0053 0013 0138 007C 014C 0239 0283 0398 0110 01B0 01B1 FFFF",
-      "current_tokens": "7031 7049 701E 7007 705D 7130 7055 721F 70BA 708B 7042 722D 00AB 0070 00D5 0285 7039 0054 02FA 0383 01E4 0071 711A 7071 7057 00C8 0084 00E1 00D3 007A 00C2 0125 024B 0092 016F 00B8 018E 0136 703E 71F7 724D 70DD 7143 701A 007C 7063 0239 0283 714B 708B 01B0 01B1 FFFF",
+      "current_tokens": "7031 7049 701E 7007 705D 7130 7055 7224 70BA 708B 7042 7230 00AB 0070 00D5 0285 7039 0054 02FA 0383 01E4 0071 711A 7071 7057 00C8 0084 00E1 00D3 007A 00C2 0125 024B 0092 016F 00B8 018E 0136 703E 71F7 724F 70DD 7143 701A 007C 7063 0239 0283 714B 708B 01B0 01B1 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4005,7 +4005,7 @@
       "target_korean": "Start 메뉴 글리프 목록",
       "original_word_count": 42,
       "original_tokens": "001B 004E 0001 0034 0239 0283 0114 0115 0116 0117 0061 006D 00AC 0326 0062 02C3 005F 0030 004A 0020 0223 02FD 030C 0048 02C6 01B0 024E 01FD 008B 0236 0253 0149 017F 000B 0027 0097 037F 0380 0009 004C 002F FFFF",
-      "current_tokens": "7024 02C6 7149 708B 0326 0061 7000 7001 7002 7003 70A8 703D 70C8 70AA 70C5 70A3 705F 702C 70EE 70D6 71B4 7084 7154 719A 01B0 02C3 024E 70FE 7013 70BE 7068 70C1 714E 725A 702A 701B 7124 70D0 70A5 725B 714B FFFF",
+      "current_tokens": "7024 02C6 7149 708B 0326 0061 7000 7001 7002 7003 70A8 703D 70C8 70AA 70C5 70A3 705F 702C 70EE 70D6 71B4 7084 7154 719A 01B0 02C3 024E 70FE 7013 70BE 7068 70C1 714E 725D 702A 701B 7124 70D0 70A5 725E 714B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4053,7 +4053,7 @@
       "target_korean": "수면상태",
       "original_word_count": 9,
       "original_tokens": "02D5 00BF 00CB 009C 0065 007C 0092 00A9 FFFF",
-      "current_tokens": "70C9 70D0 705B 7226 FFFF",
+      "current_tokens": "70C9 70D0 705B 722A FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4365,7 +4365,7 @@
       "target_korean": "폴거",
       "original_word_count": 6,
       "original_tokens": "001B 004F 002A 002D 004A FFFF",
-      "current_tokens": "7260 711B FFFF",
+      "current_tokens": "7263 711B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4473,7 +4473,7 @@
       "target_korean": "웨어울프",
       "original_word_count": 7,
       "original_tokens": "0002 004E 0000 0002 002A 001B FFFF",
-      "current_tokens": "7261 7071 7247 7052 FFFF",
+      "current_tokens": "7264 7071 724A 7052 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4485,7 +4485,7 @@
       "target_korean": "그레이트슬라임",
       "original_word_count": 9,
       "original_tokens": "002F 002B 004A 0013 000C 0028 0001 0020 FFFF",
-      "current_tokens": "7044 7030 7031 7050 722B 706D 71B4 FFFF",
+      "current_tokens": "7044 7030 7031 7050 721D 706D 71B4 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4497,7 +4497,7 @@
       "target_korean": "스큐라",
       "original_word_count": 5,
       "original_tokens": "000C 0006 0051 0028 FFFF",
-      "current_tokens": "7036 7262 706D FFFF",
+      "current_tokens": "7036 7265 706D FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4509,7 +4509,7 @@
       "target_korean": "아이언골렘",
       "original_word_count": 9,
       "original_tokens": "0000 0001 0000 0027 0031 004A 002B 0020 FFFF",
-      "current_tokens": "7015 7031 70EF 7263 7264 FFFF",
+      "current_tokens": "7015 7031 70EF 7266 7267 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4545,7 +4545,7 @@
       "target_korean": "뱀파이어로드",
       "original_word_count": 9,
       "original_tokens": "003C 0027 0041 0001 0000 002C 004A 003B FFFF",
-      "current_tokens": "7265 7008 7031 7071 703A 7006 FFFF",
+      "current_tokens": "7268 7008 7031 7071 703A 7006 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4569,7 +4569,7 @@
       "target_korean": "케르베로스",
       "original_word_count": 6,
       "original_tokens": "0008 002A 003F 002C 000C FFFF",
-      "current_tokens": "7232 704F 704D 703A 7036 FFFF",
+      "current_tokens": "7235 704F 704D 703A 7036 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4593,7 +4593,7 @@
       "target_korean": "와이번",
       "original_word_count": 6,
       "original_tokens": "0026 0001 003C 004A 0027 FFFF",
-      "current_tokens": "708C 7031 7266 FFFF",
+      "current_tokens": "708C 7031 7269 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4629,7 +4629,7 @@
       "target_korean": "크라켄",
       "original_word_count": 6,
       "original_tokens": "0007 0028 004A 0008 0027 FFFF",
-      "current_tokens": "702F 706D 7267 FFFF",
+      "current_tokens": "702F 706D 726A FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4641,7 +4641,7 @@
       "target_korean": "서큐버스",
       "original_word_count": 6,
       "original_tokens": "000A 0006 0051 003C 000C FFFF",
-      "current_tokens": "7061 7262 7116 7036 FFFF",
+      "current_tokens": "7061 7265 7116 7036 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4653,7 +4653,7 @@
       "target_korean": "데몬로드",
       "original_word_count": 8,
       "original_tokens": "003A 004A 0022 0027 002C 004A 003B FFFF",
-      "current_tokens": "70AC 7268 703A 7006 FFFF",
+      "current_tokens": "70AC 726B 703A 7006 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6609,7 +6609,7 @@
       "target_korean": "아이템/상점 화면별 글리프·토큰·포인터",
       "original_word_count": 14,
       "original_tokens": "01FF 01A5 010F 002A 004A 0013 000F 0001 0000 0001 0002 0003 0004 FFFF",
-      "current_tokens": "01FF 710B 703E 724A 7050 71FF 000F 0001 0000 0001 0002 0003 0004 FFFF",
+      "current_tokens": "01FF 710B 703E 7223 7050 71FF 000F 0001 0000 0001 0002 0003 0004 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6657,7 +6657,7 @@
       "target_korean": "아이템/상점 화면별 글리프·토큰·포인터",
       "original_word_count": 15,
       "original_tokens": "027A 0065 007D 0000 0001 0012 0020 008A 02AB 00B8 0074 00E5 00CB 007C FFFF",
-      "current_tokens": "7015 7031 7259 0054 0001 0012 0020 008A 02AB 00B8 0074 7249 70ED 007C FFFF",
+      "current_tokens": "7015 7031 725C 0054 0001 0012 0020 008A 02AB 00B8 0074 724C 70ED 007C FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6681,7 +6681,7 @@
       "target_korean": "아이템/상점 화면별 글리프·토큰·포인터",
       "original_word_count": 32,
       "original_tokens": "0000 0001 0012 0020 0399 016B 035E 02E0 00D3 009C 015A 00B0 0085 0065 0092 016F 00B8 005E 0055 0056 0057 0058 0059 005A 005B 005C 005D 0385 008A 0099 0064 FFFF",
-      "current_tokens": "7015 7031 7259 0054 709E 70DD 706F 0054 709E 70DD 70E3 7249 70ED 0065 0092 016F 00B8 005E 0055 0056 0057 0058 0059 005A 005B 005C 005D 0385 008A 0099 0064 FFFF",
+      "current_tokens": "7015 7031 725C 0054 709E 70DD 706F 0054 709E 70DD 70E3 724C 70ED 0065 0092 016F 00B8 005E 0055 0056 0057 0058 0059 005A 005B 005C 005D 0385 008A 0099 0064 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -8661,7 +8661,7 @@
       "target_korean": "이름을정해주세요",
       "original_word_count": 20,
       "original_tokens": "0152 0148 008A 01CF 008C 0065 00E5 00CB 007C 00E1 0063 00C2 0067 006B 0074 0072 0092 016F 00B8 FFFF",
-      "current_tokens": "7031 7068 706F 7154 70DC 7014 7054 70EE 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 700B 700C 7001 7015 7016 7075 701D 7030 7046 704D 704E 7011 704F 7050 705C 7044 7006 7005 70E8 700D 7056 7184 7021 7026 702A 702B 707A 7008 7031 7037 7239 725F 70F2 723F 703A 705D 70ED 70B5 7052 7036 7055 7224 71A4 7222 70A8 7128 712C 7069 71A5 7168 703E 701A 7257 7082 0054 70C9 7154 7134 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 FFFF",
+      "current_tokens": "7031 7068 706F 7154 70DC 7014 7054 70EE 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 700B 700C 7001 7015 7016 7075 701D 7030 7046 704D 704E 7011 704F 7050 705C 7044 7006 7005 70E8 700D 7056 7184 7021 7026 702A 702B 707A 7008 7031 7037 723C 7262 70F2 7242 703A 705D 70ED 70B5 7052 7036 7055 7228 71A4 7226 70A8 7128 712C 7069 71A5 7168 703E 701A 725A 7082 0054 70C9 7154 7134 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -8673,7 +8673,7 @@
       "target_korean": "이름 입력 영문/숫자 리소스 블록",
       "original_word_count": 65,
       "original_tokens": "001F 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 002A 002B 002C 002D 002E 002F 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 003A 003B 003C 003D 003E 003F 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 004A 004B 004C 004D 004E 004F 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 005A 005B 005C 005D 005E FFFF",
-      "current_tokens": "725F 70F2 723F 703A 705D 70ED 70B5 7052 7036 7055 7224 71A4 7222 70A8 7128 712C 7069 71A5 7168 703E 701A 7257 7082 0054 70C9 7154 7134 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 FFFF",
+      "current_tokens": "7262 70F2 7242 703A 705D 70ED 70B5 7052 7036 7055 7228 71A4 7226 70A8 7128 712C 7069 71A5 7168 703E 701A 725A 7082 0054 70C9 7154 7134 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 0054 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -8853,7 +8853,7 @@
       "target_korean": "엘윈, 조심해. 무언가 심상치 않은 기운이 느껴져.",
       "original_word_count": 35,
       "original_tokens": "00EB 023D 00CE 007D 0246 00AA 00AA 0091 0233 007C 007A 01B5 0082 0178 0078 0124 0079 0074 0072 009C 00E0 0075 0149 0300 0073 00E8 0078 0092 009C 00C2 0099 0073 007C 006C FFFF",
-      "current_tokens": "700B 700C 7074 71FF 7002 71A0 70DC 706B 71FF 70AB 70EF 700F 71FF 71A0 705B 70BA 71FF 7085 7066 71FF 702C 7097 7031 71FF 7072 725E 70BF 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7026 707A 703E 7031 71FF 705D 706F 703A 71FF 705F 70B6 71FF 70B7 7071 7194 71FF 7001 7015 7016 700F 71FF 7082 7083 70DC 7194 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7129 71B1 7071 706B 71FF 7056 7134 71FF 7069 703A 71FF 700F 7057 706B 71FF 7190 71FF 71D5 702C 71FF 701B 705C 71FF 712F 7015 70A6 71FF 70DC 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7001 7015 7016 70A1 71FF 709E 7011 70B6 7074 71FF 7031 71FF 7092 7093 7067 71FF 7031 71F7 70A1 71FF 7129 7015 7025 71B1 7071 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7088 706F 71FF 7079 7071 706D 706B 71FF 7097 7042 7066 71FF 7031 70D3 71FF 7093 70B5 7031 702C 71FF 702A 709A 70B4 7039 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF FFFF",
+      "current_tokens": "700B 700C 7074 71FF 7002 71A0 70DC 706B 71FF 70AB 70EF 700F 71FF 71A0 705B 70BA 71FF 7085 7066 71FF 702C 7097 7031 71FF 7072 7261 70BF 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7026 707A 703E 7031 71FF 705D 706F 703A 71FF 705F 70B6 71FF 70B7 7071 7194 71FF 7001 7015 7016 700F 71FF 7082 7083 70DC 7194 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7129 71B1 7071 706B 71FF 7056 7134 71FF 7069 703A 71FF 700F 7057 706B 71FF 7190 71FF 71D5 702C 71FF 701B 705C 71FF 712F 7015 70A6 71FF 70DC 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7001 7015 7016 70A1 71FF 709E 7011 70B6 7074 71FF 7031 71FF 7092 7093 7067 71FF 7031 71F7 70A1 71FF 7129 7015 7025 71B1 7071 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 7088 706F 71FF 7079 7071 706D 706B 71FF 7097 7042 7066 71FF 7031 70D3 71FF 7093 70B5 7031 702C 71FF 702A 709A 70B4 7039 706B 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF 71FF FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
