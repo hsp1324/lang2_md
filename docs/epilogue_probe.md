@@ -181,8 +181,7 @@ reset. The 340-step evidence set is
 confirms ordinary spaces. Frame 270 exposed one remaining authored adjacency,
 `{0001}일행`, which rendered as `엘윈일행`. All eight occurrences were changed
 to `{0001} 일행`, guarded by a regression test, and the corrected production
-checksum is `EA22`. A final `EA22` combined-probe playback is required before
-calling the corrected wording live-verified.
+checksum is `EA22`.
 
 The first corrected-checksum attempt used production `EA22`, Scenario probe
 `3590`, and combined checksum `C176` without boosting the diagnostic save.
@@ -194,6 +193,23 @@ the same damage cap still left Bernhardt at HP 1, captured at
 `captures/run/c176_at64_second_failure_current.png`. The 150 frames under
 `captures/run/c176_at64_epilogue_watch/` are also aborted battle evidence. The
 next runtime attempt must use a pre-attack save-state and varied-delay retries.
+
+The final corrected-checksum run used the same production `EA22`, Scenario probe
+`3590`, and combined checksum `C176`. A quicksave was created at Elwin's command
+menu before Attack. This run rolled the full ten damage on its first attempt,
+defeated Bernhardt, and completed the stock closing route without loading the
+state. The continuous evidence set is
+`captures/run/c176_corrected_epilogue_watch/001.png` through `359.png`:
+
+- frame 216 renders `어둠의 대결은 엘윈 일행의` with the required space;
+- frames 216-244 cover every page of relocated world record 86 with natural
+  Korean spacing and intact page transitions;
+- frame 280 renders `COPYRIGHT 1994 NCS` and `한국어화 hsp1324`;
+- frame 288 reaches `Fin`, which remains stable through frame 359.
+
+This closes the live verification gap for the corrected dynamic-name spacing and
+the relocated world-epilogue route. It does not replace the separate static
+hash, pointer, capacity, and render checks for the other 89 records.
 
 Under the current WSLg/remote-focus state, global XTest input could leave the
 frame unchanged even after raising the window. Direct window events through

@@ -3016,6 +3016,15 @@ contains 57 safe syllables as documented below and in
 - Automated BlastEm configs remove host gamepad bindings but retain keyboard
   mappings used by direct X events. This prevents an Xbox controller used in
   another game from steering the localization test emulator.
+- A final `EA22` / `3590` / `C176` retry saved state at Elwin's command menu,
+  then rolled ten damage and defeated Bernhardt on the first attack without a
+  reload. The stock route completed through credits and `Fin`. Frame 216 in
+  `captures/run/c176_corrected_epilogue_watch/` renders
+  `어둠의 대결은 엘윈 일행의` with the corrected space; frames 216-244 cover
+  all pages of relocated world record 86, frame 280 shows
+  `한국어화 hsp1324`, and frame 288 reaches `Fin`. The stable `Fin` screen was
+  captured through frame 359. This supersedes the two failed HP-1 attempts as
+  the authoritative corrected-spacing live run.
 
 ### Event Inventory Text Classification (2026-07-16)
 
