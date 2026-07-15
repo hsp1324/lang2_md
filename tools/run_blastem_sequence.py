@@ -173,6 +173,9 @@ SEQUENCES["shop-sell-list"] = list(SEQUENCES["shop-buy-sell"][:-1])
 # are timing-sensitive and can accidentally choose Move on faster hosts.
 SEQUENCES["battle-command"] = list(SEQUENCES["deploy-dialogue"])
 SEQUENCES["first-turn-dialogue"] = list(SEQUENCES["deploy-dialogue"])
+# Reuse an already running emulator and advance only until a full unit command
+# panel is visible. This is useful for later scenarios with long opening events.
+SEQUENCES["detect-command"] = []
 
 
 def scenario_select_keys(scenario_number: int) -> list[str]:
@@ -335,13 +338,16 @@ def battle_command_menu_visible(path: Path) -> bool:
         and dark_panel_pixels > 1000 * scale_x * scale_y
         # The ornate status-bar frame occupies a little over half of this
         # crop on some maps; 45% still distinguishes it from dialogue views.
+        # Preparation/hire screens fill more of the same crop with solid blue
+        # (about 52%), so cap the ratio as well as enforcing the lower bound.
         and status_blue_pixels > status.width * status.height * 0.45
+        and status_blue_pixels < status.width * status.height * 0.505
     )
 
 
 def advance_to_battle_command(args: argparse.Namespace) -> int:
     probe = LOG_ROOT / "battle_command_probe.png"
-    for step in range(1, 16):
+    for step in range(1, args.max_confirmations + 1):
         status = subprocess.call(make_key_command(args, ["c:0.9"]), cwd=ROOT)
         if status:
             return status
@@ -360,7 +366,10 @@ def advance_to_battle_command(args: argparse.Namespace) -> int:
             if battle_command_menu_visible(probe):
                 print(f"battle command menu detected after {step} confirmations")
                 return 0
-    raise RuntimeError("battle command menu was not detected after 15 confirmations")
+    raise RuntimeError(
+        "battle command menu was not detected after "
+        f"{args.max_confirmations} confirmations"
+    )
 
 
 def main() -> int:
@@ -372,6 +381,12 @@ def main() -> int:
     parser.add_argument("--window-width", type=int, default=320)
     parser.add_argument("--window-height", type=int, default=240)
     parser.add_argument("--scenario-number", type=int, default=14)
+    parser.add_argument(
+        "--max-confirmations",
+        type=int,
+        default=80,
+        help="maximum single C presses used while detecting a battle command menu",
+    )
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument(
         "--replace-existing",
@@ -470,16 +485,20 @@ def main() -> int:
     key_command = make_key_command(args, initial_keys)
     if args.dry_run:
         print("keys:", " ".join(key_command))
-        if args.sequence in {"battle-command", "first-turn-dialogue"}:
+        if args.sequence in {"battle-command", "first-turn-dialogue", "detect-command"}:
             print("then: confirm and capture until the full command menu is detected")
         if args.sequence == "first-turn-dialogue":
             print("then: close the unit menu and choose Start > 턴 종료")
         return 0
-    status = subprocess.call(key_command, cwd=ROOT)
-    if status or args.sequence not in {"battle-command", "first-turn-dialogue"}:
+    status = subprocess.call(key_command, cwd=ROOT) if initial_keys else 0
+    if status or args.sequence not in {
+        "battle-command",
+        "first-turn-dialogue",
+        "detect-command",
+    }:
         return status
     status = advance_to_battle_command(args)
-    if status or args.sequence == "battle-command":
+    if status or args.sequence in {"battle-command", "detect-command"}:
         return status
     return subprocess.call(
         make_key_command(

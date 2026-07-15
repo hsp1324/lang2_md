@@ -32,6 +32,7 @@ KEYSYMS = {
     "capture": XK.XK_Control_R,
     "menu": XK.XK_Escape,
     "tab": XK.XK_Tab,
+    "pause": XK.XK_F7,
 }
 
 
@@ -122,8 +123,11 @@ def press(display: Display, window, key: str, hold: float, send_event: bool) -> 
 
     if send_event:
         root = display.screen().root
-        for event_type in (X.KeyPress, X.KeyRelease):
-            key_event = event.KeyPress(
+        for event_type, event_class in (
+            (X.KeyPress, event.KeyPress),
+            (X.KeyRelease, event.KeyRelease),
+        ):
+            key_event = event_class(
                 time=X.CurrentTime,
                 root=root,
                 window=window,
@@ -136,7 +140,6 @@ def press(display: Display, window, key: str, hold: float, send_event: bool) -> 
                 state=0,
                 detail=keycode,
             )
-            key_event.type = event_type
             window.send_event(key_event, propagate=True)
             display.sync()
             if event_type == X.KeyPress:

@@ -585,9 +585,23 @@ ENDING_DIALOGUE_TRANSLATIONS = Path("localization/ending_dialogue_ko.json")
 EPILOGUE_DIALOGUE_TRANSLATIONS = Path("localization/epilogue_dialogue_ko.json")
 CREDITS_TRANSLATIONS = Path("localization/credits_ko.json")
 CREDITS_POINTER_TABLE = 0x0A333A
-CREDITS_RECORD_COUNT = 60
+CREDITS_SOURCE_RECORD_COUNT = 60
+CREDITS_RECORD_COUNT = 61
 CREDITS_RELOC_BASE = 0x2B0000
 CREDITS_RELOC_LIMIT = 0x2B2000
+CREDITS_SEQUENCE_POINTER_TABLE = 0x0A3172
+CREDITS_SEQUENCE_COUNT = 16
+CREDITS_SEQUENCE_POINTER_SHA256 = "535f5de559e057b663b76ca31491dcd8d1dcb0dd7bc1ecfefc9e059ed3d8b713"
+CREDITS_SEQUENCE_RECORDS_SHA256 = "e70159b2e402d96483d99ce429814c36442024a1c218294df7c2374f319cc173"
+CREDITS_SEQUENCE_RELOC_BASE = 0x2BB000
+CREDITS_SEQUENCE_RELOC_LIMIT = 0x2BB800
+CREDITS_POINTER_RELOC_BASE = 0x2BB800
+CREDITS_POINTER_RELOC_LIMIT = 0x2BBC00
+CREDITS_SEQUENCE_TABLE_HOOK = 0x02A634
+CREDITS_POINTER_TABLE_HOOK = 0x02A65A
+CREDITS_SEQUENCE_TABLE_HOOK_ORIGINAL = bytes.fromhex("43 F9 00 0A 31 72")
+CREDITS_POINTER_TABLE_HOOK_ORIGINAL = bytes.fromhex("41 F9 00 0A 33 3A")
+CREDITS_DEVELOPER_ENTRY = bytes.fromhex("3C 01 00 40 00 78")
 CREDITS_DIGIT_HELPER = 0x0A3788
 CREDITS_DIGIT_HELPER_SIZE = 0x18
 EVENT_NAME_CONTROL_RE = re.compile(r"\{([0-9A-Fa-f]{4})\}")
@@ -1747,14 +1761,25 @@ def load_credits_translations(
         )
     rows: list[dict[str, object]] = []
     seen_addresses: set[int] = set()
-    for entry in entries:
+    for index, entry in enumerate(entries):
         row = dict(entry)
+        if row.get("synthetic"):
+            if index < CREDITS_SOURCE_RECORD_COUNT or "source_address" in row:
+                raise ValueError("synthetic credits must follow all source records")
+            row["source_address_int"] = None
+            rows.append(row)
+            continue
         address = int(str(row["source_address"]), 16)
         if address in seen_addresses:
             raise ValueError(f"duplicate credits address 0x{address:06X}")
         seen_addresses.add(address)
         row["source_address_int"] = address
         rows.append(row)
+    if len(seen_addresses) != CREDITS_SOURCE_RECORD_COUNT:
+        raise ValueError(
+            f"credits need {CREDITS_SOURCE_RECORD_COUNT} source records, "
+            f"found {len(seen_addresses)}"
+        )
     payload["records"] = rows
     return payload
 
@@ -1903,7 +1928,7 @@ def patch_credits_records(
     glyph_by_char: dict[str, int],
     payload: dict[str, object],
 ) -> int:
-    table_end = CREDITS_POINTER_TABLE + CREDITS_RECORD_COUNT * 4
+    table_end = CREDITS_POINTER_TABLE + CREDITS_SOURCE_RECORD_COUNT * 4
     pointer_table_bytes = reference_data[CREDITS_POINTER_TABLE:table_end]
     pointer_digest = hashlib.sha256(pointer_table_bytes).hexdigest()
     if pointer_digest != payload["pointer_table_sha256"]:
@@ -1916,7 +1941,7 @@ def patch_credits_records(
     assert isinstance(rows, list)
     source_records: list[bytes] = []
     source_addresses: list[int] = []
-    for index in range(CREDITS_RECORD_COUNT):
+    for index in range(CREDITS_SOURCE_RECORD_COUNT):
         source_address = be32(
             reference_data, CREDITS_POINTER_TABLE + index * 4
         )
@@ -1947,9 +1972,22 @@ def patch_credits_records(
     digit_helper = reference_data[
         CREDITS_DIGIT_HELPER : CREDITS_DIGIT_HELPER + CREDITS_DIGIT_HELPER_SIZE
     ]
+    if data[
+        CREDITS_POINTER_TABLE_HOOK : CREDITS_POINTER_TABLE_HOOK + 6
+    ] != CREDITS_POINTER_TABLE_HOOK_ORIGINAL:
+        raise ValueError("credits pointer-table hook changed")
+    data[
+        CREDITS_POINTER_TABLE_HOOK : CREDITS_POINTER_TABLE_HOOK + 6
+    ] = bytes.fromhex("41 F9") + CREDITS_POINTER_RELOC_BASE.to_bytes(4, "big")
+
     cursor = CREDITS_RELOC_BASE
     for index, row in enumerate(rows):
-        put32(data, CREDITS_POINTER_TABLE + index * 4, cursor)
+        relocated_pointer = CREDITS_POINTER_RELOC_BASE + index * 4
+        if relocated_pointer + 4 > CREDITS_POINTER_RELOC_LIMIT:
+            raise ValueError("credits relocated pointer table overflow")
+        put32(data, relocated_pointer, cursor)
+        if index < CREDITS_SOURCE_RECORD_COUNT:
+            put32(data, CREDITS_POINTER_TABLE + index * 4, cursor)
         if row.get("preserve_original"):
             encoded = source_records[index]
         else:
@@ -1972,6 +2010,56 @@ def patch_credits_records(
         CREDITS_DIGIT_HELPER : CREDITS_DIGIT_HELPER + CREDITS_DIGIT_HELPER_SIZE
     ] != digit_helper:
         raise ValueError("credits digit helper was modified")
+    return cursor
+
+
+def patch_credits_sequence_table(data: bytearray, reference_data: bytes) -> int:
+    table_end = CREDITS_SEQUENCE_POINTER_TABLE + CREDITS_SEQUENCE_COUNT * 4
+    pointer_bytes = reference_data[CREDITS_SEQUENCE_POINTER_TABLE:table_end]
+    pointer_digest = hashlib.sha256(pointer_bytes).hexdigest()
+    if pointer_digest != CREDITS_SEQUENCE_POINTER_SHA256:
+        raise ValueError(
+            f"credits sequence pointer table changed: {pointer_digest} != "
+            f"{CREDITS_SEQUENCE_POINTER_SHA256}"
+        )
+
+    records: list[bytes] = []
+    for index in range(CREDITS_SEQUENCE_COUNT):
+        source = be32(
+            reference_data, CREDITS_SEQUENCE_POINTER_TABLE + index * 4
+        )
+        count = be16(reference_data, source)
+        records.append(reference_data[source : source + 2 + count * 6])
+    record_digest = hashlib.sha256(b"".join(records)).hexdigest()
+    if record_digest != CREDITS_SEQUENCE_RECORDS_SHA256:
+        raise ValueError(
+            f"credits sequence records changed: {record_digest} != "
+            f"{CREDITS_SEQUENCE_RECORDS_SHA256}"
+        )
+
+    last = bytearray(records[-1])
+    if be16(last, 0) != 1 or last[2] != CREDITS_SOURCE_RECORD_COUNT - 1:
+        raise ValueError("unexpected final copyright sequence")
+    put16(last, 0, 2)
+    last.extend(CREDITS_DEVELOPER_ENTRY)
+    records[-1] = bytes(last)
+
+    cursor = CREDITS_SEQUENCE_RELOC_BASE + CREDITS_SEQUENCE_COUNT * 4
+    for index, record in enumerate(records):
+        put32(data, CREDITS_SEQUENCE_RELOC_BASE + index * 4, cursor)
+        end = cursor + len(record)
+        if end > CREDITS_SEQUENCE_RELOC_LIMIT:
+            raise ValueError("credits relocated sequence table overflow")
+        data[cursor:end] = record
+        cursor = end
+
+    if data[
+        CREDITS_SEQUENCE_TABLE_HOOK : CREDITS_SEQUENCE_TABLE_HOOK + 6
+    ] != CREDITS_SEQUENCE_TABLE_HOOK_ORIGINAL:
+        raise ValueError("credits sequence-table hook changed")
+    data[
+        CREDITS_SEQUENCE_TABLE_HOOK : CREDITS_SEQUENCE_TABLE_HOOK + 6
+    ] = bytes.fromhex("43 F9") + CREDITS_SEQUENCE_RELOC_BASE.to_bytes(4, "big")
     return cursor
 
 
@@ -4660,6 +4748,7 @@ def main() -> None:
         patch_credits_records(
             data, IN_ROM.read_bytes(), glyph_by_char, credits_payload
         )
+        patch_credits_sequence_table(data, IN_ROM.read_bytes())
         patch_route_title(data, glyph_by_char)
         patch_scenario_header(data, glyph_by_char)
         patch_direct_word_sequences(data, glyph_by_char)

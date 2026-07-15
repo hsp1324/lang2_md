@@ -37,8 +37,14 @@ class Scenario27EndingProbeRomTests(unittest.TestCase):
             if before != after
         }
         self.assertLessEqual(changed, expected_changes)
-        self.assertEqual(data[base + FIELD_OFFSETS["at"]], 0)
-        self.assertEqual(data[base + FIELD_OFFSETS["df"]], 0)
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["at"]],
+            probe_builder.PROBE_BERNHARDT_AT_MODIFIER & 0xFF,
+        )
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["df"]],
+            probe_builder.PROBE_BERNHARDT_DF_MODIFIER & 0xFF,
+        )
         self.assertEqual(
             data[base + FIELD_OFFSETS["x"]], probe_builder.PROBE_BERNHARDT_X
         )

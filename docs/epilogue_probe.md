@@ -88,9 +88,11 @@ python3 tools/build_epilogue_probe_rom.py --record-index 86 --start-slot 15
 
 `tools/build_scenario27_ending_probe_rom.py` can be applied after the selected
 epilogue probe. It validates the complete Scenario 27 layout and exact Japanese
-Bernhardt record, then moves an unguarded AT/DF 0 Bernhardt directly above the
-first automatic Elwin position. This preserves the stock final-battle event and
-ending path while making the battle end after one attack.
+Bernhardt record, then moves an unguarded Bernhardt directly above the first
+automatic Elwin position. Scenario AT/DF bytes are signed modifiers rather than
+final values, so the probe writes `-12/-4` to cancel Emperor's `AT 12/DF 4`
+class bases. Live status is therefore `AT 0/DF 0`. This preserves the stock
+final-battle event and ending path while making the battle end after one attack.
 
 ```bash
 python3 tools/build_epilogue_probe_rom.py --record-index 78 --start-slot 14
@@ -99,6 +101,17 @@ python3 tools/build_scenario27_ending_probe_rom.py \
 ```
 
 Both outputs are ignored non-distribution ROMs.
+
+The final credit group can be checked by applying the two probes in the other
+order so the world ending loop starts at slot 15:
+
+```bash
+python3 tools/build_scenario27_ending_probe_rom.py
+python3 tools/build_epilogue_probe_rom.py \
+  --input-rom 'roms/builds/Langrisser II (Scenario 27 Ending Probe).md' \
+  --record-index 86 --start-slot 15 \
+  --output-rom 'roms/builds/Langrisser II (Scenario 27 Final Credit Probe).md'
+```
 
 ## Runtime Verification
 
@@ -117,6 +130,12 @@ The stock path was exercised in BlastEm on 2026-07-14:
 - world record 86 used `--start-slot 15` and combined checksum `CEDD`; its
   Korean final page is captured in
   `captures/run/cedd_world86_transition1.png`.
+- Production checksum `743F`, Scenario 27 probe checksum `BFAD`, and the slot
+  15 combined checksum `F2FC` replayed the complete final route. Bernhardt's
+  live status was `AT 0/DF 0`, the stock world epilogue completed, and the
+  final two-record credit group displayed `COPYRIGHT 1994 NCS` together with
+  `한국어화 hsp1324`. Evidence is
+  `captures/run/f2fc_credit_final_watch/324.png`.
 
 GST saves are ROM-content-specific in BlastEm. Loading the pre-epilogue GST
 after swapping to another probe ROM was rejected, and changing `AE90` inside an

@@ -246,10 +246,12 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     credits_intervals = []
     credits = builder.load_credits_translations()
     for index, row in enumerate(credits["records"]):
+        if row.get("synthetic"):
+            continue
         start = int(row["source_address_int"])
         capacity, _, _ = builder.direct_record_layout(japanese, start)
         relocated = be32(
-            korean, builder.CREDITS_POINTER_TABLE + index * 4
+            korean, builder.CREDITS_POINTER_RELOC_BASE + index * 4
         )
         credits_intervals.append(
             (

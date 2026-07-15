@@ -32,6 +32,11 @@ BERNHARDT_RECORD_OFFSET = 0x18323E
 # The probe puts Bernhardt directly above the first automatic Elwin position.
 PROBE_BERNHARDT_X = 15
 PROBE_BERNHARDT_Y = 15
+# Scenario stat bytes are signed modifiers applied after class base stats.
+# Emperor contributes AT 12 / DF 4, so zero bytes still leave a survivable
+# target. Cancel those base values to make the ending probe deterministic.
+PROBE_BERNHARDT_AT_MODIFIER = -12
+PROBE_BERNHARDT_DF_MODIFIER = -4
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -71,8 +76,8 @@ def validate_layout(probe: bytes, source: bytes) -> None:
 def patch_probe(probe: bytearray, source: bytes) -> int:
     validate_layout(probe, source)
     base = BERNHARDT_RECORD_OFFSET
-    probe[base + FIELD_OFFSETS["at"]] = 0
-    probe[base + FIELD_OFFSETS["df"]] = 0
+    probe[base + FIELD_OFFSETS["at"]] = PROBE_BERNHARDT_AT_MODIFIER & 0xFF
+    probe[base + FIELD_OFFSETS["df"]] = PROBE_BERNHARDT_DF_MODIFIER & 0xFF
     probe[base + FIELD_OFFSETS["x"]] = PROBE_BERNHARDT_X
     probe[base + FIELD_OFFSETS["y"]] = PROBE_BERNHARDT_Y
     mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
@@ -102,7 +107,7 @@ def main() -> int:
     args.output_rom.write_bytes(probe)
     print(
         f"Scenario 27 Bernhardt: ({PROBE_BERNHARDT_X},{PROBE_BERNHARDT_Y}), "
-        "AT 0, DF 0, no mercenaries"
+        "AT modifier -12, DF modifier -4, no mercenaries"
     )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)

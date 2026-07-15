@@ -2908,5 +2908,42 @@ contains 57 safe syllables as documented below and in
 ### Project Credit
 
 - Project developer ID: `hsp1324`.
-- Keep this ID in the repository credit and add it to the localized in-game
-  staff roll before the full-localization goal is marked complete.
+- The repository README and the localized in-game staff roll both credit this
+  ID. The in-game implementation adds synthetic record 60, `한국어화 hsp1324`,
+  without replacing any of the 60 original records or `COPYRIGHT 1994 NCS`.
+- The original 16-sequence placement table at `0x0A3172` and 60-record pointer
+  table at `0x0A333A` are hash-validated. They are expanded at `0x2BB000` and
+  `0x2BB800`; the final sequence retains copyright record 59 at `(0x10,0x5A)`
+  and adds developer record 60 at `(0x40,0x78)`. Renderer `LEA` operands at
+  `0x02A634` and `0x02A65A` point to the relocated tables.
+- Checksum `743F` renders the new record correctly offline at
+  `captures/analysis/credits_ko_hsp1324/direct_record/060_2B03AA.png`.
+  The combined Scenario 27 ending/world-slot probe checksum is `F2FC`.
+  Stock playback reached the final group after the world epilogue and rendered
+  both `COPYRIGHT 1994 NCS` and `한국어화 hsp1324` without reset or overlap in
+  `captures/run/f2fc_credit_final_watch/324.png`.
+
+### Final Credit Playback And Automation Notes (2026-07-15)
+
+- Scenario 27 stat bytes are signed class modifiers, not final AT/DF values.
+  Writing zero left Emperor's `AT 12/DF 4`, allowed Bernhardt to survive at
+  one HP, and could trigger healing. The ending probe now writes `-12/-4`;
+  checksum `BFAD` live-verifies actual `AT 0/DF 0` and deterministic defeat in
+  one Elwin attack. Do not restore literal zero bytes.
+- Applying `tools/build_epilogue_probe_rom.py --record-index 86 --start-slot 15`
+  to `BFAD` produces ignored checksum `F2FC`. The complete route was replayed
+  through the closing event, ending art, all scenario-history pages, world
+  epilogue, final credit group, and `Fin` screen. The full sampled run is under
+  `captures/run/f2fc_credit_final_watch/`.
+- `tools/send_blastem_keys.py --send-event` previously built both direct events
+  as `KeyPress` objects and only changed the numeric type for release. It now
+  emits the real Xlib `KeyRelease` class, avoiding stuck direction/confirm
+  input after remote-focus changes. The helper also names the BlastEm `F7`
+  binding as `pause` for diagnosis.
+- The battle-command detector falsely accepted preparation/hire panels because
+  both have a broad blue lower area. Real battle status bars measured about
+  48% blue in the stable crop, while the observed hire panel measured about
+  52%; the detector now accepts `45%..50.5%` and has a regression test for the
+  preparation shape. Scenario 27 still requires three confirmations after the
+  scenario map before navigating the preparation menu; a fixed two-confirm
+  batch enters soldier hire and must not be used.
