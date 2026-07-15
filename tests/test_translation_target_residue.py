@@ -16,6 +16,7 @@ OUTPUT_FIELDS = {
     "shared_word_resources.json": ("target_korean", 366),
     "ui_patch_surfaces.json": ("target_korean", 94),
 }
+DEPRECATED_OUTPUT_TERMS = ("레이가드", "흑룡마도단")
 
 
 def collect_strings(value, path):
@@ -58,6 +59,16 @@ class TranslationTargetResidueTests(unittest.TestCase):
                     if JAPANESE_OR_REPLACEMENT.search(text)
                 ]
                 self.assertEqual(residue, [])
+
+    def test_output_targets_use_standardized_faction_names(self):
+        residue = []
+        for filename, (field, _) in OUTPUT_FIELDS.items():
+            data = json.loads((LOCALIZATION / filename).read_text(encoding="utf-8"))
+            for path, text in collect_field_values(data, field):
+                for term in DEPRECATED_OUTPUT_TERMS:
+                    if term in text:
+                        residue.append(f"{filename}:{path}: {term}")
+        self.assertEqual(residue, [])
 
 
 if __name__ == "__main__":

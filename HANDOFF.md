@@ -92,7 +92,7 @@ Last live-verified build during this handoff:
 checksum: EA22
 ```
 
-The current source builds checksum `EA22` and passes all 163 tests. It
+The current source builds checksum `F03A` and passes all 176 tests. It
 includes all 31 scenarios' static event translations, the complete direct-name,
 ending-visit, credits, and 90-record epilogue resources, plus the extended 8x8
 commander-name font bank. Live regressions include Scenario 1 core UI, the
@@ -3234,3 +3234,24 @@ contains 57 safe syllables as documented below and in
   (`ea22_s03_turn1_live_01.png` through `_08.png`) without reset or freeze.
   This is current first-turn progression evidence, not a scenario clear or
   complete later-turn review.
+
+### Current F03A Scenario 4 Entry Regression (2026-07-16)
+
+- Live Scenario 4 review exposed inconsistent output terminology. Only actual
+  Korean target resources were changed: `레이가드` is now consistently
+  `레이갈드`, and `흑룡마도단` is now `흑룡마도사단`. This covers Scenario
+  4/15/16/26 descriptions and five later event lines; English/reference data
+  was intentionally left unchanged. The resulting production checksum is
+  `F03A` with the same 851 custom glyphs.
+- The new build re-entered Scenario 4 and `detect-prep` stopped after 14
+  confirmations. `f03a_s04_brief_live_01.png` through `_14.png` verify the
+  complete `빛의 신전` description, corrected `레이갈드 제국의
+  흑룡마도사단`, and intact preparation UI.
+- Automatic deployment and all 26 opening captures reached a valid Elwin
+  command panel. `f03a_s04_conditions.png` displays victory `모건 격파` and
+  defeat `신관 전멸` / `리아나/주인공 사망` without clipping or residue.
+- The first turn entered `ENEMY PHASE` and returned to the command panel after
+  93 captured confirmations. Text-bearing frames were separately selected and
+  reviewed, including Morgan/priest/imperial-commander dialogue and the Korean
+  Dark Elf combat tutorial. No reset, freeze, broken name, class, AT, or DF was
+  observed. This does not claim later-turn or scenario-clear coverage.

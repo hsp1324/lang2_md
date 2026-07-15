@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "EA22",
+  "production_checksum": "F03A",
   "states": [
     "pending",
     "historical",
@@ -111,7 +111,32 @@
       ],
       "note": "All 13 briefing/preparation frames and all 24 opening frames were visually reviewed on production EA22. First-turn progression entered ENEMY PHASE, displayed the Liana-position choice, and returned to the command menu after eight captured confirmations without reset; later turns and completion remain pending."
     },
-    {"scenario": 4},
+    {
+      "scenario": 4,
+      "description": "verified_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "verified_current",
+      "battle_ui": "verified_probe",
+      "turn_events": "progressed_current",
+      "completion": "pending",
+      "branches_endings": "pending",
+      "captures": [
+        "captures/run/f03a_s04_selector_map.png",
+        "captures/run/f03a_s04_brief_live_01.png",
+        "captures/run/f03a_s04_brief_live_13.png",
+        "captures/run/f03a_s04_brief_live_14.png",
+        "captures/run/f03a_s04_deploy_banner.png",
+        "captures/run/f03a_s04_opening_live_02.png",
+        "captures/run/f03a_s04_opening_live_26.png",
+        "captures/run/f03a_s04_conditions.png",
+        "captures/run/f03a_s04_turn1_live_01.png",
+        "captures/run/f03a_s04_turn1_live_39.png",
+        "captures/run/f03a_s04_turn1_live_86.png",
+        "captures/run/f03a_s04_turn1_live_93.png"
+      ],
+      "note": "F03A standardizes Rayguard/Black Dragon Sorcerer terminology. All 14 briefing confirmations, 26 opening confirmations, condition rows, and text-bearing frames from the 93-confirmation first-turn path were visually reviewed; the route returned to a valid command menu without reset. Later turns and completion remain pending."
+    },
     {"scenario": 5},
     {"scenario": 6},
     {"scenario": 7},
