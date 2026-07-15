@@ -3031,5 +3031,9 @@ contains 57 safe syllables as documented below and in
   2,966 logical text records and 3,565 of 3,565 physical text pages modified;
   Scenarios 7 and 25 each list one structured non-text exclusion and now report
   `all modified` instead of the misleading partial status.
-- Production build checksum remains `EA22`. The full 161-test suite and direct
+- Production build checksum remains `EA22`. The full 163-test suite and direct
   inventory (`783 candidates; 0 unclassified`) pass without launching BlastEm.
+- `tests/test_translation_target_residue.py` scans 4,511 output strings across
+  event/ending/epilogue dialogue, shared resources, global names, UI patches,
+  and credits. It rejects Japanese kana/kanji and the Unicode replacement
+  character while deliberately excluding analysis-only source quotations.
