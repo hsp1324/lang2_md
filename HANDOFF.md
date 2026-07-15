@@ -89,10 +89,10 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 988E
+checksum: EA22
 ```
 
-The current source builds checksum `988E` and passes all 152 tests. It
+The current source builds checksum `EA22` and passes all 163 tests. It
 includes all 31 scenarios' static event translations, the complete direct-name,
 ending-visit, credits, and 90-record epilogue resources, plus the extended 8x8
 commander-name font bank. Live regressions include Scenario 1 core UI, the
@@ -3046,3 +3046,34 @@ contains 57 safe syllables as documented below and in
   event/ending/epilogue dialogue, shared resources, global names, UI patches,
   and credits. It rejects Japanese kana/kanji and the Unicode replacement
   character while deliberately excluding analysis-only source quotations.
+
+### Current EA22 Scenario 1 UI Regression (2026-07-16)
+
+- A fresh isolated-runtime playback reached Elwin's first command menu after
+  12 post-deployment confirmations. `captures/run/ea22_s01_command_magic_fresh.png`
+  verifies `엘윈/파이터` and `이동/공격/치료/명령` with intact AT/DF/status
+  graphics.
+- The Start-menu regression covers `저장`, `불러오기`, `승리조건`, and
+  `게임설정`. Evidence is `captures/run/ea22_s01_save_prompt.png`,
+  `ea22_s01_load_menu.png`, `ea22_s01_conditions.png`, and
+  `ea22_s01_game_settings_final.png`. The load slots consistently render
+  `손상된 데이터`; the conditions use `발드`, and all four settings rows are
+  Korean. Large `YES/NO` and compact `AT/DF/LV/MP/HP` remain intentional
+  conventional English.
+- Hein was selected at his initial Scenario 1 position rather than inferred
+  from an older checksum. `captures/run/ea22_s01_magic_retry3_hein_menu.png`
+  verifies `헤인/워록` and `이동/공격/마법/치료/명령`; selecting the third row
+  opens `captures/run/ea22_s01_magic_current.png`, which renders
+  `매직애로우` and page `1/12` on production checksum `EA22`.
+- Direct X events shorter than one emulated input sample can be ignored, while
+  a 0.05-second held direction can repeat across several map cells. For menu
+  verification use one `down@0.02` event, wait for a capture, then send the next
+  event. This timing issue caused one discarded attack-selection attempt; it
+  did not expose a ROM or translation regression.
+- The battle-result decoration fix remains guarded in the current source by
+  `test_byte_ui_patch_preserves_ascii_and_status_graphics`, including an exact
+  byte comparison of tile `0xB0`. The direct live battle-screen evidence is
+  still the checksum `80E6` capture
+  `captures/run/80e6_battle_result_decoration_fixed.png`; do not relabel that
+  older capture as an `EA22` live battle-screen check. A fresh current-build
+  combat-window capture remains part of the broader runtime checklist.
