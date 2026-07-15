@@ -3186,3 +3186,25 @@ contains 57 safe syllables as documented below and in
   `python3 tools/runtime_verification_inventory.py` after accepting new live
   evidence; `tests/test_runtime_verification_inventory.py` rejects missing,
   reordered, or invalid scenario/status entries and stale generated Markdown.
+
+### Current EA22 Scenario 2 Entry Regression (2026-07-16)
+
+- The built-in selector entered Scenario 2 on production `EA22`.
+  `captures/run/ea22_s02_brief_01.png` through `_12.png` show the Korean
+  `시나리오 2 / 여행의 시작` briefing pages; accepted stable samples contain
+  no Japanese residue or broken dynamic names. `ea22_s02_brief_13.png` reaches
+  preparation and displays `엘윈/헤인/스코트` with intact class/status UI.
+- Continuing through auto-deployment opened the Korean event at
+  `ea22_s02_deploy_banner.png`. The command detector advanced 63 confirmations
+  and reached `ea22_s02_command_ready.png` without reset or freeze. This proves
+  current-build progression, not individual visual review of all 63
+  intermediate pages; record it as `progressed_current`, not
+  `verified_current`.
+- `captures/run/ea22_s02_conditions.png` verifies the live condition layout:
+  victory is `리아나 북쪽 도착` or `적 전멸`; defeat is `리아나 사망` or
+  `주인공 사망`. The four rows fit without overlap or Japanese residue.
+- A fixed 32-confirm briefing loop continued after the preparation transition
+  and hired six Soldiers in the isolated `load-screen` runtime SRAM. No ROM or
+  source data changed. Future cross-scenario automation must detect the
+  preparation panel and stop confirmations before navigating it; do not use a
+  fixed briefing count across scenarios.

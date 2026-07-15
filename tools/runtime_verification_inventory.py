@@ -65,6 +65,7 @@ def render_markdown(data: dict[str, object]) -> str:
     state_label = {
         "pending": "pending",
         "historical": "historical",
+        "progressed_current": "progressed",
         "verified_current": "current",
         "verified_probe": "probe",
     }
@@ -75,9 +76,10 @@ def render_markdown(data: dict[str, object]) -> str:
         "Static text modification is tracked separately and does not satisfy these live checks.",
         f"Production checksum: `{data['production_checksum']}`.",
         "",
-        "States: `current` is direct production playback, `probe` is a documented",
-        "production-derived probe, `historical` predates the current checksum, and",
-        "`pending` has no accepted live evidence yet.",
+        "States: `current` is visually reviewed production playback, `progressed`",
+        "reached the endpoint on the current build without reviewing every intermediate",
+        "page, `probe` is a documented production-derived probe, `historical` predates",
+        "the current checksum, and `pending` has no accepted live evidence yet.",
         "",
         "| Scenario | " + " | ".join(surfaces) + " | Evidence |",
         "| ---: | " + " | ".join("---" for _ in surfaces) + " | ---: |",

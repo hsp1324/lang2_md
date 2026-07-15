@@ -4,6 +4,7 @@
   "states": [
     "pending",
     "historical",
+    "progressed_current",
     "verified_current",
     "verified_probe"
   ],
@@ -65,7 +66,27 @@
       ],
       "note": "Current route reaches TURN 2 without reset. Full scenario clear and route transition remain pending."
     },
-    {"scenario": 2},
+    {
+      "scenario": 2,
+      "description": "verified_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "progressed_current",
+      "battle_ui": "verified_probe",
+      "turn_events": "pending",
+      "completion": "pending",
+      "branches_endings": "pending",
+      "captures": [
+        "captures/run/ea22_s02_selector_map.png",
+        "captures/run/ea22_s02_brief_01.png",
+        "captures/run/ea22_s02_brief_12.png",
+        "captures/run/ea22_s02_brief_13.png",
+        "captures/run/ea22_s02_deploy_banner.png",
+        "captures/run/ea22_s02_command_ready.png",
+        "captures/run/ea22_s02_conditions.png"
+      ],
+      "note": "Description, preparation names, and conditions were visually reviewed. Opening events reached the command menu after 63 confirmations without reset, but every intermediate dialogue page was not individually reviewed. Extra C events hired soldiers in the isolated test SRAM after preparation appeared; stop on preparation detection in future automation."
+    },
     {"scenario": 3},
     {"scenario": 4},
     {"scenario": 5},
@@ -95,7 +116,7 @@
       "description": "verified_current",
       "conditions": "historical",
       "preparation": "verified_current",
-      "opening_events": "verified_current",
+      "opening_events": "progressed_current",
       "battle_ui": "verified_probe",
       "turn_events": "pending",
       "completion": "verified_probe",
