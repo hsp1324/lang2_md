@@ -4,8 +4,13 @@
   "scenario_count": 31,
   "page_count": 2968,
   "modified_page_count": 2966,
+  "text_page_count": 2966,
+  "modified_text_page_count": 2966,
+  "structured_non_text_count": 2,
   "physical_page_count": 3567,
   "modified_physical_page_count": 3565,
+  "text_physical_page_count": 3565,
+  "modified_text_physical_page_count": 3565,
   "scenarios": [
     {
       "scenario": 1,
@@ -14,9 +19,14 @@
       "page_count": 121,
       "modified_page_count": 121,
       "unchanged_page_count": 0,
+      "text_page_count": 121,
+      "modified_text_page_count": 121,
+      "structured_non_text_count": 0,
       "physical_page_count": 145,
       "modified_physical_page_count": 145,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 145,
+      "modified_text_physical_page_count": 145,
       "pages": [
         {
           "address": "0x184858",
@@ -2881,9 +2891,14 @@
       "page_count": 110,
       "modified_page_count": 110,
       "unchanged_page_count": 0,
+      "text_page_count": 110,
+      "modified_text_page_count": 110,
+      "structured_non_text_count": 0,
       "physical_page_count": 137,
       "modified_physical_page_count": 137,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 137,
+      "modified_text_physical_page_count": 137,
       "pages": [
         {
           "address": "0x18688E",
@@ -5530,9 +5545,14 @@
       "page_count": 89,
       "modified_page_count": 89,
       "unchanged_page_count": 0,
+      "text_page_count": 89,
+      "modified_text_page_count": 89,
+      "structured_non_text_count": 0,
       "physical_page_count": 106,
       "modified_physical_page_count": 106,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 106,
+      "modified_text_physical_page_count": 106,
       "pages": [
         {
           "address": "0x188846",
@@ -7637,9 +7657,14 @@
       "page_count": 129,
       "modified_page_count": 129,
       "unchanged_page_count": 0,
+      "text_page_count": 129,
+      "modified_text_page_count": 129,
+      "structured_non_text_count": 0,
       "physical_page_count": 155,
       "modified_physical_page_count": 155,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 155,
+      "modified_text_physical_page_count": 155,
       "pages": [
         {
           "address": "0x18A3A0",
@@ -10696,9 +10721,14 @@
       "page_count": 79,
       "modified_page_count": 79,
       "unchanged_page_count": 0,
+      "text_page_count": 79,
+      "modified_text_page_count": 79,
+      "structured_non_text_count": 0,
       "physical_page_count": 87,
       "modified_physical_page_count": 87,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 87,
+      "modified_text_physical_page_count": 87,
       "pages": [
         {
           "address": "0x18C6D2",
@@ -12511,9 +12541,14 @@
       "page_count": 102,
       "modified_page_count": 102,
       "unchanged_page_count": 0,
+      "text_page_count": 102,
+      "modified_text_page_count": 102,
+      "structured_non_text_count": 0,
       "physical_page_count": 122,
       "modified_physical_page_count": 122,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 122,
+      "modified_text_physical_page_count": 122,
       "pages": [
         {
           "address": "0x18DCC0",
@@ -14928,9 +14963,14 @@
       "page_count": 101,
       "modified_page_count": 100,
       "unchanged_page_count": 1,
+      "text_page_count": 100,
+      "modified_text_page_count": 100,
+      "structured_non_text_count": 1,
       "physical_page_count": 118,
       "modified_physical_page_count": 117,
       "unchanged_physical_page_count": 1,
+      "text_physical_page_count": 117,
+      "modified_text_physical_page_count": 117,
       "pages": [
         {
           "address": "0x18F610",
@@ -14940,6 +14980,7 @@
           "source_refs": [
             "0x18F358"
           ],
+          "classification": "structured_non_text",
           "modified": false,
           "modified_word_count": 0,
           "physical_page_count": 1,
@@ -14950,7 +14991,8 @@
               "terminator": "0xFFFF",
               "tokens": "0202 0601 0019 0200 0201 0101 0019 020C 0202 0601 0019 0242 FFFF",
               "modified": false,
-              "modified_word_count": 0
+              "modified_word_count": 0,
+              "classification": "structured_non_text"
             }
           ]
         },
@@ -17299,9 +17341,14 @@
       "page_count": 103,
       "modified_page_count": 103,
       "unchanged_page_count": 0,
+      "text_page_count": 103,
+      "modified_text_page_count": 103,
+      "structured_non_text_count": 0,
       "physical_page_count": 128,
       "modified_physical_page_count": 128,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 128,
+      "modified_text_physical_page_count": 128,
       "pages": [
         {
           "address": "0x191416",
@@ -19778,9 +19825,14 @@
       "page_count": 147,
       "modified_page_count": 147,
       "unchanged_page_count": 0,
+      "text_page_count": 147,
+      "modified_text_page_count": 147,
+      "structured_non_text_count": 0,
       "physical_page_count": 169,
       "modified_physical_page_count": 169,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 169,
+      "modified_text_physical_page_count": 169,
       "pages": [
         {
           "address": "0x1934B0",
@@ -23201,9 +23253,14 @@
       "page_count": 108,
       "modified_page_count": 108,
       "unchanged_page_count": 0,
+      "text_page_count": 108,
+      "modified_text_page_count": 108,
+      "structured_non_text_count": 0,
       "physical_page_count": 112,
       "modified_physical_page_count": 112,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 112,
+      "modified_text_physical_page_count": 112,
       "pages": [
         {
           "address": "0x195CB6",
@@ -25622,9 +25679,14 @@
       "page_count": 96,
       "modified_page_count": 96,
       "unchanged_page_count": 0,
+      "text_page_count": 96,
+      "modified_text_page_count": 96,
+      "structured_non_text_count": 0,
       "physical_page_count": 117,
       "modified_physical_page_count": 117,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 117,
+      "modified_text_physical_page_count": 117,
       "pages": [
         {
           "address": "0x197680",
@@ -27915,9 +27977,14 @@
       "page_count": 88,
       "modified_page_count": 88,
       "unchanged_page_count": 0,
+      "text_page_count": 88,
+      "modified_text_page_count": 88,
+      "structured_non_text_count": 0,
       "physical_page_count": 113,
       "modified_physical_page_count": 113,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 113,
+      "modified_text_physical_page_count": 113,
       "pages": [
         {
           "address": "0x199344",
@@ -30064,9 +30131,14 @@
       "page_count": 96,
       "modified_page_count": 96,
       "unchanged_page_count": 0,
+      "text_page_count": 96,
+      "modified_text_page_count": 96,
+      "structured_non_text_count": 0,
       "physical_page_count": 126,
       "modified_physical_page_count": 126,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 126,
+      "modified_text_physical_page_count": 126,
       "pages": [
         {
           "address": "0x19AEE0",
@@ -32429,9 +32501,14 @@
       "page_count": 125,
       "modified_page_count": 125,
       "unchanged_page_count": 0,
+      "text_page_count": 125,
+      "modified_text_page_count": 125,
+      "structured_non_text_count": 0,
       "physical_page_count": 162,
       "modified_physical_page_count": 162,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 162,
+      "modified_text_physical_page_count": 162,
       "pages": [
         {
           "address": "0x19CF7C",
@@ -35488,9 +35565,14 @@
       "page_count": 110,
       "modified_page_count": 110,
       "unchanged_page_count": 0,
+      "text_page_count": 110,
+      "modified_text_page_count": 110,
+      "structured_non_text_count": 0,
       "physical_page_count": 118,
       "modified_physical_page_count": 118,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 118,
+      "modified_text_physical_page_count": 118,
       "pages": [
         {
           "address": "0x19F782",
@@ -37986,9 +38068,14 @@
       "page_count": 87,
       "modified_page_count": 87,
       "unchanged_page_count": 0,
+      "text_page_count": 87,
+      "modified_text_page_count": 87,
+      "structured_non_text_count": 0,
       "physical_page_count": 98,
       "modified_physical_page_count": 98,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 98,
+      "modified_text_physical_page_count": 98,
       "pages": [
         {
           "address": "0x1A1058",
@@ -40001,9 +40088,14 @@
       "page_count": 108,
       "modified_page_count": 108,
       "unchanged_page_count": 0,
+      "text_page_count": 108,
+      "modified_text_page_count": 108,
+      "structured_non_text_count": 0,
       "physical_page_count": 135,
       "modified_physical_page_count": 135,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 135,
+      "modified_text_physical_page_count": 135,
       "pages": [
         {
           "address": "0x1A2716",
@@ -42606,9 +42698,14 @@
       "page_count": 95,
       "modified_page_count": 95,
       "unchanged_page_count": 0,
+      "text_page_count": 95,
+      "modified_text_page_count": 95,
+      "structured_non_text_count": 0,
       "physical_page_count": 117,
       "modified_physical_page_count": 117,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 117,
+      "modified_text_physical_page_count": 117,
       "pages": [
         {
           "address": "0x1A48AA",
@@ -44885,9 +44982,14 @@
       "page_count": 98,
       "modified_page_count": 98,
       "unchanged_page_count": 0,
+      "text_page_count": 98,
+      "modified_text_page_count": 98,
+      "structured_non_text_count": 0,
       "physical_page_count": 116,
       "modified_physical_page_count": 116,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 116,
+      "modified_text_physical_page_count": 116,
       "pages": [
         {
           "address": "0x1A6456",
@@ -47198,9 +47300,14 @@
       "page_count": 88,
       "modified_page_count": 88,
       "unchanged_page_count": 0,
+      "text_page_count": 88,
+      "modified_text_page_count": 88,
+      "structured_non_text_count": 0,
       "physical_page_count": 111,
       "modified_physical_page_count": 111,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 111,
+      "modified_text_physical_page_count": 111,
       "pages": [
         {
           "address": "0x1A7E02",
@@ -49331,9 +49438,14 @@
       "page_count": 71,
       "modified_page_count": 71,
       "unchanged_page_count": 0,
+      "text_page_count": 71,
+      "modified_text_page_count": 71,
+      "structured_non_text_count": 0,
       "physical_page_count": 80,
       "modified_physical_page_count": 80,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 80,
+      "modified_text_physical_page_count": 80,
       "pages": [
         {
           "address": "0x1A9A8A",
@@ -50978,9 +51090,14 @@
       "page_count": 151,
       "modified_page_count": 151,
       "unchanged_page_count": 0,
+      "text_page_count": 151,
+      "modified_text_page_count": 151,
+      "structured_non_text_count": 0,
       "physical_page_count": 191,
       "modified_physical_page_count": 191,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 191,
+      "modified_text_physical_page_count": 191,
       "pages": [
         {
           "address": "0x1AB182",
@@ -54633,9 +54750,14 @@
       "page_count": 83,
       "modified_page_count": 83,
       "unchanged_page_count": 0,
+      "text_page_count": 83,
+      "modified_text_page_count": 83,
+      "structured_non_text_count": 0,
       "physical_page_count": 92,
       "modified_physical_page_count": 92,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 92,
+      "modified_text_physical_page_count": 92,
       "pages": [
         {
           "address": "0x1AE846",
@@ -56544,9 +56666,14 @@
       "page_count": 53,
       "modified_page_count": 53,
       "unchanged_page_count": 0,
+      "text_page_count": 53,
+      "modified_text_page_count": 53,
+      "structured_non_text_count": 0,
       "physical_page_count": 65,
       "modified_physical_page_count": 65,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 65,
+      "modified_text_physical_page_count": 65,
       "pages": [
         {
           "address": "0x1AF8E8",
@@ -57819,9 +57946,14 @@
       "page_count": 100,
       "modified_page_count": 99,
       "unchanged_page_count": 1,
+      "text_page_count": 99,
+      "modified_text_page_count": 99,
+      "structured_non_text_count": 1,
       "physical_page_count": 132,
       "modified_physical_page_count": 131,
       "unchanged_physical_page_count": 1,
+      "text_physical_page_count": 131,
+      "modified_text_physical_page_count": 131,
       "pages": [
         {
           "address": "0x1B0518",
@@ -57831,6 +57963,7 @@
           "source_refs": [
             "0x1B03E6"
           ],
+          "classification": "structured_non_text",
           "modified": false,
           "modified_word_count": 0,
           "physical_page_count": 1,
@@ -57841,7 +57974,8 @@
               "terminator": "0xFFFF",
               "tokens": "0001 0001 001B 0544 0104 0002 001B 05E4 0204 0001 001B 05F4 0301 0002 001B 062A FFFF",
               "modified": false,
-              "modified_word_count": 0
+              "modified_word_count": 0,
+              "classification": "structured_non_text"
             }
           ]
         },
@@ -60288,9 +60422,14 @@
       "page_count": 71,
       "modified_page_count": 71,
       "unchanged_page_count": 0,
+      "text_page_count": 71,
+      "modified_text_page_count": 71,
+      "structured_non_text_count": 0,
       "physical_page_count": 102,
       "modified_physical_page_count": 102,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 102,
+      "modified_text_physical_page_count": 102,
       "pages": [
         {
           "address": "0x1B2494",
@@ -62111,9 +62250,14 @@
       "page_count": 97,
       "modified_page_count": 97,
       "unchanged_page_count": 0,
+      "text_page_count": 97,
+      "modified_text_page_count": 97,
+      "structured_non_text_count": 0,
       "physical_page_count": 126,
       "modified_physical_page_count": 126,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 126,
+      "modified_text_physical_page_count": 126,
       "pages": [
         {
           "address": "0x1B3DF2",
@@ -64490,9 +64634,14 @@
       "page_count": 104,
       "modified_page_count": 104,
       "unchanged_page_count": 0,
+      "text_page_count": 104,
+      "modified_text_page_count": 104,
+      "structured_non_text_count": 0,
       "physical_page_count": 116,
       "modified_physical_page_count": 116,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 116,
+      "modified_text_physical_page_count": 116,
       "pages": [
         {
           "address": "0x1B5B7A",
@@ -66887,9 +67036,14 @@
       "page_count": 49,
       "modified_page_count": 49,
       "unchanged_page_count": 0,
+      "text_page_count": 49,
+      "modified_text_page_count": 49,
+      "structured_non_text_count": 0,
       "physical_page_count": 55,
       "modified_physical_page_count": 55,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 55,
+      "modified_text_physical_page_count": 55,
       "pages": [
         {
           "address": "0x1B6F00",
@@ -68026,9 +68180,14 @@
       "page_count": 65,
       "modified_page_count": 65,
       "unchanged_page_count": 0,
+      "text_page_count": 65,
+      "modified_text_page_count": 65,
+      "structured_non_text_count": 0,
       "physical_page_count": 70,
       "modified_physical_page_count": 70,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 70,
+      "modified_text_physical_page_count": 70,
       "pages": [
         {
           "address": "0x1B7B0C",
@@ -69509,9 +69668,14 @@
       "page_count": 44,
       "modified_page_count": 44,
       "unchanged_page_count": 0,
+      "text_page_count": 44,
+      "modified_text_page_count": 44,
+      "structured_non_text_count": 0,
       "physical_page_count": 46,
       "modified_physical_page_count": 46,
       "unchanged_physical_page_count": 0,
+      "text_physical_page_count": 46,
+      "modified_text_physical_page_count": 46,
       "pages": [
         {
           "address": "0x1B87C2",

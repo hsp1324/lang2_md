@@ -7,44 +7,46 @@ that page. It does not by itself prove that the whole page is translated or live
 
 - Event pointer table: `0x18011A`
 - Scenarios: 31
-- Candidate text pages: 2968
-- Modified candidate records: 2966
-- Physical pages in exactly parseable record spans: 3567
-- Modified physical pages: 3565
+- Pointer candidates: 2968
+- Structured non-text exclusions: 2
+- Text records: 2966
+- Modified text records: 2966
+- Physical text pages: 3565
+- Modified physical text pages: 3565
 
-| Scenario | Event block | Records | Physical pages | Modified physical | Status |
-| ---: | --- | ---: | ---: | ---: | --- |
-| 1 | `0x18416A..0x1860C0` | 121 | 145 | 145 | all modified |
-| 2 | `0x1860C0..0x1881AE` | 110 | 137 | 137 | all modified |
-| 3 | `0x1881AE..0x189BA6` | 89 | 106 | 106 | all modified |
-| 4 | `0x189BA6..0x18C056` | 129 | 155 | 155 | all modified |
-| 5 | `0x18C056..0x18D5F2` | 79 | 87 | 87 | all modified |
-| 6 | `0x18D5F2..0x18F29A` | 102 | 122 | 122 | all modified |
-| 7 | `0x18F29A..0x190D0A` | 101 | 118 | 117 | modified |
-| 8 | `0x190D0A..0x192B72` | 103 | 128 | 128 | all modified |
-| 9 | `0x192B72..0x195490` | 147 | 169 | 169 | all modified |
-| 10 | `0x195490..0x197060` | 108 | 112 | 112 | all modified |
-| 11 | `0x197060..0x198DE0` | 96 | 117 | 117 | all modified |
-| 12 | `0x198DE0..0x19A964` | 88 | 113 | 113 | all modified |
-| 13 | `0x19A964..0x19C736` | 96 | 126 | 126 | all modified |
-| 14 | `0x19C736..0x19EFA2` | 125 | 162 | 162 | all modified |
-| 15 | `0x19EFA2..0x1A0AA6` | 110 | 118 | 118 | all modified |
-| 16 | `0x1A0AA6..0x1A1FE2` | 87 | 98 | 98 | all modified |
-| 17 | `0x1A1FE2..0x1A4200` | 108 | 135 | 135 | all modified |
-| 18 | `0x1A4200..0x1A5DE6` | 95 | 117 | 117 | all modified |
-| 19 | `0x1A5DE6..0x1A7876` | 98 | 116 | 116 | all modified |
-| 20 | `0x1A7876..0x1A94F4` | 88 | 111 | 111 | all modified |
-| 21 | `0x1A94F4..0x1AA8CA` | 71 | 80 | 80 | all modified |
-| 22 | `0x1AA8CA..0x1AD382` | 151 | 191 | 191 | all modified |
-| 23 | `0x1AD382..0x1AF50E` | 83 | 92 | 92 | all modified |
-| 24 | `0x1AF50E..0x1B03D6` | 53 | 65 | 65 | all modified |
-| 25 | `0x1B03D6..0x1B2012` | 100 | 132 | 131 | modified |
-| 26 | `0x1B2012..0x1B3872` | 71 | 102 | 102 | all modified |
-| 27 | `0x1B3872..0x1B5506` | 97 | 126 | 126 | all modified |
-| 28 | `0x1B5506..0x1B6B70` | 104 | 116 | 116 | all modified |
-| 29 | `0x1B6B70..0x1B7686` | 49 | 55 | 55 | all modified |
-| 30 | `0x1B7686..0x1B8378` | 65 | 70 | 70 | all modified |
-| 31 | `0x1B8378..0x1B9000` | 44 | 46 | 46 | all modified |
+| Scenario | Event block | Text records | Physical text | Modified physical | Excluded | Status |
+| ---: | --- | ---: | ---: | ---: | ---: | --- |
+| 1 | `0x18416A..0x1860C0` | 121 | 145 | 145 | 0 | all modified |
+| 2 | `0x1860C0..0x1881AE` | 110 | 137 | 137 | 0 | all modified |
+| 3 | `0x1881AE..0x189BA6` | 89 | 106 | 106 | 0 | all modified |
+| 4 | `0x189BA6..0x18C056` | 129 | 155 | 155 | 0 | all modified |
+| 5 | `0x18C056..0x18D5F2` | 79 | 87 | 87 | 0 | all modified |
+| 6 | `0x18D5F2..0x18F29A` | 102 | 122 | 122 | 0 | all modified |
+| 7 | `0x18F29A..0x190D0A` | 100 | 117 | 117 | 1 | all modified |
+| 8 | `0x190D0A..0x192B72` | 103 | 128 | 128 | 0 | all modified |
+| 9 | `0x192B72..0x195490` | 147 | 169 | 169 | 0 | all modified |
+| 10 | `0x195490..0x197060` | 108 | 112 | 112 | 0 | all modified |
+| 11 | `0x197060..0x198DE0` | 96 | 117 | 117 | 0 | all modified |
+| 12 | `0x198DE0..0x19A964` | 88 | 113 | 113 | 0 | all modified |
+| 13 | `0x19A964..0x19C736` | 96 | 126 | 126 | 0 | all modified |
+| 14 | `0x19C736..0x19EFA2` | 125 | 162 | 162 | 0 | all modified |
+| 15 | `0x19EFA2..0x1A0AA6` | 110 | 118 | 118 | 0 | all modified |
+| 16 | `0x1A0AA6..0x1A1FE2` | 87 | 98 | 98 | 0 | all modified |
+| 17 | `0x1A1FE2..0x1A4200` | 108 | 135 | 135 | 0 | all modified |
+| 18 | `0x1A4200..0x1A5DE6` | 95 | 117 | 117 | 0 | all modified |
+| 19 | `0x1A5DE6..0x1A7876` | 98 | 116 | 116 | 0 | all modified |
+| 20 | `0x1A7876..0x1A94F4` | 88 | 111 | 111 | 0 | all modified |
+| 21 | `0x1A94F4..0x1AA8CA` | 71 | 80 | 80 | 0 | all modified |
+| 22 | `0x1AA8CA..0x1AD382` | 151 | 191 | 191 | 0 | all modified |
+| 23 | `0x1AD382..0x1AF50E` | 83 | 92 | 92 | 0 | all modified |
+| 24 | `0x1AF50E..0x1B03D6` | 53 | 65 | 65 | 0 | all modified |
+| 25 | `0x1B03D6..0x1B2012` | 99 | 131 | 131 | 1 | all modified |
+| 26 | `0x1B2012..0x1B3872` | 71 | 102 | 102 | 0 | all modified |
+| 27 | `0x1B3872..0x1B5506` | 97 | 126 | 126 | 0 | all modified |
+| 28 | `0x1B5506..0x1B6B70` | 104 | 116 | 116 | 0 | all modified |
+| 29 | `0x1B6B70..0x1B7686` | 49 | 55 | 55 | 0 | all modified |
+| 30 | `0x1B7686..0x1B8378` | 65 | 70 | 70 | 0 | all modified |
+| 31 | `0x1B8378..0x1B9000` | 44 | 46 | 46 | 0 | all modified |
 
 Detailed addresses, source references, terminators, and original glyph-token streams
 are stored in `localization/event_pages.json`.

@@ -13,6 +13,21 @@ TEXT_CONTROLS = {0xFFF7, 0xFFFE}
 TEXT_TERMINATORS = {0xFFFD, 0xFFFF}
 MAX_GLYPH_ID = 0x07FF
 
+# These pointer targets pass the broad glyph-range heuristic but are event
+# metadata, not dialogue. Match the full original word stream so a changed ROM
+# cannot silently inherit the exclusion.
+KNOWN_STRUCTURED_RECORDS = {
+    0x18F610: (
+        0x0202, 0x0601, 0x0019, 0x0200, 0x0201, 0x0101, 0x0019,
+        0x020C, 0x0202, 0x0601, 0x0019, 0x0242, 0xFFFF,
+    ),
+    0x1B0518: (
+        0x0001, 0x0001, 0x001B, 0x0544, 0x0104, 0x0002, 0x001B,
+        0x05E4, 0x0204, 0x0001, 0x001B, 0x05F4, 0x0301, 0x0002,
+        0x001B, 0x062A, 0xFFFF,
+    ),
+}
+
 
 def be16(data: bytes, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 2], "big")
@@ -89,6 +104,15 @@ def event_block_starts(data: bytes) -> list[int]:
     return starts
 
 
+def record_classification(address: int, words: list[int]) -> str:
+    expected = KNOWN_STRUCTURED_RECORDS.get(address)
+    if expected is None:
+        return "text"
+    if tuple(words) != expected:
+        raise ValueError(f"known structured record changed at 0x{address:06X}")
+    return "structured_non_text"
+
+
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     starts = event_block_starts(japanese)
     scenarios: list[dict[str, object]] = []
@@ -101,16 +125,17 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             words = read_text_page(japanese, target, end)
             if words is None:
                 continue
-            page = pages.setdefault(
-                target,
-                {
-                    "address": f"0x{target:06X}",
-                    "word_count": len(words),
-                    "terminator": f"0x{words[-1]:04X}",
-                    "tokens": " ".join(f"{word:04X}" for word in words),
-                    "source_refs": [],
-                },
-            )
+            page_data = {
+                "address": f"0x{target:06X}",
+                "word_count": len(words),
+                "terminator": f"0x{words[-1]:04X}",
+                "tokens": " ".join(f"{word:04X}" for word in words),
+                "source_refs": [],
+            }
+            classification = record_classification(target, words)
+            if classification != "text":
+                page_data["classification"] = classification
+            page = pages.setdefault(target, page_data)
             page["source_refs"].append(f"0x{source:06X}")
 
         modified = 0
@@ -154,20 +179,30 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     original[index : index + 2] != patched[index : index + 2]
                     for index in range(0, byte_count, 2)
                 )
-                segment_rows.append(
-                    {
-                        "address": f"0x{segment_start:06X}",
-                        "word_count": len(words),
-                        "terminator": f"0x{words[-1]:04X}",
-                        "tokens": " ".join(f"{word:04X}" for word in words),
-                        "modified": bool(changed_words),
-                        "modified_word_count": changed_words,
-                    }
-                )
+                segment_data = {
+                    "address": f"0x{segment_start:06X}",
+                    "word_count": len(words),
+                    "terminator": f"0x{words[-1]:04X}",
+                    "tokens": " ".join(f"{word:04X}" for word in words),
+                    "modified": bool(changed_words),
+                    "modified_word_count": changed_words,
+                }
+                if "classification" in page:
+                    segment_data["classification"] = page["classification"]
+                segment_rows.append(segment_data)
                 modified_physical_page_count += bool(changed_words)
             page["physical_page_count"] = len(segment_rows)
             page["physical_pages"] = segment_rows
             physical_page_count += len(segment_rows)
+        text_pages = [
+            page for page in ordered_pages
+            if page.get("classification", "text") == "text"
+        ]
+        text_physical_pages = [
+            physical
+            for page in text_pages
+            for physical in page["physical_pages"]
+        ]
         scenarios.append(
             {
                 "scenario": number,
@@ -176,9 +211,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "page_count": len(ordered_pages),
                 "modified_page_count": modified,
                 "unchanged_page_count": len(ordered_pages) - modified,
+                "text_page_count": len(text_pages),
+                "modified_text_page_count": sum(bool(page["modified"]) for page in text_pages),
+                "structured_non_text_count": len(ordered_pages) - len(text_pages),
                 "physical_page_count": physical_page_count,
                 "modified_physical_page_count": modified_physical_page_count,
                 "unchanged_physical_page_count": physical_page_count - modified_physical_page_count,
+                "text_physical_page_count": len(text_physical_pages),
+                "modified_text_physical_page_count": sum(
+                    bool(page["modified"]) for page in text_physical_pages
+                ),
                 "pages": ordered_pages,
             }
         )
@@ -189,9 +231,22 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "scenario_count": SCENARIO_COUNT,
         "page_count": sum(int(item["page_count"]) for item in scenarios),
         "modified_page_count": sum(int(item["modified_page_count"]) for item in scenarios),
+        "text_page_count": sum(int(item["text_page_count"]) for item in scenarios),
+        "modified_text_page_count": sum(
+            int(item["modified_text_page_count"]) for item in scenarios
+        ),
+        "structured_non_text_count": sum(
+            int(item["structured_non_text_count"]) for item in scenarios
+        ),
         "physical_page_count": sum(int(item["physical_page_count"]) for item in scenarios),
         "modified_physical_page_count": sum(
             int(item["modified_physical_page_count"]) for item in scenarios
+        ),
+        "text_physical_page_count": sum(
+            int(item["text_physical_page_count"]) for item in scenarios
+        ),
+        "modified_text_physical_page_count": sum(
+            int(item["modified_text_physical_page_count"]) for item in scenarios
         ),
         "scenarios": scenarios,
     }
@@ -208,22 +263,24 @@ def markdown_report(result: dict[str, object]) -> str:
         "",
         f"- Event pointer table: `{result['event_pointer_table']}`",
         f"- Scenarios: {result['scenario_count']}",
-        f"- Candidate text pages: {result['page_count']}",
-        f"- Modified candidate records: {result['modified_page_count']}",
-        f"- Physical pages in exactly parseable record spans: {result['physical_page_count']}",
-        f"- Modified physical pages: {result['modified_physical_page_count']}",
+        f"- Pointer candidates: {result['page_count']}",
+        f"- Structured non-text exclusions: {result['structured_non_text_count']}",
+        f"- Text records: {result['text_page_count']}",
+        f"- Modified text records: {result['modified_text_page_count']}",
+        f"- Physical text pages: {result['text_physical_page_count']}",
+        f"- Modified physical text pages: {result['modified_text_physical_page_count']}",
         "",
-        "| Scenario | Event block | Records | Physical pages | Modified physical | Status |",
-        "| ---: | --- | ---: | ---: | ---: | --- |",
+        "| Scenario | Event block | Text records | Physical text | Modified physical | Excluded | Status |",
+        "| ---: | --- | ---: | ---: | ---: | ---: | --- |",
     ]
     for item in result["scenarios"]:
-        modified = int(item["modified_page_count"])
-        total = int(item["page_count"])
+        modified = int(item["modified_text_physical_page_count"])
+        total = int(item["text_physical_page_count"])
         status = "unstarted" if modified == 0 else ("modified" if modified < total else "all modified")
         lines.append(
             f"| {item['scenario']} | `{item['block_start']}..{item['block_end']}` | "
-            f"{total} | {item['physical_page_count']} | "
-            f"{item['modified_physical_page_count']} | {status} |"
+            f"{item['text_page_count']} | {total} | {modified} | "
+            f"{item['structured_non_text_count']} | {status} |"
         )
     lines.extend(
         [

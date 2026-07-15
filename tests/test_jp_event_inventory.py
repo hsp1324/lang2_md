@@ -25,6 +25,9 @@ class JapaneseEventInventoryTests(unittest.TestCase):
     def test_candidate_page_baseline_is_stable(self):
         self.assertEqual(self.result["page_count"], 2968)
         self.assertEqual(self.result["modified_page_count"], 2966)
+        self.assertEqual(self.result["text_page_count"], 2966)
+        self.assertEqual(self.result["modified_text_page_count"], 2966)
+        self.assertEqual(self.result["structured_non_text_count"], 2)
         scenarios = self.result["scenarios"]
         self.assertEqual(scenarios[0]["page_count"], 121)
         self.assertEqual(scenarios[0]["modified_page_count"], 121)
@@ -35,6 +38,8 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[13]["modified_page_count"], 125)
         self.assertEqual(self.result["physical_page_count"], 3567)
         self.assertEqual(self.result["modified_physical_page_count"], 3565)
+        self.assertEqual(self.result["text_physical_page_count"], 3565)
+        self.assertEqual(self.result["modified_text_physical_page_count"], 3565)
         self.assertEqual(scenarios[0]["physical_page_count"], 145)
         self.assertEqual(scenarios[0]["modified_physical_page_count"], 145)
         self.assertEqual(scenarios[1]["physical_page_count"], 137)
@@ -95,6 +100,11 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[6]["modified_page_count"], 100)
         self.assertEqual(scenarios[6]["physical_page_count"], 118)
         self.assertEqual(scenarios[6]["modified_physical_page_count"], 117)
+        self.assertEqual(scenarios[6]["text_page_count"], 100)
+        self.assertEqual(scenarios[6]["modified_text_page_count"], 100)
+        self.assertEqual(scenarios[6]["structured_non_text_count"], 1)
+        self.assertEqual(scenarios[6]["text_physical_page_count"], 117)
+        self.assertEqual(scenarios[6]["modified_text_physical_page_count"], 117)
         self.assertEqual(scenarios[7]["page_count"], 103)
         self.assertEqual(scenarios[7]["modified_page_count"], 103)
         self.assertEqual(scenarios[7]["physical_page_count"], 128)
@@ -123,6 +133,11 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(scenarios[24]["modified_page_count"], 99)
         self.assertEqual(scenarios[24]["physical_page_count"], 132)
         self.assertEqual(scenarios[24]["modified_physical_page_count"], 131)
+        self.assertEqual(scenarios[24]["text_page_count"], 99)
+        self.assertEqual(scenarios[24]["modified_text_page_count"], 99)
+        self.assertEqual(scenarios[24]["structured_non_text_count"], 1)
+        self.assertEqual(scenarios[24]["text_physical_page_count"], 131)
+        self.assertEqual(scenarios[24]["modified_text_physical_page_count"], 131)
         self.assertEqual(scenarios[25]["page_count"], 71)
         self.assertEqual(scenarios[25]["modified_page_count"], 71)
         self.assertEqual(scenarios[25]["physical_page_count"], 102)
@@ -168,6 +183,8 @@ class JapaneseEventInventoryTests(unittest.TestCase):
             "0202 0601 0019 0200 0201 0101 0019 020C 0202 0601 0019 0242 FFFF",
         )
         self.assertFalse(record["modified"])
+        self.assertEqual(record["classification"], "structured_non_text")
+        self.assertEqual(record["physical_pages"][0]["classification"], "structured_non_text")
 
     def test_scenario_25_structured_pointer_candidate_is_untouched(self):
         record = self.result["scenarios"][24]["pages"][0]
@@ -178,6 +195,19 @@ class JapaneseEventInventoryTests(unittest.TestCase):
             "0001 0001 001B 0544 0104 0002 001B 05E4 0204 0001 001B 05F4 0301 0002 001B 062A FFFF",
         )
         self.assertFalse(record["modified"])
+        self.assertEqual(record["classification"], "structured_non_text")
+        self.assertEqual(record["physical_pages"][0]["classification"], "structured_non_text")
+
+    def test_regular_event_records_are_classified_as_text(self):
+        record = self.result["scenarios"][0]["pages"][0]
+        self.assertNotIn("classification", record)
+        self.assertTrue(all("classification" not in page for page in record["physical_pages"]))
+
+    def test_changed_structured_record_cannot_reuse_the_exclusion(self):
+        changed = bytearray(self.japanese)
+        changed[0x18F610:0x18F612] = (0x0203).to_bytes(2, "big")
+        with self.assertRaisesRegex(ValueError, "known structured record changed at 0x18F610"):
+            inventory(bytes(changed), self.korean)
 
     def test_first_known_page_and_terminator(self):
         first = self.result["scenarios"][0]["pages"][0]

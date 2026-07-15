@@ -3016,3 +3016,20 @@ contains 57 safe syllables as documented below and in
 - Automated BlastEm configs remove host gamepad bindings but retain keyboard
   mappings used by direct X events. This prevents an Xbox controller used in
   another game from steering the localization test emulator.
+
+### Event Inventory Text Classification (2026-07-16)
+
+- The event inventory's only two byte-identical candidates were already proven
+  non-dialogue structures: Scenario 7 `0x18F610` (13 words including `FFFF`)
+  and Scenario 25 `0x1B0518` (17 words including `FFFF`). Their source refs are
+  `0x18F358` and `0x1B03E6`. Do not translate or overwrite either record.
+- `tools/jp_event_inventory.py` now recognizes those records only when their
+  complete original token streams match. A changed stream raises an error
+  instead of silently reusing the exclusion.
+- Raw pointer-candidate counts remain available for ROM-analysis stability,
+  while the report separately counts real text. The current result is 2,966 of
+  2,966 logical text records and 3,565 of 3,565 physical text pages modified;
+  Scenarios 7 and 25 each list one structured non-text exclusion and now report
+  `all modified` instead of the misleading partial status.
+- Production build checksum remains `EA22`. The full 161-test suite and direct
+  inventory (`783 candidates; 0 unclassified`) pass without launching BlastEm.
