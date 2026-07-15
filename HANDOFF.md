@@ -3255,3 +3255,25 @@ contains 57 safe syllables as documented below and in
   reviewed, including Morgan/priest/imperial-commander dialogue and the Korean
   Dark Elf combat tutorial. No reset, freeze, broken name, class, AT, or DF was
   observed. This does not claim later-turn or scenario-clear coverage.
+
+### Current F03A Scenario 5 Entry Regression (2026-07-16)
+
+- `detect-prep` stopped after ten confirmations. The complete `짐승의 포효`
+  briefing and preparation transition are in
+  `f03a_s05_brief_live_01.png` through `_10.png`; no Japanese residue or broken
+  glyph appeared.
+- Commander selection was entered explicitly rather than inferred from the
+  roster list. `f03a_s05_commander_01.png` through `_05.png` verify
+  `엘윈/파이터`, `헤인/워록`, `스코트/나이트`, `리아나/클레릭`, and
+  `쉐리/파이터`. Sherry's hire page displays `솔저` at
+  `f03a_s05_sherry_hire.png`. Attempts to reuse `B, Up, C` for the other hire
+  pages returned to the preparation menu instead; those captures are rejected
+  and the remaining hire lists are still pending.
+- Automatic deployment and all 16 opening frames reached a valid Elwin command
+  panel. `f03a_s05_conditions.png` verifies victory `20턴 내 적 전멸` or
+  `20턴 내 북쪽 도착`, with defeat `제한 턴 초과` or `주인공 사망`.
+- First-turn progression returned to the command panel after 36 captured
+  confirmations. The text-bearing frames, including Morgan and imperial
+  commander dialogue, were reviewed against Scenario 5 source records. No
+  reset, freeze, broken name, class, AT, or DF was observed; later turns and
+  completion remain pending.

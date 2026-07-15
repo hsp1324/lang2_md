@@ -15,7 +15,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 2 | current | current | current | progressed | probe | pending | pending | pending | 7 |
 | 3 | current | current | current | current | probe | progressed | pending | pending | 10 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 12 |
-| 5 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 5 | current | current | current | current | probe | progressed | pending | pending | 14 |
 | 6 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 7 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 8 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -98,6 +98,25 @@ F03A standardizes Rayguard/Black Dragon Sorcerer terminology. All 14 briefing co
 - `captures/run/f03a_s04_turn1_live_39.png`
 - `captures/run/f03a_s04_turn1_live_86.png`
 - `captures/run/f03a_s04_turn1_live_93.png`
+
+### Scenario 5
+
+All ten briefing confirmations, five commander/class selections, all 16 opening confirmations, and the condition rows were visually reviewed on F03A. First-turn progression returned to the command menu after 36 captured confirmations; all text-bearing frames were reviewed. Sherry's Soldier hire row is verified, but the other commanders' hire lists and later turns remain pending.
+
+- `captures/run/f03a_s05_selector_map.png`
+- `captures/run/f03a_s05_brief_live_01.png`
+- `captures/run/f03a_s05_brief_live_09.png`
+- `captures/run/f03a_s05_brief_live_10.png`
+- `captures/run/f03a_s05_commander_01.png`
+- `captures/run/f03a_s05_commander_05.png`
+- `captures/run/f03a_s05_sherry_hire.png`
+- `captures/run/f03a_s05_deploy.png`
+- `captures/run/f03a_s05_opening_live_02.png`
+- `captures/run/f03a_s05_opening_live_16.png`
+- `captures/run/f03a_s05_conditions.png`
+- `captures/run/f03a_s05_turn1_live_01.png`
+- `captures/run/f03a_s05_turn1_live_24.png`
+- `captures/run/f03a_s05_turn1_live_36.png`
 
 ### Scenario 27
 
