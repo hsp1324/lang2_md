@@ -18,7 +18,17 @@ OUTPUT_FIELDS = {
     "shared_word_resources.json": ("target_korean", 366),
     "ui_patch_surfaces.json": ("target_korean", 94),
 }
-DEPRECATED_OUTPUT_TERMS = ("레이가드", "흑룡마도단", "랄 강")
+DEPRECATED_OUTPUT_TERMS = (
+    "레이가드",
+    "흑룡마도단",
+    "랄 강",
+    "라이텔",
+    "다크 로드",
+    "홀리 로드",
+    "화룡군",
+    "화룡병단",
+    "빙룡수병단",
+)
 
 
 def collect_strings(value, path):
@@ -79,6 +89,17 @@ class TranslationTargetResidueTests(unittest.TestCase):
         self.assertIn("랄강의 수호자는", scenario_texts[10])
         self.assertNotIn("랄 강", scenario_texts[9])
         self.assertNotIn("랄 강", scenario_texts[10])
+
+    def test_production_scenario_terms_are_canonical(self):
+        scenario_texts = builder.load_scenario_texts()
+        joined = "\n".join(scenario_texts)
+        for term in DEPRECATED_OUTPUT_TERMS:
+            self.assertNotIn(term, joined)
+        self.assertIn("성지 레이텔", scenario_texts[11])
+        self.assertIn("다크로드를 지키던", scenario_texts[11])
+        self.assertIn("염룡군단과의 싸움", scenario_texts[12])
+        self.assertIn("홀리로드를 찾아", scenario_texts[22])
+        self.assertIn("흑룡마도사단의 함정", scenario_texts[25])
 
 
 if __name__ == "__main__":

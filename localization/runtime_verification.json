@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "FD90",
+  "production_checksum": "F0E3",
   "states": [
     "pending",
     "historical",
@@ -359,6 +359,7 @@
         "captures/run/fd90_s11_commander_03.png",
         "captures/run/fd90_s11_commander_04.png",
         "captures/run/fd90_s11_commander_05.png",
+        "captures/run/f0e3_s11_roster_page2_01.png",
         "captures/run/fd90_s11_arrange.png",
         "captures/run/fd90_s11_opening_slow_02.png",
         "captures/run/fd90_s11_opening_slow_07.png",
@@ -379,7 +380,7 @@
         "captures/run/fd90_s11_turn1_slow_41.png",
         "captures/run/fd90_s11_turn1_slow_42.png"
       ],
-      "note": "All ten briefing confirmations, five commander/class selections, arrangement, all 37 slow opening confirmations, and the condition rows were visually reviewed on production FD90. The description uses the corrected place name 랄강, and the preparation roster shows 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Victory is 적 전멸; defeat is 주인공 사망 or 제시카 사망. Ending the first turn without moving allies reviewed the oil-and-fire event, Jessica/Egbert/Lester dialogue, enemy movement, and multiple 그리폰/파이터 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. The path correctly reached GAME OVER after the exposed defenders were defeated; this is a scenario loss, not a reset or freeze. Later turns, completion, and branches remain pending."
+      "note": "All ten briefing confirmations, arrangement, all 37 slow opening confirmations, and the condition rows were visually reviewed. The first preparation pass covered only the five visible rows; F0E3 explicitly followed the right-side page control and verified the additional 제시카/크루세이더 row. The complete selectable roster is therefore 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, and 제시카/크루세이더. The description uses 랄강 and canonical 다크로드. Victory is 적 전멸; defeat is 주인공 사망 or 제시카 사망. Ending the first turn without moving allies reviewed the oil-and-fire event, Jessica/Egbert/Lester dialogue, enemy movement, and multiple 그리폰/파이터 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. The path correctly reached GAME OVER after the exposed defenders were defeated; this is a scenario loss, not a reset or freeze. Later turns, completion, and branches remain pending."
     },
     {
       "scenario": 12,
@@ -401,6 +402,8 @@
         "captures/run/fd90_s12_commander_03.png",
         "captures/run/fd90_s12_commander_04.png",
         "captures/run/fd90_s12_commander_05.png",
+        "captures/run/f0e3_s12_roster_page2_01.png",
+        "captures/run/f0e3_s12_roster_page2_02_krueger.png",
         "captures/run/fd90_s12_arrange.png",
         "captures/run/fd90_s12_after_auto.png",
         "captures/run/fd90_s12_opening_slow_02.png",
@@ -420,9 +423,46 @@
         "captures/run/fd90_s12_turn1_slow_18.png",
         "captures/run/fd90_s12_turn1_slow_20.png"
       ],
-      "note": "All 13 briefing confirmations, five commander/class selections, arrangement, automatic deployment, all 12 slow opening confirmations, and the condition rows were visually reviewed on production FD90. The preparation roster remains 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Victory is 적 전멸 or 다크로드 획득; defeat is 주인공 사망. Ending the first turn without moving allies reviewed enemy movement, Jessica's warning, and a live 리치/파이터 battle with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, the Dark Rod event, and branches remain pending."
+      "note": "All 13 briefing confirmations, arrangement, automatic deployment, all 12 slow opening confirmations, and the condition rows were visually reviewed. The first preparation pass covered only the five visible rows; F0E3 followed the right-side page control and verified additional 제시카/크루세이더 and 크루거/소서러 rows. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Victory is 적 전멸 or 다크로드 획득; defeat is 주인공 사망. Ending the first turn without moving allies reviewed enemy movement, Jessica's warning, and a live 리치/파이터 battle with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, the Dark Rod event, and branches remain pending."
     },
-    {"scenario": 13},
+    {
+      "scenario": 13,
+      "description": "verified_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "verified_current",
+      "battle_ui": "verified_current",
+      "turn_events": "progressed_current",
+      "completion": "pending",
+      "branches_endings": "pending",
+      "captures": [
+        "captures/run/f0e3_s13_brief_live_01.png",
+        "captures/run/f0e3_s13_brief_live_06.png",
+        "captures/run/f0e3_s13_brief_live_12.png",
+        "captures/run/f0e3_s13_brief_live_14.png",
+        "captures/run/f0e3_s13_roster_page1_elwin.png",
+        "captures/run/f0e3_s13_roster_page1_01.png",
+        "captures/run/f0e3_s13_roster_page1_sherry.png",
+        "captures/run/f0e3_s13_roster_page1_aaron.png",
+        "captures/run/f0e3_s13_roster_page1_keith.png",
+        "captures/run/f0e3_s13_roster_page2_01.png",
+        "captures/run/f0e3_s13_roster_page2_02_krueger.png",
+        "captures/run/f0e3_s13_arrangement_menu.png",
+        "captures/run/f0e3_s13_opening_02.png",
+        "captures/run/f0e3_s13_opening_04.png",
+        "captures/run/f0e3_s13_opening_06.png",
+        "captures/run/f0e3_s13_opening_09.png",
+        "captures/run/f0e3_s13_conditions.png",
+        "captures/run/f0e3_s13_turn1_01.png",
+        "captures/run/f0e3_s13_turn1_03.png",
+        "captures/run/f0e3_s13_turn1_04.png",
+        "captures/run/f0e3_s13_turn1_09.png",
+        "captures/run/f0e3_s13_turn1_13.png",
+        "captures/run/f0e3_s13_turn1_15.png",
+        "captures/run/f0e3_s13_turn1_16.png"
+      ],
+      "note": "All 14 briefing confirmations, all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, and the condition rows were visually reviewed on production F0E3. The title now uses canonical 염룡군단과의 싸움 and the description uses 다크로드. The complete roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Victory is 졸름 장군 격파; defeat is 주인공 사망. The no-action first turn reviewed Zorum and imperial-commander dialogue, 염룡군단 terminology, enemy movement, and current battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, and branches remain pending."
+    },
     {"scenario": 14},
     {"scenario": 15},
     {"scenario": 16},

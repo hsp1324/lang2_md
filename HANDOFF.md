@@ -3418,11 +3418,11 @@ contains 57 safe syllables as documented below and in
 ### Current FD90 Scenario 11 Entry And Editor Records (2026-07-16)
 
 - All ten `불길 속에서` briefing confirmations were reviewed through the
-  preparation transition. The description uses the corrected `랄강`, and the
-  five selectable rows show `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
-  `아론/파이터`, and `키스/호크나이트`. Arrangement and all 37 slow opening
-  confirmations reached a valid Elwin command menu without Japanese residue
-  or damaged dynamic names/classes.
+  preparation transition. The original pass incorrectly stopped after the five
+  rows visible on the first page. A F0E3 revisit followed the right-side `>>`
+  control and also verified `제시카/크루세이더`; all six selectable rows are
+  intact. Arrangement and all 37 slow opening confirmations reached a valid
+  Elwin command menu without Japanese residue or damaged dynamic names/classes.
 - `fd90_s11_conditions.png` verifies victory `적 전멸` and defeat `주인공
   사망` / `제시카 사망`. The no-action first turn reviewed the oil-and-fire
   event, Jessica/Egbert/Lester dialogue, enemy movement, and current battle
@@ -3444,11 +3444,12 @@ contains 57 safe syllables as documented below and in
 
 ### Current FD90 Scenario 12 Entry And Editor Records (2026-07-16)
 
-- All 13 `성지 레이텔` briefing confirmations, five commander/class rows,
-  arrangement, automatic deployment, all 12 slow opening confirmations, and
-  the conditions were reviewed on production `FD90`. The selectable roster is
-  again `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
-  `키스/호크나이트`; names and first glyphs remain intact.
+- All 13 `성지 레이텔` briefing confirmations, arrangement, automatic
+  deployment, all 12 slow opening confirmations, and the conditions were
+  reviewed. The original pass incorrectly stopped after the first five visible
+  commander rows. A F0E3 revisit followed `>>` and also verified
+  `제시카/크루세이더` and `크루거/소서러`; all seven selectable rows are
+  intact.
 - Victory is `적 전멸` or `다크로드 획득`; defeat is `주인공 사망`. The
   no-action first turn reviewed monster movement, Jessica's warning, and a
   current `리치/파이터` battle. Names, `-AT-/-DF-`, counts, and status
@@ -3466,3 +3467,33 @@ contains 57 safe syllables as documented below and in
   state, direct-event Start did not open the Start menu, while the existing
   focused XTest fallback (`--click-window start`) did. This is an automation
   transport difference, not a ROM defect.
+
+### Current F0E3 Scenario 13 Entry, Terminology, And Editor Records (2026-07-16)
+
+- Canonical terminology is now consistent across the production scenario
+  source, reviewed event dialogue, and generated shared resources: `레이갈드`,
+  `흑룡마도사단`, `성지 레이텔`, `다크로드`, `홀리로드`, `염룡군단`, and
+  `빙룡군단`. Deprecated spaced or alternate forms are rejected by a resource
+  regression test. Scenario 13 now displays `염룡군단과의 싸움` and
+  `다크로드` in all 14 reviewed briefing frames.
+- Moving `염` into the early scenario-description glyph pass initially shifted
+  the stable name-entry allocation and failed the build with glyph ID `0x7263`.
+  `scenario_description_glyph_text()` now defers that already-reviewed event
+  glyph to its established later allocation point. The final build retains 851
+  glyphs (`0x7000..0x7353`) and checksum `F0E3` without moving the name grid.
+- The complete preparation roster was reviewed across both pages, not just the
+  five visible rows: `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
+  `아론/파이터`, `키스/호크나이트`, `제시카/크루세이더`, and
+  `크루거/소서러`. This pagination rule must be applied to every future
+  scenario and caused the explicit Scenario 11/12 revisits above.
+- All nine opening dialogue pages, victory `졸름 장군 격파`, defeat `주인공
+  사망`, and the no-action first turn were reviewed. Zorum and imperial
+  commander dialogue use `염룡군단`; current battles show intact names,
+  classes, counts, and `-AT-/-DF-`. Elwin's defeat ends in the expected
+  `GAME OVER`, not a reset or freeze.
+- The original Scenario 13 fixed-placement list contains 13 records. Editor
+  regression samples now lock Zorum (`하이로드`, LV9, AT29, DF31), hidden
+  Vargas (`제너럴`, LV8, AT48, DF35), hidden Leon (`로얄가드`, LV2, AT45,
+  DF34), and hidden Laird (`실버나이트`, LV5, AT39, DF28), including the
+  original mercenary IDs where relevant. Later turns, completion, and branches
+  remain pending.

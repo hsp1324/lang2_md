@@ -1127,6 +1127,19 @@ RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS = (
     "조심해…",
 )
 
+# `염` already belonged to the reviewed-event vocabulary, which is allocated
+# after the name-entry grid. Canonicalizing the Scenario 13 description from
+# 화룡군 to 염룡군단 must not pull it into the early description pass and move
+# every established name-entry glyph ID by one.
+DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset("염")
+
+
+def scenario_description_glyph_text(text: str) -> str:
+    return "".join(
+        char for char in text
+        if char not in DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS
+    )
+
 # Keep these newly promoted name-table strings after the established UI and
 # name-entry glyph consumers. Their records are stable direct patches, but
 # allocating their five new syllables earlier would shift the name-entry
@@ -1371,12 +1384,12 @@ SCENARIO_TEXT_OVERRIDES = {
         "시나리오 11\n"
         "불길 속에서\n"
         "랄강의 수호자는 엘윈 일행을 오래 산 마법사 제시카에게 안내했다. "
-        "그녀라면 다크 로드의 행방을 알지도 모른다. "
+        "그녀라면 다크로드의 행방을 알지도 모른다. "
         "하지만 제국과 에그베르트도 그곳을 노리고 있었다."
     ),
     25: (
         "시나리오 26\n"
-        "흑룡마도단의 함정\n"
+        "흑룡마도사단의 함정\n"
         "레온을 물리친 엘윈 일행은 벨제리아 성의 지하 신전으로 향했다. "
         "넓은 홀에 이르자 에그베르트가 기다리고 있었다. "
         "사방의 적과 강한 마법이 일행을 덮쳤다."
@@ -4883,7 +4896,7 @@ def main() -> None:
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,
-        *active_descriptions,
+        *(scenario_description_glyph_text(text) for text in active_descriptions),
         *active_direct_strings,
         *active_event_page_strings,
         *active_fixed_strings,
