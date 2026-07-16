@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from array import array
 from dataclasses import dataclass
 from pathlib import Path
+import sys
 
 from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
 
@@ -198,7 +200,11 @@ def read_scenario(data: bytes, reference_rom: bytes, number: int) -> dict[str, o
 
 
 def update_checksum(data: bytearray) -> int:
-    checksum = sum(be16(data, offset) for offset in range(0x200, len(data), 2)) & 0xFFFF
+    words = array("H")
+    words.frombytes(memoryview(data)[0x200:])
+    if sys.byteorder == "little":
+        words.byteswap()
+    checksum = sum(words) & 0xFFFF
     data[0x18E:0x190] = checksum.to_bytes(2, "big")
     return checksum
 

@@ -3838,3 +3838,18 @@ contains 57 safe syllables as documented below and in
   editor regression in addition to the generic pointer/count validation.
   Runtime verification states are unchanged; this matrix is original-data and
   editor groundwork only.
+
+### All-Scenario Editor No-Change Regression (2026-07-16)
+
+- `test_no_change_patch_is_byte_identical_for_all_scenarios` now reads and
+  reapplies every exposed fixed-placement field for each Scenario 1-31 against
+  production `138B`. Every no-change result must remain byte-identical,
+  including the stored Mega Drive checksum.
+- The checksum path now converts the ROM body to native 16-bit words in one
+  block and byte-swaps on little-endian hosts. It produces the same `138B`
+  result while reducing this 31-scenario regression from about 18.6 seconds
+  to about 1.0 second on the current machine.
+- The editor still writes only class, LV, AT, DF, and the six mercenary slots.
+  Name ID `+0x1A`, coordinates, and event/hidden flags remain read-only context;
+  README wording was corrected so the known name-ID address is not mistaken
+  for an exposed writable field.

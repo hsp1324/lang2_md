@@ -1,17 +1,26 @@
 from pathlib import Path
 import unittest
 
-from tools.scenario_data import KOREAN_NAME_BY_ID, NAME_COUNT, patch_scenario, read_scenario, scenario_layout
+from tools.scenario_data import (
+    KOREAN_NAME_BY_ID,
+    NAME_COUNT,
+    SCENARIO_COUNT,
+    patch_scenario,
+    read_scenario,
+    scenario_layout,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
 
 
 class ScenarioDataTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.rom = JP_ROM.read_bytes()
+        cls.korean = KO_ROM.read_bytes()
 
     def test_all_scenario_fixed_lists_are_valid(self):
         counts = [scenario_layout(self.rom, number).record_count for number in range(1, 32)]
@@ -711,6 +720,14 @@ class ScenarioDataTests(unittest.TestCase):
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")
         self.assertEqual(KOREAN_NAME_BY_ID[0x68], "형님")
         self.assertEqual(KOREAN_NAME_BY_ID[0x73], "파이어스")
+
+    def test_no_change_patch_is_byte_identical_for_all_scenarios(self):
+        for number in range(1, SCENARIO_COUNT + 1):
+            with self.subTest(scenario=number):
+                data = bytearray(self.korean)
+                model = read_scenario(bytes(data), self.rom, number)
+                patch_scenario(data, number, model["records"])
+                self.assertEqual(bytes(data), self.korean)
 
     def test_patch_is_limited_to_requested_fields_and_checksum(self):
         data = bytearray(self.rom)
