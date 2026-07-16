@@ -3866,3 +3866,21 @@ contains 57 safe syllables as documented below and in
   `0x082B78`, and zero unclassified candidates. Regeneration also synchronizes
   stored current-token IDs with production checksum `138B`; target text and
   original ownership are unchanged.
+
+### Static Ownership Trace For Direct Record 0x082B78 (2026-07-16)
+
+- The unresolved Japanese record is pointer-table entry 12 in the system
+  message table at `0x082A92`; its entry address is `0x082AC2` and its text
+  starts at `0x082B78`. The only absolute references to the table base in the
+  original ROM are `0x0149D2`, `0x014A64`, and `0x0170E0`.
+- `0x0149C6..0x014AE2` builds the level-up message and calls its table-copy
+  helper with fixed indexes 0-4 and 7, plus the bounded stat-increase suffix
+  index. `0x0170DE` reads entry 0 directly. Separate absolute reads use entry 9
+  for `GAME OVER`, entry 10 for item acquisition, and entry 13 for equipment.
+  No absolute reference to entry address `0x082AC2` exists in the ROM.
+- This strongly suggests entry 12 is an unused/fallback debug string, but the
+  computed stat suffix means static references alone do not prove it
+  unreachable for every malformed or secret state. It remains unchanged and
+  classified `confirmed_unresolved_direct_message` until a runtime trigger or
+  stricter value-range proof is found. Do not guess a Korean sentence from the
+  malformed-looking source text.
