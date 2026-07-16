@@ -3,6 +3,8 @@ from pathlib import Path
 import re
 import unittest
 
+from scripts import build_korean_jp_probe as builder
+
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCALIZATION = ROOT / "localization"
@@ -16,7 +18,7 @@ OUTPUT_FIELDS = {
     "shared_word_resources.json": ("target_korean", 366),
     "ui_patch_surfaces.json": ("target_korean", 94),
 }
-DEPRECATED_OUTPUT_TERMS = ("레이가드", "흑룡마도단")
+DEPRECATED_OUTPUT_TERMS = ("레이가드", "흑룡마도단", "랄 강")
 
 
 def collect_strings(value, path):
@@ -69,6 +71,14 @@ class TranslationTargetResidueTests(unittest.TestCase):
                     if term in text:
                         residue.append(f"{filename}:{path}: {term}")
         self.assertEqual(residue, [])
+
+    def test_scenario_place_name_uses_production_build_source(self):
+        scenario_texts = builder.load_scenario_texts()
+        self.assertIn("랄강의 수호자", scenario_texts[9])
+        self.assertIn("마법사를 찾아 랄강으로", scenario_texts[9])
+        self.assertIn("랄강의 수호자는", scenario_texts[10])
+        self.assertNotIn("랄 강", scenario_texts[9])
+        self.assertNotIn("랄 강", scenario_texts[10])
 
 
 if __name__ == "__main__":

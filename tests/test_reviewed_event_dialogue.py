@@ -442,6 +442,23 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             all(row["english_record"] is None and row["japanese_only"] for row in primary[104:])
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
+        corrected = next(row for row in rows if row["address"] == "0x195DF6")
+        self.assertEqual(corrected["text"], "산적인가? 저 정도로는 못 막아. 가자!")
+        corrected_text = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            corrected_text["0x19611A"],
+            "그렇군. 육지에서 싸우면 우리가 더 강하겠어.",
+        )
+        self.assertEqual(
+            corrected_text["0x196162"],
+            "이놈들은 못 지나간다! 가자, 이놈들아!",
+        )
+        self.assertEqual(corrected_text["0x1961A8"], "두목! 저놈들 꽤 강합니다!")
+        self.assertEqual(corrected_text["0x1961D4"], "맞아요! 조심하는 게 좋겠어요.")
+        self.assertEqual(
+            corrected_text["0x196218"],
+            "두목! 저놈들은 조심해서 상대해야 합니다.",
+        )
 
     def test_scenario_11_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 11]

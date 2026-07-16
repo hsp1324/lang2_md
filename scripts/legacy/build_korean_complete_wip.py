@@ -218,7 +218,7 @@ SCENARIO_DESCRIPTIONS = [
 칼자스 성을 지키기 위한
 치열한 전투가 시작되었다.""",
     """시나리오 10
-랄 강의 수호자
+랄강의 수호자
 
 에스톨의 대신관에게서
 알하자드의 두려운 진실을
@@ -229,12 +229,12 @@ SCENARIO_DESCRIPTIONS = [
 넣으면 알하자드의 부활을
 막을 수 있었다. 일행은
 다크 로드의 행방을 아는
-마법사를 찾아 랄 강으로
+마법사를 찾아 랄강으로
 향했다.""",
     """시나리오 11
 불길 속에서
 
-랄 강의 수호자는 엘윈
+랄강의 수호자는 엘윈
 일행을 오래 산 마법사
 제시카에게 안내했다.
 그녀라면 다크 로드의
@@ -506,7 +506,7 @@ REGEX_REPLACEMENTS = [
     (r"Rayguard\s+Castle", "레이가드 성"),
     (r"Rayguard\s+Empire", "레이가드 제국"),
     (r"Direth\s+Channel", "디레스 해협"),
-    (r"Rahl\s+River", "랄 강"),
+    (r"Rahl\s+River", "랄강"),
     (r"Fire\s+Dragon\s+Army", "화룡군"),
     (r"Blue\s+Dragon\s+Knights", "청룡기사단"),
     (r"Black\s+Dragon\s+Sorcerers", "흑룡마도단"),

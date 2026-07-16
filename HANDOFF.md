@@ -3379,3 +3379,38 @@ contains 57 safe syllables as documented below and in
   `-AT-/-DF-`, counts, and status graphics. The scenario did not reset or
   freeze. Later turns, scenario completion, and branch/ending coverage remain
   pending.
+
+### Current FD90 Scenario 10 Entry And Source Corrections (2026-07-16)
+
+- All 16 `랄강의 수호자` briefing confirmations were reviewed through the
+  preparation transition. The visible title and destination previously used
+  `랄 강`; the generated resource inventory had been edited first, but live
+  replay proved that the production builder reads
+  `scripts/legacy/build_korean_complete_wip.py`. Both that authoritative
+  source, the Scenario 11 override, and `shared_word_resources.json` now use
+  canonical `랄강`. `fd90_s10_brief_live_01.png` and `_14.png` prove the
+  corrected no-space form in the final build.
+- The five selectable rows show `엘윈/파이터`, `헤인/워록`,
+  `쉐리/파이터`, `아론/파이터`, and `키스/호크나이트`. Arrangement and
+  automatic deployment were also reviewed. These captures were made before
+  the scenario-local dialogue edits, but custom glyph IDs remained unchanged
+  at 851 (`0x7000..0x7353`).
+- The old 0.9-second detector interval captured partially drawn dialogue.
+  `run_blastem_sequence.py` now accepts `--confirmation-delay`; the final
+  opening used 2.2 seconds and retained every completed page through the
+  command menu. This exposed `0x195DF6` as a real mistranslation: the old
+  `겁쟁이인가? 힘으로도 건널 수 있어.` did not match the source's bandit
+  encounter. `fd90_s10_opening_slow_10.png` verifies the corrected, naturally
+  wrapped `산적인가? 저 정도로는 / 못 막아. 가자!`.
+- A pre-fix no-action turn also displayed `0x196162` as
+  `불평은 무시해도 좋다!`, unrelated to source `These scum will not get past
+  us`. Records `0x19611A..0x196218` were corrected against the source mapping
+  and locked by address tests. Those alternate pages did not retrigger in the
+  final FD90 path, so their final live reproduction is still pending rather
+  than being claimed complete.
+- `fd90_s10_conditions.png` verifies victory `레스터 격파` and defeat
+  `주인공 사망`. The final first-turn path reviewed the pirate dialogue and
+  all enemy movement, reached `TURN 2`, and returned to Elwin's command menu
+  without reset or freeze. No battle presentation occurred, so battle UI
+  remains covered only by the shared probe. Later turns, completion, and
+  branch/ending coverage remain pending. Production checksum is `FD90`.

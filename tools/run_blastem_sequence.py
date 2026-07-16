@@ -517,7 +517,9 @@ def advance_to_preparation_screen(args: argparse.Namespace) -> int:
             return 0
         if step == args.max_confirmations:
             break
-        status = subprocess.call(make_key_command(args, ["c:0.9"]), cwd=ROOT)
+        status = subprocess.call(
+            make_key_command(args, [f"c:{args.confirmation_delay}"]), cwd=ROOT
+        )
         if status:
             return status
     raise RuntimeError(
@@ -529,7 +531,9 @@ def advance_to_preparation_screen(args: argparse.Namespace) -> int:
 def advance_to_battle_command(args: argparse.Namespace) -> int:
     probe = LOG_ROOT / "battle_command_probe.png"
     for step in range(1, args.max_confirmations + 1):
-        status = subprocess.call(make_key_command(args, ["c:0.9"]), cwd=ROOT)
+        status = subprocess.call(
+            make_key_command(args, [f"c:{args.confirmation_delay}"]), cwd=ROOT
+        )
         if status:
             return status
         frame = detection_capture_path(args, probe, step)
@@ -564,6 +568,12 @@ def main() -> int:
         default=80,
         help="maximum single C presses used by a screen-detection sequence",
     )
+    parser.add_argument(
+        "--confirmation-delay",
+        type=float,
+        default=0.9,
+        help="seconds to wait after each detector C press (use 2+ for full dialogue text)",
+    )
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument(
         "--replace-existing",
@@ -587,6 +597,8 @@ def main() -> int:
 
     if not 1 <= args.scenario_number <= 31:
         raise ValueError("--scenario-number must be 1..31")
+    if args.confirmation_delay < 0:
+        raise ValueError("--confirmation-delay must be non-negative")
     if args.sequence == "scenario-select":
         SEQUENCES[args.sequence] = scenario_select_keys(args.scenario_number)
 
