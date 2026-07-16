@@ -4043,3 +4043,28 @@ contains 57 safe syllables as documented below and in
   occurred during these sessions. Tests explicitly bind the current
   description state to scenarios 13, 15, and 22 so a future off-by-one
   inventory edit cannot silently promote adjacent scenarios.
+
+### Current C7AB Late Description Playback (2026-07-17)
+
+- Production `C7AB` was freshly entered through selector description records
+  23-31. Records 23-27 display the matching on-screen scenario numbers and the
+  titles `봉인의 열쇠`, `빛과 어둠`, `대륙 최강의 기사`,
+  `흑룡마도사단의 함정`, and `전설의 끝`. Their title, intermediate body,
+  and stable final frames render without bad glyphs, reset, or freeze.
+- The last four selector records intentionally map to the optional on-screen
+  Scenarios X1-X4 rather than numbered Scenarios 28-31: record 28 is
+  `근육의 신전`, record 29 is `디레스 해협의 격전`, record 30 is
+  `마룡의 둥지`, and record 31 is `죽음의 탑`. Keep this distinction in
+  inventory notes and capture filenames; it reflects the existing selector's
+  31 description-record ordering, not an input error.
+- Every late description was followed to a stable final frame. Because the
+  automatic scroll was sampled at two-second intervals rather than capturing
+  every distinct frame, records 23-31 are conservatively marked
+  `progressed_current`, not `verified_current`. Scenario 23 additionally
+  reached an intact first preparation page. Other runtime surfaces for the
+  previously bare records remain pending.
+- BlastEm was stopped after record 31. Direct window events worked throughout,
+  and no user keyboard/gamepad collision was observed. The runtime regression
+  now requires current description evidence for records 23-31 and explicitly
+  cites both boundary captures so these entries cannot silently fall back to
+  bare pending records.

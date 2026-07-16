@@ -43,18 +43,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario20 = data["scenarios"][19]
         scenario21 = data["scenarios"][20]
         scenario22 = data["scenarios"][21]
+        scenario23 = data["scenarios"][22]
         scenario27 = data["scenarios"][26]
+        scenario31 = data["scenarios"][30]
         self.assertEqual(scenario1["description"], "verified_current")
         self.assertIn("captures/run/c7ab_s01_body_name4.png", scenario1["captures"])
-        current_description_progress = {13, 15, 22}
-        for scenario in data["scenarios"][1:22]:
+        current_description_progress = {13, 15, *range(22, 32)}
+        for scenario in data["scenarios"][1:]:
             expected = (
                 "progressed_current"
                 if scenario["scenario"] in current_description_progress
                 else "historical"
             )
             self.assertEqual(scenario["description"], expected)
-        self.assertEqual(scenario27["description"], "historical")
+        self.assertEqual(scenario27["description"], "progressed_current")
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "progressed_current")
         self.assertEqual(scenario3["description"], "historical")
@@ -156,8 +158,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("captures/run/c7ab_s22_body_final2.png", scenario22["captures"])
         self.assertEqual(scenario22["preparation"], "pending")
         self.assertEqual(scenario22["opening_events"], "pending")
+        self.assertEqual(scenario23["description"], "progressed_current")
+        self.assertIn("captures/run/c7ab_s23_title.png", scenario23["captures"])
         self.assertEqual(scenario27["preparation"], "verified_current")
         self.assertEqual(scenario27["completion"], "verified_probe")
+        self.assertIn("captures/run/c7ab_s27_body_final2.png", scenario27["captures"])
+        self.assertEqual(scenario31["description"], "progressed_current")
+        self.assertIn("captures/run/c7ab_s31_body_final2.png", scenario31["captures"])
         for evidence in data["global_evidence"]:
             self.assertIn(evidence["state"], data["states"])
             self.assertTrue(evidence["captures"])

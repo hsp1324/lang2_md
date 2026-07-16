@@ -33,15 +33,15 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 20 | historical | current | current | current | probe | progressed | pending | pending | 16 |
 | 21 | historical | current | current | current | probe | progressed | pending | pending | 18 |
 | 22 | progressed | pending | pending | pending | pending | pending | pending | pending | 14 |
-| 23 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 24 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 25 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 26 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 27 | historical | historical | current | progressed | probe | pending | probe | probe | 7 |
-| 28 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 29 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 30 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
-| 31 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 23 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 24 | progressed | pending | pending | pending | pending | pending | pending | pending | 3 |
+| 25 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 26 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 27 | progressed | historical | current | progressed | probe | pending | probe | probe | 10 |
+| 28 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 29 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 30 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 31 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 
 ## Evidence Notes
 
@@ -562,9 +562,44 @@ Production C7AB freshly reaches the source-reviewed 알하자드의 부활 descr
 - `captures/run/c7ab_s22_body_final.png`
 - `captures/run/c7ab_s22_body_final2.png`
 
+### Scenario 23
+
+Production C7AB freshly displays Scenario 23 봉인의 열쇠, follows the description from Alhazard's released seal to the party heading for Bozel's fortress, and reaches an intact first preparation page. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Conditions, opening, turns, completion, and branches remain pending.
+
+- `captures/run/c7ab_s23_title.png`
+- `captures/run/c7ab_s23_body_mid.png`
+- `captures/run/c7ab_s23_body_final.png`
+- `captures/run/c7ab_s23_after_description.png`
+
+### Scenario 24
+
+Production C7AB freshly displays Scenario 24 빛과 어둠 and reaches the final line in which Bernhardt attacks the party after the decisive battle. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s24_title.png`
+- `captures/run/c7ab_s24_body_mid.png`
+- `captures/run/c7ab_s24_body_final.png`
+
+### Scenario 25
+
+Production C7AB freshly displays Scenario 25 대륙 최강의 기사 and reaches the final lines about Egbert, the duplicate Jessica, and the unavoidable battle without broken glyphs or reset. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s25_title.png`
+- `captures/run/c7ab_s25_body_mid.png`
+- `captures/run/c7ab_s25_body_2.png`
+- `captures/run/c7ab_s25_body_final2.png`
+
+### Scenario 26
+
+Production C7AB freshly displays Scenario 26 흑룡마도사단의 함정 and reaches the final line about exploiting Egbert's trap to pour concentrated magic onto the Black Dragon Sorcerers. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s26_title.png`
+- `captures/run/c7ab_s26_body_mid.png`
+- `captures/run/c7ab_s26_body_3.png`
+- `captures/run/c7ab_s26_body_final2.png`
+
 ### Scenario 27
 
-Current prep/shop/equipment and opening progression are verified. Ending/epilogue/credits/Fin use documented production-derived probes; ordinary turn-event coverage is still pending.
+Production C7AB freshly displays Scenario 27 전설의 끝 and reaches the final line about the light-and-dark war descending after several thousand years. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Current prep/shop/equipment and opening progression are verified. Ending/epilogue/credits/Fin use documented production-derived probes; ordinary turn-event coverage is still pending.
 
 - `captures/run/ea22_s27_after_select_current.png`
 - `captures/run/ea22_s27_roster_sheet.png`
@@ -573,6 +608,45 @@ Current prep/shop/equipment and opening progression are verified. Ending/epilogu
 - `captures/run/ea22_s27_shop_sell_message2.png`
 - `captures/run/3590_s27_command_ready.png`
 - `captures/run/c176_corrected_epilogue_watch/288.png`
+- `captures/run/c7ab_s27_title.png`
+- `captures/run/c7ab_s27_body_3.png`
+- `captures/run/c7ab_s27_body_final2.png`
+
+### Scenario 28
+
+Selector description record 28 enters the on-screen secret Scenario X1 근육의 신전 on production C7AB. Its description reaches the final line about the men gathering to train at the muscle temple without broken glyphs or reset. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s28_title.png`
+- `captures/run/c7ab_s28_body_mid.png`
+- `captures/run/c7ab_s28_body_3.png`
+- `captures/run/c7ab_s28_body_final2.png`
+
+### Scenario 29
+
+Selector description record 29 enters the on-screen secret Scenario X2 디레스 해협의 격전 on production C7AB. Its description reaches the final line in which the Rayguard commander who failed to reinforce Imelda attacks to avenge the general. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s29_title.png`
+- `captures/run/c7ab_s29_body_mid.png`
+- `captures/run/c7ab_s29_body_3.png`
+- `captures/run/c7ab_s29_body_final2.png`
+
+### Scenario 30
+
+Selector description record 30 enters the on-screen secret Scenario X3 마룡의 둥지 on production C7AB. Its description reaches the final line about the mysterious girl living there because of a curse. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s30_title.png`
+- `captures/run/c7ab_s30_body_mid.png`
+- `captures/run/c7ab_s30_body_3.png`
+- `captures/run/c7ab_s30_body_final2.png`
+
+### Scenario 31
+
+Selector description record 31 enters the on-screen secret Scenario X4 죽음의 탑 on production C7AB. Its description reaches the final line about the party's tactics depending on whether they can repel the spells and break through the tower. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+
+- `captures/run/c7ab_s31_title.png`
+- `captures/run/c7ab_s31_body_mid.png`
+- `captures/run/c7ab_s31_body_3.png`
+- `captures/run/c7ab_s31_body_final2.png`
 
 ## Global Surface Evidence
 
