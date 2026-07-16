@@ -1033,7 +1033,7 @@
       {"address": "0x19379E", "english_record": 2841, "text": "오오!"},
       {"address": "0x1937A8", "english_record": 2842, "text": "제국군에게 칼자스군의 힘을 보여 주자! 원군이 올 때까지 성을 지킨다!"},
       {"address": "0x193810", "english_record": 2843, "text": "원군이라고!? {0018}이 당했나!"},
-      {"address": "0x193834", "english_record": 2843, "continuation": true, "text": "하지만 {000D}님이 없으면 모른다. 청룡기사단의 힘을 보여 주마!"},
+      {"address": "0x193834", "english_record": 2843, "continuation": true, "text": "{000D}님이 없는 지금, 망설일 수 없다. 청룡기사단의 힘을 보여 주마!"},
       {"address": "0x19389A", "english_record": 2844, "text": "비병은 기동력을 살려 적의 공성 부대를 노려라!"},
       {"address": "0x1938D8", "english_record": 2844, "continuation": true, "text": "양쪽 증원군은 적을 포위하고 기병은 접근해 지원하라!"},
       {"address": "0x193936", "english_record": 2844, "continuation": true, "text": "로드는 원군을 막는 동안 칼자스 성 수비대를 격파한다! 적의 움직임에 맞춰라!"},

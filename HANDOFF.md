@@ -3356,3 +3356,26 @@ contains 57 safe syllables as documented below and in
   damaged dynamic name/class appeared. This path did not enter the battle
   presentation, so Scenario 8 battle UI remains probe-only; later turns and
   completion remain pending.
+
+### Current D15E Scenario 9 Entry And Dialogue Fix (2026-07-16)
+
+- All 14 `칼자스 성 공방전` briefing confirmations, five commander/class
+  rows, arrangement, and all 30 current opening confirmations were reviewed.
+  Commander selection shows `엘윈/파이터`, `헤인/워록`, `스코트/파이터`,
+  `리아나/클레릭`, and `쉐리/파이터` without damaged dynamic glyphs.
+- The first EF65 opening pass exposed a real mistranslation at continuation
+  record `0x193834`: `하지만 레온님이 없으면 모른다` inverted the source
+  meaning. It now reads `레온님이 없는 지금, 망설일 수 없다.` before the
+  Blue Dragon Knights declaration. No glyph was added or reassigned; the
+  rebuilt production checksum is `D15E`, still using 851 custom glyphs
+  (`0x7000..0x7353`). `d15e_s09_opening_live_28.png` verifies the corrected
+  sentence in the emulator.
+- `d15e_s09_conditions.png` verifies victory `레아드 격파` and defeat
+  `NPC 전멸` / `주인공 사망`. The no-action first-turn path then reviewed 117
+  confirmations, reinforcement movement, and the Sherry/Scott/Keith tutorial
+  before returning to Elwin's command menu.
+- Current battle frames around `_33.._35` and `_77.._80` show the
+  `그리폰/파이터` and soldier presentations with intact names, classes,
+  `-AT-/-DF-`, counts, and status graphics. The scenario did not reset or
+  freeze. Later turns, scenario completion, and branch/ending coverage remain
+  pending.
