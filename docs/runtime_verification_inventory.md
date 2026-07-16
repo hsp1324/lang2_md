@@ -26,7 +26,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 13 | current | current | current | current | current | progressed | pending | pending | 27 |
 | 14 | current | current | current | current | probe | progressed | pending | pending | 22 |
 | 15 | current | current | current | current | probe | progressed | pending | pending | 15 |
-| 16 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 16 | current | current | current | current | probe | progressed | pending | pending | 17 |
 | 17 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 18 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 19 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -393,6 +393,28 @@ All 13 briefing confirmations, both preparation pages, arrangement, the complete
 - `captures/run/85f1_s15_turn1_endpoint.png`
 - `captures/run/85f1_s15_opening_slow_06.png`
 - `captures/run/85f1_s15_opening_slow_12.png`
+
+### Scenario 16
+
+All eight 레이갈드 제도 briefing confirmations, both preparation pages, a return to the first page, arrangement, automatic deployment, all eight opening confirmations, conditions, and the no-action first turn were visually reviewed on production 85F1. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Victory is 레온 격파 or 성문으로 이동; defeat is 주인공 사망. The first turn reviewed 레온/로얄가드 and 레아드/실버나이트 dialogue plus enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x181D34 is separately covered by editor regressions for 레온/로얄가드, an imperial 드래곤로드, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending.
+
+- `captures/run/85f1_s16_brief_live_01.png`
+- `captures/run/85f1_s16_brief_live_07.png`
+- `captures/run/85f1_s16_roster_page1_elwin.png`
+- `captures/run/85f1_s16_roster_page1_keith.png`
+- `captures/run/85f1_s16_roster_page2_lester.png`
+- `captures/run/85f1_s16_roster_page2_jessica.png`
+- `captures/run/85f1_s16_roster_page2_first.png`
+- `captures/run/85f1_s16_roster_wrap_page1.png`
+- `captures/run/85f1_s16_arrangement.png`
+- `captures/run/85f1_s16_auto.png`
+- `captures/run/85f1_s16_opening_02.png`
+- `captures/run/85f1_s16_opening_04.png`
+- `captures/run/85f1_s16_conditions.png`
+- `captures/run/85f1_s16_turn1_01.png`
+- `captures/run/85f1_s16_turn1_02.png`
+- `captures/run/85f1_s16_turn1_27.png`
+- `captures/run/85f1_s16_turn1_29.png`
 
 ### Scenario 27
 

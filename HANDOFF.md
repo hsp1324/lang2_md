@@ -3562,3 +3562,29 @@ contains 57 safe syllables as documented below and in
   selection into the wrong preparation submenu. No ROM change was needed; the
   run was restarted and completed with short direct events. Record this timing
   distinction to avoid repeating the false menu diagnosis.
+
+### Current 85F1 Scenario 16 Entry And Editor Records (2026-07-16)
+
+- All eight `레이갈드 제도` briefing confirmations were reviewed through the
+  preparation transition. The first preparation page contains
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
+  `키스/호크나이트`. Following `>>` reveals a second page with
+  `레스터/크루세이더`, `제시카/소서러`, and `스코트/파이터`.
+  `85f1_s16_roster_wrap_page1.png` records the return through `<<`, proving
+  both pages and all eight selectable commanders were covered.
+- Arrangement, automatic deployment, and all eight opening confirmations were
+  reviewed. Dialogue status rows show `쉐리/파이터` and `레온/로얄가드`
+  correctly. Conditions are victory by defeating Leon or moving to the castle
+  gate, and defeat by the protagonist's death.
+- The no-action first turn reviewed `레온/로얄가드` and
+  `레아드/실버나이트` dialogue plus all enemy movement, reached `TURN 2`,
+  and returned to a valid Elwin command menu without reset or freeze. This path
+  did not trigger a battle presentation, so battle UI remains covered by the
+  shared probe. Later turns, completion, and branches remain pending.
+- The original fixed-placement list at `0x181D34` contains ten records and is
+  distinct from the eight selectable preparation commanders. Editor regression
+  samples now lock Leon (`로얄가드`, LV4, AT46, DF35, X13/Y10), a visible
+  imperial Dragon Lord (`드래곤로드`, LV1, AT35, DF28, X20/Y12), and hidden
+  Lana (`다크프린세스`, LV1, AT36, DF33, X/Y=`0xFF`) with their exact
+  original mercenary IDs. Coordinates and hidden/event flags remain read-only
+  editor context until their ownership is proven.

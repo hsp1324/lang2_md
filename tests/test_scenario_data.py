@@ -174,6 +174,34 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(hidden_lana["mercenaries"], [135, 135, 135, 135, 255, 255])
 
+    def test_scenario_sixteen_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 16)
+        self.assertEqual(model["record_count"], 10)
+
+        leon = model["records"][0]
+        dragon_lord = model["records"][1]
+        hidden_lana = model["records"][8]
+        self.assertEqual(
+            (leon["name"]["ko"], leon["class"]["ko"], leon["level"],
+             leon["at"], leon["df"], leon["x"], leon["y"]),
+            ("레온", "로얄가드", 4, 46, 35, 13, 10),
+        )
+        self.assertEqual(leon["mercenaries"], [123, 123, 123, 123, 119, 119])
+        self.assertEqual(
+            (dragon_lord["name"]["ko"], dragon_lord["class"]["ko"],
+             dragon_lord["level"], dragon_lord["at"], dragon_lord["df"],
+             dragon_lord["x"], dragon_lord["y"]),
+            ("제국지휘관", "드래곤로드", 1, 35, 28, 20, 12),
+        )
+        self.assertEqual(dragon_lord["mercenaries"], [125, 125, 125, 125, 125, 125])
+        self.assertEqual(
+            (hidden_lana["name"]["ko"], hidden_lana["class"]["ko"],
+             hidden_lana["level"], hidden_lana["at"], hidden_lana["df"],
+             hidden_lana["x"], hidden_lana["y"], hidden_lana["hidden"]),
+            ("라나", "다크프린세스", 1, 36, 33, 255, 255, True),
+        )
+        self.assertEqual(hidden_lana["mercenaries"], [136, 136, 136, 136, 118, 118])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")
