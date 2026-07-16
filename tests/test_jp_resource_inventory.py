@@ -1,7 +1,7 @@
 from pathlib import Path
 import unittest
 
-from tools.jp_resource_inventory import inventory
+from tools.jp_resource_inventory import inventory, markdown_report
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +42,12 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
         groups = self.result["groups"]
         self.assertEqual(groups["magic_names"]["entries"][0]["target_korean"], "매직애로우")
         self.assertEqual(groups["mercenary_battle_names"]["entries"][0]["target_korean"], "파이크")
+
+    def test_report_describes_all_condition_records(self):
+        report = markdown_report(self.result)
+        self.assertIn("builder patches Scenario 1-31", report)
+        self.assertIn("preserves the final preparation-UI record", report)
+        self.assertNotIn("patches only Scenario 1", report)
 
 
 if __name__ == "__main__":
