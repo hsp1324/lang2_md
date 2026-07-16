@@ -110,6 +110,20 @@ class TranslationTargetResidueTests(unittest.TestCase):
         self.assertIn("홀리로드를 찾아", scenario_texts[22])
         self.assertIn("흑룡마도사단의 함정", scenario_texts[25])
 
+    def test_late_scenario_descriptions_preserve_japanese_source_events(self):
+        scenario_texts = builder.load_scenario_texts()
+        self.assertIn("제시카의 마법으로 베른하르트는", scenario_texts[22])
+        self.assertIn("엘라드에서 청룡기사 레아드와", scenario_texts[23])
+        self.assertIn("제국 청룡기사단장\n레온과 에그베르트", scenario_texts[24])
+        self.assertIn("수천 년에 걸친 빛과 어둠의", scenario_texts[26])
+        self.assertIn("바셀린을", scenario_texts[27])
+        self.assertIn("이멜다 장군을\n지원하러 가던 중", scenario_texts[28])
+        self.assertIn("그레이트드래곤", scenario_texts[29])
+        self.assertIn("각 층에 붙잡혀 세뇌당했고", scenario_texts[30])
+        self.assertIn("엘윈의 전술에 달려 있었다", scenario_texts[30])
+        self.assertNotIn("제시카의 희생", "\n".join(scenario_texts))
+        self.assertNotIn("헤인과 남은 엘윈", "\n".join(scenario_texts))
+
 
 if __name__ == "__main__":
     unittest.main()

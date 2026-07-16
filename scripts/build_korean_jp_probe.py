@@ -134,7 +134,9 @@ BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
 SCENARIO_GLYPH_LIST_RELOC_BASE = 0x270000
-SCENARIO_GLYPH_LIST_RELOC_LIMIT = 0x280000
+SCENARIO_GLYPH_LIST_RELOC_LIMIT = 0x274000
+SCENARIO_TOKEN_RELOC_BASE = SCENARIO_GLYPH_LIST_RELOC_LIMIT
+SCENARIO_TOKEN_RELOC_LIMIT = 0x280000
 CLASS_BYTE_POINTER_TABLE = 0x05E6D6
 CLASS_BYTE_RECORD_COUNT = 157
 NAME_BYTE_POINTER_TABLE = 0x0618E8
@@ -1133,11 +1135,16 @@ RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS = (
 # UI and name-entry glyph ID.
 RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT = "졸"
 
-# `염` already belonged to the reviewed-event vocabulary, which is allocated
-# after the name-entry grid. Canonicalizing the Scenario 13 description from
-# 화룡군 to 염룡병단 must not pull it into the early description pass and move
-# every established name-entry glyph ID by one.
-DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset("염")
+# Description corrections must not pull later vocabulary into the early glyph
+# pass and move established UI/name-entry IDs. Allocate these syllables at
+# their old consumers when possible, then append any genuinely new ones after
+# the name-entry grid.
+DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT = (
+    "염유끄집쏟뎌낸심섬뜩괴닌천년걸겼걱맡필형석셀련…늦갚맹퍼곤?롯술세뇌"
+)
+DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset(
+    DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT
+)
 
 
 def scenario_description_glyph_text(text: str) -> str:
@@ -1396,18 +1403,20 @@ SCENARIO_TEXT_OVERRIDES = {
     25: (
         "시나리오 26\n"
         "흑룡마도사단의 함정\n"
-        "레온을 물리친 엘윈 일행은 벨제리아 성의 지하 신전으로 향했다. "
-        "넓은 홀에 이르자 에그베르트가 기다리고 있었다. "
-        "사방의 적과 강한 마법이 일행을 덮쳤다."
+        "숙적 레온을 쓰러뜨리고 벨제리아 성에 잠입한 엘윈 일행은 지하 "
+        "신전으로 이어지는 통로를 서둘러 달렸다. 그러나 흑룡마도사단을 "
+        "이끄는 에그베르트가 함정을 파고 기다리고 있었다. 포위망 안에 "
+        "들어선 일행에게 흑룡마도사단의 강력한 마법 집중 공격이 쏟아지려 했다."
     ),
     30: (
         "시나리오 X4\n"
         "죽음의 탑\n"
-        "에그베르트의 도전에 응한 일행은 죽음의 탑에 들어섰다. "
-        "그곳에는 베른하르트와 강력한 병사들이 기다렸다. 알하자드와 "
-        "에그베르트의 마법 때문에 적은 평소보다 더욱 강해 보였다. "
-        "게다가 동료들이 곳곳에 감금되어 있었다. 헤인과 남은 엘윈은 "
-        "작전만으로 이 탑을 돌파해야 했다."
+        "에그베르트의 도전을 받아 죽음의 탑으로 향한 엘윈 일행은 그곳에서 "
+        "베른하르트를 비롯한 강적들과 싸우게 되었다. 그들은 에그베르트의 "
+        "술법과 알하자드의 마력으로 평소 이상의 힘을 발휘했다. 게다가 "
+        "동료들은 각 층에 붙잡혀 세뇌당했고, 전황은 엘윈 일행에게 매우 "
+        "불리했다. 강적을 물리치고 죽음의 탑을 공략할 수 있을지는 모두 "
+        "엘윈의 전술에 달려 있었다."
     ),
 }
 
@@ -2941,7 +2950,8 @@ def patch_scenario(
     text: str,
     glyph_by_char: dict[str, int],
     glyph_cursor: int | None = None,
-) -> int | None:
+    token_cursor: int | None = None,
+) -> tuple[int | None, int | None]:
     glyph_ptr = be32(data, SCENARIO_GLYPH_LIST_TABLE + index * 4)
     token_ptr = be32(data, SCENARIO_POINTER_TABLE + index * 4)
     original_glyphs = read_word_list(data, glyph_ptr)
@@ -2992,21 +3002,39 @@ def patch_scenario(
         glyph_cursor = write_word_list_exact(data, glyph_cursor, glyphs)
         if glyph_cursor & 1:
             glyph_cursor += 1
-    write_token_stream(
-        data,
-        token_ptr,
-        tokens,
-        capacity_words(data, SCENARIO_POINTER_TABLE, index, 31),
-    )
-    return glyph_cursor
+    if token_cursor is None:
+        write_token_stream(
+            data,
+            token_ptr,
+            tokens,
+            capacity_words(data, SCENARIO_POINTER_TABLE, index, 31),
+        )
+    else:
+        put32(data, SCENARIO_POINTER_TABLE + index * 4, token_cursor)
+        token_cursor = write_word_list_exact(data, token_cursor, tokens)
+    return glyph_cursor, token_cursor
 
 
 def patch_scenarios(data: bytearray, descriptions: list[str], glyph_by_char: dict[str, int]) -> None:
+    if data[
+        SCENARIO_GLYPH_LIST_RELOC_BASE:SCENARIO_TOKEN_RELOC_LIMIT
+    ] != b"\xFF" * (SCENARIO_TOKEN_RELOC_LIMIT - SCENARIO_GLYPH_LIST_RELOC_BASE):
+        raise ValueError("scenario relocation area is not blank")
     glyph_cursor = SCENARIO_GLYPH_LIST_RELOC_BASE
+    token_cursor = SCENARIO_TOKEN_RELOC_BASE
     for index, text in enumerate(descriptions):
-        glyph_cursor = patch_scenario(data, index, text, glyph_by_char, glyph_cursor)
-    if glyph_cursor is not None and glyph_cursor >= SCENARIO_GLYPH_LIST_RELOC_LIMIT:
+        glyph_cursor, token_cursor = patch_scenario(
+            data,
+            index,
+            text,
+            glyph_by_char,
+            glyph_cursor,
+            token_cursor,
+        )
+    if glyph_cursor is not None and glyph_cursor > SCENARIO_GLYPH_LIST_RELOC_LIMIT:
         raise ValueError(f"relocated scenario glyph lists overflow: 0x{glyph_cursor:06X}")
+    if token_cursor is not None and token_cursor > SCENARIO_TOKEN_RELOC_LIMIT:
+        raise ValueError(f"relocated scenario tokens overflow: 0x{token_cursor:06X}")
 
 
 def patch_direct_strings(
@@ -4924,6 +4952,7 @@ def main() -> None:
         *START_SUBMENU_TEXTS,
         *active_opening_texts,
         NAME_ENTRY_GRID_CHARS,
+        DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT,
         *late_direct_strings,
         # Append newly reviewed event vocabulary after every existing glyph
         # consumer so established UI/name-entry IDs remain stable.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "138B",
+  "production_checksum": "A15B",
   "states": [
     "pending",
     "historical",
@@ -68,7 +68,7 @@
     },
     {
       "scenario": 2,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "progressed_current",
@@ -89,7 +89,7 @@
     },
     {
       "scenario": 3,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -113,7 +113,7 @@
     },
     {
       "scenario": 4,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -139,7 +139,7 @@
     },
     {
       "scenario": 5,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -167,7 +167,7 @@
     },
     {
       "scenario": 6,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -198,7 +198,7 @@
     },
     {
       "scenario": 7,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -233,7 +233,7 @@
     },
     {
       "scenario": 8,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -266,7 +266,7 @@
     },
     {
       "scenario": 9,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -305,7 +305,7 @@
     },
     {
       "scenario": 10,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -342,7 +342,7 @@
     },
     {
       "scenario": 11,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -384,7 +384,7 @@
     },
     {
       "scenario": 12,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -427,7 +427,7 @@
     },
     {
       "scenario": 13,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -468,7 +468,7 @@
     },
     {
       "scenario": 14,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -504,7 +504,7 @@
     },
     {
       "scenario": 15,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -533,7 +533,7 @@
     },
     {
       "scenario": 16,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -564,7 +564,7 @@
     },
     {
       "scenario": 17,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -599,7 +599,7 @@
     },
     {
       "scenario": 18,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -631,7 +631,7 @@
     },
     {
       "scenario": 19,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -663,7 +663,7 @@
     },
     {
       "scenario": 20,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -693,7 +693,7 @@
     },
     {
       "scenario": 21,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -725,7 +725,7 @@
     },
     {
       "scenario": 22,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "pending",
       "preparation": "pending",
       "opening_events": "pending",
@@ -753,7 +753,7 @@
     {"scenario": 26},
     {
       "scenario": 27,
-      "description": "verified_current",
+      "description": "historical",
       "conditions": "historical",
       "preparation": "verified_current",
       "opening_events": "progressed_current",

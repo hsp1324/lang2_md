@@ -3899,3 +3899,42 @@ contains 57 safe syllables as documented below and in
   both checked-in JSON and generated Markdown, matching the direct-string
   freshness guard. Future ROM changes must update these reports in the same
   commit instead of silently leaving old hashes or counts behind.
+
+### Scenario 23-31 Description Retranslation And Token Relocation (2026-07-17)
+
+- The Japanese Scenario 23-31 records were rendered directly from
+  `roms/original/Langrisser II (Japan).md` with
+  `tools/jp_text_font_analyzer.py render-text --table scenarios --mapped`.
+  This review found substantive legacy errors, not just awkward wording:
+  Scenario 23 incorrectly called Jessica's spell a sacrifice and omitted
+  Bernhardt's continental ambition; X2 called a late reinforcement unit
+  Imelda's escort; X4 invented `헤인과 남은 엘윈` where the source says the
+  outcome depends entirely on Elwin's tactics.
+- Scenario 23-31 descriptions now preserve the original events and terminology.
+  Restored details include Laird's Elrad battle, Leon and Egbert blocking the
+  way to Bernhardt, the Black Dragon Sorcerers' concentrated attack, the
+  millennia-long legend ending, Kalzath's care of Liana and the forbidden
+  muscle temple, Imelda's delayed support and revenge attack, the Great Dragon
+  nest, and the allies captured and brainwashed on each Death Tower floor.
+  Offline rendering of the built records showed readable Korean with no
+  truncation. Live playback remains pending.
+- The first corrected build failed safely because new description vocabulary
+  moved name-entry `범` to `0x7266` and `릭` to `0x726D`, past the verified
+  `0x7262` ceiling. `DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT` now allocates
+  newly promoted description vocabulary after `NAME_ENTRY_GRID_CHARS`, keeping
+  established name-entry IDs stable. The related name-entry tests pass.
+- Keeping the corrected prose in the original token slots then exposed four
+  real capacity overflows: Scenario 24 needed 228 words in a 214-word slot,
+  Scenario 27 needed 266/251, X2 needed 247/240, and X3 needed 228/213.
+  Shortening them would discard source information, so all 31 description
+  token streams are now relocated to `0x274000..0x277475`, with their 32-bit
+  table entries updated. Glyph lists remain in `0x270000..0x271C03`; hard
+  `0x274000` and `0x280000` bounds plus new pointer/terminator tests prevent
+  overlap or unterminated records.
+- Production checksum is now `A15B` with 852 custom glyphs ending at `0x7354`.
+  The shared resource inventory marks only Scenario 23-31 as statically
+  reviewed and keeps all nine live flags false. Because every description
+  pointer changed, earlier Scenario 2-22 and 27 description captures were
+  conservatively demoted to `historical`; unrelated live surface states were
+  retained. No BlastEm process or input automation was used while the user was
+  playing Forza Horizon.

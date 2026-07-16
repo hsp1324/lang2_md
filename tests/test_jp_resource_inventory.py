@@ -32,11 +32,14 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
             expected,
         )
 
-    def test_review_is_not_inferred_from_byte_changes(self):
-        for group in self.result["groups"].values():
-            self.assertEqual(group["reviewed_count"], 0)
+    def test_review_requires_explicit_resource_metadata(self):
+        for name, group in self.result["groups"].items():
+            expected_reviewed = 9 if name == "scenario_descriptions" else 0
+            self.assertEqual(group["reviewed_count"], expected_reviewed)
             self.assertEqual(group["live_verified_count"], 0)
-            self.assertTrue(all(not entry["reviewed"] for entry in group["entries"]))
+        reviewed = self.result["groups"]["scenario_descriptions"]["entries"]
+        self.assertTrue(all(not entry["reviewed"] for entry in reviewed[:22]))
+        self.assertTrue(all(entry["reviewed"] for entry in reviewed[22:]))
 
     def test_known_magic_and_mercenary_targets(self):
         groups = self.result["groups"]
