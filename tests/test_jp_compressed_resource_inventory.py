@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import unittest
 
@@ -7,6 +8,7 @@ from tools.jp_compressed_resource_inventory import (
     decompress_type2,
     direct_load_calls,
     inventory,
+    markdown_report,
     resource_output_size,
     resource_pointers,
 )
@@ -15,6 +17,8 @@ from tools.jp_compressed_resource_inventory import (
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+INVENTORY_JSON = ROOT / "localization/compressed_resources.json"
+INVENTORY_MARKDOWN = ROOT / "docs/compressed_resource_inventory.md"
 
 
 class CompressedResourceInventoryTests(unittest.TestCase):
@@ -29,6 +33,14 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(len(pointers), 429)
         self.assertEqual(pointers[0], 0x0B06B4)
         self.assertEqual(pointers[-1], 0x13807E)
+
+    def test_checked_in_reports_match_current_rom(self):
+        stored = json.loads(INVENTORY_JSON.read_text(encoding="utf-8"))
+        self.assertEqual(stored, self.result)
+        self.assertEqual(
+            INVENTORY_MARKDOWN.read_text(encoding="utf-8"),
+            markdown_report(self.result),
+        )
 
     def test_all_output_sizes_and_decoding_match(self):
         self.assertEqual(self.result["entry_count"], 429)

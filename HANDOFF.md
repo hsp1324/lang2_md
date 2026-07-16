@@ -3888,3 +3888,14 @@ contains 57 safe syllables as documented below and in
   candidates with both checked-in JSON and generated Markdown. This prevents
   another production glyph-ID change from leaving the stored direct inventory
   stale while the live calculation tests still pass.
+
+### Generated Inventory Freshness Checks (2026-07-16)
+
+- Regenerating all static inventories against production `138B` found two
+  stale metadata-only results: event records `0x19F66A` and `0x1A4822` had old
+  modified-word counts, and compressed byte-font resource 1 had an old current
+  decoded SHA-256. The current ROM itself was not changed.
+- Event and compressed-resource tests now compare their computed models with
+  both checked-in JSON and generated Markdown, matching the direct-string
+  freshness guard. Future ROM changes must update these reports in the same
+  commit instead of silently leaving old hashes or counts behind.

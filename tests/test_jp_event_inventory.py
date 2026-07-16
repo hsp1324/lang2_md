@@ -1,12 +1,15 @@
+import json
 from pathlib import Path
 import unittest
 
-from tools.jp_event_inventory import event_block_starts, inventory
+from tools.jp_event_inventory import event_block_starts, inventory, markdown_report
 
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+INVENTORY_JSON = ROOT / "localization/event_pages.json"
+INVENTORY_MARKDOWN = ROOT / "docs/full_localization_inventory.md"
 
 
 class JapaneseEventInventoryTests(unittest.TestCase):
@@ -21,6 +24,14 @@ class JapaneseEventInventoryTests(unittest.TestCase):
         self.assertEqual(len(starts), 31)
         self.assertEqual(starts[0], 0x18416A)
         self.assertEqual(starts[-1], 0x1B8378)
+
+    def test_checked_in_reports_match_current_rom(self):
+        stored = json.loads(INVENTORY_JSON.read_text(encoding="utf-8"))
+        self.assertEqual(stored, self.result)
+        self.assertEqual(
+            INVENTORY_MARKDOWN.read_text(encoding="utf-8"),
+            markdown_report(self.result),
+        )
 
     def test_candidate_page_baseline_is_stable(self):
         self.assertEqual(self.result["page_count"], 2968)
