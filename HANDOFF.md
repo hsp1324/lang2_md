@@ -3960,3 +3960,32 @@ contains 57 safe syllables as documented below and in
   records total) statically reviewed, with live playback still unclaimed.
   Production checksum is `4D39`; no BlastEm process or input automation was
   used for this review.
+
+### Scenario 11-22 Description Source Review (2026-07-17)
+
+- Scenario 11-22 were rendered from the Japanese ROM with the same mapped
+  16x16-font workflow and retranscribed before any live claim was made. The
+  middle block contained several factual omissions: Scenario 11 now identifies
+  Lester's guidance and Egbert's prepared trap; Scenario 12 restores the hidden
+  cave entrance and ancient guardians; Scenario 13 restores the magical theft
+  and teleport; Scenario 22 now includes the evil statue, altar sword, two
+  lookalike girls, Bozel, and the seal-breaking incantation.
+- Two older translations contradicted or invented source events. Scenario 14
+  said Jessica helped reveal Baldea Castle, which is not in the Japanese
+  description, and Scenario 21 said Chaos lives in Velzeria rather than being
+  sealed there. Both are corrected. Scenario 15's Japanese title
+  `氷竜兵団将軍イメルダ` is now `빙룡병단장 이멜다`; Scenario 13 is now
+  `염룡병단과의 결전`. Historical checksum `85F1` captures still show the
+  older `염룡병단과의 싸움`, so the runtime inventory explicitly treats
+  that title evidence as historical and requires new playback.
+- Offline built-record renders for all twelve descriptions show complete
+  Korean glyphs. The focused description, name-entry, pointer, and terminator
+  suite passes. The production build is checksum `57D4`, with 859 custom
+  glyphs through `0x735B`; name-entry IDs remain within their verified range.
+  The shared resource inventory now marks Scenario 2-31 (30 records) as
+  statically source-reviewed while Scenario 1 remains separate and every live
+  description flag remains false.
+- No BlastEm process, keyboard/mouse automation, or gamepad input was used in
+  this unit because the user was playing Forza Horizon. Fresh on-screen checks
+  for the relocated descriptions and the renamed Scenario 13/15 titles remain
+  pending until exclusive emulator input is available.

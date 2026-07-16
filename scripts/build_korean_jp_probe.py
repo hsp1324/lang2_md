@@ -1142,6 +1142,7 @@ RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT = "졸"
 DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT = (
     "염유끄집쏟뎌낸심섬뜩괴닌천년걸겼걱맡필형석셀련…늦갚맹퍼곤?롯술세뇌"
     "렌탁슨렵팔벗렀쌓따릴결본태죄새된웨프양객낮짓말럼존재허틸잃귀환넌숲싼렬킬놓"
+    "백칠교숨굴명났끌얼짧생큰절복루옥좌띤즐겁싣째탈취잔씨윽쪽척탄널판맥옆꼭닮토외흘"
 )
 DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset(
     DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT
@@ -1398,9 +1399,10 @@ SCENARIO_TEXT_OVERRIDES = {
     10: (
         "시나리오 11\n"
         "불길 속에서\n"
-        "랄강의 수호자는 엘윈 일행을 오래 산 마법사 제시카에게 안내했다. "
-        "그녀라면 다크로드의 행방을 알지도 모른다. "
-        "하지만 제국과 에그베르트도 그곳을 노리고 있었다."
+        "레스터의 안내를 받은 엘윈 일행은 다크로드의 행방을 알아내기 위해 "
+        "수백 년을 살았다는 대마법사 제시카를 찾아가려 했다. 그러나 레이갈드 "
+        "제국의 참모이자 흑룡마도사단을 이끄는 에그베르트가 그때를 노리고 "
+        "함정을 파 두었다."
     ),
     25: (
         "시나리오 26\n"

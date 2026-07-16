@@ -92,7 +92,7 @@ class TranslationTargetResidueTests(unittest.TestCase):
         scenario_texts = builder.load_scenario_texts()
         self.assertIn("랄강의 수호자", scenario_texts[9])
         self.assertIn("마법사를 찾아 랄강으로", scenario_texts[9])
-        self.assertIn("랄강의 수호자는", scenario_texts[10])
+        self.assertIn("레스터의 안내를 받은", scenario_texts[10])
         self.assertNotIn("랄 강", scenario_texts[9])
         self.assertNotIn("랄 강", scenario_texts[10])
 
@@ -102,8 +102,8 @@ class TranslationTargetResidueTests(unittest.TestCase):
         for term in DEPRECATED_OUTPUT_TERMS:
             self.assertNotIn(term, joined)
         self.assertIn("성지 레이텔", scenario_texts[11])
-        self.assertIn("다크로드를 지키던", scenario_texts[11])
-        self.assertIn("염룡병단과의 싸움", scenario_texts[12])
+        self.assertIn("다크로드를 지키라는 명", scenario_texts[11])
+        self.assertIn("염룡병단과의 결전", scenario_texts[12])
         self.assertIn("빙룡병단", scenario_texts[14])
         self.assertIn("발디아 왕국", scenario_texts[13])
         self.assertIn("발디아 성", scenario_texts[13])
@@ -136,6 +136,24 @@ class TranslationTargetResidueTests(unittest.TestCase):
         self.assertIn("레온과 레아드", scenario_texts[8])
         self.assertIn("눈앞에 랄강이\n가로놓여 있었다", scenario_texts[9])
         self.assertNotIn("키스도\n길잡이로 합류", "\n".join(scenario_texts))
+
+    def test_middle_scenario_descriptions_preserve_japanese_source_events(self):
+        scenario_texts = builder.load_scenario_texts()
+        self.assertIn("그때를 노리고 함정을", scenario_texts[10])
+        self.assertIn("교묘하게 숨겨진 입구", scenario_texts[11])
+        self.assertIn("순간이동으로 사라졌다", scenario_texts[12])
+        self.assertIn("같은 목적을 지닌 청룡기사단", scenario_texts[13])
+        self.assertIn("빙룡병단장 이멜다", scenario_texts[14])
+        self.assertIn("대륙 절반을\n정복한 베른하르트", scenario_texts[15])
+        self.assertIn("정예부대를 뚫고 온 일행", scenario_texts[16])
+        self.assertIn("마물을\n조종하고 있던 사람", scenario_texts[17])
+        self.assertIn("배를 탈취할 작전", scenario_texts[18])
+        self.assertIn("두 배 사이에 건널판", scenario_texts[19])
+        self.assertIn("혼돈의 신이\n봉인되었다", scenario_texts[20])
+        self.assertIn("알하자드의\n봉인이 곧 풀린다", scenario_texts[21])
+        joined = "\n".join(scenario_texts)
+        self.assertNotIn("제시카의 도움으로 엘윈", joined)
+        self.assertNotIn("혼돈의 신도 이 저주받은\n땅에 산다", joined)
 
 
 if __name__ == "__main__":

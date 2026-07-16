@@ -20,7 +20,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "4D39")
+        self.assertEqual(data["production_checksum"], "57D4")
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]
