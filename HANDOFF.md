@@ -2429,7 +2429,10 @@ contains 57 safe syllables as documented below and in
   so dialogue punctuation floated at mid-cell height. `render_hangul_glyph()`
   now draws them explicitly on rows 12-13 and 11-14 respectively, matching the
   existing bottom-aligned ellipsis. `test_period_and_comma_use_dialogue_baseline`
-  prevents this regression.
+  prevents the renderer regression. The production-build regression
+  `test_built_rom_installs_bottom_aligned_period_and_comma` also scans every
+  available custom-glyph bank in the completed ROM and proves that both exact
+  payloads were installed; it does not depend on their current glyph IDs.
 - Japanese class table `0x05E6D6` proves Scenario 1 Laird uses class IDs
   13/55/56 `ﾏｼﾞｯｸﾅｲﾄ` and Leon uses class 69 `ﾅｲﾄﾏｽﾀｰ`. Their byte-status
   labels are therefore the exact `매직나이트` and `나이트마스터`, not the

@@ -11,6 +11,7 @@ class CustomGlyphStorageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.original = (ROOT / builder.IN_ROM).read_bytes()
+        cls.built = (ROOT / builder.OUT_ROM).read_bytes()
 
     def test_font_converter_uses_full_16_bit_glyph_id(self):
         expected = bytes.fromhex(
@@ -53,6 +54,28 @@ class CustomGlyphStorageTests(unittest.TestCase):
 
         self.assertEqual(dark_rows("."), {12, 13})
         self.assertEqual(dark_rows(","), {11, 12, 13, 14})
+
+    def test_built_rom_installs_bottom_aligned_period_and_comma(self):
+        font = builder.ImageFont.truetype(str(ROOT / builder.FONT_PATH), 16)
+        blank_offset = builder.glyph_data_offset(builder.SPACE_GLYPH)
+        blank = self.original[blank_offset : blank_offset + builder.GLYPH_BYTES]
+
+        installed_payloads = {
+            self.built[
+                builder.glyph_data_offset(glyph_id) :
+                builder.glyph_data_offset(glyph_id) + builder.GLYPH_BYTES
+            ]
+            for start, end in builder.CUSTOM_GLYPH_RANGES
+            for glyph_id in range(start, end + 1)
+            if glyph_id not in builder.CUSTOM_GLYPH_RESERVED
+        }
+
+        for char in ".,":
+            with self.subTest(char=char):
+                self.assertIn(
+                    builder.render_hangul_glyph(char, font, blank),
+                    installed_payloads,
+                )
 
 
 if __name__ == "__main__":
