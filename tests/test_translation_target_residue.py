@@ -124,6 +124,19 @@ class TranslationTargetResidueTests(unittest.TestCase):
         self.assertNotIn("제시카의 희생", "\n".join(scenario_texts))
         self.assertNotIn("헤인과 남은 엘윈", "\n".join(scenario_texts))
 
+    def test_early_scenario_descriptions_preserve_japanese_source_events(self):
+        scenario_texts = builder.load_scenario_texts()
+        self.assertIn("살라스 영주\n로렌의 저택", scenario_texts[1])
+        self.assertIn("조름이 이끄는 추격대", scenario_texts[2])
+        self.assertIn("수많은 신관전사", scenario_texts[3])
+        self.assertIn("새로 동료가 된 소녀 쉐리", scenario_texts[4])
+        self.assertIn("늙은 검객 한 사람", scenario_texts[5])
+        self.assertIn("사악하고\n불길한 존재", scenario_texts[6])
+        self.assertIn("키스마저 자리를 비운 성", scenario_texts[7])
+        self.assertIn("레온과 레아드", scenario_texts[8])
+        self.assertIn("눈앞에 랄강이\n가로놓여 있었다", scenario_texts[9])
+        self.assertNotIn("키스도\n길잡이로 합류", "\n".join(scenario_texts))
+
 
 if __name__ == "__main__":
     unittest.main()

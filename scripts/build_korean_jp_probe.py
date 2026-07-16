@@ -1141,6 +1141,7 @@ RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT = "졸"
 # the name-entry grid.
 DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT = (
     "염유끄집쏟뎌낸심섬뜩괴닌천년걸겼걱맡필형석셀련…늦갚맹퍼곤?롯술세뇌"
+    "렌탁슨렵팔벗렀쌓따릴결본태죄새된웨프양객낮짓말럼존재허틸잃귀환넌숲싼렬킬놓"
 )
 DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset(
     DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT
@@ -1389,9 +1390,10 @@ SCENARIO_TEXT_OVERRIDES = {
     4: (
         "시나리오 5\n"
         "짐승의 포효\n"
-        "빛의 신전은 큰 피해를 입었다. 제국이 다시 쳐들어오면 리아나를 "
-        "지키기 어려웠다. 게다가 모건은 근처 마을로 달아나 모두를 "
-        "해치려 했다. 엘윈 일행은 쉐리와 리아나와 함께 모건을 뒤쫓았다."
+        "빛의 대신전은 예상보다 피해가 컸다. 적이 다시 공격하면 리아나를 "
+        "지켜 낼 수 없는 상태였다. 게다가 모건은 근처 마을로 달아나 죄 없는 "
+        "주민들까지 해치려 했다. 엘윈 일행은 새로 동료가 된 소녀 쉐리와 함께 "
+        "모건을 뒤쫓았다."
     ),
     10: (
         "시나리오 11\n"

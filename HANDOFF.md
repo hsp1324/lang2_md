@@ -3938,3 +3938,25 @@ contains 57 safe syllables as documented below and in
   conservatively demoted to `historical`; unrelated live surface states were
   retained. No BlastEm process or input automation was used while the user was
   playing Forza Horizon.
+
+### Scenario 2-10 Description Source Review (2026-07-17)
+
+- The same background-only Japanese record renderer was used for Scenario
+  2-10. The legacy prose had omitted Loren's request and Zorum's approaching
+  unit in Scenario 2, the party's wounds and exhaustion in Scenario 3, and the
+  Leon/Laird elite force in Scenario 9. Scenario 8 contained a reversed fact:
+  Keith did not join as a guide; his absence left Kalzath Castle thinly
+  defended while the Blue Dragon Knights advanced.
+- All nine descriptions were rewritten from the Japanese records. Scenario 5
+  now correctly leaves Liana out of the pursuit party and identifies Sherry as
+  the newly joined companion. Scenario 10 restores the Dark Rod's role in
+  fully reviving Alhazard and the Rahl River blocking the party's path.
+  Generated `4D39` record sheets show readable Korean, 18-cell wrapping, and
+  no truncation or bad glyphs.
+- Newly promoted description syllables remain allocation-delayed until after
+  the name-entry grid. The build adds only one custom glyph relative to
+  `A15B`, uses 853 glyphs through `0x7355`, and keeps all name-entry safety
+  tests green. The shared inventory now marks Scenario 2-10 and 23-31 (18
+  records total) statically reviewed, with live playback still unclaimed.
+  Production checksum is `4D39`; no BlastEm process or input automation was
+  used for this review.
