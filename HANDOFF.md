@@ -3818,3 +3818,20 @@ contains 57 safe syllables as documented below and in
   separately documented production-derived ending probe, while Scenarios
   28-31 still require fresh production traversal. Writable editor fields stay
   limited to class, LV, AT, DF, and mercenary slots.
+
+### Scenarios 2-10 Original Editor Regression Matrix (2026-07-16)
+
+- Background-only Japanese-ROM extraction now gives every Scenario 2-10 fixed
+  list three exact representative records. The data-driven regression checks
+  record count, Korean name/class mapping, LV/AT/DF, coordinates, hidden flag,
+  and all six mercenary bytes for each sample.
+- Coverage includes Loren, Liana, the mystery knight, Vargas, priests, Morgan,
+  Werewolves, Aaron and residents, Keith, Ginam, Kramer, Zorum, Laird, Leon,
+  Lester, Scylla, Great Slime, and ordinary/hidden imperial commanders. This
+  protects the same early-game names and classes that previously exposed live
+  font and direct-reader bugs.
+- Together with the existing Scenario 1 check and explicit Scenario 11-31
+  tests, every one of the 31 fixed-placement lists now has a scenario-specific
+  editor regression in addition to the generic pointer/count validation.
+  Runtime verification states are unchanged; this matrix is original-data and
+  editor groundwork only.
