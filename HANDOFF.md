@@ -3884,3 +3884,7 @@ contains 57 safe syllables as documented below and in
   classified `confirmed_unresolved_direct_message` until a runtime trigger or
   stricter value-range proof is found. Do not guess a Korean sentence from the
   malformed-looking source text.
+- `test_checked_in_reports_match_current_rom` now compares the computed 783
+  candidates with both checked-in JSON and generated Markdown. This prevents
+  another production glyph-ID change from leaving the stored direct inventory
+  stale while the live calculation tests still pass.

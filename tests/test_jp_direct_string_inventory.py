@@ -1,13 +1,16 @@
+import json
 from pathlib import Path
 import unittest
 
 from scripts import build_korean_jp_probe as builder
-from tools.jp_direct_string_inventory import inventory, scan_candidates
+from tools.jp_direct_string_inventory import inventory, markdown_report, scan_candidates
 
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+INVENTORY_JSON = ROOT / "localization/direct_word_candidates.json"
+INVENTORY_MARKDOWN = ROOT / "docs/direct_word_candidate_inventory.md"
 
 
 class JapaneseDirectStringInventoryTests(unittest.TestCase):
@@ -19,6 +22,14 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
     def test_candidate_baseline(self):
         self.assertEqual(len(scan_candidates(self.japanese)), 783)
         self.assertEqual(self.result["candidate_count"], 783)
+
+    def test_checked_in_reports_match_current_rom(self):
+        stored = json.loads(INVENTORY_JSON.read_text(encoding="utf-8"))
+        self.assertEqual(stored, self.result)
+        self.assertEqual(
+            INVENTORY_MARKDOWN.read_text(encoding="utf-8"),
+            markdown_report(self.result),
+        )
 
     def test_known_magic_string_is_declared(self):
         row = next(row for row in self.result["candidates"] if row["address"] == "0x082BFE")
