@@ -3307,3 +3307,28 @@ contains 57 safe syllables as documented below and in
   confirmations can spill through the title sequence. Synthetic regression
   tests and the exact F03A true/false frames prove the full menu remains
   accepted while the Scenario 6 false positive is rejected.
+
+### Current EF65 Scenario 7 Entry And Ginam Name Fix (2026-07-16)
+
+- The first F03A live pass reviewed all 16 `깨어나는 망자` briefing frames,
+  five commander/class rows, the arrangement menu, all 20 opening frames, and
+  the condition panel. It exposed a real localization defect: source dialogue
+  used the fixed speaker record at `0x0974D2`, whose old capacity-era target
+  was intentionally approximated as `기잠`, while the byte name table and
+  victory condition correctly used `기남`.
+- The expanded glyph banks already contained `남`. Both the stable direct
+  patch and its legacy idempotent mirror now use canonical `기남`; custom
+  glyph count and IDs remain unchanged at 851 (`0x7000..0x7353`). The rebuilt
+  production checksum is `EF65`. Generated direct inventory now reports
+  `기남` at `0x0974D2`, with 783 candidates and zero unclassified records.
+- A fresh EF65 replay repeated all 16 briefing and 20 opening confirmations.
+  `ef65_s07_opening_live_11.png` and `_17.png` show `기남` and `기남님`, and
+  `ef65_s07_conditions.png` shows victory `기남 격파` with defeat
+  `시민 전멸` / `주인공 사망`. No glyph allocation moved.
+- The no-action first-turn path captured 100 confirmations and then completed
+  the remaining enemy movement to `TURN 2`. Text-bearing frames cover resident,
+  Elwin, Ginam, Scott, Hein, Liana, and imperial-commander dialogue. Current
+  battle frames `_62.._65` and `_83.._86` show `슬라임/주민`, `-AT-/-DF-`,
+  and intact formation/status graphics. The command detector timed out because
+  the Turn 2 cursor did not land on an allied unit; the game itself neither
+  reset nor froze. Later turns and scenario completion remain pending.

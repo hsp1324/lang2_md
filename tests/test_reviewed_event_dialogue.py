@@ -655,6 +655,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x974B2: "에그베르트",
             0x974BE: "이멜다",
             0x974C8: "모건",
+            0x974D2: "기남",
             0x974DA: "크레이머",
             0x97504: "지휘관",
             0x97526: "로렌",

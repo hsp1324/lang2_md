@@ -1072,12 +1072,12 @@ DIRECT_STRING_PATCHES = {
     0x9754A: "제국군지휘관",
     # Scenario 12 Reitel guardian, promoted after live dialogue reach.
     0x97594: "리치",
-    # Remaining fixed name-table records, promoted as one no-overflow batch
-    # after rendering and checking the original 0x97400..0x97656 table. Four
-    # single-use dialogue syllables were reworded to make room for the five
-    # required name glyphs without expanding beyond 766 custom glyph slots.
+    # Remaining fixed name-table records, promoted after rendering and
+    # checking the original 0x97400..0x97656 table. The expanded glyph banks
+    # have room for canonical names; do not revive the old capacity-era
+    # approximate spelling "기잠" for Ginam.
     0x97462: "가면기사",
-    0x974D2: "기잠",
+    0x974D2: "기남",
     0x974E6: "세이갈",
     0x974F0: "폴거",
     0x974FC: "일반병",
@@ -1180,7 +1180,7 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x974B2: "에그베르트",
     0x974BE: "이멜다",
     0x974C8: "모건",
-    0x974D2: "기잠",
+    0x974D2: "기남",
     0x974DA: "크레이머",
     0x974E6: "세이갈",
     0x974F0: "폴거",

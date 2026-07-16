@@ -4326,10 +4326,10 @@
       "address": "0x0974D2",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "기잠",
+      "target_korean": "기남",
       "original_word_count": 4,
       "original_tokens": "002E 0014 0020 FFFF",
-      "current_tokens": "702C 7102 FFFF",
+      "current_tokens": "702C 702D FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
