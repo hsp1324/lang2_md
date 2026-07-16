@@ -260,6 +260,33 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(lana["mercenaries"], [136, 136, 136, 136, 136, 136])
 
+    def test_scenario_nineteen_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 19)
+        self.assertEqual(model["record_count"], 10)
+
+        saint = model["records"][0]
+        imelda = model["records"][2]
+        hidden_laird = model["records"][7]
+        self.assertEqual(
+            (saint["name"]["ko"], saint["class"]["ko"], saint["level"],
+             saint["at"], saint["df"], saint["x"], saint["y"]),
+            ("제국지휘관", "세인트", 5, 34, 30, 26, 17),
+        )
+        self.assertEqual(saint["mercenaries"], [115, 115, 115, 115, 115, 115])
+        self.assertEqual(
+            (imelda["name"]["ko"], imelda["class"]["ko"], imelda["level"],
+             imelda["at"], imelda["df"], imelda["x"], imelda["y"]),
+            ("이멜다", "제너럴", 10, 48, 33, 37, 23),
+        )
+        self.assertEqual(imelda["mercenaries"], [119, 119, 119, 119, 127, 127])
+        self.assertEqual(
+            (hidden_laird["name"]["ko"], hidden_laird["class"]["ko"],
+             hidden_laird["level"], hidden_laird["at"], hidden_laird["df"],
+             hidden_laird["x"], hidden_laird["y"], hidden_laird["hidden"]),
+            ("레아드", "실버나이트", 9, 42, 29, 255, 255, True),
+        )
+        self.assertEqual(hidden_laird["mercenaries"], [122, 122, 122, 122, 116, 116])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")

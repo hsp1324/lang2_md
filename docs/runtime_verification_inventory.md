@@ -29,7 +29,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 16 | current | current | current | current | probe | progressed | pending | pending | 17 |
 | 17 | current | current | current | current | current | progressed | pending | pending | 21 |
 | 18 | current | current | current | current | probe | progressed | pending | pending | 18 |
-| 19 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 19 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 20 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 21 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 22 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -464,6 +464,29 @@ All eight 어둠의 공주 briefing confirmations, both preparation pages, a ret
 - `captures/run/1391_s18_turn1_05.png`
 - `captures/run/1391_s18_turn1_36.png`
 - `captures/run/1391_s18_turn1_38.png`
+
+### Scenario 19
+
+All six 미레일 항구 전투 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 1391. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. The live opening exposed spaced 다크 프린세스; all six reviewed event occurrences now use the canonical class label 다크프린세스, and the replay verifies it without an abnormal wrap. Victory is defeating Imelda within 23 turns; defeat is exceeding the turn limit or the protagonist dying. The first turn reviewed ship movement and 제시카/소서러, 아론/파이터, and 엘윈/파이터 dialogue, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 is covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Later turns, completion, and branches remain pending.
+
+- `captures/run/1391_s19_canonical_brief_01.png`
+- `captures/run/1391_s19_canonical_brief_06.png`
+- `captures/run/1391_s19_roster_page1_elwin.png`
+- `captures/run/1391_s19_roster_page1_keith.png`
+- `captures/run/1391_s19_roster_page2_lester.png`
+- `captures/run/1391_s19_roster_page2_jessica.png`
+- `captures/run/1391_s19_roster_page2_last.png`
+- `captures/run/1391_s19_roster_wrap_page1.png`
+- `captures/run/1391_s19_auto.png`
+- `captures/run/1391_s19_canonical_opening_10.png`
+- `captures/run/1391_s19_canonical_opening_11.png`
+- `captures/run/1391_s19_canonical_opening_13.png`
+- `captures/run/1391_s19_conditions.png`
+- `captures/run/1391_s19_turn1_01.png`
+- `captures/run/1391_s19_turn1_28.png`
+- `captures/run/1391_s19_turn1_29.png`
+- `captures/run/1391_s19_turn1_30.png`
+- `captures/run/1391_s19_turn1_32.png`
 
 ### Scenario 27
 

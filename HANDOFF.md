@@ -3651,3 +3651,31 @@ contains 57 safe syllables as documented below and in
   (`다크프린세스`, LV3, AT37, DF34, X37/Y2), including their exact original
   mercenary IDs. The resident's original class mapping confirms `클레릭` is
   intentional here. Coordinates and event ownership remain read-only context.
+
+### Current 1391 Scenario 19 Entry And Canonical Dark Princess Label (2026-07-16)
+
+- All six `미레일 항구 전투` briefing confirmations were reviewed. The
+  preparation roster was followed through both pages and back to page one:
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `스코트/파이터`. This eight-row round trip is retained as evidence; the
+  first five visible rows are not treated as complete coverage.
+- The opening review exposed `다크 프린세스` at `0x1A6556`, inconsistent
+  with the canonical class label `다크프린세스`. All six reviewed event
+  occurrences now use the unspaced class label, and the residue test rejects
+  the deprecated spaced form. A fresh production replay verifies
+  `이런, 다크프린세스!` without a bad wrap. The glyph inventory remains 851
+  entries (`0x7000..0x7353`) and the ROM checksum remains `1391`.
+- Conditions are victory by defeating Imelda within 23 turns, and defeat by
+  exceeding the turn limit or the protagonist's death. The no-action first
+  turn retained 32 frames, reviewed ship movement and dialogue from
+  `제시카/소서러`, `아론/파이터`, and `엘윈/파이터`, reached `TURN 2`,
+  and returned to Elwin's command menu without reset or freeze. No battle
+  presentation occurred, so battle UI remains covered by the shared probe.
+- The Japanese ROM's fixed-placement list at `0x182286` contains ten records.
+  Editor regressions lock an imperial Saint (`세인트`, LV5, AT34, DF30,
+  X26/Y17), Imelda (`제너럴`, LV10, AT48, DF33, X37/Y23), and hidden Laird
+  (`레아드/실버나이트`, LV9, AT42, DF29, X/Y=`0xFF`) with their exact six
+  mercenary slots. Coordinates and hidden/event flags remain read-only editor
+  context until runtime ownership is proven. Later turns, completion, and
+  branches remain pending.
