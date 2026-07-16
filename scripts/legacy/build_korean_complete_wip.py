@@ -258,7 +258,7 @@ SCENARIO_DESCRIPTIONS = [
 고대의 망자들이 깨어나
 일행 앞을 막았다.""",
     """시나리오 13
-염룡군단과의 싸움
+염룡병단과의 싸움
 
 엘윈 일행은 고대의 수호자를
 물리쳤지만, 다크로드를
@@ -285,7 +285,7 @@ SCENARIO_DESCRIPTIONS = [
 하지만 성검을 노리는 것은
 그들뿐이 아니었다.""",
     """시나리오 15
-빙룡 해군
+빙룡병단
 
 랑그릿사를 손에 넣은 일행은
 리아나를 구하기 위해
@@ -507,7 +507,7 @@ REGEX_REPLACEMENTS = [
     (r"Rayguard\s+Empire", "레이갈드 제국"),
     (r"Direth\s+Channel", "디레스 해협"),
     (r"Rahl\s+River", "랄강"),
-    (r"Fire\s+Dragon\s+Army", "염룡군단"),
+    (r"Fire\s+Dragon\s+Army", "염룡병단"),
     (r"Blue\s+Dragon\s+Knights", "청룡기사단"),
     (r"Black\s+Dragon\s+Sorcerers", "흑룡마도사단"),
     (r"Ultimate\s+Aerial\s+Squadron", "궁극 비행부대"),

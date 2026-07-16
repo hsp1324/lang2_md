@@ -673,7 +673,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             0x97474: "베른하르트",
             0x97482: "발가스",
             0x9748C: "보젤",
-            0x974AA: "졸름",
+            0x974AA: "조름",
             0x974B2: "에그베르트",
             0x974BE: "이멜다",
             0x974C8: "모건",

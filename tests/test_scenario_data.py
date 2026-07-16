@@ -95,7 +95,7 @@ class ScenarioDataTests(unittest.TestCase):
         self.assertEqual(
             (zorum["name"]["ko"], zorum["class"]["ko"], zorum["level"],
              zorum["at"], zorum["df"], zorum["x"], zorum["y"]),
-            ("졸름", "하이로드", 9, 29, 31, 19, 27),
+            ("조름", "하이로드", 9, 29, 31, 19, 27),
         )
         self.assertEqual(zorum["mercenaries"], [116, 116, 116, 116, 121, 121])
         self.assertEqual(
@@ -143,6 +143,36 @@ class ScenarioDataTests(unittest.TestCase):
             ("레온", "로얄가드", 2, 45, 34, 255, 255, True),
         )
         self.assertEqual(hidden_leon["mercenaries"], [123, 123, 123, 123, 115, 115])
+
+    def test_scenario_fifteen_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 15)
+        self.assertEqual(model["record_count"], 12)
+
+        serpent_knight = model["records"][1]
+        imelda = model["records"][3]
+        hidden_lana = model["records"][9]
+        self.assertEqual(
+            (serpent_knight["name"]["ko"], serpent_knight["class"]["ko"],
+             serpent_knight["level"], serpent_knight["at"], serpent_knight["df"],
+             serpent_knight["x"], serpent_knight["y"]),
+            ("제국지휘관", "서펜나이트", 1, 29, 23, 11, 13),
+        )
+        self.assertEqual(
+            serpent_knight["mercenaries"], [120, 120, 120, 120, 255, 255]
+        )
+        self.assertEqual(
+            (imelda["name"]["ko"], imelda["class"]["ko"], imelda["level"],
+             imelda["at"], imelda["df"], imelda["x"], imelda["y"]),
+            ("이멜다", "제너럴", 6, 46, 32, 23, 21),
+        )
+        self.assertEqual(imelda["mercenaries"], [115, 115, 122, 122, 119, 119])
+        self.assertEqual(
+            (hidden_lana["name"]["ko"], hidden_lana["class"]["ko"],
+             hidden_lana["level"], hidden_lana["at"], hidden_lana["df"],
+             hidden_lana["x"], hidden_lana["y"], hidden_lana["hidden"]),
+            ("라나", "다크프린세스", 1, 36, 33, 255, 255, True),
+        )
+        self.assertEqual(hidden_lana["mercenaries"], [135, 135, 135, 135, 255, 255])
 
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))

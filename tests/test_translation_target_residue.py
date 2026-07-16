@@ -28,6 +28,10 @@ DEPRECATED_OUTPUT_TERMS = (
     "화룡군",
     "화룡병단",
     "빙룡수병단",
+    "염룡군단",
+    "빙룡군단",
+    "빙룡 해군",
+    "졸름",
     "발티아",
 )
 
@@ -98,7 +102,8 @@ class TranslationTargetResidueTests(unittest.TestCase):
             self.assertNotIn(term, joined)
         self.assertIn("성지 레이텔", scenario_texts[11])
         self.assertIn("다크로드를 지키던", scenario_texts[11])
-        self.assertIn("염룡군단과의 싸움", scenario_texts[12])
+        self.assertIn("염룡병단과의 싸움", scenario_texts[12])
+        self.assertIn("빙룡병단", scenario_texts[14])
         self.assertIn("발디아 왕국", scenario_texts[13])
         self.assertIn("발디아 성", scenario_texts[13])
         self.assertIn("홀리로드를 찾아", scenario_texts[22])

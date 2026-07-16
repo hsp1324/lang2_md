@@ -662,7 +662,7 @@ DIRECT_STRING_PATCHES = {
     0x97432: "스코트",
     0x9743C: "키스",
     0x97482: "발가스",
-    0x974AA: "졸름",
+    0x974AA: "조름",
     0x974B2: "에그베르트",
     0x974BE: "이멜다",
     0x974C8: "모건",
@@ -1127,9 +1127,15 @@ RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS = (
     "조심해…",
 )
 
+# The old dynamic name spelling `졸름` allocated `졸` at the 0x974AA name
+# record. Canonical `조름` reuses existing `조`/`름` glyphs, so retain the
+# retired tile at that exact allocation point to avoid shifting every later
+# UI and name-entry glyph ID.
+RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT = "졸"
+
 # `염` already belonged to the reviewed-event vocabulary, which is allocated
 # after the name-entry grid. Canonicalizing the Scenario 13 description from
-# 화룡군 to 염룡군단 must not pull it into the early description pass and move
+# 화룡군 to 염룡병단 must not pull it into the early description pass and move
 # every established name-entry glyph ID by one.
 DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset("염")
 
@@ -1189,7 +1195,7 @@ UNSAFE_DIRECT_NAME_PATCHES = {
     0x97482: "발가스",
     0x9748C: "보젤",
     0x974A0: "발드",
-    0x974AA: "졸름",
+    0x974AA: "조름",
     0x974B2: "에그베르트",
     0x974BE: "이멜다",
     0x974C8: "모건",
@@ -4853,6 +4859,8 @@ def main() -> None:
     for offset, text in stable_direct_patches.items():
         if offset not in late_direct_name_offsets:
             active_direct_strings.append(text)
+            if offset == 0x974AA:
+                active_direct_strings.append(RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT)
         if offset == 0x97400:
             active_direct_strings.extend(RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS)
     active_event_page_strings = [text for _, text in SCENARIO1_EVENT_PAGE_PATCHES.values()]

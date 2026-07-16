@@ -3468,27 +3468,31 @@ contains 57 safe syllables as documented below and in
   focused XTest fallback (`--click-window start`) did. This is an automation
   transport difference, not a ROM defect.
 
-### Current F0E3 Scenario 13 Entry, Terminology, And Editor Records (2026-07-16)
+### Current 85F1 Scenario 13 Entry, Terminology, And Editor Records (2026-07-16)
 
 - Canonical terminology is now consistent across the production scenario
   source, reviewed event dialogue, and generated shared resources: `레이갈드`,
-  `흑룡마도사단`, `성지 레이텔`, `다크로드`, `홀리로드`, `염룡군단`, and
-  `빙룡군단`. Deprecated spaced or alternate forms are rejected by a resource
-  regression test. Scenario 13 now displays `염룡군단과의 싸움` and
+  `흑룡마도사단`, `성지 레이텔`, `다크로드`, `홀리로드`, `염룡병단`, and
+  `빙룡병단`. Deprecated spaced or alternate forms are rejected by a resource
+  regression test. Scenario 13 now displays `염룡병단과의 싸움` and
   `다크로드` in all 14 reviewed briefing frames.
 - Moving `염` into the early scenario-description glyph pass initially shifted
   the stable name-entry allocation and failed the build with glyph ID `0x7263`.
   `scenario_description_glyph_text()` now defers that already-reviewed event
-  glyph to its established later allocation point. The final build retains 851
-  glyphs (`0x7000..0x7353`) and checksum `F0E3` without moving the name grid.
+  glyph to its established later allocation point. Changing the source name
+  `졸름` to canonical `조름` then removed one allocated glyph and shifted later
+  IDs. `RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT` deliberately reserves the old
+  `졸` slot while every displayed source uses `조름`. The final build therefore
+  retains 851 glyphs (`0x7000..0x7353`) and checksum `85F1` without moving the
+  name grid or byte-UI graphics.
 - The complete preparation roster was reviewed across both pages, not just the
   five visible rows: `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
   `아론/파이터`, `키스/호크나이트`, `제시카/크루세이더`, and
   `크루거/소서러`. This pagination rule must be applied to every future
   scenario and caused the explicit Scenario 11/12 revisits above.
-- All nine opening dialogue pages, victory `졸름 장군 격파`, defeat `주인공
+- All nine opening dialogue pages, victory `조름 장군 격파`, defeat `주인공
   사망`, and the no-action first turn were reviewed. Zorum and imperial
-  commander dialogue use `염룡군단`; current battles show intact names,
+  commander dialogue use `염룡병단`; current battles show intact names,
   classes, counts, and `-AT-/-DF-`. Elwin's defeat ends in the expected
   `GAME OVER`, not a reset or freeze.
 - The original Scenario 13 fixed-placement list contains 13 records. Editor
@@ -3523,3 +3527,38 @@ contains 57 safe syllables as documented below and in
   (`실버나이트`, LV5, AT39, DF28), and hidden Leon (`로얄가드`, LV2,
   AT45, DF34), along with their original coordinates and mercenary IDs. Later
   turns, completion, and branches remain pending.
+
+### Current 85F1 Scenario 15 Entry And Editor Records (2026-07-16)
+
+- All 13 `빙룡병단` briefing confirmations were reviewed through preparation.
+  The preparation roster was not limited to the five rows visible initially:
+  the page control was followed to the second page and verified
+  `제시카/크루세이더` and `크루거/소서러`. Together with
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
+  `키스/호크나이트`, all seven selectable commanders render correctly.
+  Future scenario checks must keep paging until the roster wraps to its first
+  page; a single visible page is not complete preparation coverage.
+- Arrangement, automatic deployment, the complete opening path, and conditions
+  were reviewed. Victory is `이멜다 장군 격파` or `주인공 아래 이동`;
+  defeat is `주인공 사망`. The first pass used a 2.0-second confirmation delay
+  and captured only the first syllable of an Imelda page after the camera moved.
+  A 3.2-second replay at `85f1_s15_opening_slow_06.png` proves the complete
+  line is `드디어 따라잡았나 보군.`; this was capture timing, not damaged ROM
+  text.
+- The no-action first turn reviewed Imelda and imperial-commander dialogue,
+  enemy movement, and `제시카/크루세이더`, then returned to a valid Elwin
+  command menu without reset or freeze. No scenario-specific battle
+  presentation occurred, so battle UI remains covered by the shared probe.
+  Later turns, completion, and branches remain pending.
+- The original fixed-placement list at `0x181B3E` contains 12 records. The
+  editor regression locks a visible imperial `서펜나이트` (LV1, AT29, DF23,
+  X11/Y13, mercenary ID 120 x4), Imelda (`제너럴`, LV6, AT46, DF32,
+  X23/Y21, mercenary IDs 115 x2, 122 x2, 119 x2), and hidden Lana
+  (`다크프린세스`, LV1, AT36, DF33, X/Y=`0xFF`, mercenary ID 135 x4).
+  The editor must continue exposing coordinates and hidden/event flags as
+  read-only context until their runtime ownership is proven.
+- Direct-event menu navigation is reliable with short key holds such as
+  `down:0.8`. A manual retry used `down@0.7`, which repeated and wrapped the
+  selection into the wrong preparation submenu. No ROM change was needed; the
+  run was restarted and completed with short direct events. Record this timing
+  distinction to avoid repeating the false menu diagnosis.
