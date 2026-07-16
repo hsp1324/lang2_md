@@ -3497,3 +3497,29 @@ contains 57 safe syllables as documented below and in
   DF34), and hidden Laird (`실버나이트`, LV5, AT39, DF28), including the
   original mercenary IDs where relevant. Later turns, completion, and branches
   remain pending.
+
+### Current F0EE Scenario 14 Entry And Baldea Correction (2026-07-16)
+
+- All 14 `성검 랑그릿사` briefing confirmations were reviewed. The live F0E3
+  description exposed `발티아` even though reviewed event records already used
+  `발디아`. Official Korean Langrisser I & II material also calls the fallen
+  kingdom `발디아`. The production description source, generated shared
+  resource, and `Baltia` fallback now consistently use `발디아`; a deprecated
+  term regression test rejects `발티아`. The F0EE replay verifies
+  `발디아 왕국` in the actual description. Glyph count and IDs remain stable at
+  851 (`0x7000..0x7353`).
+- The preparation list was reviewed through its second page. All seven rows are
+  intact: `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `제시카/크루세이더`, and `크루거/소서러`.
+- The complete opening reached Elwin's command menu and displays `발디아 성터`
+  in Laird's dialogue. Conditions are one of Elwin/Jessica/Sherry reaching
+  Langrisser or defeating Leon; loss is Leon reaching Langrisser or the
+  protagonist dying. The no-action first turn reviewed Laird's aquatic, flying,
+  and ballista orders plus imperial responses, then returned to a valid Elwin
+  command menu without reset or freeze. No battle presentation occurred, so
+  Scenario 14 battle UI remains covered by the shared probe.
+- The original fixed-placement list has 11 records. Editor regression samples
+  now lock an imperial Dragon Knight (LV4, AT31, DF25), Laird
+  (`실버나이트`, LV5, AT39, DF28), and hidden Leon (`로얄가드`, LV2,
+  AT45, DF34), along with their original coordinates and mercenary IDs. Later
+  turns, completion, and branches remain pending.
