@@ -3414,3 +3414,30 @@ contains 57 safe syllables as documented below and in
   without reset or freeze. No battle presentation occurred, so battle UI
   remains covered only by the shared probe. Later turns, completion, and
   branch/ending coverage remain pending. Production checksum is `FD90`.
+
+### Current FD90 Scenario 11 Entry And Editor Records (2026-07-16)
+
+- All ten `불길 속에서` briefing confirmations were reviewed through the
+  preparation transition. The description uses the corrected `랄강`, and the
+  five selectable rows show `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
+  `아론/파이터`, and `키스/호크나이트`. Arrangement and all 37 slow opening
+  confirmations reached a valid Elwin command menu without Japanese residue
+  or damaged dynamic names/classes.
+- `fd90_s11_conditions.png` verifies victory `적 전멸` and defeat `주인공
+  사망` / `제시카 사망`. The no-action first turn reviewed the oil-and-fire
+  event, Jessica/Egbert/Lester dialogue, enemy movement, and current battle
+  frames. `fd90_s11_turn1_slow_29.png` through `_34.png` show
+  `그리폰/호크나이트`, `-AT-/-DF-`, counts, and status graphics intact.
+  The path ended at `GAME OVER` after the exposed defenders were defeated;
+  this is the expected scenario loss rather than a reset or freeze.
+- The original REV00 fixed-placement list at `0x1813C6` contains 11 records.
+  `tools/scenario_data.py` reads the complete list for the editor. Confirmed
+  examples are Jessica (`소서러`, LV7, AT30, DF17, X18/Y6, mercenary ID 100
+  x4), Egbert (`자베라`, LV7, AT43, DF32, X2/Y13, mercenary ID 115 x4), and
+  the hidden final imperial commander (`호크나이트`, LV6, AT27, DF22,
+  X/Y=`0xFF`, mercenary ID 125 x4). These exact values now have a regression
+  test against the Japanese ROM.
+- The editor may continue to write only class, LV, AT, DF, and the six
+  mercenary slots. Coordinates and hidden/event flags are useful read-only
+  context, but their runtime ownership is not proven sufficiently for UI
+  editing. Later turns, completion, and branches remain pending.

@@ -29,6 +29,33 @@ class ScenarioDataTests(unittest.TestCase):
         self.assertEqual((leon["at"], leon["df"], leon["mercenaries"][0]), (40, 31, 123))
         self.assertEqual((laird["name"]["ko"], laird["class"]["ko"]), ("레아드", "매직나이트"))
 
+    def test_scenario_eleven_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 11)
+        self.assertEqual(model["record_count"], 11)
+
+        jessica = model["records"][0]
+        egbert = model["records"][1]
+        hidden_hawk = model["records"][10]
+        self.assertEqual(
+            (jessica["name"]["ko"], jessica["class"]["ko"], jessica["level"],
+             jessica["at"], jessica["df"], jessica["x"], jessica["y"]),
+            ("제시카", "소서러", 7, 30, 17, 18, 6),
+        )
+        self.assertEqual(jessica["mercenaries"], [100, 100, 100, 100, 255, 255])
+        self.assertEqual(
+            (egbert["name"]["ko"], egbert["class"]["ko"], egbert["level"],
+             egbert["at"], egbert["df"], egbert["x"], egbert["y"]),
+            ("에그베르트", "자베라", 7, 43, 32, 2, 13),
+        )
+        self.assertEqual(egbert["mercenaries"], [115, 115, 115, 115, 255, 255])
+        self.assertEqual(
+            (hidden_hawk["name"]["ko"], hidden_hawk["class"]["ko"],
+             hidden_hawk["level"], hidden_hawk["at"], hidden_hawk["df"],
+             hidden_hawk["x"], hidden_hawk["y"], hidden_hawk["hidden"]),
+            ("제국지휘관", "호크나이트", 6, 27, 22, 255, 255, True),
+        )
+        self.assertEqual(hidden_hawk["mercenaries"], [125, 125, 125, 125, 255, 255])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")

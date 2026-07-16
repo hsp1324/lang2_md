@@ -21,7 +21,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 8 | current | current | current | current | probe | progressed | pending | pending | 19 |
 | 9 | current | current | current | current | current | progressed | pending | pending | 25 |
 | 10 | current | current | current | current | probe | progressed | pending | pending | 23 |
-| 11 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 11 | current | current | current | current | current | progressed | pending | pending | 27 |
 | 12 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 13 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 14 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -247,6 +247,38 @@ All 16 briefing confirmations, the five-member commander/class roster, arrangeme
 - `captures/run/fd90_s10_turn1_slow_08.png`
 - `captures/run/fd90_s10_turn1_slow_12.png`
 - `captures/run/fd90_s10_turn1_slow_14.png`
+
+### Scenario 11
+
+All ten briefing confirmations, five commander/class selections, arrangement, all 37 slow opening confirmations, and the condition rows were visually reviewed on production FD90. The description uses the corrected place name 랄강, and the preparation roster shows 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Victory is 적 전멸; defeat is 주인공 사망 or 제시카 사망. Ending the first turn without moving allies reviewed the oil-and-fire event, Jessica/Egbert/Lester dialogue, enemy movement, and multiple 그리폰/파이터 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. The path correctly reached GAME OVER after the exposed defenders were defeated; this is a scenario loss, not a reset or freeze. Later turns, completion, and branches remain pending.
+
+- `captures/run/fd90_s11_brief_live_01.png`
+- `captures/run/fd90_s11_brief_live_08.png`
+- `captures/run/fd90_s11_brief_live_10.png`
+- `captures/run/fd90_s11_commander_01.png`
+- `captures/run/fd90_s11_commander_02.png`
+- `captures/run/fd90_s11_commander_03.png`
+- `captures/run/fd90_s11_commander_04.png`
+- `captures/run/fd90_s11_commander_05.png`
+- `captures/run/fd90_s11_arrange.png`
+- `captures/run/fd90_s11_opening_slow_02.png`
+- `captures/run/fd90_s11_opening_slow_07.png`
+- `captures/run/fd90_s11_opening_slow_14.png`
+- `captures/run/fd90_s11_opening_slow_20.png`
+- `captures/run/fd90_s11_opening_slow_27.png`
+- `captures/run/fd90_s11_opening_slow_35.png`
+- `captures/run/fd90_s11_opening_slow_37.png`
+- `captures/run/fd90_s11_conditions.png`
+- `captures/run/fd90_s11_after_turn_end.png`
+- `captures/run/fd90_s11_turn1_slow_01.png`
+- `captures/run/fd90_s11_turn1_slow_10.png`
+- `captures/run/fd90_s11_turn1_slow_15.png`
+- `captures/run/fd90_s11_turn1_slow_21.png`
+- `captures/run/fd90_s11_turn1_slow_29.png`
+- `captures/run/fd90_s11_turn1_slow_34.png`
+- `captures/run/fd90_s11_turn1_slow_35.png`
+- `captures/run/fd90_s11_turn1_slow_41.png`
+- `captures/run/fd90_s11_turn1_slow_42.png`
 
 ### Scenario 27
 
