@@ -3799,3 +3799,22 @@ contains 57 safe syllables as documented below and in
   briefing, preparation, opening, conditions, or turn-event states can be
   promoted. The editor continues to write only class, LV, AT, DF, and the six
   mercenary slots; coordinates and hidden/event flags remain read-only.
+
+### Scenarios 27-31 Original Editor Records (2026-07-16)
+
+- Background-only extraction now gives every late-game fixed list at least one
+  exact editor regression. Scenario 27 (`0x18311C`, ten records) locks a Demon
+  Lord, Bernhardt, and hidden `레온/로얄가드`. Scenario 28 (`0x1832C4`, nine
+  records) locks `형님/빌더`, `아돈/빌더`, and `바란/빌더`, preserving this
+  special scenario's unusual names and mercenary groups.
+- Scenario 29 (`0x18344E`, nine records) locks an imperial `서펜로드`,
+  `세이갈/드래곤로드`, and `폴거/드래곤로드`. Scenario 30 (`0x1835DE`,
+  eleven records) locks a Great Dragon, `마녀/메이지`, and the hidden
+  `마녀/세인트`; the two witch classes are deliberately distinct.
+- Scenario 31 (`0x1837BC`, ten records) locks the boosted `발가스/제너럴`,
+  `보젤/다크마스터`, and final `베른하르트/엠퍼러` records. The large final
+  AT/DF values are original data, not editor corruption.
+- These regressions do not promote runtime coverage. Scenario 27 retains its
+  separately documented production-derived ending probe, while Scenarios
+  28-31 still require fresh production traversal. Writable editor fields stay
+  limited to class, LV, AT, DF, and mercenary slots.

@@ -482,6 +482,140 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(egbert["mercenaries"], [136, 136, 136, 136, 136, 136])
 
+    def test_scenario_twenty_seven_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 27)
+        self.assertEqual(model["record_count"], 10)
+        demon_lord = model["records"][0]
+        bernhardt = model["records"][8]
+        hidden_leon = model["records"][9]
+        self.assertEqual(
+            (demon_lord["name"]["ko"], demon_lord["class"]["ko"],
+             demon_lord["level"], demon_lord["at"], demon_lord["df"],
+             demon_lord["x"], demon_lord["y"]),
+            ("데몬로드", "데몬로드", 10, 50, 34, 15, 12),
+        )
+        self.assertEqual(demon_lord["mercenaries"], [137, 137, 137, 137, 136, 136])
+        self.assertEqual(
+            (bernhardt["name"]["ko"], bernhardt["class"]["ko"],
+             bernhardt["level"], bernhardt["at"], bernhardt["df"],
+             bernhardt["x"], bernhardt["y"]),
+            ("베른하르트", "엠퍼러", 10, 58, 41, 15, 3),
+        )
+        self.assertEqual(bernhardt["mercenaries"], [124, 124, 124, 124, 118, 118])
+        self.assertEqual(
+            (hidden_leon["name"]["ko"], hidden_leon["class"]["ko"],
+             hidden_leon["level"], hidden_leon["at"], hidden_leon["df"],
+             hidden_leon["x"], hidden_leon["y"], hidden_leon["hidden"]),
+            ("레온", "로얄가드", 10, 51, 39, 255, 255, True),
+        )
+        self.assertEqual(hidden_leon["mercenaries"], [123, 123, 123, 123, 124, 124])
+
+    def test_scenario_twenty_eight_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 28)
+        self.assertEqual(model["record_count"], 9)
+        brother = model["records"][0]
+        adon = model["records"][3]
+        baran = model["records"][8]
+        self.assertEqual(
+            (brother["name"]["ko"], brother["class"]["ko"], brother["level"],
+             brother["at"], brother["df"], brother["x"], brother["y"]),
+            ("형님", "빌더", 1, 38, 26, 14, 16),
+        )
+        self.assertEqual(brother["mercenaries"], [117, 117, 117, 117, 117, 117])
+        self.assertEqual(
+            (adon["name"]["ko"], adon["class"]["ko"], adon["level"],
+             adon["at"], adon["df"], adon["x"], adon["y"]),
+            ("아돈", "빌더", 9, 45, 30, 12, 10),
+        )
+        self.assertEqual(adon["mercenaries"], [134, 134, 134, 134, 138, 138])
+        self.assertEqual(
+            (baran["name"]["ko"], baran["class"]["ko"], baran["level"],
+             baran["at"], baran["df"], baran["x"], baran["y"]),
+            ("바란", "빌더", 10, 47, 31, 15, 9),
+        )
+        self.assertEqual(baran["mercenaries"], [134, 134, 134, 134, 138, 138])
+
+    def test_scenario_twenty_nine_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 29)
+        self.assertEqual(model["record_count"], 9)
+        serpent_lord = model["records"][0]
+        seigal = model["records"][7]
+        folger = model["records"][8]
+        self.assertEqual(
+            (serpent_lord["name"]["ko"], serpent_lord["class"]["ko"],
+             serpent_lord["level"], serpent_lord["at"], serpent_lord["df"],
+             serpent_lord["x"], serpent_lord["y"]),
+            ("제국지휘관", "서펜로드", 4, 35, 32, 16, 3),
+        )
+        self.assertEqual(serpent_lord["mercenaries"], [120, 120, 120, 120, 120, 120])
+        self.assertEqual(
+            (seigal["name"]["ko"], seigal["class"]["ko"], seigal["level"],
+             seigal["at"], seigal["df"], seigal["x"], seigal["y"]),
+            ("세이갈", "드래곤로드", 9, 44, 31, 35, 25),
+        )
+        self.assertEqual(seigal["mercenaries"], [125, 125, 125, 125, 125, 125])
+        self.assertEqual(
+            (folger["name"]["ko"], folger["class"]["ko"], folger["level"],
+             folger["at"], folger["df"], folger["x"], folger["y"]),
+            ("폴거", "드래곤로드", 9, 44, 31, 36, 20),
+        )
+        self.assertEqual(folger["mercenaries"], [125, 125, 125, 125, 125, 125])
+
+    def test_scenario_thirty_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 30)
+        self.assertEqual(model["record_count"], 11)
+        dragon = model["records"][0]
+        mage_witch = model["records"][9]
+        hidden_saint_witch = model["records"][10]
+        self.assertEqual(
+            (dragon["name"]["ko"], dragon["class"]["ko"], dragon["level"],
+             dragon["at"], dragon["df"], dragon["x"], dragon["y"]),
+            ("그레이트드래곤", "그레이트드래곤", 1, 39, 34, 3, 11),
+        )
+        self.assertEqual(dragon["mercenaries"], [132, 132, 132, 132, 135, 135])
+        self.assertEqual(
+            (mage_witch["name"]["ko"], mage_witch["class"]["ko"],
+             mage_witch["level"], mage_witch["at"], mage_witch["df"],
+             mage_witch["x"], mage_witch["y"]),
+            ("마녀", "메이지", 1, 30, 21, 15, 6),
+        )
+        self.assertEqual(mage_witch["mercenaries"], [132, 132, 132, 132, 135, 135])
+        self.assertEqual(
+            (hidden_saint_witch["name"]["ko"],
+             hidden_saint_witch["class"]["ko"], hidden_saint_witch["level"],
+             hidden_saint_witch["at"], hidden_saint_witch["df"],
+             hidden_saint_witch["x"], hidden_saint_witch["y"],
+             hidden_saint_witch["hidden"]),
+            ("마녀", "세인트", 7, 36, 31, 255, 255, True),
+        )
+        self.assertEqual(hidden_saint_witch["mercenaries"], [136, 136, 136, 136, 255, 255])
+
+    def test_scenario_thirty_one_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 31)
+        self.assertEqual(model["record_count"], 10)
+        vargas = model["records"][0]
+        bozel = model["records"][7]
+        bernhardt = model["records"][9]
+        self.assertEqual(
+            (vargas["name"]["ko"], vargas["class"]["ko"], vargas["level"],
+             vargas["at"], vargas["df"], vargas["x"], vargas["y"]),
+            ("발가스", "제너럴", 10, 75, 54, 15, 55),
+        )
+        self.assertEqual(vargas["mercenaries"], [115, 115, 115, 115, 122, 122])
+        self.assertEqual(
+            (bozel["name"]["ko"], bozel["class"]["ko"], bozel["level"],
+             bozel["at"], bozel["df"], bozel["x"], bozel["y"]),
+            ("보젤", "다크마스터", 10, 69, 54, 15, 15),
+        )
+        self.assertEqual(bozel["mercenaries"], [137, 137, 137, 137, 136, 136])
+        self.assertEqual(
+            (bernhardt["name"]["ko"], bernhardt["class"]["ko"],
+             bernhardt["level"], bernhardt["at"], bernhardt["df"],
+             bernhardt["x"], bernhardt["y"]),
+            ("베른하르트", "엠퍼러", 10, 87, 61, 15, 4),
+        )
+        self.assertEqual(bernhardt["mercenaries"], [124, 124, 124, 124, 119, 119])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")
