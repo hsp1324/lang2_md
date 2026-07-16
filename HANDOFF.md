@@ -3738,3 +3738,27 @@ contains 57 safe syllables as documented below and in
   IDs. The same list also contains Succubi, Living Armors, two other hidden
   Krakens, and a hidden imperial Archmage. Coordinates and hidden/event flags
   remain read-only editor context.
+
+### Current 138B Scenario 22 Background Inventory And Partial Preparation (2026-07-16)
+
+- The current-build pass reviewed all six confirmations of `알하자드의 부활`
+  through preparation. The `지휘관배치` pager was followed from page one
+  (`엘윈/헤인/쉐리/아론/키스`) to page two (`레스터/제시카/스코트`) and
+  back to page one, so Jessica is explicitly covered. The equipment commander
+  selector then verified the first-page class panels as `엘윈/파이터`,
+  `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and `키스/호크나이트`.
+- Runtime input stopped at that exact point at the user's request while another
+  game uses the machine. Page-two class panels, automatic deployment, the full
+  current-build opening, conditions, and the first no-action turn remain
+  pending and must not be inferred from the older `3B53` opening probe. BlastEm
+  was terminated before background-only work continued.
+- Static dialogue remains complete as documented in `Scenario 22 Complete
+  Reviewed Dialogue`: 151 Japanese pointer records and 191 physical pages.
+  No dialogue text was changed in this background pass.
+- The Japanese ROM fixed-placement list at `0x1827B4` contains twelve records.
+  Editor regressions lock `리아나/클레릭` (LV2, AT20, DF17, X14/Y4),
+  `보젤/다크마스터` (LV6, AT42, DF32, X15/Y5), and hidden
+  `베른하르트/엠퍼러` (LV10, AT58, DF41, X/Y=`0xFF`) with their exact
+  mercenary bytes. The list also contains Lana, imperial Archmages and a Saint,
+  Egbert, Iron Golems, and Liches. Coordinates and hidden/event flags remain
+  read-only editor context.

@@ -341,6 +341,34 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(hidden_kraken["mercenaries"], [133, 133, 133, 133, 133, 133])
 
+    def test_scenario_twenty_two_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 22)
+        self.assertEqual(model["record_count"], 12)
+
+        liana = model["records"][0]
+        bozel = model["records"][2]
+        hidden_bernhardt = model["records"][3]
+        self.assertEqual(
+            (liana["name"]["ko"], liana["class"]["ko"], liana["level"],
+             liana["at"], liana["df"], liana["x"], liana["y"]),
+            ("리아나", "클레릭", 2, 20, 17, 14, 4),
+        )
+        self.assertEqual(liana["mercenaries"], [255, 255, 255, 255, 255, 255])
+        self.assertEqual(
+            (bozel["name"]["ko"], bozel["class"]["ko"], bozel["level"],
+             bozel["at"], bozel["df"], bozel["x"], bozel["y"]),
+            ("보젤", "다크마스터", 6, 42, 32, 15, 5),
+        )
+        self.assertEqual(bozel["mercenaries"], [255, 255, 255, 255, 255, 255])
+        self.assertEqual(
+            (hidden_bernhardt["name"]["ko"], hidden_bernhardt["class"]["ko"],
+             hidden_bernhardt["level"], hidden_bernhardt["at"],
+             hidden_bernhardt["df"], hidden_bernhardt["x"],
+             hidden_bernhardt["y"], hidden_bernhardt["hidden"]),
+            ("베른하르트", "엠퍼러", 10, 58, 41, 255, 255, True),
+        )
+        self.assertEqual(hidden_bernhardt["mercenaries"], [124, 124, 124, 124, 124, 124])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")
