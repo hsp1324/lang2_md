@@ -34,12 +34,11 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
 
     def test_review_requires_explicit_resource_metadata(self):
         for name, group in self.result["groups"].items():
-            expected_reviewed = 30 if name == "scenario_descriptions" else 0
+            expected_reviewed = 31 if name == "scenario_descriptions" else 0
             self.assertEqual(group["reviewed_count"], expected_reviewed)
             self.assertEqual(group["live_verified_count"], 0)
         reviewed = self.result["groups"]["scenario_descriptions"]["entries"]
-        self.assertFalse(reviewed[0]["reviewed"])
-        self.assertTrue(all(entry["reviewed"] for entry in reviewed[1:]))
+        self.assertTrue(all(entry["reviewed"] for entry in reviewed))
 
     def test_known_magic_and_mercenary_targets(self):
         groups = self.result["groups"]

@@ -1155,6 +1155,13 @@ def scenario_description_glyph_text(text: str) -> str:
         if char not in DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS
     )
 
+
+def scenario0_description_glyph_text(text: str) -> str:
+    return "".join(
+        char for char in scenario_description_glyph_text(text)
+        if char not in DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_CHARS
+    )
+
 # Keep these newly promoted name-table strings after the established UI and
 # name-entry glyph consumers. Their records are stable direct patches, but
 # allocating their five new syllables earlier would shift the name-entry
@@ -1374,16 +1381,41 @@ OPENING_TEXT_LIST_PATCHES = OrderedDict(
 
 SCENARIO0_TITLE = "시나리오 1"
 SCENARIO0_SUBTITLE = "서장"
-SCENARIO0_BODY_SEGMENTS = (
-    "여행 중이던 젊은이의 이름은 바로 ",
+# Preserve the pre-source-review allocation order before collecting the new
+# Scenario 1 text. Newly introduced syllables are derived and deferred below,
+# so correcting this first record cannot renumber established UI glyphs.
+RETIRED_SCENARIO0_DESCRIPTION_GLYPH_COMPATIBILITY_TEXT = (
+    "시나리오 1서장"
+    "여행 중이던 젊은이의 이름은 바로 "
     "이었다. 살라스 영지의 마을에 머물던 어느 날, 헤인이 다급히 여관으로 뛰어들었다. "
-    "제국 기사단이 마을 외곽에 나타났다는 소식이었다. 그 말을 들은 ",
-    "은 리아나가 위험하다는 말에 망설이지 않았다. 그는 곧바로 검을 챙긴 ",
+    "제국 기사단이 마을 외곽에 나타났다는 소식이었다. 그 말을 들은 "
+    "은 리아나가 위험하다는 말에 망설이지 않았다. 그는 곧바로 검을 챙긴 "
     "은 동료와 마을 밖으로 달려 나갔다. 적장은 발드였다. 이 싸움이 훗날 대륙의 운명을 "
-    "바꿀 긴 전쟁의 시작이 되리라는 것을 누구도 몰랐다. 이제 ",
-    "은 발드를 쓰러뜨려 리아나를 지켜야 한다.",
+    "바꿀 긴 전쟁의 시작이 되리라는 것을 누구도 몰랐다. 이제 "
+    "은 발드를 쓰러뜨려 리아나를 지켜야 한다."
+    "※승리조건·발드 격파※패배조건·엘윈 사망·발드가 우하단 도주"
+)
+SCENARIO0_BODY_SEGMENTS = (
+    "홀로 여행을 떠난 젊은이의 이름은 ",
+    "이었다. 여행길에 오른 그는 살라스 영지의 한 마을에서 여독을 풀고 있었다. 붙임성 "
+    "좋은 그는 며칠 새 주민들과 친해졌다. 그중 어린 마법사 헤인은 ",
+    "을 잘 따랐고 둘은 오랜 친구처럼 가까워졌다. 그러던 어느 날 헤인은 ",
+    "이 머무는 여관으로 숨을 몰아쉬며 뛰어들었다. 헤인의 얼굴은 창백했다. 제국 기사단이 "
+    "마을 외곽에 쳐들어왔다며 다급히 말했다. 위험에 처한 이는 ",
+    "의 소꿉친구 리아나였다. 그는 검을 들었다",
 )
 SCENARIO0_BODY = "".join(SCENARIO0_BODY_SEGMENTS)
+DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_TEXT = "".join(
+    dict.fromkeys(
+        char
+        for char in SCENARIO0_BODY
+        if char not in RETIRED_SCENARIO0_DESCRIPTION_GLYPH_COMPATIBILITY_TEXT
+        and char not in {" ", "\n"}
+    )
+)
+DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_CHARS = frozenset(
+    DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_TEXT
+)
 SCENARIO0_CONDITIONS = "※승리조건\n·발드 격파\n※패배조건\n·엘윈 사망\n·발드가 우하단 도주"
 
 SCENARIO_TEXT_OVERRIDES = {
@@ -4936,7 +4968,14 @@ def main() -> None:
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
     chars = collect_chars(
         active_condition_chars,
-        *(scenario_description_glyph_text(text) for text in active_descriptions),
+        scenario_description_glyph_text(
+            RETIRED_SCENARIO0_DESCRIPTION_GLYPH_COMPATIBILITY_TEXT
+        ),
+        *(
+            scenario0_description_glyph_text(text)
+            if index == 0 else scenario_description_glyph_text(text)
+            for index, text in enumerate(active_descriptions)
+        ),
         *active_direct_strings,
         *active_event_page_strings,
         *active_fixed_strings,
@@ -4967,6 +5006,9 @@ def main() -> None:
         *active_epilogue_dialogue_strings,
         # Credits are relocated and appended last so no established glyph ID shifts.
         *active_credits_strings,
+        # Scenario 1 source-review vocabulary comes last so any syllable that
+        # already has an established later consumer keeps its existing ID.
+        DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_TEXT,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:

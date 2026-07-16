@@ -9,7 +9,7 @@ the remaining unreviewed entries and all live playback checks stay separate.
 | Resource | Entries | Modified | Reviewed | Live verified |
 | --- | ---: | ---: | ---: | ---: |
 | conditions | 32 | 31 | 0 | 0 |
-| scenario_descriptions | 31 | 31 | 30 | 0 |
+| scenario_descriptions | 31 | 31 | 31 | 0 |
 | item_names | 38 | 38 | 0 | 0 |
 | item_descriptions | 37 | 37 | 0 | 0 |
 | item_word_names | 37 | 37 | 0 | 0 |

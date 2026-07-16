@@ -3989,3 +3989,34 @@ contains 57 safe syllables as documented below and in
   this unit because the user was playing Forza Horizon. Fresh on-screen checks
   for the relocated descriptions and the renamed Scenario 13/15 titles remain
   pending until exclusive emulator input is available.
+
+### Scenario 1 Description Source Review And Live Playback (2026-07-17)
+
+- The final unreviewed description record was compared with the Japanese ROM.
+  The previous Korean text invented Bald as the visible enemy commander and a
+  future-war narration, while omitting that Elwin spent several days becoming
+  acquainted with the villagers, Hein became like an old friend, and Liana is
+  Elwin's childhood friend. The current text restores those source facts and
+  retains the original `서장` title and victory/defeat conditions.
+- Scenario 1 is a fixed 331-word record with four `FFF7 0001` dynamic hero-name
+  controls. Its visible body has immutable boundaries of 19, 83, 39, 81, and
+  23 characters. The corrected Korean prose fits those exact spans and renders
+  the default name naturally as `엘윈이었다`, `엘윈을`, `엘윈이`, and
+  `엘윈의`. Tests reject the invented Bald/future-war lines and require the
+  restored village, Hein, and Liana facts.
+- Changing the first record initially renumbered later custom glyphs. The
+  former Scenario 1 character order is now retained by
+  `RETIRED_SCENARIO0_DESCRIPTION_GLYPH_COMPATIBILITY_TEXT`; new-only syllables
+  are derived from the corrected body, suppressed only for Scenario 1's early
+  pass, and collected after every established consumer. A direct comparison
+  against commit `c338ef9` proves all 859 glyph IDs remain identical through
+  `0x735B`, and generated direct-string tokens no longer churn.
+- Production checksum `C7AB` was played in BlastEm with direct window events.
+  `c7ab_s01_title.png`, `c7ab_s01_body_name1.png` through `_name4.png`, and
+  `c7ab_s01_conditions.png` verify the title, full automatic scroll, four name
+  contexts, final `위험에 처한 이는 엘윈의 소꿉친구 리아나였다. 그는 검을
+  들었다`, and conditions without broken glyphs or reset. The runtime
+  inventory promotes only Scenario 1 description to `verified_current`; the
+  other relocated descriptions still require fresh live playback.
+- All 31 scenario description records are now marked statically source-reviewed
+  and all remain pointer/terminator checked in the shared resource inventory.

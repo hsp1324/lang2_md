@@ -49,10 +49,10 @@ DIRECT_GROUPS = {
     "battle_status_messages": (0x0971F4, 0x097202, 0x097214),
 }
 
-# Scenario 2-31 descriptions were transcribed against the rendered Japanese
+# All 31 scenario descriptions were transcribed against the rendered Japanese
 # records and reviewed statically. They still require live playback.
 STATIC_REVIEWED_POINTER_IDS = {
-    "scenario_descriptions": frozenset(range(1, 31)),
+    "scenario_descriptions": frozenset(range(31)),
 }
 
 

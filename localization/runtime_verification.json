@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "57D4",
+  "production_checksum": "C7AB",
   "states": [
     "pending",
     "historical",
@@ -49,7 +49,7 @@
   "scenarios": [
     {
       "scenario": 1,
-      "description": "historical",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "historical",
       "opening_events": "verified_current",
@@ -62,9 +62,15 @@
         "captures/run/ea22_s01_command_magic_fresh.png",
         "captures/run/ea22_first_turn_step_01.png",
         "captures/run/ea22_first_turn_step_73.png",
-        "captures/run/ea22_s01_turn2_map.png"
+        "captures/run/ea22_s01_turn2_map.png",
+        "captures/run/c7ab_s01_title.png",
+        "captures/run/c7ab_s01_body_name1.png",
+        "captures/run/c7ab_s01_body_name2.png",
+        "captures/run/c7ab_s01_body_name3.png",
+        "captures/run/c7ab_s01_body_name4.png",
+        "captures/run/c7ab_s01_conditions.png"
       ],
-      "note": "Current route reaches TURN 2 without reset. Full scenario clear and route transition remain pending."
+      "note": "Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. The existing route reaches TURN 2 without reset. Full scenario clear and route transition remain pending."
     },
     {
       "scenario": 2,
