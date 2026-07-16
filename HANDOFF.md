@@ -3679,3 +3679,32 @@ contains 57 safe syllables as documented below and in
   mercenary slots. Coordinates and hidden/event flags remain read-only editor
   context until runtime ownership is proven. Later turns, completion, and
   branches remain pending.
+
+### Current 138B Scenario 20 Entry And Keith Address Fix (2026-07-16)
+
+- All seven `붉게 물든 바다` briefing confirmations were reviewed. Entering
+  the `지휘관배치` submenu exposes the actual paged roster: page one contains
+  `엘윈`, `헤인`, `쉐리`, `아론`, and `키스`; page two contains `레스터`,
+  `제시카`, and `스코트`. The run returned through `<<` to page one. The
+  initial preparation action menu is not the commander pager; pressing Down
+  there only cycles `용병고용/장비착용/상점/지휘관배치` and must not be
+  mistaken for roster coverage.
+- The complete opening and conditions render normally. Victory is `적 전멸`
+  and defeat is `주인공 사망`. The no-action first turn retained 41 frames,
+  reviewed Faias's orders and enemy movement, reached `TURN 2`, then reviewed
+  the golem tactics exchange before returning to Elwin's command menu without
+  reset or freeze. The current route did not trigger the later conditional
+  kraken event or a battle presentation.
+- Live checksum `1391` exposed `키스: 공주` at `0x1A81E6`. The Japanese
+  physical page is `姫！`, but it has only two content words. `공주님!` needs
+  four words and correctly fails the builder's capacity guard. The final
+  capacity-safe translation is the complete royal address `전하`; checksum
+  `138B` capture `138b_s20_turn1_38.png` verifies it before Aaron's reply.
+  A regression test locks this exact address so the incomplete wording does not
+  return. Glyph count and IDs remain 851 (`0x7000..0x7353`).
+- The Japanese ROM's fixed-placement list at `0x182434` contains ten records.
+  Editor regressions lock a visible Scylla (`스큐라`, LV10, AT36, DF22,
+  X18/Y8), Faias (`파이어스/데몬로드`, LV1, AT46, DF32, X22/Y23), and a
+  hidden Kraken (`크라켄`, LV4, AT39, DF32, X/Y=`0xFF`) with exact mercenary
+  slots. The list also includes Minotaurs, Liches, another Scylla, and hidden
+  Wyverns. Coordinates and hidden/event flags remain read-only editor context.

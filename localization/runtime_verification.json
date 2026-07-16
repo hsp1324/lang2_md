@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "1391",
+  "production_checksum": "138B",
   "states": [
     "pending",
     "historical",
@@ -661,7 +661,36 @@
       ],
       "note": "All six 미레일 항구 전투 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 1391. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. The live opening exposed spaced 다크 프린세스; all six reviewed event occurrences now use the canonical class label 다크프린세스, and the replay verifies it without an abnormal wrap. Victory is defeating Imelda within 23 turns; defeat is exceeding the turn limit or the protagonist dying. The first turn reviewed ship movement and 제시카/소서러, 아론/파이터, and 엘윈/파이터 dialogue, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 is covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Later turns, completion, and branches remain pending."
     },
-    {"scenario": 20},
+    {
+      "scenario": 20,
+      "description": "verified_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "verified_current",
+      "battle_ui": "verified_probe",
+      "turn_events": "progressed_current",
+      "completion": "pending",
+      "branches_endings": "pending",
+      "captures": [
+        "captures/run/1391_s20_brief_live_01.png",
+        "captures/run/1391_s20_brief_live_06.png",
+        "captures/run/1391_s20_roster_page1_elwin.png",
+        "captures/run/1391_s20_roster_page2.png",
+        "captures/run/1391_s20_roster_wrap_page1.png",
+        "captures/run/1391_s20_auto.png",
+        "captures/run/1391_s20_opening_02.png",
+        "captures/run/1391_s20_opening_05.png",
+        "captures/run/1391_s20_opening_07.png",
+        "captures/run/1391_s20_conditions.png",
+        "captures/run/1391_s20_turn1_19.png",
+        "captures/run/1391_s20_turn1_20.png",
+        "captures/run/138b_s20_turn1_29.png",
+        "captures/run/138b_s20_turn1_38.png",
+        "captures/run/138b_s20_turn1_39.png",
+        "captures/run/138b_s20_turn1_41.png"
+      ],
+      "note": "All seven 붉게 물든 바다 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The complete selectable roster is 엘윈, 헤인, 쉐리, 아론, 키스, 레스터, 제시카, and 스코트; the second page and return through << are retained explicitly so 제시카 is not omitted. Victory is enemy annihilation and defeat is the protagonist's death. The first turn reviewed Faias dialogue, enemy movement, reached TURN 2, then reviewed the golem tactics conversation and returned to a valid Elwin command menu without reset or freeze. Live 1391 exposed the two-character page at 0x1A81E6 as the incomplete-looking 키스: 공주. The Japanese source is 姫！ but the physical page has only two content words; 공주님! fails the capacity guard. Production 138B uses the complete capacity-safe royal address 전하, verified live before Aaron's response. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182434 is covered by editor regressions for 스큐라, 파이어스/데몬로드, and hidden 크라켄. Later turns, conditional kraken events, completion, and route variants remain pending."
+    },
     {"scenario": 21},
     {"scenario": 22},
     {"scenario": 23},
