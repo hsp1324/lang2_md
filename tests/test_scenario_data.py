@@ -56,6 +56,34 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(hidden_hawk["mercenaries"], [125, 125, 125, 125, 255, 255])
 
+    def test_scenario_twelve_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 12)
+        self.assertEqual(model["record_count"], 11)
+
+        lich = model["records"][0]
+        living_armor = model["records"][1]
+        hidden_egbert = model["records"][10]
+        self.assertEqual(
+            (lich["name"]["ko"], lich["class"]["ko"], lich["level"],
+             lich["at"], lich["df"], lich["x"], lich["y"]),
+            ("리치", "리치", 1, 32, 27, 15, 8),
+        )
+        self.assertEqual(lich["mercenaries"], [138, 138, 138, 138, 255, 255])
+        self.assertEqual(
+            (living_armor["name"]["ko"], living_armor["class"]["ko"],
+             living_armor["level"], living_armor["at"], living_armor["df"],
+             living_armor["x"], living_armor["y"]),
+            ("리빙아머", "리빙아머", 1, 31, 30, 13, 10),
+        )
+        self.assertEqual(living_armor["mercenaries"], [130, 130, 130, 130, 130, 130])
+        self.assertEqual(
+            (hidden_egbert["name"]["ko"], hidden_egbert["class"]["ko"],
+             hidden_egbert["level"], hidden_egbert["at"], hidden_egbert["df"],
+             hidden_egbert["x"], hidden_egbert["y"], hidden_egbert["hidden"]),
+            ("에그베르트", "자베라", 7, 43, 32, 255, 255, True),
+        )
+        self.assertEqual(hidden_egbert["mercenaries"], [255, 255, 255, 255, 255, 255])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")

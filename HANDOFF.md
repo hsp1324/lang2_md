@@ -3441,3 +3441,28 @@ contains 57 safe syllables as documented below and in
   mercenary slots. Coordinates and hidden/event flags are useful read-only
   context, but their runtime ownership is not proven sufficiently for UI
   editing. Later turns, completion, and branches remain pending.
+
+### Current FD90 Scenario 12 Entry And Editor Records (2026-07-16)
+
+- All 13 `성지 레이텔` briefing confirmations, five commander/class rows,
+  arrangement, automatic deployment, all 12 slow opening confirmations, and
+  the conditions were reviewed on production `FD90`. The selectable roster is
+  again `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
+  `키스/호크나이트`; names and first glyphs remain intact.
+- Victory is `적 전멸` or `다크로드 획득`; defeat is `주인공 사망`. The
+  no-action first turn reviewed monster movement, Jessica's warning, and a
+  current `리치/파이터` battle. Names, `-AT-/-DF-`, counts, and status
+  graphics remained intact. Elwin was defeated and `GAME OVER` followed as
+  expected; this is not a reset or freeze. The Dark Rod acquisition event,
+  later turns, completion, and branches remain pending.
+- The original fixed-placement list at `0x181592` contains 11 records. Exact
+  editor/parser regression samples are the lead Lich (`리치`, LV1, AT32,
+  DF27, X15/Y8, mercenary ID 138 x4), the first Living Armor (`리빙아머`,
+  LV1, AT31, DF30, X13/Y10, mercenary ID 130 x6), and hidden Egbert
+  (`자베라`, LV7, AT43, DF32, X/Y=`0xFF`, no mercenaries). Other records in
+  the same list cover `케르베로스`, `그레이트슬라임`, `고스트`, and
+  `마스터디노`; they are already returned by `tools/scenario_data.py`.
+- Direct X11 events continued to work for directions and C/B. In this in-game
+  state, direct-event Start did not open the Start menu, while the existing
+  focused XTest fallback (`--click-window start`) did. This is an automation
+  transport difference, not a ROM defect.
