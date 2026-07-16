@@ -28,11 +28,14 @@ CONFIRMED_UNPATCHED_SYSTEM_MESSAGES = {
     0x082B08: "2 올랐다.",
     0x082B16: "을 배웠다.",
     0x082B22: "을 사용할 수 있게 됐다.",
-    0x082B3C: "GAME OVER",
     0x082B56: "을 손에 넣었다!",
     0x082B66: "트레저군:",
     # 0x082B78 is a secret/debug-style message whose exact context is not yet proven.
     0x082B90: "을 장비했다.",
+}
+
+INTENTIONALLY_RETAINED_SYSTEM_LABELS = {
+    0x082B3C: "GAME OVER",
 }
 
 CONFIRMED_UNRESOLVED_DIRECT_MESSAGES = {
@@ -284,6 +287,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             ownership = "known_unsafe_name_record"
         elif offset in CONFIRMED_UNPATCHED_SYSTEM_MESSAGES:
             ownership = "confirmed_unpatched_system_message"
+        elif offset in INTENTIONALLY_RETAINED_SYSTEM_LABELS:
+            ownership = "intentionally_retained_system_label"
         elif offset in CONFIRMED_UNRESOLVED_DIRECT_MESSAGES:
             ownership = "confirmed_unresolved_direct_message"
         elif offset in ui_surfaces:
@@ -351,6 +356,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     targets.get(offset)
                     or unsafe_targets.get(offset)
                     or CONFIRMED_UNPATCHED_SYSTEM_MESSAGES.get(offset)
+                    or INTENTIONALLY_RETAINED_SYSTEM_LABELS.get(offset)
                     or CONFIRMED_UNRESOLVED_DIRECT_MESSAGES.get(offset)
                     or ui_surfaces.get(offset)
                     or NAME_ENTRY_RESOURCES.get(offset)
@@ -387,6 +393,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "declared_direct_patch",
             "known_unsafe_name_record",
             "confirmed_unpatched_system_message",
+            "intentionally_retained_system_label",
             "confirmed_unresolved_direct_message",
             "declared_ui_surface",
             "name_entry_resource",
@@ -437,6 +444,7 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- Existing declared direct patches: {counts['declared_direct_patch']}",
             f"- Known unsafe name records: {counts['known_unsafe_name_record']}",
             f"- Confirmed unpatched system messages: {counts['confirmed_unpatched_system_message']}",
+            f"- Intentionally retained system labels: {counts['intentionally_retained_system_label']}",
             f"- Confirmed unresolved direct messages: {counts['confirmed_unresolved_direct_message']}",
             f"- Declared UI surfaces: {counts['declared_ui_surface']}",
             f"- Name-entry resources: {counts['name_entry_resource']}",

@@ -13,7 +13,8 @@ a candidate, not proof that the data is visible text.
 - Pointer-table record interiors: 95
 - Existing declared direct patches: 149
 - Known unsafe name records: 0
-- Confirmed unpatched system messages: 1
+- Confirmed unpatched system messages: 0
+- Intentionally retained system labels: 1
 - Confirmed unresolved direct messages: 1
 - Declared UI surfaces: 10
 - Name-entry resources: 16

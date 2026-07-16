@@ -116,6 +116,21 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
             rows["0x082B78"]["ownership"], "confirmed_unresolved_direct_message"
         )
 
+    def test_game_over_is_intentionally_retained(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        self.assertEqual(
+            rows["0x082B3C"]["ownership"],
+            "intentionally_retained_system_label",
+        )
+        self.assertEqual(
+            self.result["ownership_counts"]["confirmed_unpatched_system_message"],
+            0,
+        )
+        self.assertEqual(
+            self.result["ownership_counts"]["intentionally_retained_system_label"],
+            1,
+        )
+
     def test_ending_fragments_are_owned_by_full_record_translations(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
         self.assertEqual(

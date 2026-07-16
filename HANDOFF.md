@@ -3853,3 +3853,16 @@ contains 57 safe syllables as documented below and in
   Name ID `+0x1A`, coordinates, and event/hidden flags remain read-only context;
   README wording was corrected so the known name-ID address is not mistaken
   for an exposed writable field.
+
+### Intentional GAME OVER Inventory Classification (2026-07-16)
+
+- Direct record `0x082B3C` is the conventional English `GAME OVER`, already
+  accepted by the localization policy and verified in live loss paths. The
+  direct-word inventory now classifies it as
+  `intentionally_retained_system_label` instead of inflating the unpatched
+  system-message count.
+- The inventory now reports zero confirmed unpatched system messages, one
+  intentionally retained label, one unresolved secret/debug record at
+  `0x082B78`, and zero unclassified candidates. Regeneration also synchronizes
+  stored current-token IDs with production checksum `138B`; target text and
+  original ownership are unchanged.
