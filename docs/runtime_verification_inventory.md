@@ -18,7 +18,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 5 | current | current | current | current | probe | progressed | pending | pending | 14 |
 | 6 | current | current | current | current | current | progressed | pending | pending | 17 |
 | 7 | current | current | current | current | current | progressed | pending | pending | 21 |
-| 8 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 8 | current | current | current | current | probe | progressed | pending | pending | 19 |
 | 9 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 10 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 11 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -165,6 +165,30 @@ All 16 briefing confirmations, five commander/class selections, all 20 opening c
 - `captures/run/ef65_s07_turn1_live_83.png`
 - `captures/run/ef65_s07_turn1_live_99.png`
 - `captures/run/ef65_s07_turn2_map.png`
+
+### Scenario 8
+
+All 16 briefing confirmations, five commander/class selections, all 17 opening confirmations, and the condition rows were visually reviewed on EF65. The first command detector stopped early on a water/selection frame; the detector now also requires dense white command labels and rejects that exact frame while retaining the real command menu. Continuing the same no-action turn reached TURN 2 and reviewed the Sherry/Scott/Keith/Aaron anti-air tutorial before returning to Elwin's command menu. No scenario-specific battle presentation occurred, so battle_ui remains verified only by the shared probe. Later turns and completion remain pending.
+
+- `captures/run/ef65_s08_selector_map.png`
+- `captures/run/ef65_s08_brief_live_01.png`
+- `captures/run/ef65_s08_brief_live_15.png`
+- `captures/run/ef65_s08_brief_live_16.png`
+- `captures/run/ef65_s08_commander_01.png`
+- `captures/run/ef65_s08_commander_05.png`
+- `captures/run/ef65_s08_arrange.png`
+- `captures/run/ef65_s08_opening_live_03.png`
+- `captures/run/ef65_s08_opening_live_09.png`
+- `captures/run/ef65_s08_opening_live_14.png`
+- `captures/run/ef65_s08_opening_live_17.png`
+- `captures/run/ef65_s08_conditions.png`
+- `captures/run/ef65_s08_turn1_live_01.png`
+- `captures/run/ef65_s08_turn1_live_02.png`
+- `captures/run/ef65_s08_turn1_cont_01.png`
+- `captures/run/ef65_s08_turn1_cont_02.png`
+- `captures/run/ef65_s08_turn1_cont_06.png`
+- `captures/run/ef65_s08_turn1_cont_09.png`
+- `captures/run/ef65_s08_turn1_cont_11.png`
 
 ### Scenario 27
 

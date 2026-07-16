@@ -28,6 +28,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario5 = data["scenarios"][4]
         scenario6 = data["scenarios"][5]
         scenario7 = data["scenarios"][6]
+        scenario8 = data["scenarios"][7]
         scenario27 = data["scenarios"][26]
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "progressed_current")
@@ -43,6 +44,9 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario7["opening_events"], "verified_current")
         self.assertEqual(scenario7["battle_ui"], "verified_current")
         self.assertEqual(scenario7["turn_events"], "progressed_current")
+        self.assertEqual(scenario8["conditions"], "verified_current")
+        self.assertEqual(scenario8["opening_events"], "verified_current")
+        self.assertEqual(scenario8["turn_events"], "progressed_current")
         self.assertEqual(scenario27["preparation"], "verified_current")
         self.assertEqual(scenario27["completion"], "verified_probe")
         for evidence in data["global_evidence"]:

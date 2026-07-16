@@ -28,6 +28,7 @@ class BlastemCommandDetectorTests(unittest.TestCase):
             # The detector only needs the stable panel proportions, not a
             # screenshot fixture tied to one scenario or emulator scale.
             frame.paste((0, 0, 119), (15, 25, 65, 105))
+            frame.paste((255, 255, 255), (20, 35, 30, 65))
             frame.paste((119, 87, 87), (65, 25, 95, 105))
             frame.paste((0, 0, 119), (0, 195, 154, 235))
             frame.save(path)

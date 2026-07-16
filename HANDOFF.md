@@ -3332,3 +3332,27 @@ contains 57 safe syllables as documented below and in
   and intact formation/status graphics. The command detector timed out because
   the Turn 2 cursor did not land on an allied unit; the game itself neither
   reset nor froze. Later turns and scenario completion remain pending.
+
+### Current EF65 Scenario 8 Entry Regression (2026-07-16)
+
+- All 16 `하늘의 다리` briefing confirmations were reviewed through the
+  preparation transition. Commander selection cycles five current units and
+  verifies `엘윈/파이터`, `헤인/워록`, `스코트/파이터`,
+  `리아나/클레릭`, and `쉐리/파이터`. Keith appears in the scenario event
+  but is not yet a selectable preparation commander.
+- All 17 opening frames were reviewed through a valid Elwin command menu.
+  Keith, Sherry, Hein, Kramer, and imperial-commander labels are intact.
+  `ef65_s08_conditions.png` verifies victory `12턴 내 크레이머 격파` and
+  defeat `제한 턴 초과` / `주인공 사망` without clipping or residue.
+- The first detector pass falsely accepted a water-heavy map frame with a unit
+  selection rectangle. The command detector now requires more than 6.5% white
+  label pixels inside its stable panel crop in addition to the existing blue
+  panel/status constraints. Exact captures prove the real Scenario 8 command
+  menu remains accepted while `ef65_s08_turn1_live_08.png` and the earlier
+  Scenario 6 false frame are rejected.
+- Continuing the same no-action path reached `TURN 2`, then reviewed the
+  Sherry/Scott/Keith/Aaron anti-air tutorial and returned to Elwin's command
+  menu at `ef65_s08_turn1_cont_11.png`. No reset, freeze, Japanese residue, or
+  damaged dynamic name/class appeared. This path did not enter the battle
+  presentation, so Scenario 8 battle UI remains probe-only; later turns and
+  completion remain pending.

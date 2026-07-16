@@ -354,6 +354,11 @@ def battle_command_menu_visible(path: Path) -> bool:
         and blue > red * 2
         and blue > green * 1.8
     )
+    command_interior_white_pixels = sum(
+        1
+        for red, green, blue in command_interior.get_flattened_data()
+        if red > 170 and green > 170 and blue > 170
+    )
     # Portrait cut-ins also have a broad blue background and used to trigger
     # this detector early. A real command menu is only available with the blue
     # battle status bar visible across the bottom of the frame.
@@ -372,6 +377,11 @@ def battle_command_menu_visible(path: Path) -> bool:
         and dark_panel_pixels > 1000 * scale_x * scale_y
         and command_interior_dark_pixels
         > command_interior.width * command_interior.height * 0.30
+        # Water, roofs, and selection highlights have no dense command labels.
+        # Real four/five-row command menus stay above 7% on accepted captures;
+        # 6.5% leaves margin for the narrower glyph combinations.
+        and command_interior_white_pixels
+        > command_interior.width * command_interior.height * 0.065
         # The ornate status-bar frame occupies a little over half of this
         # crop on some maps; 45% still distinguishes it from dialogue views.
         # Preparation/hire screens fill more of the same crop with solid blue
