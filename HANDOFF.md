@@ -3762,3 +3762,40 @@ contains 57 safe syllables as documented below and in
   mercenary bytes. The list also contains Lana, imperial Archmages and a Saint,
   Egbert, Iron Golems, and Liches. Coordinates and hidden/event flags remain
   read-only editor context.
+
+### Scenario 23 Original Editor Records (2026-07-16)
+
+- Background-only inspection of the Japanese ROM found eleven fixed-placement
+  records at `0x1829B0`. This does not change Scenario 23's runtime status; a
+  fresh production playthrough of briefing, complete preparation pages,
+  opening, conditions, and the first turn is still required.
+- Editor regressions lock an imperial `드래곤로드` (LV10, AT45, DF31,
+  X23/Y13), `레아드/실버나이트` (LV10, AT43, DF30, X23/Y7), and an imperial
+  `위저드` (LV10, AT35, DF31, X30/Y3), including exact mercenary slots. The
+  remaining records are imperial Paladins, Saints, another Dragon Lord, and
+  another Wizard. Scenario 23 has no hidden fixed record in this list.
+- As with earlier scenarios, the editor may write only the already verified
+  class, LV, AT, DF, and six mercenary fields. Coordinates remain read-only
+  context, and the absence of a hidden flag here must not be generalized to
+  event-spawned units.
+
+### Scenarios 24-26 Original Editor Records (2026-07-16)
+
+- Background-only Japanese-ROM inspection added representative editor
+  regressions without changing any runtime status. Scenario 24 has eleven
+  records at `0x182B88`; the locked samples are `베른하르트/엠퍼러`, a
+  `데몬로드`, and a `뱀파이어로드`. This list also contains Liches and
+  Cerberuses and has no hidden fixed record.
+- Scenario 25 has twelve records at `0x182D60`. The locked samples are
+  `제시카/워록`, `레온/로얄가드`, and the hidden imperial `드래곤로드`,
+  including their exact six mercenary bytes. The list also contains
+  `레아드/실버나이트`, Egbert, imperial Wizards, Paladins, and a
+  Knight Master.
+- Scenario 26 has ten records at `0x182F62`. The locked samples are an imperial
+  `아크메이지`, an imperial `나이트마스터`, and `에그베르트/자베라`.
+  The other records are imperial Wizards, Saints, and Archmages; none of the
+  fixed records is hidden.
+- Fresh production playback is still required for all three scenarios before
+  briefing, preparation, opening, conditions, or turn-event states can be
+  promoted. The editor continues to write only class, LV, AT, DF, and the six
+  mercenary slots; coordinates and hidden/event flags remain read-only.
