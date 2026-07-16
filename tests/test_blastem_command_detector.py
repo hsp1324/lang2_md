@@ -6,6 +6,7 @@ from PIL import Image
 
 from tools.run_blastem_sequence import (
     battle_command_menu_visible,
+    game_over_visible,
     preparation_screen_visible,
 )
 
@@ -42,6 +43,16 @@ class BlastemCommandDetectorTests(unittest.TestCase):
             frame.save(path)
             self.assertFalse(battle_command_menu_visible(path))
 
+    def test_rejects_map_roofs_and_unit_selection_highlight(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "map-selection.png"
+            frame = Image.new("RGB", (320, 240), (0, 0, 0))
+            frame.paste((0, 70, 150), (15, 25, 45, 105))
+            frame.paste((0, 0, 119), (60, 25, 95, 105))
+            frame.paste((0, 0, 119), (0, 195, 154, 235))
+            frame.save(path)
+            self.assertFalse(battle_command_menu_visible(path))
+
 
 class BlastemPreparationDetectorTests(unittest.TestCase):
     @staticmethod
@@ -75,6 +86,26 @@ class BlastemPreparationDetectorTests(unittest.TestCase):
             frame.paste((0, 0, 119), (141, 32, 147, 215))
             frame.save(path)
             self.assertFalse(preparation_screen_visible(path))
+
+
+class BlastemGameOverDetectorTests(unittest.TestCase):
+    def test_accepts_centered_game_over_panel(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "game-over.png"
+            frame = Image.new("RGB", (320, 240), (0, 0, 0))
+            frame.paste((0, 0, 119), (24, 97, 294, 170))
+            frame.paste((255, 255, 255), (100, 124, 220, 139))
+            frame.save(path)
+            self.assertTrue(game_over_visible(path))
+
+    def test_rejects_top_aligned_dialogue(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "dialogue.png"
+            frame = Image.new("RGB", (320, 240), (0, 0, 0))
+            frame.paste((0, 0, 119), (24, 97, 294, 170))
+            frame.paste((255, 255, 255), (36, 104, 180, 116))
+            frame.save(path)
+            self.assertFalse(game_over_visible(path))
 
 if __name__ == "__main__":
     unittest.main()

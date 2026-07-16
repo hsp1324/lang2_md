@@ -334,6 +334,26 @@ def battle_command_menu_visible(path: Path) -> bool:
                 blue_pixels += 1
             if 50 <= blue <= 180 and red < 45 and green < 65 and blue > red * 2 and blue > green * 1.8:
                 dark_panel_pixels += 1
+    # The full command menu has a large, contiguous dark-blue interior on the
+    # left. Blue roofs and unit-selection highlights can satisfy the broader
+    # color totals above, but do not fill this stable interior rectangle.
+    command_interior = frame.crop(
+        (
+            round(10 * scale_x),
+            round(28 * scale_y),
+            round(65 * scale_x),
+            round(105 * scale_y),
+        )
+    )
+    command_interior_dark_pixels = sum(
+        1
+        for red, green, blue in command_interior.get_flattened_data()
+        if 50 <= blue <= 180
+        and red < 45
+        and green < 65
+        and blue > red * 2
+        and blue > green * 1.8
+    )
     # Portrait cut-ins also have a broad blue background and used to trigger
     # this detector early. A real command menu is only available with the blue
     # battle status bar visible across the bottom of the frame.
@@ -350,12 +370,61 @@ def battle_command_menu_visible(path: Path) -> bool:
         # content, so reject nearly solid-blue backgrounds.
         and blue_pixels < image.width * image.height * 0.85
         and dark_panel_pixels > 1000 * scale_x * scale_y
+        and command_interior_dark_pixels
+        > command_interior.width * command_interior.height * 0.30
         # The ornate status-bar frame occupies a little over half of this
         # crop on some maps; 45% still distinguishes it from dialogue views.
         # Preparation/hire screens fill more of the same crop with solid blue
         # (about 52%), so cap the ratio as well as enforcing the lower bound.
         and status_blue_pixels > status.width * status.height * 0.45
         and status_blue_pixels < status.width * status.height * 0.505
+    )
+
+
+def game_over_visible(path: Path) -> bool:
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+
+    def crop(box: tuple[int, int, int, int]) -> Image.Image:
+        left, top, right, bottom = box
+        return frame.crop(
+            (
+                round(left * scale_x),
+                round(top * scale_y),
+                round(right * scale_x),
+                round(bottom * scale_y),
+            )
+        )
+
+    def white_ratio(image: Image.Image) -> float:
+        return sum(
+            1
+            for red, green, blue in image.get_flattened_data()
+            if red > 170 and green > 170 and blue > 170
+        ) / (image.width * image.height)
+
+    panel = crop((24, 97, 294, 170))
+    panel_dark_ratio = sum(
+        1
+        for red, green, blue in panel.get_flattened_data()
+        if 50 <= blue <= 180
+        and red < 45
+        and green < 65
+        and blue > red * 2
+        and blue > green * 1.8
+    ) / (panel.width * panel.height)
+    top = crop((30, 101, 288, 119))
+    middle = crop((30, 119, 288, 146))
+    bottom = crop((30, 146, 288, 166))
+    # GAME OVER is the only runtime panel with one centered white row in this
+    # vertical band. Ordinary dialogue starts in the top band, even when it
+    # contains only one line.
+    return (
+        panel_dark_ratio > 0.80
+        and white_ratio(top) < 0.01
+        and white_ratio(middle) > 0.04
+        and white_ratio(bottom) < 0.01
     )
 
 
@@ -455,6 +524,9 @@ def advance_to_battle_command(args: argparse.Namespace) -> int:
             return status
         frame = detection_capture_path(args, probe, step)
         capture_window(frame)
+        if game_over_visible(frame):
+            print(f"game over detected after {step} confirmations")
+            return 2
         if battle_command_menu_visible(frame):
             time.sleep(2.0)
             capture_window(frame)

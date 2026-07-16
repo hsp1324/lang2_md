@@ -3277,3 +3277,33 @@ contains 57 safe syllables as documented below and in
   commander dialogue, were reviewed against Scenario 5 source records. No
   reset, freeze, broken name, class, AT, or DF was observed; later turns and
   completion remain pending.
+
+### Current F03A Scenario 6 Entry Regression (2026-07-16)
+
+- `detect-prep` stopped after 14 confirmations. All retained frames verify the
+  Korean `시나리오 6 / 노병 아론` briefing and the full description through
+  preparation. Commander selection separately verifies `엘윈/파이터`,
+  `헤인/워록`, `스코트/나이트`, `리아나/클레릭`, and `쉐리/파이터` in
+  `f03a_s06_commander_01.png` through `_05.png`.
+- Arrangement, automatic deployment, and all 16 opening confirmations were
+  reviewed through a valid Elwin command panel. Dialogue names and bottom
+  status text for Morgan, Aaron, Sherry, and imperial commanders remained
+  intact. `f03a_s06_conditions.png` verifies victory `적 격파` and defeat
+  `시민 전멸` / `주인공 사망` without clipping or Japanese residue.
+- The first-turn probe deliberately ended the turn without moving any allied
+  unit. It reviewed Aaron, resident, Morgan, imperial commander, and Hein
+  dialogue around enemy movement. The live battle renderer in
+  `f03a_s06_turn1_live_10.png` and `_11.png` displays `바바리안/솔저`,
+  `-AT-/-DF-`, and intact formation/status graphics on production F03A.
+- Because the civilians were left undefended, they were wiped out and the
+  game correctly displayed `GAME OVER` at `f03a_s06_turn1_cont_03.png` before
+  returning to the title sequence. This is an expected `시민 전멸` loss, not
+  the old dialogue-triggered reset defect. Scenario completion and later-turn
+  event coverage remain pending.
+- The original command-menu detector falsely accepted a map frame with blue
+  roofs and a unit-selection highlight. It now also requires at least 30% of
+  the command menu's stable left interior to contain dark-blue panel pixels.
+  It also detects the centered `GAME OVER` panel and exits with status 2 before
+  confirmations can spill through the title sequence. Synthetic regression
+  tests and the exact F03A true/false frames prove the full menu remains
+  accepted while the Scenario 6 false positive is rejected.

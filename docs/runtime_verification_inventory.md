@@ -16,7 +16,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 3 | current | current | current | current | probe | progressed | pending | pending | 10 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 12 |
 | 5 | current | current | current | current | probe | progressed | pending | pending | 14 |
-| 6 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 6 | current | current | current | current | current | progressed | pending | pending | 17 |
 | 7 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 8 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 9 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -117,6 +117,28 @@ All ten briefing confirmations, five commander/class selections, all 16 opening 
 - `captures/run/f03a_s05_turn1_live_01.png`
 - `captures/run/f03a_s05_turn1_live_24.png`
 - `captures/run/f03a_s05_turn1_live_36.png`
+
+### Scenario 6
+
+All 14 briefing confirmations, five commander/class selections, all 16 opening confirmations, and the condition rows were visually reviewed on F03A. The no-action first-turn probe reviewed Aaron, resident, Morgan, imperial commander, and Hein dialogue plus the current battle renderer. Barbarian/Soldier, -AT-/-DF-, names, classes, and status graphics were intact. The probe ended in the expected GAME OVER after civilians were left undefended and wiped out; this is progression evidence, not a reset, completion, or later-turn verification.
+
+- `captures/run/f03a_s06_selector_map.png`
+- `captures/run/f03a_s06_brief_live_01.png`
+- `captures/run/f03a_s06_brief_live_13.png`
+- `captures/run/f03a_s06_brief_live_14.png`
+- `captures/run/f03a_s06_commander_01.png`
+- `captures/run/f03a_s06_commander_05.png`
+- `captures/run/f03a_s06_arrange.png`
+- `captures/run/f03a_s06_deploy.png`
+- `captures/run/f03a_s06_opening_live_02.png`
+- `captures/run/f03a_s06_opening_live_16.png`
+- `captures/run/f03a_s06_conditions.png`
+- `captures/run/f03a_s06_turn1_live_01.png`
+- `captures/run/f03a_s06_turn1_live_10.png`
+- `captures/run/f03a_s06_turn1_live_12.png`
+- `captures/run/f03a_s06_turn1_live_17.png`
+- `captures/run/f03a_s06_turn1_cont_02.png`
+- `captures/run/f03a_s06_turn1_cont_03.png`
 
 ### Scenario 27
 
