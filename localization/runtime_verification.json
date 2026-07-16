@@ -723,7 +723,30 @@
       ],
       "note": "All seven 마리오네트 briefing confirmations, both preparation roster pages, the return to the first page, all eight selected commander/class panels, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 138B. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 제시카/소서러, and 스코트/파이터. Commander/class inspection used the equipment commander selector without confirming equipment; its second page explicitly verifies 제시카 rather than treating the first five rows as complete. Victory is enemy annihilation and defeat is the protagonist's death. The opening reviewed Aaron, Scott, Liana/세인트, Lich, Elwin, Sherry, Keith, Lester, and Jessica dialogue. The first turn retained 18 frames of enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1825E2 is covered by editor regressions for Lana/다크프린세스, a visible Lich, and a hidden Kraken. Later turns, conditional events, completion, and branches remain pending."
     },
-    {"scenario": 22},
+    {
+      "scenario": 22,
+      "description": "verified_current",
+      "conditions": "pending",
+      "preparation": "pending",
+      "opening_events": "pending",
+      "battle_ui": "pending",
+      "turn_events": "pending",
+      "completion": "pending",
+      "branches_endings": "pending",
+      "captures": [
+        "captures/run/138b_s22_brief_00.png",
+        "captures/run/138b_s22_brief_06.png",
+        "captures/run/138b_s22_roster_page1.png",
+        "captures/run/138b_s22_roster_page2.png",
+        "captures/run/138b_s22_roster_return_page1.png",
+        "captures/run/138b_s22_commander_01_elwin.png",
+        "captures/run/138b_s22_commander_02_hein.png",
+        "captures/run/138b_s22_commander_03_sherry.png",
+        "captures/run/138b_s22_commander_04_aaron.png",
+        "captures/run/138b_s22_commander_05_keith.png"
+      ],
+      "note": "All six 알하자드의 부활 briefing confirmations were visually reviewed on production 138B. The preparation pager was followed from 엘윈/헤인/쉐리/아론/키스 to 레스터/제시카/스코트 and back, so the complete selectable name roster is captured. The equipment commander selector separately verified the first-page class panels as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Preparation remains pending rather than current because the page-two class panels, automatic deployment, opening, conditions, and first turn were intentionally not run while the user needed the machine. The original twelve-record fixed-placement list at 0x1827B4 is covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Static dialogue covers all 151 Japanese pointer records and 191 physical pages, but the older 3B53 opening probe is not accepted as current 138B evidence."
+    },
     {"scenario": 23},
     {"scenario": 24},
     {"scenario": 25},

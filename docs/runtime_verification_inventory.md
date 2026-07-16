@@ -32,7 +32,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 19 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 20 | current | current | current | current | probe | progressed | pending | pending | 16 |
 | 21 | current | current | current | current | probe | progressed | pending | pending | 18 |
-| 22 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 22 | current | pending | pending | pending | pending | pending | pending | pending | 10 |
 | 23 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 24 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 25 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -531,6 +531,21 @@ All seven 마리오네트 briefing confirmations, both preparation roster pages,
 - `captures/run/138b_s21_turn1_01.png`
 - `captures/run/138b_s21_turn1_16.png`
 - `captures/run/138b_s21_turn1_18.png`
+
+### Scenario 22
+
+All six 알하자드의 부활 briefing confirmations were visually reviewed on production 138B. The preparation pager was followed from 엘윈/헤인/쉐리/아론/키스 to 레스터/제시카/스코트 and back, so the complete selectable name roster is captured. The equipment commander selector separately verified the first-page class panels as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Preparation remains pending rather than current because the page-two class panels, automatic deployment, opening, conditions, and first turn were intentionally not run while the user needed the machine. The original twelve-record fixed-placement list at 0x1827B4 is covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Static dialogue covers all 151 Japanese pointer records and 191 physical pages, but the older 3B53 opening probe is not accepted as current 138B evidence.
+
+- `captures/run/138b_s22_brief_00.png`
+- `captures/run/138b_s22_brief_06.png`
+- `captures/run/138b_s22_roster_page1.png`
+- `captures/run/138b_s22_roster_page2.png`
+- `captures/run/138b_s22_roster_return_page1.png`
+- `captures/run/138b_s22_commander_01_elwin.png`
+- `captures/run/138b_s22_commander_02_hein.png`
+- `captures/run/138b_s22_commander_03_sherry.png`
+- `captures/run/138b_s22_commander_04_aaron.png`
+- `captures/run/138b_s22_commander_05_keith.png`
 
 ### Scenario 27
 
