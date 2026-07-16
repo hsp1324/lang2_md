@@ -2192,7 +2192,7 @@
       {"address": "0x1A4914", "english_record": 711, "text": "녀석들이 나타났군."},
       {"address": "0x1A492E", "english_record": 712, "text": "그만! 죄 없는 사람을 해치지 마!"},
       {"address": "0x1A495E", "english_record": 713, "text": "그래! 정말 화났어!"},
-      {"address": "0x1A497A", "english_record": 714, "text": "정의로운 척하는군! 인간은 마물의 먹이라고 {0010}님이 말했다."},
+      {"address": "0x1A497A", "english_record": 714, "text": "정의로운 척하는군!\n{0010}님은 인간이 마물의\n먹이라고 하셨다."},
       {"address": "0x1A49C0", "english_record": 715, "text": "역시 {0010}인가… 어떻게든 막아야 해."},
       {"address": "0x1A4A02", "english_record": 716, "text": "마을 사람들을 어디로 피신시켜야 안전할까…"},
       {"address": "0x1A4A38", "english_record": 716, "continuation": true, "text": "남쪽은 막혔지만 서쪽은 지키기 쉬워 보여."},

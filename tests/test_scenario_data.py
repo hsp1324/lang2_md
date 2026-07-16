@@ -233,6 +233,33 @@ class ScenarioDataTests(unittest.TestCase):
             hidden_magic_knight["mercenaries"], [122, 122, 122, 122, 122, 122]
         )
 
+    def test_scenario_eighteen_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 18)
+        self.assertEqual(model["record_count"], 11)
+
+        resident = model["records"][0]
+        great_dragon = model["records"][5]
+        lana = model["records"][6]
+        self.assertEqual(
+            (resident["name"]["ko"], resident["class"]["ko"], resident["level"],
+             resident["at"], resident["df"], resident["x"], resident["y"]),
+            ("주민", "클레릭", 2, 20, 17, 15, 20),
+        )
+        self.assertEqual(resident["mercenaries"], [113, 113, 113, 113, 255, 255])
+        self.assertEqual(
+            (great_dragon["name"]["ko"], great_dragon["class"]["ko"],
+             great_dragon["level"], great_dragon["at"], great_dragon["df"],
+             great_dragon["x"], great_dragon["y"]),
+            ("그레이트드래곤", "그레이트드래곤", 1, 39, 34, 35, 4),
+        )
+        self.assertEqual(great_dragon["mercenaries"], [130, 130, 130, 130, 255, 255])
+        self.assertEqual(
+            (lana["name"]["ko"], lana["class"]["ko"], lana["level"],
+             lana["at"], lana["df"], lana["x"], lana["y"]),
+            ("라나", "다크프린세스", 3, 37, 34, 37, 2),
+        )
+        self.assertEqual(lana["mercenaries"], [136, 136, 136, 136, 136, 136])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")

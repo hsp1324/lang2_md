@@ -3621,3 +3621,33 @@ contains 57 safe syllables as documented below and in
   mercenary IDs. `엠퍼러` follows the Korean class reference for original
   `エンペラー`; no class rename was needed. Coordinates and hidden/event flags
   remain read-only editor context.
+
+### Current 1391 Scenario 18 Entry, Dynamic Name Order, And Editor Records (2026-07-16)
+
+- All eight `어둠의 공주` briefing confirmations were reviewed. The complete
+  preparation roster again has eight selectable commanders across both pages:
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `스코트/파이터`. The `>>`/`<<` round trip is retained as evidence that the
+  second page was not omitted.
+- Live 12D3 exposed an awkward token order at `0x1A497A`: `인간은 마물의
+  먹이라고 보젤님이 말했다`. The English reference and Japanese dynamic
+  speaker token both mean that Bozel taught her humans are food for monsters.
+  The reviewed text is now `정의로운 척하는군! / 보젤님은 인간이 마물의
+  / 먹이라고 하셨다.` Production 1391 capture
+  `1391_s18_opening_11.png` verifies the inserted `보젤` remains intact and
+  the three lines wrap naturally. Glyph count and IDs remain 851
+  (`0x7000..0x7353`).
+- Conditions are victory by defeating the Great Dragon or Dark Princess, and
+  defeat by the protagonist's death or all residents being eliminated. The
+  no-action first turn reviewed Liana, Hein, and Jessica dialogue plus enemy
+  movement, reached `TURN 2`, and returned to a valid Elwin command menu
+  without reset or freeze. No battle presentation occurred, so battle UI
+  remains covered by the shared probe. The evacuation choice's alternate path,
+  later turns, completion, and other branches remain pending.
+- The original fixed-placement list at `0x1820B4` contains 11 records. Editor
+  regressions lock a resident (`클레릭`, LV2, AT20, DF17, X15/Y20), the Great
+  Dragon (`그레이트드래곤`, LV1, AT39, DF34, X35/Y4), and Lana
+  (`다크프린세스`, LV3, AT37, DF34, X37/Y2), including their exact original
+  mercenary IDs. The resident's original class mapping confirms `클레릭` is
+  intentional here. Coordinates and event ownership remain read-only context.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "12D3",
+  "production_checksum": "1391",
   "states": [
     "pending",
     "historical",
@@ -597,7 +597,38 @@
       ],
       "note": "All eight 황제와 어둠의 왕자 briefing confirmations, both preparation pages, a return to the first page, arrangement, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Live 85F1 exposed mid-word wrapping at 어디, 알하자드, and 힘을 주는 plus a dangling comma before 모두. Production 12D3 replays verify natural explicit line breaks at event addresses 0x1A2852, 0x1A296C, and 0x1A2A98. Victory is 베른하르트 격파; defeat is 주인공 사망. The first turn reviewed Bernhardt and imperial dialogue, enemy movement, Scott and Jessica reactions, and live 발리스타/파이터/소서러 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics before returning to a valid Elwin command menu without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 is covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending."
     },
-    {"scenario": 18},
+    {
+      "scenario": 18,
+      "description": "verified_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "verified_current",
+      "battle_ui": "verified_probe",
+      "turn_events": "progressed_current",
+      "completion": "pending",
+      "branches_endings": "pending",
+      "captures": [
+        "captures/run/12d3_s18_brief_live_01.png",
+        "captures/run/12d3_s18_brief_live_07.png",
+        "captures/run/12d3_s18_roster_page1_elwin.png",
+        "captures/run/12d3_s18_roster_page1_keith.png",
+        "captures/run/12d3_s18_roster_page2_lester.png",
+        "captures/run/12d3_s18_roster_page2_jessica.png",
+        "captures/run/12d3_s18_roster_page2_last.png",
+        "captures/run/12d3_s18_roster_wrap_page1.png",
+        "captures/run/12d3_s18_auto.png",
+        "captures/run/1391_s18_opening_03.png",
+        "captures/run/1391_s18_opening_11.png",
+        "captures/run/1391_s18_opening_16.png",
+        "captures/run/1391_s18_conditions.png",
+        "captures/run/1391_s18_turn1_01.png",
+        "captures/run/1391_s18_turn1_03.png",
+        "captures/run/1391_s18_turn1_05.png",
+        "captures/run/1391_s18_turn1_36.png",
+        "captures/run/1391_s18_turn1_38.png"
+      ],
+      "note": "All eight 어둠의 공주 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Live 12D3 exposed the awkward dynamic-name order 인간은 마물의 먹이라고 보젤님이 말했다 at 0x1A497A. Production 1391 verifies the natural three-line 보젤님은 인간이 마물의 먹이라고 하셨다 without splitting the inserted name. Victory is 그레이트드래곤 격파 or 다크프린세스 격파; defeat is 주인공 사망 or 주민 전멸. The first turn reviewed Liana, Hein, and Jessica dialogue plus enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1820B4 is covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Later turns, the evacuation choice branch, completion, and other branches remain pending."
+    },
     {"scenario": 19},
     {"scenario": 20},
     {"scenario": 21},

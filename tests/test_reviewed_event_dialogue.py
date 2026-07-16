@@ -297,7 +297,15 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             [row["english_record"] for row in primary],
             list(range(707, 802)),
         )
-        self.assertTrue(all("\n" not in row["text"] for row in rows))
+        by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            [row["address"] for row in rows if "\n" in row["text"]],
+            ["0x1A497A"],
+        )
+        self.assertEqual(
+            by_address["0x1A497A"],
+            "정의로운 척하는군!\n{0010}님은 인간이 마물의\n먹이라고 하셨다.",
+        )
 
     def test_scenario_19_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 19]
