@@ -23,16 +23,16 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 10 | historical | current | current | current | probe | progressed | pending | pending | 23 |
 | 11 | historical | current | current | current | current | progressed | pending | pending | 28 |
 | 12 | historical | current | current | current | current | progressed | pending | pending | 29 |
-| 13 | historical | current | current | current | current | progressed | pending | pending | 27 |
+| 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
 | 14 | historical | current | current | current | probe | progressed | pending | pending | 22 |
-| 15 | historical | current | current | current | probe | progressed | pending | pending | 15 |
+| 15 | progressed | current | current | current | probe | progressed | pending | pending | 18 |
 | 16 | historical | current | current | current | probe | progressed | pending | pending | 17 |
 | 17 | historical | current | current | current | current | progressed | pending | pending | 21 |
 | 18 | historical | current | current | current | probe | progressed | pending | pending | 18 |
 | 19 | historical | current | current | current | probe | progressed | pending | pending | 18 |
 | 20 | historical | current | current | current | probe | progressed | pending | pending | 16 |
 | 21 | historical | current | current | current | probe | progressed | pending | pending | 18 |
-| 22 | historical | pending | pending | pending | pending | pending | pending | pending | 10 |
+| 22 | progressed | pending | pending | pending | pending | pending | pending | pending | 14 |
 | 23 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 24 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 25 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -323,7 +323,7 @@ All 13 briefing confirmations, arrangement, automatic deployment, all 12 slow op
 
 ### Scenario 13
 
-All 14 briefing confirmations, all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, and the condition rows were visually reviewed on historical builds. Production 85F1 rechecked the earlier title 염룡병단과의 싸움, victory 조름 장군 격파, and first-turn 염룡병단 dialogue. The current source-reviewed title is 염룡병단과의 결전 and requires fresh playback. The complete roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Defeat is 주인공 사망. The no-action first turn reviewed Zorum and imperial-commander dialogue, enemy movement, and historical battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, and branches remain pending.
+Production C7AB freshly displays the source-reviewed title 염룡병단과의 결전 and reaches the corrected final description about Vargas and the Fire Dragon Corps without reset; intermediate scroll coverage is sampled, so description is progressed rather than fully verified. All 14 briefing confirmations, all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, and the condition rows were visually reviewed on historical builds. Production 85F1 rechecked the earlier title 염룡병단과의 싸움, victory 조름 장군 격파, and first-turn 염룡병단 dialogue. The complete roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Defeat is 주인공 사망. The no-action first turn reviewed Zorum and imperial-commander dialogue, enemy movement, and historical battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, and branches remain pending.
 
 - `captures/run/f0e3_s13_brief_live_01.png`
 - `captures/run/f0e3_s13_brief_live_06.png`
@@ -352,6 +352,8 @@ All 14 briefing confirmations, all seven selectable commander/class rows across 
 - `captures/run/85f1_s13_term_recheck_06.png`
 - `captures/run/85f1_s13_conditions_name.png`
 - `captures/run/85f1_s13_turn1_term_recheck_06.png`
+- `captures/run/c7ab_s13_title.png`
+- `captures/run/c7ab_s13_body_1.png`
 
 ### Scenario 14
 
@@ -382,7 +384,7 @@ All 14 briefing confirmations, all seven selectable commander/class rows across 
 
 ### Scenario 15
 
-All 13 briefing confirmations, both preparation pages, arrangement, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 85F1. The title is the canonical 빙룡병단. The preparation page control was followed through the five visible rows to the second page, where 제시카/크루세이더 and 크루거/소서러 both render correctly; the complete selectable roster has seven commanders. Victory is 이멜다 장군 격파 or 주인공 아래 이동; defeat is 주인공 사망. A 3.2-second slow replay verifies the previously partial capture as 이멜다: 드디어 따라잡았나 보군. The first turn reviewed Imelda and imperial-commander dialogue, enemy movement, and 제시카/크루세이더 before returning to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original 12-record fixed-placement list at 0x181B3E is covered by editor regressions for a 서펜나이트 commander, 이멜다/제너럴, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending.
+Production C7AB freshly displays the Japanese-source title 빙룡병단장 이멜다, reaches the corrected final description, and shows an intact first preparation page; intermediate scroll coverage is sampled, so description is progressed rather than fully verified. All 13 briefing confirmations, both preparation pages, arrangement, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 85F1 under the earlier shortened title 빙룡병단. The preparation page control was followed through the five visible rows to the second page, where 제시카/크루세이더 and 크루거/소서러 both render correctly; the complete selectable roster has seven commanders. Victory is 이멜다 장군 격파 or 주인공 아래 이동; defeat is 주인공 사망. A 3.2-second slow replay verifies the previously partial capture as 이멜다: 드디어 따라잡았나 보군. The first turn reviewed Imelda and imperial-commander dialogue, enemy movement, and 제시카/크루세이더 before returning to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original 12-record fixed-placement list at 0x181B3E is covered by editor regressions for a 서펜나이트 commander, 이멜다/제너럴, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending.
 
 - `captures/run/85f1_s15_brief_live_01.png`
 - `captures/run/85f1_s15_brief_live_13.png`
@@ -399,6 +401,9 @@ All 13 briefing confirmations, both preparation pages, arrangement, the complete
 - `captures/run/85f1_s15_turn1_endpoint.png`
 - `captures/run/85f1_s15_opening_slow_06.png`
 - `captures/run/85f1_s15_opening_slow_12.png`
+- `captures/run/c7ab_s15_title.png`
+- `captures/run/c7ab_s15_body_final.png`
+- `captures/run/c7ab_s15_prep.png`
 
 ### Scenario 16
 
@@ -540,7 +545,7 @@ All seven 마리오네트 briefing confirmations, both preparation roster pages,
 
 ### Scenario 22
 
-All six 알하자드의 부활 briefing confirmations were visually reviewed on production 138B. The preparation pager was followed from 엘윈/헤인/쉐리/아론/키스 to 레스터/제시카/스코트 and back, so the complete selectable name roster is captured. The equipment commander selector separately verified the first-page class panels as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Preparation remains pending rather than current because the page-two class panels, automatic deployment, opening, conditions, and first turn were intentionally not run while the user needed the machine. The original twelve-record fixed-placement list at 0x1827B4 is covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Static dialogue covers all 151 Japanese pointer records and 191 physical pages, but the older 3B53 opening probe is not accepted as current 138B evidence.
+Production C7AB freshly reaches the source-reviewed 알하자드의 부활 description from the evil statue and altar sword through the two lookalike girls, Bozel's incantation, and the imminent broken seal without reset; intermediate scroll coverage is sampled, so description is progressed rather than fully verified. All six earlier briefing confirmations were visually reviewed on production 138B. The preparation pager was followed from 엘윈/헤인/쉐리/아론/키스 to 레스터/제시카/스코트 and back, so the complete selectable name roster is captured. The equipment commander selector separately verified the first-page class panels as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. Preparation remains pending rather than current because the page-two class panels, automatic deployment, opening, conditions, and first turn were intentionally not run while the user needed the machine. The original twelve-record fixed-placement list at 0x1827B4 is covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Static dialogue covers all 151 Japanese pointer records and 191 physical pages, but the older 3B53 opening probe is not accepted as current C7AB evidence.
 
 - `captures/run/138b_s22_brief_00.png`
 - `captures/run/138b_s22_brief_06.png`
@@ -552,6 +557,10 @@ All six 알하자드의 부활 briefing confirmations were visually reviewed on 
 - `captures/run/138b_s22_commander_03_sherry.png`
 - `captures/run/138b_s22_commander_04_aaron.png`
 - `captures/run/138b_s22_commander_05_keith.png`
+- `captures/run/c7ab_s22_title.png`
+- `captures/run/c7ab_s22_body_mid.png`
+- `captures/run/c7ab_s22_body_final.png`
+- `captures/run/c7ab_s22_body_final2.png`
 
 ### Scenario 27
 

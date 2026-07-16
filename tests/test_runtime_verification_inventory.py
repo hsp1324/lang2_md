@@ -46,8 +46,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario27 = data["scenarios"][26]
         self.assertEqual(scenario1["description"], "verified_current")
         self.assertIn("captures/run/c7ab_s01_body_name4.png", scenario1["captures"])
+        current_description_progress = {13, 15, 22}
         for scenario in data["scenarios"][1:22]:
-            self.assertEqual(scenario["description"], "historical")
+            expected = (
+                "progressed_current"
+                if scenario["scenario"] in current_description_progress
+                else "historical"
+            )
+            self.assertEqual(scenario["description"], expected)
         self.assertEqual(scenario27["description"], "historical")
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "progressed_current")
@@ -90,7 +96,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario12["opening_events"], "verified_current")
         self.assertEqual(scenario12["battle_ui"], "verified_current")
         self.assertEqual(scenario12["turn_events"], "progressed_current")
-        self.assertEqual(scenario13["description"], "historical")
+        self.assertEqual(scenario13["description"], "progressed_current")
+        self.assertIn("captures/run/c7ab_s13_title.png", scenario13["captures"])
         self.assertEqual(scenario13["conditions"], "verified_current")
         self.assertEqual(scenario13["preparation"], "verified_current")
         self.assertEqual(scenario13["opening_events"], "verified_current")
@@ -102,7 +109,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario14["opening_events"], "verified_current")
         self.assertEqual(scenario14["battle_ui"], "verified_probe")
         self.assertEqual(scenario14["turn_events"], "progressed_current")
-        self.assertEqual(scenario15["description"], "historical")
+        self.assertEqual(scenario15["description"], "progressed_current")
+        self.assertIn("captures/run/c7ab_s15_title.png", scenario15["captures"])
         self.assertEqual(scenario15["conditions"], "verified_current")
         self.assertEqual(scenario15["preparation"], "verified_current")
         self.assertEqual(scenario15["opening_events"], "verified_current")
@@ -144,7 +152,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario21["opening_events"], "verified_current")
         self.assertEqual(scenario21["battle_ui"], "verified_probe")
         self.assertEqual(scenario21["turn_events"], "progressed_current")
-        self.assertEqual(scenario22["description"], "historical")
+        self.assertEqual(scenario22["description"], "progressed_current")
+        self.assertIn("captures/run/c7ab_s22_body_final2.png", scenario22["captures"])
         self.assertEqual(scenario22["preparation"], "pending")
         self.assertEqual(scenario22["opening_events"], "pending")
         self.assertEqual(scenario27["preparation"], "verified_current")

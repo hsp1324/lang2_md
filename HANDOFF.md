@@ -4020,3 +4020,26 @@ contains 57 safe syllables as documented below and in
   other relocated descriptions still require fresh live playback.
 - All 31 scenario description records are now marked statically source-reviewed
   and all remain pointer/terminator checked in the shared resource inventory.
+
+### Current C7AB Middle Description Playback (2026-07-17)
+
+- Fresh BlastEm sessions used the built-in scenario selector on production
+  checksum `C7AB` after emulator input was available again. Scenario 13 shows
+  the corrected title `염룡병단과의 결전` and reaches the rewritten ending
+  about Vargas and the Fire Dragon Corps. Scenario 15 shows the Japanese-source
+  title `빙룡병단장 이멜다`, reaches its corrected ending, and then opens an
+  intact first preparation page with `엘윈/헤인/쉐리/아론/키스`.
+- Scenario 22 was followed from the evil statue and altar sword through the two
+  lookalike girls, Bozel's incantation, and the imminent broken seal. The title
+  and sampled body frames render without broken glyphs or reset on `C7AB`.
+- These three descriptions are recorded as `progressed_current`, not fully
+  verified, because the live captures sampled their automatic intermediate
+  scroll rather than preserving every distinct frame. The inventory cites
+  `c7ab_s13_title.png`, `c7ab_s15_title.png`, and
+  `c7ab_s22_body_final2.png`; `c7ab_s13_conditions.png` is intentionally not
+  cited because that filename contains a preparation-screen frame rather than
+  the conditions page.
+- The emulator was stopped after the captures. No keyboard or gamepad conflict
+  occurred during these sessions. Tests explicitly bind the current
+  description state to scenarios 13, 15, and 22 so a future off-by-one
+  inventory edit cannot silently promote adjacent scenarios.
