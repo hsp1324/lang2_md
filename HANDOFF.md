@@ -3588,3 +3588,36 @@ contains 57 safe syllables as documented below and in
   Lana (`다크프린세스`, LV1, AT36, DF33, X/Y=`0xFF`) with their exact
   original mercenary IDs. Coordinates and hidden/event flags remain read-only
   editor context until their ownership is proven.
+
+### Current 12D3 Scenario 17 Entry, Wrapping Fixes, And Editor Records (2026-07-16)
+
+- All eight `황제와 어둠의 왕자` briefing confirmations were reviewed. The
+  complete preparation roster has eight selectable commanders across two
+  pages: `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `스코트/파이터`. The run followed `>>` and then `<<` back to page one;
+  preparation coverage is not inferred from the first five visible rows.
+- The initial 85F1 opening review exposed three renderer-specific wrapping
+  defects: `어/디`, `알/하자드`, `주/는`, plus a comma stranded before
+  `모두`. Shortening alone did not fix the first two because the dynamic Liana
+  name changes the remaining line width. Final event records use explicit
+  semantic breaks at `0x1A2852`, `0x1A296C`, and `0x1A2A98`:
+  `리아나가 없다! / 어디 간 거지!?`, `당신은 이용당할 뿐이다. /
+  알하자드는 생각대로 / 힘을 주는 검이 아니다.`, and
+  `원하는 대로 해 주지. / 간다, 모두!`. Production 12D3 captures
+  `12d3_s17_opening_09.png`, `_14.png`, and `_18.png` prove all four defects
+  are gone. Glyph count and IDs remain stable at 851 (`0x7000..0x7353`).
+- Conditions are victory by defeating Bernhardt and defeat by the
+  protagonist's death. The no-action first turn ran through 47 retained frames,
+  reviewed Bernhardt and imperial dialogue, enemy movement, Scott and Jessica
+  reactions, and live `발리스타/파이터/소서러` battles. Names, classes,
+  `-AT-/-DF-`, troop counts, and status graphics remained intact, and the path
+  returned to a valid Elwin command menu without reset or freeze. Later turns,
+  completion, and branches remain pending.
+- The original fixed-placement list at `0x181EE2` contains 11 records. Editor
+  regressions lock Bernhardt (`엠퍼러`, LV1, AT52, DF37, X15/Y4), Bozel
+  (`다크마스터`, LV1, AT38, DF29, X18/Y6), and a hidden imperial Magic Knight
+  (`매직나이트`, LV10, AT36, DF27, X/Y=`0xFF`) with exact original
+  mercenary IDs. `엠퍼러` follows the Korean class reference for original
+  `エンペラー`; no class rename was needed. Coordinates and hidden/event flags
+  remain read-only editor context.

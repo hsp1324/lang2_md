@@ -20,7 +20,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "85F1")
+        self.assertEqual(data["production_checksum"], "12D3")
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]
@@ -37,6 +37,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario14 = data["scenarios"][13]
         scenario15 = data["scenarios"][14]
         scenario16 = data["scenarios"][15]
+        scenario17 = data["scenarios"][16]
         scenario27 = data["scenarios"][26]
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "progressed_current")
@@ -103,6 +104,12 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario16["opening_events"], "verified_current")
         self.assertEqual(scenario16["battle_ui"], "verified_probe")
         self.assertEqual(scenario16["turn_events"], "progressed_current")
+        self.assertEqual(scenario17["description"], "verified_current")
+        self.assertEqual(scenario17["conditions"], "verified_current")
+        self.assertEqual(scenario17["preparation"], "verified_current")
+        self.assertEqual(scenario17["opening_events"], "verified_current")
+        self.assertEqual(scenario17["battle_ui"], "verified_current")
+        self.assertEqual(scenario17["turn_events"], "progressed_current")
         self.assertEqual(scenario27["preparation"], "verified_current")
         self.assertEqual(scenario27["completion"], "verified_probe")
         for evidence in data["global_evidence"]:

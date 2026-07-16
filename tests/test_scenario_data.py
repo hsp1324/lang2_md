@@ -202,6 +202,37 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(hidden_lana["mercenaries"], [136, 136, 136, 136, 118, 118])
 
+    def test_scenario_seventeen_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 17)
+        self.assertEqual(model["record_count"], 11)
+
+        bernhardt = model["records"][0]
+        bozel = model["records"][1]
+        hidden_magic_knight = model["records"][9]
+        self.assertEqual(
+            (bernhardt["name"]["ko"], bernhardt["class"]["ko"],
+             bernhardt["level"], bernhardt["at"], bernhardt["df"],
+             bernhardt["x"], bernhardt["y"]),
+            ("베른하르트", "엠퍼러", 1, 52, 37, 15, 4),
+        )
+        self.assertEqual(bernhardt["mercenaries"], [119, 119, 119, 119, 123, 123])
+        self.assertEqual(
+            (bozel["name"]["ko"], bozel["class"]["ko"], bozel["level"],
+             bozel["at"], bozel["df"], bozel["x"], bozel["y"]),
+            ("보젤", "다크마스터", 1, 38, 29, 18, 6),
+        )
+        self.assertEqual(bozel["mercenaries"], [124, 124, 124, 124, 124, 124])
+        self.assertEqual(
+            (hidden_magic_knight["name"]["ko"], hidden_magic_knight["class"]["ko"],
+             hidden_magic_knight["level"], hidden_magic_knight["at"],
+             hidden_magic_knight["df"], hidden_magic_knight["x"],
+             hidden_magic_knight["y"], hidden_magic_knight["hidden"]),
+            ("제국지휘관", "매직나이트", 10, 36, 27, 255, 255, True),
+        )
+        self.assertEqual(
+            hidden_magic_knight["mercenaries"], [122, 122, 122, 122, 122, 122]
+        )
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")
