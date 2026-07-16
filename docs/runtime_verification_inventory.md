@@ -31,7 +31,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 18 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 19 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 20 | current | current | current | current | probe | progressed | pending | pending | 16 |
-| 21 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
+| 21 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 22 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 23 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
 | 24 | pending | pending | pending | pending | pending | pending | pending | pending | 0 |
@@ -508,6 +508,29 @@ All seven 붉게 물든 바다 briefing confirmations, both preparation pages, a
 - `captures/run/138b_s20_turn1_38.png`
 - `captures/run/138b_s20_turn1_39.png`
 - `captures/run/138b_s20_turn1_41.png`
+
+### Scenario 21
+
+All seven 마리오네트 briefing confirmations, both preparation roster pages, the return to the first page, all eight selected commander/class panels, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 138B. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 제시카/소서러, and 스코트/파이터. Commander/class inspection used the equipment commander selector without confirming equipment; its second page explicitly verifies 제시카 rather than treating the first five rows as complete. Victory is enemy annihilation and defeat is the protagonist's death. The opening reviewed Aaron, Scott, Liana/세인트, Lich, Elwin, Sherry, Keith, Lester, and Jessica dialogue. The first turn retained 18 frames of enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1825E2 is covered by editor regressions for Lana/다크프린세스, a visible Lich, and a hidden Kraken. Later turns, conditional events, completion, and branches remain pending.
+
+- `captures/run/138b_s21_brief_01.png`
+- `captures/run/138b_s21_brief_07.png`
+- `captures/run/138b_s21_roster_page1.png`
+- `captures/run/138b_s21_roster_page2.png`
+- `captures/run/138b_s21_roster_return_page1.png`
+- `captures/run/138b_s21_commander_01_elwin.png`
+- `captures/run/138b_s21_commander_05_keith.png`
+- `captures/run/138b_s21_commander_06_lester.png`
+- `captures/run/138b_s21_commander_07_jessica.png`
+- `captures/run/138b_s21_commander_08_scott.png`
+- `captures/run/138b_s21_auto2.png`
+- `captures/run/138b_s21_opening_02.png`
+- `captures/run/138b_s21_opening_06.png`
+- `captures/run/138b_s21_opening_13.png`
+- `captures/run/138b_s21_conditions.png`
+- `captures/run/138b_s21_turn1_01.png`
+- `captures/run/138b_s21_turn1_16.png`
+- `captures/run/138b_s21_turn1_18.png`
 
 ### Scenario 27
 

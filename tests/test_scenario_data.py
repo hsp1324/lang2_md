@@ -314,6 +314,33 @@ class ScenarioDataTests(unittest.TestCase):
         )
         self.assertEqual(hidden_kraken["mercenaries"], [133, 133, 133, 133, 133, 133])
 
+    def test_scenario_twenty_one_editor_records_match_original_rom(self):
+        model = read_scenario(self.rom, self.rom, 21)
+        self.assertEqual(model["record_count"], 11)
+
+        lich = model["records"][2]
+        lana = model["records"][3]
+        hidden_kraken = model["records"][8]
+        self.assertEqual(
+            (lich["name"]["ko"], lich["class"]["ko"], lich["level"],
+             lich["at"], lich["df"], lich["x"], lich["y"]),
+            ("리치", "리치", 5, 35, 29, 31, 7),
+        )
+        self.assertEqual(lich["mercenaries"], [119, 119, 119, 119, 138, 138])
+        self.assertEqual(
+            (lana["name"]["ko"], lana["class"]["ko"], lana["level"],
+             lana["at"], lana["df"], lana["x"], lana["y"]),
+            ("라나", "다크프린세스", 6, 39, 36, 37, 11),
+        )
+        self.assertEqual(lana["mercenaries"], [136, 136, 136, 136, 136, 136])
+        self.assertEqual(
+            (hidden_kraken["name"]["ko"], hidden_kraken["class"]["ko"],
+             hidden_kraken["level"], hidden_kraken["at"], hidden_kraken["df"],
+             hidden_kraken["x"], hidden_kraken["y"], hidden_kraken["hidden"]),
+            ("크라켄", "크라켄", 8, 41, 35, 255, 255, True),
+        )
+        self.assertEqual(hidden_kraken["mercenaries"], [133, 133, 133, 133, 133, 133])
+
     def test_all_name_ids_have_explicit_labels(self):
         self.assertEqual(set(KOREAN_NAME_BY_ID), set(range(NAME_COUNT)))
         self.assertEqual(KOREAN_NAME_BY_ID[0x34], "웨어울프")

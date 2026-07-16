@@ -3708,3 +3708,33 @@ contains 57 safe syllables as documented below and in
   hidden Kraken (`크라켄`, LV4, AT39, DF32, X/Y=`0xFF`) with exact mercenary
   slots. The list also includes Minotaurs, Liches, another Scylla, and hidden
   Wyverns. Coordinates and hidden/event flags remain read-only editor context.
+
+### Current 138B Scenario 21 Entry And Full Commander/Class Roster (2026-07-16)
+
+- All seven `마리오네트` briefing confirmations render normally. The actual
+  `지휘관배치` pager was followed from page one (`엘윈/헤인/쉐리/아론/키스`)
+  to page two (`레스터/제시카/스코트`) and back to page one. This explicitly
+  verifies Jessica and prevents the five initially visible rows from being
+  mistaken for the full roster.
+- Names alone are not accepted as class coverage. Opening `장비착용` makes the
+  left commander list selectable without changing equipment. Walking that
+  list verified `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `스코트/파이터`. In this selector, horizontal input changes roster pages
+  while the left list owns focus. Press Right to transfer focus to the
+  equipment choices; skipping all three slots is required before the main
+  preparation menu returns. No equipment was changed during this check.
+- Automatic deployment and all 16 opening frames were reviewed. The opening
+  includes Aaron, Scott, `리아나/세인트`, Lich, Elwin, Sherry, Keith, Lester,
+  and Jessica dialogue without Japanese text, damaged names/classes, abnormal
+  wrapping, reset, or freeze. Victory is `적 전멸`; defeat is `주인공 사망`.
+  Ending the turn retained 18 enemy-movement frames, reached `TURN 2`, and
+  returned to a valid Elwin command menu. No scenario-specific battle screen
+  occurred, so battle UI remains covered by the shared probe.
+- The Japanese ROM fixed-placement list at `0x1825E2` has eleven records.
+  Editor regressions lock a visible Lich (`리치`, LV5, AT35, DF29, X31/Y7),
+  Lana (`라나/다크프린세스`, LV6, AT39, DF36, X37/Y11), and the stronger
+  hidden Kraken (`크라켄`, LV8, AT41, DF35, X/Y=`0xFF`) with exact mercenary
+  IDs. The same list also contains Succubi, Living Armors, two other hidden
+  Krakens, and a hidden imperial Archmage. Coordinates and hidden/event flags
+  remain read-only editor context.
