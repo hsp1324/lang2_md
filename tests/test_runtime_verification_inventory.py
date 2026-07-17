@@ -44,6 +44,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario21 = data["scenarios"][20]
         scenario22 = data["scenarios"][21]
         scenario23 = data["scenarios"][22]
+        scenario24 = data["scenarios"][23]
         scenario27 = data["scenarios"][26]
         scenario31 = data["scenarios"][30]
         self.assertEqual(scenario1["description"], "verified_current")
@@ -174,6 +175,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario23["turn_events"], "verified_current")
         self.assertIn("captures/run/544b_s23_opening_14.png", scenario23["captures"])
         self.assertIn("captures/run/544b_s23_turn1_39.png", scenario23["captures"])
+        self.assertEqual(scenario24["description"], "progressed_current")
+        self.assertEqual(scenario24["conditions"], "verified_current")
+        self.assertEqual(scenario24["preparation"], "verified_current")
+        self.assertEqual(scenario24["opening_events"], "verified_current")
+        self.assertEqual(scenario24["turn_events"], "verified_current")
+        self.assertIn("captures/run/544b_s24_opening_11.png", scenario24["captures"])
+        self.assertIn("captures/run/544b_s24_turn1_38.png", scenario24["captures"])
         self.assertEqual(scenario27["preparation"], "verified_current")
         self.assertEqual(scenario27["completion"], "verified_probe")
         self.assertIn("captures/run/c7ab_s27_body_final2.png", scenario27["captures"])

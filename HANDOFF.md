@@ -4193,3 +4193,28 @@ contains 57 safe syllables as documented below and in
   No Japanese text, broken name/class/status glyph, blank page, reset, or freeze
   appeared. Scenario-specific battle presentation, later turns, completion,
   and conditional branches remain pending.
+
+### Current 544B Scenario 24 Preparation, Opening, And First Turn (2026-07-17)
+
+- Both arrangement pages and the complete nine-commander equipment selector
+  were inspected. The roster and class pairs are identical to Scenario 23:
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `레스터/크루세이더`, `스코트/파이터`,
+  `리아나/클레릭`, and `라나/클레릭`. No equipment was confirmed or
+  changed. Small labels were checked from enlarged nearest-neighbor sheets.
+- Automatic deployment and all nineteen opening confirmations review the
+  Langrisser release sequence and dialogue from Liana, Lana, Keith, Sherry,
+  Bernhardt, Scott, Hein, Lester, and Elwin. Bernhardt's two-page challenge
+  correctly continues as `놈들을 쓰러뜨리면 벨제리아성으로 오게. 그때는
+  내가 직접 상대해 주지!`; it is not a truncated first page. The sequence
+  reaches a valid Elwin command menu without reset or a blank page.
+- `544b_s24_conditions.png` shows victory `적 전멸` and defeat `주인공
+  사망`. The no-action first turn reviews both Vampire Lord dialogue pages,
+  all unit movement, `TURN 2`, and a valid Elwin command menu after 38
+  confirmations. The portrait status line visibly reads `뱀파이어로드` for
+  both name and class and matches the original fixed-placement assertion in
+  `tests/test_scenario_data.py`; do not misread the small first syllable as a
+  broken `스` glyph.
+- No Japanese text, broken commander/class/status glyph, blank page, reset, or
+  freeze appeared. Scenario-specific battle presentation, later turns,
+  completion, and conditional branches remain pending.

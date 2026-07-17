@@ -34,7 +34,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 21 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
 | 22 | progressed | current | current | current | pending | current | pending | pending | 31 |
 | 23 | progressed | current | current | current | pending | current | pending | pending | 21 |
-| 24 | progressed | pending | pending | pending | pending | pending | pending | pending | 3 |
+| 24 | progressed | current | current | current | pending | current | pending | pending | 20 |
 | 25 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 26 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 27 | progressed | historical | current | progressed | probe | pending | probe | probe | 10 |
@@ -661,11 +661,28 @@ Production 544B displays Scenario 23 봉인의 열쇠 and retains the current-so
 
 ### Scenario 24
 
-Production C7AB freshly displays Scenario 24 빛과 어둠 and reaches the final line in which Bernhardt attacks the party after the decisive battle. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Other runtime surfaces remain pending.
+Production 544B displays Scenario 24 빛과 어둠 and retains the current-source description evidence from C7AB because the intervening binary changes are isolated to Scenario 22/23 event records and the shared arrangement warning. Both preparation pages and all nine class panels are verified as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 스코트/파이터, 리아나/클레릭, and 라나/클레릭. Automatic deployment and all nineteen opening confirmations review the Langrisser release, Liana/Lana, Keith, Sherry, Bernhardt, Scott, Hein, Lester, and Elwin dialogue before returning to a valid command menu. Victory is enemy annihilation; defeat is the protagonist's death. The no-action first turn reviews both Vampire Lord dialogue pages, all movement, TURN 2, and a valid Elwin command menu after 38 confirmations. The live name and class both read 뱀파이어로드, matching the original Scenario 24 fixed-placement data. No Japanese text, broken glyph, blank page, reset, or freeze appeared. Scenario-specific battle presentation, later turns, completion, and branches remain pending.
 
 - `captures/run/c7ab_s24_title.png`
 - `captures/run/c7ab_s24_body_mid.png`
 - `captures/run/c7ab_s24_body_final.png`
+- `captures/run/544b_s24_arrangement_roster1.png`
+- `captures/run/544b_s24_arrangement_roster2.png`
+- `captures/run/544b_s24_equipment_1.png`
+- `captures/run/544b_s24_equipment_5.png`
+- `captures/run/544b_s24_equipment_6.png`
+- `captures/run/544b_s24_equipment_7.png`
+- `captures/run/544b_s24_equipment_8.png`
+- `captures/run/544b_s24_equipment_9.png`
+- `captures/run/544b_s24_opening_02.png`
+- `captures/run/544b_s24_opening_11.png`
+- `captures/run/544b_s24_opening_18.png`
+- `captures/run/544b_s24_opening_19.png`
+- `captures/run/544b_s24_conditions.png`
+- `captures/run/544b_s24_turn1_01.png`
+- `captures/run/544b_s24_turn1_02.png`
+- `captures/run/544b_s24_turn1_37.png`
+- `captures/run/544b_s24_turn1_38.png`
 
 ### Scenario 25
 
