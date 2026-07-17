@@ -16,7 +16,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 3 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
 | 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
-| 6 | progressed | current | current | current | current | progressed | pending | pending | 20 |
+| 6 | current | current | current | current | current | progressed | pending | pending | 25 |
 | 7 | progressed | current | current | current | current | progressed | pending | pending | 24 |
 | 8 | progressed | current | current | current | probe | progressed | pending | pending | 22 |
 | 9 | progressed | current | current | current | current | progressed | pending | pending | 28 |
@@ -171,7 +171,7 @@ Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling
 
 ### Scenario 6
 
-All 14 briefing confirmations, five commander/class selections, all 16 opening confirmations, and the condition rows were visually reviewed on F03A. The no-action first-turn probe reviewed Aaron, resident, Morgan, imperial commander, and Hein dialogue plus the current battle renderer. Barbarian/Soldier, -AT-/-DF-, names, classes, and status graphics were intact. The probe ended in the expected GAME OVER after civilians were left undefended and wiped out; this is progression evidence, not a reset, completion, or later-turn verification.
+Production 489B verifies the Scenario 6 route map, all 16 text-bearing scrolling frames of 노병 아론, and the preparation endpoint. The complete Korean description covers Morgan reaching the village, the residents fleeing from the sorcerers, and the lone elderly swordsman standing against them without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and the no-action first-turn dialogue plus current battle renderer. Barbarian/Soldier, -AT-/-DF-, names, classes, and status graphics were intact. The probe ended in the expected GAME OVER after civilians were left undefended and wiped out; this is progression evidence, not a reset, completion, or later-turn verification.
 
 - `captures/run/f03a_s06_selector_map.png`
 - `captures/run/f03a_s06_brief_live_01.png`
@@ -193,6 +193,11 @@ All 14 briefing confirmations, five commander/class selections, all 16 opening c
 - `captures/run/c7ab_s06_title.png`
 - `captures/run/c7ab_s06_body_2.png`
 - `captures/run/c7ab_s06_body_final2.png`
+- `captures/run/489b_s06_description_current_01.png`
+- `captures/run/489b_s06_description_current_08.png`
+- `captures/run/489b_s06_description_current_12.png`
+- `captures/run/489b_s06_description_current_16.png`
+- `captures/run/489b_s06_description_current_17.png`
 
 ### Scenario 7
 

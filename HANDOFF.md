@@ -4588,6 +4588,12 @@ contains 57 safe syllables as documented below and in
   pursuit are complete Korean with no Japanese residue, clipping, broken
   glyph, or abnormal spacing. Scenario 5 `description` is now
   `verified_current`.
+- Scenario 6 followed with four Down inputs from the saved Scenario 2.
+  `489b_s06_description_current_00.png` through `_17.png` retain the route map,
+  all 16 text-bearing `노병 아론` frames, and the preparation endpoint. Morgan
+  reaching the village, the fleeing residents, and the lone elderly swordsman
+  are complete Korean with no Japanese residue, clipping, broken glyph, or
+  abnormal spacing. Scenario 6 `description` is now `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory
