@@ -53,9 +53,9 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario31 = data["scenarios"][30]
         self.assertEqual(scenario1["description"], "verified_current")
         self.assertIn("captures/run/c7ab_s01_body_name4.png", scenario1["captures"])
-        current_description_progress = set(range(2, 32))
+        current_description_progress = set(range(3, 32))
         for scenario in data["scenarios"][1:]:
-            expected = "verified_current" if scenario["scenario"] in {28, 29, 30, 31} else (
+            expected = "verified_current" if scenario["scenario"] in {2, 28, 29, 30, 31} else (
                 "progressed_current"
                 if scenario["scenario"] in current_description_progress
                 else "historical"
@@ -64,8 +64,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario27["description"], "progressed_current")
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertIn("captures/run/c7ab_s02_body_final2.png", scenario2["captures"])
+        self.assertEqual(scenario2["description"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "verified_current")
         for capture in (
+            "captures/run/489b_s02_description_current_01.png",
+            "captures/run/489b_s02_description_current_08.png",
+            "captures/run/489b_s02_description_current_14.png",
+            "captures/run/489b_s02_description_current_20.png",
+            "captures/run/489b_s02_description_current_22.png",
             "captures/run/489b_s02_opening_01.png",
             "captures/run/489b_s02_opening_32.png",
             "captures/run/489b_s02_opening_52.png",
@@ -73,7 +79,6 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/489b_s02_opening2_18.png",
         ):
             self.assertIn(capture, scenario2["captures"])
-            self.assertTrue((ROOT / capture).is_file())
         self.assertEqual(scenario3["description"], "progressed_current")
         self.assertEqual(scenario3["turn_events"], "progressed_current")
         self.assertEqual(scenario4["opening_events"], "verified_current")

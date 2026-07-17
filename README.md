@@ -185,6 +185,7 @@ python3 tools/run_blastem_sequence.py shop
 - 일반 화면 전환 자동 입력은 최소 0.8초 간격을 둡니다. 단, 시나리오 선택 비기의 `Left, Right, Start, C` 네 키는 0.05초 간격이어야 하며 도구가 이 타이밍을 별도로 적용합니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
 - 다른 장의 설명을 넘길 때는 고정 횟수로 C를 누르지 말고, 실행 중인 창에 `python3 tools/run_blastem_sequence.py detect-prep --no-launch --send-event --capture-prefix captures/run/sNN_brief.png`를 사용합니다. 준비창의 좌우 패널과 소지금 패널을 감지한 즉시 멈추며 `--capture-prefix`는 탐지 과정의 모든 화면을 번호별로 보존합니다. 같은 옵션은 `detect-command`의 오프닝/턴 이벤트 검수에도 사용할 수 있습니다.
 - `scenario-select`는 선택기 진입에 필요한 수동 세이브 슬롯을 보존하기 위해 `captures/runtime/load-screen`을 기본 초기화하지 않습니다. 다른 시퀀스의 격리 런타임은 기존처럼 `--reuse-runtime-state`를 주지 않으면 새로 만듭니다.
+- 시나리오 선택 비기의 시작 행은 항상 1이 아니라 선택한 수동 슬롯에 저장된 현재 시나리오입니다. 도구는 슬롯 1의 유효 비트와 체크섬을 확인하고 첫 워드의 시나리오 번호를 읽은 뒤 `--scenario-number`까지 필요한 `Up/Down`만 보냅니다. 선택 후 보이는 경로 지도에서 다음 `C`부터 설명 스크롤이 시작됩니다.
 - `launch-only`도 `load-screen` 격리 런타임을 보존하며 게임 입력을 전혀 보내지 않습니다. `--manual-slot-gst`는 GST 작업 RAM의 `0xA49C/0xBD6E/0xC7F2` 세 구간을 수동 슬롯 1로 직렬화하고 체크섬과 유효 비트를 다시 계산하므로, 빌드가 달라 이전 GST 자체를 직접 로드할 수 없을 때 사용합니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 

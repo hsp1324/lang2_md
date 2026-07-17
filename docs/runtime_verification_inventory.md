@@ -12,7 +12,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | current | current | historical | current | probe | current | pending | pending | 11 |
-| 2 | progressed | current | current | current | current | current | pending | pending | 23 |
+| 2 | current | current | current | current | current | current | pending | pending | 28 |
 | 3 | progressed | current | current | current | probe | progressed | pending | pending | 13 |
 | 4 | progressed | current | current | current | probe | progressed | pending | pending | 15 |
 | 5 | progressed | current | current | current | probe | progressed | pending | pending | 17 |
@@ -63,7 +63,7 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 
 ### Scenario 2
 
-Description, preparation names, and conditions were visually reviewed. Production 489B verifies the Japanese-identical SCENARIO 2 banner, 로렌/하이로드 status popup, and the complete opening across 79 retained frames from deployment through the real Elwin command menu. All text-bearing opening frames are Korean and preserve readable names, classes, status labels, and map graphics without Japanese residue, broken glyphs, reset, or freeze. The same session verifies intact battle AT/DF labels and the complete first turn: Loren, imperial commander, and commander dialogue, NPC/enemy movement, two combats, and return to a valid Elwin command menu after 52 retained frames.
+Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling frames of the 여행의 시작 description, and the preparation endpoint. The complete Korean description covers Elwin's party reaching Loren's residence, accepting Liana's escort, and Zorum's approaching force without Japanese residue, broken glyphs, clipping, or abnormal spacing. The same build verifies preparation names and conditions, the Japanese-identical SCENARIO 2 banner, 로렌/하이로드 status popup, and the complete opening across 79 retained frames from deployment through the real Elwin command menu. All text-bearing opening frames are Korean and preserve readable names, classes, status labels, and map graphics without reset or freeze. The same session verifies intact battle AT/DF labels and the complete first turn: Loren, imperial commander, and commander dialogue, NPC/enemy movement, two combats, and return to a valid Elwin command menu after 52 retained frames.
 
 - `captures/run/ea22_s02_selector_map.png`
 - `captures/run/ea22_s02_brief_01.png`
@@ -82,6 +82,11 @@ Description, preparation names, and conditions were visually reviewed. Productio
 - `captures/run/489b_s02_opening_52.png`
 - `captures/run/489b_s02_opening_61.png`
 - `captures/run/489b_s02_opening2_18.png`
+- `captures/run/489b_s02_description_current_01.png`
+- `captures/run/489b_s02_description_current_08.png`
+- `captures/run/489b_s02_description_current_14.png`
+- `captures/run/489b_s02_description_current_20.png`
+- `captures/run/489b_s02_description_current_22.png`
 - `captures/run/489b_s02_turn1_00.png`
 - `captures/run/489b_s02_turn1_19.png`
 - `captures/run/489b_s02_turn1_21.png`

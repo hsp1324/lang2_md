@@ -4554,8 +4554,22 @@ contains 57 safe syllables as documented below and in
   map transitions, and the real Elwin command menu with intact names, classes,
   status labels, and graphics. Scenario 2 `opening_events` is therefore also
   `verified_current`.
+- Production 489B also retained the complete Scenario 2 description as
+  `489b_s02_description_current_00.png` through `_22.png`. The 23 retained
+  states comprise the route map, 21 text-bearing scrolling frames, and the
+  preparation endpoint. They cover Elwin's party reaching Loren's residence,
+  accepting Liana's escort, and Zorum's approaching force. Every line is Korean
+  with normal spacing and no clipping, broken glyph, or Japanese residue, so
+  Scenario 2 `description` is now `verified_current`.
+- This run exposed a scenario-selector automation assumption. The reconstructed
+  manual slot starts with word `0x0002`, so the selector initially points to
+  Scenario 2; the old helper always sent `scenario_number - 1` Down inputs and
+  therefore entered Scenario 3 for a requested Scenario 2. The helper now
+  validates the manual-slot flag/checksum, reads the saved scenario word, and
+  moves relative to it. Target 2 from saved Scenario 2 sends no movement;
+  target 1 sends one Up. Unit tests lock both directions and the SRAM parser.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
-  All 234 unit tests pass, and the regenerated compressed-resource inventory
-  records the changed byte-font hash. BlastEm was left on the verified Loren
-  popup for visual review.
+  All 236 unit tests pass, and the regenerated compressed-resource inventory
+  records the changed byte-font hash. BlastEm was left on the current Scenario
+  2 description for visual review.

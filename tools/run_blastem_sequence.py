@@ -25,6 +25,7 @@ LOG_ROOT = ROOT / "captures/run"
 MANUAL_SLOT_BASES = (0x194E, 0x1AF6, 0x1C9E, 0x1E46)
 MANUAL_SLOT_CHECKSUM_DATA_SIZE = 0x1A6
 MANUAL_SLOT_CHECKSUM_OFFSET = 0x1A6
+MANUAL_SLOT_SCENARIO_OFFSET = 0x000
 MANUAL_SLOT_HERO_NAME_OFFSET = 0x130
 MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET = 0x142
 GST_WORK_RAM_FILE_OFFSET = 0x2478
@@ -193,22 +194,38 @@ SEQUENCES["detect-command"] = []
 SEQUENCES["detect-prep"] = []
 
 
-def scenario_select_keys(scenario_number: int) -> list[str]:
+def scenario_select_keys(
+    scenario_number: int,
+    current_scenario_number: int = 1,
+) -> list[str]:
     if not 1 <= scenario_number <= 31:
         raise ValueError("scenario number must be 1..31")
+    if not 1 <= current_scenario_number <= 31:
+        raise ValueError("current scenario number must be 1..31")
     # The game accepts this cheat as a short sequence. Human-scale waits such
     # as 0.8 seconds between these four keys silently perform a normal load.
     cheat = [
         "left@0.12:0.05",
         "right@0.12:0.05",
         "start@0.12:0.05",
-        "c@0.12:0.8",
+        # The cheat is complete after this C. Give the selector map time to
+        # initialize before the separate confirmation below, especially when
+        # the saved scenario already equals the requested target.
+        "c@0.12:2.0",
     ]
+    if scenario_number >= current_scenario_number:
+        movement = ["down:0.08"] * (
+            scenario_number - current_scenario_number
+        )
+    else:
+        movement = ["up:0.08"] * (
+            current_scenario_number - scenario_number
+        )
     return [
         *SEQUENCES["load-screen"],
         "down:0.8",
         *cheat,
-        *(["down:0.08"] * (scenario_number - 1)),
+        *movement,
         "c:4.0",
     ]
 
@@ -274,6 +291,39 @@ def manual_slot_checksum(data: bytes | bytearray, base: int) -> int:
         )
         + 1
     ) & 0xFFFF
+
+
+def manual_slot_scenario_number(
+    sram_path: Path,
+    slot_index: int = 0,
+) -> int:
+    if not 0 <= slot_index < len(MANUAL_SLOT_BASES):
+        raise ValueError("manual slot index must be 0..3")
+    data = sram_path.read_bytes()
+    if len(data) != 0x2000:
+        raise ValueError("BlastEm SRAM must be exactly 8192 bytes")
+    flags = int.from_bytes(
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2], "big"
+    )
+    if not flags & (1 << (slot_index + 1)):
+        raise ValueError(f"manual slot {slot_index + 1} is not valid")
+    base = MANUAL_SLOT_BASES[slot_index]
+    checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+    stored = int.from_bytes(data[checksum_offset : checksum_offset + 2], "big")
+    calculated = manual_slot_checksum(data, base)
+    if stored != calculated:
+        raise ValueError(
+            f"manual slot at 0x{base:04X} has invalid checksum "
+            f"0x{stored:04X} != 0x{calculated:04X}"
+        )
+    offset = base + MANUAL_SLOT_SCENARIO_OFFSET
+    scenario_number = int.from_bytes(data[offset : offset + 2], "big")
+    if not 1 <= scenario_number <= 31:
+        raise ValueError(
+            f"manual slot {slot_index + 1} has invalid scenario "
+            f"number {scenario_number}"
+        )
+    return scenario_number
 
 
 def recover_manual_slot_from_gst(
@@ -748,6 +798,17 @@ def main() -> int:
             migrated = migrate_scenario_select_default_name(sram_path)
             if migrated:
                 print(f"migrated Japanese default hero name in {migrated} manual slot(s)")
+        if args.sequence == "scenario-select":
+            current_scenario_number = manual_slot_scenario_number(sram_path)
+            SEQUENCES[args.sequence] = scenario_select_keys(
+                args.scenario_number,
+                current_scenario_number,
+            )
+            print(
+                "scenario selector starts at saved Scenario "
+                f"{current_scenario_number}; targeting Scenario "
+                f"{args.scenario_number}"
+            )
         config_dir = runtime_home / ".config/blastem"
         config_dir.mkdir(parents=True, exist_ok=True)
         default_config = (BLASTEM.parent / "default.cfg").read_text(encoding="utf-8")

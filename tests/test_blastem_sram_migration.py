@@ -15,6 +15,7 @@ from tools.run_blastem_sequence import (
     SEQUENCES,
     SRAM_VALID_FLAGS_OFFSET,
     manual_slot_checksum,
+    manual_slot_scenario_number,
     migrate_scenario_select_default_name,
     recover_manual_slot_from_gst,
     running_blastem_pids,
@@ -197,11 +198,33 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
                 "left@0.12:0.05",
                 "right@0.12:0.05",
                 "start@0.12:0.05",
-                "c@0.12:0.8",
+                "c@0.12:2.0",
             ],
         )
         self.assertEqual(keys.count("down:0.08"), 26)
         self.assertEqual(keys[-1], "c:4.0")
+
+    def test_selector_movement_is_relative_to_saved_scenario(self):
+        self.assertNotIn("down:0.08", scenario_select_keys(2, 2))
+        self.assertNotIn("up:0.08", scenario_select_keys(2, 2))
+        self.assertEqual(scenario_select_keys(1, 2).count("up:0.08"), 1)
+        self.assertEqual(scenario_select_keys(4, 2).count("down:0.08"), 2)
+
+    def test_reads_valid_manual_slot_scenario_number(self):
+        data = bytearray(0x2000)
+        base = 0x194E
+        data[base : base + 2] = (2).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            self.assertEqual(manual_slot_scenario_number(path), 2)
 
     def test_selector_rejects_out_of_range_scenario(self):
         for scenario_number in (0, 32):
