@@ -13,7 +13,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | current | current | historical | current | probe | current | pending | pending | 11 |
 | 2 | current | current | current | current | current | current | pending | pending | 28 |
-| 3 | progressed | current | current | current | probe | progressed | pending | pending | 13 |
+| 3 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 4 | progressed | current | current | current | probe | progressed | pending | pending | 15 |
 | 5 | progressed | current | current | current | probe | progressed | pending | pending | 17 |
 | 6 | progressed | current | current | current | current | progressed | pending | pending | 20 |
@@ -96,7 +96,7 @@ Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling
 
 ### Scenario 3
 
-All 13 briefing/preparation frames and all 24 opening frames were visually reviewed on production EA22. First-turn progression entered ENEMY PHASE, displayed the Liana-position choice, and returned to the command menu after eight captured confirmations without reset; later turns and completion remain pending.
+Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling frames of 조름의 반격, and the preparation endpoint. The complete Korean description covers the party escaping Zorum's encirclement, its wounds and exhaustion, the pursuing force catching up, and the coming battle without Japanese residue, broken glyphs, clipping, or abnormal spacing. All 24 opening frames were previously visually reviewed on production EA22. First-turn progression entered ENEMY PHASE, displayed the Liana-position choice, and returned to the command menu after eight captured confirmations without reset; later turns and completion remain pending.
 
 - `captures/run/ea22_s03_selector_map.png`
 - `captures/run/ea22_s03_brief_live_01.png`
@@ -111,6 +111,11 @@ All 13 briefing/preparation frames and all 24 opening frames were visually revie
 - `captures/run/c7ab_s03_title.png`
 - `captures/run/c7ab_s03_body_2.png`
 - `captures/run/c7ab_s03_body_final2.png`
+- `captures/run/489b_s03_description_current_01.png`
+- `captures/run/489b_s03_description_current_07.png`
+- `captures/run/489b_s03_description_current_11.png`
+- `captures/run/489b_s03_description_current_14.png`
+- `captures/run/489b_s03_description_current_15.png`
 
 ### Scenario 4
 

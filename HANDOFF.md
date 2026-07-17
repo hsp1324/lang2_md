@@ -4568,6 +4568,12 @@ contains 57 safe syllables as documented below and in
   validates the manual-slot flag/checksum, reads the saved scenario word, and
   moves relative to it. Target 2 from saved Scenario 2 sends no movement;
   target 1 sends one Up. Unit tests lock both directions and the SRAM parser.
+- The corrected selector then targeted Scenario 3 from saved Scenario 2 with
+  exactly one Down input. `489b_s03_description_current_00.png` through
+  `_15.png` retain the route map, all 14 text-bearing scrolling frames, and the
+  preparation endpoint. The full `조름의 반격` description is natural Korean
+  with intact spacing and no clipping, broken glyph, or Japanese residue.
+  Scenario 3 `description` is now `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory
