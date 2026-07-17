@@ -17,7 +17,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
 | 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
 | 6 | current | current | current | current | current | progressed | pending | pending | 25 |
-| 7 | progressed | current | current | current | current | progressed | pending | pending | 24 |
+| 7 | current | current | current | current | current | progressed | pending | pending | 29 |
 | 8 | progressed | current | current | current | probe | progressed | pending | pending | 22 |
 | 9 | progressed | current | current | current | current | progressed | pending | pending | 28 |
 | 10 | progressed | current | current | current | probe | progressed | pending | pending | 26 |
@@ -201,7 +201,7 @@ Production 489B verifies the Scenario 6 route map, all 16 text-bearing scrolling
 
 ### Scenario 7
 
-All 16 briefing confirmations, five commander/class selections, all 20 opening confirmations, and the condition rows were visually reviewed. The opening exposed the old capacity-era approximate speaker label 기잠; direct record 0x0974D2 now uses canonical 기남 without adding or shifting glyphs, producing EF65. Current captures verify 기남 in both dialogue pages and 기남 격파 in conditions. The no-action first-turn path reached TURN 2 after 100 captured confirmations plus the final enemy movement; all text-bearing frames and two Slime/Resident battle presentations were reviewed. Later turns and completion remain pending.
+Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling frames of 깨어나는 망자, and the preparation endpoint. The complete Korean description covers Aaron joining the party, the quiet night, the cemetery ritual, and an evil presence being born without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, all 20 opening confirmations, the corrected canonical speaker label 기남, and condition rows. The no-action first-turn path reached TURN 2 after 100 captured confirmations plus the final enemy movement; all text-bearing frames and two Slime/Resident battle presentations were reviewed. Later turns and completion remain pending.
 
 - `captures/run/f03a_s07_selector_map.png`
 - `captures/run/ef65_s07_brief_live_01.png`
@@ -227,6 +227,11 @@ All 16 briefing confirmations, five commander/class selections, all 20 opening c
 - `captures/run/c7ab_s07_title.png`
 - `captures/run/c7ab_s07_body_2.png`
 - `captures/run/c7ab_s07_body_final2.png`
+- `captures/run/489b_s07_description_current_01.png`
+- `captures/run/489b_s07_description_current_06.png`
+- `captures/run/489b_s07_description_current_10.png`
+- `captures/run/489b_s07_description_current_14.png`
+- `captures/run/489b_s07_description_current_15.png`
 
 ### Scenario 8
 

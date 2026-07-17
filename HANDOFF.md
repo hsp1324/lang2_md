@@ -4594,6 +4594,12 @@ contains 57 safe syllables as documented below and in
   reaching the village, the fleeing residents, and the lone elderly swordsman
   are complete Korean with no Japanese residue, clipping, broken glyph, or
   abnormal spacing. Scenario 6 `description` is now `verified_current`.
+- Scenario 7 followed with five Down inputs from the saved Scenario 2.
+  `489b_s07_description_current_00.png` through `_15.png` retain the route map,
+  all 14 text-bearing `깨어나는 망자` frames, and the preparation endpoint.
+  Aaron's arrival, the quiet night, the cemetery ritual, and the evil presence
+  are complete Korean with no Japanese residue, clipping, broken glyph, or
+  abnormal spacing. Scenario 7 `description` is now `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory
