@@ -40,7 +40,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
 | 28 | current | current | current | current | pending | current | pending | pending | 15 |
 | 29 | current | current | current | current | pending | current | pending | pending | 16 |
-| 30 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 30 | current | current | current | current | pending | current | pending | pending | 15 |
 | 31 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 
 ## Evidence Notes
@@ -752,7 +752,7 @@ Production ECA0 retains the current-source Scenario 27 전설의 끝 description
 
 ### Scenario 28
 
-Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, Lester, Aaron, Sherry, and Jessica with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The selector-record versus displayed-scenario numbering difference is original behavior. Scenario-specific battle presentation, completion, and conditional branches remain pending.
+Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, Lester, Aaron, Sherry, and Jessica with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Scenario-specific battle presentation, completion, and conditional branches remain pending.
 
 - `captures/run/c7ab_s28_title.png`
 - `captures/run/c7ab_s28_body_mid.png`
@@ -772,7 +772,7 @@ Selector record 28 intentionally enters the on-screen secret Scenario X1 근육�
 
 ### Scenario 29
 
-Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, Keith, Aaron, Elwin, and Scott with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. The selector-record versus displayed-scenario numbering difference is original behavior. Scenario-specific battle presentation, completion, and conditional branches remain pending.
+Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, Keith, Aaron, Elwin, and Scott with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. Like the source, the title uses X2 while the battle status bar uses SCENARIO ?2. Scenario-specific battle presentation, completion, and conditional branches remain pending.
 
 - `captures/run/c7ab_s29_title.png`
 - `captures/run/c7ab_s29_body_mid.png`
@@ -793,12 +793,23 @@ Selector record 29 intentionally enters the on-screen secret Scenario X2 디레�
 
 ### Scenario 30
 
-Selector description record 30 enters the on-screen secret Scenario X3 마룡의 둥지 on production C7AB. Its description reaches the final line about the mysterious girl living there because of a curse. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡의 둥지. Production ECA0 freshly verifies all eight scrolling description frames, the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 엘윈, 쉐리, 아론, 헤인, 키스, 미나, 레스터, 리아나, and the live class/status labels. Victory is 미나 격파; defeat is 주인공 사망. Enemy movement defeats Elwin on the no-action first turn; frame 16 contains his clean Korean defeat line and frame 17 reaches the expected GAME OVER. Like the source, the title uses X3 while the battle status bar uses SCENARIO ?3. Scenario-specific battle presentation, a successful clear, and conditional branches remain pending.
 
 - `captures/run/c7ab_s30_title.png`
 - `captures/run/c7ab_s30_body_mid.png`
 - `captures/run/c7ab_s30_body_3.png`
 - `captures/run/c7ab_s30_body_final2.png`
+- `captures/run/eca0_s30_brief_01.png`
+- `captures/run/eca0_s30_brief_08.png`
+- `captures/run/eca0_s30_brief_09.png`
+- `captures/run/eca0_s30_opening_02.png`
+- `captures/run/eca0_s30_opening_08.png`
+- `captures/run/eca0_s30_opening_21.png`
+- `captures/run/eca0_s30_opening_25.png`
+- `captures/run/eca0_s30_conditions.png`
+- `captures/run/eca0_s30_turn1_01.png`
+- `captures/run/eca0_s30_turn1_16.png`
+- `captures/run/eca0_s30_turn1_17.png`
 
 ### Scenario 31
 

@@ -49,12 +49,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario27 = data["scenarios"][26]
         scenario28 = data["scenarios"][27]
         scenario29 = data["scenarios"][28]
+        scenario30 = data["scenarios"][29]
         scenario31 = data["scenarios"][30]
         self.assertEqual(scenario1["description"], "verified_current")
         self.assertIn("captures/run/c7ab_s01_body_name4.png", scenario1["captures"])
         current_description_progress = set(range(2, 32))
         for scenario in data["scenarios"][1:]:
-            expected = "verified_current" if scenario["scenario"] in {28, 29} else (
+            expected = "verified_current" if scenario["scenario"] in {28, 29, 30} else (
                 "progressed_current"
                 if scenario["scenario"] in current_description_progress
                 else "historical"
@@ -213,6 +214,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario29["turn_events"], "verified_current")
         self.assertEqual(scenario29["battle_ui"], "pending")
         self.assertIn("captures/run/eca0_s29_turn1_95.png", scenario29["captures"])
+        self.assertEqual(scenario30["description"], "verified_current")
+        self.assertEqual(scenario30["conditions"], "verified_current")
+        self.assertEqual(scenario30["preparation"], "verified_current")
+        self.assertEqual(scenario30["opening_events"], "verified_current")
+        self.assertEqual(scenario30["turn_events"], "verified_current")
+        self.assertEqual(scenario30["battle_ui"], "pending")
+        self.assertIn("captures/run/eca0_s30_turn1_17.png", scenario30["captures"])
         self.assertEqual(scenario31["description"], "progressed_current")
         self.assertIn("captures/run/c7ab_s31_body_final2.png", scenario31["captures"])
         for evidence in data["global_evidence"]:

@@ -4341,6 +4341,12 @@ contains 57 safe syllables as documented below and in
   frames include all nine scrolling description states and the preparation
   endpoint. The full description is clean Korean, so this surface is now
   `verified_current` rather than merely sampled.
+- The battle status bar says `SCENARIO ?1`, not `SCENARIO X1`. This initially
+  looked like a broken Korean tile, but a direct Japanese-ROM run retained
+  `jp_s28_after_battle.png` and proves the source uses the same question-mark
+  marker. The `?1` pixel rectangle is byte-for-byte identical to ECA0 frame
+  `eca0_s28_turn1_61.png`. Secret-stage titles use `X1/X2/X3`, while their
+  battle status rows use `?1/?2/?3`; do not overwrite the source marker.
 - The preparation screen contains the same five selectable commanders as
   Scenario 27. Automatic deployment was run from the initial preparation
   focus and reached the X1 map without entering equipment or hire menus.
@@ -4366,6 +4372,8 @@ contains 57 safe syllables as documented below and in
   from the small-ship pursuit through the Rayguard commander's revenge for
   Imelda. The tenth detector frame is the normal five-commander preparation
   screen, so the description is now `verified_current`.
+- As in the Japanese source, the battle status row uses `SCENARIO ?2` even
+  though the description title uses `X2`. This is not a `록` glyph collision.
 - Automatic deployment reaches the naval map. Six opening dialogue pages
   verify `세이갈/드래곤로드`, `폴거/드래곤로드`, `키스/호크나이트`,
   아론, and 엘윈 status labels without Japanese residue or broken extension
@@ -4377,3 +4385,26 @@ contains 57 safe syllables as documented below and in
 - The automatic run did not retain a readable battle-label frame, so X2
   battle UI remains pending. Full completion and conditional battle/death
   branches also remain pending. BlastEm was stopped after verification.
+
+### Current ECA0 Secret Scenario X3 Runtime (Selector 30, 2026-07-17)
+
+- Selector record 30 intentionally opens `시나리오 X3 / 마룡의 둥지`.
+  Eight scrolling description frames cover the cave discovery and mysterious
+  cursed girl through the complete final sentence. Frame 9 is the normal
+  five-commander preparation endpoint, so the description is now
+  `verified_current`.
+- As in the Japanese source, the battle status row uses `SCENARIO ?3` while
+  the description title uses `X3`. Preserve the question-mark marker.
+- Automatic deployment and 25 retained opening frames reach Elwin's command
+  panel. Eighteen dialogue pages verify 엘윈, 쉐리, 아론, 헤인, 키스,
+  `미나`, 레스터, and 리아나 names plus the live class/status labels. No
+  Japanese text, broken high extension glyph, clipping, reset, or freeze
+  appeared.
+- Conditions are victory `미나 격파` and defeat `주인공 사망`. On the
+  no-action first turn enemy movement defeats Elwin; frame 16 shows the clean
+  Korean line `젠장! 왜 이런 곳에…`, and frame 17 reaches the expected
+  `GAME OVER` without a reset.
+- The user's later keyboard input occurred after frame 17 was retained and
+  after BlastEm had been stopped, so it did not affect this evidence. Direct
+  battle-label evidence, a successful clear, and conditional branches remain
+  pending.
