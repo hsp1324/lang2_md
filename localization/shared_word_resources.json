@@ -830,9 +830,9 @@
           "glyph_pointer": "0x09BD4A",
           "current_glyph_pointer": "0x2709D2",
           "original_word_count": 263,
-          "current_word_count": 285,
+          "current_word_count": 266,
           "original_tokens": "FFFE 0000 0000 0000 0000 0000 0001 0002 0003 0004 0005 0006 0007 FFFE 0000 0000 0000 0000 0008 0009 000A 000B 000C 000D 000E 000F FFFE FFFE 0000 0009 000A 000B 000C 000D 000E 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 001A 001B 0012 001C 001D 001E 001F 0015 0020 0011 0018 0021 0022 0023 0024 0025 0018 0026 0027 0028 0029 002A 002B 0019 001F 002C 0015 002D 002E 0018 0019 002B 002F 001F 0030 0012 0031 0032 0033 0027 0034 0035 0010 0036 0018 0036 0011 0037 0038 0039 003A 003B 003C 003D 003E 003F 0029 0035 0040 0041 0042 0021 0043 001F 002B 002F 001F 0030 0024 0012 0044 0010 FFFE 0000 0031 0032 0045 0046 0047 0015 0048 0049 0033 004A 0018 0019 004B 002F 0024 004C 004D 0048 004E 001F 0020 004F 0015 0050 001E 001D 0019 0048 0051 0012 0052 0053 0054 000E 0055 0012 0056 0048 0017 0044 002B 0036 0015 0057 0027 0034 0024 001C 0010 0058 001E 0058 0020 002B 002F 001F 0030 0012 0059 0015 0048 0020 0037 0038 0039 003A 003B 003C 003D 005A 0035 0019 005B 0015 005C 001E 0018 0019 005D 005E 0012 005F 0038 0060 0061 0062 0063 0064 0033 0065 0031 0066 0019 0067 003D 0068 0067 0069 0025 006A 001C 0019 0010 FFFE FFFE 006B 006C 006D 006E 006F FFFE 0000 0070 0071 0012 0072 0073 FFFE 0000 0070 0037 0038 0039 003A 003B 003C 003D 0074 0035 FFFE 006B 0075 0076 006E 006F FFFE 0000 0070 FFF7 0001 0012 0077 0078 FFFF",
-          "target_korean": "시나리오 12\n성지 레이텔\n성지 레이텔. 바위산에 둘러싸인\n그곳 한구석에는 모르는 사람이라면\n지나칠 만큼 교묘하게 숨겨진 입구가\n있었다. 다크로드를 안치한 신전으로\n이어지는 동굴이었다.\n입구에는 사람이 다녀간 흔적도,\n먼저 갔을 에그베르트의 모습도\n없었다. 그러나 동굴 안에서는\n다크로드를 지키라는 명을 받은\n고대의 수호자들이 침입자를\n기다리고 있었다.",
+          "target_korean": "시나리오 12\n성지 레이텔\n성지 레이텔. 바위산에 둘러싸인\n그곳 한구석에는 모르는 사람이라면\n지나칠 만큼 교묘히 숨겨진 입구가\n있었다. 다크로드를 안치한 신전으로\n이어지는 동굴이었다.\n입구에는 사람이 다녀간 흔적도,\n먼저 갔을 에그베르트의 모습도\n없었다. 그러나 동굴 안에서는\n다크로드를 지키라는 명을 받은\n고대의 수호자들이 침입자를\n기다리고 있었다.",
           "modified": true,
           "reviewed": true,
           "live_verified": false
@@ -840,7 +840,7 @@
         {
           "id": 12,
           "pointer": "0x09E894",
-          "current_pointer": "0x275784",
+          "current_pointer": "0x27575E",
           "glyph_pointer": "0x09BE3E",
           "current_glyph_pointer": "0x270AC6",
           "original_word_count": 235,
@@ -854,7 +854,7 @@
         {
           "id": 13,
           "pointer": "0x09EA6A",
-          "current_pointer": "0x275926",
+          "current_pointer": "0x275900",
           "glyph_pointer": "0x09BF1C",
           "current_glyph_pointer": "0x270BA4",
           "original_word_count": 297,
@@ -868,7 +868,7 @@
         {
           "id": 14,
           "pointer": "0x09ECBC",
-          "current_pointer": "0x275B86",
+          "current_pointer": "0x275B60",
           "glyph_pointer": "0x09C012",
           "current_glyph_pointer": "0x270C9A",
           "original_word_count": 270,
@@ -882,7 +882,7 @@
         {
           "id": 15,
           "pointer": "0x09EED8",
-          "current_pointer": "0x275D74",
+          "current_pointer": "0x275D4E",
           "glyph_pointer": "0x09C106",
           "current_glyph_pointer": "0x270D8E",
           "original_word_count": 377,
@@ -896,7 +896,7 @@
         {
           "id": 16,
           "pointer": "0x09F1CA",
-          "current_pointer": "0x27606C",
+          "current_pointer": "0x276046",
           "glyph_pointer": "0x09C208",
           "current_glyph_pointer": "0x270E90",
           "original_word_count": 312,
@@ -910,7 +910,7 @@
         {
           "id": 17,
           "pointer": "0x09F43A",
-          "current_pointer": "0x2762CC",
+          "current_pointer": "0x2762A6",
           "glyph_pointer": "0x09C2FC",
           "current_glyph_pointer": "0x270F84",
           "original_word_count": 245,
@@ -924,7 +924,7 @@
         {
           "id": 18,
           "pointer": "0x09F624",
-          "current_pointer": "0x2764E0",
+          "current_pointer": "0x2764BA",
           "glyph_pointer": "0x09C3D2",
           "current_glyph_pointer": "0x27105A",
           "original_word_count": 306,
@@ -938,7 +938,7 @@
         {
           "id": 19,
           "pointer": "0x09F888",
-          "current_pointer": "0x2766F4",
+          "current_pointer": "0x2766CE",
           "glyph_pointer": "0x09C4D0",
           "current_glyph_pointer": "0x271158",
           "original_word_count": 243,
@@ -952,7 +952,7 @@
         {
           "id": 20,
           "pointer": "0x09FA6E",
-          "current_pointer": "0x2768BC",
+          "current_pointer": "0x276896",
           "glyph_pointer": "0x09C5BC",
           "current_glyph_pointer": "0x271244",
           "original_word_count": 214,
@@ -966,7 +966,7 @@
         {
           "id": 21,
           "pointer": "0x09FC1A",
-          "current_pointer": "0x276A5E",
+          "current_pointer": "0x276A38",
           "glyph_pointer": "0x09C6A8",
           "current_glyph_pointer": "0x271330",
           "original_word_count": 291,
@@ -980,7 +980,7 @@
         {
           "id": 22,
           "pointer": "0x09FE60",
-          "current_pointer": "0x276D30",
+          "current_pointer": "0x276D0A",
           "glyph_pointer": "0x09C79E",
           "current_glyph_pointer": "0x271426",
           "original_word_count": 357,
@@ -994,7 +994,7 @@
         {
           "id": 23,
           "pointer": "0x0A012A",
-          "current_pointer": "0x276F6A",
+          "current_pointer": "0x276F44",
           "glyph_pointer": "0x09C896",
           "current_glyph_pointer": "0x27151E",
           "original_word_count": 214,
@@ -1008,7 +1008,7 @@
         {
           "id": 24,
           "pointer": "0x0A02D6",
-          "current_pointer": "0x277132",
+          "current_pointer": "0x27710C",
           "glyph_pointer": "0x09C95E",
           "current_glyph_pointer": "0x2715E6",
           "original_word_count": 224,
@@ -1022,7 +1022,7 @@
         {
           "id": 25,
           "pointer": "0x0A0496",
-          "current_pointer": "0x2772D4",
+          "current_pointer": "0x2772AE",
           "glyph_pointer": "0x09CA40",
           "current_glyph_pointer": "0x2716C8",
           "original_word_count": 211,
@@ -1036,7 +1036,7 @@
         {
           "id": 26,
           "pointer": "0x0A063C",
-          "current_pointer": "0x277476",
+          "current_pointer": "0x277450",
           "glyph_pointer": "0x09CB10",
           "current_glyph_pointer": "0x271798",
           "original_word_count": 251,
@@ -1050,7 +1050,7 @@
         {
           "id": 27,
           "pointer": "0x0A0832",
-          "current_pointer": "0x27768A",
+          "current_pointer": "0x277664",
           "glyph_pointer": "0x09CBFE",
           "current_glyph_pointer": "0x271886",
           "original_word_count": 253,
@@ -1064,7 +1064,7 @@
         {
           "id": 28,
           "pointer": "0x0A0A2C",
-          "current_pointer": "0x277878",
+          "current_pointer": "0x277852",
           "glyph_pointer": "0x09CCEE",
           "current_glyph_pointer": "0x271976",
           "original_word_count": 240,
@@ -1078,7 +1078,7 @@
         {
           "id": 29,
           "pointer": "0x0A0C0C",
-          "current_pointer": "0x277A66",
+          "current_pointer": "0x277A40",
           "glyph_pointer": "0x09CDCA",
           "current_glyph_pointer": "0x271A52",
           "original_word_count": 213,
@@ -1092,7 +1092,7 @@
         {
           "id": 30,
           "pointer": "0x0A0DB6",
-          "current_pointer": "0x277C2E",
+          "current_pointer": "0x277C08",
           "glyph_pointer": "0x09CE98",
           "current_glyph_pointer": "0x271B20",
           "original_word_count": 270,

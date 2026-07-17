@@ -4651,3 +4651,19 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `466A`, SHA-256
   `d930b01e09093a2b4c0acee5f540cb916100ab585121286684b3d0e80507a391`.
   BlastEm was left on the Scenario 11 preparation screen.
+- Scenario 12 was compared with the Japanese-ROM render
+  `text_scenarios_11_mapped_040000_jp2bpp16.png`. The Korean description
+  preserves the cleverly hidden cave entrance, Dark Rod shrine, unexpectedly
+  absent Egbert, and ancient guardians waiting inside. Initial 466A playback
+  exposed `입구가` centered on a line by itself. Replacing `교묘하게` with the
+  equally accurate shorter `교묘히` makes
+  `지나칠 만큼 교묘히 숨겨진 입구가` fit one line. No description glyph was
+  added and the regenerated direct-string inventory remains unchanged.
+- Production D355 `d355_s12_description_final_00.png` through `_20.png`
+  retain the route map, all 19 text-bearing `성지 레이텔` frames, and the
+  preparation endpoint. All text is natural Korean without Japanese residue,
+  clipping, broken glyphs, or abnormal spacing. Scenario 12 `description` is
+  now `verified_current`.
+- Production checksum is `D355`, SHA-256
+  `334e49ae5ff3f0bbc6526ddba8db5b4488ac03aa1e6f373b1db36e11887f9118`.
+  BlastEm was left on the Scenario 12 preparation screen.

@@ -145,7 +145,7 @@ class TranslationTargetResidueTests(unittest.TestCase):
     def test_middle_scenario_descriptions_preserve_japanese_source_events(self):
         scenario_texts = builder.load_scenario_texts()
         self.assertIn("그때를 노려 몰래 함정을", scenario_texts[10])
-        self.assertIn("교묘하게 숨겨진 입구", scenario_texts[11])
+        self.assertIn("교묘히 숨겨진 입구", scenario_texts[11])
         self.assertIn("순간이동으로 사라졌다", scenario_texts[12])
         self.assertIn("같은 목적을 지닌 청룡기사단", scenario_texts[13])
         self.assertIn("빙룡병단장 이멜다", scenario_texts[14])

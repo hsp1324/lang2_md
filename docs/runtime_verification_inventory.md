@@ -22,7 +22,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 9 | current | current | current | current | current | progressed | pending | pending | 34 |
 | 10 | current | current | current | current | probe | progressed | pending | pending | 32 |
 | 11 | current | current | current | current | current | progressed | pending | pending | 36 |
-| 12 | progressed | current | current | current | current | progressed | pending | pending | 32 |
+| 12 | current | current | current | current | current | progressed | pending | pending | 38 |
 | 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
 | 14 | progressed | current | current | current | probe | progressed | pending | pending | 25 |
 | 15 | progressed | current | current | current | probe | progressed | pending | pending | 18 |
@@ -385,7 +385,7 @@ Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrollin
 
 ### Scenario 12
 
-All 13 briefing confirmations, arrangement, automatic deployment, all 12 slow opening confirmations, and the condition rows were visually reviewed. The first preparation pass covered only the five visible rows; F0E3 followed the right-side page control and verified additional 제시카/크루세이더 and 크루거/소서러 rows. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Victory is 적 전멸 or 다크로드 획득; defeat is 주인공 사망. Ending the first turn without moving allies reviewed enemy movement, Jessica's warning, and a live 리치/파이터 battle with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, the Dark Rod event, and branches remain pending.
+Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrolling frames of 성지 레이텔, and the preparation endpoint. Direct Japanese-ROM rendering confirms the hidden cave entrance, Dark Rod shrine, absent Egbert, and ancient guardians. Runtime review exposed 입구가 centered on a line alone; replacing 교묘하게 with the equally accurate shorter 교묘히 keeps 지나칠 만큼 교묘히 숨겨진 입구가 on one line without adding a glyph or shifting global direct-string tokens. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete seven-member roster including both second-page entries, arrangement, automatic deployment, all 12 opening confirmations, condition rows, and the first turn through the stated GAME OVER loss condition. Later turns, completion, the Dark Rod event, and branches remain pending.
 
 - `captures/run/fd90_s12_brief_live_01.png`
 - `captures/run/fd90_s12_brief_live_06.png`
@@ -419,6 +419,12 @@ All 13 briefing confirmations, arrangement, automatic deployment, all 12 slow op
 - `captures/run/c7ab_s12_title.png`
 - `captures/run/c7ab_s12_body_3.png`
 - `captures/run/c7ab_s12_body_final2.png`
+- `captures/run/d355_s12_description_final_01.png`
+- `captures/run/d355_s12_description_final_03.png`
+- `captures/run/d355_s12_description_final_08.png`
+- `captures/run/d355_s12_description_final_12.png`
+- `captures/run/d355_s12_description_final_19.png`
+- `captures/run/d355_s12_description_final_20.png`
 
 ### Scenario 13
 
