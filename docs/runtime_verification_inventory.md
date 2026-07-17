@@ -21,7 +21,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 8 | current | current | current | current | probe | progressed | pending | pending | 28 |
 | 9 | current | current | current | current | current | progressed | pending | pending | 34 |
 | 10 | current | current | current | current | probe | progressed | pending | pending | 32 |
-| 11 | progressed | current | current | current | current | progressed | pending | pending | 31 |
+| 11 | current | current | current | current | current | progressed | pending | pending | 36 |
 | 12 | progressed | current | current | current | current | progressed | pending | pending | 32 |
 | 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
 | 14 | progressed | current | current | current | probe | progressed | pending | pending | 25 |
@@ -344,7 +344,7 @@ Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrollin
 
 ### Scenario 11
 
-All ten briefing confirmations, arrangement, all 37 slow opening confirmations, and the condition rows were visually reviewed. The first preparation pass covered only the five visible rows; F0E3 explicitly followed the right-side page control and verified the additional 제시카/크루세이더 row. The complete selectable roster is therefore 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, and 제시카/크루세이더. The description uses 랄강 and canonical 다크로드. Victory is 적 전멸; defeat is 주인공 사망 or 제시카 사망. Ending the first turn without moving allies reviewed the oil-and-fire event, Jessica/Egbert/Lester dialogue, enemy movement, and multiple 그리폰/파이터 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. The path correctly reached GAME OVER after the exposed defenders were defeated; this is a scenario loss, not a reset or freeze. Later turns, completion, and branches remain pending.
+Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrolling frames of 불길 속에서, and the preparation endpoint. Direct Japanese-ROM rendering confirms the source says Egbert secretly laid traps while waiting for the opportunity. The awkward 그때를 노리고 함정을 파 두었다 is now 그때를 노려 몰래 함정을 파 두었다. A rejected 쳐 wording introduced one new description glyph and shifted 63 global direct-string token records; retaining 파 preserves every existing global glyph ID. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete six-member roster including the second page, arrangement, all 37 opening confirmations, condition rows, and the first turn through the intentional GAME OVER after the exposed defenders were defeated. Later turns, completion, and branches remain pending.
 
 - `captures/run/fd90_s11_brief_live_01.png`
 - `captures/run/fd90_s11_brief_live_08.png`
@@ -377,6 +377,11 @@ All ten briefing confirmations, arrangement, all 37 slow opening confirmations, 
 - `captures/run/c7ab_s11_title.png`
 - `captures/run/c7ab_s11_body_3.png`
 - `captures/run/c7ab_s11_body_final2.png`
+- `captures/run/466a_s11_description_final_01.png`
+- `captures/run/466a_s11_description_final_07.png`
+- `captures/run/466a_s11_description_final_10.png`
+- `captures/run/466a_s11_description_final_13.png`
+- `captures/run/466a_s11_description_final_14.png`
 
 ### Scenario 12
 

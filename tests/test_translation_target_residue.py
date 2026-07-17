@@ -96,6 +96,8 @@ class TranslationTargetResidueTests(unittest.TestCase):
         self.assertIn("다크로드만 손에 넣으면\n제국의 야망을 막을 수 있었다.", scenario_texts[9])
         self.assertNotIn("마법 물건 다크로드", scenario_texts[9])
         self.assertIn("레스터의 안내를 받은", scenario_texts[10])
+        self.assertIn("그때를 노려 몰래 함정을 파 두었다.", scenario_texts[10])
+        self.assertNotIn("그때를 노리고 함정을 파 두었다.", scenario_texts[10])
         self.assertNotIn("랄 강", scenario_texts[9])
         self.assertNotIn("랄 강", scenario_texts[10])
 
@@ -142,7 +144,7 @@ class TranslationTargetResidueTests(unittest.TestCase):
 
     def test_middle_scenario_descriptions_preserve_japanese_source_events(self):
         scenario_texts = builder.load_scenario_texts()
-        self.assertIn("그때를 노리고 함정을", scenario_texts[10])
+        self.assertIn("그때를 노려 몰래 함정을", scenario_texts[10])
         self.assertIn("교묘하게 숨겨진 입구", scenario_texts[11])
         self.assertIn("순간이동으로 사라졌다", scenario_texts[12])
         self.assertIn("같은 목적을 지닌 청룡기사단", scenario_texts[13])

@@ -4634,3 +4634,20 @@ contains 57 safe syllables as documented below and in
   All 236 unit tests pass, and the regenerated compressed-resource inventory
   records the unchanged byte-font hash. BlastEm was left on the Scenario 10
   preparation screen for visual review.
+- Scenario 11 was compared with the Japanese-ROM render
+  `text_scenarios_10_mapped_040000_jp2bpp16.png`. The source explicitly says
+  Egbert secretly spread traps while waiting for the opportunity, so the
+  awkward `그때를 노리고 함정을 파 두었다` is now
+  `그때를 노려 몰래 함정을 파 두었다` in both the production override and
+  legacy scenario source. An initial `함정을 쳐 두었다` revision added one
+  deferred description glyph and shifted 63 global direct-string token
+  records. Reusing `파` removed that shift completely while retaining the
+  source meaning; the regenerated direct inventory has no diff.
+- Production 466A `466a_s11_description_final_00.png` through `_14.png`
+  retain the route map, all 13 text-bearing `불길 속에서` frames, and the
+  preparation endpoint. All text is natural Korean without Japanese residue,
+  clipping, broken glyphs, or abnormal spacing. Scenario 11 `description` is
+  now `verified_current`.
+- Production checksum is `466A`, SHA-256
+  `d930b01e09093a2b4c0acee5f540cb916100ab585121286684b3d0e80507a391`.
+  BlastEm was left on the Scenario 11 preparation screen.
