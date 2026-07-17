@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "9C1F",
+  "production_checksum": "ECA0",
   "states": [
     "pending",
     "historical",
@@ -944,13 +944,33 @@
     {
       "scenario": 26,
       "description": "progressed_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "verified_current",
+      "battle_ui": "pending",
+      "turn_events": "verified_current",
+      "completion": "pending",
+      "branches_endings": "pending",
       "captures": [
         "captures/run/c7ab_s26_title.png",
         "captures/run/c7ab_s26_body_mid.png",
         "captures/run/c7ab_s26_body_3.png",
-        "captures/run/c7ab_s26_body_final2.png"
+        "captures/run/c7ab_s26_body_final2.png",
+        "captures/run/eca0_s26_arrange_roster1.png",
+        "captures/run/eca0_s26_arrange_roster2.png",
+        "captures/run/eca0_s26_equipment_keith2.png",
+        "captures/run/eca0_s26_equipment_jessica.png",
+        "captures/run/eca0_s26_opening_clean_01.png",
+        "captures/run/eca0_s26_opening_clean_10.png",
+        "captures/run/eca0_s26_conditions.png",
+        "captures/run/eca0_s26_turn1_actual_01.png",
+        "captures/run/eca0_s26_turn1_actual_07.png",
+        "captures/run/eca0_s26_turn1_actual_22.png",
+        "captures/run/eca0_s26_turn1_actual_42.png",
+        "captures/run/eca0_s26_turn1_actual_48.png",
+        "captures/run/eca0_s26_turn1_actual_50.png"
       ],
-      "note": "Production C7AB freshly displays Scenario 26 흑룡마도사단의 함정 and reaches the final line about exploiting Egbert's trap to pour concentrated magic onto the Black Dragon Sorcerers. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Other runtime surfaces remain pending."
+      "note": "Production ECA0 retains the current-source Scenario 26 흑룡마도사단의 함정 description evidence from C7AB and freshly verifies both preparation pages, all ten commander class panels, automatic deployment, all ten opening dialogue pages, conditions, and the complete no-action first turn through GAME OVER without reset or freeze. The roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 스코트/파이터, 리아나/클레릭, 라나/클레릭, and 제시카/소서러. Victory is 에그베르트 격파; defeat is 주인공 사망. The first-turn capture set includes Jessica, imperial commander, Hein, Aaron, Egbert, and Elwin dialogue and the expected defeat endpoint. Intermediate description scroll frames remain sampled rather than exhaustive, and battle presentation, a successful clear, later routes, and branches remain pending."
     },
     {
       "scenario": 27,

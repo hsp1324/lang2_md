@@ -4263,3 +4263,45 @@ contains 57 safe syllables as documented below and in
 - BlastEm was stopped after verification. A paused GST copied over another
   running session's quicksave caused BlastEm to exit; use a fresh selector run
   for this regression instead of reusing `a2a7_s25_battle_paused.gst`.
+
+### Current ECA0 Scenario 26 Source Review And First Turn (2026-07-17)
+
+- All 102 Japanese physical event pages were rendered and reviewed. Four
+  Korean records were corrected against the Japanese source: `0x1B2A48` now
+  describes the continent's foremost military state, `0x1B3394` identifies
+  Death Tower as Egbert's magic tower that strengthens his forces,
+  `0x1B34FC` retains the source's explicit `지옥`, and `0x1B3538` uses the
+  natural `스승님과`. Do not restore `대륙 규모 군사국가`, the former vague
+  Death Tower wording, softened `저승`, or `스승님께`.
+- The first `0x1B3394` rewrite required 38 words in a 36-word physical page.
+  The accepted capacity-safe sentence is `싸움은 데스타워에서 한다. 우리
+  힘을 키우는 내 마법탑이지.` Never enlarge that record in place; event
+  page capacity and continuation controls must remain intact.
+- Both preparation pages and all ten class panels were checked. The complete
+  roster is `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
+  `키스/호크나이트`, `레스터/크루세이더`, `스코트/파이터`,
+  `리아나/클레릭`, `라나/클레릭`, and `제시카/소서러`. Representative
+  captures include `eca0_s26_arrange_roster1.png`, `_roster2.png`,
+  `_equipment_keith2.png`, and `_equipment_jessica.png`.
+- Automatic deployment reached the map, and all ten opening dialogue pages
+  were captured as `eca0_s26_opening_clean_01.png` through `_10.png` without
+  Japanese residue, broken glyphs, clipping, reset, or freeze. Conditions are
+  victory `에그베르트 격파` and defeat `주인공 사망`.
+- The complete no-action first turn was captured in
+  `eca0_s26_turn1_actual_01.png` through `_50.png`. It includes dialogue from
+  Jessica, imperial commanders, Hein, Aaron, Egbert, and Elwin, then reaches
+  the expected `GAME OVER`; there is no Turn 2 on this losing path. The key
+  dialogue frames were reviewed and contain no Japanese or corrupted
+  name/class/status glyphs. Scenario-specific battle presentation and a
+  successful-clear route remain pending.
+- Two input-state mistakes are documented to prevent repetition. Browsing the
+  arrangement roster changes the focus, so running the clean deployment key
+  sequence afterward can enter equipment instead. Restart or restore the
+  initial preparation focus before automatic deployment. Returning from the
+  conditions page also does not guarantee the Start-menu cursor is on turn
+  end; an assumed cursor position entered save and 70 confirmations stayed in
+  its prompt. Reopen Start, identify the selected row, then move explicitly to
+  turn end.
+- Production ECA0 has SHA-256
+  `752622f2c7b424fc8e8ba3a38f316d39a8d30c8575b927040f80c369518b976c`.
+  BlastEm was stopped after the current-build verification.

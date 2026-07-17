@@ -273,6 +273,32 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         for phrase in ("이세계로", "하지 마라", "고지식하군", "헛수고가 아니길", "힘을 풀면"):
             self.assertNotIn(phrase, rejected)
 
+    def test_scenario_26_preserves_japanese_meaning(self):
+        rows = {
+            row["address"]: row["text"]
+            for row in self.rows
+            if row["scenario"] == 26
+        }
+        self.assertEqual(
+            rows["0x1B2A48"],
+            "대륙 제일의 군사국가 앞에선 어둠의 군세도 상대가 안 된다…",
+        )
+        self.assertEqual(
+            rows["0x1B3394"],
+            "싸움은 데스타워에서 한다. 우리 힘을 키우는 내 마법탑이지.",
+        )
+        self.assertEqual(
+            rows["0x1B34FC"],
+            "…덕분에 안심하고 지옥에 갈 수 있겠군요…",
+        )
+        self.assertEqual(
+            rows["0x1B3538"],
+            "다시… 태어날 수 있다면… 한 번 더… 스승님과…",
+        )
+        self.assertNotIn("대륙 규모", rows["0x1B2A48"])
+        self.assertNotIn("저승", rows["0x1B34FC"])
+        self.assertNotIn("스승님께", rows["0x1B3538"])
+
     def test_scenario_16_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 16]
         primary = [row for row in rows if not row.get("continuation")]
