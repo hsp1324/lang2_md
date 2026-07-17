@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "C1C9",
+  "production_checksum": "544B",
   "states": [
     "pending",
     "historical",
@@ -44,6 +44,16 @@
         "captures/run/d177_debug_summon_page2.png"
       ],
       "note": "All 22 magic rows use production EA22; D177 only forces the summon command so the original debug path can enumerate all eight summons."
+    },
+    {
+      "surface": "arrangement_warning",
+      "state": "verified_current",
+      "checksum": "544B",
+      "based_on": "544B",
+      "captures": [
+        "captures/run/544b_s23_arrange_warning.png"
+      ],
+      "note": "The shared incomplete-deployment warning uses its screen-local glyph list and visibly renders 지휘관 배치 미완료입니다 with readable spacing."
     }
   ],
   "scenarios": [
@@ -836,13 +846,37 @@
     {
       "scenario": 23,
       "description": "progressed_current",
+      "conditions": "verified_current",
+      "preparation": "verified_current",
+      "opening_events": "verified_current",
+      "battle_ui": "pending",
+      "turn_events": "verified_current",
+      "completion": "pending",
+      "branches_endings": "pending",
       "captures": [
         "captures/run/c7ab_s23_title.png",
         "captures/run/c7ab_s23_body_mid.png",
         "captures/run/c7ab_s23_body_final.png",
-        "captures/run/c7ab_s23_after_description.png"
+        "captures/run/c7ab_s23_after_description.png",
+        "captures/run/c1c9_s23_arrangement_roster1.png",
+        "captures/run/c1c9_s23_arrangement_roster2.png",
+        "captures/run/c1c9_s23_equipment_selector1.png",
+        "captures/run/c1c9_s23_equipment_5.png",
+        "captures/run/c1c9_s23_equipment_6.png",
+        "captures/run/c1c9_s23_equipment_7.png",
+        "captures/run/c1c9_s23_equipment_8.png",
+        "captures/run/c1c9_s23_equipment_9.png",
+        "captures/run/544b_s23_arrange_warning.png",
+        "captures/run/544b_s23_opening_14.png",
+        "captures/run/544b_s23_opening_18.png",
+        "captures/run/544b_s23_conditions.png",
+        "captures/run/544b_s23_turn1_01.png",
+        "captures/run/544b_s23_turn1_03.png",
+        "captures/run/544b_s23_turn1_15.png",
+        "captures/run/544b_s23_turn1_37.png",
+        "captures/run/544b_s23_turn1_39.png"
       ],
-      "note": "Production C7AB freshly displays Scenario 23 봉인의 열쇠, follows the description from Alhazard's released seal to the party heading for Bozel's fortress, and reaches an intact first preparation page. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Conditions, opening, turns, completion, and branches remain pending."
+      "note": "Production 544B displays Scenario 23 봉인의 열쇠 and retains the current-source description evidence from C7AB; binary comparisons through C1C9 show that neither intermediate build touched the description resource. The complete preparation roster and class panels are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 스코트/파이터, 리아나/클레릭, and 라나/클레릭. Both roster pages, automatic deployment, all eighteen opening confirmations, and the complete no-action first turn were reviewed without broken glyphs, Japanese residue, reset, or freeze. The Japanese dynamic-party expression エルウィン達か？ now visibly renders 레아드: 엘윈 일행인가? 놈들보다 먼저 찾아야 해! rather than the unnatural 엘윈들인가?. Victory is 로드 소지자 하단 도착 or 적 전멸; defeat is 로드 탈취 후 상단 도주 or 주인공 사망. The first turn reviews four Laird/imperial-commander dialogue pages, reaches TURN 2 after 39 confirmations, and returns to a valid Elwin command menu. Scenario-specific battle presentation, later turns, completion, and branches remain pending."
     },
     {
       "scenario": 24,

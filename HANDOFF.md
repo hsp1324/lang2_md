@@ -89,17 +89,17 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: EA22
+checksum: 544B
 ```
 
-The current source builds checksum `F03A` and passes all 176 tests. It
-includes all 31 scenarios' static event translations, the complete direct-name,
+The current source builds checksum `544B` and passes all 219 tests. It includes
+all 31 scenarios' static event translations, the complete direct-name,
 ending-visit, credits, and 90-record epilogue resources, plus the extended 8x8
-commander-name font bank. Live regressions include Scenario 1 core UI, the
-Scenario 27 ending/epilogue paths, Scenario 19 and 20 openings, and Scenario 25
-through its complete unconditional opening. Static translation does not prove
-all conditional event branches; the scenario sections below state the exact
-remaining runtime gaps.
+commander-name font bank. Every scenario description has current playback
+evidence; Scenarios 22 and 23 most recently gained current preparation,
+conditions, opening, and first-turn verification. Static translation does not
+prove all conditional event branches; the scenario sections below state the
+exact remaining runtime gaps.
 
 Build command:
 
@@ -110,12 +110,12 @@ python3 scripts/build_korean_jp_probe.py
 Important recent local commits:
 
 ```text
-1e9401c Add stock epilogue playback probe
-72de5e9 Translate Lana character epilogues
-efb6083 Translate Keith character epilogues
-f21e0c3 Translate Sherry epilogues and restore battle UI
-e1e2931 Translate Scott character epilogues
-b4276bb Stabilize JP probe input and early UI patches
+2f0f8cc Correct and verify Scenario 22 opening
+041b03c Verify remaining scenario descriptions
+3b77eb4 Verify early scenario descriptions
+ea7c2b7 Verify late scenario descriptions
+e000d5a Record current description playback
+d902b6e Review and verify Scenario 1 description
 ```
 
 This document may have later commits after `d89ff79`; always start with
@@ -4155,3 +4155,41 @@ contains 57 safe syllables as documented below and in
   Elwin command menu after 30 confirmations. No Japanese text, blank page,
   reset, or freeze appeared. Scenario-specific battle presentation, later
   turns, completion, and conditional branches remain pending.
+
+### Current 544B Scenario 23 Preparation, Opening, And First Turn (2026-07-17)
+
+- Current playback followed both `지휘관배치` pages rather than treating the
+  first five visible rows as the full roster. The nine selectable commander
+  and class pairs are `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
+  `아론/파이터`, `키스/호크나이트`, `레스터/크루세이더`,
+  `스코트/파이터`, `리아나/클레릭`, and `라나/클레릭`. Equipment panels
+  were inspected without confirming or changing any equipment.
+- Attempting to deploy before assigning positions exposed the shared warning
+  `지휘관배치가 끝나지않았습니다`. The fixed 16-token record cannot simply
+  insert spaces into that sentence. Its screen-local glyph slots and tokens
+  now render the shorter, readable `지휘관 배치 미완료입니다` instead.
+  `544b_s23_arrange_warning.png` verifies the exact live result, and
+  `tests/test_arrange_warning.py` locks the 16-token layout and four blank
+  slots.
+- Japanese page `0x1AE9F6` is `エルウィン達か？ 急ぐぞ！ヤツらより先に探し
+  出すのだ！`. The previous dynamic form `{0001}들인가?` rendered the
+  unnatural `엘윈들인가?`. The capacity-safe current form is
+  `{0001} 일행인가? 놈들보다 먼저 찾아야 해!`; live frame
+  `544b_s23_opening_14.png` confirms `엘윈 일행인가?` with the default name.
+  A regression rejects the former suffix.
+- The production build is checksum `544B` with the unchanged 859-glyph
+  `0x7000..0x735B` bank and deterministically rebuilds to SHA-256
+  `e57756fb0c7e7adc0d8bd08686d707fafc129ca872e83a9fcba707f7f39029fd`.
+  A detached build of commit `2f0f8cc` reproduced `C1C9`; direct comparison
+  found only 60 changed bytes in the checksum header,
+  arrangement-warning local glyph/tokens at `0xA2B9C`/`0xA2C2E`, and the
+  Scenario 23 event record at `0x1AE9F6`. No global glyph IDs, description
+  resources, classes, or other UI records changed.
+- Automatic deployment and all eighteen opening confirmations reached a valid
+  Elwin command menu. Conditions are victory `로드 소지자 하단 도착` or
+  `적 전멸`, and defeat `로드 탈취 후 상단 도주` or `주인공 사망`. The
+  no-action first turn reviewed four Laird/imperial-commander dialogue pages,
+  all movement, `TURN 2`, and a valid Elwin command menu after 39 confirmations.
+  No Japanese text, broken name/class/status glyph, blank page, reset, or freeze
+  appeared. Scenario-specific battle presentation, later turns, completion,
+  and conditional branches remain pending.

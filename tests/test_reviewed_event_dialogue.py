@@ -228,6 +228,18 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertNotIn("때가 되면 푸는군", rows["0x1AB248"])
 
+    def test_scenario_23_dynamic_party_name_is_natural_korean(self):
+        rows = {
+            row["address"]: row["text"]
+            for row in self.rows
+            if row["scenario"] == 23
+        }
+        self.assertEqual(
+            rows["0x1AE9F6"],
+            "{0001} 일행인가? 놈들보다 먼저 찾아야 해!",
+        )
+        self.assertNotIn("{0001}들", rows["0x1AE9F6"])
+
     def test_scenario_16_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 16]
         primary = [row for row in rows if not row.get("continuation")]

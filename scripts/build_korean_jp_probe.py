@@ -1336,7 +1336,7 @@ ARRANGE_MENU_GLYPH_LIST_PATCHES = {
 # screen-local glyph list. Slots 32..39 are otherwise unused by the Korean
 # menu, so they can carry the suffix without changing any global glyph IDs.
 ARRANGE_WARNING_GLYPH_OFFSET = 0xA2B9C
-ARRANGE_WARNING_GLYPH_TEXT = "가끝나않았습니다"
+ARRANGE_WARNING_GLYPH_TEXT = "미완료입니다"
 ARRANGE_WARNING_ORIGINAL_GLYPHS = (
     0x0239, 0x0283, 0x0099, 0x0065, 0x007C, 0x0092, 0x016F, 0x00B8,
 )
@@ -1347,10 +1347,12 @@ ARRANGE_WARNING_ORIGINAL_TOKENS = (
 )
 ARRANGE_WARNING_KOREAN_TOKENS = (
     0x0001,  # renderer control/prefix
-    0x000B, 0x000C, 0x000D, 0x000E, 0x000F,  # 지휘관배치
-    0x0020, 0x0021, 0x0022, 0x000B,  # 가끝나지
-    0x0023, 0x0024, 0x0025, 0x0026, 0x0027,  # 않았습니다
+    0x000B, 0x000C, 0x000D,  # 지휘관
     0x0014,  # existing blank slot
+    0x000E, 0x000F,  # 배치
+    0x0014,
+    0x0020, 0x0021, 0x0022, 0x0023, 0x0024, 0x0025,  # 미완료입니다
+    0x0014, 0x0014,
 )
 
 DIRECT_FIXED_ROUTE_TITLE_PATCHES = {
