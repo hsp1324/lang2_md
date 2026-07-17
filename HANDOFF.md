@@ -4469,3 +4469,27 @@ contains 57 safe syllables as documented below and in
   Loren's `렌 -> 0x590` mapping. The intermediate synchronous-loader builds
   `6CA0`, `E760`, and `5AC0` are not release candidates; production DAC0 is the
   first accepted runtime result for this regression.
+
+### Open DAC0 Scenario 2 Status-Banner Recheck (2026-07-18)
+
+- Loren is also still open from the user's visual review. DAC0 fixed the
+  missing VRAM tile, and the live bytes now exactly match the generated `렌`
+  tile, but the generated 8x8 shape reads too much like a lone corner/`ㄴ` at
+  native size. Treat this as a glyph-legibility defect, not as a completed name
+  fix. Add a deliberate byte-UI bitmap override for `렌`, rebuild, and require
+  both the bottom status row and commander popup to read unambiguously as
+  `로렌` before closing the regression.
+- The user still reports the phase/status banner as `SCENAR록O`, so this issue
+  is open even though the earlier rapid 30-frame crop was byte-identical across
+  samples and was initially read as the stylized ASCII `I` in `SCENARIO 2`.
+  Do not close it from visual inference alone. Retain the exact current banner,
+  capture the same normal Scenario 2 banner from the Japanese ROM, compare the
+  `SCENARIO` glyph rectangle pixel-for-pixel, and inspect the live tile ID/VRAM
+  bytes before deciding whether it is an ASCII-font shape or a collision with
+  the relocated Korean bank.
+- A later first-turn attempt is rejected evidence. A manually launched BlastEm
+  remained beside the selector-managed process; direct input and capture could
+  address different windows, and 99 retained frames were the title demo rather
+  than Scenario 2. Never promote `dac0_s02_turn1_*.png`. Before every runtime
+  check, require exactly one non-zombie BlastEm process and terminate a process
+  that survives normal `SIGTERM` before launching the next window.
