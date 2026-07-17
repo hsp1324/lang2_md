@@ -509,7 +509,7 @@
     },
     {
       "scenario": 14,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -539,7 +539,10 @@
         "captures/run/f0ee_s14_turn1_07.png",
         "captures/run/f0ee_s14_turn1_09.png",
         "captures/run/f0ee_s14_turn1_10.png",
-        "captures/run/f0ee_s14_turn1_endpoint.png"
+        "captures/run/f0ee_s14_turn1_endpoint.png",
+        "captures/run/c7ab_s14_title.png",
+        "captures/run/c7ab_s14_body_3.png",
+        "captures/run/c7ab_s14_body_final2.png"
       ],
       "note": "All 14 briefing confirmations, all seven selectable commander/class rows across both preparation pages, arrangement, the complete opening path, and the condition rows were visually reviewed. Live review exposed 발티아 only in the production scenario-description source while event dialogue already used canonical 발디아. The source, shared resource, and fallback replacement now consistently use 발디아; F0EE captures verify 발디아 왕국 in the description and the existing opening captures verify 발디아 성터. The complete roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Victory is one of 엘윈/제시카/쉐리 reaching Langrisser or defeating Leon; defeat is Leon reaching Langrisser or the protagonist dying. The no-action first turn reviewed Laird's aquatic, flying, and ballista orders plus imperial responses, then returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. Later turns, completion, and branches remain pending."
     },
@@ -577,7 +580,7 @@
     },
     {
       "scenario": 16,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -602,13 +605,16 @@
         "captures/run/85f1_s16_turn1_01.png",
         "captures/run/85f1_s16_turn1_02.png",
         "captures/run/85f1_s16_turn1_27.png",
-        "captures/run/85f1_s16_turn1_29.png"
+        "captures/run/85f1_s16_turn1_29.png",
+        "captures/run/c7ab_s16_title.png",
+        "captures/run/c7ab_s16_body_3.png",
+        "captures/run/c7ab_s16_body_final2.png"
       ],
       "note": "All eight 레이갈드 제도 briefing confirmations, both preparation pages, a return to the first page, arrangement, automatic deployment, all eight opening confirmations, conditions, and the no-action first turn were visually reviewed on production 85F1. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Victory is 레온 격파 or 성문으로 이동; defeat is 주인공 사망. The first turn reviewed 레온/로얄가드 and 레아드/실버나이트 dialogue plus enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x181D34 is separately covered by editor regressions for 레온/로얄가드, an imperial 드래곤로드, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending."
     },
     {
       "scenario": 17,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -637,13 +643,16 @@
         "captures/run/12d3_s17_turn1_35.png",
         "captures/run/12d3_s17_turn1_37.png",
         "captures/run/12d3_s17_turn1_41.png",
-        "captures/run/12d3_s17_turn1_47.png"
+        "captures/run/12d3_s17_turn1_47.png",
+        "captures/run/c7ab_s17_title.png",
+        "captures/run/c7ab_s17_body_3.png",
+        "captures/run/c7ab_s17_body_final2.png"
       ],
       "note": "All eight 황제와 어둠의 왕자 briefing confirmations, both preparation pages, a return to the first page, arrangement, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Live 85F1 exposed mid-word wrapping at 어디, 알하자드, and 힘을 주는 plus a dangling comma before 모두. Production 12D3 replays verify natural explicit line breaks at event addresses 0x1A2852, 0x1A296C, and 0x1A2A98. Victory is 베른하르트 격파; defeat is 주인공 사망. The first turn reviewed Bernhardt and imperial dialogue, enemy movement, Scott and Jessica reactions, and live 발리스타/파이터/소서러 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics before returning to a valid Elwin command menu without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 is covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending."
     },
     {
       "scenario": 18,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -669,13 +678,16 @@
         "captures/run/1391_s18_turn1_03.png",
         "captures/run/1391_s18_turn1_05.png",
         "captures/run/1391_s18_turn1_36.png",
-        "captures/run/1391_s18_turn1_38.png"
+        "captures/run/1391_s18_turn1_38.png",
+        "captures/run/c7ab_s18_title.png",
+        "captures/run/c7ab_s18_body_3.png",
+        "captures/run/c7ab_s18_body_final2.png"
       ],
       "note": "All eight 어둠의 공주 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Live 12D3 exposed the awkward dynamic-name order 인간은 마물의 먹이라고 보젤님이 말했다 at 0x1A497A. Production 1391 verifies the natural three-line 보젤님은 인간이 마물의 먹이라고 하셨다 without splitting the inserted name. Victory is 그레이트드래곤 격파 or 다크프린세스 격파; defeat is 주인공 사망 or 주민 전멸. The first turn reviewed Liana, Hein, and Jessica dialogue plus enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1820B4 is covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Later turns, the evacuation choice branch, completion, and other branches remain pending."
     },
     {
       "scenario": 19,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -701,13 +713,16 @@
         "captures/run/1391_s19_turn1_28.png",
         "captures/run/1391_s19_turn1_29.png",
         "captures/run/1391_s19_turn1_30.png",
-        "captures/run/1391_s19_turn1_32.png"
+        "captures/run/1391_s19_turn1_32.png",
+        "captures/run/c7ab_s19_title.png",
+        "captures/run/c7ab_s19_body_3.png",
+        "captures/run/c7ab_s19_body_final2.png"
       ],
       "note": "All six 미레일 항구 전투 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 1391. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. The live opening exposed spaced 다크 프린세스; all six reviewed event occurrences now use the canonical class label 다크프린세스, and the replay verifies it without an abnormal wrap. Victory is defeating Imelda within 23 turns; defeat is exceeding the turn limit or the protagonist dying. The first turn reviewed ship movement and 제시카/소서러, 아론/파이터, and 엘윈/파이터 dialogue, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 is covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Later turns, completion, and branches remain pending."
     },
     {
       "scenario": 20,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -731,13 +746,16 @@
         "captures/run/138b_s20_turn1_29.png",
         "captures/run/138b_s20_turn1_38.png",
         "captures/run/138b_s20_turn1_39.png",
-        "captures/run/138b_s20_turn1_41.png"
+        "captures/run/138b_s20_turn1_41.png",
+        "captures/run/c7ab_s20_title.png",
+        "captures/run/c7ab_s20_body_3.png",
+        "captures/run/c7ab_s20_body_final2.png"
       ],
       "note": "All seven 붉게 물든 바다 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The complete selectable roster is 엘윈, 헤인, 쉐리, 아론, 키스, 레스터, 제시카, and 스코트; the second page and return through << are retained explicitly so 제시카 is not omitted. Victory is enemy annihilation and defeat is the protagonist's death. The first turn reviewed Faias dialogue, enemy movement, reached TURN 2, then reviewed the golem tactics conversation and returned to a valid Elwin command menu without reset or freeze. Live 1391 exposed the two-character page at 0x1A81E6 as the incomplete-looking 키스: 공주. The Japanese source is 姫！ but the physical page has only two content words; 공주님! fails the capacity guard. Production 138B uses the complete capacity-safe royal address 전하, verified live before Aaron's response. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182434 is covered by editor regressions for 스큐라, 파이어스/데몬로드, and hidden 크라켄. Later turns, conditional kraken events, completion, and route variants remain pending."
     },
     {
       "scenario": 21,
-      "description": "historical",
+      "description": "progressed_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -763,7 +781,10 @@
         "captures/run/138b_s21_conditions.png",
         "captures/run/138b_s21_turn1_01.png",
         "captures/run/138b_s21_turn1_16.png",
-        "captures/run/138b_s21_turn1_18.png"
+        "captures/run/138b_s21_turn1_18.png",
+        "captures/run/c7ab_s21_title.png",
+        "captures/run/c7ab_s21_body_3.png",
+        "captures/run/c7ab_s21_body_final2.png"
       ],
       "note": "All seven 마리오네트 briefing confirmations, both preparation roster pages, the return to the first page, all eight selected commander/class panels, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 138B. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 제시카/소서러, and 스코트/파이터. Commander/class inspection used the equipment commander selector without confirming equipment; its second page explicitly verifies 제시카 rather than treating the first five rows as complete. Victory is enemy annihilation and defeat is the protagonist's death. The opening reviewed Aaron, Scott, Liana/세인트, Lich, Elwin, Sherry, Keith, Lester, and Jessica dialogue. The first turn retained 18 frames of enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1825E2 is covered by editor regressions for Lana/다크프린세스, a visible Lich, and a hidden Kraken. Later turns, conditional events, completion, and branches remain pending."
     },

@@ -4092,3 +4092,23 @@ contains 57 safe syllables as documented below and in
   and continue from the last verified artifact. Do not treat this transport
   error as a ROM/emulator failure, and do not abandon a running verification
   sequence solely because it appeared.
+
+### Current C7AB Remaining Description Playback (2026-07-17)
+
+- Production `C7AB` was freshly entered for the seven descriptions that still
+  had only historical live evidence: Scenarios 14 and 16-21. Each has a current
+  title, intermediate body, and stable final-frame capture without broken
+  glyphs, reset, freeze, or input collision.
+- The live playback preserves the static Japanese-source corrections: Scenario
+  14 identifies Baldea and the holy sword without the invented Jessica action;
+  Scenario 16 reaches Leon and the Black Dragon Knights beyond the gate;
+  Scenario 17 retains Bernhardt at the throne; Scenario 18 identifies the other
+  Liana controlling monsters; Scenario 19 is the ship-seizure operation;
+  Scenario 20 starts battle after laying a boarding plank; and Scenario 21 says
+  Chaos is sealed in Velzeria rather than living there.
+- These seven descriptions are `progressed_current`, matching the conservative
+  two-second sampling rule used for the other relocated records. Scenario 1 is
+  the only `verified_current` description because every dynamic-name context
+  and the complete automatic scroll were captured there. All other Scenarios
+  2-31 now have current production playback evidence as
+  `progressed_current`; no description remains historical or pending.

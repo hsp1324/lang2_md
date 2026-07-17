@@ -24,14 +24,14 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 11 | progressed | current | current | current | current | progressed | pending | pending | 31 |
 | 12 | progressed | current | current | current | current | progressed | pending | pending | 32 |
 | 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
-| 14 | historical | current | current | current | probe | progressed | pending | pending | 22 |
+| 14 | progressed | current | current | current | probe | progressed | pending | pending | 25 |
 | 15 | progressed | current | current | current | probe | progressed | pending | pending | 18 |
-| 16 | historical | current | current | current | probe | progressed | pending | pending | 17 |
-| 17 | historical | current | current | current | current | progressed | pending | pending | 21 |
-| 18 | historical | current | current | current | probe | progressed | pending | pending | 18 |
-| 19 | historical | current | current | current | probe | progressed | pending | pending | 18 |
-| 20 | historical | current | current | current | probe | progressed | pending | pending | 16 |
-| 21 | historical | current | current | current | probe | progressed | pending | pending | 18 |
+| 16 | progressed | current | current | current | probe | progressed | pending | pending | 20 |
+| 17 | progressed | current | current | current | current | progressed | pending | pending | 24 |
+| 18 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
+| 19 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
+| 20 | progressed | current | current | current | probe | progressed | pending | pending | 19 |
+| 21 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
 | 22 | progressed | pending | pending | pending | pending | pending | pending | pending | 14 |
 | 23 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 24 | progressed | pending | pending | pending | pending | pending | pending | pending | 3 |
@@ -414,6 +414,9 @@ All 14 briefing confirmations, all seven selectable commander/class rows across 
 - `captures/run/f0ee_s14_turn1_09.png`
 - `captures/run/f0ee_s14_turn1_10.png`
 - `captures/run/f0ee_s14_turn1_endpoint.png`
+- `captures/run/c7ab_s14_title.png`
+- `captures/run/c7ab_s14_body_3.png`
+- `captures/run/c7ab_s14_body_final2.png`
 
 ### Scenario 15
 
@@ -459,6 +462,9 @@ All eight 레이갈드 제도 briefing confirmations, both preparation pages, a 
 - `captures/run/85f1_s16_turn1_02.png`
 - `captures/run/85f1_s16_turn1_27.png`
 - `captures/run/85f1_s16_turn1_29.png`
+- `captures/run/c7ab_s16_title.png`
+- `captures/run/c7ab_s16_body_3.png`
+- `captures/run/c7ab_s16_body_final2.png`
 
 ### Scenario 17
 
@@ -485,6 +491,9 @@ All eight 황제와 어둠의 왕자 briefing confirmations, both preparation pa
 - `captures/run/12d3_s17_turn1_37.png`
 - `captures/run/12d3_s17_turn1_41.png`
 - `captures/run/12d3_s17_turn1_47.png`
+- `captures/run/c7ab_s17_title.png`
+- `captures/run/c7ab_s17_body_3.png`
+- `captures/run/c7ab_s17_body_final2.png`
 
 ### Scenario 18
 
@@ -508,6 +517,9 @@ All eight 어둠의 공주 briefing confirmations, both preparation pages, a ret
 - `captures/run/1391_s18_turn1_05.png`
 - `captures/run/1391_s18_turn1_36.png`
 - `captures/run/1391_s18_turn1_38.png`
+- `captures/run/c7ab_s18_title.png`
+- `captures/run/c7ab_s18_body_3.png`
+- `captures/run/c7ab_s18_body_final2.png`
 
 ### Scenario 19
 
@@ -531,6 +543,9 @@ All six 미레일 항구 전투 briefing confirmations, both preparation pages, 
 - `captures/run/1391_s19_turn1_29.png`
 - `captures/run/1391_s19_turn1_30.png`
 - `captures/run/1391_s19_turn1_32.png`
+- `captures/run/c7ab_s19_title.png`
+- `captures/run/c7ab_s19_body_3.png`
+- `captures/run/c7ab_s19_body_final2.png`
 
 ### Scenario 20
 
@@ -552,6 +567,9 @@ All seven 붉게 물든 바다 briefing confirmations, both preparation pages, a
 - `captures/run/138b_s20_turn1_38.png`
 - `captures/run/138b_s20_turn1_39.png`
 - `captures/run/138b_s20_turn1_41.png`
+- `captures/run/c7ab_s20_title.png`
+- `captures/run/c7ab_s20_body_3.png`
+- `captures/run/c7ab_s20_body_final2.png`
 
 ### Scenario 21
 
@@ -575,6 +593,9 @@ All seven 마리오네트 briefing confirmations, both preparation roster pages,
 - `captures/run/138b_s21_turn1_01.png`
 - `captures/run/138b_s21_turn1_16.png`
 - `captures/run/138b_s21_turn1_18.png`
+- `captures/run/c7ab_s21_title.png`
+- `captures/run/c7ab_s21_body_3.png`
+- `captures/run/c7ab_s21_body_final2.png`
 
 ### Scenario 22
 
