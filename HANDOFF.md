@@ -4600,6 +4600,13 @@ contains 57 safe syllables as documented below and in
   Aaron's arrival, the quiet night, the cemetery ritual, and the evil presence
   are complete Korean with no Japanese residue, clipping, broken glyph, or
   abnormal spacing. Scenario 7 `description` is now `verified_current`.
+- Scenario 8 followed with six Down inputs from the saved Scenario 2.
+  `489b_s08_description_current_00.png` through `_26.png` retain the route map,
+  all 25 text-bearing `하늘의 다리` frames, and the preparation endpoint. The
+  Blue Dragon Knights' advance on Kalxath, Sherry's return, the gorge bridge,
+  and the forced breakthrough are complete Korean with no Japanese residue,
+  clipping, broken glyph, or abnormal spacing. Scenario 8 `description` is now
+  `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory

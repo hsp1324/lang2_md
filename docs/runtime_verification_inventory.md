@@ -18,7 +18,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
 | 6 | current | current | current | current | current | progressed | pending | pending | 25 |
 | 7 | current | current | current | current | current | progressed | pending | pending | 29 |
-| 8 | progressed | current | current | current | probe | progressed | pending | pending | 22 |
+| 8 | current | current | current | current | probe | progressed | pending | pending | 28 |
 | 9 | progressed | current | current | current | current | progressed | pending | pending | 28 |
 | 10 | progressed | current | current | current | probe | progressed | pending | pending | 26 |
 | 11 | progressed | current | current | current | current | progressed | pending | pending | 31 |
@@ -235,7 +235,7 @@ Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling
 
 ### Scenario 8
 
-All 16 briefing confirmations, five commander/class selections, all 17 opening confirmations, and the condition rows were visually reviewed on EF65. The first command detector stopped early on a water/selection frame; the detector now also requires dense white command labels and rejects that exact frame while retaining the real command menu. Continuing the same no-action turn reached TURN 2 and reviewed the Sherry/Scott/Keith/Aaron anti-air tutorial before returning to Elwin's command menu. No scenario-specific battle presentation occurred, so battle_ui remains verified only by the shared probe. Later turns and completion remain pending.
+Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. No scenario-specific battle presentation occurred, so battle_ui remains verified only by the shared probe. Later turns and completion remain pending.
 
 - `captures/run/ef65_s08_selector_map.png`
 - `captures/run/ef65_s08_brief_live_01.png`
@@ -259,6 +259,12 @@ All 16 briefing confirmations, five commander/class selections, all 17 opening c
 - `captures/run/c7ab_s08_title.png`
 - `captures/run/c7ab_s08_body_3.png`
 - `captures/run/c7ab_s08_body_final3.png`
+- `captures/run/489b_s08_description_current_01.png`
+- `captures/run/489b_s08_description_current_09.png`
+- `captures/run/489b_s08_description_current_15.png`
+- `captures/run/489b_s08_description_current_20.png`
+- `captures/run/489b_s08_description_current_25.png`
+- `captures/run/489b_s08_description_current_26.png`
 
 ### Scenario 9
 
