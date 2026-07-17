@@ -128,7 +128,9 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
     (0x0440, 8),
     (0x0498, 24),
     (0x04D8, 24),
-    (0x05D8, 28),
+    # 0x5D8 is overwritten after the preparation screen. Scenario 2 Loren
+    # live-verifies the final bank at 0x580, including 렌 at tile 0x590.
+    (0x0580, 28),
 )
 # Scenario 25's event-spawned Jessica uses class 9 (소서러). The name-entry
 # mapping shares 소 with ASCII Q, while the 0x3F6..0x3F8 escape-bank probe is
@@ -4150,6 +4152,24 @@ def relocate_byte_ui_name_and_class_tables(
             cursor += len(payload)
 
 
+def _build_byte_ui_font_loader() -> bytes:
+    loader = bytearray(bytes.fromhex(
+        "4E B9 00 00 99 B2"      # load the original 256-tile byte font
+        "48 E7 80 40"            # preserve d0/a1
+        "30 3C 81 AD"            # extension resource 429, queued DMA
+        "32 7C 7E 00"            # VRAM byte address for tile 3F0
+        "4E B9 00 00 99 B2"
+    ))
+    for segment_index, (tile_start, _) in enumerate(BYTE_UI_FULL_EXT_VRAM_SEGMENTS):
+        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+        request = 0x8000 | resource_index
+        loader.extend(bytes.fromhex("30 3C") + request.to_bytes(2, "big"))
+        loader.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
+        loader.extend(bytes.fromhex("4E B9 00 00 99 B2"))
+    loader.extend(bytes.fromhex("4C DF 02 01 4E 75"))
+    return bytes(loader)
+
+
 def install_byte_ui_extension(
     data: bytearray,
     font: ImageFont.FreeTypeFont,
@@ -4240,19 +4260,7 @@ def install_byte_ui_extension(
 
     word_renderer = _build_byte_ui_word_renderer()
     tile_renderer = _build_byte_ui_tile_renderer()
-    font_loader = bytearray(bytes.fromhex(
-        "4E B9 00 00 99 B2"      # load the original 256-tile byte font
-        "48 E7 80 40"            # preserve d0/a1
-        "30 3C 81 AD"            # extension resource 429, queued DMA
-        "32 7C 7E 00"            # VRAM byte address for tile 3F0
-        "4E B9 00 00 99 B2"
-    ))
-    for segment_index, (tile_start, _) in enumerate(BYTE_UI_FULL_EXT_VRAM_SEGMENTS):
-        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
-        font_loader.extend(bytes.fromhex("30 3C") + (0x8000 | resource_index).to_bytes(2, "big"))
-        font_loader.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
-        font_loader.extend(bytes.fromhex("4E B9 00 00 99 B2"))
-    font_loader.extend(bytes.fromhex("4C DF 02 01 4E 75"))
+    font_loader = _build_byte_ui_font_loader()
     plane_renderer = _build_byte_ui_plane_renderer()
     panel_renderer = _build_byte_ui_panel_renderer()
     prep_roster_renderer = _build_byte_ui_prep_roster_renderer()

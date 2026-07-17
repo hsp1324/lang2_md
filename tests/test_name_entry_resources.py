@@ -410,6 +410,33 @@ class NameEntryResourceTests(unittest.TestCase):
                     builder.render_byte_ui_tile(char, font),
                 )
 
+    def test_full_extension_font_segments_use_queued_dma_requests(self):
+        loader = builder._build_byte_ui_font_loader()
+        for segment_index, (tile_start, _) in enumerate(
+            builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS
+        ):
+            resource_index = (
+                builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+            )
+            request = 0x8000 | resource_index
+            call = (
+                bytes.fromhex("30 3C")
+                + request.to_bytes(2, "big")
+                + bytes.fromhex("32 7C")
+                + (tile_start * 32).to_bytes(2, "big")
+                + bytes.fromhex("4E B9 00 00 99 B2")
+            )
+            self.assertIn(call, loader)
+
+    def test_loren_second_syllable_uses_runtime_stable_final_segment(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
+
+        self.assertEqual(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[-1], (0x0580, 28))
+        self.assertEqual(tile_by_index[index_by_char["렌"]], 0x0590)
+
     def test_extension_renderer_maps_only_escape_bytes(self):
         def mapped(value):
             return value + 0x300 if builder.BYTE_UI_EXT_CODE_FIRST <= value <= builder.BYTE_UI_EXT_CODE_LAST else value

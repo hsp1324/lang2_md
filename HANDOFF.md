@@ -2854,9 +2854,10 @@ contains 57 safe syllables as documented below and in
   `00,index` followed by the original `FF` terminator. Original JP strings do
   not use `00`, so untouched strings remain distinguishable.
 - A 16-bit index-to-VRAM table at `0x2B8000` reuses verified base glyphs and
-  allocates the remaining glyphs across six map/preparation VRAM segments:
-  `340..347`, `398..3AF`, `440..447`, `498..4AF`, `4D8..4EF`, and
-  `5D8..5F3`. Resources 430 through 435 are appended to the relocated compressed
+  initially allocated the remaining glyphs across six map/preparation VRAM
+  segments: `340..347`, `398..3AF`, `440..447`, `498..4AF`, `4D8..4EF`, and
+  `5D8..5F3`. The final segment has since moved to `580..59B`; see the current
+  Loren regression below. Resources 430 through 435 are appended to the relocated compressed
   resource table and loaded with the normal byte font. Resource 429 and the
   `F0..FE -> 3F0..3FE` name-entry compatibility path remain intact.
 - Every known byte-string renderer now recognizes the pair encoding. The map
@@ -4437,3 +4438,34 @@ contains 57 safe syllables as documented below and in
   and the source-wide secret-stage convention remain the authoritative marker
   evidence. Scenario-specific battle presentation, a successful clear, and
   conditional branches remain pending. BlastEm was stopped after review.
+
+### Current DAC0 Scenario 2 Loren Font-Bank Regression (2026-07-17)
+
+- Production ECA0 exposed a real common byte-UI regression: Scenario 2's fixed
+  NPC record is `로렌/하이로드`, but the map status row displayed only `로`.
+  The localized pointer at name ID `0x26` was correct (`00 09 00 A2 FF`), and
+  compressed resource 435 contained the correct rendered `렌`. The missing
+  syllable was therefore a runtime VRAM-load failure, not a name-table error.
+- The original final full-extension bank `5D8..5F3` is not retained after the
+  preparation transition. Making only the sixth resource request synchronous
+  also failed to populate the live tile, and moving it to `348..35B` visibly
+  collided with map graphics. These are rejected experiments; do not repeat
+  either approach.
+- The accepted build keeps all six resource requests on the normal queued DMA
+  path and relocates the final 28-tile bank to `580..59B`. In
+  `captures/analysis/dac0_s02_first_dialogue.gst`, every used tile in that bank
+  exactly matches its rendered resource bytes, including `렌` at tile `590`.
+  `captures/run/dac0_s02_loren_cursor.png` and
+  `dac0_s02_loren_popup.png` live-verify complete `로렌/하이로드` text in the
+  bottom status row and commander popup. The enlarged evidence is
+  `captures/analysis/dac0_s02_loren_status_x6.png` and
+  `dac0_s02_loren_popup_x6.png`.
+- The Scenario 2 run reached the command menu after 70 retained opening
+  confirmations without reset or freeze. Save-state RAM comparison identified
+  the live cursor at `(5,19)`; moving to the original fixed-record coordinate
+  `(19,19)` selected Loren without relying on visual guessing. The relevant
+  original editor record remains locked by `tests/test_scenario_data.py`.
+- `tests/test_name_entry_resources.py` now locks the stable final segment and
+  Loren's `렌 -> 0x590` mapping. The intermediate synchronous-loader builds
+  `6CA0`, `E760`, and `5AC0` are not release candidates; production DAC0 is the
+  first accepted runtime result for this regression.
