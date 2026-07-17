@@ -12,17 +12,17 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | current | current | historical | current | probe | current | pending | pending | 11 |
-| 2 | historical | current | current | progressed | probe | pending | pending | pending | 7 |
-| 3 | historical | current | current | current | probe | progressed | pending | pending | 10 |
-| 4 | historical | current | current | current | probe | progressed | pending | pending | 12 |
-| 5 | historical | current | current | current | probe | progressed | pending | pending | 14 |
-| 6 | historical | current | current | current | current | progressed | pending | pending | 17 |
-| 7 | historical | current | current | current | current | progressed | pending | pending | 21 |
-| 8 | historical | current | current | current | probe | progressed | pending | pending | 19 |
-| 9 | historical | current | current | current | current | progressed | pending | pending | 25 |
-| 10 | historical | current | current | current | probe | progressed | pending | pending | 23 |
-| 11 | historical | current | current | current | current | progressed | pending | pending | 28 |
-| 12 | historical | current | current | current | current | progressed | pending | pending | 29 |
+| 2 | progressed | current | current | progressed | probe | pending | pending | pending | 10 |
+| 3 | progressed | current | current | current | probe | progressed | pending | pending | 13 |
+| 4 | progressed | current | current | current | probe | progressed | pending | pending | 15 |
+| 5 | progressed | current | current | current | probe | progressed | pending | pending | 17 |
+| 6 | progressed | current | current | current | current | progressed | pending | pending | 20 |
+| 7 | progressed | current | current | current | current | progressed | pending | pending | 24 |
+| 8 | progressed | current | current | current | probe | progressed | pending | pending | 22 |
+| 9 | progressed | current | current | current | current | progressed | pending | pending | 28 |
+| 10 | progressed | current | current | current | probe | progressed | pending | pending | 26 |
+| 11 | progressed | current | current | current | current | progressed | pending | pending | 31 |
+| 12 | progressed | current | current | current | current | progressed | pending | pending | 32 |
 | 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
 | 14 | historical | current | current | current | probe | progressed | pending | pending | 22 |
 | 15 | progressed | current | current | current | probe | progressed | pending | pending | 18 |
@@ -72,6 +72,9 @@ Description, preparation names, and conditions were visually reviewed. Opening e
 - `captures/run/ea22_s02_deploy_banner.png`
 - `captures/run/ea22_s02_command_ready.png`
 - `captures/run/ea22_s02_conditions.png`
+- `captures/run/c7ab_s02_title.png`
+- `captures/run/c7ab_s02_body_2.png`
+- `captures/run/c7ab_s02_body_final2.png`
 
 ### Scenario 3
 
@@ -87,6 +90,9 @@ All 13 briefing/preparation frames and all 24 opening frames were visually revie
 - `captures/run/ea22_s03_conditions.png`
 - `captures/run/ea22_s03_turn1_live_02.png`
 - `captures/run/ea22_s03_turn1_live_08.png`
+- `captures/run/c7ab_s03_title.png`
+- `captures/run/c7ab_s03_body_2.png`
+- `captures/run/c7ab_s03_body_final2.png`
 
 ### Scenario 4
 
@@ -104,6 +110,9 @@ F03A standardizes Rayguard/Black Dragon Sorcerer terminology. All 14 briefing co
 - `captures/run/f03a_s04_turn1_live_39.png`
 - `captures/run/f03a_s04_turn1_live_86.png`
 - `captures/run/f03a_s04_turn1_live_93.png`
+- `captures/run/c7ab_s04_title.png`
+- `captures/run/c7ab_s04_body_2.png`
+- `captures/run/c7ab_s04_body_final2.png`
 
 ### Scenario 5
 
@@ -123,6 +132,9 @@ All ten briefing confirmations, five commander/class selections, all 16 opening 
 - `captures/run/f03a_s05_turn1_live_01.png`
 - `captures/run/f03a_s05_turn1_live_24.png`
 - `captures/run/f03a_s05_turn1_live_36.png`
+- `captures/run/c7ab_s05_title.png`
+- `captures/run/c7ab_s05_body_2.png`
+- `captures/run/c7ab_s05_body_final2.png`
 
 ### Scenario 6
 
@@ -145,6 +157,9 @@ All 14 briefing confirmations, five commander/class selections, all 16 opening c
 - `captures/run/f03a_s06_turn1_live_17.png`
 - `captures/run/f03a_s06_turn1_cont_02.png`
 - `captures/run/f03a_s06_turn1_cont_03.png`
+- `captures/run/c7ab_s06_title.png`
+- `captures/run/c7ab_s06_body_2.png`
+- `captures/run/c7ab_s06_body_final2.png`
 
 ### Scenario 7
 
@@ -171,6 +186,9 @@ All 16 briefing confirmations, five commander/class selections, all 20 opening c
 - `captures/run/ef65_s07_turn1_live_83.png`
 - `captures/run/ef65_s07_turn1_live_99.png`
 - `captures/run/ef65_s07_turn2_map.png`
+- `captures/run/c7ab_s07_title.png`
+- `captures/run/c7ab_s07_body_2.png`
+- `captures/run/c7ab_s07_body_final2.png`
 
 ### Scenario 8
 
@@ -195,6 +213,9 @@ All 16 briefing confirmations, five commander/class selections, all 17 opening c
 - `captures/run/ef65_s08_turn1_cont_06.png`
 - `captures/run/ef65_s08_turn1_cont_09.png`
 - `captures/run/ef65_s08_turn1_cont_11.png`
+- `captures/run/c7ab_s08_title.png`
+- `captures/run/c7ab_s08_body_3.png`
+- `captures/run/c7ab_s08_body_final3.png`
 
 ### Scenario 9
 
@@ -225,6 +246,9 @@ All 14 briefing confirmations, five commander/class selections, arrangement, all
 - `captures/run/d15e_s09_turn1_live_110.png`
 - `captures/run/d15e_s09_turn1_live_114.png`
 - `captures/run/d15e_s09_turn1_live_117.png`
+- `captures/run/c7ab_s09_title.png`
+- `captures/run/c7ab_s09_body_3.png`
+- `captures/run/c7ab_s09_body_final2.png`
 
 ### Scenario 10
 
@@ -253,6 +277,9 @@ All 16 briefing confirmations, the five-member commander/class roster, arrangeme
 - `captures/run/fd90_s10_turn1_slow_08.png`
 - `captures/run/fd90_s10_turn1_slow_12.png`
 - `captures/run/fd90_s10_turn1_slow_14.png`
+- `captures/run/c7ab_s10_title.png`
+- `captures/run/c7ab_s10_body_3.png`
+- `captures/run/c7ab_s10_body_final2.png`
 
 ### Scenario 11
 
@@ -286,6 +313,9 @@ All ten briefing confirmations, arrangement, all 37 slow opening confirmations, 
 - `captures/run/fd90_s11_turn1_slow_35.png`
 - `captures/run/fd90_s11_turn1_slow_41.png`
 - `captures/run/fd90_s11_turn1_slow_42.png`
+- `captures/run/c7ab_s11_title.png`
+- `captures/run/c7ab_s11_body_3.png`
+- `captures/run/c7ab_s11_body_final2.png`
 
 ### Scenario 12
 
@@ -320,6 +350,9 @@ All 13 briefing confirmations, arrangement, automatic deployment, all 12 slow op
 - `captures/run/fd90_s12_turn1_slow_17.png`
 - `captures/run/fd90_s12_turn1_slow_18.png`
 - `captures/run/fd90_s12_turn1_slow_20.png`
+- `captures/run/c7ab_s12_title.png`
+- `captures/run/c7ab_s12_body_3.png`
+- `captures/run/c7ab_s12_body_final2.png`
 
 ### Scenario 13
 

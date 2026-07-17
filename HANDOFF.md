@@ -4068,3 +4068,27 @@ contains 57 safe syllables as documented below and in
   now requires current description evidence for records 23-31 and explicitly
   cites both boundary captures so these entries cannot silently fall back to
   bare pending records.
+
+### Current C7AB Early Description Playback (2026-07-17)
+
+- Production `C7AB` was freshly entered through Scenarios 2-12 with direct
+  BlastEm window events. Each description has a title capture, one or more
+  intermediate body captures, and a stable final-frame capture. No broken
+  glyph, reset, freeze, or user-input collision was observed.
+- The live frames preserve the Japanese-source corrections made during the
+  static review: Scenario 2 includes Loren and Zorum's approaching force;
+  Scenario 3 includes the party's wounds and exhaustion; Scenario 5 sends
+  Sherry rather than Liana with the pursuit party; Scenario 8 reflects Keith's
+  absence from the castle; Scenario 9 names Leon and Laird's elite cavalry;
+  Scenario 10 restores the Dark Rod and Rahl River; Scenarios 11-12 retain
+  Lester, Egbert's trap, the hidden entrance, and the ancient guardians.
+- Scenarios 2-12 are conservatively `progressed_current` because the automatic
+  scroll was sampled at two-second intervals rather than recording every
+  distinct frame. Existing stronger current evidence for their conditions,
+  preparation, opening, battle UI, and turn events remains unchanged.
+- Operational rule for future Goal resumes: when Codex reports
+  `{"detail":"Bad Request"}`, retry the same bounded action once. If it fails
+  again, split combined key, capture, read, or edit calls into smaller requests
+  and continue from the last verified artifact. Do not treat this transport
+  error as a ROM/emulator failure, and do not abandon a running verification
+  sequence solely because it appeared.
