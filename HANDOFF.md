@@ -4614,8 +4614,23 @@ contains 57 safe syllables as documented below and in
   opening are complete Korean with no Japanese residue, clipping, broken
   glyph, or abnormal spacing. Scenario 9 `description` is now
   `verified_current`.
-- Production checksum is `489B`, SHA-256
-  `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
+- Scenario 10 initially exposed `마법 물건 다크로드`, an awkward literal
+  translation. Japanese-ROM playback retained in
+  `jp_s10_description_00.png` through `_32.png` shows the exact source
+  `ダークロッドとよばれるマジックアイテム`, so the production source now reads
+  `다크로드라는 마법 도구가 필요하다는 사실도 알게 되었다.` This avoids
+  adding the otherwise new deferred description glyph `템` and preserves all
+  existing glyph IDs. The first rebuild also exposed a centered one-character
+  `수` line; rewrapping the next
+  sentence as `다크로드만 손에 넣으면 / 제국의 야망을 막을 수 있었다.` removes
+  it.
+- Production D3E8 `d3e8_s10_description_final_00.png` through `_20.png`
+  retain the route map, all 19 text-bearing `랄강의 수호자` frames, and the
+  preparation endpoint. The corrected item wording and every remaining line
+  fit naturally without Japanese residue, clipping, broken glyph, or abnormal
+  spacing. Scenario 10 `description` is now `verified_current`.
+- Production checksum is `D3E8`, SHA-256
+  `f9e60ab0d3aedd160821ff5f810ce367328376f047b8b60fe25847e76e3325b7`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory
-  records the changed byte-font hash. BlastEm was left on the current Scenario
-  2 description for visual review.
+  records the unchanged byte-font hash. BlastEm was left on the Scenario 10
+  preparation screen for visual review.

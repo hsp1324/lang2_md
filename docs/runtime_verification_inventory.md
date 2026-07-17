@@ -20,7 +20,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 7 | current | current | current | current | current | progressed | pending | pending | 29 |
 | 8 | current | current | current | current | probe | progressed | pending | pending | 28 |
 | 9 | current | current | current | current | current | progressed | pending | pending | 34 |
-| 10 | progressed | current | current | current | probe | progressed | pending | pending | 26 |
+| 10 | current | current | current | current | probe | progressed | pending | pending | 32 |
 | 11 | progressed | current | current | current | current | progressed | pending | pending | 31 |
 | 12 | progressed | current | current | current | current | progressed | pending | pending | 32 |
 | 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
@@ -307,7 +307,7 @@ Production 489B verifies the Scenario 9 route map, all 20 text-bearing scrolling
 
 ### Scenario 10
 
-All 16 briefing confirmations, the five-member commander/class roster, arrangement, all 12 slow opening confirmations, and the condition rows were visually reviewed. The scenario description now uses the standardized place name 랄강 in both the actual legacy build source and the generated resource inventory. Live review corrected event 0x195DF6 from the false 겁쟁이인가 reading to 산적인가? 저 정도로는 못 막아. 가자!, with a natural two-line wrap. A pre-fix turn probe also exposed unrelated text at 0x196162; records 0x19611A..0x196218 were corrected against their source references and pass address/capacity tests, but those alternate pages did not retrigger on the final FD90 path and remain pending live reproduction. The final no-action first turn reviewed the pirate dialogue and all movement, reached TURN 2, and returned to Elwin's command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains probe-only; later turns and completion remain pending.
+Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrolling frames of 랄강의 수호자, and the preparation endpoint. Japanese production playback confirmed the source phrase ダークロッドとよばれるマジックアイテム; the former literal 마법 물건 다크로드 is now translated naturally as 다크로드라는 마법 도구가 필요하다는 사실도 알게 되었다. The following sentence was rewrapped to prevent 수 from occupying a centered line alone. This no-new-glyph rebuild retains existing glyph IDs. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the five-member commander/class roster, arrangement, all 12 opening confirmations, condition rows, the corrected 산적인가? event, and the no-action first turn through TURN 2. Alternate pages at 0x19611A..0x196218 and later turns remain pending live reproduction; battle_ui remains probe-only and completion remains pending.
 
 - `captures/run/fd90_s10_brief_live_01.png`
 - `captures/run/fd90_s10_brief_live_14.png`
@@ -335,6 +335,12 @@ All 16 briefing confirmations, the five-member commander/class roster, arrangeme
 - `captures/run/c7ab_s10_title.png`
 - `captures/run/c7ab_s10_body_3.png`
 - `captures/run/c7ab_s10_body_final2.png`
+- `captures/run/d3e8_s10_description_final_01.png`
+- `captures/run/d3e8_s10_description_final_07.png`
+- `captures/run/d3e8_s10_description_final_09.png`
+- `captures/run/d3e8_s10_description_final_15.png`
+- `captures/run/d3e8_s10_description_final_19.png`
+- `captures/run/d3e8_s10_description_final_20.png`
 
 ### Scenario 11
 
