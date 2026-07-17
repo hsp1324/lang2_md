@@ -4574,6 +4574,13 @@ contains 57 safe syllables as documented below and in
   preparation endpoint. The full `조름의 반격` description is natural Korean
   with intact spacing and no clipping, broken glyph, or Japanese residue.
   Scenario 3 `description` is now `verified_current`.
+- The same relative selector targeted Scenario 4 with two Down inputs.
+  `489b_s04_description_current_00.png` through `_14.png` retain the route map,
+  all 13 text-bearing frames of `빛의 신전`, and the preparation endpoint. The
+  complete description preserves the mysterious knight, Vargas, the Temple of
+  Light, and Rayguard Black Dragon Sorcerer terminology without Japanese text,
+  clipping, broken glyphs, or abnormal spacing. Scenario 4 `description` is now
+  `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory

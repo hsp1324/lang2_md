@@ -158,7 +158,7 @@
     },
     {
       "scenario": 4,
-      "description": "progressed_current",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -181,9 +181,14 @@
         "captures/run/f03a_s04_turn1_live_93.png",
         "captures/run/c7ab_s04_title.png",
         "captures/run/c7ab_s04_body_2.png",
-        "captures/run/c7ab_s04_body_final2.png"
+        "captures/run/c7ab_s04_body_final2.png",
+        "captures/run/489b_s04_description_current_01.png",
+        "captures/run/489b_s04_description_current_07.png",
+        "captures/run/489b_s04_description_current_12.png",
+        "captures/run/489b_s04_description_current_13.png",
+        "captures/run/489b_s04_description_current_14.png"
       ],
-      "note": "F03A standardizes Rayguard/Black Dragon Sorcerer terminology. All 14 briefing confirmations, 26 opening confirmations, condition rows, and text-bearing frames from the 93-confirmation first-turn path were visually reviewed; the route returned to a valid command menu without reset. Later turns and completion remain pending."
+      "note": "Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling frames of 빛의 신전, and the preparation endpoint. The complete Korean description consistently covers the mysterious knight, Vargas's defeat, the Temple of Light, and the Rayguard Black Dragon Sorcerers' attack without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified all 26 opening confirmations, condition rows, and text-bearing frames from the 93-confirmation first-turn path; the route returned to a valid command menu without reset. Later turns and completion remain pending."
     },
     {
       "scenario": 5,
