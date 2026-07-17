@@ -1,17 +1,25 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+from unittest import mock
 
 from tools.run_blastem_sequence import (
     JP_DEFAULT_HERO_NAME,
     JP_DEFAULT_HERO_DIALOGUE_NAME,
+    GST_WORK_RAM_FILE_OFFSET,
     KO_DEFAULT_HERO_NAME,
     MANUAL_SLOT_CHECKSUM_OFFSET,
     MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET,
     MANUAL_SLOT_HERO_NAME_OFFSET,
+    MANUAL_SLOT_WORK_RAM_SEGMENTS,
+    SEQUENCES,
+    SRAM_VALID_FLAGS_OFFSET,
     manual_slot_checksum,
     migrate_scenario_select_default_name,
+    recover_manual_slot_from_gst,
+    running_blastem_pids,
     scenario_select_keys,
+    terminate_blastem_processes,
 )
 
 
@@ -113,8 +121,73 @@ class BlastEmSramMigrationTests(unittest.TestCase):
             )
             self.assertEqual(path.read_bytes(), data)
 
+    def test_recovers_manual_slot_from_gst_work_ram(self):
+        record = bytearray(0x1A6)
+        record[:2] = (2).to_bytes(2, "big")
+        name_start = MANUAL_SLOT_HERO_NAME_OFFSET
+        record[name_start : name_start + len(KO_DEFAULT_HERO_NAME)] = (
+            KO_DEFAULT_HERO_NAME
+        )
+        gst_size = max(
+            GST_WORK_RAM_FILE_OFFSET + address + size
+            for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS
+        )
+        gst = bytearray(gst_size)
+        record_offset = 0
+        for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS:
+            start = GST_WORK_RAM_FILE_OFFSET + address
+            gst[start : start + size] = record[record_offset : record_offset + size]
+            record_offset += size
+
+        with TemporaryDirectory() as directory:
+            gst_path = Path(directory) / "scenario2.gst"
+            sram_path = Path(directory) / "save.sram"
+            gst_path.write_bytes(gst)
+            self.assertIsNone(recover_manual_slot_from_gst(gst_path, sram_path))
+            recovered = sram_path.read_bytes()
+
+        base = 0x194E
+        self.assertEqual(recovered[base : base + len(record)], record)
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        self.assertEqual(
+            int.from_bytes(recovered[checksum_offset : checksum_offset + 2], "big"),
+            manual_slot_checksum(recovered, base),
+        )
+        self.assertEqual(
+            int.from_bytes(
+                recovered[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2],
+                "big",
+            ),
+            0x0002,
+        )
+
+    def test_recovery_rejects_record_without_hero_terminator(self):
+        first_address, first_size = MANUAL_SLOT_WORK_RAM_SEGMENTS[0]
+        record_start = GST_WORK_RAM_FILE_OFFSET + first_address
+        gst = bytearray(
+            max(
+                GST_WORK_RAM_FILE_OFFSET + address + size
+                for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS
+            )
+        )
+        name_start = record_start + MANUAL_SLOT_HERO_NAME_OFFSET
+        gst[name_start : name_start + len(JP_DEFAULT_HERO_NAME)] = b"ABCDEF"
+        with TemporaryDirectory() as directory:
+            gst_path = Path(directory) / "invalid.gst"
+            gst_path.write_bytes(gst)
+            with self.assertRaisesRegex(ValueError, "no hero-name terminator"):
+                recover_manual_slot_from_gst(
+                    gst_path, Path(directory) / "save.sram"
+                )
+
 
 class BlastEmScenarioSelectTests(unittest.TestCase):
+    def test_load_screen_waits_for_transition_before_selector_input(self):
+        self.assertEqual(SEQUENCES["load-screen"][-1], "c:4.0")
+
+    def test_launch_only_sends_no_game_input(self):
+        self.assertEqual(SEQUENCES["launch-only"], [])
+
     def test_selector_cheat_uses_short_verified_key_intervals(self):
         keys = scenario_select_keys(27)
         cheat_start = keys.index("left@0.12:0.05")
@@ -134,6 +207,41 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
         for scenario_number in (0, 32):
             with self.assertRaisesRegex(ValueError, "1..31"):
                 scenario_select_keys(scenario_number)
+
+
+class BlastEmProcessTests(unittest.TestCase):
+    def write_process(self, root: Path, pid: int, name: str, state: str) -> None:
+        process = root / str(pid)
+        process.mkdir()
+        (process / "comm").write_text(name + "\n", encoding="ascii")
+        (process / "stat").write_text(
+            f"{pid} ({name}) {state} 1 2 3\n", encoding="ascii"
+        )
+
+    def test_running_pids_ignore_zombies_and_other_processes(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_process(root, 30, "blastem", "S")
+            self.write_process(root, 20, "blastem", "Z")
+            self.write_process(root, 10, "python3", "R")
+            self.assertEqual(running_blastem_pids(root), [30])
+
+    @mock.patch("tools.run_blastem_sequence.time.sleep")
+    @mock.patch("tools.run_blastem_sequence.os.kill")
+    @mock.patch("tools.run_blastem_sequence.running_blastem_pids")
+    def test_termination_escalates_survivor_to_sigkill(
+        self, running: mock.Mock, kill: mock.Mock, sleep: mock.Mock
+    ) -> None:
+        running.side_effect = [[42], [42], [42], [42], [], []]
+        with mock.patch(
+            "tools.run_blastem_sequence.time.monotonic",
+            side_effect=[0.0, 0.1, 3.0, 3.0, 3.1],
+        ):
+            terminate_blastem_processes(timeout=2.0)
+        self.assertEqual(
+            kill.call_args_list,
+            [mock.call(42, 15), mock.call(42, 9)],
+        )
 
 
 if __name__ == "__main__":

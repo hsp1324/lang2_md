@@ -29,6 +29,30 @@ class NameEntryResourceTests(unittest.TestCase):
         for offset, instruction in expected.items():
             self.assertEqual(self.rom[offset : offset + len(instruction)], instruction)
 
+    def test_loren_second_syllable_has_legible_native_bitmap(self):
+        expected_rows = (
+            "###.#.#.",
+            "..#.#.#.",
+            "#######.",
+            "#...#.#.",
+            "###.#.#.",
+            ".#......",
+            ".######.",
+            "........",
+        )
+        self.assertEqual(builder.BYTE_UI_TILE_BITMAP_OVERRIDES["렌"], expected_rows)
+        font = ImageFont.truetype(str(ROOT / "tools/fonts/Galmuri7.ttf"), 8)
+        self.assertEqual(
+            builder.render_byte_ui_tile("렌", font),
+            builder._encode_byte_ui_bitmap(expected_rows),
+        )
+
+    def test_byte_ui_bitmap_override_rejects_invalid_dimensions_and_pixels(self):
+        with self.assertRaisesRegex(ValueError, "8x8"):
+            builder._encode_byte_ui_bitmap(("........",) * 7)
+        with self.assertRaisesRegex(ValueError, "only contain"):
+            builder._encode_byte_ui_bitmap(("........",) * 7 + (".......x",))
+
     def test_name_entry_resource_lengths(self):
         self.assertEqual(len(read_word_list(self.rom, 0x0A3BB0)), 7)
         self.assertEqual(len(read_word_list(self.rom, 0x0A3C5A)), 32)
@@ -169,6 +193,8 @@ class NameEntryResourceTests(unittest.TestCase):
                 original_tiles[start : start + 32],
                 f"byte UI graphic tile 0x{code:02X} changed",
             )
+        self.assertEqual(codes["록"], 0xF6)
+        self.assertNotIn(ord("I"), builder.BYTE_UI_PRIVATE_ASCII_GLYPH_CODES)
         start = 0xB0 * 32
         self.assertEqual(
             patched_tiles[start : start + 32],
@@ -434,8 +460,38 @@ class NameEntryResourceTests(unittest.TestCase):
         codes = builder.patch_byte_ui_strings(data)
         index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
 
-        self.assertEqual(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[-1], (0x0580, 28))
-        self.assertEqual(tile_by_index[index_by_char["렌"]], 0x0590)
+        self.assertEqual(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[-1], (0x05D8, 28))
+        self.assertEqual(tile_by_index[index_by_char["렌"]], 0x05E9)
+
+    def test_map_info_renderer_restores_only_the_final_segment(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+        renderer = builder._build_byte_ui_map_info_renderer()
+        self.assertEqual(
+            renderer[:6],
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big"),
+        )
+
+        loader = builder._build_byte_ui_final_bank_loader()
+        segment_index = len(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS) - 1
+        tile_start, _ = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+        resource_index = builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+        self.assertEqual(loader[:4], bytes.fromhex("48 E7 80 40"))
+        self.assertIn(
+            bytes.fromhex("30 3C") + (0x8000 | resource_index).to_bytes(2, "big"),
+            loader,
+        )
+        self.assertIn(
+            bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"),
+            loader,
+        )
+        for other_start, _ in builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[:-1]:
+            self.assertNotIn(
+                bytes.fromhex("32 7C") + (other_start * 32).to_bytes(2, "big"),
+                loader,
+            )
 
     def test_extension_renderer_maps_only_escape_bytes(self):
         def mapped(value):
@@ -446,8 +502,8 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(mapped(0xF5), 0x3F5)
         self.assertEqual(mapped(0xFE), 0x3FE)
 
-    def test_sorcerer_uses_event_stable_extension_tiles(self):
-        expected = {"소": 0x3AD, "서": 0x3AE, "러": 0x3AF}
+    def test_battle_names_use_event_stable_extension_tiles(self):
+        expected = {"소": 0x3AD, "서": 0x3AE, "러": 0x3AF, "록": 0x5D8}
         self.assertEqual(builder.BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR, expected)
         data = bytearray(self.rom)
         builder.expand_rom(data)

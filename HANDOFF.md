@@ -4439,7 +4439,7 @@ contains 57 safe syllables as documented below and in
   evidence. Scenario-specific battle presentation, a successful clear, and
   conditional branches remain pending. BlastEm was stopped after review.
 
-### Current DAC0 Scenario 2 Loren Font-Bank Regression (2026-07-17)
+### Superseded DAC0 Scenario 2 Loren Font-Bank Regression (2026-07-17)
 
 - Production ECA0 exposed a real common byte-UI regression: Scenario 2's fixed
   NPC record is `로렌/하이로드`, but the map status row displayed only `로`.
@@ -4451,8 +4451,8 @@ contains 57 safe syllables as documented below and in
   also failed to populate the live tile, and moving it to `348..35B` visibly
   collided with map graphics. These are rejected experiments; do not repeat
   either approach.
-- The accepted build keeps all six resource requests on the normal queued DMA
-  path and relocates the final 28-tile bank to `580..59B`. In
+- DAC0 kept all six resource requests on the normal queued DMA path and moved
+  the final 28-tile bank to `580..59B`. In the early-dialogue state
   `captures/analysis/dac0_s02_first_dialogue.gst`, every used tile in that bank
   exactly matches its rendered resource bytes, including `렌` at tile `590`.
   `captures/run/dac0_s02_loren_cursor.png` and
@@ -4468,9 +4468,11 @@ contains 57 safe syllables as documented below and in
 - `tests/test_name_entry_resources.py` now locks the stable final segment and
   Loren's `렌 -> 0x590` mapping. The intermediate synchronous-loader builds
   `6CA0`, `E760`, and `5AC0` are not release candidates; production DAC0 is the
-  first accepted runtime result for this regression.
+  first visually accepted runtime result for this regression. Later fresh
+  command-time evidence proved `580..59B` is overwritten by map graphics, so
+  this acceptance is superseded by the 489B section below.
 
-### Open DAC0 Scenario 2 Status-Banner Recheck (2026-07-18)
+### Superseded DAC0 Scenario 2 Status-Banner Recheck (2026-07-18)
 
 - Loren is also still open from the user's visual review. DAC0 fixed the
   missing VRAM tile, and the live bytes now exactly match the generated `렌`
@@ -4493,3 +4495,53 @@ contains 57 safe syllables as documented below and in
   than Scenario 2. Never promote `dac0_s02_turn1_*.png`. Before every runtime
   check, require exactly one non-zombie BlastEm process and terminate a process
   that survives normal `SIGTERM` before launching the next window.
+
+### Current 489B Scenario 2 Loren And SCENARIO Resolution (2026-07-18)
+
+- Fresh build FCE0 disproved the earlier DAC0 command-time assumption. It
+  entered Scenario 2 normally from a reconstructed manual slot, reached the
+  real command menu, and moved from cursor `(5,19)` to Loren at `(19,19)`.
+  `captures/analysis/fce0_s02_loren_live.gst` shows tile `0x590` contains map
+  graphics rather than the generated `렌`; the early DAC0 GST had only proved
+  that the bank existed before the map finished loading.
+- Reloading the complete extension font after the stock map loader is rejected.
+  Checksum 9ACE produced the visibly corrupted map in
+  `captures/run/9ace_s02_deploy_start.png` because it overwrote several live
+  map banks. Reloading only the final `5D8..5F3` segment at the same early hook
+  preserved graphics but the segment was cleared again before command time.
+  Do not repeat either loader placement.
+- The accepted implementation keeps `5D8..5F3` and requests only its compressed
+  resource from the localized map-info renderer, immediately before the lower
+  status row consumes localized name/class tiles. The Scenario 2 GST VDP
+  registers resolve Plane A/B, Window, and SAT to `C000/E000/D000/F000`; none
+  reference this 28-tile range. Current quicksave bytes exactly match both
+  rendered tiles: `록 -> 0x5D8` and manual-bitmap `렌 -> 0x5E9`.
+- `captures/run/489b_s02_loren_popup.png` live-verifies `로렌/하이로드`, and
+  the same run reached the real command menu after the full opening without
+  reset, freeze, or map corruption. The explicit 8x8 `렌` bitmap is locked in
+  `tests/test_name_entry_resources.py`; it no longer depends on the ambiguous
+  Galmuri7 rasterization.
+- The user's `SCENAR록O` report was correct. Exact comparison of
+  `captures/run/c805c_s02_arrangement.png` against Japanese
+  `captures/run/jp_s02_arrangement.png` found 29 differing pixels only in the
+  `I` rectangle. Current code had assigned Korean `록` to base ASCII tile
+  `0x49`. Build 489B preserves `0x49`, assigns name-entry `록` to escape code
+  `0xF6`, and assigns battle name/class `록` to stable tile `0x5D8`.
+  `captures/run/489b_s02_arrangement.png` crop `(18,168,98,226)` is now pixel-
+  identical to the Japanese capture. The byte-font regression test also
+  requires every non-private ASCII tile, including `I`, to remain unchanged.
+- `tools/run_blastem_sequence.py launch-only --manual-slot-gst ...` is the
+  reproducible Scenario 2 entry path. GST file offset `0x2478` contains work
+  RAM; concatenate RAM `A49C+154`, `BD6E+002`, and `C7F2+050`, write the 1A6
+  bytes into SRAM manual slot 1, store the big-endian word sum plus one at
+  `+1A6`, and set valid flag bit 1 at SRAM `0x1FF0`. This avoids direct loading
+  of cross-build GSTs and the timing-sensitive scenario-select cheat.
+- `running_blastem_pids` now reads `/proc`, ignores zombies, and termination
+  escalates from SIGTERM to SIGKILL with verification. `launch-only` preserves
+  the `load-screen` runtime instead of deleting its recovered save. These paths
+  are covered by `tests/test_blastem_sram_migration.py`.
+- Production checksum is `489B`, SHA-256
+  `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
+  All 234 unit tests pass, and the regenerated compressed-resource inventory
+  records the changed byte-font hash. BlastEm was left on the verified Loren
+  popup for visual review.

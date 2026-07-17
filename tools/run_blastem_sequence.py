@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import os
 import platform
+import signal
 import shutil
 import subprocess
 import sys
@@ -22,10 +23,17 @@ RUNTIME_ROOT = ROOT / "captures/runtime"
 LOG_ROOT = ROOT / "captures/run"
 
 MANUAL_SLOT_BASES = (0x194E, 0x1AF6, 0x1C9E, 0x1E46)
-MANUAL_SLOT_CHECKSUM_DATA_SIZE = 0x1A4
+MANUAL_SLOT_CHECKSUM_DATA_SIZE = 0x1A6
 MANUAL_SLOT_CHECKSUM_OFFSET = 0x1A6
 MANUAL_SLOT_HERO_NAME_OFFSET = 0x130
 MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET = 0x142
+GST_WORK_RAM_FILE_OFFSET = 0x2478
+MANUAL_SLOT_WORK_RAM_SEGMENTS = (
+    (0xA49C, 0x154),
+    (0xBD6E, 0x002),
+    (0xC7F2, 0x050),
+)
+SRAM_VALID_FLAGS_OFFSET = 0x1FF0
 JP_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 B3 A8 DD FF")
 KO_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 FF FF FF FF")
 JP_DEFAULT_HERO_DIALOGUE_NAME = bytes.fromhex(
@@ -36,9 +44,12 @@ SAVED_DIALOGUE_NAME_SIZE = 10
 
 
 SEQUENCES = {
+    # Launch a clean test window without sending game input. Screen-guided
+    # investigations can then advance one verified transition at a time.
+    "launch-only": [],
     # Opening/title into the game's load-slot screen. Copy or retain a runtime
     # SRAM with at least one valid scenario save before using scenario select.
-    "load-screen": ["start:2.0", "start:1.0", "down:0.8", "c:1.5"],
+    "load-screen": ["start:2.0", "start:1.0", "down:0.8", "c:4.0"],
     # Opening/title into the name entry screen. Useful as a glyph/code probe.
     "name-entry": ["start:2.0", "start:1.0", "c:0.8"],
     # Opening/title/name/route into the scenario description screen.
@@ -202,22 +213,117 @@ def scenario_select_keys(scenario_number: int) -> list[str]:
     ]
 
 
-def running_blastem_pids() -> list[int]:
-    result = subprocess.run(
-        ["pgrep", "-x", "blastem"],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    return [int(line) for line in result.stdout.splitlines() if line.strip()]
+def running_blastem_pids(proc_root: Path = Path("/proc")) -> list[int]:
+    pids = []
+    for entry in proc_root.iterdir():
+        if not entry.name.isdigit():
+            continue
+        try:
+            if (entry / "comm").read_text(encoding="ascii").strip() != "blastem":
+                continue
+            stat = (entry / "stat").read_text(encoding="ascii")
+        except (FileNotFoundError, PermissionError, ProcessLookupError):
+            continue
+        closing_parenthesis = stat.rfind(")")
+        if closing_parenthesis < 0 or len(stat) <= closing_parenthesis + 2:
+            continue
+        if stat[closing_parenthesis + 2] != "Z":
+            pids.append(int(entry.name))
+    return sorted(pids)
+
+
+def terminate_blastem_processes(timeout: float = 2.0) -> None:
+    pids = running_blastem_pids()
+    if not pids:
+        return
+    for pid in pids:
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+
+    deadline = time.monotonic() + timeout
+    while running_blastem_pids() and time.monotonic() < deadline:
+        time.sleep(0.05)
+
+    survivors = running_blastem_pids()
+    for pid in survivors:
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+
+    deadline = time.monotonic() + timeout
+    while running_blastem_pids() and time.monotonic() < deadline:
+        time.sleep(0.05)
+    survivors = running_blastem_pids()
+    if survivors:
+        raise RuntimeError(
+            "BlastEm did not terminate (PID "
+            + ", ".join(str(pid) for pid in survivors)
+            + ")"
+        )
 
 
 def manual_slot_checksum(data: bytes | bytearray, base: int) -> int:
     end = base + MANUAL_SLOT_CHECKSUM_DATA_SIZE
-    return sum(
-        int.from_bytes(data[offset : offset + 2], "big")
-        for offset in range(base, end, 2)
+    return (
+        sum(
+            int.from_bytes(data[offset : offset + 2], "big")
+            for offset in range(base, end, 2)
+        )
+        + 1
     ) & 0xFFFF
+
+
+def recover_manual_slot_from_gst(
+    gst_path: Path,
+    sram_path: Path,
+    slot_index: int = 0,
+) -> None:
+    if not 0 <= slot_index < len(MANUAL_SLOT_BASES):
+        raise ValueError("manual slot index must be 0..3")
+    gst = gst_path.read_bytes()
+    record_parts = []
+    for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS:
+        start = GST_WORK_RAM_FILE_OFFSET + address
+        end = start + size
+        if len(gst) < end:
+            raise ValueError(
+                "GST is too short to contain the manual-slot work RAM segments"
+            )
+        record_parts.append(gst[start:end])
+    record = b"".join(record_parts)
+    if len(record) != MANUAL_SLOT_CHECKSUM_DATA_SIZE:
+        raise ValueError("manual-slot work RAM segment sizes changed")
+    hero_name = record[
+        MANUAL_SLOT_HERO_NAME_OFFSET :
+        MANUAL_SLOT_HERO_NAME_OFFSET + len(JP_DEFAULT_HERO_NAME)
+    ]
+    if 0xFF not in hero_name:
+        raise ValueError("GST manual-slot record has no hero-name terminator")
+
+    if sram_path.exists():
+        sram = bytearray(sram_path.read_bytes())
+        if len(sram) != 0x2000:
+            raise ValueError("BlastEm SRAM must be exactly 8192 bytes")
+    else:
+        sram = bytearray(0x2000)
+    base = MANUAL_SLOT_BASES[slot_index]
+    sram[base : base + MANUAL_SLOT_CHECKSUM_DATA_SIZE] = record
+    checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+    sram[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+        sram, base
+    ).to_bytes(2, "big")
+    flags = int.from_bytes(
+        sram[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2], "big"
+    )
+    flags |= 1 << (slot_index + 1)
+    sram[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = flags.to_bytes(
+        2, "big"
+    )
+    sram_path.parent.mkdir(parents=True, exist_ok=True)
+    sram_path.write_bytes(sram)
 
 
 def korean_default_dialogue_name(rom: Path = DEFAULT_ROM) -> bytes:
@@ -587,6 +693,11 @@ def main() -> int:
         help="reuse the isolated test SRAM/save-state directory for this sequence",
     )
     parser.add_argument("--no-launch", action="store_true")
+    parser.add_argument(
+        "--manual-slot-gst",
+        type=Path,
+        help="recover isolated manual slot 1 from a BlastEm GST work-RAM record",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--capture-prefix",
@@ -612,20 +723,28 @@ def main() -> int:
                     + "); close it or pass --replace-existing"
                 )
             if existing_pids:
-                subprocess.run(["pkill", "-x", "blastem"], check=True)
-                time.sleep(0.5)
-        runtime_name = "load-screen" if args.sequence == "scenario-select" else args.sequence
+                terminate_blastem_processes()
+        runtime_name = (
+            "load-screen"
+            if args.sequence in {"scenario-select", "launch-only"}
+            else args.sequence
+        )
         runtime_home = RUNTIME_ROOT / runtime_name
         # The scenario selector requires a valid manual save slot. Preserve its
         # dedicated runtime by default; recreating it requires an in-game save.
-        if not args.reuse_runtime_state and args.sequence != "scenario-select":
+        if not args.reuse_runtime_state and runtime_name != "load-screen":
             shutil.rmtree(runtime_home, ignore_errors=True)
         runtime_home.mkdir(parents=True, exist_ok=True)
+        sram_path = (
+            runtime_home
+            / ".local/share/blastem"
+            / args.rom.stem
+            / "save.sram"
+        )
+        if args.manual_slot_gst is not None:
+            recover_manual_slot_from_gst(args.manual_slot_gst, sram_path)
+            print(f"recovered cached manual slot 1 from {args.manual_slot_gst}")
         if args.sequence == "scenario-select" and args.rom.resolve() == DEFAULT_ROM.resolve():
-            sram_path = (
-                runtime_home
-                / ".local/share/blastem/Langrisser II (Korean JP Probe)/save.sram"
-            )
             migrated = migrate_scenario_select_default_name(sram_path)
             if migrated:
                 print(f"migrated Japanese default hero name in {migrated} manual slot(s)")

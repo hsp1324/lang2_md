@@ -128,9 +128,9 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
     (0x0440, 8),
     (0x0498, 24),
     (0x04D8, 24),
-    # 0x5D8 is overwritten after the preparation screen. Scenario 2 Loren
-    # live-verifies the final bank at 0x580, including 렌 at tile 0x590.
-    (0x0580, 28),
+    # Scenario 2 command-time Plane/SAT data does not reference this range.
+    # The map-info renderer restores it immediately before localized status text.
+    (0x05D8, 28),
 )
 # Scenario 25's event-spawned Jessica uses class 9 (소서러). The name-entry
 # mapping shares 소 with ASCII Q, while the 0x3F6..0x3F8 escape-bank probe is
@@ -140,6 +140,9 @@ BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
     "소": 0x03AD,
     "서": 0x03AE,
     "러": 0x03AF,
+    # ASCII I is visible in the fixed SCENARIO banner. Keep 록 out of the
+    # base byte font and use the final dynamically restored map-status bank.
+    "록": 0x05D8,
 }
 BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C
@@ -220,7 +223,7 @@ BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES = [
 # WPN is no longer needed). Keep B/K/U intact for BGM, OK, and TURN.
 # Lowercase/punctuation codes are not equivalent: they contain live faction
 # and terrain graphics.
-BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "IJQWYZ"]
+BYTE_UI_PRIVATE_ASCII_GLYPH_CODES = [ord(char) for char in "JQWYZ"]
 BYTE_UI_GLYPH_CODES = [
     *BYTE_UI_ORIGINAL_VISIBLE_GLYPH_CODES,
     # E0-FF draw the EXP/status gauge and other panel graphics. Replacing them
@@ -247,8 +250,8 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     "사": 0xCA,
     "워": 0xC4,
     # 0xB0 is a live battle-result decoration around AT/DF/formation labels.
-    # Replacing it made those rows render as `록AT록` and `록DF록`.
-    "록": ord("I"),
+    # ASCII I is also live in the fixed SCENARIO banner. 록 uses the escape
+    # and battle-stable mappings below instead of either shared base tile.
     "파": 0xCC,
     "이": 0xA7,
     "제": 0xC0,
@@ -295,6 +298,7 @@ BYTE_UI_EXT_CODE_BY_CHAR = {
     "카": 0xF3,
     "코": 0xF4,
     "키": 0xF5,
+    "록": 0xF6,
 }
 BYTE_UI_EXT_CODE_FIRST = 0xF0
 BYTE_UI_EXT_CODE_LAST = 0xFE
@@ -339,6 +343,7 @@ BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
 BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
+BYTE_UI_FINAL_BANK_LOAD_ROUTINE = 0x2B7C00
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
 BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
@@ -2439,7 +2444,41 @@ def render_halfwidth_hangul_glyph(
     return bytes(out)
 
 
+BYTE_UI_TILE_BITMAP_OVERRIDES = {
+    # Galmuri7's rasterized 8px 렌 loses the middle of ㄹ and reads as a
+    # corner at native MD resolution. Keep the components explicit.
+    "렌": (
+        "###.#.#.",
+        "..#.#.#.",
+        "#######.",
+        "#...#.#.",
+        "###.#.#.",
+        ".#......",
+        ".######.",
+        "........",
+    ),
+}
+
+
+def _encode_byte_ui_bitmap(rows: tuple[str, ...]) -> bytes:
+    if len(rows) != 8 or any(len(row) != 8 for row in rows):
+        raise ValueError("byte UI bitmap overrides must be 8x8")
+    if any(pixel not in ".#" for row in rows for pixel in row):
+        raise ValueError("byte UI bitmap overrides may only contain '.' and '#'")
+
+    out = bytearray()
+    for row in rows:
+        pixels = [3 if pixel == "#" else 1 for pixel in row]
+        for col in range(0, 8, 2):
+            out.append((pixels[col] << 4) | pixels[col + 1])
+    return bytes(out)
+
+
 def render_byte_ui_tile(char: str, font: ImageFont.FreeTypeFont) -> bytes:
+    override = BYTE_UI_TILE_BITMAP_OVERRIDES.get(char)
+    if override is not None:
+        return _encode_byte_ui_bitmap(override)
+
     img = Image.new("1", (8, 8), 0)
     draw = ImageDraw.Draw(img)
     bbox = draw.textbbox((0, 0), char, font=font)
@@ -3845,6 +3884,10 @@ def _build_byte_ui_status_renderer() -> bytes:
 
 def _build_byte_ui_map_info_renderer() -> bytes:
     code = _M68KCode()
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
+    )
     code.label("loop")
     code.emit("70 00 10 19 0C 00 00 FF")
     code.branch_word(0x6700, "done")
@@ -4170,6 +4213,22 @@ def _build_byte_ui_font_loader() -> bytes:
     return bytes(loader)
 
 
+def _build_byte_ui_final_bank_loader() -> bytes:
+    segment_index = len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS) - 1
+    tile_start, _ = BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+    resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+    request = 0x8000 | resource_index
+    return (
+        bytes.fromhex("48 E7 80 40")  # preserve d0/a1
+        + bytes.fromhex("30 3C")
+        + request.to_bytes(2, "big")
+        + bytes.fromhex("32 7C")
+        + (tile_start * 32).to_bytes(2, "big")
+        + bytes.fromhex("4E B9 00 00 99 B2")
+        + bytes.fromhex("4C DF 02 01 4E 75")
+    )
+
+
 def install_byte_ui_extension(
     data: bytearray,
     font: ImageFont.FreeTypeFont,
@@ -4271,6 +4330,7 @@ def install_byte_ui_extension(
     prep_selected_name_renderer = _build_byte_ui_prep_selected_name_renderer()
     prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
+    final_bank_loader = _build_byte_ui_final_bank_loader()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -4293,6 +4353,7 @@ def install_byte_ui_extension(
         BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE: prep_selected_name_renderer,
         BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
         BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE: prep_hire_class_renderer,
+        BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
     }
     for offset, payload in routines.items():
