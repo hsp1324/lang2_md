@@ -15,7 +15,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 2 | current | current | current | current | current | current | pending | pending | 28 |
 | 3 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
-| 5 | progressed | current | current | current | probe | progressed | pending | pending | 17 |
+| 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
 | 6 | progressed | current | current | current | current | progressed | pending | pending | 20 |
 | 7 | progressed | current | current | current | current | progressed | pending | pending | 24 |
 | 8 | progressed | current | current | current | probe | progressed | pending | pending | 22 |
@@ -144,7 +144,7 @@ Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling
 
 ### Scenario 5
 
-All ten briefing confirmations, five commander/class selections, all 16 opening confirmations, and the condition rows were visually reviewed on F03A. First-turn progression returned to the command menu after 36 captured confirmations; all text-bearing frames were reviewed. Sherry's Soldier hire row is verified, but the other commanders' hire lists and later turns remain pending.
+Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling frames of 짐승의 포효, and the preparation endpoint. The complete Korean description covers the damaged Temple of Light, Morgan threatening nearby residents, and Sherry joining the pursuit without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and all text-bearing frames from the 36-confirmation first-turn path. Sherry's Soldier hire row is verified, but the other commanders' hire lists and later turns remain pending.
 
 - `captures/run/f03a_s05_selector_map.png`
 - `captures/run/f03a_s05_brief_live_01.png`
@@ -163,6 +163,11 @@ All ten briefing confirmations, five commander/class selections, all 16 opening 
 - `captures/run/c7ab_s05_title.png`
 - `captures/run/c7ab_s05_body_2.png`
 - `captures/run/c7ab_s05_body_final2.png`
+- `captures/run/489b_s05_description_current_01.png`
+- `captures/run/489b_s05_description_current_06.png`
+- `captures/run/489b_s05_description_current_10.png`
+- `captures/run/489b_s05_description_current_13.png`
+- `captures/run/489b_s05_description_current_14.png`
 
 ### Scenario 6
 

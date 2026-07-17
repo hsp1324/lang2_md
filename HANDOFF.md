@@ -4581,6 +4581,13 @@ contains 57 safe syllables as documented below and in
   Light, and Rayguard Black Dragon Sorcerer terminology without Japanese text,
   clipping, broken glyphs, or abnormal spacing. Scenario 4 `description` is now
   `verified_current`.
+- Scenario 5 followed with three Down inputs from the saved Scenario 2.
+  `489b_s05_description_current_00.png` through `_14.png` retain the route map,
+  all 13 text-bearing `짐승의 포효` frames, and the preparation endpoint. The
+  damaged Temple of Light, Morgan's threat to nearby residents, and Sherry's
+  pursuit are complete Korean with no Japanese residue, clipping, broken
+  glyph, or abnormal spacing. Scenario 5 `description` is now
+  `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory
