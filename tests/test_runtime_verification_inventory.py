@@ -64,7 +64,16 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario27["description"], "progressed_current")
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertIn("captures/run/c7ab_s02_body_final2.png", scenario2["captures"])
-        self.assertEqual(scenario2["opening_events"], "progressed_current")
+        self.assertEqual(scenario2["opening_events"], "verified_current")
+        for capture in (
+            "captures/run/489b_s02_opening_01.png",
+            "captures/run/489b_s02_opening_32.png",
+            "captures/run/489b_s02_opening_52.png",
+            "captures/run/489b_s02_opening_61.png",
+            "captures/run/489b_s02_opening2_18.png",
+        ):
+            self.assertIn(capture, scenario2["captures"])
+            self.assertTrue((ROOT / capture).is_file())
         self.assertEqual(scenario3["description"], "progressed_current")
         self.assertEqual(scenario3["turn_events"], "progressed_current")
         self.assertEqual(scenario4["opening_events"], "verified_current")

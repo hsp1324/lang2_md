@@ -4540,6 +4540,20 @@ contains 57 safe syllables as documented below and in
   escalates from SIGTERM to SIGKILL with verification. `launch-only` preserves
   the `load-screen` runtime instead of deleting its recovered save. These paths
   are covered by `tests/test_blastem_sram_migration.py`.
+- The same 489B session ended the first player turn without moving units and
+  retained `captures/run/489b_s02_turn1_00.png` through `_52.png`. It covers
+  Loren, imperial-commander, and commander dialogue, all NPC/enemy movement,
+  two battle presentations, and return to a valid Elwin command menu. The
+  dialogue is fully Korean, both battle panels retain ordinary `AT/DF` labels
+  instead of the old `록AT록` corruption, and no reset or freeze occurs.
+  Scenario 2 `battle_ui` and `turn_events` are now `verified_current`.
+- A subsequent exhaustive opening review retained 79 frames across
+  `489b_s02_opening_01.png` through `_61.png` and
+  `489b_s02_opening2_01.png` through `_18.png`. Every text-bearing frame is
+  Korean; the sequence covers deployment, Loren and imperial-commander pages,
+  map transitions, and the real Elwin command menu with intact names, classes,
+  status labels, and graphics. Scenario 2 `opening_events` is therefore also
+  `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 234 unit tests pass, and the regenerated compressed-resource inventory
