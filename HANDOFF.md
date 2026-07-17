@@ -4607,6 +4607,13 @@ contains 57 safe syllables as documented below and in
   and the forced breakthrough are complete Korean with no Japanese residue,
   clipping, broken glyph, or abnormal spacing. Scenario 8 `description` is now
   `verified_current`.
+- Scenario 9 followed with seven Down inputs from the saved Scenario 2.
+  `489b_s09_description_current_00.png` through `_21.png` retain the route map,
+  all 20 text-bearing `칼자스 성 공방전` frames, and the preparation endpoint.
+  The gorge crossing, Blue Dragon Knights, Leon/Laird elite force, and siege
+  opening are complete Korean with no Japanese residue, clipping, broken
+  glyph, or abnormal spacing. Scenario 9 `description` is now
+  `verified_current`.
 - Production checksum is `489B`, SHA-256
   `97d053f18cf79a3f19d482b33b048782546e57cb153e3d9bbf33d7ec956d3957`.
   All 236 unit tests pass, and the regenerated compressed-resource inventory

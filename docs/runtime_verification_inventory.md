@@ -19,7 +19,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 6 | current | current | current | current | current | progressed | pending | pending | 25 |
 | 7 | current | current | current | current | current | progressed | pending | pending | 29 |
 | 8 | current | current | current | current | probe | progressed | pending | pending | 28 |
-| 9 | progressed | current | current | current | current | progressed | pending | pending | 28 |
+| 9 | current | current | current | current | current | progressed | pending | pending | 34 |
 | 10 | progressed | current | current | current | probe | progressed | pending | pending | 26 |
 | 11 | progressed | current | current | current | current | progressed | pending | pending | 31 |
 | 12 | progressed | current | current | current | current | progressed | pending | pending | 32 |
@@ -268,7 +268,7 @@ Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling
 
 ### Scenario 9
 
-All 14 briefing confirmations, five commander/class selections, arrangement, all 30 current opening confirmations, and the condition rows were visually reviewed. The first live pass exposed an inverted translation at event continuation 0x193834; it now reads 레온님이 없는 지금, 망설일 수 없다 and the rebuilt production checksum is D15E without any glyph-ID movement. The no-action first-turn path reviewed 117 confirmations, multiple 그리폰/파이터 and soldier battle presentations, reinforcement movement, and the Sherry/Scott/Keith tutorial before returning to Elwin's command menu. Names, classes, -AT-/-DF-, and status graphics remained intact; later turns and completion remain pending.
+Production 489B verifies the Scenario 9 route map, all 20 text-bearing scrolling frames of 칼자스 성 공방전, and the preparation endpoint. The complete Korean description covers the gorge crossing, the Blue Dragon Knights' assault, Leon and Laird's elite force, and the start of the siege without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, arrangement, all 30 opening confirmations, condition rows, and the corrected event continuation 레온님이 없는 지금, 망설일 수 없다. The no-action first-turn path reviewed 117 confirmations, multiple 그리폰/파이터 and soldier battle presentations, reinforcement movement, and the Sherry/Scott/Keith tutorial before returning to Elwin's command menu. Names, classes, -AT-/-DF-, and status graphics remained intact; later turns and completion remain pending.
 
 - `captures/run/ef65_s09_selector_map.png`
 - `captures/run/d15e_s09_brief_live_01.png`
@@ -298,6 +298,12 @@ All 14 briefing confirmations, five commander/class selections, arrangement, all
 - `captures/run/c7ab_s09_title.png`
 - `captures/run/c7ab_s09_body_3.png`
 - `captures/run/c7ab_s09_body_final2.png`
+- `captures/run/489b_s09_description_current_01.png`
+- `captures/run/489b_s09_description_current_07.png`
+- `captures/run/489b_s09_description_current_12.png`
+- `captures/run/489b_s09_description_current_16.png`
+- `captures/run/489b_s09_description_current_20.png`
+- `captures/run/489b_s09_description_current_21.png`
 
 ### Scenario 10
 
