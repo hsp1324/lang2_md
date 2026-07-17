@@ -37,7 +37,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 24 | progressed | current | current | current | pending | current | pending | pending | 20 |
 | 25 | progressed | current | progressed | current | current | progressed | pending | pending | 15 |
 | 26 | progressed | current | current | current | pending | current | pending | pending | 17 |
-| 27 | progressed | historical | current | progressed | probe | pending | probe | probe | 10 |
+| 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
 | 28 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 29 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 30 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
@@ -728,7 +728,7 @@ Production ECA0 retains the current-source Scenario 26 흑룡마도사단의 함
 
 ### Scenario 27
 
-Production C7AB freshly displays Scenario 27 전설의 끝 and reaches the final line about the light-and-dark war descending after several thousand years. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. Current prep/shop/equipment and opening progression are verified. Ending/epilogue/credits/Fin use documented production-derived probes; ordinary turn-event coverage is still pending.
+Production ECA0 retains the current-source Scenario 27 전설의 끝 description and the existing preparation, shop, and equipment evidence. The current run freshly reached preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Battle animation capture landed on the black transition rather than its labels, so battle UI remains verified only by the documented production-derived probe. Intermediate description scroll frames remain sampled rather than exhaustive. Ending, epilogue, credits, and Fin retain documented production-derived probe evidence; a successful ordinary clear and conditional branches remain pending.
 
 - `captures/run/ea22_s27_after_select_current.png`
 - `captures/run/ea22_s27_roster_sheet.png`
@@ -740,6 +740,15 @@ Production C7AB freshly displays Scenario 27 전설의 끝 and reaches the final
 - `captures/run/c7ab_s27_title.png`
 - `captures/run/c7ab_s27_body_3.png`
 - `captures/run/c7ab_s27_body_final2.png`
+- `captures/run/eca0_s27_brief_11.png`
+- `captures/run/eca0_s27_opening_02.png`
+- `captures/run/eca0_s27_opening_10.png`
+- `captures/run/eca0_s27_opening_18.png`
+- `captures/run/eca0_s27_opening_20.png`
+- `captures/run/eca0_s27_conditions.png`
+- `captures/run/eca0_s27_turn1_01.png`
+- `captures/run/eca0_s27_turn1_54.png`
+- `captures/run/eca0_s27_turn1_55.png`
 
 ### Scenario 28
 

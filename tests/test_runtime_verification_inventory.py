@@ -190,8 +190,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario26["battle_ui"], "pending")
         self.assertIn("captures/run/eca0_s26_turn1_actual_50.png", scenario26["captures"])
         self.assertEqual(scenario27["preparation"], "verified_current")
+        self.assertEqual(scenario27["conditions"], "verified_current")
+        self.assertEqual(scenario27["opening_events"], "verified_current")
+        self.assertEqual(scenario27["turn_events"], "verified_current")
+        self.assertEqual(scenario27["battle_ui"], "verified_probe")
         self.assertEqual(scenario27["completion"], "verified_probe")
         self.assertIn("captures/run/c7ab_s27_body_final2.png", scenario27["captures"])
+        self.assertIn("captures/run/eca0_s27_turn1_55.png", scenario27["captures"])
         self.assertEqual(scenario31["description"], "progressed_current")
         self.assertIn("captures/run/c7ab_s31_body_final2.png", scenario31["captures"])
         for evidence in data["global_evidence"]:

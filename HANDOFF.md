@@ -4305,3 +4305,31 @@ contains 57 safe syllables as documented below and in
 - Production ECA0 has SHA-256
   `752622f2c7b424fc8e8ba3a38f316d39a8d30c8575b927040f80c369518b976c`.
   BlastEm was stopped after the current-build verification.
+
+### Current ECA0 Scenario 27 Opening And First Turn (2026-07-17)
+
+- The built-in selector entered Scenario 27 on production ECA0 and the
+  detector stopped at preparation after eleven description confirmations.
+  The preparation panel retains the verified five-commander roster
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
+  `키스/호크나이트`; the later Scenario 26-only Liana/Lana/Jessica rows do
+  not belong to this roster.
+- Clean automatic deployment and twenty individually retained opening frames
+  reached Elwin's `이동/공격/치료/명령` panel. Bernhardt, Lana, Liana,
+  Sherry, Elwin, and Aaron dialogue, dynamic names, classes, and status text
+  are Korean and intact. Current evidence is
+  `eca0_s27_opening_01.png` through `_20.png`.
+- `eca0_s27_conditions.png` verifies victory `베른하르트 격파` and defeat
+  `주인공 사망`. Closing the conditions screen resets the Start-menu cursor
+  to `저장`; move down four rows from that visible state to choose turn end.
+  The first attempt assumed the cursor remained on conditions and therefore
+  did not leave the page. This was an input-state mistake, not a ROM failure.
+- The full no-action first turn retained 55 frames. The only waiting dialogue
+  pages are Bernhardt's two arguments for unification by force and Elwin's
+  defeat line; all are clean Korean. Enemy movement then defeats the party and
+  reaches the expected `GAME OVER` on Turn 1 without reset or freeze.
+- One automatic sample caught the all-black battle transition, but no current
+  battle-label frame was retained. Do not promote this run to direct battle-UI
+  verification; keep the existing production-derived 3590 probe for that
+  surface. A successful normal clear and conditional routes are still
+  pending. BlastEm was stopped after verification.
