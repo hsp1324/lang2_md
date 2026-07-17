@@ -41,7 +41,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 28 | current | current | current | current | pending | current | pending | pending | 15 |
 | 29 | current | current | current | current | pending | current | pending | pending | 16 |
 | 30 | current | current | current | current | pending | current | pending | pending | 15 |
-| 31 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 31 | current | current | current | current | pending | current | pending | pending | 16 |
 
 ## Evidence Notes
 
@@ -813,12 +813,24 @@ Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡�
 
 ### Scenario 31
 
-Selector description record 31 enters the on-screen secret Scenario X4 죽음의 탑 on production C7AB. Its description reaches the final line about the party's tactics depending on whether they can repel the spells and break through the tower. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. Scenario-specific battle presentation, a successful clear, and conditional branches remain pending.
 
 - `captures/run/c7ab_s31_title.png`
 - `captures/run/c7ab_s31_body_mid.png`
 - `captures/run/c7ab_s31_body_3.png`
 - `captures/run/c7ab_s31_body_final2.png`
+- `captures/run/eca0_s31_brief_01.png`
+- `captures/run/eca0_s31_brief_10.png`
+- `captures/run/eca0_s31_brief_11.png`
+- `captures/run/eca0_s31_after_deploy.png`
+- `captures/run/eca0_s31_opening_03.png`
+- `captures/run/eca0_s31_opening_04.png`
+- `captures/run/eca0_s31_opening_06.png`
+- `captures/run/eca0_s31_opening_08.png`
+- `captures/run/eca0_s31_opening_10.png`
+- `captures/run/eca0_s31_opening_12.png`
+- `captures/run/eca0_s31_conditions.png`
+- `captures/run/eca0_s31_turn1_01.png`
 
 ## Global Surface Evidence
 

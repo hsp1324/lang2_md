@@ -4408,3 +4408,32 @@ contains 57 safe syllables as documented below and in
   after BlastEm had been stopped, so it did not affect this evidence. Direct
   battle-label evidence, a successful clear, and conditional branches remain
   pending.
+
+### Current ECA0 Secret Scenario X4 Runtime (Selector 31, 2026-07-17)
+
+- Selector record 31 intentionally opens `시나리오 X4 / 죽음의 탑`. All ten
+  scrolling description frames were retained and reviewed through the final
+  sentence about breaking through the tower. Frame 11 is the normal
+  five-commander preparation endpoint, so the description is now
+  `verified_current`.
+- The battle status row displays `SCENARIO ?4`, following the source secret-
+  stage convention already proved directly for `?1`. The patterned block at
+  the far left of the row is the current terrain-tile thumbnail and the
+  adjacent `10%` is its terrain modifier. The thumbnail can resemble `록` at
+  native resolution, but it is map graphics rather than a Korean text slot;
+  do not patch either it or the intentional question-mark stage marker.
+- Automatic deployment reaches the Death Tower map. Six opening dialogue
+  pages verify `에그베르트`, `나라`, `베른하르트`, and `엘윈`, along with
+  live class and status labels, without Japanese residue, broken high
+  extension tiles, clipping, reset, or freeze. Evidence is retained in
+  `eca0_s31_opening_01.png` through `_12.png`.
+- Conditions are victory `적 전멸` and defeat `주인공 사망`. Ending the turn
+  without acting immediately reaches the expected `GAME OVER` because the
+  protagonist is defeated; `eca0_s31_turn1_01.png` preserves the endpoint.
+- A Japanese-ROM comparison session was also opened while investigating the
+  status row. The first automatic deployment attempt from its post-description
+  focus entered Aaron's equipment screen, so it is not valid X4 battle-row
+  evidence and must not be promoted as such. The direct Japanese `?1` proof
+  and the source-wide secret-stage convention remain the authoritative marker
+  evidence. Scenario-specific battle presentation, a successful clear, and
+  conditional branches remain pending. BlastEm was stopped after review.
