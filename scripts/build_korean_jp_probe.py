@@ -130,6 +130,15 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
     (0x04D8, 24),
     (0x05D8, 28),
 )
+# Scenario 25's event-spawned Jessica uses class 9 (소서러). The name-entry
+# mapping shares 소 with ASCII Q, while the 0x3F6..0x3F8 escape-bank probe is
+# not stable during battle. Keep this class beside 로얄가드's stable 얄 tile;
+# the direct-map renderer below preserves these full 16-bit tile IDs.
+BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
+    "소": 0x03AD,
+    "서": 0x03AE,
+    "러": 0x03AF,
+}
 BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C
 SCENARIO_GLYPH_LIST_TABLE = 0x9B2FC
@@ -3890,10 +3899,10 @@ def _build_byte_ui_direct_map_renderer() -> bytes:
     code.emit("0C 01 00 DF")
     code.branch_word(0x6700, "mark")
     code.label("store")
-    code.emit("02 41 00 FF D4 FC 00 02 35 81 00 00")
+    code.emit("D4 FC 00 02 35 81 00 00")
     code.branch_word(0x6000, "loop")
     code.label("mark")
-    code.emit("02 41 00 FF 34 81")
+    code.emit("34 81")
     code.branch_word(0x6000, "loop")
     code.label("done")
     code.emit("4C DF 06 03 4E 75")
@@ -4078,6 +4087,7 @@ def build_byte_ui_local_mapping(
         tile
         for start, count in BYTE_UI_FULL_EXT_VRAM_SEGMENTS
         for tile in range(start, start + count)
+        if tile not in BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR.values()
     ]
     next_extension = iter(extension_tiles)
     index_by_char: dict[str, int] = {}
@@ -4085,6 +4095,8 @@ def build_byte_ui_local_mapping(
     for char in chars:
         if char == " ":
             tile = 0x20
+        elif char in BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR:
+            tile = BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR[char]
         elif char in code_by_char:
             code = code_by_char[char]
             tile = (
@@ -4410,9 +4422,9 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         )
         if ord(char) > 0x7F
     ]
-    code_by_char: dict[str, int] = {
-        char: code for char, code in BYTE_UI_EXT_CODE_BY_CHAR.items() if char in chars
-    }
+    # Escape-bank assignments are also used by the relocated full class/name
+    # tables, whose characters are broader than the compact name-entry set.
+    code_by_char: dict[str, int] = dict(BYTE_UI_EXT_CODE_BY_CHAR)
     used_codes: set[int] = set()
     for char in chars:
         if (

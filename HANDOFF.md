@@ -4218,3 +4218,48 @@ contains 57 safe syllables as documented below and in
 - No Japanese text, broken commander/class/status glyph, blank page, reset, or
   freeze appeared. Scenario-specific battle presentation, later turns,
   completion, and conditional branches remain pending.
+
+### Current 9C1F Scenario 25 Opening And Battle Class Fix (2026-07-17)
+
+- Six Scenario 25 opening records were corrected against the Japanese source.
+  The final meanings are `폐하를 이계로 날려 보낸 어리석은 마술사여.`,
+  `알하자드의 힘을 너무 얕봤구나.`, `기다려라, {0014}. 난 비겁하게 인질을
+  쓰지 않는다.`, `후후후… 무르군, {000D}. 하지만 그게 네 장점이지.`,
+  `놈들을 맞을 준비를 하지. 헛수고로 끝나면 좋겠군.`, and `{000E}가
+  알하자드의 힘을 풀어 세상에 큰 이변이 닥치려 해!`. Do not restore the
+  rejected `이세계로`, `하지 마라`, `고지식하군`, `헛수고가 아니길`, or
+  conditional `힘을 풀면` variants. Build 6F37 captured all 28 opening pages
+  in `6f37_s25_opening_01.png` through `_28.png` without clipping, Japanese
+  residue, reset, or freeze.
+- Runtime RAM in the BlastEm GST starts at file offset `0x2478`. Scenario 25's
+  live group 9 is the event-spawned Jessica: class ID 9, original
+  `ソーサラー`, Korean `소서러`, LV5, AT29, and DF17. The hidden fixed
+  placement record is a different Warlock Jessica and must not be used to name
+  the live unit. Preserve this distinction for the scenario editor.
+- The broken battle labels were not caused by overwritten extension glyph
+  resources. In the exact paused A2A7 GST, tiles `0x3AC` (`얄`), `0x444`
+  (`가`), and `0x3AD..0x3AF` (`소서러`) and all six extension resource
+  segments were byte-exact. Screenshot matching instead proved that the battle
+  plane received `0xAC`, `0x44`, and `0xAD..0xAF`.
+- Two failed slot experiments should not be repeated. Putting `소서러` at
+  `0x3F6..0x3F8` produced battle graphics because that escape-bank area is not
+  stable in battle. Moving it to stable `0x3AD..0x3AF` fixed the map status but
+  did not fix the battle label by itself. The latter assignment remains useful
+  for stable storage, but it requires the renderer fix below.
+- The actual battle path is the localized direct-map renderer at `0x2B7800`,
+  called from `0x1B546`, `0x1CBA6`, and `0x1CBBC`. Its post-lookup store at
+  `0x2B7862` used `AND.W #$00FF,D1`, truncating every full extension tile ID.
+  The builder now keeps the table-index mask but removes the two masks after
+  tile lookup. `test_direct_map_renderer_preserves_full_extension_tile_ids`
+  prevents the truncation from returning.
+- Production 9C1F has SHA-256
+  `b88a0150b3a3bae69a31048e2da4de12b054f46419e9a26405be96563b91c51e`.
+  Current captures `9c1f_s25_battle_paused.png` through
+  `9c1f_s25_battle4_paused.png` verify `파이터`, `워록`, `로얄가드`, and the
+  dynamic Jessica's `소서러`; the high-tile syllables are intact. The same
+  no-action first turn continued through the defeat ending cinematic without
+  reset or freeze. It was over-confirmed rather than preserving every distinct
+  dialogue page, so the turn is `progressed_current`, not `verified_current`.
+- BlastEm was stopped after verification. A paused GST copied over another
+  running session's quicksave caused BlastEm to exit; use a fresh selector run
+  for this regression instead of reusing `a2a7_s25_battle_paused.gst`.

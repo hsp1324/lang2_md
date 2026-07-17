@@ -419,6 +419,32 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(mapped(0xF5), 0x3F5)
         self.assertEqual(mapped(0xFE), 0x3FE)
 
+    def test_sorcerer_uses_event_stable_extension_tiles(self):
+        expected = {"소": 0x3AD, "서": 0x3AE, "러": 0x3AF}
+        self.assertEqual(builder.BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR, expected)
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
+        self.assertEqual(codes["소"], ord("Q"))
+        self.assertEqual(
+            [tile_by_index[index_by_char[char]] for char in "소서러"],
+            [0x3AD, 0x3AE, 0x3AF],
+        )
+
+    def test_direct_map_renderer_preserves_full_extension_tile_ids(self):
+        renderer = builder._build_byte_ui_direct_map_renderer()
+        byte_mask = bytes.fromhex("02 41 00 FF")
+
+        # The one remaining mask bounds the class/name table index. Localized
+        # tile words returned by the lookup must reach VRAM without truncation.
+        self.assertEqual(renderer.count(byte_mask), 1)
+        self.assertNotIn(
+            bytes.fromhex("02 41 00 FF D4 FC 00 02 35 81 00 00"),
+            renderer,
+        )
+        self.assertIn(bytes.fromhex("D4 FC 00 02 35 81 00 00"), renderer)
+
     def test_scenario_one_status_classes_keep_exact_source_names(self):
         labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS
         self.assertEqual(labels[13], "매직나이트")

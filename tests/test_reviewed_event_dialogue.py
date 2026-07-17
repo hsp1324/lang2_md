@@ -240,6 +240,39 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertNotIn("{0001}들", rows["0x1AE9F6"])
 
+    def test_scenario_25_opening_preserves_japanese_meaning(self):
+        rows = {
+            row["address"]: row["text"]
+            for row in self.rows
+            if row["scenario"] == 25
+        }
+        self.assertEqual(
+            rows["0x1B09EA"],
+            "폐하를 이계로 날려 보낸 어리석은 마술사여.",
+        )
+        self.assertEqual(rows["0x1B0A20"], "알하자드의 힘을 너무 얕봤구나.")
+        self.assertEqual(
+            rows["0x1B0A50"],
+            "기다려라, {0014}. 난 비겁하게 인질을 쓰지 않는다.",
+        )
+        self.assertEqual(
+            rows["0x1B0AEE"],
+            "후후후… 무르군, {000D}. 하지만 그게 네 장점이지.",
+        )
+        self.assertEqual(
+            rows["0x1B0B64"],
+            "놈들을 맞을 준비를 하지. 헛수고로 끝나면 좋겠군.",
+        )
+        self.assertEqual(
+            rows["0x1B0C12"],
+            "{000E}가 알하자드의 힘을 풀어 세상에 큰 이변이 닥치려 해!",
+        )
+        rejected = "\n".join(rows[address] for address in (
+            "0x1B09EA", "0x1B0A50", "0x1B0AEE", "0x1B0B64", "0x1B0C12",
+        ))
+        for phrase in ("이세계로", "하지 마라", "고지식하군", "헛수고가 아니길", "힘을 풀면"):
+            self.assertNotIn(phrase, rejected)
+
     def test_scenario_16_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 16]
         primary = [row for row in rows if not row.get("continuation")]
