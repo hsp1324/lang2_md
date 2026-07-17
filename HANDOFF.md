@@ -4112,3 +4112,46 @@ contains 57 safe syllables as documented below and in
   and the complete automatic scroll were captured there. All other Scenarios
   2-31 now have current production playback evidence as
   `progressed_current`; no description remains historical or pending.
+
+### Current C1C9 Scenario 22 Opening And First Turn (2026-07-17)
+
+- The Japanese source for three Scenario 22 opening records was reviewed again.
+  `0x1AB208` (`二人は別人だったのか？！`) is now
+  `둘은 다른 사람이었나?`; `0x1AB248`
+  (`闇の剣を光の巫女が封印した…。納得できる話じゃな。`) is now
+  `어둠의 검은 빛의 무녀가 봉인했군… 말이 되는군.`; and
+  `0x1AB2A4` (`封印を解き、闇の力をそそぎ込むのが役めでしょう。`) is
+  now `봉인을 풀고 어둠의 힘을 불어넣는 역할이겠죠.`. The previous
+  wording at `0x1AB248` invented a later unsealing action, while the previous
+  `0x1AB2A4` incorrectly described work after the seal rather than breaking it.
+- Do not repeat the rejected long variants blindly. The first `0x1AB208`
+  revision required 16 words in an original 13-word record, and the first
+  `0x1AB248` revision required 31 words in an original 28-word record. The
+  final source-faithful forms above fit the original capacities and build
+  without relocating these fixed event records.
+- The resulting production ROM is checksum `C1C9`, has 859 custom glyphs in
+  the unchanged `0x7000..0x735B` range, and rebuilds deterministically to
+  SHA-256 `48c1642e06351026b8eea955f8deb0f6607ed8d8b6141c600daed096224dea12`.
+  A detached `041b03c` build reproduced `C7AB`. Direct comparison found only
+  96 changed bytes: the two checksum-header bytes at `0x18E..0x18F` and the
+  three reviewed event-record ranges around `0x1AB208`, `0x1AB248`, and
+  `0x1AB2A4`. No description, glyph, UI, class, or preparation bytes changed,
+  so the immediately preceding C7AB description and preparation evidence is
+  valid for the current source.
+- Fresh C1C9 playback reached the preparation screen, deployed, and captured
+  all fourteen opening confirmations at a 3.2-second interval. The corrected
+  lines render completely in `c1c9_s22_opening_06.png`, `_08.png`, and
+  `_10.png`; `_14.png` is a stable Elwin command menu. The slower interval
+  avoids treating a partially drawn text frame as a broken glyph.
+- The complete selectable preparation roster is 엘윈/파이터, 헤인/워록,
+  쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더,
+  제시카/세이지, and 스코트/파이터. An enlarged nearest-neighbor crop
+  resolved the small Keith label as `호크나이트`; it was initially misread as
+  `크루세이더`, which belongs to Lester. Verify tiny class text with an
+  enlarged crop before changing source data.
+- `c1c9_s22_conditions.png` shows victory `적 전멸` and defeat
+  `주인공 사망`/`제시카 사망`. The no-action first turn captured all four
+  Bozel/Egbert dialogue pages, enemy and allied movement, `TURN 2`, and a valid
+  Elwin command menu after 30 confirmations. No Japanese text, blank page,
+  reset, or freeze appeared. Scenario-specific battle presentation, later
+  turns, completion, and conditional branches remain pending.

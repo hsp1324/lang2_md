@@ -20,7 +20,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "C7AB")
+        self.assertEqual(data["production_checksum"], "C1C9")
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]
@@ -160,8 +160,12 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario21["turn_events"], "progressed_current")
         self.assertEqual(scenario22["description"], "progressed_current")
         self.assertIn("captures/run/c7ab_s22_body_final2.png", scenario22["captures"])
-        self.assertEqual(scenario22["preparation"], "pending")
-        self.assertEqual(scenario22["opening_events"], "pending")
+        self.assertEqual(scenario22["conditions"], "verified_current")
+        self.assertEqual(scenario22["preparation"], "verified_current")
+        self.assertEqual(scenario22["opening_events"], "verified_current")
+        self.assertEqual(scenario22["turn_events"], "verified_current")
+        self.assertIn("captures/run/c1c9_s22_opening_10.png", scenario22["captures"])
+        self.assertIn("captures/run/c1c9_s22_turn1_30.png", scenario22["captures"])
         self.assertEqual(scenario23["description"], "progressed_current")
         self.assertIn("captures/run/c7ab_s23_title.png", scenario23["captures"])
         self.assertEqual(scenario27["preparation"], "verified_current")

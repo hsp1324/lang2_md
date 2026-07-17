@@ -211,6 +211,23 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertTrue(primary[-1]["japanese_only"])
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+    def test_scenario_22_opening_preserves_japanese_meaning(self):
+        rows = {
+            row["address"]: row["text"]
+            for row in self.rows
+            if row["scenario"] == 22
+        }
+        self.assertEqual(rows["0x1AB208"], "둘은 다른 사람이었나?")
+        self.assertEqual(
+            rows["0x1AB248"],
+            "어둠의 검은 빛의 무녀가 봉인했군… 말이 되는군.",
+        )
+        self.assertEqual(
+            rows["0x1AB2A4"],
+            "봉인을 풀고 어둠의 힘을 불어넣는 역할이겠죠.",
+        )
+        self.assertNotIn("때가 되면 푸는군", rows["0x1AB248"])
+
     def test_scenario_16_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 16]
         primary = [row for row in rows if not row.get("continuation")]
