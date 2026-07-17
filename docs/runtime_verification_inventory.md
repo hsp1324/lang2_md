@@ -39,7 +39,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 26 | progressed | current | current | current | pending | current | pending | pending | 17 |
 | 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
 | 28 | current | current | current | current | pending | current | pending | pending | 15 |
-| 29 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 29 | current | current | current | current | pending | current | pending | pending | 16 |
 | 30 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 31 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 
@@ -772,12 +772,24 @@ Selector record 28 intentionally enters the on-screen secret Scenario X1 근육�
 
 ### Scenario 29
 
-Selector description record 29 enters the on-screen secret Scenario X2 디레스 해협의 격전 on production C7AB. Its description reaches the final line in which the Rayguard commander who failed to reinforce Imelda attacks to avenge the general. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, Keith, Aaron, Elwin, and Scott with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. The selector-record versus displayed-scenario numbering difference is original behavior. Scenario-specific battle presentation, completion, and conditional branches remain pending.
 
 - `captures/run/c7ab_s29_title.png`
 - `captures/run/c7ab_s29_body_mid.png`
 - `captures/run/c7ab_s29_body_3.png`
 - `captures/run/c7ab_s29_body_final2.png`
+- `captures/run/eca0_s29_brief_01.png`
+- `captures/run/eca0_s29_brief_09.png`
+- `captures/run/eca0_s29_brief_10.png`
+- `captures/run/eca0_s29_opening_02.png`
+- `captures/run/eca0_s29_opening_07.png`
+- `captures/run/eca0_s29_opening_09.png`
+- `captures/run/eca0_s29_conditions.png`
+- `captures/run/eca0_s29_turn1_01.png`
+- `captures/run/eca0_s29_turn1_51.png`
+- `captures/run/eca0_s29_turn1_76.png`
+- `captures/run/eca0_s29_turn1_93.png`
+- `captures/run/eca0_s29_turn1_95.png`
 
 ### Scenario 30
 

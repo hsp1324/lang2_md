@@ -4358,3 +4358,22 @@ contains 57 safe syllables as documented below and in
   pending rather than inferred from map movement. Completion and conditional
   conversion/item branches also remain pending. BlastEm was stopped after
   verification.
+
+### Current ECA0 Secret Scenario X2 Runtime (Selector 29, 2026-07-17)
+
+- Selector record 29 intentionally opens `시나리오 X2 / 디레스 해협의
+  격전`. All nine scrolling description states were retained and reviewed,
+  from the small-ship pursuit through the Rayguard commander's revenge for
+  Imelda. The tenth detector frame is the normal five-commander preparation
+  screen, so the description is now `verified_current`.
+- Automatic deployment reaches the naval map. Six opening dialogue pages
+  verify `세이갈/드래곤로드`, `폴거/드래곤로드`, `키스/호크나이트`,
+  아론, and 엘윈 status labels without Japanese residue or broken extension
+  glyphs. The command detector reaches Elwin after nine frames.
+- Conditions are victory `적 전멸` and defeat `주인공 사망`. The long
+  no-action first turn retains 95 frames. Its six waiting dialogue pages cover
+  폴거, 세이갈, 엘윈, 스코트, and 키스; frame 93 is `TURN 2` and frame 95
+  is Elwin's valid command menu. No reset, freeze, or blank page appeared.
+- The automatic run did not retain a readable battle-label frame, so X2
+  battle UI remains pending. Full completion and conditional battle/death
+  branches also remain pending. BlastEm was stopped after verification.
