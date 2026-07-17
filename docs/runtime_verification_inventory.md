@@ -38,7 +38,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 25 | progressed | current | progressed | current | current | progressed | pending | pending | 15 |
 | 26 | progressed | current | current | current | pending | current | pending | pending | 17 |
 | 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
-| 28 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
+| 28 | current | current | current | current | pending | current | pending | pending | 15 |
 | 29 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 30 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
 | 31 | progressed | pending | pending | pending | pending | pending | pending | pending | 4 |
@@ -752,12 +752,23 @@ Production ECA0 retains the current-source Scenario 27 전설의 끝 description
 
 ### Scenario 28
 
-Selector description record 28 enters the on-screen secret Scenario X1 근육의 신전 on production C7AB. Its description reaches the final line about the men gathering to train at the muscle temple without broken glyphs or reset. Intermediate automatic-scroll frames were sampled, so description is progressed rather than fully verified. The selector-record versus displayed-scenario numbering difference is intentional. Other runtime surfaces remain pending.
+Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, Lester, Aaron, Sherry, and Jessica with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The selector-record versus displayed-scenario numbering difference is original behavior. Scenario-specific battle presentation, completion, and conditional branches remain pending.
 
 - `captures/run/c7ab_s28_title.png`
 - `captures/run/c7ab_s28_body_mid.png`
 - `captures/run/c7ab_s28_body_3.png`
 - `captures/run/c7ab_s28_body_final2.png`
+- `captures/run/eca0_s28_brief_01.png`
+- `captures/run/eca0_s28_brief_09.png`
+- `captures/run/eca0_s28_brief_10.png`
+- `captures/run/eca0_s28_opening_02.png`
+- `captures/run/eca0_s28_opening_11.png`
+- `captures/run/eca0_s28_opening_18.png`
+- `captures/run/eca0_s28_opening_20.png`
+- `captures/run/eca0_s28_conditions.png`
+- `captures/run/eca0_s28_turn1_01.png`
+- `captures/run/eca0_s28_turn1_62.png`
+- `captures/run/eca0_s28_turn1_64.png`
 
 ### Scenario 29
 

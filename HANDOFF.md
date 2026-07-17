@@ -4333,3 +4333,28 @@ contains 57 safe syllables as documented below and in
   verification; keep the existing production-derived 3590 probe for that
   surface. A successful normal clear and conditional routes are still
   pending. BlastEm was stopped after verification.
+
+### Current ECA0 Secret Scenario X1 Runtime (Selector 28, 2026-07-17)
+
+- Selector record 28 intentionally opens on-screen `시나리오 X1 / 근육의
+  신전`; this is original numbering, not a localization offset. Ten detector
+  frames include all nine scrolling description states and the preparation
+  endpoint. The full description is clean Korean, so this surface is now
+  `verified_current` rather than merely sampled.
+- The preparation screen contains the same five selectable commanders as
+  Scenario 27. Automatic deployment was run from the initial preparation
+  focus and reached the X1 map without entering equipment or hire menus.
+- Eighteen dialogue pages in the twenty retained opening frames verify
+  `바란`, `아돈`, `삼손`, 레스터, 아론, 쉐리, and 제시카. Their live
+  names, classes, portrait status labels, and all bodybuilding dialogue render
+  in Korean without clipping or corrupted high extension tiles. The command
+  detector stops at a valid Elwin panel after frame 20.
+- Conditions are victory `적 전멸` and defeat `주인공 사망`. The no-action
+  first turn contains Baran's two instruction pages, then all enemy/allied
+  movement. Frame 62 visibly reaches `TURN 2` and frame 64 reaches Elwin's
+  intact command panel. No Japanese text, blank page, reset, or freeze
+  appeared.
+- No battle-label frame was retained in this run, so X1 battle UI remains
+  pending rather than inferred from map movement. Completion and conditional
+  conversion/item branches also remain pending. BlastEm was stopped after
+  verification.
