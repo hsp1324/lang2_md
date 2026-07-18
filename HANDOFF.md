@@ -4781,3 +4781,14 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `77D0`, SHA-256
   `485dd695b980382f103c7edea21e8b5770c6ebe4d60990992f7bda157a09c932`.
   BlastEm was left on the Scenario 18 preparation screen.
+- Scenario 19 was compared with the Japanese-ROM render
+  `text_scenarios_18_mapped_040000_jp2bpp16.png`. The existing Korean fully
+  preserves the monster-attacked port, the imperial ship prepared at Mileil
+  Harbor, the Dires Strait crossing, the approaching cargo vessel, and Elwin's
+  ship-seizure operation. No translation or layout change was required.
+- Production 77D0 `77d0_s19_description_current_00.png` through `_20.png`
+  retain the route map, all 19 text-bearing `미레일 항구 전투` frames, and
+  the preparation endpoint. Every page is natural Korean without Japanese
+  residue, clipping, broken glyphs, isolated words, or abnormal spacing.
+  Scenario 19 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.

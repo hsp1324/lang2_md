@@ -53,9 +53,9 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario31 = data["scenarios"][30]
         self.assertEqual(scenario1["description"], "verified_current")
         self.assertIn("captures/run/c7ab_s01_body_name4.png", scenario1["captures"])
-        current_description_progress = set(range(19, 32))
+        current_description_progress = set(range(20, 32))
         for scenario in data["scenarios"][1:]:
-            expected = "verified_current" if scenario["scenario"] in {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 28, 29, 30, 31} else (
+            expected = "verified_current" if scenario["scenario"] in {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 28, 29, 30, 31} else (
                 "progressed_current"
                 if scenario["scenario"] in current_description_progress
                 else "historical"
@@ -301,7 +301,16 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario18["opening_events"], "verified_current")
         self.assertEqual(scenario18["battle_ui"], "verified_probe")
         self.assertEqual(scenario18["turn_events"], "progressed_current")
-        self.assertEqual(scenario19["description"], "progressed_current")
+        self.assertEqual(scenario19["description"], "verified_current")
+        for capture in (
+            "captures/run/77d0_s19_description_current_01.png",
+            "captures/run/77d0_s19_description_current_07.png",
+            "captures/run/77d0_s19_description_current_11.png",
+            "captures/run/77d0_s19_description_current_14.png",
+            "captures/run/77d0_s19_description_current_19.png",
+            "captures/run/77d0_s19_description_current_20.png",
+        ):
+            self.assertIn(capture, scenario19["captures"])
         self.assertEqual(scenario19["conditions"], "verified_current")
         self.assertEqual(scenario19["preparation"], "verified_current")
         self.assertEqual(scenario19["opening_events"], "verified_current")

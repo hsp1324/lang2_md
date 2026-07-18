@@ -29,7 +29,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 16 | current | current | current | current | probe | progressed | pending | pending | 26 |
 | 17 | current | current | current | current | current | progressed | pending | pending | 30 |
 | 18 | current | current | current | current | probe | progressed | pending | pending | 27 |
-| 19 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
+| 19 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 20 | progressed | current | current | current | probe | progressed | pending | pending | 19 |
 | 21 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
 | 22 | progressed | current | current | current | pending | current | pending | pending | 31 |
@@ -631,7 +631,7 @@ Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrollin
 
 ### Scenario 19
 
-All six 미레일 항구 전투 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 1391. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. The live opening exposed spaced 다크 프린세스; all six reviewed event occurrences now use the canonical class label 다크프린세스, and the replay verifies it without an abnormal wrap. Victory is defeating Imelda within 23 turns; defeat is exceeding the turn limit or the protagonist dying. The first turn reviewed ship movement and 제시카/소서러, 아론/파이터, and 엘윈/파이터 dialogue, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 is covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Later turns, completion, and branches remain pending.
+Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrolling frames of 미레일 항구 전투, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the monster-attacked port, the imperial ship at Mileil Harbor, crossing the Dires Strait, the approaching cargo vessel, and the ship-seizure operation. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 remains covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Later turns, completion, and branches remain pending.
 
 - `captures/run/1391_s19_canonical_brief_01.png`
 - `captures/run/1391_s19_canonical_brief_06.png`
@@ -654,6 +654,12 @@ All six 미레일 항구 전투 briefing confirmations, both preparation pages, 
 - `captures/run/c7ab_s19_title.png`
 - `captures/run/c7ab_s19_body_3.png`
 - `captures/run/c7ab_s19_body_final2.png`
+- `captures/run/77d0_s19_description_current_01.png`
+- `captures/run/77d0_s19_description_current_07.png`
+- `captures/run/77d0_s19_description_current_11.png`
+- `captures/run/77d0_s19_description_current_14.png`
+- `captures/run/77d0_s19_description_current_19.png`
+- `captures/run/77d0_s19_description_current_20.png`
 
 ### Scenario 20
 
