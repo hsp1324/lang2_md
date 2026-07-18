@@ -36,7 +36,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 23 | current | current | current | current | pending | current | pending | pending | 27 |
 | 24 | current | current | current | current | pending | current | pending | pending | 26 |
 | 25 | current | current | progressed | current | current | progressed | pending | pending | 21 |
-| 26 | progressed | current | current | current | pending | current | pending | pending | 17 |
+| 26 | current | current | current | current | pending | current | pending | pending | 23 |
 | 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
 | 28 | current | current | current | current | pending | current | pending | pending | 15 |
 | 29 | current | current | current | current | pending | current | pending | pending | 16 |
@@ -856,7 +856,7 @@ Production 212A verifies the Scenario 25 route map, all 14 text-bearing scrollin
 
 ### Scenario 26
 
-Production ECA0 retains the current-source Scenario 26 흑룡마도사단의 함정 description evidence from C7AB and freshly verifies both preparation pages, all ten commander class panels, automatic deployment, all ten opening dialogue pages, conditions, and the complete no-action first turn through GAME OVER without reset or freeze. The roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 스코트/파이터, 리아나/클레릭, 라나/클레릭, and 제시카/소서러. Victory is 에그베르트 격파; defeat is 주인공 사망. The first-turn capture set includes Jessica, imperial commander, Hein, Aaron, Egbert, and Elwin dialogue and the expected defeat endpoint. Intermediate description scroll frames remain sampled rather than exhaustive, and battle presentation, a successful clear, later routes, and branches remain pending.
+Production 212A verifies the Scenario 26 route map, all 14 text-bearing scrolling frames of 흑룡마도사단의 함정, and the preparation endpoint. Direct Japanese-ROM rendering confirms Leon's defeat, entry into Velzeria castle, the passage toward the underground temple, Egbert's encirclement trap, and the Black Dragon Sorcerers' concentrated magic attack. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified both preparation pages, all ten commander class panels, automatic deployment, all ten opening dialogue pages, conditions, and the complete no-action first turn through GAME OVER without reset or freeze. The roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 스코트/파이터, 리아나/클레릭, 라나/클레릭, and 제시카/소서러. Victory is 에그베르트 격파; defeat is 주인공 사망. The first-turn capture set includes Jessica, imperial commander, Hein, Aaron, Egbert, and Elwin dialogue and the expected defeat endpoint. Battle presentation, a successful clear, later routes, and branches remain pending.
 
 - `captures/run/c7ab_s26_title.png`
 - `captures/run/c7ab_s26_body_mid.png`
@@ -875,6 +875,12 @@ Production ECA0 retains the current-source Scenario 26 흑룡마도사단의 함
 - `captures/run/eca0_s26_turn1_actual_42.png`
 - `captures/run/eca0_s26_turn1_actual_48.png`
 - `captures/run/eca0_s26_turn1_actual_50.png`
+- `captures/run/212a_s26_description_current_01.png`
+- `captures/run/212a_s26_description_current_05.png`
+- `captures/run/212a_s26_description_current_08.png`
+- `captures/run/212a_s26_description_current_11.png`
+- `captures/run/212a_s26_description_current_14.png`
+- `captures/run/212a_s26_description_current_15.png`
 
 ### Scenario 27
 
