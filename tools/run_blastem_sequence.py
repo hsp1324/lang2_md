@@ -28,6 +28,12 @@ MANUAL_SLOT_CHECKSUM_OFFSET = 0x1A6
 MANUAL_SLOT_SCENARIO_OFFSET = 0x000
 MANUAL_SLOT_HERO_NAME_OFFSET = 0x130
 MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET = 0x142
+MANUAL_SLOT_COMMANDER_ROSTER_OFFSET = 0x030
+MANUAL_SLOT_COMMANDER_RECORD_SIZE = 0x018
+MANUAL_SLOT_COMMANDER_COUNT = 10
+MANUAL_SLOT_COMMANDER_CLASS_OFFSET = 0x00
+MANUAL_SLOT_COMMANDER_LEVEL_OFFSET = 0x02
+MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET = 0x03
 GST_WORK_RAM_FILE_OFFSET = 0x2478
 MANUAL_SLOT_WORK_RAM_SEGMENTS = (
     (0xA49C, 0x154),
@@ -339,6 +345,51 @@ def manual_slot_scenario_number(
             f"number {scenario_number}"
         )
     return scenario_number
+
+
+def patch_manual_slot_commander_progress(
+    sram_path: Path,
+    commander_id: int,
+    level: int,
+    experience: int,
+    slot_index: int = 0,
+    expected_class: int | None = None,
+) -> tuple[int, int, int]:
+    if not 1 <= commander_id <= MANUAL_SLOT_COMMANDER_COUNT:
+        raise ValueError(
+            f"commander ID must be 1..{MANUAL_SLOT_COMMANDER_COUNT}"
+        )
+    if not 1 <= level <= 10:
+        raise ValueError("commander level must be 1..10")
+    if not 0 <= experience <= 0xFF:
+        raise ValueError("commander experience must be 0..255")
+
+    # This validates the format marker, slot flag, checksum, and scenario before
+    # any byte is changed.
+    manual_slot_scenario_number(sram_path, slot_index)
+    data = bytearray(sram_path.read_bytes())
+    base = MANUAL_SLOT_BASES[slot_index]
+    record = (
+        base
+        + MANUAL_SLOT_COMMANDER_ROSTER_OFFSET
+        + (commander_id - 1) * MANUAL_SLOT_COMMANDER_RECORD_SIZE
+    )
+    current_class = data[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET]
+    old_level = data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET]
+    old_experience = data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET]
+    if expected_class is not None and current_class != expected_class:
+        raise ValueError(
+            f"commander {commander_id} class changed: "
+            f"0x{current_class:02X} != 0x{expected_class:02X}"
+        )
+    data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET] = level
+    data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET] = experience
+    checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+    data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+        data, base
+    ).to_bytes(2, "big")
+    sram_path.write_bytes(data)
+    return current_class, old_level, old_experience
 
 
 def recover_manual_slot_from_gst(
@@ -773,6 +824,16 @@ def main() -> int:
         type=Path,
         help="recover isolated manual slot 1 from a BlastEm GST work-RAM record",
     )
+    parser.add_argument(
+        "--runtime-name",
+        help="override the isolated runtime directory name for a diagnostic run",
+    )
+    parser.add_argument("--manual-slot-commander-id", type=int)
+    parser.add_argument("--manual-slot-level", type=int)
+    parser.add_argument("--manual-slot-experience", type=int)
+    parser.add_argument(
+        "--manual-slot-expected-class", type=lambda value: int(value, 0)
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--capture-prefix",
@@ -785,6 +846,23 @@ def main() -> int:
         raise ValueError("--scenario-number must be 1..31")
     if args.confirmation_delay < 0:
         raise ValueError("--confirmation-delay must be non-negative")
+    progress_args = (
+        args.manual_slot_commander_id,
+        args.manual_slot_level,
+        args.manual_slot_experience,
+    )
+    if any(value is not None for value in progress_args) and any(
+        value is None for value in progress_args
+    ):
+        raise ValueError(
+            "commander ID, level, and experience must be supplied together"
+        )
+    if args.runtime_name is not None and (
+        not args.runtime_name
+        or Path(args.runtime_name).name != args.runtime_name
+        or args.runtime_name in (".", "..")
+    ):
+        raise ValueError("--runtime-name must be one directory name")
     scenario_selector_sequences = {"scenario-select", "scenario-select-entry"}
     if args.sequence == "scenario-select":
         SEQUENCES[args.sequence] = scenario_select_keys(args.scenario_number)
@@ -802,7 +880,7 @@ def main() -> int:
                 )
             if existing_pids:
                 terminate_blastem_processes()
-        runtime_name = (
+        runtime_name = args.runtime_name or (
             "load-screen"
             if args.sequence in scenario_selector_sequences | {"launch-only"}
             else args.sequence
@@ -829,6 +907,22 @@ def main() -> int:
             migrated = migrate_scenario_select_default_name(sram_path)
             if migrated:
                 print(f"migrated Japanese default hero name in {migrated} manual slot(s)")
+        if args.manual_slot_commander_id is not None:
+            current_class, old_level, old_experience = (
+                patch_manual_slot_commander_progress(
+                    sram_path,
+                    args.manual_slot_commander_id,
+                    args.manual_slot_level,
+                    args.manual_slot_experience,
+                    expected_class=args.manual_slot_expected_class,
+                )
+            )
+            print(
+                f"patched commander {args.manual_slot_commander_id} "
+                f"class 0x{current_class:02X} progress "
+                f"LV{old_level}/EXP{old_experience} -> "
+                f"LV{args.manual_slot_level}/EXP{args.manual_slot_experience}"
+            )
         if args.sequence in scenario_selector_sequences:
             current_scenario_number = manual_slot_scenario_number(sram_path)
             if args.sequence == "scenario-select":

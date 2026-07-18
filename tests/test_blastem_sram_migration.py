@@ -9,6 +9,11 @@ from tools.run_blastem_sequence import (
     GST_WORK_RAM_FILE_OFFSET,
     KO_DEFAULT_HERO_NAME,
     MANUAL_SLOT_CHECKSUM_OFFSET,
+    MANUAL_SLOT_COMMANDER_CLASS_OFFSET,
+    MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET,
+    MANUAL_SLOT_COMMANDER_LEVEL_OFFSET,
+    MANUAL_SLOT_COMMANDER_RECORD_SIZE,
+    MANUAL_SLOT_COMMANDER_ROSTER_OFFSET,
     MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET,
     MANUAL_SLOT_HERO_NAME_OFFSET,
     MANUAL_SLOT_WORK_RAM_SEGMENTS,
@@ -19,6 +24,7 @@ from tools.run_blastem_sequence import (
     manual_slot_checksum,
     manual_slot_scenario_number,
     migrate_scenario_select_default_name,
+    patch_manual_slot_commander_progress,
     recover_manual_slot_from_gst,
     running_blastem_pids,
     scenario_select_entry_keys,
@@ -224,6 +230,82 @@ class BlastEmSramMigrationTests(unittest.TestCase):
                 recover_manual_slot_from_gst(
                     gst_path, Path(directory) / "save.sram"
                 )
+
+    def test_patches_valid_commander_progress_and_updates_checksum(self):
+        data, base = self.make_sram()
+        data[base : base + 2] = (2).to_bytes(2, "big")
+        record = base + MANUAL_SLOT_COMMANDER_ROSTER_OFFSET
+        data[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET] = 1
+        data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET] = 1
+        data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET] = 0
+        data[
+            SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+        ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            old = patch_manual_slot_commander_progress(
+                path, 1, 9, 16, expected_class=1
+            )
+            patched = path.read_bytes()
+
+        self.assertEqual(old, (1, 1, 0))
+        self.assertEqual(
+            patched[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET], 9
+        )
+        self.assertEqual(
+            patched[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET], 16
+        )
+        self.assertEqual(
+            int.from_bytes(patched[checksum_offset : checksum_offset + 2], "big"),
+            manual_slot_checksum(patched, base),
+        )
+        changed = {
+            index for index, (before, after) in enumerate(zip(data, patched))
+            if before != after
+        }
+        self.assertEqual(
+            changed,
+            {
+                record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET,
+                record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET,
+                checksum_offset,
+                checksum_offset + 1,
+            },
+        )
+
+    def test_commander_progress_uses_24_byte_roster_records(self):
+        self.assertEqual(MANUAL_SLOT_COMMANDER_RECORD_SIZE, 0x18)
+
+    def test_commander_progress_rejects_invalid_source_class(self):
+        data, base = self.make_sram()
+        data[base : base + 2] = (2).to_bytes(2, "big")
+        data[
+            SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+        ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            with self.assertRaisesRegex(ValueError, "class changed"):
+                patch_manual_slot_commander_progress(
+                    path, 1, 9, 16, expected_class=1
+                )
+            self.assertEqual(path.read_bytes(), data)
 
 
 class BlastEmScenarioSelectTests(unittest.TestCase):

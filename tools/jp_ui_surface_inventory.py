@@ -330,7 +330,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "declared_patches": rows,
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
-            "runtime verification of class-change navigation and dynamic class candidates",
+            "runtime verification of class-change candidate sets beyond Fighter Elwin's Lord/Knight/Shaman branch",
             "production-path scenario-clear verification of the title SAVE screen's dynamic data",
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",

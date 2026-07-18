@@ -91,8 +91,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
 
     def test_stage_one_keeps_explicit_unknowns(self):
         self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 7)
-        self.assertTrue(
-            any("class-change" in gap for gap in self.result["remaining_inventory_gaps"])
+        class_change_gaps = [
+            gap
+            for gap in self.result["remaining_inventory_gaps"]
+            if "class-change" in gap
+        ]
+        self.assertEqual(
+            class_change_gaps,
+            [
+                "runtime verification of class-change candidate sets beyond "
+                "Fighter Elwin's Lord/Knight/Shaman branch"
+            ],
         )
 
 

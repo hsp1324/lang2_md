@@ -29,6 +29,7 @@
 - `docs/name_entry_analysis.md`: 일본판 이름 입력 레이아웃, 현재 안전한 57자 한글 선택표, 저장 바이트, 확정 시 인덱스→글리프 변환 훅과 실기 검증 기록입니다.
 - `docs/sram_relocation.md`: 4 MiB ROM 확장으로 겹친 SRAM을 `0x400001`로 옮긴 주소 패치와 저장/불러오기 실기 검증 기록입니다.
 - `docs/class_change_analysis.md`: 클래스 체인지 15슬롯 공유 글리프와 두 레이아웃의 인덱스 소유권 및 한국어 슬롯 배치를 기록합니다.
+- `tools/build_class_change_probe_rom.py`: 엘윈 파이터의 원본 후보 ID로 클래스 체인지 화면을 직접 열고, 실제 레벨업 경로도 재현하는 비배포 진단 ROM을 만듭니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
@@ -189,6 +190,7 @@ python3 tools/run_blastem_sequence.py shop
 - `scenario-select-entry`는 `Left, Right, Start, C` 비기 입력 직후 멈추고 시나리오 이동이나 확정을 보내지 않습니다. 전체 `scenario-select`와 같은 단일 입력 명령을 사용하므로, 창을 나눠 조작하다 비기가 누락되는 이전 실패를 반복하지 않습니다.
 - 시나리오 선택 비기의 시작 행은 항상 1이 아니라 선택한 수동 슬롯에 저장된 현재 시나리오입니다. 도구는 슬롯 1의 유효 비트와 체크섬을 확인하고 첫 워드의 시나리오 번호를 읽은 뒤 `--scenario-number`까지 필요한 `Up/Down`만 보냅니다. 선택 후 보이는 경로 지도에서 다음 `C`부터 설명 스크롤이 시작됩니다.
 - `launch-only`도 `load-screen` 격리 런타임을 보존하며 게임 입력을 전혀 보내지 않습니다. `--manual-slot-gst`는 GST 작업 RAM의 `0xA49C/0xBD6E/0xC7F2` 세 구간을 수동 슬롯 1로 직렬화하고 체크섬과 유효 비트를 다시 계산하므로, 빌드가 달라 이전 GST 자체를 직접 로드할 수 없을 때 사용합니다.
+- 복구한 수동 슬롯의 지휘관 진행도만 실험할 때는 `--runtime-name`으로 격리 폴더를 지정하고 `--manual-slot-commander-id 1 --manual-slot-level 9 --manual-slot-experience 16 --manual-slot-expected-class 0x01`을 함께 사용합니다. 이 패치는 슬롯 구조와 체크섬을 검증하지만 준비/배치 중 런타임 동기화가 값을 되돌릴 수 있으므로, 클래스 체인지 실기 확인에는 `tools/build_class_change_probe_rom.py`의 원본 핸들러 경로를 사용합니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:

@@ -5279,3 +5279,45 @@ contains 57 safe syllables as documented below and in
   attached to a normal scenario-clear run.
 - All 262 unit tests pass. The generated UI inventory still has 111 declared
   surfaces, 110 byte-modified surfaces, and eight explicit remaining gaps.
+
+### Fighter Elwin Class-Change Runtime Proof (2026-07-19)
+
+- The persistent player roster is work RAM `0xFFA4CC`, ten records of `0x18`
+  bytes; class/level/experience are record offsets `+0/+2/+3`. Manual slot 1
+  starts at SRAM `0x194E`, with this roster at `+0x30`. Runtime units start at
+  `0xFF603C`, use `0x60`-byte records, and Elwin's level/experience are
+  `0xFF606A/0xFF606B`. Routines `0x011C78` and `0x0177D8` synchronize runtime
+  and persistent records in opposite directions.
+- A save-only LV9/EXP16 patch reached preparation as intended but deployment
+  synchronization restored the older runtime LV1. Do not repeat that method as
+  a complete class-change trigger. `tools/run_blastem_sequence.py` nevertheless
+  keeps the validated commander-progress patch options because they are useful
+  for isolated save-structure experiments and recompute the slot checksum.
+- `tools/build_class_change_probe_rom.py` builds an ignored diagnostic ROM. An
+  end-turn wrapper at `0x3FF000` modifies only Fighter Elwin, then jumps to the
+  stock level-up handler `0x01480C`. The first branch displacement was
+  mistakenly `0x0010`, landing inside an instruction; the tested value is
+  `0x0012`. Natural end-turn GSTs
+  `captures/analysis/eb00_class_change_turn2.gst` and
+  `captures/analysis/eb00_class_change_short_turn2.gst` prove stock application
+  to class `0x04`, LV1, EXP0, although that route auto-confirms the first row.
+- The same probe's Start wrapper at `0x3FF040` fills `0xFFFFAA00` with commander
+  ID 1 and source-derived candidates `0x04/0x05/0x0A`, sets A1 to Elwin's
+  runtime record, and jumps to stock UI `0x02BB48`. Original progression data at
+  `0x082562` identifies these as `로드/나이트/샤먼`.
+- Probe checksum `D1D7` visibly verifies `클래스체인지 가능`, the short
+  `클래스체인지` title, all three candidates, `용병/마법` details, Down-row
+  navigation, and wrap from `샤먼` to `로드`. Accepted captures are
+  `captures/run/d1d7_class_change_start_trigger.png`, candidate frames
+  `candidate1.png` through `candidate3.png`,
+  `d1d7_class_change_candidate_wrap.png`, and
+  `d1d7_class_change_confirm.png`.
+- After confirming `로드`, `captures/analysis/d1d7_class_change_confirm.gst`
+  has byte `0x04` at GST file offset `0x2478 + 0x603C`, with LV/EXP `1/0` at
+  offsets `+0x2E/+0x2F`. This matches both natural end-turn GSTs. Production
+  remains checksum `F04C`; no probe wrapper is distributed.
+- The broad UI inventory gap is now narrowed to candidate sets beyond Fighter
+  Elwin's `로드/나이트/샤먼` branch. Do not mark every commander/branch class
+  candidate complete from this representative proof.
+- All 269 unit tests pass after the probe builder, save-slot patcher, and
+  narrowed generated inventory are included.
