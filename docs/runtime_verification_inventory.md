@@ -12,7 +12,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | current | current | historical | current | probe | current | pending | pending | 11 |
-| 2 | current | current | current | current | current | current | pending | pending | 28 |
+| 2 | current | current | current | current | current | current | pending | pending | 31 |
 | 3 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
 | 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
@@ -63,7 +63,7 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 
 ### Scenario 2
 
-Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling frames of the 여행의 시작 description, and the preparation endpoint. The complete Korean description covers Elwin's party reaching Loren's residence, accepting Liana's escort, and Zorum's approaching force without Japanese residue, broken glyphs, clipping, or abnormal spacing. The same build verifies preparation names and conditions, the Japanese-identical SCENARIO 2 banner, 로렌/하이로드 status popup, and the complete opening across 79 retained frames from deployment through the real Elwin command menu. All text-bearing opening frames are Korean and preserve readable names, classes, status labels, and map graphics without reset or freeze. The same session verifies intact battle AT/DF labels and the complete first turn: Loren, imperial commander, and commander dialogue, NPC/enemy movement, two combats, and return to a valid Elwin command menu after 52 retained frames.
+Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling frames of the 여행의 시작 description, and the preparation endpoint. The complete Korean description covers Elwin's party reaching Loren's residence, accepting Liana's escort, and Zorum's approaching force without Japanese residue, broken glyphs, clipping, or abnormal spacing. The same build verifies preparation names and conditions, the Japanese-identical SCENARIO 2 banner, 로렌/하이로드 status popup, and the complete opening across 79 retained frames from deployment through the real Elwin command menu. Production 212A freshly rechecks the arrangement banner as intact SCENARIO 2 and, from the original fixed cursor coordinates, verifies complete 로렌/하이로드 text in both the bottom status row and commander popup. Thus the earlier SCENAR록O ASCII-I collision and missing 렌 tile remain fixed after all later description glyph additions. All text-bearing opening frames are Korean and preserve readable names, classes, status labels, and map graphics without reset or freeze. The earlier session verifies intact battle AT/DF labels and the complete first turn: Loren, imperial commander, and commander dialogue, NPC/enemy movement, two combats, and return to a valid Elwin command menu after 52 retained frames.
 
 - `captures/run/ea22_s02_selector_map.png`
 - `captures/run/ea22_s02_brief_01.png`
@@ -93,6 +93,9 @@ Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling
 - `captures/run/489b_s02_turn1_22.png`
 - `captures/run/489b_s02_turn1_24.png`
 - `captures/run/489b_s02_turn1_52.png`
+- `captures/run/212a_s02_arrange_scenario_banner.png`
+- `captures/run/212a_s02_loren_status.png`
+- `captures/run/212a_s02_loren_popup.png`
 
 ### Scenario 3
 

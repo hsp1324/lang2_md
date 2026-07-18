@@ -4921,3 +4921,24 @@ contains 57 safe syllables as documented below and in
   runtime evidence from their route map through every scrolling text frame and
   the preparation endpoint. This does not promote any separate opening,
   battle, completion, branch, or ending surface that remains pending.
+
+### Current 212A Scenario Banner And Loren Regression Recheck (2026-07-18)
+
+- After the Scenario 23 description added `회`, the regenerated 783-record
+  direct-string inventory remained token-identical, but the two user-reported
+  regressions were still rechecked in live production rather than inferred
+  from that static result.
+- `212a_s27_arrange_banner_check_01.png` and
+  `212a_s02_arrange_scenario_banner.png` show intact `SCENARIO 27` and
+  `SCENARIO 2` arrangement banners. ASCII tile `0x49` still renders `I`; the
+  old `SCENAR록O` collision has not returned.
+- The Scenario 2 command cursor starts at `(5,19)`, and Loren's original fixed
+  record remains `(19,19)`. Closing Elwin's menu and moving right exactly 14
+  tiles selected the intended NPC without visual guessing.
+  `212a_s02_loren_status.png` and `212a_s02_loren_popup.png` show complete,
+  unambiguous `로렌/하이로드` in both the bottom status row and commander
+  popup. The final byte-UI mapping still holds `렌 -> 0x5E9`.
+- Existing tests continue to require non-private ASCII `I` to remain original,
+  `록` to use its private allocation, and `렌` to keep the explicit stable
+  tile. These captures prove the constraints survive in the current production
+  ROM, not only in the earlier 489B build.
