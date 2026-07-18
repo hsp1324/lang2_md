@@ -846,7 +846,7 @@
     },
     {
       "scenario": 20,
-      "description": "progressed_current",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -873,9 +873,15 @@
         "captures/run/138b_s20_turn1_41.png",
         "captures/run/c7ab_s20_title.png",
         "captures/run/c7ab_s20_body_3.png",
-        "captures/run/c7ab_s20_body_final2.png"
+        "captures/run/c7ab_s20_body_final2.png",
+        "captures/run/77d0_s20_description_current_01.png",
+        "captures/run/77d0_s20_description_current_05.png",
+        "captures/run/77d0_s20_description_current_09.png",
+        "captures/run/77d0_s20_description_current_12.png",
+        "captures/run/77d0_s20_description_current_16.png",
+        "captures/run/77d0_s20_description_current_17.png"
       ],
-      "note": "All seven 붉게 물든 바다 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The complete selectable roster is 엘윈, 헤인, 쉐리, 아론, 키스, 레스터, 제시카, and 스코트; the second page and return through << are retained explicitly so 제시카 is not omitted. Victory is enemy annihilation and defeat is the protagonist's death. The first turn reviewed Faias dialogue, enemy movement, reached TURN 2, then reviewed the golem tactics conversation and returned to a valid Elwin command menu without reset or freeze. Live 1391 exposed the two-character page at 0x1A81E6 as the incomplete-looking 키스: 공주. The Japanese source is 姫！ but the physical page has only two content words; 공주님! fails the capacity guard. Production 138B uses the complete capacity-safe royal address 전하, verified live before Aaron's response. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182434 is covered by editor regressions for 스큐라, 파이어스/데몬로드, and hidden 크라켄. Later turns, conditional kraken events, completion, and route variants remain pending."
+      "note": "Production 77D0 verifies the Scenario 20 route map, all 16 text-bearing scrolling frames of 붉게 물든 바다, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the voyage after Imelda's defeat, the interceptor carrying monsters controlled by Bozel, the gangplank between the two ships, and the opening of the deck battle. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. Live event verification also established the capacity-safe royal address 전하 for the Japanese 姫！ page. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182434 remains covered by editor regressions for 스큐라, 파이어스/데몬로드, and hidden 크라켄. Later turns, conditional kraken events, completion, and route variants remain pending."
     },
     {
       "scenario": 21,

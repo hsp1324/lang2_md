@@ -4792,3 +4792,14 @@ contains 57 safe syllables as documented below and in
   residue, clipping, broken glyphs, isolated words, or abnormal spacing.
   Scenario 19 `description` is now `verified_current`, and BlastEm was left on
   its preparation screen.
+- Scenario 20 was compared with the Japanese-ROM render
+  `text_scenarios_19_mapped_040000_jp2bpp16.png`. The existing Korean fully
+  preserves the voyage after Imelda's defeat, the interceptor carrying
+  monsters controlled by Bozel, the gangplank between the two ships, and the
+  opening of the deck battle. No translation or layout change was required.
+- Production 77D0 `77d0_s20_description_current_00.png` through `_17.png`
+  retain the route map, all 16 text-bearing `붉게 물든 바다` frames, and the
+  preparation endpoint. Every page is natural Korean without Japanese
+  residue, clipping, broken glyphs, isolated words, or abnormal spacing.
+  Scenario 20 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.
