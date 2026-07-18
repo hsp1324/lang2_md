@@ -31,7 +31,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 18 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 19 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 20 | current | current | current | current | probe | progressed | pending | pending | 25 |
-| 21 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
+| 21 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 22 | progressed | current | current | current | pending | current | pending | pending | 31 |
 | 23 | progressed | current | current | current | pending | current | pending | pending | 21 |
 | 24 | progressed | current | current | current | pending | current | pending | pending | 20 |
@@ -693,7 +693,7 @@ Production 77D0 verifies the Scenario 20 route map, all 16 text-bearing scrollin
 
 ### Scenario 21
 
-All seven 마리오네트 briefing confirmations, both preparation roster pages, the return to the first page, all eight selected commander/class panels, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 138B. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 제시카/소서러, and 스코트/파이터. Commander/class inspection used the equipment commander selector without confirming equipment; its second page explicitly verifies 제시카 rather than treating the first five rows as complete. Victory is enemy annihilation and defeat is the protagonist's death. The opening reviewed Aaron, Scott, Liana/세인트, Lich, Elwin, Sherry, Keith, Lester, and Jessica dialogue. The first turn retained 18 frames of enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1825E2 is covered by editor regressions for Lana/다크프린세스, a visible Lich, and a hidden Kraken. Later turns, conditional events, completion, and branches remain pending.
+Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrolling frames of 마리오네트, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the ancient defeat of Bozel, the cursed land where the god of chaos was sealed, its appearance beyond the horizon, and the Dark Princess blocking the party's landing. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation roster pages, all eight commander/class panels, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1825E2 remains covered by editor regressions for Lana/다크프린세스, a visible Lich, and a hidden Kraken. Later turns, conditional events, completion, and branches remain pending.
 
 - `captures/run/138b_s21_brief_01.png`
 - `captures/run/138b_s21_brief_07.png`
@@ -716,6 +716,12 @@ All seven 마리오네트 briefing confirmations, both preparation roster pages,
 - `captures/run/c7ab_s21_title.png`
 - `captures/run/c7ab_s21_body_3.png`
 - `captures/run/c7ab_s21_body_final2.png`
+- `captures/run/77d0_s21_description_current_01.png`
+- `captures/run/77d0_s21_description_current_05.png`
+- `captures/run/77d0_s21_description_current_08.png`
+- `captures/run/77d0_s21_description_current_11.png`
+- `captures/run/77d0_s21_description_current_14.png`
+- `captures/run/77d0_s21_description_current_15.png`
 
 ### Scenario 22
 

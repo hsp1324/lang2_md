@@ -4803,3 +4803,14 @@ contains 57 safe syllables as documented below and in
   residue, clipping, broken glyphs, isolated words, or abnormal spacing.
   Scenario 20 `description` is now `verified_current`, and BlastEm was left on
   its preparation screen.
+- Scenario 21 was compared with the Japanese-ROM render
+  `text_scenarios_20_mapped_040000_jp2bpp16.png`. The existing Korean fully
+  preserves Bozel's ancient defeat, the cursed land where the god of chaos was
+  sealed, its appearance beyond the horizon, and the Dark Princess blocking
+  the party's landing. No translation or layout change was required.
+- Production 77D0 `77d0_s21_description_current_00.png` through `_15.png`
+  retain the route map, all 14 text-bearing `마리오네트` frames, and the
+  preparation endpoint. Every page is natural Korean without Japanese
+  residue, clipping, broken glyphs, isolated words, or abnormal spacing.
+  Scenario 21 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.
