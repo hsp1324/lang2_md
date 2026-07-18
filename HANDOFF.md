@@ -4858,3 +4858,18 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `212A`, SHA-256
   `db597ddedddb36751c5b03d09a46fc090c0bf196ec6cb0eb0d293c8aa2dab987`.
   BlastEm was left on the Scenario 23 preparation screen.
+
+### Scenario 24 Description Runtime Verification (2026-07-18)
+
+- Scenario 24 was compared directly with Japanese-ROM render
+  `text_scenarios_23_mapped_040000_jp2bpp16.png`. The current Korean accurately
+  preserves the Elrad battle against Laird, acquisition of the Holy Rod,
+  Liana and Lana starting the ritual to release Langrisser's power, and
+  Bernhardt attacking at the moment he had awaited. No translation or layout
+  change was required.
+- Production 212A `212a_s24_description_current_00.png` through `_17.png`
+  retain the route map, all 16 text-bearing `빛과 어둠` frames, and the
+  preparation endpoint. Every page is natural Korean without Japanese
+  residue, clipping, broken glyphs, isolated words, or abnormal spacing.
+  Scenario 24 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.
