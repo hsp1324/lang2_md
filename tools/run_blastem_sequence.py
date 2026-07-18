@@ -61,6 +61,9 @@ SEQUENCES = {
     # manual save in the load-screen runtime SRAM to enter the built-in
     # Left, Right, Start, C scenario selector.
     "scenario-select": [],
+    # Stop immediately after entering the built-in scenario selector. This is
+    # the stable capture point for its title and dynamic saved-scenario number.
+    "scenario-select-entry": [],
     # Scenario screen into the commander preparation screen.
     "prep": [
         "start:2.0",
@@ -196,6 +199,21 @@ SEQUENCES["detect-command"] = []
 SEQUENCES["detect-prep"] = []
 
 
+def scenario_select_entry_keys() -> list[str]:
+    # The game accepts this cheat as a short sequence. Human-scale waits such
+    # as 0.8 seconds between these four keys silently perform a normal load.
+    return [
+        *SEQUENCES["load-screen"],
+        "down:0.8",
+        "left@0.12:0.05",
+        "right@0.12:0.05",
+        "start@0.12:0.05",
+        # The cheat is complete after this C. Leave enough time for a stable
+        # capture before any scenario-row movement or confirmation.
+        "c@0.12:2.0",
+    ]
+
+
 def scenario_select_keys(
     scenario_number: int,
     current_scenario_number: int = 1,
@@ -204,17 +222,6 @@ def scenario_select_keys(
         raise ValueError("scenario number must be 1..31")
     if not 1 <= current_scenario_number <= 31:
         raise ValueError("current scenario number must be 1..31")
-    # The game accepts this cheat as a short sequence. Human-scale waits such
-    # as 0.8 seconds between these four keys silently perform a normal load.
-    cheat = [
-        "left@0.12:0.05",
-        "right@0.12:0.05",
-        "start@0.12:0.05",
-        # The cheat is complete after this C. Give the selector map time to
-        # initialize before the separate confirmation below, especially when
-        # the saved scenario already equals the requested target.
-        "c@0.12:2.0",
-    ]
     if scenario_number >= current_scenario_number:
         movement = ["down:0.08"] * (
             scenario_number - current_scenario_number
@@ -224,9 +231,7 @@ def scenario_select_keys(
             current_scenario_number - scenario_number
         )
     return [
-        *SEQUENCES["load-screen"],
-        "down:0.8",
-        *cheat,
+        *scenario_select_entry_keys(),
         *movement,
         "c:4.0",
     ]
@@ -780,8 +785,11 @@ def main() -> int:
         raise ValueError("--scenario-number must be 1..31")
     if args.confirmation_delay < 0:
         raise ValueError("--confirmation-delay must be non-negative")
+    scenario_selector_sequences = {"scenario-select", "scenario-select-entry"}
     if args.sequence == "scenario-select":
         SEQUENCES[args.sequence] = scenario_select_keys(args.scenario_number)
+    elif args.sequence == "scenario-select-entry":
+        SEQUENCES[args.sequence] = scenario_select_entry_keys()
 
     if not args.no_launch:
         if not args.dry_run:
@@ -796,7 +804,7 @@ def main() -> int:
                 terminate_blastem_processes()
         runtime_name = (
             "load-screen"
-            if args.sequence in {"scenario-select", "launch-only"}
+            if args.sequence in scenario_selector_sequences | {"launch-only"}
             else args.sequence
         )
         runtime_home = RUNTIME_ROOT / runtime_name
@@ -814,21 +822,30 @@ def main() -> int:
         if args.manual_slot_gst is not None:
             recover_manual_slot_from_gst(args.manual_slot_gst, sram_path)
             print(f"recovered cached manual slot 1 from {args.manual_slot_gst}")
-        if args.sequence == "scenario-select" and args.rom.resolve() == DEFAULT_ROM.resolve():
+        if (
+            args.sequence in scenario_selector_sequences
+            and args.rom.resolve() == DEFAULT_ROM.resolve()
+        ):
             migrated = migrate_scenario_select_default_name(sram_path)
             if migrated:
                 print(f"migrated Japanese default hero name in {migrated} manual slot(s)")
-        if args.sequence == "scenario-select":
+        if args.sequence in scenario_selector_sequences:
             current_scenario_number = manual_slot_scenario_number(sram_path)
-            SEQUENCES[args.sequence] = scenario_select_keys(
-                args.scenario_number,
-                current_scenario_number,
-            )
-            print(
-                "scenario selector starts at saved Scenario "
-                f"{current_scenario_number}; targeting Scenario "
-                f"{args.scenario_number}"
-            )
+            if args.sequence == "scenario-select":
+                SEQUENCES[args.sequence] = scenario_select_keys(
+                    args.scenario_number,
+                    current_scenario_number,
+                )
+                print(
+                    "scenario selector starts at saved Scenario "
+                    f"{current_scenario_number}; targeting Scenario "
+                    f"{args.scenario_number}"
+                )
+            else:
+                print(
+                    "entering scenario selector at saved Scenario "
+                    f"{current_scenario_number} without confirming it"
+                )
         config_dir = runtime_home / ".config/blastem"
         config_dir.mkdir(parents=True, exist_ok=True)
         default_config = (BLASTEM.parent / "default.cfg").read_text(encoding="utf-8")

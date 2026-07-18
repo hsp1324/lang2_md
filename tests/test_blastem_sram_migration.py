@@ -21,6 +21,7 @@ from tools.run_blastem_sequence import (
     migrate_scenario_select_default_name,
     recover_manual_slot_from_gst,
     running_blastem_pids,
+    scenario_select_entry_keys,
     scenario_select_keys,
     terminate_blastem_processes,
 )
@@ -233,7 +234,7 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
         self.assertEqual(SEQUENCES["launch-only"], [])
 
     def test_selector_cheat_uses_short_verified_key_intervals(self):
-        keys = scenario_select_keys(27)
+        keys = scenario_select_entry_keys()
         cheat_start = keys.index("left@0.12:0.05")
         self.assertEqual(
             keys[cheat_start : cheat_start + 4],
@@ -244,6 +245,16 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
                 "c@0.12:2.0",
             ],
         )
+        self.assertEqual(keys[-1], "c@0.12:2.0")
+
+    def test_selector_entry_stops_before_movement_or_confirmation(self):
+        keys = scenario_select_entry_keys()
+        self.assertNotIn("down:0.08", keys)
+        self.assertNotIn("up:0.08", keys)
+        self.assertNotEqual(keys[-1], "c:4.0")
+
+    def test_selector_target_adds_movement_and_confirmation(self):
+        keys = scenario_select_keys(27)
         self.assertEqual(keys.count("down:0.08"), 26)
         self.assertEqual(keys[-1], "c:4.0")
 

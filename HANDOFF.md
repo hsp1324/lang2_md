@@ -5230,3 +5230,32 @@ contains 57 safe syllables as documented below and in
   seven newly owned surfaces as reviewed and live verified. All 257 unit tests
   pass; the direct-word inventory still has 783 classified candidates and no
   unclassified entry.
+
+### Scenario-Selector LOAD Header Number (2026-07-19)
+
+- `tools/run_blastem_sequence.py scenario-select-entry` now reuses the same
+  validated manual slot and one-command key timing as `scenario-select`, but
+  stops immediately after `Left, Right, Start, C`. Splitting launch and cheat
+  input across commands repeatedly left the game on the ordinary LOAD screen;
+  do not use that failed method for selector captures.
+- `captures/run/jp_scenario_select_entry_reference.png` proves the original
+  Japanese behavior: the selector does not replace the header with
+  `次のシナリオ`; it draws the saved scenario number in the fourth cell after
+  the three-cell `ロード` label. The patched four-cell `불러오기` initially
+  occupied that number cell, producing an overlap in
+  `captures/run/f04e_scenario_select_entry.png`.
+- The relocated header record at `0x2B7E00` now starts at tile X=`0x0F`
+  instead of `0x11`. Its four 16-pixel glyphs occupy tile columns 15..22, and
+  the unchanged selector number sprite begins at visible X=184/tile column 23.
+  This preserves the full normal label without abbreviating it and preserves
+  the original dynamic selector number.
+- Production checksum is `F04C`; custom glyph count remains 861 at
+  `0x7000..0x735D`. `captures/run/f04c_title_load_entry.png` proves the normal
+  `불러오기` header, `captures/run/f04c_scenario_select_entry.png` proves the
+  non-overlapping `불러오기2` selector header, and
+  `captures/run/f04c_scenario_select_14.png` proves the selector still reaches
+  Scenario 14.
+- The fixed record at `0x0A311A` is still translated as `다음 시나리오`, but
+  neither the ordinary nor selector-entry reference exposes it visibly. Keep
+  its inventory row `live_verified: false` until a runtime-visible owner is
+  captured. The title SAVE header at `0x0A312A` also remains unverified.

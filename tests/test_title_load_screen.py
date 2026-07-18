@@ -89,7 +89,9 @@ class TitleLoadScreenTests(unittest.TestCase):
             + builder.TITLE_LOAD_HEADER_RELOC.to_bytes(4, "big"),
         )
         header = self.words(self.patch_data, builder.TITLE_LOAD_HEADER_RELOC, 7)
-        self.assertEqual(header[:2], [0x0011, 0x0006])
+        self.assertEqual(
+            header[:2], [builder.TITLE_LOAD_HEADER_RELOC_X, 0x0006]
+        )
         self.assertEqual(header[-1], 0xFFFF)
         glyphs = self.words(
             self.patch_data,
@@ -100,6 +102,13 @@ class TitleLoadScreenTests(unittest.TestCase):
             [glyphs[token] for token in header[2:-1]],
             [self.glyph_by_char[char] for char in "불러오기"],
         )
+
+    def test_load_header_leaves_the_selector_number_cell_free(self):
+        # Four 16-pixel glyphs beginning at tile X=15 occupy tile columns
+        # 15..22. The stock selector number sprite starts at visible X=184,
+        # tile column 23, so the two surfaces are adjacent rather than stacked.
+        start_tile = builder.TITLE_LOAD_HEADER_RELOC_X
+        self.assertEqual(start_tile + 4 * 2, 23)
 
 
 if __name__ == "__main__":

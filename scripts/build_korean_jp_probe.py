@@ -720,6 +720,7 @@ TITLE_LOAD_HEADER_ORIGINAL = (0x0011, 0x0006, 0x0021, 0x000C, 0x0022, 0xFFFF)
 TITLE_LOAD_HEADER_LEA = 0x029DE6
 TITLE_LOAD_HEADER_LEA_ORIGINAL = bytes.fromhex("41 F9 00 0A 31 38")
 TITLE_LOAD_HEADER_RELOC = 0x2B7E00
+TITLE_LOAD_HEADER_RELOC_X = 0x000F
 TITLE_LOAD_TEXTS = (
     "이어하기",
     "시나리오",
@@ -3780,7 +3781,12 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
     for index, value in enumerate(fallback_header):
         put16(data, TITLE_LOAD_HEADER_RECORD + index * 2, value)
 
-    relocated_header = [0x0011, 0x0006] + tokens("불러오기", 4) + [0xFFFF]
+    # The scenario-select cheat draws its dynamic number in the fifth 16-pixel
+    # cell of this header box. Start the four-cell Korean label at the first
+    # cell so the normal label and selector number never occupy the same cell.
+    relocated_header = [TITLE_LOAD_HEADER_RELOC_X, 0x0006] + tokens(
+        "불러오기", 4
+    ) + [0xFFFF]
     relocation_size = len(relocated_header) * 2
     if data[TITLE_LOAD_HEADER_RELOC : TITLE_LOAD_HEADER_RELOC + relocation_size] != bytes(
         [0xFF] * relocation_size
