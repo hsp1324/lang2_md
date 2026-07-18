@@ -720,7 +720,7 @@
     },
     {
       "scenario": 17,
-      "description": "progressed_current",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -752,9 +752,15 @@
         "captures/run/12d3_s17_turn1_47.png",
         "captures/run/c7ab_s17_title.png",
         "captures/run/c7ab_s17_body_3.png",
-        "captures/run/c7ab_s17_body_final2.png"
+        "captures/run/c7ab_s17_body_final2.png",
+        "captures/run/b0e8_s17_description_final_01.png",
+        "captures/run/b0e8_s17_description_final_06.png",
+        "captures/run/b0e8_s17_description_final_10.png",
+        "captures/run/b0e8_s17_description_final_15.png",
+        "captures/run/b0e8_s17_description_final_22.png",
+        "captures/run/b0e8_s17_description_final_23.png"
       ],
-      "note": "All eight 황제와 어둠의 왕자 briefing confirmations, both preparation pages, a return to the first page, arrangement, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Live 85F1 exposed mid-word wrapping at 어디, 알하자드, and 힘을 주는 plus a dangling comma before 모두. Production 12D3 replays verify natural explicit line breaks at event addresses 0x1A2852, 0x1A296C, and 0x1A2A98. Victory is 베른하르트 격파; defeat is 주인공 사망. The first turn reviewed Bernhardt and imperial dialogue, enemy movement, Scott and Jessica reactions, and live 발리스타/파이터/소서러 battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics before returning to a valid Elwin command menu without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 is covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending."
+      "note": "Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrolling frames of 황제와 어둠의 왕자, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the Korean meaning, including Bernhardt's warrior-like presence and the evil-smiling man secretly observing the party. Initial current playback exposed 베른하르트., 남자가, 지켜보았다., and 있었다. as isolated lines. The description renderer normalizes source newlines to spaces, so moving source line breaks alone produced the identical AFD5 ROM and could not fix runtime wrapping. Natural sentence restructuring now renders 그가 바로 황제 베른하르트였다., 그 곁에 남자가 숨어 있었다., and 흥미롭게 지켜보았다. without isolated words. A visually correct 3564 trial using 곁엔 was rejected because its new 엔 allocation shifted 62 direct-string token records. The final regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, arrangement, automatic deployment, opening, conditions, first-turn dialogue, and live battle presentation without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 remains covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending."
     },
     {
       "scenario": 18,

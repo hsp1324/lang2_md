@@ -4737,3 +4737,29 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `3FC0`, SHA-256
   `9e82439c70338d4f19ff54c25061f96529acea1f58545a3c4902a15b95c4c4d1`.
   BlastEm was left on the Scenario 16 preparation screen.
+- Scenario 17 was compared with the Japanese-ROM render
+  `text_scenarios_16_mapped_040000_jp2bpp16.png`. The Korean meaning was
+  complete, including Bernhardt's warrior-like appearance and the
+  evil-smiling man secretly observing the party, but current playback exposed
+  `베른하르트.`, `남자가`, and `지켜보았다.` as isolated lines.
+- Failed attempt: moving only source newline boundaries produced the identical
+  AFD5 ROM. The description encoder normalizes those newlines to spaces and
+  performs its own runtime wrapping, so source rewrapping alone cannot control
+  this surface. A first sentence rewrite then left `있었다.` isolated and was
+  also rejected. The final natural wording uses
+  `그가 바로 황제 베른하르트였다.` and
+  `그 곁에 남자가 숨어 있었다. 사악한 미소를 띤 그는 일행을 흥미롭게 지켜보았다.`
+  to balance the automatic lines without dropping source meaning.
+- The visually correct 3564 trial used `곁엔`, but the newly early `엔` glyph
+  allocation shifted 62 direct-string token records and was rejected. Reusing
+  established glyphs as `그 곁에` restores every prior direct-string ID.
+- Production B0E8 `b0e8_s17_description_final_00.png` through `_23.png`
+  retain the route map, all 22 text-bearing `황제와 어둠의 왕자` frames, and
+  the preparation endpoint. No Japanese residue, clipping, broken glyph, or
+  isolated word remains. The regenerated 783-record direct inventory has no
+  token diff; later description pointers move only within the existing
+  expansion region because the text length changed.
+- Production checksum is `B0E8`, SHA-256
+  `36402abe18f609a0ff88071129e6d5f482f4837b1e642868d4ab03d86b31d64b`.
+  Scenario 17 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.
