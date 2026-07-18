@@ -11,7 +11,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
-| 1 | current | current | historical | current | probe | current | pending | pending | 11 |
+| 1 | current | current | current | current | probe | current | pending | pending | 24 |
 | 2 | current | current | current | current | current | current | pending | pending | 31 |
 | 3 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
@@ -47,7 +47,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 ### Scenario 1
 
-Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. The existing route reaches TURN 2 without reset. Full scenario clear and route transition remain pending.
+Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. Production 212A freshly verifies the complete preparation surface: 엘윈/파이터 and 헤인/워록 panels, 솔저 and 가드맨 hire rows, all 무기/방어구/장신구 equipment slots, 아이템 구입/판매, 호신용 단검 with AT+1, clean 단검을 구입함/단검을 판매함 popups, 소지금 updates, the 엘윈/헤인 arrangement roster, and intact SCENARIO 1 banner. No Japanese residue, damaged name/class glyph, clipping, reset, or freeze appeared. Direct window input shorter than 0.4 seconds was occasionally missed in this remote environment; the accepted review used 0.4-second directional holds and 0.25-second confirmations. The existing route reaches TURN 2 without reset. Full scenario clear and route transition remain pending.
 
 - `captures/run/ea22_s01_conditions.png`
 - `captures/run/ea22_s01_command_magic_fresh.png`
@@ -60,6 +60,19 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 - `captures/run/c7ab_s01_body_name3.png`
 - `captures/run/c7ab_s01_body_name4.png`
 - `captures/run/c7ab_s01_conditions.png`
+- `captures/run/212a_s01_prep_current.png`
+- `captures/run/212a_s01_hire_current2.png`
+- `captures/run/212a_s01_equipment_current.png`
+- `captures/run/212a_s01_equipment_exit_b.png`
+- `captures/run/212a_s01_equipment_exit_final.png`
+- `captures/run/212a_s01_shop_buy_list.png`
+- `captures/run/212a_s01_shop_buy_popup.png`
+- `captures/run/212a_s01_shop_sell_list.png`
+- `captures/run/212a_s01_shop_sell_popup.png`
+- `captures/run/212a_s01_arrangement_current.png`
+- `captures/run/212a_s01_arrangement_roster.png`
+- `captures/run/212a_s01_hein_prep_panel.png`
+- `captures/run/212a_s01_hein_hire_list.png`
 
 ### Scenario 2
 

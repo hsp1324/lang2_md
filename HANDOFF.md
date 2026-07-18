@@ -4942,3 +4942,30 @@ contains 57 safe syllables as documented below and in
   `록` to use its private allocation, and `렌` to keep the explicit stable
   tile. These captures prove the constraints survive in the current production
   ROM, not only in the earlier 489B build.
+
+### Current 212A Scenario 1 Preparation Regression (2026-07-18)
+
+- Scenario 1 was re-entered from the built-in selector after all description
+  glyph work. `212a_s01_prep_current.png` verifies the main preparation panel,
+  `엘윈/파이터`, `용병고용`, `장비착용`, `상점`, `지휘관배치`, and `소지금`.
+- The complete hire path was exercised rather than sampled. Elwin's row is
+  `솔저`, AT20, DF14, MV5, 40P; Hein's panel is `헤인/워록` and his row is
+  `가드맨`, AT18, DF12, MV5, 20P. Buying one soldier changed the balance from
+  500P to 460P without a broken name or stat label.
+- The no-inventory equipment path advances through all three localized slot
+  labels `무기`, `방어구`, and `장신구`, each with `취소`, before returning to
+  the main panel. Representative captures are
+  `212a_s01_equipment_current.png`, `212a_s01_equipment_exit_b.png`, and
+  `212a_s01_equipment_exit_final.png`.
+- The shop buy and sell lists show `아이템 구입`, `아이템 판매`, `단검`,
+  `호신용 단검`, `AT+1`, 50P purchase and 40P sale values. The completed
+  messages read `단검을 구입함` and `단검을 판매함`; the balance changes to
+  450P and then 490P. No old possession garbage or lone `4` reappeared.
+- `212a_s01_arrangement_current.png` and
+  `212a_s01_arrangement_roster.png` verify the intact `SCENARIO 1` banner and
+  the complete `엘윈`, `헤인` roster. The preparation surface is now
+  `verified_current`.
+- Very short direct-window directional events were occasionally ignored in
+  the current remote environment. Reliable review used 0.4-second direction
+  holds and 0.25-second C/B holds. This is an input-delivery issue, not a game
+  reset or localization defect; use those timings for future menu traversal.

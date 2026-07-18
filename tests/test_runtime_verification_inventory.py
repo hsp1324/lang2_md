@@ -54,6 +54,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         scenario31 = data["scenarios"][30]
         self.assertEqual(scenario1["description"], "verified_current")
         self.assertIn("captures/run/c7ab_s01_body_name4.png", scenario1["captures"])
+        self.assertEqual(scenario1["preparation"], "verified_current")
+        for capture in (
+            "captures/run/212a_s01_prep_current.png",
+            "captures/run/212a_s01_hire_current2.png",
+            "captures/run/212a_s01_equipment_current.png",
+            "captures/run/212a_s01_equipment_exit_b.png",
+            "captures/run/212a_s01_equipment_exit_final.png",
+            "captures/run/212a_s01_shop_buy_list.png",
+            "captures/run/212a_s01_shop_buy_popup.png",
+            "captures/run/212a_s01_shop_sell_list.png",
+            "captures/run/212a_s01_shop_sell_popup.png",
+            "captures/run/212a_s01_arrangement_roster.png",
+            "captures/run/212a_s01_hein_prep_panel.png",
+            "captures/run/212a_s01_hein_hire_list.png",
+        ):
+            self.assertIn(capture, scenario1["captures"])
         current_description_progress = set()
         for scenario in data["scenarios"][1:]:
             expected = "verified_current" if scenario["scenario"] in {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31} else (
