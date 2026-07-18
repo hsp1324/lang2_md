@@ -23,7 +23,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 10 | current | current | current | current | probe | progressed | pending | pending | 32 |
 | 11 | current | current | current | current | current | progressed | pending | pending | 36 |
 | 12 | current | current | current | current | current | progressed | pending | pending | 38 |
-| 13 | progressed | current | current | current | current | progressed | pending | pending | 29 |
+| 13 | current | current | current | current | current | progressed | pending | pending | 35 |
 | 14 | progressed | current | current | current | probe | progressed | pending | pending | 25 |
 | 15 | progressed | current | current | current | probe | progressed | pending | pending | 18 |
 | 16 | progressed | current | current | current | probe | progressed | pending | pending | 20 |
@@ -428,7 +428,7 @@ Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrollin
 
 ### Scenario 13
 
-Production C7AB freshly displays the source-reviewed title 염룡병단과의 결전 and reaches the corrected final description about Vargas and the Fire Dragon Corps without reset; intermediate scroll coverage is sampled, so description is progressed rather than fully verified. All 14 briefing confirmations, all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, and the condition rows were visually reviewed on historical builds. Production 85F1 rechecked the earlier title 염룡병단과의 싸움, victory 조름 장군 격파, and first-turn 염룡병단 dialogue. The complete roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Defeat is 주인공 사망. The no-action first turn reviewed Zorum and imperial-commander dialogue, enemy movement, and historical battle presentations with intact names, classes, -AT-/-DF-, counts, and status graphics. Elwin was defeated and the path correctly reached GAME OVER; this is the stated loss condition, not a reset or freeze. Later turns, completion, and branches remain pending.
+Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrolling frames of 염룡병단과의 결전, and the preparation endpoint. Direct Japanese-ROM rendering confirms the ancient guardians' defeat, Egbert stealing the Dark Rod by magic, his teleport toward Liana at Kalxath Castle, the party's urgent return, and Vargas blocking the way with the Fire Dragon Corps. The complete description preserves those events in natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current and historical captures verified all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, condition rows, and the no-action first turn through the stated GAME OVER loss condition. Later turns, completion, and branches remain pending.
 
 - `captures/run/f0e3_s13_brief_live_01.png`
 - `captures/run/f0e3_s13_brief_live_06.png`
@@ -459,6 +459,12 @@ Production C7AB freshly displays the source-reviewed title 염룡병단과의 �
 - `captures/run/85f1_s13_turn1_term_recheck_06.png`
 - `captures/run/c7ab_s13_title.png`
 - `captures/run/c7ab_s13_body_1.png`
+- `captures/run/d355_s13_description_current_01.png`
+- `captures/run/d355_s13_description_current_05.png`
+- `captures/run/d355_s13_description_current_09.png`
+- `captures/run/d355_s13_description_current_13.png`
+- `captures/run/d355_s13_description_current_14.png`
+- `captures/run/d355_s13_description_current_15.png`
 
 ### Scenario 14
 

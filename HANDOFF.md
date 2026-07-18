@@ -4667,3 +4667,15 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `D355`, SHA-256
   `334e49ae5ff3f0bbc6526ddba8db5b4488ac03aa1e6f373b1db36e11887f9118`.
   BlastEm was left on the Scenario 12 preparation screen.
+- Scenario 13 was compared with the Japanese-ROM render
+  `text_scenarios_12_mapped_040000_jp2bpp16.png`. The Korean text preserves
+  the ancient guardians' defeat, Egbert stealing the Dark Rod by magic, his
+  teleport toward Liana at Kalxath Castle, the party's urgent return, and
+  Vargas waiting with the Fire Dragon Corps. No translation or layout change
+  was required.
+- Production D355 `d355_s13_description_current_00.png` through `_15.png`
+  retain the route map, all 14 text-bearing `염룡병단과의 결전` frames, and
+  the preparation endpoint. All text is natural Korean without Japanese
+  residue, clipping, broken glyphs, or abnormal spacing. Scenario 13
+  `description` is now `verified_current`. BlastEm was left on the Scenario 13
+  preparation screen.
