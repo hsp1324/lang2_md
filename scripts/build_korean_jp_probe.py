@@ -607,6 +607,54 @@ START_SUBMENU_TEXTS = (
     "데이터 없음",
 )
 LOAD_MENU_GLYPH_LIST = 0x97128
+# The title-screen LOAD UI is unrelated to the in-battle Start submenu. It
+# converts this fixed 42-entry word list into a local 16x16 bank at VRAM A000
+# and renders six independent records for valid, corrupt, and empty slots.
+TITLE_LOAD_GLYPH_LIST = 0x0A2F14
+TITLE_LOAD_GLYPH_COUNT = 42
+TITLE_LOAD_GLYPH_LIST_ORIGINAL = (
+    0x0048, 0x005E, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059,
+    0x005A, 0x005B, 0x005C, 0x005D, 0x000D, 0x004A, 0x003E,
+    0x02B3, 0x0063, 0x000B, 0x0014, 0x0029, 0x0004, 0x011F,
+    0x003A, 0x000F, 0x0079, 0x0081, 0x0082, 0x0092, 0x016F,
+    0x00B8, 0x023A, 0x009C, 0x0065, 0x00A9, 0x002C, 0x003B,
+    0x01B1, 0x02C3, 0x01B0, 0x006E, 0x030D, 0x02E9, 0x0326,
+)
+TITLE_LOAD_RECORDS = OrderedDict(
+    [
+        (0x0A30D6, (8, "이어하기")),
+        (0x0A30E8, (4, "시나리오")),
+        (0x0A30F2, (9, "손상된 데이터")),
+        (0x0A3106, (9, "데이터 없음")),
+        (0x0A311A, (7, "다음 시나리오")),
+    ]
+)
+TITLE_LOAD_RECORD_ORIGINALS = {
+    0x0A30D6: (0x0023, 0x0024, 0x0025, 0x0026, 0x0027, 0x0025, 0x0028, 0x0029),
+    0x0A30E8: (0x0010, 0x0011, 0x0012, 0x0013),
+    0x0A30F2: (0x0015, 0x000C, 0x0016, 0x0017, 0x001D, 0x001E, 0x001F, 0x001A, 0x0020),
+    0x0A3106: (0x0015, 0x000C, 0x0016, 0x0017, 0x0018, 0x0019, 0x001A, 0x001B, 0x001C),
+    0x0A311A: (0x000E, 0x000F, 0x0010, 0x0011, 0x0012, 0x0013, 0x0014),
+}
+TITLE_SAVE_HEADER_RECORD = 0x0A312A
+TITLE_SAVE_HEADER_ORIGINAL = (0x0011, 0x0006, 0x000B, 0x000C, 0x000D, 0xFFFF)
+TITLE_LOAD_HEADER_RECORD = 0x0A3138
+TITLE_LOAD_HEADER_ORIGINAL = (0x0011, 0x0006, 0x0021, 0x000C, 0x0022, 0xFFFF)
+TITLE_LOAD_HEADER_LEA = 0x029DE6
+TITLE_LOAD_HEADER_LEA_ORIGINAL = bytes.fromhex("41 F9 00 0A 31 38")
+TITLE_LOAD_HEADER_RELOC = 0x2B7E00
+TITLE_LOAD_TEXTS = (
+    "이어하기",
+    "시나리오",
+    "손상된 데이터",
+    "데이터 없음",
+    "다음 시나리오",
+    "저장",
+    "불러오기",
+    # Keep the unreachable three-cell source header readable if its hook is
+    # temporarily disabled during a diagnostic build.
+    "로드",
+)
 SCENARIO_HEADER_TEXT = "프롤로그"
 CLASS_CHANGE_GLYPH_LIST = 0x0A3C9C
 CLASS_CHANGE_GLYPH_TEXT = "클래스체인지 가능  용병마법"
@@ -3569,6 +3617,84 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
     put_tokens(0x9B0AE, load_tokens("데이터 없음", 9))
 
 
+def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    original_glyphs = tuple(
+        be16(data, TITLE_LOAD_GLYPH_LIST + index * 2)
+        for index in range(TITLE_LOAD_GLYPH_COUNT)
+    )
+    if original_glyphs != TITLE_LOAD_GLYPH_LIST_ORIGINAL:
+        raise ValueError("title LOAD glyph list source changed")
+    if be16(data, TITLE_LOAD_GLYPH_LIST + TITLE_LOAD_GLYPH_COUNT * 2) != 0xFFFF:
+        raise ValueError("title LOAD glyph list terminator changed")
+
+    for offset, (capacity, _) in TITLE_LOAD_RECORDS.items():
+        original = tuple(be16(data, offset + index * 2) for index in range(capacity))
+        if original != TITLE_LOAD_RECORD_ORIGINALS[offset]:
+            raise ValueError(f"title LOAD record source changed at 0x{offset:06X}")
+        if be16(data, offset + capacity * 2) != 0xFFFF:
+            raise ValueError(f"title LOAD record terminator changed at 0x{offset:06X}")
+
+    for offset, expected in (
+        (TITLE_SAVE_HEADER_RECORD, TITLE_SAVE_HEADER_ORIGINAL),
+        (TITLE_LOAD_HEADER_RECORD, TITLE_LOAD_HEADER_ORIGINAL),
+    ):
+        actual = tuple(be16(data, offset + index * 2) for index in range(len(expected)))
+        if actual != expected:
+            raise ValueError(f"title LOAD header source changed at 0x{offset:06X}")
+    if data[TITLE_LOAD_HEADER_LEA : TITLE_LOAD_HEADER_LEA + 6] != TITLE_LOAD_HEADER_LEA_ORIGINAL:
+        raise ValueError("title LOAD header LEA source changed")
+
+    unique_chars = list(dict.fromkeys("".join(TITLE_LOAD_TEXTS) + " "))
+    available_slots = TITLE_LOAD_GLYPH_COUNT - 11
+    if len(unique_chars) > available_slots:
+        raise ValueError(
+            f"title LOAD needs {len(unique_chars)} local glyphs, only {available_slots} available"
+        )
+    slot_by_char = {char: 11 + index for index, char in enumerate(unique_chars)}
+
+    # Slot 0 is the cursor and slots 1..10 are dynamic digits. Preserve them;
+    # the remaining source-only Japanese glyphs are replaced as one bank.
+    for index, char in enumerate(unique_chars, start=11):
+        glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
+        put16(data, TITLE_LOAD_GLYPH_LIST + index * 2, glyph)
+    for index in range(11 + len(unique_chars), TITLE_LOAD_GLYPH_COUNT):
+        put16(data, TITLE_LOAD_GLYPH_LIST + index * 2, SPACE_GLYPH)
+    put16(data, TITLE_LOAD_GLYPH_LIST + TITLE_LOAD_GLYPH_COUNT * 2, 0xFFFF)
+
+    def tokens(text: str, width: int) -> list[int]:
+        values = [slot_by_char[char] for char in text]
+        if len(values) > width:
+            raise ValueError(f"title LOAD text is too long for {width} cells: {text!r}")
+        return values + [slot_by_char[" "]] * (width - len(values))
+
+    for offset, (capacity, text) in TITLE_LOAD_RECORDS.items():
+        for index, token in enumerate(tokens(text, capacity)):
+            put16(data, offset + index * 2, token)
+        put16(data, offset + capacity * 2, 0xFFFF)
+
+    # The stock save/load headers have only three text cells. Save fits in
+    # place; LOAD is moved into the free 2B7E00..2B7EFF routine gap so the
+    # natural four-cell Korean label is not abbreviated.
+    save_header = [0x0011, 0x0006] + tokens("저장", 3) + [0xFFFF]
+    for index, value in enumerate(save_header):
+        put16(data, TITLE_SAVE_HEADER_RECORD + index * 2, value)
+    fallback_header = [0x0011, 0x0006] + tokens("로드", 3) + [0xFFFF]
+    for index, value in enumerate(fallback_header):
+        put16(data, TITLE_LOAD_HEADER_RECORD + index * 2, value)
+
+    relocated_header = [0x0011, 0x0006] + tokens("불러오기", 4) + [0xFFFF]
+    relocation_size = len(relocated_header) * 2
+    if data[TITLE_LOAD_HEADER_RELOC : TITLE_LOAD_HEADER_RELOC + relocation_size] != bytes(
+        [0xFF] * relocation_size
+    ):
+        raise ValueError("title LOAD relocated header range is not free")
+    for index, value in enumerate(relocated_header):
+        put16(data, TITLE_LOAD_HEADER_RELOC + index * 2, value)
+    data[TITLE_LOAD_HEADER_LEA : TITLE_LOAD_HEADER_LEA + 6] = (
+        bytes.fromhex("41 F9") + TITLE_LOAD_HEADER_RELOC.to_bytes(4, "big")
+    )
+
+
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
     if len(ptrs) != len(ITEM_NAME_PATCHES):
@@ -5225,6 +5351,9 @@ def main() -> None:
         # Source-reviewed ending montage vocabulary is appended so it cannot
         # renumber established gameplay/UI glyphs.
         *active_opening_texts,
+        # Title LOAD is a separate local bank. Append its vocabulary last so
+        # established event, ending, name, and byte-UI glyph IDs stay stable.
+        *TITLE_LOAD_TEXTS,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
@@ -5276,6 +5405,7 @@ def main() -> None:
         patch_arrange_menu_glyph_lists(data, glyph_by_char)
         patch_start_menu(data, glyph_by_char)
         patch_start_submenus(data, glyph_by_char)
+        patch_title_load_screen(data, glyph_by_char)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)

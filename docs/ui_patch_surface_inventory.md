@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 94
-- Byte-modified declarations: 93
+- Declared patches: 104
+- Byte-modified declarations: 103
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -29,6 +29,12 @@ closed merely because every known patch declaration changed bytes.
 | name_entry_byte_values | 1 | 1 |
 | name_entry_confirm_hook | 1 | 1 |
 | name_entry_confirm_routine | 1 | 1 |
+| title_load_glyph_list | 1 | 1 |
+| title_load_slot_records | 5 | 5 |
+| title_save_header | 1 | 1 |
+| title_load_header_fallback | 1 | 1 |
+| title_load_header_hook | 1 | 1 |
+| title_load_header_relocation | 1 | 1 |
 
 ## Compressed Byte UI Font
 
@@ -40,7 +46,7 @@ Resource table `0x0B0000` index 1 uses entry
 
 - arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
 - runtime verification of class-change navigation and dynamic class candidates
-- all save/load slot states and error variants
+- title LOAD special '다음 시나리오' state and title SAVE header live verification
 - all ending and credits UI outside known opening/ending dialogue patches
 - all magic/summon targeting and result prompts
 - all equipment and shop variants beyond declared Scenario 1 paths

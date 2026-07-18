@@ -5161,3 +5161,34 @@ contains 57 safe syllables as documented below and in
 - All 245 unit tests pass. The ten Japanese-reviewed montage rows are marked
   `reviewed: true`; the first two villain records remain unreviewed, and the
   final colon-only build remains conservatively `live_verified: false`.
+
+### Title LOAD Slot Localization (2026-07-18)
+
+- The title LOAD path is independent from Start-menu Load. Entry `0x029D76`
+  loads 42 local glyphs from `0x0A2F14` into VRAM `0xA000`. Slots 0-10 are the
+  cursor and digits and remain byte-identical; only slots 11-41 are reassigned.
+- Fixed records are `0x0A30D6` (`이어하기`), `0x0A30E8` (`시나리오`),
+  `0x0A30F2` (`손상된 데이터`), `0x0A3106` (`데이터 없음`), and `0x0A311A`
+  (`다음 시나리오`). Every original-position `FFFF` terminator and record
+  width is validated before writing. The load header's original three cells
+  cannot hold four-syllable `불러오기`; the full record is stored in verified
+  `FF` space at `0x2B7E00`, and the LEA at `0x029DE6` points there. The original
+  header remains a readable `로드` fallback.
+- Production checksum is `B65D`. `captures/run/b65d_title_load_live.png`
+  proves `불러오기`, a valid manual `1 시나리오 2`, and empty slots. A real
+  Scenario 1 Start-menu save created an autosave flag (`0x0001` at SRAM
+  `0x1FF0`); its autosave region was merged with the isolated valid manual
+  slot for `captures/run/b65d_title_load_autosave_manual1.png`, which proves
+  `이어하기` and the valid manual row together.
+- In a separate SRAM copy, byte `0x1950` of manual slot 1 was changed without
+  updating its checksum. `captures/run/b65d_title_load_corrupt_manual1.png`
+  proves `손상된 데이터` while the autosave remains valid. The canonical
+  `load-screen` SRAM was restored from
+  `captures/analysis/title_load_variants/manual_slot1_original.sram`; the
+  corrupt file is diagnostic only. The format marker remains `0x07CA`.
+- `다음 시나리오` and the shared title SAVE header are statically patched and
+  boundary-tested but not marked live verified. The generated UI inventory now
+  declares the glyph bank, five records, fallback/header hook, and relocation
+  individually instead of retaining a blanket save/load gap. All 250 unit
+  tests pass, and the production build reproduces checksum `B65D` with the
+  established 861 custom glyphs still at `0x7000..0x735D`.

@@ -168,6 +168,82 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    rows.append(
+        {
+            "group": "title_load_glyph_list",
+            "address": f"0x{builder.TITLE_LOAD_GLYPH_LIST:06X}",
+            "size_bytes": builder.TITLE_LOAD_GLYPH_COUNT * 2,
+            "target_korean": "title LOAD cursor/digits and Korean local glyph bank",
+            "modified": changed(
+                japanese,
+                korean,
+                builder.TITLE_LOAD_GLYPH_LIST,
+                builder.TITLE_LOAD_GLYPH_COUNT * 2,
+            ),
+            "reviewed": True,
+            "live_verified": True,
+        }
+    )
+    live_title_load_records = {
+        0x0A30D6,  # 이어하기
+        0x0A30E8,  # 시나리오
+        0x0A30F2,  # 손상된 데이터
+        0x0A3106,  # 데이터 없음
+    }
+    for offset, (capacity, target) in builder.TITLE_LOAD_RECORDS.items():
+        rows.append(
+            {
+                "group": "title_load_slot_records",
+                "address": f"0x{offset:06X}",
+                "size_bytes": (capacity + 1) * 2,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, capacity * 2),
+                "reviewed": True,
+                "live_verified": offset in live_title_load_records,
+            }
+        )
+    for group, offset, size, target, live_verified in (
+        (
+            "title_save_header",
+            builder.TITLE_SAVE_HEADER_RECORD,
+            len(builder.TITLE_SAVE_HEADER_ORIGINAL) * 2,
+            "저장",
+            False,
+        ),
+        (
+            "title_load_header_fallback",
+            builder.TITLE_LOAD_HEADER_RECORD,
+            len(builder.TITLE_LOAD_HEADER_ORIGINAL) * 2,
+            "로드",
+            False,
+        ),
+        (
+            "title_load_header_hook",
+            builder.TITLE_LOAD_HEADER_LEA,
+            len(builder.TITLE_LOAD_HEADER_LEA_ORIGINAL),
+            "relocated 불러오기 header pointer",
+            True,
+        ),
+        (
+            "title_load_header_relocation",
+            builder.TITLE_LOAD_HEADER_RELOC,
+            14,
+            "불러오기",
+            True,
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": live_verified,
+            }
+        )
+
     resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
     original_resource = int.from_bytes(japanese[resource_entry : resource_entry + 4], "big")
     current_resource = int.from_bytes(korean[resource_entry : resource_entry + 4], "big")
@@ -197,7 +273,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
             "runtime verification of class-change navigation and dynamic class candidates",
-            "all save/load slot states and error variants",
+            "title LOAD special '다음 시나리오' state and title SAVE header live verification",
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",
             "all equipment and shop variants beyond declared Scenario 1 paths",

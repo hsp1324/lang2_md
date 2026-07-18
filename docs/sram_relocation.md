@@ -44,6 +44,8 @@ Live condition captures made through the real scenario index:
 - `captures/run/8c4d_scenario14_conditions_live.png`
 - `captures/run/8c4d_scenario23_conditions_live.png`
 
-The title-screen Load path and scenario-select suffix are still Japanese. The
-in-battle Start > Load path and save confirmation were fixed separately at
-checksum `F639`; those UI issues are independent from SRAM mapping.
+The in-battle Start > Load path and save confirmation were fixed separately at
+checksum `F639`; those UI issues are independent from SRAM mapping. The later
+title-screen LOAD patch at checksum `B65D` localizes the header and the valid,
+corrupt, and empty slot records. Its live verification uses the same relocated
+SRAM format described here.

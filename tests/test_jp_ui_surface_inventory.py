@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 94)
-        self.assertEqual(self.result["modified_patch_count"], 93)
+        self.assertEqual(self.result["declared_patch_count"], 104)
+        self.assertEqual(self.result["modified_patch_count"], 103)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -25,6 +25,22 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(len(name_rows), 6)
         self.assertTrue(all(row["reviewed"] for row in name_rows))
         self.assertTrue(all(row["live_verified"] for row in name_rows))
+
+    def test_title_load_states_are_declared_conservatively(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] == "title_load_slot_records"
+        ]
+        self.assertEqual(len(rows), 5)
+        by_target = {row["target_korean"]: row for row in rows}
+        self.assertTrue(by_target["이어하기"]["live_verified"])
+        self.assertTrue(by_target["시나리오"]["live_verified"])
+        self.assertTrue(by_target["손상된 데이터"]["live_verified"])
+        self.assertTrue(by_target["데이터 없음"]["live_verified"])
+        self.assertFalse(by_target["다음 시나리오"]["live_verified"])
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["modified"] for row in rows))
 
     def test_ending_status_labels_are_declared(self):
         rows = [
