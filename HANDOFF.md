@@ -4763,3 +4763,21 @@ contains 57 safe syllables as documented below and in
   `36402abe18f609a0ff88071129e6d5f482f4837b1e642868d4ab03d86b31d64b`.
   Scenario 17 `description` is now `verified_current`, and BlastEm was left on
   its preparation screen.
+- Scenario 18 was compared with the Japanese-ROM render
+  `text_scenarios_17_mapped_040000_jp2bpp16.png`. The existing Korean covered
+  Bozel's pursuit, the monster-attacked village, the laughing girl, and the
+  revelation that Liana was controlling the monsters, but current playback
+  left `벨제리아로`, `있었다.`, and `마물을` isolated.
+- The source now says `마물이 습격한 마을`,
+  `한 소녀가 즐겁게 웃었다.`, and
+  `마물을 조종하던 이는 리아나였다.` These shorter natural constructions
+  preserve every Japanese event while balancing the renderer's automatic
+  lines. No new early description glyph is introduced; the regenerated
+  783-record direct inventory has no token diff.
+- Production 77D0 `77d0_s18_description_final_00.png` through `_15.png`
+  retain the route map, all 14 text-bearing `어둠의 공주` frames, and the
+  preparation endpoint. No Japanese residue, clipping, broken glyph, or
+  isolated word remains. Scenario 18 `description` is now `verified_current`.
+- Production checksum is `77D0`, SHA-256
+  `485dd695b980382f103c7edea21e8b5770c6ebe4d60990992f7bda157a09c932`.
+  BlastEm was left on the Scenario 18 preparation screen.

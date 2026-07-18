@@ -914,9 +914,9 @@
           "glyph_pointer": "0x09C2FC",
           "current_glyph_pointer": "0x270F84",
           "original_word_count": 245,
-          "current_word_count": 266,
+          "current_word_count": 209,
           "original_tokens": "FFFE 0000 0000 0000 0000 0000 0001 0002 0003 0004 0005 0006 0007 FFFE 0000 0000 0000 0008 0009 000A 000B 000C 0003 000D 000E 000F 0010 FFFE FFFE 0000 0011 0012 0013 0014 0015 000A 0016 0017 0018 0019 001A 001B 001C 001D 0017 0016 0003 001E 001F 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 002A 002B 002C 002D 001B 002E 002F 0030 0025 0031 001A 0032 0033 FFFE 0000 0034 0012 0028 0029 002A 0019 002C 002D 001B 0035 0036 0037 0038 0022 0039 003A 0012 003B 0018 003C 001B 0027 003D 0039 0012 003E 0025 003F 0040 0036 002A 0041 001A 001B 002E 002F 0033 FFF7 0001 0032 0042 0043 0044 0045 0018 0046 0012 0047 0032 0048 002A 0040 001B 0025 0049 004A 004B 004C 0024 002F 0033 0028 0029 0018 004D 002F 003E 0012 003B 0043 0027 004E 004B 004C 0003 001E 0002 004F 001A 0032 0012 004F 0033 FFFE 0000 FFF7 0001 0043 0050 004B 002C 0049 0040 004E 0025 0026 0051 0003 001E 0002 0018 0052 0053 002F 0032 0053 002A 0054 0048 0055 0040 0032 0033 FFFE FFFE 0056 0057 0058 0059 005A FFFE 0000 005B 005C 005D 000A 005E 005F 0060 0061 000D 0012 0062 0063 FFFE 0000 005B 0009 000A 000B 000C 0003 000D 000E 000F 0012 0062 0063 FFFE 0056 0064 0065 0059 005A FFFE 0000 005B FFF7 0001 0012 0066 0067 FFFE 0000 005B 0030 0039 0012 0068 0069 FFFF",
-          "target_korean": "시나리오 18\n어둠의 공주\n어둠의 왕자 보젤을 쫓아 벨제리아로\n향하던 엘윈 일행은 마물에게\n습격받는 마을을 발견했다.\n마물에게 쫓겨 달아나는 사람들을\n보며 한 소녀가 즐겁게 웃고 있었다.\n일행이 그 소녀를 바라보자, 마물을\n조종하고 있던 사람은 다름 아닌\n리아나였다. 엘윈은 당황했지만\n리아나를 막기 위해 달려 나갔다.",
+          "target_korean": "시나리오 18\n어둠의 공주\n어둠의 왕자 보젤을 쫓아\n벨제리아로 향하던 엘윈 일행은\n마물이 습격한 마을을 발견했다.\n사람들이 마물에게 쫓기는 모습을\n보며 한 소녀가 즐겁게 웃었다.\n일행이 그 소녀를 바라보자,\n마물을 조종하던 이는 리아나였다.\n엘윈은 당황했지만\n리아나를 막기 위해 달려 나갔다.",
           "modified": true,
           "reviewed": true,
           "live_verified": false
@@ -924,7 +924,7 @@
         {
           "id": 18,
           "pointer": "0x09F624",
-          "current_pointer": "0x276448",
+          "current_pointer": "0x2763D6",
           "glyph_pointer": "0x09C3D2",
           "current_glyph_pointer": "0x27105A",
           "original_word_count": 306,
@@ -938,7 +938,7 @@
         {
           "id": 19,
           "pointer": "0x09F888",
-          "current_pointer": "0x27665C",
+          "current_pointer": "0x2765EA",
           "glyph_pointer": "0x09C4D0",
           "current_glyph_pointer": "0x271158",
           "original_word_count": 243,
@@ -952,7 +952,7 @@
         {
           "id": 20,
           "pointer": "0x09FA6E",
-          "current_pointer": "0x276824",
+          "current_pointer": "0x2767B2",
           "glyph_pointer": "0x09C5BC",
           "current_glyph_pointer": "0x271244",
           "original_word_count": 214,
@@ -966,7 +966,7 @@
         {
           "id": 21,
           "pointer": "0x09FC1A",
-          "current_pointer": "0x2769C6",
+          "current_pointer": "0x276954",
           "glyph_pointer": "0x09C6A8",
           "current_glyph_pointer": "0x271330",
           "original_word_count": 291,
@@ -980,7 +980,7 @@
         {
           "id": 22,
           "pointer": "0x09FE60",
-          "current_pointer": "0x276C98",
+          "current_pointer": "0x276C26",
           "glyph_pointer": "0x09C79E",
           "current_glyph_pointer": "0x271426",
           "original_word_count": 357,
@@ -994,7 +994,7 @@
         {
           "id": 23,
           "pointer": "0x0A012A",
-          "current_pointer": "0x276ED2",
+          "current_pointer": "0x276E60",
           "glyph_pointer": "0x09C896",
           "current_glyph_pointer": "0x27151E",
           "original_word_count": 214,
@@ -1008,7 +1008,7 @@
         {
           "id": 24,
           "pointer": "0x0A02D6",
-          "current_pointer": "0x27709A",
+          "current_pointer": "0x277028",
           "glyph_pointer": "0x09C95E",
           "current_glyph_pointer": "0x2715E6",
           "original_word_count": 224,
@@ -1022,7 +1022,7 @@
         {
           "id": 25,
           "pointer": "0x0A0496",
-          "current_pointer": "0x27723C",
+          "current_pointer": "0x2771CA",
           "glyph_pointer": "0x09CA40",
           "current_glyph_pointer": "0x2716C8",
           "original_word_count": 211,
@@ -1036,7 +1036,7 @@
         {
           "id": 26,
           "pointer": "0x0A063C",
-          "current_pointer": "0x2773DE",
+          "current_pointer": "0x27736C",
           "glyph_pointer": "0x09CB10",
           "current_glyph_pointer": "0x271798",
           "original_word_count": 251,
@@ -1050,7 +1050,7 @@
         {
           "id": 27,
           "pointer": "0x0A0832",
-          "current_pointer": "0x2775F2",
+          "current_pointer": "0x277580",
           "glyph_pointer": "0x09CBFE",
           "current_glyph_pointer": "0x271886",
           "original_word_count": 253,
@@ -1064,7 +1064,7 @@
         {
           "id": 28,
           "pointer": "0x0A0A2C",
-          "current_pointer": "0x2777E0",
+          "current_pointer": "0x27776E",
           "glyph_pointer": "0x09CCEE",
           "current_glyph_pointer": "0x271976",
           "original_word_count": 240,
@@ -1078,7 +1078,7 @@
         {
           "id": 29,
           "pointer": "0x0A0C0C",
-          "current_pointer": "0x2779CE",
+          "current_pointer": "0x27795C",
           "glyph_pointer": "0x09CDCA",
           "current_glyph_pointer": "0x271A52",
           "original_word_count": 213,
@@ -1092,7 +1092,7 @@
         {
           "id": 30,
           "pointer": "0x0A0DB6",
-          "current_pointer": "0x277B96",
+          "current_pointer": "0x277B24",
           "glyph_pointer": "0x09CE98",
           "current_glyph_pointer": "0x271B20",
           "original_word_count": 270,

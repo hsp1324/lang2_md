@@ -28,7 +28,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 15 | current | current | current | current | probe | progressed | pending | pending | 24 |
 | 16 | current | current | current | current | probe | progressed | pending | pending | 26 |
 | 17 | current | current | current | current | current | progressed | pending | pending | 30 |
-| 18 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
+| 18 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 19 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
 | 20 | progressed | current | current | current | probe | progressed | pending | pending | 19 |
 | 21 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
@@ -599,7 +599,7 @@ Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrollin
 
 ### Scenario 18
 
-All eight 어둠의 공주 briefing confirmations, both preparation pages, a return to the first page, automatic deployment, the complete opening path, conditions, and the no-action first turn were visually reviewed. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Live 12D3 exposed the awkward dynamic-name order 인간은 마물의 먹이라고 보젤님이 말했다 at 0x1A497A. Production 1391 verifies the natural three-line 보젤님은 인간이 마물의 먹이라고 하셨다 without splitting the inserted name. Victory is 그레이트드래곤 격파 or 다크프린세스 격파; defeat is 주인공 사망 or 주민 전멸. The first turn reviewed Liana, Hein, and Jessica dialogue plus enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1820B4 is covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Later turns, the evacuation choice branch, completion, and other branches remain pending.
+Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrolling frames of 어둠의 공주, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the party's pursuit of Bozel, the monster-attacked village, the laughing girl, and the revelation that Liana controls the monsters. Initial current playback left 벨제리아로, 있었다., and 마물을 isolated. Natural restructuring to 마물이 습격한 마을, 한 소녀가 즐겁게 웃었다., and 마물을 조종하던 이는 리아나였다. removes those lines without losing source meaning. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and first-turn dialogue without reset or freeze. The original eleven-record fixed-placement list at 0x1820B4 remains covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Later turns, the evacuation choice branch, completion, and other branches remain pending.
 
 - `captures/run/12d3_s18_brief_live_01.png`
 - `captures/run/12d3_s18_brief_live_07.png`
@@ -622,6 +622,12 @@ All eight 어둠의 공주 briefing confirmations, both preparation pages, a ret
 - `captures/run/c7ab_s18_title.png`
 - `captures/run/c7ab_s18_body_3.png`
 - `captures/run/c7ab_s18_body_final2.png`
+- `captures/run/77d0_s18_description_final_01.png`
+- `captures/run/77d0_s18_description_final_04.png`
+- `captures/run/77d0_s18_description_final_08.png`
+- `captures/run/77d0_s18_description_final_10.png`
+- `captures/run/77d0_s18_description_final_14.png`
+- `captures/run/77d0_s18_description_final_15.png`
 
 ### Scenario 19
 
