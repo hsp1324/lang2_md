@@ -4697,3 +4697,23 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `CE27`, SHA-256
   `270ddf0c3346aa46f16dc2830acbc876efb877c6a3123f08aa19a1ef0af7d86c`.
   BlastEm was left on the Scenario 14 preparation screen.
+- Scenario 15 was compared with the Japanese-ROM render
+  `text_scenarios_14_mapped_040000_jp2bpp16.png`. This exposed a substantive
+  omission: the source states that the shortest route requires crossing
+  `ローレック河`. The production text now restores the established fallback
+  spelling `롤렉 강`. Explicit source rewrapping also removes the isolated
+  `불리한` line while retaining every event in the original description.
+- Letting `롤렉` enter the early scenario-description pass initially shifted
+  121 direct-string records. `TRAILING_SCENARIO_DESCRIPTION_GLYPH_TEXT` now
+  excludes both syllables from that pass, preserving their established later
+  allocation; retaining the existing `구하려` wording also preserves `려` at
+  its original allocation point. The final 783-record direct inventory has no
+  token diff and the total custom-glyph count remains 859 (`7000-735B`).
+- Production B4C1 `b4c1_s15_description_final_00.png` through `_20.png`
+  retain the route map, all 19 text-bearing `빙룡병단장 이멜다` frames, and
+  the preparation endpoint. All text is natural Korean without Japanese
+  residue, clipping, broken glyphs, or abnormal spacing. Scenario 15
+  `description` is now `verified_current`.
+- Production checksum is `B4C1`, SHA-256
+  `4bd245a30c44e4da9781490e2a7ccef5517922b048fe4b99dd8fe617aa784310`.
+  BlastEm was left on the Scenario 15 preparation screen.

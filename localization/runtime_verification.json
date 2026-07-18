@@ -642,7 +642,7 @@
     },
     {
       "scenario": 15,
-      "description": "progressed_current",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -668,9 +668,15 @@
         "captures/run/85f1_s15_opening_slow_12.png",
         "captures/run/c7ab_s15_title.png",
         "captures/run/c7ab_s15_body_final.png",
-        "captures/run/c7ab_s15_prep.png"
+        "captures/run/c7ab_s15_prep.png",
+        "captures/run/b4c1_s15_description_final_01.png",
+        "captures/run/b4c1_s15_description_final_08.png",
+        "captures/run/b4c1_s15_description_final_10.png",
+        "captures/run/b4c1_s15_description_final_14.png",
+        "captures/run/b4c1_s15_description_final_19.png",
+        "captures/run/b4c1_s15_description_final_20.png"
       ],
-      "note": "Production C7AB freshly displays the Japanese-source title 빙룡병단장 이멜다, reaches the corrected final description, and shows an intact first preparation page; intermediate scroll coverage is sampled, so description is progressed rather than fully verified. All 13 briefing confirmations, both preparation pages, arrangement, the complete opening path, conditions, and the no-action first turn were visually reviewed on production 85F1 under the earlier shortened title 빙룡병단. The preparation page control was followed through the five visible rows to the second page, where 제시카/크루세이더 and 크루거/소서러 both render correctly; the complete selectable roster has seven commanders. Victory is 이멜다 장군 격파 or 주인공 아래 이동; defeat is 주인공 사망. A 3.2-second slow replay verifies the previously partial capture as 이멜다: 드디어 따라잡았나 보군. The first turn reviewed Imelda and imperial-commander dialogue, enemy movement, and 제시카/크루세이더 before returning to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original 12-record fixed-placement list at 0x181B3E is covered by editor regressions for a 서펜나이트 commander, 이멜다/제너럴, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending."
+      "note": "Production B4C1 verifies the Scenario 15 route map, all 19 text-bearing scrolling frames of 빙룡병단장 이멜다, and the preparation endpoint. Direct Japanese-ROM rendering exposed a substantive omission: the party must cross ローレック河 on the shortest route. The established fallback spelling 롤렉 강 is restored, and explicit source rewrapping removes the isolated 불리한 line. 롤렉 is excluded from the early scenario-description glyph pass so its established later glyph IDs remain fixed; the regenerated 783-record direct-string inventory has no token diff. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified both preparation pages, the complete seven-commander roster, arrangement, opening, conditions, and the first turn back to a valid command menu. Later turns, completion, and branches remain pending; battle_ui remains covered by the shared probe."
     },
     {
       "scenario": 16,
