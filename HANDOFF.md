@@ -5083,3 +5083,55 @@ contains 57 safe syllables as documented below and in
   in-battle Start-menu load child. `captures/run/dd8f_load_slots.png` still
   renders Japanese `ロード` and `データがありません`; keep title LOAD and
   all slot/error variants in the UI gap inventory.
+
+### Ending Result Font-Bank Repair And Full Replay (2026-07-18)
+
+- Broken-run state `captures/analysis/dd8f_ending_status.gst` was inspected
+  before changing code. Plane A at `C000`, Plane B at `E000`, and live sprites
+  at `F000` did not reference the four damaged extension ranges. The current
+  VRAM differed from the ROM resources across tiles `0x398..0x3AF`,
+  `0x440..0x447`, `0x498..0x4AF`, and `0x4D8..0x4EF`; the exact user-visible
+  failures included `젤`, `다`, `엠`, and `퍼`.
+- The ending status name call at `0x01CBA6` is now the only direct-map caller
+  routed through wrapper `0x2B7D00`. It preserves all registers, queues
+  compressed resources `0x1AF`, `0x1B0`, `0x1B1`, and `0x1B2` for VRAM tile
+  starts `0x398`, `0x440`, `0x498`, and `0x4D8`, restores registers, and jumps
+  to the existing renderer at `0x2B7800`. Calls at `0x01B546` and `0x01CBBC`
+  remain direct, avoiding a global background/resource side effect.
+- Production checksum remains `5F82`; the fixed all-record Scenario 27 probe
+  is checksum `1BE7`. The adjacent Bernhardt was defeated on the first valid
+  attack. A first navigation attempt held Up for 0.4 seconds and moved two
+  cells to an out-of-range target; use one short Up event. Loading the same-run
+  quicksave later caused BlastEm to exit, so the accepted attempt was replayed
+  from the selector instead of treating quickload as reliable evidence.
+- `captures/run/1be7_full_ending_watch/0000.png` through `1288.png` retain
+  every sampled input frame. Result starts verify `스코트/파이터` at `0257`,
+  `쉐리/파이터` at `0322`, `키스/호크나이트` at `0389`, `라나/클레릭`
+  at `0467`, `아론/파이터` at `0533`, `레스터/크로코나이트` at `0601`,
+  `헤인/워록` at `0668`, and `제시카/소서러` at `0745` before the affected
+  imperial/villain groups.
+- `0799.png` and `captures/run/1be7_bozel_darkmaster_fixed.png` show complete
+  `보젤/다크마스터`. `1052.png` and
+  `captures/run/1be7_bernhardt_emperor_fixed.png` show complete
+  `베른하르트/엠퍼러`. The combined 90-record/515-page stream reaches `Fin`
+  at `1241.png`; hashes stay identical through `1288.png`. No reset, freeze,
+  damaged result glyph, or premature terminator was observed.
+- The user-reported ending line is now retained at `0104.png` through
+  `0107.png`: `제국군이 마을로 오고 있어! 리아나가 위험해!`. It is
+  rendered by the fixed-count ending montage list at `0x0A6CEC`, not by the
+  Scenario 1 event block. Ownership and playback are proven, but every
+  `opening_text_lists` inventory entry remains `reviewed: false`; compare this
+  montage against Japanese-ROM playback before accepting its wording.
+
+### Isolated SRAM Recovery Format Marker (2026-07-18)
+
+- A newly created isolated SRAM could contain a checksum-valid manual slot and
+  valid flag `0x0002` at `0x1FF0` while the title LOAD screen still reported no
+  data. Comparing game-initialized saves proved that the global format marker
+  at `0x1FEE` must be `0x07CA`; blank synthetic files contained `0x0000`.
+- `recover_manual_slot_from_gst()` now initializes a blank marker, preserves
+  the expected marker, and rejects an unknown nonzero marker before writing.
+  `manual_slot_scenario_number()` also validates the marker, so automation can
+  no longer claim a slot is usable when the game rejects the SRAM container.
+  The full suite passes 242 tests, and a fresh `1BE7` runtime entered Scenario
+  27 through the title LOAD/selector path using the corrected blank SRAM.

@@ -35,6 +35,8 @@ MANUAL_SLOT_WORK_RAM_SEGMENTS = (
     (0xC7F2, 0x050),
 )
 SRAM_VALID_FLAGS_OFFSET = 0x1FF0
+SRAM_FORMAT_MARKER_OFFSET = 0x1FEE
+SRAM_FORMAT_MARKER = 0x07CA
 JP_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 B3 A8 DD FF")
 KO_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 FF FF FF FF")
 JP_DEFAULT_HERO_DIALOGUE_NAME = bytes.fromhex(
@@ -302,6 +304,14 @@ def manual_slot_scenario_number(
     data = sram_path.read_bytes()
     if len(data) != 0x2000:
         raise ValueError("BlastEm SRAM must be exactly 8192 bytes")
+    marker = int.from_bytes(
+        data[SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2], "big"
+    )
+    if marker != SRAM_FORMAT_MARKER:
+        raise ValueError(
+            f"BlastEm SRAM has invalid format marker "
+            f"0x{marker:04X} != 0x{SRAM_FORMAT_MARKER:04X}"
+        )
     flags = int.from_bytes(
         data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2], "big"
     )
@@ -359,6 +369,16 @@ def recover_manual_slot_from_gst(
             raise ValueError("BlastEm SRAM must be exactly 8192 bytes")
     else:
         sram = bytearray(0x2000)
+    marker = int.from_bytes(
+        sram[SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2], "big"
+    )
+    if marker not in (0, SRAM_FORMAT_MARKER):
+        raise ValueError(
+            f"BlastEm SRAM has unexpected format marker 0x{marker:04X}"
+        )
+    sram[
+        SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+    ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
     base = MANUAL_SLOT_BASES[slot_index]
     sram[base : base + MANUAL_SLOT_CHECKSUM_DATA_SIZE] = record
     checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET

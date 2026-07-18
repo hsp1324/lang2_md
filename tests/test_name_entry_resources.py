@@ -320,10 +320,15 @@ class NameEntryResourceTests(unittest.TestCase):
                 + builder.BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big"),
             )
         for offset in builder.BYTE_UI_DIRECT_MAP_RENDER_CALLS:
+            routine = (
+                builder.BYTE_UI_ENDING_RESULT_RENDER_ROUTINE
+                if offset == builder.BYTE_UI_ENDING_RESULT_RENDER_CALL
+                else builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
+            )
             self.assertEqual(
                 data[offset : offset + 6],
                 bytes.fromhex("4E B9")
-                + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+                + routine.to_bytes(4, "big"),
             )
         self.assertEqual(
             data[
@@ -527,6 +532,60 @@ class NameEntryResourceTests(unittest.TestCase):
             renderer,
         )
         self.assertIn(bytes.fromhex("D4 FC 00 02 35 81 00 00"), renderer)
+
+    def test_ending_result_renderer_restores_overwritten_extension_banks(self):
+        renderer = builder._build_byte_ui_ending_result_renderer()
+        self.assertEqual(renderer[:4], bytes.fromhex("48 E7 FF FE"))
+        self.assertEqual(renderer[-10:-6], bytes.fromhex("4C DF 7F FF"))
+        self.assertEqual(
+            renderer[-6:],
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+        for segment_index in builder.BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES:
+            tile_start, _ = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+            resource_index = builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+            request = 0x8000 | resource_index
+            self.assertIn(
+                bytes.fromhex("30 3C")
+                + request.to_bytes(2, "big")
+                + bytes.fromhex("32 7C")
+                + (tile_start * 32).to_bytes(2, "big")
+                + bytes.fromhex("4E B9 00 00 99 B2"),
+                renderer,
+            )
+        untouched_segments = set(
+            range(len(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS))
+        ) - set(builder.BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES)
+        for segment_index in untouched_segments:
+            tile_start, _ = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+            self.assertNotIn(
+                bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"),
+                renderer,
+            )
+
+    def test_ending_name_call_uses_context_specific_renderer(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+
+        ending_call = data[
+            builder.BYTE_UI_ENDING_RESULT_RENDER_CALL :
+            builder.BYTE_UI_ENDING_RESULT_RENDER_CALL + 6
+        ]
+        self.assertEqual(
+            ending_call,
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_ENDING_RESULT_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+        for offset in set(builder.BYTE_UI_DIRECT_MAP_RENDER_CALLS) - {
+            builder.BYTE_UI_ENDING_RESULT_RENDER_CALL
+        }:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+            )
 
     def test_scenario_one_status_classes_keep_exact_source_names(self):
         labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS

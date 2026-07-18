@@ -344,6 +344,7 @@ BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
 BYTE_UI_FINAL_BANK_LOAD_ROUTINE = 0x2B7C00
+BYTE_UI_ENDING_RESULT_RENDER_ROUTINE = 0x2B7D00
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
 BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
@@ -351,6 +352,11 @@ BYTE_UI_DIRECT_MAP_RENDER_CALLS = (0x01B546, 0x01CBA6, 0x01CBBC)
 BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 01 05 BC")
 BYTE_UI_DIRECT_MAP_RENDER_HOOK = 0x0105BC
 BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL = bytes.fromhex("48 E7 C0 60 B3 FC")
+BYTE_UI_ENDING_RESULT_RENDER_CALL = 0x01CBA6
+# The ending status background overwrites these extension banks before it draws
+# the commander name and class. Its Plane A/B and sprite table do not reference
+# the ranges, so restoring them at the name call is context-safe.
+BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES = (1, 2, 3, 4)
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "42 40 10 18 0C 00"
@@ -4232,6 +4238,22 @@ def _build_byte_ui_final_bank_loader() -> bytes:
     )
 
 
+def _build_byte_ui_ending_result_renderer() -> bytes:
+    wrapper = bytearray(bytes.fromhex("48 E7 FF FE"))
+    for segment_index in BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES:
+        tile_start, _ = BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+        request = 0x8000 | resource_index
+        wrapper.extend(bytes.fromhex("30 3C") + request.to_bytes(2, "big"))
+        wrapper.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
+        wrapper.extend(bytes.fromhex("4E B9 00 00 99 B2"))
+    wrapper.extend(bytes.fromhex("4C DF 7F FF"))
+    wrapper.extend(
+        bytes.fromhex("4E F9") + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    return bytes(wrapper)
+
+
 def install_byte_ui_extension(
     data: bytearray,
     font: ImageFont.FreeTypeFont,
@@ -4334,6 +4356,7 @@ def install_byte_ui_extension(
     prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
     final_bank_loader = _build_byte_ui_final_bank_loader()
+    ending_result_renderer = _build_byte_ui_ending_result_renderer()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -4357,6 +4380,7 @@ def install_byte_ui_extension(
         BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
         BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE: prep_hire_class_renderer,
         BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
+        BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
     }
     for offset, payload in routines.items():
@@ -4388,10 +4412,12 @@ def install_byte_ui_extension(
     for offset in BYTE_UI_DIRECT_MAP_RENDER_CALLS:
         if data[offset : offset + 6] != BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL:
             raise ValueError(f"direct-map byte render call changed at 0x{offset:06X}")
-        data[offset : offset + 6] = (
-            bytes.fromhex("4E B9")
-            + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+        routine = (
+            BYTE_UI_ENDING_RESULT_RENDER_ROUTINE
+            if offset == BYTE_UI_ENDING_RESULT_RENDER_CALL
+            else BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
         )
+        data[offset : offset + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
     if data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
     ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:

@@ -150,8 +150,29 @@ outcome selection or manual acceptance of every individual page.
 
 This pass also exposed an ending-status font-bank regression. Stable frames
 `0340.png` and `0545.png` show broken extension glyphs in
-`보젤/다크마스터` and `베른하르트/엠퍼러`. Fix and replay that status
-renderer before treating the all-record visual surface as clean.
+`보젤/다크마스터` and `베른하르트/엠퍼러`. A GST from the broken screen
+proved that the ending background had overwritten extension ranges beginning
+at tiles `0x398`, `0x440`, `0x498`, and `0x4D8`, while the live Plane A/B and
+sprite table did not reference those ranges. The context-specific call at
+`0x01CBA6` now reloads compressed resources `0x1AF..0x1B2` through wrapper
+`0x2B7D00` before invoking the existing direct renderer. The other two callers
+of the shared renderer remain unchanged.
+
+Production checksum `5F82` plus the all-record and Scenario 27 probes produced
+checksum `1BE7`. Its numbered stock playback is
+`captures/run/1be7_full_ending_watch/0000.png` through `1288.png`.
+`0799.png` shows intact `보젤/다크마스터`, and `1052.png` shows intact
+`베른하르트/엠퍼러`; named copies are
+`1be7_bozel_darkmaster_fixed.png` and
+`1be7_bernhardt_emperor_fixed.png`. The stream reaches `Fin` at frame `1241`
+and remains byte-identical through `1288`, without reset or freeze.
+
+This run also retained the ending-montage line reported during review.
+Frames `0104.png` through `0107.png` render the complete line
+`제국군이 마을로 오고 있어! 리아나가 위험해!` over the ending group
+illustration. It belongs to the fixed-count montage list at `0x0A6CEC`, not the
+Scenario 1 event stream. The surface is still marked `reviewed: false`, so this
+runtime ownership proof does not replace a Japanese-source wording review.
 
 ## Scenario 27 Ending Probe
 

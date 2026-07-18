@@ -13,6 +13,8 @@ from tools.run_blastem_sequence import (
     MANUAL_SLOT_HERO_NAME_OFFSET,
     MANUAL_SLOT_WORK_RAM_SEGMENTS,
     SEQUENCES,
+    SRAM_FORMAT_MARKER,
+    SRAM_FORMAT_MARKER_OFFSET,
     SRAM_VALID_FLAGS_OFFSET,
     manual_slot_checksum,
     manual_slot_scenario_number,
@@ -161,6 +163,47 @@ class BlastEmSramMigrationTests(unittest.TestCase):
             ),
             0x0002,
         )
+        self.assertEqual(
+            int.from_bytes(
+                recovered[
+                    SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+                ],
+                "big",
+            ),
+            SRAM_FORMAT_MARKER,
+        )
+
+    def test_recovery_rejects_unknown_existing_sram_format(self):
+        record = bytearray(0x1A6)
+        record[:2] = (2).to_bytes(2, "big")
+        name_start = MANUAL_SLOT_HERO_NAME_OFFSET
+        record[name_start : name_start + len(KO_DEFAULT_HERO_NAME)] = (
+            KO_DEFAULT_HERO_NAME
+        )
+        gst = bytearray(
+            max(
+                GST_WORK_RAM_FILE_OFFSET + address + size
+                for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS
+            )
+        )
+        record_offset = 0
+        for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS:
+            start = GST_WORK_RAM_FILE_OFFSET + address
+            gst[start : start + size] = record[record_offset : record_offset + size]
+            record_offset += size
+
+        with TemporaryDirectory() as directory:
+            gst_path = Path(directory) / "scenario2.gst"
+            sram_path = Path(directory) / "save.sram"
+            gst_path.write_bytes(gst)
+            sram = bytearray(0x2000)
+            sram[
+                SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+            ] = (0x1234).to_bytes(2, "big")
+            sram_path.write_bytes(sram)
+            with self.assertRaisesRegex(ValueError, "unexpected format marker"):
+                recover_manual_slot_from_gst(gst_path, sram_path)
+            self.assertEqual(sram_path.read_bytes(), sram)
 
     def test_recovery_rejects_record_without_hero_terminator(self):
         first_address, first_size = MANUAL_SLOT_WORK_RAM_SEGMENTS[0]
@@ -212,6 +255,9 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
 
     def test_reads_valid_manual_slot_scenario_number(self):
         data = bytearray(0x2000)
+        data[
+            SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+        ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
         base = 0x194E
         data[base : base + 2] = (2).to_bytes(2, "big")
         checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
@@ -225,6 +271,23 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
             path = Path(directory) / "save.sram"
             path.write_bytes(data)
             self.assertEqual(manual_slot_scenario_number(path), 2)
+
+    def test_rejects_manual_slot_without_sram_format_marker(self):
+        data = bytearray(0x2000)
+        base = 0x194E
+        data[base : base + 2] = (2).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            with self.assertRaisesRegex(ValueError, "invalid format marker"):
+                manual_slot_scenario_number(path)
 
     def test_selector_rejects_out_of_range_scenario(self):
         for scenario_number in (0, 32):
