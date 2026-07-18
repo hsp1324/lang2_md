@@ -858,9 +858,9 @@
           "glyph_pointer": "0x09BF1C",
           "current_glyph_pointer": "0x270BA4",
           "original_word_count": 297,
-          "current_word_count": 304,
+          "current_word_count": 266,
           "original_tokens": "FFFE 0000 0000 0000 0000 0000 0001 0002 0003 0004 0005 0006 0007 FFFE 0000 0000 0000 0008 0009 000A 000B 000C 000D 0003 000E 000F 0010 0011 FFFE FFFE 0000 0012 0013 0014 0015 0016 0017 0018 0019 0015 001A 001B 001C 001D 001E 001F 0020 0021 0022 0023 0021 0024 0025 0026 0027 0028 0029 002A 002B 002C FFFE 0000 002D 002E 002F 0030 0031 0023 0032 0033 0022 0034 0035 0015 0036 002E 0017 0037 002F 0038 0039 003A 003B 003C 003D 003E 003F 0040 0041 0042 003F 0043 0021 0020 0021 0022 002C 0044 0045 0046 0047 003E 0025 0048 0046 0049 0033 0022 0027 0028 0029 002A 002B 0036 0015 004A 0015 004B 004C 003F 0017 0030 0031 0015 004D 000A 0008 000B 000C 000D 0003 000E 000F 0010 0011 001D 004E 001F 004F 0025 0020 0021 0026 002C FFFE 0000 0050 001D 004A 0051 003F 002E 0017 0052 0053 0046 0054 0055 004C 0033 0022 0056 0057 0058 0059 005A 0015 0048 001D 005B 005C 0022 002C 0021 005D 005E 005F 0017 0009 000A 000B 000C 000D 0003 000E 000F 0010 0046 001F 0060 0026 0061 0021 0015 0062 001D 0063 0064 0065 0066 0023 0033 0020 0021 0022 002C FFFE FFFE 0067 0068 0069 006A 006B FFFE 0000 006C FFF7 0001 0017 006D 006E 0001 006F FFFE 0000 0000 0001 006E 0003 0010 0015 0021 0070 0025 003E 001D FFFE 0000 0000 000B 000C 000D 0003 000E 000F 0010 003F 0022 0071 0042 0043 004C FFFE 0000 006C 0056 0057 0058 0059 0072 0004 000C 0015 0073 0074 FFFE 0067 0075 0076 006A 006B FFFE 0000 006C 0072 0004 000C 001D 000B 000C 000D 0003 000E 000F 0010 003F 0077 001C FFFE 0000 006C FFF7 0001 0015 0078 0079 FFFF",
-          "target_korean": "시나리오 14\n성검 랑그릿사\n수백 년 전 빛의 후예들이 다스렸던\n발디아 왕국. 전설이 된 옛 성은\n깊은 호수 밑에서 조용히 잠들어\n있었다. 봉인이 풀려 모습을 드러낸\n발디아 성 가장 깊은 곳에는 전설의\n성검 랑그릿사가 안치되어 있었다.\n그러나 같은 목적을 지닌 청룡기사단도\n그곳에 나타났다. 성검 랑그릿사를\n둘러싼 싸움이 다시 시작되려 했다.",
+          "target_korean": "시나리오 14\n성검 랑그릿사\n수백 년 전 빛의 후예들이\n다스렸던 발디아 왕국.\n전설이 된 옛 성은 깊은 호수\n밑에서 조용히 잠들어 있었다.\n봉인이 풀려 모습을 드러낸\n발디아 성 가장 깊은 곳에는\n전설의 성검 랑그릿사가\n안치되어 있었다.\n그러나 같은 목적을 지닌\n청룡기사단도 그곳에 나타났다.\n성검 랑그릿사를 둘러싼 싸움이\n다시 시작되려 했다.",
           "modified": true,
           "reviewed": true,
           "live_verified": false
@@ -868,7 +868,7 @@
         {
           "id": 14,
           "pointer": "0x09ECBC",
-          "current_pointer": "0x275B60",
+          "current_pointer": "0x275B14",
           "glyph_pointer": "0x09C012",
           "current_glyph_pointer": "0x270C9A",
           "original_word_count": 270,
@@ -882,7 +882,7 @@
         {
           "id": 15,
           "pointer": "0x09EED8",
-          "current_pointer": "0x275D4E",
+          "current_pointer": "0x275D02",
           "glyph_pointer": "0x09C106",
           "current_glyph_pointer": "0x270D8E",
           "original_word_count": 377,
@@ -896,7 +896,7 @@
         {
           "id": 16,
           "pointer": "0x09F1CA",
-          "current_pointer": "0x276046",
+          "current_pointer": "0x275FFA",
           "glyph_pointer": "0x09C208",
           "current_glyph_pointer": "0x270E90",
           "original_word_count": 312,
@@ -910,7 +910,7 @@
         {
           "id": 17,
           "pointer": "0x09F43A",
-          "current_pointer": "0x2762A6",
+          "current_pointer": "0x27625A",
           "glyph_pointer": "0x09C2FC",
           "current_glyph_pointer": "0x270F84",
           "original_word_count": 245,
@@ -924,7 +924,7 @@
         {
           "id": 18,
           "pointer": "0x09F624",
-          "current_pointer": "0x2764BA",
+          "current_pointer": "0x27646E",
           "glyph_pointer": "0x09C3D2",
           "current_glyph_pointer": "0x27105A",
           "original_word_count": 306,
@@ -938,7 +938,7 @@
         {
           "id": 19,
           "pointer": "0x09F888",
-          "current_pointer": "0x2766CE",
+          "current_pointer": "0x276682",
           "glyph_pointer": "0x09C4D0",
           "current_glyph_pointer": "0x271158",
           "original_word_count": 243,
@@ -952,7 +952,7 @@
         {
           "id": 20,
           "pointer": "0x09FA6E",
-          "current_pointer": "0x276896",
+          "current_pointer": "0x27684A",
           "glyph_pointer": "0x09C5BC",
           "current_glyph_pointer": "0x271244",
           "original_word_count": 214,
@@ -966,7 +966,7 @@
         {
           "id": 21,
           "pointer": "0x09FC1A",
-          "current_pointer": "0x276A38",
+          "current_pointer": "0x2769EC",
           "glyph_pointer": "0x09C6A8",
           "current_glyph_pointer": "0x271330",
           "original_word_count": 291,
@@ -980,7 +980,7 @@
         {
           "id": 22,
           "pointer": "0x09FE60",
-          "current_pointer": "0x276D0A",
+          "current_pointer": "0x276CBE",
           "glyph_pointer": "0x09C79E",
           "current_glyph_pointer": "0x271426",
           "original_word_count": 357,
@@ -994,7 +994,7 @@
         {
           "id": 23,
           "pointer": "0x0A012A",
-          "current_pointer": "0x276F44",
+          "current_pointer": "0x276EF8",
           "glyph_pointer": "0x09C896",
           "current_glyph_pointer": "0x27151E",
           "original_word_count": 214,
@@ -1008,7 +1008,7 @@
         {
           "id": 24,
           "pointer": "0x0A02D6",
-          "current_pointer": "0x27710C",
+          "current_pointer": "0x2770C0",
           "glyph_pointer": "0x09C95E",
           "current_glyph_pointer": "0x2715E6",
           "original_word_count": 224,
@@ -1022,7 +1022,7 @@
         {
           "id": 25,
           "pointer": "0x0A0496",
-          "current_pointer": "0x2772AE",
+          "current_pointer": "0x277262",
           "glyph_pointer": "0x09CA40",
           "current_glyph_pointer": "0x2716C8",
           "original_word_count": 211,
@@ -1036,7 +1036,7 @@
         {
           "id": 26,
           "pointer": "0x0A063C",
-          "current_pointer": "0x277450",
+          "current_pointer": "0x277404",
           "glyph_pointer": "0x09CB10",
           "current_glyph_pointer": "0x271798",
           "original_word_count": 251,
@@ -1050,7 +1050,7 @@
         {
           "id": 27,
           "pointer": "0x0A0832",
-          "current_pointer": "0x277664",
+          "current_pointer": "0x277618",
           "glyph_pointer": "0x09CBFE",
           "current_glyph_pointer": "0x271886",
           "original_word_count": 253,
@@ -1064,7 +1064,7 @@
         {
           "id": 28,
           "pointer": "0x0A0A2C",
-          "current_pointer": "0x277852",
+          "current_pointer": "0x277806",
           "glyph_pointer": "0x09CCEE",
           "current_glyph_pointer": "0x271976",
           "original_word_count": 240,
@@ -1078,7 +1078,7 @@
         {
           "id": 29,
           "pointer": "0x0A0C0C",
-          "current_pointer": "0x277A40",
+          "current_pointer": "0x2779F4",
           "glyph_pointer": "0x09CDCA",
           "current_glyph_pointer": "0x271A52",
           "original_word_count": 213,
@@ -1092,7 +1092,7 @@
         {
           "id": 30,
           "pointer": "0x0A0DB6",
-          "current_pointer": "0x277C08",
+          "current_pointer": "0x277BBC",
           "glyph_pointer": "0x09CE98",
           "current_glyph_pointer": "0x271B20",
           "original_word_count": 270,

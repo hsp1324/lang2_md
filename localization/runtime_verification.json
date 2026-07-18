@@ -597,7 +597,7 @@
     },
     {
       "scenario": 14,
-      "description": "progressed_current",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -630,9 +630,15 @@
         "captures/run/f0ee_s14_turn1_endpoint.png",
         "captures/run/c7ab_s14_title.png",
         "captures/run/c7ab_s14_body_3.png",
-        "captures/run/c7ab_s14_body_final2.png"
+        "captures/run/c7ab_s14_body_final2.png",
+        "captures/run/ce27_s14_description_final_01.png",
+        "captures/run/ce27_s14_description_final_05.png",
+        "captures/run/ce27_s14_description_final_09.png",
+        "captures/run/ce27_s14_description_final_14.png",
+        "captures/run/ce27_s14_description_final_19.png",
+        "captures/run/ce27_s14_description_final_20.png"
       ],
-      "note": "All 14 briefing confirmations, all seven selectable commander/class rows across both preparation pages, arrangement, the complete opening path, and the condition rows were visually reviewed. Live review exposed 발티아 only in the production scenario-description source while event dialogue already used canonical 발디아. The source, shared resource, and fallback replacement now consistently use 발디아; F0EE captures verify 발디아 왕국 in the description and the existing opening captures verify 발디아 성터. The complete roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 제시카/크루세이더, and 크루거/소서러. Victory is one of 엘윈/제시카/쉐리 reaching Langrisser or defeating Leon; defeat is Leon reaching Langrisser or the protagonist dying. The no-action first turn reviewed Laird's aquatic, flying, and ballista orders plus imperial responses, then returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. Later turns, completion, and branches remain pending."
+      "note": "Production CE27 verifies the Scenario 14 route map, all 19 text-bearing scrolling frames of 성검 랑그릿사, and the preparation endpoint. Direct Japanese-ROM rendering confirms that ancient Baldia sleeps at the bottom of a deep lake, Langrisser rests in the castle depths, and the Blue Dragon Knights seek the same objective. Explicit source rewrapping removed isolated 다스렸던, 드러낸, and 전설의 lines while retaining the existing 렸 glyph so no global direct-string token IDs moved. The canonical 발디아 spelling and every event remain natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified all seven selectable commander/class rows, arrangement, the complete opening path, condition rows, and the first turn back to a valid command menu. Later turns, completion, and branches remain pending; battle_ui remains covered by the shared probe."
     },
     {
       "scenario": 15,

@@ -4679,3 +4679,21 @@ contains 57 safe syllables as documented below and in
   residue, clipping, broken glyphs, or abnormal spacing. Scenario 13
   `description` is now `verified_current`. BlastEm was left on the Scenario 13
   preparation screen.
+- Scenario 14 was compared with the Japanese-ROM render
+  `text_scenarios_13_mapped_040000_jp2bpp16.png`. It confirms that ancient
+  Baldia sleeps at the bottom of a deep lake, Langrisser is enshrined in the
+  castle depths, and the Blue Dragon Knights seek the same objective. The
+  Korean meaning and canonical `발디아` spelling were already correct, but
+  source lines wider than the runtime window left `다스렸던`, `드러낸`, and
+  `전설의` isolated. Explicit rewrapping removes all three. A trial wording
+  change from `다스렸던` to `다스리던` removed the otherwise unique `렸`
+  description glyph and shifted eight global direct-string records, so the
+  original wording was retained; the final direct inventory has no diff.
+- Production CE27 `ce27_s14_description_final_00.png` through `_20.png`
+  retain the route map, all 19 text-bearing `성검 랑그릿사` frames, and the
+  preparation endpoint. All text is natural Korean without Japanese residue,
+  clipping, broken glyphs, or abnormal spacing. Scenario 14 `description` is
+  now `verified_current`.
+- Production checksum is `CE27`, SHA-256
+  `270ddf0c3346aa46f16dc2830acbc876efb877c6a3123f08aa19a1ef0af7d86c`.
+  BlastEm was left on the Scenario 14 preparation screen.
