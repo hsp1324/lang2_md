@@ -16,7 +16,7 @@ OUTPUT_FIELDS = {
     "event_dialogue_ko.json": ("text", 3565),
     "global_strings.json": ("target_korean", 312),
     "shared_word_resources.json": ("target_korean", 366),
-    "ui_patch_surfaces.json": ("target_korean", 104),
+    "ui_patch_surfaces.json": ("target_korean", 111),
 }
 DEPRECATED_OUTPUT_TERMS = (
     "레이가드",

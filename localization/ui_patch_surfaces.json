@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 104,
-  "modified_patch_count": 103,
+  "declared_patch_count": 111,
+  "modified_patch_count": 110,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 27,
@@ -91,6 +91,34 @@
       "modified_count": 1
     },
     "title_load_header_relocation": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_main_menu_record": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_credit_font_load_hook": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_credit_render_hook": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_credit_font_load_routine": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_credit_render_routine": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_credit_text_record": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_credit_resource_pointer": {
       "entry_count": 1,
       "modified_count": 1
     }
@@ -1038,6 +1066,69 @@
       "address": "0x2B7E00",
       "size_bytes": 14,
       "target_korean": "불러오기",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_main_menu_record",
+      "address": "0x0A3146",
+      "size_bytes": 40,
+      "target_korean": "새 게임 / 불러오기",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_credit_font_load_hook",
+      "address": "0x02D66A",
+      "size_bytes": 8,
+      "target_korean": "title-only Korean/ID font resource loader",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_credit_render_hook",
+      "address": "0x02D712",
+      "size_bytes": 8,
+      "target_korean": "copyright plus Korean localization credit renderer",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_credit_font_load_routine",
+      "address": "0x2B7E20",
+      "size_bytes": 24,
+      "target_korean": "load title-only byte-font slice and restore source setup",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_credit_render_routine",
+      "address": "0x2B7E40",
+      "size_bytes": 74,
+      "target_korean": "render copyright and 한글화: hsp1324",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_credit_text_record",
+      "address": "0x2B7EC0",
+      "size_bytes": 24,
+      "target_korean": "한글화: hsp1324",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_credit_resource_pointer",
+      "address": "0x2B26D0",
+      "size_bytes": 4,
+      "target_korean": "compressed title byte-font resource 436",
       "modified": true,
       "reviewed": true,
       "live_verified": true

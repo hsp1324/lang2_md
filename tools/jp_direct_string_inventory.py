@@ -211,8 +211,10 @@ def range_ownership(offset: int) -> tuple[str, str | None] | None:
         return "item_shop_local_resource", "아이템/상점 화면별 글리프·토큰·포인터"
     if 0x0A2B00 <= offset < 0x0A3000:
         return "local_token_stream", "지휘관 배치/출격 화면별 글리프·토큰"
-    if 0x0A30D6 <= offset <= 0x0A3154:
-        return "name_entry_resource", "이름 입력 일본어 문자 선택 보조표"
+    if 0x0A30D6 <= offset < 0x0A3146:
+        return "title_load_resource", "타이틀 LOAD 글리프·슬롯 레코드"
+    if 0x0A3146 <= offset < 0x0A3170:
+        return "title_main_menu_record", "새 게임 / 불러오기"
     if offset in (0x0A342A, 0x0A3788):
         return "confirmed_credits_record", "제작진 크레딧 보조표"
     if 0x0A344A <= offset <= 0x0A3752:
@@ -398,6 +400,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "confirmed_unresolved_direct_message",
             "declared_ui_surface",
             "name_entry_resource",
+            "title_load_resource",
+            "title_main_menu_record",
             "confirmed_credits_record",
             "confirmed_untranslated_ending_fragment",
             "confirmed_untranslated_epilogue_fragment",
@@ -449,6 +453,8 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- Confirmed unresolved direct messages: {counts['confirmed_unresolved_direct_message']}",
             f"- Declared UI surfaces: {counts['declared_ui_surface']}",
             f"- Name-entry resources: {counts['name_entry_resource']}",
+            f"- Title LOAD resources: {counts['title_load_resource']}",
+            f"- Title main-menu records: {counts['title_main_menu_record']}",
             f"- Credits records: {counts['confirmed_credits_record']}",
             f"- Declared credits translation fragments: {counts['declared_credits_translation']}",
             f"- Untranslated ending fragments: {counts['confirmed_untranslated_ending_fragment']}",

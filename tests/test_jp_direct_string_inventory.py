@@ -42,6 +42,18 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
         self.assertEqual(counts["unclassified_candidate"], 0)
         self.assertTrue(all(row["ownership"] for row in self.result["candidates"]))
 
+    def test_title_main_menu_candidate_has_correct_owner(self):
+        row = next(
+            row for row in self.result["candidates"] if row["address"] == "0x0A3154"
+        )
+        self.assertEqual(row["ownership"], "title_main_menu_record")
+        self.assertEqual(row["target_korean"], "새 게임 / 불러오기")
+        self.assertTrue(row["modified"])
+        counts = self.result["ownership_counts"]
+        self.assertEqual(counts["title_load_resource"], 7)
+        self.assertEqual(counts["title_main_menu_record"], 1)
+        self.assertEqual(sum(counts.values()), self.result["candidate_count"])
+
     def test_render_confirmed_system_message_is_now_declared_and_modified(self):
         row = next(row for row in self.result["candidates"] if row["address"] == "0x082ACE")
         self.assertEqual(row["ownership"], "declared_direct_patch")

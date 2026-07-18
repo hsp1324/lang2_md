@@ -132,6 +132,67 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
     # The map-info renderer restores it immediately before localized status text.
     (0x05D8, 28),
 )
+# The first title screen uses the base 8x8 font directly. Load this
+# title-specific contiguous slice after the normal font so the Korean credit
+# can use Hangul and lowercase ID glyphs without permanently stealing the
+# gameplay mappings at J/Q/W or the live lowercase terrain/icon slots.
+TITLE_CREDIT_TILE_START = 0x3A
+TITLE_CREDIT_TILE_END = 0x73
+TITLE_CREDIT_TILE_COUNT = TITLE_CREDIT_TILE_END - TITLE_CREDIT_TILE_START + 1
+TITLE_CREDIT_TILE_OVERRIDES = {
+    0x3A: ":",
+    0x4A: "한",
+    0x51: "글",
+    0x57: "화",
+    0x61: "새",
+    0x62: "게",
+    0x63: "임",
+    0x64: "불",
+    0x65: "러",
+    0x66: "오",
+    0x67: "기",
+    0x68: "h",
+    0x70: "p",
+    0x73: "s",
+}
+TITLE_CREDIT_BITMAP_OVERRIDES = {
+    # The stock lowercase slots are terrain/icon fragments, not a coherent
+    # Latin font. Keep the requested lowercase ID but match the title's thick
+    # uppercase/digit strokes and seven-row baseline.
+    0x68: (
+        ".##.....",
+        ".##.....",
+        ".##.....",
+        ".#####..",
+        ".##..##.",
+        ".##..##.",
+        ".##..##.",
+        "........",
+    ),
+    0x70: (
+        "........",
+        ".#####..",
+        ".##..##.",
+        ".##..##.",
+        ".#####..",
+        ".##.....",
+        ".##.....",
+        "........",
+    ),
+    0x73: (
+        "........",
+        "..####..",
+        ".##.....",
+        "..###...",
+        "....##..",
+        ".##.##..",
+        "..###...",
+        "........",
+    ),
+}
+TITLE_CREDIT_RESOURCE_INDEX = (
+    BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS)
+)
 # Scenario 25's event-spawned Jessica uses class 9 (소서러). The name-entry
 # mapping shares 소 with ASCII Q, while the 0x3F6..0x3F8 escape-bank probe is
 # not stable during battle. Keep this class beside 로얄가드's stable 얄 tile;
@@ -345,7 +406,23 @@ BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
 BYTE_UI_FINAL_BANK_LOAD_ROUTINE = 0x2B7C00
 BYTE_UI_ENDING_RESULT_RENDER_ROUTINE = 0x2B7D00
+TITLE_CREDIT_FONT_LOAD_ROUTINE = 0x2B7E20
+TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
+TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
+TITLE_CREDIT_FONT_LOAD_HOOK = 0x02D66A
+TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL = bytes.fromhex("30 3C 81 89 32 7C 20 00")
+TITLE_COPYRIGHT_RENDER_HOOK = 0x02D712
+TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL = bytes.fromhex("22 78 81 C4 32 3C 80 00")
+TITLE_CREDIT_TEXT = "한글화: hsp1324"
+TITLE_CREDIT_TEXT_BYTES = bytes(
+    [0x4A, 0x51, 0x57, 0x3A, 0x00, 0x68, 0x73, 0x70, 0x31, 0x33, 0x32, 0x34]
+)
+TITLE_CREDIT_RECORD_BYTES = (
+    bytes.fromhex("00 02 00 0C 00 01 F8 00 F9 00 FA")
+    + TITLE_CREDIT_TEXT_BYTES
+    + bytes([0xFF])
+)
 BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
 BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
 BYTE_UI_DIRECT_MAP_RENDER_CALLS = (0x01B546, 0x01CBA6, 0x01CBBC)
@@ -655,6 +732,27 @@ TITLE_LOAD_TEXTS = (
     # temporarily disabled during a diagnostic build.
     "로드",
 )
+TITLE_MAIN_MENU_RECORD = 0x0A3146
+TITLE_MAIN_MENU_RECORD_ORIGINAL = (
+    0xFFF9, 0x0000, 0xFFFA, 0x0000, 0xFFFC, 0x0002, 0xFFFB, 0x0004,
+    0x0002, 0x0053, 0x0054, 0x0041, 0x0052, 0x0054, 0xFFFE, 0x004C,
+    0x004F, 0x0041, 0x0044, 0xFFFF,
+)
+TITLE_MAIN_MENU_START_OFFSET = 0x0A3158
+TITLE_MAIN_MENU_START_CAPACITY = 5
+TITLE_MAIN_MENU_START_TEXT = "새 게임"
+TITLE_MAIN_MENU_LOAD_OFFSET = 0x0A3164
+TITLE_MAIN_MENU_LOAD_CAPACITY = 4
+TITLE_MAIN_MENU_LOAD_TEXT = "불러오기"
+TITLE_MAIN_MENU_TEXTS = (
+    TITLE_MAIN_MENU_START_TEXT,
+    TITLE_MAIN_MENU_LOAD_TEXT,
+)
+TITLE_MAIN_MENU_BYTE_BY_CHAR = {
+    char: code
+    for code, char in TITLE_CREDIT_TILE_OVERRIDES.items()
+    if char in "새게임불러오기"
+}
 SCENARIO_HEADER_TEXT = "프롤로그"
 CLASS_CHANGE_GLYPH_LIST = 0x0A3C9C
 CLASS_CHANGE_GLYPH_TEXT = "클래스체인지 가능  용병마법"
@@ -3695,6 +3793,42 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
     )
 
 
+def patch_title_main_menu(data: bytearray) -> None:
+    actual = tuple(
+        be16(data, TITLE_MAIN_MENU_RECORD + index * 2)
+        for index in range(len(TITLE_MAIN_MENU_RECORD_ORIGINAL))
+    )
+    if actual != TITLE_MAIN_MENU_RECORD_ORIGINAL:
+        raise ValueError("title main-menu source record changed")
+
+    def write_text(offset: int, capacity: int, text: str, terminator: int) -> None:
+        values = [
+            0x0000 if char == " " else TITLE_MAIN_MENU_BYTE_BY_CHAR[char]
+            for char in text
+        ]
+        if len(values) > capacity:
+            raise ValueError(
+                f"title main-menu text needs {len(values)} cells, only {capacity}: {text!r}"
+            )
+        values.extend([0x0000] * (capacity - len(values)))
+        for index, value in enumerate(values):
+            put16(data, offset + index * 2, value)
+        put16(data, offset + capacity * 2, terminator)
+
+    write_text(
+        TITLE_MAIN_MENU_START_OFFSET,
+        TITLE_MAIN_MENU_START_CAPACITY,
+        TITLE_MAIN_MENU_START_TEXT,
+        0xFFFE,
+    )
+    write_text(
+        TITLE_MAIN_MENU_LOAD_OFFSET,
+        TITLE_MAIN_MENU_LOAD_CAPACITY,
+        TITLE_MAIN_MENU_LOAD_TEXT,
+        0xFFFF,
+    )
+
+
 def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
     if len(ptrs) != len(ITEM_NAME_PATCHES):
@@ -4446,11 +4580,47 @@ def _build_byte_ui_ending_result_renderer() -> bytes:
     return bytes(wrapper)
 
 
+def _build_title_credit_font_loader() -> bytes:
+    request = 0x8000 | TITLE_CREDIT_RESOURCE_INDEX
+    return (
+        bytes.fromhex("30 3C")
+        + request.to_bytes(2, "big")
+        + bytes.fromhex("32 7C")
+        + (TITLE_CREDIT_TILE_START * 32).to_bytes(2, "big")
+        + bytes.fromhex("4E B9 00 00 99 B2")
+        # Restore the source setup overwritten by the hook.
+        + bytes.fromhex("30 3C 81 89 32 7C 20 00 4E 75")
+    )
+
+
+def _build_title_credit_renderer() -> bytes:
+    def render_record(d2: int, record: int) -> bytes:
+        return (
+            bytes.fromhex("22 78 81 C4")
+            + bytes.fromhex("32 3C 80 00")
+            + bytes.fromhex("34 3C")
+            + d2.to_bytes(2, "big")
+            + bytes.fromhex("45 F9")
+            + record.to_bytes(4, "big")
+            + bytes.fromhex("48 E7 9F 9E")
+            + bytes.fromhex("4E B9 00 02 D9 86")
+            + bytes.fromhex("4C DF 79 F9")
+            + bytes.fromhex("21 C9 81 C4")
+        )
+
+    return (
+        render_record(0xCB18, 0x0A44F8)
+        + render_record(0xCC1C, TITLE_CREDIT_TEXT_RECORD)
+        + bytes.fromhex("4E 75")
+    )
+
+
 def install_byte_ui_extension(
     data: bytearray,
     font: ImageFont.FreeTypeFont,
     index_by_char: dict[str, int],
     tile_by_index: list[int],
+    font_tiles: bytes | bytearray,
 ) -> None:
     first_pointer = be32(data, BYTE_UI_FONT_RESOURCE_TABLE) & 0x00FFFFFF
     table_size = first_pointer - BYTE_UI_FONT_RESOURCE_TABLE
@@ -4460,7 +4630,7 @@ def install_byte_ui_extension(
             f"got {table_size // 4}"
         )
 
-    resource_count = BYTE_UI_RESOURCE_COUNT + 1 + len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS)
+    resource_count = BYTE_UI_RESOURCE_COUNT + 2 + len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS)
     table_end = BYTE_UI_EXT_RESOURCE_TABLE + resource_count * 4
     if table_end > BYTE_UI_EXT_RESOURCE_BASE:
         raise ValueError("relocated compressed resource table overlaps extension resource")
@@ -4516,6 +4686,34 @@ def install_byte_ui_extension(
         data[resource_cursor : resource_cursor + len(segment_resource)] = segment_resource
         resource_cursor += len(segment_resource)
 
+    title_tiles = bytearray(
+        font_tiles[TITLE_CREDIT_TILE_START * 32 : (TITLE_CREDIT_TILE_END + 1) * 32]
+    )
+    if len(title_tiles) != TITLE_CREDIT_TILE_COUNT * 32:
+        raise ValueError("title credit font slice is outside the base byte font")
+    for tile, char in TITLE_CREDIT_TILE_OVERRIDES.items():
+        start = (tile - TITLE_CREDIT_TILE_START) * 32
+        bitmap = TITLE_CREDIT_BITMAP_OVERRIDES.get(tile)
+        title_tiles[start : start + 32] = (
+            _encode_byte_ui_bitmap(bitmap)
+            if bitmap is not None
+            else render_byte_ui_tile(char, font)
+        )
+    title_resource = bytes([0x03]) + compress_9dfe_literals(bytes(title_tiles))
+    if resource_cursor + len(title_resource) > BYTE_UI_FULL_EXT_RESOURCE_LIMIT:
+        raise ValueError("title credit font resource exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[resource_cursor : resource_cursor + len(title_resource)]
+    ):
+        raise ValueError("title credit font resource area is not blank")
+    put32(
+        data,
+        BYTE_UI_EXT_RESOURCE_TABLE + TITLE_CREDIT_RESOURCE_INDEX * 4,
+        resource_cursor,
+    )
+    data[resource_cursor : resource_cursor + len(title_resource)] = title_resource
+
     tile_table_end = BYTE_UI_LOCAL_TILE_TABLE + len(tile_by_index) * 2
     if tile_table_end > BYTE_UI_LOCAL_TILE_TABLE_LIMIT:
         raise ValueError("full byte UI tile lookup table exceeds reserved bank")
@@ -4549,6 +4747,8 @@ def install_byte_ui_extension(
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
     final_bank_loader = _build_byte_ui_final_bank_loader()
     ending_result_renderer = _build_byte_ui_ending_result_renderer()
+    title_credit_font_loader = _build_title_credit_font_loader()
+    title_credit_renderer = _build_title_credit_renderer()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -4573,6 +4773,8 @@ def install_byte_ui_extension(
         BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE: prep_hire_class_renderer,
         BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
         BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
+        TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
+        TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
     }
     for offset, payload in routines.items():
@@ -4586,6 +4788,39 @@ def install_byte_ui_extension(
         if data[offset : offset + 6] != BYTE_UI_FONT_LOAD_CALL_ORIGINAL:
             raise ValueError(f"byte-font load call changed at 0x{offset:06X}")
         data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_FONT_LOAD_ROUTINE.to_bytes(4, "big")
+    title_credit_record_end = TITLE_CREDIT_TEXT_RECORD + len(TITLE_CREDIT_RECORD_BYTES)
+    if any(
+        value != 0xFF
+        for value in data[TITLE_CREDIT_TEXT_RECORD:title_credit_record_end]
+    ):
+        raise ValueError("title credit text record area is not blank")
+    data[TITLE_CREDIT_TEXT_RECORD:title_credit_record_end] = TITLE_CREDIT_RECORD_BYTES
+    if data[
+        TITLE_CREDIT_FONT_LOAD_HOOK :
+        TITLE_CREDIT_FONT_LOAD_HOOK + len(TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL)
+    ] != TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL:
+        raise ValueError("title credit font-load hook source changed")
+    data[
+        TITLE_CREDIT_FONT_LOAD_HOOK :
+        TITLE_CREDIT_FONT_LOAD_HOOK + len(TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL)
+    ] = (
+        bytes.fromhex("4E B9")
+        + TITLE_CREDIT_FONT_LOAD_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 71")
+    )
+    if data[
+        TITLE_COPYRIGHT_RENDER_HOOK :
+        TITLE_COPYRIGHT_RENDER_HOOK + len(TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL)
+    ] != TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL:
+        raise ValueError("title copyright renderer hook source changed")
+    data[
+        TITLE_COPYRIGHT_RENDER_HOOK :
+        TITLE_COPYRIGHT_RENDER_HOOK + len(TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL)
+    ] = (
+        bytes.fromhex("4E F9")
+        + TITLE_CREDIT_RENDER_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 71")
+    )
     for offset in BYTE_UI_WORD_RENDER_CALLS:
         if data[offset : offset + 6] != BYTE_UI_WORD_RENDER_CALL_ORIGINAL:
             raise ValueError(f"byte word-render call changed at 0x{offset:06X}")
@@ -4762,7 +4997,7 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
     put32(data, resource_table_entry, BYTE_UI_FONT_RESOURCE_RELOC_BASE)
     local_index_by_char, local_tile_by_index = build_byte_ui_local_mapping(code_by_char)
     install_byte_ui_extension(
-        data, font, local_index_by_char, local_tile_by_index
+        data, font, local_index_by_char, local_tile_by_index, font_tiles
     )
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
@@ -5406,6 +5641,7 @@ def main() -> None:
         patch_start_menu(data, glyph_by_char)
         patch_start_submenus(data, glyph_by_char)
         patch_title_load_screen(data, glyph_by_char)
+        patch_title_main_menu(data)
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)

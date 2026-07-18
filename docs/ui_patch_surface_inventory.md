@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 104
-- Byte-modified declarations: 103
+- Declared patches: 111
+- Byte-modified declarations: 110
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -35,6 +35,13 @@ closed merely because every known patch declaration changed bytes.
 | title_load_header_fallback | 1 | 1 |
 | title_load_header_hook | 1 | 1 |
 | title_load_header_relocation | 1 | 1 |
+| title_main_menu_record | 1 | 1 |
+| title_credit_font_load_hook | 1 | 1 |
+| title_credit_render_hook | 1 | 1 |
+| title_credit_font_load_routine | 1 | 1 |
+| title_credit_render_routine | 1 | 1 |
+| title_credit_text_record | 1 | 1 |
+| title_credit_resource_pointer | 1 | 1 |
 
 ## Compressed Byte UI Font
 

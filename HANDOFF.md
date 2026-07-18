@@ -5192,3 +5192,41 @@ contains 57 safe syllables as documented below and in
   individually instead of retaining a blanket save/load gap. All 250 unit
   tests pass, and the production build reproduces checksum `B65D` with the
   established 861 custom glyphs still at `0x7000..0x735D`.
+
+### First-Title Credit And Main Menu Localization (2026-07-18)
+
+- The first title screen's byte-font load at `0x02D664` already passes through
+  the generic localized font loader. The following source setup at `0x02D66A`
+  is hooked to wrapper `0x2B7E20`, which queues new compressed resource 436 at
+  VRAM tile `0x3A` and then restores the overwritten resource `0x8189` setup.
+  The title-only resource copies the patched base slice `0x3A..0x73`, replaces
+  only `:`, `한글화`, menu syllables, and the lowercase `hsp` bitmaps, and is
+  reloaded only on this title path. It does not permanently steal gameplay
+  mappings or the lowercase terrain/icon slots.
+- Copyright renderer entry `0x02D712` jumps to `0x2B7E40`. The wrapper renders
+  the untouched source record at `0x0A44F8` to Plane C row 22 and then the new
+  record at `0x2B7EC0` to row 24. The centered visible text is
+  `한글화: hsp1324`; the requested lowercase ID uses dedicated thick pixel
+  bitmaps because the stock lowercase slots are not a coherent Latin font.
+- The first menu record is locked at `0x0A3146`. Its five-cell START payload at
+  `0x0A3158` is `새 게임` plus padding and keeps `FFFE`; its four-cell LOAD
+  payload at `0x0A3164` is `불러오기` and keeps `FFFF`. This renderer consumes
+  8x8 byte-font IDs, not global 16x16 glyph IDs. An initial `CECC` experiment
+  used global glyph IDs and visibly produced garbage; do not repeat that
+  approach. The accepted mapping uses title-only byte slots `0x61..0x67`.
+- Production checksum is `F04E`, with the established 861 custom glyphs still
+  at `0x7000..0x735D`. `captures/run/f04e_title_credit_live.png` proves the
+  centered credit while preserving the original prompt and copyright;
+  `captures/run/f04e_title_main_menu_live.png` proves both localized menu rows.
+  `captures/run/f04e_title_new_game_entry.png` proves that
+  `새 게임` reaches Korean name entry. `captures/run/f04e_title_load_entry.png`
+  proves that `불러오기` reaches the localized LOAD screen and preserves the
+  right-side scenario number. The preserved valid Scenario 2 manual slot then
+  entered the built-in selector and reached target Scenario 14; the route frame
+  is `captures/run/f04e_scenario_select_14.png`.
+- `tests/test_title_main_screen.py` locks the Japanese menu record, menu
+  terminators, title hooks/routines/record boundaries, and every tile in the
+  separate compressed font resource. The generated UI inventory declares all
+  seven newly owned surfaces as reviewed and live verified. All 257 unit tests
+  pass; the direct-word inventory still has 783 classified candidates and no
+  unclassified entry.

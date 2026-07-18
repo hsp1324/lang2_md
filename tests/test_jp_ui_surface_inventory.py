@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 104)
-        self.assertEqual(self.result["modified_patch_count"], 103)
+        self.assertEqual(self.result["declared_patch_count"], 111)
+        self.assertEqual(self.result["modified_patch_count"], 110)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -41,6 +41,26 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertFalse(by_target["다음 시나리오"]["live_verified"])
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["modified"] for row in rows))
+
+    def test_title_credit_and_main_menu_are_live_verified(self):
+        title_groups = {
+            "title_main_menu_record",
+            "title_credit_font_load_hook",
+            "title_credit_render_hook",
+            "title_credit_font_load_routine",
+            "title_credit_render_routine",
+            "title_credit_text_record",
+            "title_credit_resource_pointer",
+        }
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] in title_groups
+        ]
+        self.assertEqual({row["group"] for row in rows}, title_groups)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_ending_status_labels_are_declared(self):
         rows = [

@@ -244,6 +244,63 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    for group, offset, size, target in (
+        (
+            "title_main_menu_record",
+            builder.TITLE_MAIN_MENU_RECORD,
+            len(builder.TITLE_MAIN_MENU_RECORD_ORIGINAL) * 2,
+            "새 게임 / 불러오기",
+        ),
+        (
+            "title_credit_font_load_hook",
+            builder.TITLE_CREDIT_FONT_LOAD_HOOK,
+            len(builder.TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL),
+            "title-only Korean/ID font resource loader",
+        ),
+        (
+            "title_credit_render_hook",
+            builder.TITLE_COPYRIGHT_RENDER_HOOK,
+            len(builder.TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL),
+            "copyright plus Korean localization credit renderer",
+        ),
+        (
+            "title_credit_font_load_routine",
+            builder.TITLE_CREDIT_FONT_LOAD_ROUTINE,
+            len(builder._build_title_credit_font_loader()),
+            "load title-only byte-font slice and restore source setup",
+        ),
+        (
+            "title_credit_render_routine",
+            builder.TITLE_CREDIT_RENDER_ROUTINE,
+            len(builder._build_title_credit_renderer()),
+            "render copyright and 한글화: hsp1324",
+        ),
+        (
+            "title_credit_text_record",
+            builder.TITLE_CREDIT_TEXT_RECORD,
+            len(builder.TITLE_CREDIT_RECORD_BYTES),
+            builder.TITLE_CREDIT_TEXT,
+        ),
+        (
+            "title_credit_resource_pointer",
+            builder.BYTE_UI_EXT_RESOURCE_TABLE
+            + builder.TITLE_CREDIT_RESOURCE_INDEX * 4,
+            4,
+            f"compressed title byte-font resource {builder.TITLE_CREDIT_RESOURCE_INDEX}",
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
     resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
     original_resource = int.from_bytes(japanese[resource_entry : resource_entry + 4], "big")
     current_resource = int.from_bytes(korean[resource_entry : resource_entry + 4], "big")
