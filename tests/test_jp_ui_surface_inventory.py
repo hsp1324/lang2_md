@@ -26,7 +26,7 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["reviewed"] for row in name_rows))
         self.assertTrue(all(row["live_verified"] for row in name_rows))
 
-    def test_title_load_states_are_declared_conservatively(self):
+    def test_title_load_and_save_fixed_records_are_live_verified(self):
         rows = [
             row
             for row in self.result["declared_patches"]
@@ -38,9 +38,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(by_target["시나리오"]["live_verified"])
         self.assertTrue(by_target["손상된 데이터"]["live_verified"])
         self.assertTrue(by_target["데이터 없음"]["live_verified"])
-        self.assertFalse(by_target["다음 시나리오"]["live_verified"])
+        self.assertTrue(by_target["다음 시나리오"]["live_verified"])
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["modified"] for row in rows))
+
+        save_headers = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] == "title_save_header"
+        ]
+        self.assertEqual(len(save_headers), 1)
+        self.assertTrue(save_headers[0]["live_verified"])
 
     def test_title_credit_and_main_menu_are_live_verified(self):
         title_groups = {

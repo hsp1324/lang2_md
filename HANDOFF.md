@@ -5255,7 +5255,27 @@ contains 57 safe syllables as documented below and in
   non-overlapping `불러오기2` selector header, and
   `captures/run/f04c_scenario_select_14.png` proves the selector still reaches
   Scenario 14.
-- The fixed record at `0x0A311A` is still translated as `다음 시나리오`, but
-  neither the ordinary nor selector-entry reference exposes it visibly. Keep
-  its inventory row `live_verified: false` until a runtime-visible owner is
-  captured. The title SAVE header at `0x0A312A` also remains unverified.
+- The fixed record at `0x0A311A` is translated as `다음 시나리오`, but neither
+  the ordinary nor selector-entry LOAD screen exposes it. The following SAVE
+  renderer probe establishes its actual visible owner.
+
+### Title SAVE Fixed-Text Renderer Probe (2026-07-19)
+
+- The stock title SAVE renderer is entry `0x029B70`; the normal title LOAD
+  renderer is `0x029D76`. `tools/build_title_save_probe_rom.py` validates the
+  two LOAD wrapper operands at `0x02A40C` and `0x02A41C`, redirects only those
+  operands to SAVE, and updates the ignored diagnostic ROM checksum. Its unit
+  test permits changes only in those eight operand bytes and checksum bytes.
+- Probe checksum `EC40` reaches the real SAVE renderer through the localized
+  title menu. `captures/run/ec40_title_save_renderer_probe.png` visibly proves
+  the `저장` header from `0x0A312A` and the lower `다음 시나리오` record from
+  `0x0A311A`. These two fixed surfaces are now `live_verified: true` in the UI
+  inventory.
+- This title redirect does not provide the current scenario-clear work RAM.
+  The colored central dynamic sprites in the diagnostic frame are therefore
+  invalid test context, not a production patch result. Attempts to set only
+  `$A49C=2`, clear D5, and copy a valid manual SRAM did not change them; do not
+  repeat those partial initializations. Full dynamic-slot verification remains
+  attached to a normal scenario-clear run.
+- All 262 unit tests pass. The generated UI inventory still has 111 declared
+  surfaces, 110 byte-modified surfaces, and eight explicit remaining gaps.

@@ -189,6 +189,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         0x0A30E8,  # 시나리오
         0x0A30F2,  # 손상된 데이터
         0x0A3106,  # 데이터 없음
+        0x0A311A,  # 다음 시나리오 (title SAVE renderer probe)
     }
     for offset, (capacity, target) in builder.TITLE_LOAD_RECORDS.items():
         rows.append(
@@ -208,7 +209,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             builder.TITLE_SAVE_HEADER_RECORD,
             len(builder.TITLE_SAVE_HEADER_ORIGINAL) * 2,
             "저장",
-            False,
+            True,
         ),
         (
             "title_load_header_fallback",
@@ -330,7 +331,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
             "runtime verification of class-change navigation and dynamic class candidates",
-            "runtime-visible ownership of title record 0x0A311A ('다음 시나리오') and title SAVE header verification",
+            "production-path scenario-clear verification of the title SAVE screen's dynamic data",
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",
             "all equipment and shop variants beyond declared Scenario 1 paths",

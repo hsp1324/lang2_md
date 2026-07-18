@@ -53,7 +53,7 @@ Resource table `0x0B0000` index 1 uses entry
 
 - arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
 - runtime verification of class-change navigation and dynamic class candidates
-- runtime-visible ownership of title record 0x0A311A ('다음 시나리오') and title SAVE header verification
+- production-path scenario-clear verification of the title SAVE screen's dynamic data
 - all ending and credits UI outside known opening/ending dialogue patches
 - all magic/summon targeting and result prompts
 - all equipment and shop variants beyond declared Scenario 1 paths
