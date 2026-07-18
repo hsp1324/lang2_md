@@ -3573,7 +3573,7 @@ contains 57 safe syllables as documented below and in
   preparation transition. The first preparation page contains
   `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
   `키스/호크나이트`. Following `>>` reveals a second page with
-  `레스터/크루세이더`, `제시카/소서러`, and `스코트/파이터`.
+  `레스터/크로코나이트`, `제시카/소서러`, and `스코트/파이터`.
   `85f1_s16_roster_wrap_page1.png` records the return through `<<`, proving
   both pages and all eight selectable commanders were covered.
 - Arrangement, automatic deployment, and all eight opening confirmations were
@@ -3598,7 +3598,7 @@ contains 57 safe syllables as documented below and in
 - All eight `황제와 어둠의 왕자` briefing confirmations were reviewed. The
   complete preparation roster has eight selectable commanders across two
   pages: `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
-  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `키스/호크나이트`, `레스터/크로코나이트`, `제시카/소서러`, and
   `스코트/파이터`. The run followed `>>` and then `<<` back to page one;
   preparation coverage is not inferred from the first five visible rows.
 - The initial 85F1 opening review exposed three renderer-specific wrapping
@@ -3631,7 +3631,7 @@ contains 57 safe syllables as documented below and in
 - All eight `어둠의 공주` briefing confirmations were reviewed. The complete
   preparation roster again has eight selectable commanders across both pages:
   `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
-  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `키스/호크나이트`, `레스터/크로코나이트`, `제시카/소서러`, and
   `스코트/파이터`. The `>>`/`<<` round trip is retained as evidence that the
   second page was not omitted.
 - Live 12D3 exposed an awkward token order at `0x1A497A`: `인간은 마물의
@@ -3661,7 +3661,7 @@ contains 57 safe syllables as documented below and in
 - All six `미레일 항구 전투` briefing confirmations were reviewed. The
   preparation roster was followed through both pages and back to page one:
   `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
-  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `키스/호크나이트`, `레스터/크로코나이트`, `제시카/소서러`, and
   `스코트/파이터`. This eight-row round trip is retained as evidence; the
   first five visible rows are not treated as complete coverage.
 - The opening review exposed `다크 프린세스` at `0x1A6556`, inconsistent
@@ -3723,7 +3723,7 @@ contains 57 safe syllables as documented below and in
 - Names alone are not accepted as class coverage. Opening `장비착용` makes the
   left commander list selectable without changing equipment. Walking that
   list verified `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
-  `키스/호크나이트`, `레스터/크루세이더`, `제시카/소서러`, and
+  `키스/호크나이트`, `레스터/크로코나이트`, `제시카/소서러`, and
   `스코트/파이터`. In this selector, horizontal input changes roster pages
   while the left list owns focus. Press Right to transfer focus to the
   equipment choices; skipping all three slots is required before the main
@@ -4145,10 +4145,11 @@ contains 57 safe syllables as documented below and in
   `_10.png`; `_14.png` is a stable Elwin command menu. The slower interval
   avoids treating a partially drawn text frame as a broken glyph.
 - The complete selectable preparation roster is 엘윈/파이터, 헤인/워록,
-  쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더,
+  쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트,
   제시카/세이지, and 스코트/파이터. An enlarged nearest-neighbor crop
   resolved the small Keith label as `호크나이트`; it was initially misread as
-  `크루세이더`, which belongs to Lester. Verify tiny class text with an
+  `크루세이더`. The later source-table review confirms Lester is
+  `크로코나이트`; verify tiny class text against the original class ID and an
   enlarged crop before changing source data.
 - `c1c9_s22_conditions.png` shows victory `적 전멸` and defeat
   `주인공 사망`/`제시카 사망`. The no-action first turn captured all four
@@ -4162,7 +4163,7 @@ contains 57 safe syllables as documented below and in
 - Current playback followed both `지휘관배치` pages rather than treating the
   first five visible rows as the full roster. The nine selectable commander
   and class pairs are `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`,
-  `아론/파이터`, `키스/호크나이트`, `레스터/크루세이더`,
+  `아론/파이터`, `키스/호크나이트`, `레스터/크로코나이트`,
   `스코트/파이터`, `리아나/클레릭`, and `라나/클레릭`. Equipment panels
   were inspected without confirming or changing any equipment.
 - Attempting to deploy before assigning positions exposed the shared warning
@@ -4200,7 +4201,7 @@ contains 57 safe syllables as documented below and in
 - Both arrangement pages and the complete nine-commander equipment selector
   were inspected. The roster and class pairs are identical to Scenario 23:
   `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
-  `키스/호크나이트`, `레스터/크루세이더`, `스코트/파이터`,
+  `키스/호크나이트`, `레스터/크로코나이트`, `스코트/파이터`,
   `리아나/클레릭`, and `라나/클레릭`. No equipment was confirmed or
   changed. Small labels were checked from enlarged nearest-neighbor sheets.
 - Automatic deployment and all nineteen opening confirmations review the
@@ -4280,7 +4281,7 @@ contains 57 safe syllables as documented below and in
   page capacity and continuation controls must remain intact.
 - Both preparation pages and all ten class panels were checked. The complete
   roster is `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`,
-  `키스/호크나이트`, `레스터/크루세이더`, `스코트/파이터`,
+  `키스/호크나이트`, `레스터/크로코나이트`, `스코트/파이터`,
   `리아나/클레릭`, `라나/클레릭`, and `제시카/소서러`. Representative
   captures include `eca0_s26_arrange_roster1.png`, `_roster2.png`,
   `_equipment_keith2.png`, and `_equipment_jessica.png`.
@@ -4969,3 +4970,28 @@ contains 57 safe syllables as documented below and in
   the current remote environment. Reliable review used 0.4-second direction
   holds and 0.25-second C/B holds. This is an input-delivery issue, not a game
   reset or localization defect; use those timings for future menu traversal.
+
+### Current 212A Scenario 25 Preparation And Lester Class Correction (2026-07-18)
+
+- The complete Scenario 25 preparation roster was checked again in current
+  production, including both horizontal pages. Page one contains
+  `엘윈/파이터`, `헤인/워록`, `쉐리/파이터`, `아론/파이터`, and
+  `키스/호크나이트`; page two contains `레스터/크로코나이트`,
+  `스코트/파이터`, `리아나/클레릭`, and `라나/클레릭`.
+- Each of the nine rows was opened through `장비착용` so class coverage is
+  based on the live detail panel rather than the name-only arrangement list.
+  Evidence is `212a_s25_equipment_commander_01.png` through `_09.png`, plus
+  `212a_s25_arrangement_roster1.png` and `_roster2.png`. Names, classes,
+  `LV`, `AT`, `DF`, `MV`, `MP`, command range, and correction labels render
+  without Japanese residue or damaged glyphs. `SCENARIO 25` is also intact.
+- Earlier HANDOFF and inventory entries called Lester a `크루세이더`. That
+  was a visual misread, not ROM ground truth. Global class ID 7 has original
+  string `ｸﾛｺﾅｲﾄ` in `localization/global_strings.json` and maps to
+  `크로코나이트`; `tools/jp_byte_table_analyzer.py` and the Scenario 10
+  source-data regression independently agree. All Lester roster notes were
+  corrected, while Jessica's separately verified class records were left
+  unchanged.
+- Horizontal page changes and selection movement were reliable with 0.4-second
+  directional holds. Pressing Down on Keith wraps within page one; Right must
+  be used to reach Lester and the remaining four rows. Scenario 25
+  `preparation` is now `verified_current`.

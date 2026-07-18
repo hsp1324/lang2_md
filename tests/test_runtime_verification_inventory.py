@@ -434,6 +434,25 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/212a_s25_description_current_15.png",
         ):
             self.assertIn(capture, scenario25["captures"])
+        self.assertEqual(scenario25["preparation"], "verified_current")
+        for capture in (
+            "captures/run/212a_s25_prep_current.png",
+            "captures/run/212a_s25_equipment_commander_01.png",
+            "captures/run/212a_s25_equipment_commander_02.png",
+            "captures/run/212a_s25_equipment_commander_03.png",
+            "captures/run/212a_s25_equipment_commander_04.png",
+            "captures/run/212a_s25_equipment_commander_05.png",
+            "captures/run/212a_s25_equipment_commander_06.png",
+            "captures/run/212a_s25_equipment_commander_07.png",
+            "captures/run/212a_s25_equipment_commander_08.png",
+            "captures/run/212a_s25_equipment_commander_09.png",
+            "captures/run/212a_s25_arrangement_roster1.png",
+            "captures/run/212a_s25_arrangement_roster2.png",
+        ):
+            self.assertIn(capture, scenario25["captures"])
+        self.assertIn("ｸﾛｺﾅｲﾄ", scenario25["note"])
+        self.assertIn("레스터/크로코나이트", scenario25["note"])
+        self.assertNotIn("레스터/크루세이더", scenario25["note"])
         self.assertEqual(scenario26["description"], "verified_current")
         for capture in (
             "captures/run/212a_s26_description_current_01.png",
