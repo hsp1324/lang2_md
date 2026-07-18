@@ -1201,7 +1201,7 @@
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
-      "battle_ui": "pending",
+      "battle_ui": "verified_current",
       "turn_events": "verified_current",
       "completion": "pending",
       "branches_endings": "pending",
@@ -1219,10 +1219,13 @@
         "captures/run/eca0_s28_opening_20.png",
         "captures/run/eca0_s28_conditions.png",
         "captures/run/eca0_s28_turn1_01.png",
+        "captures/run/eca0_s28_turn1_34.png",
+        "captures/run/eca0_s28_turn1_35.png",
+        "captures/run/eca0_s28_turn1_36.png",
         "captures/run/eca0_s28_turn1_62.png",
         "captures/run/eca0_s28_turn1_64.png"
       ],
-      "note": "Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, Lester, Aaron, Sherry, and Jessica with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Scenario-specific battle presentation, completion, and conditional branches remain pending."
+      "note": "Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, the complete no-action first turn, and its live battle presentation without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, Lester, Aaron, Sherry, and Jessica with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 34-36 retain a complete 바바리안 versus 워록 battle from 10 VS 10 through 0 VS 3. Both class labels, portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact. The first turn also retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Completion and conditional branches remain pending."
     },
     {
       "scenario": 29,
@@ -1230,7 +1233,7 @@
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
-      "battle_ui": "pending",
+      "battle_ui": "verified_current",
       "turn_events": "verified_current",
       "completion": "pending",
       "branches_endings": "pending",
@@ -1247,12 +1250,18 @@
         "captures/run/eca0_s29_opening_09.png",
         "captures/run/eca0_s29_conditions.png",
         "captures/run/eca0_s29_turn1_01.png",
+        "captures/run/eca0_s29_turn1_18.png",
+        "captures/run/eca0_s29_turn1_20.png",
+        "captures/run/eca0_s29_turn1_49.png",
+        "captures/run/eca0_s29_turn1_50.png",
+        "captures/run/eca0_s29_turn1_72.png",
+        "captures/run/eca0_s29_turn1_74.png",
         "captures/run/eca0_s29_turn1_51.png",
         "captures/run/eca0_s29_turn1_76.png",
         "captures/run/eca0_s29_turn1_93.png",
         "captures/run/eca0_s29_turn1_95.png"
       ],
-      "note": "Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, Keith, Aaron, Elwin, and Scott with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. Like the source, the title uses X2 while the battle status bar uses SCENARIO ?2. Scenario-specific battle presentation, completion, and conditional branches remain pending."
+      "note": "Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, the complete no-action first turn, and three live battle matchups without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, Keith, Aaron, Elwin, and Scott with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 18-20 verify 리자드맨 versus 파이터, frames 49-50 verify 드래곤나이트 versus 파이터, and frames 72-74 verify 고렘 versus 호크나이트. Portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact in every matchup. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. Like the source, the title uses X2 while the battle status bar uses SCENARIO ?2. Completion and conditional branches remain pending."
     },
     {
       "scenario": 30,

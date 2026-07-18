@@ -482,14 +482,33 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario28["preparation"], "verified_current")
         self.assertEqual(scenario28["opening_events"], "verified_current")
         self.assertEqual(scenario28["turn_events"], "verified_current")
-        self.assertEqual(scenario28["battle_ui"], "pending")
+        self.assertEqual(scenario28["battle_ui"], "verified_current")
+        for capture in (
+            "captures/run/eca0_s28_turn1_34.png",
+            "captures/run/eca0_s28_turn1_35.png",
+            "captures/run/eca0_s28_turn1_36.png",
+        ):
+            self.assertIn(capture, scenario28["captures"])
+        self.assertIn("바바리안 versus 워록", scenario28["note"])
         self.assertIn("captures/run/eca0_s28_turn1_64.png", scenario28["captures"])
         self.assertEqual(scenario29["description"], "verified_current")
         self.assertEqual(scenario29["conditions"], "verified_current")
         self.assertEqual(scenario29["preparation"], "verified_current")
         self.assertEqual(scenario29["opening_events"], "verified_current")
         self.assertEqual(scenario29["turn_events"], "verified_current")
-        self.assertEqual(scenario29["battle_ui"], "pending")
+        self.assertEqual(scenario29["battle_ui"], "verified_current")
+        for capture in (
+            "captures/run/eca0_s29_turn1_18.png",
+            "captures/run/eca0_s29_turn1_20.png",
+            "captures/run/eca0_s29_turn1_49.png",
+            "captures/run/eca0_s29_turn1_50.png",
+            "captures/run/eca0_s29_turn1_72.png",
+            "captures/run/eca0_s29_turn1_74.png",
+        ):
+            self.assertIn(capture, scenario29["captures"])
+        self.assertIn("리자드맨 versus 파이터", scenario29["note"])
+        self.assertIn("드래곤나이트 versus 파이터", scenario29["note"])
+        self.assertIn("고렘 versus 호크나이트", scenario29["note"])
         self.assertIn("captures/run/eca0_s29_turn1_95.png", scenario29["captures"])
         self.assertEqual(scenario30["description"], "verified_current")
         self.assertEqual(scenario30["conditions"], "verified_current")

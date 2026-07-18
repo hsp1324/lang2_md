@@ -4995,3 +4995,20 @@ contains 57 safe syllables as documented below and in
   directional holds. Pressing Down on Keith wraps within page one; Right must
   be used to reach Lester and the remaining four rows. Scenario 25
   `preparation` is now `verified_current`.
+
+### Current ECA0 Secret Scenario Battle UI Evidence (2026-07-18)
+
+- Existing first-turn capture sequences for secret Scenarios X1 and X2 were
+  re-audited frame by frame. They contain live battle presentations that had
+  been omitted from the runtime inventory status; no ROM patch was required.
+- Scenario X1 frames `eca0_s28_turn1_34.png` through `_36.png` show a complete
+  `바바리안` versus `워록` battle from 10 VS 10 to 0 VS 3. Both class
+  labels, portraits, troop counts, AT/DF base and correction values, terrain
+  percentages, and the centered `-AT-`/`-DF-` labels are intact.
+- Scenario X2 frames `_18.png` through `_20.png`, `_49.png` through `_50.png`,
+  and `_72.png` through `_74.png` cover `리자드맨/파이터`,
+  `드래곤나이트/파이터`, and `고렘/호크나이트` matchups. All shared
+  battle labels and all six class names render without Japanese residue,
+  damaged glyphs, clipping, reset, or freeze.
+- Scenario 28 and 29 `battle_ui` are therefore `verified_current`. This does
+  not promote their still-pending completion or conditional branch surfaces.
