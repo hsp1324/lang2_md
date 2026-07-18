@@ -35,7 +35,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 22 | current | current | current | current | pending | current | pending | pending | 37 |
 | 23 | current | current | current | current | pending | current | pending | pending | 27 |
 | 24 | current | current | current | current | pending | current | pending | pending | 26 |
-| 25 | progressed | current | progressed | current | current | progressed | pending | pending | 15 |
+| 25 | current | current | progressed | current | current | progressed | pending | pending | 21 |
 | 26 | progressed | current | current | current | pending | current | pending | pending | 17 |
 | 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
 | 28 | current | current | current | current | pending | current | pending | pending | 15 |
@@ -830,7 +830,7 @@ Production 212A verifies the Scenario 24 route map, all 16 text-bearing scrollin
 
 ### Scenario 25
 
-Production 9C1F retains the current Scenario 25 대륙 최강의 기사 description and reaches preparation, automatic deployment, all 28 opening confirmations, the Korean conditions page, and the first-turn battle chain without reset or freeze. The opening was retranslated against the Japanese source and the corrected pages fit without clipping. Victory is 적 전멸 and defeat is 주인공 사망. The live event-spawned Jessica is class ID 9 소서러, LV5, AT29, DF17; it is not the hidden fixed-placement Warlock record. Four current battle captures verify 파이터, 워록, 로얄가드, and 소서러. The direct-map renderer formerly truncated localized tile IDs to eight bits, corrupting 로얄가드's 얄/가 and all of 소서러; production 9C1F preserves the full 16-bit IDs. Automatic confirmation continued through the defeat ending cinematic, proving the first-turn chain did not reset, but it did not retain every distinct dialogue frame, so turn events remain progressed rather than fully verified. Scenario clear, later turns, and branches remain pending.
+Production 212A verifies the Scenario 25 route map, all 14 text-bearing scrolling frames of 대륙 최강의 기사, and the preparation endpoint. Direct Japanese-ROM rendering confirms the cursed Velzeria castle, Emperor Bernhardt waiting in its depths with Alhazard, Leon and Egbert blocking the way, captive Jessica, and the imminent battle in which neither side can yield. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production 9C1F reached preparation, automatic deployment, all 28 opening confirmations, the Korean conditions page, and the first-turn battle chain without reset or freeze. Victory is 적 전멸 and defeat is 주인공 사망. The live event-spawned Jessica is class ID 9 소서러, LV5, AT29, DF17; it is not the hidden fixed-placement Warlock record. Four current battle captures verify 파이터, 워록, 로얄가드, and 소서러. The direct-map renderer formerly truncated localized tile IDs to eight bits, corrupting 로얄가드's 얄/가 and all of 소서러; production preserves the full 16-bit IDs. Automatic confirmation continued through the defeat ending cinematic, proving the first-turn chain did not reset, but it did not retain every distinct dialogue frame, so turn events remain progressed rather than fully verified. Scenario clear, later turns, and branches remain pending.
 
 - `captures/run/c7ab_s25_title.png`
 - `captures/run/c7ab_s25_body_mid.png`
@@ -847,6 +847,12 @@ Production 9C1F retains the current Scenario 25 대륙 최강의 기사 descript
 - `captures/run/9c1f_s25_battle3_paused.png`
 - `captures/run/9c1f_s25_battle4_paused.png`
 - `captures/run/9c1f_s25_turn1_finish_50.png`
+- `captures/run/212a_s25_description_current_01.png`
+- `captures/run/212a_s25_description_current_05.png`
+- `captures/run/212a_s25_description_current_08.png`
+- `captures/run/212a_s25_description_current_11.png`
+- `captures/run/212a_s25_description_current_14.png`
+- `captures/run/212a_s25_description_current_15.png`
 
 ### Scenario 26
 

@@ -4873,3 +4873,17 @@ contains 57 safe syllables as documented below and in
   residue, clipping, broken glyphs, isolated words, or abnormal spacing.
   Scenario 24 `description` is now `verified_current`, and BlastEm was left on
   its preparation screen.
+
+### Scenario 25 Description Runtime Verification (2026-07-18)
+
+- Scenario 25 was compared directly with Japanese-ROM render
+  `text_scenarios_24_mapped_040000_jp2bpp16.png`. The current Korean accurately
+  preserves cursed Velzeria castle, Bernhardt waiting in its depths with
+  Alhazard, Leon and Egbert blocking the way, captive Jessica, and the battle
+  in which neither side can yield. No translation or layout change was needed.
+- Production 212A `212a_s25_description_current_00.png` through `_15.png`
+  retain the route map, all 14 text-bearing `대륙 최강의 기사` frames, and the
+  preparation endpoint. Every page is natural Korean without Japanese
+  residue, clipping, broken glyphs, isolated words, or abnormal spacing.
+  Scenario 25 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.
