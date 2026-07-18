@@ -26,7 +26,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 13 | current | current | current | current | current | progressed | pending | pending | 35 |
 | 14 | current | current | current | current | probe | progressed | pending | pending | 31 |
 | 15 | current | current | current | current | probe | progressed | pending | pending | 24 |
-| 16 | progressed | current | current | current | probe | progressed | pending | pending | 20 |
+| 16 | current | current | current | current | probe | progressed | pending | pending | 26 |
 | 17 | progressed | current | current | current | current | progressed | pending | pending | 24 |
 | 18 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
 | 19 | progressed | current | current | current | probe | progressed | pending | pending | 21 |
@@ -533,7 +533,7 @@ Production B4C1 verifies the Scenario 15 route map, all 19 text-bearing scrollin
 
 ### Scenario 16
 
-All eight 레이갈드 제도 briefing confirmations, both preparation pages, a return to the first page, arrangement, automatic deployment, all eight opening confirmations, conditions, and the no-action first turn were visually reviewed on production 85F1. The five first-page commanders are 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, and 키스/호크나이트. The second page adds 레스터/크루세이더, 제시카/소서러, and 스코트/파이터, for eight selectable commanders total. Victory is 레온 격파 or 성문으로 이동; defeat is 주인공 사망. The first turn reviewed 레온/로얄가드 and 레아드/실버나이트 dialogue plus enemy movement, reached TURN 2, and returned to a valid Elwin command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x181D34 is separately covered by editor regressions for 레온/로얄가드, an imperial 드래곤로드, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending.
+Production 3FC0 verifies the Scenario 16 route map, all 25 text-bearing scrolling frames of 레이갈드 제도, and the preparation endpoint. Direct Japanese-ROM rendering confirmed that 大陸の大半 means 대륙 대부분, correcting the prior substantive mistranslation 대륙 절반. Explicit source rewrapping removes the isolated 황제, 한/세대, 성에, and 앞에는 lines. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified both preparation pages, the complete eight-commander roster, arrangement, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x181D34 is separately covered by editor regressions for 레온/로얄가드, an imperial 드래곤로드, and hidden 라나/다크프린세스. Later turns, completion, and branches remain pending.
 
 - `captures/run/85f1_s16_brief_live_01.png`
 - `captures/run/85f1_s16_brief_live_07.png`
@@ -555,6 +555,12 @@ All eight 레이갈드 제도 briefing confirmations, both preparation pages, a 
 - `captures/run/c7ab_s16_title.png`
 - `captures/run/c7ab_s16_body_3.png`
 - `captures/run/c7ab_s16_body_final2.png`
+- `captures/run/3fc0_s16_description_final_01.png`
+- `captures/run/3fc0_s16_description_final_07.png`
+- `captures/run/3fc0_s16_description_final_12.png`
+- `captures/run/3fc0_s16_description_final_17.png`
+- `captures/run/3fc0_s16_description_final_25.png`
+- `captures/run/3fc0_s16_description_final_26.png`
 
 ### Scenario 17
 

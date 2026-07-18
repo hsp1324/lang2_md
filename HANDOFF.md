@@ -4717,3 +4717,23 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `B4C1`, SHA-256
   `4bd245a30c44e4da9781490e2a7ccef5517922b048fe4b99dd8fe617aa784310`.
   BlastEm was left on the Scenario 15 preparation screen.
+- Scenario 16 was compared with the Japanese-ROM render
+  `text_scenarios_15_mapped_040000_jp2bpp16.png`. This exposed a substantive
+  mistranslation: `大陸の大半` means `대륙 대부분`, not `대륙 절반`.
+  The production text now preserves Bernhardt's founding of a nation in one
+  generation and conquest of most of the continent. Explicit source
+  rewrapping also removes the isolated `황제`, `한`/`세대`, `성에`, and
+  `앞에는` lines.
+- The changed description length relocates later description pointers inside
+  the existing expansion region, which is expected. The regenerated
+  783-record direct-string inventory has no token diff, so established global
+  glyph IDs for names, classes, and UI remain fixed; the total custom-glyph
+  count remains 859 (`7000-735B`).
+- Production 3FC0 `3fc0_s16_description_final_00.png` through `_26.png`
+  retain the route map, all 25 text-bearing `레이갈드 제도` frames, and the
+  preparation endpoint. All text is natural Korean without Japanese residue,
+  clipping, broken glyphs, or abnormal spacing. Scenario 16 `description` is
+  now `verified_current`.
+- Production checksum is `3FC0`, SHA-256
+  `9e82439c70338d4f19ff54c25061f96529acea1f58545a3c4902a15b95c4c4d1`.
+  BlastEm was left on the Scenario 16 preparation screen.
