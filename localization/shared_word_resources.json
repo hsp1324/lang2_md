@@ -970,9 +970,9 @@
           "glyph_pointer": "0x09C6A8",
           "current_glyph_pointer": "0x271330",
           "original_word_count": 291,
-          "current_word_count": 361,
+          "current_word_count": 323,
           "original_tokens": "FFFE 0000 0000 0000 0000 0000 0001 0002 0003 0004 0005 0006 0006 FFFE 0000 0000 0000 0000 0000 0007 0008 0009 000A 000B 000C 000D FFFE FFFE 0000 0008 0009 000E 000F 0010 0011 0012 0013 000A 0014 0015 0016 0017 0018 0019 001A 001B 001C FFF7 0001 001D 001E 001F 000A 0020 0021 0022 0023 001B 0024 0025 0026 0027 001B 0028 FFFE 0000 0029 0019 002A 0027 002B 002C 002D 001E 002E 002F 002E 002F 0030 0027 0031 0020 000A 0032 002F 0033 0025 0034 0035 000A 0036 002D 0037 0038 0039 003A 001B 003B 003C 002D 001E 003D 003E 0025 000A 0009 002F 003F 0040 0041 003A 0042 0027 001A 0028 0035 000A 003B 003C 000A 0043 0044 0045 002D 001E 0003 000E 0002 0023 0046 0047 002D 001B 0048 0049 000A 004A 004B 002F 004C 004D 0026 0047 0030 0042 0027 001A 000A 002F 004E 004F 001A 0028 FFFE 0000 0035 0030 0042 003B 003C 000A 0036 002D 001B 0026 0050 0051 0052 0016 001E 0053 0054 001B 0055 0056 0035 0034 0057 000F 0051 0010 000F 0052 000A 0058 002D 0027 001B 001F 000A 0059 005A 005B 0012 005C 000F 005D 0033 0054 001B 0028 0035 000A 005E 005F 0039 0026 0060 002F 003A 001A 0061 0062 000A 0063 0064 001E 0034 0027 002E 002E 0041 002D 000E 000F 0010 0011 0012 0013 000A 0065 0066 002F 0014 005F 003A 0046 0029 0023 0030 0042 0027 001A 0067 0016 0068 0069 0054 0042 0027 001B 0028 FFFE FFFE 006A 006B 006C 006D 006E FFFE 0000 006F 0070 000A 0071 0072 FFFE 006A 0073 0074 006D 006E FFFE 0000 006F FFF7 0001 000A 0075 0076 FFFE 0000 006F 0077 0078 0001 0079 000A 0075 0076 FFFF",
-          "target_korean": "시나리오 22\n알하자드의 부활\n마검 알하자드의 해방을 막으려\n엘윈 일행은 어둠의 신전에\n도착했다.\n어두운 신전 깊은 곳에는 사악한\n신의 석상이 있었고, 그 앞 제단에는\n한 자루의 검이 놓여 있었다. 제단\n양옆에는 서로 꼭 닮은 리아나와\n또 한 명의 소녀가 서 있었다.\n제단 앞에서 검은 망토를 걸치고\n주문을 외는 남자는 벨제리아 성에\n있던 어둠의 왕자 보젤이었다. 그의\n입에서 흘러나온 주문은 알하자드의\n봉인이 곧 풀린다는 사실을 알렸다.",
+          "target_korean": "시나리오 22\n알하자드의 부활\n마검 알하자드의 해방을 막으려\n엘윈 일행은 어둠의 신전에\n도착했다.\n어두운 신전 깊은 곳에\n사악한 신의 석상이 있었다.\n검 한 자루가 그 앞 제단에\n놓였다. 그 양옆에는\n서로 꼭 닮은 리아나와\n또 한 명의 소녀가 서 있었다.\n제단 앞에서 검은 망토를 걸치고\n주문을 외는 남자는 벨제리아 성에\n있던 어둠의 왕자 보젤이었다.\n보젤이 외는 주문은 알하자드의\n봉인이 곧 풀린다는 사실을 알렸다.",
           "modified": true,
           "reviewed": true,
           "live_verified": false
@@ -980,7 +980,7 @@
         {
           "id": 22,
           "pointer": "0x09FE60",
-          "current_pointer": "0x276C26",
+          "current_pointer": "0x276BDA",
           "glyph_pointer": "0x09C79E",
           "current_glyph_pointer": "0x271426",
           "original_word_count": 357,
@@ -994,7 +994,7 @@
         {
           "id": 23,
           "pointer": "0x0A012A",
-          "current_pointer": "0x276E60",
+          "current_pointer": "0x276E14",
           "glyph_pointer": "0x09C896",
           "current_glyph_pointer": "0x27151E",
           "original_word_count": 214,
@@ -1008,7 +1008,7 @@
         {
           "id": 24,
           "pointer": "0x0A02D6",
-          "current_pointer": "0x277028",
+          "current_pointer": "0x276FDC",
           "glyph_pointer": "0x09C95E",
           "current_glyph_pointer": "0x2715E6",
           "original_word_count": 224,
@@ -1022,7 +1022,7 @@
         {
           "id": 25,
           "pointer": "0x0A0496",
-          "current_pointer": "0x2771CA",
+          "current_pointer": "0x27717E",
           "glyph_pointer": "0x09CA40",
           "current_glyph_pointer": "0x2716C8",
           "original_word_count": 211,
@@ -1036,7 +1036,7 @@
         {
           "id": 26,
           "pointer": "0x0A063C",
-          "current_pointer": "0x27736C",
+          "current_pointer": "0x277320",
           "glyph_pointer": "0x09CB10",
           "current_glyph_pointer": "0x271798",
           "original_word_count": 251,
@@ -1050,7 +1050,7 @@
         {
           "id": 27,
           "pointer": "0x0A0832",
-          "current_pointer": "0x277580",
+          "current_pointer": "0x277534",
           "glyph_pointer": "0x09CBFE",
           "current_glyph_pointer": "0x271886",
           "original_word_count": 253,
@@ -1064,7 +1064,7 @@
         {
           "id": 28,
           "pointer": "0x0A0A2C",
-          "current_pointer": "0x27776E",
+          "current_pointer": "0x277722",
           "glyph_pointer": "0x09CCEE",
           "current_glyph_pointer": "0x271976",
           "original_word_count": 240,
@@ -1078,7 +1078,7 @@
         {
           "id": 29,
           "pointer": "0x0A0C0C",
-          "current_pointer": "0x27795C",
+          "current_pointer": "0x277910",
           "glyph_pointer": "0x09CDCA",
           "current_glyph_pointer": "0x271A52",
           "original_word_count": 213,
@@ -1092,7 +1092,7 @@
         {
           "id": 30,
           "pointer": "0x0A0DB6",
-          "current_pointer": "0x277B24",
+          "current_pointer": "0x277AD8",
           "glyph_pointer": "0x09CE98",
           "current_glyph_pointer": "0x271B20",
           "original_word_count": 270,

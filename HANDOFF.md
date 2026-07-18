@@ -4814,3 +4814,21 @@ contains 57 safe syllables as documented below and in
   residue, clipping, broken glyphs, isolated words, or abnormal spacing.
   Scenario 21 `description` is now `verified_current`, and BlastEm was left on
   its preparation screen.
+- Scenario 22 was compared with the Japanese-ROM render
+  `text_scenarios_21_mapped_040000_jp2bpp16.png`. The Korean meaning preserves
+  the dark temple, evil idol, sword on the altar, two look-alike maidens,
+  Bozel, and the spell announcing Alhazard's imminent release. Initial current
+  playback left `제단에는`, `제단`, and `그의` isolated.
+- The description builder wraps every source line at 18 characters. The final
+  source keeps each intended row within that boundary, restores `어두운 신전`,
+  places `검 한 자루` at the altar over two balanced rows, and replaces the
+  dangling pronoun with `보젤이 외는 주문은`. The regenerated 783-record
+  direct inventory has no token diff.
+- Production 42E6 `42e6_s22_description_final_00.png` through `_24.png`
+  retain the route map, all 23 text-bearing `알하자드의 부활` frames, and the
+  preparation endpoint. No Japanese residue, clipping, broken glyph, isolated
+  word, or abnormal spacing remains. Scenario 22 `description` is now
+  `verified_current`.
+- Production checksum is `42E6`, SHA-256
+  `557f48a9461b5e6b40719a42f57257ab37478a3ffba54ec38cef933dc512f41f`.
+  BlastEm was left on the Scenario 22 preparation screen.

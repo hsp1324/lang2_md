@@ -926,7 +926,7 @@
     },
     {
       "scenario": 22,
-      "description": "progressed_current",
+      "description": "verified_current",
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
@@ -965,9 +965,15 @@
         "captures/run/c1c9_s22_turn1_01.png",
         "captures/run/c1c9_s22_turn1_04.png",
         "captures/run/c1c9_s22_turn1_28.png",
-        "captures/run/c1c9_s22_turn1_30.png"
+        "captures/run/c1c9_s22_turn1_30.png",
+        "captures/run/42e6_s22_description_final_01.png",
+        "captures/run/42e6_s22_description_final_06.png",
+        "captures/run/42e6_s22_description_final_10.png",
+        "captures/run/42e6_s22_description_final_15.png",
+        "captures/run/42e6_s22_description_final_23.png",
+        "captures/run/42e6_s22_description_final_24.png"
       ],
-      "note": "Production C1C9 reaches the source-reviewed 알하자드의 부활 description, preparation, deployment, all fourteen opening confirmations, Korean conditions, the complete no-action first turn, TURN 2, and a valid Elwin command menu without reset or freeze. The opening visibly preserves the corrected Japanese meanings: 둘은 다른 사람이었나?, 어둠의 검은 빛의 무녀가 봉인했군… 말이 되는군., and 봉인을 풀고 어둠의 힘을 불어넣는 역할이겠죠. The complete selectable roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크루세이더, 제시카/세이지, and 스코트/파이터. The first turn reviews all four Bozel/Egbert dialogue pages and returns after 30 confirmations. Victory is enemy annihilation; defeat is the protagonist's or Jessica's death. A direct binary comparison from C7AB to C1C9 finds changes only in the checksum header and the three reviewed Scenario 22 event records, so the immediately preceding C7AB class-panel and deployment captures remain current-source evidence rather than stale UI evidence. The original twelve-record fixed-placement list at 0x1827B4 is covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Static dialogue covers all 151 Japanese pointer records and 191 physical pages. Scenario-specific battle presentation, later turns, completion, and branches remain pending."
+      "note": "Production 42E6 verifies the Scenario 22 route map, all 23 text-bearing scrolling frames of 알하자드의 부활, and the preparation endpoint. Direct Japanese-ROM rendering confirms the dark temple, evil idol, sword on the altar, two look-alike maidens, Bozel, and the spell announcing Alhazard's imminent release. Initial current playback left 제단에는, 제단, and 그의 isolated. Source lines are normalized and wrapped at 18 characters; balanced lines now preserve 어두운 신전, place 검 한 자루 at the altar, and connect 보젤이 외는 주문은 without isolated words. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation roster pages, the complete eight-commander roster, deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. The original twelve-record fixed-placement list at 0x1827B4 remains covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Scenario-specific battle presentation, later turns, completion, and branches remain pending."
     },
     {
       "scenario": 23,
