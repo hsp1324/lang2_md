@@ -302,3 +302,36 @@ before changing ROM logic.
 Automation configs remove the host `pads` binding block while retaining the
 keyboard-to-emulated-pad mappings used by direct events. An Xbox controller can
 therefore be used by another application without steering the test emulator.
+
+## Source-Reviewed Ending Montage
+
+The fixed-count montage immediately before the result screens is separate from
+the 90 outcome epilogues. Japanese-ROM playback is retained in
+`captures/run/230d_jp_ending_montage/`. It proves that the old Korean line
+`제국군이 마을로 오고 있어! 리아나가 위험해!` was an invented Scenario 1
+recap, not the source ending. Addresses `0x0A6BA8..0x0A6F02` now follow the
+Japanese conversation about Bernhardt's distrust, mutual understanding, the
+allies who stopped the empire, Langrisser uniting hearts, and Elwin continuing
+his journey.
+
+The renderer count is a maximum, not each record's storage length. Most source
+records end at an earlier `FFFF`; the old writer padded through the maximum and
+erased that terminator, causing adjacent records to splice together. The
+builder now validates every Japanese source boundary before writing and puts
+each terminator back at its exact original word index. Unit tests lock the
+layout and reject the invented recap. Production checksum is `D8F6`.
+
+Runtime checksum `1E2A` captured the corrected ten-record sequence under
+`captures/run/1e2a_ending_fixed/`. That pass exposed four records where the
+game supplies `엘윈` dynamically and the fixed text therefore needs to begin
+with `: `; checksum `D8F6` includes that correction. The subsequent `2464`
+capture attempt resumed after the conversation and is not accepted as proof of
+the final punctuation-only change.
+
+The apparent `엠퍼러` damage in
+`captures/run/1e2a_ending_montage/163.png` is specific to the Scenario 27
+adjacent-Bernhardt diagnostic layout: Bernhardt's animated flame sprite lies
+over the first two class glyphs. The following map frame `164.png` shows the
+same sprite at that screen coordinate. The class token stream is byte-identical
+to the fixed build, while the ordinary result screen remains fully readable in
+`captures/run/1be7_bernhardt_emperor_fixed.png`.

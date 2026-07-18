@@ -77,6 +77,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
     for offset, (capacity, text) in builder.OPENING_TEXT_LIST_PATCHES.items():
+        reviewed = offset in builder.OPENING_TEXT_LIST_REVIEWED_ADDRESSES
         rows.append(
             {
                 "group": "opening_text_lists",
@@ -84,7 +85,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "size_bytes": capacity * 2,
                 "target_korean": text,
                 "modified": changed(japanese, korean, offset, capacity * 2),
-                "reviewed": False,
+                "reviewed": reviewed,
                 "live_verified": False,
             }
         )

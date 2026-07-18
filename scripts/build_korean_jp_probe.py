@@ -1393,17 +1393,83 @@ OPENING_TEXT_LIST_PATCHES = OrderedDict(
     [
         (0xA6B20, (0x21, "후후후…")),
         (0xA6B54, (0x2A, "알하자드… 전설의마검… 바라던 무한한 힘…")),
-        (0xA6BA8, (0x40, "대륙을... 아니 세계를 모두 내 손에 넣겠다!!")),
-        (0xA6BEA, (0x40, "싸움은 아무것도 낳지 않는다. 남는 것은 슬픔뿐...")),
-        (0xA6C2A, (0x40, "하늘이... 하늘이 어두워지고 있어... 모든 것이 끝난 걸까...")),
-        (0xA6CA6, (0x40, "엘윈, 조심해. 무언가 심상치 않은 기운이 느껴져.")),
-        (0xA6CEC, (0x40, "제국군이 마을로 오고 있어! 리아나가 위험해!")),
-        (0xA6D5E, (0x40, "알겠어. 지금 바로 가자. 더 늦기 전에 막아야 해.")),
-        (0xA6DB8, (0x40, "리아나를 구하고, 이 싸움의 이유를 알아내겠어.")),
-        (0xA6DFE, (0x40, "검을 들어라. 운명은 이미 움직이기 시작했다.")),
-        (0xA6E80, (0x40, "누구도 피할 수 없는 전란의 그림자가 대륙을 덮는다.")),
-        (0xA6F02, (0x40, "그리고 성검 랑그릿사의 전설이 다시 깨어난다.")),
+        (0xA6BA8, (0x40, "리아나: 하늘이... 어두워져... 다 끝난 거야...")),
+        (0xA6BEA, (0x40, ": 싸움에선 아무것도 생기지 않아. 남는 건 슬픔뿐...")),
+        (
+            0xA6C2A,
+            (
+                0x40,
+                "리아나: 베른하르트는 사람을 믿지 못했어. 그래서 힘으로 사람을... 아니, 모든 걸 지배하려 했던 거야.",
+            ),
+        ),
+        (0xA6CA6, (0x40, ": 믿는 마음... 서로 이해한다면 전쟁은 생기지 않아.")),
+        (
+            0xA6CEC,
+            (0x40, "리아나: 그 마음 덕분에 많은 동료를 얻었고... 폭주한 제국도 막을 수 있었어."),
+        ),
+        (0xA6D5E, (0x40, "라나: 랑그릿사의 힘은 모두의 마음을 하나로 모으는 것이었군요.")),
+        (0xA6DB8, (0x40, "셰리: 베른하르트와 같은 잘못을 범하지 않게 조심해야 해.")),
+        (
+            0xA6DFE,
+            (
+                0x40,
+                ": 난 다시 여행을 떠나 이상적인 세상을 향해 가겠어. 서로를 아끼는 마음을 다른 사람들에게도 전할 거야.",
+            ),
+        ),
+        (
+            0xA6E80,
+            (
+                0x40,
+                "제시카: 혼자 할 수 있는 일은 없어요. 모두 동료잖아요. 힘을 합치면 반드시 이상을 실현할 수 있을 거예요.",
+            ),
+        ),
+        (0xA6F02, (0x40, ": 그래. 꼭, 꼭 해낼 거야...")),
     ]
+)
+
+# The ending/opening cutscene renderer passes a maximum glyph count, but most
+# source records stop earlier at FFFF.  The old patch padded all records to the
+# renderer count and erased those terminators, so one line consumed the start
+# of the next record.  None means the Japanese segment intentionally fills the
+# complete fixed count and continues at the following address.
+OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES = {
+    0xA6B20: None,
+    0xA6B54: None,
+    0xA6BA8: 32,
+    0xA6BEA: 31,
+    0xA6C2A: 61,
+    0xA6CA6: 34,
+    0xA6CEC: 56,
+    0xA6D5E: 44,
+    0xA6DB8: 34,
+    0xA6DFE: 64,
+    0xA6E80: 64,
+    0xA6F02: 19,
+}
+
+# These ten ending-montage records were replayed from the Japanese ROM and
+# translated from that playback. The first two villain lines still need the
+# same source-review pass.
+OPENING_TEXT_LIST_REVIEWED_ADDRESSES = frozenset(
+    range(0xA6BA8, 0xA6F03)
+) & frozenset(OPENING_TEXT_LIST_PATCHES)
+
+# Keep the established custom-glyph allocation stable while replacing the
+# source-unreviewed montage wording.  New-only characters are appended after
+# all existing consumers in main().
+RETIRED_OPENING_TEXT_GLYPH_COMPATIBILITY_TEXT = (
+    "후후후…"
+    "알하자드… 전설의마검… 바라던 무한한 힘…"
+    "대륙을... 아니 세계를 모두 내 손에 넣겠다!!"
+    "싸움은 아무것도 낳지 않는다. 남는 것은 슬픔뿐..."
+    "하늘이... 하늘이 어두워지고 있어... 모든 것이 끝난 걸까..."
+    "엘윈, 조심해. 무언가 심상치 않은 기운이 느껴져."
+    "제국군이 마을로 오고 있어! 리아나가 위험해!"
+    "알겠어. 지금 바로 가자. 더 늦기 전에 막아야 해."
+    "리아나를 구하고, 이 싸움의 이유를 알아내겠어."
+    "검을 들어라. 운명은 이미 움직이기 시작했다."
+    "누구도 피할 수 없는 전란의 그림자가 대륙을 덮는다."
+    "그리고 성검 랑그릿사의 전설이 다시 깨어난다."
 )
 
 SCENARIO0_TITLE = "시나리오 1"
@@ -4891,20 +4957,49 @@ def patch_opening_glyph_probe(data: bytearray) -> None:
 
 
 def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    for offset, (capacity, text) in OPENING_TEXT_LIST_PATCHES.items():
-        values = [OPENING_SPACE_GLYPH if char == " " else glyph_by_char[char] for char in text]
-        if len(values) > capacity:
+    if set(OPENING_TEXT_LIST_PATCHES) != set(
+        OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES
+    ):
+        raise ValueError("opening text source-layout table does not match patches")
+
+    # Validate every source boundary before writing because several renderer
+    # counts overlap the next record even though an earlier FFFF stops reading.
+    for offset, (renderer_count, _) in OPENING_TEXT_LIST_PATCHES.items():
+        terminator_index = OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES[offset]
+        source_words = [
+            be16(data, offset + index * 2) for index in range(renderer_count)
+        ]
+        if terminator_index is None:
+            if 0xFFFF in source_words:
+                raise ValueError(
+                    f"opening text segment at 0x{offset:06X} gained an early terminator"
+                )
+            continue
+        if terminator_index > renderer_count:
             raise ValueError(
-                f"opening text list at 0x{offset:06X} needs {len(values)} glyphs, only {capacity}: {text!r}"
+                f"opening text terminator at 0x{offset:06X} exceeds renderer count"
             )
-        values.extend([OPENING_SPACE_GLYPH] * (capacity - len(values)))
+        if 0xFFFF in source_words[:terminator_index] or be16(
+            data, offset + terminator_index * 2
+        ) != 0xFFFF:
+            raise ValueError(
+                f"opening text source terminator changed at 0x{offset:06X}"
+            )
+
+    for offset, (capacity, text) in OPENING_TEXT_LIST_PATCHES.items():
+        terminator_index = OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES[offset]
+        storage_capacity = capacity if terminator_index is None else terminator_index
+        values = [OPENING_SPACE_GLYPH if char == " " else glyph_by_char[char] for char in text]
+        if len(values) > storage_capacity:
+            raise ValueError(
+                f"opening text list at 0x{offset:06X} needs {len(values)} glyphs, "
+                f"only {storage_capacity}: {text!r}"
+            )
+        values.extend([OPENING_SPACE_GLYPH] * (storage_capacity - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
-        # Keep the original terminator for records that have one immediately
-        # after the counted range. The renderer primarily uses the count, but
-        # later maintenance tools can still stop cleanly on FFFF.
-        if offset + capacity * 2 + 1 < len(data) and be16(data, offset + capacity * 2) == 0xFFFF:
-            put16(data, offset + capacity * 2, 0xFFFF)
+        if terminator_index is not None:
+            put16(data, offset + terminator_index * 2, 0xFFFF)
 
 
 def update_md_checksum(data: bytearray) -> int:
@@ -5108,7 +5203,7 @@ def main() -> None:
         active_item_title,
         *START_MENU_TEXTS,
         *START_SUBMENU_TEXTS,
-        *active_opening_texts,
+        RETIRED_OPENING_TEXT_GLYPH_COMPATIBILITY_TEXT,
         NAME_ENTRY_GRID_CHARS,
         DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT,
         *late_direct_strings,
@@ -5127,6 +5222,9 @@ def main() -> None:
         # Restored/corrected description vocabulary needs `롤렉회`. Keep those
         # syllables out of the early pass so established consumers retain IDs.
         TRAILING_SCENARIO_DESCRIPTION_GLYPH_TEXT,
+        # Source-reviewed ending montage vocabulary is appended so it cannot
+        # renumber established gameplay/UI glyphs.
+        *active_opening_texts,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:

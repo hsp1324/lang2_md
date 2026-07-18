@@ -382,7 +382,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     or epilogue_record is not None
                     or credits_record is not None
                 ),
-                "reviewed": False,
+                "reviewed": offset
+                in builder.OPENING_TEXT_LIST_REVIEWED_ADDRESSES,
             }
         )
     counts = {

@@ -5135,3 +5135,29 @@ contains 57 safe syllables as documented below and in
   no longer claim a slot is usable when the game rejects the SRAM container.
   The full suite passes 242 tests, and a fresh `1BE7` runtime entered Scenario
   27 through the title LOAD/selector path using the corrected blank SRAM.
+
+### Ending Montage Source Correction (2026-07-18)
+
+- Japanese replay `captures/run/230d_jp_ending_montage/` proved that
+  `리아나가 위험해` in the Korean ending was invented text. The source scene
+  instead discusses Bernhardt's distrust, understanding one another, the
+  allies who stopped the empire, Langrisser uniting hearts, and Elwin's next
+  journey. The ten records at `0x0A6BA8..0x0A6F02` now follow that source.
+- The montage renderer count is only a maximum. The previous writer padded to
+  that count and overwrote earlier `FFFF` terminators, which spliced adjacent
+  records. `OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES` locks and restores the
+  exact Japanese layout; `tests/test_opening_text_lists.py` covers the layout,
+  written boundaries, reviewed meanings, and dynamic-name separators.
+- Runtime `1E2A` under `captures/run/1e2a_ending_fixed/` verified the corrected
+  meanings and revealed that four Elwin-owned records receive the name from
+  the game. They now begin with `: `. Production checksum is `D8F6`. A later
+  `2464` capture began after the conversation, so do not cite it as final
+  punctuation playback proof.
+- `엠퍼러` remains correct in the ordinary ending result surface, proven by
+  `captures/run/1be7_bernhardt_emperor_fixed.png`. The orange/red obstruction
+  at `1e2a_ending_montage/163.png` is the adjacent-Bernhardt probe's flame
+  sprite overlaying the popup; frame `164.png` places that animated sprite at
+  the same coordinates. The relocated class token bytes are unchanged.
+- All 245 unit tests pass. The ten Japanese-reviewed montage rows are marked
+  `reviewed: true`; the first two villain records remain unreviewed, and the
+  final colon-only build remains conservatively `live_verified: false`.
