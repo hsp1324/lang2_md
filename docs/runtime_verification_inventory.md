@@ -37,7 +37,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 24 | current | current | current | current | pending | current | pending | pending | 26 |
 | 25 | current | current | progressed | current | current | progressed | pending | pending | 21 |
 | 26 | current | current | current | current | pending | current | pending | pending | 23 |
-| 27 | progressed | current | current | current | probe | current | probe | probe | 19 |
+| 27 | current | current | current | current | probe | current | probe | probe | 25 |
 | 28 | current | current | current | current | pending | current | pending | pending | 15 |
 | 29 | current | current | current | current | pending | current | pending | pending | 16 |
 | 30 | current | current | current | current | pending | current | pending | pending | 15 |
@@ -884,7 +884,7 @@ Production 212A verifies the Scenario 26 route map, all 14 text-bearing scrollin
 
 ### Scenario 27
 
-Production ECA0 retains the current-source Scenario 27 전설의 끝 description and the existing preparation, shop, and equipment evidence. The current run freshly reached preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Battle animation capture landed on the black transition rather than its labels, so battle UI remains verified only by the documented production-derived probe. Intermediate description scroll frames remain sampled rather than exhaustive. Ending, epilogue, credits, and Fin retain documented production-derived probe evidence; a successful ordinary clear and conditional branches remain pending.
+Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrolling frames of 전설의 끝, and the preparation endpoint. Direct Japanese-ROM rendering confirms survival of Egbert's magic attack, arrival at Bernhardt's innermost temple, the silent dark shrine, Bernhardt holding Alhazard with confidence despite being cornered, and the millennia-long legend of light and darkness nearing its end. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Battle animation capture landed on the black transition rather than its labels, so battle UI remains verified only by the documented production-derived probe. Ending, epilogue, credits, and Fin retain documented production-derived probe evidence; a successful ordinary clear and conditional branches remain pending.
 
 - `captures/run/ea22_s27_after_select_current.png`
 - `captures/run/ea22_s27_roster_sheet.png`
@@ -905,6 +905,12 @@ Production ECA0 retains the current-source Scenario 27 전설의 끝 description
 - `captures/run/eca0_s27_turn1_01.png`
 - `captures/run/eca0_s27_turn1_54.png`
 - `captures/run/eca0_s27_turn1_55.png`
+- `captures/run/212a_s27_description_current_01.png`
+- `captures/run/212a_s27_description_current_05.png`
+- `captures/run/212a_s27_description_current_09.png`
+- `captures/run/212a_s27_description_current_14.png`
+- `captures/run/212a_s27_description_current_19.png`
+- `captures/run/212a_s27_description_current_20.png`
 
 ### Scenario 28
 

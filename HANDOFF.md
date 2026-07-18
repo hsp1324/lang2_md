@@ -4902,3 +4902,22 @@ contains 57 safe syllables as documented below and in
   residue, clipping, broken glyphs, isolated words, or abnormal spacing.
   Scenario 26 `description` is now `verified_current`, and BlastEm was left on
   its preparation screen.
+
+### Scenario 27 Description Runtime Verification (2026-07-18)
+
+- Scenario 27 was compared directly with Japanese-ROM render
+  `text_scenarios_26_mapped_040000_jp2bpp16.png`. The current Korean accurately
+  preserves survival of Egbert's magic attack, arrival at Bernhardt's
+  innermost temple, the silent dark shrine, Bernhardt holding Alhazard with
+  confidence despite being cornered, and the millennia-long legend nearing its
+  end. No translation or layout change was required.
+- Production 212A `212a_s27_description_current_00.png` through `_20.png`
+  retain the route map, all 19 text-bearing `전설의 끝` frames, and the
+  preparation endpoint. Every page is natural Korean without Japanese
+  residue, clipping, broken glyphs, isolated words, or abnormal spacing.
+  Scenario 27 `description` is now `verified_current`, and BlastEm was left on
+  its preparation screen.
+- With this run, all 31 scenario descriptions have exhaustive current-build
+  runtime evidence from their route map through every scrolling text frame and
+  the preparation endpoint. This does not promote any separate opening,
+  battle, completion, branch, or ending surface that remains pending.
