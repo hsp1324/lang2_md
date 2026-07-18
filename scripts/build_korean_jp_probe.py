@@ -1160,7 +1160,8 @@ DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT = (
     "렌탁슨렵팔벗렀쌓따릴결본태죄새된웨프양객낮짓말럼존재허틸잃귀환넌숲싼렬킬놓"
     "백칠교숨굴명났끌얼짧생큰절복루옥좌띤즐겁싣째탈취잔씨윽쪽척탄널판맥옆꼭닮토외흘"
 )
-TRAILING_SCENARIO_DESCRIPTION_GLYPH_TEXT = "롤렉"
+TRAILING_SCENARIO_DESCRIPTION_GLYPH_TEXT = "롤렉회"
+RETIRED_SCENARIO23_DESCRIPTION_GLYPH_COMPATIBILITY_TEXT = "죽"
 DEFERRED_SCENARIO_DESCRIPTION_GLYPH_CHARS = frozenset(
     DEFERRED_SCENARIO_DESCRIPTION_GLYPH_TEXT
     + TRAILING_SCENARIO_DESCRIPTION_GLYPH_TEXT
@@ -5058,7 +5059,10 @@ def main() -> None:
         ),
         *(
             scenario0_description_glyph_text(text)
-            if index == 0 else scenario_description_glyph_text(text)
+            if index == 0 else scenario_description_glyph_text(
+                (RETIRED_SCENARIO23_DESCRIPTION_GLYPH_COMPATIBILITY_TEXT if index == 22 else "")
+                + text
+            )
             for index, text in enumerate(active_descriptions)
         ),
         *active_direct_strings,
@@ -5094,9 +5098,8 @@ def main() -> None:
         # Scenario 1 source-review vocabulary comes last so any syllable that
         # already has an established later consumer keeps its existing ID.
         DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_TEXT,
-        # The restored Scenario 15 river name needs `롤렉`. Keep those
-        # syllables out of the early description pass so their established
-        # later consumers retain every existing global glyph ID.
+        # Restored/corrected description vocabulary needs `롤렉회`. Keep those
+        # syllables out of the early pass so established consumers retain IDs.
         TRAILING_SCENARIO_DESCRIPTION_GLYPH_TEXT,
     )
     glyph_by_char = install_custom_glyphs(data, chars)

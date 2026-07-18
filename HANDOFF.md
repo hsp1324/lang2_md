@@ -4832,3 +4832,29 @@ contains 57 safe syllables as documented below and in
 - Production checksum is `42E6`, SHA-256
   `557f48a9461b5e6b40719a42f57257ab37478a3ffba54ec38cef933dc512f41f`.
   BlastEm was left on the Scenario 22 preparation screen.
+
+### Scenario 23 Description Retranslation And Runtime Verification (2026-07-18)
+
+- Scenario 23 was compared directly with Japanese-ROM render
+  `text_scenarios_22_mapped_040000_jp2bpp16.png`. Two old Korean statements did
+  not match the original: `隙を伺っていたベルンハルト` means Bernhardt was
+  watching for an opportunity, not that he was thought dead, and
+  `エルフの遺跡` is the elf ruins, not an `엘라드` location.
+- The final Korean therefore uses `기회를 노리던 베른하르트` and
+  `엘프의 유적`. It still preserves Bozel losing Alhazard, Jessica sending
+  Bernhardt to Velzeria, Liana and Lana being freed, and the incomplete power
+  of Langrisser that requires the Holy Rod.
+- Adding the previously unused `회` glyph at the old `죽` allocation point
+  shifted 37 direct-string records. Moving it to a normal deferred string still
+  shifted 18 late records. The accepted build allocates `회` in the trailing
+  description pool and retains the retired Scenario 23 `죽` glyph before the
+  established consumers. The regenerated 783-record direct-string inventory
+  has no token diff, preserving all established name, class, unit, and UI IDs.
+- Production 212A `212a_s23_description_final_00.png` through `_20.png` retain
+  the route map, all 19 text-bearing `봉인의 열쇠` frames, and the preparation
+  endpoint. No Japanese residue, clipping, broken glyph, isolated word, or
+  abnormal spacing remains. Scenario 23 `description` is now
+  `verified_current`.
+- Production checksum is `212A`, SHA-256
+  `db597ddedddb36751c5b03d09a46fc090c0bf196ec6cb0eb0d293c8aa2dab987`.
+  BlastEm was left on the Scenario 23 preparation screen.

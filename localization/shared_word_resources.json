@@ -984,9 +984,9 @@
           "glyph_pointer": "0x09C79E",
           "current_glyph_pointer": "0x271426",
           "original_word_count": 357,
-          "current_word_count": 285,
+          "current_word_count": 266,
           "original_tokens": "FFFE 0000 0000 0000 0000 0000 0001 0002 0003 0004 0005 0006 0007 FFFE 0000 0000 0000 0000 0000 0008 0009 000A 000B 000C 000D 000E FFFE FFFE 0000 000F 0010 0011 0012 0013 0014 0015 0016 0017 000B 0009 000A 0018 0019 000C 001A 001B 001C 001D 001E 001F 0020 0021 0022 0023 0024 0025 0026 0027 0021 0028 0029 002A 001A 001B 0010 001F 002B 0013 002C 0014 0013 002D 0022 002E 001A 002F 0030 0016 0031 0013 000C 0032 0012 0013 0014 0015 0016 0017 0033 0034 0010 0035 001E 001F 000B 0036 0037 0038 0020 0039 0032 0011 002B 0013 002C 0014 0013 002D 0018 002F 003A 003B 003C 003D 000B 003E 003F 0033 0018 001F 0040 001F 0041 0011 FFF7 0001 001F 0042 0043 0044 0045 0046 0047 0039 0048 0045 0028 0040 0038 0022 002F 0049 004A 0001 004B 000B 004C 001E 001F 004D 004E 0011 004F 0047 002F 0050 004A 0013 0031 0003 0012 001D 0036 0028 0051 0039 001A 001B 001C 001D 0045 0020 FFFE 0000 0003 0012 0002 0028 002F 0023 001C 001B 0030 0016 0031 0013 000B 004D 0052 004F 0047 0019 004C 0039 001A 001F 0053 0016 0002 0033 0054 0055 001F FFF7 0001 0018 002F 0053 0016 0002 004F 0047 0053 002C 0056 0003 0057 0058 0016 000B 0052 0022 001D 0021 0059 005A 0036 005B 0010 005C 0033 005D 005E 0020 0023 0024 0036 0053 002C 0056 0003 0057 0058 0016 000B 0052 0033 0019 004C 0040 0038 001F 0041 002F FFF7 0001 005F 0018 0060 0016 0003 0016 0061 0057 0017 000B 0037 0038 0028 0010 0045 002F 0062 0013 0053 0016 0017 000B 0063 0064 0025 0028 0046 000C 001E 001F 0020 FFFE FFFE 0065 0066 0067 0068 0069 FFFE 0000 006A 0061 0057 0017 006B 006C 006D 0022 006E 0057 006F 0070 0071 0025 0072 005F FFFE 0000 006A 0073 000B 005A 0074 FFFE 0065 0075 0076 0068 0069 FFFE 0000 006A 0061 0057 0017 0033 0034 001E 001F 0073 0022 002F 006E 0057 006F 0077 0071 0025 0000 0000 0078 0079 FFFE 0000 006A FFF7 0001 000B 0026 007A FFFF",
-          "target_korean": "시나리오 23\n봉인의 열쇠\n마침내 알하자드의 봉인이\n풀렸다. 죽은 줄 알았던\n베른하르트가 나타나 보젤에게서\n알하자드를 빼앗고, 대륙 통일의\n야망을 드러냈다.\n제시카의 마법으로 베른하르트는\n벨제리아까지 날아갔다. 보젤의\n마력에서 풀려난 리아나와 라나의\n도움을 받은 엘윈 일행은\n랑그릿사의 힘이 아직 완전하지\n않다는 사실을 알았다.\n그 힘을 해방할 홀리로드를 찾아\n엘라드의 유적으로 향했다.",
+          "target_korean": "시나리오 23\n봉인의 열쇠\n마침내 알하자드의 봉인이 풀렸다.\n기회를 노리던 베른하르트가 나타나\n보젤에게서 알하자드를 빼앗고,\n대륙 통일의 야망을 드러냈다.\n제시카의 마법으로 베른하르트는\n벨제리아까지 날아갔다. 보젤의\n마력에서 풀려난 리아나와 라나의\n도움을 받은 엘윈 일행은\n랑그릿사의 힘이 아직 완전하지\n않다는 사실을 알았다.\n그 힘을 해방할 홀리로드를 찾아\n엘프의 유적으로 향했다.",
           "modified": true,
           "reviewed": true,
           "live_verified": false
@@ -994,7 +994,7 @@
         {
           "id": 23,
           "pointer": "0x0A012A",
-          "current_pointer": "0x276E14",
+          "current_pointer": "0x276DEE",
           "glyph_pointer": "0x09C896",
           "current_glyph_pointer": "0x27151E",
           "original_word_count": 214,
@@ -1008,7 +1008,7 @@
         {
           "id": 24,
           "pointer": "0x0A02D6",
-          "current_pointer": "0x276FDC",
+          "current_pointer": "0x276FB6",
           "glyph_pointer": "0x09C95E",
           "current_glyph_pointer": "0x2715E6",
           "original_word_count": 224,
@@ -1022,7 +1022,7 @@
         {
           "id": 25,
           "pointer": "0x0A0496",
-          "current_pointer": "0x27717E",
+          "current_pointer": "0x277158",
           "glyph_pointer": "0x09CA40",
           "current_glyph_pointer": "0x2716C8",
           "original_word_count": 211,
@@ -1036,7 +1036,7 @@
         {
           "id": 26,
           "pointer": "0x0A063C",
-          "current_pointer": "0x277320",
+          "current_pointer": "0x2772FA",
           "glyph_pointer": "0x09CB10",
           "current_glyph_pointer": "0x271798",
           "original_word_count": 251,
@@ -1050,7 +1050,7 @@
         {
           "id": 27,
           "pointer": "0x0A0832",
-          "current_pointer": "0x277534",
+          "current_pointer": "0x27750E",
           "glyph_pointer": "0x09CBFE",
           "current_glyph_pointer": "0x271886",
           "original_word_count": 253,
@@ -1064,7 +1064,7 @@
         {
           "id": 28,
           "pointer": "0x0A0A2C",
-          "current_pointer": "0x277722",
+          "current_pointer": "0x2776FC",
           "glyph_pointer": "0x09CCEE",
           "current_glyph_pointer": "0x271976",
           "original_word_count": 240,
@@ -1078,7 +1078,7 @@
         {
           "id": 29,
           "pointer": "0x0A0C0C",
-          "current_pointer": "0x277910",
+          "current_pointer": "0x2778EA",
           "glyph_pointer": "0x09CDCA",
           "current_glyph_pointer": "0x271A52",
           "original_word_count": 213,
@@ -1092,7 +1092,7 @@
         {
           "id": 30,
           "pointer": "0x0A0DB6",
-          "current_pointer": "0x277AD8",
+          "current_pointer": "0x277AB2",
           "glyph_pointer": "0x09CE98",
           "current_glyph_pointer": "0x271B20",
           "original_word_count": 270,
