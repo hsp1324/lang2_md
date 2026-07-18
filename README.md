@@ -29,7 +29,8 @@
 - `docs/name_entry_analysis.md`: 일본판 이름 입력 레이아웃, 현재 안전한 57자 한글 선택표, 저장 바이트, 확정 시 인덱스→글리프 변환 훅과 실기 검증 기록입니다.
 - `docs/sram_relocation.md`: 4 MiB ROM 확장으로 겹친 SRAM을 `0x400001`로 옮긴 주소 패치와 저장/불러오기 실기 검증 기록입니다.
 - `docs/class_change_analysis.md`: 클래스 체인지 15슬롯 공유 글리프와 두 레이아웃의 인덱스 소유권 및 한국어 슬롯 배치를 기록합니다.
-- `tools/build_class_change_probe_rom.py`: 엘윈 파이터의 원본 후보 ID로 클래스 체인지 화면을 직접 열고, 실제 레벨업 경로도 재현하는 비배포 진단 ROM을 만듭니다.
+- `tools/build_class_change_probe_rom.py`: 지정한 지휘관·현재 클래스의 원본 후보 ID로 클래스 체인지 화면을 직접 열고, 엘윈 파이터의 실제 레벨업 경로도 재현하는 비배포 진단 ROM을 만듭니다.
+- `tools/class_change_inventory.py`: 일본판의 플레이어 지휘관 10명 클래스 체인 100개 전이를 주소·원문·한글 표기·화면/적용 실기 상태와 함께 JSON/Markdown으로 생성합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
@@ -104,6 +105,7 @@ python3 tools/jp_event_inventory.py
 python3 tools/jp_global_inventory.py
 python3 tools/jp_resource_inventory.py
 python3 tools/jp_ui_surface_inventory.py
+python3 tools/class_change_inventory.py
 python3 tools/jp_compressed_resource_inventory.py
 python3 tools/jp_direct_string_inventory.py
 ```

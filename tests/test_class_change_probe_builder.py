@@ -74,6 +74,28 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
             self.assertIn(bytes.fromhex(f"30 FC {class_id:04X}"), code)
         self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 02 BB 48"))
 
+    def test_probe_can_select_another_source_transition(self):
+        transition = probe_builder.selected_transition(self.source, 9, 0x10)
+        self.assertEqual(transition.current_class, 0x10)
+        self.assertEqual(transition.candidates, (0x1D, 0x1F, 0x19))
+
+        probe = bytearray(self.production)
+        probe_builder.patch_probe(
+            probe, self.source, commander_id=9, current_class=0x10
+        )
+        code = probe_builder.start_menu_wrapper_code(9, transition.candidates)
+        start = probe_builder.START_MENU_PROBE_WRAPPER
+        self.assertEqual(probe[start : start + len(code)], code)
+
+    def test_probe_rejects_class_outside_commanders_source_chain(self):
+        with self.assertRaisesRegex(ValueError, "no class-change transition"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                commander_id=9,
+                current_class=0x04,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

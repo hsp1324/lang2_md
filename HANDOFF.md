@@ -5321,3 +5321,30 @@ contains 57 safe syllables as documented below and in
   candidate complete from this representative proof.
 - All 269 unit tests pass after the probe builder, save-slot patcher, and
   narrowed generated inventory are included.
+
+### Generalized Class-Change Source Inventory (2026-07-19)
+
+- The ten player-chain pointers start at `0x08253A`. Each chain contains nine
+  four-word transitions (`current + three candidates`), one two-word terminal
+  transition (`current + one candidate`), and an `FFFF` sentinel. The resulting
+  100 source transitions collapse to 76 unique current/candidate combinations.
+- `tools/class_change_data.py` validates and parses this structure.
+  `tools/class_change_inventory.py` writes
+  `localization/class_change_chains.json` and
+  `docs/class_change_chain_inventory.md`, keeping Japanese and Korean class
+  names plus separate screen/application evidence states. This is the source
+  of truth for later class-chain editor work; do not transcribe a PC-version
+  chart over these MD records.
+- `tools/build_class_change_probe_rom.py --commander-id 9 --current-class 0x10`
+  built checksum `D221` from the source transition
+  `서펜나이트 -> 실버나이트/서펜로드/팔라딘`. Captures
+  `d221_c9_s10_candidate1.png` through `candidate3.png` verify all three names,
+  navigation, and their Korean `용병/마법` details without clipping.
+- Scenario 2 has no active Lester runtime record, so this diagnostic still set
+  A1 to Elwin. Confirming a Lester display row consequently followed Elwin's
+  actual Fighter apply path and wrote class `0x04`; GST
+  `captures/analysis/d221_c9_s10_confirm.gst` proves that mismatch. This is not
+  application evidence for Lester. Use a scenario with the matching commander
+  active before marking `application_verified`.
+- All 278 unit tests pass with both generated class-chain artifacts and the
+  narrowed 74-combination UI gap checked into the repository.

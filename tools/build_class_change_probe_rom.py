@@ -11,6 +11,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts import build_korean_jp_probe as builder
+from tools.class_change_data import (
+    ClassTransition,
+    read_class_change_chain,
+    transition_for_class,
+)
 
 
 DEFAULT_INPUT_ROM = ROOT / builder.OUT_ROM
@@ -46,25 +51,43 @@ def wrapper_code() -> bytes:
     )
 
 
-def start_menu_wrapper_code() -> bytes:
-    # Reproduce the candidate array built by the stock level-up routine for
-    # Fighter Elwin: commander ID 1, then Lord/Knight/Shaman and sentinels.
-    return bytes.fromhex(
-        "41 F9 FF FF AA 00"  # lea $FFFFAA00.l,a0
-        "30 FC 00 01"        # commander ID 1
-        "30 FC 00 04"        # Lord
-        "30 FC 00 05"        # Knight
-        "30 FC 00 0A"        # Shaman
-        "30 FC FF FF"
-        "30 FC FF FF"
-        "30 FC FF FF"
-        "30 FC FF FF"
-        "43 F9 FF FF 60 3C"  # lea $FFFF603C.l,a1
-        "4E F9 00 02 BB 48"  # jmp stock class-change UI
-    )
+def start_menu_wrapper_code(
+    commander_id: int = 1, candidates: tuple[int, ...] = (4, 5, 10)
+) -> bytes:
+    if not 1 <= commander_id <= 10:
+        raise ValueError("commander ID must be 1..10")
+    if not 1 <= len(candidates) <= 3:
+        raise ValueError("class-change probe needs 1..3 candidates")
+    if any(not 0 <= candidate <= 0xFFFF for candidate in candidates):
+        raise ValueError("candidate class ID must fit one word")
+
+    # Reproduce the eight-word candidate array built by the stock level-up
+    # routine: commander ID, up to three classes, then FFFF sentinels.
+    values = [commander_id, *candidates]
+    values.extend([0xFFFF] * (8 - len(values)))
+    code = bytearray(bytes.fromhex("41 F9 FF FF AA 00"))
+    for value in values:
+        code.extend(bytes.fromhex("30 FC"))
+        code.extend(value.to_bytes(2, "big"))
+    code.extend(bytes.fromhex("43 F9 FF FF 60 3C"))
+    code.extend(bytes.fromhex("4E F9 00 02 BB 48"))
+    return bytes(code)
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def selected_transition(
+    source: bytes, commander_id: int, current_class: int | None
+) -> ClassTransition:
+    if current_class is None:
+        return read_class_change_chain(source, commander_id)[0]
+    return transition_for_class(source, commander_id, current_class)
+
+
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    commander_id: int = 1,
+    current_class: int | None = None,
+) -> int:
     expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
     offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
     if source[offset : offset + 4] != expected:
@@ -86,7 +109,8 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         raise ValueError("Japanese Start-menu entry operand changed")
     if probe[start_offset : start_offset + 4] != start_expected:
         raise ValueError("input Start-menu entry operand changed")
-    start_code = start_menu_wrapper_code()
+    transition = selected_transition(source, commander_id, current_class)
+    start_code = start_menu_wrapper_code(commander_id, transition.candidates)
     start_wrapper_end = START_MENU_PROBE_WRAPPER + len(start_code)
     if (
         probe[START_MENU_PROBE_WRAPPER:start_wrapper_end]
@@ -112,6 +136,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument("--commander-id", type=int, default=1)
+    parser.add_argument(
+        "--current-class",
+        type=lambda value: int(value, 0),
+        help="source class ID; defaults to the commander's initial class",
+    )
     return parser.parse_args()
 
 
@@ -119,14 +149,24 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    transition = selected_transition(source, args.commander_id, args.current_class)
+    checksum = patch_probe(
+        probe,
+        source,
+        commander_id=args.commander_id,
+        current_class=transition.current_class,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print(
         "end-turn level-up handler redirected through Fighter Elwin "
         f"LV{PROBE_LEVEL}/EXP{PROBE_EXPERIENCE} probe"
     )
-    print("Start opens Fighter Elwin's stock Lord/Knight/Shaman selector")
+    candidates = "/".join(f"0x{value:02X}" for value in transition.candidates)
+    print(
+        f"Start opens commander {args.commander_id} class "
+        f"0x{transition.current_class:02X} candidates {candidates}"
+    )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

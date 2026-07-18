@@ -89,3 +89,25 @@ LV1, EXP0 result is independently retained in
 Candidate sets beyond Fighter Elwin's first branch still require runtime
 coverage. Do not describe the entire class-change matrix as complete until
 those commander and branch combinations have been sampled.
+
+## Full Chain Inventory
+
+`python3 tools/class_change_inventory.py` reads all ten source pointers at
+`0x08253A` and generates `localization/class_change_chains.json` plus
+`docs/class_change_chain_inventory.md`. The source contains 100 transitions
+and 76 unique current/candidate combinations after duplicates are merged.
+Each row keeps the original address, class IDs, Japanese name, Korean display
+target, screen-verification state, and application-verification state.
+
+The generalized probe also displayed Lester's source transition
+`서펜나이트(0x10) -> 실버나이트(0x1D) / 서펜로드(0x1F) / 팔라딘(0x19)` on
+checksum `D221`. All three rows and their `용병/마법` details are intact in
+`captures/run/d221_c9_s10_candidate1.png` through `candidate3.png`.
+
+That diagnostic used Elwin's active runtime record because Lester was not
+present in Scenario 2. Confirming a displayed Lester row therefore followed
+Elwin's real Fighter application path and produced class `0x04`, not the
+highlighted Lester candidate. Treat `D221` as screen/navigation evidence only.
+Application verification for a non-Elwin chain requires a scenario where the
+matching commander runtime record is active; the inventory deliberately tracks
+this separately.

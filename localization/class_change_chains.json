@@ -1,0 +1,2889 @@
+{
+  "source_pointer_table": "0x08253A",
+  "commander_count": 10,
+  "transition_count": 100,
+  "unique_transition_count": 76,
+  "live_verified_transition_count": 2,
+  "application_verified_transition_count": 1,
+  "commanders": [
+    {
+      "id": 1,
+      "name": "엘윈",
+      "pointer": "0x082562",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x082562",
+          "current": {
+            "id": 1,
+            "jp": "ﾌｧｲﾀｰ",
+            "ko": "파이터"
+          },
+          "candidates": [
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            },
+            {
+              "id": 5,
+              "jp": "ﾅｲﾄ",
+              "ko": "나이트"
+            },
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            }
+          ],
+          "live_verified": true,
+          "application_verified": true,
+          "evidence": [
+            "captures/run/d1d7_class_change_candidate1.png",
+            "captures/run/d1d7_class_change_candidate2.png",
+            "captures/run/d1d7_class_change_candidate3.png",
+            "captures/analysis/d1d7_class_change_confirm.gst"
+          ]
+        },
+        {
+          "index": 1,
+          "offset": "0x08256A",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            },
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x082572",
+          "current": {
+            "id": 5,
+            "jp": "ﾅｲﾄ",
+            "ko": "나이트"
+          },
+          "candidates": [
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            },
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x08257A",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x082582",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 32,
+              "jp": "ｷﾝｸﾞ",
+              "ko": "킹"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x08258A",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 32,
+              "jp": "ｷﾝｸﾞ",
+              "ko": "킹"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            },
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x082592",
+          "current": {
+            "id": 12,
+            "jp": "ﾊｲﾗﾝﾀﾞｰ",
+            "ko": "하이랜더"
+          },
+          "candidates": [
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            },
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x08259A",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x0825A2",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x0825AA",
+          "current": {
+            "id": 26,
+            "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+            "ko": "소드마스터"
+          },
+          "candidates": [
+            {
+              "id": 34,
+              "jp": "ﾋｰﾛｰ",
+              "ko": "히어로"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "리아나",
+      "pointer": "0x0825C2",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x0825C2",
+          "current": {
+            "id": 2,
+            "jp": "ｸﾚﾘｯｸ",
+            "ko": "클레릭"
+          },
+          "candidates": [
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            },
+            {
+              "id": 8,
+              "jp": "ﾋｰﾗｰ",
+              "ko": "힐러"
+            },
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x0825CA",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x0825D2",
+          "current": {
+            "id": 8,
+            "jp": "ﾋｰﾗｰ",
+            "ko": "힐러"
+          },
+          "candidates": [
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x0825DA",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x0825E2",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x0825EA",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x0825F2",
+          "current": {
+            "id": 17,
+            "jp": "ﾌﾟﾘｰｽﾄ",
+            "ko": "프리스트"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x0825FA",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x082602",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x08260A",
+          "current": {
+            "id": 25,
+            "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+            "ko": "팔라딘"
+          },
+          "candidates": [
+            {
+              "id": 40,
+              "jp": "ｻﾓﾅｰ",
+              "ko": "서머너"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "라나",
+      "pointer": "0x08262A",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x08262A",
+          "current": {
+            "id": 2,
+            "jp": "ｸﾚﾘｯｸ",
+            "ko": "클레릭"
+          },
+          "candidates": [
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            },
+            {
+              "id": 8,
+              "jp": "ﾋｰﾗｰ",
+              "ko": "힐러"
+            },
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x082632",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x08263A",
+          "current": {
+            "id": 8,
+            "jp": "ﾋｰﾗｰ",
+            "ko": "힐러"
+          },
+          "candidates": [
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x082642",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x08264A",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x082652",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x08265A",
+          "current": {
+            "id": 17,
+            "jp": "ﾌﾟﾘｰｽﾄ",
+            "ko": "프리스트"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x082662",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x08266A",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x082672",
+          "current": {
+            "id": 25,
+            "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+            "ko": "팔라딘"
+          },
+          "candidates": [
+            {
+              "id": 40,
+              "jp": "ｻﾓﾅｰ",
+              "ko": "서머너"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "쉐리",
+      "pointer": "0x082692",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x082692",
+          "current": {
+            "id": 1,
+            "jp": "ﾌｧｲﾀｰ",
+            "ko": "파이터"
+          },
+          "candidates": [
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            },
+            {
+              "id": 6,
+              "jp": "ﾎｰｸﾅｲﾄ",
+              "ko": "호크나이트"
+            },
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x08269A",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            },
+            {
+              "id": 14,
+              "jp": "ﾕﾆｺｰﾝﾅｲﾄ",
+              "ko": "유니콘나이트"
+            },
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x0826A2",
+          "current": {
+            "id": 6,
+            "jp": "ﾎｰｸﾅｲﾄ",
+            "ko": "호크나이트"
+          },
+          "candidates": [
+            {
+              "id": 14,
+              "jp": "ﾕﾆｺｰﾝﾅｲﾄ",
+              "ko": "유니콘나이트"
+            },
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x0826AA",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x0826B2",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 33,
+              "jp": "ﾚﾝｼﾞｬｰ",
+              "ko": "레인저"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x0826BA",
+          "current": {
+            "id": 14,
+            "jp": "ﾕﾆｺｰﾝﾅｲﾄ",
+            "ko": "유니콘나이트"
+          },
+          "candidates": [
+            {
+              "id": 33,
+              "jp": "ﾚﾝｼﾞｬｰ",
+              "ko": "레인저"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x0826C2",
+          "current": {
+            "id": 15,
+            "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+            "ko": "드래곤나이트"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x0826CA",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x0826D2",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x0826DA",
+          "current": {
+            "id": 33,
+            "jp": "ﾚﾝｼﾞｬｰ",
+            "ko": "레인저"
+          },
+          "candidates": [
+            {
+              "id": 35,
+              "jp": "ﾊｲﾏｽﾀｰ",
+              "ko": "하이마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "헤인",
+      "pointer": "0x0826FA",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x0826FA",
+          "current": {
+            "id": 3,
+            "jp": "ｳｫｰﾛｯｸ",
+            "ko": "워록"
+          },
+          "candidates": [
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            },
+            {
+              "id": 9,
+              "jp": "ｿｰｻﾗｰ",
+              "ko": "소서러"
+            },
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x082702",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x08270A",
+          "current": {
+            "id": 9,
+            "jp": "ｿｰｻﾗｰ",
+            "ko": "소서러"
+          },
+          "candidates": [
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x082712",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x08271A",
+          "current": {
+            "id": 17,
+            "jp": "ﾌﾟﾘｰｽﾄ",
+            "ko": "프리스트"
+          },
+          "candidates": [
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x082722",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x08272A",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x082732",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x08273A",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x082742",
+          "current": {
+            "id": 21,
+            "jp": "ｳｨｻﾞｰﾄﾞ",
+            "ko": "위저드"
+          },
+          "candidates": [
+            {
+              "id": 40,
+              "jp": "ｻﾓﾅｰ",
+              "ko": "서머너"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "스코트",
+      "pointer": "0x08275A",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x08275A",
+          "current": {
+            "id": 1,
+            "jp": "ﾌｧｲﾀｰ",
+            "ko": "파이터"
+          },
+          "candidates": [
+            {
+              "id": 6,
+              "jp": "ﾎｰｸﾅｲﾄ",
+              "ko": "호크나이트"
+            },
+            {
+              "id": 5,
+              "jp": "ﾅｲﾄ",
+              "ko": "나이트"
+            },
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x082762",
+          "current": {
+            "id": 6,
+            "jp": "ﾎｰｸﾅｲﾄ",
+            "ko": "호크나이트"
+          },
+          "candidates": [
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x08276A",
+          "current": {
+            "id": 5,
+            "jp": "ﾅｲﾄ",
+            "ko": "나이트"
+          },
+          "candidates": [
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x082772",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x08277A",
+          "current": {
+            "id": 15,
+            "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+            "ko": "드래곤나이트"
+          },
+          "candidates": [
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x082782",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x08278A",
+          "current": {
+            "id": 12,
+            "jp": "ﾊｲﾗﾝﾀﾞｰ",
+            "ko": "하이랜더"
+          },
+          "candidates": [
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x082792",
+          "current": {
+            "id": 17,
+            "jp": "ﾌﾟﾘｰｽﾄ",
+            "ko": "프리스트"
+          },
+          "candidates": [
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x08279A",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x0827A2",
+          "current": {
+            "id": 27,
+            "jp": "ﾅｲﾄﾏｽﾀｰ",
+            "ko": "나이트마스터"
+          },
+          "candidates": [
+            {
+              "id": 41,
+              "jp": "ﾛｲﾔﾙﾅｲﾄ",
+              "ko": "로얄나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "키스",
+      "pointer": "0x0827B2",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x0827B2",
+          "current": {
+            "id": 1,
+            "jp": "ﾌｧｲﾀｰ",
+            "ko": "파이터"
+          },
+          "candidates": [
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            },
+            {
+              "id": 6,
+              "jp": "ﾎｰｸﾅｲﾄ",
+              "ko": "호크나이트"
+            },
+            {
+              "id": 8,
+              "jp": "ﾋｰﾗｰ",
+              "ko": "힐러"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x0827BA",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x0827C2",
+          "current": {
+            "id": 6,
+            "jp": "ﾎｰｸﾅｲﾄ",
+            "ko": "호크나이트"
+          },
+          "candidates": [
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x0827CA",
+          "current": {
+            "id": 8,
+            "jp": "ﾋｰﾗｰ",
+            "ko": "힐러"
+          },
+          "candidates": [
+            {
+              "id": 15,
+              "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+              "ko": "드래곤나이트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x0827D2",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x0827DA",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x0827E2",
+          "current": {
+            "id": 15,
+            "jp": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+            "ko": "드래곤나이트"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x0827EA",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 30,
+              "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+              "ko": "드래곤로드"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x0827F2",
+          "current": {
+            "id": 17,
+            "jp": "ﾌﾟﾘｰｽﾄ",
+            "ko": "프리스트"
+          },
+          "candidates": [
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x0827FA",
+          "current": {
+            "id": 30,
+            "jp": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+            "ko": "드래곤로드"
+          },
+          "candidates": [
+            {
+              "id": 36,
+              "jp": "ﾄﾞﾗｺﾞﾝﾏｽﾀｰ",
+              "ko": "드래곤마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "아론",
+      "pointer": "0x08280A",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x08280A",
+          "current": {
+            "id": 1,
+            "jp": "ﾌｧｲﾀｰ",
+            "ko": "파이터"
+          },
+          "candidates": [
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            },
+            {
+              "id": 5,
+              "jp": "ﾅｲﾄ",
+              "ko": "나이트"
+            },
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x082812",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            },
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x08281A",
+          "current": {
+            "id": 5,
+            "jp": "ﾅｲﾄ",
+            "ko": "나이트"
+          },
+          "candidates": [
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            },
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x082822",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x08282A",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x082832",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x08283A",
+          "current": {
+            "id": 12,
+            "jp": "ﾊｲﾗﾝﾀﾞｰ",
+            "ko": "하이랜더"
+          },
+          "candidates": [
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x082842",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x08284A",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x082852",
+          "current": {
+            "id": 26,
+            "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+            "ko": "소드마스터"
+          },
+          "candidates": [
+            {
+              "id": 35,
+              "jp": "ﾊｲﾏｽﾀｰ",
+              "ko": "하이마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "레스터",
+      "pointer": "0x082862",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x082862",
+          "current": {
+            "id": 1,
+            "jp": "ﾌｧｲﾀｰ",
+            "ko": "파이터"
+          },
+          "candidates": [
+            {
+              "id": 5,
+              "jp": "ﾅｲﾄ",
+              "ko": "나이트"
+            },
+            {
+              "id": 7,
+              "jp": "ｸﾛｺﾅｲﾄ",
+              "ko": "크로코나이트"
+            },
+            {
+              "id": 10,
+              "jp": "ｼｬｰﾏﾝ",
+              "ko": "샤먼"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x08286A",
+          "current": {
+            "id": 5,
+            "jp": "ﾅｲﾄ",
+            "ko": "나이트"
+          },
+          "candidates": [
+            {
+              "id": 12,
+              "jp": "ﾊｲﾗﾝﾀﾞｰ",
+              "ko": "하이랜더"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 16,
+              "jp": "ｻｰﾍﾟﾝﾅｲﾄ",
+              "ko": "서펜나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x082872",
+          "current": {
+            "id": 7,
+            "jp": "ｸﾛｺﾅｲﾄ",
+            "ko": "크로코나이트"
+          },
+          "candidates": [
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 16,
+              "jp": "ｻｰﾍﾟﾝﾅｲﾄ",
+              "ko": "서펜나이트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x08287A",
+          "current": {
+            "id": 10,
+            "jp": "ｼｬｰﾏﾝ",
+            "ko": "샤먼"
+          },
+          "candidates": [
+            {
+              "id": 16,
+              "jp": "ｻｰﾍﾟﾝﾅｲﾄ",
+              "ko": "서펜나이트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x082882",
+          "current": {
+            "id": 12,
+            "jp": "ﾊｲﾗﾝﾀﾞｰ",
+            "ko": "하이랜더"
+          },
+          "candidates": [
+            {
+              "id": 27,
+              "jp": "ﾅｲﾄﾏｽﾀｰ",
+              "ko": "나이트마스터"
+            },
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x08288A",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 28,
+              "jp": "ｸﾞﾗﾝﾅｲﾄ",
+              "ko": "그랑나이트"
+            },
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 31,
+              "jp": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+              "ko": "서펜로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x082892",
+          "current": {
+            "id": 16,
+            "jp": "ｻｰﾍﾟﾝﾅｲﾄ",
+            "ko": "서펜나이트"
+          },
+          "candidates": [
+            {
+              "id": 29,
+              "jp": "ｼﾙﾊﾞｰﾅｲﾄ",
+              "ko": "실버나이트"
+            },
+            {
+              "id": 31,
+              "jp": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+              "ko": "서펜로드"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": true,
+          "application_verified": false,
+          "evidence": [
+            "captures/run/d221_c9_s10_candidate1.png",
+            "captures/run/d221_c9_s10_candidate2.png",
+            "captures/run/d221_c9_s10_candidate3.png"
+          ]
+        },
+        {
+          "index": 7,
+          "offset": "0x08289A",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 31,
+              "jp": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+              "ko": "서펜로드"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x0828A2",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x0828AA",
+          "current": {
+            "id": 31,
+            "jp": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+            "ko": "서펜로드"
+          },
+          "candidates": [
+            {
+              "id": 42,
+              "jp": "ｻｰﾍﾟﾝﾏｽﾀｰ",
+              "ko": "서펜마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "제시카",
+      "pointer": "0x0828C2",
+      "transitions": [
+        {
+          "index": 0,
+          "offset": "0x0828C2",
+          "current": {
+            "id": 3,
+            "jp": "ｳｫｰﾛｯｸ",
+            "ko": "워록"
+          },
+          "candidates": [
+            {
+              "id": 8,
+              "jp": "ﾋｰﾗｰ",
+              "ko": "힐러"
+            },
+            {
+              "id": 9,
+              "jp": "ｿｰｻﾗｰ",
+              "ko": "소서러"
+            },
+            {
+              "id": 4,
+              "jp": "ﾛｰﾄﾞ",
+              "ko": "로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 1,
+          "offset": "0x0828CA",
+          "current": {
+            "id": 8,
+            "jp": "ﾋｰﾗｰ",
+            "ko": "힐러"
+          },
+          "candidates": [
+            {
+              "id": 17,
+              "jp": "ﾌﾟﾘｰｽﾄ",
+              "ko": "프리스트"
+            },
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 2,
+          "offset": "0x0828D2",
+          "current": {
+            "id": 9,
+            "jp": "ｿｰｻﾗｰ",
+            "ko": "소서러"
+          },
+          "candidates": [
+            {
+              "id": 18,
+              "jp": "ﾋﾞｼｮｯﾌﾟ",
+              "ko": "비숍"
+            },
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 3,
+          "offset": "0x0828DA",
+          "current": {
+            "id": 4,
+            "jp": "ﾛｰﾄﾞ",
+            "ko": "로드"
+          },
+          "candidates": [
+            {
+              "id": 19,
+              "jp": "ﾒｲｼﾞ",
+              "ko": "메이지"
+            },
+            {
+              "id": 13,
+              "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+              "ko": "매직나이트"
+            },
+            {
+              "id": 11,
+              "jp": "ﾊｲﾛｰﾄﾞ",
+              "ko": "하이로드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 4,
+          "offset": "0x0828E2",
+          "current": {
+            "id": 17,
+            "jp": "ﾌﾟﾘｰｽﾄ",
+            "ko": "프리스트"
+          },
+          "candidates": [
+            {
+              "id": 22,
+              "jp": "ﾊｲﾌﾟﾘｰｽﾄ",
+              "ko": "하이프리스트"
+            },
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 5,
+          "offset": "0x0828EA",
+          "current": {
+            "id": 18,
+            "jp": "ﾋﾞｼｮｯﾌﾟ",
+            "ko": "비숍"
+          },
+          "candidates": [
+            {
+              "id": 23,
+              "jp": "ｾｲﾝﾄ",
+              "ko": "세인트"
+            },
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 6,
+          "offset": "0x0828F2",
+          "current": {
+            "id": 19,
+            "jp": "ﾒｲｼﾞ",
+            "ko": "메이지"
+          },
+          "candidates": [
+            {
+              "id": 21,
+              "jp": "ｳｨｻﾞｰﾄﾞ",
+              "ko": "위저드"
+            },
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 7,
+          "offset": "0x0828FA",
+          "current": {
+            "id": 13,
+            "jp": "ﾏｼﾞｯｸﾅｲﾄ",
+            "ko": "매직나이트"
+          },
+          "candidates": [
+            {
+              "id": 20,
+              "jp": "ｱｰｸﾒｲｼﾞ",
+              "ko": "아크메이지"
+            },
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 8,
+          "offset": "0x082902",
+          "current": {
+            "id": 11,
+            "jp": "ﾊｲﾛｰﾄﾞ",
+            "ko": "하이로드"
+          },
+          "candidates": [
+            {
+              "id": 24,
+              "jp": "ｾｰｼﾞ",
+              "ko": "세이지"
+            },
+            {
+              "id": 25,
+              "jp": "ﾊﾟﾗﾃﾞｨﾝ",
+              "ko": "팔라딘"
+            },
+            {
+              "id": 26,
+              "jp": "ｿｰﾄﾞﾏｽﾀｰ",
+              "ko": "소드마스터"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        },
+        {
+          "index": 9,
+          "offset": "0x08290A",
+          "current": {
+            "id": 20,
+            "jp": "ｱｰｸﾒｲｼﾞ",
+            "ko": "아크메이지"
+          },
+          "candidates": [
+            {
+              "id": 38,
+              "jp": "ｻﾞｰｳﾞｪﾗｰ",
+              "ko": "자베라"
+            }
+          ],
+          "live_verified": false,
+          "application_verified": false,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

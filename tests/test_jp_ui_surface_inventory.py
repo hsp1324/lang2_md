@@ -99,8 +99,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(
             class_change_gaps,
             [
-                "runtime verification of class-change candidate sets beyond "
-                "Fighter Elwin's Lord/Knight/Shaman branch"
+                "runtime verification of the remaining 74 unique class-change "
+                "candidate combinations and non-Elwin application paths"
             ],
         )
 

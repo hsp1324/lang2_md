@@ -52,7 +52,7 @@ Resource table `0x0B0000` index 1 uses entry
 ## Remaining Inventory Gaps
 
 - arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
-- runtime verification of class-change candidate sets beyond Fighter Elwin's Lord/Knight/Shaman branch
+- runtime verification of the remaining 74 unique class-change candidate combinations and non-Elwin application paths
 - production-path scenario-clear verification of the title SAVE screen's dynamic data
 - all ending and credits UI outside known opening/ending dialogue patches
 - all magic/summon targeting and result prompts
