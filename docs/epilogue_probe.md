@@ -92,6 +92,67 @@ python3 tools/build_epilogue_probe_rom.py --record-index 78 --start-slot 14
 python3 tools/build_epilogue_probe_rom.py --record-index 86 --start-slot 15
 ```
 
+## All-Record Renderer Pass
+
+`--all-records` concatenates the current build's 90 relocated Korean records
+into one probe-only stream at `0x3E0000`. Every record keeps its encoded words,
+dynamic-name controls, line breaks, and existing page breaks; only each
+intermediate `FFFF` terminator becomes one `FFFD` page break. The final record
+retains its `FFFF` terminator. This produces exactly 515 pages, the sum of the
+90 individual page counts, without modifying the production ROM.
+
+```bash
+python3 tools/build_epilogue_probe_rom.py --all-records
+```
+
+The command writes two ignored artifacts beside one another:
+
+```text
+roms/builds/Langrisser II (Epilogue Probe All).md
+roms/builds/Langrisser II (Epilogue Probe All).manifest.json
+```
+
+The manifest maps every original address and English cross-reference to a
+zero-based `start_page`, `page_count`, relocated address, and combined-stream
+word range. The builder validates all 90 Japanese source hashes and pointer
+owners before following the 90 current Korean relocation pointers. It also
+rejects an occupied stream reservation, a page-count change, an unterminated
+relocated record, or overflow into the descriptor reservation at `0x3FF000`.
+
+Combine it with the Scenario 27 placement probe for one stock ending entry:
+
+```bash
+python3 tools/build_scenario27_ending_probe_rom.py \
+  --input-rom 'roms/builds/Langrisser II (Epilogue Probe All).md' \
+  --output-rom 'roms/builds/Langrisser II (Scenario 27 All Epilogues Probe).md'
+```
+
+This path is intended to prove that all authored pages survive the real text
+renderer with natural spacing and dynamic names. It does not prove the normal
+stat-selection condition for each outcome, nor does it replace the normal
+per-character portrait/stat transition checks. The single-record normal,
+Liana, and world probes below remain authoritative for those selector classes.
+
+The combined checksum `DD8F` was played through Scenario 27 on 2026-07-18.
+Bernhardt was defeated on the first adjacent attack and the stock ending path
+consumed the combined stream through stable `Fin` without a reset or freeze.
+The continuous evidence sets are:
+
+```text
+captures/run/dd8f_closing_watch/
+captures/run/dd8f_all_epilogues_watch/
+```
+
+`dd8f_all_epilogues_watch/0750.png` is `Fin`, which remains stable through
+`1200.png`. Reaching the final terminator proves that the real renderer can
+consume the 90-record/515-page stream, but it is not a substitute for normal
+outcome selection or manual acceptance of every individual page.
+
+This pass also exposed an ending-status font-bank regression. Stable frames
+`0340.png` and `0545.png` show broken extension glyphs in
+`보젤/다크마스터` and `베른하르트/엠퍼러`. Fix and replay that status
+renderer before treating the all-record visual surface as clean.
+
 ## Scenario 27 Ending Probe
 
 `tools/build_scenario27_ending_probe_rom.py` can be applied after the selected

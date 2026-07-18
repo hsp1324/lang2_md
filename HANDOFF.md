@@ -5033,3 +5033,53 @@ contains 57 safe syllables as documented below and in
   view, Scenario 30 `battle_ui` is conservatively `verified_probe` using the
   production-derived 3590 shared-renderer evidence. It is not
   `verified_current`; successful-clear and branch surfaces remain pending.
+
+### All-Record Epilogue Renderer Probe (2026-07-18)
+
+- The epilogue inventory remains 90/90 translated records and 515 authored
+  pages. Static tests already lock every Japanese source hash, unique pointer
+  owner, dynamic-name control, page count, relocated Korean pointer, and
+  three-line/24-cell page limit, but the old runtime probe forced only one
+  outcome per complete Scenario 27 replay.
+- `tools/build_epilogue_probe_rom.py --all-records` now constructs one ignored
+  renderer stream at `0x3E0000`. It copies every current relocated record
+  byte-for-byte except that the first 89 `FFFF` terminators become `FFFD` page
+  breaks; the 90th terminator remains unchanged. The resulting stream has
+  exactly 515 pages and ends before the existing probe descriptors at
+  `0x3FF000`.
+- The generated JSON manifest records the zero-based start page, page count,
+  source and relocated addresses, English cross-reference, and word range for
+  every record. This lets a continuous capture set be attributed back to all
+  90 outcomes without guessing from screenshots.
+- New tests reconstruct and compare every combined segment against its
+  production relocation, assert all 90 page ranges and the total page count,
+  verify selector descriptors and checksum, and reject a nonempty reservation.
+  The standalone all-record probe is checksum `9221`; applying the Scenario 27
+  adjacent-Bernhardt probe produces checksum `DD8F`.
+- This is a non-distribution runtime verifier. It proves the real renderer can
+  consume every Korean page in one ending entry, but it does not replace
+  single-record tests of normal/Liana/world selector ownership or ordinary
+  outcome-condition selection.
+- Combined checksum `DD8F` was played from the Scenario 27 selector through
+  automatic deployment and the adjacent-Bernhardt ending probe. Bernhardt was
+  defeated on the first attack, after a pre-attack quicksave, and the complete
+  closing path consumed the all-record stream through its final `FFFF` and
+  reached stable `Fin` without a reset or freeze. Continuous evidence is
+  `captures/run/dd8f_closing_watch/` followed by
+  `captures/run/dd8f_all_epilogues_watch/`; frame `0750.png` is `Fin` and it
+  remains unchanged through `1200.png`.
+- This successful renderer pass does not promote every ending branch. It
+  verifies that the combined 90-record/515-page byte stream terminates through
+  the stock renderer, while ordinary outcome selection and a page-by-page
+  visual acceptance pass remain separate gates.
+- The run exposed a production regression outside the authored epilogue text:
+  the ending result/status loader does not retain every high-extension glyph.
+  `dd8f_all_epilogues_watch/0340.png` holds a stable broken second syllable in
+  `보젤` and first syllable in `다크마스터`; `0545.png` through `0560.png`
+  hold the same kind of stable corruption in `엠퍼러` below the intact
+  `베른하르트`. These are not one-frame fades and must be fixed in the ending
+  status-screen glyph loader before this surface is accepted.
+- The title-screen LOAD path is also distinct from the already localized
+  in-battle Start-menu load child. `captures/run/dd8f_load_slots.png` still
+  renders Japanese `ロード` and `データがありません`; keep title LOAD and
+  all slot/error variants in the UI gap inventory.

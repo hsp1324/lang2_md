@@ -2,6 +2,7 @@
 # here, not Markdown.
 /Langrisser II*.md
 /roms/**/*.md
+/roms/builds/*.manifest.json
 
 # Emulator binaries, downloaded archives, and external reference packages.
 /tools/blastem/

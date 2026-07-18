@@ -114,6 +114,77 @@ class EpilogueProbeRomTests(unittest.TestCase):
         start = probe_builder.ENDING_CHARACTER_INDEX_INIT
         self.assertEqual(data[start : start + 6], bytes.fromhex("31FC 000E AE90"))
 
+    def test_all_record_probe_concatenates_every_relocated_page(self):
+        data = bytearray(self.built)
+        checksum, page_count, manifest = probe_builder.patch_all_records_probe(
+            data,
+            self.source,
+            self.records,
+        )
+        expected_page_count = sum(
+            int(row["page_break_count"]) + 1 for row in self.records
+        )
+        self.assertEqual(page_count, 515)
+        self.assertEqual(page_count, expected_page_count)
+        self.assertEqual(len(manifest), 90)
+        self.assertEqual(manifest[0]["start_page"], 0)
+        self.assertEqual(
+            manifest[-1]["start_page"] + manifest[-1]["page_count"],
+            page_count,
+        )
+        self.assertEqual(
+            probe_builder.be32(data, probe_builder.FORCE_DESCRIPTOR + 8),
+            probe_builder.ALL_RECORD_STREAM_BASE,
+        )
+        self.assertEqual(
+            probe_builder.be32(data, probe_builder.GROUP_POINTER_TABLE),
+            probe_builder.FORCE_DESCRIPTOR,
+        )
+        for slot in range(1, probe_builder.NORMAL_CHARACTER_SLOTS):
+            self.assertEqual(
+                probe_builder.be32(
+                    data,
+                    probe_builder.GROUP_POINTER_TABLE + slot * 4,
+                ),
+                probe_builder.SKIP_DESCRIPTOR,
+            )
+
+        for index, (row, entry) in enumerate(zip(self.records, manifest)):
+            relocated = probe_builder.be32(
+                self.built, int(row["pointer_reference"], 16)
+            )
+            original_words = probe_builder.read_relocated_record(
+                self.built, relocated
+            )
+            start = (
+                probe_builder.ALL_RECORD_STREAM_BASE
+                + int(entry["stream_word_offset"]) * 2
+            )
+            actual_words = [
+                builder.be16(data, start + word * 2)
+                for word in range(int(entry["stream_word_count"]))
+            ]
+            expected_words = original_words[:-1] + [
+                0xFFFF if index == len(self.records) - 1 else 0xFFFD
+            ]
+            self.assertEqual(actual_words, expected_words)
+
+        expected_checksum = sum(
+            builder.be16(data, offset) for offset in range(0x200, len(data), 2)
+        ) & 0xFFFF
+        self.assertEqual(checksum, expected_checksum)
+        self.assertEqual(builder.be16(data, 0x18E), expected_checksum)
+
+    def test_all_record_probe_rejects_occupied_stream_reservation(self):
+        data = bytearray(self.built)
+        data[probe_builder.ALL_RECORD_STREAM_BASE] = 0
+        with self.assertRaisesRegex(ValueError, "stream reservation is not empty"):
+            probe_builder.patch_all_records_probe(
+                data,
+                self.source,
+                self.records,
+            )
+
     def test_probe_rejects_invalid_or_changed_start_slot_initializer(self):
         with self.assertRaisesRegex(ValueError, "outside 0..15"):
             probe_builder.patch_start_slot(bytearray(self.built), self.source, 16)
