@@ -5012,3 +5012,24 @@ contains 57 safe syllables as documented below and in
   damaged glyphs, clipping, reset, or freeze.
 - Scenario 28 and 29 `battle_ui` are therefore `verified_current`. This does
   not promote their still-pending completion or conditional branch surfaces.
+
+### Current 212A Scenario X3 No-Action Battle Audit (2026-07-18)
+
+- Scenario 30 was re-entered through the built-in selector on current 212A.
+  `212a_s30_arrangement_current2.png` confirms the source-secret-stage status
+  convention `SCENARIO ?3`; the question mark is intentional, not a damaged
+  Korean tile. Automatic deployment and the opening reached a valid map.
+- The older two-second first-turn run had no retained battle frame, so the new
+  run captured 150 frames at roughly 0.3-second intervals from `턴 종료`.
+  Enemy movement and effects reduce Elwin to HP0 and lead to the expected
+  Korean defeat dialogue without ever entering the side-view battle renderer.
+  `212a_s30_after_failed_turn_end.png` is the final HP0 dialogue evidence.
+- A first input attempt entered `용병고용` because several directional events
+  were sent before checking focus. Its purchases were fully removed in the
+  isolated runtime and did not change the ROM or source. Reliable traversal
+  used one 0.1-second direction event followed by a screen check; C on the
+  hire `END` row, rather than B, returns to the preparation command list.
+- Since the actual no-action route cannot prove the scenario-specific battle
+  view, Scenario 30 `battle_ui` is conservatively `verified_probe` using the
+  production-derived 3590 shared-renderer evidence. It is not
+  `verified_current`; successful-clear and branch surfaces remain pending.

@@ -515,7 +515,16 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario30["preparation"], "verified_current")
         self.assertEqual(scenario30["opening_events"], "verified_current")
         self.assertEqual(scenario30["turn_events"], "verified_current")
-        self.assertEqual(scenario30["battle_ui"], "pending")
+        self.assertEqual(scenario30["battle_ui"], "verified_probe")
+        for capture in (
+            "captures/run/212a_s30_arrangement_current2.png",
+            "captures/run/212a_s30_after_deploy.png",
+            "captures/run/212a_s30_command_current.png",
+            "captures/run/212a_s30_after_failed_turn_end.png",
+        ):
+            self.assertIn(capture, scenario30["captures"])
+        self.assertIn("production-derived 3590", scenario30["note"])
+        self.assertIn("SCENARIO ?3", scenario30["note"])
         self.assertIn("captures/run/eca0_s30_turn1_17.png", scenario30["captures"])
         self.assertEqual(scenario31["description"], "verified_current")
         self.assertEqual(scenario31["conditions"], "verified_current")

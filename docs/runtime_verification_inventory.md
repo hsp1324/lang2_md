@@ -40,7 +40,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 27 | current | current | current | current | probe | current | probe | probe | 25 |
 | 28 | current | current | current | current | current | current | pending | pending | 18 |
 | 29 | current | current | current | current | current | current | pending | pending | 22 |
-| 30 | current | current | current | current | pending | current | pending | pending | 15 |
+| 30 | current | current | current | current | probe | current | pending | pending | 19 |
 | 31 | current | current | current | current | pending | current | pending | pending | 16 |
 
 ## Evidence Notes
@@ -992,7 +992,7 @@ Selector record 29 intentionally enters the on-screen secret Scenario X2 디레�
 
 ### Scenario 30
 
-Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡의 둥지. Production ECA0 freshly verifies all eight scrolling description frames, the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 엘윈, 쉐리, 아론, 헤인, 키스, 미나, 레스터, 리아나, and the live class/status labels. Victory is 미나 격파; defeat is 주인공 사망. Enemy movement defeats Elwin on the no-action first turn; frame 16 contains his clean Korean defeat line and frame 17 reaches the expected GAME OVER. Like the source, the title uses X3 while the battle status bar uses SCENARIO ?3. Scenario-specific battle presentation, a successful clear, and conditional branches remain pending.
+Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡의 둥지. Production ECA0 freshly verifies all eight scrolling description frames, the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 엘윈, 쉐리, 아론, 헤인, 키스, 미나, 레스터, 리아나, and the live class/status labels. Victory is 미나 격파; defeat is 주인공 사망. Enemy movement defeats Elwin on the no-action first turn; frame 16 contains his clean Korean defeat line and frame 17 reaches the expected GAME OVER. A fresh current 212A replay rechecked arrangement, deployment, the command-ready map, and dense first-turn capture through Elwin's HP0 dialogue. This no-action route applies damage without entering the battle presentation, so scenario-specific battle frames remain unavailable; battle_ui is covered by the production-derived 3590 shared-renderer probe and is classified verified_probe rather than verified_current. Like the source, the title uses X3 while the battle status bar uses SCENARIO ?3; the current arrangement and map captures confirm the question mark is intentional and not a damaged Hangul tile. A successful clear and conditional branches remain pending.
 
 - `captures/run/c7ab_s30_title.png`
 - `captures/run/c7ab_s30_body_mid.png`
@@ -1009,6 +1009,10 @@ Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡�
 - `captures/run/eca0_s30_turn1_01.png`
 - `captures/run/eca0_s30_turn1_16.png`
 - `captures/run/eca0_s30_turn1_17.png`
+- `captures/run/212a_s30_arrangement_current2.png`
+- `captures/run/212a_s30_after_deploy.png`
+- `captures/run/212a_s30_command_current.png`
+- `captures/run/212a_s30_after_failed_turn_end.png`
 
 ### Scenario 31
 
