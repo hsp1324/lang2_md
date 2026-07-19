@@ -1,7 +1,7 @@
 {
   "scan_range": "0x000000..0x180000",
   "candidate_count": 783,
-  "modified_candidate_count": 498,
+  "modified_candidate_count": 499,
   "ownership_counts": {
     "pointer_table_record": 105,
     "pointer_table_record_interior": 95,
@@ -7776,9 +7776,9 @@
       "target_korean": "지휘관 배치/출격 화면별 글리프·토큰",
       "original_word_count": 6,
       "original_tokens": "01FF 0149 00A3 0198 0199 FFFF",
-      "current_tokens": "01FF 0149 00A3 0198 0199 FFFF",
+      "current_tokens": "01FF 701B 7029 70DE 70B0 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {

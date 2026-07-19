@@ -607,10 +607,20 @@ WIDE_BYTE_GLYPH_PATCHES = {
 
 DIRECT_WORD_SEQUENCE_PATCHES = {
     0x9706A: (12, "이동공격마법소환치료명령"),
+    # Scenario-clear result header: original `戦果報告`.
+    0x0A2D88: (4, "전과보고"),
     # Ending/epilogue status panel. The stock tilemap indexes these eight
     # glyph-list slots as two fixed four-glyph labels.
     0x89146: (8, "격파횟수퇴각횟수"),
 }
+
+BATTLE_RESULT_HEADER_GLYPH_LIST = 0x0A2D88
+BATTLE_RESULT_HEADER_EXPECTED_GLYPHS = (
+    0x0149,  # 戦
+    0x00A3,  # 果
+    0x0198,  # 報
+    0x0199,  # 告
+)
 
 ENDING_STATUS_GLYPH_LIST = 0x89146
 ENDING_STATUS_EXPECTED_GLYPHS = (
@@ -3414,8 +3424,21 @@ def patch_scenario_header(data: bytearray, glyph_by_char: dict[str, int]) -> Non
             put16(data, offset + i * 2, value)
 
 
+def validate_battle_result_header(data: bytes | bytearray) -> None:
+    actual_result_header = tuple(
+        be16(data, BATTLE_RESULT_HEADER_GLYPH_LIST + index * 2)
+        for index in range(len(BATTLE_RESULT_HEADER_EXPECTED_GLYPHS))
+    )
+    if actual_result_header != BATTLE_RESULT_HEADER_EXPECTED_GLYPHS:
+        raise ValueError(
+            "battle result header glyph list changed: "
+            f"{actual_result_header!r} != {BATTLE_RESULT_HEADER_EXPECTED_GLYPHS!r}"
+        )
+
+
 def patch_direct_word_sequences(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     patch_class_change_glyph_list(data, glyph_by_char)
+    validate_battle_result_header(data)
     actual_ending_glyphs = tuple(
         be16(data, ENDING_STATUS_GLYPH_LIST + index * 2)
         for index in range(len(ENDING_STATUS_EXPECTED_GLYPHS))

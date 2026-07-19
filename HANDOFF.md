@@ -5348,3 +5348,32 @@ contains 57 safe syllables as documented below and in
   active before marking `application_verified`.
 - All 278 unit tests pass with both generated class-chain artifacts and the
   narrowed 74-combination UI gap checked into the repository.
+
+### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
+
+- `tools/build_scenario1_clear_probe_rom.py` builds an ignored diagnostic ROM
+  from production. It validates the Japanese Scenario 1 header at `0x180196`,
+  the first player deployment slot `(11,17)`, and Bald's fixed record at
+  `0x1802D8`. It changes only Bald's AT/DF, position, six mercenary bytes, and
+  the Mega Drive checksum. No event, completion, result, or SAVE renderer code
+  is patched. The first version called the deployment slot Elwin-specific;
+  that ownership was broader than the source evidence, so the accepted names
+  say `FIRST_PLAYER_DEPLOYMENT`.
+- Probe checksum `8AEA` completed Scenario 1 through the stock event path.
+  `captures/run/8aea_s01_clear_post_40.png` reaches the result screen and
+  `captures/run/8aea_s01_clear_post_41.png` reaches the real title SAVE screen
+  with live work RAM. The latter visibly verifies `저장`, `시나리오 2`, three
+  `데이터 없음` rows, `다음 시나리오`, and the unobstructed dynamic number.
+  This supersedes the earlier EC40 renderer-only probe's dynamic-data gap.
+- The same result frame exposed the Japanese title `戦果報告`. Pixel matching
+  against the Japanese global font identifies exact glyph IDs `0149 00A3 0198
+  0199`; their unique ROM sequence begins at `0x0A2D88` and is followed by
+  `FFFF`. `scripts/build_korean_jp_probe.py` now validates all four source IDs
+  before writing `전과보고`. `tests/test_battle_result_screen.py` locks the
+  source IDs, terminator, target text, and every rendered 64-byte glyph.
+- Production checksum is `AD01`, still with 861 custom glyphs. A fresh AD01
+  result-screen replay was attempted, but the remote BlastEm window stopped
+  accepting deterministic cursor/confirm input after reaching the clean map.
+  Do not classify that input failure as a ROM reset or a failed text patch.
+  The new header is statically reviewed and intentionally remains
+  `live_verified: false` until an AD01 result capture is obtained.

@@ -61,6 +61,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         if row["address"] == f"0x{builder.ENDING_STATUS_GLYPH_LIST:06X}":
             row["reviewed"] = True
             row["live_verified"] = True
+        elif row["address"] == f"0x{builder.BATTLE_RESULT_HEADER_GLYPH_LIST:06X}":
+            row["reviewed"] = True
     add_rows(rows, japanese, korean, "fixed_direct_strings", builder.DIRECT_FIXED_STRING_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "route_titles", builder.DIRECT_FIXED_ROUTE_TITLE_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "scenario_headers", builder.DIRECT_FIXED_SCENARIO_HEADER_PATCHES, 2, True)
@@ -331,7 +333,6 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
             "runtime verification of the remaining 74 unique class-change candidate combinations and non-Elwin application paths",
-            "production-path scenario-clear verification of the title SAVE screen's dynamic data",
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",
             "all equipment and shop variants beyond declared Scenario 1 paths",

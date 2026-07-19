@@ -20,7 +20,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "ECA0")
+        self.assertEqual(data["production_checksum"], "AD01")
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]
@@ -89,6 +89,10 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario27["captures"])
         self.assertEqual(scenario1["turn_events"], "verified_current")
+        self.assertEqual(scenario1["completion"], "verified_probe")
+        self.assertIn(
+            "captures/run/8aea_s01_clear_post_41.png", scenario1["captures"]
+        )
         self.assertIn("captures/run/c7ab_s02_body_final2.png", scenario2["captures"])
         self.assertEqual(scenario2["description"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "verified_current")
