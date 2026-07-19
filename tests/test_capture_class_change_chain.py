@@ -24,11 +24,8 @@ class CaptureClassChangeChainTests(unittest.TestCase):
     def test_scott_chain_is_already_screen_verified(self):
         self.assertEqual(pending_transitions(SOURCE, 6), [])
 
-    def test_elwin_chain_has_nine_pending_unique_transitions(self):
-        transitions = pending_transitions(SOURCE, 1)
-        self.assertEqual(len(transitions), 9)
-        self.assertEqual(transitions[0].current_class, 0x04)
-        self.assertEqual(transitions[-1].current_class, 0x1A)
+    def test_elwin_chain_is_already_screen_verified(self):
+        self.assertEqual(pending_transitions(SOURCE, 1), [])
 
     def test_capture_paths_include_prompt_and_each_candidate(self):
         paths = expected_capture_paths(0x903C, 5, 0x0A, 3)

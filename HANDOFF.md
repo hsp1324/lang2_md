@@ -5454,6 +5454,16 @@ contains 57 safe syllables as documented below and in
   34 unique combinations begin with nine pending Elwin rows (`04` through
   terminal `1A`). Production remains checksum `AD01` with 861 custom glyphs;
   all 297 unit tests pass.
+- Commander 1 (Elwin) completed nine pending transitions with
+  `completed 9, resumed 0`: `8ea5_c1_s04`, `8ea1_c1_s05`, `8eae_c1_s0a`,
+  `8edb_c1_s12`, `8ed8_c1_s0b`, `8ed5_c1_s0c`, `8ed9_c1_s0d`,
+  `8ed8_c1_s13`, and `8eb2_c1_s1a`. All 25 candidate frames were visually
+  reviewed through the terminal Hero branch with intact Korean class, stat,
+  mercenary, and magic text. They are screen-only evidence.
+- Generated coverage is now 51/76 unique combinations, two application proofs,
+  and 25 unique combinations remaining. Commander 9 (Lester) is the next
+  nine-row batch target. Production remains checksum `AD01` with 861 custom
+  glyphs; all 297 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

@@ -180,6 +180,15 @@ combinations; 34 remain. Shared transitions also complete Lana's chain without
 a redundant emulator run, and Elwin's nine pending unique rows are the next
 batch target.
 
+Commander 1 (Elwin) next completed its nine previously uncovered transitions
+under prefixes `8ea5_c1_s04`, `8ea1_c1_s05`, `8eae_c1_s0a`,
+`8edb_c1_s12`, `8ed8_c1_s0b`, `8ed5_c1_s0c`, `8ed9_c1_s0d`,
+`8ed8_c1_s13`, and `8eb2_c1_s1a`. All 25 candidate frames were reviewed from
+the Japanese source chain through the terminal Hero branch. Korean classes,
+stats, mercenaries, and magic lists are intact. The inventory now covers 51 of
+76 unique combinations, with 25 remaining; these nine rows are screen-only
+evidence.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is
