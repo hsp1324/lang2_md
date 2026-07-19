@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 32,
-  "live_verified_unique_transition_count": 32,
+  "live_verified_transition_count": 42,
+  "live_verified_unique_transition_count": 42,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -1623,9 +1623,14 @@
               "ko": "로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8e8d_c6_s01_trigger.png",
+            "captures/run/8e8d_c6_s01_candidate1.png",
+            "captures/run/8e8d_c6_s01_candidate2.png",
+            "captures/run/8e8d_c6_s01_candidate3.png"
+          ]
         },
         {
           "index": 1,
@@ -1652,9 +1657,14 @@
               "ko": "하이랜더"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eab_c6_s06_trigger.png",
+            "captures/run/8eab_c6_s06_candidate1.png",
+            "captures/run/8eab_c6_s06_candidate2.png",
+            "captures/run/8eab_c6_s06_candidate3.png"
+          ]
         },
         {
           "index": 2,
@@ -1681,9 +1691,14 @@
               "ko": "프리스트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eac_c6_s05_trigger.png",
+            "captures/run/8eac_c6_s05_candidate1.png",
+            "captures/run/8eac_c6_s05_candidate2.png",
+            "captures/run/8eac_c6_s05_candidate3.png"
+          ]
         },
         {
           "index": 3,
@@ -1710,9 +1725,14 @@
               "ko": "하이로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ea9_c6_s04_trigger.png",
+            "captures/run/8ea9_c6_s04_candidate1.png",
+            "captures/run/8ea9_c6_s04_candidate2.png",
+            "captures/run/8ea9_c6_s04_candidate3.png"
+          ]
         },
         {
           "index": 4,
@@ -1739,9 +1759,14 @@
               "ko": "그랑나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ee3_c6_s0f_trigger.png",
+            "captures/run/8ee3_c6_s0f_candidate1.png",
+            "captures/run/8ee3_c6_s0f_candidate2.png",
+            "captures/run/8ee3_c6_s0f_candidate3.png"
+          ]
         },
         {
           "index": 5,
@@ -1768,9 +1793,14 @@
               "ko": "나이트마스터"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ede_c6_s0d_trigger.png",
+            "captures/run/8ede_c6_s0d_candidate1.png",
+            "captures/run/8ede_c6_s0d_candidate2.png",
+            "captures/run/8ede_c6_s0d_candidate3.png"
+          ]
         },
         {
           "index": 6,
@@ -1797,9 +1827,14 @@
               "ko": "팔라딘"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed9_c6_s0c_trigger.png",
+            "captures/run/8ed9_c6_s0c_candidate1.png",
+            "captures/run/8ed9_c6_s0c_candidate2.png",
+            "captures/run/8ed9_c6_s0c_candidate3.png"
+          ]
         },
         {
           "index": 7,
@@ -1826,9 +1861,14 @@
               "ko": "세이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eda_c6_s11_trigger.png",
+            "captures/run/8eda_c6_s11_candidate1.png",
+            "captures/run/8eda_c6_s11_candidate2.png",
+            "captures/run/8eda_c6_s11_candidate3.png"
+          ]
         },
         {
           "index": 8,
@@ -1855,9 +1895,14 @@
               "ko": "세인트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed0_c6_s0b_trigger.png",
+            "captures/run/8ed0_c6_s0b_candidate1.png",
+            "captures/run/8ed0_c6_s0b_candidate2.png",
+            "captures/run/8ed0_c6_s0b_candidate3.png"
+          ]
         },
         {
           "index": 9,
@@ -1874,9 +1919,12 @@
               "ko": "로얄나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ebf_c6_s1b_trigger.png",
+            "captures/run/8ebf_c6_s1b_candidate1.png"
+          ]
         }
       ]
     },

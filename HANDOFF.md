@@ -5439,6 +5439,21 @@ contains 57 safe syllables as documented below and in
   (Scott) is the next ten-combination batch target.
 - Production rebuild remains checksum `AD01`; all 296 unit tests pass after the
   Sherry evidence and generated inventories are included.
+- Commander 6 (Scott) completed all ten source transitions with
+  `completed 10, resumed 0`. Accepted prefixes are `8e8d_c6_s01`,
+  `8eab_c6_s06`, `8eac_c6_s05`, `8ea9_c6_s04`, `8ee3_c6_s0f`,
+  `8ede_c6_s0d`, `8ed9_c6_s0c`, `8eda_c6_s11`, `8ed0_c6_s0b`, and
+  `8ebf_c6_s1b`. All 28 candidate frames were visually reviewed. Cavalry,
+  flying, holy, and terminal Royal Knight branches show intact Korean class,
+  stat, mercenary, and magic text with no Japanese residue or clipping.
+  These are screen-only proofs; application evidence remains limited to the
+  established Elwin and Hein rows.
+- The generated inventory now reports 42/76 unique source combinations
+  screen-verified and two transitions application-verified. Duplicate coverage
+  also closes Lana's source chain without another emulator run. The remaining
+  34 unique combinations begin with nine pending Elwin rows (`04` through
+  terminal `1A`). Production remains checksum `AD01` with 861 custom glyphs;
+  all 297 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

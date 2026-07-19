@@ -168,6 +168,18 @@ branches. Korean class names, stats, mercenaries, and magic lists are intact;
 Ranger's empty mercenary area is source data rather than rendering damage.
 All ten Sherry rows are screen-verified and remain pending for application.
 
+Commander 6 (Scott) then completed all ten source transitions under prefixes
+`8e8d_c6_s01`, `8eab_c6_s06`, `8eac_c6_s05`, `8ea9_c6_s04`,
+`8ee3_c6_s0f`, `8ede_c6_s0d`, `8ed9_c6_s0c`, `8eda_c6_s11`,
+`8ed0_c6_s0b`, and `8ebf_c6_s1b`. Visual review covers all 28 candidate
+frames, including the cavalry, flying, holy, and terminal Royal Knight
+branches. Korean class names, stats, mercenaries, and magic lists render
+without clipping, broken glyphs, or Japanese residue. These rows remain
+screen-only evidence. The accepted evidence now covers 42 of 76 unique source
+combinations; 34 remain. Shared transitions also complete Lana's chain without
+a redundant emulator run, and Elwin's nine pending unique rows are the next
+batch target.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is
