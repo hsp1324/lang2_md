@@ -48,6 +48,7 @@
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
+- `tools/jp_direct_byte_string_inventory.py`: ROM의 짝수 주소를 32비트 포인터로 보수적으로 해석해 실제 참조되는 `FF` 종료 CP932/ASCII 바이트 문자열 후보를 분류합니다.
 - `tools/runtime_verification_inventory.py`: 31개 장의 설명·조건·준비·오프닝·전투·턴 이벤트·클리어·분기/엔딩 실기 상태를 `localization/runtime_verification.json`에서 검증해 Markdown 체크리스트로 만듭니다. 정적 번역 완료와 실기 완료를 구분합니다.
 - `tools/build_epilogue_probe_rom.py`: 원본 엔딩 선택 루틴의 조건표를 임시로 바꿔 지정한 후일담 레코드를 실제 엔딩 렌더러로 확인할 개발용 ROM을 만듭니다. `--start-slot 14/15`로 리아나·세계 특수 경로부터 시작할 수 있습니다.
 - `tools/build_ending_dialogue_probe_rom.py`: 재배치된 엔딩 방문 대사 23개를 83페이지 진단 스트림으로 연결해 실제 방문 대사 렌더러에서 전 페이지를 확인합니다. 선택 조건 자체를 증명하는 ROM은 아니며 생성 ROM과 manifest는 커밋하지 않습니다.
@@ -114,9 +115,10 @@ python3 tools/jp_ui_surface_inventory.py
 python3 tools/class_change_inventory.py
 python3 tools/jp_compressed_resource_inventory.py
 python3 tools/jp_direct_string_inventory.py
+python3 tools/jp_direct_byte_string_inventory.py
 ```
 
-전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에, 압축 리소스 전체 표는 `docs/compressed_resource_inventory.md`, `localization/compressed_resources.json`에, 직접 문자열 후보는 `docs/direct_word_candidate_inventory.md`, `localization/direct_word_candidates.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
+전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에, 압축 리소스 전체 표는 `docs/compressed_resource_inventory.md`, `localization/compressed_resources.json`에, 16비트 직접 문자열 후보는 `docs/direct_word_candidate_inventory.md`, `localization/direct_word_candidates.json`에, 포인터 참조 바이트 문자열 후보는 `docs/direct_byte_string_candidate_inventory.md`, `localization/direct_byte_string_candidates.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다.
 
 직접 문자열 후보 783개는 모두 포인터 레코드, 선언된 패치, 엔딩/후일담,
 이름 입력·크레딧·화면별 토큰, 또는 렌더로 확인한 데이터 오탐으로 분류했습니다.

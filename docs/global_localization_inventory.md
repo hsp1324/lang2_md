@@ -18,6 +18,7 @@ Detailed IDs, original text/hex, capacities, targets, and changed font codes are
 ## Interpretation
 
 - Classes and names are shared by preparation, status, map, and editor paths.
+- Illusion units use the separate one-entry class pointer at `0x05E5CA`; it is relocated as `일루전`.
 - The item byte table is separate from the relocated 16x16 item-name and description tables.
 - The Scenario 1 knife intentionally keeps its original byte codes while their glyph pixels render `단검`.
 - All 117 name IDs now have source-based Korean targets; this does not mean every ROM render path is patched.

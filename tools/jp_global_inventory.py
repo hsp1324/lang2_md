@@ -19,6 +19,7 @@ ITEM_POINTER_TABLE = 0x060364
 ITEM_COUNT = 38
 NAME_POINTER_TABLE = 0x0618E8
 NAME_COUNT = 117
+ILLUSION_CLASS_POINTER = 0x05E5CA
 
 TABLES = (
     ("classes", CLASS_POINTER_TABLE, CLASS_COUNT),
@@ -105,7 +106,7 @@ def inventory_table(
 
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
-    return {
+    result = {
         "warning": (
             "A changed byte string or font glyph only proves that its render path was touched; "
             "it does not prove a correct translation or live verification."
@@ -115,6 +116,21 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             for name, pointer, count in TABLES
         },
     }
+    original_pointer = be32(japanese, ILLUSION_CLASS_POINTER)
+    current_pointer = be32(korean, ILLUSION_CLASS_POINTER)
+    original = read_ff_string(japanese, original_pointer)
+    current = read_ff_string(korean, current_pointer)
+    result["special_classes"] = {
+        "illusion": {
+            "pointer_field": f"0x{ILLUSION_CLASS_POINTER:06X}",
+            "pointer": f"0x{original_pointer:06X}",
+            "current_pointer": f"0x{current_pointer:06X}",
+            "original_text": decode_cp932(original),
+            "target_korean": "일루전",
+            "raw_modified": original_pointer != current_pointer or original != current,
+        }
+    }
+    return result
 
 
 def markdown_report(result: dict[str, object]) -> str:
@@ -150,6 +166,7 @@ def markdown_report(result: dict[str, object]) -> str:
             "## Interpretation",
             "",
             "- Classes and names are shared by preparation, status, map, and editor paths.",
+            "- Illusion units use the separate one-entry class pointer at `0x05E5CA`; it is relocated as `일루전`.",
             "- The item byte table is separate from the relocated 16x16 item-name and description tables.",
             "- The Scenario 1 knife intentionally keeps its original byte codes while their glyph pixels render `단검`.",
             (

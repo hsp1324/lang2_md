@@ -391,6 +391,13 @@ class NameEntryResourceTests(unittest.TestCase):
                 < builder.BYTE_UI_CLASS_STRING_RELOC_LIMIT
             )
             self.assertEqual(decode(pointer), expected)
+        illusion_pointer = builder.be32(data, builder.ILLUSION_CLASS_POINTER)
+        self.assertTrue(
+            builder.BYTE_UI_CLASS_STRING_RELOC_BASE
+            <= illusion_pointer
+            < builder.BYTE_UI_CLASS_STRING_RELOC_LIMIT
+        )
+        self.assertEqual(decode(illusion_pointer), builder.ILLUSION_CLASS_LABEL)
         for index in range(builder.NAME_BYTE_RECORD_COUNT):
             pointer = builder.be32(
                 data, builder.NAME_BYTE_POINTER_TABLE + index * 4

@@ -11,7 +11,7 @@ follow this status table so a resume does not repeat already accepted work.
 
 | Stage | Status | Resume rule |
 | --- | --- | --- |
-| 1. Inventory and coverage | Complete baseline | 783 direct candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
+| 1. Inventory and coverage | Complete baseline | 783 direct-word and 348 pointer-referenced direct-byte candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
 | 2. Shared UI and global names | In progress | 111/112 declared patches differ intentionally; work only from the six explicit gaps in `docs/ui_patch_surface_inventory.md`. |
 | 3. Scenarios 2-10 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 4. Scenarios 11-20 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
@@ -22,7 +22,7 @@ Stage 2 complete-item checkpoint is closed. Production checksum `5993` fixes
 the 37-name loader, restores the missing Alhazard description, aligns IDs
 `14..37`, and uses the runtime's actual 9-column/four-text-row layout.
 Diagnostic checksum `D304` captured and accepted all 37 names, descriptions,
-prices/stat lines, and visible icons. Current diagnostic checksum `B51C` has the
+prices/stat lines, and visible icons. Current diagnostic checksum `4F78` has the
 same accepted item-surface fingerprint. Decoded icon resource 391 is also
 byte-identical to the Japanese ROM. Do not repeat this matrix unless a later
 change touches the item renderer, glyph lists, description pointers, price

@@ -8,7 +8,7 @@ runtime uses each ID directly for its icon at VRAM
 byte-identical, and decoded resource 391 keeps all 37 icon payloads
 byte-identical to the Japanese ROM.
 
-Checksum `D304` was captured row by row and accepted; current checksum `B51C` has the same accepted item-surface fingerprint.
+Checksum `D304` was captured row by row and accepted; current checksum `4F78` has the same accepted item-surface fingerprint.
 
 Price table values are 10P units. Item ID 9 has a stock special case that
 skips the dynamic price-number call and must be interpreted from runtime.

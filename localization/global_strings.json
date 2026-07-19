@@ -4692,5 +4692,15 @@
         }
       ]
     }
+  },
+  "special_classes": {
+    "illusion": {
+      "pointer_field": "0x05E5CA",
+      "pointer": "0x05E5CE",
+      "current_pointer": "0x2B9545",
+      "original_text": "ｲﾘｭｰｼﾞｮﾝ",
+      "target_korean": "일루전",
+      "raw_modified": true
+    }
   }
 }

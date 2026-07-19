@@ -220,6 +220,12 @@ SCENARIO_TOKEN_RELOC_BASE = SCENARIO_GLYPH_LIST_RELOC_LIMIT
 SCENARIO_TOKEN_RELOC_LIMIT = 0x280000
 CLASS_BYTE_POINTER_TABLE = 0x05E6D6
 CLASS_BYTE_RECORD_COUNT = 157
+# Status rendering normally indexes the class table above. Illusion units take
+# the alternate instruction at 0x010420 and load this one-entry pointer table.
+ILLUSION_CLASS_POINTER = 0x05E5CA
+ILLUSION_CLASS_SOURCE_POINTER = 0x05E5CE
+ILLUSION_CLASS_SOURCE = "ｲﾘｭｰｼﾞｮﾝ"
+ILLUSION_CLASS_LABEL = "일루전"
 NAME_BYTE_POINTER_TABLE = 0x0618E8
 NAME_BYTE_RECORD_COUNT = 117
 CLASS_BYTE_POINTER_TABLE_SHA256 = "a7b0e33ac6b662df0f496004bca7bb551d46fd5379cabd4d4a77a535c97a91ab"
@@ -4577,6 +4583,18 @@ def validate_byte_ui_name_and_class_tables(data: bytes | bytearray) -> None:
             raise ValueError(
                 f"{label} byte records changed: {actual_records_hash} != {expected_records_hash}"
             )
+    illusion_pointer = be32(data, ILLUSION_CLASS_POINTER)
+    if illusion_pointer != ILLUSION_CLASS_SOURCE_POINTER:
+        raise ValueError(
+            "illusion class pointer changed: "
+            f"0x{illusion_pointer:06X} != 0x{ILLUSION_CLASS_SOURCE_POINTER:06X}"
+        )
+    capacity = byte_string_capacity(data, illusion_pointer)
+    illusion_source = bytes(data[illusion_pointer : illusion_pointer + capacity - 1])
+    if illusion_source.decode("cp932") != ILLUSION_CLASS_SOURCE:
+        raise ValueError(
+            f"illusion class source changed at 0x{illusion_pointer:06X}"
+        )
 
 
 def build_byte_ui_local_mapping(
@@ -4584,6 +4602,9 @@ def build_byte_ui_local_mapping(
 ) -> tuple[dict[str, int], list[int]]:
     texts = [KOREAN_CLASS_LABELS[index] for index in range(CLASS_BYTE_RECORD_COUNT)]
     texts.extend(KOREAN_NAME_BY_ID[index] for index in range(NAME_BYTE_RECORD_COUNT))
+    # Append this exceptional label after the established tables so adding its
+    # unique `일` glyph cannot renumber any proven commander/class tile.
+    texts.append(ILLUSION_CLASS_LABEL)
     chars = [" ", *collect_chars(*texts)]
     extension_tiles = [
         tile
@@ -4650,6 +4671,19 @@ def relocate_byte_ui_name_and_class_tables(
             put32(data, table + index * 4, cursor)
             data[cursor : cursor + len(payload)] = payload
             cursor += len(payload)
+        if table == CLASS_BYTE_POINTER_TABLE:
+            payload = bytearray()
+            for char in ILLUSION_CLASS_LABEL:
+                payload.extend((BYTE_UI_LOCAL_MARKER, index_by_char[char]))
+            payload.append(0xFF)
+            if cursor + len(payload) > limit:
+                raise ValueError("localized illusion class string overflowed")
+            if any(value != 0xFF for value in data[cursor : cursor + len(payload)]):
+                raise ValueError(
+                    f"localized illusion class area at 0x{cursor:06X} is not blank"
+                )
+            put32(data, ILLUSION_CLASS_POINTER, cursor)
+            data[cursor : cursor + len(payload)] = payload
 
 
 def _build_byte_ui_font_loader() -> bytes:

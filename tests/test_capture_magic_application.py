@@ -75,7 +75,7 @@ class CaptureMagicApplicationTests(unittest.TestCase):
             probe = bytearray(probe_builder.DEFAULT_INPUT_ROM.read_bytes())
             checksum = probe_builder.patch_probe(probe, source, place_target=True)
             output.write_bytes(probe)
-            self.assertEqual(checksum, 0x260E)
+            self.assertEqual(checksum, 0xC06A)
             self.assertEqual(len(output.read_bytes()), 0x400000)
 
     def test_effect_delay_defaults_past_the_stock_animation(self):

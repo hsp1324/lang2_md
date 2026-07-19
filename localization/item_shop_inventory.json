@@ -64,7 +64,7 @@
     "item_surface_sha256": "4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc"
   },
   "runtime_probe": {
-    "rom_checksum": "B51C",
+    "rom_checksum": "4F78",
     "accepted_capture_checksum": "D304",
     "accepted_item_surface_sha256": "4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc",
     "status": "accepted",

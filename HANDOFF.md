@@ -22,11 +22,12 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 5993
+current production build checksum: F3EF
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 369 passing
-direct-string candidates: 783 classified, 0 unclassified
+unit tests: 373 passing
+direct-word candidates: 783 classified, 0 unclassified
+pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
@@ -51,7 +52,7 @@ glyph bank, or visible screen:
   ownership proof.
 - the original complete-item secret shop list, all 37 Korean names and
   descriptions, prices, and visible icons are accepted on diagnostic checksum
-  `D304`; current diagnostic checksum `B51C` has the same accepted item-surface
+  `D304`; current diagnostic checksum `4F78` has the same accepted item-surface
   fingerprint, and decoded icon resource 391 is byte-identical to the Japanese
   ROM.
 - the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
@@ -60,6 +61,13 @@ glyph bank, or visible screen:
 - compressed resource `391` is now owned as the stock item-icon payload from
   direct load call `0x025E62` (`0x8187` to VRAM `0x4000`), reducing unknown
   original compressed-resource ownership from 428 entries to 427.
+- the conservative 32-bit pointer scan now classifies all 348 strict CP932/ASCII
+  `FF` byte-string candidates. It found the separate illusion-unit class pointer
+  at `0x05E5CA`, selected by the status instruction at `0x010420`; production relocates its
+  `ｲﾘｭｰｼﾞｮﾝ` target as `일루전`. The reserved `ﾗﾝｸﾞﾘｯｻｰ/ｱﾙﾊｻﾞｰﾄﾞ` block at
+  `0x0A3B9D` is an internal name-entry comparison, not visible UI. Full source
+  bytes, references, and reviewed false positives are in
+  `localization/direct_byte_string_candidates.json`.
 
 Active work, in order:
 
@@ -106,7 +114,7 @@ Closed all-item shop checkpoint:
   descriptions, numeric effects, prices, and visible icons were reviewed and
   accepted. Five-digit prices retain their final `0P`; it is present in the raw
   capture pixels even when the 320x240 preview makes it hard to read;
-- current diagnostic checksum `B51C` has the same accepted item-surface SHA-256
+- current diagnostic checksum `4F78` has the same accepted item-surface SHA-256
   `4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc`.
   This surface fingerprint covers item names, descriptions, glyph lists, direct
   word names, prices, icon selector/loader, and icon payload, so unrelated ROM
@@ -215,7 +223,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `5993` and passes all 369 tests. It includes
+The current source builds checksum `F3EF` and passes all 373 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,

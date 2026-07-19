@@ -14,7 +14,7 @@ OUTPUT_FIELDS = {
     "ending_dialogue_ko.json": ("text", 23),
     "epilogue_dialogue_ko.json": ("text", 90),
     "event_dialogue_ko.json": ("text", 3565),
-    "global_strings.json": ("target_korean", 312),
+    "global_strings.json": ("target_korean", 313),
     "shared_word_resources.json": ("target_korean", 366),
     "ui_patch_surfaces.json": ("target_korean", 112),
 }

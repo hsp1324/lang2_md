@@ -1,0 +1,4115 @@
+{
+  "source_sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
+  "scan_end": "0x180000",
+  "candidate_count": 348,
+  "reference_count": 607,
+  "category_counts": {
+    "declared_equipment_category_ui": 1,
+    "global_table_interior": 10,
+    "global_table_string": 249,
+    "internal_secret_name_comparison": 1,
+    "reviewed_binary_false_positive": 84,
+    "special_illusion_class": 1,
+    "structured_name_entry_resource": 2
+  },
+  "unclassified_count": 0,
+  "special_illusion": {
+    "selector_instruction": "0x010420",
+    "selector_bytes": "43 F9 00 05 E5 CA",
+    "selector_valid": true,
+    "pointer_field": "0x05E5CA",
+    "original_pointer": "0x05E5CE",
+    "current_pointer": "0x2B9545",
+    "target_korean": "일루전",
+    "relocated": true
+  },
+  "entries": [
+    {
+      "target": "0x043141",
+      "references": [
+        "0x02C184"
+      ],
+      "text": "ｬwｫ",
+      "raw_hex": "AC 77 AB",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0431FC",
+      "references": [
+        "0x00C7E0",
+        "0x00C800",
+        "0x025096",
+        "0x029176"
+      ],
+      "text": "|ｻ8ﾇ?ﾒ?ﾒwｪ",
+      "raw_hex": "7C BB 38 C7 3F D2 3F D2 77 AA",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x045142",
+      "references": [
+        "0x002DFE"
+      ],
+      "text": "sｭqｮ~｡",
+      "raw_hex": "73 AD 71 AE 7E A1",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x04608A",
+      "references": [
+        "0x024DE2"
+      ],
+      "text": "?ﾟ?ﾐ?ﾟA",
+      "raw_hex": "3F DF 3F D0 3F DF FE 41",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x047600",
+      "references": [
+        "0x003790",
+        "0x01B0D6"
+      ],
+      "text": ";ﾔ?ﾓ;ﾔpｯpｯ",
+      "raw_hex": "3B D4 3F D3 3B D4 70 AF 70 AF F7 68",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x047601",
+      "references": [
+        "0x01DDBA"
+      ],
+      "text": "ﾔ?ﾓ;ﾔpｯpｯ",
+      "raw_hex": "D4 3F D3 3B D4 70 AF 70 AF F7 68",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x047608",
+      "references": [
+        "0x0105A2",
+        "0x01B510"
+      ],
+      "text": "pｯ",
+      "raw_hex": "70 AF F7 68",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0478FF",
+      "references": [
+        "0x01DC40"
+      ],
+      "text": "?ﾟ?ﾐ?ﾟ?ﾐ?ﾟ",
+      "raw_hex": "FD 3F DF 3F D0 3F DF 3F D0 3F DF",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x048242",
+      "references": [
+        "0x108164"
+      ],
+      "text": "wｩ?ﾗ擁ﾏｱ",
+      "raw_hex": "77 A9 3F D7 97 69 CF B1",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x04946E",
+      "references": [
+        "0x0016F2",
+        "0x00289C",
+        "0x002A92",
+        "0x003310",
+        "0x003630"
+      ],
+      "text": "/ﾐ鮏鮏濱濱A",
+      "raw_hex": "2F D0 FC 43 FE FD FC 43 E0 5F E0 5F FE 41",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x049F5C",
+      "references": [
+        "0x014276"
+      ],
+      "text": "%ﾟｩﾟｩ",
+      "raw_hex": "FE FD FE 25 DF A9 DF A9",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x05E5CE",
+      "references": [
+        "0x05E5CA"
+      ],
+      "text": "ｲﾘｭｰｼﾞｮﾝ",
+      "raw_hex": "B2 D8 AD B0 BC DE AE DD",
+      "preceded_by_ff": false,
+      "category": "special_illusion_class",
+      "owner": "status alternate class pointer 0x05E5CA"
+    },
+    {
+      "target": "0x05E953",
+      "references": [
+        "0x05E6DA"
+      ],
+      "text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[1]"
+    },
+    {
+      "target": "0x05E959",
+      "references": [
+        "0x05E6DE"
+      ],
+      "text": "ｸﾚﾘｯｸ",
+      "raw_hex": "B8 DA D8 AF B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[2]"
+    },
+    {
+      "target": "0x05E95F",
+      "references": [
+        "0x05E6E2"
+      ],
+      "text": "ｳｫｰﾛｯｸ",
+      "raw_hex": "B3 AB B0 DB AF B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[3]"
+    },
+    {
+      "target": "0x05E966",
+      "references": [
+        "0x05E6E6"
+      ],
+      "text": "ﾛｰﾄﾞ",
+      "raw_hex": "DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[4]"
+    },
+    {
+      "target": "0x05E96B",
+      "references": [
+        "0x05E6EA"
+      ],
+      "text": "ﾅｲﾄ",
+      "raw_hex": "C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[5]"
+    },
+    {
+      "target": "0x05E96F",
+      "references": [
+        "0x05E6EE"
+      ],
+      "text": "ﾎｰｸﾅｲﾄ",
+      "raw_hex": "CE B0 B8 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[6]"
+    },
+    {
+      "target": "0x05E976",
+      "references": [
+        "0x05E6F2"
+      ],
+      "text": "ｸﾛｺﾅｲﾄ",
+      "raw_hex": "B8 DB BA C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[7]"
+    },
+    {
+      "target": "0x05E97D",
+      "references": [
+        "0x05E6F6"
+      ],
+      "text": "ﾋｰﾗｰ",
+      "raw_hex": "CB B0 D7 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[8]"
+    },
+    {
+      "target": "0x05E982",
+      "references": [
+        "0x05E6FA"
+      ],
+      "text": "ｿｰｻﾗｰ",
+      "raw_hex": "BF B0 BB D7 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[9]"
+    },
+    {
+      "target": "0x05E988",
+      "references": [
+        "0x05E6FE"
+      ],
+      "text": "ｼｬｰﾏﾝ",
+      "raw_hex": "BC AC B0 CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[10]"
+    },
+    {
+      "target": "0x05E98E",
+      "references": [
+        "0x05E702"
+      ],
+      "text": "ﾊｲﾛｰﾄﾞ",
+      "raw_hex": "CA B2 DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[11]"
+    },
+    {
+      "target": "0x05E995",
+      "references": [
+        "0x05E706"
+      ],
+      "text": "ﾊｲﾗﾝﾀﾞｰ",
+      "raw_hex": "CA B2 D7 DD C0 DE B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[12]"
+    },
+    {
+      "target": "0x05E99D",
+      "references": [
+        "0x05E70A"
+      ],
+      "text": "ﾏｼﾞｯｸﾅｲﾄ",
+      "raw_hex": "CF BC DE AF B8 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[13]"
+    },
+    {
+      "target": "0x05E9A6",
+      "references": [
+        "0x05E70E"
+      ],
+      "text": "ﾕﾆｺｰﾝﾅｲﾄ",
+      "raw_hex": "D5 C6 BA B0 DD C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[14]"
+    },
+    {
+      "target": "0x05E9AF",
+      "references": [
+        "0x05E712"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+      "raw_hex": "C4 DE D7 BA DE DD C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[15]"
+    },
+    {
+      "target": "0x05E9B9",
+      "references": [
+        "0x05E716"
+      ],
+      "text": "ｻｰﾍﾟﾝﾅｲﾄ",
+      "raw_hex": "BB B0 CD DF DD C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[16]"
+    },
+    {
+      "target": "0x05E9C2",
+      "references": [
+        "0x05E71A"
+      ],
+      "text": "ﾌﾟﾘｰｽﾄ",
+      "raw_hex": "CC DF D8 B0 BD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[17]"
+    },
+    {
+      "target": "0x05E9C9",
+      "references": [
+        "0x05E71E"
+      ],
+      "text": "ﾋﾞｼｮｯﾌﾟ",
+      "raw_hex": "CB DE BC AE AF CC DF",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[18]"
+    },
+    {
+      "target": "0x05E9D1",
+      "references": [
+        "0x05E722"
+      ],
+      "text": "ﾒｲｼﾞ",
+      "raw_hex": "D2 B2 BC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[19]"
+    },
+    {
+      "target": "0x05E9D6",
+      "references": [
+        "0x05E726"
+      ],
+      "text": "ｱｰｸﾒｲｼﾞ",
+      "raw_hex": "B1 B0 B8 D2 B2 BC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[20]"
+    },
+    {
+      "target": "0x05E9DE",
+      "references": [
+        "0x05E72A"
+      ],
+      "text": "ｳｨｻﾞｰﾄﾞ",
+      "raw_hex": "B3 A8 BB DE B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[21]"
+    },
+    {
+      "target": "0x05E9E6",
+      "references": [
+        "0x05E72E"
+      ],
+      "text": "ﾊｲﾌﾟﾘｰｽﾄ",
+      "raw_hex": "CA B2 CC DF D8 B0 BD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[22]"
+    },
+    {
+      "target": "0x05E9EF",
+      "references": [
+        "0x05E732"
+      ],
+      "text": "ｾｲﾝﾄ",
+      "raw_hex": "BE B2 DD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[23]"
+    },
+    {
+      "target": "0x05E9F4",
+      "references": [
+        "0x05E736"
+      ],
+      "text": "ｾｰｼﾞ",
+      "raw_hex": "BE B0 BC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[24]"
+    },
+    {
+      "target": "0x05E9F9",
+      "references": [
+        "0x05E73A"
+      ],
+      "text": "ﾊﾟﾗﾃﾞｨﾝ",
+      "raw_hex": "CA DF D7 C3 DE A8 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[25]"
+    },
+    {
+      "target": "0x05EA01",
+      "references": [
+        "0x05E73E"
+      ],
+      "text": "ｿｰﾄﾞﾏｽﾀｰ",
+      "raw_hex": "BF B0 C4 DE CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[26]"
+    },
+    {
+      "target": "0x05EA0A",
+      "references": [
+        "0x05E742"
+      ],
+      "text": "ﾅｲﾄﾏｽﾀｰ",
+      "raw_hex": "C5 B2 C4 CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[27]"
+    },
+    {
+      "target": "0x05EA12",
+      "references": [
+        "0x05E746"
+      ],
+      "text": "ｸﾞﾗﾝﾅｲﾄ",
+      "raw_hex": "B8 DE D7 DD C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[28]"
+    },
+    {
+      "target": "0x05EA1A",
+      "references": [
+        "0x05E74A"
+      ],
+      "text": "ｼﾙﾊﾞｰﾅｲﾄ",
+      "raw_hex": "BC D9 CA DE B0 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[29]"
+    },
+    {
+      "target": "0x05EA23",
+      "references": [
+        "0x05E74E"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+      "raw_hex": "C4 DE D7 BA DE DD DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[30]"
+    },
+    {
+      "target": "0x05EA2E",
+      "references": [
+        "0x05E752"
+      ],
+      "text": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+      "raw_hex": "BB B0 CD DF DD DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[31]"
+    },
+    {
+      "target": "0x05EA38",
+      "references": [
+        "0x05E756"
+      ],
+      "text": "ｷﾝｸﾞ",
+      "raw_hex": "B7 DD B8 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[32]"
+    },
+    {
+      "target": "0x05EA3D",
+      "references": [
+        "0x05E75A"
+      ],
+      "text": "ﾚﾝｼﾞｬｰ",
+      "raw_hex": "DA DD BC DE AC B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[33]"
+    },
+    {
+      "target": "0x05EA44",
+      "references": [
+        "0x05E75E"
+      ],
+      "text": "ﾋｰﾛｰ",
+      "raw_hex": "CB B0 DB B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[34]"
+    },
+    {
+      "target": "0x05EA49",
+      "references": [
+        "0x05E762"
+      ],
+      "text": "ﾊｲﾏｽﾀｰ",
+      "raw_hex": "CA B2 CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[35]"
+    },
+    {
+      "target": "0x05EA50",
+      "references": [
+        "0x05E766"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝﾏｽﾀｰ",
+      "raw_hex": "C4 DE D7 BA DE DD CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[36]"
+    },
+    {
+      "target": "0x05EA5B",
+      "references": [
+        "0x05E76A"
+      ],
+      "text": "ｴｰｼﾞｪﾝﾄ",
+      "raw_hex": "B4 B0 BC DE AA DD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[37]"
+    },
+    {
+      "target": "0x05EA63",
+      "references": [
+        "0x05E76E"
+      ],
+      "text": "ｻﾞｰｳﾞｪﾗｰ",
+      "raw_hex": "BB DE B0 B3 DE AA D7 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[38]"
+    },
+    {
+      "target": "0x05EA6C",
+      "references": [
+        "0x05E772"
+      ],
+      "text": "ﾌﾟﾘﾝｾｽ",
+      "raw_hex": "CC DF D8 DD BE BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[39]"
+    },
+    {
+      "target": "0x05EA73",
+      "references": [
+        "0x05E776"
+      ],
+      "text": "ｻﾓﾅｰ",
+      "raw_hex": "BB D3 C5 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[40]"
+    },
+    {
+      "target": "0x05EA78",
+      "references": [
+        "0x05E77A"
+      ],
+      "text": "ﾛｲﾔﾙﾅｲﾄ",
+      "raw_hex": "DB B2 D4 D9 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[41]"
+    },
+    {
+      "target": "0x05EA80",
+      "references": [
+        "0x05E77E"
+      ],
+      "text": "ｻｰﾍﾟﾝﾏｽﾀｰ",
+      "raw_hex": "BB B0 CD DF DD CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[42]"
+    },
+    {
+      "target": "0x05EA8A",
+      "references": [
+        "0x05E782"
+      ],
+      "text": "ﾘｰﾀﾞｰ",
+      "raw_hex": "D8 B0 C0 DE B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[43]"
+    },
+    {
+      "target": "0x05EA90",
+      "references": [
+        "0x05E786"
+      ],
+      "text": "ﾊﾞﾝﾊﾟｲｱ",
+      "raw_hex": "CA DE DD CA DF B2 B1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[44]"
+    },
+    {
+      "target": "0x05EA98",
+      "references": [
+        "0x05E78A"
+      ],
+      "text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[45]"
+    },
+    {
+      "target": "0x05EA9E",
+      "references": [
+        "0x05E78E"
+      ],
+      "text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[46]"
+    },
+    {
+      "target": "0x05EAA4",
+      "references": [
+        "0x05E792"
+      ],
+      "text": "ｸﾚﾘｯｸ",
+      "raw_hex": "B8 DA D8 AF B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[47]"
+    },
+    {
+      "target": "0x05EAAA",
+      "references": [
+        "0x05E796"
+      ],
+      "text": "ｳｫｰﾛｯｸ",
+      "raw_hex": "B3 AB B0 DB AF B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[48]"
+    },
+    {
+      "target": "0x05EAB1",
+      "references": [
+        "0x05E79A"
+      ],
+      "text": "ﾅｲﾄ",
+      "raw_hex": "C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[49]"
+    },
+    {
+      "target": "0x05EAB5",
+      "references": [
+        "0x05E79E"
+      ],
+      "text": "ﾛｰﾄﾞ",
+      "raw_hex": "DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[50]"
+    },
+    {
+      "target": "0x05EABA",
+      "references": [
+        "0x05E7A2"
+      ],
+      "text": "ｼｰﾌ",
+      "raw_hex": "BC B0 CC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[51]"
+    },
+    {
+      "target": "0x05EABE",
+      "references": [
+        "0x05E7A6"
+      ],
+      "text": "ｿｰｻﾗｰ",
+      "raw_hex": "BF B0 BB D7 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[52]"
+    },
+    {
+      "target": "0x05EAC4",
+      "references": [
+        "0x05E7AA"
+      ],
+      "text": "ﾎｰｸﾅｲﾄ",
+      "raw_hex": "CE B0 B8 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[53]"
+    },
+    {
+      "target": "0x05EACB",
+      "references": [
+        "0x05E7AE"
+      ],
+      "text": "ｼｬｰﾏﾝ",
+      "raw_hex": "BC AC B0 CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[54]"
+    },
+    {
+      "target": "0x05EAD1",
+      "references": [
+        "0x05E7B2"
+      ],
+      "text": "ﾏｼﾞｯｸﾅｲﾄ",
+      "raw_hex": "CF BC DE AF B8 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[55]"
+    },
+    {
+      "target": "0x05EADA",
+      "references": [
+        "0x05E7B6"
+      ],
+      "text": "ﾏｼﾞｯｸﾅｲﾄ",
+      "raw_hex": "CF BC DE AF B8 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[56]"
+    },
+    {
+      "target": "0x05EAE3",
+      "references": [
+        "0x05E7BA"
+      ],
+      "text": "ｿｰﾄﾞﾏﾝ",
+      "raw_hex": "BF B0 C4 DE CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[57]"
+    },
+    {
+      "target": "0x05EAEA",
+      "references": [
+        "0x05E7BE"
+      ],
+      "text": "ﾊｲﾛｰﾄﾞ",
+      "raw_hex": "CA B2 DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[58]"
+    },
+    {
+      "target": "0x05EAF1",
+      "references": [
+        "0x05E7C2"
+      ],
+      "text": "ｱｻｼﾝ",
+      "raw_hex": "B1 BB BC DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[59]"
+    },
+    {
+      "target": "0x05EAF6",
+      "references": [
+        "0x05E7C6"
+      ],
+      "text": "ｻｰﾍﾟﾝﾅｲﾄ",
+      "raw_hex": "BB B0 CD DF DD C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[60]"
+    },
+    {
+      "target": "0x05EAFF",
+      "references": [
+        "0x05E7CA"
+      ],
+      "text": "ﾋﾞｼｮｯﾌﾟ",
+      "raw_hex": "CB DE BC AE AF CC DF",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[61]"
+    },
+    {
+      "target": "0x05EB07",
+      "references": [
+        "0x05E7CE"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+      "raw_hex": "C4 DE D7 BA DE DD C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[62]"
+    },
+    {
+      "target": "0x05EB11",
+      "references": [
+        "0x05E7D2"
+      ],
+      "text": "ﾒｲｼﾞ",
+      "raw_hex": "D2 B2 BC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[63]"
+    },
+    {
+      "target": "0x05EB16",
+      "references": [
+        "0x05E7D6"
+      ],
+      "text": "ﾈｸﾛﾏﾝｻｰ",
+      "raw_hex": "C8 B8 DB CF DD BB B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[64]"
+    },
+    {
+      "target": "0x05EB1E",
+      "references": [
+        "0x05E7DA"
+      ],
+      "text": "ｳｨｻﾞｰﾄﾞ",
+      "raw_hex": "B3 A8 BB DE B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[65]"
+    },
+    {
+      "target": "0x05EB26",
+      "references": [
+        "0x05E7DE"
+      ],
+      "text": "ｱｰｸﾒｲｼﾞ",
+      "raw_hex": "B1 B0 B8 D2 B2 BC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[66]"
+    },
+    {
+      "target": "0x05EB2E",
+      "references": [
+        "0x05E7E2"
+      ],
+      "text": "ｼﾙﾊﾞｰﾅｲﾄ",
+      "raw_hex": "BC D9 CA DE B0 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[67]"
+    },
+    {
+      "target": "0x05EB37",
+      "references": [
+        "0x05E7E6"
+      ],
+      "text": "ｼﾙﾊﾞｰﾅｲﾄ",
+      "raw_hex": "BC D9 CA DE B0 C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[68]"
+    },
+    {
+      "target": "0x05EB40",
+      "references": [
+        "0x05E7EA"
+      ],
+      "text": "ﾅｲﾄﾏｽﾀｰ",
+      "raw_hex": "C5 B2 C4 CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[69]"
+    },
+    {
+      "target": "0x05EB48",
+      "references": [
+        "0x05E7EE"
+      ],
+      "text": "ﾅｲﾄﾏｽﾀｰ",
+      "raw_hex": "C5 B2 C4 CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[70]"
+    },
+    {
+      "target": "0x05EB50",
+      "references": [
+        "0x05E7F2"
+      ],
+      "text": "ﾊﾟﾗﾃﾞｨﾝ",
+      "raw_hex": "CA DF D7 C3 DE A8 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[71]"
+    },
+    {
+      "target": "0x05EB58",
+      "references": [
+        "0x05E7F6"
+      ],
+      "text": "ｾｲﾝﾄ",
+      "raw_hex": "BE B2 DD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[72]"
+    },
+    {
+      "target": "0x05EB5D",
+      "references": [
+        "0x05E7FA"
+      ],
+      "text": "ｼﾞｪﾈﾗﾙ",
+      "raw_hex": "BC DE AA C8 D7 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[73]"
+    },
+    {
+      "target": "0x05EB64",
+      "references": [
+        "0x05E7FE"
+      ],
+      "text": "ｼﾞｪﾈﾗﾙ",
+      "raw_hex": "BC DE AA C8 D7 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[74]"
+    },
+    {
+      "target": "0x05EB6B",
+      "references": [
+        "0x05E802"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+      "raw_hex": "C4 DE D7 BA DE DD DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[75]"
+    },
+    {
+      "target": "0x05EB76",
+      "references": [
+        "0x05E806"
+      ],
+      "text": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+      "raw_hex": "BB B0 CD DF DD DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[76]"
+    },
+    {
+      "target": "0x05EB80",
+      "references": [
+        "0x05E80A"
+      ],
+      "text": "ﾛｲﾔﾙｶﾞｰﾄﾞ",
+      "raw_hex": "DB B2 D4 D9 B6 DE B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[77]"
+    },
+    {
+      "target": "0x05EB8A",
+      "references": [
+        "0x05E80E"
+      ],
+      "text": "ｴﾝﾍﾟﾗｰ",
+      "raw_hex": "B4 DD CD DF D7 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[78]"
+    },
+    {
+      "target": "0x05EB91",
+      "references": [
+        "0x05E812"
+      ],
+      "text": "ｻﾞｰｳﾞｪﾗｰ",
+      "raw_hex": "BB DE B0 B3 DE AA D7 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[79]"
+    },
+    {
+      "target": "0x05EB9A",
+      "references": [
+        "0x05E816"
+      ],
+      "text": "ｳｪｱｳﾙﾌ",
+      "raw_hex": "B3 AA B1 B3 D9 CC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[80]"
+    },
+    {
+      "target": "0x05EBA1",
+      "references": [
+        "0x05E81A"
+      ],
+      "text": "ｸﾞﾚｰﾄｽﾗｲﾑ",
+      "raw_hex": "B8 DE DA B0 C4 BD D7 B2 D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[81]"
+    },
+    {
+      "target": "0x05EBAB",
+      "references": [
+        "0x05E81E"
+      ],
+      "text": "ｹﾙﾍﾞﾛｽ",
+      "raw_hex": "B9 D9 CD DE DB BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[82]"
+    },
+    {
+      "target": "0x05EBB2",
+      "references": [
+        "0x05E822"
+      ],
+      "text": "ｽｷｭﾗ",
+      "raw_hex": "BD B7 AD D7",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[83]"
+    },
+    {
+      "target": "0x05EBB7",
+      "references": [
+        "0x05E826"
+      ],
+      "text": "ｺﾞｰｽﾄ",
+      "raw_hex": "BA DE B0 BD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[84]"
+    },
+    {
+      "target": "0x05EBBD",
+      "references": [
+        "0x05E82A"
+      ],
+      "text": "ﾜｲﾊﾞｰﾝ",
+      "raw_hex": "DC B2 CA DE B0 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[85]"
+    },
+    {
+      "target": "0x05EBC4",
+      "references": [
+        "0x05E82E"
+      ],
+      "text": "ﾏｽﾀｰﾃﾞｨｰﾉ",
+      "raw_hex": "CF BD C0 B0 C3 DE A8 B0 C9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[86]"
+    },
+    {
+      "target": "0x05EBCE",
+      "references": [
+        "0x05E832"
+      ],
+      "text": "ｱｲｱﾝｺﾞｰﾚﾑ",
+      "raw_hex": "B1 B2 B1 DD BA DE B0 DA D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[87]"
+    },
+    {
+      "target": "0x05EBD8",
+      "references": [
+        "0x05E836"
+      ],
+      "text": "ﾘｯﾁ",
+      "raw_hex": "D8 AF C1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[88]"
+    },
+    {
+      "target": "0x05EBDC",
+      "references": [
+        "0x05E83A"
+      ],
+      "text": "ﾘﾋﾞﾝｸﾞｱｰﾏｰ",
+      "raw_hex": "D8 CB DE DD B8 DE B1 B0 CF B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[89]"
+    },
+    {
+      "target": "0x05EBE7",
+      "references": [
+        "0x05E83E"
+      ],
+      "text": "ｻｷｭﾊﾞｽ",
+      "raw_hex": "BB B7 AD CA DE BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[90]"
+    },
+    {
+      "target": "0x05EBEE",
+      "references": [
+        "0x05E842"
+      ],
+      "text": "ｸﾗｰｹﾝ",
+      "raw_hex": "B8 D7 B0 B9 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[91]"
+    },
+    {
+      "target": "0x05EBF4",
+      "references": [
+        "0x05E846"
+      ],
+      "text": "ﾐﾉﾀｳﾛｽ",
+      "raw_hex": "D0 C9 C0 B3 DB BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[92]"
+    },
+    {
+      "target": "0x05EBFB",
+      "references": [
+        "0x05E84A"
+      ],
+      "text": "ﾃﾞｰﾓﾝﾛｰﾄﾞ",
+      "raw_hex": "C3 DE B0 D3 DD DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[93]"
+    },
+    {
+      "target": "0x05EC05",
+      "references": [
+        "0x05E84E"
+      ],
+      "text": "ｸﾞﾚｰﾄﾄﾞﾗｺﾞﾝ",
+      "raw_hex": "B8 DE DA B0 C4 C4 DE D7 BA DE DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[94]"
+    },
+    {
+      "target": "0x05EC11",
+      "references": [
+        "0x05E852"
+      ],
+      "text": "ﾊﾞﾝﾊﾟｲｱﾛｰﾄﾞ",
+      "raw_hex": "CA DE DD CA DF B2 B1 DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[95]"
+    },
+    {
+      "target": "0x05EC1D",
+      "references": [
+        "0x05E856"
+      ],
+      "text": "ﾀﾞｰｸﾌﾟﾘﾝｾｽ",
+      "raw_hex": "C0 DE B0 B8 CC DF D8 DD BE BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[96]"
+    },
+    {
+      "target": "0x05EC28",
+      "references": [
+        "0x05E85A"
+      ],
+      "text": "ﾀﾞｰｸﾏｽﾀｰ",
+      "raw_hex": "C0 DE B0 B8 CF BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[97]"
+    },
+    {
+      "target": "0x05EC31",
+      "references": [
+        "0x05E85E"
+      ],
+      "text": "ﾊﾟｲｸ",
+      "raw_hex": "CA DF B2 B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[98]"
+    },
+    {
+      "target": "0x05EC36",
+      "references": [
+        "0x05E862"
+      ],
+      "text": "ﾌｧﾗﾝｸｽ",
+      "raw_hex": "CC A7 D7 DD B8 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[99]"
+    },
+    {
+      "target": "0x05EC3D",
+      "references": [
+        "0x05E866"
+      ],
+      "text": "ｿﾙｼﾞｬｰ",
+      "raw_hex": "BF D9 BC DE AC B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[100]"
+    },
+    {
+      "target": "0x05EC44",
+      "references": [
+        "0x05E86A"
+      ],
+      "text": "ｸﾞﾗﾃﾞｨｴｰﾀｰ",
+      "raw_hex": "B8 DE D7 C3 DE A8 B4 B0 C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[101]"
+    },
+    {
+      "target": "0x05EC4F",
+      "references": [
+        "0x05E86E"
+      ],
+      "text": "ｱｰﾏｿﾙｼﾞｬｰ",
+      "raw_hex": "B1 B0 CF BF D9 BC DE AC B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[102]"
+    },
+    {
+      "target": "0x05EC59",
+      "references": [
+        "0x05E872"
+      ],
+      "text": "ﾎｰｽﾏﾝ",
+      "raw_hex": "CE B0 BD CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[103]"
+    },
+    {
+      "target": "0x05EC5F",
+      "references": [
+        "0x05E876"
+      ],
+      "text": "ﾍﾋﾞｰﾎｰｽﾏﾝ",
+      "raw_hex": "CD CB DE B0 CE B0 BD CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[104]"
+    },
+    {
+      "target": "0x05EC69",
+      "references": [
+        "0x05E87A"
+      ],
+      "text": "ﾄﾞﾗｸｰﾝ",
+      "raw_hex": "C4 DE D7 B8 B0 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[105]"
+    },
+    {
+      "target": "0x05EC70",
+      "references": [
+        "0x05E87E"
+      ],
+      "text": "ｴﾙﾌ",
+      "raw_hex": "B4 D9 CC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[106]"
+    },
+    {
+      "target": "0x05EC74",
+      "references": [
+        "0x05E882"
+      ],
+      "text": "ﾊﾞﾘｽﾀ",
+      "raw_hex": "CA DE D8 BD C0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[107]"
+    },
+    {
+      "target": "0x05EC7A",
+      "references": [
+        "0x05E886"
+      ],
+      "text": "ﾓﾝｸ",
+      "raw_hex": "D3 DD B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[108]"
+    },
+    {
+      "target": "0x05EC7E",
+      "references": [
+        "0x05E88A"
+      ],
+      "text": "ｶﾞｰﾄﾞﾏﾝ",
+      "raw_hex": "B6 DE B0 C4 DE CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[109]"
+    },
+    {
+      "target": "0x05EC86",
+      "references": [
+        "0x05E88E"
+      ],
+      "text": "ﾏｰﾏﾝ",
+      "raw_hex": "CF B0 CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[110]"
+    },
+    {
+      "target": "0x05EC8B",
+      "references": [
+        "0x05E892"
+      ],
+      "text": "ｸﾞﾘﾌｫﾝ",
+      "raw_hex": "B8 DE D8 CC AB DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[111]"
+    },
+    {
+      "target": "0x05EC92",
+      "references": [
+        "0x05E896"
+      ],
+      "text": "ｴﾝｼﾞｪﾙ",
+      "raw_hex": "B4 DD BC DE AA D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[112]"
+    },
+    {
+      "target": "0x05EC99",
+      "references": [
+        "0x05E89A"
+      ],
+      "text": "ｼﾋﾞﾘｱﾝ",
+      "raw_hex": "BC CB DE D8 B1 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[113]"
+    },
+    {
+      "target": "0x05ECA0",
+      "references": [
+        "0x05E89E"
+      ],
+      "text": "ｿﾙｼﾞｬｰ",
+      "raw_hex": "BF D9 BC DE AC B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[114]"
+    },
+    {
+      "target": "0x05ECA7",
+      "references": [
+        "0x05E8A2"
+      ],
+      "text": "ｱｰﾏｿﾙｼﾞｬｰ",
+      "raw_hex": "B1 B0 CF BF D9 BC DE AC B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[115]"
+    },
+    {
+      "target": "0x05ECB1",
+      "references": [
+        "0x05E8A6"
+      ],
+      "text": "ﾊﾞｰｻｰｶｰ",
+      "raw_hex": "CA DE B0 BB B0 B6 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[116]"
+    },
+    {
+      "target": "0x05ECB9",
+      "references": [
+        "0x05E8AA"
+      ],
+      "text": "ﾊﾞｰﾊﾞﾘｱﾝ",
+      "raw_hex": "CA DE B0 CA DE D8 B1 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[117]"
+    },
+    {
+      "target": "0x05ECC2",
+      "references": [
+        "0x05E8AE"
+      ],
+      "text": "ﾀﾞｰｸｴﾙﾌ",
+      "raw_hex": "C0 DE B0 B8 B4 D9 CC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[118]"
+    },
+    {
+      "target": "0x05ECCA",
+      "references": [
+        "0x05E8B2"
+      ],
+      "text": "ﾊﾞﾘｽﾀ",
+      "raw_hex": "CA DE D8 BD C0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[119]"
+    },
+    {
+      "target": "0x05ECD0",
+      "references": [
+        "0x05E8B6"
+      ],
+      "text": "ﾘｻﾞｰﾄﾞﾏﾝ",
+      "raw_hex": "D8 BB DE B0 C4 DE CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[120]"
+    },
+    {
+      "target": "0x05ECD9",
+      "references": [
+        "0x05E8BA"
+      ],
+      "text": "ﾎｰｽﾏﾝ",
+      "raw_hex": "CE B0 BD CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[121]"
+    },
+    {
+      "target": "0x05ECDF",
+      "references": [
+        "0x05E8BE"
+      ],
+      "text": "ﾍﾋﾞｰﾎｰｽﾏﾝ",
+      "raw_hex": "CD CB DE B0 CE B0 BD CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[122]"
+    },
+    {
+      "target": "0x05ECE9",
+      "references": [
+        "0x05E8C2"
+      ],
+      "text": "ﾛｲﾔﾙﾎｰｽ",
+      "raw_hex": "DB B2 D4 D9 CE B0 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[123]"
+    },
+    {
+      "target": "0x05ECF1",
+      "references": [
+        "0x05E8C6"
+      ],
+      "text": "ﾀﾞｰｸｶﾞｰﾄﾞ",
+      "raw_hex": "C0 DE B0 B8 B6 DE B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[124]"
+    },
+    {
+      "target": "0x05ECFB",
+      "references": [
+        "0x05E8CA"
+      ],
+      "text": "ｸﾞﾘﾌｫﾝ",
+      "raw_hex": "B8 DE D8 CC AB DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[125]"
+    },
+    {
+      "target": "0x05ED02",
+      "references": [
+        "0x05E8CE"
+      ],
+      "text": "ﾊﾟｲｸ",
+      "raw_hex": "CA DF B2 B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[126]"
+    },
+    {
+      "target": "0x05ED07",
+      "references": [
+        "0x05E8D2"
+      ],
+      "text": "ﾌｧﾗﾝｸｽ",
+      "raw_hex": "CC A7 D7 DD B8 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[127]"
+    },
+    {
+      "target": "0x05ED0E",
+      "references": [
+        "0x05E8D6"
+      ],
+      "text": "ｽｹﾙﾄﾝ",
+      "raw_hex": "BD B9 D9 C4 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[128]"
+    },
+    {
+      "target": "0x05ED14",
+      "references": [
+        "0x05E8DA"
+      ],
+      "text": "ｿﾞﾝﾋﾞ",
+      "raw_hex": "BF DE DD CB DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[129]"
+    },
+    {
+      "target": "0x05ED1A",
+      "references": [
+        "0x05E8DE"
+      ],
+      "text": "ｶﾞｰｺﾞｲﾙ",
+      "raw_hex": "B6 DE B0 BA DE B2 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[130]"
+    },
+    {
+      "target": "0x05ED22",
+      "references": [
+        "0x05E8E2"
+      ],
+      "text": "ｳﾙﾌﾏﾝ",
+      "raw_hex": "B3 D9 CC CF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[131]"
+    },
+    {
+      "target": "0x05ED28",
+      "references": [
+        "0x05E8E6"
+      ],
+      "text": "ﾎﾞｰﾝﾃﾞｨｰﾉ",
+      "raw_hex": "CE DE B0 DD C3 DE A8 B0 C9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[132]"
+    },
+    {
+      "target": "0x05ED32",
+      "references": [
+        "0x05E8EA"
+      ],
+      "text": "ﾘｳﾞｧｲｱｻﾝ",
+      "raw_hex": "D8 B3 DE A7 B2 B1 BB DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[133]"
+    },
+    {
+      "target": "0x05ED3B",
+      "references": [
+        "0x05E8EE"
+      ],
+      "text": "ｺﾞｰﾚﾑ",
+      "raw_hex": "BA DE B0 DA D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[134]"
+    },
+    {
+      "target": "0x05ED41",
+      "references": [
+        "0x05E8F2"
+      ],
+      "text": "ﾊﾞﾝﾊﾟｲｱﾊﾞｯﾄ",
+      "raw_hex": "CA DE DD CA DF B2 B1 CA DE AF C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[135]"
+    },
+    {
+      "target": "0x05ED4D",
+      "references": [
+        "0x05E8F6"
+      ],
+      "text": "ｴﾚﾒﾝﾀﾙ",
+      "raw_hex": "B4 DA D2 DD C0 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[136]"
+    },
+    {
+      "target": "0x05ED54",
+      "references": [
+        "0x05E8FA"
+      ],
+      "text": "ｱｰｸﾃﾞｰﾓﾝ",
+      "raw_hex": "B1 B0 B8 C3 DE B0 D3 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[137]"
+    },
+    {
+      "target": "0x05ED5D",
+      "references": [
+        "0x05E8FE"
+      ],
+      "text": "ﾚｲｽ",
+      "raw_hex": "DA B2 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[138]"
+    },
+    {
+      "target": "0x05ED61",
+      "references": [
+        "0x05E902"
+      ],
+      "text": "ﾍﾙﾊｳﾝﾄﾞ",
+      "raw_hex": "CD D9 CA B3 DD C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[139]"
+    },
+    {
+      "target": "0x05ED69",
+      "references": [
+        "0x05E906"
+      ],
+      "text": "ｽﾗｲﾑ",
+      "raw_hex": "BD D7 B2 D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[140]"
+    },
+    {
+      "target": "0x05ED6E",
+      "references": [
+        "0x05E90A"
+      ],
+      "text": "ｴﾚﾒﾝﾀﾙ",
+      "raw_hex": "B4 DA D2 DD C0 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[141]"
+    },
+    {
+      "target": "0x05ED75",
+      "references": [
+        "0x05E90E"
+      ],
+      "text": "ﾌﾚｲﾔ",
+      "raw_hex": "CC DA B2 D4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[142]"
+    },
+    {
+      "target": "0x05ED7A",
+      "references": [
+        "0x05E912"
+      ],
+      "text": "ﾎﾜｲﾄﾄﾞﾗｺﾞﾝ",
+      "raw_hex": "CE DC B2 C4 C4 DE D7 BA DE DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[143]"
+    },
+    {
+      "target": "0x05ED85",
+      "references": [
+        "0x05E916"
+      ],
+      "text": "ｳﾞｧﾙｷﾘｰ",
+      "raw_hex": "B3 DE A7 D9 B7 D8 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[144]"
+    },
+    {
+      "target": "0x05ED8D",
+      "references": [
+        "0x05E91A"
+      ],
+      "text": "ｽﾚｲﾌﾟﾆﾙ",
+      "raw_hex": "BD DA B2 CC DF C6 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[145]"
+    },
+    {
+      "target": "0x05ED95",
+      "references": [
+        "0x05E91E"
+      ],
+      "text": "ﾌｪﾝﾘﾙ",
+      "raw_hex": "CC AA DD D8 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[146]"
+    },
+    {
+      "target": "0x05ED9B",
+      "references": [
+        "0x05E922"
+      ],
+      "text": "ｲｪﾙﾑﾝｶﾞﾙﾄﾞ",
+      "raw_hex": "B2 AA D9 D1 DD B6 DE D9 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[147]"
+    },
+    {
+      "target": "0x05EDA6",
+      "references": [
+        "0x05E926"
+      ],
+      "text": "qyu",
+      "raw_hex": "71 79 75",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[148]"
+    },
+    {
+      "target": "0x05EDAA",
+      "references": [
+        "0x05E92A"
+      ],
+      "text": "ﾋﾞﾙﾀﾞｰ",
+      "raw_hex": "CB DE D9 C0 DE B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[149]"
+    },
+    {
+      "target": "0x05EDB1",
+      "references": [
+        "0x05E92E"
+      ],
+      "text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[150]"
+    },
+    {
+      "target": "0x05EDB7",
+      "references": [
+        "0x05E932"
+      ],
+      "text": "ｸﾚﾘｯｸ",
+      "raw_hex": "B8 DA D8 AF B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[151]"
+    },
+    {
+      "target": "0x05EDBD",
+      "references": [
+        "0x05E936"
+      ],
+      "text": "ﾅｲﾄ",
+      "raw_hex": "C5 B2 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[152]"
+    },
+    {
+      "target": "0x05EDC1",
+      "references": [
+        "0x05E93A"
+      ],
+      "text": "ﾛｰﾄﾞ",
+      "raw_hex": "DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[153]"
+    },
+    {
+      "target": "0x05EDC6",
+      "references": [
+        "0x05E93E"
+      ],
+      "text": "ﾊﾟｲﾚｰﾂ",
+      "raw_hex": "CA DF B2 DA B0 C2",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[154]"
+    },
+    {
+      "target": "0x05EDCD",
+      "references": [
+        "0x05E942"
+      ],
+      "text": "ﾊｲﾛｰﾄﾞ",
+      "raw_hex": "CA B2 DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[155]"
+    },
+    {
+      "target": "0x05EDD4",
+      "references": [
+        "0x05E946"
+      ],
+      "text": "ﾌﾟﾘｰｽﾄ",
+      "raw_hex": "CC DF D8 B0 BD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "classes[156]"
+    },
+    {
+      "target": "0x060405",
+      "references": [
+        "0x060368"
+      ],
+      "text": "ﾅｲﾌ",
+      "raw_hex": "C5 B2 CC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[1]"
+    },
+    {
+      "target": "0x060409",
+      "references": [
+        "0x06036C",
+        "0x0E1DCE"
+      ],
+      "text": "ｳｫｰﾊﾝﾏｰ",
+      "raw_hex": "B3 AB B0 CA DD CF B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[2]"
+    },
+    {
+      "target": "0x06040A",
+      "references": [
+        "0x05F2B8"
+      ],
+      "text": "ｫｰﾊﾝﾏｰ",
+      "raw_hex": "AB B0 CA DD CF B0",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[2]"
+    },
+    {
+      "target": "0x060411",
+      "references": [
+        "0x060370"
+      ],
+      "text": "ｸﾞﾚｰﾄｿｰﾄﾞ",
+      "raw_hex": "B8 DE DA B0 C4 BF B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[3]"
+    },
+    {
+      "target": "0x060416",
+      "references": [
+        "0x08629A"
+      ],
+      "text": "ｿｰﾄﾞ",
+      "raw_hex": "BF B0 C4 DE",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[3]"
+    },
+    {
+      "target": "0x06041B",
+      "references": [
+        "0x060374"
+      ],
+      "text": "ﾜﾝﾄﾞ",
+      "raw_hex": "DC DD C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[4]"
+    },
+    {
+      "target": "0x060420",
+      "references": [
+        "0x060378"
+      ],
+      "text": "ﾌﾚｲﾑﾗﾝｽ",
+      "raw_hex": "CC DA B2 D1 D7 DD BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[5]"
+    },
+    {
+      "target": "0x060428",
+      "references": [
+        "0x06037C"
+      ],
+      "text": "ﾃﾞﾋﾞﾙｱｯｸｽ",
+      "raw_hex": "C3 DE CB DE D9 B1 AF B8 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[6]"
+    },
+    {
+      "target": "0x060432",
+      "references": [
+        "0x060380"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝｽﾚｲﾔｰ",
+      "raw_hex": "C4 DE D7 BA DE DD BD DA B2 D4 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[7]"
+    },
+    {
+      "target": "0x06043E",
+      "references": [
+        "0x060384",
+        "0x060388"
+      ],
+      "text": "ﾗﾝｸﾞﾘｯｻｰ",
+      "raw_hex": "D7 DD B8 DE D8 AF BB B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[8], items[9]"
+    },
+    {
+      "target": "0x060440",
+      "references": [
+        "0x024606"
+      ],
+      "text": "ｸﾞﾘｯｻｰ",
+      "raw_hex": "B8 DE D8 AF BB B0",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[8], items[9]"
+    },
+    {
+      "target": "0x060441",
+      "references": [
+        "0x00293A",
+        "0x002B16",
+        "0x003080",
+        "0x0033AE",
+        "0x00CD0E",
+        "0x00D280",
+        "0x019D64",
+        "0x024320",
+        "0x024370",
+        "0x025360",
+        "0x02A046",
+        "0x02BB3A",
+        "0x02CD2E"
+      ],
+      "text": "ﾞﾘｯｻｰ",
+      "raw_hex": "DE D8 AF BB B0",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[8], items[9]"
+    },
+    {
+      "target": "0x060442",
+      "references": [
+        "0x01B2E8",
+        "0x01C1A2"
+      ],
+      "text": "ﾘｯｻｰ",
+      "raw_hex": "D8 AF BB B0",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[8], items[9]"
+    },
+    {
+      "target": "0x060443",
+      "references": [
+        "0x024350"
+      ],
+      "text": "ｯｻｰ",
+      "raw_hex": "AF BB B0",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[8], items[9]"
+    },
+    {
+      "target": "0x060447",
+      "references": [
+        "0x06038C"
+      ],
+      "text": "ﾒｻｲﾔﾝｿｰﾄﾞ",
+      "raw_hex": "D2 BB B2 D4 DD BF B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[10]"
+    },
+    {
+      "target": "0x060451",
+      "references": [
+        "0x060390"
+      ],
+      "text": "~ﾃﾂ~ｱﾚｲ",
+      "raw_hex": "7E C3 C2 7E B1 DA B2",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[11]"
+    },
+    {
+      "target": "0x060459",
+      "references": [
+        "0x060394"
+      ],
+      "text": "ﾎｰﾘｰﾛｯﾄﾞ",
+      "raw_hex": "CE B0 D8 B0 DB AF C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[12]"
+    },
+    {
+      "target": "0x060462",
+      "references": [
+        "0x060398"
+      ],
+      "text": "ﾀﾞｰｸﾛｯﾄﾞ",
+      "raw_hex": "C0 DE B0 B8 DB AF C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[13]"
+    },
+    {
+      "target": "0x06046B",
+      "references": [
+        "0x06039C"
+      ],
+      "text": "ｱﾙﾊｻﾞｰﾄﾞ",
+      "raw_hex": "B1 D9 CA BB DE B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[14]"
+    },
+    {
+      "target": "0x060474",
+      "references": [
+        "0x0603A0"
+      ],
+      "text": "ﾛﾝｸﾞﾎﾞｳ",
+      "raw_hex": "DB DD B8 DE CE DE B3",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[15]"
+    },
+    {
+      "target": "0x06047C",
+      "references": [
+        "0x0603A4"
+      ],
+      "text": "ｱｰﾊﾞﾚｽﾄ",
+      "raw_hex": "B1 B0 CA DE DA BD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[16]"
+    },
+    {
+      "target": "0x060480",
+      "references": [
+        "0x107D54"
+      ],
+      "text": "ﾚｽﾄ",
+      "raw_hex": "DA BD C4",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[16]"
+    },
+    {
+      "target": "0x060484",
+      "references": [
+        "0x0603A8"
+      ],
+      "text": "S･ｼｰﾙﾄﾞ",
+      "raw_hex": "53 A5 BC B0 D9 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[17]"
+    },
+    {
+      "target": "0x06048C",
+      "references": [
+        "0x0603AC"
+      ],
+      "text": "L･ｼｰﾙﾄﾞ",
+      "raw_hex": "4C A5 BC B0 D9 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[18]"
+    },
+    {
+      "target": "0x060494",
+      "references": [
+        "0x0603B0"
+      ],
+      "text": "ﾁｪｲﾝﾒｲﾙ",
+      "raw_hex": "C1 AA B2 DD D2 B2 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[19]"
+    },
+    {
+      "target": "0x06049C",
+      "references": [
+        "0x0603B4"
+      ],
+      "text": "ﾌﾟﾚｰﾄｱｰﾏｰ",
+      "raw_hex": "CC DF DA B0 C4 B1 B0 CF B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[20]"
+    },
+    {
+      "target": "0x0604A6",
+      "references": [
+        "0x0603B8"
+      ],
+      "text": "ｱｻﾙﾄｽｰﾂ",
+      "raw_hex": "B1 BB D9 C4 BD B0 C2",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[21]"
+    },
+    {
+      "target": "0x0604AE",
+      "references": [
+        "0x0603BC"
+      ],
+      "text": "ﾛｰﾌﾞ",
+      "raw_hex": "DB B0 CC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[22]"
+    },
+    {
+      "target": "0x0604B3",
+      "references": [
+        "0x0603C0"
+      ],
+      "text": "ﾄﾞﾗｺﾞﾝｽｹｲﾙ",
+      "raw_hex": "C4 DE D7 BA DE DD BD B9 B2 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[23]"
+    },
+    {
+      "target": "0x0604BE",
+      "references": [
+        "0x0603C4"
+      ],
+      "text": "ﾐﾗｰｼﾞｭﾛｰﾌﾞ",
+      "raw_hex": "D0 D7 B0 BC DE AD DB B0 CC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[24]"
+    },
+    {
+      "target": "0x0604C9",
+      "references": [
+        "0x0603C8"
+      ],
+      "text": "ｵｰﾃﾞｨﾝ~ﾉﾀﾃ~",
+      "raw_hex": "B5 B0 C3 DE A8 DD 7E C9 C0 C3 7E",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[25]"
+    },
+    {
+      "target": "0x0604D5",
+      "references": [
+        "0x0603CC"
+      ],
+      "text": "ﾙｰﾝｽﾄｰﾝ",
+      "raw_hex": "D9 B0 DD BD C4 B0 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[26]"
+    },
+    {
+      "target": "0x0604DD",
+      "references": [
+        "0x0603D0"
+      ],
+      "text": "ｸﾛｽ",
+      "raw_hex": "B8 DB BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[27]"
+    },
+    {
+      "target": "0x0604E1",
+      "references": [
+        "0x0603D4"
+      ],
+      "text": "ﾈｯｸﾚｽ",
+      "raw_hex": "C8 AF B8 DA BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[28]"
+    },
+    {
+      "target": "0x0604E7",
+      "references": [
+        "0x0603D8"
+      ],
+      "text": "ｵｰﾌﾞ",
+      "raw_hex": "B5 B0 CC DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[29]"
+    },
+    {
+      "target": "0x0604EC",
+      "references": [
+        "0x0603DC"
+      ],
+      "text": "ｽﾋﾟｰﾄﾞﾌﾞｰﾂ",
+      "raw_hex": "BD CB DF B0 C4 DE CC DE B0 C2",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[30]"
+    },
+    {
+      "target": "0x0604F7",
+      "references": [
+        "0x0603E0"
+      ],
+      "text": "ｸﾗｳﾝ",
+      "raw_hex": "B8 D7 B3 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[31]"
+    },
+    {
+      "target": "0x0604FC",
+      "references": [
+        "0x0603E4"
+      ],
+      "text": "ｱｳﾛｰﾗ",
+      "raw_hex": "B1 B3 DB B0 D7",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[32]"
+    },
+    {
+      "target": "0x060502",
+      "references": [
+        "0x0603E8"
+      ],
+      "text": "~ﾃﾝｼﾉﾊﾈ~",
+      "raw_hex": "7E C3 DD BC C9 CA C8 7E",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[33]"
+    },
+    {
+      "target": "0x060505",
+      "references": [
+        "0x0A4006",
+        "0x0A40EE"
+      ],
+      "text": "ｼﾉﾊﾈ~",
+      "raw_hex": "BC C9 CA C8 7E",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[33]"
+    },
+    {
+      "target": "0x06050B",
+      "references": [
+        "0x0603EC"
+      ],
+      "text": "ｶｰﾊﾞﾝｸﾙ",
+      "raw_hex": "B6 B0 CA DE DD B8 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[34]"
+    },
+    {
+      "target": "0x06050D",
+      "references": [
+        "0x10DFDC"
+      ],
+      "text": "ﾊﾞﾝｸﾙ",
+      "raw_hex": "CA DE DD B8 D9",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[34]"
+    },
+    {
+      "target": "0x060513",
+      "references": [
+        "0x0603F0"
+      ],
+      "text": "ｸﾞﾚｲﾌﾟﾆｰﾙ",
+      "raw_hex": "B8 DE DA B2 CC DF C6 B0 D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[35]"
+    },
+    {
+      "target": "0x060515",
+      "references": [
+        "0x1009BA"
+      ],
+      "text": "ﾚｲﾌﾟﾆｰﾙ",
+      "raw_hex": "DA B2 CC DF C6 B0 D9",
+      "preceded_by_ff": false,
+      "category": "global_table_interior",
+      "owner": "items[35]"
+    },
+    {
+      "target": "0x06051D",
+      "references": [
+        "0x0603F4"
+      ],
+      "text": "ｷﾞｬﾗﾙ~ﾉ~ﾎﾙﾝ",
+      "raw_hex": "B7 DE AC D7 D9 7E C9 7E CE D9 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[36]"
+    },
+    {
+      "target": "0x060529",
+      "references": [
+        "0x0603F8"
+      ],
+      "text": "ｱﾐｭﾚｯﾄ",
+      "raw_hex": "B1 D0 AD DA AF C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "items[37]"
+    },
+    {
+      "target": "0x061AC5",
+      "references": [
+        "0x0618EC"
+      ],
+      "text": "ｴﾙｳｨﾝ",
+      "raw_hex": "B4 D9 B3 A8 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[1]"
+    },
+    {
+      "target": "0x061ACB",
+      "references": [
+        "0x0618F0"
+      ],
+      "text": "ﾘｱﾅ",
+      "raw_hex": "D8 B1 C5",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[2]"
+    },
+    {
+      "target": "0x061ACF",
+      "references": [
+        "0x0618F4",
+        "0x061918"
+      ],
+      "text": "ﾗｰﾅ",
+      "raw_hex": "D7 B0 C5",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[3], names[12]"
+    },
+    {
+      "target": "0x061AD3",
+      "references": [
+        "0x0618F8"
+      ],
+      "text": "ｼｪﾘｰ",
+      "raw_hex": "BC AA D8 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[4]"
+    },
+    {
+      "target": "0x061AD8",
+      "references": [
+        "0x0618FC"
+      ],
+      "text": "ﾍｲﾝ",
+      "raw_hex": "CD B2 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[5]"
+    },
+    {
+      "target": "0x061ADC",
+      "references": [
+        "0x061900"
+      ],
+      "text": "ｽｺｯﾄ",
+      "raw_hex": "BD BA AF C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[6]"
+    },
+    {
+      "target": "0x061AE1",
+      "references": [
+        "0x061904"
+      ],
+      "text": "ｷｰｽ",
+      "raw_hex": "B7 B0 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[7]"
+    },
+    {
+      "target": "0x061AE5",
+      "references": [
+        "0x061908"
+      ],
+      "text": "ｱｰﾛﾝ",
+      "raw_hex": "B1 B0 DB DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[8]"
+    },
+    {
+      "target": "0x061AEA",
+      "references": [
+        "0x06190C"
+      ],
+      "text": "ﾚｽﾀｰ",
+      "raw_hex": "DA BD C0 B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[9]"
+    },
+    {
+      "target": "0x061AEF",
+      "references": [
+        "0x061910"
+      ],
+      "text": "ｼﾞｪｼｶ",
+      "raw_hex": "BC DE AA BC B6",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[10]"
+    },
+    {
+      "target": "0x061AF5",
+      "references": [
+        "0x061914"
+      ],
+      "text": "ﾅｿﾞﾉｷｼ",
+      "raw_hex": "C5 BF DE C9 B7 BC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[11]"
+    },
+    {
+      "target": "0x061AFC",
+      "references": [
+        "0x06191C"
+      ],
+      "text": "ﾚｵﾝ",
+      "raw_hex": "DA B5 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[13]"
+    },
+    {
+      "target": "0x061B00",
+      "references": [
+        "0x061920"
+      ],
+      "text": "ﾍﾞﾙﾝﾊﾙﾄ",
+      "raw_hex": "CD DE D9 DD CA D9 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[14]"
+    },
+    {
+      "target": "0x061B08",
+      "references": [
+        "0x061924"
+      ],
+      "text": "ﾊﾞﾙｶﾞｽ",
+      "raw_hex": "CA DE D9 B6 DE BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[15]"
+    },
+    {
+      "target": "0x061B0F",
+      "references": [
+        "0x061928"
+      ],
+      "text": "ﾎﾞｰｾﾞﾙ",
+      "raw_hex": "CE DE B0 BE DE D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[16]"
+    },
+    {
+      "target": "0x061B16",
+      "references": [
+        "0x06192C"
+      ],
+      "text": "ﾚｱｰﾄﾞ",
+      "raw_hex": "DA B1 B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[17]"
+    },
+    {
+      "target": "0x061B1C",
+      "references": [
+        "0x061930"
+      ],
+      "text": "ﾊﾞﾙﾄﾞｰ",
+      "raw_hex": "CA DE D9 C4 DE B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[18]"
+    },
+    {
+      "target": "0x061B23",
+      "references": [
+        "0x061934"
+      ],
+      "text": "ｿﾞﾙﾑ",
+      "raw_hex": "BF DE D9 D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[19]"
+    },
+    {
+      "target": "0x061B28",
+      "references": [
+        "0x061938"
+      ],
+      "text": "ｴｸﾞﾍﾞﾙﾄ",
+      "raw_hex": "B4 B8 DE CD DE D9 C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[20]"
+    },
+    {
+      "target": "0x061B30",
+      "references": [
+        "0x06193C"
+      ],
+      "text": "ｲﾒﾙﾀﾞ",
+      "raw_hex": "B2 D2 D9 C0 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[21]"
+    },
+    {
+      "target": "0x061B36",
+      "references": [
+        "0x061940"
+      ],
+      "text": "ﾓｰｶﾞﾝ",
+      "raw_hex": "D3 B0 B6 DE DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[22]"
+    },
+    {
+      "target": "0x061B3C",
+      "references": [
+        "0x061944"
+      ],
+      "text": "ｷﾞﾅﾑ",
+      "raw_hex": "B7 DE C5 D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[23]"
+    },
+    {
+      "target": "0x061B41",
+      "references": [
+        "0x061948"
+      ],
+      "text": "ｸﾚｲﾏｰ",
+      "raw_hex": "B8 DA B2 CF B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[24]"
+    },
+    {
+      "target": "0x061B47",
+      "references": [
+        "0x06194C"
+      ],
+      "text": "ｾｲｶﾞﾙ",
+      "raw_hex": "BE B2 B6 DE D9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[25]"
+    },
+    {
+      "target": "0x061B4D",
+      "references": [
+        "0x061950"
+      ],
+      "text": "ﾌｫﾙｶﾞｰ",
+      "raw_hex": "CC AB D9 B6 DE B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[26]"
+    },
+    {
+      "target": "0x061B54",
+      "references": [
+        "0x061954"
+      ],
+      "text": "ｲｯﾊﾟﾝﾍｲ",
+      "raw_hex": "B2 AF CA DF DD CD B2",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[27]"
+    },
+    {
+      "target": "0x061B5C",
+      "references": [
+        "0x061958",
+        "0x06195C",
+        "0x061960"
+      ],
+      "text": "ｼｷｶﾝ",
+      "raw_hex": "BC B7 B6 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[28], names[29], names[30]"
+    },
+    {
+      "target": "0x061B61",
+      "references": [
+        "0x061964"
+      ],
+      "text": "wvr",
+      "raw_hex": "77 76 72",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[31]"
+    },
+    {
+      "target": "0x061B65",
+      "references": [
+        "0x061968",
+        "0x06196C",
+        "0x061970"
+      ],
+      "text": "}~{ﾞx",
+      "raw_hex": "7D 7E 7B DE 78",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[32], names[33], names[34]"
+    },
+    {
+      "target": "0x061B6B",
+      "references": [
+        "0x061974",
+        "0x061978"
+      ],
+      "text": "ｶｲｿﾞｸ",
+      "raw_hex": "B6 B2 BF DE B8",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[35], names[36]"
+    },
+    {
+      "target": "0x061B71",
+      "references": [
+        "0x06197C"
+      ],
+      "text": "ｼﾞｹｲﾀﾞﾝ",
+      "raw_hex": "BC DE B9 B2 C0 DE DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[37]"
+    },
+    {
+      "target": "0x061B79",
+      "references": [
+        "0x061980"
+      ],
+      "text": "ﾛｰﾚﾝ",
+      "raw_hex": "DB B0 DA DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[38]"
+    },
+    {
+      "target": "0x061B7E",
+      "references": [
+        "0x061984"
+      ],
+      "text": "ｱﾄﾞﾝ",
+      "raw_hex": "B1 C4 DE DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[39]"
+    },
+    {
+      "target": "0x061B83",
+      "references": [
+        "0x061988"
+      ],
+      "text": "ｻﾑｿﾝ",
+      "raw_hex": "BB D1 BF DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[40]"
+    },
+    {
+      "target": "0x061B88",
+      "references": [
+        "0x06198C"
+      ],
+      "text": "ﾊﾞﾗﾝ",
+      "raw_hex": "CA DE D7 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[41]"
+    },
+    {
+      "target": "0x061B8D",
+      "references": [
+        "0x061990",
+        "0x061994",
+        "0x061998",
+        "0x06199C",
+        "0x0619A0",
+        "0x0619A4",
+        "0x0619A8",
+        "0x0619AC",
+        "0x0619B0",
+        "0x0619B4"
+      ],
+      "text": "ﾃｲｺｸｼｷｶﾝ",
+      "raw_hex": "C3 B2 BA B8 BC B7 B6 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[42], names[43], names[44], names[45], names[46], names[47], names[48], names[49], names[50], names[51]"
+    },
+    {
+      "target": "0x061B96",
+      "references": [
+        "0x0619B8",
+        "0x0619BC",
+        "0x0619C0",
+        "0x0619C4",
+        "0x0619C8",
+        "0x0619CC"
+      ],
+      "text": "ｳｪｱｳﾙﾌ",
+      "raw_hex": "B3 AA B1 B3 D9 CC",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[52], names[53], names[54], names[55], names[56], names[57]"
+    },
+    {
+      "target": "0x061B9D",
+      "references": [
+        "0x0619D0",
+        "0x0619D4",
+        "0x0619D8",
+        "0x0619DC"
+      ],
+      "text": "ｸﾞﾚｰﾄｽﾗｲﾑ",
+      "raw_hex": "B8 DE DA B0 C4 BD D7 B2 D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[58], names[59], names[60], names[61]"
+    },
+    {
+      "target": "0x061BA7",
+      "references": [
+        "0x0619E0",
+        "0x0619E4",
+        "0x0619E8",
+        "0x0619EC",
+        "0x0619F0"
+      ],
+      "text": "ｽｷｭﾗ",
+      "raw_hex": "BD B7 AD D7",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[62], names[63], names[64], names[65], names[66]"
+    },
+    {
+      "target": "0x061BAC",
+      "references": [
+        "0x0619F4",
+        "0x0619F8"
+      ],
+      "text": "ｱｲｱﾝｺﾞｰﾚﾑ",
+      "raw_hex": "B1 B2 B1 DD BA DE B0 DA D1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[67], names[68]"
+    },
+    {
+      "target": "0x061BB6",
+      "references": [
+        "0x0619FC",
+        "0x061A00",
+        "0x061A04"
+      ],
+      "text": "ﾘｯﾁ",
+      "raw_hex": "D8 AF C1",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[69], names[70], names[71]"
+    },
+    {
+      "target": "0x061BBA",
+      "references": [
+        "0x061A08",
+        "0x061A0C"
+      ],
+      "text": "ﾘﾋﾞﾝｸﾞｱｰﾏｰ",
+      "raw_hex": "D8 CB DE DD B8 DE B1 B0 CF B0",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[72], names[73]"
+    },
+    {
+      "target": "0x061BC5",
+      "references": [
+        "0x061A10"
+      ],
+      "text": "ﾊﾞﾝﾊﾟｲｱﾛｰﾄﾞ",
+      "raw_hex": "CA DE DD CA DF B2 B1 DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[74]"
+    },
+    {
+      "target": "0x061BD1",
+      "references": [
+        "0x061A14",
+        "0x061A18"
+      ],
+      "text": "ｺﾞｰｽﾄ",
+      "raw_hex": "BA DE B0 BD C4",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[75], names[76]"
+    },
+    {
+      "target": "0x061BD7",
+      "references": [
+        "0x061A1C",
+        "0x061A20",
+        "0x061A24"
+      ],
+      "text": "ｹﾙﾍﾞﾛｽ",
+      "raw_hex": "B9 D9 CD DE DB BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[77], names[78], names[79]"
+    },
+    {
+      "target": "0x061BDE",
+      "references": [
+        "0x061A28",
+        "0x061A2C"
+      ],
+      "text": "ﾏｽﾀｰﾃﾞｨｰﾉ",
+      "raw_hex": "CF BD C0 B0 C3 DE A8 B0 C9",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[80], names[81]"
+    },
+    {
+      "target": "0x061BE8",
+      "references": [
+        "0x061A30",
+        "0x061A34"
+      ],
+      "text": "ﾜｲﾊﾞｰﾝ",
+      "raw_hex": "DC B2 CA DE B0 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[82], names[83]"
+    },
+    {
+      "target": "0x061BEF",
+      "references": [
+        "0x061A38",
+        "0x061A3C",
+        "0x061A40",
+        "0x061A44",
+        "0x061A48",
+        "0x061A4C",
+        "0x061A50",
+        "0x061A54",
+        "0x061A58",
+        "0x061A5C"
+      ],
+      "text": "ｸﾞﾚｰﾄﾄﾞﾗｺﾞﾝ",
+      "raw_hex": "B8 DE DA B0 C4 C4 DE D7 BA DE DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[84], names[85], names[86], names[87], names[88], names[89], names[90], names[91], names[92], names[93]"
+    },
+    {
+      "target": "0x061BFB",
+      "references": [
+        "0x061A60",
+        "0x061A64"
+      ],
+      "text": "ﾐﾉﾀｳﾛｽ",
+      "raw_hex": "D0 C9 C0 B3 DB BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[94], names[95]"
+    },
+    {
+      "target": "0x061C02",
+      "references": [
+        "0x061A68",
+        "0x061A6C",
+        "0x061A70"
+      ],
+      "text": "ｸﾗｰｹﾝ",
+      "raw_hex": "B8 D7 B0 B9 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[96], names[97], names[98]"
+    },
+    {
+      "target": "0x061C08",
+      "references": [
+        "0x061A74",
+        "0x061A78"
+      ],
+      "text": "ｻｷｭﾊﾞｽ",
+      "raw_hex": "BB B7 AD CA DE BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[99], names[100]"
+    },
+    {
+      "target": "0x061C0F",
+      "references": [
+        "0x061A7C",
+        "0x061A80",
+        "0x061A84"
+      ],
+      "text": "ﾃﾞｰﾓﾝﾛｰﾄﾞ",
+      "raw_hex": "C3 DE B0 D3 DD DB B0 C4 DE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[101], names[102], names[103]"
+    },
+    {
+      "target": "0x061C19",
+      "references": [
+        "0x061A88",
+        "0x061A8C",
+        "0x061A90",
+        "0x061A94",
+        "0x061A98",
+        "0x061A9C"
+      ],
+      "text": "qyu",
+      "raw_hex": "71 79 75",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[104], names[105], names[106], names[107], names[108], names[109]"
+    },
+    {
+      "target": "0x061C1D",
+      "references": [
+        "0x061AA0",
+        "0x061AA4"
+      ],
+      "text": "ﾏｼﾞｮ",
+      "raw_hex": "CF BC DE AE",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[110], names[111]"
+    },
+    {
+      "target": "0x061C22",
+      "references": [
+        "0x061AA8",
+        "0x061AAC"
+      ],
+      "text": "ｼﾝｶﾝ",
+      "raw_hex": "BC DD B6 DD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[112], names[113]"
+    },
+    {
+      "target": "0x061C27",
+      "references": [
+        "0x061AB0"
+      ],
+      "text": "ﾃｲｺｸﾍｲ",
+      "raw_hex": "C3 B2 BA B8 CD B2",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[114]"
+    },
+    {
+      "target": "0x061C2E",
+      "references": [
+        "0x061AB4"
+      ],
+      "text": "ﾌｧｲｱｽ",
+      "raw_hex": "CC A7 B2 B1 BD",
+      "preceded_by_ff": true,
+      "category": "global_table_string",
+      "owner": "names[115]"
+    },
+    {
+      "target": "0x080400",
+      "references": [
+        "0x100ABC",
+        "0x1296B0",
+        "0x129AE6"
+      ],
+      "text": "ﾌﾎﾁ#ﾎ暿#",
+      "raw_hex": "CC CE C1 23 CE ED C1 23",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x080402",
+      "references": [
+        "0x10AF7E",
+        "0x10E8F4"
+      ],
+      "text": "ﾁ#ﾎ暿#",
+      "raw_hex": "C1 23 CE ED C1 23",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x080404",
+      "references": [
+        "0x110B7A",
+        "0x110B88",
+        "0x110ED0",
+        "0x110EDE",
+        "0x111238",
+        "0x111246"
+      ],
+      "text": "ﾎ暿#",
+      "raw_hex": "CE ED C1 23",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x08066E",
+      "references": [
+        "0x000FE6",
+        "0x003EE4",
+        "0x0043D4",
+        "0x00483C",
+        "0x0049FE",
+        "0x004EAA"
+      ],
+      "text": "ﾎ暿#",
+      "raw_hex": "CE ED C1 23",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0808E8",
+      "references": [
+        "0x011880"
+      ],
+      "text": "ｪｫｲｪｺｪ",
+      "raw_hex": "AA AB B2 AA BA AA",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x081006",
+      "references": [
+        "0x104434"
+      ],
+      "text": "32336b",
+      "raw_hex": "33 32 33 33 36 62",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x081008",
+      "references": [
+        "0x109664",
+        "0x109A2C",
+        "0x109DDE",
+        "0x10A17E",
+        "0x119638"
+      ],
+      "text": "336b",
+      "raw_hex": "33 33 36 62",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x081828",
+      "references": [
+        "0x00F3A4"
+      ],
+      "text": "OOOO",
+      "raw_hex": "4F 4F 4F 4F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x08363C",
+      "references": [
+        "0x020BDE",
+        "0x02B3B0"
+      ],
+      "text": "WXUVWfgdefgdefgDEFGFfgdef",
+      "raw_hex": "57 58 55 56 57 66 67 64 65 66 67 64 65 66 67 44 45 46 47 46 66 67 64 65 66",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x083877",
+      "references": [
+        "0x0E592A"
+      ],
+      "text": "gdcdKLMNKLMNKLMNKLMNKLMN",
+      "raw_hex": "67 64 63 64 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x084EB9",
+      "references": [
+        "0x0005AE",
+        "0x0005C8",
+        "0x000A18",
+        "0x000BB2",
+        "0x000EDE",
+        "0x000EEE",
+        "0x00166A",
+        "0x001A26",
+        "0x0033FE",
+        "0x003CB0",
+        "0x003CF0",
+        "0x003EFA",
+        "0x003FC0",
+        "0x0043C0",
+        "0x004752",
+        "0x004B22",
+        "0x004C34",
+        "0x005132",
+        "0x005722",
+        "0x00832C",
+        "0x008346",
+        "0x008362",
+        "0x00AEA4",
+        "0x00EEB2",
+        "0x00F686",
+        "0x012F30",
+        "0x013AA0",
+        "0x013BD8",
+        "0x014038",
+        "0x018596",
+        "0x01869C",
+        "0x0186C4",
+        "0x01D5DE",
+        "0x02061C",
+        "0x022FCA",
+        "0x0230E4",
+        "0x0230FC",
+        "0x0236A6",
+        "0x024A9C",
+        "0x024AF0",
+        "0x024BBE",
+        "0x024F62",
+        "0x025012",
+        "0x02506A",
+        "0x0250BE",
+        "0x025116",
+        "0x025130",
+        "0x02514E",
+        "0x025174",
+        "0x025576",
+        "0x025714",
+        "0x02746E",
+        "0x0290A8",
+        "0x02AE8E",
+        "0x02B39A",
+        "0x02C054",
+        "0x02C064",
+        "0x02C78A"
+      ],
+      "text": "KLMNOHIJKLMNO",
+      "raw_hex": "4B 4C 4D 4E 4F 48 49 4A 4B 4C 4D 4E 4F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x086100",
+      "references": [
+        "0x009380",
+        "0x00BE08",
+        "0x014B52",
+        "0x01865A",
+        "0x019E46",
+        "0x01CEEE"
+      ],
+      "text": "ﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ珮粤蒟跚",
+      "raw_hex": "D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DB DC DD DE DF E0 E1 E2 E3 E4 E5 E6 E7",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0A18DE",
+      "references": [
+        "0x026F36"
+      ],
+      "text": "h WEPON    ",
+      "raw_hex": "68 20 57 45 50 4F 4E 20 20 20 20",
+      "preceded_by_ff": false,
+      "category": "declared_equipment_category_ui",
+      "owner": "control prefix plus WEPON/PROTECTER/ITEM labels"
+    },
+    {
+      "target": "0x0A3B9D",
+      "references": [
+        "0x02B1D8"
+      ],
+      "text": "ﾗﾝｸﾞﾘｯｻｰ",
+      "raw_hex": "D7 DD B8 DE D8 AF BB B0",
+      "preceded_by_ff": false,
+      "category": "internal_secret_name_comparison",
+      "owner": "Langrisser/Alhazard name-entry comparison block"
+    },
+    {
+      "target": "0x0A516E",
+      "references": [
+        "0x0056EE"
+      ],
+      "text": "｡｢｣､･ｦｧｯ7ｰｱｲｳｴｵ7ｰｾｿﾀﾁﾂﾃ7ﾉﾊﾋﾌﾍﾎﾏ77ﾗﾘﾙﾚﾛﾜ",
+      "raw_hex": "A0 A1 A2 A3 A4 A5 A6 A7 AF 37 B0 B1 B2 B3 B4 B5 37 B0 BE BF C0 C1 C2 C3 37 C9 CA CB CC CD CE CF 37 37 D7 D8 D9 DA DB DC",
+      "preceded_by_ff": false,
+      "category": "structured_name_entry_resource",
+      "owner": "byte character/index resource, not rendered as one string"
+    },
+    {
+      "target": "0x0A518A",
+      "references": [
+        "0x0BB4DC"
+      ],
+      "text": "ﾌﾍﾎﾏ77ﾗﾘﾙﾚﾛﾜ",
+      "raw_hex": "CC CD CE CF 37 37 D7 D8 D9 DA DB DC",
+      "preceded_by_ff": false,
+      "category": "structured_name_entry_resource",
+      "owner": "byte character/index resource, not rendered as one string"
+    },
+    {
+      "target": "0x0B0C2E",
+      "references": [
+        "0x001E34",
+        "0x002134"
+      ],
+      "text": ":ﾂ*#",
+      "raw_hex": "3A C2 2A 23",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0B80B8",
+      "references": [
+        "0x11B4FC"
+      ],
+      "text": "汳洟涕qｺ冶ｹ0･ﾐ肖<",
+      "raw_hex": "9F 92 9F A4 9F B6 71 BA 96 E8 B9 30 A5 D0 8F D1 3C",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0B80BD",
+      "references": [
+        "0x087D2C"
+      ],
+      "text": "ｶqｺ冶ｹ0･ﾐ肖<",
+      "raw_hex": "B6 71 BA 96 E8 B9 30 A5 D0 8F D1 3C",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0B80C0",
+      "references": [
+        "0x087E72"
+      ],
+      "text": "冶ｹ0･ﾐ肖<",
+      "raw_hex": "96 E8 B9 30 A5 D0 8F D1 3C",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0BABA0",
+      "references": [
+        "0x056658"
+      ],
+      "text": "ﾌｪ*",
+      "raw_hex": "CC AA 2A",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C001E",
+      "references": [
+        "0x082DA4",
+        "0x082DB6",
+        "0x088914",
+        "0x088D34",
+        "0x092E6E",
+        "0x0933F6",
+        "0x09E11A",
+        "0x0A0096",
+        "0x0A1D34"
+      ],
+      "text": "gvhhwhvwW",
+      "raw_hex": "67 76 68 68 77 68 76 77 57",
+      "preceded_by_ff": true,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C0020",
+      "references": [
+        "0x088744",
+        "0x0887C4",
+        "0x088934"
+      ],
+      "text": "hhwhvwW",
+      "raw_hex": "68 68 77 68 76 77 57",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C0022",
+      "references": [
+        "0x087C04",
+        "0x088624",
+        "0x0A313E"
+      ],
+      "text": "whvwW",
+      "raw_hex": "77 68 76 77 57",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C0023",
+      "references": [
+        "0x09B038"
+      ],
+      "text": "hvwW",
+      "raw_hex": "68 76 77 57",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C0024",
+      "references": [
+        "0x096E08"
+      ],
+      "text": "vwW",
+      "raw_hex": "76 77 57",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C010B",
+      "references": [
+        "0x08BCC8"
+      ],
+      "text": "ｽｻﾛﾋﾛｾｾ淪ｽﾜﾜﾛ",
+      "raw_hex": "BD BB DB CB DB BE BE 9F CB BD DC DC DB",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C0301",
+      "references": [
+        "0x08BD1E"
+      ],
+      "text": "ﾊﾊﾎpｰｮﾌﾃ",
+      "raw_hex": "CA CA CE 70 B0 AE CC C3",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C08A9",
+      "references": [
+        "0x015E28"
+      ],
+      "text": "wﾞG",
+      "raw_hex": "77 DE 47",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C15B3",
+      "references": [
+        "0x0165BA",
+        "0x017ACE"
+      ],
+      "text": "ﾏﾌiiﾏ",
+      "raw_hex": "CF CC 69 69 CF",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C204A",
+      "references": [
+        "0x02949E"
+      ],
+      "text": "ｵ 0",
+      "raw_hex": "B5 FE 20 30",
+      "preceded_by_ff": true,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C317C",
+      "references": [
+        "0x005B62",
+        "0x00F290",
+        "0x01899A",
+        "0x01A25C",
+        "0x01A26A",
+        "0x01A278",
+        "0x01A286",
+        "0x01A294",
+        "0x01A2A2",
+        "0x02F5A2",
+        "0x030F1A",
+        "0x0310D6"
+      ],
+      "text": "ﾙﾌ51",
+      "raw_hex": "D9 CC 35 31",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C3A1A",
+      "references": [
+        "0x0134BC"
+      ],
+      "text": "ｶh斐秡<I<J<GﾋK!",
+      "raw_hex": "80 B6 68 94 E3 E2 60 F2 85 3C 49 3C 4A 3C 47 CB 80 4B 21",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0C4847",
+      "references": [
+        "0x01F456"
+      ],
+      "text": "\":ｴﾃ:ﾜﾌjｱ",
+      "raw_hex": "22 3A B4 C3 3A DC CC 6A B1",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0CC2FC",
+      "references": [
+        "0x02CC64"
+      ],
+      "text": "GGuICG5+@5YGC5僭",
+      "raw_hex": "47 47 75 49 43 47 35 FE 2B 40 35 59 47 43 35 99 47",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0001",
+      "references": [
+        "0x0974E6"
+      ],
+      "text": " DE舶YY",
+      "raw_hex": "20 44 45 94 95 59 59",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0002",
+      "references": [
+        "0x088AB6",
+        "0x088B76",
+        "0x098E5C",
+        "0x09956C",
+        "0x09964E"
+      ],
+      "text": "DE舶YY",
+      "raw_hex": "44 45 94 95 59 59",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0003",
+      "references": [
+        "0x09EA96",
+        "0x09EB6C",
+        "0x09EBD6",
+        "0x09EC4C",
+        "0x09EC9A"
+      ],
+      "text": "E舶YY",
+      "raw_hex": "45 94 95 59 59",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0004",
+      "references": [
+        "0x082710",
+        "0x0828D8",
+        "0x0991B6",
+        "0x0998C4",
+        "0x099A88"
+      ],
+      "text": "舶YY",
+      "raw_hex": "94 95 59 59",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0043",
+      "references": [
+        "0x0A0AF4"
+      ],
+      "text": "YYYE7",
+      "raw_hex": "59 59 59 45 37",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0044",
+      "references": [
+        "0x010C84",
+        "0x010DB2",
+        "0x010E86",
+        "0x0118BA",
+        "0x014C4C",
+        "0x017874"
+      ],
+      "text": "YYE7",
+      "raw_hex": "59 59 45 37",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D0045",
+      "references": [
+        "0x0A0BA2"
+      ],
+      "text": "YE7",
+      "raw_hex": "59 45 37",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0D1402",
+      "references": [
+        "0x0DB9EA"
+      ],
+      "text": "ﾄfTﾌD",
+      "raw_hex": "C4 66 54 CC 44",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0E0807",
+      "references": [
+        "0x013D84",
+        "0x013ED6"
+      ],
+      "text": "\",ｫｼ",
+      "raw_hex": "22 2C AB BC",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0E0808",
+      "references": [
+        "0x086F06"
+      ],
+      "text": ",ｫｼ",
+      "raw_hex": "2C AB BC",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0E11FC",
+      "references": [
+        "0x018B06",
+        "0x019056",
+        "0x01BB48",
+        "0x01BBCA",
+        "0x01BC4E",
+        "0x01BCD0",
+        "0x01BDA4",
+        "0x01BF36",
+        "0x01BFF8",
+        "0x01C140",
+        "0x01C22C"
+      ],
+      "text": "\"\"ﾌ",
+      "raw_hex": "22 22 CC",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0E1229",
+      "references": [
+        "0x013330"
+      ],
+      "text": "ｻ.ﾌ\"ｻ",
+      "raw_hex": "BB 2E CC 22 BB",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0E5279",
+      "references": [
+        "0x00F296"
+      ],
+      "text": "\"B\"｣",
+      "raw_hex": "22 42 22 A3",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0F008A",
+      "references": [
+        "0x09715A"
+      ],
+      "text": "ｻｧz2",
+      "raw_hex": "BB A7 7A 32",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0F0091",
+      "references": [
+        "0x0A243A"
+      ],
+      "text": "w3\"ｪ31",
+      "raw_hex": "77 33 22 AA 33 31",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0F0700",
+      "references": [
+        "0x0D34F8",
+        "0x0D3524"
+      ],
+      "text": "PｻP#",
+      "raw_hex": "50 BB 50 23",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x0FA6E6",
+      "references": [
+        "0x01DAAA"
+      ],
+      "text": "DE$UTｸ ",
+      "raw_hex": "44 45 24 55 54 B8 20",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x100C68",
+      "references": [
+        "0x02B4D2"
+      ],
+      "text": "~j巛yﾏ|ﾝﾙ",
+      "raw_hex": "F3 FB 7E 6A 9B DD 79 CF 7C DD D9",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x100C6E",
+      "references": [
+        "0x003C0E",
+        "0x003C1E",
+        "0x003D7A",
+        "0x00490A",
+        "0x004C0A",
+        "0x005356"
+      ],
+      "text": "yﾏ|ﾝﾙ",
+      "raw_hex": "79 CF 7C DD D9",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x102242",
+      "references": [
+        "0x12404C"
+      ],
+      "text": "A検",
+      "raw_hex": "41 80 8C 9F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x10B268",
+      "references": [
+        "0x018D54",
+        "0x018DB8",
+        "0x018F32",
+        "0x01910A",
+        "0x01917A",
+        "0x0193BC",
+        "0x01B1DC"
+      ],
+      "text": "涇ｶn]飼ﾟ",
+      "raw_hex": "ED DF B6 6E 5D FB F7 DF",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x110022",
+      "references": [
+        "0x0A237E"
+      ],
+      "text": "ｿｿﾏ",
+      "raw_hex": "BF BF CF",
+      "preceded_by_ff": true,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x11B200",
+      "references": [
+        "0x0D44DA",
+        "0x0D4CAC"
+      ],
+      "text": "WｫU*",
+      "raw_hex": "57 AB 55 2A",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x12343C",
+      "references": [
+        "0x01C4AC",
+        "0x020A5E",
+        "0x020AB2",
+        "0x026044",
+        "0x027F68"
+      ],
+      "text": "ｹ韋隱",
+      "raw_hex": "B9 E8 E8 E8 AA",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x126700",
+      "references": [
+        "0x001816",
+        "0x001DFC",
+        "0x002372",
+        "0x002614",
+        "0x003B40",
+        "0x003C24",
+        "0x00538E",
+        "0x0053BC",
+        "0x01AD30"
+      ],
+      "text": "5!畆0",
+      "raw_hex": "35 21 E1 5B 30",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x12D139",
+      "references": [
+        "0x00B45A"
+      ],
+      "text": "DJD344C4",
+      "raw_hex": "44 4A 44 33 34 34 43 34",
+      "preceded_by_ff": true,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x12D13C",
+      "references": [
+        "0x0297CC",
+        "0x02992A"
+      ],
+      "text": "344C4",
+      "raw_hex": "33 34 34 43 34",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x12E1F9",
+      "references": [
+        "0x0D8BE0"
+      ],
+      "text": "Tﾌ",
+      "raw_hex": "54 CC FD",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x12E200",
+      "references": [
+        "0x0F5FC0"
+      ],
+      "text": "鮱T榘",
+      "raw_hex": "FC 44 54 ED CF",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130000",
+      "references": [
+        "0x001202",
+        "0x05D382",
+        "0x0830C2",
+        "0x088A36",
+        "0x088A46",
+        "0x088AF6",
+        "0x088B96",
+        "0x088BF6",
+        "0x088C06",
+        "0x0A15BC",
+        "0x0DFFEA"
+      ],
+      "text": "餐Q斬斬各ﾒi卲",
+      "raw_hex": "8E 60 FE 51 8E 61 8E 61 8A 65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130002",
+      "references": [
+        "0x099832"
+      ],
+      "text": "Q斬斬各ﾒi卲",
+      "raw_hex": "FE 51 8E 61 8E 61 8A 65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130003",
+      "references": [
+        "0x0A25FE"
+      ],
+      "text": "Q斬斬各ﾒi卲",
+      "raw_hex": "51 8E 61 8E 61 8A 65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130004",
+      "references": [
+        "0x099310",
+        "0x099E1C",
+        "0x09A57A"
+      ],
+      "text": "斬斬各ﾒi卲",
+      "raw_hex": "8E 61 8E 61 8A 65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130006",
+      "references": [
+        "0x099776",
+        "0x09A12C"
+      ],
+      "text": "斬各ﾒi卲",
+      "raw_hex": "8E 61 8A 65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130007",
+      "references": [
+        "0x0A28F6"
+      ],
+      "text": "a各ﾒi卲",
+      "raw_hex": "61 8A 65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x130009",
+      "references": [
+        "0x082708",
+        "0x0828D0"
+      ],
+      "text": "eﾒi卲",
+      "raw_hex": "65 D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x13000A",
+      "references": [
+        "0x09E2EE",
+        "0x09FC62",
+        "0x09FDE2"
+      ],
+      "text": "ﾒi卲",
+      "raw_hex": "D2 69 ED 6F",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x1301D1",
+      "references": [
+        "0x09C7F8"
+      ],
+      "text": "ｵUceT振\\:ﾀﾌC申flVee\\",
+      "raw_hex": "B5 55 63 A0 65 54 90 55 5C 3A C0 CC FE 43 90 5C 66 6C 56 65 65 5C",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x133131",
+      "references": [
+        "0x0DD972"
+      ],
+      "text": "fb3ﾓﾀ6fb\"ｾ槇wfUfgﾚ｡b",
+      "raw_hex": "66 62 33 D3 C0 36 66 62 22 BE EA A0 77 66 55 66 67 DA A1 62",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x133137",
+      "references": [
+        "0x0E80B8"
+      ],
+      "text": "fb\"ｾ槇wfUfgﾚ｡b",
+      "raw_hex": "66 62 22 BE EA A0 77 66 55 66 67 DA A1 62",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x134000",
+      "references": [
+        "0x008636"
+      ],
+      "text": "\"ｻｲ鎹'ﾓﾝ*'c3",
+      "raw_hex": "22 BB B2 FE E8 50 27 D3 DD 2A 27 63 33",
+      "preceded_by_ff": false,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    },
+    {
+      "target": "0x1343F9",
+      "references": [
+        "0x025C80",
+        "0x025DF0"
+      ],
+      "text": ",v2｢\"vr'",
+      "raw_hex": "2C 76 32 A2 22 76 72 27",
+      "preceded_by_ff": true,
+      "category": "reviewed_binary_false_positive",
+      "owner": "binary data ending at a coincidental FF byte"
+    }
+  ]
+}

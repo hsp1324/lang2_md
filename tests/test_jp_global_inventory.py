@@ -75,6 +75,14 @@ class JapaneseGlobalInventoryTests(unittest.TestCase):
         self.assertEqual(names["known_korean_target_count"], 117)
         self.assertTrue(all(entry["target_korean"] is not None for entry in names["entries"]))
 
+    def test_special_illusion_class_is_relocated(self):
+        illusion = self.result["special_classes"]["illusion"]
+        self.assertEqual(illusion["pointer_field"], "0x05E5CA")
+        self.assertEqual(illusion["pointer"], "0x05E5CE")
+        self.assertEqual(illusion["original_text"], "ｲﾘｭｰｼﾞｮﾝ")
+        self.assertEqual(illusion["target_korean"], "일루전")
+        self.assertTrue(illusion["raw_modified"])
+
 
 if __name__ == "__main__":
     unittest.main()
