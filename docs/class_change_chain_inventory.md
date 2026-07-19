@@ -7,8 +7,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Commanders: 10
 - Source transitions: 100
 - Unique current/candidate combinations: 76
-- Live-verified transitions: 68
-- Live-verified unique combinations: 68
+- Live-verified transitions: 73
+- Live-verified unique combinations: 73
 - Application-verified transitions: 2
 
 ## 1. 엘윈
@@ -140,12 +140,12 @@ Source pointer: `0x08280A`
 | `0x082812` | `04` 로드 (ﾛｰﾄﾞ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | pending | pending |
 | `0x08281A` | `05` 나이트 (ﾅｲﾄ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | pending | pending |
 | `0x082822` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `13` 메이지 (ﾒｲｼﾞ) | pending | pending |
-| `0x08282A` | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) | pending | pending |
+| `0x08282A` | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) | yes | pending |
 | `0x082832` | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | `17` 세인트 (ｾｲﾝﾄ) / `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) | pending | pending |
-| `0x08283A` | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) | pending | pending |
-| `0x082842` | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) / `1C` 그랑나이트 (ｸﾞﾗﾝﾅｲﾄ) | pending | pending |
-| `0x08284A` | `13` 메이지 (ﾒｲｼﾞ) | `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) / `1C` 그랑나이트 (ｸﾞﾗﾝﾅｲﾄ) / `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) | pending | pending |
-| `0x082852` | `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) | `23` 하이마스터 (ﾊｲﾏｽﾀｰ) | pending | pending |
+| `0x08283A` | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) | yes | pending |
+| `0x082842` | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) / `1C` 그랑나이트 (ｸﾞﾗﾝﾅｲﾄ) | yes | pending |
+| `0x08284A` | `13` 메이지 (ﾒｲｼﾞ) | `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) / `1C` 그랑나이트 (ｸﾞﾗﾝﾅｲﾄ) / `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) | yes | pending |
+| `0x082852` | `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) | `23` 하이마스터 (ﾊｲﾏｽﾀｰ) | yes | pending |
 
 ## 9. 레스터
 

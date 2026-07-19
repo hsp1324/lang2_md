@@ -5485,6 +5485,16 @@ contains 57 safe syllables as documented below and in
   and eight unique combinations remaining. Commander 8 (Aaron) supplies five;
   commander 10 (Jessica) supplies the final three. Production remains checksum
   `AD01` with 861 custom glyphs; all 300 unit tests pass.
+- Commander 8 (Aaron) completed five pending transitions with
+  `completed 5, resumed 0`: `8ed8_c8_s12`, `8ed9_c8_s0c`, `8edc_c8_s0d`,
+  `8edd_c8_s13`, and `8eba_c8_s1a`. All 13 candidate frames were visually
+  reviewed through terminal High Master. Korean class, stat, mercenary, and
+  magic text is intact; the terminal empty mercenary area is source data.
+  These are screen-only proofs.
+- Generated coverage is now 73/76 unique combinations, two application proofs,
+  and three screen combinations remaining. Jessica's current classes
+  `03/08/14` are the final screen-only batch. Production remains checksum
+  `AD01` with 861 custom glyphs; all 301 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

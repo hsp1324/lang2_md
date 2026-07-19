@@ -207,6 +207,14 @@ are intact. Coverage is now 68 of 76 unique combinations with eight remaining;
 Aaron supplies five and Jessica the final three. These Keith rows are
 screen-only evidence.
 
+Commander 8 (Aaron) completed five uncovered transitions under prefixes
+`8ed8_c8_s12`, `8ed9_c8_s0c`, `8edc_c8_s0d`, `8edd_c8_s13`, and
+`8eba_c8_s1a`. All 13 candidate frames were reviewed through terminal High
+Master. Korean classes, stats, mercenaries, and magic lists are intact; the
+terminal class's empty mercenary area is source data. Coverage is now 73 of 76
+unique combinations. Jessica's `03/08/14` rows are the final three screen
+combinations. These Aaron rows are screen-only evidence.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is
