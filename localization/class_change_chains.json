@@ -3,7 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 4,
+  "live_verified_transition_count": 6,
+  "live_verified_unique_transition_count": 6,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -1259,9 +1260,14 @@
               "ko": "매직나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/analysis/9037_c5_s09_trigger.png",
+            "captures/run/9037_c5_s09_candidate1.png",
+            "captures/run/9037_c5_s09_candidate2.png",
+            "captures/run/9037_c5_s09_candidate3.png"
+          ]
         },
         {
           "index": 3,
@@ -1288,9 +1294,14 @@
               "ko": "하이로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/analysis/902b_c5_s04_trigger.png",
+            "captures/run/902b_c5_s04_candidate1.png",
+            "captures/run/902b_c5_s04_candidate2.png",
+            "captures/run/902b_c5_s04_candidate3.png"
+          ]
         },
         {
           "index": 4,

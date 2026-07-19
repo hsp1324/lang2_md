@@ -86,7 +86,7 @@ not a controlled before/after application proof. The normal end-turn route is
 retained in `captures/analysis/eb00_class_change_turn2.gst` and proves the
 runtime change from class `0x01` to `0x04`, LV1, EXP0.
 
-Candidate sets beyond Fighter Elwin's first branch and Hein's first two
+Candidate sets beyond Fighter Elwin's first branch and Hein's first four
 branches still require runtime coverage. Do not describe the entire
 class-change matrix as complete until those commander and branch combinations
 have been sampled.
@@ -136,6 +136,12 @@ boundary between display and application:
   three rows, class stats, mercenaries, and Korean magic lists without clipping
   or Japanese residue. This transition is screen-verified only; application
   remains pending.
+- Start-display checksum `9037` verifies
+  `소서러(0x09) -> 비숍(0x12) / 메이지(0x13) / 매직나이트(0x0D)`, and checksum
+  `902B` verifies `로드(0x04) -> 메이지(0x13) / 매직나이트(0x0D) /
+  하이로드(0x0B)`. Their `candidate1.png` through `candidate3.png` capture sets
+  preserve all names, stats, mercenaries, and Korean magic lists. Both rows are
+  screen-verified only.
 
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not

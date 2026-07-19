@@ -5385,6 +5385,16 @@ contains 57 safe syllables as documented below and in
   long/short titles, all rows, stats, mercenaries, and Korean magic lists
   without clipping or Japanese residue. This row is `live_verified` but not
   `application_verified`; do not infer application from the Start probe.
+- Fresh Start-display checksums `9037` and `902B` extend this to Hein's
+  `소서러 -> 비숍/메이지/매직나이트` and
+  `로드 -> 메이지/매직나이트/하이로드` rows. The matching
+  `captures/run/9037_c5_s09_candidate1.png` and
+  `902b_c5_s04_candidate1.png` series through `candidate3.png` verify every
+  class, stat, mercenary, and Korean magic list. These are screen-only proofs.
+- `tools/jp_ui_surface_inventory.py` now derives the remaining unique
+  class-change combination count from the source-chain inventory instead of a
+  hand-maintained number. This prevents later live-evidence additions from
+  leaving the broad UI gap stale.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

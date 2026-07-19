@@ -9,6 +9,7 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_korean_jp_probe as builder
+from tools import class_change_inventory as class_change_report
 
 
 def changed(japanese: bytes, korean: bytes, offset: int, size: int) -> bool:
@@ -52,6 +53,11 @@ def add_rows(
 
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
+    class_change = class_change_report.inventory(japanese)
+    remaining_class_change = (
+        class_change["unique_transition_count"]
+        - class_change["live_verified_unique_transition_count"]
+    )
     rows: list[dict[str, object]] = []
     add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)
     add_rows(rows, japanese, korean, "fixed_byte_strings", builder.BYTE_UI_FIXED_STRING_PATCHES, 1, True)
@@ -333,7 +339,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "declared_patches": rows,
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
-            "runtime verification of the remaining 72 unique class-change candidate combinations and non-Elwin application paths",
+            f"runtime verification of the remaining {remaining_class_change} unique class-change candidate combinations and non-Elwin application paths",
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",
             "all equipment and shop variants beyond declared Scenario 1 paths",

@@ -44,6 +44,18 @@ LIVE_EVIDENCE = {
         "captures/run/903c_c5_s0a_candidate2.png",
         "captures/run/903c_c5_s0a_candidate3.png",
     ],
+    (5, 0x09): [
+        "captures/analysis/9037_c5_s09_trigger.png",
+        "captures/run/9037_c5_s09_candidate1.png",
+        "captures/run/9037_c5_s09_candidate2.png",
+        "captures/run/9037_c5_s09_candidate3.png",
+    ],
+    (5, 0x04): [
+        "captures/analysis/902b_c5_s04_trigger.png",
+        "captures/run/902b_c5_s04_candidate1.png",
+        "captures/run/902b_c5_s04_candidate2.png",
+        "captures/run/902b_c5_s04_candidate3.png",
+    ],
     (9, 0x10): [
         "captures/run/d221_c9_s10_candidate1.png",
         "captures/run/d221_c9_s10_candidate2.png",
@@ -95,6 +107,15 @@ def inventory(source: bytes) -> dict[str, object]:
             }
         )
 
+    live_verified_unique_transitions = {
+        (
+            transition["current"]["id"],
+            tuple(candidate["id"] for candidate in transition["candidates"]),
+        )
+        for commander in commanders
+        for transition in commander["transitions"]
+        if transition["live_verified"]
+    }
     return {
         "source_pointer_table": "0x08253A",
         "commander_count": len(commanders),
@@ -106,6 +127,9 @@ def inventory(source: bytes) -> dict[str, object]:
             transition["live_verified"]
             for commander in commanders
             for transition in commander["transitions"]
+        ),
+        "live_verified_unique_transition_count": len(
+            live_verified_unique_transitions
         ),
         "application_verified_transition_count": sum(
             transition["application_verified"]
@@ -128,6 +152,8 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Source transitions: {result['transition_count']}",
         f"- Unique current/candidate combinations: {result['unique_transition_count']}",
         f"- Live-verified transitions: {result['live_verified_transition_count']}",
+        "- Live-verified unique combinations: "
+        f"{result['live_verified_unique_transition_count']}",
         f"- Application-verified transitions: {result['application_verified_transition_count']}",
         "",
     ]

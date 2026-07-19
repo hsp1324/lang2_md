@@ -21,7 +21,8 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["commander_count"], 10)
         self.assertEqual(self.result["transition_count"], 100)
         self.assertEqual(self.result["unique_transition_count"], 76)
-        self.assertEqual(self.result["live_verified_transition_count"], 4)
+        self.assertEqual(self.result["live_verified_transition_count"], 6)
+        self.assertEqual(self.result["live_verified_unique_transition_count"], 6)
         self.assertEqual(self.result["application_verified_transition_count"], 2)
 
         verified = [
@@ -30,7 +31,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             for transition in commander["transitions"]
             if transition["live_verified"]
         ]
-        self.assertEqual(len(verified), 4)
+        self.assertEqual(len(verified), 6)
         commander_id, transition = verified[0]
         self.assertEqual(commander_id, 1)
         self.assertEqual(transition["current"]["id"], 1)
@@ -67,6 +68,24 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertFalse(transition["application_verified"])
 
         commander_id, transition = verified[3]
+        self.assertEqual(commander_id, 5)
+        self.assertEqual(transition["current"]["id"], 0x09)
+        self.assertEqual(
+            [candidate["id"] for candidate in transition["candidates"]],
+            [0x12, 0x13, 0x0D],
+        )
+        self.assertFalse(transition["application_verified"])
+
+        commander_id, transition = verified[4]
+        self.assertEqual(commander_id, 5)
+        self.assertEqual(transition["current"]["id"], 0x04)
+        self.assertEqual(
+            [candidate["id"] for candidate in transition["candidates"]],
+            [0x13, 0x0D, 0x0B],
+        )
+        self.assertFalse(transition["application_verified"])
+
+        commander_id, transition = verified[5]
         self.assertEqual(commander_id, 9)
         self.assertEqual(transition["current"]["id"], 0x10)
         self.assertEqual(
