@@ -23,7 +23,8 @@ Stage 2 active checkpoint: the original complete-item secret shop list (IDs
 has the compact item-name/description glyph fix and passes all static tests, but
 the 37 names, descriptions, prices/stat lines, and icons still require runtime
 review before the equipment/shop gap can be marked complete. Resume from that
-runtime matrix; do not rebuild the loader investigation.
+runtime matrix in `docs/item_shop_runtime_matrix.md`; do not rebuild the loader
+investigation.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run
 it only when a later change shares its renderer/data ownership or an automated

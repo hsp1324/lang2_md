@@ -1,0 +1,769 @@
+{
+  "warning": "Static source ownership and unchanged icon-selection code do not prove that Korean names, descriptions, prices, or icons render correctly.",
+  "complete_secret_shop_list": {
+    "mode_value": 2,
+    "pointer_table": "0x0A1BB8",
+    "list_number": 33,
+    "item_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37
+    ]
+  },
+  "source_tables": {
+    "item_byte_names": "0x060364",
+    "prices": "0x0A1D32",
+    "icon_selector_code": "0x027B44..0x027B77",
+    "icon_formula": "VRAM 0x4000 + (item_id - 1) * 0x80; four 8x8 tiles",
+    "production_icon_selector_unchanged": true
+  },
+  "runtime_probe": {
+    "rom_checksum": "8374",
+    "status": "pending",
+    "required_review": [
+      "target_korean",
+      "target_description",
+      "expected_purchase_price_p",
+      "icon_tile_ids"
+    ]
+  },
+  "items": [
+    {
+      "id": 1,
+      "category": "무기",
+      "original_name": "ﾅｲﾌ",
+      "target_korean": "단검",
+      "target_description": "호신용 단검\nAT+1",
+      "price_table_units": 5,
+      "expected_purchase_price_p": 50,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4000",
+      "icon_tile_base": "0x2200",
+      "icon_tile_ids": [
+        "0x2200",
+        "0x2201",
+        "0x2202",
+        "0x2203"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 2,
+      "category": "무기",
+      "original_name": "ｳｫｰﾊﾝﾏｰ",
+      "target_korean": "워해머",
+      "target_description": "묵직한 워해머\nAT+2",
+      "price_table_units": 12,
+      "expected_purchase_price_p": 120,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4080",
+      "icon_tile_base": "0x2204",
+      "icon_tile_ids": [
+        "0x2204",
+        "0x2205",
+        "0x2206",
+        "0x2207"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 3,
+      "category": "무기",
+      "original_name": "ｸﾞﾚｰﾄｿｰﾄﾞ",
+      "target_korean": "그레이트소드",
+      "target_description": "그레이트소드\nAT+4",
+      "price_table_units": 30,
+      "expected_purchase_price_p": 300,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4100",
+      "icon_tile_base": "0x2208",
+      "icon_tile_ids": [
+        "0x2208",
+        "0x2209",
+        "0x220A",
+        "0x220B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 4,
+      "category": "무기",
+      "original_name": "ﾜﾝﾄﾞ",
+      "target_korean": "완드",
+      "target_description": "마력을 높이는 완드\n사거리+2 마법+1",
+      "price_table_units": 15,
+      "expected_purchase_price_p": 150,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4180",
+      "icon_tile_base": "0x220C",
+      "icon_tile_ids": [
+        "0x220C",
+        "0x220D",
+        "0x220E",
+        "0x220F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 5,
+      "category": "무기",
+      "original_name": "ﾌﾚｲﾑﾗﾝｽ",
+      "target_korean": "플레임랜스",
+      "target_description": "마법의 창\nAT+6",
+      "price_table_units": 850,
+      "expected_purchase_price_p": 8500,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4200",
+      "icon_tile_base": "0x2210",
+      "icon_tile_ids": [
+        "0x2210",
+        "0x2211",
+        "0x2212",
+        "0x2213"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 6,
+      "category": "무기",
+      "original_name": "ﾃﾞﾋﾞﾙｱｯｸｽ",
+      "target_korean": "데빌액스",
+      "target_description": "저주받은 대형도끼\nAT+8 DF-3",
+      "price_table_units": 250,
+      "expected_purchase_price_p": 2500,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4280",
+      "icon_tile_base": "0x2214",
+      "icon_tile_ids": [
+        "0x2214",
+        "0x2215",
+        "0x2216",
+        "0x2217"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 7,
+      "category": "무기",
+      "original_name": "ﾄﾞﾗｺﾞﾝｽﾚｲﾔｰ",
+      "target_korean": "D슬레이어",
+      "target_description": "D슬레이어\nAT+7",
+      "price_table_units": 1000,
+      "expected_purchase_price_p": 10000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4300",
+      "icon_tile_base": "0x2218",
+      "icon_tile_ids": [
+        "0x2218",
+        "0x2219",
+        "0x221A",
+        "0x221B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 8,
+      "category": "무기",
+      "original_name": "ﾗﾝｸﾞﾘｯｻｰ",
+      "target_korean": "랑그릿사",
+      "target_description": "루시리스의 성검\nAT+4 DF+1",
+      "price_table_units": 0,
+      "expected_purchase_price_p": 0,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4380",
+      "icon_tile_base": "0x221C",
+      "icon_tile_ids": [
+        "0x221C",
+        "0x221D",
+        "0x221E",
+        "0x221F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 9,
+      "category": "무기",
+      "original_name": "ﾗﾝｸﾞﾘｯｻｰ",
+      "target_korean": "랑그릿사",
+      "target_description": "빛의 성검\nAT+9 DF+2",
+      "price_table_units": 2400,
+      "expected_purchase_price_p": null,
+      "price_runtime_note": "stock renderer skips the dynamic price-number call for item ID 9",
+      "icon_vram_address": "0x4400",
+      "icon_tile_base": "0x2220",
+      "icon_tile_ids": [
+        "0x2220",
+        "0x2221",
+        "0x2222",
+        "0x2223"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 10,
+      "category": "무기",
+      "original_name": "ﾒｻｲﾔﾝｿｰﾄﾞ",
+      "target_korean": "메사이얀소드",
+      "target_description": "전설의 검\nAT-4 DF-3",
+      "price_table_units": 60,
+      "expected_purchase_price_p": 600,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4480",
+      "icon_tile_base": "0x2224",
+      "icon_tile_ids": [
+        "0x2224",
+        "0x2225",
+        "0x2226",
+        "0x2227"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 11,
+      "category": "무기",
+      "original_name": "~ﾃﾂ~ｱﾚｲ",
+      "target_korean": "철아령",
+      "target_description": "몸을 단련하는 추\nAT+1 MV-1",
+      "price_table_units": 1,
+      "expected_purchase_price_p": 10,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4500",
+      "icon_tile_base": "0x2228",
+      "icon_tile_ids": [
+        "0x2228",
+        "0x2229",
+        "0x222A",
+        "0x222B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 12,
+      "category": "무기",
+      "original_name": "ﾎｰﾘｰﾛｯﾄﾞ",
+      "target_korean": "홀리로드",
+      "target_description": "랑그릿사를 깨우는\n성스러운 로드",
+      "price_table_units": 400,
+      "expected_purchase_price_p": 4000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4580",
+      "icon_tile_base": "0x222C",
+      "icon_tile_ids": [
+        "0x222C",
+        "0x222D",
+        "0x222E",
+        "0x222F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 13,
+      "category": "무기",
+      "original_name": "ﾀﾞｰｸﾛｯﾄﾞ",
+      "target_korean": "다크로드",
+      "target_description": "알하자드를 깨우는\n어둠의 로드",
+      "price_table_units": 400,
+      "expected_purchase_price_p": 4000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4600",
+      "icon_tile_base": "0x2230",
+      "icon_tile_ids": [
+        "0x2230",
+        "0x2231",
+        "0x2232",
+        "0x2233"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 14,
+      "category": "무기",
+      "original_name": "ｱﾙﾊｻﾞｰﾄﾞ",
+      "target_korean": "알하자드",
+      "target_description": "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
+      "price_table_units": 0,
+      "expected_purchase_price_p": 0,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4680",
+      "icon_tile_base": "0x2234",
+      "icon_tile_ids": [
+        "0x2234",
+        "0x2235",
+        "0x2236",
+        "0x2237"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 15,
+      "category": "무기",
+      "original_name": "ﾛﾝｸﾞﾎﾞｳ",
+      "target_korean": "롱보우",
+      "target_description": "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
+      "price_table_units": 25,
+      "expected_purchase_price_p": 250,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4700",
+      "icon_tile_base": "0x2238",
+      "icon_tile_ids": [
+        "0x2238",
+        "0x2239",
+        "0x223A",
+        "0x223B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 16,
+      "category": "무기",
+      "original_name": "ｱｰﾊﾞﾚｽﾄ",
+      "target_korean": "아발레스트",
+      "target_description": "소형 방패\nDF+1",
+      "price_table_units": 125,
+      "expected_purchase_price_p": 1250,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4780",
+      "icon_tile_base": "0x223C",
+      "icon_tile_ids": [
+        "0x223C",
+        "0x223D",
+        "0x223E",
+        "0x223F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 17,
+      "category": "방어구",
+      "original_name": "S･ｼｰﾙﾄﾞ",
+      "target_korean": "소형방패",
+      "target_description": "대형 방패\nDF+2",
+      "price_table_units": 6,
+      "expected_purchase_price_p": 60,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4800",
+      "icon_tile_base": "0x2240",
+      "icon_tile_ids": [
+        "0x2240",
+        "0x2241",
+        "0x2242",
+        "0x2243"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 18,
+      "category": "방어구",
+      "original_name": "L･ｼｰﾙﾄﾞ",
+      "target_korean": "대형방패",
+      "target_description": "고리로 엮은 갑옷\nDF+3",
+      "price_table_units": 20,
+      "expected_purchase_price_p": 200,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4880",
+      "icon_tile_base": "0x2244",
+      "icon_tile_ids": [
+        "0x2244",
+        "0x2245",
+        "0x2246",
+        "0x2247"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 19,
+      "category": "방어구",
+      "original_name": "ﾁｪｲﾝﾒｲﾙ",
+      "target_korean": "체인메일",
+      "target_description": "판금 갑옷\nDF+4",
+      "price_table_units": 40,
+      "expected_purchase_price_p": 400,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4900",
+      "icon_tile_base": "0x2248",
+      "icon_tile_ids": [
+        "0x2248",
+        "0x2249",
+        "0x224A",
+        "0x224B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 20,
+      "category": "방어구",
+      "original_name": "ﾌﾟﾚｰﾄｱｰﾏｰ",
+      "target_korean": "플레이트아머",
+      "target_description": "인형 같은 철 갑옷\nAT+10 DF+10",
+      "price_table_units": 60,
+      "expected_purchase_price_p": 600,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4980",
+      "icon_tile_base": "0x224C",
+      "icon_tile_ids": [
+        "0x224C",
+        "0x224D",
+        "0x224E",
+        "0x224F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 21,
+      "category": "방어구",
+      "original_name": "ｱｻﾙﾄｽｰﾂ",
+      "target_korean": "어설트슈츠",
+      "target_description": "낡은 옷\nDF+1 마법저항+10",
+      "price_table_units": 3000,
+      "expected_purchase_price_p": 30000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4A00",
+      "icon_tile_base": "0x2250",
+      "icon_tile_ids": [
+        "0x2250",
+        "0x2251",
+        "0x2252",
+        "0x2253"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 22,
+      "category": "방어구",
+      "original_name": "ﾛｰﾌﾞ",
+      "target_korean": "로브",
+      "target_description": "용비늘 갑옷\nDF+4",
+      "price_table_units": 8,
+      "expected_purchase_price_p": 80,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4A80",
+      "icon_tile_base": "0x2254",
+      "icon_tile_ids": [
+        "0x2254",
+        "0x2255",
+        "0x2256",
+        "0x2257"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 23,
+      "category": "방어구",
+      "original_name": "ﾄﾞﾗｺﾞﾝｽｹｲﾙ",
+      "target_korean": "드래곤스케일",
+      "target_description": "미라쥬로브\nDF+2 마법저항+20",
+      "price_table_units": 200,
+      "expected_purchase_price_p": 2000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4B00",
+      "icon_tile_base": "0x2258",
+      "icon_tile_ids": [
+        "0x2258",
+        "0x2259",
+        "0x225A",
+        "0x225B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 24,
+      "category": "방어구",
+      "original_name": "ﾐﾗｰｼﾞｭﾛｰﾌﾞ",
+      "target_korean": "미라쥬로브",
+      "target_description": "오딘방패\nDF+3 D보정+1",
+      "price_table_units": 100,
+      "expected_purchase_price_p": 1000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4B80",
+      "icon_tile_base": "0x225C",
+      "icon_tile_ids": [
+        "0x225C",
+        "0x225D",
+        "0x225E",
+        "0x225F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 25,
+      "category": "방어구",
+      "original_name": "ｵｰﾃﾞｨﾝ~ﾉﾀﾃ~",
+      "target_korean": "오딘방패",
+      "target_description": "불가사의한 룬스톤\n레벨10",
+      "price_table_units": 460,
+      "expected_purchase_price_p": 4600,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4C00",
+      "icon_tile_base": "0x2260",
+      "icon_tile_ids": [
+        "0x2260",
+        "0x2261",
+        "0x2262",
+        "0x2263"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 26,
+      "category": "장신구",
+      "original_name": "ﾙｰﾝｽﾄｰﾝ",
+      "target_korean": "룬스톤",
+      "target_description": "신의 가호를 받은 십자가\nD보정+2",
+      "price_table_units": 1000,
+      "expected_purchase_price_p": 10000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4C80",
+      "icon_tile_base": "0x2264",
+      "icon_tile_ids": [
+        "0x2264",
+        "0x2265",
+        "0x2266",
+        "0x2267"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 27,
+      "category": "장신구",
+      "original_name": "ｸﾛｽ",
+      "target_korean": "크로스",
+      "target_description": "목걸이\nD보정+3",
+      "price_table_units": 30,
+      "expected_purchase_price_p": 300,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4D00",
+      "icon_tile_base": "0x2268",
+      "icon_tile_ids": [
+        "0x2268",
+        "0x2269",
+        "0x226A",
+        "0x226B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 28,
+      "category": "장신구",
+      "original_name": "ﾈｯｸﾚｽ",
+      "target_korean": "목걸이",
+      "target_description": "마력을 봉한 수정\nMP소모2배 마법+3",
+      "price_table_units": 90,
+      "expected_purchase_price_p": 900,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4D80",
+      "icon_tile_base": "0x226C",
+      "icon_tile_ids": [
+        "0x226C",
+        "0x226D",
+        "0x226E",
+        "0x226F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 29,
+      "category": "장신구",
+      "original_name": "ｵｰﾌﾞ",
+      "target_korean": "오브",
+      "target_description": "발이 빨라지는 부츠\nMV+2",
+      "price_table_units": 100,
+      "expected_purchase_price_p": 1000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4E00",
+      "icon_tile_base": "0x2270",
+      "icon_tile_ids": [
+        "0x2270",
+        "0x2271",
+        "0x2272",
+        "0x2273"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 30,
+      "category": "장신구",
+      "original_name": "ｽﾋﾟｰﾄﾞﾌﾞｰﾂ",
+      "target_korean": "스피드부츠",
+      "target_description": "아름다운 왕관\n지휘범위+3 A+2",
+      "price_table_units": 60,
+      "expected_purchase_price_p": 600,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4E80",
+      "icon_tile_base": "0x2274",
+      "icon_tile_ids": [
+        "0x2274",
+        "0x2275",
+        "0x2276",
+        "0x2277"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 31,
+      "category": "장신구",
+      "original_name": "ｸﾗｳﾝ",
+      "target_korean": "크라운",
+      "target_description": "아우로라\nAT+2",
+      "price_table_units": 500,
+      "expected_purchase_price_p": 5000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4F00",
+      "icon_tile_base": "0x2278",
+      "icon_tile_ids": [
+        "0x2278",
+        "0x2279",
+        "0x227A",
+        "0x227B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 32,
+      "category": "장신구",
+      "original_name": "ｱｳﾛｰﾗ",
+      "target_korean": "아우로라",
+      "target_description": "성천사의 날개\n마법저항+10",
+      "price_table_units": 310,
+      "expected_purchase_price_p": 3100,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x4F80",
+      "icon_tile_base": "0x227C",
+      "icon_tile_ids": [
+        "0x227C",
+        "0x227D",
+        "0x227E",
+        "0x227F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 33,
+      "category": "장신구",
+      "original_name": "~ﾃﾝｼﾉﾊﾈ~",
+      "target_korean": "천사날개",
+      "target_description": "카벙클\n마법대미지+2",
+      "price_table_units": 250,
+      "expected_purchase_price_p": 2500,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x5000",
+      "icon_tile_base": "0x2280",
+      "icon_tile_ids": [
+        "0x2280",
+        "0x2281",
+        "0x2282",
+        "0x2283"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 34,
+      "category": "장신구",
+      "original_name": "ｶｰﾊﾞﾝｸﾙ",
+      "target_korean": "카벙클",
+      "target_description": "네 가지 보석\n소환부대+1",
+      "price_table_units": 280,
+      "expected_purchase_price_p": 2800,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x5080",
+      "icon_tile_base": "0x2284",
+      "icon_tile_ids": [
+        "0x2284",
+        "0x2285",
+        "0x2286",
+        "0x2287"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 35,
+      "category": "장신구",
+      "original_name": "ｸﾞﾚｲﾌﾟﾆｰﾙ",
+      "target_korean": "그레이프닐",
+      "target_description": "아뮬렛\nA보정+2 D보정+2",
+      "price_table_units": 300,
+      "expected_purchase_price_p": 3000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x5100",
+      "icon_tile_base": "0x2288",
+      "icon_tile_ids": [
+        "0x2288",
+        "0x2289",
+        "0x228A",
+        "0x228B"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 36,
+      "category": "장신구",
+      "original_name": "ｷﾞｬﾗﾙ~ﾉ~ﾎﾙﾝ",
+      "target_korean": "갸라르혼",
+      "target_description": "루시리스의 부적\n마법저항+15",
+      "price_table_units": 320,
+      "expected_purchase_price_p": 3200,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x5180",
+      "icon_tile_base": "0x228C",
+      "icon_tile_ids": [
+        "0x228C",
+        "0x228D",
+        "0x228E",
+        "0x228F"
+      ],
+      "runtime_status": "pending"
+    },
+    {
+      "id": 37,
+      "category": "장신구",
+      "original_name": "ｱﾐｭﾚｯﾄ",
+      "target_korean": "아뮬렛",
+      "target_description": "성스러운 로드\n마법능력 상승",
+      "price_table_units": 100,
+      "expected_purchase_price_p": 1000,
+      "price_runtime_note": null,
+      "icon_vram_address": "0x5200",
+      "icon_tile_base": "0x2290",
+      "icon_tile_ids": [
+        "0x2290",
+        "0x2291",
+        "0x2292",
+        "0x2293"
+      ],
+      "runtime_status": "pending"
+    }
+  ]
+}

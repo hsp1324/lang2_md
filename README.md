@@ -43,6 +43,7 @@
 - 수동 저장 슬롯이 든 `load-screen` 테스트 SRAM을 재사용해 특정 장으로 바로 들어갈 때는 `python3 tools/run_blastem_sequence.py scenario-select --scenario-number 14 --reuse-runtime-state --click-window --replace-existing`을 사용합니다. 비기 직후 동적 숫자가 붙는 화면에서 멈추려면 같은 옵션으로 `scenario-select-entry`를 사용합니다. 선택 비기 입력이 불안정할 때는 검증된 GST의 수동 슬롯 레코드를 `python3 tools/run_blastem_sequence.py launch-only --manual-slot-gst captures/analysis/dac0_s02_cursor_a.gst --replace-existing`으로 격리 SRAM에 복구한 뒤 화면을 확인하며 `LOAD`로 진입합니다. 복구 도구는 슬롯 체크섬·유효 비트뿐 아니라 게임이 요구하는 SRAM 포맷 마커 `0x1FEE = 0x07CA`도 초기화하고 검증합니다.
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
+- `tools/item_shop_inventory.py`: 원본 전체 아이템 비기 목록의 ID `1..37`, 일본어명, 한국어 이름·설명, 가격표, 아이콘 VRAM 타일과 실기 검증 상태를 `localization/item_shop_inventory.json` 및 `docs/item_shop_runtime_matrix.md`로 생성합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
