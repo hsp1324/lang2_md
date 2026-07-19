@@ -18,6 +18,9 @@ class CaptureClassChangeChainTests(unittest.TestCase):
     def test_liana_chain_is_already_screen_verified(self):
         self.assertEqual(pending_transitions(SOURCE, 2), [])
 
+    def test_lana_chain_is_already_screen_verified_by_shared_transitions(self):
+        self.assertEqual(pending_transitions(SOURCE, 3), [])
+
     def test_sherry_chain_is_already_screen_verified(self):
         self.assertEqual(pending_transitions(SOURCE, 4), [])
 
@@ -36,13 +39,8 @@ class CaptureClassChangeChainTests(unittest.TestCase):
     def test_aaron_chain_is_already_screen_verified(self):
         self.assertEqual(pending_transitions(SOURCE, 8), [])
 
-    def test_jessica_chain_has_final_three_pending_transitions(self):
-        transitions = pending_transitions(SOURCE, 10)
-        self.assertEqual(len(transitions), 3)
-        self.assertEqual(
-            [transition.current_class for transition in transitions],
-            [0x03, 0x08, 0x14],
-        )
+    def test_jessica_chain_is_already_screen_verified(self):
+        self.assertEqual(pending_transitions(SOURCE, 10), [])
 
     def test_capture_paths_include_prompt_and_each_candidate(self):
         paths = expected_capture_paths(0x903C, 5, 0x0A, 3)

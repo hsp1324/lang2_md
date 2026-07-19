@@ -5495,6 +5495,17 @@ contains 57 safe syllables as documented below and in
   and three screen combinations remaining. Jessica's current classes
   `03/08/14` are the final screen-only batch. Production remains checksum
   `AD01` with 861 custom glyphs; all 301 unit tests pass.
+- Commander 10 (Jessica) completed the final three pending screen transitions
+  with `completed 3, resumed 0`: `8e99_c10_s03`, `8ebf_c10_s08`, and
+  `8eb9_c10_s14`. All seven candidate frames were visually reviewed through
+  terminal Zveler. Korean class, stat, mercenary, and magic text is intact.
+- Candidate-screen coverage is now 76/76 unique source combinations; every
+  commander returns zero pending unique rows. `jp_ui_surface_inventory.py`
+  therefore no longer emits the misleading `remaining 0` wording and instead
+  keeps the real gap: application verification beyond the two proven Elwin and
+  Hein transitions. A normal scenario-clear save is also still required for
+  persistence evidence. Production remains checksum `AD01` with 861 custom
+  glyphs; all 302 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

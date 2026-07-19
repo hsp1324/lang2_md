@@ -58,6 +58,17 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         class_change["unique_transition_count"]
         - class_change["live_verified_unique_transition_count"]
     )
+    if remaining_class_change:
+        class_change_gap = (
+            "runtime verification of the remaining "
+            f"{remaining_class_change} unique class-change candidate "
+            "combinations and non-Elwin application paths"
+        )
+    else:
+        class_change_gap = (
+            "runtime application verification for class-change paths beyond "
+            "the two verified Elwin and Hein transitions"
+        )
     rows: list[dict[str, object]] = []
     add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)
     add_rows(rows, japanese, korean, "fixed_byte_strings", builder.BYTE_UI_FIXED_STRING_PATCHES, 1, True)
@@ -339,7 +350,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "declared_patches": rows,
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
-            f"runtime verification of the remaining {remaining_class_change} unique class-change candidate combinations and non-Elwin application paths",
+            class_change_gap,
             "all ending and credits UI outside known opening/ending dialogue patches",
             "all magic/summon targeting and result prompts",
             "all equipment and shop variants beyond declared Scenario 1 paths",

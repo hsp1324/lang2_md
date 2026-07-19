@@ -405,6 +405,22 @@ LIVE_EVIDENCE = {
         "captures/run/d221_c9_s10_candidate2.png",
         "captures/run/d221_c9_s10_candidate3.png",
     ],
+    (10, 0x03): [
+        "captures/run/8e99_c10_s03_trigger.png",
+        "captures/run/8e99_c10_s03_candidate1.png",
+        "captures/run/8e99_c10_s03_candidate2.png",
+        "captures/run/8e99_c10_s03_candidate3.png",
+    ],
+    (10, 0x08): [
+        "captures/run/8ebf_c10_s08_trigger.png",
+        "captures/run/8ebf_c10_s08_candidate1.png",
+        "captures/run/8ebf_c10_s08_candidate2.png",
+        "captures/run/8ebf_c10_s08_candidate3.png",
+    ],
+    (10, 0x14): [
+        "captures/run/8eb9_c10_s14_trigger.png",
+        "captures/run/8eb9_c10_s14_candidate1.png",
+    ],
 }
 APPLICATION_VERIFIED = {(1, 0x01), (5, 0x03)}
 

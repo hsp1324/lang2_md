@@ -7,8 +7,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Commanders: 10
 - Source transitions: 100
 - Unique current/candidate combinations: 76
-- Live-verified transitions: 73
-- Live-verified unique combinations: 73
+- Live-verified transitions: 76
+- Live-verified unique combinations: 76
 - Application-verified transitions: 2
 
 ## 1. 엘윈
@@ -170,8 +170,8 @@ Source pointer: `0x0828C2`
 
 | Offset | Current | Candidates | Screen | Apply |
 | --- | --- | --- | --- | --- |
-| `0x0828C2` | `03` 워록 (ｳｫｰﾛｯｸ) | `08` 힐러 (ﾋｰﾗｰ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | pending | pending |
-| `0x0828CA` | `08` 힐러 (ﾋｰﾗｰ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | pending | pending |
+| `0x0828C2` | `03` 워록 (ｳｫｰﾛｯｸ) | `08` 힐러 (ﾋｰﾗｰ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | pending |
+| `0x0828CA` | `08` 힐러 (ﾋｰﾗｰ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending |
 | `0x0828D2` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | pending | pending |
 | `0x0828DA` | `04` 로드 (ﾛｰﾄﾞ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | pending | pending |
 | `0x0828E2` | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | pending | pending |
@@ -179,4 +179,4 @@ Source pointer: `0x0828C2`
 | `0x0828F2` | `13` 메이지 (ﾒｲｼﾞ) | `15` 위저드 (ｳｨｻﾞｰﾄﾞ) / `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) / `18` 세이지 (ｾｰｼﾞ) | pending | pending |
 | `0x0828FA` | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) / `18` 세이지 (ｾｰｼﾞ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) | pending | pending |
 | `0x082902` | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | `18` 세이지 (ｾｰｼﾞ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) | pending | pending |
-| `0x08290A` | `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) | `26` 자베라 (ｻﾞｰｳﾞｪﾗｰ) | pending | pending |
+| `0x08290A` | `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) | `26` 자베라 (ｻﾞｰｳﾞｪﾗｰ) | yes | pending |

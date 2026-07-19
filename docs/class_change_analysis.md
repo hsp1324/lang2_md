@@ -215,6 +215,15 @@ terminal class's empty mercenary area is source data. Coverage is now 73 of 76
 unique combinations. Jessica's `03/08/14` rows are the final three screen
 combinations. These Aaron rows are screen-only evidence.
 
+Commander 10 (Jessica) completed the final three uncovered transitions under
+prefixes `8e99_c10_s03`, `8ebf_c10_s08`, and `8eb9_c10_s14`. All seven
+candidate frames were reviewed through terminal Zveler. Korean classes, stats,
+mercenaries, and magic lists are intact. The inventory now has screen evidence
+for all 76 unique current/candidate combinations, and every commander reports
+zero pending unique rows. This closes candidate-screen coverage only. Runtime
+application remains proven for just two transitions, and normal scenario-clear
+save persistence remains pending.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is

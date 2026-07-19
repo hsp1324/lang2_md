@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 73,
-  "live_verified_unique_transition_count": 73,
+  "live_verified_transition_count": 76,
+  "live_verified_unique_transition_count": 76,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -2970,9 +2970,14 @@
               "ko": "로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8e99_c10_s03_trigger.png",
+            "captures/run/8e99_c10_s03_candidate1.png",
+            "captures/run/8e99_c10_s03_candidate2.png",
+            "captures/run/8e99_c10_s03_candidate3.png"
+          ]
         },
         {
           "index": 1,
@@ -2999,9 +3004,14 @@
               "ko": "메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ebf_c10_s08_trigger.png",
+            "captures/run/8ebf_c10_s08_candidate1.png",
+            "captures/run/8ebf_c10_s08_candidate2.png",
+            "captures/run/8ebf_c10_s08_candidate3.png"
+          ]
         },
         {
           "index": 2,
@@ -3221,9 +3231,12 @@
               "ko": "자베라"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eb9_c10_s14_trigger.png",
+            "captures/run/8eb9_c10_s14_candidate1.png"
+          ]
         }
       ]
     }
