@@ -5410,6 +5410,24 @@ contains 57 safe syllables as documented below and in
   the initial `03 -> 0A` transition.
 - Rebuilding production after the automation changes retains checksum `AD01`.
   All 291 unit tests pass.
+- `tools/capture_class_change_chain.py` adds commander-level batching. It derives
+  pending work from source transition signatures plus accepted live evidence,
+  skips a transition only when its prompt and every candidate capture already
+  exist, and supports `--limit`, `--overwrite`, and `--include-verified`.
+  Greedy source-set review identifies commander 2 (Liana) as the next best
+  chain: ten pending transitions add ten currently uncovered combinations.
+- A clean batch run for commander 2 completed all ten selected transitions with
+  `completed 10, resumed 0`. Accepted prefixes are `8e91_c2_s02`,
+  `8eb4_c2_s0a`, `8eb1_c2_s08`, `8eab_c2_s04`, `8ed6_c2_s13`,
+  `8ed2_c2_s0d`, `8ece_c2_s11`, `8ece_c2_s12`, `8ec8_c2_s0b`, and
+  `8eb8_c2_s19`. All 28 candidate frames were visually reviewed; names, stats,
+  mercenaries, and magic are Korean and intact. These ten rows are screen-only
+  evidence. With Liana registered, commander 4 (Sherry) becomes the next
+  ten-combination batch target.
+- Re-running the first two Liana rows with `--include-verified --limit 2`
+  reports `completed 0, resumed 2` without launching BlastEm, proving complete
+  capture-set resume behavior. Production remains checksum `AD01`; all 295 unit
+  tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

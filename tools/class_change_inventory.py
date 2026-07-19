@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.class_change_data import (
+    ClassTransition,
     COMMANDER_COUNT,
     REGULAR_TRANSITION_COUNT,
     class_change_chain_pointer,
@@ -30,6 +31,64 @@ LIVE_EVIDENCE = {
         "captures/run/d1d7_class_change_candidate3.png",
         "captures/analysis/d1d7_class_change_confirm.gst",
         "captures/analysis/eb00_class_change_turn2.gst",
+    ],
+    (2, 0x02): [
+        "captures/run/8e91_c2_s02_trigger.png",
+        "captures/run/8e91_c2_s02_candidate1.png",
+        "captures/run/8e91_c2_s02_candidate2.png",
+        "captures/run/8e91_c2_s02_candidate3.png",
+    ],
+    (2, 0x0A): [
+        "captures/run/8eb4_c2_s0a_trigger.png",
+        "captures/run/8eb4_c2_s0a_candidate1.png",
+        "captures/run/8eb4_c2_s0a_candidate2.png",
+        "captures/run/8eb4_c2_s0a_candidate3.png",
+    ],
+    (2, 0x08): [
+        "captures/run/8eb1_c2_s08_trigger.png",
+        "captures/run/8eb1_c2_s08_candidate1.png",
+        "captures/run/8eb1_c2_s08_candidate2.png",
+        "captures/run/8eb1_c2_s08_candidate3.png",
+    ],
+    (2, 0x04): [
+        "captures/run/8eab_c2_s04_trigger.png",
+        "captures/run/8eab_c2_s04_candidate1.png",
+        "captures/run/8eab_c2_s04_candidate2.png",
+        "captures/run/8eab_c2_s04_candidate3.png",
+    ],
+    (2, 0x13): [
+        "captures/run/8ed6_c2_s13_trigger.png",
+        "captures/run/8ed6_c2_s13_candidate1.png",
+        "captures/run/8ed6_c2_s13_candidate2.png",
+        "captures/run/8ed6_c2_s13_candidate3.png",
+    ],
+    (2, 0x0D): [
+        "captures/run/8ed2_c2_s0d_trigger.png",
+        "captures/run/8ed2_c2_s0d_candidate1.png",
+        "captures/run/8ed2_c2_s0d_candidate2.png",
+        "captures/run/8ed2_c2_s0d_candidate3.png",
+    ],
+    (2, 0x11): [
+        "captures/run/8ece_c2_s11_trigger.png",
+        "captures/run/8ece_c2_s11_candidate1.png",
+        "captures/run/8ece_c2_s11_candidate2.png",
+        "captures/run/8ece_c2_s11_candidate3.png",
+    ],
+    (2, 0x12): [
+        "captures/run/8ece_c2_s12_trigger.png",
+        "captures/run/8ece_c2_s12_candidate1.png",
+        "captures/run/8ece_c2_s12_candidate2.png",
+        "captures/run/8ece_c2_s12_candidate3.png",
+    ],
+    (2, 0x0B): [
+        "captures/run/8ec8_c2_s0b_trigger.png",
+        "captures/run/8ec8_c2_s0b_candidate1.png",
+        "captures/run/8ec8_c2_s0b_candidate2.png",
+        "captures/run/8ec8_c2_s0b_candidate3.png",
+    ],
+    (2, 0x19): [
+        "captures/run/8eb8_c2_s19_trigger.png",
+        "captures/run/8eb8_c2_s19_candidate1.png",
     ],
     (5, 0x03): [
         "captures/run/8ef4_c5_s03_candidate1.png",
@@ -99,6 +158,24 @@ LIVE_EVIDENCE = {
 APPLICATION_VERIFIED = {(1, 0x01), (5, 0x03)}
 
 
+def transition_signature(
+    transition: ClassTransition,
+) -> tuple[int, tuple[int, ...]]:
+    return transition.current_class, transition.candidates
+
+
+def live_verified_combinations(source: bytes) -> set[tuple[int, tuple[int, ...]]]:
+    combinations = set()
+    for commander_id, current_class in LIVE_EVIDENCE:
+        transition = next(
+            transition
+            for transition in read_class_change_chain(source, commander_id)
+            if transition.current_class == current_class
+        )
+        combinations.add(transition_signature(transition))
+    return combinations
+
+
 def inventory(source: bytes) -> dict[str, object]:
     classes = class_names(source)
     commanders = []
@@ -141,15 +218,7 @@ def inventory(source: bytes) -> dict[str, object]:
             }
         )
 
-    live_verified_unique_transitions = {
-        (
-            transition["current"]["id"],
-            tuple(candidate["id"] for candidate in transition["candidates"]),
-        )
-        for commander in commanders
-        for transition in commander["transitions"]
-        if transition["live_verified"]
-    }
+    live_verified_unique_transitions = live_verified_combinations(source)
     return {
         "source_pointer_table": "0x08253A",
         "commander_count": len(commanders),

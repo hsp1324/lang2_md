@@ -150,6 +150,15 @@ boundary between display and application:
   intact. All ten Hein source transitions are now screen-verified; only the
   initial `워록 -> 샤먼` transition is application-verified.
 
+The commander-level batch runner next captured all ten Liana transitions. The
+accepted prefixes are `8e91_c2_s02`, `8eb4_c2_s0a`, `8eb1_c2_s08`,
+`8eab_c2_s04`, `8ed6_c2_s13`, `8ed2_c2_s0d`, `8ece_c2_s11`,
+`8ece_c2_s12`, `8ec8_c2_s0b`, and `8eb8_c2_s19` under `captures/run`.
+Visual review covers all 28 candidate frames and confirms the Korean classes,
+stats, mercenaries, and magic lists without clipping, broken glyphs, or
+Japanese residue. All ten Liana rows are screen-verified and remain pending for
+application verification.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is
