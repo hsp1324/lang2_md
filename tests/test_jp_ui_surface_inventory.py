@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 120)
-        self.assertEqual(self.result["modified_patch_count"], 119)
+        self.assertEqual(self.result["declared_patch_count"], 128)
+        self.assertEqual(self.result["modified_patch_count"], 127)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -111,6 +111,27 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["modified"] for row in rows))
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(not row["live_verified"] for row in rows))
+
+    def test_expanded_discard_ui_is_declared_and_live_verified(self):
+        groups = {
+            "item_discard_notice_glyph_pointer",
+            "item_discard_notice_token_pointer",
+            "item_discard_notice_glyphs",
+            "item_discard_notice_tokens",
+            "shop_item_selection_prompt",
+            "item_discard_list_hook",
+            "item_discard_list_routine",
+            "item_discard_prompt_tokens",
+        }
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] in groups
+        ]
+        self.assertEqual({row["group"] for row in rows}, groups)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_hidden_sound_test_is_declared_and_live_verified(self):
         rows = [

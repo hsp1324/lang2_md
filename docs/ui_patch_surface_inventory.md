@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 120
-- Byte-modified declarations: 119
+- Declared patches: 128
+- Byte-modified declarations: 127
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -37,6 +37,14 @@ closed merely because every known patch declaration changed bytes.
 | inline_discard_prompt_hook | 1 | 1 |
 | inline_discard_prompt_routine | 1 | 1 |
 | inline_discard_prompt_record | 1 | 1 |
+| item_discard_notice_glyph_pointer | 1 | 1 |
+| item_discard_notice_token_pointer | 1 | 1 |
+| item_discard_notice_glyphs | 1 | 1 |
+| item_discard_notice_tokens | 1 | 1 |
+| shop_item_selection_prompt | 1 | 1 |
+| item_discard_list_hook | 1 | 1 |
+| item_discard_list_routine | 1 | 1 |
+| item_discard_prompt_tokens | 1 | 1 |
 | title_load_glyph_list | 1 | 1 |
 | title_load_slot_records | 5 | 5 |
 | title_save_header | 1 | 1 |

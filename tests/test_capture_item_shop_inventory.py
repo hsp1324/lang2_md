@@ -75,6 +75,19 @@ class CaptureItemShopInventoryTests(unittest.TestCase):
             frame.save(path)
             self.assertTrue(shop_detail_visible(path))
 
+    def test_shop_panel_detector_accepts_dim_xlib_palette(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "frame.png"
+            frame = Image.new("RGB", (320, 240), (0, 0, 0))
+            for x in range(12, 164):
+                for y in range(130, 218):
+                    frame.putpixel((x, y), (0, 0, 49))
+            for x in range(20, 50):
+                for y in range(140, 150):
+                    frame.putpixel((x, y), (49, 49, 49))
+            frame.save(path)
+            self.assertTrue(shop_detail_visible(path))
+
 
 if __name__ == "__main__":
     unittest.main()

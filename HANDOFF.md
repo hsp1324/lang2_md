@@ -5915,3 +5915,75 @@ contains 57 safe syllables as documented below and in
   records at work RAM `0xC7F2` plus the newly acquired item and then selects
   callback `0x017E04`. The shop refuses before that initializer; use a treasure
   or event-award path for the remaining live proof of `버릴 아이템 선택`.
+
+### Relocated Full-Inventory Notice And Dormant Discard List (2026-07-20)
+
+- The ordinary shop refusal above and the stock item-award full path are
+  distinct. The latter enters at `0x017CE8`, builds the notice at `0x0261AA`,
+  reads its glyph pointer at `0x0261B8` and token pointer at `0x0261CC`, and
+  originally uses glyph list `0x0A16B0` plus token stream `0x0A17E8`.
+  Production relocates them to `0x2B8800` and `0x2B8840` so spaces are retained:
+  `아이템이 가득 찼습니다` / `하나를 버려주세요`. Do not remove Korean
+  spacing merely to save cells; shorten to another natural Korean phrase only
+  if a later surface has a hard width limit.
+- `0x0A181C` was initially misidentified as the discard choice. Live tracing
+  showed that it is the general shop prompt and it now renders
+  `아이템을 선택하세요`. The shared `0x0A16D4` slots still preserve
+  `아이템 판매`. Captures that looked like five discardable daggers but also
+  contained other shop items were the five-row purchase list, not inventory.
+- The actual dormant discard initializer is `0x017D5E`, input callback is
+  `0x017E04`, confirmation begins at `0x017EC4`, and its old sprite renderer
+  begins at `0x017F08`. The original inline prompt is the full 13-byte record
+  `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` at `0x01807E`; the shorter suffix at `0x018082` is not a
+  standalone shop string.
+- Production redirects `0x017F08` to `0x2B8600`. The new renderer draws
+  `버릴 아이템 선택`, five localized 16x16 item-name rows, cursor, page
+  arrows, and a centered page number. The item loader stores each 16x16 glyph
+  row-major, while one 2x2 Genesis sprite reads tiles column-major; the first
+  implementation scrambled quadrants. The accepted renderer uses two 2x1
+  sprites per glyph. `PAGE` was removed because its shared ASCII tiles are
+  overwritten after the item bank loads; the stable page number remains.
+- The prompt tokens live at `0x2B8880`. Its glyphs are reserved before the
+  remaining names in the 64-slot primary item bank because overflow VRAM is
+  reused by the shop. The complete item-name bank occupies all supported
+  `88/88` slots. Static tests ensure every item and prompt token stays inside
+  the loaded primary/overflow windows.
+- `tools/build_discard_prompt_probe_rom.py` is diagnostic only. It combines the
+  zero-price complete shop with the stock award/full path, then enters the
+  otherwise unreachable discard initializer. Calling `0x017D5E` directly
+  without clearing Plane A left overlapping shop UI, and loading a Korean GST
+  under the Japanese ROM reset; do not repeat either approach. The accepted
+  diagnostic clears Plane A, reloads the production item glyph bank, and uses
+  RAM markers at `0xAEF0..0xAEFA` to audit entry, initialization, input, and
+  confirmation.
+- Two diagnostic branch offsets were a real source of intermittent resets:
+  `BNE +0x2A` landed in `0xFFFF` padding instead of the initialization `RTS`,
+  and `BEQ +0x04` landed inside a `MOVE.B`. They are now `+0x22`, `+0x06`, and
+  the confirm branch is `+0x08`; a regression test computes all destinations
+  and requires instruction boundaries. Confirmation reaches stock `0x017EC4`,
+  records the immediate pop result `callback=0x017D38`, `stack=0xFFFF80FC`,
+  clears the diagnostic input latch, and returns to idle shop callback
+  `0x0249F8`. The blank blue confirmation capture is intentional because the
+  diagnostic cleared Plane A; it proves stable return, not final shop layout.
+- Final production checksum is `3C57`; discard diagnostic checksum is `64AD`.
+  Live evidence is `captures/run/64ad_discard_selection_page1.png`,
+  `_page2.png`, `_page9.png`, `_page1_row2.png`, and
+  `_confirm_return.png`. Page 9 contains exactly the 41st pending dagger and
+  only the previous-page arrow. No reset or freeze occurred after confirmation.
+- Reserving prompt glyphs changed the renderer-aware item fingerprint, so the
+  old `7E0B` acceptance was not carried forward blindly. The complete secret
+  shop was recaptured as `captures/run/97e0_item_id01.png` through `_id37.png`.
+  All names, descriptions, prices, and original icons remained intact. The new
+  accepted fingerprint is
+  `5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02`
+  and diagnostic checksum is `97E0`.
+- The first full recapture stalled inside the Windows DWM capture subprocess.
+  `tools/capture_item_shop_inventory.py --xlib-only` now selects direct X11
+  capture. Its panel detector accepts both the normal white/dark-blue palette
+  level `87` and the dim Xlib level `49`; synthetic tests cover both. Use this
+  option on the current single-display WSLg setup.
+- Because all diagnostics derive from the current production ROM, this resource
+  relocation also changes their checksums without changing their probe logic:
+  forced class application `00BA`, class transition `1F92`, all-magic `08D2`,
+  stock Magic Arrow `D8F8`, and summon `5374`. The probe-builder tests lock
+  these regenerated identifiers and their documented patch boundaries.

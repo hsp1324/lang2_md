@@ -61,16 +61,16 @@
       "decoded_item_icons_sha256": "489632b89c19525273405d58a7b75ca4a006cc21b8efecbf1d0938240904d1d7",
       "production_bytes_identical": true
     },
-    "item_surface_sha256": "9e3372724e71c96a4dcff082fb9e3f67e843408c93d375f0a0bca16dcdda822b"
+    "item_surface_sha256": "5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02"
   },
   "runtime_probe": {
-    "rom_checksum": "344A",
-    "accepted_capture_checksum": "7E0B",
+    "rom_checksum": "97E0",
+    "accepted_capture_checksum": "97E0",
     "prior_full_matrix_checksum": "D304",
     "runtime_derivative_checksum": "4C04",
-    "accepted_item_surface_sha256": "9e3372724e71c96a4dcff082fb9e3f67e843408c93d375f0a0bca16dcdda822b",
+    "accepted_item_surface_sha256": "5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02",
     "status": "accepted",
-    "capture_prefix": "captures/run/2282_item",
+    "capture_prefix": "captures/run/97e0_item",
     "required_review": [
       "target_korean",
       "target_description",

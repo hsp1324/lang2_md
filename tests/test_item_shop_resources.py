@@ -92,6 +92,47 @@ class ItemShopResourceTests(unittest.TestCase):
             payload = builder._build_item_name_list_render_routine(terminator, store)
             self.assertEqual(self.data[routine : routine + len(payload)], payload)
 
+    def test_discard_list_uses_localized_item_name_banks(self):
+        hook_end = (
+            builder.ITEM_DISCARD_LIST_RENDER_HOOK
+            + len(builder.ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL)
+        )
+        self.assertEqual(
+            self.data[builder.ITEM_DISCARD_LIST_RENDER_HOOK:hook_end],
+            bytes.fromhex("4E F9")
+            + builder.ITEM_DISCARD_LIST_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+        routine = builder._build_item_discard_list_render_routine()
+        self.assertLessEqual(
+            builder.ITEM_DISCARD_LIST_RENDER_ROUTINE + len(routine),
+            builder.ITEM_DISCARD_LIST_RENDER_ROUTINE_LIMIT,
+        )
+        self.assertEqual(
+            self.data[
+                builder.ITEM_DISCARD_LIST_RENDER_ROUTINE :
+                builder.ITEM_DISCARD_LIST_RENDER_ROUTINE + len(routine)
+            ],
+            routine,
+        )
+        self.assertIn(
+            builder.ITEM_NAME_POINTER_TABLE.to_bytes(4, "big"), routine
+        )
+        self.assertGreaterEqual(routine.count(bytes.fromhex("16 FC 00 04")), 4)
+        self.assertNotIn(bytes.fromhex("16 FC 00 05"), routine)
+        self.assertIn(bytes.fromhex("06 44 81 00"), routine)
+        self.assertIn(bytes.fromhex("06 44 85 A0"), routine)
+        self.assertEqual(routine.count(bytes.fromhex("36 FC 01 20")), 1)
+        self.assertNotIn(bytes.fromhex("45 F9 00 01 80 8C"), routine)
+        self.assertIn(bytes.fromhex("D8 79 FF FF AE 5E 52 44"), routine)
+        self.assertIn(
+            builder.ITEM_DISCARD_PROMPT_TOKEN_STREAM.to_bytes(4, "big"), routine
+        )
+        prompt_tokens = builder.read_word_list(
+            self.data, builder.ITEM_DISCARD_PROMPT_TOKEN_STREAM
+        )
+        self.assertEqual(len(prompt_tokens), len(builder.INLINE_DISCARD_PROMPT_TEXT))
+        self.assertLess(max(prompt_tokens), builder.ITEM_NAME_GLYPH_PRIMARY_COUNT)
+
     def test_all_item_description_tokens_are_inside_stock_glyph_window(self):
         glyphs = builder.read_word_list(
             self.data, builder.ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE

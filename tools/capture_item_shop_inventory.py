@@ -80,12 +80,18 @@ def shop_detail_visible(path: Path) -> bool:
         and blue > red * 1.5
         and blue > green * 1.4
     )
-    white = sum(
+    light_neutral = sum(
         1
         for red, green, blue in pixels
-        if red > 70 and green > 70 and blue > 70
+        if red > 35
+        and green > 35
+        and blue > 35
+        and max(red, green, blue) - min(red, green, blue) <= 12
     )
-    return dark_blue / len(pixels) > 0.75 and white / len(pixels) > 0.005
+    return (
+        dark_blue / len(pixels) > 0.75
+        and light_neutral / len(pixels) > 0.005
+    )
 
 
 def run(command: list[str]) -> None:
@@ -98,9 +104,12 @@ def send_steps(keys: list[str]) -> None:
     run([sys.executable, str(SEND_KEYS), "--send-event", *keys])
 
 
-def capture(path: Path) -> Path:
+def capture(path: Path, *, xlib_only: bool = False) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    run([sys.executable, str(CAPTURE_WINDOW), str(path)])
+    command = [sys.executable, str(CAPTURE_WINDOW)]
+    if xlib_only:
+        command.append("--xlib-only")
+    run([*command, str(path)])
     return path
 
 
@@ -129,6 +138,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--end-item", type=int, default=ITEM_COUNT)
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--movement-delay", type=float, default=0.45)
+    parser.add_argument(
+        "--xlib-only",
+        action="store_true",
+        help="capture the X11 client directly without the Windows DWM path",
+    )
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
@@ -184,7 +198,7 @@ def main() -> int:
                 str(args.initial_delay),
             ]
         )
-        capture(entry_path)
+        capture(entry_path, xlib_only=args.xlib_only)
         if not shop_detail_visible(entry_path):
             raise RuntimeError(
                 "complete-item shop detail panel was not detected; no row was accepted"
@@ -200,7 +214,7 @@ def main() -> int:
                 )
                 skipped += 1
             else:
-                capture(path)
+                capture(path, xlib_only=args.xlib_only)
                 if not shop_detail_visible(path):
                     raise RuntimeError(
                         f"shop detail panel missing for item {item_id:02d} "

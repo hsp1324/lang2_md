@@ -278,6 +278,77 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    for group, offset, size, target in (
+        (
+            "item_discard_notice_glyph_pointer",
+            builder.ITEM_DISCARD_NOTICE_GLYPH_POINTER,
+            4,
+            "relocated full-inventory notice glyph list pointer",
+        ),
+        (
+            "item_discard_notice_token_pointer",
+            builder.ITEM_DISCARD_NOTICE_TOKEN_POINTER,
+            4,
+            "relocated full-inventory notice token pointer",
+        ),
+        (
+            "item_discard_notice_glyphs",
+            builder.ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST,
+            (
+                builder.ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM
+                - builder.ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST
+            ),
+            "spaced Korean notice glyph bank",
+        ),
+        (
+            "item_discard_notice_tokens",
+            builder.ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM,
+            (
+                builder.ITEM_DISCARD_NOTICE_RELOC_LIMIT
+                - builder.ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM
+            ),
+            " / ".join(builder.ITEM_DISCARD_NOTICE_LINES),
+        ),
+        (
+            "shop_item_selection_prompt",
+            builder.SHOP_ITEM_SELECTION_TOKEN_STREAM,
+            len(builder.SHOP_ITEM_SELECTION_SOURCE_TOKENS) * 2,
+            builder.SHOP_ITEM_SELECTION_TEXT,
+        ),
+        (
+            "item_discard_list_hook",
+            builder.ITEM_DISCARD_LIST_RENDER_HOOK,
+            len(builder.ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL),
+            "redirect dormant discard list to localized 16x16 renderer",
+        ),
+        (
+            "item_discard_list_routine",
+            builder.ITEM_DISCARD_LIST_RENDER_ROUTINE,
+            len(builder._build_item_discard_list_render_routine()),
+            "five localized item rows, cursor, page arrows, and page number",
+        ),
+        (
+            "item_discard_prompt_tokens",
+            builder.ITEM_DISCARD_PROMPT_TOKEN_STREAM,
+            (
+                builder.ITEM_DISCARD_PROMPT_TOKEN_STREAM_LIMIT
+                - builder.ITEM_DISCARD_PROMPT_TOKEN_STREAM
+            ),
+            builder.INLINE_DISCARD_PROMPT_TEXT,
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
     rows.append(
         {
             "group": "title_load_glyph_list",

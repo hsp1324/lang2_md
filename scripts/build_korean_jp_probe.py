@@ -110,6 +110,10 @@ ITEM_NAME_LIST_RENDER_HOOKS = (
     (0x279DE, 0x27A1C, 0x279F4, 0x2B8540),
 )
 ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("30 18 0C 40 FF FF")
+ITEM_DISCARD_LIST_RENDER_HOOK = 0x017F08
+ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("36 78 90 4C 36 3C")
+ITEM_DISCARD_LIST_RENDER_ROUTINE = 0x2B8600
+ITEM_DISCARD_LIST_RENDER_ROUTINE_LIMIT = 0x2B8800
 ITEM_NAME_OVERFLOW_VRAM_BASE = 0xB400
 ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xC000
 ITEM_NAME_OVERFLOW_CAPACITY = (
@@ -737,6 +741,37 @@ SHOP_INVENTORY_FULL_MESSAGE_TEXT = "아이템 구입 불가"
 SHOP_INVENTORY_FULL_GLYPH_LIST = 0x0A1716
 SHOP_INVENTORY_FULL_TOKEN_STREAM = 0x0A178A
 SHOP_INVENTORY_FULL_SOURCE_TOKENS = (1, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+ITEM_DISCARD_NOTICE_GLYPH_LIST = 0x0A16B0
+ITEM_DISCARD_NOTICE_GLYPH_POINTER = 0x0261B8
+ITEM_DISCARD_NOTICE_GLYPH_POINTER_SOURCE = ITEM_DISCARD_NOTICE_GLYPH_LIST
+ITEM_DISCARD_NOTICE_TOKEN_POINTER = 0x0261CC
+ITEM_DISCARD_NOTICE_TOKEN_POINTER_SOURCE = 0x0A17E8
+ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST = 0x2B8800
+ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM = 0x2B8840
+ITEM_DISCARD_NOTICE_RELOC_LIMIT = 0x2B8880
+ITEM_DISCARD_PROMPT_TOKEN_STREAM = 0x2B8880
+ITEM_DISCARD_PROMPT_TOKEN_STREAM_LIMIT = 0x2B88C0
+ITEM_DISCARD_NOTICE_GLYPH_SOURCE = (
+    0x0000, 0x0001, 0x0012, 0x0020, 0x0079, 0x007C, 0x007B, 0x0281,
+    0x0074, 0x00A9, 0x0073, 0x007A, 0x0096, 0x027A, 0x0065, 0x00E5,
+    0x00CB,
+)
+ITEM_DISCARD_NOTICE_TOKEN_STREAM = 0x0A17E8
+ITEM_DISCARD_NOTICE_SOURCE_TOKENS = (
+    0xFFFB, 0x0001, 0x0001,
+    0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
+    0x0005, 0x0008, 0x0009, 0xFFFE,
+    0x000A, 0x000B, 0x000C, 0x000D, 0x000E, 0x000E, 0x000F, 0x0010,
+    0x0005, 0xFFFE, 0xFFFF,
+)
+ITEM_DISCARD_NOTICE_LINES = ("아이템이 가득 찼습니다", "하나를 버려주세요")
+SHOP_ITEM_SELECTION_TOKEN_STREAM = 0x0A181C
+SHOP_ITEM_SELECTION_SOURCE_TOKENS = (
+    0xFFFA, 0xD000, 0xFFFB, 0x0001, 0x0001,
+    0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006,
+    0x0007, 0x0008, 0x0009, 0x000A, 0x000B, 0x000C, 0x000D, 0xFFFF,
+)
+SHOP_ITEM_SELECTION_TEXT = "아이템을 선택하세요"
 SHOP_SELL_GLYPH_LIST = 0xA16D4
 SHOP_SELL_TITLE_TOKEN_STREAM = 0xA17B8
 START_MENU_GLYPH_LIST = 0x970D4
@@ -3643,6 +3678,63 @@ def patch_direct_token_streams(data: bytearray) -> None:
 
 
 def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+    notice_glyphs = tuple(
+        be16(data, ITEM_DISCARD_NOTICE_GLYPH_LIST + index * 2)
+        for index in range(len(ITEM_DISCARD_NOTICE_GLYPH_SOURCE))
+    )
+    if notice_glyphs != ITEM_DISCARD_NOTICE_GLYPH_SOURCE:
+        raise ValueError(
+            f"unexpected item-discard notice glyph list: {notice_glyphs!r}"
+        )
+    notice_source = tuple(
+        be16(data, ITEM_DISCARD_NOTICE_TOKEN_STREAM + index * 2)
+        for index in range(len(ITEM_DISCARD_NOTICE_SOURCE_TOKENS))
+    )
+    if notice_source != ITEM_DISCARD_NOTICE_SOURCE_TOKENS:
+        raise ValueError(
+            f"unexpected item-discard notice token stream: {notice_source!r}"
+        )
+    if be32(data, ITEM_DISCARD_NOTICE_GLYPH_POINTER) != ITEM_DISCARD_NOTICE_GLYPH_POINTER_SOURCE:
+        raise ValueError("unexpected item-discard notice glyph-list pointer")
+    if be32(data, ITEM_DISCARD_NOTICE_TOKEN_POINTER) != ITEM_DISCARD_NOTICE_TOKEN_POINTER_SOURCE:
+        raise ValueError("unexpected item-discard notice token-stream pointer")
+    notice_chars = collect_chars(*ITEM_DISCARD_NOTICE_LINES)
+    notice_glyphs = [SPACE_GLYPH]
+    notice_glyphs.extend(glyph_by_char[char] for char in notice_chars)
+    notice_slot = {" ": 0}
+    notice_slot.update({char: index + 1 for index, char in enumerate(notice_chars)})
+    notice_tokens = [0xFFFB, 0x0001, 0x0001]
+    for line in ITEM_DISCARD_NOTICE_LINES:
+        notice_tokens.extend(notice_slot[char] for char in line)
+        notice_tokens.append(0xFFFE)
+    glyph_bytes = (len(notice_glyphs) + 1) * 2
+    token_bytes = (len(notice_tokens) + 1) * 2
+    if ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST + glyph_bytes > ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM:
+        raise ValueError("item-discard notice glyph list overlaps token stream")
+    if ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM + token_bytes > ITEM_DISCARD_NOTICE_RELOC_LIMIT:
+        raise ValueError("item-discard notice token stream exceeds reserved area")
+    if any(
+        value != 0xFF
+        for value in data[
+            ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST:ITEM_DISCARD_NOTICE_RELOC_LIMIT
+        ]
+    ):
+        raise ValueError("item-discard notice relocation area is not blank")
+    write_word_list(
+        data,
+        ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST,
+        notice_glyphs,
+        (ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM - ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST) // 2,
+    )
+    write_token_stream(
+        data,
+        ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM,
+        notice_tokens,
+        (ITEM_DISCARD_NOTICE_RELOC_LIMIT - ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM) // 2,
+    )
+    put32(data, ITEM_DISCARD_NOTICE_GLYPH_POINTER, ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST)
+    put32(data, ITEM_DISCARD_NOTICE_TOKEN_POINTER, ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM)
+
     # Routine 0x272A6 loads all 31 glyphs at 0xA1716 into VRAM 0xD000. The
     # purchase title uses slots 0..5, while the completion suffixes at 0xA17C8
     # and 0xA17D8 use slots 6..12. Preserve the rest of the shared list so later
@@ -3705,6 +3797,47 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
     }
     for slot, value in sell_values_by_slot.items():
         put16(data, SHOP_SELL_GLYPH_LIST + slot * 2, value)
+
+    selection_source = tuple(
+        be16(data, SHOP_ITEM_SELECTION_TOKEN_STREAM + index * 2)
+        for index in range(len(SHOP_ITEM_SELECTION_SOURCE_TOKENS))
+    )
+    if selection_source != SHOP_ITEM_SELECTION_SOURCE_TOKENS:
+        raise ValueError(
+            f"unexpected shop item-selection token stream: {selection_source!r}"
+        )
+    selection_values_by_slot = {
+        4: glyph_by_char["을"],
+        5: glyph_by_char["선"],
+        6: glyph_by_char["택"],
+        7: glyph_by_char["하"],
+        8: glyph_by_char["세"],
+        9: glyph_by_char["요"],
+    }
+    for slot, value in selection_values_by_slot.items():
+        put16(data, SHOP_SELL_GLYPH_LIST + slot * 2, value)
+    selection_slot = {
+        "아": 0,
+        "이": 1,
+        "템": 2,
+        " ": 3,
+        "을": 4,
+        "선": 5,
+        "택": 6,
+        "하": 7,
+        "세": 8,
+        "요": 9,
+    }
+    selection_tokens = [0xFFFA, 0xD000, 0xFFFB, 0x0001, 0x0001]
+    selection_tokens.extend(
+        selection_slot[char] for char in SHOP_ITEM_SELECTION_TEXT
+    )
+    write_token_stream(
+        data,
+        SHOP_ITEM_SELECTION_TOKEN_STREAM,
+        selection_tokens,
+        len(SHOP_ITEM_SELECTION_SOURCE_TOKENS),
+    )
 
     original_title_tokens = [0, 1, 2, 3, 6, 7]
     actual_title_tokens = [
@@ -4018,6 +4151,13 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             item_glyphs.append(glyph)
         return local_by_glyph[glyph]
 
+    # The dormant discard screen does not reload the overflow bank after the
+    # shop has reused that VRAM. Reserve its prompt glyphs in the persistent
+    # 64-slot primary item-name bank before appending the remaining names.
+    discard_prompt_tokens = [
+        local_index(char) for char in INLINE_DISCARD_PROMPT_TEXT
+    ]
+
     for index, (ptr, text) in enumerate(zip(ptrs, ITEM_NAME_PATCHES)):
         capacity = direct_string_capacity_words(data, ptr)
         if index == 0:
@@ -4032,6 +4172,30 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
                 f"item name at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
             )
         write_token_stream(data, ptr, tokens, capacity)
+
+    discard_prompt_bytes = (len(discard_prompt_tokens) + 1) * 2
+    if (
+        ITEM_DISCARD_PROMPT_TOKEN_STREAM + discard_prompt_bytes
+        > ITEM_DISCARD_PROMPT_TOKEN_STREAM_LIMIT
+    ):
+        raise ValueError("localized item-discard prompt token stream is too large")
+    if any(
+        value != 0xFF
+        for value in data[
+            ITEM_DISCARD_PROMPT_TOKEN_STREAM:ITEM_DISCARD_PROMPT_TOKEN_STREAM_LIMIT
+        ]
+    ):
+        raise ValueError("item-discard prompt token area is not blank")
+    write_word_list(
+        data,
+        ITEM_DISCARD_PROMPT_TOKEN_STREAM,
+        discard_prompt_tokens,
+        (
+            ITEM_DISCARD_PROMPT_TOKEN_STREAM_LIMIT
+            - ITEM_DISCARD_PROMPT_TOKEN_STREAM
+        )
+        // 2,
+    )
 
     for ref in ITEM_GLYPH_LIST_REFS:
         put32(data, ref, ITEM_NAME_GLYPH_LIST_RELOC_BASE)
@@ -4054,11 +4218,18 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         (routine, _build_item_name_list_render_routine(terminator, store))
         for _, terminator, store, routine in ITEM_NAME_LIST_RENDER_HOOKS
     ]
+    discard_list_renderer = _build_item_discard_list_render_routine()
     for offset, payload in (
         (ITEM_NAME_GLYPH_LOAD_ROUTINE, loader),
         (ITEM_NAME_POPUP_BUILD_ROUTINE, popup_builder),
         *list_renderers,
+        (ITEM_DISCARD_LIST_RENDER_ROUTINE, discard_list_renderer),
     ):
+        if (
+            offset == ITEM_DISCARD_LIST_RENDER_ROUTINE
+            and offset + len(payload) > ITEM_DISCARD_LIST_RENDER_ROUTINE_LIMIT
+        ):
+            raise ValueError("item discard-list renderer exceeds reserved bank")
         if any(value != 0xFF for value in data[offset : offset + len(payload)]):
             raise ValueError(f"item name extension area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
@@ -4086,6 +4257,19 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         if bytes(data[hook:hook_end]) != ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL:
             raise ValueError(f"item name list-render hook changed at 0x{hook:06X}")
         data[hook:hook_end] = bytes.fromhex("4E F9") + routine.to_bytes(4, "big")
+    discard_hook_end = (
+        ITEM_DISCARD_LIST_RENDER_HOOK
+        + len(ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL)
+    )
+    if (
+        bytes(data[ITEM_DISCARD_LIST_RENDER_HOOK:discard_hook_end])
+        != ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL
+    ):
+        raise ValueError("item discard-list render hook changed")
+    data[ITEM_DISCARD_LIST_RENDER_HOOK:discard_hook_end] = (
+        bytes.fromhex("4E F9")
+        + ITEM_DISCARD_LIST_RENDER_ROUTINE.to_bytes(4, "big")
+    )
 
 
 def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -4345,6 +4529,86 @@ def _build_item_name_list_render_routine(
     code.label("finish")
     code.emit("EA 48 80 78 E3 90")
     code.emit(bytes.fromhex("4E F9") + store_target.to_bytes(4, "big"))
+    return code.finish()
+
+
+def _build_item_discard_list_render_routine() -> bytes:
+    code = _M68KCode()
+    # The dormant stock discard screen draws five 8x8 Japanese item-name rows.
+    # Rebuild its sprite list with the localized 16x16 item-name glyph banks.
+    code.emit("36 78 90 4C 36 3C 00 D4")
+    code.emit("30 39 FF FF AE 60 E9 48 D6 40")
+    code.emit("36 C3 16 FC 00 00 52 38 90 4E 16 F8 90 4E")
+    code.emit("36 FC 80 1F 36 FC 00 E0")
+
+    code.emit("4A 79 FF FF AE 5E")
+    code.branch_word(0x6700, "no_previous_page")
+    code.emit("36 FC 00 D4 16 FC 00 00 52 38 90 4E 16 F8 90 4E")
+    code.emit("36 FC 80 1E 36 FC 00 D0")
+    code.label("no_previous_page")
+
+    code.emit("41 F9 FF FF AA FC 30 39 FF FF AE 5E 52 40 D0 40")
+    code.emit("30 30 00 00")
+    code.branch_word(0x6B00, "no_next_page")
+    code.emit("36 FC 00 D4 16 FC 00 00 52 38 90 4E 16 F8 90 4E")
+    code.emit("36 FC 80 1F 36 FC 01 48")
+    code.label("no_next_page")
+
+    code.emit("41 F9 FF FF AA FC 30 39 FF FF AE 5E D0 40")
+    code.emit("32 30 00 00 53 41")
+    code.emit("41 F9 FF FF AA 34")
+    code.emit(bytes.fromhex("43 F9") + ITEM_NAME_POINTER_TABLE.to_bytes(4, "big"))
+    code.emit("34 39 FF FF AE 5E C4 FC 00 05 D4 42 D4 42 54 42")
+    code.emit("36 3C 00 D0")
+    code.label("item_loop")
+    code.emit("3A 30 20 00 53 45 DA 45 DA 45 24 71 50 00")
+    code.emit("3E 3C 00 E8")
+    code.label("glyph_loop")
+    code.emit("30 1A 0C 40 FF FF")
+    code.branch_word(0x6700, "next_item")
+    code.emit("38 00")
+    code.emit("0C 44 00 40")
+    code.branch_word(0x6500, "primary_bank")
+    code.emit("04 44 00 40 E5 4C 06 44 85 A0")
+    code.branch_word(0x6000, "store_glyph")
+    code.label("primary_bank")
+    code.emit("E5 4C 06 44 81 00")
+    code.label("store_glyph")
+    # The glyph loader stores tiles row-major. A Mega Drive 2x2 sprite reads
+    # them column-major, so draw the top and bottom rows as two 2x1 sprites.
+    code.emit("36 C3 16 FC 00 04 52 38 90 4E 16 F8 90 4E 36 C4 36 C7")
+    code.emit("3C 03 50 46 36 C6 16 FC 00 04 52 38 90 4E 16 F8 90 4E")
+    code.emit("54 44 36 C4 36 C7 06 47 00 10")
+    code.branch_word(0x6000, "glyph_loop")
+    code.label("next_item")
+    code.emit("58 42 06 43 00 10")
+    code.branch_word(0x51C9, "item_loop")
+
+    code.emit("3E 3C 01 20")
+    code.emit("36 FC 01 20 16 FC 00 00 52 38 90 4E 16 F8 90 4E")
+    code.emit("38 3C 80 30 D8 79 FF FF AE 5E 52 44 36 C4 36 C7")
+    code.emit(
+        bytes.fromhex("45 F9")
+        + ITEM_DISCARD_PROMPT_TOKEN_STREAM.to_bytes(4, "big")
+    )
+    code.emit("36 3C 00 C0 3E 3C 00 D0")
+    code.label("prompt_loop")
+    code.emit("30 1A 0C 40 FF FF")
+    code.branch_word(0x6700, "prompt_done")
+    code.emit("38 00")
+    code.emit("0C 44 00 40")
+    code.branch_word(0x6500, "prompt_primary_bank")
+    code.emit("04 44 00 40 E5 4C 06 44 85 A0")
+    code.branch_word(0x6000, "prompt_store")
+    code.label("prompt_primary_bank")
+    code.emit("E5 4C 06 44 81 00")
+    code.label("prompt_store")
+    code.emit("36 C3 16 FC 00 04 52 38 90 4E 16 F8 90 4E 36 C4 36 C7")
+    code.emit("3C 03 50 46 36 C6 16 FC 00 04 52 38 90 4E 16 F8 90 4E")
+    code.emit("54 44 36 C4 36 C7 06 47 00 10")
+    code.branch_word(0x6000, "prompt_loop")
+    code.label("prompt_done")
+    code.emit("31 CB 90 4C 4E 75")
     return code.finish()
 
 
@@ -5976,6 +6240,8 @@ def main() -> None:
             + SHOP_PURCHASE_MESSAGE_TEXT
             + SHOP_SELL_MESSAGE_TEXT
             + SHOP_INVENTORY_FULL_MESSAGE_TEXT
+            + "".join(ITEM_DISCARD_NOTICE_LINES)
+            + SHOP_ITEM_SELECTION_TEXT
         )
     )
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]
