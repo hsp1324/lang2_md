@@ -22,14 +22,14 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: D8C1
+current production build checksum: 3C57
 last broadly live-verified production checksum: E38B
-custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 394 passing
+custom Hangul glyphs: 865 (0x7000..0x7361)
+unit tests: 403 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 449 classified, 0 unclassified
-declared UI patches: 119/120 byte-modified; NPC is intentionally unchanged
+declared UI patches: 127/128 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
 
@@ -52,17 +52,20 @@ glyph bank, or visible screen:
   levels recorded by their inventories. A diagnostic proof is not a natural
   ownership proof.
 - the original complete-item secret shop list, all 37 Korean names and
-  descriptions, prices, and visible icons are accepted. Diagnostic checksum
-  `7E0B` has the renderer-aware fingerprint; price-only derivative `4C04`
-  verifies the repaired late-name lists and purchase popups, and decoded icon
-  resource 391 is byte-identical to the Japanese ROM.
+  descriptions, prices, and visible icons are accepted. Current diagnostic
+  checksum `97E0` has renderer-aware fingerprint
+  `5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02`;
+  decoded icon resource 391 remains byte-identical to the Japanese ROM.
 - the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
   equipment paths, Scenario 25's complete nine-commander equipment selector,
   Scenario 27's category and sell variants, and the accepted 37-item matrix.
 - a 41st shop purchase with all 40 equipment slots occupied now shows the
   fixed Korean warning `아이템 구입 불가`; the original nine-cell message was
-  `これ以上持てません`. The distinct `버릴 아이템 선택` path is used by
-  non-shop item acquisition and remains statically patched but not live-proven.
+  `これ以上持てません`. The distinct item-award path now shows naturally
+  spaced `아이템이 가득 찼습니다` / `하나를 버려주세요`, then renders the
+  five-row `버릴 아이템 선택` UI. Diagnostic `64AD` proves pages 1, 2, and 9,
+  cursor movement, confirmation, and stable return; a natural treasure/event
+  trigger remains to be identified if one exists in normal play.
 - compressed resource `391` is now owned as the stock item-icon payload from
   direct load call `0x025E62` (`0x8187` to VRAM `0x4000`), reducing unknown
   original compressed-resource ownership from 428 entries to 427.
