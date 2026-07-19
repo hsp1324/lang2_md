@@ -30,11 +30,14 @@ class CaptureClassChangeChainTests(unittest.TestCase):
     def test_lester_chain_is_already_screen_verified(self):
         self.assertEqual(pending_transitions(SOURCE, 9), [])
 
-    def test_keith_chain_has_eight_pending_unique_transitions(self):
-        transitions = pending_transitions(SOURCE, 7)
-        self.assertEqual(len(transitions), 8)
-        self.assertEqual(transitions[0].current_class, 0x01)
-        self.assertEqual(transitions[-1].current_class, 0x1E)
+    def test_keith_chain_is_already_screen_verified(self):
+        self.assertEqual(pending_transitions(SOURCE, 7), [])
+
+    def test_aaron_chain_has_five_pending_unique_transitions(self):
+        transitions = pending_transitions(SOURCE, 8)
+        self.assertEqual(len(transitions), 5)
+        self.assertEqual(transitions[0].current_class, 0x12)
+        self.assertEqual(transitions[-1].current_class, 0x1A)
 
     def test_capture_paths_include_prompt_and_each_candidate(self):
         paths = expected_capture_paths(0x903C, 5, 0x0A, 3)

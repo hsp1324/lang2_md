@@ -198,6 +198,15 @@ mercenaries, and magic lists are intact. Coverage is now 60 of 76 unique
 combinations with 16 remaining; commander 7 (Keith) supplies the next eight
 uncovered rows. These Lester rows are screen-only evidence.
 
+Commander 7 (Keith) completed eight uncovered transitions under prefixes
+`8e91_c7_s01`, `8ea9_c7_s04`, `8eb2_c7_s06`, `8eb8_c7_s08`,
+`8ed3_c7_s0b`, `8edc_c7_s0d`, `8ed7_c7_s11`, and `8ebe_c7_s1e`.
+All 22 candidate frames were reviewed, including `클레릭`, the flying chain,
+and terminal High Master. Korean classes, stats, mercenaries, and magic lists
+are intact. Coverage is now 68 of 76 unique combinations with eight remaining;
+Aaron supplies five and Jessica the final three. These Keith rows are
+screen-only evidence.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is

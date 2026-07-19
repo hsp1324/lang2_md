@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 60,
-  "live_verified_unique_transition_count": 60,
+  "live_verified_transition_count": 68,
+  "live_verified_unique_transition_count": 68,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -2001,9 +2001,14 @@
               "ko": "힐러"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8e91_c7_s01_trigger.png",
+            "captures/run/8e91_c7_s01_candidate1.png",
+            "captures/run/8e91_c7_s01_candidate2.png",
+            "captures/run/8e91_c7_s01_candidate3.png"
+          ]
         },
         {
           "index": 1,
@@ -2030,9 +2035,14 @@
               "ko": "드래곤나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ea9_c7_s04_trigger.png",
+            "captures/run/8ea9_c7_s04_candidate1.png",
+            "captures/run/8ea9_c7_s04_candidate2.png",
+            "captures/run/8ea9_c7_s04_candidate3.png"
+          ]
         },
         {
           "index": 2,
@@ -2059,9 +2069,14 @@
               "ko": "비숍"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eb2_c7_s06_trigger.png",
+            "captures/run/8eb2_c7_s06_candidate1.png",
+            "captures/run/8eb2_c7_s06_candidate2.png",
+            "captures/run/8eb2_c7_s06_candidate3.png"
+          ]
         },
         {
           "index": 3,
@@ -2088,9 +2103,14 @@
               "ko": "프리스트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eb8_c7_s08_trigger.png",
+            "captures/run/8eb8_c7_s08_candidate1.png",
+            "captures/run/8eb8_c7_s08_candidate2.png",
+            "captures/run/8eb8_c7_s08_candidate3.png"
+          ]
         },
         {
           "index": 4,
@@ -2117,9 +2137,14 @@
               "ko": "팔라딘"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed3_c7_s0b_trigger.png",
+            "captures/run/8ed3_c7_s0b_candidate1.png",
+            "captures/run/8ed3_c7_s0b_candidate2.png",
+            "captures/run/8ed3_c7_s0b_candidate3.png"
+          ]
         },
         {
           "index": 5,
@@ -2146,9 +2171,14 @@
               "ko": "드래곤로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8edc_c7_s0d_trigger.png",
+            "captures/run/8edc_c7_s0d_candidate1.png",
+            "captures/run/8edc_c7_s0d_candidate2.png",
+            "captures/run/8edc_c7_s0d_candidate3.png"
+          ]
         },
         {
           "index": 6,
@@ -2233,9 +2263,14 @@
               "ko": "하이프리스트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed7_c7_s11_trigger.png",
+            "captures/run/8ed7_c7_s11_candidate1.png",
+            "captures/run/8ed7_c7_s11_candidate2.png",
+            "captures/run/8ed7_c7_s11_candidate3.png"
+          ]
         },
         {
           "index": 9,
@@ -2252,9 +2287,12 @@
               "ko": "드래곤마스터"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ebe_c7_s1e_trigger.png",
+            "captures/run/8ebe_c7_s1e_candidate1.png"
+          ]
         }
       ]
     },

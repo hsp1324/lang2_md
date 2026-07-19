@@ -5475,6 +5475,16 @@ contains 57 safe syllables as documented below and in
   and 16 unique combinations remaining. Commander 7 (Keith) is the next
   eight-row batch target. Production remains checksum `AD01` with 861 custom
   glyphs; all 299 unit tests pass.
+- Commander 7 (Keith) completed eight pending transitions with
+  `completed 8, resumed 0`: `8e91_c7_s01`, `8ea9_c7_s04`, `8eb2_c7_s06`,
+  `8eb8_c7_s08`, `8ed3_c7_s0b`, `8edc_c7_s0d`, `8ed7_c7_s11`, and
+  `8ebe_c7_s1e`. All 22 candidate frames were visually reviewed. `클레릭`,
+  the flying chain, and terminal High Master render intact Korean class, stat,
+  mercenary, and magic text. These are screen-only proofs.
+- Generated coverage is now 68/76 unique combinations, two application proofs,
+  and eight unique combinations remaining. Commander 8 (Aaron) supplies five;
+  commander 10 (Jessica) supplies the final three. Production remains checksum
+  `AD01` with 861 custom glyphs; all 300 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

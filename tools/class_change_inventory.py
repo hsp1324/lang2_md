@@ -274,6 +274,52 @@ LIVE_EVIDENCE = {
         "captures/run/8ebf_c6_s1b_trigger.png",
         "captures/run/8ebf_c6_s1b_candidate1.png",
     ],
+    (7, 0x01): [
+        "captures/run/8e91_c7_s01_trigger.png",
+        "captures/run/8e91_c7_s01_candidate1.png",
+        "captures/run/8e91_c7_s01_candidate2.png",
+        "captures/run/8e91_c7_s01_candidate3.png",
+    ],
+    (7, 0x04): [
+        "captures/run/8ea9_c7_s04_trigger.png",
+        "captures/run/8ea9_c7_s04_candidate1.png",
+        "captures/run/8ea9_c7_s04_candidate2.png",
+        "captures/run/8ea9_c7_s04_candidate3.png",
+    ],
+    (7, 0x06): [
+        "captures/run/8eb2_c7_s06_trigger.png",
+        "captures/run/8eb2_c7_s06_candidate1.png",
+        "captures/run/8eb2_c7_s06_candidate2.png",
+        "captures/run/8eb2_c7_s06_candidate3.png",
+    ],
+    (7, 0x08): [
+        "captures/run/8eb8_c7_s08_trigger.png",
+        "captures/run/8eb8_c7_s08_candidate1.png",
+        "captures/run/8eb8_c7_s08_candidate2.png",
+        "captures/run/8eb8_c7_s08_candidate3.png",
+    ],
+    (7, 0x0B): [
+        "captures/run/8ed3_c7_s0b_trigger.png",
+        "captures/run/8ed3_c7_s0b_candidate1.png",
+        "captures/run/8ed3_c7_s0b_candidate2.png",
+        "captures/run/8ed3_c7_s0b_candidate3.png",
+    ],
+    (7, 0x0D): [
+        "captures/run/8edc_c7_s0d_trigger.png",
+        "captures/run/8edc_c7_s0d_candidate1.png",
+        "captures/run/8edc_c7_s0d_candidate2.png",
+        "captures/run/8edc_c7_s0d_candidate3.png",
+    ],
+    (7, 0x11): [
+        "captures/run/8ed7_c7_s11_trigger.png",
+        "captures/run/8ed7_c7_s11_candidate1.png",
+        "captures/run/8ed7_c7_s11_candidate2.png",
+        "captures/run/8ed7_c7_s11_candidate3.png",
+    ],
+    (7, 0x1E): [
+        "captures/run/8ebe_c7_s1e_trigger.png",
+        "captures/run/8ebe_c7_s1e_candidate1.png",
+    ],
     (9, 0x01): [
         "captures/run/8e97_c9_s01_trigger.png",
         "captures/run/8e97_c9_s01_candidate1.png",
