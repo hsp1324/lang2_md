@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 2,
-  "application_verified_transition_count": 1,
+  "live_verified_transition_count": 3,
+  "application_verified_transition_count": 2,
   "commanders": [
     {
       "id": 1,
@@ -42,7 +42,8 @@
             "captures/run/d1d7_class_change_candidate1.png",
             "captures/run/d1d7_class_change_candidate2.png",
             "captures/run/d1d7_class_change_candidate3.png",
-            "captures/analysis/d1d7_class_change_confirm.gst"
+            "captures/analysis/d1d7_class_change_confirm.gst",
+            "captures/analysis/eb00_class_change_turn2.gst"
           ]
         },
         {
@@ -1189,9 +1190,15 @@
               "ko": "로드"
             }
           ],
-          "live_verified": false,
-          "application_verified": false,
-          "evidence": []
+          "live_verified": true,
+          "application_verified": true,
+          "evidence": [
+            "captures/run/8ef4_c5_s03_candidate1.png",
+            "captures/run/8ef4_c5_s03_candidate2.png",
+            "captures/run/8ef4_c5_s03_candidate3.png",
+            "captures/run/a8d7_c5_s03_hein_shaman_applied.png",
+            "captures/analysis/a8d7_c5_s03_after_turn.gst"
+          ]
         },
         {
           "index": 1,

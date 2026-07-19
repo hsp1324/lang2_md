@@ -29,6 +29,14 @@ LIVE_EVIDENCE = {
         "captures/run/d1d7_class_change_candidate2.png",
         "captures/run/d1d7_class_change_candidate3.png",
         "captures/analysis/d1d7_class_change_confirm.gst",
+        "captures/analysis/eb00_class_change_turn2.gst",
+    ],
+    (5, 0x03): [
+        "captures/run/8ef4_c5_s03_candidate1.png",
+        "captures/run/8ef4_c5_s03_candidate2.png",
+        "captures/run/8ef4_c5_s03_candidate3.png",
+        "captures/run/a8d7_c5_s03_hein_shaman_applied.png",
+        "captures/analysis/a8d7_c5_s03_after_turn.gst",
     ],
     (9, 0x10): [
         "captures/run/d221_c9_s10_candidate1.png",
@@ -36,7 +44,7 @@ LIVE_EVIDENCE = {
         "captures/run/d221_c9_s10_candidate3.png",
     ],
 }
-APPLICATION_VERIFIED = {(1, 0x01)}
+APPLICATION_VERIFIED = {(1, 0x01), (5, 0x03)}
 
 
 def inventory(source: bytes) -> dict[str, object]:

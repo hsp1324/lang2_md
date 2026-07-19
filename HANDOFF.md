@@ -5312,10 +5312,11 @@ contains 57 safe syllables as documented below and in
   `candidate1.png` through `candidate3.png`,
   `d1d7_class_change_candidate_wrap.png`, and
   `d1d7_class_change_confirm.png`.
-- After confirming `로드`, `captures/analysis/d1d7_class_change_confirm.gst`
-  has byte `0x04` at GST file offset `0x2478 + 0x603C`, with LV/EXP `1/0` at
-  offsets `+0x2E/+0x2F`. This matches both natural end-turn GSTs. Production
-  remains checksum `F04C`; no probe wrapper is distributed.
+- `captures/analysis/d1d7_class_change_confirm.gst` has class `0x04`, but lacks
+  a controlled pre-confirm state and is retained only as screen/navigation
+  evidence. The normal end-turn GSTs above are the accepted application proof:
+  they show the runtime change from class `0x01` to `0x04`, LV1, EXP0.
+  Production remains checksum `F04C`; no probe wrapper is distributed.
 - The broad UI inventory gap is now narrowed to candidate sets beyond Fighter
   Elwin's `로드/나이트/샤먼` branch. Do not mark every commander/branch class
   candidate complete from this representative proof.
@@ -5341,13 +5342,42 @@ contains 57 safe syllables as documented below and in
   `d221_c9_s10_candidate1.png` through `candidate3.png` verify all three names,
   navigation, and their Korean `용병/마법` details without clipping.
 - Scenario 2 has no active Lester runtime record, so this diagnostic still set
-  A1 to Elwin. Confirming a Lester display row consequently followed Elwin's
-  actual Fighter apply path and wrote class `0x04`; GST
-  `captures/analysis/d221_c9_s10_confirm.gst` proves that mismatch. This is not
-  application evidence for Lester. Use a scenario with the matching commander
-  active before marking `application_verified`.
-- All 278 unit tests pass with both generated class-chain artifacts and the
-  narrowed 74-combination UI gap checked into the repository.
+  A1 to Elwin. Its retained state did not establish a Lester before/after
+  transition. This is screen/navigation evidence only; use a scenario with the
+  matching commander active before marking `application_verified`.
+- The 278-test snapshot recorded here predates the non-Elwin application probe
+  below. The generated inventory at this point still had a 74-combination gap.
+
+### Non-Elwin Class-Change Runtime Application (2026-07-19)
+
+- `tools/build_class_change_probe_rom.py` now accepts a source-chain commander
+  ID and an independent active runtime-record index. Player runtime records
+  start at `0xFF603C`, are `0x60` bytes each, and indexes outside 0..9 are
+  rejected. `--end-turn-only` preserves the normal Start menu and installs only
+  the guarded stock level-up trigger.
+- Start-display checksum `8EF4` uses commander 5, current class `0x03`, runtime
+  index 1, and the source candidates `0x0A/0x09/0x04`. Captures
+  `captures/run/8ef4_c5_s03_candidate1.png` through `candidate3.png` visibly
+  verify `샤먼/소서러/로드`, navigation, and their `용병/마법` details.
+- Before/after states `captures/analysis/8ef4_c5_s03_preconfirm.gst` and
+  `8ef4_c5_s03_confirm.gst` have identical class bytes in all ten player
+  runtime and persistent records. The Start wrapper is a display/navigation
+  probe only; confirmation must never be cited as application evidence.
+- End-turn-only checksum `A8D7` was booted fresh. The normal Start menu remained
+  available, and `턴 종료` entered the stock level-up path. Runtime record 1
+  changed from class `0x03` to `0x0A` and reset to LV1. The byte result is in
+  `captures/analysis/a8d7_c5_s03_after_turn.gst`; the map status popup visibly
+  reads `헤인 / 샤먼 / LV 1` in
+  `captures/run/a8d7_c5_s03_hein_shaman_applied.png`.
+- An in-battle `저장` confirmation was also attempted in the isolated `A8D7`
+  runtime. On clean termination, `save.sram` contained the format marker but no
+  manual-slot valid flag or roster payload. This attempt is not persistent-save
+  evidence and should not be repeated as such. A normal scenario-clear save is
+  still needed to prove persistence; runtime application itself is verified.
+- Cross-ROM GST loads that reset after combat were rejected. Only the fresh
+  `8EF4` and `A8D7` boots above are accepted evidence. Production ROM content
+  was not modified by either ignored diagnostic ROM. Rebuilding production
+  retains checksum `AD01`, and all 289 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

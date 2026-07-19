@@ -59,6 +59,16 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
         self.assertIn(bytes.fromhex("13 FC 00 10 FF FF 60 6B"), code)
         self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
 
+    def test_end_turn_wrapper_can_target_hein_runtime_record(self):
+        code = probe_builder.wrapper_code(
+            runtime_record_index=1,
+            expected_class=0x03,
+        )
+        self.assertEqual(code[:8], bytes.fromhex("0C 39 00 03 FF FF 60 9C"))
+        self.assertIn(bytes.fromhex("13 FC 00 09 FF FF 60 CA"), code)
+        self.assertIn(bytes.fromhex("13 FC 00 10 FF FF 60 CB"), code)
+        self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
+
     def test_probe_rejects_unexpected_input_operand(self):
         probe = bytearray(self.production)
         probe[probe_builder.END_TURN_LEVEL_UP_ENTRY_OPERAND] ^= 0xFF
@@ -67,12 +77,50 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
         ):
             probe_builder.patch_probe(probe, self.source)
 
+    def test_end_turn_only_probe_preserves_normal_start_menu(self):
+        probe = bytearray(self.production)
+        probe_builder.patch_probe(
+            probe,
+            self.source,
+            commander_id=5,
+            current_class=0x03,
+            runtime_record_index=1,
+            enable_start_menu_probe=False,
+        )
+        start = probe_builder.START_MENU_ENTRY_OPERAND
+        self.assertEqual(
+            probe[start : start + 4],
+            probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+        wrapper = probe_builder.START_MENU_PROBE_WRAPPER
+        self.assertEqual(probe[wrapper : wrapper + 8], b"\xFF" * 8)
+
     def test_start_wrapper_uses_source_elwin_candidate_ids(self):
         code = probe_builder.start_menu_wrapper_code()
         self.assertIn(bytes.fromhex("30 FC 00 01"), code)
         for class_id in (4, 5, 10):
             self.assertIn(bytes.fromhex(f"30 FC {class_id:04X}"), code)
         self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 02 BB 48"))
+
+    def test_start_wrapper_can_target_another_active_runtime_record(self):
+        code = probe_builder.start_menu_wrapper_code(
+            commander_id=5,
+            candidates=(0x0A, 0x09, 0x04),
+            runtime_record_index=1,
+        )
+        self.assertIn(bytes.fromhex("30 FC 00 05"), code)
+        self.assertIn(bytes.fromhex("43 F9 FF FF 60 9C"), code)
+        self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 02 BB 48"))
+
+    def test_start_wrapper_rejects_runtime_record_outside_player_slots(self):
+        for index in (-1, 10):
+            with self.subTest(index=index):
+                with self.assertRaisesRegex(ValueError, "runtime record index"):
+                    probe_builder.start_menu_wrapper_code(
+                        runtime_record_index=index
+                    )
+                with self.assertRaisesRegex(ValueError, "runtime record index"):
+                    probe_builder.wrapper_code(runtime_record_index=index)
 
     def test_probe_can_select_another_source_transition(self):
         transition = probe_builder.selected_transition(self.source, 9, 0x10)
@@ -81,9 +129,15 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
 
         probe = bytearray(self.production)
         probe_builder.patch_probe(
-            probe, self.source, commander_id=9, current_class=0x10
+            probe,
+            self.source,
+            commander_id=9,
+            current_class=0x10,
+            runtime_record_index=3,
         )
-        code = probe_builder.start_menu_wrapper_code(9, transition.candidates)
+        code = probe_builder.start_menu_wrapper_code(
+            9, transition.candidates, runtime_record_index=3
+        )
         start = probe_builder.START_MENU_PROBE_WRAPPER
         self.assertEqual(probe[start : start + len(code)], code)
 
