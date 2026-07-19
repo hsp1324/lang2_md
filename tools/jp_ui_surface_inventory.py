@@ -355,7 +355,6 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "all-epilogue, ending-visit, and final-credit paths",
             "magic/summon targeting and result paths beyond the production-faithful "
             "Magic Arrow and diagnostic Attack/Elemental probes",
-            "all equipment and shop variants beyond declared Scenario 1 paths",
             "ownership and purpose of 428 compressed resources beyond byte-font resource index 1",
             "all executable-embedded strings not yet represented by a builder patch declaration",
         ],

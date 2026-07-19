@@ -12,11 +12,11 @@ follow this status table so a resume does not repeat already accepted work.
 | Stage | Status | Resume rule |
 | --- | --- | --- |
 | 1. Inventory and coverage | Complete baseline | 783 direct candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
-| 2. Shared UI and global names | In progress | 111/112 declared patches differ intentionally; work only from the seven explicit gaps in `docs/ui_patch_surface_inventory.md`. |
+| 2. Shared UI and global names | In progress | 111/112 declared patches differ intentionally; work only from the six explicit gaps in `docs/ui_patch_surface_inventory.md`. |
 | 3. Scenarios 2-10 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 4. Scenarios 11-20 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
-| 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the seven UI gaps are resolved or explicitly accepted. |
+| 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the six UI gaps are resolved or explicitly accepted. |
 
 Stage 2 complete-item checkpoint is closed. Production checksum `5993` fixes
 the 37-name loader, restores the missing Alhazard description, aligns IDs
@@ -26,7 +26,7 @@ prices/stat lines, and visible icons. Current diagnostic checksum `B51C` has the
 same accepted item-surface fingerprint. Decoded icon resource 391 is also
 byte-identical to the Japanese ROM. Do not repeat this matrix unless a later
 change touches the item renderer, glyph lists, description pointers, price
-renderer, icon resource, or selector. Resume Stage 2 only from the seven gaps
+renderer, icon resource, or selector. Resume Stage 2 only from the six gaps
 in `docs/ui_patch_surface_inventory.md`.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run

@@ -28,7 +28,7 @@ custom Hangul glyphs: 864 (0x7000..0x7360)
 unit tests: 366 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
-explicit UI verification gaps: 7
+explicit UI verification gaps: 6
 ```
 
 Completed and closed unless a later edit touches the same renderer, pointer,
@@ -54,13 +54,16 @@ glyph bank, or visible screen:
   `D304`; current diagnostic checksum `B51C` has the same accepted item-surface
   fingerprint, and decoded icon resource 391 is byte-identical to the Japanese
   ROM.
+- the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
+  equipment paths, Scenario 25's complete nine-commander equipment selector,
+  Scenario 27's category and sell variants, and the accepted 37-item matrix.
 
 Active work, in order:
 
 1. Upgrade scenario `completion` and `branches_endings` cells that are still
    `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
    continuity evidence but is not a page-by-page visual review.
-2. Work only from the seven explicit shared-UI gaps in
+2. Work only from the six explicit shared-UI gaps in
    `docs/ui_patch_surface_inventory.md`; the item-shop gap is closed.
 3. Re-run a completed path only when a new patch shares its glyphs, pointers,
    tokens, compressed resource, or control flow, or when an automated regression

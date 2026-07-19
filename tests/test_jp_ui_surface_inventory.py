@@ -102,7 +102,7 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(font["relocated"])
 
     def test_stage_one_keeps_explicit_unknowns(self):
-        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 7)
+        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 6)
         class_change_gaps = [
             gap
             for gap in self.result["remaining_inventory_gaps"]
@@ -124,6 +124,10 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertIn(
             "ending and credits UI variants outside the verified Scenario 27, "
             "all-epilogue, ending-visit, and final-credit paths",
+            self.result["remaining_inventory_gaps"],
+        )
+        self.assertNotIn(
+            "all equipment and shop variants beyond declared Scenario 1 paths",
             self.result["remaining_inventory_gaps"],
         )
 
