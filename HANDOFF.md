@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 27EB (item-shop runtime review pending)
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 861 (0x7000..0x735D)
-unit tests: 354 passing
+unit tests: 359 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 7
@@ -92,8 +92,11 @@ Current all-item shop checkpoint (runtime review pending):
   The exact original/Korean/price/icon matrix is checked in at
   `localization/item_shop_inventory.json` and
   `docs/item_shop_runtime_matrix.md`; update each row's `runtime_status` only
-  from its capture. No runtime acceptance has been recorded yet. BlastEm was
-  deliberately stopped because the user was using the same PC.
+  from its capture. `tools/capture_item_shop_inventory.py` now has a tested
+  5-row/8-page movement plan, stable ID filenames, partial-range resume, panel
+  detection, direct-window events, and guaranteed emulator cleanup. Only its
+  `--dry-run` path has run so far. No runtime acceptance has been recorded yet.
+  BlastEm was deliberately stopped because the user was using the same PC.
 
 ## Why The Work Moved From English ROM To Japanese ROM
 
@@ -174,7 +177,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `27EB` and passes all 354 tests. It includes
+The current source builds checksum `27EB` and passes all 359 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,
