@@ -5612,7 +5612,39 @@ contains 57 safe syllables as documented below and in
   as rejected diagnostic divergence, not a production translation defect, and
   do not patch the Scenario 1 dialogue record to compensate for it.
 - Remaining coverage is every other magic targeting/result shape and all summon
-  application/result paths. The complete 22-magic and eight-summon name lists
-  remain separately verified by the earlier EA22/D177 inventory captures.
+  application/result paths beyond Elemental. The complete 22-magic and
+  eight-summon name lists remain separately verified by the earlier EA22/D177
+  inventory captures.
 - Rebuilding production after these diagnostic-only additions retains checksum
   `AD01` and 861 custom glyphs. The complete suite passes all 326 tests.
+
+### Summon Targeting And Runtime Application (2026-07-19)
+
+- The REV00 summon path mirrors the magic menu. Command builder branch
+  `0x020DFA` controls command ID 3, `0x021724` controls the debug eight-ID list,
+  and `0x021938` accepts the selected row. `tools/build_summon_application_probe_rom.py`
+  validates the Japanese and production bytes before patching only those three
+  branches plus checksum. Production `AD01` remains unchanged; ignored probe
+  checksum is `C41E`.
+- `tools/capture_summon_application.py` reaches Hein, selects `소환`, captures
+  the Korean list and target stages, checks exact MP cost, parses the generated
+  member from GST, returns to its runtime coordinate, and opens its unit menu.
+  It reuses the key-by-key focus recovery and dialogue handling proven by the
+  magic application tool and terminates BlastEm in `finally`.
+- Elemental ID 0 consumes source-table cost 5, reducing Hein from MP `12 -> 7`.
+  The stable map and GST prove class `0x8D` at `(12,20)`. The resulting bottom
+  status renders `엘리멘탈`, and its command menu renders `이동/공격/마법`
+  without Japanese residue, broken glyphs, reset, or freeze. Accepted captures
+  use prefix `captures/run/c41e_summon_00_`; authoritative state is
+  `captures/analysis/c41e_summon_00.gst`.
+- Runtime ownership is now concrete: each player commander group at work RAM
+  `0xFF603C + index*0x60` consists of eight `0x0C`-byte member records. Hein is
+  group 1; Elemental occupies member 7 at group offset `0x54`. Its member class
+  is `+0x00`, map X/Y are `+0x06/+0x07`. Do not expose summon members as
+  independent commanders in the future editor.
+- `C41E` forces a command and list that Hein does not naturally own. It proves
+  shared summon list/target/application/status rendering and runtime layout,
+  not natural class ownership or persistence. IDs 1..7 and a natural summoner
+  route remain pending.
+- Rebuilding production after the summon diagnostics retains checksum `AD01`
+  and 861 custom glyphs. The complete suite passes all 335 tests.

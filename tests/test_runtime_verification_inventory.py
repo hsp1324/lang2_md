@@ -27,6 +27,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             evidence["captures"],
         )
 
+    def test_summon_application_evidence_is_diagnostic(self):
+        data = inventory.load_inventory()
+        evidence = {
+            row["surface"]: row for row in data["global_evidence"]
+        }["summon_targeting_results"]
+        self.assertEqual(evidence["checksum"], "C41E")
+        self.assertEqual(evidence["based_on"], "AD01")
+        self.assertIn("member slot 7", evidence["note"])
+        self.assertIn("not natural summon ownership evidence", evidence["note"])
+        self.assertIn(
+            "captures/run/c41e_summon_00_summoned_status.png",
+            evidence["captures"],
+        )
+
     def test_inventory_has_all_scenarios_and_surfaces(self):
         data = inventory.load_inventory()
         self.assertEqual(

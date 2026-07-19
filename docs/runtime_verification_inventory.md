@@ -1064,5 +1064,12 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/797c_magic_16_target.png`
   - `captures/run/797c_magic_16_result.png`
   - `captures/run/797c_magic_16_result_stable.png`
+- `summon_targeting_results`: probe checksum `C41E` (base `AD01`). AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. This is renderer/runtime-application evidence, not natural summon ownership evidence.
+  - `captures/run/c41e_summon_00_hein_command.png`
+  - `captures/run/c41e_summon_00_selected.png`
+  - `captures/run/c41e_summon_00_target.png`
+  - `captures/run/c41e_summon_00_result.png`
+  - `captures/run/c41e_summon_00_result_stable.png`
+  - `captures/run/c41e_summon_00_summoned_status.png`
 - `arrangement_warning`: current checksum `544B` (base `544B`). The shared incomplete-deployment warning uses its screen-local glyph list and visibly renders 지휘관 배치 미완료입니다 with readable spacing.
   - `captures/run/544b_s23_arrange_warning.png`

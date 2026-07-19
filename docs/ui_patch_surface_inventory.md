@@ -54,7 +54,7 @@ Resource table `0x0B0000` index 1 uses entry
 - arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
 - natural active-commander and save-persistence verification for class-change paths beyond the two natural Elwin and Hein proofs
 - all ending and credits UI outside known opening/ending dialogue patches
-- magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack probes
+- magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack/Elemental probes
 - all equipment and shop variants beyond declared Scenario 1 paths
 - ownership and purpose of 428 compressed resources beyond byte-font resource index 1
 - all executable-embedded strings not yet represented by a builder patch declaration

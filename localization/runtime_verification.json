@@ -67,6 +67,21 @@
       "note": "AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10; it is not production ownership evidence."
     },
     {
+      "surface": "summon_targeting_results",
+      "state": "verified_probe",
+      "checksum": "C41E",
+      "based_on": "AD01",
+      "captures": [
+        "captures/run/c41e_summon_00_hein_command.png",
+        "captures/run/c41e_summon_00_selected.png",
+        "captures/run/c41e_summon_00_target.png",
+        "captures/run/c41e_summon_00_result.png",
+        "captures/run/c41e_summon_00_result_stable.png",
+        "captures/run/c41e_summon_00_summoned_status.png"
+      ],
+      "note": "AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. This is renderer/runtime-application evidence, not natural summon ownership evidence."
+    },
+    {
       "surface": "arrangement_warning",
       "state": "verified_current",
       "checksum": "544B",
