@@ -5395,6 +5395,21 @@ contains 57 safe syllables as documented below and in
   class-change combination count from the source-chain inventory instead of a
   hand-maintained number. This prevents later live-evidence additions from
   leaving the broad UI gap stale.
+- `tools/capture_class_change_transition.py` automates the repeated screen-only
+  workflow: build an ignored probe from the selected source transition, boot a
+  clean isolated runtime, wait for `battle-command` detection to finish, close
+  both command/status panels, enter the Start diagnostic, capture its prompt and
+  every candidate row, and terminate BlastEm. It uses direct window events and
+  never treats those captures as application evidence.
+- End-to-end use of that tool completed Hein's remaining source rows for current
+  classes `11/12/13/0D/0B/15`. Accepted capture prefixes are
+  `904f_c5_s11`, `904e_c5_s12`, `9050_c5_s13`, `904e_c5_s0d`,
+  `9052_c5_s0b`, and `9037_c5_s15`. Visual review found no Japanese residue,
+  broken class glyph, clipping, or damaged mercenary/magic label. Hein's full
+  ten-transition chain is screen-verified; application remains proven only for
+  the initial `03 -> 0A` transition.
+- Rebuilding production after the automation changes retains checksum `AD01`.
+  All 291 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

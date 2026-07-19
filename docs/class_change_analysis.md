@@ -86,10 +86,9 @@ not a controlled before/after application proof. The normal end-turn route is
 retained in `captures/analysis/eb00_class_change_turn2.gst` and proves the
 runtime change from class `0x01` to `0x04`, LV1, EXP0.
 
-Candidate sets beyond Fighter Elwin's first branch and Hein's first four
-branches still require runtime coverage. Do not describe the entire
-class-change matrix as complete until those commander and branch combinations
-have been sampled.
+Candidate sets beyond Fighter Elwin's first branch and Hein's ten-branch chain
+still require runtime coverage. Do not describe the entire class-change matrix
+as complete until those commander and branch combinations have been sampled.
 
 ## Full Chain Inventory
 
@@ -142,6 +141,14 @@ boundary between display and application:
   하이로드(0x0B)`. Their `candidate1.png` through `candidate3.png` capture sets
   preserve all names, stats, mercenaries, and Korean magic lists. Both rows are
   screen-verified only.
+- The automated capture tool then verifies Hein's remaining six rows:
+  `프리스트(11)`, `비숍(12)`, `메이지(13)`, `매직나이트(0D)`,
+  `하이로드(0B)`, and the terminal `위저드(15) -> 서머너(28)`. The accepted
+  prefixes are `904f_c5_s11`, `904e_c5_s12`, `9050_c5_s13`,
+  `904e_c5_s0d`, `9052_c5_s0b`, and `9037_c5_s15` under `captures/run`.
+  Every candidate class, stat block, mercenary list, and Korean magic list is
+  intact. All ten Hein source transitions are now screen-verified; only the
+  initial `워록 -> 샤먼` transition is application-verified.
 
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not

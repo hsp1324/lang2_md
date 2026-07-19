@@ -56,6 +56,40 @@ LIVE_EVIDENCE = {
         "captures/run/902b_c5_s04_candidate2.png",
         "captures/run/902b_c5_s04_candidate3.png",
     ],
+    (5, 0x11): [
+        "captures/run/904f_c5_s11_trigger.png",
+        "captures/run/904f_c5_s11_candidate1.png",
+        "captures/run/904f_c5_s11_candidate2.png",
+        "captures/run/904f_c5_s11_candidate3.png",
+    ],
+    (5, 0x12): [
+        "captures/run/904e_c5_s12_trigger.png",
+        "captures/run/904e_c5_s12_candidate1.png",
+        "captures/run/904e_c5_s12_candidate2.png",
+        "captures/run/904e_c5_s12_candidate3.png",
+    ],
+    (5, 0x13): [
+        "captures/run/9050_c5_s13_trigger.png",
+        "captures/run/9050_c5_s13_candidate1.png",
+        "captures/run/9050_c5_s13_candidate2.png",
+        "captures/run/9050_c5_s13_candidate3.png",
+    ],
+    (5, 0x0D): [
+        "captures/run/904e_c5_s0d_trigger.png",
+        "captures/run/904e_c5_s0d_candidate1.png",
+        "captures/run/904e_c5_s0d_candidate2.png",
+        "captures/run/904e_c5_s0d_candidate3.png",
+    ],
+    (5, 0x0B): [
+        "captures/run/9052_c5_s0b_trigger.png",
+        "captures/run/9052_c5_s0b_candidate1.png",
+        "captures/run/9052_c5_s0b_candidate2.png",
+        "captures/run/9052_c5_s0b_candidate3.png",
+    ],
+    (5, 0x15): [
+        "captures/run/9037_c5_s15_trigger.png",
+        "captures/run/9037_c5_s15_candidate1.png",
+    ],
     (9, 0x10): [
         "captures/run/d221_c9_s10_candidate1.png",
         "captures/run/d221_c9_s10_candidate2.png",

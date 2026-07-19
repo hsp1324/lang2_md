@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 6,
-  "live_verified_unique_transition_count": 6,
+  "live_verified_transition_count": 12,
+  "live_verified_unique_transition_count": 12,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -1328,9 +1328,14 @@
               "ko": "위저드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/904f_c5_s11_trigger.png",
+            "captures/run/904f_c5_s11_candidate1.png",
+            "captures/run/904f_c5_s11_candidate2.png",
+            "captures/run/904f_c5_s11_candidate3.png"
+          ]
         },
         {
           "index": 5,
@@ -1357,9 +1362,14 @@
               "ko": "아크메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/904e_c5_s12_trigger.png",
+            "captures/run/904e_c5_s12_candidate1.png",
+            "captures/run/904e_c5_s12_candidate2.png",
+            "captures/run/904e_c5_s12_candidate3.png"
+          ]
         },
         {
           "index": 6,
@@ -1386,9 +1396,14 @@
               "ko": "세이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/9050_c5_s13_trigger.png",
+            "captures/run/9050_c5_s13_candidate1.png",
+            "captures/run/9050_c5_s13_candidate2.png",
+            "captures/run/9050_c5_s13_candidate3.png"
+          ]
         },
         {
           "index": 7,
@@ -1415,9 +1430,14 @@
               "ko": "팔라딘"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/904e_c5_s0d_trigger.png",
+            "captures/run/904e_c5_s0d_candidate1.png",
+            "captures/run/904e_c5_s0d_candidate2.png",
+            "captures/run/904e_c5_s0d_candidate3.png"
+          ]
         },
         {
           "index": 8,
@@ -1444,9 +1464,14 @@
               "ko": "소드마스터"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/9052_c5_s0b_trigger.png",
+            "captures/run/9052_c5_s0b_candidate1.png",
+            "captures/run/9052_c5_s0b_candidate2.png",
+            "captures/run/9052_c5_s0b_candidate3.png"
+          ]
         },
         {
           "index": 9,
@@ -1463,9 +1488,12 @@
               "ko": "서머너"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/9037_c5_s15_trigger.png",
+            "captures/run/9037_c5_s15_candidate1.png"
+          ]
         }
       ]
     },

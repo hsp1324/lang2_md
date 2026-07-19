@@ -21,8 +21,8 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["commander_count"], 10)
         self.assertEqual(self.result["transition_count"], 100)
         self.assertEqual(self.result["unique_transition_count"], 76)
-        self.assertEqual(self.result["live_verified_transition_count"], 6)
-        self.assertEqual(self.result["live_verified_unique_transition_count"], 6)
+        self.assertEqual(self.result["live_verified_transition_count"], 12)
+        self.assertEqual(self.result["live_verified_unique_transition_count"], 12)
         self.assertEqual(self.result["application_verified_transition_count"], 2)
 
         verified = [
@@ -31,68 +31,49 @@ class ClassChangeInventoryTests(unittest.TestCase):
             for transition in commander["transitions"]
             if transition["live_verified"]
         ]
-        self.assertEqual(len(verified), 6)
-        commander_id, transition = verified[0]
-        self.assertEqual(commander_id, 1)
-        self.assertEqual(transition["current"]["id"], 1)
-        self.assertEqual(
-            [candidate["id"] for candidate in transition["candidates"]],
-            [4, 5, 10],
-        )
-        self.assertTrue(transition["application_verified"])
+        self.assertEqual(len(verified), 12)
+        by_key = {
+            (commander_id, transition["current"]["id"]): transition
+            for commander_id, transition in verified
+        }
+        expected_candidates = {
+            (1, 0x01): [0x04, 0x05, 0x0A],
+            (5, 0x03): [0x0A, 0x09, 0x04],
+            (5, 0x0A): [0x11, 0x12, 0x13],
+            (5, 0x09): [0x12, 0x13, 0x0D],
+            (5, 0x04): [0x13, 0x0D, 0x0B],
+            (5, 0x11): [0x16, 0x17, 0x15],
+            (5, 0x12): [0x17, 0x15, 0x14],
+            (5, 0x13): [0x15, 0x14, 0x18],
+            (5, 0x0D): [0x14, 0x18, 0x19],
+            (5, 0x0B): [0x18, 0x19, 0x1A],
+            (5, 0x15): [0x28],
+            (9, 0x10): [0x1D, 0x1F, 0x19],
+        }
+        self.assertEqual(set(by_key), set(expected_candidates))
+        for key, candidates in expected_candidates.items():
+            with self.subTest(key=key):
+                self.assertEqual(
+                    [
+                        candidate["id"]
+                        for candidate in by_key[key]["candidates"]
+                    ],
+                    candidates,
+                )
+
+        self.assertTrue(by_key[(1, 0x01)]["application_verified"])
         self.assertIn(
             "captures/analysis/eb00_class_change_turn2.gst",
-            transition["evidence"],
+            by_key[(1, 0x01)]["evidence"],
         )
-
-        commander_id, transition = verified[1]
-        self.assertEqual(commander_id, 5)
-        self.assertEqual(transition["current"]["id"], 0x03)
-        self.assertEqual(
-            [candidate["id"] for candidate in transition["candidates"]],
-            [0x0A, 0x09, 0x04],
-        )
-        self.assertTrue(transition["application_verified"])
+        self.assertTrue(by_key[(5, 0x03)]["application_verified"])
         self.assertIn(
             "captures/analysis/a8d7_c5_s03_after_turn.gst",
-            transition["evidence"],
+            by_key[(5, 0x03)]["evidence"],
         )
-
-        commander_id, transition = verified[2]
-        self.assertEqual(commander_id, 5)
-        self.assertEqual(transition["current"]["id"], 0x0A)
-        self.assertEqual(
-            [candidate["id"] for candidate in transition["candidates"]],
-            [0x11, 0x12, 0x13],
-        )
-        self.assertFalse(transition["application_verified"])
-
-        commander_id, transition = verified[3]
-        self.assertEqual(commander_id, 5)
-        self.assertEqual(transition["current"]["id"], 0x09)
-        self.assertEqual(
-            [candidate["id"] for candidate in transition["candidates"]],
-            [0x12, 0x13, 0x0D],
-        )
-        self.assertFalse(transition["application_verified"])
-
-        commander_id, transition = verified[4]
-        self.assertEqual(commander_id, 5)
-        self.assertEqual(transition["current"]["id"], 0x04)
-        self.assertEqual(
-            [candidate["id"] for candidate in transition["candidates"]],
-            [0x13, 0x0D, 0x0B],
-        )
-        self.assertFalse(transition["application_verified"])
-
-        commander_id, transition = verified[5]
-        self.assertEqual(commander_id, 9)
-        self.assertEqual(transition["current"]["id"], 0x10)
-        self.assertEqual(
-            [candidate["id"] for candidate in transition["candidates"]],
-            [0x1D, 0x1F, 0x19],
-        )
-        self.assertFalse(transition["application_verified"])
+        for key, transition in by_key.items():
+            if key not in {(1, 0x01), (5, 0x03)}:
+                self.assertFalse(transition["application_verified"])
 
     def test_generated_files_match(self):
         self.assertEqual(
