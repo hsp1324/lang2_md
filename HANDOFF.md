@@ -5428,6 +5428,17 @@ contains 57 safe syllables as documented below and in
   reports `completed 0, resumed 2` without launching BlastEm, proving complete
   capture-set resume behavior. Production remains checksum `AD01`; all 295 unit
   tests pass.
+- Commander 4 (Sherry) then completed ten fresh transitions with
+  `completed 10, resumed 0`. Accepted prefixes are `8e90_c4_s01`,
+  `8ea7_c4_s04`, `8eb0_c4_s06`, `8eb9_c4_s0a`, `8ed7_c4_s0b`,
+  `8ee1_c4_s0e`, `8ede_c4_s0f`, `8edd_c4_s12`, `8ed4_c4_s13`, and
+  `8ebd_c4_s21`. All 28 candidate frames were reviewed. Flying, unicorn,
+  Ranger, Dragon Lord, and terminal High Master branches render Korean names,
+  stats, mercenaries, and magic without clipping or residue. Ranger's blank
+  mercenary area is source behavior. These are screen-only proofs; commander 6
+  (Scott) is the next ten-combination batch target.
+- Production rebuild remains checksum `AD01`; all 296 unit tests pass after the
+  Sherry evidence and generated inventories are included.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

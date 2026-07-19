@@ -21,8 +21,8 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["commander_count"], 10)
         self.assertEqual(self.result["transition_count"], 100)
         self.assertEqual(self.result["unique_transition_count"], 76)
-        self.assertEqual(self.result["live_verified_transition_count"], 22)
-        self.assertEqual(self.result["live_verified_unique_transition_count"], 22)
+        self.assertEqual(self.result["live_verified_transition_count"], 32)
+        self.assertEqual(self.result["live_verified_unique_transition_count"], 32)
         self.assertEqual(self.result["application_verified_transition_count"], 2)
 
         verified = [
@@ -31,7 +31,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             for transition in commander["transitions"]
             if transition["live_verified"]
         ]
-        self.assertEqual(len(verified), 22)
+        self.assertEqual(len(verified), 32)
         by_key = {
             (commander_id, transition["current"]["id"]): transition
             for commander_id, transition in verified
@@ -48,6 +48,16 @@ class ClassChangeInventoryTests(unittest.TestCase):
             (2, 0x12): [0x16, 0x15, 0x18],
             (2, 0x0B): [0x15, 0x18, 0x17],
             (2, 0x19): [0x28],
+            (4, 0x01): [0x04, 0x06, 0x0A],
+            (4, 0x04): [0x0B, 0x0E, 0x0F],
+            (4, 0x06): [0x0E, 0x0F, 0x12],
+            (4, 0x0A): [0x0F, 0x12, 0x13],
+            (4, 0x0B): [0x17, 0x21, 0x19],
+            (4, 0x0E): [0x21, 0x19, 0x1E],
+            (4, 0x0F): [0x19, 0x1E, 0x1D],
+            (4, 0x12): [0x1E, 0x1D, 0x15],
+            (4, 0x13): [0x1D, 0x15, 0x14],
+            (4, 0x21): [0x23],
             (5, 0x03): [0x0A, 0x09, 0x04],
             (5, 0x0A): [0x11, 0x12, 0x13],
             (5, 0x09): [0x12, 0x13, 0x0D],

@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 22,
-  "live_verified_unique_transition_count": 22,
+  "live_verified_transition_count": 32,
+  "live_verified_unique_transition_count": 32,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -952,9 +952,14 @@
               "ko": "샤먼"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8e90_c4_s01_trigger.png",
+            "captures/run/8e90_c4_s01_candidate1.png",
+            "captures/run/8e90_c4_s01_candidate2.png",
+            "captures/run/8e90_c4_s01_candidate3.png"
+          ]
         },
         {
           "index": 1,
@@ -981,9 +986,14 @@
               "ko": "드래곤나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ea7_c4_s04_trigger.png",
+            "captures/run/8ea7_c4_s04_candidate1.png",
+            "captures/run/8ea7_c4_s04_candidate2.png",
+            "captures/run/8ea7_c4_s04_candidate3.png"
+          ]
         },
         {
           "index": 2,
@@ -1010,9 +1020,14 @@
               "ko": "비숍"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eb0_c4_s06_trigger.png",
+            "captures/run/8eb0_c4_s06_candidate1.png",
+            "captures/run/8eb0_c4_s06_candidate2.png",
+            "captures/run/8eb0_c4_s06_candidate3.png"
+          ]
         },
         {
           "index": 3,
@@ -1039,9 +1054,14 @@
               "ko": "메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eb9_c4_s0a_trigger.png",
+            "captures/run/8eb9_c4_s0a_candidate1.png",
+            "captures/run/8eb9_c4_s0a_candidate2.png",
+            "captures/run/8eb9_c4_s0a_candidate3.png"
+          ]
         },
         {
           "index": 4,
@@ -1068,9 +1088,14 @@
               "ko": "팔라딘"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed7_c4_s0b_trigger.png",
+            "captures/run/8ed7_c4_s0b_candidate1.png",
+            "captures/run/8ed7_c4_s0b_candidate2.png",
+            "captures/run/8ed7_c4_s0b_candidate3.png"
+          ]
         },
         {
           "index": 5,
@@ -1097,9 +1122,14 @@
               "ko": "드래곤로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ee1_c4_s0e_trigger.png",
+            "captures/run/8ee1_c4_s0e_candidate1.png",
+            "captures/run/8ee1_c4_s0e_candidate2.png",
+            "captures/run/8ee1_c4_s0e_candidate3.png"
+          ]
         },
         {
           "index": 6,
@@ -1126,9 +1156,14 @@
               "ko": "실버나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ede_c4_s0f_trigger.png",
+            "captures/run/8ede_c4_s0f_candidate1.png",
+            "captures/run/8ede_c4_s0f_candidate2.png",
+            "captures/run/8ede_c4_s0f_candidate3.png"
+          ]
         },
         {
           "index": 7,
@@ -1155,9 +1190,14 @@
               "ko": "위저드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8edd_c4_s12_trigger.png",
+            "captures/run/8edd_c4_s12_candidate1.png",
+            "captures/run/8edd_c4_s12_candidate2.png",
+            "captures/run/8edd_c4_s12_candidate3.png"
+          ]
         },
         {
           "index": 8,
@@ -1184,9 +1224,14 @@
               "ko": "아크메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed4_c4_s13_trigger.png",
+            "captures/run/8ed4_c4_s13_candidate1.png",
+            "captures/run/8ed4_c4_s13_candidate2.png",
+            "captures/run/8ed4_c4_s13_candidate3.png"
+          ]
         },
         {
           "index": 9,
@@ -1203,9 +1248,12 @@
               "ko": "하이마스터"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ebd_c4_s21_trigger.png",
+            "captures/run/8ebd_c4_s21_candidate1.png"
+          ]
         }
       ]
     },

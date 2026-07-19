@@ -159,6 +159,15 @@ stats, mercenaries, and magic lists without clipping, broken glyphs, or
 Japanese residue. All ten Liana rows are screen-verified and remain pending for
 application verification.
 
+The next batch captured all ten Sherry transitions under prefixes
+`8e90_c4_s01`, `8ea7_c4_s04`, `8eb0_c4_s06`, `8eb9_c4_s0a`,
+`8ed7_c4_s0b`, `8ee1_c4_s0e`, `8ede_c4_s0f`, `8edd_c4_s12`,
+`8ed4_c4_s13`, and `8ebd_c4_s21`. All 28 candidate frames were reviewed,
+including the flying, unicorn, Ranger, Dragon Lord, and terminal High Master
+branches. Korean class names, stats, mercenaries, and magic lists are intact;
+Ranger's empty mercenary area is source data rather than rendering damage.
+All ten Sherry rows are screen-verified and remain pending for application.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is
