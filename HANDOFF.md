@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 5993
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 368 passing
+unit tests: 369 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
@@ -215,7 +215,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `5993` and passes all 368 tests. It includes
+The current source builds checksum `5993` and passes all 369 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,
@@ -1194,9 +1194,10 @@ full-game Korean localization, split into six stages in
   obtained, Treasure-kun label, and item equipped. The builder verifies every
   original token tuple before writing Korean.
 - `GAME OVER` at `0x082B3C` intentionally remains conventional English. The
-  Japanese secret/debug-style message at `0x082B78` rendered as
-  `面をしないだすー`; web searches did not establish its runtime context, so
-  it remains untouched rather than guessed.
+  Japanese debug artifact at `0x082B78` renders as `面をしないだすー`; its
+  table index and every reachable player growth value are now statically
+  proven unable to select it, so it remains byte-identical rather than being
+  assigned a guessed Korean sentence.
 - A separate word-swapped 37-entry item-name pointer table starts at `0x001068`.
   Its strings span `0x0010FE..0x0012E8`; two Langrisser IDs share `0x00115E`,
   leaving 36 unique strings. The builder validates source block SHA-256
@@ -3986,7 +3987,7 @@ contains 57 safe syllables as documented below and in
   `intentionally_retained_system_label` instead of inflating the unpatched
   system-message count.
 - The inventory now reports zero confirmed unpatched system messages, one
-  intentionally retained label, one unresolved secret/debug record at
+  intentionally retained label, one intentionally unreachable debug record at
   `0x082B78`, and zero unclassified candidates. Regeneration also synchronizes
   stored current-token IDs with production checksum `138B`; target text and
   original ownership are unchanged.
@@ -4002,12 +4003,16 @@ contains 57 safe syllables as documented below and in
   index. `0x0170DE` reads entry 0 directly. Separate absolute reads use entry 9
   for `GAME OVER`, entry 10 for item acquisition, and entry 13 for equipment.
   No absolute reference to entry address `0x082AC2` exists in the ROM.
-- This strongly suggests entry 12 is an unused/fallback debug string, but the
-  computed stat suffix means static references alone do not prove it
-  unreachable for every malformed or secret state. It remains unchanged and
-  classified `confirmed_unresolved_direct_message` until a runtime trigger or
-  stricter value-range proof is found. Do not guess a Korean sentence from the
-  malformed-looking source text.
+- The stricter value-range proof is now implemented by
+  `unreachable_debug_message_proof()`. Across all 40 class IDs reachable from
+  the ten playable commanders' complete class-change chains, the three growth
+  fields use growth IDs `0..10,12,14`, whose ten-level table values are only
+  `0,1,2`. The level-up renderer skips zero and can therefore select only
+  suffix entries 5 and 6, never entry 12. Entry address `0x082AC2` and message
+  address `0x082B78` also have no executable-region absolute references.
+- Entry 12 is now classified `intentionally_unreachable_debug_message` and its
+  malformed-looking original text remains unchanged. This is an unreachable
+  ROM artifact, not untranslated player-facing UI.
 - `test_checked_in_reports_match_current_rom` now compares the computed 783
   candidates with both checked-in JSON and generated Markdown. This prevents
   another production glyph-ID change from leaving the stored direct inventory

@@ -15,7 +15,7 @@ a candidate, not proof that the data is visible text.
 - Known unsafe name records: 0
 - Confirmed unpatched system messages: 0
 - Intentionally retained system labels: 1
-- Confirmed unresolved direct messages: 1
+- Intentionally unreachable debug messages: 1
 - Declared UI surfaces: 10
 - Name-entry resources: 8
 - Title LOAD resources: 7

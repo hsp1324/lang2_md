@@ -136,8 +136,20 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
             rows["0x082562"]["ownership"], "structured_game_data_false_positive"
         )
         self.assertEqual(
-            rows["0x082B78"]["ownership"], "confirmed_unresolved_direct_message"
+            rows["0x082B78"]["ownership"],
+            "intentionally_unreachable_debug_message",
         )
+
+    def test_debug_message_is_unreachable_from_playable_growth_paths(self):
+        proof = self.result["unreachable_debug_message_proof"]
+        self.assertTrue(proof["proven_unreachable"])
+        self.assertEqual(proof["entry_index"], 12)
+        self.assertEqual(proof["message_address"], "0x082B78")
+        self.assertEqual(proof["playable_class_count"], 40)
+        self.assertEqual(proof["growth_values"], [0, 1, 2])
+        self.assertEqual(proof["reachable_growth_suffix_indices"], [5, 6])
+        self.assertEqual(proof["entry_address_references"], [])
+        self.assertEqual(proof["message_address_references"], [])
 
     def test_game_over_is_intentionally_retained(self):
         rows = {row["address"]: row for row in self.result["candidates"]}

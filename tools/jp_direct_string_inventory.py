@@ -9,6 +9,7 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_korean_jp_probe as builder
+from tools.class_change_data import COMMANDER_COUNT, read_class_change_chain
 from tools.jp_text_font_analyzer import be16, be32
 
 
@@ -30,7 +31,7 @@ CONFIRMED_UNPATCHED_SYSTEM_MESSAGES = {
     0x082B22: "을 사용할 수 있게 됐다.",
     0x082B56: "을 손에 넣었다!",
     0x082B66: "트레저군:",
-    # 0x082B78 is a secret/debug-style message whose exact context is not yet proven.
+    # 0x082B78 is a proven-unreachable debug artifact retained byte-identically.
     0x082B90: "을 장비했다.",
 }
 
@@ -38,9 +39,17 @@ INTENTIONALLY_RETAINED_SYSTEM_LABELS = {
     0x082B3C: "GAME OVER",
 }
 
-CONFIRMED_UNRESOLVED_DIRECT_MESSAGES = {
-    0x082B78: "비기/디버그성 문구 `面をしないだすー` (실행 문맥 미확정)",
+INTENTIONALLY_UNREACHABLE_DEBUG_MESSAGES = {
+    0x082B78: "실행 불가 디버그 문구 `面をしないだすー` (원본 보존)",
 }
+
+SYSTEM_MESSAGE_TABLE = 0x082A92
+UNREACHABLE_DEBUG_MESSAGE_INDEX = 12
+CLASS_STAT_TABLE = 0x05EDDC
+CLASS_STAT_RECORD_SIZE = 0x1C
+CLASS_GROWTH_OFFSETS = (0x0A, 0x0B, 0x0C)
+GROWTH_TABLE = 0x082922
+GROWTH_LEVEL_COUNT = 10
 
 
 def scan_candidates(data: bytes, start: int = 0, end: int = SCAN_END) -> list[tuple[int, list[int]]]:
@@ -70,6 +79,78 @@ def scan_candidates(data: bytes, start: int = 0, end: int = SCAN_END) -> list[tu
         else:
             position += 2
     return entries
+
+
+def unreachable_debug_message_proof(data: bytes) -> dict[str, object]:
+    message_pointer = be32(
+        data, SYSTEM_MESSAGE_TABLE + UNREACHABLE_DEBUG_MESSAGE_INDEX * 4
+    )
+    playable_classes = set()
+    for commander_id in range(1, COMMANDER_COUNT + 1):
+        for transition in read_class_change_chain(data, commander_id):
+            playable_classes.add(transition.current_class)
+            playable_classes.update(transition.candidates)
+    growth_ids = {
+        data[
+            CLASS_STAT_TABLE
+            + class_id * CLASS_STAT_RECORD_SIZE
+            + growth_offset
+        ]
+        for class_id in playable_classes
+        for growth_offset in CLASS_GROWTH_OFFSETS
+    }
+    growth_values = {
+        data[GROWTH_TABLE + growth_id * GROWTH_LEVEL_COUNT + level]
+        for growth_id in growth_ids
+        for level in range(GROWTH_LEVEL_COUNT)
+    }
+
+    def references(value: int) -> list[str]:
+        needle = value.to_bytes(4, "big")
+        positions = []
+        start = 0
+        while True:
+            position = data.find(needle, start, 0x040000)
+            if position < 0:
+                return [f"0x{offset:06X}" for offset in positions]
+            positions.append(position)
+            start = position + 1
+
+    table_references = references(SYSTEM_MESSAGE_TABLE)
+    pointer_references = references(
+        SYSTEM_MESSAGE_TABLE + UNREACHABLE_DEBUG_MESSAGE_INDEX * 4
+    )
+    message_references = references(message_pointer)
+    maximum_growth = max(growth_values)
+    reachable_suffix_indices = sorted(
+        {value + 4 for value in growth_values if value}
+    )
+    proven = (
+        message_pointer == 0x082B78
+        and table_references == ["0x0149D2", "0x014A64", "0x0170E0"]
+        and not pointer_references
+        and not message_references
+        and maximum_growth == 2
+        and reachable_suffix_indices == [5, 6]
+    )
+    return {
+        "table": f"0x{SYSTEM_MESSAGE_TABLE:06X}",
+        "entry_index": UNREACHABLE_DEBUG_MESSAGE_INDEX,
+        "entry_address": (
+            f"0x{SYSTEM_MESSAGE_TABLE + UNREACHABLE_DEBUG_MESSAGE_INDEX * 4:06X}"
+        ),
+        "message_address": f"0x{message_pointer:06X}",
+        "table_references": table_references,
+        "entry_address_references": pointer_references,
+        "message_address_references": message_references,
+        "playable_class_count": len(playable_classes),
+        "playable_class_ids": sorted(playable_classes),
+        "growth_ids": sorted(growth_ids),
+        "growth_values": sorted(growth_values),
+        "maximum_growth": maximum_growth,
+        "reachable_growth_suffix_indices": reachable_suffix_indices,
+        "proven_unreachable": proven,
+    }
 
 
 def read_current_stream(data: bytes, offset: int, limit: int = 256) -> list[int] | None:
@@ -233,6 +314,9 @@ def tokens(words: list[int] | None) -> str | None:
 
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
+    debug_proof = unreachable_debug_message_proof(japanese)
+    if not debug_proof["proven_unreachable"]:
+        raise ValueError("system debug-message reachability proof changed")
     owners = pointer_owners(japanese)
     record_intervals = pointer_record_intervals(japanese)
     targets = declared_targets()
@@ -295,8 +379,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             ownership = "confirmed_unpatched_system_message"
         elif offset in INTENTIONALLY_RETAINED_SYSTEM_LABELS:
             ownership = "intentionally_retained_system_label"
-        elif offset in CONFIRMED_UNRESOLVED_DIRECT_MESSAGES:
-            ownership = "confirmed_unresolved_direct_message"
+        elif offset in INTENTIONALLY_UNREACHABLE_DEBUG_MESSAGES:
+            ownership = "intentionally_unreachable_debug_message"
         elif offset in ui_surfaces:
             ownership = "declared_ui_surface"
         elif offset in NAME_ENTRY_RESOURCES:
@@ -364,7 +448,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     or unsafe_targets.get(offset)
                     or CONFIRMED_UNPATCHED_SYSTEM_MESSAGES.get(offset)
                     or INTENTIONALLY_RETAINED_SYSTEM_LABELS.get(offset)
-                    or CONFIRMED_UNRESOLVED_DIRECT_MESSAGES.get(offset)
+                    or INTENTIONALLY_UNREACHABLE_DEBUG_MESSAGES.get(offset)
                     or ui_surfaces.get(offset)
                     or NAME_ENTRY_RESOURCES.get(offset)
                     or (ranged[1] if ranged else None)
@@ -407,7 +491,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "known_unsafe_name_record",
             "confirmed_unpatched_system_message",
             "intentionally_retained_system_label",
-            "confirmed_unresolved_direct_message",
+            "intentionally_unreachable_debug_message",
             "declared_ui_surface",
             "name_entry_resource",
             "title_load_resource",
@@ -435,6 +519,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "Candidates only match a conservative glyph/control/FFFF byte pattern. "
             "Unclassified candidates may be data and require ownership proof before patching."
         ),
+        "unreachable_debug_message_proof": debug_proof,
         "candidates": rows,
     }
 
@@ -460,7 +545,7 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- Known unsafe name records: {counts['known_unsafe_name_record']}",
             f"- Confirmed unpatched system messages: {counts['confirmed_unpatched_system_message']}",
             f"- Intentionally retained system labels: {counts['intentionally_retained_system_label']}",
-            f"- Confirmed unresolved direct messages: {counts['confirmed_unresolved_direct_message']}",
+            f"- Intentionally unreachable debug messages: {counts['intentionally_unreachable_debug_message']}",
             f"- Declared UI surfaces: {counts['declared_ui_surface']}",
             f"- Name-entry resources: {counts['name_entry_resource']}",
             f"- Title LOAD resources: {counts['title_load_resource']}",
