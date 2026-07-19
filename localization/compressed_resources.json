@@ -14,9 +14,9 @@
     "2": 248,
     "1": 2
   },
-  "modified_count": 1,
-  "known_owner_count": 2,
-  "unknown_owner_count": 427,
+  "modified_count": 2,
+  "known_owner_count": 3,
+  "unknown_owner_count": 426,
   "loader_routines": {
     "load": "0x0099B2",
     "dispatch": "0x0099FA",
@@ -9131,18 +9131,18 @@
       "index": 393,
       "table_entry": "0x0B0624",
       "original_pointer": "0x120EEE",
-      "current_pointer": "0x120EEE",
+      "current_pointer": "0x2E0000",
       "original_type": 3,
       "current_type": 3,
       "decoder_routine": "0x009DFE",
       "original_output_size": 5984,
       "current_output_size": 5984,
       "original_decoded_sha256": "58befb34120f5baa2e39868866e47cd043400663429b1db620fbeda69d3193c4",
-      "current_decoded_sha256": "58befb34120f5baa2e39868866e47cd043400663429b1db620fbeda69d3193c4",
-      "pointer_modified": false,
-      "content_modified": false,
-      "modified": false,
-      "owner": null,
+      "current_decoded_sha256": "aefae91df5f8eed1b09fbd82013c25ed9317e7324ddbad9f6166e093386ac9e5",
+      "pointer_modified": true,
+      "content_modified": true,
+      "modified": true,
+      "owner": "title_logo",
       "direct_immediate_call_count": 1,
       "direct_immediate_calls": [
         {
@@ -9154,8 +9154,8 @@
           "destination": "0x2000"
         }
       ],
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "index": 394,

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "38AB",
+  "production_checksum": "F9C0",
   "states": [
     "pending",
     "historical",
@@ -19,6 +19,17 @@
     "branches_endings"
   ],
   "global_evidence": [
+    {
+      "surface": "title_logo_and_main_menu",
+      "state": "verified_current",
+      "checksum": "F9C0",
+      "based_on": "F9C0",
+      "captures": [
+        "captures/run/f9c0_title_logo_live.png",
+        "captures/run/f9c0_title_logo_menu.png"
+      ],
+      "note": "Compressed resource 393 and its 28x8 layout now render 랑그릿사 while preserving the stock II, angels, PUSH START BUTTON, copyright line, 새 게임 / 불러오기 menu, and 한글화: hsp1324 credit."
+    },
     {
       "surface": "battle_ui",
       "state": "verified_probe",

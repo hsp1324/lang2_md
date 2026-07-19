@@ -77,10 +77,10 @@ class CompressedResourceInventoryTests(unittest.TestCase):
             "fde977cddd80d58997844e812050c13a9d965d94f97265ec1a5d23d9d98d08bf",
         )
 
-    def test_only_byte_ui_font_is_relocated_and_modified(self):
-        self.assertEqual(self.result["modified_count"], 1)
-        self.assertEqual(self.result["known_owner_count"], 2)
-        self.assertEqual(self.result["unknown_owner_count"], 427)
+    def test_owned_localized_resources_are_relocated_and_modified(self):
+        self.assertEqual(self.result["modified_count"], 2)
+        self.assertEqual(self.result["known_owner_count"], 3)
+        self.assertEqual(self.result["unknown_owner_count"], 426)
         entry = self.result["entries"][builder.BYTE_UI_FONT_RESOURCE_INDEX]
         self.assertEqual(entry["owner"], "byte_ui_font")
         self.assertEqual(entry["original_pointer"], "0x0B0A84")
@@ -91,6 +91,17 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(entry["current_output_size"], 8192)
         self.assertTrue(entry["pointer_modified"])
         self.assertTrue(entry["content_modified"])
+
+        logo = self.result["entries"][builder.TITLE_LOGO_RESOURCE_INDEX]
+        self.assertEqual(logo["owner"], "title_logo")
+        self.assertEqual(logo["original_pointer"], "0x120EEE")
+        self.assertEqual(logo["current_pointer"], "0x2E0000")
+        self.assertEqual(logo["original_output_size"], 5984)
+        self.assertEqual(logo["current_output_size"], 5984)
+        self.assertTrue(logo["pointer_modified"])
+        self.assertTrue(logo["content_modified"])
+        self.assertTrue(logo["reviewed"])
+        self.assertTrue(logo["live_verified"])
 
     def test_item_icon_resource_owner_matches_the_stock_loader(self):
         entry = self.result["entries"][391]

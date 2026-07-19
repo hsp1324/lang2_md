@@ -8,7 +8,7 @@ runtime uses each ID directly for its icon at VRAM
 byte-identical, and decoded resource 391 keeps all 37 icon payloads
 byte-identical to the Japanese ROM.
 
-Checksum `97E0` has the accepted renderer-aware item-surface fingerprint; current checksum `9434` matches it. The earlier `D304` run covers all 37 rows, and price-only runtime derivative `4C04` rechecks the late name lists and purchase popups.
+Checksum `97E0` has the accepted renderer-aware item-surface fingerprint; current checksum `5549` matches it. The earlier `D304` run covers all 37 rows, and price-only runtime derivative `4C04` rechecks the late name lists and purchase popups.
 
 Price table values are 10P units. Item ID 9 has a stock special case that
 skips the dynamic price-number call and must be interpreted from runtime.

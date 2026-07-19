@@ -6046,3 +6046,37 @@ contains 57 safe syllables as documented below and in
 - Tests lock all four raw texts and categories. The remaining explicit gap is
   now byte sequences with fewer than three signal characters; those cannot be
   treated as text without an independent pointer, renderer, or runtime owner.
+
+### Korean Title Logo (2026-07-20)
+
+- The large Japanese `ラングリッサー` logo is compressed resource 393. Its
+  original table pointer is `0x120EEE`, type is 3 (`0x009DFE` LZSS), decoded
+  size is exactly 5984 bytes/187 tiles, and decoded SHA-256 is
+  `58befb34120f5baa2e39868866e47cd043400663429b1db620fbeda69d3193c4`.
+  Loader call `0x02D672` requests raw ID `0x8189` at VRAM `0x2000`.
+- The matching layout is the 232-byte record `0x0A429E..0x0A4385` with header
+  width 28 and height 8. Its source SHA-256 is
+  `fdfa8f93b59bec91aa5fed8b2ac478a4cdad8aa657130c4303aab7f363b11cd4`.
+  It uses `F8/F9/FA..FE/FF` controls; `0x0A4381` is therefore the tail of a
+  numeric tile layout, not an inline Japanese text candidate.
+- `build_title_logo_assets()` deterministically renders `랑그릿사` with
+  Galmuri9 at 44 pixels, reusing title palette 2. Blank tile 0 plus 172 unique
+  nonblank cells fit inside the original 187-tile output. The layout stream is
+  214 bytes and fits the original 226-byte payload capacity. The decoded tile
+  output remains exactly 5984 bytes.
+- The type-3 resource is relocated to `0x2E0000` and both the original and
+  active extended table entry 393 are updated. Resources 392, 394, and 395 and
+  the 16 bytes after the layout record are locked unchanged, so the stock
+  background, large `II`, angels, and adjacent title records remain separate.
+- Production checksum `F9C0` is live-verified in
+  `captures/run/f9c0_title_logo_live.png` and
+  `captures/run/f9c0_title_logo_menu.png`. They show the Korean logo together
+  with intact `PUSH START BUTTON`, `새 게임`, `불러오기`, and
+  `한글화: hsp1324`. No clipping, bad palette, reset, or damaged adjacent art
+  appeared. `tests/test_title_logo_resource.py` locks the source and current
+  hashes, layout decoder, tile bounds, and adjacent-resource preservation.
+- Diagnostics rebuilt from production now identify as forced class application
+  `BE23`, class transition `DCFB`, forced magic capture `C63B`, stock Magic
+  Arrow builder `9661`, summon builder `10DD`, and item-shop inventory `5549`.
+  These checksum changes come from the shared title resource; the probe-specific
+  byte-boundary tests still require their gameplay patches to remain unchanged.

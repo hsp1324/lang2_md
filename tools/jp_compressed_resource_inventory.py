@@ -26,8 +26,11 @@ RESOURCE_DECODER_ROUTINES = {
 KNOWN_OWNERS = {
     builder.BYTE_UI_FONT_RESOURCE_INDEX: "byte_ui_font",
     391: "item_icons",
+    builder.TITLE_LOGO_RESOURCE_INDEX: "title_logo",
 }
-LIVE_VERIFIED_OWNERS = frozenset(KNOWN_OWNERS)
+LIVE_VERIFIED_OWNERS = frozenset(
+    {builder.BYTE_UI_FONT_RESOURCE_INDEX, 391, builder.TITLE_LOGO_RESOURCE_INDEX}
+)
 
 
 def be32(data: bytes, offset: int) -> int:
