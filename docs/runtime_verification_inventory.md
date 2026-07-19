@@ -11,7 +11,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
-| 1 | current | current | current | current | probe | current | probe | pending | 26 |
+| 1 | current | current | current | current | probe | current | probe | pending | 28 |
 | 2 | current | current | current | current | current | current | pending | pending | 31 |
 | 3 | current | current | current | current | probe | progressed | pending | pending | 18 |
 | 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
@@ -47,7 +47,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 ### Scenario 1
 
-Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. Production 212A freshly verifies the complete preparation surface: 엘윈/파이터 and 헤인/워록 panels, 솔저 and 가드맨 hire rows, all 무기/방어구/장신구 equipment slots, 아이템 구입/판매, 호신용 단검 with AT+1, clean 단검을 구입함/단검을 판매함 popups, 소지금 updates, the 엘윈/헤인 arrangement roster, and intact SCENARIO 1 banner. No Japanese residue, damaged name/class glyph, clipping, reset, or freeze appeared. Direct window input shorter than 0.4 seconds was occasionally missed in this remote environment; the accepted review used 0.4-second directional holds and 0.25-second confirmations. The existing production route reaches TURN 2 without reset. Production-derived clear probe 8AEA changes only Bald's documented fixed deployment/stat/mercenary fields and reached the stock result and title SAVE renderers. It verifies the ordinary Scenario 1 clear transition and the real-work-RAM SAVE rows `저장`, `시나리오 2`, `데이터 없음`, and `다음 시나리오`, including the dynamic scenario number. That result frame exposed the remaining Japanese `戦果報告`; source ownership is now proven at 0x0A2D88 and production AD01 statically renders `전과보고`, but an AD01 live result-screen recapture remains pending.
+Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. Production 212A freshly verifies the complete preparation surface: 엘윈/파이터 and 헤인/워록 panels, 솔저 and 가드맨 hire rows, all 무기/방어구/장신구 equipment slots, 아이템 구입/판매, 호신용 단검 with AT+1, clean 단검을 구입함/단검을 판매함 popups, 소지금 updates, the 엘윈/헤인 arrangement roster, and intact SCENARIO 1 banner. No Japanese residue, damaged name/class glyph, clipping, reset, or freeze appeared. Direct window input shorter than 0.4 seconds was occasionally missed in this remote environment; the accepted review used 0.4-second directional holds and 0.25-second confirmations. The existing production route reaches TURN 2 without reset. Production-derived clear probes change only Bald's documented fixed deployment/stat/mercenary fields and retain the stock result and title SAVE renderers. Earlier probe 8AEA exposed the remaining Japanese `戦果報告`; source ownership is now proven at 0x0A2D88. Current probe 479F is built from production AD01 and freshly reaches the same ordinary clear path without reset. Its result screen visibly renders `전과보고`, and its real-work-RAM SAVE screen verifies `저장`, the initial `데이터 없음` rows, saved `시나리오 2`, `다음 시나리오`, and the unobstructed dynamic number.
 
 - `captures/run/ea22_s01_conditions.png`
 - `captures/run/ea22_s01_command_magic_fresh.png`
@@ -75,6 +75,8 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 - `captures/run/212a_s01_hein_hire_list.png`
 - `captures/run/8aea_s01_clear_post_40.png`
 - `captures/run/8aea_s01_clear_post_41.png`
+- `captures/run/479f_s01_clear_result_current.png`
+- `captures/run/479f_s01_clear_save_current.png`
 
 ### Scenario 2
 

@@ -82,7 +82,7 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(rows[0]["reviewed"])
         self.assertTrue(rows[0]["live_verified"])
 
-    def test_battle_result_header_is_reviewed_but_awaits_current_live_capture(self):
+    def test_battle_result_header_is_live_verified(self):
         rows = [
             row
             for row in self.result["declared_patches"]
@@ -92,7 +92,7 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(rows[0]["target_korean"], "전과보고")
         self.assertTrue(rows[0]["modified"])
         self.assertTrue(rows[0]["reviewed"])
-        self.assertFalse(rows[0]["live_verified"])
+        self.assertTrue(rows[0]["live_verified"])
 
     def test_compressed_byte_font_is_relocated(self):
         font = self.result["compressed_byte_ui_font"]

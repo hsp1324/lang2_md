@@ -600,7 +600,7 @@
       "target_korean": "전과보고",
       "modified": true,
       "reviewed": true,
-      "live_verified": false
+      "live_verified": true
     },
     {
       "group": "direct_word_sequences",

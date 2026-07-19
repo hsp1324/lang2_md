@@ -63,6 +63,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             row["live_verified"] = True
         elif row["address"] == f"0x{builder.BATTLE_RESULT_HEADER_GLYPH_LIST:06X}":
             row["reviewed"] = True
+            row["live_verified"] = True
     add_rows(rows, japanese, korean, "fixed_direct_strings", builder.DIRECT_FIXED_STRING_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "route_titles", builder.DIRECT_FIXED_ROUTE_TITLE_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "scenario_headers", builder.DIRECT_FIXED_SCENARIO_HEADER_PATCHES, 2, True)

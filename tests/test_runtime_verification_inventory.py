@@ -93,6 +93,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn(
             "captures/run/8aea_s01_clear_post_41.png", scenario1["captures"]
         )
+        self.assertIn(
+            "captures/run/479f_s01_clear_result_current.png",
+            scenario1["captures"],
+        )
+        self.assertIn(
+            "captures/run/479f_s01_clear_save_current.png",
+            scenario1["captures"],
+        )
         self.assertIn("captures/run/c7ab_s02_body_final2.png", scenario2["captures"])
         self.assertEqual(scenario2["description"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "verified_current")

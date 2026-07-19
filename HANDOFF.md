@@ -5371,9 +5371,16 @@ contains 57 safe syllables as documented below and in
   `FFFF`. `scripts/build_korean_jp_probe.py` now validates all four source IDs
   before writing `전과보고`. `tests/test_battle_result_screen.py` locks the
   source IDs, terminator, target text, and every rendered 64-byte glyph.
-- Production checksum is `AD01`, still with 861 custom glyphs. A fresh AD01
-  result-screen replay was attempted, but the remote BlastEm window stopped
-  accepting deterministic cursor/confirm input after reaching the clean map.
-  Do not classify that input failure as a ROM reset or a failed text patch.
-  The new header is statically reviewed and intentionally remains
-  `live_verified: false` until an AD01 result capture is obtained.
+- Production checksum is `AD01`, still with 861 custom glyphs. Its rebuilt
+  clear probe checksum is `479F`. Loading the old 8AEA attack GST into 479F
+  reproduced the map but reset after combat; that cross-ROM state is rejected
+  as evidence. A fresh 479F boot then entered Scenario 1 normally, selected
+  Elwin, defeated adjacent Bald, and completed all stock post-battle movement
+  and dialogue without reset or freeze.
+- `captures/run/479f_s01_clear_result_current.png` visibly proves the centered
+  `전과보고` title, party lists, and POINT value without damaged glyphs or
+  clipping. The next frame initially showed four `데이터 없음` rows; confirming
+  slot 1 wrote the real next-scenario data, and
+  `captures/run/479f_s01_clear_save_current.png` proves `시나리오 2`, the
+  unobstructed dynamic number, remaining empty rows, and `다음 시나리오`.
+  The result-header inventory entry is now `live_verified: true`.
