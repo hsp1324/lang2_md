@@ -172,12 +172,16 @@ Closed all-item shop checkpoint:
   scale from both geometries, captures the physical client rectangle, and
   downsamples it to the canonical 320x240 frame without changing focus.
 - `PrintWindow` can capture an occluded OpenGL window without focus, but partial
-  redraws retain stale pixels from earlier screens. The apparent extra `렛`
-  after preparation labels in `3c46_s02_escape_after_hire_end.png` is such a
-  rejected mosaic: glyph `렛` (`0x7235`) is absent from the complete
-  `0x96FC0..0x97680` preparation/name resource range, and earlier accepted DWM
-  captures render the same labels cleanly. `--print-window` is explicit and
-  diagnostic-only; it is no longer an automatic fallback or acceptance path.
+  redraws retain stale pixels from earlier screens, so it remains diagnostic-
+  only. However, reliable DWM capture `3c46_s02_prep_verify_09.png` proved that
+  the extra `렛` after preparation labels was also a real transition-dependent
+  defect. The four rows are six cells wide, and their token stream at
+  `0x09AA6C` used unloaded tile `0x05FC` for five trailing cells. That tile
+  retained scenario-description VRAM even though `렛` (`0x7235`) is absent
+  from the preparation glyph list. Production `38AB` replaces those five
+  tokens with loaded blank tile `0x0540`; DWM capture
+  `389a_s02_prep_verify_09.png` verifies all four rows without residue.
+  `--print-window` is still never an automatic fallback or acceptance path.
 - Automatic detector sequences cannot request foreground activation. A single
   manual capture may use `--allow-focus-steal` only after confirming that the
   user is not working in another application. Never add a per-frame activation
@@ -5719,7 +5723,7 @@ contains 57 safe syllables as documented below and in
   unobstructed dynamic number, remaining empty rows, and `다음 시나리오`.
   The result-header inventory entry is now `live_verified: true`.
 
-### Scenario 2 North-Escape Completion Probe (2026-07-20, Live Pending)
+### Scenario 2 North-Escape Completion Probe (2026-07-20, Verified)
 
 - Scenario 2 is not a Zorum-defeat clear. The stock condition resource says
   victory is Liana reaching the north edge or enemy annihilation; defeat is
@@ -5730,11 +5734,19 @@ contains 57 safe syllables as documented below and in
   coordinates `(8,18)`. It changes only that record's Y byte to `1` plus the
   Mega Drive checksum. Current ignored diagnostic checksum is `3C46`.
 - Static tests prove the changed-byte subset and reject altered deployment
-  pointers or input Liana records. A recovered isolated Scenario 2 save reached
-  preparation and the opening, but the completion run was stopped before
-  acceptance because per-frame Windows activation stole the user's foreground
-  window. Do not claim a clear, result screen, next-scenario save, or ordinary
-  continuation until a fresh no-focus-steal playback is reviewed.
+  pointers or input Liana records. The rebuilt probe based on production `38AB`
+  has checksum `389A`. A recovered isolated Scenario 2 save entered the normal
+  route, preparation, deployment, and all 62 opening confirmations before
+  reaching Elwin's command menu without reset or freeze.
+- On the first NPC phase, Liana reached the north edge and the stock completion
+  path rendered the complete Korean escape dialogue in
+  `389a_s02_escape_12.png` through `_17.png`. Frame `_18.png` is the intact
+  `전과보고` screen with `POINT 800P`; `_19.png` is the next-scenario save
+  screen. Repeated confirmation wrote real `시나리오 3` data to slot 1, and
+  selecting `다음 시나리오` reached the Scenario 3 route map in
+  `389a_s02_next_scenario_selected.png`. Scenario 2 completion is therefore
+  `verified_probe`; alternative enemy-annihilation victory and both defeat
+  branches remain pending.
 
 ### Stable Forced Class-Change Application Diagnostics (2026-07-19)
 

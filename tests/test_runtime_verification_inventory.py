@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "E38B")
+        self.assertEqual(data["production_checksum"], "38AB")
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]
@@ -151,6 +151,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("captures/run/c7ab_s02_body_final2.png", scenario2["captures"])
         self.assertEqual(scenario2["description"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "verified_current")
+        self.assertEqual(scenario2["completion"], "verified_probe")
         for capture in (
             "captures/run/489b_s02_description_current_01.png",
             "captures/run/489b_s02_description_current_08.png",
@@ -165,6 +166,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/212a_s02_arrange_scenario_banner.png",
             "captures/run/212a_s02_loren_status.png",
             "captures/run/212a_s02_loren_popup.png",
+            "captures/run/389a_s02_prep_verify_09.png",
+            "captures/run/389a_s02_command_final.png",
+            "captures/run/389a_s02_escape_12.png",
+            "captures/run/389a_s02_escape_17.png",
+            "captures/run/389a_s02_escape_18.png",
+            "captures/run/389a_s02_escape_19.png",
+            "captures/run/389a_s02_next_scenario_selected.png",
         ):
             self.assertIn(capture, scenario2["captures"])
         self.assertEqual(scenario3["description"], "verified_current")

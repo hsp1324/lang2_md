@@ -1611,6 +1611,26 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA2B98: (2, "출격"),
 }
 
+# The four preparation-menu rows are six cells wide. The Japanese token stream
+# uses tile 0x05FC for five trailing cells, but that tile is outside the glyphs
+# reloaded by the preparation screen and can retain scenario-description data.
+# Slot 16 (tile 0x0540) is explicitly loaded as a blank by the localized
+# four-slot shop label, so use it for every trailing cell.
+PREP_MENU_TOKEN_STREAM = 0x09AA6C
+PREP_MENU_ORIGINAL_ROWS = (
+    (0x0510, 0x0514, 0x0518, 0x051C, 0x05FC, 0x05FC),
+    (0x0520, 0x0524, 0x0528, 0x052C, 0x0530, 0x0534),
+    (0x0538, 0x053C, 0x0540, 0x0544, 0x05FC, 0x05FC),
+    (0x0548, 0x054C, 0x0550, 0x0554, 0x0558, 0x05FC),
+)
+PREP_MENU_ROW_DELIMITERS = (
+    (0xFFFC, 0xFFFE),
+    (0xFFFC, 0xFFFE),
+    (0xFFFC, 0xFFFE),
+    (0xFFFC, 0xFFFF),
+)
+PREP_MENU_LOADED_BLANK_TILE = 0x0540
+
 # Screen-local glyph loader for the two route-menu rows that do not use the
 # direct strings above. The original list at 0xA2BAC is:
 #   移 動 順 変 更 自
@@ -3675,6 +3695,30 @@ def patch_direct_token_streams(data: bytearray) -> None:
     for offset, tokens in DIRECT_TOKEN_STREAM_PATCHES.items():
         capacity = direct_string_capacity_words(data, offset)
         write_token_stream(data, offset, tokens, capacity)
+
+
+def patch_prep_menu_trailing_cells(data: bytearray) -> None:
+    cursor = PREP_MENU_TOKEN_STREAM
+    for row_index, (expected_row, expected_delimiters) in enumerate(
+        zip(PREP_MENU_ORIGINAL_ROWS, PREP_MENU_ROW_DELIMITERS)
+    ):
+        actual_row = tuple(be16(data, cursor + index * 2) for index in range(6))
+        if actual_row != expected_row:
+            raise ValueError(
+                f"unexpected preparation-menu row {row_index}: "
+                f"{actual_row!r} != {expected_row!r}"
+            )
+        for index, token in enumerate(actual_row):
+            if token == 0x05FC:
+                put16(data, cursor + index * 2, PREP_MENU_LOADED_BLANK_TILE)
+        cursor += 12
+        actual_delimiters = (be16(data, cursor), be16(data, cursor + 2))
+        if actual_delimiters != expected_delimiters:
+            raise ValueError(
+                f"unexpected preparation-menu delimiters after row {row_index}: "
+                f"{actual_delimiters!r} != {expected_delimiters!r}"
+            )
+        cursor += 4
 
 
 def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -6349,6 +6393,7 @@ def main() -> None:
         patch_direct_word_sequences(data, glyph_by_char)
         patch_magic_list_names(data)
         patch_arrange_menu_glyph_lists(data, glyph_by_char)
+        patch_prep_menu_trailing_cells(data)
         patch_start_menu(data, glyph_by_char)
         patch_start_submenus(data, glyph_by_char)
         patch_title_load_screen(data, glyph_by_char)
