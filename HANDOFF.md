@@ -13,6 +13,61 @@ It writes:
 roms/builds/Langrisser II (Korean JP Probe).md
 ```
 
+## Resume Dashboard (2026-07-19)
+
+This section is the first stop after a Goal resume or interrupted session. Do
+not restart completed investigations merely because their details also remain
+in the chronological log below.
+
+Current reproducible baseline:
+
+```text
+production checksum: E38B
+custom Hangul glyphs: 861 (0x7000..0x735D)
+unit tests: 341 passing
+direct-string candidates: 783 classified, 0 unclassified
+declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
+explicit UI verification gaps: 7
+```
+
+Completed and closed unless a later edit touches the same renderer, pointer,
+glyph bank, or visible screen:
+
+- all 31 scenario event resources are statically translated, and every scenario
+  description, conditions, preparation, and opening path has current playback
+  evidence recorded in `localization/runtime_verification.json`;
+- the 90 outcome epilogues are relocated at `0x2C0000` and the 23 naturally
+  spaced ending-visit records are relocated at `0x2D0000`; the combined visit
+  renderer completed all 83 pages on checksum `F852`;
+- the direct-string inventory has no unclassified candidate, so do not repeat a
+  whole-ROM direct-string scan unless the builder changes reachable pointers;
+- the Scenario 1 preparation, hire, equipment, shop, arrangement, battle menu,
+  first turn, clear result, and save path have accepted evidence;
+- complete name/class/mercenary lists, all 22 magic names, all eight summon
+  names, representative class-change application, stock Magic Arrow, diagnostic
+  Attack, and diagnostic Elemental application have accepted evidence at the
+  levels recorded by their inventories. A diagnostic proof is not a natural
+  ownership proof.
+
+Active work, in order:
+
+1. Close only the seven explicit gaps in `docs/ui_patch_surface_inventory.md`;
+   start with a concrete screen/path rather than another global rescan.
+2. Upgrade scenario `completion` and `branches_endings` cells that are still
+   `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
+   continuity evidence but is not a page-by-page visual review.
+3. Re-run a completed path only when a new patch shares its glyphs, pointers,
+   tokens, compressed resource, or control flow, or when an automated regression
+   fails. Record why the regression was necessary.
+4. Keep editor work limited to fields with proven ROM/runtime ownership; current
+   localization completion remains the priority.
+
+Before new work, run `git status --short`, `git log --oneline -5`, and the focused
+tests for the surface being changed. After a coherent unit, regenerate the
+inventories, run the full suite, update this dashboard only if its counts or
+priorities changed, then commit and push. Generated ROMs and captures remain
+ignored; record their checksum and paths here or in the relevant inventory.
+
 ## Why The Work Moved From English ROM To Japanese ROM
 
 The project originally started on the English ROM because the first visible
@@ -89,17 +144,17 @@ Do not assume system packages are installed on the next PC.
 Last live-verified build during this handoff:
 
 ```text
-checksum: 544B
+checksum: E38B
 ```
 
-The current source builds checksum `544B` and passes all 219 tests. It includes
-all 31 scenarios' static event translations, the complete direct-name,
-ending-visit, credits, and 90-record epilogue resources, plus the extended 8x8
-commander-name font bank. Every scenario description has current playback
-evidence; Scenarios 22 and 23 most recently gained current preparation,
-conditions, opening, and first-turn verification. Static translation does not
-prove all conditional event branches; the scenario sections below state the
-exact remaining runtime gaps.
+The current source builds checksum `E38B` and passes all 341 tests. It includes
+all 31 scenarios' static event translations, the complete direct-name, credits,
+90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
+the extended 8x8 commander-name font bank. Every scenario description,
+condition screen, preparation surface, and opening path has current playback
+evidence. Static translation and renderer probes do not prove every conditional
+event branch; the generated runtime inventory and Resume Dashboard above state
+the exact remaining work.
 
 Build command:
 
@@ -110,12 +165,11 @@ python3 scripts/build_korean_jp_probe.py
 Important recent local commits:
 
 ```text
-2f0f8cc Correct and verify Scenario 22 opening
-041b03c Verify remaining scenario descriptions
-3b77eb4 Verify early scenario descriptions
-ea7c2b7 Verify late scenario descriptions
-e000d5a Record current description playback
-d902b6e Review and verify Scenario 1 description
+d7e9ebf Automate summon targeting and runtime probes
+da0e8fe Automate magic targeting and result probes
+a8ce09d Automate stable class change application probes
+d172de2 Complete class change candidate screen matrix
+bb3d52d Verify Aaron class change chain
 ```
 
 This document may have later commits after `d89ff79`; always start with
@@ -5648,3 +5702,48 @@ contains 57 safe syllables as documented below and in
   route remain pending.
 - Rebuilding production after the summon diagnostics retains checksum `AD01`
   and 861 custom glyphs. The complete suite passes all 335 tests.
+
+### Relocated Spaced Ending Visit Dialogue (2026-07-19)
+
+- The 23 ending-visit records are distinct from the 90 outcome epilogues.
+  Their Japanese starts are `0x0954E2..0x096A84`; exact unique pointer owners
+  are the 23 descriptor fields at `0x095412..0x0954DC`. The earlier fixed-slot
+  Korean writer preserved controls and page counts but forced most words
+  together. That storage policy is superseded.
+- `localization/ending_dialogue_ko.json` now records every pointer owner and
+  uses natural Korean spacing. Production validates source SHA-256, pointer
+  ownership, ordered `FFF7` dynamic names, `FFFD` page count, at most three
+  lines per page, and at most 24 visible cells per line. It leaves the original
+  Japanese record bytes intact, writes 23 variable-length Korean records from
+  `0x2D0000`, and updates only their verified owners. Current production is
+  checksum `E38B` with the established 861 custom glyphs.
+- `tools/build_ending_dialogue_probe_rom.py` joins the 23 current records into
+  an ignored `0x3D0000` stream. Only intermediate `FFFF` terminators become
+  `FFFD`; the final terminator remains. Its manifest proves 23 records and 83
+  pages. It redirects every visit descriptor to that stream, so it is renderer
+  evidence rather than proof of all natural visit-condition selections.
+- Standalone diagnostic checksum is `ACE4`; applying the unchanged adjacent
+  Scenario 27 Bernhardt probe produces `F852`. The stock route reached
+  preparation after 17 confirmations, command control after 22 opening pages,
+  and defeated Bernhardt on the first saved attack attempt.
+- `captures/run/f852_ending_dialogue_watch/240.png`, `320.png`, `400.png`, and
+  `420.png` visibly verify natural spacing across early and late records.
+  `470.png` renders Liana's final request, `475.png` renders
+  `넌 혼자가 아니야, 리아나. 그래, 이제 혼자가 아니야…`, `477.png`
+  reaches the stock forest ending, and `479.png` begins the expected SEGA
+  restart. All 83 pages completed without Japanese residue, clipping, blank
+  authored pages, premature termination, freeze, or unintended reset.
+- `tools/jp_direct_string_inventory.py` now treats ending visits like relocated
+  epilogues and credits: stale source bytes remain unmodified, but the exact
+  reachable `0x2Dxxxx` pointer is reported and counts as localized. Do not
+  restore the old assumption that the source interval itself must change.
+- Because Mega Drive checksums cover the new ending records, rebuilding older
+  diagnostics from production `E38B` changes only their identifiers: forced
+  class application `A7EE`, class transition `C6C6`, all-magic `B006`, stock
+  Magic Arrow `802C`, and summon `FAA8`. Their accepted AD01-derived runtime
+  captures remain historical evidence; the probe-byte tests lock the current
+  regenerated identifiers and still require each patch to touch only its
+  documented fields.
+- Final rebuild is production checksum `E38B` with 861 custom glyphs. The
+  direct-word inventory classifies all 783 candidates with zero unclassified,
+  the UI inventory retains 7 explicit gaps, and all 341 tests pass.

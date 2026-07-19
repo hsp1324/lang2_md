@@ -351,7 +351,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
             class_change_gap,
-            "all ending and credits UI outside known opening/ending dialogue patches",
+            "ending and credits UI variants outside the verified Scenario 27, "
+            "all-epilogue, ending-visit, and final-credit paths",
             "magic/summon targeting and result paths beyond the production-faithful "
             "Magic Arrow and diagnostic Attack/Elemental probes",
             "all equipment and shop variants beyond declared Scenario 1 paths",

@@ -121,6 +121,11 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             "production-faithful Magic Arrow and diagnostic Attack/Elemental probes",
             self.result["remaining_inventory_gaps"],
         )
+        self.assertIn(
+            "ending and credits UI variants outside the verified Scenario 27, "
+            "all-epilogue, ending-visit, and final-credit paths",
+            self.result["remaining_inventory_gaps"],
+        )
 
 
 if __name__ == "__main__":

@@ -807,6 +807,8 @@ SCENARIO1_EVENT_PAGE_PATCHES = {
 
 EVENT_DIALOGUE_TRANSLATIONS = Path("localization/event_dialogue_ko.json")
 ENDING_DIALOGUE_TRANSLATIONS = Path("localization/ending_dialogue_ko.json")
+ENDING_DIALOGUE_RELOC_BASE = 0x2D0000
+ENDING_DIALOGUE_RELOC_LIMIT = 0x2D8000
 EPILOGUE_DIALOGUE_TRANSLATIONS = Path("localization/epilogue_dialogue_ko.json")
 EPILOGUE_RECORD_INVENTORY = Path("localization/epilogue_records.json")
 EPILOGUE_RELOC_BASE = 0x2C0000
@@ -2075,13 +2077,22 @@ def load_ending_dialogue_translations(
         raise ValueError(f"ending translations in {path} have no record list")
     rows: list[dict[str, object]] = []
     seen_addresses: set[int] = set()
+    seen_references: set[int] = set()
     for entry in entries:
         row = dict(entry)
         address = int(str(row["address"]), 16)
+        pointer_reference = int(str(row["pointer_reference"]), 16)
         if address in seen_addresses:
             raise ValueError(f"duplicate ending dialogue address 0x{address:06X}")
+        if pointer_reference in seen_references:
+            raise ValueError(
+                f"duplicate ending dialogue pointer reference "
+                f"0x{pointer_reference:06X}"
+            )
         seen_addresses.add(address)
+        seen_references.add(pointer_reference)
         row["address_int"] = address
+        row["pointer_reference_int"] = pointer_reference
         rows.append(row)
     return rows
 
@@ -2272,12 +2283,14 @@ def direct_record_layout(
     raise ValueError(f"direct record at 0x{start:06X} has no terminator")
 
 
-def patch_ending_dialogue_records(
+def patch_relocated_ending_dialogue_records(
     data: bytearray,
     reference_data: bytes,
     glyph_by_char: dict[str, int],
     rows: list[dict[str, object]],
-) -> None:
+) -> int:
+    encoded: list[tuple[int, list[int]]] = []
+    required_bytes = 0
     for row in rows:
         start = int(row["address_int"])
         capacity, original_controls, original_page_breaks = direct_record_layout(
@@ -2303,12 +2316,37 @@ def patch_ending_dialogue_records(
                 f"ending page breaks changed at 0x{start:06X}: "
                 f"{translated_page_breaks} != {original_page_breaks}"
             )
-        if len(values) + 1 > capacity:
+        pointer_reference = int(row["pointer_reference_int"])
+        if be32(reference_data, pointer_reference) != start:
             raise ValueError(
-                f"ending record at 0x{start:06X} needs {len(values) + 1} words, "
-                f"only {capacity}: {text!r}"
+                f"Japanese ending pointer 0x{pointer_reference:06X} no longer "
+                f"targets 0x{start:06X}"
             )
-        write_word_list(data, start, values, capacity)
+        if be32(data, pointer_reference) != start:
+            raise ValueError(
+                f"working ending pointer 0x{pointer_reference:06X} changed "
+                "before relocation"
+            )
+        encoded.append((pointer_reference, values))
+        required_bytes += (len(values) + 1) * 2
+
+    relocation_end = ENDING_DIALOGUE_RELOC_BASE + required_bytes
+    if relocation_end > ENDING_DIALOGUE_RELOC_LIMIT:
+        raise ValueError(
+            f"ending dialogue relocation needs 0x{required_bytes:X} bytes, "
+            f"exceeds 0x{ENDING_DIALOGUE_RELOC_LIMIT - ENDING_DIALOGUE_RELOC_BASE:X}"
+        )
+    if (
+        data[ENDING_DIALOGUE_RELOC_BASE:relocation_end]
+        != b"\xFF" * required_bytes
+    ):
+        raise ValueError("ending dialogue relocation target is not empty")
+
+    cursor = ENDING_DIALOGUE_RELOC_BASE
+    for pointer_reference, values in encoded:
+        put32(data, pointer_reference, cursor)
+        cursor = write_word_list_exact(data, cursor, values)
+    return cursor
 
 
 def patch_relocated_epilogue_dialogue_records(
@@ -5648,7 +5686,7 @@ def main() -> None:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_scenario1_event_pages(data, glyph_by_char)
         patch_reviewed_event_pages(data, IN_ROM.read_bytes(), glyph_by_char, reviewed_event_rows)
-        patch_ending_dialogue_records(
+        patch_relocated_ending_dialogue_records(
             data, IN_ROM.read_bytes(), glyph_by_char, ending_dialogue_rows
         )
         patch_relocated_epilogue_dialogue_records(

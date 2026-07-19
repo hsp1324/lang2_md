@@ -4,6 +4,26 @@ The active Goal is full Korean localization of the Japanese Mega Drive ROM.
 Work is split into stages so each checkpoint can be built, tested, live-checked,
 documented, committed, and pushed independently.
 
+## Current Stage Status (2026-07-19)
+
+The broad Goal below remains the final acceptance contract. Day-to-day work must
+follow this status table so a resume does not repeat already accepted work.
+
+| Stage | Status | Resume rule |
+| --- | --- | --- |
+| 1. Inventory and coverage | Complete baseline | 783 direct candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
+| 2. Shared UI and global names | In progress | 111/112 declared patches differ intentionally; work only from the seven explicit gaps in `docs/ui_patch_surface_inventory.md`. |
+| 3. Scenarios 2-10 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
+| 4. Scenarios 11-20 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
+| 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
+| 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the seven UI gaps are resolved or explicitly accepted. |
+
+Accepted completed work is a regression contract, not a recurring task. Re-run
+it only when a later change shares its renderer/data ownership or an automated
+test fails. The authoritative machine-readable state is
+`localization/runtime_verification.json`; regenerate
+`docs/runtime_verification_inventory.md` after changing it.
+
 ## Stage 1: Inventory And Coverage
 
 - Identify every text pointer, glyph list, token stream, and compressed UI resource.

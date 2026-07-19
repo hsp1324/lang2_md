@@ -242,7 +242,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     for row in builder.load_ending_dialogue_translations():
         start = int(row["address_int"])
         capacity, _, _ = builder.direct_record_layout(japanese, start)
-        ending_intervals.append((start, start + capacity * 2, str(row["text"])))
+        relocated = be32(korean, int(row["pointer_reference_int"]))
+        ending_intervals.append(
+            (start, start + capacity * 2, str(row["text"]), relocated)
+        )
     epilogue_inventory_by_address = {
         int(row["address_int"]): row
         for row in builder.load_epilogue_record_inventory()
@@ -279,6 +282,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     for offset, original in scan_candidates(japanese):
         current = read_current_stream(korean, offset)
         ranged = None
+        ending_record = None
         epilogue_record = None
         credits_record = None
         if offset in owners:
@@ -305,10 +309,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             if interior:
                 ranged = ("pointer_table_record_interior", interior)
             else:
-                ending = next(
+                ending_record = next(
                     (
-                        (start, text)
-                        for start, end, text in ending_intervals
+                        (start, text, relocated)
+                        for start, end, text, relocated in ending_intervals
                         if start <= offset < end
                     ),
                     None,
@@ -329,10 +333,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     ),
                     None,
                 )
-                if ending:
+                if ending_record:
                     ranged = (
                         "declared_ending_translation",
-                        f"엔딩 번역 레코드 0x{ending[0]:06X}: {ending[1]}",
+                        f"엔딩 번역 레코드 0x{ending_record[0]:06X}: "
+                        f"{ending_record[1]}",
                     )
                 elif epilogue_record:
                     ranged = (
@@ -373,7 +378,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     else (
                         f"0x{epilogue_record[2]:06X}"
                         if epilogue_record
-                        else None
+                        else (
+                            f"0x{ending_record[2]:06X}"
+                            if ending_record
+                            else None
+                        )
                     )
                 ),
                 # Relocated records intentionally leave source bytes intact.
@@ -381,6 +390,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 # interval remains byte-identical.
                 "modified": (
                     current != original
+                    or ending_record is not None
                     or epilogue_record is not None
                     or credits_record is not None
                 ),

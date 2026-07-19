@@ -41,6 +41,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             evidence["captures"],
         )
 
+    def test_ending_visit_dialogue_evidence_is_renderer_diagnostic(self):
+        data = inventory.load_inventory()
+        evidence = {
+            row["surface"]: row for row in data["global_evidence"]
+        }["ending_visit_dialogue"]
+        self.assertEqual(evidence["checksum"], "F852")
+        self.assertEqual(evidence["based_on"], "E38B")
+        self.assertIn("83-page", evidence["note"])
+        self.assertIn("not all natural visit-condition selections", evidence["note"])
+        self.assertIn(
+            "captures/run/f852_ending_dialogue_watch/475.png",
+            evidence["captures"],
+        )
+
     def test_inventory_has_all_scenarios_and_surfaces(self):
         data = inventory.load_inventory()
         self.assertEqual(
@@ -53,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "AD01")
+        self.assertEqual(data["production_checksum"], "E38B")
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]

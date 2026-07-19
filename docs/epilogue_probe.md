@@ -174,6 +174,41 @@ illustration. It belongs to the fixed-count montage list at `0x0A6CEC`, not the
 Scenario 1 event stream. The surface is still marked `reviewed: false`, so this
 runtime ownership proof does not replace a Japanese-source wording review.
 
+## All Ending Visit Dialogue Pass
+
+The 23 ending-visit records at Japanese addresses `0x0954E2..0x096A84` are
+separate from the 90 outcome epilogues. Each record has one verified pointer
+owner in the stock descriptor block at `0x095412..0x0954DC`. Production now
+keeps every Japanese source record intact, relocates naturally spaced Korean
+records consecutively from `0x2D0000`, and updates those 23 owners. Ordered
+dynamic-name controls, source hashes, page counts, three-line pages, and
+24-cell lines remain build gates.
+
+`tools/build_ending_dialogue_probe_rom.py` constructs an ignored diagnostic
+stream at `0x3D0000`. It copies all 23 current relocated records and replaces
+only the first 22 terminators with page breaks. All 23 visit pointers then
+target the combined stream, so whichever visit condition the stock ending
+chooses first renders all 83 authored pages. The generated manifest maps each
+record to its exact page range. This proves renderer coverage, not all natural
+condition selections.
+
+```bash
+python3 scripts/build_korean_jp_probe.py
+python3 tools/build_ending_dialogue_probe_rom.py
+python3 tools/build_scenario27_ending_probe_rom.py \
+  --input-rom 'roms/builds/Langrisser II (Ending Dialogue Probe All).md' \
+  --output-rom 'roms/builds/Langrisser II (Scenario 27 All Ending Dialogues Probe).md'
+```
+
+Production checksum `E38B` generates standalone probe `ACE4` and combined
+Scenario 27 probe `F852`. The complete playback is retained in
+`captures/run/f852_ending_dialogue_watch/`. The combined stream starts before
+frame `240`; representative spaced pages are `240`, `320`, `400`, and `420`.
+Frame `470` renders the final Liana request, `475` renders the final
+`넌 혼자가 아니야, 리아나` page, and `477` reaches the normal forest ending.
+Frame `479` begins the expected SEGA restart. No Japanese residue, clipping,
+blank authored page, premature terminator, unintended reset, or freeze occurred.
+
 ## Scenario 27 Ending Probe
 
 `tools/build_scenario27_ending_probe_rom.py` can be applied after the selected

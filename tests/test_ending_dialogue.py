@@ -41,30 +41,48 @@ class EndingDialogueTests(unittest.TestCase):
             ROOT / builder.ENDING_DIALOGUE_TRANSLATIONS
         )
 
-    def test_all_fourteen_main_ending_records_are_present(self):
+    def translated_address(self, row: dict[str, object]) -> int:
+        return builder.be32(self.korean, int(row["pointer_reference_int"]))
+
+    def test_all_ending_visit_records_are_present(self):
         main_records = {int(row["english_record"]) for row in self.rows}
         self.assertEqual(main_records, set(range(1785, 1799)))
         self.assertEqual(len(self.rows), 23)
 
-    def test_source_hashes_and_capacities_are_valid(self):
+    def test_source_hashes_and_pointer_owners_are_valid(self):
         for row in self.rows:
             start = int(row["address_int"])
             capacity, _, _ = builder.direct_record_layout(self.japanese, start)
             source = self.japanese[start : start + capacity * 2]
             self.assertEqual(hashlib.sha256(source).hexdigest(), row["source_sha256"])
-            self.assertLessEqual(len(record_words(self.korean, start)), capacity)
+            pointer_reference = int(row["pointer_reference_int"])
+            self.assertEqual(builder.be32(self.japanese, pointer_reference), start)
+            self.assertEqual(self.korean[start : start + capacity * 2], source)
+
+    def test_all_records_are_uniquely_relocated_in_order(self):
+        addresses = [self.translated_address(row) for row in self.rows]
+        self.assertEqual(addresses, sorted(addresses))
+        self.assertEqual(len(addresses), len(set(addresses)))
+        self.assertTrue(
+            all(
+                builder.ENDING_DIALOGUE_RELOC_BASE
+                <= address
+                < builder.ENDING_DIALOGUE_RELOC_LIMIT
+                for address in addresses
+            )
+        )
 
     def test_dynamic_names_and_page_breaks_are_preserved(self):
         for row in self.rows:
             start = int(row["address_int"])
             original = record_words(self.japanese, start)
-            translated = record_words(self.korean, start)
+            translated = record_words(self.korean, self.translated_address(row))
             self.assertEqual(name_controls(translated), name_controls(original))
             self.assertEqual(translated.count(0xFFFD), original.count(0xFFFD))
 
     def test_translated_records_have_no_japanese_glyph_ids(self):
         for row in self.rows:
-            start = int(row["address_int"])
+            start = self.translated_address(row)
             words = record_words(self.korean, start)
             index = 0
             while index < len(words):
@@ -92,7 +110,7 @@ class EndingDialogueTests(unittest.TestCase):
         used = {
             word
             for row in self.rows
-            for word in record_words(self.korean, int(row["address_int"]))
+            for word in record_words(self.korean, self.translated_address(row))
         }
         self.assertTrue(any(0x7300 <= word <= 0x73FE for word in used))
 

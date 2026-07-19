@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "AD01",
+  "production_checksum": "E38B",
   "states": [
     "pending",
     "historical",
@@ -80,6 +80,22 @@
         "captures/run/c41e_summon_00_summoned_status.png"
       ],
       "note": "AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. This is renderer/runtime-application evidence, not natural summon ownership evidence."
+    },
+    {
+      "surface": "ending_visit_dialogue",
+      "state": "verified_probe",
+      "checksum": "F852",
+      "based_on": "E38B",
+      "captures": [
+        "captures/run/f852_ending_dialogue_watch/240.png",
+        "captures/run/f852_ending_dialogue_watch/320.png",
+        "captures/run/f852_ending_dialogue_watch/400.png",
+        "captures/run/f852_ending_dialogue_watch/420.png",
+        "captures/run/f852_ending_dialogue_watch/470.png",
+        "captures/run/f852_ending_dialogue_watch/475.png",
+        "captures/run/f852_ending_dialogue_watch/477.png"
+      ],
+      "note": "E38B relocates all 23 ending-visit records with natural Korean spacing. Diagnostic F852 redirects every stock visit selector pointer to one 83-page concatenated stream; Scenario 27 playback rendered every page through the stock visit renderer, reached the final Elwin/Liana page, then followed the normal forest ending and SEGA restart without clipping, Japanese residue, reset, freeze, or premature termination. This proves renderer coverage, not all natural visit-condition selections."
     },
     {
       "surface": "arrangement_warning",

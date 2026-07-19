@@ -160,6 +160,7 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
             rows["0x09600E"]["ownership"], "declared_ending_translation"
         )
         self.assertTrue(rows["0x09600E"]["modified"])
+        self.assertTrue(rows["0x09600E"]["relocated_pointer"].startswith("0x2D"))
 
     def test_character_epilogue_fragments_are_owned_by_full_translations(self):
         rows = {row["address"]: row for row in self.result["candidates"]}
