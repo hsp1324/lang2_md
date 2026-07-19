@@ -9,7 +9,9 @@ A translated static name does not imply that its candidate screen was live verif
 - Unique current/candidate combinations: 76
 - Live-verified transitions: 76
 - Live-verified unique combinations: 76
-- Application-verified transitions: 2
+- Application-verified transitions: 4
+- Natural application proofs: 2
+- Forced-context diagnostic application proofs: 2
 
 ## 1. 엘윈
 
@@ -17,7 +19,7 @@ Source pointer: `0x082562`
 
 | Offset | Current | Candidates | Screen | Apply |
 | --- | --- | --- | --- | --- |
-| `0x082562` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `05` 나이트 (ﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | yes |
+| `0x082562` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `05` 나이트 (ﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | natural |
 | `0x08256A` | `04` 로드 (ﾛｰﾄﾞ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | yes | pending |
 | `0x082572` | `05` 나이트 (ﾅｲﾄ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | yes | pending |
 | `0x08257A` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending |
@@ -85,7 +87,7 @@ Source pointer: `0x0826FA`
 
 | Offset | Current | Candidates | Screen | Apply |
 | --- | --- | --- | --- | --- |
-| `0x0826FA` | `03` 워록 (ｳｫｰﾛｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | yes |
+| `0x0826FA` | `03` 워록 (ｳｫｰﾛｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | natural |
 | `0x082702` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending |
 | `0x08270A` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | yes | pending |
 | `0x082712` | `04` 로드 (ﾛｰﾄﾞ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | yes | pending |
@@ -119,7 +121,7 @@ Source pointer: `0x0827B2`
 
 | Offset | Current | Candidates | Screen | Apply |
 | --- | --- | --- | --- | --- |
-| `0x0827B2` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `08` 힐러 (ﾋｰﾗｰ) | yes | pending |
+| `0x0827B2` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `08` 힐러 (ﾋｰﾗｰ) | yes | forced-context |
 | `0x0827BA` | `04` 로드 (ﾛｰﾄﾞ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) | yes | pending |
 | `0x0827C2` | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | pending |
 | `0x0827CA` | `08` 힐러 (ﾋｰﾗｰ) | `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | yes | pending |
@@ -170,7 +172,7 @@ Source pointer: `0x0828C2`
 
 | Offset | Current | Candidates | Screen | Apply |
 | --- | --- | --- | --- | --- |
-| `0x0828C2` | `03` 워록 (ｳｫｰﾛｯｸ) | `08` 힐러 (ﾋｰﾗｰ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | pending |
+| `0x0828C2` | `03` 워록 (ｳｫｰﾛｯｸ) | `08` 힐러 (ﾋｰﾗｰ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | forced-context |
 | `0x0828CA` | `08` 힐러 (ﾋｰﾗｰ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending |
 | `0x0828D2` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | pending | pending |
 | `0x0828DA` | `04` 로드 (ﾛｰﾄﾞ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | pending | pending |

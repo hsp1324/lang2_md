@@ -5542,3 +5542,38 @@ contains 57 safe syllables as documented below and in
   `captures/run/479f_s01_clear_save_current.png` proves `시나리오 2`, the
   unobstructed dynamic number, remaining empty rows, and `다음 시나리오`.
   The result-header inventory entry is now `live_verified: true`.
+
+### Stable Forced Class-Change Application Diagnostics (2026-07-19)
+
+- Stock handler disassembly resolves runtime record `+0x00` as current class
+  and `+0x01` as commander ID. The handler reads `+0x01` at `0x01483C`, indexes
+  the source pointer table at `0x08253A`, and reads `+0x00` at `0x014B46`.
+- The first forced Jessica `03 -> 08` probe, checksum `BDAC`, applied the class
+  but reset because runtime record 0 retained Jessica ID 10 in Scenario 1.
+  `captures/analysis/bdac_c10_s03_jessica_cleric_applied.gst` is rejected
+  failure analysis, not stable evidence. Do not repeat this no-restore design.
+- `tools/build_class_change_probe_rom.py --force-runtime-context` now patches
+  the post-confirm resume operand at `0x014D0C` to a callback at `0x3FF040`.
+  The callback restores the original runtime commander ID and resumes the stock
+  handler at `0x01480C`. Forced context is end-turn-only because the callback
+  and the screen-only Start probe share the diagnostic expansion slot.
+- Checksum `7164` stably applies Jessica's source `워록(03) -> 힐러(08)`
+  chain. `captures/analysis/7164_c10_s03_forced_apply_stable.gst` contains class
+  08, restored commander 01, LV1, EXP8; the stable map and Korean status screen
+  are `7164_c10_s03_post_apply_stable.png` and
+  `7164_c10_s03_applied_status.png` under `captures/run`.
+- `tools/capture_class_change_application.py` automates the clean Scenario 1
+  route, normal `Start > 턴 종료`, first-candidate application, 15-second
+  stability wait, GST field assertions, status capture, and BlastEm cleanup.
+  Its checksum `715F` Keith proof applies `파이터(01) -> 로드(04)` and retains
+  `captures/analysis/715f_c7_s01_forced_apply.gst` with class 04, restored
+  commander 01, LV1, EXP0. The corresponding reviewed frames use prefix
+  `captures/run/715f_c7_s01_forced_apply_`.
+- Forced-context results prove source-chain application through the stock
+  handler and stable return after identity restoration. They are not natural
+  active-commander or save-persistence proofs. The class-change inventory now
+  distinguishes two `natural` proofs from two `forced-context` proofs; the
+  remaining gap is natural commander coverage and normal save persistence.
+- The production rebuild remains checksum `AD01` with 861 custom glyphs. All
+  310 unit tests pass, including the forced wrapper, restore callback, GST
+  parser, generated inventory, and explicit evidence-type regressions.

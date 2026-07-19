@@ -111,8 +111,9 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(
             class_change_gaps,
             [
-                "runtime application verification for class-change paths "
-                "beyond the two verified Elwin and Hein transitions"
+                "natural active-commander and save-persistence verification "
+                "for class-change paths beyond the two natural Elwin and "
+                "Hein proofs"
             ],
         )
 

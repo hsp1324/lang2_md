@@ -52,7 +52,7 @@ Resource table `0x0B0000` index 1 uses entry
 ## Remaining Inventory Gaps
 
 - arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
-- runtime application verification for class-change paths beyond the two verified Elwin and Hein transitions
+- natural active-commander and save-persistence verification for class-change paths beyond the two natural Elwin and Hein proofs
 - all ending and credits UI outside known opening/ending dialogue patches
 - all magic/summon targeting and result prompts
 - all equipment and shop variants beyond declared Scenario 1 paths

@@ -30,6 +30,8 @@ PROBE_WRAPPER = 0x3FF000
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 START_MENU_PROBE_WRAPPER = 0x3FF040
+CLASS_CHANGE_RESUME_OPERAND = 0x014D0C
+POST_APPLY_WRAPPER = START_MENU_PROBE_WRAPPER
 RUNTIME_RECORD_BASE = 0xFFFF603C
 RUNTIME_RECORD_SIZE = 0x60
 PLAYER_RUNTIME_RECORD_COUNT = 10
@@ -50,14 +52,27 @@ def runtime_record_address(runtime_record_index: int) -> int:
 def wrapper_code(
     runtime_record_index: int = 0,
     expected_class: int = ELWIN_FIGHTER_CLASS,
+    forced_commander_id: int | None = None,
 ) -> bytes:
     if not 0 <= expected_class <= 0xFF:
         raise ValueError("expected class ID must fit one byte")
+    if forced_commander_id is not None and not 1 <= forced_commander_id <= 10:
+        raise ValueError("forced commander ID must be 1..10")
     record = runtime_record_address(runtime_record_index)
-    code = bytearray(bytes.fromhex("0C 39"))
-    code.extend(expected_class.to_bytes(2, "big"))
-    code.extend(record.to_bytes(4, "big"))
-    code.extend(bytes.fromhex("66 00 00 12"))
+    code = bytearray()
+    if forced_commander_id is None:
+        code.extend(bytes.fromhex("0C 39"))
+        code.extend(expected_class.to_bytes(2, "big"))
+        code.extend(record.to_bytes(4, "big"))
+        code.extend(bytes.fromhex("66 00 00 12"))
+    else:
+        for value, field_offset in (
+            (expected_class, ELWIN_CLASS_OFFSET),
+            (forced_commander_id, 0x01),
+        ):
+            code.extend(bytes.fromhex("13 FC"))
+            code.extend(value.to_bytes(2, "big"))
+            code.extend((record + field_offset).to_bytes(4, "big"))
     for value, field_offset in (
         (PROBE_LEVEL, ELWIN_LEVEL_OFFSET),
         (PROBE_EXPERIENCE, ELWIN_EXPERIENCE_OFFSET),
@@ -96,6 +111,20 @@ def start_menu_wrapper_code(
     return bytes(code)
 
 
+def post_apply_wrapper_code(
+    runtime_record_index: int,
+    restore_commander_id: int,
+) -> bytes:
+    if not 1 <= restore_commander_id <= 10:
+        raise ValueError("restore commander ID must be 1..10")
+    record = runtime_record_address(runtime_record_index)
+    code = bytearray(bytes.fromhex("13 FC"))
+    code.extend(restore_commander_id.to_bytes(2, "big"))
+    code.extend((record + 0x01).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9 00 01 48 0C"))
+    return bytes(code)
+
+
 def selected_transition(
     source: bytes, commander_id: int, current_class: int | None
 ) -> ClassTransition:
@@ -111,7 +140,13 @@ def patch_probe(
     current_class: int | None = None,
     runtime_record_index: int = 0,
     enable_start_menu_probe: bool = True,
+    force_runtime_context: bool = False,
+    restore_commander_id: int = 1,
 ) -> int:
+    if force_runtime_context and enable_start_menu_probe:
+        raise ValueError(
+            "forced runtime context requires the end-turn-only probe"
+        )
     transition = selected_transition(source, commander_id, current_class)
     expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
     offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
@@ -123,6 +158,7 @@ def patch_probe(
     code = wrapper_code(
         runtime_record_index=runtime_record_index,
         expected_class=transition.current_class,
+        forced_commander_id=commander_id if force_runtime_context else None,
     )
     wrapper_end = PROBE_WRAPPER + len(code)
     if probe[PROBE_WRAPPER:wrapper_end] != b"\xFF" * len(code):
@@ -131,7 +167,25 @@ def patch_probe(
     probe[offset : offset + 4] = PROBE_WRAPPER.to_bytes(4, "big")
     probe[PROBE_WRAPPER:wrapper_end] = code
 
-    if enable_start_menu_probe:
+    if force_runtime_context:
+        resume_expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
+        resume_offset = CLASS_CHANGE_RESUME_OPERAND
+        if source[resume_offset : resume_offset + 4] != resume_expected:
+            raise ValueError("Japanese class-change resume operand changed")
+        if probe[resume_offset : resume_offset + 4] != resume_expected:
+            raise ValueError("input class-change resume operand changed")
+        post_code = post_apply_wrapper_code(
+            runtime_record_index,
+            restore_commander_id,
+        )
+        post_end = POST_APPLY_WRAPPER + len(post_code)
+        if probe[POST_APPLY_WRAPPER:post_end] != b"\xFF" * len(post_code):
+            raise ValueError("input post-apply wrapper region is not empty")
+        probe[resume_offset : resume_offset + 4] = POST_APPLY_WRAPPER.to_bytes(
+            4, "big"
+        )
+        probe[POST_APPLY_WRAPPER:post_end] = post_code
+    elif enable_start_menu_probe:
         start_expected = START_MENU_ENTRY.to_bytes(4, "big")
         start_offset = START_MENU_ENTRY_OPERAND
         if source[start_offset : start_offset + 4] != start_expected:
@@ -185,6 +239,23 @@ def parse_args() -> argparse.Namespace:
         help="preserve the normal Start menu and install only the end-turn trigger",
     )
     parser.add_argument(
+        "--force-runtime-context",
+        action="store_true",
+        help=(
+            "diagnostic only: set the selected runtime record's current class "
+            "and commander ID before entering the stock end-turn handler"
+        ),
+    )
+    parser.add_argument(
+        "--restore-commander-id",
+        type=int,
+        default=1,
+        help=(
+            "commander ID restored after the forced class-change callback; "
+            "Scenario 1 runtime record 0 is Elwin (1)"
+        ),
+    )
+    parser.add_argument(
         "--current-class",
         type=lambda value: int(value, 0),
         help="source class ID; defaults to the commander's initial class",
@@ -204,6 +275,8 @@ def main() -> int:
         current_class=transition.current_class,
         runtime_record_index=args.runtime_record_index,
         enable_start_menu_probe=not args.end_turn_only,
+        force_runtime_context=args.force_runtime_context,
+        restore_commander_id=args.restore_commander_id,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -215,6 +288,11 @@ def main() -> int:
     candidates = "/".join(f"0x{value:02X}" for value in transition.candidates)
     if args.end_turn_only:
         print("normal Start menu preserved for end-turn application verification")
+        if args.force_runtime_context:
+            print(
+                "runtime context forced to commander "
+                f"{args.commander_id} before the stock handler"
+            )
     else:
         print(
             f"Start opens commander {args.commander_id} class "

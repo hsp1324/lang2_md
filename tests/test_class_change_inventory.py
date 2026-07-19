@@ -23,7 +23,14 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["unique_transition_count"], 76)
         self.assertEqual(self.result["live_verified_transition_count"], 76)
         self.assertEqual(self.result["live_verified_unique_transition_count"], 76)
-        self.assertEqual(self.result["application_verified_transition_count"], 2)
+        self.assertEqual(self.result["application_verified_transition_count"], 4)
+        self.assertEqual(
+            self.result["natural_application_verified_transition_count"], 2
+        )
+        self.assertEqual(
+            self.result["forced_context_application_verified_transition_count"],
+            2,
+        )
 
         verified = [
             (commander["id"], transition)
@@ -126,18 +133,45 @@ class ClassChangeInventoryTests(unittest.TestCase):
                 )
 
         self.assertTrue(by_key[(1, 0x01)]["application_verified"])
+        self.assertEqual(
+            by_key[(1, 0x01)]["application_evidence_type"], "natural"
+        )
         self.assertIn(
             "captures/analysis/eb00_class_change_turn2.gst",
             by_key[(1, 0x01)]["evidence"],
         )
         self.assertTrue(by_key[(5, 0x03)]["application_verified"])
+        self.assertEqual(
+            by_key[(5, 0x03)]["application_evidence_type"], "natural"
+        )
         self.assertIn(
             "captures/analysis/a8d7_c5_s03_after_turn.gst",
             by_key[(5, 0x03)]["evidence"],
         )
+        forced_evidence = {
+            (7, 0x01): "captures/analysis/715f_c7_s01_forced_apply.gst",
+            (10, 0x03): (
+                "captures/analysis/7164_c10_s03_forced_apply_stable.gst"
+            ),
+        }
+        for key, evidence in forced_evidence.items():
+            self.assertTrue(by_key[key]["application_verified"])
+            self.assertEqual(
+                by_key[key]["application_evidence_type"], "forced_context"
+            )
+            self.assertIn(evidence, by_key[key]["evidence"])
+
         for key, transition in by_key.items():
-            if key not in {(1, 0x01), (5, 0x03)}:
+            if key not in {
+                (1, 0x01),
+                (5, 0x03),
+                (7, 0x01),
+                (10, 0x03),
+            }:
                 self.assertFalse(transition["application_verified"])
+                self.assertEqual(
+                    transition["application_evidence_type"], "pending"
+                )
 
     def test_generated_files_match(self):
         self.assertEqual(

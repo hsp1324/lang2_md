@@ -86,9 +86,9 @@ not a controlled before/after application proof. The normal end-turn route is
 retained in `captures/analysis/eb00_class_change_turn2.gst` and proves the
 runtime change from class `0x01` to `0x04`, LV1, EXP0.
 
-Candidate sets beyond Fighter Elwin's first branch and Hein's ten-branch chain
-still require runtime coverage. Do not describe the entire class-change matrix
-as complete until those commander and branch combinations have been sampled.
+All 76 unique current/candidate combinations now have candidate-screen
+coverage. This does not prove natural application or save persistence for every
+commander and branch; those remain separate evidence categories below.
 
 ## Full Chain Inventory
 
@@ -201,7 +201,7 @@ uncovered rows. These Lester rows are screen-only evidence.
 Commander 7 (Keith) completed eight uncovered transitions under prefixes
 `8e91_c7_s01`, `8ea9_c7_s04`, `8eb2_c7_s06`, `8eb8_c7_s08`,
 `8ed3_c7_s0b`, `8edc_c7_s0d`, `8ed7_c7_s11`, and `8ebe_c7_s1e`.
-All 22 candidate frames were reviewed, including `클레릭`, the flying chain,
+All 22 candidate frames were reviewed, including `힐러`, the flying chain,
 and terminal High Master. Korean classes, stats, mercenaries, and magic lists
 are intact. Coverage is now 68 of 76 unique combinations with eight remaining;
 Aaron supplies five and Jessica the final three. These Keith rows are
@@ -221,8 +221,49 @@ candidate frames were reviewed through terminal Zveler. Korean classes, stats,
 mercenaries, and magic lists are intact. The inventory now has screen evidence
 for all 76 unique current/candidate combinations, and every commander reports
 zero pending unique rows. This closes candidate-screen coverage only. Runtime
-application remains proven for just two transitions, and normal scenario-clear
-save persistence remains pending.
+application has two natural proofs and two forced-context diagnostic proofs.
+Normal scenario-clear save persistence remains pending.
+
+## Forced-Context Application Diagnostics
+
+Disassembly of the stock level-up handler confirms the runtime record ownership
+needed to exercise a source chain without waiting for that commander to appear
+in a scenario. At `0x01483C` the handler reads runtime record `+0x01` as the
+commander ID, uses it to index the pointer table at `0x08253A`, and later reads
+the current class from record `+0x00` at `0x014B46`.
+
+The first forced Jessica experiment, checksum `BDAC`, set both fields before the
+normal end-turn handler and successfully produced class `0x08`. It then reset
+because Scenario 1 runtime record 0 still identified Jessica after the handler
+returned. Keep `captures/analysis/bdac_c10_s03_jessica_cleric_applied.gst` only
+as rejected failure analysis; it is not stable application evidence.
+
+`tools/build_class_change_probe_rom.py --force-runtime-context` now redirects
+the post-confirm resume operand at `0x014D0C` through a small callback. The
+callback restores the original Scenario 1 commander ID and resumes the stock
+handler at `0x01480C`. `tools/capture_class_change_application.py` automates a
+clean boot, normal `Start > 턴 종료`, first-candidate confirmation, a 15-second
+stability wait, GST field assertions, status-screen capture, and BlastEm
+termination in `finally`.
+
+Two controlled proofs are accepted:
+
+- Jessica source chain `워록(03) -> 힐러(08)`, checksum `7164`, is retained in
+  `captures/analysis/7164_c10_s03_forced_apply_stable.gst`. The GST contains
+  class `08`, restored commander ID `01`, LV1, and EXP8. The stable map and
+  status screen are `captures/run/7164_c10_s03_post_apply_stable.png` and
+  `captures/run/7164_c10_s03_applied_status.png`.
+- Keith source chain `파이터(01) -> 로드(04)`, checksum `715F`, is retained in
+  `captures/analysis/715f_c7_s01_forced_apply.gst`. The GST contains class
+  `04`, restored commander ID `01`, LV1, and EXP0. The trigger, candidate,
+  stable map, and status frames use prefix
+  `captures/run/715f_c7_s01_forced_apply_`.
+
+These prove that the selected source-owned chain is applied by the stock
+end-turn handler and that the restored Scenario 1 runtime remains stable. They
+do not replace natural active-commander or normal save-persistence evidence.
+The generated inventory therefore reports `natural` and `forced-context`
+application types separately.
 
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not

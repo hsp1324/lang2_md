@@ -66,8 +66,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         )
     else:
         class_change_gap = (
-            "runtime application verification for class-change paths beyond "
-            "the two verified Elwin and Hein transitions"
+            "natural active-commander and save-persistence verification for "
+            "class-change paths beyond the two natural Elwin and Hein proofs"
         )
     rows: list[dict[str, object]] = []
     add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)

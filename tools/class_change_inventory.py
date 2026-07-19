@@ -279,6 +279,11 @@ LIVE_EVIDENCE = {
         "captures/run/8e91_c7_s01_candidate1.png",
         "captures/run/8e91_c7_s01_candidate2.png",
         "captures/run/8e91_c7_s01_candidate3.png",
+        "captures/run/715f_c7_s01_forced_apply_trigger.png",
+        "captures/run/715f_c7_s01_forced_apply_candidate1.png",
+        "captures/run/715f_c7_s01_forced_apply_stable_map.png",
+        "captures/run/715f_c7_s01_forced_apply_applied_status.png",
+        "captures/analysis/715f_c7_s01_forced_apply.gst",
     ],
     (7, 0x04): [
         "captures/run/8ea9_c7_s04_trigger.png",
@@ -410,6 +415,10 @@ LIVE_EVIDENCE = {
         "captures/run/8e99_c10_s03_candidate1.png",
         "captures/run/8e99_c10_s03_candidate2.png",
         "captures/run/8e99_c10_s03_candidate3.png",
+        "captures/run/7164_c10_s03_applied_initial.png",
+        "captures/run/7164_c10_s03_post_apply_stable.png",
+        "captures/run/7164_c10_s03_applied_status.png",
+        "captures/analysis/7164_c10_s03_forced_apply_stable.gst",
     ],
     (10, 0x08): [
         "captures/run/8ebf_c10_s08_trigger.png",
@@ -422,7 +431,11 @@ LIVE_EVIDENCE = {
         "captures/run/8eb9_c10_s14_candidate1.png",
     ],
 }
-APPLICATION_VERIFIED = {(1, 0x01), (5, 0x03)}
+NATURAL_APPLICATION_VERIFIED = {(1, 0x01), (5, 0x03)}
+FORCED_CONTEXT_APPLICATION_VERIFIED = {(7, 0x01), (10, 0x03)}
+APPLICATION_VERIFIED = (
+    NATURAL_APPLICATION_VERIFIED | FORCED_CONTEXT_APPLICATION_VERIFIED
+)
 
 
 def transition_signature(
@@ -465,6 +478,12 @@ def inventory(source: bytes) -> dict[str, object]:
             key = (commander_id, transition.current_class)
             live_verified = key in LIVE_EVIDENCE
             application_verified = key in APPLICATION_VERIFIED
+            if key in NATURAL_APPLICATION_VERIFIED:
+                application_evidence_type = "natural"
+            elif key in FORCED_CONTEXT_APPLICATION_VERIFIED:
+                application_evidence_type = "forced_context"
+            else:
+                application_evidence_type = "pending"
             transitions.append(
                 {
                     "index": index,
@@ -473,6 +492,7 @@ def inventory(source: bytes) -> dict[str, object]:
                     "candidates": candidates,
                     "live_verified": live_verified,
                     "application_verified": application_verified,
+                    "application_evidence_type": application_evidence_type,
                     "evidence": LIVE_EVIDENCE.get(key, []),
                 }
             )
@@ -506,6 +526,16 @@ def inventory(source: bytes) -> dict[str, object]:
             for commander in commanders
             for transition in commander["transitions"]
         ),
+        "natural_application_verified_transition_count": sum(
+            transition["application_evidence_type"] == "natural"
+            for commander in commanders
+            for transition in commander["transitions"]
+        ),
+        "forced_context_application_verified_transition_count": sum(
+            transition["application_evidence_type"] == "forced_context"
+            for commander in commanders
+            for transition in commander["transitions"]
+        ),
         "commanders": commanders,
     }
 
@@ -525,6 +555,10 @@ def markdown_report(result: dict[str, object]) -> str:
         "- Live-verified unique combinations: "
         f"{result['live_verified_unique_transition_count']}",
         f"- Application-verified transitions: {result['application_verified_transition_count']}",
+        "- Natural application proofs: "
+        f"{result['natural_application_verified_transition_count']}",
+        "- Forced-context diagnostic application proofs: "
+        f"{result['forced_context_application_verified_transition_count']}",
         "",
     ]
     for commander in result["commanders"]:
@@ -546,7 +580,7 @@ def markdown_report(result: dict[str, object]) -> str:
                 for candidate in transition["candidates"]
             )
             live = "yes" if transition["live_verified"] else "pending"
-            applied = "yes" if transition["application_verified"] else "pending"
+            applied = transition["application_evidence_type"].replace("_", "-")
             lines.append(
                 f"| `{transition['offset']}` | {current_label} | "
                 f"{candidate_label} | {live} | {applied} |"

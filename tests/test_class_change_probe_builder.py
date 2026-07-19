@@ -69,6 +69,62 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
         self.assertIn(bytes.fromhex("13 FC 00 10 FF FF 60 CB"), code)
         self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
 
+    def test_forced_wrapper_sets_source_commander_and_current_class(self):
+        code = probe_builder.wrapper_code(
+            runtime_record_index=0,
+            expected_class=0x03,
+            forced_commander_id=10,
+        )
+        self.assertEqual(code[:8], bytes.fromhex("13 FC 00 03 FF FF 60 3C"))
+        self.assertEqual(code[8:16], bytes.fromhex("13 FC 00 0A FF FF 60 3D"))
+        self.assertNotIn(bytes.fromhex("66 00 00 12"), code)
+        self.assertIn(bytes.fromhex("13 FC 00 09 FF FF 60 6A"), code)
+        self.assertIn(bytes.fromhex("13 FC 00 10 FF FF 60 6B"), code)
+        self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
+
+    def test_forced_wrapper_rejects_invalid_commander(self):
+        for commander_id in (0, 11):
+            with self.subTest(commander_id=commander_id):
+                with self.assertRaisesRegex(ValueError, "forced commander ID"):
+                    probe_builder.wrapper_code(
+                        expected_class=0x03,
+                        forced_commander_id=commander_id,
+                    )
+
+    def test_post_apply_wrapper_restores_commander_and_resumes_stock_handler(self):
+        code = probe_builder.post_apply_wrapper_code(0, 1)
+        self.assertEqual(code[:8], bytes.fromhex("13 FC 00 01 FF FF 60 3D"))
+        self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
+
+        probe = bytearray(self.production)
+        probe_builder.patch_probe(
+            probe,
+            self.source,
+            commander_id=10,
+            current_class=0x03,
+            runtime_record_index=0,
+            enable_start_menu_probe=False,
+            force_runtime_context=True,
+            restore_commander_id=1,
+        )
+        resume = probe_builder.CLASS_CHANGE_RESUME_OPERAND
+        self.assertEqual(
+            probe[resume : resume + 4],
+            probe_builder.POST_APPLY_WRAPPER.to_bytes(4, "big"),
+        )
+        wrapper = probe_builder.POST_APPLY_WRAPPER
+        self.assertEqual(probe[wrapper : wrapper + len(code)], code)
+
+    def test_forced_context_rejects_start_menu_probe_collision(self):
+        with self.assertRaisesRegex(ValueError, "end-turn-only"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                commander_id=10,
+                current_class=0x03,
+                force_runtime_context=True,
+            )
+
     def test_probe_rejects_unexpected_input_operand(self):
         probe = bytearray(self.production)
         probe[probe_builder.END_TURN_LEVEL_UP_ENTRY_OPERAND] ^= 0xFF
