@@ -116,6 +116,11 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
                 "Hein proofs"
             ],
         )
+        self.assertIn(
+            "magic/summon targeting and result paths beyond the "
+            "production-faithful Magic Arrow and diagnostic Attack probes",
+            self.result["remaining_inventory_gaps"],
+        )
 
 
 if __name__ == "__main__":

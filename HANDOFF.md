@@ -5577,3 +5577,42 @@ contains 57 safe syllables as documented below and in
 - The production rebuild remains checksum `AD01` with 861 custom glyphs. All
   310 unit tests pass, including the forced wrapper, restore callback, GST
   parser, generated inventory, and explicit evidence-type regressions.
+
+### Magic Targeting And Result Automation (2026-07-19)
+
+- Disassembly confirms the REV00 all-magic debug branch at `0x021228` and the
+  diagnostic MP-selection branch at `0x02141E`. The ignored all-magic probe
+  validates the Japanese bytes before replacing `67000008` with four NOP bytes
+  and `660000D2` with `600000D2`. Production `AD01` retains both stock branches.
+- `tools/build_magic_application_probe_rom.py` can independently move unguarded
+  Bald beside Hein. With `--stock-magic`, checksum `49A2` changes only the
+  already documented Scenario 1 Bald fields and Mega Drive checksum; it leaves
+  magic ownership and MP code stock. Without that option, checksum `797C`
+  additionally exposes all 22 IDs for renderer diagnostics.
+- `tools/capture_magic_application.py` uses the clean `battle-command` route,
+  reaches Hein without crossing the moved Bald, sends repeated directions as
+  separately reactivated window events, captures selection and both target
+  confirmations, and reads Hein's current/max MP from runtime record 1 offsets
+  `+0x38/+0x39` in GST. It advances inserted event dialogue one page at a time
+  only while MP is unchanged, then closes any post-effect portrait dialogue and
+  always terminates BlastEm.
+- Production-faithful `49A2` proves `매직애로우`: all three inserted combat
+  pages (`헤인`, `리아나`, `발드`) and Bald's post-hit line are Korean, Bald
+  falls from HP 10 to 9, Hein spends MP `12 -> 11`, and the stable frame returns
+  to the map. Accepted captures use prefix `captures/run/49a2_magic_00_`; the
+  authoritative state is `captures/analysis/49a2_magic_00.gst`.
+- Diagnostic `797C` proves the separate support spell `어택`, including page-3
+  list selection, target confirmation, effect graphics, stable map return, and
+  Hein MP `12 -> 10`. Captures use prefix `captures/run/797c_magic_16_`; state
+  is `captures/analysis/797c_magic_16.gst`. This proves shared targeting/result
+  rendering but not that Hein naturally owns Attack.
+- A first `797C` Magic Arrow run appeared to leave a blank blue window after
+  the hit. Repeating the path with stock branches in `49A2` rendered Bald's
+  final line normally and closed cleanly. Treat the blank forced-branch frame
+  as rejected diagnostic divergence, not a production translation defect, and
+  do not patch the Scenario 1 dialogue record to compensate for it.
+- Remaining coverage is every other magic targeting/result shape and all summon
+  application/result paths. The complete 22-magic and eight-summon name lists
+  remain separately verified by the earlier EA22/D177 inventory captures.
+- Rebuilding production after these diagnostic-only additions retains checksum
+  `AD01` and 861 custom glyphs. The complete suite passes all 326 tests.

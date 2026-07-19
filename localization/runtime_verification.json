@@ -46,6 +46,27 @@
       "note": "All 22 magic rows use production EA22; D177 only forces the summon command so the original debug path can enumerate all eight summons."
     },
     {
+      "surface": "magic_targeting_results",
+      "state": "verified_probe",
+      "checksum": "49A2/797C",
+      "based_on": "AD01",
+      "captures": [
+        "captures/run/49a2_magic_00_selected.png",
+        "captures/run/49a2_magic_00_target.png",
+        "captures/run/49a2_magic_00_event_01.png",
+        "captures/run/49a2_magic_00_event_02.png",
+        "captures/run/49a2_magic_00_event_03.png",
+        "captures/run/49a2_magic_00_result.png",
+        "captures/run/49a2_magic_00_post_event_01.png",
+        "captures/run/49a2_magic_00_result_stable.png",
+        "captures/run/797c_magic_16_selected.png",
+        "captures/run/797c_magic_16_target.png",
+        "captures/run/797c_magic_16_result.png",
+        "captures/run/797c_magic_16_result_stable.png"
+      ],
+      "note": "AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10; it is not production ownership evidence."
+    },
+    {
       "surface": "arrangement_warning",
       "state": "verified_current",
       "checksum": "544B",

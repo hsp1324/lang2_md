@@ -8,6 +8,25 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class RuntimeVerificationInventoryTests(unittest.TestCase):
+    def test_magic_application_evidence_separates_stock_and_forced_paths(self):
+        data = inventory.load_inventory()
+        evidence = {
+            row["surface"]: row for row in data["global_evidence"]
+        }["magic_targeting_results"]
+        self.assertEqual(evidence["state"], "verified_probe")
+        self.assertEqual(evidence["checksum"], "49A2/797C")
+        self.assertEqual(evidence["based_on"], "AD01")
+        self.assertIn("preserves stock magic", evidence["note"])
+        self.assertIn("not production ownership evidence", evidence["note"])
+        self.assertIn(
+            "captures/run/49a2_magic_00_result_stable.png",
+            evidence["captures"],
+        )
+        self.assertIn(
+            "captures/run/797c_magic_16_result_stable.png",
+            evidence["captures"],
+        )
+
     def test_inventory_has_all_scenarios_and_surfaces(self):
         data = inventory.load_inventory()
         self.assertEqual(

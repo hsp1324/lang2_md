@@ -352,7 +352,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
             class_change_gap,
             "all ending and credits UI outside known opening/ending dialogue patches",
-            "all magic/summon targeting and result prompts",
+            "magic/summon targeting and result paths beyond the production-faithful "
+            "Magic Arrow and diagnostic Attack probes",
             "all equipment and shop variants beyond declared Scenario 1 paths",
             "ownership and purpose of 428 compressed resources beyond byte-font resource index 1",
             "all executable-embedded strings not yet represented by a builder patch declaration",

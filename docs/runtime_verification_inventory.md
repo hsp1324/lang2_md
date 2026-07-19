@@ -1051,5 +1051,18 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/ea22_debug_magic_page4.png`
   - `captures/run/d177_debug_summon_page1.png`
   - `captures/run/d177_debug_summon_page2.png`
+- `magic_targeting_results`: probe checksum `49A2/797C` (base `AD01`). AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10; it is not production ownership evidence.
+  - `captures/run/49a2_magic_00_selected.png`
+  - `captures/run/49a2_magic_00_target.png`
+  - `captures/run/49a2_magic_00_event_01.png`
+  - `captures/run/49a2_magic_00_event_02.png`
+  - `captures/run/49a2_magic_00_event_03.png`
+  - `captures/run/49a2_magic_00_result.png`
+  - `captures/run/49a2_magic_00_post_event_01.png`
+  - `captures/run/49a2_magic_00_result_stable.png`
+  - `captures/run/797c_magic_16_selected.png`
+  - `captures/run/797c_magic_16_target.png`
+  - `captures/run/797c_magic_16_result.png`
+  - `captures/run/797c_magic_16_result_stable.png`
 - `arrangement_warning`: current checksum `544B` (base `544B`). The shared incomplete-deployment warning uses its screen-local glyph list and visibly renders 지휘관 배치 미완료입니다 with readable spacing.
   - `captures/run/544b_s23_arrange_warning.png`
