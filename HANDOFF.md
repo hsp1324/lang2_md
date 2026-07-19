@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 5993
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 367 passing
+unit tests: 368 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
@@ -128,6 +128,13 @@ Closed all-item shop checkpoint:
   never requests `_NET_ACTIVE_WINDOW` or keyboard focus. While the user is
   gaming, do not run an XTest/click-window sequence because that path still
   requires focus by design.
+- WSLg can return either an all-black X11 image or an enlarged center fragment
+  for the live SDL/OpenGL client even though the window is visible.
+  `capture_blastem_window.py` therefore prefers a focus-free Windows DWM
+  `CopyFromScreen` capture on WSL and falls back to X11 elsewhere. The live
+  320x240 proof is
+  `captures/run/windows_client_exact.png`; do not replace this with a click or
+  foreground-window workaround.
 
 ## Why The Work Moved From English ROM To Japanese ROM
 
@@ -208,7 +215,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `5993` and passes all 367 tests. It includes
+The current source builds checksum `5993` and passes all 368 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,

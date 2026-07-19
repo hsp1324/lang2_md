@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 import struct
 import subprocess
 from pathlib import Path
@@ -125,18 +126,87 @@ def capture_with_xlib(window_id: int) -> Image.Image:
     return Image.frombytes("RGB", (geom.width, geom.height), image.data, "raw", "BGRX")
 
 
+def windows_capture_script(
+    output: str,
+    client_x: int,
+    client_y: int,
+    width: int,
+    height: int,
+) -> str:
+    escaped_output = output.replace("'", "''")
+    return f'''Add-Type -AssemblyName System.Drawing
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public static class DwmCapture {{
+ [StructLayout(LayoutKind.Sequential)]
+ public struct RECT {{ public int Left, Top, Right, Bottom; }}
+ [DllImport("dwmapi.dll")]
+ public static extern int DwmGetWindowAttribute(
+  IntPtr window, int attribute, out RECT rect, int size
+ );
+}}
+"@
+$process = Get-Process |
+ Where-Object {{ $_.MainWindowTitle -match 'BlastEm' }} |
+ Select-Object -First 1
+if (-not $process) {{ throw 'BlastEm window not found' }}
+$rect = New-Object DwmCapture+RECT
+$result = [DwmCapture]::DwmGetWindowAttribute(
+ $process.MainWindowHandle, 9, [ref]$rect, 16
+)
+if ($result -ne 0) {{ throw "DwmGetWindowAttribute failed: $result" }}
+$bitmap = New-Object System.Drawing.Bitmap {width},{height}
+$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+$graphics.CopyFromScreen(
+ ($rect.Left + {client_x}), ($rect.Top + {client_y}), 0, 0, $bitmap.Size
+)
+$bitmap.Save('{escaped_output}', [System.Drawing.Imaging.ImageFormat]::Png)
+$graphics.Dispose()
+$bitmap.Dispose()
+'''
+
+
+def capture_with_windows_desktop(window_id: int, output: Path) -> Image.Image:
+    if shutil.which("powershell.exe") is None or shutil.which("wslpath") is None:
+        raise RuntimeError("Windows desktop capture is unavailable")
+    display = Display()
+    window = display.create_resource_object("window", window_id)
+    geometry = window.get_geometry()
+    windows_output = subprocess.check_output(
+        ["wslpath", "-w", str(output.resolve())], text=True
+    ).strip()
+    script = windows_capture_script(
+        windows_output,
+        geometry.x,
+        geometry.y,
+        geometry.width,
+        geometry.height,
+    )
+    subprocess.check_call(
+        ["powershell.exe", "-NoProfile", "-Command", script]
+    )
+    with Image.open(output) as image:
+        return image.convert("RGB")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
 
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     window = find_blastem_window()
     try:
-        xwd = subprocess.check_output(["xwd", "-silent", "-id", f"{window:#x}"])
-        img = read_xwd(xwd)
+        img = capture_with_windows_desktop(window, args.output)
     except (FileNotFoundError, subprocess.CalledProcessError, RuntimeError):
-        img = capture_with_xlib(window)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            xwd = subprocess.check_output(
+                ["xwd", "-silent", "-id", f"{window:#x}"]
+            )
+            img = read_xwd(xwd)
+        except (FileNotFoundError, subprocess.CalledProcessError, RuntimeError):
+            img = capture_with_xlib(window)
     img.save(args.output)
     print(args.output)
     return 0
