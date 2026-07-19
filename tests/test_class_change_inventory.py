@@ -21,7 +21,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["commander_count"], 10)
         self.assertEqual(self.result["transition_count"], 100)
         self.assertEqual(self.result["unique_transition_count"], 76)
-        self.assertEqual(self.result["live_verified_transition_count"], 3)
+        self.assertEqual(self.result["live_verified_transition_count"], 4)
         self.assertEqual(self.result["application_verified_transition_count"], 2)
 
         verified = [
@@ -30,7 +30,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             for transition in commander["transitions"]
             if transition["live_verified"]
         ]
-        self.assertEqual(len(verified), 3)
+        self.assertEqual(len(verified), 4)
         commander_id, transition = verified[0]
         self.assertEqual(commander_id, 1)
         self.assertEqual(transition["current"]["id"], 1)
@@ -58,6 +58,15 @@ class ClassChangeInventoryTests(unittest.TestCase):
         )
 
         commander_id, transition = verified[2]
+        self.assertEqual(commander_id, 5)
+        self.assertEqual(transition["current"]["id"], 0x0A)
+        self.assertEqual(
+            [candidate["id"] for candidate in transition["candidates"]],
+            [0x11, 0x12, 0x13],
+        )
+        self.assertFalse(transition["application_verified"])
+
+        commander_id, transition = verified[3]
         self.assertEqual(commander_id, 9)
         self.assertEqual(transition["current"]["id"], 0x10)
         self.assertEqual(

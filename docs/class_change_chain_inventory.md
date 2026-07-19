@@ -7,7 +7,7 @@ A translated static name does not imply that its candidate screen was live verif
 - Commanders: 10
 - Source transitions: 100
 - Unique current/candidate combinations: 76
-- Live-verified transitions: 3
+- Live-verified transitions: 4
 - Application-verified transitions: 2
 
 ## 1. 엘윈
@@ -85,7 +85,7 @@ Source pointer: `0x0826FA`
 | Offset | Current | Candidates | Screen | Apply |
 | --- | --- | --- | --- | --- |
 | `0x0826FA` | `03` 워록 (ｳｫｰﾛｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | yes |
-| `0x082702` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | pending | pending |
+| `0x082702` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending |
 | `0x08270A` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | pending | pending |
 | `0x082712` | `04` 로드 (ﾛｰﾄﾞ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | pending | pending |
 | `0x08271A` | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | pending | pending |

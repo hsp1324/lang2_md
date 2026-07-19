@@ -3,7 +3,7 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 3,
+  "live_verified_transition_count": 4,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -1225,9 +1225,14 @@
               "ko": "메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/analysis/903c_c5_s0a_trigger.png",
+            "captures/run/903c_c5_s0a_candidate1.png",
+            "captures/run/903c_c5_s0a_candidate2.png",
+            "captures/run/903c_c5_s0a_candidate3.png"
+          ]
         },
         {
           "index": 2,

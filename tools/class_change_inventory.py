@@ -38,6 +38,12 @@ LIVE_EVIDENCE = {
         "captures/run/a8d7_c5_s03_hein_shaman_applied.png",
         "captures/analysis/a8d7_c5_s03_after_turn.gst",
     ],
+    (5, 0x0A): [
+        "captures/analysis/903c_c5_s0a_trigger.png",
+        "captures/run/903c_c5_s0a_candidate1.png",
+        "captures/run/903c_c5_s0a_candidate2.png",
+        "captures/run/903c_c5_s0a_candidate3.png",
+    ],
     (9, 0x10): [
         "captures/run/d221_c9_s10_candidate1.png",
         "captures/run/d221_c9_s10_candidate2.png",

@@ -5378,6 +5378,13 @@ contains 57 safe syllables as documented below and in
   `8EF4` and `A8D7` boots above are accepted evidence. Production ROM content
   was not modified by either ignored diagnostic ROM. Rebuilding production
   retains checksum `AD01`, and all 289 unit tests pass.
+- A fresh checksum `903C` Start-display probe covers Hein's next source
+  transition, `샤먼(0x0A) -> 프리스트(0x11) / 비숍(0x12) / 메이지(0x13)`.
+  `captures/analysis/903c_c5_s0a_trigger.png` and
+  `captures/run/903c_c5_s0a_candidate1.png` through `candidate3.png` verify the
+  long/short titles, all rows, stats, mercenaries, and Korean magic lists
+  without clipping or Japanese residue. This row is `live_verified` but not
+  `application_verified`; do not infer application from the Start probe.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 
