@@ -72,6 +72,6 @@ Resource table `0x0B0000` index 1 uses entry
 - ending and credits UI variants outside the verified Scenario 27, all-epilogue, ending-visit, and final-credit paths
 - magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack/Elemental probes
 - ownership and purpose of 427 compressed resources beyond byte-font resource index 1 and item-icon resource index 391
-- non-pointer byte sequences outside the conservative maximal half-width/uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories
+- non-pointer byte sequences shorter than the conservative three-signal half-width/uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories
 
 Detailed declarations are in `localization/ui_patch_surfaces.json`.

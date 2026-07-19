@@ -53,7 +53,7 @@ def scan_runs(
 
 def halfwidth_runs(data: bytes) -> list[tuple[int, int, bytes]]:
     allowed = {0x20, *range(0xA1, 0xE0)}
-    return scan_runs(data, allowed, 4, lambda value: value != 0x20, 32)
+    return scan_runs(data, allowed, 3, lambda value: value != 0x20, 32)
 
 
 def ascii_runs(data: bytes) -> list[tuple[int, int, bytes]]:
@@ -69,7 +69,7 @@ def ascii_runs(data: bytes) -> list[tuple[int, int, bytes]]:
     return scan_runs(
         data,
         allowed,
-        4,
+        3,
         lambda value: ord("A") <= value <= ord("Z"),
         40,
     )
@@ -86,6 +86,8 @@ def classify_halfwidth(
 ) -> tuple[str, str]:
     if overlaps(start, end, global_intervals):
         return "global_table_string", "owned by class, item, or commander-name table"
+    if 0x060000 <= start < 0x061000:
+        return "structured_game_data", "item stat, effect, or graphics data"
     if start == builder.INLINE_DISCARD_PROMPT_SOURCE:
         return "localized_inline_ui", "fixed 13-cell item discard/replacement prompt"
     if 0x040000 <= start < 0x050000:
@@ -100,6 +102,10 @@ def classify_halfwidth(
         return "internal_secret_name_comparison", "reserved Langrisser/Alhazard name comparison"
     if start in (0x0A50F5, 0x0A5190):
         return "structured_character_resource", "name-entry character/index resource"
+    if start == 0x0A4381:
+        return "structured_character_resource", "character-index table terminator"
+    if start == 0x0A44F3:
+        return "title_layout_data", "numeric title-layout table terminator"
     if start >= 0x0B0000:
         return "compressed_resource_data", "compressed-resource table or payload"
     return "unclassified", "requires manual ownership review"
@@ -112,6 +118,8 @@ def classify_ascii(start: int) -> tuple[str, str]:
         return "internal_controller_signature", "PADR controller signature"
     if start == 0x01808C:
         return "retained_compact_english_ui", "PAGE label; compact English is allowed"
+    if start < 0x040000:
+        return "executable_code_or_table", "68000 executable code or numeric table"
     if 0x080000 <= start < 0x090000:
         return "glyph_or_tile_data_false_positive", "packed glyph/tile data"
     if start in (0x0A18DF, 0x0A18EB, 0x0A18F7):
@@ -120,6 +128,8 @@ def classify_ascii(start: int) -> tuple[str, str]:
         return "retained_title_record", "NCS CORP. / PUSH START BUTTON source record"
     if start == 0x0A61A2:
         return "structured_character_resource", "character/index resource"
+    if 0x060000 <= start < 0x061000:
+        return "structured_game_data", "item stat, effect, or graphics data"
     if start >= 0x0B0000:
         return "compressed_resource_data", "compressed-resource table or payload"
     return "unclassified", "requires manual ownership review"
@@ -176,7 +186,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     return {
         "warning": (
             "This conservative scan covers maximal half-width-Japanese and uppercase-ASCII "
-            "FF-terminated runs. It does not claim arbitrary executable bytes are text."
+            "FF-terminated runs with at least three signal characters. It does not claim "
+            "arbitrary executable bytes are text."
         ),
         "source_sha256": hashlib.sha256(japanese).hexdigest(),
         "halfwidth_candidate_count": sum(row["kind"] == "halfwidth" for row in candidates),

@@ -25,10 +25,10 @@ Current reproducible baseline:
 current production build checksum: 3C57
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 865 (0x7000..0x7361)
-unit tests: 409 passing
+unit tests: 410 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
-conservative inline-byte candidates: 449 classified, 0 unclassified
+conservative inline-byte candidates: 646 classified, 0 unclassified
 declared UI patches: 127/128 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
@@ -76,7 +76,7 @@ glyph bank, or visible screen:
   `0x0A3B9D` is an internal name-entry comparison, not visible UI. Full source
   bytes, references, and reviewed false positives are in
   `localization/direct_byte_string_candidates.json`.
-- the independent inline scan classifies 449 conservative `FF`-terminated runs
+- the independent inline scan classifies 646 conservative `FF`-terminated runs
   with zero unknowns. It proves the fixed 13-cell `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` prompt at
   `0x01807E` and a separate 77-row hidden sound-test table at
   `0x05E040..0x05E50F`. Production preserves every sound ID, redirects only the
@@ -6016,3 +6016,21 @@ contains 57 safe syllables as documented below and in
   forced class application `00BA`, class transition `1F92`, all-magic `08D2`,
   stock Magic Arrow `D8F8`, and summon `5374`. The probe-builder tests lock
   these regenerated identifiers and their documented patch boundaries.
+
+### Three-Signal Inline Byte Scan (2026-07-20)
+
+- `tools/jp_inline_byte_string_inventory.py` previously required four
+  half-width Japanese or uppercase-ASCII signal bytes. It now requires three,
+  increasing conservative `FF`-terminated candidates from 449 to 646 while
+  retaining zero unclassified rows. This does not claim arbitrary ROM bytes are
+  text; compressed payloads, packed glyphs, executable code, and numeric tables
+  remain explicitly separated from user-facing strings.
+- Four candidates crossed the old boundary without already having exact
+  ownership: `0x0096C2` (`BEB9`) disassembles as `CLR.W D5; CLR.B ...`,
+  `0x060D0D` (`DUR`) lies in item stat/effect/graphics data, `0x0A4381`
+  (`ｸｹｺ`) terminates a character-index table, and `0x0A44F3` (`ｫｵｿ`)
+  terminates the numeric title-layout table immediately before the NCS/title
+  records. None is patched or promoted as visible Japanese text.
+- Tests lock all four raw texts and categories. The remaining explicit gap is
+  now byte sequences with fewer than three signal characters; those cannot be
+  treated as text without an independent pointer, renderer, or runtime owner.

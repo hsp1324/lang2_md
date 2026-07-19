@@ -17,10 +17,23 @@ class JapaneseInlineByteStringInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_conservative_candidate_baseline_has_no_unknown_owner(self):
-        self.assertEqual(self.result["halfwidth_candidate_count"], 372)
-        self.assertEqual(self.result["ascii_candidate_count"], 77)
-        self.assertEqual(self.result["candidate_count"], 449)
+        self.assertEqual(self.result["halfwidth_candidate_count"], 513)
+        self.assertEqual(self.result["ascii_candidate_count"], 133)
+        self.assertEqual(self.result["candidate_count"], 646)
         self.assertEqual(self.result["unclassified_count"], 0)
+
+    def test_three_signal_false_positives_have_specific_owners(self):
+        rows = {row["address"]: row for row in self.result["candidates"]}
+        expected = {
+            "0x0096C2": ("BEB9", "executable_code_or_table"),
+            "0x060D0D": ("DUR", "structured_game_data"),
+            "0x0A4381": ("ｸｹｺ", "structured_character_resource"),
+            "0x0A44F3": ("ｫｵｿ", "title_layout_data"),
+        }
+        for address, (text, category) in expected.items():
+            with self.subTest(address=address):
+                self.assertEqual(rows[address]["original_text"], text)
+                self.assertEqual(rows[address]["category"], category)
 
     def test_discard_prompt_is_owned_but_not_overclaimed_as_live_verified(self):
         prompt = self.result["discard_prompt"]

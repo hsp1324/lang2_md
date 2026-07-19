@@ -1,13 +1,14 @@
 {
-  "warning": "This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF-terminated runs. It does not claim arbitrary executable bytes are text.",
+  "warning": "This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF-terminated runs with at least three signal characters. It does not claim arbitrary executable bytes are text.",
   "source_sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
-  "halfwidth_candidate_count": 372,
-  "ascii_candidate_count": 77,
-  "candidate_count": 449,
+  "halfwidth_candidate_count": 513,
+  "ascii_candidate_count": 133,
+  "candidate_count": 646,
   "category_counts": {
-    "compressed_resource_data": 152,
-    "global_font_bitmap_false_positive": 32,
-    "global_table_string": 225,
+    "compressed_resource_data": 321,
+    "executable_code_or_table": 1,
+    "global_font_bitmap_false_positive": 38,
+    "global_table_string": 243,
     "glyph_or_tile_data_false_positive": 21,
     "internal_controller_signature": 3,
     "internal_hardware_signature": 2,
@@ -18,7 +19,9 @@
     "retained_title_record": 2,
     "sound_test_label_table": 1,
     "special_illusion_class": 1,
-    "structured_character_resource": 3
+    "structured_character_resource": 4,
+    "structured_game_data": 1,
+    "title_layout_data": 1
   },
   "unclassified_count": 0,
   "discard_prompt": {
@@ -770,6 +773,15 @@
       "owner": "PADR controller signature"
     },
     {
+      "kind": "ascii",
+      "address": "0x0096C2",
+      "end": "0x0096C7",
+      "original_text": "BEB9",
+      "raw_hex": "42 45 42 39",
+      "category": "executable_code_or_table",
+      "owner": "68000 executable code or numeric table"
+    },
+    {
       "kind": "halfwidth",
       "address": "0x01807E",
       "end": "0x01808C",
@@ -798,6 +810,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x04319F",
+      "end": "0x0431A3",
+      "original_text": "ﾅﾏｵ",
+      "raw_hex": "C5 CF B5",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0431E0",
       "end": "0x0431E5",
       "original_text": "ﾝｪﾟｩ",
@@ -811,6 +832,15 @@
       "end": "0x04350D",
       "original_text": "ﾀｿﾀｿ",
       "raw_hex": "C0 BF C0 BF",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0435F7",
+      "end": "0x0435FB",
+      "original_text": "ﾕﾞｩ",
+      "raw_hex": "D5 DE A9",
       "category": "global_font_bitmap_false_positive",
       "owner": "packed 16x16 glyph pixels"
     },
@@ -897,6 +927,24 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x045919",
+      "end": "0x04591D",
+      "original_text": "ﾋﾞ･",
+      "raw_hex": "CB DE A5",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x046261",
+      "end": "0x046265",
+      "original_text": "ﾎﾏｲ",
+      "raw_hex": "CE CF B2",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x046534",
       "end": "0x04653B",
       "original_text": "ﾀｿﾂｽﾇｺ",
@@ -946,6 +994,15 @@
       "end": "0x0471A5",
       "original_text": "ﾟｫﾟｨ",
       "raw_hex": "DF AB DF A8",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x048665",
+      "end": "0x048669",
+      "original_text": "ﾈﾝｪ",
+      "raw_hex": "C8 DD AA",
       "category": "global_font_bitmap_false_positive",
       "owner": "packed 16x16 glyph pixels"
     },
@@ -1036,6 +1093,15 @@
       "end": "0x04B4BB",
       "original_text": "ﾀｿﾀｿﾂｽﾇｺ",
       "raw_hex": "C0 BF C0 BF C2 BD C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04B6AF",
+      "end": "0x04B6B3",
+      "original_text": "ﾞﾞｩ",
+      "raw_hex": "DE DE A9",
       "category": "global_font_bitmap_false_positive",
       "owner": "packed 16x16 glyph pixels"
     },
@@ -1135,6 +1201,15 @@
       "end": "0x05E96B",
       "original_text": "ﾛｰﾄﾞ",
       "raw_hex": "DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E96B",
+      "end": "0x05E96F",
+      "original_text": "ﾅｲﾄ",
+      "raw_hex": "C5 B2 C4",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -1527,10 +1602,28 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x05EAB1",
+      "end": "0x05EAB5",
+      "original_text": "ﾅｲﾄ",
+      "raw_hex": "C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x05EAB5",
       "end": "0x05EABA",
       "original_text": "ﾛｰﾄﾞ",
       "raw_hex": "DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EABA",
+      "end": "0x05EABE",
+      "original_text": "ｼｰﾌ",
+      "raw_hex": "BC B0 CC",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -1860,6 +1953,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x05EBD8",
+      "end": "0x05EBDC",
+      "original_text": "ﾘｯﾁ",
+      "raw_hex": "D8 AF C1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x05EBDC",
       "end": "0x05EBE7",
       "original_text": "ﾘﾋﾞﾝｸﾞｱｰﾏｰ",
@@ -2013,10 +2115,28 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x05EC70",
+      "end": "0x05EC74",
+      "original_text": "ｴﾙﾌ",
+      "raw_hex": "B4 D9 CC",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x05EC74",
       "end": "0x05EC7A",
       "original_text": "ﾊﾞﾘｽﾀ",
       "raw_hex": "CA DE D8 BD C0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC7A",
+      "end": "0x05EC7E",
+      "original_text": "ﾓﾝｸ",
+      "raw_hex": "D3 DD B8",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -2283,6 +2403,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x05ED5D",
+      "end": "0x05ED61",
+      "original_text": "ﾚｲｽ",
+      "raw_hex": "DA B2 BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x05ED61",
       "end": "0x05ED69",
       "original_text": "ﾍﾙﾊｳﾝﾄﾞ",
@@ -2391,6 +2520,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x05EDBD",
+      "end": "0x05EDC1",
+      "original_text": "ﾅｲﾄ",
+      "raw_hex": "C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x05EDC1",
       "end": "0x05EDC6",
       "original_text": "ﾛｰﾄﾞ",
@@ -2422,6 +2560,15 @@
       "end": "0x05EDDB",
       "original_text": "ﾌﾟﾘｰｽﾄ",
       "raw_hex": "CC DF D8 B0 BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060405",
+      "end": "0x060409",
+      "original_text": "ﾅｲﾌ",
+      "raw_hex": "C5 B2 CC",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -2494,6 +2641,15 @@
       "end": "0x060451",
       "original_text": "ﾒｻｲﾔﾝｿｰﾄﾞ",
       "raw_hex": "D2 BB B2 D4 DD BF B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060455",
+      "end": "0x060459",
+      "original_text": "ｱﾚｲ",
+      "raw_hex": "B1 DA B2",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -2625,6 +2781,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0604DD",
+      "end": "0x0604E1",
+      "original_text": "ｸﾛｽ",
+      "raw_hex": "B8 DB BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0604E1",
       "end": "0x0604E7",
       "original_text": "ﾈｯｸﾚｽ",
@@ -2688,6 +2853,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x060525",
+      "end": "0x060529",
+      "original_text": "ﾎﾙﾝ",
+      "raw_hex": "CE D9 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x060529",
       "end": "0x060530",
       "original_text": "ｱﾐｭﾚｯﾄ",
@@ -2696,11 +2870,38 @@
       "owner": "owned by class, item, or commander-name table"
     },
     {
+      "kind": "ascii",
+      "address": "0x060D0D",
+      "end": "0x060D11",
+      "original_text": "DUR",
+      "raw_hex": "44 55 52",
+      "category": "structured_game_data",
+      "owner": "item stat, effect, or graphics data"
+    },
+    {
       "kind": "halfwidth",
       "address": "0x061AC5",
       "end": "0x061ACB",
       "original_text": "ｴﾙｳｨﾝ",
       "raw_hex": "B4 D9 B3 A8 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061ACB",
+      "end": "0x061ACF",
+      "original_text": "ﾘｱﾅ",
+      "raw_hex": "D8 B1 C5",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061ACF",
+      "end": "0x061AD3",
+      "original_text": "ﾗｰﾅ",
+      "raw_hex": "D7 B0 C5",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -2715,10 +2916,28 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x061AD8",
+      "end": "0x061ADC",
+      "original_text": "ﾍｲﾝ",
+      "raw_hex": "CD B2 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x061ADC",
       "end": "0x061AE1",
       "original_text": "ｽｺｯﾄ",
       "raw_hex": "BD BA AF C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AE1",
+      "end": "0x061AE5",
+      "original_text": "ｷｰｽ",
+      "raw_hex": "B7 B0 BD",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -2755,6 +2974,15 @@
       "end": "0x061AFC",
       "original_text": "ﾅｿﾞﾉｷｼ",
       "raw_hex": "C5 BF DE C9 B7 BC",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AFC",
+      "end": "0x061B00",
+      "original_text": "ﾚｵﾝ",
+      "raw_hex": "DA B5 DD",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -2989,6 +3217,15 @@
       "end": "0x061BB6",
       "original_text": "ｱｲｱﾝｺﾞｰﾚﾑ",
       "raw_hex": "B1 B2 B1 DD BA DE B0 DA D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BB6",
+      "end": "0x061BBA",
+      "original_text": "ﾘｯﾁ",
+      "raw_hex": "D8 AF C1",
       "category": "global_table_string",
       "owner": "owned by class, item, or commander-name table"
     },
@@ -3362,6 +3599,24 @@
       "owner": "reserved Langrisser/Alhazard name comparison"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x0A4381",
+      "end": "0x0A4385",
+      "original_text": "ｸｹｺ",
+      "raw_hex": "B8 B9 BA",
+      "category": "structured_character_resource",
+      "owner": "character-index table terminator"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0A44F3",
+      "end": "0x0A44F7",
+      "original_text": "ｫｵｿ",
+      "raw_hex": "AB B5 BF",
+      "category": "title_layout_data",
+      "owner": "numeric title-layout table terminator"
+    },
+    {
       "kind": "ascii",
       "address": "0x0A450E",
       "end": "0x0A4514",
@@ -3408,6 +3663,33 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0B0AD4",
+      "end": "0x0B0AD8",
+      "original_text": "ｯｻﾂ",
+      "raw_hex": "AF BB C2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B0BF5",
+      "end": "0x0B0BF9",
+      "original_text": "ﾟﾏﾂ",
+      "raw_hex": "DF CF C2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0B1E01",
+      "end": "0x0B1E05",
+      "original_text": "DTU",
+      "raw_hex": "44 54 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0B3587",
       "end": "0x0B358C",
       "original_text": "ﾌﾌﾜﾌ",
@@ -3425,11 +3707,47 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x0B3C77",
+      "end": "0x0B3C7C",
+      "original_text": "ﾝｸ ﾞ",
+      "raw_hex": "DD B8 20 DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B43BE",
+      "end": "0x0B43C2",
+      "original_text": "ﾞﾝﾟ",
+      "raw_hex": "DE DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "ascii",
       "address": "0x0B494C",
       "end": "0x0B4953",
       "original_text": "UUQ5UQ",
       "raw_hex": "55 55 51 35 55 51",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B5011",
+      "end": "0x0B5015",
+      "original_text": "ﾍﾓﾒ",
+      "raw_hex": "CD D3 D2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B52A6",
+      "end": "0x0B52AA",
+      "original_text": "ﾜﾝﾌ",
+      "raw_hex": "DC DD CC",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3453,10 +3771,46 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0B65CD",
+      "end": "0x0B65D2",
+      "original_text": "ﾝｸ ﾞ",
+      "raw_hex": "DD B8 20 DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0B66AC",
+      "end": "0x0B66B1",
+      "original_text": "SS3U",
+      "raw_hex": "53 53 33 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B6A1A",
+      "end": "0x0B6A1E",
+      "original_text": "ﾂﾃﾃ",
+      "raw_hex": "C2 C3 C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0B73A9",
       "end": "0x0B73B2",
       "original_text": "ﾝﾜﾅﾝﾝﾍﾜﾝ",
       "raw_hex": "DD DC C5 DD DD CD DC DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B7515",
+      "end": "0x0B7519",
+      "original_text": "ﾝﾌﾀ",
+      "raw_hex": "DD CC C0",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3479,11 +3833,29 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x0BB9CB",
+      "end": "0x0BB9CF",
+      "original_text": "ﾂﾃﾃ",
+      "raw_hex": "C2 C3 C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "ascii",
       "address": "0x0BBAD5",
       "end": "0x0BBADB",
       "original_text": "LH LL",
       "raw_hex": "4C 48 20 4C 4C",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BC6EC",
+      "end": "0x0BC6F0",
+      "original_text": "ﾍﾍﾎ",
+      "raw_hex": "CD CD CE",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3525,6 +3897,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0BD073",
+      "end": "0x0BD077",
+      "original_text": "ﾞﾞﾑ",
+      "raw_hex": "DE DE D1",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0BD19F",
       "end": "0x0BD1A4",
       "original_text": "ﾋｼｽﾜ",
@@ -3534,10 +3915,55 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0BD2D3",
+      "end": "0x0BD2D7",
+      "original_text": "ｨﾓﾃ",
+      "raw_hex": "A8 D3 C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0BE1E2",
       "end": "0x0BE1E8",
       "original_text": "ﾌﾏﾎﾜﾍ",
       "raw_hex": "CC CF CE DC CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BE9AB",
+      "end": "0x0BE9AF",
+      "original_text": "ｪｪｪ",
+      "raw_hex": "AA AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BEA5A",
+      "end": "0x0BEA5E",
+      "original_text": "ﾝﾏﾏ",
+      "raw_hex": "DD CF CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BED44",
+      "end": "0x0BED48",
+      "original_text": "ﾌﾜﾜ",
+      "raw_hex": "CC DC DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BEFFC",
+      "end": "0x0BF000",
+      "original_text": "ﾍﾝﾂ",
+      "raw_hex": "CD DD C2",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3556,6 +3982,42 @@
       "end": "0x0BF291",
       "original_text": "ｽｽﾍｽｻ",
       "raw_hex": "BD BD CD BD BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BF2CB",
+      "end": "0x0BF2CF",
+      "original_text": "ﾍﾝﾌ",
+      "raw_hex": "CD DD CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BF40D",
+      "end": "0x0BF411",
+      "original_text": "ﾌﾎﾒ",
+      "raw_hex": "CC CE D2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BF4E4",
+      "end": "0x0BF4E8",
+      "original_text": "ﾌﾝﾟ",
+      "raw_hex": "CC DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BF9A7",
+      "end": "0x0BF9AB",
+      "original_text": "ﾁﾂﾁ",
+      "raw_hex": "C1 C2 C1",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3601,6 +4063,15 @@
       "end": "0x0C030A",
       "original_text": "ｰｮﾌﾃ",
       "raw_hex": "B0 AE CC C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0887",
+      "end": "0x0C088B",
+      "original_text": "ﾌﾅﾌ",
+      "raw_hex": "CC C5 CC",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3696,10 +4167,73 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0C1B91",
+      "end": "0x0C1B95",
+      "original_text": "ﾞﾝﾟ",
+      "raw_hex": "DE DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C1CCF",
+      "end": "0x0C1CD3",
+      "original_text": "ﾊｪﾌ",
+      "raw_hex": "CA AA CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0C1E76",
       "end": "0x0C1E7E",
       "original_text": "ﾍﾌﾃﾌﾍﾌﾂ",
       "raw_hex": "CD CC C3 CC CD CC C2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C23AB",
+      "end": "0x0C23AF",
+      "original_text": "ｰﾜｰ",
+      "raw_hex": "B0 DC B0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C2513",
+      "end": "0x0C2517",
+      "original_text": "､ﾋｱ",
+      "raw_hex": "A4 CB B1",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C2553",
+      "end": "0x0C2557",
+      "original_text": "ﾊｼﾌ",
+      "raw_hex": "CA BC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C255C",
+      "end": "0x0C2560",
+      "original_text": "ｻｮﾓ",
+      "raw_hex": "BB AE D3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C2588",
+      "end": "0x0C258C",
+      "original_text": "ﾍﾊｲ",
+      "raw_hex": "CD CA B2",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3723,6 +4257,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0C2608",
+      "end": "0x0C260C",
+      "original_text": "ﾋｻﾞ",
+      "raw_hex": "CB BB DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0C2753",
       "end": "0x0C2758",
       "original_text": "ﾛﾋﾛﾎ",
@@ -3741,10 +4284,55 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0C2CBF",
+      "end": "0x0C2CC3",
+      "original_text": "ﾞﾝﾞ",
+      "raw_hex": "DE DD DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C3648",
+      "end": "0x0C364C",
+      "original_text": "ﾝｽｽ",
+      "raw_hex": "DD BD BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C366D",
+      "end": "0x0C3671",
+      "original_text": "ﾟｽﾜ",
+      "raw_hex": "DF BD DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0C3696",
       "end": "0x0C369D",
       "original_text": "ﾁﾍｽｽﾝﾋ",
       "raw_hex": "C1 CD BD BD DD CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C3FBE",
+      "end": "0x0C3FC2",
+      "original_text": "ﾞﾜﾂ",
+      "raw_hex": "DE DC C2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C3FCD",
+      "end": "0x0C3FD1",
+      "original_text": "ﾂﾃﾃ",
+      "raw_hex": "C2 C3 C3",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3759,10 +4347,37 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0C474A",
+      "end": "0x0C474E",
+      "original_text": "ﾜﾚ｢",
+      "raw_hex": "DC DA A2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0C47B5",
       "end": "0x0C47BA",
       "original_text": "､ｬｬｪ",
       "raw_hex": "A4 AC AC AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C4D0B",
+      "end": "0x0C4D0F",
+      "original_text": "ｿﾍﾝ",
+      "raw_hex": "BF CD DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C663E",
+      "end": "0x0C6642",
+      "original_text": "ｬﾁ｢",
+      "raw_hex": "AC C1 A2",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3772,6 +4387,42 @@
       "end": "0x0C6DA5",
       "original_text": "DCC1D4",
       "raw_hex": "44 43 43 31 44 34",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C751A",
+      "end": "0x0C751E",
+      "original_text": "ﾃﾟﾔ",
+      "raw_hex": "C3 DF D4",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0C764F",
+      "end": "0x0C7653",
+      "original_text": "VUU",
+      "raw_hex": "56 55 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0C787A",
+      "end": "0x0C787E",
+      "original_text": "FUX",
+      "raw_hex": "46 55 58",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0C7A62",
+      "end": "0x0C7A67",
+      "original_text": "8PYY",
+      "raw_hex": "38 50 59 59",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3858,6 +4509,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0C84B6",
+      "end": "0x0C84BA",
+      "original_text": "ﾄﾏﾟ",
+      "raw_hex": "C4 CF DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0C86A4",
       "end": "0x0C86AB",
       "original_text": "ﾈﾛﾍﾍﾘﾛ",
@@ -3871,6 +4531,24 @@
       "end": "0x0C87AC",
       "original_text": "ﾟﾝﾔﾍ",
       "raw_hex": "DF DD D4 CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C8968",
+      "end": "0x0C896C",
+      "original_text": "ﾝﾌﾋ",
+      "raw_hex": "DD CC CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C8A90",
+      "end": "0x0C8A94",
+      "original_text": "ｿｿｼ",
+      "raw_hex": "BF BF BC",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3912,6 +4590,24 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0C8E97",
+      "end": "0x0C8E9B",
+      "original_text": "ｻﾋﾑ",
+      "raw_hex": "BB CB D1",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0C8EBE",
+      "end": "0x0C8EC2",
+      "original_text": "DJD",
+      "raw_hex": "44 4A 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0C988D",
       "end": "0x0C9893",
       "original_text": "ｰｬﾜﾌﾎ",
@@ -3948,10 +4644,28 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0CA6F1",
+      "end": "0x0CA6F5",
+      "original_text": "ﾝﾌﾉ",
+      "raw_hex": "DD CC C9",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0CAE3A",
       "end": "0x0CAE3F",
       "original_text": "ﾟﾞﾝﾟ",
       "raw_hex": "DF DE DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CB43D",
+      "end": "0x0CB441",
+      "original_text": "IUE",
+      "raw_hex": "49 55 45",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -3966,10 +4680,28 @@
     },
     {
       "kind": "ascii",
+      "address": "0x0CBEB6",
+      "end": "0x0CBEBA",
+      "original_text": "TDT",
+      "raw_hex": "54 44 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x0CBF80",
       "end": "0x0CBF87",
       "original_text": "7ESESU",
       "raw_hex": "37 45 53 45 53 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CBF90",
+      "end": "0x0CBF94",
+      "original_text": "ETY",
+      "raw_hex": "45 54 59",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4020,6 +4752,24 @@
     },
     {
       "kind": "ascii",
+      "address": "0x0CC3C5",
+      "end": "0x0CC3CA",
+      "original_text": "GCE7",
+      "raw_hex": "47 43 45 37",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CCA93",
+      "end": "0x0CCA97",
+      "original_text": "ﾟｾｾ",
+      "raw_hex": "DF BE BE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x0CD1F1",
       "end": "0x0CD1FB",
       "original_text": "QBDHJ ABD",
@@ -4042,6 +4792,15 @@
       "end": "0x0CD3EB",
       "original_text": "7ESES",
       "raw_hex": "37 45 53 45 53",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CD651",
+      "end": "0x0CD655",
+      "original_text": "DTY",
+      "raw_hex": "44 54 59",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4082,6 +4841,15 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "ascii",
+      "address": "0x0CE722",
+      "end": "0x0CE727",
+      "original_text": "2XGW",
+      "raw_hex": "32 58 47 57",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "halfwidth",
       "address": "0x0CEAC3",
       "end": "0x0CEAC8",
@@ -4110,10 +4878,28 @@
     },
     {
       "kind": "ascii",
+      "address": "0x0CEDF6",
+      "end": "0x0CEDFB",
+      "original_text": "2XGW",
+      "raw_hex": "32 58 47 57",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x0CF224",
       "end": "0x0CF22D",
       "original_text": "DC33UTDU",
       "raw_hex": "44 43 33 33 55 54 44 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CF265",
+      "end": "0x0CF269",
+      "original_text": "DSD",
+      "raw_hex": "44 53 44",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4137,10 +4923,37 @@
     },
     {
       "kind": "ascii",
+      "address": "0x0CFF2B",
+      "end": "0x0CFF30",
+      "original_text": "CUY5",
+      "raw_hex": "43 55 59 35",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x0CFF4E",
       "end": "0x0CFF55",
       "original_text": "7ESESU",
       "raw_hex": "37 45 53 45 53 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CFF8F",
+      "end": "0x0CFF98",
+      "original_text": "733DC53E",
+      "raw_hex": "37 33 33 44 43 35 33 45",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CFFD1",
+      "end": "0x0CFFD5",
+      "original_text": "YED",
+      "raw_hex": "59 45 44",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4154,11 +4967,146 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "ascii",
+      "address": "0x0D020C",
+      "end": "0x0D0212",
+      "original_text": "6 CDC",
+      "raw_hex": "36 20 43 44 43",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0D1AEB",
+      "end": "0x0D1AEF",
+      "original_text": "ﾙﾞﾝ",
+      "raw_hex": "D9 DE DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D1C15",
+      "end": "0x0D1C1A",
+      "original_text": "F9TT",
+      "raw_hex": "46 39 54 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "halfwidth",
       "address": "0x0D1FAB",
       "end": "0x0D1FB3",
       "original_text": "｡ｭﾝﾝ｡ｭﾍ",
       "raw_hex": "A1 AD DD DD A1 AD CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D2214",
+      "end": "0x0D2218",
+      "original_text": "UDJ",
+      "raw_hex": "55 44 4A",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D29E2",
+      "end": "0x0D29E8",
+      "original_text": "+EM0Q",
+      "raw_hex": "2B 45 4D 30 51",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D7185",
+      "end": "0x0D7189",
+      "original_text": "UDO",
+      "raw_hex": "55 44 4F",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0D83D4",
+      "end": "0x0D83D8",
+      "original_text": "ｧ｣｣",
+      "raw_hex": "A7 A3 A3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D8797",
+      "end": "0x0D879B",
+      "original_text": "UDD",
+      "raw_hex": "55 44 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D87A0",
+      "end": "0x0D87A4",
+      "original_text": "EOO",
+      "raw_hex": "45 4F 4F",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D87B2",
+      "end": "0x0D87B6",
+      "original_text": "TTU",
+      "raw_hex": "54 54 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0D8C95",
+      "end": "0x0D8C99",
+      "original_text": "ｪｧｧ",
+      "raw_hex": "AA A7 A7",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0DA5A2",
+      "end": "0x0DA5A6",
+      "original_text": "ﾜｿｿ",
+      "raw_hex": "DC BF BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0DDEC6",
+      "end": "0x0DDECA",
+      "original_text": "ｳﾌﾋ",
+      "raw_hex": "B3 CC CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0DDFA0",
+      "end": "0x0DDFA4",
+      "original_text": "ｪｬﾌ",
+      "raw_hex": "AA AC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0DE016",
+      "end": "0x0DE01A",
+      "original_text": "ｻｺｻ",
+      "raw_hex": "BB BA BB",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4182,6 +5130,33 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0E0496",
+      "end": "0x0E049A",
+      "original_text": "ﾊｲﾋ",
+      "raw_hex": "CA B2 CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E050B",
+      "end": "0x0E050F",
+      "original_text": "ｰｫ｣",
+      "raw_hex": "B0 AB A3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E070A",
+      "end": "0x0E070E",
+      "original_text": "ﾂｺ｣",
+      "raw_hex": "C2 BA A3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0E096B",
       "end": "0x0E0971",
       "original_text": "ｼﾂﾂﾂｻ",
@@ -4199,11 +5174,56 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x0E123D",
+      "end": "0x0E1241",
+      "original_text": "ﾌﾋﾌ",
+      "raw_hex": "CC CB CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E1621",
+      "end": "0x0E1625",
+      "original_text": "ｳｫﾋ",
+      "raw_hex": "B3 AB CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E1AE0",
+      "end": "0x0E1AE4",
+      "original_text": "ｰﾈﾆ",
+      "raw_hex": "B0 C8 C6",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E1B53",
+      "end": "0x0E1B57",
+      "original_text": "ｴﾊﾆ",
+      "raw_hex": "B4 CA C6",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "ascii",
       "address": "0x0E2BD1",
       "end": "0x0E2BD7",
       "original_text": "UPEU.",
       "raw_hex": "55 50 45 55 2E",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E2BFF",
+      "end": "0x0E2C03",
+      "original_text": "UBD",
+      "raw_hex": "55 42 44",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4236,10 +5256,46 @@
     },
     {
       "kind": "ascii",
+      "address": "0x0E3EAB",
+      "end": "0x0E3EAF",
+      "original_text": "RRO",
+      "raw_hex": "52 52 4F",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E3EB4",
+      "end": "0x0E3EB8",
+      "original_text": "RUU",
+      "raw_hex": "52 55 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x0E49A2",
       "end": "0x0E49A8",
       "original_text": "UTUEE",
       "raw_hex": "55 54 55 45 45",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E541B",
+      "end": "0x0E541F",
+      "original_text": "EUT",
+      "raw_hex": "45 55 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E6621",
+      "end": "0x0E6627",
+      "original_text": "S5O4E",
+      "raw_hex": "53 35 4F 34 45",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4254,6 +5310,69 @@
     },
     {
       "kind": "ascii",
+      "address": "0x0E6BF2",
+      "end": "0x0E6BF6",
+      "original_text": "UUO",
+      "raw_hex": "55 55 4F",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E72BC",
+      "end": "0x0E72C0",
+      "original_text": "ｪ｢ｻ",
+      "raw_hex": "AA A2 BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0EA57F",
+      "end": "0x0EA583",
+      "original_text": "｣ﾕﾀ",
+      "raw_hex": "A3 D5 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0EE8AC",
+      "end": "0x0EE8B0",
+      "original_text": "ﾌﾌｮ",
+      "raw_hex": "CC CC AE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0EF71F",
+      "end": "0x0EF724",
+      "original_text": " ｣｣ｧ",
+      "raw_hex": "20 A3 A3 A7",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0F19A4",
+      "end": "0x0F19A8",
+      "original_text": "ｧｪｪ",
+      "raw_hex": "A7 AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0F3D77",
+      "end": "0x0F3D7B",
+      "original_text": "TUR",
+      "raw_hex": "54 55 52",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x0F3D7C",
       "end": "0x0F3D84",
       "original_text": "OERUEGR",
@@ -4263,10 +5382,37 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0F60D8",
+      "end": "0x0F60DC",
+      "original_text": "ﾝﾝﾃ",
+      "raw_hex": "DD DD C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0F73B7",
+      "end": "0x0F73BB",
+      "original_text": "ﾏﾏﾏ",
+      "raw_hex": "CF CF CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x0F78EE",
       "end": "0x0F78F5",
       "original_text": " ｣｣ｧ ｣",
       "raw_hex": "20 A3 A3 A7 20 A3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0F88E6",
+      "end": "0x0F88EA",
+      "original_text": "OTD",
+      "raw_hex": "4F 54 44",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4299,6 +5445,69 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x0FB0AF",
+      "end": "0x0FB0B3",
+      "original_text": "｡ﾉﾃ",
+      "raw_hex": "A1 C9 C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0FD892",
+      "end": "0x0FD896",
+      "original_text": "ｰﾀﾐ",
+      "raw_hex": "B0 C0 D0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0FDFFF",
+      "end": "0x0FE003",
+      "original_text": "UTU",
+      "raw_hex": "55 54 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0FE33A",
+      "end": "0x0FE33E",
+      "original_text": "RUO",
+      "raw_hex": "52 55 4F",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0FF6DA",
+      "end": "0x0FF6DF",
+      "original_text": "ﾏ ｦｯ",
+      "raw_hex": "CF 20 A6 AF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x100E8D",
+      "end": "0x100E91",
+      "original_text": "ﾂｾﾚ",
+      "raw_hex": "C2 BE DA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x101182",
+      "end": "0x101186",
+      "original_text": "ﾟｿｿ",
+      "raw_hex": "DF BF BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x104523",
       "end": "0x104529",
       "original_text": "ﾏﾟｿｿｾ",
@@ -4312,6 +5521,15 @@
       "end": "0x104A6F",
       "original_text": "UDDU",
       "raw_hex": "55 44 44 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x104AD0",
+      "end": "0x104AD4",
+      "original_text": "ｿ｣ｿ",
+      "raw_hex": "BF A3 BF",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4344,6 +5562,15 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x105DCD",
+      "end": "0x105DD1",
+      "original_text": "ﾁﾀﾁ",
+      "raw_hex": "C1 C0 C1",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x1064A9",
       "end": "0x1064AE",
       "original_text": "ﾏﾑﾛﾟ",
@@ -4361,11 +5588,29 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "ascii",
+      "address": "0x108889",
+      "end": "0x10888D",
+      "original_text": "HPC",
+      "raw_hex": "48 50 43",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "halfwidth",
       "address": "0x108B40",
       "end": "0x108B46",
       "original_text": "ﾟﾟﾟﾟﾟ",
       "raw_hex": "DF DF DF DF DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x109351",
+      "end": "0x109355",
+      "original_text": "ﾟﾇｿ",
+      "raw_hex": "DF C7 BF",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4379,11 +5624,29 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x10A87E",
+      "end": "0x10A882",
+      "original_text": "ｻｻｳ",
+      "raw_hex": "BB BB B3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "ascii",
       "address": "0x10A934",
       "end": "0x10A93C",
       "original_text": "C4DDCFD",
       "raw_hex": "43 34 44 44 43 46 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10AD7A",
+      "end": "0x10AD7E",
+      "original_text": "ﾗﾋﾇ",
+      "raw_hex": "D7 CB C7",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4397,11 +5660,74 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "ascii",
+      "address": "0x10B705",
+      "end": "0x10B709",
+      "original_text": "DDC",
+      "raw_hex": "44 44 43",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10BA63",
+      "end": "0x10BA67",
+      "original_text": "DDC",
+      "raw_hex": "44 44 43",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10BBBF",
+      "end": "0x10BBC3",
+      "original_text": "ｫﾏｾ",
+      "raw_hex": "AB CF BE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10C349",
+      "end": "0x10C34D",
+      "original_text": "ｾｻｿ",
+      "raw_hex": "BE BB BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10C4AC",
+      "end": "0x10C4B2",
+      "original_text": "4DDB4",
+      "raw_hex": "34 44 44 42 34",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10C751",
+      "end": "0x10C755",
+      "original_text": "ﾝ｢ｪ",
+      "raw_hex": "DD A2 AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "halfwidth",
       "address": "0x10CE65",
       "end": "0x10CE6A",
       "original_text": "ﾝﾝﾝﾟ",
       "raw_hex": "DD DD DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10D957",
+      "end": "0x10D95B",
+      "original_text": "｡ｳｸ",
+      "raw_hex": "A1 B3 B8",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4416,10 +5742,28 @@
     },
     {
       "kind": "ascii",
+      "address": "0x10DC19",
+      "end": "0x10DC1D",
+      "original_text": "YTI",
+      "raw_hex": "59 54 49",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x10DC1E",
       "end": "0x10DC26",
       "original_text": "STEY5TD",
       "raw_hex": "53 54 45 59 35 54 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10E062",
+      "end": "0x10E066",
+      "original_text": "ﾐﾟﾀ",
+      "raw_hex": "D0 DF C0",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4434,10 +5778,37 @@
     },
     {
       "kind": "ascii",
+      "address": "0x10E402",
+      "end": "0x10E407",
+      "original_text": "DC3T",
+      "raw_hex": "44 43 33 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
       "address": "0x10E4BC",
       "end": "0x10E4C5",
       "original_text": "DTE4E5UT",
       "raw_hex": "44 54 45 34 45 35 55 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10E4CA",
+      "end": "0x10E4CE",
+      "original_text": "TUE",
+      "raw_hex": "54 55 45",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x110022",
+      "end": "0x110026",
+      "original_text": "ｿｿﾏ",
+      "raw_hex": "BF BF CF",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4456,6 +5827,15 @@
       "end": "0x11809B",
       "original_text": "ﾏｷｷﾏ",
       "raw_hex": "CF B7 B7 CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x118D72",
+      "end": "0x118D76",
+      "original_text": "ﾀﾀﾀ",
+      "raw_hex": "C0 C0 C0",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4505,6 +5885,60 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x11D052",
+      "end": "0x11D056",
+      "original_text": "ｼｼﾟ",
+      "raw_hex": "BC BC DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x11D3EA",
+      "end": "0x11D3EE",
+      "original_text": "ｼｼﾟ",
+      "raw_hex": "BC BC DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x11D8E5",
+      "end": "0x11D8E9",
+      "original_text": "ｿﾟﾚ",
+      "raw_hex": "BF DF DA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x11E957",
+      "end": "0x11E95D",
+      "original_text": "B33EB",
+      "raw_hex": "42 33 33 45 42",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x11E9AD",
+      "end": "0x11E9B6",
+      "original_text": "34U33UV3",
+      "raw_hex": "33 34 55 33 33 55 56 33",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x11EAA5",
+      "end": "0x11EAAA",
+      "original_text": "0CUT",
+      "raw_hex": "30 43 55 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "ascii",
       "address": "0x11EAB6",
       "end": "0x11EABC",
@@ -4519,6 +5953,15 @@
       "end": "0x11FD56",
       "original_text": "3DD3SDD5",
       "raw_hex": "33 44 44 33 53 44 44 35",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x11FEA4",
+      "end": "0x11FEA8",
+      "original_text": "DUV",
+      "raw_hex": "44 55 56",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4542,10 +5985,64 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x121836",
+      "end": "0x12183A",
+      "original_text": "ﾌﾏﾏ",
+      "raw_hex": "CC CF CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12205F",
+      "end": "0x122063",
+      "original_text": "ﾒﾗｿ",
+      "raw_hex": "D2 D7 BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x122A78",
+      "end": "0x122A7C",
+      "original_text": "ｿｿｻ",
+      "raw_hex": "BF BF BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x122BAA",
       "end": "0x122BAF",
       "original_text": "ﾀﾀﾀﾀ",
       "raw_hex": "C0 C0 C0 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x122E38",
+      "end": "0x122E3C",
+      "original_text": "ﾃﾜｿ",
+      "raw_hex": "C3 DC BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x122E3C",
+      "end": "0x122E40",
+      "original_text": "ﾍﾍﾋ",
+      "raw_hex": "CD CD CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x122EE3",
+      "end": "0x122EE8",
+      "original_text": " USC",
+      "raw_hex": "20 55 53 43",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4596,6 +6093,24 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x125123",
+      "end": "0x125127",
+      "original_text": "ｯｻｾ",
+      "raw_hex": "AF BB BE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1252A3",
+      "end": "0x1252A7",
+      "original_text": "ﾝﾝﾞ",
+      "raw_hex": "DD DD DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x1254BA",
       "end": "0x1254C3",
       "original_text": "ﾜﾌﾜﾌﾋｻｺｪ",
@@ -4614,10 +6129,28 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x1255A6",
+      "end": "0x1255AA",
+      "original_text": "ﾜｪｪ",
+      "raw_hex": "DC AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x1255D0",
       "end": "0x1255D8",
       "original_text": "ｪｫｪﾋｫｺｯ",
       "raw_hex": "AA AB AA CB AB BA AF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1258E0",
+      "end": "0x1258E4",
+      "original_text": "ｻﾟｫ",
+      "raw_hex": "BB DF AB",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4641,10 +6174,91 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x12661F",
+      "end": "0x126623",
+      "original_text": "ｮｺ､",
+      "raw_hex": "AE BA A4",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x126693",
       "end": "0x126698",
       "original_text": "ｫｻｪｯ",
       "raw_hex": "AB BB AA AF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x1269AD",
+      "end": "0x1269B1",
+      "original_text": "UUU",
+      "raw_hex": "55 55 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x126E35",
+      "end": "0x126E39",
+      "original_text": "ﾌﾏｻ",
+      "raw_hex": "CC CF BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x126E96",
+      "end": "0x126E9A",
+      "original_text": "ﾌｼﾌ",
+      "raw_hex": "CC BC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x126E9C",
+      "end": "0x126EA0",
+      "original_text": "ｼﾎﾏ",
+      "raw_hex": "BC CE CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12784F",
+      "end": "0x127853",
+      "original_text": "ｻｨｰ",
+      "raw_hex": "BB A8 B0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1278FB",
+      "end": "0x1278FF",
+      "original_text": "ﾌﾏﾌ",
+      "raw_hex": "CC CF CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12A293",
+      "end": "0x12A297",
+      "original_text": "ｹｿｯ",
+      "raw_hex": "B9 BF AF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12A2A1",
+      "end": "0x12A2A5",
+      "original_text": "ｩｪｿ",
+      "raw_hex": "A9 AA BF",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4654,6 +6268,15 @@
       "end": "0x12AF61",
       "original_text": "ﾚｪｪｪ",
       "raw_hex": "DA AA AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12B35F",
+      "end": "0x12B363",
+      "original_text": "ﾜﾝﾖ",
+      "raw_hex": "DC DD D6",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4677,10 +6300,37 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x12C213",
+      "end": "0x12C217",
+      "original_text": "ﾟﾟﾟ",
+      "raw_hex": "DF DF DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x12C75B",
       "end": "0x12C760",
       "original_text": "ｯｯｪｪ",
       "raw_hex": "AF AF AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x12CB58",
+      "end": "0x12CB61",
+      "original_text": "TE335U33",
+      "raw_hex": "54 45 33 33 35 55 33 33",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x12D135",
+      "end": "0x12D139",
+      "original_text": "LDC",
+      "raw_hex": "4C 44 43",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4694,11 +6344,56 @@
       "owner": "compressed-resource table or payload"
     },
     {
+      "kind": "halfwidth",
+      "address": "0x12D147",
+      "end": "0x12D14B",
+      "original_text": "ｭﾝﾜ",
+      "raw_hex": "AD DD DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
       "kind": "ascii",
       "address": "0x12D28B",
       "end": "0x12D292",
       "original_text": "4KDCKD",
       "raw_hex": "34 4B 44 43 4B 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12D2C3",
+      "end": "0x12D2C7",
+      "original_text": "ﾟｿｻ",
+      "raw_hex": "DF BF BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x12D2DC",
+      "end": "0x12D2E0",
+      "original_text": "KDB",
+      "raw_hex": "4B 44 42",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12D3B6",
+      "end": "0x12D3BA",
+      "original_text": "ｪﾝｭ",
+      "raw_hex": "AA DD AD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x12D4EE",
+      "end": "0x12D4F2",
+      "original_text": "IID",
+      "raw_hex": "49 49 44",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4731,10 +6426,46 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x12ECC7",
+      "end": "0x12ECCB",
+      "original_text": "ｻﾍｼ",
+      "raw_hex": "BB CD BC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x13037D",
+      "end": "0x130381",
+      "original_text": "ﾍﾝﾝ",
+      "raw_hex": "CD DD DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x1307BB",
       "end": "0x1307C0",
       "original_text": "ｾﾍｼﾖ",
       "raw_hex": "BE CD BC D6",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x130B0E",
+      "end": "0x130B12",
+      "original_text": "ﾐﾗﾒ",
+      "raw_hex": "D0 D7 D2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x130B14",
+      "end": "0x130B18",
+      "original_text": "ﾝﾗﾐ",
+      "raw_hex": "DD D7 D0",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4749,10 +6480,37 @@
     },
     {
       "kind": "halfwidth",
+      "address": "0x130B95",
+      "end": "0x130B99",
+      "original_text": "ﾜﾏﾎ",
+      "raw_hex": "DC CF CE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1317E1",
+      "end": "0x1317E5",
+      "original_text": "ﾝﾖﾝ",
+      "raw_hex": "DD D6 DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
       "address": "0x133079",
       "end": "0x13307F",
       "original_text": "ﾄﾒｿｲﾒ",
       "raw_hex": "C4 D2 BF B2 D2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x135C10",
+      "end": "0x135C14",
+      "original_text": "ｮｪﾗ",
+      "raw_hex": "AE AA D7",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     },
@@ -4771,6 +6529,24 @@
       "end": "0x13677B",
       "original_text": "EQQATDD",
       "raw_hex": "45 51 51 41 54 44 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x136BC4",
+      "end": "0x136BC8",
+      "original_text": "WUT",
+      "raw_hex": "57 55 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x137B34",
+      "end": "0x137B38",
+      "original_text": "ZUV",
+      "raw_hex": "5A 55 56",
       "category": "compressed_resource_data",
       "owner": "compressed-resource table or payload"
     }
