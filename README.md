@@ -34,7 +34,7 @@
 - `tools/capture_class_change_chain.py`: 한 지휘관 체인에서 아직 화면 검증되지 않은 고유 전이만 골라 위 자동 캡처를 순차 실행하고, 완전한 기존 캡처 세트는 건너뛰어 중단 후 재개합니다.
 - `tools/class_change_inventory.py`: 일본판의 플레이어 지휘관 10명 클래스 체인 100개 전이를 주소·원문·한글 표기·화면/적용 실기 상태와 함께 JSON/Markdown으로 생성합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
-- `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다. 단일 디스플레이 전환 뒤 Windows DWM 좌표가 어긋날 때는 `--xlib-only`로 포커스 변경 없이 X11 클라이언트를 직접 캡처합니다.
+- `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. Windows 배율을 반영한 DWM 데스크톱 캡처를 우선하고 `xwd`, Xlib 순으로 fallback하며 자동 경로는 포커스를 바꾸지 않습니다. `--print-window`는 가려진 OpenGL 창에서 이전 프레임 잔상이 섞일 수 있는 진단 전용 옵션입니다. `--allow-focus-steal`은 사용자가 다른 작업을 하지 않을 때 한 번만 명시적으로 허용해야 합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치합니다.
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
@@ -201,7 +201,7 @@ python3 tools/run_blastem_sequence.py shop
 - 현재 확인된 일본판 시작 타이밍은 `load ROM` 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`입니다. 이보다 빠르면 첫 입력이 씹히고, 늦으면 타이틀 idle 컷신으로 들어갑니다.
 - 일반 화면 전환 자동 입력은 최소 0.8초 간격을 둡니다. 단, 시나리오 선택 비기의 `Left, Right, Start, C` 네 키는 0.05초 간격이어야 하며 도구가 이 타이밍을 별도로 적용합니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
 - `tools/send_blastem_keys.py`는 RandR에서 활성 모니터 중 가장 넓은 출력을 골라 BlastEm 창을 배치합니다. 현재 Windows의 가로형 서브 모니터는 X 출력 `XWAYLAND8` (`1920,717`, 3440x1440)입니다. 다른 출력을 강제하려면 `BLASTEM_MONITOR=<X 출력명>`을 설정하고, RandR를 쓸 수 없으면 기존 `(40,40)` 위치로 돌아갑니다. `--send-event` 모드는 창 위치만 맞추고 활성 창 요청이나 포커스 변경을 하지 않으므로 사용자가 다른 게임을 하는 동안에는 이 모드만 허용합니다.
-- `tools/capture_blastem_window.py`는 WSLg에서 Windows DWM 창 경계와 X11 클라이언트 오프셋으로 정확한 게임 영역을 우선 캡처합니다. X11의 SDL/OpenGL 백버퍼는 완전 검정 또는 확대된 중앙 조각을 반환할 수 있어 WSL 실기 증거로 사용하지 않습니다. DWM 경로는 `CopyFromScreen`만 사용하며 창 활성화나 포커스 변경을 하지 않습니다. Ubuntu처럼 `powershell.exe`가 없는 환경이나 DWM 호출 실패 시에는 기존 X11 캡처로 돌아갑니다.
+- `tools/capture_blastem_window.py`는 WSLg에서 Windows DWM 창 경계, Windows 배율, X11 클라이언트 오프셋을 함께 적용해 게임 영역을 우선 캡처합니다. DWM 경로는 `CopyFromScreen`만 사용하며 창 활성화나 포커스 변경을 하지 않습니다. 가려진 OpenGL 창을 `PrintWindow`로 찍으면 갱신되지 않은 타일이 현재 화면에 합성될 수 있으므로 자동 fallback과 실기 합격 자료에서 제외했습니다. 자동 시퀀스에는 포커스 강탈 옵션이 없으며, 단발 캡처의 `--allow-focus-steal`만 사용자가 자리를 비우지 않았음을 확인한 뒤 명시적으로 사용할 수 있습니다.
 - 다른 장의 설명을 넘길 때는 고정 횟수로 C를 누르지 말고, 실행 중인 창에 `python3 tools/run_blastem_sequence.py detect-prep --no-launch --send-event --capture-prefix captures/run/sNN_brief.png`를 사용합니다. 준비창의 좌우 패널과 소지금 패널을 감지한 즉시 멈추며 `--capture-prefix`는 탐지 과정의 모든 화면을 번호별로 보존합니다. 같은 옵션은 `detect-command`의 오프닝/턴 이벤트 검수에도 사용할 수 있습니다.
 - `scenario-select`는 선택기 진입에 필요한 수동 세이브 슬롯을 보존하기 위해 `captures/runtime/load-screen`을 기본 초기화하지 않습니다. 다른 시퀀스의 격리 런타임은 기존처럼 `--reuse-runtime-state`를 주지 않으면 새로 만듭니다.
 - `scenario-select-entry`는 `Left, Right, Start, C` 비기 입력 직후 멈추고 시나리오 이동이나 확정을 보내지 않습니다. 전체 `scenario-select`와 같은 단일 입력 명령을 사용하므로, 창을 나눠 조작하다 비기가 누락되는 이전 실패를 반복하지 않습니다.

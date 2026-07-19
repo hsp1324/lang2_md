@@ -167,13 +167,22 @@ Closed all-item shop checkpoint:
   never requests `_NET_ACTIVE_WINDOW` or keyboard focus. While the user is
   gaming, do not run an XTest/click-window sequence because that path still
   requires focus by design.
-- With the current single-display Windows layout, the automatic Windows DWM
-  path can capture stale desktop/title-bar coordinates. Direct Xlib capture via
-  `find_blastem_window_xlib()` and `capture_with_xlib()` returns the exact
-  320x240 client without focus changes. Use
-  `python3 tools/capture_blastem_window.py --xlib-only OUTPUT.png` until
-  automatic monitor coordinate fallback is corrected; do not replace it with a
-  click or foreground-window workaround.
+- Windows currently reports the BlastEm outer window at twice the X11 logical
+  dimensions because display scaling is 200%. The DWM path now derives that
+  scale from both geometries, captures the physical client rectangle, and
+  downsamples it to the canonical 320x240 frame without changing focus.
+- `PrintWindow` can capture an occluded OpenGL window without focus, but partial
+  redraws retain stale pixels from earlier screens. The apparent extra `렛`
+  after preparation labels in `3c46_s02_escape_after_hire_end.png` is such a
+  rejected mosaic: glyph `렛` (`0x7235`) is absent from the complete
+  `0x96FC0..0x97680` preparation/name resource range, and earlier accepted DWM
+  captures render the same labels cleanly. `--print-window` is explicit and
+  diagnostic-only; it is no longer an automatic fallback or acceptance path.
+- Automatic detector sequences cannot request foreground activation. A single
+  manual capture may use `--allow-focus-steal` only after confirming that the
+  user is not working in another application. Never add a per-frame activation
+  flag back to `run_blastem_sequence.py`; it repeatedly calls Windows
+  `SetForegroundWindow` and steals the user's active window.
 
 ## Why The Work Moved From English ROM To Japanese ROM
 
