@@ -141,6 +141,8 @@ BYTE_UI_LOCAL_TILE_TABLE = 0x2B8000
 BYTE_UI_LOCAL_TILE_TABLE_LIMIT = 0x2B8400
 INLINE_DISCARD_PROMPT_RECORD = 0x2B8400
 INLINE_DISCARD_PROMPT_RECORD_LIMIT = 0x2B8420
+SOUND_TEST_TILE_TABLE = 0x2BC000
+SOUND_TEST_TILE_TABLE_LIMIT = 0x2C0000
 BYTE_UI_CLASS_STRING_RELOC_BASE = 0x2B9000
 BYTE_UI_CLASS_STRING_RELOC_LIMIT = 0x2BA000
 BYTE_UI_NAME_STRING_RELOC_BASE = 0x2BA000
@@ -442,12 +444,37 @@ TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
+SOUND_TEST_RENDER_ROUTINE = 0x2B7F60
 INLINE_DISCARD_PROMPT_RENDER_HOOK = 0x01804C
 INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL = bytes.fromhex("45 F9 00 01 80 7E")
 INLINE_DISCARD_PROMPT_SOURCE = 0x01807E
 INLINE_DISCARD_PROMPT_SOURCE_BYTES = "ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ".encode("cp932")
 INLINE_DISCARD_PROMPT_WIDTH = 13
 INLINE_DISCARD_PROMPT_TEXT = "버릴 아이템 선택"
+SOUND_TEST_SOURCE_TABLE = 0x05E040
+SOUND_TEST_ROW_COUNT = 77
+SOUND_TEST_ROW_SIZE = 16
+SOUND_TEST_LABEL_WIDTH = 15
+SOUND_TEST_SOURCE_SHA256 = "a2b42b12028f5fe45bd3dcbb39795e40da25adcf8ed84a1add9230bfcb56c39b"
+SOUND_TEST_RENDER_HOOK = 0x00FB14
+SOUND_TEST_RENDER_HOOK_ORIGINAL = bytes.fromhex("72 00 12 39 FF FF")
+SOUND_TEST_LABELS = (
+    "BGM STOP",
+    "아군 1", "아군 2", "아군 3", "아군 4", "아군 5", "아군 6", "아군 7", "아군 8",
+    "적군1 레온", "적군2 발가스", "적군3 모건", "적군4 자크", "적군5 에그베르트",
+    "적군6 이멜다", "적군7 다크프린세스", "적군8 보젤", "적군9 베른하르트", "제국군",
+    "아니키", "제시카", "고대 MAGIC", "리아나와 우하우하", "아이템숍",
+    "OPENING 1", "OPENING 2", "ENDING 1", "ENDING 2", "ENDING 3", "ENDING 4",
+    "STORY", "REQUIEM", "FM SE STOP", "WINDOW OPEN", "WINDOW CLOSE",
+    "선택 1", "선택 2", "선택 SE", "해제", "ITEM ON", "OPERATION MISS",
+    "MAGIC MISS", "MAGIC SUCCESS", "MAGIC FLYING", "THUNDER", "WIND", "EARTHQUAKE",
+    "SLEEP", "MUTE / ZONE", "TURN UNDEAD", "SWORD SWING", "SWORD POWER",
+    "SHOT 1", "SHOT 2", "ENEMY FLYING", "ENEMY HIT", "ENEMY DOWN", "BATTLE",
+    "ARROW FLYING", "BATTLE CRY", "소녀 SCREAM 1", "소녀 SCREAM 2", "소녀 SCREAM 3",
+    "소녀 SCREAM 4", "몬스터 CRY 1", "몬스터 CRY 2", "몬스터 CRY 3",
+    "남자 SCREAM 1", "남자 SCREAM 2", "남자 SCREAM 3", "남자 SCREAM 4",
+    "BOMB HIGH", "BOMB NORMAL", "BOMB LOW", "LANGRISSER", "WOLF MAN", "OWL",
+)
 TITLE_CREDIT_FONT_LOAD_HOOK = 0x02D66A
 TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL = bytes.fromhex("30 3C 81 89 32 7C 20 00")
 TITLE_COPYRIGHT_RENDER_HOOK = 0x02D712
@@ -4880,6 +4907,22 @@ def _build_inline_discard_prompt_renderer() -> bytes:
     return code.finish()
 
 
+def _build_sound_test_renderer() -> bytes:
+    code = _M68KCode()
+    # The stock table keeps a one-byte sound ID followed by 15 label bytes.
+    # Keep that table intact for playback and index a relocated 15-word tile
+    # row solely for rendering.
+    code.emit("72 00 12 39 FF FF A6 C8 C2 FC 00 1E")
+    code.emit(bytes.fromhex("43 F9") + SOUND_TEST_TILE_TABLE.to_bytes(4, "big"))
+    code.emit("D2 C1 34 78 90 4C 34 3C 00 E8 70 0E")
+    code.label("loop")
+    code.emit("34 FC 00 D0 14 FC 00 00 52 38 90 4E 14 F8 90 4E")
+    code.emit("36 3C 80 00 D6 59 34 C3 34 C2 50 42")
+    code.branch_word(0x51C8, "loop")
+    code.emit("31 CA 90 4C 4E 75")
+    return code.finish()
+
+
 def _build_title_credit_font_loader() -> bytes:
     request = 0x8000 | TITLE_CREDIT_RESOURCE_INDEX
     return (
@@ -5050,6 +5093,7 @@ def install_byte_ui_extension(
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer()
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
+    sound_test_renderer = _build_sound_test_renderer()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -5078,6 +5122,7 @@ def install_byte_ui_extension(
         TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
         INLINE_DISCARD_PROMPT_RENDER_ROUTINE: discard_prompt_renderer,
+        SOUND_TEST_RENDER_ROUTINE: sound_test_renderer,
     }
     for offset, payload in routines.items():
         if offset + len(payload) > BYTE_UI_EXT_ROUTINE_LIMIT:
@@ -5121,6 +5166,45 @@ def install_byte_ui_extension(
     data[INLINE_DISCARD_PROMPT_RENDER_HOOK:hook_end] = (
         bytes.fromhex("4E F9")
         + INLINE_DISCARD_PROMPT_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+
+    source_end = SOUND_TEST_SOURCE_TABLE + SOUND_TEST_ROW_COUNT * SOUND_TEST_ROW_SIZE
+    source = bytes(data[SOUND_TEST_SOURCE_TABLE:source_end])
+    if hashlib.sha256(source).hexdigest() != SOUND_TEST_SOURCE_SHA256:
+        raise ValueError("sound-test source table changed")
+    if data[source_end] != 0xFF:
+        raise ValueError("sound-test table terminator changed")
+    if len(SOUND_TEST_LABELS) != SOUND_TEST_ROW_COUNT:
+        raise ValueError(
+            f"sound-test label count is {len(SOUND_TEST_LABELS)}, expected {SOUND_TEST_ROW_COUNT}"
+        )
+    tile_rows = bytearray()
+    for row, label in enumerate(SOUND_TEST_LABELS):
+        if len(label) > SOUND_TEST_LABEL_WIDTH:
+            raise ValueError(f"sound-test label {row} exceeds 15 cells: {label!r}")
+        padded = label.ljust(SOUND_TEST_LABEL_WIDTH)
+        for char in padded:
+            if ord(char) < 0x80:
+                tile = ord(char)
+            else:
+                try:
+                    tile = tile_by_index[index_by_char[char]]
+                except KeyError as exc:
+                    raise ValueError(
+                        f"sound-test label {row} needs unavailable glyph {char!r}"
+                    ) from exc
+            tile_rows.extend(tile.to_bytes(2, "big"))
+    table_end = SOUND_TEST_TILE_TABLE + len(tile_rows)
+    if table_end > SOUND_TEST_TILE_TABLE_LIMIT:
+        raise ValueError("localized sound-test tile table exceeds reserved bank")
+    if any(value != 0xFF for value in data[SOUND_TEST_TILE_TABLE:table_end]):
+        raise ValueError("localized sound-test tile table area is not blank")
+    data[SOUND_TEST_TILE_TABLE:table_end] = tile_rows
+    sound_hook_end = SOUND_TEST_RENDER_HOOK + len(SOUND_TEST_RENDER_HOOK_ORIGINAL)
+    if bytes(data[SOUND_TEST_RENDER_HOOK:sound_hook_end]) != SOUND_TEST_RENDER_HOOK_ORIGINAL:
+        raise ValueError("sound-test render hook changed")
+    data[SOUND_TEST_RENDER_HOOK:sound_hook_end] = (
+        bytes.fromhex("4E F9") + SOUND_TEST_RENDER_ROUTINE.to_bytes(4, "big")
     )
 
     for offset in BYTE_UI_FONT_LOAD_CALLS:

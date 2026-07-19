@@ -35,7 +35,9 @@ This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF
 - `0x05E040..0x05E510` is a 77-row hidden sound-test label table.
   39 rows contain half-width Japanese. It is a real
   structured UI/debug surface, not an item, class, summon, or compressed asset.
-  Its access path and live appearance must be verified before translation.
+  Production preserves all first-byte sound IDs and redirects only the label
+  renderer to a relocated 15-cell tile table. Cursor `(2,2)` plus B held for
+  at least 60 frames enters it; tail traversal, wraparound, and exit are live-verified.
 - `PAGE`, `NCS CORP.`, and `PUSH START BUTTON` are intentionally retained compact
   English/title text. `SEGA` and `PADR` are internal hardware/controller signatures.
 

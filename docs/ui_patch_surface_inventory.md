@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 115
-- Byte-modified declarations: 114
+- Declared patches: 118
+- Byte-modified declarations: 117
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -29,6 +29,9 @@ closed merely because every known patch declaration changed bytes.
 | name_entry_byte_values | 1 | 1 |
 | name_entry_confirm_hook | 1 | 1 |
 | name_entry_confirm_routine | 1 | 1 |
+| sound_test_render_hook | 1 | 1 |
+| sound_test_render_routine | 1 | 1 |
+| sound_test_tile_table | 1 | 1 |
 | inline_discard_prompt_hook | 1 | 1 |
 | inline_discard_prompt_routine | 1 | 1 |
 | inline_discard_prompt_record | 1 | 1 |
@@ -59,7 +62,6 @@ Resource table `0x0B0000` index 1 uses entry
 - ending and credits UI variants outside the verified Scenario 27, all-epilogue, ending-visit, and final-credit paths
 - magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack/Elemental probes
 - ownership and purpose of 427 compressed resources beyond byte-font resource index 1 and item-icon resource index 391
-- access-path, translation, and live verification of the hidden 77-row sound-test label table at 0x05E040
 - non-pointer byte sequences outside the conservative maximal half-width/uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories
 
 Detailed declarations are in `localization/ui_patch_surfaces.json`.

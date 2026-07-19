@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 115)
-        self.assertEqual(self.result["modified_patch_count"], 114)
+        self.assertEqual(self.result["declared_patch_count"], 118)
+        self.assertEqual(self.result["modified_patch_count"], 117)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -111,6 +111,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["modified"] for row in rows))
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(not row["live_verified"] for row in rows))
+
+    def test_hidden_sound_test_is_declared_and_live_verified(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"].startswith("sound_test_")
+        ]
+        self.assertEqual(len(rows), 3)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_stage_one_keeps_explicit_unknowns(self):
         self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 6)

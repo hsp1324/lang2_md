@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 115,
-  "modified_patch_count": 114,
+  "declared_patch_count": 118,
+  "modified_patch_count": 117,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 27,
@@ -67,6 +67,18 @@
       "modified_count": 1
     },
     "name_entry_confirm_routine": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "sound_test_render_hook": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "sound_test_render_routine": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "sound_test_tile_table": {
       "entry_count": 1,
       "modified_count": 1
     },
@@ -1002,6 +1014,33 @@
       "live_verified": true
     },
     {
+      "group": "sound_test_render_hook",
+      "address": "0x00FB14",
+      "size_bytes": 6,
+      "target_korean": "redirect the hidden 77-row sound-test label renderer",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "sound_test_render_routine",
+      "address": "0x2B7F60",
+      "size_bytes": 68,
+      "target_korean": "render a relocated 15-cell tile row while preserving stock sound IDs",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "sound_test_tile_table",
+      "address": "0x2BC000",
+      "size_bytes": 2310,
+      "target_korean": "77 localized hidden sound-test labels",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
       "group": "inline_discard_prompt_hook",
       "address": "0x01804C",
       "size_bytes": 6,
@@ -1188,7 +1227,6 @@
     "ending and credits UI variants outside the verified Scenario 27, all-epilogue, ending-visit, and final-credit paths",
     "magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack/Elemental probes",
     "ownership and purpose of 427 compressed resources beyond byte-font resource index 1 and item-icon resource index 391",
-    "access-path, translation, and live verification of the hidden 77-row sound-test label table at 0x05E040",
     "non-pointer byte sequences outside the conservative maximal half-width/uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories"
   ]
 }

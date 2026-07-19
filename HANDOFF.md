@@ -22,15 +22,15 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 2282
+current production build checksum: F91E
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 384 passing
+unit tests: 389 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 449 classified, 0 unclassified
-declared UI patches: 114/115 byte-modified; NPC is intentionally unchanged
-explicit UI verification gaps: 7
+declared UI patches: 117/118 byte-modified; NPC is intentionally unchanged
+explicit UI verification gaps: 6
 ```
 
 Completed and closed unless a later edit touches the same renderer, pointer,
@@ -72,15 +72,16 @@ glyph bank, or visible screen:
 - the independent inline scan classifies 449 conservative `FF`-terminated runs
   with zero unknowns. It proves the fixed 13-cell `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` prompt at
   `0x01807E` and a separate 77-row hidden sound-test table at
-  `0x05E040..0x05E50F`; the sound-test access/translation remains an explicit
-  UI gap rather than being mistaken for class or item data.
+  `0x05E040..0x05E50F`. Production preserves every sound ID, redirects only the
+  label renderer, and has live evidence for entry, representative rows, the
+  final row, wraparound, and exit.
 
 Active work, in order:
 
 1. Upgrade scenario `completion` and `branches_endings` cells that are still
    `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
    continuity evidence but is not a page-by-page visual review.
-2. Work only from the seven explicit shared-UI gaps in
+2. Work only from the six explicit shared-UI gaps in
    `docs/ui_patch_surface_inventory.md`; the item-shop gap is closed.
 3. Re-run a completed path only when a new patch shares its glyphs, pointers,
    tokens, compressed resource, or control flow, or when an automated regression
@@ -246,7 +247,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `2282` and passes all 384 tests. It includes
+The current source builds checksum `F91E` and passes all 389 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,
@@ -5868,8 +5869,15 @@ contains 57 safe syllables as documented below and in
   distinct items in the complete secret shop did not reach this prompt, so its
   actual equipment/treasure access path remains `reviewed` but not live-verified.
 - The 77 fixed 16-byte records at `0x05E040..0x05E50F` are a hidden sound-test
-  label table, ending in `ﾌｸﾛｳ`; they are not summon, class, or item names. Its
-  access path, translation, and renderer verification are a deliberate UI gap.
+  label table, ending in `ﾌｸﾛｳ`; they are not summon, class, or item names. On
+  the battle map, place the cursor at `(2,2)` and hold B for at least 60 frames.
+  Flag byte `0xFFFFA6D4` then selects callback `0x00FA28`; Up/Down traverse rows,
+  C plays, and B exits. Production `F91E` keeps all 77 first-byte sound IDs
+  unchanged, redirects hook `0x00FB14` to renderer `0x2B7F60`, and reads 15
+  direct tile words per row from `0x2BC000`. Captures
+  `f91e_sound_test_load_state.png`, `_row09.png`, `_row15.png`, `_row22.png`,
+  `_row37.png`, `_row60.png`, `_row76.png`, `_wrap_row00.png`, and `_exit.png`
+  prove Korean/English labels, tail traversal, wraparound, and clean exit.
 - A fresh item-35 purchase reproduced `그레이` followed by icon tiles. Tokens
   `76..78` crossed the stock 64-slot name window into the icon bank. A first
   overflow load at `0xE000` failed because GST VRAM proved that address is the
@@ -5878,5 +5886,6 @@ contains 57 safe syllables as documented below and in
 - Production `2282` and diagnostic `7E0B` use split name loading and bank-aware
   renderers. The renderer-aware item fingerprint is
   `9e3372724e71c96a4dcff082fb9e3f67e843408c93d375f0a0bca16dcdda822b`;
-  all 384 tests pass. The current single-display layout is captured reliably
+  the subsequent sound-test production build is `F91E`, and all 389 tests pass.
+  The current single-display layout is captured reliably
   with direct Xlib rather than the stale-coordinate Windows DWM path.

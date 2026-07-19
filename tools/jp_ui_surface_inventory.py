@@ -190,6 +190,38 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
     for group, offset, size, target in (
         (
+            "sound_test_render_hook",
+            builder.SOUND_TEST_RENDER_HOOK,
+            len(builder.SOUND_TEST_RENDER_HOOK_ORIGINAL),
+            "redirect the hidden 77-row sound-test label renderer",
+        ),
+        (
+            "sound_test_render_routine",
+            builder.SOUND_TEST_RENDER_ROUTINE,
+            len(builder._build_sound_test_renderer()),
+            "render a relocated 15-cell tile row while preserving stock sound IDs",
+        ),
+        (
+            "sound_test_tile_table",
+            builder.SOUND_TEST_TILE_TABLE,
+            builder.SOUND_TEST_ROW_COUNT * builder.SOUND_TEST_LABEL_WIDTH * 2,
+            "77 localized hidden sound-test labels",
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
+    for group, offset, size, target in (
+        (
             "inline_discard_prompt_hook",
             builder.INLINE_DISCARD_PROMPT_RENDER_HOOK,
             len(builder.INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL),
@@ -389,8 +421,6 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "Magic Arrow and diagnostic Attack/Elemental probes",
             "ownership and purpose of 427 compressed resources beyond byte-font "
             "resource index 1 and item-icon resource index 391",
-            "access-path, translation, and live verification of the hidden 77-row "
-            "sound-test label table at 0x05E040",
             "non-pointer byte sequences outside the conservative maximal half-width/"
             "uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories",
         ],

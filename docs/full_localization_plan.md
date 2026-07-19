@@ -12,11 +12,11 @@ follow this status table so a resume does not repeat already accepted work.
 | Stage | Status | Resume rule |
 | --- | --- | --- |
 | 1. Inventory and coverage | Complete baseline | 783 direct-word, 348 pointer-referenced direct-byte, and 449 conservative inline-byte candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
-| 2. Shared UI and global names | In progress | 114/115 declared patches differ intentionally; work only from the seven explicit gaps in `docs/ui_patch_surface_inventory.md`. |
+| 2. Shared UI and global names | In progress | 117/118 declared patches differ intentionally; work only from the six explicit gaps in `docs/ui_patch_surface_inventory.md`. |
 | 3. Scenarios 2-10 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 4. Scenarios 11-20 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
-| 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the seven UI gaps are resolved or explicitly accepted. |
+| 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the six UI gaps are resolved or explicitly accepted. |
 
 Stage 2 complete-item checkpoint is closed. Production checksum `2282` splits
 the 84 item-name glyphs at the stock 64-slot VRAM boundary: slots `0..63` stay
@@ -28,7 +28,7 @@ fingerprint; price-only derivative `4C04` verifies `그레이프니르`,
 `걀라르호른`, `아뮬렛`, and the `단검` regression in BlastEm. The earlier
 `D304` capture set still covers all 37 descriptions, prices/stat lines, and
 visible icons. Decoded icon resource 391 remains byte-identical to the Japanese
-ROM. Resume Stage 2 only from the seven gaps in
+ROM. Resume Stage 2 only from the six gaps in
 `docs/ui_patch_surface_inventory.md`.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run
@@ -54,9 +54,9 @@ test fails. The authoritative machine-readable state is
   without guessing their runtime-selected IDs.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known
   owners, and require render/code-reference proof before patching unknown candidates.
-- Scan conservative inline `FF` byte strings independently of pointer tables. Keep
-  the 77-row hidden sound-test label table as an explicit untranslated/runtime gap
-  until its access path and live renderer are proven.
+- Scan conservative inline `FF` byte strings independently of pointer tables. The
+  77-row hidden sound-test label table is now localized and live-verified; retain
+  its source hash, sound-ID preservation test, and `(2,2)` plus held-B access proof.
 - Keep full ending-dialogue pages and character epilogues as explicit translation
   work even when a shorter suffix inside the same page has already been patched.
 - Track word-swapped pointer tables separately from normal big-endian pointers;
