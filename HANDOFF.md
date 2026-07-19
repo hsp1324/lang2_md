@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 3C57
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 865 (0x7000..0x7361)
-unit tests: 403 passing
+unit tests: 409 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 449 classified, 0 unclassified
@@ -5718,6 +5718,23 @@ contains 57 safe syllables as documented below and in
   `captures/run/479f_s01_clear_save_current.png` proves `시나리오 2`, the
   unobstructed dynamic number, remaining empty rows, and `다음 시나리오`.
   The result-header inventory entry is now `live_verified: true`.
+
+### Scenario 2 North-Escape Completion Probe (2026-07-20, Live Pending)
+
+- Scenario 2 is not a Zorum-defeat clear. The stock condition resource says
+  victory is Liana reaching the north edge or enemy annihilation; defeat is
+  Liana or the protagonist dying. Do not reuse the Scenario 1 weak-boss probe.
+- `tools/build_scenario2_escape_probe_rom.py` validates the Japanese Scenario 2
+  header `0x180368`, deployment table `0x180380`, first-player slot `(5,19)`,
+  ten fixed records, and Liana's index-3 record at `0x1803FC` with source
+  coordinates `(8,18)`. It changes only that record's Y byte to `1` plus the
+  Mega Drive checksum. Current ignored diagnostic checksum is `3C46`.
+- Static tests prove the changed-byte subset and reject altered deployment
+  pointers or input Liana records. A recovered isolated Scenario 2 save reached
+  preparation and the opening, but the completion run was stopped before
+  acceptance because per-frame Windows activation stole the user's foreground
+  window. Do not claim a clear, result screen, next-scenario save, or ordinary
+  continuation until a fresh no-focus-steal playback is reviewed.
 
 ### Stable Forced Class-Change Application Diagnostics (2026-07-19)
 
