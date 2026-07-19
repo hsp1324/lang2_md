@@ -6864,7 +6864,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0003 0004 0005 0006 0007 0008 0005 FFFF",
-      "current_tokens": "0040 0041 0042 FFFF",
+      "current_tokens": "0009 000A 000B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6876,7 +6876,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0009 000A 0005 000B 000C 0005 000D FFFF",
-      "current_tokens": "0043 0044 0001 0045 0003 0046 FFFF",
+      "current_tokens": "000C 000D 0001 000E 0003 000F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6888,7 +6888,7 @@
       "target_korean": null,
       "original_word_count": 4,
       "original_tokens": "000E 0007 000D FFFF",
-      "current_tokens": "0047 0046 FFFF",
+      "current_tokens": "0010 000F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6900,7 +6900,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0002 000A 0001 000F 0010 0007 0011 FFFF",
-      "current_tokens": "0048 0044 0049 004A 004B FFFF",
+      "current_tokens": "0011 000D 0012 0013 0014 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6912,7 +6912,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0012 0013 0014 0015 0016 0017 0011 FFFF",
-      "current_tokens": "004C 004D 004E 004B FFFF",
+      "current_tokens": "0015 0016 0017 0014 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6924,7 +6924,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0018 0019 0011 000A 0001 001A 0005 FFFF",
-      "current_tokens": "004F 0050 0044 0001 0051 FFFF",
+      "current_tokens": "0018 0019 000D 0001 001A FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6936,7 +6936,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0010 0007 0009 001B 0016 001C 0005 FFFF",
-      "current_tokens": "0052 0043 0053 0054 FFFF",
+      "current_tokens": "001B 000C 001C 001D FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6948,7 +6948,7 @@
       "target_korean": null,
       "original_word_count": 9,
       "original_tokens": "001D 001C 0001 001A 0007 000C 0005 000D FFFF",
-      "current_tokens": "0055 0054 0001 0056 0003 0046 FFFF",
+      "current_tokens": "001E 001D 0001 001F 0003 000F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6960,7 +6960,7 @@
       "target_korean": null,
       "original_word_count": 5,
       "original_tokens": "001E 0015 000A 0001 FFFF",
-      "current_tokens": "0057 0000 0058 FFFF",
+      "current_tokens": "0020 0000 0021 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6972,7 +6972,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "001F 0005 001B 0005 0020 0016 000D FFFF",
-      "current_tokens": "0059 005A 005B 0046 FFFF",
+      "current_tokens": "0022 0023 0024 000F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6984,7 +6984,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "0021 0005 0017 0020 0016 000D FFFF",
-      "current_tokens": "005C 005D 005B 0046 FFFF",
+      "current_tokens": "0025 0026 0024 000F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6996,7 +6996,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "0015 0014 0006 0022 0005 000B FFFF",
-      "current_tokens": "005E 005F 0060 0046 FFFF",
+      "current_tokens": "0027 0028 0029 000F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7008,7 +7008,7 @@
       "target_korean": null,
       "original_word_count": 6,
       "original_tokens": "0020 0007 0009 0023 0003 FFFF",
-      "current_tokens": "0061 0062 0063 FFFF",
+      "current_tokens": "002A 002B 002C FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7020,7 +7020,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "0015 0005 0024 000A 0011 000B FFFF",
-      "current_tokens": "0000 0064 0044 004B 0045 FFFF",
+      "current_tokens": "0000 002D 000D 0014 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7032,7 +7032,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "0025 0019 0026 0005 0014 000D FFFF",
-      "current_tokens": "0003 0065 0066 0067 FFFF",
+      "current_tokens": "0003 002E 002F 0030 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7044,7 +7044,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "0027 0019 0026 0005 0014 000D FFFF",
-      "current_tokens": "0068 0065 0066 0067 FFFF",
+      "current_tokens": "0031 002E 002F 0030 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7056,7 +7056,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0028 0029 0001 0007 001D 0001 0014 FFFF",
-      "current_tokens": "0069 006A 0055 006B FFFF",
+      "current_tokens": "0032 0033 001E 0034 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7068,7 +7068,7 @@
       "target_korean": null,
       "original_word_count": 9,
       "original_tokens": "002A 000A 0005 000B 0015 0005 0008 0005 FFFF",
-      "current_tokens": "0048 0044 0001 0045 0000 0042 FFFF",
+      "current_tokens": "0011 000D 0001 000E 0000 000B FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7080,7 +7080,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0015 001C 0014 000B 0011 0005 002B FFFF",
-      "current_tokens": "0051 006C 0045 006D 006E FFFF",
+      "current_tokens": "001A 0035 000E 0036 0037 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7092,7 +7092,7 @@
       "target_korean": null,
       "original_word_count": 4,
       "original_tokens": "0020 0005 002C FFFF",
-      "current_tokens": "005B 006F FFFF",
+      "current_tokens": "0024 0038 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7104,7 +7104,7 @@
       "target_korean": null,
       "original_word_count": 9,
       "original_tokens": "000D 0010 002D 0007 0011 002E 0001 0014 FFFF",
-      "current_tokens": "0046 0070 0071 004B 0072 006B FFFF",
+      "current_tokens": "000F 0039 003A 0014 003B 0034 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7116,7 +7116,7 @@
       "target_korean": null,
       "original_word_count": 9,
       "original_tokens": "002F 0010 0005 0030 0031 0020 0005 002C FFFF",
-      "current_tokens": "0073 0074 0075 005B 006F FFFF",
+      "current_tokens": "003C 003D 003E 0024 0038 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7128,7 +7128,7 @@
       "target_korean": null,
       "original_word_count": 9,
       "original_tokens": "0032 0005 0012 0033 0007 0034 0035 0036 FFFF",
-      "current_tokens": "0076 0077 0066 0067 FFFF",
+      "current_tokens": "003F 0040 002F 0030 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7140,7 +7140,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0014 0005 0007 0011 000B 0005 0007 FFFF",
-      "current_tokens": "0078 004B 0079 FFFF",
+      "current_tokens": "0041 0014 0042 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7152,7 +7152,7 @@
       "target_korean": null,
       "original_word_count": 4,
       "original_tokens": "0017 0020 0011 FFFF",
-      "current_tokens": "005D 005B 004B FFFF",
+      "current_tokens": "0026 0024 0014 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7164,7 +7164,7 @@
       "target_korean": null,
       "original_word_count": 6,
       "original_tokens": "0037 0016 0017 000A 0011 FFFF",
-      "current_tokens": "007A 007B 0001 FFFF",
+      "current_tokens": "0043 0044 0001 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7176,7 +7176,7 @@
       "target_korean": null,
       "original_word_count": 4,
       "original_tokens": "0032 0005 002C FFFF",
-      "current_tokens": "0076 006F FFFF",
+      "current_tokens": "003F 0038 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7188,7 +7188,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0011 0038 0005 000D 002C 0005 002B FFFF",
-      "current_tokens": "004B 007C 0046 007D 006E FFFF",
+      "current_tokens": "0014 0045 000F 0046 0037 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7200,7 +7200,7 @@
       "target_korean": null,
       "original_word_count": 5,
       "original_tokens": "0017 0010 0003 0007 FFFF",
-      "current_tokens": "005D 0074 007E FFFF",
+      "current_tokens": "0026 003D 0047 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7212,7 +7212,7 @@
       "target_korean": null,
       "original_word_count": 6,
       "original_tokens": "0015 0003 0020 0005 0010 FFFF",
-      "current_tokens": "0000 0063 005B 0074 FFFF",
+      "current_tokens": "0000 002C 0024 003D FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7224,7 +7224,7 @@
       "target_korean": null,
       "original_word_count": 5,
       "original_tokens": "0039 003A 0034 003B FFFF",
-      "current_tokens": "007F 0054 0080 0081 FFFF",
+      "current_tokens": "0048 001D 0049 004A FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7236,7 +7236,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "003C 0005 0024 0007 0017 0014 FFFF",
-      "current_tokens": "0082 0083 0084 FFFF",
+      "current_tokens": "004B 004C 004D FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7248,7 +7248,7 @@
       "target_korean": null,
       "original_word_count": 8,
       "original_tokens": "0009 000A 0001 002A 003D 0005 0014 FFFF",
-      "current_tokens": "0043 0044 0001 0085 0086 FFFF",
+      "current_tokens": "000C 000D 0001 004E 004F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7260,7 +7260,7 @@
       "target_korean": null,
       "original_word_count": 9,
       "original_tokens": "003E 003F 0010 0014 0034 001F 0014 0007 FFFF",
-      "current_tokens": "0087 0074 0088 0089 FFFF",
+      "current_tokens": "0050 003D 0051 0052 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7272,7 +7272,7 @@
       "target_korean": null,
       "original_word_count": 7,
       "original_tokens": "0015 002F 0031 000A 0016 000B FFFF",
-      "current_tokens": "0000 008A 008B FFFF",
+      "current_tokens": "0000 0053 0054 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7296,7 +7296,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "000F 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 001A 001B 001C 001D 001E 001F 0020 0011 0021 0022 0023 0007 0008 0008 0008 0008 0009 000A 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00C0 00C1 00C2 0008 00C3 00C4 00C5 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "000F 0010 0011 0008 0012 0013 0014 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7308,7 +7308,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0001 0025 0026 0027 0028 0023 0017 0029 002A 001A 002B 002C 002D 0003 000F 002E 0007 0008 0009 000A 000B 002F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00CA 00CB 00CC 00CD 00CE 00CF 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00D0 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0019 001A 001B 001C 001D 001E 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 001F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7320,7 +7320,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0030 0031 0032 0033 0034 0023 0035 0036 0007 0030 0037 0038 0026 000B 0024 0008 0008 0008 0030 0037 0039 001F 0015 003A 000B 000C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00D1 00D2 00D3 0008 00D4 00CC 00D5 0008 00D6 00CF 0008 0008 0008 0008 0008 00D7 00D8 00D9 00C8 00C9 0008 00D1 00DA 00C8 00DB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0020 0021 0022 0008 0023 001B 0024 0008 0025 001E 0008 0008 0008 0008 0008 0026 0027 0028 0017 0018 0008 0020 0029 0017 002A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7332,7 +7332,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0030 0037 0003 0019 0003 003B 0032 003C 003D 0021 003E 003F 0013 0040 0007 0008 0008 0008 0009 000A 000B 0041 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00D1 00DA 00DC 0008 00DD 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00DE 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0020 0029 002B 0008 002C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 002D 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7344,7 +7344,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0042 0031 0011 0003 0043 0022 0003 0044 0044 0021 003E 0045 0046 0015 0047 0048 0049 004A 0040 0007 0008 0008 0008 0008 0008 0008 0008 0009 000A 000B 004B 004C 004D 004E 004F 0050 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00DF 00E0 00E1 00E2 0008 00E3 00E4 00E5 00E6 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00E7 0008 00E8 00E9 00EA 00EB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "002E 002F 0030 0031 0008 0032 0033 0034 0035 0008 0008 0008 0008 0008 0008 0015 0016 0017 0036 0008 0037 0038 0039 003A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7356,7 +7356,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0051 003F 0052 0013 0032 003E 003B 0053 003E 0054 001B 0055 0021 003E 003D 0022 0056 0057 0023 0030 002E 0007 0008 0008 0008 0008 0008 0009 000A 000B 0058 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00E8 00EC 00CB 00CC 00ED 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00EE 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0037 003B 001A 001B 003C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 003D 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7368,7 +7368,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "003A 0015 004A 0012 0059 0047 001B 0010 003E 0036 003E 005A 0003 005B 0059 005C 005D 0040 0003 0031 0032 002C 0035 005E 002E 0007 0008 0009 000A 000B 002F 004C 004D 004E 000B 000C 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
-      "current_tokens": "00EF 00F0 00D9 00F1 00DC 0008 00F2 0005 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00D0 0008 00E8 00E9 00C8 00DB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
+      "current_tokens": "003E 003F 0028 0040 002B 0008 0041 0005 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 001F 0008 0037 0038 0017 002A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7380,7 +7380,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "005A 0003 005B 0059 005C 005D 0040 0003 0031 0032 002C 0035 005E 002E 0007 0008 0008 0008 0009 000A 000B 005F 004C 004D 004E 000B 0024 0009 0060 0061 000B 0050 0008 0008 0008 0008 004D 0060 0061 000B 000C 0008 0008 0008 0008 FFFF",
-      "current_tokens": "00F3 00DC 0008 00F2 0005 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00F4 0008 00E8 00E9 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
+      "current_tokens": "0042 002B 0008 0041 0005 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 0043 0008 0037 0038 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7392,7 +7392,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0062 0014 003D 0019 0053 0003 0063 0052 001B 0064 001C 0020 0028 0023 002E 0007 0008 0008 0009 000A 004F 002F 004C 004D 004E 004F 0050 0009 0060 0061 004F 0024 004C 0065 0066 0067 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00F5 00F6 00DC 0008 0005 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00EA 00D0 0008 00E8 00E9 00EA 00EB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0044 0045 002B 0008 0005 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0039 001F 0008 0037 0038 0039 003A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7404,7 +7404,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0068 0053 0022 0069 0032 0035 006A 0023 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0008 0008 0008 0008 0008 0009 000A 000B 000C 004C 0071 0072 004F 000C 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00F7 00D3 0008 0004 00F8 00F9 00D5 0008 00FA 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00DB 0008 00FB 00FC 00EA 00DB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0046 0022 0008 0004 0047 0048 0024 0008 0049 0008 0008 0008 0008 0008 0008 0015 0016 0017 002A 0008 004A 004B 0039 002A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7416,7 +7416,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "005E 002E 003F 0013 0045 005D 0049 006B 0015 0003 0031 0032 0073 0074 006F 0023 001C 001D 003D 0011 0023 0063 0049 0051 0007 0008 0008 0030 0037 0075 0031 001B 0076 0077 0007 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00FD 00CA 00FE 00D7 00FF 0008 0100 0101 00D5 0008 0008 0008 0008 0008 0008 00F2 00F1 0102 0103 0008 0104 00CF 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "004C 0019 004D 0026 004E 0008 004F 0050 0024 0008 0008 0008 0008 0008 0008 0041 0040 0051 0052 0008 0053 001E 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7428,7 +7428,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0030 002E 0017 0048 0059 0012 0078 0015 0051 0003 0031 0032 0073 0074 006F 0023 001C 001D 003D 0011 0023 0063 0049 0051 0007 0008 0008 0030 0037 0075 0031 001B 0076 0077 0007 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0105 00F9 0106 00CF 00FF 0008 0100 0101 00D5 0008 0008 0008 0008 0008 0008 00ED 0107 00DC 0008 0104 00CF 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0054 0048 0055 001E 004E 0008 004F 0050 0024 0008 0008 0008 0008 0008 0008 003C 0056 002B 0008 0053 001E 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7440,7 +7440,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "003F 0013 0045 005D 0049 006B 0015 003D 0079 007A 0020 0028 0023 0017 007B 007C 0003 0030 002E 0007 0030 007D 003D 0003 007E 007F 0080 003D 0011 0029 0017 0030 0081 0003 0082 0083 001B 0084 0075 003D 0011 0023 0007 0008 0008 FFFF",
-      "current_tokens": "0108 0109 0104 0008 010A 010B 0008 010C 00C2 0008 010D 0008 0008 0008 0008 00C6 00C7 00EA 00C9 0008 00FB 00FC 00EA 00C9 0008 0008 0008 0008 0008 0008 00D7 00D8 00D9 00DB 00EA 00EB 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
+      "current_tokens": "0057 0058 0053 0008 0059 005A 0008 005B 0011 0008 005C 0008 0008 0008 0008 0015 0016 0039 0018 0008 004A 004B 0039 0018 0008 0008 0008 0008 0008 0008 0026 0027 0028 002A 0039 003A 0008 0008 0008 0008 0008 0008 0008 0008 0008 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7452,7 +7452,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0005 0085 0005 0003 0086 0016 0087 0088 0057 003E 0017 0042 0031 0011 0089 0007 0008 0008 0009 000A 004F 0024 004C 0071 0072 004F 0024 0038 0026 0008 0008 000C 008A 0050 0014 0040 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "010C 00D2 00C2 0008 010E 010F 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00EA 00D0 0008 00FB 00FC 00EA 00C9 0008 0008 0008 0008 0008 0008 00D7 00D8 00D9 00DB 00EA 00DE 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "005B 0021 0011 0008 005D 005E 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0039 001F 0008 004A 004B 0039 0018 0008 0008 0008 0008 0008 0008 0026 0027 0028 002A 0039 002D 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7464,7 +7464,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "002B 0016 008B 008C 008D 0011 0022 0026 0017 0042 0031 0011 004A 0063 0040 008E 0062 0007 0009 000A 004F 002F 004C 0071 0072 004F 0024 0038 0026 0008 0008 000C 008A 0041 0014 0040 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00CE 00E4 0008 0110 0111 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00DB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "001D 0033 0008 005F 0060 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 002A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7476,7 +7476,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0010 0003 008F 0003 003C 0056 0029 0032 0090 0016 0019 0042 0053 003E 003E 007F 0007 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 004D 004E 000B 000C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00E3 00E4 0008 0110 0111 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0032 0033 0008 005F 0060 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7488,7 +7488,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0090 0016 0019 0042 0053 003E 0017 000F 0091 0016 003B 0027 0022 0017 0092 0093 0065 0066 0003 0033 0022 003E 007F 0007 0008 0008 0008 004D 004E 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0112 00D9 0104 0008 0113 00E2 0008 0114 0115 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00EB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0061 0028 0053 0008 0062 0031 0008 0063 0064 0008 0008 0008 0008 0008 0008 0037 0038 0017 003A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7500,7 +7500,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0094 0095 0003 0056 0032 006A 0096 0029 0003 0097 001A 0020 0028 0080 0016 0087 0088 0057 003E 0098 0063 0005 0007 0008 0008 0008 0008 004D 004E 000B 0050 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0116 0117 0008 0114 0115 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00D0 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0065 0066 0008 0063 0064 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 001F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7512,7 +7512,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "008F 0094 0016 0001 0069 0032 003B 003B 001A 0098 0063 0005 0007 0008 0008 0008 0008 0008 004D 004E 000B 002F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0118 00E4 0008 0119 00E2 0008 011A 0008 0114 0115 0008 0008 0008 0008 0008 00C6 00C7 00C8 00DB 011B 0008 00E8 00E9 00C8 00DB 011B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0067 0033 0008 0068 0031 0008 0069 0008 0063 0064 0008 0008 0008 0008 0008 0015 0016 0017 002A 006A 0008 0037 0038 0017 002A 006A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7524,7 +7524,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0099 0091 0032 0053 003E 0090 0003 0044 003E 003C 0029 0067 0067 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0009 000B 000C 000D 004C 004D 000B 000C 000D 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "011C 00E2 0008 0115 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00DB 0008 00D1 00DA 00DF 011D 00C8 00DB 011B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "006B 0031 0008 0064 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 002A 0008 0020 0029 002E 006C 0017 002A 006A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7536,7 +7536,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0028 0035 002B 0003 009A 003A 0016 0016 0010 003E 009B 002A 001A 009C 0011 009D 006A 0007 004D 004E 000B 000C 0008 0008 0008 0008 0008 0030 0037 009E 009F 000B 000C 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0002 011E 011F 0008 0114 0115 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00D0 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0002 006D 006E 0008 0063 0064 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 001F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7548,7 +7548,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0051 003F 0052 0013 0003 001A 0043 00A0 0016 0087 0021 003E 0017 0044 0023 006A 0092 0093 0065 0066 0027 0033 0022 0098 0063 0005 0007 004D 004E 000B 002F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0120 0121 0122 0104 0123 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00C9 0008 00D1 00DA 00DF 011D 00C8 00C9 011B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "006F 0070 0071 0053 0072 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 0018 0008 0020 0029 002E 006C 0017 0018 006A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7560,7 +7560,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0030 0037 0020 0097 0021 007F 0092 0093 0065 0066 0032 0033 0034 003E 0063 0015 00A1 0007 004D 004E 000B 0024 0008 0008 0008 0008 0008 0030 0037 009E 009F 000B 0024 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0124 0125 0110 0111 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 00E9 00C8 00EB 0008 00E8 0126 0127 00C8 00DB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0073 0074 005F 0060 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0038 0017 003A 0008 0037 0075 0076 0017 002A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7572,7 +7572,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0042 0031 0011 00A2 0000 0032 002C 0035 003E 007F 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0008 0008 0008 004D 000B 0050 004C 004D 0060 0061 000B 000C 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0128 0129 00D7 00DC 00C2 0008 012A 00F1 012B 0008 0008 0008 0008 0008 0008 00CB 012C 00DB 011B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0077 0078 0026 002B 0011 0008 0079 0040 007A 0008 0008 0008 0008 0008 0008 001A 007B 002A 006A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7584,7 +7584,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "00A3 00A4 00A5 0011 00A6 0007 0008 0008 0008 00A0 0057 0032 006D 006E 0053 007F 0017 0046 00A7 0059 000C 000D 0020 0011 0023 003D 0070 0070 0067 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0001 00DC 0008 0129 0000 00FF 0008 00E1 00E2 0008 012D 0106 0129 0008 0008 00E8 0126 0127 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0001 002B 0008 0078 0000 004E 0008 0030 0031 0008 007C 0055 0078 0008 0008 0037 0075 0076 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7596,7 +7596,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "005A 0003 005B 0003 00A8 0000 0032 00A9 008D 003E 004A 0063 0040 0007 0008 0008 0008 0008 004D 0060 0061 000B 0024 0008 0008 0008 0008 0030 0037 009E 009F 000B 0024 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "012E 012F 00CC 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00E8 0126 0127 00C8 00EB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "007D 007E 001B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0037 0075 0076 0017 003A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7608,7 +7608,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0030 00A6 0016 0087 0088 0057 003E 00AA 0049 004A 0046 0040 0007 0008 0008 0008 0008 0008 00AB 00AC 00AD 00AE 000B 0024 0008 0008 0008 004D 0060 0061 000B 0050 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00D1 00D2 00D3 0008 0130 00C2 0008 0131 0127 0008 0008 0008 0008 0008 0008 00FB 0132 00CE 0133 00C9 0134 0008 00D1 00DA 00C8 00EB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0020 0021 0022 0008 007F 0011 0008 0080 0076 0008 0008 0008 0008 0008 0008 004A 0081 001D 0082 0018 0083 0008 0020 0029 0017 003A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7620,7 +7620,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0042 0031 0011 0030 0031 0032 00AF 009B 00A0 0034 003E 004A 005D 0040 00B0 0059 0007 0008 0071 000E 004C 0024 00B1 0022 0008 0008 0008 0030 0037 0038 0026 000B 0050 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0135 00CC 0008 0136 0121 0137 00D5 0008 0138 0139 0008 0008 0008 0008 0008 00FB 00FC 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0084 001B 0008 0085 0070 0086 0024 0008 0087 0088 0008 0008 0008 0008 0008 004A 004B 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7632,7 +7632,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "00B2 0088 0032 003D 009C 0097 001A 0020 00B3 006A 008B 0053 0057 0023 00B4 00B5 0003 008B 0036 003E 00A1 0015 0064 0007 0008 0008 0008 0071 0072 000B 0024 004C 00B6 00B7 00B8 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "013A 013B 013C 0103 0008 013D 013E 0008 0008 0008 0008 0008 0008 0008 0008 0137 013F 0140 0141 00C8 00EB 0008 00C6 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0089 008A 008B 0052 0008 008C 008D 0008 0008 0008 0008 0008 0008 0008 0008 0086 008E 008F 0090 0017 003A 0008 0015 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7644,7 +7644,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "00A3 00A4 00A5 0011 0031 0032 00B9 00BA 006F 0068 0053 0022 004A 003F 0062 0013 0007 0008 00AB 00AC 00AD 00AE 000B 0024 0008 0008 0008 00AB 00AC 0060 0061 000B 0050 004C 000B 0024 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "013A 0101 0104 0121 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 00C7 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0089 0050 0053 0070 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0016 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7656,7 +7656,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0020 009B 0022 0043 0003 005A 0032 008B 0011 0035 0019 001A 00BB 002A 006A 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0067 0009 000A 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00F2 0142 00D7 00DC 0008 0143 0144 0008 0008 0008 0008 0008 0008 0008 0008 00D1 00DA 00DF 011D 00C8 00DB 011B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0041 0091 0026 002B 0008 0092 0093 0008 0008 0008 0008 0008 0008 0008 0008 0020 0029 002E 006C 0017 002A 006A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7668,7 +7668,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "005E 00BC 0055 0003 00B4 00B5 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0008 0008 0008 0008 0008 0008 0008 0030 0037 009E 009F 000C 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0145 0146 0147 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00D1 00DA 00E3 0120 0137 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0094 0095 0096 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0020 0029 0032 006F 0086 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7680,7 +7680,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0028 0044 006A 0044 001B 00B9 006A 00BD 00A6 0003 005D 0013 0045 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0030 0037 0039 001F 0015 003A 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "0148 0008 0129 0137 0008 0126 0149 0008 0008 0008 0008 0008 0008 0008 0008 00CE 014A 0138 00E3 00C8 00DB 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0097 0008 0078 0086 0008 0075 0098 0008 0008 0008 0008 0008 0008 0008 0008 001D 0099 0087 0032 0017 002A 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7692,7 +7692,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "0006 00BE 0013 005D 0059 0032 003D 0088 0036 003E 006A 0096 0029 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 004D 004E 000B 000C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "013A 014B 014C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 00C6 0126 0127 00C8 00C9 0008 00E8 0126 0127 00C8 00C9 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0089 009A 009B 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0015 0075 0076 0017 0018 0008 0037 0075 0076 0017 0018 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7704,7 +7704,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "005B 0003 0035 0003 009C 0036 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0067 0009 0060 0061 000B 0024 0008 0008 0008 0008 004D 0060 0061 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00EF 00F0 00D9 00F1 00DC 0008 0138 014D 0008 0008 0008 0008 0008 0008 0008 00D1 00DA 00DF 011D 00C8 00DB 014E 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "003E 003F 0028 0040 002B 0008 0087 009C 0008 0008 0008 0008 0008 0008 0008 0020 0029 002E 006C 0017 002A 009D 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -7716,7 +7716,7 @@
       "target_korean": null,
       "original_word_count": 46,
       "original_tokens": "005A 0003 005B 0059 005C 005D 0040 0003 00A8 0000 0032 00A9 008D 003E 003B 00A2 0029 0007 0030 0037 009E 009F 004C 00B6 00B7 00B8 0008 0008 0008 0008 0008 0008 0008 000B 000C 00BF 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-      "current_tokens": "00F2 00F1 0102 0103 0008 0104 00CF 0008 0008 0008 0008 0008 0008 0008 0008 00D1 00DA 014F 00D2 0008 0150 0151 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
+      "current_tokens": "0041 0040 0051 0052 0008 0053 001E 0008 0008 0008 0008 0008 0008 0008 0008 0020 0029 009E 0021 0008 009F 00A0 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false

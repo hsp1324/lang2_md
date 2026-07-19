@@ -18,6 +18,13 @@ follow this status table so a resume does not repeat already accepted work.
 | 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
 | 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the seven UI gaps are resolved or explicitly accepted. |
 
+Stage 2 active checkpoint: the original complete-item secret shop list (IDs
+`1..37`) is exposed by diagnostic checksum `8374`. Production checksum `27EB`
+has the compact item-name/description glyph fix and passes all static tests, but
+the 37 names, descriptions, prices/stat lines, and icons still require runtime
+review before the equipment/shop gap can be marked complete. Resume from that
+runtime matrix; do not rebuild the loader investigation.
+
 Accepted completed work is a regression contract, not a recurring task. Re-run
 it only when a later change shares its renderer/data ownership or an automated
 test fails. The authoritative machine-readable state is

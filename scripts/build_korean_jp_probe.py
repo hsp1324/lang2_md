@@ -96,10 +96,14 @@ ITEM_GLYPH_LIST_BASE = 0xA14AC
 ITEM_GLYPH_LIST_REFS = (0x21C6E, 0x26924)
 ITEM_NAME_POINTER_TABLE = 0xA1902
 ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x282000
+ITEM_NAME_GLYPH_LOAD_INSTRUCTION = 0x21C72
+ITEM_NAME_GLYPH_LOAD_SOURCE = bytes.fromhex("70 40")
+ITEM_NAME_GLYPH_LOAD_MAX = 0x7F
 ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
 ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
 ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
 ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x286000
+ITEM_DESCRIPTION_GLYPH_LOAD_COUNT = 0xC0
 BYTE_UI_FONT_RESOURCE_TABLE = 0x0B0000
 BYTE_UI_FONT_RESOURCE_INDEX = 1
 BYTE_UI_FONT_RESOURCE_RELOC_BASE = 0x290000
@@ -3901,7 +3905,16 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     if len(ptrs) != len(ITEM_NAME_PATCHES):
         raise ValueError(f"expected {len(ITEM_NAME_PATCHES)} item name pointers, got {len(ptrs)}")
 
-    item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
+    original_item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
+    if len(original_item_glyphs) != 0x40:
+        raise ValueError(
+            f"item name glyph source has {len(original_item_glyphs)} slots, expected 64"
+        )
+    # Every item-name token stream is rewritten below, so retaining the 55
+    # unused Japanese slots only wastes the stock VRAM load window. Keep the
+    # nine slots shared by the possession title and Dagger, then append the
+    # Korean glyphs actually used by all 38 name records.
+    item_glyphs = original_item_glyphs[:9]
     item_title_glyphs = [glyph_by_char[char] for char in ITEM_POSSESSION_TITLE_TEXT]
     if len(item_title_glyphs) > 6:
         raise ValueError(
@@ -3940,6 +3953,23 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
 
     for ref in ITEM_GLYPH_LIST_REFS:
         put32(data, ref, ITEM_NAME_GLYPH_LIST_RELOC_BASE)
+    if len(item_glyphs) > ITEM_NAME_GLYPH_LOAD_MAX:
+        raise ValueError(
+            f"item name glyph list needs {len(item_glyphs)} slots, "
+            f"stock moveq loader supports {ITEM_NAME_GLYPH_LOAD_MAX}"
+        )
+    source = data[
+        ITEM_NAME_GLYPH_LOAD_INSTRUCTION :
+        ITEM_NAME_GLYPH_LOAD_INSTRUCTION + len(ITEM_NAME_GLYPH_LOAD_SOURCE)
+    ]
+    if source != ITEM_NAME_GLYPH_LOAD_SOURCE:
+        raise ValueError(
+            f"item name glyph loader changed: expected "
+            f"{ITEM_NAME_GLYPH_LOAD_SOURCE.hex()}, got {source.hex()}"
+        )
+    data[
+        ITEM_NAME_GLYPH_LOAD_INSTRUCTION : ITEM_NAME_GLYPH_LOAD_INSTRUCTION + 2
+    ] = bytes((0x70, len(item_glyphs)))
     end = write_word_list_exact(data, ITEM_NAME_GLYPH_LIST_RELOC_BASE, item_glyphs)
     if end >= ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE:
         raise ValueError(f"relocated item glyph list overflow: 0x{end:06X}")
@@ -3952,7 +3982,18 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
             f"expected {len(ITEM_DESCRIPTION_PATCHES)} item description pointers, got {len(ptrs)}"
         )
 
-    desc_glyphs = read_word_list(data, ITEM_DESCRIPTION_GLYPH_LIST_BASE)
+    original_desc_glyphs = read_word_list(data, ITEM_DESCRIPTION_GLYPH_LIST_BASE)
+    if len(original_desc_glyphs) != ITEM_DESCRIPTION_GLYPH_LOAD_COUNT:
+        raise ValueError(
+            f"item description glyph source has {len(original_desc_glyphs)} slots, "
+            f"expected {ITEM_DESCRIPTION_GLYPH_LOAD_COUNT}"
+        )
+    # Slots 0..14 have runtime meaning: the first description, its dedicated
+    # blank, numeric status glyphs, and the price tail. All remaining Japanese
+    # slots can be replaced because every description token stream is rewritten.
+    # Compacting here keeps every Korean description inside the original
+    # 192-glyph loader instead of expanding its VRAM range.
+    desc_glyphs = original_desc_glyphs[:15]
     # Scenario 1 shop only has Knife. The shop description renderer also uses
     # the original local glyph window, so keep the first description in the
     # original low local slots instead of moving it behind the original list.
@@ -4006,6 +4047,11 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
         write_token_stream(data, ptr, tokens, capacity)
 
     put32(data, ITEM_DESCRIPTION_GLYPH_LIST_REF, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE)
+    if len(desc_glyphs) > ITEM_DESCRIPTION_GLYPH_LOAD_COUNT:
+        raise ValueError(
+            f"item description glyph list needs {len(desc_glyphs)} slots, "
+            f"stock loader supports {ITEM_DESCRIPTION_GLYPH_LOAD_COUNT}"
+        )
     end = write_word_list_exact(data, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE, desc_glyphs)
     if end >= EXPANDED_ROM_SIZE:
         raise ValueError(f"relocated item description glyph list overflow: 0x{end:06X}")

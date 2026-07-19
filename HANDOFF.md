@@ -22,9 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-production checksum: E38B
+current production build checksum: 27EB (item-shop runtime review pending)
+last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 861 (0x7000..0x735D)
-unit tests: 341 passing
+unit tests: 349 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 7
@@ -51,8 +52,9 @@ glyph bank, or visible screen:
 
 Active work, in order:
 
-1. Close only the seven explicit gaps in `docs/ui_patch_surface_inventory.md`;
-   start with a concrete screen/path rather than another global rescan.
+1. Resume the all-item shop runtime review described immediately below. The
+   static loader fix is complete; do not repeat its disassembly or compaction.
+   Close the equipment/shop gap only after all 37 rows and icons are reviewed.
 2. Upgrade scenario `completion` and `branches_endings` cells that are still
    `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
    continuity evidence but is not a page-by-page visual review.
@@ -67,6 +69,28 @@ tests for the surface being changed. After a coherent unit, regenerate the
 inventories, run the full suite, update this dashboard only if its counts or
 priorities changed, then commit and push. Generated ROMs and captures remain
 ignored; record their checksum and paths here or in the relevant inventory.
+
+Current all-item shop checkpoint (runtime review pending):
+
+- the original shop mode flag at `0xA6DC` selects two secret lists. List 32 has
+  28 purchasable items; list 33 at pointer-table index 32 contains exact IDs
+  `1..37`, including Langrisser and Alhazard. The diagnostic builder
+  `tools/build_item_shop_probe_rom.py` changes only the list selector at
+  `0x027B32` plus the checksum and therefore uses the original complete-item
+  secret list rather than an invented inventory;
+- checksum `3F14` reproduced the defect on page 2: the old relocated name list
+  had 140 glyphs while `0x21C72` loaded only 64, and the description list had
+  338 glyphs while `0x272C0` loaded only 192;
+- production checksum `27EB` compacts the rewritten name list to 85 glyphs and
+  the description list to 161. The name loader now loads the exact 85; the
+  description remains inside the stock 192-glyph window. All 37 token streams
+  are statically proven inside their loaded windows by
+  `tests/test_item_shop_resources.py`;
+- the rebuilt complete-item probe is checksum `8374`. Next action is to launch
+  that ROM, capture all 37 rows/pages, and compare Korean name, three-line
+  description, price/stat text, and item icon against original item ID order.
+  No runtime acceptance has been recorded yet. BlastEm was deliberately stopped
+  because the user was using the same PC.
 
 ## Why The Work Moved From English ROM To Japanese ROM
 
@@ -147,7 +171,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `E38B` and passes all 341 tests. It includes
+The current source builds checksum `27EB` and passes all 349 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,
@@ -165,6 +189,7 @@ python3 scripts/build_korean_jp_probe.py
 Important recent local commits:
 
 ```text
+6195d90 Relocate and verify ending visit dialogue
 d7e9ebf Automate summon targeting and runtime probes
 da0e8fe Automate magic targeting and result probes
 a8ce09d Automate stable class change application probes
