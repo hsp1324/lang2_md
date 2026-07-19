@@ -31,11 +31,13 @@ ITEM_ICON_RESOURCE_LOAD_BYTES = bytes.fromhex(
     "30 3C 81 87 32 7C 40 00 4E B9 00 00 99 B2"
 )
 ITEM_ICON_BYTES = 37 * 0x80
-ACCEPTED_PROBE_CHECKSUM = 0xD304
+ACCEPTED_PROBE_CHECKSUM = 0x7E0B
 ACCEPTED_ITEM_SURFACE_SHA256 = (
-    "4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc"
+    "9e3372724e71c96a4dcff082fb9e3f67e843408c93d375f0a0bca16dcdda822b"
 )
-ACCEPTED_CAPTURE_PREFIX = "captures/run/d304_item_shop_idNN.png"
+ACCEPTED_CAPTURE_PREFIX = "captures/run/2282_item"
+ACCEPTED_RUNTIME_DERIVATIVE_CHECKSUM = 0x4C04
+PRIOR_FULL_MATRIX_CHECKSUM = 0xD304
 
 ITEM_BYTE_POINTER_TABLE_SHA256 = (
     "c7c28b9ed56ea87441ef1c6899ae691ab3b2508e43c0a52d81b5a56a8b107161"
@@ -119,6 +121,54 @@ def item_surface_sha256(korean: bytes, decoded_icons: bytes) -> str:
     ):
         values = builder.read_word_list(korean, offset)
         add(label, b"".join(value.to_bytes(2, "big") for value in values))
+
+    add(
+        "name-glyph-load-hook",
+        korean[
+            builder.ITEM_NAME_GLYPH_LOAD_HOOK :
+            builder.ITEM_NAME_GLYPH_LOAD_HOOK
+            + len(builder.ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL)
+        ],
+    )
+    name_glyphs = builder.read_word_list(
+        korean, builder.ITEM_NAME_GLYPH_LIST_RELOC_BASE
+    )
+    load_routine = builder._build_item_name_glyph_load_routine(len(name_glyphs))
+    add(
+        "name-glyph-load-routine",
+        korean[
+            builder.ITEM_NAME_GLYPH_LOAD_ROUTINE :
+            builder.ITEM_NAME_GLYPH_LOAD_ROUTINE + len(load_routine)
+        ],
+    )
+    add(
+        "name-popup-build-hook",
+        korean[
+            builder.ITEM_NAME_POPUP_BUILD_HOOK :
+            builder.ITEM_NAME_POPUP_BUILD_HOOK
+            + len(builder.ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL)
+        ],
+    )
+    popup_routine = builder._build_item_name_popup_stream_routine()
+    add(
+        "name-popup-build-routine",
+        korean[
+            builder.ITEM_NAME_POPUP_BUILD_ROUTINE :
+            builder.ITEM_NAME_POPUP_BUILD_ROUTINE + len(popup_routine)
+        ],
+    )
+    for index, (hook, terminator, store, routine) in enumerate(
+        builder.ITEM_NAME_LIST_RENDER_HOOKS
+    ):
+        add(
+            f"name-list-hook-{index}",
+            korean[hook : hook + len(builder.ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL)],
+        )
+        payload = builder._build_item_name_list_render_routine(terminator, store)
+        add(
+            f"name-list-routine-{index}",
+            korean[routine : routine + len(payload)],
+        )
 
     add(
         "word-item-names",
@@ -244,6 +294,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "runtime_probe": {
             "rom_checksum": f"{probe_checksum:04X}",
             "accepted_capture_checksum": f"{ACCEPTED_PROBE_CHECKSUM:04X}",
+            "prior_full_matrix_checksum": f"{PRIOR_FULL_MATRIX_CHECKSUM:04X}",
+            "runtime_derivative_checksum": f"{ACCEPTED_RUNTIME_DERIVATIVE_CHECKSUM:04X}",
             "accepted_item_surface_sha256": ACCEPTED_ITEM_SURFACE_SHA256,
             "status": "accepted" if accepted else "pending",
             "capture_prefix": (
@@ -267,8 +319,12 @@ def markdown_report(result: dict[str, object]) -> str:
     accepted_checksum = result["runtime_probe"]["accepted_capture_checksum"]
     accepted = result["runtime_probe"]["status"] == "accepted"
     review_line = (
-        f"Checksum `{accepted_checksum}` was captured row by row and accepted; current "
-        f"checksum `{probe_checksum}` has the same accepted item-surface fingerprint."
+        f"Checksum `{accepted_checksum}` has the accepted renderer-aware item-surface "
+        f"fingerprint; current checksum `{probe_checksum}` matches it. The earlier "
+        f"`{result['runtime_probe']['prior_full_matrix_checksum']}` run covers all 37 "
+        f"rows, and price-only runtime derivative "
+        f"`{result['runtime_probe']['runtime_derivative_checksum']}` rechecks the late "
+        f"name lists and purchase popups."
         if accepted
         else f"Checksum `{probe_checksum}` still requires row-by-row capture."
     )

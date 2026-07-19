@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 112)
-        self.assertEqual(self.result["modified_patch_count"], 111)
+        self.assertEqual(self.result["declared_patch_count"], 115)
+        self.assertEqual(self.result["modified_patch_count"], 114)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -100,6 +100,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(font["original_pointer"], "0x0B0A84")
         self.assertEqual(font["current_pointer"], "0x290000")
         self.assertTrue(font["relocated"])
+
+    def test_inline_discard_prompt_is_declared_without_runtime_overclaim(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"].startswith("inline_discard_prompt_")
+        ]
+        self.assertEqual(len(rows), 3)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(not row["live_verified"] for row in rows))
 
     def test_stage_one_keeps_explicit_unknowns(self):
         self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 6)

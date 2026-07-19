@@ -93,12 +93,29 @@ MAGIC_LIST_GLYPH_SOURCE_SHA256 = "2f186a1afc569e0ba1c90279cd2af2425bdca7a112d243
 CONDITION_POINTER_TABLE = 0x98D7A
 CONDITION_GLYPH_LIST_TABLE = 0x986C6
 ITEM_GLYPH_LIST_BASE = 0xA14AC
-ITEM_GLYPH_LIST_REFS = (0x21C6E, 0x26924)
+ITEM_GLYPH_LIST_REFS = (0x26924,)
 ITEM_NAME_POINTER_TABLE = 0xA1902
 ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x282000
-ITEM_NAME_GLYPH_LOAD_INSTRUCTION = 0x21C72
-ITEM_NAME_GLYPH_LOAD_SOURCE = bytes.fromhex("70 40")
-ITEM_NAME_GLYPH_LOAD_MAX = 0x7F
+ITEM_NAME_GLYPH_PRIMARY_COUNT = 0x40
+ITEM_NAME_GLYPH_LOAD_HOOK = 0x21C6C
+ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL = bytes.fromhex(
+    "41 F9 00 0A 14 AC 70 40 22 3C 00 00 20 00 4E B9 00 02 C2 C4"
+)
+ITEM_NAME_GLYPH_LOAD_ROUTINE = 0x2B8440
+ITEM_NAME_POPUP_BUILD_HOOK = 0x278F0
+ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL = bytes.fromhex("41 F9 00 0A 19 02")
+ITEM_NAME_POPUP_BUILD_ROUTINE = 0x2B8480
+ITEM_NAME_LIST_RENDER_HOOKS = (
+    (0x26FB8, 0x27044, 0x26FCE, 0x2B8500),
+    (0x279DE, 0x27A1C, 0x279F4, 0x2B8540),
+)
+ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("30 18 0C 40 FF FF")
+ITEM_NAME_OVERFLOW_VRAM_BASE = 0xB400
+ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xC000
+ITEM_NAME_OVERFLOW_CAPACITY = (
+    ITEM_NAME_OVERFLOW_VRAM_LIMIT - ITEM_NAME_OVERFLOW_VRAM_BASE
+) // 0x80
+ITEM_NAME_GLYPH_LOAD_MAX = ITEM_NAME_GLYPH_PRIMARY_COUNT + ITEM_NAME_OVERFLOW_CAPACITY
 ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
 ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
 ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
@@ -122,6 +139,8 @@ BYTE_UI_EXT_ROUTINE_BASE = 0x2B7000
 BYTE_UI_EXT_ROUTINE_LIMIT = 0x2B8000
 BYTE_UI_LOCAL_TILE_TABLE = 0x2B8000
 BYTE_UI_LOCAL_TILE_TABLE_LIMIT = 0x2B8400
+INLINE_DISCARD_PROMPT_RECORD = 0x2B8400
+INLINE_DISCARD_PROMPT_RECORD_LIMIT = 0x2B8420
 BYTE_UI_CLASS_STRING_RELOC_BASE = 0x2B9000
 BYTE_UI_CLASS_STRING_RELOC_LIMIT = 0x2BA000
 BYTE_UI_NAME_STRING_RELOC_BASE = 0x2BA000
@@ -422,6 +441,13 @@ TITLE_CREDIT_FONT_LOAD_ROUTINE = 0x2B7E20
 TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
+INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
+INLINE_DISCARD_PROMPT_RENDER_HOOK = 0x01804C
+INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL = bytes.fromhex("45 F9 00 01 80 7E")
+INLINE_DISCARD_PROMPT_SOURCE = 0x01807E
+INLINE_DISCARD_PROMPT_SOURCE_BYTES = "ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ".encode("cp932")
+INLINE_DISCARD_PROMPT_WIDTH = 13
+INLINE_DISCARD_PROMPT_TEXT = "버릴 아이템 선택"
 TITLE_CREDIT_FONT_LOAD_HOOK = 0x02D66A
 TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL = bytes.fromhex("30 3C 81 89 32 7C 20 00")
 TITLE_COPYRIGHT_RENDER_HOOK = 0x02D712
@@ -3964,23 +3990,54 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     if len(item_glyphs) > ITEM_NAME_GLYPH_LOAD_MAX:
         raise ValueError(
             f"item name glyph list needs {len(item_glyphs)} slots, "
-            f"stock moveq loader supports {ITEM_NAME_GLYPH_LOAD_MAX}"
+            f"split VRAM loader supports {ITEM_NAME_GLYPH_LOAD_MAX}"
         )
-    source = data[
-        ITEM_NAME_GLYPH_LOAD_INSTRUCTION :
-        ITEM_NAME_GLYPH_LOAD_INSTRUCTION + len(ITEM_NAME_GLYPH_LOAD_SOURCE)
-    ]
-    if source != ITEM_NAME_GLYPH_LOAD_SOURCE:
-        raise ValueError(
-            f"item name glyph loader changed: expected "
-            f"{ITEM_NAME_GLYPH_LOAD_SOURCE.hex()}, got {source.hex()}"
-        )
-    data[
-        ITEM_NAME_GLYPH_LOAD_INSTRUCTION : ITEM_NAME_GLYPH_LOAD_INSTRUCTION + 2
-    ] = bytes((0x70, len(item_glyphs)))
     end = write_word_list_exact(data, ITEM_NAME_GLYPH_LIST_RELOC_BASE, item_glyphs)
     if end >= ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE:
         raise ValueError(f"relocated item glyph list overflow: 0x{end:06X}")
+
+    # VRAM 0x2000..0x3FFF holds exactly 64 16x16 glyphs; item icons begin at
+    # 0x4000. Keep the stock window intact and load later name glyphs into the
+    # 24-slot gap at 0xB400..0xBFFF after the item-description bank. The purchase
+    # popup builder explicitly selects the matching bank for every name token.
+    loader = _build_item_name_glyph_load_routine(len(item_glyphs))
+    popup_builder = _build_item_name_popup_stream_routine()
+    list_renderers = [
+        (routine, _build_item_name_list_render_routine(terminator, store))
+        for _, terminator, store, routine in ITEM_NAME_LIST_RENDER_HOOKS
+    ]
+    for offset, payload in (
+        (ITEM_NAME_GLYPH_LOAD_ROUTINE, loader),
+        (ITEM_NAME_POPUP_BUILD_ROUTINE, popup_builder),
+        *list_renderers,
+    ):
+        if any(value != 0xFF for value in data[offset : offset + len(payload)]):
+            raise ValueError(f"item name extension area at 0x{offset:06X} is not blank")
+        data[offset : offset + len(payload)] = payload
+
+    load_hook_end = ITEM_NAME_GLYPH_LOAD_HOOK + len(ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL)
+    if bytes(data[ITEM_NAME_GLYPH_LOAD_HOOK:load_hook_end]) != ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL:
+        raise ValueError("item name glyph-load hook changed")
+    load_hook = (
+        bytes.fromhex("4E B9")
+        + ITEM_NAME_GLYPH_LOAD_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 71") * 7
+    )
+    if len(load_hook) != len(ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL):
+        raise AssertionError("item name glyph-load hook size changed")
+    data[ITEM_NAME_GLYPH_LOAD_HOOK:load_hook_end] = load_hook
+
+    popup_hook_end = ITEM_NAME_POPUP_BUILD_HOOK + len(ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL)
+    if bytes(data[ITEM_NAME_POPUP_BUILD_HOOK:popup_hook_end]) != ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL:
+        raise ValueError("item name popup-build hook changed")
+    data[ITEM_NAME_POPUP_BUILD_HOOK:popup_hook_end] = (
+        bytes.fromhex("4E F9") + ITEM_NAME_POPUP_BUILD_ROUTINE.to_bytes(4, "big")
+    )
+    for hook, _, _, routine in ITEM_NAME_LIST_RENDER_HOOKS:
+        hook_end = hook + len(ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL)
+        if bytes(data[hook:hook_end]) != ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL:
+            raise ValueError(f"item name list-render hook changed at 0x{hook:06X}")
+        data[hook:hook_end] = bytes.fromhex("4E F9") + routine.to_bytes(4, "big")
 
 
 def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -4180,6 +4237,67 @@ class _M68KCode:
                 displacement & 0xFFFF
             ).to_bytes(2, "big")
         return bytes(self.code)
+
+
+def _build_item_name_glyph_load_routine(glyph_count: int) -> bytes:
+    if not ITEM_NAME_GLYPH_PRIMARY_COUNT < glyph_count <= ITEM_NAME_GLYPH_LOAD_MAX:
+        raise ValueError(f"item name glyph count cannot use split VRAM loader: {glyph_count}")
+    overflow_count = glyph_count - ITEM_NAME_GLYPH_PRIMARY_COUNT
+    return (
+        bytes.fromhex("41 F9")
+        + ITEM_NAME_GLYPH_LIST_RELOC_BASE.to_bytes(4, "big")
+        + bytes((0x70, ITEM_NAME_GLYPH_PRIMARY_COUNT))
+        + bytes.fromhex("22 3C 00 00 20 00 4E B9 00 02 C2 C4 41 F9")
+        + (ITEM_NAME_GLYPH_LIST_RELOC_BASE + ITEM_NAME_GLYPH_PRIMARY_COUNT * 2).to_bytes(
+            4, "big"
+        )
+        + bytes((0x70, overflow_count))
+        + bytes.fromhex("22 3C")
+        + ITEM_NAME_OVERFLOW_VRAM_BASE.to_bytes(4, "big")
+        + bytes.fromhex("4E B9 00 02 C2 C4 4E 75")
+    )
+
+
+def _build_item_name_popup_stream_routine() -> bytes:
+    code = _M68KCode()
+    code.emit("41 F9 00 0A 19 02 30 06 D0 40 D0 40 20 70 00 00")
+    code.label("loop")
+    code.emit("30 18 0C 40 FF FF")
+    code.branch_word(0x6700, "done")
+    code.emit("53 78 C7 CC 54 78 C7 CA 0C 40 00 40")
+    code.branch_word(0x6500, "primary")
+    code.emit("04 40 00 40 32 FC FF FA")
+    code.emit(bytes.fromhex("32 FC") + ITEM_NAME_OVERFLOW_VRAM_BASE.to_bytes(2, "big"))
+    code.branch_word(0x6000, "store")
+    code.label("primary")
+    code.emit("32 FC FF FA 32 FC 20 00")
+    code.label("store")
+    code.emit("32 C0")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("4E F9 00 02 79 16")
+    return code.finish()
+
+
+def _build_item_name_list_render_routine(
+    terminator_target: int, store_target: int
+) -> bytes:
+    code = _M68KCode()
+    code.emit("30 18 0C 40 FF FF")
+    code.branch_word(0x6600, "glyph")
+    code.emit(bytes.fromhex("4E F9") + terminator_target.to_bytes(4, "big"))
+    code.label("glyph")
+    code.emit("0C 40 00 40")
+    code.branch_word(0x6500, "primary")
+    code.emit("04 40 00 40 EF 48 06 40")
+    code.emit(ITEM_NAME_OVERFLOW_VRAM_BASE.to_bytes(2, "big"))
+    code.branch_word(0x6000, "finish")
+    code.label("primary")
+    code.emit("EF 48 06 40 20 00")
+    code.label("finish")
+    code.emit("EA 48 80 78 E3 90")
+    code.emit(bytes.fromhex("4E F9") + store_target.to_bytes(4, "big"))
+    return code.finish()
 
 
 def _build_byte_ui_word_renderer() -> bytes:
@@ -4605,6 +4723,10 @@ def build_byte_ui_local_mapping(
     # Append this exceptional label after the established tables so adding its
     # unique `일` glyph cannot renumber any proven commander/class tile.
     texts.append(ILLUSION_CLASS_LABEL)
+    # This fixed-width inline prompt is rendered by a dedicated local-index
+    # routine. Append it after all established class/name labels so its two
+    # new glyphs cannot renumber any previously verified mapping.
+    texts.append(INLINE_DISCARD_PROMPT_TEXT)
     chars = [" ", *collect_chars(*texts)]
     extension_tiles = [
         tile
@@ -4734,6 +4856,28 @@ def _build_byte_ui_ending_result_renderer() -> bytes:
         bytes.fromhex("4E F9") + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
     )
     return bytes(wrapper)
+
+
+def _build_inline_discard_prompt_renderer() -> bytes:
+    code = _M68KCode()
+    code.emit(
+        bytes.fromhex("45 F9")
+        + INLINE_DISCARD_PROMPT_RECORD.to_bytes(4, "big")
+    )
+    code.emit("70 0C 3E 3C 00 D8")
+    code.label("loop")
+    # Preserve the original 13-cell sprite-list construction, replacing only
+    # its byte-code lookup with the full localized tile table.
+    code.emit("36 FC 00 C8 16 FC 00 00 52 38 90 4E 16 F8 90 4E")
+    code.emit("3F 00 70 00 10 1A")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("38 00 30 1F 00 44 80 00 36 C4 36 C7 50 47")
+    code.branch_word(0x51C8, "loop")
+    code.emit("31 CB 90 4C 4E 75")
+    return code.finish()
 
 
 def _build_title_credit_font_loader() -> bytes:
@@ -4905,6 +5049,7 @@ def install_byte_ui_extension(
     ending_result_renderer = _build_byte_ui_ending_result_renderer()
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer()
+    discard_prompt_renderer = _build_inline_discard_prompt_renderer()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -4932,6 +5077,7 @@ def install_byte_ui_extension(
         TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
         TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
+        INLINE_DISCARD_PROMPT_RENDER_ROUTINE: discard_prompt_renderer,
     }
     for offset, payload in routines.items():
         if offset + len(payload) > BYTE_UI_EXT_ROUTINE_LIMIT:
@@ -4939,6 +5085,43 @@ def install_byte_ui_extension(
         if any(value != 0xFF for value in data[offset : offset + len(payload)]):
             raise ValueError(f"byte UI routine area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
+
+    if len(INLINE_DISCARD_PROMPT_SOURCE_BYTES) != INLINE_DISCARD_PROMPT_WIDTH:
+        raise AssertionError("discard prompt source width constant is wrong")
+    source_end = INLINE_DISCARD_PROMPT_SOURCE + INLINE_DISCARD_PROMPT_WIDTH
+    if bytes(data[INLINE_DISCARD_PROMPT_SOURCE:source_end]) != INLINE_DISCARD_PROMPT_SOURCE_BYTES:
+        raise ValueError("inline discard prompt source changed")
+    if data[source_end] != 0xFF:
+        raise ValueError("inline discard prompt terminator changed")
+    record = bytes(
+        [index_by_char[char] for char in INLINE_DISCARD_PROMPT_TEXT]
+        + [index_by_char[" "]]
+        * (INLINE_DISCARD_PROMPT_WIDTH - len(INLINE_DISCARD_PROMPT_TEXT))
+    )
+    if len(record) != INLINE_DISCARD_PROMPT_WIDTH:
+        raise ValueError("localized inline discard prompt exceeds its fixed width")
+    if INLINE_DISCARD_PROMPT_RECORD + len(record) > INLINE_DISCARD_PROMPT_RECORD_LIMIT:
+        raise ValueError("inline discard prompt record exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[
+            INLINE_DISCARD_PROMPT_RECORD : INLINE_DISCARD_PROMPT_RECORD + len(record)
+        ]
+    ):
+        raise ValueError("inline discard prompt record area is not blank")
+    data[
+        INLINE_DISCARD_PROMPT_RECORD : INLINE_DISCARD_PROMPT_RECORD + len(record)
+    ] = record
+    hook_end = (
+        INLINE_DISCARD_PROMPT_RENDER_HOOK
+        + len(INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL)
+    )
+    if bytes(data[INLINE_DISCARD_PROMPT_RENDER_HOOK:hook_end]) != INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL:
+        raise ValueError("inline discard prompt render hook changed")
+    data[INLINE_DISCARD_PROMPT_RENDER_HOOK:hook_end] = (
+        bytes.fromhex("4E F9")
+        + INLINE_DISCARD_PROMPT_RENDER_ROUTINE.to_bytes(4, "big")
+    )
 
     for offset in BYTE_UI_FONT_LOAD_CALLS:
         if data[offset : offset + 6] != BYTE_UI_FONT_LOAD_CALL_ORIGINAL:

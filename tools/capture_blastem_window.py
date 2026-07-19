@@ -193,20 +193,28 @@ def capture_with_windows_desktop(window_id: int, output: Path) -> Image.Image:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("output", type=Path)
+    parser.add_argument(
+        "--xlib-only",
+        action="store_true",
+        help="skip Windows desktop/xwd capture and read the X11 client directly",
+    )
     args = parser.parse_args()
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     window = find_blastem_window()
-    try:
-        img = capture_with_windows_desktop(window, args.output)
-    except (FileNotFoundError, subprocess.CalledProcessError, RuntimeError):
+    if args.xlib_only:
+        img = capture_with_xlib(window)
+    else:
         try:
-            xwd = subprocess.check_output(
-                ["xwd", "-silent", "-id", f"{window:#x}"]
-            )
-            img = read_xwd(xwd)
+            img = capture_with_windows_desktop(window, args.output)
         except (FileNotFoundError, subprocess.CalledProcessError, RuntimeError):
-            img = capture_with_xlib(window)
+            try:
+                xwd = subprocess.check_output(
+                    ["xwd", "-silent", "-id", f"{window:#x}"]
+                )
+                img = read_xwd(xwd)
+            except (FileNotFoundError, subprocess.CalledProcessError, RuntimeError):
+                img = capture_with_xlib(window)
     img.save(args.output)
     print(args.output)
     return 0

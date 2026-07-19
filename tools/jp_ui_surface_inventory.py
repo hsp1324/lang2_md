@@ -188,6 +188,38 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    for group, offset, size, target in (
+        (
+            "inline_discard_prompt_hook",
+            builder.INLINE_DISCARD_PROMPT_RENDER_HOOK,
+            len(builder.INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL),
+            "redirect fixed item-discard prompt to localized renderer",
+        ),
+        (
+            "inline_discard_prompt_routine",
+            builder.INLINE_DISCARD_PROMPT_RENDER_ROUTINE,
+            len(builder._build_inline_discard_prompt_renderer()),
+            "render 13 full localized tile IDs without consuming base byte-font slots",
+        ),
+        (
+            "inline_discard_prompt_record",
+            builder.INLINE_DISCARD_PROMPT_RECORD,
+            builder.INLINE_DISCARD_PROMPT_WIDTH,
+            builder.INLINE_DISCARD_PROMPT_TEXT,
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": False,
+            }
+        )
+
     rows.append(
         {
             "group": "title_load_glyph_list",
@@ -357,8 +389,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "Magic Arrow and diagnostic Attack/Elemental probes",
             "ownership and purpose of 427 compressed resources beyond byte-font "
             "resource index 1 and item-icon resource index 391",
-            "non-pointer and inline executable byte strings outside the classified "
-            "direct-word and direct-byte candidate inventories",
+            "access-path, translation, and live verification of the hidden 77-row "
+            "sound-test label table at 0x05E040",
+            "non-pointer byte sequences outside the conservative maximal half-width/"
+            "uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories",
         ],
     }
 

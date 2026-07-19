@@ -1,0 +1,4778 @@
+{
+  "warning": "This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF-terminated runs. It does not claim arbitrary executable bytes are text.",
+  "source_sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
+  "halfwidth_candidate_count": 372,
+  "ascii_candidate_count": 77,
+  "candidate_count": 449,
+  "category_counts": {
+    "compressed_resource_data": 152,
+    "global_font_bitmap_false_positive": 32,
+    "global_table_string": 225,
+    "glyph_or_tile_data_false_positive": 21,
+    "internal_controller_signature": 3,
+    "internal_hardware_signature": 2,
+    "internal_secret_name_comparison": 2,
+    "localized_equipment_category_container": 3,
+    "localized_inline_ui": 1,
+    "retained_compact_english_ui": 1,
+    "retained_title_record": 2,
+    "sound_test_label_table": 1,
+    "special_illusion_class": 1,
+    "structured_character_resource": 3
+  },
+  "unclassified_count": 0,
+  "discard_prompt": {
+    "source": "0x01807E",
+    "hook": "0x01804C",
+    "record": "0x2B8400",
+    "target_korean": "버릴 아이템 선택",
+    "hook_installed": true,
+    "live_verified": false
+  },
+  "sound_test": {
+    "table": "0x05E040",
+    "end": "0x05E510",
+    "record_count": 77,
+    "japanese_label_count": 39,
+    "localized_count": 0,
+    "live_verified": false,
+    "rows": [
+      {
+        "index": 0,
+        "address": "0x05E040",
+        "sound_id": "0xFE",
+        "original_label": "STOP MUSIC",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 1,
+        "address": "0x05E050",
+        "sound_id": "0x01",
+        "original_label": "FRIEND 1",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 2,
+        "address": "0x05E060",
+        "sound_id": "0x02",
+        "original_label": "FRIEND 2",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 3,
+        "address": "0x05E070",
+        "sound_id": "0x03",
+        "original_label": "FRIEND 3",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 4,
+        "address": "0x05E080",
+        "sound_id": "0x04",
+        "original_label": "FRIEND 4",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 5,
+        "address": "0x05E090",
+        "sound_id": "0x05",
+        "original_label": "FRIEND 5",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 6,
+        "address": "0x05E0A0",
+        "sound_id": "0x06",
+        "original_label": "FRIEND 6",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 7,
+        "address": "0x05E0B0",
+        "sound_id": "0x07",
+        "original_label": "FRIEND 7",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 8,
+        "address": "0x05E0C0",
+        "sound_id": "0x08",
+        "original_label": "FRIEND 8 ｴﾝｸﾞﾝ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 9,
+        "address": "0x05E0D0",
+        "sound_id": "0x09",
+        "original_label": "E 1 ﾚｵﾝ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 10,
+        "address": "0x05E0E0",
+        "sound_id": "0x0A",
+        "original_label": "E 2 ﾊﾞﾙｶﾞｽ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 11,
+        "address": "0x05E0F0",
+        "sound_id": "0x21",
+        "original_label": "E 3 ﾓｰｶﾞﾝ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 12,
+        "address": "0x05E100",
+        "sound_id": "0x22",
+        "original_label": "E 4 ｼﾞｬｱｸ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 13,
+        "address": "0x05E110",
+        "sound_id": "0x23",
+        "original_label": "E 5 ｴｸﾞﾍﾞﾙﾄ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 14,
+        "address": "0x05E120",
+        "sound_id": "0x24",
+        "original_label": "E 6 ｲﾒﾙﾀﾞ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 15,
+        "address": "0x05E130",
+        "sound_id": "0x25",
+        "original_label": "E 7 ﾀﾞｰｸﾌﾟﾘﾝｾｽ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 16,
+        "address": "0x05E140",
+        "sound_id": "0x26",
+        "original_label": "E 8 ﾎﾞｰｾﾞﾙ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 17,
+        "address": "0x05E150",
+        "sound_id": "0x27",
+        "original_label": "E 9 ﾍﾞﾙﾝﾊﾙﾄ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 18,
+        "address": "0x05E160",
+        "sound_id": "0x28",
+        "original_label": "E A ｴﾝｸﾞﾝ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 19,
+        "address": "0x05E170",
+        "sound_id": "0x0B",
+        "original_label": "ｱﾆｷ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 20,
+        "address": "0x05E180",
+        "sound_id": "0x0C",
+        "original_label": "ｼﾞｪｼｶ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 21,
+        "address": "0x05E190",
+        "sound_id": "0x0D",
+        "original_label": "ANCIENT MAGIC",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 22,
+        "address": "0x05E1A0",
+        "sound_id": "0x0E",
+        "original_label": "ﾘｱﾅ ﾄ ｳﾊｳﾊ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 23,
+        "address": "0x05E1B0",
+        "sound_id": "0x29",
+        "original_label": "SHOP",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 24,
+        "address": "0x05E1C0",
+        "sound_id": "0x2A",
+        "original_label": "OPENING1",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 25,
+        "address": "0x05E1D0",
+        "sound_id": "0x2B",
+        "original_label": "OPENING2",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 26,
+        "address": "0x05E1E0",
+        "sound_id": "0x2C",
+        "original_label": "ENDING1",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 27,
+        "address": "0x05E1F0",
+        "sound_id": "0x30",
+        "original_label": "ENDING2",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 28,
+        "address": "0x05E200",
+        "sound_id": "0x2D",
+        "original_label": "ENDING3",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 29,
+        "address": "0x05E210",
+        "sound_id": "0x31",
+        "original_label": "ENDING4",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 30,
+        "address": "0x05E220",
+        "sound_id": "0x2E",
+        "original_label": "STORY ｼｮｳｶｲ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 31,
+        "address": "0x05E230",
+        "sound_id": "0x2F",
+        "original_label": "REQUIEM",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 32,
+        "address": "0x05E240",
+        "sound_id": "0x41",
+        "original_label": "FM SE STOP",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 33,
+        "address": "0x05E250",
+        "sound_id": "0x42",
+        "original_label": "WINDOW OPEN",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 34,
+        "address": "0x05E260",
+        "sound_id": "0x43",
+        "original_label": "WINDOW CLOSE",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 35,
+        "address": "0x05E270",
+        "sound_id": "0x44",
+        "original_label": "SELECT 1",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 36,
+        "address": "0x05E280",
+        "sound_id": "0x47",
+        "original_label": "SELECT 2",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 37,
+        "address": "0x05E290",
+        "sound_id": "0x48",
+        "original_label": "ｹｯﾃｲｵﾝ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 38,
+        "address": "0x05E2A0",
+        "sound_id": "0x45",
+        "original_label": "ﾊｽﾞｽ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 39,
+        "address": "0x05E2B0",
+        "sound_id": "0x46",
+        "original_label": "ﾂｹﾙ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 40,
+        "address": "0x05E2C0",
+        "sound_id": "0x5E",
+        "original_label": "OPERATION MISS",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 41,
+        "address": "0x05E2D0",
+        "sound_id": "0x62",
+        "original_label": "MAGIC MISS",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 42,
+        "address": "0x05E2E0",
+        "sound_id": "0x63",
+        "original_label": "MAGIC SUCCESS",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 43,
+        "address": "0x05E2F0",
+        "sound_id": "0x5F",
+        "original_label": "MAGIC FLYING",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 44,
+        "address": "0x05E300",
+        "sound_id": "0x60",
+        "original_label": "THUNDER",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 45,
+        "address": "0x05E310",
+        "sound_id": "0x61",
+        "original_label": "WIND",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 46,
+        "address": "0x05E320",
+        "sound_id": "0x64",
+        "original_label": "ERATHQUAKE",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 47,
+        "address": "0x05E330",
+        "sound_id": "0x67",
+        "original_label": "SLEEP",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 48,
+        "address": "0x05E340",
+        "sound_id": "0x68",
+        "original_label": "MUTE ･ ZONE",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 49,
+        "address": "0x05E350",
+        "sound_id": "0x69",
+        "original_label": "TURN UNDEAD",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 50,
+        "address": "0x05E360",
+        "sound_id": "0x49",
+        "original_label": "ｹﾝ ﾌﾙ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 51,
+        "address": "0x05E370",
+        "sound_id": "0x4A",
+        "original_label": "ｹﾝﾆﾁｶﾗｶﾞﾀﾏﾙ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 52,
+        "address": "0x05E380",
+        "sound_id": "0x4B",
+        "original_label": "ﾀﾏﾉﾊｯｼｬｵﾝ 1",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 53,
+        "address": "0x05E390",
+        "sound_id": "0x4C",
+        "original_label": "ﾀﾏﾉﾊｯｼｬｵﾝ 2",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 54,
+        "address": "0x05E3A0",
+        "sound_id": "0x4D",
+        "original_label": "ﾋﾗｲｽﾙﾃｷﾉﾊｵﾄ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 55,
+        "address": "0x05E3B0",
+        "sound_id": "0x4E",
+        "original_label": "ﾃｷ ｷﾙ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 56,
+        "address": "0x05E3C0",
+        "sound_id": "0x4F",
+        "original_label": "ﾃｷ ﾀｵｽ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 57,
+        "address": "0x05E3D0",
+        "sound_id": "0x65",
+        "original_label": "BATTLE",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 58,
+        "address": "0x05E3E0",
+        "sound_id": "0x66",
+        "original_label": "ARROW FLYING",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 59,
+        "address": "0x05E3F0",
+        "sound_id": "0x50",
+        "original_label": "ﾄｷﾉｺｴ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 60,
+        "address": "0x05E400",
+        "sound_id": "0x51",
+        "original_label": "ﾋﾒｲ ｵﾝﾅ 1",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 61,
+        "address": "0x05E410",
+        "sound_id": "0x52",
+        "original_label": "ﾋﾒｲ ｵﾝﾅ 2",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 62,
+        "address": "0x05E420",
+        "sound_id": "0x53",
+        "original_label": "ﾋﾒｲ ｵﾝﾅ 3",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 63,
+        "address": "0x05E430",
+        "sound_id": "0x54",
+        "original_label": "ﾋﾒｲ ｵﾝﾅ 4",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 64,
+        "address": "0x05E440",
+        "sound_id": "0x55",
+        "original_label": "ﾋﾒｲ ﾓﾝｽﾀｰ 1",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 65,
+        "address": "0x05E450",
+        "sound_id": "0x56",
+        "original_label": "ﾋﾒｲ ﾓﾝｽﾀｰ 2",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 66,
+        "address": "0x05E460",
+        "sound_id": "0x6D",
+        "original_label": "ﾋﾒｲ ﾓﾝｽﾀｰ 3",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 67,
+        "address": "0x05E470",
+        "sound_id": "0x57",
+        "original_label": "ﾋﾒｲ ｵﾄｺ 1",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 68,
+        "address": "0x05E480",
+        "sound_id": "0x58",
+        "original_label": "ﾋﾒｲ ｵﾄｺ 2",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 69,
+        "address": "0x05E490",
+        "sound_id": "0x59",
+        "original_label": "ﾋﾒｲ ｵﾄｺ 3",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 70,
+        "address": "0x05E4A0",
+        "sound_id": "0x5A",
+        "original_label": "ﾋﾒｲ ｵﾄｺ 4",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 71,
+        "address": "0x05E4B0",
+        "sound_id": "0x5B",
+        "original_label": "BOMB HIGH",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 72,
+        "address": "0x05E4C0",
+        "sound_id": "0x5C",
+        "original_label": "BOMB NORMAL",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 73,
+        "address": "0x05E4D0",
+        "sound_id": "0x5D",
+        "original_label": "BOMB LOW",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 74,
+        "address": "0x05E4E0",
+        "sound_id": "0x6A",
+        "original_label": "LUNGRISSER",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 75,
+        "address": "0x05E4F0",
+        "sound_id": "0x6B",
+        "original_label": "WOLF MAN",
+        "contains_japanese": false,
+        "target_korean": null,
+        "live_verified": false
+      },
+      {
+        "index": 76,
+        "address": "0x05E500",
+        "sound_id": "0x6C",
+        "original_label": "ﾌｸﾛｳ",
+        "contains_japanese": true,
+        "target_korean": null,
+        "live_verified": false
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "kind": "ascii",
+      "address": "0x00811C",
+      "end": "0x008121",
+      "original_text": "SEGA",
+      "raw_hex": "53 45 47 41",
+      "category": "internal_hardware_signature",
+      "owner": "SEGA hardware signature"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x00816C",
+      "end": "0x008171",
+      "original_text": "SEGA",
+      "raw_hex": "53 45 47 41",
+      "category": "internal_hardware_signature",
+      "owner": "SEGA hardware signature"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x008220",
+      "end": "0x008225",
+      "original_text": "PADR",
+      "raw_hex": "50 41 44 52",
+      "category": "internal_controller_signature",
+      "owner": "PADR controller signature"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0084AC",
+      "end": "0x0084B1",
+      "original_text": "PADR",
+      "raw_hex": "50 41 44 52",
+      "category": "internal_controller_signature",
+      "owner": "PADR controller signature"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x01807E",
+      "end": "0x01808C",
+      "original_text": "ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ",
+      "raw_hex": "BD C3 D9 20 B1 B2 C3 D1 20 BE DD C0 B8",
+      "category": "localized_inline_ui",
+      "owner": "fixed 13-cell item discard/replacement prompt"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x01808C",
+      "end": "0x018091",
+      "original_text": "PAGE",
+      "raw_hex": "50 41 47 45",
+      "category": "retained_compact_english_ui",
+      "owner": "PAGE label; compact English is allowed"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x02A252",
+      "end": "0x02A257",
+      "original_text": "PADR",
+      "raw_hex": "50 41 44 52",
+      "category": "internal_controller_signature",
+      "owner": "PADR controller signature"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0431E0",
+      "end": "0x0431E5",
+      "original_text": "ﾝｪﾟｩ",
+      "raw_hex": "DD AA DF A9",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x043508",
+      "end": "0x04350D",
+      "original_text": "ﾀｿﾀｿ",
+      "raw_hex": "C0 BF C0 BF",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0442CA",
+      "end": "0x0442CF",
+      "original_text": "ﾇｺﾟ｢",
+      "raw_hex": "C7 BA DF A2",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0442E0",
+      "end": "0x0442E5",
+      "original_text": "ﾟ｢ﾇｺ",
+      "raw_hex": "DF A2 C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0443A0",
+      "end": "0x0443AB",
+      "original_text": "ﾎｵﾄｻﾁｾﾃｽﾁｾ",
+      "raw_hex": "CE B5 C4 BB C1 BE C3 BD C1 BE",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0446F0",
+      "end": "0x0446F9",
+      "original_text": "ﾀｿﾀｿﾂｽﾇｺ",
+      "raw_hex": "C0 BF C0 BF C2 BD C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x044BC8",
+      "end": "0x044BCD",
+      "original_text": "ﾏｴﾏｵ",
+      "raw_hex": "CF B4 CF B5",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x044C60",
+      "end": "0x044C65",
+      "original_text": "ﾟｩﾟｩ",
+      "raw_hex": "DF A9 DF A9",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x044D20",
+      "end": "0x044D25",
+      "original_text": "ﾟｨﾟｫ",
+      "raw_hex": "DF A8 DF AB",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x044FE0",
+      "end": "0x044FE9",
+      "original_text": "ﾇｺﾇｺﾇｺﾇｺ",
+      "raw_hex": "C7 BA C7 BA C7 BA C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0453F6",
+      "end": "0x0453FB",
+      "original_text": "ﾞ･ﾏｲ",
+      "raw_hex": "DE A5 CF B2",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x046534",
+      "end": "0x04653B",
+      "original_text": "ﾀｿﾂｽﾇｺ",
+      "raw_hex": "C0 BF C2 BD C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x046766",
+      "end": "0x04676B",
+      "original_text": "ﾀｿﾀｿ",
+      "raw_hex": "C0 BF C0 BF",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0468F2",
+      "end": "0x0468F7",
+      "original_text": "ﾜｫﾞｩ",
+      "raw_hex": "DC AB DE A9",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x046A20",
+      "end": "0x046A25",
+      "original_text": "ﾟ､ﾟ､",
+      "raw_hex": "DF A4 DF A4",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x046E20",
+      "end": "0x046E25",
+      "original_text": "ﾟｩﾟｩ",
+      "raw_hex": "DF A9 DF A9",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0471A0",
+      "end": "0x0471A5",
+      "original_text": "ﾟｫﾟｨ",
+      "raw_hex": "DF AB DF A8",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x049560",
+      "end": "0x049565",
+      "original_text": "ﾟｩﾟｩ",
+      "raw_hex": "DF A9 DF A9",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0496B0",
+      "end": "0x0496BB",
+      "original_text": "ﾀｿﾀｿﾀｿﾂｽﾇｺ",
+      "raw_hex": "C0 BF C0 BF C0 BF C2 BD C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0497E0",
+      "end": "0x0497EB",
+      "original_text": "ﾜｫﾟｨﾟｯﾏｰﾀｿ",
+      "raw_hex": "DC AB DF A8 DF AF CF B0 C0 BF",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x049898",
+      "end": "0x0498A1",
+      "original_text": "ﾀｿﾀｿﾀｿﾐｯ",
+      "raw_hex": "C0 BF C0 BF C0 BF D0 AF",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x049BA0",
+      "end": "0x049BA9",
+      "original_text": "ﾟｯﾟｨﾟｯﾟｨ",
+      "raw_hex": "DF AF DF A8 DF AF DF A8",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x049BE0",
+      "end": "0x049BE5",
+      "original_text": "ﾞｩﾟｨ",
+      "raw_hex": "DE A9 DF A8",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x049EED",
+      "end": "0x049EFB",
+      "original_text": "ｯ ﾟﾀｿﾀｿﾂｽﾇｺﾇｺ",
+      "raw_hex": "AF 20 DF C0 BF C0 BF C2 BD C7 BA C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x049F60",
+      "end": "0x049F65",
+      "original_text": "ﾟｩﾟｩ",
+      "raw_hex": "DF A9 DF A9",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04AE64",
+      "end": "0x04AE6B",
+      "original_text": "ﾏｴﾏｴﾏｴ",
+      "raw_hex": "CF B4 CF B4 CF B4",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04B4B2",
+      "end": "0x04B4BB",
+      "original_text": "ﾀｿﾀｿﾂｽﾇｺ",
+      "raw_hex": "C0 BF C0 BF C2 BD C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04C1E2",
+      "end": "0x04C1EB",
+      "original_text": "ﾀｿﾀｿﾀｿﾀｿ",
+      "raw_hex": "C0 BF C0 BF C0 BF C0 BF",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04D5C4",
+      "end": "0x04D5C9",
+      "original_text": "ﾇｺﾇｺ",
+      "raw_hex": "C7 BA C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04D944",
+      "end": "0x04D94B",
+      "original_text": "ﾇｺﾇｺﾇｺ",
+      "raw_hex": "C7 BA C7 BA C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04D960",
+      "end": "0x04D969",
+      "original_text": "ﾇｺﾇｺﾇｺﾇｺ",
+      "raw_hex": "C7 BA C7 BA C7 BA C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x04D9F2",
+      "end": "0x04D9FB",
+      "original_text": "ﾀｿﾀｿﾂｽﾇｺ",
+      "raw_hex": "C0 BF C0 BF C2 BD C7 BA",
+      "category": "global_font_bitmap_false_positive",
+      "owner": "packed 16x16 glyph pixels"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E501",
+      "end": "0x05E511",
+      "original_text": "ﾌｸﾛｳ           ",
+      "raw_hex": "CC B8 DB B3 20 20 20 20 20 20 20 20 20 20 20",
+      "category": "sound_test_label_table",
+      "owner": "hidden 77-row sound-test label table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E5CD",
+      "end": "0x05E5D7",
+      "original_text": "ﾎｲﾘｭｰｼﾞｮﾝ",
+      "raw_hex": "CE B2 D8 AD B0 BC DE AE DD",
+      "category": "special_illusion_class",
+      "owner": "run begins in the preceding pointer byte"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E953",
+      "end": "0x05E959",
+      "original_text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E959",
+      "end": "0x05E95F",
+      "original_text": "ｸﾚﾘｯｸ",
+      "raw_hex": "B8 DA D8 AF B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E95F",
+      "end": "0x05E966",
+      "original_text": "ｳｫｰﾛｯｸ",
+      "raw_hex": "B3 AB B0 DB AF B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E966",
+      "end": "0x05E96B",
+      "original_text": "ﾛｰﾄﾞ",
+      "raw_hex": "DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E96F",
+      "end": "0x05E976",
+      "original_text": "ﾎｰｸﾅｲﾄ",
+      "raw_hex": "CE B0 B8 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E976",
+      "end": "0x05E97D",
+      "original_text": "ｸﾛｺﾅｲﾄ",
+      "raw_hex": "B8 DB BA C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E97D",
+      "end": "0x05E982",
+      "original_text": "ﾋｰﾗｰ",
+      "raw_hex": "CB B0 D7 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E982",
+      "end": "0x05E988",
+      "original_text": "ｿｰｻﾗｰ",
+      "raw_hex": "BF B0 BB D7 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E988",
+      "end": "0x05E98E",
+      "original_text": "ｼｬｰﾏﾝ",
+      "raw_hex": "BC AC B0 CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E98E",
+      "end": "0x05E995",
+      "original_text": "ﾊｲﾛｰﾄﾞ",
+      "raw_hex": "CA B2 DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E995",
+      "end": "0x05E99D",
+      "original_text": "ﾊｲﾗﾝﾀﾞｰ",
+      "raw_hex": "CA B2 D7 DD C0 DE B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E99D",
+      "end": "0x05E9A6",
+      "original_text": "ﾏｼﾞｯｸﾅｲﾄ",
+      "raw_hex": "CF BC DE AF B8 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9A6",
+      "end": "0x05E9AF",
+      "original_text": "ﾕﾆｺｰﾝﾅｲﾄ",
+      "raw_hex": "D5 C6 BA B0 DD C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9AF",
+      "end": "0x05E9B9",
+      "original_text": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+      "raw_hex": "C4 DE D7 BA DE DD C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9B9",
+      "end": "0x05E9C2",
+      "original_text": "ｻｰﾍﾟﾝﾅｲﾄ",
+      "raw_hex": "BB B0 CD DF DD C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9C2",
+      "end": "0x05E9C9",
+      "original_text": "ﾌﾟﾘｰｽﾄ",
+      "raw_hex": "CC DF D8 B0 BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9C9",
+      "end": "0x05E9D1",
+      "original_text": "ﾋﾞｼｮｯﾌﾟ",
+      "raw_hex": "CB DE BC AE AF CC DF",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9D1",
+      "end": "0x05E9D6",
+      "original_text": "ﾒｲｼﾞ",
+      "raw_hex": "D2 B2 BC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9D6",
+      "end": "0x05E9DE",
+      "original_text": "ｱｰｸﾒｲｼﾞ",
+      "raw_hex": "B1 B0 B8 D2 B2 BC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9DE",
+      "end": "0x05E9E6",
+      "original_text": "ｳｨｻﾞｰﾄﾞ",
+      "raw_hex": "B3 A8 BB DE B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9E6",
+      "end": "0x05E9EF",
+      "original_text": "ﾊｲﾌﾟﾘｰｽﾄ",
+      "raw_hex": "CA B2 CC DF D8 B0 BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9EF",
+      "end": "0x05E9F4",
+      "original_text": "ｾｲﾝﾄ",
+      "raw_hex": "BE B2 DD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9F4",
+      "end": "0x05E9F9",
+      "original_text": "ｾｰｼﾞ",
+      "raw_hex": "BE B0 BC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05E9F9",
+      "end": "0x05EA01",
+      "original_text": "ﾊﾟﾗﾃﾞｨﾝ",
+      "raw_hex": "CA DF D7 C3 DE A8 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA01",
+      "end": "0x05EA0A",
+      "original_text": "ｿｰﾄﾞﾏｽﾀｰ",
+      "raw_hex": "BF B0 C4 DE CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA0A",
+      "end": "0x05EA12",
+      "original_text": "ﾅｲﾄﾏｽﾀｰ",
+      "raw_hex": "C5 B2 C4 CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA12",
+      "end": "0x05EA1A",
+      "original_text": "ｸﾞﾗﾝﾅｲﾄ",
+      "raw_hex": "B8 DE D7 DD C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA1A",
+      "end": "0x05EA23",
+      "original_text": "ｼﾙﾊﾞｰﾅｲﾄ",
+      "raw_hex": "BC D9 CA DE B0 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA23",
+      "end": "0x05EA2E",
+      "original_text": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+      "raw_hex": "C4 DE D7 BA DE DD DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA2E",
+      "end": "0x05EA38",
+      "original_text": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+      "raw_hex": "BB B0 CD DF DD DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA38",
+      "end": "0x05EA3D",
+      "original_text": "ｷﾝｸﾞ",
+      "raw_hex": "B7 DD B8 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA3D",
+      "end": "0x05EA44",
+      "original_text": "ﾚﾝｼﾞｬｰ",
+      "raw_hex": "DA DD BC DE AC B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA44",
+      "end": "0x05EA49",
+      "original_text": "ﾋｰﾛｰ",
+      "raw_hex": "CB B0 DB B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA49",
+      "end": "0x05EA50",
+      "original_text": "ﾊｲﾏｽﾀｰ",
+      "raw_hex": "CA B2 CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA50",
+      "end": "0x05EA5B",
+      "original_text": "ﾄﾞﾗｺﾞﾝﾏｽﾀｰ",
+      "raw_hex": "C4 DE D7 BA DE DD CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA5B",
+      "end": "0x05EA63",
+      "original_text": "ｴｰｼﾞｪﾝﾄ",
+      "raw_hex": "B4 B0 BC DE AA DD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA63",
+      "end": "0x05EA6C",
+      "original_text": "ｻﾞｰｳﾞｪﾗｰ",
+      "raw_hex": "BB DE B0 B3 DE AA D7 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA6C",
+      "end": "0x05EA73",
+      "original_text": "ﾌﾟﾘﾝｾｽ",
+      "raw_hex": "CC DF D8 DD BE BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA73",
+      "end": "0x05EA78",
+      "original_text": "ｻﾓﾅｰ",
+      "raw_hex": "BB D3 C5 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA78",
+      "end": "0x05EA80",
+      "original_text": "ﾛｲﾔﾙﾅｲﾄ",
+      "raw_hex": "DB B2 D4 D9 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA80",
+      "end": "0x05EA8A",
+      "original_text": "ｻｰﾍﾟﾝﾏｽﾀｰ",
+      "raw_hex": "BB B0 CD DF DD CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA8A",
+      "end": "0x05EA90",
+      "original_text": "ﾘｰﾀﾞｰ",
+      "raw_hex": "D8 B0 C0 DE B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA90",
+      "end": "0x05EA98",
+      "original_text": "ﾊﾞﾝﾊﾟｲｱ",
+      "raw_hex": "CA DE DD CA DF B2 B1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA98",
+      "end": "0x05EA9E",
+      "original_text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EA9E",
+      "end": "0x05EAA4",
+      "original_text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAA4",
+      "end": "0x05EAAA",
+      "original_text": "ｸﾚﾘｯｸ",
+      "raw_hex": "B8 DA D8 AF B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAAA",
+      "end": "0x05EAB1",
+      "original_text": "ｳｫｰﾛｯｸ",
+      "raw_hex": "B3 AB B0 DB AF B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAB5",
+      "end": "0x05EABA",
+      "original_text": "ﾛｰﾄﾞ",
+      "raw_hex": "DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EABE",
+      "end": "0x05EAC4",
+      "original_text": "ｿｰｻﾗｰ",
+      "raw_hex": "BF B0 BB D7 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAC4",
+      "end": "0x05EACB",
+      "original_text": "ﾎｰｸﾅｲﾄ",
+      "raw_hex": "CE B0 B8 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EACB",
+      "end": "0x05EAD1",
+      "original_text": "ｼｬｰﾏﾝ",
+      "raw_hex": "BC AC B0 CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAD1",
+      "end": "0x05EADA",
+      "original_text": "ﾏｼﾞｯｸﾅｲﾄ",
+      "raw_hex": "CF BC DE AF B8 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EADA",
+      "end": "0x05EAE3",
+      "original_text": "ﾏｼﾞｯｸﾅｲﾄ",
+      "raw_hex": "CF BC DE AF B8 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAE3",
+      "end": "0x05EAEA",
+      "original_text": "ｿｰﾄﾞﾏﾝ",
+      "raw_hex": "BF B0 C4 DE CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAEA",
+      "end": "0x05EAF1",
+      "original_text": "ﾊｲﾛｰﾄﾞ",
+      "raw_hex": "CA B2 DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAF1",
+      "end": "0x05EAF6",
+      "original_text": "ｱｻｼﾝ",
+      "raw_hex": "B1 BB BC DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAF6",
+      "end": "0x05EAFF",
+      "original_text": "ｻｰﾍﾟﾝﾅｲﾄ",
+      "raw_hex": "BB B0 CD DF DD C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EAFF",
+      "end": "0x05EB07",
+      "original_text": "ﾋﾞｼｮｯﾌﾟ",
+      "raw_hex": "CB DE BC AE AF CC DF",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB07",
+      "end": "0x05EB11",
+      "original_text": "ﾄﾞﾗｺﾞﾝﾅｲﾄ",
+      "raw_hex": "C4 DE D7 BA DE DD C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB11",
+      "end": "0x05EB16",
+      "original_text": "ﾒｲｼﾞ",
+      "raw_hex": "D2 B2 BC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB16",
+      "end": "0x05EB1E",
+      "original_text": "ﾈｸﾛﾏﾝｻｰ",
+      "raw_hex": "C8 B8 DB CF DD BB B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB1E",
+      "end": "0x05EB26",
+      "original_text": "ｳｨｻﾞｰﾄﾞ",
+      "raw_hex": "B3 A8 BB DE B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB26",
+      "end": "0x05EB2E",
+      "original_text": "ｱｰｸﾒｲｼﾞ",
+      "raw_hex": "B1 B0 B8 D2 B2 BC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB2E",
+      "end": "0x05EB37",
+      "original_text": "ｼﾙﾊﾞｰﾅｲﾄ",
+      "raw_hex": "BC D9 CA DE B0 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB37",
+      "end": "0x05EB40",
+      "original_text": "ｼﾙﾊﾞｰﾅｲﾄ",
+      "raw_hex": "BC D9 CA DE B0 C5 B2 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB40",
+      "end": "0x05EB48",
+      "original_text": "ﾅｲﾄﾏｽﾀｰ",
+      "raw_hex": "C5 B2 C4 CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB48",
+      "end": "0x05EB50",
+      "original_text": "ﾅｲﾄﾏｽﾀｰ",
+      "raw_hex": "C5 B2 C4 CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB50",
+      "end": "0x05EB58",
+      "original_text": "ﾊﾟﾗﾃﾞｨﾝ",
+      "raw_hex": "CA DF D7 C3 DE A8 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB58",
+      "end": "0x05EB5D",
+      "original_text": "ｾｲﾝﾄ",
+      "raw_hex": "BE B2 DD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB5D",
+      "end": "0x05EB64",
+      "original_text": "ｼﾞｪﾈﾗﾙ",
+      "raw_hex": "BC DE AA C8 D7 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB64",
+      "end": "0x05EB6B",
+      "original_text": "ｼﾞｪﾈﾗﾙ",
+      "raw_hex": "BC DE AA C8 D7 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB6B",
+      "end": "0x05EB76",
+      "original_text": "ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ",
+      "raw_hex": "C4 DE D7 BA DE DD DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB76",
+      "end": "0x05EB80",
+      "original_text": "ｻｰﾍﾟﾝﾛｰﾄﾞ",
+      "raw_hex": "BB B0 CD DF DD DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB80",
+      "end": "0x05EB8A",
+      "original_text": "ﾛｲﾔﾙｶﾞｰﾄﾞ",
+      "raw_hex": "DB B2 D4 D9 B6 DE B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB8A",
+      "end": "0x05EB91",
+      "original_text": "ｴﾝﾍﾟﾗｰ",
+      "raw_hex": "B4 DD CD DF D7 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB91",
+      "end": "0x05EB9A",
+      "original_text": "ｻﾞｰｳﾞｪﾗｰ",
+      "raw_hex": "BB DE B0 B3 DE AA D7 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EB9A",
+      "end": "0x05EBA1",
+      "original_text": "ｳｪｱｳﾙﾌ",
+      "raw_hex": "B3 AA B1 B3 D9 CC",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBA1",
+      "end": "0x05EBAB",
+      "original_text": "ｸﾞﾚｰﾄｽﾗｲﾑ",
+      "raw_hex": "B8 DE DA B0 C4 BD D7 B2 D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBAB",
+      "end": "0x05EBB2",
+      "original_text": "ｹﾙﾍﾞﾛｽ",
+      "raw_hex": "B9 D9 CD DE DB BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBB2",
+      "end": "0x05EBB7",
+      "original_text": "ｽｷｭﾗ",
+      "raw_hex": "BD B7 AD D7",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBB7",
+      "end": "0x05EBBD",
+      "original_text": "ｺﾞｰｽﾄ",
+      "raw_hex": "BA DE B0 BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBBD",
+      "end": "0x05EBC4",
+      "original_text": "ﾜｲﾊﾞｰﾝ",
+      "raw_hex": "DC B2 CA DE B0 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBC4",
+      "end": "0x05EBCE",
+      "original_text": "ﾏｽﾀｰﾃﾞｨｰﾉ",
+      "raw_hex": "CF BD C0 B0 C3 DE A8 B0 C9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBCE",
+      "end": "0x05EBD8",
+      "original_text": "ｱｲｱﾝｺﾞｰﾚﾑ",
+      "raw_hex": "B1 B2 B1 DD BA DE B0 DA D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBDC",
+      "end": "0x05EBE7",
+      "original_text": "ﾘﾋﾞﾝｸﾞｱｰﾏｰ",
+      "raw_hex": "D8 CB DE DD B8 DE B1 B0 CF B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBE7",
+      "end": "0x05EBEE",
+      "original_text": "ｻｷｭﾊﾞｽ",
+      "raw_hex": "BB B7 AD CA DE BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBEE",
+      "end": "0x05EBF4",
+      "original_text": "ｸﾗｰｹﾝ",
+      "raw_hex": "B8 D7 B0 B9 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBF4",
+      "end": "0x05EBFB",
+      "original_text": "ﾐﾉﾀｳﾛｽ",
+      "raw_hex": "D0 C9 C0 B3 DB BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EBFB",
+      "end": "0x05EC05",
+      "original_text": "ﾃﾞｰﾓﾝﾛｰﾄﾞ",
+      "raw_hex": "C3 DE B0 D3 DD DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC05",
+      "end": "0x05EC11",
+      "original_text": "ｸﾞﾚｰﾄﾄﾞﾗｺﾞﾝ",
+      "raw_hex": "B8 DE DA B0 C4 C4 DE D7 BA DE DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC11",
+      "end": "0x05EC1D",
+      "original_text": "ﾊﾞﾝﾊﾟｲｱﾛｰﾄﾞ",
+      "raw_hex": "CA DE DD CA DF B2 B1 DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC1D",
+      "end": "0x05EC28",
+      "original_text": "ﾀﾞｰｸﾌﾟﾘﾝｾｽ",
+      "raw_hex": "C0 DE B0 B8 CC DF D8 DD BE BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC28",
+      "end": "0x05EC31",
+      "original_text": "ﾀﾞｰｸﾏｽﾀｰ",
+      "raw_hex": "C0 DE B0 B8 CF BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC31",
+      "end": "0x05EC36",
+      "original_text": "ﾊﾟｲｸ",
+      "raw_hex": "CA DF B2 B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC36",
+      "end": "0x05EC3D",
+      "original_text": "ﾌｧﾗﾝｸｽ",
+      "raw_hex": "CC A7 D7 DD B8 BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC3D",
+      "end": "0x05EC44",
+      "original_text": "ｿﾙｼﾞｬｰ",
+      "raw_hex": "BF D9 BC DE AC B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC44",
+      "end": "0x05EC4F",
+      "original_text": "ｸﾞﾗﾃﾞｨｴｰﾀｰ",
+      "raw_hex": "B8 DE D7 C3 DE A8 B4 B0 C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC4F",
+      "end": "0x05EC59",
+      "original_text": "ｱｰﾏｿﾙｼﾞｬｰ",
+      "raw_hex": "B1 B0 CF BF D9 BC DE AC B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC59",
+      "end": "0x05EC5F",
+      "original_text": "ﾎｰｽﾏﾝ",
+      "raw_hex": "CE B0 BD CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC5F",
+      "end": "0x05EC69",
+      "original_text": "ﾍﾋﾞｰﾎｰｽﾏﾝ",
+      "raw_hex": "CD CB DE B0 CE B0 BD CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC69",
+      "end": "0x05EC70",
+      "original_text": "ﾄﾞﾗｸｰﾝ",
+      "raw_hex": "C4 DE D7 B8 B0 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC74",
+      "end": "0x05EC7A",
+      "original_text": "ﾊﾞﾘｽﾀ",
+      "raw_hex": "CA DE D8 BD C0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC7E",
+      "end": "0x05EC86",
+      "original_text": "ｶﾞｰﾄﾞﾏﾝ",
+      "raw_hex": "B6 DE B0 C4 DE CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC86",
+      "end": "0x05EC8B",
+      "original_text": "ﾏｰﾏﾝ",
+      "raw_hex": "CF B0 CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC8B",
+      "end": "0x05EC92",
+      "original_text": "ｸﾞﾘﾌｫﾝ",
+      "raw_hex": "B8 DE D8 CC AB DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC92",
+      "end": "0x05EC99",
+      "original_text": "ｴﾝｼﾞｪﾙ",
+      "raw_hex": "B4 DD BC DE AA D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EC99",
+      "end": "0x05ECA0",
+      "original_text": "ｼﾋﾞﾘｱﾝ",
+      "raw_hex": "BC CB DE D8 B1 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECA0",
+      "end": "0x05ECA7",
+      "original_text": "ｿﾙｼﾞｬｰ",
+      "raw_hex": "BF D9 BC DE AC B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECA7",
+      "end": "0x05ECB1",
+      "original_text": "ｱｰﾏｿﾙｼﾞｬｰ",
+      "raw_hex": "B1 B0 CF BF D9 BC DE AC B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECB1",
+      "end": "0x05ECB9",
+      "original_text": "ﾊﾞｰｻｰｶｰ",
+      "raw_hex": "CA DE B0 BB B0 B6 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECB9",
+      "end": "0x05ECC2",
+      "original_text": "ﾊﾞｰﾊﾞﾘｱﾝ",
+      "raw_hex": "CA DE B0 CA DE D8 B1 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECC2",
+      "end": "0x05ECCA",
+      "original_text": "ﾀﾞｰｸｴﾙﾌ",
+      "raw_hex": "C0 DE B0 B8 B4 D9 CC",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECCA",
+      "end": "0x05ECD0",
+      "original_text": "ﾊﾞﾘｽﾀ",
+      "raw_hex": "CA DE D8 BD C0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECD0",
+      "end": "0x05ECD9",
+      "original_text": "ﾘｻﾞｰﾄﾞﾏﾝ",
+      "raw_hex": "D8 BB DE B0 C4 DE CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECD9",
+      "end": "0x05ECDF",
+      "original_text": "ﾎｰｽﾏﾝ",
+      "raw_hex": "CE B0 BD CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECDF",
+      "end": "0x05ECE9",
+      "original_text": "ﾍﾋﾞｰﾎｰｽﾏﾝ",
+      "raw_hex": "CD CB DE B0 CE B0 BD CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECE9",
+      "end": "0x05ECF1",
+      "original_text": "ﾛｲﾔﾙﾎｰｽ",
+      "raw_hex": "DB B2 D4 D9 CE B0 BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECF1",
+      "end": "0x05ECFB",
+      "original_text": "ﾀﾞｰｸｶﾞｰﾄﾞ",
+      "raw_hex": "C0 DE B0 B8 B6 DE B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ECFB",
+      "end": "0x05ED02",
+      "original_text": "ｸﾞﾘﾌｫﾝ",
+      "raw_hex": "B8 DE D8 CC AB DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED02",
+      "end": "0x05ED07",
+      "original_text": "ﾊﾟｲｸ",
+      "raw_hex": "CA DF B2 B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED07",
+      "end": "0x05ED0E",
+      "original_text": "ﾌｧﾗﾝｸｽ",
+      "raw_hex": "CC A7 D7 DD B8 BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED0E",
+      "end": "0x05ED14",
+      "original_text": "ｽｹﾙﾄﾝ",
+      "raw_hex": "BD B9 D9 C4 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED14",
+      "end": "0x05ED1A",
+      "original_text": "ｿﾞﾝﾋﾞ",
+      "raw_hex": "BF DE DD CB DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED1A",
+      "end": "0x05ED22",
+      "original_text": "ｶﾞｰｺﾞｲﾙ",
+      "raw_hex": "B6 DE B0 BA DE B2 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED22",
+      "end": "0x05ED28",
+      "original_text": "ｳﾙﾌﾏﾝ",
+      "raw_hex": "B3 D9 CC CF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED28",
+      "end": "0x05ED32",
+      "original_text": "ﾎﾞｰﾝﾃﾞｨｰﾉ",
+      "raw_hex": "CE DE B0 DD C3 DE A8 B0 C9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED32",
+      "end": "0x05ED3B",
+      "original_text": "ﾘｳﾞｧｲｱｻﾝ",
+      "raw_hex": "D8 B3 DE A7 B2 B1 BB DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED3B",
+      "end": "0x05ED41",
+      "original_text": "ｺﾞｰﾚﾑ",
+      "raw_hex": "BA DE B0 DA D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED41",
+      "end": "0x05ED4D",
+      "original_text": "ﾊﾞﾝﾊﾟｲｱﾊﾞｯﾄ",
+      "raw_hex": "CA DE DD CA DF B2 B1 CA DE AF C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED4D",
+      "end": "0x05ED54",
+      "original_text": "ｴﾚﾒﾝﾀﾙ",
+      "raw_hex": "B4 DA D2 DD C0 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED54",
+      "end": "0x05ED5D",
+      "original_text": "ｱｰｸﾃﾞｰﾓﾝ",
+      "raw_hex": "B1 B0 B8 C3 DE B0 D3 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED61",
+      "end": "0x05ED69",
+      "original_text": "ﾍﾙﾊｳﾝﾄﾞ",
+      "raw_hex": "CD D9 CA B3 DD C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED69",
+      "end": "0x05ED6E",
+      "original_text": "ｽﾗｲﾑ",
+      "raw_hex": "BD D7 B2 D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED6E",
+      "end": "0x05ED75",
+      "original_text": "ｴﾚﾒﾝﾀﾙ",
+      "raw_hex": "B4 DA D2 DD C0 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED75",
+      "end": "0x05ED7A",
+      "original_text": "ﾌﾚｲﾔ",
+      "raw_hex": "CC DA B2 D4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED7A",
+      "end": "0x05ED85",
+      "original_text": "ﾎﾜｲﾄﾄﾞﾗｺﾞﾝ",
+      "raw_hex": "CE DC B2 C4 C4 DE D7 BA DE DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED85",
+      "end": "0x05ED8D",
+      "original_text": "ｳﾞｧﾙｷﾘｰ",
+      "raw_hex": "B3 DE A7 D9 B7 D8 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED8D",
+      "end": "0x05ED95",
+      "original_text": "ｽﾚｲﾌﾟﾆﾙ",
+      "raw_hex": "BD DA B2 CC DF C6 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED95",
+      "end": "0x05ED9B",
+      "original_text": "ﾌｪﾝﾘﾙ",
+      "raw_hex": "CC AA DD D8 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05ED9B",
+      "end": "0x05EDA6",
+      "original_text": "ｲｪﾙﾑﾝｶﾞﾙﾄﾞ",
+      "raw_hex": "B2 AA D9 D1 DD B6 DE D9 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDAA",
+      "end": "0x05EDB1",
+      "original_text": "ﾋﾞﾙﾀﾞｰ",
+      "raw_hex": "CB DE D9 C0 DE B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDB1",
+      "end": "0x05EDB7",
+      "original_text": "ﾌｧｲﾀｰ",
+      "raw_hex": "CC A7 B2 C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDB7",
+      "end": "0x05EDBD",
+      "original_text": "ｸﾚﾘｯｸ",
+      "raw_hex": "B8 DA D8 AF B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDC1",
+      "end": "0x05EDC6",
+      "original_text": "ﾛｰﾄﾞ",
+      "raw_hex": "DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDC6",
+      "end": "0x05EDCD",
+      "original_text": "ﾊﾟｲﾚｰﾂ",
+      "raw_hex": "CA DF B2 DA B0 C2",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDCD",
+      "end": "0x05EDD4",
+      "original_text": "ﾊｲﾛｰﾄﾞ",
+      "raw_hex": "CA B2 DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x05EDD4",
+      "end": "0x05EDDB",
+      "original_text": "ﾌﾟﾘｰｽﾄ",
+      "raw_hex": "CC DF D8 B0 BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060409",
+      "end": "0x060411",
+      "original_text": "ｳｫｰﾊﾝﾏｰ",
+      "raw_hex": "B3 AB B0 CA DD CF B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060411",
+      "end": "0x06041B",
+      "original_text": "ｸﾞﾚｰﾄｿｰﾄﾞ",
+      "raw_hex": "B8 DE DA B0 C4 BF B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06041B",
+      "end": "0x060420",
+      "original_text": "ﾜﾝﾄﾞ",
+      "raw_hex": "DC DD C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060420",
+      "end": "0x060428",
+      "original_text": "ﾌﾚｲﾑﾗﾝｽ",
+      "raw_hex": "CC DA B2 D1 D7 DD BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060428",
+      "end": "0x060432",
+      "original_text": "ﾃﾞﾋﾞﾙｱｯｸｽ",
+      "raw_hex": "C3 DE CB DE D9 B1 AF B8 BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060432",
+      "end": "0x06043E",
+      "original_text": "ﾄﾞﾗｺﾞﾝｽﾚｲﾔｰ",
+      "raw_hex": "C4 DE D7 BA DE DD BD DA B2 D4 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06043E",
+      "end": "0x060447",
+      "original_text": "ﾗﾝｸﾞﾘｯｻｰ",
+      "raw_hex": "D7 DD B8 DE D8 AF BB B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060447",
+      "end": "0x060451",
+      "original_text": "ﾒｻｲﾔﾝｿｰﾄﾞ",
+      "raw_hex": "D2 BB B2 D4 DD BF B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060459",
+      "end": "0x060462",
+      "original_text": "ﾎｰﾘｰﾛｯﾄﾞ",
+      "raw_hex": "CE B0 D8 B0 DB AF C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060462",
+      "end": "0x06046B",
+      "original_text": "ﾀﾞｰｸﾛｯﾄﾞ",
+      "raw_hex": "C0 DE B0 B8 DB AF C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06046B",
+      "end": "0x060474",
+      "original_text": "ｱﾙﾊｻﾞｰﾄﾞ",
+      "raw_hex": "B1 D9 CA BB DE B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060474",
+      "end": "0x06047C",
+      "original_text": "ﾛﾝｸﾞﾎﾞｳ",
+      "raw_hex": "DB DD B8 DE CE DE B3",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06047C",
+      "end": "0x060484",
+      "original_text": "ｱｰﾊﾞﾚｽﾄ",
+      "raw_hex": "B1 B0 CA DE DA BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060485",
+      "end": "0x06048C",
+      "original_text": "･ｼｰﾙﾄﾞ",
+      "raw_hex": "A5 BC B0 D9 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06048D",
+      "end": "0x060494",
+      "original_text": "･ｼｰﾙﾄﾞ",
+      "raw_hex": "A5 BC B0 D9 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060494",
+      "end": "0x06049C",
+      "original_text": "ﾁｪｲﾝﾒｲﾙ",
+      "raw_hex": "C1 AA B2 DD D2 B2 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06049C",
+      "end": "0x0604A6",
+      "original_text": "ﾌﾟﾚｰﾄｱｰﾏｰ",
+      "raw_hex": "CC DF DA B0 C4 B1 B0 CF B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604A6",
+      "end": "0x0604AE",
+      "original_text": "ｱｻﾙﾄｽｰﾂ",
+      "raw_hex": "B1 BB D9 C4 BD B0 C2",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604AE",
+      "end": "0x0604B3",
+      "original_text": "ﾛｰﾌﾞ",
+      "raw_hex": "DB B0 CC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604B3",
+      "end": "0x0604BE",
+      "original_text": "ﾄﾞﾗｺﾞﾝｽｹｲﾙ",
+      "raw_hex": "C4 DE D7 BA DE DD BD B9 B2 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604BE",
+      "end": "0x0604C9",
+      "original_text": "ﾐﾗｰｼﾞｭﾛｰﾌﾞ",
+      "raw_hex": "D0 D7 B0 BC DE AD DB B0 CC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604D5",
+      "end": "0x0604DD",
+      "original_text": "ﾙｰﾝｽﾄｰﾝ",
+      "raw_hex": "D9 B0 DD BD C4 B0 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604E1",
+      "end": "0x0604E7",
+      "original_text": "ﾈｯｸﾚｽ",
+      "raw_hex": "C8 AF B8 DA BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604E7",
+      "end": "0x0604EC",
+      "original_text": "ｵｰﾌﾞ",
+      "raw_hex": "B5 B0 CC DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604EC",
+      "end": "0x0604F7",
+      "original_text": "ｽﾋﾟｰﾄﾞﾌﾞｰﾂ",
+      "raw_hex": "BD CB DF B0 C4 DE CC DE B0 C2",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604F7",
+      "end": "0x0604FC",
+      "original_text": "ｸﾗｳﾝ",
+      "raw_hex": "B8 D7 B3 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0604FC",
+      "end": "0x060502",
+      "original_text": "ｱｳﾛｰﾗ",
+      "raw_hex": "B1 B3 DB B0 D7",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x06050B",
+      "end": "0x060513",
+      "original_text": "ｶｰﾊﾞﾝｸﾙ",
+      "raw_hex": "B6 B0 CA DE DD B8 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060513",
+      "end": "0x06051D",
+      "original_text": "ｸﾞﾚｲﾌﾟﾆｰﾙ",
+      "raw_hex": "B8 DE DA B2 CC DF C6 B0 D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x060529",
+      "end": "0x060530",
+      "original_text": "ｱﾐｭﾚｯﾄ",
+      "raw_hex": "B1 D0 AD DA AF C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AC5",
+      "end": "0x061ACB",
+      "original_text": "ｴﾙｳｨﾝ",
+      "raw_hex": "B4 D9 B3 A8 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AD3",
+      "end": "0x061AD8",
+      "original_text": "ｼｪﾘｰ",
+      "raw_hex": "BC AA D8 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061ADC",
+      "end": "0x061AE1",
+      "original_text": "ｽｺｯﾄ",
+      "raw_hex": "BD BA AF C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AE5",
+      "end": "0x061AEA",
+      "original_text": "ｱｰﾛﾝ",
+      "raw_hex": "B1 B0 DB DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AEA",
+      "end": "0x061AEF",
+      "original_text": "ﾚｽﾀｰ",
+      "raw_hex": "DA BD C0 B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AEF",
+      "end": "0x061AF5",
+      "original_text": "ｼﾞｪｼｶ",
+      "raw_hex": "BC DE AA BC B6",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061AF5",
+      "end": "0x061AFC",
+      "original_text": "ﾅｿﾞﾉｷｼ",
+      "raw_hex": "C5 BF DE C9 B7 BC",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B00",
+      "end": "0x061B08",
+      "original_text": "ﾍﾞﾙﾝﾊﾙﾄ",
+      "raw_hex": "CD DE D9 DD CA D9 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B08",
+      "end": "0x061B0F",
+      "original_text": "ﾊﾞﾙｶﾞｽ",
+      "raw_hex": "CA DE D9 B6 DE BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B0F",
+      "end": "0x061B16",
+      "original_text": "ﾎﾞｰｾﾞﾙ",
+      "raw_hex": "CE DE B0 BE DE D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B16",
+      "end": "0x061B1C",
+      "original_text": "ﾚｱｰﾄﾞ",
+      "raw_hex": "DA B1 B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B1C",
+      "end": "0x061B23",
+      "original_text": "ﾊﾞﾙﾄﾞｰ",
+      "raw_hex": "CA DE D9 C4 DE B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B23",
+      "end": "0x061B28",
+      "original_text": "ｿﾞﾙﾑ",
+      "raw_hex": "BF DE D9 D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B28",
+      "end": "0x061B30",
+      "original_text": "ｴｸﾞﾍﾞﾙﾄ",
+      "raw_hex": "B4 B8 DE CD DE D9 C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B30",
+      "end": "0x061B36",
+      "original_text": "ｲﾒﾙﾀﾞ",
+      "raw_hex": "B2 D2 D9 C0 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B36",
+      "end": "0x061B3C",
+      "original_text": "ﾓｰｶﾞﾝ",
+      "raw_hex": "D3 B0 B6 DE DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B3C",
+      "end": "0x061B41",
+      "original_text": "ｷﾞﾅﾑ",
+      "raw_hex": "B7 DE C5 D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B41",
+      "end": "0x061B47",
+      "original_text": "ｸﾚｲﾏｰ",
+      "raw_hex": "B8 DA B2 CF B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B47",
+      "end": "0x061B4D",
+      "original_text": "ｾｲｶﾞﾙ",
+      "raw_hex": "BE B2 B6 DE D9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B4D",
+      "end": "0x061B54",
+      "original_text": "ﾌｫﾙｶﾞｰ",
+      "raw_hex": "CC AB D9 B6 DE B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B54",
+      "end": "0x061B5C",
+      "original_text": "ｲｯﾊﾟﾝﾍｲ",
+      "raw_hex": "B2 AF CA DF DD CD B2",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B5C",
+      "end": "0x061B61",
+      "original_text": "ｼｷｶﾝ",
+      "raw_hex": "BC B7 B6 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B6B",
+      "end": "0x061B71",
+      "original_text": "ｶｲｿﾞｸ",
+      "raw_hex": "B6 B2 BF DE B8",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B71",
+      "end": "0x061B79",
+      "original_text": "ｼﾞｹｲﾀﾞﾝ",
+      "raw_hex": "BC DE B9 B2 C0 DE DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B79",
+      "end": "0x061B7E",
+      "original_text": "ﾛｰﾚﾝ",
+      "raw_hex": "DB B0 DA DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B7E",
+      "end": "0x061B83",
+      "original_text": "ｱﾄﾞﾝ",
+      "raw_hex": "B1 C4 DE DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B83",
+      "end": "0x061B88",
+      "original_text": "ｻﾑｿﾝ",
+      "raw_hex": "BB D1 BF DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B88",
+      "end": "0x061B8D",
+      "original_text": "ﾊﾞﾗﾝ",
+      "raw_hex": "CA DE D7 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B8D",
+      "end": "0x061B96",
+      "original_text": "ﾃｲｺｸｼｷｶﾝ",
+      "raw_hex": "C3 B2 BA B8 BC B7 B6 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B96",
+      "end": "0x061B9D",
+      "original_text": "ｳｪｱｳﾙﾌ",
+      "raw_hex": "B3 AA B1 B3 D9 CC",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061B9D",
+      "end": "0x061BA7",
+      "original_text": "ｸﾞﾚｰﾄｽﾗｲﾑ",
+      "raw_hex": "B8 DE DA B0 C4 BD D7 B2 D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BA7",
+      "end": "0x061BAC",
+      "original_text": "ｽｷｭﾗ",
+      "raw_hex": "BD B7 AD D7",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BAC",
+      "end": "0x061BB6",
+      "original_text": "ｱｲｱﾝｺﾞｰﾚﾑ",
+      "raw_hex": "B1 B2 B1 DD BA DE B0 DA D1",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BBA",
+      "end": "0x061BC5",
+      "original_text": "ﾘﾋﾞﾝｸﾞｱｰﾏｰ",
+      "raw_hex": "D8 CB DE DD B8 DE B1 B0 CF B0",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BC5",
+      "end": "0x061BD1",
+      "original_text": "ﾊﾞﾝﾊﾟｲｱﾛｰﾄﾞ",
+      "raw_hex": "CA DE DD CA DF B2 B1 DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BD1",
+      "end": "0x061BD7",
+      "original_text": "ｺﾞｰｽﾄ",
+      "raw_hex": "BA DE B0 BD C4",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BD7",
+      "end": "0x061BDE",
+      "original_text": "ｹﾙﾍﾞﾛｽ",
+      "raw_hex": "B9 D9 CD DE DB BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BDE",
+      "end": "0x061BE8",
+      "original_text": "ﾏｽﾀｰﾃﾞｨｰﾉ",
+      "raw_hex": "CF BD C0 B0 C3 DE A8 B0 C9",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BE8",
+      "end": "0x061BEF",
+      "original_text": "ﾜｲﾊﾞｰﾝ",
+      "raw_hex": "DC B2 CA DE B0 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BEF",
+      "end": "0x061BFB",
+      "original_text": "ｸﾞﾚｰﾄﾄﾞﾗｺﾞﾝ",
+      "raw_hex": "B8 DE DA B0 C4 C4 DE D7 BA DE DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061BFB",
+      "end": "0x061C02",
+      "original_text": "ﾐﾉﾀｳﾛｽ",
+      "raw_hex": "D0 C9 C0 B3 DB BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C02",
+      "end": "0x061C08",
+      "original_text": "ｸﾗｰｹﾝ",
+      "raw_hex": "B8 D7 B0 B9 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C08",
+      "end": "0x061C0F",
+      "original_text": "ｻｷｭﾊﾞｽ",
+      "raw_hex": "BB B7 AD CA DE BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C0F",
+      "end": "0x061C19",
+      "original_text": "ﾃﾞｰﾓﾝﾛｰﾄﾞ",
+      "raw_hex": "C3 DE B0 D3 DD DB B0 C4 DE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C1D",
+      "end": "0x061C22",
+      "original_text": "ﾏｼﾞｮ",
+      "raw_hex": "CF BC DE AE",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C22",
+      "end": "0x061C27",
+      "original_text": "ｼﾝｶﾝ",
+      "raw_hex": "BC DD B6 DD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C27",
+      "end": "0x061C2E",
+      "original_text": "ﾃｲｺｸﾍｲ",
+      "raw_hex": "C3 B2 BA B8 CD B2",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x061C2E",
+      "end": "0x061C34",
+      "original_text": "ﾌｧｲｱｽ",
+      "raw_hex": "CC A7 B2 B1 BD",
+      "category": "global_table_string",
+      "owner": "owned by class, item, or commander-name table"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x08079D",
+      "end": "0x0807BB",
+      "original_text": "ｪｫｫｫｫｺｺｺｺｫｫｫｫｺｻｪｺｻｫｻｻｺｻｻｫｻｺｻｻ",
+      "raw_hex": "AA AB AB AB AB BA BA BA BA AB AB AB AB BA BB AA BA BB AB BB BB BA BB BB AB BB BA BB BB",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0808CE",
+      "end": "0x0808EF",
+      "original_text": "ｫｫｪｫｺｺｺｺｪｪｫｫｺｪｺｺｪｫｫｫｪｺｺｺｪｪｪｫｲｪｺｪ",
+      "raw_hex": "AB AB AA AB BA BA BA BA AA AA AB AB BA AA BA BA AA AB AB AB AA BA BA BA AA AA AA AB B2 AA BA AA",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x080B4B",
+      "end": "0x080B57",
+      "original_text": "｢｢ｪｪｪｪｪｪｪｪｪ",
+      "raw_hex": "A2 A2 AA AA AA AA AA AA AA AA AA",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0810A8",
+      "end": "0x0810AD",
+      "original_text": "OOOO",
+      "raw_hex": "4F 4F 4F 4F",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0810C8",
+      "end": "0x0810CD",
+      "original_text": "OOOB",
+      "raw_hex": "4F 4F 4F 42",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x081828",
+      "end": "0x08182D",
+      "original_text": "OOOO",
+      "raw_hex": "4F 4F 4F 4F",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x081848",
+      "end": "0x08184D",
+      "original_text": "OOOB",
+      "raw_hex": "4F 4F 4F 42",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x083761",
+      "end": "0x083776",
+      "original_text": "KLMNKLMNKLMNKLMNKLMN",
+      "raw_hex": "4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x08387B",
+      "end": "0x083890",
+      "original_text": "KLMNKLMNKLMNKLMNKLMN",
+      "raw_hex": "4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E 4B 4C 4D 4E",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x083A8F",
+      "end": "0x083A9C",
+      "original_text": "LXFGDEFGDEFG",
+      "raw_hex": "4C 58 46 47 44 45 46 47 44 45 46 47",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x083E30",
+      "end": "0x083E35",
+      "original_text": "GGGH",
+      "raw_hex": "47 47 47 48",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x08406E",
+      "end": "0x08407E",
+      "original_text": "JKLMNOPQRSTUVWX",
+      "raw_hex": "4A 4B 4C 4D 4E 4F 50 51 52 53 54 55 56 57 58",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x084162",
+      "end": "0x084188",
+      "original_text": "ABCDEFGHEFCHFFCHFIJJKLMNOPQRSTUVXTUVX",
+      "raw_hex": "41 42 43 44 45 46 47 48 45 46 43 48 46 46 43 48 46 49 4A 4A 4B 4C 4D 4E 4F 50 51 52 53 54 55 56 58 54 55 56 58",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x08450C",
+      "end": "0x08451A",
+      "original_text": "ANCNCNCNCNCNC",
+      "raw_hex": "41 4E 43 4E 43 4E 43 4E 43 4E 43 4E 43",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0846EF",
+      "end": "0x0846FD",
+      "original_text": "ANCNCNCNCCNCC",
+      "raw_hex": "41 4E 43 4E 43 4E 43 4E 43 43 4E 43 43",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x084EAF",
+      "end": "0x084EC7",
+      "original_text": "ABCHIJKHIJKLMNOHIJKLMNO",
+      "raw_hex": "41 42 43 48 49 4A 4B 48 49 4A 4B 4C 4D 4E 4F 48 49 4A 4B 4C 4D 4E 4F",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x084F76",
+      "end": "0x084F8E",
+      "original_text": "ABCHIJKLMNOHIJKLMNOLMNO",
+      "raw_hex": "41 42 43 48 49 4A 4B 4C 4D 4E 4F 48 49 4A 4B 4C 4D 4E 4F 4C 4D 4E 4F",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x08564C",
+      "end": "0x085662",
+      "original_text": "JSTQRQRSTQRQRSTQRQRST",
+      "raw_hex": "4A 53 54 51 52 51 52 53 54 51 52 51 52 53 54 51 52 51 52 53 54",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x085760",
+      "end": "0x085776",
+      "original_text": "JQRQRSTQRQRSTQRQRSTQR",
+      "raw_hex": "4A 51 52 51 52 53 54 51 52 51 52 53 54 51 52 51 52 53 54 51 52",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x085D34",
+      "end": "0x085D4A",
+      "original_text": "JRQRSTQRQRSRQRSTQRQRR",
+      "raw_hex": "4A 52 51 52 53 54 51 52 51 52 53 52 51 52 53 54 51 52 51 52 52",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x085E36",
+      "end": "0x085E4C",
+      "original_text": "JQRSTQRQRRQRSTQRQRSQR",
+      "raw_hex": "4A 51 52 53 54 51 52 51 52 52 51 52 53 54 51 52 51 52 53 51 52",
+      "category": "glyph_or_tile_data_false_positive",
+      "owner": "packed glyph/tile data"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0A18DF",
+      "end": "0x0A18EA",
+      "original_text": " WEPON    ",
+      "raw_hex": "20 57 45 50 4F 4E 20 20 20 20",
+      "category": "localized_equipment_category_container",
+      "owner": "visible labels patched at the next byte"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0A18EB",
+      "end": "0x0A18F6",
+      "original_text": " PROTECTER",
+      "raw_hex": "20 50 52 4F 54 45 43 54 45 52",
+      "category": "localized_equipment_category_container",
+      "owner": "visible labels patched at the next byte"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0A18F7",
+      "end": "0x0A1902",
+      "original_text": " ITEM     ",
+      "raw_hex": "20 49 54 45 4D 20 20 20 20 20",
+      "category": "localized_equipment_category_container",
+      "owner": "visible labels patched at the next byte"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0A3B9D",
+      "end": "0x0A3BA6",
+      "original_text": "ﾗﾝｸﾞﾘｯｻｰ",
+      "raw_hex": "D7 DD B8 DE D8 AF BB B0",
+      "category": "internal_secret_name_comparison",
+      "owner": "reserved Langrisser/Alhazard name comparison"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0A3BA6",
+      "end": "0x0A3BAF",
+      "original_text": "ｱﾙﾊｻﾞｰﾄﾞ",
+      "raw_hex": "B1 D9 CA BB DE B0 C4 DE",
+      "category": "internal_secret_name_comparison",
+      "owner": "reserved Langrisser/Alhazard name comparison"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0A450E",
+      "end": "0x0A4514",
+      "original_text": "CORP.",
+      "raw_hex": "43 4F 52 50 2E",
+      "category": "retained_title_record",
+      "owner": "NCS CORP. / PUSH START BUTTON source record"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0A452B",
+      "end": "0x0A4532",
+      "original_text": "BUTTON",
+      "raw_hex": "42 55 54 54 4F 4E",
+      "category": "retained_title_record",
+      "owner": "NCS CORP. / PUSH START BUTTON source record"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0A50F5",
+      "end": "0x0A510E",
+      "original_text": "ｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｮｯｰｱｲｳｴｵ",
+      "raw_hex": "A8 A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 AE AF B0 B1 B2 B3 B4 B5",
+      "category": "structured_character_resource",
+      "owner": "name-entry character/index resource"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0A5190",
+      "end": "0x0A5197",
+      "original_text": "ﾗﾘﾙﾚﾛﾜ",
+      "raw_hex": "D7 D8 D9 DA DB DC",
+      "category": "structured_character_resource",
+      "owner": "name-entry character/index resource"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0A61A2",
+      "end": "0x0A61AD",
+      "original_text": "KLMNOPQRST",
+      "raw_hex": "4B 4C 4D 4E 4F 50 51 52 53 54",
+      "category": "structured_character_resource",
+      "owner": "character/index resource"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B3587",
+      "end": "0x0B358C",
+      "original_text": "ﾌﾌﾜﾌ",
+      "raw_hex": "CC CC DC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B392C",
+      "end": "0x0B3933",
+      "original_text": "ｽｽﾍｽｻﾛ",
+      "raw_hex": "BD BD CD BD BB DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0B494C",
+      "end": "0x0B4953",
+      "original_text": "UUQ5UQ",
+      "raw_hex": "55 55 51 35 55 51",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B5EDD",
+      "end": "0x0B5EE2",
+      "original_text": "ﾌﾌﾜﾌ",
+      "raw_hex": "CC CC DC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B6282",
+      "end": "0x0B6288",
+      "original_text": "ｽｽﾍｽｻ",
+      "raw_hex": "BD BD CD BD BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0B73A9",
+      "end": "0x0B73B2",
+      "original_text": "ﾝﾜﾅﾝﾝﾍﾜﾝ",
+      "raw_hex": "DD DC C5 DD DD CD DC DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BA1B4",
+      "end": "0x0BA1B9",
+      "original_text": "ﾜﾍﾌﾜ",
+      "raw_hex": "DC CD CC DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BA3CB",
+      "end": "0x0BA3D0",
+      "original_text": "ｽｽﾍｽ",
+      "raw_hex": "BD BD CD BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0BBAD5",
+      "end": "0x0BBADB",
+      "original_text": "LH LL",
+      "raw_hex": "4C 48 20 4C 4C",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BC88F",
+      "end": "0x0BC899",
+      "original_text": "ﾚｱｽｽﾍｽｻﾛﾋ",
+      "raw_hex": "DA B1 BD BD CD BD BB DB CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BCB3B",
+      "end": "0x0BCB40",
+      "original_text": "ﾌﾝﾍﾜ",
+      "raw_hex": "CC DD CD DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BCB40",
+      "end": "0x0BCB49",
+      "original_text": "ﾌﾍﾜﾜﾍﾌﾍﾍ",
+      "raw_hex": "CC CD DC DC CD CC CD CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BCF12",
+      "end": "0x0BCF1A",
+      "original_text": "ｾｾﾋｽﾜﾜﾛ",
+      "raw_hex": "BE BE CB BD DC DC DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BD19F",
+      "end": "0x0BD1A4",
+      "original_text": "ﾋｼｽﾜ",
+      "raw_hex": "CB BC BD DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BE1E2",
+      "end": "0x0BE1E8",
+      "original_text": "ﾌﾏﾎﾜﾍ",
+      "raw_hex": "CC CF CE DC CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BF171",
+      "end": "0x0BF176",
+      "original_text": "ﾏﾆﾆﾆ",
+      "raw_hex": "CF C6 C6 C6",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BF28B",
+      "end": "0x0BF291",
+      "original_text": "ｽｽﾍｽｻ",
+      "raw_hex": "BD BD CD BD BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BFA32",
+      "end": "0x0BFA37",
+      "original_text": "ﾜﾊﾌﾍ",
+      "raw_hex": "DC CA CC CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BFC04",
+      "end": "0x0BFC0A",
+      "original_text": "ﾘﾈﾌﾝﾃ",
+      "raw_hex": "D8 C8 CC DD C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0BFD5C",
+      "end": "0x0BFD61",
+      "original_text": "ﾌﾌﾜﾌ",
+      "raw_hex": "CC CC DC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0113",
+      "end": "0x0C0119",
+      "original_text": "ﾋｽﾜﾜﾛ",
+      "raw_hex": "CB BD DC DC DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0305",
+      "end": "0x0C030A",
+      "original_text": "ｰｮﾌﾃ",
+      "raw_hex": "B0 AE CC C3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0A6B",
+      "end": "0x0C0A70",
+      "original_text": "ﾟﾞﾝﾟ",
+      "raw_hex": "DF DE DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0B80",
+      "end": "0x0C0B86",
+      "original_text": "ﾊｪﾌﾝﾚ",
+      "raw_hex": "CA AA CC DD DA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0CDA",
+      "end": "0x0C0CDF",
+      "original_text": "ﾌﾌﾜﾌ",
+      "raw_hex": "CC CC DC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0CF0",
+      "end": "0x0C0CF6",
+      "original_text": "ﾌﾜﾝﾜﾝ",
+      "raw_hex": "CC DC DD DC DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0D10",
+      "end": "0x0C0D15",
+      "original_text": "ﾌﾍﾍﾍ",
+      "raw_hex": "CC CD CD CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C0D2E",
+      "end": "0x0C0D33",
+      "original_text": "ﾍﾜﾜﾜ",
+      "raw_hex": "CD DC DC DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C1081",
+      "end": "0x0C1087",
+      "original_text": "ﾂﾃﾌﾞﾌ",
+      "raw_hex": "C2 C3 CC DE CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C113B",
+      "end": "0x0C1141",
+      "original_text": "ｽｽﾍｽｻ",
+      "raw_hex": "BD BD CD BD BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C1252",
+      "end": "0x0C125B",
+      "original_text": "ｼﾌｽﾋﾊｪﾋﾌ",
+      "raw_hex": "BC CC BD CB CA AA CB CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C14BC",
+      "end": "0x0C14C2",
+      "original_text": "ﾞﾂﾍﾓﾞ",
+      "raw_hex": "DE C2 CD D3 DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C1E76",
+      "end": "0x0C1E7E",
+      "original_text": "ﾍﾌﾃﾌﾍﾌﾂ",
+      "raw_hex": "CD CC C3 CC CD CC C2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C25B3",
+      "end": "0x0C25B8",
+      "original_text": "ﾝﾝｽｽ",
+      "raw_hex": "DD DD BD BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C2602",
+      "end": "0x0C2608",
+      "original_text": "ﾁﾍｽｽﾝ",
+      "raw_hex": "C1 CD BD BD DD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C2753",
+      "end": "0x0C2758",
+      "original_text": "ﾛﾋﾛﾎ",
+      "raw_hex": "DB CB DB CE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C27AE",
+      "end": "0x0C27B3",
+      "original_text": "ﾛ｡ﾛﾜ",
+      "raw_hex": "DB A1 DB DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C3696",
+      "end": "0x0C369D",
+      "original_text": "ﾁﾍｽｽﾝﾋ",
+      "raw_hex": "C1 CD BD BD DD CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C4667",
+      "end": "0x0C466D",
+      "original_text": "ﾌﾎｪﾜﾑ",
+      "raw_hex": "CC CE AA DC D1",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C47B5",
+      "end": "0x0C47BA",
+      "original_text": "､ｬｬｪ",
+      "raw_hex": "A4 AC AC AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0C6D9E",
+      "end": "0x0C6DA5",
+      "original_text": "DCC1D4",
+      "raw_hex": "44 43 43 31 44 34",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C7CBB",
+      "end": "0x0C7CC2",
+      "original_text": "､ﾜｿﾜﾛｿ",
+      "raw_hex": "A4 DC BF DC DB BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C7D86",
+      "end": "0x0C7D8F",
+      "original_text": "ﾍﾋｼﾍﾜﾛｼﾜ",
+      "raw_hex": "CD CB BC CD DC DB BC DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C7E98",
+      "end": "0x0C7E9E",
+      "original_text": "ｽﾌﾋﾄｼ",
+      "raw_hex": "BD CC CB C4 BC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C7E9E",
+      "end": "0x0C7EA7",
+      "original_text": "ﾍｽｻｼﾛﾏﾋｽ",
+      "raw_hex": "CD BD BB BC DB CF CB BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C7EE6",
+      "end": "0x0C7EED",
+      "original_text": "ｻｻﾟﾛｼﾍ",
+      "raw_hex": "BB BB DF DB BC CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C7EED",
+      "end": "0x0C7EF6",
+      "original_text": "ｿｻｽﾋｳｻｻｲ",
+      "raw_hex": "BF BB BD CB B3 BB BB B2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C807F",
+      "end": "0x0C8085",
+      "original_text": "ﾋﾍﾝﾃﾄ",
+      "raw_hex": "CB CD DD C3 C4",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C823D",
+      "end": "0x0C8246",
+      "original_text": "ﾓﾍﾃｽﾒﾜｽｳ",
+      "raw_hex": "D3 CD C3 BD D2 DC BD B3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C84AD",
+      "end": "0x0C84B2",
+      "original_text": "ﾟﾌﾄﾍ",
+      "raw_hex": "DF CC C4 CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C86A4",
+      "end": "0x0C86AB",
+      "original_text": "ﾈﾛﾍﾍﾘﾛ",
+      "raw_hex": "C8 DB CD CD D8 DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C87A7",
+      "end": "0x0C87AC",
+      "original_text": "ﾟﾝﾔﾍ",
+      "raw_hex": "DF DD D4 CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C8BDE",
+      "end": "0x0C8BE3",
+      "original_text": "ｻｿｻﾒ",
+      "raw_hex": "BB BF BB D2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C8BE3",
+      "end": "0x0C8BE9",
+      "original_text": "ｻｿｲｻｲ",
+      "raw_hex": "BB BF B2 BB B2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C8C17",
+      "end": "0x0C8C1D",
+      "original_text": "ｽﾌﾏﾙﾀ",
+      "raw_hex": "BD CC CF D9 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C8CFD",
+      "end": "0x0C8D02",
+      "original_text": "ﾜｽﾋﾛ",
+      "raw_hex": "DC BD CB DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0C988D",
+      "end": "0x0C9893",
+      "original_text": "ｰｬﾜﾌﾎ",
+      "raw_hex": "B0 AC DC CC CE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CA079",
+      "end": "0x0CA07E",
+      "original_text": "ﾌﾌﾜﾌ",
+      "raw_hex": "CC CC DC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CA488",
+      "end": "0x0CA48D",
+      "original_text": "ｽｽﾍｽ",
+      "raw_hex": "BD BD CD BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CA48D",
+      "end": "0x0CA49A",
+      "original_text": "ｻﾛﾋﾛｾｾﾋｽｧﾜﾜﾛ",
+      "raw_hex": "BB DB CB DB BE BE CB BD A7 DC DC DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CAE3A",
+      "end": "0x0CAE3F",
+      "original_text": "ﾟﾞﾝﾟ",
+      "raw_hex": "DF DE DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CBB45",
+      "end": "0x0CBB4A",
+      "original_text": "UWYI",
+      "raw_hex": "55 57 59 49",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CBF80",
+      "end": "0x0CBF87",
+      "original_text": "7ESESU",
+      "raw_hex": "37 45 53 45 53 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CBFC8",
+      "end": "0x0CBFD0",
+      "original_text": "DC53EU5",
+      "raw_hex": "44 43 35 33 45 55 35",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CC0E1",
+      "end": "0x0CC0E9",
+      "original_text": "T3CYUS4",
+      "raw_hex": "54 33 43 59 55 53 34",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CC0EB",
+      "end": "0x0CC0F2",
+      "original_text": "D5YEDD",
+      "raw_hex": "44 35 59 45 44 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CC15F",
+      "end": "0x0CC165",
+      "original_text": "YYYE7",
+      "raw_hex": "59 59 59 45 37",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CC2D7",
+      "end": "0x0CC2DE",
+      "original_text": "KEDW4E",
+      "raw_hex": "4B 45 44 57 34 45",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CD1F1",
+      "end": "0x0CD1FB",
+      "original_text": "QBDHJ ABD",
+      "raw_hex": "51 42 44 48 4A 20 41 42 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CD3BE",
+      "end": "0x0CD3C5",
+      "original_text": "CUT9GT",
+      "raw_hex": "43 55 54 39 47 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CD3E5",
+      "end": "0x0CD3EB",
+      "original_text": "7ESES",
+      "raw_hex": "37 45 53 45 53",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CD659",
+      "end": "0x0CD65E",
+      "original_text": "TYYY",
+      "raw_hex": "54 59 59 59",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CE3EF",
+      "end": "0x0CE3F4",
+      "original_text": "ﾑｴｴｴ",
+      "raw_hex": "D1 B4 B4 B4",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CE3F6",
+      "end": "0x0CE3FD",
+      "original_text": "ｻｻﾝﾚｻｻ",
+      "raw_hex": "BB BB DD DA BB BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CE67D",
+      "end": "0x0CE683",
+      "original_text": "UWZJT",
+      "raw_hex": "55 57 5A 4A 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CEAC3",
+      "end": "0x0CEAC8",
+      "original_text": "ﾑｴｴｴ",
+      "raw_hex": "D1 B4 B4 B4",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0CEACA",
+      "end": "0x0CEAD1",
+      "original_text": "ｻｻﾝﾚｻｻ",
+      "raw_hex": "BB BB DD DA BB BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CED51",
+      "end": "0x0CED57",
+      "original_text": "UWZJT",
+      "raw_hex": "55 57 5A 4A 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CF224",
+      "end": "0x0CF22D",
+      "original_text": "DC33UTDU",
+      "raw_hex": "44 43 33 33 55 54 44 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CFA45",
+      "end": "0x0CFA4A",
+      "original_text": "UTDU",
+      "raw_hex": "55 54 44 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CFB10",
+      "end": "0x0CFB17",
+      "original_text": "A3CII3",
+      "raw_hex": "41 33 43 49 49 33",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0CFF4E",
+      "end": "0x0CFF55",
+      "original_text": "7ESESU",
+      "raw_hex": "37 45 53 45 53 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0D0042",
+      "end": "0x0D0049",
+      "original_text": "TYYYE7",
+      "raw_hex": "54 59 59 59 45 37",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0D1FAB",
+      "end": "0x0D1FB3",
+      "original_text": "｡ｭﾝﾝ｡ｭﾍ",
+      "raw_hex": "A1 AD DD DD A1 AD CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E042E",
+      "end": "0x0E0435",
+      "original_text": "ﾋｺｳ｢ﾌｻ",
+      "raw_hex": "CB BA B3 A2 CC BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E0438",
+      "end": "0x0E043E",
+      "original_text": "ﾌｺｻｲﾋ",
+      "raw_hex": "CC BA BB B2 CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E096B",
+      "end": "0x0E0971",
+      "original_text": "ｼﾂﾂﾂｻ",
+      "raw_hex": "BC C2 C2 C2 BB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E0AA0",
+      "end": "0x0E0AA8",
+      "original_text": "ｻﾋﾋｻｻｼｼ",
+      "raw_hex": "BB CB CB BB BB BC BC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E2BD1",
+      "end": "0x0E2BD7",
+      "original_text": "UPEU.",
+      "raw_hex": "55 50 45 55 2E",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0E2E3A",
+      "end": "0x0E2E3F",
+      "original_text": "ﾟﾀﾟﾜ",
+      "raw_hex": "DF C0 DF DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E33A2",
+      "end": "0x0E33A7",
+      "original_text": "URUU",
+      "raw_hex": "55 52 55 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E3E0D",
+      "end": "0x0E3E14",
+      "original_text": "PUT3PU",
+      "raw_hex": "50 55 54 33 50 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E49A2",
+      "end": "0x0E49A8",
+      "original_text": "UTUEE",
+      "raw_hex": "55 54 55 45 45",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0E662A",
+      "end": "0x0E6630",
+      "original_text": "PUT3P",
+      "raw_hex": "50 55 54 33 50",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0F3D7C",
+      "end": "0x0F3D84",
+      "original_text": "OERUEGR",
+      "raw_hex": "4F 45 52 55 45 47 52",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x0F78EE",
+      "end": "0x0F78F5",
+      "original_text": " ｣｣ｧ ｣",
+      "raw_hex": "20 A3 A3 A7 20 A3",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0F89C1",
+      "end": "0x0F89CB",
+      "original_text": "EEEDOD60T",
+      "raw_hex": "45 45 45 44 4F 44 36 30 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0F89DF",
+      "end": "0x0F89E8",
+      "original_text": "T444J0CD",
+      "raw_hex": "54 34 34 34 4A 30 43 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x0FA86A",
+      "end": "0x0FA86F",
+      "original_text": "ECCB",
+      "raw_hex": "45 43 43 42",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x104523",
+      "end": "0x104529",
+      "original_text": "ﾏﾟｿｿｾ",
+      "raw_hex": "CF DF BF BF BE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x104A6A",
+      "end": "0x104A6F",
+      "original_text": "UDDU",
+      "raw_hex": "55 44 44 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x104FB9",
+      "end": "0x104FBF",
+      "original_text": "ﾏﾟｿｿｾ",
+      "raw_hex": "CF DF BF BF BE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x105916",
+      "end": "0x10591B",
+      "original_text": "ﾀﾀﾀﾀ",
+      "raw_hex": "C0 C0 C0 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x105A67",
+      "end": "0x105A6C",
+      "original_text": "ﾟﾟﾟﾟ",
+      "raw_hex": "DF DF DF DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1064A9",
+      "end": "0x1064AE",
+      "original_text": "ﾏﾑﾛﾟ",
+      "raw_hex": "CF D1 DB DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1067CB",
+      "end": "0x1067D0",
+      "original_text": "ﾏﾑﾛﾟ",
+      "raw_hex": "CF D1 DB DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x108B40",
+      "end": "0x108B46",
+      "original_text": "ﾟﾟﾟﾟﾟ",
+      "raw_hex": "DF DF DF DF DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10A5AF",
+      "end": "0x10A5B6",
+      "original_text": "C4DDCF",
+      "raw_hex": "43 34 44 44 43 46",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10A934",
+      "end": "0x10A93C",
+      "original_text": "C4DDCFD",
+      "raw_hex": "43 34 44 44 43 46 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10B694",
+      "end": "0x10B69D",
+      "original_text": "C34ECDDN",
+      "raw_hex": "43 33 34 45 43 44 44 4E",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x10CE65",
+      "end": "0x10CE6A",
+      "original_text": "ﾝﾝﾝﾟ",
+      "raw_hex": "DD DD DD DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10DC00",
+      "end": "0x10DC06",
+      "original_text": "CUE9D",
+      "raw_hex": "43 55 45 39 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10DC1E",
+      "end": "0x10DC26",
+      "original_text": "STEY5TD",
+      "raw_hex": "53 54 45 59 35 54 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10E36E",
+      "end": "0x10E375",
+      "original_text": "STEY5T",
+      "raw_hex": "53 54 45 59 35 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x10E4BC",
+      "end": "0x10E4C5",
+      "original_text": "DTE4E5UT",
+      "raw_hex": "44 54 45 34 45 35 55 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x116D1D",
+      "end": "0x116D23",
+      "original_text": "ﾀﾀﾀﾀﾀ",
+      "raw_hex": "C0 C0 C0 C0 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x118096",
+      "end": "0x11809B",
+      "original_text": "ﾏｷｷﾏ",
+      "raw_hex": "CF B7 B7 CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x119DA8",
+      "end": "0x119DB0",
+      "original_text": "ｶｶｶｶｶｶｿ",
+      "raw_hex": "B6 B6 B6 B6 B6 B6 BF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x119EBA",
+      "end": "0x119EBF",
+      "original_text": "ﾟﾟﾞｽ",
+      "raw_hex": "DF DF DE BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x11A75B",
+      "end": "0x11A760",
+      "original_text": "ｿｿｿﾟ",
+      "raw_hex": "BF BF BF DF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x11B1F2",
+      "end": "0x11B1F7",
+      "original_text": "ｪﾕﾀﾀ",
+      "raw_hex": "AA D5 C0 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x11CB06",
+      "end": "0x11CB0B",
+      "original_text": "ﾝﾞﾞﾞ",
+      "raw_hex": "DD DE DE DE",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x11EAB6",
+      "end": "0x11EABC",
+      "original_text": "TESUD",
+      "raw_hex": "54 45 53 55 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x11FD4D",
+      "end": "0x11FD56",
+      "original_text": "3DD3SDD5",
+      "raw_hex": "33 44 44 33 53 44 44 35",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x1202B3",
+      "end": "0x1202BC",
+      "original_text": "FUCETU3T",
+      "raw_hex": "46 55 43 45 54 55 33 54",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x120929",
+      "end": "0x120932",
+      "original_text": "U5UUEDUE",
+      "raw_hex": "55 35 55 55 45 44 55 45",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x122BAA",
+      "end": "0x122BAF",
+      "original_text": "ﾀﾀﾀﾀ",
+      "raw_hex": "C0 C0 C0 C0",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x123015",
+      "end": "0x12301B",
+      "original_text": "PTBD3",
+      "raw_hex": "50 54 42 44 33",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1230D3",
+      "end": "0x1230D8",
+      "original_text": "ﾌﾈﾝﾌ",
+      "raw_hex": "CC C8 DD CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1234C2",
+      "end": "0x1234C8",
+      "original_text": "ﾋﾟﾌﾘﾛ",
+      "raw_hex": "CB DF CC D8 DB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1234CA",
+      "end": "0x1234D1",
+      "original_text": "ﾝﾜｸﾏﾍﾜ",
+      "raw_hex": "DD DC B8 CF CD DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x124FE6",
+      "end": "0x124FED",
+      "original_text": "ｺﾝｾｿｭｽ",
+      "raw_hex": "BA DD BE BF AD BD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1254BA",
+      "end": "0x1254C3",
+      "original_text": "ﾜﾌﾜﾌﾋｻｺｪ",
+      "raw_hex": "DC CC DC CC CB BB BA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1254D0",
+      "end": "0x1254D6",
+      "original_text": "ﾞﾝﾝﾜﾍ",
+      "raw_hex": "DE DD DD DC CD",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1255D0",
+      "end": "0x1255D8",
+      "original_text": "ｪｫｪﾋｫｺｯ",
+      "raw_hex": "AA AB AA CB AB BA AF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x126099",
+      "end": "0x12609E",
+      "original_text": "ﾞ｡ﾋﾏ",
+      "raw_hex": "DE A1 CB CF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1265F4",
+      "end": "0x1265FD",
+      "original_text": "ﾑｼﾝﾜﾌﾋｼﾌ",
+      "raw_hex": "D1 BC DD DC CC CB BC CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x126693",
+      "end": "0x126698",
+      "original_text": "ｫｻｪｯ",
+      "raw_hex": "AB BB AA AF",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12AF5C",
+      "end": "0x12AF61",
+      "original_text": "ﾚｪｪｪ",
+      "raw_hex": "DA AA AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12B367",
+      "end": "0x12B36C",
+      "original_text": "ﾖﾝﾖﾖ",
+      "raw_hex": "D6 DD D6 D6",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12B474",
+      "end": "0x12B479",
+      "original_text": "ｳｻｻﾌ",
+      "raw_hex": "B3 BB BB CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12C75B",
+      "end": "0x12C760",
+      "original_text": "ｯｯｪｪ",
+      "raw_hex": "AF AF AA AA",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x12D139",
+      "end": "0x12D142",
+      "original_text": "DJD344C4",
+      "raw_hex": "44 4A 44 33 34 34 43 34",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x12D28B",
+      "end": "0x12D292",
+      "original_text": "4KDCKD",
+      "raw_hex": "34 4B 44 43 4B 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12E777",
+      "end": "0x12E77E",
+      "original_text": "ﾋｼﾌﾏﾞ ",
+      "raw_hex": "CB BC CC CF DE 20",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12E996",
+      "end": "0x12E99B",
+      "original_text": "ﾜﾌﾞﾜ",
+      "raw_hex": "DC CC DE DC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x12ECB8",
+      "end": "0x12ECBD",
+      "original_text": "ﾏﾍｽﾋ",
+      "raw_hex": "CF CD BD CB",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x1307BB",
+      "end": "0x1307C0",
+      "original_text": "ｾﾍｼﾖ",
+      "raw_hex": "BE CD BC D6",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x130B20",
+      "end": "0x130B25",
+      "original_text": "ﾟﾆﾍﾌ",
+      "raw_hex": "DF C6 CD CC",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "halfwidth",
+      "address": "0x133079",
+      "end": "0x13307F",
+      "original_text": "ﾄﾒｿｲﾒ",
+      "raw_hex": "C4 D2 BF B2 D2",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x1366BB",
+      "end": "0x1366C1",
+      "original_text": "5DDUU",
+      "raw_hex": "35 44 44 55 55",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    },
+    {
+      "kind": "ascii",
+      "address": "0x136773",
+      "end": "0x13677B",
+      "original_text": "EQQATDD",
+      "raw_hex": "45 51 51 41 54 44 44",
+      "category": "compressed_resource_data",
+      "owner": "compressed-resource table or payload"
+    }
+  ]
+}

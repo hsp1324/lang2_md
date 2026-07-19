@@ -34,7 +34,7 @@
 - `tools/capture_class_change_chain.py`: 한 지휘관 체인에서 아직 화면 검증되지 않은 고유 전이만 골라 위 자동 캡처를 순차 실행하고, 완전한 기존 캡처 세트는 건너뛰어 중단 후 재개합니다.
 - `tools/class_change_inventory.py`: 일본판의 플레이어 지휘관 10명 클래스 체인 100개 전이를 주소·원문·한글 표기·화면/적용 실기 상태와 함께 JSON/Markdown으로 생성합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
-- `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다.
+- `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. `xwd`가 실패하면 Xlib 직접 캡처로 fallback합니다. 단일 디스플레이 전환 뒤 Windows DWM 좌표가 어긋날 때는 `--xlib-only`로 포커스 변경 없이 X11 클라이언트를 직접 캡처합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치합니다.
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
@@ -49,6 +49,7 @@
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
 - `tools/jp_direct_byte_string_inventory.py`: ROM의 짝수 주소를 32비트 포인터로 보수적으로 해석해 실제 참조되는 `FF` 종료 CP932/ASCII 바이트 문자열 후보를 분류합니다.
+- `tools/jp_inline_byte_string_inventory.py`: 포인터 표에 잡히지 않는 보수적 `FF` 종료 반각 일본어/ASCII 연속열을 스캔합니다. 현재 449개를 전부 분류하며, 77행 숨김 사운드 테스트 표와 `버릴 아이템 선택` 고정 프롬프트를 별도 소유권으로 기록합니다.
 - `tools/runtime_verification_inventory.py`: 31개 장의 설명·조건·준비·오프닝·전투·턴 이벤트·클리어·분기/엔딩 실기 상태를 `localization/runtime_verification.json`에서 검증해 Markdown 체크리스트로 만듭니다. 정적 번역 완료와 실기 완료를 구분합니다.
 - `tools/build_epilogue_probe_rom.py`: 원본 엔딩 선택 루틴의 조건표를 임시로 바꿔 지정한 후일담 레코드를 실제 엔딩 렌더러로 확인할 개발용 ROM을 만듭니다. `--start-slot 14/15`로 리아나·세계 특수 경로부터 시작할 수 있습니다.
 - `tools/build_ending_dialogue_probe_rom.py`: 재배치된 엔딩 방문 대사 23개를 83페이지 진단 스트림으로 연결해 실제 방문 대사 렌더러에서 전 페이지를 확인합니다. 선택 조건 자체를 증명하는 ROM은 아니며 생성 ROM과 manifest는 커밋하지 않습니다.

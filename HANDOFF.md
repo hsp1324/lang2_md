@@ -22,14 +22,15 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: F3EF
+current production build checksum: 2282
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 373 passing
+unit tests: 384 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
-declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
-explicit UI verification gaps: 6
+conservative inline-byte candidates: 449 classified, 0 unclassified
+declared UI patches: 114/115 byte-modified; NPC is intentionally unchanged
+explicit UI verification gaps: 7
 ```
 
 Completed and closed unless a later edit touches the same renderer, pointer,
@@ -51,10 +52,10 @@ glyph bank, or visible screen:
   levels recorded by their inventories. A diagnostic proof is not a natural
   ownership proof.
 - the original complete-item secret shop list, all 37 Korean names and
-  descriptions, prices, and visible icons are accepted on diagnostic checksum
-  `D304`; current diagnostic checksum `4F78` has the same accepted item-surface
-  fingerprint, and decoded icon resource 391 is byte-identical to the Japanese
-  ROM.
+  descriptions, prices, and visible icons are accepted. Diagnostic checksum
+  `7E0B` has the renderer-aware fingerprint; price-only derivative `4C04`
+  verifies the repaired late-name lists and purchase popups, and decoded icon
+  resource 391 is byte-identical to the Japanese ROM.
 - the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
   equipment paths, Scenario 25's complete nine-commander equipment selector,
   Scenario 27's category and sell variants, and the accepted 37-item matrix.
@@ -68,13 +69,18 @@ glyph bank, or visible screen:
   `0x0A3B9D` is an internal name-entry comparison, not visible UI. Full source
   bytes, references, and reviewed false positives are in
   `localization/direct_byte_string_candidates.json`.
+- the independent inline scan classifies 449 conservative `FF`-terminated runs
+  with zero unknowns. It proves the fixed 13-cell `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` prompt at
+  `0x01807E` and a separate 77-row hidden sound-test table at
+  `0x05E040..0x05E50F`; the sound-test access/translation remains an explicit
+  UI gap rather than being mistaken for class or item data.
 
 Active work, in order:
 
 1. Upgrade scenario `completion` and `branches_endings` cells that are still
    `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
    continuity evidence but is not a page-by-page visual review.
-2. Work only from the six explicit shared-UI gaps in
+2. Work only from the seven explicit shared-UI gaps in
    `docs/ui_patch_surface_inventory.md`; the item-shop gap is closed.
 3. Re-run a completed path only when a new patch shares its glyphs, pointers,
    tokens, compressed resource, or control flow, or when an automated regression
@@ -114,11 +120,28 @@ Closed all-item shop checkpoint:
   descriptions, numeric effects, prices, and visible icons were reviewed and
   accepted. Five-digit prices retain their final `0P`; it is present in the raw
   capture pixels even when the 320x240 preview makes it hard to read;
-- current diagnostic checksum `4F78` has the same accepted item-surface SHA-256
-  `4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc`.
-  This surface fingerprint covers item names, descriptions, glyph lists, direct
-  word names, prices, icon selector/loader, and icon payload, so unrelated ROM
-  changes do not reopen the accepted matrix;
+- a later full-shop replay exposed a gap in that checkpoint: tokens `64+` in
+  names such as `그레이프니르` were interpreted through the icon bank because
+  the stock `0x2000..0x3FFF` name window holds only 64 16x16 glyphs and item
+  icons begin at `0x4000`. The old builder loaded all 84 names contiguously,
+  so list and purchase-popup suffixes became icons even though static token
+  bounds passed;
+- production `2282` keeps slots `0..63` at `0x2000`, loads the 20 overflow
+  glyphs into `0xB400..0xBDFF` after the 192-slot description bank, and patches
+  the two hardcoded list renderers plus the popup stream builder to select the
+  matching VRAM base. `0xE000` was rejected after GST inspection proved it is a
+  plane/name-table region that gets overwritten with vertical-line data;
+- free-price derivative `4C04` verifies the full last two shop pages and clean
+  messages `그레이프니르를 구입함`, `걀라르호른을 구입함`,
+  `아뮬렛을 구입함`, plus the low-slot regression `단검을 구입함` in
+  `captures/run/2282_item35_list.png`, `_item35_popup.png`,
+  `_item36_37_list.png`, `_item36_popup.png`, `_item37_popup.png`, and
+  `_item01_popup_regression.png`;
+- current diagnostic checksum `7E0B` has renderer-aware item-surface SHA-256
+  `9e3372724e71c96a4dcff082fb9e3f67e843408c93d375f0a0bca16dcdda822b`.
+  This fingerprint covers item names, descriptions, glyph lists, direct word
+  names, prices, icons, and the glyph-load/list/popup renderer hooks and
+  routines, so a later renderer regression now reopens the matrix;
 - item icon resource 391 is loaded at `0x025E5A` to VRAM `0x4000`. Its first
   `37 * 0x80` decoded bytes and the ID-to-tile selector at
   `0x027B44..0x027B77` are byte-identical to the Japanese ROM. The exact matrix
@@ -131,18 +154,18 @@ Closed all-item shop checkpoint:
   title/menu input sequence on original diagnostic checksum `3328` stopped at
   a black screen because the original timing differs; that failed capture is
   not acceptance evidence and need not be repeated for icon proof.
-- BlastEm placement now selects the widest RandR output (`XWAYLAND8`,
-  3440x1440 on this PC). Direct `--send-event` input only places the window and
+- BlastEm placement selects the widest active RandR output. Direct
+  `--send-event` input only places the window and
   never requests `_NET_ACTIVE_WINDOW` or keyboard focus. While the user is
   gaming, do not run an XTest/click-window sequence because that path still
   requires focus by design.
-- WSLg can return either an all-black X11 image or an enlarged center fragment
-  for the live SDL/OpenGL client even though the window is visible.
-  `capture_blastem_window.py` therefore prefers a focus-free Windows DWM
-  `CopyFromScreen` capture on WSL and falls back to X11 elsewhere. The live
-  320x240 proof is
-  `captures/run/windows_client_exact.png`; do not replace this with a click or
-  foreground-window workaround.
+- With the current single-display Windows layout, the automatic Windows DWM
+  path can capture stale desktop/title-bar coordinates. Direct Xlib capture via
+  `find_blastem_window_xlib()` and `capture_with_xlib()` returns the exact
+  320x240 client without focus changes. Use
+  `python3 tools/capture_blastem_window.py --xlib-only OUTPUT.png` until
+  automatic monitor coordinate fallback is corrected; do not replace it with a
+  click or foreground-window workaround.
 
 ## Why The Work Moved From English ROM To Japanese ROM
 
@@ -223,7 +246,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `F3EF` and passes all 373 tests. It includes
+The current source builds checksum `2282` and passes all 384 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,
@@ -5829,3 +5852,31 @@ contains 57 safe syllables as documented below and in
 - Final rebuild is production checksum `E38B` with 861 custom glyphs. The
   direct-word inventory classifies all 783 candidates with zero unclassified,
   the UI inventory retains 7 explicit gaps, and all 341 tests pass.
+
+### Inline Byte Inventory, Discard Prompt, And Late Item Names (2026-07-19)
+
+- `tools/jp_inline_byte_string_inventory.py` independently scans conservative
+  `FF`-terminated half-width Japanese and ASCII runs outside the pointer-based
+  inventories. It classifies 372 half-width and 77 ASCII candidates, 449 total,
+  with zero unclassified. Generated outputs are
+  `localization/inline_byte_strings.json` and
+  `docs/inline_byte_string_inventory.md`.
+- The apparent `ｱｲﾃﾑ ｾﾝﾀｸ` fragment is actually the fixed 13-cell record
+  `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` at `0x01807E`. Hook `0x01804C` now renders the relocated
+  local-tile record `버릴 아이템 선택` through routine `0x2B7F20`. Static
+  source, width, record, hook, and machine-code tests pass. Buying all 37
+  distinct items in the complete secret shop did not reach this prompt, so its
+  actual equipment/treasure access path remains `reviewed` but not live-verified.
+- The 77 fixed 16-byte records at `0x05E040..0x05E50F` are a hidden sound-test
+  label table, ending in `ﾌｸﾛｳ`; they are not summon, class, or item names. Its
+  access path, translation, and renderer verification are a deliberate UI gap.
+- A fresh item-35 purchase reproduced `그레이` followed by icon tiles. Tokens
+  `76..78` crossed the stock 64-slot name window into the icon bank. A first
+  overflow load at `0xE000` failed because GST VRAM proved that address is the
+  plane/name table. The accepted split uses `0xB400`, the 24-slot gap between
+  the item-description bank ending at `0xB400` and plane data at `0xC000`.
+- Production `2282` and diagnostic `7E0B` use split name loading and bank-aware
+  renderers. The renderer-aware item fingerprint is
+  `9e3372724e71c96a4dcff082fb9e3f67e843408c93d375f0a0bca16dcdda822b`;
+  all 384 tests pass. The current single-display layout is captured reliably
+  with direct Xlib rather than the stale-coordinate Windows DWM path.
