@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import time
 
@@ -35,6 +36,47 @@ KEYSYMS = {
     "pause": XK.XK_F7,
     "debug": XK.XK_u,
 }
+
+
+def choose_monitor(
+    monitors: list[tuple[str, int, int, int, int]], preference: str
+) -> tuple[str, int, int, int, int] | None:
+    if not monitors:
+        return None
+    if preference != "widest":
+        for monitor in monitors:
+            if monitor[0] == preference:
+                return monitor
+    return max(monitors, key=lambda monitor: (monitor[3], monitor[4]))
+
+
+def active_monitors(display: Display) -> list[tuple[str, int, int, int, int]]:
+    if not display.has_extension("RANDR"):
+        return []
+    root = display.screen().root
+    resources = root.xrandr_get_screen_resources_current()
+    monitors = []
+    for output_id in resources.outputs:
+        output = display.xrandr_get_output_info(
+            output_id, resources.config_timestamp
+        )
+        if not output.crtc:
+            continue
+        crtc = display.xrandr_get_crtc_info(
+            output.crtc, resources.config_timestamp
+        )
+        if crtc.width and crtc.height:
+            monitors.append((output.name, crtc.x, crtc.y, crtc.width, crtc.height))
+    return monitors
+
+
+def blastem_window_position(display: Display) -> tuple[int, int]:
+    preference = os.environ.get("BLASTEM_MONITOR", "widest")
+    monitor = choose_monitor(active_monitors(display), preference)
+    if monitor is None:
+        return 40, 40
+    _, x, y, _, _ = monitor
+    return x + 40, y + 40
 
 
 def find_blastem_window(display: Display):
@@ -82,7 +124,13 @@ def wait_for_blastem_window(display: Display, timeout: float):
     raise RuntimeError("could not find BlastEm window")
 
 
-def activate_window(display: Display, window) -> None:
+def activate_window(display: Display, window, request_focus: bool = True) -> None:
+    x, y = blastem_window_position(display)
+    window.configure(x=x, y=y, stack_mode=X.Above)
+    display.sync()
+    if not request_focus:
+        return
+
     root = display.screen().root
     net_active_window = display.intern_atom("_NET_ACTIVE_WINDOW")
     message = event.ClientMessage(
@@ -94,7 +142,6 @@ def activate_window(display: Display, window) -> None:
         message,
         event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask,
     )
-    window.configure(x=40, y=40, stack_mode=X.Above)
     try:
         window.set_input_focus(X.RevertToParent, X.CurrentTime)
     except Exception:
@@ -193,7 +240,7 @@ def main() -> int:
 
     display = Display()
     window = wait_for_blastem_window(display, args.wait_window)
-    activate_window(display, window)
+    activate_window(display, window, request_focus=not args.send_event)
     if args.click_window:
         click_window_center(display, window)
     time.sleep(args.ready_delay)

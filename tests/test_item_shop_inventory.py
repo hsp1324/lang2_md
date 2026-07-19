@@ -44,6 +44,24 @@ class ItemShopInventoryTests(unittest.TestCase):
                 row["icon_tile_ids"],
                 [f"0x{expected + index:04X}" for index in range(4)],
             )
+        resource = self.result["source_tables"]["item_icon_resource"]
+        self.assertEqual(resource["index"], 391)
+        self.assertEqual(resource["destination"], "0x4000")
+        self.assertEqual(resource["item_icon_bytes"], 37 * 0x80)
+        self.assertTrue(resource["production_bytes_identical"])
+
+    def test_runtime_acceptance_is_bound_to_the_item_surface_fingerprint(self):
+        self.assertEqual(
+            self.result["runtime_probe"]["accepted_capture_checksum"], "D304"
+        )
+        self.assertEqual(self.result["runtime_probe"]["status"], "accepted")
+        self.assertEqual(
+            self.result["source_tables"]["item_surface_sha256"],
+            self.result["runtime_probe"]["accepted_item_surface_sha256"],
+        )
+        self.assertTrue(
+            all(row["runtime_status"] == "accepted" for row in self.result["items"])
+        )
 
     def test_category_boundaries_match_stock_shop_code(self):
         categories = {row["id"]: row["category"] for row in self.result["items"]}

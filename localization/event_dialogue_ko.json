@@ -1296,8 +1296,8 @@
       {"address": "0x196FB0", "english_record": 3078, "text": "나는 이들과 함께 움직인다. 그때까지 부탁한다!"},
       {"address": "0x196FEE", "english_record": null, "japanese_only": true, "text": "예, 두목!"},
       {"address": "0x196FFC", "english_record": null, "japanese_only": true, "text": "맞다, 두목! 이걸 가져가 주세요!"},
-      {"address": "0x197028", "english_record": null, "japanese_only": true, "text": "목걸이인가? 고맙군."},
-      {"address": "0x197046", "english_record": null, "japanese_only": true, "text": "목걸이를 얻었다!"}
+      {"address": "0x197028", "english_record": null, "japanese_only": true, "text": "넥클리스인가? 고맙군."},
+      {"address": "0x197046", "english_record": null, "japanese_only": true, "text": "넥클리스를 얻었다!"}
     ],
     "11": [
       {"address": "0x197680", "english_record": 0, "text": "{000A}님! {000A}님을 찾는 분들이 왔습니다."},
@@ -2342,8 +2342,8 @@
       {"address": "0x1A6BA8", "english_record": 1010, "continuation": true, "text": "그렇지 않았다면 저런 자들을 따를 리가 있나!"},
       {"address": "0x1A6BDE", "english_record": 1011, "text": "바보들! 죽은 자의 유언 때문에 어둠의 군세를 따르나!"},
       {"address": "0x1A6C24", "english_record": 1012, "text": "더는 못 참아! 마지막에 웃는 건 우리라는 것만 말해 두지!"},
-      {"address": "0x1A6C7E", "english_record": 1013, "text": "갸라르혼을 찾았다!"},
-      {"address": "0x1A6C9C", "english_record": 1014, "text": "아우로라를 찾았다!"},
+      {"address": "0x1A6C7E", "english_record": 1013, "text": "걀라르호른을 찾았다!"},
+      {"address": "0x1A6C9C", "english_record": 1014, "text": "오로라를 찾았다!"},
       {"address": "0x1A6CB4", "english_record": 1015, "text": "적의 증원 부대가 다가오는 모양이야. 상대해야 할지도 몰라."},
       {"address": "0x1A6D0A", "english_record": 1015, "continuation": true, "text": "지금은 {0015}를 쓰러뜨리는 데 집중하자!"},
       {"address": "0x1A6D36", "english_record": 1016, "text": "이런! 배를 빼앗기다니…"},

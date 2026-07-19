@@ -76,6 +76,32 @@ class ItemShopResourceTests(unittest.TestCase):
         )
         self.assertLess(description_end, builder.BYTE_UI_FONT_RESOURCE_RELOC_BASE)
 
+    def test_item_descriptions_remain_aligned_with_original_ids(self):
+        descriptions = builder.ITEM_DESCRIPTION_PATCHES
+        self.assertEqual(len(descriptions), 37)
+        self.assertIn("암흑의 마검", descriptions[13])
+        self.assertIn("사거리1-3", descriptions[14])
+        self.assertIn("사거리1-6", descriptions[15])
+        self.assertIn("마법대미지+2", descriptions[33])
+        self.assertIn("DF+1", descriptions[34])
+        self.assertIn("A보정+2 D보정+2", descriptions[35])
+        self.assertIn("마법저항+15", descriptions[36])
+
+    def test_item_descriptions_fit_four_runtime_rows_before_price(self):
+        for item_id, description in enumerate(builder.ITEM_DESCRIPTION_PATCHES, 1):
+            lines = []
+            for paragraph in description.splitlines():
+                lines.extend(
+                    builder.wrap_korean(
+                        paragraph, builder.ITEM_DESCRIPTION_COLUMNS
+                    )
+                )
+            self.assertLessEqual(
+                len(lines),
+                builder.ITEM_DESCRIPTION_TEXT_ROWS,
+                f"item {item_id} description reaches the price row: {lines!r}",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -104,6 +104,8 @@ ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
 ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
 ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE = 0x286000
 ITEM_DESCRIPTION_GLYPH_LOAD_COUNT = 0xC0
+ITEM_DESCRIPTION_COLUMNS = 9
+ITEM_DESCRIPTION_TEXT_ROWS = 4
 BYTE_UI_FONT_RESOURCE_TABLE = 0x0B0000
 BYTE_UI_FONT_RESOURCE_INDEX = 1
 BYTE_UI_FONT_RESOURCE_RELOC_BASE = 0x290000
@@ -1753,36 +1755,36 @@ ITEM_NAME_PATCHES = [
     "완드",
     "플레임랜스",
     "데빌액스",
-    "D슬레이어",
+    "드래곤슬레이어",
     "랑그릿사",
     "랑그릿사",
-    "메사이얀소드",
+    "메사이어소드",
     "철아령",
     "홀리로드",
     "다크로드",
     "알하자드",
     "롱보우",
-    "아발레스트",
+    "아바레스트",
     "소형방패",
     "대형방패",
     "체인메일",
     "플레이트아머",
-    "어설트슈츠",
+    "어설트슈트",
     "로브",
     "드래곤스케일",
     "미라쥬로브",
-    "오딘방패",
+    "오딘의방패",
     "룬스톤",
     "크로스",
-    "목걸이",
+    "넥클리스",
     "오브",
     "스피드부츠",
     "크라운",
-    "아우로라",
+    "오로라",
     "천사날개",
     "카벙클",
-    "그레이프닐",
-    "갸라르혼",
+    "그레이프니르",
+    "걀라르호른",
     "아뮬렛",
     "홀리로드",
 ]
@@ -1814,13 +1816,14 @@ ITEM_DESCRIPTION_PATCHES = [
     "마력을 높이는 완드\n사거리+2 마법+1",
     "마법의 창\nAT+6",
     "저주받은 대형도끼\nAT+8 DF-3",
-    "D슬레이어\nAT+7",
+    "드래곤슬레이어\nAT+7",
     "루시리스의 성검\nAT+4 DF+1",
     "빛의 성검\nAT+9 DF+2",
     "전설의 검\nAT-4 DF-3",
     "몸을 단련하는 추\nAT+1 MV-1",
     "랑그릿사를 깨우는\n성스러운 로드",
     "알하자드를 깨우는\n어둠의 로드",
+    "랑그릿사와 대극인\n암흑의 마검\n마족 소환 가능",
     "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
     "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
     "소형 방패\nDF+1",
@@ -1831,20 +1834,19 @@ ITEM_DESCRIPTION_PATCHES = [
     "낡은 옷\nDF+1 마법저항+10",
     "용비늘 갑옷\nDF+4",
     "미라쥬로브\nDF+2 마법저항+20",
-    "오딘방패\nDF+3 D보정+1",
+    "오딘의 방패\nDF+3 D보정+1",
     "불가사의한 룬스톤\n레벨10",
     "신의 가호를 받은 십자가\nD보정+2",
-    "목걸이\nD보정+3",
+    "넥클리스\nD보정+3",
     "마력을 봉한 수정\nMP소모2배 마법+3",
     "발이 빨라지는 부츠\nMV+2",
     "아름다운 왕관\n지휘범위+3 A+2",
-    "아우로라\nAT+2",
-    "성천사의 날개\n마법저항+10",
+    "오로라\nAT+2",
+    "천사의 날개\n마법저항+10",
     "카벙클\n마법대미지+2",
-    "네 가지 보석\n소환부대+1",
-    "아뮬렛\nA보정+2 D보정+2",
+    "펜리르 봉인 사슬\n소환사 장비 시\nDF+1",
+    "신의 뿔피리\n소환사 장비 시\nA보정+2 D보정+2",
     "루시리스의 부적\n마법저항+15",
-    "성스러운 로드\n마법능력 상승",
 ]
 
 
@@ -4034,7 +4036,14 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
             tokens.extend([space_index, 9, 10, 11, 12])
             tokens.extend([space_index] * (45 - len(tokens)))
         else:
-            tokens = fixed_text_tokens(text, 15, 3, local_index, space_index)
+            tokens = fixed_text_tokens(
+                text,
+                ITEM_DESCRIPTION_COLUMNS,
+                ITEM_DESCRIPTION_TEXT_ROWS,
+                local_index,
+                space_index,
+            )
+            tokens.extend([space_index] * ITEM_DESCRIPTION_COLUMNS)
         # Shop prices render their leading digits dynamically but keep the
         # trailing "0P" in the last two description cells. Preserve that tail
         # or a 50P knife is displayed as the unexplained number 5.

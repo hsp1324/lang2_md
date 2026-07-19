@@ -44,7 +44,7 @@
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
 - `tools/item_shop_inventory.py`: 원본 전체 아이템 비기 목록의 ID `1..37`, 일본어명, 한국어 이름·설명, 가격표, 아이콘 VRAM 타일과 실기 검증 상태를 `localization/item_shop_inventory.json` 및 `docs/item_shop_runtime_matrix.md`로 생성합니다.
-- `tools/capture_item_shop_inventory.py`: checksum `8374` 전체 아이템 진단 ROM을 열어 5행씩 8페이지를 이동하며 ID `1..37` 화면을 개별 캡처합니다. `--start-item/--end-item`으로 중단 지점부터 재개하고, 캡처가 실제 상점 설명 패널인지 검사하며, 예외가 나도 BlastEm을 종료합니다. 사용자가 PC를 쓰는 동안에는 `--dry-run`만 사용합니다.
+- `tools/capture_item_shop_inventory.py`: 현재 생산 ROM에서 전체 아이템 진단 체크섬과 ASCII 캡처 접두사를 자동 산출하고, 5행씩 8페이지인 ID `1..37`을 개별 캡처합니다. 마지막 페이지는 2행이므로 전환 후 Up 1회만 사용합니다. `--start-item/--end-item`으로 재개하고, 실제 상점 설명 패널을 검사하며, 예외가 나도 BlastEm을 종료합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
@@ -196,6 +196,7 @@ python3 tools/run_blastem_sequence.py shop
 - 예전 성공 캡처(`captures/run/font_resource_08_conditions.png` -> `font_resource_11_shop_knife.png`)는 빠른 진입과 `B` 길게 누르기를 분리해서 보낸 흐름입니다. 현재 도구는 키별 hold를 지원하므로 같은 흐름을 한 명령으로 재현할 수 있습니다.
 - 현재 확인된 일본판 시작 타이밍은 `load ROM` 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`입니다. 이보다 빠르면 첫 입력이 씹히고, 늦으면 타이틀 idle 컷신으로 들어갑니다.
 - 일반 화면 전환 자동 입력은 최소 0.8초 간격을 둡니다. 단, 시나리오 선택 비기의 `Left, Right, Start, C` 네 키는 0.05초 간격이어야 하며 도구가 이 타이밍을 별도로 적용합니다. 상점 구매 검증은 `python3 tools/run_blastem_sequence.py shop-buy`, 지휘관 배치 검증은 `python3 tools/run_blastem_sequence.py arrange`, 전투 명령은 `python3 tools/run_blastem_sequence.py battle-command`, 첫 턴 종료 후 대사는 `python3 tools/run_blastem_sequence.py first-turn-dialogue`를 사용합니다.
+- `tools/send_blastem_keys.py`는 RandR에서 활성 모니터 중 가장 넓은 출력을 골라 BlastEm 창을 배치합니다. 현재 Windows의 가로형 서브 모니터는 X 출력 `XWAYLAND8` (`1920,717`, 3440x1440)입니다. 다른 출력을 강제하려면 `BLASTEM_MONITOR=<X 출력명>`을 설정하고, RandR를 쓸 수 없으면 기존 `(40,40)` 위치로 돌아갑니다. `--send-event` 모드는 창 위치만 맞추고 활성 창 요청이나 포커스 변경을 하지 않으므로 사용자가 다른 게임을 하는 동안에는 이 모드만 허용합니다.
 - 다른 장의 설명을 넘길 때는 고정 횟수로 C를 누르지 말고, 실행 중인 창에 `python3 tools/run_blastem_sequence.py detect-prep --no-launch --send-event --capture-prefix captures/run/sNN_brief.png`를 사용합니다. 준비창의 좌우 패널과 소지금 패널을 감지한 즉시 멈추며 `--capture-prefix`는 탐지 과정의 모든 화면을 번호별로 보존합니다. 같은 옵션은 `detect-command`의 오프닝/턴 이벤트 검수에도 사용할 수 있습니다.
 - `scenario-select`는 선택기 진입에 필요한 수동 세이브 슬롯을 보존하기 위해 `captures/runtime/load-screen`을 기본 초기화하지 않습니다. 다른 시퀀스의 격리 런타임은 기존처럼 `--reuse-runtime-state`를 주지 않으면 새로 만듭니다.
 - `scenario-select-entry`는 `Left, Right, Start, C` 비기 입력 직후 멈추고 시나리오 이동이나 확정을 보내지 않습니다. 전체 `scenario-select`와 같은 단일 입력 명령을 사용하므로, 창을 나눠 조작하다 비기가 누락되는 이전 실패를 반복하지 않습니다.

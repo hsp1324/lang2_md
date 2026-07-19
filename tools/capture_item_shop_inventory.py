@@ -23,7 +23,6 @@ SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
 ITEM_COUNT = 37
 ROWS_PER_PAGE = 5
-EXPECTED_PROBE_CHECKSUM = 0x8374
 
 
 def item_position(item_id: int) -> tuple[int, int]:
@@ -40,9 +39,10 @@ def movement_after(item_id: int, wait: float = 0.45) -> list[str]:
     _, row = item_position(item_id)
     if row + 1 < ROWS_PER_PAGE:
         return [f"down@0.02:{wait}"]
-    return [f"up@0.02:{wait}"] * (ROWS_PER_PAGE - 1) + [
-        f"right@0.02:{wait}"
-    ]
+    next_page_rows = min(ROWS_PER_PAGE, ITEM_COUNT - item_id)
+    return [f"right@0.02:{wait}"] + [
+        f"up@0.02:{wait}"
+    ] * (next_page_rows - 1)
 
 
 def movement_to(item_id: int, wait: float = 0.45) -> list[str]:
@@ -64,10 +64,10 @@ def shop_detail_visible(path: Path) -> bool:
     scale_y = frame.height / 240
     detail = frame.crop(
         (
-            round(95 * scale_x),
-            round(125 * scale_y),
-            round(305 * scale_x),
-            round(210 * scale_y),
+            round(12 * scale_x),
+            round(130 * scale_y),
+            round(164 * scale_x),
+            round(218 * scale_y),
         )
     )
     pixels = list(detail.get_flattened_data())
@@ -83,9 +83,9 @@ def shop_detail_visible(path: Path) -> bool:
     white = sum(
         1
         for red, green, blue in pixels
-        if red > 170 and green > 170 and blue > 170
+        if red > 70 and green > 70 and blue > 70
     )
-    return dark_blue / len(pixels) > 0.85 and white / len(pixels) > 0.005
+    return dark_blue / len(pixels) > 0.75 and white / len(pixels) > 0.005
 
 
 def run(command: list[str]) -> None:
@@ -120,11 +120,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-rom", type=Path, default=probe_builder.DEFAULT_OUTPUT_ROM
     )
-    parser.add_argument("--runtime-name", default="item-shop-8374")
+    parser.add_argument("--runtime-name")
     parser.add_argument(
         "--capture-prefix",
         type=Path,
-        default=ROOT / "captures/run/8374_item_shop",
     )
     parser.add_argument("--start-item", type=int, default=1)
     parser.add_argument("--end-item", type=int, default=ITEM_COUNT)
@@ -147,16 +146,15 @@ def main() -> int:
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
     checksum = probe_builder.patch_probe(probe, source)
-    if checksum != EXPECTED_PROBE_CHECKSUM:
-        raise ValueError(
-            f"complete-item probe checksum changed: "
-            f"0x{checksum:04X} != 0x{EXPECTED_PROBE_CHECKSUM:04X}"
-        )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
+    runtime_name = args.runtime_name or f"item-shop-{checksum:04x}"
+    capture_prefix = args.capture_prefix or (
+        ROOT / f"captures/run/{checksum:04x}_item_shop"
+    )
 
     planned = [
-        (item_id, *item_position(item_id), artifact_path(args.capture_prefix, item_id))
+        (item_id, *item_position(item_id), artifact_path(capture_prefix, item_id))
         for item_id in range(args.start_item, args.end_item + 1)
     ]
     if args.dry_run:
@@ -169,7 +167,7 @@ def main() -> int:
             )
         return 0
 
-    entry_path = Path(f"{args.capture_prefix}_entry.png")
+    entry_path = Path(f"{capture_prefix}_entry.png")
     try:
         run(
             [
@@ -179,7 +177,7 @@ def main() -> int:
                 "--rom",
                 str(args.output_rom),
                 "--runtime-name",
-                args.runtime_name,
+                runtime_name,
                 "--replace-existing",
                 "--send-event",
                 "--initial-delay",

@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as builder
 from tools import build_item_shop_probe_rom as probe_builder
+from tools.jp_compressed_resource_inventory import decoded_payload, resource_pointers
 from tools.jp_global_inventory import decode_cp932, read_ff_string
 
 
@@ -23,6 +24,18 @@ ITEM_PRICE_TABLE = 0x0A1D32
 ITEM_PRICE_TABLE_END = 0x0A1D7C
 ITEM_ICON_SELECTOR_START = 0x027B44
 ITEM_ICON_SELECTOR_END = 0x027B78
+ITEM_ICON_RESOURCE_INDEX = 391
+ITEM_ICON_RESOURCE_POINTER = 0x11FAE4
+ITEM_ICON_RESOURCE_LOAD_START = 0x025E5A
+ITEM_ICON_RESOURCE_LOAD_BYTES = bytes.fromhex(
+    "30 3C 81 87 32 7C 40 00 4E B9 00 00 99 B2"
+)
+ITEM_ICON_BYTES = 37 * 0x80
+ACCEPTED_PROBE_CHECKSUM = 0xD304
+ACCEPTED_ITEM_SURFACE_SHA256 = (
+    "4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc"
+)
+ACCEPTED_CAPTURE_PREFIX = "captures/run/d304_item_shop_idNN.png"
 
 ITEM_BYTE_POINTER_TABLE_SHA256 = (
     "c7c28b9ed56ea87441ef1c6899ae691ab3b2508e43c0a52d81b5a56a8b107161"
@@ -75,12 +88,90 @@ def item_category(item_id: int) -> str:
     return "장신구"
 
 
+def item_surface_sha256(korean: bytes, decoded_icons: bytes) -> str:
+    digest = sha256()
+
+    def add(label: str, payload: bytes) -> None:
+        digest.update(label.encode("ascii") + b"\0")
+        digest.update(len(payload).to_bytes(4, "big"))
+        digest.update(payload)
+
+    name_pointers = builder.read_pointer_table_until(
+        korean, builder.ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90
+    )
+    description_pointers = builder.read_pointer_table_until(
+        korean, builder.ITEM_DESCRIPTION_POINTER_TABLE, 0xA1E10, 0xA2C00
+    )
+    for label, pointers in (
+        ("name", name_pointers),
+        ("description", description_pointers),
+    ):
+        for index, pointer in enumerate(pointers):
+            values = builder.read_word_list(korean, pointer)
+            payload = pointer.to_bytes(4, "big") + b"".join(
+                value.to_bytes(2, "big") for value in values
+            )
+            add(f"{label}-{index:02d}", payload)
+
+    for label, offset in (
+        ("name-glyphs", builder.ITEM_NAME_GLYPH_LIST_RELOC_BASE),
+        ("description-glyphs", builder.ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE),
+    ):
+        values = builder.read_word_list(korean, offset)
+        add(label, b"".join(value.to_bytes(2, "big") for value in values))
+
+    add(
+        "word-item-names",
+        korean[
+            builder.WORD_ITEM_NAME_SOURCE_RANGE[0] :
+            builder.WORD_ITEM_NAME_SOURCE_RANGE[1]
+        ],
+    )
+    add("prices", korean[ITEM_PRICE_TABLE:ITEM_PRICE_TABLE_END])
+    add("icon-selector", korean[ITEM_ICON_SELECTOR_START:ITEM_ICON_SELECTOR_END])
+    add(
+        "icon-loader",
+        korean[
+            ITEM_ICON_RESOURCE_LOAD_START :
+            ITEM_ICON_RESOURCE_LOAD_START + len(ITEM_ICON_RESOURCE_LOAD_BYTES)
+        ],
+    )
+    add("icon-payload", decoded_icons[:ITEM_ICON_BYTES])
+    return digest.hexdigest()
+
+
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     item_ids = validate_source(japanese)
+    probe = bytearray(korean)
+    probe_checksum = probe_builder.patch_probe(probe, japanese)
     icon_source = japanese[ITEM_ICON_SELECTOR_START:ITEM_ICON_SELECTOR_END]
     icon_current = korean[ITEM_ICON_SELECTOR_START:ITEM_ICON_SELECTOR_END]
     if icon_current != icon_source:
         raise ValueError("production ROM changed the stock item ID-to-icon selector")
+    load_start = ITEM_ICON_RESOURCE_LOAD_START
+    load_end = load_start + len(ITEM_ICON_RESOURCE_LOAD_BYTES)
+    if japanese[load_start:load_end] != ITEM_ICON_RESOURCE_LOAD_BYTES:
+        raise ValueError("Japanese item-icon resource load changed")
+    if korean[load_start:load_end] != ITEM_ICON_RESOURCE_LOAD_BYTES:
+        raise ValueError("production ROM changed the item-icon resource load")
+    original_pointer = resource_pointers(japanese)[ITEM_ICON_RESOURCE_INDEX]
+    current_pointer = (
+        builder.be32(
+            korean,
+            builder.BYTE_UI_FONT_RESOURCE_TABLE + ITEM_ICON_RESOURCE_INDEX * 4,
+        )
+        & 0x00FFFFFF
+    )
+    if original_pointer != ITEM_ICON_RESOURCE_POINTER:
+        raise ValueError("Japanese item-icon resource pointer changed")
+    original_icons = decoded_payload(japanese, original_pointer)
+    current_icons = decoded_payload(korean, current_pointer)
+    if original_icons is None or current_icons is None:
+        raise ValueError("item-icon resource decoder is unavailable")
+    if original_icons[:ITEM_ICON_BYTES] != current_icons[:ITEM_ICON_BYTES]:
+        raise ValueError("production ROM changed decoded item-icon graphics")
+    surface_sha256 = item_surface_sha256(korean, current_icons)
+    accepted = surface_sha256 == ACCEPTED_ITEM_SURFACE_SHA256
     if len(builder.ITEM_NAME_PATCHES) < len(item_ids):
         raise ValueError("Korean item-name targets do not cover all 37 item IDs")
     if len(builder.ITEM_DESCRIPTION_PATCHES) != len(item_ids):
@@ -110,14 +201,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "icon_vram_address": f"0x{icon_vram:04X}",
                 "icon_tile_base": f"0x{icon_tile:04X}",
                 "icon_tile_ids": [f"0x{icon_tile + index:04X}" for index in range(4)],
-                "runtime_status": "pending",
+                "runtime_status": (
+                    "accepted" if accepted else "pending"
+                ),
             }
         )
 
     return {
         "warning": (
-            "Static source ownership and unchanged icon-selection code do not prove "
-            "that Korean names, descriptions, prices, or icons render correctly."
+            "Accepted status is item-surface-specific. Changes to unrelated ROM "
+            "content do not reset the 37 reviewed rows."
         ),
         "complete_secret_shop_list": {
             "mode_value": 2,
@@ -133,10 +226,31 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             ),
             "icon_formula": "VRAM 0x4000 + (item_id - 1) * 0x80; four 8x8 tiles",
             "production_icon_selector_unchanged": True,
+            "item_icon_resource": {
+                "index": ITEM_ICON_RESOURCE_INDEX,
+                "load_call": f"0x{ITEM_ICON_RESOURCE_LOAD_START:06X}",
+                "destination": "0x4000",
+                "original_pointer": f"0x{original_pointer:06X}",
+                "current_pointer": f"0x{current_pointer:06X}",
+                "decoded_size": len(original_icons),
+                "item_icon_bytes": ITEM_ICON_BYTES,
+                "decoded_item_icons_sha256": sha256(
+                    original_icons[:ITEM_ICON_BYTES]
+                ).hexdigest(),
+                "production_bytes_identical": True,
+            },
+            "item_surface_sha256": surface_sha256,
         },
         "runtime_probe": {
-            "rom_checksum": "8374",
-            "status": "pending",
+            "rom_checksum": f"{probe_checksum:04X}",
+            "accepted_capture_checksum": f"{ACCEPTED_PROBE_CHECKSUM:04X}",
+            "accepted_item_surface_sha256": ACCEPTED_ITEM_SURFACE_SHA256,
+            "status": "accepted" if accepted else "pending",
+            "capture_prefix": (
+                ACCEPTED_CAPTURE_PREFIX
+                if accepted
+                else None
+            ),
             "required_review": [
                 "target_korean",
                 "target_description",
@@ -149,6 +263,15 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
 
 def markdown_report(result: dict[str, object]) -> str:
+    probe_checksum = result["runtime_probe"]["rom_checksum"]
+    accepted_checksum = result["runtime_probe"]["accepted_capture_checksum"]
+    accepted = result["runtime_probe"]["status"] == "accepted"
+    review_line = (
+        f"Checksum `{accepted_checksum}` was captured row by row and accepted; current "
+        f"checksum `{probe_checksum}` has the same accepted item-surface fingerprint."
+        if accepted
+        else f"Checksum `{probe_checksum}` still requires row-by-row capture."
+    )
     lines = [
         "# Complete Item Shop Runtime Matrix",
         "",
@@ -157,8 +280,10 @@ def markdown_report(result: dict[str, object]) -> str:
         "The original secret shop list 33 contains exact item IDs `1..37`. The",
         "runtime uses each ID directly for its icon at VRAM",
         "`0x4000 + (item_id - 1) * 0x80`. Production keeps that selector code",
-        "byte-identical. This matrix remains pending until checksum `8374` is",
-        "captured row by row; static ownership is not visual acceptance.",
+        "byte-identical, and decoded resource 391 keeps all 37 icon payloads",
+        "byte-identical to the Japanese ROM.",
+        "",
+        review_line,
         "",
         "Price table values are 10P units. Item ID 9 has a stock special case that",
         "skips the dynamic price-number call and must be interpreted from runtime.",
@@ -180,7 +305,7 @@ def markdown_report(result: dict[str, object]) -> str:
     lines.extend(
         [
             "",
-            "Full three-line Korean descriptions, four icon tile IDs, price-table",
+            "Full four-row Korean descriptions, four icon tile IDs, price-table",
             "units, and per-row status are in `localization/item_shop_inventory.json`.",
             "",
         ]
@@ -216,7 +341,10 @@ def main() -> int:
     )
     args.markdown.parent.mkdir(parents=True, exist_ok=True)
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
-    print(f"{len(result['items'])} complete-secret-shop items; runtime pending")
+    print(
+        f"{len(result['items'])} complete-secret-shop items; "
+        f"runtime {result['runtime_probe']['status']}"
+    )
     return 0
 
 

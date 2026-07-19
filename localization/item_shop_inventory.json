@@ -1,5 +1,5 @@
 {
-  "warning": "Static source ownership and unchanged icon-selection code do not prove that Korean names, descriptions, prices, or icons render correctly.",
+  "warning": "Accepted status is item-surface-specific. Changes to unrelated ROM content do not reset the 37 reviewed rows.",
   "complete_secret_shop_list": {
     "mode_value": 2,
     "pointer_table": "0x0A1BB8",
@@ -49,11 +49,26 @@
     "prices": "0x0A1D32",
     "icon_selector_code": "0x027B44..0x027B77",
     "icon_formula": "VRAM 0x4000 + (item_id - 1) * 0x80; four 8x8 tiles",
-    "production_icon_selector_unchanged": true
+    "production_icon_selector_unchanged": true,
+    "item_icon_resource": {
+      "index": 391,
+      "load_call": "0x025E5A",
+      "destination": "0x4000",
+      "original_pointer": "0x11FAE4",
+      "current_pointer": "0x11FAE4",
+      "decoded_size": 8192,
+      "item_icon_bytes": 4736,
+      "decoded_item_icons_sha256": "489632b89c19525273405d58a7b75ca4a006cc21b8efecbf1d0938240904d1d7",
+      "production_bytes_identical": true
+    },
+    "item_surface_sha256": "4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc"
   },
   "runtime_probe": {
-    "rom_checksum": "8374",
-    "status": "pending",
+    "rom_checksum": "B51C",
+    "accepted_capture_checksum": "D304",
+    "accepted_item_surface_sha256": "4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc",
+    "status": "accepted",
+    "capture_prefix": "captures/run/d304_item_shop_idNN.png",
     "required_review": [
       "target_korean",
       "target_description",
@@ -79,7 +94,7 @@
         "0x2202",
         "0x2203"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 2,
@@ -98,7 +113,7 @@
         "0x2206",
         "0x2207"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 3,
@@ -117,7 +132,7 @@
         "0x220A",
         "0x220B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 4,
@@ -136,7 +151,7 @@
         "0x220E",
         "0x220F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 5,
@@ -155,7 +170,7 @@
         "0x2212",
         "0x2213"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 6,
@@ -174,14 +189,14 @@
         "0x2216",
         "0x2217"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 7,
       "category": "무기",
       "original_name": "ﾄﾞﾗｺﾞﾝｽﾚｲﾔｰ",
-      "target_korean": "D슬레이어",
-      "target_description": "D슬레이어\nAT+7",
+      "target_korean": "드래곤슬레이어",
+      "target_description": "드래곤슬레이어\nAT+7",
       "price_table_units": 1000,
       "expected_purchase_price_p": 10000,
       "price_runtime_note": null,
@@ -193,7 +208,7 @@
         "0x221A",
         "0x221B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 8,
@@ -212,7 +227,7 @@
         "0x221E",
         "0x221F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 9,
@@ -231,13 +246,13 @@
         "0x2222",
         "0x2223"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 10,
       "category": "무기",
       "original_name": "ﾒｻｲﾔﾝｿｰﾄﾞ",
-      "target_korean": "메사이얀소드",
+      "target_korean": "메사이어소드",
       "target_description": "전설의 검\nAT-4 DF-3",
       "price_table_units": 60,
       "expected_purchase_price_p": 600,
@@ -250,7 +265,7 @@
         "0x2226",
         "0x2227"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 11,
@@ -269,7 +284,7 @@
         "0x222A",
         "0x222B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 12,
@@ -288,7 +303,7 @@
         "0x222E",
         "0x222F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 13,
@@ -307,14 +322,14 @@
         "0x2232",
         "0x2233"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 14,
       "category": "무기",
       "original_name": "ｱﾙﾊｻﾞｰﾄﾞ",
       "target_korean": "알하자드",
-      "target_description": "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
+      "target_description": "랑그릿사와 대극인\n암흑의 마검\n마족 소환 가능",
       "price_table_units": 0,
       "expected_purchase_price_p": 0,
       "price_runtime_note": null,
@@ -326,14 +341,14 @@
         "0x2236",
         "0x2237"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 15,
       "category": "무기",
       "original_name": "ﾛﾝｸﾞﾎﾞｳ",
       "target_korean": "롱보우",
-      "target_description": "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
+      "target_description": "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
       "price_table_units": 25,
       "expected_purchase_price_p": 250,
       "price_runtime_note": null,
@@ -345,14 +360,14 @@
         "0x223A",
         "0x223B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 16,
       "category": "무기",
       "original_name": "ｱｰﾊﾞﾚｽﾄ",
-      "target_korean": "아발레스트",
-      "target_description": "소형 방패\nDF+1",
+      "target_korean": "아바레스트",
+      "target_description": "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
       "price_table_units": 125,
       "expected_purchase_price_p": 1250,
       "price_runtime_note": null,
@@ -364,14 +379,14 @@
         "0x223E",
         "0x223F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 17,
       "category": "방어구",
       "original_name": "S･ｼｰﾙﾄﾞ",
       "target_korean": "소형방패",
-      "target_description": "대형 방패\nDF+2",
+      "target_description": "소형 방패\nDF+1",
       "price_table_units": 6,
       "expected_purchase_price_p": 60,
       "price_runtime_note": null,
@@ -383,14 +398,14 @@
         "0x2242",
         "0x2243"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 18,
       "category": "방어구",
       "original_name": "L･ｼｰﾙﾄﾞ",
       "target_korean": "대형방패",
-      "target_description": "고리로 엮은 갑옷\nDF+3",
+      "target_description": "대형 방패\nDF+2",
       "price_table_units": 20,
       "expected_purchase_price_p": 200,
       "price_runtime_note": null,
@@ -402,14 +417,14 @@
         "0x2246",
         "0x2247"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 19,
       "category": "방어구",
       "original_name": "ﾁｪｲﾝﾒｲﾙ",
       "target_korean": "체인메일",
-      "target_description": "판금 갑옷\nDF+4",
+      "target_description": "고리로 엮은 갑옷\nDF+3",
       "price_table_units": 40,
       "expected_purchase_price_p": 400,
       "price_runtime_note": null,
@@ -421,14 +436,14 @@
         "0x224A",
         "0x224B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 20,
       "category": "방어구",
       "original_name": "ﾌﾟﾚｰﾄｱｰﾏｰ",
       "target_korean": "플레이트아머",
-      "target_description": "인형 같은 철 갑옷\nAT+10 DF+10",
+      "target_description": "판금 갑옷\nDF+4",
       "price_table_units": 60,
       "expected_purchase_price_p": 600,
       "price_runtime_note": null,
@@ -440,14 +455,14 @@
         "0x224E",
         "0x224F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 21,
       "category": "방어구",
       "original_name": "ｱｻﾙﾄｽｰﾂ",
-      "target_korean": "어설트슈츠",
-      "target_description": "낡은 옷\nDF+1 마법저항+10",
+      "target_korean": "어설트슈트",
+      "target_description": "인형 같은 철 갑옷\nAT+10 DF+10",
       "price_table_units": 3000,
       "expected_purchase_price_p": 30000,
       "price_runtime_note": null,
@@ -459,14 +474,14 @@
         "0x2252",
         "0x2253"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 22,
       "category": "방어구",
       "original_name": "ﾛｰﾌﾞ",
       "target_korean": "로브",
-      "target_description": "용비늘 갑옷\nDF+4",
+      "target_description": "낡은 옷\nDF+1 마법저항+10",
       "price_table_units": 8,
       "expected_purchase_price_p": 80,
       "price_runtime_note": null,
@@ -478,14 +493,14 @@
         "0x2256",
         "0x2257"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 23,
       "category": "방어구",
       "original_name": "ﾄﾞﾗｺﾞﾝｽｹｲﾙ",
       "target_korean": "드래곤스케일",
-      "target_description": "미라쥬로브\nDF+2 마법저항+20",
+      "target_description": "용비늘 갑옷\nDF+4",
       "price_table_units": 200,
       "expected_purchase_price_p": 2000,
       "price_runtime_note": null,
@@ -497,14 +512,14 @@
         "0x225A",
         "0x225B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 24,
       "category": "방어구",
       "original_name": "ﾐﾗｰｼﾞｭﾛｰﾌﾞ",
       "target_korean": "미라쥬로브",
-      "target_description": "오딘방패\nDF+3 D보정+1",
+      "target_description": "미라쥬로브\nDF+2 마법저항+20",
       "price_table_units": 100,
       "expected_purchase_price_p": 1000,
       "price_runtime_note": null,
@@ -516,14 +531,14 @@
         "0x225E",
         "0x225F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 25,
       "category": "방어구",
       "original_name": "ｵｰﾃﾞｨﾝ~ﾉﾀﾃ~",
-      "target_korean": "오딘방패",
-      "target_description": "불가사의한 룬스톤\n레벨10",
+      "target_korean": "오딘의방패",
+      "target_description": "오딘의 방패\nDF+3 D보정+1",
       "price_table_units": 460,
       "expected_purchase_price_p": 4600,
       "price_runtime_note": null,
@@ -535,14 +550,14 @@
         "0x2262",
         "0x2263"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 26,
       "category": "장신구",
       "original_name": "ﾙｰﾝｽﾄｰﾝ",
       "target_korean": "룬스톤",
-      "target_description": "신의 가호를 받은 십자가\nD보정+2",
+      "target_description": "불가사의한 룬스톤\n레벨10",
       "price_table_units": 1000,
       "expected_purchase_price_p": 10000,
       "price_runtime_note": null,
@@ -554,14 +569,14 @@
         "0x2266",
         "0x2267"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 27,
       "category": "장신구",
       "original_name": "ｸﾛｽ",
       "target_korean": "크로스",
-      "target_description": "목걸이\nD보정+3",
+      "target_description": "신의 가호를 받은 십자가\nD보정+2",
       "price_table_units": 30,
       "expected_purchase_price_p": 300,
       "price_runtime_note": null,
@@ -573,14 +588,14 @@
         "0x226A",
         "0x226B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 28,
       "category": "장신구",
       "original_name": "ﾈｯｸﾚｽ",
-      "target_korean": "목걸이",
-      "target_description": "마력을 봉한 수정\nMP소모2배 마법+3",
+      "target_korean": "넥클리스",
+      "target_description": "넥클리스\nD보정+3",
       "price_table_units": 90,
       "expected_purchase_price_p": 900,
       "price_runtime_note": null,
@@ -592,14 +607,14 @@
         "0x226E",
         "0x226F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 29,
       "category": "장신구",
       "original_name": "ｵｰﾌﾞ",
       "target_korean": "오브",
-      "target_description": "발이 빨라지는 부츠\nMV+2",
+      "target_description": "마력을 봉한 수정\nMP소모2배 마법+3",
       "price_table_units": 100,
       "expected_purchase_price_p": 1000,
       "price_runtime_note": null,
@@ -611,14 +626,14 @@
         "0x2272",
         "0x2273"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 30,
       "category": "장신구",
       "original_name": "ｽﾋﾟｰﾄﾞﾌﾞｰﾂ",
       "target_korean": "스피드부츠",
-      "target_description": "아름다운 왕관\n지휘범위+3 A+2",
+      "target_description": "발이 빨라지는 부츠\nMV+2",
       "price_table_units": 60,
       "expected_purchase_price_p": 600,
       "price_runtime_note": null,
@@ -630,14 +645,14 @@
         "0x2276",
         "0x2277"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 31,
       "category": "장신구",
       "original_name": "ｸﾗｳﾝ",
       "target_korean": "크라운",
-      "target_description": "아우로라\nAT+2",
+      "target_description": "아름다운 왕관\n지휘범위+3 A+2",
       "price_table_units": 500,
       "expected_purchase_price_p": 5000,
       "price_runtime_note": null,
@@ -649,14 +664,14 @@
         "0x227A",
         "0x227B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 32,
       "category": "장신구",
       "original_name": "ｱｳﾛｰﾗ",
-      "target_korean": "아우로라",
-      "target_description": "성천사의 날개\n마법저항+10",
+      "target_korean": "오로라",
+      "target_description": "오로라\nAT+2",
       "price_table_units": 310,
       "expected_purchase_price_p": 3100,
       "price_runtime_note": null,
@@ -668,14 +683,14 @@
         "0x227E",
         "0x227F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 33,
       "category": "장신구",
       "original_name": "~ﾃﾝｼﾉﾊﾈ~",
       "target_korean": "천사날개",
-      "target_description": "카벙클\n마법대미지+2",
+      "target_description": "천사의 날개\n마법저항+10",
       "price_table_units": 250,
       "expected_purchase_price_p": 2500,
       "price_runtime_note": null,
@@ -687,14 +702,14 @@
         "0x2282",
         "0x2283"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 34,
       "category": "장신구",
       "original_name": "ｶｰﾊﾞﾝｸﾙ",
       "target_korean": "카벙클",
-      "target_description": "네 가지 보석\n소환부대+1",
+      "target_description": "카벙클\n마법대미지+2",
       "price_table_units": 280,
       "expected_purchase_price_p": 2800,
       "price_runtime_note": null,
@@ -706,14 +721,14 @@
         "0x2286",
         "0x2287"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 35,
       "category": "장신구",
       "original_name": "ｸﾞﾚｲﾌﾟﾆｰﾙ",
-      "target_korean": "그레이프닐",
-      "target_description": "아뮬렛\nA보정+2 D보정+2",
+      "target_korean": "그레이프니르",
+      "target_description": "펜리르 봉인 사슬\n소환사 장비 시\nDF+1",
       "price_table_units": 300,
       "expected_purchase_price_p": 3000,
       "price_runtime_note": null,
@@ -725,14 +740,14 @@
         "0x228A",
         "0x228B"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 36,
       "category": "장신구",
       "original_name": "ｷﾞｬﾗﾙ~ﾉ~ﾎﾙﾝ",
-      "target_korean": "갸라르혼",
-      "target_description": "루시리스의 부적\n마법저항+15",
+      "target_korean": "걀라르호른",
+      "target_description": "신의 뿔피리\n소환사 장비 시\nA보정+2 D보정+2",
       "price_table_units": 320,
       "expected_purchase_price_p": 3200,
       "price_runtime_note": null,
@@ -744,14 +759,14 @@
         "0x228E",
         "0x228F"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     },
     {
       "id": 37,
       "category": "장신구",
       "original_name": "ｱﾐｭﾚｯﾄ",
       "target_korean": "아뮬렛",
-      "target_description": "성스러운 로드\n마법능력 상승",
+      "target_description": "루시리스의 부적\n마법저항+15",
       "price_table_units": 100,
       "expected_purchase_price_p": 1000,
       "price_runtime_note": null,
@@ -763,7 +778,7 @@
         "0x2292",
         "0x2293"
       ],
-      "runtime_status": "pending"
+      "runtime_status": "accepted"
     }
   ]
 }

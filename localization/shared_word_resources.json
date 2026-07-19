@@ -1204,9 +1204,9 @@
           "glyph_pointer": null,
           "current_glyph_pointer": null,
           "original_word_count": 8,
-          "current_word_count": 6,
+          "current_word_count": 8,
           "original_tokens": "0018 0019 0011 000A 0001 001A 0005 FFFF",
-          "target_korean": "D슬레이어",
+          "target_korean": "드래곤슬레이어",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1248,7 +1248,7 @@
           "original_word_count": 9,
           "current_word_count": 7,
           "original_tokens": "001D 001C 0001 001A 0007 000C 0005 000D FFFF",
-          "target_korean": "메사이얀소드",
+          "target_korean": "메사이어소드",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1332,7 +1332,7 @@
           "original_word_count": 7,
           "current_word_count": 6,
           "original_tokens": "0015 0005 0024 000A 0011 000B FFFF",
-          "target_korean": "아발레스트",
+          "target_korean": "아바레스트",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1402,7 +1402,7 @@
           "original_word_count": 8,
           "current_word_count": 6,
           "original_tokens": "0015 001C 0014 000B 0011 0005 002B FFFF",
-          "target_korean": "어설트슈츠",
+          "target_korean": "어설트슈트",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1456,9 +1456,9 @@
           "glyph_pointer": null,
           "current_glyph_pointer": null,
           "original_word_count": 9,
-          "current_word_count": 5,
+          "current_word_count": 6,
           "original_tokens": "0032 0005 0012 0033 0007 0034 0035 0036 FFFF",
-          "target_korean": "오딘방패",
+          "target_korean": "오딘의방패",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1498,9 +1498,9 @@
           "glyph_pointer": null,
           "current_glyph_pointer": null,
           "original_word_count": 6,
-          "current_word_count": 4,
+          "current_word_count": 5,
           "original_tokens": "0037 0016 0017 000A 0011 FFFF",
-          "target_korean": "목걸이",
+          "target_korean": "넥클리스",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1554,9 +1554,9 @@
           "glyph_pointer": null,
           "current_glyph_pointer": null,
           "original_word_count": 6,
-          "current_word_count": 5,
+          "current_word_count": 4,
           "original_tokens": "0015 0003 0020 0005 0010 FFFF",
-          "target_korean": "아우로라",
+          "target_korean": "오로라",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1596,9 +1596,9 @@
           "glyph_pointer": null,
           "current_glyph_pointer": null,
           "original_word_count": 8,
-          "current_word_count": 6,
+          "current_word_count": 7,
           "original_tokens": "0009 000A 0001 002A 003D 0005 0014 FFFF",
-          "target_korean": "그레이프닐",
+          "target_korean": "그레이프니르",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1610,9 +1610,9 @@
           "glyph_pointer": null,
           "current_glyph_pointer": null,
           "original_word_count": 9,
-          "current_word_count": 5,
+          "current_word_count": 6,
           "original_tokens": "003E 003F 0010 0014 0034 001F 0014 0007 FFFF",
-          "target_korean": "갸라르혼",
+          "target_korean": "걀라르호른",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1748,7 +1748,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0051 003F 0052 0013 0032 003E 003B 0053 003E 0054 001B 0055 0021 003E 003D 0022 0056 0057 0023 0030 002E 0007 0008 0008 0008 0008 0008 0009 000A 000B 0058 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "D슬레이어\nAT+7",
+          "target_korean": "드래곤슬레이어\nAT+7",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1846,7 +1846,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "003F 0013 0045 005D 0049 006B 0015 003D 0079 007A 0020 0028 0023 0017 007B 007C 0003 0030 002E 0007 0030 007D 003D 0003 007E 007F 0080 003D 0011 0029 0017 0030 0081 0003 0082 0083 001B 0084 0075 003D 0011 0023 0007 0008 0008 FFFF",
-          "target_korean": "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
+          "target_korean": "랑그릿사와 대극인\n암흑의 마검\n마족 소환 가능",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1860,7 +1860,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0005 0085 0005 0003 0086 0016 0087 0088 0057 003E 0017 0042 0031 0011 0089 0007 0008 0008 0009 000A 004F 0024 004C 0071 0072 004F 0024 0038 0026 0008 0008 000C 008A 0050 0014 0040 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
+          "target_korean": "나무로 만든 강한 활\nAT-2 MV-2\n사거리1-3",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1874,7 +1874,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "002B 0016 008B 008C 008D 0011 0022 0026 0017 0042 0031 0011 004A 0063 0040 008E 0062 0007 0009 000A 004F 002F 004C 0071 0072 004F 0024 0038 0026 0008 0008 000C 008A 0041 0014 0040 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "소형 방패\nDF+1",
+          "target_korean": "강력한 쇠뇌\nAT-4 MV-2\n사거리1-6",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1888,7 +1888,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0010 0003 008F 0003 003C 0056 0029 0032 0090 0016 0019 0042 0053 003E 003E 007F 0007 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 004D 004E 000B 000C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "대형 방패\nDF+2",
+          "target_korean": "소형 방패\nDF+1",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1902,7 +1902,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0090 0016 0019 0042 0053 003E 0017 000F 0091 0016 003B 0027 0022 0017 0092 0093 0065 0066 0003 0033 0022 003E 007F 0007 0008 0008 0008 004D 004E 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "고리로 엮은 갑옷\nDF+3",
+          "target_korean": "대형 방패\nDF+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1916,7 +1916,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0094 0095 0003 0056 0032 006A 0096 0029 0003 0097 001A 0020 0028 0080 0016 0087 0088 0057 003E 0098 0063 0005 0007 0008 0008 0008 0008 004D 004E 000B 0050 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "판금 갑옷\nDF+4",
+          "target_korean": "고리로 엮은 갑옷\nDF+3",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1930,7 +1930,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "008F 0094 0016 0001 0069 0032 003B 003B 001A 0098 0063 0005 0007 0008 0008 0008 0008 0008 004D 004E 000B 002F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "인형 같은 철 갑옷\nAT+10 DF+10",
+          "target_korean": "판금 갑옷\nDF+4",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1944,7 +1944,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0099 0091 0032 0053 003E 0090 0003 0044 003E 003C 0029 0067 0067 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0009 000B 000C 000D 004C 004D 000B 000C 000D 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "낡은 옷\nDF+1 마법저항+10",
+          "target_korean": "인형 같은 철 갑옷\nAT+10 DF+10",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1958,7 +1958,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0028 0035 002B 0003 009A 003A 0016 0016 0010 003E 009B 002A 001A 009C 0011 009D 006A 0007 004D 004E 000B 000C 0008 0008 0008 0008 0008 0030 0037 009E 009F 000B 000C 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "용비늘 갑옷\nDF+4",
+          "target_korean": "낡은 옷\nDF+1 마법저항+10",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1972,7 +1972,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0051 003F 0052 0013 0003 001A 0043 00A0 0016 0087 0021 003E 0017 0044 0023 006A 0092 0093 0065 0066 0027 0033 0022 0098 0063 0005 0007 004D 004E 000B 002F 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "미라쥬로브\nDF+2 마법저항+20",
+          "target_korean": "용비늘 갑옷\nDF+4",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -1986,7 +1986,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0030 0037 0020 0097 0021 007F 0092 0093 0065 0066 0032 0033 0034 003E 0063 0015 00A1 0007 004D 004E 000B 0024 0008 0008 0008 0008 0008 0030 0037 009E 009F 000B 0024 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "오딘방패\nDF+3 D보정+1",
+          "target_korean": "미라쥬로브\nDF+2 마법저항+20",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2000,7 +2000,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0042 0031 0011 00A2 0000 0032 002C 0035 003E 007F 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0008 0008 0008 004D 000B 0050 004C 004D 0060 0061 000B 000C 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "불가사의한 룬스톤\n레벨10",
+          "target_korean": "오딘의 방패\nDF+3 D보정+1",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2014,7 +2014,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "00A3 00A4 00A5 0011 00A6 0007 0008 0008 0008 00A0 0057 0032 006D 006E 0053 007F 0017 0046 00A7 0059 000C 000D 0020 0011 0023 003D 0070 0070 0067 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "신의 가호를 받은 십자가\nD보정+2",
+          "target_korean": "불가사의한 룬스톤\n레벨10",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2028,7 +2028,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "005A 0003 005B 0003 00A8 0000 0032 00A9 008D 003E 004A 0063 0040 0007 0008 0008 0008 0008 004D 0060 0061 000B 0024 0008 0008 0008 0008 0030 0037 009E 009F 000B 0024 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "목걸이\nD보정+3",
+          "target_korean": "신의 가호를 받은 십자가\nD보정+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2042,7 +2042,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0030 00A6 0016 0087 0088 0057 003E 00AA 0049 004A 0046 0040 0007 0008 0008 0008 0008 0008 00AB 00AC 00AD 00AE 000B 0024 0008 0008 0008 004D 0060 0061 000B 0050 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "마력을 봉한 수정\nMP소모2배 마법+3",
+          "target_korean": "넥클리스\nD보정+3",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2056,7 +2056,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0042 0031 0011 0030 0031 0032 00AF 009B 00A0 0034 003E 004A 005D 0040 00B0 0059 0007 0008 0071 000E 004C 0024 00B1 0022 0008 0008 0008 0030 0037 0038 0026 000B 0050 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "발이 빨라지는 부츠\nMV+2",
+          "target_korean": "마력을 봉한 수정\nMP소모2배 마법+3",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2070,7 +2070,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "00B2 0088 0032 003D 009C 0097 001A 0020 00B3 006A 008B 0053 0057 0023 00B4 00B5 0003 008B 0036 003E 00A1 0015 0064 0007 0008 0008 0008 0071 0072 000B 0024 004C 00B6 00B7 00B8 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "아름다운 왕관\n지휘범위+3 A+2",
+          "target_korean": "발이 빨라지는 부츠\nMV+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2084,7 +2084,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "00A3 00A4 00A5 0011 0031 0032 00B9 00BA 006F 0068 0053 0022 004A 003F 0062 0013 0007 0008 00AB 00AC 00AD 00AE 000B 0024 0008 0008 0008 00AB 00AC 0060 0061 000B 0050 004C 000B 0024 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "아우로라\nAT+2",
+          "target_korean": "아름다운 왕관\n지휘범위+3 A+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2098,7 +2098,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0020 009B 0022 0043 0003 005A 0032 008B 0011 0035 0019 001A 00BB 002A 006A 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0067 0009 000A 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "성천사의 날개\n마법저항+10",
+          "target_korean": "오로라\nAT+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2112,7 +2112,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "005E 00BC 0055 0003 00B4 00B5 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0008 0008 0008 0008 0008 0008 0008 0030 0037 009E 009F 000C 000D 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "카벙클\n마법대미지+2",
+          "target_korean": "천사의 날개\n마법저항+10",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2126,7 +2126,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0028 0044 006A 0044 001B 00B9 006A 00BD 00A6 0003 005D 0013 0045 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 0030 0037 0039 001F 0015 003A 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "네 가지 보석\n소환부대+1",
+          "target_korean": "카벙클\n마법대미지+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2140,7 +2140,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "0006 00BE 0013 005D 0059 0032 003D 0088 0036 003E 006A 0096 0029 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0070 0070 0067 004D 004E 000B 000C 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "아뮬렛\nA보정+2 D보정+2",
+          "target_korean": "펜리르 봉인 사슬\n소환사 장비 시\nDF+1",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2154,7 +2154,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "005B 0003 0035 0003 009C 0036 0007 006B 006C 0004 0015 001B 006D 006E 006F 0023 003D 0067 0009 0060 0061 000B 0024 0008 0008 0008 0008 004D 0060 0061 000B 0024 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "루시리스의 부적\n마법저항+15",
+          "target_korean": "신의 뿔피리\n소환사 장비 시\nA보정+2 D보정+2",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2168,7 +2168,7 @@
           "original_word_count": 46,
           "current_word_count": 46,
           "original_tokens": "005A 0003 005B 0059 005C 005D 0040 0003 00A8 0000 0032 00A9 008D 003E 003B 00A2 0029 0007 0030 0037 009E 009F 004C 00B6 00B7 00B8 0008 0008 0008 0008 0008 0008 0008 000B 000C 00BF 0008 0008 0008 0008 0008 0008 0008 000D 000E FFFF",
-          "target_korean": "성스러운 로드\n마법능력 상승",
+          "target_korean": "루시리스의 부적\n마법저항+15",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2251,9 +2251,9 @@
           "id": 6,
           "pointer": "0x00114E",
           "original_word_count": 8,
-          "current_word_count": 6,
+          "current_word_count": 8,
           "original_tokens": "005F 0049 000C 002B 0001 0023 004A FFFF",
-          "target_korean": "D슬레이어",
+          "target_korean": "드래곤슬레이어",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2286,7 +2286,7 @@
           "original_word_count": 9,
           "current_word_count": 7,
           "original_tokens": "0021 000A 0001 0023 0027 000E 004A 003B FFFF",
-          "target_korean": "메사이얀소드",
+          "target_korean": "메사이어소드",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2352,7 +2352,7 @@
           "original_word_count": 7,
           "current_word_count": 6,
           "original_tokens": "0000 004A 003C 002B 000C 0013 FFFF",
-          "target_korean": "아발레스트",
+          "target_korean": "아바레스트",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2407,7 +2407,7 @@
           "original_word_count": 8,
           "current_word_count": 6,
           "original_tokens": "0000 000A 002A 0013 000C 004A 0011 FFFF",
-          "target_korean": "어설트슈츠",
+          "target_korean": "어설트슈트",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2449,9 +2449,9 @@
           "id": 24,
           "pointer": "0x00124A",
           "original_word_count": 9,
-          "current_word_count": 5,
+          "current_word_count": 6,
           "original_tokens": "0004 004A 003A 004C 0027 0063 0064 0065 FFFF",
-          "target_korean": "오딘방패",
+          "target_korean": "오딘의방패",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2482,9 +2482,9 @@
           "id": 27,
           "pointer": "0x001274",
           "original_word_count": 6,
-          "current_word_count": 4,
+          "current_word_count": 5,
           "original_tokens": "0017 0053 0007 002B 000C FFFF",
-          "target_korean": "목걸이",
+          "target_korean": "넥클리스",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2526,9 +2526,9 @@
           "id": 31,
           "pointer": "0x0012A2",
           "original_word_count": 6,
-          "current_word_count": 5,
+          "current_word_count": 4,
           "original_tokens": "0000 0002 002C 004A 0028 FFFF",
-          "target_korean": "아우로라",
+          "target_korean": "오로라",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2559,9 +2559,9 @@
           "id": 34,
           "pointer": "0x0012C6",
           "original_word_count": 8,
-          "current_word_count": 6,
+          "current_word_count": 7,
           "original_tokens": "002F 002B 0001 0043 0015 004A 002A FFFF",
-          "target_korean": "그레이프닐",
+          "target_korean": "그레이프니르",
           "modified": true,
           "reviewed": false,
           "live_verified": false
@@ -2570,9 +2570,9 @@
           "id": 35,
           "pointer": "0x0012D6",
           "original_word_count": 9,
-          "current_word_count": 5,
+          "current_word_count": 6,
           "original_tokens": "002E 0050 0028 002A 0063 001D 002A 0027 FFFF",
-          "target_korean": "갸라르혼",
+          "target_korean": "걀라르호른",
           "modified": true,
           "reviewed": false,
           "live_verified": false

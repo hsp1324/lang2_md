@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 27EB (item-shop runtime review pending)
+current production build checksum: 5993
 last broadly live-verified production checksum: E38B
-custom Hangul glyphs: 861 (0x7000..0x735D)
-unit tests: 359 passing
+custom Hangul glyphs: 864 (0x7000..0x7360)
+unit tests: 366 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 7
@@ -49,15 +49,19 @@ glyph bank, or visible screen:
   Attack, and diagnostic Elemental application have accepted evidence at the
   levels recorded by their inventories. A diagnostic proof is not a natural
   ownership proof.
+- the original complete-item secret shop list, all 37 Korean names and
+  descriptions, prices, and visible icons are accepted on diagnostic checksum
+  `D304`; current diagnostic checksum `B51C` has the same accepted item-surface
+  fingerprint, and decoded icon resource 391 is byte-identical to the Japanese
+  ROM.
 
 Active work, in order:
 
-1. Resume the all-item shop runtime review described immediately below. The
-   static loader fix is complete; do not repeat its disassembly or compaction.
-   Close the equipment/shop gap only after all 37 rows and icons are reviewed.
-2. Upgrade scenario `completion` and `branches_endings` cells that are still
+1. Upgrade scenario `completion` and `branches_endings` cells that are still
    `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
    continuity evidence but is not a page-by-page visual review.
+2. Work only from the seven explicit shared-UI gaps in
+   `docs/ui_patch_surface_inventory.md`; the item-shop gap is closed.
 3. Re-run a completed path only when a new patch shares its glyphs, pointers,
    tokens, compressed resource, or control flow, or when an automated regression
    fails. Record why the regression was necessary.
@@ -70,7 +74,7 @@ inventories, run the full suite, update this dashboard only if its counts or
 priorities changed, then commit and push. Generated ROMs and captures remain
 ignored; record their checksum and paths here or in the relevant inventory.
 
-Current all-item shop checkpoint (runtime review pending):
+Closed all-item shop checkpoint:
 
 - the original shop mode flag at `0xA6DC` selects two secret lists. List 32 has
   28 purchasable items; list 33 at pointer-table index 32 contains exact IDs
@@ -81,22 +85,43 @@ Current all-item shop checkpoint (runtime review pending):
 - checksum `3F14` reproduced the defect on page 2: the old relocated name list
   had 140 glyphs while `0x21C72` loaded only 64, and the description list had
   338 glyphs while `0x272C0` loaded only 192;
-- production checksum `27EB` compacts the rewritten name list to 85 glyphs and
-  the description list to 161. The name loader now loads the exact 85; the
-  description remains inside the stock 192-glyph window. All 37 token streams
+- production checksum `5993` keeps the compact rewritten name and description
+  lists inside their loader windows. All 37 token streams
   are statically proven inside their loaded windows by
   `tests/test_item_shop_resources.py`;
-- the rebuilt complete-item probe is checksum `8374`. Next action is to launch
-  that ROM, capture all 37 rows/pages, and compare Korean name, three-line
-  description, price/stat text, and item icon against original item ID order.
-  The exact original/Korean/price/icon matrix is checked in at
-  `localization/item_shop_inventory.json` and
-  `docs/item_shop_runtime_matrix.md`; update each row's `runtime_status` only
-  from its capture. `tools/capture_item_shop_inventory.py` now has a tested
-  5-row/8-page movement plan, stable ID filenames, partial-range resume, panel
-  detection, direct-window events, and guaranteed emulator cleanup. Only its
-  `--dry-run` path has run so far. No runtime acceptance has been recorded yet.
-  BlastEm was deliberately stopped because the user was using the same PC.
+- the previous 37-description list omitted Alhazard at ID 14, shifted the
+  following descriptions, and ended with an unrelated Holy Rod line. ID 14 is
+  restored, IDs 15..37 are realigned, and Gleipnir/Gjallarhorn/Amulet now match
+  the Japanese effects. The runtime panel is 9 columns by four text rows plus
+  one price row, not the earlier assumed 15 by three; the corrected layout no
+  longer splits `AT+2` across rows;
+- diagnostic checksum `D304` was captured as
+  `captures/run/d304_item_shop_id01.png` through `id37.png`. All names,
+  descriptions, numeric effects, prices, and visible icons were reviewed and
+  accepted. Five-digit prices retain their final `0P`; it is present in the raw
+  capture pixels even when the 320x240 preview makes it hard to read;
+- current diagnostic checksum `B51C` has the same accepted item-surface SHA-256
+  `4fae78480f73d9c2d61925687152dd20f81851db55614bea75749aae0fe62bbc`.
+  This surface fingerprint covers item names, descriptions, glyph lists, direct
+  word names, prices, icon selector/loader, and icon payload, so unrelated ROM
+  changes do not reopen the accepted matrix;
+- item icon resource 391 is loaded at `0x025E5A` to VRAM `0x4000`. Its first
+  `37 * 0x80` decoded bytes and the ID-to-tile selector at
+  `0x027B44..0x027B77` are byte-identical to the Japanese ROM. The exact matrix
+  and checksum-bound acceptance are in `localization/item_shop_inventory.json`
+  and `docs/item_shop_runtime_matrix.md`;
+- `tools/capture_item_shop_inventory.py` derives artifact names from the
+  current checksum, checks the real BlastEm 87-level palette, changes page
+  before clamping to the first row, and uses one Up on the final two-row page.
+  Do not restore the old Up-before-Right/four-Up logic. Attempting the Korean
+  title/menu input sequence on original diagnostic checksum `3328` stopped at
+  a black screen because the original timing differs; that failed capture is
+  not acceptance evidence and need not be repeated for icon proof.
+- BlastEm placement now selects the widest RandR output (`XWAYLAND8`,
+  3440x1440 on this PC). Direct `--send-event` input only places the window and
+  never requests `_NET_ACTIVE_WINDOW` or keyboard focus. While the user is
+  gaming, do not run an XTest/click-window sequence because that path still
+  requires focus by design.
 
 ## Why The Work Moved From English ROM To Japanese ROM
 
@@ -177,7 +202,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `27EB` and passes all 359 tests. It includes
+The current source builds checksum `5993` and passes all 366 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,

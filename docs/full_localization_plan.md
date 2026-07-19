@@ -18,13 +18,16 @@ follow this status table so a resume does not repeat already accepted work.
 | 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
 | 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the seven UI gaps are resolved or explicitly accepted. |
 
-Stage 2 active checkpoint: the original complete-item secret shop list (IDs
-`1..37`) is exposed by diagnostic checksum `8374`. Production checksum `27EB`
-has the compact item-name/description glyph fix and passes all static tests, but
-the 37 names, descriptions, prices/stat lines, and icons still require runtime
-review before the equipment/shop gap can be marked complete. Resume from that
-runtime matrix in `docs/item_shop_runtime_matrix.md`; do not rebuild the loader
-investigation.
+Stage 2 complete-item checkpoint is closed. Production checksum `5993` fixes
+the 37-name loader, restores the missing Alhazard description, aligns IDs
+`14..37`, and uses the runtime's actual 9-column/four-text-row layout.
+Diagnostic checksum `D304` captured and accepted all 37 names, descriptions,
+prices/stat lines, and visible icons. Current diagnostic checksum `B51C` has the
+same accepted item-surface fingerprint. Decoded icon resource 391 is also
+byte-identical to the Japanese ROM. Do not repeat this matrix unless a later
+change touches the item renderer, glyph lists, description pointers, price
+renderer, icon resource, or selector. Resume Stage 2 only from the seven gaps
+in `docs/ui_patch_surface_inventory.md`.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run
 it only when a later change shares its renderer/data ownership or an automated
