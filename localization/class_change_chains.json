@@ -3,8 +3,8 @@
   "commander_count": 10,
   "transition_count": 100,
   "unique_transition_count": 76,
-  "live_verified_transition_count": 51,
-  "live_verified_unique_transition_count": 51,
+  "live_verified_transition_count": 60,
+  "live_verified_unique_transition_count": 60,
   "application_verified_transition_count": 2,
   "commanders": [
     {
@@ -2575,9 +2575,14 @@
               "ko": "샤먼"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8e97_c9_s01_trigger.png",
+            "captures/run/8e97_c9_s01_candidate1.png",
+            "captures/run/8e97_c9_s01_candidate2.png",
+            "captures/run/8e97_c9_s01_candidate3.png"
+          ]
         },
         {
           "index": 1,
@@ -2604,9 +2609,14 @@
               "ko": "서펜나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eae_c9_s05_trigger.png",
+            "captures/run/8eae_c9_s05_candidate1.png",
+            "captures/run/8eae_c9_s05_candidate2.png",
+            "captures/run/8eae_c9_s05_candidate3.png"
+          ]
         },
         {
           "index": 2,
@@ -2633,9 +2643,14 @@
               "ko": "비숍"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8eb6_c9_s07_trigger.png",
+            "captures/run/8eb6_c9_s07_candidate1.png",
+            "captures/run/8eb6_c9_s07_candidate2.png",
+            "captures/run/8eb6_c9_s07_candidate3.png"
+          ]
         },
         {
           "index": 3,
@@ -2662,9 +2677,14 @@
               "ko": "메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ebf_c9_s0a_trigger.png",
+            "captures/run/8ebf_c9_s0a_candidate1.png",
+            "captures/run/8ebf_c9_s0a_candidate2.png",
+            "captures/run/8ebf_c9_s0a_candidate3.png"
+          ]
         },
         {
           "index": 4,
@@ -2691,9 +2711,14 @@
               "ko": "실버나이트"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ee0_c9_s0c_trigger.png",
+            "captures/run/8ee0_c9_s0c_candidate1.png",
+            "captures/run/8ee0_c9_s0c_candidate2.png",
+            "captures/run/8ee0_c9_s0c_candidate3.png"
+          ]
         },
         {
           "index": 5,
@@ -2720,9 +2745,14 @@
               "ko": "서펜로드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ee5_c9_s0d_trigger.png",
+            "captures/run/8ee5_c9_s0d_candidate1.png",
+            "captures/run/8ee5_c9_s0d_candidate2.png",
+            "captures/run/8ee5_c9_s0d_candidate3.png"
+          ]
         },
         {
           "index": 6,
@@ -2782,9 +2812,14 @@
               "ko": "위저드"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8edf_c9_s12_trigger.png",
+            "captures/run/8edf_c9_s12_candidate1.png",
+            "captures/run/8edf_c9_s12_candidate2.png",
+            "captures/run/8edf_c9_s12_candidate3.png"
+          ]
         },
         {
           "index": 8,
@@ -2811,9 +2846,14 @@
               "ko": "아크메이지"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ed5_c9_s13_trigger.png",
+            "captures/run/8ed5_c9_s13_candidate1.png",
+            "captures/run/8ed5_c9_s13_candidate2.png",
+            "captures/run/8ed5_c9_s13_candidate3.png"
+          ]
         },
         {
           "index": 9,
@@ -2830,9 +2870,12 @@
               "ko": "서펜마스터"
             }
           ],
-          "live_verified": false,
+          "live_verified": true,
           "application_verified": false,
-          "evidence": []
+          "evidence": [
+            "captures/run/8ec7_c9_s1f_trigger.png",
+            "captures/run/8ec7_c9_s1f_candidate1.png"
+          ]
         }
       ]
     },

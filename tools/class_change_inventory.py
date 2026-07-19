@@ -274,6 +274,58 @@ LIVE_EVIDENCE = {
         "captures/run/8ebf_c6_s1b_trigger.png",
         "captures/run/8ebf_c6_s1b_candidate1.png",
     ],
+    (9, 0x01): [
+        "captures/run/8e97_c9_s01_trigger.png",
+        "captures/run/8e97_c9_s01_candidate1.png",
+        "captures/run/8e97_c9_s01_candidate2.png",
+        "captures/run/8e97_c9_s01_candidate3.png",
+    ],
+    (9, 0x05): [
+        "captures/run/8eae_c9_s05_trigger.png",
+        "captures/run/8eae_c9_s05_candidate1.png",
+        "captures/run/8eae_c9_s05_candidate2.png",
+        "captures/run/8eae_c9_s05_candidate3.png",
+    ],
+    (9, 0x07): [
+        "captures/run/8eb6_c9_s07_trigger.png",
+        "captures/run/8eb6_c9_s07_candidate1.png",
+        "captures/run/8eb6_c9_s07_candidate2.png",
+        "captures/run/8eb6_c9_s07_candidate3.png",
+    ],
+    (9, 0x0A): [
+        "captures/run/8ebf_c9_s0a_trigger.png",
+        "captures/run/8ebf_c9_s0a_candidate1.png",
+        "captures/run/8ebf_c9_s0a_candidate2.png",
+        "captures/run/8ebf_c9_s0a_candidate3.png",
+    ],
+    (9, 0x0C): [
+        "captures/run/8ee0_c9_s0c_trigger.png",
+        "captures/run/8ee0_c9_s0c_candidate1.png",
+        "captures/run/8ee0_c9_s0c_candidate2.png",
+        "captures/run/8ee0_c9_s0c_candidate3.png",
+    ],
+    (9, 0x0D): [
+        "captures/run/8ee5_c9_s0d_trigger.png",
+        "captures/run/8ee5_c9_s0d_candidate1.png",
+        "captures/run/8ee5_c9_s0d_candidate2.png",
+        "captures/run/8ee5_c9_s0d_candidate3.png",
+    ],
+    (9, 0x12): [
+        "captures/run/8edf_c9_s12_trigger.png",
+        "captures/run/8edf_c9_s12_candidate1.png",
+        "captures/run/8edf_c9_s12_candidate2.png",
+        "captures/run/8edf_c9_s12_candidate3.png",
+    ],
+    (9, 0x13): [
+        "captures/run/8ed5_c9_s13_trigger.png",
+        "captures/run/8ed5_c9_s13_candidate1.png",
+        "captures/run/8ed5_c9_s13_candidate2.png",
+        "captures/run/8ed5_c9_s13_candidate3.png",
+    ],
+    (9, 0x1F): [
+        "captures/run/8ec7_c9_s1f_trigger.png",
+        "captures/run/8ec7_c9_s1f_candidate1.png",
+    ],
     (9, 0x10): [
         "captures/run/d221_c9_s10_candidate1.png",
         "captures/run/d221_c9_s10_candidate2.png",

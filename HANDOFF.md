@@ -5464,6 +5464,17 @@ contains 57 safe syllables as documented below and in
   and 25 unique combinations remaining. Commander 9 (Lester) is the next
   nine-row batch target. Production remains checksum `AD01` with 861 custom
   glyphs; all 297 unit tests pass.
+- Commander 9 (Lester) completed nine pending transitions with
+  `completed 9, resumed 0`: `8e97_c9_s01`, `8eae_c9_s05`, `8eb6_c9_s07`,
+  `8ebf_c9_s0a`, `8ee0_c9_s0c`, `8ee5_c9_s0d`, `8edf_c9_s12`,
+  `8ed5_c9_s13`, and `8ec7_c9_s1f`. All 25 candidate frames were visually
+  reviewed, including the MD water chain through terminal Serpent Master.
+  Korean class, stat, mercenary, and magic text is intact. These are
+  screen-only proofs.
+- Generated coverage is now 60/76 unique combinations, two application proofs,
+  and 16 unique combinations remaining. Commander 7 (Keith) is the next
+  eight-row batch target. Production remains checksum `AD01` with 861 custom
+  glyphs; all 299 unit tests pass.
 
 ### Scenario 1 Clear, Dynamic SAVE, And Result Header (2026-07-19)
 

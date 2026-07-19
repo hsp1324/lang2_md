@@ -189,6 +189,15 @@ stats, mercenaries, and magic lists are intact. The inventory now covers 51 of
 76 unique combinations, with 25 remaining; these nine rows are screen-only
 evidence.
 
+Commander 9 (Lester) then completed nine uncovered transitions under prefixes
+`8e97_c9_s01`, `8eae_c9_s05`, `8eb6_c9_s07`, `8ebf_c9_s0a`,
+`8ee0_c9_s0c`, `8ee5_c9_s0d`, `8edf_c9_s12`, `8ed5_c9_s13`, and
+`8ec7_c9_s1f`. All 25 candidate frames were reviewed, including the source MD
+water chain through terminal Serpent Master. Korean classes, stats,
+mercenaries, and magic lists are intact. Coverage is now 60 of 76 unique
+combinations with 16 remaining; commander 7 (Keith) supplies the next eight
+uncovered rows. These Lester rows are screen-only evidence.
+
 An in-battle `저장` confirmation in the isolated `A8D7` runtime did not set a
 manual-slot valid flag or write a roster record to `save.sram`. It is not
 accepted as persistent-save synchronization evidence. Runtime application is
