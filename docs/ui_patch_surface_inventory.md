@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 128
-- Byte-modified declarations: 127
+- Declared patches: 132
+- Byte-modified declarations: 131
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -29,6 +29,10 @@ closed merely because every known patch declaration changed bytes.
 | name_entry_byte_values | 1 | 1 |
 | name_entry_confirm_hook | 1 | 1 |
 | name_entry_confirm_routine | 1 | 1 |
+| title_logo_original_resource_pointer | 1 | 1 |
+| title_logo_active_resource_pointer | 1 | 1 |
+| title_logo_layout_record | 1 | 1 |
+| title_logo_resource_payload | 1 | 1 |
 | shop_inventory_full_glyphs | 1 | 1 |
 | shop_inventory_full_message | 1 | 1 |
 | sound_test_render_hook | 1 | 1 |
@@ -71,7 +75,7 @@ Resource table `0x0B0000` index 1 uses entry
 - natural active-commander and save-persistence verification for class-change paths beyond the two natural Elwin and Hein proofs
 - ending and credits UI variants outside the verified Scenario 27, all-epilogue, ending-visit, and final-credit paths
 - magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack/Elemental probes
-- ownership and purpose of 427 compressed resources beyond byte-font resource index 1 and item-icon resource index 391
+- ownership and purpose of 426 compressed resources beyond byte-font resource index 1, item-icon resource index 391, and title-logo resource index 393
 - non-pointer byte sequences shorter than the conservative three-signal half-width/uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories
 
 Detailed declarations are in `localization/ui_patch_surfaces.json`.

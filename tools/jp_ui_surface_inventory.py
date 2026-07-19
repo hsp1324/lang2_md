@@ -188,6 +188,50 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    title_logo_payload, _ = builder.build_title_logo_assets()
+    title_logo_resource_size = 1 + len(
+        builder.compress_9dfe_literals(title_logo_payload)
+    )
+    for group, offset, size, target in (
+        (
+            "title_logo_original_resource_pointer",
+            builder.BYTE_UI_FONT_RESOURCE_TABLE
+            + builder.TITLE_LOGO_RESOURCE_INDEX * 4,
+            4,
+            "localized title logo resource pointer",
+        ),
+        (
+            "title_logo_active_resource_pointer",
+            builder.BYTE_UI_EXT_RESOURCE_TABLE
+            + builder.TITLE_LOGO_RESOURCE_INDEX * 4,
+            4,
+            "active localized title logo resource pointer",
+        ),
+        (
+            "title_logo_layout_record",
+            builder.TITLE_LOGO_LAYOUT_RECORD,
+            builder.TITLE_LOGO_LAYOUT_RECORD_SIZE,
+            builder.TITLE_LOGO_TEXT,
+        ),
+        (
+            "title_logo_resource_payload",
+            builder.TITLE_LOGO_RESOURCE_RELOC_BASE,
+            title_logo_resource_size,
+            f"{builder.TITLE_LOGO_TEXT} indexed title tiles",
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
     for group, offset, size, target in (
         (
             "shop_inventory_full_glyphs",
@@ -516,8 +560,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "all-epilogue, ending-visit, and final-credit paths",
             "magic/summon targeting and result paths beyond the production-faithful "
             "Magic Arrow and diagnostic Attack/Elemental probes",
-            "ownership and purpose of 427 compressed resources beyond byte-font "
-            "resource index 1 and item-icon resource index 391",
+            "ownership and purpose of 426 compressed resources beyond byte-font "
+            "resource index 1, item-icon resource index 391, and title-logo "
+            "resource index 393",
             "non-pointer byte sequences shorter than the conservative three-signal "
             "half-width/uppercase-ASCII inline scan and the classified "
             "direct-word/direct-byte inventories",

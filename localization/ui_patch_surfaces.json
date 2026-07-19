@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 128,
-  "modified_patch_count": 127,
+  "declared_patch_count": 132,
+  "modified_patch_count": 131,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 27,
@@ -67,6 +67,22 @@
       "modified_count": 1
     },
     "name_entry_confirm_routine": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_logo_original_resource_pointer": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_logo_active_resource_pointer": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_logo_layout_record": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "title_logo_resource_payload": {
       "entry_count": 1,
       "modified_count": 1
     },
@@ -1054,6 +1070,42 @@
       "live_verified": true
     },
     {
+      "group": "title_logo_original_resource_pointer",
+      "address": "0x0B0624",
+      "size_bytes": 4,
+      "target_korean": "localized title logo resource pointer",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_logo_active_resource_pointer",
+      "address": "0x2B2624",
+      "size_bytes": 4,
+      "target_korean": "active localized title logo resource pointer",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_logo_layout_record",
+      "address": "0x0A429E",
+      "size_bytes": 232,
+      "target_korean": "랑그릿사",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "title_logo_resource_payload",
+      "address": "0x2E0000",
+      "size_bytes": 6735,
+      "target_korean": "랑그릿사 indexed title tiles",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
       "group": "shop_inventory_full_glyphs",
       "address": "0x0A1730",
       "size_bytes": 4,
@@ -1356,7 +1408,7 @@
     "natural active-commander and save-persistence verification for class-change paths beyond the two natural Elwin and Hein proofs",
     "ending and credits UI variants outside the verified Scenario 27, all-epilogue, ending-visit, and final-credit paths",
     "magic/summon targeting and result paths beyond the production-faithful Magic Arrow and diagnostic Attack/Elemental probes",
-    "ownership and purpose of 427 compressed resources beyond byte-font resource index 1 and item-icon resource index 391",
+    "ownership and purpose of 426 compressed resources beyond byte-font resource index 1, item-icon resource index 391, and title-logo resource index 393",
     "non-pointer byte sequences shorter than the conservative three-signal half-width/uppercase-ASCII inline scan and the classified direct-word/direct-byte inventories"
   ]
 }

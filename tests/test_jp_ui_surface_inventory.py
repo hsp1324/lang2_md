@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 128)
-        self.assertEqual(self.result["modified_patch_count"], 127)
+        self.assertEqual(self.result["declared_patch_count"], 132)
+        self.assertEqual(self.result["modified_patch_count"], 131)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -59,6 +59,23 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             "title_credit_render_routine",
             "title_credit_text_record",
             "title_credit_resource_pointer",
+        }
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] in title_groups
+        ]
+        self.assertEqual({row["group"] for row in rows}, title_groups)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
+
+    def test_title_logo_resource_and_layout_are_live_verified(self):
+        title_groups = {
+            "title_logo_original_resource_pointer",
+            "title_logo_active_resource_pointer",
+            "title_logo_layout_record",
+            "title_logo_resource_payload",
         }
         rows = [
             row
