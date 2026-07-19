@@ -44,7 +44,7 @@
 - `tools/jp_global_inventory.py`: 클래스·아이템·인물 이름의 공유 1바이트 테이블과 전역 글꼴 충돌 가능성을 JSON/Markdown으로 생성합니다.
 - `tools/jp_resource_inventory.py`: 조건·시나리오 설명·아이템·마법·용병 전투명·상태 메시지의 16비트 리소스 변경/검수 상태를 생성합니다.
 - `tools/item_shop_inventory.py`: 원본 전체 아이템 비기 목록의 ID `1..37`, 일본어명, 한국어 이름·설명, 가격표, 아이콘 VRAM 타일과 실기 검증 상태를 `localization/item_shop_inventory.json` 및 `docs/item_shop_runtime_matrix.md`로 생성합니다.
-- `tools/capture_item_shop_inventory.py`: 현재 생산 ROM에서 전체 아이템 진단 체크섬과 ASCII 캡처 접두사를 자동 산출하고, 5행씩 8페이지인 ID `1..37`을 개별 캡처합니다. 마지막 페이지는 2행이므로 전환 후 Up 1회만 사용합니다. `--start-item/--end-item`으로 재개하고, 실제 상점 설명 패널을 검사하며, 예외가 나도 BlastEm을 종료합니다.
+- `tools/capture_item_shop_inventory.py`: 현재 생산 ROM에서 전체 아이템 진단 체크섬과 ASCII 캡처 접두사를 자동 산출하고, 5행씩 8페이지인 ID `1..37`을 개별 캡처합니다. 마지막 페이지는 2행이므로 전환 후 Up 1회만 사용합니다. `--start-item/--end-item`으로 재개하고, 실제 상점 설명 패널을 검사하며, 예외가 나도 BlastEm을 종료합니다. 40칸 보유 한도 검증에는 배포 ROM을 바꾸지 않는 `python3 tools/build_item_shop_probe_rom.py --free-prices` 진단 옵션을 사용합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.

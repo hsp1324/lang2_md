@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 118)
-        self.assertEqual(self.result["modified_patch_count"], 117)
+        self.assertEqual(self.result["declared_patch_count"], 120)
+        self.assertEqual(self.result["modified_patch_count"], 119)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -119,6 +119,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             if row["group"].startswith("sound_test_")
         ]
         self.assertEqual(len(rows), 3)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
+
+    def test_shop_inventory_full_message_is_live_verified(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"].startswith("shop_inventory_full_")
+        ]
+        self.assertEqual(len(rows), 2)
         self.assertTrue(all(row["modified"] for row in rows))
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["live_verified"] for row in rows))

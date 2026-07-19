@@ -22,14 +22,14 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: F91E
+current production build checksum: D8C1
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 389 passing
+unit tests: 394 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 449 classified, 0 unclassified
-declared UI patches: 117/118 byte-modified; NPC is intentionally unchanged
+declared UI patches: 119/120 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
 
@@ -59,6 +59,10 @@ glyph bank, or visible screen:
 - the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
   equipment paths, Scenario 25's complete nine-commander equipment selector,
   Scenario 27's category and sell variants, and the accepted 37-item matrix.
+- a 41st shop purchase with all 40 equipment slots occupied now shows the
+  fixed Korean warning `아이템 구입 불가`; the original nine-cell message was
+  `これ以上持てません`. The distinct `버릴 아이템 선택` path is used by
+  non-shop item acquisition and remains statically patched but not live-proven.
 - compressed resource `391` is now owned as the stock item-icon payload from
   direct load call `0x025E62` (`0x8187` to VRAM `0x4000`), reducing unknown
   original compressed-resource ownership from 428 entries to 427.
@@ -247,7 +251,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `F91E` and passes all 389 tests. It includes
+The current source builds checksum `D8C1` and passes all 394 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,
@@ -5889,3 +5893,25 @@ contains 57 safe syllables as documented below and in
   the subsequent sound-test production build is `F91E`, and all 389 tests pass.
   The current single-display layout is captured reliably
   with direct Xlib rather than the stale-coordinate Windows DWM path.
+
+### Full Inventory Shop Warning (2026-07-19)
+
+- Shop purchase routine `0x02760C` calls item insertion at `0x02826C`. A return
+  value of `0xFFFF` branches to `0x0276AC` and opens resource `0x0A177E`, whose
+  nine visible cells at `0x0A178C` originally render `これ以上持てません`.
+- The word at `0x0A178A` is the argument to the preceding `FFF9` control, not a
+  visible glyph. Treating all ten words as text first produced a truncated
+  three-glyph popup; this failed interpretation is now covered by the source
+  token test and must not be repeated.
+- Production `D8C1` keeps the control argument at `1`, assigns shared shop
+  glyph-list slots 13/14 to `불/가`, and renders the exact nine-cell warning
+  `아이템 구입 불가`. `captures/run/d8c1_shop_inventory_full_message_spaced.png`
+  is the accepted live capture.
+- `tools/build_item_shop_probe_rom.py --free-prices` changes only the original
+  list selector, 37 price words, and checksum. Diagnostic `0243` purchased 40
+  free daggers and reached the refusal on purchase 41. The ordinary diagnostic
+  remains unchanged when the option is omitted.
+- The separate discard initializer at `0x017D5E` enumerates the 40 equipment
+  records at work RAM `0xC7F2` plus the newly acquired item and then selects
+  callback `0x017E04`. The shop refuses before that initializer; use a treasure
+  or event-award path for the remaining live proof of `버릴 아이템 선택`.

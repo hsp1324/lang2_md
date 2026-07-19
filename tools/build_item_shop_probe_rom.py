@@ -26,6 +26,8 @@ SHOP_LIST_POINTER_TABLE = 0x0A1BB8
 SHOP_LIST_COUNT = 33
 ALL_ITEM_LIST_INDEX = 32
 ALL_ITEM_COUNT = 37
+ITEM_PRICE_TABLE = 0x0A1D32
+ITEM_PRICE_TABLE_END = 0x0A1D7C
 
 
 def read_shop_list(data: bytes | bytearray, index: int) -> list[int]:
@@ -53,7 +55,7 @@ def validate_all_item_list(data: bytes | bytearray) -> list[int]:
     return items
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def patch_probe(probe: bytearray, source: bytes, free_prices: bool = False) -> int:
     validate_all_item_list(source)
     validate_all_item_list(probe)
     offset = SHOP_LIST_SELECTOR_OFFSET
@@ -63,6 +65,11 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
     if probe[offset : offset + size] != SHOP_LIST_SELECTOR_SOURCE:
         raise ValueError("input shop-list selector changed")
     probe[offset : offset + size] = SHOP_LIST_SELECTOR_PATCH
+    if free_prices:
+        source_prices = source[ITEM_PRICE_TABLE:ITEM_PRICE_TABLE_END]
+        if probe[ITEM_PRICE_TABLE:ITEM_PRICE_TABLE_END] != source_prices:
+            raise ValueError("input item price table changed")
+        probe[ITEM_PRICE_TABLE:ITEM_PRICE_TABLE_END] = b"\x00" * len(source_prices)
     return builder.update_md_checksum(probe)
 
 
@@ -76,6 +83,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument(
+        "--free-prices",
+        action="store_true",
+        help="set all 37 diagnostic shop prices to 0P for inventory-capacity testing",
+    )
     return parser.parse_args()
 
 
@@ -83,10 +95,12 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    checksum = patch_probe(probe, source, free_prices=args.free_prices)
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print("stock shop list 33 enabled: item IDs 1..37")
+    if args.free_prices:
+        print("diagnostic prices: all 0P")
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

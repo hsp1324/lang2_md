@@ -42,6 +42,28 @@ class ItemShopProbeBuilderTests(unittest.TestCase):
         allowed = {0x18E, 0x18F, *range(offset, offset + len(replacement))}
         self.assertLessEqual(changed, allowed)
 
+    def test_free_price_probe_changes_only_prices_selector_and_checksum(self):
+        probe = bytearray(self.production)
+        checksum = probe_builder.patch_probe(probe, self.source, free_prices=True)
+        self.assertEqual(checksum, int.from_bytes(probe[0x18E:0x190], "big"))
+        self.assertEqual(
+            probe[probe_builder.ITEM_PRICE_TABLE : probe_builder.ITEM_PRICE_TABLE_END],
+            b"\x00" * (probe_builder.ITEM_PRICE_TABLE_END - probe_builder.ITEM_PRICE_TABLE),
+        )
+        offset = probe_builder.SHOP_LIST_SELECTOR_OFFSET
+        allowed = {
+            0x18E,
+            0x18F,
+            *range(offset, offset + len(probe_builder.SHOP_LIST_SELECTOR_PATCH)),
+            *range(probe_builder.ITEM_PRICE_TABLE, probe_builder.ITEM_PRICE_TABLE_END),
+        }
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.production, probe))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
     def test_source_and_input_mutations_are_rejected(self):
         offset = probe_builder.SHOP_LIST_SELECTOR_OFFSET
         source = bytearray(self.source)

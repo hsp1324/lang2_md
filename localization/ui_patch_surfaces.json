@@ -1,6 +1,6 @@
 {
-  "declared_patch_count": 118,
-  "modified_patch_count": 117,
+  "declared_patch_count": 120,
+  "modified_patch_count": 119,
   "groups": {
     "byte_ff_strings": {
       "entry_count": 27,
@@ -67,6 +67,14 @@
       "modified_count": 1
     },
     "name_entry_confirm_routine": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "shop_inventory_full_glyphs": {
+      "entry_count": 1,
+      "modified_count": 1
+    },
+    "shop_inventory_full_message": {
       "entry_count": 1,
       "modified_count": 1
     },
@@ -1009,6 +1017,24 @@
       "address": "0x2A0000",
       "size_bytes": 38,
       "target_korean": "relocated index-to-glyph conversion routine",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "shop_inventory_full_glyphs",
+      "address": "0x0A1730",
+      "size_bytes": 4,
+      "target_korean": "불가",
+      "modified": true,
+      "reviewed": true,
+      "live_verified": true
+    },
+    {
+      "group": "shop_inventory_full_message",
+      "address": "0x0A178A",
+      "size_bytes": 20,
+      "target_korean": "아이템 구입 불가",
       "modified": true,
       "reviewed": true,
       "live_verified": true

@@ -733,6 +733,10 @@ ITEM_POSSESSION_TITLE_TEXT = "아이템소지"
 ITEM_SELL_TITLE_TEXT = "아이템판매"
 SHOP_PURCHASE_MESSAGE_TEXT = "을 구입함"
 SHOP_SELL_MESSAGE_TEXT = "을 판매함"
+SHOP_INVENTORY_FULL_MESSAGE_TEXT = "아이템 구입 불가"
+SHOP_INVENTORY_FULL_GLYPH_LIST = 0x0A1716
+SHOP_INVENTORY_FULL_TOKEN_STREAM = 0x0A178A
+SHOP_INVENTORY_FULL_SOURCE_TOKENS = (1, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 SHOP_SELL_GLYPH_LIST = 0xA16D4
 SHOP_SELL_TITLE_TOKEN_STREAM = 0xA17B8
 START_MENU_GLYPH_LIST = 0x970D4
@@ -3662,9 +3666,26 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
         10: glyph_by_char["함"],
         11: glyph_by_char["판"],
         12: glyph_by_char["매"],
+        13: glyph_by_char["불"],
+        14: glyph_by_char["가"],
     }
     for slot, value in purchase_values_by_slot.items():
         put16(data, 0xA1716 + slot * 2, value)
+
+    actual_full_tokens = tuple(
+        be16(data, SHOP_INVENTORY_FULL_TOKEN_STREAM + index * 2)
+        for index in range(len(SHOP_INVENTORY_FULL_SOURCE_TOKENS))
+    )
+    if actual_full_tokens != SHOP_INVENTORY_FULL_SOURCE_TOKENS:
+        raise ValueError(
+            "unexpected shop inventory-full token stream: "
+            f"{actual_full_tokens!r} != {SHOP_INVENTORY_FULL_SOURCE_TOKENS!r}"
+        )
+    # The first word is the argument to the preceding FFF9 control; the
+    # remaining nine words are the visible fixed-width message cells.
+    full_tokens = (1, 0, 1, 2, 3, 4, 5, 3, 13, 14)
+    for index, token in enumerate(full_tokens):
+        put16(data, SHOP_INVENTORY_FULL_TOKEN_STREAM + index * 2, token)
 
     # The sell path at 0x26256 initially loads the 14-glyph list at 0xA16D4
     # into VRAM 0xD000. Item handling later reloads 0xD000 from the shared list
@@ -5954,6 +5975,7 @@ def main() -> None:
             + ITEM_SELL_TITLE_TEXT
             + SHOP_PURCHASE_MESSAGE_TEXT
             + SHOP_SELL_MESSAGE_TEXT
+            + SHOP_INVENTORY_FULL_MESSAGE_TEXT
         )
     )
     active_opening_texts = [text for _, text in OPENING_TEXT_LIST_PATCHES.values()]

@@ -190,6 +190,32 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
     for group, offset, size, target in (
         (
+            "shop_inventory_full_glyphs",
+            builder.SHOP_INVENTORY_FULL_GLYPH_LIST + 13 * 2,
+            4,
+            "불가",
+        ),
+        (
+            "shop_inventory_full_message",
+            builder.SHOP_INVENTORY_FULL_TOKEN_STREAM,
+            len(builder.SHOP_INVENTORY_FULL_SOURCE_TOKENS) * 2,
+            builder.SHOP_INVENTORY_FULL_MESSAGE_TEXT,
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
+    for group, offset, size, target in (
+        (
             "sound_test_render_hook",
             builder.SOUND_TEST_RENDER_HOOK,
             len(builder.SOUND_TEST_RENDER_HOOK_ORIGINAL),

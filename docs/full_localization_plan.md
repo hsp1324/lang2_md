@@ -12,7 +12,7 @@ follow this status table so a resume does not repeat already accepted work.
 | Stage | Status | Resume rule |
 | --- | --- | --- |
 | 1. Inventory and coverage | Complete baseline | 783 direct-word, 348 pointer-referenced direct-byte, and 449 conservative inline-byte candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
-| 2. Shared UI and global names | In progress | 117/118 declared patches differ intentionally; work only from the six explicit gaps in `docs/ui_patch_surface_inventory.md`. |
+| 2. Shared UI and global names | In progress | 119/120 declared patches differ intentionally; work only from the six explicit gaps in `docs/ui_patch_surface_inventory.md`. |
 | 3. Scenarios 2-10 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 4. Scenarios 11-20 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
 | 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |

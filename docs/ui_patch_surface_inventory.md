@@ -6,8 +6,8 @@ This report inventories UI surfaces already declared by the builder. It is not a
 complete Japanese-residue scan. The explicit gap list prevents Stage 1 from being
 closed merely because every known patch declaration changed bytes.
 
-- Declared patches: 118
-- Byte-modified declarations: 117
+- Declared patches: 120
+- Byte-modified declarations: 119
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
 | Group | Entries | Modified |
@@ -29,6 +29,8 @@ closed merely because every known patch declaration changed bytes.
 | name_entry_byte_values | 1 | 1 |
 | name_entry_confirm_hook | 1 | 1 |
 | name_entry_confirm_routine | 1 | 1 |
+| shop_inventory_full_glyphs | 1 | 1 |
+| shop_inventory_full_message | 1 | 1 |
 | sound_test_render_hook | 1 | 1 |
 | sound_test_render_routine | 1 | 1 |
 | sound_test_tile_table | 1 | 1 |
