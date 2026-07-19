@@ -15,8 +15,8 @@
     "1": 2
   },
   "modified_count": 1,
-  "known_owner_count": 1,
-  "unknown_owner_count": 428,
+  "known_owner_count": 2,
+  "unknown_owner_count": 427,
   "loader_routines": {
     "load": "0x0099B2",
     "dispatch": "0x0099FA",
@@ -733,8 +733,8 @@
           "destination": "0x0000"
         }
       ],
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "index": 2,
@@ -9082,7 +9082,7 @@
       "pointer_modified": false,
       "content_modified": false,
       "modified": false,
-      "owner": null,
+      "owner": "item_icons",
       "direct_immediate_call_count": 1,
       "direct_immediate_calls": [
         {
@@ -9094,8 +9094,8 @@
           "destination": "0x4000"
         }
       ],
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "index": 392,

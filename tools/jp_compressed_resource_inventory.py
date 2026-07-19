@@ -25,7 +25,9 @@ RESOURCE_DECODER_ROUTINES = {
 }
 KNOWN_OWNERS = {
     builder.BYTE_UI_FONT_RESOURCE_INDEX: "byte_ui_font",
+    391: "item_icons",
 }
+LIVE_VERIFIED_OWNERS = frozenset(KNOWN_OWNERS)
 
 
 def be32(data: bytes, offset: int) -> int:
@@ -299,8 +301,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "owner": KNOWN_OWNERS.get(index),
                 "direct_immediate_call_count": len(calls_by_index.get(index, [])),
                 "direct_immediate_calls": calls_by_index.get(index, []),
-                "reviewed": False,
-                "live_verified": False,
+                "reviewed": index in LIVE_VERIFIED_OWNERS,
+                "live_verified": index in LIVE_VERIFIED_OWNERS,
             }
         )
     return {

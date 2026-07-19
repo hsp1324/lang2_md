@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 5993
 last broadly live-verified production checksum: E38B
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 366 passing
+unit tests: 367 passing
 direct-string candidates: 783 classified, 0 unclassified
 declared UI patches: 111/112 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
@@ -57,6 +57,9 @@ glyph bank, or visible screen:
 - the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
   equipment paths, Scenario 25's complete nine-commander equipment selector,
   Scenario 27's category and sell variants, and the accepted 37-item matrix.
+- compressed resource `391` is now owned as the stock item-icon payload from
+  direct load call `0x025E62` (`0x8187` to VRAM `0x4000`), reducing unknown
+  original compressed-resource ownership from 428 entries to 427.
 
 Active work, in order:
 
@@ -205,7 +208,7 @@ Last live-verified build during this handoff:
 checksum: E38B
 ```
 
-The current source builds checksum `5993` and passes all 366 tests. It includes
+The current source builds checksum `5993` and passes all 367 tests. It includes
 all 31 scenarios' static event translations, the complete direct-name, credits,
 90-record epilogue, and 23-record naturally spaced ending-visit resources, plus
 the extended 8x8 commander-name font bank. Every scenario description,

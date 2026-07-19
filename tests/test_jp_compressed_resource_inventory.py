@@ -79,7 +79,8 @@ class CompressedResourceInventoryTests(unittest.TestCase):
 
     def test_only_byte_ui_font_is_relocated_and_modified(self):
         self.assertEqual(self.result["modified_count"], 1)
-        self.assertEqual(self.result["known_owner_count"], 1)
+        self.assertEqual(self.result["known_owner_count"], 2)
+        self.assertEqual(self.result["unknown_owner_count"], 427)
         entry = self.result["entries"][builder.BYTE_UI_FONT_RESOURCE_INDEX]
         self.assertEqual(entry["owner"], "byte_ui_font")
         self.assertEqual(entry["original_pointer"], "0x0B0A84")
@@ -90,6 +91,29 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(entry["current_output_size"], 8192)
         self.assertTrue(entry["pointer_modified"])
         self.assertTrue(entry["content_modified"])
+
+    def test_item_icon_resource_owner_matches_the_stock_loader(self):
+        entry = self.result["entries"][391]
+        self.assertEqual(entry["owner"], "item_icons")
+        self.assertEqual(entry["original_pointer"], "0x11FAE4")
+        self.assertEqual(entry["original_type"], 3)
+        self.assertEqual(entry["original_output_size"], 8192)
+        self.assertFalse(entry["modified"])
+        self.assertTrue(entry["reviewed"])
+        self.assertTrue(entry["live_verified"])
+        self.assertEqual(
+            entry["direct_immediate_calls"],
+            [
+                {
+                    "call_site": "0x025E62",
+                    "immediate_resource": True,
+                    "resource_index": 391,
+                    "raw_resource_id": "0x8187",
+                    "high_bit_flag": True,
+                    "destination": "0x4000",
+                }
+            ],
+        )
 
     def test_direct_loader_calls_are_mapped_without_guessing_dynamic_ids(self):
         calls = direct_load_calls(self.japanese)

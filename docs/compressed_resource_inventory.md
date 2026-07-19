@@ -13,8 +13,8 @@ A valid record does not establish that it contains text or UI data.
 - Total calculated output bytes: 903,296
 - Decoded and hashed by type: type 1: 2, type 2: 248, type 3: 179
 - Modified resources in current build: 1
-- Known owners: 1
-- Unknown owners: 428
+- Known owners: 2
+- Unknown owners: 427
 - Direct loader calls: 75
 - Immediate-ID calls: 64
 - Dynamic-ID calls: 11
@@ -44,6 +44,7 @@ calls remain listed by code address without a guessed resource owner.
 | Index | Owner | Original | Current | Type | Size | Pointer changed | Content changed |
 | ---: | --- | --- | --- | ---: | ---: | --- | --- |
 | 1 | byte_ui_font | `0x0B0A84` | `0x290000` | `0x03` | 8192 | True | True |
+| 391 | item_icons | `0x11FAE4` | `0x11FAE4` | `0x03` | 8192 | False | False |
 
 All pointers, output sizes, decoded hashes, ownership fields, and review flags
 are in `localization/compressed_resources.json`.
