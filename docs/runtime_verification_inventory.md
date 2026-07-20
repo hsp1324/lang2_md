@@ -15,7 +15,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 2 | current | current | current | current | current | current | probe | pending | 38 |
 | 3 | current | current | current | current | probe | probe | probe | pending | 34 |
 | 4 | current | current | current | current | probe | probe | probe | pending | 46 |
-| 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
+| 5 | current | current | current | current | probe | progressed | probe | pending | 31 |
 | 6 | current | current | current | current | current | progressed | pending | pending | 25 |
 | 7 | current | current | current | current | current | progressed | pending | pending | 29 |
 | 8 | current | current | current | current | probe | progressed | pending | pending | 28 |
@@ -213,7 +213,7 @@ Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling
 
 ### Scenario 5
 
-Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling frames of 짐승의 포효, and the preparation endpoint. The complete Korean description covers the damaged Temple of Light, Morgan threatening nearby residents, and Sherry joining the pursuit without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and all text-bearing frames from the 36-confirmation first-turn path. Sherry's Soldier hire row is verified, but the other commanders' hire lists and later turns remain pending.
+Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling frames of 짐승의 포효, and the preparation endpoint. The complete Korean description covers the damaged Temple of Light, Morgan threatening nearby residents, and Sherry joining the pursuit without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and all text-bearing frames from the 36-confirmation first-turn path. Production 39BD-derived escape probe 398C validates the Japanese header, deployment table, and all nine fixed records before changing only the first Elwin deployment Y from 50 to 1. The live path used the stock Move command to cross the north threshold, triggered the original `20턴 내 북쪽 도착` victory, rendered the pursuit exit, Sherry level/class-change surfaces, 전과보고 with POINT 1400P, a real 시나리오 6 save, 다음 시나리오, and the Scenario 6 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. The alternate `20턴 내 적 전멸` victory, later turns, and defeat branches remain pending. Sherry's Soldier hire row is verified, but the other commanders' hire lists remain pending.
 
 - `captures/run/f03a_s05_selector_map.png`
 - `captures/run/f03a_s05_brief_live_01.png`
@@ -237,6 +237,15 @@ Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling
 - `captures/run/489b_s05_description_current_10.png`
 - `captures/run/489b_s05_description_current_13.png`
 - `captures/run/489b_s05_description_current_14.png`
+- `captures/run/398c_s05_selector.png`
+- `captures/run/398c_s05_sortie.png`
+- `captures/run/398c_s05_command.png`
+- `captures/run/398c_s05_north_commit.png`
+- `captures/run/398c_s05_escape_11.png`
+- `captures/run/398c_s05_escape_12.png`
+- `captures/run/398c_s05_escape_14.png`
+- `captures/run/398c_s05_escape_16.png`
+- `captures/run/398c_s05_next_scenario.png`
 
 ### Scenario 6
 

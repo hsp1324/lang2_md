@@ -262,6 +262,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario5["captures"])
         self.assertEqual(scenario5["opening_events"], "verified_current")
+        self.assertEqual(scenario5["completion"], "verified_probe")
+        for capture in (
+            "captures/run/398c_s05_selector.png",
+            "captures/run/398c_s05_sortie.png",
+            "captures/run/398c_s05_command.png",
+            "captures/run/398c_s05_north_commit.png",
+            "captures/run/398c_s05_escape_11.png",
+            "captures/run/398c_s05_escape_12.png",
+            "captures/run/398c_s05_escape_14.png",
+            "captures/run/398c_s05_escape_16.png",
+            "captures/run/398c_s05_next_scenario.png",
+        ):
+            self.assertIn(capture, scenario5["captures"])
+        self.assertIn("changing only the first Elwin deployment Y", scenario5["note"])
+        self.assertIn("20턴 내 북쪽 도착", scenario5["note"])
+        self.assertIn("alternate `20턴 내 적 전멸`", scenario5["note"])
         self.assertEqual(scenario6["conditions"], "verified_current")
         self.assertEqual(scenario6["description"], "verified_current")
         for capture in (

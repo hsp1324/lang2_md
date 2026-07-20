@@ -6198,3 +6198,27 @@ contains 57 safe syllables as documented below and in
 - Scenario 4 `turn_events` is now `verified_probe`. `branches_endings` remains
   `pending`, so future sessions must not repeat the already covered scheduled
   events as if they were missing branch coverage.
+
+### Scenario 5 North-Exit Completion (2026-07-20)
+
+- Scenario 5 has two stock victory conditions: enemy annihilation within 20
+  turns or north-edge arrival within 20 turns. The Japanese header is
+  `0x18083C`, deployment table is `0x180858`, and the fixed list has nine
+  36-byte records at `0x180870`. The first Elwin deployment is `(13,50)`.
+- `tools/build_scenario5_escape_probe_rom.py` derives diagnostic `398C` from
+  production `39BD`. It validates the source and input layouts, deployment,
+  and all fixed records, then changes only the first deployment Y from 50 to
+  1. Enemy records, events, abilities, rewards, and completion code remain
+  byte-identical. Five tests lock the exact change scope and checksum.
+- Live play entered Scenario 5 through the stock selector, traversed the
+  briefing, preparation, automatic arrangement, opening, and command UI. The
+  stock Move command crossed the north threshold and triggered the original
+  escape completion; no event or work-RAM completion flag was patched.
+- The complete path reached Sherry's level/class-change screens,
+  `전과보고 / POINT 1400P`, a real `시나리오 6` save, `다음 시나리오`, and
+  the Scenario 6 route map. Representative captures use the `398c_s05_`
+  prefix. No Japanese residue, broken name/class/UI glyph, reset, or freeze
+  appeared.
+- Scenario 5 `completion` is now `verified_probe`. Enemy-annihilation victory,
+  later turns, defeat branches, and the remaining commander hire lists stay
+  pending and must not be conflated with this north-exit evidence.
