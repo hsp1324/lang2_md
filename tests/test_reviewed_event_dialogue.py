@@ -79,6 +79,15 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             list(range(2223, 2312)),
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            text_by_address["0x18964C"],
+            "가자! 모두 소녀를 잡아라!",
+        )
+        self.assertEqual(
+            text_by_address["0x1898F4"],
+            "하지만 여기까지다! 소녀는 데려가겠다!",
+        )
 
     def test_scenario_4_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 4]

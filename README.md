@@ -57,7 +57,8 @@
 - `tools/build_scenario27_ending_probe_rom.py`: 시나리오 27의 베른하르트를 엘윈 바로 위에 두고 능력치와 용병을 제한해 원작 결말·후일담 진입을 단축합니다. 피해 난수로 HP 1이 남을 수 있으므로 공격 직전 상태 저장 후 재시도해야 합니다. 두 프로브 ROM은 배포·커밋하지 않으며 구조와 사용 순서는 `docs/epilogue_probe.md`에 기록합니다.
 - `tools/build_title_save_probe_rom.py`: 타이틀의 LOAD 진입 두 곳만 원본 SAVE 렌더러로 돌리는 진단 ROM을 만들어 `저장`과 `다음 시나리오` 고정 레코드의 실제 소유권을 확인합니다. 정상 시나리오 클리어 작업 RAM이 없으므로 슬롯의 동적 숫자·스프라이트 품질 검증에는 사용하지 않습니다.
 - `tools/build_scenario1_clear_probe_rom.py`: 시나리오 1의 발드만 첫 플레이어 배치 슬롯 옆으로 옮기고 AT/DF와 용병을 제거한 진단 ROM을 만듭니다. 원본 이벤트·클리어·저장 렌더러는 건드리지 않으며 정상 클리어 뒤 결과 화면과 동적 저장 슬롯을 짧게 검증할 때만 사용합니다.
-- `tools/build_scenario2_escape_probe_rom.py`: 시나리오 2의 승리 조건인 `리아나 북쪽 도착`을 원본 이벤트로 빠르게 재현하기 위해 리아나의 고정 배치 Y 좌표만 `18→1`로 바꿉니다. 원본 헤더·배치표·리아나 레코드를 검증하고 이벤트 및 다른 필드는 건드리지 않습니다. 생성 ROM은 커밋하지 않으며 실기 완료 경로는 아직 검증 대기입니다.
+- `tools/build_scenario2_escape_probe_rom.py`: 시나리오 2의 승리 조건인 `리아나 북쪽 도착`을 원본 이벤트로 빠르게 재현하기 위해 리아나의 고정 배치 Y 좌표만 `18→1`로 바꿉니다. 원본 헤더·배치표·리아나 레코드를 검증하고 이벤트 및 다른 필드는 건드리지 않습니다. 생성 ROM은 커밋하지 않으며 전과보고·저장·3장 진입까지 실기로 검증했습니다.
+- `tools/build_scenario3_clear_probe_rom.py`: 시나리오 3의 원본 이벤트·배치 구조는 유지하고 적 지휘관 8명의 AT/DF·용병·초기 좌표만 제한합니다. 이벤트 출현 좌표는 원본 스크립트가 다시 지정할 수 있습니다. 수동 슬롯의 엘윈 AT/DF를 높여 정상 전투·턴 이벤트·발가스 퇴각·전과보고·저장·4장 진입을 검증할 때 사용하며 생성 ROM은 커밋하지 않습니다.
 - `tools/game_genie.py`, `tools/build_game_genie_probe_rom.py`: 명시한 Genesis Game Genie 코드를 주소/워드로 해석하고 무시되는 실험 ROM을 만듭니다. 코드 호환 리비전을 자동 판별하지 않으며, 프로젝트 원본은 일본판 REV00입니다. REV01용 공개 코드는 주소가 정상적으로 보여도 REV00을 리셋시킬 수 있으므로 프리셋을 제공하지 않습니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
@@ -190,7 +191,7 @@ env LD_LIBRARY_PATH=tools/blastem/lib tools/blastem/blastem "roms/builds/Langris
 python3 tools/run_blastem_sequence.py shop
 ```
 
-이 도구는 BlastEm 실행 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`를 보내고 `C -> C -> C -> B 유지 -> C -> 아래 -> 아래 -> C -> C -> C`를 이어 보냅니다. `tools/send_blastem_keys.py`의 키 표기는 `key[@hold][:wait]` 형식입니다. 예를 들어 `b@3.0:0.15`는 B를 3초 누른 뒤 0.15초 기다립니다.
+이 도구는 BlastEm 실행 후 12초에 첫 `Start`, 그 2초 뒤 두 번째 `Start`를 보내고 `C -> C -> C -> B 유지 -> C -> 아래 -> 아래 -> C -> C -> C`를 이어 보냅니다. `tools/send_blastem_keys.py`의 키 표기는 `key[@hold][:wait]` 형식입니다. 예를 들어 `b@3.0:0.15`는 B를 3초 누른 뒤 0.15초 기다립니다. BlastEm 속도 키 `4`는 400%로 적/NPC 이동과 전투 애니메이션을 빠르게 넘길 때, `0`은 100%로 대사와 캡처를 확인할 때 사용합니다.
 
 입력 자동화 주의점:
 
@@ -209,7 +210,7 @@ python3 tools/run_blastem_sequence.py shop
 - `scenario-select-entry`는 `Left, Right, Start, C` 비기 입력 직후 멈추고 시나리오 이동이나 확정을 보내지 않습니다. 전체 `scenario-select`와 같은 단일 입력 명령을 사용하므로, 창을 나눠 조작하다 비기가 누락되는 이전 실패를 반복하지 않습니다.
 - 시나리오 선택 비기의 시작 행은 항상 1이 아니라 선택한 수동 슬롯에 저장된 현재 시나리오입니다. 도구는 슬롯 1의 유효 비트와 체크섬을 확인하고 첫 워드의 시나리오 번호를 읽은 뒤 `--scenario-number`까지 필요한 `Up/Down`만 보냅니다. 선택 후 보이는 경로 지도에서 다음 `C`부터 설명 스크롤이 시작됩니다.
 - `launch-only`도 `load-screen` 격리 런타임을 보존하며 게임 입력을 전혀 보내지 않습니다. `--manual-slot-gst`는 GST 작업 RAM의 `0xA49C/0xBD6E/0xC7F2` 세 구간을 수동 슬롯 1로 직렬화하고 체크섬과 유효 비트를 다시 계산하므로, 빌드가 달라 이전 GST 자체를 직접 로드할 수 없을 때 사용합니다.
-- 복구한 수동 슬롯의 지휘관 진행도만 실험할 때는 `--runtime-name`으로 격리 폴더를 지정하고 `--manual-slot-commander-id 1 --manual-slot-level 9 --manual-slot-experience 16 --manual-slot-expected-class 0x01`을 함께 사용합니다. 이 패치는 슬롯 구조와 체크섬을 검증하지만 준비/배치 중 런타임 동기화가 값을 되돌릴 수 있으므로, 클래스 체인지 실기 확인에는 `tools/build_class_change_probe_rom.py`의 원본 핸들러 경로를 사용합니다.
+- 복구한 수동 슬롯의 지휘관 진행도만 실험할 때는 `--runtime-name`으로 격리 폴더를 지정하고 `--manual-slot-commander-id 1 --manual-slot-level 9 --manual-slot-experience 16 --manual-slot-expected-class 0x01`을 함께 사용합니다. 필요하면 `--manual-slot-class`, `--manual-slot-at`, `--manual-slot-df`도 덧붙입니다. 24바이트 지휘관 레코드의 확인된 오프셋은 클래스 `+0`, 레벨 `+2`, EXP `+3`, AT `+4`, DF `+5`이며 도구는 원본 클래스와 `0..99` 능력치 범위를 검사하고 슬롯 체크섬을 다시 계산합니다. 준비/배치 중 런타임 동기화가 값을 되돌릴 수 있으므로 클래스 체인지 실기 확인에는 `tools/build_class_change_probe_rom.py`의 원본 핸들러 경로를 사용합니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:

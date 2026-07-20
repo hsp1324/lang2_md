@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "F9C0")
+        self.assertEqual(data["production_checksum"], "F661")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -192,7 +192,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/489b_s03_description_current_15.png",
         ):
             self.assertIn(capture, scenario3["captures"])
-        self.assertEqual(scenario3["turn_events"], "progressed_current")
+        self.assertEqual(scenario3["turn_events"], "verified_probe")
+        self.assertEqual(scenario3["completion"], "verified_probe")
+        for capture in (
+            "captures/run/b2bd_s03_turn3_entry_01.png",
+            "captures/run/b2bd_s03_zorum_quote_hit1.png",
+            "captures/run/b2bdv2_s03_vargas_retreat_13.png",
+            "captures/run/b2bdv2_s03_clear_after_result.png",
+            "captures/run/b2bdv2_s03_clear_save_slot2.png",
+            "captures/run/b2bdv2_s03_next_scenario_selected.png",
+            "captures/run/b2bdv2_s04_route.png",
+            "captures/run/af5e_s03_imperial_capture_line.png",
+            "captures/run/af5e_r3_last_enemy_post_3.png",
+        ):
+            self.assertIn(capture, scenario3["captures"])
+        self.assertIn("save-slot AT 99 / DF 96", scenario3["note"])
         self.assertEqual(scenario4["opening_events"], "verified_current")
         self.assertEqual(scenario4["description"], "verified_current")
         for capture in (

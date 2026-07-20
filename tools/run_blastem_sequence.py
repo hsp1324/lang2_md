@@ -34,6 +34,8 @@ MANUAL_SLOT_COMMANDER_COUNT = 10
 MANUAL_SLOT_COMMANDER_CLASS_OFFSET = 0x00
 MANUAL_SLOT_COMMANDER_LEVEL_OFFSET = 0x02
 MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET = 0x03
+MANUAL_SLOT_COMMANDER_AT_OFFSET = 0x04
+MANUAL_SLOT_COMMANDER_DF_OFFSET = 0x05
 GST_WORK_RAM_FILE_OFFSET = 0x2478
 MANUAL_SLOT_WORK_RAM_SEGMENTS = (
     (0xA49C, 0x154),
@@ -354,6 +356,9 @@ def patch_manual_slot_commander_progress(
     experience: int,
     slot_index: int = 0,
     expected_class: int | None = None,
+    new_class: int | None = None,
+    new_at: int | None = None,
+    new_df: int | None = None,
 ) -> tuple[int, int, int]:
     if not 1 <= commander_id <= MANUAL_SLOT_COMMANDER_COUNT:
         raise ValueError(
@@ -363,6 +368,11 @@ def patch_manual_slot_commander_progress(
         raise ValueError("commander level must be 1..10")
     if not 0 <= experience <= 0xFF:
         raise ValueError("commander experience must be 0..255")
+    if new_class is not None and not 0 <= new_class <= 0x9C:
+        raise ValueError("commander class must be 0..156")
+    for label, value in (("AT", new_at), ("DF", new_df)):
+        if value is not None and not 0 <= value <= 99:
+            raise ValueError(f"commander {label} must be 0..99")
 
     # This validates the format marker, slot flag, checksum, and scenario before
     # any byte is changed.
@@ -382,6 +392,12 @@ def patch_manual_slot_commander_progress(
             f"commander {commander_id} class changed: "
             f"0x{current_class:02X} != 0x{expected_class:02X}"
         )
+    if new_class is not None:
+        data[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET] = new_class
+    if new_at is not None:
+        data[record + MANUAL_SLOT_COMMANDER_AT_OFFSET] = new_at
+    if new_df is not None:
+        data[record + MANUAL_SLOT_COMMANDER_DF_OFFSET] = new_df
     data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET] = level
     data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET] = experience
     checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
@@ -834,6 +850,13 @@ def main() -> int:
     parser.add_argument(
         "--manual-slot-expected-class", type=lambda value: int(value, 0)
     )
+    parser.add_argument(
+        "--manual-slot-class",
+        type=lambda value: int(value, 0),
+        help="set the selected commander's class in the recovered manual slot",
+    )
+    parser.add_argument("--manual-slot-at", type=int)
+    parser.add_argument("--manual-slot-df", type=int)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--capture-prefix",
@@ -915,13 +938,31 @@ def main() -> int:
                     args.manual_slot_level,
                     args.manual_slot_experience,
                     expected_class=args.manual_slot_expected_class,
+                    new_class=args.manual_slot_class,
+                    new_at=args.manual_slot_at,
+                    new_df=args.manual_slot_df,
                 )
+            )
+            class_summary = (
+                f"0x{current_class:02X}->0x{args.manual_slot_class:02X}"
+                if args.manual_slot_class is not None
+                else f"0x{current_class:02X}"
             )
             print(
                 f"patched commander {args.manual_slot_commander_id} "
-                f"class 0x{current_class:02X} progress "
+                f"class {class_summary} progress "
                 f"LV{old_level}/EXP{old_experience} -> "
                 f"LV{args.manual_slot_level}/EXP{args.manual_slot_experience}"
+                + (
+                    f", AT {args.manual_slot_at}"
+                    if args.manual_slot_at is not None
+                    else ""
+                )
+                + (
+                    f", DF {args.manual_slot_df}"
+                    if args.manual_slot_df is not None
+                    else ""
+                )
             )
         if args.sequence in scenario_selector_sequences:
             current_scenario_number = manual_slot_scenario_number(sram_path)

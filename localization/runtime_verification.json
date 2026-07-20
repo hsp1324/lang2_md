@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "F9C0",
+  "production_checksum": "F661",
   "states": [
     "pending",
     "historical",
@@ -221,8 +221,8 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_probe",
-      "turn_events": "progressed_current",
-      "completion": "pending",
+      "turn_events": "verified_probe",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/ea22_s03_selector_map.png",
@@ -242,9 +242,25 @@
         "captures/run/489b_s03_description_current_07.png",
         "captures/run/489b_s03_description_current_11.png",
         "captures/run/489b_s03_description_current_14.png",
-        "captures/run/489b_s03_description_current_15.png"
+        "captures/run/489b_s03_description_current_15.png",
+        "captures/run/b2bd_s03_turn3_entry_01.png",
+        "captures/run/b2bd_s03_turn3_entry_05.png",
+        "captures/run/b2bd_s03_turn3_entry_13.png",
+        "captures/run/b2bd_s03_zorum_quote_hit1.png",
+        "captures/run/b2bdv2_s03_enemy8_event_02.png",
+        "captures/run/b2bdv2_s03_after_turn16.png",
+        "captures/run/b2bdv2_s03_vargas_retreat_02.png",
+        "captures/run/b2bdv2_s03_vargas_retreat_04.png",
+        "captures/run/b2bdv2_s03_vargas_retreat_10.png",
+        "captures/run/b2bdv2_s03_vargas_retreat_13.png",
+        "captures/run/b2bdv2_s03_clear_after_result.png",
+        "captures/run/b2bdv2_s03_clear_save_slot2.png",
+        "captures/run/b2bdv2_s03_next_scenario_selected.png",
+        "captures/run/b2bdv2_s04_route.png",
+        "captures/run/af5e_s03_imperial_capture_line.png",
+        "captures/run/af5e_r3_last_enemy_post_3.png"
       ],
-      "note": "Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling frames of 조름의 반격, and the preparation endpoint. The complete Korean description covers the party escaping Zorum's encirclement, its wounds and exhaustion, the pursuing force catching up, and the coming battle without Japanese residue, broken glyphs, clipping, or abnormal spacing. All 24 opening frames were previously visually reviewed on production EA22. First-turn progression entered ENEMY PHASE, displayed the Liana-position choice, and returned to the command menu after eight captured confirmations without reset; later turns and completion remain pending."
+      "note": "Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling frames of 조름의 반격, and the preparation endpoint. The complete Korean description covers the party escaping Zorum's encirclement, its wounds and exhaustion, the pursuing force catching up, and the coming battle without Japanese residue, broken glyphs, clipping, or abnormal spacing. All 24 opening frames were previously visually reviewed on production EA22. Production-derived clear probe B2BD preserves the stock Scenario 3 event and placement logic, removes enemy mercenaries, weakens enemy commanders, and starts Elwin with save-slot AT 99 / DF 96. Live play verified the complete turn-3 Liana/Hein/Scott tutorial chain, Zorum and generic commander combat dialogue, later reinforcement and Vargas events, ordinary Vargas retreat, all post-battle pages, 전과보고 with POINT 1340P, a real 시나리오 4 save in slot 2, 다음 시나리오, and entry to the Scenario 4 route map without Japanese residue, broken UI labels, reset, or freeze. After the two natural-language edits, production F661-derived probe AF5E replayed the stock triggers through Zorum and the pursuing commanders; `제국군지휘관: 가자! 모두 소녀를 잡아라!` and Vargas's `하지만 여기까지다! 소녀는 데려가겠다!` both render cleanly in their natural events. Alternative defeat and nonstandard victory branches remain pending."
     },
     {
       "scenario": 4,

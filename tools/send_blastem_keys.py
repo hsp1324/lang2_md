@@ -13,6 +13,14 @@ from Xlib.protocol import event
 
 
 KEYSYMS = {
+    "0": XK.XK_0,
+    "1": XK.XK_1,
+    "2": XK.XK_2,
+    "3": XK.XK_3,
+    "4": XK.XK_4,
+    "5": XK.XK_5,
+    "6": XK.XK_6,
+    "7": XK.XK_7,
     "enter": XK.XK_Return,
     "start": XK.XK_Return,
     "a": XK.XK_a,

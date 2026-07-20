@@ -6076,7 +6076,64 @@ contains 57 safe syllables as documented below and in
   appeared. `tests/test_title_logo_resource.py` locks the source and current
   hashes, layout decoder, tile bounds, and adjacent-resource preservation.
 - Diagnostics rebuilt from production now identify as forced class application
-  `BE23`, class transition `DCFB`, forced magic capture `C63B`, stock Magic
-  Arrow builder `9661`, summon builder `10DD`, and item-shop inventory `5549`.
+  `BAC4`, class transition `D99C`, forced magic capture `C2DC`, stock Magic
+  Arrow builder `9302`, summon builder `0D7E`, and item-shop inventory `51EA`.
   These checksum changes come from the shared title resource; the probe-specific
   byte-boundary tests still require their gameplay patches to remain unchanged.
+
+### Scenario 3 Ordinary Clear And Save-Slot Stat Patch (2026-07-20)
+
+- `tools/build_scenario3_clear_probe_rom.py` derives diagnostic `B2BD` from
+  production `F9C0`. It validates the Scenario 3 header at `0x1804F8`, the
+  deployment table at `0x180510`, all ten 24-byte fixed records against the
+  Japanese source, and Elwin's original `(16,16)` deployment before changing
+  anything. Only enemy records 2 through 9 are changed: AT `90`, DF `0`, no
+  mercenaries, and nearby initial coordinates. Events and completion code are
+  untouched, and the generated ROM remains ignored.
+- A recovered manual save-slot commander record is 24 bytes. Live-safe fields
+  are class `+0`, level `+2`, EXP `+3`, AT `+4`, and DF `+5`.
+  `tools/run_blastem_sequence.py` now accepts `--manual-slot-class`,
+  `--manual-slot-at`, and `--manual-slot-df`, validates the expected source
+  class and `0..99` stat range, and recomputes the slot checksum. The accepted
+  run used commander 1, class `0x01`, level 1, EXP 0, AT 99, and DF 96.
+- Fixed-record coordinates are not authoritative for scripted reinforcements.
+  Vargas's probe record began at `(16,14)` but the stock event overwrote it to
+  `(2,11)` on spawn; another hidden group was repositioned similarly. A future
+  editor must label fixed deployment separately from event-scripted spawn
+  coordinates instead of presenting one field as the final runtime position.
+- Direct GST loading from both TURN banners and stable command quicksaves reset
+  to the intro/title under this derived ROM. Editing the same live GST fields
+  also reset. Do not use state-load retries here. Reconstruct a checksum-valid
+  SRAM manual slot and change its stat fields before loading instead.
+- BlastEm accepts speed controls `4` for 400% and `0` for 100%. The fast setting
+  was stable for enemy/NPC movement and battle animation; dialogue and accepted
+  captures were returned to 100%. Start-menu rows need distinct Down holds with
+  about 0.6 seconds between them. Important C/Start events were reliable at
+  `0.3..0.5` second holds in the remote WSLg session.
+- Live play defeated Zorum and six imperial commanders, traversed the complete
+  turn-3 Liana/Hein/Scott tutorial chain, later reinforcement/Vargas events,
+  ordinary Vargas retreat, and every post-battle page. Evidence includes
+  `b2bd_s03_turn3_entry_01.png` through `_15.png`,
+  `b2bd_s03_zorum_quote_hit1.png`, `b2bdv2_s03_after_turn16.png`, and
+  `b2bdv2_s03_vargas_retreat_02.png` through `_13.png` under `captures/run`.
+  `b2bdv2_s03_clear_after_result.png` shows `전과보고 / POINT 1340P`,
+  `_clear_save_slot2.png` shows a real `시나리오 4` save, and
+  `_next_scenario_selected.png` followed by `b2bdv2_s04_route.png` proves
+  ordinary Scenario 4 entry without reset or freeze.
+- Runtime review found two needlessly archaic Scenario 3 lines. Event records
+  `0x18964C` and `0x1898F4` now read `가자! 모두 소녀를 잡아라!` and
+  `하지만 여기까지다! 소녀는 데려가겠다!`. The masked knight capture was
+  rechecked at original resolution and already says the natural
+  `길 위에서 조심하십시오`; it was not changed based on a scaled-screen
+  misreading. Exact-text regression assertions prevent the two accepted edits
+  from reverting.
+- Rebuilding after those edits produces production `F661` and Scenario 3 probe
+  `AF5E`. A fresh live replay defeated Zorum and the pursuing commanders to
+  activate the real records rather than a standalone renderer. Evidence
+  `captures/run/af5e_s03_imperial_capture_line.png` visibly renders
+  `제국군지휘관: 가자! 모두 소녀를 잡아라!`, and
+  `captures/run/af5e_r3_last_enemy_post_3.png` visibly renders Vargas's
+  `하지만 여기까지다! 소녀는 데려가겠다!`. Neither page clips, resets, or
+  contains Japanese/broken glyphs. The first launcher attempt exited after an
+  Xlib `BadRRModeError`; a clean no-click relaunch completed the accepted path,
+  so this is host-window handling evidence rather than a ROM reset.
