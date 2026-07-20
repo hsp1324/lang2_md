@@ -37,7 +37,7 @@ class JapaneseInlineByteStringInventoryTests(unittest.TestCase):
 
     def test_discard_prompt_is_owned_but_not_overclaimed_as_live_verified(self):
         prompt = self.result["discard_prompt"]
-        self.assertEqual(prompt["target_korean"], "버릴 아이템 선택")
+        self.assertEqual(prompt["target_korean"], "버릴 아이템")
         self.assertTrue(prompt["hook_installed"])
         self.assertFalse(prompt["live_verified"])
 

@@ -42,7 +42,13 @@ class ItemShopResourceTests(unittest.TestCase):
         overflow_count = len(glyphs) - builder.ITEM_NAME_GLYPH_PRIMARY_COUNT
         self.assertGreater(overflow_count, 0)
         self.assertLessEqual(overflow_count, builder.ITEM_NAME_OVERFLOW_CAPACITY)
-        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT, 0xC000)
+        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT, 0xBF00)
+        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT // 32, 0x5F8)
+        self.assertEqual(builder.ITEM_NAME_OVERFLOW_CAPACITY, 22)
+        self.assertLessEqual(
+            builder.ITEM_NAME_OVERFLOW_VRAM_BASE + overflow_count * 0x80,
+            builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT,
+        )
 
         hook_end = (
             builder.ITEM_NAME_GLYPH_LOAD_HOOK

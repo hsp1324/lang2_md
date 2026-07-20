@@ -119,7 +119,7 @@ class CreditsTests(unittest.TestCase):
         self.assertEqual(second_entry, builder.CREDITS_DEVELOPER_ENTRY)
         self.assertEqual(second_entry[0], builder.CREDITS_RECORD_COUNT - 1)
         self.assertTrue(self.rows[-1].get("synthetic"))
-        self.assertEqual(self.rows[-1]["target_korean"], "한국어화 hsp1324")
+        self.assertEqual(self.rows[-1]["target_korean"], "한국어화 HSP1324")
 
     def test_relocation_does_not_overlap_other_declared_banks(self):
         self.assertGreaterEqual(

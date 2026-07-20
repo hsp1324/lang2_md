@@ -28,7 +28,7 @@
     "source": "0x01807E",
     "hook": "0x01804C",
     "record": "0x2B8400",
-    "target_korean": "버릴 아이템 선택",
+    "target_korean": "버릴 아이템",
     "hook_installed": true,
     "live_verified": false
   },

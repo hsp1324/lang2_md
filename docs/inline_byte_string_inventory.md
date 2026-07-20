@@ -33,7 +33,7 @@ This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF
 
 - `0x01807E` is the 13-cell `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` record. The code at
   `0x01804C` loads it directly and draws exactly 13 cells. Production now
-  redirects that path to `0x2B8400` and renders `버릴 아이템 선택`
+  redirects that path to `0x2B8400` and renders `버릴 아이템`
   through the full byte-UI tile table. Runtime verification is still pending.
 - `0x05E040..0x05E510` is a 77-row hidden sound-test label table.
   39 rows contain half-width Japanese. It is a real

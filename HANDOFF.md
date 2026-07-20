@@ -13,7 +13,7 @@ It writes:
 roms/builds/Langrisser II (Korean JP Probe).md
 ```
 
-## Resume Dashboard (2026-07-19)
+## Resume Dashboard (2026-07-20)
 
 This section is the first stop after a Goal resume or interrupted session. Do
 not restart completed investigations merely because their details also remain
@@ -22,14 +22,14 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 3C57
-last broadly live-verified production checksum: E38B
-custom Hangul glyphs: 865 (0x7000..0x7361)
-unit tests: 410 passing
+current production build checksum: 6C85
+latest targeted live-verified production checksum: 6C85
+custom Hangul glyphs: 864 (0x7000..0x7360)
+unit tests: 467 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
-declared UI patches: 127/128 byte-modified; NPC is intentionally unchanged
+declared UI patches: 131/132 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
 
@@ -53,8 +53,8 @@ glyph bank, or visible screen:
   ownership proof.
 - the original complete-item secret shop list, all 37 Korean names and
   descriptions, prices, and visible icons are accepted. Current diagnostic
-  checksum `97E0` has renderer-aware fingerprint
-  `5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02`;
+  checksum `C80E` has renderer-aware fingerprint
+  `eb1d9aadc20f3a46a8ab3f3b1d7cb757619dbe28551f52d757cce6814027b19c`;
   decoded icon resource 391 remains byte-identical to the Japanese ROM.
 - the equipment/shop UI gap is closed by Scenario 1 buy/sell and empty-slot
   equipment paths, Scenario 25's complete nine-commander equipment selector,
@@ -63,7 +63,7 @@ glyph bank, or visible screen:
   fixed Korean warning `아이템 구입 불가`; the original nine-cell message was
   `これ以上持てません`. The distinct item-award path now shows naturally
   spaced `아이템이 가득 찼습니다` / `하나를 버려주세요`, then renders the
-  five-row `버릴 아이템 선택` UI. Diagnostic `64AD` proves pages 1, 2, and 9,
+  five-row `버릴 아이템` UI. Diagnostic `94DB` proves pages 1 and 9,
   cursor movement, confirmation, and stable return; a natural treasure/event
   trigger remains to be identified if one exists in normal play.
 - compressed resource `391` is now owned as the stock item-icon payload from
@@ -139,7 +139,7 @@ Closed all-item shop checkpoint:
   the two hardcoded list renderers plus the popup stream builder to select the
   matching VRAM base. `0xE000` was rejected after GST inspection proved it is a
   plane/name-table region that gets overwritten with vertical-line data;
-- free-price derivative `4C04` verifies the full last two shop pages and clean
+- historical free-price derivative `4C04` verifies the full last two shop pages and clean
   messages `그레이프니르를 구입함`, `걀라르호른을 구입함`,
   `아뮬렛을 구입함`, plus the low-slot regression `단검을 구입함` in
   `captures/run/2282_item35_list.png`, `_item35_popup.png`,
@@ -6407,3 +6407,51 @@ contains 57 safe syllables as documented below and in
   manual inputs after a clean restart produced the accepted evidence. This is
   a host detector scaling bug, not a ROM reset or command-menu regression;
   normalize captures before fixed-coordinate detection in a later tooling fix.
+
+### Uppercase Project Credit And Selector VRAM Collision (2026-07-20)
+
+- The current title and synthetic final staff-roll records use the requested
+  uppercase ID: `한글화: HSP1324` and `한국어화 HSP1324`. The former custom
+  lowercase `h/p/s` bitmap overrides were removed, so `HSP1324` now uses one
+  coherent stock uppercase/digit font. Production checksum `6C85` is live
+  verified in `captures/run/6c85_title_uppercase_live_3.png`. Older lowercase
+  screenshots remain historical evidence for their checksums, not the current
+  display contract.
+- The mark that looked like `렛` or `렌` before selected preparation rows was
+  not a text token or bad cursor offset. Plane tilemap inspection found the
+  selector at tile `0x5F8`. In the broken Korean GST, tiles `0x5F8..0x5FB`
+  exactly matched custom glyph ID `0x7234` (`뮬`); the Japanese GST contained
+  the stock triangle there. The item-name overflow loader used 24 nominal
+  slots at VRAM `0xB400..0xBFFF`, and glyph index 86 therefore began at
+  `0xBF00`, overwriting selector tiles `0x5F8..0x5FF`.
+- Production now stops the overflow bank at exclusive address `0xBF00`, giving
+  22 safe slots. The dormant discard heading is the shorter `버릴 아이템`,
+  reducing the item-name bank to exactly 86 glyphs (64 primary + 22 overflow)
+  without changing any item name. `선택` remains in the shared local table for
+  sound-test commands and does not enter the item-name overflow bank.
+- Fresh captures `captures/run/6c85_cursor_fixed_prep.png` and
+  `captures/run/6c85_cursor_fixed_arrange.png` show the normal white triangle
+  before `용병고용` and `지휘관배치`; the latter also preserves `SCENARIO 1`.
+  A post-fix GST comparison proves all eight selector tiles `0x5F8..0x5FF`
+  byte-identical to the Japanese runtime. The regression test locks the
+  `0xBF00` boundary, selector tile index, 22-slot capacity, and actual loader
+  end.
+- Because the loader boundary is part of the renderer-aware item fingerprint,
+  the former `97E0` acceptance was not reused. Complete-secret-shop diagnostic
+  `C80E` was freshly captured as `captures/run/c80e_item_id01.png` through
+  `_id37.png`; all names, descriptions, prices, and source icons are intact,
+  including `그레이프니르`, `걀라르호른`, and `아뮬렛`. The accepted new
+  fingerprint is
+  `eb1d9aadc20f3a46a8ab3f3b1d7cb757619dbe28551f52d757cce6814027b19c`;
+  the rebuilt zero-price derivative is `9607`.
+- Discard diagnostic `94DB` reused a copied, isolated full-inventory GST only
+  to avoid repurchasing 40 items. Loading it under the new diagnostic redrew
+  the current `버릴 아이템` heading, navigated from page 1 to page 9, retained
+  normal cursor/page arrows, and returned stably after confirmation. Evidence
+  is `captures/run/94db_discard_reused_state.png`,
+  `94db_discard_page9.png`, and `94db_discard_confirm_return.png`. It is
+  renderer/capacity evidence, not a natural event-award ownership proof.
+- Do not repeat the two discarded cursor experiments. `Cursor Backing Probe`
+  (`5DD7`) blanked preceding glyph-list words and did not change the mark;
+  `Cursor Spacing Probe` (`0192`) moved the label but left the mark intact.
+  They are ignored diagnostics and are not production fixes.

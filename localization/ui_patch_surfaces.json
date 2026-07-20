@@ -1172,7 +1172,7 @@
       "group": "inline_discard_prompt_record",
       "address": "0x2B8400",
       "size_bytes": 13,
-      "target_korean": "버릴 아이템 선택",
+      "target_korean": "버릴 아이템",
       "modified": true,
       "reviewed": true,
       "live_verified": false
@@ -1244,7 +1244,7 @@
       "group": "item_discard_prompt_tokens",
       "address": "0x2B8880",
       "size_bytes": 64,
-      "target_korean": "버릴 아이템 선택",
+      "target_korean": "버릴 아이템",
       "modified": true,
       "reviewed": true,
       "live_verified": true
@@ -1379,7 +1379,7 @@
       "group": "title_credit_render_routine",
       "address": "0x2B7E40",
       "size_bytes": 74,
-      "target_korean": "render copyright and 한글화: hsp1324",
+      "target_korean": "render copyright and 한글화: HSP1324",
       "modified": true,
       "reviewed": true,
       "live_verified": true
@@ -1388,7 +1388,7 @@
       "group": "title_credit_text_record",
       "address": "0x2B7EC0",
       "size_bytes": 24,
-      "target_korean": "한글화: hsp1324",
+      "target_korean": "한글화: HSP1324",
       "modified": true,
       "reviewed": true,
       "live_verified": true

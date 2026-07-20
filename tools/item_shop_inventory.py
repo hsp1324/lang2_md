@@ -31,12 +31,12 @@ ITEM_ICON_RESOURCE_LOAD_BYTES = bytes.fromhex(
     "30 3C 81 87 32 7C 40 00 4E B9 00 00 99 B2"
 )
 ITEM_ICON_BYTES = 37 * 0x80
-ACCEPTED_PROBE_CHECKSUM = 0x97E0
+ACCEPTED_PROBE_CHECKSUM = 0xC80E
 ACCEPTED_ITEM_SURFACE_SHA256 = (
-    "5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02"
+    "eb1d9aadc20f3a46a8ab3f3b1d7cb757619dbe28551f52d757cce6814027b19c"
 )
-ACCEPTED_CAPTURE_PREFIX = "captures/run/97e0_item"
-ACCEPTED_RUNTIME_DERIVATIVE_CHECKSUM = 0x4C04
+ACCEPTED_CAPTURE_PREFIX = "captures/run/c80e_item"
+ACCEPTED_RUNTIME_DERIVATIVE_CHECKSUM = 0x9607
 PRIOR_FULL_MATRIX_CHECKSUM = 0xD304
 
 ITEM_BYTE_POINTER_TABLE_SHA256 = (
@@ -320,11 +320,12 @@ def markdown_report(result: dict[str, object]) -> str:
     accepted = result["runtime_probe"]["status"] == "accepted"
     review_line = (
         f"Checksum `{accepted_checksum}` has the accepted renderer-aware item-surface "
-        f"fingerprint; current checksum `{probe_checksum}` matches it. The earlier "
-        f"`{result['runtime_probe']['prior_full_matrix_checksum']}` run covers all 37 "
-        f"rows, and price-only runtime derivative "
-        f"`{result['runtime_probe']['runtime_derivative_checksum']}` rechecks the late "
-        f"name lists and purchase popups."
+        f"fingerprint; current checksum `{probe_checksum}` matches it and its capture "
+        f"set covers all 37 rows. Historical checksum "
+        f"`{result['runtime_probe']['prior_full_matrix_checksum']}` remains earlier "
+        f"evidence. The current zero-price capacity derivative is "
+        f"`{result['runtime_probe']['runtime_derivative_checksum']}`; it is a "
+        f"diagnostic identifier, not the matrix acceptance itself."
         if accepted
         else f"Checksum `{probe_checksum}` still requires row-by-row capture."
     )

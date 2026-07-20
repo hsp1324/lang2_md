@@ -67,14 +67,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "39BD")
+        self.assertEqual(data["production_checksum"], "6C85")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
         self.assertEqual(title["state"], "verified_current")
-        self.assertEqual(title["checksum"], "F9C0")
+        self.assertEqual(title["checksum"], "6C85")
         self.assertIn(
-            "captures/run/f9c0_title_logo_menu.png", title["captures"]
+            "captures/run/6c85_title_uppercase_live_3.png", title["captures"]
         )
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]

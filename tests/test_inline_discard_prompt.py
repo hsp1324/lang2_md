@@ -33,7 +33,7 @@ class InlineDiscardPromptTests(unittest.TestCase):
     def test_builder_declares_the_full_inline_record(self):
         self.assertEqual(builder.INLINE_DISCARD_PROMPT_SOURCE, PROMPT)
         self.assertEqual(builder.INLINE_DISCARD_PROMPT_WIDTH, WIDTH)
-        self.assertEqual(builder.INLINE_DISCARD_PROMPT_TEXT, "버릴 아이템 선택")
+        self.assertEqual(builder.INLINE_DISCARD_PROMPT_TEXT, "버릴 아이템")
 
     def test_korean_record_uses_full_local_tile_indexes(self):
         working = bytearray(self.japanese)

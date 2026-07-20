@@ -115,7 +115,10 @@ ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("36 78 90 4C 36 3C")
 ITEM_DISCARD_LIST_RENDER_ROUTINE = 0x2B8600
 ITEM_DISCARD_LIST_RENDER_ROUTINE_LIMIT = 0x2B8800
 ITEM_NAME_OVERFLOW_VRAM_BASE = 0xB400
-ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xC000
+# The generic window selector occupies tiles 0x5F8..0x5FF (VRAM byte address
+# 0xBF00..0xBFFF). Loading item-name overflow glyphs there turns its triangle
+# into the last item-name syllables on preparation and arrangement menus.
+ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xBF00
 ITEM_NAME_OVERFLOW_CAPACITY = (
     ITEM_NAME_OVERFLOW_VRAM_LIMIT - ITEM_NAME_OVERFLOW_VRAM_BASE
 ) // 0x80
@@ -165,7 +168,7 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
 )
 # The first title screen uses the base 8x8 font directly. Load this
 # title-specific contiguous slice after the normal font so the Korean credit
-# can use Hangul and lowercase ID glyphs without permanently stealing the
+# can use Hangul and the localized menu glyphs without permanently stealing the
 # gameplay mappings at J/Q/W or the live lowercase terrain/icon slots.
 TITLE_CREDIT_TILE_START = 0x3A
 TITLE_CREDIT_TILE_END = 0x73
@@ -182,45 +185,8 @@ TITLE_CREDIT_TILE_OVERRIDES = {
     0x65: "러",
     0x66: "오",
     0x67: "기",
-    0x68: "h",
-    0x70: "p",
-    0x73: "s",
 }
-TITLE_CREDIT_BITMAP_OVERRIDES = {
-    # The stock lowercase slots are terrain/icon fragments, not a coherent
-    # Latin font. Keep the requested lowercase ID but match the title's thick
-    # uppercase/digit strokes and seven-row baseline.
-    0x68: (
-        ".##.....",
-        ".##.....",
-        ".##.....",
-        ".#####..",
-        ".##..##.",
-        ".##..##.",
-        ".##..##.",
-        "........",
-    ),
-    0x70: (
-        "........",
-        ".#####..",
-        ".##..##.",
-        ".##..##.",
-        ".#####..",
-        ".##.....",
-        ".##.....",
-        "........",
-    ),
-    0x73: (
-        "........",
-        "..####..",
-        ".##.....",
-        "..###...",
-        "....##..",
-        ".##.##..",
-        "..###...",
-        "........",
-    ),
-}
+TITLE_CREDIT_BITMAP_OVERRIDES = {}
 TITLE_CREDIT_RESOURCE_INDEX = (
     BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS)
 )
@@ -468,7 +434,7 @@ INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL = bytes.fromhex("45 F9 00 01 80 7E")
 INLINE_DISCARD_PROMPT_SOURCE = 0x01807E
 INLINE_DISCARD_PROMPT_SOURCE_BYTES = "ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ".encode("cp932")
 INLINE_DISCARD_PROMPT_WIDTH = 13
-INLINE_DISCARD_PROMPT_TEXT = "버릴 아이템 선택"
+INLINE_DISCARD_PROMPT_TEXT = "버릴 아이템"
 SOUND_TEST_SOURCE_TABLE = 0x05E040
 SOUND_TEST_ROW_COUNT = 77
 SOUND_TEST_ROW_SIZE = 16
@@ -497,9 +463,9 @@ TITLE_CREDIT_FONT_LOAD_HOOK = 0x02D66A
 TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL = bytes.fromhex("30 3C 81 89 32 7C 20 00")
 TITLE_COPYRIGHT_RENDER_HOOK = 0x02D712
 TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL = bytes.fromhex("22 78 81 C4 32 3C 80 00")
-TITLE_CREDIT_TEXT = "한글화: hsp1324"
+TITLE_CREDIT_TEXT = "한글화: HSP1324"
 TITLE_CREDIT_TEXT_BYTES = bytes(
-    [0x4A, 0x51, 0x57, 0x3A, 0x00, 0x68, 0x73, 0x70, 0x31, 0x33, 0x32, 0x34]
+    [0x4A, 0x51, 0x57, 0x3A, 0x00, 0x48, 0x53, 0x50, 0x31, 0x33, 0x32, 0x34]
 )
 TITLE_CREDIT_RECORD_BYTES = (
     bytes.fromhex("00 02 00 0C 00 01 F8 00 F9 00 FA")
@@ -4473,8 +4439,9 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
 
     # VRAM 0x2000..0x3FFF holds exactly 64 16x16 glyphs; item icons begin at
     # 0x4000. Keep the stock window intact and load later name glyphs into the
-    # 24-slot gap at 0xB400..0xBFFF after the item-description bank. The purchase
-    # popup builder explicitly selects the matching bank for every name token.
+    # 22 safe slots at 0xB400..0xBEFF after the item-description bank. Tiles
+    # 0x5F8..0x5FF at 0xBF00 hold the generic window selector and must survive.
+    # The purchase popup explicitly selects the matching bank for every token.
     loader = _build_item_name_glyph_load_routine(len(item_glyphs))
     popup_builder = _build_item_name_popup_stream_routine()
     list_renderers = [
@@ -5299,9 +5266,12 @@ def build_byte_ui_local_mapping(
     # unique `일` glyph cannot renumber any proven commander/class tile.
     texts.append(ILLUSION_CLASS_LABEL)
     # This fixed-width inline prompt is rendered by a dedicated local-index
-    # routine. Append it after all established class/name labels so its two
-    # new glyphs cannot renumber any previously verified mapping.
+    # routine. Append it after all established class/name labels.
     texts.append(INLINE_DISCARD_PROMPT_TEXT)
+    # Sound-test rows use the same local tile table. Keep its command glyphs
+    # after the shortened discard heading so the established mapping order is
+    # identical to the former `버릴 아이템 선택` record.
+    texts.append("선택")
     chars = [" ", *collect_chars(*texts)]
     extension_tiles = [
         tile

@@ -499,7 +499,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "title_credit_render_routine",
             builder.TITLE_CREDIT_RENDER_ROUTINE,
             len(builder._build_title_credit_renderer()),
-            "render copyright and 한글화: hsp1324",
+            "render copyright and 한글화: HSP1324",
         ),
         (
             "title_credit_text_record",

@@ -18,17 +18,18 @@ follow this status table so a resume does not repeat already accepted work.
 | 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
 | 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the six UI gaps are resolved or explicitly accepted. |
 
-Stage 2 complete-item checkpoint is closed. Production checksum `2282` splits
-the 84 item-name glyphs at the stock 64-slot VRAM boundary: slots `0..63` stay
-at `0x2000`, while slots `64..83` use the free `0xB400..0xBDFF` range before
-the plane table at `0xC000`. Both shop-list renderers and the purchase-popup
-builder select the correct bank, so late names and messages no longer turn into
-item icons. Diagnostic checksum `7E0B` has the renderer-aware accepted surface
-fingerprint; price-only derivative `4C04` verifies `그레이프니르`,
-`걀라르호른`, `아뮬렛`, and the `단검` regression in BlastEm. The earlier
-`D304` capture set still covers all 37 descriptions, prices/stat lines, and
-visible icons. Decoded icon resource 391 remains byte-identical to the Japanese
-ROM. Resume Stage 2 only from the six gaps in
+Stage 2 complete-item checkpoint is closed. Production checksum `6C85` splits
+the 86 item-name glyphs at the stock 64-slot VRAM boundary: slots `0..63` stay
+at `0x2000`, while slots `64..85` use `0xB400..0xBEFF`. The exclusive
+`0xBF00` limit preserves the stock selector tiles `0x5F8..0x5FF`. Both
+shop-list renderers and the purchase-popup builder select the correct bank, so
+late names and messages no longer turn into item icons. Diagnostic checksum
+`C80E` has accepted renderer-aware fingerprint
+`eb1d9aadc20f3a46a8ab3f3b1d7cb757619dbe28551f52d757cce6814027b19c`;
+its 37 captures verify every item from 단검 through 아뮬렛. Free-price
+derivative `9607` and discard diagnostic `94DB` retain the capacity paths.
+Decoded icon resource 391 remains byte-identical to the Japanese ROM. Resume
+Stage 2 only from the six gaps in
 `docs/ui_patch_surface_inventory.md`.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run

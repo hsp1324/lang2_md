@@ -85,6 +85,27 @@ class TitleMainScreenTests(unittest.TestCase):
         )
 
     def test_credit_hooks_and_record_are_installed_in_production_rom(self):
+        self.assertEqual(builder.TITLE_CREDIT_TEXT, "한글화: HSP1324")
+        self.assertEqual(
+            builder.TITLE_CREDIT_TEXT_BYTES,
+            bytes(
+                [
+                    0x4A,
+                    0x51,
+                    0x57,
+                    0x3A,
+                    0x00,
+                    0x48,
+                    0x53,
+                    0x50,
+                    0x31,
+                    0x33,
+                    0x32,
+                    0x34,
+                ]
+            ),
+        )
+        self.assertEqual(builder.TITLE_CREDIT_BITMAP_OVERRIDES, {})
         self.assertEqual(
             self.ko[
                 builder.TITLE_CREDIT_FONT_LOAD_HOOK :

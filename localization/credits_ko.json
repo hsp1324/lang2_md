@@ -63,6 +63,6 @@
     {"source_address":"0x0A3736","source_japanese":"ディレクター","target_korean":"디렉터"},
     {"source_address":"0x0A3744","source_japanese":"高田 慎二郎","target_korean":"다카다 신지로","romanization":"Shinjiro Takata"},
     {"source_address":"0x0A3752","source_japanese":"COPYRIGHT 1994 NCS","target_korean":"COPYRIGHT 1994 NCS","preserve_original":true},
-    {"synthetic":true,"target_korean":"한국어화 hsp1324","credit_role":"Korean localization developer"}
+    {"synthetic":true,"target_korean":"한국어화 HSP1324","credit_role":"Korean localization developer"}
   ]
 }
