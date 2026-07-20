@@ -218,6 +218,27 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario4["captures"])
         self.assertEqual(scenario4["turn_events"], "progressed_current")
+        self.assertEqual(scenario4["completion"], "verified_probe")
+        for capture in (
+            "captures/run/79dd_s04_selector_entry.png",
+            "captures/run/79dd_s04_prep.png",
+            "captures/run/79dd_s04_arrange.png",
+            "captures/run/79dd_s04_sortie.png",
+            "captures/run/79dd_s04_opening_16.png",
+            "captures/run/79dd_s04_after_morgan_attack.png",
+            "captures/run/79dd_s04_post_01.png",
+            "captures/run/79dd_s04_post_08.png",
+            "captures/run/79dd_s04_post_16.png",
+            "captures/run/79dd_s04_post_34.png",
+            "captures/run/79dd_s04_post_37.png",
+            "captures/run/79dd_s04_post_39.png",
+            "captures/run/79dd_s04_post_40.png",
+            "captures/run/79dd_s04_post_41.png",
+            "captures/run/79dd_s04_next_scenario.png",
+        ):
+            self.assertIn(capture, scenario4["captures"])
+        self.assertIn("moving only Elwin's first deployment", scenario4["note"])
+        self.assertIn("Later-turn mind-control", scenario4["note"])
         self.assertEqual(scenario5["preparation"], "verified_current")
         self.assertEqual(scenario5["description"], "verified_current")
         for capture in (

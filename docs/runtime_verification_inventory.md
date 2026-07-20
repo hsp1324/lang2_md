@@ -14,7 +14,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 1 | current | current | current | current | probe | current | probe | pending | 28 |
 | 2 | current | current | current | current | current | current | probe | pending | 38 |
 | 3 | current | current | current | current | probe | probe | probe | pending | 34 |
-| 4 | current | current | current | current | probe | progressed | pending | pending | 20 |
+| 4 | current | current | current | current | probe | progressed | probe | pending | 36 |
 | 5 | current | current | current | current | probe | progressed | pending | pending | 22 |
 | 6 | current | current | current | current | current | progressed | pending | pending | 25 |
 | 7 | current | current | current | current | current | progressed | pending | pending | 29 |
@@ -162,7 +162,7 @@ Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling
 
 ### Scenario 4
 
-Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling frames of 빛의 신전, and the preparation endpoint. The complete Korean description consistently covers the mysterious knight, Vargas's defeat, the Temple of Light, and the Rayguard Black Dragon Sorcerers' attack without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified all 26 opening confirmations, condition rows, and text-bearing frames from the 93-confirmation first-turn path; the route returned to a valid command menu without reset. Later turns and completion remain pending.
+Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling frames of 빛의 신전, and the preparation endpoint. The complete Korean description consistently covers the mysterious knight, Vargas's defeat, the Temple of Light, and the Rayguard Black Dragon Sorcerers' attack without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified all 26 opening confirmations, condition rows, and text-bearing frames from the 93-confirmation first-turn path; the route returned to a valid command menu without reset. Production F661-derived clear probe 79DD validates the Japanese header, deployment table, and all eleven fixed records before moving only Elwin's first deployment from (7,38) to (7,22) and removing only Morgan's AT/DF and mercenaries at the original (7,21). Live play re-entered Scenario 4, rendered the preparation and SCENARIO 4 deployment UI, traversed the stock opening, defeated Morgan in a real battle, and reviewed the complete successful post-battle path through the mystery knight, Sherry recruitment, Cross reward, 전과보고 with POINT 1280P, a real 시나리오 5 save, 다음 시나리오, and the Scenario 5 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. Later-turn mind-control, NPC-loss, defeat, and other conditional branches remain pending.
 
 - `captures/run/f03a_s04_selector_map.png`
 - `captures/run/f03a_s04_brief_live_01.png`
@@ -184,6 +184,22 @@ Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling
 - `captures/run/489b_s04_description_current_12.png`
 - `captures/run/489b_s04_description_current_13.png`
 - `captures/run/489b_s04_description_current_14.png`
+- `captures/run/79dd_s04_selector_entry.png`
+- `captures/run/79dd_s04_prep.png`
+- `captures/run/79dd_s04_arrange.png`
+- `captures/run/79dd_s04_sortie.png`
+- `captures/run/79dd_s04_opening_16.png`
+- `captures/run/79dd_s04_opening_current2.png`
+- `captures/run/79dd_s04_after_morgan_attack.png`
+- `captures/run/79dd_s04_post_01.png`
+- `captures/run/79dd_s04_post_08.png`
+- `captures/run/79dd_s04_post_16.png`
+- `captures/run/79dd_s04_post_34.png`
+- `captures/run/79dd_s04_post_37.png`
+- `captures/run/79dd_s04_post_39.png`
+- `captures/run/79dd_s04_post_40.png`
+- `captures/run/79dd_s04_post_41.png`
+- `captures/run/79dd_s04_next_scenario.png`
 
 ### Scenario 5
 

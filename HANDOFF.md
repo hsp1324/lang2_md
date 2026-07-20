@@ -6137,3 +6137,33 @@ contains 57 safe syllables as documented below and in
   contains Japanese/broken glyphs. The first launcher attempt exited after an
   Xlib `BadRRModeError`; a clean no-click relaunch completed the accepted path,
   so this is host-window handling evidence rather than a ROM reset.
+
+### Scenario 4 Ordinary Clear (2026-07-20)
+
+- `tools/build_scenario4_clear_probe_rom.py` derives diagnostic `79DD` from
+  production `F661`. It validates the Japanese Scenario 4 header at
+  `0x180688`, deployment table at `0x1806A0`, and all eleven 36-byte fixed
+  records before changing anything. Only Elwin's first deployment moves from
+  `(7,38)` to `(7,22)`. Morgan remains the original name/class/level and stays
+  at `(7,21)`; only his AT/DF become zero and his six mercenary slots become
+  empty. NPCs, other commanders, events, completion logic, and rewards are
+  untouched. The probe ROM is ignored.
+- A recovered manual slot entered Scenario 4 through the stock selector with
+  Elwin AT 99 / DF 96. Live captures verify the current briefing,
+  `SCENARIO 4` deployment label, preparation panel, stock opening, and command
+  UI. The adjacent Morgan was defeated through the normal attack command, not
+  an event or RAM flag edit. `captures/run/79dd_s04_after_morgan_attack.png`
+  and `_post_01.png` show the real battle and Morgan response.
+- Frames `79dd_s04_post_00.png` through `_40.png` cover the complete successful
+  post-battle sequence: the mystery knight pursues the enemy, Sherry joins,
+  the priests survive, the Cross is awarded, and the party prepares to pursue
+  Morgan. Names, classes, portraits, status bars, and dialogue render without
+  Japanese residue or broken glyphs. `79dd_s04_post_40.png` shows
+  `전과보고 / POINT 1280P`; `_post_41.png` shows a real `시나리오 5` save,
+  and `79dd_s04_next_scenario.png` proves stock Scenario 5 route-map entry
+  without reset or freeze.
+- This verifies the ordinary successful completion only. Immediate Morgan
+  defeat intentionally bypasses later-turn mind control, priest/NPC loss,
+  defeat, and other conditional paths. Scenario 4 `turn_events` therefore
+  remains `progressed_current`, and `branches_endings` remains pending rather
+  than being promoted from this clear probe.
