@@ -290,6 +290,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             self.assertIn(capture, scenario6["captures"])
         self.assertEqual(scenario6["battle_ui"], "verified_current")
         self.assertEqual(scenario6["turn_events"], "progressed_current")
+        self.assertEqual(scenario6["completion"], "verified_probe")
+        for capture in (
+            "captures/run/5b6b_s06_prep_08.png",
+            "captures/run/5b6b_s06_opening_15.png",
+            "captures/run/5b6b_s06_t1_hein_panel6.png",
+            "captures/run/5b6b_s06_t1_liana_panel.png",
+            "captures/run/5b6b_s06_t1_sherry_panel.png",
+            "captures/run/5b6b_s06_victory_27.png",
+            "captures/run/5b6b_s06_victory_37.png",
+            "captures/run/5b6b_s06_victory_38.png",
+            "captures/run/5b6b_s06_victory_40.png",
+            "captures/run/5b6b_s06_next_scenario.png",
+        ):
+            self.assertIn(capture, scenario6["captures"])
+        self.assertIn("all thirteen fixed records", scenario6["note"])
+        self.assertIn("Amulet reward", scenario6["note"])
+        self.assertIn("Civilian-loss/no-Amulet", scenario6["note"])
         self.assertEqual(scenario7["opening_events"], "verified_current")
         self.assertEqual(scenario7["description"], "verified_current")
         for capture in (

@@ -6222,3 +6222,53 @@ contains 57 safe syllables as documented below and in
 - Scenario 5 `completion` is now `verified_probe`. Enemy-annihilation victory,
   later turns, defeat branches, and the remaining commander hire lists stay
   pending and must not be conflated with this north-exit evidence.
+
+### Scenario 6 Civilian-Safe Completion (2026-07-20)
+
+- The Japanese Scenario 6 header is `0x1809B4`, the deployment table is
+  `0x1809D0`, and the fixed list at `0x1809E6` contains thirteen 36-byte
+  records beginning at `0x1809E8`. Records 0..3 are Aaron and the three
+  resident NPCs; records 4..12 are enemy commanders. The first stock Elwin
+  deployment remains `(4,26)`.
+- `tools/build_scenario6_clear_probe_rom.py` derives diagnostic `5B6B` from
+  production `39BD`. It validates the Japanese and input layouts plus every
+  enemy record before changing anything. Allied/NPC records 0..3 and all
+  events remain byte-identical. Enemy records 4..12 receive AT 0, DF 0, and
+  empty mercenary slots. Visible records 4..11 move to `(4,25)`, `(7,26)`,
+  `(9,28)`, `(11,26)`, `(15,26)`, `(4,27)`, `(7,28)`, and `(9,30)` so every
+  diagnostic placement is cardinally adjacent to a stock player deployment.
+  Hidden record 12 retains `(255,255)` and its original event state. Five
+  tests lock the allowed change surface and checksum.
+- A fresh live path entered Scenario 6 through the stock selector and crossed
+  the current briefing, preparation, automatic arrangement, opening, and
+  command UI. Normal attack commands defeated all visible enemies while all
+  three residents survived. Captures verify Hein/Warlock, Liana/Cleric, and
+  Sherry/Ranger and later Lord without broken names, classes, AT/DF labels, or
+  Japanese residue. Sherry's level-triggered class change is a real stock
+  transition, not a probe patch.
+- The complete successful aftermath is retained as
+  `captures/run/5b6b_s06_victory_01.png` through `_40.png`. It covers the
+  Aaron/Sherry reunion, Alhazard manuscript discussion, residents thanking
+  the party, `아뮬렛을 얻었다!`, and all result transitions.
+  `5b6b_s06_victory_37.png` shows `전과보고 / POINT 2050P`, `_38.png` and
+  `_40.png` show a real `시나리오 7` save, and
+  `5b6b_s06_next_scenario.png` proves Scenario 7 route-map entry without reset
+  or freeze. Scenario 6 `completion` is now `verified_probe`; civilian-loss,
+  no-Amulet, defeat, and later conditional paths remain pending.
+- Read-only GST inspection established the current battle-record layout used
+  by later editor work: work RAM base `0x603C`, record size `0x60`, position at
+  `+0x06/+0x07`, and defeated flag bit `0x80` at `+0x02`. Player records are
+  runtime 0..4 and Scenario 6 fixed records map to runtime 5..17. This mapping
+  was used only to locate the final live enemies; no completion or event flag
+  was modified.
+- Do not repeat direct GST stat writes. Editing `+0x3A/+0x3B` in a quicksave
+  appeared to load but the next input reset into the opening sequence, so the
+  untouched backup was restored and the run restarted. Validated SRAM roster
+  patching before launch remained stable. Also note that `detect-command`
+  cannot recognize Sherry's reduced four-row post-class-change command menu;
+  it toggles the panel until stopped. Exit that panel manually before invoking
+  the detector again.
+- The shared level-up surface visibly renders `레벨이올랐다` without the
+  intended space even though source `0x82ACE` is `레벨이 올랐다.`. This is a
+  renderer/composition follow-up, not evidence of missing Scenario 6 dialogue,
+  and remains open for a focused shared-UI fix.
