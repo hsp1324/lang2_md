@@ -79,6 +79,11 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
                 expected_spaces,
             )
 
+    def test_level_up_stat_labels_reuse_native_latin_glyphs(self):
+        for address, (_, prefix_words) in builder.SYSTEM_MESSAGE_NATIVE_PREFIX_WORDS.items():
+            actual = builder.read_word_list(self.korean, address)
+            self.assertEqual(tuple(actual[: len(prefix_words)]), prefix_words)
+
     def test_system_message_patch_rejects_changed_source(self):
         data = bytearray(self.japanese)
         data[0x082ACE] ^= 1

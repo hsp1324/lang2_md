@@ -1488,6 +1488,15 @@ SYSTEM_MESSAGE_EXPECTED_WORDS = {
     0x082B90: (0x008A, 0x00A7, 0x00A8, 0x0099, 0x0092, 0x0099, 0x0064, 0x006C),
 }
 
+# The level-up renderer already owns stable full-width Latin glyphs for these
+# stat labels. Reuse the Japanese source tokens so the labels cannot collide
+# with the animated byte-font/custom-glyph banks.
+SYSTEM_MESSAGE_NATIVE_PREFIX_WORDS = {
+    0x082AE2: ("AT", (0x006D, 0x006E)),
+    0x082AEA: ("DF", (0x005F, 0x0097)),
+    0x082AF2: ("MP", (0x00AB, 0x0070)),
+}
+
 # These strings established glyph IDs before the live spacing cleanup. Keep
 # their vocabulary in the same collection position so unrelated item, name,
 # and UI glyph lists remain byte-stable while the emitted system text changes.
@@ -2141,6 +2150,15 @@ def direct_string_capacity_words(data: bytes | bytearray, offset: int) -> int:
 
 def write_direct_string(data: bytearray, offset: int, text: str, glyph_by_char: dict[str, int]) -> None:
     values = []
+    native_prefix = SYSTEM_MESSAGE_NATIVE_PREFIX_WORDS.get(offset)
+    if native_prefix is not None:
+        prefix_text, prefix_words = native_prefix
+        if not text.startswith(prefix_text):
+            raise ValueError(
+                f"system message at 0x{offset:06X} must start with {prefix_text!r}"
+            )
+        values.extend(prefix_words)
+        text = text[len(prefix_text) :]
     for char in text:
         if char == " ":
             if offset in SYSTEM_MESSAGE_EXPECTED_WORDS:

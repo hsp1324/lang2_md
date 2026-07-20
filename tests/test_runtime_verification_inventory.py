@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "6C85")
+        self.assertEqual(data["production_checksum"], "33EF")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -400,13 +400,19 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/d3e8_s10_description_final_15.png",
             "captures/run/d3e8_s10_description_final_19.png",
             "captures/run/d3e8_s10_description_final_20.png",
+            "captures/run/4591_s10_victory_17.png",
+            "captures/run/4591_s10_victory_19.png",
+            "captures/run/4591_s11_route_entry2.png",
         ):
             self.assertIn(capture, scenario10["captures"])
         self.assertEqual(scenario10["conditions"], "verified_current")
         self.assertEqual(scenario10["preparation"], "verified_current")
         self.assertEqual(scenario10["opening_events"], "verified_current")
         self.assertEqual(scenario10["battle_ui"], "verified_probe")
-        self.assertEqual(scenario10["turn_events"], "progressed_current")
+        self.assertEqual(scenario10["turn_events"], "verified_probe")
+        self.assertEqual(scenario10["completion"], "verified_probe")
+        self.assertIn("all ten hidden turn-event monster records", scenario10["note"])
+        self.assertIn("POINT 2470P", scenario10["note"])
         self.assertEqual(scenario11["description"], "verified_current")
         for capture in (
             "captures/run/466a_s11_description_final_01.png",

@@ -761,10 +761,13 @@ def preparation_screen_visible(path: Path) -> bool:
     )
 
 
-def capture_window(path: Path) -> None:
+def capture_window(path: Path, *, xlib_only: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    command = [sys.executable, str(CAPTURE_WINDOW), str(path)]
+    if xlib_only:
+        command.append("--xlib-only")
     subprocess.check_call(
-        [sys.executable, str(CAPTURE_WINDOW), str(path)],
+        command,
         cwd=ROOT,
         stdout=subprocess.DEVNULL,
     )
@@ -783,7 +786,7 @@ def advance_to_preparation_screen(args: argparse.Namespace) -> int:
     probe = LOG_ROOT / "preparation_probe.png"
     for step in range(args.max_confirmations + 1):
         frame = detection_capture_path(args, probe, step)
-        capture_window(frame)
+        capture_window(frame, xlib_only=args.xlib_capture)
         if preparation_screen_visible(frame):
             print(f"preparation screen detected after {step} confirmations")
             return 0
@@ -809,13 +812,13 @@ def advance_to_battle_command(args: argparse.Namespace) -> int:
         if status:
             return status
         frame = detection_capture_path(args, probe, step)
-        capture_window(frame)
+        capture_window(frame, xlib_only=args.xlib_capture)
         if game_over_visible(frame):
             print(f"game over detected after {step} confirmations")
             return 2
         if battle_command_menu_visible(frame):
             time.sleep(2.0)
-            capture_window(frame)
+            capture_window(frame, xlib_only=args.xlib_capture)
             if battle_command_menu_visible(frame):
                 print(f"battle command menu detected after {step} confirmations")
                 return 0
@@ -847,6 +850,14 @@ def main() -> int:
         help="seconds to wait after each detector C press (use 2+ for full dialogue text)",
     )
     parser.add_argument("--click-window", action="store_true")
+    parser.add_argument(
+        "--xlib-capture",
+        action="store_true",
+        help=(
+            "capture the BlastEm X11 client directly so detection remains "
+            "valid while another Windows application covers the emulator"
+        ),
+    )
     parser.add_argument(
         "--replace-existing",
         action="store_true",

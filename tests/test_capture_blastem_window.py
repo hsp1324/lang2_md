@@ -69,6 +69,15 @@ class CaptureBlastemWindowTests(unittest.TestCase):
         self.assertNotIn("--allow-focus-steal", command)
         self.assertNotIn("--print-window", command)
 
+    @mock.patch("tools.run_blastem_sequence.subprocess.check_call")
+    def test_sequence_capture_can_request_occlusion_safe_xlib(self, check_call):
+        output = Path("captures/run/detector.png")
+        run_blastem_sequence.capture_window(output, xlib_only=True)
+
+        command = check_call.call_args.args[0]
+        self.assertIn("--xlib-only", command)
+        self.assertNotIn("--allow-focus-steal", command)
+
 
 if __name__ == "__main__":
     unittest.main()

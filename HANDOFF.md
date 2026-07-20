@@ -6473,3 +6473,67 @@ contains 57 safe syllables as documented below and in
   Scenario 9 command captures while rejecting Scenario 9 dialogue,
   preparation, result, and route/title captures. This is host automation only;
   it changes no ROM byte.
+
+### Scenario 10 Monster Clear And Editor Mapping (2026-07-21)
+
+- The Japanese Scenario 10 header is `0x181186`, its deployment pointer at
+  header `+0x08` resolves to `0x1811A2`, and the first stock Elwin deployment
+  is `(5,28)`. The fixed list contains thirteen `0x24`-byte records beginning
+  at `0x1811BA`: two pirates and Lester at indices 0..2, five Scylla at 3..7,
+  three Great Slime at 8/10/12, and two Werewolf at 9/11. Monster source
+  coordinates are hidden `(255,255)` until the stock event places them.
+- Read-only GST inspection maps Scenario 10 fixed records 0..12 to runtime
+  commander groups 5..17 at work RAM `0x603C + group*0x60`; player groups are
+  0..4. Runtime class IDs are `0x53` Scylla, `0x51` Great Slime, and `0x50`
+  Werewolf. The stock TURN 3 event placed groups 8..17 at `(17,14)`, `(5,20)`,
+  `(7,21)`, `(27,17)`, `(25,21)`, `(28,28)`, `(14,29)`, `(4,29)`, `(22,30)`,
+  and `(12,30)` before their normal AI movement. These are the verified
+  scenario/editor ownership facts; summon members remain separate member
+  records and must not be exposed as commanders.
+- Diagnostic `4591`, derived from production `6C85`, changed only monster
+  AT/DF, their six mercenary slots, Elwin's initial deployment, and the ROM
+  checksum. It did not alter an event or completion flag. The real TURN 3
+  spawn occurred, normal player attacks killed four nearby monster
+  commanders, and the unmodified pirate AI killed the remaining Scylla while
+  they had AT/DF zero. The final normal Elwin attack defeated the last Great
+  Slime. Captures `4591_s10_monster_spawn_dialogue.png` through
+  `4591_s10_victory_16.png` retain the complete later-turn and victory path;
+  `_victory_17.png` is `전과보고 / POINT 2470P`, `_victory_19.png` is the real
+  `시나리오 11` save, and `4591_s11_route_entry2.png` proves route entry
+  without reset or freeze. Scenario 10 `turn_events` and `completion` are now
+  `verified_probe`; defeat, pirate-loss, retreat, and other conditional paths
+  remain pending.
+- The accepted run exposed orphan punctuation/word wrapping in four records.
+  Production shortens `0x1960AC`, `0x1960D4`, `0x196DE4`, and `0x196F1E` so a
+  period/question mark or the final syllable of `한다` cannot occupy a line by
+  itself. It also exposed corrupted first Latin glyphs in shared level-up
+  `AT가/DF가/MP가`. The direct renderer already owns stable Japanese-source
+  Latin tokens, so production `33EF` reuses `006D 006E`, `005F 0097`, and
+  `00AB 0070` respectively and appends only the Korean `가`. Tests lock the
+  native prefixes; live post-level verification of `33EF` remains pending.
+- `tools/build_scenario10_clear_probe_rom.py` is now narrower than the accepted
+  exploratory run. It validates the complete Japanese/input layout and every
+  monster record, preserves stock deployment and all events, and changes only
+  monster AT/DF plus their mercenary slots. Against production `33EF` it builds
+  ignored diagnostic checksum `0CF8`. Do not reintroduce the `(10,26)` Elwin
+  deployment: live play proved the monster reveal is the fixed TURN 3 event,
+  not a movement trigger.
+- Do not repeat direct GST stat/event writes. The working method was a fresh
+  ROM path plus source-validated diagnostic records. Save-state editing can
+  load under a mismatched callback and reset at the next input, so GST was used
+  only for read-only record/coordinate inspection and ordinary quicksave
+  recovery.
+
+### Occlusion-Safe BlastEm Capture (2026-07-21)
+
+- Standard desktop screenshots captured Chrome whenever it covered BlastEm.
+  `capture_blastem_window.py --xlib-only` reads the BlastEm X11 client directly
+  and remained correct while the window was fully occluded. The sequence
+  runner now exposes `--xlib-capture` and forwards it to every detector/capture
+  call; `--send-event` keeps emulator input window-local without stealing the
+  user's foreground focus. Tests cover that forwarding path.
+- Fresh BlastEm intro playback can outlast the old 12-second fixed delay. A
+  reliable selector route waits for the intro, sends START to skip it, sends
+  START again for the title menu, enters LOAD, selects the Scenario 2 SRAM,
+  and only then enters the selector code. Sending the code during the intro
+  can land in name entry and must not be treated as a ROM failure.

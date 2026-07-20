@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "6C85",
+  "production_checksum": "33EF",
   "states": [
     "pending",
     "historical",
@@ -597,8 +597,8 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_probe",
-      "turn_events": "progressed_current",
-      "completion": "pending",
+      "turn_events": "verified_probe",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/fd90_s10_brief_live_01.png",
@@ -632,9 +632,22 @@
         "captures/run/d3e8_s10_description_final_09.png",
         "captures/run/d3e8_s10_description_final_15.png",
         "captures/run/d3e8_s10_description_final_19.png",
-        "captures/run/d3e8_s10_description_final_20.png"
+        "captures/run/d3e8_s10_description_final_20.png",
+        "captures/run/4591_s10_monster_spawn_dialogue.png",
+        "captures/run/4591_s10_turn4_dialogue_2.png",
+        "captures/run/4591_s10_turn4_dialogue_6.png",
+        "captures/run/4591_s10_victory_01.png",
+        "captures/run/4591_s10_victory_04.png",
+        "captures/run/4591_s10_victory_07.png",
+        "captures/run/4591_s10_victory_10.png",
+        "captures/run/4591_s10_victory_11.png",
+        "captures/run/4591_s10_victory_12.png",
+        "captures/run/4591_s10_victory_13.png",
+        "captures/run/4591_s10_victory_17.png",
+        "captures/run/4591_s10_victory_19.png",
+        "captures/run/4591_s11_route_entry2.png"
       ],
-      "note": "Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrolling frames of 랄강의 수호자, and the preparation endpoint. Japanese production playback confirmed the source phrase ダークロッドとよばれるマジックアイテム; the former literal 마법 물건 다크로드 is now translated naturally as 다크로드라는 마법 도구가 필요하다는 사실도 알게 되었다. The following sentence was rewrapped to prevent 수 from occupying a centered line alone. This no-new-glyph rebuild retains existing glyph IDs. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the five-member commander/class roster, arrangement, all 12 opening confirmations, condition rows, the corrected 산적인가? event, and the no-action first turn through TURN 2. Alternate pages at 0x19611A..0x196218 and later turns remain pending live reproduction; battle_ui remains probe-only and completion remains pending."
+      "note": "Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrolling frames of 랄강의 수호자, and the preparation endpoint. Japanese production playback confirmed the source phrase ダークロッドとよばれるマジックアイテム; the former literal 마법 물건 다크로드 is now translated naturally as 다크로드라는 마법 도구가 필요하다는 사실도 알게 되었다. The following sentence was rewrapped to prevent 수 from occupying a centered line alone. Earlier current captures verify the five-member commander/class roster, arrangement, all 12 opening confirmations, condition rows, the corrected 산적인가? event, and the no-action first turn through TURN 2. Diagnostic 4591, derived from production 6C85, validates the Japanese Scenario 10 header, deployment pointer, thirteen fixed records, and all ten hidden turn-event monster records before changing only their AT/DF, mercenaries, and Elwin's initial deployment. The stock TURN 3 event revealed all five Scylla, two Werewolf, and three Great Slime groups. Normal player attacks and unmodified pirate AI defeated every monster without writing completion/event flags, exercised turn-event and death dialogue, reached 전과보고 with POINT 2470P, saved a real 시나리오 11 slot, and entered the Scenario 11 route without reset or freeze. Live playback exposed two orphan-punctuation/word-wrap lines at 0x1960AC, 0x1960D4, 0x196DE4, and 0x196F1E; production 33EF shortens them. The same playback exposed animated/custom glyph collisions in shared AT가/DF가/MP가 level-up labels; 33EF restores the Japanese renderer's native Latin prefix tokens, but that correction still needs live recheck. A stricter follow-up builder now preserves stock deployment too. Alternate failure, pirate-loss, retreat, and other conditional branches remain pending."
     },
     {
       "scenario": 11,

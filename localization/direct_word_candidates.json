@@ -1702,7 +1702,7 @@
       "target_korean": "AT가",
       "original_word_count": 4,
       "original_tokens": "006D 006E 0079 FFFF",
-      "current_tokens": "7207 7208 700F FFFF",
+      "current_tokens": "006D 006E 700F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1714,7 +1714,7 @@
       "target_korean": "DF가",
       "original_word_count": 4,
       "original_tokens": "005F 0097 0079 FFFF",
-      "current_tokens": "7209 720A 700F FFFF",
+      "current_tokens": "005F 0097 700F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -1726,7 +1726,7 @@
       "target_korean": "MP가",
       "original_word_count": 4,
       "original_tokens": "00AB 0070 0079 FFFF",
-      "current_tokens": "720B 7034 700F FFFF",
+      "current_tokens": "00AB 0070 700F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
