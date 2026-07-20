@@ -2591,16 +2591,27 @@
       ]
     },
     "level_item_system_messages": {
-      "entry_count": 11,
-      "modified_count": 11,
+      "entry_count": 12,
+      "modified_count": 12,
       "reviewed_count": 0,
       "live_verified_count": 0,
       "entries": [
         {
           "id": 0,
+          "pointer": "0x082ACA",
+          "original_word_count": 2,
+          "current_word_count": 2,
+          "original_tokens": "00C2 FFFF",
+          "target_korean": "의",
+          "modified": true,
+          "reviewed": false,
+          "live_verified": false
+        },
+        {
+          "id": 1,
           "pointer": "0x082ACE",
           "original_word_count": 10,
-          "current_word_count": 8,
+          "current_word_count": 9,
           "original_tokens": "002B 003F 002A 0079 00B0 0079 007B 0064 006C FFFF",
           "target_korean": "레벨이 올랐다.",
           "modified": true,
@@ -2608,7 +2619,7 @@
           "live_verified": false
         },
         {
-          "id": 1,
+          "id": 2,
           "pointer": "0x082AE2",
           "original_word_count": 4,
           "current_word_count": 4,
@@ -2619,7 +2630,7 @@
           "live_verified": false
         },
         {
-          "id": 2,
+          "id": 3,
           "pointer": "0x082AEA",
           "original_word_count": 4,
           "current_word_count": 4,
@@ -2630,7 +2641,7 @@
           "live_verified": false
         },
         {
-          "id": 3,
+          "id": 4,
           "pointer": "0x082AF2",
           "original_word_count": 4,
           "current_word_count": 4,
@@ -2641,62 +2652,62 @@
           "live_verified": false
         },
         {
-          "id": 4,
+          "id": 5,
           "pointer": "0x082AFA",
           "original_word_count": 7,
           "current_word_count": 6,
           "original_tokens": "0055 00B0 0079 007B 0064 006C FFFF",
-          "target_korean": "1 올랐다.",
-          "modified": true,
-          "reviewed": false,
-          "live_verified": false
-        },
-        {
-          "id": 5,
-          "pointer": "0x082B08",
-          "original_word_count": 7,
-          "current_word_count": 6,
-          "original_tokens": "0056 00B0 0079 007B 0064 006C FFFF",
-          "target_korean": "2 올랐다.",
+          "target_korean": " 1 상승",
           "modified": true,
           "reviewed": false,
           "live_verified": false
         },
         {
           "id": 6,
-          "pointer": "0x082B16",
-          "original_word_count": 6,
+          "pointer": "0x082B08",
+          "original_word_count": 7,
           "current_word_count": 6,
-          "original_tokens": "008A 02B8 008E 0064 006C FFFF",
-          "target_korean": "을 배웠다.",
+          "original_tokens": "0056 00B0 0079 007B 0064 006C FFFF",
+          "target_korean": " 2 상승",
           "modified": true,
           "reviewed": false,
           "live_verified": false
         },
         {
           "id": 7,
-          "pointer": "0x082B22",
-          "original_word_count": 13,
-          "current_word_count": 11,
-          "original_tokens": "008A 00E7 0093 008E 007D 00CC 0078 007A 0073 007B 0064 006C FFFF",
-          "target_korean": "을 사용할 수 있게 됐다.",
+          "pointer": "0x082B16",
+          "original_word_count": 6,
+          "current_word_count": 5,
+          "original_tokens": "008A 02B8 008E 0064 006C FFFF",
+          "target_korean": " 습득!",
           "modified": true,
           "reviewed": false,
           "live_verified": false
         },
         {
           "id": 8,
-          "pointer": "0x082B56",
-          "original_word_count": 8,
-          "current_word_count": 8,
-          "original_tokens": "008A 0084 007A 016B 009C 0064 0047 FFFF",
-          "target_korean": "을 손에 넣었다!",
+          "pointer": "0x082B22",
+          "original_word_count": 13,
+          "current_word_count": 7,
+          "original_tokens": "008A 00E7 0093 008E 007D 00CC 0078 007A 0073 007B 0064 006C FFFF",
+          "target_korean": " 사용 가능",
           "modified": true,
           "reviewed": false,
           "live_verified": false
         },
         {
           "id": 9,
+          "pointer": "0x082B56",
+          "original_word_count": 8,
+          "current_word_count": 5,
+          "original_tokens": "008A 0084 007A 016B 009C 0064 0047 FFFF",
+          "target_korean": " 획득!",
+          "modified": true,
+          "reviewed": false,
+          "live_verified": false
+        },
+        {
+          "id": 10,
           "pointer": "0x082B66",
           "original_word_count": 9,
           "current_word_count": 6,
@@ -2707,12 +2718,12 @@
           "live_verified": false
         },
         {
-          "id": 10,
+          "id": 11,
           "pointer": "0x082B90",
           "original_word_count": 9,
-          "current_word_count": 7,
+          "current_word_count": 6,
           "original_tokens": "008A 00A7 00A8 0099 0092 0099 0064 006C FFFF",
-          "target_korean": "을 장비했다.",
+          "target_korean": " 장비했다",
           "modified": true,
           "reviewed": false,
           "live_verified": false

@@ -428,7 +428,7 @@
       "opening_events": "verified_current",
       "battle_ui": "verified_current",
       "turn_events": "progressed_current",
-      "completion": "pending",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/f03a_s07_selector_map.png",
@@ -459,9 +459,24 @@
         "captures/run/489b_s07_description_current_06.png",
         "captures/run/489b_s07_description_current_10.png",
         "captures/run/489b_s07_description_current_14.png",
-        "captures/run/489b_s07_description_current_15.png"
+        "captures/run/489b_s07_description_current_15.png",
+        "captures/run/1a2e_s07_root_menu3.png",
+        "captures/run/1a2e_s07_ginam_target.png",
+        "captures/run/1a2e_s07_after_attack.png",
+        "captures/run/1a2e_s07_system_6.png",
+        "captures/run/1a2e_s07_system_59.png",
+        "captures/run/1a2e_s07_system_60.png",
+        "captures/run/1a2e_s07_system_61.png",
+        "captures/run/1a2e_s07_system_62.png",
+        "captures/run/1a2e_s07_system_63.png",
+        "captures/run/1a2e_s07_system_64.png",
+        "captures/run/1a2e_s07_system_65.png",
+        "captures/run/1a2e_s07_system_66.png",
+        "captures/run/1a2e_s07_system_67.png",
+        "captures/run/1a2e_s07_system_68.png",
+        "captures/run/1a2e_s07_route_next4.png"
       ],
-      "note": "Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling frames of 깨어나는 망자, and the preparation endpoint. The complete Korean description covers Aaron joining the party, the quiet night, the cemetery ritual, and an evil presence being born without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, all 20 opening confirmations, the corrected canonical speaker label 기남, and condition rows. The no-action first-turn path reached TURN 2 after 100 captured confirmations plus the final enemy movement; all text-bearing frames and two Slime/Resident battle presentations were reviewed. Later turns and completion remain pending."
+      "note": "Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling frames of 깨어나는 망자, and the preparation endpoint. The complete Korean description covers Aaron joining the party, the quiet night, the cemetery ritual, and an evil presence being born without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, all 20 opening confirmations, the corrected canonical speaker label 기남, condition rows, and a no-action first-turn path through TURN 2 with two Slime/Resident battle presentations. Final production BFBA-derived clear probe 1A2E validates the Japanese header, deployment table, and all twelve fixed records; it preserves residents 0..2, hidden Keith 3, all other enemies 5..11, and every event while limiting only Ginam record 4 to AT/DF 0 with no mercenaries and moving him directly above the stock Elwin deployment. A normal attack kept every resident alive and verified the complete successful aftermath, Keith and the Blue Dragon Knights, Mirage Robe and Runestone rewards, corrected shared acquisition and level-up UI, class change, 전과보고 with POINT 1760P, a real 시나리오 8 save, 다음 시나리오, and the Scenario 8 route map without Japanese residue, broken glyphs, reset, or freeze. Later-turn conditional events, civilian-death variants, defeat, and other reward outcomes remain pending."
     },
     {
       "scenario": 8,

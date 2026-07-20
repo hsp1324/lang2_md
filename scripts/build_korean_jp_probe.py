@@ -1304,17 +1304,18 @@ DIRECT_STRING_PATCHES = {
     0x189B44: "우리는에스토르로간다.",
     0x189B92: "바로눈앞입니다.",
     # Shared level-up, acquisition, and equipment message fragments.
+    0x82ACA: "의",
     0x82ACE: "레벨이 올랐다.",
     0x82AE2: "AT가",
     0x82AEA: "DF가",
     0x82AF2: "MP가",
-    0x82AFA: "1 올랐다.",
-    0x82B08: "2 올랐다.",
-    0x82B16: "을 배웠다.",
-    0x82B22: "을 사용할 수 있게 됐다.",
-    0x82B56: "을 손에 넣었다!",
+    0x82AFA: " 1 상승",
+    0x82B08: " 2 상승",
+    0x82B16: " 습득!",
+    0x82B22: " 사용 가능",
+    0x82B56: " 획득!",
     0x82B66: "트레저군:",
-    0x82B90: "을 장비했다.",
+    0x82B90: " 장비했다",
     0x82BFE: "매직애로우",
     0x82C0E: "블래스트",
     0x82C18: "썬더",
@@ -1491,6 +1492,7 @@ LATE_DIRECT_NAME_GLYPH_OFFSETS = (
 )
 
 SYSTEM_MESSAGE_EXPECTED_WORDS = {
+    0x082ACA: (0x00C2,),
     0x082ACE: (0x002B, 0x003F, 0x002A, 0x0079, 0x00B0, 0x0079, 0x007B, 0x0064, 0x006C),
     0x082AE2: (0x006D, 0x006E, 0x0079),
     0x082AEA: (0x005F, 0x0097, 0x0079),
@@ -1502,6 +1504,19 @@ SYSTEM_MESSAGE_EXPECTED_WORDS = {
     0x082B56: (0x008A, 0x0084, 0x007A, 0x016B, 0x009C, 0x0064, 0x0047),
     0x082B66: (0x0013, 0x002B, 0x0033, 0x0050, 0x004A, 0x00A6, 0x00B8, 0x00EB),
     0x082B90: (0x008A, 0x00A7, 0x00A8, 0x0099, 0x0092, 0x0099, 0x0064, 0x006C),
+}
+
+# These strings established glyph IDs before the live spacing cleanup. Keep
+# their vocabulary in the same collection position so unrelated item, name,
+# and UI glyph lists remain byte-stable while the emitted system text changes.
+SYSTEM_MESSAGE_GLYPH_COMPATIBILITY_TEXTS = {
+    0x082ACE: "레벨이 올랐다.",
+    0x082AFA: "1 올랐다.",
+    0x082B08: "2 올랐다.",
+    0x082B16: "을 배웠다.",
+    0x082B22: "을 사용할 수 있게 됐다.",
+    0x082B56: "을 손에 넣었다!",
+    0x082B90: "을 장비했다.",
 }
 
 DIRECT_PREFIX_STRING_PATCHES = {}
@@ -2146,6 +2161,8 @@ def write_direct_string(data: bytearray, offset: int, text: str, glyph_by_char: 
     values = []
     for char in text:
         if char == " ":
+            if offset in SYSTEM_MESSAGE_EXPECTED_WORDS:
+                values.append(SPACE_GLYPH)
             continue
         if char == "\n":
             values.append(0xFFFE)
@@ -6428,7 +6445,12 @@ def main() -> None:
     active_direct_strings = []
     for offset, text in stable_direct_patches.items():
         if offset not in late_direct_name_offsets:
-            active_direct_strings.append(text)
+            if offset == 0x082ACA:
+                pass
+            else:
+                active_direct_strings.append(
+                    SYSTEM_MESSAGE_GLYPH_COMPATIBILITY_TEXTS.get(offset, text)
+                )
             if offset == 0x974AA:
                 active_direct_strings.append(RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT)
         if offset == 0x97400:

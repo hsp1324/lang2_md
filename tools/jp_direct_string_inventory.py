@@ -21,18 +21,19 @@ MIN_GLYPHS = 3
 MAX_WORDS = 64
 
 CONFIRMED_UNPATCHED_SYSTEM_MESSAGES = {
+    0x082ACA: "의",
     0x082ACE: "레벨이 올랐다.",
     0x082AE2: "AT가",
     0x082AEA: "DF가",
     0x082AF2: "MP가",
-    0x082AFA: "1 올랐다.",
-    0x082B08: "2 올랐다.",
-    0x082B16: "을 배웠다.",
-    0x082B22: "을 사용할 수 있게 됐다.",
-    0x082B56: "을 손에 넣었다!",
+    0x082AFA: " 1 상승",
+    0x082B08: " 2 상승",
+    0x082B16: " 습득!",
+    0x082B22: " 사용 가능",
+    0x082B56: " 획득!",
     0x082B66: "트레저군:",
     # 0x082B78 is a proven-unreachable debug artifact retained byte-identically.
-    0x082B90: "을 장비했다.",
+    0x082B90: " 장비했다",
 }
 
 INTENTIONALLY_RETAINED_SYSTEM_LABELS = {

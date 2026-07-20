@@ -6272,3 +6272,61 @@ contains 57 safe syllables as documented below and in
   intended space even though source `0x82ACE` is `레벨이 올랐다.`. This is a
   renderer/composition follow-up, not evidence of missing Scenario 6 dialogue,
   and remains open for a focused shared-UI fix.
+
+### Scenario 7 Civilian-Safe Completion And Shared Messages (2026-07-20)
+
+- The Japanese Scenario 7 header is `0x180BBC`, its deployment table is
+  `0x180BDA`, and its fixed list at `0x180BF4` contains twelve 36-byte records
+  beginning at `0x180BF6`. Records 0..2 are residents, record 3 is hidden
+  Keith, record 4 at `0x180C86` is Ginam, and records 5..11 are the remaining
+  enemies. The first stock Elwin deployment is `(7,20)`.
+- `tools/build_scenario7_clear_probe_rom.py` derives `1A2E` from final production
+  `BFBA`. It validates the complete Japanese/input layout and Ginam source
+  record, then changes only Ginam's AT/DF to zero, removes his mercenaries,
+  and moves him from `(6,6)` to `(7,19)`. Every resident, hidden Keith, other
+  enemy, deployment, and event byte remains unchanged. Five tests lock the
+  permitted record/checksum surface.
+- A fresh live path used the stock selector, preparation, automatic placement,
+  complete opening, Elwin's normal `공격`, and the adjacent Ginam target. All
+  residents survived. The aftermath covers Keith and the Blue Dragon Knights,
+  the Kalzath report, resident thanks, Mirage Robe and Runestone rewards,
+  Sherry's stock class-change panel, `전과보고 / POINT 1760P`, a real
+  `시나리오 8` save, `다음 시나리오`, and the Scenario 8 route map. Accepted
+  evidence uses `captures/run/1a2e_s07_root_menu3.png`,
+  `1a2e_s07_ginam_target.png`, `1a2e_s07_after_attack.png`, and
+  `1a2e_s07_system_*`; `1a2e_s07_system_67.png` and `_68.png` prove the real
+  Scenario 8 save, while `1a2e_s07_route_next4.png` proves the Scenario 8
+  route map. Scenario 7 `completion` is now
+  `verified_probe`; later-turn conditionals, civilian-death variants, defeat,
+  and alternate rewards remain pending.
+- The live reward originally exposed `미라쥬로브를손에넣었다!`, while level-up
+  frames exposed original table entry 0 `は` after every dynamic commander name
+  plus `레벨이올랐다.`. The complete shared table starts at `0x082ACA`, not
+  `0x082ACE`: entry 0 is the one-glyph particle and entry 1 is the level text.
+  Production now maps entry 0 to `의`. Only the source-validated shared system
+  offsets preserve `SPACE_GLYPH`; other capacity-sensitive direct strings keep
+  their established behavior. Short suffixes are now ` 1 상승`, ` 2 상승`,
+  ` 습득!`, ` 사용 가능`, ` 획득!`, and ` 장비했다`.
+- `captures/run/1a2e_s07_system_6.png` visibly proves `미라쥬로브 / 획득!`.
+  `_60.png`, `_61.png`, `_62.png`, and `_65.png` prove the universal
+  `{이름}의 / 레벨이 올랐다.` composition for Elwin, Hein, Sherry, and Aaron.
+  Production checksum is `BFBA`; custom glyph count remains 865
+  (`0x7000..0x7361`). Compatibility vocabulary preserves every pre-existing
+  glyph ID, so the accepted item-surface fingerprint remains
+  `5be15eded722526f4a630855c24aaaea15bdd4cf1898c0af6acde85ba608af02`.
+  Direct/shared inventories were regenerated and retain zero unclassified
+  direct candidates.
+- Do not load a quicksave produced by an older checksum directly into a newly
+  rebuilt ROM. Loading the `9431` pre-attack GST under the intermediate `262F`
+  build terminated BlastEm. The accepted replay extracted only the validated
+  manual SRAM slot
+  and started a fresh runtime. Also do not use `detect-command` for this path:
+  one attempt reached its 30-confirmation limit and consumed Elwin's action.
+  Exact single-step captures established the last opening page and normal
+  command menu before the accepted attack.
+- Run the full test suite and production build sequentially. Several probe
+  tests intentionally write temporary derivatives through the shared build
+  path, so running `build_korean_jp_probe.py` concurrently with discovery can
+  leave a derivative as the final file despite passing tests. The accepted
+  order is full discovery, production rebuild, probe rebuild, then inventory
+  regeneration; that order finishes at production `BFBA` and probe `1A2E`.

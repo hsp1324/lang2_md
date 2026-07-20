@@ -309,6 +309,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("Civilian-loss/no-Amulet", scenario6["note"])
         self.assertEqual(scenario7["opening_events"], "verified_current")
         self.assertEqual(scenario7["description"], "verified_current")
+        self.assertEqual(scenario7["completion"], "verified_probe")
         for capture in (
             "captures/run/489b_s07_description_current_01.png",
             "captures/run/489b_s07_description_current_06.png",
@@ -317,6 +318,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/489b_s07_description_current_15.png",
         ):
             self.assertIn(capture, scenario7["captures"])
+        for capture in (
+            "captures/run/1a2e_s07_root_menu3.png",
+            "captures/run/1a2e_s07_ginam_target.png",
+            "captures/run/1a2e_s07_system_6.png",
+            "captures/run/1a2e_s07_system_59.png",
+            "captures/run/1a2e_s07_system_60.png",
+            "captures/run/1a2e_s07_system_63.png",
+            "captures/run/1a2e_s07_system_66.png",
+            "captures/run/1a2e_s07_system_68.png",
+            "captures/run/1a2e_s07_route_next4.png",
+        ):
+            self.assertIn(capture, scenario7["captures"])
+        self.assertIn("all twelve fixed records", scenario7["note"])
+        self.assertIn("Mirage Robe and Runestone", scenario7["note"])
+        self.assertIn("civilian-death variants", scenario7["note"])
         self.assertEqual(scenario7["battle_ui"], "verified_current")
         self.assertEqual(scenario7["turn_events"], "progressed_current")
         self.assertEqual(scenario8["conditions"], "verified_current")

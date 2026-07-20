@@ -13,7 +13,7 @@ the remaining unreviewed entries and all live playback checks stay separate.
 | item_names | 38 | 38 | 0 | 0 |
 | item_descriptions | 37 | 37 | 0 | 0 |
 | item_word_names | 37 | 37 | 0 | 0 |
-| level_item_system_messages | 11 | 11 | 0 | 0 |
+| level_item_system_messages | 12 | 12 | 0 | 0 |
 | magic_names | 23 | 23 | 0 | 0 |
 | mercenary_battle_names | 15 | 15 | 0 | 0 |
 | battle_status_messages | 3 | 3 | 0 | 0 |

@@ -17,7 +17,8 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.japanese = JP_ROM.read_bytes()
-        cls.result = inventory(cls.japanese, KO_ROM.read_bytes())
+        cls.korean = KO_ROM.read_bytes()
+        cls.result = inventory(cls.japanese, cls.korean)
 
     def test_candidate_baseline(self):
         self.assertEqual(len(scan_candidates(self.japanese)), 783)
@@ -60,11 +61,35 @@ class JapaneseDirectStringInventoryTests(unittest.TestCase):
         self.assertEqual(row["target_korean"], "레벨이 올랐다.")
         self.assertTrue(row["modified"])
 
+    def test_shared_system_messages_preserve_only_the_intended_spaces(self):
+        built = self.korean
+        self.assertEqual(builder.DIRECT_STRING_PATCHES[0x082ACA], "의")
+        self.assertNotEqual(builder.read_word_list(built, 0x082ACA), [0x00C2])
+        for address, expected_spaces in (
+            (0x082ACE, 1),
+            (0x082AFA, 2),
+            (0x082B08, 2),
+            (0x082B16, 1),
+            (0x082B22, 2),
+            (0x082B56, 1),
+            (0x082B90, 1),
+        ):
+            self.assertEqual(
+                builder.read_word_list(built, address).count(builder.SPACE_GLYPH),
+                expected_spaces,
+            )
+
     def test_system_message_patch_rejects_changed_source(self):
         data = bytearray(self.japanese)
         data[0x082ACE] ^= 1
         with self.assertRaisesRegex(ValueError, "system message source changed"):
             builder.patch_direct_strings(data, {}, {0x082ACE: ""}, {}, {})
+
+    def test_level_up_particle_patch_rejects_changed_source(self):
+        data = bytearray(self.japanese)
+        data[0x082ACA] ^= 1
+        with self.assertRaisesRegex(ValueError, "system message source changed"):
+            builder.patch_direct_strings(data, {"의": 0x7000}, {0x082ACA: "의"}, {}, {})
 
     def test_word_item_patch_rejects_changed_source_block(self):
         data = bytearray(self.japanese)

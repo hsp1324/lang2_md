@@ -15,7 +15,7 @@ OUTPUT_FIELDS = {
     "epilogue_dialogue_ko.json": ("text", 90),
     "event_dialogue_ko.json": ("text", 3565),
     "global_strings.json": ("target_korean", 313),
-    "shared_word_resources.json": ("target_korean", 366),
+    "shared_word_resources.json": ("target_korean", 367),
     "ui_patch_surfaces.json": ("target_korean", 132),
 }
 DEPRECATED_OUTPUT_TERMS = (
