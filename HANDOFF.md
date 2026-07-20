@@ -6376,3 +6376,34 @@ contains 57 safe syllables as documented below and in
   method instead gives the already relocated clear-target Kramer the stock
   Vargas name and General class IDs. It changes no production ROM and must not
   be cited as natural event-placement or completion evidence.
+
+### Scenario 9 Ordinary Clear (2026-07-20)
+
+- The Japanese Scenario 9 header is `0x180F72`, its deployment table is
+  `0x180F92`, and its fixed list at `0x180FB0` contains thirteen 36-byte
+  records beginning at `0x180FB2`. Laird is record 3 at `0x18101E`, originally
+  name ID `0x11`, class ID `0x43` (Silver Knight), AT36, DF26 at `(14,15)`.
+  The first stock player deployment remains Elwin at `(8,28)`.
+- `tools/build_scenario9_clear_probe_rom.py` derives diagnostic checksum
+  `AF92` from production `CE96`. It validates the Japanese and input layouts,
+  the deployment pointer and complete Laird record, then changes only Laird's
+  AT/DF to zero, removes his six mercenaries, and moves him to `(8,27)`.
+  Every other fixed record, deployment, event, identity, class, reward, and
+  completion byte remains unchanged. Five tests lock this permitted surface
+  and exact checksum.
+- A normal Elwin `공격` selected the adjacent Laird and completed the stock
+  stage. `af92_s09_laird_target_selected.png` shows `레아드 / 실버나이트`;
+  `af92_s09_after_laird_attack.png` begins the real aftermath. The complete
+  retreat, Leon/Kalxath defense, Jessica/Alhazard explanation, commander
+  level-up sequence, and result proceeded without Japanese residue, reset, or
+  freeze. `af92_s09_post_62.png` shows `전과보고 / POINT 3060P`,
+  `af92_s09_post_64.png` shows the real `시나리오 10` save, and
+  `af92_s09_next_scenario.png` proves entry to the stock Scenario 10 route map.
+  Scenario 9 `completion` is `verified_probe`; timeout, defeat, later-turn
+  conditionals, and other branches remain pending.
+- BlastEm ran at 960x720 for this session. The current automation's fixed
+  320x240 crop coordinates therefore failed to recognize the visible command
+  menu and could enter the inner order submenu or consume an action. Exact
+  manual inputs after a clean restart produced the accepted evidence. This is
+  a host detector scaling bug, not a ROM reset or command-menu regression;
+  normalize captures before fixed-coordinate detection in a later tooling fix.

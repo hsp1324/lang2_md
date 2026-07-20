@@ -380,6 +380,18 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario9["opening_events"], "verified_current")
         self.assertEqual(scenario9["battle_ui"], "verified_current")
         self.assertEqual(scenario9["turn_events"], "progressed_current")
+        self.assertEqual(scenario9["completion"], "verified_probe")
+        for capture in (
+            "captures/run/af92_s09_laird_target_selected.png",
+            "captures/run/af92_s09_after_laird_attack.png",
+            "captures/run/af92_s09_post_62.png",
+            "captures/run/af92_s09_post_64.png",
+            "captures/run/af92_s09_next_scenario.png",
+        ):
+            self.assertIn(capture, scenario9["captures"])
+        self.assertIn("all thirteen fixed records", scenario9["note"])
+        self.assertIn("POINT 3060P", scenario9["note"])
+        self.assertIn("host automation behavior", scenario9["note"])
         self.assertEqual(scenario10["description"], "verified_current")
         for capture in (
             "captures/run/d3e8_s10_description_final_01.png",

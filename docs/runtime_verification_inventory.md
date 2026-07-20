@@ -19,7 +19,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 6 | current | current | current | current | current | progressed | probe | pending | 39 |
 | 7 | current | current | current | current | current | progressed | probe | pending | 44 |
 | 8 | current | current | current | current | probe | progressed | probe | pending | 40 |
-| 9 | current | current | current | current | current | progressed | pending | pending | 34 |
+| 9 | current | current | current | current | current | progressed | probe | pending | 43 |
 | 10 | current | current | current | current | probe | progressed | pending | pending | 32 |
 | 11 | current | current | current | current | current | progressed | pending | pending | 36 |
 | 12 | current | current | current | current | current | progressed | pending | pending | 38 |
@@ -387,7 +387,7 @@ Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling
 
 ### Scenario 9
 
-Production 489B verifies the Scenario 9 route map, all 20 text-bearing scrolling frames of 칼자스 성 공방전, and the preparation endpoint. The complete Korean description covers the gorge crossing, the Blue Dragon Knights' assault, Leon and Laird's elite force, and the start of the siege without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, arrangement, all 30 opening confirmations, condition rows, and the corrected event continuation 레온님이 없는 지금, 망설일 수 없다. The no-action first-turn path reviewed 117 confirmations, multiple 그리폰/파이터 and soldier battle presentations, reinforcement movement, and the Sherry/Scott/Keith tutorial before returning to Elwin's command menu. Names, classes, -AT-/-DF-, and status graphics remained intact; later turns and completion remain pending.
+Production 489B verifies the Scenario 9 route map, all 20 text-bearing scrolling frames of 칼자스 성 공방전, and the preparation endpoint. The complete Korean description covers the gorge crossing, the Blue Dragon Knights' assault, Leon and Laird's elite force, and the start of the siege without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, arrangement, all 30 opening confirmations, condition rows, and the corrected event continuation 레온님이 없는 지금, 망설일 수 없다. The no-action first-turn path reviewed 117 confirmations, multiple 그리폰/파이터 and soldier battle presentations, reinforcement movement, and the Sherry/Scott/Keith tutorial before returning to Elwin's command menu. Names, classes, -AT-/-DF-, and status graphics remained intact. Final production CE96-derived clear probe AF92 validates the Japanese header, deployment table, and all thirteen fixed records; it preserves every other record and event while limiting only Laird record 3 to AT/DF 0 with no mercenaries and moving him directly above stock Elwin. One normal attack verified 레아드/실버나이트, the complete successful aftermath, Jessica's Alhazard explanation, commander level-ups, 전과보고 with POINT 3060P, a real 시나리오 10 save, 다음 시나리오, and the Scenario 10 route map without Japanese residue, reset, or freeze. Fixed 320x240 command-detector crops did not scale to the 960x720 window, so accepted completion used exact manual input after a clean restart; this was host automation behavior, not a ROM defect. Later-turn conditionals, timeout, defeat, and other branches remain pending.
 
 - `captures/run/ef65_s09_selector_map.png`
 - `captures/run/d15e_s09_brief_live_01.png`
@@ -423,6 +423,15 @@ Production 489B verifies the Scenario 9 route map, all 20 text-bearing scrolling
 - `captures/run/489b_s09_description_current_16.png`
 - `captures/run/489b_s09_description_current_20.png`
 - `captures/run/489b_s09_description_current_21.png`
+- `captures/run/af92_s09_laird_target_selected.png`
+- `captures/run/af92_s09_after_laird_attack.png`
+- `captures/run/af92_s09_post_25.png`
+- `captures/run/af92_s09_post_40.png`
+- `captures/run/af92_s09_post_60.png`
+- `captures/run/af92_s09_post_61.png`
+- `captures/run/af92_s09_post_62.png`
+- `captures/run/af92_s09_post_64.png`
+- `captures/run/af92_s09_next_scenario.png`
 
 ### Scenario 10
 
