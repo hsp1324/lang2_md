@@ -607,6 +607,27 @@ def battle_command_menu_visible(path: Path) -> bool:
         for red, green, blue in command_interior.get_flattened_data()
         if red > 170 and green > 170 and blue > 170
     )
+    # Command panels can be 64 or 72 source pixels wide depending on the row
+    # set. Their right gold frame always crosses this shared band; preparation,
+    # dialogue, and result panels use much wider frame positions. This extra
+    # geometry check lets high-resolution captures use a lower text-density
+    # threshold without accepting those other blue screens.
+    command_right_border = frame.crop(
+        (
+            round(94 * scale_x),
+            round(42 * scale_y),
+            round(107 * scale_x),
+            round(145 * scale_y),
+        )
+    )
+    command_right_border_gold_pixels = sum(
+        1
+        for red, green, blue in command_right_border.get_flattened_data()
+        if red > 100
+        and green > 70
+        and blue < 80
+        and red > blue * 1.5
+    )
     # Portrait cut-ins also have a broad blue background and used to trigger
     # this detector early. A real command menu is only available with the blue
     # battle status bar visible across the bottom of the frame.
@@ -617,7 +638,7 @@ def battle_command_menu_visible(path: Path) -> bool:
         if blue > 70 and blue > red * 1.3 and blue > green * 1.2
     )
     return (
-        blue_pixels > 3200 * scale_x * scale_y
+        blue_pixels > image.width * image.height * 0.44
         # Water-heavy maps can fill this entire crop with blue pixels. A real
         # command panel also contains its gold frame, labels, and portrait/map
         # content, so reject nearly solid-blue backgrounds.
@@ -626,10 +647,13 @@ def battle_command_menu_visible(path: Path) -> bool:
         and command_interior_dark_pixels
         > command_interior.width * command_interior.height * 0.30
         # Water, roofs, and selection highlights have no dense command labels.
-        # Real four/five-row command menus stay above 7% on accepted captures;
-        # 6.5% leaves margin for the narrower glyph combinations.
+        # The sparse four-row panel in a 960x720 Scenario 9 capture occupies
+        # only about 4.1% of this crop. Geometry and the status-bar checks keep
+        # the relaxed threshold from accepting wide dialogue/result panels.
         and command_interior_white_pixels
-        > command_interior.width * command_interior.height * 0.065
+        > command_interior.width * command_interior.height * 0.035
+        and command_right_border_gold_pixels
+        > command_right_border.width * command_right_border.height * 0.05
         # The ornate status-bar frame occupies a little over half of this
         # crop on some maps; 45% still distinguishes it from dialogue views.
         # Preparation/hire screens fill more of the same crop with solid blue

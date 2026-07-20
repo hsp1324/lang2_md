@@ -30,6 +30,7 @@ class BlastemCommandDetectorTests(unittest.TestCase):
             frame.paste((0, 0, 119), (15, 25, 65, 105))
             frame.paste((255, 255, 255), (20, 35, 30, 65))
             frame.paste((119, 87, 87), (65, 25, 95, 105))
+            frame.paste((180, 130, 20), (95, 42, 101, 145))
             frame.paste((0, 0, 119), (0, 195, 154, 235))
             frame.save(path)
             self.assertTrue(battle_command_menu_visible(path))
@@ -51,6 +52,31 @@ class BlastemCommandDetectorTests(unittest.TestCase):
             frame.paste((0, 70, 150), (15, 25, 45, 105))
             frame.paste((0, 0, 119), (60, 25, 95, 105))
             frame.paste((0, 0, 119), (0, 195, 154, 235))
+            frame.save(path)
+            self.assertFalse(battle_command_menu_visible(path))
+
+    def test_accepts_sparse_four_row_panel_at_960_by_720(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "command-960.png"
+            frame = Image.new("RGB", (320, 240), (0, 128, 0))
+            # Match the shifted, slightly wider four-row panel observed in the
+            # Scenario 9 960x720 run. Its text occupies only about four percent
+            # of the old command-interior crop.
+            frame.paste((0, 0, 119), (40, 42, 100, 145))
+            frame.paste((180, 130, 20), (100, 42, 105, 145))
+            frame.paste((255, 255, 255), (43, 52, 50, 74))
+            frame.paste((0, 0, 119), (0, 195, 152, 235))
+            frame = frame.resize((960, 720), Image.Resampling.NEAREST)
+            frame.save(path)
+            self.assertTrue(battle_command_menu_visible(path))
+
+    def test_rejects_wide_result_panel_after_relaxed_text_threshold(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "result-960.png"
+            frame = Image.new("RGB", (320, 240), (0, 0, 119))
+            frame.paste((255, 255, 255), (40, 52, 48, 74))
+            frame.paste((0, 0, 119), (0, 195, 152, 235))
+            frame = frame.resize((960, 720), Image.Resampling.NEAREST)
             frame.save(path)
             self.assertFalse(battle_command_menu_visible(path))
 

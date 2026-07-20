@@ -6455,3 +6455,21 @@ contains 57 safe syllables as documented below and in
   (`5DD7`) blanked preceding glyph-list words and did not change the mark;
   `Cursor Spacing Probe` (`0192`) moved the label but left the mark intact.
   They are ignored diagnostics and are not production fixes.
+
+### Resolution-Aware Battle Command Detection (2026-07-20)
+
+- Scenario 9's real 960x720 outer command panel in
+  `captures/run/af92_s09_outer_command.png` occupied about 46.4% of the broad
+  blue crop and only 4.1% of the command-interior white-text crop. The former
+  fixed thresholds therefore rejected it even though the ROM screen was
+  correct.
+- `battle_command_menu_visible()` now accepts the observed high-resolution
+  proportions and also requires the narrow command panel's right gold frame
+  in the normalized source-pixel band `x=94..106, y=42..144`. Wider dialogue,
+  preparation, result, route, and title panels place their right edge outside
+  that band and remain rejected.
+- Detector tests cover the sparse 960x720 four-row panel and the formerly
+  risky wide result-panel shape. Direct checks accept the real Scenario 3 and
+  Scenario 9 command captures while rejecting Scenario 9 dialogue,
+  preparation, result, and route/title captures. This is host automation only;
+  it changes no ROM byte.
