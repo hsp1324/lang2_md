@@ -6167,3 +6167,34 @@ contains 57 safe syllables as documented below and in
   defeat, and other conditional paths. Scenario 4 `turn_events` therefore
   remains `progressed_current`, and `branches_endings` remains pending rather
   than being promoted from this clear probe.
+
+### Scenario 4 Late-Turn Progression And Shika Correction (2026-07-20)
+
+- `tools/build_scenario4_clear_probe_rom.py --mode progression` derives a
+  progression-only diagnostic while preserving every original deployment
+  coordinate, identity, class, level, and event. It validates the Japanese
+  Scenario 4 header, deployment table, and eleven fixed records, then changes
+  only enemy records 5..10 to AT 0, DF 0, and no mercenaries. The clear mode
+  remains unchanged and still moves only Elwin beside Morgan.
+- Diagnostic `FD8E` first reached the complete turn 1, turn 3 tablet/Alhazard,
+  and turn 5 Morgan mind-control/Liana recovery sequences. Source comparison
+  found that Japanese `シカシカ!` / `シ、シカーッ!` had been mistransliterated
+  as `싱싱!` / `싱, 싱갸!`. They are now `시카시카!` / `시, 시카앗!`.
+- Replacing those strings directly would have renumbered established custom
+  glyph IDs and invalidated every later direct-string consumer. The builder
+  therefore keeps the retired syllables at their original allocation points
+  and appends the newly required `시카앗` glyphs after all established event,
+  ending, name, UI, and title-load vocabulary. Direct-string inventory remains
+  byte-stable, and the custom glyph count remains 865 (`0x7000..0x7361`).
+- Current production is `39BD`; the rebuilt clear probe is `BD39` and the
+  progression probe is `40EA`. Derived diagnostic checksums are forced class
+  application `FE20`, class transition `1CF8`, forced magic `0638`, stock
+  Magic Arrow `D65E`, summon `50DA`, and item-surface inventory `9546`.
+- A fresh `40EA` replay rechecked the stock opening and all scheduled events
+  through the turn 5 command menu. `captures/run/40ea_s04_turn5_events_15.png`
+  visibly renders `시카시카!` without clipping or corruption. The second cry
+  belongs to a separate combat condition; it is encoding-tested but remains
+  live-pending with NPC-loss, defeat, and other conditional branches.
+- Scenario 4 `turn_events` is now `verified_probe`. `branches_endings` remains
+  `pending`, so future sessions must not repeat the already covered scheduled
+  events as if they were missing branch coverage.

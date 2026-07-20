@@ -19,6 +19,9 @@ DEFAULT_SOURCE_ROM = ROOT / builder.IN_ROM
 DEFAULT_OUTPUT_ROM = (
     ROOT / "roms/builds/Langrisser II (Scenario 4 Clear Probe).md"
 )
+DEFAULT_PROGRESSION_OUTPUT_ROM = (
+    ROOT / "roms/builds/Langrisser II (Scenario 4 Progression Probe).md"
+)
 
 SCENARIO_NUMBER = 4
 SCENARIO_HEADER = 0x180688
@@ -34,6 +37,10 @@ SOURCE_MORGAN_X = 7
 SOURCE_MORGAN_Y = 21
 PROBE_MORGAN_AT = 0
 PROBE_MORGAN_DF = 0
+FIRST_ENEMY_RECORD_INDEX = 5
+LAST_ENEMY_RECORD_INDEX = 10
+PROGRESSION_ENEMY_AT = 0
+PROGRESSION_ENEMY_DF = 0
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -94,6 +101,23 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
     return builder.update_md_checksum(probe)
 
 
+def patch_progression_probe(probe: bytearray, source: bytes) -> int:
+    validate_layout(probe, source)
+    layout = scenario_layout(source, SCENARIO_NUMBER)
+    for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
+        base = layout.records_offset + index * FIXED_RECORD_SIZE
+        end = base + FIXED_RECORD_SIZE
+        if probe[base:end] != source[base:end]:
+            raise ValueError(
+                f"input Scenario 4 enemy record {index} differs from Japanese source"
+            )
+        probe[base + FIELD_OFFSETS["at"]] = PROGRESSION_ENEMY_AT
+        probe[base + FIELD_OFFSETS["df"]] = PROGRESSION_ENEMY_DF
+        mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
+        probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+    return builder.update_md_checksum(probe)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -103,7 +127,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
-    parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument(
+        "--mode",
+        choices=("clear", "progression"),
+        default="clear",
+        help="clear moves Elwin next to Morgan; progression preserves all coordinates",
+    )
+    parser.add_argument("--output-rom", type=Path)
     return parser.parse_args()
 
 
@@ -111,15 +141,26 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
-    args.output_rom.parent.mkdir(parents=True, exist_ok=True)
-    args.output_rom.write_bytes(probe)
-    print(
-        f"Scenario 4 Elwin: ({PROBE_FIRST_PLAYER_X},{PROBE_FIRST_PLAYER_Y}); "
-        f"Morgan: ({SOURCE_MORGAN_X},{SOURCE_MORGAN_Y}), AT 0, DF 0, no mercenaries"
-    )
+    if args.mode == "progression":
+        checksum = patch_progression_probe(probe, source)
+        output_rom = args.output_rom or DEFAULT_PROGRESSION_OUTPUT_ROM
+        print(
+            "Scenario 4 original coordinates preserved; enemy records "
+            f"{FIRST_ENEMY_RECORD_INDEX}..{LAST_ENEMY_RECORD_INDEX}: "
+            "AT 0, DF 0, no mercenaries"
+        )
+    else:
+        checksum = patch_probe(probe, source)
+        output_rom = args.output_rom or DEFAULT_OUTPUT_ROM
+        print(
+            f"Scenario 4 Elwin: ({PROBE_FIRST_PLAYER_X},{PROBE_FIRST_PLAYER_Y}); "
+            f"Morgan: ({SOURCE_MORGAN_X},{SOURCE_MORGAN_Y}), "
+            "AT 0, DF 0, no mercenaries"
+        )
+    output_rom.parent.mkdir(parents=True, exist_ok=True)
+    output_rom.write_bytes(probe)
     print(f"checksum: {checksum:04X}")
-    print(args.output_rom)
+    print(output_rom)
     return 0
 
 

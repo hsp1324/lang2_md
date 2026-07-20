@@ -103,6 +103,9 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             list(range(2312, 2441)),
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(text_by_address["0x18B39A"], "시카시카!")
+        self.assertEqual(text_by_address["0x18B3A6"], "시, 시카앗!")
 
     def test_scenario_31_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 31]

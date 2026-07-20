@@ -1438,6 +1438,15 @@ RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS = (
 # UI and name-entry glyph ID.
 RETIRED_ZORUM_GLYPH_COMPATIBILITY_TEXT = "졸"
 
+# Scenario 4 originally mistransliterated シカシカ / シ、シカーッ as
+# 싱싱 / 싱, 싱갸. Keep those retired syllables at their established event
+# positions so correcting the two records cannot renumber later glyphs.
+RETIRED_SCENARIO4_SHIKA_GLYPH_COMPATIBILITY_TEXTS = {
+    0x18B39A: "싱싱!",
+    0x18B3A6: "싱, 싱갸!",
+}
+DEFERRED_SCENARIO4_SHIKA_GLYPH_TEXT = "시카앗"
+
 # Description corrections must not pull later vocabulary into the early glyph
 # pass and move established UI/name-entry IDs. Allocate these syllables at
 # their old consumers when possible, then append any genuinely new ones after
@@ -6426,7 +6435,12 @@ def main() -> None:
             active_direct_strings.extend(RETIRED_ENDING_SUFFIX_GLYPH_COMPATIBILITY_TEXTS)
     active_event_page_strings = [text for _, text in SCENARIO1_EVENT_PAGE_PATCHES.values()]
     active_reviewed_event_strings = [
-        reviewed_event_visible_text(str(row["text"])) for row in reviewed_event_rows
+        reviewed_event_visible_text(
+            RETIRED_SCENARIO4_SHIKA_GLYPH_COMPATIBILITY_TEXTS.get(
+                int(row["address_int"]), str(row["text"])
+            )
+        )
+        for row in reviewed_event_rows
     ]
     active_ending_dialogue_strings = [
         ending_dialogue_visible_text(str(row["text"])) for row in ending_dialogue_rows
@@ -6521,6 +6535,9 @@ def main() -> None:
         # Title LOAD is a separate local bank. Append its vocabulary last so
         # established event, ending, name, and byte-UI glyph IDs stay stable.
         *TITLE_LOAD_TEXTS,
+        # Corrected Scenario 4 Shika cries need new syllables, but must not
+        # renumber any previously accepted event, ending, or UI glyph.
+        DEFERRED_SCENARIO4_SHIKA_GLYPH_TEXT,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:

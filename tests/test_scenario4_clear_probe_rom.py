@@ -87,6 +87,84 @@ class Scenario4ClearProbeRomTests(unittest.TestCase):
         ) & 0xFFFF
         self.assertEqual(builder.be16(data, 0x18E), expected)
 
+    def test_progression_probe_only_changes_enemy_stats_mercenaries_and_checksum(self):
+        data = bytearray(self.built)
+        probe_builder.patch_progression_probe(data, self.source)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        expected_changes = {0x18E, 0x18F}
+        for index in range(
+            probe_builder.FIRST_ENEMY_RECORD_INDEX,
+            probe_builder.LAST_ENEMY_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            expected_changes.update(
+                {
+                    base + FIELD_OFFSETS["at"],
+                    base + FIELD_OFFSETS["df"],
+                    *(
+                        base + FIELD_OFFSETS["mercenaries"] + slot
+                        for slot in range(6)
+                    ),
+                }
+            )
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.built, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, expected_changes)
+
+    def test_progression_probe_preserves_deployment_identity_and_coordinates(self):
+        data = bytearray(self.built)
+        probe_builder.patch_progression_probe(data, self.source)
+        deployment = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        self.assertEqual(
+            data[deployment : deployment + 4],
+            probe_builder.SOURCE_FIRST_PLAYER_DEPLOYMENT,
+        )
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(
+            probe_builder.FIRST_ENEMY_RECORD_INDEX,
+            probe_builder.LAST_ENEMY_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            for field_offset in (
+                0x00,
+                FIELD_OFFSETS["level"],
+                FIELD_OFFSETS["x"],
+                FIELD_OFFSETS["y"],
+                FIELD_OFFSETS["name_id"],
+                FIELD_OFFSETS["class_id"],
+            ):
+                self.assertEqual(
+                    data[base + field_offset], self.source[base + field_offset]
+                )
+
+    def test_progression_probe_weakens_all_six_enemy_records(self):
+        data = bytearray(self.built)
+        probe_builder.patch_progression_probe(data, self.source)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(
+            probe_builder.FIRST_ENEMY_RECORD_INDEX,
+            probe_builder.LAST_ENEMY_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            self.assertEqual(data[base + FIELD_OFFSETS["at"]], 0)
+            self.assertEqual(data[base + FIELD_OFFSETS["df"]], 0)
+            start = base + FIELD_OFFSETS["mercenaries"]
+            self.assertEqual(data[start : start + 6], b"\xFF" * 6)
+
+    def test_progression_probe_rejects_changed_enemy_record(self):
+        data = bytearray(self.built)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        base = (
+            layout.records_offset
+            + probe_builder.FIRST_ENEMY_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        data[base] ^= 1
+        with self.assertRaisesRegex(ValueError, "enemy record 5 differs"):
+            probe_builder.patch_progression_probe(data, self.source)
+
 
 if __name__ == "__main__":
     unittest.main()

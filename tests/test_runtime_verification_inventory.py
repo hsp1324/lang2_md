@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "F661")
+        self.assertEqual(data["production_checksum"], "39BD")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -217,7 +217,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/489b_s04_description_current_14.png",
         ):
             self.assertIn(capture, scenario4["captures"])
-        self.assertEqual(scenario4["turn_events"], "progressed_current")
+        self.assertEqual(scenario4["turn_events"], "verified_probe")
         self.assertEqual(scenario4["completion"], "verified_probe")
         for capture in (
             "captures/run/79dd_s04_selector_entry.png",
@@ -235,10 +235,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/79dd_s04_post_40.png",
             "captures/run/79dd_s04_post_41.png",
             "captures/run/79dd_s04_next_scenario.png",
+            "captures/run/40ea_s04_sortie.png",
+            "captures/run/40ea_s04_turn2_01.png",
+            "captures/run/40ea_s04_turn3_01.png",
+            "captures/run/40ea_s04_turn3_07.png",
+            "captures/run/40ea_s04_turn5_start.png",
+            "captures/run/40ea_s04_turn5_events_01.png",
+            "captures/run/40ea_s04_turn5_events_05.png",
+            "captures/run/40ea_s04_turn5_events_10.png",
+            "captures/run/40ea_s04_turn5_events_15.png",
+            "captures/run/40ea_s04_turn5_command.png",
         ):
             self.assertIn(capture, scenario4["captures"])
         self.assertIn("moving only Elwin's first deployment", scenario4["note"])
-        self.assertIn("Later-turn mind-control", scenario4["note"])
+        self.assertIn("progression probe 40EA preserves every deployment", scenario4["note"])
+        self.assertIn("turn 5 Morgan mind-control", scenario4["note"])
+        self.assertIn("second Shika cry", scenario4["note"])
         self.assertEqual(scenario5["preparation"], "verified_current")
         self.assertEqual(scenario5["description"], "verified_current")
         for capture in (
