@@ -515,7 +515,15 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(mapped(0xFE), 0x3FE)
 
     def test_battle_names_use_event_stable_extension_tiles(self):
-        expected = {"소": 0x3AD, "서": 0x3AE, "러": 0x3AF, "록": 0x5D8}
+        expected = {
+            "소": 0x3AD,
+            "서": 0x3AE,
+            "러": 0x3AF,
+            "록": 0x5D8,
+            "가": 0x5F0,
+            "스": 0x5F1,
+            "럴": 0x5F2,
+        }
         self.assertEqual(builder.BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR, expected)
         data = bytearray(self.rom)
         builder.expand_rom(data)
@@ -525,6 +533,18 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(
             [tile_by_index[index_by_char[char]] for char in "소서러"],
             [0x3AD, 0x3AE, 0x3AF],
+        )
+        self.assertEqual(
+            [tile_by_index[index_by_char[char]] for char in "발가스"],
+            [0xC1, 0x5F0, 0x5F1],
+        )
+        self.assertEqual(
+            [tile_by_index[index_by_char[char]] for char in "제너럴"],
+            [0xC0, 0x3AB, 0x5F2],
+        )
+        self.assertEqual(
+            builder.BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR,
+            {"럴": 0x443, "가": 0x444},
         )
 
     def test_direct_map_renderer_preserves_full_extension_tile_ids(self):
@@ -541,6 +561,10 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertIn(bytes.fromhex("D4 FC 00 02 35 81 00 00"), renderer)
 
     def test_ending_result_renderer_restores_overwritten_extension_banks(self):
+        self.assertEqual(
+            builder.BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES,
+            (1, 2, 3, 4, 5),
+        )
         renderer = builder._build_byte_ui_ending_result_renderer()
         self.assertEqual(renderer[:4], bytes.fromhex("48 E7 FF FE"))
         self.assertEqual(renderer[-10:-6], bytes.fromhex("4C DF 7F FF"))

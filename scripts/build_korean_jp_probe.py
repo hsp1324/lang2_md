@@ -235,6 +235,20 @@ BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
     # ASCII I is visible in the fixed SCENARIO banner. Keep 록 out of the
     # base byte font and use the final dynamically restored map-status bank.
     "록": 0x05D8,
+    # Scenario 8's reinforcement animation overwrites the former 0x0444,
+    # 0x00AF, and 0x0443 mappings. These unused tail slots belong to the final
+    # segment restored by every map-info update, and assigning them explicitly
+    # does not renumber any established local-table index or other glyph tile.
+    "가": 0x05F0,
+    "스": 0x05F1,
+    "럴": 0x05F2,
+}
+# Preserve the two extension-iterator positions that `럴` and `가` occupied
+# before their Scenario 8-safe remap. Consuming these slots keeps every later
+# class/name tile (notably `렌`) byte-identical.
+BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR = {
+    "럴": 0x0443,
+    "가": 0x0444,
 }
 BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C
@@ -519,8 +533,10 @@ BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL = bytes.fromhex("48 E7 C0 60 B3 FC")
 BYTE_UI_ENDING_RESULT_RENDER_CALL = 0x01CBA6
 # The ending status background overwrites these extension banks before it draws
 # the commander name and class. Its Plane A/B and sprite table do not reference
-# the ranges, so restoring them at the name call is context-safe.
-BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES = (1, 2, 3, 4)
+# the ranges, so restoring them at the name call is context-safe. The final
+# bank now contains battle-stable 가/스/럴 as well as 록, so it must be restored
+# here too; otherwise 스코트 and 키스 end in sprite fragments on 전과보고.
+BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES = (1, 2, 3, 4, 5)
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "42 40 10 18 0C 00"
@@ -5301,6 +5317,14 @@ def build_byte_ui_local_mapping(
             tile = 0x20
         elif char in BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR:
             tile = BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR[char]
+            retired_tile = BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR.get(char)
+            if retired_tile is not None:
+                consumed_tile = next(next_extension)
+                if consumed_tile != retired_tile:
+                    raise ValueError(
+                        f"retired full byte UI tile for {char!r} changed: "
+                        f"0x{consumed_tile:04X} != 0x{retired_tile:04X}"
+                    )
         elif char in code_by_char:
             code = code_by_char[char]
             tile = (

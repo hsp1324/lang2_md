@@ -6330,3 +6330,49 @@ contains 57 safe syllables as documented below and in
   leave a derivative as the final file despite passing tests. The accepted
   order is full discovery, production rebuild, probe rebuild, then inventory
   regeneration; that order finishes at production `BFBA` and probe `1A2E`.
+
+### Scenario 8 Completion And Battle-Stable Name Tiles (2026-07-20)
+
+- The Japanese Scenario 8 header is `0x180DA6`, its deployment table is
+  `0x180DC6`, and its fixed list at `0x180DE4` contains eleven 36-byte records
+  beginning at `0x180DE6`. Kramer is record 5 at `0x180E9A`, originally
+  `하이로드`, LV1, AT25, DF26 at `(38,8)` with six mercenary slots. The first
+  stock Elwin deployment remains `(2,7)`.
+- `tools/build_scenario8_clear_probe_rom.py` derives diagnostic `2209` from
+  final production `CE96`. It validates the Japanese/input layouts and complete
+  Kramer record, then changes only Kramer's AT/DF to zero, removes his six
+  mercenaries, and moves him to `(2,6)`. Every other fixed record, deployment,
+  event, class, identity, reward, and completion byte remains unchanged. Five
+  tests lock the permitted record/checksum surface.
+- The first normal Elwin attack intentionally did not finish the scenario. The
+  stock boss-survival path left Kramer at HP 1, spawned Vargas and Zolm, and
+  played their retreat exchange. Repeated C at that point only toggles the
+  enemy status popup; this is not a hang. End the turn through Start, let the
+  stock enemy/tutorial sequence return to Elwin's command menu, then attack the
+  adjacent Kramer a second time. The second normal attack completed the stage.
+- Captures `2209_s08_after_attack.png`, `2209_s08_event_11.png`,
+  `2209_s08_turn2_command2.png`, `2209_s08_kramer_second_target.png`, and
+  `2209_s08_after_second_attack.png` cover both attacks and the real
+  reinforcement/status path. `2209_s08_victory_23.png` shows
+  `전과보고 / POINT 3020P`, `_24.png` and `_26.png` show Scenario 8 then the
+  real `시나리오 9` save, and `2209_s08_next_scenario.png` proves stock
+  Scenario 9 route-map entry without reset or freeze. Scenario 8 `completion`
+  is `verified_probe`; timeout, defeat, and other conditional outcomes remain
+  pending.
+- The first `132D` run exposed graphic fragments in `발가스/제너럴` because
+  Scenario 8 reinforcement graphics overwrite the previous tiles for `가`,
+  `스`, and `럴`. Production remaps them to unused tail tiles
+  `0x05F0..0x05F2` in the final dynamically restored byte-font bank while
+  consuming retired iterator slots `0x0443/0x0444` so every later established
+  mapping, notably `렌`, remains byte-identical.
+- The intermediate `9A2C` replay proved `발가스/제너럴`, but its result screen
+  exposed a second owner collision: `스코트` and `키스` ended in red sprite
+  fragments. The result wrapper at `0x2B7D00` restored extension segments 1..4
+  only. `BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES` now includes segment 5,
+  and final `2209_s08_victory_23.png` shows both names intact.
+- `tools/build_scenario8_status_probe_rom.py` is renderer-only evidence. The
+  first attempt cleared the hidden Vargas record's bit and set coordinates,
+  but the game correctly did not deploy an event-owned record. The retained
+  method instead gives the already relocated clear-target Kramer the stock
+  Vargas name and General class IDs. It changes no production ROM and must not
+  be cited as natural event-placement or completion evidence.

@@ -18,7 +18,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 5 | current | current | current | current | probe | progressed | probe | pending | 31 |
 | 6 | current | current | current | current | current | progressed | probe | pending | 39 |
 | 7 | current | current | current | current | current | progressed | probe | pending | 44 |
-| 8 | current | current | current | current | probe | progressed | pending | pending | 28 |
+| 8 | current | current | current | current | probe | progressed | probe | pending | 40 |
 | 9 | current | current | current | current | current | progressed | pending | pending | 34 |
 | 10 | current | current | current | current | probe | progressed | pending | pending | 32 |
 | 11 | current | current | current | current | current | progressed | pending | pending | 36 |
@@ -342,7 +342,7 @@ Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling
 
 ### Scenario 8
 
-Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. No scenario-specific battle presentation occurred, so battle_ui remains verified only by the shared probe. Later turns and completion remain pending.
+Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. Final production CE96-derived clear probe 2209 validates the Japanese header, deployment table, and all eleven fixed records; it preserves every deployment and event while limiting only Kramer record 5 to AT/DF 0, no mercenaries, and a coordinate directly above stock Elwin. The first normal attack exercised the stock boss-survival path, Vargas and Zolm reinforcements, and all retreat dialogue while leaving Kramer at HP 1. After a stock turn transition, a second normal attack defeated him and reached level messages, 전과보고 with POINT 3020P, a real 시나리오 9 save, 다음 시나리오, and the Scenario 9 route map. Scenario 8 reinforcement graphics overwrote the former 가/스/럴 byte-font tiles; production moves them to the dynamically restored final bank, and the ending-result renderer now reloads that bank so actual 발가스/제너럴, 스코트, and 키스 remain intact. A separate status probe proved that merely clearing the Scenario 8-hidden record flag does not perform event placement; it therefore relabels only the relocated visible target with the stock Vargas name/class IDs for renderer diagnosis and is not completion evidence. Later-turn conditionals, timeout/defeat, alternate combat outcomes, and other branches remain pending.
 
 - `captures/run/ef65_s08_selector_map.png`
 - `captures/run/ef65_s08_brief_live_01.png`
@@ -372,6 +372,18 @@ Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling
 - `captures/run/489b_s08_description_current_20.png`
 - `captures/run/489b_s08_description_current_25.png`
 - `captures/run/489b_s08_description_current_26.png`
+- `captures/run/2209_s08_after_attack.png`
+- `captures/run/2209_s08_event_11.png`
+- `captures/run/2209_s08_turn2_command2.png`
+- `captures/run/2209_s08_kramer_second_target.png`
+- `captures/run/2209_s08_after_second_attack.png`
+- `captures/run/2209_s08_second_battle_done.png`
+- `captures/run/2209_s08_victory_5.png`
+- `captures/run/2209_s08_victory_16.png`
+- `captures/run/2209_s08_victory_23.png`
+- `captures/run/2209_s08_victory_24.png`
+- `captures/run/2209_s08_victory_26.png`
+- `captures/run/2209_s08_next_scenario.png`
 
 ### Scenario 9
 

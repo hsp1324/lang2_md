@@ -348,6 +348,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             self.assertIn(capture, scenario8["captures"])
         self.assertEqual(scenario8["opening_events"], "verified_current")
         self.assertEqual(scenario8["turn_events"], "progressed_current")
+        self.assertEqual(scenario8["battle_ui"], "verified_probe")
+        self.assertEqual(scenario8["completion"], "verified_probe")
+        for capture in (
+            "captures/run/2209_s08_after_attack.png",
+            "captures/run/2209_s08_event_11.png",
+            "captures/run/2209_s08_turn2_command2.png",
+            "captures/run/2209_s08_kramer_second_target.png",
+            "captures/run/2209_s08_after_second_attack.png",
+            "captures/run/2209_s08_victory_5.png",
+            "captures/run/2209_s08_victory_23.png",
+            "captures/run/2209_s08_victory_26.png",
+            "captures/run/2209_s08_next_scenario.png",
+        ):
+            self.assertIn(capture, scenario8["captures"])
+        self.assertIn("all eleven fixed records", scenario8["note"])
+        self.assertIn("boss-survival", scenario8["note"])
+        self.assertIn("Scenario 8-hidden record", scenario8["note"])
         self.assertEqual(scenario9["description"], "verified_current")
         for capture in (
             "captures/run/489b_s09_description_current_01.png",
