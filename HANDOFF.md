@@ -3708,6 +3708,20 @@ contains 57 safe syllables as documented below and in
   AT45, DF34), along with their original coordinates and mercenary IDs. Later
   turns, completion, and branches remain pending.
 
+### Scenario 14 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario14_clear_probe_rom.py` validates the Japanese Scenario
+  14 header at `0x181934`, the seven stock player deployments beginning at
+  `0x181956`, and all eleven fixed enemy records beginning at `0x181974`.
+  It changes only each enemy's AT/DF and six mercenary slots, plus the Mega
+  Drive checksum. Names, classes, levels, coordinates, hidden Leon, and all
+  event data remain source-identical.
+- The verified live conditions allow Elwin, Jessica, or Sherry to reach
+  Langrisser, or Leon to be defeated. Leon reaching Langrisser or the
+  protagonist dying causes defeat. No guessed Langrisser coordinate or compact
+  placement is included: the safe probe is ready for later-turn and completion
+  playback once foreground input is available.
+
 ### Current 85F1 Scenario 15 Entry And Editor Records (2026-07-16)
 
 - All 13 `빙룡병단` briefing confirmations were reviewed through preparation.
