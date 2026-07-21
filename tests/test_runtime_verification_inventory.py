@@ -451,7 +451,19 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario12["preparation"], "verified_current")
         self.assertEqual(scenario12["opening_events"], "verified_current")
         self.assertEqual(scenario12["battle_ui"], "verified_current")
-        self.assertEqual(scenario12["turn_events"], "progressed_current")
+        self.assertEqual(scenario12["turn_events"], "verified_probe")
+        self.assertEqual(scenario12["completion"], "verified_probe")
+        for capture in (
+            "captures/run/8b33_s12_sherry_target_alive9.png",
+            "captures/run/8b33_s12_sherry_alive9_result.png",
+            "captures/run/8b33_s12_completion_24.png",
+            "captures/run/8b33_s12_next_selected.png",
+            "captures/run/8b33_s12_route_selected.png",
+            "captures/run/8b33_s13_entry.png",
+        ):
+            self.assertIn(capture, scenario12["captures"])
+        self.assertIn("POINT 4920P", scenario12["note"])
+        self.assertIn("not as a fresh 8B33", scenario12["note"])
         self.assertEqual(scenario13["description"], "verified_current")
         for capture in (
             "captures/run/d355_s13_description_current_01.png",

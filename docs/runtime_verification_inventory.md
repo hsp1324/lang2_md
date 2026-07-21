@@ -22,7 +22,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 9 | current | current | current | current | current | progressed | probe | pending | 43 |
 | 10 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 11 | current | current | current | current | current | probe | probe | pending | 57 |
-| 12 | current | current | current | current | current | progressed | pending | pending | 40 |
+| 12 | current | current | current | current | current | probe | probe | pending | 52 |
 | 13 | current | current | current | current | current | progressed | pending | pending | 35 |
 | 14 | current | current | current | current | probe | progressed | pending | pending | 31 |
 | 15 | current | current | current | current | probe | progressed | pending | pending | 24 |
@@ -551,7 +551,7 @@ Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrollin
 
 ### Scenario 12
 
-Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrolling frames of 성지 레이텔, and the preparation endpoint. Direct Japanese-ROM rendering confirms the hidden cave entrance, Dark Rod shrine, absent Egbert, and ancient guardians. Runtime review exposed 입구가 centered on a line alone; replacing 교묘하게 with the equally accurate shorter 교묘히 keeps 지나칠 만큼 교묘히 숨겨진 입구가 on one line without adding a glyph or shifting global direct-string tokens. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete seven-member roster including both second-page entries, arrangement, automatic deployment, all 12 opening confirmations, condition rows, and the first turn through the stated GAME OVER loss condition. Later turns, completion, the Dark Rod event, and branches remain pending.
+Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrolling frames of 성지 레이텔, and the preparation endpoint. Direct Japanese-ROM rendering confirms the hidden cave entrance, Dark Rod shrine, absent Egbert, and ancient guardians. Runtime review exposed 입구가 centered on a line alone; replacing 교묘하게 with the equally accurate shorter 교묘히 keeps 지나칠 만큼 교묘히 숨겨진 입구가 on one line without adding a glyph or shifting global direct-string tokens. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete seven-member roster including both second-page entries, arrangement, automatic deployment, all 12 opening confirmations, condition rows, and the first turn through the stated GAME OVER loss condition. The older compact diagnostic run had defeated nine, not all ten, visible guardians; read-only GST inspection found fixed record 2 리빙아머 at HP 10 and identified hidden record 17 as the Egbert event actor. That diagnostic work RAM was resumed under current compact checksum 8B33 without runtime edits. A normal Sherry attack defeated the remaining 리빙아머 and triggered the stock Dark Rod aftermath, 전과보고 / POINT 4920P, a real 시나리오 13 save in slot 1, 다음 시나리오, route map, and 염룡병단과의 결전 entry without reset or freeze. This verifies turn events and completion as a probe continuation, not as a fresh 8B33 deployment-to-clear replay. Alternate branches remain pending.
 
 - `captures/run/fd90_s12_brief_live_01.png`
 - `captures/run/fd90_s12_brief_live_06.png`
@@ -593,6 +593,18 @@ Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrollin
 - `captures/run/d355_s12_description_final_20.png`
 - `captures/run/2ca4_s12_jessica_slime_battle.png`
 - `captures/run/2ca4_s12_jessica_slime_attack_after.png`
+- `captures/run/8b33_s12_sherry_target_alive9.png`
+- `captures/run/8b33_s12_sherry_alive9_result.png`
+- `captures/run/8b33_s12_after_livingarmor.png`
+- `captures/run/8b33_s12_completion_01.png`
+- `captures/run/8b33_s12_completion_07.png`
+- `captures/run/8b33_s12_completion_13.png`
+- `captures/run/8b33_s12_completion_23.png`
+- `captures/run/8b33_s12_completion_24.png`
+- `captures/run/8b33_s12_next_selected.png`
+- `captures/run/8b33_s12_route_after.png`
+- `captures/run/8b33_s12_route_selected.png`
+- `captures/run/8b33_s13_entry.png`
 
 ### Scenario 13
 

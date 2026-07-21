@@ -6858,11 +6858,12 @@ contains 57 safe syllables as documented below and in
   current compact derivative as checksum `E14C`.
 - The accepted live `0E4F` run used the earlier compact derivative made from
   production `C3D8`. It entered Scenario 12 from the real Scenario 11 save,
-  completed automatic deployment and the full opening, normally defeated all
-  ten visible guardians over ten turns, and triggered the stock hidden Egbert
-  and Dark Rod sequence. Victory dialogue is currently paused before the
-  result/save transition, so Scenario 12 completion is not yet promoted to
-  `verified_probe`.
+  completed automatic deployment and the full opening, normally defeated nine
+  of the ten initially visible guardians over ten turns, and triggered the
+  stock hidden Egbert and Dark Rod sequence. The earlier note incorrectly said
+  that all ten visible guardians were gone: runtime fixed record 2, a
+  `리빙아머` at `(23,8)`, still had HP 10. Runtime record 17 was the hidden
+  Egbert event actor at `(15,7)`, not an additional combat target.
 - The user's reported colored shape above Hein's `D99`, between DF and MP, is
   not a Korean glyph. Enlarging `0e4f_s12_victory15.png`, `_20.png`, and
   `_21_xlib.png` shows a 16x16 map-unit sprite crossing the lower status plane;
@@ -6877,9 +6878,38 @@ contains 57 safe syllables as documented below and in
   and both source-only Liana-return records `0x19A87E/0x19A8F4`. The latter now
   says `{0002}가 납치됐다면 지금까지 싸운 보람이 없어`; five records omit
   a final period that previously occupied a line by itself. Exact translation
-  tests lock the accepted wording. These edits have passed the reviewed-event
-  and target-residue tests plus a complete production build, but still need
-  live verification after the foreground-input pause ends.
+  tests lock the accepted wording. These edits passed the reviewed-event and
+  target-residue tests plus a complete production build; the resumed `8B33`
+  continuation below also renders the affected aftermath pages without broken
+  glyphs, clipping, reset, or freeze.
+
+### Scenario 12 Completion Continuation (2026-07-22)
+
+- The old `0E4F` diagnostic quicksave was resumed under the current compact
+  Scenario 12 ROM, checksum `8B33`. This is current ROM code and text rendering
+  with recovered older diagnostic work RAM; it is not a fresh `8B33` battle
+  from deployment. No runtime flags, HP, or unit records were edited.
+- Read-only GST inspection identified the sole remaining combat unit as fixed
+  record 2, `리빙아머`, HP 10 at `(23,8)`. Sherry moved onto the source unit,
+  the target status rendered cleanly, and one ordinary Attack reduced it to HP
+  0. Captures `8b33_s12_sherry_target_alive9.png`,
+  `8b33_s12_sherry_alive9_result.png`, and
+  `8b33_s12_after_livingarmor.png` retain the normal kill evidence.
+- Moving toward the hidden Egbert event position then triggered the stock clear
+  continuation. The run rendered the complete Jessica, Aaron, Hein, and Elwin
+  aftermath, `전과보고 / POINT 4920P`, wrote a real `시나리오 13` save in
+  slot 1, selected `다음 시나리오`, displayed the route map, and entered the
+  Scenario 13 description `염룡병단과의 결전` without reset or freeze.
+  Representative captures are `8b33_s12_completion_01.png`, `_07.png`,
+  `_13.png`, `_23.png`, `_24.png`, `8b33_s12_next_selected.png`,
+  `8b33_s12_route_after.png`, `8b33_s12_route_selected.png`, and
+  `8b33_s13_entry.png`. Scenario 12 `turn_events` and `completion` are now
+  `verified_probe`; alternate branches remain pending.
+- The completion pages also confirm the known punctuation baseline: full stops
+  still occupy centered small-font cells and some prose remains stiff. That is
+  a text-quality follow-up, not a completion-handler failure. Do not repeat the
+  old claim that the run stopped before result/save, and do not attack runtime
+  record 17 as though it were another guardian.
 
 ### Scenario 13 Clear Probe Prepared Offline (2026-07-21)
 
