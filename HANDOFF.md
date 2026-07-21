@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 579 passing
+unit tests: 585 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4200,6 +4200,19 @@ contains 57 safe syllables as documented below and in
   separately documented production-derived ending probe, while Scenarios
   28-31 still require fresh production traversal. Writable editor fields stay
   limited to class, LV, AT, DF, and mercenary slots.
+
+### Scenario 27 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario27_clear_probe_rom.py` validates the Japanese Scenario
+  27 header at `0x1830CC`, all ten stock player deployments beginning at
+  `0x1830F4`, and all ten fixed enemy records beginning at `0x18311E`.
+- Only AT/DF and six mercenary slots are limited. Demon Lords, imperial
+  commanders, the Vampire Lord, Bernhardt, and hidden Leon retain source side,
+  identity, class, level, coordinates, hidden flags, and event handlers.
+- The generated diagnostic ROM checksum is `5B2B`; six focused regressions and
+  the full 585-test suite pass. This is static evidence only, so the clear,
+  ending, epilogue, credits, and final wait chain still requires live playback
+  against this build when emulator input is allowed.
 
 ### Scenarios 2-10 Original Editor Regression Matrix (2026-07-16)
 
