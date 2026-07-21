@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 545 passing
+unit tests: 550 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4029,6 +4029,20 @@ contains 57 safe syllables as documented below and in
   IDs. The same list also contains Succubi, Living Armors, two other hidden
   Krakens, and a hidden imperial Archmage. Coordinates and hidden/event flags
   remain read-only editor context.
+
+### Scenario 21 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario21_clear_probe_rom.py` validates the Japanese Scenario
+  21 header at `0x18259E`, all eight stock player deployments beginning at
+  `0x1825C2`, and all eleven fixed enemy records beginning at `0x1825E4`.
+  It changes only each enemy's AT/DF and six mercenary slots plus the checksum;
+  player coordinates and event data remain byte-identical.
+- Lana remains `라나/다크프린세스`, LV6, AT39, DF36 at `(37,11)`.
+  Hidden records 7..10 retain `(255,255)`, including three original 크라켄
+  records and the imperial `아크메이지`, LV6, AT39, DF27. Their identities,
+  classes, levels, source mercenaries, reveal events, and completion handler
+  remain intact for later live playback. Production `2CA4` builds the ignored
+  diagnostic ROM as checksum `AD53`.
 
 ### Current 138B Scenario 22 Background Inventory And Partial Preparation (2026-07-16)
 
