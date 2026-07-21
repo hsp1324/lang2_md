@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 518 passing
+unit tests: 524 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3805,6 +3805,21 @@ contains 57 safe syllables as documented below and in
   Lana (`다크프린세스`, LV1, AT36, DF33, X/Y=`0xFF`) with their exact
   original mercenary IDs. Coordinates and hidden/event flags remain read-only
   editor context until their ownership is proven.
+
+### Scenario 16 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario16_clear_probe_rom.py` validates the Japanese Scenario
+  16 header at `0x181CF0`, all eight stock player deployments beginning at
+  `0x181D14`, and all ten fixed enemy records beginning at `0x181D36`.
+  It changes only each enemy's AT/DF and six mercenary slots plus the Mega
+  Drive checksum. No player coordinate or event byte is changed.
+- Leon remains `레온/로얄가드`, LV4, AT46, DF35 at stock `(13,10)`;
+  Laird remains `레아드/실버나이트`, LV6, AT40, DF28 at `(6,20)`.
+  Hidden records 7..9 retain `(255,255)`, including Lana as
+  `라나/다크프린세스`, LV1, AT36, DF33. Both hidden ghosts, all identities,
+  classes, levels, initial coordinates, and event handlers are preserved for
+  later-turn, gate, reinforcement, and completion playback. Production `2CA4`
+  builds the ignored diagnostic ROM as checksum `02C6`.
 
 ### Current 12D3 Scenario 17 Entry, Wrapping Fixes, And Editor Records (2026-07-16)
 
