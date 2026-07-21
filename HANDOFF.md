@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 40BC
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 608 passing
+unit tests: 614 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6982,3 +6982,18 @@ contains 57 safe syllables as documented below and in
   Six focused regressions and the full 608-test suite pass. This is static
   editor/probe groundwork only; X3 successful completion and conditional
   branches remain pending.
+
+### Scenario 31 Source-Validated Clear Probe (2026-07-22)
+
+- `tools/build_scenario31_clear_probe_rom.py` validates the Japanese secret
+  Scenario X4 header at `0x18376C`, all ten stock player deployments beginning
+  at `0x183794`, and all ten fixed combat records beginning at `0x1837BE`.
+- Only AT/DF and six mercenary slots are limited. Enemy-side 발가스, 이멜다,
+  데몬로드, 레온, 레아드, 에그베르트, and 보젤 remain distinct from the
+  special-side `베른하르트/엠퍼러`. Tests preserve every side and visible
+  flag plus representative source identities, classes, coordinates, and the
+  original large AT/DF values up to Bernhardt's `87/61`.
+- Production `40BC` builds the ignored diagnostic ROM as checksum `3A5A`.
+  Six focused regressions and the full 614-test suite pass. All 31 scenarios
+  now have a source-validating progression/clear probe builder; X4 battle,
+  successful completion, and conditional branches still require live review.
