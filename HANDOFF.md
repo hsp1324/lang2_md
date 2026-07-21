@@ -3757,6 +3757,20 @@ contains 57 safe syllables as documented below and in
   run was restarted and completed with short direct events. Record this timing
   distinction to avoid repeating the false menu diagnosis.
 
+### Scenario 15 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario15_clear_probe_rom.py` validates the Japanese Scenario
+  15 header at `0x181B00`, all seven stock player deployments beginning at
+  `0x181B22`, and all twelve fixed records beginning at `0x181B40`. Record 0
+  is the hidden allied Scott event and remains byte-identical. Only enemy
+  records 1..11 have AT/DF and their six mercenary slots limited.
+- Imelda remains `제너럴` at stock `(23,21)`. Hidden Scylla, Lana
+  (`다크프린세스`), a second Scylla, and Wyvern retain their original hidden
+  flags, identities, classes, levels, and `(255,255)` initial coordinates.
+  Player positions and all event handlers remain source-identical, so the
+  diagnostic ROM is suitable for later-turn, reinforcement, retreat, and
+  completion playback without making an unverified shortcut placement.
+
 ### Current 85F1 Scenario 16 Entry And Editor Records (2026-07-16)
 
 - All eight `레이갈드 제도` briefing confirmations were reviewed through the
