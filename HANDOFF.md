@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 524 passing
+unit tests: 529 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3853,6 +3853,21 @@ contains 57 safe syllables as documented below and in
   mercenary IDs. `엠퍼러` follows the Korean class reference for original
   `エンペラー`; no class rename was needed. Coordinates and hidden/event flags
   remain read-only editor context.
+
+### Scenario 17 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario17_clear_probe_rom.py` validates the Japanese Scenario
+  17 header at `0x181E9E`, all eight stock player deployments beginning at
+  `0x181EC2`, and all eleven fixed enemy records beginning at `0x181EE4`.
+  It changes only each enemy's AT/DF and six mercenary slots plus the checksum;
+  player coordinates and event data remain byte-identical.
+- Bernhardt remains `베른하르트/엠퍼러`, LV1, AT52, DF37 at `(15,4)`,
+  and Bozel remains `보젤/다크마스터`, LV1, AT38, DF29 at `(18,6)`.
+  Hidden records 9 and 10 retain their two imperial commander IDs,
+  `매직나이트`, LV10, AT36, DF27, and `(255,255)` initial coordinates.
+  The diagnostic therefore preserves the throne, hidden reinforcement, and
+  completion event ownership for later live playback. Production `2CA4`
+  builds the ignored diagnostic ROM as checksum `FFB9`.
 
 ### Current 1391 Scenario 18 Entry, Dynamic Name Order, And Editor Records (2026-07-16)
 
