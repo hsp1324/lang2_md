@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 6C85
+current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 467 passing
+unit tests: 518 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3770,6 +3770,15 @@ contains 57 safe syllables as documented below and in
   Player positions and all event handlers remain source-identical, so the
   diagnostic ROM is suitable for later-turn, reinforcement, retreat, and
   completion playback without making an unverified shortcut placement.
+- Production `2CA4` source-reviews six awkward Scenario 15 records without
+  adding a custom glyph or changing the established glyph order. Addresses
+  `0x19FF78`, `0x1A012A`, `0x1A01A0`, `0x1A03F0`, `0x1A0844`, and
+  `0x1A087E` now preserve Imelda's treatment of her troops, the mutiny's
+  respectful address, Elwin asking whether Liana recognizes him, and Hein's
+  explanation that he sensed a spell and recognized the caller's voice.
+  All six fit their original physical-page capacities and render cleanly under
+  `captures/analysis/s15_render_2ca4/`. This is static renderer evidence;
+  Scenario 15 later-turn and completion playback remains pending.
 
 ### Current 85F1 Scenario 16 Entry And Editor Records (2026-07-16)
 

@@ -350,6 +350,28 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(primary[-1]["english_record"], 706)
         self.assertTrue(all(row["english_record"] is not None for row in rows))
         self.assertTrue(all("\n" not in row["text"] for row in rows))
+        by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(by_address["0x19FF78"], "뭔 짓이야!")
+        self.assertEqual(
+            by_address["0x1A012A"],
+            "{0015}님은 부하를 조금도 안 아끼나?",
+        )
+        self.assertEqual(
+            by_address["0x1A01A0"],
+            "각오하세요, {0015}님!",
+        )
+        self.assertEqual(
+            by_address["0x1A03F0"],
+            "{0002}! 나야, {0001}! 못 알아봐?",
+        )
+        self.assertEqual(
+            by_address["0x1A0844"],
+            "그녀에게 걸린 술법이 느껴졌어요.",
+        )
+        self.assertEqual(
+            by_address["0x1A087E"],
+            "그녀를 부른 목소리도 들어 본 적이 있어요. 어쩌면…",
+        )
 
     def test_scenario_17_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 17]
