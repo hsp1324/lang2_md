@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 556 passing
+unit tests: 561 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4100,6 +4100,23 @@ contains 57 safe syllables as documented below and in
   class, LV, AT, DF, and six mercenary fields. Coordinates remain read-only
   context, and the absence of a hidden flag here must not be generalized to
   event-spawned units.
+
+### Scenario 23 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario23_clear_probe_rom.py` validates the Japanese Scenario
+  23 header at `0x182966`, all nine stock player deployments beginning at
+  `0x18298C`, and all eleven fixed enemy records beginning at `0x1829B0`.
+- The builder limits only AT/DF and six mercenary slots for records 0..10.
+  All records retain enemy `side_id=4`; identities, classes, levels, stock
+  coordinates, the Holy Rod objective, exit handling, and event handlers stay
+  source-identical. Locked representatives include an imperial
+  `드래곤로드` (LV10, AT45, DF31), `레아드/실버나이트` (LV10, AT43,
+  DF30), and an imperial `위저드` (LV10, AT35, DF31). Live clear/result/save
+  playback remains pending until emulator input is allowed.
+- The generated diagnostic ROM checksum is `DED4`; five focused regressions
+  and the full 561-test suite pass. Initial inspection misread the table's
+  leading `0x0000` as coordinate data; a direct 16-bit source dump corrected
+  and locked the nine pairs beginning at `0x18298C`.
 
 ### Scenarios 24-26 Original Editor Records (2026-07-16)
 
