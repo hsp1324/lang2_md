@@ -6537,3 +6537,78 @@ contains 57 safe syllables as documented below and in
   START again for the title menu, enters LOAD, selects the Scenario 2 SRAM,
   and only then enters the selector code. Sending the code during the intro
   can land in name entry and must not be treated as a ROM failure.
+
+### Scenario 11 Fire Route Clear And Scenario 12 Entry (2026-07-21)
+
+- `tools/build_scenario11_clear_probe_rom.py` derived live diagnostic `D091`
+  from production `33EF`. It validates the Japanese Scenario 11 header at
+  `0x18138E`, deployment table at `0x1813AC`, and all eleven `0x24`-byte fixed
+  records before changing anything. `--safe-clear-layout --safe-jessica`
+  changes only the six player deployment coordinates, Jessica's fixed X/Y,
+  enemy records 1..10 AT/DF/mercenaries/level/class, visible enemy coordinates,
+  and the ROM checksum. Jessica's identity, stats, class, mercenaries, and every
+  event/completion handler remain unchanged. Twelve tests lock the permitted
+  bytes. After the accepted punctuation edit, production `C3D8` deterministically
+  rebuilds the same probe fields as `607A`; `D091` remains the checksum of the
+  retained live-clear evidence rather than the new derivative's checksum.
+- The accepted layout puts the six players at `(18,20)`, `(17,20)`, `(19,20)`,
+  `(18,19)`, `(17,19)`, `(19,19)`, Jessica at `(18,18)`, and fixed visible
+  enemies around them. The final hidden enemy record keeps `(255,255)`. Live
+  `d091_retreat_20.png` proves the stock Egbert retreat event placed the
+  unmodified Jessica record at the safe coordinate with her original stats.
+- Read-only GST inspection confirmed that fixed coordinates are not final
+  runtime coordinates. Players occupy runtime groups 0..5, Jessica group 6,
+  and fixed enemy records 1..10 map to runtime groups 7..16. The stock event
+  moved fixed enemy record 7 to `(17,30)`; it advanced to `(17,24)` before the
+  final fight. Hidden fixed record 10 appeared as runtime group 16 at `(21,20)`
+  and moved to `(20,20)`. The editor must continue labeling X/Y as read-only
+  initial placement, not a guaranteed spawn or turn coordinate.
+- The complete live route traversed Egbert's retreat, the turn-6 fire exchange,
+  TURN 7 through TURN 9, and the hidden reinforcement without Japanese text,
+  broken names/classes, reset, or freeze. Elwin normally defeated the southern
+  messenger and Sherry normally defeated the final reinforcement. Captures
+  `d091_turn9_battle.png`, `d091_turn9_enemy16_target.png`, and
+  `d091_turn9_enemy16_battle.png` retain those normal attack paths.
+- Victory captures `d091_s11_victory_01.png` through `_17.png` retain the stock
+  aftermath. `_18.png` is `전과보고 / POINT 3770P`, `_20.png` writes a real
+  `시나리오 11` slot before the dynamic save update, `_21.png` visibly shows
+  the resulting `시나리오 12` slot, and `d091_s11_next_selected.png` selects
+  `다음 시나리오`. `d091_s12_route.png`, `d091_s12_title.png`, and
+  `d091_s12_brief_00.png` through `_04.png` prove ordinary Scenario 12 route,
+  `성지 레이텔`, complete current briefing, and preparation entry. Scenario 11
+  `turn_events` and `completion` are now `verified_probe`; alternate loss and
+  conditional branches remain pending.
+- The movement/attack input sequence was clarified during this run. Direction
+  events must use a short hold such as `@0.02`; `0.25` auto-repeats and skips
+  several map cells. From a commander, C opens the outer menu, C selects
+  `이동`, short directions choose the destination, C stages the move, short
+  directions place the cursor on the adjacent enemy, and C starts battle. B
+  cancels a staged move and restores the original runtime coordinate. Start
+  menu rows still require four separate Down events with about 0.6 seconds
+  between them before choosing `턴 종료`.
+- Do not retry the rejected `3FE1` layout that hid fixed enemy records 2..9; a
+  Scenario 11 slot stayed black immediately after load. Earlier `D079` left
+  Jessica exposed to the fire deadline. `D085` reached TURN 8 and reduced the
+  visible force but retained timing-sensitive Jessica placement. The built-in
+  enemy-control code did not enable control through either direct events or
+  focused XTest. Direct live GST HP/stat edits were also unstable at later
+  transitions. `D091` plus source-validated SRAM roster fields was the accepted
+  route; GST remained read-only except for ordinary quicksave recovery.
+- Scenario 11 runtime review exposed an orphan final period at event address
+  `0x1986FE`. The accepted text is now `뭐라고요!? …알겠습니다`; an exact
+  address test prevents the period from returning as a centered line by itself.
+  The preparation detector's ornate-divider gold threshold is now `0.14`
+  because the real Scenario 11 divider measures about 14.9%; the former 18%
+  threshold could advance into the hire menu instead of stopping on preparation.
+- Rebuilding that one reviewed text change produces production checksum `C3D8`
+  with 864 custom glyphs. The direct Scenario 11 renderer at
+  `captures/analysis/s11_render_c3d8/scenario_11_pages_07.png` shows physical
+  page 85 ending cleanly at `…알겠습니다` with no orphan punctuation. This is
+  static renderer evidence; the surrounding D091 live clear remains the runtime
+  evidence for the unmodified event flow and completion handler.
+- `tools/scenario_data.py` now has a direct JSON CLI for one, several, or all 31
+  scenarios. Its schema separates editable `level/at/df/class_id/mercenaries`
+  from read-only identity, role, offset, hidden state, and coordinates, and
+  explicitly warns that event scripts may override initial X/Y. The existing
+  `editor/server.py` GUI continues to use the same validated data layer and
+  writes a separate ROM rather than overwriting production.

@@ -98,6 +98,17 @@ class BlastemPreparationDetectorTests(unittest.TestCase):
             self.make_preparation_shape(path)
             self.assertTrue(preparation_screen_visible(path))
 
+    def test_accepts_partially_ornate_preparation_divider(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "preparation-partial-divider.png"
+            frame = self.make_preparation_shape(path)
+            # Match the Scenario 11 divider: only about 15% of this crop is
+            # gold because the ornament also contains blue and black pixels.
+            frame.paste((0, 0, 0), (141, 32, 147, 157))
+            frame.paste((0, 0, 119), (141, 157, 147, 187))
+            frame.save(path)
+            self.assertTrue(preparation_screen_visible(path))
+
     def test_rejects_briefing_without_money_panel(self):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "briefing.png"

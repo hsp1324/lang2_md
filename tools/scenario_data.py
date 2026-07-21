@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 from array import array
 from dataclasses import dataclass
+import json
 from pathlib import Path
 import sys
+
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
 
@@ -17,6 +24,8 @@ CLASS_POINTER_TABLE = 0x05E6D6
 CLASS_COUNT = 157
 NAME_POINTER_TABLE = 0x0618E8
 NAME_COUNT = 0x75
+DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+DEFAULT_REFERENCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 
 FIELD_OFFSETS = {
     "level": 0x0E,
@@ -231,3 +240,79 @@ def patch_scenario(data: bytearray, number: int, records: list[dict[str, object]
         start = offset + FIELD_OFFSETS["mercenaries"]
         data[start : start + 6] = bytes(mercenaries)
     return update_checksum(data)
+
+
+def export_scenarios(
+    data: bytes,
+    reference_rom: bytes,
+    numbers: list[int],
+) -> dict[str, object]:
+    scenarios = []
+    for number in numbers:
+        scenario = read_scenario(data, reference_rom, number)
+        scenario.pop("classes")
+        scenarios.append(scenario)
+    return {
+        "schema_version": 1,
+        "coordinate_policy": (
+            "read_only_initial_placement; event scripts may override runtime coordinates"
+        ),
+        "editable_fields": ["level", "at", "df", "class_id", "mercenaries"],
+        "read_only_fields": [
+            "index",
+            "offset",
+            "role",
+            "label",
+            "hidden",
+            "x",
+            "y",
+            "name",
+        ],
+        "classes": class_names(reference_rom),
+        "scenarios": scenarios,
+    }
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Export source-identified records for the scenario editor"
+    )
+    parser.add_argument("--rom", type=Path, default=DEFAULT_ROM)
+    parser.add_argument(
+        "--reference-rom",
+        type=Path,
+        default=DEFAULT_REFERENCE_ROM,
+        help="Japanese ROM used for authoritative class/name decoding",
+    )
+    parser.add_argument(
+        "--scenario",
+        type=int,
+        action="append",
+        help="scenario number to export; repeat as needed (default: all 31)",
+    )
+    parser.add_argument("--output", type=Path, help="write JSON to this path")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    numbers = args.scenario or list(range(1, SCENARIO_COUNT + 1))
+    if any(not 1 <= number <= SCENARIO_COUNT for number in numbers):
+        raise ValueError(f"scenario must be 1..{SCENARIO_COUNT}")
+    payload = export_scenarios(
+        args.rom.read_bytes(),
+        args.reference_rom.read_bytes(),
+        numbers,
+    )
+    rendered = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(rendered, encoding="utf-8")
+        print(args.output)
+    else:
+        print(rendered, end="")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

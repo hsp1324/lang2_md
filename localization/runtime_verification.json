@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "33EF",
+  "production_checksum": "C3D8",
   "states": [
     "pending",
     "historical",
@@ -656,8 +656,8 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_current",
-      "turn_events": "progressed_current",
-      "completion": "pending",
+      "turn_events": "verified_probe",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/fd90_s11_brief_live_01.png",
@@ -695,9 +695,30 @@
         "captures/run/466a_s11_description_final_07.png",
         "captures/run/466a_s11_description_final_10.png",
         "captures/run/466a_s11_description_final_13.png",
-        "captures/run/466a_s11_description_final_14.png"
+        "captures/run/466a_s11_description_final_14.png",
+        "captures/run/d091_retreat_20.png",
+        "captures/run/d091_turn6_fire_01.png",
+        "captures/run/d091_turn6_fire_02.png",
+        "captures/run/d091_turn6_fire_04.png",
+        "captures/run/d091_turn6_fire_05.png",
+        "captures/run/d091_turn6_fire_07.png",
+        "captures/run/d091_turn9_battle.png",
+        "captures/run/d091_turn9_enemy16_target.png",
+        "captures/run/d091_turn9_enemy16_battle.png",
+        "captures/run/d091_s11_victory_04.png",
+        "captures/run/d091_s11_victory_08.png",
+        "captures/run/d091_s11_victory_12.png",
+        "captures/run/d091_s11_victory_16.png",
+        "captures/run/d091_s11_victory_17.png",
+        "captures/run/d091_s11_victory_18.png",
+        "captures/run/d091_s11_victory_20.png",
+        "captures/run/d091_s11_victory_21.png",
+        "captures/run/d091_s11_next_selected.png",
+        "captures/run/d091_s12_route.png",
+        "captures/run/d091_s12_title.png",
+        "captures/run/d091_s12_brief_04.png"
       ],
-      "note": "Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrolling frames of 불길 속에서, and the preparation endpoint. Direct Japanese-ROM rendering confirms the source says Egbert secretly laid traps while waiting for the opportunity. The awkward 그때를 노리고 함정을 파 두었다 is now 그때를 노려 몰래 함정을 파 두었다. A rejected 쳐 wording introduced one new description glyph and shifted 63 global direct-string token records; retaining 파 preserves every existing global glyph ID. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete six-member roster including the second page, arrangement, all 37 opening confirmations, condition rows, and the first turn through the intentional GAME OVER after the exposed defenders were defeated. Later turns, completion, and branches remain pending."
+      "note": "Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrolling frames of 불길 속에서, and the preparation endpoint. Direct Japanese-ROM rendering confirms the source says Egbert secretly laid traps while waiting for the opportunity. The awkward 그때를 노리고 함정을 파 두었다 is now 그때를 노려 몰래 함정을 파 두었다. A rejected 쳐 wording introduced one new description glyph and shifted 63 global direct-string token records; retaining 파 preserves every existing global glyph ID. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete six-member roster including the second page, arrangement, all 37 opening confirmations, condition rows, and the first-turn loss route. Production 33EF-derived diagnostic D091 validates the Japanese header, deployment table, and all eleven fixed records, weakens only imperial combat fields, uses a compact assault layout, and moves Jessica outside the spreading fire while preserving every event and completion handler. The live route traversed Egbert's retreat, fire events through turn 9, the event-relocated southern messenger, and the hidden final reinforcement. Normal Elwin and Sherry attacks defeated the final two groups, reached 전과보고 / POINT 3770P, wrote a real 시나리오 12 save, and entered the Scenario 12 route and 성지 레이텔 preparation screen without Japanese residue, reset, or freeze. Alternate defeat and other conditional branches remain pending."
     },
     {
       "scenario": 12,

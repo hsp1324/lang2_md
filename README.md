@@ -36,7 +36,7 @@
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. Windows 배율을 반영한 DWM 데스크톱 캡처를 우선하고 `xwd`, Xlib 순으로 fallback하며 자동 경로는 포커스를 바꾸지 않습니다. `--print-window`는 가려진 OpenGL 창에서 이전 프레임 잔상이 섞일 수 있는 진단 전용 옵션입니다. `--allow-focus-steal`은 사용자가 다른 작업을 하지 않을 때 한 번만 명시적으로 허용해야 합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
-- `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치합니다.
+- `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치하거나 편집기용 JSON으로 내보냅니다. 좌표는 초기 고정 배치일 뿐 이벤트가 실시간으로 덮어쓸 수 있어 읽기 전용입니다.
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
 - `tools/english_dialogue_inventory.py`: 레거시 영문 추출본의 3바이트 이벤트 복귀값으로 2,978개 시나리오 대사와 104개 엔딩/에필로그 대사를 분류합니다. 이 값은 일본판 문자열 주소가 아니며 영문/기계번역은 검토용 참고 자료입니다.
 - `tools/render_event_pages.py`: 시나리오별 일본판 대사 후보를 주소와 제어코드가 보이는 개별 PNG 및 묶음 시트로 렌더링합니다. 예: `python3 tools/render_event_pages.py --scenario 14`.
@@ -66,6 +66,7 @@
 - `tools/build_scenario8_clear_probe_rom.py`: 시나리오 8의 크레이머 한 명만 원본 엘윈 배치 바로 위로 옮기고 AT/DF와 용병을 제한합니다. 첫 정상 공격은 원본 보스 생존 처리로 HP 1을 남기므로 턴 종료 뒤 두 번째 정상 공격으로 격파해야 합니다. 발가스 증원·퇴각 대사, 전과보고, 9장 저장과 진입까지 실기로 검증하며 생성 ROM은 커밋하지 않습니다.
 - `tools/build_scenario8_status_probe_rom.py`: 위 클리어 진단의 크레이머 표시 레코드에 원본 발가스 이름·제너럴 클래스 ID만 임시 적용해 상태창 글꼴을 짧게 재현합니다. 숨김 발가스의 플래그만 해제하는 방식은 이벤트 배치를 만들지 못하므로 사용하지 않습니다. 이 ROM은 표시 경로 진단 전용이며 배포·커밋하지 않습니다.
 - `tools/build_scenario9_clear_probe_rom.py`: 시나리오 9의 레아드 한 명만 원본 엘윈 배치 바로 위로 옮기고 AT/DF와 용병을 제한합니다. 실제 공격 명령으로 레아드를 격파해 전체 퇴각·알하자드 설명·레벨업·전과보고·10장 저장과 진입까지 실기로 검증하며 생성 ROM은 커밋하지 않습니다.
+- `tools/build_scenario11_clear_probe_rom.py`: 시나리오 11의 일본판 헤더·배치표·11개 고정 레코드를 검증하고 적 능력치·용병을 제한합니다. `--safe-clear-layout --safe-jessica` 진단 조합은 이벤트를 보존한 채 전투 진영과 제시카만 화재 밖으로 옮겨 9턴 화재·숨은 증원·전과보고·12장 저장과 진입까지 실기로 검증하며 생성 ROM은 커밋하지 않습니다.
 - `tools/game_genie.py`, `tools/build_game_genie_probe_rom.py`: 명시한 Genesis Game Genie 코드를 주소/워드로 해석하고 무시되는 실험 ROM을 만듭니다. 코드 호환 리비전을 자동 판별하지 않으며, 프로젝트 원본은 일본판 REV00입니다. REV01용 공개 코드는 주소가 정상적으로 보여도 REV00을 리셋시킬 수 있으므로 프리셋을 제공하지 않습니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
@@ -108,6 +109,14 @@ roms/builds/Langrisser II (Korean Scenario Edit).md
 ```
 
 시나리오 포인터 표는 `0x18005E`이며 각 헤더의 `+0x0C`가 고정 배치 목록을 가리킵니다. 목록은 2바이트 개수 뒤에 36바이트 레코드가 이어집니다. 쓰기가 검증되어 현재 노출한 필드는 레벨 `+0x0E`, AT/DF `+0x12/+0x13`, 클래스 `+0x1B`, 용병 6칸 `+0x1E..+0x23`입니다. 이름 ID `+0x1A`, 좌표, 이벤트 플래그는 문맥 표시용으로만 읽으며 의미와 파급 범위가 완전히 확정되기 전에는 쓰지 않습니다.
+
+GUI와 같은 검증 데이터 계층을 JSON으로 확인하거나 다른 편집기에서 재사용하려면 다음처럼 실행합니다. `--scenario`를 반복하지 않으면 31개 전부를 내보냅니다.
+
+```bash
+python3 tools/scenario_data.py --scenario 11 --output captures/analysis/scenario11_editor.json
+```
+
+내보낸 `x/y`는 고정 배치표의 초기값입니다. 시나리오 이벤트가 등장·퇴각·증원 좌표를 다시 쓰는 경우가 있으므로 편집 가능 필드는 `level/at/df/class_id/mercenaries`로 제한합니다.
 
 고정 배치 레코드의 클래스 ID만 바꾸면 화면상의 클래스명과 능력치는 바뀌지만 마법·소환 명령은 부여되지 않습니다. REV00 시나리오 1에서 레아드를 `서머너`로 바꾼 실기 검증에서도 `이동/공격/치료/명령`만 남았습니다. 전투 중 유닛 구조체에서는 `+0x50` long의 비트 0과 17이 각각 마법·소환 명령 조건이지만, 고정 배치 레코드에서 이 런타임 값으로 이어지는 소유권은 아직 확정하지 않았습니다. 따라서 현재 편집기는 클래스 선택을 능력·마법 세트 편집으로 취급하지 않으며, 원본 필드 매핑이 검증될 때까지 별도 기능으로 노출하지 않습니다.
 

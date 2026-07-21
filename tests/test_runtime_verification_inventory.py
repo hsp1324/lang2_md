@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "33EF")
+        self.assertEqual(data["production_checksum"], "C3D8")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -420,13 +420,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/466a_s11_description_final_10.png",
             "captures/run/466a_s11_description_final_13.png",
             "captures/run/466a_s11_description_final_14.png",
+            "captures/run/d091_turn9_battle.png",
+            "captures/run/d091_turn9_enemy16_battle.png",
+            "captures/run/d091_s11_victory_18.png",
+            "captures/run/d091_s11_victory_21.png",
+            "captures/run/d091_s12_route.png",
+            "captures/run/d091_s12_brief_04.png",
         ):
             self.assertIn(capture, scenario11["captures"])
         self.assertEqual(scenario11["conditions"], "verified_current")
         self.assertEqual(scenario11["preparation"], "verified_current")
         self.assertEqual(scenario11["opening_events"], "verified_current")
         self.assertEqual(scenario11["battle_ui"], "verified_current")
-        self.assertEqual(scenario11["turn_events"], "progressed_current")
+        self.assertEqual(scenario11["turn_events"], "verified_probe")
+        self.assertEqual(scenario11["completion"], "verified_probe")
+        self.assertIn("POINT 3770P", scenario11["note"])
+        self.assertIn("real 시나리오 12 save", scenario11["note"])
         self.assertEqual(scenario12["description"], "verified_current")
         for capture in (
             "captures/run/d355_s12_description_final_01.png",

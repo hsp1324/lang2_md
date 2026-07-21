@@ -1,10 +1,14 @@
 from pathlib import Path
+import json
+import subprocess
+import sys
 import unittest
 
 from tools.scenario_data import (
     KOREAN_NAME_BY_ID,
     NAME_COUNT,
     SCENARIO_COUNT,
+    export_scenarios,
     patch_scenario,
     read_scenario,
     scenario_layout,
@@ -29,6 +33,36 @@ class ScenarioDataTests(unittest.TestCase):
         for number in range(1, 32):
             model = read_scenario(self.rom, self.rom, number)
             self.assertEqual(len(model["records"]), model["record_count"])
+
+    def test_editor_export_separates_editable_and_read_only_fields(self):
+        payload = export_scenarios(self.korean, self.rom, [11])
+        self.assertEqual(payload["schema_version"], 1)
+        self.assertEqual(
+            payload["coordinate_policy"],
+            "read_only_initial_placement; event scripts may override runtime coordinates",
+        )
+        self.assertEqual(payload["editable_fields"], [
+            "level", "at", "df", "class_id", "mercenaries"
+        ])
+        self.assertIn("x", payload["read_only_fields"])
+        self.assertIn("hidden", payload["read_only_fields"])
+        self.assertEqual(payload["scenarios"][0]["number"], 11)
+        self.assertNotIn("classes", payload["scenarios"][0])
+        self.assertEqual(payload["scenarios"][0]["records"][0]["label"], "제시카")
+
+    def test_editor_export_cli_runs_directly_from_repository(self):
+        output = subprocess.check_output(
+            [
+                sys.executable,
+                str(ROOT / "tools/scenario_data.py"),
+                "--scenario",
+                "11",
+            ],
+            cwd=ROOT,
+            text=True,
+        )
+        payload = json.loads(output)
+        self.assertEqual([row["number"] for row in payload["scenarios"]], [11])
 
     def test_scenario_one_known_enemy_records(self):
         model = read_scenario(self.rom, self.rom, 1)

@@ -757,7 +757,11 @@ def preparation_screen_visible(path: Path) -> bool:
         and command_blue > 0.75
         and money_blue > 0.23
         and divider_blue < 0.25
-        and divider_gold > 0.18
+        # The ornate divider is partly blue/black in the real 640x480
+        # preparation screen. Scenario 11 measured about 14.9% gold; the old
+        # 18% threshold skipped the screen and let detector confirmations enter
+        # the mercenary-hire submenu.
+        and divider_gold > 0.14
     )
 
 

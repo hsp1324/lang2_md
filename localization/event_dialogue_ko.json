@@ -1385,7 +1385,7 @@
       {"address": "0x19862C", "english_record": 69, "text": "지금이 아니면 기회가 없을지도 몰라!"},
       {"address": "0x198662", "english_record": 69, "continuation": true, "text": "{0004}는 모르겠지만, 마술사에게 스승을 찾는 건 목숨이 걸린 일이야!"},
       {"address": "0x1986B8", "english_record": 70, "text": "미안하지만 새 제자를 받을 생각은 없어."},
-      {"address": "0x1986FE", "english_record": 71, "text": "뭐라고요!? …알겠습니다."},
+      {"address": "0x1986FE", "english_record": 71, "text": "뭐라고요!? …알겠습니다"},
       {"address": "0x198736", "english_record": 72, "text": "좋은 스승을 만날 거야. 실망하지 마."},
       {"address": "0x198766", "english_record": 73, "text": "모두 불태워 주마!"},
       {"address": "0x198786", "english_record": 74, "text": "젠장… 어째서!"},
