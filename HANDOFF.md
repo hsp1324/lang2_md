@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 2CA4
+current production build checksum: 40BC
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 590 passing
+unit tests: 596 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6910,3 +6910,42 @@ contains 57 safe syllables as documented below and in
 - This implementation and its six focused tests were completed without
   launching, focusing, or sending input to BlastEm while the user was playing
   another game.
+
+### Great Slime Small-Font Collision Fix (2026-07-22)
+
+- The user-reported broken `그레이트슬라임` name is confined to the 8x8
+  status/battle renderer. The 16x16 dialogue name and death line are intact:
+  `captures/run/2ca4_s12_jessica_slime_battle.png` and
+  `captures/run/2ca4_s12_jessica_slime_attack_after.png` show normal combat
+  and `그레이트슬라임 : 크윽!` after Jessica's attack.
+- Enlarged Scenario 10 evidence at
+  `captures/analysis/4591_s10_turn4_after_great_slime_name_x4.png` and
+  `_stable_name_x4.png` isolates the corrupted 8x8 syllables to `슬/임`.
+  Their previous extension tiles `0x0499/0x049A` are overwritten by animated
+  battle graphics. Production now gives them stable tiles `0x05F3/0x05F4` and
+  consumes the retired iterator positions so every later byte-UI glyph keeps
+  its existing tile ID.
+- The final byte-UI extension segment grows from 28 to 29 load words and ends
+  at `0x05F4`, below the generic selector/cursor boundary at `0x05F8`. Tests
+  lock the exact `그레이트슬라임` tile sequence and the boundary. Production
+  checksum is `40BC`; its Scenario 12 compact derivative is `8B33`. The full
+  591-test suite passes.
+- `tools/build_scenario1_great_slime_status_probe_rom.py` applies the Japanese
+  Scenario 10 fixed record's source-verified name ID `58` and class ID `81` to
+  the already adjacent Scenario 1 clear-probe target. It changes only those
+  two identity bytes on top of the documented clear probe and exists solely
+  for renderer diagnosis; the portrait and scenario events are deliberately
+  not presented as Great Slime gameplay evidence. Current production `40BC`
+  builds it as checksum `037D`.
+- Fresh captures `captures/run/40bc_s01_great_slime_status.png` and
+  `captures/run/40bc_s01_great_slime_battle_live.png` verify both the map
+  status panel and the actual battle renderer. Name and class each display
+  complete `그레이트슬라임`, including stable `슬/임`, after the battle
+  graphics load. The visual fix is accepted. The older GST loads remain only
+  origin evidence and must not be counted as current completion evidence.
+- Direct X11 taps now issue a matching key release and wait 40 ms before the
+  requested press. A unit test locks the neutral interval. This reduced one
+  possible stale-key cause, but live directions remained intermittent under
+  the remote X server, so input reliability is not considered solved. Prefer
+  the source-validated display probe over replaying ten turns solely to
+  recheck this name.

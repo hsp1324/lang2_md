@@ -1,7 +1,12 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from tools.send_blastem_keys import activate_window, choose_monitor
+from tools.send_blastem_keys import (
+    DIRECT_EVENT_RELEASE_SETTLE,
+    activate_window,
+    choose_monitor,
+    press,
+)
 
 
 class SendBlastemKeysTests(unittest.TestCase):
@@ -35,6 +40,29 @@ class SendBlastemKeysTests(unittest.TestCase):
         display.sync.assert_called_once()
         display.intern_atom.assert_not_called()
         window.set_input_focus.assert_not_called()
+
+    def test_direct_event_tap_starts_with_a_neutral_release_interval(self):
+        display = MagicMock()
+        display.keysym_to_keycode.return_value = 42
+        window = MagicMock()
+
+        with (
+            patch("tools.send_blastem_keys.event.KeyRelease") as key_release,
+            patch("tools.send_blastem_keys.event.KeyPress") as key_press,
+            patch("tools.send_blastem_keys.time.sleep") as sleep,
+        ):
+            key_release.side_effect = ["neutral-release", "tap-release"]
+            key_press.return_value = "tap-press"
+            press(display, window, "left", hold=0.02, send_event=True)
+
+        self.assertEqual(
+            [call.args[0] for call in window.send_event.call_args_list],
+            ["neutral-release", "tap-press", "tap-release"],
+        )
+        self.assertEqual(
+            [call.args[0] for call in sleep.call_args_list],
+            [DIRECT_EVENT_RELEASE_SETTLE, 0.02],
+        )
 
 
 if __name__ == "__main__":

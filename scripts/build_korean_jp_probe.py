@@ -164,7 +164,10 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
     (0x04D8, 24),
     # Scenario 2 command-time Plane/SAT data does not reference this range.
     # The map-info renderer restores it immediately before localized status text.
-    (0x05D8, 28),
+    # Stop before the generic selector/cursor tiles at 0x05F8. The last two
+    # cells are needed by monster names during battle, where 0x0499/0x049A
+    # are overwritten by animated graphics.
+    (0x05D8, 29),
 )
 # The first title screen uses the base 8x8 font directly. Load this
 # title-specific contiguous slice after the normal font so the Korean credit
@@ -208,13 +211,17 @@ BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
     "가": 0x05F0,
     "스": 0x05F1,
     "럴": 0x05F2,
+    "슬": 0x05F3,
+    "임": 0x05F4,
 }
-# Preserve the two extension-iterator positions that `럴` and `가` occupied
-# before their Scenario 8-safe remap. Consuming these slots keeps every later
+# Preserve the extension-iterator positions that the stable characters occupied
+# before their battle-safe remaps. Consuming these slots keeps every later
 # class/name tile (notably `렌`) byte-identical.
 BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR = {
     "럴": 0x0443,
     "가": 0x0444,
+    "슬": 0x0499,
+    "임": 0x049A,
 }
 BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C

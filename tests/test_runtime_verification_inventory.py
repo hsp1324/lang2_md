@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "C3D8")
+        self.assertEqual(data["production_checksum"], "40BC")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]

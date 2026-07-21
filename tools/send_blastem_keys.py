@@ -45,6 +45,12 @@ KEYSYMS = {
     "debug": XK.XK_u,
 }
 
+# A direct X11 sender exits immediately after each batch. Remote X servers can
+# deliver the final release after the next helper has already started, leaving
+# a Genesis direction logically held and making the following tap disappear.
+# Force a neutral interval of roughly two NTSC frames before every direct tap.
+DIRECT_EVENT_RELEASE_SETTLE = 0.04
+
 
 def choose_monitor(
     monitors: list[tuple[str, int, int, int, int]], preference: str
@@ -179,6 +185,22 @@ def press(display: Display, window, key: str, hold: float, send_event: bool) -> 
 
     if send_event:
         root = display.screen().root
+        release_event = event.KeyRelease(
+            time=X.CurrentTime,
+            root=root,
+            window=window,
+            same_screen=1,
+            child=X.NONE,
+            root_x=0,
+            root_y=0,
+            event_x=10,
+            event_y=10,
+            state=0,
+            detail=keycode,
+        )
+        window.send_event(release_event, propagate=True)
+        display.sync()
+        time.sleep(DIRECT_EVENT_RELEASE_SETTLE)
         for event_type, event_class in (
             (X.KeyPress, event.KeyPress),
             (X.KeyRelease, event.KeyRelease),

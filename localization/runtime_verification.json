@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "C3D8",
+  "production_checksum": "40BC",
   "states": [
     "pending",
     "historical",
@@ -39,6 +39,17 @@
         "captures/run/3590_battle_live_083.png"
       ],
       "note": "Scenario 27 proximity probe changes only documented deployment/stat fields; the shared battle renderer is production code."
+    },
+    {
+      "surface": "great_slime_small_font",
+      "state": "verified_probe",
+      "checksum": "037D",
+      "based_on": "40BC",
+      "captures": [
+        "captures/run/40bc_s01_great_slime_status.png",
+        "captures/run/40bc_s01_great_slime_battle_live.png"
+      ],
+      "note": "The source-validated display probe applies the Japanese Scenario 10 Great Slime name ID 58 and class ID 81 to the adjacent Scenario 1 clear target. It verifies complete 그레이트슬라임 in both map status and the actual battle renderer after moving 슬/임 from animation-overwritten tiles 0x499/0x49A to stable 0x5F3/0x5F4. The unchanged Bald portrait makes this renderer evidence only, not Scenario 1 story or completion evidence."
     },
     {
       "surface": "magic_summon_lists",
@@ -636,6 +647,8 @@
         "captures/run/4591_s10_monster_spawn_dialogue.png",
         "captures/run/4591_s10_turn4_dialogue_2.png",
         "captures/run/4591_s10_turn4_dialogue_6.png",
+        "captures/run/4591_s10_turn4_after_great_slime.png",
+        "captures/run/4591_s10_turn4_after_great_slime_stable.png",
         "captures/run/4591_s10_victory_01.png",
         "captures/run/4591_s10_victory_04.png",
         "captures/run/4591_s10_victory_07.png",
@@ -768,7 +781,9 @@
         "captures/run/d355_s12_description_final_08.png",
         "captures/run/d355_s12_description_final_12.png",
         "captures/run/d355_s12_description_final_19.png",
-        "captures/run/d355_s12_description_final_20.png"
+        "captures/run/d355_s12_description_final_20.png",
+        "captures/run/2ca4_s12_jessica_slime_battle.png",
+        "captures/run/2ca4_s12_jessica_slime_attack_after.png"
       ],
       "note": "Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrolling frames of 성지 레이텔, and the preparation endpoint. Direct Japanese-ROM rendering confirms the hidden cave entrance, Dark Rod shrine, absent Egbert, and ancient guardians. Runtime review exposed 입구가 centered on a line alone; replacing 교묘하게 with the equally accurate shorter 교묘히 keeps 지나칠 만큼 교묘히 숨겨진 입구가 on one line without adding a glyph or shifting global direct-string tokens. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete seven-member roster including both second-page entries, arrangement, automatic deployment, all 12 opening confirmations, condition rows, and the first turn through the stated GAME OVER loss condition. Later turns, completion, the Dark Rod event, and branches remain pending."
     },

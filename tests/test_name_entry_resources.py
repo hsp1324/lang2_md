@@ -472,7 +472,9 @@ class NameEntryResourceTests(unittest.TestCase):
         codes = builder.patch_byte_ui_strings(data)
         index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
 
-        self.assertEqual(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[-1], (0x05D8, 28))
+        self.assertEqual(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[-1], (0x05D8, 29))
+        final_start, final_count = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[-1]
+        self.assertLessEqual(final_start + final_count, 0x05F8)
         self.assertEqual(tile_by_index[index_by_char["렌"]], 0x05E9)
 
     def test_map_info_renderer_restores_only_the_final_segment(self):
@@ -523,6 +525,8 @@ class NameEntryResourceTests(unittest.TestCase):
             "가": 0x5F0,
             "스": 0x5F1,
             "럴": 0x5F2,
+            "슬": 0x5F3,
+            "임": 0x5F4,
         }
         self.assertEqual(builder.BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR, expected)
         data = bytearray(self.rom)
@@ -543,8 +547,12 @@ class NameEntryResourceTests(unittest.TestCase):
             [0xC0, 0x3AB, 0x5F2],
         )
         self.assertEqual(
+            [tile_by_index[index_by_char[char]] for char in "그레이트슬라임"],
+            [0xBE, 0xD1, 0xA7, 0xB2, 0x5F3, 0x3F0, 0x5F4],
+        )
+        self.assertEqual(
             builder.BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR,
-            {"럴": 0x443, "가": 0x444},
+            {"럴": 0x443, "가": 0x444, "슬": 0x499, "임": 0x49A},
         )
 
     def test_direct_map_renderer_preserves_full_extension_tile_ids(self):
