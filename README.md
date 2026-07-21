@@ -75,6 +75,7 @@
 - `tools/build_scenario17_clear_probe_rom.py`: 시나리오 17의 일본판 헤더·8명 배치표·11개 적 레코드를 검증하고 AT/DF·용병만 제한합니다. 베른하르트·보젤과 숨은 매직나이트의 정체·클래스·레벨·좌표 및 모든 이벤트를 보존합니다.
 - `tools/build_scenario18_clear_probe_rom.py`: 시나리오 18의 일본판 헤더·8명 배치표·주민 2명·적군 9명을 검증합니다. 주민 레코드는 통째로 보존하고 적군 AT/DF·용병만 제한해 라나·그레이트드래곤과 주민 생존 이벤트를 실기로 확인할 때 사용합니다.
 - `tools/build_scenario19_clear_probe_rom.py`: 시나리오 19의 일본판 헤더·8명 배치표·적군 10명을 검증하고 AT/DF·용병만 제한합니다. 이멜다와 숨은 레아드·제국 증원의 정체·클래스·레벨·좌표 및 모든 이벤트를 보존합니다.
+- `tools/build_scenario20_clear_probe_rom.py`: 시나리오 20의 일본판 헤더·8명 배치표·적군 10명을 검증하고 AT/DF·용병만 제한합니다. 파이어스와 숨은 와이번·크라켄의 정체·클래스·레벨·좌표 및 키스 관련 해상 이벤트를 보존합니다.
 - `tools/game_genie.py`, `tools/build_game_genie_probe_rom.py`: 명시한 Genesis Game Genie 코드를 주소/워드로 해석하고 무시되는 실험 ROM을 만듭니다. 코드 호환 리비전을 자동 판별하지 않으며, 프로젝트 원본은 일본판 REV00입니다. REV01용 공개 코드는 주소가 정상적으로 보여도 REV00을 리셋시킬 수 있으므로 프리셋을 제공하지 않습니다.
 - `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.

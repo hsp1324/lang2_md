@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 540 passing
+unit tests: 545 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3985,6 +3985,20 @@ contains 57 safe syllables as documented below and in
   hidden Kraken (`크라켄`, LV4, AT39, DF32, X/Y=`0xFF`) with exact mercenary
   slots. The list also includes Minotaurs, Liches, another Scylla, and hidden
   Wyverns. Coordinates and hidden/event flags remain read-only editor context.
+
+### Scenario 20 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario20_clear_probe_rom.py` validates the Japanese Scenario
+  20 header at `0x1823F0`, all eight stock player deployments beginning at
+  `0x182414`, and all ten fixed enemy records beginning at `0x182436`.
+  It changes only each enemy's AT/DF and six mercenary slots plus the checksum;
+  player coordinates and all event data remain byte-identical.
+- Fias remains `파이어스/데몬로드`, LV1, AT46, DF32 at `(22,23)`.
+  Hidden records 7..9 retain `(255,255)` and their original 와이번/크라켄
+  identities, classes, levels, and source mercenary IDs. Keith's player roster
+  entry, sea-monster reinforcements, story events, and completion handler are
+  untouched for later live playback. Production `2CA4` builds the ignored
+  diagnostic ROM as checksum `27E5`.
 
 ### Current 138B Scenario 21 Entry And Full Commander/Class Roster (2026-07-16)
 
