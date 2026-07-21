@@ -41,7 +41,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 28 | current | current | current | current | current | current | pending | pending | 18 |
 | 29 | current | current | current | current | current | current | pending | pending | 22 |
 | 30 | current | current | current | current | probe | current | pending | pending | 19 |
-| 31 | current | current | current | current | pending | current | pending | pending | 16 |
+| 31 | current | current | current | current | pending | current | pending | pending | 22 |
 
 ## Evidence Notes
 
@@ -1168,7 +1168,7 @@ Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡�
 
 ### Scenario 31
 
-Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. Scenario-specific battle presentation, a successful clear, and conditional branches remain pending.
+Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. A fresh production-derived 3A5A clear-probe run independently reached the arrangement menu, deployed, advanced twenty detected opening frames, and stopped at the command-ready map. Its full-size evidence confirms 엠퍼러 dialogue plus clean 엘윈/파이터 and 발가스/제너럴 status labels. A first movement attempt was cancelled without battle after a nominal short direction tap advanced more than one tile; therefore scenario-specific battle presentation, a successful clear, and conditional branches remain pending.
 
 - `captures/run/c7ab_s31_title.png`
 - `captures/run/c7ab_s31_body_mid.png`
@@ -1186,6 +1186,12 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
 - `captures/run/eca0_s31_opening_12.png`
 - `captures/run/eca0_s31_conditions.png`
 - `captures/run/eca0_s31_turn1_01.png`
+- `captures/run/3a5a_s31_clean2_arrange_menu.png`
+- `captures/run/3a5a_s31_clean2_deploy_confirm.png`
+- `captures/run/3a5a_s31_clean2_opening_08.png`
+- `captures/run/3a5a_s31_clean2_opening_18.png`
+- `captures/run/3a5a_s31_clean2_opening_20.png`
+- `captures/run/3a5a_s31_clean2_move_vargas.png`
 
 ## Global Surface Evidence
 

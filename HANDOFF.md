@@ -7009,3 +7009,34 @@ contains 57 safe syllables as documented below and in
   stopped without changing ROM/SRAM evidence. Resume from a fresh isolated
   runtime and verify each menu movement before confirming; do not reuse this
   mixed preparation state for completion claims.
+
+### Scenario 31 Fresh Deployment And Command Probe (2026-07-22)
+
+- A second isolated runtime, `s31-clear-3a5a-clean2`, started again from the
+  validated manual slot and the production-derived `3A5A` clear probe. A long
+  B press focused the preparation menu. Separate, visually checked Down taps
+  reached `지휘관배치`; direct window input then reached `출격` without reusing
+  the earlier mixed preparation state. Captures
+  `3a5a_s31_clean2_arrange_menu.png`,
+  `3a5a_s31_clean2_down_short_from_enemy.png`, and
+  `3a5a_s31_clean2_deploy_confirm.png` retain the accepted route.
+- `detect-command` reached the command-ready map after twenty confirmations.
+  `3a5a_s31_clean2_opening_01.png` through `_20.png` preserve the complete
+  detected opening sequence. Full-size frames `_08`, `_18`, and `_20` show
+  Korean 엠퍼러 dialogue and clean `엘윈/파이터` command/status labels.
+  `3a5a_s31_clean2_move_vargas.png` independently shows the source-identified
+  enemy as `발가스/제너럴`, with no broken byte glyph. This expands current
+  probe evidence but does not replace the existing production dialogue run.
+- The run did not produce a battle or clear. The first movement probe reached
+  Vargas, but a nominally short direction tap advanced more than one tile and
+  C could not accept the intended adjacent destination. B returned cleanly to
+  Elwin's command state. Keep Scenario 31 `battle_ui`, `completion`, and
+  `branches_endings` pending; none of the movement-attempt frames are battle
+  evidence.
+- `tools/send_blastem_keys.py` now releases all four Genesis direction
+  keysyms before both direct-window and XTest taps, waits 40 ms at neutral, and
+  also releases a requested non-direction key before pressing it. Unit tests
+  lock both paths. This prevents a previously held direction from leaking into
+  the next tap, but it does not yet guarantee one map tile per remote event;
+  continue verifying each movement frame and use B to recover rejected routes.
+  The complete 615-test suite passes after this input and evidence update.

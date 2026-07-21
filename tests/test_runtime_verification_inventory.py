@@ -749,6 +749,16 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario31["battle_ui"], "pending")
         self.assertIn("captures/run/c7ab_s31_body_final2.png", scenario31["captures"])
         self.assertIn("captures/run/eca0_s31_turn1_01.png", scenario31["captures"])
+        for capture in (
+            "captures/run/3a5a_s31_clean2_arrange_menu.png",
+            "captures/run/3a5a_s31_clean2_deploy_confirm.png",
+            "captures/run/3a5a_s31_clean2_opening_20.png",
+            "captures/run/3a5a_s31_clean2_move_vargas.png",
+        ):
+            self.assertIn(capture, scenario31["captures"])
+        self.assertIn("production-derived 3A5A", scenario31["note"])
+        self.assertIn("발가스/제너럴", scenario31["note"])
+        self.assertIn("successful clear", scenario31["note"])
         for evidence in data["global_evidence"]:
             self.assertIn(evidence["state"], data["states"])
             self.assertTrue(evidence["captures"])

@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+from Xlib import X
+
 from tools.send_blastem_keys import (
+    DIRECT_EVENT_NEUTRAL_KEYS,
     DIRECT_EVENT_RELEASE_SETTLE,
     activate_window,
     choose_monitor,
@@ -51,14 +54,43 @@ class SendBlastemKeysTests(unittest.TestCase):
             patch("tools.send_blastem_keys.event.KeyPress") as key_press,
             patch("tools.send_blastem_keys.time.sleep") as sleep,
         ):
-            key_release.side_effect = ["neutral-release", "tap-release"]
+            key_release.side_effect = [
+                *(f"neutral-release-{index}" for index in range(4)),
+                "tap-release",
+            ]
             key_press.return_value = "tap-press"
             press(display, window, "left", hold=0.02, send_event=True)
 
         self.assertEqual(
             [call.args[0] for call in window.send_event.call_args_list],
-            ["neutral-release", "tap-press", "tap-release"],
+            [
+                *(f"neutral-release-{index}" for index in range(4)),
+                "tap-press",
+                "tap-release",
+            ],
         )
+        self.assertEqual(DIRECT_EVENT_NEUTRAL_KEYS, ("up", "down", "left", "right"))
+        self.assertEqual(
+            [call.args[0] for call in sleep.call_args_list],
+            [DIRECT_EVENT_RELEASE_SETTLE, 0.02],
+        )
+
+    def test_xtest_tap_releases_all_directions_before_pressing(self):
+        display = MagicMock()
+        display.keysym_to_keycode.return_value = 42
+        window = MagicMock()
+
+        with (
+            patch("tools.send_blastem_keys.xtest.fake_input") as fake_input,
+            patch("tools.send_blastem_keys.time.sleep") as sleep,
+        ):
+            press(display, window, "up", hold=0.02, send_event=False)
+
+        self.assertEqual(fake_input.call_count, 6)
+        for call in fake_input.call_args_list[:4]:
+            self.assertEqual(call.args[1], X.KeyRelease)
+        self.assertEqual(fake_input.call_args_list[4].args[1], X.KeyPress)
+        self.assertEqual(fake_input.call_args_list[5].args[1], X.KeyRelease)
         self.assertEqual(
             [call.args[0] for call in sleep.call_args_list],
             [DIRECT_EVENT_RELEASE_SETTLE, 0.02],
