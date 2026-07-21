@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 529 passing
+unit tests: 535 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3898,6 +3898,21 @@ contains 57 safe syllables as documented below and in
   (`다크프린세스`, LV3, AT37, DF34, X37/Y2), including their exact original
   mercenary IDs. The resident's original class mapping confirms `클레릭` is
   intentional here. Coordinates and event ownership remain read-only context.
+
+### Scenario 18 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario18_clear_probe_rom.py` validates the Japanese Scenario
+  18 header at `0x182070`, all eight stock player deployments beginning at
+  `0x182094`, and all eleven fixed records beginning at `0x1820B6`. Records
+  0 and 1 are the two `side_id=3` residents and remain byte-identical,
+  including `클레릭`, their four 시민 units, and stock coordinates.
+- Only `side_id=4` enemy records 2..10 have AT/DF and six mercenary slots
+  limited. The Great Dragon remains `그레이트드래곤`, LV1, AT39, DF34 at
+  `(35,4)`, while Lana remains `라나/다크프린세스`, LV3, AT37, DF34 at
+  `(37,2)`. All identities, classes, levels, coordinates, resident-loss logic,
+  evacuation choice, and completion events remain source-identical for live
+  playback. Production `2CA4` builds the ignored diagnostic ROM as checksum
+  `660B`.
 
 ### Current 1391 Scenario 19 Entry And Canonical Dark Princess Label (2026-07-16)
 
