@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 567 passing
+unit tests: 574 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4152,6 +4152,21 @@ contains 57 safe syllables as documented below and in
 - The generated diagnostic ROM checksum is `E2B9`; six focused regressions and
   the full 567-test suite pass. This is static evidence only, so Scenario 24
   clear/result/save playback remains pending until emulator input is allowed.
+
+### Scenario 25 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario25_clear_probe_rom.py` validates the Japanese Scenario
+  25 header at `0x182D16`, all nine stock player deployments beginning at
+  `0x182D3C`, and all twelve fixed records beginning at `0x182D62`.
+- Record 0 is allied `제시카/워록` with `side_id=3` and remains
+  byte-identical. Only enemy records 1..11 have AT/DF and six mercenary slots
+  limited. Leon, Laird, Egbert, all imperial commanders, and the hidden Dragon
+  Lord keep source side, identity, class, level, coordinates, hidden flags,
+  and event handlers. Live clear/result/save playback remains pending until
+  emulator input is allowed.
+- The generated diagnostic ROM checksum is `0DFC`; seven focused regressions
+  and the full 574-test suite pass. This remains static evidence and does not
+  promote any completion or post-battle runtime state.
 
 ### Scenarios 27-31 Original Editor Records (2026-07-16)
 
