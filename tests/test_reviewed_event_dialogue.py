@@ -632,6 +632,25 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(primary[-1]["english_record"], 287)
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            text_by_address["0x19A67A"],
+            "검도 마찬가지입니다. 어떻게 쓰느냐가 중요합니다",
+        )
+        self.assertEqual(
+            text_by_address["0x19A87E"],
+            "{0002}가 납치됐다면 지금까지 싸운 보람이 없어",
+        )
+        self.assertEqual(
+            text_by_address["0x19A8F4"],
+            "{0002}가 납치됐다면 지금까지 싸운 보람이 없어",
+        )
+        for address in ("0x199638", "0x19A67A", "0x19A6D6", "0x19A87E", "0x19A8F4"):
+            self.assertFalse(
+                text_by_address[address].endswith("."),
+                f"Scenario 12 live layout leaves final punctuation orphaned at {address}",
+            )
+
     def test_scenario_13_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 13]
         primary = [row for row in rows if not row.get("continuation")]

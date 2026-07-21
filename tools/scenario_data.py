@@ -24,6 +24,7 @@ CLASS_POINTER_TABLE = 0x05E6D6
 CLASS_COUNT = 157
 NAME_POINTER_TABLE = 0x0618E8
 NAME_COUNT = 0x75
+SIDE_OFFSET = 0x08
 DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
 DEFAULT_REFERENCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 
@@ -104,6 +105,12 @@ SCENARIO1_ROLES = {
     10: ("적군", "레아드"),
     11: ("적군", "제국지휘관"),
 }
+ROLE_BY_SIDE = {
+    0x01: "아군 이벤트",
+    0x03: "NPC / 아군",
+    0x04: "적군",
+    0x08: "특수 진영",
+}
 
 
 def be16(data: bytes | bytearray, offset: int) -> int:
@@ -180,13 +187,18 @@ def read_scenario(data: bytes, reference_rom: bytes, number: int) -> dict[str, o
         class_id = raw[FIELD_OFFSETS["class_id"]]
         name_id = raw[FIELD_OFFSETS["name_id"]]
         mercs = list(raw[FIELD_OFFSETS["mercenaries"] : FIELD_OFFSETS["mercenaries"] + 6])
-        default_role = ("배치", name_for_id(reference_rom, name_id)["ko"])
+        side_id = raw[SIDE_OFFSET]
+        default_role = (
+            ROLE_BY_SIDE.get(side_id, f"진영 {side_id:02X}"),
+            name_for_id(reference_rom, name_id)["ko"],
+        )
         role, label = SCENARIO1_ROLES.get(index, default_role) if number == 1 else default_role
         records.append({
             "index": index,
             "offset": offset,
             "role": role,
             "label": label,
+            "side_id": side_id,
             "hidden": bool(raw[0] & 0x80),
             "level": raw[FIELD_OFFSETS["level"]],
             "at": raw[FIELD_OFFSETS["at"]],
@@ -262,6 +274,7 @@ def export_scenarios(
             "index",
             "offset",
             "role",
+            "side_id",
             "label",
             "hidden",
             "x",

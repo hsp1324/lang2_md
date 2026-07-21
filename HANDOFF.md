@@ -6548,9 +6548,9 @@ contains 57 safe syllables as documented below and in
   enemy records 1..10 AT/DF/mercenaries/level/class, visible enemy coordinates,
   and the ROM checksum. Jessica's identity, stats, class, mercenaries, and every
   event/completion handler remain unchanged. Twelve tests lock the permitted
-  bytes. After the accepted punctuation edit, production `C3D8` deterministically
-  rebuilds the same probe fields as `607A`; `D091` remains the checksum of the
-  retained live-clear evidence rather than the new derivative's checksum.
+  bytes. Production `C3D8` rebuilt the same probe fields as `607A`; the current
+  Scenario 12 dialogue build `96D5` rebuilds them as `3377`. `D091` remains the
+  checksum of the retained live-clear evidence rather than a current derivative.
 - The accepted layout puts the six players at `(18,20)`, `(17,20)`, `(19,20)`,
   `(18,19)`, `(17,19)`, `(19,19)`, Jessica at `(18,18)`, and fixed visible
   enemies around them. The final hidden enemy record keeps `(255,255)`. Live
@@ -6612,3 +6612,43 @@ contains 57 safe syllables as documented below and in
   explicitly warns that event scripts may override initial X/Y. The existing
   `editor/server.py` GUI continues to use the same validated data layer and
   writes a separate ROM rather than overwriting production.
+
+### Scenario 12 Guardian Probe And HUD Overlap Diagnosis (2026-07-21)
+
+- `tools/scenario_data.py` no longer labels every Scenario 2+ fixed record as
+  generic `배치`. The read-only byte at fixed-record offset `+0x08` is exposed
+  as `side_id` and maps observed values `01/03/04/08` to `아군 이벤트`,
+  `NPC / 아군`, `적군`, and `특수 진영`. Tests cover Scenarios 6, 12, 15,
+  and 22. This restores the editor GUI's enemy filter without guessing from a
+  unit sprite or record position.
+- `tools/build_scenario12_clear_probe_rom.py` validates the Japanese Scenario
+  12 header `0x181554`, deployment table `0x181574`, and all eleven fixed
+  records. Its normal mode changes only enemy AT/DF and mercenary slots. The
+  optional compact mode additionally moves seven player deployments and the
+  ten initially visible guardians; identities, classes, levels, hidden
+  Egbert, and event handlers remain unchanged. Production `96D5` builds the
+  current compact derivative as checksum `E14C`.
+- The accepted live `0E4F` run used the earlier compact derivative made from
+  production `C3D8`. It entered Scenario 12 from the real Scenario 11 save,
+  completed automatic deployment and the full opening, normally defeated all
+  ten visible guardians over ten turns, and triggered the stock hidden Egbert
+  and Dark Rod sequence. Victory dialogue is currently paused before the
+  result/save transition, so Scenario 12 completion is not yet promoted to
+  `verified_probe`.
+- The user's reported colored shape above Hein's `D99`, between DF and MP, is
+  not a Korean glyph. Enlarging `0e4f_s12_victory15.png`, `_20.png`, and
+  `_21_xlib.png` shows a 16x16 map-unit sprite crossing the lower status plane;
+  `MP13` remains complete. It appears on Hein pages only after compact player
+  placement and is absent from stock-coordinate Scenario 12 captures such as
+  `c765_s12_opening_elwin.png`. Do not patch the byte font or status renderer
+  for this diagnostic-only overlap. Use the normal probe (stock player
+  coordinates) for UI evidence, and treat compact-layout screenshots with a
+  sprite over the HUD as route evidence only.
+- Live review found several awkward or orphaned Scenario 12 lines. Production
+  `96D5` changes `0x199638`, `0x199DCA`, `0x199E26`, `0x19A67A`, `0x19A6D6`,
+  and both source-only Liana-return records `0x19A87E/0x19A8F4`. The latter now
+  says `{0002}가 납치됐다면 지금까지 싸운 보람이 없어`; five records omit
+  a final period that previously occupied a line by itself. Exact translation
+  tests lock the accepted wording. These edits have passed the reviewed-event
+  and target-residue tests plus a complete production build, but still need
+  live verification after the foreground-input pause ends.

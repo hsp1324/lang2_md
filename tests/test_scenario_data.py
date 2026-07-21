@@ -46,6 +46,7 @@ class ScenarioDataTests(unittest.TestCase):
         ])
         self.assertIn("x", payload["read_only_fields"])
         self.assertIn("hidden", payload["read_only_fields"])
+        self.assertIn("side_id", payload["read_only_fields"])
         self.assertEqual(payload["scenarios"][0]["number"], 11)
         self.assertNotIn("classes", payload["scenarios"][0])
         self.assertEqual(payload["scenarios"][0]["records"][0]["label"], "제시카")
@@ -216,6 +217,39 @@ class ScenarioDataTests(unittest.TestCase):
             ("에그베르트", "자베라", 7, 43, 32, 255, 255, True),
         )
         self.assertEqual(hidden_egbert["mercenaries"], [255, 255, 255, 255, 255, 255])
+
+    def test_side_byte_drives_roles_after_scenario_one(self):
+        scenario6 = read_scenario(self.korean, self.rom, 6)
+        self.assertTrue(
+            all(row["side_id"] == 0x03 for row in scenario6["records"][:4])
+        )
+        self.assertTrue(
+            all(row["role"] == "NPC / 아군" for row in scenario6["records"][:4])
+        )
+        self.assertTrue(
+            all(row["side_id"] == 0x04 for row in scenario6["records"][4:])
+        )
+        self.assertTrue(
+            all(row["role"] == "적군" for row in scenario6["records"][4:])
+        )
+
+        scenario12 = read_scenario(self.korean, self.rom, 12)
+        self.assertTrue(
+            all(row["side_id"] == 0x04 for row in scenario12["records"])
+        )
+        self.assertTrue(all(row["role"] == "적군" for row in scenario12["records"]))
+
+    def test_uncommon_side_values_remain_distinct_read_only_roles(self):
+        scenario15 = read_scenario(self.korean, self.rom, 15)
+        self.assertEqual(scenario15["records"][0]["side_id"], 0x01)
+        self.assertEqual(scenario15["records"][0]["role"], "아군 이벤트")
+
+        scenario22 = read_scenario(self.korean, self.rom, 22)
+        special = [
+            row for row in scenario22["records"] if row["side_id"] == 0x08
+        ]
+        self.assertTrue(special)
+        self.assertTrue(all(row["role"] == "특수 진영" for row in special))
 
     def test_scenario_thirteen_editor_records_match_original_rom(self):
         model = read_scenario(self.rom, self.rom, 13)
