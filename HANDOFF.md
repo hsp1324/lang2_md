@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 585 passing
+unit tests: 590 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4213,6 +4213,19 @@ contains 57 safe syllables as documented below and in
   the full 585-test suite pass. This is static evidence only, so the clear,
   ending, epilogue, credits, and final wait chain still requires live playback
   against this build when emulator input is allowed.
+
+### Scenario 28 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario28_clear_probe_rom.py` validates the Japanese Scenario
+  28 header at `0x183286`, all seven stock player deployments beginning at
+  `0x1832A8`, and all nine fixed enemy records beginning at `0x1832C6`.
+- Only AT/DF and six mercenary slots are limited. All records retain enemy
+  `side_id=4`, `빌더` class, levels, coordinates, and event handlers. The six
+  generic brother IDs and the distinct `아돈`, `삼손`, and `바란` IDs remain
+  source-identical.
+- The generated diagnostic ROM checksum is `5D3E`; five focused regressions
+  and the full 590-test suite pass. Live clear/result/save playback remains
+  pending until the diagnostic ROM is exercised in BlastEm.
 
 ### Scenarios 2-10 Original Editor Regression Matrix (2026-07-16)
 
