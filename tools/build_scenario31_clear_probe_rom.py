@@ -32,8 +32,35 @@ SOURCE_PLAYER_DEPLOYMENTS = (
     (5, 16),
     (25, 16),
 )
+PLAYER_DEPLOYMENT_COUNT = len(SOURCE_PLAYER_DEPLOYMENTS)
+COMPACT_PLAYER_DEPLOYMENTS = (
+    (14, 56),
+    (16, 56),
+    (12, 56),
+    (18, 56),
+    (15, 58),
+    *SOURCE_PLAYER_DEPLOYMENTS[5:],
+)
 FIRST_COMBAT_RECORD_INDEX = 0
 LAST_COMBAT_RECORD_INDEX = 9
+COMPACT_COMBAT_POSITIONS = {
+    0: (13, 55),
+    1: (14, 55),
+    2: (15, 55),
+    3: (16, 55),
+    4: (17, 55),
+    5: (13, 56),
+    6: (15, 56),
+    7: (17, 56),
+    8: (14, 57),
+    9: (16, 57),
+}
+COMPLETION_SOURCE_RECORD_INDEX = 9
+COMPLETION_TARGET_RECORD_INDEX = 0
+COMPLETION_RECORD_COUNT = 1
+COMPLETION_ACTIVE_POSITION = (14, 60)
+COMPLETION_AT = 0xF4
+COMPLETION_DF = 0xFC
 VARGAS_RECORD_INDEX = 0
 LEON_RECORD_INDEX = 3
 LAIRD_RECORD_INDEX = 4
@@ -83,7 +110,13 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             )
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    *,
+    compact_layout: bool = False,
+    completion_layout: bool = False,
+) -> int:
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_COMBAT_RECORD_INDEX, LAST_COMBAT_RECORD_INDEX + 1):
@@ -92,6 +125,35 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
         mercenaries = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenaries : mercenaries + 6] = b"\xFF" * 6
+    if compact_layout:
+        positions = deployment_bytes(COMPACT_PLAYER_DEPLOYMENTS)
+        end = FIRST_PLAYER_DEPLOYMENT_OFFSET + len(positions)
+        probe[FIRST_PLAYER_DEPLOYMENT_OFFSET:end] = positions
+        for index, (x, y) in COMPACT_COMBAT_POSITIONS.items():
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            probe[base + FIELD_OFFSETS["x"]] = x
+            probe[base + FIELD_OFFSETS["y"]] = y
+    elif completion_layout:
+        source_record = (
+            layout.records_offset
+            + COMPLETION_SOURCE_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        active = (
+            layout.records_offset
+            + COMPLETION_TARGET_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        probe[active : active + FIXED_RECORD_SIZE] = source[
+            source_record : source_record + FIXED_RECORD_SIZE
+        ]
+        probe[active + FIELD_OFFSETS["at"]] = COMPLETION_AT
+        probe[active + FIELD_OFFSETS["df"]] = COMPLETION_DF
+        mercenaries = active + FIELD_OFFSETS["mercenaries"]
+        probe[mercenaries : mercenaries + 6] = b"\xFF" * 6
+        probe[active + FIELD_OFFSETS["x"]] = COMPLETION_ACTIVE_POSITION[0]
+        probe[active + FIELD_OFFSETS["y"]] = COMPLETION_ACTIVE_POSITION[1]
+        probe[layout.record_list_offset : layout.record_list_offset + 2] = (
+            COMPLETION_RECORD_COUNT.to_bytes(2, "big")
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -106,6 +168,26 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    layout_group = parser.add_mutually_exclusive_group()
+    layout_group.add_argument(
+        "--compact-layout",
+        action="store_true",
+        help=(
+            "diagnostic completion route only: move the first five player "
+            "deployments and all ten combat records into the source-verified "
+            "lower hall; use the default probe for stock-coordinate evidence"
+        ),
+    )
+    layout_group.add_argument(
+        "--completion-layout",
+        action="store_true",
+        help=(
+            "diagnostic completion route only: move Bernhardt directly above "
+            "stock Elwin and temporarily reduce the fixed combat list to "
+            "that single source-copied record; "
+            "use this derivative only to test the stock victory handler"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -113,14 +195,26 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    checksum = patch_probe(
+        probe,
+        source,
+        compact_layout=args.compact_layout,
+        completion_layout=args.completion_layout,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print("Scenario 31 combat records 0..9: AT 0, DF 0, no mercenaries")
-    print(
-        "stock deployments, side IDs, commander identities, classes, "
-        "coordinates, and all handlers preserved"
-    )
+    if args.completion_layout:
+        print("Scenario 31 Bernhardt: AT -12, DF -4, no mercenaries")
+        print("diagnostic single-record adjacent Bernhardt layout applied")
+        print("Bernhardt's source record and all scenario handlers preserved")
+    elif args.compact_layout:
+        print("Scenario 31 combat records 0..9: AT 0, DF 0, no mercenaries")
+        print("diagnostic five-player and combat layout moved to the lower hall")
+        print("side IDs, commander identities, classes, and all handlers preserved")
+    else:
+        print("Scenario 31 combat records 0..9: AT 0, DF 0, no mercenaries")
+        print("stock player and combat coordinates preserved")
+        print("side IDs, commander identities, classes, and all handlers preserved")
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

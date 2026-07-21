@@ -1527,9 +1527,9 @@
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
-      "battle_ui": "pending",
+      "battle_ui": "verified_probe",
       "turn_events": "verified_current",
-      "completion": "pending",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/c7ab_s31_title.png",
@@ -1553,9 +1553,26 @@
         "captures/run/3a5a_s31_clean2_opening_08.png",
         "captures/run/3a5a_s31_clean2_opening_18.png",
         "captures/run/3a5a_s31_clean2_opening_20.png",
-        "captures/run/3a5a_s31_clean2_move_vargas.png"
+        "captures/run/3a5a_s31_clean2_move_vargas.png",
+        "captures/run/3b62_s31_compact_battle_01.png",
+        "captures/run/3b62_s31_compact_battle_after.png",
+        "captures/run/3b82_s31_compact_hein_demon_post.png",
+        "captures/run/3b82_s31_compact_hein_demon_dead.png",
+        "captures/run/78f8_s31_bernhardt_target.png",
+        "captures/run/78f8_s31_bernhardt_result_01.png",
+        "captures/run/78f8_s31_bernhardt_result_03.png",
+        "captures/run/78f8_s31_bernhardt_result_05.png",
+        "captures/run/78f8_s31_victory_11.png",
+        "captures/run/78f8_s31_victory_17.png",
+        "captures/run/78f8_s31_victory_21.png",
+        "captures/run/78f8_s31_victory_24.png",
+        "captures/run/78f8_s31_victory_27.png",
+        "captures/run/78f8_s31_save_slot2_after.png",
+        "captures/run/78f8_s31_next_selected.png",
+        "captures/run/78f8_s31_next_after.png",
+        "captures/run/78f8_s31_route_after.png"
       ],
-      "note": "Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. A fresh production-derived 3A5A clear-probe run independently reached the arrangement menu, deployed, advanced twenty detected opening frames, and stopped at the command-ready map. Its full-size evidence confirms 엠퍼러 dialogue plus clean 엘윈/파이터 and 발가스/제너럴 status labels. A first movement attempt was cancelled without battle after a nominal short direction tap advanced more than one tile; therefore scenario-specific battle presentation, a successful clear, and conditional branches remain pending."
+      "note": "Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. A fresh production-derived 3A5A clear-probe run independently reached the arrangement menu, deployed, advanced twenty detected opening frames, and stopped at the command-ready map. Its full-size evidence confirms 엠퍼러 dialogue plus clean 엘윈/파이터 and 발가스/제너럴 status labels. Compact original-class derivatives 3B62 and 3B82 entered actual battles, retained clean 파이터/제너럴 labels, defeated 이멜다 and 데몬로드 through normal attack commands, and rendered their item/death paths without broken combat UI. Completion-only derivative 78F8 temporarily reduces the fixed combat list to a source-copied 베른하르트/엠퍼러 record adjacent to stock Elwin, cancels only the Emperor class AT/DF bases, and leaves the scenario handlers intact. A normal attack reached HP 0, rendered the final-boss and commander aftermath, level/class-change surfaces, 전과보고 with POINT 10700P, a real slot-2 save, 다음 시나리오, and normal-route 전설의 끝 entry without reset or freeze. Hidden-record side reassignment and a single Imelda record did not trigger completion, proving that the final boss death event is required; those failed derivatives are not accepted evidence. Scenario 31 battle_ui and completion are therefore verified_probe, while conditional branches and endings remain pending."
     }
   ]
 }

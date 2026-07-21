@@ -7040,3 +7040,57 @@ contains 57 safe syllables as documented below and in
   the next tap, but it does not yet guarantee one map tile per remote event;
   continue verifying each movement frame and use B to recover rejected routes.
   The complete 615-test suite passes after this input and evidence update.
+
+### Scenario 31 Battle And Completion Probes (2026-07-22)
+
+- Optional `--compact-layout` keeps every source commander identity, class,
+  side, and event handler while moving the first five player deployments and
+  all ten combat records into the lower hall. Checksum `3B62` reached a real
+  Elwin-versus-Imelda battle and clean `파이터/제너럴` combat UI; Imelda's
+  defeat produced `완드`, `대형방패`, and `넥클리스` messages plus her Korean
+  death line. Checksum `3B82` let Hein normally finish the adjacent Demon Lord
+  and rendered clean `데몬로드: 크아악!`. Captures
+  `3b62_s31_compact_battle_01.png`, `3b62_s31_compact_battle_after.png`,
+  `3b82_s31_compact_hein_demon_post.png`, and
+  `3b82_s31_compact_hein_demon_dead.png` promote Scenario 31 `battle_ui` to
+  `verified_probe`.
+- The compact original-class route cannot safely idle: source enemy magic
+  kills Elwin on the first enemy phase. Replacing all enemy classes with
+  Fighter, clustering them, or placing them in a corridor also failed because
+  every surviving group attacked Elwin. Raising Elwin to AT 99 was rejected:
+  damage wrapped/capped and repeatedly left Imelda at HP 1, whereas stock AT 23
+  defeated her. Runtime DF 99 was stable and was retained only in the isolated
+  diagnostic save.
+- Hidden flag `0x80` plus NPC-side reassignment did not satisfy `적 전멸`.
+  Checksum `2472` normally defeated the sole visible Imelda, rendered all item
+  and death pages, but advanced to TURN 2. Reducing the fixed list to one
+  source-copied Imelda record (`639A`) produced the same non-completion result.
+  These failures show that merely removing counted enemies is insufficient;
+  the final-boss death event is required. They are diagnostic history, not
+  accepted completion or roster evidence.
+- `--completion-layout` now source-copies the Japanese record-9
+  `베른하르트/엠퍼러` into the single active fixed-record slot, places it at
+  `(14,60)` above stock Elwin, clears mercenaries, and uses the previously
+  validated signed Emperor base cancellations `AT -12 / DF -4`. It preserves
+  every scenario handler and changes the record count only in this ignored
+  derivative. Focused tests lock the exact changed bytes; default mode remains
+  checksum `3A5A` and source-coordinate evidence remains authoritative.
+- Completion checksum `78F8`, with stock Elwin AT 23 and isolated-save DF 99,
+  displayed `베른하르트/엠퍼러 AT 0 DF 0` and defeated him through one normal
+  Attack at HP 0. The stock final-boss route then rendered Bernhardt, Elwin,
+  Scott, Lester, Hein, Sherry, and Liana aftermath pages, level/class-change
+  surfaces, `전과보고 / POINT 10700P`, a real `시나리오 27` save in slot 2,
+  `다음 시나리오`, the route map, and normal `전설의 끝` description entry
+  without reset or freeze. Representative evidence is
+  `78f8_s31_bernhardt_target.png`, `78f8_s31_bernhardt_result_03.png`,
+  `78f8_s31_victory_11.png`, `78f8_s31_victory_17.png`,
+  `78f8_s31_victory_24.png`, `78f8_s31_victory_27.png`,
+  `78f8_s31_save_slot2_after.png`, `78f8_s31_next_after.png`, and
+  `78f8_s31_route_after.png`. Scenario 31 `completion` is now
+  `verified_probe`; conditional branches and endings remain pending.
+- Arrangement input remains focus-sensitive. On the `639A` and `78F8` runs a
+  C tap was once missed or a foreground click reset the menu selection, and
+  `detect-command` entered the commander-placement list. B recovery followed
+  by separately verified XTest Down taps and a direct-window C confirmed
+  sortie. Treat unchanged or wrong-menu frames as input delivery failures
+  before changing ROM data.

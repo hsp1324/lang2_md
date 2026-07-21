@@ -746,7 +746,9 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario31["preparation"], "verified_current")
         self.assertEqual(scenario31["opening_events"], "verified_current")
         self.assertEqual(scenario31["turn_events"], "verified_current")
-        self.assertEqual(scenario31["battle_ui"], "pending")
+        self.assertEqual(scenario31["battle_ui"], "verified_probe")
+        self.assertEqual(scenario31["completion"], "verified_probe")
+        self.assertEqual(scenario31["branches_endings"], "pending")
         self.assertIn("captures/run/c7ab_s31_body_final2.png", scenario31["captures"])
         self.assertIn("captures/run/eca0_s31_turn1_01.png", scenario31["captures"])
         for capture in (
@@ -754,11 +756,18 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/3a5a_s31_clean2_deploy_confirm.png",
             "captures/run/3a5a_s31_clean2_opening_20.png",
             "captures/run/3a5a_s31_clean2_move_vargas.png",
+            "captures/run/3b62_s31_compact_battle_01.png",
+            "captures/run/3b82_s31_compact_hein_demon_dead.png",
+            "captures/run/78f8_s31_bernhardt_target.png",
+            "captures/run/78f8_s31_victory_27.png",
+            "captures/run/78f8_s31_save_slot2_after.png",
+            "captures/run/78f8_s31_route_after.png",
         ):
             self.assertIn(capture, scenario31["captures"])
         self.assertIn("production-derived 3A5A", scenario31["note"])
         self.assertIn("발가스/제너럴", scenario31["note"])
-        self.assertIn("successful clear", scenario31["note"])
+        self.assertIn("POINT 10700P", scenario31["note"])
+        self.assertIn("final boss death event is required", scenario31["note"])
         for evidence in data["global_evidence"]:
             self.assertIn(evidence["state"], data["states"])
             self.assertTrue(evidence["captures"])
