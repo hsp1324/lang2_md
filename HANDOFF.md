@@ -6652,3 +6652,33 @@ contains 57 safe syllables as documented below and in
   tests lock the accepted wording. These edits have passed the reviewed-event
   and target-residue tests plus a complete production build, but still need
   live verification after the foreground-input pause ends.
+
+### Scenario 13 Clear Probe Prepared Offline (2026-07-21)
+
+- The Japanese Scenario 13 header is `0x181720`; header `+0x08` resolves to
+  deployment table `0x181740`. After the table's leading word, the seven stock
+  player deployments are `(16,3)`, `(20,2)`, `(24,2)`, `(28,3)`, `(22,4)`,
+  `(20,6)`, and `(24,6)`. The fixed list contains thirteen `0x24`-byte enemy
+  records at `0x181760..0x181933`.
+- Fixed record 8 is `조름/하이로드`, LV9, AT29, DF31 at `(19,27)`. Records
+  10..12 are hidden `(255,255)` reinforcements: `발가스/제너럴`,
+  `레온/로얄가드`, and `레아드/실버나이트`. Their Japanese IDs, classes,
+  levels, hidden flags, and source mercenary IDs are locked by tests rather
+  than inferred from sprites.
+- `tools/build_scenario13_clear_probe_rom.py` validates the complete Japanese
+  and production layouts before writing. It changes every enemy's AT/DF to
+  zero, clears only their six mercenary slots, and moves only Zorum from
+  `(19,27)` to `(16,4)`, immediately below stock Elwin at `(16,3)`. The player
+  deployment table, all identities/classes/levels, hidden reinforcements, and
+  event handlers remain byte-identical. Production `96D5` builds diagnostic
+  checksum `81E3`, SHA-256
+  `4ca123e8600626a1bbff19dfb0abfa6124d5df80879adbae5baca16545b7c5b9`.
+- The intended live sequence is not an immediate boss kill: advance ordinary
+  turns first to retain the Fire Dragon Corps tactics and hidden reinforcement
+  dialogue, then normally attack adjacent Zorum after the late events, retain
+  every victory page, result, a real Scenario 14 save, and route entry. Until
+  that run is complete, Scenario 13 `turn_events` remains
+  `progressed_current` and `completion` remains `pending`.
+- This implementation and its six focused tests were completed without
+  launching, focusing, or sending input to BlastEm while the user was playing
+  another game.
