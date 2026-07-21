@@ -13,7 +13,7 @@ It writes:
 roms/builds/Langrisser II (Korean JP Probe).md
 ```
 
-## Resume Dashboard (2026-07-20)
+## Resume Dashboard (2026-07-21)
 
 This section is the first stop after a Goal resume or interrupted session. Do
 not restart completed investigations merely because their details also remain
@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 550 passing
+unit tests: 556 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4067,6 +4067,23 @@ contains 57 safe syllables as documented below and in
   mercenary bytes. The list also contains Lana, imperial Archmages and a Saint,
   Egbert, Iron Golems, and Liches. Coordinates and hidden/event flags remain
   read-only editor context.
+
+### Scenario 22 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario22_clear_probe_rom.py` validates the Japanese Scenario
+  22 header at `0x182770`, all eight stock player deployments beginning at
+  `0x182794`, and all twelve fixed records beginning at `0x1827B6`. Record 0
+  is allied `리아나/클레릭` with `side_id=3` and remains byte-identical.
+- Records 1..11 are combat/event actors. The builder limits only their AT/DF
+  and six mercenary slots while preserving `side_id`: Lana, Bozel, Egbert,
+  imperial commanders, golems, and liches retain special side `8`, and hidden
+  Bernhardt retains enemy side `4`, `엠퍼러`, LV10, AT58, DF41, and
+  `(255,255)`. All side transitions, identities, classes, levels, coordinates,
+  Alhazard events, and completion handlers remain source-identical for later
+  live playback.
+- The generated diagnostic ROM checksum is `FCAD`. Six focused regressions and
+  the full 556-test suite pass; this is static evidence only, so Scenario 22
+  clear/result/save playback remains pending until emulator input is allowed.
 
 ### Scenario 23 Original Editor Records (2026-07-16)
 
