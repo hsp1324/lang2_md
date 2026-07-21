@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 40BC
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 602 passing
+unit tests: 608 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6966,3 +6966,19 @@ contains 57 safe syllables as documented below and in
   Six focused regressions and the full 602-test suite pass. This is static
   editor/probe groundwork only; X2 completion and conditional branches remain
   pending until a normal live clear reaches the stock result and exit path.
+
+### Scenario 30 Source-Validated Clear Probe (2026-07-22)
+
+- `tools/build_scenario30_clear_probe_rom.py` validates the Japanese secret
+  Scenario X3 header at `0x183594`, all nine stock player deployments
+  beginning at `0x1835BA`, and all eleven fixed enemy records beginning at
+  `0x1835E0`.
+- Only AT/DF and six mercenary slots are limited. Nine visible
+  `그레이트드래곤`/`그레이트드래곤` records remain distinct from the visible
+  `마녀/메이지` and hidden `(255,255)` `마녀/세인트`. Their source name and
+  class IDs, levels, coordinates, side, and hidden flags are locked by tests;
+  all event handlers and player deployments remain untouched.
+- Production `40BC` builds the ignored diagnostic ROM as checksum `BC65`.
+  Six focused regressions and the full 608-test suite pass. This is static
+  editor/probe groundwork only; X3 successful completion and conditional
+  branches remain pending.
