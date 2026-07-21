@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 561 passing
+unit tests: 567 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -4138,6 +4138,20 @@ contains 57 safe syllables as documented below and in
   briefing, preparation, opening, conditions, or turn-event states can be
   promoted. The editor continues to write only class, LV, AT, DF, and the six
   mercenary slots; coordinates and hidden/event flags remain read-only.
+
+### Scenario 24 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario24_clear_probe_rom.py` validates the Japanese Scenario
+  24 header at `0x182B3E`, all nine stock player deployments beginning at
+  `0x182B64`, and all eleven fixed records beginning at `0x182B8A`.
+- Record 0 is `베른하르트/엠퍼러`, retains special `side_id=8`, and remains
+  byte-identical because it is an event actor. Only enemy records 1..10 have
+  AT/DF and six mercenary slots limited. Demon Lords, Liches, Cerberuses, and
+  the Vampire Lord retain source side, identity, class, level, and coordinate
+  data, while all Langrisser and completion handlers remain unchanged.
+- The generated diagnostic ROM checksum is `E2B9`; six focused regressions and
+  the full 567-test suite pass. This is static evidence only, so Scenario 24
+  clear/result/save playback remains pending until emulator input is allowed.
 
 ### Scenarios 27-31 Original Editor Records (2026-07-16)
 
