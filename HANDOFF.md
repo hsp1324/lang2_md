@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 40BC
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 596 passing
+unit tests: 602 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6949,3 +6949,20 @@ contains 57 safe syllables as documented below and in
   the remote X server, so input reliability is not considered solved. Prefer
   the source-validated display probe over replaying ten turns solely to
   recheck this name.
+
+### Scenario 29 Source-Validated Clear Probe (2026-07-22)
+
+- `tools/build_scenario29_clear_probe_rom.py` validates the Japanese secret
+  Scenario X2 header at `0x18340A`, all eight stock player deployments
+  beginning at `0x18342E`, and all nine fixed enemy records beginning at
+  `0x183450`.
+- Only AT/DF and six mercenary slots are limited. All nine records retain
+  enemy `side_id=4`, visible state, identity, class, level, and stock
+  coordinates. Tests lock representative imperial `서펜로드`,
+  `서펜나이트`, and `드래곤나이트` records plus
+  `세이갈/드래곤로드` and `폴거/드래곤로드` directly against the Japanese
+  source.
+- Production `40BC` builds the ignored diagnostic ROM as checksum `F6A2`.
+  Six focused regressions and the full 602-test suite pass. This is static
+  editor/probe groundwork only; X2 completion and conditional branches remain
+  pending until a normal live clear reaches the stock result and exit path.
