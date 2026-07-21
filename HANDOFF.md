@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 2CA4
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 535 passing
+unit tests: 540 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3941,6 +3941,21 @@ contains 57 safe syllables as documented below and in
   mercenary slots. Coordinates and hidden/event flags remain read-only editor
   context until runtime ownership is proven. Later turns, completion, and
   branches remain pending.
+
+### Scenario 19 Source-Validated Clear Probe (2026-07-21)
+
+- `tools/build_scenario19_clear_probe_rom.py` validates the Japanese Scenario
+  19 header at `0x182242`, all eight stock player deployments beginning at
+  `0x182266`, and all ten fixed enemy records beginning at `0x182288`.
+  It changes only each enemy's AT/DF and six mercenary slots plus the checksum;
+  player coordinates and event data remain byte-identical.
+- Imelda remains `이멜다/제너럴`, LV10, AT48, DF33 at `(37,23)`.
+  Hidden records 7..9 retain `(255,255)`, including Laird as
+  `레아드/실버나이트`, LV9, AT42, DF29 and the two source imperial
+  reinforcement identities/classes. The turn limit, ship movement,
+  reinforcement, retreat, and completion event ownership remain intact for
+  later live playback. Production `2CA4` builds the ignored diagnostic ROM as
+  checksum `7625`.
 
 ### Current 138B Scenario 20 Entry And Keith Address Fix (2026-07-16)
 
