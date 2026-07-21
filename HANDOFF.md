@@ -6997,3 +6997,15 @@ contains 57 safe syllables as documented below and in
   Six focused regressions and the full 614-test suite pass. All 31 scenarios
   now have a source-validating progression/clear probe builder; X4 battle,
   successful completion, and conditional branches still require live review.
+- A fresh `3A5A` selector run recovered the validated manual slot, entered the
+  X4 route without reset, advanced all 22 detected description confirmations,
+  and reached the clean preparation screen. Captures
+  `captures/run/3a5a_s31_entry.png` and
+  `captures/run/3a5a_s31_preparation.png` retain that current probe evidence.
+  The two roster pages and visible class/menu labels remained readable.
+- Do not promote deployment from this run. Remote direction events were
+  intermittently missed or repeated in the arrangement menu and entered hire
+  and manual-placement states instead of the checked row. The emulator was
+  stopped without changing ROM/SRAM evidence. Resume from a fresh isolated
+  runtime and verify each menu movement before confirming; do not reuse this
+  mixed preparation state for completion claims.
