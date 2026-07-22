@@ -41,6 +41,14 @@ LEON_RECORD_INDEX = 0
 LAIRD_RECORD_INDEX = 5
 HIDDEN_ENEMY_RECORD_INDEXES = (7, 8, 9)
 LANA_RECORD_INDEX = 8
+CASTLE_GATE_BOUNDS = (12, 1, 14, 5)
+COMPLETION_ELWIN_POSITION = (13, 6)
+CASTLE_GATE_TARGET = (13, 5)
+COMPLETION_TRIGGERS = {
+    0x1A0C16: bytes.fromhex("05 01 00 00 0C 01 0E 05 00 1A 0C C2"),
+    0x1A0C22: bytes.fromhex("06 F0 00 00 10 03 10 03 00 1A 0C F4"),
+    0x1A0C2E: bytes.fromhex("07 01 0C 02 00 00 00 00 00 1A 0D 0A"),
+}
 PROBE_AT = 0
 PROBE_DF = 0
 
@@ -85,8 +93,24 @@ def validate_layout(probe: bytes, source: bytes) -> None:
                 f"input Scenario 16 fixed record {index} differs from Japanese source"
             )
 
+    for offset, expected in COMPLETION_TRIGGERS.items():
+        end = offset + len(expected)
+        if source[offset:end] != expected:
+            raise ValueError(
+                f"Japanese Scenario 16 completion trigger at 0x{offset:06X} changed"
+            )
+        if probe[offset:end] != expected:
+            raise ValueError(
+                f"input Scenario 16 completion trigger at 0x{offset:06X} changed"
+            )
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    *,
+    completion_layout: bool = False,
+) -> int:
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
@@ -95,6 +119,12 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+    if completion_layout:
+        elwin = deployment_bytes((COMPLETION_ELWIN_POSITION,))
+        probe[
+            FIRST_PLAYER_DEPLOYMENT_OFFSET :
+            FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
+        ] = elwin
     return builder.update_md_checksum(probe)
 
 
@@ -109,6 +139,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument(
+        "--completion-layout",
+        action="store_true",
+        help=(
+            "move only Elwin to (13,6), one tile below the source-verified "
+            "castle-gate region X 12..14 / Y 1..5"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -116,14 +154,22 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    checksum = patch_probe(
+        probe,
+        source,
+        completion_layout=args.completion_layout,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print("Scenario 16 enemy records 0..9: AT 0, DF 0, no mercenaries")
-    print(
-        "stock deployments, identities, classes, levels, hidden events, "
-        "coordinates, and handlers preserved"
-    )
+    if args.completion_layout:
+        print("completion layout: Elwin moved from (5,32) to (13,6)")
+        print("castle-gate region X 12..14 / Y 1..5 and handlers preserved")
+    else:
+        print(
+            "stock deployments, identities, classes, levels, hidden events, "
+            "coordinates, and handlers preserved"
+        )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

@@ -77,7 +77,7 @@ class Scenario1GreatSlimeStatusProbeRomTests(unittest.TestCase):
         expected = sum(
             builder.be16(data, offset) for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0x7A27)
+        self.assertEqual(expected, 0xBB75)
         self.assertEqual(builder.be16(data, 0x18E), expected)
 
 

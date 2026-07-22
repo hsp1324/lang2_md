@@ -7277,3 +7277,50 @@ contains 57 safe syllables as documented below and in
   accepted runtime surface fingerprints remain unchanged. Current Scenario 15
   default/completion checksums are `C5AE`/`C5C0`. Do not replay the otherwise
   unchanged full completion solely because of this isolated final-line rewrap.
+
+### Scenario 16 Castle Gate Completion And Rewrap (2026-07-22)
+
+- Japanese event records `0x1A0C16`, `0x1A0C22`, and `0x1A0C2E` are now locked
+  in the Scenario 16 clear-probe tests. They identify Elwin ID 1 entering the
+  inclusive castle-gate bounds `X 12..14 / Y 1..5`, the hidden Gleipnir tile
+  `(16,3)`, and protagonist defeat. The handlers and trigger bytes are kept
+  read-only for future editor work.
+- `tools/build_scenario16_clear_probe_rom.py` preserves all eight stock player
+  deployments in default mode, every enemy identity/class/level/hidden flag,
+  Leon, Laird, hidden Lana and ghosts, and every event handler. It limits only
+  enemy records 0..9 AT/DF and their six mercenary slots. Optional
+  `--completion-layout` changes only Elwin from `(5,32)` to `(13,6)`, one tile
+  below the source-verified gate region. Tests lock the exact touched-byte
+  envelope and the source trigger records.
+- The accepted `8D76` derivative was built from production `B766` and loaded
+  the real Scenario 16 SRAM left by the Scenario 15 completion. One normal
+  Move to `(13,5)` plus the action-confirm C fired Leon's retreat and traversed
+  the stock allied resolution, level/class-change pages, and
+  `전과보고 / POINT 6000P` without reset or freeze. The save screen wrote real
+  Scenario 17 data; selecting `다음 시나리오` showed `진군루트` and entered
+  `황제와 어둠의 왕자`. Normal termination left the 8192-byte disk SRAM with
+  `manual_slot_scenario_number()` equal to 17 in slots 1 and 2. Slot 2 was an
+  accidental extra save caused by host cursor navigation, not ROM behavior.
+- Representative evidence is `8d76_s16_gate_target.png`,
+  `8d76_s16_gate_event_00.png`, `_03.png`, `_05.png`, `_09.png`, `_12.png`,
+  `_24.png`, `_25.png`, `_27.png`, `8d76_s17_route_02.png`, and
+  `8d76_s17_entry.png`. Scenario 16 `completion` is now `verified_probe`;
+  later no-action turns and alternate branches remain pending.
+- Live completion exposed three word-split defects: `시/작` at `0x1A1E44`,
+  `조/종` at `0x1A1F32`, and `구하/겠어` at `0x1A1FBA`. They now read
+  `드디어 최후의 / 결전이 시작되는군.`,
+  `알하자드 곁에 {0002}를 / 조종하는 자도 있을 거야.`, and
+  `그리고 {0002}도 / 꼭 구하겠어!`. Production `F8B4` renders all 98
+  Scenario 16 physical pages; the final sheet is
+  `captures/analysis/f8b4_s16_event_pages_ko/scenario_16_pages_04.png`.
+  Current default/completion derivatives are `CED6`/`CEC4`.
+- `8d76_s16_gate_event_24.png` also reproduces the unresolved shared dynamic
+  name defect in `전과보고`: several allied names intermittently show a red
+  block in one glyph position. Do not treat that capture as successful name
+  rendering or change Scenario 16 event data for it; investigate the common
+  small-font dynamic-name upload/palette path separately.
+- The production text delta is exactly `+0x414E` in the MD checksum and only
+  changes checksum expectations for production-derived diagnostics. Their
+  patch envelopes and accepted historical runtime fingerprints remain intact.
+  The complete-secret item inventory and runtime matrix were regenerated for
+  `F8B4`.
