@@ -108,7 +108,7 @@ class Scenario14ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x6E6A,
+            0x542E,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -116,7 +116,7 @@ class Scenario14ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x6E50,
+            0x5414,
         )
 
     def test_preserves_player_deployments_and_event_header(self):

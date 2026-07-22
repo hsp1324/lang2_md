@@ -430,6 +430,7 @@ BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
 BYTE_UI_FINAL_BANK_LOAD_ROUTINE = 0x2B7C00
 BYTE_UI_ENDING_RESULT_RENDER_ROUTINE = 0x2B7D00
+BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE = 0x2B7D80
 TITLE_CREDIT_FONT_LOAD_ROUTINE = 0x2B7E20
 TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
@@ -510,6 +511,10 @@ BYTE_UI_ENDING_RESULT_RENDER_CALL = 0x01CBA6
 # bank now contains battle-stable 가/스/럴 as well as 록, so it must be restored
 # here too; otherwise 스코트 and 키스 end in sprite fragments on 전과보고.
 BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES = (1, 2, 3, 4, 5)
+BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK = 0x01CE40
+BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL = bytes.fromhex(
+    "4E B9 00 00 95 1C"
+)
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "42 40 10 18 0C 00"
@@ -5436,6 +5441,18 @@ def _build_byte_ui_ending_result_renderer() -> bytes:
     return bytes(wrapper)
 
 
+def _build_byte_ui_ending_result_final_bank_loader() -> bytes:
+    # Result-screen character graphics overwrite the final localized bank after
+    # the names have already been placed. Run the displaced setup call first,
+    # then restore the bank once the graphics setup is complete.
+    return (
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL
+        + bytes.fromhex("4E B9")
+        + BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 75")
+    )
+
+
 def _build_inline_discard_prompt_renderer() -> bytes:
     code = _M68KCode()
     code.emit(
@@ -5641,6 +5658,9 @@ def install_byte_ui_extension(
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
     final_bank_loader = _build_byte_ui_final_bank_loader()
     ending_result_renderer = _build_byte_ui_ending_result_renderer()
+    ending_result_final_bank_loader = (
+        _build_byte_ui_ending_result_final_bank_loader()
+    )
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer()
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
@@ -5669,6 +5689,7 @@ def install_byte_ui_extension(
         BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE: prep_hire_class_renderer,
         BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
         BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE: ending_result_final_bank_loader,
         TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
         TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
@@ -5819,6 +5840,18 @@ def install_byte_ui_extension(
             else BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
         )
         data[offset : offset + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
+    if data[
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK :
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK + 6
+    ] != BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL:
+        raise ValueError("ending-result final bank hook source changed")
+    data[
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK :
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK + 6
+    ] = (
+        bytes.fromhex("4E B9")
+        + BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big")
+    )
     if data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
     ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:

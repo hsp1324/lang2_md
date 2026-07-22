@@ -7310,17 +7310,30 @@ contains 57 safe syllables as documented below and in
   `조/종` at `0x1A1F32`, and `구하/겠어` at `0x1A1FBA`. They now read
   `드디어 최후의 / 결전이 시작되는군.`,
   `알하자드 곁에 {0002}를 / 조종하는 자도 있을 거야.`, and
-  `그리고 {0002}도 / 꼭 구하겠어!`. Production `F8B4` renders all 98
+  `그리고 {0002}도 / 꼭 구하겠어!`. Production `DE78` retains all 98
   Scenario 16 physical pages; the final sheet is
   `captures/analysis/f8b4_s16_event_pages_ko/scenario_16_pages_04.png`.
-  Current default/completion derivatives are `CED6`/`CEC4`.
-- `8d76_s16_gate_event_24.png` also reproduces the unresolved shared dynamic
-  name defect in `전과보고`: several allied names intermittently show a red
-  block in one glyph position. Do not treat that capture as successful name
-  rendering or change Scenario 16 event data for it; investigate the common
-  small-font dynamic-name upload/palette path separately.
+  The page image predates the UI-only result-bank fix; current
+  default/completion derivatives are `B49A`/`B488`.
+- `8d76_s16_gate_event_24.png` reproduced a shared dynamic-name defect in
+  `전과보고`: `키스`, `레스터`, and `스코트` each showed a red fragment in
+  one glyph position. Exact state `captures/analysis/8d76_s16_result_broken.gst`
+  proved that result character graphics overwrite final localized bank segment
+  5 after the early name-render reload. Resource 435 and the ROM bytes were
+  correct; live VRAM tile `0x5F1` for `스` contained character-graphic bytes.
+- Reloading only segment 5 at the early renderer was tested in checksum `725A`
+  and failed. Do not repeat that change, a synchronous sixth resource load, or
+  moving the full final bank into the old `0x348..0x35B` range.
+- Diagnostic `733A` preserves the displaced result setup `JSR 0x951C` at
+  `0x01CE40`, then calls the common final-bank loader at `0x2B7C00` from a late
+  wrapper at `0x2B7D80`. `captures/run/733a_tail29.png`,
+  `733a_quickload_now.png`, and `733a_quickload_3s.png` show all three names
+  clean after normal playback, quickload, and a three-second wait. Production
+  `DE78` contains the same hook. The focused resource tests and all derived
+  checksum locks cover it.
 - The production text delta is exactly `+0x414E` in the MD checksum and only
   changes checksum expectations for production-derived diagnostics. Their
   patch envelopes and accepted historical runtime fingerprints remain intact.
-  The complete-secret item inventory and runtime matrix were regenerated for
-  `F8B4`.
+  The later result-bank hook changes production from `F8B4` to `DE78` without
+  changing event text. The complete-secret item inventory and runtime matrix
+  were regenerated for `DE78`.

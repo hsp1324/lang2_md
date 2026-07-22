@@ -626,6 +626,28 @@ class NameEntryResourceTests(unittest.TestCase):
                 + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
             )
 
+    def test_ending_result_restores_final_bank_after_character_graphics(self):
+        routine = builder._build_byte_ui_ending_result_final_bank_loader()
+        self.assertEqual(
+            routine,
+            builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL
+            + bytes.fromhex("4E B9")
+            + builder.BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 75"),
+        )
+
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK :
+                builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK + 6
+            ],
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big"),
+        )
+
     def test_scenario_one_status_classes_keep_exact_source_names(self):
         labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS
         self.assertEqual(labels[13], "매직나이트")
