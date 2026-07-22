@@ -7449,3 +7449,40 @@ contains 57 safe syllables as documented below and in
   `2829s_s20_route.png`, and `2829s_s20_title.png`. Scenario 19 completion is
   `verified_probe`; ordinary later turns, item pickups, defeat variants, and
   other branches remain pending.
+
+### Scenario 20 Fias Portrait Font Restore (2026-07-22)
+
+- Production-DE78 completion derivative D9D5 moved only Elwin from `(9,7)` to
+  `(22,22)`, directly above source `파이어스/데몬로드` at `(22,23)`, while
+  limiting all ten fixed enemy records to AT/DF 0 and no mercenaries. A normal
+  attack entered Fias's complete defeat event, but every portrait page reduced
+  the persistent bottom status class from `데몬로드` to `로드`.
+- The relocated class record and tile lookup were correct: `데/몬` use
+  `0x4AB/0x4AC`. Exact pre-dialogue and dialogue GST comparison proved the
+  portrait resource loaded at VRAM `0xA000` overwrites ranges including the
+  complete `0x498..0x4AF` extension segment. The bottom Window plane still
+  references `0x4AB/0x4AC`; this is a resource-lifetime defect, not a missing
+  translation or pointer defect.
+- Source portrait setup calls at `0x018220` and `0x01840C` are both the exact
+  original `JSR 0x99B2`. Production now redirects both to a wrapper at
+  `0x2B7DA0` that performs the displaced load first, preserves its resulting
+  registers, then queues only overwritten extension segments 1..5 after the
+  portrait request. Active Plane A/B and linked SAT entries do not use these
+  ranges; the active bottom Window uses them specifically for localized status
+  text. Do not relocate established tiles or reload the base ASCII bank.
+- The resulting production checksum is `D79C`; rebuilt Scenario 20 default and
+  completion probes are `D2DD` and `D2F9`. Live capture
+  `d2f9_s20_fias_dialogue_restore.png` keeps both the portrait and complete
+  `파이어스/데몬로드`. State
+  `captures/analysis/d2f9_s20_fias_dialogue_restored.gst` contains
+  `0x4AB/0x4AC` bytes exactly equal to
+  `captures/analysis/d9d5_pre_fias_dialogue.gst`, unlike the overwritten
+  `captures/analysis/d9d5_fias_dialogue.gst`.
+- Continued D2F9 playback traversed the complete Fias defeat dialogue, Elwin's
+  level/class-change pages, the next enemy phase, and the golem-tactics event
+  back to a valid Turn 2 command without reset, freeze, Japanese residue, or
+  broken names/classes. Representative evidence is
+  `d2f9_s20_fias_event_01.png`, `_04.png`, `_07.png`, `_10.png`,
+  `d2f9_s20_class_change_open.png`, and `d2f9_s20_turn2_command.png`.
+  Fias's defeat alone does not complete `적 전멸`; the kraken conditional and
+  full completion/save transition remain pending.

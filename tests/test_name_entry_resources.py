@@ -648,6 +648,54 @@ class NameEntryResourceTests(unittest.TestCase):
             + builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big"),
         )
 
+    def test_portrait_loader_restores_overwritten_status_font_banks(self):
+        routine = builder._build_byte_ui_portrait_font_restore()
+        self.assertTrue(
+            routine.startswith(builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL)
+        )
+        self.assertLessEqual(
+            builder.BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE + len(routine),
+            builder.TITLE_CREDIT_FONT_LOAD_ROUTINE,
+        )
+        for segment_index in builder.BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES:
+            tile_start, _ = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+            resource_index = builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+            self.assertIn(
+                bytes.fromhex("30 3C")
+                + (0x8000 | resource_index).to_bytes(2, "big")
+                + bytes.fromhex("32 7C")
+                + (tile_start * 32).to_bytes(2, "big")
+                + bytes.fromhex("4E B9 00 00 99 B2"),
+                routine,
+            )
+
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+        for offset in builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE.to_bytes(4, "big"),
+            )
+
+    def test_demon_lord_prefix_uses_portrait_overwritten_segment(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
+        self.assertEqual(
+            [tile_by_index[index_by_char[char]] for char in "데몬"],
+            [0x04AB, 0x04AC],
+        )
+        restored_tiles = {
+            tile
+            for segment_index in builder.BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES
+            for start, count in [builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]]
+            for tile in range(start, start + count)
+        }
+        self.assertTrue({0x04AB, 0x04AC}.issubset(restored_tiles))
+
     def test_scenario_one_status_classes_keep_exact_source_names(self):
         labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS
         self.assertEqual(labels[13], "매직나이트")

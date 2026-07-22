@@ -27,7 +27,7 @@ class CaptureClassChangeTransitionTests(unittest.TestCase):
                 current_class=0x0A,
                 runtime_record_index=1,
             )
-            self.assertEqual(checksum, 0xC1B3)
+            self.assertEqual(checksum, 0xBAD7)
             self.assertEqual(candidates, (0x11, 0x12, 0x13))
             self.assertEqual(len(output.read_bytes()), 0x400000)
 

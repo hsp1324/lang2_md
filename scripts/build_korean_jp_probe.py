@@ -431,6 +431,7 @@ BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
 BYTE_UI_FINAL_BANK_LOAD_ROUTINE = 0x2B7C00
 BYTE_UI_ENDING_RESULT_RENDER_ROUTINE = 0x2B7D00
 BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE = 0x2B7D80
+BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE = 0x2B7DA0
 TITLE_CREDIT_FONT_LOAD_ROUTINE = 0x2B7E20
 TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
@@ -515,6 +516,16 @@ BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK = 0x01CE40
 BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL = bytes.fromhex(
     "4E B9 00 00 95 1C"
 )
+# Both portrait setup paths load character graphics at VRAM A000. The resource
+# extends across the localized 8x8 banks even though the active portrait plane
+# and sprite table do not use those tiles. Restore the affected banks after the
+# queued portrait request so the persistent bottom status row keeps complete
+# commander and class names during dialogue.
+BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS = (0x018220, 0x01840C)
+BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL = bytes.fromhex(
+    "4E B9 00 00 99 B2"
+)
+BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES = (1, 2, 3, 4, 5)
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "42 40 10 18 0C 00"
@@ -5453,6 +5464,20 @@ def _build_byte_ui_ending_result_final_bank_loader() -> bytes:
     )
 
 
+def _build_byte_ui_portrait_font_restore() -> bytes:
+    wrapper = bytearray(BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL)
+    wrapper.extend(bytes.fromhex("48 E7 FF FE"))
+    for segment_index in BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES:
+        tile_start, _ = BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
+        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
+        request = 0x8000 | resource_index
+        wrapper.extend(bytes.fromhex("30 3C") + request.to_bytes(2, "big"))
+        wrapper.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
+        wrapper.extend(bytes.fromhex("4E B9 00 00 99 B2"))
+    wrapper.extend(bytes.fromhex("4C DF 7F FF 4E 75"))
+    return bytes(wrapper)
+
+
 def _build_inline_discard_prompt_renderer() -> bytes:
     code = _M68KCode()
     code.emit(
@@ -5661,6 +5686,7 @@ def install_byte_ui_extension(
     ending_result_final_bank_loader = (
         _build_byte_ui_ending_result_final_bank_loader()
     )
+    portrait_font_restore = _build_byte_ui_portrait_font_restore()
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer()
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
@@ -5690,6 +5716,7 @@ def install_byte_ui_extension(
         BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
         BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
         BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE: ending_result_final_bank_loader,
+        BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE: portrait_font_restore,
         TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
         TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
@@ -5852,6 +5879,13 @@ def install_byte_ui_extension(
         bytes.fromhex("4E B9")
         + BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big")
     )
+    for offset in BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS:
+        if data[offset : offset + 6] != BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL:
+            raise ValueError(f"portrait font-restore hook changed at 0x{offset:06X}")
+        data[offset : offset + 6] = (
+            bytes.fromhex("4E B9")
+            + BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE.to_bytes(4, "big")
+        )
     if data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
     ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:
