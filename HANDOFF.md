@@ -7337,3 +7337,39 @@ contains 57 safe syllables as documented below and in
   The later result-bank hook changes production from `F8B4` to `DE78` without
   changing event text. The complete-secret item inventory and runtime matrix
   were regenerated for `DE78`.
+
+### Scenario 17 Bernhardt Completion (2026-07-22)
+
+- `tools/build_scenario17_clear_probe_rom.py --completion-layout` changes only
+  Elwin's first deployment from `(12,25)` to `(15,5)` in addition to the
+  existing enemy AT/DF/mercenary limits. Bernhardt remains the source record
+  `베른하르트/엠퍼러`, LV1 at the throne `(15,4)`; Bozel, both hidden
+  `매직나이트` records, every identity/class/level/side/handler, and the other
+  seven player deployments remain unchanged. Tests lock the exact touched-byte
+  envelope and checksums `B18D`/`B17C`.
+- The isolated runtime `s17_completion_b17c` recovered the real Scenario 17
+  manual slots written by the accepted Scenario 16 completion. It entered the
+  selector, reviewed the description endpoint and automatic deployment, and
+  reached Elwin's command menu directly below Bernhardt. Captures
+  `b17c_s17_command_ready.png` and `b17c_s17_bernhardt_target.png` retain clean
+  `엘윈/파이터` and `베른하르트/엠퍼러` names, classes, commands, and status
+  text.
+- The first normal attack left Bernhardt at HP6. Ending the turn preserved the
+  stock enemy dialogue and returned to a valid Turn 2 command after 21 detected
+  confirmations; a second normal attack defeated him. Do not add an HP hook or
+  infer a one-hit requirement from the diagnostic. `b17c_s17_boss_defeated.png`
+  begins the accepted completion path.
+- Eighty retained completion frames plus the preceding battle frames traverse
+  Bernhardt's defeat, Bozel's retreat, Jessica's history explanation, every
+  allied reaction, level-up and class-change pages without reset, freeze,
+  Japanese residue, or broken dynamic names/classes. Contact sheets are
+  `captures/analysis/b17c_s17_clear_00_19_sheet.png`, `_20_39_sheet.png`, and
+  `_40_59_sheet.png`; individual frames continue through
+  `captures/run/b17c_s17_clear_79.png`.
+- Slot 1 visibly changed from `시나리오 17` to `시나리오 18`. Selecting
+  `다음 시나리오` displayed `진군루트` and entered `어둠의 공주`; normal
+  BlastEm termination left disk SRAM slot 1 at Scenario 18 and slot 2 at
+  Scenario 17. Evidence is `b17c_s17_after_save.png`,
+  `b17c_s17_next_selected.png`, `b17c_s18_route.png`, and
+  `b17c_s18_entry.png`. Scenario 17 completion is `verified_probe`; alternate
+  battle/route branches remain pending.

@@ -1045,8 +1045,8 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_current",
-      "turn_events": "progressed_current",
-      "completion": "pending",
+      "turn_events": "verified_probe",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/85f1_s17_brief_live_01.png",
@@ -1078,9 +1078,22 @@
         "captures/run/b0e8_s17_description_final_10.png",
         "captures/run/b0e8_s17_description_final_15.png",
         "captures/run/b0e8_s17_description_final_22.png",
-        "captures/run/b0e8_s17_description_final_23.png"
+        "captures/run/b0e8_s17_description_final_23.png",
+        "captures/run/b17c_s17_command_ready.png",
+        "captures/run/b17c_s17_bernhardt_target.png",
+        "captures/run/b17c_s17_boss_defeated.png",
+        "captures/analysis/b17c_s17_clear_00_19_sheet.png",
+        "captures/analysis/b17c_s17_clear_20_39_sheet.png",
+        "captures/analysis/b17c_s17_clear_40_59_sheet.png",
+        "captures/run/b17c_s17_clear_60.png",
+        "captures/run/b17c_s17_clear_69.png",
+        "captures/run/b17c_s17_clear_70.png",
+        "captures/run/b17c_s17_after_save.png",
+        "captures/run/b17c_s17_next_selected.png",
+        "captures/run/b17c_s18_route.png",
+        "captures/run/b17c_s18_entry.png"
       ],
-      "note": "Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrolling frames of 황제와 어둠의 왕자, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the Korean meaning, including Bernhardt's warrior-like presence and the evil-smiling man secretly observing the party. Initial current playback exposed 베른하르트., 남자가, 지켜보았다., and 있었다. as isolated lines. The description renderer normalizes source newlines to spaces, so moving source line breaks alone produced the identical AFD5 ROM and could not fix runtime wrapping. Natural sentence restructuring now renders 그가 바로 황제 베른하르트였다., 그 곁에 남자가 숨어 있었다., and 흥미롭게 지켜보았다. without isolated words. A visually correct 3564 trial using 곁엔 was rejected because its new 엔 allocation shifted 62 direct-string token records. The final regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, arrangement, automatic deployment, opening, conditions, first-turn dialogue, and live battle presentation without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 remains covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending."
+      "note": "Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrolling frames of 황제와 어둠의 왕자, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the Korean meaning, including Bernhardt's warrior-like presence and the evil-smiling man secretly observing the party. Initial current playback exposed 베른하르트., 남자가, 지켜보았다., and 있었다. as isolated lines. The description renderer normalizes source newlines to spaces, so moving source line breaks alone produced the identical AFD5 ROM and could not fix runtime wrapping. Natural sentence restructuring now renders 그가 바로 황제 베른하르트였다., 그 곁에 남자가 숨어 있었다., and 흥미롭게 지켜보았다. without isolated words. A visually correct 3564 trial using 곁엔 was rejected because its new 엔 allocation shifted 62 direct-string token records. The final regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, arrangement, automatic deployment, opening, conditions, first-turn dialogue, and live battle presentation without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 remains covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending. Production-DE78 completion derivative B17C moves only Elwin from (12,25) to (15,5), directly below the source Bernhardt at (15,4), in addition to the locked enemy AT/DF/mercenary limits. Two normal attacks defeated 베른하르트/엠퍼러; the intervening enemy phase traversed 21 detected stock turn-event confirmations and returned to a valid Turn 2 command. The full completion then rendered Bernhardt and Bozel retreat, allied dialogue, level-up/class-change pages, and save flow without reset, freeze, Japanese residue, or broken dynamic names/classes. Slot 1 changed from Scenario 17 to 18; 다음 시나리오 displayed 진군루트 and entered 어둠의 공주. Alternate battle/route branches remain pending."
     },
     {
       "scenario": 18,
