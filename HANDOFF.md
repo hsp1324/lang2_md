@@ -7410,3 +7410,42 @@ contains 57 safe syllables as documented below and in
   at Scenario 17. Evidence is `17f2_s18_next_selected.png` and
   `17f2_s19_title.png`. Scenario 18 completion and normal turn events are
   `verified_probe`; the evacuation-choice alternate path remains pending.
+
+### Scenario 19 Imelda Completion (2026-07-22)
+
+- `tools/build_scenario19_clear_probe_rom.py --completion-layout` changes only
+  Elwin's first deployment from `(2,9)` to `(37,22)` in addition to the
+  existing enemy AT/DF/mercenary limits. Imelda remains the source
+  `이멜다/제너럴`, LV10 at `(37,23)`; hidden Laird remains
+  `레아드/실버나이트`, LV9 at `(255,255)`. Both other reinforcement records,
+  every identity/class/level/side/handler, and the other seven player
+  deployments remain unchanged. Tests lock the exact touched-byte envelope and
+  checksums `27F9`/`2829`.
+- The first isolated runtime used the real Scenario 19 save written by the
+  accepted Scenario 18 completion and stock Elwin AT24/DF19. Its normal attack
+  triggered Imelda's departure orders and the source Laird/reinforcement
+  sequence, proving the completion layout reaches the intended event. Ending
+  the turn then allowed source enemy magic to reduce Elwin from HP6 to 0 and
+  reached the expected `GAME OVER`. Enemy fixed-record AT/DF limits do not
+  suppress spell damage; do not repeat this stock-stat completion attempt.
+  Evidence includes `2829_s19_clear_05.png`, `_07.png`, `_13.png`, and
+  `2829_s19_turn1_after_imelda_19.png`.
+- The accepted runtime `s19_completion_2829_strong` copied the same real save
+  and changed only commander 1 in the isolated SRAM from AT24/DF19 to AT99/DF99
+  while preserving class `0x01`, LV7, and EXP5. This is diagnostic runtime
+  state, not a ROM patch and not an editor/default-stat source. One normal
+  attack defeated Imelda and retained clean `엘윈/파이터`,
+  `이멜다/제너럴`, and `레아드/실버나이트` status text.
+- The accepted completion traversed Imelda's defeat, Laird's reinforcement and
+  departure responses, allied dialogue, every level-up page, and the save flow
+  without reset, freeze, Japanese residue, or broken dynamic names/classes.
+  Evidence includes `2829s_s19_after_first_attack.png`,
+  `2829s_s19_reinforcement_ready.png`, and
+  `2829s_s19_reinforcement_34.png`.
+- Slot 1 visibly changed from `시나리오 19` to `시나리오 20`. Selecting
+  `다음 시나리오` displayed `진군루트` and entered `붉게 물든 바다`;
+  normal BlastEm termination left disk SRAM slot 1 at Scenario 20 and slot 2
+  at Scenario 17. Evidence is `2829s_s19_next_selected.png`,
+  `2829s_s20_route.png`, and `2829s_s20_title.png`. Scenario 19 completion is
+  `verified_probe`; ordinary later turns, item pickups, defeat variants, and
+  other branches remain pending.

@@ -29,7 +29,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 16 | current | current | current | current | probe | progressed | probe | pending | 45 |
 | 17 | current | current | current | current | current | probe | probe | pending | 43 |
 | 18 | current | current | current | current | probe | probe | probe | pending | 36 |
-| 19 | current | current | current | current | probe | progressed | pending | pending | 27 |
+| 19 | current | current | current | current | probe | progressed | probe | pending | 38 |
 | 20 | current | current | current | current | probe | progressed | pending | pending | 25 |
 | 21 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 22 | current | current | current | current | pending | current | pending | pending | 37 |
@@ -900,7 +900,7 @@ Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrollin
 
 ### Scenario 19
 
-Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrolling frames of 미레일 항구 전투, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the monster-attacked port, the imperial ship at Mileil Harbor, crossing the Dires Strait, the approaching cargo vessel, and the ship-seizure operation. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 remains covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Later turns, completion, and branches remain pending.
+Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrolling frames of 미레일 항구 전투, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the monster-attacked port, the imperial ship at Mileil Harbor, crossing the Dires Strait, the approaching cargo vessel, and the ship-seizure operation. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 remains covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Production-DE78 completion derivative 2829 moves only Elwin from (2,9) to (37,22), directly above source Imelda at (37,23), in addition to the locked enemy AT/DF/mercenary limits. Imelda remains 이멜다/제너럴, LV10; hidden Laird remains 레아드/실버나이트, LV9, and all reinforcement identities, classes, coordinates, and handlers remain source-identical. A stock-stat attempt triggered Imelda's departure orders and Laird's reinforcements but ended in GAME OVER after enemy magic reduced Elwin from HP6 to 0; enemy AT/DF limits do not suppress spell damage. The accepted isolated runtime retained Scenario 19's real save while setting only Elwin's manual-slot AT/DF to 99. One normal attack then defeated Imelda and traversed the departure orders, Laird reinforcement, allied dialogue, level-up pages, and save flow without reset, freeze, Japanese residue, or broken names/classes. Slot 1 changed from Scenario 19 to 20 while slot 2 remained 17; 다음 시나리오 displayed 진군루트 and entered 붉게 물든 바다. The AT/DF 99 SRAM is diagnostic evidence only and is not a scenario or editor default. Later ordinary turns, item pickups, defeat variants, and other branches remain pending.
 
 - `captures/run/1391_s19_canonical_brief_01.png`
 - `captures/run/1391_s19_canonical_brief_06.png`
@@ -929,6 +929,17 @@ Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrollin
 - `captures/run/77d0_s19_description_current_14.png`
 - `captures/run/77d0_s19_description_current_19.png`
 - `captures/run/77d0_s19_description_current_20.png`
+- `captures/run/2829_s19_command_ready.png`
+- `captures/run/2829_s19_imelda_target.png`
+- `captures/run/2829_s19_clear_05.png`
+- `captures/run/2829_s19_clear_07.png`
+- `captures/run/2829_s19_clear_13.png`
+- `captures/run/2829_s19_turn1_after_imelda_19.png`
+- `captures/run/2829s_s19_after_first_attack.png`
+- `captures/run/2829s_s19_reinforcement_ready.png`
+- `captures/run/2829s_s19_reinforcement_34.png`
+- `captures/run/2829s_s19_next_selected.png`
+- `captures/run/2829s_s20_title.png`
 
 ### Scenario 20
 
