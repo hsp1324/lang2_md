@@ -7590,9 +7590,35 @@ contains 57 safe syllables as documented below and in
   `리아나/클레릭`, `신관/클레릭`, `사제/프리스트`; and enemy
   `제국지휘관/시프`, `모건/소서러`, `제국지휘관/샤먼`,
   `제국지휘관/워록`. Each has a map-status capture and a simultaneous popup
-  or command/status capture under `captures/run/c1a2_s04_*`. The hidden
-  `수수께끼의 기사/파이터` still requires its event appearance and is not
-  covered by this matrix.
+  or command/status capture under `captures/run/c1a2_s04_*`.
+- Current-production clear derivative `451E` staged Elwin immediately below
+  source Morgan without changing either identity or class. An isolated manual
+  slot then changed only Elwin AT/DF to 99 so one stock battle could traverse
+  the event; that runtime value is not a production/editor default. The battle
+  presentation renders `파이터/소서러` intact, and all following `가면기사`,
+  `쉐리`, `엘윈`, `헤인`, `리아나`, `신관`, and `사제` speaker names remain
+  clean through battle report and save. Evidence is rooted at
+  `captures/run/c1a2_s04_battle_at99_*`.
+- The event-only masked knight cannot be cursor-inspected during stock playback.
+  `tools/build_scenario4_clear_probe_rom.py --mode masked-knight-status`
+  therefore validates Japanese and input record 4, then changes only its hidden
+  bit and coordinates from `(255,255)` to `(7,37)`. Name ID `0x0B`, class ID
+  `0x01`, level, AT/DF, side, and mercenaries remain source-identical. Probe
+  checksum `48C8` proves `수수께끼의 기사/파이터` in both the map row and
+  detailed popup. Evidence is
+  `captures/run/c1a2_s04_masked_knight_map_status.png`,
+  `captures/run/c1a2_s04_masked_knight_popup_with_bottom.png`, and exact state
+  `captures/analysis/c1a2_s04_masked_knight_popup.gst` (SHA-256
+  `a7892180977571e6c39615f6b957412faf11e3bf6499be604d0f75c2eae09b9b`).
+  Exact VRAM comparison returns `수수께끼의 기사` across all eight name cells
+  and `파이터` across all three class cells.
+- Rejected input evidence must not be used as a pass. The first retry hired a
+  soldier because preparation focus still belonged to the commander list; a
+  second one-second detector overshot the freshly drawn main command into the
+  `명령` submenu. In preparation, move focus into the hire pane, select `END`
+  with `Right`, `Up`, `C`, then navigate the right action menu. Use at least a
+  2.5-second confirmation delay when detecting the first command after long
+  dialogue, and visually confirm `이동/공격/치료/명령` before acting.
 - This is not yet a global close. Every allied, enemy, and NPC name/class must
   still pass all required surfaces in every scenario. If a simultaneous
   surface regresses, extend context-specific rendering to that surface; do

@@ -22,6 +22,9 @@ DEFAULT_OUTPUT_ROM = (
 DEFAULT_PROGRESSION_OUTPUT_ROM = (
     ROOT / "roms/builds/Langrisser II (Scenario 4 Progression Probe).md"
 )
+DEFAULT_MASKED_KNIGHT_OUTPUT_ROM = (
+    ROOT / "roms/builds/Langrisser II (Scenario 4 Masked Knight Status Probe).md"
+)
 
 SCENARIO_NUMBER = 4
 SCENARIO_HEADER = 0x180688
@@ -37,6 +40,12 @@ SOURCE_MORGAN_X = 7
 SOURCE_MORGAN_Y = 21
 PROBE_MORGAN_AT = 0
 PROBE_MORGAN_DF = 0
+MASKED_KNIGHT_RECORD_INDEX = 4
+MASKED_KNIGHT_RECORD_OFFSET = 0x180740
+MASKED_KNIGHT_NAME_ID = 0x0B
+MASKED_KNIGHT_CLASS_ID = 0x01
+MASKED_KNIGHT_X = 7
+MASKED_KNIGHT_Y = 37
 FIRST_ENEMY_RECORD_INDEX = 5
 LAST_ENEMY_RECORD_INDEX = 10
 PROGRESSION_ENEMY_AT = 0
@@ -85,6 +94,28 @@ def validate_layout(probe: bytes, source: bytes) -> None:
     ):
         raise ValueError("unexpected Japanese Scenario 4 Morgan coordinates")
 
+    masked_offset = (
+        source_layout.records_offset
+        + MASKED_KNIGHT_RECORD_INDEX * FIXED_RECORD_SIZE
+    )
+    if masked_offset != MASKED_KNIGHT_RECORD_OFFSET:
+        raise ValueError(
+            f"unexpected masked-knight record 0x{masked_offset:06X}"
+        )
+    masked_end = masked_offset + FIXED_RECORD_SIZE
+    if probe[masked_offset:masked_end] != source[masked_offset:masked_end]:
+        raise ValueError("input masked-knight record differs from Japanese source")
+    if (
+        source[masked_offset] != 0x80
+        or source[masked_offset + FIELD_OFFSETS["x"]] != 0xFF
+        or source[masked_offset + FIELD_OFFSETS["y"]] != 0xFF
+        or source[masked_offset + FIELD_OFFSETS["name_id"]]
+        != MASKED_KNIGHT_NAME_ID
+        or source[masked_offset + FIELD_OFFSETS["class_id"]]
+        != MASKED_KNIGHT_CLASS_ID
+    ):
+        raise ValueError("unexpected Japanese Scenario 4 masked-knight identity")
+
 
 def patch_probe(probe: bytearray, source: bytes) -> int:
     validate_layout(probe, source)
@@ -118,6 +149,17 @@ def patch_progression_probe(probe: bytearray, source: bytes) -> int:
     return builder.update_md_checksum(probe)
 
 
+def patch_masked_knight_status_probe(
+    probe: bytearray, source: bytes
+) -> int:
+    validate_layout(probe, source)
+    base = MASKED_KNIGHT_RECORD_OFFSET
+    probe[base] &= 0x7F
+    probe[base + FIELD_OFFSETS["x"]] = MASKED_KNIGHT_X
+    probe[base + FIELD_OFFSETS["y"]] = MASKED_KNIGHT_Y
+    return builder.update_md_checksum(probe)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -129,9 +171,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument(
         "--mode",
-        choices=("clear", "progression"),
+        choices=("clear", "progression", "masked-knight-status"),
         default="clear",
-        help="clear moves Elwin next to Morgan; progression preserves all coordinates",
+        help=(
+            "clear moves Elwin next to Morgan; progression preserves all "
+            "coordinates; masked-knight-status reveals the source hidden "
+            "record above the stock Elwin deployment"
+        ),
     )
     parser.add_argument("--output-rom", type=Path)
     return parser.parse_args()
@@ -148,6 +194,14 @@ def main() -> int:
             "Scenario 4 original coordinates preserved; enemy records "
             f"{FIRST_ENEMY_RECORD_INDEX}..{LAST_ENEMY_RECORD_INDEX}: "
             "AT 0, DF 0, no mercenaries"
+        )
+    elif args.mode == "masked-knight-status":
+        checksum = patch_masked_knight_status_probe(probe, source)
+        output_rom = args.output_rom or DEFAULT_MASKED_KNIGHT_OUTPUT_ROM
+        print(
+            "Scenario 4 source masked knight: hidden flag cleared; "
+            f"coordinates ({MASKED_KNIGHT_X},{MASKED_KNIGHT_Y}); "
+            "name, class, level, stats, side, and mercenaries preserved"
         )
     else:
         checksum = patch_probe(probe, source)

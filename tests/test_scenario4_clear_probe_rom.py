@@ -165,6 +165,67 @@ class Scenario4ClearProbeRomTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "enemy record 5 differs"):
             probe_builder.patch_progression_probe(data, self.source)
 
+    def test_masked_knight_status_probe_changes_only_visibility_coordinates_and_checksum(self):
+        data = bytearray(self.built)
+        probe_builder.patch_masked_knight_status_probe(data, self.source)
+        base = probe_builder.MASKED_KNIGHT_RECORD_OFFSET
+        expected_changes = {
+            0x18E,
+            0x18F,
+            base,
+            base + FIELD_OFFSETS["x"],
+            base + FIELD_OFFSETS["y"],
+        }
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.built, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, expected_changes)
+
+    def test_masked_knight_status_probe_preserves_source_identity_class_and_stats(self):
+        data = bytearray(self.built)
+        probe_builder.patch_masked_knight_status_probe(data, self.source)
+        base = probe_builder.MASKED_KNIGHT_RECORD_OFFSET
+        self.assertEqual(data[base] & 0x80, 0)
+        self.assertEqual(
+            (
+                data[base + FIELD_OFFSETS["x"]],
+                data[base + FIELD_OFFSETS["y"]],
+            ),
+            (
+                probe_builder.MASKED_KNIGHT_X,
+                probe_builder.MASKED_KNIGHT_Y,
+            ),
+        )
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["name_id"]],
+            probe_builder.MASKED_KNIGHT_NAME_ID,
+        )
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["class_id"]],
+            probe_builder.MASKED_KNIGHT_CLASS_ID,
+        )
+        for field_offset in (
+            FIELD_OFFSETS["level"],
+            FIELD_OFFSETS["at"],
+            FIELD_OFFSETS["df"],
+        ):
+            self.assertEqual(
+                data[base + field_offset], self.source[base + field_offset]
+            )
+        mercenary = base + FIELD_OFFSETS["mercenaries"]
+        self.assertEqual(
+            data[mercenary : mercenary + 6],
+            self.source[mercenary : mercenary + 6],
+        )
+
+    def test_masked_knight_status_probe_rejects_changed_source_record(self):
+        data = bytearray(self.built)
+        data[probe_builder.MASKED_KNIGHT_RECORD_OFFSET] ^= 1
+        with self.assertRaisesRegex(ValueError, "masked-knight record differs"):
+            probe_builder.patch_masked_knight_status_probe(data, self.source)
+
 
 if __name__ == "__main__":
     unittest.main()
