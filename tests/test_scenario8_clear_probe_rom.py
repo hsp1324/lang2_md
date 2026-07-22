@@ -71,7 +71,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0x994B)
+        self.assertEqual(checksum, 0xC19F)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
 

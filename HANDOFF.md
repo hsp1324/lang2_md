@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 45D8
-latest targeted live-verified production checksum: 45D8
+current production build checksum: 6E2C
+latest targeted live-verified production checksum: 6E2C
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 658 passing
+unit tests: 659 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -7678,3 +7678,48 @@ contains 57 safe syllables as documented below and in
   `한글화: HSP1324` are all intact. The independent `새 게임 / 불러오기`
   record did not change; its exact bytes remain covered by
   `tests/test_title_main_screen.py` and the earlier 6C85 live capture.
+
+### Scenario 1 Multi-Turn Map-Status Scratch Restore (2026-07-23)
+
+- Mobile RetroArch play and a fresh production `45D8` BlastEm replay both
+  reproduced a delayed map-status defect after several enemy/NPC actions.
+  Commander names, classes, and mercenary labels initially rendered correctly,
+  then individual cells such as the apparent `스`, `렌`, `가`, and `터`
+  positions became red, green, or map-tile fragments. Exact consecutive frames
+  prove that the same selected unit's class cells changed while its record and
+  bottom Window tilemap stayed unchanged. This is VRAM lifetime corruption, not
+  a translated string, token, pointer, or save-data mutation.
+- The dynamic map renderer intentionally uses scratch tiles `0x5D8..0x5DF` for
+  names and `0x5E0..0x5E7` for classes. Existing portrait wrappers restored the
+  shared static font segments but did not cover all map-phase graphics requests.
+  Three stock `JSR 0x99B2` calls at `0x00F176`, `0x00F330`, and `0x011984`
+  load graphics at VRAM `0xA000` after the status row has already been drawn,
+  overwriting those scratch cells.
+- Production `6E2C` redirects only those validated six-byte calls through a
+  wrapper that performs the displaced resource load and then re-resolves the
+  current runtime record from `$A628`. A guarded synchronous helper rebuilds
+  the current name from the player buffer or table `0x0618E8` and the class
+  from table `0x05E6D6` into the same scratch cells. It preserves all registers,
+  ignores pointers outside `0xFFFF603C..0xFFFF7FFF`, and is also called after
+  the established portrait-font restore. It does not move glyph IDs, alter
+  unit data, or restore shared static banks globally.
+- Fresh `6E2C` Scenario 1 playback retained every detector frame while ending
+  four consecutive turns without moving a player unit: 90, 127, 108, and 90
+  frames respectively, 415 total. `제국지휘관`, enemy `솔저`,
+  `레아드/매직나이트` and later `레아드/헤비랜서`, `레온/로얄가드`,
+  `민병대`, and `사제/프리스트` remain complete before, during, and after
+  map movement, portrait dialogue, and battles. Representative evidence is
+  `captures/run/6e2c_s01_turn1_event_39.png`, `_42.png`, `_60.png`,
+  `captures/run/6e2c_s01_turn2_event_114.png`,
+  `captures/run/6e2c_s01_turn3_event_102.png`, and
+  `captures/run/6e2c_s01_turn4_event_67.png`. Enlarged complete status sheets
+  are `captures/analysis/6e2c_s01_turn{1,2,3,4}_status_sheet.png`.
+- The exact post-fourth-turn state is
+  `captures/analysis/6e2c_s01_turn5_command_clean.gst`, SHA-256
+  `4c524690486fcfc972627851e9ffdf6f672f053c091de3483e6263e7cda7ad99`.
+  The rebuilt 4 MiB production ROM is checksum `6E2C`, SHA-256
+  `cc2c0249a47dc7e3184073ff1932d2e3e5dd243cadafed71a502929e4270a5b6`.
+  Rejected in-process replacement of a running emulator's GST sometimes reset
+  or black-screened and is not evidence; resume a saved GST in a fresh isolated
+  runtime instead. Unit tests lock the source hook bytes, destinations, guarded
+  helper inputs, both name/class render calls, and non-overlapping code ranges.

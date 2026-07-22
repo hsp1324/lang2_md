@@ -447,6 +447,8 @@ TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE = 0x2B7300
+BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE = 0x2B7370
+BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE = 0x2B73F0
 INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
 SOUND_TEST_RENDER_ROUTINE = 0x2B7F60
 INLINE_DISCARD_PROMPT_RENDER_HOOK = 0x01804C
@@ -560,6 +562,8 @@ BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL = bytes.fromhex(
     "4E B9 00 00 99 B2"
 )
 BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES = (1, 2, 3, 4)
+BYTE_UI_MAP_GRAPHICS_LOAD_HOOKS = (0x00F176, 0x00F330, 0x011984)
+BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL = bytes.fromhex("4E B9 00 00 99 B2")
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "42 40 10 18 0C 00"
@@ -5130,6 +5134,54 @@ def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
     return bytes(code)
 
 
+def _build_byte_ui_map_info_scratch_restore() -> bytes:
+    # A000-targeted map and battle graphics overwrite the 5D8..5E7 scratch
+    # cells after the bottom status row has already rendered. Re-resolve the
+    # currently selected runtime record and synchronously rebuild both fields.
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")
+    code.emit("24 78 A6 28")  # a2 = current runtime unit record
+    code.emit("B5 FC FF FF 60 3C")
+    code.branch_word(0x6500, "done")
+    code.emit("B5 FC FF FF 80 00")
+    code.branch_word(0x6400, "done")
+    code.emit("9E FC 00 20 20 4F")  # 32-byte dummy tilemap buffer on stack
+
+    code.emit("70 00 10 2A 00 01 0C 00 00 01")
+    code.branch_word(0x6600, "table_name")
+    code.emit("43 F8 A5 CC")
+    code.branch_word(0x6000, "render_name")
+    code.label("table_name")
+    code.emit("43 F9 00 06 18 E8 D0 40 D0 40 22 71 00 00")
+    code.label("render_name")
+    code.emit("3C 3C 05 D8")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+
+    code.emit("20 4F 70 00 10 12")
+    code.emit("43 F9 00 05 E6 D6 D0 40 D0 40 22 71 00 00")
+    code.emit("3C 3C 05 E0")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("DE FC 00 20")
+    code.label("done")
+    code.emit("4C DF 7F FF 4E 75")
+    return code.finish()
+
+
+def _build_byte_ui_map_graphics_load_wrapper() -> bytes:
+    return (
+        BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL
+        + bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 75")
+    )
+
+
 def _build_byte_ui_direct_map_renderer() -> bytes:
     code = _M68KCode()
     code.emit("48 E7 C0 60")
@@ -5522,6 +5574,10 @@ def _build_byte_ui_portrait_font_restore() -> bytes:
         wrapper.extend(bytes.fromhex("30 3C") + request.to_bytes(2, "big"))
         wrapper.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
         wrapper.extend(bytes.fromhex("4E B9 00 00 99 B2"))
+    wrapper.extend(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big")
+    )
     wrapper.extend(bytes.fromhex("4C DF 7F FF 4E 75"))
     return bytes(wrapper)
 
@@ -5764,6 +5820,8 @@ def install_byte_ui_extension(
         BYTE_UI_DYNAMIC_CLASS_TILE, restore_final_bank=False
     )
     dynamic_glyph_renderer = _build_byte_ui_dynamic_glyph_renderer()
+    map_info_scratch_restore = _build_byte_ui_map_info_scratch_restore()
+    map_graphics_load_wrapper = _build_byte_ui_map_graphics_load_wrapper()
     direct_map_renderer = _build_byte_ui_direct_map_renderer()
     prep_selected_name_renderer = _build_byte_ui_prep_selected_name_renderer()
     prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
@@ -5799,6 +5857,8 @@ def install_byte_ui_extension(
         BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE: map_info_name_renderer,
         BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE: map_info_class_renderer,
         BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE: dynamic_glyph_renderer,
+        BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE: map_info_scratch_restore,
+        BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE: map_graphics_load_wrapper,
         BYTE_UI_DIRECT_MAP_RENDER_ROUTINE: direct_map_renderer,
         BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE: prep_selected_name_renderer,
         BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
@@ -5975,6 +6035,13 @@ def install_byte_ui_extension(
         data[offset : offset + 6] = (
             bytes.fromhex("4E B9")
             + BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE.to_bytes(4, "big")
+        )
+    for offset in BYTE_UI_MAP_GRAPHICS_LOAD_HOOKS:
+        if data[offset : offset + 6] != BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL:
+            raise ValueError(f"map graphics-load hook changed at 0x{offset:06X}")
+        data[offset : offset + 6] = (
+            bytes.fromhex("4E B9")
+            + BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE.to_bytes(4, "big")
         )
     if data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6

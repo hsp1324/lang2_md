@@ -561,6 +561,43 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(helper.count(bytes.fromhex("23 D8 00 C0 00 00")), 8)
         self.assertIn(bytes.fromhex("33 FC 8F 02 00 C0 00 04"), helper)
 
+    def test_map_graphics_loaders_restore_current_dynamic_name_and_class(self):
+        restore = builder._build_byte_ui_map_info_scratch_restore()
+        self.assertIn(bytes.fromhex("24 78 A6 28"), restore)
+        self.assertIn(bytes.fromhex("B5 FC FF FF 60 3C"), restore)
+        self.assertIn(bytes.fromhex("B5 FC FF FF 80 00"), restore)
+        self.assertIn(bytes.fromhex("43 F9 00 06 18 E8"), restore)
+        self.assertIn(bytes.fromhex("43 F9 00 05 E6 D6"), restore)
+        self.assertEqual(
+            restore.count(
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
+            ),
+            2,
+        )
+        self.assertLessEqual(
+            builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE + len(restore),
+            builder.BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE,
+        )
+
+        wrapper = builder._build_byte_ui_map_graphics_load_wrapper()
+        self.assertTrue(wrapper.startswith(builder.BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL))
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big"),
+            wrapper,
+        )
+
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+        for offset in builder.BYTE_UI_MAP_GRAPHICS_LOAD_HOOKS:
+            self.assertEqual(
+                data[offset : offset + 6],
+                bytes.fromhex("4E B9")
+                + builder.BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE.to_bytes(4, "big"),
+            )
+
     def test_extension_renderer_maps_only_escape_bytes(self):
         def mapped(value):
             return value + 0x300 if builder.BYTE_UI_EXT_CODE_FIRST <= value <= builder.BYTE_UI_EXT_CODE_LAST else value
@@ -726,6 +763,11 @@ class NameEntryResourceTests(unittest.TestCase):
                 + bytes.fromhex("4E B9 00 00 99 B2"),
                 routine,
             )
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big"),
+            routine,
+        )
 
         data = bytearray(self.rom)
         builder.expand_rom(data)
