@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 2749
+current production build checksum: B766
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 629 passing
+unit tests: 632 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -7180,8 +7180,9 @@ contains 57 safe syllables as documented below and in
   additionally changes only Elwin from stock `(23,26)` to `(16,7)`, one tile
   below Langrisser. Tests lock the exact touched-byte envelope and all three
   source trigger records. Production `40BC` produced checksums `B672` and
-  `B658`; after the isolated text correction below, current production `2749`
-  produces `9CFF` and `9CE5`.
+  `B658`; the Scenario 14 text correction produced `9CFF`/`9CE5` from
+  production `2749`, and the later Scenario 15 rewrap makes the current
+  production `B766` derivatives `2D1C`/`2D02`.
 - The stock-coordinate `B672` run traversed the no-action first-turn orders,
   the delayed-Leon exchange on TURN 2, Leon's arrival and Vargas/Eliza report,
   and the Langrisser/Alhazard history discussion. It returned to valid Elwin
@@ -7223,6 +7224,56 @@ contains 57 safe syllables as documented below and in
   regenerated without changing their patch logic. The complete-secret item
   inventory and Markdown matrix were also regenerated against `2749`; their
   accepted runtime surface fingerprint remains unchanged. The complete suite
-  now contains 629 tests. Generated probe ROMs and runtime states remain
+  now contains 632 tests. Generated probe ROMs and runtime states remain
   ignored; source, tests, inventories, captures, and these notes are the
   durable handoff.
+
+### Scenario 15 Southern Escape And Completion (2026-07-22)
+
+- The Japanese completion-region records are now locked at `0x19F13C`,
+  `0x19F148`, and `0x19F154`. The middle record identifies Elwin ID 1 entering
+  inclusive bounds `X 1..46 / Y 21..22` and calls handler `0x19F30A`; the
+  neighboring records preserve the broader southern encounter and protagonist
+  defeat paths. This makes the bounds useful as read-only editor context while
+  keeping event-owned flags and handlers unavailable for editing.
+- `tools/build_scenario15_clear_probe_rom.py` still preserves allied Scott,
+  all seven stock deployments in default mode, every identity/class/level,
+  hidden Scylla/Lana/Wyvern coordinates and flags, and every event handler.
+  Only enemy records 1..11 AT/DF and six mercenary slots are limited. Optional
+  `--completion-layout` additionally changes only Elwin from `(3,2)` to
+  `(3,20)`, one tile above the source escape region. Tests lock the exact
+  touched-byte envelope and all three source trigger records.
+- The accepted live derivative `35A3` was built from production `2749`. A
+  read-only GST confirmed Elwin ID 1, class Fighter, HP 10 at `(3,20)`. One
+  normal Move to `(3,21)`, followed by the action-confirm C, first triggered
+  the overlapping stock southern event: Lana appeared as Dark Princess,
+  Imelda ordered her troops and monsters, and the controlled monsters were
+  released. The same event chain rendered Imelda's retreat, Scott's return,
+  all level/class-change results, and `전과보고 / POINT 4000P` without reset,
+  freeze, Japanese residue, or broken name/class labels.
+- Slot 1 visibly changed from Scenario 15 to the real `시나리오 16`. Selecting
+  `다음 시나리오` displayed the route map and entered `레이갈드 제도`.
+  Normal BlastEm termination left the 8192-byte disk SRAM with
+  `manual_slot_scenario_number()` equal to 16. Representative evidence is
+  `35a3_s15_command_ready.png`, `35a3_s15_escape_target.png`,
+  `35a3_s15_escape_event_02.png`, `_03.png`, `_11.png`, `_17.png`, `_31.png`,
+  `_57.png`, `_59.png`, `35a3_s15_next_selected.png`, and
+  `35a3_s16_entry.png`. Scenario 15 `completion` is now `verified_probe`;
+  later no-action turns and alternate branches remain pending.
+- Live completion page `_44.png` exposed another punctuation wrap rather than
+  a handler fault: `알았어. {0002}도 걱정돼. 서둘러 가자!` placed the full
+  stop at the beginning of the next row. Reviewed record `0x1A0A6E` is now the
+  shorter `알았어. {0002}가 걱정돼. 서두르자!`. Current production `B766`
+  renders all 118 Scenario 15 physical pages, and
+  `captures/analysis/s15_render_b766/scenario_15_pages_09.png` proves the final
+  record fits one physical page. A focused test locks the replacement.
+- The first isolated secret-selector attempt entered name input even with
+  direct events, and a subsequent scripted load sequence initially stopped at
+  the title animation. Neither run touched battle data. Screen-guided Start,
+  `불러오기`, and slot-1 selection using the actual Scenario 15 SRAM produced
+  the accepted run. Record both as host input-timing failures, not ROM defects.
+- The current production change from `2749` to `B766` again shifts only the
+  checksum values of production-derived diagnostics; their patch envelopes and
+  accepted runtime surface fingerprints remain unchanged. Current Scenario 15
+  default/completion checksums are `C5AE`/`C5C0`. Do not replay the otherwise
+  unchanged full completion solely because of this isolated final-line rewrap.

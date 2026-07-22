@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "2749")
+        self.assertEqual(data["production_checksum"], "B766")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -545,6 +545,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario15["opening_events"], "verified_current")
         self.assertEqual(scenario15["battle_ui"], "verified_probe")
         self.assertEqual(scenario15["turn_events"], "progressed_current")
+        self.assertEqual(scenario15["completion"], "verified_probe")
+        for capture in (
+            "captures/run/35a3_s15_command_ready.png",
+            "captures/run/35a3_s15_escape_target.png",
+            "captures/run/35a3_s15_escape_event_03.png",
+            "captures/run/35a3_s15_escape_event_11.png",
+            "captures/run/35a3_s15_escape_event_31.png",
+            "captures/run/35a3_s15_escape_event_57.png",
+            "captures/run/35a3_s15_escape_event_59.png",
+            "captures/run/35a3_s15_next_selected.png",
+            "captures/run/35a3_s16_entry.png",
+            "captures/analysis/s15_render_b766/scenario_15_pages_09.png",
+        ):
+            self.assertIn(capture, scenario15["captures"])
+        self.assertIn("record 0x1A0A6E", scenario15["note"])
+        self.assertIn("POINT 4000P", scenario15["note"])
+        self.assertIn("disk SRAM slot 1 at Scenario 16", scenario15["note"])
         self.assertEqual(scenario16["description"], "verified_current")
         for capture in (
             "captures/run/3fc0_s16_description_final_01.png",

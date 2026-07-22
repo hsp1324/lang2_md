@@ -379,6 +379,11 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             by_address["0x1A087E"],
             "그녀를 부른 목소리도 들어 본 적이 있어요. 어쩌면…",
         )
+        self.assertEqual(
+            by_address["0x1A0A6E"],
+            "알았어. {0002}가 걱정돼. 서두르자!",
+        )
+        self.assertNotIn("{0002}도 걱정돼", by_address["0x1A0A6E"])
 
     def test_scenario_17_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 17]

@@ -64,7 +64,7 @@
     "item_surface_sha256": "eb1d9aadc20f3a46a8ab3f3b1d7cb757619dbe28551f52d757cce6814027b19c"
   },
   "runtime_probe": {
-    "rom_checksum": "82D2",
+    "rom_checksum": "12EF",
     "accepted_capture_checksum": "C80E",
     "prior_full_matrix_checksum": "D304",
     "runtime_derivative_checksum": "9607",

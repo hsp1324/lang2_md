@@ -10,12 +10,16 @@ class Scenario15ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self) -> bytearray:
+    def patched(self, *, completion_layout: bool = False) -> bytearray:
         data = bytearray(self.production)
-        probe_builder.patch_probe(data, self.source)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_layout=completion_layout,
+        )
         return data
 
-    def allowed_offsets(self) -> set[int]:
+    def allowed_offsets(self, *, completion_layout: bool = False) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
         for index in range(
@@ -31,6 +35,13 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                         base + FIELD_OFFSETS["mercenaries"] + slot
                         for slot in range(6)
                     ),
+                }
+            )
+        if completion_layout:
+            allowed.update(
+                {
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 1,
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 3,
                 }
             )
         return allowed
@@ -90,6 +101,54 @@ class Scenario15ClearProbeTests(unittest.TestCase):
         self.assertEqual(
             data[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
+        )
+
+    def test_completion_layout_moves_only_elwin_above_escape_region(self):
+        data = self.patched(completion_layout=True)
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_layout=True),
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            (
+                probe_builder.COMPLETION_ELWIN_POSITION,
+                *probe_builder.SOURCE_PLAYER_DEPLOYMENTS[1:],
+            )
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+
+    def test_source_verified_completion_triggers_are_locked(self):
+        for offset, expected in probe_builder.COMPLETION_TRIGGERS.items():
+            self.assertEqual(
+                self.source[offset : offset + len(expected)],
+                expected,
+            )
+        escape = probe_builder.COMPLETION_TRIGGERS[0x19F148]
+        self.assertEqual(escape[0], 0x0D)
+        self.assertEqual(escape[1], 0x01)
+        self.assertEqual(tuple(escape[4:8]), probe_builder.ESCAPE_BOUNDS)
+        self.assertEqual(probe_builder.ESCAPE_TARGET, (3, 21))
+
+    def test_default_and_completion_checksums_are_locked(self):
+        default = bytearray(self.production)
+        completion = bytearray(self.production)
+        self.assertEqual(
+            probe_builder.patch_probe(default, self.source),
+            0xC5AE,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                completion,
+                self.source,
+                completion_layout=True,
+            ),
+            0xC5C0,
         )
 
     def test_preserves_imelda_and_hidden_enemy_identities(self):
