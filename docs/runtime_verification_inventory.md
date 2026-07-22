@@ -23,7 +23,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 10 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 11 | current | current | current | current | current | probe | probe | pending | 57 |
 | 12 | current | current | current | current | current | probe | probe | pending | 52 |
-| 13 | current | current | current | current | current | progressed | pending | pending | 35 |
+| 13 | current | current | current | current | current | probe | probe | pending | 50 |
 | 14 | current | current | current | current | probe | progressed | pending | pending | 31 |
 | 15 | current | current | current | current | probe | progressed | pending | pending | 24 |
 | 16 | current | current | current | current | probe | progressed | pending | pending | 26 |
@@ -608,7 +608,7 @@ Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrollin
 
 ### Scenario 13
 
-Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrolling frames of 염룡병단과의 결전, and the preparation endpoint. Direct Japanese-ROM rendering confirms the ancient guardians' defeat, Egbert stealing the Dark Rod by magic, his teleport toward Liana at Kalxath Castle, the party's urgent return, and Vargas blocking the way with the Fire Dragon Corps. The complete description preserves those events in natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current and historical captures verified all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, condition rows, and the no-action first turn through the stated GAME OVER loss condition. Later turns, completion, and branches remain pending.
+Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrolling frames of 염룡병단과의 결전, and the preparation endpoint. Direct Japanese-ROM rendering confirms the ancient guardians' defeat, Egbert stealing the Dark Rod by magic, his teleport toward Liana at Kalxath Castle, the party's urgent return, and Vargas blocking the way with the Fire Dragon Corps. The complete description preserves those events in natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current and historical captures verified all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, condition rows, and the no-action first turn through the stated GAME OVER loss condition. Probe checksum 67DF traversed the complete 39-page first-turn tactics event and 17-page Zorum event without Japanese residue, broken glyphs, reset, or freeze. Completion checksum 0CCD resumed matching diagnostic work RAM, used an identity-guarded Start wrapper to lower only live Vargas HP from 8 to 1, and then used Hein's ordinary 매직애로우 command to reach HP 0. The stock handler awarded 데빌액스, traversed the complete aftermath in a 42-step capture sequence, displayed 전과보고 / POINT 6560P, wrote a real 시나리오 14 save in slot 1, selected 다음 시나리오, displayed the route map, and entered 성검 랑그릿사. Normal BlastEm termination left disk SRAM slot 1 at Scenario 14. This is a probe continuation rather than a fresh production deployment-to-clear replay; alternate branches remain pending.
 
 - `captures/run/f0e3_s13_brief_live_01.png`
 - `captures/run/f0e3_s13_brief_live_06.png`
@@ -645,6 +645,21 @@ Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrollin
 - `captures/run/d355_s13_description_current_13.png`
 - `captures/run/d355_s13_description_current_14.png`
 - `captures/run/d355_s13_description_current_15.png`
+- `captures/run/67df_s13_turn1_event_01.png`
+- `captures/run/67df_s13_turn1_event_39.png`
+- `captures/run/67df_s13_zorum_event_01.png`
+- `captures/run/67df_s13_zorum_event_17.png`
+- `captures/run/0ccd_s13_start_hp_wrapper.png`
+- `captures/run/0ccd_s13_vargas_defeat_after_spell.png`
+- `captures/run/0ccd_s13_completion_06.png`
+- `captures/run/0ccd_s13_completion_15.png`
+- `captures/run/0ccd_s13_completion_25.png`
+- `captures/run/0ccd_s13_completion_42.png`
+- `captures/run/0ccd_s13_completion_44.png`
+- `captures/run/0ccd_s13_completion_46.png`
+- `captures/run/0ccd_s13_next_selected.png`
+- `captures/run/0ccd_s14_route.png`
+- `captures/run/0ccd_s14_title.png`
 
 ### Scenario 14
 

@@ -479,7 +479,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario13["preparation"], "verified_current")
         self.assertEqual(scenario13["opening_events"], "verified_current")
         self.assertEqual(scenario13["battle_ui"], "verified_current")
-        self.assertEqual(scenario13["turn_events"], "progressed_current")
+        self.assertEqual(scenario13["turn_events"], "verified_probe")
+        self.assertEqual(scenario13["completion"], "verified_probe")
+        for capture in (
+            "captures/run/67df_s13_turn1_event_39.png",
+            "captures/run/67df_s13_zorum_event_17.png",
+            "captures/run/0ccd_s13_start_hp_wrapper.png",
+            "captures/run/0ccd_s13_vargas_defeat_after_spell.png",
+            "captures/run/0ccd_s13_completion_44.png",
+            "captures/run/0ccd_s13_completion_46.png",
+            "captures/run/0ccd_s13_next_selected.png",
+            "captures/run/0ccd_s14_route.png",
+            "captures/run/0ccd_s14_title.png",
+        ):
+            self.assertIn(capture, scenario13["captures"])
+        self.assertIn("POINT 6560P", scenario13["note"])
+        self.assertIn("disk SRAM slot 1 at Scenario 14", scenario13["note"])
+        self.assertIn("probe continuation", scenario13["note"])
         self.assertEqual(scenario14["description"], "verified_current")
         for capture in (
             "captures/run/ce27_s14_description_final_01.png",

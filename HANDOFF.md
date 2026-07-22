@@ -3670,7 +3670,7 @@ contains 57 safe syllables as documented below and in
   `아론/파이터`, `키스/호크나이트`, `제시카/크루세이더`, and
   `크루거/소서러`. This pagination rule must be applied to every future
   scenario and caused the explicit Scenario 11/12 revisits above.
-- All nine opening dialogue pages, victory `조름 장군 격파`, defeat `주인공
+- All nine opening dialogue pages, victory `발가스 장군 격파`, defeat `주인공
   사망`, and the no-action first turn were reviewed. Zorum and imperial
   commander dialogue use `염룡병단`; current battles show intact names,
   classes, counts, and `-AT-/-DF-`. Elwin's defeat ends in the expected
@@ -6911,7 +6911,7 @@ contains 57 safe syllables as documented below and in
   old claim that the run stopped before result/save, and do not attack runtime
   record 17 as though it were another guardian.
 
-### Scenario 13 Clear Probe Prepared Offline (2026-07-21)
+### Scenario 13 Turn Events And Completion (2026-07-22)
 
 - The Japanese Scenario 13 header is `0x181720`; header `+0x08` resolves to
   deployment table `0x181740`. After the table's leading word, the seven stock
@@ -6923,23 +6923,63 @@ contains 57 safe syllables as documented below and in
   `레온/로얄가드`, and `레아드/실버나이트`. Their Japanese IDs, classes,
   levels, hidden flags, and source mercenary IDs are locked by tests rather
   than inferred from sprites.
-- `tools/build_scenario13_clear_probe_rom.py` validates the complete Japanese
-  and production layouts before writing. It changes every enemy's AT/DF to
-  zero, clears only their six mercenary slots, and moves only Zorum from
-  `(19,27)` to `(16,4)`, immediately below stock Elwin at `(16,3)`. The player
-  deployment table, all identities/classes/levels, hidden reinforcements, and
-  event handlers remain byte-identical. Production `96D5` builds diagnostic
-  checksum `81E3`, SHA-256
-  `4ca123e8600626a1bbff19dfb0abfa6124d5df80879adbae5baca16545b7c5b9`.
-- The intended live sequence is not an immediate boss kill: advance ordinary
-  turns first to retain the Fire Dragon Corps tactics and hidden reinforcement
-  dialogue, then normally attack adjacent Zorum after the late events, retain
-  every victory page, result, a real Scenario 14 save, and route entry. Until
-  that run is complete, Scenario 13 `turn_events` remains
-  `progressed_current` and `completion` remains `pending`.
-- This implementation and its six focused tests were completed without
-  launching, focusing, or sending input to BlastEm while the user was playing
-  another game.
+- The normal probe still changes every enemy's AT/DF to zero, clears only the
+  six mercenary slots, and moves only Zorum from `(19,27)` to `(16,4)`. The
+  current production checksum `40BC` builds normal probe checksum `2BCA`.
+  `67DF` was an earlier paired-layout continuation used for long-form event
+  coverage. Its 39 first-turn pages and 17 Zorum pages are retained in
+  `67df_s13_turn1_event_01.png` through `_39.png` and
+  `67df_s13_zorum_event_01.png` through `_17.png`. They traverse the Fire
+  Dragon Corps tactics event without Japanese residue, broken glyphs, reset,
+  or freeze, so `turn_events` is now `verified_probe`.
+- Read-only GST inspection established a `0x60`-byte runtime group stride from
+  work-RAM file offset `0x2478`, absolute group base `$FFFF603C`. Per-group
+  class, name, action/defeat flags, HP, X, and Y are at `+0`, `+1`, `+2`, `+3`,
+  `+6`, and `+7`. Fixed records map to runtime groups 7..19, so Zorum is group
+  15 and Vargas is group 17 at `$FFFF669C`; Vargas's name ID and HP bytes are
+  `$FFFF669D` and `$FFFF669F`. This mapping is inspection/editor groundwork,
+  not permission to expose live event flags as editable scenario data.
+- Several rejected paths are now explicit. `AT99` overflowed or capped, `AT23`
+  did no useful damage, and `AT60` reduced normal enemies but did not make the
+  regenerating boss efficient. Setting record flag `0x80` alone (`E6CD`) did
+  not hide generic initial enemies because the loader normalized it; source
+  coordinates `(255,255)` did. Vargas appears when a player enters or acts in
+  the southern arrival area, not when Zorum dies: checksum `0CE6` spawned him
+  while Zorum still had HP 10. The first action against Vargas triggers his
+  prebattle speech, and later attacks or magic can reduce him; the older
+  `67df_s13_all_dead_vargas_attack.png` frame actually shows HP 8. A Fighter
+  Vargas still regenerates 4 HP per enemy phase, while the available stock
+  spell lists dealt about 4 damage per player turn. Changing saved classes to
+  Wizard did not grant spells because learned magic is character data, so do
+  not repeat that approach.
+- `--completion-layout` is a non-distribution completion probe. It places all
+  seven players around the stock southern arrival lane, leaves Zorum at
+  `(18,30)`, puts generic initial records 0..7 and 9 at `(255,255)`, and changes
+  only Vargas's diagnostic class to enemy-palette Fighter. It installs a
+  30-byte wrapper at `0x3FEF00` and redirects the Start-menu entry operand at
+  `0x00F2E0`. The wrapper checks that runtime group 17 still has Vargas name ID
+  15, writes only live HP 1, restores A0 to stock entry `0x022C1E`, and jumps to
+  that entry. The first wrapper checksum `9EB1` reset to the intro because it
+  jumped without restoring A0; `0CCD` is the accepted fixed checksum. Tests
+  lock both probe checksums, the exact touched-byte envelope, the identity
+  guard, and rejection of a changed Start operand or occupied wrapper region.
+- The accepted `0CCD` continuation loaded matching `0CE6` diagnostic work RAM;
+  the ROM layout was identical apart from the new Start wrapper. No runtime
+  flag, defeat bit, coordinate, or event state was edited. Start changed a live
+  Vargas from HP 8 to HP 1 while opening the normal Korean menu, and Hein's
+  ordinary `매직애로우` command reduced him to HP 0. The stock handler awarded
+  `데빌액스`, traversed the complete aftermath in a 42-step capture sequence,
+  displayed
+  `전과보고 / POINT 6560P`, wrote a real Scenario 14 save to slot 1, selected
+  `다음 시나리오`, displayed the route map, and entered Scenario 14
+  `성검 랑그릿사`. After normal BlastEm termination,
+  `manual_slot_scenario_number()` also read 14 from disk SRAM. Representative
+  captures are `0ccd_s13_start_hp_wrapper.png`,
+  `0ccd_s13_vargas_defeat_after_spell.png`, `0ccd_s13_completion_06.png`,
+  `_15.png`, `_25.png`, `_42.png`, `_44.png`, `_46.png`,
+  `0ccd_s13_next_selected.png`, `0ccd_s14_route.png`, and
+  `0ccd_s14_title.png`. Scenario 13 `completion` is now `verified_probe`;
+  alternate branches remain pending.
 
 ### Great Slime Small-Font Collision Fix (2026-07-22)
 
