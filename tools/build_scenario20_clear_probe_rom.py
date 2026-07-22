@@ -30,6 +30,7 @@ FIRST_ENEMY_RECORD_INDEX = 0
 LAST_ENEMY_RECORD_INDEX = 9
 FIAS_RECORD_INDEX = 5
 HIDDEN_ENEMY_RECORD_INDEXES = (7, 8, 9)
+COMPLETION_HIDDEN_RECORD_INDEXES = (0, 1, 2, 3, 4, 6, 7, 8, 9)
 PROBE_AT = 0
 PROBE_DF = 0
 
@@ -93,6 +94,9 @@ def patch_probe(
             FIRST_PLAYER_DEPLOYMENT_OFFSET :
             FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
         ] = elwin
+        for index in COMPLETION_HIDDEN_RECORD_INDEXES:
+            enemy = layout.records_offset + index * FIXED_RECORD_SIZE
+            probe[enemy] |= 0x80
     return builder.update_md_checksum(probe)
 
 
@@ -100,8 +104,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Build an ignored Scenario 20 ROM with weakened monster groups "
-            "while preserving Fias, hidden sea monsters, stock deployments, "
-            "and all event handlers"
+            "while preserving source identities, record indexes, and all "
+            "event handlers"
         )
     )
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
@@ -111,8 +115,8 @@ def parse_args() -> argparse.Namespace:
         "--completion-layout",
         action="store_true",
         help=(
-            "move only Elwin to (22,22), one tile above the source Fias "
-            "at (22,23)"
+            "move only Elwin to (22,22), preserve Fias at source record 5, "
+            "and hide the nine other records for completion-flow verification"
         ),
     )
     return parser.parse_args()
@@ -132,7 +136,10 @@ def main() -> int:
     print("Scenario 20 enemy records 0..9: AT 0, DF 0, no mercenaries")
     if args.completion_layout:
         print("completion layout: Elwin moved from (9,7) to (22,22)")
-        print("Fias remains at the source position (22,23)")
+        print(
+            "completion list: source record 5 Fias visible; "
+            "records 0-4/6-9 hidden"
+        )
     else:
         print(
             "stock deployments, identities, classes, levels, hidden events, "

@@ -41,6 +41,8 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                     probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 3,
                 }
             )
+            for index in probe_builder.COMPLETION_HIDDEN_RECORD_INDEXES:
+                allowed.add(layout.records_offset + index * FIXED_RECORD_SIZE)
         return allowed
 
     def test_changes_only_declared_enemy_fields_and_checksum(self):
@@ -121,7 +123,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
         )
 
-    def test_completion_layout_moves_only_elwin_above_source_fias(self):
+    def test_completion_layout_keeps_fias_record_index_and_hides_other_records(self):
         data = self.patched(completion_layout=True)
         changed = {
             offset
@@ -140,6 +142,23 @@ class Scenario20ClearProbeTests(unittest.TestCase):
             )
         )
         self.assertEqual(data[start : start + len(expected)], expected)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        fias_source = layout.records_offset + (
+            probe_builder.FIAS_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        expected_fias = bytearray(
+            self.source[fias_source : fias_source + FIXED_RECORD_SIZE]
+        )
+        expected_fias[FIELD_OFFSETS["at"]] = probe_builder.PROBE_AT
+        expected_fias[FIELD_OFFSETS["df"]] = probe_builder.PROBE_DF
+        mercenaries = FIELD_OFFSETS["mercenaries"]
+        expected_fias[mercenaries : mercenaries + 6] = b"\xFF" * 6
+        self.assertEqual(
+            data[fias_source : fias_source + FIXED_RECORD_SIZE], expected_fias
+        )
+        for index in probe_builder.COMPLETION_HIDDEN_RECORD_INDEXES:
+            enemy = layout.records_offset + index * FIXED_RECORD_SIZE
+            self.assertTrue(bool(data[enemy] & 0x80))
 
     def test_default_and_completion_checksums_are_locked(self):
         default = bytearray(self.production)

@@ -7484,5 +7484,40 @@ contains 57 safe syllables as documented below and in
   broken names/classes. Representative evidence is
   `d2f9_s20_fias_event_01.png`, `_04.png`, `_07.png`, `_10.png`,
   `d2f9_s20_class_change_open.png`, and `d2f9_s20_turn2_command.png`.
-  Fias's defeat alone does not complete `적 전멸`; the kraken conditional and
-  full completion/save transition remain pending.
+  That first all-record playback left other monsters alive after Fias's defeat,
+  so it did not complete `적 전멸`; the accepted isolated completion playback
+  is documented below.
+
+### Scenario 20 Fias Completion (2026-07-22)
+
+- The first completion experiment reduced the fixed-record count to one and
+  copied Fias from source record 5 into record 0. Fias visibly retreated, but
+  the scenario never completed because the stock handler owns the source
+  record index. Do not repeat this record-copy/count-reduction approach.
+- The accepted `--completion-layout` keeps the Japanese ten-record count and
+  Fias at source record 5, moves only Elwin from `(9,7)` to `(22,22)`, and sets
+  the existing hidden flag on records 0..4 and 6..9. It does not copy Fias,
+  renumber records, change identities/classes/levels/handlers, or expose these
+  diagnostic flags as editor defaults. Tests lock the complete touched-byte
+  envelope and checksums `D2DD`/`D2F9`.
+- Runtime `s20_completion_d2f9_hidden` used the real Scenario 20 slot recovered
+  from the accepted Scenario 19 run. Only Elwin's isolated SRAM AT/DF remained
+  99/99; this is diagnostic runtime state, not a ROM or editor-default patch.
+  The first normal attack left Fias at source HP1, as intended. After the next
+  turn restored his troops, the second normal attack defeated him and fired
+  the stock completion handler.
+- The complete aftermath rendered Fias's final dialogue, Elwin, Sherry,
+  Jessica, Hein, Lester, Scott, and Keith responses, allied level/class-change
+  pages, and `전과보고 / POINT 18050P` without reset, freeze, Japanese
+  residue, or damaged names/classes. The portrait-font restore kept complete
+  `파이어스/데몬로드` throughout. Evidence includes
+  `d2f9h_s20_after_second_attack.png`, `d2f9h_s20_after_second_04.png`,
+  `d2f9h_s20_clear_10.png`, `d2f9h_s20_clear_24.png`, and
+  `d2f9h_s20_clear_30.png`.
+- Slot 1 visibly changed from `시나리오 20` to `시나리오 21`; the disk SRAM
+  parser independently reads scenario 21. Selecting `다음 시나리오` displayed
+  `진군루트` and entered Scenario 21 `마리오네트`. Evidence is
+  `d2f9h_s20_next_selected.png`, `d2f9h_s21_route.png`, and
+  `d2f9h_s21_entry.png`. Scenario 20 completion is `verified_probe`; the
+  conditional kraken/Keith route, alternate outcomes, and other branches remain
+  pending.

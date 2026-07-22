@@ -30,7 +30,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 17 | current | current | current | current | current | probe | probe | pending | 43 |
 | 18 | current | current | current | current | probe | probe | probe | pending | 36 |
 | 19 | current | current | current | current | probe | progressed | probe | pending | 38 |
-| 20 | current | current | current | current | probe | progressed | pending | pending | 33 |
+| 20 | current | current | current | current | probe | progressed | probe | pending | 42 |
 | 21 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 22 | current | current | current | current | pending | current | pending | pending | 37 |
 | 23 | current | current | current | current | pending | current | pending | pending | 27 |
@@ -943,7 +943,7 @@ Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrollin
 
 ### Scenario 20
 
-Production 77D0 verifies the Scenario 20 route map, all 16 text-bearing scrolling frames of 붉게 물든 바다, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the voyage after Imelda's defeat, the interceptor carrying monsters controlled by Bozel, the gangplank between the two ships, and the opening of the deck battle. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. Live event verification also established the capacity-safe royal address 전하 for the Japanese 姫！ page. Production-D79C derivative D2F9 places only Elwin beside source Fias and limits enemy AT/DF/mercenaries. A normal attack traversed the complete 파이어스/데몬로드 defeat event, class-change surfaces, and the following golem-tactics turn dialogue. This playback exposed that portrait resources loaded at VRAM A000 overwrite localized status-font segments while the bottom Window plane still references 데/몬 at tiles 0x4AB/0x4AC. Production D79C hooks both source portrait-loader calls and queues restoration of only the five affected extension segments; D2F9 keeps complete 파이어스/데몬로드 text throughout the portrait dialogue, and exact GST comparison proves both tiles match the pre-dialogue bytes. The original ten-record fixed-placement list at 0x182434 remains covered by editor regressions for 스큐라, 파이어스/데몬로드, and hidden 크라켄. Conditional kraken events, completion, and route variants remain pending.
+Production 77D0 verifies the Scenario 20 route map, all 16 text-bearing scrolling frames of 붉게 물든 바다, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the voyage after Imelda's defeat, the interceptor carrying monsters controlled by Bozel, the gangplank between the two ships, and the opening of the deck battle. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. Live event verification also established the capacity-safe royal address 전하 for the Japanese 姫！ page. Production-D79C derivative D2F9 limits enemy AT/DF/mercenaries, preserves source Fias at fixed record 5, hides the other nine diagnostic records, and places only Elwin beside him. Two normal attacks traversed the complete 파이어스/데몬로드 defeat event, all allied aftermath and class-change surfaces, 전과보고, a real Scenario 21 save, and Scenario 21 마리오네트 entry. This playback exposed that portrait resources loaded at VRAM A000 overwrite localized status-font segments while the bottom Window plane still references 데/몬 at tiles 0x4AB/0x4AC. Production D79C hooks both source portrait-loader calls and queues restoration of only the five affected extension segments; D2F9 keeps complete 파이어스/데몬로드 text throughout the portrait dialogue, and exact GST comparison proves both tiles match the pre-dialogue bytes. The rejected record-count-one experiment copied Fias to record 0 and failed to complete because the source handler retains record-index ownership; it must not be repeated. The original ten-record fixed-placement list at 0x182434 remains covered by editor regressions for 스큐라, 파이어스/데몬로드, and hidden 크라켄. Conditional kraken/Keith events and route variants remain pending.
 
 - `captures/run/1391_s20_brief_live_01.png`
 - `captures/run/1391_s20_brief_live_06.png`
@@ -978,6 +978,15 @@ Production 77D0 verifies the Scenario 20 route map, all 16 text-bearing scrollin
 - `captures/run/d2f9_s20_fias_event_10.png`
 - `captures/run/d2f9_s20_class_change_open.png`
 - `captures/run/d2f9_s20_turn2_command.png`
+- `captures/run/d2f9h_s20_after_second_attack.png`
+- `captures/run/d2f9h_s20_after_second_04.png`
+- `captures/run/d2f9h_s20_clear_10.png`
+- `captures/run/d2f9h_s20_clear_24.png`
+- `captures/run/d2f9h_s20_clear_30.png`
+- `captures/run/d2f9h_s20_clear_32.png`
+- `captures/run/d2f9h_s20_next_selected.png`
+- `captures/run/d2f9h_s21_route.png`
+- `captures/run/d2f9h_s21_entry.png`
 
 ### Scenario 21
 
