@@ -50950,7 +50950,7 @@
             "0x1A9A4A"
           ],
           "modified": true,
-          "modified_word_count": 6,
+          "modified_word_count": 8,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -50959,7 +50959,7 @@
               "terminator": "0xFFFF",
               "tokens": "0160 007B 0047 FFFE FFF7 0060 00EF 0047 FFFF",
               "modified": true,
-              "modified_word_count": 6
+              "modified_word_count": 8
             }
           ]
         },

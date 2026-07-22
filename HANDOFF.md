@@ -7521,3 +7521,82 @@ contains 57 safe syllables as documented below and in
   `d2f9h_s21_entry.png`. Scenario 20 completion is `verified_probe`; the
   conditional kraken/Keith route, alternate outcomes, and other branches remain
   pending.
+### Scenario 21 Commander/Class Shared-VRAM Regression (2026-07-22)
+
+- Scenario 21 runtime verification now treats every allied, enemy, and NPC
+  commander name/class as a blocking surface. The durable checklist is
+  `docs/commander_name_class_runtime_checklist.md`; preparation roster,
+  arrangement, map status, popup, battle, portrait dialogue, level/class
+  change, and battle report must all pass before the scenario is complete.
+- Production-derived D623 playback initially showed clean roster/status text
+  for Elwin, Hein, Sherry, Scott, Keith, Aaron, Lester, and Jessica, but later
+  battles exposed a resource-lifetime regression. `서큐버스` lost `서/버`,
+  and Hein's `샤먼` plus `제국지휘관/아크메이지` used the same damaged banks.
+  Evidence is `captures/analysis/d623_s21_succubus_broken.gst`,
+  `captures/run/d623_s21_lester_lower_confirm.png`, and
+  `captures/analysis/d623_s21_greatdragon_panel_6x.png` (the last filename is
+  historical; the pictured unit is Succubus).
+- Exact GST/ROM comparison proves extension segment 0 (`0x340..0x347`) is
+  replaced by compressed resource 219 loaded at VRAM `0x6000`, while segment
+  1 (`0x398..0x3AF`) is replaced by resource 145 loaded at VRAM `0x7000`.
+  The latter load is the stock battle path at `0x01CE12..0x01CE1C`.
+  `서=0x3AE`, `버=0x3A4`, `샤=0x342`, and `먼=0x343`; the localized records and
+  lookup table are correct, so this is not a translation or pointer defect.
+- Rejected attempt 1 hooked the early post-battle cleanup call at `0x01D172`
+  and queued restoration of segments 0/1. Later map-return graphics setup
+  overwrote segment 0 and the first three segment-1 tiles again.
+- Rejected attempt 2 moved the restore after the final cleanup call at
+  `0x01D268`. Fresh Lester-versus-Succubus combat still left both complete
+  segments overwritten. Captures include
+  `captures/run/e14b_latehook_lester_battle.png` and
+  `captures/run/e14b_latehook_lester_postbattle.png`.
+- Rejected attempt 3 called a map-info-specific loader for segments 0/1/5,
+  then tried synchronous VDP writes of the raw 1 KiB segments 0/1. Both were
+  overwritten again within three seconds by ongoing graphics ownership;
+  `captures/analysis/9e35_s21_map_info_up_lester.gst` and
+  `captures/analysis/33a7_s21_direct_restore_succubus.gst` still differ in
+  every segment-0/1 tile. These experiments were removed from source. Do not
+  repeat one-shot or repeated restoration at the shared addresses.
+- Production `C1A2` implements the first accepted context-specific path for the
+  map bottom row. A raw 174-index glyph table at `0x2BD000` and sixteen VDP
+  commands at `0x2BE800` feed a synchronous helper at `0x2B7300`. Name calls
+  use `0x5D8..0x5DF`; class calls use `0x5E0..0x5E7`. Separate wrappers at
+  `0x2B7780/0x2B77A0` preserve D6 and prevent the asynchronous final-bank
+  loader from overwriting the just-written scratch glyphs. Portrait restore
+  still covers segments 1..4 but intentionally excludes segment 5.
+- Completion probe `DD8E` entered Scenario 21 from the normal SRAM load path,
+  reviewed all eight preparation commander/class panels, and fought Lana.
+  After battle graphics, portrait dialogue, loot, and the hidden imperial
+  event, `제국지휘관/아크메이지`, both `서큐버스` records, both
+  `리빙아머` records, both `리치` records, `헤인/샤먼`,
+  `레스터/매직나이트`, `제시카/소서러`, and
+  `스코트/드래곤나이트` remained complete. The Succubus and imperial
+  detailed popups were also complete; battle presentation showed
+  `로드/다크프린세스` without broken glyphs.
+- Evidence is listed in `docs/commander_name_class_runtime_checklist.md` and is
+  rooted at `captures/run/c1a2_s21_*`. Do not delete the older broken D623
+  captures; they prove the shared-bank failure this renderer fixes.
+- Scenario 4 cross-checks now cover `모건/소서러` and
+  `제국지휘관/워록` with the bottom row and detailed popup visible at the
+  same time. Evidence is
+  `captures/run/c1a2_s04_morgan_popup_with_bottom.png` and
+  `captures/run/c1a2_s04_imperial_warlock_popup_with_bottom.png`. The latter
+  exact state is `captures/analysis/c1a2_s04_imperial_warlock_popup.gst`
+  (SHA-256 `db0759ccb8a22804b592378b23cc7a1718882e36193079e6ad10771ac51af0a4`).
+  Its VRAM scratch cells exactly match `제국지휘관` at `0x5D8..0x5DC` and
+  `워록` at `0x5E0..0x5E1`; opening the popup does not clobber the bottom row.
+- The same C1A2 run then checked every currently visible unique Scenario 4
+  combination: allied `엘윈/파이터`, `헤인/워록`, `스코트/파이터`; NPC
+  `리아나/클레릭`, `신관/클레릭`, `사제/프리스트`; and enemy
+  `제국지휘관/시프`, `모건/소서러`, `제국지휘관/샤먼`,
+  `제국지휘관/워록`. Each has a map-status capture and a simultaneous popup
+  or command/status capture under `captures/run/c1a2_s04_*`. The hidden
+  `수수께끼의 기사/파이터` still requires its event appearance and is not
+  covered by this matrix.
+- This is not yet a global close. Every allied, enemy, and NPC name/class must
+  still pass all required surfaces in every scenario. If a simultaneous
+  surface regresses, extend context-specific rendering to that surface; do
+  not restore the shared `0x340/0x398` banks or overwrite selector tiles
+  `0x5F8..0x5FF`. Scenario 21's live battle also exposes the remaining Japanese
+  center-bottom label `地形`; treat it as pending battle-UI localization rather
+  than a commander/class pass.

@@ -209,6 +209,11 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             [row["english_record"] for row in primary],
             [*range(912, 981), 1168, 1169],
         )
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            text_by_address["0x1AA75C"],
+            "앗! {0060}이다!",
+        )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
     def test_scenario_22_has_all_reviewed_physical_pages(self):

@@ -317,7 +317,9 @@ class NameEntryResourceTests(unittest.TestCase):
             self.assertEqual(
                 data[offset : offset + 6],
                 bytes.fromhex("4E B9")
-                + builder.BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big"),
+                + builder.BYTE_UI_MAP_INFO_RENDER_ROUTINE_BY_CALL[offset].to_bytes(
+                    4, "big"
+                ),
             )
         for offset in builder.BYTE_UI_DIRECT_MAP_RENDER_CALLS:
             routine = (
@@ -477,35 +479,87 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertLessEqual(final_start + final_count, 0x05F8)
         self.assertEqual(tile_by_index[index_by_char["렌"]], 0x05E9)
 
-    def test_map_info_renderer_restores_only_the_final_segment(self):
+    def test_map_info_renderer_uses_separate_dynamic_name_and_class_tiles(self):
         data = bytearray(self.rom)
         builder.expand_rom(data)
         builder.patch_byte_ui_strings(data)
         renderer = builder._build_byte_ui_map_info_renderer()
-        self.assertEqual(
-            renderer[:6],
+        dynamic_call = (
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+        )
+        self.assertIn(dynamic_call + bytes.fromhex("52 46"), renderer)
+        self.assertNotIn(
             bytes.fromhex("4E B9")
             + builder.BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big"),
+            renderer,
         )
 
-        loader = builder._build_byte_ui_final_bank_loader()
-        segment_index = len(builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS) - 1
-        tile_start, _ = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
-        resource_index = builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
-        self.assertEqual(loader[:4], bytes.fromhex("48 E7 80 40"))
-        self.assertIn(
-            bytes.fromhex("30 3C") + (0x8000 | resource_index).to_bytes(2, "big"),
-            loader,
+        name_wrapper = builder._build_byte_ui_map_info_wrapper(
+            builder.BYTE_UI_DYNAMIC_NAME_TILE, restore_final_bank=False
+        )
+        class_wrapper = builder._build_byte_ui_map_info_wrapper(
+            builder.BYTE_UI_DYNAMIC_CLASS_TILE, restore_final_bank=False
         )
         self.assertIn(
-            bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"),
-            loader,
+            bytes.fromhex("3C 3C")
+            + builder.BYTE_UI_DYNAMIC_NAME_TILE.to_bytes(2, "big"),
+            name_wrapper,
         )
-        for other_start, _ in builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[:-1]:
-            self.assertNotIn(
-                bytes.fromhex("32 7C") + (other_start * 32).to_bytes(2, "big"),
-                loader,
+        self.assertIn(
+            bytes.fromhex("3C 3C")
+            + builder.BYTE_UI_DYNAMIC_CLASS_TILE.to_bytes(2, "big"),
+            class_wrapper,
+        )
+        final_load_call = (
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
+        )
+        self.assertNotIn(final_load_call, name_wrapper)
+        self.assertNotIn(final_load_call, class_wrapper)
+        self.assertEqual(
+            builder.BYTE_UI_DYNAMIC_CLASS_TILE,
+            builder.BYTE_UI_DYNAMIC_NAME_TILE + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
+        )
+        self.assertLessEqual(
+            builder.BYTE_UI_DYNAMIC_CLASS_TILE + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
+            0x05F8,
+        )
+
+    def test_dynamic_name_class_glyph_table_and_vdp_commands_are_exact(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, _ = builder.build_byte_ui_local_mapping(codes)
+        font = ImageFont.truetype(str(ROOT / "tools/fonts/Galmuri7.ttf"), 8)
+
+        for char, index in index_by_char.items():
+            start = builder.BYTE_UI_DYNAMIC_GLYPH_TABLE + index * 32
+            self.assertEqual(
+                data[start : start + 32], builder.render_byte_ui_tile(char, font)
             )
+
+        for index, tile in enumerate(
+            range(
+                builder.BYTE_UI_DYNAMIC_NAME_TILE,
+                builder.BYTE_UI_DYNAMIC_CLASS_TILE
+                + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
+            )
+        ):
+            address = tile * 32
+            expected = ((0x4000 | (address & 0x3FFF)) << 16) | (
+                (address >> 14) & 3
+            )
+            self.assertEqual(
+                builder.be32(
+                    data, builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE + index * 4
+                ),
+                expected,
+            )
+
+        helper = builder._build_byte_ui_dynamic_glyph_renderer()
+        self.assertEqual(helper.count(bytes.fromhex("23 D8 00 C0 00 00")), 8)
+        self.assertIn(bytes.fromhex("33 FC 8F 02 00 C0 00 04"), helper)
 
     def test_extension_renderer_maps_only_escape_bytes(self):
         def mapped(value):
@@ -649,6 +703,10 @@ class NameEntryResourceTests(unittest.TestCase):
         )
 
     def test_portrait_loader_restores_overwritten_status_font_banks(self):
+        self.assertEqual(
+            builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS,
+            (0x018220, 0x01840C, 0x01CD20),
+        )
         routine = builder._build_byte_ui_portrait_font_restore()
         self.assertTrue(
             routine.startswith(builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL)

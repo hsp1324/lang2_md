@@ -150,6 +150,13 @@ INLINE_DISCARD_PROMPT_RECORD = 0x2B8400
 INLINE_DISCARD_PROMPT_RECORD_LIMIT = 0x2B8420
 SOUND_TEST_TILE_TABLE = 0x2BC000
 SOUND_TEST_TILE_TABLE_LIMIT = 0x2C0000
+BYTE_UI_DYNAMIC_GLYPH_TABLE = 0x2BD000
+BYTE_UI_DYNAMIC_GLYPH_TABLE_LIMIT = 0x2BE800
+BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE = 0x2BE800
+BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT = 0x2BE840
+BYTE_UI_DYNAMIC_NAME_TILE = 0x05D8
+BYTE_UI_DYNAMIC_CLASS_TILE = 0x05E0
+BYTE_UI_DYNAMIC_FIELD_WIDTH = 8
 BYTE_UI_CLASS_STRING_RELOC_BASE = 0x2B9000
 BYTE_UI_CLASS_STRING_RELOC_LIMIT = 0x2BA000
 BYTE_UI_NAME_STRING_RELOC_BASE = 0x2BA000
@@ -424,6 +431,8 @@ BYTE_UI_PLANE_RENDER_ROUTINE = 0x2B7500
 BYTE_UI_PANEL_RENDER_ROUTINE = 0x2B7600
 BYTE_UI_PREP_ROSTER_ROUTINE = 0x2B7680
 BYTE_UI_MAP_INFO_RENDER_ROUTINE = 0x2B7700
+BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE = 0x2B7780
+BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE = 0x2B77A0
 BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
 BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
@@ -436,6 +445,7 @@ TITLE_CREDIT_FONT_LOAD_ROUTINE = 0x2B7E20
 TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
+BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE = 0x2B7300
 INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
 SOUND_TEST_RENDER_ROUTINE = 0x2B7F60
 INLINE_DISCARD_PROMPT_RENDER_HOOK = 0x01804C
@@ -500,6 +510,10 @@ TITLE_LOGO_HEIGHT_TILES = 8
 TITLE_LOGO_TILE_COUNT = TITLE_LOGO_RESOURCE_ORIGINAL_SIZE // 32
 TITLE_LOGO_FONT_SIZE = 44
 BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
+BYTE_UI_MAP_INFO_RENDER_ROUTINE_BY_CALL = {
+    BYTE_UI_MAP_INFO_RENDER_CALLS[0]: BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE,
+    BYTE_UI_MAP_INFO_RENDER_CALLS[1]: BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE,
+}
 BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
 BYTE_UI_DIRECT_MAP_RENDER_CALLS = (0x01B546, 0x01CBA6, 0x01CBBC)
 BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 01 05 BC")
@@ -516,16 +530,16 @@ BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK = 0x01CE40
 BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL = bytes.fromhex(
     "4E B9 00 00 95 1C"
 )
-# Both portrait setup paths load character graphics at VRAM A000. The resource
-# extends across the localized 8x8 banks even though the active portrait plane
-# and sprite table do not use those tiles. Restore the affected banks after the
-# queued portrait request so the persistent bottom status row keeps complete
-# commander and class names during dialogue.
-BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS = (0x018220, 0x01840C)
+# The battle and post-battle/level-up portrait paths load character graphics at
+# VRAM A000. The resource extends across the localized 8x8 banks even though
+# the active portrait plane and sprite table do not use those tiles. Restore
+# the affected banks after the queued portrait request so the persistent bottom
+# status row keeps complete commander and class names during dialogue.
+BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS = (0x018220, 0x01840C, 0x01CD20)
 BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL = bytes.fromhex(
     "4E B9 00 00 99 B2"
 )
-BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES = (1, 2, 3, 4, 5)
+BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES = (1, 2, 3, 4)
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "42 40 10 18 0C 00"
@@ -5048,17 +5062,17 @@ def _build_byte_ui_status_renderer() -> bytes:
 
 def _build_byte_ui_map_info_renderer() -> bytes:
     code = _M68KCode()
-    code.emit(
-        bytes.fromhex("4E B9")
-        + BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
-    )
     code.label("loop")
     code.emit("70 00 10 19 0C 00 00 FF")
     code.branch_word(0x6700, "done")
     code.emit("0C 00 00 00")
     code.branch_word(0x6600, "legacy")
     code.emit("42 40 10 19")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("52 46")
     code.branch_word(0x6000, "store")
     code.label("legacy")
     code.emit("0C 00 00 F0")
@@ -5080,6 +5094,48 @@ def _build_byte_ui_map_info_renderer() -> bytes:
     code.label("done")
     code.emit("30 FC FF FE 4E 75")
     return code.finish()
+
+
+def _build_byte_ui_map_info_wrapper(tile: int, *, restore_final_bank: bool) -> bytes:
+    wrapper = bytearray(bytes.fromhex("48 E7 02 00"))  # preserve d6
+    if restore_final_bank:
+        wrapper.extend(
+            bytes.fromhex("4E B9")
+            + BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
+        )
+    wrapper.extend(bytes.fromhex("3C 3C") + tile.to_bytes(2, "big"))
+    wrapper.extend(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    wrapper.extend(bytes.fromhex("4C DF 00 40 4E 75"))
+    return bytes(wrapper)
+
+
+def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
+    # D0 is a localized table index and D6 is the destination tile. Names and
+    # classes use separate eight-tile ranges in the final, animation-safe bank.
+    code = bytearray(bytes.fromhex("48 E7 60 A0"))  # preserve d1-d2/a0/a2
+    code.extend(bytes.fromhex("34 00 C4 FC 00 20"))
+    code.extend(
+        bytes.fromhex("41 F9") + BYTE_UI_DYNAMIC_GLYPH_TABLE.to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("D1 C2"))
+    code.extend(
+        bytes.fromhex("32 06 04 41")
+        + BYTE_UI_DYNAMIC_NAME_TILE.to_bytes(2, "big")
+    )
+    code.extend(bytes.fromhex("E5 49"))
+    code.extend(
+        bytes.fromhex("45 F9")
+        + BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE.to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("24 32 10 00"))
+    code.extend(bytes.fromhex("33 FC 8F 02 00 C0 00 04"))
+    code.extend(bytes.fromhex("23 C2 00 C0 00 04"))
+    code.extend(bytes.fromhex("23 D8 00 C0 00 00") * 8)
+    code.extend(bytes.fromhex("30 06 4C DF 05 06 4E 75"))
+    return bytes(code)
 
 
 def _build_byte_ui_direct_map_renderer() -> bytes:
@@ -5658,6 +5714,38 @@ def install_byte_ui_extension(
     for index, tile in enumerate(tile_by_index):
         put16(data, BYTE_UI_LOCAL_TILE_TABLE + index * 2, tile)
 
+    dynamic_glyphs = b"".join(
+        render_byte_ui_tile(char, font)
+        for char, _ in sorted(index_by_char.items(), key=lambda item: item[1])
+    )
+    dynamic_glyph_end = BYTE_UI_DYNAMIC_GLYPH_TABLE + len(dynamic_glyphs)
+    if dynamic_glyph_end > BYTE_UI_DYNAMIC_GLYPH_TABLE_LIMIT:
+        raise ValueError("dynamic name/class glyph table exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[BYTE_UI_DYNAMIC_GLYPH_TABLE:dynamic_glyph_end]
+    ):
+        raise ValueError("dynamic name/class glyph table area is not blank")
+    data[BYTE_UI_DYNAMIC_GLYPH_TABLE:dynamic_glyph_end] = dynamic_glyphs
+
+    dynamic_commands = bytearray()
+    for tile in range(
+        BYTE_UI_DYNAMIC_NAME_TILE,
+        BYTE_UI_DYNAMIC_CLASS_TILE + BYTE_UI_DYNAMIC_FIELD_WIDTH,
+    ):
+        address = tile * 32
+        command = ((0x4000 | (address & 0x3FFF)) << 16) | ((address >> 14) & 3)
+        dynamic_commands.extend(command.to_bytes(4, "big"))
+    command_end = BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE + len(dynamic_commands)
+    if command_end > BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT:
+        raise ValueError("dynamic name/class VDP command table exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE:command_end]
+    ):
+        raise ValueError("dynamic name/class VDP command table area is not blank")
+    data[BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE:command_end] = dynamic_commands
+
     if data[
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION :
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION + 6
@@ -5677,6 +5765,13 @@ def install_byte_ui_extension(
     roster_renderer = _build_byte_ui_roster_renderer()
     status_renderer = _build_byte_ui_status_renderer()
     map_info_renderer = _build_byte_ui_map_info_renderer()
+    map_info_name_renderer = _build_byte_ui_map_info_wrapper(
+        BYTE_UI_DYNAMIC_NAME_TILE, restore_final_bank=False
+    )
+    map_info_class_renderer = _build_byte_ui_map_info_wrapper(
+        BYTE_UI_DYNAMIC_CLASS_TILE, restore_final_bank=False
+    )
+    dynamic_glyph_renderer = _build_byte_ui_dynamic_glyph_renderer()
     direct_map_renderer = _build_byte_ui_direct_map_renderer()
     prep_selected_name_renderer = _build_byte_ui_prep_selected_name_renderer()
     prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
@@ -5709,6 +5804,9 @@ def install_byte_ui_extension(
         BYTE_UI_PANEL_RENDER_ROUTINE: panel_renderer,
         BYTE_UI_PREP_ROSTER_ROUTINE: prep_roster_renderer,
         BYTE_UI_MAP_INFO_RENDER_ROUTINE: map_info_renderer,
+        BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE: map_info_name_renderer,
+        BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE: map_info_class_renderer,
+        BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE: dynamic_glyph_renderer,
         BYTE_UI_DIRECT_MAP_RENDER_ROUTINE: direct_map_renderer,
         BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE: prep_selected_name_renderer,
         BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
@@ -5856,7 +5954,7 @@ def install_byte_ui_extension(
             raise ValueError(f"map-info byte render call changed at 0x{offset:06X}")
         data[offset : offset + 6] = (
             bytes.fromhex("4E B9")
-            + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
+            + BYTE_UI_MAP_INFO_RENDER_ROUTINE_BY_CALL[offset].to_bytes(4, "big")
         )
     for offset in BYTE_UI_DIRECT_MAP_RENDER_CALLS:
         if data[offset : offset + 6] != BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL:
