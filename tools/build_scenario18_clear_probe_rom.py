@@ -35,6 +35,8 @@ SOURCE_PLAYER_DEPLOYMENTS = (
     (22, 30),
     (30, 31),
 )
+COMPLETION_ELWIN_POSITION = (35, 5)
+GREAT_DRAGON_POSITION = (35, 4)
 FIRST_RESIDENT_RECORD_INDEX = 0
 LAST_RESIDENT_RECORD_INDEX = 1
 FIRST_ENEMY_RECORD_INDEX = 2
@@ -86,7 +88,12 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             )
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    *,
+    completion_layout: bool = False,
+) -> int:
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
@@ -95,6 +102,12 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+    if completion_layout:
+        elwin = deployment_bytes((COMPLETION_ELWIN_POSITION,))
+        probe[
+            FIRST_PLAYER_DEPLOYMENT_OFFSET :
+            FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
+        ] = elwin
     return builder.update_md_checksum(probe)
 
 
@@ -109,6 +122,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument(
+        "--completion-layout",
+        action="store_true",
+        help=(
+            "move only Elwin to (35,5), one tile below the source Great "
+            "Dragon at (35,4)"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -116,14 +137,22 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    checksum = patch_probe(
+        probe,
+        source,
+        completion_layout=args.completion_layout,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print("Scenario 18 enemy records 2..10: AT 0, DF 0, no mercenaries")
-    print(
-        "both residents, stock deployments, identities, classes, levels, "
-        "coordinates, and handlers preserved"
-    )
+    if args.completion_layout:
+        print("completion layout: Elwin moved from (9,12) to (35,5)")
+        print("Great Dragon remains at the source position (35,4)")
+    else:
+        print(
+            "both residents, stock deployments, identities, classes, levels, "
+            "coordinates, and handlers preserved"
+        )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

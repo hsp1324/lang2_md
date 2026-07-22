@@ -614,7 +614,17 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario18["preparation"], "verified_current")
         self.assertEqual(scenario18["opening_events"], "verified_current")
         self.assertEqual(scenario18["battle_ui"], "verified_probe")
-        self.assertEqual(scenario18["turn_events"], "progressed_current")
+        self.assertEqual(scenario18["turn_events"], "verified_probe")
+        self.assertEqual(scenario18["completion"], "verified_probe")
+        for capture in (
+            "captures/run/17f2_s18_dragon_target.png",
+            "captures/run/17f2_s18_turn1_after_attack_40.png",
+            "captures/run/17f2_s18_dragon_retry01_status.png",
+            "captures/run/17f2_s18_clear_12.png",
+            "captures/run/17f2_s18_next_selected.png",
+            "captures/run/17f2_s19_title.png",
+        ):
+            self.assertIn(capture, scenario18["captures"])
         self.assertEqual(scenario19["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s19_description_current_01.png",

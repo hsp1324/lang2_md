@@ -28,7 +28,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 15 | current | current | current | current | probe | progressed | probe | pending | 41 |
 | 16 | current | current | current | current | probe | progressed | probe | pending | 45 |
 | 17 | current | current | current | current | current | probe | probe | pending | 43 |
-| 18 | current | current | current | current | probe | progressed | pending | pending | 27 |
+| 18 | current | current | current | current | probe | probe | probe | pending | 36 |
 | 19 | current | current | current | current | probe | progressed | pending | pending | 27 |
 | 20 | current | current | current | current | probe | progressed | pending | pending | 25 |
 | 21 | current | current | current | current | probe | progressed | pending | pending | 27 |
@@ -859,7 +859,7 @@ Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrollin
 
 ### Scenario 18
 
-Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrolling frames of 어둠의 공주, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the party's pursuit of Bozel, the monster-attacked village, the laughing girl, and the revelation that Liana controls the monsters. Initial current playback left 벨제리아로, 있었다., and 마물을 isolated. Natural restructuring to 마물이 습격한 마을, 한 소녀가 즐겁게 웃었다., and 마물을 조종하던 이는 리아나였다. removes those lines without losing source meaning. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and first-turn dialogue without reset or freeze. The original eleven-record fixed-placement list at 0x1820B4 remains covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Later turns, the evacuation choice branch, completion, and other branches remain pending.
+Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrolling frames of 어둠의 공주, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the party's pursuit of Bozel, the monster-attacked village, the laughing girl, and the revelation that Liana controls the monsters. Initial current playback left 벨제리아로, 있었다., and 마물을 isolated. Natural restructuring to 마물이 습격한 마을, 한 소녀가 즐겁게 웃었다., and 마물을 조종하던 이는 리아나였다. removes those lines without losing source meaning. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and first-turn dialogue without reset or freeze. The original eleven-record fixed-placement list at 0x1820B4 remains covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Production-DE78 completion derivative 17F2 moves only Elwin from (9,12) to (35,5), directly below the source Great Dragon at (35,4), in addition to the locked enemy AT/DF/mercenary limits. Both residents remain source-identical 클레릭 records at (15,20) and (11,20), while Lana remains 라나/다크프린세스 at (37,2). The first normal attack left the Great Dragon at HP1; its stock turn recovery restored the unit, so the accepted run used the documented pre-attack quicksave and a later normal battle defeated all ten units. The intervening enemy/NPC phases traversed 40 and 42 detected confirmations and returned to valid command menus without resident loss, reset, or freeze. Completion rendered Lana's retreat, resident survival/gift dialogue, allied level-up and class-change pages, and the save flow in Korean. Slot 1 changed from Scenario 18 to 19 while slot 2 remained 17; 다음 시나리오 displayed 진군루트 and entered 미레일 항구 전투. The evacuation choice's alternate path and other branches remain pending.
 
 - `captures/run/12d3_s18_brief_live_01.png`
 - `captures/run/12d3_s18_brief_live_07.png`
@@ -888,6 +888,15 @@ Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrollin
 - `captures/run/77d0_s18_description_final_10.png`
 - `captures/run/77d0_s18_description_final_14.png`
 - `captures/run/77d0_s18_description_final_15.png`
+- `captures/run/17f2_s18_description.png`
+- `captures/run/17f2_s18_command_ready.png`
+- `captures/run/17f2_s18_dragon_target.png`
+- `captures/run/17f2_s18_turn1_after_attack_40.png`
+- `captures/run/17f2_s18_dragon_retry01_status.png`
+- `captures/run/17f2_s18_clear_12.png`
+- `captures/run/17f2_s18_clear_24.png`
+- `captures/run/17f2_s18_next_selected.png`
+- `captures/run/17f2_s19_title.png`
 
 ### Scenario 19
 

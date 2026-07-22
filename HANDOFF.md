@@ -7373,3 +7373,40 @@ contains 57 safe syllables as documented below and in
   `b17c_s17_next_selected.png`, `b17c_s18_route.png`, and
   `b17c_s18_entry.png`. Scenario 17 completion is `verified_probe`; alternate
   battle/route branches remain pending.
+
+### Scenario 18 Great Dragon Completion (2026-07-22)
+
+- `tools/build_scenario18_clear_probe_rom.py --completion-layout` changes only
+  Elwin's first deployment from `(9,12)` to `(35,5)` in addition to the
+  existing enemy AT/DF/mercenary limits. The Great Dragon remains the source
+  `그레이트드래곤/그레이트드래곤`, LV1 at `(35,4)`; Lana remains
+  `라나/다크프린세스`, LV3 at `(37,2)`. Both resident `클레릭` records,
+  every identity/class/level/side/handler, and the other seven player
+  deployments remain unchanged. Tests lock the exact touched-byte envelope and
+  checksums `17DF`/`17F2`.
+- The isolated runtime `s18_completion_17f2` recovered the real Scenario 18
+  save written by the accepted Scenario 17 completion. It reviewed the
+  description endpoint, preparation, automatic deployment, opening, and clean
+  `엘윈/파이터` plus `그레이트드래곤/그레이트드래곤` battle status.
+  Directional arrangement input must use short `@0.05` taps: the first long
+  hold skipped rows and entered manual placement, while the retried short taps
+  selected automatic deployment reliably.
+- The first normal attack left the Great Dragon at HP1. The stock turn start
+  restored its troop count, so repeated turn cycling cannot guarantee the
+  clear. Use the documented pre-attack quicksave and retry a normal battle;
+  the accepted Turn 3 attack defeated all ten units. The preceding enemy/NPC
+  phases returned to valid Elwin command menus after 40 and 42 detected
+  confirmations. A failed automation attempt sent confirmations while an NPC
+  status panel was open; it changed no ROM or save data and must not be treated
+  as completion evidence.
+- The accepted completion rendered Lana's retreat, resident survival and gift
+  dialogue, allied level-up/class-change pages, and the save flow without
+  reset, freeze, Japanese residue, or broken dynamic names/classes. Evidence
+  includes `17f2_s18_dragon_retry01_status.png`, `17f2_s18_clear_12.png`, and
+  `17f2_s18_clear_24.png`.
+- Slot 1 visibly changed from `시나리오 18` to `시나리오 19`. Selecting
+  `다음 시나리오` displayed `진군루트` and entered `미레일 항구 전투`;
+  normal BlastEm termination left disk SRAM slot 1 at Scenario 19 and slot 2
+  at Scenario 17. Evidence is `17f2_s18_next_selected.png` and
+  `17f2_s19_title.png`. Scenario 18 completion and normal turn events are
+  `verified_probe`; the evacuation-choice alternate path remains pending.
