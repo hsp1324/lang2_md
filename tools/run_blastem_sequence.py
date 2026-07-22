@@ -15,7 +15,7 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 BLASTEM = ROOT / "tools/blastem/blastem"
 SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"

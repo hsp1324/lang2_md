@@ -25,7 +25,7 @@ CLASS_COUNT = 157
 NAME_POINTER_TABLE = 0x0618E8
 NAME_COUNT = 0x75
 SIDE_OFFSET = 0x08
-DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 DEFAULT_REFERENCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 
 FIELD_OFFSETS = {

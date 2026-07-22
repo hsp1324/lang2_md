@@ -8,7 +8,7 @@ from tools.jp_direct_string_inventory import inventory, markdown_report, scan_ca
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 INVENTORY_JSON = ROOT / "localization/direct_word_candidates.json"
 INVENTORY_MARKDOWN = ROOT / "docs/direct_word_candidate_inventory.md"
 

@@ -380,7 +380,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--ko-rom", type=Path,
-        default=ROOT / "roms/builds/Langrisser II (Korean JP Probe).md",
+        default=ROOT / "roms/builds/Langrisser II (Korean).md",
     )
     parser.add_argument(
         "--json", type=Path,

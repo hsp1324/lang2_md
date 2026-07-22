@@ -5,7 +5,7 @@ from scripts import build_korean_jp_probe as builder
 
 
 ROOT = Path(__file__).resolve().parents[1]
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 
 
 def token_stream(data: bytes, offset: int) -> list[int]:

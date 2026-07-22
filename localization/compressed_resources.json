@@ -14,9 +14,9 @@
     "2": 248,
     "1": 2
   },
-  "modified_count": 2,
-  "known_owner_count": 3,
-  "unknown_owner_count": 426,
+  "modified_count": 3,
+  "known_owner_count": 4,
+  "unknown_owner_count": 425,
   "loader_routines": {
     "load": "0x0099B2",
     "dispatch": "0x0099FA",
@@ -5381,18 +5381,18 @@
       "index": 223,
       "table_entry": "0x0B037C",
       "original_pointer": "0x0FEB2A",
-      "current_pointer": "0x0FEB2A",
+      "current_pointer": "0x2E2000",
       "original_type": 3,
       "current_type": 3,
       "decoder_routine": "0x009DFE",
       "original_output_size": 2368,
       "current_output_size": 2368,
       "original_decoded_sha256": "975fa8f6995b6ff3e7949abd48103372cb35370795bf87812230ef1d14c28e7d",
-      "current_decoded_sha256": "975fa8f6995b6ff3e7949abd48103372cb35370795bf87812230ef1d14c28e7d",
-      "pointer_modified": false,
-      "content_modified": false,
-      "modified": false,
-      "owner": null,
+      "current_decoded_sha256": "60c49ce77a5211f7582d8a485a64cbf853e5c3218c3cba9bb66b96db26d85ae2",
+      "pointer_modified": true,
+      "content_modified": true,
+      "modified": true,
+      "owner": "battle_ui_terrain",
       "direct_immediate_call_count": 1,
       "direct_immediate_calls": [
         {
@@ -5404,8 +5404,8 @@
           "destination": "0x2000"
         }
       ],
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "index": 224,
@@ -9138,7 +9138,7 @@
       "original_output_size": 5984,
       "current_output_size": 5984,
       "original_decoded_sha256": "58befb34120f5baa2e39868866e47cd043400663429b1db620fbeda69d3193c4",
-      "current_decoded_sha256": "aefae91df5f8eed1b09fbd82013c25ed9317e7324ddbad9f6166e093386ac9e5",
+      "current_decoded_sha256": "a7dc88edbc9dced635928000be897ea9dff7a680bc9ad736713171b0e577515b",
       "pointer_modified": true,
       "content_modified": true,
       "modified": true,

@@ -108,7 +108,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x94B7,
+            0x18ED,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -116,7 +116,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x94A6,
+            0x18DC,
         )
     def test_preserves_bosses_and_hidden_reinforcements(self):
         data = self.patched()

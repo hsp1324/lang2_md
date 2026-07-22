@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "D79C",
+  "production_checksum": "45D8",
   "states": [
     "pending",
     "historical",
@@ -22,12 +22,23 @@
     {
       "surface": "title_logo_and_main_menu",
       "state": "verified_current",
-      "checksum": "6C85",
-      "based_on": "6C85",
+      "checksum": "45D8",
+      "based_on": "45D8",
       "captures": [
+        "captures/run/45d8_title_english_logo_prompt_current.png",
         "captures/run/6c85_title_uppercase_live_3.png"
       ],
-      "note": "Compressed resource 393 and its 28x8 layout render 랑그릿사 while preserving the stock II, angels, PUSH START BUTTON, copyright line, 새 게임 / 불러오기 menu, and the uppercase 한글화: HSP1324 credit."
+      "note": "Production 45D8 imports the exact English-ROM resource 393 payload and 28x8 layout, rendering the decorated Langrisser logo while preserving the stock II, angels, PUSH START BUTTON, copyright line, and uppercase 한글화: HSP1324 credit. The independent 새 게임 / 불러오기 record is byte-locked by the title-main-screen tests; its prior live evidence remains the 6C85 capture because a held automated Start input immediately confirmed the default row in this run."
+    },
+    {
+      "surface": "battle_ui_terrain_label",
+      "state": "verified_probe",
+      "checksum": "C954",
+      "based_on": "45D8",
+      "captures": [
+        "captures/run/c954_s04_terrain_battle2_04.png"
+      ],
+      "note": "Production 45D8-based Scenario 4 clear probe C954 was entered through the actual SRAM/load/scenario-selector path. After automatic deployment, a normal Elwin attack against Morgan reached the stock battle renderer and simultaneously displayed 엘윈/파이터, 모건/소서러, -AT-, -DF-, -지형-, troop counts, and terrain percentages without reset, freeze, red screen, or damaged glyphs. The probe keeps the production resource 223 relocation and changes only separately documented Scenario 4 diagnostic fields; this is shared-renderer evidence, not a claim that every Scenario 4 branch was covered."
     },
     {
       "surface": "battle_ui",
@@ -330,9 +341,10 @@
         "captures/run/40ea_s04_turn5_events_05.png",
         "captures/run/40ea_s04_turn5_events_10.png",
         "captures/run/40ea_s04_turn5_events_15.png",
-        "captures/run/40ea_s04_turn5_command.png"
+        "captures/run/40ea_s04_turn5_command.png",
+        "captures/run/c954_s04_terrain_battle2_04.png"
       ],
-      "note": "Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling frames of 빛의 신전, and the preparation endpoint. The complete Korean description consistently covers the mysterious knight, Vargas's defeat, the Temple of Light, and the Rayguard Black Dragon Sorcerers' attack without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified all 26 opening confirmations and condition rows. Production 39BD-derived progression probe 40EA preserves every deployment coordinate and event while limiting only the six enemy fixed records' AT/DF and mercenaries. Fresh play traversed the stock opening and returned to valid command menus after the complete turn 1, turn 3 tablet/Alhazard explanation, and turn 5 Morgan mind-control/Liana recovery sequences. The Japanese cries シカシカ / シ、シカーッ are corrected from 싱싱 / 싱, 싱갸 to 시카시카 / 시, 시카앗; the scheduled turn-5 시카시카 page renders cleanly in 40EA. The second cry belongs to a separate combat condition and remains with other conditional branches rather than being claimed as live-covered. Production F661-derived clear probe 79DD validates the Japanese header, deployment table, and all eleven fixed records before moving only Elwin's first deployment from (7,38) to (7,22) and removing only Morgan's AT/DF and mercenaries at the original (7,21). Live play traversed the stock opening, defeated Morgan in a real battle, and reviewed the complete successful path through the mystery knight, Sherry recruitment, Cross reward, 전과보고 with POINT 1280P, a real 시나리오 5 save, 다음 시나리오, and the Scenario 5 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. NPC-loss, defeat, the second Shika cry, and other conditional branches remain pending."
+      "note": "Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling frames of 빛의 신전, and the preparation endpoint. The complete Korean description consistently covers the mysterious knight, Vargas's defeat, the Temple of Light, and the Rayguard Black Dragon Sorcerers' attack without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified all 26 opening confirmations and condition rows. Production 39BD-derived progression probe 40EA preserves every deployment coordinate and event while limiting only the six enemy fixed records' AT/DF and mercenaries. Fresh play traversed the stock opening and returned to valid command menus after the complete turn 1, turn 3 tablet/Alhazard explanation, and turn 5 Morgan mind-control/Liana recovery sequences. The Japanese cries シカシカ / シ、シカーッ are corrected from 싱싱 / 싱, 싱갸 to 시카시카 / 시, 시카앗; the scheduled turn-5 시카시카 page renders cleanly in 40EA. The second cry belongs to a separate combat condition and remains with other conditional branches rather than being claimed as live-covered. Production F661-derived clear probe 79DD validates the Japanese header, deployment table, and all eleven fixed records before moving only Elwin's first deployment from (7,38) to (7,22) and removing only Morgan's AT/DF and mercenaries at the original (7,21). Live play traversed the stock opening, defeated Morgan in a real battle, and reviewed the complete successful path through the mystery knight, Sherry recruitment, Cross reward, 전과보고 with POINT 1280P, a real 시나리오 5 save, 다음 시나리오, and the Scenario 5 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. Production 45D8-based probe C954 independently reaches a normal Elwin-versus-Morgan battle through the actual SRAM/load/scenario-selector path and verifies intact 엘윈/파이터, 모건/소서러, -AT-, -DF-, and the newly localized -지형- resource. NPC-loss, defeat, the second Shika cry, and other conditional branches remain pending."
     },
     {
       "scenario": 5,

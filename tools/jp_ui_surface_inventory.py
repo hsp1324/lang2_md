@@ -232,6 +232,45 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    battle_ui_terrain_resource_size = 1 + len(
+        builder.compress_9dfe_literals(
+            bytes(builder.BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SIZE)
+        )
+    )
+    for group, offset, size, target in (
+        (
+            "battle_ui_terrain_original_resource_pointer",
+            builder.BYTE_UI_FONT_RESOURCE_TABLE
+            + builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX * 4,
+            4,
+            "localized battle UI terrain resource pointer",
+        ),
+        (
+            "battle_ui_terrain_active_resource_pointer",
+            builder.BYTE_UI_EXT_RESOURCE_TABLE
+            + builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX * 4,
+            4,
+            "active localized battle UI terrain resource pointer",
+        ),
+        (
+            "battle_ui_terrain_resource_payload",
+            builder.BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE,
+            battle_ui_terrain_resource_size,
+            "전투 중앙 지형 타일",
+        ),
+    ):
+        rows.append(
+            {
+                "group": group,
+                "address": f"0x{offset:06X}",
+                "size_bytes": size,
+                "target_korean": target,
+                "modified": changed(japanese, korean, offset, size),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
     for group, offset, size, target in (
         (
             "shop_inventory_full_glyphs",
@@ -560,9 +599,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "all-epilogue, ending-visit, and final-credit paths",
             "magic/summon targeting and result paths beyond the production-faithful "
             "Magic Arrow and diagnostic Attack/Elemental probes",
-            "ownership and purpose of 426 compressed resources beyond byte-font "
-            "resource index 1, item-icon resource index 391, and title-logo "
-            "resource index 393",
+            "ownership and purpose of 425 compressed resources beyond byte-font "
+            "resource index 1, battle-terrain resource index 223, item-icon "
+            "resource index 391, and title-logo resource index 393",
             "non-pointer byte sequences shorter than the conservative three-signal "
             "half-width/uppercase-ASCII inline scan and the classified "
             "direct-word/direct-byte inventories",
@@ -620,7 +659,7 @@ def main() -> None:
     parser.add_argument(
         "--ko-rom",
         type=Path,
-        default=Path("roms/builds/Langrisser II (Korean JP Probe).md"),
+        default=Path("roms/builds/Langrisser II (Korean).md"),
     )
     parser.add_argument("--json", type=Path, default=Path("localization/ui_patch_surfaces.json"))
     parser.add_argument("--markdown", type=Path, default=Path("docs/ui_patch_surface_inventory.md"))

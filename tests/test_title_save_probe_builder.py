@@ -6,7 +6,7 @@ from tools import build_title_save_probe_rom as probe_builder
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 
 
 class TitleSaveProbeBuilderTests(unittest.TestCase):

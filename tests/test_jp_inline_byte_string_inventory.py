@@ -6,7 +6,7 @@ from tools.jp_inline_byte_string_inventory import inventory, markdown_report
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 JSON_PATH = ROOT / "localization/inline_byte_strings.json"
 MARKDOWN_PATH = ROOT / "docs/inline_byte_string_inventory.md"
 

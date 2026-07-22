@@ -6,7 +6,7 @@ from tools import build_magic_application_probe_rom as probe_builder
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 
 
 class MagicApplicationProbeBuilderTests(unittest.TestCase):
@@ -100,7 +100,7 @@ class MagicApplicationProbeBuilderTests(unittest.TestCase):
             place_target=True,
             enable_all_magic=False,
         )
-        self.assertEqual(checksum, 0x5E43)
+        self.assertEqual(checksum, 0xE279)
         self.assertEqual(
             probe[
                 probe_builder.ALL_MAGIC_BRANCH_OFFSET :

@@ -19,7 +19,8 @@ from tools.scenario_data import KOREAN_NAME_BY_ID
 
 
 IN_ROM = Path("roms/original/Langrisser II (Japan).md")
-OUT_ROM = Path("roms/builds/Langrisser II (Korean JP Probe).md")
+EN_ROM = Path("roms/original/Langrisser II (English).md")
+OUT_ROM = Path("roms/builds/Langrisser II (Korean).md")
 FONT_PATH = Path("tools/fonts/Galmuri9.ttf")
 EXPANDED_ROM_SIZE = 0x400000
 ORIGINAL_SRAM_START = 0x200001
@@ -497,18 +498,37 @@ TITLE_LOGO_RESOURCE_ORIGINAL_SIZE = 5984
 TITLE_LOGO_RESOURCE_ORIGINAL_SHA256 = (
     "58befb34120f5baa2e39868866e47cd043400663429b1db620fbeda69d3193c4"
 )
+TITLE_LOGO_ENGLISH_RESOURCE_POINTER = 0x1E6E00
+TITLE_LOGO_ENGLISH_RESOURCE_TYPE = 0x00
+TITLE_LOGO_ENGLISH_RESOURCE_SHA256 = (
+    "a7dc88edbc9dced635928000be897ea9dff7a680bc9ad736713171b0e577515b"
+)
+TITLE_LOGO_ENGLISH_LAYOUT_RECORD = 0x0A428E
+TITLE_LOGO_ENGLISH_LAYOUT_USED_SIZE = 231
+TITLE_LOGO_ENGLISH_LAYOUT_SHA256 = (
+    "093ae5c040a8a18258c27ac9b23a0a93ad028022f68b0aa1df9252c274da43fc"
+)
 TITLE_LOGO_RESOURCE_RELOC_BASE = 0x2E0000
 TITLE_LOGO_RESOURCE_RELOC_LIMIT = 0x2E2000
+BATTLE_UI_TERRAIN_RESOURCE_INDEX = 223
+BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER = 0x0FEB2A
+BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SIZE = 2368
+BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SHA256 = (
+    "975fa8f6995b6ff3e7949abd48103372cb35370795bf87812230ef1d14c28e7d"
+)
+BATTLE_UI_TERRAIN_TILE_IDS = (0x47, 0x48)
+BATTLE_UI_TERRAIN_LABEL = "지형"
+BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE = TITLE_LOGO_RESOURCE_RELOC_LIMIT
+BATTLE_UI_TERRAIN_RESOURCE_RELOC_LIMIT = 0x2E3000
 TITLE_LOGO_LAYOUT_RECORD = 0x0A429E
 TITLE_LOGO_LAYOUT_RECORD_SIZE = 232
 TITLE_LOGO_LAYOUT_ORIGINAL_SHA256 = (
     "fdfa8f93b59bec91aa5fed8b2ac478a4cdad8aa657130c4303aab7f363b11cd4"
 )
-TITLE_LOGO_TEXT = "랑그릿사"
+TITLE_LOGO_TEXT = "LANGRISSER"
 TITLE_LOGO_WIDTH_TILES = 28
 TITLE_LOGO_HEIGHT_TILES = 8
 TITLE_LOGO_TILE_COUNT = TITLE_LOGO_RESOURCE_ORIGINAL_SIZE // 32
-TITLE_LOGO_FONT_SIZE = 44
 BYTE_UI_MAP_INFO_RENDER_CALLS = (0x020EDA, 0x020F08)
 BYTE_UI_MAP_INFO_RENDER_ROUTINE_BY_CALL = {
     BYTE_UI_MAP_INFO_RENDER_CALLS[0]: BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE,
@@ -3024,119 +3044,35 @@ def compress_9dfe_literals(payload: bytes) -> bytes:
     return bytes(out)
 
 
-def _encode_md_indexed_tile(pixels: list[int]) -> bytes:
-    if len(pixels) != 64:
-        raise ValueError("Mega Drive indexed tiles must contain exactly 64 pixels")
-    if any(pixel < 0 or pixel > 0x0F for pixel in pixels):
-        raise ValueError("Mega Drive indexed tile pixels must fit in four bits")
-    return bytes(
-        (pixels[index] << 4) | pixels[index + 1]
-        for index in range(0, len(pixels), 2)
-    )
-
-
-def _encode_title_logo_layout(tile_ids: list[int]) -> bytes:
-    expected_cells = TITLE_LOGO_WIDTH_TILES * TITLE_LOGO_HEIGHT_TILES
-    if len(tile_ids) != expected_cells:
-        raise ValueError(
-            f"title logo layout has {len(tile_ids)} cells, expected {expected_cells}"
-        )
-    if any(tile_id < 0 or tile_id >= 0xF7 for tile_id in tile_ids):
-        raise ValueError("title logo tile IDs collide with layout control bytes")
-
-    # Select tile offset 0, palette 2 with priority, and no flips. Long blank
-    # runs use the stock layout renderer's FE count/value command.
-    stream = bytearray((0xF8, 0x00, 0xF9, 0x02, 0xFA))
-    cursor = 0
-    while cursor < len(tile_ids):
-        run_end = cursor + 1
-        while (
-            run_end < len(tile_ids)
-            and tile_ids[run_end] == tile_ids[cursor]
-            and run_end - cursor < 0x100
-        ):
-            run_end += 1
-        run_length = run_end - cursor
-        if run_length >= 4:
-            stream.extend((0xFE, run_length, tile_ids[cursor]))
-            cursor = run_end
-        else:
-            stream.extend(tile_ids[cursor:run_end])
-            cursor = run_end
-    stream.append(0xFF)
-    return bytes(stream)
-
-
 def build_title_logo_assets() -> tuple[bytes, bytes]:
-    width = TITLE_LOGO_WIDTH_TILES * 8
-    height = TITLE_LOGO_HEIGHT_TILES * 8
-    image = Image.new("P", (width, height), 0)
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype(str(FONT_PATH), TITLE_LOGO_FONT_SIZE)
-    bbox = draw.textbbox((0, 0), TITLE_LOGO_TEXT, font=font, stroke_width=5)
-    x = (width - (bbox[2] - bbox[0])) // 2 - bbox[0]
-    y = (height - (bbox[3] - bbox[1])) // 2 - bbox[1]
-
-    # Reuse title palette 2: black/dark shadow, gold rim, and red face. This
-    # keeps the Korean logo visually compatible with the original II artwork.
-    draw.text(
-        (x + 2, y + 3),
-        TITLE_LOGO_TEXT,
-        font=font,
-        fill=1,
-        stroke_width=4,
-        stroke_fill=13,
-    )
-    draw.text(
-        (x, y),
-        TITLE_LOGO_TEXT,
-        font=font,
-        fill=3,
-        stroke_width=5,
-        stroke_fill=8,
-    )
-    draw.text(
-        (x, y),
-        TITLE_LOGO_TEXT,
-        font=font,
-        fill=3,
-        stroke_width=3,
-        stroke_fill=13,
-    )
-
-    tiles = [bytes(32)]
-    layout: list[int] = []
-    for tile_y in range(TITLE_LOGO_HEIGHT_TILES):
-        for tile_x in range(TITLE_LOGO_WIDTH_TILES):
-            pixels = [
-                int(image.getpixel((tile_x * 8 + pixel_x, tile_y * 8 + pixel_y)))
-                for pixel_y in range(8)
-                for pixel_x in range(8)
-            ]
-            if any(pixels):
-                layout.append(len(tiles))
-                tiles.append(_encode_md_indexed_tile(pixels))
-            else:
-                layout.append(0)
-    if len(tiles) > TITLE_LOGO_TILE_COUNT:
+    english = EN_ROM.read_bytes()
+    entry = BYTE_UI_FONT_RESOURCE_TABLE + TITLE_LOGO_RESOURCE_INDEX * 4
+    pointer = be32(english, entry) & 0x00FFFFFF
+    if pointer != TITLE_LOGO_ENGLISH_RESOURCE_POINTER:
         raise ValueError(
-            f"title logo needs {len(tiles)} tiles, only {TITLE_LOGO_TILE_COUNT} available"
+            f"English title logo resource pointer changed: 0x{pointer:06X}"
         )
-    tile_payload = b"".join(tiles) + bytes(
-        (TITLE_LOGO_TILE_COUNT - len(tiles)) * 32
+    if english[pointer] != TITLE_LOGO_ENGLISH_RESOURCE_TYPE:
+        raise ValueError("English title logo is not the expected raw resource")
+    size = be16(english, pointer + 1)
+    if size != TITLE_LOGO_RESOURCE_ORIGINAL_SIZE:
+        raise ValueError(f"English title logo size changed: {size}")
+    tile_payload = bytes(english[pointer + 3 : pointer + 3 + size])
+    if hashlib.sha256(tile_payload).hexdigest() != TITLE_LOGO_ENGLISH_RESOURCE_SHA256:
+        raise ValueError("English title logo payload changed")
+
+    layout_end = (
+        TITLE_LOGO_ENGLISH_LAYOUT_RECORD + TITLE_LOGO_ENGLISH_LAYOUT_USED_SIZE
     )
-    layout_stream = _encode_title_logo_layout(layout)
-    layout_capacity = TITLE_LOGO_LAYOUT_RECORD_SIZE - 6
-    if len(layout_stream) > layout_capacity:
-        raise ValueError(
-            f"title logo layout needs {len(layout_stream)} bytes, only {layout_capacity} available"
-        )
-    layout_record = (
-        bytes.fromhex("00 01")
-        + TITLE_LOGO_WIDTH_TILES.to_bytes(2, "big")
-        + TITLE_LOGO_HEIGHT_TILES.to_bytes(2, "big")
-        + layout_stream
-        + bytes(layout_capacity - len(layout_stream))
+    source_layout = bytes(english[TITLE_LOGO_ENGLISH_LAYOUT_RECORD:layout_end])
+    if hashlib.sha256(source_layout).hexdigest() != TITLE_LOGO_ENGLISH_LAYOUT_SHA256:
+        raise ValueError("English title logo layout changed")
+    if source_layout[:6] != bytes.fromhex("00 01 00 1C 00 08"):
+        raise ValueError("English title logo layout dimensions changed")
+    if source_layout[-1] != 0xFF:
+        raise ValueError("English title logo layout is not terminated")
+    layout_record = source_layout + bytes(
+        TITLE_LOGO_LAYOUT_RECORD_SIZE - len(source_layout)
     )
     return tile_payload, layout_record
 
@@ -3181,6 +3117,62 @@ def patch_title_logo_resource(data: bytearray) -> None:
     put32(data, original_entry, TITLE_LOGO_RESOURCE_RELOC_BASE)
     put32(data, extended_entry, TITLE_LOGO_RESOURCE_RELOC_BASE)
     data[TITLE_LOGO_LAYOUT_RECORD:layout_end] = layout_record
+
+
+def patch_battle_ui_terrain_resource(data: bytearray) -> None:
+    original_entry = (
+        BYTE_UI_FONT_RESOURCE_TABLE + BATTLE_UI_TERRAIN_RESOURCE_INDEX * 4
+    )
+    extended_entry = (
+        BYTE_UI_EXT_RESOURCE_TABLE + BATTLE_UI_TERRAIN_RESOURCE_INDEX * 4
+    )
+    original_pointer = be32(data, original_entry) & 0x00FFFFFF
+    extended_pointer = be32(data, extended_entry) & 0x00FFFFFF
+    if original_pointer != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER:
+        raise ValueError(
+            "battle UI terrain resource pointer changed: "
+            f"0x{original_pointer:06X}"
+        )
+    if extended_pointer != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER:
+        raise ValueError(
+            "extended battle UI terrain resource pointer changed: "
+            f"0x{extended_pointer:06X}"
+        )
+    if data[original_pointer] != 0x03:
+        raise ValueError("battle UI terrain resource is not type 3")
+
+    source = decompress_9dfe(data, original_pointer + 1)
+    if len(source) != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SIZE:
+        raise ValueError("battle UI terrain decoded size changed")
+    if (
+        hashlib.sha256(source).hexdigest()
+        != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SHA256
+    ):
+        raise ValueError("battle UI terrain decoded source changed")
+
+    half_font = Path("tools/fonts/Galmuri7.ttf")
+    font = ImageFont.truetype(str(half_font if half_font.exists() else FONT_PATH), 8)
+    localized = bytearray(source)
+    for char, tile_id in zip(
+        BATTLE_UI_TERRAIN_LABEL, BATTLE_UI_TERRAIN_TILE_IDS, strict=True
+    ):
+        start = tile_id * 32
+        localized[start : start + 32] = render_byte_ui_tile(char, font)
+
+    resource = bytes([0x03]) + compress_9dfe_literals(bytes(localized))
+    resource_end = BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE + len(resource)
+    if resource_end > BATTLE_UI_TERRAIN_RESOURCE_RELOC_LIMIT:
+        raise ValueError(
+            "localized battle UI terrain resource exceeds its reserved bank"
+        )
+    if any(
+        value != 0xFF
+        for value in data[BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE:resource_end]
+    ):
+        raise ValueError("localized battle UI terrain bank is not blank")
+    data[BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE:resource_end] = resource
+    put32(data, original_entry, BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE)
+    put32(data, extended_entry, BATTLE_UI_TERRAIN_RESOURCE_RELOC_BASE)
 
 
 def collect_chars(*texts: str) -> list[str]:
@@ -6757,6 +6749,7 @@ def main() -> None:
     if args.patch_byte_ui_strings:
         byte_ui_code_by_char = patch_byte_ui_strings(data)
         patch_title_logo_resource(data)
+        patch_battle_ui_terrain_resource(data)
     if args.patch_name_entry_reused_glyphs:
         if not byte_ui_code_by_char:
             raise ValueError("Korean name-entry grid requires byte UI font patching")

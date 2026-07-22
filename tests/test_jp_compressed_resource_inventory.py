@@ -16,7 +16,7 @@ from tools.jp_compressed_resource_inventory import (
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 INVENTORY_JSON = ROOT / "localization/compressed_resources.json"
 INVENTORY_MARKDOWN = ROOT / "docs/compressed_resource_inventory.md"
 
@@ -78,9 +78,9 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         )
 
     def test_owned_localized_resources_are_relocated_and_modified(self):
-        self.assertEqual(self.result["modified_count"], 2)
-        self.assertEqual(self.result["known_owner_count"], 3)
-        self.assertEqual(self.result["unknown_owner_count"], 426)
+        self.assertEqual(self.result["modified_count"], 3)
+        self.assertEqual(self.result["known_owner_count"], 4)
+        self.assertEqual(self.result["unknown_owner_count"], 425)
         entry = self.result["entries"][builder.BYTE_UI_FONT_RESOURCE_INDEX]
         self.assertEqual(entry["owner"], "byte_ui_font")
         self.assertEqual(entry["original_pointer"], "0x0B0A84")
@@ -91,6 +91,17 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(entry["current_output_size"], 8192)
         self.assertTrue(entry["pointer_modified"])
         self.assertTrue(entry["content_modified"])
+
+        terrain = self.result["entries"][builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX]
+        self.assertEqual(terrain["owner"], "battle_ui_terrain")
+        self.assertEqual(terrain["original_pointer"], "0x0FEB2A")
+        self.assertEqual(terrain["current_pointer"], "0x2E2000")
+        self.assertEqual(terrain["original_output_size"], 2368)
+        self.assertEqual(terrain["current_output_size"], 2368)
+        self.assertTrue(terrain["pointer_modified"])
+        self.assertTrue(terrain["content_modified"])
+        self.assertTrue(terrain["reviewed"])
+        self.assertTrue(terrain["live_verified"])
 
         logo = self.result["entries"][builder.TITLE_LOGO_RESOURCE_INDEX]
         self.assertEqual(logo["owner"], "title_logo")

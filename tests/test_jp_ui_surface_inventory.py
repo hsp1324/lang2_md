@@ -6,7 +6,7 @@ from tools.jp_ui_surface_inventory import inventory
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 
 
 class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 132)
-        self.assertEqual(self.result["modified_patch_count"], 131)
+        self.assertEqual(self.result["declared_patch_count"], 135)
+        self.assertEqual(self.result["modified_patch_count"], 134)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -83,6 +83,22 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             if row["group"] in title_groups
         ]
         self.assertEqual({row["group"] for row in rows}, title_groups)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
+
+    def test_battle_ui_terrain_resource_is_live_verified(self):
+        terrain_groups = {
+            "battle_ui_terrain_original_resource_pointer",
+            "battle_ui_terrain_active_resource_pointer",
+            "battle_ui_terrain_resource_payload",
+        }
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] in terrain_groups
+        ]
+        self.assertEqual({row["group"] for row in rows}, terrain_groups)
         self.assertTrue(all(row["modified"] for row in rows))
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["live_verified"] for row in rows))

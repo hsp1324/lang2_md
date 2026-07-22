@@ -25,11 +25,17 @@ RESOURCE_DECODER_ROUTINES = {
 }
 KNOWN_OWNERS = {
     builder.BYTE_UI_FONT_RESOURCE_INDEX: "byte_ui_font",
+    builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX: "battle_ui_terrain",
     391: "item_icons",
     builder.TITLE_LOGO_RESOURCE_INDEX: "title_logo",
 }
 LIVE_VERIFIED_OWNERS = frozenset(
-    {builder.BYTE_UI_FONT_RESOURCE_INDEX, 391, builder.TITLE_LOGO_RESOURCE_INDEX}
+    {
+        builder.BYTE_UI_FONT_RESOURCE_INDEX,
+        builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX,
+        391,
+        builder.TITLE_LOGO_RESOURCE_INDEX,
+    }
 )
 
 
@@ -431,7 +437,7 @@ def main() -> None:
     parser.add_argument(
         "--ko-rom",
         type=Path,
-        default=Path("roms/builds/Langrisser II (Korean JP Probe).md"),
+        default=Path("roms/builds/Langrisser II (Korean).md"),
     )
     parser.add_argument("--json", type=Path, default=Path("localization/compressed_resources.json"))
     parser.add_argument("--markdown", type=Path, default=Path("docs/compressed_resource_inventory.md"))

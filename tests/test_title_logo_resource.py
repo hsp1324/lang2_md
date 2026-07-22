@@ -8,8 +8,8 @@ from scripts import build_korean_jp_probe as builder
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / builder.IN_ROM
 KO_ROM = ROOT / builder.OUT_ROM
-CURRENT_TILE_SHA256 = "aefae91df5f8eed1b09fbd82013c25ed9317e7324ddbad9f6166e093386ac9e5"
-CURRENT_LAYOUT_SHA256 = "798d0d8f17e2b4850fbf87aa7b83572968fd5be22d0ca6bb951622f83bd620e9"
+CURRENT_TILE_SHA256 = "a7dc88edbc9dced635928000be897ea9dff7a680bc9ad736713171b0e577515b"
+CURRENT_LAYOUT_SHA256 = "cfbb0598dfa0e0ce9883a0cb3b103c706565eb6782912d30f78e1c0d30d77899"
 
 
 def decode_layout(record: bytes) -> list[int]:
@@ -41,7 +41,33 @@ class TitleLogoResourceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.jp = JP_ROM.read_bytes()
+        cls.en = (ROOT / builder.EN_ROM).read_bytes()
         cls.ko = KO_ROM.read_bytes()
+
+    def test_english_logo_source_is_locked(self) -> None:
+        entry = (
+            builder.BYTE_UI_FONT_RESOURCE_TABLE
+            + builder.TITLE_LOGO_RESOURCE_INDEX * 4
+        )
+        pointer = builder.be32(self.en, entry) & 0x00FFFFFF
+        self.assertEqual(pointer, builder.TITLE_LOGO_ENGLISH_RESOURCE_POINTER)
+        self.assertEqual(self.en[pointer], builder.TITLE_LOGO_ENGLISH_RESOURCE_TYPE)
+        size = builder.be16(self.en, pointer + 1)
+        self.assertEqual(size, builder.TITLE_LOGO_RESOURCE_ORIGINAL_SIZE)
+        payload = self.en[pointer + 3 : pointer + 3 + size]
+        self.assertEqual(
+            hashlib.sha256(payload).hexdigest(),
+            builder.TITLE_LOGO_ENGLISH_RESOURCE_SHA256,
+        )
+        source_layout = self.en[
+            builder.TITLE_LOGO_ENGLISH_LAYOUT_RECORD :
+            builder.TITLE_LOGO_ENGLISH_LAYOUT_RECORD
+            + builder.TITLE_LOGO_ENGLISH_LAYOUT_USED_SIZE
+        ]
+        self.assertEqual(
+            hashlib.sha256(source_layout).hexdigest(),
+            builder.TITLE_LOGO_ENGLISH_LAYOUT_SHA256,
+        )
 
     def test_original_logo_resource_and_layout_are_locked(self) -> None:
         entry = (

@@ -7,7 +7,7 @@ from tools.item_shop_inventory import inventory, markdown_report
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 JSON_PATH = ROOT / "localization/item_shop_inventory.json"
 MARKDOWN_PATH = ROOT / "docs/item_shop_runtime_matrix.md"
 

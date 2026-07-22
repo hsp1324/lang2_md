@@ -67,15 +67,27 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "D79C")
+        self.assertEqual(data["production_checksum"], "45D8")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
         self.assertEqual(title["state"], "verified_current")
-        self.assertEqual(title["checksum"], "6C85")
+        self.assertEqual(title["checksum"], "45D8")
         self.assertIn(
-            "captures/run/6c85_title_uppercase_live_3.png", title["captures"]
+            "captures/run/45d8_title_english_logo_prompt_current.png",
+            title["captures"],
         )
+        terrain = {
+            row["surface"]: row for row in data["global_evidence"]
+        }["battle_ui_terrain_label"]
+        self.assertEqual(terrain["state"], "verified_probe")
+        self.assertEqual(terrain["checksum"], "C954")
+        self.assertEqual(terrain["based_on"], "45D8")
+        self.assertIn(
+            "captures/run/c954_s04_terrain_battle2_04.png",
+            terrain["captures"],
+        )
+        self.assertIn("-지형-", terrain["note"])
         scenario1 = data["scenarios"][0]
         scenario2 = data["scenarios"][1]
         scenario3 = data["scenarios"][2]

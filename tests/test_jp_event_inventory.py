@@ -7,7 +7,7 @@ from tools.jp_event_inventory import event_block_starts, inventory, markdown_rep
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 INVENTORY_JSON = ROOT / "localization/event_pages.json"
 INVENTORY_MARKDOWN = ROOT / "docs/full_localization_inventory.md"
 

@@ -186,7 +186,7 @@ def main() -> None:
     parser.add_argument(
         "--ko-rom",
         type=Path,
-        default=Path("roms/builds/Langrisser II (Korean JP Probe).md"),
+        default=Path("roms/builds/Langrisser II (Korean).md"),
     )
     parser.add_argument("--json", type=Path, default=Path("localization/global_strings.json"))
     parser.add_argument(

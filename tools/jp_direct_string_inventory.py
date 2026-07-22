@@ -576,7 +576,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Inventory conservative direct word-string candidates")
     parser.add_argument("--jp-rom", type=Path, default=Path("roms/original/Langrisser II (Japan).md"))
     parser.add_argument(
-        "--ko-rom", type=Path, default=Path("roms/builds/Langrisser II (Korean JP Probe).md")
+        "--ko-rom", type=Path, default=Path("roms/builds/Langrisser II (Korean).md")
     )
     parser.add_argument("--json", type=Path, default=Path("localization/direct_word_candidates.json"))
     parser.add_argument("--markdown", type=Path, default=Path("docs/direct_word_candidate_inventory.md"))

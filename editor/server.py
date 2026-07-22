@@ -17,7 +17,7 @@ from tools.scenario_data import SCENARIO_COUNT, patch_scenario, read_scenario
 STATIC = Path(__file__).resolve().parent / "static"
 REFERENCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 ROM_CHOICES = {
-    "korean": ROOT / "roms/builds/Langrisser II (Korean JP Probe).md",
+    "korean": ROOT / "roms/builds/Langrisser II (Korean).md",
     "japanese": REFERENCE_ROM,
 }
 OUTPUT_ROM = ROOT / "roms/builds/Langrisser II (Korean Scenario Edit).md"

@@ -7,7 +7,7 @@ from tools.jp_event_inventory import inventory
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 
 
 class ReviewedEventDialogueTests(unittest.TestCase):

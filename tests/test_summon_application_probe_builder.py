@@ -6,7 +6,7 @@ from tools import build_summon_application_probe_rom as probe_builder
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean JP Probe).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 
 
 class SummonApplicationProbeBuilderTests(unittest.TestCase):
@@ -37,7 +37,7 @@ class SummonApplicationProbeBuilderTests(unittest.TestCase):
         probe = bytearray(self.production)
         checksum = probe_builder.patch_probe(probe, self.source)
         self.assertEqual(checksum, int.from_bytes(probe[0x18E:0x190], "big"))
-        self.assertEqual(checksum, 0xD8BF)
+        self.assertEqual(checksum, 0x5CF5)
         allowed = {0x18E, 0x18F}
         for offset, replacement in (
             (

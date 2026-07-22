@@ -10,10 +10,10 @@ python3 scripts/build_korean_jp_probe.py
 It writes:
 
 ```text
-roms/builds/Langrisser II (Korean JP Probe).md
+roms/builds/Langrisser II (Korean).md
 ```
 
-## Resume Dashboard (2026-07-22)
+## Resume Dashboard (2026-07-23)
 
 This section is the first stop after a Goal resume or interrupted session. Do
 not restart completed investigations merely because their details also remain
@@ -22,14 +22,14 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: B766
-latest targeted live-verified production checksum: 6C85
+current production build checksum: 45D8
+latest targeted live-verified production checksum: 45D8
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 632 passing
+unit tests: 658 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
-declared UI patches: 131/132 byte-modified; NPC is intentionally unchanged
+declared UI patches: 134/135 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
 
@@ -248,7 +248,7 @@ from this machine or install/extract BlastEm locally. The current command line i
 
 ```bash
 env LD_LIBRARY_PATH=tools/blastem/lib \
-  tools/blastem/blastem "roms/builds/Langrisser II (Korean JP Probe).md"
+  tools/blastem/blastem "roms/builds/Langrisser II (Korean).md"
 ```
 
 Python tools need Pillow and python-xlib:
@@ -889,7 +889,7 @@ Render item names from the relocated item glyph list:
 
 ```bash
 python3 tools/jp_text_font_analyzer.py \
-  --rom "roms/builds/Langrisser II (Korean JP Probe).md" \
+  --rom "roms/builds/Langrisser II (Korean).md" \
   render-pointer-text \
   --pointer-table 0xA1902 \
   --low 0xA1990 \
@@ -904,7 +904,7 @@ Render item descriptions:
 
 ```bash
 python3 tools/jp_text_font_analyzer.py \
-  --rom "roms/builds/Langrisser II (Korean JP Probe).md" \
+  --rom "roms/builds/Langrisser II (Korean).md" \
   render-pointer-text \
   --pointer-table 0xA1D7C \
   --low 0xA1E10 \
@@ -919,7 +919,7 @@ Render direct strings around the prep/menu region:
 
 ```bash
 python3 tools/jp_text_font_analyzer.py \
-  --rom "roms/builds/Langrisser II (Korean JP Probe).md" \
+  --rom "roms/builds/Langrisser II (Korean).md" \
   render-direct-strings \
   --start 0x97000 \
   --end 0x97800 \
@@ -938,7 +938,7 @@ Save BlastEm state with the mapped backtick key:
 
 ```bash
 python3 tools/send_blastem_keys.py save:0.8
-cp ~/.local/share/blastem/'Langrisser II (Korean JP Probe)'/quicksave.gst \
+cp ~/.local/share/blastem/'Langrisser II (Korean)'/quicksave.gst \
   captures/analysis/current.gst
 ```
 
@@ -3355,10 +3355,12 @@ contains 57 safe syllables as documented below and in
   stock battle renderer was entered through the normal Elwin attack path.
   `captures/run/3590_battle_live_078.png` and `_083.png` verify the current
   localization code in the battle presentation: portrait names, numeric stats,
-  `-AT-`, `-DF-`, and the original formation/modifier decoration are intact.
-  The third center-row mark is original graphic decoration, not untranslated
-  Japanese text. It must remain byte-identical rather than be overwritten with
-  another Hangul glyph.
+  `-AT-`, `-DF-`, and the original formation/modifier graphics are intact.
+  Historical correction: the third center row was initially misclassified as
+  decoration. Later exact resource/tile matching proved that it is the Japanese
+  label `地形`; see `Battle Terrain Label Resource 223` below. Only the two
+  kanji tiles may change, while the surrounding `0xB0` dash tiles remain
+  byte-identical.
 - Runtime status is now separated from static translation coverage in
   `localization/runtime_verification.json`. The generated
   `docs/runtime_verification_inventory.md` tracks eight live surfaces for all
@@ -7626,3 +7628,53 @@ contains 57 safe syllables as documented below and in
   `0x5F8..0x5FF`. Scenario 21's live battle also exposes the remaining Japanese
   center-bottom label `地形`; treat it as pending battle-UI localization rather
   than a commander/class pass.
+
+### Battle Terrain Label Resource 223 (2026-07-22)
+
+- Exact pixel matching against
+  `captures/run/c1a2_s04_battle_at99_battle_02.png` proves that the third
+  centered battle row is `-地形-`, not decoration. The two kanji are tiles
+  `0x47/0x48` from compressed resource index 223. The surrounding dashes are
+  base byte-font tile `0xB0` and are intentionally untouched.
+- The Japanese resource pointer is `0x0FEB2A`, type 3, decoded length 2368
+  bytes, SHA-256
+  `975fa8f6995b6ff3e7949abd48103372cb35370795bf87812230ef1d14c28e7d`.
+  `patch_battle_ui_terrain_resource()` validates all of those values, changes
+  only tiles `0x47/0x48` to `지형`, literal-compresses the complete resource at
+  `0x2E2000`, and redirects both the original and active extended resource-table
+  entries. The reserved bank ends at `0x2E3000` and must be blank before use.
+- `tests/test_battle_ui_resources.py` locks the source identity, two-tile change
+  envelope, both pointer redirects, and failure on a changed source pointer.
+  Production `45D8` 기반 Scenario 4 clear probe `C954` was entered through the
+  actual SRAM/load/scenario-selector path. After automatic deployment, a normal
+  Elwin attack against Morgan reached the stock battle renderer. Accepted
+  evidence `captures/run/c954_s04_terrain_battle2_04.png` simultaneously shows
+  `엘윈/파이터`, `모건/소서러`, `-AT-`, `-DF-`, `-지형-`, troop counts, and
+  terrain percentages without reset, freeze, red screen, or damaged glyphs.
+  Resource/UI inventories therefore mark resource 223 live verified. Old GST
+  injection attempts and split scenario-selector cheat input were rejected and
+  must not be used as evidence.
+
+### English-ROM Title Logo Import (2026-07-22)
+
+- The requested title contract changed from the generated Korean `랑그릿사`
+  bitmap to the decorated `Langrisser` logo in the user-provided English ROM.
+  This does not change the Japanese ROM as the gameplay/event base.
+- Required local input is `roms/original/Langrisser II (English).md`. Resource
+  table index 393 points to `0x1E6E00`, where type 0 stores a 5984-byte raw tile
+  payload with SHA-256
+  `a7dc88edbc9dced635928000be897ea9dff7a680bc9ad736713171b0e577515b`.
+  Its 28x8 layout begins at English-ROM `0x0A428E`, consumes 231 bytes through
+  the `0xFF` terminator, and has SHA-256
+  `093ae5c040a8a18258c27ac9b23a0a93ad028022f68b0aa1df9252c274da43fc`.
+- The Japanese caller and destination record remain unchanged. The builder
+  validates the English source, pads its layout to the Japanese 232-byte record
+  at `0x0A429E`, literal-compresses the raw payload as type 3 at `0x2E0000`, and
+  redirects both resource tables. It does not copy English code, dialogue, or
+  other resources.
+- Production checksum `45D8` is live verified in
+  `captures/run/45d8_title_english_logo_prompt_current.png`: decorated
+  `Langrisser`, large `II`, angels, `PUSH START BUTTON`, copyright, and
+  `한글화: HSP1324` are all intact. The independent `새 게임 / 불러오기`
+  record did not change; its exact bytes remain covered by
+  `tests/test_title_main_screen.py` and the earlier 6C85 live capture.
