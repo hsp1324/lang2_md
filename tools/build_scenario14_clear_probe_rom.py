@@ -37,6 +37,13 @@ SOURCE_PLAYER_DEPLOYMENTS = (
 FIRST_ENEMY_RECORD_INDEX = 0
 LAST_ENEMY_RECORD_INDEX = 10
 LEON_RECORD_INDEX = 10
+LANGRISSER_POSITION = (16, 6)
+COMPLETION_ELWIN_POSITION = (16, 7)
+LANGRISSER_SUCCESS_TRIGGERS = {
+    0x19C872: bytes.fromhex("08 01 00 00 10 06 10 06 00 19 CB 70"),
+    0x19C87E: bytes.fromhex("08 04 00 00 10 06 10 06 00 19 CB 92"),
+    0x19C88A: bytes.fromhex("08 0A 00 00 10 06 10 06 00 19 CB B4"),
+}
 PROBE_AT = 0
 PROBE_DF = 0
 
@@ -81,8 +88,24 @@ def validate_layout(probe: bytes, source: bytes) -> None:
                 f"input Scenario 14 enemy record {index} differs from Japanese source"
             )
 
+    for offset, expected in LANGRISSER_SUCCESS_TRIGGERS.items():
+        end = offset + len(expected)
+        if source[offset:end] != expected:
+            raise ValueError(
+                f"Japanese Langrisser trigger at 0x{offset:06X} changed"
+            )
+        if probe[offset:end] != expected:
+            raise ValueError(
+                f"input Langrisser trigger at 0x{offset:06X} changed"
+            )
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    *,
+    completion_layout: bool = False,
+) -> int:
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
@@ -91,6 +114,12 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+    if completion_layout:
+        elwin = deployment_bytes((COMPLETION_ELWIN_POSITION,))
+        probe[
+            FIRST_PLAYER_DEPLOYMENT_OFFSET :
+            FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
+        ] = elwin
     return builder.update_md_checksum(probe)
 
 
@@ -105,6 +134,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument(
+        "--completion-layout",
+        action="store_true",
+        help=(
+            "move only Elwin to (16,7), one tile below the source-verified "
+            "Langrisser trigger at (16,6)"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -112,14 +149,22 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    checksum = patch_probe(
+        probe,
+        source,
+        completion_layout=args.completion_layout,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print("Scenario 14 enemy records 0..10: AT 0, DF 0, no mercenaries")
-    print(
-        "stock deployments, identities, classes, levels, hidden Leon, "
-        "and events preserved"
-    )
+    if args.completion_layout:
+        print("completion layout: Elwin moved from (23,26) to (16,7)")
+        print("Langrisser trigger (16,6), identities, and events preserved")
+    else:
+        print(
+            "stock deployments, identities, classes, levels, hidden Leon, "
+            "and events preserved"
+        )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

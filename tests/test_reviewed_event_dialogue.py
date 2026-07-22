@@ -32,6 +32,13 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             [row["english_record"] for row in primary],
             [*range(385, 396), *range(397, 511)],
         )
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            text_by_address["0x19D4A0"],
+            "늦어서 미안하다.\n아기를 안은 엘리자에게\n"
+            "{000F}의 전사를 알릴 수 없었어.",
+        )
+        self.assertNotIn("{000F}장군", text_by_address["0x19D4A0"])
 
     def test_scenario_1_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 1]

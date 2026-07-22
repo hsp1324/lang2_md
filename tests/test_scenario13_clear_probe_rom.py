@@ -225,7 +225,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x2BCA,
+            0x1257,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -233,7 +233,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x0CCD,
+            0xF35A,
         )
 
     def test_completion_layout_rejects_changed_start_entry(self):

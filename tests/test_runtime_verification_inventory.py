@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "40BC")
+        self.assertEqual(data["production_checksum"], "2749")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -511,7 +511,24 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario14["preparation"], "verified_current")
         self.assertEqual(scenario14["opening_events"], "verified_current")
         self.assertEqual(scenario14["battle_ui"], "verified_probe")
-        self.assertEqual(scenario14["turn_events"], "progressed_current")
+        self.assertEqual(scenario14["turn_events"], "verified_probe")
+        self.assertEqual(scenario14["completion"], "verified_probe")
+        for capture in (
+            "captures/run/b672_s14_turn2_event_01.png",
+            "captures/run/b672_s14_turn3_leon_01.png",
+            "captures/run/b672_s14_turn4_history_12.png",
+            "captures/run/b658_s14_langrisser_commit.png",
+            "captures/run/b658_s14_langrisser_event_25.png",
+            "captures/run/b658_s14_save_select.png",
+            "captures/run/b658_s14_next_selected.png",
+            "captures/run/b658_s15_route.png",
+            "captures/run/b658_s15_entry.png",
+            "captures/analysis/s14_render_2749/scenario_14_pages_02.png",
+        ):
+            self.assertIn(capture, scenario14["captures"])
+        self.assertIn("record 0x19D4A0", scenario14["note"])
+        self.assertIn("POINT 2200P", scenario14["note"])
+        self.assertIn("disk SRAM slot 1 at Scenario 15", scenario14["note"])
         self.assertEqual(scenario15["description"], "verified_current")
         for capture in (
             "captures/run/b4c1_s15_description_final_01.png",

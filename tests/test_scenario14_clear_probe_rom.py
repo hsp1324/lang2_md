@@ -10,12 +10,16 @@ class Scenario14ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self) -> bytearray:
+    def patched(self, *, completion_layout: bool = False) -> bytearray:
         data = bytearray(self.production)
-        probe_builder.patch_probe(data, self.source)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_layout=completion_layout,
+        )
         return data
 
-    def allowed_offsets(self) -> set[int]:
+    def allowed_offsets(self, *, completion_layout: bool = False) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
         for index in range(
@@ -31,6 +35,13 @@ class Scenario14ClearProbeTests(unittest.TestCase):
                         base + FIELD_OFFSETS["mercenaries"] + slot
                         for slot in range(6)
                     ),
+                }
+            )
+        if completion_layout:
+            allowed.update(
+                {
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 1,
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 3,
                 }
             )
         return allowed
@@ -62,6 +73,51 @@ class Scenario14ClearProbeTests(unittest.TestCase):
                 FIELD_OFFSETS["y"],
             ):
                 self.assertEqual(data[base + offset], self.source[base + offset])
+
+    def test_completion_layout_moves_only_elwin_below_langrisser(self):
+        data = self.patched(completion_layout=True)
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_layout=True),
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            (
+                probe_builder.COMPLETION_ELWIN_POSITION,
+                *probe_builder.SOURCE_PLAYER_DEPLOYMENTS[1:],
+            )
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+
+    def test_source_verified_langrisser_triggers_are_locked(self):
+        for offset, expected in probe_builder.LANGRISSER_SUCCESS_TRIGGERS.items():
+            self.assertEqual(
+                self.source[offset : offset + len(expected)],
+                expected,
+            )
+            self.assertEqual(expected[4:8], bytes((16, 6, 16, 6)))
+        self.assertEqual(probe_builder.LANGRISSER_POSITION, (16, 6))
+
+    def test_default_and_completion_checksums_are_locked(self):
+        default = bytearray(self.production)
+        completion = bytearray(self.production)
+        self.assertEqual(
+            probe_builder.patch_probe(default, self.source),
+            0x9CFF,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                completion,
+                self.source,
+                completion_layout=True,
+            ),
+            0x9CE5,
+        )
 
     def test_preserves_player_deployments_and_event_header(self):
         data = self.patched()

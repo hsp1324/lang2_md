@@ -13,7 +13,7 @@ It writes:
 roms/builds/Langrisser II (Korean JP Probe).md
 ```
 
-## Resume Dashboard (2026-07-21)
+## Resume Dashboard (2026-07-22)
 
 This section is the first stop after a Goal resume or interrupted session. Do
 not restart completed investigations merely because their details also remain
@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 40BC
+current production build checksum: 2749
 latest targeted live-verified production checksum: 6C85
 custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 614 passing
+unit tests: 629 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -7164,3 +7164,65 @@ contains 57 safe syllables as documented below and in
   by separately verified XTest Down taps and a direct-window C confirmed
   sortie. Treat unchanged or wrong-menu frames as input delivery failures
   before changing ROM data.
+
+### Scenario 14 Later Turns, Langrisser Clear, And Live Rewrap (2026-07-22)
+
+- `tools/build_scenario14_clear_probe_rom.py` now locks the Japanese and input
+  event records at `0x19C872`, `0x19C87E`, and `0x19C88A`. They identify
+  Elwin ID 1, Sherry ID 4, and Jessica ID 10 reaching the exact Langrisser
+  tile `(16,6)`, with stock handlers `0x19CB70`, `0x19CB92`, and `0x19CBB4`.
+  The separate hidden Rune Stone target is `(5,24)`. This is source-derived
+  event structure suitable for read-only editor context, not a guessed map
+  coordinate.
+- Default mode preserves all seven player deployments and every enemy
+  identity, class, level, coordinate, hidden flag, and handler while limiting
+  only enemy AT/DF and six mercenary slots. Optional `--completion-layout`
+  additionally changes only Elwin from stock `(23,26)` to `(16,7)`, one tile
+  below Langrisser. Tests lock the exact touched-byte envelope and all three
+  source trigger records. Production `40BC` produced checksums `B672` and
+  `B658`; after the isolated text correction below, current production `2749`
+  produces `9CFF` and `9CE5`.
+- The stock-coordinate `B672` run traversed the no-action first-turn orders,
+  the delayed-Leon exchange on TURN 2, Leon's arrival and Vargas/Eliza report,
+  and the Langrisser/Alhazard history discussion. It returned to valid Elwin
+  command menus without reset or freeze. Representative evidence is
+  `b672_s14_turn2_event_01.png`, `b672_s14_turn3_leon_01.png`,
+  `b672_s14_turn3_leon_06.png`, `b672_s14_turn4_history_02.png`, and
+  `b672_s14_turn4_history_12.png`. Scenario 14 `turn_events` is therefore
+  `verified_probe`; conditional outcomes remain pending.
+- The `B658` completion run used only normal commands. Elwin selected Move,
+  entered `(16,6)`, and required a second C to commit the staged action before
+  the stock handler fired. It awarded `랑그릿사`, rendered Leon/Laird retreat,
+  all allied reactions, level and class-change results, and
+  `전과보고 / POINT 2200P`. Slot 1 visibly changed from Scenario 2 to the real
+  `시나리오 15`; moving down four rows selected `다음 시나리오`, followed by
+  the route map and `빙룡병단장 이멜다` entry. Normal BlastEm termination left
+  the 8192-byte disk SRAM with `manual_slot_scenario_number()` equal to 15.
+  Captures include `b658_s14_langrisser_commit.png`,
+  `b658_s14_langrisser_event_01.png`, `_03.png`, `_08.png`, `_20.png`,
+  `_25.png`, `b658_s14_save_select.png`, `b658_s14_next_selected.png`,
+  `b658_s15_route.png`, and `b658_s15_entry.png`. Completion is now
+  `verified_probe`; this is a constrained diagnostic continuation, not a
+  production start-to-clear playthrough.
+- Live TURN 3 exposed a real layout defect at reviewed record `0x19D4A0`:
+  `{000F}장군의` wrapped as `장/군의`, and the final full stop occupied a page
+  alone. The record is now `늦어서 미안하다. / 아기를 안은 엘리자에게 /
+  {000F}의 전사를 알릴 수 없었어.`. Current checksum `2749` statically
+  renders all 162 Scenario 14 physical pages; page sheet
+  `captures/analysis/s14_render_2749/scenario_14_pages_02.png` proves the
+  corrected record fits three rows. A focused regression locks its address,
+  text, and rejection of the old glued placeholder.
+- The first scenario-selector attempt omitted `--click-window` while SDL
+  keyboard capture was disabled and entered name input. This was transport
+  failure, not ROM behavior; retrying with `--click-window --send-event`
+  succeeded. Likewise, C at the destination staged movement but did not fire
+  the handler until the action-confirm C. Preserve these distinctions to avoid
+  changing event data in response to missed host input.
+- The one text edit changed the production checksum from `40BC` to `2749`, so
+  checksum-only expectations for every production-derived diagnostic were
+  regenerated without changing their patch logic. The complete-secret item
+  inventory and Markdown matrix were also regenerated against `2749`; their
+  accepted runtime surface fingerprint remains unchanged. The complete suite
+  now contains 629 tests. Generated probe ROMs and runtime states remain
+  ignored; source, tests, inventories, captures, and these notes are the
+  durable handoff.
