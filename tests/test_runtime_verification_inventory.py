@@ -728,9 +728,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario22["conditions"], "verified_current")
         self.assertEqual(scenario22["preparation"], "verified_current")
         self.assertEqual(scenario22["opening_events"], "verified_current")
-        self.assertEqual(scenario22["turn_events"], "verified_current")
+        self.assertEqual(scenario22["battle_ui"], "verified_probe")
+        self.assertEqual(scenario22["turn_events"], "verified_probe")
+        self.assertEqual(scenario22["completion"], "verified_probe")
         self.assertIn("captures/run/c1c9_s22_opening_10.png", scenario22["captures"])
         self.assertIn("captures/run/c1c9_s22_turn1_30.png", scenario22["captures"])
+        for capture in (
+            "captures/run/123d_s22_turn4_empire_commander_hover.png",
+            "captures/run/123d_s22_turn4_bozel_hover.png",
+            "captures/run/a263_s22_turn1_elwin_lana_target.png",
+            "captures/run/a263_s22_turn1_hein_bozel_battle.png",
+            "captures/run/a263_s22_turn2_hein_magic_bernhardt_target.png",
+            "captures/run/a263_s22_after_bernhardt_fast30.png",
+            "captures/run/a263_s22_next_scenario.png",
+            "captures/run/a263_s23_description_entry.png",
+        ):
+            self.assertIn(capture, scenario22["captures"])
         self.assertEqual(scenario23["description"], "verified_current")
         for capture in (
             "captures/run/212a_s23_description_final_01.png",

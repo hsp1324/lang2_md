@@ -10,12 +10,27 @@ class Scenario22ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self) -> bytearray:
+    def patched(
+        self,
+        *,
+        completion_hp: bool = False,
+        completion_layout: bool = False,
+    ) -> bytearray:
         data = bytearray(self.production)
-        probe_builder.patch_probe(data, self.source)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_hp=completion_hp,
+            completion_layout=completion_layout,
+        )
         return data
 
-    def allowed_offsets(self) -> set[int]:
+    def allowed_offsets(
+        self,
+        *,
+        completion_hp: bool = False,
+        completion_layout: bool = False,
+    ) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
         for index in range(
@@ -32,6 +47,24 @@ class Scenario22ClearProbeTests(unittest.TestCase):
                         for slot in range(6)
                     ),
                 }
+            )
+        if completion_layout:
+            for index in range(len(probe_builder.COMPLETION_PLAYER_DEPLOYMENTS)):
+                player = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + index * 4
+                allowed.update({player + 1, player + 3})
+        if completion_hp or completion_layout:
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.COMPLETION_HP_WRAPPER,
+                    probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+                )
             )
         return allowed
 
@@ -116,6 +149,128 @@ class Scenario22ClearProbeTests(unittest.TestCase):
         self.assertEqual(
             data[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
+        )
+
+    def test_completion_hp_wrapper_only_touches_present_living_enemies(self):
+        code = probe_builder.completion_hp_wrapper_code()
+        for group in range(
+            probe_builder.FIRST_ENEMY_RUNTIME_GROUP,
+            probe_builder.LAST_ENEMY_RUNTIME_GROUP + 1,
+        ):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        self.assertEqual(code.count(bytes.fromhex("67 12")), 11)
+        self.assertEqual(code.count(bytes.fromhex("67 08")), 11)
+        self.assertEqual(code.count(bytes.fromhex("13 FC 00 01")), 11)
+        self.assertTrue(
+            code.endswith(
+                bytes.fromhex("41 F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big")
+                + bytes.fromhex("4E F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big")
+            )
+        )
+
+        data = self.patched(completion_hp=True)
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_hp=True),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.COMPLETION_HP_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.COMPLETION_HP_WRAPPER :
+                probe_builder.COMPLETION_HP_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+    def test_completion_hp_checksum_is_locked(self):
+        data = bytearray(self.production)
+        self.assertEqual(
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                completion_hp=True,
+            ),
+            0xA365,
+        )
+
+    def test_completion_layout_stages_players_without_moving_enemies(self):
+        data = self.patched(completion_layout=True)
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_layout=True),
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            probe_builder.COMPLETION_PLAYER_DEPLOYMENTS
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            enemy = layout.records_offset + index * FIXED_RECORD_SIZE
+            self.assertEqual(
+                data[
+                    enemy + FIELD_OFFSETS["x"] :
+                    enemy + FIELD_OFFSETS["y"] + 1
+                ],
+                self.source[
+                    enemy + FIELD_OFFSETS["x"] :
+                    enemy + FIELD_OFFSETS["y"] + 1
+                ],
+            )
+        adjacent_record_indexes = (1, 2, 4, 5, 6, 7, 8, 9)
+        for player, record_index in zip(
+            probe_builder.COMPLETION_PLAYER_DEPLOYMENTS,
+            adjacent_record_indexes,
+        ):
+            enemy = layout.records_offset + record_index * FIXED_RECORD_SIZE
+            enemy_position = (
+                self.source[enemy + FIELD_OFFSETS["x"]],
+                self.source[enemy + FIELD_OFFSETS["y"]],
+            )
+            self.assertEqual(
+                abs(player[0] - enemy_position[0])
+                + abs(player[1] - enemy_position[1]),
+                1,
+            )
+
+    def test_completion_layout_checksum_is_locked(self):
+        data = bytearray(self.production)
+        self.assertEqual(
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                completion_layout=True,
+            ),
+            0xA263,
         )
 
     def test_rejects_non_source_fixed_record(self):

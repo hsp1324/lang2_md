@@ -32,7 +32,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 19 | current | current | current | current | probe | progressed | probe | pending | 38 |
 | 20 | current | current | current | current | probe | progressed | probe | pending | 42 |
 | 21 | current | current | current | current | probe | probe | probe | pending | 49 |
-| 22 | current | current | current | current | pending | current | pending | pending | 37 |
+| 22 | current | current | current | current | probe | probe | probe | pending | 58 |
 | 23 | current | current | current | current | pending | current | pending | pending | 27 |
 | 24 | current | current | current | current | pending | current | pending | pending | 26 |
 | 25 | current | current | current | current | current | progressed | pending | pending | 33 |
@@ -1051,7 +1051,7 @@ Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrollin
 
 ### Scenario 22
 
-Production 42E6 verifies the Scenario 22 route map, all 23 text-bearing scrolling frames of 알하자드의 부활, and the preparation endpoint. Direct Japanese-ROM rendering confirms the dark temple, evil idol, sword on the altar, two look-alike maidens, Bozel, and the spell announcing Alhazard's imminent release. Initial current playback left 제단에는, 제단, and 그의 isolated. Source lines are normalized and wrapped at 18 characters; balanced lines now preserve 어두운 신전, place 검 한 자루 at the altar, and connect 보젤이 외는 주문은 without isolated words. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation roster pages, the complete eight-commander roster, deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. The original twelve-record fixed-placement list at 0x1827B4 remains covered by editor regressions for 리아나/클레릭, 보젤/다크마스터, and hidden 베른하르트/엠퍼러. Scenario-specific battle presentation, later turns, completion, and branches remain pending.
+Production 42E6 verifies the Scenario 22 route map, all 23 text-bearing scrolling frames of 알하자드의 부활, and the preparation endpoint. Direct Japanese-ROM rendering confirms the dark temple, evil idol, sword on the altar, two look-alike maidens, Bozel, and the spell announcing Alhazard's imminent release. Initial current playback left 제단에는, 제단, and 그의 isolated. Source lines are normalized and wrapped at 18 characters; balanced lines now preserve 어두운 신전, place 검 한 자루 at the altar, and connect 보젤이 외는 주문은 without isolated words. Production-4234 stock-layout derivative 123D then reached turn 4 with every sampled status row intact: 제국지휘관/세인트, 제국지휘관/아크메이지, 에그베르트/자베라, 보젤/다크마스터, 라나/다크프린세스, 리치/리치, and 아이언골렘/아이언골렘. Production-4234 completion-layout derivative A263 preserves all enemy coordinates, identities, classes, sides, and event handlers, stages only the eight player deployments, removes enemy mercenaries, and routes Start through a guarded one-HP helper that skips allied Liana, hidden X=FF Bernhardt, and dead groups. Live play verified 라나, 보젤, both generic commanders, 에그베르트, both 아이언골렘 groups, and revealed 베른하르트 in target rows, battles, defeat dialogue, turn events, and level-up flow. 헤인의 stock 매직애로우 defeated HP-1 베른하르트/엠퍼러 without reset. The ordinary result path reached the real 저장 UI, changed slot 1 to 시나리오 23, selected 다음 시나리오, and entered the Scenario 23 route and description. The direct event speaker 제국군지휘관 follows its distinct source string while map records remain 제국지휘관; this is not a damaged glyph. No Japanese residue, colored status cells, reset, or freeze appeared. Natural branch and defeat variants remain pending.
 
 - `captures/run/138b_s22_brief_00.png`
 - `captures/run/138b_s22_brief_06.png`
@@ -1090,6 +1090,27 @@ Production 42E6 verifies the Scenario 22 route map, all 23 text-bearing scrollin
 - `captures/run/42e6_s22_description_final_15.png`
 - `captures/run/42e6_s22_description_final_23.png`
 - `captures/run/42e6_s22_description_final_24.png`
+- `captures/run/123d_s22_turn4_lich_hover.png`
+- `captures/run/123d_s22_turn4_iron_golem_hover.png`
+- `captures/run/123d_s22_turn4_empire_commander_hover.png`
+- `captures/run/123d_s22_turn4_empire_archmage1_hover.png`
+- `captures/run/123d_s22_turn4_bozel_hover.png`
+- `captures/run/123d_s22_turn4_lana_hover.png`
+- `captures/run/123d_s22_turn4_egbert_hover.png`
+- `captures/run/a263_s22_turn1_elwin_lana_target.png`
+- `captures/run/a263_s22_turn1_elwin_lana_battle.png`
+- `captures/run/a263_s22_turn1_hein_bozel_target.png`
+- `captures/run/a263_s22_turn1_hein_bozel_battle.png`
+- `captures/run/a263_s22_after_bozel_watch_04.png`
+- `captures/run/a263_s22_sherry_archmage_battle.png`
+- `captures/run/a263_s22_lester_egbert_prebattle.png`
+- `captures/run/a263_s22_jessica_golem_battle.png`
+- `captures/run/a263_s22_turn2_event_watch_01.png`
+- `captures/run/a263_s22_turn2_hein_magic_bernhardt_target.png`
+- `captures/run/a263_s22_turn2_hein_magic_bernhardt_effect.png`
+- `captures/run/a263_s22_after_bernhardt_fast30.png`
+- `captures/run/a263_s22_next_scenario.png`
+- `captures/run/a263_s23_description_entry.png`
 
 ### Scenario 23
 

@@ -7814,3 +7814,63 @@ contains 57 safe syllables as documented below and in
   earlier saves booted to the Sega screen. They are still valid read-only RAM
   snapshots. Do not replace the authoritative starting state or repeat the
   rejected in-process load path.
+
+### Scenario 22 Turn-4 Status and Completion Handoff (2026-07-23)
+
+- The stock-layout completion derivative was rebuilt from production `4234` as
+  checksum `123D`, SHA-256
+  `c291c0d3728d380f3f297364e1a9b499f2b1564c1bb6ed02992e54874afa8dce`.
+  Its source Scenario 22 fixed records remain byte-identical except for
+  documented AT/DF zeroing and enemy mercenary removal. Normal deployments and
+  all coordinates, identities, classes, sides, hidden flags, and handlers are
+  preserved.
+- The live `123D` run reached turn 4. Direct cursor checks retained
+  `제국지휘관/세인트`, `제국지휘관/아크메이지`,
+  `에그베르트/자베라`, `보젤/다크마스터`,
+  `라나/다크프린세스`, `리치/리치`, and
+  `아이언골렘/아이언골렘`. This includes the previously mobile-sensitive
+  `스` and `터` glyphs after several enemy phases and battles. Representative
+  captures are the `captures/run/123d_s22_turn4_*_hover.png` files. Because the
+  probe removes enemy mercenaries, it is not evidence for enemy soldier rows.
+- `tools/build_scenario22_clear_probe_rom.py` now supports `--completion-hp`
+  and `--completion-layout`. Both install a guarded Start-menu wrapper at
+  `0x3FEF00`; it scans runtime groups 9..19 at `$FFFF603C` with stride `0x60`,
+  skips X=`0xFF` hidden groups and HP=0 dead groups, and changes only present,
+  living enemy commander HP to one before tail-calling stock Start entry
+  `0x022C1E`. The layout option changes only the eight deployment coordinates
+  at the source-validated `0x182794` table. Enemy coordinates remain untouched.
+  Tests lock all allowed offsets, wrapper operands, hidden-group guards, and
+  checksums `A365` (HP only) and `A263` (layout plus HP).
+- Accepted completion ROM
+  `roms/builds/Langrisser II (Scenario 22 Completion Layout Probe).md` is
+  checksum `A263`, SHA-256
+  `d985cd2153784ca7332e8f5805814361b9a4085723d5388800eef0d373ec4822`.
+  The actual Scenario 21 save SRAM was copied into the ROM-specific save
+  directory before launch. Opening Start proved allied `리아나/클레릭`
+  remained HP 10, visible enemies became HP 1, and hidden
+  `베른하르트/엠퍼러` remained HP 10 at `(255,255)`.
+- Live play defeated 라나, 보젤, both generic imperial commanders,
+  에그베르트, both 아이언골렘 groups, and the event-revealed 베른하르트.
+  Target rows, battle panels, death dialogue, turn events, and level-up pages
+  remained Korean. Hein's stock `매직애로우` killed the HP-1 Bernhardt and
+  displayed intact `베른하르트/엠퍼러`. The direct dialogue speaker
+  `제국군지휘관` at the established direct-string surface preserves a
+  distinct Japanese source label; map/status records correctly remain
+  `제국지휘관`, so do not merge these without rechecking the source.
+- The ordinary completion path reached the real `저장` screen with slot 1
+  changed to `시나리오 23`, selected `다음 시나리오`, and entered the
+  Scenario 23 route and description. Representative evidence is
+  `captures/run/a263_s22_after_bernhardt_fast30.png`,
+  `captures/run/a263_s22_next_scenario.png`, and
+  `captures/run/a263_s23_description_entry.png`. The flushed SRAM is
+  `captures/runtime/s22_completion_a263/.local/share/blastem/Langrisser II
+  (Scenario 22 Completion Layout Probe)/save.sram`, SHA-256
+  `0be2b99a5854d6afea290701fe2b453ccd19aa57eb30d8c62925cb03893ba452`.
+- Rejected runtime paths to avoid repeating: the first A263 relaunch sent menu
+  input before the title was ready and selected `새 게임`; soft reset plus
+  screen-gated input recovered it. Preparation-page detector signatures did
+  not recognize the long Scenario 22 briefing and spilled confirmations into
+  equipment purchases. These changed only the isolated diagnostic SRAM. The
+  accepted run used visible page boundaries, selected the equipment `END`
+  row, then `지휘관배치`, `자동배치`, and `출격`. Direct GST writes and GST
+  relaunch were not used.
