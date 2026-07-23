@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "4234")
+        self.assertEqual(data["production_checksum"], "AD99")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -758,9 +758,24 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario23["conditions"], "verified_current")
         self.assertEqual(scenario23["preparation"], "verified_current")
         self.assertEqual(scenario23["opening_events"], "verified_current")
+        self.assertEqual(scenario23["battle_ui"], "verified_probe")
         self.assertEqual(scenario23["turn_events"], "verified_current")
+        self.assertEqual(scenario23["completion"], "verified_probe")
         self.assertIn("captures/run/544b_s23_opening_14.png", scenario23["captures"])
         self.assertIn("captures/run/544b_s23_turn1_39.png", scenario23["captures"])
+        for capture in (
+            "captures/run/ad99_s23_stock_enemy0_dragonlord.png",
+            "captures/run/ad99_s23_stock_enemy0_soldier_left.png",
+            "captures/run/ad99_s23_stock_enemy1_merc_bottom_left.png",
+            "captures/run/ad99_s23_stock_laird_merc.png",
+            "captures/run/ad99_s23_stock_saint_merc_upper_right.png",
+            "captures/run/ad99_s23_stock_wizard_merc_right.png",
+            "captures/run/ad99_s23_turn2_cluster_unit.png",
+            "captures/run/ad99_s23_turn2_cluster_commander.png",
+        ):
+            self.assertIn(capture, scenario23["captures"])
+        self.assertIn("all stock Scenario 23 enemy records", scenario23["note"])
+        self.assertIn("Five one-second animation-cycle captures", scenario23["note"])
         self.assertEqual(scenario24["description"], "verified_current")
         for capture in (
             "captures/run/212a_s24_description_current_01.png",

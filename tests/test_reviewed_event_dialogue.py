@@ -264,6 +264,21 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertNotIn("{0001}들", rows["0x1AE9F6"])
 
+    def test_scenario_23_completion_and_defeat_lines_preserve_context(self):
+        rows = {
+            row["address"]: row["text"]
+            for row in self.rows
+            if row["scenario"] == 23
+        }
+        self.assertEqual(rows["0x1AECEA"], "크윽…")
+        self.assertEqual(rows["0x1AECF6"], "으아악…")
+        self.assertEqual(
+            rows["0x1AEE1E"],
+            "성스러운 지팡이 획득!",
+        )
+        self.assertNotIn("바보야", rows["0x1AECEA"])
+        self.assertNotIn("빼앗겼", rows["0x1AEE1E"])
+
     def test_scenario_25_opening_preserves_japanese_meaning(self):
         rows = {
             row["address"]: row["text"]

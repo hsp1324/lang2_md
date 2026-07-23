@@ -7899,3 +7899,79 @@ contains 57 safe syllables as documented below and in
   accepted run used visible page boundaries, selected the equipment `END`
   row, then `지휘관배치`, `자동배치`, and `출격`. Direct GST writes and GST
   relaunch were not used.
+
+### Scenario 23 Battle, Holy Rod, And Completion Handoff (2026-07-23)
+
+- `tools/build_scenario23_clear_probe_rom.py` now has two separate completion
+  aids in addition to its source-identical stock layout. `--completion-layout`
+  stages all nine player deployments directly below source enemy records
+  0..8. `--completion-target-only` stages only Elwin below source record 0
+  `제국지휘관/드래곤로드` and hides records 1..10 without moving any enemy
+  coordinate or changing an identity, class, level, side, or event handler.
+  The two modes are mutually exclusive and ten focused tests lock every
+  permitted byte.
+- Both modes install a guarded Start-menu wrapper at `0x3FEF00`. Read-only GST
+  inspection of the live map established that Scenario 23 players occupy
+  runtime groups 0..8 and fixed enemies occupy groups 9..19 at
+  `$FFFF603C`, stride `0x60`. The wrapper skips X=`0xFF` hidden and HP=0 dead
+  groups, lowers only present living enemies to HP1, and tail-calls stock Start
+  entry `0x022C1E`. The rejected first implementation scanned groups 10..20:
+  it left record 0 at HP10 while records 1..10 became HP1. Do not repeat that
+  range.
+- The all-enemy diagnostic playback visibly retained
+  `제국지휘관/드래곤로드`, `레아드/실버나이트`,
+  `제국지휘관/팔라딘`, and `제국지휘관/위저드` after deployment and the
+  first enemy phase. Battles retained `엘윈/로드`, `헤인/샤먼`,
+  `드래곤로드`, `팔라딘`, `-AT-`, `-DF-`, and `-지형-`. The completion
+  probe removes enemy mercenaries, so these sessions are not enemy-soldier
+  evidence. Representative captures are
+  `captures/run/84e8b_s23_dragonlord_detail_hp1.png`,
+  `captures/run/f3be_s23_hein_paladin_battle_start.png`, and
+  `captures/run/f0fc_s23_battle.png`.
+- Completion-target checksum `8597` performed the complete stock resolution:
+  Dragon Lord defeat, Holy Rod search, Langrisser unsealing, all level-up
+  pages, `전과보고`, the real `저장` UI, slot 1 changing to
+  `시나리오 24`, `다음 시나리오`, and the Scenario 24 route. The flushed
+  SRAM is
+  `captures/runtime/s23_completion_8597/.local/share/blastem/Langrisser II
+  (Scenario 23 Completion Target Probe)/save.sram`, SHA-256
+  `35ed399b083ed249e102911120c22d8023344bec5fa7f8d9a7df0d6801663f26`.
+  No reset, freeze, red screen, Japanese residue, or damaged name/class cell
+  appeared.
+- Live completion exposed two reviewed-dialogue errors. English record 1529's
+  `The Holy Rod was taken!` is an acquisition notification after the soldier
+  finds it, not a statement that the party lost it; the old
+  `지팡이를 빼앗겼어!` is now the capacity-safe
+  `성스러운 지팡이 획득!`. Enemy reactions 1518/1519 now distinguish
+  `크윽…` and `으아악…` instead of the unrelated `바보야…` and duplicate
+  groan. Tests lock all three addresses. Current production-derived target
+  probe `F0FC` replays the corrected acquisition line at
+  `captures/run/f0fc_s23_holy_rod_acquired2.png`.
+- Current production is checksum `AD99`, SHA-256
+  `55b6db65eccb1aea573d7ae55305bdaec078e10476b0b4d8c90fa0a967e4627e`.
+  Its Scenario 23 default, all-enemy completion-layout, and target-only probes
+  are respectively `5FC9`, `F04D`, and `F0FC`, with SHA-256
+  `f01bda94fc73dc8978167e3beae2a12ab38a929614d99ee731d37e3af551a0dd`,
+  `e514ff4a86e3a93a94a86eb21463a3626bf97df3e1de1b631aba8f954eae2e8f`,
+  and `ea8573ebae275153490d441db6f7f1a13ca1f31d7d2564ebe7e5ed2982b5997a`.
+  Scenario 23 battle UI and completion are `verified_probe`; natural alternate
+  branches and later ordinary turns remain pending.
+- A separate production-`AD99` playback retained every stock Scenario 23
+  enemy commander and mercenary. It loaded the real Scenario 23 manual slot
+  produced by the earlier Scenario 22 completion; only the allied saved AT/DF
+  values were diagnostic. Turn 1 map-status inspection visibly retained
+  `제국지휘관/드래곤로드`, `팔라딘`, `세인트`, `위저드`,
+  `레아드/실버나이트`, and enemy soldiers `엘리멘탈`, `팔랑크스`,
+  `헤비호스맨`, `로얄호스`, `다크엘프`, `버서커`, and `발리스타`.
+  After the full stock enemy phase reached Turn 2,
+  `제국지휘관/위저드` and `발리스타` remained intact. Five idle captures
+  of the same Ballista at 0/1/2/3/5 seconds had byte-identical name/class
+  crops, so no delayed animated-cell mutation appeared in that sample.
+  Representative captures are
+  `captures/run/ad99_s23_stock_enemy0_dragonlord.png`,
+  `captures/run/ad99_s23_stock_enemy1_merc_bottom_left.png`,
+  `captures/run/ad99_s23_stock_laird_merc.png`,
+  `captures/run/ad99_s23_stock_saint_merc_upper_right.png`,
+  `captures/run/ad99_s23_stock_wizard_merc_right.png`,
+  `captures/run/ad99_s23_turn2_cluster_unit.png`, and
+  `captures/run/ad99_s23_turn2_cluster_commander.png`.

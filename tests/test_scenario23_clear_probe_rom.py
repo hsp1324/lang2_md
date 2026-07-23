@@ -15,7 +15,30 @@ class Scenario23ClearProbeTests(unittest.TestCase):
         probe_builder.patch_probe(data, self.source)
         return data
 
-    def allowed_offsets(self) -> set[int]:
+    def completion_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_layout=True,
+        )
+        return data
+
+    def completion_target_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_target_only=True,
+        )
+        return data
+
+    def allowed_offsets(
+        self,
+        *,
+        completion_layout: bool = False,
+        completion_target_only: bool = False,
+    ) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
         for index in range(
@@ -33,6 +56,46 @@ class Scenario23ClearProbeTests(unittest.TestCase):
                     ),
                 }
             )
+        if completion_layout:
+            size = len(
+                probe_builder.deployment_bytes(
+                    probe_builder.COMPLETION_PLAYER_DEPLOYMENTS
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET,
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + size,
+                )
+            )
+        if completion_target_only:
+            size = len(
+                probe_builder.deployment_bytes(
+                    (probe_builder.COMPLETION_ELWIN_POSITION,)
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET,
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + size,
+                )
+            )
+            for index in probe_builder.COMPLETION_HIDDEN_RECORD_INDEXES:
+                allowed.add(layout.records_offset + index * FIXED_RECORD_SIZE)
+        if completion_layout or completion_target_only:
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.COMPLETION_HP_WRAPPER,
+                    probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+                )
+            )
         return allowed
 
     def test_changes_only_declared_enemy_fields_and_checksum(self):
@@ -43,6 +106,18 @@ class Scenario23ClearProbeTests(unittest.TestCase):
             if before != after
         }
         self.assertLessEqual(changed, self.allowed_offsets())
+
+    def test_completion_layout_changes_only_declared_fields(self):
+        data = self.completion_patched()
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_layout=True),
+        )
 
     def test_weakens_all_enemy_records_without_changing_identity(self):
         data = self.patched()
@@ -125,6 +200,155 @@ class Scenario23ClearProbeTests(unittest.TestCase):
             data[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
         )
+
+    def test_completion_layout_stages_only_players_beside_enemy_groups(self):
+        data = self.completion_patched()
+        expected = probe_builder.deployment_bytes(
+            probe_builder.COMPLETION_PLAYER_DEPLOYMENTS
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        self.assertEqual(data[start : start + len(expected)], expected)
+
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        enemy_positions = set()
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            coordinates = tuple(
+                self.source[
+                    base + FIELD_OFFSETS["x"] : base + FIELD_OFFSETS["y"] + 1
+                ]
+            )
+            enemy_positions.add(coordinates)
+            self.assertEqual(
+                data[
+                    base + FIELD_OFFSETS["x"] : base + FIELD_OFFSETS["y"] + 1
+                ],
+                self.source[
+                    base + FIELD_OFFSETS["x"] : base + FIELD_OFFSETS["y"] + 1
+                ],
+            )
+        self.assertTrue(
+            set(probe_builder.COMPLETION_PLAYER_DEPLOYMENTS).isdisjoint(
+                enemy_positions
+            )
+        )
+        for player, record_index in zip(
+            probe_builder.COMPLETION_PLAYER_DEPLOYMENTS,
+            range(9),
+        ):
+            base = layout.records_offset + record_index * FIXED_RECORD_SIZE
+            enemy = (
+                self.source[base + FIELD_OFFSETS["x"]],
+                self.source[base + FIELD_OFFSETS["y"]],
+            )
+            self.assertEqual(player, (enemy[0], enemy[1] + 1))
+
+    def test_completion_layout_installs_present_living_enemy_hp_wrapper(self):
+        code = probe_builder.completion_hp_wrapper_code()
+        for group in range(
+            probe_builder.FIRST_ENEMY_RUNTIME_GROUP,
+            probe_builder.LAST_ENEMY_RUNTIME_GROUP + 1,
+        ):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        self.assertEqual(code.count(bytes.fromhex("67 12")), 11)
+        self.assertEqual(code.count(bytes.fromhex("67 08")), 11)
+        self.assertEqual(code.count(bytes.fromhex("13 FC 00 01")), 11)
+        self.assertTrue(
+            code.endswith(
+                bytes.fromhex("41 F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big")
+                + bytes.fromhex("4E F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big")
+            )
+        )
+
+        data = self.completion_patched()
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.COMPLETION_HP_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.COMPLETION_HP_WRAPPER :
+                probe_builder.COMPLETION_HP_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+    def test_completion_target_only_preserves_target_and_hides_other_records(self):
+        data = self.completion_target_patched()
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_target_only=True),
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            (probe_builder.COMPLETION_ELWIN_POSITION,)
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            self.assertEqual(
+                data[
+                    base + FIELD_OFFSETS["x"] :
+                    base + FIELD_OFFSETS["y"] + 1
+                ],
+                self.source[
+                    base + FIELD_OFFSETS["x"] :
+                    base + FIELD_OFFSETS["y"] + 1
+                ],
+            )
+            if index == probe_builder.COMPLETION_TARGET_RECORD_INDEX:
+                self.assertEqual(data[base] & 0x80, self.source[base] & 0x80)
+            else:
+                self.assertEqual(data[base] & 0x80, 0x80)
+
+        code = probe_builder.completion_hp_wrapper_code()
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.COMPLETION_HP_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.COMPLETION_HP_WRAPPER :
+                probe_builder.COMPLETION_HP_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+    def test_rejects_combined_completion_modes(self):
+        data = bytearray(self.production)
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                completion_layout=True,
+                completion_target_only=True,
+            )
 
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)

@@ -214,7 +214,7 @@ class Scenario22ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_hp=True,
             ),
-            0xA365,
+            0x0ECA,
         )
 
     def test_completion_layout_stages_players_without_moving_enemies(self):
@@ -270,7 +270,7 @@ class Scenario22ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xA263,
+            0x0DC8,
         )
 
     def test_rejects_non_source_fixed_record(self):
