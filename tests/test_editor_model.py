@@ -1,0 +1,68 @@
+from pathlib import Path
+import unittest
+
+from editor.model import class_change_editor_model, item_editor_model
+ROOT = Path(__file__).resolve().parents[1]
+JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+
+
+class EditorModelTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.japanese = JP_ROM.read_bytes()
+        cls.korean = KO_ROM.read_bytes()
+
+    def test_item_model_has_all_prices_effects_and_metadata(self):
+        model = item_editor_model(self.korean)
+        self.assertEqual(len(model["items"]), 37)
+        self.assertEqual(model["items"][0]["name"], "단검")
+        self.assertEqual(model["items"][0]["purchase_price"], 50)
+        self.assertEqual(model["items"][30]["name"], "크라운")
+        self.assertEqual(
+            [effect["effect_type"] for effect in model["items"][30]["effects"][:3]],
+            [3, 4, 5],
+        )
+        self.assertIn(
+            {"id": 6, "name": "마법 사거리"},
+            model["effect_types"],
+        )
+
+    def test_class_change_model_has_ten_complete_commander_chains(self):
+        model = class_change_editor_model(self.korean, self.japanese)
+        self.assertEqual(len(model["commanders"]), 10)
+        self.assertEqual(model["commanders"][0]["name"], "엘윈")
+        self.assertTrue(
+            all(len(commander["transitions"]) == 10
+                for commander in model["commanders"])
+        )
+        self.assertEqual(
+            model["commanders"][0]["transitions"][0],
+            {
+                "index": 0,
+                "current_class": 1,
+                "candidates": [4, 5, 10],
+            },
+        )
+        self.assertEqual(model["preview_class_ids"][:3], [1, 2, 3])
+
+    def test_committed_preview_manifest_is_self_contained(self):
+        import json
+        from PIL import Image
+
+        preview_dir = ROOT / "editor/static/class-previews"
+        manifest = json.loads(
+            (preview_dir / "manifest.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["asset_count"], 37)
+        self.assertEqual(manifest["pending_class_ids"], [1, 2, 3])
+        self.assertEqual(len(manifest["assets"]), manifest["asset_count"])
+        for entry in manifest["assets"].values():
+            path = preview_dir / entry["file"]
+            self.assertTrue(path.is_file(), path)
+            with Image.open(path) as image:
+                self.assertEqual(image.size, (32, 40))
+
+
+if __name__ == "__main__":
+    unittest.main()

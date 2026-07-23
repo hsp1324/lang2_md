@@ -89,7 +89,7 @@
 - `tools/build_scenario30_clear_probe_rom.py`: 비밀 시나리오 X3의 일본판 헤더·9명 배치표·적군 11명을 검증하고 AT/DF·용병만 제한합니다. 그레이트드래곤과 일반 마녀/메이지, 숨은 마녀/세인트의 서로 다른 원본 레코드 및 이벤트를 보존합니다.
 - `tools/build_scenario31_clear_probe_rom.py`: 비밀 시나리오 X4의 일본판 헤더·10명 배치표·전투 레코드 10개를 검증하고 기본 모드에서는 AT/DF·용병만 제한합니다. `--compact-layout`은 원본 클래스·진영을 유지한 전투 UI 진단용이고, `--completion-layout`은 원본 베른하르트 레코드 하나만 엘윈 옆에 둬 최종 보스 사망·전과보고·저장 핸들러를 확인하는 비배포 진단용입니다. 후자의 레코드 수/좌표는 이름·클래스·진영 근거로 사용하지 않습니다.
 - `tools/game_genie.py`, `tools/build_game_genie_probe_rom.py`: 명시한 Genesis Game Genie 코드를 주소/워드로 해석하고 무시되는 실험 ROM을 만듭니다. 코드 호환 리비전을 자동 판별하지 않으며, 프로젝트 원본은 일본판 REV00입니다. REV01용 공개 코드는 주소가 정상적으로 보여도 REV00을 리셋시킬 수 있으므로 프리셋을 제공하지 않습니다.
-- `editor/server.py`: 클래스, LV, AT, DF, 용병 구성을 수정하는 로컬 시나리오 편집기입니다.
+- `editor/server.py`: 시나리오 배치, 아이템 능력치, 클래스 체인지 경로를 수정하는 로컬 게임 데이터 편집기입니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
 - `script_extract/korean_records_google.json`: 기계 번역 기반 전체 대사 레코드입니다.
@@ -115,7 +115,7 @@ python3 scripts/build_korean_jp_probe.py
 roms/builds/Langrisser II (Korean).md
 ```
 
-## 시나리오 편집기
+## 게임 데이터 편집기
 
 에뮬레이터 없이 로컬 편집기를 실행합니다.
 
@@ -123,13 +123,15 @@ roms/builds/Langrisser II (Korean).md
 python3 editor/server.py
 ```
 
-브라우저에서 `http://127.0.0.1:8765`를 엽니다. 31개 시나리오를 선택할 수 있고, 현재 확정된 필드인 클래스, LV, AT, DF, 용병 6칸만 수정합니다. `편집 ROM 빌드`는 원본을 덮어쓰지 않고 다음 파일을 만듭니다.
+브라우저에서 `http://127.0.0.1:8765`를 엽니다. 탭에서 31개 시나리오의 클래스·LV·AT·DF·용병 6칸, 37개 아이템의 가격·효과 4칸, 10명 지휘관의 클래스 체인지 경로를 수정할 수 있습니다. 클래스 선택 옆에는 원본 클래스 체인지 화면에서 추출한 편성 그림이 표시됩니다. `편집 ROM 빌드`는 원본을 덮어쓰지 않고 다음 파일을 만듭니다.
 
 ```text
-roms/builds/Langrisser II (Korean Scenario Edit).md
+roms/builds/Langrisser II (Korean Editor Edit).md
 ```
 
 시나리오 포인터 표는 `0x18005E`이며 각 헤더의 `+0x0C`가 고정 배치 목록을 가리킵니다. 목록은 2바이트 개수 뒤에 36바이트 레코드가 이어집니다. 쓰기가 검증되어 현재 노출한 필드는 레벨 `+0x0E`, AT/DF `+0x12/+0x13`, 클래스 `+0x1B`, 용병 6칸 `+0x1E..+0x23`입니다. 이름 ID `+0x1A`, 좌표, 이벤트 플래그는 문맥 표시용으로만 읽으며 의미와 파급 범위가 완전히 확정되기 전에는 쓰지 않습니다.
+
+아이템 효과 표는 `0x060530`이며 ID마다 `(효과 종류, 값)` 4쌍, 총 8바이트입니다. 가격 표는 `0x0A1D32`이며 ROM 값에 10을 곱한 값이 게임에서 P로 표시됩니다. 경험치 2배, 특수 사거리, 룬스톤, MP 2배처럼 별도 코드에 하드코딩된 효과는 아직 읽기 전용으로 표시합니다. 클래스 체인지 포인터 표는 `0x08253A`이며 엘윈부터 제시카까지 10명의 10개 전이를 편집합니다. 자세한 구조와 제한은 `docs/editor_data_model.md`에 기록했습니다.
 
 GUI와 같은 검증 데이터 계층을 JSON으로 확인하거나 다른 편집기에서 재사용하려면 다음처럼 실행합니다. `--scenario`를 반복하지 않으면 31개 전부를 내보냅니다.
 
@@ -148,7 +150,8 @@ python3 tools/scenario_data.py --scenario 11 --output captures/analysis/scenario
 정적 검증:
 
 ```bash
-python3 -m unittest tests.test_scenario_data tests.test_jp_event_inventory tests.test_jp_global_inventory
+python3 -m unittest tests.test_editor_model tests.test_item_data tests.test_class_change_data tests.test_scenario_data
+python3 -m unittest tests.test_jp_event_inventory tests.test_jp_global_inventory
 python3 tools/jp_event_inventory.py
 python3 tools/jp_global_inventory.py
 python3 tools/jp_resource_inventory.py

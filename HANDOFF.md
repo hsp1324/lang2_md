@@ -8094,3 +8094,47 @@ contains 57 safe syllables as documented below and in
   `captures/run/ad99_s25_enemy_paladin_merc_hover.png`,
   `captures/run/ad99_s25_turn_counter_after_phase.png`, and
   `captures/run/ad99_s25_turn2_nightmaster_hover_precise.png`.
+
+### Integrated Game Data Editor (2026-07-23)
+
+- `editor/server.py` is no longer scenario-only. Its three tabs edit fixed
+  scenario deployments, all 37 item price/effect records, and all ten
+  commander class-change chains. It writes
+  `roms/builds/Langrisser II (Korean Editor Edit).md` and never overwrites
+  the selected source ROM.
+- Item effects begin at `0x060530`; each item ID owns four two-byte
+  `(effect type, value)` pairs. Prices begin at `0x0A1D32` as big-endian
+  words whose displayed value is ten times the stored value. The common
+  effect application loop is at `0x0281DA`. `tools/item_data.py` maps and
+  validates AT, DF, MV, command range, A/D correction, magic range/damage,
+  magic resistance, and summon-ID effects. Hardcoded EXP x2, attack-range,
+  Rune Stone, and MP x2 behavior is displayed read-only and must not be
+  inferred from the generic table.
+- The class-change pointer table remains `0x08253A`. Each of the ten
+  commanders has nine eight-byte `current + 3 candidates` transitions and
+  one `current + final candidate + FFFF` transition.
+  `tools/class_change_data.py` now patches these chains while rejecting
+  duplicate current classes, invalid class IDs, wrong row shapes, or changed
+  commander ordering.
+- `tools/build_class_preview_assets.py` crops the formation preview shown in
+  verified class-change candidate screens into committed 32x40 PNGs. There
+  are 37 source-backed previews. Fighter, Cleric, and Warlock never occur as
+  upgrade candidates in the stock route, so the editor explicitly says the
+  source picture is unavailable instead of inventing one. Ranger and High
+  Master have blank formation panes in the source screens; their committed
+  previews intentionally preserve that.
+- The live API mutation check changed Scenario 26 record 0 LV from 5 to 6,
+  Knife price units from 5 to 6, and Elwin's first candidates from
+  `(4,5,10)` to `(5,4,10)` in one build. Reading the result through the three
+  ROM data layers returned exactly those values. A following unchanged
+  integrated build was byte-identical to the current 4 MiB Korean source,
+  checksum `2A66`, SHA-256
+  `17aeac87cd8edb8b5ab735388ff476775a3b100db5ad7c110cecdce2e4936686`.
+  This checksum belongs to the current uncommitted Scenario 26 diagnostic
+  source and is not approval of that production experiment.
+- Static verification:
+  `python3 -m unittest tests.test_editor_model tests.test_item_data
+  tests.test_class_change_data tests.test_scenario_data` passes 46 tests;
+  `python3 -m py_compile` passes all new Python modules; and
+  `node --check editor/static/app.js` passes. The complete address map and
+  safety boundary are in `docs/editor_data_model.md`.

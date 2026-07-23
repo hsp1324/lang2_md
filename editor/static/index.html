@@ -3,51 +3,107 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>랑그릿사 II 시나리오 편집기</title>
+  <title>랑그릿사 II 게임 데이터 편집기</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <header class="topbar">
     <div>
-      <h1>랑그릿사 II 시나리오 편집기</h1>
+      <h1>랑그릿사 II 게임 데이터 편집기</h1>
       <p id="sourcePath">ROM 정보를 읽는 중</p>
     </div>
     <button id="buildButton" type="button">편집 ROM 빌드</button>
   </header>
 
   <main>
-    <section class="controls" aria-label="시나리오 선택">
-      <label>시나리오
-        <select id="scenarioSelect"></select>
-      </label>
+    <section class="controls sourceControls" aria-label="기준 ROM 선택">
       <label>기준 ROM
         <select id="romSelect">
           <option value="korean">한국어 최신 빌드</option>
           <option value="japanese">일본어 원본</option>
         </select>
       </label>
-      <label>표시
-        <select id="filterSelect">
-          <option value="all">전체 배치</option>
-          <option value="enemy">적군</option>
-          <option value="event">NPC / 이벤트</option>
-        </select>
-      </label>
-      <span id="recordSummary" class="summary"></span>
     </section>
 
+    <nav class="tabs" aria-label="편집 영역">
+      <button class="tab active" type="button" data-tab="scenario">시나리오</button>
+      <button class="tab" type="button" data-tab="items">아이템</button>
+      <button class="tab" type="button" data-tab="classes">클래스 체인지</button>
+    </nav>
     <div id="notice" class="notice" hidden></div>
-    <section class="tableWrap" aria-label="배치 데이터">
-      <table>
-        <thead>
-          <tr>
-            <th>배치</th><th>이름</th><th>클래스</th><th>LV</th>
-            <th>AT</th><th>DF</th><th>좌표</th><th>용병 1</th><th>용병 2</th><th>용병 3</th>
-            <th>용병 4</th><th>용병 5</th><th>용병 6</th><th>ROM</th>
-          </tr>
-        </thead>
-        <tbody id="recordsBody"></tbody>
-      </table>
+
+    <section id="scenarioPanel" class="tabPanel active">
+      <div class="controls">
+        <label>시나리오
+          <select id="scenarioSelect"></select>
+        </label>
+        <label>표시
+          <select id="filterSelect">
+            <option value="all">전체 배치</option>
+            <option value="enemy">적군</option>
+            <option value="event">NPC / 이벤트</option>
+          </select>
+        </label>
+        <span id="recordSummary" class="summary"></span>
+      </div>
+      <div class="tableWrap" aria-label="배치 데이터">
+        <table class="scenarioTable">
+          <thead>
+            <tr>
+              <th>배치</th><th>이름</th><th>클래스</th><th>LV</th>
+              <th>AT</th><th>DF</th><th>좌표</th><th>용병 1</th><th>용병 2</th><th>용병 3</th>
+              <th>용병 4</th><th>용병 5</th><th>용병 6</th><th>ROM</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="itemsPanel" class="tabPanel">
+      <div class="controls">
+        <label>분류
+          <select id="itemFilter">
+            <option value="all">전체 아이템</option>
+            <option value="무기">무기</option>
+            <option value="방어구">방어구</option>
+            <option value="장신구">장신구</option>
+          </select>
+        </label>
+        <span id="itemSummary" class="summary"></span>
+      </div>
+      <div class="tableWrap" aria-label="아이템 데이터">
+        <table class="itemTable">
+          <thead>
+            <tr>
+              <th>ID</th><th>분류</th><th>이름</th><th>가격</th>
+              <th>효과 1</th><th>효과 2</th><th>효과 3</th><th>효과 4</th>
+              <th>별도 동작</th><th>ROM</th>
+            </tr>
+          </thead>
+          <tbody id="itemsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="classesPanel" class="tabPanel">
+      <div class="controls">
+        <label>지휘관
+          <select id="commanderSelect"></select>
+        </label>
+        <span id="classSummary" class="summary"></span>
+      </div>
+      <div class="tableWrap" aria-label="클래스 체인지 경로">
+        <table class="classTable">
+          <thead>
+            <tr>
+              <th>단계</th><th>현재 클래스 / 편성</th><th>후보 1</th>
+              <th>후보 2</th><th>후보 3</th><th>ROM</th>
+            </tr>
+          </thead>
+          <tbody id="classRoutesBody"></tbody>
+        </table>
+      </div>
     </section>
   </main>
   <script src="/app.js"></script>

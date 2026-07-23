@@ -1,0 +1,381 @@
+{
+  "generated_from": "localization/class_change_chains.json",
+  "asset_count": 37,
+  "assets": {
+    "4": {
+      "file": "04.png",
+      "source": "captures/run/d1d7_class_change_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "5": {
+      "file": "05.png",
+      "source": "captures/run/d1d7_class_change_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "6": {
+      "file": "06.png",
+      "source": "captures/run/8e90_c4_s01_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "7": {
+      "file": "07.png",
+      "source": "captures/run/8e97_c9_s01_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "8": {
+      "file": "08.png",
+      "source": "captures/run/8e91_c2_s02_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "9": {
+      "file": "09.png",
+      "source": "captures/run/8ef4_c5_s03_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "10": {
+      "file": "0A.png",
+      "source": "captures/run/d1d7_class_change_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "11": {
+      "file": "0B.png",
+      "source": "captures/run/8ea5_c1_s04_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "12": {
+      "file": "0C.png",
+      "source": "captures/run/8ea5_c1_s04_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "13": {
+      "file": "0D.png",
+      "source": "captures/run/8ea1_c1_s05_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "14": {
+      "file": "0E.png",
+      "source": "captures/run/8ea7_c4_s04_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "15": {
+      "file": "0F.png",
+      "source": "captures/run/8ea7_c4_s04_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "16": {
+      "file": "10.png",
+      "source": "captures/run/8eae_c9_s05_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "17": {
+      "file": "11.png",
+      "source": "captures/run/8eb4_c2_s0a_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "18": {
+      "file": "12.png",
+      "source": "captures/run/8ea5_c1_s04_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "19": {
+      "file": "13.png",
+      "source": "captures/run/8eae_c1_s0a_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "20": {
+      "file": "14.png",
+      "source": "captures/run/8ed8_c1_s13_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "21": {
+      "file": "15.png",
+      "source": "captures/run/8ece_c2_s11_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "22": {
+      "file": "16.png",
+      "source": "captures/run/8ed2_c2_s0d_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "23": {
+      "file": "17.png",
+      "source": "captures/run/8edb_c1_s12_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "24": {
+      "file": "18.png",
+      "source": "captures/run/8ece_c2_s12_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "25": {
+      "file": "19.png",
+      "source": "captures/run/8ed6_c2_s13_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "26": {
+      "file": "1A.png",
+      "source": "captures/run/8edb_c1_s12_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "27": {
+      "file": "1B.png",
+      "source": "captures/run/8ed8_c1_s0b_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "28": {
+      "file": "1C.png",
+      "source": "captures/run/8ed5_c1_s0c_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "29": {
+      "file": "1D.png",
+      "source": "captures/run/8ed9_c1_s0d_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "30": {
+      "file": "1E.png",
+      "source": "captures/run/8ee1_c4_s0e_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "31": {
+      "file": "1F.png",
+      "source": "captures/run/8ee5_c9_s0d_candidate3.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "32": {
+      "file": "20.png",
+      "source": "captures/run/8edb_c1_s12_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "33": {
+      "file": "21.png",
+      "source": "captures/run/8ed7_c4_s0b_candidate2.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "34": {
+      "file": "22.png",
+      "source": "captures/run/8eb2_c1_s1a_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "35": {
+      "file": "23.png",
+      "source": "captures/run/8ebd_c4_s21_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "36": {
+      "file": "24.png",
+      "source": "captures/run/8ebe_c7_s1e_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "38": {
+      "file": "26.png",
+      "source": "captures/run/8eb9_c10_s14_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "40": {
+      "file": "28.png",
+      "source": "captures/run/8eb8_c2_s19_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "41": {
+      "file": "29.png",
+      "source": "captures/run/8ebf_c6_s1b_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    },
+    "42": {
+      "file": "2A.png",
+      "source": "captures/run/8ec7_c9_s1f_candidate1.png",
+      "crop": [
+        192,
+        72,
+        224,
+        112
+      ]
+    }
+  },
+  "pending_class_ids": [
+    1,
+    2,
+    3
+  ]
+}

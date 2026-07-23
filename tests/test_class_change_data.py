@@ -5,6 +5,8 @@ from tools.class_change_data import (
     CLASS_CHANGE_POINTER_TABLE,
     ClassTransition,
     class_change_chain_pointer,
+    patch_class_change_chain,
+    patch_class_change_chains,
     read_class_change_chain,
     transition_for_class,
 )
@@ -71,6 +73,48 @@ class ClassChangeDataTests(unittest.TestCase):
         source[pointer + 0x4C : pointer + 0x4E] = b"\x00\x00"
         with self.assertRaisesRegex(ValueError, "no terminal sentinel"):
             read_class_change_chain(source, 1)
+
+    def test_patch_chain_round_trip_changes_only_selected_words(self):
+        original = list(read_class_change_chain(self.source, 1))
+        original[0] = ClassTransition(0x01, (0x05, 0x04, 0x0A))
+        patched = bytearray(self.source)
+        patch_class_change_chain(patched, 1, tuple(original))
+
+        self.assertEqual(read_class_change_chain(patched, 1), tuple(original))
+        pointer = class_change_chain_pointer(self.source, 1)
+        changed = {
+            index for index, (before, after) in enumerate(zip(self.source, patched))
+            if before != after
+        }
+        self.assertEqual(changed, {pointer + 3, pointer + 5})
+
+    def test_patch_all_chains_from_editor_shape(self):
+        commanders = []
+        for commander_id in range(1, 11):
+            commanders.append({
+                "commander_id": commander_id,
+                "transitions": [
+                    {
+                        "current_class": transition.current_class,
+                        "candidates": list(transition.candidates),
+                    }
+                    for transition in read_class_change_chain(
+                        self.source, commander_id
+                    )
+                ],
+            })
+        patched = bytearray(self.source)
+        patch_class_change_chains(patched, commanders)
+        self.assertEqual(patched, self.source)
+
+    def test_patch_chain_rejects_duplicate_current_class(self):
+        transitions = list(read_class_change_chain(self.source, 1))
+        transitions[1] = ClassTransition(
+            transitions[0].current_class,
+            transitions[1].candidates,
+        )
+        with self.assertRaisesRegex(ValueError, "repeats"):
+            patch_class_change_chain(bytearray(self.source), 1, transitions)
 
 
 if __name__ == "__main__":

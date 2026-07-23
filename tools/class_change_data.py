@@ -87,3 +87,75 @@ def transition_for_class(
         f"commander {commander_id} has no class-change transition from "
         f"class 0x{current_class:02X}"
     )
+
+
+def patch_class_change_chain(
+    data: bytearray,
+    commander_id: int,
+    transitions: list[dict[str, object]] | tuple[ClassTransition, ...],
+) -> None:
+    pointer = class_change_chain_pointer(data, commander_id)
+    if len(transitions) != REGULAR_TRANSITION_COUNT + 1:
+        raise ValueError(
+            f"commander {commander_id} needs "
+            f"{REGULAR_TRANSITION_COUNT + 1} transitions"
+        )
+
+    normalized: list[ClassTransition] = []
+    for index, source_transition in enumerate(transitions):
+        if isinstance(source_transition, ClassTransition):
+            transition = source_transition
+        else:
+            transition = ClassTransition(
+                int(source_transition["current_class"]),
+                tuple(int(value) for value in source_transition["candidates"]),
+            )
+        expected_candidates = 3 if index < REGULAR_TRANSITION_COUNT else 1
+        if len(transition.candidates) != expected_candidates:
+            raise ValueError(
+                f"commander {commander_id} transition {index} needs "
+                f"{expected_candidates} candidate classes"
+            )
+        values = (transition.current_class, *transition.candidates)
+        if any(not 0 <= value < CLASS_COUNT for value in values):
+            raise ValueError(
+                f"commander {commander_id} transition {index} contains "
+                "an invalid class ID"
+            )
+        normalized.append(transition)
+
+    current_classes = [transition.current_class for transition in normalized]
+    if len(set(current_classes)) != len(current_classes):
+        raise ValueError(
+            f"commander {commander_id} class-change chain repeats a current class"
+        )
+
+    for index, transition in enumerate(normalized[:REGULAR_TRANSITION_COUNT]):
+        offset = pointer + index * 8
+        values = (transition.current_class, *transition.candidates)
+        data[offset : offset + 8] = b"".join(
+            value.to_bytes(2, "big") for value in values
+        )
+
+    terminal = normalized[-1]
+    terminal_offset = pointer + REGULAR_TRANSITION_COUNT * 8
+    data[terminal_offset : terminal_offset + 6] = (
+        terminal.current_class.to_bytes(2, "big")
+        + terminal.candidates[0].to_bytes(2, "big")
+        + b"\xFF\xFF"
+    )
+
+
+def patch_class_change_chains(
+    data: bytearray,
+    commanders: list[dict[str, object]],
+) -> None:
+    if len(commanders) != COMMANDER_COUNT:
+        raise ValueError(
+            f"expected {COMMANDER_COUNT} commander chains, got {len(commanders)}"
+        )
+    for expected_id, commander in enumerate(commanders, 1):
+        commander_id = int(commander["commander_id"])
+        if commander_id != expected_id:
+            raise ValueError("commander IDs must be ordered and unchanged")
+        patch_class_change_chain(data, commander_id, commander["transitions"])

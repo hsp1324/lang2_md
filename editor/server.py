@@ -11,7 +11,15 @@ from urllib.parse import parse_qs, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from tools.scenario_data import SCENARIO_COUNT, patch_scenario, read_scenario
+from editor.model import class_change_editor_model, item_editor_model
+from tools.class_change_data import patch_class_change_chains
+from tools.item_data import patch_items
+from tools.scenario_data import (
+    SCENARIO_COUNT,
+    patch_scenario,
+    read_scenario,
+    update_checksum,
+)
 
 
 STATIC = Path(__file__).resolve().parent / "static"
@@ -20,7 +28,7 @@ ROM_CHOICES = {
     "korean": ROOT / "roms/builds/Langrisser II (Korean).md",
     "japanese": REFERENCE_ROM,
 }
-OUTPUT_ROM = ROOT / "roms/builds/Langrisser II (Korean Scenario Edit).md"
+OUTPUT_ROM = ROOT / "roms/builds/Langrisser II (Korean Editor Edit).md"
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -39,6 +47,29 @@ class Handler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path == "/api/scenarios":
             return self.send_json({"scenarios": list(range(1, SCENARIO_COUNT + 1))})
+        if parsed.path == "/api/items":
+            try:
+                rom_key = parse_qs(parsed.query).get("rom", ["korean"])[0]
+                rom_path = ROM_CHOICES[rom_key]
+                result = item_editor_model(rom_path.read_bytes())
+                result["rom"] = rom_key
+                result["rom_path"] = str(rom_path.relative_to(ROOT))
+                return self.send_json(result)
+            except (KeyError, OSError, ValueError) as exc:
+                return self.send_json({"error": str(exc)}, 400)
+        if parsed.path == "/api/class-changes":
+            try:
+                rom_key = parse_qs(parsed.query).get("rom", ["korean"])[0]
+                rom_path = ROM_CHOICES[rom_key]
+                result = class_change_editor_model(
+                    rom_path.read_bytes(),
+                    REFERENCE_ROM.read_bytes(),
+                )
+                result["rom"] = rom_key
+                result["rom_path"] = str(rom_path.relative_to(ROOT))
+                return self.send_json(result)
+            except (KeyError, OSError, ValueError) as exc:
+                return self.send_json({"error": str(exc)}, 400)
         if parsed.path.startswith("/api/scenarios/"):
             try:
                 number = int(parsed.path.rsplit("/", 1)[1])
@@ -61,7 +92,25 @@ class Handler(SimpleHTTPRequestHandler):
             rom_key = request.get("rom", "korean")
             source = ROM_CHOICES[rom_key]
             data = bytearray(source.read_bytes())
-            checksum = patch_scenario(data, int(request["number"]), request["records"])
+            scenarios = request.get("scenarios")
+            if scenarios is None and "number" in request:
+                scenarios = [{
+                    "number": request["number"],
+                    "records": request["records"],
+                }]
+            for scenario in scenarios or []:
+                patch_scenario(
+                    data,
+                    int(scenario["number"]),
+                    scenario["records"],
+                )
+            if "items" in request:
+                patch_items(data, request["items"])
+            if "class_changes" in request:
+                patch_class_change_chains(data, request["class_changes"])
+            if not scenarios and "items" not in request and "class_changes" not in request:
+                raise ValueError("build request contains no editable data")
+            checksum = update_checksum(data)
             OUTPUT_ROM.parent.mkdir(parents=True, exist_ok=True)
             OUTPUT_ROM.write_bytes(data)
             return self.send_json({
@@ -74,12 +123,12 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Langrisser II MD scenario editor")
+    parser = argparse.ArgumentParser(description="Langrisser II MD data editor")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     server = ThreadingHTTPServer((args.host, args.port), Handler)
-    print(f"Scenario editor: http://{args.host}:{args.port}", flush=True)
+    print(f"Game data editor: http://{args.host}:{args.port}", flush=True)
     server.serve_forever()
 
 
