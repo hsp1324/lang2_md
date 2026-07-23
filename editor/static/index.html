@@ -50,7 +50,7 @@
         <table class="scenarioTable">
           <thead>
             <tr>
-              <th>배치</th><th>이름</th><th>클래스</th><th>LV</th>
+              <th>배치</th><th>이미지</th><th>이름</th><th>클래스</th><th>LV</th>
               <th>AT</th><th>DF</th><th>좌표</th><th>용병 1</th><th>용병 2</th><th>용병 3</th>
               <th>용병 4</th><th>용병 5</th><th>용병 6</th><th>ROM</th>
             </tr>
@@ -76,7 +76,7 @@
         <table class="itemTable">
           <thead>
             <tr>
-              <th>ID</th><th>분류</th><th>이름</th><th>가격</th>
+              <th>ID</th><th>그림</th><th>분류</th><th>이름</th><th>가격</th>
               <th>효과 1</th><th>효과 2</th><th>효과 3</th><th>효과 4</th>
               <th>별도 동작</th><th>ROM</th>
             </tr>
@@ -93,19 +93,26 @@
         </label>
         <span id="classSummary" class="summary"></span>
       </div>
-      <div class="tableWrap" aria-label="클래스 체인지 경로">
-        <table class="classTable">
-          <thead>
-            <tr>
-              <th>단계</th><th>현재 클래스 / 편성</th><th>후보 1</th>
-              <th>후보 2</th><th>후보 3</th><th>ROM</th>
-            </tr>
-          </thead>
-          <tbody id="classRoutesBody"></tbody>
-        </table>
+      <div class="classWorkspace">
+        <div class="classTreeWrap" aria-label="클래스 체인지 트리">
+          <div class="tierLabels">
+            <span>1단계</span><span>2단계</span><span>3단계</span>
+            <span>4단계</span><span>숨은 5단계</span>
+          </div>
+          <div id="classTree" class="classTree">
+            <svg id="classEdges" class="classEdges" aria-hidden="true"></svg>
+          </div>
+        </div>
+        <aside id="classInspector" class="classInspector">
+          <h2>클래스를 선택하세요</h2>
+        </aside>
       </div>
     </section>
   </main>
+  <div id="assetPicker" class="assetPicker" hidden>
+    <input id="assetPickerSearch" type="search" placeholder="ID 또는 이름 검색">
+    <div id="assetPickerOptions" class="assetPickerOptions"></div>
+  </div>
   <script src="/app.js"></script>
 </body>
 </html>

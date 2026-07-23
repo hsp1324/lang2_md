@@ -1,0 +1,413 @@
+{
+  "generated_from": "localization/item_shop_inventory.json",
+  "asset_count": 37,
+  "assets": {
+    "1": {
+      "file": "01.png",
+      "name": "단검",
+      "source": "captures/run/97e0_item_id01.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "2": {
+      "file": "02.png",
+      "name": "워해머",
+      "source": "captures/run/97e0_item_id02.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "3": {
+      "file": "03.png",
+      "name": "그레이트소드",
+      "source": "captures/run/97e0_item_id03.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "4": {
+      "file": "04.png",
+      "name": "완드",
+      "source": "captures/run/97e0_item_id04.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "5": {
+      "file": "05.png",
+      "name": "플레임랜스",
+      "source": "captures/run/97e0_item_id05.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "6": {
+      "file": "06.png",
+      "name": "데빌액스",
+      "source": "captures/run/97e0_item_id06.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "7": {
+      "file": "07.png",
+      "name": "드래곤슬레이어",
+      "source": "captures/run/97e0_item_id07.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "8": {
+      "file": "08.png",
+      "name": "랑그릿사",
+      "source": "captures/run/97e0_item_id08.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "9": {
+      "file": "09.png",
+      "name": "랑그릿사",
+      "source": "captures/run/97e0_item_id09.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "10": {
+      "file": "10.png",
+      "name": "메사이어소드",
+      "source": "captures/run/97e0_item_id10.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "11": {
+      "file": "11.png",
+      "name": "철아령",
+      "source": "captures/run/97e0_item_id11.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "12": {
+      "file": "12.png",
+      "name": "홀리로드",
+      "source": "captures/run/97e0_item_id12.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "13": {
+      "file": "13.png",
+      "name": "다크로드",
+      "source": "captures/run/97e0_item_id13.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "14": {
+      "file": "14.png",
+      "name": "알하자드",
+      "source": "captures/run/97e0_item_id14.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "15": {
+      "file": "15.png",
+      "name": "롱보우",
+      "source": "captures/run/97e0_item_id15.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "16": {
+      "file": "16.png",
+      "name": "아바레스트",
+      "source": "captures/run/97e0_item_id16.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "17": {
+      "file": "17.png",
+      "name": "소형방패",
+      "source": "captures/run/97e0_item_id17.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "18": {
+      "file": "18.png",
+      "name": "대형방패",
+      "source": "captures/run/97e0_item_id18.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "19": {
+      "file": "19.png",
+      "name": "체인메일",
+      "source": "captures/run/97e0_item_id19.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "20": {
+      "file": "20.png",
+      "name": "플레이트아머",
+      "source": "captures/run/97e0_item_id20.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "21": {
+      "file": "21.png",
+      "name": "어설트슈트",
+      "source": "captures/run/97e0_item_id21.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "22": {
+      "file": "22.png",
+      "name": "로브",
+      "source": "captures/run/97e0_item_id22.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "23": {
+      "file": "23.png",
+      "name": "드래곤스케일",
+      "source": "captures/run/97e0_item_id23.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "24": {
+      "file": "24.png",
+      "name": "미라쥬로브",
+      "source": "captures/run/97e0_item_id24.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "25": {
+      "file": "25.png",
+      "name": "오딘의방패",
+      "source": "captures/run/97e0_item_id25.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "26": {
+      "file": "26.png",
+      "name": "룬스톤",
+      "source": "captures/run/97e0_item_id26.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "27": {
+      "file": "27.png",
+      "name": "크로스",
+      "source": "captures/run/97e0_item_id27.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "28": {
+      "file": "28.png",
+      "name": "넥클리스",
+      "source": "captures/run/97e0_item_id28.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "29": {
+      "file": "29.png",
+      "name": "오브",
+      "source": "captures/run/97e0_item_id29.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "30": {
+      "file": "30.png",
+      "name": "스피드부츠",
+      "source": "captures/run/97e0_item_id30.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "31": {
+      "file": "31.png",
+      "name": "크라운",
+      "source": "captures/run/97e0_item_id31.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "32": {
+      "file": "32.png",
+      "name": "오로라",
+      "source": "captures/run/97e0_item_id32.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    },
+    "33": {
+      "file": "33.png",
+      "name": "천사날개",
+      "source": "captures/run/97e0_item_id33.png",
+      "crop": [
+        24,
+        70,
+        40,
+        86
+      ]
+    },
+    "34": {
+      "file": "34.png",
+      "name": "카벙클",
+      "source": "captures/run/97e0_item_id34.png",
+      "crop": [
+        24,
+        84,
+        40,
+        100
+      ]
+    },
+    "35": {
+      "file": "35.png",
+      "name": "그레이프니르",
+      "source": "captures/run/97e0_item_id35.png",
+      "crop": [
+        24,
+        98,
+        40,
+        114
+      ]
+    },
+    "36": {
+      "file": "36.png",
+      "name": "걀라르호른",
+      "source": "captures/run/97e0_item_id36.png",
+      "crop": [
+        24,
+        42,
+        40,
+        58
+      ]
+    },
+    "37": {
+      "file": "37.png",
+      "name": "아뮬렛",
+      "source": "captures/run/97e0_item_id37.png",
+      "crop": [
+        24,
+        56,
+        40,
+        72
+      ]
+    }
+  }
+}

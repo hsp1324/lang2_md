@@ -8,6 +8,7 @@ from tools.class_change_data import (
     class_change_chain_pointer,
     read_class_change_chain,
 )
+from tools.class_hire_data import read_class_hire_unlocks
 from tools.item_data import (
     ITEM_EFFECT_TYPES,
     effect_record_offset,
@@ -37,6 +38,7 @@ def item_editor_model(
             "name": row["target_korean"],
             "original_name": row["original_name"],
             "description": row["target_description"],
+            "icon_url": f"/item-icons/{record.item_id:02d}.png",
             "price_units": record.price_units,
             "purchase_price": record.price_units * 10,
             "price_offset": price_offset(record.item_id),
@@ -67,25 +69,48 @@ def class_change_editor_model(
     commanders = []
     preview_ids = set()
     for commander_id in range(1, COMMANDER_COUNT + 1):
+        pointer = class_change_chain_pointer(data, commander_id)
         transitions = []
         for index, transition in enumerate(
             read_class_change_chain(data, commander_id)
         ):
             preview_ids.add(transition.current_class)
             preview_ids.update(transition.candidates)
+            if index == 0:
+                source_tier = 1
+            elif index <= 3:
+                source_tier = 2
+            elif index <= 8:
+                source_tier = 3
+            else:
+                source_tier = 4
             transitions.append({
                 "index": index,
+                "source_tier": source_tier,
                 "current_class": transition.current_class,
                 "candidates": list(transition.candidates),
+                "offset": pointer + index * 8,
             })
         commanders.append({
             "commander_id": commander_id,
             "name": KOREAN_NAME_BY_ID[commander_id],
-            "pointer": class_change_chain_pointer(data, commander_id),
+            "pointer": pointer,
             "transitions": transitions,
         })
     return {
         "classes": classes,
         "preview_class_ids": sorted(preview_ids),
+        "class_hires": [
+            {
+                "class_id": record.class_id,
+                "hire_class_ids": list(record.hire_class_ids),
+                "offset": record.offset,
+            }
+            for record in (
+                read_class_hire_unlocks(data, class_id)
+                for class_id in range(len(classes))
+            )
+        ],
+        "hire_class_ids": list(range(0x62, 0x72)),
         "commanders": commanders,
     }

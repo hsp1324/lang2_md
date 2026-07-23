@@ -1,0 +1,2165 @@
+{
+  "generated_from": "roms/original/Langrisser II (Japan).md",
+  "graphics_base": "0x052980",
+  "generic_table": "0x05DDE6",
+  "commander_pointer_table": "0x05DB80",
+  "generic_class_count": 157,
+  "commander_count": 10,
+  "generic": {
+    "0": {
+      "sprite_id": 24,
+      "files": [
+        "generic/00-p0.png",
+        "generic/00-p1.png",
+        "generic/00-p2.png",
+        "generic/00-p3.png"
+      ]
+    },
+    "1": {
+      "sprite_id": 28,
+      "files": [
+        "generic/01-p0.png",
+        "generic/01-p1.png",
+        "generic/01-p2.png",
+        "generic/01-p3.png"
+      ]
+    },
+    "2": {
+      "sprite_id": 25,
+      "files": [
+        "generic/02-p0.png",
+        "generic/02-p1.png",
+        "generic/02-p2.png",
+        "generic/02-p3.png"
+      ]
+    },
+    "3": {
+      "sprite_id": 24,
+      "files": [
+        "generic/03-p0.png",
+        "generic/03-p1.png",
+        "generic/03-p2.png",
+        "generic/03-p3.png"
+      ]
+    },
+    "4": {
+      "sprite_id": 28,
+      "files": [
+        "generic/04-p0.png",
+        "generic/04-p1.png",
+        "generic/04-p2.png",
+        "generic/04-p3.png"
+      ]
+    },
+    "5": {
+      "sprite_id": 8,
+      "files": [
+        "generic/05-p0.png",
+        "generic/05-p1.png",
+        "generic/05-p2.png",
+        "generic/05-p3.png"
+      ]
+    },
+    "6": {
+      "sprite_id": 24,
+      "files": [
+        "generic/06-p0.png",
+        "generic/06-p1.png",
+        "generic/06-p2.png",
+        "generic/06-p3.png"
+      ]
+    },
+    "7": {
+      "sprite_id": 24,
+      "files": [
+        "generic/07-p0.png",
+        "generic/07-p1.png",
+        "generic/07-p2.png",
+        "generic/07-p3.png"
+      ]
+    },
+    "8": {
+      "sprite_id": 25,
+      "files": [
+        "generic/08-p0.png",
+        "generic/08-p1.png",
+        "generic/08-p2.png",
+        "generic/08-p3.png"
+      ]
+    },
+    "9": {
+      "sprite_id": 29,
+      "files": [
+        "generic/09-p0.png",
+        "generic/09-p1.png",
+        "generic/09-p2.png",
+        "generic/09-p3.png"
+      ]
+    },
+    "10": {
+      "sprite_id": 29,
+      "files": [
+        "generic/0A-p0.png",
+        "generic/0A-p1.png",
+        "generic/0A-p2.png",
+        "generic/0A-p3.png"
+      ]
+    },
+    "11": {
+      "sprite_id": 28,
+      "files": [
+        "generic/0B-p0.png",
+        "generic/0B-p1.png",
+        "generic/0B-p2.png",
+        "generic/0B-p3.png"
+      ]
+    },
+    "12": {
+      "sprite_id": 8,
+      "files": [
+        "generic/0C-p0.png",
+        "generic/0C-p1.png",
+        "generic/0C-p2.png",
+        "generic/0C-p3.png"
+      ]
+    },
+    "13": {
+      "sprite_id": 8,
+      "files": [
+        "generic/0D-p0.png",
+        "generic/0D-p1.png",
+        "generic/0D-p2.png",
+        "generic/0D-p3.png"
+      ]
+    },
+    "14": {
+      "sprite_id": 24,
+      "files": [
+        "generic/0E-p0.png",
+        "generic/0E-p1.png",
+        "generic/0E-p2.png",
+        "generic/0E-p3.png"
+      ]
+    },
+    "15": {
+      "sprite_id": 24,
+      "files": [
+        "generic/0F-p0.png",
+        "generic/0F-p1.png",
+        "generic/0F-p2.png",
+        "generic/0F-p3.png"
+      ]
+    },
+    "16": {
+      "sprite_id": 24,
+      "files": [
+        "generic/10-p0.png",
+        "generic/10-p1.png",
+        "generic/10-p2.png",
+        "generic/10-p3.png"
+      ]
+    },
+    "17": {
+      "sprite_id": 24,
+      "files": [
+        "generic/11-p0.png",
+        "generic/11-p1.png",
+        "generic/11-p2.png",
+        "generic/11-p3.png"
+      ]
+    },
+    "18": {
+      "sprite_id": 24,
+      "files": [
+        "generic/12-p0.png",
+        "generic/12-p1.png",
+        "generic/12-p2.png",
+        "generic/12-p3.png"
+      ]
+    },
+    "19": {
+      "sprite_id": 24,
+      "files": [
+        "generic/13-p0.png",
+        "generic/13-p1.png",
+        "generic/13-p2.png",
+        "generic/13-p3.png"
+      ]
+    },
+    "20": {
+      "sprite_id": 24,
+      "files": [
+        "generic/14-p0.png",
+        "generic/14-p1.png",
+        "generic/14-p2.png",
+        "generic/14-p3.png"
+      ]
+    },
+    "21": {
+      "sprite_id": 24,
+      "files": [
+        "generic/15-p0.png",
+        "generic/15-p1.png",
+        "generic/15-p2.png",
+        "generic/15-p3.png"
+      ]
+    },
+    "22": {
+      "sprite_id": 24,
+      "files": [
+        "generic/16-p0.png",
+        "generic/16-p1.png",
+        "generic/16-p2.png",
+        "generic/16-p3.png"
+      ]
+    },
+    "23": {
+      "sprite_id": 24,
+      "files": [
+        "generic/17-p0.png",
+        "generic/17-p1.png",
+        "generic/17-p2.png",
+        "generic/17-p3.png"
+      ]
+    },
+    "24": {
+      "sprite_id": 24,
+      "files": [
+        "generic/18-p0.png",
+        "generic/18-p1.png",
+        "generic/18-p2.png",
+        "generic/18-p3.png"
+      ]
+    },
+    "25": {
+      "sprite_id": 24,
+      "files": [
+        "generic/19-p0.png",
+        "generic/19-p1.png",
+        "generic/19-p2.png",
+        "generic/19-p3.png"
+      ]
+    },
+    "26": {
+      "sprite_id": 24,
+      "files": [
+        "generic/1A-p0.png",
+        "generic/1A-p1.png",
+        "generic/1A-p2.png",
+        "generic/1A-p3.png"
+      ]
+    },
+    "27": {
+      "sprite_id": 24,
+      "files": [
+        "generic/1B-p0.png",
+        "generic/1B-p1.png",
+        "generic/1B-p2.png",
+        "generic/1B-p3.png"
+      ]
+    },
+    "28": {
+      "sprite_id": 24,
+      "files": [
+        "generic/1C-p0.png",
+        "generic/1C-p1.png",
+        "generic/1C-p2.png",
+        "generic/1C-p3.png"
+      ]
+    },
+    "29": {
+      "sprite_id": 24,
+      "files": [
+        "generic/1D-p0.png",
+        "generic/1D-p1.png",
+        "generic/1D-p2.png",
+        "generic/1D-p3.png"
+      ]
+    },
+    "30": {
+      "sprite_id": 24,
+      "files": [
+        "generic/1E-p0.png",
+        "generic/1E-p1.png",
+        "generic/1E-p2.png",
+        "generic/1E-p3.png"
+      ]
+    },
+    "31": {
+      "sprite_id": 24,
+      "files": [
+        "generic/1F-p0.png",
+        "generic/1F-p1.png",
+        "generic/1F-p2.png",
+        "generic/1F-p3.png"
+      ]
+    },
+    "32": {
+      "sprite_id": 24,
+      "files": [
+        "generic/20-p0.png",
+        "generic/20-p1.png",
+        "generic/20-p2.png",
+        "generic/20-p3.png"
+      ]
+    },
+    "33": {
+      "sprite_id": 24,
+      "files": [
+        "generic/21-p0.png",
+        "generic/21-p1.png",
+        "generic/21-p2.png",
+        "generic/21-p3.png"
+      ]
+    },
+    "34": {
+      "sprite_id": 24,
+      "files": [
+        "generic/22-p0.png",
+        "generic/22-p1.png",
+        "generic/22-p2.png",
+        "generic/22-p3.png"
+      ]
+    },
+    "35": {
+      "sprite_id": 24,
+      "files": [
+        "generic/23-p0.png",
+        "generic/23-p1.png",
+        "generic/23-p2.png",
+        "generic/23-p3.png"
+      ]
+    },
+    "36": {
+      "sprite_id": 24,
+      "files": [
+        "generic/24-p0.png",
+        "generic/24-p1.png",
+        "generic/24-p2.png",
+        "generic/24-p3.png"
+      ]
+    },
+    "37": {
+      "sprite_id": 24,
+      "files": [
+        "generic/25-p0.png",
+        "generic/25-p1.png",
+        "generic/25-p2.png",
+        "generic/25-p3.png"
+      ]
+    },
+    "38": {
+      "sprite_id": 24,
+      "files": [
+        "generic/26-p0.png",
+        "generic/26-p1.png",
+        "generic/26-p2.png",
+        "generic/26-p3.png"
+      ]
+    },
+    "39": {
+      "sprite_id": 24,
+      "files": [
+        "generic/27-p0.png",
+        "generic/27-p1.png",
+        "generic/27-p2.png",
+        "generic/27-p3.png"
+      ]
+    },
+    "40": {
+      "sprite_id": 24,
+      "files": [
+        "generic/28-p0.png",
+        "generic/28-p1.png",
+        "generic/28-p2.png",
+        "generic/28-p3.png"
+      ]
+    },
+    "41": {
+      "sprite_id": 24,
+      "files": [
+        "generic/29-p0.png",
+        "generic/29-p1.png",
+        "generic/29-p2.png",
+        "generic/29-p3.png"
+      ]
+    },
+    "42": {
+      "sprite_id": 24,
+      "files": [
+        "generic/2A-p0.png",
+        "generic/2A-p1.png",
+        "generic/2A-p2.png",
+        "generic/2A-p3.png"
+      ]
+    },
+    "43": {
+      "sprite_id": 25,
+      "files": [
+        "generic/2B-p0.png",
+        "generic/2B-p1.png",
+        "generic/2B-p2.png",
+        "generic/2B-p3.png"
+      ]
+    },
+    "44": {
+      "sprite_id": 27,
+      "files": [
+        "generic/2C-p0.png",
+        "generic/2C-p1.png",
+        "generic/2C-p2.png",
+        "generic/2C-p3.png"
+      ]
+    },
+    "45": {
+      "sprite_id": 126,
+      "files": [
+        "generic/2D-p0.png",
+        "generic/2D-p1.png",
+        "generic/2D-p2.png",
+        "generic/2D-p3.png"
+      ]
+    },
+    "46": {
+      "sprite_id": 126,
+      "files": [
+        "generic/2E-p0.png",
+        "generic/2E-p1.png",
+        "generic/2E-p2.png",
+        "generic/2E-p3.png"
+      ]
+    },
+    "47": {
+      "sprite_id": 127,
+      "files": [
+        "generic/2F-p0.png",
+        "generic/2F-p1.png",
+        "generic/2F-p2.png",
+        "generic/2F-p3.png"
+      ]
+    },
+    "48": {
+      "sprite_id": 128,
+      "files": [
+        "generic/30-p0.png",
+        "generic/30-p1.png",
+        "generic/30-p2.png",
+        "generic/30-p3.png"
+      ]
+    },
+    "49": {
+      "sprite_id": 129,
+      "files": [
+        "generic/31-p0.png",
+        "generic/31-p1.png",
+        "generic/31-p2.png",
+        "generic/31-p3.png"
+      ]
+    },
+    "50": {
+      "sprite_id": 130,
+      "files": [
+        "generic/32-p0.png",
+        "generic/32-p1.png",
+        "generic/32-p2.png",
+        "generic/32-p3.png"
+      ]
+    },
+    "51": {
+      "sprite_id": 131,
+      "files": [
+        "generic/33-p0.png",
+        "generic/33-p1.png",
+        "generic/33-p2.png",
+        "generic/33-p3.png"
+      ]
+    },
+    "52": {
+      "sprite_id": 132,
+      "files": [
+        "generic/34-p0.png",
+        "generic/34-p1.png",
+        "generic/34-p2.png",
+        "generic/34-p3.png"
+      ]
+    },
+    "53": {
+      "sprite_id": 133,
+      "files": [
+        "generic/35-p0.png",
+        "generic/35-p1.png",
+        "generic/35-p2.png",
+        "generic/35-p3.png"
+      ]
+    },
+    "54": {
+      "sprite_id": 134,
+      "files": [
+        "generic/36-p0.png",
+        "generic/36-p1.png",
+        "generic/36-p2.png",
+        "generic/36-p3.png"
+      ]
+    },
+    "55": {
+      "sprite_id": 171,
+      "files": [
+        "generic/37-p0.png",
+        "generic/37-p1.png",
+        "generic/37-p2.png",
+        "generic/37-p3.png"
+      ]
+    },
+    "56": {
+      "sprite_id": 135,
+      "files": [
+        "generic/38-p0.png",
+        "generic/38-p1.png",
+        "generic/38-p2.png",
+        "generic/38-p3.png"
+      ]
+    },
+    "57": {
+      "sprite_id": 136,
+      "files": [
+        "generic/39-p0.png",
+        "generic/39-p1.png",
+        "generic/39-p2.png",
+        "generic/39-p3.png"
+      ]
+    },
+    "58": {
+      "sprite_id": 137,
+      "files": [
+        "generic/3A-p0.png",
+        "generic/3A-p1.png",
+        "generic/3A-p2.png",
+        "generic/3A-p3.png"
+      ]
+    },
+    "59": {
+      "sprite_id": 138,
+      "files": [
+        "generic/3B-p0.png",
+        "generic/3B-p1.png",
+        "generic/3B-p2.png",
+        "generic/3B-p3.png"
+      ]
+    },
+    "60": {
+      "sprite_id": 139,
+      "files": [
+        "generic/3C-p0.png",
+        "generic/3C-p1.png",
+        "generic/3C-p2.png",
+        "generic/3C-p3.png"
+      ]
+    },
+    "61": {
+      "sprite_id": 140,
+      "files": [
+        "generic/3D-p0.png",
+        "generic/3D-p1.png",
+        "generic/3D-p2.png",
+        "generic/3D-p3.png"
+      ]
+    },
+    "62": {
+      "sprite_id": 141,
+      "files": [
+        "generic/3E-p0.png",
+        "generic/3E-p1.png",
+        "generic/3E-p2.png",
+        "generic/3E-p3.png"
+      ]
+    },
+    "63": {
+      "sprite_id": 142,
+      "files": [
+        "generic/3F-p0.png",
+        "generic/3F-p1.png",
+        "generic/3F-p2.png",
+        "generic/3F-p3.png"
+      ]
+    },
+    "64": {
+      "sprite_id": 143,
+      "files": [
+        "generic/40-p0.png",
+        "generic/40-p1.png",
+        "generic/40-p2.png",
+        "generic/40-p3.png"
+      ]
+    },
+    "65": {
+      "sprite_id": 144,
+      "files": [
+        "generic/41-p0.png",
+        "generic/41-p1.png",
+        "generic/41-p2.png",
+        "generic/41-p3.png"
+      ]
+    },
+    "66": {
+      "sprite_id": 145,
+      "files": [
+        "generic/42-p0.png",
+        "generic/42-p1.png",
+        "generic/42-p2.png",
+        "generic/42-p3.png"
+      ]
+    },
+    "67": {
+      "sprite_id": 172,
+      "files": [
+        "generic/43-p0.png",
+        "generic/43-p1.png",
+        "generic/43-p2.png",
+        "generic/43-p3.png"
+      ]
+    },
+    "68": {
+      "sprite_id": 146,
+      "files": [
+        "generic/44-p0.png",
+        "generic/44-p1.png",
+        "generic/44-p2.png",
+        "generic/44-p3.png"
+      ]
+    },
+    "69": {
+      "sprite_id": 169,
+      "files": [
+        "generic/45-p0.png",
+        "generic/45-p1.png",
+        "generic/45-p2.png",
+        "generic/45-p3.png"
+      ]
+    },
+    "70": {
+      "sprite_id": 147,
+      "files": [
+        "generic/46-p0.png",
+        "generic/46-p1.png",
+        "generic/46-p2.png",
+        "generic/46-p3.png"
+      ]
+    },
+    "71": {
+      "sprite_id": 148,
+      "files": [
+        "generic/47-p0.png",
+        "generic/47-p1.png",
+        "generic/47-p2.png",
+        "generic/47-p3.png"
+      ]
+    },
+    "72": {
+      "sprite_id": 149,
+      "files": [
+        "generic/48-p0.png",
+        "generic/48-p1.png",
+        "generic/48-p2.png",
+        "generic/48-p3.png"
+      ]
+    },
+    "73": {
+      "sprite_id": 177,
+      "files": [
+        "generic/49-p0.png",
+        "generic/49-p1.png",
+        "generic/49-p2.png",
+        "generic/49-p3.png"
+      ]
+    },
+    "74": {
+      "sprite_id": 176,
+      "files": [
+        "generic/4A-p0.png",
+        "generic/4A-p1.png",
+        "generic/4A-p2.png",
+        "generic/4A-p3.png"
+      ]
+    },
+    "75": {
+      "sprite_id": 150,
+      "files": [
+        "generic/4B-p0.png",
+        "generic/4B-p1.png",
+        "generic/4B-p2.png",
+        "generic/4B-p3.png"
+      ]
+    },
+    "76": {
+      "sprite_id": 151,
+      "files": [
+        "generic/4C-p0.png",
+        "generic/4C-p1.png",
+        "generic/4C-p2.png",
+        "generic/4C-p3.png"
+      ]
+    },
+    "77": {
+      "sprite_id": 170,
+      "files": [
+        "generic/4D-p0.png",
+        "generic/4D-p1.png",
+        "generic/4D-p2.png",
+        "generic/4D-p3.png"
+      ]
+    },
+    "78": {
+      "sprite_id": 175,
+      "files": [
+        "generic/4E-p0.png",
+        "generic/4E-p1.png",
+        "generic/4E-p2.png",
+        "generic/4E-p3.png"
+      ]
+    },
+    "79": {
+      "sprite_id": 173,
+      "files": [
+        "generic/4F-p0.png",
+        "generic/4F-p1.png",
+        "generic/4F-p2.png",
+        "generic/4F-p3.png"
+      ]
+    },
+    "80": {
+      "sprite_id": 152,
+      "files": [
+        "generic/50-p0.png",
+        "generic/50-p1.png",
+        "generic/50-p2.png",
+        "generic/50-p3.png"
+      ]
+    },
+    "81": {
+      "sprite_id": 153,
+      "files": [
+        "generic/51-p0.png",
+        "generic/51-p1.png",
+        "generic/51-p2.png",
+        "generic/51-p3.png"
+      ]
+    },
+    "82": {
+      "sprite_id": 154,
+      "files": [
+        "generic/52-p0.png",
+        "generic/52-p1.png",
+        "generic/52-p2.png",
+        "generic/52-p3.png"
+      ]
+    },
+    "83": {
+      "sprite_id": 155,
+      "files": [
+        "generic/53-p0.png",
+        "generic/53-p1.png",
+        "generic/53-p2.png",
+        "generic/53-p3.png"
+      ]
+    },
+    "84": {
+      "sprite_id": 156,
+      "files": [
+        "generic/54-p0.png",
+        "generic/54-p1.png",
+        "generic/54-p2.png",
+        "generic/54-p3.png"
+      ]
+    },
+    "85": {
+      "sprite_id": 157,
+      "files": [
+        "generic/55-p0.png",
+        "generic/55-p1.png",
+        "generic/55-p2.png",
+        "generic/55-p3.png"
+      ]
+    },
+    "86": {
+      "sprite_id": 158,
+      "files": [
+        "generic/56-p0.png",
+        "generic/56-p1.png",
+        "generic/56-p2.png",
+        "generic/56-p3.png"
+      ]
+    },
+    "87": {
+      "sprite_id": 159,
+      "files": [
+        "generic/57-p0.png",
+        "generic/57-p1.png",
+        "generic/57-p2.png",
+        "generic/57-p3.png"
+      ]
+    },
+    "88": {
+      "sprite_id": 160,
+      "files": [
+        "generic/58-p0.png",
+        "generic/58-p1.png",
+        "generic/58-p2.png",
+        "generic/58-p3.png"
+      ]
+    },
+    "89": {
+      "sprite_id": 161,
+      "files": [
+        "generic/59-p0.png",
+        "generic/59-p1.png",
+        "generic/59-p2.png",
+        "generic/59-p3.png"
+      ]
+    },
+    "90": {
+      "sprite_id": 162,
+      "files": [
+        "generic/5A-p0.png",
+        "generic/5A-p1.png",
+        "generic/5A-p2.png",
+        "generic/5A-p3.png"
+      ]
+    },
+    "91": {
+      "sprite_id": 163,
+      "files": [
+        "generic/5B-p0.png",
+        "generic/5B-p1.png",
+        "generic/5B-p2.png",
+        "generic/5B-p3.png"
+      ]
+    },
+    "92": {
+      "sprite_id": 164,
+      "files": [
+        "generic/5C-p0.png",
+        "generic/5C-p1.png",
+        "generic/5C-p2.png",
+        "generic/5C-p3.png"
+      ]
+    },
+    "93": {
+      "sprite_id": 165,
+      "files": [
+        "generic/5D-p0.png",
+        "generic/5D-p1.png",
+        "generic/5D-p2.png",
+        "generic/5D-p3.png"
+      ]
+    },
+    "94": {
+      "sprite_id": 166,
+      "files": [
+        "generic/5E-p0.png",
+        "generic/5E-p1.png",
+        "generic/5E-p2.png",
+        "generic/5E-p3.png"
+      ]
+    },
+    "95": {
+      "sprite_id": 167,
+      "files": [
+        "generic/5F-p0.png",
+        "generic/5F-p1.png",
+        "generic/5F-p2.png",
+        "generic/5F-p3.png"
+      ]
+    },
+    "96": {
+      "sprite_id": 174,
+      "files": [
+        "generic/60-p0.png",
+        "generic/60-p1.png",
+        "generic/60-p2.png",
+        "generic/60-p3.png"
+      ]
+    },
+    "97": {
+      "sprite_id": 168,
+      "files": [
+        "generic/61-p0.png",
+        "generic/61-p1.png",
+        "generic/61-p2.png",
+        "generic/61-p3.png"
+      ]
+    },
+    "98": {
+      "sprite_id": 1,
+      "files": [
+        "generic/62-p0.png",
+        "generic/62-p1.png",
+        "generic/62-p2.png",
+        "generic/62-p3.png"
+      ]
+    },
+    "99": {
+      "sprite_id": 2,
+      "files": [
+        "generic/63-p0.png",
+        "generic/63-p1.png",
+        "generic/63-p2.png",
+        "generic/63-p3.png"
+      ]
+    },
+    "100": {
+      "sprite_id": 3,
+      "files": [
+        "generic/64-p0.png",
+        "generic/64-p1.png",
+        "generic/64-p2.png",
+        "generic/64-p3.png"
+      ]
+    },
+    "101": {
+      "sprite_id": 4,
+      "files": [
+        "generic/65-p0.png",
+        "generic/65-p1.png",
+        "generic/65-p2.png",
+        "generic/65-p3.png"
+      ]
+    },
+    "102": {
+      "sprite_id": 5,
+      "files": [
+        "generic/66-p0.png",
+        "generic/66-p1.png",
+        "generic/66-p2.png",
+        "generic/66-p3.png"
+      ]
+    },
+    "103": {
+      "sprite_id": 6,
+      "files": [
+        "generic/67-p0.png",
+        "generic/67-p1.png",
+        "generic/67-p2.png",
+        "generic/67-p3.png"
+      ]
+    },
+    "104": {
+      "sprite_id": 7,
+      "files": [
+        "generic/68-p0.png",
+        "generic/68-p1.png",
+        "generic/68-p2.png",
+        "generic/68-p3.png"
+      ]
+    },
+    "105": {
+      "sprite_id": 8,
+      "files": [
+        "generic/69-p0.png",
+        "generic/69-p1.png",
+        "generic/69-p2.png",
+        "generic/69-p3.png"
+      ]
+    },
+    "106": {
+      "sprite_id": 9,
+      "files": [
+        "generic/6A-p0.png",
+        "generic/6A-p1.png",
+        "generic/6A-p2.png",
+        "generic/6A-p3.png"
+      ]
+    },
+    "107": {
+      "sprite_id": 10,
+      "files": [
+        "generic/6B-p0.png",
+        "generic/6B-p1.png",
+        "generic/6B-p2.png",
+        "generic/6B-p3.png"
+      ]
+    },
+    "108": {
+      "sprite_id": 11,
+      "files": [
+        "generic/6C-p0.png",
+        "generic/6C-p1.png",
+        "generic/6C-p2.png",
+        "generic/6C-p3.png"
+      ]
+    },
+    "109": {
+      "sprite_id": 12,
+      "files": [
+        "generic/6D-p0.png",
+        "generic/6D-p1.png",
+        "generic/6D-p2.png",
+        "generic/6D-p3.png"
+      ]
+    },
+    "110": {
+      "sprite_id": 13,
+      "files": [
+        "generic/6E-p0.png",
+        "generic/6E-p1.png",
+        "generic/6E-p2.png",
+        "generic/6E-p3.png"
+      ]
+    },
+    "111": {
+      "sprite_id": 14,
+      "files": [
+        "generic/6F-p0.png",
+        "generic/6F-p1.png",
+        "generic/6F-p2.png",
+        "generic/6F-p3.png"
+      ]
+    },
+    "112": {
+      "sprite_id": 15,
+      "files": [
+        "generic/70-p0.png",
+        "generic/70-p1.png",
+        "generic/70-p2.png",
+        "generic/70-p3.png"
+      ]
+    },
+    "113": {
+      "sprite_id": 16,
+      "files": [
+        "generic/71-p0.png",
+        "generic/71-p1.png",
+        "generic/71-p2.png",
+        "generic/71-p3.png"
+      ]
+    },
+    "114": {
+      "sprite_id": 99,
+      "files": [
+        "generic/72-p0.png",
+        "generic/72-p1.png",
+        "generic/72-p2.png",
+        "generic/72-p3.png"
+      ]
+    },
+    "115": {
+      "sprite_id": 100,
+      "files": [
+        "generic/73-p0.png",
+        "generic/73-p1.png",
+        "generic/73-p2.png",
+        "generic/73-p3.png"
+      ]
+    },
+    "116": {
+      "sprite_id": 101,
+      "files": [
+        "generic/74-p0.png",
+        "generic/74-p1.png",
+        "generic/74-p2.png",
+        "generic/74-p3.png"
+      ]
+    },
+    "117": {
+      "sprite_id": 102,
+      "files": [
+        "generic/75-p0.png",
+        "generic/75-p1.png",
+        "generic/75-p2.png",
+        "generic/75-p3.png"
+      ]
+    },
+    "118": {
+      "sprite_id": 103,
+      "files": [
+        "generic/76-p0.png",
+        "generic/76-p1.png",
+        "generic/76-p2.png",
+        "generic/76-p3.png"
+      ]
+    },
+    "119": {
+      "sprite_id": 104,
+      "files": [
+        "generic/77-p0.png",
+        "generic/77-p1.png",
+        "generic/77-p2.png",
+        "generic/77-p3.png"
+      ]
+    },
+    "120": {
+      "sprite_id": 105,
+      "files": [
+        "generic/78-p0.png",
+        "generic/78-p1.png",
+        "generic/78-p2.png",
+        "generic/78-p3.png"
+      ]
+    },
+    "121": {
+      "sprite_id": 106,
+      "files": [
+        "generic/79-p0.png",
+        "generic/79-p1.png",
+        "generic/79-p2.png",
+        "generic/79-p3.png"
+      ]
+    },
+    "122": {
+      "sprite_id": 107,
+      "files": [
+        "generic/7A-p0.png",
+        "generic/7A-p1.png",
+        "generic/7A-p2.png",
+        "generic/7A-p3.png"
+      ]
+    },
+    "123": {
+      "sprite_id": 108,
+      "files": [
+        "generic/7B-p0.png",
+        "generic/7B-p1.png",
+        "generic/7B-p2.png",
+        "generic/7B-p3.png"
+      ]
+    },
+    "124": {
+      "sprite_id": 109,
+      "files": [
+        "generic/7C-p0.png",
+        "generic/7C-p1.png",
+        "generic/7C-p2.png",
+        "generic/7C-p3.png"
+      ]
+    },
+    "125": {
+      "sprite_id": 110,
+      "files": [
+        "generic/7D-p0.png",
+        "generic/7D-p1.png",
+        "generic/7D-p2.png",
+        "generic/7D-p3.png"
+      ]
+    },
+    "126": {
+      "sprite_id": 111,
+      "files": [
+        "generic/7E-p0.png",
+        "generic/7E-p1.png",
+        "generic/7E-p2.png",
+        "generic/7E-p3.png"
+      ]
+    },
+    "127": {
+      "sprite_id": 112,
+      "files": [
+        "generic/7F-p0.png",
+        "generic/7F-p1.png",
+        "generic/7F-p2.png",
+        "generic/7F-p3.png"
+      ]
+    },
+    "128": {
+      "sprite_id": 113,
+      "files": [
+        "generic/80-p0.png",
+        "generic/80-p1.png",
+        "generic/80-p2.png",
+        "generic/80-p3.png"
+      ]
+    },
+    "129": {
+      "sprite_id": 114,
+      "files": [
+        "generic/81-p0.png",
+        "generic/81-p1.png",
+        "generic/81-p2.png",
+        "generic/81-p3.png"
+      ]
+    },
+    "130": {
+      "sprite_id": 115,
+      "files": [
+        "generic/82-p0.png",
+        "generic/82-p1.png",
+        "generic/82-p2.png",
+        "generic/82-p3.png"
+      ]
+    },
+    "131": {
+      "sprite_id": 116,
+      "files": [
+        "generic/83-p0.png",
+        "generic/83-p1.png",
+        "generic/83-p2.png",
+        "generic/83-p3.png"
+      ]
+    },
+    "132": {
+      "sprite_id": 117,
+      "files": [
+        "generic/84-p0.png",
+        "generic/84-p1.png",
+        "generic/84-p2.png",
+        "generic/84-p3.png"
+      ]
+    },
+    "133": {
+      "sprite_id": 118,
+      "files": [
+        "generic/85-p0.png",
+        "generic/85-p1.png",
+        "generic/85-p2.png",
+        "generic/85-p3.png"
+      ]
+    },
+    "134": {
+      "sprite_id": 119,
+      "files": [
+        "generic/86-p0.png",
+        "generic/86-p1.png",
+        "generic/86-p2.png",
+        "generic/86-p3.png"
+      ]
+    },
+    "135": {
+      "sprite_id": 120,
+      "files": [
+        "generic/87-p0.png",
+        "generic/87-p1.png",
+        "generic/87-p2.png",
+        "generic/87-p3.png"
+      ]
+    },
+    "136": {
+      "sprite_id": 121,
+      "files": [
+        "generic/88-p0.png",
+        "generic/88-p1.png",
+        "generic/88-p2.png",
+        "generic/88-p3.png"
+      ]
+    },
+    "137": {
+      "sprite_id": 122,
+      "files": [
+        "generic/89-p0.png",
+        "generic/89-p1.png",
+        "generic/89-p2.png",
+        "generic/89-p3.png"
+      ]
+    },
+    "138": {
+      "sprite_id": 123,
+      "files": [
+        "generic/8A-p0.png",
+        "generic/8A-p1.png",
+        "generic/8A-p2.png",
+        "generic/8A-p3.png"
+      ]
+    },
+    "139": {
+      "sprite_id": 124,
+      "files": [
+        "generic/8B-p0.png",
+        "generic/8B-p1.png",
+        "generic/8B-p2.png",
+        "generic/8B-p3.png"
+      ]
+    },
+    "140": {
+      "sprite_id": 125,
+      "files": [
+        "generic/8C-p0.png",
+        "generic/8C-p1.png",
+        "generic/8C-p2.png",
+        "generic/8C-p3.png"
+      ]
+    },
+    "141": {
+      "sprite_id": 17,
+      "files": [
+        "generic/8D-p0.png",
+        "generic/8D-p1.png",
+        "generic/8D-p2.png",
+        "generic/8D-p3.png"
+      ]
+    },
+    "142": {
+      "sprite_id": 18,
+      "files": [
+        "generic/8E-p0.png",
+        "generic/8E-p1.png",
+        "generic/8E-p2.png",
+        "generic/8E-p3.png"
+      ]
+    },
+    "143": {
+      "sprite_id": 19,
+      "files": [
+        "generic/8F-p0.png",
+        "generic/8F-p1.png",
+        "generic/8F-p2.png",
+        "generic/8F-p3.png"
+      ]
+    },
+    "144": {
+      "sprite_id": 20,
+      "files": [
+        "generic/90-p0.png",
+        "generic/90-p1.png",
+        "generic/90-p2.png",
+        "generic/90-p3.png"
+      ]
+    },
+    "145": {
+      "sprite_id": 21,
+      "files": [
+        "generic/91-p0.png",
+        "generic/91-p1.png",
+        "generic/91-p2.png",
+        "generic/91-p3.png"
+      ]
+    },
+    "146": {
+      "sprite_id": 22,
+      "files": [
+        "generic/92-p0.png",
+        "generic/92-p1.png",
+        "generic/92-p2.png",
+        "generic/92-p3.png"
+      ]
+    },
+    "147": {
+      "sprite_id": 23,
+      "files": [
+        "generic/93-p0.png",
+        "generic/93-p1.png",
+        "generic/93-p2.png",
+        "generic/93-p3.png"
+      ]
+    },
+    "148": {
+      "sprite_id": 24,
+      "files": [
+        "generic/94-p0.png",
+        "generic/94-p1.png",
+        "generic/94-p2.png",
+        "generic/94-p3.png"
+      ]
+    },
+    "149": {
+      "sprite_id": 24,
+      "files": [
+        "generic/95-p0.png",
+        "generic/95-p1.png",
+        "generic/95-p2.png",
+        "generic/95-p3.png"
+      ]
+    },
+    "150": {
+      "sprite_id": 28,
+      "files": [
+        "generic/96-p0.png",
+        "generic/96-p1.png",
+        "generic/96-p2.png",
+        "generic/96-p3.png"
+      ]
+    },
+    "151": {
+      "sprite_id": 25,
+      "files": [
+        "generic/97-p0.png",
+        "generic/97-p1.png",
+        "generic/97-p2.png",
+        "generic/97-p3.png"
+      ]
+    },
+    "152": {
+      "sprite_id": 8,
+      "files": [
+        "generic/98-p0.png",
+        "generic/98-p1.png",
+        "generic/98-p2.png",
+        "generic/98-p3.png"
+      ]
+    },
+    "153": {
+      "sprite_id": 28,
+      "files": [
+        "generic/99-p0.png",
+        "generic/99-p1.png",
+        "generic/99-p2.png",
+        "generic/99-p3.png"
+      ]
+    },
+    "154": {
+      "sprite_id": 28,
+      "files": [
+        "generic/9A-p0.png",
+        "generic/9A-p1.png",
+        "generic/9A-p2.png",
+        "generic/9A-p3.png"
+      ]
+    },
+    "155": {
+      "sprite_id": 28,
+      "files": [
+        "generic/9B-p0.png",
+        "generic/9B-p1.png",
+        "generic/9B-p2.png",
+        "generic/9B-p3.png"
+      ]
+    },
+    "156": {
+      "sprite_id": 29,
+      "files": [
+        "generic/9C-p0.png",
+        "generic/9C-p1.png",
+        "generic/9C-p2.png",
+        "generic/9C-p3.png"
+      ]
+    }
+  },
+  "commanders": {
+    "1": {
+      "1": {
+        "sprite_id": 30,
+        "file": "commanders/1/01-p1.png"
+      },
+      "4": {
+        "sprite_id": 30,
+        "file": "commanders/1/04-p1.png"
+      },
+      "5": {
+        "sprite_id": 34,
+        "file": "commanders/1/05-p1.png"
+      },
+      "10": {
+        "sprite_id": 31,
+        "file": "commanders/1/0A-p1.png"
+      },
+      "11": {
+        "sprite_id": 30,
+        "file": "commanders/1/0B-p1.png"
+      },
+      "12": {
+        "sprite_id": 34,
+        "file": "commanders/1/0C-p1.png"
+      },
+      "13": {
+        "sprite_id": 35,
+        "file": "commanders/1/0D-p1.png"
+      },
+      "18": {
+        "sprite_id": 31,
+        "file": "commanders/1/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 31,
+        "file": "commanders/1/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 31,
+        "file": "commanders/1/14-p1.png"
+      },
+      "23": {
+        "sprite_id": 32,
+        "file": "commanders/1/17-p1.png"
+      },
+      "26": {
+        "sprite_id": 30,
+        "file": "commanders/1/1A-p1.png"
+      },
+      "27": {
+        "sprite_id": 34,
+        "file": "commanders/1/1B-p1.png"
+      },
+      "28": {
+        "sprite_id": 36,
+        "file": "commanders/1/1C-p1.png"
+      },
+      "29": {
+        "sprite_id": 35,
+        "file": "commanders/1/1D-p1.png"
+      },
+      "32": {
+        "sprite_id": 33,
+        "file": "commanders/1/20-p1.png"
+      },
+      "34": {
+        "sprite_id": 33,
+        "file": "commanders/1/22-p1.png"
+      },
+      "41": {
+        "sprite_id": 34,
+        "file": "commanders/1/29-p1.png"
+      }
+    },
+    "2": {
+      "2": {
+        "sprite_id": 37,
+        "file": "commanders/2/02-p1.png"
+      },
+      "4": {
+        "sprite_id": 41,
+        "file": "commanders/2/04-p1.png"
+      },
+      "8": {
+        "sprite_id": 37,
+        "file": "commanders/2/08-p1.png"
+      },
+      "10": {
+        "sprite_id": 38,
+        "file": "commanders/2/0A-p1.png"
+      },
+      "11": {
+        "sprite_id": 41,
+        "file": "commanders/2/0B-p1.png"
+      },
+      "13": {
+        "sprite_id": 42,
+        "file": "commanders/2/0D-p1.png"
+      },
+      "17": {
+        "sprite_id": 37,
+        "file": "commanders/2/11-p1.png"
+      },
+      "18": {
+        "sprite_id": 39,
+        "file": "commanders/2/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 38,
+        "file": "commanders/2/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 38,
+        "file": "commanders/2/14-p1.png"
+      },
+      "21": {
+        "sprite_id": 38,
+        "file": "commanders/2/15-p1.png"
+      },
+      "22": {
+        "sprite_id": 37,
+        "file": "commanders/2/16-p1.png"
+      },
+      "23": {
+        "sprite_id": 40,
+        "file": "commanders/2/17-p1.png"
+      },
+      "24": {
+        "sprite_id": 39,
+        "file": "commanders/2/18-p1.png"
+      },
+      "25": {
+        "sprite_id": 42,
+        "file": "commanders/2/19-p1.png"
+      },
+      "29": {
+        "sprite_id": 42,
+        "file": "commanders/2/1D-p1.png"
+      },
+      "37": {
+        "sprite_id": 37,
+        "file": "commanders/2/25-p1.png"
+      },
+      "38": {
+        "sprite_id": 39,
+        "file": "commanders/2/26-p1.png"
+      },
+      "40": {
+        "sprite_id": 38,
+        "file": "commanders/2/28-p1.png"
+      }
+    },
+    "3": {
+      "2": {
+        "sprite_id": 43,
+        "file": "commanders/3/02-p1.png"
+      },
+      "4": {
+        "sprite_id": 47,
+        "file": "commanders/3/04-p1.png"
+      },
+      "8": {
+        "sprite_id": 43,
+        "file": "commanders/3/08-p1.png"
+      },
+      "10": {
+        "sprite_id": 44,
+        "file": "commanders/3/0A-p1.png"
+      },
+      "11": {
+        "sprite_id": 47,
+        "file": "commanders/3/0B-p1.png"
+      },
+      "13": {
+        "sprite_id": 48,
+        "file": "commanders/3/0D-p1.png"
+      },
+      "17": {
+        "sprite_id": 43,
+        "file": "commanders/3/11-p1.png"
+      },
+      "18": {
+        "sprite_id": 45,
+        "file": "commanders/3/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 44,
+        "file": "commanders/3/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 44,
+        "file": "commanders/3/14-p1.png"
+      },
+      "21": {
+        "sprite_id": 44,
+        "file": "commanders/3/15-p1.png"
+      },
+      "22": {
+        "sprite_id": 43,
+        "file": "commanders/3/16-p1.png"
+      },
+      "23": {
+        "sprite_id": 46,
+        "file": "commanders/3/17-p1.png"
+      },
+      "24": {
+        "sprite_id": 45,
+        "file": "commanders/3/18-p1.png"
+      },
+      "25": {
+        "sprite_id": 48,
+        "file": "commanders/3/19-p1.png"
+      },
+      "29": {
+        "sprite_id": 48,
+        "file": "commanders/3/1D-p1.png"
+      },
+      "37": {
+        "sprite_id": 43,
+        "file": "commanders/3/25-p1.png"
+      },
+      "38": {
+        "sprite_id": 45,
+        "file": "commanders/3/26-p1.png"
+      },
+      "40": {
+        "sprite_id": 44,
+        "file": "commanders/3/28-p1.png"
+      }
+    },
+    "4": {
+      "1": {
+        "sprite_id": 92,
+        "file": "commanders/4/01-p1.png"
+      },
+      "4": {
+        "sprite_id": 92,
+        "file": "commanders/4/04-p1.png"
+      },
+      "6": {
+        "sprite_id": 97,
+        "file": "commanders/4/06-p1.png"
+      },
+      "10": {
+        "sprite_id": 93,
+        "file": "commanders/4/0A-p1.png"
+      },
+      "11": {
+        "sprite_id": 92,
+        "file": "commanders/4/0B-p1.png"
+      },
+      "14": {
+        "sprite_id": 96,
+        "file": "commanders/4/0E-p1.png"
+      },
+      "15": {
+        "sprite_id": 98,
+        "file": "commanders/4/0F-p1.png"
+      },
+      "18": {
+        "sprite_id": 94,
+        "file": "commanders/4/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 93,
+        "file": "commanders/4/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 93,
+        "file": "commanders/4/14-p1.png"
+      },
+      "21": {
+        "sprite_id": 94,
+        "file": "commanders/4/15-p1.png"
+      },
+      "23": {
+        "sprite_id": 94,
+        "file": "commanders/4/17-p1.png"
+      },
+      "25": {
+        "sprite_id": 96,
+        "file": "commanders/4/19-p1.png"
+      },
+      "29": {
+        "sprite_id": 96,
+        "file": "commanders/4/1D-p1.png"
+      },
+      "30": {
+        "sprite_id": 98,
+        "file": "commanders/4/1E-p1.png"
+      },
+      "33": {
+        "sprite_id": 92,
+        "file": "commanders/4/21-p1.png"
+      },
+      "35": {
+        "sprite_id": 92,
+        "file": "commanders/4/23-p1.png"
+      },
+      "36": {
+        "sprite_id": 98,
+        "file": "commanders/4/24-p1.png"
+      },
+      "39": {
+        "sprite_id": 95,
+        "file": "commanders/4/27-p1.png"
+      }
+    },
+    "5": {
+      "3": {
+        "sprite_id": 55,
+        "file": "commanders/5/03-p1.png"
+      },
+      "4": {
+        "sprite_id": 58,
+        "file": "commanders/5/04-p1.png"
+      },
+      "9": {
+        "sprite_id": 55,
+        "file": "commanders/5/09-p1.png"
+      },
+      "10": {
+        "sprite_id": 55,
+        "file": "commanders/5/0A-p1.png"
+      },
+      "11": {
+        "sprite_id": 58,
+        "file": "commanders/5/0B-p1.png"
+      },
+      "13": {
+        "sprite_id": 60,
+        "file": "commanders/5/0D-p1.png"
+      },
+      "17": {
+        "sprite_id": 59,
+        "file": "commanders/5/11-p1.png"
+      },
+      "18": {
+        "sprite_id": 56,
+        "file": "commanders/5/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 55,
+        "file": "commanders/5/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 55,
+        "file": "commanders/5/14-p1.png"
+      },
+      "21": {
+        "sprite_id": 56,
+        "file": "commanders/5/15-p1.png"
+      },
+      "22": {
+        "sprite_id": 59,
+        "file": "commanders/5/16-p1.png"
+      },
+      "23": {
+        "sprite_id": 57,
+        "file": "commanders/5/17-p1.png"
+      },
+      "24": {
+        "sprite_id": 57,
+        "file": "commanders/5/18-p1.png"
+      },
+      "25": {
+        "sprite_id": 60,
+        "file": "commanders/5/19-p1.png"
+      },
+      "26": {
+        "sprite_id": 58,
+        "file": "commanders/5/1A-p1.png"
+      },
+      "38": {
+        "sprite_id": 55,
+        "file": "commanders/5/26-p1.png"
+      },
+      "40": {
+        "sprite_id": 56,
+        "file": "commanders/5/28-p1.png"
+      }
+    },
+    "6": {
+      "1": {
+        "sprite_id": 61,
+        "file": "commanders/6/01-p1.png"
+      },
+      "4": {
+        "sprite_id": 61,
+        "file": "commanders/6/04-p1.png"
+      },
+      "5": {
+        "sprite_id": 65,
+        "file": "commanders/6/05-p1.png"
+      },
+      "6": {
+        "sprite_id": 67,
+        "file": "commanders/6/06-p1.png"
+      },
+      "11": {
+        "sprite_id": 61,
+        "file": "commanders/6/0B-p1.png"
+      },
+      "12": {
+        "sprite_id": 65,
+        "file": "commanders/6/0C-p1.png"
+      },
+      "13": {
+        "sprite_id": 66,
+        "file": "commanders/6/0D-p1.png"
+      },
+      "15": {
+        "sprite_id": 68,
+        "file": "commanders/6/0F-p1.png"
+      },
+      "17": {
+        "sprite_id": 64,
+        "file": "commanders/6/11-p1.png"
+      },
+      "23": {
+        "sprite_id": 62,
+        "file": "commanders/6/17-p1.png"
+      },
+      "24": {
+        "sprite_id": 63,
+        "file": "commanders/6/18-p1.png"
+      },
+      "25": {
+        "sprite_id": 66,
+        "file": "commanders/6/19-p1.png"
+      },
+      "27": {
+        "sprite_id": 65,
+        "file": "commanders/6/1B-p1.png"
+      },
+      "28": {
+        "sprite_id": 69,
+        "file": "commanders/6/1C-p1.png"
+      },
+      "29": {
+        "sprite_id": 66,
+        "file": "commanders/6/1D-p1.png"
+      },
+      "30": {
+        "sprite_id": 68,
+        "file": "commanders/6/1E-p1.png"
+      },
+      "41": {
+        "sprite_id": 65,
+        "file": "commanders/6/29-p1.png"
+      }
+    },
+    "7": {
+      "1": {
+        "sprite_id": 78,
+        "file": "commanders/7/01-p1.png"
+      },
+      "4": {
+        "sprite_id": 78,
+        "file": "commanders/7/04-p1.png"
+      },
+      "6": {
+        "sprite_id": 83,
+        "file": "commanders/7/06-p1.png"
+      },
+      "8": {
+        "sprite_id": 80,
+        "file": "commanders/7/08-p1.png"
+      },
+      "11": {
+        "sprite_id": 78,
+        "file": "commanders/7/0B-p1.png"
+      },
+      "13": {
+        "sprite_id": 82,
+        "file": "commanders/7/0D-p1.png"
+      },
+      "15": {
+        "sprite_id": 84,
+        "file": "commanders/7/0F-p1.png"
+      },
+      "17": {
+        "sprite_id": 80,
+        "file": "commanders/7/11-p1.png"
+      },
+      "18": {
+        "sprite_id": 79,
+        "file": "commanders/7/12-p1.png"
+      },
+      "21": {
+        "sprite_id": 79,
+        "file": "commanders/7/15-p1.png"
+      },
+      "22": {
+        "sprite_id": 80,
+        "file": "commanders/7/16-p1.png"
+      },
+      "23": {
+        "sprite_id": 81,
+        "file": "commanders/7/17-p1.png"
+      },
+      "25": {
+        "sprite_id": 82,
+        "file": "commanders/7/19-p1.png"
+      },
+      "26": {
+        "sprite_id": 78,
+        "file": "commanders/7/1A-p1.png"
+      },
+      "29": {
+        "sprite_id": 82,
+        "file": "commanders/7/1D-p1.png"
+      },
+      "30": {
+        "sprite_id": 84,
+        "file": "commanders/7/1E-p1.png"
+      },
+      "36": {
+        "sprite_id": 84,
+        "file": "commanders/7/24-p1.png"
+      }
+    },
+    "8": {
+      "1": {
+        "sprite_id": 85,
+        "file": "commanders/8/01-p1.png"
+      },
+      "4": {
+        "sprite_id": 85,
+        "file": "commanders/8/04-p1.png"
+      },
+      "5": {
+        "sprite_id": 89,
+        "file": "commanders/8/05-p1.png"
+      },
+      "10": {
+        "sprite_id": 86,
+        "file": "commanders/8/0A-p1.png"
+      },
+      "11": {
+        "sprite_id": 85,
+        "file": "commanders/8/0B-p1.png"
+      },
+      "12": {
+        "sprite_id": 89,
+        "file": "commanders/8/0C-p1.png"
+      },
+      "13": {
+        "sprite_id": 90,
+        "file": "commanders/8/0D-p1.png"
+      },
+      "18": {
+        "sprite_id": 88,
+        "file": "commanders/8/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 86,
+        "file": "commanders/8/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 86,
+        "file": "commanders/8/14-p1.png"
+      },
+      "22": {
+        "sprite_id": 87,
+        "file": "commanders/8/16-p1.png"
+      },
+      "23": {
+        "sprite_id": 88,
+        "file": "commanders/8/17-p1.png"
+      },
+      "25": {
+        "sprite_id": 90,
+        "file": "commanders/8/19-p1.png"
+      },
+      "26": {
+        "sprite_id": 85,
+        "file": "commanders/8/1A-p1.png"
+      },
+      "27": {
+        "sprite_id": 89,
+        "file": "commanders/8/1B-p1.png"
+      },
+      "28": {
+        "sprite_id": 91,
+        "file": "commanders/8/1C-p1.png"
+      },
+      "35": {
+        "sprite_id": 85,
+        "file": "commanders/8/23-p1.png"
+      }
+    },
+    "9": {
+      "1": {
+        "sprite_id": 70,
+        "file": "commanders/9/01-p1.png"
+      },
+      "5": {
+        "sprite_id": 73,
+        "file": "commanders/9/05-p1.png"
+      },
+      "7": {
+        "sprite_id": 75,
+        "file": "commanders/9/07-p1.png"
+      },
+      "10": {
+        "sprite_id": 71,
+        "file": "commanders/9/0A-p1.png"
+      },
+      "12": {
+        "sprite_id": 73,
+        "file": "commanders/9/0C-p1.png"
+      },
+      "13": {
+        "sprite_id": 74,
+        "file": "commanders/9/0D-p1.png"
+      },
+      "16": {
+        "sprite_id": 76,
+        "file": "commanders/9/10-p1.png"
+      },
+      "18": {
+        "sprite_id": 72,
+        "file": "commanders/9/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 71,
+        "file": "commanders/9/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 71,
+        "file": "commanders/9/14-p1.png"
+      },
+      "21": {
+        "sprite_id": 72,
+        "file": "commanders/9/15-p1.png"
+      },
+      "25": {
+        "sprite_id": 73,
+        "file": "commanders/9/19-p1.png"
+      },
+      "27": {
+        "sprite_id": 73,
+        "file": "commanders/9/1B-p1.png"
+      },
+      "28": {
+        "sprite_id": 77,
+        "file": "commanders/9/1C-p1.png"
+      },
+      "29": {
+        "sprite_id": 74,
+        "file": "commanders/9/1D-p1.png"
+      },
+      "31": {
+        "sprite_id": 76,
+        "file": "commanders/9/1F-p1.png"
+      },
+      "38": {
+        "sprite_id": 71,
+        "file": "commanders/9/26-p1.png"
+      },
+      "42": {
+        "sprite_id": 76,
+        "file": "commanders/9/2A-p1.png"
+      }
+    },
+    "10": {
+      "3": {
+        "sprite_id": 49,
+        "file": "commanders/10/03-p1.png"
+      },
+      "4": {
+        "sprite_id": 53,
+        "file": "commanders/10/04-p1.png"
+      },
+      "8": {
+        "sprite_id": 50,
+        "file": "commanders/10/08-p1.png"
+      },
+      "9": {
+        "sprite_id": 49,
+        "file": "commanders/10/09-p1.png"
+      },
+      "11": {
+        "sprite_id": 53,
+        "file": "commanders/10/0B-p1.png"
+      },
+      "13": {
+        "sprite_id": 54,
+        "file": "commanders/10/0D-p1.png"
+      },
+      "17": {
+        "sprite_id": 50,
+        "file": "commanders/10/11-p1.png"
+      },
+      "18": {
+        "sprite_id": 51,
+        "file": "commanders/10/12-p1.png"
+      },
+      "19": {
+        "sprite_id": 49,
+        "file": "commanders/10/13-p1.png"
+      },
+      "20": {
+        "sprite_id": 49,
+        "file": "commanders/10/14-p1.png"
+      },
+      "21": {
+        "sprite_id": 49,
+        "file": "commanders/10/15-p1.png"
+      },
+      "22": {
+        "sprite_id": 50,
+        "file": "commanders/10/16-p1.png"
+      },
+      "23": {
+        "sprite_id": 52,
+        "file": "commanders/10/17-p1.png"
+      },
+      "24": {
+        "sprite_id": 51,
+        "file": "commanders/10/18-p1.png"
+      },
+      "25": {
+        "sprite_id": 54,
+        "file": "commanders/10/19-p1.png"
+      },
+      "26": {
+        "sprite_id": 53,
+        "file": "commanders/10/1A-p1.png"
+      },
+      "38": {
+        "sprite_id": 49,
+        "file": "commanders/10/26-p1.png"
+      },
+      "40": {
+        "sprite_id": 51,
+        "file": "commanders/10/28-p1.png"
+      }
+    }
+  }
+}

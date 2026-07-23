@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT))
 
 from editor.model import class_change_editor_model, item_editor_model
 from tools.class_change_data import patch_class_change_chains
+from tools.class_hire_data import patch_class_hire_unlocks
 from tools.item_data import patch_items
 from tools.scenario_data import (
     SCENARIO_COUNT,
@@ -108,7 +109,14 @@ class Handler(SimpleHTTPRequestHandler):
                 patch_items(data, request["items"])
             if "class_changes" in request:
                 patch_class_change_chains(data, request["class_changes"])
-            if not scenarios and "items" not in request and "class_changes" not in request:
+            if "class_hires" in request:
+                patch_class_hire_unlocks(data, request["class_hires"])
+            if (
+                not scenarios
+                and "items" not in request
+                and "class_changes" not in request
+                and "class_hires" not in request
+            ):
                 raise ValueError("build request contains no editable data")
             checksum = update_checksum(data)
             OUTPUT_ROM.parent.mkdir(parents=True, exist_ok=True)

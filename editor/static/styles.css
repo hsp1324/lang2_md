@@ -77,9 +77,8 @@ select { padding: 0 30px 0 9px; }
   max-height: calc(100vh - 235px);
 }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.scenarioTable { min-width: 1430px; }
-.itemTable { min-width: 1540px; }
-.classTable { min-width: 1280px; }
+.scenarioTable { min-width: 1510px; }
+.itemTable { min-width: 1590px; }
 thead { position: sticky; top: 0; z-index: 2; background: #2c312c; }
 th, td {
   border-bottom: 1px solid #383d38;
@@ -97,6 +96,26 @@ tr[data-hidden="true"] td:first-child::after {
 tr:hover { background: #222622; }
 td input { width: 58px; padding: 0 6px; }
 td select { width: 138px; }
+.spriteCell { width: 58px; text-align: center; }
+.pixelSprite {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.emptySprite {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  color: #737c71;
+}
+.itemIconCell { width: 46px; text-align: center; }
+.itemIconCell img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
 .identity { min-width: 116px; }
 .identity small { display: block; color: #8e988b; margin-top: 2px; }
 .offset { font-family: Consolas, monospace; color: #91a28e; }
@@ -110,39 +129,203 @@ td select { width: 138px; }
 .priceEditor input { width: 78px; }
 .priceEditor span { color: #9ca69a; }
 .special { color: #d4bf83; white-space: normal; min-width: 150px; }
-.classChoice {
+.assetChoice {
+  width: 150px;
+  min-height: 48px;
+  padding: 3px 7px;
   display: grid;
-  grid-template-columns: 48px minmax(160px, 1fr);
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  background: #292e29;
+  border-color: #596158;
+  color: #eef1ec;
+  font-weight: 400;
+  text-align: left;
+}
+.assetChoice span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.assetPicker {
+  position: fixed;
+  z-index: 20;
+  width: min(390px, calc(100vw - 24px));
+  height: min(520px, calc(100vh - 24px));
+  padding: 8px;
+  background: #202420;
+  border: 1px solid #697268;
+  box-shadow: 0 10px 32px #000a;
+}
+.assetPicker[hidden] { display: none; }
+.assetPicker input {
+  width: 100%;
+  padding: 0 10px;
+  margin-bottom: 8px;
+}
+.assetPickerOptions {
+  height: calc(100% - 42px);
+  overflow: auto;
+}
+.pickerOption {
+  width: 100%;
+  min-height: 52px;
+  padding: 4px 8px;
+  display: grid;
+  grid-template-columns: 44px 30px minmax(100px, 1fr) minmax(90px, 1fr);
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  border-bottom: 1px solid #373d37;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  font-weight: 400;
+}
+.pickerOption:hover { background: #303630; }
+.pickerOption small { color: #929c90; overflow: hidden; }
+.classWorkspace {
+  display: grid;
+  grid-template-columns: minmax(680px, 1fr) 310px;
+  min-height: calc(100vh - 235px);
+  border: 1px solid #424741;
+}
+.classTreeWrap {
+  min-width: 0;
+  overflow: auto;
+  border-right: 1px solid #424741;
+}
+.tierLabels {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  min-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(5, 210px);
+  gap: 12px;
+  padding: 10px 16px;
+  background: #2c312c;
+  border-bottom: 1px solid #424741;
+  color: #cbd1c8;
+  font-size: 12px;
+  font-weight: 700;
+}
+.classTree {
+  position: relative;
+  min-width: 1100px;
+  min-height: 610px;
+  padding: 18px 16px 28px;
+  display: grid;
+  grid-template-columns: repeat(5, 210px);
+  gap: 12px;
+  align-items: stretch;
+}
+.classEdges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+.classEdges path {
+  fill: none;
+  stroke: #667566;
+  stroke-width: 2;
+}
+.classTier {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 12px;
+}
+.classNode {
+  width: 196px;
+  min-height: 64px;
+  padding: 6px 8px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
-  min-width: 220px;
+  background: #292e29;
+  border-color: #596158;
+  color: #f0f2ee;
+  text-align: left;
+  font-weight: 400;
 }
-.classChoice select { width: 100%; }
-.classPreview {
-  width: 48px;
-  height: 60px;
+.classNode.selected {
+  background: #275f3a;
+  border-color: #6cc187;
+  box-shadow: 0 0 0 2px #6cc18755;
+}
+.classNode strong, .classNode small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.classNode small { margin-top: 3px; color: #9ea79b; font-size: 10px; }
+.nodeSprite, .inspectorSprite {
   display: grid;
   place-items: center;
-  overflow: hidden;
-  background: #00006d;
-  border: 1px solid #4b5350;
-}
-.classPreview img {
   width: 48px;
-  height: 60px;
-  object-fit: fill;
-  image-rendering: pixelated;
+  height: 48px;
+  background: #161916;
+  border: 1px solid #444b44;
 }
-.classPreview span {
-  color: #c2c9c0;
-  font-size: 10px;
-  line-height: 1.35;
-  text-align: center;
+.classInspector {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  padding: 16px;
+  background: #202320;
 }
+.classInspector h2 { margin: 0; font-size: 17px; }
+.classInspector h3 { margin: 0 0 9px; font-size: 14px; }
+.classInspector label { margin-top: 13px; }
+.classInspector select { width: 100%; }
+.inspectorTitle {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.inspectorTitle p { margin: 4px 0 0; color: #99a196; font-size: 11px; }
+.inspectorSprite { width: 56px; height: 56px; }
+.inspectorSprite .pixelSprite { width: 48px; height: 48px; }
+.nextClassGrid { display: grid; gap: 8px; }
+.hireEditor {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #454b44;
+}
+.hireChoices { display: grid; gap: 7px; }
+.inspectorChoice { width: 100%; }
+.hireEditor p, .terminalNote {
+  margin: 9px 0 0;
+  color: #a4aca1;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: normal;
+}
+.classInspector .offset { margin-top: 9px; font-size: 11px; }
 @media (max-width: 700px) {
   .topbar { align-items: stretch; flex-direction: column; }
   main { padding: 12px; }
   .tabs { margin-left: -12px; margin-right: -12px; padding: 0 12px; overflow-x: auto; }
   .summary { width: 100%; margin-left: 0; }
   .tableWrap { max-height: calc(100vh - 315px); }
+  .classWorkspace {
+    display: block;
+    min-height: 0;
+  }
+  .classTreeWrap {
+    max-height: 58vh;
+    border-right: 0;
+    border-bottom: 1px solid #424741;
+  }
+  .classInspector { position: static; }
 }

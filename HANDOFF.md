@@ -8138,3 +8138,39 @@ contains 57 safe syllables as documented below and in
   `python3 -m py_compile` passes all new Python modules; and
   `node --check editor/static/app.js` passes. The complete address map and
   safety boundary are in `docs/editor_data_model.md`.
+
+### ROM-backed Editor Images And Five-tier Class Tree (2026-07-23)
+
+- The earlier `class-previews` were crops of the candidate screen's mercenary
+  formation pane, not character-class art. They remain historical evidence
+  but the editor no longer displays them. `tools/build_class_sprite_assets.py`
+  now reads all 157 generic sprite words at `0x05DDE6`, ten commander override
+  pointers at `0x05DB80`, and four-tile 16x16 sprites based at `0x052980`.
+  It emits 628 generic palette PNGs plus 180 commander-specific PNGs. The
+  scenario table and class tree prefer a commander override and fall back to
+  the generic class ID. The provided external image chart is a visual/name
+  cross-check only; ROM IDs remain authoritative.
+- `tools/build_item_icon_assets.py` crops all 37 verified shop captures at
+  X=24 and `Y=42+14*((id-1)%5)` into authentic 16x16 item icons. These and the
+  class sprites are editor display assets only; they do not patch ROM graphics.
+- The ten class-chain records are now rendered as their actual maximum
+  five-tier branching tree: row 0 owns tier 1, rows 1..3 tier 2, rows 4..8
+  tier 3, and terminal row 9 tier 4 to hidden tier 5. The prior ten-stage table
+  was a storage-layout interpretation and must not be restored.
+- Class records begin at `0x05EDDC`, size `0x1C`. Bytes `+0x1A/+0x1B` store
+  two newly unlocked mercenary bit indices. `FF` means none; `00..0F` maps to
+  actual class IDs `62..71`. The apply code at `0x014C68..0x014CAC` ORs these
+  into the commander's cumulative hire mask. `tools/class_hire_data.py` owns
+  this conversion and rejects every other class ID.
+- The scenario table is now ordered deployment, character sprite, name, class,
+  stats, coordinates, and six mercenary slots. A shared custom picker shows
+  all 157 class IDs with ROM sprite, Korean name, and Japanese name; class
+  unlock controls restrict the same picker to `62..71` plus none. The item
+  table displays all 37 source icons.
+- Headless Playwright at 1600x1000 verified 12 Scenario 1 records, 37 item
+  icons, a 17-node/28-edge Elwin class tree, two hire controls, and 158 picker
+  rows without console or page errors. A 390x844 mobile pass had no body
+  overflow or overlapping inspector. An unchanged integrated API build is
+  byte-identical to production `FDC9`, SHA-256
+  `7ad7d2199378380a6abb7bac94825799e57d7bf3f3122ded45225c7270a2b19c`.
+  The focused data/editor suite now passes 50 tests.
