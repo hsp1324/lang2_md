@@ -164,3 +164,28 @@ checksum `48C8`에서 숨김 비트와 좌표만 바꿨다. 일본 원본과 pro
 `captures/run/c1a2_s04_*_map_status.png`와
 `captures/run/c1a2_s04_*_popup_with_bottom.png` 또는
 `*_command_with_bottom.png`이다.
+
+## Scenario 21 Turn 4 and Completion Check
+
+Production `4234` 기반 completion probe `5E20`을 turn 4까지 진행한 뒤 지도
+이동, 초상화 대사, 파이어볼, 일반 전투를 연속 통과시켰다. 다음 조합은 하단
+상태창이나 지휘관 메뉴에서 모두 온전했다.
+
+| Side | Name | Class | Context |
+| --- | --- | --- | --- |
+| 적군 지휘관 | 서큐버스 | 서큐버스 | turn 4 하단 상태창 |
+| 적군 병사 | 서큐버스 | 서큐버스 | turn 4 인접 병사 하단 상태창 |
+| 아군 | 레스터 | 매직나이트 | 명령·마법 목록 |
+| 아군 | 제시카 | 비숍 | 하단 상태창 |
+| 아군 | 쉐리 | 로드 | 북쪽 크라켄 전투 |
+| 아군 | 아론 | 로드 | 중앙 크라켄 전투 |
+| 아군 | 키스 | 호크나이트 | 남쪽 크라켄 전투 |
+| 적군 | 크라켄 | 크라켄 | 세 reveal 위치와 전투창 |
+
+특히 이전 지연 손상에서 반복된 `키`, `스`, `크`, `트`를 같은 세션의 turn 4
+및 세 번의 전투 뒤에도 확인했다. 빈 지형은 `SCENARIO 21 / TURN 4`로
+표시되어 과거 `SCENAR록O` 손상도 재발하지 않았다. 대표 증거는
+`captures/run/5e20_s21_scan_up.png`,
+`captures/run/5e20_s21_scan_left.png`,
+`captures/run/5e20_s21_kraken_south_keith_menu.png`과
+`captures/run/5e20_s21_kraken_north_battle_02.png`이다.

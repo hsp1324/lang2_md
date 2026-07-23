@@ -7773,3 +7773,44 @@ contains 57 safe syllables as documented below and in
   inventory were refreshed from this production build; their accepted older
   live captures remain surface-fingerprint evidence rather than current-ROM
   checksum evidence.
+
+### Scenario 21 Completion and Scenario 22 Save Handoff (2026-07-23)
+
+- The valid starting state remains
+  `captures/analysis/4234_s21_two_enemies_remaining.gst`, SHA-256
+  `1ef7de1e8bc833f51633c290701b5c4bf643a8efb6bfaeb03ac6e8a1a51c0eed`.
+  Freshly launched derivative `5E20` reached turn 4 and retained
+  `서큐버스/서큐버스` on both the enemy commander and an adjacent enemy
+  soldier. `레스터/매직나이트` and `제시카/비숍` were also intact, and an
+  empty tile still rendered `SCENARIO 21 / TURN 4`. Representative captures
+  are `captures/run/5e20_s21_scan_up.png`,
+  `captures/run/5e20_s21_scan_left.png`, and
+  `captures/run/5e20_s21_scan_up_left.png`.
+- Opening the Start menu reapplied the probe's guarded one-HP helper. Lester's
+  stock `파이어볼` killed both remaining Succubus groups and traversed their
+  Korean death event. The event then revealed the three source Kraken groups
+  at `(2,5)`, `(1,16)`, and `(2,27)`, beside the staged source players. Runtime
+  inspection after the reveal showed groups 15..17 as class `0x5B`, names
+  `0x60..0x62`, HP 10, with the exact stock positions; after battle each had
+  HP 0 and defeat flag `0x80`.
+- The north, middle, and south fights visibly retained
+  `크라켄/크라켄`; their adjacent commanders were `쉐리/로드`,
+  `아론/로드`, and `키스/호크나이트`. The battle renderer displayed clean
+  `AT/DF` labels rather than the former damaged cells. Evidence includes
+  `captures/run/5e20_s21_kraken_north_enemy_target.png`,
+  `captures/run/5e20_s21_kraken_north_battle_02.png`,
+  `captures/run/5e20_s21_kraken_middle_enemy_target.png`, and
+  `captures/run/5e20_s21_kraken_south_keith_menu.png`.
+- Defeating all three Krakens traversed the full Korean aftermath and each
+  commander level-up page, then reached `전과보고`. The real save UI rendered
+  `저장`, changed slot 1 from `시나리오 21` to `시나리오 22`, selected
+  `다음 시나리오`, and entered the Scenario 22 route and preparation screens.
+  No reset, freeze, Japanese residue, or delayed colored name/class cells
+  appeared. The first post-Kraken Elwin dialogue is readable Korean but has
+  awkward line composition; retain
+  `captures/run/5e20_s21_after_all_krakens_wait.png` as a later prose-review
+  target rather than treating it as a renderer failure.
+- New in-process quicksaves remain non-authoritative for relaunch because two
+  earlier saves booted to the Sega screen. They are still valid read-only RAM
+  snapshots. Do not replace the authoritative starting state or repeat the
+  rejected in-process load path.

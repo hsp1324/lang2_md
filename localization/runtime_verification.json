@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "6E2C",
+  "production_checksum": "4234",
   "states": [
     "pending",
     "historical",
@@ -1278,8 +1278,8 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_probe",
-      "turn_events": "progressed_current",
-      "completion": "pending",
+      "turn_events": "verified_probe",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/138b_s21_brief_01.png",
@@ -1308,9 +1308,31 @@
         "captures/run/77d0_s21_description_current_08.png",
         "captures/run/77d0_s21_description_current_11.png",
         "captures/run/77d0_s21_description_current_14.png",
-        "captures/run/77d0_s21_description_current_15.png"
+        "captures/run/77d0_s21_description_current_15.png",
+        "captures/run/5e20_s21_scan_up.png",
+        "captures/run/5e20_s21_scan_left.png",
+        "captures/run/5e20_s21_turn4_lester_magic_list.png",
+        "captures/run/5e20_s21_turn4_lester_fireball_18.png",
+        "captures/run/5e20_s21_turn4_lester_fireball_22.png",
+        "captures/run/5e20_s21_kraken_north_enemy_target.png",
+        "captures/run/5e20_s21_kraken_north_battle_02.png",
+        "captures/run/5e20_s21_kraken_middle_enemy_target.png",
+        "captures/run/5e20_s21_kraken_south_keith_menu.png",
+        "captures/run/5e20_s21_kraken_south_enemy_target.png",
+        "captures/run/5e20_s21_after_all_krakens_wait.png",
+        "captures/run/5e20_s21_clear_event_02.png",
+        "captures/run/5e20_s21_clear_event_04_wait.png",
+        "captures/run/5e20_s21_clear_event_10_wait.png",
+        "captures/run/5e20_s21_clear_event_21_settled.png",
+        "captures/run/5e20_s21_clear_event_23.png",
+        "captures/run/5e20_s21_post_report_01.png",
+        "captures/run/5e20_s21_save_confirm_01.png",
+        "captures/run/5e20_s21_save_next_selected.png",
+        "captures/run/5e20_s22_entry_01.png",
+        "captures/run/5e20_s22_entry_02.png",
+        "captures/run/5e20_s22_entry_04.png"
       ],
-      "note": "Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrolling frames of 마리오네트, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the ancient defeat of Bozel, the cursed land where the god of chaos was sealed, its appearance beyond the horizon, and the Dark Princess blocking the party's landing. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation roster pages, all eight commander/class panels, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original eleven-record fixed-placement list at 0x1825E2 remains covered by editor regressions for Lana/다크프린세스, a visible Lich, and a hidden Kraken. Later turns, conditional events, completion, and branches remain pending."
+      "note": "Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrolling frames of 마리오네트, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the ancient defeat of Bozel, the cursed land where the god of chaos was sealed, its appearance beyond the horizon, and the Dark Princess blocking the party's landing. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation roster pages, all eight commander/class panels, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. Production-4234 completion derivative 5E20 preserves every identity, event handler, and hidden reinforcement while limiting documented enemy combat fields and staging players beside the stock reveal points. Turn 4 retains 서큐버스/서큐버스 for both commander and adjacent soldier, 레스터/매직나이트, 제시카/비숍, 쉐리/로드, 아론/로드, and 키스/호크나이트 after map movement, magic, dialogue portraits, and battles. Fireball defeated the last two visible Succubi, all three stock Kraken reveal events rendered 크라켄/크라켄, and normal attacks reached the complete Korean aftermath, every level-up page, 전과보고, the real 저장 screen, saved 시나리오 22, 다음 시나리오, the Scenario 22 route text, and its preparation screen without reset, freeze, Japanese residue, or colored status cells. The first post-Kraken Elwin page is readable Korean but its line composition should receive a later prose review; it does not block completion-flow coverage. Natural branch/end variants remain pending."
     },
     {
       "scenario": 22,

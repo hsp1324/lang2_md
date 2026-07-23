@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "6E2C")
+        self.assertEqual(data["production_checksum"], "4234")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -701,7 +701,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario21["preparation"], "verified_current")
         self.assertEqual(scenario21["opening_events"], "verified_current")
         self.assertEqual(scenario21["battle_ui"], "verified_probe")
-        self.assertEqual(scenario21["turn_events"], "progressed_current")
+        self.assertEqual(scenario21["turn_events"], "verified_probe")
+        self.assertEqual(scenario21["completion"], "verified_probe")
+        for capture in (
+            "captures/run/5e20_s21_scan_up.png",
+            "captures/run/5e20_s21_scan_left.png",
+            "captures/run/5e20_s21_turn4_lester_fireball_22.png",
+            "captures/run/5e20_s21_kraken_north_enemy_target.png",
+            "captures/run/5e20_s21_kraken_middle_enemy_target.png",
+            "captures/run/5e20_s21_kraken_south_keith_menu.png",
+            "captures/run/5e20_s21_clear_event_23.png",
+            "captures/run/5e20_s21_save_confirm_01.png",
+            "captures/run/5e20_s22_entry_04.png",
+        ):
+            self.assertIn(capture, scenario21["captures"])
         self.assertEqual(scenario22["description"], "verified_current")
         for capture in (
             "captures/run/42e6_s22_description_final_01.png",
