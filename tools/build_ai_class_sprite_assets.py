@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import argparse
-from collections import defaultdict
+from collections import Counter, defaultdict
 import json
 from pathlib import Path
 import shutil
@@ -150,28 +150,49 @@ def pixelize_cell(
             )
         )
     )
-    scale = min(16 / cell.width, 16 / cell.height)
-    size = (
-        max(1, round(cell.width * scale)),
-        max(1, round(cell.height * scale)),
-    )
-    subject = cell.resize(size, Image.Resampling.NEAREST)
-    canvas = Image.new("RGBA", (16, 16), TRANSPARENT)
-    x = (16 - subject.width) // 2
-    y = 16 - subject.height
-    canvas.alpha_composite(subject, (x, y))
-    alpha = canvas.getchannel("A").point(
-        lambda value: 255 if value >= 96 else 0
-    )
-    rgb = Image.new("RGB", canvas.size, (0, 0, 0))
-    rgb.paste(canvas.convert("RGB"), mask=alpha)
-    quantized = rgb.quantize(
-        colors=16,
+    alpha = cell.getchannel("A")
+    rgb = Image.new("RGB", cell.size, (0, 0, 0))
+    rgb.paste(cell.convert("RGB"), mask=alpha)
+    palette_source = rgb.quantize(
+        colors=15,
         method=Image.Quantize.MEDIANCUT,
         dither=Image.Dither.NONE,
-    ).convert("RGBA")
-    quantized.putalpha(alpha)
-    return quantized
+    ).convert("RGB")
+
+    # The AI sheet is high-resolution pseudo-pixel art. A single NEAREST
+    # sample per destination pixel can land between its macro pixels and erase
+    # small features such as eyes. Collapse every source block by its dominant
+    # pre-quantized color instead, using the complete 16x16 destination extent.
+    result = Image.new("RGBA", (16, 16), TRANSPARENT)
+    for target_y in range(16):
+        source_y0 = target_y * cell.height // 16
+        source_y1 = max(
+            source_y0 + 1,
+            (target_y + 1) * cell.height // 16,
+        )
+        for target_x in range(16):
+            source_x0 = target_x * cell.width // 16
+            source_x1 = max(
+                source_x0 + 1,
+                (target_x + 1) * cell.width // 16,
+            )
+            colors: Counter[tuple[int, int, int]] = Counter()
+            visible = 0
+            sample_count = (
+                (source_x1 - source_x0) * (source_y1 - source_y0)
+            )
+            for source_y in range(source_y0, source_y1):
+                for source_x in range(source_x0, source_x1):
+                    if alpha.getpixel((source_x, source_y)) < 64:
+                        continue
+                    visible += 1
+                    colors[palette_source.getpixel((source_x, source_y))] += 1
+            if visible < max(1, sample_count // 10):
+                continue
+            color = colors.most_common(1)[0][0]
+            result.putpixel((target_x, target_y), (*color, 255))
+
+    return result
 
 
 def dominant_colors(
@@ -208,6 +229,7 @@ def build_assets(
     source_cell_dir = output_dir / "source-cells"
     source_cell_dir.mkdir(parents=True, exist_ok=True)
     source_cell_files: dict[tuple[int, int], str] = {}
+    pixelized_cells: dict[tuple[int, int], Image.Image] = {}
     for commander_id in range(1, COMMANDER_COUNT + 1):
         for stage in range(1, GRID_COLUMNS + 1):
             target = source_cell_dir / f"{commander_id}-{stage}.png"
@@ -218,6 +240,11 @@ def build_assets(
             ).save(target, optimize=True)
             source_cell_files[(commander_id, stage)] = str(
                 target.relative_to(output_dir)
+            )
+            pixelized_cells[(commander_id, stage)] = pixelize_cell(
+                sheet,
+                commander_id - 1,
+                stage - 1,
             )
 
     for commander_id in range(1, COMMANDER_COUNT + 1):
@@ -236,11 +263,7 @@ def build_assets(
             source_cell = sheet.crop(
                 cell_bounds(sheet, commander_id - 1, stage - 1)
             )
-            ai_base = pixelize_cell(
-                sheet,
-                commander_id - 1,
-                stage - 1,
-            )
+            ai_base = pixelized_cells[(commander_id, stage)]
             source_cell_file = source_cell_files[
                 (commander_id, stage)
             ]
@@ -276,7 +299,7 @@ def build_assets(
                 "group_rank": group_rank,
                 "redesigned": redesigned,
                 "feature": (
-                    "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음"
+                    "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음"
                     if redesigned
                     else "중복 그림 묶음의 최저 클래스·ROM 원본 유지"
                 ),
@@ -297,8 +320,8 @@ def build_assets(
         "asset_count": asset_count,
         "redesigned_count": redesigned_count,
         "pipeline": (
-            "AI concept cell -> central foreground isolation -> nearest-neighbor "
-            "16x16 -> per-cell adaptive palette"
+            "AI concept cell -> central foreground isolation -> adaptive "
+            "palette -> dominant-block 16x16"
         ),
         "rom_effect": "none; preview PNG assets only",
         "commanders": commanders,

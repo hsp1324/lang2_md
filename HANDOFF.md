@@ -8280,13 +8280,17 @@ contains 57 safe syllables as documented below and in
   pixelization, changing source gold/blue/white into unrelated violet/brown.
   A later attempt also restored a broad ROM head rectangle; the user clarified
   that face locking belongs only to Test Change, and the rectangle hid too much
-  of the AI design. The accepted AI pipeline selects the central foreground
-  component, excludes neighboring-cell fragments, uses nearest-neighbor fitting
-  across the full 16x16 extent and a per-cell adaptive palette, and restores no
-  ROM pixels. The old 15-pixel fit added avoidable padding and made the already
-  higher-resolution concept look compressed. Its rank-zero
+  of the AI design. A direct nearest-neighbor reduction was also rejected:
+  choosing one arbitrary source sample per destination pixel erased small
+  features such as Elwin Lord's eye, while aspect fitting used only 13-14 of
+  the 16 horizontal pixels. The accepted AI pipeline selects the central
+  foreground component, excludes neighboring-cell fragments, reduces the
+  source to a per-cell adaptive 15-color palette, and chooses the dominant
+  source-block color for every cell of the full 16x16 destination. It restores
+  no ROM pixels. Its rank-zero
   entries still bypass the AI result entirely. The browser inspector displays
-  source and 16x16 dominant color swatches to expose future palette drift.
+  source and 16x16 dominant color swatches at equal 88-pixel preview sizes to
+  expose future palette or apparent-size drift.
 - Generated sources are retained under `docs/assets/ai-class-source`, while
   the accepted final preview input is
   `docs/assets/allied_class_redesign_concept.png`. It is a 10x5 pixel-art
@@ -8294,7 +8298,7 @@ contains 57 safe syllables as documented below and in
   `allied_class_ai_evolution_v2.png` and direct Elwin/Liana experiments remain
   under `docs/assets/ai-class-source` as source history but are not wired into
   the preview. Its dark gray background is removed with a color-seeded
-  foreground mask before nearest-neighbor reduction. Character design work is
+  foreground mask before dominant-block reduction. Character design work is
   intentionally paused here so localization remains the primary task.
 - A separate final generation experiment used each commander's enlarged ROM
   16x16 reference strip as direct image input. The ten raw five-stage outputs

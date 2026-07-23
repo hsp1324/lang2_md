@@ -11,6 +11,7 @@ from tools.build_class_sprite_assets import (
 from tools.build_test_class_sprite_assets import (
     protected_face_points,
 )
+from tools.build_ai_class_sprite_assets import pixelize_cell
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,6 +129,26 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         self.assertEqual(len(source_cells), 50)
         for filename in source_cells:
             self.assertTrue((AI_ASSET_DIR / filename).is_file(), filename)
+
+    def test_ai_pixelizer_uses_full_extent_and_binary_alpha(self):
+        sheet = Image.open(
+            ROOT / "docs/assets/allied_class_redesign_concept.png"
+        ).convert("RGB")
+        elwin_lord = pixelize_cell(sheet, 0, 1)
+        self.assertEqual(elwin_lord.size, (16, 16))
+        self.assertEqual(elwin_lord.getchannel("A").getbbox(), (0, 0, 16, 16))
+        self.assertTrue(
+            {
+                color
+                for _, color in (
+                    elwin_lord.getchannel("A").getcolors(maxcolors=256) or []
+                )
+            }.issubset({0, 255})
+        )
+        self.assertLessEqual(
+            len(elwin_lord.getcolors(maxcolors=256) or []),
+            15,
+        )
 
     def test_preview_generators_are_not_imported_by_rom_builder(self):
         production_sources = (

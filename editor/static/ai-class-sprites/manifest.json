@@ -6,7 +6,7 @@
   "commander_count": 10,
   "asset_count": 170,
   "redesigned_count": 102,
-  "pipeline": "AI concept cell -> central foreground isolation -> nearest-neighbor 16x16 -> per-cell adaptive palette",
+  "pipeline": "AI concept cell -> central foreground isolation -> adaptive palette -> dominant-block 16x16",
   "rom_effect": "none; preview PNG assets only",
   "commanders": {
     "1": {
@@ -68,12 +68,12 @@
             "#f7f8f8"
           ],
           "pixel_palette": [
-            "#faf9f8",
-            "#825532",
-            "#9b8a71",
-            "#750a0a",
-            "#52372c",
-            "#302c27"
+            "#f7e8c4",
+            "#750907",
+            "#ccc8b4",
+            "#b88d55",
+            "#7e7972",
+            "#764429"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -85,7 +85,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/04.png"
         },
         "5": {
@@ -181,12 +181,12 @@
             "#f9f9f9"
           ],
           "pixel_palette": [
-            "#6f5546",
-            "#c2b7a2",
-            "#8c8d8f",
-            "#480e0d",
-            "#f9f9f7",
-            "#e6e4d7"
+            "#d2c7b2",
+            "#4e0e0c",
+            "#7b482c",
+            "#3b3837",
+            "#f4f4ee",
+            "#b5926a"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -198,7 +198,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/0B.png"
         },
         "12": {
@@ -219,12 +219,12 @@
             "#f9f9f9"
           ],
           "pixel_palette": [
-            "#6f5546",
-            "#c2b7a2",
-            "#8c8d8f",
-            "#480e0d",
-            "#f9f9f7",
-            "#e6e4d7"
+            "#d2c7b2",
+            "#4e0e0c",
+            "#7b482c",
+            "#3b3837",
+            "#f4f4ee",
+            "#b5926a"
           ],
           "face_source_sprite_id": 34,
           "face_pixel_count": 0,
@@ -235,7 +235,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/0C.png"
         },
         "13": {
@@ -292,12 +292,12 @@
             "#f9f9f9"
           ],
           "pixel_palette": [
-            "#6f5546",
-            "#c2b7a2",
-            "#8c8d8f",
-            "#480e0d",
-            "#f9f9f7",
-            "#e6e4d7"
+            "#d2c7b2",
+            "#4e0e0c",
+            "#7b482c",
+            "#3b3837",
+            "#f4f4ee",
+            "#b5926a"
           ],
           "face_source_sprite_id": 31,
           "face_pixel_count": 0,
@@ -309,7 +309,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/12.png"
         },
         "19": {
@@ -330,12 +330,12 @@
             "#f9f9f9"
           ],
           "pixel_palette": [
-            "#6f5546",
-            "#c2b7a2",
-            "#8c8d8f",
-            "#480e0d",
-            "#f9f9f7",
-            "#e6e4d7"
+            "#d2c7b2",
+            "#4e0e0c",
+            "#7b482c",
+            "#3b3837",
+            "#f4f4ee",
+            "#b5926a"
           ],
           "face_source_sprite_id": 31,
           "face_pixel_count": 0,
@@ -347,7 +347,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/13.png"
         },
         "20": {
@@ -368,12 +368,12 @@
             "#fffffe"
           ],
           "pixel_palette": [
-            "#b57d35",
-            "#c7b088",
-            "#efe9d7",
-            "#480f0f",
-            "#776353",
-            "#5a3c2c"
+            "#f5f3e3",
+            "#ca9236",
+            "#770907",
+            "#874f29",
+            "#dbc795",
+            "#4b4340"
           ],
           "face_source_sprite_id": 31,
           "face_pixel_count": 0,
@@ -385,7 +385,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/14.png"
         },
         "23": {
@@ -441,12 +441,12 @@
             "#fffffe"
           ],
           "pixel_palette": [
-            "#b57d35",
-            "#c7b088",
-            "#efe9d7",
-            "#480f0f",
-            "#776353",
-            "#5a3c2c"
+            "#f5f3e3",
+            "#ca9236",
+            "#770907",
+            "#874f29",
+            "#dbc795",
+            "#4b4340"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -458,7 +458,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/1A.png"
         },
         "27": {
@@ -479,12 +479,12 @@
             "#fffffe"
           ],
           "pixel_palette": [
-            "#b57d35",
-            "#c7b088",
-            "#efe9d7",
-            "#480f0f",
-            "#776353",
-            "#5a3c2c"
+            "#f5f3e3",
+            "#ca9236",
+            "#770907",
+            "#874f29",
+            "#dbc795",
+            "#4b4340"
           ],
           "face_source_sprite_id": 34,
           "face_pixel_count": 0,
@@ -495,7 +495,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/1B.png"
         },
         "28": {
@@ -551,12 +551,12 @@
             "#fffffe"
           ],
           "pixel_palette": [
-            "#b57d35",
-            "#c7b088",
-            "#efe9d7",
-            "#480f0f",
-            "#776353",
-            "#5a3c2c"
+            "#f5f3e3",
+            "#ca9236",
+            "#770907",
+            "#874f29",
+            "#dbc795",
+            "#4b4340"
           ],
           "face_source_sprite_id": 35,
           "face_pixel_count": 0,
@@ -566,7 +566,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/1D.png"
         },
         "32": {
@@ -623,12 +623,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#b3a58d",
-            "#8d4e23",
-            "#fcfcfa",
-            "#f1dba9",
-            "#650907",
-            "#3b3432"
+            "#faf9f1",
+            "#e1b050",
+            "#aba191",
+            "#46120f",
+            "#8e714b",
+            "#ece0c0"
           ],
           "face_source_sprite_id": 33,
           "face_pixel_count": 0,
@@ -638,7 +638,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "1/22.png"
         }
       }
@@ -738,12 +738,12 @@
             "#f8f8f7"
           ],
           "pixel_palette": [
-            "#964e15",
-            "#5e5043",
-            "#f6f3e8",
-            "#e8ca7b",
-            "#b46d24",
-            "#e5b658"
+            "#f1e8c9",
+            "#ddb354",
+            "#b57529",
+            "#643922",
+            "#756452",
+            "#740c0e"
           ],
           "face_source_sprite_id": 37,
           "face_pixel_count": 0,
@@ -755,7 +755,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/08.png"
         },
         "10": {
@@ -815,12 +815,12 @@
             "#ffbb09"
           ],
           "pixel_palette": [
-            "#eae1c7",
-            "#bb8030",
-            "#7e7f86",
-            "#8c5119",
-            "#4c392b",
-            "#474f6d"
+            "#8b4e16",
+            "#f0ecde",
+            "#47403e",
+            "#c38f38",
+            "#797b81",
+            "#020ea5"
           ],
           "face_source_sprite_id": 41,
           "face_pixel_count": 0,
@@ -830,7 +830,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/0B.png"
         },
         "13": {
@@ -888,12 +888,12 @@
             "#ffbb09"
           ],
           "pixel_palette": [
-            "#eae1c7",
-            "#bb8030",
-            "#7e7f86",
-            "#8c5119",
-            "#4c392b",
-            "#474f6d"
+            "#8b4e16",
+            "#f0ecde",
+            "#47403e",
+            "#c38f38",
+            "#797b81",
+            "#020ea5"
           ],
           "face_source_sprite_id": 37,
           "face_pixel_count": 0,
@@ -905,7 +905,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/11.png"
         },
         "18": {
@@ -962,12 +962,12 @@
             "#ffbb09"
           ],
           "pixel_palette": [
-            "#eae1c7",
-            "#bb8030",
-            "#7e7f86",
-            "#8c5119",
-            "#4c392b",
-            "#474f6d"
+            "#8b4e16",
+            "#f0ecde",
+            "#47403e",
+            "#c38f38",
+            "#797b81",
+            "#020ea5"
           ],
           "face_source_sprite_id": 38,
           "face_pixel_count": 0,
@@ -980,7 +980,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/13.png"
         },
         "20": {
@@ -1001,12 +1001,12 @@
             "#fcffff"
           ],
           "pixel_palette": [
-            "#9b4a0f",
-            "#f8f5df",
-            "#e89b10",
-            "#594834",
-            "#e3c064",
-            "#381314"
+            "#f7f4df",
+            "#8c4612",
+            "#efa919",
+            "#6f0c0a",
+            "#453f39",
+            "#e4cc7f"
           ],
           "face_source_sprite_id": 38,
           "face_pixel_count": 0,
@@ -1019,7 +1019,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/14.png"
         },
         "21": {
@@ -1040,12 +1040,12 @@
             "#fcffff"
           ],
           "pixel_palette": [
-            "#9b4a0f",
-            "#f8f5df",
-            "#e89b10",
-            "#594834",
-            "#e3c064",
-            "#381314"
+            "#f7f4df",
+            "#8c4612",
+            "#efa919",
+            "#6f0c0a",
+            "#453f39",
+            "#e4cc7f"
           ],
           "face_source_sprite_id": 38,
           "face_pixel_count": 0,
@@ -1058,7 +1058,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/15.png"
         },
         "22": {
@@ -1079,12 +1079,12 @@
             "#fcffff"
           ],
           "pixel_palette": [
-            "#9b4a0f",
-            "#f8f5df",
-            "#e89b10",
-            "#594834",
-            "#e3c064",
-            "#381314"
+            "#f7f4df",
+            "#8c4612",
+            "#efa919",
+            "#6f0c0a",
+            "#453f39",
+            "#e4cc7f"
           ],
           "face_source_sprite_id": 37,
           "face_pixel_count": 0,
@@ -1096,7 +1096,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/16.png"
         },
         "23": {
@@ -1152,12 +1152,12 @@
             "#fcffff"
           ],
           "pixel_palette": [
-            "#9b4a0f",
-            "#f8f5df",
-            "#e89b10",
-            "#594834",
-            "#e3c064",
-            "#381314"
+            "#f7f4df",
+            "#8c4612",
+            "#efa919",
+            "#6f0c0a",
+            "#453f39",
+            "#e4cc7f"
           ],
           "face_source_sprite_id": 39,
           "face_pixel_count": 0,
@@ -1167,7 +1167,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/18.png"
         },
         "25": {
@@ -1188,12 +1188,12 @@
             "#fcffff"
           ],
           "pixel_palette": [
-            "#9b4a0f",
-            "#f8f5df",
-            "#e89b10",
-            "#594834",
-            "#e3c064",
-            "#381314"
+            "#f7f4df",
+            "#8c4612",
+            "#efa919",
+            "#6f0c0a",
+            "#453f39",
+            "#e4cc7f"
           ],
           "face_source_sprite_id": 42,
           "face_pixel_count": 0,
@@ -1204,7 +1204,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/19.png"
         },
         "29": {
@@ -1225,12 +1225,12 @@
             "#fcffff"
           ],
           "pixel_palette": [
-            "#9b4a0f",
-            "#f8f5df",
-            "#e89b10",
-            "#594834",
-            "#e3c064",
-            "#381314"
+            "#f7f4df",
+            "#8c4612",
+            "#efa919",
+            "#6f0c0a",
+            "#453f39",
+            "#e4cc7f"
           ],
           "face_source_sprite_id": 42,
           "face_pixel_count": 0,
@@ -1241,7 +1241,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/1D.png"
         },
         "40": {
@@ -1262,12 +1262,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#c79f4c",
-            "#fbfbf8",
-            "#a77738",
-            "#19244b",
-            "#84411e",
-            "#373530"
+            "#e1a225",
+            "#9d9a91",
+            "#8d4c1a",
+            "#f6f2d5",
+            "#0b1641",
+            "#4c4748"
           ],
           "face_source_sprite_id": 38,
           "face_pixel_count": 0,
@@ -1280,7 +1280,7 @@
           ],
           "group_rank": 4,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "2/28.png"
         }
       }
@@ -1380,12 +1380,12 @@
             "#feffff"
           ],
           "pixel_palette": [
-            "#322f37",
-            "#e3b13d",
-            "#a85f11",
-            "#1b265f",
-            "#dbca9c",
-            "#7a6b5a"
+            "#e09f25",
+            "#a25912",
+            "#f3efdf",
+            "#979391",
+            "#12185c",
+            "#27293f"
           ],
           "face_source_sprite_id": 43,
           "face_pixel_count": 0,
@@ -1397,7 +1397,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/08.png"
         },
         "10": {
@@ -1457,12 +1457,12 @@
             "#fffeff"
           ],
           "pixel_palette": [
-            "#8a8e99",
-            "#f8f7f3",
-            "#8f5118",
-            "#c39141",
-            "#464757",
-            "#d4c28e"
+            "#7f8aa2",
+            "#7b4921",
+            "#f3f1eb",
+            "#c39c58",
+            "#2d2e38",
+            "#3c486f"
           ],
           "face_source_sprite_id": 47,
           "face_pixel_count": 0,
@@ -1472,7 +1472,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/0B.png"
         },
         "13": {
@@ -1530,12 +1530,12 @@
             "#fffeff"
           ],
           "pixel_palette": [
-            "#8a8e99",
-            "#f8f7f3",
-            "#8f5118",
-            "#c39141",
-            "#464757",
-            "#d4c28e"
+            "#7f8aa2",
+            "#7b4921",
+            "#f3f1eb",
+            "#c39c58",
+            "#2d2e38",
+            "#3c486f"
           ],
           "face_source_sprite_id": 43,
           "face_pixel_count": 0,
@@ -1547,7 +1547,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/11.png"
         },
         "18": {
@@ -1604,12 +1604,12 @@
             "#fffeff"
           ],
           "pixel_palette": [
-            "#8a8e99",
-            "#f8f7f3",
-            "#8f5118",
-            "#c39141",
-            "#464757",
-            "#d4c28e"
+            "#7f8aa2",
+            "#7b4921",
+            "#f3f1eb",
+            "#c39c58",
+            "#2d2e38",
+            "#3c486f"
           ],
           "face_source_sprite_id": 44,
           "face_pixel_count": 0,
@@ -1622,7 +1622,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/13.png"
         },
         "20": {
@@ -1643,12 +1643,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#ede7d8",
-            "#c08c36",
-            "#6b7074",
-            "#5e442e",
-            "#2b2c35",
-            "#182e70"
+            "#91969e",
+            "#f5f5f0",
+            "#e0a42a",
+            "#794a1e",
+            "#324377",
+            "#dcc98e"
           ],
           "face_source_sprite_id": 44,
           "face_pixel_count": 0,
@@ -1661,7 +1661,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/14.png"
         },
         "21": {
@@ -1682,12 +1682,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#ede7d8",
-            "#c08c36",
-            "#6b7074",
-            "#5e442e",
-            "#2b2c35",
-            "#182e70"
+            "#91969e",
+            "#f5f5f0",
+            "#e0a42a",
+            "#794a1e",
+            "#324377",
+            "#dcc98e"
           ],
           "face_source_sprite_id": 44,
           "face_pixel_count": 0,
@@ -1700,7 +1700,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/15.png"
         },
         "22": {
@@ -1721,12 +1721,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#ede7d8",
-            "#c08c36",
-            "#6b7074",
-            "#5e442e",
-            "#2b2c35",
-            "#182e70"
+            "#91969e",
+            "#f5f5f0",
+            "#e0a42a",
+            "#794a1e",
+            "#324377",
+            "#dcc98e"
           ],
           "face_source_sprite_id": 43,
           "face_pixel_count": 0,
@@ -1738,7 +1738,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/16.png"
         },
         "23": {
@@ -1794,12 +1794,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#ede7d8",
-            "#c08c36",
-            "#6b7074",
-            "#5e442e",
-            "#2b2c35",
-            "#182e70"
+            "#91969e",
+            "#f5f5f0",
+            "#e0a42a",
+            "#794a1e",
+            "#324377",
+            "#dcc98e"
           ],
           "face_source_sprite_id": 45,
           "face_pixel_count": 0,
@@ -1809,7 +1809,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/18.png"
         },
         "25": {
@@ -1830,12 +1830,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#ede7d8",
-            "#c08c36",
-            "#6b7074",
-            "#5e442e",
-            "#2b2c35",
-            "#182e70"
+            "#91969e",
+            "#f5f5f0",
+            "#e0a42a",
+            "#794a1e",
+            "#324377",
+            "#dcc98e"
           ],
           "face_source_sprite_id": 48,
           "face_pixel_count": 0,
@@ -1846,7 +1846,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/19.png"
         },
         "29": {
@@ -1867,12 +1867,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#ede7d8",
-            "#c08c36",
-            "#6b7074",
-            "#5e442e",
-            "#2b2c35",
-            "#182e70"
+            "#91969e",
+            "#f5f5f0",
+            "#e0a42a",
+            "#794a1e",
+            "#324377",
+            "#dcc98e"
           ],
           "face_source_sprite_id": 48,
           "face_pixel_count": 0,
@@ -1883,7 +1883,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/1D.png"
         },
         "40": {
@@ -1904,12 +1904,12 @@
             "#fcfcfb"
           ],
           "pixel_palette": [
-            "#efece3",
-            "#c58c2c",
-            "#84561d",
-            "#787e90",
-            "#cfba8a",
-            "#545967"
+            "#515e85",
+            "#f9f7ee",
+            "#c5a768",
+            "#8d551c",
+            "#e5d39e",
+            "#37363f"
           ],
           "face_source_sprite_id": 44,
           "face_pixel_count": 0,
@@ -1922,7 +1922,7 @@
           ],
           "group_rank": 4,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "3/28.png"
         }
       }
@@ -1987,12 +1987,12 @@
             "#fbfbfb"
           ],
           "pixel_palette": [
-            "#525672",
-            "#e4dbc2",
-            "#a89270",
-            "#50495c",
-            "#766257",
-            "#3c3d4a"
+            "#595a73",
+            "#444357",
+            "#efeadb",
+            "#bead86",
+            "#34343d",
+            "#8e7762"
           ],
           "face_source_sprite_id": 92,
           "face_pixel_count": 0,
@@ -2005,7 +2005,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/04.png"
         },
         "6": {
@@ -2098,12 +2098,12 @@
             "#faf9fa"
           ],
           "pixel_palette": [
-            "#570d0c",
-            "#3d3b43",
-            "#867e5a",
-            "#6e5044",
-            "#3f2722",
-            "#a70706"
+            "#49495b",
+            "#a60706",
+            "#e9deb0",
+            "#b49e6b",
+            "#815d43",
+            "#401212"
           ],
           "face_source_sprite_id": 92,
           "face_pixel_count": 0,
@@ -2116,7 +2116,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/0B.png"
         },
         "14": {
@@ -2247,12 +2247,12 @@
             "#faf9fa"
           ],
           "pixel_palette": [
-            "#570d0c",
-            "#3d3b43",
-            "#867e5a",
-            "#6e5044",
-            "#3f2722",
-            "#a70706"
+            "#49495b",
+            "#a60706",
+            "#e9deb0",
+            "#b49e6b",
+            "#815d43",
+            "#401212"
           ],
           "face_source_sprite_id": 93,
           "face_pixel_count": 0,
@@ -2263,7 +2263,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/13.png"
         },
         "20": {
@@ -2284,12 +2284,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 93,
           "face_pixel_count": 0,
@@ -2300,7 +2300,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/14.png"
         },
         "21": {
@@ -2321,12 +2321,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 94,
           "face_pixel_count": 0,
@@ -2337,7 +2337,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/15.png"
         },
         "23": {
@@ -2358,12 +2358,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 94,
           "face_pixel_count": 0,
@@ -2374,7 +2374,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/17.png"
         },
         "25": {
@@ -2395,12 +2395,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 96,
           "face_pixel_count": 0,
@@ -2411,7 +2411,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/19.png"
         },
         "29": {
@@ -2432,12 +2432,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 96,
           "face_pixel_count": 0,
@@ -2448,7 +2448,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/1D.png"
         },
         "30": {
@@ -2469,12 +2469,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 98,
           "face_pixel_count": 0,
@@ -2484,7 +2484,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/1E.png"
         },
         "33": {
@@ -2505,12 +2505,12 @@
             "#fafafa"
           ],
           "pixel_palette": [
-            "#a0916c",
-            "#1c8910",
-            "#ded4aa",
-            "#67524b",
-            "#1e3217",
-            "#185f08"
+            "#aa9571",
+            "#474954",
+            "#214311",
+            "#1c6708",
+            "#f1e2b5",
+            "#1f9110"
           ],
           "face_source_sprite_id": 92,
           "face_pixel_count": 0,
@@ -2523,7 +2523,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/21.png"
         },
         "35": {
@@ -2544,12 +2544,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#9495a0",
-            "#4b4d69",
-            "#f8f8f6",
-            "#d2c7ad",
-            "#d4a647",
-            "#393849"
+            "#4d5273",
+            "#dfae46",
+            "#f9f8f5",
+            "#a4a4a7",
+            "#dfd4b1",
+            "#76593f"
           ],
           "face_source_sprite_id": 92,
           "face_pixel_count": 0,
@@ -2562,7 +2562,7 @@
           ],
           "group_rank": 4,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "4/23.png"
         }
       }
@@ -2664,12 +2664,12 @@
             "#afafae"
           ],
           "pixel_palette": [
-            "#94c5cc",
-            "#3a51a2",
-            "#eabd4a",
-            "#373539",
-            "#222534",
-            "#efefe9"
+            "#94cfd4",
+            "#28478e",
+            "#f1dfb0",
+            "#c69e5b",
+            "#444663",
+            "#272d3f"
           ],
           "face_source_sprite_id": 55,
           "face_pixel_count": 0,
@@ -2682,7 +2682,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/09.png"
         },
         "10": {
@@ -2703,12 +2703,12 @@
             "#afafae"
           ],
           "pixel_palette": [
-            "#94c5cc",
-            "#3a51a2",
-            "#eabd4a",
-            "#373539",
-            "#222534",
-            "#efefe9"
+            "#94cfd4",
+            "#28478e",
+            "#f1dfb0",
+            "#c69e5b",
+            "#444663",
+            "#272d3f"
           ],
           "face_source_sprite_id": 55,
           "face_pixel_count": 0,
@@ -2721,7 +2721,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/0A.png"
         },
         "11": {
@@ -2742,12 +2742,12 @@
             "#feffff"
           ],
           "pixel_palette": [
-            "#5982c8",
-            "#f6e9ce",
-            "#c2a682",
-            "#a08868",
-            "#7b5344",
-            "#b3d1dc"
+            "#f7efdf",
+            "#484963",
+            "#7f523e",
+            "#be9e75",
+            "#6c89b6",
+            "#b7d1d8"
           ],
           "face_source_sprite_id": 58,
           "face_pixel_count": 0,
@@ -2758,7 +2758,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/0B.png"
         },
         "13": {
@@ -2888,12 +2888,12 @@
             "#feffff"
           ],
           "pixel_palette": [
-            "#5982c8",
-            "#f6e9ce",
-            "#c2a682",
-            "#a08868",
-            "#7b5344",
-            "#b3d1dc"
+            "#f7efdf",
+            "#484963",
+            "#7f523e",
+            "#be9e75",
+            "#6c89b6",
+            "#b7d1d8"
           ],
           "face_source_sprite_id": 55,
           "face_pixel_count": 0,
@@ -2906,7 +2906,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/13.png"
         },
         "20": {
@@ -2927,12 +2927,12 @@
             "#fffffc"
           ],
           "pixel_palette": [
-            "#6880a1",
-            "#f9f8ef",
-            "#8f5f31",
-            "#f7dba2",
-            "#bf9752",
-            "#172a68"
+            "#0b1859",
+            "#faf1d1",
+            "#e0ac4f",
+            "#895626",
+            "#9c9fa4",
+            "#a67638"
           ],
           "face_source_sprite_id": 55,
           "face_pixel_count": 0,
@@ -2945,7 +2945,7 @@
           ],
           "group_rank": 4,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/14.png"
         },
         "21": {
@@ -2966,12 +2966,12 @@
             "#fffffc"
           ],
           "pixel_palette": [
-            "#6880a1",
-            "#f9f8ef",
-            "#8f5f31",
-            "#f7dba2",
-            "#bf9752",
-            "#172a68"
+            "#0b1859",
+            "#faf1d1",
+            "#e0ac4f",
+            "#895626",
+            "#9c9fa4",
+            "#a67638"
           ],
           "face_source_sprite_id": 56,
           "face_pixel_count": 0,
@@ -2982,7 +2982,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/15.png"
         },
         "22": {
@@ -3003,12 +3003,12 @@
             "#fffffc"
           ],
           "pixel_palette": [
-            "#6880a1",
-            "#f9f8ef",
-            "#8f5f31",
-            "#f7dba2",
-            "#bf9752",
-            "#172a68"
+            "#0b1859",
+            "#faf1d1",
+            "#e0ac4f",
+            "#895626",
+            "#9c9fa4",
+            "#a67638"
           ],
           "face_source_sprite_id": 59,
           "face_pixel_count": 0,
@@ -3018,7 +3018,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/16.png"
         },
         "23": {
@@ -3075,12 +3075,12 @@
             "#fffffc"
           ],
           "pixel_palette": [
-            "#6880a1",
-            "#f9f8ef",
-            "#8f5f31",
-            "#f7dba2",
-            "#bf9752",
-            "#172a68"
+            "#0b1859",
+            "#faf1d1",
+            "#e0ac4f",
+            "#895626",
+            "#9c9fa4",
+            "#a67638"
           ],
           "face_source_sprite_id": 57,
           "face_pixel_count": 0,
@@ -3090,7 +3090,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/18.png"
         },
         "25": {
@@ -3111,12 +3111,12 @@
             "#fffffc"
           ],
           "pixel_palette": [
-            "#6880a1",
-            "#f9f8ef",
-            "#8f5f31",
-            "#f7dba2",
-            "#bf9752",
-            "#172a68"
+            "#0b1859",
+            "#faf1d1",
+            "#e0ac4f",
+            "#895626",
+            "#9c9fa4",
+            "#a67638"
           ],
           "face_source_sprite_id": 60,
           "face_pixel_count": 0,
@@ -3126,7 +3126,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/19.png"
         },
         "26": {
@@ -3147,12 +3147,12 @@
             "#fffffc"
           ],
           "pixel_palette": [
-            "#6880a1",
-            "#f9f8ef",
-            "#8f5f31",
-            "#f7dba2",
-            "#bf9752",
-            "#172a68"
+            "#0b1859",
+            "#faf1d1",
+            "#e0ac4f",
+            "#895626",
+            "#9c9fa4",
+            "#a67638"
           ],
           "face_source_sprite_id": 58,
           "face_pixel_count": 0,
@@ -3163,7 +3163,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/1A.png"
         },
         "40": {
@@ -3184,12 +3184,12 @@
             "#fafaf9"
           ],
           "pixel_palette": [
-            "#e0b260",
-            "#9a5b21",
-            "#5671a2",
-            "#a1825f",
-            "#ebefed",
-            "#ded8b4"
+            "#f8f7ee",
+            "#925924",
+            "#4b6398",
+            "#f0cb78",
+            "#ac8148",
+            "#c8ccca"
           ],
           "face_source_sprite_id": 56,
           "face_pixel_count": 0,
@@ -3200,7 +3200,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "5/28.png"
         }
       }
@@ -3263,12 +3263,12 @@
             "#382f27"
           ],
           "pixel_palette": [
-            "#8f431f",
-            "#40362d",
-            "#f0ddb9",
-            "#3b2720",
-            "#bf9b3e",
-            "#ba6f38"
+            "#a35b2a",
+            "#e8d7ae",
+            "#b7934d",
+            "#69361f",
+            "#3b2f28",
+            "#321f1b"
           ],
           "face_source_sprite_id": 61,
           "face_pixel_count": 0,
@@ -3279,7 +3279,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/04.png"
         },
         "5": {
@@ -3373,12 +3373,12 @@
             "#feffff"
           ],
           "pixel_palette": [
-            "#f2f3f2",
-            "#4d090b",
-            "#b2baac",
-            "#415e8e",
-            "#825b31",
-            "#4c3e34"
+            "#677d89",
+            "#bc9856",
+            "#f7e8c3",
+            "#7a5532",
+            "#500607",
+            "#c9c8b9"
           ],
           "face_source_sprite_id": 61,
           "face_pixel_count": 0,
@@ -3389,7 +3389,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/0B.png"
         },
         "12": {
@@ -3410,12 +3410,12 @@
             "#feffff"
           ],
           "pixel_palette": [
-            "#f2f3f2",
-            "#4d090b",
-            "#b2baac",
-            "#415e8e",
-            "#825b31",
-            "#4c3e34"
+            "#677d89",
+            "#bc9856",
+            "#f7e8c3",
+            "#7a5532",
+            "#500607",
+            "#c9c8b9"
           ],
           "face_source_sprite_id": 65,
           "face_pixel_count": 0,
@@ -3427,7 +3427,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/0C.png"
         },
         "13": {
@@ -3626,12 +3626,12 @@
             "#2f2b29"
           ],
           "pixel_palette": [
-            "#197e0c",
-            "#1c4d0d",
-            "#373532",
-            "#f9e693",
-            "#ecb840",
-            "#3f1011"
+            "#f7e19e",
+            "#258e0d",
+            "#b89345",
+            "#19670a",
+            "#1d4116",
+            "#491613"
           ],
           "face_source_sprite_id": 66,
           "face_pixel_count": 0,
@@ -3642,7 +3642,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/19.png"
         },
         "27": {
@@ -3663,12 +3663,12 @@
             "#2f2b29"
           ],
           "pixel_palette": [
-            "#197e0c",
-            "#1c4d0d",
-            "#373532",
-            "#f9e693",
-            "#ecb840",
-            "#3f1011"
+            "#f7e19e",
+            "#258e0d",
+            "#b89345",
+            "#19670a",
+            "#1d4116",
+            "#491613"
           ],
           "face_source_sprite_id": 65,
           "face_pixel_count": 0,
@@ -3680,7 +3680,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/1B.png"
         },
         "28": {
@@ -3736,12 +3736,12 @@
             "#2f2b29"
           ],
           "pixel_palette": [
-            "#197e0c",
-            "#1c4d0d",
-            "#373532",
-            "#f9e693",
-            "#ecb840",
-            "#3f1011"
+            "#f7e19e",
+            "#258e0d",
+            "#b89345",
+            "#19670a",
+            "#1d4116",
+            "#491613"
           ],
           "face_source_sprite_id": 66,
           "face_pixel_count": 0,
@@ -3752,7 +3752,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/1D.png"
         },
         "30": {
@@ -3773,12 +3773,12 @@
             "#2f2b29"
           ],
           "pixel_palette": [
-            "#197e0c",
-            "#1c4d0d",
-            "#373532",
-            "#f9e693",
-            "#ecb840",
-            "#3f1011"
+            "#f7e19e",
+            "#258e0d",
+            "#b89345",
+            "#19670a",
+            "#1d4116",
+            "#491613"
           ],
           "face_source_sprite_id": 68,
           "face_pixel_count": 0,
@@ -3788,7 +3788,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/1E.png"
         },
         "41": {
@@ -3809,12 +3809,12 @@
             "#feffff"
           ],
           "pixel_palette": [
-            "#edeecd",
-            "#d6c889",
-            "#3e2f25",
-            "#185011",
-            "#bd8828",
-            "#996020"
+            "#1e630e",
+            "#eaba5f",
+            "#f4f0d7",
+            "#9f6a2a",
+            "#451815",
+            "#27381e"
           ],
           "face_source_sprite_id": 65,
           "face_pixel_count": 0,
@@ -3826,7 +3826,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "6/29.png"
         }
       }
@@ -3890,12 +3890,12 @@
             "#9d5529"
           ],
           "pixel_palette": [
-            "#975027",
-            "#43362c",
-            "#d7b16d",
-            "#723f24",
-            "#ebe8c4",
-            "#3b2820"
+            "#914d25",
+            "#302a28",
+            "#b1672f",
+            "#e7debf",
+            "#c7a672",
+            "#633c26"
           ],
           "face_source_sprite_id": 78,
           "face_pixel_count": 0,
@@ -3907,7 +3907,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/04.png"
         },
         "6": {
@@ -4000,12 +4000,12 @@
             "#2e2c2d"
           ],
           "pixel_palette": [
-            "#3f3b3c",
-            "#4c609e",
-            "#906f47",
-            "#d4a65c",
-            "#5c4433",
-            "#ebe9df"
+            "#6078b0",
+            "#464455",
+            "#ad8d5e",
+            "#725036",
+            "#f1e1bb",
+            "#bebeb6"
           ],
           "face_source_sprite_id": 78,
           "face_pixel_count": 0,
@@ -4017,7 +4017,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/0B.png"
         },
         "13": {
@@ -4112,12 +4112,12 @@
             "#2e2c2d"
           ],
           "pixel_palette": [
-            "#3f3b3c",
-            "#4c609e",
-            "#906f47",
-            "#d4a65c",
-            "#5c4433",
-            "#ebe9df"
+            "#6078b0",
+            "#464455",
+            "#ad8d5e",
+            "#725036",
+            "#f1e1bb",
+            "#bebeb6"
           ],
           "face_source_sprite_id": 80,
           "face_pixel_count": 0,
@@ -4128,7 +4128,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/11.png"
         },
         "18": {
@@ -4185,12 +4185,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#5c75a4",
-            "#ac7223",
-            "#47484b",
-            "#eab53c",
-            "#dfe9e8",
-            "#342624"
+            "#d8a139",
+            "#3d5fa2",
+            "#825527",
+            "#cecebe",
+            "#f8e9b2",
+            "#8698ad"
           ],
           "face_source_sprite_id": 79,
           "face_pixel_count": 0,
@@ -4200,7 +4200,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/15.png"
         },
         "22": {
@@ -4221,12 +4221,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#5c75a4",
-            "#ac7223",
-            "#47484b",
-            "#eab53c",
-            "#dfe9e8",
-            "#342624"
+            "#d8a139",
+            "#3d5fa2",
+            "#825527",
+            "#cecebe",
+            "#f8e9b2",
+            "#8698ad"
           ],
           "face_source_sprite_id": 80,
           "face_pixel_count": 0,
@@ -4237,7 +4237,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/16.png"
         },
         "23": {
@@ -4293,12 +4293,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#5c75a4",
-            "#ac7223",
-            "#47484b",
-            "#eab53c",
-            "#dfe9e8",
-            "#342624"
+            "#d8a139",
+            "#3d5fa2",
+            "#825527",
+            "#cecebe",
+            "#f8e9b2",
+            "#8698ad"
           ],
           "face_source_sprite_id": 82,
           "face_pixel_count": 0,
@@ -4309,7 +4309,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/19.png"
         },
         "26": {
@@ -4330,12 +4330,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#5c75a4",
-            "#ac7223",
-            "#47484b",
-            "#eab53c",
-            "#dfe9e8",
-            "#342624"
+            "#d8a139",
+            "#3d5fa2",
+            "#825527",
+            "#cecebe",
+            "#f8e9b2",
+            "#8698ad"
           ],
           "face_source_sprite_id": 78,
           "face_pixel_count": 0,
@@ -4347,7 +4347,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/1A.png"
         },
         "29": {
@@ -4368,12 +4368,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#5c75a4",
-            "#ac7223",
-            "#47484b",
-            "#eab53c",
-            "#dfe9e8",
-            "#342624"
+            "#d8a139",
+            "#3d5fa2",
+            "#825527",
+            "#cecebe",
+            "#f8e9b2",
+            "#8698ad"
           ],
           "face_source_sprite_id": 82,
           "face_pixel_count": 0,
@@ -4384,7 +4384,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/1D.png"
         },
         "30": {
@@ -4405,12 +4405,12 @@
             "#fefefe"
           ],
           "pixel_palette": [
-            "#5c75a4",
-            "#ac7223",
-            "#47484b",
-            "#eab53c",
-            "#dfe9e8",
-            "#342624"
+            "#d8a139",
+            "#3d5fa2",
+            "#825527",
+            "#cecebe",
+            "#f8e9b2",
+            "#8698ad"
           ],
           "face_source_sprite_id": 84,
           "face_pixel_count": 0,
@@ -4421,7 +4421,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/1E.png"
         },
         "36": {
@@ -4442,12 +4442,12 @@
             "#fffff1"
           ],
           "pixel_palette": [
-            "#33601c",
-            "#fcfbee",
-            "#e5b250",
-            "#dadfae",
-            "#c38025",
-            "#9d6226"
+            "#f6f3e1",
+            "#9f6522",
+            "#b5863b",
+            "#d4bf8c",
+            "#556e38",
+            "#efbe57"
           ],
           "face_source_sprite_id": 84,
           "face_pixel_count": 0,
@@ -4458,7 +4458,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "7/24.png"
         }
       }
@@ -4523,12 +4523,12 @@
             "#f7f8f7"
           ],
           "pixel_palette": [
-            "#f1f1f0",
-            "#919195",
-            "#69110e",
-            "#313d5e",
-            "#dbab4f",
-            "#e3ca99"
+            "#f5f4f0",
+            "#83838a",
+            "#dec693",
+            "#494349",
+            "#ca9c4f",
+            "#7a4f2f"
           ],
           "face_source_sprite_id": 85,
           "face_pixel_count": 0,
@@ -4541,7 +4541,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/04.png"
         },
         "5": {
@@ -4636,12 +4636,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#c5ac8b",
-            "#5f6161",
-            "#fafaf8",
-            "#895115",
-            "#2e2927",
-            "#806e5c"
+            "#f7f5ec",
+            "#d7a759",
+            "#754e2d",
+            "#dfcca7",
+            "#a49e98",
+            "#3e3e42"
           ],
           "face_source_sprite_id": 85,
           "face_pixel_count": 0,
@@ -4654,7 +4654,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/0B.png"
         },
         "12": {
@@ -4675,12 +4675,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#c5ac8b",
-            "#5f6161",
-            "#fafaf8",
-            "#895115",
-            "#2e2927",
-            "#806e5c"
+            "#f7f5ec",
+            "#d7a759",
+            "#754e2d",
+            "#dfcca7",
+            "#a49e98",
+            "#3e3e42"
           ],
           "face_source_sprite_id": 89,
           "face_pixel_count": 0,
@@ -4691,7 +4691,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/0C.png"
         },
         "13": {
@@ -4784,12 +4784,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#c5ac8b",
-            "#5f6161",
-            "#fafaf8",
-            "#895115",
-            "#2e2927",
-            "#806e5c"
+            "#f7f5ec",
+            "#d7a759",
+            "#754e2d",
+            "#dfcca7",
+            "#a49e98",
+            "#3e3e42"
           ],
           "face_source_sprite_id": 86,
           "face_pixel_count": 0,
@@ -4800,7 +4800,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/13.png"
         },
         "20": {
@@ -4821,12 +4821,12 @@
             "#fcfcfb"
           ],
           "pixel_palette": [
-            "#faf9ed",
-            "#544026",
-            "#8a867b",
-            "#a56d28",
-            "#865217",
-            "#d5c29b"
+            "#f8f6ec",
+            "#89531d",
+            "#e4a838",
+            "#e6d0a0",
+            "#af9b7d",
+            "#534c47"
           ],
           "face_source_sprite_id": 86,
           "face_pixel_count": 0,
@@ -4837,7 +4837,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/14.png"
         },
         "22": {
@@ -4893,12 +4893,12 @@
             "#fcfcfb"
           ],
           "pixel_palette": [
-            "#faf9ed",
-            "#544026",
-            "#8a867b",
-            "#a56d28",
-            "#865217",
-            "#d5c29b"
+            "#f8f6ec",
+            "#89531d",
+            "#e4a838",
+            "#e6d0a0",
+            "#af9b7d",
+            "#534c47"
           ],
           "face_source_sprite_id": 88,
           "face_pixel_count": 0,
@@ -4908,7 +4908,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/17.png"
         },
         "25": {
@@ -4929,12 +4929,12 @@
             "#fcfcfb"
           ],
           "pixel_palette": [
-            "#faf9ed",
-            "#544026",
-            "#8a867b",
-            "#a56d28",
-            "#865217",
-            "#d5c29b"
+            "#f8f6ec",
+            "#89531d",
+            "#e4a838",
+            "#e6d0a0",
+            "#af9b7d",
+            "#534c47"
           ],
           "face_source_sprite_id": 90,
           "face_pixel_count": 0,
@@ -4944,7 +4944,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/19.png"
         },
         "26": {
@@ -4965,12 +4965,12 @@
             "#fcfcfb"
           ],
           "pixel_palette": [
-            "#faf9ed",
-            "#544026",
-            "#8a867b",
-            "#a56d28",
-            "#865217",
-            "#d5c29b"
+            "#f8f6ec",
+            "#89531d",
+            "#e4a838",
+            "#e6d0a0",
+            "#af9b7d",
+            "#534c47"
           ],
           "face_source_sprite_id": 85,
           "face_pixel_count": 0,
@@ -4983,7 +4983,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/1A.png"
         },
         "27": {
@@ -5004,12 +5004,12 @@
             "#fcfcfb"
           ],
           "pixel_palette": [
-            "#faf9ed",
-            "#544026",
-            "#8a867b",
-            "#a56d28",
-            "#865217",
-            "#d5c29b"
+            "#f8f6ec",
+            "#89531d",
+            "#e4a838",
+            "#e6d0a0",
+            "#af9b7d",
+            "#534c47"
           ],
           "face_source_sprite_id": 89,
           "face_pixel_count": 0,
@@ -5020,7 +5020,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/1B.png"
         },
         "28": {
@@ -5076,12 +5076,12 @@
             "#fdfdfd"
           ],
           "pixel_palette": [
-            "#4f4032",
-            "#d6b585",
-            "#a3723a",
-            "#f9f8e9",
-            "#735841",
-            "#e4d5b3"
+            "#955f2d",
+            "#faf9f3",
+            "#e4b364",
+            "#b1854b",
+            "#e8d8b7",
+            "#605546"
           ],
           "face_source_sprite_id": 85,
           "face_pixel_count": 0,
@@ -5094,7 +5094,7 @@
           ],
           "group_rank": 4,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "8/23.png"
         }
       }
@@ -5265,12 +5265,12 @@
             "#1a5704"
           ],
           "pixel_palette": [
-            "#b5aa8e",
-            "#d7c99a",
-            "#22ca11",
-            "#1b6c0c",
-            "#164b07",
-            "#1eb514"
+            "#18ca0e",
+            "#d4d5aa",
+            "#195f10",
+            "#9c9c6c",
+            "#615447",
+            "#1aa10e"
           ],
           "face_source_sprite_id": 73,
           "face_pixel_count": 0,
@@ -5282,7 +5282,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/0C.png"
         },
         "13": {
@@ -5412,12 +5412,12 @@
             "#1a5704"
           ],
           "pixel_palette": [
-            "#b5aa8e",
-            "#d7c99a",
-            "#22ca11",
-            "#1b6c0c",
-            "#164b07",
-            "#1eb514"
+            "#18ca0e",
+            "#d4d5aa",
+            "#195f10",
+            "#9c9c6c",
+            "#615447",
+            "#1aa10e"
           ],
           "face_source_sprite_id": 71,
           "face_pixel_count": 0,
@@ -5428,7 +5428,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/13.png"
         },
         "20": {
@@ -5449,12 +5449,12 @@
             "#0002d5"
           ],
           "pixel_palette": [
-            "#3c7bf4",
-            "#0003d1",
-            "#c5e7f5",
-            "#694a47",
-            "#0f1872",
-            "#adb3a7"
+            "#315cc1",
+            "#0105db",
+            "#bddee4",
+            "#67677d",
+            "#4d1217",
+            "#93a3b1"
           ],
           "face_source_sprite_id": 71,
           "face_pixel_count": 0,
@@ -5465,7 +5465,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/14.png"
         },
         "21": {
@@ -5486,12 +5486,12 @@
             "#0002d5"
           ],
           "pixel_palette": [
-            "#3c7bf4",
-            "#0003d1",
-            "#c5e7f5",
-            "#694a47",
-            "#0f1872",
-            "#adb3a7"
+            "#315cc1",
+            "#0105db",
+            "#bddee4",
+            "#67677d",
+            "#4d1217",
+            "#93a3b1"
           ],
           "face_source_sprite_id": 72,
           "face_pixel_count": 0,
@@ -5501,7 +5501,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/15.png"
         },
         "25": {
@@ -5522,12 +5522,12 @@
             "#0002d5"
           ],
           "pixel_palette": [
-            "#3c7bf4",
-            "#0003d1",
-            "#c5e7f5",
-            "#694a47",
-            "#0f1872",
-            "#adb3a7"
+            "#315cc1",
+            "#0105db",
+            "#bddee4",
+            "#67677d",
+            "#4d1217",
+            "#93a3b1"
           ],
           "face_source_sprite_id": 73,
           "face_pixel_count": 0,
@@ -5539,7 +5539,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/19.png"
         },
         "27": {
@@ -5560,12 +5560,12 @@
             "#0002d5"
           ],
           "pixel_palette": [
-            "#3c7bf4",
-            "#0003d1",
-            "#c5e7f5",
-            "#694a47",
-            "#0f1872",
-            "#adb3a7"
+            "#315cc1",
+            "#0105db",
+            "#bddee4",
+            "#67677d",
+            "#4d1217",
+            "#93a3b1"
           ],
           "face_source_sprite_id": 73,
           "face_pixel_count": 0,
@@ -5577,7 +5577,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/1B.png"
         },
         "28": {
@@ -5633,12 +5633,12 @@
             "#0002d5"
           ],
           "pixel_palette": [
-            "#3c7bf4",
-            "#0003d1",
-            "#c5e7f5",
-            "#694a47",
-            "#0f1872",
-            "#adb3a7"
+            "#315cc1",
+            "#0105db",
+            "#bddee4",
+            "#67677d",
+            "#4d1217",
+            "#93a3b1"
           ],
           "face_source_sprite_id": 74,
           "face_pixel_count": 0,
@@ -5648,7 +5648,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/1D.png"
         },
         "31": {
@@ -5669,12 +5669,12 @@
             "#0002d5"
           ],
           "pixel_palette": [
-            "#3c7bf4",
-            "#0003d1",
-            "#c5e7f5",
-            "#694a47",
-            "#0f1872",
-            "#adb3a7"
+            "#315cc1",
+            "#0105db",
+            "#bddee4",
+            "#67677d",
+            "#4d1217",
+            "#93a3b1"
           ],
           "face_source_sprite_id": 76,
           "face_pixel_count": 0,
@@ -5685,7 +5685,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/1F.png"
         },
         "42": {
@@ -5706,12 +5706,12 @@
             "#fffefe"
           ],
           "pixel_palette": [
-            "#fcfcfb",
-            "#e5be6d",
-            "#c08b45",
-            "#906231",
-            "#d2ae77",
-            "#e9d6a2"
+            "#e2b35d",
+            "#926c42",
+            "#f7f5ed",
+            "#ead9b8",
+            "#5d3c27",
+            "#fdfdfd"
           ],
           "face_source_sprite_id": 76,
           "face_pixel_count": 0,
@@ -5722,7 +5722,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "9/2A.png"
         }
       }
@@ -5862,12 +5862,12 @@
             "#f9f8f7"
           ],
           "pixel_palette": [
-            "#bfa389",
-            "#e4e0d4",
-            "#910905",
-            "#550707",
-            "#4d3832",
-            "#7f7079"
+            "#c6b294",
+            "#4e0b0a",
+            "#ece8df",
+            "#545872",
+            "#94725a",
+            "#860805"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -5881,7 +5881,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/09.png"
         },
         "11": {
@@ -5902,12 +5902,12 @@
             "#f4f4f4"
           ],
           "pixel_palette": [
-            "#b2813c",
-            "#810909",
-            "#3b221e",
-            "#b5a882",
-            "#faf3cb",
-            "#000fd6"
+            "#8f0909",
+            "#eee8c6",
+            "#b17e3c",
+            "#ceb376",
+            "#0210b9",
+            "#5d637c"
           ],
           "face_source_sprite_id": 53,
           "face_pixel_count": 0,
@@ -5918,7 +5918,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/0B.png"
         },
         "13": {
@@ -5975,12 +5975,12 @@
             "#f4f4f4"
           ],
           "pixel_palette": [
-            "#b2813c",
-            "#810909",
-            "#3b221e",
-            "#b5a882",
-            "#faf3cb",
-            "#000fd6"
+            "#8f0909",
+            "#eee8c6",
+            "#b17e3c",
+            "#ceb376",
+            "#0210b9",
+            "#5d637c"
           ],
           "face_source_sprite_id": 50,
           "face_pixel_count": 0,
@@ -5991,7 +5991,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/11.png"
         },
         "18": {
@@ -6048,12 +6048,12 @@
             "#f4f4f4"
           ],
           "pixel_palette": [
-            "#b2813c",
-            "#810909",
-            "#3b221e",
-            "#b5a882",
-            "#faf3cb",
-            "#000fd6"
+            "#8f0909",
+            "#eee8c6",
+            "#b17e3c",
+            "#ceb376",
+            "#0210b9",
+            "#5d637c"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -6067,7 +6067,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/13.png"
         },
         "20": {
@@ -6088,12 +6088,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#82879e",
-            "#f7f6f2",
-            "#cac2ae",
-            "#393746",
-            "#5a5c6f",
-            "#27282f"
+            "#f8f7f2",
+            "#8d919e",
+            "#4a4f68",
+            "#b8a996",
+            "#60191a",
+            "#605d6c"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -6107,7 +6107,7 @@
           ],
           "group_rank": 3,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/14.png"
         },
         "21": {
@@ -6128,12 +6128,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#82879e",
-            "#f7f6f2",
-            "#cac2ae",
-            "#393746",
-            "#5a5c6f",
-            "#27282f"
+            "#f8f7f2",
+            "#8d919e",
+            "#4a4f68",
+            "#b8a996",
+            "#60191a",
+            "#605d6c"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -6147,7 +6147,7 @@
           ],
           "group_rank": 4,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/15.png"
         },
         "22": {
@@ -6168,12 +6168,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#82879e",
-            "#f7f6f2",
-            "#cac2ae",
-            "#393746",
-            "#5a5c6f",
-            "#27282f"
+            "#f8f7f2",
+            "#8d919e",
+            "#4a4f68",
+            "#b8a996",
+            "#60191a",
+            "#605d6c"
           ],
           "face_source_sprite_id": 50,
           "face_pixel_count": 0,
@@ -6184,7 +6184,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/16.png"
         },
         "23": {
@@ -6240,12 +6240,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#82879e",
-            "#f7f6f2",
-            "#cac2ae",
-            "#393746",
-            "#5a5c6f",
-            "#27282f"
+            "#f8f7f2",
+            "#8d919e",
+            "#4a4f68",
+            "#b8a996",
+            "#60191a",
+            "#605d6c"
           ],
           "face_source_sprite_id": 51,
           "face_pixel_count": 0,
@@ -6255,7 +6255,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/18.png"
         },
         "25": {
@@ -6276,12 +6276,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#82879e",
-            "#f7f6f2",
-            "#cac2ae",
-            "#393746",
-            "#5a5c6f",
-            "#27282f"
+            "#f8f7f2",
+            "#8d919e",
+            "#4a4f68",
+            "#b8a996",
+            "#60191a",
+            "#605d6c"
           ],
           "face_source_sprite_id": 54,
           "face_pixel_count": 0,
@@ -6291,7 +6291,7 @@
           ],
           "group_rank": 1,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/19.png"
         },
         "26": {
@@ -6312,12 +6312,12 @@
             "#fcfcfc"
           ],
           "pixel_palette": [
-            "#82879e",
-            "#f7f6f2",
-            "#cac2ae",
-            "#393746",
-            "#5a5c6f",
-            "#27282f"
+            "#f8f7f2",
+            "#8d919e",
+            "#4a4f68",
+            "#b8a996",
+            "#60191a",
+            "#605d6c"
           ],
           "face_source_sprite_id": 53,
           "face_pixel_count": 0,
@@ -6328,7 +6328,7 @@
           ],
           "group_rank": 2,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/1A.png"
         },
         "38": {
@@ -6349,12 +6349,12 @@
             "#fffffb"
           ],
           "pixel_palette": [
-            "#cd8d25",
-            "#7e848b",
-            "#960a04",
-            "#eae0bc",
-            "#daba6f",
-            "#401111"
+            "#dea43f",
+            "#a30a04",
+            "#f9edbf",
+            "#4d0f0e",
+            "#304993",
+            "#a85a1e"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -6368,7 +6368,7 @@
           ],
           "group_rank": 5,
           "redesigned": true,
-          "feature": "AI 원화 중앙 전경·최근접 축소·셀별 적응형 15색·고정 영역 없음",
+          "feature": "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음",
           "file": "10/26.png"
         }
       }
