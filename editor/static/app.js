@@ -640,7 +640,7 @@ function renderAiClassInspector() {
   const info = classInfo(classId);
   const row = aiClassRow(commander.commander_id, classId);
   const headPreservation = row.redesigned
-    ? `ROM 원본 영역 ${row.face_pixel_count}픽셀`
+    ? "얼굴·머리 고정 없음"
     : "원본 전체 256픽셀";
   aiClassInspector.innerHTML = `
     <div class="inspectorTitle">
@@ -666,7 +666,7 @@ function renderAiClassInspector() {
         </span>
       </div>
       <div>
-        <span>ROM 얼굴 기준</span>
+        <span>ROM 원본 비교</span>
         <span class="comparisonSprite">
           ${spriteImage(classId, {commanderId: commander.commander_id})}
         </span>
@@ -681,7 +681,7 @@ function renderAiClassInspector() {
         <span class="paletteRow"><b>원화</b>${colorSwatches(row.source_palette)}</span>
         <span class="paletteRow"><b>16×16</b>${colorSwatches(row.pixel_palette)}</span>
       </dd></div>
-      <div><dt>머리 보존</dt><dd>${headPreservation} · 그림 0x${hexId(
+      <div><dt>원본 고정</dt><dd>${headPreservation} · 그림 0x${hexId(
         row.face_source_sprite_id
       )}</dd></div>
       <div><dt>ROM 반영</dt><dd>미적용 · 비교용 PNG만 생성</dd></div>

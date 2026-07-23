@@ -8278,17 +8278,30 @@ contains 57 safe syllables as documented below and in
   broad two-color replacement.
 - The rejected first AI conversion applied a second class-theme recolor after
   pixelization, changing source gold/blue/white into unrelated violet/brown.
-  The accepted pipeline removes black background, uses nearest-neighbor
-  fitting and a per-cell adaptive palette, then restores the ROM head rectangle
-  including transparent pixels. Its rank-zero entries still bypass the AI
-  result entirely. The browser inspector displays source and 16x16 dominant
-  color swatches to expose future palette drift.
-- Generated sources are retained under `docs/assets/ai-class-source`; the
-  initial 10x5 concept is `allied_class_ai_evolution_v2.png`, and direct ROM
-  reference experiments are under `commanders/`. The current Elwin direct
-  source is wired into the preview. The Liana direct source is retained for a
-  later design pass but is not wired. Character design work is intentionally
-  paused here so localization remains the primary task.
+  A later attempt also restored a broad ROM head rectangle; the user clarified
+  that face locking belongs only to Test Change, and the rectangle hid too much
+  of the AI design. The accepted AI pipeline selects the central foreground
+  component, excludes neighboring-cell fragments, uses nearest-neighbor fitting
+  across the full 16x16 extent and a per-cell adaptive palette, and restores no
+  ROM pixels. The old 15-pixel fit added avoidable padding and made the already
+  higher-resolution concept look compressed. Its rank-zero
+  entries still bypass the AI result entirely. The browser inspector displays
+  source and 16x16 dominant color swatches to expose future palette drift.
+- Generated sources are retained under `docs/assets/ai-class-source`, while
+  the accepted final preview input is
+  `docs/assets/allied_class_redesign_concept.png`. It is a 10x5 pixel-art
+  sheet and now supplies all ten commanders, including Elwin. The rejected
+  `allied_class_ai_evolution_v2.png` and direct Elwin/Liana experiments remain
+  under `docs/assets/ai-class-source` as source history but are not wired into
+  the preview. Its dark gray background is removed with a color-seeded
+  foreground mask before nearest-neighbor reduction. Character design work is
+  intentionally paused here so localization remains the primary task.
+- A separate final generation experiment used each commander's enlarged ROM
+  16x16 reference strip as direct image input. The ten raw five-stage outputs
+  are `docs/assets/direct_16x16_01_elwin.png` through
+  `docs/assets/direct_16x16_10_jessica.png`. They are comparison-only source
+  files: the AI tab, Test Change tab, editor build API, and ROM builder do not
+  read them.
 - Headless Chromium at 1600x1000 and 390x844 verified 17 Elwin nodes, 28
   edges, exact rank-zero labels, ten AI/Test redesign badges, source/original/
   converted comparisons, no broken images, and no body overflow. The focused

@@ -92,8 +92,12 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                                     source.getpixel((x, y)),
                                 )
 
-    def test_ai_assets_keep_source_cells_and_rom_face_pixels(self):
+    def test_ai_assets_keep_source_cells_without_face_lock(self):
         manifest = self.ai_manifest
+        self.assertEqual(
+            manifest["ai_source_sheets"],
+            ["docs/assets/allied_class_redesign_concept.png"],
+        )
         self.assertEqual(manifest["commander_count"], 10)
         self.assertEqual(manifest["asset_count"], 170)
         self.assertEqual(manifest["redesigned_count"], 102)
@@ -119,22 +123,9 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     self.assertEqual(image.tobytes(), source.tobytes())
                     self.assertEqual(row["face_pixel_count"], 0)
                     continue
-                protected = protected_face_points(source)
-                left = max(0, min(x for x, _ in protected) - 1)
-                right = min(15, max(x for x, _ in protected) + 1)
-                top = max(0, min(y for _, y in protected) - 1)
-                bottom = min(8, max(y for _, y in protected) + 1)
-                self.assertEqual(
-                    row["face_pixel_count"],
-                    (right - left + 1) * (bottom - top + 1),
-                )
-                for y in range(top, bottom + 1):
-                    for x in range(left, right + 1):
-                        self.assertEqual(
-                            image.getpixel((x, y)),
-                            source.getpixel((x, y)),
-                        )
-        self.assertEqual(len(source_cells), 52)
+                self.assertEqual(row["face_pixel_count"], 0)
+                self.assertNotEqual(image.tobytes(), source.tobytes())
+        self.assertEqual(len(source_cells), 50)
         for filename in source_cells:
             self.assertTrue((AI_ASSET_DIR / filename).is_file(), filename)
 
@@ -147,6 +138,20 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             source = path.read_text(encoding="utf-8")
             self.assertNotIn("build_test_class_sprite_assets", source)
             self.assertNotIn("build_ai_class_sprite_assets", source)
+
+    def test_direct_16x16_generation_experiment_is_source_only(self):
+        direct_sources = sorted(
+            (ROOT / "docs/assets").glob("direct_16x16_*.png")
+        )
+        self.assertEqual(len(direct_sources), 10)
+        for path in direct_sources:
+            with Image.open(path) as image:
+                self.assertGreaterEqual(image.width, 1000)
+                self.assertGreaterEqual(image.height, 500)
+        manifest_text = (AI_ASSET_DIR / "manifest.json").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn("direct_16x16_", manifest_text)
 
 
 if __name__ == "__main__":
