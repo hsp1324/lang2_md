@@ -11,7 +11,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
-| 1 | current | current | current | current | probe | current | probe | pending | 36 |
+| 1 | current | current | current | current | probe | current | probe | pending | 44 |
 | 2 | current | current | current | current | current | current | probe | pending | 38 |
 | 3 | current | current | current | current | probe | probe | probe | pending | 34 |
 | 4 | current | current | current | current | probe | probe | probe | pending | 47 |
@@ -47,7 +47,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 ### Scenario 1
 
-Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. Production 212A freshly verifies the complete preparation surface: 엘윈/파이터 and 헤인/워록 panels, 솔저 and 가드맨 hire rows, all 무기/방어구/장신구 equipment slots, 아이템 구입/판매, 호신용 단검 with AT+1, clean 단검을 구입함/단검을 판매함 popups, 소지금 updates, the 엘윈/헤인 arrangement roster, and intact SCENARIO 1 banner. Production 6C85 additionally proves the preparation and arrangement selectors after reserving VRAM tiles 0x5F8..0x5FF; the live selector bytes match the Japanese source exactly. No Japanese residue, damaged name/class glyph, clipping, reset, or freeze appeared. Direct window input shorter than 0.4 seconds was occasionally missed in this remote environment; the accepted review used 0.4-second directional holds and 0.25-second confirmations. The existing production route reaches TURN 2 without reset. Production-derived clear probes change only Bald's documented fixed deployment/stat/mercenary fields and retain the stock result and title SAVE renderers. Earlier probe 8AEA exposed the remaining Japanese `戦果報告`; source ownership is now proven at 0x0A2D88. Current probe 479F is built from production AD01 and freshly reaches the same ordinary clear path without reset. Its result screen visibly renders `전과보고`, and its real-work-RAM SAVE screen verifies `저장`, the initial `데이터 없음` rows, saved `시나리오 2`, `다음 시나리오`, and the unobstructed dynamic number. Production 6E2C fixes the delayed map-status scratch overwrite reproduced on mobile RetroArch and production 45D8. A fresh no-action Scenario 1 run retained 415 frames across four complete turns and keeps 제국지휘관, enemy 솔저, 레아드, 레온, 민병대, and 사제/프리스트 intact through map graphics, portraits, and battles.
+Production C7AB visually verifies the source-reviewed Scenario 1 title, complete scrolling description, all four dynamic-name contexts (엘윈이었다/엘윈을/엘윈이/엘윈의), natural final sentence, and condition rows without broken glyphs or reset. Production 212A freshly verifies the complete preparation surface: 엘윈/파이터 and 헤인/워록 panels, 솔저 and 가드맨 hire rows, all 무기/방어구/장신구 equipment slots, 아이템 구입/판매, 호신용 단검 with AT+1, clean 단검을 구입함/단검을 판매함 popups, 소지금 updates, the 엘윈/헤인 arrangement roster, and intact SCENARIO 1 banner. Production 6C85 additionally proves the preparation and arrangement selectors after reserving VRAM tiles 0x5F8..0x5FF; the live selector bytes match the Japanese source exactly. No Japanese residue, damaged name/class glyph, clipping, reset, or freeze appeared. Direct window input shorter than 0.4 seconds was occasionally missed in this remote environment; the accepted review used 0.4-second directional holds and 0.25-second confirmations. The existing production route reaches TURN 2 without reset. Production-derived clear probes change only Bald's documented fixed deployment/stat/mercenary fields and retain the stock result and title SAVE renderers. Earlier probe 8AEA exposed the remaining Japanese `戦果報告`; source ownership is now proven at 0x0A2D88. Current probe 479F is built from production AD01 and freshly reaches the same ordinary clear path without reset. Its result screen visibly renders `전과보고`, and its real-work-RAM SAVE screen verifies `저장`, the initial `데이터 없음` rows, saved `시나리오 2`, `다음 시나리오`, and the unobstructed dynamic number. Production 6E2C fixes the delayed map-status scratch overwrite reproduced on mobile RetroArch and production 45D8. A fresh no-action Scenario 1 run retained 415 frames across four complete turns and keeps 제국지휘관, enemy 솔저, 레아드, 레온, 민병대, and 사제/프리스트 intact through map graphics, portraits, and battles. A second production 4234 run used real SRAM and a fresh Scenario 1 selector entry rather than a cross-checksum GST. It traversed the stock description, preparation, opening, and no-action events through TURN 4, then directly rechecked 제국지휘관 and adjacent enemy soldiers on turns 1 and 3, 레아드/매직나이트, 레온/나이트마스터 and adjacent cavalry on turn 1, and an enemy soldier plus 발드/파이터 on turn 4. SCENARIO 1 and every TURN counter also remained intact. The user's earlier Android RetroArch captures lose the same static 가 or 스 glyph at different string positions, matching the pre-4234 direct-render defect rather than changed unit data.
 
 - `captures/run/ea22_s01_conditions.png`
 - `captures/run/ea22_s01_command_magic_fresh.png`
@@ -85,6 +85,14 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 - `captures/run/6e2c_s01_turn2_event_114.png`
 - `captures/run/6e2c_s01_turn3_event_102.png`
 - `captures/run/6e2c_s01_turn4_event_67.png`
+- `captures/run/4234_s01_production_enemy_commander_fresh2.png`
+- `captures/run/4234_s01_production_enemy_soldier_right_fresh.png`
+- `captures/run/4234_s01_production_leard_fresh.png`
+- `captures/run/4234_s01_production_leon_candidate1.png`
+- `captures/run/4234_s01_production_turn3_enemy_candidate3.png`
+- `captures/run/4234_s01_production_turn3_enemy_soldier_left.png`
+- `captures/run/4234_s01_production_turn4_enemy_search4.png`
+- `captures/run/4234_s01_production_turn4_enemy_neighbor_right.png`
 
 ### Scenario 2
 

@@ -68,6 +68,11 @@ Production `4234`는 이름 테이블 `0x0618E8`과 클래스 테이블
 | 21 probe `5E20` | 적 고정 레코드 | 제시카 / 비숍 | 통과 |
 | 1 production `4234` | 적 지휘관 | 발드 / 파이터 | 턴 5·6 통과 |
 | 1 production `4234` | 적 병사 | 발드 / 창병 | 턴 5·6 통과 |
+| 1 production `4234`, 실제 SRAM 신규 실행 | 적 지휘관 | 제국지휘관 / 세인트 | 턴 1·3 통과 |
+| 1 production `4234`, 실제 SRAM 신규 실행 | 적 병사 | 제국지휘관 소속 병사 | 턴 1·3·4 통과 |
+| 1 production `4234`, 실제 SRAM 신규 실행 | 적 지휘관 | 레아드 / 매직나이트 | 턴 1 통과 |
+| 1 production `4234`, 실제 SRAM 신규 실행 | 적 지휘관 | 레온 / 나이트마스터 | 턴 1 통과 |
+| 1 production `4234`, 실제 SRAM 신규 실행 | 적 지휘관 | 발드 / 파이터 | 턴 4 통과 |
 
 대표 캡처는 `captures/analysis/5e20_s21_enemy_status_sheet.png`,
 `captures/analysis/4234_s01_enemy_commander_soldiers_status.png`,
@@ -76,6 +81,20 @@ Production `4234`는 이름 테이블 `0x0618E8`과 클래스 테이블
 이름에 `0x5D8..`, 클래스에 `0x5E0..`를 사용함을 확인했다. 완료 직전의
 불완전 S21 GST가 구형 ROM에서도 표시를 끄는 검은 화면은 합격/실패 판정에
 사용하지 않는다.
+
+추가 `4234` 검증은 교차 체크섬 GST를 사용하지 않고 실제 SRAM과 시나리오
+선택 비기로 처음부터 진입했다. 설명, 준비, 출격 대사, 적/NPC 행동을 그대로
+통과해 `TURN 4`에서 다시 적장과 병사를 선택했다. 대표 캡처는
+`captures/run/4234_s01_production_enemy_commander_fresh2.png`,
+`captures/run/4234_s01_production_turn3_enemy_candidate3.png`,
+`captures/run/4234_s01_production_turn3_enemy_soldier_left.png`,
+`captures/run/4234_s01_production_turn4_enemy_search4.png`,
+`captures/run/4234_s01_production_turn4_enemy_neighbor_right.png`이다.
+휴대폰의 이전 RetroArch 화면에서 `가드맨`의 `가`, `프리스트`와
+`나이트마스터`의 동일한 `스` 칸만 그래픽 조각으로 바뀐 것은 이 직접 렌더러
+수정 전 증상과 일치한다. 현재 롬에서 재발하면 문자열이나 클래스 ID를 다시
+바꾸기 전에 휴대폰에 복사된 롬 체크섬과 RetroArch의 실제 로드 파일을 먼저
+확인한다.
 
 ## Scenario 21 Shared-VRAM Regression
 

@@ -7762,6 +7762,31 @@ contains 57 safe syllables as documented below and in
   `captures/analysis/4234_s01_enemy_commander_soldiers_status.png`,
   `captures/run/4234_s01_turn6_enemy_target.png`, and
   `captures/run/4234_s01_turn6_enemy_soldier.png`.
+- A second production `4234` run did not reuse the cross-checksum GST. It
+  entered Scenario 1 through a real SRAM slot and the built-in selector,
+  traversed the description, preparation, opening, and all no-action phase
+  events through `TURN 4`, and inspected the map status directly. Turn 1
+  retains `제국지휘관`, its adjacent enemy soldier, `레아드/매직나이트`,
+  `레온/나이트마스터`, and Leon's adjacent cavalry. Turn 3 again retains
+  `제국지휘관` and both adjacent soldiers; turn 4 retains an enemy soldier and
+  `발드/파이터`. `SCENARIO 1` and each `TURN` counter also remain intact.
+  Representative captures are
+  `captures/run/4234_s01_production_enemy_commander_fresh2.png`,
+  `captures/run/4234_s01_production_enemy_soldier_right_fresh.png`,
+  `captures/run/4234_s01_production_leard_fresh.png`,
+  `captures/run/4234_s01_production_leon_candidate1.png`,
+  `captures/run/4234_s01_production_turn3_enemy_candidate3.png`,
+  `captures/run/4234_s01_production_turn3_enemy_soldier_left.png`,
+  `captures/run/4234_s01_production_turn4_enemy_search4.png`, and
+  `captures/run/4234_s01_production_turn4_enemy_neighbor_right.png`.
+- The user's Android RetroArch captures from the pre-fix play session show the
+  old direct-render signature, not mutated unit data: `가드맨` loses only `가`,
+  `프리스트` and `나이트마스터` lose the same `스` tile at different screen
+  positions, and `헤비랜서` loses one of its established static glyph cells.
+  The current `4234` run above does not reproduce any of those cells after the
+  same number of turns. Do not reopen string tables or class IDs for this
+  symptom; first confirm that the device is running the current production ROM
+  rather than an older copied file or cached RetroArch content entry.
 - `captures/run/5e20_s21_after_c_*.png` came from an incomplete Scenario 21
   completion GST that also disables the display under older ROM `F388`; those
   black frames are diagnostic rejects, not a regression result or pass.
