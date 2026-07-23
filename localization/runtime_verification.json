@@ -1547,8 +1547,8 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_current",
-      "turn_events": "progressed_current",
-      "completion": "pending",
+      "turn_events": "verified_current",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/c7ab_s25_title.png",
@@ -1583,9 +1583,26 @@
         "captures/run/212a_s25_equipment_commander_08.png",
         "captures/run/212a_s25_equipment_commander_09.png",
         "captures/run/212a_s25_arrangement_roster1.png",
-        "captures/run/212a_s25_arrangement_roster2.png"
+        "captures/run/212a_s25_arrangement_roster2.png",
+        "captures/run/7607_s25_leon_target_selected.png",
+        "captures/run/7607_s25_after_leon_detector_stop.png",
+        "captures/run/7607_s26_route.png",
+        "captures/run/7607_s26_description_01.png",
+        "captures/run/ad99_s25_laird_commander_hover.png",
+        "captures/run/ad99_s25_leon_commander_hover.png",
+        "captures/run/ad99_s25_egbert_commander_hover.png",
+        "captures/run/ad99_s25_nightmaster_commander_hover.png",
+        "captures/run/ad99_s25_wizard_commander_hover.png",
+        "captures/run/ad99_s25_enemy_paladin_commander_hover.png",
+        "captures/run/ad99_s25_laird_royal_horse_hover.png",
+        "captures/run/ad99_s25_egbert_merc_hover.png",
+        "captures/run/ad99_s25_wizard_merc_hover.png",
+        "captures/run/ad99_s25_enemy_paladin_merc_hover.png",
+        "captures/run/ad99_s25_turn_counter_after_phase.png",
+        "captures/run/ad99_s25_turn2_nightmaster_hover_precise.png",
+        "captures/run/ad99_s25_turn2_armored_soldier_hover.png"
       ],
-      "note": "Production 212A verifies the Scenario 25 route map, all 14 text-bearing scrolling frames of 대륙 최강의 기사, and the full preparation surface. Direct Japanese-ROM rendering confirms the cursed Velzeria castle, Emperor Bernhardt waiting in its depths with Alhazard, Leon and Egbert blocking the way, captive Jessica, and the imminent battle in which neither side can yield. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. The current preparation review follows both roster pages and all nine equipment panels: 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트, 스코트/파이터, 리아나/클레릭, and 라나/클레릭. Lester's original class string is ｸﾛｺﾅｲﾄ (global class ID 7), so 크로코나이트 is source-correct; earlier notes that visually misread it as 크루세이더 were corrected. Earlier production 9C1F reached automatic deployment, all 28 opening confirmations, the Korean conditions page, and the first-turn battle chain without reset or freeze. Victory is 적 전멸 and defeat is 주인공 사망. The live event-spawned Jessica is class ID 9 소서러, LV5, AT29, DF17; it is not the hidden fixed-placement Warlock record. Four current battle captures verify 파이터, 워록, 로얄가드, and 소서러. The direct-map renderer formerly truncated localized tile IDs to eight bits, corrupting 로얄가드's 얄/가 and all of 소서러; production preserves the full 16-bit IDs. Automatic confirmation continued through the defeat ending cinematic, proving the first-turn chain did not reset, but it did not retain every distinct dialogue frame, so turn events remain progressed rather than fully verified. Scenario clear, later turns, and branches remain pending."
+      "note": "Production 212A verifies the Scenario 25 route map, all 14 text-bearing scrolling frames of 대륙 최강의 기사, and the full preparation surface. Direct Japanese-ROM rendering confirms the cursed Velzeria castle, Emperor Bernhardt waiting in its depths with Alhazard, Leon and Egbert blocking the way, captive Jessica, and the imminent battle in which neither side can yield. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. The current preparation review follows both roster pages and all nine equipment panels: 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트, 스코트/파이터, 리아나/클레릭, and 라나/클레릭. Lester's original class string is ｸﾛｺﾅｲﾄ (global class ID 7), so 크로코나이트 is source-correct; earlier notes that visually misread it as 크루세이더 were corrected. Earlier production 9C1F reached automatic deployment, all 28 opening confirmations, the Korean conditions page, and the first-turn battle chain without reset or freeze. Victory is 적 전멸 and defeat is 주인공 사망. The live event-spawned Jessica is class ID 9 소서러, LV5, AT29, DF17; it is not the hidden fixed-placement Warlock record. Four current battle captures verify 파이터, 워록, 로얄가드, and 소서러. The direct-map renderer formerly truncated localized tile IDs to eight bits, corrupting 로얄가드's 얄/가 and all of 소서러; production preserves the full 16-bit IDs. Production AD99 was then run from the real Scenario 25 save produced by the preceding completion path with every stock enemy and mercenary intact. Turn 1 map-status inspection visibly retained 레온/로얄가드, 레아드/실버나이트, 에그베르트/자베라, 제국지휘관/나이트마스터, 위저드, 팔라딘, and soldiers 로얄호스, 아머솔저, 헤비호스맨, and 그리폰. The complete stock enemy phase reached SCENARIO 25 / TURN 2; sampled commander and soldier rows remained intact. Five idle captures of the same 나이트마스터 row at 0/1/2/3/5 seconds were pixel-identical on Turn 1, and a second five-capture set was pixel-identical on Turn 2, so the delayed 스/터 cell mutation did not reproduce. Source record 11 Dragon Lord remained hidden at (255,255) through Turn 2 and is not claimed as visible evidence. Production-AD99 completion derivative 7607 preserves allied Jessica and source Leon, stages only Elwin, hides and defeats runtime groups 11..20 after opening, and lowers only present living Leon to HP1. A normal battle retained 엘윈/로드 and 레온/로얄가드, then traversed the full aftermath, item overflow/discard UI, level-up and class-change pages, 전과보고, a real 시나리오 26 save, 다음 시나리오, and the Scenario 26 route and description without reset, freeze, Japanese residue, or damaged name/class cells. Scenario 25 turn events and completion are verified; natural alternate branches and later ordinary turns remain pending."
     },
     {
       "scenario": 26,

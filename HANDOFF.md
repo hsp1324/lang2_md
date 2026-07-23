@@ -8032,3 +8032,65 @@ contains 57 safe syllables as documented below and in
   `captures/run/ad99_s24_stock_hellhound.png`,
   `captures/run/ad99_s24_stock_vampirebat.png`, and
   `captures/run/ad99_s24_stock_turn2_command.png`.
+
+### Scenario 25 Stock Roster And Completion Handoff (2026-07-23)
+
+- `tools/build_scenario25_clear_probe_rom.py --completion-target-only`
+  preserves source record 0 allied Jessica and source record 1
+  `레온/로얄가드`, stages only Elwin at `(16,15)` below Leon's unchanged
+  `(16,14)`, and hides source records 2..11 without changing any fixed
+  identity, class, level, coordinate, side, or handler. The Start wrapper at
+  `0x3FEF00` hides and defeats runtime groups 11..20, lowers only present
+  living group 10 Leon to HP1, preserves group 9 Jessica, and tail-calls stock
+  Start entry `0x022C1E`. Focused tests lock the permitted offsets and
+  checksums `8EF1` for the ordinary probe and `7607` for the completion target.
+- Read-only GST inspection after Start proved group 9 Jessica remained HP10,
+  group 10 Leon became HP1 at `(16,14)`, and groups 11..20 were HP0 with
+  X=`0xFF`. A normal Elwin attack retained `엘윈/로드` and
+  `레온/로얄가드`, then traversed the complete Leon/imperial aftermath,
+  item-overflow discard UI, level-up and class-change pages, `전과보고`, the
+  real save UI changing slot 1 to `시나리오 26`, `다음 시나리오`, and the
+  Scenario 26 route and description. The flushed SRAM is
+  `captures/runtime/s25_completion_7607/.local/share/blastem/Langrisser II
+  (Scenario 25 Completion Target Probe)/save.sram`, SHA-256
+  `799f34e1b8b3e2079978ce4f1bf9315ca8ce4079956ef8ece1319754c28807aa`.
+  Accepted `7607` has SHA-256
+  `392f1e4527072ace5459a458afc4b42aed1ffa9683d801ddb78213cec0a4a76f`;
+  ordinary `8EF1` has SHA-256
+  `8ac56a1062f7788666144ed73d71f8338ad00dc5f414c945896d74bce922a9ef`.
+- A separate production-`AD99` playback retained every stock Scenario 25
+  commander and mercenary. Turn 1 status rows visibly verified
+  `레온/로얄가드`, `레아드/실버나이트`, `에그베르트/자베라`,
+  `제국지휘관/나이트마스터`, `위저드`, `팔라딘`, and soldiers
+  `로얄호스`, `아머솔저`, `헤비호스맨`, and `그리폰`. The full stock
+  enemy phase reached `SCENARIO 25 / TURN 2`; sampled commander and soldier
+  rows remained intact afterward.
+- Five 0/1/2/3/5-second crops of the same `나이트마스터` row were
+  pixel-identical on Turn 1, and another five were pixel-identical on Turn 2.
+  The user's earlier delayed `스`/`터` mobile corruption did not reproduce in
+  this production session. Source record 11 Dragon Lord remained HP0 at
+  `(255,255)` through Turn 2 and is intentionally not claimed as visible
+  evidence; verify it when its natural event reveals the group.
+- Preparation input lesson: `detect-prep` stops with focus on the commander or
+  hire pane. Press B to return focus to the right main menu, then select
+  `지휘관배치`. In the arrangement screen, short direction taps were sometimes
+  swallowed while 0.8-second holds advanced reliably. Screen-gate
+  `자동배치` before choosing `출격`; an attempted sortie before deployment
+  correctly shows `지휘관 배치 미완료입니다`.
+- Representative evidence:
+  `captures/run/7607_s25_leon_target_selected.png`,
+  `captures/run/7607_s25_after_leon_detector_stop.png`,
+  `captures/run/7607_s26_route.png`,
+  `captures/run/7607_s26_description_01.png`,
+  `captures/run/ad99_s25_laird_commander_hover.png`,
+  `captures/run/ad99_s25_leon_commander_hover.png`,
+  `captures/run/ad99_s25_egbert_commander_hover.png`,
+  `captures/run/ad99_s25_nightmaster_commander_hover.png`,
+  `captures/run/ad99_s25_wizard_commander_hover.png`,
+  `captures/run/ad99_s25_enemy_paladin_commander_hover.png`,
+  `captures/run/ad99_s25_laird_royal_horse_hover.png`,
+  `captures/run/ad99_s25_egbert_merc_hover.png`,
+  `captures/run/ad99_s25_wizard_merc_hover.png`,
+  `captures/run/ad99_s25_enemy_paladin_merc_hover.png`,
+  `captures/run/ad99_s25_turn_counter_after_phase.png`, and
+  `captures/run/ad99_s25_turn2_nightmaster_hover_precise.png`.
