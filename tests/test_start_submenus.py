@@ -53,6 +53,11 @@ class StartSubmenuTests(unittest.TestCase):
         self.assertEqual(len(self.words(0x9B09C, 9)), 9)
         self.assertEqual(len(self.words(0x9B0AE, 9)), 9)
 
+    def test_config_entry_describes_the_control_settings_screen(self):
+        self.assertIn("조작설정", builder.START_SUBMENU_TEXTS)
+        self.assertNotIn("설정완료", builder.START_SUBMENU_TEXTS)
+        self.assertEqual(self.words(0x9AEBC, 6), [8, 40, 21, 22, 0x3F, 0x3F])
+
 
 if __name__ == "__main__":
     unittest.main()

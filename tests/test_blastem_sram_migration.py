@@ -403,11 +403,23 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
         self.assertEqual(keys.count("down:0.08"), 26)
         self.assertEqual(keys[-1], "c:4.0")
 
-    def test_selector_movement_always_starts_at_scenario_one(self):
+    def test_selector_movement_starts_at_saved_scenario_and_wraps(self):
         self.assertNotIn("down:0.08", scenario_select_keys(1))
         self.assertEqual(scenario_select_keys(2).count("down:0.08"), 1)
         self.assertEqual(scenario_select_keys(4).count("down:0.08"), 3)
         self.assertNotIn("up:0.08", scenario_select_keys(31))
+        self.assertEqual(
+            scenario_select_keys(26, 26).count("down:0.08"),
+            0,
+        )
+        self.assertEqual(
+            scenario_select_keys(1, 26).count("down:0.08"),
+            6,
+        )
+        self.assertEqual(
+            scenario_select_keys(20, 26).count("down:0.08"),
+            25,
+        )
 
     def test_reads_valid_manual_slot_scenario_number(self):
         data = bytearray(0x2000)

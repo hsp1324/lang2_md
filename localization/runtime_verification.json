@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "AD99",
+  "production_checksum": "9DD0",
   "states": [
     "pending",
     "historical",
@@ -138,6 +138,17 @@
         "captures/run/544b_s23_arrange_warning.png"
       ],
       "note": "The shared incomplete-deployment warning uses its screen-local glyph list and visibly renders 지휘관 배치 미완료입니다 with readable spacing."
+    },
+    {
+      "surface": "start_and_control_settings",
+      "state": "verified_probe",
+      "checksum": "6B21",
+      "based_on": "9DD0",
+      "captures": [
+        "captures/run/6b21_s26_settings_menu_korean_final.png",
+        "captures/run/6b21_s26_control_settings_korean_final.png"
+      ],
+      "note": "Production 9DD0 changes the misleading fourth game-settings row from 설정완료 to 조작설정 and localizes the independent screen-local list at 0x0971A2 and layout beginning at 0x09AFD0. The 6B21 Scenario 26 battle/UI derivative visibly verifies 게임속도, 표시속도, 전투장면, 조작설정, 색상설정, 키 설정, 유닛검색, 취소, 결정/메뉴, 설정메뉴, and 나가기. Source glyph slots 5..19 remain byte-identical so R/G/B, digits 0..7, and hard-coded A/B/C/S prefixes all render correctly; no Japanese or damaged glyph remains on either screen."
     }
   ],
   "scenarios": [
@@ -1610,9 +1621,9 @@
       "conditions": "verified_current",
       "preparation": "verified_current",
       "opening_events": "verified_current",
-      "battle_ui": "pending",
+      "battle_ui": "verified_probe",
       "turn_events": "verified_current",
-      "completion": "pending",
+      "completion": "verified_probe",
       "branches_endings": "pending",
       "captures": [
         "captures/run/c7ab_s26_title.png",
@@ -1637,9 +1648,20 @@
         "captures/run/212a_s26_description_current_08.png",
         "captures/run/212a_s26_description_current_11.png",
         "captures/run/212a_s26_description_current_14.png",
-        "captures/run/212a_s26_description_current_15.png"
+        "captures/run/212a_s26_description_current_15.png",
+        "captures/run/d6a8_s26_battle_ui_10.png",
+        "captures/run/d9f3v4_s26_egbert_status.png",
+        "captures/run/d9f3v4_s26_contact_dialogue_short.png",
+        "captures/run/d9f3v4_s26_darklord_reward.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_10.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_13.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_18.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_25.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_27.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_34.png",
+        "captures/run/d9f3v4_s26_clear_dialogue_36.png"
       ],
-      "note": "Production 212A verifies the Scenario 26 route map, all 14 text-bearing scrolling frames of 흑룡마도사단의 함정, and the preparation endpoint. Direct Japanese-ROM rendering confirms Leon's defeat, entry into Velzeria castle, the passage toward the underground temple, Egbert's encirclement trap, and the Black Dragon Sorcerers' concentrated magic attack. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified both preparation pages, all ten commander class panels, automatic deployment, all ten opening dialogue pages, conditions, and the complete no-action first turn through GAME OVER without reset or freeze. The roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트, 스코트/파이터, 리아나/클레릭, 라나/클레릭, and 제시카/소서러. Victory is 에그베르트 격파; defeat is 주인공 사망. The first-turn capture set includes Jessica, imperial commander, Hein, Aaron, Egbert, and Elwin dialogue and the expected defeat endpoint. Battle presentation, a successful clear, later routes, and branches remain pending."
+      "note": "Production 212A verifies the Scenario 26 route map, all 14 text-bearing scrolling frames of 흑룡마도사단의 함정, and the preparation endpoint. Direct Japanese-ROM rendering confirms Leon's defeat, entry into Velzeria castle, the passage toward the underground temple, Egbert's encirclement trap, and the Black Dragon Sorcerers' concentrated magic attack. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified both preparation pages, all ten commander class panels, automatic deployment, all ten opening dialogue pages, conditions, and the complete no-action first turn through GAME OVER without reset or freeze. The roster is 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트, 스코트/파이터, 리아나/클레릭, 라나/클레릭, and 제시카/소서러. Victory is 에그베르트 격파; defeat is 주인공 사망. The first-turn capture set includes Jessica, imperial commander, Hein, Aaron, Egbert, and Elwin dialogue and the expected defeat endpoint. The D6A8 battle-only derivative keeps source fixed record 0 as the Archmage target, stages only Elwin, and removes runtime groups 11..19 after opening; a stock attack visibly renders 엘윈/로드, 제국군지휘관/아크메이지, -AT-, -DF-, -지형-, values, and troop counts without damaged glyphs. Egbert's contact event bypasses the generic battle renderer, so completion is verified separately. The D9F3 completion-only derivative loads every source fixed record unchanged, removes runtime groups 10..18 after opening, and lowers only runtime group 19 에그베르트/자베라 to one HP. A real attack traversed the scripted contact, 다크로드 reward, full-inventory discard and confirmation UI, all aftermath dialogue, level ups, 전과보고, the real save screen, and 시나리오 27 without Japanese residue, reset, freeze, or damaged names/classes. Several pre-Egbert death lines still use the generic speaker label 제국군지휘관 and remain a later label-polish item; natural alternate branches and endings remain pending."
     },
     {
       "scenario": 27,

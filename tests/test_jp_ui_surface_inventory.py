@@ -15,8 +15,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         cls.result = inventory(JP_ROM.read_bytes(), KO_ROM.read_bytes())
 
     def test_declared_patch_baseline(self):
-        self.assertEqual(self.result["declared_patch_count"], 135)
-        self.assertEqual(self.result["modified_patch_count"], 134)
+        self.assertEqual(self.result["declared_patch_count"], 143)
+        self.assertEqual(self.result["modified_patch_count"], 142)
         name_rows = [
             row
             for row in self.result["declared_patches"]
@@ -25,6 +25,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(len(name_rows), 6)
         self.assertTrue(all(row["reviewed"] for row in name_rows))
         self.assertTrue(all(row["live_verified"] for row in name_rows))
+
+    def test_control_settings_rows_are_declared_and_live_verified(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"].startswith("control_settings_")
+        ]
+        self.assertEqual(len(rows), 8)
+        self.assertTrue(all(row["modified"] for row in rows))
+        self.assertTrue(all(row["reviewed"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_title_load_and_save_fixed_records_are_live_verified(self):
         rows = [

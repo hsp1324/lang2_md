@@ -24,10 +24,20 @@ class Scenario26ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def battle_ui_target_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            battle_ui_target_only=True,
+        )
+        return data
+
     def allowed_offsets(
         self,
         *,
         completion_target_only: bool = False,
+        battle_ui_target_only: bool = False,
     ) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
@@ -46,10 +56,15 @@ class Scenario26ClearProbeTests(unittest.TestCase):
                     ),
                 }
             )
-        if completion_target_only:
+        if completion_target_only or battle_ui_target_only:
+            position = (
+                probe_builder.COMPLETION_ELWIN_POSITION
+                if completion_target_only
+                else probe_builder.BATTLE_UI_ELWIN_POSITION
+            )
             size = len(
                 probe_builder.deployment_bytes(
-                    (probe_builder.COMPLETION_ELWIN_POSITION,)
+                    (position,)
                 )
             )
             allowed.update(
@@ -58,9 +73,11 @@ class Scenario26ClearProbeTests(unittest.TestCase):
                     probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + size,
                 )
             )
-            for index in probe_builder.COMPLETION_HIDDEN_RECORD_INDEXES:
-                allowed.add(layout.records_offset + index * FIXED_RECORD_SIZE)
-            wrapper = probe_builder.completion_hp_wrapper_code()
+            wrapper = (
+                probe_builder.completion_hp_wrapper_code()
+                if completion_target_only
+                else probe_builder.battle_ui_hp_wrapper_code()
+            )
             allowed.update(
                 range(
                     probe_builder.START_MENU_ENTRY_OPERAND,
@@ -166,7 +183,7 @@ class Scenario26ClearProbeTests(unittest.TestCase):
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
         )
 
-    def test_completion_target_preserves_fixed_coordinates_and_egbert_visibility(self):
+    def test_completion_target_preserves_all_fixed_records_and_coordinates(self):
         data = self.completion_target_patched()
         changed = {
             offset
@@ -196,10 +213,7 @@ class Scenario26ClearProbeTests(unittest.TestCase):
                     base + FIELD_OFFSETS["y"] + 1
                 ],
             )
-            if index == probe_builder.COMPLETION_TARGET_RECORD_INDEX:
-                self.assertEqual(data[base] & 0x80, self.source[base] & 0x80)
-            else:
-                self.assertEqual(data[base] & 0x80, 0x80)
+            self.assertEqual(data[base] & 0x80, self.source[base] & 0x80)
 
     def test_completion_wrapper_targets_only_egbert(self):
         code = probe_builder.completion_hp_wrapper_code()
@@ -284,6 +298,53 @@ class Scenario26ClearProbeTests(unittest.TestCase):
         damaged[layout.records_offset] ^= 1
         with self.assertRaisesRegex(ValueError, "fixed record 0"):
             probe_builder.patch_probe(damaged, self.source)
+
+    def test_battle_ui_target_preserves_source_identity_and_targets_archmage(self):
+        data = self.battle_ui_target_patched()
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(battle_ui_target_only=True),
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            (probe_builder.BATTLE_UI_ELWIN_POSITION,)
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+
+        code = probe_builder.battle_ui_hp_wrapper_code()
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.BATTLE_UI_TARGET_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        for group in probe_builder.BATTLE_UI_HIDDEN_RUNTIME_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+
+    def test_rejects_combined_target_modes(self):
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                completion_target_only=True,
+                battle_ui_target_only=True,
+            )
 
 
 if __name__ == "__main__":

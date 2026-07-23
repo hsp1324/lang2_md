@@ -222,12 +222,18 @@ def scenario_select_entry_keys() -> list[str]:
     ]
 
 
-def scenario_select_keys(scenario_number: int) -> list[str]:
-    if not 1 <= scenario_number <= 31:
-        raise ValueError("scenario number must be 1..31")
-    # The cheat displays the loaded slot's scenario number while entering, but
-    # its selectable list always opens on Scenario 1.
-    movement = ["down:0.08"] * (scenario_number - 1)
+def scenario_select_keys(
+    scenario_number: int,
+    current_scenario_number: int = 1,
+) -> list[str]:
+    for value in (scenario_number, current_scenario_number):
+        if not 1 <= value <= 31:
+            raise ValueError("scenario number must be 1..31")
+    # The selector opens on the loaded slot's scenario number and wraps after
+    # 31. Earlier automation incorrectly added target-1 moves, so a Scenario
+    # 26 save plus 25 Down presses entered Scenario 20.
+    movement_count = (scenario_number - current_scenario_number) % 31
+    movement = ["down:0.08"] * movement_count
     return [
         *scenario_select_entry_keys(),
         *movement,
@@ -997,12 +1003,13 @@ def main() -> int:
             current_scenario_number = manual_slot_scenario_number(sram_path)
             if args.sequence == "scenario-select":
                 SEQUENCES[args.sequence] = scenario_select_keys(
-                    args.scenario_number
+                    args.scenario_number,
+                    current_scenario_number,
                 )
                 print(
                     "scenario selector uses valid saved Scenario "
-                    f"{current_scenario_number} and starts its list at "
-                    f"Scenario 1; targeting Scenario {args.scenario_number}"
+                    f"{current_scenario_number} and starts on that scenario; "
+                    f"targeting Scenario {args.scenario_number}"
                 )
             else:
                 print(

@@ -297,6 +297,35 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    rows.append(
+        {
+            "group": "control_settings_glyph_list",
+            "address": f"0x{builder.CONTROL_SETTINGS_GLYPH_LIST:06X}",
+            "size_bytes": len(builder.CONTROL_SETTINGS_ORIGINAL_GLYPHS) * 2,
+            "target_korean": "Korean labels with preserved R/G/B, digits, and A/B/C/S slots",
+            "modified": changed(
+                japanese,
+                korean,
+                builder.CONTROL_SETTINGS_GLYPH_LIST,
+                len(builder.CONTROL_SETTINGS_ORIGINAL_GLYPHS) * 2,
+            ),
+            "reviewed": True,
+            "live_verified": True,
+        }
+    )
+    for offset, original, replacement in builder.CONTROL_SETTINGS_ROWS:
+        rows.append(
+            {
+                "group": "control_settings_layout_rows",
+                "address": f"0x{offset:06X}",
+                "size_bytes": len(original) * 2,
+                "target_korean": "/".join(str(token) for token in replacement),
+                "modified": changed(japanese, korean, offset, len(original) * 2),
+                "reviewed": True,
+                "live_verified": True,
+            }
+        )
+
     for group, offset, size, target in (
         (
             "sound_test_render_hook",

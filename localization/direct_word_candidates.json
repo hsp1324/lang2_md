@@ -1,7 +1,7 @@
 {
   "scan_range": "0x000000..0x180000",
   "candidate_count": 783,
-  "modified_candidate_count": 501,
+  "modified_candidate_count": 511,
   "ownership_counts": {
     "pointer_table_record": 105,
     "pointer_table_record_interior": 95,
@@ -4090,7 +4090,7 @@
       "target_korean": "Start 메뉴 글리프 목록",
       "original_word_count": 42,
       "original_tokens": "001B 004E 0001 0034 0239 0283 0114 0115 0116 0117 0061 006D 00AC 0326 0062 02C3 005F 0030 004A 0020 0223 02FD 030C 0048 02C6 01B0 024E 01FD 008B 0236 0253 0149 017F 000B 0027 0097 037F 0380 0009 004C 002F FFFF",
-      "current_tokens": "7024 02C6 713E 7088 0326 0061 7000 7001 7002 7003 70A8 703D 7154 70AD 70CA 70A0 705F 702C 70EA 70A6 71A1 7081 7119 7183 01B0 02C3 024E 7123 7013 7141 7068 70DE 7144 7257 702A 701B 7151 70D5 70A2 7258 7106 FFFF",
+      "current_tokens": "7024 02C6 713E 7088 0326 0061 7000 7001 7002 7003 70A8 703D 7154 70AD 70CA 70A0 705F 702C 70EA 70A6 71A1 7081 7119 7183 01B0 02C3 024E 7123 7013 7141 7068 70DE 7144 7257 702A 701B 7151 70D5 70A2 7258 7097 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -4114,9 +4114,9 @@
       "target_korean": "게임 설정/검색 메뉴 공통 글리프 목록",
       "original_word_count": 41,
       "original_tokens": "0005 0028 004A 025C 02A6 0331 02C5 032E 005E 0055 0056 0057 0058 0059 005A 005B 0006 006D 01B1 0061 0326 0332 030D 006E 0024 0015 0053 0013 039A 033D 0223 02FD 038B 0021 0051 01CF 0050 0027 000D 002A FFFF",
-      "current_tokens": "0005 0028 004A 025C 02A6 0331 02C5 032E 005E 0055 0056 0057 0058 0059 005A 005B 0006 006D 01B1 0061 0326 0332 030D 006E 0024 0015 0053 0013 039A 033D 0223 02FD 038B 0021 0051 01CF 0050 0027 000D 002A FFFF",
+      "current_tokens": "72B4 705B 7081 7119 70B9 0331 02C5 032E 005E 0055 0056 0057 0058 0059 005A 005B 0006 006D 01B1 0061 71E7 7245 7085 7059 7055 7272 720F 7362 7016 700F 702C 7022 0054 0021 0051 01CF 0050 0027 000D 002A FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5686,7 +5686,7 @@
       "target_korean": "전투 UI 화면별 로컬 토큰/레이아웃",
       "original_word_count": 50,
       "original_tokens": "0003 0011 0012 0013 001A 001B 003F 001C 001A 003F 001D 001E 003F 0024 0025 001A 001B 003F 003F 001C 001A 003F 001D 001E 003F 001F 0020 0021 0012 0022 003F 000F 0019 003F 000F 0023 0023 0026 0022 0000 0027 0028 003F 003F 003F 003F 003F 003F 003F FFFF",
-      "current_tokens": "0003 0013 0014 001B 001C 003F 003F 001D 001E 003F 001F 0020 003F 0021 0022 001B 001C 003F 003F 001D 001E 003F 001F 0020 003F 0023 0024 000B 0025 003F 003F 0026 0011 003F 0027 0011 003F 0015 0016 0028 0003 003F 003F 003F 003F 003F 003F 003F 003F FFFF",
+      "current_tokens": "0003 0013 0014 001B 001C 003F 003F 001D 001E 003F 001F 0020 003F 0021 0022 001B 001C 003F 003F 001D 001E 003F 001F 0020 003F 0023 0024 000B 0025 003F 003F 0026 0011 003F 0027 0011 003F 0008 0028 0015 0016 003F 003F 003F 003F 003F 003F 003F 003F FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -5782,9 +5782,9 @@
       "target_korean": "전투 UI 화면별 로컬 토큰/레이아웃",
       "original_word_count": 8,
       "original_tokens": "000C 0000 0000 0001 0002 0003 0004 FFFF",
-      "current_tokens": "000C 0000 0000 0001 0002 0003 0004 FFFF",
+      "current_tokens": "000C 0000 0000 0001 0002 0003 0020 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5794,9 +5794,9 @@
       "target_korean": "전투 UI 화면별 로컬 토큰/레이아웃",
       "original_word_count": 7,
       "original_tokens": "000C 0009 0010 0002 0003 0004 FFFF",
-      "current_tokens": "000C 0009 0010 0002 0003 0004 FFFF",
+      "current_tokens": "000C 0009 0004 0020 0002 0003 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5842,9 +5842,9 @@
       "target_korean": "시스템 UI 화면별 글리프·로컬 토큰",
       "original_word_count": 9,
       "original_tokens": "0004 000C 0018 0019 001A 001B 001C 001D FFFF",
-      "current_tokens": "0004 000C 0018 0019 001A 001B 001C 001D FFFF",
+      "current_tokens": "0004 000C 0014 0015 0016 0000 0020 0020 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5854,9 +5854,9 @@
       "target_korean": "시스템 UI 화면별 글리프·로컬 토큰",
       "original_word_count": 8,
       "original_tokens": "0004 000E 0010 0024 0025 0026 0027 FFFF",
-      "current_tokens": "0004 000E 0010 0024 0025 0026 0027 FFFF",
+      "current_tokens": "0004 000E 0017 0018 0020 0020 0020 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5866,9 +5866,9 @@
       "target_korean": "시스템 UI 화면별 글리프·로컬 토큰",
       "original_word_count": 7,
       "original_tokens": "0001 0011 0014 0015 0016 0017 FFFF",
-      "current_tokens": "0001 0011 0014 0015 0016 0017 FFFF",
+      "current_tokens": "0001 0011 001C 001D 001E 0020 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5878,9 +5878,9 @@
       "target_korean": "시스템 UI 화면별 글리프·로컬 토큰",
       "original_word_count": 10,
       "original_tokens": "0014 000C 0023 001F 0020 0021 0019 0022 0002 FFFF",
-      "current_tokens": "0014 000C 0023 001F 0020 0021 0019 0022 0002 FFFF",
+      "current_tokens": "0014 000C 0019 0003 001F 001A 001B 0020 0020 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -5890,9 +5890,9 @@
       "target_korean": "시스템 UI 화면별 글리프·로컬 토큰",
       "original_word_count": 9,
       "original_tokens": "0014 000E 001E 001F 0021 0019 0022 0002 FFFF",
-      "current_tokens": "0014 000E 001E 001F 0021 0019 0022 0002 FFFF",
+      "current_tokens": "0014 000E 0002 0003 001A 001B 0020 0020 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -6751,10 +6751,10 @@
       "address": "0x0A16F2",
       "ownership": "declared_direct_patch",
       "owner": null,
-      "target_korean": "버리겠습니까예아니오",
+      "target_korean": "버릴까요네취소",
       "original_word_count": 18,
       "original_tokens": "008A 027A 0065 0092 0099 0064 00A9 00CC 0095 007C 0074 0096 02C6 0326 0061 01B0 02C3 FFFF",
-      "current_tokens": "710B 7001 719C 70D9 7148 70AD 70DD 7015 7148 705F FFFF",
+      "current_tokens": "0054 710B 71DC 70AD 70EA 7157 7059 7055 0054 0054 0054 0054 0054 0054 0054 0054 0054 FFFF",
       "relocated_pointer": null,
       "modified": true,
       "reviewed": false
@@ -6862,9 +6862,9 @@
       "target_korean": "아이템/상점 화면별 글리프·토큰·포인터",
       "original_word_count": 14,
       "original_tokens": "0000 0001 0002 0003 0006 FFFE 0007 0008 0004 0009 000A 0006 000B FFFF",
-      "current_tokens": "0000 0001 0002 0003 0006 FFFE 0007 0008 0004 0009 000A 0006 000B FFFF",
+      "current_tokens": "0000 0001 0002 0003 0004 FFFE 0000 0000 0000 0000 0000 0000 0000 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {
@@ -6874,9 +6874,9 @@
       "target_korean": "아이템/상점 화면별 글리프·토큰·포인터",
       "original_word_count": 7,
       "original_tokens": "000C 000D 000E FFFE 000F 0010 FFFF",
-      "current_tokens": "000C 000D 000E FFFE 000F 0010 FFFF",
+      "current_tokens": "0005 0000 0000 FFFE 0006 0007 FFFF",
       "relocated_pointer": null,
-      "modified": false,
+      "modified": true,
       "reviewed": false
     },
     {

@@ -38,8 +38,9 @@ ARCHMAGE_RECORD_INDEX = 0
 KNIGHT_MASTER_RECORD_INDEX = 8
 EGBERT_RECORD_INDEX = 9
 COMPLETION_TARGET_RECORD_INDEX = EGBERT_RECORD_INDEX
-COMPLETION_HIDDEN_RECORD_INDEXES = tuple(range(0, 9))
 COMPLETION_ELWIN_POSITION = (15, 9)
+BATTLE_UI_TARGET_RECORD_INDEX = ARCHMAGE_RECORD_INDEX
+BATTLE_UI_ELWIN_POSITION = (24, 21)
 PROBE_AT = 0
 PROBE_DF = 0
 START_MENU_ENTRY = 0x022C1E
@@ -50,6 +51,8 @@ RUNTIME_GROUP_SIZE = 0x60
 FIRST_FIXED_RUNTIME_GROUP = 10
 COMPLETION_TARGET_RUNTIME_GROUP = 19
 COMPLETION_HIDDEN_RUNTIME_GROUPS = tuple(range(10, 19))
+BATTLE_UI_TARGET_RUNTIME_GROUP = 10
+BATTLE_UI_HIDDEN_RUNTIME_GROUPS = tuple(range(11, 20))
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
 
@@ -64,17 +67,21 @@ def deployment_bytes(positions: tuple[tuple[int, int], ...]) -> bytes:
     )
 
 
-def completion_hp_wrapper_code() -> bytes:
+def target_hp_wrapper_code(
+    *,
+    target_group: int,
+    hidden_groups: tuple[int, ...],
+) -> bytes:
     code = bytearray()
     # Opening events have already materialized the fixed groups when Start is
-    # opened. Remove every non-target enemy, then lower only living Egbert.
-    for group in COMPLETION_HIDDEN_RUNTIME_GROUPS:
+    # opened. Remove every non-target enemy, then lower only the living target.
+    for group in hidden_groups:
         record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
         code.extend(bytes.fromhex("13 FC 00 FF"))
         code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
         code.extend(bytes.fromhex("13 FC 00 00"))
         code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
-    target = RUNTIME_GROUP_BASE + COMPLETION_TARGET_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    target = RUNTIME_GROUP_BASE + target_group * RUNTIME_GROUP_SIZE
     code.extend(bytes.fromhex("0C 39 00 FF"))
     code.extend((target + RUNTIME_X_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("67 12"))
@@ -88,6 +95,20 @@ def completion_hp_wrapper_code() -> bytes:
     code.extend(bytes.fromhex("4E F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     return bytes(code)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    return target_hp_wrapper_code(
+        target_group=COMPLETION_TARGET_RUNTIME_GROUP,
+        hidden_groups=COMPLETION_HIDDEN_RUNTIME_GROUPS,
+    )
+
+
+def battle_ui_hp_wrapper_code() -> bytes:
+    return target_hp_wrapper_code(
+        target_group=BATTLE_UI_TARGET_RUNTIME_GROUP,
+        hidden_groups=BATTLE_UI_HIDDEN_RUNTIME_GROUPS,
+    )
 
 
 def validate_layout(probe: bytes, source: bytes) -> None:
@@ -124,7 +145,10 @@ def patch_probe(
     source: bytes,
     *,
     completion_target_only: bool = False,
+    battle_ui_target_only: bool = False,
 ) -> int:
+    if completion_target_only and battle_ui_target_only:
+        raise ValueError("completion and battle UI target modes are mutually exclusive")
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
@@ -133,13 +157,20 @@ def patch_probe(
         probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
         mercenaries = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenaries : mercenaries + 6] = b"\xFF" * 6
-    if completion_target_only:
-        elwin = deployment_bytes((COMPLETION_ELWIN_POSITION,))
+    if completion_target_only or battle_ui_target_only:
+        elwin_position = (
+            COMPLETION_ELWIN_POSITION
+            if completion_target_only
+            else BATTLE_UI_ELWIN_POSITION
+        )
+        wrapper = (
+            completion_hp_wrapper_code()
+            if completion_target_only
+            else battle_ui_hp_wrapper_code()
+        )
+        elwin = deployment_bytes((elwin_position,))
         end = FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
         probe[FIRST_PLAYER_DEPLOYMENT_OFFSET:end] = elwin
-        for index in COMPLETION_HIDDEN_RECORD_INDEXES:
-            base = layout.records_offset + index * FIXED_RECORD_SIZE
-            probe[base] |= 0x80
         expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
         if source[
             START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
@@ -149,7 +180,6 @@ def patch_probe(
             START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
         ] != expected_start_entry:
             raise ValueError("input Start-menu entry operand changed")
-        wrapper = completion_hp_wrapper_code()
         wrapper_end = COMPLETION_HP_WRAPPER + len(wrapper)
         if probe[COMPLETION_HP_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
             raise ValueError("input completion wrapper region is not empty")
@@ -179,6 +209,14 @@ def parse_args() -> argparse.Namespace:
             "and enable the completion HP wrapper"
         ),
     )
+    parser.add_argument(
+        "--battle-ui-target-only",
+        action="store_true",
+        help=(
+            "leave only source record 0 Archmage visible, stage Elwin below "
+            "it, and enable the battle UI HP wrapper"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -190,6 +228,7 @@ def main() -> int:
         probe,
         source,
         completion_target_only=args.completion_target_only,
+        battle_ui_target_only=args.battle_ui_target_only,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -200,8 +239,8 @@ def main() -> int:
     )
     if args.completion_target_only:
         print(
-            "completion target: source record 9 Egbert remains visible; "
-            "enemy records 0..8 hidden"
+            "completion target: all source records load unchanged; Start "
+            "removes non-target runtime enemies"
         )
         print(
             "Elwin staged at (15,9); all fixed-record coordinates remain "
@@ -210,6 +249,19 @@ def main() -> int:
         print(
             "Start hides and defeats runtime groups 10..18, then lowers only "
             "present, living group 19 Egbert to one HP"
+        )
+    if args.battle_ui_target_only:
+        print(
+            "battle UI target: all source records load unchanged; Start "
+            "removes non-target runtime enemies"
+        )
+        print(
+            "Elwin staged at (24,21); all fixed-record coordinates remain "
+            "unchanged"
+        )
+        print(
+            "Start hides and defeats runtime groups 11..19, then lowers only "
+            "present, living group 10 Archmage to one HP"
         )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)

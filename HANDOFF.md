@@ -8310,3 +8310,60 @@ contains 57 safe syllables as documented below and in
   edges, exact rank-zero labels, ten AI/Test redesign badges, source/original/
   converted comparisons, no broken images, and no body overflow. The focused
   experimental/editor suite passes 12 tests.
+
+### Scenario 26 Battle And Completion Verification (2026-07-24)
+
+- Scenario 26 needs two diagnostic modes because contact with Egbert invokes a
+  scripted event and bypasses the stock general battle renderer.
+  `--battle-ui-target-only` therefore keeps source fixed record 0 Archmage as
+  the target, stages Elwin at `(24,21)`, and removes runtime groups 11..19
+  only after opening. Checksum `D6A8` visibly renders `엘윈/로드`,
+  `제국군지휘관/아크메이지`, `-AT-`, `-DF-`, `-지형-`, both counts, and
+  all numeric fields in `captures/run/d6a8_s26_battle_ui_10.png`.
+- `--completion-target-only` loads every source fixed record byte-identically,
+  stages Elwin at `(15,9)`, removes runtime groups 10..18 after opening, and
+  lowers only present group 19 `에그베르트/자베라` to HP 1. Checksum `D9F3`
+  reaches the real contact event, `다크로드 획득!`, full-inventory notice,
+  discard picker and confirmation, the complete aftermath, level ups,
+  `전과보고`, the real save screen, and `시나리오 27`. It does not reset,
+  freeze, show Japanese, or damage names/classes.
+- Accepted captures include
+  `captures/run/d9f3v4_s26_egbert_status.png`,
+  `captures/run/d9f3v4_s26_contact_dialogue_short.png`,
+  `captures/run/d9f3v4_s26_darklord_reward.png`, and
+  `captures/run/d9f3v4_s26_clear_dialogue_10.png` through the selected
+  aftermath samples listed in `localization/runtime_verification.json`.
+  Several pre-Egbert death lines still use generic `제국군지휘관`; treat this
+  as later speaker-label polish, not a flow failure.
+- Do not revive the rejected fixed-record hide-bit mutation. It changed source
+  data before events materialized the groups. Both accepted modes leave the
+  complete fixed table unchanged and isolate enemies in work RAM from the
+  Start wrapper. The two CLI modes are deliberately mutually exclusive.
+- The scenario selector opens on the loaded slot's current scenario, not
+  Scenario 1. `tools/run_blastem_sequence.py` now moves by
+  `(target-current) % 31`; the old target-minus-one logic changed a Scenario
+  26 save into Scenario 20 and must not be restored.
+
+### Control Settings Screen Localization (2026-07-24)
+
+- The fourth game-settings row opened another screen and was incorrectly
+  labelled `설정완료`. It is now `조작설정`. The independent screen uses the
+  40-word glyph list at `0x0971A2`, referenced by code at `0x02351C`, and
+  layout records beginning at `0x09AFD0`.
+- The accepted labels are `색상설정`, `키 설정`, `A 유닛검색`, `B 취소`,
+  `C 결정/메뉴`, `S 설정메뉴`, and `나가기`. Production checksum is
+  `9DD0`; Scenario 26 battle/UI derivative `6B21` proves both screens in
+  `captures/run/6b21_s26_settings_menu_korean_final.png` and
+  `captures/run/6b21_s26_control_settings_korean_final.png`.
+- Preserve original glyph slots 5..19 exactly. Slots 5..7 are R/G/B, 8..15
+  are dynamic digits 0..7, and 17..19 are direct A/C/S prefix tiles; slot 7
+  also supplies B. The first rejected assignment overwrote the digits, and the
+  second overwrote the hard-coded prefixes. Korean uses slots 0..4 and 20..31,
+  with slot 32 as space.
+- `tests/test_control_settings_screen.py` locks the source list, every original
+  row, replacement width and terminator, preserved slots, and final labels.
+  `tests/test_start_submenus.py` separately locks the `조작설정` entry.
+- Production rebuild `9DD0` and all derived checksum baselines pass the full
+  719-test suite. The two additional Hangul glyphs shift every production-based
+  diagnostic checksum by the same `0x0FC9`; this is expected baseline movement,
+  not a probe behavior change.

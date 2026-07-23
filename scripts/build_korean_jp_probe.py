@@ -920,12 +920,58 @@ START_SUBMENU_TEXTS = (
     "전투장면",
     "켜기",
     "끄기",
-    "설정완료",
+    "조작설정",
     "불러올 데이터를 선택하세요",
     "장",
     "턴",
     "손상된 데이터",
     "데이터 없음",
+)
+CONTROL_SETTINGS_TEXTS = (
+    "색상설정",
+    "키 설정",
+    "A 유닛검색",
+    "B 취소",
+    "C 결정/메뉴",
+    "S 설정메뉴",
+    "나가기",
+)
+CONTROL_SETTINGS_GLYPH_LIST = 0x971A2
+CONTROL_SETTINGS_ORIGINAL_GLYPHS = (
+    0x0005, 0x0028, 0x004A, 0x025C, 0x02A6, 0x0331, 0x02C5, 0x032E,
+    0x005E, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x005B,
+    0x0006, 0x006D, 0x01B1, 0x0061, 0x0326, 0x0332, 0x030D, 0x006E,
+    0x0024, 0x0015, 0x0053, 0x0013, 0x039A, 0x033D, 0x0223, 0x02FD,
+    0x038B, 0x0021, 0x0051, 0x01CF, 0x0050, 0x0027, 0x000D, 0x002A,
+)
+CONTROL_SETTINGS_GLYPH_SLOT_CHARS = {
+    0: "색",
+    1: "상",
+    2: "설",
+    3: "정",
+    4: "키",
+    20: "유",
+    21: "닛",
+    22: "검",
+    23: "취",
+    24: "소",
+    25: "결",
+    26: "메",
+    27: "뉴",
+    28: "나",
+    29: "가",
+    30: "기",
+    31: "/",
+}
+CONTROL_SETTINGS_SPACE_SLOT = 32
+CONTROL_SETTINGS_ROWS = (
+    (0x9AFD4, (0, 1, 2, 3, 4), (0, 1, 2, 3, 32)),
+    (0x9AFE4, (16, 2, 3, 4), (4, 32, 2, 3)),
+    (0x9B00A, (24, 25, 26, 27, 28, 29), (20, 21, 22, 0, 32, 32)),
+    (0x9B01C, (16, 36, 37, 38, 39), (23, 24, 32, 32, 32)),
+    (0x9B02C, (20, 21, 22, 23), (28, 29, 30, 32)),
+    (0x9B03A, (35, 31, 32, 33, 25, 34, 2), (25, 3, 31, 26, 27, 32, 32)),
+    (0x9B04E, (30, 31, 33, 25, 34, 2), (2, 3, 26, 27, 32, 32)),
 )
 LOAD_MENU_GLYPH_LIST = 0x97128
 # The title-screen LOAD UI is unrelated to the in-battle Start submenu. It
@@ -4347,7 +4393,7 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
         37: "면",
         38: "켜",
         39: "끄",
-        40: "완",
+        40: "작",
     }
     for slot, char in main_slot_chars.items():
         put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph_by_char[char])
@@ -4382,7 +4428,7 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
         (0x9AE98, [29, 30, 0x3F, 31, 32, 0x3F]),
         (0x9AEA4, [35, 36, 11, 37, 0x3F, 0x3F]),
         (0x9AEB0, [38, 17, 0x3F, 39, 17, 0x3F]),
-        (0x9AEBC, [21, 22, 40, 3, 0x3F, 0x3F]),
+        (0x9AEBC, [8, 40, 21, 22, 0x3F, 0x3F]),
     )
     for offset, tokens in config_rows:
         put_tokens(offset, tokens)
@@ -4415,6 +4461,45 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
     put_tokens(0x9B092, load_tokens("턴", 5))
     put_tokens(0x9B09C, load_tokens("손상된 데이터", 9))
     put_tokens(0x9B0AE, load_tokens("데이터 없음", 9))
+
+
+def patch_control_settings_screen(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+) -> None:
+    actual_glyphs = tuple(
+        be16(data, CONTROL_SETTINGS_GLYPH_LIST + index * 2)
+        for index in range(len(CONTROL_SETTINGS_ORIGINAL_GLYPHS))
+    )
+    if actual_glyphs != CONTROL_SETTINGS_ORIGINAL_GLYPHS:
+        raise ValueError("control-settings glyph list changed")
+
+    for slot, char in CONTROL_SETTINGS_GLYPH_SLOT_CHARS.items():
+        put16(
+            data,
+            CONTROL_SETTINGS_GLYPH_LIST + slot * 2,
+            glyph_by_char[char],
+        )
+    put16(
+        data,
+        CONTROL_SETTINGS_GLYPH_LIST + CONTROL_SETTINGS_SPACE_SLOT * 2,
+        SPACE_GLYPH,
+    )
+
+    for offset, original, replacement in CONTROL_SETTINGS_ROWS:
+        actual = tuple(
+            be16(data, offset + index * 2)
+            for index in range(len(original))
+        )
+        if actual != original:
+            raise ValueError(
+                f"control-settings row at 0x{offset:06X} changed: "
+                f"{actual!r} != {original!r}"
+            )
+        if len(replacement) != len(original):
+            raise AssertionError("control-settings replacement width changed")
+        for index, token in enumerate(replacement):
+            put16(data, offset + index * 2, token)
 
 
 def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -7142,6 +7227,10 @@ def main() -> None:
         # Corrected Scenario 4 Shika cries need new syllables, but must not
         # renumber any previously accepted event, ending, or UI glyph.
         DEFERRED_SCENARIO4_SHIKA_GLYPH_TEXT,
+        # The control-settings screen has an independent glyph list. Append
+        # its vocabulary after every established consumer to keep all existing
+        # gameplay and name-entry glyph IDs stable.
+        *CONTROL_SETTINGS_TEXTS,
     )
     glyph_by_char = install_custom_glyphs(data, chars)
     if args.patch_default_name:
@@ -7196,6 +7285,7 @@ def main() -> None:
         patch_prep_menu_trailing_cells(data)
         patch_start_menu(data, glyph_by_char)
         patch_start_submenus(data, glyph_by_char)
+        patch_control_settings_screen(data, glyph_by_char)
         patch_title_load_screen(data, glyph_by_char)
         patch_title_main_menu(data)
     if not args.skip_items:

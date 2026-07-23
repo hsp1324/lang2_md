@@ -37,7 +37,7 @@ class SummonApplicationProbeBuilderTests(unittest.TestCase):
         probe = bytearray(self.production)
         checksum = probe_builder.patch_probe(probe, self.source)
         self.assertEqual(checksum, int.from_bytes(probe[0x18E:0x190], "big"))
-        self.assertEqual(checksum, 0xC4B6)
+        self.assertEqual(checksum, 0xB4ED)
         allowed = {0x18E, 0x18F}
         for offset, replacement in (
             (

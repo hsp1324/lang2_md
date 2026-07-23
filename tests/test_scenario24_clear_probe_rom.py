@@ -301,10 +301,10 @@ class Scenario24ClearProbeTests(unittest.TestCase):
             )
 
     def test_current_probe_checksums_are_locked(self):
-        self.assertEqual(self.patched()[0x18E:0x190], bytes.fromhex("63 AE"))
+        self.assertEqual(self.patched()[0x18E:0x190], bytes.fromhex("53 E5"))
         self.assertEqual(
             self.completion_target_patched()[0x18E:0x190],
-            bytes.fromhex("08 D4"),
+            bytes.fromhex("F9 0B"),
         )
 
     def test_rejects_non_source_fixed_record(self):
