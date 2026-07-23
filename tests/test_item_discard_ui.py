@@ -54,6 +54,58 @@ class ItemDiscardUiTests(unittest.TestCase):
             ),
             builder.SHOP_ITEM_SELECTION_SOURCE_TOKENS,
         )
+        self.assertEqual(
+            self.words(
+                self.japanese,
+                builder.ITEM_DISCARD_CONFIRM_GLYPH_LIST,
+                len(builder.ITEM_DISCARD_CONFIRM_GLYPH_SOURCE),
+            ),
+            builder.ITEM_DISCARD_CONFIRM_GLYPH_SOURCE,
+        )
+        self.assertEqual(
+            self.words(
+                self.japanese,
+                builder.ITEM_DISCARD_CONFIRM_TOKEN_STREAM,
+                len(builder.ITEM_DISCARD_CONFIRM_SOURCE_TOKENS),
+            ),
+            builder.ITEM_DISCARD_CONFIRM_SOURCE_TOKENS,
+        )
+
+    def test_discard_confirmation_uses_compact_korean_records(self):
+        glyphs = self.words(
+            self.korean,
+            builder.ITEM_DISCARD_CONFIRM_GLYPH_LIST,
+            len(builder.ITEM_DISCARD_CONFIRM_GLYPH_SOURCE),
+        )
+        self.assertEqual(glyphs[0], builder.SPACE_GLYPH)
+        self.assertEqual(len(set(glyphs[1:8])), 7)
+        self.assertTrue(
+            all(
+                any(
+                    start <= glyph <= end
+                    for start, end in builder.CUSTOM_GLYPH_RANGES
+                )
+                and glyph not in builder.CUSTOM_GLYPH_RESERVED
+                for glyph in glyphs[1:8]
+            )
+        )
+        self.assertEqual(
+            glyphs[8:],
+            (builder.SPACE_GLYPH,) * (len(glyphs) - 8),
+        )
+        tokens = self.words(
+            self.korean,
+            builder.ITEM_DISCARD_CONFIRM_TOKEN_STREAM,
+            len(builder.ITEM_DISCARD_CONFIRM_SOURCE_TOKENS),
+        )
+        self.assertEqual(
+            tokens,
+            (
+                0, 1, 2, 3, 4, 0xFFFE,
+                0, 0, 0, 0, 0, 0, 0, 0xFFFF,
+                5, 0, 0, 0xFFFE, 6, 7, 0xFFFF,
+            ),
+        )
 
     def test_notice_is_relocated_with_spaces_preserved(self):
         expected_chars = builder.collect_chars(*builder.ITEM_DISCARD_NOTICE_LINES)

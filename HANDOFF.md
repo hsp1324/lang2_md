@@ -8207,3 +8207,52 @@ contains 57 safe syllables as documented below and in
   immediate candidates as explicit image buttons, highlights the selected
   outgoing edges, and gives the inspector enough width to keep the candidates
   unambiguous.
+
+### Scenario 26 Dynamic Status And Discard UI Stabilization (2026-07-24)
+
+- The previous dynamic map-status cache at contiguous VRAM tiles
+  `0x05D8..0x05E7`, and the attempted `0x04D8..0x04E7` replacement, both
+  overlap live map graphics in later scenarios. The accepted cache uses the
+  noncontiguous tail cells `0x07A1..0x07B5` listed in
+  `BYTE_UI_DYNAMIC_TILE_IDS`; the full-screen H-scroll writer stops before
+  those cells and VBlank rebuilds the selected unit's name/class only in
+  full-scroll mode. Legacy one-byte Korean codes are mapped through the new
+  `0x2BE860` lookup table instead of being mistaken for graphic tiles.
+- Portrait and battle resource loads must not restore persistent Korean font
+  banks into map graphics. The old restore hooks are retired. The Scenario 26
+  battle class buffer at `0xFFFFA714` uses the established static direct
+  renderer because both sides remain visible simultaneously; two calls must
+  never share one transient eight-tile class cache.
+- The discard confirmation at glyph list `0x0A16F2` is not a direct string.
+  Its fixed two-record token geometry is now patched explicitly as
+  `버릴까요` and `네/취소`; `아니오` cannot fit the stock two-cell second
+  choice. The focused runtime/editor resource suite passes 68 tests together
+  with the Bald separation checks below.
+
+### Bald 2E In-game Sprite Separation (2026-07-24)
+
+- The map-unit loader at `0x0110F4..0x011104` shifts the 16-bit sprite ID by
+  seven and adds graphics base `0x052980`; lookup
+  `0x011474..0x01148A` preserves all 16 bits. The second animation bank uses
+  base `0x058280`. This permits an expansion-backed sprite ID without moving
+  the two stock banks or the tables immediately after them.
+- `scripts/build_korean_jp_probe.py` now copies both stock Fighter `0x7E`
+  frames into blank production ranges `0x2F0000..0x2F007F` and
+  `0x2F5900..0x2F597F`. These addresses correspond to sprite ID `0x53AD`.
+  It remaps only color indexes `4/5/F` to the live map CRAM row 1's
+  violet entries and index `8` to red, then changes only generic class entry
+  `2E` at `0x05DE42`. The white blade and gold/brown shield rim remain
+  source-identical. Class `2D` continues to point to stock `0x007E`.
+- The first runtime pass checksum `9551` proved the high-ID DMA path and red
+  shield but exposed a cyan highlight because the map uses CRAM row 1 rather
+  than the editor preview palette. The accepted remap is production checksum
+  `0957`. `captures/run/0957_s01_bald_design_runtime.png` shows `발드` with
+  the new magenta/violet armor and red shield. Moving to the ordinary
+  Scenario 1 imperial Fighter produced
+  `captures/run/0957_s01_generic_2d_runtime_control.png`, which retains the
+  stock green unit. Neither route reset, froze, or produced a red screen.
+- `tests/test_bald_map_sprite.py` locks the two class IDs, both frame
+  transforms, expansion bounds, and occupied-range rejection. Do not reuse
+  `0x00` or `0x1A` as apparently missing low sprite IDs: direct rendering
+  shows both contain live effect/monster graphics even though the two class
+  tables do not reference them.

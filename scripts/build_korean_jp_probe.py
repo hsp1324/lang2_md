@@ -44,6 +44,32 @@ SRAM_LONG_PATCHES = {
     0x01E06A: 0x203FE1,
 }
 
+# Map-unit graphics contain two 0x80-byte animation frames per sprite. The
+# second source bank begins immediately after the stock 0xB2-sprite first
+# bank. Sprite IDs are 16-bit and the loader computes base + (ID << 7), so a
+# high ID can point at an aligned expansion slot without moving either stock
+# bank or the tables that follow it.
+GENERIC_CLASS_SPRITE_TABLE = 0x05DDE6
+MAP_SPRITE_FRAME_BASES = (0x052980, 0x058280)
+MAP_SPRITE_BYTES = 0x80
+BALD_CLASS_ID = 0x2E
+BALD_SOURCE_SPRITE_ID = 0x007E
+BALD_CUSTOM_SPRITE_ID = 0x53AD
+BALD_CUSTOM_FRAME_OFFSETS = tuple(
+    base + BALD_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
+    for base in MAP_SPRITE_FRAME_BASES
+)
+# Bald is an enemy-only Scenario 1 class. The live map uses CRAM row 1 for his
+# sprite, not the class-change preview row. Remap the Fighter's blue/cyan armor
+# into that row's magenta and muted-violet entries and its shield center into
+# red, while leaving the white blade and gold/brown rim pixels untouched.
+BALD_SPRITE_COLOR_INDEX_REMAP = {
+    0x4: 0xD,  # blue armor -> bright violet
+    0x5: 0xE,  # dark blue armor -> muted violet
+    0x8: 0xB,  # green shield center -> red
+    0xF: 0xD,  # cyan armor highlight -> bright violet
+}
+
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
 
@@ -155,9 +181,27 @@ BYTE_UI_DYNAMIC_GLYPH_TABLE = 0x2BD000
 BYTE_UI_DYNAMIC_GLYPH_TABLE_LIMIT = 0x2BE800
 BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE = 0x2BE800
 BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT = 0x2BE840
-BYTE_UI_DYNAMIC_NAME_TILE = 0x05D8
-BYTE_UI_DYNAMIC_CLASS_TILE = 0x05E0
+BYTE_UI_DYNAMIC_TILE_ID_TABLE = 0x2BE840
+BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT = 0x2BE860
+BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE = 0x2BE860
+BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT = 0x2BE960
+# These patterns are a transient map-status cache, not a persistent font bank.
+# They occupy noncontiguous cells in the unused tail of the full-screen
+# H-scroll table and avoid every retained Plane/SAT reference. The stock
+# full-scroll writer is shortened below so it stops before the first cache
+# cell; the line-scroll writer remains source-identical for scripted effects.
+# The old 0x05D8..0x05E7 and experimental 0x04D8..0x04E7 caches collided with
+# live map graphics in later scenarios.
+BYTE_UI_DYNAMIC_TILE_IDS = (
+    0x07A1, 0x07A2, 0x07A3, 0x07A4, 0x07A5, 0x07A6, 0x07A7, 0x07A8,
+    0x07A9, 0x07AD, 0x07AF, 0x07B0, 0x07B1, 0x07B3, 0x07B4, 0x07B5,
+)
+BYTE_UI_DYNAMIC_NAME_SLOT = 0
+BYTE_UI_DYNAMIC_CLASS_SLOT = 8
 BYTE_UI_DYNAMIC_FIELD_WIDTH = 8
+BYTE_UI_FULL_SCROLL_HSCROLL_FILL = 0x0090A6
+BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL = bytes.fromhex("32 3C 00 B7")
+BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED = bytes.fromhex("32 3C 00 07")
 BYTE_UI_CLASS_STRING_RELOC_BASE = 0x2B9000
 BYTE_UI_CLASS_STRING_RELOC_LIMIT = 0x2BA000
 BYTE_UI_NAME_STRING_RELOC_BASE = 0x2BA000
@@ -432,8 +476,8 @@ BYTE_UI_PLANE_RENDER_ROUTINE = 0x2B7500
 BYTE_UI_PANEL_RENDER_ROUTINE = 0x2B7600
 BYTE_UI_PREP_ROSTER_ROUTINE = 0x2B7680
 BYTE_UI_MAP_INFO_RENDER_ROUTINE = 0x2B7700
-BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE = 0x2B7780
-BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE = 0x2B77A0
+BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE = 0x2B77A0
+BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE = 0x2B77C0
 BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
 BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE = 0x2B88C0
 BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT = 0x2B9000
@@ -449,8 +493,10 @@ TITLE_CREDIT_RENDER_ROUTINE = 0x2B7E40
 TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE = 0x2B7300
-BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE = 0x2B7370
-BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE = 0x2B73F0
+BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE = 0x2B7374
+BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE = 0x2B7280
+BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE = 0x2B7290
+BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE = 0x2B72A0
 INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
 SOUND_TEST_RENDER_ROUTINE = 0x2B7F60
 INLINE_DISCARD_PROMPT_RENDER_HOOK = 0x01804C
@@ -459,6 +505,20 @@ INLINE_DISCARD_PROMPT_SOURCE = 0x01807E
 INLINE_DISCARD_PROMPT_SOURCE_BYTES = "ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ".encode("cp932")
 INLINE_DISCARD_PROMPT_WIDTH = 13
 INLINE_DISCARD_PROMPT_TEXT = "버릴 아이템"
+ITEM_DISCARD_CONFIRM_GLYPH_LIST = 0x0A16F2
+ITEM_DISCARD_CONFIRM_GLYPH_SOURCE = (
+    0x008A, 0x027A, 0x0065, 0x0092, 0x0099, 0x0064, 0x00A9, 0x00CC,
+    0x0095, 0x007C, 0x0074, 0x0096, 0x02C6, 0x0326, 0x0061, 0x01B0,
+    0x02C3,
+)
+ITEM_DISCARD_CONFIRM_TOKEN_STREAM = 0x0A1844
+ITEM_DISCARD_CONFIRM_SOURCE_TOKENS = (
+    0x0000, 0x0001, 0x0002, 0x0003, 0x0006, 0xFFFE,
+    0x0007, 0x0008, 0x0004, 0x0009, 0x000A, 0x0006, 0x000B, 0xFFFF,
+    0x000C, 0x000D, 0x000E, 0xFFFE, 0x000F, 0x0010, 0xFFFF,
+)
+ITEM_DISCARD_CONFIRM_SUFFIX = " 버릴까요"
+ITEM_DISCARD_CONFIRM_CHOICES = ("네", "취소")
 SOUND_TEST_SOURCE_TABLE = 0x05E040
 SOUND_TEST_ROW_COUNT = 77
 SOUND_TEST_ROW_SIZE = 16
@@ -556,15 +616,21 @@ BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL = bytes.fromhex(
     "4E B9 00 00 95 1C"
 )
 # The battle and post-battle/level-up portrait paths load character graphics at
-# VRAM A000. The resource extends across the localized 8x8 banks even though
-# the active portrait plane and sprite table do not use those tiles. Restore
-# the affected banks after the queued portrait request so the persistent bottom
-# status row keeps complete commander and class names during dialogue.
+# VRAM A000. Earlier builds restored four static font segments after those
+# requests, but later maps reuse the same tiles for unit graphics; Scenario 26
+# therefore turned units into Hangul fragments after the first battle. The map
+# status paths now use dedicated synchronous scratch tiles, so these wrappers
+# must restore only the current status fields and leave map/battle graphics
+# intact.
 BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS = (0x018220, 0x01840C, 0x01CD20)
 BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL = bytes.fromhex(
     "4E B9 00 00 99 B2"
 )
-BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES = (1, 2, 3, 4)
+BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES = ()
+BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK = 0x00836E
+BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL = bytes.fromhex(
+    "4E B9 00 00 8A 6C"
+)
 BYTE_UI_MAP_GRAPHICS_LOAD_HOOKS = (0x00F176, 0x00F330, 0x011984)
 BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL = bytes.fromhex("4E B9 00 00 99 B2")
 BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK = 0x027A64
@@ -1454,7 +1520,9 @@ DIRECT_STRING_PATCHES = {
     0x97642: "마녀",
     0x9764E: "제국병",
     0x97656: "파이어스",
-    0xA16F2: "버리겠습니까예아니오",
+    # This is a glyph list rather than visible linear text. Its dedicated
+    # patch below preserves the leading blank and rewrites both token records.
+    0xA16F2: "버릴까요네취소",
 }
 
 # These strings were the first safe suffix probes inside long ending records.
@@ -2101,6 +2169,39 @@ def expand_rom(data: bytearray) -> None:
     # Mega Drive header ROM end address. The checksum is updated separately.
     put32(data, 0x1A4, EXPANDED_ROM_SIZE - 1)
     relocate_sram(data)
+
+
+def patch_bald_map_sprite(data: bytearray) -> None:
+    table_offset = GENERIC_CLASS_SPRITE_TABLE + BALD_CLASS_ID * 2
+    actual_sprite_id = be16(data, table_offset)
+    if actual_sprite_id != BALD_SOURCE_SPRITE_ID:
+        raise ValueError(
+            f"unexpected Bald class sprite: 0x{actual_sprite_id:04X} "
+            f"!= 0x{BALD_SOURCE_SPRITE_ID:04X}"
+        )
+
+    for frame_base, target in zip(
+        MAP_SPRITE_FRAME_BASES, BALD_CUSTOM_FRAME_OFFSETS
+    ):
+        source = frame_base + BALD_SOURCE_SPRITE_ID * MAP_SPRITE_BYTES
+        source_payload = bytes(data[source : source + MAP_SPRITE_BYTES])
+        if len(source_payload) != MAP_SPRITE_BYTES:
+            raise ValueError("Bald source map sprite is truncated")
+        if target + MAP_SPRITE_BYTES > EXPANDED_ROM_SIZE:
+            raise ValueError("Bald custom map sprite exceeds expanded ROM")
+        if any(value != 0xFF for value in data[target : target + MAP_SPRITE_BYTES]):
+            raise ValueError(
+                f"Bald custom map-sprite area at 0x{target:06X} is not blank"
+            )
+
+        remapped = bytearray()
+        for packed in source_payload:
+            high = BALD_SPRITE_COLOR_INDEX_REMAP.get(packed >> 4, packed >> 4)
+            low = BALD_SPRITE_COLOR_INDEX_REMAP.get(packed & 0x0F, packed & 0x0F)
+            remapped.append((high << 4) | low)
+        data[target : target + MAP_SPRITE_BYTES] = remapped
+
+    put16(data, table_offset, BALD_CUSTOM_SPRITE_ID)
 
 
 def relocate_sram(data: bytearray) -> None:
@@ -4018,6 +4119,43 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
     put32(data, ITEM_DISCARD_NOTICE_GLYPH_POINTER, ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST)
     put32(data, ITEM_DISCARD_NOTICE_TOKEN_POINTER, ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM)
 
+    # The stock list at 0xA16F2 is loaded as a 17-slot glyph bank. Its token
+    # stream owns two records: a five-cell suffix plus continuation row, then
+    # compact three/two-cell confirmation choices. Treating the glyph list as
+    # one direct string left the Japanese token indexes pointing beyond the
+    # shortened Korean list. Keep the fixed geometry and use 네/취소, since
+    # 아니오 cannot fit the stock two-cell second choice.
+    confirm_glyphs = [
+        SPACE_GLYPH,
+        glyph_by_char["버"],
+        glyph_by_char["릴"],
+        glyph_by_char["까"],
+        glyph_by_char["요"],
+        glyph_by_char["네"],
+        glyph_by_char["취"],
+        glyph_by_char["소"],
+    ]
+    confirm_glyphs.extend(
+        [SPACE_GLYPH] * (
+            len(ITEM_DISCARD_CONFIRM_GLYPH_SOURCE) - len(confirm_glyphs)
+        )
+    )
+    for slot, glyph in enumerate(confirm_glyphs):
+        put16(data, ITEM_DISCARD_CONFIRM_GLYPH_LIST + slot * 2, glyph)
+    put16(
+        data,
+        ITEM_DISCARD_CONFIRM_GLYPH_LIST
+        + len(ITEM_DISCARD_CONFIRM_GLYPH_SOURCE) * 2,
+        0xFFFF,
+    )
+    confirm_tokens = (
+        0, 1, 2, 3, 4, 0xFFFE,
+        0, 0, 0, 0, 0, 0, 0, 0xFFFF,
+        5, 0, 0, 0xFFFE, 6, 7, 0xFFFF,
+    )
+    for index, token in enumerate(confirm_tokens):
+        put16(data, ITEM_DISCARD_CONFIRM_TOKEN_STREAM + index * 2, token)
+
     # Routine 0x272A6 loads all 31 glyphs at 0xA1716 into VRAM 0xD000. The
     # purchase title uses slots 0..5, while the completion suffixes at 0xA17C8
     # and 0xA17D8 use slots 6..12. Preserve the rest of the shared list so later
@@ -5074,6 +5212,22 @@ def _build_byte_ui_map_info_renderer() -> bytes:
     code.emit("52 46")
     code.branch_word(0x6000, "store")
     code.label("legacy")
+    code.emit("2F 00")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("0C 00 00 FF")
+    code.branch_word(0x6700, "legacy_unmapped")
+    code.emit("58 8F 02 40 00 FF")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("52 46")
+    code.branch_word(0x6000, "store")
+    code.label("legacy_unmapped")
+    code.emit("20 1F")
     code.emit("0C 00 00 F0")
     code.branch_word(0x6500, "base")
     code.emit("06 40 03 00")
@@ -5095,14 +5249,14 @@ def _build_byte_ui_map_info_renderer() -> bytes:
     return code.finish()
 
 
-def _build_byte_ui_map_info_wrapper(tile: int, *, restore_final_bank: bool) -> bytes:
+def _build_byte_ui_map_info_wrapper(slot: int, *, restore_final_bank: bool) -> bytes:
     wrapper = bytearray(bytes.fromhex("48 E7 02 00"))  # preserve d6
     if restore_final_bank:
         wrapper.extend(
             bytes.fromhex("4E B9")
             + BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
         )
-    wrapper.extend(bytes.fromhex("3C 3C") + tile.to_bytes(2, "big"))
+    wrapper.extend(bytes.fromhex("3C 3C") + slot.to_bytes(2, "big"))
     wrapper.extend(
         bytes.fromhex("4E B9")
         + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
@@ -5112,18 +5266,16 @@ def _build_byte_ui_map_info_wrapper(tile: int, *, restore_final_bank: bool) -> b
 
 
 def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
-    # D0 is a localized table index and D6 is the destination tile. Names and
-    # classes use separate eight-tile ranges in the final, animation-safe bank.
+    # D0 is a localized table index and D6 is the destination slot. The command
+    # and tile-ID tables map that slot onto noncontiguous animation-safe VRAM
+    # patterns.
     code = bytearray(bytes.fromhex("48 E7 60 A0"))  # preserve d1-d2/a0/a2
     code.extend(bytes.fromhex("34 00 C4 FC 00 20"))
     code.extend(
         bytes.fromhex("41 F9") + BYTE_UI_DYNAMIC_GLYPH_TABLE.to_bytes(4, "big")
     )
     code.extend(bytes.fromhex("D1 C2"))
-    code.extend(
-        bytes.fromhex("32 06 04 41")
-        + BYTE_UI_DYNAMIC_NAME_TILE.to_bytes(2, "big")
-    )
+    code.extend(bytes.fromhex("32 06"))
     code.extend(bytes.fromhex("E5 49"))
     code.extend(
         bytes.fromhex("45 F9")
@@ -5133,20 +5285,39 @@ def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
     code.extend(bytes.fromhex("33 FC 8F 02 00 C0 00 04"))
     code.extend(bytes.fromhex("23 C2 00 C0 00 04"))
     code.extend(bytes.fromhex("23 D8 00 C0 00 00") * 8)
-    code.extend(bytes.fromhex("30 06 4C DF 05 06 4E 75"))
+    code.extend(bytes.fromhex("32 06 D2 41"))
+    code.extend(
+        bytes.fromhex("45 F9")
+        + BYTE_UI_DYNAMIC_TILE_ID_TABLE.to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("30 32 10 00 4C DF 05 06 4E 75"))
     return bytes(code)
 
 
+def _build_byte_ui_dynamic_legacy_lookup() -> bytes:
+    # D0 contains a zero-extended legacy byte. Return its dynamic glyph index,
+    # or 0xFF when the byte is an ordinary ASCII/graphic tile.
+    return (
+        bytes.fromhex("2F 08 41 F9")
+        + BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE.to_bytes(4, "big")
+        + bytes.fromhex("10 30 00 00 20 5F 4E 75")
+    )
+
+
 def _build_byte_ui_map_info_scratch_restore() -> bytes:
-    # A000-targeted map and battle graphics overwrite the 5D8..5E7 scratch
+    # A000-targeted map and battle graphics may overwrite the transient scratch
     # cells after the bottom status row has already rendered. Re-resolve the
     # currently selected runtime record and synchronously rebuild both fields.
+    # The scratch patterns overlap the unused tail of the H-scroll table and
+    # are safe only while VDP register 11 is in full-screen scroll mode.
     code = _M68KCode()
     code.emit("48 E7 FF FE")
+    code.emit("4A 79 FF FF 90 5A")
+    code.branch_word(0x6600, "done")
     code.emit("24 78 A6 28")  # a2 = current runtime unit record
-    code.emit("B5 FC FF FF 60 3C")
+    code.emit("B5 FC 00 FF 60 3C")
     code.branch_word(0x6500, "done")
-    code.emit("B5 FC FF FF 80 00")
+    code.emit("B5 FC 00 FF 80 00")
     code.branch_word(0x6400, "done")
     code.emit("9E FC 00 20 20 4F")  # 32-byte dummy tilemap buffer on stack
 
@@ -5157,7 +5328,9 @@ def _build_byte_ui_map_info_scratch_restore() -> bytes:
     code.label("table_name")
     code.emit("43 F9 00 06 18 E8 D0 40 D0 40 22 71 00 00")
     code.label("render_name")
-    code.emit("3C 3C 05 D8")
+    code.emit(
+        bytes.fromhex("3C 3C") + BYTE_UI_DYNAMIC_NAME_SLOT.to_bytes(2, "big")
+    )
     code.emit(
         bytes.fromhex("4E B9")
         + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
@@ -5165,7 +5338,9 @@ def _build_byte_ui_map_info_scratch_restore() -> bytes:
 
     code.emit("20 4F 70 00 10 12")
     code.emit("43 F9 00 05 E6 D6 D0 40 D0 40 22 71 00 00")
-    code.emit("3C 3C 05 E0")
+    code.emit(
+        bytes.fromhex("3C 3C") + BYTE_UI_DYNAMIC_CLASS_SLOT.to_bytes(2, "big")
+    )
     code.emit(
         bytes.fromhex("4E B9")
         + BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
@@ -5179,6 +5354,18 @@ def _build_byte_ui_map_info_scratch_restore() -> bytes:
 def _build_byte_ui_map_graphics_load_wrapper() -> bytes:
     return (
         BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL
+        + bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E 75")
+    )
+
+
+def _build_byte_ui_vblank_dynamic_restore_wrapper() -> bytes:
+    # The stock VBlank path refreshes the full H-scroll buffer even while the
+    # VDP uses full-screen scrolling. Dynamic map-status patterns live in the
+    # unused tail of that buffer, so redraw them after all queued VRAM work.
+    return (
+        BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL
         + bytes.fromhex("4E B9")
         + BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big")
         + bytes.fromhex("4E 75")
@@ -5229,6 +5416,13 @@ def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
     # ending result) must keep distinct static tiles for every visible row.
     code = _M68KCode()
     code.emit("48 E7 FF FE")
+    # The battle panel calls this renderer twice with the same class scratch
+    # slot, once per side. Its tilemaps remain visible simultaneously, so the
+    # second class would overwrite the first. The established static renderer
+    # already has battle-safe class glyph mappings; reserve the dynamic cache
+    # for the map-status buffers at A726/A738.
+    code.emit("B5 FC FF FF A7 14")
+    code.branch_word(0x6700, "static")
     code.emit("B3 FC 00 06 18 E8")
     code.branch_word(0x6700, "name")
     code.emit("B3 FC 00 05 E6 D6")
@@ -5242,13 +5436,19 @@ def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
     )
 
     code.label("name")
-    code.emit("3C 3C 05 D8 0C 01 00 01")
+    code.emit(
+        bytes.fromhex("3C 3C")
+        + BYTE_UI_DYNAMIC_NAME_SLOT.to_bytes(2, "big")
+        + bytes.fromhex("0C 01 00 01")
+    )
     code.branch_word(0x6600, "deref")
     code.emit("43 F8 A5 CC")
     code.branch_word(0x6000, "loop")
 
     code.label("class")
-    code.emit("3C 3C 05 E0")
+    code.emit(
+        bytes.fromhex("3C 3C") + BYTE_UI_DYNAMIC_CLASS_SLOT.to_bytes(2, "big")
+    )
     code.label("deref")
     code.emit("02 41 00 FF D2 41 D2 41 22 71 10 00")
 
@@ -5266,6 +5466,22 @@ def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
     code.branch_word(0x6000, "store")
 
     code.label("legacy")
+    code.emit("2F 00 30 01")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("0C 00 00 FF")
+    code.branch_word(0x6700, "legacy_unmapped")
+    code.emit("02 40 00 FF")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("32 00 20 1F 52 46")
+    code.branch_word(0x6000, "store")
+    code.label("legacy_unmapped")
+    code.emit("20 1F")
     code.emit("0C 01 00 DE")
     code.branch_word(0x6700, "mark")
     code.emit("0C 01 00 DF")
@@ -5278,6 +5494,12 @@ def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
     code.branch_word(0x6000, "loop")
     code.label("done")
     code.emit("4C DF 7F FF 4E 75")
+    code.label("static")
+    code.emit("4C DF 7F FF")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+    )
     return code.finish()
 
 
@@ -5630,13 +5852,6 @@ def _build_byte_ui_ending_result_final_bank_loader() -> bytes:
 def _build_byte_ui_portrait_font_restore() -> bytes:
     wrapper = bytearray(BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL)
     wrapper.extend(bytes.fromhex("48 E7 FF FE"))
-    for segment_index in BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES:
-        tile_start, _ = BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
-        resource_index = BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
-        request = 0x8000 | resource_index
-        wrapper.extend(bytes.fromhex("30 3C") + request.to_bytes(2, "big"))
-        wrapper.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
-        wrapper.extend(bytes.fromhex("4E B9 00 00 99 B2"))
     wrapper.extend(
         bytes.fromhex("4E B9")
         + BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big")
@@ -5721,6 +5936,7 @@ def _build_title_credit_renderer() -> bytes:
 def install_byte_ui_extension(
     data: bytearray,
     font: ImageFont.FreeTypeFont,
+    code_by_char: dict[str, int],
     index_by_char: dict[str, int],
     tile_by_index: list[int],
     font_tiles: bytes | bytearray,
@@ -5840,10 +6056,7 @@ def install_byte_ui_extension(
     data[BYTE_UI_DYNAMIC_GLYPH_TABLE:dynamic_glyph_end] = dynamic_glyphs
 
     dynamic_commands = bytearray()
-    for tile in range(
-        BYTE_UI_DYNAMIC_NAME_TILE,
-        BYTE_UI_DYNAMIC_CLASS_TILE + BYTE_UI_DYNAMIC_FIELD_WIDTH,
-    ):
+    for tile in BYTE_UI_DYNAMIC_TILE_IDS:
         address = tile * 32
         command = ((0x4000 | (address & 0x3FFF)) << 16) | ((address >> 14) & 3)
         dynamic_commands.extend(command.to_bytes(4, "big"))
@@ -5856,6 +6069,47 @@ def install_byte_ui_extension(
     ):
         raise ValueError("dynamic name/class VDP command table area is not blank")
     data[BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE:command_end] = dynamic_commands
+
+    dynamic_tile_ids = b"".join(
+        tile.to_bytes(2, "big") for tile in BYTE_UI_DYNAMIC_TILE_IDS
+    )
+    tile_id_end = BYTE_UI_DYNAMIC_TILE_ID_TABLE + len(dynamic_tile_ids)
+    if tile_id_end > BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT:
+        raise ValueError("dynamic name/class tile-ID table exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[BYTE_UI_DYNAMIC_TILE_ID_TABLE:tile_id_end]
+    ):
+        raise ValueError("dynamic name/class tile-ID table area is not blank")
+    data[BYTE_UI_DYNAMIC_TILE_ID_TABLE:tile_id_end] = dynamic_tile_ids
+
+    dynamic_legacy_indexes = bytearray([0xFF] * 0x100)
+    for char, code in code_by_char.items():
+        if not 0 <= code <= 0xFF:
+            raise ValueError(f"byte UI glyph code for {char!r} is not a byte")
+        dynamic_index = index_by_char.get(char)
+        if dynamic_index is None:
+            continue
+        if not 0 <= dynamic_index <= 0xFE:
+            raise ValueError(
+                f"dynamic name/class glyph index for {char!r} is not a byte"
+            )
+        dynamic_legacy_indexes[code] = dynamic_index
+    legacy_index_end = (
+        BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE + len(dynamic_legacy_indexes)
+    )
+    if legacy_index_end > BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT:
+        raise ValueError("dynamic legacy-index table exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE:legacy_index_end
+        ]
+    ):
+        raise ValueError("dynamic legacy-index table area is not blank")
+    data[
+        BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE:legacy_index_end
+    ] = dynamic_legacy_indexes
 
     if data[
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION :
@@ -5877,14 +6131,13 @@ def install_byte_ui_extension(
     status_renderer = _build_byte_ui_status_renderer()
     map_info_renderer = _build_byte_ui_map_info_renderer()
     map_info_name_renderer = _build_byte_ui_map_info_wrapper(
-        BYTE_UI_DYNAMIC_NAME_TILE, restore_final_bank=False
+        BYTE_UI_DYNAMIC_NAME_SLOT, restore_final_bank=False
     )
     map_info_class_renderer = _build_byte_ui_map_info_wrapper(
-        BYTE_UI_DYNAMIC_CLASS_TILE, restore_final_bank=False
+        BYTE_UI_DYNAMIC_CLASS_SLOT, restore_final_bank=False
     )
     dynamic_glyph_renderer = _build_byte_ui_dynamic_glyph_renderer()
-    map_info_scratch_restore = _build_byte_ui_map_info_scratch_restore()
-    map_graphics_load_wrapper = _build_byte_ui_map_graphics_load_wrapper()
+    dynamic_legacy_lookup = _build_byte_ui_dynamic_legacy_lookup()
     direct_map_renderer = _build_byte_ui_direct_map_renderer()
     dynamic_direct_map_renderer = _build_byte_ui_dynamic_direct_map_renderer()
     prep_selected_name_renderer = _build_byte_ui_prep_selected_name_renderer()
@@ -5895,7 +6148,6 @@ def install_byte_ui_extension(
     ending_result_final_bank_loader = (
         _build_byte_ui_ending_result_final_bank_loader()
     )
-    portrait_font_restore = _build_byte_ui_portrait_font_restore()
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer()
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
@@ -5921,8 +6173,7 @@ def install_byte_ui_extension(
         BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE: map_info_name_renderer,
         BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE: map_info_class_renderer,
         BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE: dynamic_glyph_renderer,
-        BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE: map_info_scratch_restore,
-        BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE: map_graphics_load_wrapper,
+        BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE: dynamic_legacy_lookup,
         BYTE_UI_DIRECT_MAP_RENDER_ROUTINE: direct_map_renderer,
         BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE: prep_selected_name_renderer,
         BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
@@ -5930,7 +6181,6 @@ def install_byte_ui_extension(
         BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
         BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
         BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE: ending_result_final_bank_loader,
-        BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE: portrait_font_restore,
         TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
         TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
@@ -6114,20 +6364,15 @@ def install_byte_ui_extension(
         bytes.fromhex("4E B9")
         + BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big")
     )
-    for offset in BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS:
-        if data[offset : offset + 6] != BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL:
-            raise ValueError(f"portrait font-restore hook changed at 0x{offset:06X}")
-        data[offset : offset + 6] = (
-            bytes.fromhex("4E B9")
-            + BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE.to_bytes(4, "big")
-        )
-    for offset in BYTE_UI_MAP_GRAPHICS_LOAD_HOOKS:
-        if data[offset : offset + 6] != BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL:
-            raise ValueError(f"map graphics-load hook changed at 0x{offset:06X}")
-        data[offset : offset + 6] = (
-            bytes.fromhex("4E B9")
-            + BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE.to_bytes(4, "big")
-        )
+    if data[
+        BYTE_UI_FULL_SCROLL_HSCROLL_FILL :
+        BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
+    ] != BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL:
+        raise ValueError("full-screen H-scroll fill instruction changed")
+    data[
+        BYTE_UI_FULL_SCROLL_HSCROLL_FILL :
+        BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
+    ] = BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED
     if data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
     ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:
@@ -6283,7 +6528,12 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
     put32(data, resource_table_entry, BYTE_UI_FONT_RESOURCE_RELOC_BASE)
     local_index_by_char, local_tile_by_index = build_byte_ui_local_mapping(code_by_char)
     install_byte_ui_extension(
-        data, font, local_index_by_char, local_tile_by_index, font_tiles
+        data,
+        font,
+        code_by_char,
+        local_index_by_char,
+        local_tile_by_index,
+        font_tiles,
     )
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
@@ -6737,6 +6987,7 @@ def main() -> None:
 
     data = bytearray(IN_ROM.read_bytes())
     expand_rom(data)
+    patch_bald_map_sprite(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()

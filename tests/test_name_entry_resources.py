@@ -502,19 +502,19 @@ class NameEntryResourceTests(unittest.TestCase):
         )
 
         name_wrapper = builder._build_byte_ui_map_info_wrapper(
-            builder.BYTE_UI_DYNAMIC_NAME_TILE, restore_final_bank=False
+            builder.BYTE_UI_DYNAMIC_NAME_SLOT, restore_final_bank=False
         )
         class_wrapper = builder._build_byte_ui_map_info_wrapper(
-            builder.BYTE_UI_DYNAMIC_CLASS_TILE, restore_final_bank=False
+            builder.BYTE_UI_DYNAMIC_CLASS_SLOT, restore_final_bank=False
         )
         self.assertIn(
             bytes.fromhex("3C 3C")
-            + builder.BYTE_UI_DYNAMIC_NAME_TILE.to_bytes(2, "big"),
+            + builder.BYTE_UI_DYNAMIC_NAME_SLOT.to_bytes(2, "big"),
             name_wrapper,
         )
         self.assertIn(
             bytes.fromhex("3C 3C")
-            + builder.BYTE_UI_DYNAMIC_CLASS_TILE.to_bytes(2, "big"),
+            + builder.BYTE_UI_DYNAMIC_CLASS_SLOT.to_bytes(2, "big"),
             class_wrapper,
         )
         final_load_call = (
@@ -524,13 +524,18 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertNotIn(final_load_call, name_wrapper)
         self.assertNotIn(final_load_call, class_wrapper)
         self.assertEqual(
-            builder.BYTE_UI_DYNAMIC_CLASS_TILE,
-            builder.BYTE_UI_DYNAMIC_NAME_TILE + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
+            builder.BYTE_UI_DYNAMIC_CLASS_SLOT,
+            builder.BYTE_UI_DYNAMIC_NAME_SLOT + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
         )
-        self.assertLessEqual(
-            builder.BYTE_UI_DYNAMIC_CLASS_TILE + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
-            0x05F8,
+        self.assertEqual(builder.BYTE_UI_DYNAMIC_NAME_SLOT, 0)
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 16)
+        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 16)
+        self.assertTrue(
+            all(0x07A1 <= tile <= 0x07B5 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
         )
+        self.assertNotIn(0x07A0, builder.BYTE_UI_DYNAMIC_TILE_IDS)
+        self.assertNotIn(0x07BE, builder.BYTE_UI_DYNAMIC_TILE_IDS)
+        self.assertNotIn(0x07BF, builder.BYTE_UI_DYNAMIC_TILE_IDS)
 
     def test_dynamic_name_class_glyph_table_and_vdp_commands_are_exact(self):
         data = bytearray(self.rom)
@@ -545,13 +550,7 @@ class NameEntryResourceTests(unittest.TestCase):
                 data[start : start + 32], builder.render_byte_ui_tile(char, font)
             )
 
-        for index, tile in enumerate(
-            range(
-                builder.BYTE_UI_DYNAMIC_NAME_TILE,
-                builder.BYTE_UI_DYNAMIC_CLASS_TILE
-                + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
-            )
-        ):
+        for index, tile in enumerate(builder.BYTE_UI_DYNAMIC_TILE_IDS):
             address = tile * 32
             expected = ((0x4000 | (address & 0x3FFF)) << 16) | (
                 (address >> 14) & 3
@@ -562,47 +561,81 @@ class NameEntryResourceTests(unittest.TestCase):
                 ),
                 expected,
             )
+            self.assertEqual(
+                builder.be16(
+                    data, builder.BYTE_UI_DYNAMIC_TILE_ID_TABLE + index * 2
+                ),
+                tile,
+            )
+
+        for char in ("엘", "윈"):
+            self.assertEqual(
+                data[builder.BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE + codes[char]],
+                index_by_char[char],
+            )
+        self.assertEqual(
+            data[builder.BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE + ord("A")],
+            0xFF,
+        )
 
         helper = builder._build_byte_ui_dynamic_glyph_renderer()
         self.assertEqual(helper.count(bytes.fromhex("23 D8 00 C0 00 00")), 8)
         self.assertIn(bytes.fromhex("33 FC 8F 02 00 C0 00 04"), helper)
-
-    def test_map_graphics_loaders_restore_current_dynamic_name_and_class(self):
-        restore = builder._build_byte_ui_map_info_scratch_restore()
-        self.assertIn(bytes.fromhex("24 78 A6 28"), restore)
-        self.assertIn(bytes.fromhex("B5 FC FF FF 60 3C"), restore)
-        self.assertIn(bytes.fromhex("B5 FC FF FF 80 00"), restore)
-        self.assertIn(bytes.fromhex("43 F9 00 06 18 E8"), restore)
-        self.assertIn(bytes.fromhex("43 F9 00 05 E6 D6"), restore)
-        self.assertEqual(
-            restore.count(
-                bytes.fromhex("4E B9")
-                + builder.BYTE_UI_MAP_INFO_RENDER_ROUTINE.to_bytes(4, "big")
-            ),
-            2,
-        )
-        self.assertLessEqual(
-            builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE + len(restore),
-            builder.BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE,
-        )
-
-        wrapper = builder._build_byte_ui_map_graphics_load_wrapper()
-        self.assertTrue(wrapper.startswith(builder.BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL))
         self.assertIn(
-            bytes.fromhex("4E B9")
-            + builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big"),
-            wrapper,
+            bytes.fromhex("45 F9")
+            + builder.BYTE_UI_DYNAMIC_TILE_ID_TABLE.to_bytes(4, "big"),
+            helper,
         )
+        self.assertNotIn(bytes.fromhex("04 41 05 D8"), helper)
 
+        lookup_call = (
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE.to_bytes(4, "big")
+        )
+        lookup = builder._build_byte_ui_dynamic_legacy_lookup()
+        self.assertIn(
+            bytes.fromhex("41 F9")
+            + builder.BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE.to_bytes(4, "big"),
+            lookup,
+        )
+        self.assertIn(lookup_call, builder._build_byte_ui_map_info_renderer())
+        direct = builder._build_byte_ui_dynamic_direct_map_renderer()
+        self.assertIn(lookup_call, direct)
+        self.assertIn(bytes.fromhex("32 00 20 1F 52 46"), direct)
+        self.assertNotIn(bytes.fromhex("58 8F 02 40 00 FF"), direct)
+
+    def test_map_graphics_loaders_remain_source_identical(self):
         data = bytearray(self.rom)
         builder.expand_rom(data)
         builder.patch_byte_ui_strings(data)
         for offset in builder.BYTE_UI_MAP_GRAPHICS_LOAD_HOOKS:
             self.assertEqual(
                 data[offset : offset + 6],
-                bytes.fromhex("4E B9")
-                + builder.BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE.to_bytes(4, "big"),
+                builder.BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL,
             )
+
+    def test_full_scroll_fill_preserves_dynamic_cache_without_vblank_hook(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK :
+                builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK + 6
+            ],
+            builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL,
+        )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL :
+                builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
+            ],
+            builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED,
+        )
+        self.assertEqual(
+            data[0x0090EE : 0x0090F2],
+            bytes.fromhex("32 3C 00 B7"),
+        )
 
     def test_extension_renderer_maps_only_escape_bytes(self):
         def mapped(value):
@@ -667,11 +700,20 @@ class NameEntryResourceTests(unittest.TestCase):
 
     def test_map_status_direct_paths_use_dynamic_name_and_class_tiles(self):
         renderer = builder._build_byte_ui_dynamic_direct_map_renderer()
+        self.assertIn(bytes.fromhex("B5 FC FF FF A7 14"), renderer)
         self.assertIn(bytes.fromhex("B3 FC 00 06 18 E8"), renderer)
         self.assertIn(bytes.fromhex("B3 FC 00 05 E6 D6"), renderer)
         self.assertIn(bytes.fromhex("B3 FC 00 05 E5 CA"), renderer)
-        self.assertIn(bytes.fromhex("3C 3C 05 D8"), renderer)
-        self.assertIn(bytes.fromhex("3C 3C 05 E0"), renderer)
+        self.assertIn(
+            bytes.fromhex("3C 3C")
+            + builder.BYTE_UI_DYNAMIC_NAME_SLOT.to_bytes(2, "big"),
+            renderer,
+        )
+        self.assertIn(
+            bytes.fromhex("3C 3C")
+            + builder.BYTE_UI_DYNAMIC_CLASS_SLOT.to_bytes(2, "big"),
+            renderer,
+        )
         self.assertIn(
             bytes.fromhex("4E B9")
             + builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big"),
@@ -683,6 +725,13 @@ class NameEntryResourceTests(unittest.TestCase):
             bytes.fromhex("4E F9")
             + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
             renderer,
+        )
+        self.assertEqual(
+            renderer.count(
+                bytes.fromhex("4E F9")
+                + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+            ),
+            2,
         )
         self.assertLessEqual(
             builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE + len(renderer),
@@ -798,34 +847,14 @@ class NameEntryResourceTests(unittest.TestCase):
             + builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big"),
         )
 
-    def test_portrait_loader_restores_overwritten_status_font_banks(self):
+    def test_portrait_loaders_remain_source_identical(self):
         self.assertEqual(
             builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS,
             (0x018220, 0x01840C, 0x01CD20),
         )
-        routine = builder._build_byte_ui_portrait_font_restore()
-        self.assertTrue(
-            routine.startswith(builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL)
-        )
-        self.assertLessEqual(
-            builder.BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE + len(routine),
-            builder.TITLE_CREDIT_FONT_LOAD_ROUTINE,
-        )
-        for segment_index in builder.BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES:
-            tile_start, _ = builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]
-            resource_index = builder.BYTE_UI_FULL_EXT_RESOURCE_FIRST_INDEX + segment_index
-            self.assertIn(
-                bytes.fromhex("30 3C")
-                + (0x8000 | resource_index).to_bytes(2, "big")
-                + bytes.fromhex("32 7C")
-                + (tile_start * 32).to_bytes(2, "big")
-                + bytes.fromhex("4E B9 00 00 99 B2"),
-                routine,
-            )
-        self.assertIn(
-            bytes.fromhex("4E B9")
-            + builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big"),
-            routine,
+        self.assertEqual(
+            builder.BYTE_UI_PORTRAIT_FONT_RESTORE_SEGMENT_INDICES,
+            (),
         )
 
         data = bytearray(self.rom)
@@ -834,11 +863,10 @@ class NameEntryResourceTests(unittest.TestCase):
         for offset in builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOKS:
             self.assertEqual(
                 data[offset : offset + 6],
-                bytes.fromhex("4E B9")
-                + builder.BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE.to_bytes(4, "big"),
+                builder.BYTE_UI_PORTRAIT_FONT_RESTORE_HOOK_ORIGINAL,
             )
 
-    def test_demon_lord_prefix_uses_portrait_overwritten_segment(self):
+    def test_demon_lord_prefix_is_not_restored_over_live_map_graphics(self):
         data = bytearray(self.rom)
         builder.expand_rom(data)
         codes = builder.patch_byte_ui_strings(data)
@@ -853,7 +881,7 @@ class NameEntryResourceTests(unittest.TestCase):
             for start, count in [builder.BYTE_UI_FULL_EXT_VRAM_SEGMENTS[segment_index]]
             for tile in range(start, start + count)
         }
-        self.assertTrue({0x04AB, 0x04AC}.issubset(restored_tiles))
+        self.assertTrue({0x04AB, 0x04AC}.isdisjoint(restored_tiles))
 
     def test_scenario_one_status_classes_keep_exact_source_names(self):
         labels = builder.BYTE_UI_SCENARIO1_CLASS_LABELS
