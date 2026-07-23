@@ -294,3 +294,41 @@ AT/DF만 진단값이다. 적군 record, 좌표, 클래스, 용병 구성은 pro
 `captures/run/ad99_s23_stock_wizard_merc_right.png`,
 `captures/run/ad99_s23_turn2_cluster_unit.png`, 그리고
 `captures/run/ad99_s23_turn2_cluster_commander.png`이다.
+
+## Scenario 24 Stock Enemy And Completion Matrix
+
+Production `AD99` 정식 배치를 이전 장의 실제 저장 데이터로 출격시켜
+적군과 용병을 제거하지 않은 상태로 확인했다.
+
+| Side | Name | Class | Context |
+| --- | --- | --- | --- |
+| 적장 | 데몬로드 | 데몬로드 | 하단 상태창·상세창 |
+| 적장 | 리치 | 리치 | 하단 상태창·상세창 |
+| 적장 | 케르베로스 | 케르베로스 | 하단 상태창·상세창 |
+| 적장 | 뱀파이어로드 | 뱀파이어로드 | 하단 상태창·상세창·전투 |
+| 적 병사 | 아크데몬 | 아크데몬 | 데몬로드·뱀파이어로드 인접 병사 |
+| 적 병사 | 엘리멘탈 | 엘리멘탈 | 데몬로드 인접 병사 |
+| 적 병사 | 발리스타 | 발리스타 | 리치 인접 병사 |
+| 적 병사 | 골렘 | 골렘 | 리치 인접 병사 |
+| 적 병사 | 헬하운드 | 헬하운드 | 케르베로스 인접 병사 |
+| 적 병사 | 뱀파이어배트 | 뱀파이어배트 | 뱀파이어로드 인접 병사 |
+
+전체 적군 행동과 두 장의 뱀파이어로드 대사를 통과해 `TURN 2`의 정상
+엘윈 명령창으로 돌아왔다. 같은 데몬로드의 이름·클래스 영역을
+0·1·2·3·5초에 캡처한 픽셀 해시는 모두 동일했다. 베른하르트는 원본
+이벤트대로 `TURN 2`까지 숨은 상태이므로 이 정식 배치 실행은
+`베른하르트/엠퍼러`의 화면 증거로 사용하지 않는다.
+
+완료 전용 `08D4`는 원본 record 10 `뱀파이어로드/뱀파이어로드`만
+공격 대상으로 남기고 엘윈을 바로 아래에 배치한다. 전투창의
+`엘윈/로드`, `뱀파이어로드`, `-AT-`, `-DF-`, `-지형-`을 확인했고,
+완료 대사·전과보고·`시나리오 25` 저장·다음 시나리오 진입까지
+정상 통과했다. 대표 증거는
+`captures/run/08d4_s24_vampire_attack.png`,
+`captures/run/08d4_s24_after_vampire_event_44.png`,
+`captures/run/ad99_s24_stock_demonlord_status.png`,
+`captures/run/ad99_s24_stock_vampire_status.png`,
+`captures/run/ad99_s24_stock_elemental.png`,
+`captures/run/ad99_s24_stock_golem.png`,
+`captures/run/ad99_s24_stock_vampirebat.png`, 그리고
+`captures/run/ad99_s24_stock_turn2_command.png`이다.

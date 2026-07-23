@@ -34,7 +34,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 21 | current | current | current | current | probe | probe | probe | pending | 49 |
 | 22 | current | current | current | current | probe | probe | probe | pending | 58 |
 | 23 | current | current | current | current | probe | current | probe | pending | 54 |
-| 24 | current | current | current | current | pending | current | pending | pending | 26 |
+| 24 | current | current | current | current | probe | current | probe | pending | 44 |
 | 25 | current | current | current | current | current | progressed | pending | pending | 33 |
 | 26 | current | current | current | current | pending | current | pending | pending | 23 |
 | 27 | current | current | current | current | probe | current | probe | probe | 25 |
@@ -1181,7 +1181,7 @@ Production 212A verifies the Scenario 23 route map, all 19 text-bearing scrollin
 
 ### Scenario 24
 
-Production 212A verifies the Scenario 24 route map, all 16 text-bearing scrolling frames of 빛과 어둠, and the preparation endpoint. Direct Japanese-ROM rendering confirms the Elrad battle against Laird, acquisition of the Holy Rod, Liana and Lana beginning the ritual to release Langrisser's power, and Bernhardt attacking at the awaited moment. The current Korean preserves every event and term without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production 544B verified both preparation pages and all nine class panels as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트, 스코트/파이터, 리아나/클레릭, and 라나/클레릭. Automatic deployment and all nineteen opening confirmations review the Langrisser release, Liana/Lana, Keith, Sherry, Bernhardt, Scott, Hein, Lester, and Elwin dialogue before returning to a valid command menu. Victory is enemy annihilation; defeat is the protagonist's death. The no-action first turn reviews both Vampire Lord dialogue pages, all movement, TURN 2, and a valid Elwin command menu after 38 confirmations. The live name and class both read 뱀파이어로드, matching the original Scenario 24 fixed-placement data. No blank page, reset, or freeze appeared. Scenario-specific battle presentation, later turns, completion, and branches remain pending.
+Production 212A verifies the Scenario 24 route map, all 16 text-bearing scrolling frames of 빛과 어둠, and the preparation endpoint. Direct Japanese-ROM rendering confirms the Elrad battle against Laird, acquisition of the Holy Rod, Liana and Lana beginning the ritual to release Langrisser's power, and Bernhardt attacking at the awaited moment. The current Korean preserves every event and term without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production 544B verified both preparation pages and all nine class panels as 엘윈/파이터, 헤인/워록, 쉐리/파이터, 아론/파이터, 키스/호크나이트, 레스터/크로코나이트, 스코트/파이터, 리아나/클레릭, and 라나/클레릭. Automatic deployment and all nineteen opening confirmations review the Langrisser release, Liana/Lana, Keith, Sherry, Bernhardt, Scott, Hein, Lester, and Elwin dialogue before returning to a valid command menu. Victory is enemy annihilation; defeat is the protagonist's death. Production AD99 was also run with every stock Scenario 24 enemy and mercenary intact. Turn 1 status rows and detail panels visibly retain 데몬로드, 리치, 케르베로스, 뱀파이어로드, 아크데몬, 엘리멘탈, 발리스타, 골렘, 헬하운드, and 뱀파이어배트 as both names and classes. The complete stock enemy phase renders both Vampire Lord dialogue pages, all movement and spells, TURN 2, and a valid Elwin command menu. Five idle captures of the same 데몬로드 row at 0/1/2/3/5 seconds have pixel-identical name/class crops. Bernhardt remains intentionally hidden at his source coordinate through Turn 2. Production-AD99 completion derivative 08D4 preserves all fixed identities, classes, levels, coordinates, sides, and handlers, hides and defeats only runtime groups 10..18 after the opening, stages Elwin below source record 10 Vampire Lord, and lowers only present living groups 9..19 to HP1 from Start. A normal battle retained 엘윈/로드, 뱀파이어로드, -AT-, -DF-, and -지형-, then triggered the complete monster, Langrisser, and peace aftermath without reset, freeze, Japanese residue, or damaged name/class cells. 전과보고 reached the real 저장 UI, changed slot 1 from 시나리오 24 to 시나리오 25, selected 다음 시나리오, and entered the Scenario 25 route and description. Scenario 24 battle UI and completion are verified by the probe; natural alternate branches and later ordinary turns remain pending.
 
 - `captures/run/c7ab_s24_title.png`
 - `captures/run/c7ab_s24_body_mid.png`
@@ -1209,6 +1209,24 @@ Production 212A verifies the Scenario 24 route map, all 16 text-bearing scrollin
 - `captures/run/212a_s24_description_current_12.png`
 - `captures/run/212a_s24_description_current_16.png`
 - `captures/run/212a_s24_description_current_17.png`
+- `captures/run/08d4_s24_vampire_attack.png`
+- `captures/run/08d4_s24_vampire_reaction.png`
+- `captures/run/08d4_s24_after_vampire_event_01.png`
+- `captures/run/08d4_s24_after_vampire_event_17.png`
+- `captures/run/08d4_s24_after_vampire_event_24.png`
+- `captures/run/08d4_s24_after_vampire_event_44.png`
+- `captures/run/08d4_s24_after_vampire_event_47.png`
+- `captures/run/08d4_s25_route_wait4.png`
+- `captures/run/ad99_s24_stock_demonlord_status.png`
+- `captures/run/ad99_s24_stock_lich_status.png`
+- `captures/run/ad99_s24_stock_cerberus_status.png`
+- `captures/run/ad99_s24_stock_vampire_status.png`
+- `captures/run/ad99_s24_stock_elemental.png`
+- `captures/run/ad99_s24_stock_ballista.png`
+- `captures/run/ad99_s24_stock_golem.png`
+- `captures/run/ad99_s24_stock_hellhound.png`
+- `captures/run/ad99_s24_stock_vampirebat.png`
+- `captures/run/ad99_s24_stock_turn2_command.png`
 
 ### Scenario 25
 

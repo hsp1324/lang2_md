@@ -7975,3 +7975,60 @@ contains 57 safe syllables as documented below and in
   `captures/run/ad99_s23_stock_wizard_merc_right.png`,
   `captures/run/ad99_s23_turn2_cluster_unit.png`, and
   `captures/run/ad99_s23_turn2_cluster_commander.png`.
+
+### Scenario 24 Stock Roster, Battle, And Completion Handoff (2026-07-23)
+
+- `tools/build_scenario24_clear_probe_rom.py --completion-target-only` keeps
+  source record 0 special-side `베른하르트/엠퍼러` and source record 10
+  `뱀파이어로드/뱀파이어로드` structurally present, stages only Elwin at
+  `(16,24)`, and does not move or rewrite any fixed enemy coordinate,
+  identity, class, level, side, or event handler. Ten focused tests lock the
+  permitted offsets and checksums `63AE` for the ordinary clear probe and
+  `08D4` for the completion target.
+- Scenario 24 opening events reactivate source records 1..9, so a source
+  hidden bit alone is insufficient. The accepted Start wrapper at `0x3FEF00`
+  first sets runtime groups 10..18 to X=`0xFF`, HP=0, then scans groups 9..19,
+  skips hidden or dead groups, lowers the remaining present living groups to
+  HP1, and tail-calls stock Start entry `0x022C1E`. Read-only GST inspection
+  after Start proved group 9 Bernhardt HP1 at `(16,19)`, groups 10..18 HP0
+  and X=`0xFF`, and group 19 Vampire Lord HP1 at `(16,23)`.
+- Do not repeat the two rejected derivatives. Checksum `74E6`, SHA-256
+  `e83e8230c121b7f5ae27043c878154c30f0783ed49c77ac40a09806961ef2b84`,
+  used source hidden bits only; the opening restored all groups. Checksum
+  `C366`, SHA-256
+  `778ecee2f41475bec6f8b0c03bcc81ba7ca279e903d7e416c8da07a92bef48a0`,
+  changed X to `0xFF` but left HP10; defeating the Vampire Lord did not satisfy
+  enemy annihilation. Accepted `08D4` has SHA-256
+  `0153913182e484d31337191663c28cdc31dac832c8222227f2365f443e2c2822`.
+- A normal Elwin attack in `08D4` retained clean `엘윈/로드`,
+  `뱀파이어로드`, `-AT-`, `-DF-`, and `-지형-`, then triggered the full
+  monster, Langrisser, and peace aftermath. The real result and save flow
+  changed slot 1 to `시나리오 25`; `다음 시나리오` entered the Scenario 25
+  route and both description pages. Flushed completion SRAM is
+  `captures/runtime/s24_completion_08d4/.local/share/blastem/Langrisser II
+  (Scenario 24 Completion Target Probe)/save.sram`, SHA-256
+  `b44e23f4dca31e8c58e4d5147c0daa03e702a72e1ae16418edddf2999f9bb0f5`.
+- A separate production-`AD99` playback retained all stock enemies and
+  mercenaries. Turn 1 status rows and detail panels visibly verified
+  commanders `데몬로드`, `리치`, `케르베로스`, `뱀파이어로드` and
+  soldiers `아크데몬`, `엘리멘탈`, `발리스타`, `골렘`, `헬하운드`,
+  `뱀파이어배트`. The complete enemy phase rendered both Vampire Lord pages,
+  all movement and spells, then reached `TURN 2` and a valid Elwin command.
+  Five 0/1/2/3/5-second crops of the same `데몬로드/데몬로드` status row
+  were pixel-identical. Bernhardt remains source-hidden through Turn 2 and
+  therefore still requires a natural event-time screen check.
+- Representative evidence:
+  `captures/run/08d4_s24_vampire_attack.png`,
+  `captures/run/08d4_s24_after_vampire_event_44.png`,
+  `captures/run/08d4_s24_after_event_detector_stop.png`,
+  `captures/run/08d4_s25_route_wait4.png`,
+  `captures/run/ad99_s24_stock_demonlord_status.png`,
+  `captures/run/ad99_s24_stock_lich_status.png`,
+  `captures/run/ad99_s24_stock_cerberus_status.png`,
+  `captures/run/ad99_s24_stock_vampire_status.png`,
+  `captures/run/ad99_s24_stock_elemental.png`,
+  `captures/run/ad99_s24_stock_ballista.png`,
+  `captures/run/ad99_s24_stock_golem.png`,
+  `captures/run/ad99_s24_stock_hellhound.png`,
+  `captures/run/ad99_s24_stock_vampirebat.png`, and
+  `captures/run/ad99_s24_stock_turn2_command.png`.
