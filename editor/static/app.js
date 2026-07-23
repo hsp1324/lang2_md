@@ -15,6 +15,14 @@ const commanderSelect = $("#commanderSelect");
 const classSummary = $("#classSummary");
 const classTree = $("#classTree");
 const classInspector = $("#classInspector");
+const testCommanderSelect = $("#testCommanderSelect");
+const testClassSummary = $("#testClassSummary");
+const testClassTree = $("#testClassTree");
+const testClassInspector = $("#testClassInspector");
+const aiCommanderSelect = $("#aiCommanderSelect");
+const aiClassSummary = $("#aiClassSummary");
+const aiClassTree = $("#aiClassTree");
+const aiClassInspector = $("#aiClassInspector");
 const assetPicker = $("#assetPicker");
 const assetPickerSearch = $("#assetPickerSearch");
 const assetPickerOptions = $("#assetPickerOptions");
@@ -22,9 +30,13 @@ const assetPickerOptions = $("#assetPickerOptions");
 let scenarioModel = null;
 let itemModel = null;
 let classModel = null;
+let testClassSpriteModel = null;
+let aiClassSpriteModel = null;
 let scenarioModels = new Map();
 let activeCommanderId = null;
 let selectedTreeClassId = null;
+let selectedTestClassId = null;
+let selectedAiClassId = null;
 let pickerState = null;
 
 function escapeHtml(value) {
@@ -37,6 +49,12 @@ function escapeHtml(value) {
 
 function hexId(value) {
   return Number(value).toString(16).padStart(2, "0").toUpperCase();
+}
+
+function colorSwatches(colors) {
+  return colors.map(color =>
+    `<i class="colorSwatch" style="background:${color}" title="${color}"></i>`
+  ).join("");
 }
 
 function showNotice(message, success = false) {
@@ -59,6 +77,14 @@ function representativeSpritePath(classId) {
 
 function commanderSpritePath(commanderId, classId) {
   return `/class-sprites/commanders/${commanderId}/${hexId(classId)}-p1.png`;
+}
+
+function testClassSpritePath(commanderId, classId) {
+  return `/test-class-sprites/${commanderId}/${hexId(classId)}.png`;
+}
+
+function aiClassSpritePath(commanderId, classId) {
+  return `/ai-class-sprites/${commanderId}/${hexId(classId)}.png`;
 }
 
 function spriteImage(classId, options = {}) {
@@ -87,6 +113,24 @@ function installSpriteFallbacks(root = document) {
       }
     }, {once: true});
   });
+}
+
+function testSpriteImage(commanderId, classId) {
+  const fallback = commanderSpritePath(commanderId, classId);
+  const label = classInfo(classId)?.ko || `클래스 ${hexId(classId)}`;
+  return `<img class="pixelSprite" src="${testClassSpritePath(
+    commanderId,
+    classId
+  )}" data-fallback="${fallback}" alt="${escapeHtml(label)}">`;
+}
+
+function aiSpriteImage(commanderId, classId) {
+  const fallback = commanderSpritePath(commanderId, classId);
+  const label = classInfo(classId)?.ko || `클래스 ${hexId(classId)}`;
+  return `<img class="pixelSprite" src="${aiClassSpritePath(
+    commanderId,
+    classId
+  )}" data-fallback="${fallback}" alt="${escapeHtml(label)}">`;
 }
 
 function classOptions(selected, allowEmpty = false) {
@@ -304,25 +348,30 @@ function classNode(classId, level, commander, nextClassIds) {
     </button>`;
 }
 
-function drawClassEdges(edges) {
-  const svg = $("#classEdges");
+function drawClassEdges(
+  edges,
+  tree = classTree,
+  svgSelector = "#classEdges",
+  selectedClassId = selectedTreeClassId,
+) {
+  const svg = tree.querySelector(svgSelector);
   if (!svg) return;
-  const treeRect = classTree.getBoundingClientRect();
-  svg.setAttribute("viewBox", `0 0 ${classTree.scrollWidth} ${classTree.scrollHeight}`);
-  svg.setAttribute("width", classTree.scrollWidth);
-  svg.setAttribute("height", classTree.scrollHeight);
+  const treeRect = tree.getBoundingClientRect();
+  svg.setAttribute("viewBox", `0 0 ${tree.scrollWidth} ${tree.scrollHeight}`);
+  svg.setAttribute("width", tree.scrollWidth);
+  svg.setAttribute("height", tree.scrollHeight);
   svg.innerHTML = edges.map(edge => {
-    const from = classTree.querySelector(`[data-node-id="${edge.from}"]`);
-    const to = classTree.querySelector(`[data-node-id="${edge.to}"]`);
+    const from = tree.querySelector(`[data-node-id="${edge.from}"]`);
+    const to = tree.querySelector(`[data-node-id="${edge.to}"]`);
     if (!from || !to) return "";
     const a = from.getBoundingClientRect();
     const b = to.getBoundingClientRect();
-    const x1 = a.right - treeRect.left + classTree.scrollLeft;
-    const y1 = a.top + a.height / 2 - treeRect.top + classTree.scrollTop;
-    const x2 = b.left - treeRect.left + classTree.scrollLeft;
-    const y2 = b.top + b.height / 2 - treeRect.top + classTree.scrollTop;
+    const x1 = a.right - treeRect.left + tree.scrollLeft;
+    const y1 = a.top + a.height / 2 - treeRect.top + tree.scrollTop;
+    const x2 = b.left - treeRect.left + tree.scrollLeft;
+    const y2 = b.top + b.height / 2 - treeRect.top + tree.scrollTop;
     const bend = Math.max(28, (x2 - x1) / 2);
-    const active = Number(edge.from.split("-")[1]) === selectedTreeClassId
+    const active = Number(edge.from.split("-")[1]) === selectedClassId
       ? ' class="active"'
       : "";
     return `<path${active} d="M ${x1} ${y1} C ${x1 + bend} ${y1}, ` +
@@ -436,6 +485,252 @@ function renderClassRoutes() {
   requestAnimationFrame(() => drawClassEdges(graph.edges));
 }
 
+function activeTestCommander() {
+  return classModel.commanders.find(
+    entry => entry.commander_id === Number(testCommanderSelect.value)
+  );
+}
+
+function testClassRow(commanderId, classId) {
+  return testClassSpriteModel.commanders[String(commanderId)]
+    .classes[String(classId)];
+}
+
+function testClassNode(classId, level, commander, nextClassIds) {
+  const info = classInfo(classId);
+  const row = testClassRow(commander.commander_id, classId);
+  const selected = selectedTestClassId === classId ? " selected" : "";
+  const nextCandidate = nextClassIds.includes(classId) ? " nextCandidate" : "";
+  const redesigned = row.redesigned ? " redesigned" : "";
+  return `
+    <button class="classNode${selected}${nextCandidate}${redesigned}" type="button"
+      data-test-tree-class="${classId}" data-node-id="${level}-${classId}">
+      <span class="nodeSprite">
+        ${testSpriteImage(commander.commander_id, classId)}
+      </span>
+      <span><strong>${escapeHtml(info.ko)}</strong>
+        <small>${hexId(classId)} · ${escapeHtml(info.jp)}</small>
+      </span>
+    </button>`;
+}
+
+function renderTestClassInspector() {
+  const commander = activeTestCommander();
+  const classId = selectedTestClassId;
+  if (classId === null) {
+    testClassInspector.innerHTML = "<h2>클래스를 선택하세요</h2>";
+    return;
+  }
+  const info = classInfo(classId);
+  const row = testClassRow(commander.commander_id, classId);
+  testClassInspector.innerHTML = `
+    <div class="inspectorTitle">
+      <span class="inspectorSprite">
+        ${testSpriteImage(commander.commander_id, classId)}
+      </span>
+      <div><h2>${escapeHtml(info.ko)}</h2>
+        <p>${hexId(classId)} · ${escapeHtml(info.jp)} · ${row.tier}단계</p>
+      </div>
+    </div>
+    <div class="spriteComparison">
+      <div>
+        <span>원본</span>
+        <span class="comparisonSprite">
+          ${spriteImage(classId, {commanderId: commander.commander_id})}
+        </span>
+      </div>
+      <div>
+        <span>${row.redesigned ? "새 디자인" : "원본 유지"}</span>
+        <span class="comparisonSprite ${row.redesigned ? "changed" : ""}">
+          ${testSpriteImage(commander.commander_id, classId)}
+        </span>
+      </div>
+    </div>
+    <dl class="designMetadata">
+      <div><dt>디자인</dt><dd>${escapeHtml(row.feature)}</dd></div>
+      <div><dt>원본 보존</dt><dd>얼굴·머리·외곽선 ${row.protected_face_pixel_count}픽셀 잠금</dd></div>
+      <div><dt>변경량</dt><dd>${row.changed_pixel_count}픽셀 · 원본 불투명 픽셀 대비 ${Math.round(
+        row.changed_ratio * 100
+      )}%</dd></div>
+      <div><dt>원본 그림</dt><dd>0x${hexId(row.source_sprite_id)}</dd></div>
+      <div><dt>중복 클래스</dt><dd>${row.duplicate_group.map(
+        value => `${hexId(value)} ${escapeHtml(classInfo(value).ko)}`
+      ).join(" · ")}</dd></div>
+    </dl>`;
+  installSpriteFallbacks(testClassInspector);
+}
+
+function renderTestClassRoutes() {
+  if (!testClassSpriteModel) return;
+  const commander = activeTestCommander();
+  const graph = buildClassGraph(commander);
+  if (selectedTestClassId === null ||
+      !graph.levels.some(level => level.includes(selectedTestClassId))) {
+    selectedTestClassId = graph.levels[0][0];
+  }
+  const selectedTransition = commander.transitions.find(
+    entry => entry.current_class === selectedTestClassId
+  );
+  const nextClassIds = selectedTransition?.candidates || [];
+  testClassTree.innerHTML = `
+    <svg id="testClassEdges" class="classEdges" aria-hidden="true"></svg>
+    ${graph.levels.map((level, levelIndex) => `
+      <div class="classTier" data-tier="${levelIndex + 1}">
+        ${level.map(classId =>
+          testClassNode(classId, levelIndex, commander, nextClassIds)
+        ).join("")}
+      </div>`).join("")}`;
+  testClassTree.querySelectorAll("[data-test-tree-class]").forEach(node => {
+    node.addEventListener("click", () => {
+      selectedTestClassId = Number(node.dataset.testTreeClass);
+      renderTestClassRoutes();
+    });
+  });
+  installSpriteFallbacks(testClassTree);
+  const redesignedCount = Object.values(
+    testClassSpriteModel.commanders[String(commander.commander_id)].classes
+  ).filter(row => row.redesigned).length;
+  testClassSummary.textContent =
+    `${commander.name} · 새 디자인 ${redesignedCount}개 · 실제 ROM 미적용`;
+  renderTestClassInspector();
+  requestAnimationFrame(() => drawClassEdges(
+    graph.edges,
+    testClassTree,
+    "#testClassEdges",
+    selectedTestClassId,
+  ));
+}
+
+function activeAiCommander() {
+  return classModel.commanders.find(
+    entry => entry.commander_id === Number(aiCommanderSelect.value)
+  );
+}
+
+function aiClassRow(commanderId, classId) {
+  return aiClassSpriteModel.commanders[String(commanderId)]
+    .classes[String(classId)];
+}
+
+function aiClassNode(classId, level, commander, nextClassIds) {
+  const info = classInfo(classId);
+  const row = aiClassRow(commander.commander_id, classId);
+  const selected = selectedAiClassId === classId ? " selected" : "";
+  const nextCandidate = nextClassIds.includes(classId) ? " nextCandidate" : "";
+  const generated = row.redesigned ? " aiGenerated" : "";
+  return `
+    <button class="classNode${generated}${selected}${nextCandidate}" type="button"
+      data-ai-tree-class="${classId}" data-node-id="${level}-${classId}">
+      <span class="nodeSprite">
+        ${aiSpriteImage(commander.commander_id, classId)}
+      </span>
+      <span><strong>${escapeHtml(info.ko)}</strong>
+        <small>${hexId(classId)} · ${escapeHtml(info.jp)}</small>
+      </span>
+    </button>`;
+}
+
+function renderAiClassInspector() {
+  const commander = activeAiCommander();
+  const classId = selectedAiClassId;
+  if (classId === null) {
+    aiClassInspector.innerHTML = "<h2>클래스를 선택하세요</h2>";
+    return;
+  }
+  const info = classInfo(classId);
+  const row = aiClassRow(commander.commander_id, classId);
+  const headPreservation = row.redesigned
+    ? `ROM 원본 영역 ${row.face_pixel_count}픽셀`
+    : "원본 전체 256픽셀";
+  aiClassInspector.innerHTML = `
+    <div class="inspectorTitle">
+      <span class="inspectorSprite">
+        ${aiSpriteImage(commander.commander_id, classId)}
+      </span>
+      <div><h2>${escapeHtml(info.ko)}</h2>
+        <p>${hexId(classId)} · ${escapeHtml(info.jp)} · ${row.tier}단계</p>
+      </div>
+    </div>
+    <div class="aiSpriteComparison">
+      <div>
+        <span>${row.redesigned ? "AI 원화" : "AI 원화 · 미사용"}</span>
+        <span class="aiSourceSprite">
+          <img src="/ai-class-sprites/${row.ai_source_cell_file}"
+            alt="${escapeHtml(commander.name)} ${row.ai_sheet_stage}단계 AI 원화">
+        </span>
+      </div>
+      <div>
+        <span>${row.redesigned ? "16×16 변환" : "ROM 원본 유지"}</span>
+        <span class="comparisonSprite ${row.redesigned ? "changed" : ""}">
+          ${aiSpriteImage(commander.commander_id, classId)}
+        </span>
+      </div>
+      <div>
+        <span>ROM 얼굴 기준</span>
+        <span class="comparisonSprite">
+          ${spriteImage(classId, {commanderId: commander.commander_id})}
+        </span>
+      </div>
+    </div>
+    <dl class="designMetadata">
+      <div><dt>생성 방식</dt><dd>${escapeHtml(row.feature)}</dd></div>
+      <div><dt>AI 원화</dt><dd>${escapeHtml(row.ai_source_kind)} · ${escapeHtml(
+        row.ai_source_position
+      )}</dd></div>
+      <div><dt>대표 색상</dt><dd>
+        <span class="paletteRow"><b>원화</b>${colorSwatches(row.source_palette)}</span>
+        <span class="paletteRow"><b>16×16</b>${colorSwatches(row.pixel_palette)}</span>
+      </dd></div>
+      <div><dt>머리 보존</dt><dd>${headPreservation} · 그림 0x${hexId(
+        row.face_source_sprite_id
+      )}</dd></div>
+      <div><dt>ROM 반영</dt><dd>미적용 · 비교용 PNG만 생성</dd></div>
+    </dl>`;
+  installSpriteFallbacks(aiClassInspector);
+}
+
+function renderAiClassRoutes() {
+  if (!aiClassSpriteModel) return;
+  const commander = activeAiCommander();
+  const graph = buildClassGraph(commander);
+  if (selectedAiClassId === null ||
+      !graph.levels.some(level => level.includes(selectedAiClassId))) {
+    selectedAiClassId = graph.levels[0][0];
+  }
+  const selectedTransition = commander.transitions.find(
+    entry => entry.current_class === selectedAiClassId
+  );
+  const nextClassIds = selectedTransition?.candidates || [];
+  aiClassTree.innerHTML = `
+    <svg id="aiClassEdges" class="classEdges" aria-hidden="true"></svg>
+    ${graph.levels.map((level, levelIndex) => `
+      <div class="classTier" data-tier="${levelIndex + 1}">
+        ${level.map(classId =>
+          aiClassNode(classId, levelIndex, commander, nextClassIds)
+        ).join("")}
+      </div>`).join("")}`;
+  aiClassTree.querySelectorAll("[data-ai-tree-class]").forEach(node => {
+    node.addEventListener("click", () => {
+      selectedAiClassId = Number(node.dataset.aiTreeClass);
+      renderAiClassRoutes();
+    });
+  });
+  installSpriteFallbacks(aiClassTree);
+  const rows = Object.values(
+    aiClassSpriteModel.commanders[String(commander.commander_id)].classes
+  );
+  const redesignedCount = rows.filter(row => row.redesigned).length;
+  aiClassSummary.textContent =
+    `${commander.name} · 중복 상위 클래스 AI 시안 ${redesignedCount}개 · 실제 ROM 미적용`;
+  renderAiClassInspector();
+  requestAnimationFrame(() => drawClassEdges(
+    graph.edges,
+    aiClassTree,
+    "#aiClassEdges",
+    selectedAiClassId,
+  ));
+}
+
 function collectClassEdits() {
   // Class tree and hire controls update classModel immediately.
 }
@@ -499,14 +794,29 @@ async function loadAll() {
   selectedTreeClassId = null;
   try {
     const rom = romSelect.value;
-    const [itemsResponse, classesResponse] = await Promise.all([
+    const [
+      itemsResponse,
+      classesResponse,
+      testSpritesResponse,
+      aiSpritesResponse,
+    ] = await Promise.all([
       fetch(`/api/items?rom=${rom}`),
       fetch(`/api/class-changes?rom=${rom}`),
+      fetch("/test-class-sprites/manifest.json"),
+      fetch("/ai-class-sprites/manifest.json"),
     ]);
     itemModel = await itemsResponse.json();
     classModel = await classesResponse.json();
+    testClassSpriteModel = await testSpritesResponse.json();
+    aiClassSpriteModel = await aiSpritesResponse.json();
     if (!itemsResponse.ok) throw new Error(itemModel.error);
     if (!classesResponse.ok) throw new Error(classModel.error);
+    if (!testSpritesResponse.ok) {
+      throw new Error("테스트 클래스 디자인을 읽지 못했습니다");
+    }
+    if (!aiSpritesResponse.ok) {
+      throw new Error("AI 클래스 디자인을 읽지 못했습니다");
+    }
     await loadScenario();
     sourcePath.textContent = itemModel.rom_path;
     renderItems();
@@ -514,7 +824,11 @@ async function loadAll() {
       `<option value="${commander.commander_id}">` +
       `${commander.commander_id}. ${escapeHtml(commander.name)}</option>`
     ).join("");
+    testCommanderSelect.innerHTML = commanderSelect.innerHTML;
+    aiCommanderSelect.innerHTML = commanderSelect.innerHTML;
     renderClassRoutes();
+    renderTestClassRoutes();
+    renderAiClassRoutes();
   } catch (error) {
     showNotice(error.message);
   } finally {
@@ -577,6 +891,10 @@ document.querySelectorAll(".tab").forEach(tab => {
     });
     if (tab.dataset.tab === "classes") {
       requestAnimationFrame(renderClassRoutes);
+    } else if (tab.dataset.tab === "testClasses") {
+      requestAnimationFrame(renderTestClassRoutes);
+    } else if (tab.dataset.tab === "aiClasses") {
+      requestAnimationFrame(renderAiClassRoutes);
     }
   });
 });
@@ -688,6 +1006,7 @@ document.addEventListener("pointerdown", event => {
 window.addEventListener("resize", closePicker);
 window.addEventListener("resize", () => {
   if (activeCommanderId !== null) renderClassRoutes();
+  if (testClassSpriteModel) renderTestClassRoutes();
 });
 
 scenarioSelect.addEventListener("change", async () => {
@@ -710,6 +1029,14 @@ commanderSelect.addEventListener("change", () => {
   activeCommanderId = Number(commanderSelect.value);
   selectedTreeClassId = null;
   renderClassRoutes();
+});
+testCommanderSelect.addEventListener("change", () => {
+  selectedTestClassId = null;
+  renderTestClassRoutes();
+});
+aiCommanderSelect.addEventListener("change", () => {
+  selectedAiClassId = null;
+  renderAiClassRoutes();
 });
 buildButton.addEventListener("click", buildRom);
 loadAll();

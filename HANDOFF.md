@@ -8256,3 +8256,40 @@ contains 57 safe syllables as documented below and in
   `0x00` or `0x1A` as apparently missing low sprite IDs: direct rendering
   shows both contain live effect/monster graphics even though the two class
   tables do not reference them.
+
+### Experimental Class Design Tabs (2026-07-24)
+
+- The editor has two read-only comparison tabs beside the real class-change
+  editor. `Test Change` uses deterministic recoloring and silhouette accents;
+  `AI Classes` compares a generated source cell, its 16x16 conversion, and the
+  authoritative ROM face. Neither manifest is sent to `POST /api/build`, and
+  both declare `rom_effect: none; preview PNG assets only`. Bald class `2E`
+  remains the only custom class design in the production ROM.
+- Per commander, classes are grouped by their original sprite ID and sorted by
+  `(tier, class ID)`. Rank zero in every duplicate group is byte-exact to the
+  ROM extraction. Only the 102 later ranks among 170 total class entries are
+  experimental. `tests/test_experimental_class_sprite_assets.py` locks this
+  boundary, all committed files, and the production-builder isolation.
+- The rejected first Test Change pass reduced nearly every opaque body pixel
+  to one light and one dark theme color, then drew large weapons after the
+  face pass. It destroyed armor shading and could cover faces. The replacement
+  keeps four-level shading, restores every source black outline, and restores
+  a skin/hair/adjacent-outline face mask after all additions. Do not revive the
+  broad two-color replacement.
+- The rejected first AI conversion applied a second class-theme recolor after
+  pixelization, changing source gold/blue/white into unrelated violet/brown.
+  The accepted pipeline removes black background, uses nearest-neighbor
+  fitting and a per-cell adaptive palette, then restores the ROM head rectangle
+  including transparent pixels. Its rank-zero entries still bypass the AI
+  result entirely. The browser inspector displays source and 16x16 dominant
+  color swatches to expose future palette drift.
+- Generated sources are retained under `docs/assets/ai-class-source`; the
+  initial 10x5 concept is `allied_class_ai_evolution_v2.png`, and direct ROM
+  reference experiments are under `commanders/`. The current Elwin direct
+  source is wired into the preview. The Liana direct source is retained for a
+  later design pass but is not wired. Character design work is intentionally
+  paused here so localization remains the primary task.
+- Headless Chromium at 1600x1000 and 390x844 verified 17 Elwin nodes, 28
+  edges, exact rank-zero labels, ten AI/Test redesign badges, source/original/
+  converted comparisons, no broken images, and no body overflow. The focused
+  experimental/editor suite passes 12 tests.

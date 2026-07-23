@@ -29,6 +29,8 @@
       <button class="tab active" type="button" data-tab="scenario">시나리오</button>
       <button class="tab" type="button" data-tab="items">아이템</button>
       <button class="tab" type="button" data-tab="classes">클래스 체인지</button>
+      <button class="tab" type="button" data-tab="testClasses">테스트 체인지</button>
+      <button class="tab" type="button" data-tab="aiClasses">AI 클래스</button>
     </nav>
     <div id="notice" class="notice" hidden></div>
 
@@ -104,6 +106,52 @@
           </div>
         </div>
         <aside id="classInspector" class="classInspector">
+          <h2>클래스를 선택하세요</h2>
+        </aside>
+      </div>
+    </section>
+
+    <section id="testClassesPanel" class="tabPanel">
+      <div class="controls">
+        <label>지휘관
+          <select id="testCommanderSelect"></select>
+        </label>
+        <span id="testClassSummary" class="summary"></span>
+      </div>
+      <div class="classWorkspace testClassWorkspace">
+        <div class="classTreeWrap" aria-label="새 클래스 디자인 비교 트리">
+          <div class="tierLabels">
+            <span>1단계</span><span>2단계</span><span>3단계</span>
+            <span>4단계</span><span>숨은 5단계</span>
+          </div>
+          <div id="testClassTree" class="classTree">
+            <svg id="testClassEdges" class="classEdges" aria-hidden="true"></svg>
+          </div>
+        </div>
+        <aside id="testClassInspector" class="classInspector">
+          <h2>클래스를 선택하세요</h2>
+        </aside>
+      </div>
+    </section>
+
+    <section id="aiClassesPanel" class="tabPanel">
+      <div class="controls">
+        <label>지휘관
+          <select id="aiCommanderSelect"></select>
+        </label>
+        <span id="aiClassSummary" class="summary"></span>
+      </div>
+      <div class="classWorkspace aiClassWorkspace">
+        <div class="classTreeWrap" aria-label="AI 클래스 디자인 비교 트리">
+          <div class="tierLabels">
+            <span>1단계</span><span>2단계</span><span>3단계</span>
+            <span>4단계</span><span>숨은 5단계</span>
+          </div>
+          <div id="aiClassTree" class="classTree">
+            <svg id="aiClassEdges" class="classEdges" aria-hidden="true"></svg>
+          </div>
+        </div>
+        <aside id="aiClassInspector" class="classInspector">
           <h2>클래스를 선택하세요</h2>
         </aside>
       </div>

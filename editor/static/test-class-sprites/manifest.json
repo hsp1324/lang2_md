@@ -1,0 +1,3144 @@
+{
+  "generated_from": "roms/original/Langrisser II (Japan).md",
+  "concept_sheet": "docs/assets/allied_class_redesign_concept.png",
+  "commander_count": 10,
+  "redesigned_count": 102,
+  "policy": "preserve the lowest class in each duplicate sprite group; dramatically redesign only later classes for editor comparison",
+  "rom_effect": "none; preview PNG assets only",
+  "commanders": {
+    "1": {
+      "name": "엘윈",
+      "classes": {
+        "1": {
+          "class_id": 1,
+          "class_name": "파이터",
+          "tier": 1,
+          "source_sprite_id": 30,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/01.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 30,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "진홍 갑옷·금장 대검",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 127,
+          "changed_ratio": 0.617,
+          "file": "1/04.png"
+        },
+        "5": {
+          "class_id": 5,
+          "class_name": "나이트",
+          "tier": 2,
+          "source_sprite_id": 34,
+          "duplicate_group": [
+            5,
+            12,
+            27
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/05.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 31,
+          "duplicate_group": [
+            10,
+            18,
+            19,
+            20
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/0A.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 30,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 127,
+          "changed_ratio": 0.617,
+          "file": "1/0B.png"
+        },
+        "12": {
+          "class_id": 12,
+          "class_name": "하이랜더",
+          "tier": 3,
+          "source_sprite_id": 34,
+          "duplicate_group": [
+            5,
+            12,
+            27
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적갈색 군마·녹금 마갑",
+          "protected_face_pixel_count": 29,
+          "changed_pixel_count": 130,
+          "changed_ratio": 0.64,
+          "file": "1/0C.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 35,
+          "duplicate_group": [
+            13,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/0D.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 31,
+          "duplicate_group": [
+            10,
+            18,
+            19,
+            20
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "보라 주교복·대형 성표",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 145,
+          "changed_ratio": 0.74,
+          "file": "1/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 31,
+          "duplicate_group": [
+            10,
+            18,
+            19,
+            20
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 147,
+          "changed_ratio": 0.75,
+          "file": "1/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 31,
+          "duplicate_group": [
+            10,
+            18,
+            19,
+            20
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 144,
+          "changed_ratio": 0.735,
+          "file": "1/14.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 32,
+          "duplicate_group": [
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/17.png"
+        },
+        "26": {
+          "class_id": 26,
+          "class_name": "소드마스터",
+          "tier": 4,
+          "source_sprite_id": 30,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "흑진홍 갑옷·초대형 은검",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 138,
+          "changed_ratio": 0.67,
+          "file": "1/1A.png"
+        },
+        "27": {
+          "class_id": 27,
+          "class_name": "나이트마스터",
+          "tier": 4,
+          "source_sprite_id": 34,
+          "duplicate_group": [
+            5,
+            12,
+            27
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑마·진홍 마갑·장창",
+          "protected_face_pixel_count": 29,
+          "changed_pixel_count": 137,
+          "changed_ratio": 0.675,
+          "file": "1/1B.png"
+        },
+        "28": {
+          "class_id": 28,
+          "class_name": "그랑나이트",
+          "tier": 4,
+          "source_sprite_id": 36,
+          "duplicate_group": [
+            28
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/1C.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 35,
+          "duplicate_group": [
+            13,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 26,
+          "changed_pixel_count": 142,
+          "changed_ratio": 0.703,
+          "file": "1/1D.png"
+        },
+        "32": {
+          "class_id": 32,
+          "class_name": "킹",
+          "tier": 4,
+          "source_sprite_id": 33,
+          "duplicate_group": [
+            32,
+            34
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "1/20.png"
+        },
+        "34": {
+          "class_id": 34,
+          "class_name": "히어로",
+          "tier": 5,
+          "source_sprite_id": 33,
+          "duplicate_group": [
+            32,
+            34
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백금 영웅갑·빛의 대검",
+          "protected_face_pixel_count": 29,
+          "changed_pixel_count": 114,
+          "changed_ratio": 0.543,
+          "file": "1/22.png"
+        }
+      }
+    },
+    "2": {
+      "name": "리아나",
+      "classes": {
+        "2": {
+          "class_id": 2,
+          "class_name": "클레릭",
+          "tier": 1,
+          "source_sprite_id": 37,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "2/02.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 41,
+          "duplicate_group": [
+            4,
+            11
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "2/04.png"
+        },
+        "8": {
+          "class_id": 8,
+          "class_name": "힐러",
+          "tier": 2,
+          "source_sprite_id": 37,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백색 성의·청록 치유광",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 132,
+          "changed_ratio": 0.759,
+          "file": "2/08.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 38,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "2/0A.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 41,
+          "duplicate_group": [
+            4,
+            11
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 38,
+          "changed_pixel_count": 127,
+          "changed_ratio": 0.668,
+          "file": "2/0B.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 42,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "2/0D.png"
+        },
+        "17": {
+          "class_id": 17,
+          "class_name": "프리스트",
+          "tier": 3,
+          "source_sprite_id": 37,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "백금 사제복·성광 지팡이",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 109,
+          "changed_ratio": 0.626,
+          "file": "2/11.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 39,
+          "duplicate_group": [
+            18,
+            24
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "2/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 38,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 151,
+          "changed_ratio": 0.839,
+          "file": "2/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 38,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 131,
+          "changed_ratio": 0.728,
+          "file": "2/14.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 38,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.856,
+          "file": "2/15.png"
+        },
+        "22": {
+          "class_id": 22,
+          "class_name": "하이프리스트",
+          "tier": 4,
+          "source_sprite_id": 37,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "금백 성의·태양 후광",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 149,
+          "changed_ratio": 0.856,
+          "file": "2/16.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 40,
+          "duplicate_group": [
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "2/17.png"
+        },
+        "24": {
+          "class_id": 24,
+          "class_name": "세이지",
+          "tier": 4,
+          "source_sprite_id": 39,
+          "duplicate_group": [
+            18,
+            24
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "현자 자색 로브·빛의 고리",
+          "protected_face_pixel_count": 40,
+          "changed_pixel_count": 149,
+          "changed_ratio": 0.78,
+          "file": "2/18.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 42,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 32,
+          "changed_pixel_count": 111,
+          "changed_ratio": 0.536,
+          "file": "2/19.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 42,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 32,
+          "changed_pixel_count": 145,
+          "changed_ratio": 0.7,
+          "file": "2/1D.png"
+        },
+        "40": {
+          "class_id": 40,
+          "class_name": "서머너",
+          "tier": 5,
+          "source_sprite_id": 38,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "암흑 소환복·쌍보주",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.856,
+          "file": "2/28.png"
+        }
+      }
+    },
+    "3": {
+      "name": "라나",
+      "classes": {
+        "2": {
+          "class_id": 2,
+          "class_name": "클레릭",
+          "tier": 1,
+          "source_sprite_id": 43,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "3/02.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 47,
+          "duplicate_group": [
+            4,
+            11
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "3/04.png"
+        },
+        "8": {
+          "class_id": 8,
+          "class_name": "힐러",
+          "tier": 2,
+          "source_sprite_id": 43,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백색 성의·청록 치유광",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 132,
+          "changed_ratio": 0.759,
+          "file": "3/08.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 44,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "3/0A.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 47,
+          "duplicate_group": [
+            4,
+            11
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 38,
+          "changed_pixel_count": 129,
+          "changed_ratio": 0.679,
+          "file": "3/0B.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 48,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "3/0D.png"
+        },
+        "17": {
+          "class_id": 17,
+          "class_name": "프리스트",
+          "tier": 3,
+          "source_sprite_id": 43,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "백금 사제복·성광 지팡이",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 109,
+          "changed_ratio": 0.626,
+          "file": "3/11.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 45,
+          "duplicate_group": [
+            18,
+            24
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "3/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 44,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 151,
+          "changed_ratio": 0.839,
+          "file": "3/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 44,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 131,
+          "changed_ratio": 0.728,
+          "file": "3/14.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 44,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.856,
+          "file": "3/15.png"
+        },
+        "22": {
+          "class_id": 22,
+          "class_name": "하이프리스트",
+          "tier": 4,
+          "source_sprite_id": 43,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "금백 성의·태양 후광",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 149,
+          "changed_ratio": 0.856,
+          "file": "3/16.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 46,
+          "duplicate_group": [
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "3/17.png"
+        },
+        "24": {
+          "class_id": 24,
+          "class_name": "세이지",
+          "tier": 4,
+          "source_sprite_id": 45,
+          "duplicate_group": [
+            18,
+            24
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "현자 자색 로브·빛의 고리",
+          "protected_face_pixel_count": 40,
+          "changed_pixel_count": 149,
+          "changed_ratio": 0.78,
+          "file": "3/18.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 48,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 32,
+          "changed_pixel_count": 111,
+          "changed_ratio": 0.536,
+          "file": "3/19.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 48,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 32,
+          "changed_pixel_count": 145,
+          "changed_ratio": 0.7,
+          "file": "3/1D.png"
+        },
+        "40": {
+          "class_id": 40,
+          "class_name": "서머너",
+          "tier": 5,
+          "source_sprite_id": 44,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            21,
+            40
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "암흑 소환복·쌍보주",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.856,
+          "file": "3/28.png"
+        }
+      }
+    },
+    "4": {
+      "name": "쉐리",
+      "classes": {
+        "1": {
+          "class_id": 1,
+          "class_name": "파이터",
+          "tier": 1,
+          "source_sprite_id": 92,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            33,
+            35
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/01.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 92,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            33,
+            35
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "진홍 갑옷·금장 대검",
+          "protected_face_pixel_count": 13,
+          "changed_pixel_count": 150,
+          "changed_ratio": 0.838,
+          "file": "4/04.png"
+        },
+        "6": {
+          "class_id": 6,
+          "class_name": "호크나이트",
+          "tier": 2,
+          "source_sprite_id": 97,
+          "duplicate_group": [
+            6
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/06.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 93,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/0A.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 92,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            33,
+            35
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 13,
+          "changed_pixel_count": 150,
+          "changed_ratio": 0.838,
+          "file": "4/0B.png"
+        },
+        "14": {
+          "class_id": 14,
+          "class_name": "유니콘나이트",
+          "tier": 3,
+          "source_sprite_id": 96,
+          "duplicate_group": [
+            14,
+            25,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/0E.png"
+        },
+        "15": {
+          "class_id": 15,
+          "class_name": "드래곤나이트",
+          "tier": 3,
+          "source_sprite_id": 98,
+          "duplicate_group": [
+            15,
+            30
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/0F.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 94,
+          "duplicate_group": [
+            18,
+            21,
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 93,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 14,
+          "changed_pixel_count": 163,
+          "changed_ratio": 0.976,
+          "file": "4/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 93,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 14,
+          "changed_pixel_count": 160,
+          "changed_ratio": 0.958,
+          "file": "4/14.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 94,
+          "duplicate_group": [
+            18,
+            21,
+            23
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 168,
+          "changed_ratio": 0.933,
+          "file": "4/15.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 94,
+          "duplicate_group": [
+            18,
+            21,
+            23
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "은백 성갑·광휘 검",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 145,
+          "changed_ratio": 0.806,
+          "file": "4/17.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 96,
+          "duplicate_group": [
+            14,
+            25,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 9,
+          "changed_pixel_count": 132,
+          "changed_ratio": 0.644,
+          "file": "4/19.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 96,
+          "duplicate_group": [
+            14,
+            25,
+            29
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 9,
+          "changed_pixel_count": 158,
+          "changed_ratio": 0.771,
+          "file": "4/1D.png"
+        },
+        "30": {
+          "class_id": 30,
+          "class_name": "드래곤로드",
+          "tier": 4,
+          "source_sprite_id": 98,
+          "duplicate_group": [
+            15,
+            30
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적룡·황금 갑옷·화염창",
+          "protected_face_pixel_count": 22,
+          "changed_pixel_count": 142,
+          "changed_ratio": 0.634,
+          "file": "4/1E.png"
+        },
+        "33": {
+          "class_id": 33,
+          "class_name": "레인저",
+          "tier": 4,
+          "source_sprite_id": 92,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            33,
+            35
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "녹은 경갑·장궁·숲의 광채",
+          "protected_face_pixel_count": 13,
+          "changed_pixel_count": 160,
+          "changed_ratio": 0.894,
+          "file": "4/21.png"
+        },
+        "35": {
+          "class_id": 35,
+          "class_name": "하이마스터",
+          "tier": 5,
+          "source_sprite_id": 92,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            33,
+            35
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "흑금 갑옷·쌍날 대검",
+          "protected_face_pixel_count": 13,
+          "changed_pixel_count": 151,
+          "changed_ratio": 0.844,
+          "file": "4/23.png"
+        }
+      }
+    },
+    "5": {
+      "name": "헤인",
+      "classes": {
+        "3": {
+          "class_id": 3,
+          "class_name": "워록",
+          "tier": 1,
+          "source_sprite_id": 55,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "5/03.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 58,
+          "duplicate_group": [
+            4,
+            11,
+            26
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "5/04.png"
+        },
+        "9": {
+          "class_id": 9,
+          "class_name": "소서러",
+          "tier": 2,
+          "source_sprite_id": 55,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 로브·대형 마력봉",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 164,
+          "changed_ratio": 0.85,
+          "file": "5/09.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 55,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑자색 로브·주술 보주",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 155,
+          "changed_ratio": 0.803,
+          "file": "5/0A.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 58,
+          "duplicate_group": [
+            4,
+            11,
+            26
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 138,
+          "changed_ratio": 0.742,
+          "file": "5/0B.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 60,
+          "duplicate_group": [
+            13,
+            25
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "5/0D.png"
+        },
+        "17": {
+          "class_id": 17,
+          "class_name": "프리스트",
+          "tier": 3,
+          "source_sprite_id": 59,
+          "duplicate_group": [
+            17,
+            22
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "5/11.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 56,
+          "duplicate_group": [
+            18,
+            21,
+            40
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "5/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 55,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 164,
+          "changed_ratio": 0.85,
+          "file": "5/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 55,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 156,
+          "changed_ratio": 0.808,
+          "file": "5/14.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 56,
+          "duplicate_group": [
+            18,
+            21,
+            40
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 158,
+          "changed_ratio": 0.806,
+          "file": "5/15.png"
+        },
+        "22": {
+          "class_id": 22,
+          "class_name": "하이프리스트",
+          "tier": 4,
+          "source_sprite_id": 59,
+          "duplicate_group": [
+            17,
+            22
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "금백 성의·태양 후광",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.806,
+          "file": "5/16.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 57,
+          "duplicate_group": [
+            23,
+            24
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "5/17.png"
+        },
+        "24": {
+          "class_id": 24,
+          "class_name": "세이지",
+          "tier": 4,
+          "source_sprite_id": 57,
+          "duplicate_group": [
+            23,
+            24
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "현자 자색 로브·빛의 고리",
+          "protected_face_pixel_count": 23,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.782,
+          "file": "5/18.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 60,
+          "duplicate_group": [
+            13,
+            25
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 117,
+          "changed_ratio": 0.591,
+          "file": "5/19.png"
+        },
+        "26": {
+          "class_id": 26,
+          "class_name": "소드마스터",
+          "tier": 4,
+          "source_sprite_id": 58,
+          "duplicate_group": [
+            4,
+            11,
+            26
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑진홍 갑옷·초대형 은검",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 147,
+          "changed_ratio": 0.79,
+          "file": "5/1A.png"
+        },
+        "40": {
+          "class_id": 40,
+          "class_name": "서머너",
+          "tier": 5,
+          "source_sprite_id": 56,
+          "duplicate_group": [
+            18,
+            21,
+            40
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "암흑 소환복·쌍보주",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 156,
+          "changed_ratio": 0.796,
+          "file": "5/28.png"
+        }
+      }
+    },
+    "6": {
+      "name": "스코트",
+      "classes": {
+        "1": {
+          "class_id": 1,
+          "class_name": "파이터",
+          "tier": 1,
+          "source_sprite_id": 61,
+          "duplicate_group": [
+            1,
+            4,
+            11
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/01.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 61,
+          "duplicate_group": [
+            1,
+            4,
+            11
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "진홍 갑옷·금장 대검",
+          "protected_face_pixel_count": 31,
+          "changed_pixel_count": 104,
+          "changed_ratio": 0.568,
+          "file": "6/04.png"
+        },
+        "5": {
+          "class_id": 5,
+          "class_name": "나이트",
+          "tier": 2,
+          "source_sprite_id": 65,
+          "duplicate_group": [
+            5,
+            12,
+            27,
+            41
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/05.png"
+        },
+        "6": {
+          "class_id": 6,
+          "class_name": "호크나이트",
+          "tier": 2,
+          "source_sprite_id": 67,
+          "duplicate_group": [
+            6
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/06.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 61,
+          "duplicate_group": [
+            1,
+            4,
+            11
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 31,
+          "changed_pixel_count": 104,
+          "changed_ratio": 0.568,
+          "file": "6/0B.png"
+        },
+        "12": {
+          "class_id": 12,
+          "class_name": "하이랜더",
+          "tier": 3,
+          "source_sprite_id": 65,
+          "duplicate_group": [
+            5,
+            12,
+            27,
+            41
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적갈색 군마·녹금 마갑",
+          "protected_face_pixel_count": 30,
+          "changed_pixel_count": 112,
+          "changed_ratio": 0.563,
+          "file": "6/0C.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 66,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/0D.png"
+        },
+        "15": {
+          "class_id": 15,
+          "class_name": "드래곤나이트",
+          "tier": 3,
+          "source_sprite_id": 68,
+          "duplicate_group": [
+            15,
+            30
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/0F.png"
+        },
+        "17": {
+          "class_id": 17,
+          "class_name": "프리스트",
+          "tier": 3,
+          "source_sprite_id": 64,
+          "duplicate_group": [
+            17
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/11.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 62,
+          "duplicate_group": [
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/17.png"
+        },
+        "24": {
+          "class_id": 24,
+          "class_name": "세이지",
+          "tier": 4,
+          "source_sprite_id": 63,
+          "duplicate_group": [
+            24
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/18.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 66,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 111,
+          "changed_ratio": 0.558,
+          "file": "6/19.png"
+        },
+        "27": {
+          "class_id": 27,
+          "class_name": "나이트마스터",
+          "tier": 4,
+          "source_sprite_id": 65,
+          "duplicate_group": [
+            5,
+            12,
+            27,
+            41
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑마·진홍 마갑·장창",
+          "protected_face_pixel_count": 30,
+          "changed_pixel_count": 119,
+          "changed_ratio": 0.598,
+          "file": "6/1B.png"
+        },
+        "28": {
+          "class_id": 28,
+          "class_name": "그랑나이트",
+          "tier": 4,
+          "source_sprite_id": 69,
+          "duplicate_group": [
+            28
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "6/1C.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 66,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 125,
+          "changed_ratio": 0.628,
+          "file": "6/1D.png"
+        },
+        "30": {
+          "class_id": 30,
+          "class_name": "드래곤로드",
+          "tier": 4,
+          "source_sprite_id": 68,
+          "duplicate_group": [
+            15,
+            30
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적룡·황금 갑옷·화염창",
+          "protected_face_pixel_count": 29,
+          "changed_pixel_count": 117,
+          "changed_ratio": 0.571,
+          "file": "6/1E.png"
+        },
+        "41": {
+          "class_id": 41,
+          "class_name": "로얄나이트",
+          "tier": 5,
+          "source_sprite_id": 65,
+          "duplicate_group": [
+            5,
+            12,
+            27,
+            41
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "백마·금홍 왕실 마갑",
+          "protected_face_pixel_count": 30,
+          "changed_pixel_count": 104,
+          "changed_ratio": 0.523,
+          "file": "6/29.png"
+        }
+      }
+    },
+    "7": {
+      "name": "키스",
+      "classes": {
+        "1": {
+          "class_id": 1,
+          "class_name": "파이터",
+          "tier": 1,
+          "source_sprite_id": 78,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/01.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 78,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "진홍 갑옷·금장 대검",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 116,
+          "changed_ratio": 0.634,
+          "file": "7/04.png"
+        },
+        "6": {
+          "class_id": 6,
+          "class_name": "호크나이트",
+          "tier": 2,
+          "source_sprite_id": 83,
+          "duplicate_group": [
+            6
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/06.png"
+        },
+        "8": {
+          "class_id": 8,
+          "class_name": "힐러",
+          "tier": 2,
+          "source_sprite_id": 80,
+          "duplicate_group": [
+            8,
+            17,
+            22
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/08.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 78,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 116,
+          "changed_ratio": 0.634,
+          "file": "7/0B.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 82,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/0D.png"
+        },
+        "15": {
+          "class_id": 15,
+          "class_name": "드래곤나이트",
+          "tier": 3,
+          "source_sprite_id": 84,
+          "duplicate_group": [
+            15,
+            30,
+            36
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/0F.png"
+        },
+        "17": {
+          "class_id": 17,
+          "class_name": "프리스트",
+          "tier": 3,
+          "source_sprite_id": 80,
+          "duplicate_group": [
+            8,
+            17,
+            22
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백금 사제복·성광 지팡이",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 109,
+          "changed_ratio": 0.586,
+          "file": "7/11.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 79,
+          "duplicate_group": [
+            18,
+            21
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/12.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 79,
+          "duplicate_group": [
+            18,
+            21
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 141,
+          "changed_ratio": 0.766,
+          "file": "7/15.png"
+        },
+        "22": {
+          "class_id": 22,
+          "class_name": "하이프리스트",
+          "tier": 4,
+          "source_sprite_id": 80,
+          "duplicate_group": [
+            8,
+            17,
+            22
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "금백 성의·태양 후광",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 130,
+          "changed_ratio": 0.699,
+          "file": "7/16.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 81,
+          "duplicate_group": [
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "7/17.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 82,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 40,
+          "changed_pixel_count": 96,
+          "changed_ratio": 0.49,
+          "file": "7/19.png"
+        },
+        "26": {
+          "class_id": 26,
+          "class_name": "소드마스터",
+          "tier": 4,
+          "source_sprite_id": 78,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "흑진홍 갑옷·초대형 은검",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 128,
+          "changed_ratio": 0.699,
+          "file": "7/1A.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 82,
+          "duplicate_group": [
+            13,
+            25,
+            29
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 40,
+          "changed_pixel_count": 114,
+          "changed_ratio": 0.582,
+          "file": "7/1D.png"
+        },
+        "30": {
+          "class_id": 30,
+          "class_name": "드래곤로드",
+          "tier": 4,
+          "source_sprite_id": 84,
+          "duplicate_group": [
+            15,
+            30,
+            36
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적룡·황금 갑옷·화염창",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 131,
+          "changed_ratio": 0.636,
+          "file": "7/1E.png"
+        },
+        "36": {
+          "class_id": 36,
+          "class_name": "드래곤마스터",
+          "tier": 5,
+          "source_sprite_id": 84,
+          "duplicate_group": [
+            15,
+            30,
+            36
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자색 고룡·금빛 용창",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 124,
+          "changed_ratio": 0.602,
+          "file": "7/24.png"
+        }
+      }
+    },
+    "8": {
+      "name": "아론",
+      "classes": {
+        "1": {
+          "class_id": 1,
+          "class_name": "파이터",
+          "tier": 1,
+          "source_sprite_id": 85,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26,
+            35
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/01.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 85,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26,
+            35
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "진홍 갑옷·금장 대검",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 131,
+          "changed_ratio": 0.72,
+          "file": "8/04.png"
+        },
+        "5": {
+          "class_id": 5,
+          "class_name": "나이트",
+          "tier": 2,
+          "source_sprite_id": 89,
+          "duplicate_group": [
+            5,
+            12,
+            27
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/05.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 86,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/0A.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 85,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26,
+            35
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 131,
+          "changed_ratio": 0.72,
+          "file": "8/0B.png"
+        },
+        "12": {
+          "class_id": 12,
+          "class_name": "하이랜더",
+          "tier": 3,
+          "source_sprite_id": 89,
+          "duplicate_group": [
+            5,
+            12,
+            27
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적갈색 군마·녹금 마갑",
+          "protected_face_pixel_count": 18,
+          "changed_pixel_count": 135,
+          "changed_ratio": 0.655,
+          "file": "8/0C.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 90,
+          "duplicate_group": [
+            13,
+            25
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/0D.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 88,
+          "duplicate_group": [
+            18,
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 86,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 18,
+          "changed_pixel_count": 150,
+          "changed_ratio": 0.794,
+          "file": "8/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 86,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 18,
+          "changed_pixel_count": 149,
+          "changed_ratio": 0.788,
+          "file": "8/14.png"
+        },
+        "22": {
+          "class_id": 22,
+          "class_name": "하이프리스트",
+          "tier": 4,
+          "source_sprite_id": 87,
+          "duplicate_group": [
+            22
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/16.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 88,
+          "duplicate_group": [
+            18,
+            23
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "은백 성갑·광휘 검",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 112,
+          "changed_ratio": 0.566,
+          "file": "8/17.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 90,
+          "duplicate_group": [
+            13,
+            25
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 28,
+          "changed_pixel_count": 107,
+          "changed_ratio": 0.552,
+          "file": "8/19.png"
+        },
+        "26": {
+          "class_id": 26,
+          "class_name": "소드마스터",
+          "tier": 4,
+          "source_sprite_id": 85,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26,
+            35
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "흑진홍 갑옷·초대형 은검",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 140,
+          "changed_ratio": 0.769,
+          "file": "8/1A.png"
+        },
+        "27": {
+          "class_id": 27,
+          "class_name": "나이트마스터",
+          "tier": 4,
+          "source_sprite_id": 89,
+          "duplicate_group": [
+            5,
+            12,
+            27
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑마·진홍 마갑·장창",
+          "protected_face_pixel_count": 18,
+          "changed_pixel_count": 140,
+          "changed_ratio": 0.68,
+          "file": "8/1B.png"
+        },
+        "28": {
+          "class_id": 28,
+          "class_name": "그랑나이트",
+          "tier": 4,
+          "source_sprite_id": 91,
+          "duplicate_group": [
+            28
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "8/1C.png"
+        },
+        "35": {
+          "class_id": 35,
+          "class_name": "하이마스터",
+          "tier": 5,
+          "source_sprite_id": 85,
+          "duplicate_group": [
+            1,
+            4,
+            11,
+            26,
+            35
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "흑금 갑옷·쌍날 대검",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 139,
+          "changed_ratio": 0.764,
+          "file": "8/23.png"
+        }
+      }
+    },
+    "9": {
+      "name": "레스터",
+      "classes": {
+        "1": {
+          "class_id": 1,
+          "class_name": "파이터",
+          "tier": 1,
+          "source_sprite_id": 70,
+          "duplicate_group": [
+            1
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/01.png"
+        },
+        "5": {
+          "class_id": 5,
+          "class_name": "나이트",
+          "tier": 2,
+          "source_sprite_id": 73,
+          "duplicate_group": [
+            5,
+            12,
+            25,
+            27
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/05.png"
+        },
+        "7": {
+          "class_id": 7,
+          "class_name": "크로코나이트",
+          "tier": 2,
+          "source_sprite_id": 75,
+          "duplicate_group": [
+            7
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/07.png"
+        },
+        "10": {
+          "class_id": 10,
+          "class_name": "샤먼",
+          "tier": 2,
+          "source_sprite_id": 71,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/0A.png"
+        },
+        "12": {
+          "class_id": 12,
+          "class_name": "하이랜더",
+          "tier": 3,
+          "source_sprite_id": 73,
+          "duplicate_group": [
+            5,
+            12,
+            25,
+            27
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "적갈색 군마·녹금 마갑",
+          "protected_face_pixel_count": 22,
+          "changed_pixel_count": 133,
+          "changed_ratio": 0.624,
+          "file": "9/0C.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 74,
+          "duplicate_group": [
+            13,
+            29
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/0D.png"
+        },
+        "16": {
+          "class_id": 16,
+          "class_name": "서펜나이트",
+          "tier": 3,
+          "source_sprite_id": 76,
+          "duplicate_group": [
+            16,
+            31,
+            42
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/10.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 72,
+          "duplicate_group": [
+            18,
+            21
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 71,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 146,
+          "changed_ratio": 0.741,
+          "file": "9/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 71,
+          "duplicate_group": [
+            10,
+            19,
+            20
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 146,
+          "changed_ratio": 0.741,
+          "file": "9/14.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 72,
+          "duplicate_group": [
+            18,
+            21
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 145,
+          "changed_ratio": 0.744,
+          "file": "9/15.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 73,
+          "duplicate_group": [
+            5,
+            12,
+            25,
+            27
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 22,
+          "changed_pixel_count": 111,
+          "changed_ratio": 0.521,
+          "file": "9/19.png"
+        },
+        "27": {
+          "class_id": 27,
+          "class_name": "나이트마스터",
+          "tier": 4,
+          "source_sprite_id": 73,
+          "duplicate_group": [
+            5,
+            12,
+            25,
+            27
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "흑마·진홍 마갑·장창",
+          "protected_face_pixel_count": 22,
+          "changed_pixel_count": 140,
+          "changed_ratio": 0.657,
+          "file": "9/1B.png"
+        },
+        "28": {
+          "class_id": 28,
+          "class_name": "그랑나이트",
+          "tier": 4,
+          "source_sprite_id": 77,
+          "duplicate_group": [
+            28
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "9/1C.png"
+        },
+        "29": {
+          "class_id": 29,
+          "class_name": "실버나이트",
+          "tier": 4,
+          "source_sprite_id": 74,
+          "duplicate_group": [
+            13,
+            29
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "은청 군마·수정 장창",
+          "protected_face_pixel_count": 30,
+          "changed_pixel_count": 130,
+          "changed_ratio": 0.647,
+          "file": "9/1D.png"
+        },
+        "31": {
+          "class_id": 31,
+          "class_name": "서펜로드",
+          "tier": 4,
+          "source_sprite_id": 76,
+          "duplicate_group": [
+            16,
+            31,
+            42
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청록 해룡·은빛 삼지창",
+          "protected_face_pixel_count": 21,
+          "changed_pixel_count": 143,
+          "changed_ratio": 0.622,
+          "file": "9/1F.png"
+        },
+        "42": {
+          "class_id": 42,
+          "class_name": "서펜마스터",
+          "tier": 5,
+          "source_sprite_id": 76,
+          "duplicate_group": [
+            16,
+            31,
+            42
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "백금 해룡·왕실 삼지창",
+          "protected_face_pixel_count": 21,
+          "changed_pixel_count": 142,
+          "changed_ratio": 0.617,
+          "file": "9/2A.png"
+        }
+      }
+    },
+    "10": {
+      "name": "제시카",
+      "classes": {
+        "3": {
+          "class_id": 3,
+          "class_name": "워록",
+          "tier": 1,
+          "source_sprite_id": 49,
+          "duplicate_group": [
+            3,
+            9,
+            19,
+            20,
+            21,
+            38
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "10/03.png"
+        },
+        "4": {
+          "class_id": 4,
+          "class_name": "로드",
+          "tier": 2,
+          "source_sprite_id": 53,
+          "duplicate_group": [
+            4,
+            11,
+            26
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "10/04.png"
+        },
+        "8": {
+          "class_id": 8,
+          "class_name": "힐러",
+          "tier": 2,
+          "source_sprite_id": 50,
+          "duplicate_group": [
+            8,
+            17,
+            22
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "10/08.png"
+        },
+        "9": {
+          "class_id": 9,
+          "class_name": "소서러",
+          "tier": 2,
+          "source_sprite_id": 49,
+          "duplicate_group": [
+            3,
+            9,
+            19,
+            20,
+            21,
+            38
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "청색 로브·대형 마력봉",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 156,
+          "changed_ratio": 0.867,
+          "file": "10/09.png"
+        },
+        "11": {
+          "class_id": 11,
+          "class_name": "하이로드",
+          "tier": 3,
+          "source_sprite_id": 53,
+          "duplicate_group": [
+            4,
+            11,
+            26
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "왕실 자색 갑옷·금장 망토",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 153,
+          "changed_ratio": 0.814,
+          "file": "10/0B.png"
+        },
+        "13": {
+          "class_id": 13,
+          "class_name": "매직나이트",
+          "tier": 3,
+          "source_sprite_id": 54,
+          "duplicate_group": [
+            13,
+            25
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "10/0D.png"
+        },
+        "17": {
+          "class_id": 17,
+          "class_name": "프리스트",
+          "tier": 3,
+          "source_sprite_id": 50,
+          "duplicate_group": [
+            8,
+            17,
+            22
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백금 사제복·성광 지팡이",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 144,
+          "changed_ratio": 0.818,
+          "file": "10/11.png"
+        },
+        "18": {
+          "class_id": 18,
+          "class_name": "비숍",
+          "tier": 3,
+          "source_sprite_id": 51,
+          "duplicate_group": [
+            18,
+            24
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "10/12.png"
+        },
+        "19": {
+          "class_id": 19,
+          "class_name": "메이지",
+          "tier": 3,
+          "source_sprite_id": 49,
+          "duplicate_group": [
+            3,
+            9,
+            19,
+            20,
+            21,
+            38
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "청색 마도복·서리 보주",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 156,
+          "changed_ratio": 0.867,
+          "file": "10/13.png"
+        },
+        "20": {
+          "class_id": 20,
+          "class_name": "아크메이지",
+          "tier": 4,
+          "source_sprite_id": 49,
+          "duplicate_group": [
+            3,
+            9,
+            19,
+            20,
+            21,
+            38
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "자금색 로브·쌍중 보주",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 163,
+          "changed_ratio": 0.906,
+          "file": "10/14.png"
+        },
+        "21": {
+          "class_id": 21,
+          "class_name": "위저드",
+          "tier": 4,
+          "source_sprite_id": 49,
+          "duplicate_group": [
+            3,
+            9,
+            19,
+            20,
+            21,
+            38
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "암흑 로브·거대 마법봉",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 165,
+          "changed_ratio": 0.917,
+          "file": "10/15.png"
+        },
+        "22": {
+          "class_id": 22,
+          "class_name": "하이프리스트",
+          "tier": 4,
+          "source_sprite_id": 50,
+          "duplicate_group": [
+            8,
+            17,
+            22
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "금백 성의·태양 후광",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 163,
+          "changed_ratio": 0.926,
+          "file": "10/16.png"
+        },
+        "23": {
+          "class_id": 23,
+          "class_name": "세인트",
+          "tier": 4,
+          "source_sprite_id": 52,
+          "duplicate_group": [
+            23
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "10/17.png"
+        },
+        "24": {
+          "class_id": 24,
+          "class_name": "세이지",
+          "tier": 4,
+          "source_sprite_id": 51,
+          "duplicate_group": [
+            18,
+            24
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "현자 자색 로브·빛의 고리",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 149,
+          "changed_ratio": 0.819,
+          "file": "10/18.png"
+        },
+        "25": {
+          "class_id": 25,
+          "class_name": "팔라딘",
+          "tier": 4,
+          "source_sprite_id": 54,
+          "duplicate_group": [
+            13,
+            25
+          ],
+          "group_rank": 1,
+          "redesigned": true,
+          "feature": "백마·금빛 마갑·성창",
+          "protected_face_pixel_count": 17,
+          "changed_pixel_count": 142,
+          "changed_ratio": 0.654,
+          "file": "10/19.png"
+        },
+        "26": {
+          "class_id": 26,
+          "class_name": "소드마스터",
+          "tier": 4,
+          "source_sprite_id": 53,
+          "duplicate_group": [
+            4,
+            11,
+            26
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑진홍 갑옷·초대형 은검",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 164,
+          "changed_ratio": 0.872,
+          "file": "10/1A.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "source_sprite_id": 49,
+          "duplicate_group": [
+            3,
+            9,
+            19,
+            20,
+            21,
+            38
+          ],
+          "group_rank": 5,
+          "redesigned": true,
+          "feature": "흑자색 마도복·소환 문장",
+          "protected_face_pixel_count": 19,
+          "changed_pixel_count": 163,
+          "changed_ratio": 0.906,
+          "file": "10/26.png"
+        }
+      }
+    }
+  }
+}
