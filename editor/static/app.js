@@ -53,6 +53,10 @@ function genericSpritePath(classId, palette = 1) {
   return `/class-sprites/generic/${hexId(classId)}-p${palette}.png`;
 }
 
+function representativeSpritePath(classId) {
+  return `/class-sprites/representative/${hexId(classId)}-p1.png`;
+}
+
 function commanderSpritePath(commanderId, classId) {
   return `/class-sprites/commanders/${commanderId}/${hexId(classId)}-p1.png`;
 }
@@ -62,7 +66,9 @@ function spriteImage(classId, options = {}) {
     return '<span class="emptySprite">-</span>';
   }
   const palette = options.palette ?? 1;
-  const fallback = genericSpritePath(classId, palette);
+  const fallback = options.representative === false
+    ? genericSpritePath(classId, palette)
+    : representativeSpritePath(classId);
   const source = options.commanderId
     ? commanderSpritePath(options.commanderId, classId)
     : fallback;
@@ -94,9 +100,10 @@ function classOptions(selected, allowEmpty = false) {
   ).join("");
 }
 
-function scenarioPalette(record) {
-  if (record.role.includes("적군")) return 2;
-  if (record.role.includes("NPC")) return 0;
+function scenarioPalette() {
+  // These assets are extracted against the class-change screen's CRAM.
+  // Its other rows are not faction palettes, so p1 is the only canonical
+  // preview for allied, enemy, and NPC records alike.
   return 1;
 }
 
@@ -105,8 +112,18 @@ function mercenaryButton(classId, recordIndex, slot, palette) {
   return `
     <button class="assetChoice" type="button" data-merc-picker
       data-record-index="${recordIndex}" data-slot="${slot}">
-      ${spriteImage(classId, {palette})}
+      ${spriteImage(classId, {palette, representative: false})}
       <span>${info ? `${hexId(classId)} ${escapeHtml(info.ko)}` : "없음"}</span>
+    </button>`;
+}
+
+function classPickerButton(classId, attributes, options = {}) {
+  const info = classInfo(classId);
+  return `
+    <button class="assetChoice classChoice" type="button" data-class-picker
+      ${attributes}>
+      ${spriteImage(classId, options)}
+      <span>${hexId(classId)} ${escapeHtml(info.ko)}</span>
     </button>`;
 }
 
@@ -128,13 +145,14 @@ function renderScenario() {
     row.dataset.hidden = record.hidden;
     row.innerHTML = `
       <td>${record.index + 1}. ${escapeHtml(record.role)}</td>
-      <td class="spriteCell" data-record-sprite>
-        ${spriteImage(record.class_id, {palette, commanderId})}
-      </td>
       <td class="identity">${escapeHtml(record.name.ko)}
         <small>${escapeHtml(record.name.jp)}</small>
       </td>
-      <td><select data-field="class_id">${classOptions(record.class_id)}</select></td>
+      <td>${classPickerButton(
+        record.class_id,
+        `data-scenario-class data-record-index="${record.index}"`,
+        {palette, commanderId}
+      )}</td>
       <td><input data-field="level" type="number" min="0" max="255" value="${record.level}"></td>
       <td><input data-field="at" type="number" min="0" max="255" value="${record.at}"></td>
       <td><input data-field="df" type="number" min="0" max="255" value="${record.df}"></td>
@@ -270,11 +288,12 @@ function buildClassGraph(commander) {
   return {levels: levels.map(unique), edges};
 }
 
-function classNode(classId, level, commander) {
+function classNode(classId, level, commander, nextClassIds) {
   const info = classInfo(classId);
   const selected = selectedTreeClassId === classId ? " selected" : "";
+  const nextCandidate = nextClassIds.includes(classId) ? " nextCandidate" : "";
   return `
-    <button class="classNode${selected}" type="button"
+    <button class="classNode${selected}${nextCandidate}" type="button"
       data-tree-class="${classId}" data-node-id="${level}-${classId}">
       <span class="nodeSprite">
         ${spriteImage(classId, {commanderId: commander.commander_id})}
@@ -303,7 +322,10 @@ function drawClassEdges(edges) {
     const x2 = b.left - treeRect.left + classTree.scrollLeft;
     const y2 = b.top + b.height / 2 - treeRect.top + classTree.scrollTop;
     const bend = Math.max(28, (x2 - x1) / 2);
-    return `<path d="M ${x1} ${y1} C ${x1 + bend} ${y1}, ` +
+    const active = Number(edge.from.split("-")[1]) === selectedTreeClassId
+      ? ' class="active"'
+      : "";
+    return `<path${active} d="M ${x1} ${y1} C ${x1 + bend} ${y1}, ` +
       `${x2 - bend} ${y2}, ${x2} ${y2}"></path>`;
   }).join("");
 }
@@ -336,9 +358,14 @@ function renderClassInspector() {
   const hireRow = hireRowFor(classId);
   const choices = transition
     ? transition.candidates.map((candidate, slot) => `
-        <label>다음 클래스 ${slot + 1}
-          <select data-next-class="${slot}">${classOptions(candidate)}</select>
-        </label>`).join("")
+        <div class="nextClassChoice">
+          <span>선택 ${slot + 1}</span>
+          ${classPickerButton(
+            candidate,
+            `data-next-class-picker data-slot="${slot}"`,
+            {commanderId: commander.commander_id}
+          )}
+        </div>`).join("")
     : '<p class="terminalNote">이 경로에서 다음 클래스가 없는 종착 클래스입니다.</p>';
   classInspector.innerHTML = `
     <div class="inspectorTitle">
@@ -350,10 +377,18 @@ function renderClassInspector() {
       </div>
     </div>
     ${transition ? `
-      <label>현재 클래스
-        <select id="currentClassSelect">${classOptions(classId)}</select>
-      </label>
-      <div class="nextClassGrid">${choices}</div>
+      <div class="currentClassEditor">
+        <h3>현재 클래스</h3>
+        ${classPickerButton(
+          classId,
+          "data-current-class-picker",
+          {commanderId: commander.commander_id}
+        )}
+      </div>
+      <div class="nextClassEditor">
+        <h3>다음 클래스 ${transition.candidates.length}개</h3>
+        <div class="nextClassGrid">${choices}</div>
+      </div>
       <p class="offset">경로 ROM 0x${transition.offset.toString(16).toUpperCase()}</p>
     ` : choices}
     <div class="hireEditor">
@@ -366,22 +401,6 @@ function renderClassInspector() {
       <p class="offset">클래스 ROM 0x${hireRow.offset.toString(16).toUpperCase()}</p>
     </div>`;
   installSpriteFallbacks(classInspector);
-
-  const currentSelect = $("#currentClassSelect");
-  if (currentSelect) {
-    currentSelect.addEventListener("change", () => {
-      transition.current_class = Number(currentSelect.value);
-      selectedTreeClassId = transition.current_class;
-      renderClassRoutes();
-    });
-  }
-  classInspector.querySelectorAll("[data-next-class]").forEach(select => {
-    select.addEventListener("change", () => {
-      transition.candidates[Number(select.dataset.nextClass)] =
-        Number(select.value);
-      renderClassRoutes();
-    });
-  });
 }
 
 function renderClassRoutes() {
@@ -391,11 +410,17 @@ function renderClassRoutes() {
       !graph.levels.some(level => level.includes(selectedTreeClassId))) {
     selectedTreeClassId = graph.levels[0][0];
   }
+  const selectedTransition = commander.transitions.find(
+    entry => entry.current_class === selectedTreeClassId
+  );
+  const nextClassIds = selectedTransition?.candidates || [];
   classTree.innerHTML = `
     <svg id="classEdges" class="classEdges" aria-hidden="true"></svg>
     ${graph.levels.map((level, levelIndex) => `
       <div class="classTier" data-tier="${levelIndex + 1}">
-        ${level.map(classId => classNode(classId, levelIndex, commander)).join("")}
+        ${level.map(classId =>
+          classNode(classId, levelIndex, commander, nextClassIds)
+        ).join("")}
       </div>`).join("")}`;
   classTree.querySelectorAll("[data-tree-class]").forEach(node => {
     node.addEventListener("click", () => {
@@ -419,7 +444,9 @@ function renderPickerOptions() {
   if (!pickerState) return;
   const query = assetPickerSearch.value.trim().toLowerCase();
   const allowed = pickerState.allowedIds;
-  const rows = [{id: 255, ko: "없음", jp: ""}]
+  const rows = (pickerState.allowEmpty
+    ? [{id: 255, ko: "없음", jp: ""}]
+    : [])
     .concat(classModel.classes.filter(row => allowed.includes(row.id)))
     .filter(row => {
       if (!query) return true;
@@ -428,7 +455,11 @@ function renderPickerOptions() {
     });
   assetPickerOptions.innerHTML = rows.map(row => `
     <button type="button" class="pickerOption" data-picker-value="${row.id}">
-      ${spriteImage(row.id, {palette: pickerState.palette})}
+      ${spriteImage(row.id, {
+        palette: pickerState.palette,
+        commanderId: pickerState.commanderId,
+        representative: pickerState.representative,
+      })}
       <strong>${row.id === 255 ? "" : hexId(row.id)}</strong>
       <span>${escapeHtml(row.ko)}</span>
       <small>${escapeHtml(row.jp)}</small>
@@ -550,22 +581,34 @@ document.querySelectorAll(".tab").forEach(tab => {
   });
 });
 
-recordsBody.addEventListener("change", event => {
-  const select = event.target.closest('[data-field="class_id"]');
-  if (!select) return;
-  const row = select.closest("tr");
-  const record = scenarioModel.records[Number(row.dataset.index)];
-  record.class_id = Number(select.value);
-  renderScenario();
-});
-
 recordsBody.addEventListener("click", event => {
+  const classButton = event.target.closest("[data-scenario-class]");
+  if (classButton) {
+    const record = scenarioModel.records[Number(classButton.dataset.recordIndex)];
+    const commanderId = record.name.id >= 1 && record.name.id <= 10
+      ? record.name.id
+      : null;
+    openPicker(classButton, {
+      allowedIds: classModel.classes.map(row => row.id),
+      allowEmpty: false,
+      palette: scenarioPalette(record),
+      commanderId,
+      onSelect: classId => {
+        record.class_id = classId;
+        closePicker();
+        renderScenario();
+      },
+    });
+    return;
+  }
   const button = event.target.closest("[data-merc-picker]");
   if (!button) return;
   const record = scenarioModel.records[Number(button.dataset.recordIndex)];
   openPicker(button, {
-    allowedIds: classModel.classes.map(row => row.id),
-    palette: scenarioPalette(record),
+      allowedIds: classModel.classes.map(row => row.id),
+      allowEmpty: true,
+      palette: scenarioPalette(record),
+      representative: false,
     onSelect: classId => {
       record.mercenaries[Number(button.dataset.slot)] = classId;
       closePicker();
@@ -575,11 +618,48 @@ recordsBody.addEventListener("click", event => {
 });
 
 classInspector.addEventListener("click", event => {
+  const commander = activeCommander();
+  const transition = commander.transitions.find(
+    entry => entry.current_class === selectedTreeClassId
+  );
+  const currentButton = event.target.closest("[data-current-class-picker]");
+  if (currentButton && transition) {
+    openPicker(currentButton, {
+      allowedIds: classModel.classes.map(row => row.id),
+      allowEmpty: false,
+      palette: 1,
+      commanderId: commander.commander_id,
+      onSelect: classId => {
+        transition.current_class = classId;
+        selectedTreeClassId = classId;
+        closePicker();
+        renderClassRoutes();
+      },
+    });
+    return;
+  }
+  const nextButton = event.target.closest("[data-next-class-picker]");
+  if (nextButton && transition) {
+    openPicker(nextButton, {
+      allowedIds: classModel.classes.map(row => row.id),
+      allowEmpty: false,
+      palette: 1,
+      commanderId: commander.commander_id,
+      onSelect: classId => {
+        transition.candidates[Number(nextButton.dataset.slot)] = classId;
+        closePicker();
+        renderClassRoutes();
+      },
+    });
+    return;
+  }
   const button = event.target.closest("[data-hire-picker]");
   if (!button) return;
   openPicker(button, {
-    allowedIds: classModel.hire_class_ids,
-    palette: 1,
+      allowedIds: classModel.hire_class_ids,
+      allowEmpty: true,
+      palette: 1,
+      representative: false,
     onSelect: classId => {
       hireRowFor(selectedTreeClassId)
         .hire_class_ids[Number(button.dataset.slot)] = classId;
@@ -599,7 +679,9 @@ assetPickerOptions.addEventListener("click", event => {
 document.addEventListener("pointerdown", event => {
   if (!assetPicker.hidden &&
       !assetPicker.contains(event.target) &&
-      !event.target.closest("[data-merc-picker], [data-hire-picker]")) {
+      !event.target.closest(
+        "[data-class-picker], [data-merc-picker], [data-hire-picker]"
+      )) {
     closePicker();
   }
 });

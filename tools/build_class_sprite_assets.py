@@ -31,6 +31,21 @@ PALETTES = (
      0xC62, 0xC22, 0xA28, 0xE82, 0xC44, 0xE64, 0xEA8, 0xEEE),
 )
 
+# Bald uses a second Fighter record (0x2E) that otherwise looks identical to
+# the generic imperial Fighter (0x2D). Give only his representative editor
+# preview distinctive violet armor with a gold-rimmed crimson shield while
+# preserving the white blade and every ROM-backed pixel.
+REPRESENTATIVE_PALETTE_OVERRIDES = {
+    0x2E: {
+        0x4: 0xE6C,  # light violet armor
+        0x5: 0xA04,  # deep violet armor
+        0x8: 0x00E,  # crimson shield center
+        0x9: 0x006,  # crimson shield shadow
+        0xE: 0x624,  # dark armor outline
+        0xF: 0xEAC,  # pale lavender highlight
+    },
+}
+
 
 def be16(data: bytes, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 2], "big")
@@ -52,12 +67,22 @@ def genesis_color(value: int) -> tuple[int, int, int, int]:
     )
 
 
-def render_sprite(data: bytes, sprite_id: int, palette_id: int) -> Image.Image:
+def render_sprite(
+    data: bytes,
+    sprite_id: int,
+    palette_id: int,
+    *,
+    palette_override: dict[int, int] | None = None,
+) -> Image.Image:
     start = SPRITE_GRAPHICS + sprite_id * SPRITE_BYTES
     payload = data[start : start + SPRITE_BYTES]
     if len(payload) != SPRITE_BYTES:
         raise ValueError(f"sprite 0x{sprite_id:02X} exceeds the ROM")
-    palette = [genesis_color(value) for value in PALETTES[palette_id]]
+    palette_values = list(PALETTES[palette_id])
+    if palette_override:
+        for color_index, value in palette_override.items():
+            palette_values[color_index] = value
+    palette = [genesis_color(value) for value in palette_values]
     palette[0] = (0, 0, 0, 0)
     image = Image.new("RGBA", (16, 16))
     for tile_index in range(4):
@@ -116,6 +141,7 @@ def build_assets(
         }
 
     commanders: dict[str, object] = {}
+    representative_sprite_ids: dict[int, int] = {}
     for commander_id in range(1, COMMANDER_COUNT + 1):
         commander_dir = output_dir / "commanders" / str(commander_id)
         commander_dir.mkdir(parents=True, exist_ok=True)
@@ -123,6 +149,7 @@ def build_assets(
         for class_id, sprite_id in sorted(
             commander_sprite_map(data, commander_id).items()
         ):
+            representative_sprite_ids.setdefault(class_id, sprite_id)
             target = commander_dir / f"{class_id:02X}-p1.png"
             render_sprite(data, sprite_id, 1).save(target, optimize=True)
             rows[str(class_id)] = {
@@ -131,14 +158,46 @@ def build_assets(
             }
         commanders[str(commander_id)] = rows
 
+    # The stock generic table deliberately maps many playable commander
+    # classes to the Aniki placeholder (sprite 0x18). Their real map sprites
+    # live in the per-commander override tables above. Give class-only editor
+    # pickers a ROM-backed representative instead of exposing that placeholder.
+    representative_dir = output_dir / "representative"
+    representative_dir.mkdir(parents=True, exist_ok=True)
+    representatives: dict[str, object] = {}
+    for class_id in range(CLASS_COUNT):
+        generic_sprite_id = int(generic[str(class_id)]["sprite_id"])
+        sprite_id = (
+            representative_sprite_ids[class_id]
+            if generic_sprite_id == 0x18 and class_id in representative_sprite_ids
+            else generic_sprite_id
+        )
+        target = representative_dir / f"{class_id:02X}-p1.png"
+        palette_override = REPRESENTATIVE_PALETTE_OVERRIDES.get(class_id)
+        render_sprite(
+            data,
+            sprite_id,
+            1,
+            palette_override=palette_override,
+        ).save(target, optimize=True)
+        representatives[str(class_id)] = {
+            "sprite_id": sprite_id,
+            "generic_sprite_id": generic_sprite_id,
+            "uses_commander_override": sprite_id != generic_sprite_id,
+            "uses_palette_override": palette_override is not None,
+            "file": str(target.relative_to(output_dir)),
+        }
+
     manifest = {
         "generated_from": str(rom_path.relative_to(ROOT)),
         "graphics_base": f"0x{SPRITE_GRAPHICS:06X}",
         "generic_table": f"0x{GENERIC_SPRITE_TABLE:06X}",
         "commander_pointer_table": f"0x{COMMANDER_SPRITE_POINTER_TABLE:06X}",
         "generic_class_count": len(generic),
+        "representative_class_count": len(representatives),
         "commander_count": len(commanders),
         "generic": generic,
+        "representatives": representatives,
         "commanders": commanders,
     }
     output_dir.mkdir(parents=True, exist_ok=True)

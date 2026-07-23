@@ -4,6 +4,7 @@
   "generic_table": "0x05DDE6",
   "commander_pointer_table": "0x05DB80",
   "generic_class_count": 157,
+  "representative_class_count": 157,
   "commander_count": 10,
   "generic": {
     "0": {
@@ -1418,6 +1419,1107 @@
         "generic/9C-p2.png",
         "generic/9C-p3.png"
       ]
+    }
+  },
+  "representatives": {
+    "0": {
+      "sprite_id": 24,
+      "generic_sprite_id": 24,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/00-p1.png"
+    },
+    "1": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/01-p1.png"
+    },
+    "2": {
+      "sprite_id": 25,
+      "generic_sprite_id": 25,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/02-p1.png"
+    },
+    "3": {
+      "sprite_id": 55,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/03-p1.png"
+    },
+    "4": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/04-p1.png"
+    },
+    "5": {
+      "sprite_id": 8,
+      "generic_sprite_id": 8,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/05-p1.png"
+    },
+    "6": {
+      "sprite_id": 97,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/06-p1.png"
+    },
+    "7": {
+      "sprite_id": 75,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/07-p1.png"
+    },
+    "8": {
+      "sprite_id": 25,
+      "generic_sprite_id": 25,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/08-p1.png"
+    },
+    "9": {
+      "sprite_id": 29,
+      "generic_sprite_id": 29,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/09-p1.png"
+    },
+    "10": {
+      "sprite_id": 29,
+      "generic_sprite_id": 29,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/0A-p1.png"
+    },
+    "11": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/0B-p1.png"
+    },
+    "12": {
+      "sprite_id": 8,
+      "generic_sprite_id": 8,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/0C-p1.png"
+    },
+    "13": {
+      "sprite_id": 8,
+      "generic_sprite_id": 8,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/0D-p1.png"
+    },
+    "14": {
+      "sprite_id": 96,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/0E-p1.png"
+    },
+    "15": {
+      "sprite_id": 98,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/0F-p1.png"
+    },
+    "16": {
+      "sprite_id": 76,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/10-p1.png"
+    },
+    "17": {
+      "sprite_id": 37,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/11-p1.png"
+    },
+    "18": {
+      "sprite_id": 31,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/12-p1.png"
+    },
+    "19": {
+      "sprite_id": 31,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/13-p1.png"
+    },
+    "20": {
+      "sprite_id": 31,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/14-p1.png"
+    },
+    "21": {
+      "sprite_id": 38,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/15-p1.png"
+    },
+    "22": {
+      "sprite_id": 37,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/16-p1.png"
+    },
+    "23": {
+      "sprite_id": 32,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/17-p1.png"
+    },
+    "24": {
+      "sprite_id": 39,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/18-p1.png"
+    },
+    "25": {
+      "sprite_id": 42,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/19-p1.png"
+    },
+    "26": {
+      "sprite_id": 30,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/1A-p1.png"
+    },
+    "27": {
+      "sprite_id": 34,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/1B-p1.png"
+    },
+    "28": {
+      "sprite_id": 36,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/1C-p1.png"
+    },
+    "29": {
+      "sprite_id": 35,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/1D-p1.png"
+    },
+    "30": {
+      "sprite_id": 98,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/1E-p1.png"
+    },
+    "31": {
+      "sprite_id": 76,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/1F-p1.png"
+    },
+    "32": {
+      "sprite_id": 33,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/20-p1.png"
+    },
+    "33": {
+      "sprite_id": 92,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/21-p1.png"
+    },
+    "34": {
+      "sprite_id": 33,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/22-p1.png"
+    },
+    "35": {
+      "sprite_id": 92,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/23-p1.png"
+    },
+    "36": {
+      "sprite_id": 98,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/24-p1.png"
+    },
+    "37": {
+      "sprite_id": 37,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/25-p1.png"
+    },
+    "38": {
+      "sprite_id": 39,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/26-p1.png"
+    },
+    "39": {
+      "sprite_id": 95,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/27-p1.png"
+    },
+    "40": {
+      "sprite_id": 38,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/28-p1.png"
+    },
+    "41": {
+      "sprite_id": 34,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/29-p1.png"
+    },
+    "42": {
+      "sprite_id": 76,
+      "generic_sprite_id": 24,
+      "uses_commander_override": true,
+      "uses_palette_override": false,
+      "file": "representative/2A-p1.png"
+    },
+    "43": {
+      "sprite_id": 25,
+      "generic_sprite_id": 25,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/2B-p1.png"
+    },
+    "44": {
+      "sprite_id": 27,
+      "generic_sprite_id": 27,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/2C-p1.png"
+    },
+    "45": {
+      "sprite_id": 126,
+      "generic_sprite_id": 126,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/2D-p1.png"
+    },
+    "46": {
+      "sprite_id": 126,
+      "generic_sprite_id": 126,
+      "uses_commander_override": false,
+      "uses_palette_override": true,
+      "file": "representative/2E-p1.png"
+    },
+    "47": {
+      "sprite_id": 127,
+      "generic_sprite_id": 127,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/2F-p1.png"
+    },
+    "48": {
+      "sprite_id": 128,
+      "generic_sprite_id": 128,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/30-p1.png"
+    },
+    "49": {
+      "sprite_id": 129,
+      "generic_sprite_id": 129,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/31-p1.png"
+    },
+    "50": {
+      "sprite_id": 130,
+      "generic_sprite_id": 130,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/32-p1.png"
+    },
+    "51": {
+      "sprite_id": 131,
+      "generic_sprite_id": 131,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/33-p1.png"
+    },
+    "52": {
+      "sprite_id": 132,
+      "generic_sprite_id": 132,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/34-p1.png"
+    },
+    "53": {
+      "sprite_id": 133,
+      "generic_sprite_id": 133,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/35-p1.png"
+    },
+    "54": {
+      "sprite_id": 134,
+      "generic_sprite_id": 134,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/36-p1.png"
+    },
+    "55": {
+      "sprite_id": 171,
+      "generic_sprite_id": 171,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/37-p1.png"
+    },
+    "56": {
+      "sprite_id": 135,
+      "generic_sprite_id": 135,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/38-p1.png"
+    },
+    "57": {
+      "sprite_id": 136,
+      "generic_sprite_id": 136,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/39-p1.png"
+    },
+    "58": {
+      "sprite_id": 137,
+      "generic_sprite_id": 137,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/3A-p1.png"
+    },
+    "59": {
+      "sprite_id": 138,
+      "generic_sprite_id": 138,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/3B-p1.png"
+    },
+    "60": {
+      "sprite_id": 139,
+      "generic_sprite_id": 139,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/3C-p1.png"
+    },
+    "61": {
+      "sprite_id": 140,
+      "generic_sprite_id": 140,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/3D-p1.png"
+    },
+    "62": {
+      "sprite_id": 141,
+      "generic_sprite_id": 141,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/3E-p1.png"
+    },
+    "63": {
+      "sprite_id": 142,
+      "generic_sprite_id": 142,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/3F-p1.png"
+    },
+    "64": {
+      "sprite_id": 143,
+      "generic_sprite_id": 143,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/40-p1.png"
+    },
+    "65": {
+      "sprite_id": 144,
+      "generic_sprite_id": 144,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/41-p1.png"
+    },
+    "66": {
+      "sprite_id": 145,
+      "generic_sprite_id": 145,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/42-p1.png"
+    },
+    "67": {
+      "sprite_id": 172,
+      "generic_sprite_id": 172,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/43-p1.png"
+    },
+    "68": {
+      "sprite_id": 146,
+      "generic_sprite_id": 146,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/44-p1.png"
+    },
+    "69": {
+      "sprite_id": 169,
+      "generic_sprite_id": 169,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/45-p1.png"
+    },
+    "70": {
+      "sprite_id": 147,
+      "generic_sprite_id": 147,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/46-p1.png"
+    },
+    "71": {
+      "sprite_id": 148,
+      "generic_sprite_id": 148,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/47-p1.png"
+    },
+    "72": {
+      "sprite_id": 149,
+      "generic_sprite_id": 149,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/48-p1.png"
+    },
+    "73": {
+      "sprite_id": 177,
+      "generic_sprite_id": 177,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/49-p1.png"
+    },
+    "74": {
+      "sprite_id": 176,
+      "generic_sprite_id": 176,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/4A-p1.png"
+    },
+    "75": {
+      "sprite_id": 150,
+      "generic_sprite_id": 150,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/4B-p1.png"
+    },
+    "76": {
+      "sprite_id": 151,
+      "generic_sprite_id": 151,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/4C-p1.png"
+    },
+    "77": {
+      "sprite_id": 170,
+      "generic_sprite_id": 170,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/4D-p1.png"
+    },
+    "78": {
+      "sprite_id": 175,
+      "generic_sprite_id": 175,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/4E-p1.png"
+    },
+    "79": {
+      "sprite_id": 173,
+      "generic_sprite_id": 173,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/4F-p1.png"
+    },
+    "80": {
+      "sprite_id": 152,
+      "generic_sprite_id": 152,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/50-p1.png"
+    },
+    "81": {
+      "sprite_id": 153,
+      "generic_sprite_id": 153,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/51-p1.png"
+    },
+    "82": {
+      "sprite_id": 154,
+      "generic_sprite_id": 154,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/52-p1.png"
+    },
+    "83": {
+      "sprite_id": 155,
+      "generic_sprite_id": 155,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/53-p1.png"
+    },
+    "84": {
+      "sprite_id": 156,
+      "generic_sprite_id": 156,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/54-p1.png"
+    },
+    "85": {
+      "sprite_id": 157,
+      "generic_sprite_id": 157,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/55-p1.png"
+    },
+    "86": {
+      "sprite_id": 158,
+      "generic_sprite_id": 158,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/56-p1.png"
+    },
+    "87": {
+      "sprite_id": 159,
+      "generic_sprite_id": 159,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/57-p1.png"
+    },
+    "88": {
+      "sprite_id": 160,
+      "generic_sprite_id": 160,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/58-p1.png"
+    },
+    "89": {
+      "sprite_id": 161,
+      "generic_sprite_id": 161,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/59-p1.png"
+    },
+    "90": {
+      "sprite_id": 162,
+      "generic_sprite_id": 162,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/5A-p1.png"
+    },
+    "91": {
+      "sprite_id": 163,
+      "generic_sprite_id": 163,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/5B-p1.png"
+    },
+    "92": {
+      "sprite_id": 164,
+      "generic_sprite_id": 164,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/5C-p1.png"
+    },
+    "93": {
+      "sprite_id": 165,
+      "generic_sprite_id": 165,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/5D-p1.png"
+    },
+    "94": {
+      "sprite_id": 166,
+      "generic_sprite_id": 166,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/5E-p1.png"
+    },
+    "95": {
+      "sprite_id": 167,
+      "generic_sprite_id": 167,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/5F-p1.png"
+    },
+    "96": {
+      "sprite_id": 174,
+      "generic_sprite_id": 174,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/60-p1.png"
+    },
+    "97": {
+      "sprite_id": 168,
+      "generic_sprite_id": 168,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/61-p1.png"
+    },
+    "98": {
+      "sprite_id": 1,
+      "generic_sprite_id": 1,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/62-p1.png"
+    },
+    "99": {
+      "sprite_id": 2,
+      "generic_sprite_id": 2,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/63-p1.png"
+    },
+    "100": {
+      "sprite_id": 3,
+      "generic_sprite_id": 3,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/64-p1.png"
+    },
+    "101": {
+      "sprite_id": 4,
+      "generic_sprite_id": 4,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/65-p1.png"
+    },
+    "102": {
+      "sprite_id": 5,
+      "generic_sprite_id": 5,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/66-p1.png"
+    },
+    "103": {
+      "sprite_id": 6,
+      "generic_sprite_id": 6,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/67-p1.png"
+    },
+    "104": {
+      "sprite_id": 7,
+      "generic_sprite_id": 7,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/68-p1.png"
+    },
+    "105": {
+      "sprite_id": 8,
+      "generic_sprite_id": 8,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/69-p1.png"
+    },
+    "106": {
+      "sprite_id": 9,
+      "generic_sprite_id": 9,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/6A-p1.png"
+    },
+    "107": {
+      "sprite_id": 10,
+      "generic_sprite_id": 10,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/6B-p1.png"
+    },
+    "108": {
+      "sprite_id": 11,
+      "generic_sprite_id": 11,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/6C-p1.png"
+    },
+    "109": {
+      "sprite_id": 12,
+      "generic_sprite_id": 12,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/6D-p1.png"
+    },
+    "110": {
+      "sprite_id": 13,
+      "generic_sprite_id": 13,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/6E-p1.png"
+    },
+    "111": {
+      "sprite_id": 14,
+      "generic_sprite_id": 14,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/6F-p1.png"
+    },
+    "112": {
+      "sprite_id": 15,
+      "generic_sprite_id": 15,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/70-p1.png"
+    },
+    "113": {
+      "sprite_id": 16,
+      "generic_sprite_id": 16,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/71-p1.png"
+    },
+    "114": {
+      "sprite_id": 99,
+      "generic_sprite_id": 99,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/72-p1.png"
+    },
+    "115": {
+      "sprite_id": 100,
+      "generic_sprite_id": 100,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/73-p1.png"
+    },
+    "116": {
+      "sprite_id": 101,
+      "generic_sprite_id": 101,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/74-p1.png"
+    },
+    "117": {
+      "sprite_id": 102,
+      "generic_sprite_id": 102,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/75-p1.png"
+    },
+    "118": {
+      "sprite_id": 103,
+      "generic_sprite_id": 103,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/76-p1.png"
+    },
+    "119": {
+      "sprite_id": 104,
+      "generic_sprite_id": 104,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/77-p1.png"
+    },
+    "120": {
+      "sprite_id": 105,
+      "generic_sprite_id": 105,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/78-p1.png"
+    },
+    "121": {
+      "sprite_id": 106,
+      "generic_sprite_id": 106,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/79-p1.png"
+    },
+    "122": {
+      "sprite_id": 107,
+      "generic_sprite_id": 107,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/7A-p1.png"
+    },
+    "123": {
+      "sprite_id": 108,
+      "generic_sprite_id": 108,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/7B-p1.png"
+    },
+    "124": {
+      "sprite_id": 109,
+      "generic_sprite_id": 109,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/7C-p1.png"
+    },
+    "125": {
+      "sprite_id": 110,
+      "generic_sprite_id": 110,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/7D-p1.png"
+    },
+    "126": {
+      "sprite_id": 111,
+      "generic_sprite_id": 111,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/7E-p1.png"
+    },
+    "127": {
+      "sprite_id": 112,
+      "generic_sprite_id": 112,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/7F-p1.png"
+    },
+    "128": {
+      "sprite_id": 113,
+      "generic_sprite_id": 113,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/80-p1.png"
+    },
+    "129": {
+      "sprite_id": 114,
+      "generic_sprite_id": 114,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/81-p1.png"
+    },
+    "130": {
+      "sprite_id": 115,
+      "generic_sprite_id": 115,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/82-p1.png"
+    },
+    "131": {
+      "sprite_id": 116,
+      "generic_sprite_id": 116,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/83-p1.png"
+    },
+    "132": {
+      "sprite_id": 117,
+      "generic_sprite_id": 117,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/84-p1.png"
+    },
+    "133": {
+      "sprite_id": 118,
+      "generic_sprite_id": 118,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/85-p1.png"
+    },
+    "134": {
+      "sprite_id": 119,
+      "generic_sprite_id": 119,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/86-p1.png"
+    },
+    "135": {
+      "sprite_id": 120,
+      "generic_sprite_id": 120,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/87-p1.png"
+    },
+    "136": {
+      "sprite_id": 121,
+      "generic_sprite_id": 121,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/88-p1.png"
+    },
+    "137": {
+      "sprite_id": 122,
+      "generic_sprite_id": 122,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/89-p1.png"
+    },
+    "138": {
+      "sprite_id": 123,
+      "generic_sprite_id": 123,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/8A-p1.png"
+    },
+    "139": {
+      "sprite_id": 124,
+      "generic_sprite_id": 124,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/8B-p1.png"
+    },
+    "140": {
+      "sprite_id": 125,
+      "generic_sprite_id": 125,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/8C-p1.png"
+    },
+    "141": {
+      "sprite_id": 17,
+      "generic_sprite_id": 17,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/8D-p1.png"
+    },
+    "142": {
+      "sprite_id": 18,
+      "generic_sprite_id": 18,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/8E-p1.png"
+    },
+    "143": {
+      "sprite_id": 19,
+      "generic_sprite_id": 19,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/8F-p1.png"
+    },
+    "144": {
+      "sprite_id": 20,
+      "generic_sprite_id": 20,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/90-p1.png"
+    },
+    "145": {
+      "sprite_id": 21,
+      "generic_sprite_id": 21,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/91-p1.png"
+    },
+    "146": {
+      "sprite_id": 22,
+      "generic_sprite_id": 22,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/92-p1.png"
+    },
+    "147": {
+      "sprite_id": 23,
+      "generic_sprite_id": 23,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/93-p1.png"
+    },
+    "148": {
+      "sprite_id": 24,
+      "generic_sprite_id": 24,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/94-p1.png"
+    },
+    "149": {
+      "sprite_id": 24,
+      "generic_sprite_id": 24,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/95-p1.png"
+    },
+    "150": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/96-p1.png"
+    },
+    "151": {
+      "sprite_id": 25,
+      "generic_sprite_id": 25,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/97-p1.png"
+    },
+    "152": {
+      "sprite_id": 8,
+      "generic_sprite_id": 8,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/98-p1.png"
+    },
+    "153": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/99-p1.png"
+    },
+    "154": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/9A-p1.png"
+    },
+    "155": {
+      "sprite_id": 28,
+      "generic_sprite_id": 28,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/9B-p1.png"
+    },
+    "156": {
+      "sprite_id": 29,
+      "generic_sprite_id": 29,
+      "uses_commander_override": false,
+      "uses_palette_override": false,
+      "file": "representative/9C-p1.png"
     }
   },
   "commanders": {

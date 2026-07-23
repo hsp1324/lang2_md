@@ -148,6 +148,7 @@ td select { width: 138px; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.classChoice { width: 168px; }
 .assetPicker {
   position: fixed;
   z-index: 20;
@@ -187,7 +188,7 @@ td select { width: 138px; }
 .pickerOption small { color: #929c90; overflow: hidden; }
 .classWorkspace {
   display: grid;
-  grid-template-columns: minmax(680px, 1fr) 310px;
+  grid-template-columns: minmax(680px, 1fr) 460px;
   min-height: calc(100vh - 235px);
   border: 1px solid #424741;
 }
@@ -233,6 +234,10 @@ td select { width: 138px; }
   stroke: #667566;
   stroke-width: 2;
 }
+.classEdges path.active {
+  stroke: #70c98b;
+  stroke-width: 4;
+}
 .classTier {
   position: relative;
   z-index: 1;
@@ -259,6 +264,10 @@ td select { width: 138px; }
   background: #275f3a;
   border-color: #6cc187;
   box-shadow: 0 0 0 2px #6cc18755;
+}
+.classNode.nextCandidate {
+  border-color: #70c98b;
+  box-shadow: inset 4px 0 0 #70c98b;
 }
 .classNode strong, .classNode small {
   display: block;
@@ -296,7 +305,33 @@ td select { width: 138px; }
 .inspectorTitle p { margin: 4px 0 0; color: #99a196; font-size: 11px; }
 .inspectorSprite { width: 56px; height: 56px; }
 .inspectorSprite .pixelSprite { width: 48px; height: 48px; }
-.nextClassGrid { display: grid; gap: 8px; }
+.currentClassEditor, .nextClassEditor { margin-top: 15px; }
+.currentClassEditor h3, .nextClassEditor h3 { color: #dce7dc; }
+.currentClassEditor .classChoice { width: 100%; }
+.nextClassGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.nextClassChoice {
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid #4d5d4f;
+  background: #252a25;
+}
+.nextClassChoice > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #9eaa9d;
+  font-size: 11px;
+}
+.nextClassChoice .classChoice {
+  width: 100%;
+  min-height: 62px;
+  grid-template-columns: 44px minmax(0, 1fr);
+  padding: 3px;
+}
+.nextClassChoice .classChoice span { white-space: normal; }
 .hireEditor {
   margin-top: 18px;
   padding-top: 15px;
@@ -328,4 +363,5 @@ td select { width: 138px; }
     border-bottom: 1px solid #424741;
   }
   .classInspector { position: static; }
+  .nextClassGrid { grid-template-columns: 1fr; }
 }

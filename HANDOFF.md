@@ -8151,7 +8151,9 @@ contains 57 safe syllables as documented below and in
   the generic class ID. The provided external image chart is a visual/name
   cross-check only; ROM IDs remain authoritative.
 - `tools/build_item_icon_assets.py` crops all 37 verified shop captures at
-  X=24 and `Y=42+14*((id-1)%5)` into authentic 16x16 item icons. These and the
+  X=24 and `Y=42+16*((id-1)%5)` into authentic 16x16 item icons. The rejected
+  14-pixel pitch increasingly mixed adjacent rows and must not be restored.
+  These and the
   class sprites are editor display assets only; they do not patch ROM graphics.
 - The ten class-chain records are now rendered as their actual maximum
   five-tier branching tree: row 0 owns tier 1, rows 1..3 tier 2, rows 4..8
@@ -8162,8 +8164,9 @@ contains 57 safe syllables as documented below and in
   actual class IDs `62..71`. The apply code at `0x014C68..0x014CAC` ORs these
   into the commander's cumulative hire mask. `tools/class_hire_data.py` owns
   this conversion and rejects every other class ID.
-- The scenario table is now ordered deployment, character sprite, name, class,
-  stats, coordinates, and six mercenary slots. A shared custom picker shows
+- The scenario table is now ordered deployment, name, class,
+  stats, coordinates, and six mercenary slots; the class button includes its
+  sprite instead of duplicating a separate image column. A shared custom picker shows
   all 157 class IDs with ROM sprite, Korean name, and Japanese name; class
   unlock controls restrict the same picker to `62..71` plus none. The item
   table displays all 37 source icons.
@@ -8174,3 +8177,33 @@ contains 57 safe syllables as documented below and in
   byte-identical to production `FDC9`, SHA-256
   `7ad7d2199378380a6abb7bac94825799e57d7bf3f3122ded45225c7270a2b19c`.
   The focused data/editor suite now passes 50 tests.
+
+### Editor Representative Sprites And Duplicate Fighter IDs (2026-07-24)
+
+- The class-change CRAM rows are not allied/enemy/NPC faction palettes. The
+  editor now uses verified row `p1` for all scenario records, which removes the
+  false-color corruption previously visible on enemy and NPC sprites.
+  Mercenary/hire pickers still use generic class sprites. Commander and class
+  pickers prefer a commander override and otherwise use a representative
+  sprite.
+- The generic class sprite table deliberately points many playable commander
+  classes, including `03` and `0E..2A`, at Aniki placeholder sprite `0x18`.
+  `tools/build_class_sprite_assets.py` now emits 157 representative PNGs; only
+  those placeholder classes fall back to the first ROM commander override.
+  Actual classes `94` Aniki and `95` Builder keep their source generic Aniki
+  art. Do not treat the placeholder as proof that the class is unused.
+- Class IDs `2D` and `2E` both display Fighter and use generic sprite `0x7E`,
+  but their 28-byte records differ at `+0x0F`, `+0x10`, and `+0x13`. A complete
+  fixed-placement scan finds `2D` on twelve generic imperial commanders in
+  Scenarios 1, 2, 3, and 6, while `2E` appears only on Bald in Scenario 1.
+  Scenario LV/AT/DF belong to the 36-byte placement records, not these class
+  records. Only verified class-record hire bytes `+0x1A/+0x1B` remain editable.
+- To make the otherwise identical IDs legible in the editor, representative
+  `2E` alone uses violet armor and a red shield center while preserving its
+  white blade, gold/brown shield rim, ROM sprite ID, and pixel layout. This is
+  an editor PNG palette override and does not change in-game graphics.
+- The scenario table no longer duplicates a separate image column: its class
+  button owns both the sprite and ID/name. The class inspector shows all three
+  immediate candidates as explicit image buttons, highlights the selected
+  outgoing edges, and gives the inspector enough width to keep the candidates
+  unambiguous.
