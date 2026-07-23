@@ -325,7 +325,11 @@ class NameEntryResourceTests(unittest.TestCase):
             routine = (
                 builder.BYTE_UI_ENDING_RESULT_RENDER_ROUTINE
                 if offset == builder.BYTE_UI_ENDING_RESULT_RENDER_CALL
-                else builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
+                else (
+                    builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE
+                    if offset == builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL
+                    else builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
+                )
             )
             self.assertEqual(
                 data[offset : offset + 6],
@@ -338,7 +342,9 @@ class NameEntryResourceTests(unittest.TestCase):
                 builder.BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
             ],
             bytes.fromhex("4E F9")
-            + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+            + builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE.to_bytes(
+                4, "big"
+            ),
         )
         self.assertEqual(
             data[
@@ -659,6 +665,50 @@ class NameEntryResourceTests(unittest.TestCase):
         )
         self.assertIn(bytes.fromhex("D4 FC 00 02 35 81 00 00"), renderer)
 
+    def test_map_status_direct_paths_use_dynamic_name_and_class_tiles(self):
+        renderer = builder._build_byte_ui_dynamic_direct_map_renderer()
+        self.assertIn(bytes.fromhex("B3 FC 00 06 18 E8"), renderer)
+        self.assertIn(bytes.fromhex("B3 FC 00 05 E6 D6"), renderer)
+        self.assertIn(bytes.fromhex("B3 FC 00 05 E5 CA"), renderer)
+        self.assertIn(bytes.fromhex("3C 3C 05 D8"), renderer)
+        self.assertIn(bytes.fromhex("3C 3C 05 E0"), renderer)
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big"),
+            renderer,
+        )
+        self.assertIn(bytes.fromhex("2F 00 42 40 10 19"), renderer)
+        self.assertIn(bytes.fromhex("32 00 20 1F 52 46"), renderer)
+        self.assertIn(
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+            renderer,
+        )
+        self.assertLessEqual(
+            builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE + len(renderer),
+            builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT,
+        )
+
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        builder.patch_byte_ui_strings(data)
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL :
+                builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL + 6
+            ],
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_DIRECT_MAP_RENDER_HOOK :
+                builder.BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
+            ],
+            bytes.fromhex("4E F9")
+            + builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
+
     def test_ending_result_renderer_restores_overwritten_extension_banks(self):
         self.assertEqual(
             builder.BYTE_UI_ENDING_RESULT_RELOAD_SEGMENT_INDICES,
@@ -709,13 +759,22 @@ class NameEntryResourceTests(unittest.TestCase):
             + builder.BYTE_UI_ENDING_RESULT_RENDER_ROUTINE.to_bytes(4, "big"),
         )
         for offset in set(builder.BYTE_UI_DIRECT_MAP_RENDER_CALLS) - {
-            builder.BYTE_UI_ENDING_RESULT_RENDER_CALL
+            builder.BYTE_UI_ENDING_RESULT_RENDER_CALL,
+            builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL,
         }:
             self.assertEqual(
                 data[offset : offset + 6],
                 bytes.fromhex("4E B9")
                 + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
             )
+        self.assertEqual(
+            data[
+                builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL :
+                builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL + 6
+            ],
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big"),
+        )
 
     def test_ending_result_restores_final_bank_after_character_graphics(self):
         routine = builder._build_byte_ui_ending_result_final_bank_loader()

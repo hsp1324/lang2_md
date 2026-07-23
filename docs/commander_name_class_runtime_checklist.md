@@ -45,6 +45,38 @@ Production `6E2C`는 원본 `JSR 0x99B2`가 확인된 `0x00F176`, `0x00F330`,
 `turn4_status_sheet.png`까지이며, 재개 가능한 상태는
 `captures/analysis/6e2c_s01_turn5_command_clean.gst`이다.
 
+## Direct Status-Path Regression
+
+`6E2C` 이후에도 일부 하단 상태 갱신은 동적 맵 정보 경로가 아니라 원본
+`0x0105BC` 직접 렌더러를 호출했다. 이 경로는 이름·클래스 문자열이 올바른데도
+Window 타일맵에 고정 글꼴 ID를 기록하므로, 해당 고정 타일이 지도/전투 그래픽에
+덮이면 `스`, `크`, `렌`, `가`, `터` 같은 특정 칸만 다시 깨질 수 있었다.
+
+Production `4234`는 이름 테이블 `0x0618E8`과 클래스 테이블
+`0x05E6D6/0x05E5CA`에 한해 `0x2B88C0` 동적 직접 렌더러를 사용한다.
+`0x01042E/0x010444`의 숨은 BSR 경로와 `0x01B546` 초상화 대사 갱신을
+포함하며, 후일담 다중 행 렌더러에는 적용하지 않는다. 각 글리프 호출 전후로
+목적지 오프셋 D0를 보존해야 한다. 이 보존이 빠진 첫 구현은 상태창 작업 RAM
+밖에 기록해 리셋됐으며 폐기했다.
+
+현재 빌드의 필수 회귀 결과는 다음과 같다.
+
+| Scenario | Side/type | Name / class | Result |
+| --- | --- | --- | --- |
+| 21 probe `5E20` | 적 고정 레코드 | 레스터 / 매직나이트 | 통과 |
+| 21 probe `5E20` | 적 고정 레코드 | 서큐버스 / 서큐버스 | 통과 |
+| 21 probe `5E20` | 적 고정 레코드 | 제시카 / 비숍 | 통과 |
+| 1 production `4234` | 적 지휘관 | 발드 / 파이터 | 턴 5·6 통과 |
+| 1 production `4234` | 적 병사 | 발드 / 창병 | 턴 5·6 통과 |
+
+대표 캡처는 `captures/analysis/5e20_s21_enemy_status_sheet.png`,
+`captures/analysis/4234_s01_enemy_commander_soldiers_status.png`,
+`captures/run/4234_s01_turn6_enemy_target.png`,
+`captures/run/4234_s01_turn6_enemy_soldier.png`이다. 저장 상태의 하단 행도
+이름에 `0x5D8..`, 클래스에 `0x5E0..`를 사용함을 확인했다. 완료 직전의
+불완전 S21 GST가 구형 ROM에서도 표시를 끄는 검은 화면은 합격/실패 판정에
+사용하지 않는다.
+
 ## Scenario 21 Shared-VRAM Regression
 
 일본 원본의 고정 적군/NPC 레코드는 다음과 같다.

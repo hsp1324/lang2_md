@@ -435,6 +435,8 @@ BYTE_UI_MAP_INFO_RENDER_ROUTINE = 0x2B7700
 BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE = 0x2B7780
 BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE = 0x2B77A0
 BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
+BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE = 0x2B88C0
+BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT = 0x2B9000
 BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
@@ -539,6 +541,7 @@ BYTE_UI_MAP_INFO_RENDER_ROUTINE_BY_CALL = {
 BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 02 11 5E")
 BYTE_UI_DIRECT_MAP_RENDER_CALLS = (0x01B546, 0x01CBA6, 0x01CBBC)
 BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL = bytes.fromhex("4E B9 00 01 05 BC")
+BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL = 0x01B546
 BYTE_UI_DIRECT_MAP_RENDER_HOOK = 0x0105BC
 BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL = bytes.fromhex("48 E7 C0 60 B3 FC")
 BYTE_UI_ENDING_RESULT_RENDER_CALL = 0x01CBA6
@@ -5218,6 +5221,66 @@ def _build_byte_ui_direct_map_renderer() -> bytes:
     return code.finish()
 
 
+def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
+    # The stock map-status paths at 0x1042E/0x10444 and the portrait-dialogue
+    # refresh at 0x1B546 use the direct table renderer rather than the command
+    # list renderer at 0x20EDA/0x20F08. Route only the name/class tables through
+    # the same dynamic scratch tiles; other callers (notably the multi-row
+    # ending result) must keep distinct static tiles for every visible row.
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")
+    code.emit("B3 FC 00 06 18 E8")
+    code.branch_word(0x6700, "name")
+    code.emit("B3 FC 00 05 E6 D6")
+    code.branch_word(0x6700, "class")
+    code.emit("B3 FC 00 05 E5 CA")
+    code.branch_word(0x6700, "class")
+    code.emit("4C DF 7F FF")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+
+    code.label("name")
+    code.emit("3C 3C 05 D8 0C 01 00 01")
+    code.branch_word(0x6600, "deref")
+    code.emit("43 F8 A5 CC")
+    code.branch_word(0x6000, "loop")
+
+    code.label("class")
+    code.emit("3C 3C 05 E0")
+    code.label("deref")
+    code.emit("02 41 00 FF D2 41 D2 41 22 71 10 00")
+
+    code.label("loop")
+    code.emit("42 41 12 19 0C 01 00 FF")
+    code.branch_word(0x6700, "done")
+    code.emit("0C 01 00 00")
+    code.branch_word(0x6600, "legacy")
+    code.emit("2F 00 42 40 10 19")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("32 00 20 1F 52 46")
+    code.branch_word(0x6000, "store")
+
+    code.label("legacy")
+    code.emit("0C 01 00 DE")
+    code.branch_word(0x6700, "mark")
+    code.emit("0C 01 00 DF")
+    code.branch_word(0x6700, "mark")
+    code.label("store")
+    code.emit("D4 FC 00 02 35 81 00 00")
+    code.branch_word(0x6000, "loop")
+    code.label("mark")
+    code.emit("34 81")
+    code.branch_word(0x6000, "loop")
+    code.label("done")
+    code.emit("4C DF 7F FF 4E 75")
+    return code.finish()
+
+
 def _build_byte_ui_prep_selected_name_renderer() -> bytes:
     code = _M68KCode()
     code.label("loop")
@@ -5823,6 +5886,7 @@ def install_byte_ui_extension(
     map_info_scratch_restore = _build_byte_ui_map_info_scratch_restore()
     map_graphics_load_wrapper = _build_byte_ui_map_graphics_load_wrapper()
     direct_map_renderer = _build_byte_ui_direct_map_renderer()
+    dynamic_direct_map_renderer = _build_byte_ui_dynamic_direct_map_renderer()
     prep_selected_name_renderer = _build_byte_ui_prep_selected_name_renderer()
     prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
@@ -5879,6 +5943,23 @@ def install_byte_ui_extension(
         if any(value != 0xFF for value in data[offset : offset + len(payload)]):
             raise ValueError(f"byte UI routine area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
+
+    dynamic_direct_end = (
+        BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE
+        + len(dynamic_direct_map_renderer)
+    )
+    if dynamic_direct_end > BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT:
+        raise ValueError("dynamic direct-map renderer exceeds reserved area")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE:dynamic_direct_end
+        ]
+    ):
+        raise ValueError("dynamic direct-map renderer area is not blank")
+    data[
+        BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE:dynamic_direct_end
+    ] = dynamic_direct_map_renderer
 
     if len(INLINE_DISCARD_PROMPT_SOURCE_BYTES) != INLINE_DISCARD_PROMPT_WIDTH:
         raise AssertionError("discard prompt source width constant is wrong")
@@ -6014,7 +6095,11 @@ def install_byte_ui_extension(
         routine = (
             BYTE_UI_ENDING_RESULT_RENDER_ROUTINE
             if offset == BYTE_UI_ENDING_RESULT_RENDER_CALL
-            else BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
+            else (
+                BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE
+                if offset == BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_CALL
+                else BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
+            )
         )
         data[offset : offset + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
     if data[
@@ -6049,7 +6134,10 @@ def install_byte_ui_extension(
         raise ValueError("direct-map byte renderer entry changed")
     data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
-    ] = bytes.fromhex("4E F9") + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+    ] = (
+        bytes.fromhex("4E F9")
+        + BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
+    )
     if data[
         BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK :
         BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK + 6

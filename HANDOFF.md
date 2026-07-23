@@ -7723,3 +7723,53 @@ contains 57 safe syllables as documented below and in
   or black-screened and is not evidence; resume a saved GST in a fresh isolated
   runtime instead. Unit tests lock the source hook bytes, destinations, guarded
   helper inputs, both name/class render calls, and non-overlapping code ranges.
+
+### Direct Map-Status Dynamic Tile Routing (2026-07-23)
+
+- The `6E2C` scratch restore fixed later VRAM overwrites, but mobile play and a
+  Scenario 21 BlastEm state proved a second independent defect. The visible
+  bottom row still contained static font tile IDs for some refreshes even while
+  `0x5D8..0x5E7` held the correct current glyphs. This explains why only cells
+  such as `스`, `크`, `렌`, `가`, and `터` could show map or animation pixels.
+- A write watchpoint on `$FFA770` traced the stale tilemap write to the direct
+  byte-UI renderer reached through the stock entry at `0x0105BC`. Hidden BSR
+  callers at `0x01042E/0x010444` and the portrait-dialogue refresh call at
+  `0x01B546` bypassed the already-dynamic map-info wrappers at
+  `0x020EDA/0x020F08`. The ending result calls at `0x01CBA6/0x01CBBC` have
+  different multi-row lifetime requirements and remain on their established
+  ending/static renderers.
+- Production `4234` installs the guarded direct renderer at `0x2B88C0`. It
+  recognizes only name table `0x0618E8` and class tables
+  `0x05E6D6/0x05E5CA`, resolves the selected string, writes name references to
+  `0x5D8..0x5DF` and class references to `0x5E0..0x5E7`, and falls back to the
+  prior direct renderer for every other table. The first live attempt omitted
+  preservation of D0, which is the destination tilemap offset (`0x48` in the
+  observed class call), wrote outside the work-RAM buffer, and reset. The final
+  routine saves/restores D0 around every dynamic glyph call; tests lock the
+  exact preservation sequence.
+- Scenario 21 completion derivative `5E20` refreshed and retained
+  `레스터/매직나이트`, `서큐버스/서큐버스`, and `제시카/비숍` without
+  colored cells. `captures/run/5e20_s21_d623_refreshed.png` and
+  `captures/analysis/5e20_s21_enemy_status_sheet.png` are representative. The
+  saved Window row uses `0x5D8..0x5DB` for the four-character Succubus name and
+  `0x5E0..0x5E3` for its class, rather than the stale static IDs.
+- The production ROM resumed the prior clean Scenario 1 multi-turn state,
+  selected enemy commander `발드/파이터` and adjacent enemy soldiers
+  `발드/창병`, ended turn 5, let all NPC/enemy movement and scrolling finish,
+  and selected them again on turn 6. Both fields remained complete and the
+  turn-6 GST still references name tiles `0x5D8..0x5D9` and class tiles
+  `0x5E0..0x5E1`. Evidence is
+  `captures/analysis/4234_s01_enemy_commander_soldiers_status.png`,
+  `captures/run/4234_s01_turn6_enemy_target.png`, and
+  `captures/run/4234_s01_turn6_enemy_soldier.png`.
+- `captures/run/5e20_s21_after_c_*.png` came from an incomplete Scenario 21
+  completion GST that also disables the display under older ROM `F388`; those
+  black frames are diagnostic rejects, not a regression result or pass.
+- Final production checksum is `4234`, SHA-256
+  `1ac285c236058219678abc5248704caad75bbfcbab3bba17bd53672a288eabb5`.
+  Scenario 21 completion derivative `5E20` has SHA-256
+  `77abba18be54c195845e6e131d29e8879bb8ace24c31d6a3bd8bae9146cfb927`.
+  All 660 unit tests pass. Probe checksum locks and the generated 37-item shop
+  inventory were refreshed from this production build; their accepted older
+  live captures remain surface-fingerprint evidence rather than current-ROM
+  checksum evidence.

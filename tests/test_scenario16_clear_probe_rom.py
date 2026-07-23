@@ -123,7 +123,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x444E,
+            0x1856,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -131,7 +131,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x443C,
+            0x1844,
         )
 
     def test_preserves_leon_laird_and_hidden_lana_source_records(self):
