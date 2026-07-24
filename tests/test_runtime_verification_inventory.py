@@ -519,6 +519,9 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/4591_s10_victory_17.png",
             "captures/run/4591_s10_victory_19.png",
             "captures/run/4591_s11_route_entry2.png",
+            "captures/run/949f_s10_command_ready.png",
+            "captures/run/949f_s10_death_event_01.png",
+            "captures/run/949f_s10_death_event_02.png",
         ):
             self.assertIn(capture, scenario10["captures"])
         self.assertEqual(scenario10["conditions"], "verified_current")
@@ -527,8 +530,11 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario10["battle_ui"], "verified_probe")
         self.assertEqual(scenario10["turn_events"], "verified_probe")
         self.assertEqual(scenario10["completion"], "verified_probe")
+        self.assertEqual(scenario10["branches_endings"], "verified_probe")
         self.assertIn("all ten hidden turn-event monster records", scenario10["note"])
         self.assertIn("POINT 2470P", scenario10["note"])
+        self.assertIn("runtime player group 0", scenario10["note"])
+        self.assertIn("젠장! 여기까지인가", scenario10["note"])
         self.assertEqual(scenario11["description"], "verified_current")
         for capture in (
             "captures/run/466a_s11_description_final_01.png",

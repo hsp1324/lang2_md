@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 782 passing
+unit tests: 786 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -8700,3 +8700,32 @@ contains 57 safe syllables as documented below and in
 - Production rebuild remains checksum `9DD0`; all 782 tests pass. The accepted
   code, inventory, and documentation changes do not alter distributed ROM
   bytes.
+
+### Scenario 10 Protagonist Defeat Branch (2026-07-24)
+
+- The visible conditions screen and Japanese scenario resources identify only
+  `주인공 사망` as the defeat condition. Pirate-loss and retreat records are
+  conditional dialogue, not additional GAME OVER conditions.
+- `tools/build_scenario10_clear_probe_rom.py --protagonist-death` preserves
+  all five player deployments and every one of the thirteen fixed records.
+  The Start wrapper at `0x3FEF00` changes only runtime player group 0 at
+  `$FFFF603C`, setting its defeated flag, HP 0, and hidden X coordinate before
+  tail-calling the stock Start handler. Production `9DD0` produces diagnostic
+  checksum `949F`.
+- Fresh selector playback entered Scenario 10, reviewed the route,
+  preparation, automatic deployment, opening, and an intact
+  `엘윈/파이터` command panel. Ending the turn reached
+  `captures/run/949f_s10_death_event_01.png` with
+  `엘윈: 젠장! 여기까지인가…`, followed by
+  `949f_s10_death_event_02.png` with GAME OVER. No Japanese text, broken
+  glyph, reset, or freeze appeared.
+- A new isolated runtime does not contain a scenario-selector SRAM merely
+  because `--reuse-runtime-state` is passed. Copy a validated manual-slot
+  `save.sram` into the ROM-stem directory first. In the preparation menu,
+  `Down` three times enters `지휘관배치`; four times wraps to
+  `용병고용`. The first misrouted hire attempt was discarded and is not
+  runtime evidence.
+- Scenario 10 normal completion and its only defeat ending are now live
+  covered, so `branches_endings` is `verified_probe`. Pirate casualty and
+  retreat dialogue remain conditional-page work rather than ending coverage.
+- Production rebuild remains checksum `9DD0`; all 786 tests pass.

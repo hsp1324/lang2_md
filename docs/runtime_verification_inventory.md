@@ -20,7 +20,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 7 | current | current | current | current | current | progressed | probe | probe | 64 |
 | 8 | current | current | current | current | probe | progressed | probe | probe | 47 |
 | 9 | current | current | current | current | current | progressed | probe | probe | 57 |
-| 10 | current | current | current | current | probe | probe | probe | pending | 47 |
+| 10 | current | current | current | current | probe | probe | probe | probe | 50 |
 | 11 | current | current | current | current | current | probe | probe | pending | 57 |
 | 12 | current | current | current | current | current | probe | probe | pending | 52 |
 | 13 | current | current | current | current | current | probe | probe | pending | 50 |
@@ -535,7 +535,7 @@ Production 489B verifies the Scenario 9 route map, all 20 text-bearing scrolling
 
 ### Scenario 10
 
-Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrolling frames of 랄강의 수호자, and the preparation endpoint. Japanese production playback confirmed the source phrase ダークロッドとよばれるマジックアイテム; the former literal 마법 물건 다크로드 is now translated naturally as 다크로드라는 마법 도구가 필요하다는 사실도 알게 되었다. The following sentence was rewrapped to prevent 수 from occupying a centered line alone. Earlier current captures verify the five-member commander/class roster, arrangement, all 12 opening confirmations, condition rows, the corrected 산적인가? event, and the no-action first turn through TURN 2. Diagnostic 4591, derived from production 6C85, validates the Japanese Scenario 10 header, deployment pointer, thirteen fixed records, and all ten hidden turn-event monster records before changing only their AT/DF, mercenaries, and Elwin's initial deployment. The stock TURN 3 event revealed all five Scylla, two Werewolf, and three Great Slime groups. Normal player attacks and unmodified pirate AI defeated every monster without writing completion/event flags, exercised turn-event and death dialogue, reached 전과보고 with POINT 2470P, saved a real 시나리오 11 slot, and entered the Scenario 11 route without reset or freeze. Live playback exposed two orphan-punctuation/word-wrap lines at 0x1960AC, 0x1960D4, 0x196DE4, and 0x196F1E; production 33EF shortens them. The same playback exposed animated/custom glyph collisions in shared AT가/DF가/MP가 level-up labels; 33EF restores the Japanese renderer's native Latin prefix tokens, but that correction still needs live recheck. A stricter follow-up builder now preserves stock deployment too. Alternate failure, pirate-loss, retreat, and other conditional branches remain pending.
+Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrolling frames of 랄강의 수호자, and the preparation endpoint. Japanese production playback confirmed the source phrase ダークロッドとよばれるマジックアイテム; the former literal 마법 물건 다크로드 is now translated naturally as 다크로드라는 마법 도구가 필요하다는 사실도 알게 되었다. The following sentence was rewrapped to prevent 수 from occupying a centered line alone. Earlier current captures verify the five-member commander/class roster, arrangement, all 12 opening confirmations, condition rows, the corrected 산적인가? event, and the no-action first turn through TURN 2. Diagnostic 4591, derived from production 6C85, validates the Japanese Scenario 10 header, deployment pointer, thirteen fixed records, and all ten hidden turn-event monster records before changing only their AT/DF, mercenaries, and Elwin's initial deployment. The stock TURN 3 event revealed all five Scylla, two Werewolf, and three Great Slime groups. Normal player attacks and unmodified pirate AI defeated every monster without writing completion/event flags, exercised turn-event and death dialogue, reached 전과보고 with POINT 2470P, saved a real 시나리오 11 slot, and entered the Scenario 11 route without reset or freeze. Live playback exposed two orphan-punctuation/word-wrap lines at 0x1960AC, 0x1960D4, 0x196DE4, and 0x196F1E; production 33EF shortens them. The same playback exposed animated/custom glyph collisions in shared AT가/DF가/MP가 level-up labels; 33EF restores the Japanese renderer's native Latin prefix tokens, but that correction still needs live recheck. A stricter follow-up builder now preserves stock deployment too. Current-production protagonist-death diagnostic 949F preserves all five player deployments and thirteen fixed records, marks only runtime player group 0 defeated through Start, and reaches Elwin's `젠장! 여기까지인가…` followed by GAME OVER without Japanese residue, broken glyphs, reset, or freeze. The visible and source-validated defeat condition is only protagonist death, so normal completion and the defeat ending are live-covered and branches_endings is verified_probe. Pirate-loss, retreat, and other conditional dialogue remain tracked separately rather than being claimed as alternate endings.
 
 - `captures/run/fd90_s10_brief_live_01.png`
 - `captures/run/fd90_s10_brief_live_14.png`
@@ -584,6 +584,9 @@ Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrollin
 - `captures/run/4591_s10_victory_17.png`
 - `captures/run/4591_s10_victory_19.png`
 - `captures/run/4591_s11_route_entry2.png`
+- `captures/run/949f_s10_command_ready.png`
+- `captures/run/949f_s10_death_event_01.png`
+- `captures/run/949f_s10_death_event_02.png`
 
 ### Scenario 11
 
