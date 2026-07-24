@@ -93,7 +93,7 @@
 - `tools/build_class_sprite_assets.py`: 일본판 ROM의 157개 클래스/용병 스프라이트와 10명 지휘관별 클래스 스프라이트를 에디터용 PNG로 추출합니다.
 - `tools/build_item_icon_assets.py`: 검증된 상점 캡처에서 37개 아이템 아이콘을 에디터용 PNG로 추출합니다.
 - `tools/build_test_class_sprite_assets.py`: 같은 그림을 공유하는 아군 상위 클래스만 재도색한 `테스트 체인지` 비교 PNG를 만듭니다. 묶음의 최저 클래스, 얼굴·머리·원본 외곽선은 보존하며 ROM에는 쓰지 않습니다.
-- `tools/build_ai_class_sprite_assets.py`: 생성형 원화 셀의 중앙 전경을 분리하고, 적응형 팔레트의 원화 블록을 집계해 16×16로 변환한 `AI 클래스` 비교 PNG를 만듭니다. 얼굴을 포함한 고정 영역은 없으며, 이 자산도 ROM 빌더와 분리되어 있습니다.
+- `tools/build_ai_class_sprite_assets.py`: 생성형 원화 셀의 중앙 전경을 분리하고, 1픽셀 장식색이 남는 최근접 샘플 위상을 고른 뒤 최대 범위 15색 팔레트로 16×16 `AI 클래스` 비교 PNG를 만듭니다. 얼굴을 포함한 고정 영역은 없으며, 이 자산도 ROM 빌더와 분리되어 있습니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
 - `script_extract/korean_records_google.json`: 기계 번역 기반 전체 대사 레코드입니다.

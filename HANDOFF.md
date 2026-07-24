@@ -8280,25 +8280,30 @@ contains 57 safe syllables as documented below and in
   pixelization, changing source gold/blue/white into unrelated violet/brown.
   A later attempt also restored a broad ROM head rectangle; the user clarified
   that face locking belongs only to Test Change, and the rectangle hid too much
-  of the AI design. A direct nearest-neighbor reduction was also rejected:
-  choosing one arbitrary source sample per destination pixel erased small
-  features such as Elwin Lord's eye, while aspect fitting used only 13-14 of
-  the 16 horizontal pixels. The accepted AI pipeline selects the central
-  foreground component, excludes neighboring-cell fragments, reduces the
-  source to a per-cell adaptive 15-color palette, and chooses the dominant
-  source-block color for every cell of the full 16x16 destination. It restores
-  no ROM pixels. Its rank-zero
+  of the AI design. Aspect fitting used only 13-14 of the 16 horizontal pixels,
+  while dominant-block reduction erased small contrasting details. The current
+  preview pipeline narrows foreground-mask growth from six to three source
+  pixels, fills the complete 16x16 destination, and tests nearest-neighbor
+  sampling phases within one source pixel in each direction. It keeps the
+  phase that covers the most significant high-saturation hue groups, then
+  quantizes with Pillow MAXCOVERAGE to 15 visible colors plus transparency.
+  This retains the one-pixel green shield accent in the Elwin Lord regression
+  fixture without restoring any ROM pixels. Across all 102 redesigned entries,
+  significant source-hue retention rose from `189/464 (40.7%)` in the prior
+  dominant-block output to `344/464 (74.1%)`; the test suite locks a 70% floor.
+  Its rank-zero
   entries still bypass the AI result entirely. The browser inspector displays
   source and 16x16 dominant color swatches at equal 88-pixel preview sizes to
   expose future palette or apparent-size drift.
 - Generated sources are retained under `docs/assets/ai-class-source`, while
   the accepted final preview input is
-  `docs/assets/allied_class_redesign_concept.png`. It is a 10x5 pixel-art
-  sheet and now supplies all ten commanders, including Elwin. The rejected
+  `docs/assets/allied_class_redesign_concept.png`. It is a `972x1619` 10x5
+  high-resolution pseudo-pixel sheet rather than a native 16x16 sheet, and now
+  supplies all ten commanders, including Elwin. The rejected
   `allied_class_ai_evolution_v2.png` and direct Elwin/Liana experiments remain
   under `docs/assets/ai-class-source` as source history but are not wired into
   the preview. Its dark gray background is removed with a color-seeded
-  foreground mask before dominant-block reduction. Character design work is
+  foreground mask before phase-selected nearest reduction. Character design work is
   intentionally paused here so localization remains the primary task.
 - A separate final generation experiment used each commander's enlarged ROM
   16x16 reference strip as direct image input. The ten raw five-stage outputs

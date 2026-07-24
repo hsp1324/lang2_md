@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter, defaultdict
+import colorsys
 import json
 from pathlib import Path
 import shutil
@@ -57,13 +58,14 @@ def source_foreground(image: Image.Image) -> Image.Image:
             red, green, blue = rgb.getpixel((x, y))
             brightest = max(red, green, blue)
             chroma = brightest - min(red, green, blue)
-            if brightest >= 55 or chroma >= 18:
+            if brightest >= 60 or chroma >= 20:
                 seed.putpixel((x, y), 255)
 
     # The concept sheet is already pixel art, but its black outlines sit on a
     # dark gray background. Grow from visible color instead of treating every
-    # dark pixel as background so the outlines survive without the broad glow.
-    mask = central_component(seed.filter(ImageFilter.MaxFilter(13)))
+    # dark pixel as background. Three source pixels are enough to retain the
+    # outline while excluding the broad dark glow around each sprite.
+    mask = central_component(seed.filter(ImageFilter.MaxFilter(7)))
     rgba = rgb.convert("RGBA")
     rgba.putalpha(mask)
     return rgba
@@ -131,6 +133,61 @@ def source_subject(image: Image.Image) -> Image.Image:
     return subject.crop(bbox)
 
 
+def accent_hue_bucket(color: tuple[int, int, int]) -> int | None:
+    red, green, blue = (channel / 255 for channel in color)
+    hue, saturation, value = colorsys.rgb_to_hsv(red, green, blue)
+    if saturation < 0.45 or value < 0.4:
+        return None
+    return int(hue * 12) % 12
+
+
+def accent_hues(
+    image: Image.Image,
+    *,
+    minimum: int | None = None,
+) -> set[int]:
+    counts: Counter[int] = Counter()
+    for y in range(image.height):
+        for x in range(image.width):
+            red, green, blue, alpha = image.getpixel((x, y))
+            if alpha < 64:
+                continue
+            bucket = accent_hue_bucket((red, green, blue))
+            if bucket is not None:
+                counts[bucket] += 1
+    if minimum is None:
+        minimum = max(
+            8,
+            round(image.width * image.height * 0.0015),
+        )
+    return {
+        bucket
+        for bucket, frequency in counts.items()
+        if frequency >= minimum
+    }
+
+
+def nearest_detail_sample(image: Image.Image) -> Image.Image:
+    wanted_hues = accent_hues(image)
+    best: tuple[tuple[int, int, int, int], Image.Image] | None = None
+    for offset_y in range(-1, 2):
+        for offset_x in range(-1, 2):
+            shifted = Image.new("RGBA", image.size, TRANSPARENT)
+            shifted.alpha_composite(image, (-offset_x, -offset_y))
+            candidate = shifted.resize((16, 16), Image.Resampling.NEAREST)
+            score = (
+                len(wanted_hues & accent_hues(candidate, minimum=1)),
+                -abs(offset_x) - abs(offset_y),
+                -abs(offset_y),
+                -abs(offset_x),
+            )
+            if best is None or score > best[0]:
+                best = (score, candidate)
+    if best is None:
+        raise ValueError("AI source cell produced no sampling candidate")
+    return best[1]
+
+
 def pixelize_cell(
     sheet: Image.Image,
     row: int,
@@ -150,48 +207,23 @@ def pixelize_cell(
             )
         )
     )
-    alpha = cell.getchannel("A")
-    rgb = Image.new("RGB", cell.size, (0, 0, 0))
-    rgb.paste(cell.convert("RGB"), mask=alpha)
-    palette_source = rgb.quantize(
+    # The concept sheet uses enlarged pseudo-pixels. Sample those blocks
+    # directly into the complete 16x16 destination instead of averaging them;
+    # averaging destroys one-pixel eyes and thin weapon edges. MAXCOVERAGE
+    # retains small, high-contrast accent colors that MEDIANCUT discards.
+    sampled = nearest_detail_sample(cell)
+    alpha = sampled.getchannel("A").point(
+        lambda value: 255 if value >= 64 else 0
+    )
+    rgb = Image.new("RGB", sampled.size, (0, 0, 0))
+    rgb.paste(sampled.convert("RGB"), mask=alpha)
+    palette = rgb.quantize(
         colors=15,
-        method=Image.Quantize.MEDIANCUT,
+        method=Image.Quantize.MAXCOVERAGE,
         dither=Image.Dither.NONE,
     ).convert("RGB")
-
-    # The AI sheet is high-resolution pseudo-pixel art. A single NEAREST
-    # sample per destination pixel can land between its macro pixels and erase
-    # small features such as eyes. Collapse every source block by its dominant
-    # pre-quantized color instead, using the complete 16x16 destination extent.
-    result = Image.new("RGBA", (16, 16), TRANSPARENT)
-    for target_y in range(16):
-        source_y0 = target_y * cell.height // 16
-        source_y1 = max(
-            source_y0 + 1,
-            (target_y + 1) * cell.height // 16,
-        )
-        for target_x in range(16):
-            source_x0 = target_x * cell.width // 16
-            source_x1 = max(
-                source_x0 + 1,
-                (target_x + 1) * cell.width // 16,
-            )
-            colors: Counter[tuple[int, int, int]] = Counter()
-            visible = 0
-            sample_count = (
-                (source_x1 - source_x0) * (source_y1 - source_y0)
-            )
-            for source_y in range(source_y0, source_y1):
-                for source_x in range(source_x0, source_x1):
-                    if alpha.getpixel((source_x, source_y)) < 64:
-                        continue
-                    visible += 1
-                    colors[palette_source.getpixel((source_x, source_y))] += 1
-            if visible < max(1, sample_count // 10):
-                continue
-            color = colors.most_common(1)[0][0]
-            result.putpixel((target_x, target_y), (*color, 255))
-
+    result = palette.convert("RGBA")
+    result.putalpha(alpha)
     return result
 
 
@@ -299,7 +331,7 @@ def build_assets(
                 "group_rank": group_rank,
                 "redesigned": redesigned,
                 "feature": (
-                    "AI 원화 중앙 전경·16×16 블록 집계·셀별 적응형 15색·고정 영역 없음"
+                    "AI 원화 중앙 전경·16×16 최근접 도트 복원·희소색 보존 15색·고정 영역 없음"
                     if redesigned
                     else "중복 그림 묶음의 최저 클래스·ROM 원본 유지"
                 ),
@@ -321,7 +353,7 @@ def build_assets(
         "redesigned_count": redesigned_count,
         "pipeline": (
             "AI concept cell -> central foreground isolation -> adaptive "
-            "palette -> dominant-block 16x16"
+            "nearest 16x16 -> maximum-coverage 15-color palette"
         ),
         "rom_effect": "none; preview PNG assets only",
         "commanders": commanders,

@@ -11,7 +11,7 @@ from tools.build_class_sprite_assets import (
 from tools.build_test_class_sprite_assets import (
     protected_face_points,
 )
-from tools.build_ai_class_sprite_assets import pixelize_cell
+from tools.build_ai_class_sprite_assets import accent_hues, pixelize_cell
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -126,11 +126,24 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     continue
                 self.assertEqual(row["face_pixel_count"], 0)
                 self.assertNotEqual(image.tobytes(), source.tobytes())
+                self.assertLessEqual(
+                    len(image.getcolors(maxcolors=256) or []),
+                    16,
+                )
+                self.assertTrue(
+                    {
+                        color
+                        for _, color in (
+                            image.getchannel("A").getcolors(maxcolors=256)
+                            or []
+                        )
+                    }.issubset({0, 255})
+                )
         self.assertEqual(len(source_cells), 50)
         for filename in source_cells:
             self.assertTrue((AI_ASSET_DIR / filename).is_file(), filename)
 
-    def test_ai_pixelizer_uses_full_extent_and_binary_alpha(self):
+    def test_ai_pixelizer_uses_full_extent_and_preserves_rare_accents(self):
         sheet = Image.open(
             ROOT / "docs/assets/allied_class_redesign_concept.png"
         ).convert("RGB")
@@ -147,7 +160,45 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         )
         self.assertLessEqual(
             len(elwin_lord.getcolors(maxcolors=256) or []),
-            15,
+            16,
+        )
+        self.assertTrue(
+            any(
+                green >= 96
+                and green >= red + 40
+                and green >= blue + 20
+                and alpha == 255
+                for y in range(elwin_lord.height)
+                for x in range(elwin_lord.width)
+                for red, green, blue, alpha in [
+                    elwin_lord.getpixel((x, y))
+                ]
+            ),
+            "Elwin Lord's one-pixel green shield accent was lost",
+        )
+
+    def test_ai_redesigns_retain_most_significant_source_hues(self):
+        source_hue_count = 0
+        retained_hue_count = 0
+        for commander in self.ai_manifest["commanders"].values():
+            for row in commander["classes"].values():
+                if not row["redesigned"]:
+                    continue
+                with Image.open(
+                    AI_ASSET_DIR / row["ai_source_cell_file"]
+                ) as source:
+                    wanted = accent_hues(source.convert("RGBA"))
+                with Image.open(AI_ASSET_DIR / row["file"]) as converted:
+                    retained = accent_hues(
+                        converted.convert("RGBA"),
+                        minimum=1,
+                    )
+                source_hue_count += len(wanted)
+                retained_hue_count += len(wanted & retained)
+        self.assertGreater(source_hue_count, 0)
+        self.assertGreaterEqual(
+            retained_hue_count / source_hue_count,
+            0.70,
         )
 
     def test_preview_generators_are_not_imported_by_rom_builder(self):
