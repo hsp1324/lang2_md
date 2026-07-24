@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 00DC
 latest targeted live-verified production checksum: 00DC
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 820 passing
+unit tests: 823 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -8907,3 +8907,28 @@ contains 57 safe syllables as documented below and in
   available`; that was host transport failure, not ROM behavior. The accepted
   virtual display never created, activated, moved, or raised a window on the
   user's Windows desktop.
+
+### Scenario 16 Protagonist Defeat Branch (2026-07-24)
+
+- The Scenario 16 conditions declare only `주인공 사망` as defeat.
+  Japanese trigger `0x1A0C2E` is
+  `07 01 0C 02 00 00 00 00 00 1A 0D 0A`; it identifies protagonist name ID
+  `0x01` and calls `0x1A0D0A`. That scenario handler is exactly `13 FF`.
+- `tools/build_scenario16_clear_probe_rom.py --protagonist-death` preserves
+  all eight deployments and all ten fixed records. Its guarded Start wrapper
+  changes only runtime player group 0 at `$FFFF603C` before tail-calling the
+  stock Start entry, and conflicts with `--completion-layout` by design.
+  Production `00DC` produces checksum `F7AB`.
+- Fresh focus-free Xvfb playback restored a validated Scenario 16 manual slot,
+  retained the route, roster, automatic arrangement, opening, and clean
+  `엘윈/파이터` command panel, then opened the normal Korean Start menu. Normal
+  turn end rendered `엘윈: 으윽… 여기까지인가…` through the shared
+  commander-defeat path; one further confirmation reached GAME OVER through
+  the immediate scenario handler. The shared dialogue and the handler must not
+  be conflated when reviewing source ownership.
+- Representative evidence is `f7ab_s16_death_entry_headless.png`,
+  `f7ab_s16_death_prep_23.png`, `f7ab_s16_death_arrangement.png`,
+  `f7ab_s16_death_opening_09.png`, `f7ab_s16_death_start_menu.png`,
+  `f7ab_s16_death_event_00.png`, and `f7ab_s16_death_event_01.png`. Normal
+  completion and the sole declared defeat ending are now live-covered, so
+  Scenario 16 `branches_endings` is `verified_probe`.

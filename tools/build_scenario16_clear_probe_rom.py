@@ -49,8 +49,19 @@ COMPLETION_TRIGGERS = {
     0x1A0C22: bytes.fromhex("06 F0 00 00 10 03 10 03 00 1A 0C F4"),
     0x1A0C2E: bytes.fromhex("07 01 0C 02 00 00 00 00 00 1A 0D 0A"),
 }
+PROTAGONIST_DEATH_HANDLER = 0x1A0D0A
+PROTAGONIST_DEATH_HANDLER_BYTES = bytes.fromhex("13 FF")
 PROBE_AT = 0
 PROBE_DF = 0
+START_MENU_ENTRY = 0x022C1E
+START_MENU_ENTRY_OPERAND = 0x00F2E0
+RUNTIME_WRAPPER = 0x3FEF00
+RUNTIME_GROUP_BASE = 0xFFFF603C
+RUNTIME_GROUP_SIZE = 0x60
+PROTAGONIST_RUNTIME_GROUP = 0
+RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
+RUNTIME_HP_OFFSET = 0x03
+RUNTIME_X_OFFSET = 0x06
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -61,6 +72,48 @@ def deployment_bytes(positions: tuple[tuple[int, int], ...]) -> bytes:
     return b"".join(
         x.to_bytes(2, "big") + y.to_bytes(2, "big") for x, y in positions
     )
+
+
+def protagonist_death_wrapper_code() -> bytes:
+    record = (
+        RUNTIME_GROUP_BASE
+        + PROTAGONIST_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code = bytearray()
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def install_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+    wrapper: bytes,
+) -> None:
+    expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+            != expected_start_entry
+        ):
+            raise ValueError(f"{label} Start-menu entry operand changed")
+    wrapper_end = RUNTIME_WRAPPER + len(wrapper)
+    if probe[RUNTIME_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError("input diagnostic wrapper region is not empty")
+    probe[
+        START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+    ] = RUNTIME_WRAPPER.to_bytes(4, "big")
+    probe[RUNTIME_WRAPPER:wrapper_end] = wrapper
 
 
 def validate_layout(probe: bytes, source: bytes) -> None:
@@ -103,6 +156,17 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             raise ValueError(
                 f"input Scenario 16 completion trigger at 0x{offset:06X} changed"
             )
+    handler_end = (
+        PROTAGONIST_DEATH_HANDLER + len(PROTAGONIST_DEATH_HANDLER_BYTES)
+    )
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[PROTAGONIST_DEATH_HANDLER:handler_end]
+            != PROTAGONIST_DEATH_HANDLER_BYTES
+        ):
+            raise ValueError(
+                f"{label} Scenario 16 protagonist-death handler changed"
+            )
 
 
 def patch_probe(
@@ -110,8 +174,18 @@ def patch_probe(
     source: bytes,
     *,
     completion_layout: bool = False,
+    protagonist_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
+    if completion_layout and protagonist_death:
+        raise ValueError("Scenario 16 diagnostic modes conflict")
+    if protagonist_death:
+        install_start_wrapper(
+            probe,
+            source,
+            protagonist_death_wrapper_code(),
+        )
+        return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -147,6 +221,14 @@ def parse_args() -> argparse.Namespace:
             "castle-gate region X 12..14 / Y 1..5"
         ),
     )
+    parser.add_argument(
+        "--protagonist-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 16 deployment and fixed record, then "
+            "mark only runtime player group 0 defeated through Start"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -158,14 +240,22 @@ def main() -> int:
         probe,
         source,
         completion_layout=args.completion_layout,
+        protagonist_death=args.protagonist_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print("Scenario 16 enemy records 0..9: AT 0, DF 0, no mercenaries")
+    if args.protagonist_death:
+        print(
+            "protagonist-death: all Scenario 16 deployments and fixed "
+            "records preserved"
+        )
+        print("Start marks only runtime player group 0 defeated")
+    else:
+        print("Scenario 16 enemy records 0..9: AT 0, DF 0, no mercenaries")
     if args.completion_layout:
         print("completion layout: Elwin moved from (5,32) to (13,6)")
         print("castle-gate region X 12..14 / Y 1..5 and handlers preserved")
-    else:
+    elif not args.protagonist_death:
         print(
             "stock deployments, identities, classes, levels, hidden events, "
             "coordinates, and handlers preserved"

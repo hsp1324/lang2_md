@@ -728,6 +728,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario16["opening_events"], "verified_current")
         self.assertEqual(scenario16["battle_ui"], "verified_probe")
         self.assertEqual(scenario16["turn_events"], "progressed_current")
+        self.assertEqual(scenario16["completion"], "verified_probe")
+        self.assertEqual(scenario16["branches_endings"], "verified_probe")
+        for capture in (
+            "captures/run/f7ab_s16_death_entry_headless.png",
+            "captures/run/f7ab_s16_death_prep_23.png",
+            "captures/run/f7ab_s16_death_arrangement.png",
+            "captures/run/f7ab_s16_death_opening_09.png",
+            "captures/run/f7ab_s16_death_start_menu.png",
+            "captures/run/f7ab_s16_death_event_00.png",
+            "captures/run/f7ab_s16_death_event_01.png",
+        ):
+            self.assertIn(capture, scenario16["captures"])
+        self.assertIn("protagonist-death diagnostic F7AB", scenario16["note"])
+        self.assertIn("handler bytes 13 FF", scenario16["note"])
+        self.assertIn("으윽… 여기까지인가…", scenario16["note"])
         self.assertEqual(scenario17["description"], "verified_current")
         for capture in (
             "captures/run/b0e8_s17_description_final_01.png",
