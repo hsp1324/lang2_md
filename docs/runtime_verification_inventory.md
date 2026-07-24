@@ -40,7 +40,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 27 | current | current | current | current | probe | current | probe | probe | 25 |
 | 28 | current | current | current | current | current | current | probe | pending | 27 |
 | 29 | current | current | current | current | current | current | probe | pending | 30 |
-| 30 | current | current | current | current | probe | current | pending | pending | 19 |
+| 30 | current | current | current | current | probe | current | probe | pending | 27 |
 | 31 | current | current | current | current | probe | current | probe | pending | 39 |
 
 ## Evidence Notes
@@ -1421,7 +1421,7 @@ Selector record 29 intentionally enters the on-screen secret Scenario X2 디레�
 
 ### Scenario 30
 
-Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡의 둥지. Production ECA0 freshly verifies all eight scrolling description frames, the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 엘윈, 쉐리, 아론, 헤인, 키스, 미나, 레스터, 리아나, and the live class/status labels. Victory is 미나 격파; defeat is 주인공 사망. Enemy movement defeats Elwin on the no-action first turn; frame 16 contains his clean Korean defeat line and frame 17 reaches the expected GAME OVER. A fresh current 212A replay rechecked arrangement, deployment, the command-ready map, and dense first-turn capture through Elwin's HP0 dialogue. This no-action route applies damage without entering the battle presentation, so scenario-specific battle frames remain unavailable; battle_ui is covered by the production-derived 3590 shared-renderer probe and is classified verified_probe rather than verified_current. Like the source, the title uses X3 while the battle status bar uses SCENARIO ?3; the current arrangement and map captures confirm the question mark is intentional and not a damaged Hangul tile. A successful clear and conditional branches remain pending.
+Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡의 둥지. Production ECA0 freshly verifies all eight scrolling description frames, the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 엘윈, 쉐리, 아론, 헤인, 키스, 미나, 레스터, 리아나, and the live class/status labels. Victory is 미나 격파; defeat is 주인공 사망. Enemy movement defeats Elwin on the no-action first turn; frame 16 contains his clean Korean defeat line and frame 17 reaches the expected GAME OVER. A fresh current 212A replay rechecked arrangement, deployment, the command-ready map, and dense first-turn capture through Elwin's HP0 dialogue. Like the source, the title uses X3 while the battle status bar uses SCENARIO ?3; the current arrangement and map captures confirm the question mark is intentional and not a damaged Hangul tile. Production-9DD0 completion derivative 8386 preserves all eleven Japanese fixed records and both Mina identities, classes, coordinates, and transformation handlers, moving only the first Elwin deployment to (15,7). Its Start wrapper hides runtime groups 9..17 and lowers only current Mina group 18 to HP 1. Normal Elwin attacks retained 미나/메이지 and transformed 미나/세인트 with centered -AT-/-DF-/-지형- battle labels, then traversed the complete aftermath, 완드·독보우·미라쥬로브 awards, repeated full-inventory discard UI, allied level ups, 전과보고, a real 시나리오 23 save, 진군루트, and 봉인된 성검 entry without Japanese residue, broken names/classes, reset, or freeze. Conditional branches remain pending.
 
 - `captures/run/c7ab_s30_title.png`
 - `captures/run/c7ab_s30_body_mid.png`
@@ -1442,6 +1442,14 @@ Selector record 30 intentionally enters the on-screen secret Scenario X3 마룡�
 - `captures/run/212a_s30_after_deploy.png`
 - `captures/run/212a_s30_command_current.png`
 - `captures/run/212a_s30_after_failed_turn_end.png`
+- `captures/run/8386_s30_mina1_battle.png`
+- `captures/run/8386_s30_mina2_battle_start.png`
+- `captures/run/8386_s30_clear_01.png`
+- `captures/run/8386_s30_clear_16.png`
+- `captures/run/8386_s30_clear_31.png`
+- `captures/run/8386_s30_next_selected.png`
+- `captures/run/8386_s30_next_route.png`
+- `captures/run/8386_s30_return_s23.png`
 
 ### Scenario 31
 

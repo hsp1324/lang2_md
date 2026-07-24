@@ -7055,6 +7055,42 @@ contains 57 safe syllables as documented below and in
   editor/probe groundwork only; X3 successful completion and conditional
   branches remain pending.
 
+### Scenario 30 Completion Verification (2026-07-24)
+
+- `tools/build_scenario30_clear_probe_rom.py --completion-target-only` now
+  leaves all eleven Japanese fixed records source-identical, including visible
+  `미나/메이지` at `(15,6)` and hidden `미나/세인트` at `(255,255)`.
+  Only the first Elwin deployment moves from `(15,18)` to `(15,7)`, directly
+  below Mina. Production `9DD0` produces accepted diagnostic checksum `8386`.
+- The Start wrapper at `0x3FEF00` uses the verified Scenario 30 runtime map:
+  player groups `0..8`, fixed groups `9..19`, base `$FFFF603C`, stride
+  `0x60`. It hides and defeats groups `9..17` and lowers only present, living
+  group 18 to HP 1. After the first Mina dies, the stock event rewrites that
+  same group from source name/class `6E/3F` to hidden-record identity/class
+  `6F/48` and restores `(15,6)`, so opening Start again safely targets the
+  transformed Mina without patching event coordinates or map occupancy.
+- Two ordinary Elwin attacks rendered intact `미나/메이지` and
+  `미나/세인트`, troop counts, AT/DF corrections, terrain corrections, and
+  centered `-AT-`, `-DF-`, `-지형-` labels. The stock path then traversed
+  Mina's complete transformation and defeat dialogue, `완드`, `독보우`, and
+  `미라쥬로브` awards, repeated full-inventory discard prompts, allied level
+  ups, `전과보고`, a real slot-1 `시나리오 23` save, `진군루트`, and the
+  Scenario 23 `봉인된 성검` entry without reset or freeze. Representative
+  captures are `captures/run/8386_s30_mina1_battle.png`,
+  `captures/run/8386_s30_mina2_battle_start.png`,
+  `captures/run/8386_s30_clear_01.png`,
+  `captures/run/8386_s30_clear_16.png`,
+  `captures/run/8386_s30_clear_31.png`,
+  `captures/run/8386_s30_next_selected.png`,
+  `captures/run/8386_s30_next_route.png`, and
+  `captures/run/8386_s30_return_s23.png`.
+- Do not repeat the rejected `839C` layout. It staged only the first Mina near
+  stock Elwin; the transformation correctly restored the second Mina to
+  `(15,6)`, requiring long movement through occupied mercenary tiles. Direct
+  GST X/Y edits were also rejected earlier because the separate occupancy grid
+  did not move with the record. The accepted `8386` layout moves the deployment
+  owner once and preserves both event-owned Mina coordinates.
+
 ### Scenario 31 Source-Validated Clear Probe (2026-07-22)
 
 - `tools/build_scenario31_clear_probe_rom.py` validates the Japanese secret

@@ -12,10 +12,10 @@
 
 ## 필요한 파일
 
-이 저장소는 ROM 바이너리를 추적하지 않습니다. 현재 일본판 기반 빌드에는 아래 일본판 ROM만 필요합니다. 영어판은 legacy 스크립트를 다시 실행할 때만 선택적으로 둡니다.
+이 저장소는 ROM 바이너리를 추적하지 않습니다. 현재 빌드는 일본판을 기준 ROM으로 사용하고 영문판에서 원본 영문 타이틀 로고 리소스를 검증해 가져오므로 아래 두 ROM이 모두 필요합니다.
 
 - `roms/original/Langrisser II (Japan).md`
-- `roms/original/Langrisser II (English).md` (legacy 전용, 선택)
+- `roms/original/Langrisser II (English).md`
 
 ## 주요 파일
 
@@ -86,7 +86,7 @@
 - `tools/build_scenario27_clear_probe_rom.py`: 시나리오 27의 일본판 헤더·10명 배치표·적군 10명을 검증하고 AT/DF·용병만 제한합니다. 베른하르트와 숨은 레온을 포함한 정체·클래스·레벨·좌표·숨김 상태 및 이벤트를 보존합니다.
 - `tools/build_scenario28_clear_probe_rom.py`: 비밀 시나리오 X1의 일본판 헤더·7명 배치표·빌더 적군 9명을 검증하고 기본 모드에서는 AT/DF·용병만 제한합니다. `--completion-target-only`는 준비 배치표를 원본 그대로 두고 바란만 첫 엘윈 배치 바로 위로 옮기며, Start에서 다른 빌더 런타임 그룹을 제거하고 바란 HP만 1로 낮춥니다. checksum `31F2`에서 정상 공격으로 바란을 격파해 전체 후속 대사·전과보고·13장 저장·진군루트·13장 복귀까지 확인했습니다.
 - `tools/build_scenario29_clear_probe_rom.py`: 비밀 시나리오 X2의 일본판 헤더·8명 배치표·적군 9명을 검증하고 기본 모드에서는 AT/DF·용병만 제한합니다. `--completion-target-only`는 준비 배치표를 원본 그대로 두고 폴거만 첫 엘윈 배치 바로 위로 옮기며, Start에서 다른 적 런타임 그룹을 제거하고 폴거 HP만 1로 낮춥니다. checksum `A042`에서 정상 공격으로 폴거를 격파해 전체 후속 대사·전과보고·20장 저장·진군루트·20장 복귀까지 확인했습니다.
-- `tools/build_scenario30_clear_probe_rom.py`: 비밀 시나리오 X3의 일본판 헤더·9명 배치표·적군 11명을 검증하고 AT/DF·용병만 제한합니다. 그레이트드래곤과 일반 마녀/메이지, 숨은 마녀/세인트의 서로 다른 원본 레코드 및 이벤트를 보존합니다.
+- `tools/build_scenario30_clear_probe_rom.py`: 비밀 시나리오 X3의 일본판 헤더·9명 배치표·적군 11명을 검증하고 기본 모드에서는 AT/DF·용병만 제한합니다. `--completion-target-only`는 일본판 미나 좌표와 메이지→세인트 변신 이벤트를 그대로 두고 첫 엘윈 배치만 바로 아래 `(15,7)`로 옮기며, Start에서 다른 런타임 적을 제거하고 현재 미나 HP만 1로 낮춥니다. checksum `8386`에서 두 형태를 정상 공격으로 격파해 완드·독보우·미라쥬로브와 소지품 폐기, 후속 대사·전과보고·23장 저장·진군루트·23장 복귀까지 확인했습니다.
 - `tools/build_scenario31_clear_probe_rom.py`: 비밀 시나리오 X4의 일본판 헤더·10명 배치표·전투 레코드 10개를 검증하고 기본 모드에서는 AT/DF·용병만 제한합니다. `--compact-layout`은 원본 클래스·진영을 유지한 전투 UI 진단용이고, `--completion-layout`은 원본 베른하르트 레코드 하나만 엘윈 옆에 둬 최종 보스 사망·전과보고·저장 핸들러를 확인하는 비배포 진단용입니다. 후자의 레코드 수/좌표는 이름·클래스·진영 근거로 사용하지 않습니다.
 - `tools/game_genie.py`, `tools/build_game_genie_probe_rom.py`: 명시한 Genesis Game Genie 코드를 주소/워드로 해석하고 무시되는 실험 ROM을 만듭니다. 코드 호환 리비전을 자동 판별하지 않으며, 프로젝트 원본은 일본판 REV00입니다. REV01용 공개 코드는 주소가 정상적으로 보여도 REV00을 리셋시킬 수 있으므로 프리셋을 제공하지 않습니다.
 - `editor/server.py`: 시나리오 배치, 아이템 능력치, 클래스 체인지 경로와 전직 시 용병 해금을 수정하는 로컬 게임 데이터 편집기입니다.
