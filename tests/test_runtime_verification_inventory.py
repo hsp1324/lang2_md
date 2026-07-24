@@ -482,6 +482,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario9["battle_ui"], "verified_current")
         self.assertEqual(scenario9["turn_events"], "progressed_current")
         self.assertEqual(scenario9["completion"], "verified_probe")
+        self.assertEqual(scenario9["branches_endings"], "verified_probe")
+        self.assertIn("NPC-annihilation diagnostic 448F", scenario9["note"])
+        self.assertIn("protagonist diagnostic 949F", scenario9["note"])
+        self.assertIn("there is no timeout condition", scenario9["note"])
+        for capture in (
+            "captures/run/448f_s09_npc_event_04.png",
+            "captures/run/448f_s09_npc_event_08.png",
+            "captures/run/448f_s09_npc_event_12.png",
+            "captures/run/448f_s09_npc_event_15.png",
+            "captures/run/448f_s09_npc_event_17.png",
+            "captures/run/448f_s09_npc_event_18.png",
+            "captures/run/949f_s09_death_event_21.png",
+            "captures/run/949f_s09_death_event_22.png",
+        ):
+            self.assertIn(capture, scenario9["captures"])
         for capture in (
             "captures/run/af92_s09_laird_target_selected.png",
             "captures/run/af92_s09_after_laird_attack.png",

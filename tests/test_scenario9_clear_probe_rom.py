@@ -15,6 +15,16 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
         cls.source = (ROOT / builder.IN_ROM).read_bytes()
         cls.built = (ROOT / builder.OUT_ROM).read_bytes()
 
+    def diagnostic_patched(self, mode: str) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            npc_annihilation=mode == "npc",
+            protagonist_death=mode == "protagonist",
+        )
+        return data
+
     def test_probe_only_changes_laird_combat_fields_coordinates_and_checksum(self):
         data = bytearray(self.built)
         probe_builder.patch_probe(data, self.source)
@@ -81,6 +91,114 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
         self.assertEqual(checksum, expected)
         self.assertEqual(checksum, 0x7ECC)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+
+    def test_diagnostic_modes_change_only_wrapper_and_checksum(self):
+        for mode, wrapper in (
+            ("npc", probe_builder.npc_annihilation_wrapper_code()),
+            ("protagonist", probe_builder.protagonist_death_wrapper_code()),
+        ):
+            with self.subTest(mode=mode):
+                data = self.diagnostic_patched(mode)
+                expected_changes = {
+                    0x18E,
+                    0x18F,
+                    *range(
+                        probe_builder.START_MENU_ENTRY_OPERAND,
+                        probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                    ),
+                    *range(
+                        probe_builder.RUNTIME_WRAPPER,
+                        probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                    ),
+                }
+                changed = {
+                    index
+                    for index, (before, after) in enumerate(zip(self.built, data))
+                    if before != after
+                }
+                self.assertLessEqual(changed, expected_changes)
+
+    def test_diagnostic_modes_preserve_all_scenario_fixed_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for mode in ("npc", "protagonist"):
+            data = self.diagnostic_patched(mode)
+            for index in range(layout.record_count):
+                start = layout.records_offset + index * FIXED_RECORD_SIZE
+                end = start + FIXED_RECORD_SIZE
+                self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_npc_annihilation_marks_only_runtime_groups_seven_to_nine(self):
+        code = probe_builder.npc_annihilation_wrapper_code()
+        for group in (7, 8, 9):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("00 39 00 80")
+                + (
+                    record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                ).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_protagonist_death_marks_only_runtime_group_zero(self):
+        code = probe_builder.protagonist_death_wrapper_code()
+        protagonist = probe_builder.RUNTIME_GROUP_BASE
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (
+                protagonist + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertNotIn(
+            (
+                probe_builder.RUNTIME_GROUP_BASE
+                + 7 * probe_builder.RUNTIME_GROUP_SIZE
+                + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+
+    def test_diagnostic_modes_conflict(self):
+        data = bytearray(self.built)
+        with self.assertRaisesRegex(ValueError, "modes conflict"):
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                npc_annihilation=True,
+                protagonist_death=True,
+            )
+
+    def test_diagnostic_checksums_are_valid(self):
+        for mode, checksum in (("npc", 0x448F), ("protagonist", 0x949F)):
+            with self.subTest(mode=mode):
+                data = self.diagnostic_patched(mode)
+                expected = sum(
+                    int.from_bytes(data[offset : offset + 2], "big")
+                    for offset in range(0x200, len(data), 2)
+                ) & 0xFFFF
+                self.assertEqual(
+                    int.from_bytes(data[0x18E:0x190], "big"),
+                    expected,
+                )
+                self.assertEqual(expected, checksum)
 
 
 if __name__ == "__main__":

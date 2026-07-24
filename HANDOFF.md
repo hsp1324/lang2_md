@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 774 passing
+unit tests: 782 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6798,14 +6798,36 @@ contains 57 safe syllables as documented below and in
   freeze. `af92_s09_post_62.png` shows `전과보고 / POINT 3060P`,
   `af92_s09_post_64.png` shows the real `시나리오 10` save, and
   `af92_s09_next_scenario.png` proves entry to the stock Scenario 10 route map.
-  Scenario 9 `completion` is `verified_probe`; timeout, defeat, later-turn
-  conditionals, and other branches remain pending.
+  Scenario 9 `completion` is `verified_probe`.
 - BlastEm ran at 960x720 for this session. The current automation's fixed
   320x240 crop coordinates therefore failed to recognize the visible command
   menu and could enter the inner order submenu or consume an action. Exact
   manual inputs after a clean restart produced the accepted evidence. This is
   a host detector scaling bug, not a ROM reset or command-menu regression;
   normalize captures before fixed-coordinate detection in a later tooling fix.
+- The Japanese roster block contains seven player IDs, and the deployment
+  table contains the exact seven coordinates `(8,28)`, `(10,26)`, `(13,27)`,
+  `(16,29)`, `(19,27)`, `(22,26)`, and `(25,28)`. Fixed records `0..2` are
+  the three side-3 Kalxath NPC commanders, so they map after the player groups
+  to runtime groups `7..9`; enemy records `3..12` map to groups `10..19`.
+- `tools/build_scenario9_clear_probe_rom.py --npc-annihilation` derives
+  diagnostic `448F` from production `9DD0`. It preserves all seven deployments
+  and all thirteen fixed records, then its Start wrapper marks only runtime
+  groups `7..9` defeated before tail-jumping the stock handler. The stock
+  first enemy phase renders all three NPC apologies, Sherry and Keith's
+  reactions, Laird's response, Elwin's `칼자스 성이 무너지다니…`, and GAME
+  OVER. Accepted evidence is `448f_s09_npc_event_04.png` through `_18.png`.
+- Fixed-data-preserving `--protagonist-death` diagnostic `949F` changes only
+  runtime player group 0 through Start. After the unmodified first enemy-phase
+  command sequence, `949f_s09_death_event_21.png` shows
+  `이젠 안 돼… 미안해, 쉐리…` and `_22.png` shows GAME OVER. Both defeat
+  paths retain clean Korean names, classes, and dialogue without reset or
+  freeze.
+- The visible condition capture `d15e_s09_conditions.png` says
+  `NPC 전멸 / 주인공 사망`; Scenario 9 has no timeout condition. Older notes
+  that listed timeout were corrected. Normal completion, NPC annihilation,
+  and protagonist death are live-covered, so `branches_endings` is
+  `verified_probe`. Ordinary later-turn dialogue remains tracked separately.
 
 ### Uppercase Project Credit And Selector VRAM Collision (2026-07-20)
 
@@ -8675,6 +8697,6 @@ contains 57 safe syllables as documented below and in
   villain records at `0x0A6B20` and `0x0A6B54` remain unreviewed and false.
   Scenario 27 `branches_endings` remains `verified_probe`, because this run
   does not prove an unmodified final-boss clear or every conditional outcome.
-- Production rebuild remains checksum `9DD0`; all 774 tests pass. The accepted
+- Production rebuild remains checksum `9DD0`; all 782 tests pass. The accepted
   code, inventory, and documentation changes do not alter distributed ROM
   bytes.
