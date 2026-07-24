@@ -8,7 +8,7 @@ runtime uses each ID directly for its icon at VRAM
 byte-identical, and decoded resource 391 keeps all 37 icon payloads
 byte-identical to the Japanese ROM.
 
-Checksum `C80E` has the accepted renderer-aware item-surface fingerprint; current checksum `F959` matches it and its capture set covers all 37 rows. Historical checksum `D304` remains earlier evidence. The current zero-price capacity derivative is `9607`; it is a diagnostic identifier, not the matrix acceptance itself.
+Checksum `C80E` has the accepted renderer-aware item-surface fingerprint; current checksum `48A8` matches it and its capture set covers all 37 rows. Historical checksum `D304` remains earlier evidence. The current zero-price capacity derivative is `9607`; it is a diagnostic identifier, not the matrix acceptance itself.
 
 Price table values are 10P units. Item ID 9 has a stock special case that
 skips the dynamic price-number call and must be interpreted from runtime.

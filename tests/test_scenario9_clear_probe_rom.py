@@ -89,7 +89,7 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0x7ECC)
+        self.assertEqual(checksum, 0xCE1B)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_diagnostic_modes_change_only_wrapper_and_checksum(self):
@@ -187,7 +187,7 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             )
 
     def test_diagnostic_checksums_are_valid(self):
-        for mode, checksum in (("npc", 0x448F), ("protagonist", 0x949F)):
+        for mode, checksum in (("npc", 0x93DE), ("protagonist", 0xE3EE)):
             with self.subTest(mode=mode):
                 data = self.diagnostic_patched(mode)
                 expected = sum(

@@ -704,6 +704,10 @@ class ReviewedEventDialogueTests(unittest.TestCase):
 
         text_by_address = {row["address"]: row["text"] for row in rows}
         self.assertEqual(
+            text_by_address["0x199B88"],
+            "크윽! 여기까지인가…",
+        )
+        self.assertEqual(
             text_by_address["0x19A67A"],
             "검도 마찬가지입니다. 어떻게 쓰느냐가 중요합니다",
         )

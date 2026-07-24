@@ -292,13 +292,13 @@ class Scenario31ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0x976E)
+        self.assertEqual(expected, 0xE6BD)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_optional_layout_checksums_are_current_and_valid(self):
         for data, expected in (
-            (self.patched(compact_layout=True), 0x9896),
-            (self.patched(completion_layout=True), 0xD60C),
+            (self.patched(compact_layout=True), 0xE7E5),
+            (self.patched(completion_layout=True), 0x255B),
         ):
             actual = sum(
                 int.from_bytes(data[offset : offset + 2], "big")

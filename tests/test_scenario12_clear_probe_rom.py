@@ -10,12 +10,18 @@ class Scenario12ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self, *, compact_layout: bool = False) -> bytearray:
+    def patched(
+        self,
+        *,
+        compact_layout: bool = False,
+        protagonist_death: bool = False,
+    ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
             data,
             self.source,
             compact_layout=compact_layout,
+            protagonist_death=protagonist_death,
         )
         return data
 
@@ -60,6 +66,97 @@ class Scenario12ClearProbeTests(unittest.TestCase):
             for offset, (before, after) in enumerate(zip(self.production, data))
             if before != after
         }
+
+    def test_source_verified_scenario_triggers_are_preserved(self):
+        data = self.patched()
+        for offset, expected in probe_builder.SCENARIO_TRIGGERS.items():
+            with self.subTest(offset=f"0x{offset:06X}"):
+                self.assertEqual(
+                    self.source[offset : offset + len(expected)],
+                    expected,
+                )
+                self.assertEqual(data[offset : offset + len(expected)], expected)
+
+    def test_protagonist_death_changes_only_wrapper_and_checksum(self):
+        data = self.patched(protagonist_death=True)
+        wrapper = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.PROTAGONIST_RUNTIME_GROUP
+        )
+        allowed = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            ),
+        }
+        self.assertLessEqual(self.changed_offsets(data), allowed)
+
+    def test_protagonist_death_preserves_all_fixed_records_and_deployments(self):
+        data = self.patched(protagonist_death=True)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        end = start + probe_builder.PLAYER_DEPLOYMENT_COUNT * 4
+        self.assertEqual(data[start:end], self.source[start:end])
+        fixed_end = (
+            layout.records_offset
+            + layout.record_count * FIXED_RECORD_SIZE
+        )
+        self.assertEqual(
+            data[layout.records_offset:fixed_end],
+            self.source[layout.records_offset:fixed_end],
+        )
+
+    def test_protagonist_death_wrapper_targets_only_group_zero(self):
+        wrapper = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.PROTAGONIST_RUNTIME_GROUP
+        )
+        record = probe_builder.RUNTIME_GROUP_BASE
+        self.assertIn(
+            (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4, "big"
+            ),
+            wrapper,
+        )
+        self.assertIn(
+            (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertEqual(
+            wrapper[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_diagnostic_modes_conflict(self):
+        for kwargs in (
+            {"compact_layout": True, "protagonist_death": True},
+        ):
+            with self.subTest(kwargs=kwargs):
+                with self.assertRaisesRegex(ValueError, "conflict"):
+                    probe_builder.patch_probe(
+                        bytearray(self.production),
+                        self.source,
+                        **kwargs,
+                    )
+
+    def test_diagnostic_checksums_are_valid(self):
+        for kwargs in ({"protagonist_death": True},):
+            with self.subTest(kwargs=kwargs):
+                data = self.patched(**kwargs)
+                expected = sum(
+                    int.from_bytes(data[offset : offset + 2], "big")
+                    for offset in range(0x200, len(data), 2)
+                ) & 0xFFFF
+                self.assertEqual(
+                    int.from_bytes(data[0x18E:0x190], "big"),
+                    expected,
+                )
+                self.assertEqual(expected, 0xE3EE)
 
     def test_base_probe_changes_only_enemy_combat_fields_and_checksum(self):
         data = self.patched()

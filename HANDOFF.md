@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 9DD0
-latest targeted live-verified production checksum: 9DD0
+current production build checksum: ED1F
+latest targeted live-verified production checksum: ED1F
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 792 passing
+unit tests: 798 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -8760,3 +8760,33 @@ contains 57 safe syllables as documented below and in
   101-file inventory in three interleaved groups completed as
   `257 + 352 + 183 = 792` tests, all OK. Production rebuild remains checksum
   `9DD0` with 866 custom glyphs.
+
+### Scenario 12 Defeat Branch And Dark Rod Event Audit (2026-07-24)
+
+- `tools/build_scenario12_clear_probe_rom.py` now validates the three stock
+  map-trigger records at `0x198F06`, `0x198F12`, and `0x198F1E`.
+  `--protagonist-death` preserves all seven player deployments and all eleven
+  fixed records, then marks only runtime player group 0 defeated through the
+  guarded Start wrapper at `0x3FEF00`.
+- Live defeat playback exposed an old English-alignment error. Japanese page
+  `0x199B88` renders `くっ！ここまでか……`, but the reviewed Korean table
+  incorrectly contained English record 227's `그럼 막아 봐라!`. Current
+  production `ED1F` corrects it to `크윽! 여기까지인가…`; diagnostic
+  checksum `E3EE` renders that line in
+  `captures/run/e3eev3_s12_death_line.png` and then GAME OVER in
+  `e3eev3_s12_game_over.png`.
+- A rejected diagnostic assumed hidden runtime group 17 at `(15,7)` was an
+  attackable Egbert after he obtained the Dark Rod. It is an event actor.
+  Staging Keith beside that coordinate attacked the source Lich instead.
+  An earlier rejected layout killed the initial `(28,25)` Egbert actor and
+  produced Wand, Mirage Robe, and Necklace rewards plus the instruction to
+  defeat the awakened guardians; it did not complete the scenario.
+- Do not reintroduce a separate Dark-Rod combat mode. The visible `적 전멸`
+  and `다크로드 획득` rows describe the stock progression already traversed
+  by the accepted `8B33` completion: defeat the guardians, enter the Dark Rod
+  event, continue through the theft aftermath, result, real Scenario 13 save,
+  and next-stage entry. Normal completion and the sole defeat ending are now
+  live-covered, so Scenario 12 `branches_endings` is `verified_probe`.
+- The complete 101-file inventory passes in three interleaved groups:
+  `257 + 352 + 189 = 798` tests. The rebuilt production ROM has checksum
+  `ED1F` and 866 custom glyphs.
