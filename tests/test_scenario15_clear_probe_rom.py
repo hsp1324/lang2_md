@@ -140,7 +140,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xFB67,
+            0x0F24,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -148,7 +148,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xFB79,
+            0x0F36,
         )
 
     def test_preserves_imelda_and_hidden_enemy_identities(self):

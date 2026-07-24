@@ -8817,3 +8817,53 @@ contains 57 safe syllables as documented below and in
 - The complete inventory passes in three interleaved groups:
   `261 + 352 + 189 = 802` tests. Production remains checksum `ED1F` with
   866 custom glyphs.
+
+### Scenario 14 Defeat Branches And Byte-UI Slot Registry (2026-07-24)
+
+- The visible Scenario 14 conditions declare two loss paths: protagonist death
+  and the enemy obtaining Langrisser. The guarded `--protagonist-death` mode
+  preserves every deployment and fixed record, changes only runtime player
+  group 0 through Start, renders event `0x19E3B8` as
+  `엘윈: 조금만 더 버텼다면 / 랑그릿사는 우리 것인데…`, and reaches
+  GAME OVER in `e3ee_s14_death_event_07.png` and `_08.png`.
+- The Japanese trigger at `0x19C8DE` is
+  `0E 0D 00 00 10 06 10 06 00 19 CC 52`: Leon name ID `0x0D`, target
+  `(16,6)`, handler `0x19CC52`. Do not repeat runtime X/Y-only teleport
+  checksum `67C6`; it moved the visible sprite without updating occupancy or
+  action state. Do not repeat source-record placement `(16,7)` checksum
+  `7D27`; Leon followed ordinary AI and never made the required final move.
+- Accepted checksum `90E3` activates only the source hidden Leon fixed record
+  at the exact `(16,6)` trigger. It retains the Japanese name, class, LV,
+  AT, DF, and mercenaries. Fresh playback renders
+  `랑그릿사를 얻었다!`, Leon's withdrawal order, the Laird/Elwin farewell,
+  `엘윈: 다 끝났어…`, and GAME OVER in
+  `90e3_s14_enemy_09.png` through `_17.png`. Normal completion and both
+  declared defeat paths are now covered.
+- The map/status renderer and battle renderer do not have identical tile
+  lifetimes. `헤비호스맨` could therefore show a correct `비` on the map
+  while battle animation graphics overwrote its former tile `0x039C`.
+  Production moves `비` to the final restored tail tile `0x05F5` and retains
+  `0x039C` as a consumed, retired slot so later local indexes do not shift.
+- `tools/generate_byte_ui_slot_inventory.py` writes
+  `localization/byte_ui_slot_inventory.json`. It records all 174 local byte-UI
+  indexes, all 118 extension tiles, explicit battle-stable owners, retired
+  runtime hazards, currently unassigned cells, the sixteen transient map cache
+  tiles, and unsafe byte codes `0xA1..0xA4`. `unassigned` means
+  runtime ownership is not yet proven, not that a tile is safe to reuse.
+- The first Scenario 1 Heavy Horseman battle probe, checksum `CEB8`, hid every
+  fixed record except Laird. That also removed event-waiting records 0 through
+  7, so the opening stalled on an empty map. Do not repeat that layout.
+  `tools/build_scenario1_heavy_horseman_battle_probe_rom.py` now preserves
+  records 0 through 7 and hides only unrelated enemies 8, 9, and 11. It keeps
+  the Japanese Laird record, class, and two `0x7A` mercenaries intact, stages
+  the group at `(11,15)`, and produces checksum `DDC6`. The probe reaches
+  sortie normally; final battle-frame confirmation of `비 -> 0x05F5` remains
+  pending because hidden OpenGL capture became partial and blindly advancing
+  could enter the unit command menu.
+- Bald class `0x2E` currently remaps sprite palette indexes `4/5/8/F` to live
+  CRAM row-1 indexes `D/E/B/D`. In the emulator those resolve to saturated
+  magenta, muted dark violet, red, and magenta. The editor preview override
+  instead shows pale lavender values, so the user's report that the live Bald
+  looks more reddish than the editor is correct. Do not change the production
+  palette from a static preview alone; compare the editor and a fresh live
+  Scenario 1 capture before accepting another remap.

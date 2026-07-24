@@ -216,10 +216,10 @@ BYTE_UI_FULL_EXT_VRAM_SEGMENTS = (
     (0x04D8, 24),
     # Scenario 2 command-time Plane/SAT data does not reference this range.
     # The map-info renderer restores it immediately before localized status text.
-    # Stop before the generic selector/cursor tiles at 0x05F8. The last two
-    # cells are needed by monster names during battle, where 0x0499/0x049A
-    # are overwritten by animated graphics.
-    (0x05D8, 29),
+    # Stop before the generic selector/cursor tiles at 0x05F8. The tail cells
+    # are needed by names during battle, where their former tiles are
+    # overwritten by animated graphics.
+    (0x05D8, 30),
 )
 # The first title screen uses the base 8x8 font directly. Load this
 # title-specific contiguous slice after the normal font so the Korean credit
@@ -265,6 +265,7 @@ BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
     "럴": 0x05F2,
     "슬": 0x05F3,
     "임": 0x05F4,
+    "비": 0x05F5,
 }
 # Preserve the extension-iterator positions that the stable characters occupied
 # before their battle-safe remaps. Consuming these slots keeps every later
@@ -274,6 +275,20 @@ BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR = {
     "가": 0x0444,
     "슬": 0x0499,
     "임": 0x049A,
+    "비": 0x039C,
+}
+BYTE_UI_RETIRED_FULL_EXT_TILE_REASON = {
+    0x039C: "battle animation graphics overwrite the former 비 tile",
+    0x0443: "Scenario 8 reinforcement animation overwrites the former 럴 tile",
+    0x0444: "Scenario 8 reinforcement animation overwrites the former 가 tile",
+    0x0499: "battle animation graphics overwrite the former 슬 tile",
+    0x049A: "battle animation graphics overwrite the former 임 tile",
+}
+BYTE_UI_UNSAFE_CODE_REASON = {
+    0xA1: "full battle renderer status/icon owner",
+    0xA2: "full battle renderer status/icon owner",
+    0xA3: "full battle renderer status/icon owner",
+    0xA4: "full battle renderer status/icon owner",
 }
 BYTE_UI_LOCAL_MARKER = 0x00
 SCENARIO_POINTER_TABLE = 0x9CF7C

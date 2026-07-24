@@ -44,8 +44,22 @@ LANGRISSER_SUCCESS_TRIGGERS = {
     0x19C87E: bytes.fromhex("08 04 00 00 10 06 10 06 00 19 CB 92"),
     0x19C88A: bytes.fromhex("08 0A 00 00 10 06 10 06 00 19 CB B4"),
 }
+LEON_LANGRISSER_TRIGGER = {
+    0x19C8DE: bytes.fromhex("0E 0D 00 00 10 06 10 06 00 19 CC 52"),
+}
 PROBE_AT = 0
 PROBE_DF = 0
+START_MENU_ENTRY = 0x022C1E
+START_MENU_ENTRY_OPERAND = 0x00F2E0
+RUNTIME_WRAPPER = 0x3FEF00
+RUNTIME_GROUP_BASE = 0xFFFF603C
+RUNTIME_GROUP_SIZE = 0x60
+PROTAGONIST_RUNTIME_GROUP = 0
+RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
+RUNTIME_HP_OFFSET = 0x03
+RUNTIME_X_OFFSET = 0x06
+LEON_NAME_ID = 0x0D
+LEON_PROBE_POSITION = LANGRISSER_POSITION
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -56,6 +70,48 @@ def deployment_bytes(positions: tuple[tuple[int, int], ...]) -> bytes:
     return b"".join(
         x.to_bytes(2, "big") + y.to_bytes(2, "big") for x, y in positions
     )
+
+
+def protagonist_death_wrapper_code() -> bytes:
+    record = (
+        RUNTIME_GROUP_BASE
+        + PROTAGONIST_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code = bytearray()
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def install_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+    wrapper: bytes,
+) -> None:
+    expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+            != expected_start_entry
+        ):
+            raise ValueError(f"{label} Start-menu entry operand changed")
+    wrapper_end = RUNTIME_WRAPPER + len(wrapper)
+    if probe[RUNTIME_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError("input diagnostic wrapper region is not empty")
+    probe[
+        START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+    ] = RUNTIME_WRAPPER.to_bytes(4, "big")
+    probe[RUNTIME_WRAPPER:wrapper_end] = wrapper
 
 
 def validate_layout(probe: bytes, source: bytes) -> None:
@@ -98,6 +154,16 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             raise ValueError(
                 f"input Langrisser trigger at 0x{offset:06X} changed"
             )
+    for offset, expected in LEON_LANGRISSER_TRIGGER.items():
+        end = offset + len(expected)
+        if source[offset:end] != expected:
+            raise ValueError(
+                f"Japanese Leon Langrisser trigger at 0x{offset:06X} changed"
+            )
+        if probe[offset:end] != expected:
+            raise ValueError(
+                f"input Leon Langrisser trigger at 0x{offset:06X} changed"
+            )
 
 
 def patch_probe(
@@ -105,9 +171,34 @@ def patch_probe(
     source: bytes,
     *,
     completion_layout: bool = False,
+    protagonist_death: bool = False,
+    leon_langrisser: bool = False,
 ) -> int:
     validate_layout(probe, source)
+    diagnostic_modes = (
+        int(completion_layout)
+        + int(protagonist_death)
+        + int(leon_langrisser)
+    )
+    if diagnostic_modes > 1:
+        raise ValueError("Scenario 14 diagnostic modes conflict")
+    if protagonist_death:
+        install_start_wrapper(
+            probe,
+            source,
+            protagonist_death_wrapper_code(),
+        )
+        return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
+    if leon_langrisser:
+        leon = (
+            layout.records_offset
+            + LEON_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        probe[leon] &= 0x7F
+        probe[leon + FIELD_OFFSETS["x"]] = LEON_PROBE_POSITION[0]
+        probe[leon + FIELD_OFFSETS["y"]] = LEON_PROBE_POSITION[1]
+        return builder.update_md_checksum(probe)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
         probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
@@ -142,6 +233,23 @@ def parse_args() -> argparse.Namespace:
             "Langrisser trigger at (16,6)"
         ),
     )
+    parser.add_argument(
+        "--protagonist-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 14 deployment and fixed record, then "
+            "mark only runtime player group 0 defeated through Start"
+        ),
+    )
+    parser.add_argument(
+        "--leon-langrisser",
+        action="store_true",
+        help=(
+            "preserve every Scenario 14 deployment and non-Leon fixed "
+            "record, then activate the source Leon record on the "
+            "source-verified Langrisser failure tile"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -153,14 +261,31 @@ def main() -> int:
         probe,
         source,
         completion_layout=args.completion_layout,
+        protagonist_death=args.protagonist_death,
+        leon_langrisser=args.leon_langrisser,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print("Scenario 14 enemy records 0..10: AT 0, DF 0, no mercenaries")
+    if args.protagonist_death:
+        print(
+            "protagonist-death: all Scenario 14 deployments and fixed "
+            "records preserved"
+        )
+        print("Start marks only runtime player group 0 defeated")
+    elif args.leon_langrisser:
+        print(
+            "leon-langrisser: all Scenario 14 deployments and non-Leon "
+            "fixed records preserved"
+        )
+        print(
+            "source Leon activated on the Langrisser failure tile (16,6)"
+        )
+    else:
+        print("Scenario 14 enemy records 0..10: AT 0, DF 0, no mercenaries")
     if args.completion_layout:
         print("completion layout: Elwin moved from (23,26) to (16,7)")
         print("Langrisser trigger (16,6), identities, and events preserved")
-    else:
+    elif not (args.protagonist_death or args.leon_langrisser):
         print(
             "stock deployments, identities, classes, levels, hidden Leon, "
             "and events preserved"

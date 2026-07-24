@@ -1,0 +1,1998 @@
+{
+  "format": 1,
+  "description": "Deterministic inventory of the byte-UI local indexes and VRAM tiles. Unassigned does not mean safe until live ownership is verified.",
+  "local_index_count": 174,
+  "extension_capacity": 118,
+  "extension_segments": [
+    {
+      "start": "0x0340",
+      "count": 8
+    },
+    {
+      "start": "0x0398",
+      "count": 24
+    },
+    {
+      "start": "0x0440",
+      "count": 8
+    },
+    {
+      "start": "0x0498",
+      "count": 24
+    },
+    {
+      "start": "0x04D8",
+      "count": 24
+    },
+    {
+      "start": "0x05D8",
+      "count": 30
+    }
+  ],
+  "local_indexes": [
+    {
+      "local_index": "0x00",
+      "char": " ",
+      "vram_tile": "0x0020",
+      "allocation": "space",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x01",
+      "char": "파",
+      "vram_tile": "0x00CC",
+      "allocation": "base_byte_code",
+      "byte_code": "0xCC"
+    },
+    {
+      "local_index": "0x02",
+      "char": "이",
+      "vram_tile": "0x00A7",
+      "allocation": "base_byte_code",
+      "byte_code": "0xA7"
+    },
+    {
+      "local_index": "0x03",
+      "char": "터",
+      "vram_tile": "0x00AB",
+      "allocation": "base_byte_code",
+      "byte_code": "0xAB"
+    },
+    {
+      "local_index": "0x04",
+      "char": "클",
+      "vram_tile": "0x00D6",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD6"
+    },
+    {
+      "local_index": "0x05",
+      "char": "레",
+      "vram_tile": "0x00D1",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD1"
+    },
+    {
+      "local_index": "0x06",
+      "char": "릭",
+      "vram_tile": "0x00DA",
+      "allocation": "base_byte_code",
+      "byte_code": "0xDA"
+    },
+    {
+      "local_index": "0x07",
+      "char": "워",
+      "vram_tile": "0x00C4",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC4"
+    },
+    {
+      "local_index": "0x08",
+      "char": "록",
+      "vram_tile": "0x05D8",
+      "allocation": "battle_stable",
+      "byte_code": "0xF6"
+    },
+    {
+      "local_index": "0x09",
+      "char": "로",
+      "vram_tile": "0x00DC",
+      "allocation": "base_byte_code",
+      "byte_code": "0xDC"
+    },
+    {
+      "local_index": "0x0A",
+      "char": "드",
+      "vram_tile": "0x00BF",
+      "allocation": "base_byte_code",
+      "byte_code": "0xBF"
+    },
+    {
+      "local_index": "0x0B",
+      "char": "나",
+      "vram_tile": "0x00DD",
+      "allocation": "base_byte_code",
+      "byte_code": "0xDD"
+    },
+    {
+      "local_index": "0x0C",
+      "char": "트",
+      "vram_tile": "0x00B2",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB2"
+    },
+    {
+      "local_index": "0x0D",
+      "char": "호",
+      "vram_tile": "0x0059",
+      "allocation": "base_byte_code",
+      "byte_code": "0x59"
+    },
+    {
+      "local_index": "0x0E",
+      "char": "크",
+      "vram_tile": "0x0340",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x0F",
+      "char": "코",
+      "vram_tile": "0x03F4",
+      "allocation": "escape_code",
+      "byte_code": "0xF4"
+    },
+    {
+      "local_index": "0x10",
+      "char": "힐",
+      "vram_tile": "0x0341",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x11",
+      "char": "러",
+      "vram_tile": "0x03AF",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x12",
+      "char": "소",
+      "vram_tile": "0x03AD",
+      "allocation": "battle_stable",
+      "byte_code": "0x51"
+    },
+    {
+      "local_index": "0x13",
+      "char": "서",
+      "vram_tile": "0x03AE",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x14",
+      "char": "샤",
+      "vram_tile": "0x0342",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x15",
+      "char": "먼",
+      "vram_tile": "0x0343",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x16",
+      "char": "하",
+      "vram_tile": "0x00A9",
+      "allocation": "base_byte_code",
+      "byte_code": "0xA9"
+    },
+    {
+      "local_index": "0x17",
+      "char": "랜",
+      "vram_tile": "0x0344",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x18",
+      "char": "더",
+      "vram_tile": "0x0345",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x19",
+      "char": "매",
+      "vram_tile": "0x00DE",
+      "allocation": "base_byte_code",
+      "byte_code": "0xDE"
+    },
+    {
+      "local_index": "0x1A",
+      "char": "직",
+      "vram_tile": "0x00DF",
+      "allocation": "base_byte_code",
+      "byte_code": "0xDF"
+    },
+    {
+      "local_index": "0x1B",
+      "char": "유",
+      "vram_tile": "0x0346",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x1C",
+      "char": "니",
+      "vram_tile": "0x0347",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x1D",
+      "char": "콘",
+      "vram_tile": "0x0398",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x1E",
+      "char": "래",
+      "vram_tile": "0x0399",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x1F",
+      "char": "곤",
+      "vram_tile": "0x039A",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x20",
+      "char": "펜",
+      "vram_tile": "0x039B",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x21",
+      "char": "프",
+      "vram_tile": "0x004A",
+      "allocation": "base_byte_code",
+      "byte_code": "0x4A"
+    },
+    {
+      "local_index": "0x22",
+      "char": "리",
+      "vram_tile": "0x00B3",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB3"
+    },
+    {
+      "local_index": "0x23",
+      "char": "스",
+      "vram_tile": "0x05F1",
+      "allocation": "battle_stable",
+      "byte_code": "0xAF"
+    },
+    {
+      "local_index": "0x24",
+      "char": "비",
+      "vram_tile": "0x05F5",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x25",
+      "char": "숍",
+      "vram_tile": "0x039D",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x26",
+      "char": "메",
+      "vram_tile": "0x039E",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x27",
+      "char": "지",
+      "vram_tile": "0x00AD",
+      "allocation": "base_byte_code",
+      "byte_code": "0xAD"
+    },
+    {
+      "local_index": "0x28",
+      "char": "아",
+      "vram_tile": "0x00A8",
+      "allocation": "base_byte_code",
+      "byte_code": "0xA8"
+    },
+    {
+      "local_index": "0x29",
+      "char": "위",
+      "vram_tile": "0x00B7",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB7"
+    },
+    {
+      "local_index": "0x2A",
+      "char": "저",
+      "vram_tile": "0x00D7",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD7"
+    },
+    {
+      "local_index": "0x2B",
+      "char": "세",
+      "vram_tile": "0x039F",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x2C",
+      "char": "인",
+      "vram_tile": "0x00B1",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB1"
+    },
+    {
+      "local_index": "0x2D",
+      "char": "팔",
+      "vram_tile": "0x03A0",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x2E",
+      "char": "라",
+      "vram_tile": "0x03F0",
+      "allocation": "escape_code",
+      "byte_code": "0xF0"
+    },
+    {
+      "local_index": "0x2F",
+      "char": "딘",
+      "vram_tile": "0x03A1",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x30",
+      "char": "마",
+      "vram_tile": "0x0057",
+      "allocation": "base_byte_code",
+      "byte_code": "0x57"
+    },
+    {
+      "local_index": "0x31",
+      "char": "그",
+      "vram_tile": "0x00BE",
+      "allocation": "base_byte_code",
+      "byte_code": "0xBE"
+    },
+    {
+      "local_index": "0x32",
+      "char": "랑",
+      "vram_tile": "0x03A2",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x33",
+      "char": "실",
+      "vram_tile": "0x03A3",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x34",
+      "char": "버",
+      "vram_tile": "0x03A4",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x35",
+      "char": "킹",
+      "vram_tile": "0x03A5",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x36",
+      "char": "히",
+      "vram_tile": "0x03A6",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x37",
+      "char": "어",
+      "vram_tile": "0x00CD",
+      "allocation": "base_byte_code",
+      "byte_code": "0xCD"
+    },
+    {
+      "local_index": "0x38",
+      "char": "에",
+      "vram_tile": "0x00BB",
+      "allocation": "base_byte_code",
+      "byte_code": "0xBB"
+    },
+    {
+      "local_index": "0x39",
+      "char": "전",
+      "vram_tile": "0x03A7",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x3A",
+      "char": "자",
+      "vram_tile": "0x03A8",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x3B",
+      "char": "베",
+      "vram_tile": "0x00DB",
+      "allocation": "base_byte_code",
+      "byte_code": "0xDB"
+    },
+    {
+      "local_index": "0x3C",
+      "char": "린",
+      "vram_tile": "0x03A9",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x3D",
+      "char": "머",
+      "vram_tile": "0x03AA",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x3E",
+      "char": "너",
+      "vram_tile": "0x03AB",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x3F",
+      "char": "얄",
+      "vram_tile": "0x03AC",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x40",
+      "char": "뱀",
+      "vram_tile": "0x0440",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x41",
+      "char": "시",
+      "vram_tile": "0x00AC",
+      "allocation": "base_byte_code",
+      "byte_code": "0xAC"
+    },
+    {
+      "local_index": "0x42",
+      "char": "맨",
+      "vram_tile": "0x00BC",
+      "allocation": "base_byte_code",
+      "byte_code": "0xBC"
+    },
+    {
+      "local_index": "0x43",
+      "char": "새",
+      "vram_tile": "0x0441",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x44",
+      "char": "신",
+      "vram_tile": "0x00D5",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD5"
+    },
+    {
+      "local_index": "0x45",
+      "char": "네",
+      "vram_tile": "0x0442",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x46",
+      "char": "제",
+      "vram_tile": "0x00C0",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC0"
+    },
+    {
+      "local_index": "0x47",
+      "char": "럴",
+      "vram_tile": "0x05F2",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x48",
+      "char": "가",
+      "vram_tile": "0x05F0",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x49",
+      "char": "엠",
+      "vram_tile": "0x0445",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x4A",
+      "char": "퍼",
+      "vram_tile": "0x0446",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x4B",
+      "char": "웨",
+      "vram_tile": "0x0447",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x4C",
+      "char": "울",
+      "vram_tile": "0x0498",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x4D",
+      "char": "슬",
+      "vram_tile": "0x05F3",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x4E",
+      "char": "임",
+      "vram_tile": "0x05F4",
+      "allocation": "battle_stable",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x4F",
+      "char": "케",
+      "vram_tile": "0x049B",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x50",
+      "char": "르",
+      "vram_tile": "0x00AA",
+      "allocation": "base_byte_code",
+      "byte_code": "0xAA"
+    },
+    {
+      "local_index": "0x51",
+      "char": "큐",
+      "vram_tile": "0x049C",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x52",
+      "char": "고",
+      "vram_tile": "0x049D",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x53",
+      "char": "와",
+      "vram_tile": "0x049E",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x54",
+      "char": "번",
+      "vram_tile": "0x049F",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x55",
+      "char": "디",
+      "vram_tile": "0x04A0",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x56",
+      "char": "노",
+      "vram_tile": "0x04A1",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x57",
+      "char": "언",
+      "vram_tile": "0x04A2",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x58",
+      "char": "골",
+      "vram_tile": "0x04A3",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x59",
+      "char": "렘",
+      "vram_tile": "0x04A4",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x5A",
+      "char": "치",
+      "vram_tile": "0x04A5",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x5B",
+      "char": "빙",
+      "vram_tile": "0x04A6",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x5C",
+      "char": "켄",
+      "vram_tile": "0x04A7",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x5D",
+      "char": "미",
+      "vram_tile": "0x04A8",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x5E",
+      "char": "타",
+      "vram_tile": "0x04A9",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x5F",
+      "char": "우",
+      "vram_tile": "0x04AA",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x60",
+      "char": "데",
+      "vram_tile": "0x04AB",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x61",
+      "char": "몬",
+      "vram_tile": "0x04AC",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x62",
+      "char": "다",
+      "vram_tile": "0x04AD",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x63",
+      "char": "솔",
+      "vram_tile": "0x00B8",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB8"
+    },
+    {
+      "local_index": "0x64",
+      "char": "글",
+      "vram_tile": "0x04AE",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x65",
+      "char": "헤",
+      "vram_tile": "0x00D8",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD8"
+    },
+    {
+      "local_index": "0x66",
+      "char": "군",
+      "vram_tile": "0x00A5",
+      "allocation": "base_byte_code",
+      "byte_code": "0xA5"
+    },
+    {
+      "local_index": "0x67",
+      "char": "엘",
+      "vram_tile": "0x00B4",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB4"
+    },
+    {
+      "local_index": "0x68",
+      "char": "발",
+      "vram_tile": "0x00C1",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC1"
+    },
+    {
+      "local_index": "0x69",
+      "char": "몽",
+      "vram_tile": "0x04AF",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x6A",
+      "char": "폰",
+      "vram_tile": "0x04D8",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x6B",
+      "char": "엔",
+      "vram_tile": "0x04D9",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x6C",
+      "char": "젤",
+      "vram_tile": "0x04DA",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x6D",
+      "char": "민",
+      "vram_tile": "0x00B6",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB6"
+    },
+    {
+      "local_index": "0x6E",
+      "char": "커",
+      "vram_tile": "0x04DB",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x6F",
+      "char": "바",
+      "vram_tile": "0x00C8",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC8"
+    },
+    {
+      "local_index": "0x70",
+      "char": "안",
+      "vram_tile": "0x04DC",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x71",
+      "char": "켈",
+      "vram_tile": "0x04DD",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x72",
+      "char": "톤",
+      "vram_tile": "0x04DE",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x73",
+      "char": "좀",
+      "vram_tile": "0x04DF",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x74",
+      "char": "일",
+      "vram_tile": "0x04E0",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x75",
+      "char": "본",
+      "vram_tile": "0x04E1",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x76",
+      "char": "선",
+      "vram_tile": "0x04E2",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x77",
+      "char": "배",
+      "vram_tile": "0x04E3",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x78",
+      "char": "멘",
+      "vram_tile": "0x04E4",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x79",
+      "char": "탈",
+      "vram_tile": "0x04E5",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x7A",
+      "char": "헬",
+      "vram_tile": "0x04E6",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x7B",
+      "char": "운",
+      "vram_tile": "0x04E7",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x7C",
+      "char": "야",
+      "vram_tile": "0x04E8",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x7D",
+      "char": "화",
+      "vram_tile": "0x04E9",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x7E",
+      "char": "키",
+      "vram_tile": "0x03F5",
+      "allocation": "escape_code",
+      "byte_code": "0xF5"
+    },
+    {
+      "local_index": "0x7F",
+      "char": "릴",
+      "vram_tile": "0x04EA",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x80",
+      "char": "요",
+      "vram_tile": "0x04EB",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x81",
+      "char": "문",
+      "vram_tile": "0x04EC",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x82",
+      "char": "간",
+      "vram_tile": "0x04ED",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x83",
+      "char": "빌",
+      "vram_tile": "0x04EE",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x84",
+      "char": "츠",
+      "vram_tile": "0x04EF",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x85",
+      "char": "윈",
+      "vram_tile": "0x00D9",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD9"
+    },
+    {
+      "local_index": "0x86",
+      "char": "쉐",
+      "vram_tile": "0x03F2",
+      "allocation": "escape_code",
+      "byte_code": "0xF2"
+    },
+    {
+      "local_index": "0x87",
+      "char": "론",
+      "vram_tile": "0x03F1",
+      "allocation": "escape_code",
+      "byte_code": "0xF1"
+    },
+    {
+      "local_index": "0x88",
+      "char": "카",
+      "vram_tile": "0x03F3",
+      "allocation": "escape_code",
+      "byte_code": "0xF3"
+    },
+    {
+      "local_index": "0x89",
+      "char": "수",
+      "vram_tile": "0x00B9",
+      "allocation": "base_byte_code",
+      "byte_code": "0xB9"
+    },
+    {
+      "local_index": "0x8A",
+      "char": "께",
+      "vram_tile": "0x05D9",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x8B",
+      "char": "끼",
+      "vram_tile": "0x05DA",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x8C",
+      "char": "의",
+      "vram_tile": "0x05DB",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x8D",
+      "char": "기",
+      "vram_tile": "0x00CB",
+      "allocation": "base_byte_code",
+      "byte_code": "0xCB"
+    },
+    {
+      "local_index": "0x8E",
+      "char": "사",
+      "vram_tile": "0x00CA",
+      "allocation": "base_byte_code",
+      "byte_code": "0xCA"
+    },
+    {
+      "local_index": "0x8F",
+      "char": "온",
+      "vram_tile": "0x00D2",
+      "allocation": "base_byte_code",
+      "byte_code": "0xD2"
+    },
+    {
+      "local_index": "0x90",
+      "char": "른",
+      "vram_tile": "0x00BD",
+      "allocation": "base_byte_code",
+      "byte_code": "0xBD"
+    },
+    {
+      "local_index": "0x91",
+      "char": "보",
+      "vram_tile": "0x05DC",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x92",
+      "char": "조",
+      "vram_tile": "0x05DD",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x93",
+      "char": "름",
+      "vram_tile": "0x05DE",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x94",
+      "char": "멜",
+      "vram_tile": "0x05DF",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x95",
+      "char": "모",
+      "vram_tile": "0x05E0",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x96",
+      "char": "건",
+      "vram_tile": "0x05E1",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x97",
+      "char": "남",
+      "vram_tile": "0x05E2",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x98",
+      "char": "갈",
+      "vram_tile": "0x05E3",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x99",
+      "char": "폴",
+      "vram_tile": "0x05E4",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x9A",
+      "char": "거",
+      "vram_tile": "0x05E5",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x9B",
+      "char": "병",
+      "vram_tile": "0x00CF",
+      "allocation": "base_byte_code",
+      "byte_code": "0xCF"
+    },
+    {
+      "local_index": "0x9C",
+      "char": "휘",
+      "vram_tile": "0x00AE",
+      "allocation": "base_byte_code",
+      "byte_code": "0xAE"
+    },
+    {
+      "local_index": "0x9D",
+      "char": "관",
+      "vram_tile": "0x00C2",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC2"
+    },
+    {
+      "local_index": "0x9E",
+      "char": "주",
+      "vram_tile": "0x05E6",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0x9F",
+      "char": "해",
+      "vram_tile": "0x05E7",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xA0",
+      "char": "적",
+      "vram_tile": "0x00A6",
+      "allocation": "base_byte_code",
+      "byte_code": "0xA6"
+    },
+    {
+      "local_index": "0xA1",
+      "char": "대",
+      "vram_tile": "0x05E8",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xA2",
+      "char": "렌",
+      "vram_tile": "0x05E9",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xA3",
+      "char": "돈",
+      "vram_tile": "0x00C3",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC3"
+    },
+    {
+      "local_index": "0xA4",
+      "char": "삼",
+      "vram_tile": "0x00C6",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC6"
+    },
+    {
+      "local_index": "0xA5",
+      "char": "손",
+      "vram_tile": "0x00C7",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC7"
+    },
+    {
+      "local_index": "0xA6",
+      "char": "란",
+      "vram_tile": "0x00C9",
+      "allocation": "base_byte_code",
+      "byte_code": "0xC9"
+    },
+    {
+      "local_index": "0xA7",
+      "char": "국",
+      "vram_tile": "0x00CE",
+      "allocation": "base_byte_code",
+      "byte_code": "0xCE"
+    },
+    {
+      "local_index": "0xA8",
+      "char": "형",
+      "vram_tile": "0x05EA",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xA9",
+      "char": "님",
+      "vram_tile": "0x05EB",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xAA",
+      "char": "녀",
+      "vram_tile": "0x05EC",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xAB",
+      "char": "루",
+      "vram_tile": "0x05ED",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xAC",
+      "char": "템",
+      "vram_tile": "0x05EE",
+      "allocation": "extension",
+      "byte_code": null
+    },
+    {
+      "local_index": "0xAD",
+      "char": "택",
+      "vram_tile": "0x05EF",
+      "allocation": "extension",
+      "byte_code": null
+    }
+  ],
+  "extension_slots": [
+    {
+      "vram_tile": "0x0340",
+      "status": "active",
+      "char": "크",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0341",
+      "status": "active",
+      "char": "힐",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0342",
+      "status": "active",
+      "char": "샤",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0343",
+      "status": "active",
+      "char": "먼",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0344",
+      "status": "active",
+      "char": "랜",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0345",
+      "status": "active",
+      "char": "더",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0346",
+      "status": "active",
+      "char": "유",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0347",
+      "status": "active",
+      "char": "니",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0398",
+      "status": "active",
+      "char": "콘",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0399",
+      "status": "active",
+      "char": "래",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x039A",
+      "status": "active",
+      "char": "곤",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x039B",
+      "status": "active",
+      "char": "펜",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x039C",
+      "status": "retired_unsafe",
+      "char": "비",
+      "reason": "battle animation graphics overwrite the former 비 tile"
+    },
+    {
+      "vram_tile": "0x039D",
+      "status": "active",
+      "char": "숍",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x039E",
+      "status": "active",
+      "char": "메",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x039F",
+      "status": "active",
+      "char": "세",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A0",
+      "status": "active",
+      "char": "팔",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A1",
+      "status": "active",
+      "char": "딘",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A2",
+      "status": "active",
+      "char": "랑",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A3",
+      "status": "active",
+      "char": "실",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A4",
+      "status": "active",
+      "char": "버",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A5",
+      "status": "active",
+      "char": "킹",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A6",
+      "status": "active",
+      "char": "히",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A7",
+      "status": "active",
+      "char": "전",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A8",
+      "status": "active",
+      "char": "자",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03A9",
+      "status": "active",
+      "char": "린",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03AA",
+      "status": "active",
+      "char": "머",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03AB",
+      "status": "active",
+      "char": "너",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03AC",
+      "status": "active",
+      "char": "얄",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x03AD",
+      "status": "active",
+      "char": "소",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x03AE",
+      "status": "active",
+      "char": "서",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x03AF",
+      "status": "active",
+      "char": "러",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x0440",
+      "status": "active",
+      "char": "뱀",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0441",
+      "status": "active",
+      "char": "새",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0442",
+      "status": "active",
+      "char": "네",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0443",
+      "status": "retired_unsafe",
+      "char": "럴",
+      "reason": "Scenario 8 reinforcement animation overwrites the former 럴 tile"
+    },
+    {
+      "vram_tile": "0x0444",
+      "status": "retired_unsafe",
+      "char": "가",
+      "reason": "Scenario 8 reinforcement animation overwrites the former 가 tile"
+    },
+    {
+      "vram_tile": "0x0445",
+      "status": "active",
+      "char": "엠",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0446",
+      "status": "active",
+      "char": "퍼",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0447",
+      "status": "active",
+      "char": "웨",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0498",
+      "status": "active",
+      "char": "울",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x0499",
+      "status": "retired_unsafe",
+      "char": "슬",
+      "reason": "battle animation graphics overwrite the former 슬 tile"
+    },
+    {
+      "vram_tile": "0x049A",
+      "status": "retired_unsafe",
+      "char": "임",
+      "reason": "battle animation graphics overwrite the former 임 tile"
+    },
+    {
+      "vram_tile": "0x049B",
+      "status": "active",
+      "char": "케",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x049C",
+      "status": "active",
+      "char": "큐",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x049D",
+      "status": "active",
+      "char": "고",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x049E",
+      "status": "active",
+      "char": "와",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x049F",
+      "status": "active",
+      "char": "번",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A0",
+      "status": "active",
+      "char": "디",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A1",
+      "status": "active",
+      "char": "노",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A2",
+      "status": "active",
+      "char": "언",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A3",
+      "status": "active",
+      "char": "골",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A4",
+      "status": "active",
+      "char": "렘",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A5",
+      "status": "active",
+      "char": "치",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A6",
+      "status": "active",
+      "char": "빙",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A7",
+      "status": "active",
+      "char": "켄",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A8",
+      "status": "active",
+      "char": "미",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04A9",
+      "status": "active",
+      "char": "타",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04AA",
+      "status": "active",
+      "char": "우",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04AB",
+      "status": "active",
+      "char": "데",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04AC",
+      "status": "active",
+      "char": "몬",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04AD",
+      "status": "active",
+      "char": "다",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04AE",
+      "status": "active",
+      "char": "글",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04AF",
+      "status": "active",
+      "char": "몽",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04D8",
+      "status": "active",
+      "char": "폰",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04D9",
+      "status": "active",
+      "char": "엔",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04DA",
+      "status": "active",
+      "char": "젤",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04DB",
+      "status": "active",
+      "char": "커",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04DC",
+      "status": "active",
+      "char": "안",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04DD",
+      "status": "active",
+      "char": "켈",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04DE",
+      "status": "active",
+      "char": "톤",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04DF",
+      "status": "active",
+      "char": "좀",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E0",
+      "status": "active",
+      "char": "일",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E1",
+      "status": "active",
+      "char": "본",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E2",
+      "status": "active",
+      "char": "선",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E3",
+      "status": "active",
+      "char": "배",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E4",
+      "status": "active",
+      "char": "멘",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E5",
+      "status": "active",
+      "char": "탈",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E6",
+      "status": "active",
+      "char": "헬",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E7",
+      "status": "active",
+      "char": "운",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E8",
+      "status": "active",
+      "char": "야",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04E9",
+      "status": "active",
+      "char": "화",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04EA",
+      "status": "active",
+      "char": "릴",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04EB",
+      "status": "active",
+      "char": "요",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04EC",
+      "status": "active",
+      "char": "문",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04ED",
+      "status": "active",
+      "char": "간",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04EE",
+      "status": "active",
+      "char": "빌",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x04EF",
+      "status": "active",
+      "char": "츠",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05D8",
+      "status": "active",
+      "char": "록",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x05D9",
+      "status": "active",
+      "char": "께",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05DA",
+      "status": "active",
+      "char": "끼",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05DB",
+      "status": "active",
+      "char": "의",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05DC",
+      "status": "active",
+      "char": "보",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05DD",
+      "status": "active",
+      "char": "조",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05DE",
+      "status": "active",
+      "char": "름",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05DF",
+      "status": "active",
+      "char": "멜",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E0",
+      "status": "active",
+      "char": "모",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E1",
+      "status": "active",
+      "char": "건",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E2",
+      "status": "active",
+      "char": "남",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E3",
+      "status": "active",
+      "char": "갈",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E4",
+      "status": "active",
+      "char": "폴",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E5",
+      "status": "active",
+      "char": "거",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E6",
+      "status": "active",
+      "char": "주",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E7",
+      "status": "active",
+      "char": "해",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E8",
+      "status": "active",
+      "char": "대",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05E9",
+      "status": "active",
+      "char": "렌",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05EA",
+      "status": "active",
+      "char": "형",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05EB",
+      "status": "active",
+      "char": "님",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05EC",
+      "status": "active",
+      "char": "녀",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05ED",
+      "status": "active",
+      "char": "루",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05EE",
+      "status": "active",
+      "char": "템",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05EF",
+      "status": "active",
+      "char": "택",
+      "reason": "ordered extension allocation"
+    },
+    {
+      "vram_tile": "0x05F0",
+      "status": "active",
+      "char": "가",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x05F1",
+      "status": "active",
+      "char": "스",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x05F2",
+      "status": "active",
+      "char": "럴",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x05F3",
+      "status": "active",
+      "char": "슬",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x05F4",
+      "status": "active",
+      "char": "임",
+      "reason": "explicit battle-stable assignment"
+    },
+    {
+      "vram_tile": "0x05F5",
+      "status": "active",
+      "char": "비",
+      "reason": "explicit battle-stable assignment"
+    }
+  ],
+  "unsafe_byte_codes": [
+    {
+      "byte_code": "0xA1",
+      "reason": "full battle renderer status/icon owner"
+    },
+    {
+      "byte_code": "0xA2",
+      "reason": "full battle renderer status/icon owner"
+    },
+    {
+      "byte_code": "0xA3",
+      "reason": "full battle renderer status/icon owner"
+    },
+    {
+      "byte_code": "0xA4",
+      "reason": "full battle renderer status/icon owner"
+    }
+  ],
+  "dynamic_map_cache_tiles": [
+    "0x07A1",
+    "0x07A2",
+    "0x07A3",
+    "0x07A4",
+    "0x07A5",
+    "0x07A6",
+    "0x07A7",
+    "0x07A8",
+    "0x07A9",
+    "0x07AD",
+    "0x07AF",
+    "0x07B0",
+    "0x07B1",
+    "0x07B3",
+    "0x07B4",
+    "0x07B5"
+  ]
+}

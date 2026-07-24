@@ -24,7 +24,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 11 | current | current | current | current | current | probe | probe | probe | 63 |
 | 12 | current | current | current | current | current | probe | probe | probe | 54 |
 | 13 | current | current | current | current | current | probe | probe | probe | 57 |
-| 14 | current | current | current | current | probe | probe | probe | pending | 47 |
+| 14 | current | current | current | current | probe | probe | probe | probe | 55 |
 | 15 | current | current | current | current | probe | progressed | probe | pending | 41 |
 | 16 | current | current | current | current | probe | progressed | probe | pending | 45 |
 | 17 | current | current | current | current | current | probe | probe | pending | 43 |
@@ -779,7 +779,7 @@ Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrollin
 
 ### Scenario 14
 
-Production CE27 verifies the Scenario 14 route map, all 19 text-bearing scrolling frames of 성검 랑그릿사, and the preparation endpoint. Direct Japanese-ROM rendering confirms that ancient Baldia sleeps at the bottom of a deep lake, Langrisser rests in the castle depths, and the Blue Dragon Knights seek the same objective. Explicit source rewrapping removed isolated 다스렸던, 드러낸, and 전설의 lines while retaining the existing 렸 glyph so no global direct-string token IDs moved. The canonical 발디아 spelling is retained. Source-validated probe B672 traversed the no-action orders, delayed Leon discussion, Leon arrival, and Langrisser/Alhazard history event through a valid command menu without reset or freeze. Live playback exposed record 0x19D4A0 wrapping {000F}장군의 across pages and leaving a lone full stop; production 2749 shortens it to 늦어서 미안하다 / 아기를 안은 엘리자에게 / {000F}의 전사를 알릴 수 없었어, and the 162-page current static render proves the corrected three-line record fits. Completion derivative B658 changes only Elwin's deployment to one tile below the source-verified (16,6) Langrisser trigger in addition to the normal enemy AT/DF/mercenary limits. One ordinary Move obtained 랑그릿사, traversed Leon/Laird retreat, all allied reactions, level/class-change results, 전과보고 with POINT 2200P, wrote a real 시나리오 15 save, selected 다음 시나리오, and entered 빙룡병단장 이멜다. Normal BlastEm termination left disk SRAM slot 1 at Scenario 15. Current derivatives are 542E/5414 after the Scenario 16 follow-up rewrap; replaying the otherwise unchanged full completion is intentionally not duplicated. Battle UI remains covered by the shared probe, and alternate branches remain pending.
+Production CE27 verifies the Scenario 14 route map, all 19 text-bearing scrolling frames of 성검 랑그릿사, and the preparation endpoint. Direct Japanese-ROM rendering confirms that ancient Baldia sleeps at the bottom of a deep lake, Langrisser rests in the castle depths, and the Blue Dragon Knights seek the same objective. Explicit source rewrapping removed isolated 다스렸던, 드러낸, and 전설의 lines while retaining the existing 렸 glyph so no global direct-string token IDs moved. The canonical 발디아 spelling is retained. Source-validated probe B672 traversed the no-action orders, delayed Leon discussion, Leon arrival, and Langrisser/Alhazard history event through a valid command menu without reset or freeze. Live playback exposed record 0x19D4A0 wrapping {000F}장군의 across pages and leaving a lone full stop; production 2749 shortens it to 늦어서 미안하다 / 아기를 안은 엘리자에게 / {000F}의 전사를 알릴 수 없었어, and the 162-page current static render proves the corrected three-line record fits. Completion derivative B658 changes only Elwin's deployment to one tile below the source-verified (16,6) Langrisser trigger in addition to the normal enemy AT/DF/mercenary limits. One ordinary Move obtained 랑그릿사, traversed Leon/Laird retreat, all allied reactions, level/class-change results, 전과보고 with POINT 2200P, wrote a real 시나리오 15 save, selected 다음 시나리오, and entered 빙룡병단장 이멜다. Normal BlastEm termination left disk SRAM slot 1 at Scenario 15. Current derivatives are 542E/5414 after the Scenario 16 follow-up rewrap; replaying the otherwise unchanged full completion is intentionally not duplicated. The protagonist-death derivative preserves every deployment and fixed record, marks only runtime player group 0 defeated through Start, renders 엘윈: 조금만 더 버텼다면 / 랑그릿사는 우리 것인데… from event 0x19E3B8, and reaches GAME OVER. The Japanese trigger at 0x19C8DE identifies Leon name ID 0x0D reaching (16,6) and handler 0x19CC52. Runtime X/Y-only teleport checksum 67C6 moved the sprite but not occupancy/action state and did not fire the branch. Activating the source hidden Leon record at (16,7), checksum 7D27, produced ordinary AI movement and also failed. The accepted diagnostic activates only that source Leon record at the exact trigger (16,6), preserving his Japanese identity, class, LV, AT, DF, and mercenaries. Current production 00DC produces checksum 90E3; fresh playback renders 랑그릿사를 얻었다!, 레온: 임무는 끝났다. / 더 싸울 이유는 없다. / 전군 퇴각!, the Leon/Laird/Elwin farewell sequence, 엘윈: 다 끝났어…, and GAME OVER without Japanese residue, broken glyphs, reset, or freeze. Normal completion and both declared defeat endings are now live-covered, so branches_endings is verified_probe.
 
 - `captures/run/f0ee_s14_brief_live_02.png`
 - `captures/run/f0ee_s14_brief_live_06.png`
@@ -827,6 +827,14 @@ Production CE27 verifies the Scenario 14 route map, all 19 text-bearing scrollin
 - `captures/run/b658_s14_next_selected.png`
 - `captures/run/b658_s15_route.png`
 - `captures/run/b658_s15_entry.png`
+- `captures/run/e3ee_s14_death_event_07.png`
+- `captures/run/e3ee_s14_death_event_08.png`
+- `captures/run/90e3_s14_enemy_09.png`
+- `captures/run/90e3_s14_enemy_10.png`
+- `captures/run/90e3_s14_enemy_11.png`
+- `captures/run/90e3_s14_enemy_12.png`
+- `captures/run/90e3_s14_enemy_16.png`
+- `captures/run/90e3_s14_enemy_17.png`
 - `captures/analysis/s14_render_2749/scenario_14_pages_02.png`
 
 ### Scenario 15

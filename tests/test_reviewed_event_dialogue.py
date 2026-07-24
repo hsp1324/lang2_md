@@ -39,6 +39,20 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             "{000F}의 전사를 알릴 수 없었어.",
         )
         self.assertNotIn("{000F}장군", text_by_address["0x19D4A0"])
+        self.assertEqual(
+            text_by_address["0x19E31C"],
+            "랑그릿사를 얻었다!",
+        )
+        self.assertEqual(
+            text_by_address["0x19E33A"],
+            "임무는 끝났다.\n더 싸울 이유는 없다.\n전군 퇴각!",
+        )
+        self.assertEqual(text_by_address["0x19E386"], "잘 있어!")
+        self.assertEqual(text_by_address["0x19E392"], "다 끝났어….")
+        self.assertEqual(
+            text_by_address["0x19E3B8"],
+            "조금만 더 버텼다면\n랑그릿사는 우리 것인데….",
+        )
 
     def test_scenario_1_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 1]
