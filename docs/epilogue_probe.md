@@ -167,12 +167,11 @@ checksum `1BE7`. Its numbered stock playback is
 `1be7_bernhardt_emperor_fixed.png`. The stream reaches `Fin` at frame `1241`
 and remains byte-identical through `1288`, without reset or freeze.
 
-This run also retained the ending-montage line reported during review.
-Frames `0104.png` through `0107.png` render the complete line
-`제국군이 마을로 오고 있어! 리아나가 위험해!` over the ending group
-illustration. It belongs to the fixed-count montage list at `0x0A6CEC`, not the
-Scenario 1 event stream. The surface is still marked `reviewed: false`, so this
-runtime ownership proof does not replace a Japanese-source wording review.
+This historical run retained the then-unreviewed line
+`제국군이 마을로 오고 있어! 리아나가 위험해!` at frames `0104.png`
+through `0107.png`. Do not cite that wording as accepted translation evidence.
+The later Japanese-source review below proved that it was an invented Scenario
+1 recap and replaced the complete montage conversation.
 
 ## All Ending Visit Dialogue Pass
 
@@ -370,3 +369,31 @@ over the first two class glyphs. The following map frame `164.png` shows the
 same sprite at that screen coordinate. The class token stream is byte-identical
 to the fixed build, while the ordinary result screen remains fully readable in
 `captures/run/1be7_bernhardt_emperor_fixed.png`.
+
+Current production checksum `9DD0` plus the adjacent-Bernhardt diagnostic
+produced checksum `E93E`. A fresh selector run first demonstrated a useful
+automation failure: reporting a valid saved Scenario 27 does not prove that the
+selector cheat was accepted. The missed cheat loaded the slot's Scenario 1 map,
+visible as `SCENARIO 1` in the lower panel. The accepted replay stopped on
+`captures/run/e93e_s27_selector_live.png`, visibly confirmed selector row
+`시나리오 27`, and only then entered the route.
+
+The accepted run used stock automatic deployment and a normal Elwin attack.
+`e93e_s27_real_target_bernhardt.png` and `e93e_s27_real_battle_ui.png` retain
+intact `베른하르트/엠퍼러`, AT/DF 0 diagnostic stats, and the battle labels.
+The complete closing stream is
+`captures/run/e93e_s27_ending_watch/000.png` onward. Frames `075..124` traverse
+the final punctuation build's ten reviewed montage records; `090..094` contain
+the corrected allies/empire line, `100` completes Langrisser uniting everyone's
+hearts, and `103` completes Sherry's warning. The invented
+`리아나가 위험해` recap never appears.
+
+The same run retained normal result selection rather than the all-record
+concatenation probe. Representative status screens include
+`225` (`스코트/파이터`), `400` (`라나/클레릭`), `575`
+(`보젤/다크마스터`), `650` (`레온/로얄가드`), `725`
+(`베른하르트/엠퍼러`), `800` (`리아나/클레릭`), and `825` (Elwin's
+conclusion). Credits remain interleaved with the original battle scenes, and
+frame `875` reaches `Fin` without a reset or freeze. The ten source-reviewed
+montage rows may therefore be `live_verified: true`; the two preceding,
+unreviewed villain records remain false.

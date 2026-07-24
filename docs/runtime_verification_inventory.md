@@ -37,7 +37,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 24 | current | current | current | current | probe | current | probe | pending | 44 |
 | 25 | current | current | current | current | current | current | probe | pending | 50 |
 | 26 | current | current | current | current | probe | current | probe | pending | 34 |
-| 27 | current | current | current | current | probe | current | probe | probe | 25 |
+| 27 | current | current | current | current | probe | current | probe | probe | 37 |
 | 28 | current | current | current | current | current | current | probe | pending | 27 |
 | 29 | current | current | current | current | current | current | probe | pending | 30 |
 | 30 | current | current | current | current | probe | current | probe | pending | 27 |
@@ -1324,7 +1324,7 @@ Production 212A verifies the Scenario 26 route map, all 14 text-bearing scrollin
 
 ### Scenario 27
 
-Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrolling frames of 전설의 끝, and the preparation endpoint. Direct Japanese-ROM rendering confirms survival of Egbert's magic attack, arrival at Bernhardt's innermost temple, the silent dark shrine, Bernhardt holding Alhazard with confidence despite being cornered, and the millennia-long legend of light and darkness nearing its end. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Battle animation capture landed on the black transition rather than its labels, so battle UI remains verified only by the documented production-derived probe. Ending, epilogue, credits, and Fin retain documented production-derived probe evidence; a successful ordinary clear and conditional branches remain pending.
+Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrolling frames of 전설의 끝, and the preparation endpoint. Direct Japanese-ROM rendering confirms survival of Egbert's magic attack, arrival at Bernhardt's innermost temple, the silent dark shrine, Bernhardt holding Alhazard with confidence despite being cornered, and the millennia-long legend of light and darkness nearing its end. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Current production 9DD0 plus the source-validating adjacent-Bernhardt probe produced E93E. A normal Elwin attack rendered intact 베른하르트/엠퍼러 and battle labels, then the stock closing route traversed the source-reviewed ten-record montage, all selected character and villain epilogues, interleaved credits, Liana and Elwin conclusions, and Fin at frame 875 without reset or freeze. The obsolete invented ending line 리아나가 위험해 did not appear; the corrected mutual-understanding, allied-hearts, and continuing-journey conversation did. This remains production-derived probe evidence because only Bernhardt's position, AT/DF, and mercenaries are diagnostic; an unmodified ordinary clear and conditional ending branches remain pending.
 
 - `captures/run/ea22_s27_after_select_current.png`
 - `captures/run/ea22_s27_roster_sheet.png`
@@ -1333,6 +1333,18 @@ Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrollin
 - `captures/run/ea22_s27_shop_sell_message2.png`
 - `captures/run/3590_s27_command_ready.png`
 - `captures/run/c176_corrected_epilogue_watch/288.png`
+- `captures/run/e93e_s27_real_target_bernhardt.png`
+- `captures/run/e93e_s27_real_battle_ui.png`
+- `captures/run/e93e_s27_ending_watch/090.png`
+- `captures/run/e93e_s27_ending_watch/100.png`
+- `captures/run/e93e_s27_ending_watch/225.png`
+- `captures/run/e93e_s27_ending_watch/400.png`
+- `captures/run/e93e_s27_ending_watch/575.png`
+- `captures/run/e93e_s27_ending_watch/650.png`
+- `captures/run/e93e_s27_ending_watch/725.png`
+- `captures/run/e93e_s27_ending_watch/800.png`
+- `captures/run/e93e_s27_ending_watch/825.png`
+- `captures/run/e93e_s27_ending_watch/875.png`
 - `captures/run/c7ab_s27_title.png`
 - `captures/run/c7ab_s27_body_3.png`
 - `captures/run/c7ab_s27_body_final2.png`

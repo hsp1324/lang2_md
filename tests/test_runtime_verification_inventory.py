@@ -853,8 +853,24 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario27["turn_events"], "verified_current")
         self.assertEqual(scenario27["battle_ui"], "verified_probe")
         self.assertEqual(scenario27["completion"], "verified_probe")
+        self.assertEqual(scenario27["branches_endings"], "verified_probe")
         self.assertIn("captures/run/c7ab_s27_body_final2.png", scenario27["captures"])
         self.assertIn("captures/run/eca0_s27_turn1_55.png", scenario27["captures"])
+        for capture in (
+            "captures/run/e93e_s27_real_target_bernhardt.png",
+            "captures/run/e93e_s27_real_battle_ui.png",
+            "captures/run/e93e_s27_ending_watch/090.png",
+            "captures/run/e93e_s27_ending_watch/100.png",
+            "captures/run/e93e_s27_ending_watch/575.png",
+            "captures/run/e93e_s27_ending_watch/725.png",
+            "captures/run/e93e_s27_ending_watch/800.png",
+            "captures/run/e93e_s27_ending_watch/825.png",
+            "captures/run/e93e_s27_ending_watch/875.png",
+        ):
+            self.assertIn(capture, scenario27["captures"])
+        self.assertIn("source-reviewed ten-record montage", scenario27["note"])
+        self.assertIn("리아나가 위험해 did not appear", scenario27["note"])
+        self.assertIn("Fin at frame 875", scenario27["note"])
         self.assertEqual(scenario28["description"], "verified_current")
         self.assertEqual(scenario28["conditions"], "verified_current")
         self.assertEqual(scenario28["preparation"], "verified_current")

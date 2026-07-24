@@ -106,7 +106,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "target_korean": text,
                 "modified": changed(japanese, korean, offset, capacity * 2),
                 "reviewed": reviewed,
-                "live_verified": False,
+                "live_verified": reviewed,
             }
         )
     for code, text in builder.WIDE_BYTE_GLYPH_PATCHES.items():

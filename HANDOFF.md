@@ -22,14 +22,14 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 6E2C
-latest targeted live-verified production checksum: 6E2C
-custom Hangul glyphs: 864 (0x7000..0x7360)
-unit tests: 659 passing
+current production build checksum: 9DD0
+latest targeted live-verified production checksum: 9DD0
+custom Hangul glyphs: 866 (0x7000..0x7362)
+unit tests: 736 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
-declared UI patches: 134/135 byte-modified; NPC is intentionally unchanged
+declared UI patches: 142/143 byte-modified; NPC is intentionally unchanged
 explicit UI verification gaps: 6
 ```
 
@@ -5526,12 +5526,11 @@ contains 57 safe syllables as documented below and in
   `베른하르트/엠퍼러`. The combined 90-record/515-page stream reaches `Fin`
   at `1241.png`; hashes stay identical through `1288.png`. No reset, freeze,
   damaged result glyph, or premature terminator was observed.
-- The user-reported ending line is now retained at `0104.png` through
-  `0107.png`: `제국군이 마을로 오고 있어! 리아나가 위험해!`. It is
-  rendered by the fixed-count ending montage list at `0x0A6CEC`, not by the
-  Scenario 1 event block. Ownership and playback are proven, but every
-  `opening_text_lists` inventory entry remains `reviewed: false`; compare this
-  montage against Japanese-ROM playback before accepting its wording.
+- Historical frames `0104.png` through `0107.png` retained the then-unreviewed
+  line `제국군이 마을로 오고 있어! 리아나가 위험해!`. Do not cite it as
+  accepted translation evidence. The Japanese-ROM comparison documented in
+  `Ending Montage Source Correction` below proved it was an invented Scenario
+  1 recap and replaced the complete montage conversation.
 
 ### Isolated SRAM Recovery Format Marker (2026-07-18)
 
@@ -5568,9 +5567,11 @@ contains 57 safe syllables as documented below and in
   at `1e2a_ending_montage/163.png` is the adjacent-Bernhardt probe's flame
   sprite overlaying the popup; frame `164.png` places that animated sprite at
   the same coordinates. The relocated class token bytes are unchanged.
-- All 245 unit tests pass. The ten Japanese-reviewed montage rows are marked
-  `reviewed: true`; the first two villain records remain unreviewed, and the
-  final colon-only build remains conservatively `live_verified: false`.
+- At this 2026-07-18 checkpoint all 245 unit tests passed. The ten
+  Japanese-reviewed montage rows were `reviewed: true` but remained
+  `live_verified: false` because the final colon-only build had not been
+  replayed. The current `E93E` replay recorded later in this file supersedes
+  only that runtime flag; the first two villain records remain unreviewed.
 
 ### Title LOAD Slot Localization (2026-07-18)
 
@@ -8469,3 +8470,43 @@ contains 57 safe syllables as documented below and in
   `captures/run/a042_s29_saved.png`,
   `captures/run/a042_s29_next_route.png`, and
   `captures/run/a042_s29_return_s20.png`.
+
+### Current Scenario 27 Ending Replay (2026-07-24)
+
+- Production `9DD0` plus
+  `tools/build_scenario27_ending_probe_rom.py` produces checksum `E93E`.
+  The diagnostic changes only Bernhardt's position, signed AT/DF modifiers,
+  and mercenary slots. The closing event, montage, result selectors,
+  epilogues, credits, and final terminator remain production data.
+- Do not trust the selector helper's saved-scenario message alone. The first
+  attempt missed the Left/Right/Start/C cheat and loaded the slot's actual
+  Scenario 1 map; the lower panel visibly read `SCENARIO 1`. The accepted run
+  stopped at `captures/run/e93e_s27_selector_live.png`, confirmed
+  `시나리오 27`, pressed C once, and then verified the Scenario 27 route,
+  five-commander preparation list, automatic deployment, and final map before
+  proceeding.
+- A normal Elwin attack rendered intact `베른하르트/엠퍼러`, `-AT-`,
+  `-DF-`, and `-지형-` in
+  `captures/run/e93e_s27_real_target_bernhardt.png` and
+  `captures/run/e93e_s27_real_battle_ui.png`. Bernhardt died on the first
+  saved attempt and the stock closing event continued normally.
+- `captures/run/e93e_s27_ending_watch/075.png` through `124.png` cover the
+  final source-reviewed ten-record montage. The corrected conversation about
+  trust, mutual understanding, the allies stopping the empire, Langrisser
+  uniting hearts, and Elwin's continuing journey is present. The obsolete
+  invented line `리아나가 위험해` is absent.
+- Normal selected epilogues retained intact names and classes, including
+  `스코트/파이터` (`225`), `키스/호크나이트` (`350`),
+  `라나/클레릭` (`400`), `보젤/다크마스터` (`575`),
+  `레온/로얄가드` (`650`), `에그베르트/아크메이지` (`700`),
+  `베른하르트/엠퍼러` (`725`), and `리아나/클레릭` (`800`).
+  Elwin's conclusion is frame `825`; frame `875` reaches `Fin` without a
+  reset or freeze.
+- `tools/jp_ui_surface_inventory.py` now marks only the ten
+  Japanese-reviewed montage rows `live_verified: true`. The two preceding
+  villain records at `0x0A6B20` and `0x0A6B54` remain unreviewed and false.
+  Scenario 27 `branches_endings` remains `verified_probe`, because this run
+  does not prove an unmodified final-boss clear or every conditional outcome.
+- Production rebuild remains checksum `9DD0`; all 736 tests pass. The accepted
+  code, inventory, and documentation changes do not alter distributed ROM
+  bytes.

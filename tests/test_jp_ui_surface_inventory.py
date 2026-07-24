@@ -37,6 +37,23 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["live_verified"] for row in rows))
 
+    def test_source_reviewed_ending_montage_is_live_verified(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["group"] == "opening_text_lists"
+        ]
+        reviewed = [row for row in rows if row["reviewed"]]
+        unreviewed = [row for row in rows if not row["reviewed"]]
+        self.assertEqual(len(reviewed), 10)
+        self.assertEqual(len(unreviewed), 2)
+        self.assertTrue(all(row["live_verified"] for row in reviewed))
+        self.assertTrue(all(not row["live_verified"] for row in unreviewed))
+        self.assertNotIn(
+            "리아나가 위험해",
+            "".join(str(row["target_korean"]) for row in reviewed),
+        )
+
     def test_title_load_and_save_fixed_records_are_live_verified(self):
         rows = [
             row
