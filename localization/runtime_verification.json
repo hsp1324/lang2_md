@@ -412,9 +412,22 @@
         "captures/run/398c_s05_escape_12.png",
         "captures/run/398c_s05_escape_14.png",
         "captures/run/398c_s05_escape_16.png",
-        "captures/run/398c_s05_next_scenario.png"
+        "captures/run/398c_s05_next_scenario.png",
+        "captures/run/b5e8_s05_selector_05.png",
+        "captures/run/b5e8_s05_prep_17.png",
+        "captures/run/b5e8_s05_opening_16.png",
+        "captures/run/b5e8_s05_start_hook.png",
+        "captures/run/b5e8_s05_target_werewolf.png",
+        "captures/run/b5e8_s05_after_werewolf.png",
+        "captures/run/b5e8_s05_annihilation_03.png",
+        "captures/run/b5e8_s05_annihilation_07.png",
+        "captures/run/b5e8_s05_annihilation_10.png",
+        "captures/run/b5e8_s05_annihilation_14.png",
+        "captures/run/b5e8_s05_annihilation_15.png",
+        "captures/run/b5e8_s05_annihilation_20.png",
+        "captures/run/b5e8_s05_annihilation_22.png"
       ],
-      "note": "Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling frames of 짐승의 포효, and the preparation endpoint. The complete Korean description covers the damaged Temple of Light, Morgan threatening nearby residents, and Sherry joining the pursuit without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and all text-bearing frames from the 36-confirmation first-turn path. Production 39BD-derived escape probe 398C validates the Japanese header, deployment table, and all nine fixed records before changing only the first Elwin deployment Y from 50 to 1. The live path used the stock Move command to cross the north threshold, triggered the original `20턴 내 북쪽 도착` victory, rendered the pursuit exit, Sherry level/class-change surfaces, 전과보고 with POINT 1400P, a real 시나리오 6 save, 다음 시나리오, and the Scenario 6 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. The alternate `20턴 내 적 전멸` victory, later turns, and defeat branches remain pending. Sherry's Soldier hire row is verified, but the other commanders' hire lists remain pending."
+      "note": "Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling frames of 짐승의 포효, and the preparation endpoint. The complete Korean description covers the damaged Temple of Light, Morgan threatening nearby residents, and Sherry joining the pursuit without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and all text-bearing frames from the 36-confirmation first-turn path. Production 39BD-derived escape probe 398C validates the Japanese header, deployment table, and all nine fixed records before changing only the first Elwin deployment Y from 50 to 1. The live path used the stock Move command to cross the north threshold, triggered the original `20턴 내 북쪽 도착` victory, rendered the pursuit exit, Sherry level/class-change surfaces, 전과보고 with POINT 1400P, a real 시나리오 6 save, 다음 시나리오, and the Scenario 6 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. Production 9DD0-derived diagnostic B5E8 separately validates all five player deployments and the same nine fixed records, retains enemy identity/class/level/coordinates/events while limiting only AT/DF and mercenaries, moves only Elwin below the source record-0 werewolf, and uses a Start wrapper to remove runtime groups 6..13 and lower only living group 5 to HP 1. A normal Attack then triggered the stock `20턴 내 적 전멸` aftermath, Morgan and allied retreat dialogue, level/class-change surfaces, 전과보고 with POINT 1920P, and a real 시나리오 6 save without Japanese residue, damaged unit/class/UI glyphs, reset, or freeze. Both victory conditions are live-covered, while later turns and defeat branches remain pending. Sherry's Soldier hire row is verified, but the other commanders' hire lists remain pending."
     },
     {
       "scenario": 6,

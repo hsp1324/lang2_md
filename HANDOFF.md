@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 736 passing
+unit tests: 741 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6453,6 +6453,41 @@ contains 57 safe syllables as documented below and in
 - Scenario 5 `completion` is now `verified_probe`. Enemy-annihilation victory,
   later turns, defeat branches, and the remaining commander hire lists stay
   pending and must not be conflated with this north-exit evidence.
+
+### Scenario 5 Enemy-Annihilation Victory (2026-07-24)
+
+- `tools/build_scenario5_escape_probe_rom.py --enemy-annihilation` derives
+  diagnostic checksum `B5E8` from production `9DD0`. It revalidates the
+  Japanese Scenario 5 header, all five player deployments, and all nine fixed
+  enemy records before patching. The fixed records retain side, visibility,
+  name, class, level, coordinates, and event handlers; only AT/DF and the six
+  mercenary slots are limited. Only Elwin moves from `(13,50)` to `(12,43)`,
+  directly below the source record-0 werewolf at `(12,42)`.
+- The probe redirects the existing Start-menu entry through a wrapper in
+  verified empty space at `0x3FEF00`. On Start entry it removes runtime groups
+  6..13 and lowers only present, living group 5 to HP 1, then tail-jumps to the
+  stock Start handler at `0x022C1E`. Ten tests lock the allowed byte scope,
+  source identity/coordinate preservation, runtime group writes, stock tail,
+  and checksum. This is diagnostic acceleration, not production data or
+  editor-default evidence.
+- Fresh play visibly selected `시나리오 5`, traversed the five-commander
+  preparation and opening, opened the intact Korean Start menu, targeted the
+  original `늑대인간`, and defeated it with the normal Attack command. The
+  stock enemy-annihilation branch then rendered its enemy aftermath, Morgan's
+  `하지만 아직 끝나지 않았다!`, allied retreat dialogue, level/class-change
+  surfaces, `전과보고 / POINT 1920P`, and a real `시나리오 6` save without
+  Japanese residue, broken unit/class/UI glyphs, reset, or freeze.
+- Representative evidence is
+  `captures/run/b5e8_s05_selector_05.png`,
+  `b5e8_s05_prep_17.png`, `b5e8_s05_opening_16.png`,
+  `b5e8_s05_start_hook.png`, `b5e8_s05_target_werewolf.png`,
+  `b5e8_s05_after_werewolf.png`,
+  `b5e8_s05_annihilation_03.png`, `_07.png`, `_10.png`, `_14.png`,
+  `_15.png`, `_20.png`, and `_22.png`.
+- Both documented Scenario 5 victory conditions are now live-covered.
+  `completion` remains `verified_probe`; `branches_endings` remains `pending`
+  because later-turn and defeat branches have not been traversed. Future
+  sessions must not repeat either victory route as if it were missing.
 
 ### Scenario 6 Civilian-Safe Completion (2026-07-20)
 
