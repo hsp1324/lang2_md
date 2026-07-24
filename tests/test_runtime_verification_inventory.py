@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "ED1F")
+        self.assertEqual(data["production_checksum"], "B3F2")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -819,8 +819,17 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario18["captures"])
         self.assertIn("Dark-princess layout checksum 3A56", scenario18["note"])
-        self.assertIn("fresh two-resident aggregate-loss GAME OVER", scenario18["note"])
-        self.assertEqual(scenario18["branches_endings"], "pending")
+        for capture in (
+            "captures/run/6655_s18_loaded_resident1.png",
+            "captures/run/6655_s18_resident2_actual2.png",
+            "captures/run/6655_s18_second_lana.png",
+            "captures/run/6655_s18_loss_taunt1.png",
+            "captures/run/6655_s18_production_game_over.png",
+        ):
+            self.assertIn(capture, scenario18["captures"])
+        self.assertIn("Production-derived checksum 6655", scenario18["note"])
+        self.assertIn("original handler address 0x1A45C6", scenario18["note"])
+        self.assertEqual(scenario18["branches_endings"], "verified_probe")
         self.assertEqual(scenario19["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s19_description_current_01.png",

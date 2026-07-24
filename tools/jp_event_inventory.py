@@ -12,6 +12,9 @@ EVENT_DATA_END = 0x1B9000
 TEXT_CONTROLS = {0xFFF7, 0xFFFE}
 TEXT_TERMINATORS = {0xFFFD, 0xFFFF}
 MAX_GLYPH_ID = 0x07FF
+SCENARIO18_RELOCATED_TEXT_SOURCE_START = 0x1A4C2E
+SCENARIO18_RELOCATED_TEXT_SOURCE_END = 0x1A4D0E
+SCENARIO18_RELOCATED_TEXT_TARGET_START = 0x3FEE00
 
 # These pointer targets pass the broad glyph-range heuristic but are event
 # metadata, not dialogue. Match the full original word stream so a changed ROM
@@ -113,6 +116,20 @@ def record_classification(address: int, words: list[int]) -> str:
     return "structured_non_text"
 
 
+def korean_text_address(source_address: int) -> int:
+    if (
+        SCENARIO18_RELOCATED_TEXT_SOURCE_START
+        <= source_address
+        < SCENARIO18_RELOCATED_TEXT_SOURCE_END
+    ):
+        return (
+            SCENARIO18_RELOCATED_TEXT_TARGET_START
+            + source_address
+            - SCENARIO18_RELOCATED_TEXT_SOURCE_START
+        )
+    return source_address
+
+
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     starts = event_block_starts(japanese)
     scenarios: list[dict[str, object]] = []
@@ -142,7 +159,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for target, page in pages.items():
             byte_count = int(page["word_count"]) * 2
             original = japanese[target : target + byte_count]
-            patched = korean[target : target + byte_count]
+            korean_target = korean_text_address(target)
+            patched = korean[korean_target : korean_target + byte_count]
             changed_words = sum(
                 original[index : index + 2] != patched[index : index + 2]
                 for index in range(0, byte_count, 2)
@@ -174,7 +192,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             for segment_start, words in segments:
                 byte_count = len(words) * 2
                 original = japanese[segment_start : segment_start + byte_count]
-                patched = korean[segment_start : segment_start + byte_count]
+                korean_segment_start = korean_text_address(segment_start)
+                patched = korean[
+                    korean_segment_start : korean_segment_start + byte_count
+                ]
                 changed_words = sum(
                     original[index : index + 2] != patched[index : index + 2]
                     for index in range(0, byte_count, 2)

@@ -9039,3 +9039,38 @@ contains 57 safe syllables as documented below and in
 - This independently closes the Lana direct-defeat completion route. Scenario
   18 `branches_endings` stays `pending` only because the fresh aggregate
   resident-loss condition still needs to reach its stock `GAME OVER` handler.
+
+### Scenario 18 Aggregate Resident-Loss Production Fix (2026-07-25)
+
+- The stock Japanese Scenario 18 ROM declares resident annihilation as a defeat
+  condition but its shipped defeat-event list omits the aggregate check. A
+  natural stock-derived run at checksum `B33F` killed both residents and
+  continued to TURN 2, confirming that this is source behavior rather than a
+  Korean text regression.
+- Production checksum `B3F2` relocates the localized event-text chain
+  `0x1A4C2E..0x1A4D0E` (224 bytes) to `0x3FEE00`, updates its sole pointer at
+  `0x1A4518`, and installs the complete original defeat list plus
+  `04 20 21 21 00` as event ID `22` in the freed same-bank slot at
+  `0x1A4C2E`. The aggregate record must point to the original handler address
+  `0x1A45C6`; copying the identical `13 FF` handler bytes elsewhere does not
+  preserve the engine behavior.
+- Do not repeat the rejected diagnostics: cross-bank lists `4430`/`4330`
+  failed; in-place `CFEF` reached GAME OVER but destroyed the original victory
+  condition; `8581` fired temporary ID 26 but continued to TURN 2; bridge
+  `9B96` set IDs 26 and 22 but consumed ID 22 before dispatch; and same-bank
+  `8181` used copied handler bytes and continued to TURN 2. Pointing the
+  duplicate ID 22 record directly at `0x1A45C6` succeeded in `7A55`; removing
+  the unused copied byte produced the final diagnostic checksum `6655`.
+- The production-derived natural-combat probe also builds as `6655`.
+  `6655_s18_loaded_resident1.png`, `6655_s18_resident2_actual2.png`,
+  `6655_s18_second_lana.png`, `6655_s18_loss_taunt1.png`, and
+  `6655_s18_production_game_over.png` cover both resident death lines, both
+  Lana responses, both loss taunts, and GAME OVER without reset or freeze.
+  The reusable final state is under
+  `captures/runtime/s18_resident_samebank_6655_final`.
+- `tools/jp_event_inventory.py` and the reviewed-dialogue regression resolve
+  source addresses in that text range to the expansion destination. Probe
+  checksum locks were rebased to `B3F2`; Scenarios 28-30 retain separate
+  accepted live checksums and current production-derived checksums so rebasing
+  does not falsely claim a new live replay. Scenario 18 `branches_endings` is
+  now `verified_probe`.

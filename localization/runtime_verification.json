@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "ED1F",
+  "production_checksum": "B3F2",
   "states": [
     "pending",
     "historical",
@@ -1271,7 +1271,7 @@
       "battle_ui": "verified_probe",
       "turn_events": "verified_probe",
       "completion": "verified_probe",
-      "branches_endings": "pending",
+      "branches_endings": "verified_probe",
       "captures": [
         "captures/run/12d3_s18_brief_live_01.png",
         "captures/run/12d3_s18_brief_live_07.png",
@@ -1316,9 +1316,14 @@
         "captures/run/3a56_s18_lana_clear_24.png",
         "captures/run/3a56_s18_lana_clear_29.png",
         "captures/run/3a56_s18_lana_clear_next_scenario.png",
-        "captures/run/3a56_s19_entry_11.png"
+        "captures/run/3a56_s19_entry_11.png",
+        "captures/run/6655_s18_loaded_resident1.png",
+        "captures/run/6655_s18_resident2_actual2.png",
+        "captures/run/6655_s18_second_lana.png",
+        "captures/run/6655_s18_loss_taunt1.png",
+        "captures/run/6655_s18_production_game_over.png"
       ],
-      "note": "Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrolling frames of 어둠의 공주, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the party's pursuit of Bozel, the monster-attacked village, the laughing girl, and the revelation that Liana controls the monsters. Initial current playback left 벨제리아로, 있었다., and 마물을 isolated. Natural restructuring to 마물이 습격한 마을, 한 소녀가 즐겁게 웃었다., and 마물을 조종하던 이는 리아나였다. removes those lines without losing source meaning. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and first-turn dialogue without reset or freeze. The original eleven-record fixed-placement list at 0x1820B4 remains covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Production-DE78 completion derivative 17F2 moves only Elwin from (9,12) to (35,5), directly below the source Great Dragon at (35,4), in addition to the locked enemy AT/DF/mercenary limits. Both residents remain source-identical 클레릭 records at (15,20) and (11,20), while Lana remains 라나/다크프린세스 at (37,2). The first normal attack left the Great Dragon at HP1; its stock turn recovery restored the unit, so the accepted run used the documented pre-attack quicksave and a later normal battle defeated all ten units. The intervening enemy/NPC phases traversed 40 and 42 detected confirmations and returned to valid command menus without resident loss, reset, or freeze. Completion rendered Lana's retreat, resident survival/gift dialogue, allied level-up and class-change pages, and the save flow in Korean. Slot 1 changed from Scenario 18 to 19 while slot 2 remained 17; 다음 시나리오 displayed 진군루트 and entered 미레일 항구 전투. Dark-princess layout checksum 3A56 independently preserved all source records while placing Elwin below Lana. A fresh Scenario 18 run defeated Lana in a normal battle, rendered 스피드부츠 획득, the complete Lana-retreat and pursuit dialogue, allied level-ups, 엘윈's class-change candidates, the result/save flow, 진군루트, and the Scenario 19 preparation screen without Japanese text, broken names/classes/UI, reset, or freeze. Scenario 18 branches_endings remains pending only because the fresh two-resident aggregate-loss GAME OVER path is not yet live-confirmed."
+      "note": "Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrolling frames of 어둠의 공주, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the party's pursuit of Bozel, the monster-attacked village, the laughing girl, and the revelation that Liana controls the monsters. Initial current playback left 벨제리아로, 있었다., and 마물을 isolated. Natural restructuring to 마물이 습격한 마을, 한 소녀가 즐겁게 웃었다., and 마물을 조종하던 이는 리아나였다. removes those lines without losing source meaning. The regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and first-turn dialogue without reset or freeze. The original eleven-record fixed-placement list at 0x1820B4 remains covered by editor regressions for 주민/클레릭, 그레이트드래곤, and 라나/다크프린세스. Production-DE78 completion derivative 17F2 moves only Elwin from (9,12) to (35,5), directly below the source Great Dragon at (35,4), in addition to the locked enemy AT/DF/mercenary limits. Both residents remain source-identical 클레릭 records at (15,20) and (11,20), while Lana remains 라나/다크프린세스 at (37,2). The first normal attack left the Great Dragon at HP1; its stock turn recovery restored the unit, so the accepted run used the documented pre-attack quicksave and a later normal battle defeated all ten units. The intervening enemy/NPC phases traversed 40 and 42 detected confirmations and returned to valid command menus without resident loss, reset, or freeze. Completion rendered Lana's retreat, resident survival/gift dialogue, allied level-up and class-change pages, and the save flow in Korean. Slot 1 changed from Scenario 18 to 19 while slot 2 remained 17; 다음 시나리오 displayed 진군루트 and entered 미레일 항구 전투. Dark-princess layout checksum 3A56 independently preserved all source records while placing Elwin below Lana. A fresh Scenario 18 run defeated Lana in a normal battle, rendered 스피드부츠 획득, the complete Lana-retreat and pursuit dialogue, allied level-ups, 엘윈's class-change candidates, the result/save flow, 진군루트, and the Scenario 19 preparation screen without Japanese text, broken names/classes/UI, reset, or freeze. The shipped Japanese event list omitted the declared aggregate resident-loss trigger. Production B3F2 relocates the complete source defeat list into the freed same-bank slot at 0x1A4C2E, moves that localized dialogue chain to 0x3FEE00, and adds event ID 22 for resident IDs 20/21 while retaining the original handler address 0x1A45C6. Production-derived checksum 6655 uses natural battles with source identities and events intact; both 주민 death lines, both 라나 responses, 라나's two loss taunts, and GAME OVER rendered without reset or freeze. Normal Great Dragon completion, Lana defeat, protagonist defeat, and two-resident aggregate loss are live-covered, so branches_endings is verified_probe."
     },
     {
       "scenario": 19,

@@ -874,11 +874,12 @@ class ReviewedEventDialogueTests(unittest.TestCase):
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:
             address = int(row["address_int"])
+            korean_address = builder.relocated_event_text_address(address)
             jp_capacity, jp_terminator, jp_controls = builder.event_page_layout(
                 self.japanese, address
             )
             ko_capacity, ko_terminator, ko_controls = builder.event_page_layout(
-                self.korean, address
+                self.korean, korean_address
             )
             self.assertEqual(ko_capacity, jp_capacity, row["address"])
             self.assertEqual(ko_terminator, jp_terminator, row["address"])

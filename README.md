@@ -38,6 +38,7 @@
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.
 - `tools/scenario_data.py`: MD판 31개 시나리오의 고정 배치 레코드를 읽고 제한된 필드를 패치하거나 편집기용 JSON으로 내보냅니다. 좌표는 초기 고정 배치일 뿐 이벤트가 실시간으로 덮어쓸 수 있어 읽기 전용입니다.
 - `tools/jp_event_inventory.py`: `0x18011A`의 31개 이벤트 블록을 따라가 대사 후보 페이지와 현재 빌드의 변경 여부를 JSON/Markdown으로 생성합니다.
+- 시나리오 18은 일본 원판에서 주민 전멸 패배 조건을 설명하지만 실제 집계 이벤트가 누락되어 있습니다. 현재 빌드는 같은 뱅크의 원본 패배 핸들러 `0x1A45C6`을 유지한 채 주민 ID `20/21` 집계 조건을 보완하고, 자리를 확보하기 위해 `0x1A4C2E..0x1A4D0E`의 대사 체인을 `0x3FEE00`으로 재배치합니다. 이벤트 인벤토리는 원본 주소를 유지해 표시하되 한국어 비교 시 재배치 주소를 자동으로 해석합니다.
 - `tools/english_dialogue_inventory.py`: 레거시 영문 추출본의 3바이트 이벤트 복귀값으로 2,978개 시나리오 대사와 104개 엔딩/에필로그 대사를 분류합니다. 이 값은 일본판 문자열 주소가 아니며 영문/기계번역은 검토용 참고 자료입니다.
 - `tools/render_event_pages.py`: 시나리오별 일본판 대사 후보를 주소와 제어코드가 보이는 개별 PNG 및 묶음 시트로 렌더링합니다. 예: `python3 tools/render_event_pages.py --scenario 14`.
 - 수동 저장 슬롯이 든 `load-screen` 테스트 SRAM을 재사용해 특정 장으로 바로 들어갈 때는 `python3 tools/run_blastem_sequence.py scenario-select --scenario-number 14 --reuse-runtime-state --click-window --replace-existing`을 사용합니다. 비기 직후 동적 숫자가 붙는 화면에서 멈추려면 같은 옵션으로 `scenario-select-entry`를 사용합니다. 선택 비기 입력이 불안정할 때는 검증된 GST의 수동 슬롯 레코드를 `python3 tools/run_blastem_sequence.py launch-only --manual-slot-gst captures/analysis/dac0_s02_cursor_a.gst --replace-existing`으로 격리 SRAM에 복구한 뒤 화면을 확인하며 `LOAD`로 진입합니다. 복구 도구는 슬롯 체크섬·유효 비트뿐 아니라 게임이 요구하는 SRAM 포맷 마커 `0x1FEE = 0x07CA`도 초기화하고 검증합니다.

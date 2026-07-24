@@ -44,6 +44,26 @@ SRAM_LONG_PATCHES = {
     0x01E06A: 0x203FE1,
 }
 
+# Scenario 18's briefing declares defeat when both residents die, but the
+# shipped event list only contains their individual death dialogue. Keep the
+# stock event ID/handler semantics and relocate the complete list into a freed
+# same-bank dialogue slot. The displaced localized dialogue remains in
+# expansion ROM and is reached through its sole source pointer.
+SCENARIO18_DEFEAT_TRIGGER_POINTER = 0x1A4208
+SCENARIO18_DEFEAT_TRIGGER_LIST = 0x1A4268
+SCENARIO18_DEFEAT_TRIGGER_LIST_END = 0x1A4322
+SCENARIO18_DEFEAT_TRIGGER_SHA256 = (
+    "0f8e8b3c6772954a4d2884eeaa49c9c543be6da94965b78f0f47114873ad4be5"
+)
+SCENARIO18_RESIDENT_LOSS_EVENT_ID = 0x22
+SCENARIO18_RESIDENT_LOSS_NAMES = (0x20, 0x21, 0x21)
+SCENARIO18_RESIDENT_LOSS_HANDLER = 0x1A45C6
+SCENARIO18_RELOCATED_TRIGGER_LIST = 0x1A4C2E
+SCENARIO18_DISPLACED_DIALOGUE_START = SCENARIO18_RELOCATED_TRIGGER_LIST
+SCENARIO18_DISPLACED_DIALOGUE_END = 0x1A4D0E
+SCENARIO18_DISPLACED_DIALOGUE_POINTER = 0x1A4518
+SCENARIO18_RELOCATED_DIALOGUE = 0x3FEE00
+
 # Map-unit graphics contain two 0x80-byte animation frames per sprite. The
 # second source bank begins immediately after the stock 0xB2-sprite first
 # bank. Sprite IDs are 16-bit and the loader computes base + (ID << 7), so a
@@ -2230,6 +2250,114 @@ def expand_rom(data: bytearray) -> None:
     # Mega Drive header ROM end address. The checksum is updated separately.
     put32(data, 0x1A4, EXPANDED_ROM_SIZE - 1)
     relocate_sram(data)
+
+
+def patch_scenario18_resident_loss(
+    data: bytearray,
+    reference_data: bytes,
+) -> None:
+    source_triggers = reference_data[
+        SCENARIO18_DEFEAT_TRIGGER_LIST:SCENARIO18_DEFEAT_TRIGGER_LIST_END
+    ]
+    if hashlib.sha256(source_triggers).hexdigest() != (
+        SCENARIO18_DEFEAT_TRIGGER_SHA256
+    ):
+        raise ValueError("Scenario 18 source defeat-trigger list changed")
+    if not source_triggers.endswith(b"\xFF\xFF"):
+        raise ValueError("Scenario 18 defeat-trigger terminator changed")
+
+    source_list_pointer = SCENARIO18_DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+    source_dialogue_pointer = SCENARIO18_DISPLACED_DIALOGUE_START.to_bytes(
+        4, "big"
+    )
+    for label, payload in (("source", reference_data), ("input", data)):
+        if (
+            payload[
+                SCENARIO18_DEFEAT_TRIGGER_POINTER:
+                SCENARIO18_DEFEAT_TRIGGER_POINTER + 4
+            ]
+            != source_list_pointer
+        ):
+            raise ValueError(
+                f"Scenario 18 {label} defeat-trigger pointer changed"
+            )
+        if (
+            payload[
+                SCENARIO18_DISPLACED_DIALOGUE_POINTER:
+                SCENARIO18_DISPLACED_DIALOGUE_POINTER + 4
+            ]
+            != source_dialogue_pointer
+        ):
+            raise ValueError(
+                f"Scenario 18 {label} displaced-dialogue pointer changed"
+            )
+
+    aggregate_trigger = bytes(
+        (
+            SCENARIO18_RESIDENT_LOSS_EVENT_ID,
+            0x04,
+            *SCENARIO18_RESIDENT_LOSS_NAMES,
+            0,
+        )
+    ) + SCENARIO18_RESIDENT_LOSS_HANDLER.to_bytes(4, "big")
+    relocated_triggers = (
+        source_triggers[:-2] + aggregate_trigger + b"\xFF\xFF"
+    )
+    available = (
+        SCENARIO18_DISPLACED_DIALOGUE_END
+        - SCENARIO18_DISPLACED_DIALOGUE_START
+    )
+    if len(relocated_triggers) > available:
+        raise ValueError("Scenario 18 relocated trigger list exceeds slot")
+
+    displaced_dialogue = bytes(
+        data[
+            SCENARIO18_DISPLACED_DIALOGUE_START:
+            SCENARIO18_DISPLACED_DIALOGUE_END
+        ]
+    )
+    relocated_dialogue_end = (
+        SCENARIO18_RELOCATED_DIALOGUE + len(displaced_dialogue)
+    )
+    if (
+        data[SCENARIO18_RELOCATED_DIALOGUE:relocated_dialogue_end]
+        != b"\xFF" * len(displaced_dialogue)
+    ):
+        raise ValueError("Scenario 18 relocated-dialogue region is not blank")
+
+    data[
+        SCENARIO18_RELOCATED_DIALOGUE:relocated_dialogue_end
+    ] = displaced_dialogue
+    put32(
+        data,
+        SCENARIO18_DISPLACED_DIALOGUE_POINTER,
+        SCENARIO18_RELOCATED_DIALOGUE,
+    )
+    put32(
+        data,
+        SCENARIO18_DEFEAT_TRIGGER_POINTER,
+        SCENARIO18_RELOCATED_TRIGGER_LIST,
+    )
+    data[
+        SCENARIO18_RELOCATED_TRIGGER_LIST:
+        SCENARIO18_DISPLACED_DIALOGUE_END
+    ] = relocated_triggers + b"\xFF" * (
+        available - len(relocated_triggers)
+    )
+
+
+def relocated_event_text_address(source_address: int) -> int:
+    if (
+        SCENARIO18_DISPLACED_DIALOGUE_START
+        <= source_address
+        < SCENARIO18_DISPLACED_DIALOGUE_END
+    ):
+        return (
+            SCENARIO18_RELOCATED_DIALOGUE
+            + source_address
+            - SCENARIO18_DISPLACED_DIALOGUE_START
+        )
+    return source_address
 
 
 def patch_bald_map_sprite(data: bytearray) -> None:
@@ -7278,6 +7406,7 @@ def main() -> None:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_scenario1_event_pages(data, glyph_by_char)
         patch_reviewed_event_pages(data, IN_ROM.read_bytes(), glyph_by_char, reviewed_event_rows)
+        patch_scenario18_resident_loss(data, IN_ROM.read_bytes())
         patch_relocated_ending_dialogue_records(
             data, IN_ROM.read_bytes(), glyph_by_char, ending_dialogue_rows
         )

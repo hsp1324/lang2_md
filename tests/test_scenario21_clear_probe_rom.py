@@ -255,7 +255,7 @@ class Scenario21ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x818B,
+            0x34A1,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -263,7 +263,7 @@ class Scenario21ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x1CC8,
+            0xCFDE,
         )
 
     def test_rejects_non_source_fixed_record(self):

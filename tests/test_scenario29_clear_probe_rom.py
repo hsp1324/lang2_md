@@ -159,11 +159,11 @@ class Scenario29ClearProbeTests(unittest.TestCase):
         )
         self.assertEqual(data[start : start + len(expected)], expected)
 
-    def test_completion_target_matches_live_verified_checksum(self):
+    def test_completion_target_matches_current_rebased_checksum(self):
         data = self.completion_target_patched()
         self.assertEqual(
             int.from_bytes(data[0x18E:0x190], "big"),
-            probe_builder.ACCEPTED_COMPLETION_CHECKSUM,
+            probe_builder.CURRENT_COMPLETION_CHECKSUM,
         )
 
     def test_completion_target_moves_only_folger_coordinate(self):
@@ -263,7 +263,7 @@ class Scenario29ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0xB6C2)
+        self.assertEqual(expected, 0x69D8)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
 

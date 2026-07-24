@@ -38,6 +38,8 @@ SOURCE_PLAYER_DEPLOYMENTS = (
 COMPLETION_ELWIN_POSITION = (35, 5)
 DARK_PRINCESS_ELWIN_POSITION = (37, 3)
 RESIDENT_PROBE_ELWIN_POSITION = SOURCE_PLAYER_DEPLOYMENTS[0]
+RESIDENT_COMBAT_ATTACKER_RECORDS = (9, 10)
+RESIDENT_COMBAT_ATTACKER_POSITIONS = ((15, 19), (11, 19))
 GREAT_DRAGON_POSITION = (35, 4)
 DARK_PRINCESS_POSITION = (37, 2)
 FIRST_RESIDENT_RECORD_INDEX = 0
@@ -88,6 +90,27 @@ GREAT_DRAGON_DEATH_EVENT_BYTES = bytes.fromhex(
 )
 PROBE_AT = 0
 PROBE_DF = 0
+RESIDENT_COMBAT_ATTACKER_AT = 99
+RESIDENT_COMBAT_ATTACKER_DF = 99
+DEFEAT_TRIGGER_POINTER = 0x1A4208
+DEFEAT_TRIGGER_LIST = 0x1A4268
+DEFEAT_TRIGGER_LIST_END = 0x1A4322
+RESIDENT_LOSS_EVENT_ID = 0x22
+SAME_BANK_RESIDENT_LOSS_EVENT_ID = RESIDENT_LOSS_EVENT_ID
+ALL_LISTED_NAMES_DEFEATED_CONDITION = 0x04
+RELOCATED_DEFEAT_TRIGGER_LIST = 0x1BFE00
+SAME_BANK_DEFEAT_TRIGGER_LIST = 0x1A4C2E
+DISPLACED_DIALOGUE_CHAIN_START = SAME_BANK_DEFEAT_TRIGGER_LIST
+DISPLACED_DIALOGUE_CHAIN_END = 0x1A4D0E
+DISPLACED_DIALOGUE_POINTER = 0x1A4518
+RELOCATED_DIALOGUE_CHAIN = 0x3FEE00
+LAST_GROUP_DEATH_TRIGGER = 0x1A4312
+LAST_GROUP_DEATH_TRIGGER_BYTES = bytes.fromhex(
+    "22 08 3E 52 3F 5E 5F 45 46 00 00 1A 47 3C"
+)
+INPLACE_RESIDENT_LOSS_HANDLER = PROTAGONIST_DEATH_EVENT + 8
+INPLACE_RESIDENT_LOSS_EVENT_ID = RESIDENT_LOSS_EVENT_ID
+RESIDENT_LOSS_HANDLER = INPLACE_RESIDENT_LOSS_HANDLER
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 RUNTIME_WRAPPER = 0x3FEF00
@@ -97,6 +120,10 @@ RUNTIME_GROUP_COUNT = 20
 PROTAGONIST_RUNTIME_GROUP = 0
 PROTAGONIST_NAME_ID = 0x01
 RESIDENT_NAME_IDS = (0x20, 0x21)
+RESIDENT_LOSS_CONDITION_NAMES = (
+    *RESIDENT_NAME_IDS,
+    RESIDENT_NAME_IDS[-1],
+)
 RUNTIME_NAME_OFFSET = 0x01
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
@@ -212,6 +239,218 @@ def install_start_wrapper(
     probe[RUNTIME_WRAPPER:wrapper_end] = wrapper
 
 
+def resident_loss_trigger_code(
+    source: bytes,
+    *,
+    event_id: int = RESIDENT_LOSS_EVENT_ID,
+    handler_address: int = RESIDENT_LOSS_HANDLER,
+) -> bytes:
+    source_triggers = source[DEFEAT_TRIGGER_LIST:DEFEAT_TRIGGER_LIST_END]
+    if not source_triggers.endswith(b"\xFF\xFF"):
+        raise ValueError("Scenario 18 defeat-trigger list terminator changed")
+    aggregate_prefix = bytes(
+        (
+            event_id,
+            ALL_LISTED_NAMES_DEFEATED_CONDITION,
+            *RESIDENT_LOSS_CONDITION_NAMES,
+            0,
+        )
+    )
+    aggregate_trigger = (
+        aggregate_prefix + handler_address.to_bytes(4, "big")
+    )
+    return source_triggers[:-2] + aggregate_trigger + b"\xFF\xFF"
+
+
+def same_bank_resident_loss_trigger_installed(
+    probe: bytes | bytearray,
+    source: bytes,
+) -> bool:
+    if (
+        probe[DEFEAT_TRIGGER_POINTER : DEFEAT_TRIGGER_POINTER + 4]
+        != SAME_BANK_DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+        or probe[
+            DISPLACED_DIALOGUE_POINTER : DISPLACED_DIALOGUE_POINTER + 4
+        ]
+        != RELOCATED_DIALOGUE_CHAIN.to_bytes(4, "big")
+    ):
+        return False
+    code = resident_loss_trigger_code(
+        source,
+        event_id=SAME_BANK_RESIDENT_LOSS_EVENT_ID,
+    )
+    if (
+        probe[
+            SAME_BANK_DEFEAT_TRIGGER_LIST:
+            SAME_BANK_DEFEAT_TRIGGER_LIST + len(code)
+        ]
+        != code
+    ):
+        raise ValueError("installed Scenario 18 resident-loss trigger changed")
+    return True
+
+
+def install_resident_loss_trigger(probe: bytearray, source: bytes) -> None:
+    expected_pointer = DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        if data[DEFEAT_TRIGGER_POINTER : DEFEAT_TRIGGER_POINTER + 4] != expected_pointer:
+            raise ValueError(f"{label} Scenario 18 defeat-trigger pointer changed")
+    code = resident_loss_trigger_code(source)
+    end = RELOCATED_DEFEAT_TRIGGER_LIST + len(code)
+    if probe[RELOCATED_DEFEAT_TRIGGER_LIST:end] != b"\xFF" * len(code):
+        raise ValueError("input resident-loss trigger region is not empty")
+    probe[
+        DEFEAT_TRIGGER_POINTER : DEFEAT_TRIGGER_POINTER + 4
+    ] = RELOCATED_DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+    probe[RELOCATED_DEFEAT_TRIGGER_LIST:end] = code
+
+
+def install_same_bank_resident_loss_trigger(
+    probe: bytearray,
+    source: bytes,
+) -> None:
+    if same_bank_resident_loss_trigger_installed(probe, source):
+        return
+    expected_list_pointer = DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+    expected_dialogue_pointer = DISPLACED_DIALOGUE_CHAIN_START.to_bytes(
+        4, "big"
+    )
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[DEFEAT_TRIGGER_POINTER : DEFEAT_TRIGGER_POINTER + 4]
+            != expected_list_pointer
+        ):
+            raise ValueError(
+                f"{label} Scenario 18 defeat-trigger pointer changed"
+            )
+        if (
+            data[
+                DISPLACED_DIALOGUE_POINTER :
+                DISPLACED_DIALOGUE_POINTER + 4
+            ]
+            != expected_dialogue_pointer
+        ):
+            raise ValueError(
+                f"{label} Scenario 18 displaced-dialogue pointer changed"
+            )
+
+    displaced_dialogue = bytes(
+        probe[DISPLACED_DIALOGUE_CHAIN_START:DISPLACED_DIALOGUE_CHAIN_END]
+    )
+    relocated_dialogue_end = RELOCATED_DIALOGUE_CHAIN + len(
+        displaced_dialogue
+    )
+    if (
+        probe[RELOCATED_DIALOGUE_CHAIN:relocated_dialogue_end]
+        != b"\xFF" * len(displaced_dialogue)
+    ):
+        raise ValueError("input relocated-dialogue region is not empty")
+
+    code = resident_loss_trigger_code(
+        source,
+        event_id=SAME_BANK_RESIDENT_LOSS_EVENT_ID,
+    )
+    available = (
+        DISPLACED_DIALOGUE_CHAIN_END - DISPLACED_DIALOGUE_CHAIN_START
+    )
+    if len(code) > available:
+        raise ValueError("same-bank resident-loss trigger exceeds dialogue slot")
+
+    probe[RELOCATED_DIALOGUE_CHAIN:relocated_dialogue_end] = (
+        displaced_dialogue
+    )
+    probe[
+        DISPLACED_DIALOGUE_POINTER : DISPLACED_DIALOGUE_POINTER + 4
+    ] = RELOCATED_DIALOGUE_CHAIN.to_bytes(4, "big")
+    probe[
+        DEFEAT_TRIGGER_POINTER : DEFEAT_TRIGGER_POINTER + 4
+    ] = SAME_BANK_DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+    probe[
+        SAME_BANK_DEFEAT_TRIGGER_LIST:DISPLACED_DIALOGUE_CHAIN_END
+    ] = code + b"\xFF" * (available - len(code))
+
+
+def install_inplace_resident_loss_trigger(
+    probe: bytearray,
+    source: bytes,
+) -> None:
+    """Diagnostic only: replace the final group trigger without relocating the list."""
+    if (
+        probe[DEFEAT_TRIGGER_POINTER : DEFEAT_TRIGGER_POINTER + 4]
+        != DEFEAT_TRIGGER_LIST.to_bytes(4, "big")
+    ):
+        raise ValueError(
+            "input Scenario 18 defeat-trigger pointer is already relocated"
+        )
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[
+                LAST_GROUP_DEATH_TRIGGER:
+                LAST_GROUP_DEATH_TRIGGER + len(LAST_GROUP_DEATH_TRIGGER_BYTES)
+            ]
+            != LAST_GROUP_DEATH_TRIGGER_BYTES
+        ):
+            raise ValueError(
+                f"{label} Scenario 18 final group-death trigger changed"
+            )
+    aggregate_trigger = bytes(
+        (
+            INPLACE_RESIDENT_LOSS_EVENT_ID,
+            ALL_LISTED_NAMES_DEFEATED_CONDITION,
+            *RESIDENT_LOSS_CONDITION_NAMES,
+            0,
+        )
+    ) + INPLACE_RESIDENT_LOSS_HANDLER.to_bytes(4, "big")
+    replacement = (
+        aggregate_trigger
+        + b"\xFF\xFF"
+        + b"\xFF"
+        * (
+            len(LAST_GROUP_DEATH_TRIGGER_BYTES)
+            - len(aggregate_trigger)
+            - 2
+        )
+    )
+    probe[
+        LAST_GROUP_DEATH_TRIGGER:
+        LAST_GROUP_DEATH_TRIGGER + len(replacement)
+    ] = replacement
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[
+                INPLACE_RESIDENT_LOSS_HANDLER:
+                INPLACE_RESIDENT_LOSS_HANDLER + 2
+            ]
+            != b"\x13\xFF"
+        ):
+            raise ValueError(
+                f"{label} Scenario 18 protagonist GAME OVER handler changed"
+            )
+
+
+def stage_resident_combat_loss(probe: bytearray, source: bytes) -> None:
+    layout = scenario_layout(source, SCENARIO_NUMBER)
+    for index in range(
+        FIRST_RESIDENT_RECORD_INDEX,
+        LAST_RESIDENT_RECORD_INDEX + 1,
+    ):
+        base = layout.records_offset + index * FIXED_RECORD_SIZE
+        probe[base + FIELD_OFFSETS["df"]] = 0
+        mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
+        probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+    for index, (x, y) in zip(
+        RESIDENT_COMBAT_ATTACKER_RECORDS,
+        RESIDENT_COMBAT_ATTACKER_POSITIONS,
+    ):
+        base = layout.records_offset + index * FIXED_RECORD_SIZE
+        probe[base + FIELD_OFFSETS["at"]] = RESIDENT_COMBAT_ATTACKER_AT
+        probe[base + FIELD_OFFSETS["df"]] = RESIDENT_COMBAT_ATTACKER_DF
+        probe[base + FIELD_OFFSETS["x"]] = x
+        probe[base + FIELD_OFFSETS["y"]] = y
+        mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
+        probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+
+
 def validate_layout(probe: bytes, source: bytes) -> None:
     source_layout = scenario_layout(source, SCENARIO_NUMBER)
     probe_layout = scenario_layout(probe, SCENARIO_NUMBER)
@@ -310,6 +549,10 @@ def patch_probe(
     dark_princess_layout: bool = False,
     protagonist_death: bool = False,
     resident_annihilation: bool = False,
+    resident_combat_loss: bool = False,
+    resident_combat_loss_fix: bool = False,
+    resident_combat_loss_same_bank_fix: bool = False,
+    resident_combat_loss_inplace_fix: bool = False,
 ) -> int:
     validate_layout(probe, source)
     modes = (
@@ -317,6 +560,10 @@ def patch_probe(
         dark_princess_layout,
         protagonist_death,
         resident_annihilation,
+        resident_combat_loss,
+        resident_combat_loss_fix,
+        resident_combat_loss_same_bank_fix,
+        resident_combat_loss_inplace_fix,
     )
     if sum(modes) > 1:
         raise ValueError("Scenario 18 diagnostic modes conflict")
@@ -329,6 +576,20 @@ def patch_probe(
         install_start_wrapper(probe, source, wrapper)
         return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
+    if (
+        resident_combat_loss
+        or resident_combat_loss_fix
+        or resident_combat_loss_same_bank_fix
+        or resident_combat_loss_inplace_fix
+    ):
+        stage_resident_combat_loss(probe, source)
+        if resident_combat_loss_fix:
+            install_resident_loss_trigger(probe, source)
+        elif resident_combat_loss_same_bank_fix:
+            install_same_bank_resident_loss_trigger(probe, source)
+        elif resident_combat_loss_inplace_fix:
+            install_inplace_resident_loss_trigger(probe, source)
+        return builder.update_md_checksum(probe)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
         probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
@@ -393,6 +654,42 @@ def parse_args() -> argparse.Namespace:
             "HP through Start"
         ),
     )
+    parser.add_argument(
+        "--resident-combat-loss",
+        action="store_true",
+        help=(
+            "remove resident and two attacker mercenaries, lower resident DF, "
+            "and stage two source enemy commanders for natural resident-loss "
+            "battles"
+        ),
+    )
+    parser.add_argument(
+        "--resident-combat-loss-fix",
+        action="store_true",
+        help=(
+            "stage the same natural resident-loss battles and add the missing "
+            "source aggregate-loss trigger as a second event ID 22 condition"
+        ),
+    )
+    parser.add_argument(
+        "--resident-combat-loss-inplace-fix",
+        action="store_true",
+        help=(
+            "diagnostically replace Scenario 18's final group-death record "
+            "with the missing resident-loss condition while keeping the "
+            "event list at its original address"
+        ),
+    )
+    parser.add_argument(
+        "--resident-combat-loss-same-bank-fix",
+        action="store_true",
+        help=(
+            "stage the natural resident-loss battles, relocate one Korean "
+            "dialogue chain to expansion ROM, and place the complete source "
+            "trigger list plus resident-loss condition in its freed 0x1A-bank "
+            "slot"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -407,6 +704,14 @@ def main() -> int:
         dark_princess_layout=args.dark_princess_layout,
         protagonist_death=args.protagonist_death,
         resident_annihilation=args.resident_annihilation,
+        resident_combat_loss=args.resident_combat_loss,
+        resident_combat_loss_fix=args.resident_combat_loss_fix,
+        resident_combat_loss_same_bank_fix=(
+            args.resident_combat_loss_same_bank_fix
+        ),
+        resident_combat_loss_inplace_fix=(
+            args.resident_combat_loss_inplace_fix
+        ),
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -430,6 +735,38 @@ def main() -> int:
             "Elwin retains HP/status and returns from the completion GST "
             "position to the source deployment (9,12)"
         )
+    elif (
+        args.resident_combat_loss
+        or args.resident_combat_loss_fix
+        or args.resident_combat_loss_same_bank_fix
+        or args.resident_combat_loss_inplace_fix
+    ):
+        print(
+            "resident-combat-loss: resident identities/classes/events are "
+            "preserved with no mercenaries and DF 0"
+        )
+        print(
+            "source enemy records 9 and 10 retain identity/class/events, "
+            "gain AT/DF 99 with no mercenaries, and start beside the residents"
+        )
+        if args.resident_combat_loss_fix:
+            print(
+                "missing resident aggregate-loss condition is installed as "
+                "a second event ID 22 record in the relocated Scenario 18 "
+                "defeat-trigger list"
+            )
+        elif args.resident_combat_loss_same_bank_fix:
+            print(
+                "missing resident aggregate-loss condition is installed "
+                "beside the complete source list in a freed Scenario 18 "
+                "dialogue slot within the original 0x1A event bank"
+            )
+        elif args.resident_combat_loss_inplace_fix:
+            print(
+                "missing resident aggregate-loss condition temporarily "
+                "reuses event ID 22 and replaces the final group-death record "
+                "at the original list address"
+            )
     else:
         print("Scenario 18 enemy records 2..10: AT 0, DF 0, no mercenaries")
     if args.completion_layout:
@@ -438,7 +775,14 @@ def main() -> int:
     elif args.dark_princess_layout:
         print("Dark Princess layout: Elwin moved from (9,12) to (37,3)")
         print("Lana remains at the source position (37,2)")
-    elif not args.protagonist_death and not args.resident_annihilation:
+    elif (
+        not args.protagonist_death
+        and not args.resident_annihilation
+        and not args.resident_combat_loss
+        and not args.resident_combat_loss_fix
+        and not args.resident_combat_loss_same_bank_fix
+        and not args.resident_combat_loss_inplace_fix
+    ):
         print(
             "both residents, stock deployments, identities, classes, levels, "
             "coordinates, and handlers preserved"

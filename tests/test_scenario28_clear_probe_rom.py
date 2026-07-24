@@ -170,11 +170,11 @@ class Scenario28ClearProbeTests(unittest.TestCase):
         )
         self.assertEqual(data[start : start + len(expected)], expected)
 
-    def test_completion_target_matches_live_verified_checksum(self):
+    def test_completion_target_matches_current_rebased_checksum(self):
         data = self.completion_target_patched()
         self.assertEqual(
             int.from_bytes(data[0x18E:0x190], "big"),
-            probe_builder.ACCEPTED_COMPLETION_CHECKSUM,
+            probe_builder.CURRENT_COMPLETION_CHECKSUM,
         )
 
     def test_completion_target_moves_only_baran_coordinate(self):

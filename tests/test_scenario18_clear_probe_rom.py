@@ -17,6 +17,10 @@ class Scenario18ClearProbeTests(unittest.TestCase):
         dark_princess_layout: bool = False,
         protagonist_death: bool = False,
         resident_annihilation: bool = False,
+        resident_combat_loss: bool = False,
+        resident_combat_loss_fix: bool = False,
+        resident_combat_loss_same_bank_fix: bool = False,
+        resident_combat_loss_inplace_fix: bool = False,
     ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
@@ -26,6 +30,14 @@ class Scenario18ClearProbeTests(unittest.TestCase):
             dark_princess_layout=dark_princess_layout,
             protagonist_death=protagonist_death,
             resident_annihilation=resident_annihilation,
+            resident_combat_loss=resident_combat_loss,
+            resident_combat_loss_fix=resident_combat_loss_fix,
+            resident_combat_loss_same_bank_fix=(
+                resident_combat_loss_same_bank_fix
+            ),
+            resident_combat_loss_inplace_fix=(
+                resident_combat_loss_inplace_fix
+            ),
         )
         return data
 
@@ -361,6 +373,16 @@ class Scenario18ClearProbeTests(unittest.TestCase):
             {"completion_layout": True, "protagonist_death": True},
             {"dark_princess_layout": True, "resident_annihilation": True},
             {"protagonist_death": True, "resident_annihilation": True},
+            {"resident_annihilation": True, "resident_combat_loss": True},
+            {"resident_combat_loss": True, "resident_combat_loss_fix": True},
+            {
+                "resident_combat_loss_fix": True,
+                "resident_combat_loss_inplace_fix": True,
+            },
+            {
+                "resident_combat_loss_fix": True,
+                "resident_combat_loss_same_bank_fix": True,
+            },
         )
         for modes in conflict_pairs:
             with self.subTest(modes=modes):
@@ -372,6 +394,170 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                         self.source,
                         **modes,
                     )
+
+    def test_resident_combat_loss_stages_only_declared_fixed_fields(self):
+        data = self.patched(resident_combat_loss=True)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        allowed = {0x18E, 0x18F}
+        for index in range(
+            probe_builder.FIRST_RESIDENT_RECORD_INDEX,
+            probe_builder.LAST_RESIDENT_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            allowed.add(base + FIELD_OFFSETS["df"])
+            allowed.update(
+                base + FIELD_OFFSETS["mercenaries"] + slot
+                for slot in range(6)
+            )
+            for offset in (
+                0,
+                0x08,
+                FIELD_OFFSETS["level"],
+                FIELD_OFFSETS["name_id"],
+                FIELD_OFFSETS["class_id"],
+                FIELD_OFFSETS["x"],
+                FIELD_OFFSETS["y"],
+            ):
+                self.assertEqual(data[base + offset], self.source[base + offset])
+            self.assertEqual(data[base + FIELD_OFFSETS["df"]], 0)
+            mercenaries = base + FIELD_OFFSETS["mercenaries"]
+            self.assertEqual(data[mercenaries : mercenaries + 6], b"\xFF" * 6)
+
+        for index, position in zip(
+            probe_builder.RESIDENT_COMBAT_ATTACKER_RECORDS,
+            probe_builder.RESIDENT_COMBAT_ATTACKER_POSITIONS,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            allowed.update(
+                {
+                    base + FIELD_OFFSETS["at"],
+                    base + FIELD_OFFSETS["df"],
+                    base + FIELD_OFFSETS["x"],
+                    base + FIELD_OFFSETS["y"],
+                    *(
+                        base + FIELD_OFFSETS["mercenaries"] + slot
+                        for slot in range(6)
+                    ),
+                }
+            )
+            for offset in (
+                0,
+                0x08,
+                FIELD_OFFSETS["level"],
+                FIELD_OFFSETS["name_id"],
+                FIELD_OFFSETS["class_id"],
+            ):
+                self.assertEqual(data[base + offset], self.source[base + offset])
+            self.assertEqual(
+                data[base + FIELD_OFFSETS["at"]],
+                probe_builder.RESIDENT_COMBAT_ATTACKER_AT,
+            )
+            self.assertEqual(
+                data[base + FIELD_OFFSETS["df"]],
+                probe_builder.RESIDENT_COMBAT_ATTACKER_DF,
+            )
+            self.assertEqual(
+                (
+                    data[base + FIELD_OFFSETS["x"]],
+                    data[base + FIELD_OFFSETS["y"]],
+                ),
+                position,
+            )
+            mercenaries = base + FIELD_OFFSETS["mercenaries"]
+            self.assertEqual(data[mercenaries : mercenaries + 6], b"\xFF" * 6)
+
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
+    def test_obsolete_resident_loss_diagnostics_reject_fixed_production(self):
+        for mode in (
+            {"resident_combat_loss_fix": True},
+            {"resident_combat_loss_inplace_fix": True},
+        ):
+            with self.subTest(mode=mode):
+                with self.assertRaisesRegex(
+                    ValueError,
+                    "defeat-trigger pointer|final group-death trigger",
+                ):
+                    self.patched(**mode)
+
+    def test_resident_combat_loss_same_bank_fix_rehomes_dialogue(self):
+        data = self.patched(resident_combat_loss_same_bank_fix=True)
+        dialogue_size = (
+            probe_builder.DISPLACED_DIALOGUE_CHAIN_END
+            - probe_builder.DISPLACED_DIALOGUE_CHAIN_START
+        )
+        dialogue = self.production[
+            probe_builder.RELOCATED_DIALOGUE_CHAIN :
+            probe_builder.RELOCATED_DIALOGUE_CHAIN + dialogue_size
+        ]
+        relocated_end = (
+            probe_builder.RELOCATED_DIALOGUE_CHAIN + len(dialogue)
+        )
+        self.assertEqual(
+            data[
+                probe_builder.RELOCATED_DIALOGUE_CHAIN : relocated_end
+            ],
+            dialogue,
+        )
+        self.assertEqual(
+            data[
+                probe_builder.DISPLACED_DIALOGUE_POINTER :
+                probe_builder.DISPLACED_DIALOGUE_POINTER + 4
+            ],
+            probe_builder.RELOCATED_DIALOGUE_CHAIN.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.DEFEAT_TRIGGER_POINTER :
+                probe_builder.DEFEAT_TRIGGER_POINTER + 4
+            ],
+            probe_builder.SAME_BANK_DEFEAT_TRIGGER_LIST.to_bytes(4, "big"),
+        )
+        code = probe_builder.resident_loss_trigger_code(
+            self.source,
+            event_id=probe_builder.SAME_BANK_RESIDENT_LOSS_EVENT_ID,
+        )
+        self.assertEqual(
+            data[
+                probe_builder.SAME_BANK_DEFEAT_TRIGGER_LIST :
+                probe_builder.SAME_BANK_DEFEAT_TRIGGER_LIST + len(code)
+            ],
+            code,
+        )
+        self.assertEqual(
+            data[
+                probe_builder.SAME_BANK_DEFEAT_TRIGGER_LIST :
+                probe_builder.SAME_BANK_DEFEAT_TRIGGER_LIST
+                + (
+                    probe_builder.DEFEAT_TRIGGER_LIST_END
+                    - probe_builder.DEFEAT_TRIGGER_LIST
+                    - 2
+                )
+            ],
+            self.source[
+                probe_builder.DEFEAT_TRIGGER_LIST :
+                probe_builder.DEFEAT_TRIGGER_LIST_END - 2
+            ],
+        )
+        aggregate_offset = (
+            probe_builder.DEFEAT_TRIGGER_LIST_END
+            - probe_builder.DEFEAT_TRIGGER_LIST
+            - 2
+        )
+        self.assertEqual(
+            code[aggregate_offset],
+            probe_builder.SAME_BANK_RESIDENT_LOSS_EVENT_ID,
+        )
+        self.assertEqual(
+            code[-6:-2],
+            probe_builder.RESIDENT_LOSS_HANDLER.to_bytes(4, "big"),
+        )
+        self.assertEqual(code[-2:], b"\xFF\xFF")
 
     def test_source_victory_and_defeat_events_are_locked(self):
         records = (
@@ -428,7 +614,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x3A43,
+            0xED59,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -436,18 +622,20 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x3A56,
+            0xED6C,
         )
         dark_princess = bytearray(self.production)
         protagonist_death = bytearray(self.production)
         resident_annihilation = bytearray(self.production)
+        resident_combat_loss = bytearray(self.production)
+        resident_combat_loss_same_bank_fix = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(
                 dark_princess,
                 self.source,
                 dark_princess_layout=True,
             ),
-            0x3A56,
+            0xED6C,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -455,7 +643,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0xF7AB,
+            0xAAC1,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -463,7 +651,23 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_annihilation=True,
             ),
-            0x854B,
+            0x3861,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                resident_combat_loss,
+                self.source,
+                resident_combat_loss=True,
+            ),
+            0x6655,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                resident_combat_loss_same_bank_fix,
+                self.source,
+                resident_combat_loss_same_bank_fix=True,
+            ),
+            0x6655,
         )
 
     def test_rejects_non_source_fixed_record(self):
