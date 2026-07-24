@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: ED1F
-latest targeted live-verified production checksum: ED1F
+current production build checksum: 00DC
+latest targeted live-verified production checksum: 00DC
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 802 passing
+unit tests: 820 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -8867,3 +8867,43 @@ contains 57 safe syllables as documented below and in
   looks more reddish than the editor is correct. Do not change the production
   palette from a static preview alone; compare the editor and a fresh live
   Scenario 1 capture before accepting another remap.
+
+### Scenario 15 Protagonist Defeat And Focus-Free Playback (2026-07-24)
+
+- The visible Scenario 15 conditions declare one defeat path, `주인공 사망`.
+  Japanese event record `0x19F154` is
+  `0E 01 0C 02 00 00 00 00 00 19 F3 1A`; it identifies protagonist name ID
+  `0x01` and calls handler `0x19F31A`. The handler is exactly `13 FF`, which
+  enters GAME OVER without a separate Elwin dialogue page. Do not invent a
+  missing translation for this source-authentic immediate ending.
+- `tools/build_scenario15_clear_probe_rom.py --protagonist-death` preserves
+  all seven deployments and all twelve fixed records. Its guarded Start
+  wrapper at `0x3FEF00` changes only runtime player group 0 at `$FFFF603C`
+  before tail-calling the stock Start entry. The mode is intentionally
+  incompatible with `--completion-layout`. Production `00DC` produces
+  diagnostic checksum `F7AB`.
+- Fresh playback restored Scenario 15 from the validated `35A3` GST, entered
+  the secret selector, retained the route, preparation roster, automatic
+  arrangement, opening, and clean `엘윈/파이터` command panel. Start still
+  displayed the normal Korean menu. Normal turn end reached ENEMY PHASE,
+  rendered Imelda's Korean dialogue, and the detector found GAME OVER after
+  four further confirmations. Representative captures are
+  `f7ab_s15_death_entry_headless.png`, `f7ab_s15_death_prep_17.png`,
+  `f7ab_s15_death_command_now.png`, `f7ab_s15_death_trigger_00.png`,
+  `f7ab_s15_death_trigger_03.png`, and `f7ab_s15_death_event_04.png`.
+  Normal completion and the sole declared defeat ending are now covered, so
+  Scenario 15 `branches_endings` is `verified_probe`.
+- Direct `--send-event` previously avoided `_NET_ACTIVE_WINDOW` and
+  `set_input_focus` but still repositioned and raised the BlastEm window.
+  `activate_window(..., request_focus=False)` now returns before monitor
+  selection, `configure`, stacking, sync, or focus calls. Its regression test
+  locks all six omissions. This is the required transport whenever the user
+  is working in another application.
+- The accepted run used an isolated persistent Xvfb display and
+  `--software-renderer`. `tools/run_blastem_sequence.py` maps that option to
+  BlastEm `-g`, before the ROM path. Xvfb's OpenGL path aborts after the
+  unsupported-vsync warning; do not retry it. An earlier nonpersistent Xvfb
+  process exited with its invoking shell and made SDL report `x11 not
+  available`; that was host transport failure, not ROM behavior. The accepted
+  virtual display never created, activated, moved, or raised a window on the
+  user's Windows desktop.

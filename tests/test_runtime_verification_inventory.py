@@ -688,6 +688,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario15["battle_ui"], "verified_probe")
         self.assertEqual(scenario15["turn_events"], "progressed_current")
         self.assertEqual(scenario15["completion"], "verified_probe")
+        self.assertEqual(scenario15["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/35a3_s15_command_ready.png",
             "captures/run/35a3_s15_escape_target.png",
@@ -698,12 +699,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/35a3_s15_escape_event_59.png",
             "captures/run/35a3_s15_next_selected.png",
             "captures/run/35a3_s16_entry.png",
+            "captures/run/f7ab_s15_death_entry_headless.png",
+            "captures/run/f7ab_s15_death_prep_17.png",
+            "captures/run/f7ab_s15_death_command_now.png",
+            "captures/run/f7ab_s15_death_trigger_00.png",
+            "captures/run/f7ab_s15_death_trigger_03.png",
+            "captures/run/f7ab_s15_death_event_04.png",
             "captures/analysis/s15_render_b766/scenario_15_pages_09.png",
         ):
             self.assertIn(capture, scenario15["captures"])
         self.assertIn("record 0x1A0A6E", scenario15["note"])
         self.assertIn("POINT 4000P", scenario15["note"])
         self.assertIn("disk SRAM slot 1 at Scenario 16", scenario15["note"])
+        self.assertIn("protagonist-death diagnostic F7AB", scenario15["note"])
+        self.assertIn("handler bytes 13 FF", scenario15["note"])
         self.assertEqual(scenario16["description"], "verified_current")
         for capture in (
             "captures/run/3fc0_s16_description_final_01.png",

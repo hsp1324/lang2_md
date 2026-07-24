@@ -541,6 +541,26 @@ def disable_host_gamepad_bindings(config: str) -> str:
     return config[:start] + "\tpads {\n\t}\n" + config[end:]
 
 
+def blastem_command(
+    rom: Path,
+    window_width: int,
+    window_height: int,
+    *,
+    software_renderer: bool = False,
+) -> list[str]:
+    command = [str(BLASTEM)]
+    if software_renderer:
+        command.append("-g")
+    command.extend(
+        [
+            str(rom.resolve()),
+            str(window_width),
+            str(window_height),
+        ]
+    )
+    return command
+
+
 def make_key_command(args: argparse.Namespace, keys: list[str]) -> list[str]:
     command = [
         sys.executable,
@@ -859,6 +879,14 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--software-renderer",
+        action="store_true",
+        help=(
+            "disable OpenGL with BlastEm -g; useful for an isolated Xvfb "
+            "display without a hardware-backed GL context"
+        ),
+    )
+    parser.add_argument(
         "--replace-existing",
         action="store_true",
         help="terminate existing BlastEm processes before launching the test window",
@@ -1031,12 +1059,12 @@ def main() -> int:
         env["HOME"] = str(runtime_home)
         if "microsoft" in platform.release().lower():
             env.setdefault("SDL_AUDIODRIVER", "dummy")
-        command = [
-            str(BLASTEM),
-            str(args.rom.resolve()),
-            str(args.window_width),
-            str(args.window_height),
-        ]
+        command = blastem_command(
+            args.rom,
+            args.window_width,
+            args.window_height,
+            software_renderer=args.software_renderer,
+        )
         if args.dry_run:
             print("launch:", " ".join(command))
             print("runtime home:", runtime_home)

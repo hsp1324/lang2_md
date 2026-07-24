@@ -140,11 +140,11 @@ def wait_for_blastem_window(display: Display, timeout: float):
 
 
 def activate_window(display: Display, window, request_focus: bool = True) -> None:
+    if not request_focus:
+        return
     x, y = blastem_window_position(display)
     window.configure(x=x, y=y, stack_mode=X.Above)
     display.sync()
-    if not request_focus:
-        return
 
     root = display.screen().root
     net_active_window = display.intern_atom("_NET_ACTIVE_WINDOW")

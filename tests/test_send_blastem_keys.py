@@ -31,16 +31,17 @@ class SendBlastemKeysTests(unittest.TestCase):
         self.assertEqual(choose_monitor(monitors, "TV"), monitors[0])
         self.assertIsNone(choose_monitor([], "widest"))
 
-    def test_direct_event_placement_does_not_request_focus(self):
+    def test_direct_event_does_not_restack_reposition_or_request_focus(self):
         display = MagicMock()
         window = MagicMock()
         with patch(
             "tools.send_blastem_keys.blastem_window_position",
             return_value=(1960, 757),
-        ):
+        ) as position:
             activate_window(display, window, request_focus=False)
-        window.configure.assert_called_once()
-        display.sync.assert_called_once()
+        position.assert_not_called()
+        window.configure.assert_not_called()
+        display.sync.assert_not_called()
         display.intern_atom.assert_not_called()
         window.set_input_focus.assert_not_called()
 

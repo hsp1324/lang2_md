@@ -4,6 +4,8 @@ import unittest
 from argparse import Namespace
 
 from tools.run_blastem_sequence import (
+    BLASTEM,
+    blastem_command,
     detection_capture_path,
     disable_host_gamepad_bindings,
 )
@@ -26,6 +28,17 @@ class BlastEmProbeRuntimeTests(unittest.TestCase):
         self.assertEqual(
             detection_capture_path(args, Path("fallback.png"), 7),
             Path("captures/run/s03_brief_07.png"),
+        )
+
+    def test_software_renderer_flag_precedes_rom_path(self):
+        rom = ROOT / "roms/builds/Langrisser II (Korean).md"
+        self.assertEqual(
+            blastem_command(rom, 320, 240, software_renderer=True),
+            [str(BLASTEM), "-g", str(rom.resolve()), "320", "240"],
+        )
+        self.assertEqual(
+            blastem_command(rom, 640, 480),
+            [str(BLASTEM), str(rom.resolve()), "640", "480"],
         )
 
 
