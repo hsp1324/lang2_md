@@ -9074,3 +9074,31 @@ contains 57 safe syllables as documented below and in
   accepted live checksums and current production-derived checksums so rebasing
   does not falsely claim a new live replay. Scenario 18 `branches_endings` is
   now `verified_probe`.
+
+### Scenario 19 Protagonist-Death Branch (2026-07-25)
+
+- The visible conditions declare turn-limit expiration or protagonist death as
+  defeat. Source trigger `0x1A5E60` is
+  `0E 02 01 00 00 1A 61 44`; it dispatches the protagonist-death event at
+  `0x1A6144`, whose bytes are
+  `02 01 02 01 00 1A 6D 36 13 FF`. The event renders source text
+  `0x1A6D36` and executes GAME OVER. The scenario-specific Korean line is
+  `이런! 배를 빼앗기다니…`, which matches the Japanese event context.
+- `tools/build_scenario19_clear_probe_rom.py --protagonist-death` checksum
+  `AAC1` preserves all eight deployments, all ten fixed records, and both
+  source event records. Its guarded Start wrapper changes only runtime player
+  group 0 at `$FFFF603C` before tail-calling the stock Start entry.
+- Fresh isolated Xvfb playback recovered the real Scenario 19 slot, retained
+  the preparation roster, automatic deployment, opening, and clean
+  `엘윈/파이터` command panel. Normal turn end rendered the Elwin line,
+  Imelda's response, `오호호호…`, and GAME OVER without Japanese residue,
+  broken names/classes/UI glyphs, reset, or freeze. Pressing C once more after
+  GAME OVER returned to the title normally; that is not a runtime reset.
+- Representative evidence is `aac1_s19_death_prep_16.png`,
+  `aac1_s19_death_arrangement2.png`, `aac1_s19_death_auto.png`,
+  `aac1_s19_death_opening_17.png`, `aac1_s19_death_wait.png`,
+  `aac1_s19_death_event_02.png`, `aac1_s19_death_event_03.png`, and
+  `aac1_s19_death_event_04.png`. Normal completion and the declared
+  protagonist-death ending are live-covered, so Scenario 19
+  `branches_endings` is `verified_probe`. Ordinary item-pickup variations
+  remain separate coverage rather than defeat endings.

@@ -855,6 +855,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/2829s_s20_title.png",
         ):
             self.assertIn(capture, scenario19["captures"])
+        for capture in (
+            "captures/run/aac1_s19_death_prep_16.png",
+            "captures/run/aac1_s19_death_arrangement2.png",
+            "captures/run/aac1_s19_death_auto.png",
+            "captures/run/aac1_s19_death_opening_17.png",
+            "captures/run/aac1_s19_death_wait.png",
+            "captures/run/aac1_s19_death_event_02.png",
+            "captures/run/aac1_s19_death_event_03.png",
+            "captures/run/aac1_s19_death_event_04.png",
+        ):
+            self.assertIn(capture, scenario19["captures"])
+        self.assertEqual(scenario19["branches_endings"], "verified_probe")
+        self.assertIn("protagonist-death diagnostic AAC1", scenario19["note"])
+        self.assertIn("protagonist-death event at 0x1A6144", scenario19["note"])
         self.assertEqual(scenario20["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s20_description_current_01.png",
