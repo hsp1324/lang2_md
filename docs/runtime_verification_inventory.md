@@ -38,7 +38,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 25 | current | current | current | current | current | current | probe | pending | 50 |
 | 26 | current | current | current | current | probe | current | probe | pending | 34 |
 | 27 | current | current | current | current | probe | current | probe | probe | 25 |
-| 28 | current | current | current | current | current | current | pending | pending | 18 |
+| 28 | current | current | current | current | current | current | probe | pending | 27 |
 | 29 | current | current | current | current | current | current | pending | pending | 22 |
 | 30 | current | current | current | current | probe | current | pending | pending | 19 |
 | 31 | current | current | current | current | probe | current | probe | pending | 39 |
@@ -1354,7 +1354,7 @@ Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrollin
 
 ### Scenario 28
 
-Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the five-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, the complete no-action first turn, and its live battle presentation without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, Lester, Aaron, Sherry, and Jessica with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 34-36 retain a complete 바바리안 versus 워록 battle from 10 VS 10 through 0 VS 3. Both class labels, portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact. The first turn also retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Completion and conditional branches remain pending.
+Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the seven-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, the complete no-action first turn, and its live battle presentation without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, 레스터, 아론, 쉐리, and 제시카 with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 34-36 retain a complete 바바리안 versus 워록 battle from 10 VS 10 through 0 VS 3. Both class labels, portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact. The first turn also retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Production-9DD0 completion derivative 31F2 preserves the stock seven-player deployment table, every Builder identity/class/level/event handler, and all fixed coordinates except moving only Baran from (15,9) to directly above the first stock Elwin deployment at (14,23). Its Start wrapper removes runtime groups 7..14 and lowers only living Baran group 15 to HP 1. A normal Elwin attack retained 바란/빌더 and the centered -AT-/-DF-/-지형- battle labels, then traversed all brother defeat and party aftermath pages, level ups, 전과보고 with POINT 58710P, a real 시나리오 13 save, 진군루트, and 염룡병단과의 결전 entry without Japanese residue, broken names/classes, reset, or freeze. Changing only runtime X/Y was rejected because the separate map-occupancy grid stayed at the stock deployment; fixed-target placement is the accepted diagnostic. Conditional branches remain pending.
 
 - `captures/run/c7ab_s28_title.png`
 - `captures/run/c7ab_s28_body_mid.png`
@@ -1374,6 +1374,15 @@ Selector record 28 intentionally enters the on-screen secret Scenario X1 근육�
 - `captures/run/eca0_s28_turn1_36.png`
 - `captures/run/eca0_s28_turn1_62.png`
 - `captures/run/eca0_s28_turn1_64.png`
+- `captures/run/31f2_s28_start_menu.png`
+- `captures/run/31f2_s28_baran_battle.png`
+- `captures/run/31f2_s28_clear_1.png`
+- `captures/run/31f2_s28_clear_09.png`
+- `captures/run/31f2_s28_clear_18.png`
+- `captures/run/31f2_s28_clear_21.png`
+- `captures/run/31f2_s28_next_selected.png`
+- `captures/run/31f2_s28_next_route.png`
+- `captures/run/31f2_s28_return_s13.png`
 
 ### Scenario 29
 

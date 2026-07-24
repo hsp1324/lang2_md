@@ -8372,3 +8372,38 @@ contains 57 safe syllables as documented below and in
   719-test suite. The two additional Hangul glyphs shift every production-based
   diagnostic checksum by the same `0x0FC9`; this is expected baseline movement,
   not a probe behavior change.
+
+### Scenario 28 Completion Verification (2026-07-24)
+
+- `tools/build_scenario28_clear_probe_rom.py --completion-target-only` now
+  preserves the source seven-player deployment table and all nine Builder
+  identities, classes, levels, and event handlers. It moves only fixed record
+  8 `바란/빌더` from `(15,9)` to `(14,23)`, directly above the stock first
+  Elwin deployment `(14,24)`. Production `9DD0` produces accepted diagnostic
+  checksum `31F2`.
+- The Start wrapper at `0x3FEF00` keeps the established Scenario 28 runtime
+  mapping: player groups `0..6`, fixed groups `7..15`, base `$FFFF603C`,
+  stride `0x60`. Read-only GST inspection after Start proved groups `7..14`
+  hidden with HP 0 and X `FF`, while group 15 retained Baran name `29`, class
+  `95`, source Y ownership, and HP 1. A normal Elwin attack displayed intact
+  `바란/빌더`, `-AT-`, `-DF-`, and `-지형-`.
+- Live playback retained all brother defeat pages and the Elwin, Sherry, Hein,
+  Adon, Samson, and Baran aftermath, then reached commander level ups,
+  `전과보고` with `POINT 58710P`, the real save UI, slot 1 `시나리오 13`,
+  `진군루트`, and the Scenario 13 `염룡병단과의 결전` description without
+  Japanese residue, broken names/classes, reset, or freeze. Representative
+  captures are `captures/run/31f2_s28_baran_battle.png`,
+  `captures/run/31f2_s28_clear_1.png`,
+  `captures/run/31f2_s28_clear_09.png`,
+  `captures/run/31f2_s28_clear_18.png`,
+  `captures/run/31f2_s28_clear_21.png`,
+  `captures/run/31f2_s28_next_selected.png`,
+  `captures/run/31f2_s28_next_route.png`, and
+  `captures/run/31f2_s28_return_s13.png`.
+- Do not repeat the rejected `1B80` runtime teleport. Changing group 0 X/Y to
+  `(15,10)` changed the record but not the separate map-occupancy grid, so no
+  selectable Elwin existed at the new coordinate. Also, manual placement
+  visibly numbered all seven commanders but the sortie check still reported
+  `지휘관 배치 미완료입니다`; selecting the stock `자동배치` command immediately
+  produced a valid sortie. Completion evidence therefore uses automatic
+  deployment and fixed-target placement, not a live X/Y teleport.

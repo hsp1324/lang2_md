@@ -15,7 +15,20 @@ class Scenario28ClearProbeTests(unittest.TestCase):
         probe_builder.patch_probe(data, self.source)
         return data
 
-    def allowed_offsets(self) -> set[int]:
+    def completion_target_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_target_only=True,
+        )
+        return data
+
+    def allowed_offsets(
+        self,
+        *,
+        completion_target_only: bool = False,
+    ) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
         for index in range(
@@ -32,6 +45,34 @@ class Scenario28ClearProbeTests(unittest.TestCase):
                         for slot in range(6)
                     ),
                 }
+            )
+        if completion_target_only:
+            layout = scenario_layout(
+                self.source,
+                probe_builder.SCENARIO_NUMBER,
+            )
+            target = (
+                layout.records_offset
+                + probe_builder.BARAN_RECORD_INDEX * FIXED_RECORD_SIZE
+            )
+            allowed.update(
+                {
+                    target + FIELD_OFFSETS["x"],
+                    target + FIELD_OFFSETS["y"],
+                }
+            )
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.COMPLETION_HP_WRAPPER,
+                    probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+                )
             )
         return allowed
 
@@ -111,6 +152,114 @@ class Scenario28ClearProbeTests(unittest.TestCase):
             data[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
         )
+
+    def test_completion_target_changes_only_declared_probe_fields(self):
+        data = self.completion_target_patched()
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(completion_target_only=True),
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+
+    def test_completion_target_matches_live_verified_checksum(self):
+        data = self.completion_target_patched()
+        self.assertEqual(
+            int.from_bytes(data[0x18E:0x190], "big"),
+            probe_builder.ACCEPTED_COMPLETION_CHECKSUM,
+        )
+
+    def test_completion_target_moves_only_baran_coordinate(self):
+        data = self.completion_target_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            for offset in (
+                0,
+                0x08,
+                FIELD_OFFSETS["level"],
+                FIELD_OFFSETS["name_id"],
+                FIELD_OFFSETS["class_id"],
+            ):
+                self.assertEqual(data[base + offset], self.source[base + offset])
+            coordinates = tuple(
+                data[
+                    base + FIELD_OFFSETS["x"] : base
+                    + FIELD_OFFSETS["y"]
+                    + 1
+                ]
+            )
+            if index == probe_builder.BARAN_RECORD_INDEX:
+                self.assertEqual(
+                    coordinates,
+                    probe_builder.COMPLETION_TARGET_POSITION,
+                )
+            else:
+                self.assertEqual(
+                    coordinates,
+                    tuple(
+                        self.source[
+                            base + FIELD_OFFSETS["x"] : base
+                            + FIELD_OFFSETS["y"]
+                            + 1
+                        ]
+                    ),
+                )
+
+    def test_completion_wrapper_targets_only_runtime_baran(self):
+        code = probe_builder.completion_hp_wrapper_code()
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.COMPLETION_TARGET_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        for group in probe_builder.COMPLETION_HIDDEN_RUNTIME_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+
+    def test_completion_target_rejects_changed_entry_or_occupied_wrapper(self):
+        damaged = bytearray(self.production)
+        damaged[probe_builder.START_MENU_ENTRY_OPERAND] ^= 1
+        with self.assertRaisesRegex(ValueError, "Start-menu entry operand"):
+            probe_builder.patch_probe(
+                damaged,
+                self.source,
+                completion_target_only=True,
+            )
+
+        damaged = bytearray(self.production)
+        damaged[probe_builder.COMPLETION_HP_WRAPPER] = 0
+        with self.assertRaisesRegex(ValueError, "wrapper region"):
+            probe_builder.patch_probe(
+                damaged,
+                self.source,
+                completion_target_only=True,
+            )
 
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)
