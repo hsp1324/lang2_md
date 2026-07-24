@@ -759,6 +759,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario17["battle_ui"], "verified_current")
         self.assertEqual(scenario17["turn_events"], "verified_probe")
         self.assertEqual(scenario17["completion"], "verified_probe")
+        self.assertEqual(scenario17["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/b17c_s17_bernhardt_target.png",
             "captures/run/b17c_s17_boss_defeated.png",
@@ -766,6 +767,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/b17c_s18_entry.png",
         ):
             self.assertIn(capture, scenario17["captures"])
+        for capture in (
+            "captures/run/f7ab_s17_death_entry_headless.png",
+            "captures/run/f7ab_s17_death_prep_25.png",
+            "captures/run/f7ab_s17_death_arrangement.png",
+            "captures/run/f7ab_s17_death_auto.png",
+            "captures/run/f7ab_s17_death_opening_36.png",
+            "captures/run/f7ab_s17_death_start_menu.png",
+            "captures/run/f7ab_s17_death_event_05.png",
+            "captures/run/f7ab_s17_death_event_06.png",
+        ):
+            self.assertIn(capture, scenario17["captures"])
+        self.assertIn("protagonist-death diagnostic F7AB", scenario17["note"])
+        self.assertIn("defeat event at 0x1A236E", scenario17["note"])
+        self.assertIn("handler bytes 13 FF", scenario17["note"])
+        self.assertIn("여기까지 와서 죽는 건가…", scenario17["note"])
         self.assertEqual(scenario18["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s18_description_final_01.png",

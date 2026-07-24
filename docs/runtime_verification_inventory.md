@@ -27,7 +27,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 14 | current | current | current | current | probe | probe | probe | probe | 55 |
 | 15 | current | current | current | current | probe | progressed | probe | probe | 47 |
 | 16 | current | current | current | current | probe | progressed | probe | probe | 52 |
-| 17 | current | current | current | current | current | probe | probe | pending | 43 |
+| 17 | current | current | current | current | current | probe | probe | probe | 51 |
 | 18 | current | current | current | current | probe | probe | probe | pending | 36 |
 | 19 | current | current | current | current | probe | progressed | probe | pending | 38 |
 | 20 | current | current | current | current | probe | progressed | probe | pending | 42 |
@@ -948,7 +948,7 @@ Production 3FC0 verifies the Scenario 16 route map, all 25 text-bearing scrollin
 
 ### Scenario 17
 
-Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrolling frames of 황제와 어둠의 왕자, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the Korean meaning, including Bernhardt's warrior-like presence and the evil-smiling man secretly observing the party. Initial current playback exposed 베른하르트., 남자가, 지켜보았다., and 있었다. as isolated lines. The description renderer normalizes source newlines to spaces, so moving source line breaks alone produced the identical AFD5 ROM and could not fix runtime wrapping. Natural sentence restructuring now renders 그가 바로 황제 베른하르트였다., 그 곁에 남자가 숨어 있었다., and 흥미롭게 지켜보았다. without isolated words. A visually correct 3564 trial using 곁엔 was rejected because its new 엔 allocation shifted 62 direct-string token records. The final regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, arrangement, automatic deployment, opening, conditions, first-turn dialogue, and live battle presentation without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 remains covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending. Production-DE78 completion derivative B17C moves only Elwin from (12,25) to (15,5), directly below the source Bernhardt at (15,4), in addition to the locked enemy AT/DF/mercenary limits. Two normal attacks defeated 베른하르트/엠퍼러; the intervening enemy phase traversed 21 detected stock turn-event confirmations and returned to a valid Turn 2 command. The full completion then rendered Bernhardt and Bozel retreat, allied dialogue, level-up/class-change pages, and save flow without reset, freeze, Japanese residue, or broken dynamic names/classes. Slot 1 changed from Scenario 17 to 18; 다음 시나리오 displayed 진군루트 and entered 어둠의 공주. Alternate battle/route branches remain pending.
+Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrolling frames of 황제와 어둠의 왕자, and the preparation endpoint. Direct Japanese-ROM rendering confirmed the Korean meaning, including Bernhardt's warrior-like presence and the evil-smiling man secretly observing the party. Initial current playback exposed 베른하르트., 남자가, 지켜보았다., and 있었다. as isolated lines. The description renderer normalizes source newlines to spaces, so moving source line breaks alone produced the identical AFD5 ROM and could not fix runtime wrapping. Natural sentence restructuring now renders 그가 바로 황제 베른하르트였다., 그 곁에 남자가 숨어 있었다., and 흥미롭게 지켜보았다. without isolated words. A visually correct 3564 trial using 곁엔 was rejected because its new 엔 allocation shifted 62 direct-string token records. The final regenerated 783-record direct-string inventory has no token diff, so established name, class, and UI glyph IDs remain fixed. Earlier current captures verified both preparation pages, the complete eight-commander roster, arrangement, automatic deployment, opening, conditions, first-turn dialogue, and live battle presentation without reset or freeze. The original eleven-record fixed-placement list at 0x181EE2 remains covered by editor regressions for 베른하르트/엠퍼러, 보젤/다크마스터, and a hidden imperial 매직나이트. Later turns, completion, and branches remain pending. Production-DE78 completion derivative B17C moves only Elwin from (12,25) to (15,5), directly below the source Bernhardt at (15,4), in addition to the locked enemy AT/DF/mercenary limits. Two normal attacks defeated 베른하르트/엠퍼러; the intervening enemy phase traversed 21 detected stock turn-event confirmations and returned to a valid Turn 2 command. The full completion then rendered Bernhardt and Bozel retreat, allied dialogue, level-up/class-change pages, and save flow without reset, freeze, Japanese residue, or broken dynamic names/classes. Slot 1 changed from Scenario 17 to 18; 다음 시나리오 displayed 진군루트 and entered 어둠의 공주. Alternate battle/route branches remain pending. Production 00DC protagonist-death diagnostic F7AB preserves every deployment and fixed record, changes only runtime player group 0 through the guarded Start wrapper, and reaches the source Scenario 17 defeat event at 0x1A236E after normal turn end. That event calls Elwin text 0x1A2FAE and immediately executes handler bytes 13 FF. Fresh headless Xvfb playback retained the route, complete preparation roster, automatic arrangement, opening, clean 엘윈/파이터 command panel, and Korean Start menu. It traversed the stock Bernhardt exchange, rendered 엘윈: 여기까지 와서 죽는 건가…, and reached GAME OVER without Japanese residue, broken names/classes/UI glyphs, reset, or freeze. Normal completion and the sole declared defeat ending are now live-covered, so branches_endings is verified_probe.
 
 - `captures/run/85f1_s17_brief_live_01.png`
 - `captures/run/85f1_s17_brief_live_07.png`
@@ -993,6 +993,14 @@ Production B0E8 verifies the Scenario 17 route map, all 22 text-bearing scrollin
 - `captures/run/b17c_s17_next_selected.png`
 - `captures/run/b17c_s18_route.png`
 - `captures/run/b17c_s18_entry.png`
+- `captures/run/f7ab_s17_death_entry_headless.png`
+- `captures/run/f7ab_s17_death_prep_25.png`
+- `captures/run/f7ab_s17_death_arrangement.png`
+- `captures/run/f7ab_s17_death_auto.png`
+- `captures/run/f7ab_s17_death_opening_36.png`
+- `captures/run/f7ab_s17_death_start_menu.png`
+- `captures/run/f7ab_s17_death_event_05.png`
+- `captures/run/f7ab_s17_death_event_06.png`
 
 ### Scenario 18
 
