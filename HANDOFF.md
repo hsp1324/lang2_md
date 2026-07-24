@@ -8959,3 +8959,57 @@ contains 57 safe syllables as documented below and in
   `f7ab_s17_death_event_06.png`. Normal completion and the sole declared
   defeat ending are now live-covered, so Scenario 17 `branches_endings` is
   `verified_probe`.
+
+### Scenario 18 Resident Runtime Slots And Defeat Diagnostics (2026-07-25)
+
+- Scenario 18 runtime group numbers are not stable. A fresh automatic
+  deployment stored resident name ID `0x20` in group 2 and did not yet have
+  `0x21` in the twenty group headers. The accepted completion GST stored the
+  two source residents in groups 8 and 9. Hard-coding groups 8 and 9 therefore
+  modified unused/hidden player records in one route and cannot prove the
+  resident branch.
+- `tools/build_scenario18_clear_probe_rom.py --resident-annihilation` now
+  scans all twenty `$FFFF603C` group records for source name IDs `0x20` and
+  `0x21`, gives only matching commanders zero HP, and independently scans for
+  protagonist name ID `0x01` before restoring Elwin to `(9,12)`. The source
+  deployments, all eleven fixed records, resident classes/mercenaries, and
+  event records remain unchanged. Focused tests lock the exact 68000 loop and
+  reject absolute per-slot HP/flag/coordinate writes.
+- The first loop implementation produced checksums `3624` and `8545`.
+  Its `DBRA` displacement used the end of the four-byte instruction instead of
+  the extension-word base, branching back to `MOVEQ #19,D0` and creating an
+  infinite loop. Capstone disassembly exposed the bad targets. Do not restore
+  those checksums.
+- Checksum `BD5C` chained the original Start menu through scheduler
+  `0x0085EE`. The menu rendered, but its visible cursor and executed action
+  diverged because the diagnostic wrapper was already running as a scheduled
+  task. The correct wrapper tail is the established direct jump to
+  `0x022C1E`; checksum `854B` preserves the menu/action mapping and enters
+  ENEMY PHASE normally.
+- With the clean completion GST, checksum `854B` found both residents and
+  changed only their commander HP from `0A` to `00`. Stock cleanup then marked
+  both commanders and all eight live resident mercenaries defeated. Captures
+  `854b_s18_both_residents_rapid_montage.png`,
+  `854b_s18_both_turn_end_selected.png`,
+  `854b_s18_both_enemy_wait12.png`,
+  `854b_s18_both_resident_dialogue_next.png`,
+  `854b_s18_both_after_lana.png`, and
+  `854b_s18_both_after_second_resident.png` verify both resident death pages
+  and both Lana responses in Korean without broken names, classes, glyphs, or
+  reset.
+- The completion GST was already late in the scenario. Its aggregate resident
+  survival/defeat watcher did not re-evaluate after the injected deaths, and
+  the run reached TURN 5 instead of GAME OVER. Command `0x27` at `0x1A475E`
+  statically checks name IDs `20/21/FF`; handler `0x016D18` rejects an inactive
+  commander or any existing mercenary with flag bit 7 set. This establishes
+  the source condition but does not replace a fresh live defeat result.
+- Checksum `994B` temporarily changed the second resident event terminator
+  from `FF FF` to `13 FF`. It did not cause GAME OVER and was reverted;
+  `13 FF` is not a reusable standalone aggregate-loss patch in this context.
+  Do not repeat that experiment.
+- As a baseline, Scenario 18 protagonist checksum `F7AB` rendered
+  `엘윈: 리아나... 어째서...`, both following Lana pages, and then the stock
+  `GAME OVER` panel in `f7ab_s18_protagonist_after_lana2.png`. This confirms
+  the current Korean loss panel and protagonist path. Scenario 18
+  `branches_endings` remains pending until a fresh state with both live
+  residents reaches the original aggregate watcher and produces GAME OVER.
