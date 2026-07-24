@@ -17,7 +17,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 4 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 5 | current | current | current | current | probe | progressed | probe | pending | 44 |
 | 6 | current | current | current | current | current | progressed | probe | probe | 68 |
-| 7 | current | current | current | current | current | progressed | probe | pending | 44 |
+| 7 | current | current | current | current | current | progressed | probe | probe | 64 |
 | 8 | current | current | current | current | probe | progressed | probe | pending | 40 |
 | 9 | current | current | current | current | current | progressed | probe | pending | 43 |
 | 10 | current | current | current | current | probe | probe | probe | pending | 47 |
@@ -352,7 +352,7 @@ Production 489B verifies the Scenario 6 route map, all 16 text-bearing scrolling
 
 ### Scenario 7
 
-Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling frames of 깨어나는 망자, and the preparation endpoint. The complete Korean description covers Aaron joining the party, the quiet night, the cemetery ritual, and an evil presence being born without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, all 20 opening confirmations, the corrected canonical speaker label 기남, condition rows, and a no-action first-turn path through TURN 2 with two Slime/Resident battle presentations. Final production BFBA-derived clear probe 1A2E validates the Japanese header, deployment table, and all twelve fixed records; it preserves residents 0..2, hidden Keith 3, all other enemies 5..11, and every event while limiting only Ginam record 4 to AT/DF 0 with no mercenaries and moving him directly above the stock Elwin deployment. A normal attack kept every resident alive and verified the complete successful aftermath, Keith and the Blue Dragon Knights, Mirage Robe and Runestone rewards, corrected shared acquisition and level-up UI, class change, 전과보고 with POINT 1760P, a real 시나리오 8 save, 다음 시나리오, and the Scenario 8 route map without Japanese residue, broken glyphs, reset, or freeze. Later-turn conditional events, civilian-death variants, defeat, and other reward outcomes remain pending.
+Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling frames of 깨어나는 망자, and the preparation endpoint. The complete Korean description covers Aaron joining the party, the quiet night, the cemetery ritual, and an evil presence being born without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified five commander/class selections, all 20 opening confirmations, the corrected canonical speaker label 기남, condition rows, and a no-action first-turn path through TURN 2 with two Slime/Resident battle presentations. Final production BFBA-derived clear probe 1A2E validates the Japanese header, deployment table, and all twelve fixed records; it preserves residents 0..2, hidden Keith 3, all other enemies 5..11, and every event while limiting only Ginam record 4 to AT/DF 0 with no mercenaries and moving him directly above the stock Elwin deployment. A normal attack kept every resident alive and verified the complete successful aftermath, Keith and the Blue Dragon Knights, Mirage Robe and Runestone rewards, corrected shared acquisition and level-up UI, class change, 전과보고 with POINT 1760P, a real 시나리오 8 save, 다음 시나리오, and the Scenario 8 route map without Japanese residue, broken glyphs, reset, or freeze. Current production 9DD0 diagnostics C958, CA78, and CB98 preserve all fixed records and independently mark resident runtime groups 6, 7, and 8 lost. Their distinct reactions are `왜… 왜 구하러 오지 않는 거야…`, `아이…`, and `부, 부탁… 누가… 살려 줘…`; all three paths omit both Mirage Robe and Runestone and continue normally. Diagnostics 1BB0, 1CD0, and 1DF0 cover all three two-resident subsets and render exactly the two applicable reactions in stock order. Diagnostic 6F28 renders all three reactions, `큰일이다… 마을 사람들을 못 본 척하다니…`, and GAME OVER. Fixed-data-preserving protagonist diagnostic 949F reaches Elwin's `졌다!`, Ginam's follow-up, and GAME OVER. Resident-safe completion, all six partial-loss subsets, resident annihilation, and protagonist death are live-covered, so branches_endings is verified_probe. Ordinary later-turn conditional coverage remains tracked separately under turn_events.
 
 - `captures/run/f03a_s07_selector_map.png`
 - `captures/run/ef65_s07_brief_live_01.png`
@@ -398,6 +398,26 @@ Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling
 - `captures/run/1a2e_s07_system_67.png`
 - `captures/run/1a2e_s07_system_68.png`
 - `captures/run/1a2e_s07_route_next4.png`
+- `captures/run/c958_s07_loss0_event_07.png`
+- `captures/run/c958_s07_loss0_event_55.png`
+- `captures/run/ca78_s07_loss1_event_08.png`
+- `captures/run/cb98_s07_loss2_event_08.png`
+- `captures/run/cb98_s07_loss2_event_64.png`
+- `captures/run/1bb0_s07_loss01_event_08.png`
+- `captures/run/1bb0_s07_loss01_event_09.png`
+- `captures/run/1cd0_s07_loss02_event_08.png`
+- `captures/run/1cd0_s07_loss02_event_09.png`
+- `captures/run/1df0_s07_loss12_event_08.png`
+- `captures/run/1df0_s07_loss12_event_09.png`
+- `captures/run/6f28_s07_annihilation_event_20.png`
+- `captures/run/6f28_s07_annihilation_event_21.png`
+- `captures/run/6f28_s07_annihilation_event_22.png`
+- `captures/run/6f28_s07_annihilation_event_23.png`
+- `captures/run/6f28_s07_annihilation_event_24.png`
+- `captures/run/949f_s07_death_event_24.png`
+- `captures/run/949f_s07_death_event_25.png`
+- `captures/run/949f_s07_death_event_26.png`
+- `captures/run/949f_s07_death_event_27.png`
 
 ### Scenario 8
 

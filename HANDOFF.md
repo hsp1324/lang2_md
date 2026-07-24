@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 752 passing
+unit tests: 764 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6658,6 +6658,53 @@ contains 57 safe syllables as documented below and in
   order is full discovery, production rebuild, probe rebuild, then inventory
   regeneration; that order finishes at production `BFBA` and probe `1A2E`.
 
+### Scenario 7 Civilian-Loss And Defeat Branches (2026-07-24)
+
+- Current production `9DD0` confirms six player runtime groups `0..5`;
+  resident fixed records `0..2` become runtime groups `6..8`, hidden Keith is
+  group 9, Ginam is group 10, and the remaining enemies are groups `11..17`.
+  The six Japanese deployments are exactly `(7,20)`, `(12,20)`, `(15,20)`,
+  `(8,24)`, `(14,27)`, and `(18,23)`. The resident death table at `0x18F374`
+  is `17 02 20 00 00 18 F6 7C / 19 02 21 00 00 18 F6 9C /
+  1C 02 22 00 00 18 F6 D6 / 1D 04 20 21 22 00 00 18 F6 E0`; the final row is
+  the separate all-three-residents-lost handler.
+- `tools/build_scenario7_clear_probe_rom.py --civilian-loss` keeps all twelve
+  fixed records, the deployment table, hidden Keith, and the death-event table
+  source-identical. Its Start wrapper marks only the requested resident
+  runtime group(s) defeated, hides groups `11..17`, leaves Ginam group 10 at
+  one HP, and tail-jumps the stock Start handler. Checksums are `C958`, `CA78`,
+  and `CB98` for the three single losses; `1BB0`, `1CD0`, and `1DF0` for the
+  three double losses; and `6F28` for all three. Seventeen focused tests lock
+  the allowed byte ranges, every nonempty subset, the runtime writes, source
+  identities, event table, and checksums.
+- The single-loss reactions are record 0
+  `왜… 왜 구하러 오지 않는 거야…`, record 1 `아이…`, and record 2
+  `부, 부탁… 누가… 살려 줘…`. Accepted captures are
+  `c958_s07_loss0_event_07.png`, `ca78_s07_loss1_event_08.png`, and
+  `cb98_s07_loss2_event_08.png`. All three single-loss paths omit both
+  Mirage Robe and Runestone and continue through the common aftermath without
+  Japanese residue, broken glyphs, reset, or freeze. `c958` and `cb98` reach a
+  real Scenario 8 save in `_event_55.png` and `_event_64.png`.
+- Each double-loss probe renders exactly its two applicable reactions in the
+  stock name-ID order: `1BB0` uses `_event_08/_09`, as do `1CD0` and `1DF0`.
+  The all-loss path uses `6f28_s07_annihilation_event_20.png` through `_22.png`
+  for all three reactions, `_23.png` for
+  `큰일이다… 마을 사람들을 못 본 척하다니…`, and `_24.png` for GAME OVER.
+- Fixed-data-preserving protagonist diagnostic `949F` changes only player
+  runtime group 0 through Start. The stock first enemy phase reaches Elwin's
+  `졌다!`, Ginam's two follow-up pages, and GAME OVER in
+  `949f_s07_death_event_24.png` through `_27.png`. Resident-safe completion,
+  all six partial-loss subsets, resident annihilation, and protagonist death
+  are therefore live-covered; Scenario 7 `branches_endings` is
+  `verified_probe`. Ordinary later-turn conditionals remain tracked
+  separately under `turn_events`.
+- Rejected evidence: the first `C958` attempt selected `이동` instead of
+  `공격`, so `c958_s07_loss_00..75.png` must not be reused. At the attack
+  target, `A` and `B` cancel and a bare `C` can open the enemy detail popup
+  when the direct-event state is unsettled. The reliable sequence is to retain
+  `save:0.5` before the final `C`; this reproduces the accepted normal attack
+  without changing game RAM.
+
 ### Scenario 8 Completion And Battle-Stable Name Tiles (2026-07-20)
 
 - The Japanese Scenario 8 header is `0x180DA6`, its deployment table is
@@ -8603,6 +8650,6 @@ contains 57 safe syllables as documented below and in
   villain records at `0x0A6B20` and `0x0A6B54` remain unreviewed and false.
   Scenario 27 `branches_endings` remains `verified_probe`, because this run
   does not prove an unmodified final-boss clear or every conditional outcome.
-- Production rebuild remains checksum `9DD0`; all 736 tests pass. The accepted
+- Production rebuild remains checksum `9DD0`; all 764 tests pass. The accepted
   code, inventory, and documentation changes do not alter distributed ROM
   bytes.

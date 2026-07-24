@@ -397,7 +397,29 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             self.assertIn(capture, scenario7["captures"])
         self.assertIn("all twelve fixed records", scenario7["note"])
         self.assertIn("Mirage Robe and Runestone", scenario7["note"])
-        self.assertIn("civilian-death variants", scenario7["note"])
+        self.assertIn("C958, CA78, and CB98", scenario7["note"])
+        self.assertIn("1BB0, 1CD0, and 1DF0", scenario7["note"])
+        self.assertIn("Diagnostic 6F28", scenario7["note"])
+        self.assertIn("protagonist diagnostic 949F", scenario7["note"])
+        self.assertEqual(scenario7["branches_endings"], "verified_probe")
+        for capture in (
+            "captures/run/c958_s07_loss0_event_07.png",
+            "captures/run/c958_s07_loss0_event_55.png",
+            "captures/run/ca78_s07_loss1_event_08.png",
+            "captures/run/cb98_s07_loss2_event_08.png",
+            "captures/run/cb98_s07_loss2_event_64.png",
+            "captures/run/1bb0_s07_loss01_event_08.png",
+            "captures/run/1bb0_s07_loss01_event_09.png",
+            "captures/run/1cd0_s07_loss02_event_08.png",
+            "captures/run/1cd0_s07_loss02_event_09.png",
+            "captures/run/1df0_s07_loss12_event_08.png",
+            "captures/run/1df0_s07_loss12_event_09.png",
+            "captures/run/6f28_s07_annihilation_event_23.png",
+            "captures/run/6f28_s07_annihilation_event_24.png",
+            "captures/run/949f_s07_death_event_24.png",
+            "captures/run/949f_s07_death_event_27.png",
+        ):
+            self.assertIn(capture, scenario7["captures"])
         self.assertEqual(scenario7["battle_ui"], "verified_current")
         self.assertEqual(scenario7["turn_events"], "progressed_current")
         self.assertEqual(scenario8["conditions"], "verified_current")
