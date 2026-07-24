@@ -967,6 +967,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario22["battle_ui"], "verified_probe")
         self.assertEqual(scenario22["turn_events"], "verified_probe")
         self.assertEqual(scenario22["completion"], "verified_probe")
+        self.assertEqual(scenario22["branches_endings"], "verified_probe")
         self.assertIn("captures/run/c1c9_s22_opening_10.png", scenario22["captures"])
         self.assertIn("captures/run/c1c9_s22_turn1_30.png", scenario22["captures"])
         for capture in (
@@ -978,8 +979,31 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/a263_s22_after_bernhardt_fast30.png",
             "captures/run/a263_s22_next_scenario.png",
             "captures/run/a263_s23_description_entry.png",
+            "captures/run/aac1_s22_selector_22.png",
+            "captures/run/aac1_s22_route_00.png",
+            "captures/run/aac1_s22_brief_13.png",
+            "captures/run/aac1_s22_arrangement.png",
+            "captures/run/aac1_s22_auto.png",
+            "captures/run/aac1_s22_opening_22.png",
+            "captures/run/aac1_s22_start_menu.png",
+            "captures/run/aac1_s22_death_event_04.png",
+            "captures/run/aac1_s22_death_event_05.png",
+            "captures/run/b181_s22_selector_22.png",
+            "captures/run/b181_s22_route.png",
+            "captures/run/b181_s22_brief_19.png",
+            "captures/run/b181_s22_opening_24.png",
+            "captures/run/b181_s22_death_event_06.png",
+            "captures/run/b181_s22_death_event_07.png",
         ):
             self.assertIn(capture, scenario22["captures"])
+        self.assertIn("trigger 0x1AA928", scenario22["note"])
+        self.assertIn("handler 0x1AAC60", scenario22["note"])
+        self.assertIn("text pointer 0x1ABC58", scenario22["note"])
+        self.assertIn("trigger 0x1AA958", scenario22["note"])
+        self.assertIn("handler 0x1AACA0", scenario22["note"])
+        self.assertIn("text pointer 0x1ABCC8", scenario22["note"])
+        self.assertIn("엘윈: 큭… 여기까지인가…", scenario22["note"])
+        self.assertIn("제시카: 아아… 하늘이 푸르군…", scenario22["note"])
         self.assertEqual(scenario23["description"], "verified_current")
         for capture in (
             "captures/run/212a_s23_description_final_01.png",

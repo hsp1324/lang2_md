@@ -35,13 +35,34 @@ LANA_RECORD_INDEX = 1
 BOZEL_RECORD_INDEX = 2
 BERNHARDT_RECORD_INDEX = 3
 EGBERT_RECORD_INDEX = 7
+PROTAGONIST_DEATH_TRIGGER = 0x1AA928
+PROTAGONIST_DEATH_TRIGGER_BYTES = bytes.fromhex(
+    "10 02 01 00 00 1A AC 60"
+)
+PROTAGONIST_DEATH_EVENT = 0x1AAC60
+PROTAGONIST_DEATH_EVENT_BYTES = bytes.fromhex(
+    "02 01 02 01 00 1A BC 58 13 FF 15 FF FF FF"
+)
+PROTAGONIST_DEATH_TEXT = 0x1ABC58
+JESSICA_DEATH_TRIGGER = 0x1AA958
+JESSICA_DEATH_TRIGGER_BYTES = bytes.fromhex(
+    "16 02 0A 00 00 1A AC A0"
+)
+JESSICA_DEATH_EVENT = 0x1AACA0
+JESSICA_DEATH_EVENT_BYTES = bytes.fromhex(
+    "02 0A 1A 01 00 1A BC C8 13 FF 15 FF FF FF"
+)
+JESSICA_DEATH_TEXT = 0x1ABCC8
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 COMPLETION_HP_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
+PROTAGONIST_RUNTIME_GROUP = 0
+JESSICA_RUNTIME_GROUP = 6
 FIRST_ENEMY_RUNTIME_GROUP = 9
 LAST_ENEMY_RUNTIME_GROUP = 19
+RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
 PROBE_AT = 0
@@ -79,6 +100,45 @@ def completion_hp_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def mark_runtime_group_defeated_code(group: int) -> bytes:
+    record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+    code = bytearray()
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def install_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+    wrapper: bytes,
+) -> None:
+    expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+            != expected_start_entry
+        ):
+            raise ValueError(f"{label} Start-menu entry operand changed")
+    wrapper_end = COMPLETION_HP_WRAPPER + len(wrapper)
+    if probe[COMPLETION_HP_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError("input diagnostic wrapper region is not empty")
+    probe[
+        START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+    ] = COMPLETION_HP_WRAPPER.to_bytes(4, "big")
+    probe[COMPLETION_HP_WRAPPER:wrapper_end] = wrapper
+
+
 def validate_layout(probe: bytes, source: bytes) -> None:
     source_layout = scenario_layout(source, SCENARIO_NUMBER)
     probe_layout = scenario_layout(probe, SCENARIO_NUMBER)
@@ -106,6 +166,35 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             raise ValueError(
                 f"input Scenario 22 fixed record {index} differs from Japanese source"
             )
+    event_spans = (
+        (
+            "protagonist-death trigger",
+            PROTAGONIST_DEATH_TRIGGER,
+            PROTAGONIST_DEATH_TRIGGER_BYTES,
+        ),
+        (
+            "protagonist-death event",
+            PROTAGONIST_DEATH_EVENT,
+            PROTAGONIST_DEATH_EVENT_BYTES,
+        ),
+        (
+            "Jessica-death trigger",
+            JESSICA_DEATH_TRIGGER,
+            JESSICA_DEATH_TRIGGER_BYTES,
+        ),
+        (
+            "Jessica-death event",
+            JESSICA_DEATH_EVENT,
+            JESSICA_DEATH_EVENT_BYTES,
+        ),
+    )
+    for label, offset, expected_bytes in event_spans:
+        end = offset + len(expected_bytes)
+        for rom_label, data in (("Japanese", source), ("input", probe)):
+            if data[offset:end] != expected_bytes:
+                raise ValueError(
+                    f"{rom_label} Scenario 22 {label} changed"
+                )
 
 
 def patch_probe(
@@ -114,8 +203,31 @@ def patch_probe(
     *,
     completion_hp: bool = False,
     completion_layout: bool = False,
+    protagonist_death: bool = False,
+    jessica_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
+    death_modes = int(protagonist_death) + int(jessica_death)
+    if death_modes > 1:
+        raise ValueError(
+            "Scenario 22 protagonist-death and Jessica-death modes conflict"
+        )
+    if death_modes and (completion_hp or completion_layout):
+        raise ValueError(
+            "Scenario 22 death modes conflict with completion options"
+        )
+    if death_modes:
+        group = (
+            PROTAGONIST_RUNTIME_GROUP
+            if protagonist_death
+            else JESSICA_RUNTIME_GROUP
+        )
+        install_start_wrapper(
+            probe,
+            source,
+            mark_runtime_group_defeated_code(group),
+        )
+        return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_COMBAT_RECORD_INDEX, LAST_COMBAT_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -130,23 +242,8 @@ def patch_probe(
             FIRST_PLAYER_DEPLOYMENT_OFFSET + len(players)
         ] = players
     if completion_hp or completion_layout:
-        expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
-        if source[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] != expected_start_entry:
-            raise ValueError("Japanese Start-menu entry operand changed")
-        if probe[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] != expected_start_entry:
-            raise ValueError("input Start-menu entry operand changed")
         wrapper = completion_hp_wrapper_code()
-        wrapper_end = COMPLETION_HP_WRAPPER + len(wrapper)
-        if probe[COMPLETION_HP_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
-            raise ValueError("input completion wrapper region is not empty")
-        probe[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] = COMPLETION_HP_WRAPPER.to_bytes(4, "big")
-        probe[COMPLETION_HP_WRAPPER:wrapper_end] = wrapper
+        install_start_wrapper(probe, source, wrapper)
     return builder.update_md_checksum(probe)
 
 
@@ -177,6 +274,23 @@ def parse_args() -> argparse.Namespace:
             "the completion HP wrapper without moving any enemy record"
         ),
     )
+    death_mode = parser.add_mutually_exclusive_group()
+    death_mode.add_argument(
+        "--protagonist-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 22 deployment and fixed record, then "
+            "mark only runtime player group 0 defeated through Start"
+        ),
+    )
+    death_mode.add_argument(
+        "--jessica-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 22 deployment and fixed record, then "
+            "mark only runtime Jessica group 6 defeated through Start"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -189,14 +303,28 @@ def main() -> int:
         source,
         completion_hp=args.completion_hp,
         completion_layout=args.completion_layout,
+        protagonist_death=args.protagonist_death,
+        jessica_death=args.jessica_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print("Scenario 22 combat records 1..11: AT 0, DF 0, no mercenaries")
-    print(
-        "allied Liana, stock deployments, side IDs, identities, classes, "
-        "levels, hidden events, coordinates, and handlers preserved"
-    )
+    if args.protagonist_death or args.jessica_death:
+        target = (
+            "player group 0"
+            if args.protagonist_death
+            else "Jessica group 6"
+        )
+        print(
+            "Scenario 22 defeat mode: all deployments, fixed records, "
+            "events, identities, and combat values remain source-identical"
+        )
+        print(f"Start marks only runtime {target} defeated")
+    else:
+        print("Scenario 22 combat records 1..11: AT 0, DF 0, no mercenaries")
+        print(
+            "allied Liana, stock deployments, side IDs, identities, classes, "
+            "levels, hidden events, coordinates, and handlers preserved"
+        )
     if args.completion_layout:
         print(
             "completion layout: eight players staged beside source enemies; "

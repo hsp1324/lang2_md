@@ -25,6 +25,16 @@ class Scenario22ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def death_patched(self, mode: str) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            protagonist_death=mode == "protagonist",
+            jessica_death=mode == "jessica",
+        )
+        return data
+
     def allowed_offsets(
         self,
         *,
@@ -273,11 +283,165 @@ class Scenario22ClearProbeTests(unittest.TestCase):
             0x1421,
         )
 
+    def test_source_defeat_triggers_and_handlers_are_locked(self):
+        spans = (
+            (
+                probe_builder.PROTAGONIST_DEATH_TRIGGER,
+                probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+                probe_builder.PROTAGONIST_DEATH_EVENT,
+            ),
+            (
+                probe_builder.PROTAGONIST_DEATH_EVENT,
+                probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+                probe_builder.PROTAGONIST_DEATH_TEXT,
+            ),
+            (
+                probe_builder.JESSICA_DEATH_TRIGGER,
+                probe_builder.JESSICA_DEATH_TRIGGER_BYTES,
+                probe_builder.JESSICA_DEATH_EVENT,
+            ),
+            (
+                probe_builder.JESSICA_DEATH_EVENT,
+                probe_builder.JESSICA_DEATH_EVENT_BYTES,
+                probe_builder.JESSICA_DEATH_TEXT,
+            ),
+        )
+        for offset, expected, target in spans:
+            with self.subTest(offset=f"0x{offset:06X}"):
+                self.assertEqual(
+                    self.source[offset : offset + len(expected)],
+                    expected,
+                )
+                self.assertIn(target.to_bytes(4, "big"), expected)
+        for event in (
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+            probe_builder.JESSICA_DEATH_EVENT_BYTES,
+        ):
+            self.assertIn(b"\x13\xFF\x15\xFF", event)
+
+    def test_death_modes_change_only_wrapper_and_checksum(self):
+        for mode, group in (
+            ("protagonist", probe_builder.PROTAGONIST_RUNTIME_GROUP),
+            ("jessica", probe_builder.JESSICA_RUNTIME_GROUP),
+        ):
+            with self.subTest(mode=mode):
+                data = self.death_patched(mode)
+                wrapper = probe_builder.mark_runtime_group_defeated_code(group)
+                allowed = {
+                    0x18E,
+                    0x18F,
+                    *range(
+                        probe_builder.START_MENU_ENTRY_OPERAND,
+                        probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                    ),
+                    *range(
+                        probe_builder.COMPLETION_HP_WRAPPER,
+                        probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+                    ),
+                }
+                changed = {
+                    offset
+                    for offset, (before, after) in enumerate(
+                        zip(self.production, data)
+                    )
+                    if before != after
+                }
+                self.assertLessEqual(changed, allowed)
+
+    def test_death_modes_preserve_deployments_and_all_fixed_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        deployment_start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployment_end = deployment_start + len(
+            probe_builder.deployment_bytes(
+                probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+            )
+        )
+        records_end = (
+            layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+        )
+        for mode in ("protagonist", "jessica"):
+            with self.subTest(mode=mode):
+                data = self.death_patched(mode)
+                self.assertEqual(
+                    data[deployment_start:deployment_end],
+                    self.source[deployment_start:deployment_end],
+                )
+                self.assertEqual(
+                    data[layout.record_list_offset:records_end],
+                    self.source[layout.record_list_offset:records_end],
+                )
+
+    def test_death_wrappers_target_only_requested_runtime_group(self):
+        protagonist = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.PROTAGONIST_RUNTIME_GROUP
+        )
+        jessica = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.JESSICA_RUNTIME_GROUP
+        )
+        protagonist_record = probe_builder.RUNTIME_GROUP_BASE
+        jessica_record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.JESSICA_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        for offset in (
+            probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET,
+            probe_builder.RUNTIME_HP_OFFSET,
+            probe_builder.RUNTIME_X_OFFSET,
+        ):
+            self.assertIn(
+                (protagonist_record + offset).to_bytes(4, "big"),
+                protagonist,
+            )
+            self.assertNotIn(
+                (jessica_record + offset).to_bytes(4, "big"),
+                protagonist,
+            )
+            self.assertIn(
+                (jessica_record + offset).to_bytes(4, "big"),
+                jessica,
+            )
+            self.assertNotIn(
+                (protagonist_record + offset).to_bytes(4, "big"),
+                jessica,
+            )
+
+    def test_death_modes_conflict_with_each_other_and_completion(self):
+        with self.assertRaisesRegex(ValueError, "modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                protagonist_death=True,
+                jessica_death=True,
+            )
+        with self.assertRaisesRegex(ValueError, "completion options"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                jessica_death=True,
+                completion_hp=True,
+            )
+
+    def test_death_mode_checksums_are_locked(self):
+        for mode, checksum in (("protagonist", 0xAAC1), ("jessica", 0xB181)):
+            with self.subTest(mode=mode):
+                data = self.death_patched(mode)
+                self.assertEqual(
+                    int.from_bytes(data[0x18E:0x190], "big"),
+                    checksum,
+                )
+
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         damaged[layout.records_offset] ^= 1
         with self.assertRaisesRegex(ValueError, "fixed record 0"):
+            probe_builder.patch_probe(damaged, self.source)
+
+    def test_rejects_changed_defeat_event(self):
+        damaged = bytearray(self.production)
+        damaged[probe_builder.JESSICA_DEATH_EVENT] ^= 1
+        with self.assertRaisesRegex(ValueError, "Jessica-death event"):
             probe_builder.patch_probe(damaged, self.source)
 
 

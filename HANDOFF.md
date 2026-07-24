@@ -9189,3 +9189,34 @@ contains 57 safe syllables as documented below and in
   `GetImage` with `BadMatch`. `tools/capture_blastem_window.py` now falls back
   to the composed root-window client rectangle. This changes capture
   compatibility only and does not touch ROM data or emulator input.
+
+### Scenario 22 Defeat Branches (2026-07-25)
+
+- The visible defeat conditions are `주인공 사망 / 제시카 사망`. The
+  Japanese protagonist trigger at `0x1AA928` calls handler `0x1AAC60` and
+  text `0x1ABC58`; the Jessica trigger at `0x1AA958` calls handler
+  `0x1AACA0` and text `0x1ABCC8`. Both source handlers retain their
+  `13 FF 15 FF` GAME OVER sequence.
+- `tools/build_scenario22_clear_probe_rom.py --protagonist-death` and
+  `--jessica-death` preserve all eight player deployments, all twelve fixed
+  records, combat values, identities, coordinates, and source event bytes.
+  Their guarded Start wrappers mark only runtime player group 0 or Jessica
+  group 6 defeated. Production `B3F2` produces checksums `AAC1` and `B181`;
+  SHA-256 values are
+  `14d2d17ba1d407fc0ad5b27a4926a71cdbf6f081991d8ef988666ef93815e288`
+  and
+  `043175c32b1bcb51ef85223e68b3bc6c452862f5da3bd26ed21f299653c8ccc8`.
+- Both accepted isolated runs began from a valid Scenario 20 slot and visibly
+  changed the selector to 22 before entering the correct route, preparation,
+  automatic arrangement, opening, clean `엘윈/파이터` command panel, and
+  Korean Start menu. Normal turn end traversed the stock turn event and then
+  rendered `엘윈: 큭… 여기까지인가…` or
+  `제시카: 아아… 하늘이 푸르군…`, followed by GAME OVER.
+- Representative evidence is `aac1_s22_selector_22.png`,
+  `aac1_s22_arrangement.png`, `aac1_s22_opening_22.png`,
+  `aac1_s22_death_event_04.png`, `aac1_s22_death_event_05.png`,
+  `b181_s22_selector_22.png`, `b181_s22_opening_24.png`,
+  `b181_s22_death_event_06.png`, and `b181_s22_death_event_07.png`.
+  Neither path showed Japanese residue, broken names/classes/UI glyphs,
+  reset, or freeze. Normal completion and both declared defeat endings are
+  live-covered, so Scenario 22 `branches_endings` is `verified_probe`.
