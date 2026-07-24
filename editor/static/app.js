@@ -84,7 +84,10 @@ function testClassSpritePath(commanderId, classId) {
 }
 
 function aiClassSpritePath(commanderId, classId) {
-  return `/ai-class-sprites/${commanderId}/${hexId(classId)}.png`;
+  const version =
+    aiClassSpriteModel?.asset_version || "coherent-full-16-fit-2";
+  return `/ai-class-sprites/${commanderId}/${hexId(classId)}.png` +
+    `?v=${encodeURIComponent(version)}`;
 }
 
 function spriteImage(classId, options = {}) {
@@ -618,8 +621,9 @@ function aiClassNode(classId, level, commander, nextClassIds) {
   const selected = selectedAiClassId === classId ? " selected" : "";
   const nextCandidate = nextClassIds.includes(classId) ? " nextCandidate" : "";
   const generated = row.redesigned ? " aiGenerated" : "";
+  const pending = row.pending_redesign ? " aiPending" : "";
   return `
-    <button class="classNode${generated}${selected}${nextCandidate}" type="button"
+    <button class="classNode${generated}${pending}${selected}${nextCandidate}" type="button"
       data-ai-tree-class="${classId}" data-node-id="${level}-${classId}">
       <span class="nodeSprite">
         ${aiSpriteImage(commander.commander_id, classId)}
@@ -639,8 +643,17 @@ function renderAiClassInspector() {
   }
   const info = classInfo(classId);
   const row = aiClassRow(commander.commander_id, classId);
-  const headPreservation = row.redesigned
-    ? "얼굴·머리 고정 없음"
+  const pending = Boolean(row.pending_redesign);
+  const nativeAi16 = Boolean(
+    row.redesigned && row.ai_source_kind.includes("네이티브 16×16")
+  );
+  const headPreservation = pending
+    ? "실패 시안 제거·현재 ROM 원본 전체 256픽셀"
+    : row.redesigned
+    ? row.ai_source_kind.includes("네이티브 16×16") ||
+      row.ai_source_kind.includes("마스크 인페인트")
+      ? "ROM 얼굴·머리·윤곽을 처음부터 편집 잠금"
+      : "원작 레퍼런스 얼굴·머리와 몸 연결 유지"
     : "원본 전체 256픽셀";
   aiClassInspector.innerHTML = `
     <div class="inspectorTitle">
@@ -653,14 +666,28 @@ function renderAiClassInspector() {
     </div>
     <div class="aiSpriteComparison">
       <div>
-        <span>${row.redesigned ? "AI 원화" : "AI 원화 · 미사용"}</span>
+        <span>${pending
+          ? "전용 생성 대기"
+          : row.redesigned
+          ? nativeAi16
+            ? "AI 원출력 (16×16)"
+            : "AI 원화"
+          : "AI 원화 · 미사용"}</span>
         <span class="aiSourceSprite">
-          <img src="/ai-class-sprites/${row.ai_source_cell_file}"
-            alt="${escapeHtml(commander.name)} ${row.ai_sheet_stage}단계 AI 원화">
+          ${row.redesigned && row.ai_source_cell_file
+            ? `<img src="/ai-class-sprites/${row.ai_source_cell_file}"
+                alt="${escapeHtml(commander.name)} ${escapeHtml(info.ko)} AI 원화">`
+            : spriteImage(classId, {commanderId: commander.commander_id})}
         </span>
       </div>
       <div>
-        <span>${row.redesigned ? "16×16 변환" : "ROM 원본 유지"}</span>
+        <span>${pending
+          ? "현재 안전 복구본"
+          : row.redesigned
+          ? nativeAi16
+            ? "에디터 적용본 (변환 없음)"
+            : "16×16 변환"
+          : "ROM 원본 유지"}</span>
         <span class="comparisonSprite ${row.redesigned ? "changed" : ""}">
           ${aiSpriteImage(commander.commander_id, classId)}
         </span>

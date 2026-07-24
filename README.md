@@ -93,7 +93,8 @@
 - `tools/build_class_sprite_assets.py`: 일본판 ROM의 157개 클래스/용병 스프라이트와 10명 지휘관별 클래스 스프라이트를 에디터용 PNG로 추출합니다.
 - `tools/build_item_icon_assets.py`: 검증된 상점 캡처에서 37개 아이템 아이콘을 에디터용 PNG로 추출합니다.
 - `tools/build_test_class_sprite_assets.py`: 같은 그림을 공유하는 아군 상위 클래스만 재도색한 `테스트 체인지` 비교 PNG를 만듭니다. 묶음의 최저 클래스, 얼굴·머리·원본 외곽선은 보존하며 ROM에는 쓰지 않습니다.
-- `tools/build_ai_class_sprite_assets.py`: 생성형 원화 셀의 중앙 전경을 분리하고, 1픽셀 장식색이 남는 최근접 샘플 위상을 고른 뒤 최대 범위 15색 팔레트로 16×16 `AI 클래스` 비교 PNG를 만듭니다. 얼굴을 포함한 고정 영역은 없으며, 이 자산도 ROM 빌더와 분리되어 있습니다.
+- `tools/build_ai_class_sprite_assets.py`: 원작 지휘관 그림의 얼굴·머리카락을 정체성 레퍼런스로 생성한 클래스별 보드에서 고정 격자 셀과 중앙 전경을 분리합니다. 전경은 종횡비를 유지한 채 16×16 전체 범위에 최근접 표본화하고 가로 중앙·아래쪽 바닥선에 맞춥니다. 축소 뒤 ROM 머리 사각형을 덮는 방식은 폐기했습니다. 엘윈의 깨진 생성/자동 재색칠 시안 10개는 에디터에서 ROM 원본으로 임시 복구했습니다.
+- `tools/pixellab_elwin_inpaint.py`: 엘윈의 실제 위쪽 얼굴·갈색 머리를 생성 전에 잠그는 네이티브 16×16 인페인트 실험 도구입니다. 원본 실루엣 전체를 고정한 로드 후보는 클래스 차이가 보이지 않아 폐기하고 ROM 원본으로 복원했습니다. 다음 후보는 머리 정체성만 고정하고 몸·갑옷·장비 실루엣은 바꾸도록 프롬프트를 재설계합니다. API 호출은 `PIXELLAB_API_TOKEN` 또는 프로젝트 밖의 `/home/hong/.config/pixellab/token`과 명시적인 `--run`이 모두 있을 때만 수행합니다.
 - `scripts/legacy/`: 영어판 기반 초기 실험 스크립트 보관 위치입니다.
 - `script_extract/english_records.json`: 추출한 영어 대사 레코드입니다.
 - `script_extract/korean_records_google.json`: 기계 번역 기반 전체 대사 레코드입니다.

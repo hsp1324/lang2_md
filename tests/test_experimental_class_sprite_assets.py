@@ -11,7 +11,14 @@ from tools.build_class_sprite_assets import (
 from tools.build_test_class_sprite_assets import (
     protected_face_points,
 )
-from tools.build_ai_class_sprite_assets import accent_hues, pixelize_cell
+from tools.build_ai_class_sprite_assets import (
+    accent_hues,
+    pixelize_cell,
+)
+from tools.pixellab_elwin_inpaint import (
+    CLASS_PROMPTS as PIXELLAB_ELWIN_CLASSES,
+    inpaint_mask as pixellab_inpaint_mask,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,15 +100,22 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                                     source.getpixel((x, y)),
                                 )
 
-    def test_ai_assets_keep_source_cells_without_face_lock(self):
+    def test_ai_assets_keep_coherent_source_cells_at_full_16_extent(self):
         manifest = self.ai_manifest
-        self.assertEqual(
-            manifest["ai_source_sheets"],
-            ["docs/assets/allied_class_redesign_concept.png"],
+        self.assertEqual(len(manifest["ai_source_sheets"]), 9)
+        self.assertTrue(
+            all(
+                path.startswith(
+                    "docs/assets/ai-class-source/"
+                    "identity-locked-class-boards/"
+                )
+                for path in manifest["ai_source_sheets"]
+            )
         )
         self.assertEqual(manifest["commander_count"], 10)
         self.assertEqual(manifest["asset_count"], 170)
-        self.assertEqual(manifest["redesigned_count"], 102)
+        self.assertEqual(manifest["redesigned_count"], 92)
+        self.assertEqual(manifest["pending_redesign_count"], 10)
         self.assertIn("preview PNG assets only", manifest["rom_effect"])
         source_cells = set()
         rows = [
@@ -111,7 +125,6 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         ]
         for row in rows:
             path = AI_ASSET_DIR / row["file"]
-            source_cells.add(row["ai_source_cell_file"])
             self.assertTrue(path.is_file(), path)
             with Image.open(path) as image:
                 self.assertEqual(image.size, (16, 16))
@@ -121,11 +134,18 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     1,
                 )
                 if not row["redesigned"]:
+                    self.assertIsNone(row["ai_source_cell_file"])
                     self.assertEqual(image.tobytes(), source.tobytes())
                     self.assertEqual(row["face_pixel_count"], 0)
                     continue
+                source_cells.add(row["ai_source_cell_file"])
                 self.assertEqual(row["face_pixel_count"], 0)
                 self.assertNotEqual(image.tobytes(), source.tobytes())
+                self.assertEqual(
+                    image.getchannel("A").getbbox()[3],
+                    16,
+                    "converted sprite must be aligned to the bottom row",
+                )
                 self.assertLessEqual(
                     len(image.getcolors(maxcolors=256) or []),
                     16,
@@ -139,7 +159,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         )
                     }.issubset({0, 255})
                 )
-        self.assertEqual(len(source_cells), 50)
+        self.assertEqual(len(source_cells), 92)
         for filename in source_cells:
             self.assertTrue((AI_ASSET_DIR / filename).is_file(), filename)
 
@@ -200,6 +220,49 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             retained_hue_count / source_hue_count,
             0.70,
         )
+
+    def test_elwin_rejected_trials_are_replaced_by_exact_rom_sprites(self):
+        self.assertEqual(
+            self.ai_manifest["asset_version"],
+            "elwin-original-pending-silhouette-redesign-2",
+        )
+        pending_rows = []
+        for class_id in PIXELLAB_ELWIN_CLASSES:
+            original = Image.open(
+                ROOT
+                / (
+                    "editor/static/class-sprites/commanders/1/"
+                    f"{class_id:02X}-p1.png"
+                )
+            ).convert("RGBA")
+            actual = Image.open(
+                AI_ASSET_DIR / "1" / f"{class_id:02X}.png"
+            ).convert("RGBA")
+            row = self.ai_manifest["commanders"]["1"]["classes"][
+                str(class_id)
+            ]
+            self.assertEqual(actual.tobytes(), original.tobytes())
+            self.assertFalse(row["redesigned"])
+            self.assertTrue(row["pending_redesign"])
+            self.assertIsNone(row["ai_source_cell_file"])
+            pending_rows.append(row)
+        self.assertEqual(len(pending_rows), 10)
+
+    def test_pixellab_lord_trial_is_native_16_and_locks_head_pixels(self):
+        trial_dir = (
+            ROOT / "docs/assets/ai-class-source/pixellab-elwin-trial"
+        )
+        source = Image.open(trial_dir / "04-source-16.png").convert("RGBA")
+        mask = Image.open(trial_dir / "04-mask-16.png").convert("L")
+        generated_mask, box = pixellab_inpaint_mask(source)
+        self.assertEqual(source.size, (16, 16))
+        self.assertEqual(mask.size, (16, 16))
+        self.assertEqual(mask.tobytes(), generated_mask.tobytes())
+        self.assertEqual(box, (4, 0, 14, 5))
+        values = {color for _, color in mask.getcolors(maxcolors=256)}
+        self.assertEqual(values, {0, 255})
+        self.assertGreater(sum(value == 0 for value in mask.getdata()), 0)
+        self.assertGreater(sum(value == 255 for value in mask.getdata()), 0)
 
     def test_preview_generators_are_not_imported_by_rom_builder(self):
         production_sources = (

@@ -1,0 +1,49 @@
+{
+  "class_id": 4,
+  "class_hex": "04",
+  "class_name": "LORD",
+  "canvas": [
+    16,
+    16
+  ],
+  "logical_canvas": [
+    16,
+    16
+  ],
+  "integer_scale": 1,
+  "head_lock_box": [
+    4,
+    0,
+    14,
+    5
+  ],
+  "mask_semantics": "black=preserve exactly, white=generate",
+  "api": "https://api.pixellab.ai/v2/inpaint",
+  "request_template": {
+    "description": "Elwin LORD commander, full body. Preserve the input's exact pose, body proportions, size, sword silhouette, and bottom-aligned stance. The locked original brown-haired head is final. Continue its neck naturally into the same shoulders. Change only the clothing and equipment design to silver cuirass and shoulder armor, a short crimson cape behind the left shoulder, a small red-and-gold heater shield on the right forearm, and a straight sword held diagonally away from the body. Keep the red cape on screen-left and the small shield distinct on screen-right. Preserve clear dark gaps between the head, shoulders, arms, torso, legs, sword, and shield. Low top-down three-quarter view, facing south-east. Every editable pixel belongs to the existing character silhouette; keep all of those pixels opaque and fill them with character art. Do not erase or hollow out the body. Native 16x16 pixel art. Every output pixel is a final sprite pixel; use large readable color clusters and no sub-pixel details. Transparent background.",
+    "negative_description": "portrait, bust, floating head, oversized head, tiny body, disconnected neck, different face, different hair, helmet covering hair, symmetrical front view, cropped feet, horse, wings, magic, extra weapons, oversized shield, shield covering torso, merged equipment, smooth shading, missing limbs, transparent holes inside the body, anti-aliasing, blur, one-pixel noise, background, ground shadow, text, border, more than one character",
+    "image_size": {
+      "width": 16,
+      "height": 16
+    },
+    "text_guidance_scale": 6,
+    "outline": "single color black outline",
+    "shading": "basic shading",
+    "detail": "medium detail",
+    "view": "low top-down",
+    "direction": "south-east",
+    "no_background": false,
+    "init_image_strength": 300,
+    "inpainting_image": {
+      "type": "base64",
+      "base64": "<04-source-16.png>",
+      "format": "png"
+    },
+    "mask_image": {
+      "type": "base64",
+      "base64": "<04-mask-16.png>",
+      "format": "png"
+    },
+    "seed": "<candidate seed>"
+  }
+}
