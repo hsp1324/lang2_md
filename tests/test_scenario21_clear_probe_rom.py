@@ -10,32 +10,48 @@ class Scenario21ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self, *, completion_layout: bool = False) -> bytearray:
+    def patched(
+        self,
+        *,
+        completion_layout: bool = False,
+        protagonist_death: bool = False,
+    ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
             data,
             self.source,
             completion_layout=completion_layout,
+            protagonist_death=protagonist_death,
         )
         return data
 
-    def allowed_offsets(self, *, completion_layout: bool = False) -> set[int]:
+    def allowed_offsets(
+        self,
+        *,
+        completion_layout: bool = False,
+        protagonist_death: bool = False,
+    ) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
-        for index in range(layout.record_count):
-            base = layout.records_offset + index * FIXED_RECORD_SIZE
-            allowed.update(
-                {
-                    base + FIELD_OFFSETS["at"],
-                    base + FIELD_OFFSETS["df"],
-                    *(
-                        base + FIELD_OFFSETS["mercenaries"] + slot
-                        for slot in range(6)
-                    ),
-                }
+        if not protagonist_death:
+            for index in range(layout.record_count):
+                base = layout.records_offset + index * FIXED_RECORD_SIZE
+                allowed.update(
+                    {
+                        base + FIELD_OFFSETS["at"],
+                        base + FIELD_OFFSETS["df"],
+                        *(
+                            base + FIELD_OFFSETS["mercenaries"] + slot
+                            for slot in range(6)
+                        ),
+                    }
+                )
+        if completion_layout or protagonist_death:
+            wrapper = (
+                probe_builder.protagonist_death_wrapper_code()
+                if protagonist_death
+                else probe_builder.completion_hp_wrapper_code()
             )
-        if completion_layout:
-            wrapper = probe_builder.completion_hp_wrapper_code()
             allowed.update(
                 range(
                     probe_builder.START_MENU_ENTRY_OPERAND,
@@ -48,17 +64,22 @@ class Scenario21ClearProbeTests(unittest.TestCase):
                     probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
                 )
             )
-            for index in range(len(probe_builder.COMPLETION_PLAYER_DEPLOYMENTS)):
-                player = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + index * 4
-                allowed.update({player + 1, player + 3})
-            for index in probe_builder.COMPLETION_ENEMY_POSITIONS:
-                enemy = layout.records_offset + index * FIXED_RECORD_SIZE
-                allowed.update(
-                    {
-                        enemy + FIELD_OFFSETS["x"],
-                        enemy + FIELD_OFFSETS["y"],
-                    }
-                )
+            if completion_layout:
+                for index in range(
+                    len(probe_builder.COMPLETION_PLAYER_DEPLOYMENTS)
+                ):
+                    player = (
+                        probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + index * 4
+                    )
+                    allowed.update({player + 1, player + 3})
+                for index in probe_builder.COMPLETION_ENEMY_POSITIONS:
+                    enemy = layout.records_offset + index * FIXED_RECORD_SIZE
+                    allowed.update(
+                        {
+                            enemy + FIELD_OFFSETS["x"],
+                            enemy + FIELD_OFFSETS["y"],
+                        }
+                    )
         return allowed
 
     def test_changes_only_declared_enemy_fields_and_checksum(self):
@@ -250,9 +271,96 @@ class Scenario21ClearProbeTests(unittest.TestCase):
             code,
         )
 
+    def test_protagonist_death_mode_preserves_source_and_uses_stock_event(self):
+        data = self.patched(protagonist_death=True)
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(
+            changed,
+            self.allowed_offsets(protagonist_death=True),
+        )
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        self.assertEqual(
+            data[
+                layout.record_list_offset :
+                layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+            ],
+            self.source[
+                layout.record_list_offset :
+                layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+            ],
+        )
+        trigger_start = probe_builder.PROTAGONIST_DEATH_TRIGGER
+        trigger_end = (
+            trigger_start + len(probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES)
+        )
+        self.assertEqual(
+            data[trigger_start:trigger_end],
+            probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+        )
+        event_start = probe_builder.PROTAGONIST_DEATH_EVENT
+        event_end = event_start + len(probe_builder.PROTAGONIST_DEATH_EVENT_BYTES)
+        self.assertEqual(
+            data[event_start:event_end],
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(
+            probe_builder.PROTAGONIST_DEATH_TEXT.to_bytes(4, "big"),
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(b"\x13\xFF", probe_builder.PROTAGONIST_DEATH_EVENT_BYTES)
+
+        code = probe_builder.protagonist_death_wrapper_code()
+        record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4, "big"
+            ),
+            code,
+        )
+        self.assertIn(
+            (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.COMPLETION_HP_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.COMPLETION_HP_WRAPPER :
+                probe_builder.COMPLETION_HP_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+    def test_diagnostic_modes_conflict(self):
+        with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                completion_layout=True,
+                protagonist_death=True,
+            )
+
     def test_default_and_completion_checksums_are_locked(self):
         default = bytearray(self.production)
         completion = bytearray(self.production)
+        protagonist_death = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
             0x34A1,
@@ -265,12 +373,26 @@ class Scenario21ClearProbeTests(unittest.TestCase):
             ),
             0xCFDE,
         )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                protagonist_death,
+                self.source,
+                protagonist_death=True,
+            ),
+            0xAAC1,
+        )
 
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         damaged[layout.records_offset] ^= 1
         with self.assertRaisesRegex(ValueError, "fixed record 0"):
+            probe_builder.patch_probe(damaged, self.source)
+
+    def test_rejects_changed_protagonist_death_event(self):
+        damaged = bytearray(self.production)
+        damaged[probe_builder.PROTAGONIST_DEATH_EVENT] ^= 1
+        with self.assertRaisesRegex(ValueError, "protagonist-death event"):
             probe_builder.patch_probe(damaged, self.source)
 
 

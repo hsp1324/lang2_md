@@ -926,6 +926,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario21["battle_ui"], "verified_probe")
         self.assertEqual(scenario21["turn_events"], "verified_probe")
         self.assertEqual(scenario21["completion"], "verified_probe")
+        self.assertEqual(scenario21["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/5e20_s21_scan_up.png",
             "captures/run/5e20_s21_scan_left.png",
@@ -936,8 +937,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/5e20_s21_clear_event_23.png",
             "captures/run/5e20_s21_save_confirm_01.png",
             "captures/run/5e20_s22_entry_04.png",
+            "captures/run/aac1_s21_fresh2_selector_21.png",
+            "captures/run/aac1_s21_fresh2_route_00.png",
+            "captures/run/aac1_s21_fresh2_brief_16.png",
+            "captures/run/aac1_s21_fresh2_auto2.png",
+            "captures/run/aac1_s21_fresh2_opening_20.png",
+            "captures/run/aac1_s21_fresh2_start_menu.png",
+            "captures/run/aac1_s21_fresh2_death_wait_01.png",
+            "captures/run/aac1_s21_fresh2_game_over.png",
         ):
             self.assertIn(capture, scenario21["captures"])
+        self.assertIn("source trigger 0x1A958C", scenario21["note"])
+        self.assertIn("handler 0x1A97BE", scenario21["note"])
+        self.assertIn("text pointer 0x1A9ED8", scenario21["note"])
+        self.assertIn("젠장… 막 벨제리아에 왔는데…", scenario21["note"])
         self.assertEqual(scenario22["description"], "verified_current")
         for capture in (
             "captures/run/42e6_s22_description_final_01.png",

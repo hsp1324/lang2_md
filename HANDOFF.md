@@ -9156,3 +9156,36 @@ contains 57 safe syllables as documented below and in
   builder suite has sixteen tests; mode checksums are default `AF33`,
   completion `AF4F`, protagonist death `AAC1`, Kraken `AF2A`, and conditional
   dialogues `AF30`.
+
+### Scenario 21 Protagonist-Death Branch (2026-07-25)
+
+- The Japanese Scenario 21 protagonist-death trigger is locked at `0x1A958C`
+  (`0B 02 01 00 00 1A 97 BE`). Its source handler at `0x1A97BE` calls text
+  `0x1A9ED8`, executes `13 FF`, and reaches GAME OVER. The reviewed Korean
+  text is `젠장… 막 벨제리아에 왔는데…`.
+- `tools/build_scenario21_clear_probe_rom.py --protagonist-death` preserves
+  all eight deployments, all eleven fixed records, combat values, identities,
+  coordinates, event bytes, and text pointers. Its guarded Start wrapper marks
+  only runtime player group 0 defeated. Production `B3F2` produces diagnostic
+  checksum `AAC1` and SHA-256
+  `14d2d17ba1d407fc0ad5b27a4926a71cdbf6f081991d8ef988666ef93815e288`.
+- Accepted isolated playback began from a valid Scenario 20 save, visibly
+  changed the built-in selector from 20 to 21, entered the Scenario 21 route
+  and ship map, retained preparation, automatic arrangement, opening, the
+  clean `엘윈/파이터` command panel, and the Korean Start menu. Normal turn
+  end rendered the Korean Elwin line and then GAME OVER without Japanese
+  residue, broken name/class/UI glyphs, reset, or freeze. Representative
+  evidence is `aac1_s21_fresh2_selector_21.png`,
+  `aac1_s21_fresh2_route_00.png`, `aac1_s21_fresh2_opening_20.png`,
+  `aac1_s21_fresh2_death_wait_01.png`, and
+  `aac1_s21_fresh2_game_over.png`.
+- The first automatic selector attempt entered name entry because the
+  title-screen Down input was dropped. It is rejected. Future fresh runs must
+  capture `불러오기`, a real save slot, a visible scenario-number change, and
+  the target route before accepting later evidence. Scenario 21 normal
+  completion and its sole declared defeat ending are now live-covered;
+  `branches_endings` is `verified_probe`.
+- Isolated Xvfb exposed that SDL/OpenGL windows can reject direct X11
+  `GetImage` with `BadMatch`. `tools/capture_blastem_window.py` now falls back
+  to the composed root-window client rectangle. This changes capture
+  compatibility only and does not touch ROM data or emulator input.

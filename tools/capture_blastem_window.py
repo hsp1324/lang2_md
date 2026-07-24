@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 
 from PIL import Image
-from Xlib import X
+from Xlib import X, error
 from Xlib.display import Display
 
 
@@ -122,8 +122,38 @@ def capture_with_xlib(window_id: int) -> Image.Image:
     display = Display()
     window = display.create_resource_object("window", window_id)
     geom = window.get_geometry()
-    image = window.get_image(0, 0, geom.width, geom.height, X.ZPixmap, 0xFFFFFFFF)
-    return Image.frombytes("RGB", (geom.width, geom.height), image.data, "raw", "BGRX")
+    try:
+        image = window.get_image(
+            0, 0, geom.width, geom.height, X.ZPixmap, 0xFFFFFFFF
+        )
+        return Image.frombytes(
+            "RGB", (geom.width, geom.height), image.data, "raw", "BGRX"
+        )
+    except error.BadMatch:
+        # Some SDL/OpenGL windows are not directly readable with GetImage.
+        # The isolated Xvfb runtime still exposes their composed pixels on the
+        # root window, so capture that client rectangle instead.
+        root = display.screen().root
+        # python-xlib exposes the translated destination origin on the source
+        # object, so query root -> window to obtain the client's root position.
+        coords = root.translate_coords(window, 0, 0)
+        screen_width = display.screen().width_in_pixels
+        screen_height = display.screen().height_in_pixels
+        width = min(geom.width, screen_width - coords.x)
+        height = min(geom.height, screen_height - coords.y)
+        if width <= 0 or height <= 0:
+            raise
+        image = root.get_image(
+            coords.x, coords.y, width, height, X.ZPixmap, 0xFFFFFFFF
+        )
+        captured = Image.frombytes(
+            "RGB", (width, height), image.data, "raw", "BGRX"
+        )
+        if (width, height) == (geom.width, geom.height):
+            return captured
+        result = Image.new("RGB", (geom.width, geom.height))
+        result.paste(captured, (0, 0))
+        return result
 
 
 def windows_capture_script(

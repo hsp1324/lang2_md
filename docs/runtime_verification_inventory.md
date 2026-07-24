@@ -31,7 +31,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 18 | current | current | current | current | probe | probe | probe | probe | 49 |
 | 19 | current | current | current | current | probe | progressed | probe | probe | 46 |
 | 20 | current | current | current | current | probe | probe | probe | probe | 60 |
-| 21 | current | current | current | current | probe | probe | probe | pending | 49 |
+| 21 | current | current | current | current | probe | probe | probe | probe | 57 |
 | 22 | current | current | current | current | probe | probe | probe | pending | 58 |
 | 23 | current | current | current | current | probe | current | probe | pending | 54 |
 | 24 | current | current | current | current | probe | current | probe | pending | 44 |
@@ -1174,7 +1174,7 @@ Production 77D0 verifies the Scenario 20 route map, all 16 text-bearing scrollin
 
 ### Scenario 21
 
-Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrolling frames of 마리오네트, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the ancient defeat of Bozel, the cursed land where the god of chaos was sealed, its appearance beyond the horizon, and the Dark Princess blocking the party's landing. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation roster pages, all eight commander/class panels, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. Production-4234 completion derivative 5E20 preserves every identity, event handler, and hidden reinforcement while limiting documented enemy combat fields and staging players beside the stock reveal points. Turn 4 retains 서큐버스/서큐버스 for both commander and adjacent soldier, 레스터/매직나이트, 제시카/비숍, 쉐리/로드, 아론/로드, and 키스/호크나이트 after map movement, magic, dialogue portraits, and battles. Fireball defeated the last two visible Succubi, all three stock Kraken reveal events rendered 크라켄/크라켄, and normal attacks reached the complete Korean aftermath, every level-up page, 전과보고, the real 저장 screen, saved 시나리오 22, 다음 시나리오, the Scenario 22 route text, and its preparation screen without reset, freeze, Japanese residue, or colored status cells. The first post-Kraken Elwin page is readable Korean but its line composition should receive a later prose review; it does not block completion-flow coverage. Natural branch/end variants remain pending.
+Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrolling frames of 마리오네트, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the ancient defeat of Bozel, the cursed land where the god of chaos was sealed, its appearance beyond the horizon, and the Dark Princess blocking the party's landing. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation roster pages, all eight commander/class panels, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. Production-4234 completion derivative 5E20 preserves every identity, event handler, and hidden reinforcement while limiting documented enemy combat fields and staging players beside the stock reveal points. Turn 4 retains 서큐버스/서큐버스 for both commander and adjacent soldier, 레스터/매직나이트, 제시카/비숍, 쉐리/로드, 아론/로드, and 키스/호크나이트 after map movement, magic, dialogue portraits, and battles. Fireball defeated the last two visible Succubi, all three stock Kraken reveal events rendered 크라켄/크라켄, and normal attacks reached the complete Korean aftermath, every level-up page, 전과보고, the real 저장 screen, saved 시나리오 22, 다음 시나리오, the Scenario 22 route text, and its preparation screen without reset, freeze, Japanese residue, or colored status cells. The first post-Kraken Elwin page is readable Korean but its line composition should receive a later prose review; it does not block completion-flow coverage. Production-B3F2 protagonist-death diagnostic AAC1 preserves all eight deployments, all eleven fixed records, source trigger 0x1A958C, handler 0x1A97BE, and text pointer 0x1A9ED8 while changing only runtime player group 0 through the guarded Start wrapper. A fresh isolated run visibly changed a valid Scenario 20 slot to 21, entered the Scenario 21 route and ship map, retained the eight-commander preparation flow, automatic arrangement, opening, clean 엘윈/파이터 command panel, and Korean Start menu, then rendered 엘윈: 젠장… 막 벨제리아에 왔는데… followed by GAME OVER after normal turn end. No Japanese residue, broken name/class/UI glyphs, reset, or freeze appeared. Normal completion and the sole declared protagonist-death ending are therefore live-covered, so branches_endings is verified_probe. An earlier automatic attempt entered the name-entry screen because its title-screen Down input was dropped; it was rejected. The accepted path captured 불러오기, selected slot 1, visibly changed 20 to 21, and confirmed the Scenario 21 route before any evidence was accepted.
 
 - `captures/run/138b_s21_brief_01.png`
 - `captures/run/138b_s21_brief_07.png`
@@ -1225,6 +1225,14 @@ Production 77D0 verifies the Scenario 21 route map, all 14 text-bearing scrollin
 - `captures/run/5e20_s22_entry_01.png`
 - `captures/run/5e20_s22_entry_02.png`
 - `captures/run/5e20_s22_entry_04.png`
+- `captures/run/aac1_s21_fresh2_selector_21.png`
+- `captures/run/aac1_s21_fresh2_route_00.png`
+- `captures/run/aac1_s21_fresh2_brief_16.png`
+- `captures/run/aac1_s21_fresh2_auto2.png`
+- `captures/run/aac1_s21_fresh2_opening_20.png`
+- `captures/run/aac1_s21_fresh2_start_menu.png`
+- `captures/run/aac1_s21_fresh2_death_wait_01.png`
+- `captures/run/aac1_s21_fresh2_game_over.png`
 
 ### Scenario 22
 
