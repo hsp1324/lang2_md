@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 786 passing
+unit tests: 792 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -8729,3 +8729,34 @@ contains 57 safe syllables as documented below and in
   covered, so `branches_endings` is `verified_probe`. Pirate casualty and
   retreat dialogue remain conditional-page work rather than ending coverage.
 - Production rebuild remains checksum `9DD0`; all 786 tests pass.
+
+### Scenario 11 Defeat Branches (2026-07-24)
+
+- The visible conditions are `주인공 사망 / 제시카 사망`. Existing
+  read-only GST mapping identifies player groups `0..5` and source fixed
+  record 0 Jessica as runtime group 6.
+- `tools/build_scenario11_clear_probe_rom.py --protagonist-death` and
+  `--jessica-death` preserve all six player deployments and all eleven fixed
+  records. They install the same guarded Start wrapper at `0x3FEF00`, changing
+  only group 0 or group 6 before tail-calling the stock handler. Production
+  `9DD0` produces checksums `949F` and `9B5F`.
+- In the `949F` run, the full first-turn Egbert/Jessica/Lester trap sequence
+  completed before `captures/run/949f_s11_death_event_11.png` displayed
+  `엘윈: 이제 끝인가…`; `_12.png` is GAME OVER. Names, classes, and the
+  lower status panel remained intact.
+- In the `9B5F` run, `9b5f_s11_event_00.png` reached ENEMY PHASE and
+  `_event_01.png` immediately reached GAME OVER. The source Jessica-loss path
+  has no intervening dialogue. Later frames from this automation are a normal
+  user-input restart caused by sending C after GAME OVER and are excluded.
+- Short 0.7-second preparation inputs were dropped while the panel redrew and
+  misrouted one discarded attempt into mercenary hire. The accepted runs use
+  1.2 seconds or more per preparation-menu direction and confirm each panel
+  before continuing.
+- Normal completion and both declared defeat endings are now live-covered, so
+  Scenario 11 `branches_endings` is `verified_probe`. Other casualty and
+  retreat records remain conditional dialogue work.
+- The monolithic full-suite process was externally terminated with signal 15
+  twice after producing only passing progress dots. Running the same complete
+  101-file inventory in three interleaved groups completed as
+  `257 + 352 + 183 = 792` tests, all OK. Production rebuild remains checksum
+  `9DD0` with 866 custom glyphs.

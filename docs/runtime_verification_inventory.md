@@ -21,7 +21,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 8 | current | current | current | current | probe | progressed | probe | probe | 47 |
 | 9 | current | current | current | current | current | progressed | probe | probe | 57 |
 | 10 | current | current | current | current | probe | probe | probe | probe | 50 |
-| 11 | current | current | current | current | current | probe | probe | pending | 57 |
+| 11 | current | current | current | current | current | probe | probe | probe | 63 |
 | 12 | current | current | current | current | current | probe | probe | pending | 52 |
 | 13 | current | current | current | current | current | probe | probe | pending | 50 |
 | 14 | current | current | current | current | probe | probe | probe | pending | 47 |
@@ -590,7 +590,7 @@ Production D3E8 verifies the Scenario 10 route map, all 19 text-bearing scrollin
 
 ### Scenario 11
 
-Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrolling frames of 불길 속에서, and the preparation endpoint. Direct Japanese-ROM rendering confirms the source says Egbert secretly laid traps while waiting for the opportunity. The awkward 그때를 노리고 함정을 파 두었다 is now 그때를 노려 몰래 함정을 파 두었다. A rejected 쳐 wording introduced one new description glyph and shifted 63 global direct-string token records; retaining 파 preserves every existing global glyph ID. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete six-member roster including the second page, arrangement, all 37 opening confirmations, condition rows, and the first-turn loss route. Production 33EF-derived diagnostic D091 validates the Japanese header, deployment table, and all eleven fixed records, weakens only imperial combat fields, uses a compact assault layout, and moves Jessica outside the spreading fire while preserving every event and completion handler. The live route traversed Egbert's retreat, fire events through turn 9, the event-relocated southern messenger, and the hidden final reinforcement. Normal Elwin and Sherry attacks defeated the final two groups, reached 전과보고 / POINT 3770P, wrote a real 시나리오 12 save, and entered the Scenario 12 route and 성지 레이텔 preparation screen without Japanese residue, reset, or freeze. Alternate defeat and other conditional branches remain pending.
+Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrolling frames of 불길 속에서, and the preparation endpoint. Direct Japanese-ROM rendering confirms the source says Egbert secretly laid traps while waiting for the opportunity. The awkward 그때를 노리고 함정을 파 두었다 is now 그때를 노려 몰래 함정을 파 두었다. A rejected 쳐 wording introduced one new description glyph and shifted 63 global direct-string token records; retaining 파 preserves every existing global glyph ID. The complete description is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current captures verified the complete six-member roster including the second page, arrangement, all 37 opening confirmations, condition rows, and the first-turn loss route. Production 33EF-derived diagnostic D091 validates the Japanese header, deployment table, and all eleven fixed records, weakens only imperial combat fields, uses a compact assault layout, and moves Jessica outside the spreading fire while preserving every event and completion handler. The live route traversed Egbert's retreat, fire events through turn 9, the event-relocated southern messenger, and the hidden final reinforcement. Normal Elwin and Sherry attacks defeated the final two groups, reached 전과보고 / POINT 3770P, wrote a real 시나리오 12 save, and entered the Scenario 12 route and 성지 레이텔 preparation screen without Japanese residue, reset, or freeze. Current-production defeat diagnostics preserve all six player deployments and eleven fixed records. Checksum 949F marks only runtime player group 0 defeated, traverses the complete first-turn trap dialogue, then reaches Elwin's `이제 끝인가…` and GAME OVER. Checksum 9B5F marks only runtime Jessica group 6 defeated and reaches GAME OVER immediately after ENEMY PHASE, matching the source branch with no intervening dialogue. The visible defeat conditions are protagonist death and Jessica death; normal completion and both defeat endings are live-covered, so branches_endings is verified_probe. Other casualty and retreat dialogue remain tracked separately.
 
 - `captures/run/fd90_s11_brief_live_01.png`
 - `captures/run/fd90_s11_brief_live_08.png`
@@ -649,6 +649,12 @@ Production 466A verifies the Scenario 11 route map, all 13 text-bearing scrollin
 - `captures/run/d091_s12_route.png`
 - `captures/run/d091_s12_title.png`
 - `captures/run/d091_s12_brief_04.png`
+- `captures/run/949f_s11_command_ready.png`
+- `captures/run/949f_s11_death_event_11.png`
+- `captures/run/949f_s11_death_event_12.png`
+- `captures/run/9b5f_s11_command_ready.png`
+- `captures/run/9b5f_s11_event_00.png`
+- `captures/run/9b5f_s11_event_01.png`
 
 ### Scenario 12
 

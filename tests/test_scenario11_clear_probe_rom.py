@@ -15,6 +15,121 @@ class Scenario11ClearProbeTests(unittest.TestCase):
         probe_builder.patch_probe(data, self.source)
         return data
 
+    def death_patched(self, mode: str) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            protagonist_death=mode == "protagonist",
+            jessica_death=mode == "jessica",
+        )
+        return data
+
+    def test_death_modes_change_only_wrapper_and_checksum(self):
+        for mode, group in (
+            ("protagonist", probe_builder.PROTAGONIST_RUNTIME_GROUP),
+            ("jessica", probe_builder.JESSICA_RUNTIME_GROUP),
+        ):
+            with self.subTest(mode=mode):
+                data = self.death_patched(mode)
+                wrapper = probe_builder.mark_runtime_group_defeated_code(group)
+                allowed = {
+                    0x18E,
+                    0x18F,
+                    *range(
+                        probe_builder.START_MENU_ENTRY_OPERAND,
+                        probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                    ),
+                    *range(
+                        probe_builder.RUNTIME_WRAPPER,
+                        probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                    ),
+                }
+                changed = {
+                    offset
+                    for offset, (before, after) in enumerate(
+                        zip(self.production, data)
+                    )
+                    if before != after
+                }
+                self.assertLessEqual(changed, allowed)
+
+    def test_death_modes_preserve_all_fixed_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for mode in ("protagonist", "jessica"):
+            with self.subTest(mode=mode):
+                data = self.death_patched(mode)
+                for index in range(layout.record_count):
+                    start = layout.records_offset + index * FIXED_RECORD_SIZE
+                    end = start + FIXED_RECORD_SIZE
+                    self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_death_wrappers_target_only_requested_runtime_group(self):
+        protagonist = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.PROTAGONIST_RUNTIME_GROUP
+        )
+        jessica = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.JESSICA_RUNTIME_GROUP
+        )
+        protagonist_record = probe_builder.RUNTIME_GROUP_BASE
+        jessica_record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.JESSICA_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            (protagonist_record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            protagonist,
+        )
+        self.assertNotIn(
+            (jessica_record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            protagonist,
+        )
+        self.assertIn(
+            (jessica_record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            jessica,
+        )
+        self.assertNotIn(
+            (protagonist_record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            jessica,
+        )
+        self.assertEqual(
+            jessica[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_death_modes_reject_safe_layout_options(self):
+        data = bytearray(self.production)
+        with self.assertRaisesRegex(ValueError, "safe-layout"):
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                protagonist_death=True,
+                safe_elwin=True,
+            )
+
+    def test_death_modes_conflict(self):
+        data = bytearray(self.production)
+        with self.assertRaisesRegex(ValueError, "modes conflict"):
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                protagonist_death=True,
+                jessica_death=True,
+            )
+
+    def test_death_mode_checksums_are_valid(self):
+        for mode, checksum in (("protagonist", 0x949F), ("jessica", 0x9B5F)):
+            with self.subTest(mode=mode):
+                data = self.death_patched(mode)
+                expected = sum(
+                    int.from_bytes(data[offset : offset + 2], "big")
+                    for offset in range(0x200, len(data), 2)
+                ) & 0xFFFF
+                self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+                self.assertEqual(expected, checksum)
+
     def test_changes_only_enemy_combat_fields_and_checksum(self):
         data = self.patched()
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)

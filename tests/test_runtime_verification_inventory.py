@@ -556,6 +556,19 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario11["battle_ui"], "verified_current")
         self.assertEqual(scenario11["turn_events"], "verified_probe")
         self.assertEqual(scenario11["completion"], "verified_probe")
+        self.assertEqual(scenario11["branches_endings"], "verified_probe")
+        for capture in (
+            "captures/run/949f_s11_command_ready.png",
+            "captures/run/949f_s11_death_event_11.png",
+            "captures/run/949f_s11_death_event_12.png",
+            "captures/run/9b5f_s11_command_ready.png",
+            "captures/run/9b5f_s11_event_00.png",
+            "captures/run/9b5f_s11_event_01.png",
+        ):
+            self.assertIn(capture, scenario11["captures"])
+        self.assertIn("runtime player group 0", scenario11["note"])
+        self.assertIn("runtime Jessica group 6", scenario11["note"])
+        self.assertIn("이제 끝인가", scenario11["note"])
         self.assertIn("POINT 3770P", scenario11["note"])
         self.assertIn("real 시나리오 12 save", scenario11["note"])
         self.assertEqual(scenario12["description"], "verified_current")

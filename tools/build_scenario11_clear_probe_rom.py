@@ -60,10 +60,59 @@ SAFE_CLEAR_VISIBLE_POSITIONS = {
     8: (17, 18),
     9: (19, 18),
 }
+START_MENU_ENTRY = 0x022C1E
+START_MENU_ENTRY_OPERAND = 0x00F2E0
+RUNTIME_WRAPPER = 0x3FEF00
+RUNTIME_GROUP_BASE = 0xFFFF603C
+RUNTIME_GROUP_SIZE = 0x60
+PROTAGONIST_RUNTIME_GROUP = 0
+JESSICA_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
+RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
+RUNTIME_HP_OFFSET = 0x03
+RUNTIME_X_OFFSET = 0x06
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 4], "big")
+
+
+def mark_runtime_group_defeated_code(group: int) -> bytes:
+    record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+    code = bytearray()
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def install_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+    wrapper: bytes,
+) -> None:
+    expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+            != expected_start_entry
+        ):
+            raise ValueError(f"{label} Start-menu entry operand changed")
+    wrapper_end = RUNTIME_WRAPPER + len(wrapper)
+    if probe[RUNTIME_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError("input diagnostic wrapper region is not empty")
+    probe[
+        START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+    ] = RUNTIME_WRAPPER.to_bytes(4, "big")
+    probe[RUNTIME_WRAPPER:wrapper_end] = wrapper
 
 
 def validate_layout(probe: bytes, source: bytes) -> None:
@@ -106,9 +155,35 @@ def patch_probe(
     safe_elwin: bool = False,
     safe_clear_layout: bool = False,
     safe_jessica: bool = False,
+    protagonist_death: bool = False,
+    jessica_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
+    death_modes = int(protagonist_death) + int(jessica_death)
+    if death_modes > 1:
+        raise ValueError("protagonist-death and jessica-death modes conflict")
+    if death_modes and (safe_elwin or safe_clear_layout or safe_jessica):
+        raise ValueError("death modes conflict with safe-layout options")
+    if death_modes:
+        for index in range(layout.record_count):
+            start = layout.records_offset + index * FIXED_RECORD_SIZE
+            end = start + FIXED_RECORD_SIZE
+            if probe[start:end] != source[start:end]:
+                raise ValueError(
+                    f"input Scenario 11 fixed record {index} differs from Japanese source"
+                )
+        group = (
+            PROTAGONIST_RUNTIME_GROUP
+            if protagonist_death
+            else JESSICA_RUNTIME_GROUP
+        )
+        install_start_wrapper(
+            probe,
+            source,
+            mark_runtime_group_defeated_code(group),
+        )
+        return builder.update_md_checksum(probe)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
         probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
@@ -175,6 +250,23 @@ def parse_args() -> argparse.Namespace:
             "turn-eight fire area to the compact southern battle area"
         ),
     )
+    death_mode = parser.add_mutually_exclusive_group()
+    death_mode.add_argument(
+        "--protagonist-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 11 fixed record and mark only runtime "
+            "player group 0 defeated through Start"
+        ),
+    )
+    death_mode.add_argument(
+        "--jessica-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 11 fixed record and mark only runtime "
+            "Jessica group 6 defeated through Start"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -188,26 +280,39 @@ def main() -> int:
         safe_elwin=args.safe_elwin,
         safe_clear_layout=args.safe_clear_layout,
         safe_jessica=args.safe_jessica,
+        protagonist_death=args.protagonist_death,
+        jessica_death=args.jessica_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print(
-        "Scenario 11 Jessica and events preserved; enemy records 1..10: "
-        "AT 0, DF 0, no mercenaries"
-    )
-    if args.safe_clear_layout:
+    if args.protagonist_death or args.jessica_death:
+        target = "player group 0" if args.protagonist_death else "Jessica group 6"
+        print(
+            "Scenario 11 defeat mode: all deployments and fixed records "
+            "remain source-identical"
+        )
+        print(
+            f"Start marks only runtime {target} defeated, then returns to "
+            "the stock Start handler"
+        )
+    else:
+        print(
+            "Scenario 11 Jessica and events preserved; enemy records 1..10: "
+            "AT 0, DF 0, no mercenaries"
+        )
+    if args.safe_clear_layout and not (args.protagonist_death or args.jessica_death):
         print("diagnostic player assault deployment moved south")
         print(
             "diagnostic enemy levels: 0; classes: Fighter; "
             "player and visible-enemy assault layout moved south"
         )
-    else:
+    elif not (args.protagonist_death or args.jessica_death):
         if args.safe_elwin:
             print("diagnostic Elwin deployment: (14,10) -> (18,20)")
         else:
             print("stock Elwin deployment preserved: (14,10)")
         print("stock enemy levels and coordinates preserved")
-    if args.safe_jessica:
+    if args.safe_jessica and not (args.protagonist_death or args.jessica_death):
         print("diagnostic Jessica deployment moved to (18,18)")
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
