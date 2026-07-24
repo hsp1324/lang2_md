@@ -452,6 +452,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("all eleven fixed records", scenario8["note"])
         self.assertIn("boss-survival", scenario8["note"])
         self.assertIn("Scenario 8-hidden record", scenario8["note"])
+        self.assertIn("protagonist-death diagnostic 949F", scenario8["note"])
+        self.assertIn("timeout diagnostic 042E", scenario8["note"])
+        self.assertIn("$FFFFA5F1", scenario8["note"])
+        self.assertEqual(scenario8["branches_endings"], "verified_probe")
+        for capture in (
+            "captures/run/949f_s08_death_event_02.png",
+            "captures/run/949f_s08_death_event_03.png",
+            "captures/run/949f_s08_death_event_04.png",
+            "captures/run/042e_s08_timeout_mid_01.png",
+            "captures/run/042e_s08_timeout_mid_06.png",
+            "captures/run/042e_s08_timeout_mid_07.png",
+            "captures/run/042e_s08_timeout_mid_08.png",
+        ):
+            self.assertIn(capture, scenario8["captures"])
         self.assertEqual(scenario9["description"], "verified_current")
         for capture in (
             "captures/run/489b_s09_description_current_01.png",

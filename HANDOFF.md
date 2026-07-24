@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 764 passing
+unit tests: 774 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -3524,7 +3524,7 @@ contains 57 safe syllables as documented below and in
   but is not yet a selectable preparation commander.
 - All 17 opening frames were reviewed through a valid Elwin command menu.
   Keith, Sherry, Hein, Kramer, and imperial-commander labels are intact.
-  `ef65_s08_conditions.png` verifies victory `12턴 내 크레이머 격파` and
+  `ef65_s08_conditions.png` verifies victory `23턴 내 크레이머 격파` and
   defeat `제한 턴 초과` / `주인공 사망` without clipping or residue.
 - The first detector pass falsely accepted a water-heavy map frame with a unit
   selection rectangle. The command detector now requires more than 6.5% white
@@ -6750,6 +6750,31 @@ contains 57 safe syllables as documented below and in
   method instead gives the already relocated clear-target Kramer the stock
   Vargas name and General class IDs. It changes no production ROM and must not
   be cited as natural event-placement or completion evidence.
+- Production `9DD0` protagonist-death diagnostic `949F` preserves all eleven
+  fixed records and every deployment. Its Start wrapper changes only runtime
+  player group 0 at `$FFFF603C`, then tail-jumps the stock handler. The first
+  enemy phase reaches `제국군지휘관: 핫!`, Elwin's
+  `크윽! 너무 무리했나…`, and GAME OVER in
+  `949f_s08_death_event_02.png` through `_04.png`.
+- Read-only GST comparison of ordinary Scenario 8 TURN 1, TURN 2, and TURN 3
+  states narrowed four `01→02` candidates to the sole sequential byte
+  `$FFFFA5F1 = 01/02/03`. Timeout diagnostic `042E` preserves every fixed
+  record and deployment; its Start wrapper sets only that verified counter to
+  the final allowed turn 23 and returns to the stock handler. After the
+  unmodified TURN 23 enemy phase, captures
+  `042e_s08_timeout_mid_06.png` through `_08.png` show Kramer's
+  `이제 칼자스 성의 잔군도 전멸 못하겠군…`, `하하하하…`, and GAME OVER.
+  Names, classes, and dialogue remain intact.
+- Rejected evidence: diagnostic `0423` set the counter to 12 because an older
+  handoff line incorrectly transcribed the visible condition. It correctly
+  advanced to TURN 13 without defeat and is not timeout evidence. The actual
+  `ef65_s08_conditions.png` reads `23턴 내 크레이머 격파`; the handoff and
+  diagnostic constant are corrected. Two selector/preparation input misses
+  entered name selection and mercenary hire respectively; both runs were
+  discarded and the accepted `042E` path used a fresh isolated runtime.
+  Normal completion, the boss-survival reinforcement branch, protagonist
+  death, and timeout are live-covered, so Scenario 8 `branches_endings` is
+  `verified_probe`. Ordinary later-turn dialogue remains tracked separately.
 
 ### Scenario 9 Ordinary Clear (2026-07-20)
 
@@ -8650,6 +8675,6 @@ contains 57 safe syllables as documented below and in
   villain records at `0x0A6B20` and `0x0A6B54` remain unreviewed and false.
   Scenario 27 `branches_endings` remains `verified_probe`, because this run
   does not prove an unmodified final-boss clear or every conditional outcome.
-- Production rebuild remains checksum `9DD0`; all 764 tests pass. The accepted
+- Production rebuild remains checksum `9DD0`; all 774 tests pass. The accepted
   code, inventory, and documentation changes do not alter distributed ROM
   bytes.

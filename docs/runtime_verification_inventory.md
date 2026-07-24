@@ -18,7 +18,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 5 | current | current | current | current | probe | progressed | probe | pending | 44 |
 | 6 | current | current | current | current | current | progressed | probe | probe | 68 |
 | 7 | current | current | current | current | current | progressed | probe | probe | 64 |
-| 8 | current | current | current | current | probe | progressed | probe | pending | 40 |
+| 8 | current | current | current | current | probe | progressed | probe | probe | 47 |
 | 9 | current | current | current | current | current | progressed | probe | pending | 43 |
 | 10 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 11 | current | current | current | current | current | probe | probe | pending | 57 |
@@ -421,7 +421,7 @@ Production 489B verifies the Scenario 7 route map, all 14 text-bearing scrolling
 
 ### Scenario 8
 
-Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. Final production CE96-derived clear probe 2209 validates the Japanese header, deployment table, and all eleven fixed records; it preserves every deployment and event while limiting only Kramer record 5 to AT/DF 0, no mercenaries, and a coordinate directly above stock Elwin. The first normal attack exercised the stock boss-survival path, Vargas and Zolm reinforcements, and all retreat dialogue while leaving Kramer at HP 1. After a stock turn transition, a second normal attack defeated him and reached level messages, 전과보고 with POINT 3020P, a real 시나리오 9 save, 다음 시나리오, and the Scenario 9 route map. Scenario 8 reinforcement graphics overwrote the former 가/스/럴 byte-font tiles; production moves them to the dynamically restored final bank, and the ending-result renderer now reloads that bank so actual 발가스/제너럴, 스코트, and 키스 remain intact. A separate status probe proved that merely clearing the Scenario 8-hidden record flag does not perform event placement; it therefore relabels only the relocated visible target with the stock Vargas name/class IDs for renderer diagnosis and is not completion evidence. Later-turn conditionals, timeout/defeat, alternate combat outcomes, and other branches remain pending.
+Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. Final production CE96-derived clear probe 2209 validates the Japanese header, deployment table, and all eleven fixed records; it preserves every deployment and event while limiting only Kramer record 5 to AT/DF 0, no mercenaries, and a coordinate directly above stock Elwin. The first normal attack exercised the stock boss-survival path, Vargas and Zolm reinforcements, and all retreat dialogue while leaving Kramer at HP 1. After a stock turn transition, a second normal attack defeated him and reached level messages, 전과보고 with POINT 3020P, a real 시나리오 9 save, 다음 시나리오, and the Scenario 9 route map. Scenario 8 reinforcement graphics overwrote the former 가/스/럴 byte-font tiles; production moves them to the dynamically restored final bank, and the ending-result renderer now reloads that bank so actual 발가스/제너럴, 스코트, and 키스 remain intact. A separate status probe proved that merely clearing the Scenario 8-hidden record flag does not perform event placement; it therefore relabels only the relocated visible target with the stock Vargas name/class IDs for renderer diagnosis and is not completion evidence. Current-production protagonist-death diagnostic 949F preserves all eleven fixed records and marks only runtime player group 0 defeated through Start; the stock first enemy phase reaches `제국군지휘관: 핫!`, Elwin's `크윽! 너무 무리했나…`, and GAME OVER. Ordinary TURN 1/2/3 GST comparison proves the runtime turn counter is `$FFFFA5F1`; timeout diagnostic 042E preserves all fixed records, sets only that counter to the actual final allowed turn 23, and reaches Kramer's `이제 칼자스 성의 잔군도 전멸 못하겠군…`, `하하하하…`, and GAME OVER after the stock enemy phase. Normal completion, boss survival/reinforcement, protagonist death, and timeout are live-covered, so branches_endings is verified_probe. Ordinary later-turn dialogue remains tracked separately under turn_events.
 
 - `captures/run/ef65_s08_selector_map.png`
 - `captures/run/ef65_s08_brief_live_01.png`
@@ -463,6 +463,13 @@ Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling
 - `captures/run/2209_s08_victory_24.png`
 - `captures/run/2209_s08_victory_26.png`
 - `captures/run/2209_s08_next_scenario.png`
+- `captures/run/949f_s08_death_event_02.png`
+- `captures/run/949f_s08_death_event_03.png`
+- `captures/run/949f_s08_death_event_04.png`
+- `captures/run/042e_s08_timeout_mid_01.png`
+- `captures/run/042e_s08_timeout_mid_06.png`
+- `captures/run/042e_s08_timeout_mid_07.png`
+- `captures/run/042e_s08_timeout_mid_08.png`
 
 ### Scenario 9
 
