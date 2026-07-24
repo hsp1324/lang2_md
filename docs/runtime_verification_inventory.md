@@ -16,7 +16,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 3 | current | current | current | current | probe | probe | probe | pending | 34 |
 | 4 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 5 | current | current | current | current | probe | progressed | probe | pending | 44 |
-| 6 | current | current | current | current | current | progressed | probe | pending | 56 |
+| 6 | current | current | current | current | current | progressed | probe | probe | 68 |
 | 7 | current | current | current | current | current | progressed | probe | pending | 44 |
 | 8 | current | current | current | current | probe | progressed | probe | pending | 40 |
 | 9 | current | current | current | current | current | progressed | probe | pending | 43 |
@@ -279,7 +279,7 @@ Production 489B verifies the Scenario 5 route map, all 13 text-bearing scrolling
 
 ### Scenario 6
 
-Production 489B verifies the Scenario 6 route map, all 16 text-bearing scrolling frames of 노병 아론, and the preparation endpoint. The complete Korean description covers Morgan reaching the village, the residents fleeing from the sorcerers, and the lone elderly swordsman standing against them without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and the no-action first-turn dialogue plus current battle renderer. Barbarian/Soldier, -AT-/-DF-, names, classes, and status graphics were intact. Its no-action path naturally let the stock AI eliminate all three residents and reached the expected GAME OVER, which verifies the natural `시민 전멸` defeat rather than a reset defect. Production 39BD-derived clear probe 5B6B validates the Japanese header, deployment table, and all thirteen fixed records; it preserves allied/NPC records 0..3 and every event, limits only enemy records 4..12 to AT/DF 0 with no mercenaries, and moves only the eight visible enemies to cardinally adjacent cells around the stock player deployments. Live play used normal attack commands, kept every resident alive, and covered the Aaron/Sherry encounter, complete successful aftermath, Alhazard manuscript discussion, Amulet reward, 전과보고 with POINT 2050P, a real 시나리오 7 save, 다음 시나리오, and the Scenario 7 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. Production-9DD0 partial-loss diagnostics 963A, 975A, and 987A keep every allied/NPC fixed record source-identical and independently mark resident records 1, 2, and 3 defeated at runtime before a normal final attack. Their distinct `아아… 누가 좀 도와줘…`, `어, 엄마…`, and `으으…` reactions render cleanly; each follows the common aftermath without the Amulet acquisition, reaches 전과보고 with POINT 2050P, and saves Scenario 7. Diagnostic E892 marks resident records 1 and 2 lost, renders both reactions in order, retains one survivor, follows the same no-Amulet completion, reaches POINT 1970P, and saves Scenario 7. The remaining two two-loss permutations and protagonist-death branch remain pending, so branches_endings is not promoted.
+Production 489B verifies the Scenario 6 route map, all 16 text-bearing scrolling frames of 노병 아론, and the preparation endpoint. The complete Korean description covers Morgan reaching the village, the residents fleeing from the sorcerers, and the lone elderly swordsman standing against them without Japanese residue, broken glyphs, clipping, or abnormal spacing. F03A previously verified five commander/class selections, all 16 opening confirmations, condition rows, and the no-action first-turn dialogue plus current battle renderer. Barbarian/Soldier, -AT-/-DF-, names, classes, and status graphics were intact. Its no-action path naturally let the stock AI eliminate all three residents and reached the expected GAME OVER, which verifies the natural `시민 전멸` defeat rather than a reset defect. Production 39BD-derived clear probe 5B6B validates the Japanese header, deployment table, and all thirteen fixed records; it preserves allied/NPC records 0..3 and every event, limits only enemy records 4..12 to AT/DF 0 with no mercenaries, and moves only the eight visible enemies to cardinally adjacent cells around the stock player deployments. Live play used normal attack commands, kept every resident alive, and covered the Aaron/Sherry encounter, complete successful aftermath, Alhazard manuscript discussion, Amulet reward, 전과보고 with POINT 2050P, a real 시나리오 7 save, 다음 시나리오, and the Scenario 7 route map without Japanese residue, broken name/class/UI glyphs, reset, or freeze. Production-9DD0 partial-loss diagnostics 963A, 975A, and 987A keep every allied/NPC fixed record source-identical and independently mark resident records 1, 2, and 3 defeated at runtime before a normal final attack. Their distinct `아아… 누가 좀 도와줘…`, `어, 엄마…`, and `으으…` reactions render cleanly; each follows the common aftermath without the Amulet acquisition, reaches 전과보고 with POINT 2050P, and saves Scenario 7. Diagnostic E892 marks resident records 1 and 2 lost, renders both reactions in order, retains one survivor, follows the same no-Amulet completion, reaches POINT 1970P, and saves Scenario 7. Diagnostics E9B2 and EAD2 cover the other record-1+3 and record-2+3 loss subsets, render both applicable reactions in order, reach the no-Amulet result with POINT 1910P, and save Scenario 7. Fixed-data-preserving protagonist-death diagnostic 949F changes only runtime player group 0 through Start; the stock enemy-phase dialogue then reaches GAME OVER after 14 confirmations. All six partial-loss subsets, resident-safe completion, natural all-resident defeat, and protagonist-death defeat are live-covered, so branches_endings is verified_probe. Ordinary later-turn coverage remains tracked separately.
 
 - `captures/run/f03a_s06_selector_map.png`
 - `captures/run/f03a_s06_brief_live_01.png`
@@ -337,6 +337,18 @@ Production 489B verifies the Scenario 6 route map, all 16 text-bearing scrolling
 - `captures/run/e892_s06_two_loss_01.png`
 - `captures/run/e892_s06_two_loss_34.png`
 - `captures/run/e892_s06_two_loss_37.png`
+- `captures/run/e9b2_s06_two_loss_00.png`
+- `captures/run/e9b2_s06_two_loss_01.png`
+- `captures/run/e9b2_s06_two_loss_34.png`
+- `captures/run/e9b2_s06_two_loss_37.png`
+- `captures/run/ead2_s06_two_loss_00.png`
+- `captures/run/ead2_s06_two_loss_01.png`
+- `captures/run/ead2_s06_two_loss_34.png`
+- `captures/run/ead2_s06_two_loss_37.png`
+- `captures/run/949f_s06_start_death_hook.png`
+- `captures/run/949f_s06_after_turn_end.png`
+- `captures/run/949f_s06_death_path_13.png`
+- `captures/run/949f_s06_death_path_14.png`
 
 ### Scenario 7
 

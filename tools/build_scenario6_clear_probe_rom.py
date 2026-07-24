@@ -48,6 +48,7 @@ START_MENU_ENTRY_OPERAND = 0x00F2E0
 PARTIAL_LOSS_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
+PROTAGONIST_RUNTIME_GROUP = 0
 FIRST_FIXED_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
 DEFAULT_LOST_CIVILIAN_RECORDS = (1,)
 VALID_CIVILIAN_RECORDS = (1, 2, 3)
@@ -121,6 +122,49 @@ def partial_loss_wrapper_code(
     return bytes(code)
 
 
+def protagonist_death_wrapper_code() -> bytes:
+    code = bytearray()
+    protagonist = (
+        RUNTIME_GROUP_BASE + PROTAGONIST_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (protagonist + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((protagonist + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((protagonist + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def install_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+    wrapper: bytes,
+    *,
+    label: str,
+) -> None:
+    expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+    for source_label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+            != expected_start_entry
+        ):
+            raise ValueError(f"{source_label} Start-menu entry operand changed")
+    wrapper_end = PARTIAL_LOSS_WRAPPER + len(wrapper)
+    if probe[PARTIAL_LOSS_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError(f"input {label} wrapper region is not empty")
+    probe[
+        START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+    ] = PARTIAL_LOSS_WRAPPER.to_bytes(4, "big")
+    probe[PARTIAL_LOSS_WRAPPER:wrapper_end] = wrapper
+
+
 def validate_layout(probe: bytes, source: bytes) -> None:
     source_layout = scenario_layout(source, SCENARIO_NUMBER)
     probe_layout = scenario_layout(probe, SCENARIO_NUMBER)
@@ -159,42 +203,52 @@ def patch_probe(
     *,
     civilian_loss: bool = False,
     lost_civilian_records: tuple[int, ...] = DEFAULT_LOST_CIVILIAN_RECORDS,
+    protagonist_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
+    if civilian_loss and protagonist_death:
+        raise ValueError("civilian-loss and protagonist-death modes conflict")
     if civilian_loss:
         validate_lost_civilian_records(lost_civilian_records)
     layout = scenario_layout(source, SCENARIO_NUMBER)
-    for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
-        base = layout.records_offset + index * FIXED_RECORD_SIZE
-        probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
-        probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
-        mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
-        probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
-        if civilian_loss and index == FIRST_ENEMY_RECORD_INDEX:
-            x, y = PARTIAL_LOSS_TARGET_COORDINATE
-            probe[base + FIELD_OFFSETS["x"]] = x
-            probe[base + FIELD_OFFSETS["y"]] = y
-        elif not civilian_loss and index <= LAST_VISIBLE_ENEMY_RECORD_INDEX:
-            x, y = PROBE_VISIBLE_COORDINATES[index - FIRST_ENEMY_RECORD_INDEX]
-            probe[base + FIELD_OFFSETS["x"]] = x
-            probe[base + FIELD_OFFSETS["y"]] = y
+    if not protagonist_death:
+        for index in range(
+            FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
+            probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
+            mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
+            probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+            if civilian_loss and index == FIRST_ENEMY_RECORD_INDEX:
+                x, y = PARTIAL_LOSS_TARGET_COORDINATE
+                probe[base + FIELD_OFFSETS["x"]] = x
+                probe[base + FIELD_OFFSETS["y"]] = y
+            elif (
+                not civilian_loss
+                and index <= LAST_VISIBLE_ENEMY_RECORD_INDEX
+            ):
+                x, y = PROBE_VISIBLE_COORDINATES[
+                    index - FIRST_ENEMY_RECORD_INDEX
+                ]
+                probe[base + FIELD_OFFSETS["x"]] = x
+                probe[base + FIELD_OFFSETS["y"]] = y
 
     if civilian_loss:
-        expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
-        for label, data in (("Japanese", source), ("input", probe)):
-            if (
-                data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
-                != expected_start_entry
-            ):
-                raise ValueError(f"{label} Start-menu entry operand changed")
         wrapper = partial_loss_wrapper_code(lost_civilian_records)
-        wrapper_end = PARTIAL_LOSS_WRAPPER + len(wrapper)
-        if probe[PARTIAL_LOSS_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
-            raise ValueError("input partial-loss wrapper region is not empty")
-        probe[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] = PARTIAL_LOSS_WRAPPER.to_bytes(4, "big")
-        probe[PARTIAL_LOSS_WRAPPER:wrapper_end] = wrapper
+        install_start_wrapper(
+            probe,
+            source,
+            wrapper,
+            label="partial-loss",
+        )
+    elif protagonist_death:
+        install_start_wrapper(
+            probe,
+            source,
+            protagonist_death_wrapper_code(),
+            label="protagonist-death",
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -208,13 +262,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--civilian-loss",
         action="store_true",
         help=(
             "retain two residents, mark one runtime resident defeated through "
             "Start, and leave one source enemy at one HP for the damaged-"
             "village/no-Amulet completion branch"
+        ),
+    )
+    mode.add_argument(
+        "--protagonist-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 6 fixed record and mark only runtime "
+            "player group 0 defeated through Start"
         ),
     )
     parser.add_argument(
@@ -242,6 +305,7 @@ def main() -> int:
         source,
         civilian_loss=args.civilian_loss,
         lost_civilian_records=lost_civilian_records,
+        protagonist_death=args.protagonist_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -254,6 +318,15 @@ def main() -> int:
             "Start marks fixed resident record(s) "
             f"{','.join(map(str, lost_civilian_records))} defeated, removes "
             "enemy groups 10..17, and lowers living enemy group 9 to one HP"
+        )
+    elif args.protagonist_death:
+        print(
+            "Scenario 6 protagonist-death mode: all deployments and fixed "
+            "records remain source-identical"
+        )
+        print(
+            "Start marks only runtime player group 0 defeated, then returns "
+            "to the stock Start handler"
         )
     else:
         print(

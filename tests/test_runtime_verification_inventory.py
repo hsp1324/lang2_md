@@ -348,6 +348,18 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e892_s06_two_loss_01.png",
             "captures/run/e892_s06_two_loss_34.png",
             "captures/run/e892_s06_two_loss_37.png",
+            "captures/run/e9b2_s06_two_loss_00.png",
+            "captures/run/e9b2_s06_two_loss_01.png",
+            "captures/run/e9b2_s06_two_loss_34.png",
+            "captures/run/e9b2_s06_two_loss_37.png",
+            "captures/run/ead2_s06_two_loss_00.png",
+            "captures/run/ead2_s06_two_loss_01.png",
+            "captures/run/ead2_s06_two_loss_34.png",
+            "captures/run/ead2_s06_two_loss_37.png",
+            "captures/run/949f_s06_start_death_hook.png",
+            "captures/run/949f_s06_after_turn_end.png",
+            "captures/run/949f_s06_death_path_13.png",
+            "captures/run/949f_s06_death_path_14.png",
         ):
             self.assertIn(capture, scenario6["captures"])
         self.assertIn("all thirteen fixed records", scenario6["note"])
@@ -356,8 +368,10 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("diagnostics 963A, 975A, and 987A", scenario6["note"])
         self.assertIn("no-Amulet", scenario6["note"])
         self.assertIn("POINT 1970P", scenario6["note"])
-        self.assertEqual(scenario6["branches_endings"], "pending")
-        self.assertIn("protagonist-death branch remain pending", scenario6["note"])
+        self.assertIn("E9B2 and EAD2", scenario6["note"])
+        self.assertIn("diagnostic 949F", scenario6["note"])
+        self.assertEqual(scenario6["branches_endings"], "verified_probe")
+        self.assertIn("All six partial-loss subsets", scenario6["note"])
         self.assertEqual(scenario7["opening_events"], "verified_current")
         self.assertEqual(scenario7["description"], "verified_current")
         self.assertEqual(scenario7["completion"], "verified_probe")

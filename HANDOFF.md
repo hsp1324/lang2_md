@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 747 passing
+unit tests: 752 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6579,10 +6579,26 @@ contains 57 safe syllables as documented below and in
   `987a_s06_loss_dialogue.png`, `_partial_25.png`, `_partial_32.png`,
   `_partial_35.png`; and `e892_s06_two_loss_00.png`, `_01.png`,
   `_34.png`, `_37.png`.
-- Resident-safe, each single-resident-loss, one representative
-  two-resident-loss, and all-residents-lost paths are now live-covered. The
-  other two two-loss permutations and protagonist-death branch remain
-  unplayed, so Scenario 6 `branches_endings` deliberately remains `pending`.
+- Checksums `E9B2` and `EAD2` cover the remaining record-1+3 and record-2+3
+  two-loss subsets. Each renders both already source-identified reactions in
+  the correct order, reaches the no-Amulet result at `POINT 1910P`, and saves
+  Scenario 7. Evidence is
+  `captures/run/e9b2_s06_two_loss_00.png`, `_01.png`, `_34.png`, `_37.png`
+  and the corresponding `ead2_s06_two_loss_` files.
+- `--protagonist-death` derives checksum `949F` without changing any Scenario
+  6 deployment or fixed record. Its Start wrapper changes only runtime player
+  group 0's defeated flag, HP, and X coordinate, then returns to the stock
+  handler. Choosing `턴 종료` preserves the original enemy-phase dialogue
+  order and reaches the expected `GAME OVER` after 14 confirmations.
+  `949f_s06_start_death_hook.png`, `949f_s06_after_turn_end.png`,
+  `949f_s06_death_path_13.png`, and `_14.png` retain that evidence. This
+  verifies the protagonist-death condition and GAME OVER route; it does not
+  claim a natural combat animation caused the diagnostic state change.
+- Resident-safe, all three single-resident-loss, all three
+  two-resident-loss, all-residents-lost, and protagonist-death outcomes are
+  now live-covered. Scenario 6 `branches_endings` is therefore
+  `verified_probe`; incomplete ordinary later-turn coverage remains tracked
+  separately under `turn_events`.
 
 ### Scenario 7 Civilian-Safe Completion And Shared Messages (2026-07-20)
 

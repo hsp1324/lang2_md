@@ -24,6 +24,15 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
         )
         return data
 
+    def protagonist_death_patched(self) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            protagonist_death=True,
+        )
+        return data
+
     def test_probe_only_changes_enemy_combat_fields_coordinates_and_checksum(self):
         data = bytearray(self.built)
         probe_builder.patch_probe(data, self.source)
@@ -257,6 +266,83 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
 
     def test_partial_loss_checksum_is_valid(self):
         data = self.partial_loss_patched()
+        expected = sum(
+            int.from_bytes(data[offset : offset + 2], "big")
+            for offset in range(0x200, len(data), 2)
+        ) & 0xFFFF
+        self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+
+    def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
+        data = self.protagonist_death_patched()
+        wrapper = probe_builder.protagonist_death_wrapper_code()
+        allowed = {0x18E, 0x18F}
+        allowed.update(
+            range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.PARTIAL_LOSS_WRAPPER,
+                probe_builder.PARTIAL_LOSS_WRAPPER + len(wrapper),
+            )
+        )
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.built, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
+    def test_protagonist_death_preserves_all_scenario_fixed_records(self):
+        data = self.protagonist_death_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        start = layout.records_offset
+        end = start + layout.record_count * FIXED_RECORD_SIZE
+        self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_protagonist_death_wrapper_marks_only_player_group_zero(self):
+        code = probe_builder.protagonist_death_wrapper_code()
+        protagonist = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (
+                protagonist + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 00")
+            + (
+                protagonist + probe_builder.RUNTIME_HP_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 FF")
+            + (
+                protagonist + probe_builder.RUNTIME_X_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
+    def test_probe_rejects_conflicting_runtime_modes(self):
+        with self.assertRaisesRegex(ValueError, "modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.built),
+                self.source,
+                civilian_loss=True,
+                protagonist_death=True,
+            )
+
+    def test_protagonist_death_checksum_is_valid(self):
+        data = self.protagonist_death_patched()
         expected = sum(
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
