@@ -9102,3 +9102,57 @@ contains 57 safe syllables as documented below and in
   protagonist-death ending are live-covered, so Scenario 19
   `branches_endings` is `verified_probe`. Ordinary item-pickup variations
   remain separate coverage rather than defeat endings.
+
+### Scenario 20 Scheduled Events And Defeat Branch (2026-07-25)
+
+- The source event list at `0x1A79BA..0x1A79F1` has seven scheduled entries:
+  IDs 0/2/1/5 use turn condition `01` with values 1/2/0/3; IDs 3/4/6 use
+  fixed-record-range condition `04` with ranges 0..9, 0..2, and 0..4.
+  Do not describe ID 3 as a Keith event. Its handler at `0x1A7A90` contains
+  Kraken/Wyvern reveal dialogue and Hein, Scott, Jessica, and Elwin reactions;
+  Keith appears in the separate ordinary golem event.
+- `tools/build_scenario20_clear_probe_rom.py --protagonist-death` locks source
+  trigger `0x1A78D4` and handler `0x1A7BC4`, preserves all deployments and
+  fixed records, and installs the guarded Start wrapper at `0x3FEF00`.
+  Checksum `AAC1` changes only runtime player group 0. Fresh isolated playback
+  retained the eight-commander preparation roster, automatic arrangement,
+  opening, and `엘윈/파이터`; a normal turn end rendered
+  `엘윈: 파이어스…` and GAME OVER. Evidence includes
+  `aac1_s20_death_prep_12.png`, `aac1_s20_death_arrangement.png`,
+  `aac1_s20_death_auto.png`, `aac1_s20_death_wait.png`, and
+  `aac1_s20_death_event_01.png`.
+- `--kraken-event` checksum `AF2A` changes only ID 3 from its original
+  fixed-record condition to a turn-3 trigger. It locks the complete handler,
+  text pointers `0x1A8216`, `0x1A822C`, `0x1A823E`, `0x1A82A6`,
+  `0x1A82CA`, and `0x1A82F6`, and preserves hidden records 7..9. A fully
+  fresh Scenario 20 run rendered clean `크라켄`, `와이번`, `파이어스`,
+  Scott, Jessica, and Elwin pages and returned to the command menu. Accepted
+  samples are `af2a_s20_turn3_kraken_28.png`, `_29.png`, `_34.png`,
+  `_39.png`, and `_42.png`.
+- `--conditional-dialogues` checksum `AF30` changes only ID 4 to turn 4 and
+  ID 6 to turn 5. It locks the Doren handler at `0x1A7AEC`, the Liana-threat
+  handler at `0x1A7B56`, and all nine referenced text pointers. Runtime
+  `s20_cond_af30_fresh5` started from a valid Scenario 19 slot, visibly changed
+  the selector number to 20, and entered the actual ship map. It traversed the
+  original eight-commander preparation, arrangement, opening, and ordinary
+  turns before rendering every Doren-revenge page and every Liana-threat page.
+  `파이어스/데몬로드`, `엘윈/파이터`, the turn banners, and the final command
+  menus remain intact. Accepted samples are
+  `af30_s20_fresh5_turn4_doren_07.png`, `_11.png`, `_14.png`, `_16.png`,
+  `af30_s20_fresh5_turn5_liana_08.png`, `_10.png`, `_11.png`, and `_13.png`.
+- Do not reuse the rejected `s20_cond_af30` GST path. Loading an AF2A turn-3
+  GST under AF30 restored AF2A's in-RAM event table, so the new triggers could
+  not fire. Also reject `s20_cond_af30_fresh` and the later zero-movement/new
+  game attempts: the route header could show Scenario 20 while the actual
+  preparation and map were Scenario 1. A valid selector run must first capture
+  the load-slot screen, perform at least one visible scenario-number change,
+  and confirm `SCENARIO 20` on the ship map. Direct X11 window events also
+  dropped some direction inputs; the accepted fresh5 run used screen-guided
+  XTest taps on isolated `DISPLAY=:104` and checked the GST turn counter at
+  `$FFFFA5F1`.
+- Normal completion, the declared protagonist-death ending, and all seven
+  scheduled source event entries are now live-covered. Scenario 20
+  `turn_events` and `branches_endings` are `verified_probe`. The focused
+  builder suite has sixteen tests; mode checksums are default `AF33`,
+  completion `AF4F`, protagonist death `AAC1`, Kraken `AF2A`, and conditional
+  dialogues `AF30`.

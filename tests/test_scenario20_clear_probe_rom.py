@@ -10,12 +10,22 @@ class Scenario20ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self, *, completion_layout: bool = False) -> bytearray:
+    def patched(
+        self,
+        *,
+        completion_layout: bool = False,
+        protagonist_death: bool = False,
+        kraken_event: bool = False,
+        conditional_dialogues: bool = False,
+    ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
             data,
             self.source,
             completion_layout=completion_layout,
+            protagonist_death=protagonist_death,
+            kraken_event=kraken_event,
+            conditional_dialogues=conditional_dialogues,
         )
         return data
 
@@ -160,9 +170,228 @@ class Scenario20ClearProbeTests(unittest.TestCase):
             enemy = layout.records_offset + index * FIXED_RECORD_SIZE
             self.assertTrue(bool(data[enemy] & 0x80))
 
+    def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
+        data = self.patched(protagonist_death=True)
+        wrapper = probe_builder.protagonist_death_wrapper_code()
+        expected_changes = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            ),
+        }
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, expected_changes)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        records_end = (
+            layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+        )
+        self.assertEqual(
+            data[layout.records_offset:records_end],
+            self.source[layout.records_offset:records_end],
+        )
+
+    def test_protagonist_death_wrapper_marks_only_runtime_elwin(self):
+        code = probe_builder.protagonist_death_wrapper_code()
+        record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        for offset in (
+            probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET,
+            probe_builder.RUNTIME_HP_OFFSET,
+            probe_builder.RUNTIME_X_OFFSET,
+        ):
+            self.assertIn((record + offset).to_bytes(4, "big"), code)
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_protagonist_death_installs_wrapper_and_rejects_conflicts(self):
+        data = self.patched(protagonist_death=True)
+        wrapper = probe_builder.protagonist_death_wrapper_code()
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.RUNTIME_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.RUNTIME_WRAPPER :
+                probe_builder.RUNTIME_WRAPPER + len(wrapper)
+            ],
+            wrapper,
+        )
+        with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                completion_layout=True,
+                protagonist_death=True,
+            )
+
+    def test_kraken_event_changes_only_trigger_combat_limits_and_checksum(self):
+        data = self.patched(kraken_event=True)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        allowed = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.KRAKEN_EVENT_TRIGGER,
+                probe_builder.KRAKEN_EVENT_TRIGGER
+                + len(probe_builder.KRAKEN_EVENT_TRIGGER_BYTES),
+            ),
+        }
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            allowed.update(
+                (
+                    base + FIELD_OFFSETS["at"],
+                    base + FIELD_OFFSETS["df"],
+                )
+            )
+            mercenaries = base + FIELD_OFFSETS["mercenaries"]
+            allowed.update(range(mercenaries, mercenaries + 6))
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
+    def test_kraken_event_preserves_handler_hidden_records_and_texts(self):
+        data = self.patched(kraken_event=True)
+        start = probe_builder.KRAKEN_EVENT_TRIGGER
+        end = start + len(probe_builder.KRAKEN_EVENT_TRIGGER_BYTES)
+        self.assertEqual(
+            data[start:end],
+            probe_builder.KRAKEN_EVENT_TURN_THREE_TRIGGER_BYTES,
+        )
+        event_end = probe_builder.KRAKEN_EVENT + len(
+            probe_builder.KRAKEN_EVENT_BYTES
+        )
+        self.assertEqual(
+            data[probe_builder.KRAKEN_EVENT:event_end],
+            probe_builder.KRAKEN_EVENT_BYTES,
+        )
+        for text in probe_builder.KRAKEN_EVENT_TEXTS:
+            self.assertIn(
+                text.to_bytes(4, "big"),
+                probe_builder.KRAKEN_EVENT_BYTES,
+            )
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in probe_builder.HIDDEN_ENEMY_RECORD_INDEXES:
+            enemy = layout.records_offset + index * FIXED_RECORD_SIZE
+            self.assertTrue(bool(data[enemy] & 0x80))
+
+    def test_kraken_event_rejects_other_diagnostic_modes(self):
+        for kwargs in (
+            {"completion_layout": True, "kraken_event": True},
+            {"protagonist_death": True, "kraken_event": True},
+            {"kraken_event": True, "conditional_dialogues": True},
+        ):
+            with self.subTest(kwargs=kwargs):
+                with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+                    probe_builder.patch_probe(
+                        bytearray(self.production),
+                        self.source,
+                        **kwargs,
+                    )
+
+    def test_conditional_dialogues_preserve_handlers_and_texts(self):
+        data = self.patched(conditional_dialogues=True)
+        for trigger, source_bytes, patched_bytes in (
+            (
+                probe_builder.DOREN_EVENT_TRIGGER,
+                probe_builder.DOREN_EVENT_TRIGGER_BYTES,
+                probe_builder.DOREN_EVENT_TURN_FOUR_TRIGGER_BYTES,
+            ),
+            (
+                probe_builder.LIANA_THREAT_EVENT_TRIGGER,
+                probe_builder.LIANA_THREAT_EVENT_TRIGGER_BYTES,
+                probe_builder.LIANA_THREAT_EVENT_TURN_FIVE_TRIGGER_BYTES,
+            ),
+        ):
+            end = trigger + len(source_bytes)
+            self.assertEqual(data[trigger:end], patched_bytes)
+        for event, event_bytes, texts in (
+            (
+                probe_builder.DOREN_EVENT,
+                probe_builder.DOREN_EVENT_BYTES,
+                probe_builder.DOREN_EVENT_TEXTS,
+            ),
+            (
+                probe_builder.LIANA_THREAT_EVENT,
+                probe_builder.LIANA_THREAT_EVENT_BYTES,
+                probe_builder.LIANA_THREAT_EVENT_TEXTS,
+            ),
+        ):
+            self.assertEqual(data[event:event + len(event_bytes)], event_bytes)
+            for text in texts:
+                self.assertIn(text.to_bytes(4, "big"), event_bytes)
+
+    def test_conditional_dialogues_reject_other_diagnostic_modes(self):
+        for kwargs in (
+            {"completion_layout": True, "conditional_dialogues": True},
+            {"protagonist_death": True, "conditional_dialogues": True},
+        ):
+            with self.subTest(kwargs=kwargs):
+                with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+                    probe_builder.patch_probe(
+                        bytearray(self.production),
+                        self.source,
+                        **kwargs,
+                    )
+
+    def test_protagonist_death_trigger_and_event_are_locked(self):
+        trigger_start = probe_builder.PROTAGONIST_DEATH_TRIGGER
+        trigger_end = (
+            trigger_start + len(probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES)
+        )
+        self.assertEqual(
+            self.source[trigger_start:trigger_end],
+            probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+        )
+        self.assertEqual(
+            int.from_bytes(self.source[trigger_start + 4 : trigger_start + 8], "big"),
+            probe_builder.PROTAGONIST_DEATH_EVENT,
+        )
+        event_start = probe_builder.PROTAGONIST_DEATH_EVENT
+        event_end = event_start + len(probe_builder.PROTAGONIST_DEATH_EVENT_BYTES)
+        self.assertEqual(
+            self.source[event_start:event_end],
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(
+            probe_builder.PROTAGONIST_DEATH_FIAS_TEXT.to_bytes(4, "big"),
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(
+            probe_builder.PROTAGONIST_DEATH_ALTERNATE_TEXT.to_bytes(4, "big"),
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(b"\x13\xFF", probe_builder.PROTAGONIST_DEATH_EVENT_BYTES)
+
     def test_default_and_completion_checksums_are_locked(self):
         default = bytearray(self.production)
         completion = bytearray(self.production)
+        protagonist = bytearray(self.production)
+        kraken = bytearray(self.production)
+        conditional = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
             0xAF33,
@@ -174,6 +403,30 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 completion_layout=True,
             ),
             0xAF4F,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                protagonist,
+                self.source,
+                protagonist_death=True,
+            ),
+            0xAAC1,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                kraken,
+                self.source,
+                kraken_event=True,
+            ),
+            0xAF2A,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                conditional,
+                self.source,
+                conditional_dialogues=True,
+            ),
+            0xAF30,
         )
 
     def test_rejects_non_source_fixed_record(self):

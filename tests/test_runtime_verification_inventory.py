@@ -883,7 +883,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario20["preparation"], "verified_current")
         self.assertEqual(scenario20["opening_events"], "verified_current")
         self.assertEqual(scenario20["battle_ui"], "verified_probe")
-        self.assertEqual(scenario20["turn_events"], "progressed_current")
+        self.assertEqual(scenario20["turn_events"], "verified_probe")
         self.assertEqual(scenario20["completion"], "verified_probe")
         for capture in (
             "captures/run/d2f9h_s20_after_second_attack.png",
@@ -894,6 +894,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/d2f9h_s21_entry.png",
         ):
             self.assertIn(capture, scenario20["captures"])
+        for capture in (
+            "captures/run/aac1_s20_death_wait.png",
+            "captures/run/aac1_s20_death_event_01.png",
+            "captures/run/af2a_s20_turn3_kraken_28.png",
+            "captures/run/af2a_s20_turn3_kraken_39.png",
+            "captures/run/af30_s20_fresh5_turn4_doren_07.png",
+            "captures/run/af30_s20_fresh5_turn4_doren_14.png",
+            "captures/run/af30_s20_fresh5_turn5_liana_08.png",
+            "captures/run/af30_s20_fresh5_turn5_liana_11.png",
+        ):
+            self.assertIn(capture, scenario20["captures"])
+        self.assertEqual(scenario20["branches_endings"], "verified_probe")
+        self.assertIn("protagonist-death diagnostic AAC1", scenario20["note"])
+        self.assertIn("all seven scheduled source event entries", scenario20["note"])
+        self.assertIn("AF2A turn-3 GST under AF30", scenario20["note"])
+        self.assertIn("changed a valid slot from Scenario 19 to 20", scenario20["note"])
         self.assertEqual(scenario21["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s21_description_current_01.png",
