@@ -8407,3 +8407,29 @@ contains 57 safe syllables as documented below and in
   `지휘관 배치 미완료입니다`; selecting the stock `자동배치` command immediately
   produced a valid sortie. Completion evidence therefore uses automatic
   deployment and fixed-target placement, not a live X/Y teleport.
+
+### Scenario 29 Completion Verification (2026-07-24)
+
+- `tools/build_scenario29_clear_probe_rom.py --completion-target-only`
+  preserves the source eight-player deployment table and all nine enemy
+  identities, classes, levels, and event handlers. It moves only fixed record
+  8 `폴거/드래곤로드` from `(36,20)` to `(5,6)`, directly above the stock
+  first Elwin deployment `(5,7)`. Production `9DD0` produces accepted
+  diagnostic checksum `A042`.
+- The Start wrapper at `0x3FEF00` uses player groups `0..7` and fixed groups
+  `8..16` at `$FFFF603C`, stride `0x60`. It hides and defeats groups `8..15`,
+  verifies that group 16 is present and living, and lowers only Folger to HP 1.
+  A normal Elwin attack retained both unique Folger pre-battle pages,
+  `폴거/드래곤로드`, and intact `-AT-`, `-DF-`, and `-지형-` labels.
+- The stock completion path traversed Folger, Seigal, and generic imperial
+  defeat dialogue, allied level ups, `전과보고` with `POINT 46980P`, the
+  real save UI, slot 1 `시나리오 20`, `진군루트`, and the Scenario 20
+  `붉게 물든 바다` description without Japanese residue, broken
+  names/classes, reset, or freeze. Representative captures are
+  `captures/run/a042_s29_folger_battle_ui2.png`,
+  `captures/run/a042_s29_clear_1.png`,
+  `captures/run/a042_s29_clear_12.png`,
+  `captures/run/a042_s29_clear_19.png`,
+  `captures/run/a042_s29_saved.png`,
+  `captures/run/a042_s29_next_route.png`, and
+  `captures/run/a042_s29_return_s20.png`.

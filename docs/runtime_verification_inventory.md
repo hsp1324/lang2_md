@@ -39,7 +39,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 26 | current | current | current | current | probe | current | probe | pending | 34 |
 | 27 | current | current | current | current | probe | current | probe | probe | 25 |
 | 28 | current | current | current | current | current | current | probe | pending | 27 |
-| 29 | current | current | current | current | current | current | pending | pending | 22 |
+| 29 | current | current | current | current | current | current | probe | pending | 30 |
 | 30 | current | current | current | current | probe | current | pending | pending | 19 |
 | 31 | current | current | current | current | probe | current | probe | pending | 39 |
 
@@ -1386,7 +1386,7 @@ Selector record 28 intentionally enters the on-screen secret Scenario X1 근육�
 
 ### Scenario 29
 
-Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, the complete no-action first turn, and three live battle matchups without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, Keith, Aaron, Elwin, and Scott with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 18-20 verify 리자드맨 versus 파이터, frames 49-50 verify 드래곤나이트 versus 파이터, and frames 72-74 verify 고렘 versus 호크나이트. Portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact in every matchup. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. Like the source, the title uses X2 while the battle status bar uses SCENARIO ?2. Completion and conditional branches remain pending.
+Selector record 29 intentionally enters the on-screen secret Scenario X2 디레스 해협의 격전. Production ECA0 freshly verifies all nine scrolling description frames, the eight-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, the complete no-action first turn, and three live battle matchups without Japanese text, broken glyphs, reset, or freeze. The opening and first-turn pages cover 세이갈, 폴거, 키스, 아론, 엘윈, and 스코트 with intact Korean names, classes, and status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 18-20 verify 리자드맨 versus 파이터, frames 49-50 verify 드래곤나이트 versus 파이터, and frames 72-74 verify 고렘 versus 호크나이트. Portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact in every matchup. The first turn retains six event pages across the long naval movement, reaches TURN 2 at frame 93, and a valid Elwin command menu at frame 95. Like the source, the title uses X2 while the battle status bar uses SCENARIO ?2. Production-9DD0 completion derivative A042 preserves the stock eight-player deployment table, every enemy identity/class/level/event handler, and all fixed coordinates except moving only Folger from (36,20) to directly above the first stock Elwin deployment at (5,6). Its Start wrapper removes runtime groups 8..15 and lowers only living Folger group 16 to HP 1. A normal Elwin attack retained 폴거/드래곤로드, both unique pre-battle pages, and the centered -AT-/-DF-/-지형- battle labels, then traversed Folger, Seigal, and imperial defeat dialogue, allied level ups, 전과보고 with POINT 46980P, a real 시나리오 20 save, 진군루트, and 붉게 물든 바다 entry without Japanese residue, broken names/classes, reset, or freeze. Conditional branches remain pending.
 
 - `captures/run/c7ab_s29_title.png`
 - `captures/run/c7ab_s29_body_mid.png`
@@ -1410,6 +1410,14 @@ Selector record 29 intentionally enters the on-screen secret Scenario X2 디레�
 - `captures/run/eca0_s29_turn1_76.png`
 - `captures/run/eca0_s29_turn1_93.png`
 - `captures/run/eca0_s29_turn1_95.png`
+- `captures/run/a042_s29_start.png`
+- `captures/run/a042_s29_folger_battle_ui2.png`
+- `captures/run/a042_s29_clear_1.png`
+- `captures/run/a042_s29_clear_12.png`
+- `captures/run/a042_s29_clear_19.png`
+- `captures/run/a042_s29_saved.png`
+- `captures/run/a042_s29_next_route.png`
+- `captures/run/a042_s29_return_s20.png`
 
 ### Scenario 30
 
