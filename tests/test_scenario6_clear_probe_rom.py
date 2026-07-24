@@ -15,6 +15,15 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
         cls.source = (ROOT / builder.IN_ROM).read_bytes()
         cls.built = (ROOT / builder.OUT_ROM).read_bytes()
 
+    def partial_loss_patched(self) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            civilian_loss=True,
+        )
+        return data
+
     def test_probe_only_changes_enemy_combat_fields_coordinates_and_checksum(self):
         data = bytearray(self.built)
         probe_builder.patch_probe(data, self.source)
@@ -93,6 +102,165 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
+        self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+
+    def test_partial_loss_changes_only_declared_diagnostic_fields(self):
+        data = self.partial_loss_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        allowed = {0x18E, 0x18F}
+        for index in range(
+            probe_builder.FIRST_ENEMY_RECORD_INDEX,
+            probe_builder.LAST_ENEMY_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            allowed.update(
+                {
+                    base + FIELD_OFFSETS["at"],
+                    base + FIELD_OFFSETS["df"],
+                    *(
+                        base + FIELD_OFFSETS["mercenaries"] + slot
+                        for slot in range(6)
+                    ),
+                }
+            )
+            if index == probe_builder.FIRST_ENEMY_RECORD_INDEX:
+                allowed.update(
+                    {base + FIELD_OFFSETS["x"], base + FIELD_OFFSETS["y"]}
+                )
+        wrapper = probe_builder.partial_loss_wrapper_code()
+        allowed.update(
+            range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.PARTIAL_LOSS_WRAPPER,
+                probe_builder.PARTIAL_LOSS_WRAPPER + len(wrapper),
+            )
+        )
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.built, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
+    def test_partial_loss_preserves_all_allied_and_npc_fixed_records(self):
+        data = self.partial_loss_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        start = layout.records_offset
+        end = start + probe_builder.FIRST_ENEMY_RECORD_INDEX * FIXED_RECORD_SIZE
+        self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_partial_loss_preserves_enemy_identity_and_stock_coordinates(self):
+        data = self.partial_loss_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(
+            probe_builder.FIRST_ENEMY_RECORD_INDEX,
+            probe_builder.LAST_ENEMY_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            for field in ("name_id", "class_id", "level"):
+                offset = FIELD_OFFSETS[field]
+                self.assertEqual(data[base + offset], self.source[base + offset])
+            if index == probe_builder.FIRST_ENEMY_RECORD_INDEX:
+                self.assertEqual(
+                    (
+                        data[base + FIELD_OFFSETS["x"]],
+                        data[base + FIELD_OFFSETS["y"]],
+                    ),
+                    probe_builder.PARTIAL_LOSS_TARGET_COORDINATE,
+                )
+            else:
+                self.assertEqual(
+                    data[
+                        base + FIELD_OFFSETS["x"] : base + FIELD_OFFSETS["y"] + 1
+                    ],
+                    self.source[
+                        base + FIELD_OFFSETS["x"] : base + FIELD_OFFSETS["y"] + 1
+                    ],
+                )
+
+    def test_partial_loss_wrapper_marks_one_resident_and_isolates_target(self):
+        code = probe_builder.partial_loss_wrapper_code()
+        lost_runtime_group = (
+            probe_builder.FIRST_FIXED_RUNTIME_GROUP
+            + probe_builder.DEFAULT_LOST_CIVILIAN_RECORDS[0]
+        )
+        civilian = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + lost_runtime_group * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (
+                civilian + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 00")
+            + (civilian + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 FF")
+            + (civilian + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PARTIAL_LOSS_TARGET_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        for group in probe_builder.PARTIAL_LOSS_HIDDEN_ENEMY_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
+    def test_partial_loss_wrapper_supports_each_surviving_subset(self):
+        for lost_records in ((1,), (2,), (3,), (1, 2), (1, 3), (2, 3)):
+            code = probe_builder.partial_loss_wrapper_code(lost_records)
+            for fixed_record in lost_records:
+                runtime_group = (
+                    probe_builder.FIRST_FIXED_RUNTIME_GROUP + fixed_record
+                )
+                civilian = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + runtime_group * probe_builder.RUNTIME_GROUP_SIZE
+                )
+                self.assertIn(
+                    bytes.fromhex("00 39 00 80")
+                    + (
+                        civilian
+                        + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                    ).to_bytes(4, "big"),
+                    code,
+                )
+        for invalid in ((), (1, 1), (0,), (1, 2, 3)):
+            with self.assertRaises(ValueError):
+                probe_builder.partial_loss_wrapper_code(invalid)
+
+    def test_partial_loss_checksum_is_valid(self):
+        data = self.partial_loss_patched()
+        expected = sum(
+            int.from_bytes(data[offset : offset + 2], "big")
+            for offset in range(0x200, len(data), 2)
+        ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
 

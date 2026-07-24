@@ -331,11 +331,33 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/5b6b_s06_victory_38.png",
             "captures/run/5b6b_s06_victory_40.png",
             "captures/run/5b6b_s06_next_scenario.png",
+            "captures/run/963a_s06_attack_00.png",
+            "captures/run/963a_s06_attack_01.png",
+            "captures/run/963a_s06_partial_25.png",
+            "captures/run/963a_s06_partial_32.png",
+            "captures/run/963a_s06_partial_35.png",
+            "captures/run/975a_s06_loss_dialogue_start2.png",
+            "captures/run/975a_s06_partial_25.png",
+            "captures/run/975a_s06_partial_32.png",
+            "captures/run/975a_s06_partial_35.png",
+            "captures/run/987a_s06_loss_dialogue.png",
+            "captures/run/987a_s06_partial_25.png",
+            "captures/run/987a_s06_partial_32.png",
+            "captures/run/987a_s06_partial_35.png",
+            "captures/run/e892_s06_two_loss_00.png",
+            "captures/run/e892_s06_two_loss_01.png",
+            "captures/run/e892_s06_two_loss_34.png",
+            "captures/run/e892_s06_two_loss_37.png",
         ):
             self.assertIn(capture, scenario6["captures"])
         self.assertIn("all thirteen fixed records", scenario6["note"])
         self.assertIn("Amulet reward", scenario6["note"])
-        self.assertIn("Civilian-loss/no-Amulet", scenario6["note"])
+        self.assertIn("natural `시민 전멸` defeat", scenario6["note"])
+        self.assertIn("diagnostics 963A, 975A, and 987A", scenario6["note"])
+        self.assertIn("no-Amulet", scenario6["note"])
+        self.assertIn("POINT 1970P", scenario6["note"])
+        self.assertEqual(scenario6["branches_endings"], "pending")
+        self.assertIn("protagonist-death branch remain pending", scenario6["note"])
         self.assertEqual(scenario7["opening_events"], "verified_current")
         self.assertEqual(scenario7["description"], "verified_current")
         self.assertEqual(scenario7["completion"], "verified_probe")

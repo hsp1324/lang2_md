@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: 9DD0
 latest targeted live-verified production checksum: 9DD0
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 741 passing
+unit tests: 747 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -6519,8 +6519,8 @@ contains 57 safe syllables as documented below and in
   `5b6b_s06_victory_37.png` shows `전과보고 / POINT 2050P`, `_38.png` and
   `_40.png` show a real `시나리오 7` save, and
   `5b6b_s06_next_scenario.png` proves Scenario 7 route-map entry without reset
-  or freeze. Scenario 6 `completion` is now `verified_probe`; civilian-loss,
-  no-Amulet, defeat, and later conditional paths remain pending.
+  or freeze. Scenario 6 `completion` is now `verified_probe`; the partial-loss
+  and no-Amulet follow-up is recorded in the next section.
 - Read-only GST inspection established the current battle-record layout used
   by later editor work: work RAM base `0x603C`, record size `0x60`, position at
   `+0x06/+0x07`, and defeated flag bit `0x80` at `+0x02`. Player records are
@@ -6538,6 +6538,51 @@ contains 57 safe syllables as documented below and in
   intended space even though source `0x82ACE` is `레벨이 올랐다.`. This is a
   renderer/composition follow-up, not evidence of missing Scenario 6 dialogue,
   and remains open for a focused shared-UI fix.
+
+### Scenario 6 Civilian-Loss Variants (2026-07-24)
+
+- Earlier production `F03A` already supplied a natural defeat path: leaving
+  every ally idle let the stock AI kill all three residents, displayed the
+  resident/enemy reactions, then reached the expected `GAME OVER` in
+  `captures/run/f03a_s06_turn1_cont_03.png`. This is accepted evidence for
+  the `시민 전멸` defeat condition, not a reset defect. The old inventory note
+  that called all civilian-loss and defeat outcomes pending was too broad.
+- `tools/build_scenario6_clear_probe_rom.py --civilian-loss` now derives
+  short partial-loss diagnostics from production `9DD0`. It keeps all four
+  allied/NPC fixed records byte-identical to the Japanese ROM. Enemy records
+  retain identity, class, level, and event ownership while only combat fields
+  are limited; only source enemy record 4 moves next to stock Elwin. On the
+  first Start entry, an isolated wrapper at `0x3FEF00` marks the selected
+  runtime resident record(s) defeated, removes enemy runtime groups 10..17,
+  lowers the remaining source enemy group 9 to HP 1, and tail-jumps to the
+  stock Start handler at `0x022C1E`.
+- Eleven tests lock the allowed ROM byte scope, source-identical NPC records,
+  enemy identity and coordinates, all six nonempty resident-survivor subsets,
+  guarded runtime writes, stock tail, and checksum. These runtime state writes
+  are diagnostic acceleration only; they are not production or editor-default
+  evidence.
+- Checksums `963A`, `975A`, and `987A` independently mark fixed resident
+  records 1, 2, and 3 lost. Normal Elwin attacks trigger their three distinct
+  stock reactions: `아아… 누가 좀 도와줘…`, `어, 엄마…`, and `으으…`.
+  Each run then traverses the common Aaron/Sherry and Alhazard discussion,
+  omits `아뮬렛을 얻었다!`, reaches `전과보고 / POINT 2050P`, and saves a
+  real `시나리오 7` without Japanese residue, damaged names/classes/UI,
+  reset, or freeze.
+- Checksum `E892` marks resident records 1 and 2 lost. Both reactions render
+  in order, the sole survivor prevents `GAME OVER`, the same no-Amulet
+  completion follows, and `전과보고 / POINT 1970P` reaches a real Scenario 7
+  save. Representative captures are
+  `captures/run/963a_s06_attack_00.png`, `_attack_01.png`,
+  `_partial_25.png`, `_partial_32.png`, `_partial_35.png`;
+  `975a_s06_loss_dialogue_start2.png`, `_partial_25.png`,
+  `_partial_32.png`, `_partial_35.png`;
+  `987a_s06_loss_dialogue.png`, `_partial_25.png`, `_partial_32.png`,
+  `_partial_35.png`; and `e892_s06_two_loss_00.png`, `_01.png`,
+  `_34.png`, `_37.png`.
+- Resident-safe, each single-resident-loss, one representative
+  two-resident-loss, and all-residents-lost paths are now live-covered. The
+  other two two-loss permutations and protagonist-death branch remain
+  unplayed, so Scenario 6 `branches_endings` deliberately remains `pending`.
 
 ### Scenario 7 Civilian-Safe Completion And Shared Messages (2026-07-20)
 

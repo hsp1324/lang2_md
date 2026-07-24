@@ -26,6 +26,7 @@ DEPLOYMENT_POINTER_OFFSET = 0x08
 DEPLOYMENT_TABLE = 0x1809D0
 FIRST_PLAYER_DEPLOYMENT_OFFSET = DEPLOYMENT_TABLE + 0x02
 SOURCE_FIRST_PLAYER_DEPLOYMENT = bytes.fromhex("0004 001A")
+PLAYER_DEPLOYMENT_COUNT = 5
 FIRST_ENEMY_RECORD_INDEX = 4
 LAST_VISIBLE_ENEMY_RECORD_INDEX = 11
 LAST_ENEMY_RECORD_INDEX = 12
@@ -41,10 +42,83 @@ PROBE_VISIBLE_COORDINATES = (
     (7, 28),
     (9, 30),
 )
+PARTIAL_LOSS_TARGET_COORDINATE = PROBE_VISIBLE_COORDINATES[0]
+START_MENU_ENTRY = 0x022C1E
+START_MENU_ENTRY_OPERAND = 0x00F2E0
+PARTIAL_LOSS_WRAPPER = 0x3FEF00
+RUNTIME_GROUP_BASE = 0xFFFF603C
+RUNTIME_GROUP_SIZE = 0x60
+FIRST_FIXED_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
+DEFAULT_LOST_CIVILIAN_RECORDS = (1,)
+VALID_CIVILIAN_RECORDS = (1, 2, 3)
+PARTIAL_LOSS_TARGET_RUNTIME_GROUP = (
+    FIRST_FIXED_RUNTIME_GROUP + FIRST_ENEMY_RECORD_INDEX
+)
+PARTIAL_LOSS_HIDDEN_ENEMY_GROUPS = tuple(
+    range(PARTIAL_LOSS_TARGET_RUNTIME_GROUP + 1, FIRST_FIXED_RUNTIME_GROUP + 13)
+)
+RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
+RUNTIME_HP_OFFSET = 0x03
+RUNTIME_X_OFFSET = 0x06
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 4], "big")
+
+
+def validate_lost_civilian_records(records: tuple[int, ...]) -> None:
+    if not records:
+        raise ValueError("partial-loss mode requires at least one resident")
+    if len(records) >= len(VALID_CIVILIAN_RECORDS):
+        raise ValueError("partial-loss mode must leave at least one resident")
+    if len(set(records)) != len(records):
+        raise ValueError("partial-loss resident records must be unique")
+    invalid = sorted(set(records) - set(VALID_CIVILIAN_RECORDS))
+    if invalid:
+        raise ValueError(f"invalid Scenario 6 resident records: {invalid}")
+
+
+def partial_loss_wrapper_code(
+    lost_civilian_records: tuple[int, ...] = DEFAULT_LOST_CIVILIAN_RECORDS,
+) -> bytes:
+    validate_lost_civilian_records(lost_civilian_records)
+    code = bytearray()
+    for fixed_record in lost_civilian_records:
+        runtime_group = FIRST_FIXED_RUNTIME_GROUP + fixed_record
+        civilian = RUNTIME_GROUP_BASE + runtime_group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (civilian + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((civilian + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((civilian + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+
+    for group in PARTIAL_LOSS_HIDDEN_ENEMY_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+
+    target = (
+        RUNTIME_GROUP_BASE
+        + PARTIAL_LOSS_TARGET_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code.extend(bytes.fromhex("0C 39 00 FF"))
+    code.extend((target + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("67 12"))
+    code.extend(bytes.fromhex("0C 39 00 00"))
+    code.extend((target + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("67 08"))
+    code.extend(bytes.fromhex("13 FC 00 01"))
+    code.extend((target + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
 
 
 def validate_layout(probe: bytes, source: bytes) -> None:
@@ -79,8 +153,16 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             )
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    *,
+    civilian_loss: bool = False,
+    lost_civilian_records: tuple[int, ...] = DEFAULT_LOST_CIVILIAN_RECORDS,
+) -> int:
     validate_layout(probe, source)
+    if civilian_loss:
+        validate_lost_civilian_records(lost_civilian_records)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -88,10 +170,31 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
-        if index <= LAST_VISIBLE_ENEMY_RECORD_INDEX:
+        if civilian_loss and index == FIRST_ENEMY_RECORD_INDEX:
+            x, y = PARTIAL_LOSS_TARGET_COORDINATE
+            probe[base + FIELD_OFFSETS["x"]] = x
+            probe[base + FIELD_OFFSETS["y"]] = y
+        elif not civilian_loss and index <= LAST_VISIBLE_ENEMY_RECORD_INDEX:
             x, y = PROBE_VISIBLE_COORDINATES[index - FIRST_ENEMY_RECORD_INDEX]
             probe[base + FIELD_OFFSETS["x"]] = x
             probe[base + FIELD_OFFSETS["y"]] = y
+
+    if civilian_loss:
+        expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+        for label, data in (("Japanese", source), ("input", probe)):
+            if (
+                data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+                != expected_start_entry
+            ):
+                raise ValueError(f"{label} Start-menu entry operand changed")
+        wrapper = partial_loss_wrapper_code(lost_civilian_records)
+        wrapper_end = PARTIAL_LOSS_WRAPPER + len(wrapper)
+        if probe[PARTIAL_LOSS_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+            raise ValueError("input partial-loss wrapper region is not empty")
+        probe[
+            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+        ] = PARTIAL_LOSS_WRAPPER.to_bytes(4, "big")
+        probe[PARTIAL_LOSS_WRAPPER:wrapper_end] = wrapper
     return builder.update_md_checksum(probe)
 
 
@@ -105,6 +208,25 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument(
+        "--civilian-loss",
+        action="store_true",
+        help=(
+            "retain two residents, mark one runtime resident defeated through "
+            "Start, and leave one source enemy at one HP for the damaged-"
+            "village/no-Amulet completion branch"
+        ),
+    )
+    parser.add_argument(
+        "--lost-civilian-record",
+        action="append",
+        type=int,
+        choices=VALID_CIVILIAN_RECORDS,
+        help=(
+            "fixed resident record to mark defeated; repeat for two losses "
+            "(default: 1)"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -112,13 +234,32 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    lost_civilian_records = tuple(
+        args.lost_civilian_record or DEFAULT_LOST_CIVILIAN_RECORDS
+    )
+    checksum = patch_probe(
+        probe,
+        source,
+        civilian_loss=args.civilian_loss,
+        lost_civilian_records=lost_civilian_records,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print(
-        "Scenario 6 enemy records 4..12: AT 0, DF 0, no mercenaries; "
-        "visible records 4..11 moved near the stock player deployment"
-    )
+    if args.civilian_loss:
+        print(
+            "Scenario 6 partial-loss mode: fixed allied/NPC records remain "
+            "source-identical; only enemy record 4 moves to (4,25)"
+        )
+        print(
+            "Start marks fixed resident record(s) "
+            f"{','.join(map(str, lost_civilian_records))} defeated, removes "
+            "enemy groups 10..17, and lowers living enemy group 9 to one HP"
+        )
+    else:
+        print(
+            "Scenario 6 enemy records 4..12: AT 0, DF 0, no mercenaries; "
+            "visible records 4..11 moved near the stock player deployment"
+        )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0
