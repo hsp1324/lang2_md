@@ -807,6 +807,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/17f2_s19_title.png",
         ):
             self.assertIn(capture, scenario18["captures"])
+        for capture in (
+            "captures/run/3a56_s18_fresh4_prep.png",
+            "captures/run/3a56_s18_fresh4_lana_attack.png",
+            "captures/run/3a56_s18_lana_clear_01.png",
+            "captures/run/3a56_s18_lana_clear_15.png",
+            "captures/run/3a56_s18_lana_clear_24.png",
+            "captures/run/3a56_s18_lana_clear_29.png",
+            "captures/run/3a56_s18_lana_clear_next_scenario.png",
+            "captures/run/3a56_s19_entry_11.png",
+        ):
+            self.assertIn(capture, scenario18["captures"])
+        self.assertIn("Dark-princess layout checksum 3A56", scenario18["note"])
+        self.assertIn("fresh two-resident aggregate-loss GAME OVER", scenario18["note"])
+        self.assertEqual(scenario18["branches_endings"], "pending")
         self.assertEqual(scenario19["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s19_description_current_01.png",

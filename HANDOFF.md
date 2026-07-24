@@ -9013,3 +9013,29 @@ contains 57 safe syllables as documented below and in
   the current Korean loss panel and protagonist path. Scenario 18
   `branches_endings` remains pending until a fresh state with both live
   residents reaches the original aggregate watcher and produces GAME OVER.
+
+### Scenario 18 Lana Completion Branch (2026-07-25)
+
+- `tools/build_scenario18_clear_probe_rom.py --dark-princess-layout` checksum
+  `3A56` preserves the Japanese Scenario 18 deployments, fixed records, and
+  events while moving only Elwin to `(37,3)`, directly below source Lana at
+  `(37,2)`. The fresh isolated runtime was
+  `captures/runtime/s18_lana_3a56_fresh4`.
+- A normal attack defeated Lana and rendered a clean battle panel followed by
+  `스피드부츠 획득!`. Captures
+  `3a56_s18_fresh4_lana_attack.png`,
+  `3a56_s18_lana_clear_01.png`, and
+  `3a56_s18_lana_clear_15.png` cover the item and representative early/late
+  dialogue. Dynamic names rendered correctly, including
+  `제국에서도 보젤은 적일 텐데.`.
+- The branch continued through allied level-ups, Elwin's class-change screen,
+  the result panel, save update from Scenario 18 to 19, and `진군루트`.
+  `3a56_s18_lana_clear_24.png`,
+  `3a56_s18_lana_clear_29.png`,
+  `3a56_s18_lana_clear_next_scenario.png`, and
+  `3a56_s19_entry_11.png` verify those endpoints and the Scenario 19
+  preparation screen. No Japanese text, broken name/class/UI glyph, reset, or
+  freeze appeared.
+- This independently closes the Lana direct-defeat completion route. Scenario
+  18 `branches_endings` stays `pending` only because the fresh aggregate
+  resident-loss condition still needs to reach its stock `GAME OVER` handler.
