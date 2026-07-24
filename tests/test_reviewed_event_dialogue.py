@@ -744,6 +744,8 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             all(row["english_record"] is None and row["japanese_only"] for row in primary[94:])
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(text_by_address["0x19B660"], "젠장! 끝인가…")
 
     def test_scenario_23_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 23]

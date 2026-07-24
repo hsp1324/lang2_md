@@ -23,7 +23,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 10 | current | current | current | current | probe | probe | probe | probe | 50 |
 | 11 | current | current | current | current | current | probe | probe | probe | 63 |
 | 12 | current | current | current | current | current | probe | probe | probe | 54 |
-| 13 | current | current | current | current | current | probe | probe | pending | 50 |
+| 13 | current | current | current | current | current | probe | probe | probe | 57 |
 | 14 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 15 | current | current | current | current | probe | progressed | probe | pending | 41 |
 | 16 | current | current | current | current | probe | progressed | probe | pending | 45 |
@@ -717,7 +717,7 @@ Production D355 verifies the Scenario 12 route map, all 19 text-bearing scrollin
 
 ### Scenario 13
 
-Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrolling frames of 염룡병단과의 결전, and the preparation endpoint. Direct Japanese-ROM rendering confirms the ancient guardians' defeat, Egbert stealing the Dark Rod by magic, his teleport toward Liana at Kalxath Castle, the party's urgent return, and Vargas blocking the way with the Fire Dragon Corps. The complete description preserves those events in natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current and historical captures verified all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, condition rows, and the no-action first turn through the stated GAME OVER loss condition. Probe checksum 67DF traversed the complete 39-page first-turn tactics event and 17-page Zorum event without Japanese residue, broken glyphs, reset, or freeze. Completion checksum 0CCD resumed matching diagnostic work RAM, used an identity-guarded Start wrapper to lower only live Vargas HP from 8 to 1, and then used Hein's ordinary 매직애로우 command to reach HP 0. The stock handler awarded 데빌액스, traversed the complete aftermath in a 42-step capture sequence, displayed 전과보고 / POINT 6560P, wrote a real 시나리오 14 save in slot 1, selected 다음 시나리오, displayed the route map, and entered 성검 랑그릿사. Normal BlastEm termination left disk SRAM slot 1 at Scenario 14. This is a probe continuation rather than a fresh production deployment-to-clear replay; alternate branches remain pending.
+Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrolling frames of 염룡병단과의 결전, and the preparation endpoint. Direct Japanese-ROM rendering confirms the ancient guardians' defeat, Egbert stealing the Dark Rod by magic, his teleport toward Liana at Kalxath Castle, the party's urgent return, and Vargas blocking the way with the Fire Dragon Corps. The complete description preserves those events in natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing. Earlier current and historical captures verified all seven selectable commander/class rows across both preparation pages, arrangement, all nine opening dialogue pages, condition rows, and the no-action first turn through the stated GAME OVER loss condition. Probe checksum 67DF traversed the complete 39-page first-turn tactics event and 17-page Zorum event without Japanese residue, broken glyphs, reset, or freeze. Completion checksum 0CCD resumed matching diagnostic work RAM, used an identity-guarded Start wrapper to lower only live Vargas HP from 8 to 1, and then used Hein's ordinary 매직애로우 command to reach HP 0. The stock handler awarded 데빌액스, traversed the complete aftermath in a 42-step capture sequence, displayed 전과보고 / POINT 6560P, wrote a real 시나리오 14 save in slot 1, selected 다음 시나리오, displayed the route map, and entered 성검 랑그릿사. Normal BlastEm termination left disk SRAM slot 1 at Scenario 14. This is a probe continuation rather than a fresh production deployment-to-clear replay. Current production ED1F produces protagonist-death derivative E3EE, which preserves all seven deployments and thirteen fixed records and marks only runtime player group 0 defeated through Start. Fresh selector playback retained the Scenario 13 route, preparation, arrangement, opening, and clean 엘윈/파이터 command panel. Ending the turn traversed four Fire Dragon Corps tactics pages, rendered 엘윈: 젠장! 끝인가… from Japanese event 0x19B660, and reached GAME OVER without Japanese residue, broken glyphs, reset, or freeze. Victory and the sole declared defeat ending are now live-covered, so branches_endings is verified_probe.
 
 - `captures/run/f0e3_s13_brief_live_01.png`
 - `captures/run/f0e3_s13_brief_live_06.png`
@@ -769,6 +769,13 @@ Production D355 verifies the Scenario 13 route map, all 14 text-bearing scrollin
 - `captures/run/0ccd_s13_next_selected.png`
 - `captures/run/0ccd_s14_route.png`
 - `captures/run/0ccd_s14_title.png`
+- `captures/run/e3ee_s13_route_entry.png`
+- `captures/run/e3ee_s13_prep_10.png`
+- `captures/run/e3ee_s13_arrange.png`
+- `captures/run/e3ee_s13_opening_13.png`
+- `captures/run/e3ee_s13_start_wrapper.png`
+- `captures/run/e3ee_s13_death_event_04.png`
+- `captures/run/e3ee_s13_death_event_05.png`
 
 ### Scenario 14
 

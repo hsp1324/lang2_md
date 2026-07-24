@@ -25,7 +25,7 @@ Current reproducible baseline:
 current production build checksum: ED1F
 latest targeted live-verified production checksum: ED1F
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 798 passing
+unit tests: 802 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -8790,3 +8790,30 @@ contains 57 safe syllables as documented below and in
 - The complete 101-file inventory passes in three interleaved groups:
   `257 + 352 + 189 = 798` tests. The rebuilt production ROM has checksum
   `ED1F` and 866 custom glyphs.
+
+### Scenario 13 Protagonist Defeat Branch (2026-07-24)
+
+- The reviewed conditions resource declares `발가스 장군 격파` as the
+  victory condition and only `주인공 사망` as the defeat condition.
+  Conditional commander casualty records are dialogue paths, not additional
+  GAME OVER endings.
+- `tools/build_scenario13_clear_probe_rom.py --protagonist-death` preserves
+  all seven player deployments and all thirteen fixed records. It installs a
+  guarded Start wrapper at `0x3FEF00` that changes only runtime player group 0
+  at `$FFFF603C`, then tail-calls the stock Start handler. The mode conflicts
+  with the separate completion layout by design. Production `ED1F` produces
+  diagnostic checksum `E3EE`.
+- Fresh selector playback entered Scenario 13 from a validated Scenario 12
+  manual slot and retained the route, preparation roster, arrangement map,
+  thirteen opening confirmations, and clean `엘윈/파이터` command panel.
+  The Start wrapper opened the normal Korean menu without reset or freeze.
+- Ending turn traversed four Fire Dragon Corps tactics pages, then
+  `captures/run/e3ee_s13_death_event_04.png` rendered
+  `엘윈: 젠장! 끝인가…`. The text is Japanese event `0x19B660`.
+  `e3ee_s13_death_event_05.png` reaches GAME OVER. Names, classes, portraits,
+  and the lower status row remain intact.
+- Normal completion and the sole declared defeat ending are now live-covered,
+  so Scenario 13 `branches_endings` is `verified_probe`.
+- The complete inventory passes in three interleaved groups:
+  `261 + 352 + 189 = 802` tests. Production remains checksum `ED1F` with
+  866 custom glyphs.

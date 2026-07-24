@@ -10,12 +10,18 @@ class Scenario13ClearProbeTests(unittest.TestCase):
         cls.source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
         cls.production = probe_builder.DEFAULT_INPUT_ROM.read_bytes()
 
-    def patched(self, *, completion_layout: bool = False) -> bytearray:
+    def patched(
+        self,
+        *,
+        completion_layout: bool = False,
+        protagonist_death: bool = False,
+    ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
             data,
             self.source,
             completion_layout=completion_layout,
+            protagonist_death=protagonist_death,
         )
         return data
 
@@ -94,6 +100,79 @@ class Scenario13ClearProbeTests(unittest.TestCase):
             changed,
             self.allowed_offsets(completion_layout=True),
         )
+
+    def test_protagonist_death_changes_only_wrapper_and_checksum(self):
+        data = self.patched(protagonist_death=True)
+        wrapper = probe_builder.protagonist_death_wrapper_code()
+        allowed = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.COMPLETION_HP_WRAPPER,
+                probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+            ),
+        }
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(
+                zip(self.production, data)
+            )
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
+    def test_protagonist_death_preserves_deployments_and_fixed_records(self):
+        data = self.patched(protagonist_death=True)
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployments = probe_builder.deployment_bytes(
+            probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+        )
+        self.assertEqual(data[start : start + len(deployments)], deployments)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        fixed_end = (
+            layout.records_offset
+            + layout.record_count * FIXED_RECORD_SIZE
+        )
+        self.assertEqual(
+            data[layout.records_offset:fixed_end],
+            self.source[layout.records_offset:fixed_end],
+        )
+
+    def test_protagonist_death_wrapper_targets_only_group_zero(self):
+        wrapper = probe_builder.protagonist_death_wrapper_code()
+        record = probe_builder.RUNTIME_GROUP_BASE
+        self.assertIn(
+            (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4, "big"
+            ),
+            wrapper,
+        )
+        self.assertIn(
+            (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertIn(
+            (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertEqual(
+            wrapper[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_diagnostic_modes_conflict(self):
+        with self.assertRaisesRegex(ValueError, "conflicts"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                completion_layout=True,
+                protagonist_death=True,
+            )
 
     def test_weakens_every_enemy_without_changing_identity(self):
         data = self.patched()
@@ -234,6 +313,15 @@ class Scenario13ClearProbeTests(unittest.TestCase):
                 completion_layout=True,
             ),
             0xB930,
+        )
+        death = bytearray(self.production)
+        self.assertEqual(
+            probe_builder.patch_probe(
+                death,
+                self.source,
+                protagonist_death=True,
+            ),
+            0xE3EE,
         )
 
     def test_completion_layout_rejects_changed_start_entry(self):
