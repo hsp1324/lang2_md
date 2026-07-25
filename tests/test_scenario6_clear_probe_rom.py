@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import unittest
 
@@ -30,6 +31,15 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
             data,
             self.source,
             protagonist_death=True,
+        )
+        return data
+
+    def turn_event_patched(self, target_turn: int) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            turn_event=target_turn,
         )
         return data
 
@@ -102,6 +112,43 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
         data[base] ^= 1
         with self.assertRaisesRegex(ValueError, "enemy record 4 differs"):
             probe_builder.patch_probe(data, self.source)
+
+    def test_source_scheduled_turn_table_and_handlers_are_locked(self):
+        table_end = (
+            probe_builder.TURN_EVENT_TABLE
+            + len(probe_builder.TURN_EVENT_TABLE_BYTES)
+        )
+        for data in (self.source, self.built):
+            self.assertEqual(
+                data[probe_builder.TURN_EVENT_TABLE:table_end],
+                probe_builder.TURN_EVENT_TABLE_BYTES,
+            )
+            for turn, offset in probe_builder.TURN_EVENT_HANDLERS.items():
+                expected = probe_builder.TURN_EVENT_HANDLER_BYTES[turn]
+                self.assertEqual(data[offset : offset + len(expected)], expected)
+
+    def test_scheduled_turn_dialogue_pages_are_reviewed(self):
+        translations = json.loads(
+            (ROOT / "localization/event_dialogue_ko.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        scenario_addresses = {
+            int(row["address"], 16)
+            for row in translations["scenarios"]["6"]
+        }
+        expected = {
+            address
+            for pages in probe_builder.TURN_EVENT_TEXTS.values()
+            for address in pages
+        }
+        self.assertLessEqual(expected, scenario_addresses)
+
+    def test_turn7_internal_branch_prefixes_are_locked(self):
+        for branch, expected in probe_builder.TURN7_BRANCH_PREFIX_BYTES.items():
+            offset = probe_builder.TURN7_BRANCH_HANDLERS[branch]
+            for data in (self.source, self.built):
+                self.assertEqual(data[offset : offset + len(expected)], expected)
 
     def test_probe_checksum_is_valid(self):
         data = bytearray(self.built)
@@ -332,14 +379,187 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
         )
         self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
 
-    def test_probe_rejects_conflicting_runtime_modes(self):
-        with self.assertRaisesRegex(ValueError, "modes conflict"):
+    def test_turn_event_wrappers_use_the_required_stock_counter_state(self):
+        self.assertEqual(
+            probe_builder.TURN_EVENT_COUNTER_VALUES,
+            {3: 2, 4: 4, 5: 5, 7: 7},
+        )
+        for target_turn, counter_value in (
+            probe_builder.TURN_EVENT_COUNTER_VALUES.items()
+        ):
+            code = probe_builder.turn_event_wrapper_code(target_turn)
+            expected_address = probe_builder.RUNTIME_TURN_COUNTER.to_bytes(
+                4, "big"
+            )
+            prefix_length = (
+                len(probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS) * 8
+            )
+            for runtime_group in (
+                probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS
+            ):
+                record = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + runtime_group * probe_builder.RUNTIME_GROUP_SIZE
+                )
+                self.assertIn(
+                    bytes.fromhex("13 FC")
+                    + probe_builder.TURN_EVENT_PROTECTED_DF.to_bytes(2, "big")
+                    + (record + probe_builder.RUNTIME_DF_OFFSET).to_bytes(
+                        4, "big"
+                    ),
+                    code[:prefix_length],
+                )
+            self.assertEqual(
+                code[prefix_length : prefix_length + 8],
+                bytes.fromhex("0C 39")
+                + counter_value.to_bytes(2, "big")
+                + expected_address,
+            )
+            self.assertEqual(
+                code[prefix_length + 8 : prefix_length + 10],
+                bytes.fromhex("64 08"),
+            )
+            self.assertEqual(
+                code[prefix_length + 10 : prefix_length + 18],
+                bytes.fromhex("13 FC")
+                + counter_value.to_bytes(2, "big")
+                + expected_address,
+            )
+            self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
+    def test_turn_event_modes_change_only_wrapper_operand_and_checksum(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        fixed_start = layout.records_offset
+        fixed_end = fixed_start + layout.record_count * FIXED_RECORD_SIZE
+        deployment_end = (
+            probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+            + probe_builder.PLAYER_DEPLOYMENT_COUNT * 4
+        )
+        for target_turn in probe_builder.TURN_EVENT_HANDLERS:
+            data = self.turn_event_patched(target_turn)
+            wrapper = probe_builder.turn_event_wrapper_code(target_turn)
+            allowed = {0x18E, 0x18F}
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.PARTIAL_LOSS_WRAPPER,
+                    probe_builder.PARTIAL_LOSS_WRAPPER + len(wrapper),
+                )
+            )
+            changed = {
+                index
+                for index, (before, after) in enumerate(zip(self.built, data))
+                if before != after
+            }
+            self.assertLessEqual(changed, allowed)
+            self.assertEqual(
+                data[
+                    probe_builder.DEPLOYMENT_TABLE
+                    : deployment_end
+                ],
+                self.source[
+                    probe_builder.DEPLOYMENT_TABLE
+                    : deployment_end
+                ],
+            )
+            self.assertEqual(
+                data[fixed_start:fixed_end],
+                self.source[fixed_start:fixed_end],
+            )
+            expected_checksum = sum(
+                int.from_bytes(data[offset : offset + 2], "big")
+                for offset in range(0x200, len(data), 2)
+            ) & 0xFFFF
+            self.assertEqual(
+                int.from_bytes(data[0x18E:0x190], "big"),
+                expected_checksum,
+            )
+
+    def test_turn_event_wrapper_rejects_unknown_turn(self):
+        for target_turn in (1, 2, 6, 8):
+            with self.assertRaisesRegex(ValueError, "must be one of"):
+                probe_builder.turn_event_wrapper_code(target_turn)
+
+    def test_turn7_branch_modes_only_redirect_the_stock_table_target(self):
+        for branch, target in probe_builder.TURN7_BRANCH_HANDLERS.items():
+            if branch == "stock":
+                continue
+            data = bytearray(self.built)
+            checksum = probe_builder.patch_probe(
+                data,
+                self.source,
+                turn_event=7,
+                turn_event_branch=branch,
+            )
+            wrapper = probe_builder.turn_event_wrapper_code(7)
+            allowed = {0x18E, 0x18F}
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.TURN_EVENT_TABLE_TURN7_TARGET,
+                    probe_builder.TURN_EVENT_TABLE_TURN7_TARGET + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.PARTIAL_LOSS_WRAPPER,
+                    probe_builder.PARTIAL_LOSS_WRAPPER + len(wrapper),
+                )
+            )
+            changed = {
+                index
+                for index, (before, after) in enumerate(zip(self.built, data))
+                if before != after
+            }
+            self.assertLessEqual(changed, allowed)
+            target_offset = probe_builder.TURN_EVENT_TABLE_TURN7_TARGET
+            self.assertEqual(
+                int.from_bytes(data[target_offset : target_offset + 4], "big"),
+                target,
+            )
+            self.assertEqual(
+                int.from_bytes(data[0x18E:0x190], "big"),
+                checksum,
+            )
+
+    def test_turn7_branch_modes_reject_other_turns_and_unknown_names(self):
+        with self.assertRaisesRegex(ValueError, "require --turn-event 7"):
             probe_builder.patch_probe(
                 bytearray(self.built),
                 self.source,
-                civilian_loss=True,
-                protagonist_death=True,
+                turn_event=5,
+                turn_event_branch="late-arrival",
             )
+        with self.assertRaisesRegex(ValueError, "branch must be one of"):
+            probe_builder.patch_probe(
+                bytearray(self.built),
+                self.source,
+                turn_event=7,
+                turn_event_branch="not-a-branch",
+            )
+
+    def test_probe_rejects_conflicting_runtime_modes(self):
+        for options in (
+            {"civilian_loss": True, "protagonist_death": True},
+            {"civilian_loss": True, "turn_event": 3},
+            {"protagonist_death": True, "turn_event": 7},
+        ):
+            with self.assertRaisesRegex(ValueError, "modes conflict"):
+                probe_builder.patch_probe(
+                    bytearray(self.built),
+                    self.source,
+                    **options,
+                )
 
     def test_protagonist_death_checksum_is_valid(self):
         data = self.protagonist_death_patched()

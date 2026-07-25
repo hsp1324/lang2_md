@@ -358,7 +358,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario6["captures"])
         self.assertEqual(scenario6["battle_ui"], "verified_current")
-        self.assertEqual(scenario6["turn_events"], "progressed_current")
+        self.assertEqual(scenario6["turn_events"], "verified_probe")
         self.assertEqual(scenario6["completion"], "verified_probe")
         for capture in (
             "captures/run/5b6b_s06_prep_08.png",
@@ -400,6 +400,24 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/949f_s06_after_turn_end.png",
             "captures/run/949f_s06_death_path_13.png",
             "captures/run/949f_s06_death_path_14.png",
+            "captures/run/0912_s06_turn3_after_ai_01.png",
+            "captures/run/0912_s06_turn3_event_02.png",
+            "captures/run/0912_s06_turn3_event_03.png",
+            "captures/run/0912_s06_turn3_return_command_02.png",
+            "captures/run/0916_s06_turn4_return_map.png",
+            "captures/run/0916_s06_turn4_return_command.png",
+            "captures/run/0918_s06_turn5_return_map.png",
+            "captures/run/0918_s06_turn5_return_command.png",
+            "captures/run/091c_s06_turn7_advance_01.png",
+            "captures/run/091c_s06_turn7_advance_05.png",
+            "captures/run/091c_s06_turn7_return_command.png",
+            "captures/run/092e_s06_turn7_support_wait_001.png",
+            "captures/run/092e_s06_turn7_support_return_command.png",
+            "captures/run/093c_s06_turn7_morgan_wait_001.png",
+            "captures/run/093c_s06_turn7_morgan_return_command.png",
+            "captures/run/0976_s06_turn7_late_wait_001.png",
+            "captures/run/0976_s06_turn7_late_event_02.png",
+            "captures/run/0976_s06_turn7_late_return_command.png",
         ):
             self.assertIn(capture, scenario6["captures"])
         self.assertIn("all thirteen fixed records", scenario6["note"])
@@ -412,6 +430,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("diagnostic 949F", scenario6["note"])
         self.assertEqual(scenario6["branches_endings"], "verified_probe")
         self.assertIn("All six partial-loss subsets", scenario6["note"])
+        self.assertIn("scheduled-turn table at 0x18D778", scenario6["note"])
+        self.assertIn("diagnostics 0912, 0916, 0918, and 091C", scenario6["note"])
+        self.assertIn("runtime groups 0..8", scenario6["note"])
+        self.assertIn("bridges 092E, 093C, and 0976", scenario6["note"])
+        self.assertIn("Rejected DFF1", scenario6["note"])
+        self.assertIn("rejected BD15", scenario6["note"])
+        self.assertIn("cross-checksum state load", scenario6["note"])
         self.assertEqual(scenario7["opening_events"], "verified_current")
         self.assertEqual(scenario7["description"], "verified_current")
         self.assertEqual(scenario7["completion"], "verified_probe")

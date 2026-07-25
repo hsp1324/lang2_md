@@ -9848,3 +9848,59 @@ contains 57 safe syllables as documented below and in
   names/classes/status UI and no Japanese residue, clipping, reset, or freeze.
   Scenario 5 `turn_events` is therefore `verified_probe`. The other
   commanders' hire lists remain a separate preparation-UI verification gap.
+
+### Scenario 6 Scheduled Turn Events (2026-07-25)
+
+- The Japanese scheduled-turn table is source-locked at `0x18D778`. It sends
+  turn 1 to `0x18D7BC`, turn 3 to `0x18D816`, turn 7 to `0x18D824`, turn 4
+  to `0x18D888`, and turn 5 to `0x18D8A2`. Type `01` is an entering-turn
+  event, while type `04` is evaluated when ending that numbered turn. The
+  guarded Start diagnostic therefore raises shared counter `$FFFFA5F1` to
+  `2/4/5/7` for targets `3/4/5/7` and never rewinds a later state.
+- `tools/build_scenario6_clear_probe_rom.py --turn-event {3,4,5,7}` preserves
+  all five deployments, all thirteen fixed records, the scheduled table, and
+  every source handler. A stock no-action phase can naturally kill the three
+  residents or Elwin before a later event, so the diagnostic wrapper writes
+  DF 99 only to runtime groups `0..8`: five player groups, Aaron, and the
+  three residents. This protection exists only in RAM after Start; fixed
+  records and event bytes remain source-identical.
+- Accepted checksums are `0912` for turn 3, `0916` for turn 4, `0918` for
+  turn 5, and `091C` for the stock turn-7 branch. `0912` rendered the three
+  Morgan split-attack pages, then `TURN 3` and a valid
+  `엘윈/파이터` command menu. The movement-only handlers under `0916` and
+  `0918` returned at `TURN 5` and `TURN 6`; their GST records show all nine
+  protected groups alive, DF 99, and counters 5/6. `091C` rendered Morgan's
+  stock `참 좋은 때에 왔군` reaction, Hein's luck remark, Morgan's two-page
+  answer, and Hein's `그런가…`, then returned at `TURN 8`.
+- Turn 7's reviewed physical pages are `0x18DF2C`, `0x18DF4C`,
+  `0x18DFB0`, `0x18E00E`, `0x18E044/0x18E088`, `0x18E0BA`, and
+  `0x18E0CA/0x18E0F4`. `--turn-event-branch` is a deterministic diagnostic
+  bridge that changes only the scheduled-table target at `0x18D78C` to a
+  stock internal body. `support-arrival` checksum `092E` targets `0x18D836`
+  and rendered `모건님! 저희가 돕겠습니다!`. `morgan-alternate` checksum
+  `093C` targets `0x18D844` and rendered
+  `참 좋은 때에 와 주었군. 이 건방진 놈들에게 본때를 보여 주게.`.
+  `late-arrival` checksum `0976` targets `0x18D87E` and rendered both
+  `모건님!? 결국 제때 못 왔나.` and
+  `뭐, 됐어. 죽일 때까지 기다리지.`. All three returned at `TURN 8`.
+- Representative captures are
+  `0912_s06_turn3_after_ai_01.png`, `_event_02.png`, `_event_03.png`,
+  `_after_fastforward_02.png`, and `_return_command_02.png`;
+  `0916_s06_turn4_return_map.png` / `_return_command.png`;
+  `0918_s06_turn5_return_map.png` / `_return_command.png`;
+  `091c_s06_turn7_advance_01.png` through `_05.png` and
+  `_return_command.png`; `092e_s06_turn7_support_wait_001.png`;
+  `093c_s06_turn7_morgan_wait_001.png`; and
+  `0976_s06_turn7_late_wait_001.png` / `_event_02.png`. The latter three
+  branches also have matching `_return_command.png` evidence.
+- Do not cite `DFF1` or `BD15` as accepted scheduled-event evidence. `DFF1`
+  protected no runtime groups and naturally lost all residents. `BD15`
+  protected Aaron/residents but not the player groups and naturally lost
+  Elwin. The final `091x` family protects all required groups without changing
+  source fixed data. A copied `093C` quicksave was also rejected under `0976`:
+  BlastEm closes when loading a state made for another ROM checksum. The
+  accepted `0976` run starts from a fresh isolated runtime.
+- Every accepted path returned to a valid command menu with intact
+  name/class/status UI and no Japanese residue, clipping, GAME OVER, reset, or
+  freeze. Scenario 6 `turn_events` is now `verified_probe`. Remaining
+  preparation hire-list gaps are tracked separately.
