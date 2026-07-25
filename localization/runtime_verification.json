@@ -305,7 +305,7 @@
       "battle_ui": "verified_probe",
       "turn_events": "verified_probe",
       "completion": "verified_probe",
-      "branches_endings": "pending",
+      "branches_endings": "verified_probe",
       "captures": [
         "captures/run/ea22_s03_selector_map.png",
         "captures/run/ea22_s03_brief_live_01.png",
@@ -340,9 +340,31 @@
         "captures/run/b2bdv2_s03_next_scenario_selected.png",
         "captures/run/b2bdv2_s04_route.png",
         "captures/run/af5e_s03_imperial_capture_line.png",
-        "captures/run/af5e_r3_last_enemy_post_3.png"
+        "captures/run/af5e_r3_last_enemy_post_3.png",
+        "captures/run/5a3f_s03_protagonist_arrangement.png",
+        "captures/run/5a3f_s03_protagonist_opening_25.png",
+        "captures/run/5a3f_s03_protagonist_start_menu2.png",
+        "captures/run/5a3f_s03_protagonist_result_01.png",
+        "captures/run/5a3f_s03_protagonist_result_02.png",
+        "captures/run/5d9f_s03_liana_alive_route_retry.png",
+        "captures/run/5d9f_s03_liana_alive_prep_retry_22.png",
+        "captures/run/5d9f_s03_liana_alive_opening_25.png",
+        "captures/run/5d9f_s03_liana_alive_result_00.png",
+        "captures/run/5d9f_s03_liana_alive_result_01.png",
+        "captures/run/5d9f_s03_liana_alive_result_02.png",
+        "captures/run/5d9f_s03_liana_alive_result_03.png",
+        "captures/run/5d9f_s03_liana_alive_result_04.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_route.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_prep_22.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_opening_24.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_result_00.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_result_01.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_result_02.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_result_03.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_result_04.png",
+        "captures/run/adb7_s03_liana_zorum_defeated_result_05.png"
       ],
-      "note": "Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling frames of 조름의 반격, and the preparation endpoint. The complete Korean description covers the party escaping Zorum's encirclement, its wounds and exhaustion, the pursuing force catching up, and the coming battle without Japanese residue, broken glyphs, clipping, or abnormal spacing. All 24 opening frames were previously visually reviewed on production EA22. Production-derived clear probe B2BD preserves the stock Scenario 3 event and placement logic, removes enemy mercenaries, weakens enemy commanders, and starts Elwin with save-slot AT 99 / DF 96. Live play verified the complete turn-3 Liana/Hein/Scott tutorial chain, Zorum and generic commander combat dialogue, later reinforcement and Vargas events, ordinary Vargas retreat, all post-battle pages, 전과보고 with POINT 1340P, a real 시나리오 4 save in slot 2, 다음 시나리오, and entry to the Scenario 4 route map without Japanese residue, broken UI labels, reset, or freeze. After the two natural-language edits, production F661-derived probe AF5E replayed the stock triggers through Zorum and the pursuing commanders; `제국군지휘관: 가자! 모두 소녀를 잡아라!` and Vargas's `하지만 여기까지다! 소녀는 데려가겠다!` both render cleanly in their natural events. Alternative defeat and nonstandard victory branches remain pending."
+      "note": "Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling frames of 조름의 반격, and the preparation endpoint. The complete Korean description covers the party escaping Zorum's encirclement, its wounds and exhaustion, the pursuing force catching up, and the coming battle without Japanese residue, broken glyphs, clipping, or abnormal spacing. All 24 opening frames were previously visually reviewed on production EA22. Production-derived clear probe B2BD preserves the stock Scenario 3 event and placement logic, removes enemy mercenaries, weakens enemy commanders, and starts Elwin with save-slot AT 99 / DF 96. Live play verified the complete turn-3 Liana/Hein/Scott tutorial chain, Zorum and generic commander combat dialogue, later reinforcement and Vargas events, ordinary Vargas retreat, all post-battle pages, 전과보고 with POINT 1340P, a real 시나리오 4 save in slot 2, 다음 시나리오, and entry to the Scenario 4 route map without Japanese residue, broken UI labels, reset, or freeze. After the two natural-language edits, production F661-derived probe AF5E replayed the stock triggers through Zorum and the pursuing commanders; `제국군지휘관: 가자! 모두 소녀를 잡아라!` and Vargas's `하지만 여기까지다! 소녀는 데려가겠다!` both render cleanly in their natural events. The Japanese event block is source-locked at 0x1881AE..0x189BA6. The protagonist-death trigger at 0x188222 dispatches handler 0x1885E8 and text 0x1892BE. The Liana-death trigger at 0x18823A dispatches handler 0x188614; its direct pointers 0x18933C, 0x189376, 0x1893DC, and 0x189488 expand through FFFD continuations 0x189388, 0x189402, and 0x189448. Runtime groups 0..2 are Elwin, Hein, and Scott; groups 3, 4, and 5 are Liana, the Masked Knight, and Zorum; groups 6..11 are imperial commanders; group 12 is Vargas. Production-derived diagnostics preserve all three player deployments, all ten fixed records, and every source event byte. Checksums 5A3F, 5D9F, and ADB7 respectively mark only Elwin, only Liana, or Liana plus Zorum defeated through a guarded Start wrapper. Fresh isolated playback retained SCENARIO 3, preparation, opening, names, classes, command UI, and Start UI. The Elwin path rendered `안돼… 몸이 움직이지 않아…` and GAME OVER. The Liana/Zorum-alive path rendered Liana's failure page, Zorum's laugh and victory declaration, Elwin's `윽… 아직 힘이 부족해…`, and GAME OVER. The Liana/Zorum-defeated path rendered Liana's failure page, all three Vargas pages including the dynamic `레온과 조름이 너희가 제법이라더니 별것 아니군!`, Elwin's failure page, and GAME OVER. No accepted path showed Japanese residue, broken name/class/UI glyphs, clipping, reset, or freeze. Normal completion, protagonist defeat, and both internal Liana-defeat variants are now live-covered, so branches_endings is verified_probe."
     },
     {
       "scenario": 4,

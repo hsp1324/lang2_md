@@ -9642,3 +9642,60 @@ contains 57 safe syllables as documented below and in
   residue, broken name/class/UI glyph, clipping, unexpected reset, or freeze.
   Normal completion and both declared defeat endings are live-covered, so
   Scenario 2 `branches_endings` is `verified_probe`.
+
+### Scenario 3 Result Branches (2026-07-25)
+
+- The Japanese event block is `0x1881AE..0x189BA6`. The protagonist-death
+  trigger `0x188222` dispatches handler `0x1885E8` and Elwin text
+  `0x1892BE`. The Liana-death trigger `0x18823A` dispatches handler
+  `0x188614`. Its direct text pointers are `0x18933C`, `0x189376`,
+  `0x1893DC`, and `0x189488`; the `FFFD` continuations are `0x189388`,
+  `0x189402`, and `0x189448`. Tests lock both handlers and all seven physical
+  dialogue pages against the Japanese source and reviewed translation data.
+- Runtime records are 0x60 bytes at work RAM `0xFFFF603C`. Groups 0..2 are
+  Elwin, Hein, and Scott; groups 3, 4, and 5 are Liana, the Masked Knight,
+  and Zorum; groups 6..11 are imperial commanders; group 12 is Vargas.
+  `tools/build_scenario3_clear_probe_rom.py` now exposes mutually exclusive
+  `--protagonist-death`, `--liana-death`, and
+  `--liana-death-zorum-defeated` modes. Each preserves all three player
+  deployments, all ten fixed records, and source event bytes. The guarded
+  Start wrapper at `0x3FEF00` changes only the declared runtime groups, then
+  returns to stock Start handler `0x022C1E`.
+- Production-derived checksum `5A3F` marks only Elwin defeated. Fresh
+  isolated playback retained the Scenario 3 route, preparation, automatic
+  deployment, opening, `엘윈/파이터` command panel, and Korean Start menu,
+  then rendered `안돼… 몸이 움직이지 않아…` and GAME OVER. Representative
+  evidence is `5a3f_s03_protagonist_arrangement.png`,
+  `5a3f_s03_protagonist_opening_25.png`,
+  `5a3f_s03_protagonist_start_menu2.png`, and
+  `5a3f_s03_protagonist_result_01.png` through `_02.png`.
+- Checksum `5D9F` marks only Liana defeated while Zorum remains active. It
+  rendered Liana's failure page, `조름: 하하하!`,
+  `역시 이 조름님이 마지막에 이기는군!`,
+  `엘윈: 윽… 아직 힘이 부족해…`, and GAME OVER. Representative evidence
+  is `5d9f_s03_liana_alive_route_retry.png`,
+  `5d9f_s03_liana_alive_prep_retry_22.png`,
+  `5d9f_s03_liana_alive_opening_25.png`, and
+  `5d9f_s03_liana_alive_result_00.png` through `_04.png`.
+- Checksum `ADB7` marks Liana and Zorum defeated, selecting the alternate
+  internal Liana-death path. It rendered Liana's failure page,
+  `발가스: 크하하! 계집은 받아 간다!`,
+  `레온과 조름이 너희가 제법이라더니 별것 아니군!`, `크하하하!`,
+  Elwin's failure page, and GAME OVER. Representative evidence is
+  `adb7_s03_liana_zorum_defeated_route.png`,
+  `adb7_s03_liana_zorum_defeated_prep_22.png`,
+  `adb7_s03_liana_zorum_defeated_opening_24.png`, and
+  `adb7_s03_liana_zorum_defeated_result_00.png` through `_05.png`.
+- Do not repeat the fresh-window Scenario 31 selector-cheat attempt used at
+  the start of this audit; its timing entered the wrong route. The reliable
+  path is the valid manual Scenario 3 slot at
+  `captures/runtime/s3-clear-b2bd-v2/.local/share/blastem/`
+  `Langrisser II (Scenario 3 Clear Probe)/quicksave.gst`: open the title
+  menu, choose Load, select slot 1, and proceed through normal preparation.
+  Failed `5a3f_s03_protagonist_entry*` and the first non-retry `5d9f`
+  preparation captures are not accepted evidence.
+- All accepted paths showed clean names, classes, status UI, and dialogue
+  without Japanese residue, clipping, unexpected reset, or freeze. Existing
+  B2BD/B2BDv2 coverage already proves ordinary completion. Normal completion,
+  protagonist defeat, and both internal Liana-death variants are now
+  live-covered, so Scenario 3 `branches_endings` is `verified_probe`.
