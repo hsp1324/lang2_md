@@ -9391,3 +9391,30 @@ contains 57 safe syllables as documented below and in
   `5a95_s28_death_event_01.png` through `_05.png`. Normal completion and the
   sole declared defeat ending are now live-covered, so Scenario 28
   `branches_endings` is `verified_probe`.
+
+### Scenario 29 Protagonist-Death Branch (2026-07-25)
+
+- Selector record 29 is the secret Scenario X2 `디레스 해협의 격전`. Its
+  title uses `X2`, while arrangement and battle status intentionally retain
+  the source `SCENARIO ?2`.
+- The Japanese defeat trigger at `0x1B6BB2`
+  (`07 02 01 00 00 1B 6D 68`) dispatches handler `0x1B6D68`, which calls
+  Elwin text `0x1B72AC`, executes `13 FF 15 FF`, and reaches GAME OVER.
+- `tools/build_scenario29_clear_probe_rom.py --protagonist-death` preserves
+  all eight player deployments, all nine fixed records, identities, classes,
+  levels, combat values, coordinates, mercenaries, and source event bytes.
+  Its guarded Start wrapper marks only runtime player group 0 defeated.
+  Production `63C6` produces checksum `5A95`, SHA-256
+  `eec3eec6d7feba031565303f09ed81733188ed38dccbe0d0f85617230c7bdbd3`.
+- Fresh isolated playback retained the X2 route, eight-commander preparation,
+  automatic deployment, all opening pages, clean `엘윈/파이터` command panel,
+  and Korean Start menu. Normal turn end rendered the clean `세이갈` and `폴거`
+  pages, `엘윈: 조금 무리했나…`, and GAME OVER without Japanese residue,
+  broken names/classes/UI glyphs, reset, or freeze.
+- Representative evidence is `5a95_s29_death_entry.png`,
+  `5a95_s29_death_prep_11.png`, `5a95_s29_death_arrangement.png`,
+  `5a95_s29_death_auto.png`, `5a95_s29_death_opening_09.png`,
+  `5a95_s29_death_opening_12.png`, `5a95_s29_death_start_menu.png`, and
+  `5a95_s29_death_event_01.png` through `_05.png`. Normal completion and the
+  sole declared defeat ending are now live-covered, so Scenario 29
+  `branches_endings` is `verified_probe`.

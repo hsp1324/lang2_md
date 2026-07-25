@@ -1252,6 +1252,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario29["opening_events"], "verified_current")
         self.assertEqual(scenario29["turn_events"], "verified_current")
         self.assertEqual(scenario29["battle_ui"], "verified_current")
+        self.assertEqual(scenario29["completion"], "verified_probe")
+        self.assertEqual(scenario29["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/eca0_s29_turn1_18.png",
             "captures/run/eca0_s29_turn1_20.png",
@@ -1259,12 +1261,28 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/eca0_s29_turn1_50.png",
             "captures/run/eca0_s29_turn1_72.png",
             "captures/run/eca0_s29_turn1_74.png",
+            "captures/run/5a95_s29_death_entry.png",
+            "captures/run/5a95_s29_death_prep_11.png",
+            "captures/run/5a95_s29_death_arrangement.png",
+            "captures/run/5a95_s29_death_auto.png",
+            "captures/run/5a95_s29_death_opening_09.png",
+            "captures/run/5a95_s29_death_opening_12.png",
+            "captures/run/5a95_s29_death_start_menu.png",
+            "captures/run/5a95_s29_death_event_01.png",
+            "captures/run/5a95_s29_death_event_02.png",
+            "captures/run/5a95_s29_death_event_03.png",
+            "captures/run/5a95_s29_death_event_04.png",
+            "captures/run/5a95_s29_death_event_05.png",
         ):
             self.assertIn(capture, scenario29["captures"])
         self.assertIn("리자드맨 versus 파이터", scenario29["note"])
         self.assertIn("드래곤나이트 versus 파이터", scenario29["note"])
         self.assertIn("고렘 versus 호크나이트", scenario29["note"])
         self.assertIn("captures/run/eca0_s29_turn1_95.png", scenario29["captures"])
+        self.assertIn("trigger 0x1B6BB2", scenario29["note"])
+        self.assertIn("handler 0x1B6D68", scenario29["note"])
+        self.assertIn("text 0x1B72AC", scenario29["note"])
+        self.assertIn("조금 무리했나…", scenario29["note"])
         self.assertEqual(scenario30["description"], "verified_current")
         self.assertEqual(scenario30["conditions"], "verified_current")
         self.assertEqual(scenario30["preparation"], "verified_current")
