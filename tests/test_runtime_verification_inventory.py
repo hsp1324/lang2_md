@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "B3F2")
+        self.assertEqual(data["production_checksum"], "4385")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -1156,6 +1156,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario26["turn_events"], "verified_current")
         self.assertEqual(scenario26["battle_ui"], "verified_probe")
         self.assertEqual(scenario26["completion"], "verified_probe")
+        self.assertEqual(scenario26["branches_endings"], "verified_probe")
         self.assertIn("captures/run/d6a8_s26_battle_ui_10.png", scenario26["captures"])
         self.assertIn(
             "captures/run/d9f3v4_s26_darklord_reward.png",
@@ -1166,6 +1167,26 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             scenario26["captures"],
         )
         self.assertIn("captures/run/eca0_s26_turn1_actual_50.png", scenario26["captures"])
+        for capture in (
+            "captures/run/3a54_s26_death_entry.png",
+            "captures/run/3a54_s26_death_prep_12.png",
+            "captures/run/3a54_s26_death_arrangement.png",
+            "captures/run/3a54_s26_death_auto.png",
+            "captures/run/3a54_s26_death_opening_11.png",
+            "captures/run/3a54_s26_death_command.png",
+            "captures/run/3a54_s26_death_start_menu.png",
+            "captures/run/3a54_s26_death_event_04.png",
+            "captures/run/3a54_s26_death_event_05.png",
+            "captures/run/3a54_s26_death_event_06.png",
+            "captures/run/3a54_s26_death_event_07.png",
+        ):
+            self.assertIn(capture, scenario26["captures"])
+        self.assertIn("trigger at 0x1B207C", scenario26["note"])
+        self.assertIn("handler 0x1B2266", scenario26["note"])
+        self.assertIn("text pointers 0x1B2EE4", scenario26["note"])
+        self.assertIn("것부/터", scenario26["note"])
+        self.assertIn("AA6B", scenario26["note"])
+        self.assertIn("젠장! 여기까지인가…", scenario26["note"])
         self.assertEqual(scenario27["preparation"], "verified_current")
         self.assertEqual(scenario27["conditions"], "verified_current")
         self.assertEqual(scenario27["opening_events"], "verified_current")

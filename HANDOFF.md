@@ -9317,3 +9317,42 @@ contains 57 safe syllables as documented below and in
   completion and the sole declared defeat ending are live-covered, so
   Scenario 25 `branches_endings` is `verified_probe`. Later ordinary turns
   remain separate pending coverage.
+
+### Scenario 26 Protagonist-Death Branch (2026-07-25)
+
+- The Japanese defeat trigger is `0x1B207C`
+  (`07 02 01 00 00 1B 22 66`). It dispatches handler `0x1B2266`, whose three
+  dialogue pointers are `0x1B2EE4`, `0x1B2EFC`, and `0x1B2F54`, then executes
+  the original GAME OVER sequence. The visible conditions declare no other
+  defeat branch.
+- `tools/build_scenario26_clear_probe_rom.py --protagonist-death` preserves
+  all ten player deployments, all ten fixed records, identities, classes,
+  levels, combat values, coordinates, mercenaries, and source event bytes.
+  Its guarded Start wrapper marks only runtime player group 0 defeated.
+  Production checksum `4385` has SHA-256
+  `bed37719d9e48e70efa6bc926be7a5c77723e32cc91acb56caf4ef42672d8d5f`.
+  The accepted diagnostic checksum is `3A54`, SHA-256
+  `9bc579a13aaa63a962cdd2f96813d17266ff96c2a984a7c8ef563dbba15896ea`.
+- The first `AAC1` playback exposed an overlooked automatic wrap as
+  `것부` / `터`. Adding an explicit line break produced `AA6B` and fixed the
+  word, but left the final period alone on a fourth line. Do not repeat either
+  version. The accepted source is
+  `잘 싸웠다. 하지만 끝이다.\n제국에 맞선 것부터 무모했군`; only the
+  space-tight final period was removed.
+- Fresh isolated Xvfb playback retained the route, all ten preparation panels,
+  automatic deployment, opening, clean `엘윈/파이터` command panel, and
+  Korean Start menu. Normal turn end rendered `엘윈: 뭐?! 말도 안 돼!`,
+  the corrected Egbert page, `엘윈: 젠장! 여기까지인가…`, and GAME OVER
+  without Japanese residue, broken names/classes/UI glyphs, reset, or freeze.
+- Representative evidence is `3a54_s26_death_entry.png`,
+  `3a54_s26_death_prep_12.png`, `3a54_s26_death_arrangement.png`,
+  `3a54_s26_death_auto.png`, `3a54_s26_death_opening_11.png`,
+  `3a54_s26_death_command.png`, `3a54_s26_death_start_menu.png`,
+  `3a54_s26_death_event_04.png`, `3a54_s26_death_event_05.png`,
+  `3a54_s26_death_event_06.png`, and `3a54_s26_death_event_07.png`.
+  Normal completion and the sole declared defeat ending are live-covered, so
+  Scenario 26 `branches_endings` is `verified_probe`.
+- Removing the final glyph moved every current production-derived checksum by
+  `-0x706D`; current probe baselines and the generated item-shop report were
+  regenerated. Historical accepted-capture checksums and source-address locks
+  remain unchanged.

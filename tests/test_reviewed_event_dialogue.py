@@ -348,6 +348,10 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             rows["0x1B3538"],
             "다시… 태어날 수 있다면… 한 번 더… 스승님과…",
         )
+        self.assertEqual(
+            rows["0x1B2EFC"],
+            "잘 싸웠다. 하지만 끝이다.\n제국에 맞선 것부터 무모했군",
+        )
         self.assertNotIn("대륙 규모", rows["0x1B2A48"])
         self.assertNotIn("저승", rows["0x1B34FC"])
         self.assertNotIn("스승님께", rows["0x1B3538"])
@@ -819,7 +823,10 @@ class ReviewedEventDialogueTests(unittest.TestCase):
                 for row in primary[69:]
             )
         )
-        self.assertTrue(all("\n" not in row["text"] for row in rows))
+        self.assertEqual(
+            [row["address"] for row in rows if "\n" in row["text"]],
+            ["0x1B2EFC"],
+        )
 
     def test_scenario_27_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 27]
