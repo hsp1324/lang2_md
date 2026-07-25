@@ -9418,3 +9418,19 @@ contains 57 safe syllables as documented below and in
   `5a95_s29_death_event_01.png` through `_05.png`. Normal completion and the
   sole declared defeat ending are now live-covered, so Scenario 29
   `branches_endings` is `verified_probe`.
+
+### Scenario 30 Defeat Evidence Promotion (2026-07-25)
+
+- Do not build or replay another protagonist-death derivative solely for
+  branch accounting. Production `ECA0` already reached Elwin's defeat through
+  normal first-turn enemy movement.
+- Source trigger `0x1B76A2` (`06 02 01 00 00 1B 79 1A`) dispatches handler
+  `0x1B791A`, which calls Elwin text `0x1B7DA2`, executes `13 FF 15 FF`, and
+  reaches GAME OVER. Tests now lock both source byte streams and the text
+  pointer in `tools/build_scenario30_clear_probe_rom.py`.
+- `captures/run/eca0_s30_turn1_16.png` cleanly renders
+  `엘윈: 젠장! 왜 이런 곳에…`; `_17.png` is GAME OVER. The existing
+  `8386` completion run also covered visible `미나/메이지`, transformed
+  `미나/세인트`, all three item awards and discard UI, result, save, route,
+  and Scenario 23 return. Source audit found no second defeat condition.
+  Scenario 30 `branches_endings` is therefore `verified_current`.

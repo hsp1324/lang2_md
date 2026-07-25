@@ -1290,6 +1290,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario30["turn_events"], "verified_current")
         self.assertEqual(scenario30["battle_ui"], "verified_probe")
         self.assertEqual(scenario30["completion"], "verified_probe")
+        self.assertEqual(scenario30["branches_endings"], "verified_current")
         for capture in (
             "captures/run/212a_s30_arrangement_current2.png",
             "captures/run/212a_s30_after_deploy.png",
@@ -1301,6 +1302,11 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/8386_s30_return_s23.png",
         ):
             self.assertIn(capture, scenario30["captures"])
+        self.assertIn("trigger is 0x1B76A2", scenario30["note"])
+        self.assertIn("handler 0x1B791A", scenario30["note"])
+        self.assertIn("text 0x1B7DA2", scenario30["note"])
+        self.assertIn("eca0_s30_turn1_16.png", scenario30["note"])
+        self.assertIn("eca0_s30_turn1_17.png", scenario30["note"])
         self.assertIn("completion derivative 8386", scenario30["note"])
         self.assertIn("미나/메이지", scenario30["note"])
         self.assertIn("미나/세인트", scenario30["note"])

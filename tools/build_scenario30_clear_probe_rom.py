@@ -41,6 +41,15 @@ GREAT_DRAGON_RECORD_INDEX = 0
 VISIBLE_WITCH_RECORD_INDEX = 9
 HIDDEN_WITCH_RECORD_INDEX = 10
 COMPLETION_TARGET_RECORD_INDEX = VISIBLE_WITCH_RECORD_INDEX
+PROTAGONIST_DEATH_TRIGGER = 0x1B76A2
+PROTAGONIST_DEATH_TRIGGER_BYTES = bytes.fromhex(
+    "06 02 01 00 00 1B 79 1A"
+)
+PROTAGONIST_DEATH_EVENT = 0x1B791A
+PROTAGONIST_DEATH_EVENT_BYTES = bytes.fromhex(
+    "02 01 02 01 00 1B 7D A2 13 FF 15 FF FF FF"
+)
+PROTAGONIST_DEATH_TEXT = 0x1B7DA2
 PROBE_AT = 0
 PROBE_DF = 0
 START_MENU_ENTRY = 0x022C1E
@@ -125,6 +134,24 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             raise ValueError(
                 f"input Scenario 30 fixed record {index} differs from Japanese source"
             )
+    for label, offset, expected_bytes in (
+        (
+            "protagonist-death trigger",
+            PROTAGONIST_DEATH_TRIGGER,
+            PROTAGONIST_DEATH_TRIGGER_BYTES,
+        ),
+        (
+            "protagonist-death event",
+            PROTAGONIST_DEATH_EVENT,
+            PROTAGONIST_DEATH_EVENT_BYTES,
+        ),
+    ):
+        end = offset + len(expected_bytes)
+        for rom_label, data in (("Japanese", source), ("input", probe)):
+            if data[offset:end] != expected_bytes:
+                raise ValueError(
+                    f"{rom_label} Scenario 30 {label} changed"
+                )
 
 
 def patch_probe(

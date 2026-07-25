@@ -155,6 +155,28 @@ class Scenario30ClearProbeTests(unittest.TestCase):
             self.source[probe_builder.SCENARIO_HEADER : probe_builder.DEPLOYMENT_TABLE],
         )
 
+    def test_source_protagonist_death_trigger_event_and_text_are_locked(self):
+        self.assertEqual(
+            self.source[
+                probe_builder.PROTAGONIST_DEATH_TRIGGER :
+                probe_builder.PROTAGONIST_DEATH_TRIGGER
+                + len(probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES)
+            ],
+            probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+        )
+        self.assertEqual(
+            self.source[
+                probe_builder.PROTAGONIST_DEATH_EVENT :
+                probe_builder.PROTAGONIST_DEATH_EVENT
+                + len(probe_builder.PROTAGONIST_DEATH_EVENT_BYTES)
+            ],
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(
+            probe_builder.PROTAGONIST_DEATH_TEXT.to_bytes(4, "big"),
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+
     def test_completion_target_changes_only_declared_probe_fields(self):
         data = self.completion_target_patched()
         changed = {
