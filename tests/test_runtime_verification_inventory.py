@@ -1021,6 +1021,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario23["battle_ui"], "verified_probe")
         self.assertEqual(scenario23["turn_events"], "verified_current")
         self.assertEqual(scenario23["completion"], "verified_probe")
+        self.assertEqual(scenario23["branches_endings"], "verified_probe")
         self.assertIn("captures/run/544b_s23_opening_14.png", scenario23["captures"])
         self.assertIn("captures/run/544b_s23_turn1_39.png", scenario23["captures"])
         for capture in (
@@ -1036,6 +1037,26 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             self.assertIn(capture, scenario23["captures"])
         self.assertIn("all stock Scenario 23 enemy records", scenario23["note"])
         self.assertIn("Five one-second animation-cycle captures", scenario23["note"])
+        for capture in (
+            "captures/run/aac1_s23_death_command.png",
+            "captures/run/aac1_s23_death_event_04.png",
+            "captures/run/aac1_s23_death_event_05.png",
+            "captures/run/b905_s23_holy_escape_command.png",
+            "captures/run/b905_s23_holy_escape_event_03.png",
+            "captures/run/b905_s23_holy_escape_event_04.png",
+            "captures/run/b905_s23_holy_escape_event_05.png",
+        ):
+            self.assertIn(capture, scenario23["captures"])
+        self.assertIn("source trigger 0x1AD3D6", scenario23["note"])
+        self.assertIn("spatial trigger 0x1AD6C8", scenario23["note"])
+        self.assertIn("handler 0x1AE5DA", scenario23["note"])
+        self.assertIn("source ending body at 0x1AE5F0", scenario23["note"])
+        self.assertIn("coordinate-only B3ED experiment was rejected", scenario23["note"])
+        self.assertIn("엘윈: 크윽… 여기까지인가…", scenario23["note"])
+        self.assertIn(
+            "레아드: 이제 못 따라올 거다! 랑그릿사도 두렵지 않아!",
+            scenario23["note"],
+        )
         self.assertEqual(scenario24["description"], "verified_current")
         for capture in (
             "captures/run/212a_s24_description_current_01.png",

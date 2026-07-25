@@ -33,6 +33,16 @@ class Scenario23ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def defeat_patched(self, mode: str) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            protagonist_death=mode == "protagonist",
+            holy_rod_escape=mode == "holy_rod_escape",
+        )
+        return data
+
     def allowed_offsets(
         self,
         *,
@@ -350,11 +360,191 @@ class Scenario23ClearProbeTests(unittest.TestCase):
                 completion_target_only=True,
             )
 
+    def test_source_defeat_and_holy_rod_escape_events_are_locked(self):
+        spans = (
+            (
+                probe_builder.PROTAGONIST_DEATH_TRIGGER,
+                probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+                probe_builder.PROTAGONIST_DEATH_EVENT,
+            ),
+            (
+                probe_builder.PROTAGONIST_DEATH_EVENT,
+                probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+                probe_builder.PROTAGONIST_DEATH_TEXT,
+            ),
+            (
+                probe_builder.HOLY_ROD_ESCAPE_TRIGGER,
+                probe_builder.HOLY_ROD_ESCAPE_TRIGGER_BYTES,
+                probe_builder.HOLY_ROD_ESCAPE_EVENT,
+            ),
+            (
+                probe_builder.HOLY_ROD_ESCAPE_EVENT,
+                probe_builder.HOLY_ROD_ESCAPE_EVENT_BYTES,
+                probe_builder.HOLY_ROD_ESCAPE_LAIRD_TEXT,
+            ),
+            (
+                probe_builder.HOLY_ROD_ESCAPE_ENDING,
+                probe_builder.HOLY_ROD_ESCAPE_ENDING_BYTES,
+                probe_builder.HOLY_ROD_ESCAPE_LAIRD_TEXT,
+            ),
+        )
+        for offset, expected, target in spans:
+            with self.subTest(offset=f"0x{offset:06X}"):
+                self.assertEqual(
+                    self.source[offset : offset + len(expected)],
+                    expected,
+                )
+                self.assertIn(target.to_bytes(4, "big"), expected)
+        self.assertIn(
+            probe_builder.HOLY_ROD_ESCAPE_ELWIN_TEXT.to_bytes(4, "big"),
+            probe_builder.HOLY_ROD_ESCAPE_ENDING_BYTES,
+        )
+        self.assertIn(
+            bytes.fromhex("15 FF"),
+            probe_builder.HOLY_ROD_ESCAPE_ENDING_BYTES,
+        )
+
+    def test_defeat_modes_preserve_deployments_and_all_fixed_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        deployment_start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployment_end = deployment_start + len(
+            probe_builder.deployment_bytes(
+                probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+            )
+        )
+        records_end = (
+            layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+        )
+        for mode in ("protagonist", "holy_rod_escape"):
+            with self.subTest(mode=mode):
+                data = self.defeat_patched(mode)
+                self.assertEqual(
+                    data[deployment_start:deployment_end],
+                    self.source[deployment_start:deployment_end],
+                )
+                self.assertEqual(
+                    data[layout.record_list_offset:records_end],
+                    self.source[layout.record_list_offset:records_end],
+                )
+
+    def test_defeat_modes_change_only_declared_bridge_wrapper_and_checksum(self):
+        wrapper = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.PROTAGONIST_RUNTIME_GROUP
+        )
+        common_allowed = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.COMPLETION_HP_WRAPPER,
+                probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+            ),
+        }
+        for mode in ("protagonist", "holy_rod_escape"):
+            with self.subTest(mode=mode):
+                data = self.defeat_patched(mode)
+                allowed = set(common_allowed)
+                if mode == "holy_rod_escape":
+                    allowed.update(
+                        range(
+                            probe_builder.PROTAGONIST_DEATH_TRIGGER + 4,
+                            probe_builder.PROTAGONIST_DEATH_TRIGGER + 8,
+                        )
+                    )
+                changed = {
+                    offset
+                    for offset, (before, after) in enumerate(
+                        zip(self.production, data)
+                    )
+                    if before != after
+                }
+                self.assertLessEqual(changed, allowed)
+
+    def test_defeat_wrapper_targets_only_runtime_elwin(self):
+        code = probe_builder.mark_runtime_group_defeated_code(
+            probe_builder.PROTAGONIST_RUNTIME_GROUP
+        )
+        elwin_record = probe_builder.RUNTIME_GROUP_BASE
+        for offset in (
+            probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET,
+            probe_builder.RUNTIME_HP_OFFSET,
+            probe_builder.RUNTIME_X_OFFSET,
+        ):
+            self.assertIn((elwin_record + offset).to_bytes(4, "big"), code)
+        self.assertTrue(
+            code.endswith(
+                bytes.fromhex("41 F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big")
+                + bytes.fromhex("4E F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big")
+            )
+        )
+
+    def test_holy_rod_bridge_changes_only_protagonist_dispatch_target(self):
+        data = self.defeat_patched("holy_rod_escape")
+        pointer = probe_builder.PROTAGONIST_DEATH_TRIGGER + 4
+        self.assertEqual(
+            data[pointer : pointer + 4],
+            probe_builder.HOLY_ROD_ESCAPE_ENDING.to_bytes(4, "big"),
+        )
+        for offset, expected in (
+            (
+                probe_builder.HOLY_ROD_ESCAPE_TRIGGER,
+                probe_builder.HOLY_ROD_ESCAPE_TRIGGER_BYTES,
+            ),
+            (
+                probe_builder.HOLY_ROD_ESCAPE_EVENT,
+                probe_builder.HOLY_ROD_ESCAPE_EVENT_BYTES,
+            ),
+            (
+                probe_builder.HOLY_ROD_ESCAPE_ENDING,
+                probe_builder.HOLY_ROD_ESCAPE_ENDING_BYTES,
+            ),
+        ):
+            self.assertEqual(data[offset : offset + len(expected)], expected)
+
+    def test_defeat_mode_checksums_are_locked(self):
+        for mode, checksum in (
+            ("protagonist", 0xAAC1),
+            ("holy_rod_escape", 0xB905),
+        ):
+            with self.subTest(mode=mode):
+                data = self.defeat_patched(mode)
+                self.assertEqual(
+                    int.from_bytes(data[0x18E:0x190], "big"),
+                    checksum,
+                )
+
+    def test_defeat_modes_conflict_with_other_diagnostics(self):
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                protagonist_death=True,
+                holy_rod_escape=True,
+            )
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                holy_rod_escape=True,
+                completion_layout=True,
+            )
+
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         damaged[layout.records_offset] ^= 1
         with self.assertRaisesRegex(ValueError, "fixed record 0"):
+            probe_builder.patch_probe(damaged, self.source)
+
+    def test_rejects_changed_defeat_event(self):
+        damaged = bytearray(self.production)
+        damaged[probe_builder.HOLY_ROD_ESCAPE_EVENT] ^= 1
+        with self.assertRaisesRegex(ValueError, "Holy Rod escape event"):
             probe_builder.patch_probe(damaged, self.source)
 
 

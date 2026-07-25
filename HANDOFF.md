@@ -9220,3 +9220,45 @@ contains 57 safe syllables as documented below and in
   Neither path showed Japanese residue, broken names/classes/UI glyphs,
   reset, or freeze. Normal completion and both declared defeat endings are
   live-covered, so Scenario 22 `branches_endings` is `verified_probe`.
+
+### Scenario 23 Defeat Branches (2026-07-25)
+
+- The Japanese protagonist-death trigger is `0x1AD3D6`
+  (`06 02 01 00 00 1A D7 AC`). It dispatches handler `0x1AD7AC`, text
+  `0x1AEB14`, and GAME OVER. `--protagonist-death` preserves all nine player
+  deployments, all eleven fixed records, and the source event bytes; its
+  guarded Start wrapper marks only runtime player group 0 defeated. Production
+  `B3F2` produces checksum `AAC1`, SHA-256
+  `14d2d17ba1d407fc0ad5b27a4926a71cdbf6f081991d8ef988666ef93815e288`.
+- The source Holy Rod enemy-escape trigger at `0x1AD6C8` uses bounds
+  X `21..26` / Y `1..3` and handler `0x1AE5DA`. The handler tests Laird,
+  falls through the ending body at `0x1AE5F0`, renders text pointers
+  `0x1AF08C` and `0x1AF0E0`, and executes GAME OVER. Merely changing Laird's
+  fixed coordinate to the escape area in rejected checksum `B3ED` did not
+  activate the branch; the stock path also requires the Holy Rod
+  carrier/escape-AI state.
+- `--holy-rod-escape` is therefore an explicit diagnostic bridge, not a claim
+  of natural carrier AI playback. It changes only the protagonist-death
+  dispatch pointer to the untouched source ending body `0x1AE5F0`, then uses
+  the same group-0 Start wrapper. The stock spatial trigger, full handler,
+  Laird/Elwin dialogue pointers, and ending bytes remain unchanged and are
+  regression-locked. Checksum `B905` has SHA-256
+  `bef0539f06c69573b19ab8275bc884ef04d965b80bc8570998347e655dd3468f`.
+  A discarded `B90D` experiment entered at `0x1AE5F8` and therefore rendered
+  only Elwin's second line; do not repeat it.
+- Both accepted isolated runs began from a valid Scenario 23 manual slot and
+  traversed the route, preparation, automatic deployment, opening, clean
+  `엘윈/로드` command panel, and Korean Start menu. Normal turn end under
+  `AAC1` rendered `엘윈: 크윽… 여기까지인가…` and GAME OVER. `B905`
+  first retained the ordinary Laird turn dialogue, then rendered
+  `레아드: 이제 못 따라올 거다! 랑그릿사도 두렵지 않아!`,
+  `엘윈: 제길! 조금만 더 빨랐으면…`, and GAME OVER. No Japanese residue,
+  broken name/class/UI glyph, reset, or freeze appeared.
+- Representative evidence is `aac1_s23_death_command.png`,
+  `aac1_s23_death_event_04.png`, `aac1_s23_death_event_05.png`,
+  `b905_s23_holy_escape_command.png`, `b905_s23_holy_escape_event_03.png`,
+  `b905_s23_holy_escape_event_04.png`, and
+  `b905_s23_holy_escape_event_05.png`. Normal completion and both declared
+  defeat endings are now live-covered through documented probes, so Scenario
+  23 `branches_endings` is `verified_probe`. Natural Holy Rod carrier AI
+  playback and later ordinary turns remain separate pending coverage.
