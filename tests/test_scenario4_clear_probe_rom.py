@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import unittest
 
@@ -18,6 +19,23 @@ class Scenario4ClearProbeRomTests(unittest.TestCase):
     def patched(self) -> bytearray:
         data = bytearray(self.built)
         probe_builder.patch_probe(data, self.source)
+        return data
+
+    def death_patched(
+        self,
+        *,
+        liana_death: bool = False,
+        priest_annihilation: bool = False,
+        protagonist_death: bool = False,
+    ) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_death_probe(
+            data,
+            self.source,
+            liana_death=liana_death,
+            priest_annihilation=priest_annihilation,
+            protagonist_death=protagonist_death,
+        )
         return data
 
     def test_probe_only_changes_verified_fields_and_checksum(self):
@@ -225,6 +243,207 @@ class Scenario4ClearProbeRomTests(unittest.TestCase):
         data[probe_builder.MASKED_KNIGHT_RECORD_OFFSET] ^= 1
         with self.assertRaisesRegex(ValueError, "masked-knight record differs"):
             probe_builder.patch_masked_knight_status_probe(data, self.source)
+
+    def test_source_owned_defeat_events_are_locked(self):
+        for data in (self.source, self.built):
+            for offset, expected in (
+                (
+                    probe_builder.PROTAGONIST_DEATH_TRIGGER,
+                    probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+                ),
+                (
+                    probe_builder.PROTAGONIST_DEATH_HANDLER,
+                    probe_builder.PROTAGONIST_DEATH_HANDLER_BYTES,
+                ),
+                (
+                    probe_builder.LIANA_DEATH_TRIGGER,
+                    probe_builder.LIANA_DEATH_TRIGGER_BYTES,
+                ),
+                (
+                    probe_builder.LIANA_DEATH_HANDLER,
+                    probe_builder.LIANA_DEATH_HANDLER_BYTES,
+                ),
+                (
+                    probe_builder.PRIEST_ANNIHILATION_TRIGGER,
+                    probe_builder.PRIEST_ANNIHILATION_TRIGGER_BYTES,
+                ),
+                (
+                    probe_builder.PRIEST_ANNIHILATION_HANDLER,
+                    probe_builder.PRIEST_ANNIHILATION_HANDLER_BYTES,
+                ),
+            ):
+                self.assertEqual(data[offset : offset + len(expected)], expected)
+        self.assertIn(
+            probe_builder.PROTAGONIST_DEATH_TEXT.to_bytes(3, "big"),
+            probe_builder.PROTAGONIST_DEATH_HANDLER_BYTES,
+        )
+        for address in probe_builder.LIANA_DEATH_TEXTS:
+            self.assertIn(
+                address.to_bytes(3, "big"),
+                probe_builder.LIANA_DEATH_HANDLER_BYTES,
+            )
+        for address in probe_builder.PRIEST_ANNIHILATION_DIRECT_TEXTS:
+            self.assertIn(
+                address.to_bytes(3, "big"),
+                probe_builder.PRIEST_ANNIHILATION_HANDLER_BYTES,
+            )
+
+    def test_priest_annihilation_continuation_pages_are_translated(self):
+        translations = json.loads(
+            (ROOT / "localization/event_dialogue_ko.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        scenario_addresses = {
+            int(row["address"], 0)
+            for row in translations["scenarios"]["4"]
+        }
+        self.assertLessEqual(
+            set(probe_builder.PRIEST_ANNIHILATION_PHYSICAL_TEXTS),
+            scenario_addresses,
+        )
+        for address in probe_builder.PRIEST_ANNIHILATION_PHYSICAL_TEXTS:
+            builder.event_page_layout(self.source, address)
+        for address, continuation in (
+            probe_builder.PRIEST_ANNIHILATION_CONTINUATIONS.items()
+        ):
+            capacity, terminator, _controls = builder.event_page_layout(
+                self.source,
+                address,
+            )
+            self.assertEqual(terminator, 0xFFFD)
+            self.assertEqual(address + capacity * 2 + 2, continuation)
+
+    def test_death_modes_preserve_all_records_and_deployments(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        record_start = layout.records_offset
+        record_end = record_start + layout.record_count * FIXED_RECORD_SIZE
+        deployment_start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployment_end = (
+            deployment_start + probe_builder.PLAYER_DEPLOYMENT_COUNT * 4
+        )
+        for mode in (
+            {"protagonist_death": True},
+            {"liana_death": True},
+            {"priest_annihilation": True},
+        ):
+            data = self.death_patched(**mode)
+            self.assertEqual(
+                data[record_start:record_end],
+                self.source[record_start:record_end],
+            )
+            self.assertEqual(
+                data[deployment_start:deployment_end],
+                self.source[deployment_start:deployment_end],
+            )
+
+    def test_declared_runtime_groups_match_source_identities(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        liana_record = (
+            probe_builder.LIANA_RUNTIME_GROUP
+            - probe_builder.PLAYER_DEPLOYMENT_COUNT
+        )
+        liana_base = (
+            layout.records_offset + liana_record * FIXED_RECORD_SIZE
+        )
+        self.assertEqual(
+            self.source[liana_base + FIELD_OFFSETS["name_id"]],
+            0x02,
+        )
+        priest_ids = []
+        for group in probe_builder.PRIEST_RUNTIME_GROUPS:
+            fixed_record = group - probe_builder.PLAYER_DEPLOYMENT_COUNT
+            base = layout.records_offset + fixed_record * FIXED_RECORD_SIZE
+            priest_ids.append(
+                self.source[base + FIELD_OFFSETS["name_id"]]
+            )
+        self.assertEqual(priest_ids, [0x70, 0x71, 0x1F])
+
+    def test_death_wrappers_target_only_declared_runtime_groups(self):
+        modes = (
+            (
+                (probe_builder.PROTAGONIST_RUNTIME_GROUP,),
+                {probe_builder.PROTAGONIST_RUNTIME_GROUP},
+            ),
+            (
+                (probe_builder.LIANA_RUNTIME_GROUP,),
+                {probe_builder.LIANA_RUNTIME_GROUP},
+            ),
+            (
+                probe_builder.PRIEST_RUNTIME_GROUPS,
+                set(probe_builder.PRIEST_RUNTIME_GROUPS),
+            ),
+        )
+        for groups, expected_groups in modes:
+            code = probe_builder.runtime_death_wrapper_code(groups)
+            for group in range(14):
+                target = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + group * probe_builder.RUNTIME_GROUP_SIZE
+                )
+                hp_address = (
+                    target + probe_builder.RUNTIME_HP_OFFSET
+                ).to_bytes(4, "big")
+                if group in expected_groups:
+                    self.assertIn(hp_address, code)
+                else:
+                    self.assertNotIn(hp_address, code)
+            self.assertEqual(
+                code[-6:],
+                bytes.fromhex("4E F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+            )
+
+    def test_death_modes_change_only_wrapper_operand_and_checksum(self):
+        modes = (
+            (
+                {"protagonist_death": True},
+                (probe_builder.PROTAGONIST_RUNTIME_GROUP,),
+            ),
+            (
+                {"liana_death": True},
+                (probe_builder.LIANA_RUNTIME_GROUP,),
+            ),
+            (
+                {"priest_annihilation": True},
+                probe_builder.PRIEST_RUNTIME_GROUPS,
+            ),
+        )
+        for mode, groups in modes:
+            data = self.death_patched(**mode)
+            wrapper = probe_builder.runtime_death_wrapper_code(groups)
+            allowed = {
+                0x18E,
+                0x18F,
+                *range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                ),
+                *range(
+                    probe_builder.RUNTIME_WRAPPER,
+                    probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                ),
+            }
+            changed = {
+                offset
+                for offset, (before, after) in enumerate(zip(self.built, data))
+                if before != after
+            }
+            self.assertLessEqual(changed, allowed)
+
+    def test_death_modes_require_exactly_one_selection(self):
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_death_probe(
+                bytearray(self.built),
+                self.source,
+            )
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_death_probe(
+                bytearray(self.built),
+                self.source,
+                liana_death=True,
+                protagonist_death=True,
+            )
 
 
 if __name__ == "__main__":

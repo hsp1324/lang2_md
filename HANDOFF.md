@@ -9699,3 +9699,60 @@ contains 57 safe syllables as documented below and in
   B2BD/B2BDv2 coverage already proves ordinary completion. Normal completion,
   protagonist defeat, and both internal Liana-death variants are now
   live-covered, so Scenario 3 `branches_endings` is `verified_probe`.
+
+### Scenario 4 Result Branches (2026-07-25)
+
+- The Japanese event block is `0x189BA6..0x18C056`. The protagonist-death
+  trigger at `0x189C8A` dispatches handler `0x189F52` and Elwin text
+  `0x18AD96`. The Liana-death trigger at `0x189CA2` dispatches handler
+  `0x189F92` and texts `0x18AE56`/`0x18AE6C`. The priest-annihilation
+  trigger at `0x189CDE` checks name IDs `70, 71, 1F`, dispatches handler
+  `0x18A08A`, and reaches direct pages `0x18B11A`/`0x18B194` plus the
+  `FFFD` continuation at `0x18B156`. Tests lock every trigger/handler byte,
+  physical continuation, and reviewed translation address against the
+  Japanese source and production ROM.
+- Scenario 4 has three player deployments at `(7,38)`, `(5,40)`, and
+  `(9,40)`, followed by eleven fixed records. Runtime records are 0x60 bytes
+  at work RAM `0xFFFF603C`: group 0 is Elwin, group 3 is Liana, and groups
+  4..6 are the two Shinkan records and one Priest record.
+  `tools/build_scenario4_clear_probe_rom.py` now exposes mutually exclusive
+  `--mode protagonist-death`, `liana-death`, and `priest-annihilation`.
+  Every mode preserves all deployments, all eleven fixed records, and source
+  event bytes. Its guarded Start wrapper at `0x3FEF00` modifies only the
+  declared live groups, then returns to stock handler `0x022C1E`.
+- Production-derived checksum `5A3F` marks only Elwin defeated. Fresh
+  isolated playback retained the Scenario 4 route, preparation, automatic
+  deployment, opening, `엘윈/파이터` command panel, and Korean Start menu,
+  then rendered `큭… 이럴 수가…` and GAME OVER. Representative evidence is
+  `5a3f_s04_protagonist_arrangement_retry2.png`,
+  `5a3f_s04_protagonist_opening_retry_33.png`,
+  `5a3f_s04_protagonist_start_menu.png`, and
+  `5a3f_s04_protagonist_result_15.png` through `_16.png`.
+- Checksum `5D9F` marks only Liana defeated. It retained the same ordinary
+  surfaces, then rendered `리아나: 아아… 엘윈…`,
+  `엘윈: 설마, 이런 일이…`, and GAME OVER. Representative evidence is
+  `5d9f_s04_liana_retry2_prep_23.png`,
+  `5d9f_s04_liana_arrangement_menu.png`,
+  `5d9f_s04_liana_retry2_opening_33.png`, and
+  `5d9f_s04_liana_retry2_result_5.png` through `_7.png`.
+- Checksum `000F` marks only priest-side runtime groups 4..6 defeated. It
+  traversed every individual Shinkan/Priest loss reaction, Morgan's
+  `히히히! 사람을 죽이는 건 즐겁군.` and
+  `이제 석판은 우리 것이다. 그럼 이만.`, Elwin's `이런 수가…`, and
+  GAME OVER. Representative evidence is
+  `000f_s04_priest_prep_23.png`, `000f_s04_priest_opening_32.png`, and
+  `000f_s04_priest_result_04.png` through `_12.png`.
+- Do not treat `5d9f_s04_liana_result_05.png` from the first fast pass as an
+  empty-page bug. It was captured only 0.9 seconds after the portrait change,
+  before typewriter output began. A clean 2.5-second replay produced the full
+  text in `5d9f_s04_liana_retry2_result_6.png`. Also do not reuse the first
+  preparation-navigation captures: an extra Down entered mercenary hiring.
+  The detected preparation screen already has the cursor on `용병고용`; from
+  there use three held Down presses to `지휘관배치`.
+- All accepted paths showed clean names, classes, status UI, and dialogue
+  without Japanese residue, clipping, unexpected reset, or freeze. Existing
+  `79DD` coverage proves ordinary completion. Normal completion and all three
+  declared defeat gates are now live-covered, so Scenario 4
+  `branches_endings` is `verified_probe`. The second `시, 시카앗` combat
+  condition is a separate conditional combat event and remains explicitly
+  outside this result-gate claim.
