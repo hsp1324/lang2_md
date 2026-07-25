@@ -10103,3 +10103,35 @@ contains 57 safe syllables as documented below and in
 - Scenario 15 `turn_events` is now `verified_probe`. The runtime matrix is
   246/248 (99.2%); only Scenario 16 and 19 `turn_events` remain below a
   verified state.
+
+### Scenario 16 Scheduled Turn Events (2026-07-26)
+
+- The Japanese Scenario 16 player-name table at `0x181D00`, all eight player
+  deployments at `0x181D12`, the event pointer table at `0x1A0AA6`, and the
+  scheduled-turn table at `0x1A0C3C` are source-locked. The scheduled table
+  contains turn-1 entry, turn-3 end, and turn-8 end records targeting
+  `0x1A0C5C`, `0x1A0C86`, and `0x1A0C8C`. Tests lock the exact table bytes,
+  every handler hash, and the nine referenced physical text pointers.
+- `tools/build_scenario16_clear_probe_rom.py --turn-event {3,8}` preserves all
+  eight player deployments, all ten fixed records, every scheduled record,
+  and every source handler. Its guarded Start wrapper protects only runtime
+  player groups `0..7` with DF 99 and raises `$FFFFA5F1` only to 3 or 8. It
+  does not change any enemy/NPC runtime group.
+- Accepted checksum `9307`, SHA-256
+  `71e94c0a5dde27bef0ab76dbb8b49bd458f66c08fdcebc37ce04113d25b43f5d`,
+  traverses the stock state-only turn-3 end handler and reaches TURN 4.
+  `9307_s16_turn4_command.png` proves the valid command-menu return without
+  reset, freeze, or an unexpected defeat.
+- Accepted checksum `9311`, SHA-256
+  `01ef1120ee4725f4a43888e8b1be593ccb7a23d37b0c44d70d461dc09f96e1a1`,
+  renders all five stock turn-8 physical pages: Lana offers to help Leon,
+  Leon rejects her help, Lana invokes his debt, Leon relents, and Elwin
+  resolves to break through. Evidence is
+  `9311_s16_turn8_after_end.png` and `9311_s16_turn8_02.png` through `_05.png`.
+  The ordinary enemy phase then completes normally; the TURN 9 banner and
+  `9311_s16_turn9_command_confirmed.png` prove the clean Elwin/Fighter command
+  panel return.
+- No accepted page shows Japanese residue, clipping, broken
+  name/class/status glyphs, unexpected GAME OVER, reset, or freeze. Scenario
+  16 `turn_events` is now `verified_probe`. The runtime matrix is 247/248
+  (99.6%); only Scenario 19 `turn_events` remains below a verified state.

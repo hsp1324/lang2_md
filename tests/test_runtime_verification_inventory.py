@@ -859,7 +859,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario16["preparation"], "verified_current")
         self.assertEqual(scenario16["opening_events"], "verified_current")
         self.assertEqual(scenario16["battle_ui"], "verified_probe")
-        self.assertEqual(scenario16["turn_events"], "progressed_current")
+        self.assertEqual(scenario16["turn_events"], "verified_probe")
         self.assertEqual(scenario16["completion"], "verified_probe")
         self.assertEqual(scenario16["branches_endings"], "verified_probe")
         for capture in (
@@ -870,11 +870,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/f7ab_s16_death_start_menu.png",
             "captures/run/f7ab_s16_death_event_00.png",
             "captures/run/f7ab_s16_death_event_01.png",
+            "captures/run/9307_s16_turn4_command.png",
+            "captures/run/9311_s16_turn8_after_end.png",
+            "captures/run/9311_s16_turn8_02.png",
+            "captures/run/9311_s16_turn8_03.png",
+            "captures/run/9311_s16_turn8_04.png",
+            "captures/run/9311_s16_turn8_05.png",
+            "captures/run/9311_s16_turn9_command_confirmed.png",
         ):
             self.assertIn(capture, scenario16["captures"])
         self.assertIn("protagonist-death diagnostic F7AB", scenario16["note"])
         self.assertIn("handler bytes 13 FF", scenario16["note"])
         self.assertIn("으윽… 여기까지인가…", scenario16["note"])
+        self.assertIn("Production 653C source-preserving turn diagnostics", scenario16["note"])
+        self.assertIn("Checksums 9307 and 9311", scenario16["note"])
+        self.assertIn("Scenario 16 turn_events is now verified_probe", scenario16["note"])
         self.assertEqual(scenario17["description"], "verified_current")
         for capture in (
             "captures/run/b0e8_s17_description_final_01.png",
