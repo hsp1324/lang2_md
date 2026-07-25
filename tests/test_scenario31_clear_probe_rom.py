@@ -15,6 +15,9 @@ class Scenario31ClearProbeTests(unittest.TestCase):
         *,
         compact_layout: bool = False,
         completion_layout: bool = False,
+        branch_target: int | None = None,
+        player_branch_target: int | None = None,
+        protect_protagonist: bool = False,
     ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
@@ -22,6 +25,9 @@ class Scenario31ClearProbeTests(unittest.TestCase):
             self.source,
             compact_layout=compact_layout,
             completion_layout=completion_layout,
+            branch_target=branch_target,
+            player_branch_target=player_branch_target,
+            protect_protagonist=protect_protagonist,
         )
         return data
 
@@ -279,6 +285,333 @@ class Scenario31ClearProbeTests(unittest.TestCase):
         self.assertEqual(data[active + FIELD_OFFSETS["class_id"]], 0x4E)
         self.assertFalse(bool(data[active] & 0x80))
 
+    def test_branch_targets_preserve_all_original_fixed_data(self):
+        source_layout = scenario_layout(
+            self.source, probe_builder.SCENARIO_NUMBER
+        )
+        for target_index in probe_builder.BRANCH_TARGET_INDICES:
+            with self.subTest(target_index=target_index):
+                data = self.patched(branch_target=target_index)
+                probe_layout = scenario_layout(
+                    data, probe_builder.SCENARIO_NUMBER
+                )
+                self.assertEqual(
+                    probe_layout,
+                    source_layout,
+                )
+                self.assertEqual(
+                    data[
+                        source_layout.record_list_offset :
+                        source_layout.records_offset
+                        + source_layout.record_count * FIXED_RECORD_SIZE
+                    ],
+                    self.source[
+                        source_layout.record_list_offset :
+                        source_layout.records_offset
+                        + source_layout.record_count * FIXED_RECORD_SIZE
+                    ],
+                )
+
+    def test_branch_wrapper_targets_only_selected_runtime_record(self):
+        for target_index in probe_builder.BRANCH_TARGET_INDICES:
+            code = probe_builder.branch_death_wrapper_code(target_index)
+            target_group = (
+                probe_builder.FIRST_FIXED_RUNTIME_GROUP + target_index
+            )
+            target = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + target_group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("00 39 00 80")
+                + (
+                    target + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                ).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            for index in probe_builder.ALL_FIXED_RECORD_INDICES:
+                if index == target_index:
+                    continue
+                record = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + (
+                        probe_builder.FIRST_FIXED_RUNTIME_GROUP + index
+                    )
+                    * probe_builder.RUNTIME_GROUP_SIZE
+                )
+                self.assertNotIn(
+                    bytes.fromhex("00 39 00 80")
+                    + (
+                        record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                    ).to_bytes(4, "big"),
+                    code,
+                )
+                self.assertNotIn(
+                    bytes.fromhex("13 FC 00 00")
+                    + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(
+                        4, "big"
+                    ),
+                    code,
+                )
+        target_eight = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + (
+                probe_builder.FIRST_FIXED_RUNTIME_GROUP + 8
+            )
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        runtime_name_write = (
+            bytes.fromhex("13 FC 00 66")
+            + (
+                target_eight + probe_builder.RUNTIME_NAME_OFFSET
+            ).to_bytes(4, "big")
+        )
+        self.assertIn(
+            runtime_name_write,
+            probe_builder.branch_death_wrapper_code(8),
+        )
+        for target_index in range(8):
+            self.assertNotIn(
+                runtime_name_write,
+                probe_builder.branch_death_wrapper_code(target_index),
+            )
+        for group in range(probe_builder.PLAYER_DEPLOYMENT_COUNT):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertNotIn(
+                bytes.fromhex("13 FC 00 00")
+                + (
+                    record + probe_builder.RUNTIME_HP_OFFSET
+                ).to_bytes(4, "big"),
+                probe_builder.branch_death_wrapper_code(0),
+            )
+
+    def test_optional_branch_protection_targets_only_player_df(self):
+        protected = probe_builder.branch_death_wrapper_code(
+            8,
+            protect_protagonist=True,
+        )
+        protagonist = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        write = (
+            bytes.fromhex("13 FC 00 FF")
+            + (protagonist + probe_builder.RUNTIME_DF_OFFSET).to_bytes(4, "big")
+        )
+        self.assertIn(write, protected)
+        self.assertNotIn(
+            write,
+            probe_builder.branch_death_wrapper_code(8),
+        )
+        protected_rom = self.patched(
+            branch_target=8,
+            protect_protagonist=True,
+        )
+        self.assertEqual(
+            protected_rom[
+                probe_builder.PROTAGONIST_DEATH_TRIGGER :
+                probe_builder.PROTAGONIST_DEATH_TRIGGER
+                + len(probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES)
+            ],
+            probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+        )
+
+    def test_player_branch_targets_preserve_fixed_data_and_target_one_group(self):
+        source_layout = scenario_layout(
+            self.source, probe_builder.SCENARIO_NUMBER
+        )
+        fixed_start = source_layout.record_list_offset
+        fixed_end = (
+            source_layout.records_offset
+            + source_layout.record_count * FIXED_RECORD_SIZE
+        )
+        for target_group in probe_builder.PLAYER_BRANCH_TARGETS:
+            with self.subTest(target_group=target_group):
+                data = self.patched(player_branch_target=target_group)
+                self.assertEqual(
+                    data[fixed_start:fixed_end],
+                    self.source[fixed_start:fixed_end],
+                )
+                code = probe_builder.player_branch_death_wrapper_code(
+                    target_group
+                )
+                target = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + target_group * probe_builder.RUNTIME_GROUP_SIZE
+                )
+                self.assertIn(
+                    bytes.fromhex("00 39 00 80")
+                    + (
+                        target
+                        + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                    ).to_bytes(4, "big"),
+                    code,
+                )
+                self.assertIn(
+                    bytes.fromhex("13 FC 00 00")
+                    + (
+                        target + probe_builder.RUNTIME_HP_OFFSET
+                    ).to_bytes(4, "big"),
+                    code,
+                )
+                for other_group in probe_builder.PLAYER_BRANCH_TARGETS:
+                    if other_group == target_group:
+                        continue
+                    other = (
+                        probe_builder.RUNTIME_GROUP_BASE
+                        + other_group * probe_builder.RUNTIME_GROUP_SIZE
+                    )
+                    self.assertNotIn(
+                        bytes.fromhex("00 39 00 80")
+                        + (
+                            other
+                            + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                        ).to_bytes(4, "big"),
+                        code,
+                    )
+                    self.assertNotIn(
+                        bytes.fromhex("13 FC 00 00")
+                        + (
+                            other + probe_builder.RUNTIME_HP_OFFSET
+                        ).to_bytes(4, "big"),
+                        code,
+                    )
+
+    def test_preserves_protagonist_death_source_records(self):
+        for offset, expected in (
+            (
+                probe_builder.PROTAGONIST_DEATH_TRIGGER,
+                probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+            ),
+            (
+                probe_builder.PROTAGONIST_DEATH_EVENT,
+                probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+            ),
+        ):
+            end = offset + len(expected)
+            self.assertEqual(self.source[offset:end], expected)
+            self.assertEqual(self.production[offset:end], expected)
+
+    def test_source_branch_triggers_and_handlers_are_locked(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        record_eight = (
+            layout.records_offset
+            + 8 * FIXED_RECORD_SIZE
+            + FIELD_OFFSETS["name_id"]
+        )
+        self.assertEqual(self.source[record_eight], 0x65)
+        self.assertEqual(self.production[record_eight], 0x65)
+        self.assertEqual(probe_builder.BRANCH_EVENT_SPECS[8][0], 0x66)
+        for target_index, (
+            trigger_name_id,
+            trigger_offset,
+            handler_offset,
+            text_offset,
+        ) in probe_builder.BRANCH_EVENT_SPECS.items():
+            with self.subTest(target_index=target_index):
+                trigger = bytes(
+                    (
+                        probe_builder.BRANCH_EVENT_IDS[target_index],
+                        0x02,
+                        trigger_name_id,
+                        0x00,
+                        0x00,
+                    )
+                ) + handler_offset.to_bytes(3, "big")
+                speaker_id, portrait_id = (
+                    probe_builder.BRANCH_HANDLER_SPEAKERS[target_index]
+                )
+                handler_prefix = bytes(
+                    (0x02, speaker_id, portrait_id, 0x01, 0x00)
+                ) + text_offset.to_bytes(3, "big")
+                for data in (self.source, self.production):
+                    self.assertEqual(
+                        data[
+                            trigger_offset : trigger_offset + len(trigger)
+                        ],
+                        trigger,
+                    )
+                    self.assertEqual(
+                        data[
+                            handler_offset :
+                            handler_offset + len(handler_prefix)
+                        ],
+                        handler_prefix,
+                    )
+
+    def test_source_player_branch_triggers_and_handlers_are_locked(self):
+        for target_group, (
+            event_id,
+            name_id,
+            trigger_offset,
+            handler_offset,
+            text_offset,
+            portrait_id,
+        ) in probe_builder.PLAYER_BRANCH_EVENT_SPECS.items():
+            with self.subTest(target_group=target_group):
+                trigger = bytes(
+                    (event_id, 0x02, name_id, 0x00, 0x00)
+                ) + handler_offset.to_bytes(3, "big")
+                handler_prefix = bytes(
+                    (0x02, name_id, portrait_id, 0x01, 0x00)
+                ) + text_offset.to_bytes(3, "big")
+                for data in (self.source, self.production):
+                    self.assertEqual(
+                        data[
+                            trigger_offset : trigger_offset + len(trigger)
+                        ],
+                        trigger,
+                    )
+                    self.assertEqual(
+                        data[
+                            handler_offset :
+                            handler_offset + len(handler_prefix)
+                        ],
+                        handler_prefix,
+                    )
+
+    def test_branch_modes_are_mutually_exclusive_and_validated(self):
+        for kwargs in (
+            {"branch_target": 0, "compact_layout": True},
+            {"branch_target": 0, "completion_layout": True},
+            {"player_branch_target": 1, "compact_layout": True},
+            {"player_branch_target": 1, "completion_layout": True},
+            {"branch_target": 0, "player_branch_target": 1},
+        ):
+            with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+                probe_builder.patch_probe(
+                    bytearray(self.production),
+                    self.source,
+                    **kwargs,
+                )
+        with self.assertRaisesRegex(ValueError, "branch target"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                branch_target=9,
+            )
+        with self.assertRaisesRegex(ValueError, "requires a branch target"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                protect_protagonist=True,
+            )
+        with self.assertRaisesRegex(ValueError, "player branch target"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                player_branch_target=6,
+            )
+
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
@@ -292,13 +625,13 @@ class Scenario31ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0x5D64)
+        self.assertEqual(expected, 0x5D0E)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_optional_layout_checksums_are_current_and_valid(self):
         for data, expected in (
-            (self.patched(compact_layout=True), 0x5E8C),
-            (self.patched(completion_layout=True), 0x9C02),
+            (self.patched(compact_layout=True), 0x5E36),
+            (self.patched(completion_layout=True), 0x9BAC),
         ):
             actual = sum(
                 int.from_bytes(data[offset : offset + 2], "big")
@@ -306,6 +639,30 @@ class Scenario31ClearProbeTests(unittest.TestCase):
             ) & 0xFFFF
             self.assertEqual(actual, expected)
             self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+
+    def test_branch_target_checksums_are_valid(self):
+        for target_index in probe_builder.BRANCH_TARGET_INDICES:
+            with self.subTest(target_index=target_index):
+                data = self.patched(branch_target=target_index)
+                expected = sum(
+                    int.from_bytes(data[offset : offset + 2], "big")
+                    for offset in range(0x200, len(data), 2)
+                ) & 0xFFFF
+                self.assertEqual(
+                    int.from_bytes(data[0x18E:0x190], "big"),
+                    expected,
+                )
+        for target_group in probe_builder.PLAYER_BRANCH_TARGETS:
+            with self.subTest(player_target_group=target_group):
+                data = self.patched(player_branch_target=target_group)
+                expected = sum(
+                    int.from_bytes(data[offset : offset + 2], "big")
+                    for offset in range(0x200, len(data), 2)
+                ) & 0xFFFF
+                self.assertEqual(
+                    int.from_bytes(data[0x18E:0x190], "big"),
+                    expected,
+                )
 
 
 if __name__ == "__main__":

@@ -143,7 +143,14 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             [row["english_record"] for row in primary],
             list(range(1572, 1616)),
         )
-        self.assertTrue(all("\n" not in row["text"] for row in rows))
+        self.assertEqual(
+            [row["address"] for row in rows if "\n" in row["text"]],
+            ["0x1B89E2"],
+        )
+        self.assertEqual(
+            next(row for row in rows if row["address"] == "0x1B89E2")["text"],
+            "죄송합니다…\n퇴각하겠습니다…",
+        )
 
     def test_scenario_29_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 29]

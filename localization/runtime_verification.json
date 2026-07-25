@@ -2105,7 +2105,7 @@
       "battle_ui": "verified_probe",
       "turn_events": "verified_current",
       "completion": "verified_probe",
-      "branches_endings": "pending",
+      "branches_endings": "verified_probe",
       "captures": [
         "captures/run/c7ab_s31_title.png",
         "captures/run/c7ab_s31_body_mid.png",
@@ -2145,9 +2145,30 @@
         "captures/run/78f8_s31_save_slot2_after.png",
         "captures/run/78f8_s31_next_selected.png",
         "captures/run/78f8_s31_next_after.png",
-        "captures/run/78f8_s31_route_after.png"
+        "captures/run/78f8_s31_route_after.png",
+        "captures/run/ecd5_s31_b0_death.png",
+        "captures/run/ed95_s31_b1_death.png",
+        "captures/run/ee55_s31_b2_death.png",
+        "captures/run/ef15_s31_b3_after_endturn_wait.png",
+        "captures/run/efd5_s31_b4_death_wait.png",
+        "captures/run/f095_s31_b5_death.png",
+        "captures/run/f155_s31_b6_death_wait.png",
+        "captures/run/f215_fresh_s31_b7_death.png",
+        "captures/run/6e37_s31_b8_death.png",
+        "captures/run/6e37_s31_b8_postprogress.png",
+        "captures/run/6e37_s31_b8_game_over.png",
+        "captures/run/e615_s31_p1_death.png",
+        "captures/run/e6d5_s31_p2_death.png",
+        "captures/run/e795_s31_p3_death.png",
+        "captures/run/e855_s31_p4_death.png",
+        "captures/run/e915_s31_p5_death.png",
+        "captures/run/ea95_s31_p7_death.png",
+        "captures/run/eb55_s31_p8_death.png",
+        "captures/run/ebbf_s31_p9_wrap_death.png",
+        "captures/run/ebbf_s31_p9_wrap_continued.png",
+        "captures/run/ebbf_s31_p9_wrap_game_over.png"
       ],
-      "note": "Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. A fresh production-derived 3A5A clear-probe run independently reached the arrangement menu, deployed, advanced twenty detected opening frames, and stopped at the command-ready map. Its full-size evidence confirms 엠퍼러 dialogue plus clean 엘윈/파이터 and 발가스/제너럴 status labels. Compact original-class derivatives 3B62 and 3B82 entered actual battles, retained clean 파이터/제너럴 labels, defeated 이멜다 and 데몬로드 through normal attack commands, and rendered their item/death paths without broken combat UI. Completion-only derivative 78F8 temporarily reduces the fixed combat list to a source-copied 베른하르트/엠퍼러 record adjacent to stock Elwin, cancels only the Emperor class AT/DF bases, and leaves the scenario handlers intact. A normal attack reached HP 0, rendered the final-boss and commander aftermath, level/class-change surfaces, 전과보고 with POINT 10700P, a real slot-2 save, 다음 시나리오, and normal-route 전설의 끝 entry without reset or freeze. Hidden-record side reassignment and a single Imelda record did not trigger completion, proving that the final boss death event is required; those failed derivatives are not accepted evidence. Scenario 31 battle_ui and completion are therefore verified_probe, while conditional branches and endings remain pending."
+      "note": "Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음의 탑. Production ECA0 freshly verifies all ten scrolling description frames, the five-commander preparation roster, automatic deployment, six opening dialogue pages, conditions, and the complete no-action first turn without Japanese text, broken glyphs, reset, or freeze. The opening covers 에그베르트, 나라, 베른하르트, 엘윈, and the live class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Ending the first turn without action immediately reaches the expected GAME OVER because the protagonist is defeated. Like the source secret-stage status convention, the description title uses X4 while the battle status bar uses SCENARIO ?4. The patterned block left of 10% in that row is the current terrain thumbnail, not a corrupted 록 glyph. A fresh production-derived 3A5A clear-probe run independently reached the arrangement menu, deployed, advanced twenty detected opening frames, and stopped at the command-ready map. Its full-size evidence confirms 엠퍼러 dialogue plus clean 엘윈/파이터 and 발가스/제너럴 status labels. Compact original-class derivatives 3B62 and 3B82 entered actual battles, retained clean 파이터/제너럴 labels, defeated 이멜다 and 데몬로드 through normal attack commands, and rendered their item/death paths without broken combat UI. Completion-only derivative 78F8 temporarily reduces the fixed combat list to a source-copied 베른하르트/엠퍼러 record adjacent to stock Elwin, cancels only the Emperor class AT/DF bases, and leaves the scenario handlers intact. A normal attack reached HP 0, rendered the final-boss and commander aftermath, level/class-change surfaces, 전과보고 with POINT 10700P, a real slot-2 save, 다음 시나리오, and normal-route 전설의 끝 entry without reset or freeze. Hidden-record side reassignment and a single Imelda record did not trigger completion, proving that the final boss death event is required; those failed derivatives are not accepted evidence. Source-derived runtime branch probes preserve all ten player deployments and all ten fixed records, then mark exactly one fixed runtime group defeated through the guarded Start wrapper. Fresh checksums ECD5, ED95, EE55, EF15, EFD5, F095, F155, and F215 render the stock death handlers for 발가스, 이멜다, 데몬로드 ID 67, 레온, 레아드, 에그베르트, 데몬로드 ID 65, and 보젤 respectively. The Japanese fixed record 8 duplicates name ID 65 even though its otherwise-unrepresented stock trigger at 0x1B8426 requires ID 66. Checksum 6E37 therefore changes only runtime group 18 name byte from 65 to 66 in addition to its defeat flag and HP, leaving all fixed data and every non-target runtime group unchanged. It renders 데몬로드: 크오!, resumes the enemy phase, then reaches the expected 엘윈 defeat and GAME OVER without Japanese residue, damaged glyphs, reset, or freeze. Separate source-preserving player probes E615, E6D5, E795, E855, E915, EA95, EB55, and EBBF render the declared death lines for 헤인, 쉐리, 아론, 키스, 레스터, 제시카, 리아나, and 라나. Scott has no Scenario 31 player-death event in the source table. The first Lana capture exposed an automatic split before the final 다…; production 6370 adds an explicit balanced line break, and EBBF visibly renders 죄송합니다… / 퇴각하겠습니다… before continuing through Elwin's defeat and GAME OVER. The ordinary protagonist defeat, all eight declared allied death routes, every stock fixed-commander death route, the dormant ID-66 handler, and normal completion are now live-covered, so Scenario 31 battle_ui, completion, and branches_endings are verified_probe."
     }
   ]
 }

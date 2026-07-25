@@ -7394,6 +7394,102 @@ contains 57 safe syllables as documented below and in
   sortie. Treat unchanged or wrong-menu frames as input delivery failures
   before changing ROM data.
 
+### Scenario 31 Intermediate Death Branches (2026-07-25)
+
+- The Japanese event table at `0x1B839E..0x1B8435` dispatches commander death
+  events by runtime name ID, not by fixed-record index. The source-locked
+  intermediate routes are:
+
+  | Fixed record | Name / rendered line | Trigger | Handler | Text |
+  | --- | --- | --- | --- | --- |
+  | 0 | 발가스 / `엘리자…` | `0x1B83E6` | `0x1B8648` | `0x1B8A12` |
+  | 1 | 이멜다 / `…아름다운 내가 이런 자들에게 지다니…` | `0x1B83EE` | `0x1B8688` | `0x1B8AAC` |
+  | 2 | 데몬로드 ID `67` / `크악!` | `0x1B83F6` | `0x1B86BC` | `0x1B8B2C` |
+  | 3 | 레온 / `설마, 내가 지다니…` | `0x1B83FE` | `0x1B86C6` | `0x1B8B36` |
+  | 4 | 레아드 / `레온님… 면목 없습니다…` | `0x1B8406` | `0x1B86F6` | `0x1B8B8A` |
+  | 5 | 에그베르트 / `크윽… 또 패하다니…` | `0x1B840E` | `0x1B8700` | `0x1B8BB0` |
+  | 6 | 데몬로드 ID `65` / `크아악!` | `0x1B8416` | `0x1B872C` | `0x1B8BD4` |
+  | 7 | 보젤 / `후후… 다시 만나자!` | `0x1B841E` | `0x1B8736` | `0x1B8BE2` |
+  | 8 | 데몬로드 ID `66` / `크오!` | `0x1B8426` | `0x1B8782` | `0x1B8C86` |
+
+  The ordinary protagonist route remains trigger `0x1B839E`, handler
+  `0x1B85EA`, text `0x1B893E`; Bernhardt completion uses trigger
+  `0x1B842E`, handler `0x1B878C`, and text `0x1B8C90`. Focused tests now lock
+  every table entry and the first dialogue call in every handler in both the
+  Japanese source and production ROM.
+- `--branch-target 0..8` preserves all ten player deployments and all ten
+  `0x24`-byte fixed records. Its guarded Start wrapper lives at `0x3FEF00`,
+  replaces only the operand at `0x00F2E0`, and tail-jumps the stock Start
+  handler `0x022C1E`. Runtime groups begin at `$FFFF603C`, use stride `0x60`,
+  and map player groups `0..9` followed by fixed groups `10..19`; class, name,
+  defeat flags, HP, X, and Y are at `+0`, `+1`, `+2`, `+3`, `+6`, and `+7`.
+  Normal branch modes change only the selected fixed group's defeat flag and
+  HP before the source event pass.
+- Fresh isolated runs accepted the following checksums and captures:
+  `ECD5` / `ecd5_s31_b0_death.png`, `ED95` /
+  `ed95_s31_b1_death.png`, `EE55` / `ee55_s31_b2_death.png`, `EF15` /
+  `ef15_s31_b3_after_endturn_wait.png`, `EFD5` /
+  `efd5_s31_b4_death_wait.png`, `F095` /
+  `f095_s31_b5_death.png`, `F155` /
+  `f155_s31_b6_death_wait.png`, and `F215` /
+  `f215_fresh_s31_b7_death.png`. Each run entered X4 from a valid save,
+  traversed preparation and the stock opening, ended Turn 1 normally, rendered
+  the expected Korean route above, and continued without reset or freeze.
+- Japanese fixed record 8 at `0x1838DE` has duplicate name ID `65`, while its
+  dedicated stock trigger explicitly requires ID `66`. A GST from the first
+  protected experiment confirms runtime groups 16 and 18 both retained ID
+  `65`, so merely defeating group 18 could never select handler `0x1B8782`.
+  The accepted unprotected checksum `6E37` keeps the fixed record byte-identical
+  and changes only runtime group 18 name `65 -> 66` before setting its defeat
+  flag and HP. `6e37_s31_b8_death.png` renders `데몬로드: 크오!`;
+  `6e37_s31_b8_postprogress.png` and
+  `6e37_s31_b8_game_over.png` prove normal enemy-phase continuation into the
+  expected Elwin defeat and GAME OVER without Japanese residue, damaged
+  glyphs, reset, or freeze. This covers a dormant source handler without
+  silently correcting distribution data.
+- The same event table also declares eight allied death routes. Scott runtime
+  group 6 has no Scenario 31 death trigger in the Japanese source:
+
+  | Runtime group | Name / rendered line | Trigger | Handler | Text | Probe |
+  | --- | --- | --- | --- | --- | --- |
+  | 1 | 헤인 / `당했군…` | `0x1B83A6` | `0x1B85F8` | `0x1B895A` | `E615` |
+  | 2 | 쉐리 / `아파!` | `0x1B83AE` | `0x1B8602` | `0x1B897C` | `E6D5` |
+  | 3 | 아론 / `크윽…` | `0x1B83B6` | `0x1B860C` | `0x1B898A` | `E795` |
+  | 4 | 키스 / `면목 없군…` | `0x1B83BE` | `0x1B8616` | `0x1B8996` | `E855` |
+  | 5 | 레스터 / `쳇… 당했어…` | `0x1B83C6` | `0x1B8620` | `0x1B89B0` | `E915` |
+  | 7 | 제시카 / `그런…` | `0x1B83DE` | `0x1B863E` | `0x1B8A06` | `EA95` |
+  | 8 | 리아나 / `미안해…` | `0x1B83CE` | `0x1B862A` | `0x1B89CE` | `EB55` |
+  | 9 | 라나 / `죄송합니다… / 퇴각하겠습니다…` | `0x1B83D6` | `0x1B8634` | `0x1B89E2` | `EBBF` |
+
+  `--player-branch-target 1,2,3,4,5,7,8,9` preserves all source deployments
+  and fixed records, and its guarded Start wrapper marks only the selected
+  player runtime group defeated. Accepted captures are
+  `e615_s31_p1_death.png`, `e6d5_s31_p2_death.png`,
+  `e795_s31_p3_death.png`, `e855_s31_p4_death.png`,
+  `e915_s31_p5_death.png`, `ea95_s31_p7_death.png`,
+  `eb55_s31_p8_death.png`, and `ebbf_s31_p9_wrap_death.png`.
+  The first Lana run at checksum `EC15` exposed a bad automatic wrap that left
+  final `다…` alone. Reviewed record `0x1B89E2` now contains the explicit
+  balanced break `죄송합니다…\n퇴각하겠습니다…`; production checksum `6370`
+  and current player-9 probe `EBBF` visibly retain both lines. Captures
+  `ebbf_s31_p9_wrap_continued.png` and
+  `ebbf_s31_p9_wrap_game_over.png` prove subsequent Elwin defeat and GAME OVER
+  without reset or freeze.
+- Rejected experiments remain important. The old one-record `8A13` route did
+  render Vargas but did not preserve the roster. Hiding all non-target runtime
+  groups at X=`FF` obscured event behavior. Leon one-record checksums
+  `AB85/AB05` reset after battle. Reusing an `F155` GST under checksum `F215`
+  reset to the title, so cross-checksum GST playback is not branch evidence.
+  Unprotected `F2D5` and a manual-slot DF 99 attempt reached the real Elwin
+  defeat before a target-8 event; the manual DF edit did not propagate into
+  Scenario 31. Protected `684A` kept Elwin alive but still left group 18 as
+  name ID `65`, produced another ally's death, and is also rejected as
+  target-8 evidence. Do not repeat any of these routes.
+- Production protagonist defeat, all eight declared allied death handlers, all
+  fixed-commander death handlers, the dormant ID-66 handler, and the `78F8`
+  Bernhardt completion route are now live-covered. Scenario 31
+  `branches_endings` is therefore `verified_probe`.
+
 ### Scenario 14 Later Turns, Langrisser Clear, And Live Rewrap (2026-07-22)
 
 - `tools/build_scenario14_clear_probe_rom.py` now locks the Japanese and input
@@ -8542,6 +8638,34 @@ contains 57 safe syllables as documented below and in
   edges, exact rank-zero labels, ten AI/Test redesign badges, source/original/
   converted comparisons, no broken images, and no body overflow. The focused
   experimental/editor suite passes 12 tests.
+
+### AI Class Design Replacement And Mask Editor (2026-07-25)
+
+- This section supersedes the 2026-07-24 AI-input notes above. The accepted
+  Elwin main infantry line now uses stages 2-5 of
+  `docs/assets/direct_16x16_01_elwin.png` for Lord, High Lord, Sword Master,
+  and Hero. Stage 1 remains reference-only, so Fighter stays byte-exact to
+  the ROM. Elwin Mage and Archmage use
+  `character-ai-v3/elwin/elwin-mage-archmage-source.png`.
+- Commanders 2-10 no longer use `identity-locked-class-boards` as the final
+  source or identity reference. Their new per-commander sheets live below
+  `docs/assets/ai-class-source/character-ai-v3`. Every sheet was regenerated
+  with `references/XX-original.png` as the authoritative face/hair input.
+  Sherry has the original short bob; Aaron and Lester retain the original
+  larger head-to-body ratio. The earlier AI boards remain only as history.
+- The final conversion keeps each new AI class silhouette, fits it to 16x16,
+  snaps it to the commander's ROM palette, and restores an editable set of
+  exact ROM head/face pixels. Rank-zero/base classes remain byte-exact.
+  `editor/ai_identity_masks.json` stores only user overrides.
+- The AI inspector now contains a 16x16 purple mask canvas. Click toggles one
+  original-locked pixel; dragging paints or erases continuously. Saving posts
+  to `/api/ai-class-mask`, rebuilds all preview assets, and reloads the
+  manifest. Resetting to the automatic mask removes the override. This is
+  still preview-only and is excluded from `/api/build`.
+- `tools/build_character_ai_comparison_sheets.py` writes one
+  `<character>-ai-and-16x16.png` per commander, containing the generated
+  source, converted 16x16, and ROM original side by side. These ten files live
+  in the corresponding `character-ai-v3/<character>` directories.
 
 ### Scenario 26 Battle And Completion Verification (2026-07-24)
 
