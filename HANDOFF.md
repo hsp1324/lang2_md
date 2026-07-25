@@ -9289,3 +9289,31 @@ contains 57 safe syllables as documented below and in
   completion and the sole declared defeat ending are now live-covered, so
   Scenario 24 `branches_endings` is `verified_probe`. Later ordinary turns
   remain separate pending coverage.
+
+### Scenario 25 Protagonist-Death Branch (2026-07-25)
+
+- The Japanese defeat trigger is `0x1B042A`
+  (`05 02 01 00 00 1B 06 74`). It dispatches handler `0x1B0674`, which calls
+  Elwin text `0x1B12CE`, Leon text `0x1B12D6`, Elwin text `0x1B12FE`, then
+  executes `13 FF 15 FF` and reaches GAME OVER.
+- `tools/build_scenario25_clear_probe_rom.py --protagonist-death` preserves
+  all nine player deployments, all twelve fixed records, identities, classes,
+  levels, combat values, coordinates, mercenaries, and source event bytes.
+  Its guarded Start wrapper marks only runtime player group 0 defeated.
+  Production `B3F2` produces checksum `AAC1`, SHA-256
+  `14d2d17ba1d407fc0ad5b27a4926a71cdbf6f081991d8ef988666ef93815e288`.
+- Fresh isolated Xvfb playback entered Scenario 25 from a valid manual slot
+  and retained the route, preparation, automatic deployment, opening,
+  `엘윈/파이터` command panel, and Korean Start menu. Normal turn end first
+  traversed the stock Leon/Liana pages, then rendered `엘윈: 큭!`,
+  `레온: 이겼나… 힘든 싸움이었다.`, `엘윈: 여기까지인가…`, and GAME OVER.
+  No Japanese residue, broken name/class/UI glyph, reset, or freeze appeared.
+- Representative evidence is `aac1_s25_death_entry.png`,
+  `aac1_s25_death_prep_09.png`, `aac1_s25_death_arrangement.png`,
+  `aac1_s25_death_auto.png`, `aac1_s25_death_opening_16.png`,
+  `aac1_s25_death_opening_28.png`, `aac1_s25_death_start_menu.png`,
+  `aac1_s25_death_event_06.png`, `aac1_s25_death_event_07.png`,
+  `aac1_s25_death_event_08.png`, and `aac1_s25_death_event_09.png`. Normal
+  completion and the sole declared defeat ending are live-covered, so
+  Scenario 25 `branches_endings` is `verified_probe`. Later ordinary turns
+  remain separate pending coverage.

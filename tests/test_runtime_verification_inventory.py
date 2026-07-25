@@ -1119,6 +1119,27 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("ｸﾛｺﾅｲﾄ", scenario25["note"])
         self.assertIn("레스터/크로코나이트", scenario25["note"])
         self.assertNotIn("레스터/크루세이더", scenario25["note"])
+        self.assertEqual(scenario25["branches_endings"], "verified_probe")
+        for capture in (
+            "captures/run/aac1_s25_death_entry.png",
+            "captures/run/aac1_s25_death_prep_09.png",
+            "captures/run/aac1_s25_death_arrangement.png",
+            "captures/run/aac1_s25_death_auto.png",
+            "captures/run/aac1_s25_death_opening_16.png",
+            "captures/run/aac1_s25_death_opening_28.png",
+            "captures/run/aac1_s25_death_start_menu.png",
+            "captures/run/aac1_s25_death_event_06.png",
+            "captures/run/aac1_s25_death_event_07.png",
+            "captures/run/aac1_s25_death_event_08.png",
+            "captures/run/aac1_s25_death_event_09.png",
+        ):
+            self.assertIn(capture, scenario25["captures"])
+        self.assertIn("source trigger 0x1B042A", scenario25["note"])
+        self.assertIn("handler 0x1B0674", scenario25["note"])
+        self.assertIn("text pointers 0x1B12CE", scenario25["note"])
+        self.assertIn("엘윈: 큭!", scenario25["note"])
+        self.assertIn("레온: 이겼나… 힘든 싸움이었다.", scenario25["note"])
+        self.assertIn("엘윈: 여기까지인가…", scenario25["note"])
         self.assertEqual(scenario26["description"], "verified_current")
         for capture in (
             "captures/run/212a_s26_description_current_01.png",
