@@ -12,7 +12,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | current | current | current | current | probe | current | probe | probe | 51 |
-| 2 | current | current | current | current | current | current | probe | pending | 38 |
+| 2 | current | current | current | current | current | current | probe | probe | 65 |
 | 3 | current | current | current | current | probe | probe | probe | pending | 34 |
 | 4 | current | current | current | current | probe | probe | probe | pending | 47 |
 | 5 | current | current | current | current | probe | progressed | probe | pending | 44 |
@@ -103,7 +103,7 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 
 ### Scenario 2
 
-Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling frames of the 여행의 시작 description, and the preparation endpoint. The complete Korean description covers Elwin's party reaching Loren's residence, accepting Liana's escort, and Zorum's approaching force without Japanese residue, broken glyphs, clipping, or abnormal spacing. The same build verifies preparation names and conditions, the Japanese-identical SCENARIO 2 banner, 로렌/하이로드 status popup, and the complete opening across 79 retained frames from deployment through the real Elwin command menu. Production 212A freshly rechecks the arrangement banner as intact SCENARIO 2 and, from the original fixed cursor coordinates, verifies complete 로렌/하이로드 text in both the bottom status row and commander popup. Thus the earlier SCENAR록O ASCII-I collision and missing 렌 tile remain fixed after all later description glyph additions. All text-bearing opening frames are Korean and preserve readable names, classes, status labels, and map graphics without reset or freeze. The earlier session verifies intact battle AT/DF labels and the complete first turn: Loren, imperial commander, and commander dialogue, NPC/enemy movement, two combats, and return to a valid Elwin command menu after 52 retained frames. Production 38AB fixes the preparation rows' five stale 0x05FC tail cells; 389A differs only by Liana's documented Scenario 2 Y coordinate and checksum. It verifies clean preparation labels, all 62 opening confirmations, Liana's north-edge Korean completion dialogue, 전과보고 with POINT 800P, a real Scenario 3 slot save, and ordinary entry to the Scenario 3 route without reset or freeze. Enemy-annihilation victory and the two defeat branches remain pending.
+Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling frames of the 여행의 시작 description, and the preparation endpoint. The complete Korean description covers Elwin's party reaching Loren's residence, accepting Liana's escort, and Zorum's approaching force without Japanese residue, broken glyphs, clipping, or abnormal spacing. The same build verifies preparation names and conditions, the Japanese-identical SCENARIO 2 banner, 로렌/하이로드 status popup, and the complete opening across 79 retained frames from deployment through the real Elwin command menu. Production 212A freshly rechecks the arrangement banner as intact SCENARIO 2 and, from the original fixed cursor coordinates, verifies complete 로렌/하이로드 text in both the bottom status row and commander popup. Thus the earlier SCENAR록O ASCII-I collision and missing 렌 tile remain fixed after all later description glyph additions. All text-bearing opening frames are Korean and preserve readable names, classes, status labels, and map graphics without reset or freeze. The earlier session verifies intact battle AT/DF labels and the complete first turn: Loren, imperial commander, and commander dialogue, NPC/enemy movement, two combats, and return to a valid Elwin command menu after 52 retained frames. Production 38AB fixes the preparation rows' five stale 0x05FC tail cells; 389A differs only by Liana's documented Scenario 2 Y coordinate and checksum. It verifies clean preparation labels, all 62 opening confirmations, Liana's north-edge Korean completion dialogue, 전과보고 with POINT 800P, a real Scenario 3 slot save, and ordinary entry to the Scenario 3 route without reset or freeze. The Japanese event block is source-locked at 0x1860C0..0x1881AE. The protagonist-death trigger at 0x186174 dispatches handler 0x18650E and text 0x1876AE. The Liana-death trigger at 0x18618E dispatches handler 0x18654C and texts 0x187736, 0x187762, 0x187774, and 0x187792. The enemy-annihilation trigger at 0x1861E6 checks Zorum plus commander name IDs 2A, 2B, 2C, 2D, and 2E, then dispatches handler 0x186708 and texts 0x187B80, 0x187B8C, 0x187BB6, 0x187C20, 0x187C84, and 0x187D08. Runtime groups 0..2 are Elwin, Hein, and Scott; groups 3..6 are Loren, two allied commanders, and Liana; groups 7..12 are exactly the six enemy fixed records. Production-derived diagnostics preserve all three deployments, all ten fixed records, and every source event byte. Checksums 5A3F, 60FF, and 0EB7 respectively mark only Elwin, only Liana, or enemy groups 7..12 defeated through a guarded Start wrapper. Fresh isolated playback retained SCENARIO 2, preparation, opening, names, classes, command UI, and Start UI. The Elwin path rendered 리아나를 지키기도 전에 내가 당하다니… and GAME OVER. The Liana path rendered Zorum's capture order, Liana's refusal, retreat order, Elwin's failure page, and GAME OVER. The enemy path traversed every ordinary fixed-enemy death page, then rendered 해냈다!, 놈들을 전부 쓰러뜨렸군., the escort dialogue, 그레이트소드 획득!, the ability increase, 전과보고, and a stable 시나리오 3 save row without Japanese residue, broken name/class/UI glyphs, reset, or freeze. The apparent first syllable in 야! 그런 데 숨다니 is the correct 0x70A3 야 glyph and byte-exact renderer output, not 이. Rejected checksum 1B9C left one target alive with HP 1 and stalled at attack target selection; do not repeat that static-record/coordinate design. Normal completion and both declared defeat endings are now live-covered, so branches_endings is verified_probe.
 
 - `captures/run/ea22_s02_selector_map.png`
 - `captures/run/ea22_s02_brief_01.png`
@@ -143,6 +143,33 @@ Production 489B verifies the Scenario 2 route map, all 21 text-bearing scrolling
 - `captures/run/389a_s02_escape_18.png`
 - `captures/run/389a_s02_escape_19.png`
 - `captures/run/389a_s02_next_scenario_selected.png`
+- `captures/run/5a3f_s02_protagonist_arrangement.png`
+- `captures/run/5a3f_s02_protagonist_command.png`
+- `captures/run/5a3f_s02_protagonist_result_13.png`
+- `captures/run/5a3f_s02_protagonist_result_14.png`
+- `captures/run/5a3f_s02_protagonist_result_15.png`
+- `captures/run/60ff_s02_liana_arrangement.png`
+- `captures/run/60ff_s02_liana_command.png`
+- `captures/run/60ff_s02_liana_result_13.png`
+- `captures/run/60ff_s02_liana_result_14.png`
+- `captures/run/60ff_s02_liana_result_15.png`
+- `captures/run/60ff_s02_liana_result_16.png`
+- `captures/run/60ff_s02_liana_result_17.png`
+- `captures/run/60ff_s02_liana_result_18.png`
+- `captures/run/0eb7_s02_annihilation_arrangement.png`
+- `captures/run/0eb7_s02_annihilation_command.png`
+- `captures/run/0eb7_s02_annihilation_start_menu.png`
+- `captures/run/0eb7_s02_annihilation_after_start.png`
+- `captures/run/0eb7_s02_annihilation_result_23.png`
+- `captures/run/0eb7_s02_annihilation_result_28.png`
+- `captures/run/0eb7_s02_annihilation_result_29.png`
+- `captures/run/0eb7_s02_annihilation_result_30.png`
+- `captures/run/0eb7_s02_annihilation_result_32.png`
+- `captures/run/0eb7_s02_annihilation_result_33.png`
+- `captures/run/0eb7_s02_annihilation_result_36.png`
+- `captures/run/0eb7_s02_annihilation_result_39.png`
+- `captures/run/0eb7_s02_annihilation_result_40.png`
+- `captures/run/0eb7_s02_annihilation_result_43.png`
 
 ### Scenario 3
 

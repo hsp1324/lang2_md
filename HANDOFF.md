@@ -9588,3 +9588,57 @@ contains 57 safe syllables as documented below and in
   `미나/세인트`, all three item awards and discard UI, result, save, route,
   and Scenario 23 return. Source audit found no second defeat condition.
   Scenario 30 `branches_endings` is therefore `verified_current`.
+
+### Scenario 2 Result Branches (2026-07-25)
+
+- The Japanese event block is `0x1860C0..0x1881AE`. The protagonist-death
+  trigger `0x186174` dispatches handler `0x18650E` and Elwin text
+  `0x1876AE`. The Liana-death trigger `0x18618E` dispatches handler
+  `0x18654C` and texts `0x187736`, `0x187762`, `0x187774`, and `0x187792`.
+  The enemy-annihilation trigger `0x1861E6` checks Zorum plus name IDs
+  `2A, 2B, 2C, 2D, 2E`, then dispatches handler `0x186708` and texts
+  `0x187B80`, `0x187B8C`, `0x187BB6`, `0x187C20`, `0x187C84`, and
+  `0x187D08`. Tests lock every trigger and handler byte against both Japanese
+  and production ROMs.
+- Runtime group records are 0x60 bytes at work RAM `0xFFFF603C`. Groups 0..2
+  are Elwin, Hein, and Scott; fixed records begin at group 3. Groups 3..6 are
+  Loren, two allied commanders, and Liana; groups 7..12 are exactly the six
+  enemy records. `tools/build_scenario2_escape_probe_rom.py` now exposes
+  mutually exclusive `--protagonist-death`, `--liana-death`, and
+  `--enemy-annihilation` modes. Each mode preserves all three deployments,
+  all ten fixed records, identity/class/stat/mercenary fields, and source
+  event bytes. A guarded Start wrapper at `0x3FEF00` changes only the intended
+  live group flags/HP/X, then returns to stock Start handler `0x022C1E`.
+- Production-derived protagonist checksum `5A3F` retained the complete
+  Scenario 2 entry, preparation, opening, `엘윈/파이터` command panel, and
+  ordinary NPC/enemy pages, then rendered
+  `리아나를 지키기도 전에 내가 당하다니…` and GAME OVER. Representative
+  evidence is `5a3f_s02_protagonist_arrangement.png`,
+  `5a3f_s02_protagonist_command.png`, and
+  `5a3f_s02_protagonist_result_13.png` through `_15.png`.
+- Liana checksum `60FF` retained the same normal surfaces, then rendered
+  Zorum's capture order, Liana's refusal, the retreat order, Elwin's failure
+  page, and GAME OVER. Representative evidence is
+  `60ff_s02_liana_arrangement.png`, `60ff_s02_liana_command.png`, and
+  `60ff_s02_liana_result_13.png` through `_18.png`.
+- Enemy-annihilation checksum `0EB7` retained all records until Start, then
+  traversed the stock death pages for all six enemy groups before the actual
+  clear handler. It rendered `해냈다!`, `놈들을 전부 쓰러뜨렸군.`, the escort
+  dialogue, `그레이트소드 획득!`, the ability increase, `전과보고`, and a
+  stable `시나리오 3` save row. Representative evidence is
+  `0eb7_s02_annihilation_arrangement.png`,
+  `0eb7_s02_annihilation_command.png`,
+  `0eb7_s02_annihilation_start_menu.png`,
+  `0eb7_s02_annihilation_after_start.png`,
+  `0eb7_s02_annihilation_result_23.png`, `_28.png`, `_29.png`, `_30.png`,
+  `_32.png`, `_33.png`, `_36.png`, `_39.png`, `_40.png`, and `_43.png`.
+  The apparent first syllable in `야! 그런 데 숨다니` is the correct
+  `0x70A3` 야 glyph and matches the renderer byte-for-byte; it is not 이.
+- Do not repeat rejected checksum `1B9C`. That design altered static enemy
+  fields/coordinates and left one target at HP 1; attack selection stalled
+  instead of producing a deterministic result. The accepted `0EB7` wrapper
+  touches only live enemy groups 7..12.
+- All three accepted runs were fresh isolated playback and showed no Japanese
+  residue, broken name/class/UI glyph, clipping, unexpected reset, or freeze.
+  Normal completion and both declared defeat endings are live-covered, so
+  Scenario 2 `branches_endings` is `verified_probe`.
