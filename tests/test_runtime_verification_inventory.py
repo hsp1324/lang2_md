@@ -1073,6 +1073,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario24["turn_events"], "verified_current")
         self.assertIn("captures/run/544b_s24_opening_11.png", scenario24["captures"])
         self.assertIn("captures/run/544b_s24_turn1_38.png", scenario24["captures"])
+        self.assertEqual(scenario24["branches_endings"], "verified_probe")
+        for capture in (
+            "captures/run/aac1_s24_death_entry.png",
+            "captures/run/aac1_s24_death_prep_10.png",
+            "captures/run/aac1_s24_death_arrangement.png",
+            "captures/run/aac1_s24_death_auto.png",
+            "captures/run/aac1_s24_death_opening_10.png",
+            "captures/run/aac1_s24_death_opening_21.png",
+            "captures/run/aac1_s24_death_start_menu.png",
+            "captures/run/aac1_s24_death_event_04.png",
+            "captures/run/aac1_s24_death_event_05.png",
+        ):
+            self.assertIn(capture, scenario24["captures"])
+        self.assertIn("source trigger 0x1AF564", scenario24["note"])
+        self.assertIn("handler 0x1AF71A", scenario24["note"])
+        self.assertIn("text 0x1AFBDA", scenario24["note"])
+        self.assertIn("엘윈: 뭐야!? 당했나…", scenario24["note"])
         self.assertEqual(scenario25["description"], "verified_current")
         for capture in (
             "captures/run/212a_s25_description_current_01.png",

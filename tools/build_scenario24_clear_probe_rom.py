@@ -40,6 +40,15 @@ VAMPIRE_LORD_RECORD_INDEX = 10
 COMPLETION_TARGET_RECORD_INDEX = VAMPIRE_LORD_RECORD_INDEX
 COMPLETION_HIDDEN_RECORD_INDEXES = tuple(range(1, 10))
 COMPLETION_ELWIN_POSITION = (16, 24)
+PROTAGONIST_DEATH_TRIGGER = 0x1AF564
+PROTAGONIST_DEATH_TRIGGER_BYTES = bytes.fromhex(
+    "02 02 01 00 00 1A F7 1A"
+)
+PROTAGONIST_DEATH_EVENT = 0x1AF71A
+PROTAGONIST_DEATH_EVENT_BYTES = bytes.fromhex(
+    "02 01 02 01 00 1A FB DA 13 FF 15 FF FF FF"
+)
+PROTAGONIST_DEATH_TEXT = 0x1AFBDA
 PROBE_AT = 0
 PROBE_DF = 0
 START_MENU_ENTRY = 0x022C1E
@@ -47,9 +56,11 @@ START_MENU_ENTRY_OPERAND = 0x00F2E0
 COMPLETION_HP_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
+PROTAGONIST_RUNTIME_GROUP = 0
 FIRST_FIXED_RUNTIME_GROUP = 9
 LAST_FIXED_RUNTIME_GROUP = 19
 COMPLETION_HIDDEN_RUNTIME_GROUPS = tuple(range(10, 19))
+RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
 
@@ -94,6 +105,48 @@ def completion_hp_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def protagonist_death_wrapper_code() -> bytes:
+    record = (
+        RUNTIME_GROUP_BASE
+        + PROTAGONIST_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code = bytearray()
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def install_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+    wrapper: bytes,
+) -> None:
+    expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        if (
+            data[START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4]
+            != expected_start_entry
+        ):
+            raise ValueError(f"{label} Start-menu entry operand changed")
+    wrapper_end = COMPLETION_HP_WRAPPER + len(wrapper)
+    if probe[COMPLETION_HP_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError("input diagnostic wrapper region is not empty")
+    probe[
+        START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
+    ] = COMPLETION_HP_WRAPPER.to_bytes(4, "big")
+    probe[COMPLETION_HP_WRAPPER:wrapper_end] = wrapper
+
+
 def validate_layout(probe: bytes, source: bytes) -> None:
     source_layout = scenario_layout(source, SCENARIO_NUMBER)
     probe_layout = scenario_layout(probe, SCENARIO_NUMBER)
@@ -121,6 +174,25 @@ def validate_layout(probe: bytes, source: bytes) -> None:
             raise ValueError(
                 f"input Scenario 24 fixed record {index} differs from Japanese source"
             )
+    event_spans = (
+        (
+            "protagonist-death trigger",
+            PROTAGONIST_DEATH_TRIGGER,
+            PROTAGONIST_DEATH_TRIGGER_BYTES,
+        ),
+        (
+            "protagonist-death event",
+            PROTAGONIST_DEATH_EVENT,
+            PROTAGONIST_DEATH_EVENT_BYTES,
+        ),
+    )
+    for label, offset, expected_bytes in event_spans:
+        end = offset + len(expected_bytes)
+        for rom_label, data in (("Japanese", source), ("input", probe)):
+            if data[offset:end] != expected_bytes:
+                raise ValueError(
+                    f"{rom_label} Scenario 24 {label} changed"
+                )
 
 
 def patch_probe(
@@ -128,8 +200,18 @@ def patch_probe(
     source: bytes,
     *,
     completion_target_only: bool = False,
+    protagonist_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
+    if completion_target_only and protagonist_death:
+        raise ValueError("Scenario 24 diagnostic modes conflict")
+    if protagonist_death:
+        install_start_wrapper(
+            probe,
+            source,
+            protagonist_death_wrapper_code(),
+        )
+        return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -144,23 +226,8 @@ def patch_probe(
         for index in COMPLETION_HIDDEN_RECORD_INDEXES:
             base = layout.records_offset + index * FIXED_RECORD_SIZE
             probe[base] |= 0x80
-        expected_start_entry = START_MENU_ENTRY.to_bytes(4, "big")
-        if source[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] != expected_start_entry:
-            raise ValueError("Japanese Start-menu entry operand changed")
-        if probe[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] != expected_start_entry:
-            raise ValueError("input Start-menu entry operand changed")
         wrapper = completion_hp_wrapper_code()
-        wrapper_end = COMPLETION_HP_WRAPPER + len(wrapper)
-        if probe[COMPLETION_HP_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
-            raise ValueError("input completion wrapper region is not empty")
-        probe[
-            START_MENU_ENTRY_OPERAND : START_MENU_ENTRY_OPERAND + 4
-        ] = COMPLETION_HP_WRAPPER.to_bytes(4, "big")
-        probe[COMPLETION_HP_WRAPPER:wrapper_end] = wrapper
+        install_start_wrapper(probe, source, wrapper)
     return builder.update_md_checksum(probe)
 
 
@@ -184,6 +251,14 @@ def parse_args() -> argparse.Namespace:
             "completion HP wrapper"
         ),
     )
+    parser.add_argument(
+        "--protagonist-death",
+        action="store_true",
+        help=(
+            "preserve every Scenario 24 deployment and fixed record, then "
+            "mark only runtime player group 0 defeated through Start"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -195,15 +270,27 @@ def main() -> int:
         probe,
         source,
         completion_target_only=args.completion_target_only,
+        protagonist_death=args.protagonist_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print("Scenario 24 enemy records 1..10: AT 0, DF 0, no mercenaries")
+    if args.protagonist_death:
+        print(
+            "protagonist-death diagnostic: stock deployments and fixed "
+            "records preserved; runtime player group 0 marked defeated"
+        )
+    else:
+        print("Scenario 24 enemy records 1..10: AT 0, DF 0, no mercenaries")
     print(
         "special-side Bernhardt, stock deployments, identities, classes, "
         "levels, coordinates, Langrisser events, and handlers preserved"
     )
-    if args.completion_target_only:
+    if args.protagonist_death:
+        print(
+            "stock protagonist-death trigger, event, dialogue pointer, and "
+            "GAME OVER handler preserved"
+        )
+    elif args.completion_target_only:
         print(
             "completion target: special-side Bernhardt and source record 10 "
             "Vampire Lord remain visible; records 1..9 hidden"

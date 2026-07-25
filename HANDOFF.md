@@ -9262,3 +9262,30 @@ contains 57 safe syllables as documented below and in
   defeat endings are now live-covered through documented probes, so Scenario
   23 `branches_endings` is `verified_probe`. Natural Holy Rod carrier AI
   playback and later ordinary turns remain separate pending coverage.
+
+### Scenario 24 Protagonist-Death Branch (2026-07-25)
+
+- The visible conditions declare only `주인공 사망` as defeat. The Japanese
+  trigger at `0x1AF564` is `02 02 01 00 00 1A F7 1A`; it dispatches handler
+  `0x1AF71A`, which calls text `0x1AFBDA`, executes `13 FF 15 FF`, and reaches
+  GAME OVER. The reviewed Korean line is `뭐야!? 당했나…`.
+- `tools/build_scenario24_clear_probe_rom.py --protagonist-death` preserves
+  all nine player deployments, all eleven fixed records, combat values,
+  identities, classes, coordinates, and both source event records. Its guarded
+  Start wrapper marks only runtime player group 0 defeated. Production `B3F2`
+  produces checksum `AAC1` and SHA-256
+  `14d2d17ba1d407fc0ad5b27a4926a71cdbf6f081991d8ef988666ef93815e288`.
+- Fresh isolated Xvfb playback recovered a valid Scenario 20 manual slot,
+  visibly changed the built-in selector to Scenario 24, and retained the route,
+  preparation roster, automatic deployment, opening, clean `엘윈/파이터`
+  command panel, and Korean Start menu. Normal turn end rendered all three
+  ordinary Vampire Lord pages, `엘윈: 뭐야!? 당했나…`, and GAME OVER without
+  Japanese residue, broken names/classes/UI glyphs, reset, or freeze.
+- Representative evidence is `aac1_s24_death_entry.png`,
+  `aac1_s24_death_prep_10.png`, `aac1_s24_death_arrangement.png`,
+  `aac1_s24_death_auto.png`, `aac1_s24_death_opening_10.png`,
+  `aac1_s24_death_opening_21.png`, `aac1_s24_death_start_menu.png`,
+  `aac1_s24_death_event_04.png`, and `aac1_s24_death_event_05.png`. Normal
+  completion and the sole declared defeat ending are now live-covered, so
+  Scenario 24 `branches_endings` is `verified_probe`. Later ordinary turns
+  remain separate pending coverage.
