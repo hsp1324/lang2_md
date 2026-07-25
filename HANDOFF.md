@@ -5954,6 +5954,36 @@ contains 57 safe syllables as documented below and in
   unobstructed dynamic number, remaining empty rows, and `다음 시나리오`.
   The result-header inventory entry is now `live_verified: true`.
 
+### Scenario 1 Protagonist-Death Branch (2026-07-25)
+
+- The visible conditions declare only `주인공 사망` as defeat. The Japanese
+  trigger at `0x184244` is `07 02 01 00 00 18 43 9E`; handler `0x18439E`
+  calls Elwin text `0x184B0A` (`나도… 끝인가…`) and executes the stock
+  `13 FF 15 FF` GAME OVER sequence.
+- `tools/build_scenario1_clear_probe_rom.py --protagonist-death` preserves
+  both player deployments, all twelve fixed records, identities, classes,
+  levels, combat values, coordinates, mercenaries, and the source event bytes.
+  Its guarded Start wrapper changes only runtime player group 0's defeated
+  flag, HP, and X coordinate before tail-jumping the original Start handler.
+  Production checksum `6370` produces diagnostic `5A3F`, SHA-256
+  `31a5b52ba85787b2554df1f65a1865d9aa747e22bde4279f2e5e6476820791c9`.
+- Fresh isolated playback recovered a valid Scenario 31 slot, visibly changed
+  the built-in selector to Scenario 1, and retained the full description,
+  conditions, preparation, automatic deployment, opening, and clean
+  `엘윈/파이터` command panel. Normal turn end traversed the ordinary resident,
+  `제국군지휘관`, and Leon pages, then rendered `엘윈: 나도… 끝인가…` and
+  GAME OVER without Japanese residue, broken names/classes/UI glyphs, reset,
+  or freeze.
+- Representative evidence is `5a3f_s01_death_prep_40.png`,
+  `5a3f_s01_death_prep_tail_02.png`, `5a3f_s01_death_opening_10.png`,
+  `5a3f_s01_death_progress_01.png`, `5a3f_s01_death_progress_13.png`,
+  `5a3f_s01_death_progress_14.png`, and
+  `5a3f_s01_death_progress_15.png`. The first preparation detector stopped on
+  the conditions screen after forty confirmations; two further confirmations
+  reached preparation. This is an automation limit, not a ROM failure. Normal
+  completion and the sole declared defeat ending are now live-covered, so
+  Scenario 1 `branches_endings` is `verified_probe`.
+
 ### Scenario 2 North-Escape Completion Probe (2026-07-20, Verified)
 
 - Scenario 2 is not a Zorum-defeat clear. The stock condition resource says
@@ -8646,7 +8676,7 @@ contains 57 safe syllables as documented below and in
   `docs/assets/direct_16x16_01_elwin.png` for Lord, High Lord, Sword Master,
   and Hero. Stage 1 remains reference-only, so Fighter stays byte-exact to
   the ROM. Elwin Mage and Archmage use
-  `character-ai-v3/elwin/elwin-mage-archmage-source.png`.
+  `character-ai-v3/elwin/elwin-mage-archmage-source-v3.png`.
 - Commanders 2-10 no longer use `identity-locked-class-boards` as the final
   source or identity reference. Their new per-commander sheets live below
   `docs/assets/ai-class-source/character-ai-v3`. Every sheet was regenerated

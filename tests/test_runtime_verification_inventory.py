@@ -157,6 +157,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             self.assertIn(capture, scenario27["captures"])
         self.assertEqual(scenario1["turn_events"], "verified_current")
         self.assertEqual(scenario1["completion"], "verified_probe")
+        self.assertEqual(scenario1["branches_endings"], "verified_probe")
         self.assertIn(
             "captures/run/8aea_s01_clear_post_41.png", scenario1["captures"]
         )
@@ -168,6 +169,18 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/479f_s01_clear_save_current.png",
             scenario1["captures"],
         )
+        for capture in (
+            "captures/run/5a3f_s01_death_opening_10.png",
+            "captures/run/5a3f_s01_death_progress_01.png",
+            "captures/run/5a3f_s01_death_progress_13.png",
+            "captures/run/5a3f_s01_death_progress_14.png",
+            "captures/run/5a3f_s01_death_progress_15.png",
+        ):
+            self.assertIn(capture, scenario1["captures"])
+        self.assertIn("trigger 0x184244", scenario1["note"])
+        self.assertIn("handler 0x18439E", scenario1["note"])
+        self.assertIn("text 0x184B0A", scenario1["note"])
+        self.assertIn("엘윈: 나도… 끝인가…", scenario1["note"])
         self.assertIn("captures/run/c7ab_s02_body_final2.png", scenario2["captures"])
         self.assertEqual(scenario2["description"], "verified_current")
         self.assertEqual(scenario2["opening_events"], "verified_current")
