@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import unittest
 
@@ -21,6 +22,23 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             data,
             self.source,
             enemy_annihilation=True,
+        )
+        return data
+
+    def result_patched(
+        self,
+        *,
+        protagonist_death: bool = False,
+        timeout: bool = False,
+        timeout_alternate: bool = False,
+    ) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            protagonist_death=protagonist_death,
+            timeout=timeout,
+            timeout_alternate=timeout_alternate,
         )
         return data
 
@@ -206,6 +224,219 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+
+    def test_source_owned_result_events_are_locked(self):
+        for data in (self.source, self.built):
+            for offset, expected in (
+                (
+                    probe_builder.PROTAGONIST_DEATH_TRIGGER,
+                    probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+                ),
+                (
+                    probe_builder.PROTAGONIST_DEATH_HANDLER,
+                    probe_builder.PROTAGONIST_DEATH_HANDLER_BYTES,
+                ),
+                (
+                    probe_builder.TIMEOUT_TRIGGER,
+                    probe_builder.TIMEOUT_TRIGGER_BYTES,
+                ),
+                (
+                    probe_builder.TIMEOUT_HANDLER,
+                    probe_builder.TIMEOUT_HANDLER_BYTES,
+                ),
+            ):
+                self.assertEqual(data[offset : offset + len(expected)], expected)
+        for address in probe_builder.PROTAGONIST_DEATH_TEXTS:
+            self.assertIn(
+                address.to_bytes(3, "big"),
+                probe_builder.PROTAGONIST_DEATH_HANDLER_BYTES,
+            )
+        for address in probe_builder.TIMEOUT_TEXTS:
+            self.assertIn(
+                address.to_bytes(3, "big"),
+                probe_builder.TIMEOUT_HANDLER_BYTES,
+            )
+
+    def test_result_text_pages_are_reviewed_and_structurally_valid(self):
+        translations = json.loads(
+            (ROOT / "localization/event_dialogue_ko.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        scenario_addresses = {
+            int(row["address"], 0)
+            for row in translations["scenarios"]["5"]
+        }
+        expected = {
+            *probe_builder.PROTAGONIST_DEATH_PHYSICAL_TEXTS,
+            *probe_builder.TIMEOUT_TEXTS,
+        }
+        self.assertLessEqual(expected, scenario_addresses)
+        for address in expected:
+            capacity, terminator, _controls = builder.event_page_layout(
+                self.source,
+                address,
+            )
+            continuation = probe_builder.PROTAGONIST_DEATH_CONTINUATIONS.get(
+                address
+            )
+            if continuation is None:
+                self.assertEqual(terminator, 0xFFFF)
+            else:
+                self.assertEqual(terminator, 0xFFFD)
+                self.assertEqual(address + capacity * 2 + 2, continuation)
+
+    def test_result_modes_preserve_all_deployments_and_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        record_start = layout.records_offset
+        record_end = record_start + layout.record_count * FIXED_RECORD_SIZE
+        deployment_start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployment_end = deployment_start + len(
+            probe_builder.deployment_bytes(
+                probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+            )
+        )
+        for mode in (
+            {"protagonist_death": True},
+            {"timeout": True},
+            {"timeout_alternate": True},
+        ):
+            data = self.result_patched(**mode)
+            self.assertEqual(
+                data[record_start:record_end],
+                self.source[record_start:record_end],
+            )
+            self.assertEqual(
+                data[deployment_start:deployment_end],
+                self.source[deployment_start:deployment_end],
+            )
+
+    def test_protagonist_wrapper_targets_only_player_group_zero(self):
+        code = probe_builder.protagonist_death_wrapper_code()
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (target + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4,
+                "big",
+            ),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 00")
+            + (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        for group in range(1, 14):
+            other = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertNotIn(
+                (other + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
+    def test_timeout_wrapper_sets_only_verified_turn_counter(self):
+        self.assertEqual(probe_builder.TIMEOUT_LAST_ALLOWED_TURN, 22)
+        code = probe_builder.timeout_wrapper_code()
+        self.assertEqual(
+            code[:8],
+            bytes.fromhex("0C 39")
+            + probe_builder.TIMEOUT_LAST_ALLOWED_TURN.to_bytes(2, "big")
+            + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+        )
+        self.assertEqual(code[8:10], bytes.fromhex("64 08"))
+        self.assertEqual(
+            code[10:18],
+            bytes.fromhex("13 FC")
+            + probe_builder.TIMEOUT_LAST_ALLOWED_TURN.to_bytes(2, "big")
+            + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_result_modes_change_only_wrapper_operand_and_checksum(self):
+        for mode, wrapper in (
+            (
+                {"protagonist_death": True},
+                probe_builder.protagonist_death_wrapper_code(),
+            ),
+            (
+                {"timeout": True},
+                probe_builder.timeout_wrapper_code(),
+            ),
+            (
+                {"timeout_alternate": True},
+                probe_builder.timeout_wrapper_code(),
+            ),
+        ):
+            data = self.result_patched(**mode)
+            allowed = {
+                0x18E,
+                0x18F,
+                *range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                ),
+                *range(
+                    probe_builder.ANNIHILATION_WRAPPER,
+                    probe_builder.ANNIHILATION_WRAPPER + len(wrapper),
+                ),
+            }
+            if mode.get("timeout_alternate"):
+                allowed.update(
+                    range(
+                        probe_builder.TIMEOUT_TRIGGER_TARGET_OFFSET,
+                        probe_builder.TIMEOUT_TRIGGER_TARGET_OFFSET + 3,
+                    )
+                )
+            changed = {
+                offset
+                for offset, (before, after) in enumerate(zip(self.built, data))
+                if before != after
+            }
+            self.assertLessEqual(changed, allowed)
+
+    def test_timeout_alternate_bridges_only_to_source_owned_body(self):
+        data = self.result_patched(timeout_alternate=True)
+        offset = probe_builder.TIMEOUT_TRIGGER_TARGET_OFFSET
+        self.assertEqual(
+            data[offset : offset + 3],
+            probe_builder.TIMEOUT_ALTERNATE_HANDLER.to_bytes(3, "big"),
+        )
+        alternate = probe_builder.TIMEOUT_ALTERNATE_HANDLER
+        source_body = probe_builder.TIMEOUT_HANDLER_BYTES[
+            alternate - probe_builder.TIMEOUT_HANDLER :
+        ]
+        self.assertEqual(
+            data[alternate : alternate + len(source_body)],
+            source_body,
+        )
+
+    def test_result_modes_are_mutually_exclusive_with_annihilation(self):
+        for modes in (
+            {"protagonist_death": True, "timeout": True},
+            {"protagonist_death": True, "timeout_alternate": True},
+            {"timeout": True, "timeout_alternate": True},
+            {"enemy_annihilation": True, "protagonist_death": True},
+            {"enemy_annihilation": True, "timeout": True},
+            {"enemy_annihilation": True, "timeout_alternate": True},
+        ):
+            with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+                probe_builder.patch_probe(
+                    bytearray(self.built),
+                    self.source,
+                    **modes,
+                )
 
 
 if __name__ == "__main__":

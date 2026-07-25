@@ -3452,8 +3452,8 @@ contains 57 safe syllables as documented below and in
   pages returned to the preparation menu instead; those captures are rejected
   and the remaining hire lists are still pending.
 - Automatic deployment and all 16 opening frames reached a valid Elwin command
-  panel. `f03a_s05_conditions.png` verifies victory `20턴 내 적 전멸` or
-  `20턴 내 북쪽 도착`, with defeat `제한 턴 초과` or `주인공 사망`.
+  panel. `f03a_s05_conditions.png` verifies victory `22턴 내 적 전멸` or
+  `22턴 내 북쪽 도착`, with defeat `제한 턴 초과` or `주인공 사망`.
 - First-turn progression returned to the command panel after 36 captured
   confirmations. The text-bearing frames, including Morgan and imperial
   commander dialogue, were reviewed against Scenario 5 source records. No
@@ -6462,8 +6462,8 @@ contains 57 safe syllables as documented below and in
 
 ### Scenario 5 North-Exit Completion (2026-07-20)
 
-- Scenario 5 has two stock victory conditions: enemy annihilation within 20
-  turns or north-edge arrival within 20 turns. The Japanese header is
+- Scenario 5 has two stock victory conditions: enemy annihilation within 22
+  turns or north-edge arrival within 22 turns. The Japanese header is
   `0x18083C`, deployment table is `0x180858`, and the fixed list has nine
   36-byte records at `0x180870`. The first Elwin deployment is `(13,50)`.
 - `tools/build_scenario5_escape_probe_rom.py` derives diagnostic `398C` from
@@ -6515,9 +6515,10 @@ contains 57 safe syllables as documented below and in
   `b5e8_s05_annihilation_03.png`, `_07.png`, `_10.png`, `_14.png`,
   `_15.png`, `_20.png`, and `_22.png`.
 - Both documented Scenario 5 victory conditions are now live-covered.
-  `completion` remains `verified_probe`; `branches_endings` remains `pending`
-  because later-turn and defeat branches have not been traversed. Future
-  sessions must not repeat either victory route as if it were missing.
+  `completion` remains `verified_probe`. At this 2026-07-24 checkpoint,
+  `branches_endings` was still pending; the later Scenario 5 Result Branches
+  section supersedes that status. Future sessions must not repeat either
+  victory route as if it were missing.
 
 ### Scenario 6 Civilian-Safe Completion (2026-07-20)
 
@@ -9756,3 +9757,56 @@ contains 57 safe syllables as documented below and in
   `branches_endings` is `verified_probe`. The second `시, 시카앗` combat
   condition is a separate conditional combat event and remains explicitly
   outside this result-gate claim.
+
+### Scenario 5 Result Branches (2026-07-25)
+
+- The live condition screen is authoritative: both victories are limited to
+  22 turns, not 20. The older Scenario 5 notes that said 20 were corrected.
+  The Japanese event block is `0x18C056..0x18D5F2`. The protagonist-death
+  trigger at `0x18C0C6` dispatches handler `0x18C3D6`; its direct pages are
+  `0x18CBD0` and `0x18CBEA`, with the latter continuing through `FFFD` to
+  physical page `0x18CC2C`.
+- Production-6370 checksum `5A3F` preserves all five player deployments, all
+  nine fixed records, and every source event byte. Its guarded Start wrapper
+  marks only runtime player group 0 defeated. Fresh isolated playback retained
+  the Scenario 5 route, preparation, automatic arrangement, opening,
+  `엘윈/파이터` command panel, and Korean Start menu. Stock turn end rendered
+  `엘윈: 크윽… 여기까지인가…`, Morgan's
+  `이런, 정말 형편없군. 모두 죽고 말았잖아.` and
+  `난 목숨을 건졌으니 됐지. 흐하하하하…`, then GAME OVER.
+  Representative evidence is `5a3f_s05_protagonist_route.png`,
+  `_prep.png`, `_opening_12.png`, `_command.png`, `_start_menu.png`, and
+  `_result_02.png` through `_05.png`.
+- Timeout trigger `0x18C1CA` dispatches source handler `0x18C2AE` and reaches
+  pages `0x18C8E4`, `0x18C908`, and `0x18C92A`. Ordinary Scenario 8
+  turn-state comparison had already established the shared runtime counter at
+  `0xFFFFA5F1`; Scenario 5's final allowed value is 22. The final timeout
+  wrapper compares the byte first, writes 22 only while the value is below
+  22, and therefore never rewinds turn 22 or later when Start is reopened.
+- Checksum `E019` leaves every deployment, fixed record, and source event byte
+  intact and changes only the guarded Start wrapper plus checksum. A fresh
+  run set turn 22, used stock `턴 종료`, and rendered
+  `스코트: 안 돼… 모건을 놓쳤어!`,
+  `엘윈: 어째서… 여기까지인가…`, and GAME OVER. Representative evidence is
+  `e019_s05_timeout_route.png`, `_entry_11.png`, `_sortie.png`,
+  `_opening_13.png`, `_start.png`, `_endturn_selected.png`, and
+  `_result_02.png` through `_04.png`.
+- Source handler `0x18C2C2` is the alternate timeout body used when Scott is
+  unavailable. Checksum `E02D` is an explicit diagnostic bridge: it changes
+  only the timeout trigger target from `0x18C2AE` to the untouched source body
+  at `0x18C2C2`, in addition to the same guarded turn wrapper. It rendered
+  `일반병: 안 돼! 모건을 놓쳤어!`, the same Elwin page, and GAME OVER.
+  Representative evidence is `e02d_s05_timeout_alt_route_retry.png`,
+  `_entry_11.png`, `_sortie.png`, `_opening_13.png`,
+  `_endturn_selected.png`, and `_result_01.png` through `_03.png`.
+- The first exploratory timeout build was rejected as evidence. It used the
+  stale value 20 and rewrote the counter on every Start, so later turns could
+  be rewound. A guarded revision advanced through 20, 21, and 22 and proved
+  that the stock loss fires only after ending turn 22. The final E019/E02D
+  builds use 22 directly; do not repeat or cite the earlier C9CB/E015 captures
+  as accepted timeout evidence.
+- No accepted result path showed Japanese residue, broken name/class/UI
+  glyphs, clipping, unexpected reset, or freeze. Both stock victories,
+  protagonist death, and both timeout-speaker variants are live-covered, so
+  Scenario 5 `branches_endings` is `verified_probe`. Ordinary intermediate
+  turns and the remaining commander hire lists stay separately pending.

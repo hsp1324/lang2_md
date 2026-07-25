@@ -311,15 +311,28 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/b5e8_s05_annihilation_15.png",
             "captures/run/b5e8_s05_annihilation_20.png",
             "captures/run/b5e8_s05_annihilation_22.png",
+            "captures/run/5a3f_s05_protagonist_result_02.png",
+            "captures/run/5a3f_s05_protagonist_result_03.png",
+            "captures/run/5a3f_s05_protagonist_result_04.png",
+            "captures/run/5a3f_s05_protagonist_result_05.png",
+            "captures/run/e019_s05_timeout_result_02.png",
+            "captures/run/e019_s05_timeout_result_03.png",
+            "captures/run/e019_s05_timeout_result_04.png",
+            "captures/run/e02d_s05_timeout_alt_result_01.png",
+            "captures/run/e02d_s05_timeout_alt_result_02.png",
+            "captures/run/e02d_s05_timeout_alt_result_03.png",
         ):
             self.assertIn(capture, scenario5["captures"])
         self.assertIn("changing only the first Elwin deployment Y", scenario5["note"])
-        self.assertIn("20턴 내 북쪽 도착", scenario5["note"])
+        self.assertIn("22턴 내 북쪽 도착", scenario5["note"])
         self.assertIn("diagnostic B5E8", scenario5["note"])
-        self.assertIn("20턴 내 적 전멸", scenario5["note"])
+        self.assertIn("22턴 내 적 전멸", scenario5["note"])
         self.assertIn("POINT 1920P", scenario5["note"])
-        self.assertEqual(scenario5["branches_endings"], "pending")
-        self.assertIn("defeat branches remain pending", scenario5["note"])
+        self.assertEqual(scenario5["branches_endings"], "verified_probe")
+        self.assertIn("Production-6370 diagnostic 5A3F", scenario5["note"])
+        self.assertIn("Final standard checksum E019", scenario5["note"])
+        self.assertIn("Diagnostic E02D", scenario5["note"])
+        self.assertIn("both timeout-speaker variants", scenario5["note"])
         self.assertEqual(scenario6["conditions"], "verified_current")
         self.assertEqual(scenario6["description"], "verified_current")
         for capture in (
