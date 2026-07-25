@@ -679,6 +679,42 @@ def battle_command_menu_visible(path: Path) -> bool:
     )
 
 
+def battle_dialogue_visible(path: Path) -> bool:
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+    panel = frame.crop(
+        (
+            round(10 * scale_x),
+            round(95 * scale_y),
+            round(310 * scale_x),
+            round(185 * scale_y),
+        )
+    )
+    dark_blue_pixels = sum(
+        1
+        for red, green, blue in panel.get_flattened_data()
+        if 35 <= blue <= 160
+        and red < 30
+        and green < 45
+        and blue > red * 2
+        and blue > green * 1.8
+    )
+    white_pixels = sum(
+        1
+        for red, green, blue in panel.get_flattened_data()
+        if red > 160 and green > 160 and blue > 160
+    )
+    # Dialogue uses a nearly full-width dark-blue box in this stable band.
+    # Command/status panels, TURN banners, sky, and water do not fill enough
+    # of the crop. Keep the text threshold low enough for short stock lines
+    # such as Scenario 8 Hein's "졌다!" while still rejecting a blank box.
+    return (
+        dark_blue_pixels > panel.width * panel.height * 0.58
+        and white_pixels > panel.width * panel.height * 0.008
+    )
+
+
 def game_over_visible(path: Path) -> bool:
     frame = Image.open(path).convert("RGB")
     scale_x = frame.width / 320
@@ -825,26 +861,38 @@ def advance_to_preparation_screen(args: argparse.Namespace) -> int:
 
 def advance_to_battle_command(args: argparse.Namespace) -> int:
     probe = LOG_ROOT / "battle_command_probe.png"
-    for step in range(1, args.max_confirmations + 1):
-        status = subprocess.call(
-            make_key_command(args, [f"c:{args.confirmation_delay}"]), cwd=ROOT
-        )
-        if status:
-            return status
+    confirmations = 0
+    for step in range(args.max_confirmations + 1):
         frame = detection_capture_path(args, probe, step)
         capture_window(frame, xlib_only=args.xlib_capture)
         if game_over_visible(frame):
-            print(f"game over detected after {step} confirmations")
+            print(f"game over detected after {confirmations} confirmations")
             return 2
         if battle_command_menu_visible(frame):
             time.sleep(2.0)
             capture_window(frame, xlib_only=args.xlib_capture)
             if battle_command_menu_visible(frame):
-                print(f"battle command menu detected after {step} confirmations")
+                print(
+                    "battle command menu detected after "
+                    f"{confirmations} confirmations"
+                )
                 return 0
+        if step == args.max_confirmations:
+            break
+        if battle_dialogue_visible(frame):
+            status = subprocess.call(
+                make_key_command(args, [f"c:{args.confirmation_delay}"]),
+                cwd=ROOT,
+            )
+            if status:
+                return status
+            confirmations += 1
+        else:
+            time.sleep(args.confirmation_delay)
     raise RuntimeError(
-        "battle command menu was not detected after "
-        f"{args.max_confirmations} confirmations"
+        "battle command menu was not detected within "
+        f"{args.max_confirmations} screen checks "
+        f"({confirmations} confirmations sent)"
     )
 
 

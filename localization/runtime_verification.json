@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "4385",
+  "production_checksum": "6370",
   "states": [
     "pending",
     "historical",
@@ -764,7 +764,7 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_probe",
-      "turn_events": "progressed_current",
+      "turn_events": "verified_probe",
       "completion": "verified_probe",
       "branches_endings": "verified_probe",
       "captures": [
@@ -814,9 +814,29 @@
         "captures/run/042e_s08_timeout_mid_01.png",
         "captures/run/042e_s08_timeout_mid_06.png",
         "captures/run/042e_s08_timeout_mid_07.png",
-        "captures/run/042e_s08_timeout_mid_08.png"
+        "captures/run/042e_s08_timeout_mid_08.png",
+        "captures/run/19be_s08_turn2_retry_transition1_contact.png",
+        "captures/run/19be_s08_turn2_retry_end_contact.png",
+        "captures/run/0b42_s08_turn12_contact.png",
+        "captures/run/19de_s08_turn18_event_live_75.png",
+        "captures/run/0b42_s08_turn18_event_a_33.png",
+        "captures/run/0b42_s08_turn21_event_02.png",
+        "captures/run/0b42_s08_turn21_event_05.png",
+        "captures/run/19e8_s08_turn23_entry_full_38.png",
+        "captures/run/19e8_s08_turn23_entry_full_39.png",
+        "captures/run/19e8_s08_turn23_entry_full_40.png",
+        "captures/run/0b42_s08_turn23_end_live_00.png",
+        "captures/run/0b42_s08_turn23_end_live_03.png",
+        "captures/run/0b42_s08_turn23_end_live_05.png",
+        "captures/run/0b42_s08_turn23_end_live_07.png",
+        "captures/run/0b42_s08_turn23_end_live_08.png",
+        "captures/run/0b42_s08_turn23_end_live_09.png",
+        "captures/run/66a0_s08_turn23_no_scott_entry_00.png",
+        "captures/run/66a0_s08_turn23_no_scott_entry_01.png",
+        "captures/run/66a0_s08_turn23_no_scott_entry_02.png",
+        "captures/run/66a0_s08_turn23_no_scott_command_00.png"
       ],
-      "note": "Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. Final production CE96-derived clear probe 2209 validates the Japanese header, deployment table, and all eleven fixed records; it preserves every deployment and event while limiting only Kramer record 5 to AT/DF 0, no mercenaries, and a coordinate directly above stock Elwin. The first normal attack exercised the stock boss-survival path, Vargas and Zolm reinforcements, and all retreat dialogue while leaving Kramer at HP 1. After a stock turn transition, a second normal attack defeated him and reached level messages, 전과보고 with POINT 3020P, a real 시나리오 9 save, 다음 시나리오, and the Scenario 9 route map. Scenario 8 reinforcement graphics overwrote the former 가/스/럴 byte-font tiles; production moves them to the dynamically restored final bank, and the ending-result renderer now reloads that bank so actual 발가스/제너럴, 스코트, and 키스 remain intact. A separate status probe proved that merely clearing the Scenario 8-hidden record flag does not perform event placement; it therefore relabels only the relocated visible target with the stock Vargas name/class IDs for renderer diagnosis and is not completion evidence. Current-production protagonist-death diagnostic 949F preserves all eleven fixed records and marks only runtime player group 0 defeated through Start; the stock first enemy phase reaches `제국군지휘관: 핫!`, Elwin's `크윽! 너무 무리했나…`, and GAME OVER. Ordinary TURN 1/2/3 GST comparison proves the runtime turn counter is `$FFFFA5F1`; timeout diagnostic 042E preserves all fixed records, sets only that counter to the actual final allowed turn 23, and reaches Kramer's `이제 칼자스 성의 잔군도 전멸 못하겠군…`, `하하하하…`, and GAME OVER after the stock enemy phase. Normal completion, boss survival/reinforcement, protagonist death, and timeout are live-covered, so branches_endings is verified_probe. Ordinary later-turn dialogue remains tracked separately under turn_events."
+      "note": "Production 489B verifies the Scenario 8 route map, all 25 text-bearing scrolling frames of 하늘의 다리, and the preparation endpoint. The complete Korean description covers the Blue Dragon Knights advancing on Kalxath, Sherry's return, the lightly defended castle, the gorge suspension bridge, and the attempted forced breakthrough without Japanese residue, broken glyphs, clipping, or abnormal spacing. EF65 previously verified five commander/class selections, all 17 opening confirmations, condition rows, and the no-action turn through the Sherry/Scott/Keith/Aaron anti-air tutorial and TURN 2. Final production CE96-derived clear probe 2209 validates the Japanese header, deployment table, and all eleven fixed records; it preserves every deployment and event while limiting only Kramer record 5 to AT/DF 0, no mercenaries, and a coordinate directly above stock Elwin. The first normal attack exercised the stock boss-survival path, Vargas and Zolm reinforcements, and all retreat dialogue while leaving Kramer at HP 1. After a stock turn transition, a second normal attack defeated him and reached level messages, 전과보고 with POINT 3020P, a real 시나리오 9 save, 다음 시나리오, and the Scenario 9 route map. Scenario 8 reinforcement graphics overwrote the former 가/스/럴 byte-font tiles; production moves them to the dynamically restored final bank, and the ending-result renderer now reloads that bank so actual 발가스/제너럴, 스코트, and 키스 remain intact. A separate status probe proved that merely clearing the Scenario 8-hidden record flag does not perform event placement; it therefore relabels only the relocated visible target with the stock Vargas name/class IDs for renderer diagnosis and is not completion evidence. Current-production protagonist-death diagnostic 949F preserves all eleven fixed records and marks only runtime player group 0 defeated through Start; the stock first enemy phase reaches `제국군지휘관: 핫!`, Elwin's `크윽! 너무 무리했나…`, and GAME OVER. Ordinary TURN 1/2/3 GST comparison proves the runtime turn counter is `$FFFFA5F1`; timeout diagnostic 042E preserves all fixed records, sets only that counter to the actual final allowed turn 23, and reaches Kramer's `이제 칼자스 성의 잔군도 전멸 못하겠군…`, `하하하하…`, and GAME OVER after the stock enemy phase. Normal completion, boss survival/reinforcement, protagonist death, and timeout are live-covered, so branches_endings is verified_probe. The Japanese scheduled-turn table at 0x190E96 is source-locked: turn-1 end dispatches 0x190F64, turn-2 entry/end dispatch 0x191030/0x190F76, turn-12 end dispatches 0x190F90, turn-18 entry dispatches 0x190FAA, turn-21 end dispatches 0x190FC2, and turn-23 entry/end dispatch 0x190FD4/0x191008. Source-preserving diagnostics 19BE, 19D4, 19DE, 19E6, and 19E8 protect only the seven player runtime groups with DF 99 and raise counter $FFFFA5F1 only to 1, 12, 17, 21, or 22. Sequence checksum 0B42 traversed turns 12, 18, 21, and 23 in one fresh run. Together they render every turn-1/2, turn-12, turn-18, turn-21, and turn-23 page, including the available-Scott entry, all bridge-collapse pages, GAME OVER at the turn-23 limit, and valid command-menu returns where the scenario continues. The turn-23 source handler conditionally substitutes a generic soldier when Scott is unavailable. The Japanese player order is source-locked as Elwin, Hein, Scott, Sherry, Aaron, Lester, and Keith, so diagnostic 66A0 marks only runtime group 2 Scott unavailable and leaves every deployment, fixed record, scheduled table record, and handler unchanged. Fresh playback first rendered Scott's stock withdrawal, then at TURN 23 rendered `일반병: 이제 줄 하나뿐입니다!`, Sherry, and Elwin without the Scott entry page before returning to an intact Elwin command menu. Its SHA-256 is fc59df43ea876be8bd80320b629bd1891da1d08daf5c64f5aba4c2b356a87bb7. An earlier rejected 6B20 experiment incorrectly assumed group 6 was Scott, actually withdrew Keith, and still rendered Scott's entry; do not repeat it. No accepted scheduled-event path showed Japanese residue, clipping, broken name/class/status glyphs, reset, or freeze. All Scenario 8 scheduled turn events and both source turn-23 entry variants are therefore verified_probe."
     },
     {
       "scenario": 9,

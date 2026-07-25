@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 00DC
-latest targeted live-verified production checksum: 00DC
+current production build checksum: 6370
+latest targeted live-verified production checksum: 6370
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 827 passing
+unit tests: 984 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -9958,3 +9958,65 @@ contains 57 safe syllables as documented below and in
   glyphs, GAME OVER, reset, or freeze. All Scenario 7 scheduled turn events
   and source dialogue bodies are now `verified_probe`. Remaining preparation
   hire-list gaps are tracked separately.
+
+### Scenario 8 Scheduled Turn Events (2026-07-26)
+
+- The Japanese scheduled-turn table is source-locked at `0x190E96`. Turn-1
+  end dispatches `0x190F64`; turn-2 entry/end dispatch
+  `0x191030/0x190F76`; turn-12 end dispatches `0x190F90`; turn-18 entry
+  dispatches `0x190FAA`; turn-21 end dispatches `0x190FC2`; and turn-23
+  entry/end dispatch `0x190FD4/0x191008`. The builder locks all ten table
+  records and every referenced handler before installing a diagnostic wrapper.
+- `tools/build_scenario8_clear_probe_rom.py --turn-event {2,12,18,21,23}`
+  preserves all seven player deployments, all eleven fixed records, and all
+  source event bytes. It protects only runtime player groups `0..6` with
+  DF 99 and raises shared counter `$FFFFA5F1` only to `1`, `12`, `17`, `21`,
+  or `22`. Checksums and SHA-256 values are:
+  `19BE` / `4cec778498028ea8eac034fa133156959fa6b07f28a37267241ebf6420144b96`,
+  `19D4` / `75cac869f73b6cbf4dd94a19ba3aa52246e415f791ba6767b3cd18b76315ba88`,
+  `19DE` / `d47bd7653be46288e7bcccd767a5c6dd83d836a358faee10e0bc07da7baf54af`,
+  `19E6` / `d9ef7700456c6ae87aef3009c62bfe5712ae361999b3985d4372ea9dca492523`,
+  and
+  `19E8` / `56c9ac535389f2c4ca83c017886f7ea9874b820bfb5a9a967e2b135a4eff5e69`.
+  Sequence checksum `0B42`, SHA-256
+  `cc47e0440c6c64731cdded6aba9685163875d2efa86272d229b4d7ece68a499b`,
+  advances successive Start uses through turns 12, 18, 21, and 23.
+- Fresh playback reviewed every turn-1/2 page in
+  `19be_s08_turn2_retry_transition1_contact.png` and
+  `19be_s08_turn2_retry_end_contact.png`; every turn-12 page in
+  `0b42_s08_turn12_contact.png`; the two turn-18 pages in
+  `19de_s08_turn18_event_live_75.png` and
+  `0b42_s08_turn18_event_a_33.png`; and the turn-21 generic soldier and
+  Kramer pages in `0b42_s08_turn21_event_02.png` and `_05.png`.
+- With Scott present, `19e8_s08_turn23_entry_full_38.png` through `_40.png`
+  render Scott, Sherry, and Elwin. The end event renders the five
+  bridge-collapse/failure pages and GAME OVER in
+  `0b42_s08_turn23_end_live_00.png`, `_03.png`, `_05.png`, `_07.png`,
+  `_08.png`, and `_09.png`.
+- The turn-23 source handler begins with the character-availability condition
+  `04 06`. The Japanese Scenario 8 player order at `0x180DB6` is
+  Elwin, Hein, Scott, Sherry, Aaron, Lester, and Keith, so Scott is runtime
+  group 2, not group 6. Checksum `66A0`, SHA-256
+  `fc59df43ea876be8bd80320b629bd1891da1d08daf5c64f5aba4c2b356a87bb7`,
+  preserves every source deployment, fixed record, table record, and handler;
+  its Start wrapper marks only runtime group 2 unavailable. Fresh isolated
+  playback first rendered Scott's stock withdrawal, then at TURN 23 rendered
+  `일반병: 이제 줄 하나뿐입니다!`, Sherry, and Elwin without the Scott
+  entry page. Captures are `66a0_s08_turn23_no_scott_entry_00.png` through
+  `_02.png`; `66a0_s08_turn23_no_scott_command_00.png` proves the intact
+  command-menu return.
+- Reject checksum `6B20`: it assumed runtime group 6 was Scott, actually
+  withdrew Keith, and still rendered Scott's turn-23 page. Read-only GST
+  records made the mistaken mapping explicit, and the builder now derives
+  Scott's group from the source-locked name table so this cannot silently
+  recur.
+- `battle_dialogue_visible` now accepts short full-panel lines such as
+  `졌다!` by lowering only the white-text ratio threshold from 2.5% to 0.8%;
+  the existing dark-blue full-panel geometry still rejects blank map panels.
+  Synthetic short-dialogue and blank-panel tests cover the distinction.
+  Static TURN banners and selected-unit map frames remain deliberate manual-C
+  checkpoints so unattended detection cannot accidentally choose Move.
+- No accepted path showed Japanese residue, clipping, broken name/class/status
+  glyphs, unexpected GAME OVER before the declared limit, reset, or freeze.
+  All Scenario 8 scheduled turn events and both source turn-23 entry variants
+  are now `verified_probe`.

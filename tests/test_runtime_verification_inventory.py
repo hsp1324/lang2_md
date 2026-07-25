@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "4385")
+        self.assertEqual(data["production_checksum"], "6370")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -523,7 +523,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario8["captures"])
         self.assertEqual(scenario8["opening_events"], "verified_current")
-        self.assertEqual(scenario8["turn_events"], "progressed_current")
+        self.assertEqual(scenario8["turn_events"], "verified_probe")
         self.assertEqual(scenario8["battle_ui"], "verified_probe")
         self.assertEqual(scenario8["completion"], "verified_probe")
         for capture in (
@@ -544,6 +544,10 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("protagonist-death diagnostic 949F", scenario8["note"])
         self.assertIn("timeout diagnostic 042E", scenario8["note"])
         self.assertIn("$FFFFA5F1", scenario8["note"])
+        self.assertIn("scheduled-turn table at 0x190E96", scenario8["note"])
+        self.assertIn("Sequence checksum 0B42", scenario8["note"])
+        self.assertIn("runtime group 2 Scott", scenario8["note"])
+        self.assertIn("rejected 6B20", scenario8["note"])
         self.assertEqual(scenario8["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/949f_s08_death_event_02.png",
@@ -553,6 +557,22 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/042e_s08_timeout_mid_06.png",
             "captures/run/042e_s08_timeout_mid_07.png",
             "captures/run/042e_s08_timeout_mid_08.png",
+            "captures/run/19be_s08_turn2_retry_transition1_contact.png",
+            "captures/run/19be_s08_turn2_retry_end_contact.png",
+            "captures/run/0b42_s08_turn12_contact.png",
+            "captures/run/19de_s08_turn18_event_live_75.png",
+            "captures/run/0b42_s08_turn18_event_a_33.png",
+            "captures/run/0b42_s08_turn21_event_02.png",
+            "captures/run/0b42_s08_turn21_event_05.png",
+            "captures/run/19e8_s08_turn23_entry_full_38.png",
+            "captures/run/19e8_s08_turn23_entry_full_39.png",
+            "captures/run/19e8_s08_turn23_entry_full_40.png",
+            "captures/run/0b42_s08_turn23_end_live_00.png",
+            "captures/run/0b42_s08_turn23_end_live_09.png",
+            "captures/run/66a0_s08_turn23_no_scott_entry_00.png",
+            "captures/run/66a0_s08_turn23_no_scott_entry_01.png",
+            "captures/run/66a0_s08_turn23_no_scott_entry_02.png",
+            "captures/run/66a0_s08_turn23_no_scott_command_00.png",
         ):
             self.assertIn(capture, scenario8["captures"])
         self.assertEqual(scenario9["description"], "verified_current")
