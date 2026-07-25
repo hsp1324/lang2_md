@@ -45,7 +45,7 @@ class CaptureClassChangeApplicationTests(unittest.TestCase):
                 runtime_record_index=0,
                 restore_commander_id=1,
             )
-            self.assertEqual(checksum, 0x27D3)
+            self.assertEqual(checksum, 0x299F)
             self.assertEqual(expected_class, 0x08)
             self.assertEqual(len(output.read_bytes()), 0x400000)
 

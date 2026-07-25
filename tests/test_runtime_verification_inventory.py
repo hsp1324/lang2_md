@@ -67,7 +67,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "6370")
+        self.assertEqual(data["production_checksum"], "653C")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -589,12 +589,16 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario9["preparation"], "verified_current")
         self.assertEqual(scenario9["opening_events"], "verified_current")
         self.assertEqual(scenario9["battle_ui"], "verified_current")
-        self.assertEqual(scenario9["turn_events"], "progressed_current")
+        self.assertEqual(scenario9["turn_events"], "verified_probe")
         self.assertEqual(scenario9["completion"], "verified_probe")
         self.assertEqual(scenario9["branches_endings"], "verified_probe")
         self.assertIn("NPC-annihilation diagnostic 448F", scenario9["note"])
         self.assertIn("protagonist diagnostic 949F", scenario9["note"])
         self.assertIn("there is no timeout condition", scenario9["note"])
+        self.assertIn("scheduled table at 0x192D48", scenario9["note"])
+        self.assertIn("no later scheduled-turn record exists", scenario9["note"])
+        self.assertIn("Production-653C diagnostic 8315", scenario9["note"])
+        self.assertIn("팔랑크스나", scenario9["note"])
         for capture in (
             "captures/run/448f_s09_npc_event_04.png",
             "captures/run/448f_s09_npc_event_08.png",
@@ -604,6 +608,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/448f_s09_npc_event_18.png",
             "captures/run/949f_s09_death_event_21.png",
             "captures/run/949f_s09_death_event_22.png",
+            "captures/run/8315_s09_turn1_a_26.png",
+            "captures/run/8315_s09_turn2_entry_00.png",
+            "captures/run/8315_s09_turn2_entry_01.png",
+            "captures/run/8315_s09_turn2_entry_02.png",
+            "captures/run/8315_s09_turn2_entry_03.png",
+            "captures/run/8315_s09_turn2_entry_04.png",
+            "captures/run/8315_s09_turn2_entry_05.png",
+            "captures/run/8315_s09_turn2_command.png",
         ):
             self.assertIn(capture, scenario9["captures"])
         for capture in (

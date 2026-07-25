@@ -224,7 +224,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x3992,
+            0x3B5E,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -232,7 +232,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x3980,
+            0x3B4C,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -241,7 +241,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x5A3F,
+            0x5C0B,
         )
 
     def test_preserves_leon_laird_and_hidden_lana_source_records(self):

@@ -508,8 +508,8 @@ class Scenario23ClearProbeTests(unittest.TestCase):
 
     def test_defeat_mode_checksums_are_locked(self):
         for mode, checksum in (
-            ("protagonist", 0x5A3F),
-            ("holy_rod_escape", 0x6883),
+            ("protagonist", 0x5C0B),
+            ("holy_rod_escape", 0x6A4F),
         ):
             with self.subTest(mode=mode):
                 data = self.defeat_patched(mode)

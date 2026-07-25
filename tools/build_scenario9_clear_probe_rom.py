@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 from pathlib import Path
 import sys
 
@@ -19,10 +20,18 @@ DEFAULT_SOURCE_ROM = ROOT / builder.IN_ROM
 DEFAULT_OUTPUT_ROM = (
     ROOT / "roms/builds/Langrisser II (Scenario 9 Clear Probe).md"
 )
+DEFAULT_TURN_EVENT_OUTPUT_ROM = (
+    ROOT / "roms/builds/Langrisser II (Scenario 9 turn 2 Probe).md"
+)
 
 SCENARIO_NUMBER = 9
 SCENARIO_HEADER = 0x180F72
 DEPLOYMENT_POINTER_OFFSET = 0x08
+PLAYER_NAME_TABLE = SCENARIO_HEADER + 0x10
+SOURCE_PLAYER_NAME_IDS = (0x01, 0x05, 0x06, 0x02, 0x04, 0x08, 0x07)
+SOURCE_PLAYER_NAME_TABLE = b"\x00\x07" + b"".join(
+    name_id.to_bytes(2, "big") for name_id in SOURCE_PLAYER_NAME_IDS
+)
 DEPLOYMENT_TABLE = 0x180F92
 FIRST_PLAYER_DEPLOYMENT_OFFSET = DEPLOYMENT_TABLE + 0x02
 SOURCE_PLAYER_DEPLOYMENTS = bytes.fromhex(
@@ -57,6 +66,53 @@ FIRST_FIXED_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
+RUNTIME_DF_OFFSET = 0x3B
+RUNTIME_TURN_COUNTER = 0xFFFFA5F1
+TURN_EVENT_TARGET = 2
+TURN_EVENT_COUNTER_VALUE = 1
+TURN_EVENT_PROTECTED_RUNTIME_GROUPS = tuple(
+    range(PLAYER_DEPLOYMENT_COUNT + len(NPC_RECORD_INDICES))
+)
+TURN_EVENT_PROTECTED_DF = 99
+SCENARIO_EVENT_POINTER_TABLE = 0x192B72
+SCENARIO_EVENT_POINTER_TABLE_BYTES = bytes.fromhex(
+    "00 19 2B 8A "
+    "00 19 2B CC "
+    "00 19 2C 6E "
+    "00 19 2D 3A "
+    "00 19 2D 48 "
+    "00 19 2D 62"
+)
+TURN_EVENT_TABLE = 0x192D48
+TURN_EVENT_TABLE_BYTES = bytes.fromhex(
+    "00 01 00 01 00 19 2D 88 "
+    "08 04 00 01 00 19 2E 4C "
+    "09 01 00 02 00 19 2E 56 "
+    "FF FF"
+)
+TURN_EVENT_HANDLER_RANGES = {
+    "turn-1-entry": (0x192D88, 0x192E4C),
+    "turn-1-end": (0x192E4C, 0x192E56),
+    "turn-2-entry": (0x192E56, 0x192E78),
+}
+TURN_EVENT_HANDLER_SHA256 = {
+    "turn-1-entry": (
+        "4d5886b0a993df5934cea8fbd9fb1c8a66c02ed85d0aa4c442b5c2660973563b"
+    ),
+    "turn-1-end": (
+        "398a6b105ad4e814269c9a1396a81f1140665a3e83721efa9c884751ef130f0c"
+    ),
+    "turn-2-entry": (
+        "9e41758445a9b9e5d9b7e8d051482846920c854979f866b15a44ed9e4323db9b"
+    ),
+}
+TURN_EVENT_TEXTS = (
+    0x19389A,
+    0x193A02,
+    0x193A80,
+    0x193B42,
+    0x193B84,
+)
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -91,6 +147,27 @@ def npc_annihilation_wrapper_code() -> bytes:
 
 def protagonist_death_wrapper_code() -> bytes:
     return mark_runtime_groups_defeated_code((PROTAGONIST_RUNTIME_GROUP,))
+
+
+def turn_event_wrapper_code() -> bytes:
+    code = bytearray()
+    for runtime_group in TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+        record = RUNTIME_GROUP_BASE + runtime_group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("13 FC"))
+        code.extend(TURN_EVENT_PROTECTED_DF.to_bytes(2, "big"))
+        code.extend((record + RUNTIME_DF_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("0C 39"))
+    code.extend(TURN_EVENT_COUNTER_VALUE.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("64 08"))
+    code.extend(bytes.fromhex("13 FC"))
+    code.extend(TURN_EVENT_COUNTER_VALUE.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
 
 
 def install_start_wrapper(
@@ -132,12 +209,41 @@ def validate_layout(probe: bytes, source: bytes) -> None:
     for label, data in (("Japanese source", source), ("input ROM", probe)):
         if (
             data[
+                PLAYER_NAME_TABLE : PLAYER_NAME_TABLE
+                + len(SOURCE_PLAYER_NAME_TABLE)
+            ]
+            != SOURCE_PLAYER_NAME_TABLE
+        ):
+            raise ValueError(f"{label} Scenario 9 player name table changed")
+        if (
+            data[
                 FIRST_PLAYER_DEPLOYMENT_OFFSET :
                 FIRST_PLAYER_DEPLOYMENT_OFFSET + len(SOURCE_PLAYER_DEPLOYMENTS)
             ]
             != SOURCE_PLAYER_DEPLOYMENTS
         ):
             raise ValueError(f"{label} Scenario 9 player deployments changed")
+        pointer_end = (
+            SCENARIO_EVENT_POINTER_TABLE
+            + len(SCENARIO_EVENT_POINTER_TABLE_BYTES)
+        )
+        if (
+            data[SCENARIO_EVENT_POINTER_TABLE:pointer_end]
+            != SCENARIO_EVENT_POINTER_TABLE_BYTES
+        ):
+            raise ValueError(f"{label} Scenario 9 event pointer table changed")
+        turn_table_end = TURN_EVENT_TABLE + len(TURN_EVENT_TABLE_BYTES)
+        if data[TURN_EVENT_TABLE:turn_table_end] != TURN_EVENT_TABLE_BYTES:
+            raise ValueError(f"{label} Scenario 9 scheduled turn table changed")
+        for handler, (start, end) in TURN_EVENT_HANDLER_RANGES.items():
+            payload = bytes(data[start:end])
+            if (
+                hashlib.sha256(payload).hexdigest()
+                != TURN_EVENT_HANDLER_SHA256[handler]
+            ):
+                raise ValueError(
+                    f"{label} Scenario 9 turn handler {handler} changed"
+                )
 
     for index in NPC_RECORD_INDICES:
         record_offset = source_layout.records_offset + index * FIXED_RECORD_SIZE
@@ -168,11 +274,12 @@ def patch_probe(
     *,
     npc_annihilation: bool = False,
     protagonist_death: bool = False,
+    turn_event: bool = False,
 ) -> int:
     validate_layout(probe, source)
-    if npc_annihilation and protagonist_death:
-        raise ValueError("npc-annihilation and protagonist-death modes conflict")
-    if npc_annihilation or protagonist_death:
+    if sum((npc_annihilation, protagonist_death, turn_event)) > 1:
+        raise ValueError("Scenario 9 diagnostic modes conflict")
+    if npc_annihilation or protagonist_death or turn_event:
         layout = scenario_layout(source, SCENARIO_NUMBER)
         for index in range(layout.record_count):
             start = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -184,7 +291,11 @@ def patch_probe(
         wrapper = (
             npc_annihilation_wrapper_code()
             if npc_annihilation
-            else protagonist_death_wrapper_code()
+            else (
+                protagonist_death_wrapper_code()
+                if protagonist_death
+                else turn_event_wrapper_code()
+            )
         )
         install_start_wrapper(probe, source, wrapper)
     else:
@@ -207,7 +318,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
-    parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument("--output-rom", type=Path)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument(
         "--npc-annihilation",
@@ -225,6 +336,15 @@ def parse_args() -> argparse.Namespace:
             "player group 0 defeated through Start"
         ),
     )
+    mode.add_argument(
+        "--turn-event",
+        action="store_true",
+        help=(
+            "preserve every Scenario 9 deployment/fixed record and scheduled "
+            "event, protect player/NPC runtime groups, and advance from turn 1 "
+            "through the turn-1 end and turn-2 entry dialogue"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -237,9 +357,15 @@ def main() -> int:
         source,
         npc_annihilation=args.npc_annihilation,
         protagonist_death=args.protagonist_death,
+        turn_event=args.turn_event,
     )
-    args.output_rom.parent.mkdir(parents=True, exist_ok=True)
-    args.output_rom.write_bytes(probe)
+    output_rom = args.output_rom or (
+        DEFAULT_TURN_EVENT_OUTPUT_ROM
+        if args.turn_event
+        else DEFAULT_OUTPUT_ROM
+    )
+    output_rom.parent.mkdir(parents=True, exist_ok=True)
+    output_rom.write_bytes(probe)
     if args.npc_annihilation:
         print(
             "Scenario 9 NPC-annihilation mode: all deployments and fixed "
@@ -258,13 +384,22 @@ def main() -> int:
             "Start marks only runtime player group 0 defeated, then returns "
             "to the stock Start handler"
         )
+    elif args.turn_event:
+        print(
+            "Scenario 9 turn-event mode: all deployments, fixed records, "
+            "scheduled records, and handlers remain source-identical"
+        )
+        print(
+            "Start protects runtime player/NPC groups 0..9 and raises the "
+            "turn counter only to 1"
+        )
     else:
         print(
             f"Scenario 9 Laird: ({PROBE_LAIRD_X},{PROBE_LAIRD_Y}), "
             "AT 0, DF 0, no mercenaries"
         )
     print(f"checksum: {checksum:04X}")
-    print(args.output_rom)
+    print(output_rom)
     return 0
 
 

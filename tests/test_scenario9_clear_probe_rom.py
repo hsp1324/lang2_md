@@ -22,6 +22,7 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             self.source,
             npc_annihilation=mode == "npc",
             protagonist_death=mode == "protagonist",
+            turn_event=mode == "turn",
         )
         return data
 
@@ -89,13 +90,14 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0x446C)
+        self.assertEqual(checksum, 0x4638)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_diagnostic_modes_change_only_wrapper_and_checksum(self):
         for mode, wrapper in (
             ("npc", probe_builder.npc_annihilation_wrapper_code()),
             ("protagonist", probe_builder.protagonist_death_wrapper_code()),
+            ("turn", probe_builder.turn_event_wrapper_code()),
         ):
             with self.subTest(mode=mode):
                 data = self.diagnostic_patched(mode)
@@ -120,7 +122,7 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
 
     def test_diagnostic_modes_preserve_all_scenario_fixed_records(self):
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
-        for mode in ("npc", "protagonist"):
+        for mode in ("npc", "protagonist", "turn"):
             data = self.diagnostic_patched(mode)
             for index in range(layout.record_count):
                 start = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -176,6 +178,100 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             code,
         )
 
+    def test_turn_event_mode_protects_only_player_and_npc_groups(self):
+        code = probe_builder.turn_event_wrapper_code()
+        for group in probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC")
+                + probe_builder.TURN_EVENT_PROTECTED_DF.to_bytes(2, "big")
+                + (record + probe_builder.RUNTIME_DF_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        first_enemy = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + 10 * probe_builder.RUNTIME_GROUP_SIZE
+            + probe_builder.RUNTIME_DF_OFFSET
+        )
+        self.assertNotIn(first_enemy.to_bytes(4, "big"), code)
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+            code,
+        )
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_source_locks_player_order_event_table_and_handlers(self):
+        self.assertEqual(
+            self.source[
+                probe_builder.PLAYER_NAME_TABLE :
+                probe_builder.PLAYER_NAME_TABLE
+                + len(probe_builder.SOURCE_PLAYER_NAME_TABLE)
+            ],
+            probe_builder.SOURCE_PLAYER_NAME_TABLE,
+        )
+        self.assertEqual(
+            self.source[
+                probe_builder.SCENARIO_EVENT_POINTER_TABLE :
+                probe_builder.SCENARIO_EVENT_POINTER_TABLE
+                + len(probe_builder.SCENARIO_EVENT_POINTER_TABLE_BYTES)
+            ],
+            probe_builder.SCENARIO_EVENT_POINTER_TABLE_BYTES,
+        )
+        self.assertEqual(
+            self.source[
+                probe_builder.TURN_EVENT_TABLE :
+                probe_builder.TURN_EVENT_TABLE
+                + len(probe_builder.TURN_EVENT_TABLE_BYTES)
+            ],
+            probe_builder.TURN_EVENT_TABLE_BYTES,
+        )
+        for address in probe_builder.TURN_EVENT_TEXTS:
+            self.assertTrue(
+                any(
+                    address.to_bytes(4, "big") in self.source[start:end]
+                    for start, end in
+                    probe_builder.TURN_EVENT_HANDLER_RANGES.values()
+                ),
+                f"missing turn-event text pointer 0x{address:06X}",
+            )
+
+    def test_probe_rejects_changed_turn_event_source_surfaces(self):
+        for label, offset, message in (
+            ("player names", probe_builder.PLAYER_NAME_TABLE + 2, "name table"),
+            (
+                "event pointers",
+                probe_builder.SCENARIO_EVENT_POINTER_TABLE,
+                "event pointer table",
+            ),
+            (
+                "turn table",
+                probe_builder.TURN_EVENT_TABLE,
+                "scheduled turn table",
+            ),
+            (
+                "turn handler",
+                probe_builder.TURN_EVENT_HANDLER_RANGES["turn-2-entry"][0],
+                "turn handler turn-2-entry",
+            ),
+        ):
+            with self.subTest(label=label):
+                source = bytearray(self.source)
+                source[offset] ^= 1
+                with self.assertRaisesRegex(ValueError, message):
+                    probe_builder.patch_probe(
+                        bytearray(self.built),
+                        bytes(source),
+                        turn_event=True,
+                    )
+
     def test_diagnostic_modes_conflict(self):
         data = bytearray(self.built)
         with self.assertRaisesRegex(ValueError, "modes conflict"):
@@ -183,11 +279,15 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
                 data,
                 self.source,
                 npc_annihilation=True,
-                protagonist_death=True,
+                turn_event=True,
             )
 
     def test_diagnostic_checksums_are_valid(self):
-        for mode, checksum in (("npc", 0x0A2F), ("protagonist", 0x5A3F)):
+        for mode, checksum in (
+            ("npc", 0x0BFB),
+            ("protagonist", 0x5C0B),
+            ("turn", 0x8315),
+        ):
             with self.subTest(mode=mode):
                 data = self.diagnostic_patched(mode)
                 expected = sum(

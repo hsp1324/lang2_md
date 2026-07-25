@@ -1041,7 +1041,7 @@
       {"address": "0x193A02", "english_record": 2845, "text": "{0006}, {0011}의 부대는 꽤 강하지 않아?"},
       {"address": "0x193A3E", "english_record": 2845, "continuation": true, "text": "머리는 {0006}가 써. 쉽게 해치울 방법을 생각해."},
       {"address": "0x193A80", "english_record": 2846, "text": "쉽게 쓰러뜨리긴 어렵습니다. 상대는 청룡기사단의 부단장입니다."},
-      {"address": "0x193AD4", "english_record": 2846, "continuation": true, "text": "하지만 파랑크스에 그리폰으로 공격하면 이길 수도 있습니다."},
+      {"address": "0x193AD4", "english_record": 2846, "continuation": true, "text": "하지만 팔랑크스나 그리폰으로 공격하면 이길 수도 있습니다."},
       {"address": "0x193B42", "english_record": 2847, "text": "부하를 소중히 하지 않으면 마지막엔 고생할 거야."},
       {"address": "0x193B84", "english_record": 2848, "text": "헤에… 그런 거야?"},
       {"address": "0x193B9E", "english_record": 2849, "text": "룬스톤을 찾았다!"},

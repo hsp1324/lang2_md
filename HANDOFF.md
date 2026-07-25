@@ -22,10 +22,10 @@ in the chronological log below.
 Current reproducible baseline:
 
 ```text
-current production build checksum: 6370
-latest targeted live-verified production checksum: 6370
+current production build checksum: 653C
+latest targeted live-verified production checksum: 653C
 custom Hangul glyphs: 866 (0x7000..0x7362)
-unit tests: 984 passing
+unit tests: 988 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
@@ -10020,3 +10020,31 @@ contains 57 safe syllables as documented below and in
   glyphs, unexpected GAME OVER before the declared limit, reset, or freeze.
   All Scenario 8 scheduled turn events and both source turn-23 entry variants
   are now `verified_probe`.
+
+### Scenario 9 Scheduled Turn Events And Canonical Phalanx Term (2026-07-26)
+
+- The Japanese Scenario 9 event pointer table at `0x192B72` and scheduled-turn
+  table at `0x192D48` are source-locked. The scheduled table contains only
+  turn-1 entry, turn-1 end, and turn-2 entry records targeting `0x192D88`,
+  `0x192E4C`, and `0x192E56`; there is no later scheduled-turn record.
+  Tests also lock the exact bytes and hashes of all three handler ranges.
+- `tools/build_scenario9_clear_probe_rom.py --turn-event` preserves all seven
+  player deployments, all thirteen fixed records, every scheduled record, and
+  every handler. Its guarded Start wrapper protects only player/NPC runtime
+  groups `0..9` with DF 99 and raises `$FFFFA5F1` only to 1. It does not alter
+  enemy groups or claim any later event exists.
+- The first diagnostic checksum `8149` exposed an inconsistent reviewed term
+  at `0x193AD4`: `파랑크스에 그리폰으로` was neither the canonical MD mercenary
+  name nor natural Korean. The accepted production build is checksum `653C`;
+  the corrected page reads `하지만 팔랑크스나 그리폰으로 공격하면 이길 수도
+  있습니다.` The final diagnostic checksum is `8315`, SHA-256
+  `8d6823a558e625d5730aec37a85a147d29b23fb64c4dbbaddfc4cb17baf0d532`.
+- Fresh isolated playback rendered Laird's turn-1-end aerial-corps order in
+  `8315_s09_turn1_a_26.png`, all six physical turn-2 tutorial pages in
+  `8315_s09_turn2_entry_00.png` through `_05.png`, and returned to the intact
+  Elwin command menu in `8315_s09_turn2_command.png`. The corrected mercenary
+  term is visible in `_03.png`.
+- No accepted page showed Japanese residue, clipping, damaged
+  name/class/status glyphs, reset, or freeze. Scenario 9 `turn_events` is now
+  `verified_probe`; the runtime matrix is 245/248 (98.8%). Only Scenario 15,
+  16, and 19 `turn_events` remain below a verified state.

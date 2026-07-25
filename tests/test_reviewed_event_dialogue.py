@@ -643,6 +643,11 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             corrected["text"],
             "{000D}님이 없는 지금, 망설일 수 없다. 청룡기사단의 힘을 보여 주마!",
         )
+        text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(
+            text_by_address["0x193AD4"],
+            "하지만 팔랑크스나 그리폰으로 공격하면 이길 수도 있습니다.",
+        )
 
     def test_scenario_10_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 10]
