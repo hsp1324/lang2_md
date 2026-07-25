@@ -10048,3 +10048,58 @@ contains 57 safe syllables as documented below and in
   name/class/status glyphs, reset, or freeze. Scenario 9 `turn_events` is now
   `verified_probe`; the runtime matrix is 245/248 (98.8%). Only Scenario 15,
   16, and 19 `turn_events` remain below a verified state.
+
+### Scenario 15 Scheduled Turn Events (2026-07-26)
+
+- The Japanese player-name table at `0x181B10`, all seven deployments at
+  `0x181B20`, the event pointer table at `0x19EFA2`, and the scheduled-turn
+  table at `0x19F162` are source-locked. Tests also lock every handler range,
+  including the common turn-6 body at `0x19F670..0x19F782`, and all eight
+  first-call text pointers `0x1A05E2..0x1A07A6`.
+- `tools/build_scenario15_clear_probe_rom.py --turn-event {2,3,6,7,8}`
+  preserves all seven player deployments, all twelve fixed records, every
+  scheduled record, and every source handler. Its guarded Start wrapper
+  protects only runtime players plus allied Scott, groups `0..7`, with DF 99
+  and raises `$FFFFA5F1` only to `1`, `3`, `5`, `6`, or `7`. The resulting
+  checksums are `9303`, `9307`, `930B`, `930D`, and `930F`.
+- Accepted checksum `9303`, SHA-256
+  `99ff148df33b17b1886cd92dcee762fa4ba66cccc35aed35109275d14fe043c0`,
+  renders the ordinary turn-1-end imperial order, Jessica's turn-2 Alhazard
+  warning, and a valid command-menu return. Accepted checksum `9307`,
+  SHA-256
+  `71e94c0a5dde27bef0ab76dbb8b49bd458f66c08fdcebc37ce04113d25b43f5d`,
+  renders all four stock turn-3 Imelda/imperial-commander pages.
+- The turn-3 source handler contains a second speaker body at `0x19F2E6`.
+  `--turn-event-branch imperial-soldier` changes only the scheduled target
+  field at `0x19F19E..0x19F1A1` in addition to the guarded wrapper and
+  checksum. Accepted checksum `9331`, SHA-256
+  `1accc1d8535230701db02442f7cf4b91191073d27a9819621686c3c3afa5847d`,
+  renders the 제국병 strategy and apology pages plus the shared Imelda page.
+  This bridge proves the untouched source-owned fallback body; it does not
+  claim the stock availability predicate selected that speaker.
+- Accepted checksum `930B`, SHA-256
+  `d1e69a81bc811a9c309cbe91166740cb77bea467b40987371bbf39b6d9b206d8`,
+  naturally continues through the state-only turn-6 entry, all ten physical
+  pages of the Lana/Imelda reinforcement event, all four turn-7 mind-control
+  pages, and Scott's three turn-8 reunion pages. The turn-6 first-call body
+  returns after setting its one-shot state; the later half of common handler
+  `0x19F670` belongs to the already live-covered escape/completion path, so it
+  is not a missing scheduled-turn branch.
+- Scott gains several levels after the turn-8 reunion and reaches the Korean
+  class-change surface. `930b_s15_turn8_classchange_01.png` verifies the
+  소드맨/호크나이트/나이트/로드 choices, stats, and mercenary row.
+  `930b_s15_turn8_command_confirmed.png` proves that the full reward sequence
+  returns to a clean 엘윈/파이터 command panel rather than resetting or
+  freezing. The earlier file named `930b_s15_turn8_command.png` is only a
+  Scott level-up page and must not be cited as command-return evidence.
+- Representative event evidence is `9303_s15_turn2_51.png`,
+  `9307_s15_turn3_00.png` through `_03.png`,
+  `9331_s15_turn3_soldier_00.png` through `_02.png`,
+  `930b_s15_turn6_end_00.png` through `_09.png`,
+  `930b_s15_turn6_enemy_57.png` through `_60.png`, and
+  `930b_s15_turn8_00.png` through `_02.png`. No accepted page shows Japanese
+  residue, clipping, broken name/class/status glyphs, unexpected GAME OVER,
+  reset, or freeze.
+- Scenario 15 `turn_events` is now `verified_probe`. The runtime matrix is
+  246/248 (99.2%); only Scenario 16 and 19 `turn_events` remain below a
+  verified state.

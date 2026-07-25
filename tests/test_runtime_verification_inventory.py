@@ -807,7 +807,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario15["preparation"], "verified_current")
         self.assertEqual(scenario15["opening_events"], "verified_current")
         self.assertEqual(scenario15["battle_ui"], "verified_probe")
-        self.assertEqual(scenario15["turn_events"], "progressed_current")
+        self.assertEqual(scenario15["turn_events"], "verified_probe")
         self.assertEqual(scenario15["completion"], "verified_probe")
         self.assertEqual(scenario15["branches_endings"], "verified_probe")
         for capture in (
@@ -827,6 +827,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/f7ab_s15_death_trigger_03.png",
             "captures/run/f7ab_s15_death_event_04.png",
             "captures/analysis/s15_render_b766/scenario_15_pages_09.png",
+            "captures/run/9303_s15_turn2_51.png",
+            "captures/run/9307_s15_turn3_03.png",
+            "captures/run/9331_s15_turn3_soldier_02.png",
+            "captures/run/930b_s15_turn6_end_09.png",
+            "captures/run/930b_s15_turn6_enemy_60.png",
+            "captures/run/930b_s15_turn8_02.png",
+            "captures/run/930b_s15_turn8_classchange_01.png",
+            "captures/run/930b_s15_turn8_command_confirmed.png",
         ):
             self.assertIn(capture, scenario15["captures"])
         self.assertIn("record 0x1A0A6E", scenario15["note"])
@@ -834,6 +842,9 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("disk SRAM slot 1 at Scenario 16", scenario15["note"])
         self.assertIn("protagonist-death diagnostic F7AB", scenario15["note"])
         self.assertIn("handler bytes 13 FF", scenario15["note"])
+        self.assertIn("Production 653C source-preserving turn diagnostics", scenario15["note"])
+        self.assertIn("checksum 9331", scenario15["note"])
+        self.assertIn("Scenario 15 turn_events is now verified_probe", scenario15["note"])
         self.assertEqual(scenario16["description"], "verified_current")
         for capture in (
             "captures/run/3fc0_s16_description_final_01.png",

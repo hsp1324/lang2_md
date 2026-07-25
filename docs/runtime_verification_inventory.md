@@ -25,7 +25,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 12 | current | current | current | current | current | probe | probe | probe | 54 |
 | 13 | current | current | current | current | current | probe | probe | probe | 57 |
 | 14 | current | current | current | current | probe | probe | probe | probe | 55 |
-| 15 | current | current | current | current | probe | progressed | probe | probe | 47 |
+| 15 | current | current | current | current | probe | probe | probe | probe | 71 |
 | 16 | current | current | current | current | probe | progressed | probe | probe | 52 |
 | 17 | current | current | current | current | current | probe | probe | probe | 51 |
 | 18 | current | current | current | current | probe | probe | probe | probe | 49 |
@@ -1035,7 +1035,7 @@ Production CE27 verifies the Scenario 14 route map, all 19 text-bearing scrollin
 
 ### Scenario 15
 
-Production B4C1 verifies the Scenario 15 route map, all 19 text-bearing scrolling frames of 빙룡병단장 이멜다, and the preparation endpoint. Direct Japanese-ROM rendering exposed a substantive omission: the party must cross ローレック河 on the shortest route. The established fallback spelling 롤렉 강 is restored, and explicit source rewrapping removes the isolated 불리한 line. 롤렉 is excluded from the early scenario-description glyph pass so its established later glyph IDs remain fixed; the regenerated 783-record direct-string inventory has no token diff. Earlier current captures verified both preparation pages, the complete seven-commander roster, arrangement, opening, conditions, and the first turn back to a valid command menu. Source-validated completion records at 0x19F13C, 0x19F148, and 0x19F154 lock the southern encounter, Elwin ID 1 escape bounds X 1..46 / Y 21..22 with handler 0x19F30A, and protagonist defeat. Production-2749 derivative 35A3 changes only Elwin's deployment from (3,2) to (3,20) in addition to enemy AT/DF/mercenary limits. One normal Move to (3,21) triggered the stock Lana/Dark Princess and monster sequence, Imelda retreat, Scott reunion, level/class-change pages, 전과보고 with POINT 4000P, a real 시나리오 16 save, the route map, and 레이갈드 제도 entry. Normal BlastEm termination left disk SRAM slot 1 at Scenario 16. Live page 35a3_s15_escape_event_44 exposed the last Elwin line wrapping its full stop to the next row; production B766 shortens record 0x1A0A6E to 알았어. {0002}가 걱정돼. 서두르자!, and the current 118-page static render proves it fits one physical page. Current default/completion derivatives are ECC0/ECD2; replaying the otherwise unchanged full completion is intentionally not duplicated. The first secret-selector attempt entered name input despite direct events; loading the actual Scenario 15 SRAM from the Scenario 14 completion run succeeded, so this is recorded as input transport failure rather than ROM behavior. Production 00DC protagonist-death diagnostic F7AB preserves every deployment and fixed record, changes only runtime player group 0 through the guarded Start wrapper, and reaches the original defeat handler 0x19F31A after normal turn end. The Japanese handler bytes 13 FF go directly to GAME OVER, so the absence of a separate Elwin death line is source behavior rather than untranslated text. Fresh headless Xvfb playback retained the route, preparation roster, automatic arrangement, opening, clean 엘윈/파이터 command panel, Korean Start menu, Imelda enemy-phase dialogue, and GAME OVER without reset, freeze, or broken glyphs. Normal completion and the sole declared defeat ending are now live-covered, so branches_endings is verified_probe. Later no-action turns remain pending; battle UI remains covered by the shared probe.
+Production B4C1 verifies the Scenario 15 route map, all 19 text-bearing scrolling frames of 빙룡병단장 이멜다, and the preparation endpoint. Direct Japanese-ROM rendering exposed a substantive omission: the party must cross ローレック河 on the shortest route. The established fallback spelling 롤렉 강 is restored, and explicit source rewrapping removes the isolated 불리한 line. 롤렉 is excluded from the early scenario-description glyph pass so its established later glyph IDs remain fixed; the regenerated 783-record direct-string inventory has no token diff. Earlier current captures verified both preparation pages, the complete seven-commander roster, arrangement, opening, conditions, and the first turn back to a valid command menu. Source-validated completion records at 0x19F13C, 0x19F148, and 0x19F154 lock the southern encounter, Elwin ID 1 escape bounds X 1..46 / Y 21..22 with handler 0x19F30A, and protagonist defeat. Production-2749 derivative 35A3 changes only Elwin's deployment from (3,2) to (3,20) in addition to enemy AT/DF/mercenary limits. One normal Move to (3,21) triggered the stock Lana/Dark Princess and monster sequence, Imelda retreat, Scott reunion, level/class-change pages, 전과보고 with POINT 4000P, a real 시나리오 16 save, the route map, and 레이갈드 제도 entry. Normal BlastEm termination left disk SRAM slot 1 at Scenario 16. Live page 35a3_s15_escape_event_44 exposed the last Elwin line wrapping its full stop to the next row; production B766 shortens record 0x1A0A6E to 알았어. {0002}가 걱정돼. 서두르자!, and the current 118-page static render proves it fits one physical page. Current default/completion derivatives are ECC0/ECD2; replaying the otherwise unchanged full completion is intentionally not duplicated. The first secret-selector attempt entered name input despite direct events; loading the actual Scenario 15 SRAM from the Scenario 14 completion run succeeded, so this is recorded as input transport failure rather than ROM behavior. Production 00DC protagonist-death diagnostic F7AB preserves every deployment and fixed record, changes only runtime player group 0 through the guarded Start wrapper, and reaches the original defeat handler 0x19F31A after normal turn end. The Japanese handler bytes 13 FF go directly to GAME OVER, so the absence of a separate Elwin death line is source behavior rather than untranslated text. Fresh headless Xvfb playback retained the route, preparation roster, automatic arrangement, opening, clean 엘윈/파이터 command panel, Korean Start menu, Imelda enemy-phase dialogue, and GAME OVER without reset, freeze, or broken glyphs. Normal completion and the sole declared defeat ending are now live-covered, so branches_endings is verified_probe. Production 653C source-preserving turn diagnostics lock the Japanese player-name table at 0x181B10, all seven deployments at 0x181B20, all twelve fixed records, the event pointer table at 0x19EFA2, the scheduled table at 0x19F162, and every referenced handler. Checksums 9303, 9307, 930B, 930D, and 930F protect only runtime players plus Scott with DF 99 and raise the shared turn counter only to the required value. Fresh isolated playback renders Jessica's turn-2 Alhazard warning; all four stock turn-3 Imelda/imperial-commander pages; the source-owned imperial-soldier fallback in checksum 9331, which changes only the scheduled target field; the state-only turn-6 entry; all ten physical pages of the turn-6 Lana/Imelda reinforcement body; all four turn-7 mind-control pages; and Scott's three turn-8 reunion pages. The turn-8 path also retained the Korean class-change surface and returned to a clean Elwin command panel after Scott's repeated level-up processing. The later half of common handler 0x19F670 belongs to the already live-covered completion path rather than a missing scheduled-turn branch. No accepted turn-event page shows Japanese residue, clipping, broken name/class/status glyphs, unexpected GAME OVER, reset, or freeze. Scenario 15 turn_events is now verified_probe; battle UI remains covered by the shared probe.
 
 - `captures/run/85f1_s15_brief_live_01.png`
 - `captures/run/85f1_s15_brief_live_13.png`
@@ -1084,6 +1084,30 @@ Production B4C1 verifies the Scenario 15 route map, all 19 text-bearing scrollin
 - `captures/run/f7ab_s15_death_trigger_03.png`
 - `captures/run/f7ab_s15_death_event_04.png`
 - `captures/analysis/s15_render_b766/scenario_15_pages_09.png`
+- `captures/run/9303_s15_turn2_51.png`
+- `captures/run/9307_s15_turn3_00.png`
+- `captures/run/9307_s15_turn3_01.png`
+- `captures/run/9307_s15_turn3_02.png`
+- `captures/run/9307_s15_turn3_03.png`
+- `captures/run/9331_s15_turn3_soldier_00.png`
+- `captures/run/9331_s15_turn3_soldier_01.png`
+- `captures/run/9331_s15_turn3_soldier_02.png`
+- `captures/run/930b_s15_turn6_entry.png`
+- `captures/run/930b_s15_turn6_command.png`
+- `captures/run/930b_s15_turn6_end_00.png`
+- `captures/run/930b_s15_turn6_end_03.png`
+- `captures/run/930b_s15_turn6_end_05.png`
+- `captures/run/930b_s15_turn6_end_08.png`
+- `captures/run/930b_s15_turn6_end_09.png`
+- `captures/run/930b_s15_turn6_enemy_57.png`
+- `captures/run/930b_s15_turn6_enemy_58.png`
+- `captures/run/930b_s15_turn6_enemy_59.png`
+- `captures/run/930b_s15_turn6_enemy_60.png`
+- `captures/run/930b_s15_turn8_00.png`
+- `captures/run/930b_s15_turn8_01.png`
+- `captures/run/930b_s15_turn8_02.png`
+- `captures/run/930b_s15_turn8_classchange_01.png`
+- `captures/run/930b_s15_turn8_command_confirmed.png`
 
 ### Scenario 16
 
