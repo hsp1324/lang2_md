@@ -1,3 +1,4 @@
+import hashlib
 import unittest
 
 from tools import build_scenario19_clear_probe_rom as probe_builder
@@ -15,6 +16,7 @@ class Scenario19ClearProbeTests(unittest.TestCase):
         *,
         completion_layout: bool = False,
         protagonist_death: bool = False,
+        turn_event: int | None = None,
     ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
@@ -22,6 +24,7 @@ class Scenario19ClearProbeTests(unittest.TestCase):
             self.source,
             completion_layout=completion_layout,
             protagonist_death=protagonist_death,
+            turn_event=turn_event,
         )
         return data
 
@@ -221,6 +224,169 @@ class Scenario19ClearProbeTests(unittest.TestCase):
                 protagonist_death=True,
             )
 
+    def test_turn_event_modes_change_only_wrapper_and_checksum(self):
+        for target_turn in probe_builder.TURN_EVENT_COUNTER_VALUES:
+            with self.subTest(target_turn=target_turn):
+                data = self.patched(turn_event=target_turn)
+                wrapper = probe_builder.turn_event_wrapper_code(target_turn)
+                expected_changes = {
+                    0x18E,
+                    0x18F,
+                    *range(
+                        probe_builder.START_MENU_ENTRY_OPERAND,
+                        probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                    ),
+                    *range(
+                        probe_builder.RUNTIME_WRAPPER,
+                        probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                    ),
+                }
+                changed = {
+                    offset
+                    for offset, (before, after) in enumerate(
+                        zip(self.production, data)
+                    )
+                    if before != after
+                }
+                self.assertLessEqual(changed, expected_changes)
+
+    def test_turn_event_modes_preserve_deployments_and_fixed_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        deployment_start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployment_end = deployment_start + len(
+            probe_builder.deployment_bytes(
+                probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+            )
+        )
+        records_end = (
+            layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+        )
+        for target_turn in probe_builder.TURN_EVENT_COUNTER_VALUES:
+            with self.subTest(target_turn=target_turn):
+                data = self.patched(turn_event=target_turn)
+                self.assertEqual(
+                    data[deployment_start:deployment_end],
+                    self.source[deployment_start:deployment_end],
+                )
+                self.assertEqual(
+                    data[layout.records_offset:records_end],
+                    self.source[layout.records_offset:records_end],
+                )
+
+    def test_turn_event_wrapper_protects_only_players(self):
+        for target_turn, counter_value in (
+            probe_builder.TURN_EVENT_COUNTER_VALUES.items()
+        ):
+            with self.subTest(target_turn=target_turn):
+                code = probe_builder.turn_event_wrapper_code(target_turn)
+                for group in probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+                    record = (
+                        probe_builder.RUNTIME_GROUP_BASE
+                        + group * probe_builder.RUNTIME_GROUP_SIZE
+                    )
+                    self.assertIn(
+                        bytes.fromhex("13 FC")
+                        + probe_builder.TURN_EVENT_PROTECTED_DF.to_bytes(
+                            2, "big"
+                        )
+                        + (
+                            record + probe_builder.RUNTIME_DF_OFFSET
+                        ).to_bytes(4, "big"),
+                        code,
+                    )
+                first_enemy = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + probe_builder.PLAYER_DEPLOYMENT_COUNT
+                    * probe_builder.RUNTIME_GROUP_SIZE
+                    + probe_builder.RUNTIME_DF_OFFSET
+                )
+                self.assertNotIn(first_enemy.to_bytes(4, "big"), code)
+                self.assertIn(
+                    bytes.fromhex("13 FC")
+                    + counter_value.to_bytes(2, "big")
+                    + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+                    code,
+                )
+                self.assertEqual(
+                    code[-6:],
+                    bytes.fromhex("4E F9")
+                    + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+                )
+
+    def test_source_locks_scheduled_table_handlers_and_text_pointers(self):
+        self.assertEqual(
+            self.source[
+                probe_builder.PLAYER_NAME_TABLE :
+                probe_builder.PLAYER_NAME_TABLE
+                + len(probe_builder.SOURCE_PLAYER_NAME_TABLE)
+            ],
+            probe_builder.SOURCE_PLAYER_NAME_TABLE,
+        )
+        self.assertEqual(
+            self.source[
+                probe_builder.SCENARIO_EVENT_POINTER_TABLE :
+                probe_builder.SCENARIO_EVENT_POINTER_TABLE
+                + len(probe_builder.SCENARIO_EVENT_POINTER_TABLE_BYTES)
+            ],
+            probe_builder.SCENARIO_EVENT_POINTER_TABLE_BYTES,
+        )
+        self.assertEqual(
+            self.source[
+                probe_builder.TURN_EVENT_TABLE :
+                probe_builder.TURN_EVENT_TABLE
+                + len(probe_builder.TURN_EVENT_TABLE_BYTES)
+            ],
+            probe_builder.TURN_EVENT_TABLE_BYTES,
+        )
+        for handler, (start, end) in (
+            probe_builder.TURN_EVENT_HANDLER_RANGES.items()
+        ):
+            self.assertEqual(
+                hashlib.sha256(self.source[start:end]).hexdigest(),
+                probe_builder.TURN_EVENT_HANDLER_SHA256[handler],
+            )
+        for target_turn, addresses in probe_builder.TURN_EVENT_TEXTS.items():
+            handler = (
+                "turn-2-entry"
+                if target_turn == 2
+                else f"turn-{target_turn}-end"
+            )
+            start, end = probe_builder.TURN_EVENT_HANDLER_RANGES[handler]
+            for address in addresses:
+                self.assertIn(
+                    address.to_bytes(4, "big"),
+                    self.source[start:end],
+                    f"missing turn-{target_turn} text pointer 0x{address:06X}",
+                )
+
+    def test_turn_event_probe_rejects_changed_source_surfaces(self):
+        cases = (
+            (probe_builder.PLAYER_NAME_TABLE + 2, "player name table"),
+            (
+                probe_builder.SCENARIO_EVENT_POINTER_TABLE,
+                "event pointer table",
+            ),
+            (probe_builder.TURN_EVENT_TABLE, "scheduled turn table"),
+            (
+                probe_builder.TURN_EVENT_HANDLER_RANGES["turn-2-entry"][0],
+                "turn handler turn-2-entry",
+            ),
+            (
+                probe_builder.TURN_EVENT_HANDLER_RANGES["turn-23-end"][0],
+                "turn handler turn-23-end",
+            ),
+        )
+        for offset, message in cases:
+            with self.subTest(offset=f"0x{offset:06X}"):
+                source = bytearray(self.source)
+                source[offset] ^= 1
+                with self.assertRaisesRegex(ValueError, message):
+                    probe_builder.patch_probe(
+                        bytearray(self.production),
+                        bytes(source),
+                        turn_event=23,
+                    )
+
     def test_protagonist_death_trigger_and_event_are_locked(self):
         trigger_start = probe_builder.PROTAGONIST_DEATH_TRIGGER
         trigger_end = (
@@ -252,7 +418,7 @@ class Scenario19ClearProbeTests(unittest.TestCase):
         protagonist = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xAEBD,
+            0x9F52,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -260,7 +426,7 @@ class Scenario19ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xAEED,
+            0x9F82,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -268,8 +434,26 @@ class Scenario19ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x5C0B,
+            0x4CA0,
         )
+        for target_turn, checksum in (
+            (2, 0x8398),
+            (13, 0x83B0),
+            (18, 0x83BA),
+            (19, 0x83BC),
+            (21, 0x83C0),
+            (23, 0x83C4),
+        ):
+            with self.subTest(target_turn=target_turn):
+                turn_event = bytearray(self.production)
+                self.assertEqual(
+                    probe_builder.patch_probe(
+                        turn_event,
+                        self.source,
+                        turn_event=target_turn,
+                    ),
+                    checksum,
+                )
 
     def test_rejects_non_source_fixed_record(self):
         damaged = bytearray(self.production)

@@ -65,9 +65,26 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             for surface in data["surfaces"]:
                 self.assertIn(entry.get(surface, "pending"), data["states"])
 
+    def test_all_248_scenario_surfaces_have_live_verification(self):
+        data = inventory.load_inventory()
+        results = [
+            (entry["scenario"], surface, entry.get(surface, "pending"))
+            for entry in data["scenarios"]
+            for surface in data["surfaces"]
+        ]
+        self.assertEqual(len(results), 31 * 8)
+        self.assertEqual(
+            [
+                result
+                for result in results
+                if not result[2].startswith("verified_")
+            ],
+            [],
+        )
+
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "653C")
+        self.assertEqual(data["production_checksum"], "55D1")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -986,7 +1003,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario19["preparation"], "verified_current")
         self.assertEqual(scenario19["opening_events"], "verified_current")
         self.assertEqual(scenario19["battle_ui"], "verified_probe")
-        self.assertEqual(scenario19["turn_events"], "progressed_current")
+        self.assertEqual(scenario19["turn_events"], "verified_probe")
         self.assertEqual(scenario19["completion"], "verified_probe")
         for capture in (
             "captures/run/2829_s19_imelda_target.png",
@@ -1011,6 +1028,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario19["branches_endings"], "verified_probe")
         self.assertIn("protagonist-death diagnostic AAC1", scenario19["note"])
         self.assertIn("protagonist-death event at 0x1A6144", scenario19["note"])
+        for capture in (
+            "captures/run/9303_s19_turn2_04.png",
+            "captures/run/83b0_s19_turn13_weapon_current.png",
+            "captures/run/83ba_s19_turn18_current_01.png",
+            "captures/run/83ba_s19_turn18_current_03.png",
+            "captures/run/83bc_s19_turn19_current.png",
+            "captures/run/932b_s19_turn21_page_02.png",
+            "captures/run/83c4_s19_turn23_current.png",
+            "captures/run/83c4_s19_turn23_elwin.png",
+            "captures/run/83c4_s19_turn23_game_over.png",
+        ):
+            self.assertIn(capture, scenario19["captures"])
+        self.assertIn("player-name table at 0x182252", scenario19["note"])
+        self.assertIn("scheduled table at 0x1A5F3A", scenario19["note"])
+        self.assertIn("Checksums 8398, 83B0, 83BA, 83BC, 83C0, and 83C4", scenario19["note"])
+        self.assertIn("Production 55D1 shortens those records", scenario19["note"])
+        self.assertIn("Scenario 19 turn_events is verified_probe", scenario19["note"])
         self.assertEqual(scenario20["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s20_description_current_01.png",

@@ -156,7 +156,7 @@ class Scenario12ClearProbeTests(unittest.TestCase):
                     int.from_bytes(data[0x18E:0x190], "big"),
                     expected,
                 )
-                self.assertEqual(expected, 0x5C0B)
+                self.assertEqual(expected, 0x4CA0)
 
     def test_base_probe_changes_only_enemy_combat_fields_and_checksum(self):
         data = self.patched()

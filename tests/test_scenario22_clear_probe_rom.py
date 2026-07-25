@@ -224,7 +224,7 @@ class Scenario22ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_hp=True,
             ),
-            0xC66D,
+            0xB702,
         )
 
     def test_completion_layout_stages_players_without_moving_enemies(self):
@@ -280,7 +280,7 @@ class Scenario22ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xC56B,
+            0xB600,
         )
 
     def test_source_defeat_triggers_and_handlers_are_locked(self):
@@ -423,7 +423,7 @@ class Scenario22ClearProbeTests(unittest.TestCase):
             )
 
     def test_death_mode_checksums_are_locked(self):
-        for mode, checksum in (("protagonist", 0x5C0B), ("jessica", 0x62CB)):
+        for mode, checksum in (("protagonist", 0x4CA0), ("jessica", 0x5360)):
             with self.subTest(mode=mode):
                 data = self.death_patched(mode)
                 self.assertEqual(

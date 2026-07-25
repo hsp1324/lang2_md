@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_checksum": "653C",
+  "production_checksum": "55D1",
   "states": [
     "pending",
     "historical",
@@ -1559,7 +1559,7 @@
       "preparation": "verified_current",
       "opening_events": "verified_current",
       "battle_ui": "verified_probe",
-      "turn_events": "progressed_current",
+      "turn_events": "verified_probe",
       "completion": "verified_probe",
       "branches_endings": "verified_probe",
       "captures": [
@@ -1608,9 +1608,30 @@
         "captures/run/aac1_s19_death_wait.png",
         "captures/run/aac1_s19_death_event_02.png",
         "captures/run/aac1_s19_death_event_03.png",
-        "captures/run/aac1_s19_death_event_04.png"
+        "captures/run/aac1_s19_death_event_04.png",
+        "captures/run/9303_s19_turn2_02.png",
+        "captures/run/9303_s19_turn2_03.png",
+        "captures/run/9303_s19_turn2_04.png",
+        "captures/run/9303_s19_turn2_command.png",
+        "captures/run/83b0_s19_turn13_wait.png",
+        "captures/run/83b0_s19_turn13_weapon_current.png",
+        "captures/run/931b_s19_turn14_command_confirm.png",
+        "captures/run/83ba_s19_turn18_wait.png",
+        "captures/run/83ba_s19_turn18_current_01.png",
+        "captures/run/83ba_s19_turn18_current_02.png",
+        "captures/run/83ba_s19_turn18_current_03.png",
+        "captures/run/9325_s19_turn18_return_94.png",
+        "captures/run/83bc_s19_turn19_current.png",
+        "captures/run/9327_s19_turn19_return_wait.png",
+        "captures/run/932b_s19_turn21_wait.png",
+        "captures/run/932b_s19_turn21_page_01.png",
+        "captures/run/932b_s19_turn21_page_02.png",
+        "captures/run/932b_s19_turn21_return_wait4.png",
+        "captures/run/83c4_s19_turn23_current.png",
+        "captures/run/83c4_s19_turn23_elwin.png",
+        "captures/run/83c4_s19_turn23_game_over.png"
       ],
-      "note": "Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrolling frames of 미레일 항구 전투, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the monster-attacked port, the imperial ship at Mileil Harbor, crossing the Dires Strait, the approaching cargo vessel, and the ship-seizure operation. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 remains covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Production-DE78 completion derivative 2829 moves only Elwin from (2,9) to (37,22), directly above source Imelda at (37,23), in addition to the locked enemy AT/DF/mercenary limits. Imelda remains 이멜다/제너럴, LV10; hidden Laird remains 레아드/실버나이트, LV9, and all reinforcement identities, classes, coordinates, and handlers remain source-identical. A stock-stat attempt triggered Imelda's departure orders and Laird's reinforcements but ended in GAME OVER after enemy magic reduced Elwin from HP6 to 0; enemy AT/DF limits do not suppress spell damage. The accepted isolated runtime retained Scenario 19's real save while setting only Elwin's manual-slot AT/DF to 99. One normal attack then defeated Imelda and traversed the departure orders, Laird reinforcement, allied dialogue, level-up pages, and save flow without reset, freeze, Japanese residue, or broken names/classes. Slot 1 changed from Scenario 19 to 20 while slot 2 remained 17; 다음 시나리오 displayed 진군루트 and entered 붉게 물든 바다. The AT/DF 99 SRAM is diagnostic evidence only and is not a scenario or editor default. Production-B3F2 protagonist-death diagnostic AAC1 preserves every deployment and fixed record, locks trigger 0x1A5E60 and the protagonist-death event at 0x1A6144, and changes only runtime player group 0 through the guarded Start wrapper. Fresh isolated playback retained the roster, automatic arrangement, opening, and clean 엘윈/파이터 command panel; normal turn end rendered 엘윈: 이런! 배를 빼앗기다니…, 이멜다's response, 오호호호…, and GAME OVER without Japanese residue, broken names/classes/UI glyphs, reset, or freeze. Normal completion and the declared protagonist-death ending are now live-covered, so branches_endings is verified_probe. Ordinary item-pickup variations remain separate coverage rather than defeat endings."
+      "note": "Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrolling frames of 미레일 항구 전투, and the preparation endpoint. Direct Japanese-ROM rendering confirms the existing Korean preserves the monster-attacked port, the imperial ship at Mileil Harbor, crossing the Dires Strait, the approaching cargo vessel, and the ship-seizure operation. Every page is natural Korean without Japanese residue, broken glyphs, clipping, or abnormal spacing; no translation change was required. Earlier current captures verified both preparation pages, the complete eight-commander roster, automatic deployment, opening, conditions, and the first turn back to a valid command menu without reset or freeze. No scenario-specific battle presentation occurred, so battle_ui remains covered by the shared probe. The original ten-record fixed-placement list at 0x182286 remains covered by editor regressions for an imperial 세인트, 이멜다/제너럴, and hidden 레아드/실버나이트. Production-DE78 completion derivative 2829 moves only Elwin from (2,9) to (37,22), directly above source Imelda at (37,23), in addition to the locked enemy AT/DF/mercenary limits. Imelda remains 이멜다/제너럴, LV10; hidden Laird remains 레아드/실버나이트, LV9, and all reinforcement identities, classes, coordinates, and handlers remain source-identical. A stock-stat attempt triggered Imelda's departure orders and Laird's reinforcements but ended in GAME OVER after enemy magic reduced Elwin from HP6 to 0; enemy AT/DF limits do not suppress spell damage. The accepted isolated runtime retained Scenario 19's real save while setting only Elwin's manual-slot AT/DF to 99. One normal attack then defeated Imelda and traversed the departure orders, Laird reinforcement, allied dialogue, level-up pages, and save flow without reset, freeze, Japanese residue, or broken names/classes. Slot 1 changed from Scenario 19 to 20 while slot 2 remained 17; 다음 시나리오 displayed 진군루트 and entered 붉게 물든 바다. The AT/DF 99 SRAM is diagnostic evidence only and is not a scenario or editor default. Production-B3F2 protagonist-death diagnostic AAC1 preserves every deployment and fixed record, locks trigger 0x1A5E60 and the protagonist-death event at 0x1A6144, and changes only runtime player group 0 through the guarded Start wrapper. Fresh isolated playback retained the roster, automatic arrangement, opening, and clean 엘윈/파이터 command panel; normal turn end rendered 엘윈: 이런! 배를 빼앗기다니…, 이멜다's response, 오호호호…, and GAME OVER without Japanese residue, broken names/classes/UI glyphs, reset, or freeze. Normal completion and the declared protagonist-death ending are now live-covered, so branches_endings is verified_probe. Ordinary item-pickup variations remain separate coverage rather than defeat endings. Source-preserving scheduled-turn diagnostics lock the Japanese player-name table at 0x182252, all eight deployments at 0x182264, the event pointer table at 0x1A5DE6, the scheduled table at 0x1A5F3A, and every referenced handler and text pointer. Checksums 8398, 83B0, 83BA, 83BC, 83C0, and 83C4 protect only runtime player groups 0..7 with DF 99 and raise the shared turn counter only to the value required for turns 2, 13, 18, 19, 21, or 23. Turn 2 renders Jessica, Aaron, and Elwin's departure dialogue and returns to a valid command menu. Turn 13 renders Imelda's loading-status exchange and returns at TURN 14; turn 18 renders all four loading-deadline pages and reaches TURN 19; turn 19 renders Imelda's garrison-status demand and reaches TURN 20; turn 21 renders all three deadline pages and reaches TURN 22. Turn 23 renders Imelda's departure taunt, Elwin's apology to Liana, and the source-owned deadline GAME OVER. Live playback exposed isolated punctuation and mid-word wrapping in records 0x1A66E8, 0x1A674A, 0x1A679C, 0x1A67B8, and 0x1A6824. Production 55D1 shortens those records to 무기 적재를 마쳤습니다, 곧 끝납니다! 잠시만!, 예! 서두르겠습니다!, 수비대 상황을 보고해!, and 오호호호! 끝냈군. 잘 있어라, 꼬마들아!. Fresh 83B0/83BA/83BC/83C4 playback proves every corrected page fits naturally; the current static render covers all 116 Scenario 19 physical pages. No accepted path shows Japanese residue, broken name/class/status glyphs, clipping, reset, freeze, or unexpected GAME OVER. Scenario 19 turn_events is verified_probe."
     },
     {
       "scenario": 20,

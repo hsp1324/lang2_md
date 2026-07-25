@@ -116,7 +116,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0xB8AF)
+        self.assertEqual(checksum, 0xA944)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
@@ -196,7 +196,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0x5C0B)
+        self.assertEqual(expected, 0x4CA0)
 
     def test_timeout_changes_only_start_wrapper_and_checksum(self):
         data = self.timeout_patched()
@@ -583,7 +583,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0xCB9A)
+        self.assertEqual(expected, 0xBC2F)
 
     def test_turn_event_checksums_are_valid(self):
         for turn in probe_builder.TURN_EVENT_COUNTER_VALUES:

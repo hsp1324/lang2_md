@@ -187,7 +187,7 @@ class Scenario1ClearProbeRomTests(unittest.TestCase):
             builder.be16(data, offset) for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(builder.be16(data, 0x18E), expected)
-        self.assertEqual(expected, 0x5C0B)
+        self.assertEqual(expected, 0x4CA0)
 
 
 if __name__ == "__main__":

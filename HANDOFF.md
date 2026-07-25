@@ -10135,3 +10135,80 @@ contains 57 safe syllables as documented below and in
   name/class/status glyphs, unexpected GAME OVER, reset, or freeze. Scenario
   16 `turn_events` is now `verified_probe`. The runtime matrix is 247/248
   (99.6%); only Scenario 19 `turn_events` remains below a verified state.
+### Scenario 19 Scheduled Turn Events And Live Rewraps (2026-07-26)
+
+- The Japanese Scenario 19 player-name table at `0x182252`, all eight player
+  deployments at `0x182264`, the event pointer table at `0x1A5DE6`, and the
+  66-byte scheduled-turn table at `0x1A5F3A` are source-locked. The scheduled
+  table dispatches turn-1 entry, turn-2 entry, and turn-13/18/19/21/23 end
+  events. Tests lock the exact tables, all eight referenced handler hashes,
+  and every dialogue pointer used by turns 2, 13, 18, 19, 21, and 23.
+- `tools/build_scenario19_clear_probe_rom.py --turn-event
+  {2,13,18,19,21,23}` preserves the eight deployments, all ten fixed records,
+  every source event byte, and every enemy/NPC runtime group. Its guarded
+  Start wrapper protects only player groups `0..7` with DF 99 and raises
+  `$FFFFA5F1` only to the target value. Production `55D1` creates checksums
+  `8398`, `83B0`, `83BA`, `83BC`, `83C0`, and `83C4`.
+- Turn 2 renders Jessica's warning, Aaron's Dires Strait route, and Elwin's
+  order to seize the ship, then returns to a valid command menu. Evidence is
+  `9303_s19_turn2_02.png` through `_04.png` and
+  `9303_s19_turn2_command.png`. The current `8398` rebuild differs on this
+  path only in five later Scenario 19 text records and the ROM checksum.
+- The initial turn-13/18/19/23 playback exposed real layout defects:
+  `무기 적재는 끝났습니다.` left its period alone, `잠시만` and
+  `다하겠습니다` split between rows, the turn-19 exclamation occupied a row
+  alone, and the turn-23 taunt began its second row with a period. Production
+  `55D1` changes only records `0x1A66E8`, `0x1A674A`, `0x1A679C`,
+  `0x1A67B8`, and `0x1A6824` to:
+  `무기 적재를 마쳤습니다`, `곧 끝납니다! 잠시만!`,
+  `예! 서두르겠습니다!`, `수비대 상황을 보고해!`, and
+  `오호호호! 끝냈군. 잘 있어라, 꼬마들아!`.
+- Fresh current-probe evidence is
+  `83b0_s19_turn13_weapon_current.png`,
+  `83ba_s19_turn18_current_01.png` and `_03.png`,
+  `83bc_s19_turn19_current.png`, and
+  `83c4_s19_turn23_current.png`. Every corrected line fits naturally.
+  `931b_s19_turn14_command_confirm.png`,
+  `9325_s19_turn18_return_94.png`, and
+  `9327_s19_turn19_return_wait.png` prove the earlier byte-identical handlers
+  return at turns 14, 19, and 20. Turn 21 text was unchanged; its three pages
+  and TURN 22 return are in `932b_s19_turn21_wait.png`,
+  `932b_s19_turn21_page_01.png`, `_02.png`, and
+  `932b_s19_turn21_return_wait4.png`.
+- Turn 23 is the source deadline ending rather than a command-menu return.
+  Current checksum `83C4` renders Imelda's departure, Elwin's apology to
+  Liana, and the expected GAME OVER in
+  `83c4_s19_turn23_current.png`, `83c4_s19_turn23_elwin.png`, and
+  `83c4_s19_turn23_game_over.png`.
+- The current production SHA-256 is
+  `c0d380816adda45e8aba6dbff5eddee9139edcd82a171bddcdadd318416c4a7d`.
+  The turn-13/18/19/21/23 probe SHA-256 values are
+  `a5d1eb4a9cad53c457f3a742c832e9724a4709f891fe651927fc79c3b81c9bf8`,
+  `0e6dcc4eb54e861aa395b85825bf127a66765624169d30f6a430388f60deb855`,
+  `e06f0a6675732212f8b28e2bb11a151babdd56e3cb925f211e3dbc76dc6e6eb6`,
+  `0e6b65973cdd510f4a002e96093468838467e97d09e378fc9a7f9a35f474852d`,
+  and `7106b5f662c1801e4ae90cc71c2d0daab101bbd51e8ca1e30c8417f689da85da`.
+  No accepted path shows Japanese residue, broken name/class/status glyphs,
+  clipping, reset, freeze, or unexpected GAME OVER. Scenario 19
+  `turn_events` is now `verified_probe`; the runtime matrix is 248/248.
+
+### Production 55D1 Checksum Rebase (2026-07-26)
+
+- The five Scenario 19 wording fixes intentionally change the production MD
+  checksum from `653C` to `55D1`, a modular difference of `-0x0F6B`.
+  No checksum-compensation word was added: `55D1` remains the honest build
+  identifier and SHA-256
+  `c0d380816adda45e8aba6dbff5eddee9139edcd82a171bddcdadd318416c4a7d`
+  remains the exact identity.
+- Every current production-derived probe checksum moved by the same modular
+  difference. Current checksum locks in the Scenario 1, 8..31, class-change,
+  magic, summon, and item diagnostic tests were rebased; historical accepted
+  capture checksums and their evidence names remain unchanged.
+- `python3 tools/item_shop_inventory.py` regenerated
+  `localization/item_shop_inventory.json` and
+  `docs/item_shop_runtime_matrix.md`; the current full-list derivative is
+  `B15A`, while the accepted item-surface fingerprint/capture checksum remains
+  `C80E`.
+- `python3 -m unittest discover -s tests` passes all 1005 tests on production
+  `55D1`. The focused Scenario 19/runtime-inventory suite separately passes
+  all 23 tests.
