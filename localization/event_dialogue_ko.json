@@ -3353,7 +3353,7 @@
       {"address": "0x1B5D20", "english_record": 107, "text": "오!"},
       {"address": "0x1B5D28", "english_record": 108, "text": "대체 뭐야…"},
       {"address": "0x1B5D3A", "english_record": 109, "text": "이번엔 우리 차례다! {0027}, {0028}! 함께 자세로 적을 쓰러뜨린다!"},
-      {"address": "0x1B5D92", "english_record": 109, "continuation": true, "text": "우리 몸이 터지기 전에 놈들을 쓰러뜨려라! 모두 힘내라!"},
+      {"address": "0x1B5D92", "english_record": 109, "continuation": true, "text": "몸이 터지기 전에 놈들을\n쓰러뜨려라! 모두 힘내라!"},
       {"address": "0x1B5DDC", "english_record": 109, "continuation": true, "text": "으음!"},
       {"address": "0x1B5DE4", "english_record": 110, "text": "몸을 단련해야겠군…"},
       {"address": "0x1B5E02", "english_record": 111, "text": "형님은 만나게 둘 수 없어! …응? 입이 멋대로 말했네."},

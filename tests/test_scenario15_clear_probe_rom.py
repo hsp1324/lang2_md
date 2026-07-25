@@ -241,7 +241,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x51CD,
+            0x720E,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -249,7 +249,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x51DF,
+            0x7220,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -258,7 +258,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x3A54,
+            0x5A95,
         )
 
     def test_preserves_imelda_and_hidden_enemy_identities(self):

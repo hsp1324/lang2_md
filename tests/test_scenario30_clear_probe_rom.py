@@ -263,7 +263,7 @@ class Scenario30ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0xBF2E)
+        self.assertEqual(expected, 0xDF6F)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_completion_checksum_is_current(self):

@@ -24,6 +24,15 @@ class Scenario28ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def protagonist_death_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            protagonist_death=True,
+        )
+        return data
+
     def allowed_offsets(
         self,
         *,
@@ -176,6 +185,106 @@ class Scenario28ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[0x18E:0x190], "big"),
             probe_builder.CURRENT_COMPLETION_CHECKSUM,
         )
+
+    def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
+        data = self.protagonist_death_patched()
+        wrapper = probe_builder.protagonist_death_wrapper_code()
+        expected_changes = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.COMPLETION_HP_WRAPPER,
+                probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+            ),
+        }
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, expected_changes)
+        self.assertEqual(
+            int.from_bytes(data[0x18E:0x190], "big"),
+            probe_builder.CURRENT_PROTAGONIST_DEATH_CHECKSUM,
+        )
+
+    def test_protagonist_death_preserves_deployments_and_fixed_records(self):
+        data = self.protagonist_death_patched()
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        expected = probe_builder.deployment_bytes(
+            probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+        )
+        self.assertEqual(data[start : start + len(expected)], expected)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            end = base + FIXED_RECORD_SIZE
+            self.assertEqual(data[base:end], self.source[base:end])
+
+    def test_protagonist_death_wrapper_marks_only_runtime_group_zero(self):
+        code = probe_builder.protagonist_death_wrapper_code()
+        protagonist = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (
+                protagonist + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 00")
+            + (protagonist + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 FF")
+            + (protagonist + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_source_protagonist_death_trigger_event_and_text_are_locked(self):
+        self.assertEqual(
+            self.source[
+                probe_builder.PROTAGONIST_DEATH_TRIGGER :
+                probe_builder.PROTAGONIST_DEATH_TRIGGER
+                + len(probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES)
+            ],
+            probe_builder.PROTAGONIST_DEATH_TRIGGER_BYTES,
+        )
+        self.assertEqual(
+            self.source[
+                probe_builder.PROTAGONIST_DEATH_EVENT :
+                probe_builder.PROTAGONIST_DEATH_EVENT
+                + len(probe_builder.PROTAGONIST_DEATH_EVENT_BYTES)
+            ],
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+        self.assertIn(
+            probe_builder.PROTAGONIST_DEATH_TEXT.to_bytes(4, "big"),
+            probe_builder.PROTAGONIST_DEATH_EVENT_BYTES,
+        )
+
+    def test_diagnostic_modes_are_mutually_exclusive(self):
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                completion_target_only=True,
+                protagonist_death=True,
+            )
 
     def test_completion_target_moves_only_baran_coordinate(self):
         data = self.completion_target_patched()

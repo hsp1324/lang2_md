@@ -1217,14 +1217,35 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario28["opening_events"], "verified_current")
         self.assertEqual(scenario28["turn_events"], "verified_current")
         self.assertEqual(scenario28["battle_ui"], "verified_current")
+        self.assertEqual(scenario28["completion"], "verified_probe")
+        self.assertEqual(scenario28["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/eca0_s28_turn1_34.png",
             "captures/run/eca0_s28_turn1_35.png",
             "captures/run/eca0_s28_turn1_36.png",
+            "captures/run/5a95_s28_death_entry.png",
+            "captures/run/5a95_s28_death_prep_15.png",
+            "captures/run/5a95_s28_death_arrangement.png",
+            "captures/run/5a95_s28_death_auto.png",
+            "captures/run/5a95_s28_death_opening_24.png",
+            "captures/run/5a95_s28_death_command.png",
+            "captures/run/5a95_s28_death_start_menu.png",
+            "captures/run/5a95_s28_death_event_01.png",
+            "captures/run/5a95_s28_death_event_02.png",
+            "captures/run/5a95_s28_death_event_03.png",
+            "captures/run/5a95_s28_death_event_04.png",
+            "captures/run/5a95_s28_death_event_05.png",
         ):
             self.assertIn(capture, scenario28["captures"])
         self.assertIn("바바리안 versus 워록", scenario28["note"])
         self.assertIn("captures/run/eca0_s28_turn1_64.png", scenario28["captures"])
+        self.assertIn("trigger 0x1B5554", scenario28["note"])
+        self.assertIn("handler 0x1B59A8", scenario28["note"])
+        self.assertIn("text 0x1B6592", scenario28["note"])
+        self.assertIn("3A54", scenario28["note"])
+        self.assertIn("39FE", scenario28["note"])
+        self.assertIn("몸이 터지기 전에 놈들을", scenario28["note"])
+        self.assertIn("이제 용서 못 해!", scenario28["note"])
         self.assertEqual(scenario29["description"], "verified_current")
         self.assertEqual(scenario29["conditions"], "verified_current")
         self.assertEqual(scenario29["preparation"], "verified_current")

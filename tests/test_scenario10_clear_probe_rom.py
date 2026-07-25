@@ -184,7 +184,7 @@ class Scenario10ClearProbeTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0x3A54)
+        self.assertEqual(expected, 0x5A95)
 
 
 if __name__ == "__main__":

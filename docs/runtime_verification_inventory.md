@@ -38,7 +38,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 25 | current | current | current | current | current | current | probe | probe | 61 |
 | 26 | current | current | current | current | probe | current | probe | probe | 45 |
 | 27 | current | current | current | current | probe | current | probe | probe | 37 |
-| 28 | current | current | current | current | current | current | probe | pending | 27 |
+| 28 | current | current | current | current | current | current | probe | probe | 39 |
 | 29 | current | current | current | current | current | current | probe | pending | 30 |
 | 30 | current | current | current | current | probe | current | probe | pending | 27 |
 | 31 | current | current | current | current | probe | current | probe | pending | 39 |
@@ -1598,7 +1598,7 @@ Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrollin
 
 ### Scenario 28
 
-Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the seven-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, the complete no-action first turn, and its live battle presentation without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, 레스터, 아론, 쉐리, and 제시카 with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 34-36 retain a complete 바바리안 versus 워록 battle from 10 VS 10 through 0 VS 3. Both class labels, portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact. The first turn also retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Production-9DD0 completion derivative 31F2 preserves the stock seven-player deployment table, every Builder identity/class/level/event handler, and all fixed coordinates except moving only Baran from (15,9) to directly above the first stock Elwin deployment at (14,23). Its Start wrapper removes runtime groups 7..14 and lowers only living Baran group 15 to HP 1. A normal Elwin attack retained 바란/빌더 and the centered -AT-/-DF-/-지형- battle labels, then traversed all brother defeat and party aftermath pages, level ups, 전과보고 with POINT 58710P, a real 시나리오 13 save, 진군루트, and 염룡병단과의 결전 entry without Japanese residue, broken names/classes, reset, or freeze. Changing only runtime X/Y was rejected because the separate map-occupancy grid stayed at the stock deployment; fixed-target placement is the accepted diagnostic. Conditional branches remain pending.
+Selector record 28 intentionally enters the on-screen secret Scenario X1 근육의 신전. Production ECA0 retains all nine scrolling description frames through the final muscle-temple sentence, then verifies the seven-commander preparation roster, automatic deployment, eighteen opening dialogue pages, conditions, the complete no-action first turn, and its live battle presentation without Japanese text, broken glyphs, reset, or freeze. The opening covers 바란, 아돈, 삼손, 레스터, 아론, 쉐리, and 제시카 with intact Korean names and class/status labels. Victory is 적 전멸; defeat is 주인공 사망. Frames 34-36 retain a complete 바바리안 versus 워록 battle from 10 VS 10 through 0 VS 3. Both class labels, portraits, troop counts, AT/DF base and correction values, terrain correction percentages, and the centered -AT-/-DF- labels remain intact. The first turn also retains Baran's two instruction pages, all phase movement, TURN 2, and a valid Elwin command menu after 64 confirmations. The title uses X1 while the battle status bar deliberately uses SCENARIO ?1; a Japanese-ROM capture proves the ?1 pixels are source-identical, not a damaged Hangul tile. Production-9DD0 completion derivative 31F2 preserves the stock seven-player deployment table, every Builder identity/class/level/event handler, and all fixed coordinates except moving only Baran from (15,9) to directly above the first stock Elwin deployment at (14,23). Its Start wrapper removes runtime groups 7..14 and lowers only living Baran group 15 to HP 1. A normal Elwin attack retained 바란/빌더 and the centered -AT-/-DF-/-지형- battle labels, then traversed all brother defeat and party aftermath pages, level ups, 전과보고 with POINT 58710P, a real 시나리오 13 save, 진군루트, and 염룡병단과의 결전 entry without Japanese residue, broken names/classes, reset, or freeze. Changing only runtime X/Y was rejected because the separate map-occupancy grid stayed at the stock deployment; fixed-target placement is the accepted diagnostic. The sole declared defeat event is source trigger 0x1B5554, handler 0x1B59A8, and Elwin text 0x1B6592. Production 63C6 diagnostic 5A95 preserves all seven player deployments, all nine fixed records, identities, classes, levels, coordinates, mercenaries, and source event bytes, then marks only runtime player group 0 defeated through Start. Its SHA-256 is eec3eec6d7feba031565303f09ed81733188ed38dccbe0d0f85617230c7bdbd3. A first 3A54 playback exposed a lone final ! in Baran's ordinary turn line; explicit wrapping in 39FE left the object particle 을 alone. The accepted Korean is 몸이 터지기 전에 놈들을 / 쓰러뜨려라! 모두 힘내라!, verified as two balanced lines in 5A95. Fresh isolated playback retained the X1 route, preparation, automatic deployment, all opening pages, clean 엘윈/파이터 command panel, and Korean Start menu. Normal turn end rendered both corrected Baran pages, 으음!, 엘윈: 이제 용서 못 해!, and GAME OVER without Japanese residue, broken names/classes/UI glyphs, reset, or freeze. Normal completion and the sole declared defeat ending are now live-covered, so branches_endings is verified_probe.
 
 - `captures/run/c7ab_s28_title.png`
 - `captures/run/c7ab_s28_body_mid.png`
@@ -1627,6 +1627,18 @@ Selector record 28 intentionally enters the on-screen secret Scenario X1 근육�
 - `captures/run/31f2_s28_next_selected.png`
 - `captures/run/31f2_s28_next_route.png`
 - `captures/run/31f2_s28_return_s13.png`
+- `captures/run/5a95_s28_death_entry.png`
+- `captures/run/5a95_s28_death_prep_15.png`
+- `captures/run/5a95_s28_death_arrangement.png`
+- `captures/run/5a95_s28_death_auto.png`
+- `captures/run/5a95_s28_death_opening_24.png`
+- `captures/run/5a95_s28_death_command.png`
+- `captures/run/5a95_s28_death_start_menu.png`
+- `captures/run/5a95_s28_death_event_01.png`
+- `captures/run/5a95_s28_death_event_02.png`
+- `captures/run/5a95_s28_death_event_03.png`
+- `captures/run/5a95_s28_death_event_04.png`
+- `captures/run/5a95_s28_death_event_05.png`
 
 ### Scenario 29
 

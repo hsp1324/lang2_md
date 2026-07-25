@@ -89,7 +89,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0x96F8)
+        self.assertEqual(checksum, 0xB739)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
@@ -169,7 +169,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0x3A54)
+        self.assertEqual(expected, 0x5A95)
 
     def test_timeout_changes_only_start_wrapper_and_checksum(self):
         data = self.timeout_patched()
@@ -232,7 +232,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0xA9E3)
+        self.assertEqual(expected, 0xCA24)
 
 
 if __name__ == "__main__":

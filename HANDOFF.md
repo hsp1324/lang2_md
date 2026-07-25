@@ -9356,3 +9356,38 @@ contains 57 safe syllables as documented below and in
   `-0x706D`; current probe baselines and the generated item-shop report were
   regenerated. Historical accepted-capture checksums and source-address locks
   remain unchanged.
+
+### Scenario 28 Protagonist-Death Branch (2026-07-25)
+
+- Selector record 28 is the secret Scenario X1 `근육의 신전`. Its title uses
+  `X1`, while the arrangement and battle status rows intentionally use the
+  source-identical `SCENARIO ?1`; this is not a damaged Hangul tile.
+- The Japanese defeat trigger at `0x1B5554`
+  (`0F 02 01 00 00 1B 59 A8`) dispatches handler `0x1B59A8`, which calls
+  Elwin text `0x1B6592`, executes `13 FF 15 FF`, and reaches GAME OVER.
+- `tools/build_scenario28_clear_probe_rom.py --protagonist-death` preserves
+  all seven player deployments, all nine fixed records, identities, Builder
+  classes, levels, combat values, coordinates, mercenaries, and source event
+  bytes. Its guarded Start wrapper marks only runtime player group 0 defeated.
+  Production `63C6` produces checksum `5A95`, SHA-256
+  `eec3eec6d7feba031565303f09ed81733188ed38dccbe0d0f85617230c7bdbd3`.
+- The first `3A54` playback exposed Baran's continuation ending with `!` alone
+  on a third line. Explicit wrapping in `39FE` instead left the object
+  particle `을` alone. Do not repeat either version. The accepted source is
+  `몸이 터지기 전에 놈들을\n쓰러뜨려라! 모두 힘내라!`, which renders as
+  two balanced lines in `5A95`.
+- A fast command detector initially skipped Elwin's defeat page because it
+  sent C from the blank transition frame. Slow passive captures prove the
+  page is present. Fresh isolated `5A95` playback retained the route,
+  preparation, automatic deployment, all opening pages, clean
+  `엘윈/파이터` command panel, and Korean Start menu. Normal turn end rendered
+  both corrected Baran pages, `으음!`, `엘윈: 이제 용서 못 해!`, and GAME
+  OVER without Japanese residue, broken names/classes/UI glyphs, reset, or
+  freeze.
+- Representative evidence is `5a95_s28_death_entry.png`,
+  `5a95_s28_death_prep_15.png`, `5a95_s28_death_arrangement.png`,
+  `5a95_s28_death_auto.png`, `5a95_s28_death_opening_24.png`,
+  `5a95_s28_death_command.png`, `5a95_s28_death_start_menu.png`, and
+  `5a95_s28_death_event_01.png` through `_05.png`. Normal completion and the
+  sole declared defeat ending are now live-covered, so Scenario 28
+  `branches_endings` is `verified_probe`.

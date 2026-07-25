@@ -876,7 +876,16 @@ class ReviewedEventDialogueTests(unittest.TestCase):
                 for row in primary[102:]
             )
         )
-        self.assertTrue(all("\n" not in row["text"] for row in rows))
+        wrapped = [row for row in rows if "\n" in row["text"]]
+        self.assertEqual(
+            [(row["address"], row["text"]) for row in wrapped],
+            [
+                (
+                    "0x1B5D92",
+                    "몸이 터지기 전에 놈들을\n쓰러뜨려라! 모두 힘내라!",
+                )
+            ],
+        )
 
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:
