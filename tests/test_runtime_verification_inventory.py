@@ -486,7 +486,31 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario7["captures"])
         self.assertEqual(scenario7["battle_ui"], "verified_current")
-        self.assertEqual(scenario7["turn_events"], "progressed_current")
+        self.assertEqual(scenario7["turn_events"], "verified_probe")
+        for capture in (
+            "captures/run/814d_s07_turn3_wait.png",
+            "captures/run/814d_s07_turn3_event_01.png",
+            "captures/run/814d_s07_turn3_event_71.png",
+            "captures/run/8151r_s07_turn6_entry_resume_46.png",
+            "captures/run/8151r_s07_turn6_entry_resume_48.png",
+            "captures/run/8151r_s07_turn6_entry_resume_49.png",
+            "captures/run/8151r_s07_turn6_entry_resume_51.png",
+            "captures/run/8151r_s07_turn6_entry_resume_52.png",
+            "captures/run/8151r_s07_turn6_entry_resume_54.png",
+            "captures/run/8151r_s07_turn6_entry_resume_55.png",
+            "captures/run/8151r_s07_turn6_entry_resume_58.png",
+            "captures/run/8179v2_s07_turn6_bridge_68.png",
+            "captures/run/8179v2_s07_turn6_bridge_69.png",
+            "captures/run/8179v2_s07_turn6_bridge_70.png",
+            "captures/run/8179v2_s07_turn6_bridge_71.png",
+            "captures/run/8179v2_s07_turn6_bridge_73.png",
+        ):
+            self.assertIn(capture, scenario7["captures"])
+        self.assertIn("scheduled-turn table at 0x18F3E6", scenario7["note"])
+        self.assertIn("diagnostics 814D and 8151", scenario7["note"])
+        self.assertIn("bridge 8179", scenario7["note"])
+        self.assertIn("Rejected 8155 and 817F", scenario7["note"])
+        self.assertIn("turn-6 entry target field at 0x18F40A", scenario7["note"])
         self.assertEqual(scenario8["conditions"], "verified_current")
         self.assertEqual(scenario8["description"], "verified_current")
         for capture in (

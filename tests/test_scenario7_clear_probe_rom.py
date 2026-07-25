@@ -37,6 +37,20 @@ class Scenario7ClearProbeRomTests(unittest.TestCase):
         )
         return data
 
+    def turn_event_patched(
+        self,
+        turn: int,
+        branch: str = "stock",
+    ) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            turn_event=turn,
+            turn_event_branch=branch,
+        )
+        return data
+
     def test_probe_only_changes_ginam_combat_fields_coordinates_and_checksum(self):
         data = bytearray(self.built)
         probe_builder.patch_probe(data, self.source)
@@ -90,6 +104,50 @@ class Scenario7ClearProbeRomTests(unittest.TestCase):
         )
         self.assertEqual(probe_builder.FIRST_FIXED_RUNTIME_GROUP, 6)
         self.assertEqual(probe_builder.GINAM_RUNTIME_GROUP, 10)
+
+    def test_source_scheduled_turn_table_and_handlers_are_locked(self):
+        table_end = (
+            probe_builder.TURN_EVENT_TABLE
+            + len(probe_builder.TURN_EVENT_TABLE_BYTES)
+        )
+        self.assertEqual(
+            self.source[probe_builder.TURN_EVENT_TABLE:table_end],
+            probe_builder.TURN_EVENT_TABLE_BYTES,
+        )
+        self.assertEqual(
+            self.built[probe_builder.TURN_EVENT_TABLE:table_end],
+            probe_builder.TURN_EVENT_TABLE_BYTES,
+        )
+        for handler, offset in probe_builder.TURN_EVENT_HANDLERS.items():
+            expected = probe_builder.TURN_EVENT_HANDLER_BYTES[handler]
+            self.assertEqual(self.source[offset : offset + len(expected)], expected)
+            self.assertEqual(self.built[offset : offset + len(expected)], expected)
+
+    def test_turn6_internal_dialogue_branch_prefix_is_locked(self):
+        for branch, expected in (
+            probe_builder.TURN6_END_BRANCH_PREFIX_BYTES.items()
+        ):
+            offset = probe_builder.TURN6_END_BRANCH_HANDLERS[branch]
+            self.assertEqual(self.source[offset : offset + len(expected)], expected)
+            self.assertEqual(self.built[offset : offset + len(expected)], expected)
+
+    def test_scheduled_turn_dialogue_pages_are_reviewed(self):
+        expected_texts = {
+            3: (
+                0x1904AA,
+                0x1904F4,
+            ),
+            6: (
+                0x18FB84,
+                0x18FB9C,
+                0x18FBC0,
+                0x18FBCA,
+                0x18FBDA,
+                0x18FC2A,
+                0x18FC60,
+            ),
+        }
+        self.assertEqual(probe_builder.TURN_EVENT_TEXTS, expected_texts)
 
     def test_probe_weakens_and_moves_ginam_only(self):
         data = bytearray(self.built)
@@ -331,6 +389,13 @@ class Scenario7ClearProbeRomTests(unittest.TestCase):
                 civilian_loss=True,
                 protagonist_death=True,
             )
+        with self.assertRaisesRegex(ValueError, "modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.built),
+                self.source,
+                protagonist_death=True,
+                turn_event=3,
+            )
 
     def test_protagonist_death_checksum_is_valid(self):
         data = self.protagonist_death_patched()
@@ -339,6 +404,162 @@ class Scenario7ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
+
+    def test_turn_event_modes_change_only_wrapper_operand_and_checksum(self):
+        for turn in probe_builder.TURN_EVENT_COUNTER_VALUES:
+            data = self.turn_event_patched(turn)
+            wrapper = probe_builder.turn_event_wrapper_code(turn)
+            allowed = {0x18E, 0x18F}
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.RUNTIME_WRAPPER,
+                    probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                )
+            )
+            changed = {
+                index
+                for index, (before, after) in enumerate(zip(self.built, data))
+                if before != after
+            }
+            self.assertLessEqual(changed, allowed)
+
+    def test_turn_event_modes_preserve_all_deployments_and_fixed_records(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        fixed_start = layout.records_offset
+        fixed_end = fixed_start + layout.record_count * FIXED_RECORD_SIZE
+        deployment_end = (
+            probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+            + len(probe_builder.SOURCE_PLAYER_DEPLOYMENTS)
+        )
+        for turn in probe_builder.TURN_EVENT_COUNTER_VALUES:
+            data = self.turn_event_patched(turn)
+            self.assertEqual(
+                data[
+                    probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET:deployment_end
+                ],
+                probe_builder.SOURCE_PLAYER_DEPLOYMENTS,
+            )
+            self.assertEqual(
+                data[fixed_start:fixed_end],
+                self.source[fixed_start:fixed_end],
+            )
+
+    def test_turn_event_wrappers_use_required_stock_counter_state(self):
+        self.assertEqual(
+            probe_builder.TURN_EVENT_COUNTER_VALUES,
+            {3: 3, 6: 5},
+        )
+        self.assertEqual(
+            probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS,
+            tuple(range(10)),
+        )
+        for turn, counter_value in probe_builder.TURN_EVENT_COUNTER_VALUES.items():
+            code = probe_builder.turn_event_wrapper_code(turn)
+            for runtime_group in probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+                record = (
+                    probe_builder.RUNTIME_GROUP_BASE
+                    + runtime_group * probe_builder.RUNTIME_GROUP_SIZE
+                )
+                self.assertIn(
+                    bytes.fromhex("13 FC")
+                    + probe_builder.TURN_EVENT_PROTECTED_DF.to_bytes(2, "big")
+                    + (record + probe_builder.RUNTIME_DF_OFFSET).to_bytes(4, "big"),
+                    code,
+                )
+            self.assertIn(
+                bytes.fromhex("0C 39")
+                + counter_value.to_bytes(2, "big")
+                + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC")
+                + counter_value.to_bytes(2, "big")
+                + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+                code,
+            )
+            self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
+    def test_turn_event_wrapper_rejects_unknown_turn(self):
+        with self.assertRaisesRegex(ValueError, "must be one of 3, 6"):
+            probe_builder.turn_event_wrapper_code(5)
+        with self.assertRaisesRegex(ValueError, "must be one of 3, 6"):
+            probe_builder.patch_probe(
+                bytearray(self.built),
+                self.source,
+                turn_event=5,
+            )
+
+    def test_turn6_branch_only_redirects_source_table_target(self):
+        data = self.turn_event_patched(6, "dialogue")
+        wrapper = probe_builder.turn_event_wrapper_code(6)
+        self.assertEqual(
+            int.from_bytes(
+                self.source[
+                    probe_builder.TURN6_DIALOGUE_BRIDGE_TABLE_TARGET :
+                    probe_builder.TURN6_DIALOGUE_BRIDGE_TABLE_TARGET + 4
+                ],
+                "big",
+            ),
+            probe_builder.TURN_EVENT_HANDLERS["turn-6-entry"],
+        )
+        allowed = {0x18E, 0x18F}
+        allowed.update(
+            range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.TURN6_DIALOGUE_BRIDGE_TABLE_TARGET,
+                probe_builder.TURN6_DIALOGUE_BRIDGE_TABLE_TARGET + 4,
+            )
+        )
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.built, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+        self.assertEqual(
+            int.from_bytes(
+                data[
+                    probe_builder.TURN6_DIALOGUE_BRIDGE_TABLE_TARGET :
+                    probe_builder.TURN6_DIALOGUE_BRIDGE_TABLE_TARGET + 4
+                ],
+                "big",
+            ),
+            probe_builder.TURN6_END_BRANCH_HANDLERS["dialogue"],
+        )
+
+    def test_turn6_branch_rejects_other_turns_and_unknown_names(self):
+        with self.assertRaisesRegex(ValueError, "require --turn-event 6"):
+            probe_builder.patch_probe(
+                bytearray(self.built),
+                self.source,
+                turn_event=3,
+                turn_event_branch="dialogue",
+            )
+        with self.assertRaisesRegex(ValueError, "must be one of"):
+            probe_builder.patch_probe(
+                bytearray(self.built),
+                self.source,
+                turn_event=6,
+                turn_event_branch="unknown",
+            )
 
 
 if __name__ == "__main__":

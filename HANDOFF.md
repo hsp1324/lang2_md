@@ -9904,3 +9904,57 @@ contains 57 safe syllables as documented below and in
   name/class/status UI and no Japanese residue, clipping, GAME OVER, reset, or
   freeze. Scenario 6 `turn_events` is now `verified_probe`. Remaining
   preparation hire-list gaps are tracked separately.
+
+### Scenario 7 Scheduled Turn Events (2026-07-26)
+
+- The Japanese scheduled-turn table is source-locked at `0x18F3E6`. Its
+  entries dispatch turn-1 entry/end to `0x18F44E/0x18F4B4`, turn-3 end to
+  `0x18F4E4`, turn-5 end to `0x18F4EA`, turn-6 entry/end to
+  `0x18F4F0/0x18F514`, and turn-2 entry to `0x18F536`. Reviewed physical
+  pages are `0x1904AA/0x1904F4` for turn 3 and
+  `0x18FB84/0x18FB9C/0x18FBC0/0x18FBCA` plus the conditional
+  `0x18FBDA/0x18FC2A/0x18FC60` body for turn 6.
+- `tools/build_scenario7_clear_probe_rom.py --turn-event {3,6}` preserves all
+  six player deployments, all twelve fixed records, the complete event table,
+  and every source handler. Its guarded Start wrapper protects only runtime
+  groups `0..9` (six player groups, three residents, and hidden Keith) with
+  DF 99 and raises shared counter `$FFFFA5F1` to 3 or 5 without rewinding a
+  later state. Ginam and all remaining enemy groups retain stock behavior.
+- Stock diagnostics `814D` and `8151` have SHA-256
+  `89d13a506ee43017fd34318262c146f227297d85577dce28ac1e624eba89ed26`
+  and
+  `db5fe41e6f66d4471c0d22a01f7ee6f3185dd1734979c843e9a69c23767199fe`.
+  `814D` rendered Ginam's `오늘 밤은 즐겁겠군. 하인들을 부려 마을을
+  깨워야지.` and the imperial commander's response, then returned to a valid
+  turn-4 command menu. `8151` traversed the stock turn-5 handler, rendered the
+  complete Keith/Hein/Sherry/Elwin turn-6 entry exchange, and returned to an
+  intact command menu. Its next ordinary transition also remained stable.
+- The protected stock state did not satisfy the turn-6 end predicate.
+  Diagnostic bridge `8179` therefore changes only the already live-proven
+  turn-6 entry target field at `0x18F40A` to the untouched source-owned
+  conditional body at `0x18F518`, in addition to the normal guarded wrapper
+  and checksum. It does not claim the stock predicate fired. Fresh isolated
+  playback rendered `TURN 6`, the imperial commander's
+  `히히히! 오늘의 나는 피를 원하는 짐승! 모두 죽이겠다!`, Elwin's
+  `큰일이야! 마을 밖에서 돌아온 부대가 있었나!`, and Keith's
+  `여긴 내게 맡기고 모두 네크로맨서를 쓰러뜨려!`, then returned to an
+  intact `엘윈/파이터` command panel. Its SHA-256 is
+  `3aad7cb9a856fe9a45ac31060112a10e6d850119b1514211eb1998f35d1716df`.
+- Representative evidence is
+  `814d_s07_turn3_wait.png`, `_event_01.png`, and `_event_71.png`;
+  `8151r_s07_turn6_entry_resume_46.png`, `_48.png`, `_49.png`, `_51.png`,
+  `_52.png`, `_54.png`, `_55.png`, and `_58.png`; and
+  `8179v2_s07_turn6_bridge_68.png` through `_71.png` plus `_73.png`.
+  The `8179v2` run used a fresh recovered Scenario 2 manual slot, entered the
+  built-in selector in one uninterrupted input command, and independently
+  traversed Scenario 7 preparation, automatic arrangement, and opening.
+- Do not cite checksums `8155` or `817F` as accepted conditional-body
+  evidence. Those rejected experiments redirected type-04 end slots but did
+  not dispatch `0x18F518` under the tested transition. Also discard the first
+  `8179` attempt that missed the title-menu Down input and entered name entry,
+  and the split-input retry that remained on ordinary LOAD; both were host
+  input failures, not ROM behavior.
+- No accepted path showed Japanese residue, clipping, broken name/class/status
+  glyphs, GAME OVER, reset, or freeze. All Scenario 7 scheduled turn events
+  and source dialogue bodies are now `verified_probe`. Remaining preparation
+  hire-list gaps are tracked separately.

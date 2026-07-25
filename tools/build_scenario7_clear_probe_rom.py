@@ -19,6 +19,12 @@ DEFAULT_SOURCE_ROM = ROOT / builder.IN_ROM
 DEFAULT_OUTPUT_ROM = (
     ROOT / "roms/builds/Langrisser II (Scenario 7 Clear Probe).md"
 )
+DEFAULT_TURN_EVENT_OUTPUT_PATTERN = (
+    "Langrisser II (Scenario 7 turn {turn} Probe).md"
+)
+DEFAULT_TURN_EVENT_BRANCH_OUTPUT_PATTERN = (
+    "Langrisser II (Scenario 7 turn {turn} {branch} Probe).md"
+)
 
 SCENARIO_NUMBER = 7
 SCENARIO_HEADER = 0x180BBC
@@ -70,6 +76,80 @@ HIDDEN_ENEMY_RUNTIME_GROUPS = tuple(
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
+RUNTIME_DF_OFFSET = 0x3B
+RUNTIME_TURN_COUNTER = 0xFFFFA5F1
+TURN_EVENT_PROTECTED_RUNTIME_GROUPS = tuple(range(GINAM_RUNTIME_GROUP))
+TURN_EVENT_PROTECTED_DF = 99
+TURN_EVENT_TABLE = 0x18F3E6
+TURN_EVENT_TABLE_BYTES = bytes.fromhex(
+    "00 01 00 01 00 18 F4 4E "
+    "01 04 00 01 00 18 F4 B4 "
+    "02 04 00 03 00 18 F4 E4 "
+    "03 04 00 05 00 18 F4 EA "
+    "04 01 00 06 00 18 F4 F0 "
+    "05 04 00 06 00 18 F5 14 "
+    "06 01 00 02 00 18 F5 36 "
+    "FF FF"
+)
+TURN_EVENT_HANDLERS = {
+    "turn-3-end": 0x18F4E4,
+    "turn-5-end": 0x18F4EA,
+    "turn-6-entry": 0x18F4F0,
+    "turn-6-end": 0x18F514,
+}
+TURN_EVENT_HANDLER_BYTES = {
+    "turn-3-end": bytes.fromhex("12 17 17 00 FF FF"),
+    "turn-5-end": bytes.fromhex("0C 01 08 FF FF FF"),
+    "turn-6-entry": bytes.fromhex(
+        "0C 04 12 FF "
+        "17 FF 00 18 F7 7E "
+        "02 07 21 01 00 18 FB 84 "
+        "02 04 0D 01 00 18 FB C0 "
+        "02 01 01 01 00 18 FB CA "
+        "FF FF"
+    ),
+    "turn-6-end": bytes.fromhex(
+        "0D 2E 16 1D "
+        "02 2E 6E 01 00 18 FB DA "
+        "02 01 01 01 00 18 FC 2A "
+        "02 07 21 01 00 18 FC 60 "
+        "12 07 17 06 "
+        "FF FF"
+    ),
+}
+# The stock turn-6 end condition does not enter its dialogue body in the
+# ordinary protected path. Reuse the independently live-proven turn-6 entry
+# slot as a deterministic bridge to that untouched source-owned body. This
+# branch is a separate diagnostic and does not claim the stock condition fired.
+TURN6_DIALOGUE_BRIDGE_TABLE_TARGET = TURN_EVENT_TABLE + 4 * 8 + 4
+TURN6_END_BRANCH_HANDLERS = {
+    "stock": TURN_EVENT_HANDLERS["turn-6-end"],
+    "dialogue": 0x18F518,
+}
+TURN6_END_BRANCH_PREFIX_BYTES = {
+    "dialogue": bytes.fromhex("02 2E 6E 01 00 18 FB DA"),
+}
+# Target 6 starts from turn 5. One normal turn end traverses the stock turn-5
+# end handler and turn-6 entry handler; a second traverses turn-6 end.
+TURN_EVENT_COUNTER_VALUES = {
+    3: 3,
+    6: 5,
+}
+TURN_EVENT_TEXTS = {
+    3: (
+        0x1904AA,
+        0x1904F4,
+    ),
+    6: (
+        0x18FB84,
+        0x18FB9C,
+        0x18FBC0,
+        0x18FBCA,
+        0x18FBDA,
+        0x18FC2A,
+        0x18FC60,
+    ),
+}
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -139,6 +219,35 @@ def protagonist_death_wrapper_code() -> bytes:
     code.extend((protagonist + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((protagonist + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def turn_event_wrapper_code(target_turn: int) -> bytes:
+    if target_turn not in TURN_EVENT_COUNTER_VALUES:
+        raise ValueError(
+            "Scenario 7 turn-event target must be one of "
+            + ", ".join(str(turn) for turn in TURN_EVENT_COUNTER_VALUES)
+        )
+    counter_value = TURN_EVENT_COUNTER_VALUES[target_turn]
+    code = bytearray()
+    # Protect the six player groups, three residents, and hidden Keith. Ginam
+    # and the remaining enemy groups retain stock values and behavior.
+    for runtime_group in TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+        record = RUNTIME_GROUP_BASE + runtime_group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("13 FC"))
+        code.extend(TURN_EVENT_PROTECTED_DF.to_bytes(2, "big"))
+        code.extend((record + RUNTIME_DF_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("0C 39"))
+    code.extend(counter_value.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("64 08"))
+    code.extend(bytes.fromhex("13 FC"))
+    code.extend(counter_value.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -244,6 +353,16 @@ def validate_layout(probe: bytes, source: bytes) -> None:
         or source[record_offset + FIELD_OFFSETS["y"]] != SOURCE_GINAM_Y
     ):
         raise ValueError("unexpected Japanese Scenario 7 Ginam coordinates")
+    table_end = TURN_EVENT_TABLE + len(TURN_EVENT_TABLE_BYTES)
+    for label, data in (("Japanese source", source), ("input ROM", probe)):
+        if data[TURN_EVENT_TABLE:table_end] != TURN_EVENT_TABLE_BYTES:
+            raise ValueError(f"{label} Scenario 7 scheduled turn table changed")
+        for handler, offset in TURN_EVENT_HANDLERS.items():
+            expected = TURN_EVENT_HANDLER_BYTES[handler]
+            if data[offset : offset + len(expected)] != expected:
+                raise ValueError(
+                    f"{label} Scenario 7 turn handler {handler} changed"
+                )
 
 
 def patch_probe(
@@ -253,13 +372,29 @@ def patch_probe(
     civilian_loss: bool = False,
     lost_civilian_records: tuple[int, ...] = DEFAULT_LOST_CIVILIAN_RECORDS,
     protagonist_death: bool = False,
+    turn_event: int | None = None,
+    turn_event_branch: str = "stock",
 ) -> int:
     validate_layout(probe, source)
-    if civilian_loss and protagonist_death:
-        raise ValueError("civilian-loss and protagonist-death modes conflict")
+    if sum((civilian_loss, protagonist_death, turn_event is not None)) > 1:
+        raise ValueError("Scenario 7 diagnostic modes conflict")
+    if turn_event is not None and turn_event not in TURN_EVENT_COUNTER_VALUES:
+        raise ValueError(
+            "Scenario 7 turn-event target must be one of "
+            + ", ".join(str(turn) for turn in TURN_EVENT_COUNTER_VALUES)
+        )
+    if turn_event_branch not in TURN6_END_BRANCH_HANDLERS:
+        raise ValueError(
+            "Scenario 7 turn-6 branch must be one of "
+            + ", ".join(TURN6_END_BRANCH_HANDLERS)
+        )
+    if turn_event_branch != "stock" and turn_event != 6:
+        raise ValueError(
+            "Scenario 7 alternate turn-event branches require --turn-event 6"
+        )
     if civilian_loss:
         validate_lost_civilian_records(lost_civilian_records)
-    if not protagonist_death:
+    if not protagonist_death and turn_event is None:
         base = GINAM_RECORD_OFFSET
         probe[base + FIELD_OFFSETS["at"]] = PROBE_GINAM_AT
         probe[base + FIELD_OFFSETS["df"]] = PROBE_GINAM_DF
@@ -281,6 +416,18 @@ def patch_probe(
             protagonist_death_wrapper_code(),
             label="protagonist-death",
         )
+    elif turn_event is not None:
+        if turn_event_branch != "stock":
+            probe[
+                TURN6_DIALOGUE_BRIDGE_TABLE_TARGET :
+                TURN6_DIALOGUE_BRIDGE_TABLE_TARGET + 4
+            ] = TURN6_END_BRANCH_HANDLERS[turn_event_branch].to_bytes(4, "big")
+        install_start_wrapper(
+            probe,
+            source,
+            turn_event_wrapper_code(turn_event),
+            label=f"turn-{turn_event}",
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -293,7 +440,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
-    parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument("--output-rom", type=Path)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument(
         "--civilian-loss",
@@ -309,6 +456,25 @@ def parse_args() -> argparse.Namespace:
         help=(
             "preserve every Scenario 7 fixed record and mark only runtime "
             "player group 0 defeated through Start"
+        ),
+    )
+    parser.add_argument(
+        "--turn-event-branch",
+        choices=tuple(TURN6_END_BRANCH_HANDLERS),
+        default="stock",
+        help=(
+            "for --turn-event 6 only, redirect the proven turn-6 entry slot "
+            "to the source-owned turn-6 end handler's conditional dialogue "
+            "body; this is a diagnostic bridge, not a stock-condition claim"
+        ),
+    )
+    mode.add_argument(
+        "--turn-event",
+        type=int,
+        choices=tuple(TURN_EVENT_COUNTER_VALUES),
+        help=(
+            "preserve every fixed record and raise the runtime turn counter "
+            "to exercise the stock turn-3 or turn-5/6 scheduled events"
         ),
     )
     parser.add_argument(
@@ -337,9 +503,26 @@ def main() -> int:
         civilian_loss=args.civilian_loss,
         lost_civilian_records=lost_civilian_records,
         protagonist_death=args.protagonist_death,
+        turn_event=args.turn_event,
+        turn_event_branch=args.turn_event_branch,
     )
-    args.output_rom.parent.mkdir(parents=True, exist_ok=True)
-    args.output_rom.write_bytes(probe)
+    if args.output_rom is not None:
+        output_rom = args.output_rom
+    elif args.turn_event is not None and args.turn_event_branch != "stock":
+        output_rom = DEFAULT_OUTPUT_ROM.parent / (
+            DEFAULT_TURN_EVENT_BRANCH_OUTPUT_PATTERN.format(
+                turn=args.turn_event,
+                branch=args.turn_event_branch,
+            )
+        )
+    elif args.turn_event is not None:
+        output_rom = DEFAULT_OUTPUT_ROM.parent / (
+            DEFAULT_TURN_EVENT_OUTPUT_PATTERN.format(turn=args.turn_event)
+        )
+    else:
+        output_rom = DEFAULT_OUTPUT_ROM
+    output_rom.parent.mkdir(parents=True, exist_ok=True)
+    output_rom.write_bytes(probe)
     if args.civilian_loss:
         print(
             "Scenario 7 civilian-loss mode: all resident/Keith fixed records "
@@ -359,13 +542,29 @@ def main() -> int:
             "Start marks only runtime player group 0 defeated, then returns "
             "to the stock Start handler"
         )
+    elif args.turn_event is not None:
+        print(
+            f"Scenario 7 turn-{args.turn_event} mode: all deployments and "
+            "fixed records remain source-identical"
+        )
+        print(
+            "Start protects runtime groups 0..9, raises the turn counter to "
+            f"{TURN_EVENT_COUNTER_VALUES[args.turn_event]}, then returns to "
+            "the stock Start handler"
+        )
+        if args.turn_event_branch != "stock":
+            print(
+                "Proven turn-6 entry bridge redirects to source-owned turn-6 "
+                f"{args.turn_event_branch} body at "
+                f"0x{TURN6_END_BRANCH_HANDLERS[args.turn_event_branch]:06X}"
+            )
     else:
         print(
             f"Scenario 7 Ginam: ({PROBE_GINAM_X},{PROBE_GINAM_Y}), "
             "AT 0, DF 0, no mercenaries"
         )
     print(f"checksum: {checksum:04X}")
-    print(args.output_rom)
+    print(output_rom)
     return 0
 
 
