@@ -29,6 +29,13 @@ DEFAULT_TIMEOUT_ALTERNATE_OUTPUT_ROM = (
     ROOT
     / "roms/builds/Langrisser II (Scenario 5 timeout alternate Probe).md"
 )
+DEFAULT_TURN_EVENT_OUTPUT_PATTERN = (
+    "Langrisser II (Scenario 5 turn {turn} Probe).md"
+)
+DEFAULT_TURN_EVENT_ALTERNATE_OUTPUT_ROM = (
+    ROOT
+    / "roms/builds/Langrisser II (Scenario 5 turn 20 alternate Probe).md"
+)
 
 SCENARIO_NUMBER = 5
 SCENARIO_HEADER = 0x18083C
@@ -88,6 +95,49 @@ TIMEOUT_HANDLER_BYTES = bytes.fromhex(
 TIMEOUT_TEXTS = (0x18C8E4, 0x18C908, 0x18C92A)
 TIMEOUT_TRIGGER_TARGET_OFFSET = TIMEOUT_TRIGGER + 5
 TIMEOUT_ALTERNATE_HANDLER = 0x18C2C2
+TURN_EVENT_TABLE = 0x18C1AA
+TURN_EVENT_TABLE_BYTES = bytes.fromhex(
+    "00 01 00 01 00 18 C2 06 "
+    "01 01 00 10 00 18 C2 66 "
+    "02 01 00 14 00 18 C2 7E "
+    "03 01 00 16 00 18 C2 A4 "
+    "04 04 00 16 00 18 C2 AE "
+    "FF FF"
+)
+TURN_EVENT_HANDLERS = {
+    16: 0x18C266,
+    20: 0x18C27E,
+    22: 0x18C2A4,
+}
+TURN_EVENT_HANDLER_BYTES = {
+    16: bytes.fromhex(
+        "04 02 00 18 C2 74 "
+        "02 02 05 01 00 18 C8 00 "
+        "02 01 01 01 00 18 C8 24 "
+        "FF FF"
+    ),
+    20: bytes.fromhex(
+        "04 06 00 18 C2 92 "
+        "02 06 15 01 00 18 C8 4C "
+        "16 FF 00 18 C2 9A "
+        "02 1B 29 00 00 18 C8 7C "
+        "02 01 01 01 00 18 C8 AC "
+        "FF FF"
+    ),
+    22: bytes.fromhex(
+        "02 01 01 01 00 18 C8 BC "
+        "FF FF"
+    ),
+}
+TURN_EVENT_TEXTS = {
+    16: (0x18C800, 0x18C824),
+    20: (0x18C84C, 0x18C87C, 0x18C8AC),
+    22: (0x18C8BC,),
+}
+TURN_EVENT_ALTERNATE_TARGET = 20
+TURN_EVENT_ALTERNATE_TRIGGER_TARGET_OFFSET = 0x18C1BF
+TURN_EVENT_ALTERNATE_HANDLER = 0x18C292
+TURN_EVENT_ALTERNATE_TEXT = 0x18C87C
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 ANNIHILATION_WRAPPER = 0x3FEF00
@@ -181,6 +231,29 @@ def timeout_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def turn_event_wrapper_code(target_turn: int) -> bytes:
+    if target_turn not in TURN_EVENT_HANDLERS:
+        raise ValueError(
+            "Scenario 5 turn-event target must be one of "
+            + ", ".join(str(turn) for turn in TURN_EVENT_HANDLERS)
+        )
+    preceding_turn = target_turn - 1
+    code = bytearray(bytes.fromhex("0C 39"))
+    code.extend(preceding_turn.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    # Raise an earlier save to the preceding turn once, without rewinding it
+    # if Start is reopened after the scheduled event has fired.
+    code.extend(bytes.fromhex("64 08"))
+    code.extend(bytes.fromhex("13 FC"))
+    code.extend(preceding_turn.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def install_start_wrapper(
     probe: bytearray,
     source: bytes,
@@ -233,6 +306,18 @@ def validate_result_events(probe: bytes, source: bytes) -> None:
                 raise ValueError(
                     f"{rom_label} Scenario 5 {label} changed"
                 )
+    table_end = TURN_EVENT_TABLE + len(TURN_EVENT_TABLE_BYTES)
+    for rom_label, data in (("Japanese", source), ("input", probe)):
+        if data[TURN_EVENT_TABLE:table_end] != TURN_EVENT_TABLE_BYTES:
+            raise ValueError(
+                f"{rom_label} Scenario 5 scheduled turn-event table changed"
+            )
+        for turn, offset in TURN_EVENT_HANDLERS.items():
+            expected = TURN_EVENT_HANDLER_BYTES[turn]
+            if data[offset : offset + len(expected)] != expected:
+                raise ValueError(
+                    f"{rom_label} Scenario 5 turn {turn} handler changed"
+                )
 
 
 def install_timeout_alternate_bridge(probe: bytearray) -> None:
@@ -252,6 +337,21 @@ def install_timeout_alternate_bridge(probe: bytearray) -> None:
         TIMEOUT_TRIGGER_TARGET_OFFSET :
         TIMEOUT_TRIGGER_TARGET_OFFSET + 3
     ] = TIMEOUT_ALTERNATE_HANDLER.to_bytes(3, "big")
+
+
+def install_turn_event_alternate_bridge(probe: bytearray) -> None:
+    offset = TURN_EVENT_ALTERNATE_TRIGGER_TARGET_OFFSET
+    current = int.from_bytes(probe[offset : offset + 3], "big")
+    expected = TURN_EVENT_HANDLERS[TURN_EVENT_ALTERNATE_TARGET]
+    if current != expected:
+        raise ValueError(
+            "input Scenario 5 turn-20 trigger target changed: "
+            f"0x{current:06X} != 0x{expected:06X}"
+        )
+    probe[offset : offset + 3] = TURN_EVENT_ALTERNATE_HANDLER.to_bytes(
+        3,
+        "big",
+    )
 
 
 def validate_layout(probe: bytes, source: bytes) -> None:
@@ -292,6 +392,8 @@ def patch_probe(
     protagonist_death: bool = False,
     timeout: bool = False,
     timeout_alternate: bool = False,
+    turn_event: int | None = None,
+    turn_event_alternate: bool = False,
 ) -> int:
     validate_layout(probe, source)
     if sum(
@@ -300,14 +402,35 @@ def patch_probe(
             protagonist_death,
             timeout,
             timeout_alternate,
+            turn_event is not None,
+            turn_event_alternate,
         )
     ) > 1:
         raise ValueError("Scenario 5 diagnostic modes are mutually exclusive")
-    if protagonist_death or timeout or timeout_alternate:
+    if turn_event is not None and turn_event not in TURN_EVENT_HANDLERS:
+        raise ValueError(
+            "Scenario 5 turn-event target must be one of "
+            + ", ".join(str(turn) for turn in TURN_EVENT_HANDLERS)
+        )
+    if (
+        protagonist_death
+        or timeout
+        or timeout_alternate
+        or turn_event is not None
+        or turn_event_alternate
+    ):
         wrapper = (
             protagonist_death_wrapper_code()
             if protagonist_death
-            else timeout_wrapper_code()
+            else (
+                turn_event_wrapper_code(TURN_EVENT_ALTERNATE_TARGET)
+                if turn_event_alternate
+                else (
+                    turn_event_wrapper_code(turn_event)
+                    if turn_event is not None
+                    else timeout_wrapper_code()
+                )
+            )
         )
         install_start_wrapper(
             probe,
@@ -319,12 +442,22 @@ def patch_probe(
                 else (
                     "timeout-alternate"
                     if timeout_alternate
-                    else "timeout"
+                    else (
+                        f"turn-{turn_event}"
+                        if turn_event is not None
+                        else (
+                            "turn-20-alternate"
+                            if turn_event_alternate
+                            else "timeout"
+                        )
+                    )
                 )
             ),
         )
         if timeout_alternate:
             install_timeout_alternate_bridge(probe)
+        if turn_event_alternate:
+            install_turn_event_alternate_bridge(probe)
         return builder.update_md_checksum(probe)
     if not enemy_annihilation:
         y_offset = FIRST_PLAYER_DEPLOYMENT_OFFSET + 2
@@ -397,6 +530,24 @@ def parse_args() -> argparse.Namespace:
             "trigger directly to its source-owned alternate dialogue body"
         ),
     )
+    mode.add_argument(
+        "--turn-event",
+        type=int,
+        choices=tuple(TURN_EVENT_HANDLERS),
+        metavar="{16,20,22}",
+        help=(
+            "preserve the source scenario and raise the runtime counter only "
+            "to the turn immediately before the selected scheduled event"
+        ),
+    )
+    mode.add_argument(
+        "--turn-event-alternate",
+        action="store_true",
+        help=(
+            "enter stock turn 20 while bridging its dispatch pointer directly "
+            "to the source-owned general-soldier fallback body"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -411,6 +562,8 @@ def main() -> int:
         protagonist_death=args.protagonist_death,
         timeout=args.timeout,
         timeout_alternate=args.timeout_alternate,
+        turn_event=args.turn_event,
+        turn_event_alternate=args.turn_event_alternate,
     )
     if args.protagonist_death:
         output_rom = args.output_rom or DEFAULT_PROTAGONIST_DEATH_OUTPUT_ROM
@@ -441,6 +594,32 @@ def main() -> int:
         print(
             "Start sets the verified runtime turn counter to 22, then returns "
             "to the stock Start handler"
+        )
+    elif args.turn_event is not None:
+        output_rom = args.output_rom or (
+            ROOT
+            / "roms/builds"
+            / DEFAULT_TURN_EVENT_OUTPUT_PATTERN.format(turn=args.turn_event)
+        )
+        print(
+            f"Scenario 5 turn-{args.turn_event} mode: all deployments, fixed "
+            "records, and event bytes remain source-identical"
+        )
+        print(
+            "Start raises the verified runtime turn counter only to "
+            f"{args.turn_event - 1}; stock turn end enters turn "
+            f"{args.turn_event}"
+        )
+    elif args.turn_event_alternate:
+        output_rom = args.output_rom or DEFAULT_TURN_EVENT_ALTERNATE_OUTPUT_ROM
+        print(
+            "Scenario 5 turn-20 alternate mode: all deployments, fixed "
+            "records, and the source fallback body remain unchanged"
+        )
+        print(
+            "The turn-20 trigger is bridged directly to source body "
+            f"0x{TURN_EVENT_ALTERNATE_HANDLER:06X}; Start raises the counter "
+            "only to turn 19"
         )
     elif args.enemy_annihilation:
         output_rom = args.output_rom or DEFAULT_OUTPUT_ROM

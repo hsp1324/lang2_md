@@ -9810,3 +9810,41 @@ contains 57 safe syllables as documented below and in
   protagonist death, and both timeout-speaker variants are live-covered, so
   Scenario 5 `branches_endings` is `verified_probe`. Ordinary intermediate
   turns and the remaining commander hire lists stay separately pending.
+
+### Scenario 5 Scheduled Turn Events (2026-07-25)
+
+- The Japanese scheduled-turn table is source-locked at `0x18C1AA`. Its stock
+  entries dispatch turn 1 to `0x18C206`, turn 16 to `0x18C266`, turn 20 to
+  `0x18C27E`, turn 22 to `0x18C2A4`, and the end-of-turn-22 timeout to
+  `0x18C2AE`. The reviewed physical text pages are `0x18C800/0x18C824` for
+  turn 16, `0x18C84C/0x18C87C/0x18C8AC` for turn 20, and `0x18C8BC` for
+  turn 22.
+- `tools/build_scenario5_escape_probe_rom.py --turn-event {16,20,22}`
+  preserves every deployment, all nine fixed records, the scheduled table,
+  and every source handler. Its guarded Start wrapper raises runtime counter
+  `$FFFFA5F1` only to the target turn minus one when the current value is
+  lower, so reopening Start never rewinds a later turn. Generated diagnostics
+  and checksums are E00B for turn 16, E013 for turn 20, and E017 for turn 22.
+- E00B rendered TURN 16, `리아나: 안 돼. 시간이 너무 걸려.`, and
+  `엘윈: 이대로면 모건을 놓쳐. 서두르자!`. E013 rendered TURN 20,
+  `스코트: 시간이 없어. 서둘러 돌파하자!`, and
+  `엘윈: 좋아, 가자!`. E017 rendered TURN 22 and
+  `엘윈: 시간이 없다! 전력으로 싸워!`. Representative evidence is
+  `e00b_s05_turn16_event_dialogue_10.png` through `_14.png`,
+  `e013_s05_turn20_event_dialogue_22.png` through `_26.png`, and
+  `e017_s05_turn22_event_dialogue_28.png` through `_31.png`.
+- The stock turn-20 handler first checks whether Scott is available and can
+  branch to the untouched general-soldier body at `0x18C292`. E027 changes
+  only the turn-20 table target from `0x18C27E` to `0x18C292`, in addition to
+  the ordinary guarded turn-19 wrapper. It rendered TURN 20,
+  `일반병: 시간이 없어. 서둘러 돌파하자!`, and the same Elwin line.
+  Evidence is `e027_s05_turn20_alt_event_dialogue_28.png` through `_32.png`.
+- Do not reuse checksum 295B as accepted evidence. That rejected experiment
+  changed only Scott's X coordinate to 255 and confirmed the runtime record
+  was modified, but the stock availability condition does not depend on X
+  alone and still rendered Scott. E027 is the accepted, deterministic
+  source-body bridge.
+- Every accepted event returned to a valid command menu with intact
+  names/classes/status UI and no Japanese residue, clipping, reset, or freeze.
+  Scenario 5 `turn_events` is therefore `verified_probe`. The other
+  commanders' hire lists remain a separate preparation-UI verification gap.

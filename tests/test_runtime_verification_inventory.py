@@ -287,6 +287,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario5["captures"])
         self.assertEqual(scenario5["opening_events"], "verified_current")
+        self.assertEqual(scenario5["turn_events"], "verified_probe")
         self.assertEqual(scenario5["completion"], "verified_probe")
         for capture in (
             "captures/run/398c_s05_selector.png",
@@ -321,6 +322,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e02d_s05_timeout_alt_result_01.png",
             "captures/run/e02d_s05_timeout_alt_result_02.png",
             "captures/run/e02d_s05_timeout_alt_result_03.png",
+            "captures/run/e00b_s05_turn16_event_dialogue_11.png",
+            "captures/run/e00b_s05_turn16_event_dialogue_12.png",
+            "captures/run/e013_s05_turn20_event_dialogue_23.png",
+            "captures/run/e013_s05_turn20_event_dialogue_24.png",
+            "captures/run/e017_s05_turn22_event_dialogue_29.png",
+            "captures/run/e027_s05_turn20_alt_event_dialogue_29.png",
+            "captures/run/e027_s05_turn20_alt_event_dialogue_30.png",
         ):
             self.assertIn(capture, scenario5["captures"])
         self.assertIn("changing only the first Elwin deployment Y", scenario5["note"])
@@ -333,6 +341,12 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("Final standard checksum E019", scenario5["note"])
         self.assertIn("Diagnostic E02D", scenario5["note"])
         self.assertIn("both timeout-speaker variants", scenario5["note"])
+        self.assertIn("scheduled-turn table at 0x18C1AA", scenario5["note"])
+        self.assertIn("diagnostics E00B, E013, and E017", scenario5["note"])
+        self.assertIn("Diagnostic E027", scenario5["note"])
+        self.assertIn("source-owned alternate body 0x18C292", scenario5["note"])
+        self.assertIn("Rejected checksum 295B", scenario5["note"])
+        self.assertIn("does not depend on X alone", scenario5["note"])
         self.assertEqual(scenario6["conditions"], "verified_current")
         self.assertEqual(scenario6["description"], "verified_current")
         for capture in (

@@ -31,6 +31,8 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
         protagonist_death: bool = False,
         timeout: bool = False,
         timeout_alternate: bool = False,
+        turn_event: int | None = None,
+        turn_event_alternate: bool = False,
     ) -> bytearray:
         data = bytearray(self.built)
         probe_builder.patch_probe(
@@ -39,6 +41,8 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             protagonist_death=protagonist_death,
             timeout=timeout,
             timeout_alternate=timeout_alternate,
+            turn_event=turn_event,
+            turn_event_alternate=turn_event_alternate,
         )
         return data
 
@@ -256,6 +260,18 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
                 address.to_bytes(3, "big"),
                 probe_builder.TIMEOUT_HANDLER_BYTES,
             )
+        table_end = (
+            probe_builder.TURN_EVENT_TABLE
+            + len(probe_builder.TURN_EVENT_TABLE_BYTES)
+        )
+        for data in (self.source, self.built):
+            self.assertEqual(
+                data[probe_builder.TURN_EVENT_TABLE:table_end],
+                probe_builder.TURN_EVENT_TABLE_BYTES,
+            )
+            for turn, offset in probe_builder.TURN_EVENT_HANDLERS.items():
+                expected = probe_builder.TURN_EVENT_HANDLER_BYTES[turn]
+                self.assertEqual(data[offset : offset + len(expected)], expected)
 
     def test_result_text_pages_are_reviewed_and_structurally_valid(self):
         translations = json.loads(
@@ -270,6 +286,11 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
         expected = {
             *probe_builder.PROTAGONIST_DEATH_PHYSICAL_TEXTS,
             *probe_builder.TIMEOUT_TEXTS,
+            *(
+                address
+                for texts in probe_builder.TURN_EVENT_TEXTS.values()
+                for address in texts
+            ),
         }
         self.assertLessEqual(expected, scenario_addresses)
         for address in expected:
@@ -300,6 +321,11 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             {"protagonist_death": True},
             {"timeout": True},
             {"timeout_alternate": True},
+            *(
+                {"turn_event": turn}
+                for turn in probe_builder.TURN_EVENT_HANDLERS
+            ),
+            {"turn_event_alternate": True},
         ):
             data = self.result_patched(**mode)
             self.assertEqual(
@@ -364,6 +390,53 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
         )
 
+    def test_turn_event_wrappers_set_only_the_preceding_turn(self):
+        self.assertEqual(tuple(probe_builder.TURN_EVENT_HANDLERS), (16, 20, 22))
+        for target_turn in probe_builder.TURN_EVENT_HANDLERS:
+            preceding_turn = target_turn - 1
+            code = probe_builder.turn_event_wrapper_code(target_turn)
+            expected_write = (
+                bytes.fromhex("13 FC")
+                + preceding_turn.to_bytes(2, "big")
+                + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big")
+            )
+            self.assertEqual(
+                code[:8],
+                bytes.fromhex("0C 39")
+                + preceding_turn.to_bytes(2, "big")
+                + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+            )
+            self.assertEqual(code[8:10], bytes.fromhex("64 08"))
+            self.assertEqual(code[10:18], expected_write)
+            self.assertEqual(
+                code[-6:],
+                bytes.fromhex("4E F9")
+                + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+            )
+
+    def test_turn_event_wrapper_rejects_unknown_turn(self):
+        for target_turn in (1, 15, 17, 21, 23):
+            with self.assertRaisesRegex(ValueError, "must be one of"):
+                probe_builder.turn_event_wrapper_code(target_turn)
+
+    def test_turn_20_alternate_bridges_only_to_source_owned_body(self):
+        data = self.result_patched(turn_event_alternate=True)
+        offset = probe_builder.TURN_EVENT_ALTERNATE_TRIGGER_TARGET_OFFSET
+        self.assertEqual(
+            data[offset : offset + 3],
+            probe_builder.TURN_EVENT_ALTERNATE_HANDLER.to_bytes(3, "big"),
+        )
+        alternate = probe_builder.TURN_EVENT_ALTERNATE_HANDLER
+        handler_end = probe_builder.TURN_EVENT_HANDLERS[22]
+        self.assertEqual(
+            data[alternate:handler_end],
+            self.source[alternate:handler_end],
+        )
+        self.assertIn(
+            probe_builder.TURN_EVENT_ALTERNATE_TEXT.to_bytes(3, "big"),
+            data[alternate:handler_end],
+        )
+
     def test_result_modes_change_only_wrapper_operand_and_checksum(self):
         for mode, wrapper in (
             (
@@ -377,6 +450,19 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             (
                 {"timeout_alternate": True},
                 probe_builder.timeout_wrapper_code(),
+            ),
+            *(
+                (
+                    {"turn_event": turn},
+                    probe_builder.turn_event_wrapper_code(turn),
+                )
+                for turn in probe_builder.TURN_EVENT_HANDLERS
+            ),
+            (
+                {"turn_event_alternate": True},
+                probe_builder.turn_event_wrapper_code(
+                    probe_builder.TURN_EVENT_ALTERNATE_TARGET
+                ),
             ),
         ):
             data = self.result_patched(**mode)
@@ -397,6 +483,14 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
                     range(
                         probe_builder.TIMEOUT_TRIGGER_TARGET_OFFSET,
                         probe_builder.TIMEOUT_TRIGGER_TARGET_OFFSET + 3,
+                    )
+                )
+            if mode.get("turn_event_alternate"):
+                allowed.update(
+                    range(
+                        probe_builder.TURN_EVENT_ALTERNATE_TRIGGER_TARGET_OFFSET,
+                        probe_builder.TURN_EVENT_ALTERNATE_TRIGGER_TARGET_OFFSET
+                        + 3,
                     )
                 )
             changed = {
@@ -430,6 +524,12 @@ class Scenario5EscapeProbeRomTests(unittest.TestCase):
             {"enemy_annihilation": True, "protagonist_death": True},
             {"enemy_annihilation": True, "timeout": True},
             {"enemy_annihilation": True, "timeout_alternate": True},
+            {"enemy_annihilation": True, "turn_event": 16},
+            {"protagonist_death": True, "turn_event": 20},
+            {"timeout": True, "turn_event": 22},
+            {"timeout_alternate": True, "turn_event": 16},
+            {"turn_event": 20, "turn_event_alternate": True},
+            {"timeout": True, "turn_event_alternate": True},
         ):
             with self.assertRaisesRegex(ValueError, "mutually exclusive"):
                 probe_builder.patch_probe(
