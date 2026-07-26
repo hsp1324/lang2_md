@@ -882,7 +882,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario15["conditions"], "verified_current")
         self.assertEqual(scenario15["preparation"], "verified_current")
         self.assertEqual(scenario15["opening_events"], "verified_current")
-        self.assertEqual(scenario15["battle_ui"], "verified_probe")
+        self.assertEqual(scenario15["battle_ui"], "verified_current")
         self.assertEqual(scenario15["turn_events"], "verified_probe")
         self.assertEqual(scenario15["completion"], "verified_probe")
         self.assertEqual(scenario15["branches_endings"], "verified_probe")
@@ -911,16 +911,32 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/930b_s15_turn8_02.png",
             "captures/run/930b_s15_turn8_classchange_01.png",
             "captures/run/930b_s15_turn8_command_confirmed.png",
+            "captures/run/e1af_s15_current_entry_14.png",
+            "captures/run/e1af_s15_current_opening_24.png",
+            "captures/run/e1af_s15_current_turn2_02.png",
+            "captures/run/e1af_s15_current_turn2_04.png",
+            "captures/run/e1af_s15_current_turn3_02.png",
+            "captures/run/e1af_s15_current_turn3_03.png",
+            "captures/run/e1af_s15_current_turn3_08.png",
+            "captures/run/e1af_s15_current_turn3_15.png",
+            "captures/run/e1af_s15_current_turn3_18.png",
+            "captures/run/e1af_s15_current_turn3_21.png",
+            "captures/run/e1af_s15_current_turn3_55.png",
+            "captures/run/e1af_s15_turn5_after_wait.png",
         ):
             self.assertIn(capture, scenario15["captures"])
         self.assertIn("record 0x1A0A6E", scenario15["note"])
+        self.assertIn("current E1AF no-action play", scenario15["note"])
+        self.assertIn("서펜로드/쉐리", scenario15["note"])
         self.assertIn("POINT 4000P", scenario15["note"])
         self.assertIn("disk SRAM slot 1 at Scenario 16", scenario15["note"])
         self.assertIn("protagonist-death diagnostic F7AB", scenario15["note"])
         self.assertIn("handler bytes 13 FF", scenario15["note"])
         self.assertIn("Production 653C source-preserving turn diagnostics", scenario15["note"])
         self.assertIn("checksum 9331", scenario15["note"])
-        self.assertIn("Scenario 15 turn_events is now verified_probe", scenario15["note"])
+        self.assertIn(
+            "Scenario 15 turn_events remains verified_probe", scenario15["note"]
+        )
         self.assertEqual(scenario16["description"], "verified_current")
         for capture in (
             "captures/run/3fc0_s16_description_final_01.png",

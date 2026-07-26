@@ -10610,3 +10610,26 @@ contains 57 safe syllables as documented below and in
 - This is current-production confirmation of the `0x07A1..0x07A7` preparation
   scratch mapping already proven at checksum `3497`. No dialogue-only build
   change has reintroduced the final static-bank collision for `록` or `가`.
+
+### Current E1AF Scenario 15 Early Turns And Battle UI (2026-07-26)
+
+- Fresh unmodified production entered Scenario 15 through the selector,
+  retained the seven-name preparation roster and clean Elwin/Fighter command
+  panel, and naturally traversed the stock turn-2 and turn-3 scheduled events.
+  `e1af_s15_current_turn2_02.png` through `_04.png` preserve the
+  Imelda/imperial-commander exchange; `e1af_s15_current_turn3_02.png` and
+  `_03.png` preserve the ambush exchange without clipping or damaged glyphs.
+- Natural enemy-phase battles are captured in
+  `e1af_s15_current_turn3_08.png`, `_15.png`, and `_18.png`.
+  `서펜로드/쉐리` and `리저드맨/쉐리`, portraits, troop counts, AT/DF
+  modifiers, terrain percentages, and animation frames are intact.
+  `_21.png` preserves Sherry's `헤인! 당했군…`, and `_55.png` returns to a
+  valid Elwin/Fighter command panel. Scenario 15 `battle_ui` is now
+  `verified_current`.
+- Unmodified no-action play reaches the source GAME OVER on turn 5
+  (`e1af_s15_turn5_after_wait.png`), so it cannot cover the turn-6 through
+  turn-8 events. `turn_events` intentionally remains `verified_probe`: turns
+  2-3 now have current evidence, while the source-preserving DF-99 diagnostics
+  remain the accepted evidence for turns 6-8. Do not mislabel the host
+  detector's early ENEMY PHASE frame as GAME OVER; the accepted terminal frame
+  was captured after the phase completed.
