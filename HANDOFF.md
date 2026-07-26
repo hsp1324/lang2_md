@@ -10826,3 +10826,23 @@ contains 57 safe syllables as documented below and in
 - No Japanese residue, damaged name/class/status glyph, red screen, reset, or
   freeze appeared. Scenario 24 `battle_ui` is now `verified_current`; its
   completion and branches remain probe-backed.
+
+### Current 1AB2 Scenario 26 Natural Battle UI (2026-07-27)
+
+- Unmodified production `1AB2` entered Scenario 26 through the built-in
+  selector from the same valid Scenario 21 manual SRAM. No ROM byte or
+  Scenario 26 record was changed. The inherited Elwin AT/DF 99 values are
+  diagnostic SRAM data only, not production defaults.
+- The route, preparation endpoint, arrangement, automatic deployment,
+  `에그베르트` opening, and `엘윈/로드` command panel remained intact.
+- Ordinary no-action play reached three natural enemy-phase battles:
+  `다크엘프/샤먼`, `발리스타/샤먼`, and `발리스타/로드`. Captures
+  `_15.png`, `_22.png`, `_38.png`, `_45.png`, `_104.png`, and `_113.png`
+  retain all class labels, portraits, troop counts, `-AT-`, `-DF-`, `-지형-`,
+  modifiers, terrain percentages, and combat sprites through the completed
+  animations.
+- The following `제국군지휘관` and `에그베르트` pages remained intact.
+  No-action defeat then reached the normal GAME OVER screen in `_141.png`
+  without Japanese residue, damaged glyph, red screen, reset, or freeze.
+  Scenario 26 `battle_ui` is now `verified_current`; completion and branches
+  remain probe-backed.

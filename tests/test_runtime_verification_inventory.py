@@ -1475,10 +1475,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario26["preparation"], "verified_current")
         self.assertEqual(scenario26["opening_events"], "verified_current")
         self.assertEqual(scenario26["turn_events"], "verified_current")
-        self.assertEqual(scenario26["battle_ui"], "verified_probe")
+        self.assertEqual(scenario26["battle_ui"], "verified_current")
         self.assertEqual(scenario26["completion"], "verified_probe")
         self.assertEqual(scenario26["branches_endings"], "verified_probe")
         self.assertIn("captures/run/d6a8_s26_battle_ui_10.png", scenario26["captures"])
+        for capture in (
+            "captures/run/1ab2_s26_current_enemy1_15.png",
+            "captures/run/1ab2_s26_current_enemy1_22.png",
+            "captures/run/1ab2_s26_current_enemy1_38.png",
+            "captures/run/1ab2_s26_current_enemy1_45.png",
+            "captures/run/1ab2_s26_current_enemy1_104.png",
+            "captures/run/1ab2_s26_current_enemy1_113.png",
+            "captures/run/1ab2_s26_current_enemy1_141.png",
+        ):
+            self.assertIn(capture, scenario26["captures"])
         self.assertIn(
             "captures/run/d9f3v4_s26_darklord_reward.png",
             scenario26["captures"],
