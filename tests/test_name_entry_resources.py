@@ -573,6 +573,73 @@ class NameEntryResourceTests(unittest.TestCase):
                 data[builder.BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE + codes[char]],
                 index_by_char[char],
             )
+
+    def test_preparation_overwritten_glyphs_use_fixed_dynamic_slots(self):
+        self.assertEqual(
+            builder.BYTE_UI_PREP_DYNAMIC_CHARS,
+            ("록", "가", "스", "럴", "슬", "임", "비"),
+        )
+        self.assertLessEqual(
+            len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
+            len(builder.BYTE_UI_DYNAMIC_TILE_IDS),
+        )
+
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, _ = builder.build_byte_ui_local_mapping(codes)
+        table = data[
+            builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE :
+            builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT
+        ]
+        for slot, char in enumerate(builder.BYTE_UI_PREP_DYNAMIC_CHARS):
+            self.assertEqual(table[index_by_char[char]], slot)
+        self.assertTrue(
+            all(
+                value == 0xFF
+                for index, value in enumerate(table)
+                if index not in {
+                    index_by_char[char]
+                    for char in builder.BYTE_UI_PREP_DYNAMIC_CHARS
+                }
+            )
+        )
+
+        prep_lookup_call = (
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+        )
+        for renderer in (
+            builder._build_byte_ui_prep_roster_renderer(),
+            builder._build_byte_ui_panel_renderer(),
+            builder._build_byte_ui_roster_renderer(),
+            builder._build_byte_ui_status_renderer(),
+            builder._build_byte_ui_prep_selected_name_renderer(),
+            builder._build_byte_ui_prep_selected_panel_renderer(),
+            builder._build_byte_ui_prep_hire_class_renderer(),
+        ):
+            self.assertIn(prep_lookup_call, renderer)
+
+        lookup = builder._build_byte_ui_prep_local_tile_lookup()
+        self.assertIn(
+            bytes.fromhex("41 F9")
+            + builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE.to_bytes(4, "big"),
+            lookup,
+        )
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big"),
+            lookup,
+        )
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"),
+            lookup,
+        )
+        self.assertLessEqual(
+            builder.BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE + len(lookup),
+            builder.BYTE_UI_EXT_ROUTINE_LIMIT,
+        )
         self.assertEqual(
             data[builder.BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE + ord("A")],
             0xFF,

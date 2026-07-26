@@ -122,6 +122,15 @@ def build_inventory(source_rom: bytes) -> dict[str, object]:
         "dynamic_map_cache_tiles": [
             hex_word(tile) for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS
         ],
+        "preparation_dynamic_slots": [
+            {
+                "slot": slot,
+                "vram_tile": hex_word(builder.BYTE_UI_DYNAMIC_TILE_IDS[slot]),
+                "char": char,
+                "reason": "preparation graphics overwrite the final static font segment",
+            }
+            for slot, char in enumerate(builder.BYTE_UI_PREP_DYNAMIC_CHARS)
+        ],
     }
 
 

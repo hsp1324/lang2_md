@@ -205,6 +205,8 @@ BYTE_UI_DYNAMIC_TILE_ID_TABLE = 0x2BE840
 BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT = 0x2BE860
 BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE = 0x2BE860
 BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT = 0x2BE960
+BYTE_UI_PREP_DYNAMIC_SLOT_TABLE = 0x2BE960
+BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT = 0x2BEA60
 # These patterns are a transient map-status cache, not a persistent font bank.
 # They occupy noncontiguous cells in the unused tail of the full-screen
 # H-scroll table and avoid every retained Plane/SAT reference. The stock
@@ -219,6 +221,10 @@ BYTE_UI_DYNAMIC_TILE_IDS = (
 BYTE_UI_DYNAMIC_NAME_SLOT = 0
 BYTE_UI_DYNAMIC_CLASS_SLOT = 8
 BYTE_UI_DYNAMIC_FIELD_WIDTH = 8
+# Preparation and hiring graphics overwrite the complete final static font
+# segment at 0x05D8..0x05F5. Give only the affected glyphs fixed scratch slots
+# so multiple visible rows can share them without overwriting one another.
+BYTE_UI_PREP_DYNAMIC_CHARS = ("록", "가", "스", "럴", "슬", "임", "비")
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL = 0x0090A6
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL = bytes.fromhex("32 3C 00 B7")
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED = bytes.fromhex("32 3C 00 07")
@@ -534,6 +540,7 @@ BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE = 0x2B7290
 BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE = 0x2B72A0
 INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
 SOUND_TEST_RENDER_ROUTINE = 0x2B7F60
+BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7FB0
 INLINE_DISCARD_PROMPT_RENDER_HOOK = 0x01804C
 INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL = bytes.fromhex("45 F9 00 01 80 7E")
 INLINE_DISCARD_PROMPT_SOURCE = 0x01807E
@@ -5353,7 +5360,10 @@ def _build_byte_ui_prep_roster_renderer() -> bytes:
     code.emit("0C 00 00 00")
     code.branch_word(0x6600, "legacy")
     code.emit("42 40 10 18")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
     code.branch_word(0x6000, "store")
     code.label("legacy")
     code.emit("0C 00 00 DF")
@@ -5373,7 +5383,10 @@ def _build_byte_ui_panel_renderer() -> bytes:
     code.emit("0C 40 00 00")
     code.branch_word(0x6600, "legacy")
     code.emit("42 40 10 19")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
     code.branch_word(0x6000, "base")
     code.label("legacy")
     code.emit("0C 40 00 F0")
@@ -5389,7 +5402,10 @@ def _build_byte_ui_roster_renderer() -> bytes:
     code.emit("0C 00 00 00")
     code.branch_word(0x6600, "legacy")
     code.emit("42 40 10 18")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
     code.branch_word(0x6000, "store")
     code.label("legacy")
     code.emit("0C 00 00 F0")
@@ -5409,7 +5425,10 @@ def _build_byte_ui_status_renderer() -> bytes:
     code.emit("0C 00 00 00")
     code.branch_word(0x6600, "legacy")
     code.emit("42 40 10 18")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
     code.branch_word(0x6000, "store")
     code.label("legacy")
     code.emit("0C 00 00 F0")
@@ -5526,6 +5545,33 @@ def _build_byte_ui_dynamic_legacy_lookup() -> bytes:
         + BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE.to_bytes(4, "big")
         + bytes.fromhex("10 30 00 00 20 5F 4E 75")
     )
+
+
+def _build_byte_ui_prep_local_tile_lookup() -> bytes:
+    # D0 is a localized table index. The preparation window owns the final
+    # static font segment, so affected glyphs are rendered synchronously into
+    # fixed scratch slots; all other indexes retain the ordinary lookup.
+    code = _M68KCode()
+    code.emit("2F 06 2F 08")  # preserve d6/a0
+    code.emit(
+        bytes.fromhex("41 F9")
+        + BYTE_UI_PREP_DYNAMIC_SLOT_TABLE.to_bytes(4, "big")
+    )
+    code.emit("D0 C0 7C 00 1C 10 0C 06 00 FF")
+    code.branch_word(0x6700, "static")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.branch_word(0x6000, "done")
+    code.label("static")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
+    code.label("done")
+    code.emit("20 5F 2C 1F 4E 75")
+    return code.finish()
 
 
 def _build_byte_ui_map_info_scratch_restore() -> bytes:
@@ -5737,7 +5783,7 @@ def _build_byte_ui_prep_selected_name_renderer() -> bytes:
     code.emit("42 40 10 18")
     code.emit(
         bytes.fromhex("4E B9")
-        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
     )
     code.branch_word(0x6000, "store")
     code.label("legacy")
@@ -5776,7 +5822,7 @@ def _build_byte_ui_prep_selected_panel_renderer() -> bytes:
     code.emit("42 40 10 18")
     code.emit(
         bytes.fromhex("4E B9")
-        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
     )
     code.branch_word(0x6000, "store")
     code.label("legacy")
@@ -5818,7 +5864,7 @@ def _build_byte_ui_prep_hire_class_renderer() -> bytes:
     code.emit("42 40 10 19")
     code.emit(
         bytes.fromhex("4E B9")
-        + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
     )
     code.branch_word(0x6000, "store")
     code.label("legacy")
@@ -6335,6 +6381,25 @@ def install_byte_ui_extension(
         BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE:legacy_index_end
     ] = dynamic_legacy_indexes
 
+    prep_dynamic_slots = bytearray([0xFF] * 0x100)
+    for slot, char in enumerate(BYTE_UI_PREP_DYNAMIC_CHARS):
+        prep_dynamic_slots[index_by_char[char]] = slot
+    prep_dynamic_slot_end = (
+        BYTE_UI_PREP_DYNAMIC_SLOT_TABLE + len(prep_dynamic_slots)
+    )
+    if prep_dynamic_slot_end > BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT:
+        raise ValueError("preparation dynamic-slot table exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_DYNAMIC_SLOT_TABLE:prep_dynamic_slot_end
+        ]
+    ):
+        raise ValueError("preparation dynamic-slot table area is not blank")
+    data[
+        BYTE_UI_PREP_DYNAMIC_SLOT_TABLE:prep_dynamic_slot_end
+    ] = prep_dynamic_slots
+
     if data[
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION :
         BYTE_UI_RESOURCE_LOOKUP_BASE_INSTRUCTION + 6
@@ -6376,6 +6441,7 @@ def install_byte_ui_extension(
     title_credit_renderer = _build_title_credit_renderer()
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
     sound_test_renderer = _build_sound_test_renderer()
+    prep_local_tile_lookup = _build_byte_ui_prep_local_tile_lookup()
     lookup_renderer = bytes.fromhex(
         "2F 09"                  # preserve a1
         "D0 40"                  # word index -> word-table offset
@@ -6410,6 +6476,7 @@ def install_byte_ui_extension(
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
         INLINE_DISCARD_PROMPT_RENDER_ROUTINE: discard_prompt_renderer,
         SOUND_TEST_RENDER_ROUTINE: sound_test_renderer,
+        BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE: prep_local_tile_lookup,
     }
     for offset, payload in routines.items():
         if offset + len(payload) > BYTE_UI_EXT_ROUTINE_LIMIT:

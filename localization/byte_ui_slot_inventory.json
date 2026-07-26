@@ -1994,5 +1994,49 @@
     "0x07B3",
     "0x07B4",
     "0x07B5"
+  ],
+  "preparation_dynamic_slots": [
+    {
+      "slot": 0,
+      "vram_tile": "0x07A1",
+      "char": "록",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 1,
+      "vram_tile": "0x07A2",
+      "char": "가",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 2,
+      "vram_tile": "0x07A3",
+      "char": "스",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 3,
+      "vram_tile": "0x07A4",
+      "char": "럴",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 4,
+      "vram_tile": "0x07A5",
+      "char": "슬",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 5,
+      "vram_tile": "0x07A6",
+      "char": "임",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 6,
+      "vram_tile": "0x07A7",
+      "char": "비",
+      "reason": "preparation graphics overwrite the final static font segment"
+    }
   ]
 }

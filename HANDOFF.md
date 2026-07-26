@@ -10488,3 +10488,44 @@ contains 57 safe syllables as documented below and in
   248/248 overall and improves from 151 current / 97 probe to 152 current /
   96 probe. Runtime-inventory regressions lock the resumed dialogue, battle,
   and return frames.
+
+### Preparation `가`/`록` Final-Bank Collision Fix (2026-07-26)
+
+- Production checksum `316E` reproduced the user's broken `가드맨` and
+  `헤인/워록` in Scenario 1 preparation. Evidence is
+  `316e_s01_garok_hein_selected.png`,
+  `316e_s01_garok_hein_hire.png`, and
+  `captures/analysis/316e_s01_hein_hire_garok_broken.gst`.
+- Exact GST VRAM comparison found that every tile in the final static Hangul
+  segment `0x05D8..0x05F5` differed from its ROM resource during preparation.
+  Rendering that range showed preparation and hiring window borders, not font
+  data. Earlier static assignments put `록` at `0x05D8` and
+  `가/스/럴/슬/임/비` at `0x05F0..0x05F5`, so correct strings and pointers
+  could still display damaged glyphs. The other five static segments remained
+  byte-exact.
+- Do not reload or reserve that complete final segment during preparation:
+  those cells are legitimately owned by the stock window graphics. A new
+  256-byte local-index lookup at `0x2BE960..0x2BEA5F` maps only the seven
+  affected glyphs to fixed dynamic scratch tiles `0x07A1..0x07A7`.
+  Preparation roster, panel, status, selected-name, selected-panel, and
+  hire-class renderers call the context-specific lookup at `0x2B7FB0`.
+  Every other glyph still uses the ordinary static lookup, and battle/ending
+  contexts retain the existing static final bank.
+- Checksum `3497`, SHA-256
+  `87caa84da3cd3c16423c33926e196f40a4c787c3139aaf14f02982a72686b3d3`,
+  live-verifies `헤인/워록` and `가드맨` in
+  `3497_s01_hein_hire_guardman.png` and after a four-second wait in
+  `3497_s01_hein_hire_guardman_wait4s.png`. Scenario 2 preparation preserves
+  `스코트` in `3497_s02_prep_26.png`.
+- `captures/analysis/3497_s01_hein_hire_guardman_fixed.gst` proves the live
+  `록` and `가` patterns at dynamic tiles `0x07A1` and `0x07A2` are
+  byte-exact while the static final segment continues holding the window
+  graphics. Fresh Scenario 1 deployment also reaches the normal command panel;
+  `3497_s01_hein_battle_command.png` preserves `헤인/워록` in both the full
+  panel and bottom status row. This distinguishes a context-specific VRAM
+  ownership fix from another global glyph-bank overwrite.
+- The 457 preparation/font/checksum-derived regression tests pass. The complete
+  suite passes 1011 of 1013 tests; the only two failures are concurrent,
+  unstaged AI-class-editor WIP expectations in
+  `test_experimental_class_sprite_assets`, not ROM or localization failures.
+  Do not change or stage those editor assets as part of this fix.
