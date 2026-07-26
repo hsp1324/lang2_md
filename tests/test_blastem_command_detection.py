@@ -220,6 +220,43 @@ class BlastemCommandDetectionTests(unittest.TestCase):
         self.assertEqual(subprocess_call.call_count, 2)
         self.assertEqual(capture_window.call_count, 4)
 
+    @mock.patch.object(runner.time, "sleep")
+    @mock.patch.object(runner, "battle_map_surface_visible", return_value=True)
+    @mock.patch.object(runner.subprocess, "call", return_value=0)
+    @mock.patch.object(runner, "battle_dialogue_visible", return_value=False)
+    @mock.patch.object(runner, "battle_command_menu_visible")
+    @mock.patch.object(runner, "game_over_visible", return_value=False)
+    @mock.patch.object(runner, "capture_window")
+    def test_map_transition_can_require_more_than_four_confirmations(
+        self,
+        capture_window,
+        game_over_visible,
+        battle_command_menu_visible,
+        battle_dialogue_visible,
+        subprocess_call,
+        battle_map_surface_visible,
+        sleep,
+    ):
+        args = self.args()
+        args.max_confirmations = 6
+        battle_command_menu_visible.side_effect = (
+            False,
+            False,
+            False,
+            False,
+            False,
+            True,
+            True,
+        )
+
+        self.assertEqual(
+            runner.advance_to_battle_command(args, open_map_command=True),
+            0,
+        )
+
+        self.assertEqual(subprocess_call.call_count, 5)
+        self.assertEqual(capture_window.call_count, 7)
+
 
 if __name__ == "__main__":
     unittest.main()

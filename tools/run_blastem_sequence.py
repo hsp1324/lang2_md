@@ -966,7 +966,7 @@ def advance_to_battle_command(
         elif (
             open_map_command
             and battle_map_surface_visible(frame)
-            and map_confirmations < 4
+            and map_confirmations < args.max_confirmations
         ):
             status = subprocess.call(
                 make_key_command(args, [f"c:{args.confirmation_delay}"]),
@@ -998,6 +998,14 @@ def main() -> int:
         type=int,
         default=80,
         help="maximum single C presses used by a screen-detection sequence",
+    )
+    parser.add_argument(
+        "--open-map-command",
+        action="store_true",
+        help=(
+            "allow a reused battle-map detector to dismiss SCENARIO/TURN "
+            "banners and open the commander menu"
+        ),
     )
     parser.add_argument(
         "--confirmation-delay",
@@ -1257,7 +1265,10 @@ def main() -> int:
         return status
     status = advance_to_battle_command(
         args,
-        open_map_command=args.sequence in {"battle-command", "first-turn-dialogue"},
+        open_map_command=(
+            args.open_map_command
+            or args.sequence in {"battle-command", "first-turn-dialogue"}
+        ),
     )
     if status or args.sequence in {"battle-command", "detect-command"}:
         return status

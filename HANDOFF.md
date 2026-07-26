@@ -10313,3 +10313,39 @@ contains 57 safe syllables as documented below and in
   seconds. New regressions lock the exact Scenario 1 wording, dialogue
   stabilization, battle-map status-bar detection, and the two-confirmation
   transition from map surface to commander menu.
+
+### Production 316E Scenario 1 Turn 4 Direct Regression (2026-07-26)
+
+- The four-map-confirmation limit documented immediately above was too small
+  for a real no-action turn transition. A fresh production run reached a valid
+  Elwin/Fighter battle map after the Scenario/TURN banners but exhausted that
+  cap before reopening the command menu. This was an automation timeout, not a
+  ROM reset or freeze.
+- Reused `detect-command` runs can now opt in explicitly with
+  `--open-map-command`. Only that flag and the two fresh-deployment sequences
+  enable map confirmations; ordinary reused detection remains read-only on a
+  bare battle map. Opted-in detection may send map confirmations up to the
+  existing `--max-confirmations` screen-check bound. A regression requires five
+  map confirmations before the command menu, preventing the old cap from
+  returning unnoticed.
+- Fresh isolated Xvfb playback of the shipped 316E ROM traversed the complete
+  opening and three no-action turn transitions, then returned to a valid
+  Elwin/Fighter command panel on TURN 4. Stable completed-text frames preserve
+  `발드/파이터`, `리아나/클레릭`, `레온/나이트마스터`,
+  `제국군지휘관/솔저`, `로렌/하이로드`, and `엘윈/파이터`.
+  Representative dialogue evidence is
+  `316e_longrun_s01_turn1_14.png` through `_18.png`,
+  `316e_longrun_s01_turn1_66.png`, `_70.png`,
+  `316e_longrun_s01_turn2_104.png`, and
+  `316e_longrun_s01_turn2_107.png`.
+- Direct TURN 4 map inspection in
+  `316e_longrun_s01_turn4_cursor_left2.png` and
+  `316e_longrun_s01_turn4_cursor_unit2.png` preserves
+  `SCENARIO 1 / TURN 4`, `제국지휘관`, and `솔저`. This is current-production
+  evidence against the delayed status-glyph corruption previously reproduced
+  on mobile RetroArch. No Japanese residue, damaged name/class/status glyph,
+  reset, or freeze appeared.
+- `localization/runtime_verification.json` and its generated report now retain
+  the 316E opening, turn-dialogue, command-panel, and TURN 4 direct-status
+  captures. The focused runtime-inventory and command-detector suite passes
+  all 17 tests. The complete suite passes all 1010 tests in 225.3 seconds.
