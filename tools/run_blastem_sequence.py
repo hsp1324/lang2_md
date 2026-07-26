@@ -679,6 +679,32 @@ def battle_command_menu_visible(path: Path) -> bool:
     )
 
 
+def battle_map_surface_visible(path: Path) -> bool:
+    frame = Image.open(path).convert("RGB")
+    scale_y = frame.height / 240
+    status = frame.crop(
+        (0, round(195 * scale_y), frame.width, round(235 * scale_y))
+    )
+    pixels = list(status.get_flattened_data())
+    blue_ratio = sum(
+        1
+        for red, green, blue in pixels
+        if blue > 70 and blue > red * 1.3 and blue > green * 1.2
+    ) / len(pixels)
+    gold_ratio = sum(
+        1
+        for red, green, blue in pixels
+        if red > 100
+        and green > 70
+        and blue < 80
+        and red > blue * 1.5
+    ) / len(pixels)
+    # Battle maps retain the framed status bar while SCENARIO/TURN banners
+    # close and while the cursor waits on its first commander. Preparation
+    # screens fill more of this band with blue and have less of this frame.
+    return 0.45 < blue_ratio < 0.505 and gold_ratio > 0.08
+
+
 def battle_dialogue_visible(path: Path) -> bool:
     frame = Image.open(path).convert("RGB")
     scale_x = frame.width / 320
@@ -829,6 +855,50 @@ def capture_window(path: Path, *, xlib_only: bool = False) -> None:
     )
 
 
+def dialogue_text_fingerprint(path: Path) -> bytes:
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+    text = frame.crop(
+        (
+            round(24 * scale_x),
+            round(102 * scale_y),
+            round(288 * scale_x),
+            round(156 * scale_y),
+        )
+    )
+    return bytes(
+        1 if red > 150 and green > 150 and blue > 150 else 0
+        for red, green, blue in text.get_flattened_data()
+    )
+
+
+def wait_for_dialogue_stability(
+    args: argparse.Namespace,
+    frame: Path,
+    *,
+    max_checks: int = 8,
+) -> None:
+    previous = dialogue_text_fingerprint(frame)
+    stable_checks = 0
+    for _ in range(max_checks):
+        time.sleep(max(args.confirmation_delay, 0.25))
+        capture_window(frame, xlib_only=args.xlib_capture)
+        if not battle_dialogue_visible(frame):
+            raise RuntimeError("dialogue disappeared before its text stabilized")
+        current = dialogue_text_fingerprint(frame)
+        if current == previous:
+            stable_checks += 1
+            if stable_checks >= 2:
+                return
+        else:
+            stable_checks = 0
+        previous = current
+    raise RuntimeError(
+        f"dialogue text did not stabilize after {max_checks} capture checks"
+    )
+
+
 def detection_capture_path(args: argparse.Namespace, fallback: Path, step: int) -> Path:
     if args.capture_prefix is None:
         return fallback
@@ -859,9 +929,14 @@ def advance_to_preparation_screen(args: argparse.Namespace) -> int:
     )
 
 
-def advance_to_battle_command(args: argparse.Namespace) -> int:
+def advance_to_battle_command(
+    args: argparse.Namespace,
+    *,
+    open_map_command: bool = False,
+) -> int:
     probe = LOG_ROOT / "battle_command_probe.png"
     confirmations = 0
+    map_confirmations = 0
     for step in range(args.max_confirmations + 1):
         frame = detection_capture_path(args, probe, step)
         capture_window(frame, xlib_only=args.xlib_capture)
@@ -880,6 +955,7 @@ def advance_to_battle_command(args: argparse.Namespace) -> int:
         if step == args.max_confirmations:
             break
         if battle_dialogue_visible(frame):
+            wait_for_dialogue_stability(args, frame)
             status = subprocess.call(
                 make_key_command(args, [f"c:{args.confirmation_delay}"]),
                 cwd=ROOT,
@@ -887,6 +963,18 @@ def advance_to_battle_command(args: argparse.Namespace) -> int:
             if status:
                 return status
             confirmations += 1
+        elif (
+            open_map_command
+            and battle_map_surface_visible(frame)
+            and map_confirmations < 4
+        ):
+            status = subprocess.call(
+                make_key_command(args, [f"c:{args.confirmation_delay}"]),
+                cwd=ROOT,
+            )
+            if status:
+                return status
+            map_confirmations += 1
         else:
             time.sleep(args.confirmation_delay)
     raise RuntimeError(
@@ -915,7 +1003,10 @@ def main() -> int:
         "--confirmation-delay",
         type=float,
         default=0.9,
-        help="seconds to wait after each detector C press (use 2+ for full dialogue text)",
+        help=(
+            "seconds between dialogue-stability captures and after each "
+            "detector C press"
+        ),
     )
     parser.add_argument("--click-window", action="store_true")
     parser.add_argument(
@@ -1164,7 +1255,10 @@ def main() -> int:
         "detect-command",
     }:
         return status
-    status = advance_to_battle_command(args)
+    status = advance_to_battle_command(
+        args,
+        open_map_command=args.sequence in {"battle-command", "first-turn-dialogue"},
+    )
     if status or args.sequence in {"battle-command", "detect-command"}:
         return status
     return subprocess.call(

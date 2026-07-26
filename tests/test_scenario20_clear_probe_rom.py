@@ -394,7 +394,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
         conditional = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x9D20,
+            0x2CAF,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -402,7 +402,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x9D3C,
+            0x2CCB,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -410,7 +410,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x98AE,
+            0x283D,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -418,7 +418,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 kraken_event=True,
             ),
-            0x9D17,
+            0x2CA6,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -426,7 +426,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 conditional_dialogues=True,
             ),
-            0x9D1D,
+            0x2CAC,
         )
 
     def test_rejects_non_source_fixed_record(self):

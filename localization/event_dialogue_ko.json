@@ -5,7 +5,7 @@
       {"address": "0x184858", "english_record": 2101, "text": "큰일이야, {0001}!"},
       {"address": "0x184872", "english_record": 2102, "text": "무슨 일이야, {0005}?"},
       {"address": "0x18488A", "english_record": 2103, "text": "레이갈드 제국군이 마을 어귀를 점령했어!"},
-      {"address": "0x1848C0", "english_record": 2104, "text": "{0005}, 마을 어귀라면 네 소꿉친구가 사는 곳 아니야?"},
+      {"address": "0x1848C0", "english_record": 2104, "text": "{0005}, 마을 어귀는 네 소꿉친구가 사는 곳 아니야?"},
       {"address": "0x184918", "english_record": 2105, "text": "맞아! 이대로면 리아나가 위험해!"},
       {"address": "0x18495A", "english_record": 2105, "continuation": true, "text": "{0001}, 넌 검을 잘 쓰잖아. 제발 도와줘!"},
       {"address": "0x18499A", "english_record": 2106, "text": "물론이지. 가자!"},

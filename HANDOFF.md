@@ -10269,3 +10269,47 @@ contains 57 safe syllables as documented below and in
   the same checksum and SHA-256. The final complete post-rebase suite,
   including the added name-prompt inventory regression, passes all 1006
   tests. The focused UI/runtime/item suite separately passes all 41 tests.
+
+### Production 316E Stable Dialogue Capture And Scenario 1 Rewrap (2026-07-26)
+
+- `tools/run_blastem_sequence.py` now fingerprints only the light text pixels
+  in the canonical battle-dialogue text band and requires two consecutive
+  identical captures before sending C. This rejects a still-growing
+  typewriter frame such as the earlier
+  `a1df_s01_turn_end_15.png`. The lower continue marker is outside the
+  fingerprint crop, so its animation does not prevent stabilization.
+- The first fresh live run exposed a separate automation gap: after opening
+  dialogue, the game can wait at the `SCENARIO 1` and `TURN 1` banners with
+  the framed battle status bar visible. The old detector waited 100 checks
+  and sent no confirmations. Fresh-deployment sequences now recognize the
+  blue/gold battle status bar and allow at most four map confirmations to
+  dismiss the banners and open the first commander menu. Reused
+  `detect-command` runs do not enable this behavior.
+- The stable A1DF captures then proved that record `0x1848C0` was complete,
+  not mid-typewriter, and placed its final `?` alone on a third row. English
+  record 2104 says that Hein's childhood friend lives near the village edge.
+  The reviewed Korean was shortened from
+  `{0005}, 마을 어귀라면 네 소꿉친구가 사는 곳 아니야?` to
+  `{0005}, 마을 어귀는 네 소꿉친구가 사는 곳 아니야?`.
+- Fresh production playback in
+  `captures/run/316e_stable_s01_opening_08.png` proves the complete sentence
+  fits two natural rows. `316e_stable_s01_opening_09.png` through `_11.png`
+  preserve the following Hein/Elwin pages, and
+  `316e_stable_s01_opening_13.png` proves the intact Elwin/Fighter command
+  panel return. The detector reached it after seven dialogue confirmations.
+- Compared with production A1DF, production 316E differs in only 38 bytes:
+  the honest checksum word at `0x00018E..0x00018F` and the intended translated
+  record bytes at `0x1848D3..0x1848F9`. No checksum compensation was added.
+  The 4 MiB ROM SHA-256 is
+  `80292d21c5227a2c821d5bea484463714192877dcfdb21ea4ab809dd78187132`;
+  a clean `/tmp/lang2-md-s01-wrap-candidate.md` rebuild is byte-identical to
+  the shipped ROM.
+- Current production-derived checksum locks were rebased by the common
+  modular difference only; accepted historical capture checksums were not
+  changed. The complete-item derivative is now `8CF7`, while the accepted
+  renderer-aware item fingerprint remains `C80E`. Runtime inventory metadata
+  and its generated report now identify production `316E`.
+- `python3 -m unittest discover -s tests` passes all 1009 tests in 227.7
+  seconds. New regressions lock the exact Scenario 1 wording, dialogue
+  stabilization, battle-map status-bar detection, and the two-confirmation
+  transition from map surface to commander menu.

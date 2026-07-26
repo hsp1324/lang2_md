@@ -209,7 +209,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x74F4,
+            0x0483,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -217,7 +217,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x74E3,
+            0x0472,
         )
 
         death = bytearray(self.production)
@@ -227,7 +227,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x98AE,
+            0x283D,
         )
 
     def test_preserves_bosses_and_hidden_reinforcements(self):

@@ -100,7 +100,7 @@ class MagicApplicationProbeBuilderTests(unittest.TestCase):
             place_target=True,
             enable_all_magic=False,
         )
-        self.assertEqual(checksum, 0x3E80)
+        self.assertEqual(checksum, 0xCE0F)
         self.assertEqual(
             probe[
                 probe_builder.ALL_MAGIC_BRANCH_OFFSET :

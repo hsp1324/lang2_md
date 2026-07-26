@@ -424,14 +424,14 @@ class Scenario25ClearProbeTests(unittest.TestCase):
             )
 
     def test_current_probe_checksums_are_locked(self):
-        self.assertEqual(self.patched()[0x18E:0x190], bytes.fromhex("83 37"))
+        self.assertEqual(self.patched()[0x18E:0x190], bytes.fromhex("12 C6"))
         self.assertEqual(
             self.completion_target_patched()[0x18E:0x190],
-            bytes.fromhex("6A 4D"),
+            bytes.fromhex("F9 DC"),
         )
         self.assertEqual(
             self.protagonist_death_patched()[0x18E:0x190],
-            bytes.fromhex("98 AE"),
+            bytes.fromhex("28 3D"),
         )
 
     def test_rejects_non_source_fixed_record(self):
