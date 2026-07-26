@@ -564,7 +564,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             self.assertIn(capture, scenario8["captures"])
         self.assertEqual(scenario8["opening_events"], "verified_current")
         self.assertEqual(scenario8["turn_events"], "verified_probe")
-        self.assertEqual(scenario8["battle_ui"], "verified_probe")
+        self.assertEqual(scenario8["battle_ui"], "verified_current")
         self.assertEqual(scenario8["completion"], "verified_probe")
         for capture in (
             "captures/run/2209_s08_after_attack.png",
@@ -576,6 +576,17 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/2209_s08_victory_23.png",
             "captures/run/2209_s08_victory_26.png",
             "captures/run/2209_s08_next_scenario.png",
+            "captures/run/316e_s08_current_turn1_recover_02.png",
+            "captures/run/316e_s08_current_turn1_recover_06.png",
+            "captures/run/316e_s08_current_turn1_recover_09.png",
+            "captures/run/316e_s08_current_turn1_recover_11.png",
+            "captures/run/316e_s08_current_turn2_02.png",
+            "captures/run/316e_s08_current_turn2_05.png",
+            "captures/run/316e_s08_current_turn2_60.png",
+            "captures/run/316e_s08_current_turn3_05.png",
+            "captures/run/316e_s08_current_turn3_14.png",
+            "captures/run/316e_s08_current_turn3_46.png",
+            "captures/run/316e_s08_current_turn3_91.png",
         ):
             self.assertIn(capture, scenario8["captures"])
         self.assertIn("all eleven fixed records", scenario8["note"])

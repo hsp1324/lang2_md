@@ -10457,3 +10457,34 @@ contains 57 safe syllables as documented below and in
   248/248 overall and improves from 150 current / 98 probe to 151 current /
   97 probe. Runtime-inventory regressions lock the natural dialogue, battle,
   and return frames.
+
+### Production 316E Scenario 8 Battle UI Promotion (2026-07-26)
+
+- Fresh isolated playback entered Scenario 8 through the stock selector from
+  the valid Scenario 2 manual save and used the unmodified shipped 316E ROM.
+  `316e_s08_current_route.png`, `_entry_26.png`, `_arrangement.png`,
+  `_sortie_after_auto.png`, and `_opening_20.png` retain the route,
+  preparation, automatic deployment, `SCENARIO 8 / TURN 1`, and
+  Elwin/Fighter command return.
+- The first no-action transition was interrupted once by a host `SIGTERM`
+  after the map had entered ordinary AI movement. BlastEm remained alive on a
+  valid Scenario 8 map, and `316e_s08_current_turn1_recover.png` plus the
+  resumed detector traversed Sherry, Scott, Keith, and Aaron dialogue before
+  returning to the command panel. This is a capture-subprocess interruption,
+  not a ROM reset or freeze.
+- The resumed first and second transitions preserve the complete Korean
+  speaker labels and lower status rows in `_turn1_recover_02.png`,
+  `_06.png`, `_09.png`, `_11.png`, `_turn2_02.png`, `_05.png`, and
+  `_60.png`. No delayed commander/class corruption appeared.
+- The third no-action transition produced multiple stock battles.
+  `316e_s08_current_turn3_05.png` verifies
+  `호크나이트/호크나이트`, including the previously vulnerable `크`
+  glyph in both labels. `_turn3_14.png` verifies
+  `그리폰/호크나이트`, and `_turn3_46.png` verifies
+  `매직나이트/파이터`. Every accepted frame preserves portraits, troop
+  counts, `-AT-`, `-DF-`, `-지형-`, modifiers, and terrain percentages.
+  `_turn3_91.png` proves stable return to the Elwin/Fighter command panel.
+- Scenario 8 `battle_ui` is now `verified_current`. The runtime matrix remains
+  248/248 overall and improves from 151 current / 97 probe to 152 current /
+  96 probe. Runtime-inventory regressions lock the resumed dialogue, battle,
+  and return frames.
