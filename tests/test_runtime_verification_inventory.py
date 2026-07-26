@@ -84,7 +84,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "E1AF")
+        self.assertEqual(data["production_checksum"], "1AB2")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -1226,7 +1226,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario21["conditions"], "verified_current")
         self.assertEqual(scenario21["preparation"], "verified_current")
         self.assertEqual(scenario21["opening_events"], "verified_current")
-        self.assertEqual(scenario21["battle_ui"], "verified_probe")
+        self.assertEqual(scenario21["battle_ui"], "verified_current")
         self.assertEqual(scenario21["turn_events"], "verified_probe")
         self.assertEqual(scenario21["completion"], "verified_probe")
         self.assertEqual(scenario21["branches_endings"], "verified_probe")
@@ -1248,6 +1248,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/aac1_s21_fresh2_start_menu.png",
             "captures/run/aac1_s21_fresh2_death_wait_01.png",
             "captures/run/aac1_s21_fresh2_game_over.png",
+            "captures/run/1ab2_s21_current_leviathan_hawknight_battle.png",
         ):
             self.assertIn(capture, scenario21["captures"])
         self.assertIn("source trigger 0x1A958C", scenario21["note"])

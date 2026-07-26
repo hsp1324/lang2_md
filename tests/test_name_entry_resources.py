@@ -778,7 +778,21 @@ class NameEntryResourceTests(unittest.TestCase):
 
     def test_map_status_direct_paths_use_dynamic_name_and_class_tiles(self):
         renderer = builder._build_byte_ui_dynamic_direct_map_renderer()
+        self.assertIn(
+            bytes.fromhex("0C AF")
+            + builder.BYTE_UI_BATTLE_DIRECT_RETURN_ADDRESS.to_bytes(4, "big")
+            + builder.BYTE_UI_BATTLE_RETURN_STACK_OFFSET.to_bytes(2, "big"),
+            renderer,
+        )
         self.assertIn(bytes.fromhex("B5 FC FF FF A7 14"), renderer)
+        self.assertIn(
+            bytes.fromhex("3C 2F")
+            + builder.BYTE_UI_BATTLE_SIDE_STACK_OFFSET.to_bytes(2, "big")
+            + bytes.fromhex("4A 46"),
+            renderer,
+        )
+        self.assertIn(bytes.fromhex("7C 00"), renderer)
+        self.assertIn(bytes.fromhex("7C 08"), renderer)
         self.assertIn(bytes.fromhex("B3 FC 00 06 18 E8"), renderer)
         self.assertIn(bytes.fromhex("B3 FC 00 05 E6 D6"), renderer)
         self.assertIn(bytes.fromhex("B3 FC 00 05 E5 CA"), renderer)
@@ -809,7 +823,7 @@ class NameEntryResourceTests(unittest.TestCase):
                 bytes.fromhex("4E F9")
                 + builder.BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
             ),
-            2,
+            1,
         )
         self.assertLessEqual(
             builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE + len(renderer),

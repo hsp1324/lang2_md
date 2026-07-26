@@ -221,6 +221,12 @@ BYTE_UI_DYNAMIC_TILE_IDS = (
 BYTE_UI_DYNAMIC_NAME_SLOT = 0
 BYTE_UI_DYNAMIC_CLASS_SLOT = 8
 BYTE_UI_DYNAMIC_FIELD_WIDTH = 8
+# The battle-class caller at 0x01B546 saves its side word immediately below
+# the JSR return address. The dynamic renderer's 15-register MOVEM adds 60
+# bytes, so the original 0/1 side is 64 bytes above the current stack pointer.
+BYTE_UI_BATTLE_DIRECT_RETURN_ADDRESS = 0x01B54C
+BYTE_UI_BATTLE_RETURN_STACK_OFFSET = 60
+BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
 # Preparation and hiring graphics overwrite the complete final static font
 # segment at 0x05D8..0x05F5. Give only the affected glyphs fixed scratch slots
 # so multiple visible rows can share them without overwriting one another.
@@ -5686,13 +5692,31 @@ def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
     # ending result) must keep distinct static tiles for every visible row.
     code = _M68KCode()
     code.emit("48 E7 FF FE")
-    # The battle panel calls this renderer twice with the same class scratch
-    # slot, once per side. Its tilemaps remain visible simultaneously, so the
-    # second class would overwrite the first. The established static renderer
-    # already has battle-safe class glyph mappings; reserve the dynamic cache
-    # for the map-status buffers at A726/A738.
+    # The battle panel calls this renderer once per side with the same A714
+    # tilemap buffer. The caller's saved side word selects a distinct half of
+    # the 16-tile cache, so both class labels remain visible without falling
+    # back to static font tiles that battle graphics overwrite.
+    code.emit(
+        bytes.fromhex("0C AF")
+        + BYTE_UI_BATTLE_DIRECT_RETURN_ADDRESS.to_bytes(4, "big")
+        + BYTE_UI_BATTLE_RETURN_STACK_OFFSET.to_bytes(2, "big")
+    )
+    code.branch_word(0x6600, "route_table")
     code.emit("B5 FC FF FF A7 14")
-    code.branch_word(0x6700, "static")
+    code.branch_word(0x6600, "route_table")
+    code.emit(
+        bytes.fromhex("3C 2F")
+        + BYTE_UI_BATTLE_SIDE_STACK_OFFSET.to_bytes(2, "big")
+        + bytes.fromhex("4A 46")
+    )
+    code.branch_word(0x6700, "battle_left")
+    code.emit("7C 08")
+    code.branch_word(0x6000, "deref")
+    code.label("battle_left")
+    code.emit("7C 00")
+    code.branch_word(0x6000, "deref")
+
+    code.label("route_table")
     code.emit("B3 FC 00 06 18 E8")
     code.branch_word(0x6700, "name")
     code.emit("B3 FC 00 05 E6 D6")
@@ -5764,12 +5788,6 @@ def _build_byte_ui_dynamic_direct_map_renderer() -> bytes:
     code.branch_word(0x6000, "loop")
     code.label("done")
     code.emit("4C DF 7F FF 4E 75")
-    code.label("static")
-    code.emit("4C DF 7F FF")
-    code.emit(
-        bytes.fromhex("4E F9")
-        + BYTE_UI_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
-    )
     return code.finish()
 
 

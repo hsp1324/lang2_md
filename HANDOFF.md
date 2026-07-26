@@ -8576,10 +8576,11 @@ contains 57 safe syllables as documented below and in
   full-scroll mode. Legacy one-byte Korean codes are mapped through the new
   `0x2BE860` lookup table instead of being mistaken for graphic tiles.
 - Portrait and battle resource loads must not restore persistent Korean font
-  banks into map graphics. The old restore hooks are retired. The Scenario 26
-  battle class buffer at `0xFFFFA714` uses the established static direct
-  renderer because both sides remain visible simultaneously; two calls must
-  never share one transient eight-tile class cache.
+  banks into map graphics. The old restore hooks are retired. Production
+  `1AB2` supersedes the former static-buffer assumption: the battle class
+  buffer at `0xFFFFA714` uses separate transient cache halves for the left and
+  right side. Two simultaneously visible labels must never share one
+  eight-tile half.
 - The discard confirmation at glyph list `0x0A16F2` is not a direct string.
   Its fixed two-record token geometry is now patched explicitly as
   `버릴까요` and `네/취소`; `아니오` cannot fit the stock two-cell second
@@ -10734,3 +10735,37 @@ contains 57 safe syllables as documented below and in
   intact. No Japanese residue, damaged dynamic glyph, red screen, reset, or
   freeze appeared. Scenario 20 `battle_ui` is now `verified_current`;
   scheduled events, completion, and branches remain probe-backed.
+
+### Current 1AB2 Scenario 21 Battle Cache Fix (2026-07-27)
+
+- Unmodified production `E1AF` entered Scenario 21 through the real Scenario
+  20 completion SRAM and advanced naturally to enemy TURN 13. The first
+  Leviathan attack exposed a production defect: the map and post-battle rows
+  retained clean `헤인/샤먼`, but the battle screen's simultaneous top class
+  labels were graphics fragments.
+- The battle call at `0x01B546` writes an 18-word tilemap through
+  `0xFFFFA714` twice, once per side. The former dynamic wrapper deliberately
+  sent this buffer to the static direct renderer. That assumption was wrong:
+  battle graphics overwrite the referenced static extension tiles at
+  `0x340..0x347` and `0x398..0x3AF`.
+- Production `1AB2` identifies only this exact context by checking both return
+  address `0x01B54C` at post-MOVEM stack offset `60` and buffer
+  `0xFFFFA714`. The caller's saved 0/1 side word is at offset `64`; the left
+  class uses safe dynamic slots `0..7` and the right class uses `8..15`.
+  Other direct-render contexts keep their established table routing.
+- A production-identical temporary build replayed the same ordinary enemy
+  phase. `1ab2_s21_current_leviathan_hawknight_battle.png` retains
+  `리바이어선/호크나이트`, both combat sprites, troop counts, `AT/DF`,
+  `지형`, and multiple animation frames. The candidate and final production
+  ROMs are byte-identical.
+- A completely fresh title-to-Scenario-1 preparation run, not a
+  cross-checksum GST, selected Hein's hiring panel.
+  `1ab2_s01_hein_hire_guardman_wait5s.png` keeps `헤인/워록` and `가드맨`
+  intact after five seconds. Earlier attempts to idle a `3497` GST under the
+  shifted candidate routine returned to the opening cinematic and are invalid
+  cross-build evidence, not a ROM reset.
+- Final production checksum is `1AB2`; SHA-256 is
+  `2c10798906190fba32695251759d786d98efaf6f7832a027141a411e909a9a36`.
+  The focused runtime/resource suite passes 87 tests. The Scenario 1 Heavy
+  Horseman probe checksum is now `F79C`; its independent test still proves
+  that only documented coordinates and the header checksum differ.

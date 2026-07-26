@@ -102,7 +102,7 @@ class Scenario1HeavyHorsemanBattleProbeRomTests(unittest.TestCase):
         expected = sum(
             builder.be16(data, offset) for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0xBE99)
+        self.assertEqual(expected, 0xF79C)
         self.assertEqual(builder.be16(data, 0x18E), expected)
 
 
