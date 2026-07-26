@@ -814,10 +814,10 @@
       "group": "fixed_direct_strings",
       "address": "0x0A37BE",
       "size_bytes": 40,
-      "target_korean": "이름을정해주세요",
+      "target_korean": "이름을 정해주세요",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "group": "fixed_direct_strings",

@@ -614,7 +614,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x8F38,
+            0xDB46,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -622,7 +622,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x8F4B,
+            0xDB59,
         )
         dark_princess = bytearray(self.production)
         protagonist_death = bytearray(self.production)
@@ -635,7 +635,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 dark_princess_layout=True,
             ),
-            0x8F4B,
+            0xDB59,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -643,7 +643,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x4CA0,
+            0x98AE,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -651,7 +651,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_annihilation=True,
             ),
-            0xDA40,
+            0x264E,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -659,7 +659,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_combat_loss=True,
             ),
-            0x0834,
+            0x5442,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -667,7 +667,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_combat_loss_same_bank_fix=True,
             ),
-            0x0834,
+            0x5442,
         )
 
     def test_rejects_non_source_fixed_record(self):

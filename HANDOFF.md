@@ -10212,3 +10212,60 @@ contains 57 safe syllables as documented below and in
 - `python3 -m unittest discover -s tests` passes all 1005 tests on production
   `55D1`. The focused Scenario 19/runtime-inventory suite separately passes
   all 23 tests.
+
+### Production A1DF Name Prompt And Save Confirmation (2026-07-26)
+
+- The fixed name-entry prompt at `0x0A37BE` now reads
+  `이름을 정해주세요`. It still occupies the original 20-word record; the
+  change moves one existing blank cell between `이름을` and `정해주세요`
+  without growing the record. Fresh production playback is
+  `captures/run/55d1_final_name_entry_spaced2.png`. The UI inventory generator
+  marks this exact declaration reviewed and live-verified.
+- The in-game save confirmation retains the source `FFFD` control word at
+  `0x09AE56`, the `0003/0002` two-row layout header at `0x09AE58`, and the
+  `FFFF` terminator at `0x09AE68`. The two three-cell rows now use
+  `예 / 아니오`: glyph slots 1, 4, and 5 hold `예/아/니`, while slot 16
+  reuses the already localized `오`. The six visible cells are
+  `0001 003F 003F / 0004 0005 0010`. Fresh production playback in
+  `captures/run/a1df_s01_save_prompt_korean2.png` proves both choices fit the
+  stock nested window without clipping or damaged adjacent menu text.
+- Compared with the accepted `55D1` build, the new ROM differs in only 26
+  bytes: the checksum word at `0x00018E..0x00018F`, Start-menu glyph slots and
+  save-choice tokens at `0x0970D6..0x097107` and
+  `0x09AE5F..0x09AE67`, and the fixed name prompt at
+  `0x0A37C4..0x0A37CF`. No compensation word was added. The honest production
+  checksum is `A1DF`; SHA-256 is
+  `cd4948e25988e417c60c8af90748b13df50e7367a213dac80dc77b582c4e190d`.
+- Fresh A1DF Scenario 1 playback covers the title/new-load/name-entry flow,
+  scenario description and conditions, preparation, hire/shop/equipment and
+  arrangement surfaces, opening dialogue, command/order menus, save/load,
+  game settings, and control settings. Key evidence includes
+  `55d1_final_s01_prep_detect_01.png`,
+  `55d1_final_s01_shop_buy_popup2.png`,
+  `55d1_final_s01_arrange.png`,
+  `55d1_final_s01_opening_00.png` through `_06.png`,
+  `55d1_final_s01_order_menu.png`,
+  `a1df_s01_conditions.png`, `a1df_s01_game_settings3.png`, and
+  `a1df_s01_control_settings.png`.
+- A no-action A1DF run traversed the complete first-turn imperial/NPC/support
+  sequence and continued through TURN 4. The reviewed dialogue contact sheet
+  is `/tmp/a1df_s01_turn_dialogue_sheet.png`; retained evidence includes
+  `a1df_s01_turn_end_00.png` through `_115.png`,
+  `a1df_s01_turn2_end_start.png`, and
+  `a1df_s01_turn4_command_manual.png`. Elwin/Fighter, Resident/Militia,
+  Imperial Commander, Leon/Knight Master, Bald/Fighter, Liana/Cleric,
+  Laird/Magic Knight, support-unit labels, and `SCENARIO 1 / TURN 2..4`
+  remain intact without delayed glyph corruption, Japanese residue, reset, or
+  freeze. `a1df_s01_turn_end_15.png` is an intentionally rejected
+  mid-typewriter capture: the translation record continues through
+  `힘으로 데려갈까?`; capture automation must wait for the complete text
+  render before judging punctuation or page completeness.
+- `python3 tools/item_shop_inventory.py` regenerates the current full-list
+  derivative as `FD68`; the accepted renderer-aware item fingerprint and
+  historical captures remain `C80E`. Runtime inventory metadata and its
+  generated report now identify production `A1DF` while preserving historical
+  evidence checksums. A clean rebuild at
+  `/tmp/lang2-md-a1df-rebuild.md` is byte-identical to the shipped ROM and has
+  the same checksum and SHA-256. The final complete post-rebase suite,
+  including the added name-prompt inventory regression, passes all 1006
+  tests. The focused UI/runtime/item suite separately passes all 41 tests.

@@ -21,27 +21,43 @@ class StartSubmenuTests(unittest.TestCase):
     def test_save_choices_preserve_control_words_and_terminator(self):
         self.assertEqual(builder.be16(self.ko, 0x9AE56), 0xFFFD)
         self.assertEqual(self.words(0x9AE58, 2), [0x0003, 0x0002])
-        self.assertEqual(self.words(0x9AE5C, 6), [1, 4, 5, 24, 25, 0x3F])
+        self.assertEqual(self.words(0x9AE5C, 6), [1, 0x3F, 0x3F, 4, 5, 16])
         self.assertEqual(builder.be16(self.ko, 0x9AE68), 0xFFFF)
 
-    def test_save_choices_use_original_latin_glyphs(self):
-        expected = {1: 0x02C6, 4: 0x0326, 5: 0x0061, 24: 0x01B0, 25: 0x02C3}
+    def test_save_choices_use_korean_glyphs(self):
+        chars = builder.collect_chars(
+            *builder.START_MENU_TEXTS,
+            *builder.START_SUBMENU_TEXTS,
+        )
+        glyph_by_char = {
+            char: 0x7000 + index for index, char in enumerate(chars)
+        }
+        patched = bytearray(self.jp)
+        builder.patch_start_menu(patched, glyph_by_char)
+        builder.patch_start_submenus(patched, glyph_by_char)
+        expected = {
+            1: glyph_by_char["예"],
+            4: glyph_by_char["아"],
+            5: glyph_by_char["니"],
+        }
         for target_slot, glyph in expected.items():
-            self.assertIn(
-                glyph,
-                [
-                    builder.be16(
-                        self.jp, builder.START_MENU_GLYPH_LIST + source_slot * 2
-                    )
-                    for source_slot in range(41)
-                ],
-            )
             self.assertEqual(
                 builder.be16(
-                    self.ko, builder.START_MENU_GLYPH_LIST + target_slot * 2
+                    patched, builder.START_MENU_GLYPH_LIST + target_slot * 2
                 ),
                 glyph,
             )
+        self.assertEqual(
+            builder.be16(patched, builder.START_MENU_GLYPH_LIST + 16 * 2),
+            glyph_by_char["오"],
+        )
+        self.assertEqual(
+            [
+                builder.be16(patched, 0x9AE58 + index * 2)
+                for index in range(8)
+            ],
+            [0x0003, 0x0002, 1, 0x3F, 0x3F, 4, 5, 16],
+        )
 
     def test_load_records_keep_all_original_boundaries(self):
         for offset in (0x9B082, 0x9B0C0):

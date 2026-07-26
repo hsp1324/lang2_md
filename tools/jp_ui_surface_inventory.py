@@ -82,6 +82,10 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             row["reviewed"] = True
             row["live_verified"] = True
     add_rows(rows, japanese, korean, "fixed_direct_strings", builder.DIRECT_FIXED_STRING_PATCHES, 2, True)
+    for row in rows:
+        if row["address"] == "0x0A37BE":
+            row["reviewed"] = True
+            row["live_verified"] = True
     add_rows(rows, japanese, korean, "route_titles", builder.DIRECT_FIXED_ROUTE_TITLE_PATCHES, 2, True)
     add_rows(rows, japanese, korean, "scenario_headers", builder.DIRECT_FIXED_SCENARIO_HEADER_PATCHES, 2, True)
     for offset, text in builder.ARRANGE_MENU_GLYPH_LIST_PATCHES.items():

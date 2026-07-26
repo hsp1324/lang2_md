@@ -37,6 +37,18 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["live_verified"] for row in rows))
 
+    def test_spaced_name_prompt_is_live_verified(self):
+        rows = [
+            row
+            for row in self.result["declared_patches"]
+            if row["address"] == "0x0A37BE"
+        ]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["target_korean"], "이름을 정해주세요")
+        self.assertTrue(rows[0]["modified"])
+        self.assertTrue(rows[0]["reviewed"])
+        self.assertTrue(rows[0]["live_verified"])
+
     def test_source_reviewed_ending_montage_is_live_verified(self):
         rows = [
             row

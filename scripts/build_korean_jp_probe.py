@@ -944,8 +944,6 @@ START_MENU_TOKEN_STREAM = 0x9AD88
 START_MENU_TEXTS = ("저장", "불러오기", "승리조건", "게임설정", "턴 종료")
 START_SUBMENU_TEXTS = (
     "저장할까요?",
-    # Retain these syllables in the stable custom-glyph allocation even though
-    # the tight live choice box uses compact original Latin YES/NO glyphs.
     "예",
     "아니오",
     "게임속도",
@@ -1844,7 +1842,7 @@ DIRECT_FIXED_STRING_PATCHES = {
     0xA37A0: (4, "시나리오"),
     0xA37AA: (5, "합계"),
     0xA37B6: (3, "턴"),
-    0xA37BE: (20, "이름을정해주세요"),
+    0xA37BE: (20, "이름을 정해주세요"),
     # Do not patch item possession title message words directly: that renderer
     # uses the item local glyph list, and 0xA1716 is a purchase-popup message.
     0xA2B72: (5, "지휘관배치"),
@@ -4541,15 +4539,13 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
     for slot, char in main_slot_chars.items():
         put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph_by_char[char])
 
-    # Compact English confirmation choices are familiar game UI and fit the
-    # original overlapping windows. Copy the Japanese ROM's original Latin
-    # glyph IDs into five slots no longer used by the localized main menu.
+    # The save-choice record has two three-cell rows. Reuse three slots no
+    # longer referenced by the localized main menu for 예/아/니, and reuse the
+    # existing 오 slot so both choices remain inside the stock window.
     save_choice_glyphs = {
-        1: 0x02C6,   # Y
-        4: 0x0326,   # E
-        5: 0x0061,   # S
-        24: 0x01B0,  # N
-        25: 0x02C3,  # O
+        1: glyph_by_char["예"],
+        4: glyph_by_char["아"],
+        5: glyph_by_char["니"],
     }
     for slot, glyph in save_choice_glyphs.items():
         put16(data, START_MENU_GLYPH_LIST + slot * 2, glyph)
@@ -4561,8 +4557,8 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
     # 8-cell save prompt and two 3-cell choice rows.
     put_tokens(0x9AE44, [10, 11, 12, 13, 18, 23, 0x3F, 0x3F])
     # Preserve FFFD at 0x9AE56 and the original 0x0003/0x0002 layout header.
-    # The following six cells wrap as two three-cell choices.
-    put_tokens(0x9AE58, [0x0003, 0x0002, 1, 4, 5, 24, 25, 0x3F])
+    # The following six cells wrap as two three-cell choices: 예 / 아니오.
+    put_tokens(0x9AE58, [0x0003, 0x0002, 1, 0x3F, 0x3F, 4, 5, 16])
 
     config_rows = (
         (0x9AE74, [19, 20, 27, 28, 0x3F, 0x3F]),
