@@ -37,7 +37,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 24 | current | current | current | current | current | current | probe | probe | 66 |
 | 25 | current | current | current | current | current | current | probe | probe | 61 |
 | 26 | current | current | current | current | current | current | probe | probe | 61 |
-| 27 | current | current | current | current | probe | current | probe | probe | 37 |
+| 27 | current | current | current | current | current | current | probe | probe | 50 |
 | 28 | current | current | current | current | current | current | probe | probe | 39 |
 | 29 | current | current | current | current | current | current | probe | probe | 42 |
 | 30 | current | current | current | current | probe | current | probe | current | 27 |
@@ -2010,7 +2010,7 @@ Production 212A verifies the Scenario 26 route map, all 14 text-bearing scrollin
 
 ### Scenario 27
 
-Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrolling frames of 전설의 끝, and the preparation endpoint. Direct Japanese-ROM rendering confirms survival of Egbert's magic attack, arrival at Bernhardt's innermost temple, the silent dark shrine, Bernhardt holding Alhazard with confidence despite being cornered, and the millennia-long legend of light and darkness nearing its end. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Current production 9DD0 plus the source-validating adjacent-Bernhardt probe produced E93E. A normal Elwin attack rendered intact 베른하르트/엠퍼러 and battle labels, then the stock closing route traversed the source-reviewed ten-record montage, all selected character and villain epilogues, interleaved credits, Liana and Elwin conclusions, and Fin at frame 875 without reset or freeze. The obsolete invented ending line 리아나가 위험해 did not appear; the corrected mutual-understanding, allied-hearts, and continuing-journey conversation did. This remains production-derived probe evidence because only Bernhardt's position, AT/DF, and mercenaries are diagnostic; an unmodified ordinary clear and conditional ending branches remain pending.
+Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrolling frames of 전설의 끝, and the preparation endpoint. Direct Japanese-ROM rendering confirms survival of Egbert's magic attack, arrival at Bernhardt's innermost temple, the silent dark shrine, Bernhardt holding Alhazard with confidence despite being cornered, and the millennia-long legend of light and darkness nearing its end. Every current Korean description page is accurate and readable without Japanese residue, clipping, broken glyphs, isolated words, or abnormal spacing. Earlier production ECA0 verified preparation, automatic deployment, all twenty opening frames, the command menu, and Korean conditions without reset or freeze. The opening pages cover Bernhardt, Lana, Liana, Sherry, Elwin, and Aaron with intact dynamic names, classes, and status labels. Victory is 베른하르트 격파; defeat is 주인공 사망. The complete no-action first turn retained 55 frames, including both Bernhardt turn-event pages and Elwin's defeat line, before the expected GAME OVER. Current production 9DD0 plus the source-validating adjacent-Bernhardt probe produced E93E. A normal Elwin attack rendered intact 베른하르트/엠퍼러 and battle labels, then the stock closing route traversed the source-reviewed ten-record montage, all selected character and villain epilogues, interleaved credits, Liana and Elwin conclusions, and Fin at frame 875 without reset or freeze. The obsolete invented ending line 리아나가 위험해 did not appear; the corrected mutual-understanding, allied-hearts, and continuing-journey conversation did. This remains production-derived probe evidence because only Bernhardt's position, AT/DF, and mercenaries are diagnostic; an unmodified ordinary clear and conditional ending branches remain pending. Final production 1AB2 entered Scenario 27 through the built-in selector from the same valid Scenario 21 manual SRAM, without changing ROM or scenario data. The route, preparation endpoint, arrangement, automatic deployment, Bernhardt opening, and 엘윈/로드 command panel remained intact. Since the stock no-action first turn reaches the source-authentic defeat before combat, the original all-factions debug command was entered on an empty map tile with its required short timing. The resulting 적군 command menu proves that the in-game command was active. It moved one enemy unit into range at runtime only; Elwin then used the ordinary 공격 command. The resulting 로드/아크데몬 battle retained both class labels, portraits, troop counts, -AT-, -DF-, -지형-, modifiers, terrain percentages, and combat sprites through the completed animation. No Japanese residue, damaged glyph, red screen, reset, or freeze appeared. Scenario 27 battle_ui is therefore verified_current.
 
 - `captures/run/ea22_s27_after_select_current.png`
 - `captures/run/ea22_s27_roster_sheet.png`
@@ -2049,6 +2049,19 @@ Production 212A verifies the Scenario 27 route map, all 19 text-bearing scrollin
 - `captures/run/212a_s27_description_current_14.png`
 - `captures/run/212a_s27_description_current_19.png`
 - `captures/run/212a_s27_description_current_20.png`
+- `captures/run/1ab2_s27_current_route_after.png`
+- `captures/run/1ab2_s27_current_brief_34.png`
+- `captures/run/1ab2_s27_current_arrangement.png`
+- `captures/run/1ab2_s27_current_after_auto.png`
+- `captures/run/1ab2_s27_current_opening_start.png`
+- `captures/run/1ab2_s27_current_dialogue_19.png`
+- `captures/run/1ab2_s27_current_dialogue_more_14.png`
+- `captures/run/1ab2_s27_current_debug_enemy_command_exact.png`
+- `captures/run/1ab2_s27_current_debug_enemy_moved5.png`
+- `captures/run/1ab2_s27_current_debug_battle_01.png`
+- `captures/run/1ab2_s27_current_debug_battle_02.png`
+- `captures/run/1ab2_s27_current_debug_battle_03.png`
+- `captures/run/1ab2_s27_current_debug_battle_end.png`
 
 ### Scenario 28
 

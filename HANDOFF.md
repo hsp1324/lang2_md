@@ -10846,3 +10846,25 @@ contains 57 safe syllables as documented below and in
   without Japanese residue, damaged glyph, red screen, reset, or freeze.
   Scenario 26 `battle_ui` is now `verified_current`; completion and branches
   remain probe-backed.
+
+### Current 1AB2 Scenario 27 Debug-Exposed Battle UI (2026-07-27)
+
+- Unmodified production `1AB2` entered Scenario 27 through the built-in
+  selector from the same valid Scenario 21 manual SRAM. No ROM byte or
+  scenario record was changed.
+- The route, preparation endpoint, arrangement, automatic deployment,
+  `베른하르트` opening, and `엘윈/로드` command panel remained intact.
+  Stock no-action play first confirmed the source-authentic turn-1 defeat
+  without combat.
+- On a fresh run, the original all-factions debug command was entered on an
+  empty tile with 0.12-second holds and 0.05-second waits. The resulting
+  `적군` command panel in `1ab2_s27_current_debug_enemy_command_exact.png`
+  proves that the built-in command was active. It moved one enemy unit into
+  attack range at runtime only; Elwin then used the ordinary `공격` command.
+- `1ab2_s27_current_debug_battle_01.png` through `_03.png` preserve a real
+  `로드/아크데몬` battle with both class labels, portraits, troop counts,
+  `-AT-`, `-DF-`, `-지형-`, modifiers, terrain percentages, and combat
+  sprites through the completed animation.
+- No Japanese residue, damaged glyph, red screen, reset, or freeze appeared.
+  Scenario 27 `battle_ui` is now `verified_current`; completion and branches
+  remain probe-backed.
