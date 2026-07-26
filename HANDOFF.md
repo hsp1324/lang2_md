@@ -10432,3 +10432,28 @@ contains 57 safe syllables as documented below and in
   248/248 overall and improves from 149 current / 99 probe to 150 current /
   98 probe. Runtime-inventory regressions now lock the accepted Scenario 3 and
   Scenario 4 current battle frames.
+
+### Production 316E Scenario 5 Battle UI Promotion (2026-07-26)
+
+- Fresh isolated playback entered Scenario 5 through the stock selector from
+  the valid Scenario 2 manual save and used the unmodified shipped 316E ROM.
+  `316e_s05_current_route.png`, `_entry_14.png`, `_arrangement.png`,
+  `_sortie_after_auto.png`, and `_opening_17.png` retain the route,
+  preparation, automatic deployment, ordinary map, and Elwin/Fighter command
+  return.
+- The first no-action turn rendered the complete Morgan and imperial-commander
+  exchange. Accepted frames `_turn1_20.png`, `_41.png`, and `_46.png`
+  preserve the speaker labels and readable Korean text; `_turn1_59.png`
+  proves stable return to the Elwin/Fighter command panel. Turns 2 and 3
+  completed normally without a battle presentation.
+- The fourth no-action transition produced a stock Werewolf attack.
+  `316e_s05_current_turn4_08.png`, `_09.png`, and `_10.png` preserve the
+  complete `웨어울프/파이터` labels, both portraits, troop counts, `-AT-`,
+  `-DF-`, `-지형-`, numeric modifiers, and terrain percentages throughout
+  the battle. `_turn4_47.png` proves the later command-panel return with
+  Elwin/Fighter still intact. No Japanese residue, reset, freeze, or delayed
+  name/class/status corruption appeared through TURN 5.
+- Scenario 5 `battle_ui` is now `verified_current`. The runtime matrix remains
+  248/248 overall and improves from 150 current / 98 probe to 151 current /
+  97 probe. Runtime-inventory regressions lock the natural dialogue, battle,
+  and return frames.

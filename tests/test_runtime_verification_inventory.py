@@ -309,6 +309,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("second Shika cry", scenario4["note"])
         self.assertEqual(scenario5["preparation"], "verified_current")
         self.assertEqual(scenario5["description"], "verified_current")
+        self.assertEqual(scenario5["battle_ui"], "verified_current")
         for capture in (
             "captures/run/489b_s05_description_current_01.png",
             "captures/run/489b_s05_description_current_06.png",
@@ -360,6 +361,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e017_s05_turn22_event_dialogue_29.png",
             "captures/run/e027_s05_turn20_alt_event_dialogue_29.png",
             "captures/run/e027_s05_turn20_alt_event_dialogue_30.png",
+            "captures/run/316e_s05_current_turn1_20.png",
+            "captures/run/316e_s05_current_turn1_41.png",
+            "captures/run/316e_s05_current_turn1_46.png",
+            "captures/run/316e_s05_current_turn1_59.png",
+            "captures/run/316e_s05_current_turn4_08.png",
+            "captures/run/316e_s05_current_turn4_09.png",
+            "captures/run/316e_s05_current_turn4_10.png",
+            "captures/run/316e_s05_current_turn4_47.png",
         ):
             self.assertIn(capture, scenario5["captures"])
         self.assertIn("changing only the first Elwin deployment Y", scenario5["note"])
