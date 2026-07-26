@@ -10349,3 +10349,29 @@ contains 57 safe syllables as documented below and in
   the 316E opening, turn-dialogue, command-panel, and TURN 4 direct-status
   captures. The focused runtime-inventory and command-detector suite passes
   all 17 tests. The complete suite passes all 1010 tests in 225.3 seconds.
+
+### Production 316E Scenario 1 Battle UI Promotion (2026-07-26)
+
+- The same unmodified 316E no-action run contains normal AI battles on TURN 2
+  and TURN 3, so Scenario 1 no longer needs a production-derived diagnostic for
+  its `battle_ui` cell. Accepted completed battle frames include
+  `316e_longrun_s01_turn2_33.png` for `파이터/시민`,
+  `316e_longrun_s01_turn2_76.png` for `헤비호스맨/파이크`,
+  `316e_longrun_s01_turn3_32.png` for `나이트마스터/파이크`,
+  `316e_longrun_s01_turn3_48.png` for `매직나이트/파이크`, and
+  `316e_longrun_s01_turn3_63.png` for `솔저/파이터`.
+- Every accepted frame preserves the stock portraits, troop counts,
+  `-AT-`, `-DF-`, `-지형-`, numeric modifiers, and terrain percentages.
+  The `비` in `헤비호스맨` remains intact in the actual battle renderer, not
+  merely on the map status row. Later TURN 3 frames also retain the long class
+  names without the delayed glyph corruption previously seen on mobile.
+- `316e_longrun_s01_turn3_62.png` is intentionally rejected as a
+  mid-transition frame: the right label temporarily shows only the final
+  `터`. The immediately following `_63.png` completes `파이터` and retains it
+  throughout the battle. Do not treat `_62.png` as a damaged production
+  glyph, and do not accept a battle frame until both labels and the numeric
+  panel have stabilized.
+- Scenario 1 `battle_ui` is now `verified_current`. The runtime matrix remains
+  248/248 overall and improves from 147 current / 101 probe to 148 current /
+  100 probe. The focused runtime and command-detector suite passes all 29
+  tests.

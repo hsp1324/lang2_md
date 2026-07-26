@@ -11,7 +11,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 
 | Scenario | description | conditions | preparation | opening_events | battle_ui | turn_events | completion | branches_endings | Evidence |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
-| 1 | current | current | current | current | probe | current | probe | probe | 65 |
+| 1 | current | current | current | current | current | current | probe | probe | 71 |
 | 2 | current | current | current | current | current | current | probe | probe | 65 |
 | 3 | current | current | current | current | probe | probe | probe | probe | 56 |
 | 4 | current | current | current | current | probe | probe | probe | probe | 76 |
@@ -109,8 +109,14 @@ Production C7AB visually verifies the source-reviewed Scenario 1 title, complete
 - `captures/run/316e_longrun_s01_turn1_66.png`
 - `captures/run/316e_longrun_s01_turn1_70.png`
 - `captures/run/316e_longrun_s01_turn2_command_05.png`
+- `captures/run/316e_longrun_s01_turn2_33.png`
+- `captures/run/316e_longrun_s01_turn2_60.png`
+- `captures/run/316e_longrun_s01_turn2_76.png`
 - `captures/run/316e_longrun_s01_turn2_104.png`
 - `captures/run/316e_longrun_s01_turn2_107.png`
+- `captures/run/316e_longrun_s01_turn3_32.png`
+- `captures/run/316e_longrun_s01_turn3_48.png`
+- `captures/run/316e_longrun_s01_turn3_63.png`
 - `captures/run/316e_longrun_s01_turn3_86.png`
 - `captures/run/316e_longrun_s01_turn4_cursor_left2.png`
 - `captures/run/316e_longrun_s01_turn4_cursor_unit2.png`
