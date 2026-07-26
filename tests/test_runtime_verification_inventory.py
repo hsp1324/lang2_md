@@ -1382,9 +1382,18 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario24["conditions"], "verified_current")
         self.assertEqual(scenario24["preparation"], "verified_current")
         self.assertEqual(scenario24["opening_events"], "verified_current")
+        self.assertEqual(scenario24["battle_ui"], "verified_current")
         self.assertEqual(scenario24["turn_events"], "verified_current")
         self.assertIn("captures/run/544b_s24_opening_11.png", scenario24["captures"])
         self.assertIn("captures/run/544b_s24_turn1_38.png", scenario24["captures"])
+        for capture in (
+            "captures/run/1ab2_s24_current_enemy3_119.png",
+            "captures/run/1ab2_s24_current_enemy3_128.png",
+            "captures/run/1ab2_s24_current_enemy3_136.png",
+            "captures/run/1ab2_s24_current_enemy3_144.png",
+            "captures/run/1ab2_s24_current_enemy3_wait20.png",
+        ):
+            self.assertIn(capture, scenario24["captures"])
         self.assertEqual(scenario24["branches_endings"], "verified_probe")
         for capture in (
             "captures/run/aac1_s24_death_entry.png",

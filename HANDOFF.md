@@ -10808,3 +10808,21 @@ contains 57 safe syllables as documented below and in
 - No Japanese residue, damaged name/class/status glyph, red screen, reset, or
   freeze appeared. Scenario 23 `battle_ui` is now `verified_current`; its
   completion and branches remain probe-backed.
+
+### Current 1AB2 Scenario 24 Natural Battle UI (2026-07-27)
+
+- Unmodified production `1AB2` entered Scenario 24 through the built-in
+  selector from the same valid Scenario 21 manual SRAM. No ROM byte, scenario
+  record, placement, stat, or event data was changed for this run.
+- The route, preparation endpoint, arrangement, automatic deployment,
+  `엘윈/로드` command panel, Korean Start/settings menus, and the first
+  `뱀파이어로드` dialogue remained intact. `전투장면` was visibly set to
+  `켜기`.
+- Ordinary no-action play reached a natural TURN 3
+  `뱀파이어로드/샤먼` battle. `1ab2_s24_current_enemy3_128.png`, `_136.png`,
+  and `_144.png` retain both class labels, portraits, troop counts, `-AT-`,
+  `-DF-`, `-지형-`, modifiers, and terrain percentages through the completed
+  animation. `_wait20.png` then reaches TURN 4.
+- No Japanese residue, damaged name/class/status glyph, red screen, reset, or
+  freeze appeared. Scenario 24 `battle_ui` is now `verified_current`; its
+  completion and branches remain probe-backed.
