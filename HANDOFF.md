@@ -10633,3 +10633,31 @@ contains 57 safe syllables as documented below and in
   remain the accepted evidence for turns 6-8. Do not mislabel the host
   detector's early ENEMY PHASE frame as GAME OVER; the accepted terminal frame
   was captured after the phase completed.
+
+### Current E1AF Scenario 16 Natural Battle UI (2026-07-26)
+
+- Fresh unmodified production entered Scenario 16 through the selector and
+  retained the complete eight-commander preparation roster. Captures
+  `e1af_s16_current_entry_17.png` and
+  `e1af_s16_current_opening_16.png` preserve the preparation endpoint and
+  clean Elwin/Fighter command panel.
+- Natural no-action playback traversed the stock turn-2 Leon/Laird exchange,
+  the state-only turn-3 transition, Keith's ordinary defeat line, and returned
+  to valid command panels through turn 5. Representative evidence is
+  `e1af_s16_current_turn2_02.png` through `_04.png`,
+  `e1af_s16_current_turn3_31.png`, and the `_48.png` / turn-4 `_58.png`
+  command endpoints. The later physical turn-8 body remains covered by the
+  source-preserving `9311` diagnostic, so `turn_events` remains
+  `verified_probe`.
+- `e1af_s16_current_turn4_11.png` through `_15.png` and turn-5
+  `e1af_s16_current_turn5_dialogue_02.png` capture stock
+  `골렘/파이터` battles. The two-syllable `골렘` label uses the established
+  global string target for source `ゴーレム`; its first syllable includes the
+  final consonant in one Hangul tile and must not be transcribed as `고렘`.
+  Portraits, troop counts, AT/DF modifiers, terrain percentages, and animation
+  frames remain intact. Scenario 16 `battle_ui` is now
+  `verified_current`.
+- Direct-window directional events were intermittently ignored after the SDL
+  capture state changed. Toggling keyboard capture once and using focused XTest
+  input restored menu navigation. This was host input transport, not a ROM
+  reset or freeze.

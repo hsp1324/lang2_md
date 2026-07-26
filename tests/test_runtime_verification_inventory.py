@@ -950,7 +950,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario16["conditions"], "verified_current")
         self.assertEqual(scenario16["preparation"], "verified_current")
         self.assertEqual(scenario16["opening_events"], "verified_current")
-        self.assertEqual(scenario16["battle_ui"], "verified_probe")
+        self.assertEqual(scenario16["battle_ui"], "verified_current")
         self.assertEqual(scenario16["turn_events"], "verified_probe")
         self.assertEqual(scenario16["completion"], "verified_probe")
         self.assertEqual(scenario16["branches_endings"], "verified_probe")
@@ -969,6 +969,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/9311_s16_turn8_04.png",
             "captures/run/9311_s16_turn8_05.png",
             "captures/run/9311_s16_turn9_command_confirmed.png",
+            "captures/run/e1af_s16_current_entry_17.png",
+            "captures/run/e1af_s16_current_opening_16.png",
+            "captures/run/e1af_s16_current_turn2_02.png",
+            "captures/run/e1af_s16_current_turn2_03.png",
+            "captures/run/e1af_s16_current_turn2_04.png",
+            "captures/run/e1af_s16_current_turn2_56.png",
+            "captures/run/e1af_s16_current_turn3_31.png",
+            "captures/run/e1af_s16_current_turn3_48.png",
+            "captures/run/e1af_s16_current_turn4_11.png",
+            "captures/run/e1af_s16_current_turn4_15.png",
+            "captures/run/e1af_s16_current_turn4_58.png",
+            "captures/run/e1af_s16_current_turn5_dialogue_02.png",
+            "captures/run/e1af_s16_current_turn5_dialogue_05.png",
+            "captures/run/e1af_s16_current_turn5_dialogue_12.png",
+            "captures/run/e1af_s16_current_turn5_dialogue_30.png",
         ):
             self.assertIn(capture, scenario16["captures"])
         self.assertIn("protagonist-death diagnostic F7AB", scenario16["note"])

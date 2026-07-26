@@ -26,7 +26,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 13 | current | current | current | current | current | probe | probe | probe | 57 |
 | 14 | current | current | current | current | current | current | probe | probe | 64 |
 | 15 | current | current | current | current | current | probe | probe | probe | 84 |
-| 16 | current | current | current | current | probe | probe | probe | probe | 59 |
+| 16 | current | current | current | current | current | probe | probe | probe | 74 |
 | 17 | current | current | current | current | current | probe | probe | probe | 51 |
 | 18 | current | current | current | current | probe | probe | probe | probe | 49 |
 | 19 | current | current | current | current | probe | probe | probe | probe | 67 |
@@ -1281,6 +1281,21 @@ Production 3FC0 verifies the Scenario 16 route map, all 25 text-bearing scrollin
 - `captures/run/9311_s16_turn8_04.png`
 - `captures/run/9311_s16_turn8_05.png`
 - `captures/run/9311_s16_turn9_command_confirmed.png`
+- `captures/run/e1af_s16_current_entry_17.png`
+- `captures/run/e1af_s16_current_opening_16.png`
+- `captures/run/e1af_s16_current_turn2_02.png`
+- `captures/run/e1af_s16_current_turn2_03.png`
+- `captures/run/e1af_s16_current_turn2_04.png`
+- `captures/run/e1af_s16_current_turn2_56.png`
+- `captures/run/e1af_s16_current_turn3_31.png`
+- `captures/run/e1af_s16_current_turn3_48.png`
+- `captures/run/e1af_s16_current_turn4_11.png`
+- `captures/run/e1af_s16_current_turn4_15.png`
+- `captures/run/e1af_s16_current_turn4_58.png`
+- `captures/run/e1af_s16_current_turn5_dialogue_02.png`
+- `captures/run/e1af_s16_current_turn5_dialogue_05.png`
+- `captures/run/e1af_s16_current_turn5_dialogue_12.png`
+- `captures/run/e1af_s16_current_turn5_dialogue_30.png`
 
 ### Scenario 17
 
