@@ -1268,7 +1268,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario22["conditions"], "verified_current")
         self.assertEqual(scenario22["preparation"], "verified_current")
         self.assertEqual(scenario22["opening_events"], "verified_current")
-        self.assertEqual(scenario22["battle_ui"], "verified_probe")
+        self.assertEqual(scenario22["battle_ui"], "verified_current")
         self.assertEqual(scenario22["turn_events"], "verified_probe")
         self.assertEqual(scenario22["completion"], "verified_probe")
         self.assertEqual(scenario22["branches_endings"], "verified_probe")
@@ -1298,6 +1298,10 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/b181_s22_opening_24.png",
             "captures/run/b181_s22_death_event_06.png",
             "captures/run/b181_s22_death_event_07.png",
+            "captures/run/1ab2_s22_current_enemy3_104.png",
+            "captures/run/1ab2_s22_current_enemy3_110.png",
+            "captures/run/1ab2_s22_current_enemy3_118.png",
+            "captures/run/1ab2_s22_current_enemy3_end.png",
         ):
             self.assertIn(capture, scenario22["captures"])
         self.assertIn("trigger 0x1AA928", scenario22["note"])

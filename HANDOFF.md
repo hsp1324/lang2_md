@@ -10769,3 +10769,23 @@ contains 57 safe syllables as documented below and in
   The focused runtime/resource suite passes 87 tests. The Scenario 1 Heavy
   Horseman probe checksum is now `F79C`; its independent test still proves
   that only documented coordinates and the header checksum differ.
+
+### Current 1AB2 Scenario 22 Natural Battle UI (2026-07-27)
+
+- Unmodified production `1AB2` entered Scenario 22 through the built-in
+  selector from a valid Scenario 21 manual SRAM. No scenario record, stat,
+  deployment, event, or ROM byte was changed for this run.
+- The route, complete description endpoint, preparation screen, arrangement,
+  automatic deployment, `제시카/소서러` command panel, and Korean Start menu
+  remained intact. Input-state mistakes that entered the hire pane or waited
+  on a map without opening a command were rejected rather than treated as ROM
+  failures.
+- Ordinary no-action play reached the natural TURN 3 enemy phase. Completed
+  frames `1ab2_s22_current_enemy3_104.png` and `_110.png` preserve
+  `리치/샤먼`, both portraits, troop counts, `-AT-`, `-DF-`, `-지형-`,
+  modifiers, and terrain percentages through the attack animation.
+  `1ab2_s22_current_enemy3_118.png` then preserves `헤인: 으아악!` plus the
+  clean `헤인/샤먼` map status row, and `_end.png` reaches `TURN 4`.
+- No Japanese residue, damaged name/class/status glyph, red screen, reset, or
+  freeze appeared. Scenario 22 `battle_ui` is now `verified_current`; its
+  scheduled events, completion, and branches remain probe-backed.
