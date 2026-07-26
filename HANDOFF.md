@@ -7564,11 +7564,14 @@ contains 57 safe syllables as documented below and in
 - Live TURN 3 exposed a real layout defect at reviewed record `0x19D4A0`:
   `{000F}장군의` wrapped as `장/군의`, and the final full stop occupied a page
   alone. The record is now `늦어서 미안하다. / 아기를 안은 엘리자에게 /
-  {000F}의 전사를 알릴 수 없었어.`. Current checksum `2749` statically
+  {000F}의 전사를 알릴 수 없었어`. Current checksum `2749` statically
   renders all 162 Scenario 14 physical pages; page sheet
   `captures/analysis/s14_render_2749/scenario_14_pages_02.png` proves the
-  corrected record fits three rows. A focused regression locks its address,
-  text, and rejection of the old glued placeholder.
+  corrected record fits three rows in the static renderer. It does not model
+  the runtime renderer's continuation-page terminator behavior; the later
+  current-production replay below covers that separately. A focused
+  regression locks its address, text, and rejection of the old glued
+  placeholder.
 - The first scenario-selector attempt omitted `--click-window` while SDL
   keyboard capture was disabled and entered name input. This was transport
   failure, not ROM behavior; retrying with `--click-window --send-event`
@@ -10555,3 +10558,39 @@ contains 57 safe syllables as documented below and in
   Regenerate the inventory with
   `python3 tools/runtime_verification_inventory.py`. The seven focused runtime
   inventory tests pass.
+
+### Scenario 14 Runtime Continuation-Page Fix (2026-07-26)
+
+- Fresh unmodified production replay found that the earlier static page audit
+  missed a runtime-only pagination defect. The TURN 2 Leon/Vargas report
+  continued from record `0x19D4A0` into record `0x19D87C`; the latter's final
+  full stop appeared alone after the complete sentence.
+- The rejected iterations are preserved to avoid repeating them:
+  checksum `C480` removed the already known final stop from `0x19D4A0` but
+  still reproduced the separate stop from `0x19D87C`; checksum `5469`
+  removed only that second stop and produced a blank continuation page;
+  checksum `D58A` rewrapped it to three visible rows but retained the blank
+  page. The static renderer did not expose any of these runtime terminator
+  outcomes.
+- Production checksum `E1AF`, SHA-256
+  `cfb314f6596d0ad0ce6b59e5edbf05fdab627b3215cbe7a99526c32e22fda6ff`,
+  uses exactly two explicit rows at `0x19D87C`:
+  `죽음을 전하는 건 괴롭다 / 갓 출산한 분께는 힘들겠지`.
+  `e1af_s14_dotfix_chain_03.png` shows the intact two-line page and
+  `_04.png` shows the immediate next page,
+  `제국군지휘관: 그렇군…`; there is no punctuation-only or blank page.
+- The same current run verifies the complete seven-name preparation roster
+  and class panel in `e1af_s14_dotfix_entry_15.png`, the clean
+  `엘윈/파이터` command panel in `e1af_s14_dotfix_opening2_00.png`, the
+  completed event at `e1af_s14_dotfix_postevent_wait.png`, and a valid TURN 3
+  command return in `e1af_s14_dotfix_turn3_command_01.png`. No Japanese
+  residue, broken name/class glyph, reset, or freeze appeared. Scenario 14
+  `turn_events` is now `verified_current`; `battle_ui` remains probe-backed
+  because this run did not add a current-production battle.
+- The final text change shifts production-derived diagnostic checksums by
+  `+0x0C25` from `D58A`. All checksum-only locks were regenerated from
+  `E1AF`; no probe patch logic or gameplay data changed. The focused dialogue,
+  runtime-inventory, item-inventory, and production-derived probe tests pass.
+  The preparation-specific dynamic mapping for `가드맨`의 `가` and `워록`의
+  `록` remains separately locked by the `3497` live evidence and regression
+  tests documented above.

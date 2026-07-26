@@ -84,7 +84,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
 
     def test_current_evidence_matches_production_checksum(self):
         data = inventory.load_inventory()
-        self.assertEqual(data["production_checksum"], "3497")
+        self.assertEqual(data["production_checksum"], "E1AF")
         title = {
             row["surface"]: row for row in data["global_evidence"]
         }["title_logo_and_main_menu"]
@@ -826,7 +826,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario14["preparation"], "verified_current")
         self.assertEqual(scenario14["opening_events"], "verified_current")
         self.assertEqual(scenario14["battle_ui"], "verified_probe")
-        self.assertEqual(scenario14["turn_events"], "verified_probe")
+        self.assertEqual(scenario14["turn_events"], "verified_current")
         self.assertEqual(scenario14["completion"], "verified_probe")
         self.assertEqual(scenario14["branches_endings"], "verified_probe")
         for capture in (
@@ -844,9 +844,17 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/90e3_s14_enemy_09.png",
             "captures/run/90e3_s14_enemy_17.png",
             "captures/analysis/s14_render_2749/scenario_14_pages_02.png",
+            "captures/run/e1af_s14_dotfix_entry_15.png",
+            "captures/run/e1af_s14_dotfix_opening2_00.png",
+            "captures/run/e1af_s14_dotfix_chain_03.png",
+            "captures/run/e1af_s14_dotfix_chain_04.png",
+            "captures/run/e1af_s14_dotfix_postevent_wait.png",
+            "captures/run/e1af_s14_dotfix_turn3_command_01.png",
         ):
             self.assertIn(capture, scenario14["captures"])
         self.assertIn("record 0x19D4A0", scenario14["note"])
+        self.assertIn("record 0x19D87C", scenario14["note"])
+        self.assertIn("production E1AF playback", scenario14["note"])
         self.assertIn("POINT 2200P", scenario14["note"])
         self.assertIn("disk SRAM slot 1 at Scenario 15", scenario14["note"])
         self.assertIn("0x19C8DE", scenario14["note"])

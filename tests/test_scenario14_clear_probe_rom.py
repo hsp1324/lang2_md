@@ -237,7 +237,7 @@ class Scenario14ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xAA4D,
+            0x5765,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -245,7 +245,7 @@ class Scenario14ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xAA33,
+            0x574B,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -254,7 +254,7 @@ class Scenario14ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x2B66,
+            0xD87E,
         )
         leon = bytearray(self.production)
         self.assertEqual(
@@ -263,7 +263,7 @@ class Scenario14ClearProbeTests(unittest.TestCase):
                 self.source,
                 leon_langrisser=True,
             ),
-            0xC49E,
+            0x71B6,
         )
 
     def test_preserves_player_deployments_and_event_header(self):

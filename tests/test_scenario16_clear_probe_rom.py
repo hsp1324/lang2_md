@@ -394,7 +394,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x0AB9,
+            0xB7D1,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -402,7 +402,7 @@ class Scenario16ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x0AA7,
+            0xB7BF,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -411,9 +411,9 @@ class Scenario16ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x2B66,
+            0xD87E,
         )
-        for target_turn, checksum in ((3, 0x6262), (8, 0x626C)):
+        for target_turn, checksum in ((3, 0x0F7A), (8, 0x0F84)):
             with self.subTest(target_turn=target_turn):
                 data = bytearray(self.production)
                 self.assertEqual(

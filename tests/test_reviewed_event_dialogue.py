@@ -36,9 +36,18 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(
             text_by_address["0x19D4A0"],
             "늦어서 미안하다.\n아기를 안은 엘리자에게\n"
-            "{000F}의 전사를 알릴 수 없었어.",
+            "{000F}의 전사를 알릴 수 없었어",
         )
         self.assertNotIn("{000F}장군", text_by_address["0x19D4A0"])
+        self.assertEqual(
+            text_by_address["0x19D87C"],
+            "죽음을 전하는 건 괴롭다\n갓 출산한 분께는 힘들겠지",
+        )
+        self.assertFalse(text_by_address["0x19D87C"].endswith("."))
+        self.assertEqual(len(text_by_address["0x19D87C"].splitlines()), 2)
+        self.assertTrue(
+            all(len(line) <= 14 for line in text_by_address["0x19D87C"].splitlines())
+        )
         self.assertEqual(
             text_by_address["0x19E31C"],
             "랑그릿사를 얻었다!",
