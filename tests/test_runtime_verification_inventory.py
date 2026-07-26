@@ -825,7 +825,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario14["conditions"], "verified_current")
         self.assertEqual(scenario14["preparation"], "verified_current")
         self.assertEqual(scenario14["opening_events"], "verified_current")
-        self.assertEqual(scenario14["battle_ui"], "verified_probe")
+        self.assertEqual(scenario14["battle_ui"], "verified_current")
         self.assertEqual(scenario14["turn_events"], "verified_current")
         self.assertEqual(scenario14["completion"], "verified_probe")
         self.assertEqual(scenario14["branches_endings"], "verified_probe")
@@ -850,11 +850,15 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e1af_s14_dotfix_chain_04.png",
             "captures/run/e1af_s14_dotfix_postevent_wait.png",
             "captures/run/e1af_s14_dotfix_turn3_command_01.png",
+            "captures/run/e1af_s14_dotfix_return_43.png",
+            "captures/run/e1af_s14_dotfix_return_44.png",
+            "captures/run/e1af_s14_dotfix_return_47.png",
         ):
             self.assertIn(capture, scenario14["captures"])
         self.assertIn("record 0x19D4A0", scenario14["note"])
         self.assertIn("record 0x19D87C", scenario14["note"])
         self.assertIn("production E1AF playback", scenario14["note"])
+        self.assertIn("리저드맨/파이터 battle", scenario14["note"])
         self.assertIn("POINT 2200P", scenario14["note"])
         self.assertIn("disk SRAM slot 1 at Scenario 15", scenario14["note"])
         self.assertIn("0x19C8DE", scenario14["note"])

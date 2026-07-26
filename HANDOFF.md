@@ -10594,3 +10594,8 @@ contains 57 safe syllables as documented below and in
   The preparation-specific dynamic mapping for `가드맨`의 `가` and `워록`의
   `록` remains separately locked by the `3497` live evidence and regression
   tests documented above.
+- Reviewing the complete no-action capture sequence also found a natural
+  current-production battle in `e1af_s14_dotfix_return_43.png`, `_44.png`, and
+  `_47.png`. It preserves `리저드맨/파이터`, both portraits, troop-count
+  animation from 10:10 through 2:8, AT/DF modifiers, and terrain percentages.
+  Scenario 14 `battle_ui` is therefore also `verified_current`.
