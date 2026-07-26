@@ -10529,3 +10529,29 @@ contains 57 safe syllables as documented below and in
   unstaged AI-class-editor WIP expectations in
   `test_experimental_class_sprite_assets`, not ROM or localization failures.
   Do not change or stage those editor assets as part of this fix.
+
+### Current 3497 Scenario 10 Turn-Event Verification (2026-07-26)
+
+- Fresh selector playback used the unmodified production ROM, checksum `3497`,
+  with the valid Scenario 2 SRAM runtime. It entered the stock Scenario 10
+  route, preparation, arrangement, opening, and battle without a diagnostic
+  patch. `3497_s10_current_entry_19.png` shows the complete
+  `엘윈/헤인/쉐리/아론/키스` preparation roster with intact class labels.
+- Ending the first turn rendered Lester's stock dialogue in
+  `3497_s10_current_turn1_00.png` and returned to the command menu on TURN 2.
+  Ending the second turn naturally triggered the full stock TURN 3 monster
+  reveal. The accepted dialogue captures are
+  `3497_s10_current_turn3_00.png`, `_04.png`, `_06.png`, and `_09.png`.
+- The following unmodified battles and status screens were reviewed:
+  `3497_s10_current_turn3_68.png` (`그레이트슬라임/호크나이트`),
+  `_78.png` (`슬라임/호크나이트`), `_110.png`
+  (`웨어울프/파이터`), `_128.png` (`슬라임/파이터`), and `_177.png`
+  (`슬라임/워록`). Names, classes, `-AT-/-DF-/-지형-`, values, and portraits
+  remained intact. `_196.png` preserves Hein's defeat dialogue, and `_220.png`
+  proves normal return to Elwin's command menu without reset or freeze.
+- `battle_ui` and `turn_events` for Scenario 10 are now
+  `verified_current`. Completion and branches/endings remain
+  `verified_probe`; this run did not claim another current-production clear.
+  Regenerate the inventory with
+  `python3 tools/runtime_verification_inventory.py`. The seven focused runtime
+  inventory tests pass.
