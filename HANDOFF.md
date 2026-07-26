@@ -10375,3 +10375,34 @@ contains 57 safe syllables as documented below and in
   248/248 overall and improves from 147 current / 101 probe to 148 current /
   100 probe. The focused runtime and command-detector suite passes all 29
   tests.
+
+### Production 316E Scenario 3 Battle UI Promotion (2026-07-26)
+
+- Fresh isolated playback entered Scenario 3 through the stock scenario
+  selector from a valid Scenario 2 manual save. It used the shipped 316E ROM
+  without changing scenario data, stats, deployments, or event handlers.
+  The route screen, preparation endpoint, automatic deployment, opening, and
+  Elwin/Fighter command return are retained in
+  `316e_s03_current_route.png`, `316e_s03_current_entry_15.png`,
+  `316e_s03_current_sortie_after_auto.png`, and
+  `316e_s03_current_opening_25.png`.
+- Attempting to sortie before automatic deployment rendered the complete
+  Korean warning `지휘관 배치 미완료입니다` in
+  `316e_s03_current_sortie.png`. This was an expected stock validation path,
+  not a ROM error. Automatic deployment then entered the ordinary map.
+- The first no-action transition reached TURN 2 and showed the Korean
+  `리아나의 이동 위치를 바꿀까요?` prompt before returning to an intact
+  Elwin/Fighter command panel. The next transition produced normal AI battles.
+  Accepted completed frames
+  `316e_s03_current_turn2_recover_03.png`, `_22.png`, and `_30.png`
+  preserve `파이크/가드맨`, both portraits, troop counts, `-AT-`, `-DF-`,
+  `-지형-`, numeric modifiers, and terrain percentages. Final frame `_56.png`
+  proves stable return to the Elwin/Fighter command panel.
+- One capture subprocess was terminated by the host after four frames. BlastEm
+  itself remained alive on a valid TURN 2 map, and a new read-only detector
+  continued from that exact state through the accepted battles and command
+  return. This is recorded as capture-transport interruption rather than a
+  reset, freeze, or ROM failure.
+- Scenario 3 `battle_ui` is now `verified_current`. The runtime matrix remains
+  248/248 overall and improves from 148 current / 100 probe to 149 current /
+  99 probe.

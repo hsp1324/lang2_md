@@ -13,7 +13,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | 1 | current | current | current | current | current | current | probe | probe | 71 |
 | 2 | current | current | current | current | current | current | probe | probe | 65 |
-| 3 | current | current | current | current | probe | probe | probe | probe | 56 |
+| 3 | current | current | current | current | current | probe | probe | probe | 68 |
 | 4 | current | current | current | current | probe | probe | probe | probe | 76 |
 | 5 | current | current | current | current | probe | probe | probe | probe | 86 |
 | 6 | current | current | current | current | current | probe | probe | probe | 93 |
@@ -251,6 +251,18 @@ Production 489B verifies the Scenario 3 route map, all 14 text-bearing scrolling
 - `captures/run/adb7_s03_liana_zorum_defeated_result_03.png`
 - `captures/run/adb7_s03_liana_zorum_defeated_result_04.png`
 - `captures/run/adb7_s03_liana_zorum_defeated_result_05.png`
+- `captures/run/316e_s03_current_route.png`
+- `captures/run/316e_s03_current_entry_15.png`
+- `captures/run/316e_s03_current_sortie.png`
+- `captures/run/316e_s03_current_sortie_after_auto.png`
+- `captures/run/316e_s03_current_opening_25.png`
+- `captures/run/316e_s03_current_turn1_24.png`
+- `captures/run/316e_s03_current_turn1_30.png`
+- `captures/run/316e_s03_current_turn2_recover.png`
+- `captures/run/316e_s03_current_turn2_recover_03.png`
+- `captures/run/316e_s03_current_turn2_recover_22.png`
+- `captures/run/316e_s03_current_turn2_recover_30.png`
+- `captures/run/316e_s03_current_turn2_recover_56.png`
 
 ### Scenario 4
 
