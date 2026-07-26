@@ -10406,3 +10406,29 @@ contains 57 safe syllables as documented below and in
 - Scenario 3 `battle_ui` is now `verified_current`. The runtime matrix remains
   248/248 overall and improves from 148 current / 100 probe to 149 current /
   99 probe.
+
+### Production 316E Scenario 4 Battle UI Promotion (2026-07-26)
+
+- Fresh isolated playback entered Scenario 4 through the stock selector from
+  the same valid Scenario 2 manual save and used the unmodified shipped 316E
+  ROM. `316e_s04_current_route.png`, `_entry_14.png`,
+  `_arrangement.png`, `_sortie_after_auto.png`, and `_opening_27.png`
+  retain the route, preparation, automatic deployment, map, and
+  Elwin/Fighter command return. The initial map status also preserves
+  Lester/Crocoknight.
+- A normal no-action first turn produced multiple stock AI battles.
+  Accepted completed frames verify `시프/가드맨` in `_turn1_19.png`,
+  `솔저/가드맨` in `_turn1_33.png`, and `파이크/클레릭` in
+  `_turn1_42.png`. `_turn1_56.png` independently repeats
+  `시프/가드맨` with the second portrait variant. Every frame preserves both
+  names, portraits, troop counts, `-AT-`, `-DF-`, `-지형-`, modifiers, and
+  terrain percentages.
+- The same natural transition rendered the Scenario 4 Morgan, Scott, Hein, and
+  Elwin dialogue without broken speaker, commander, or class text, then
+  returned to an intact Elwin/Fighter command panel in `_turn1_114.png`.
+  No Japanese residue, reset, freeze, or delayed status-glyph corruption
+  appeared.
+- Scenario 4 `battle_ui` is now `verified_current`. The runtime matrix remains
+  248/248 overall and improves from 149 current / 99 probe to 150 current /
+  98 probe. Runtime-inventory regressions now lock the accepted Scenario 3 and
+  Scenario 4 current battle frames.

@@ -249,8 +249,17 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, scenario3["captures"])
         self.assertIn("save-slot AT 99 / DF 96", scenario3["note"])
+        self.assertEqual(scenario3["battle_ui"], "verified_current")
+        for capture in (
+            "captures/run/316e_s03_current_turn2_recover_03.png",
+            "captures/run/316e_s03_current_turn2_recover_22.png",
+            "captures/run/316e_s03_current_turn2_recover_30.png",
+            "captures/run/316e_s03_current_turn2_recover_56.png",
+        ):
+            self.assertIn(capture, scenario3["captures"])
         self.assertEqual(scenario4["opening_events"], "verified_current")
         self.assertEqual(scenario4["description"], "verified_current")
+        self.assertEqual(scenario4["battle_ui"], "verified_current")
         for capture in (
             "captures/run/489b_s04_description_current_01.png",
             "captures/run/489b_s04_description_current_07.png",
@@ -287,6 +296,11 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/40ea_s04_turn5_events_10.png",
             "captures/run/40ea_s04_turn5_events_15.png",
             "captures/run/40ea_s04_turn5_command.png",
+            "captures/run/316e_s04_current_turn1_19.png",
+            "captures/run/316e_s04_current_turn1_33.png",
+            "captures/run/316e_s04_current_turn1_42.png",
+            "captures/run/316e_s04_current_turn1_56.png",
+            "captures/run/316e_s04_current_turn1_114.png",
         ):
             self.assertIn(capture, scenario4["captures"])
         self.assertIn("moving only Elwin's first deployment", scenario4["note"])

@@ -14,7 +14,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 1 | current | current | current | current | current | current | probe | probe | 71 |
 | 2 | current | current | current | current | current | current | probe | probe | 65 |
 | 3 | current | current | current | current | current | probe | probe | probe | 68 |
-| 4 | current | current | current | current | probe | probe | probe | probe | 76 |
+| 4 | current | current | current | current | current | probe | probe | probe | 86 |
 | 5 | current | current | current | current | probe | probe | probe | probe | 86 |
 | 6 | current | current | current | current | current | probe | probe | probe | 93 |
 | 7 | current | current | current | current | current | probe | probe | probe | 80 |
@@ -344,6 +344,16 @@ Production 489B verifies the Scenario 4 route map, all 13 text-bearing scrolling
 - `captures/run/000f_s04_priest_result_10.png`
 - `captures/run/000f_s04_priest_result_11.png`
 - `captures/run/000f_s04_priest_result_12.png`
+- `captures/run/316e_s04_current_route.png`
+- `captures/run/316e_s04_current_entry_14.png`
+- `captures/run/316e_s04_current_arrangement.png`
+- `captures/run/316e_s04_current_sortie_after_auto.png`
+- `captures/run/316e_s04_current_opening_27.png`
+- `captures/run/316e_s04_current_turn1_19.png`
+- `captures/run/316e_s04_current_turn1_33.png`
+- `captures/run/316e_s04_current_turn1_42.png`
+- `captures/run/316e_s04_current_turn1_56.png`
+- `captures/run/316e_s04_current_turn1_114.png`
 
 ### Scenario 5
 
