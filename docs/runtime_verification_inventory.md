@@ -28,7 +28,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 15 | current | current | current | current | current | probe | probe | probe | 84 |
 | 16 | current | current | current | current | current | probe | probe | probe | 74 |
 | 17 | current | current | current | current | current | probe | probe | probe | 51 |
-| 18 | current | current | current | current | probe | probe | probe | probe | 49 |
+| 18 | current | current | current | current | current | probe | probe | probe | 57 |
 | 19 | current | current | current | current | probe | probe | probe | probe | 67 |
 | 20 | current | current | current | current | probe | probe | probe | probe | 60 |
 | 21 | current | current | current | current | probe | probe | probe | probe | 57 |
@@ -1384,6 +1384,14 @@ Production 77D0 verifies the Scenario 18 route map, all 14 text-bearing scrollin
 - `captures/run/77d0_s18_description_final_10.png`
 - `captures/run/77d0_s18_description_final_14.png`
 - `captures/run/77d0_s18_description_final_15.png`
+- `captures/run/e1af_s18_current_entry_15.png`
+- `captures/run/e1af_s18_current_opening_13.png`
+- `captures/run/e1af_s18_current_opening_31.png`
+- `captures/run/e1af_s18_current_turn2_43.png`
+- `captures/run/e1af_s18_current_enemy2_07.png`
+- `captures/run/e1af_s18_current_enemy2_09.png`
+- `captures/run/e1af_s18_current_enemy2_12.png`
+- `captures/run/e1af_s18_current_enemy2_17.png`
 - `captures/run/17f2_s18_description.png`
 - `captures/run/17f2_s18_command_ready.png`
 - `captures/run/17f2_s18_dragon_target.png`

@@ -10661,3 +10661,28 @@ contains 57 safe syllables as documented below and in
   capture state changed. Toggling keyboard capture once and using focused XTest
   input restored menu navigation. This was host input transport, not a ROM
   reset or freeze.
+
+### Current E1AF Scenario 18 Natural Battle UI (2026-07-26)
+
+- The unmodified production ROM `roms/builds/Langrisser II (Korean).md`
+  (checksum `E1AF`) was launched in the isolated runtime
+  `captures/runtime/e1af-s18-current`. Its slot-1 SRAM was copied from the
+  accepted Scenario 17 completion runtime, and `manual_slot_scenario_number()`
+  confirmed that the slot naturally enters Scenario 18. No diagnostic ROM or
+  scenario-record patch was used.
+- `e1af_s18_current_entry_15.png` verifies the preparation endpoint.
+  `e1af_s18_current_opening_13.png` and `_31.png` cover the opening sequence
+  and a clean `엘윈/파이터` command panel. The complete opening was reviewed
+  through `_00`..`_31`; the large `YES/NO` branch remains intentional under
+  the established large-English-label policy.
+- The battle was advanced normally through the first enemy phase, the
+  `TURN 2` boundary in `e1af_s18_current_turn2_43.png`, and another normal turn
+  end with battle scenes enabled. `e1af_s18_current_enemy2_07.png` through
+  `_09.png` show a real `레이스/호크나이트` battle with intact `-AT-`, `-DF-`,
+  and `-지형-` labels. `_12.png` and `_17.png` retain clean map status names
+  and classes including `키스/호크나이트`, `리치/레이스`, `스큐라/스큐라`,
+  `와이번/가고일`, and `스큐라/리바이어선`.
+- No Japanese residue, damaged dynamic name/class glyph, red screen, reset, or
+  freeze occurred. Scenario 18 `battle_ui` is now `verified_current`.
+  `turn_events` remains `verified_probe` because the later scheduled events
+  were not all replayed naturally in this run.
