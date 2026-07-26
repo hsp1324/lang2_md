@@ -1103,9 +1103,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario19["conditions"], "verified_current")
         self.assertEqual(scenario19["preparation"], "verified_current")
         self.assertEqual(scenario19["opening_events"], "verified_current")
-        self.assertEqual(scenario19["battle_ui"], "verified_probe")
+        self.assertEqual(scenario19["battle_ui"], "verified_current")
         self.assertEqual(scenario19["turn_events"], "verified_probe")
         self.assertEqual(scenario19["completion"], "verified_probe")
+        for capture in (
+            "captures/run/e1af_s19_current_entry_21.png",
+            "captures/run/e1af_s19_current_opening_20.png",
+            "captures/run/e1af_s19_current_turn2_02.png",
+            "captures/run/e1af_s19_current_turn2_04.png",
+            "captures/run/e1af_s19_current_turn2_07.png",
+            "captures/run/e1af_s19_current_enemy6_19.png",
+            "captures/run/e1af_s19_current_enemy6_21.png",
+            "captures/run/e1af_s19_current_enemy6_28.png",
+            "captures/run/e1af_s19_current_enemy6_33.png",
+            "captures/run/e1af_s19_current_enemy6_34.png",
+            "captures/run/e1af_s19_current_enemy6_38.png",
+        ):
+            self.assertIn(capture, scenario19["captures"])
         for capture in (
             "captures/run/2829_s19_imelda_target.png",
             "captures/run/2829_s19_turn1_after_imelda_19.png",

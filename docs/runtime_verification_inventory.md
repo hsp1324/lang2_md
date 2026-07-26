@@ -29,7 +29,7 @@ the current checksum, and `pending` has no accepted live evidence yet.
 | 16 | current | current | current | current | current | probe | probe | probe | 74 |
 | 17 | current | current | current | current | current | probe | probe | probe | 51 |
 | 18 | current | current | current | current | current | probe | probe | probe | 57 |
-| 19 | current | current | current | current | probe | probe | probe | probe | 67 |
+| 19 | current | current | current | current | current | probe | probe | probe | 78 |
 | 20 | current | current | current | current | probe | probe | probe | probe | 60 |
 | 21 | current | current | current | current | probe | probe | probe | probe | 57 |
 | 22 | current | current | current | current | probe | probe | probe | probe | 73 |
@@ -1446,6 +1446,17 @@ Production 77D0 verifies the Scenario 19 route map, all 19 text-bearing scrollin
 - `captures/run/77d0_s19_description_current_14.png`
 - `captures/run/77d0_s19_description_current_19.png`
 - `captures/run/77d0_s19_description_current_20.png`
+- `captures/run/e1af_s19_current_entry_21.png`
+- `captures/run/e1af_s19_current_opening_20.png`
+- `captures/run/e1af_s19_current_turn2_02.png`
+- `captures/run/e1af_s19_current_turn2_04.png`
+- `captures/run/e1af_s19_current_turn2_07.png`
+- `captures/run/e1af_s19_current_enemy6_19.png`
+- `captures/run/e1af_s19_current_enemy6_21.png`
+- `captures/run/e1af_s19_current_enemy6_28.png`
+- `captures/run/e1af_s19_current_enemy6_33.png`
+- `captures/run/e1af_s19_current_enemy6_34.png`
+- `captures/run/e1af_s19_current_enemy6_38.png`
 - `captures/run/2829_s19_command_ready.png`
 - `captures/run/2829_s19_imelda_target.png`
 - `captures/run/2829_s19_clear_05.png`

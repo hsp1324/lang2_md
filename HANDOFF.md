@@ -10686,3 +10686,27 @@ contains 57 safe syllables as documented below and in
   freeze occurred. Scenario 18 `battle_ui` is now `verified_current`.
   `turn_events` remains `verified_probe` because the later scheduled events
   were not all replayed naturally in this run.
+
+### Current E1AF Scenario 19 Natural Battle UI (2026-07-26)
+
+- The unmodified production checksum `E1AF` was launched in
+  `captures/runtime/e1af-s19-current`. Slot 1 came from the accepted Scenario
+  18 completion save and was independently confirmed as Scenario 19 before
+  loading; no diagnostic ROM or scenario layout patch was used.
+- `e1af_s19_current_entry_21.png` preserves the complete preparation endpoint,
+  while `e1af_s19_current_opening_20.png` and turn-2 captures `_02`, `_04`,
+  and `_07` retain the current opening, Jessica/Elwin departure dialogue, and
+  a valid `엘윈/파이터` command panel.
+- Natural no-action enemy movement was followed through turn 6. The stock
+  player deployment was left intact; Elwin made one ordinary four-tile move
+  around the starting building without changing ROM or SRAM combat data.
+  `e1af_s19_current_enemy6_19.png` and `_21.png` show a real
+  `그리폰/호크나이트` battle. `_33.png` and `_34.png` show a real
+  `드래곤나이트/로드` battle. Both retain portraits, troop counts, `-AT-`,
+  `-DF-`, `-지형-`, and terrain percentages. `_28.png` and `_38.png` preserve
+  the clean Keith and Aaron battle-reaction pages.
+- Map-phase review also retained clean `제국지휘관`, `그리폰`, `아머솔져`,
+  `판디스타`, `팔랑크스`, and `다크엘프` labels. No Japanese residue,
+  damaged dynamic glyph, red screen, reset, or freeze occurred. Scenario 19
+  `battle_ui` is now `verified_current`; the later scheduled turn table stays
+  `verified_probe`.
