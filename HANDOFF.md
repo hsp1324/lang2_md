@@ -10599,3 +10599,14 @@ contains 57 safe syllables as documented below and in
   `_47.png`. It preserves `리저드맨/파이터`, both portraits, troop-count
   animation from 10:10 through 2:8, AT/DF modifiers, and terrain percentages.
   Scenario 14 `battle_ui` is therefore also `verified_current`.
+
+### Current E1AF `가드맨`/`워록` Recheck (2026-07-26)
+
+- Fresh Scenario 1 preparation playback on final production checksum `E1AF`
+  selected Hein and opened his hire list. `e1af_s01_hein_hire_guardman.png`
+  shows intact `헤인/워록` and `가드맨`; the same glyphs remain byte-visually
+  stable after four idle seconds in
+  `e1af_s01_hein_hire_guardman_wait4s.png`.
+- This is current-production confirmation of the `0x07A1..0x07A7` preparation
+  scratch mapping already proven at checksum `3497`. No dialogue-only build
+  change has reintroduced the final static-bank collision for `록` or `가`.

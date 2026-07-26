@@ -152,8 +152,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/212a_s01_arrangement_roster.png",
             "captures/run/212a_s01_hein_prep_panel.png",
             "captures/run/212a_s01_hein_hire_list.png",
+            "captures/run/e1af_s01_garok_entry_25.png",
+            "captures/run/e1af_s01_hein_hire_guardman.png",
+            "captures/run/e1af_s01_hein_hire_guardman_wait4s.png",
         ):
             self.assertIn(capture, scenario1["captures"])
+        self.assertIn("production E1AF replay", scenario1["note"])
+        self.assertIn("헤인/워록 and 가드맨", scenario1["note"])
         current_description_progress = set()
         for scenario in data["scenarios"][1:]:
             expected = "verified_current" if scenario["scenario"] in {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31} else (
