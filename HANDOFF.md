@@ -10789,3 +10789,22 @@ contains 57 safe syllables as documented below and in
 - No Japanese residue, damaged name/class/status glyph, red screen, reset, or
   freeze appeared. Scenario 22 `battle_ui` is now `verified_current`; its
   scheduled events, completion, and branches remain probe-backed.
+
+### Current 1AB2 Scenario 23 Natural Battle UI (2026-07-27)
+
+- Unmodified production `1AB2` entered Scenario 23 through the built-in
+  selector from the same valid Scenario 21 manual SRAM. No ROM byte, scenario
+  record, placement, stat, or event data was changed for this run.
+- The route, preparation endpoint, arrangement, automatic deployment,
+  `레아드/실버나이트` opening, and `엘윈/로드` command panel remained
+  intact.
+- Ordinary no-action play reached a natural TURN 2 `팔라딘/호크나이트`
+  battle. `1ab2_s23_current_enemy2_16.png` and `_20.png` retain both class
+  labels, portraits, troop counts, `-AT-`, `-DF-`, `-지형-`, modifiers, and
+  terrain percentages through the completed animation.
+  `1ab2_s23_current_enemy2_24.png` then preserves
+  `키스: 실수다…` with the clean `키스/호크나이트` status row, and
+  `_wait10.png` reaches TURN 3.
+- No Japanese residue, damaged name/class/status glyph, red screen, reset, or
+  freeze appeared. Scenario 23 `battle_ui` is now `verified_current`; its
+  completion and branches remain probe-backed.

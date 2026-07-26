@@ -1326,7 +1326,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario23["conditions"], "verified_current")
         self.assertEqual(scenario23["preparation"], "verified_current")
         self.assertEqual(scenario23["opening_events"], "verified_current")
-        self.assertEqual(scenario23["battle_ui"], "verified_probe")
+        self.assertEqual(scenario23["battle_ui"], "verified_current")
         self.assertEqual(scenario23["turn_events"], "verified_current")
         self.assertEqual(scenario23["completion"], "verified_probe")
         self.assertEqual(scenario23["branches_endings"], "verified_probe")
@@ -1341,6 +1341,10 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/ad99_s23_stock_wizard_merc_right.png",
             "captures/run/ad99_s23_turn2_cluster_unit.png",
             "captures/run/ad99_s23_turn2_cluster_commander.png",
+            "captures/run/1ab2_s23_current_enemy2_16.png",
+            "captures/run/1ab2_s23_current_enemy2_20.png",
+            "captures/run/1ab2_s23_current_enemy2_24.png",
+            "captures/run/1ab2_s23_current_enemy2_wait10.png",
         ):
             self.assertIn(capture, scenario23["captures"])
         self.assertIn("all stock Scenario 23 enemy records", scenario23["note"])
