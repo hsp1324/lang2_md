@@ -10710,3 +10710,27 @@ contains 57 safe syllables as documented below and in
   damaged dynamic glyph, red screen, reset, or freeze occurred. Scenario 19
   `battle_ui` is now `verified_current`; the later scheduled turn table stays
   `verified_probe`.
+
+### Current E1AF Scenario 20 Natural Battle UI (2026-07-26)
+
+- The unmodified production checksum `E1AF` was launched in
+  `captures/runtime/e1af-s20-current`. Slot 1 came from the accepted Scenario
+  19 completion runtime and was confirmed as Scenario 20 before loading. No
+  ROM, fixed-placement, or event patch was used.
+- The inherited manual-slot Elwin AT/DF 99 values are diagnostic SRAM data
+  only and are not production or editor defaults. They do not alter the
+  production battle renderer, names, classes, font mapping, fixed placements,
+  event handlers, or dialogue.
+- `e1af_s20_current_entry_18.png` preserves the preparation endpoint and
+  `e1af_s20_current_opening_12.png` preserves a clean `엘윈/파이터` command
+  panel. Natural no-action turns rendered the stock Fias pages in
+  `e1af_s20_current_enemy1_39.png` and `_40.png`, the turn-2 monster event,
+  and returned through a valid TURN 4 command menu.
+- `e1af_s20_current_enemy3_39.png` and
+  `e1af_s20_current_enemy3_battle.png` are real TURN 3 battle frames.
+  `e1af_s20_current_enemy3_43.png` preserves Keith's post-battle page.
+  Names and classes including `미노타우로스`, `몬스터`, `호크나이트`,
+  `스큐라`, and `리바이어선`, plus `-AT-`, `-DF-`, and `-지형-`, remain
+  intact. No Japanese residue, damaged dynamic glyph, red screen, reset, or
+  freeze appeared. Scenario 20 `battle_ui` is now `verified_current`;
+  scheduled events, completion, and branches remain probe-backed.

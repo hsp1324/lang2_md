@@ -1173,7 +1173,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertEqual(scenario20["conditions"], "verified_current")
         self.assertEqual(scenario20["preparation"], "verified_current")
         self.assertEqual(scenario20["opening_events"], "verified_current")
-        self.assertEqual(scenario20["battle_ui"], "verified_probe")
+        self.assertEqual(scenario20["battle_ui"], "verified_current")
         self.assertEqual(scenario20["turn_events"], "verified_probe")
         self.assertEqual(scenario20["completion"], "verified_probe")
         for capture in (
@@ -1196,11 +1196,23 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/af30_s20_fresh5_turn5_liana_11.png",
         ):
             self.assertIn(capture, scenario20["captures"])
+        for capture in (
+            "captures/run/e1af_s20_current_entry_18.png",
+            "captures/run/e1af_s20_current_opening_12.png",
+            "captures/run/e1af_s20_current_enemy1_39.png",
+            "captures/run/e1af_s20_current_enemy3_39.png",
+            "captures/run/e1af_s20_current_enemy3_battle.png",
+            "captures/run/e1af_s20_current_enemy3_43.png",
+            "captures/run/e1af_s20_current_turn4_command.png",
+        ):
+            self.assertIn(capture, scenario20["captures"])
         self.assertEqual(scenario20["branches_endings"], "verified_probe")
         self.assertIn("protagonist-death diagnostic AAC1", scenario20["note"])
         self.assertIn("all seven scheduled source event entries", scenario20["note"])
         self.assertIn("AF2A turn-3 GST under AF30", scenario20["note"])
         self.assertIn("changed a valid slot from Scenario 19 to 20", scenario20["note"])
+        self.assertIn("Final production E1AF", scenario20["note"])
+        self.assertIn("AT/DF 99 values are diagnostic save data only", scenario20["note"])
         self.assertEqual(scenario21["description"], "verified_current")
         for capture in (
             "captures/run/77d0_s21_description_current_01.png",
