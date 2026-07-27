@@ -68,6 +68,79 @@ class HardModeBaselineTests(unittest.TestCase):
         )
         self.assertEqual(scenario_22["enemy_summary"]["record_count"], 1)
 
+    def test_fixed_record_and_class_stat_ownership_is_source_locked(self):
+        source = JP_ROM.read_bytes()
+        model = self.inventory["source_model"]
+        self.assertEqual(
+            model["fixed_record_loader"],
+            {
+                "start": "0x010E46",
+                "end": "0x010ED8",
+                "commander_at_modifier_offset": "0x12",
+                "commander_df_modifier_offset": "0x13",
+                "value_encoding": "signed_byte",
+            },
+        )
+        self.assertEqual(
+            model["class_record_model"],
+            {
+                "table": "0x05EDDC",
+                "record_size": 0x1C,
+                "soldier_at_correction_offset": "0x0F",
+                "soldier_df_correction_offset": "0x10",
+                "scope": "global_per_class",
+            },
+        )
+        self.assertEqual(
+            source[
+                hard_mode_baseline.FIXED_RECORD_LOADER:
+                hard_mode_baseline.FIXED_RECORD_LOADER + 24
+            ],
+            bytes.fromhex(
+                "23 58 00 08 23 58 00 14 23 58 00 20 "
+                "23 58 00 2C 23 58 00 38 23 58 00 50"
+            ),
+        )
+        self.assertEqual(
+            source[0x010E84:0x010E9C],
+            bytes.fromhex(
+                "13 6A 00 0D 00 44 13 6A 00 0E 00 45 "
+                "13 6A 00 0F 00 46 13 6A 00 10 00 47"
+            ),
+        )
+
+    def test_known_scenario_one_stat_sources_are_not_conflated(self):
+        records = self.inventory["scenarios"][0]["records"]
+        bald = records[8]
+        leon = records[9]
+        self.assertEqual(
+            (
+                bald["class_id"],
+                bald["commander_at_modifier"],
+                bald["commander_df_modifier"],
+                bald["soldier_at_correction"],
+                bald["soldier_df_correction"],
+            ),
+            ("2E", 21, 18, 2, 0),
+        )
+        self.assertEqual(
+            (
+                leon["class_id"],
+                leon["commander_at_modifier"],
+                leon["commander_df_modifier"],
+                leon["soldier_at_correction"],
+                leon["soldier_df_correction"],
+            ),
+            ("45", 40, 31, 11, 8),
+        )
+
+    def test_hard_mode_rule_keeps_shared_class_records_immutable(self):
+        rule = self.inventory["source_model"]["hard_mode_implementation_rule"]
+        self.assertIn("fixed-record", rule["commander_stats"])
+        self.assertIn("do not patch shared class records globally", rule["soldier_corrections"])
+        self.assertIn("enemy-only expanded-ROM", rule["soldier_corrections"])
+        self.assertIn("340 fixed records", rule["dynamic_event_spawns"])
+
     def test_checked_in_artifacts_are_current(self):
         subprocess.run(
             [

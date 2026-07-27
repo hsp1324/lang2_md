@@ -27,6 +27,14 @@ DEFAULT_MARKDOWN = ROOT / "docs/hard_mode_balance_discussion.md"
 NORMAL_SIZE = 0x400000
 NORMAL_CHECKSUM = "99FD"
 NORMAL_SHA256 = "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+CLASS_RECORD_TABLE = 0x05EDDC
+CLASS_RECORD_SIZE = 0x1C
+CLASS_SOLDIER_AT_CORRECTION_OFFSET = 0x0F
+CLASS_SOLDIER_DF_CORRECTION_OFFSET = 0x10
+FIXED_COMMANDER_AT_MODIFIER_OFFSET = 0x12
+FIXED_COMMANDER_DF_MODIFIER_OFFSET = 0x13
+FIXED_RECORD_LOADER = 0x010E46
+FIXED_RECORD_LOADER_END = 0x010ED8
 
 
 def rom_identity(data: bytes) -> dict[str, object]:
@@ -35,6 +43,18 @@ def rom_identity(data: bytes) -> dict[str, object]:
         "header_checksum": data[0x18E:0x190].hex().upper(),
         "sha256": hashlib.sha256(data).hexdigest(),
     }
+
+
+def signed_byte(value: int) -> int:
+    return value if value < 0x80 else value - 0x100
+
+
+def class_corrections(source: bytes, class_id: int) -> tuple[int, int]:
+    base = CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
+    return (
+        signed_byte(source[base + CLASS_SOLDIER_AT_CORRECTION_OFFSET]),
+        signed_byte(source[base + CLASS_SOLDIER_DF_CORRECTION_OFFSET]),
+    )
 
 
 def stat_summary(records: list[dict[str, object]], field: str) -> dict[str, object] | None:
@@ -62,7 +82,10 @@ def mercenary_row(class_id: int, classes: list[dict[str, object]]) -> dict[str, 
 def record_row(
     row: dict[str, object],
     classes: list[dict[str, object]],
+    source: bytes,
 ) -> dict[str, object]:
+    class_id = int(row["class_id"])
+    soldier_at, soldier_df = class_corrections(source, class_id)
     return {
         "index": row["index"],
         "offset": f"0x{int(row['offset']):06X}",
@@ -73,12 +96,16 @@ def record_row(
         "name_id": f"{int(row['name']['id']):02X}",
         "name_japanese": row["name"]["jp"],
         "name_korean": row["name"]["ko"],
-        "class_id": f"{int(row['class_id']):02X}",
+        "class_id": f"{class_id:02X}",
         "class_japanese": row["class"]["jp"],
         "class_korean": row["class"]["ko"],
         "level": row["level"],
         "at": row["at"],
         "df": row["df"],
+        "commander_at_modifier": signed_byte(int(row["at"])),
+        "commander_df_modifier": signed_byte(int(row["df"])),
+        "soldier_at_correction": soldier_at,
+        "soldier_df_correction": soldier_df,
         "x": row["x"],
         "y": row["y"],
         "mercenaries": [
@@ -153,11 +180,11 @@ def build_inventory(
                 }
                 for class_id, count in sorted(mercenary_counts.items())
             ],
-            "records": [record_row(row, classes) for row in records],
+            "records": [record_row(row, classes, source) for row in records],
         })
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -179,6 +206,42 @@ def build_inventory(
         "source_model": {
             "scenario_count": SCENARIO_COUNT,
             "record_size": 0x24,
+            "fixed_record_loader": {
+                "start": f"0x{FIXED_RECORD_LOADER:06X}",
+                "end": f"0x{FIXED_RECORD_LOADER_END:06X}",
+                "commander_at_modifier_offset": (
+                    f"0x{FIXED_COMMANDER_AT_MODIFIER_OFFSET:02X}"
+                ),
+                "commander_df_modifier_offset": (
+                    f"0x{FIXED_COMMANDER_DF_MODIFIER_OFFSET:02X}"
+                ),
+                "value_encoding": "signed_byte",
+            },
+            "class_record_model": {
+                "table": f"0x{CLASS_RECORD_TABLE:06X}",
+                "record_size": CLASS_RECORD_SIZE,
+                "soldier_at_correction_offset": (
+                    f"0x{CLASS_SOLDIER_AT_CORRECTION_OFFSET:02X}"
+                ),
+                "soldier_df_correction_offset": (
+                    f"0x{CLASS_SOLDIER_DF_CORRECTION_OFFSET:02X}"
+                ),
+                "scope": "global_per_class",
+            },
+            "hard_mode_implementation_rule": {
+                "commander_stats": (
+                    "patch fixed-record signed modifiers after approval"
+                ),
+                "soldier_corrections": (
+                    "do not patch shared class records globally; after approval "
+                    "use a separate enemy-only expanded-ROM correction table "
+                    "applied after the fixed-record loader"
+                ),
+                "dynamic_event_spawns": (
+                    "not represented by the 340 fixed records and must be "
+                    "inventoried separately before scenario approval"
+                ),
+            },
             "editable_fields_after_approval": [
                 "level",
                 "at",
@@ -245,6 +308,23 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "3. 상위 용병 투입 시점과 기존 용병 교체 비율",
         "4. 후반 소환물 계열 병사 투입 시점과 편성 비율",
         "5. 보스·지원군·분기·엔딩·비기 시나리오 예외",
+        "",
+        "## 기술적으로 확정된 능력치 구조",
+        "",
+        "- 36바이트 고정 배치 레코드의 `+0x12/+0x13`은 지휘관",
+        "  `AT/DF` 부호 있는 보정값이다. 원본 로더 `0x010E46..0x010ED6`가",
+        "  이를 런타임 레코드 `+0x3A/+0x3B`로 복사한다.",
+        "- 병사 상태창의 `A+/D+`는 고정 배치 레코드가 아니라 28바이트",
+        "  클래스 레코드 `0x05EDDC + class_id * 0x1C`의",
+        "  `+0x0F/+0x10`에서 온다.",
+        "- 클래스 레코드는 아군·적군·NPC가 공유할 수 있다. 따라서 이 두",
+        "  바이트를 전역으로 올리면 같은 클래스를 쓰는 일반판 아군까지",
+        "  강해질 수 있으므로 하드 모드 구현에는 사용하지 않는다.",
+        "- 승인 후에는 확장 ROM에 시나리오·배치별 적 전용 병사 보정표를",
+        "  두고 고정 배치 로더 직후에만 적용한다. 일반 한국어판과 원본",
+        "  클래스 표는 그대로 보존한다.",
+        "- 아래 340개는 고정 배치만 포함한다. 턴 이벤트로 생성되는 지원군과",
+        "  증원은 별도 소유권 조사 후 같은 승인표에 추가해야 한다.",
         "",
         "## 일본 원판 시나리오 분포",
         "",
