@@ -11693,3 +11693,38 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Startup And Interrupt Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x008000..0x008F4D` startup/interrupt region has SHA-256
+  `21083420fa6207834d7410193a3148bd1843b61b8802e79a2bee618970e8406a`
+  and contains 41 low-signal candidates: 39 half-width-looking and two
+  ASCII-looking rows. Its ordered candidate manifest is
+  `1a1af1e7e551c373c9e75c22bc7c8e9bd2eb851774b23bdcdad34fff563d005d`.
+- Forty candidates are fully covered by five exact Capstone instruction
+  streams: `0x008000..0x008099` (55 instructions, six candidates),
+  `0x008104..0x00861B` (287, 17), `0x00866C..0x00868D` (10, one),
+  `0x0086B4..0x008B0D` (295, 13), and `0x008B24..0x008F4D`
+  (393, three). The combined code-candidate manifest is
+  `1282c6309cae702bd5a14b779a15be85da269a67c754b8f0242b22c753cf0360`.
+- Four source-locked data tables separate those streams: startup
+  hardware/register configuration, button/input bit masks, indexed 16-bit
+  configuration records, and indexed jump offsets. Only the first has a
+  candidate: `0x008101` is raw `BF DF` inside that configuration table, not
+  a byte string. Its manifest is
+  `853b7b9d4ef2e4fcea270ce5fa06fe7b42cb35c0cbde6c6cceefbd8694bff400`.
+- The preceding `0x005DD4..0x007FFF` gap is 8,748 bytes of `0xFF` padding with
+  SHA-256
+  `efbb843b08b0ee9f83c721907ce3d853bdfc16378357c0d82f644ed4f1d30913`
+  and contains no candidate.
+- Three aligned four-byte windows target odd instruction-byte candidates
+  `0x008049`, `0x008283`, and `0x008601`; none can be a valid 68000
+  instruction entry. No executable PC-relative reference targets a row.
+- The cumulative exact review is now 5,657 of 6,612 short-inline candidates:
+  5,656 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 955 candidates.
+- Focused inventory tests pass 106/106. Reports were regenerated from the
+  isolated ROM with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.

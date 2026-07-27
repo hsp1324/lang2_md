@@ -29,6 +29,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-gameplay unclassified: 0
 - Executable-auxiliary candidates: 127
 - Executable-auxiliary unclassified: 0
+- Executable-startup candidates: 41
+- Executable-startup unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -45,6 +47,34 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Startup Candidates
+
+- The source-locked `0x008000..0x008F4E` startup/interrupt region is split into five exact 68000 instruction segments and four explicit data tables.
+- Source SHA-256: `21083420fa6207834d7410193a3148bd1843b61b8802e79a2bee618970e8406a`; candidate manifest SHA-256: `1a1af1e7e551c373c9e75c22bc7c8e9bd2eb851774b23bdcdad34fff563d005d` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 40, `startup_configuration_table_false_positive` 1.
+- The preceding `0x005DD4..0x008000` gap contains 8748 bytes of `0xFF` padding and no candidate.
+- Exact aligned four-byte windows: 3 across 3 candidate starts; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Code segment | Bytes | Instructions | Candidates | Source SHA-256 |
+| --- | ---: | ---: | ---: | --- |
+| `0x008000..0x00809A` | 154 | 55 | 6 | `ce1724cf9b267c4923b3aa558a7e97ec1bca4d4bb087e1ecc4eb6be7b025eff3` |
+| `0x008104..0x00861C` | 1304 | 287 | 17 | `a161e90bbeb36058bc8e725302766a3a1bde2a801222192b234d21ff7a03a90e` |
+| `0x00866C..0x00868E` | 34 | 10 | 1 | `e731ba9ada61f65120bf4e7bb7c9b657956fe0e8d7654a51bf2fea579198a3aa` |
+| `0x0086B4..0x008B0E` | 1114 | 295 | 13 | `197c0818a23184fe36de773950cdecb357cd732c5d340b3c6835018ed4e9b853` |
+| `0x008B24..0x008F4E` | 1066 | 393 | 3 | `afeeff1180047d9a134181551166c4dabe278e99fe63acfa289765759408e23a` |
+
+| Data segment | Owner | Candidates | Source SHA-256 |
+| --- | --- | ---: | --- |
+| `0x00809A..0x008104` | startup hardware/register configuration table | 1 | `0e7ed0e76239d6ebf0961fdee838efa526cbd722670f91758d80748246d57932` |
+| `0x00861C..0x00866C` | startup button and input bit-mask tables | 0 | `73b549daddddfe9ffde0a1873bd330caca5d9bcbdab8a9213f1b0116967480b8` |
+| `0x00868E..0x0086B4` | startup indexed 16-bit configuration records | 0 | `ab35a810740431c5b0b4f02760b650e988d96e947d44b0c9860a672d6652ea61` |
+| `0x008B0E..0x008B24` | indexed jump-table 16-bit offsets | 0 | `933223c8098848974610a8845b253eb4b929f4dd6739e767d7ecd66b9666525a` |
+
+Independent Capstone tests require each code segment to end exactly
+at its declared boundary and cover all 40 code-candidate spans.
+Candidate `0x008101` remains owned by the source-locked startup
+configuration table rather than an executable byte string.
 
 ## Reviewed Executable-Auxiliary Candidates
 
