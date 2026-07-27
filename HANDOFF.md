@@ -11601,3 +11601,26 @@ contains 57 safe syllables as documented below and in
   isolated current-source ROM; no production ROM bytes changed, BlastEm was
   not launched, Xvfb `:104` remained the only emulator display, and the
   physical monitor was untouched.
+
+### Executable Renderer-Block Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x02BFC8..0x02FFFF` renderer/system block contains
+  16,440 bytes and disassembles from its first byte through its last byte as
+  3,451 contiguous 68000 instructions. Its SHA-256 is
+  `edb590da0da63058e15da20aff12b3ec185ca9ba699f255212e62ac4ff1b5797`.
+- All 108 low-signal candidates are covered completely by that instruction
+  stream: 72 half-width-looking and 36 ASCII-looking rows. Their ordered
+  manifest SHA-256 is
+  `7617dc0672ad2a47e0bacf10051a5ccd12f7c7060d5b7bfad103f58bc1c0c805`.
+- The aligned address scan finds 37 references to four candidate starts.
+  `0x02C311`, `0x02D188`, `0x02DC40`, and `0x02DCC2` are instruction entry
+  points; the last two are called repeatedly by the following system-renderer
+  code. These true code pointers strengthen executable ownership and do not
+  indicate byte strings. No executable PC-relative reference targets a row.
+- The cumulative exact review is now 5,261 of 6,612 short-inline candidates:
+  5,260 structural false positives plus the retained `L-`. The remaining open
+  executable/numeric set is 1,351.
+- Focused inventory tests pass 95/95. The checked-in reports were regenerated
+  from the isolated current-source ROM. No production ROM bytes changed,
+  BlastEm remained stopped, and only virtual display `:104` remains reserved
+  for future emulator checks.

@@ -23,6 +23,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Compressed-resource-bank unclassified: 0
 - Executable-tail candidates: 21
 - Executable-tail unclassified: 0
+- Executable-renderer candidates: 108
+- Executable-renderer unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -39,6 +41,26 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Renderer Candidates
+
+- The source-locked `0x02BFC8..0x030000` block contains 16440 bytes and 3451 contiguous 68000 instructions.
+- Source SHA-256: `edb590da0da63058e15da20aff12b3ec185ca9ba699f255212e62ac4ff1b5797`; candidate manifest SHA-256: `7617dc0672ad2a47e0bacf10051a5ccd12f7c7060d5b7bfad103f58bc1c0c805` (layout valid: `True`).
+- Category total: `contiguous_instruction_stream_false_positive` 108.
+- Exact aligned four-byte references: 37 across 4 code targets; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Code target | Exact aligned references |
+| --- | --- |
+| `0x02C311` | `0x0DF0E0` |
+| `0x02D188` | `0x02D16C` |
+| `0x02DC40` | `0x02E0B6`, `0x02FF98`, `0x030934`, `0x030976` |
+| `0x02DCC2` | `0x02E026`, `0x02E06E`, `0x02E290`, `0x02E30A`, `0x02E352`, `0x02E39A`, `0x02FC82`, `0x02FCD4`, `0x02FD40`, `0x02FDF6`, `0x02FE50`, `0x02FEBE`, `0x02FFA6`, `0x030030`, `0x0300F2`, `0x030158`, `0x0301AA`, `0x0302E0`, `0x030362`, `0x030426`, `0x0304B2`, `0x030586`, `0x0305F8`, `0x0306AA`, `0x03078C`, `0x03080C`, `0x030882`, `0x0309CC`, `0x030AA4`, `0x030AF4`, `0x030B44` |
+
+All 108 candidate spans are covered by the contiguous instruction
+stream in an independent Capstone regression test. The 37 exact
+aligned references resolve to four instruction entry points, which
+further confirms executable ownership rather than text ownership.
+Per-candidate word contexts and references remain in the JSON report.
 
 ## Reviewed Executable-Tail Candidates
 

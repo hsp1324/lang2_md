@@ -17,6 +17,10 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_TAIL_INSTRUCTION_REVIEWS,
     EXECUTABLE_TAIL_SOURCE_SHA256,
     EXECUTABLE_TAIL_START,
+    EXECUTABLE_RENDERER_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_RENDERER_END,
+    EXECUTABLE_RENDERER_SOURCE_SHA256,
+    EXECUTABLE_RENDERER_START,
     FONT_BITMAP_BANK_END,
     FONT_BITMAP_BANK_START,
     FONT_BITMAP_GLYPH_BYTES,
@@ -55,6 +59,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         cls.bank = cls.result["text_ui_bank"]
         cls.compressed_bank = cls.result["compressed_resource_bank"]
         cls.executable_tail_bank = cls.result["executable_tail_bank"]
+        cls.executable_renderer_bank = cls.result[
+            "executable_renderer_bank"
+        ]
 
     def test_low_signal_candidate_baseline(self):
         self.assertEqual(self.result["candidate_count"], 6612)
@@ -258,6 +265,119 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
                 and not row["pc_relative_lea_pea_references"]
                 for row in bank["candidates"]
             )
+        )
+
+    def test_executable_renderer_is_source_locked_and_fully_classified(self):
+        bank = self.executable_renderer_bank
+        self.assertEqual(bank["candidate_count"], 108)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 36, "halfwidth": 72},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {"contiguous_instruction_stream_false_positive": 108},
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(bank["source_bytes"], 16440)
+        self.assertEqual(
+            bank["source_sha256"], EXECUTABLE_RENDERER_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_RENDERER_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+
+    def test_executable_renderer_candidates_are_inside_contiguous_instructions(self):
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        instructions = list(
+            md.disasm(
+                self.japanese[
+                    EXECUTABLE_RENDERER_START:EXECUTABLE_RENDERER_END
+                ],
+                EXECUTABLE_RENDERER_START,
+            )
+        )
+        self.assertEqual(len(instructions), 3451)
+        self.assertEqual(instructions[0].address, EXECUTABLE_RENDERER_START)
+        self.assertEqual(
+            instructions[-1].address + instructions[-1].size,
+            EXECUTABLE_RENDERER_END,
+        )
+        covered_bytes = {
+            address
+            for instruction in instructions
+            for address in range(
+                instruction.address,
+                instruction.address + instruction.size,
+            )
+        }
+        for row in self.executable_renderer_bank["candidates"]:
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(
+                    set(range(start, end)) <= covered_bytes
+                )
+
+    def test_executable_renderer_exact_references_are_code_entry_points(self):
+        bank = self.executable_renderer_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 37)
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertEqual(
+            {
+                int(row["target"], 16): [
+                    int(address, 16) for address in row["addresses"]
+                ]
+                for row in bank["aligned_absolute_32_references"]
+            },
+            {
+                0x02C311: [0x0DF0E0],
+                0x02D188: [0x02D16C],
+                0x02DC40: [
+                    0x02E0B6,
+                    0x02FF98,
+                    0x030934,
+                    0x030976,
+                ],
+                0x02DCC2: [
+                    0x02E026,
+                    0x02E06E,
+                    0x02E290,
+                    0x02E30A,
+                    0x02E352,
+                    0x02E39A,
+                    0x02FC82,
+                    0x02FCD4,
+                    0x02FD40,
+                    0x02FDF6,
+                    0x02FE50,
+                    0x02FEBE,
+                    0x02FFA6,
+                    0x030030,
+                    0x0300F2,
+                    0x030158,
+                    0x0301AA,
+                    0x0302E0,
+                    0x030362,
+                    0x030426,
+                    0x0304B2,
+                    0x030586,
+                    0x0305F8,
+                    0x0306AA,
+                    0x03078C,
+                    0x03080C,
+                    0x030882,
+                    0x0309CC,
+                    0x030AA4,
+                    0x030AF4,
+                    0x030B44,
+                ],
+            },
         )
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):

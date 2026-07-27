@@ -107,6 +107,14 @@ EXECUTABLE_TAIL_OPCODE_BOUNDARY_ADDRESSES = {
     0x030A8D,
     0x03109A,
 }
+EXECUTABLE_RENDERER_START = 0x02BFC8
+EXECUTABLE_RENDERER_END = 0x030000
+EXECUTABLE_RENDERER_SOURCE_SHA256 = (
+    "edb590da0da63058e15da20aff12b3ec185ca9ba699f255212e62ac4ff1b5797"
+)
+EXECUTABLE_RENDERER_CANDIDATE_MANIFEST_SHA256 = (
+    "7617dc0672ad2a47e0bacf10051a5ccd12f7c7060d5b7bfad103f58bc1c0c805"
+)
 MAX_LOW_SIGNAL = 2
 WORD_STREAM_CONTROLS = {
     0xFFF3,
@@ -1026,6 +1034,94 @@ def executable_tail_candidate_inventory(
     }
 
 
+def executable_renderer_candidate_inventory(
+    data: bytes, candidates: list[dict[str, object]]
+) -> dict[str, object]:
+    addresses = {int(row["start_int"]) for row in candidates}
+    absolute = aligned_absolute_references(data, addresses)
+    pc_relative = pc_relative_lea_pea_references(data, addresses)
+    detailed_rows = []
+    for row in candidates:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        context_start, context = word_context(data, start, end)
+        detailed_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": "contiguous_instruction_stream_false_positive",
+                "owner": "68000 executable instruction bytes",
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in pc_relative.get(start, [])
+                ],
+            }
+        )
+
+    source_sha256 = hashlib.sha256(
+        data[EXECUTABLE_RENDERER_START:EXECUTABLE_RENDERER_END]
+    ).hexdigest()
+    manifest_sha256 = candidate_manifest_sha256(candidates)
+    return {
+        "range": "0x02BFC8..0x030000",
+        "source_bytes": (
+            EXECUTABLE_RENDERER_END - EXECUTABLE_RENDERER_START
+        ),
+        "linear_instruction_count": 3451,
+        "source_sha256": source_sha256,
+        "expected_source_sha256": EXECUTABLE_RENDERER_SOURCE_SHA256,
+        "candidate_manifest_sha256": manifest_sha256,
+        "expected_candidate_manifest_sha256": (
+            EXECUTABLE_RENDERER_CANDIDATE_MANIFEST_SHA256
+        ),
+        "source_layout_valid": (
+            source_sha256 == EXECUTABLE_RENDERER_SOURCE_SHA256
+            and manifest_sha256
+            == EXECUTABLE_RENDERER_CANDIDATE_MANIFEST_SHA256
+        ),
+        "candidate_count": len(detailed_rows),
+        "kind_counts": dict(
+            sorted(Counter(str(row["kind"]) for row in detailed_rows).items())
+        ),
+        "category_counts": {
+            "contiguous_instruction_stream_false_positive": len(
+                detailed_rows
+            )
+        },
+        "unclassified_count": 0,
+        "aligned_absolute_32_reference_count": sum(
+            len(references) for references in absolute.values()
+        ),
+        "aligned_absolute_32_references": [
+            {
+                "target": f"0x{target:06X}",
+                "addresses": [
+                    f"0x{address:06X}" for address in references
+                ],
+            }
+            for target, references in sorted(absolute.items())
+        ],
+        "pc_relative_lea_pea_reference_count": sum(
+            len(references) for references in pc_relative.values()
+        ),
+        "candidates": detailed_rows,
+    }
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -1121,6 +1217,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ]
     executable_tail_bank = executable_tail_candidate_inventory(
         japanese, executable_tail
+    )
+    executable_renderer = [
+        row
+        for row in candidates
+        if EXECUTABLE_RENDERER_START
+        <= int(row["start_int"])
+        < EXECUTABLE_RENDERER_END
+    ]
+    executable_renderer_bank = executable_renderer_candidate_inventory(
+        japanese, executable_renderer
     )
 
     font_bitmap_addresses = {
@@ -1831,6 +1937,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         },
         "compressed_resource_bank": compressed_resource_bank,
         "executable_tail_bank": executable_tail_bank,
+        "executable_renderer_bank": executable_renderer_bank,
     }
 
 
@@ -1844,6 +1951,7 @@ def markdown_report(result: dict[str, object]) -> str:
     bank = result["text_ui_bank"]
     compressed_bank = result["compressed_resource_bank"]
     executable_tail_bank = result["executable_tail_bank"]
+    executable_renderer_bank = result["executable_renderer_bank"]
     lines = [
         "# Short Inline Byte Candidate Inventory",
         "",
@@ -1910,6 +2018,14 @@ def markdown_report(result: dict[str, object]) -> str:
             f"{executable_tail_bank['unclassified_count']}"
         ),
         (
+            "- Executable-renderer candidates: "
+            f"{executable_renderer_bank['candidate_count']}"
+        ),
+        (
+            "- Executable-renderer unclassified: "
+            f"{executable_renderer_bank['unclassified_count']}"
+        ),
+        (
             "- Exact aligned 32-bit references to text/UI-bank candidates: "
             f"{bank['aligned_absolute_32_reference_count']}"
         ),
@@ -1935,6 +2051,60 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Executable-Renderer Candidates",
+            "",
+            (
+                f"- The source-locked `{executable_renderer_bank['range']}` "
+                f"block contains {executable_renderer_bank['source_bytes']} "
+                f"bytes and "
+                f"{executable_renderer_bank['linear_instruction_count']} "
+                "contiguous 68000 instructions."
+            ),
+            (
+                f"- Source SHA-256: "
+                f"`{executable_renderer_bank['source_sha256']}`; candidate "
+                f"manifest SHA-256: "
+                f"`{executable_renderer_bank['candidate_manifest_sha256']}` "
+                f"(layout valid: "
+                f"`{executable_renderer_bank['source_layout_valid']}`)."
+            ),
+            (
+                "- Category total: "
+                "`contiguous_instruction_stream_false_positive` "
+                f"{executable_renderer_bank['candidate_count']}."
+            ),
+            (
+                "- Exact aligned four-byte references: "
+                f"{executable_renderer_bank['aligned_absolute_32_reference_count']} "
+                f"across "
+                f"{len(executable_renderer_bank['aligned_absolute_32_references'])} "
+                "code targets; exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{executable_renderer_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Code target | Exact aligned references |",
+            "| --- | --- |",
+        ]
+    )
+    for row in executable_renderer_bank[
+        "aligned_absolute_32_references"
+    ]:
+        lines.append(
+            f"| `{row['target']}` | "
+            + ", ".join(
+                f"`{address}`" for address in row["addresses"]
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "All 108 candidate spans are covered by the contiguous instruction",
+            "stream in an independent Capstone regression test. The 37 exact",
+            "aligned references resolve to four instruction entry points, which",
+            "further confirms executable ownership rather than text ownership.",
+            "Per-candidate word contexts and references remain in the JSON report.",
             "",
             "## Reviewed Executable-Tail Candidates",
             "",
@@ -2395,6 +2565,7 @@ def main() -> None:
     bank = result["text_ui_bank"]
     compressed_bank = result["compressed_resource_bank"]
     executable_tail_bank = result["executable_tail_bank"]
+    executable_renderer_bank = result["executable_renderer_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
         f"{font_bank['candidate_count']} font-bitmap-bank, "
@@ -2404,8 +2575,9 @@ def main() -> None:
         f"{ending_bank['candidate_count']} ending/scenario-bank, and "
         f"{bank['candidate_count']} text/UI-bank, and "
         f"{compressed_bank['candidate_count']} compressed-resource-bank, and "
-        f"{executable_tail_bank['candidate_count']} executable-tail candidates, "
-        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count']} "
+        f"{executable_tail_bank['candidate_count']} executable-tail, and "
+        f"{executable_renderer_bank['candidate_count']} executable-renderer candidates, "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count']} "
         "unclassified"
     )
 
