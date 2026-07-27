@@ -38,6 +38,10 @@ let selectedTreeClassId = null;
 let selectedTestClassId = null;
 let selectedAiClassId = null;
 let pickerState = null;
+let aiMaskEditorState = null;
+let aiMountMaskEditorState = null;
+let aiDesignEditorState = null;
+let aiSpriteReloadToken = Date.now();
 
 function escapeHtml(value) {
   return String(value)
@@ -85,9 +89,15 @@ function testClassSpritePath(commanderId, classId) {
 
 function aiClassSpritePath(commanderId, classId) {
   const version =
-    aiClassSpriteModel?.asset_version || "coherent-full-16-fit-2";
+    aiClassSpriteModel?.asset_version ||
+    "sherry-all-ai-v40";
+  const revision = aiClassSpriteModel?.commanders?.[
+    String(commanderId)
+  ]?.classes?.[String(Number(classId))]?.design_revision || 0;
   return `/ai-class-sprites/${commanderId}/${hexId(classId)}.png` +
-    `?v=${encodeURIComponent(version)}`;
+    `?v=${encodeURIComponent(version)}` +
+    `&design=${encodeURIComponent(revision)}` +
+    `&reload=${aiSpriteReloadToken}`;
 }
 
 function spriteImage(classId, options = {}) {
@@ -634,6 +644,772 @@ function aiClassNode(classId, level, commander, nextClassIds) {
     </button>`;
 }
 
+function identityMaskPointKey(x, y) {
+  return `${x},${y}`;
+}
+
+function identityMaskPoints(set) {
+  return [...set].map(value => value.split(",").map(Number))
+    .sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+}
+
+function drawIdentityMaskEditor() {
+  const state = aiMaskEditorState;
+  if (!state?.image.complete || !state.image.naturalWidth) return;
+  const canvas = state.canvas;
+  const context = canvas.getContext("2d");
+  const cellSize = canvas.width / 16;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.imageSmoothingEnabled = false;
+  context.drawImage(state.image, 0, 0, canvas.width, canvas.height);
+  context.fillStyle = "rgba(207, 65, 225, 0.52)";
+  for (const point of identityMaskPoints(state.points)) {
+    context.fillRect(
+      point[0] * cellSize,
+      point[1] * cellSize,
+      cellSize,
+      cellSize,
+    );
+  }
+  context.beginPath();
+  context.strokeStyle = "rgba(255, 255, 255, 0.22)";
+  context.lineWidth = 1;
+  for (let index = 0; index <= 16; index += 1) {
+    const position = index * cellSize + (index < 16 ? 0.5 : -0.5);
+    context.moveTo(position, 0);
+    context.lineTo(position, canvas.height);
+    context.moveTo(0, position);
+    context.lineTo(canvas.width, position);
+  }
+  context.stroke();
+  const count = $("#identityMaskCount");
+  if (count) {
+    const mode = state.useAutomatic
+      ? "자동값"
+      : state.dirty
+      ? "수정 중"
+      : state.savedMode === "custom"
+      ? "사용자 저장값"
+      : "자동 마스크";
+    count.textContent = `${mode} · 원본 고정 ${state.points.size}픽셀`;
+  }
+}
+
+function identityMaskCell(event, canvas) {
+  const bounds = canvas.getBoundingClientRect();
+  return [
+    Math.max(0, Math.min(
+      15,
+      Math.floor((event.clientX - bounds.left) / bounds.width * 16),
+    )),
+    Math.max(0, Math.min(
+      15,
+      Math.floor((event.clientY - bounds.top) / bounds.height * 16),
+    )),
+  ];
+}
+
+function setIdentityMaskPoint(x, y, locked) {
+  const state = aiMaskEditorState;
+  const key = identityMaskPointKey(x, y);
+  if (locked) {
+    state.points.add(key);
+  } else {
+    state.points.delete(key);
+  }
+  state.dirty = true;
+  state.useAutomatic = false;
+  drawIdentityMaskEditor();
+}
+
+async function applyIdentityMask() {
+  const state = aiMaskEditorState;
+  if (!state || state.saving) return;
+  const commanderId = state.commanderId;
+  const classId = state.classId;
+  state.saving = true;
+  const applyButton = $("#identityMaskApply");
+  const resetButton = $("#identityMaskReset");
+  const clearButton = $("#identityMaskClear");
+  for (const button of [applyButton, resetButton, clearButton]) {
+    if (button) button.disabled = true;
+  }
+  applyButton.textContent = "마스크 저장 중…";
+  try {
+    const response = await fetch("/api/ai-class-mask", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        commander_id: state.commanderId,
+        class_id: state.classId,
+        points: identityMaskPoints(state.points),
+        reset: state.useAutomatic,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    const row = aiClassRow(commanderId, classId);
+    row.identity_lock_points = identityMaskPoints(state.points);
+    row.identity_lock_pixel_count = data.identity_lock_pixel_count;
+    row.identity_lock_mode = data.identity_lock_mode;
+    row.identity_mask_pending_rebuild = true;
+    renderAiClassInspector();
+    showNotice(
+      `${activeAiCommander().name} ${classInfo(classId).ko} · ` +
+      `원본 고정 ${data.identity_lock_pixel_count}픽셀 저장 완료 · ` +
+      "다음 AI 변환 때 적용",
+      true,
+    );
+  } catch (error) {
+    showNotice(error.message);
+    state.saving = false;
+    if (applyButton) {
+      applyButton.disabled = false;
+      applyButton.textContent = "마스크 저장";
+    }
+    for (const button of [resetButton, clearButton]) {
+      if (button) button.disabled = false;
+    }
+  }
+}
+
+function setupIdentityMaskEditor(commander, classId, row) {
+  const canvas = $("#identityMaskCanvas");
+  if (!canvas) {
+    aiMaskEditorState = null;
+    return;
+  }
+  const points = new Set(
+    (row.identity_lock_points || []).map(point =>
+      identityMaskPointKey(point[0], point[1])
+    )
+  );
+  const defaultPoints = new Set(
+    (row.identity_lock_default_points || []).map(point =>
+      identityMaskPointKey(point[0], point[1])
+    )
+  );
+  const image = new Image();
+  aiMaskEditorState = {
+    commanderId: commander.commander_id,
+    classId,
+    canvas,
+    image,
+    points,
+    defaultPoints,
+    savedMode: row.identity_lock_mode || "automatic",
+    dirty: false,
+    useAutomatic: false,
+    saving: false,
+    dragging: false,
+    dragLocked: true,
+    lastCell: null,
+  };
+  const state = aiMaskEditorState;
+  image.addEventListener("load", () => {
+    if (aiMaskEditorState === state) drawIdentityMaskEditor();
+  });
+  image.src = `${commanderSpritePath(
+    commander.commander_id,
+    classId,
+  )}?mask=${aiSpriteReloadToken}`;
+  canvas.addEventListener("pointerdown", event => {
+    const [x, y] = identityMaskCell(event, canvas);
+    const key = identityMaskPointKey(x, y);
+    state.dragging = true;
+    state.dragLocked = !state.points.has(key);
+    state.lastCell = key;
+    canvas.setPointerCapture(event.pointerId);
+    setIdentityMaskPoint(x, y, state.dragLocked);
+    event.preventDefault();
+  });
+  canvas.addEventListener("pointermove", event => {
+    if (!state.dragging) return;
+    const [x, y] = identityMaskCell(event, canvas);
+    const key = identityMaskPointKey(x, y);
+    if (key !== state.lastCell) {
+      state.lastCell = key;
+      setIdentityMaskPoint(x, y, state.dragLocked);
+    }
+  });
+  const finishDrag = () => {
+    state.dragging = false;
+    state.lastCell = null;
+  };
+  canvas.addEventListener("pointerup", finishDrag);
+  canvas.addEventListener("pointercancel", finishDrag);
+  $("#identityMaskClear").addEventListener("click", () => {
+    state.points.clear();
+    state.dirty = true;
+    state.useAutomatic = false;
+    drawIdentityMaskEditor();
+  });
+  $("#identityMaskReset").addEventListener("click", () => {
+    state.points = new Set(state.defaultPoints);
+    state.dirty = true;
+    state.useAutomatic = true;
+    drawIdentityMaskEditor();
+  });
+  $("#identityMaskApply").addEventListener("click", applyIdentityMask);
+  drawIdentityMaskEditor();
+}
+
+function drawMountMaskEditor() {
+  const state = aiMountMaskEditorState;
+  if (!state?.image.complete || !state.image.naturalWidth) return;
+  const canvas = state.canvas;
+  const context = canvas.getContext("2d");
+  const cellSize = canvas.width / 16;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.imageSmoothingEnabled = false;
+  context.drawImage(state.image, 0, 0, canvas.width, canvas.height);
+  context.fillStyle = "rgba(37, 190, 210, 0.52)";
+  for (const point of identityMaskPoints(state.points)) {
+    context.fillRect(
+      point[0] * cellSize,
+      point[1] * cellSize,
+      cellSize,
+      cellSize,
+    );
+  }
+  context.beginPath();
+  context.strokeStyle = "rgba(255, 255, 255, 0.22)";
+  context.lineWidth = 1;
+  for (let index = 0; index <= 16; index += 1) {
+    const position = index * cellSize + (index < 16 ? 0.5 : -0.5);
+    context.moveTo(position, 0);
+    context.lineTo(position, canvas.height);
+    context.moveTo(0, position);
+    context.lineTo(canvas.width, position);
+  }
+  context.stroke();
+  const count = $("#mountMaskCount");
+  if (count) {
+    count.textContent =
+      `${state.dirty ? "수정 중" : "사용자 저장값"} · ` +
+      `원본 탈것 고정 ${state.points.size}픽셀`;
+  }
+}
+
+function setMountMaskPoint(x, y, locked) {
+  const state = aiMountMaskEditorState;
+  const key = identityMaskPointKey(x, y);
+  if (locked) {
+    state.points.add(key);
+  } else {
+    state.points.delete(key);
+  }
+  state.dirty = true;
+  drawMountMaskEditor();
+}
+
+async function applyMountMask() {
+  const state = aiMountMaskEditorState;
+  if (!state || state.saving) return;
+  const commanderId = state.commanderId;
+  const classId = state.classId;
+  state.saving = true;
+  const applyButton = $("#mountMaskApply");
+  const reloadButton = $("#mountMaskReload");
+  const clearButton = $("#mountMaskClear");
+  for (const button of [applyButton, reloadButton, clearButton]) {
+    if (button) button.disabled = true;
+  }
+  if (applyButton) applyButton.textContent = "탈것 마스크 저장 중…";
+  try {
+    const response = await fetch("/api/ai-class-mount-mask", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        commander_id: commanderId,
+        class_id: classId,
+        points: identityMaskPoints(state.points),
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    const row = aiClassRow(commanderId, classId);
+    row.mount_lock_points = identityMaskPoints(state.points);
+    row.mount_lock_pixel_count = data.mount_lock_pixel_count;
+    row.mount_lock_mode = data.mount_lock_mode;
+    row.mount_mask_pending_rebuild = true;
+    renderAiClassInspector();
+    showNotice(
+      `${activeAiCommander().name} ${classInfo(classId).ko} · ` +
+      `원본 탈것 ${data.mount_lock_pixel_count}픽셀 저장 완료 · ` +
+      "다음 AI 변환 때 적용",
+      true,
+    );
+  } catch (error) {
+    showNotice(error.message);
+    state.saving = false;
+    if (applyButton) {
+      applyButton.disabled = false;
+      applyButton.textContent = "탈것 마스크 저장";
+    }
+    for (const button of [reloadButton, clearButton]) {
+      if (button) button.disabled = false;
+    }
+  }
+}
+
+function setupMountMaskEditor(commander, classId, row) {
+  const canvas = $("#mountMaskCanvas");
+  if (!canvas) {
+    aiMountMaskEditorState = null;
+    return;
+  }
+  const points = new Set(
+    (row.mount_lock_points || []).map(point =>
+      identityMaskPointKey(point[0], point[1])
+    )
+  );
+  const image = new Image();
+  aiMountMaskEditorState = {
+    commanderId: commander.commander_id,
+    classId,
+    canvas,
+    image,
+    points,
+    savedPoints: new Set(points),
+    dirty: false,
+    saving: false,
+    dragging: false,
+    dragLocked: true,
+    lastCell: null,
+  };
+  const state = aiMountMaskEditorState;
+  image.addEventListener("load", () => {
+    if (aiMountMaskEditorState === state) drawMountMaskEditor();
+  });
+  image.src = `${commanderSpritePath(
+    commander.commander_id,
+    classId,
+  )}?mount-mask=${aiSpriteReloadToken}`;
+  canvas.addEventListener("pointerdown", event => {
+    const [x, y] = identityMaskCell(event, canvas);
+    const key = identityMaskPointKey(x, y);
+    state.dragging = true;
+    state.dragLocked = !state.points.has(key);
+    state.lastCell = key;
+    canvas.setPointerCapture(event.pointerId);
+    setMountMaskPoint(x, y, state.dragLocked);
+    event.preventDefault();
+  });
+  canvas.addEventListener("pointermove", event => {
+    if (!state.dragging) return;
+    const [x, y] = identityMaskCell(event, canvas);
+    const key = identityMaskPointKey(x, y);
+    if (key !== state.lastCell) {
+      state.lastCell = key;
+      setMountMaskPoint(x, y, state.dragLocked);
+    }
+  });
+  const finishDrag = () => {
+    state.dragging = false;
+    state.lastCell = null;
+  };
+  canvas.addEventListener("pointerup", finishDrag);
+  canvas.addEventListener("pointercancel", finishDrag);
+  $("#mountMaskClear").addEventListener("click", () => {
+    state.points.clear();
+    state.dirty = true;
+    drawMountMaskEditor();
+  });
+  $("#mountMaskReload").addEventListener("click", () => {
+    state.points = new Set(state.savedPoints);
+    state.dirty = false;
+    drawMountMaskEditor();
+  });
+  $("#mountMaskApply").addEventListener("click", applyMountMask);
+  drawMountMaskEditor();
+}
+
+const megaDriveColorLevels = [0, 36, 73, 109, 146, 182, 219, 255];
+
+function cloneDesignPixels(pixels) {
+  return pixels.map(pixel => [...pixel]);
+}
+
+function snapMegaDriveChannel(value) {
+  return megaDriveColorLevels.reduce((best, level) =>
+    Math.abs(level - value) < Math.abs(best - value) ? level : best
+  );
+}
+
+function hexDesignColor(pixel) {
+  return `#${pixel.slice(0, 3)
+    .map(value => value.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+function designColorFromHex(value) {
+  return [
+    snapMegaDriveChannel(parseInt(value.slice(1, 3), 16)),
+    snapMegaDriveChannel(parseInt(value.slice(3, 5), 16)),
+    snapMegaDriveChannel(parseInt(value.slice(5, 7), 16)),
+    255,
+  ];
+}
+
+function designPixelKey(pixel) {
+  return pixel.join(",");
+}
+
+function designVisibleColors(pixels) {
+  const counts = new Map();
+  for (const pixel of pixels) {
+    if (!pixel[3]) continue;
+    const key = designPixelKey(pixel);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([key]) => key.split(",").map(Number));
+}
+
+function setAiDesignTool(tool) {
+  const state = aiDesignEditorState;
+  if (!state) return;
+  state.tool = tool;
+  document.querySelectorAll("[data-ai-design-tool]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.aiDesignTool === tool,
+    );
+  });
+}
+
+function drawAiDesignEditor() {
+  const state = aiDesignEditorState;
+  if (!state?.pixels) return;
+  const context = state.canvas.getContext("2d");
+  const cellSize = state.canvas.width / 16;
+  context.clearRect(0, 0, state.canvas.width, state.canvas.height);
+  for (let y = 0; y < 16; y += 1) {
+    for (let x = 0; x < 16; x += 1) {
+      const pixel = state.pixels[y * 16 + x];
+      if (!pixel[3]) continue;
+      context.fillStyle =
+        `rgb(${pixel[0]} ${pixel[1]} ${pixel[2]})`;
+      context.fillRect(
+        x * cellSize,
+        y * cellSize,
+        cellSize,
+        cellSize,
+      );
+    }
+  }
+  context.beginPath();
+  context.strokeStyle = "rgba(255, 255, 255, 0.18)";
+  context.lineWidth = 1;
+  for (let index = 0; index <= 16; index += 1) {
+    const position = index * cellSize + (index < 16 ? 0.5 : -0.5);
+    context.moveTo(position, 0);
+    context.lineTo(position, state.canvas.height);
+    context.moveTo(0, position);
+    context.lineTo(state.canvas.width, position);
+  }
+  context.stroke();
+  context.strokeStyle = "rgba(225, 83, 255, 0.62)";
+  context.lineWidth = 2;
+  for (const key of state.lockPoints) {
+    const [x, y] = key.split(",").map(Number);
+    context.strokeRect(
+      x * cellSize + 1,
+      y * cellSize + 1,
+      cellSize - 2,
+      cellSize - 2,
+    );
+  }
+
+  const colors = designVisibleColors(state.pixels);
+  const palette = $("#aiDesignPalette");
+  if (palette) {
+    palette.innerHTML = colors.map(pixel => `
+      <button type="button" class="aiDesignSwatch${
+        designPixelKey(pixel) === designPixelKey(state.selectedColor)
+          ? " selected"
+          : ""
+      }" data-design-color="${hexDesignColor(pixel)}"
+        style="--swatch:${hexDesignColor(pixel)}"
+        title="${hexDesignColor(pixel)}"></button>
+    `).join("");
+    palette.querySelectorAll("[data-design-color]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.selectedColor = designColorFromHex(
+          button.dataset.designColor
+        );
+        $("#aiDesignColor").value = hexDesignColor(
+          state.selectedColor
+        );
+        setAiDesignTool("pencil");
+        drawAiDesignEditor();
+      });
+    });
+  }
+  const count = $("#aiDesignColorCount");
+  if (count) {
+    count.textContent =
+      `가시색 ${colors.length}/15 · 자주색 테두리는 얼굴 마스크 잠금`;
+    count.classList.toggle("overLimit", colors.length > 15);
+  }
+  $("#aiDesignUndo").disabled = state.undo.length === 0;
+  $("#aiDesignRedo").disabled = state.redo.length === 0;
+}
+
+function pushAiDesignHistory() {
+  const state = aiDesignEditorState;
+  state.undo.push(cloneDesignPixels(state.pixels));
+  if (state.undo.length > 60) state.undo.shift();
+  state.redo = [];
+}
+
+function floodAiDesign(startIndex, replacement) {
+  const state = aiDesignEditorState;
+  const targetKey = designPixelKey(state.pixels[startIndex]);
+  if (targetKey === designPixelKey(replacement)) return;
+  const pending = [startIndex];
+  const visited = new Set();
+  while (pending.length) {
+    const index = pending.pop();
+    if (visited.has(index)) continue;
+    visited.add(index);
+    const x = index % 16;
+    const y = Math.floor(index / 16);
+    if (state.lockPoints.has(`${x},${y}`)) continue;
+    if (designPixelKey(state.pixels[index]) !== targetKey) continue;
+    state.pixels[index] = [...replacement];
+    if (x) pending.push(index - 1);
+    if (x < 15) pending.push(index + 1);
+    if (y) pending.push(index - 16);
+    if (y < 15) pending.push(index + 16);
+  }
+}
+
+function applyAiDesignPixel(x, y, beginStroke = false) {
+  const state = aiDesignEditorState;
+  const index = y * 16 + x;
+  if (state.tool === "eyedropper") {
+    const color = state.pixels[index];
+    if (color[3]) {
+      state.selectedColor = [...color];
+      $("#aiDesignColor").value = hexDesignColor(color);
+      setAiDesignTool("pencil");
+      drawAiDesignEditor();
+    }
+    return;
+  }
+  if (state.lockPoints.has(`${x},${y}`)) return;
+  if (beginStroke) pushAiDesignHistory();
+  if (state.tool === "fill") {
+    floodAiDesign(index, state.selectedColor);
+  } else {
+    state.pixels[index] = state.tool === "eraser"
+      ? [0, 0, 0, 0]
+      : [...state.selectedColor];
+  }
+  state.dirty = true;
+  drawAiDesignEditor();
+}
+
+async function saveAiDesign(reset = false) {
+  const state = aiDesignEditorState;
+  if (!state || state.saving) return;
+  state.saving = true;
+  const buttons = [
+    $("#aiDesignSave"),
+    $("#aiDesignDeleteOverride"),
+  ].filter(Boolean);
+  buttons.forEach(button => button.disabled = true);
+  try {
+    const response = await fetch("/api/ai-class-design", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        commander_id: state.commanderId,
+        class_id: state.classId,
+        pixels: reset ? undefined : state.pixels,
+        reset,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    const row = aiClassRow(state.commanderId, state.classId);
+    row.design_override = data.design_override;
+    row.design_revision = data.design_revision;
+    row.changed_pixel_count = data.changed_pixel_count;
+    row.pixel_palette = data.pixel_palette;
+    row.identity_mask_pending_rebuild = false;
+    aiSpriteReloadToken = Date.now();
+    renderAiClassRoutes();
+    showNotice(
+      `${activeAiCommander().name} ${classInfo(state.classId).ko} · ` +
+      `${data.visible_color_count}/15색 디자인 ${
+        reset ? "자동 변환본 복원" : "저장 완료"
+      }`,
+      true,
+    );
+  } catch (error) {
+    showNotice(error.message);
+    state.saving = false;
+    buttons.forEach(button => button.disabled = false);
+  }
+}
+
+function setupAiDesignEditor(commander, classId, row) {
+  const canvas = $("#aiDesignCanvas");
+  if (!canvas || !row.redesigned) {
+    aiDesignEditorState = null;
+    return;
+  }
+  const state = {
+    commanderId: commander.commander_id,
+    classId,
+    canvas,
+    pixels: null,
+    savedPixels: null,
+    selectedColor: [73, 36, 109, 255],
+    tool: "pencil",
+    lockPoints: new Set(
+      (row.identity_lock_points || []).map(
+        point => `${point[0]},${point[1]}`
+      )
+    ),
+    undo: [],
+    redo: [],
+    dirty: false,
+    saving: false,
+    dragging: false,
+    lastCell: null,
+    referenceObjectUrl: null,
+  };
+  aiDesignEditorState = state;
+
+  const image = new Image();
+  image.addEventListener("load", () => {
+    if (aiDesignEditorState !== state) return;
+    const buffer = document.createElement("canvas");
+    buffer.width = 16;
+    buffer.height = 16;
+    const context = buffer.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    context.clearRect(0, 0, 16, 16);
+    context.drawImage(image, 0, 0, 16, 16);
+    const data = context.getImageData(0, 0, 16, 16).data;
+    state.pixels = Array.from({length: 256}, (_, index) => [
+      data[index * 4],
+      data[index * 4 + 1],
+      data[index * 4 + 2],
+      data[index * 4 + 3],
+    ]);
+    state.savedPixels = cloneDesignPixels(state.pixels);
+    const colors = designVisibleColors(state.pixels);
+    if (colors.length) state.selectedColor = [...colors[0]];
+    $("#aiDesignColor").value = hexDesignColor(state.selectedColor);
+    drawAiDesignEditor();
+  });
+  image.src = aiClassSpritePath(commander.commander_id, classId);
+
+  canvas.addEventListener("pointerdown", event => {
+    const [x, y] = identityMaskCell(event, canvas);
+    state.dragging = true;
+    state.lastCell = `${x},${y}`;
+    canvas.setPointerCapture(event.pointerId);
+    applyAiDesignPixel(x, y, true);
+    event.preventDefault();
+  });
+  canvas.addEventListener("pointermove", event => {
+    if (!state.dragging || ["fill", "eyedropper"].includes(state.tool)) {
+      return;
+    }
+    const [x, y] = identityMaskCell(event, canvas);
+    const key = `${x},${y}`;
+    if (key !== state.lastCell) {
+      state.lastCell = key;
+      applyAiDesignPixel(x, y);
+    }
+  });
+  const finish = () => {
+    state.dragging = false;
+    state.lastCell = null;
+  };
+  canvas.addEventListener("pointerup", finish);
+  canvas.addEventListener("pointercancel", finish);
+
+  document.querySelectorAll("[data-ai-design-tool]").forEach(button => {
+    button.addEventListener("click", () =>
+      setAiDesignTool(button.dataset.aiDesignTool)
+    );
+  });
+  $("#aiDesignColor").addEventListener("input", event => {
+    state.selectedColor = designColorFromHex(event.target.value);
+    event.target.value = hexDesignColor(state.selectedColor);
+    setAiDesignTool("pencil");
+    drawAiDesignEditor();
+  });
+  $("#aiDesignUndo").addEventListener("click", () => {
+    if (!state.undo.length) return;
+    state.redo.push(cloneDesignPixels(state.pixels));
+    state.pixels = state.undo.pop();
+    state.dirty = true;
+    drawAiDesignEditor();
+  });
+  $("#aiDesignRedo").addEventListener("click", () => {
+    if (!state.redo.length) return;
+    state.undo.push(cloneDesignPixels(state.pixels));
+    state.pixels = state.redo.pop();
+    state.dirty = true;
+    drawAiDesignEditor();
+  });
+  $("#aiDesignReload").addEventListener("click", () => {
+    pushAiDesignHistory();
+    state.pixels = cloneDesignPixels(state.savedPixels);
+    state.dirty = false;
+    drawAiDesignEditor();
+  });
+  $("#aiDesignSave").addEventListener("click", () => saveAiDesign(false));
+  $("#aiDesignDeleteOverride").addEventListener(
+    "click",
+    () => saveAiDesign(true),
+  );
+
+  const reference = $("#aiDesignReferenceImage");
+  const referenceZoom = $("#aiDesignReferenceZoom");
+  const defaultReference = reference.src;
+  $("#aiDesignReferenceFile").addEventListener("change", event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      showNotice("PNG, JPG, WEBP 같은 이미지 파일을 선택해주세요");
+      return;
+    }
+    if (state.referenceObjectUrl) {
+      URL.revokeObjectURL(state.referenceObjectUrl);
+    }
+    state.referenceObjectUrl = URL.createObjectURL(file);
+    reference.src = state.referenceObjectUrl;
+    $("#aiDesignReferenceName").textContent = file.name;
+  });
+  $("#aiDesignReferenceReset").addEventListener("click", () => {
+    if (state.referenceObjectUrl) {
+      URL.revokeObjectURL(state.referenceObjectUrl);
+      state.referenceObjectUrl = null;
+    }
+    reference.src = defaultReference;
+    $("#aiDesignReferenceFile").value = "";
+    $("#aiDesignReferenceName").textContent = "현재 클래스 AI 원화";
+  });
+  const applyReferenceZoom = () => {
+    reference.style.width = `${referenceZoom.value}%`;
+  };
+  referenceZoom.addEventListener("input", () => {
+    applyReferenceZoom();
+  });
+  applyReferenceZoom();
+  setAiDesignTool("pencil");
+}
+
 function renderAiClassInspector() {
   const commander = activeAiCommander();
   const classId = selectedAiClassId;
@@ -644,16 +1420,41 @@ function renderAiClassInspector() {
   const info = classInfo(classId);
   const row = aiClassRow(commander.commander_id, classId);
   const pending = Boolean(row.pending_redesign);
-  const nativeAi16 = Boolean(
-    row.redesigned && row.ai_source_kind.includes("네이티브 16×16")
+  const identityLockedAi16 = Boolean(
+    row.redesigned && row.identity_lock_box
   );
+  const directStageAi = Boolean(
+    row.redesigned && row.ai_source_kind.includes("direct_16x16")
+  );
+  const characterSheetAi = Boolean(
+    row.redesigned && (
+      row.ai_source_kind.includes("character-ai-v3") ||
+      row.ai_source_kind.includes("logical16-v3")
+    )
+  );
+  const eyeLockCount = Number(row.eye_lock_pixel_count || 0);
+  const maskLockCount = Number(row.identity_lock_pixel_count || 0);
+  const maskMode = row.identity_lock_mode === "custom"
+    ? "사용자 마스크"
+    : "자동 마스크";
+  const maskPending = Boolean(row.identity_mask_pending_rebuild);
+  const aiReferencePath = row.ai_source_cell_file
+    ? `/ai-class-sprites/${row.ai_source_cell_file}?v=${encodeURIComponent(
+        aiClassSpriteModel.asset_version
+      )}`
+    : commanderSpritePath(commander.commander_id, classId);
   const headPreservation = pending
     ? "실패 시안 제거·현재 ROM 원본 전체 256픽셀"
     : row.redesigned
-    ? row.ai_source_kind.includes("네이티브 16×16") ||
+    ? directStageAi
+      ? "ROM 얼굴·머리·눈 사각형 잠금·선택된 5단계 보병 실루엣 유지"
+      : characterSheetAi
+      ? "ROM 얼굴·머리 사용자 마스크 잠금·캐릭터별 AI 클래스 실루엣 유지"
+      : row.identity_lock_box ||
+      row.ai_source_kind.includes("네이티브 16×16") ||
       row.ai_source_kind.includes("마스크 인페인트")
-      ? "ROM 얼굴·머리·윤곽을 처음부터 편집 잠금"
-      : "원작 레퍼런스 얼굴·머리와 몸 연결 유지"
+      ? "ROM 얼굴·머리·윤곽·투명 실루엣을 픽셀 단위로 편집 잠금"
+      : `원작 레퍼런스 얼굴·머리 연결 유지·ROM 눈/흰자 ${eyeLockCount}픽셀 잠금`
     : "원본 전체 256픽셀";
   aiClassInspector.innerHTML = `
     <div class="inspectorTitle">
@@ -669,13 +1470,17 @@ function renderAiClassInspector() {
         <span>${pending
           ? "전용 생성 대기"
           : row.redesigned
-          ? nativeAi16
-            ? "AI 원출력 (16×16)"
+          ? identityLockedAi16
+            ? characterSheetAi
+              ? "캐릭터별 전용 AI 원화"
+              : "AI 장비 참고 원화"
             : "AI 원화"
           : "AI 원화 · 미사용"}</span>
         <span class="aiSourceSprite">
           ${row.redesigned && row.ai_source_cell_file
-            ? `<img src="/ai-class-sprites/${row.ai_source_cell_file}"
+            ? `<img src="/ai-class-sprites/${row.ai_source_cell_file}?v=${encodeURIComponent(
+                aiClassSpriteModel.asset_version
+              )}"
                 alt="${escapeHtml(commander.name)} ${escapeHtml(info.ko)} AI 원화">`
             : spriteImage(classId, {commanderId: commander.commander_id})}
         </span>
@@ -684,8 +1489,12 @@ function renderAiClassInspector() {
         <span>${pending
           ? "현재 안전 복구본"
           : row.redesigned
-          ? nativeAi16
-            ? "에디터 적용본 (변환 없음)"
+          ? identityLockedAi16
+            ? directStageAi
+              ? "최종 16×16 (5단계 디자인·원본 얼굴)"
+              : characterSheetAi
+              ? "최종 16×16 (전용 AI·원본 머리)"
+              : "최종 16×16 (원본 머리 잠금)"
             : "16×16 변환"
           : "ROM 원본 유지"}</span>
         <span class="comparisonSprite ${row.redesigned ? "changed" : ""}">
@@ -701,6 +1510,9 @@ function renderAiClassInspector() {
     </div>
     <dl class="designMetadata">
       <div><dt>생성 방식</dt><dd>${escapeHtml(row.feature)}</dd></div>
+      <div><dt>디자인 버전</dt><dd>${escapeHtml(
+        aiClassSpriteModel.asset_version
+      )}</dd></div>
       <div><dt>AI 원화</dt><dd>${escapeHtml(row.ai_source_kind)} · ${escapeHtml(
         row.ai_source_position
       )}</dd></div>
@@ -711,9 +1523,145 @@ function renderAiClassInspector() {
       <div><dt>원본 고정</dt><dd>${headPreservation} · 그림 0x${hexId(
         row.face_source_sprite_id
       )}</dd></div>
+      ${row.redesigned
+        ? `<div><dt>얼굴 마스크</dt><dd>${maskMode} · 원본 고정 ${
+            maskLockCount
+          }픽셀${maskPending ? " · 저장됨, 다음 AI 변환 때 적용" : ""}</dd></div>`
+        : ""}
+      <div><dt>눈 고정</dt><dd>${
+        row.redesigned
+          ? `ROM 원본의 눈·흰자 ${eyeLockCount}픽셀 그대로 유지`
+          : "ROM 원본 전체 유지에 포함"
+      }</dd></div>
+      ${row.redesigned
+        ? `<div><dt>장비 변경</dt><dd>${row.changed_pixel_count}픽셀 · ${
+            identityLockedAi16
+              ? directStageAi
+                ? "얼굴·머리·눈 제외"
+                : characterSheetAi
+                ? "사용자 얼굴·머리 마스크 제외"
+                : "얼굴·머리·외곽선·눈 제외"
+              : "원본 눈·흰자 제외"
+          }</dd></div>`
+        : ""}
       <div><dt>ROM 반영</dt><dd>미적용 · 비교용 PNG만 생성</dd></div>
-    </dl>`;
+    </dl>
+    ${row.redesigned
+      ? `<section class="aiDesignEditor">
+          <h3>16×16 캐릭터 디자인 편집</h3>
+          <p>AI 원화를 보면서 최종 도트를 직접 수정합니다. 자주색
+            테두리의 얼굴 마스크 픽셀은 원작 정체성을 위해 잠겨
+            있습니다.</p>
+          <div class="aiDesignWorkspace">
+            <div class="aiDesignPixelPane">
+              <canvas id="aiDesignCanvas" width="320" height="320"
+                aria-label="${escapeHtml(info.ko)} 16×16 디자인 편집"></canvas>
+              <div class="aiDesignTools">
+                <button type="button" data-ai-design-tool="pencil">연필</button>
+                <button type="button" data-ai-design-tool="eraser">지우개</button>
+                <button type="button" data-ai-design-tool="fill">채우기</button>
+                <button type="button" data-ai-design-tool="eyedropper">스포이드</button>
+              </div>
+              <div class="aiDesignColorControl">
+                <label>선택색
+                  <input id="aiDesignColor" type="color" value="#49246d">
+                </label>
+                <span id="aiDesignColorCount"></span>
+              </div>
+              <div id="aiDesignPalette" class="aiDesignPalette"
+                aria-label="현재 디자인 팔레트"></div>
+              <div class="aiDesignHistory">
+                <button id="aiDesignUndo" type="button">실행 취소</button>
+                <button id="aiDesignRedo" type="button">다시 실행</button>
+                <button id="aiDesignReload" type="button">저장본 다시 읽기</button>
+              </div>
+            </div>
+            <div class="aiDesignReferencePane">
+              <div class="aiDesignReferenceHeader">
+                <strong>참고할 AI 그림</strong>
+                <span id="aiDesignReferenceName">현재 클래스 AI 원화</span>
+              </div>
+              <div class="aiDesignReferenceViewport">
+                <img id="aiDesignReferenceImage"
+                  src="${aiReferencePath}"
+                  alt="${escapeHtml(info.ko)} AI 디자인 참고 이미지">
+              </div>
+              <label class="aiDesignFileLabel">
+                다른 AI 그림 불러오기
+                <input id="aiDesignReferenceFile" type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif">
+              </label>
+              <label class="aiDesignZoomLabel">참고 그림 배율 (25%~200%)
+                <input id="aiDesignReferenceZoom" type="range"
+                  min="25" max="200" step="25" value="50">
+              </label>
+              <button id="aiDesignReferenceReset" type="button">
+                현재 AI 원화로 돌아가기
+              </button>
+              <p>불러온 이미지는 참고용으로 브라우저에서만 열리며
+                프로젝트 파일을 덮어쓰지 않습니다.</p>
+            </div>
+          </div>
+          <div class="aiDesignSaveActions">
+            <button id="aiDesignDeleteOverride" type="button"
+              ${row.design_override ? "" : "disabled"}>
+              수동 편집 삭제
+            </button>
+            <button id="aiDesignSave" class="primary" type="button">
+              이 디자인 저장
+            </button>
+          </div>
+          <p class="aiDesignNote">저장하면 선택한 클래스 PNG만 즉시
+            갱신합니다. 전체 170개를 다시 만들지 않으며, 수동 편집은
+            이후 AI 자산 재빌드 때도 유지됩니다.</p>
+        </section>`
+      : ""}
+    ${row.redesigned
+      ? `<section class="identityMaskEditor">
+          <h3>16×16 얼굴 마스크 편집</h3>
+          <p>자주색 칸은 최종 이미지에서 ROM 원본 픽셀을 그대로
+            고정합니다. 클릭은 한 칸 전환, 드래그는 같은 상태로
+            연속 칠하기입니다.</p>
+          <canvas id="identityMaskCanvas" width="320" height="320"
+            aria-label="${escapeHtml(info.ko)} 원본 픽셀 고정 마스크"></canvas>
+          <span id="identityMaskCount" class="identityMaskCount"></span>
+          <div class="identityMaskActions">
+            <button id="identityMaskClear" type="button">전체 해제</button>
+            <button id="identityMaskReset" type="button">자동값 불러오기</button>
+            <button id="identityMaskApply" class="primary" type="button">
+              마스크 저장
+            </button>
+          </div>
+          <p class="identityMaskNote">좌표만 즉시 저장합니다. 저장된
+            마스크는 다음 AI 이미지의 16×16 변환 때 적용되며, 저장
+            시점에는 PNG 170개나 실제 ROM을 다시 만들지 않습니다.</p>
+        </section>`
+      : ""}
+    ${row.redesigned
+      ? `<section class="identityMaskEditor mountMaskEditor">
+          <h3>16×16 탈것 마스크 편집</h3>
+          <p>청록색 칸은 말·드래곤 등 탈것 부분을 ROM 원본 픽셀로
+            복원합니다. 얼굴 마스크와 독립되어 있으므로 탈것에
+            해당하는 칸만 직접 칠하면 됩니다.</p>
+          <canvas id="mountMaskCanvas" width="320" height="320"
+            aria-label="${escapeHtml(info.ko)} 원본 탈것 픽셀 고정 마스크"></canvas>
+          <span id="mountMaskCount" class="identityMaskCount"></span>
+          <div class="identityMaskActions">
+            <button id="mountMaskClear" type="button">전체 해제</button>
+            <button id="mountMaskReload" type="button">저장값 불러오기</button>
+            <button id="mountMaskApply" class="primary" type="button">
+              탈것 마스크 저장
+            </button>
+          </div>
+          <p class="identityMaskNote">저장할 때는 이 클래스의 좌표만
+            기록하며 전체 PNG를 검증하거나 다시 만들지 않습니다.
+            다음 AI 변환·자산 재빌드 때 선택한 탈것 픽셀이 적용됩니다.</p>
+        </section>`
+      : ""}`;
   installSpriteFallbacks(aiClassInspector);
+  setupAiDesignEditor(commander, classId, row);
+  setupIdentityMaskEditor(commander, classId, row);
+  setupMountMaskEditor(commander, classId, row);
 }
 
 function renderAiClassRoutes() {
@@ -830,7 +1778,10 @@ async function loadAll() {
       fetch(`/api/items?rom=${rom}`),
       fetch(`/api/class-changes?rom=${rom}`),
       fetch("/test-class-sprites/manifest.json"),
-      fetch("/ai-class-sprites/manifest.json"),
+      fetch(
+        `/ai-class-sprites/manifest.json?reload=${Date.now()}`,
+        {cache: "no-store"}
+      ),
     ]);
     itemModel = await itemsResponse.json();
     classModel = await classesResponse.json();

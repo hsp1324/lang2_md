@@ -117,6 +117,57 @@ class EditorModelTests(unittest.TestCase):
             self.assertIn((255, 0, 0, 255), bald_pixels)
             self.assertNotIn((36, 219, 36, 255), bald_pixels)
 
+    def test_loren_high_lord_has_distinct_green_representative_palette(self):
+        import json
+        from PIL import Image
+
+        preview_dir = ROOT / "editor/static/class-sprites"
+        manifest = json.loads(
+            (preview_dir / "manifest.json").read_text(encoding="utf-8")
+        )
+        regular_path = (
+            preview_dir / manifest["representatives"][str(0x0B)]["file"]
+        )
+        loren_entry = manifest["representatives"][str(0x9B)]
+        loren_path = preview_dir / loren_entry["file"]
+        self.assertEqual(loren_entry["sprite_id"], 0x1C)
+        self.assertTrue(loren_entry["uses_palette_override"])
+        with Image.open(regular_path) as regular, Image.open(
+            loren_path
+        ) as loren:
+            loren_pixels = set(loren.get_flattened_data())
+            self.assertNotEqual(regular.tobytes(), loren.tobytes())
+            self.assertIn((36, 219, 36, 255), loren_pixels)
+            self.assertIn((36, 109, 0, 255), loren_pixels)
+            self.assertNotIn((73, 109, 255, 255), loren_pixels)
+
+    def test_playable_and_loren_high_lords_are_distinct_rom_records(self):
+        from tools.class_hire_data import read_class_hire_unlocks
+        from tools.scenario_data import class_names
+
+        classes = class_names(self.japanese)
+        self.assertEqual(classes[0x0B]["jp"], classes[0x9B]["jp"])
+        self.assertEqual(classes[0x0B]["ko"], "하이로드")
+        self.assertEqual(classes[0x9B]["ko"], "하이로드")
+        base = 0x05EDDC
+        size = 0x1C
+        self.assertNotEqual(
+            self.japanese[base + 0x0B * size : base + 0x0C * size],
+            self.japanese[base + 0x9B * size : base + 0x9C * size],
+        )
+        self.assertEqual(
+            read_class_hire_unlocks(
+                self.japanese, 0x0B
+            ).hire_class_ids,
+            (0x6A, 0x63),
+        )
+        self.assertEqual(
+            read_class_hire_unlocks(
+                self.japanese, 0x9B
+            ).hire_class_ids,
+            (0xFF, 0xFF),
+        )
+
     def test_committed_item_icon_manifest_is_self_contained(self):
         import json
         from PIL import Image

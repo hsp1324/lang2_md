@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "active_templates": [
+    {
+      "class_id": "04",
+      "class_name": "로드",
+      "master": "1:0B",
+      "master_class_name": "엘윈 하이로드",
+      "targets": ["1:04", "4:04", "6:04", "7:04", "8:04"],
+      "excluded_rom_base_classes": ["2:04", "3:04", "5:04", "10:04"],
+      "missing_class_commanders": ["9"],
+      "policy": "high_lord_equipment_to_fighter_branch_lord_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "0B",
+      "class_name": "하이로드",
+      "master": "5:0B",
+      "master_name": "헤인 하이로드",
+      "targets": ["1:0B", "2:0B", "3:0B", "4:0B", "5:0B", "6:0B", "7:0B", "8:0B", "10:0B"],
+      "preserved_reassigned_design": "1:0B -> 1:04",
+      "master_live_color_override": "5:0B red cape -> Hein bright green",
+      "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "1A",
+      "class_name": "소드마스터",
+      "master": "5:1A",
+      "master_name": "헤인 소드마스터",
+      "targets": ["5:1A", "7:1A", "8:1A", "10:1A"],
+      "excluded_protected_masters": ["1:1A"],
+      "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "14",
+      "class_name": "아크메이지",
+      "master": "9:14",
+      "master_name": "레스터 아크메이지",
+      "targets": ["1:14", "2:14", "3:14", "4:14", "5:14", "8:14", "9:14", "10:14"],
+      "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "11",
+      "class_name": "프리스트",
+      "master": "5:11",
+      "master_name": "헤인 프리스트",
+      "targets": ["2:11", "3:11", "5:11", "7:11", "10:11"],
+      "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "13",
+      "class_name": "메이지",
+      "master": "5:13",
+      "master_name": "헤인 메이지",
+      "targets": ["1:13", "2:13", "3:13", "4:13", "5:13", "8:13", "9:13", "10:13"],
+      "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "16",
+      "class_name": "하이프리스트",
+      "master": "5:16",
+      "master_name": "헤인 하이프리스트",
+      "targets": ["2:16", "3:16", "5:16", "7:16", "10:16"],
+      "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    }
+  ],
+  "reserved_split_templates": [],
+  "protected_master_keys": ["1:0B", "5:0B", "1:1A", "5:1A"]
+}

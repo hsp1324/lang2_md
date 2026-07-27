@@ -90,6 +90,21 @@ BALD_SPRITE_COLOR_INDEX_REMAP = {
     0xF: 0xD,  # cyan armor highlight -> bright violet
 }
 
+LOREN_CLASS_ID = 0x9B
+LOREN_SOURCE_SPRITE_ID = 0x001C
+LOREN_CUSTOM_SPRITE_ID = 0x53AE
+LOREN_CUSTOM_FRAME_OFFSETS = tuple(
+    base + LOREN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
+    for base in MAP_SPRITE_FRAME_BASES
+)
+# Loren's NPC-only High Lord keeps every source pixel and uses only colors
+# already present in the live map CRAM row: green armor with a gold highlight.
+LOREN_SPRITE_COLOR_INDEX_REMAP = {
+    0x4: 0x8,  # blue armor -> bright green
+    0xE: 0x9,  # dark blue armor -> dark green
+    0xF: 0xA,  # cyan highlight -> gold
+}
+
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
 
@@ -2402,6 +2417,47 @@ def patch_bald_map_sprite(data: bytearray) -> None:
         data[target : target + MAP_SPRITE_BYTES] = remapped
 
     put16(data, table_offset, BALD_CUSTOM_SPRITE_ID)
+
+
+def patch_loren_map_sprite(data: bytearray) -> None:
+    table_offset = GENERIC_CLASS_SPRITE_TABLE + LOREN_CLASS_ID * 2
+    actual_sprite_id = be16(data, table_offset)
+    if actual_sprite_id != LOREN_SOURCE_SPRITE_ID:
+        raise ValueError(
+            f"unexpected Loren class sprite: 0x{actual_sprite_id:04X} "
+            f"!= 0x{LOREN_SOURCE_SPRITE_ID:04X}"
+        )
+
+    for frame_base, target in zip(
+        MAP_SPRITE_FRAME_BASES, LOREN_CUSTOM_FRAME_OFFSETS
+    ):
+        source = frame_base + LOREN_SOURCE_SPRITE_ID * MAP_SPRITE_BYTES
+        source_payload = bytes(data[source : source + MAP_SPRITE_BYTES])
+        if len(source_payload) != MAP_SPRITE_BYTES:
+            raise ValueError("Loren source map sprite is truncated")
+        if target + MAP_SPRITE_BYTES > EXPANDED_ROM_SIZE:
+            raise ValueError("Loren custom map sprite exceeds expanded ROM")
+        if any(
+            value != 0xFF
+            for value in data[target : target + MAP_SPRITE_BYTES]
+        ):
+            raise ValueError(
+                f"Loren custom map-sprite area at 0x{target:06X} "
+                "is not blank"
+            )
+
+        remapped = bytearray()
+        for packed in source_payload:
+            high = LOREN_SPRITE_COLOR_INDEX_REMAP.get(
+                packed >> 4, packed >> 4
+            )
+            low = LOREN_SPRITE_COLOR_INDEX_REMAP.get(
+                packed & 0x0F, packed & 0x0F
+            )
+            remapped.append((high << 4) | low)
+        data[target : target + MAP_SPRITE_BYTES] = remapped
+
+    put16(data, table_offset, LOREN_CUSTOM_SPRITE_ID)
 
 
 def relocate_sram(data: bytearray) -> None:
@@ -7297,6 +7353,7 @@ def main() -> None:
     data = bytearray(IN_ROM.read_bytes())
     expand_rom(data)
     patch_bald_map_sprite(data)
+    patch_loren_map_sprite(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()

@@ -44,6 +44,14 @@ REPRESENTATIVE_PALETTE_OVERRIDES = {
         0xE: 0x624,  # dark armor outline
         0xF: 0xEAC,  # pale lavender highlight
     },
+    # Loren uses the NPC-only High Lord record 0x9B. Keep the stock High Lord
+    # silhouette, but separate him from other NPC commanders with green armor
+    # and a gold highlight. These values match the production index remap.
+    0x9B: {
+        0x4: 0x2C2,  # blue armor -> bright green
+        0xE: 0x062,  # dark blue armor -> dark green
+        0xF: 0x0AE,  # cyan highlight -> gold
+    },
 }
 
 

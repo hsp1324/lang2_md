@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "class_id": "22",
+  "class_name": "히어로",
+  "raw_ai": "raw/22-hero-v2.png",
+  "final_locked_ai": "raw/22-hero-final-locked.png",
+  "logical16": "logical16/22-hero.png",
+  "identity_match": {
+    "matched": 73,
+    "total": 73,
+    "ratio": 1.0
+  },
+  "connected_body_pixels": 87,
+  "visible_pixel_count": 175,
+  "visible_color_count": 11,
+  "empty_rows": [],
+  "empty_columns": [],
+  "contains_pure_black": false,
+  "contains_purple_fringe": false,
+  "mounted": false,
+  "large_sword": true,
+  "accepted": true
+}

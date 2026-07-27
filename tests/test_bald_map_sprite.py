@@ -74,5 +74,103 @@ class BaldMapSpriteTests(unittest.TestCase):
             builder.patch_bald_map_sprite(data)
 
 
+class LorenMapSpriteTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.original = bytearray(builder.IN_ROM.read_bytes())
+        cls.patched = bytearray(cls.original)
+        builder.expand_rom(cls.patched)
+        builder.patch_bald_map_sprite(cls.patched)
+        builder.patch_loren_map_sprite(cls.patched)
+
+    def test_only_npc_high_lord_9b_uses_loren_sprite(self) -> None:
+        table = builder.GENERIC_CLASS_SPRITE_TABLE
+        playable_high_lord = builder.be16(
+            self.patched, table + 0x0B * 2
+        )
+        loren_high_lord = builder.be16(
+            self.patched, table + 0x9B * 2
+        )
+        self.assertEqual(
+            playable_high_lord,
+            builder.LOREN_SOURCE_SPRITE_ID,
+        )
+        self.assertEqual(
+            loren_high_lord,
+            builder.LOREN_CUSTOM_SPRITE_ID,
+        )
+        self.assertNotEqual(
+            builder.LOREN_CUSTOM_SPRITE_ID,
+            builder.BALD_CUSTOM_SPRITE_ID,
+        )
+
+    def test_loren_frames_use_green_and_gold_index_remap(self) -> None:
+        changed_indexes = set()
+        for frame_base, target in zip(
+            builder.MAP_SPRITE_FRAME_BASES,
+            builder.LOREN_CUSTOM_FRAME_OFFSETS,
+        ):
+            source = (
+                frame_base
+                + builder.LOREN_SOURCE_SPRITE_ID
+                * builder.MAP_SPRITE_BYTES
+            )
+            source_payload = self.original[
+                source : source + builder.MAP_SPRITE_BYTES
+            ]
+            target_payload = self.patched[
+                target : target + builder.MAP_SPRITE_BYTES
+            ]
+            self.assertEqual(
+                len(target_payload),
+                builder.MAP_SPRITE_BYTES,
+            )
+            for source_byte, target_byte in zip(
+                source_payload, target_payload
+            ):
+                for shift in (4, 0):
+                    source_index = (source_byte >> shift) & 0x0F
+                    target_index = (target_byte >> shift) & 0x0F
+                    expected = (
+                        builder.LOREN_SPRITE_COLOR_INDEX_REMAP.get(
+                            source_index, source_index
+                        )
+                    )
+                    self.assertEqual(target_index, expected)
+                    if source_index != target_index:
+                        changed_indexes.add(source_index)
+        self.assertEqual(
+            changed_indexes,
+            set(builder.LOREN_SPRITE_COLOR_INDEX_REMAP),
+        )
+
+    def test_loren_custom_frames_use_separate_blank_expansion(self) -> None:
+        self.assertTrue(
+            set(builder.LOREN_CUSTOM_FRAME_OFFSETS).isdisjoint(
+                builder.BALD_CUSTOM_FRAME_OFFSETS
+            )
+        )
+        for target in builder.LOREN_CUSTOM_FRAME_OFFSETS:
+            self.assertLessEqual(
+                target + builder.MAP_SPRITE_BYTES,
+                builder.EXPANDED_ROM_SIZE,
+            )
+            self.assertEqual(
+                bytes(
+                    self.original[
+                        target : target + builder.MAP_SPRITE_BYTES
+                    ]
+                ),
+                b"",
+            )
+
+    def test_loren_patch_rejects_reuse_of_custom_frame_area(self) -> None:
+        data = bytearray(self.original)
+        builder.expand_rom(data)
+        data[builder.LOREN_CUSTOM_FRAME_OFFSETS[0]] = 0
+        with self.assertRaisesRegex(ValueError, "is not blank"):
+            builder.patch_loren_map_sprite(data)
+
+
 if __name__ == "__main__":
     unittest.main()

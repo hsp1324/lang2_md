@@ -192,6 +192,22 @@ td select { width: 138px; }
   min-height: calc(100vh - 235px);
   border: 1px solid #424741;
 }
+.aiClassWorkspace {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+.aiClassWorkspace .classTreeWrap {
+  max-height: min(650px, calc(100vh - 235px));
+  border-right: 0;
+  border-bottom: 1px solid #424741;
+  scrollbar-gutter: stable both-edges;
+}
+.aiClassWorkspace .classInspector {
+  position: static;
+  align-self: stretch;
+  max-height: none;
+  overflow: visible;
+}
 .classTreeWrap {
   min-width: 0;
   overflow: auto;
@@ -444,6 +460,195 @@ td select { width: 138px; }
   line-height: 1.45;
   white-space: normal;
 }
+.aiDesignEditor {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #496c83;
+}
+.aiDesignEditor h3 {
+  margin: 0;
+  color: #d9f1ff;
+}
+.aiDesignEditor > p {
+  margin: 7px 0 11px;
+  color: #aeb9bd;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: normal;
+}
+.aiDesignWorkspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.aiDesignPixelPane,
+.aiDesignReferencePane {
+  min-width: 0;
+  padding: 9px;
+  background: #171b1d;
+  border: 1px solid #40515b;
+}
+#aiDesignCanvas {
+  display: block;
+  width: min(320px, 100%);
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #6aa6c4;
+  background-color: #151815;
+  background-image:
+    linear-gradient(45deg, #303530 25%, transparent 25%),
+    linear-gradient(-45deg, #303530 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #303530 75%),
+    linear-gradient(-45deg, transparent 75%, #303530 75%);
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-size: 20px 20px;
+  image-rendering: pixelated;
+  cursor: crosshair;
+  touch-action: none;
+}
+.aiDesignTools,
+.aiDesignHistory {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 8px;
+}
+.aiDesignTools button,
+.aiDesignHistory button,
+.aiDesignReferencePane button,
+.aiDesignSaveActions button {
+  min-width: 0;
+  padding: 6px 7px;
+  background: #29343a;
+  border-color: #4d6876;
+  color: #dcebf2;
+  font-size: 11px;
+}
+.aiDesignTools button.active {
+  background: #246383;
+  border-color: #72bee4;
+  color: #fff;
+  box-shadow: inset 0 -2px 0 #72bee4;
+}
+.aiDesignColorControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  color: #b8c5ca;
+  font-size: 11px;
+}
+.classInspector .aiDesignColorControl label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+#aiDesignColor {
+  width: 42px;
+  height: 28px;
+  padding: 1px;
+  border: 1px solid #668493;
+  background: #131719;
+}
+#aiDesignColorCount {
+  text-align: right;
+}
+#aiDesignColorCount.overLimit {
+  color: #ff8b7e;
+}
+.aiDesignPalette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 29px;
+  margin-top: 8px;
+}
+.aiDesignSwatch {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  background: var(--swatch);
+  border: 1px solid #ffffff44;
+}
+.aiDesignSwatch.selected {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+}
+.aiDesignHistory {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.aiDesignReferenceHeader {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 7px;
+  color: #d9e9ef;
+  font-size: 11px;
+}
+.aiDesignReferenceHeader span {
+  color: #8fa1a8;
+  overflow-wrap: anywhere;
+}
+.aiDesignReferenceViewport {
+  height: 320px;
+  overflow: auto;
+  display: grid;
+  place-items: start center;
+  background: #090b0c;
+  border: 1px solid #3f525c;
+}
+#aiDesignReferenceImage {
+  display: block;
+  width: 50%;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.classInspector .aiDesignFileLabel,
+.classInspector .aiDesignZoomLabel {
+  display: grid;
+  gap: 5px;
+  margin-top: 8px;
+  color: #b8c5ca;
+  font-size: 11px;
+}
+#aiDesignReferenceFile {
+  width: 100%;
+  min-width: 0;
+  font-size: 10px;
+}
+#aiDesignReferenceZoom {
+  width: 100%;
+}
+#aiDesignReferenceReset {
+  width: 100%;
+  margin-top: 8px;
+}
+.aiDesignReferencePane p {
+  margin: 8px 0 0;
+  color: #849198;
+  font-size: 10px;
+  line-height: 1.45;
+  white-space: normal;
+}
+.aiDesignSaveActions {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 7px;
+  margin-top: 10px;
+}
+.aiDesignSaveActions .primary {
+  background: #276e91;
+  border-color: #67b7dd;
+  color: #fff;
+}
+.aiDesignEditor .aiDesignNote {
+  margin-bottom: 0;
+  color: #8e9a9e;
+}
 .paletteRow {
   display: flex;
   align-items: center;
@@ -463,6 +668,108 @@ td select { width: 138px; }
   height: 17px;
   border: 1px solid #ffffff38;
 }
+.identityMaskEditor {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #5c4368;
+}
+.identityMaskEditor h3 {
+  margin: 0;
+  color: #eedcff;
+}
+.identityMaskEditor p {
+  margin: 7px 0 10px;
+  color: #aeb5ad;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: normal;
+}
+#identityMaskCanvas,
+#mountMaskCanvas {
+  display: block;
+  width: min(320px, 100%);
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #a864ba;
+  background-color: #151815;
+  background-image:
+    linear-gradient(45deg, #242824 25%, transparent 25%),
+    linear-gradient(-45deg, #242824 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #242824 75%),
+    linear-gradient(-45deg, transparent 75%, #242824 75%);
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-size: 16px 16px;
+  image-rendering: pixelated;
+  cursor: crosshair;
+  touch-action: none;
+}
+.mountMaskEditor {
+  border-top-color: #386c73;
+}
+.mountMaskEditor h3 {
+  color: #c9f7fb;
+}
+#mountMaskCanvas {
+  border-color: #3ca4b2;
+}
+.mountMaskEditor .identityMaskCount {
+  color: #a9e8ee;
+}
+.mountMaskEditor .identityMaskActions button {
+  background: #263e41;
+  border-color: #41747a;
+  color: #daf4f5;
+}
+.mountMaskEditor .identityMaskActions .primary {
+  background: #246f79;
+  border-color: #4ea7b2;
+}
+.identityMaskCount {
+  display: block;
+  margin: 8px 0;
+  color: #e5c0ee;
+  font-size: 12px;
+  text-align: center;
+}
+.identityMaskActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.identityMaskActions button {
+  min-width: 0;
+  padding: 5px 8px;
+  background: #3a313d;
+  border-color: #76577d;
+  color: #e7dce9;
+  font-size: 11px;
+}
+.identityMaskActions .primary {
+  grid-column: 1 / -1;
+  background: #74408b;
+  border-color: #a668bd;
+  color: #fff;
+}
+.identityMaskEditor .identityMaskNote {
+  margin-bottom: 0;
+  color: #8e978d;
+}
+@media (min-width: 1900px) {
+  .aiClassWorkspace {
+    grid-template-columns: minmax(1100px, 1fr) minmax(560px, 640px);
+    height: calc(100vh - 235px);
+  }
+  .aiClassWorkspace .classTreeWrap {
+    max-height: none;
+    border-right: 1px solid #424741;
+    border-bottom: 0;
+  }
+  .aiClassWorkspace .classInspector {
+    max-height: 100%;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+}
 @media (max-width: 700px) {
   .topbar { align-items: stretch; flex-direction: column; }
   main { padding: 12px; }
@@ -481,4 +788,5 @@ td select { width: 138px; }
   .classInspector { position: static; }
   .nextClassGrid { grid-template-columns: 1fr; }
   .aiSpriteComparison { grid-template-columns: 1fr; }
+  .aiDesignWorkspace { grid-template-columns: 1fr; }
 }
