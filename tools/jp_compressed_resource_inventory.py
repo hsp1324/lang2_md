@@ -24,21 +24,25 @@ RESOURCE_DECODER_ROUTINES = {
     4: 0x009AAA,
 }
 KNOWN_OWNERS = {
+    0: "sega_boot_logo",
     builder.BYTE_UI_FONT_RESOURCE_INDEX: "byte_ui_font",
     builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX: "battle_ui_terrain",
     391: "item_icons",
+    392: "masaya_publisher_logo",
     builder.TITLE_LOGO_RESOURCE_INDEX: "title_logo",
 }
 LIVE_VERIFIED_OWNERS = frozenset(
     {
+        0,
         builder.BYTE_UI_FONT_RESOURCE_INDEX,
         builder.BATTLE_UI_TERRAIN_RESOURCE_INDEX,
         391,
+        392,
         builder.TITLE_LOGO_RESOURCE_INDEX,
     }
 )
 ASSET_FAMILY_RANGES = (
-    (0, 0, "publisher_logo"),
+    (0, 0, "platform_logo"),
     (1, 1, "ui_font"),
     (2, 25, "map_tileset"),
     (26, 46, "battle_background"),
@@ -49,15 +53,15 @@ ASSET_FAMILY_RANGES = (
     (363, 389, "small_graphic_fragment"),
     (390, 390, "world_map_graphics"),
     (391, 391, "item_icon_graphics"),
-    (392, 392, "opening_logo_graphics"),
+    (392, 392, "publisher_logo"),
     (393, 393, "title_logo_graphics"),
     (394, 428, "opening_ending_graphics"),
 )
 RAW_TILE_TEXT_SIGNALS = {
-    0: "publisher_brand_lettering",
+    0: "platform_brand_lettering",
     1: "font_glyphs",
     223: "battle_ui_label_tiles",
-    392: "opening_logo_lettering",
+    392: "publisher_brand_lettering",
     393: "title_lettering",
 }
 

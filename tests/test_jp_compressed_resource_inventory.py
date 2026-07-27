@@ -62,7 +62,7 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(
             self.result["asset_family_counts"],
             {
-                "publisher_logo": 1,
+                "platform_logo": 1,
                 "ui_font": 1,
                 "map_tileset": 24,
                 "battle_background": 21,
@@ -73,7 +73,7 @@ class CompressedResourceInventoryTests(unittest.TestCase):
                 "small_graphic_fragment": 27,
                 "world_map_graphics": 1,
                 "item_icon_graphics": 1,
-                "opening_logo_graphics": 1,
+                "publisher_logo": 1,
                 "title_logo_graphics": 1,
                 "opening_ending_graphics": 35,
             },
@@ -87,10 +87,10 @@ class CompressedResourceInventoryTests(unittest.TestCase):
                 if entry["raw_tile_text_signal"] is not None
             },
             {
-                0: "publisher_brand_lettering",
+                0: "platform_brand_lettering",
                 1: "font_glyphs",
                 223: "battle_ui_label_tiles",
-                392: "opening_logo_lettering",
+                392: "publisher_brand_lettering",
                 393: "title_lettering",
             },
         )
@@ -103,7 +103,7 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(
             self.result["entries"][428]["asset_family"], "opening_ending_graphics"
         )
-        self.assertEqual(self.result["unknown_owner_count"], 425)
+        self.assertEqual(self.result["unknown_owner_count"], 423)
 
     def test_type1_rle_and_type2_plane_decoder(self):
         pointers = resource_pointers(self.japanese)
@@ -126,8 +126,8 @@ class CompressedResourceInventoryTests(unittest.TestCase):
 
     def test_owned_localized_resources_are_relocated_and_modified(self):
         self.assertEqual(self.result["modified_count"], 3)
-        self.assertEqual(self.result["known_owner_count"], 4)
-        self.assertEqual(self.result["unknown_owner_count"], 425)
+        self.assertEqual(self.result["known_owner_count"], 6)
+        self.assertEqual(self.result["unknown_owner_count"], 423)
         entry = self.result["entries"][builder.BYTE_UI_FONT_RESOURCE_INDEX]
         self.assertEqual(entry["owner"], "byte_ui_font")
         self.assertEqual(entry["original_pointer"], "0x0B0A84")
@@ -160,6 +160,19 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertTrue(logo["content_modified"])
         self.assertTrue(logo["reviewed"])
         self.assertTrue(logo["live_verified"])
+
+    def test_stock_boot_brand_graphics_have_exact_live_owners(self):
+        sega = self.result["entries"][0]
+        self.assertEqual(sega["owner"], "sega_boot_logo")
+        self.assertEqual(sega["asset_family"], "platform_logo")
+        self.assertTrue(sega["reviewed"])
+        self.assertTrue(sega["live_verified"])
+
+        masaya = self.result["entries"][392]
+        self.assertEqual(masaya["owner"], "masaya_publisher_logo")
+        self.assertEqual(masaya["asset_family"], "publisher_logo")
+        self.assertTrue(masaya["reviewed"])
+        self.assertTrue(masaya["live_verified"])
 
     def test_item_icon_resource_owner_matches_the_stock_loader(self):
         entry = self.result["entries"][391]

@@ -13,8 +13,8 @@ A valid record does not establish that it contains text or UI data.
 - Total calculated output bytes: 903,296
 - Decoded and hashed by type: type 1: 2, type 2: 248, type 3: 179
 - Modified resources in current build: 3
-- Known owners: 4
-- Unknown owners: 425
+- Known owners: 6
+- Unknown owners: 423
 - Broad asset families reviewed in raw tile order: 429
 - Raw tile text/lettering signals: 5
 - Direct loader calls: 75
@@ -44,7 +44,7 @@ ownership. Absence of readable Japanese in this view is not translation proof.
 
 | Asset family | Resources |
 | --- | ---: |
-| `publisher_logo` | 1 |
+| `platform_logo` | 1 |
 | `ui_font` | 1 |
 | `map_tileset` | 24 |
 | `battle_background` | 21 |
@@ -55,7 +55,7 @@ ownership. Absence of readable Japanese in this view is not translation proof.
 | `small_graphic_fragment` | 27 |
 | `world_map_graphics` | 1 |
 | `item_icon_graphics` | 1 |
-| `opening_logo_graphics` | 1 |
+| `publisher_logo` | 1 |
 | `title_logo_graphics` | 1 |
 | `opening_ending_graphics` | 35 |
 
@@ -63,10 +63,10 @@ Obvious lettering/font signals in raw tile order:
 
 | Index | Family | Signal | Owner |
 | ---: | --- | --- | --- |
-| 0 | `publisher_logo` | `publisher_brand_lettering` |  |
+| 0 | `platform_logo` | `platform_brand_lettering` | `sega_boot_logo` |
 | 1 | `ui_font` | `font_glyphs` | `byte_ui_font` |
 | 223 | `battle_ui` | `battle_ui_label_tiles` | `battle_ui_terrain` |
-| 392 | `opening_logo_graphics` | `opening_logo_lettering` |  |
+| 392 | `publisher_logo` | `publisher_brand_lettering` | `masaya_publisher_logo` |
 | 393 | `title_logo_graphics` | `title_lettering` | `title_logo` |
 
 ## Type Distribution
@@ -81,9 +81,11 @@ Obvious lettering/font signals in raw tile order:
 
 | Index | Owner | Original | Current | Type | Size | Pointer changed | Content changed |
 | ---: | --- | --- | --- | ---: | ---: | --- | --- |
+| 0 | sega_boot_logo | `0x0B06B4` | `0x0B06B4` | `0x03` | 1568 | False | False |
 | 1 | byte_ui_font | `0x0B0A84` | `0x290000` | `0x03` | 8192 | True | True |
 | 223 | battle_ui_terrain | `0x0FEB2A` | `0x2E2000` | `0x03` | 2368 | True | True |
 | 391 | item_icons | `0x11FAE4` | `0x11FAE4` | `0x03` | 8192 | False | False |
+| 392 | masaya_publisher_logo | `0x120BEE` | `0x120BEE` | `0x03` | 1632 | False | False |
 | 393 | title_logo | `0x120EEE` | `0x2E0000` | `0x03` | 5984 | True | True |
 
 All pointers, output sizes, decoded hashes, ownership fields, and review flags

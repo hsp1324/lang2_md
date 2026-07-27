@@ -11340,15 +11340,17 @@ contains 57 safe syllables as documented below and in
   `tools/jp_compressed_resource_inventory.py` records only broad, visually
   defensible families: publisher/UI font, map tiles, battle backgrounds and
   sprites, battle UI/scene graphics, portraits, small fragments, world map,
-  item icons, opening logo/title, and opening/ending graphics. Exact owner
-  count deliberately remains 4 and unknown owner count remains 425; family
+  item icons, platform/publisher/title logos, and opening/ending graphics.
+  Exact owner count is 6 and unknown owner count remains 423; family
   assignment is not promoted to unsupported address ownership.
-- Five records have an obvious raw-tile lettering or font signal: MASAYA
-  publisher logo `0`, UI font `1`, localized battle terrain label `223`,
-  opening logo graphic `392`, and localized title logo `393`. Resource `0`
-  was additionally seen during an input-free Japanese cold boot on isolated
-  virtual `DISPLAY=:104`; it is the retained publisher brand rather than
-  untranslated game UI.
+- Five records have an obvious raw-tile lettering or font signal: SEGA boot
+  logo `0`, UI font `1`, localized battle terrain label `223`, MASAYA
+  publisher logo `392`, and localized title logo `393`. A 0.04-second
+  input-free Japanese cold-boot sweep on isolated virtual `DISPLAY=:104`
+  fixed the two brand owners precisely; accepted frames are
+  `captures/run/jp_stock_boot_sega_logo.png` and
+  `captures/run/jp_stock_boot_masaya_logo.png`. Both are retained original
+  brand screens rather than untranslated game UI.
 - The atlas cannot reconstruct tile maps, runtime palettes, animation, or
   dynamic loader ownership. A resource with no readable Japanese in raw tile
   order is therefore not considered translation-complete. The generated JSON
@@ -11363,4 +11365,4 @@ contains 57 safe syllables as documented below and in
   `WAYLAND_DISPLAY`; both BlastEm display sockets were connected to
   `@/tmp/.X11-unix/X104` on Xvfb PID 5324, and the process was immediately
   terminated. Atlas, compressed-inventory, and display isolation focused tests
-  pass 20/20.
+  pass 21/21.

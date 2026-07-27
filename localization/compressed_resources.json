@@ -15,10 +15,10 @@
     "1": 2
   },
   "modified_count": 3,
-  "known_owner_count": 4,
-  "unknown_owner_count": 425,
+  "known_owner_count": 6,
+  "unknown_owner_count": 423,
   "asset_family_counts": {
-    "publisher_logo": 1,
+    "platform_logo": 1,
     "ui_font": 1,
     "map_tileset": 24,
     "battle_background": 21,
@@ -29,7 +29,7 @@
     "small_graphic_fragment": 27,
     "world_map_graphics": 1,
     "item_icon_graphics": 1,
-    "opening_logo_graphics": 1,
+    "publisher_logo": 1,
     "title_logo_graphics": 1,
     "opening_ending_graphics": 35
   },
@@ -669,10 +669,10 @@
       "pointer_modified": false,
       "content_modified": false,
       "modified": false,
-      "owner": null,
-      "asset_family": "publisher_logo",
+      "owner": "sega_boot_logo",
+      "asset_family": "platform_logo",
       "raw_tile_visual_reviewed": true,
-      "raw_tile_text_signal": "publisher_brand_lettering",
+      "raw_tile_text_signal": "platform_brand_lettering",
       "direct_immediate_call_count": 1,
       "direct_immediate_calls": [
         {
@@ -684,8 +684,8 @@
           "destination": "0x0000"
         }
       ],
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "index": 1,
@@ -10306,10 +10306,10 @@
       "pointer_modified": false,
       "content_modified": false,
       "modified": false,
-      "owner": null,
-      "asset_family": "opening_logo_graphics",
+      "owner": "masaya_publisher_logo",
+      "asset_family": "publisher_logo",
       "raw_tile_visual_reviewed": true,
-      "raw_tile_text_signal": "opening_logo_lettering",
+      "raw_tile_text_signal": "publisher_brand_lettering",
       "direct_immediate_call_count": 1,
       "direct_immediate_calls": [
         {
@@ -10321,8 +10321,8 @@
           "destination": "0x0000"
         }
       ],
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true
     },
     {
       "index": 393,
