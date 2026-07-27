@@ -120,7 +120,7 @@ class Scenario11ClearProbeTests(unittest.TestCase):
             )
 
     def test_death_mode_checksums_are_valid(self):
-        for mode, checksum in (("protagonist", 0xD87E), ("jessica", 0xDF3E)):
+        for mode, checksum in (("protagonist", 0x90CC), ("jessica", 0x978C)):
             with self.subTest(mode=mode):
                 data = self.death_patched(mode)
                 expected = sum(

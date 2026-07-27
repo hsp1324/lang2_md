@@ -12,13 +12,14 @@ follow this status table so a resume does not repeat already accepted work.
 | Stage | Status | Resume rule |
 | --- | --- | --- |
 | 1. Inventory and coverage | Complete baseline | 783 direct-word, 348 pointer-referenced direct-byte, 646 conservative inline-byte, and 6,612 short-inline candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
-| 2. Shared UI and global names | In progress | 142/143 declared patches differ intentionally; all 143 are source-reviewed and 142 have live evidence. The sole non-live row is the superseded `로드` fallback; work only from the four explicit gaps in `docs/ui_patch_surface_inventory.md`. |
+| 2. Shared UI and global names | Complete | All 143 declarations are source-reviewed, 142 differ intentionally, and the retained `NPC` abbreviation is unchanged by design. The superseded load-header fallback is the sole non-live declaration. `docs/ui_patch_surface_inventory.md` has zero explicit gaps; reopen only when a shared owner or residue scan changes. |
 | 3. Scenarios 2-10 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; replay only when a shared owner changes or evidence is explicitly promoted. |
 | 4. Scenarios 11-20 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; preserve the distinction between natural and diagnostic evidence. |
 | 5. Scenarios 21-31 and endings | Runtime and ending inventory complete | The 90 epilogues, 23 ending visits, 12 montage records, 16 credit groups, and all 61 production credit records are structurally inventoried and renderer-verified through `Fin`. |
-| 6. Full regression and release | Pending | Resolve or explicitly accept the four shared-UI gaps, then run the final isolated build and release regression. |
+| 6. Full regression and release | In progress | Current source reproduces checksum `99FD`. Scenario diagnostic checksum locks are rebased; finish isolated full-suite and current-build emulator smoke before release acceptance. |
+| 7. Separate hard-mode build | Deferred for balance discussion | Start only after the normal Korean ROM passes Stage 6. Agree on stat scaling, stronger mercenary timing, summon-unit composition, and scenario exceptions with the user before changing any balance value. |
 
-Stage 2 complete-item checkpoint is closed. Production checksum `6C85` splits
+Stage 2 complete-item checkpoint is closed. Accepted item checkpoint `6C85` splits
 the 86 item-name glyphs at the stock 64-slot VRAM boundary: slots `0..63` stay
 at `0x2000`, while slots `64..85` use `0xB400..0xBEFF`. The exclusive
 `0xBF00` limit preserves the stock selector tiles `0x5F8..0x5FF`. Both
@@ -28,9 +29,10 @@ late names and messages no longer turn into item icons. Diagnostic checksum
 `eb1d9aadc20f3a46a8ab3f3b1d7cb757619dbe28551f52d757cce6814027b19c`;
 its 37 captures verify every item from 단검 through 아뮬렛. Free-price
 derivative `9607` and discard diagnostic `94DB` retain the capacity paths.
-Decoded icon resource 391 remains byte-identical to the Japanese ROM. Resume
-Stage 2 only from the four gaps in
-`docs/ui_patch_surface_inventory.md`.
+Decoded icon resource 391 remains byte-identical to the Japanese ROM. The
+current item-surface derivative is checksum `F586`. Resume Stage 2 only
+when its shared renderer/data owner changes or a new explicit inventory gap is
+generated.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run
 it only when a later change shares its renderer/data ownership or an automated
@@ -102,6 +104,19 @@ test fails. The authoritative machine-readable state is
   not replace per-scenario live verification.
 - Expand the scenario editor only for fields whose runtime ownership is proven.
 - Produce the final documented build, commit, and push.
+
+## Stage 7: Separate Hard-Mode Build
+
+- Preserve the normal Korean ROM's Japanese balance and emit hard mode under a
+  separate build profile and filename.
+- Before implementation, discuss and agree with the user on scenario-band
+  difficulty targets, enemy commander and mercenary AT/DF scaling, caps,
+  stronger mercenary replacement ratios, late-game summon-unit composition,
+  and boss/support/branch exceptions.
+- Do not choose provisional balance values or patch the normal ROM while that
+  discussion is pending.
+- Apply accepted changes through the documented scenario placement/editor data
+  model and regression-test each scenario independently.
 
 `LV`, `AT`, `DF`, `MP`, and `HP` may remain as standard game abbreviations. Large
 English labels may remain only when they are conventional, space-constrained, and
