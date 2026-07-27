@@ -32,6 +32,7 @@
 - `tools/build_class_change_probe_rom.py`: 지정한 지휘관·현재 클래스·활성 런타임 슬롯의 원본 후보 ID로 클래스 체인지 화면을 직접 열거나, `--end-turn-only`로 정상 턴 종료 레벨업 적용 경로를 재현하는 비배포 진단 ROM을 만듭니다. Start 직접 진입은 화면/이동 검사용이며 실제 적용 증거로 사용하지 않습니다.
 - `tools/capture_class_change_transition.py`: 지정한 원본 클래스 전이의 진단 ROM 빌드, 격리 BlastEm 새 부팅, 명령 화면 감지, Start 진단 진입, 모든 후보 행 캡처와 종료를 한 번에 수행합니다.
 - `tools/capture_class_change_chain.py`: 한 지휘관 체인에서 아직 화면 검증되지 않은 고유 전이만 골라 위 자동 캡처를 순차 실행하고, 완전한 기존 캡처 세트는 건너뛰어 중단 후 재개합니다.
+- `tools/verify_class_change_persistence.py`: 정상 시나리오 클리어 뒤의 8192바이트 SRAM에서 슬롯 형식·유효 플래그·체크섬·시나리오 번호를 검증하고 지정 지휘관의 클래스/LV/EXP가 저장됐는지 확인합니다.
 - `tools/class_change_inventory.py`: 일본판의 플레이어 지휘관 10명 클래스 체인 100개 전이를 주소·원문·한글 표기·화면/적용 실기 상태와 함께 JSON/Markdown으로 생성합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. Windows 배율을 반영한 DWM 데스크톱 캡처를 우선하고 `xwd`, Xlib 순으로 fallback하며 자동 경로는 포커스를 바꾸지 않습니다. `--print-window`는 가려진 OpenGL 창에서 이전 프레임 잔상이 섞일 수 있는 진단 전용 옵션입니다. `--allow-focus-steal`은 사용자가 다른 작업을 하지 않을 때 한 번만 명시적으로 허용해야 합니다.
@@ -58,7 +59,7 @@
 - `tools/build_ending_dialogue_probe_rom.py`: 재배치된 엔딩 방문 대사 23개를 83페이지 진단 스트림으로 연결해 실제 방문 대사 렌더러에서 전 페이지를 확인합니다. 선택 조건 자체를 증명하는 ROM은 아니며 생성 ROM과 manifest는 커밋하지 않습니다.
 - `tools/build_scenario27_ending_probe_rom.py`: 시나리오 27의 베른하르트를 엘윈 바로 위에 두고 능력치와 용병을 제한해 원작 결말·후일담 진입을 단축합니다. 피해 난수로 HP 1이 남을 수 있으므로 공격 직전 상태 저장 후 재시도해야 합니다. 두 프로브 ROM은 배포·커밋하지 않으며 구조와 사용 순서는 `docs/epilogue_probe.md`에 기록합니다.
 - `tools/build_title_save_probe_rom.py`: 타이틀의 LOAD 진입 두 곳만 원본 SAVE 렌더러로 돌리는 진단 ROM을 만들어 `저장`과 `다음 시나리오` 고정 레코드의 실제 소유권을 확인합니다. 정상 시나리오 클리어 작업 RAM이 없으므로 슬롯의 동적 숫자·스프라이트 품질 검증에는 사용하지 않습니다.
-- `tools/build_scenario1_clear_probe_rom.py`: 시나리오 1의 발드만 첫 플레이어 배치 슬롯 옆으로 옮기고 AT/DF와 용병을 제거한 진단 ROM을 만듭니다. 원본 이벤트·클리어·저장 렌더러는 건드리지 않으며 정상 클리어 뒤 결과 화면과 동적 저장 슬롯을 짧게 검증할 때만 사용합니다.
+- `tools/build_scenario1_clear_probe_rom.py`: 시나리오 1의 발드만 첫 플레이어 배치 슬롯 옆으로 옮기고 AT/DF와 용병을 제거한 진단 ROM을 만듭니다. `--runtime-defeat-bald`는 더 늦은 턴의 저장 동기화 검증을 위해 Start에서 발드 런타임 그룹만 패배 처리합니다. 두 모드 모두 원본 결과·클리어·저장 렌더러를 건드리지 않으며 비배포 검증에만 사용합니다.
 - `tools/build_scenario1_great_slime_status_probe_rom.py`: 위 시나리오 1 표시 대상에 일본판 시나리오 10의 실제 그레이트슬라임 이름·클래스 ID만 적용합니다. 작은 상태/전투 글꼴 충돌을 빠르게 재현하는 비배포 표시 진단이며 시나리오 진행 증거로 사용하지 않습니다.
 - `tools/build_scenario1_heavy_horseman_battle_probe_rom.py`: 일본판 시나리오 1 레아드의 실제 `0x7A` 헤비호스맨 두 명을 보존한 채 부대를 엘윈 근처에 두고 관계없는 적만 숨깁니다. 맵에서는 정상이나 전투에서만 `비`가 깨지던 타일 생명주기 회귀를 짧게 재현하는 비배포 진단입니다.
 - `tools/build_scenario2_escape_probe_rom.py`: 시나리오 2의 승리 조건인 `리아나 북쪽 도착`을 원본 이벤트로 빠르게 재현하기 위해 리아나의 고정 배치 Y 좌표만 `18→1`로 바꿉니다. 원본 헤더·배치표·리아나 레코드를 검증하고 이벤트 및 다른 필드는 건드리지 않습니다. 생성 ROM은 커밋하지 않으며 전과보고·저장·3장 진입까지 실기로 검증했습니다.
@@ -265,6 +266,7 @@ python3 tools/run_blastem_sequence.py shop
 - 시나리오 선택 비기의 시작 행은 항상 1이 아니라 선택한 수동 슬롯에 저장된 현재 시나리오입니다. 도구는 슬롯 1의 유효 비트와 체크섬을 확인하고 첫 워드의 시나리오 번호를 읽은 뒤 `--scenario-number`까지 필요한 `Up/Down`만 보냅니다. 선택 후 보이는 경로 지도에서 다음 `C`부터 설명 스크롤이 시작됩니다.
 - `launch-only`도 `load-screen` 격리 런타임을 보존하며 게임 입력을 전혀 보내지 않습니다. `--manual-slot-gst`는 GST 작업 RAM의 `0xA49C/0xBD6E/0xC7F2` 세 구간을 수동 슬롯 1로 직렬화하고 체크섬과 유효 비트를 다시 계산하므로, 빌드가 달라 이전 GST 자체를 직접 로드할 수 없을 때 사용합니다.
 - 복구한 수동 슬롯의 지휘관 진행도만 실험할 때는 `--runtime-name`으로 격리 폴더를 지정하고 `--manual-slot-commander-id 1 --manual-slot-level 9 --manual-slot-experience 16 --manual-slot-expected-class 0x01`을 함께 사용합니다. 필요하면 `--manual-slot-class`, `--manual-slot-at`, `--manual-slot-df`도 덧붙입니다. 24바이트 지휘관 레코드의 확인된 오프셋은 클래스 `+0`, 레벨 `+2`, EXP `+3`, AT `+4`, DF `+5`이며 도구는 원본 클래스와 `0..99` 능력치 범위를 검사하고 슬롯 체크섬을 다시 계산합니다. 준비/배치 중 런타임 동기화가 값을 되돌릴 수 있으므로 클래스 체인지 실기 확인에는 `tools/build_class_change_probe_rom.py`의 원본 핸들러 경로를 사용합니다.
+- checksum `B335`는 시나리오 1의 자연 활성 지휘관인 헤인이 원본 턴 종료 핸들러에서 `워록(03) -> 샤먼(0A)`으로 전직한 뒤 실제 결과·SAVE 경로를 거쳐 슬롯 1의 `시나리오 2`에 유지됨을 검증합니다. 저장된 헤인 레코드는 클래스 `0A`, LV1, EXP17, AT23, DF13이고 슬롯 체크섬은 `2330`입니다. `captures/analysis/b335_c5_s03_scenario2_save.sram`과 `tools/verify_class_change_persistence.py`가 이 경계를 고정합니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:

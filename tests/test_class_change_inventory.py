@@ -31,6 +31,10 @@ class ClassChangeInventoryTests(unittest.TestCase):
             self.result["forced_context_application_verified_transition_count"],
             2,
         )
+        self.assertEqual(
+            self.result["save_persistence_verified_transition_count"],
+            1,
+        )
 
         verified = [
             (commander["id"], transition)
@@ -148,6 +152,13 @@ class ClassChangeInventoryTests(unittest.TestCase):
             "captures/analysis/a8d7_c5_s03_after_turn.gst",
             by_key[(5, 0x03)]["evidence"],
         )
+        self.assertTrue(
+            by_key[(5, 0x03)]["save_persistence_verified"]
+        )
+        self.assertIn(
+            "captures/analysis/b335_c5_s03_scenario2_save.sram",
+            by_key[(5, 0x03)]["save_persistence_evidence"],
+        )
         forced_evidence = {
             (7, 0x01): "captures/analysis/715f_c7_s01_forced_apply.gst",
             (10, 0x03): (
@@ -171,6 +182,14 @@ class ClassChangeInventoryTests(unittest.TestCase):
                 self.assertFalse(transition["application_verified"])
                 self.assertEqual(
                     transition["application_evidence_type"], "pending"
+                )
+            if key != (5, 0x03):
+                self.assertFalse(
+                    transition["save_persistence_verified"]
+                )
+                self.assertEqual(
+                    transition["save_persistence_evidence"],
+                    [],
                 )
 
     def test_generated_files_match(self):

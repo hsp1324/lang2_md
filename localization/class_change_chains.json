@@ -8,6 +8,7 @@
   "application_verified_transition_count": 4,
   "natural_application_verified_transition_count": 2,
   "forced_context_application_verified_transition_count": 2,
+  "save_persistence_verified_transition_count": 1,
   "commanders": [
     {
       "id": 1,
@@ -42,6 +43,8 @@
           "live_verified": true,
           "application_verified": true,
           "application_evidence_type": "natural",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/d1d7_class_change_candidate1.png",
             "captures/run/d1d7_class_change_candidate2.png",
@@ -78,6 +81,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ea5_c1_s04_trigger.png",
             "captures/run/8ea5_c1_s04_candidate1.png",
@@ -113,6 +118,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ea1_c1_s05_trigger.png",
             "captures/run/8ea1_c1_s05_candidate1.png",
@@ -148,6 +155,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eae_c1_s0a_trigger.png",
             "captures/run/8eae_c1_s0a_candidate1.png",
@@ -183,6 +192,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8edb_c1_s12_trigger.png",
             "captures/run/8edb_c1_s12_candidate1.png",
@@ -218,6 +229,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed8_c1_s0b_trigger.png",
             "captures/run/8ed8_c1_s0b_candidate1.png",
@@ -253,6 +266,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed5_c1_s0c_trigger.png",
             "captures/run/8ed5_c1_s0c_candidate1.png",
@@ -288,6 +303,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed9_c1_s0d_trigger.png",
             "captures/run/8ed9_c1_s0d_candidate1.png",
@@ -323,6 +340,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed8_c1_s13_trigger.png",
             "captures/run/8ed8_c1_s13_candidate1.png",
@@ -348,6 +367,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb2_c1_s1a_trigger.png",
             "captures/run/8eb2_c1_s1a_candidate1.png"
@@ -388,6 +409,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e91_c2_s02_trigger.png",
             "captures/run/8e91_c2_s02_candidate1.png",
@@ -423,6 +446,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb4_c2_s0a_trigger.png",
             "captures/run/8eb4_c2_s0a_candidate1.png",
@@ -458,6 +483,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb1_c2_s08_trigger.png",
             "captures/run/8eb1_c2_s08_candidate1.png",
@@ -493,6 +520,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eab_c2_s04_trigger.png",
             "captures/run/8eab_c2_s04_candidate1.png",
@@ -528,6 +557,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed6_c2_s13_trigger.png",
             "captures/run/8ed6_c2_s13_candidate1.png",
@@ -563,6 +594,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed2_c2_s0d_trigger.png",
             "captures/run/8ed2_c2_s0d_candidate1.png",
@@ -598,6 +631,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ece_c2_s11_trigger.png",
             "captures/run/8ece_c2_s11_candidate1.png",
@@ -633,6 +668,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ece_c2_s12_trigger.png",
             "captures/run/8ece_c2_s12_candidate1.png",
@@ -668,6 +705,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ec8_c2_s0b_trigger.png",
             "captures/run/8ec8_c2_s0b_candidate1.png",
@@ -693,6 +732,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb8_c2_s19_trigger.png",
             "captures/run/8eb8_c2_s19_candidate1.png"
@@ -733,6 +774,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -763,6 +806,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -793,6 +838,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -823,6 +870,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -853,6 +902,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -883,6 +934,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -913,6 +966,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -943,6 +998,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -973,6 +1030,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -993,6 +1052,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         }
       ]
@@ -1030,6 +1091,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e90_c4_s01_trigger.png",
             "captures/run/8e90_c4_s01_candidate1.png",
@@ -1065,6 +1128,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ea7_c4_s04_trigger.png",
             "captures/run/8ea7_c4_s04_candidate1.png",
@@ -1100,6 +1165,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb0_c4_s06_trigger.png",
             "captures/run/8eb0_c4_s06_candidate1.png",
@@ -1135,6 +1202,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb9_c4_s0a_trigger.png",
             "captures/run/8eb9_c4_s0a_candidate1.png",
@@ -1170,6 +1239,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed7_c4_s0b_trigger.png",
             "captures/run/8ed7_c4_s0b_candidate1.png",
@@ -1205,6 +1276,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ee1_c4_s0e_trigger.png",
             "captures/run/8ee1_c4_s0e_candidate1.png",
@@ -1240,6 +1313,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ede_c4_s0f_trigger.png",
             "captures/run/8ede_c4_s0f_candidate1.png",
@@ -1275,6 +1350,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8edd_c4_s12_trigger.png",
             "captures/run/8edd_c4_s12_candidate1.png",
@@ -1310,6 +1387,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed4_c4_s13_trigger.png",
             "captures/run/8ed4_c4_s13_candidate1.png",
@@ -1335,6 +1414,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ebd_c4_s21_trigger.png",
             "captures/run/8ebd_c4_s21_candidate1.png"
@@ -1375,6 +1456,12 @@
           "live_verified": true,
           "application_verified": true,
           "application_evidence_type": "natural",
+          "save_persistence_verified": true,
+          "save_persistence_evidence": [
+            "captures/run/b335_c5_s03_scenario2_save.png",
+            "captures/analysis/b335_c5_s03_scenario2_save.gst",
+            "captures/analysis/b335_c5_s03_scenario2_save.sram"
+          ],
           "evidence": [
             "captures/run/8ef4_c5_s03_candidate1.png",
             "captures/run/8ef4_c5_s03_candidate2.png",
@@ -1411,6 +1498,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/analysis/903c_c5_s0a_trigger.png",
             "captures/run/903c_c5_s0a_candidate1.png",
@@ -1446,6 +1535,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/analysis/9037_c5_s09_trigger.png",
             "captures/run/9037_c5_s09_candidate1.png",
@@ -1481,6 +1572,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/analysis/902b_c5_s04_trigger.png",
             "captures/run/902b_c5_s04_candidate1.png",
@@ -1516,6 +1609,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/904f_c5_s11_trigger.png",
             "captures/run/904f_c5_s11_candidate1.png",
@@ -1551,6 +1646,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/904e_c5_s12_trigger.png",
             "captures/run/904e_c5_s12_candidate1.png",
@@ -1586,6 +1683,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/9050_c5_s13_trigger.png",
             "captures/run/9050_c5_s13_candidate1.png",
@@ -1621,6 +1720,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/904e_c5_s0d_trigger.png",
             "captures/run/904e_c5_s0d_candidate1.png",
@@ -1656,6 +1757,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/9052_c5_s0b_trigger.png",
             "captures/run/9052_c5_s0b_candidate1.png",
@@ -1681,6 +1784,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/9037_c5_s15_trigger.png",
             "captures/run/9037_c5_s15_candidate1.png"
@@ -1721,6 +1826,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e8d_c6_s01_trigger.png",
             "captures/run/8e8d_c6_s01_candidate1.png",
@@ -1756,6 +1863,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eab_c6_s06_trigger.png",
             "captures/run/8eab_c6_s06_candidate1.png",
@@ -1791,6 +1900,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eac_c6_s05_trigger.png",
             "captures/run/8eac_c6_s05_candidate1.png",
@@ -1826,6 +1937,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ea9_c6_s04_trigger.png",
             "captures/run/8ea9_c6_s04_candidate1.png",
@@ -1861,6 +1974,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ee3_c6_s0f_trigger.png",
             "captures/run/8ee3_c6_s0f_candidate1.png",
@@ -1896,6 +2011,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ede_c6_s0d_trigger.png",
             "captures/run/8ede_c6_s0d_candidate1.png",
@@ -1931,6 +2048,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed9_c6_s0c_trigger.png",
             "captures/run/8ed9_c6_s0c_candidate1.png",
@@ -1966,6 +2085,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eda_c6_s11_trigger.png",
             "captures/run/8eda_c6_s11_candidate1.png",
@@ -2001,6 +2122,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed0_c6_s0b_trigger.png",
             "captures/run/8ed0_c6_s0b_candidate1.png",
@@ -2026,6 +2149,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ebf_c6_s1b_trigger.png",
             "captures/run/8ebf_c6_s1b_candidate1.png"
@@ -2066,6 +2191,8 @@
           "live_verified": true,
           "application_verified": true,
           "application_evidence_type": "forced_context",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e91_c7_s01_trigger.png",
             "captures/run/8e91_c7_s01_candidate1.png",
@@ -2106,6 +2233,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ea9_c7_s04_trigger.png",
             "captures/run/8ea9_c7_s04_candidate1.png",
@@ -2141,6 +2270,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb2_c7_s06_trigger.png",
             "captures/run/8eb2_c7_s06_candidate1.png",
@@ -2176,6 +2307,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb8_c7_s08_trigger.png",
             "captures/run/8eb8_c7_s08_candidate1.png",
@@ -2211,6 +2344,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed3_c7_s0b_trigger.png",
             "captures/run/8ed3_c7_s0b_candidate1.png",
@@ -2246,6 +2381,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8edc_c7_s0d_trigger.png",
             "captures/run/8edc_c7_s0d_candidate1.png",
@@ -2281,6 +2418,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2311,6 +2450,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2341,6 +2482,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed7_c7_s11_trigger.png",
             "captures/run/8ed7_c7_s11_candidate1.png",
@@ -2366,6 +2509,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ebe_c7_s1e_trigger.png",
             "captures/run/8ebe_c7_s1e_candidate1.png"
@@ -2406,6 +2551,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2436,6 +2583,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2466,6 +2615,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2496,6 +2647,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2526,6 +2679,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed8_c8_s12_trigger.png",
             "captures/run/8ed8_c8_s12_candidate1.png",
@@ -2561,6 +2716,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -2591,6 +2748,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed9_c8_s0c_trigger.png",
             "captures/run/8ed9_c8_s0c_candidate1.png",
@@ -2626,6 +2785,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8edc_c8_s0d_trigger.png",
             "captures/run/8edc_c8_s0d_candidate1.png",
@@ -2661,6 +2822,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8edd_c8_s13_trigger.png",
             "captures/run/8edd_c8_s13_candidate1.png",
@@ -2686,6 +2849,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eba_c8_s1a_trigger.png",
             "captures/run/8eba_c8_s1a_candidate1.png"
@@ -2726,6 +2891,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e97_c9_s01_trigger.png",
             "captures/run/8e97_c9_s01_candidate1.png",
@@ -2761,6 +2928,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eae_c9_s05_trigger.png",
             "captures/run/8eae_c9_s05_candidate1.png",
@@ -2796,6 +2965,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb6_c9_s07_trigger.png",
             "captures/run/8eb6_c9_s07_candidate1.png",
@@ -2831,6 +3002,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ebf_c9_s0a_trigger.png",
             "captures/run/8ebf_c9_s0a_candidate1.png",
@@ -2866,6 +3039,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ee0_c9_s0c_trigger.png",
             "captures/run/8ee0_c9_s0c_candidate1.png",
@@ -2901,6 +3076,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ee5_c9_s0d_trigger.png",
             "captures/run/8ee5_c9_s0d_candidate1.png",
@@ -2936,6 +3113,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/d221_c9_s10_candidate1.png",
             "captures/run/d221_c9_s10_candidate2.png",
@@ -2970,6 +3149,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8edf_c9_s12_trigger.png",
             "captures/run/8edf_c9_s12_candidate1.png",
@@ -3005,6 +3186,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ed5_c9_s13_trigger.png",
             "captures/run/8ed5_c9_s13_candidate1.png",
@@ -3030,6 +3213,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ec7_c9_s1f_trigger.png",
             "captures/run/8ec7_c9_s1f_candidate1.png"
@@ -3070,6 +3255,8 @@
           "live_verified": true,
           "application_verified": true,
           "application_evidence_type": "forced_context",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e99_c10_s03_trigger.png",
             "captures/run/8e99_c10_s03_candidate1.png",
@@ -3109,6 +3296,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8ebf_c10_s08_trigger.png",
             "captures/run/8ebf_c10_s08_candidate1.png",
@@ -3144,6 +3333,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3174,6 +3365,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3204,6 +3397,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3234,6 +3429,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3264,6 +3461,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3294,6 +3493,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3324,6 +3525,8 @@
           "live_verified": false,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": []
         },
         {
@@ -3344,6 +3547,8 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
+          "save_persistence_verified": false,
+          "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb9_c10_s14_trigger.png",
             "captures/run/8eb9_c10_s14_candidate1.png"

@@ -15,12 +15,18 @@ class Scenario1ClearProbeRomTests(unittest.TestCase):
         cls.source = (ROOT / builder.IN_ROM).read_bytes()
         cls.built = (ROOT / builder.OUT_ROM).read_bytes()
 
-    def patched(self, *, protagonist_death: bool = False) -> bytearray:
+    def patched(
+        self,
+        *,
+        protagonist_death: bool = False,
+        runtime_defeat_bald: bool = False,
+    ) -> bytearray:
         data = bytearray(self.built)
         probe_builder.patch_probe(
             data,
             self.source,
             protagonist_death=protagonist_death,
+            runtime_defeat_bald=runtime_defeat_bald,
         )
         return data
 
@@ -188,6 +194,53 @@ class Scenario1ClearProbeRomTests(unittest.TestCase):
         ) & 0xFFFF
         self.assertEqual(builder.be16(data, 0x18E), expected)
         self.assertEqual(expected, 0xD87E)
+
+    def test_runtime_defeat_wrapper_targets_only_live_bald_group(self):
+        data = self.patched(runtime_defeat_bald=True)
+        code = probe_builder.bald_defeat_wrapper_code()
+        bald_record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.RUNTIME_BALD_GROUP_INDEX
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (bald_record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4, "big"
+            ),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 00")
+            + (bald_record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 FF")
+            + (bald_record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.RUNTIME_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.RUNTIME_WRAPPER :
+                probe_builder.RUNTIME_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+    def test_probe_modes_are_mutually_exclusive(self):
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            self.patched(
+                protagonist_death=True,
+                runtime_defeat_bald=True,
+            )
 
 
 if __name__ == "__main__":

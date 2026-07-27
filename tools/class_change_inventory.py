@@ -436,6 +436,13 @@ FORCED_CONTEXT_APPLICATION_VERIFIED = {(7, 0x01), (10, 0x03)}
 APPLICATION_VERIFIED = (
     NATURAL_APPLICATION_VERIFIED | FORCED_CONTEXT_APPLICATION_VERIFIED
 )
+SAVE_PERSISTENCE_EVIDENCE = {
+    (5, 0x03): [
+        "captures/run/b335_c5_s03_scenario2_save.png",
+        "captures/analysis/b335_c5_s03_scenario2_save.gst",
+        "captures/analysis/b335_c5_s03_scenario2_save.sram",
+    ],
+}
 
 
 def transition_signature(
@@ -478,6 +485,7 @@ def inventory(source: bytes) -> dict[str, object]:
             key = (commander_id, transition.current_class)
             live_verified = key in LIVE_EVIDENCE
             application_verified = key in APPLICATION_VERIFIED
+            save_persistence_verified = key in SAVE_PERSISTENCE_EVIDENCE
             if key in NATURAL_APPLICATION_VERIFIED:
                 application_evidence_type = "natural"
             elif key in FORCED_CONTEXT_APPLICATION_VERIFIED:
@@ -493,6 +501,10 @@ def inventory(source: bytes) -> dict[str, object]:
                     "live_verified": live_verified,
                     "application_verified": application_verified,
                     "application_evidence_type": application_evidence_type,
+                    "save_persistence_verified": save_persistence_verified,
+                    "save_persistence_evidence": SAVE_PERSISTENCE_EVIDENCE.get(
+                        key, []
+                    ),
                     "evidence": LIVE_EVIDENCE.get(key, []),
                 }
             )
@@ -536,6 +548,11 @@ def inventory(source: bytes) -> dict[str, object]:
             for commander in commanders
             for transition in commander["transitions"]
         ),
+        "save_persistence_verified_transition_count": sum(
+            transition["save_persistence_verified"]
+            for commander in commanders
+            for transition in commander["transitions"]
+        ),
         "commanders": commanders,
     }
 
@@ -559,6 +576,8 @@ def markdown_report(result: dict[str, object]) -> str:
         f"{result['natural_application_verified_transition_count']}",
         "- Forced-context diagnostic application proofs: "
         f"{result['forced_context_application_verified_transition_count']}",
+        "- Normal scenario-clear save-persistence proofs: "
+        f"{result['save_persistence_verified_transition_count']}",
         "",
     ]
     for commander in result["commanders"]:
@@ -568,8 +587,8 @@ def markdown_report(result: dict[str, object]) -> str:
                 "",
                 f"Source pointer: `{commander['pointer']}`",
                 "",
-                "| Offset | Current | Candidates | Screen | Apply |",
-                "| --- | --- | --- | --- | --- |",
+                "| Offset | Current | Candidates | Screen | Apply | Save |",
+                "| --- | --- | --- | --- | --- | --- |",
             ]
         )
         for transition in commander["transitions"]:
@@ -581,9 +600,14 @@ def markdown_report(result: dict[str, object]) -> str:
             )
             live = "yes" if transition["live_verified"] else "pending"
             applied = transition["application_evidence_type"].replace("_", "-")
+            saved = (
+                "yes"
+                if transition["save_persistence_verified"]
+                else "pending"
+            )
             lines.append(
                 f"| `{transition['offset']}` | {current_label} | "
-                f"{candidate_label} | {live} | {applied} |"
+                f"{candidate_label} | {live} | {applied} | {saved} |"
             )
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"

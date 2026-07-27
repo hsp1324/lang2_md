@@ -44,9 +44,11 @@ START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 RUNTIME_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
+RUNTIME_GROUP_SIZE = 0x60
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
+RUNTIME_BALD_GROUP_INDEX = PLAYER_DEPLOYMENT_COUNT + BALD_RECORD_INDEX
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -102,6 +104,22 @@ def protagonist_death_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def bald_defeat_wrapper_code() -> bytes:
+    record = RUNTIME_GROUP_BASE + RUNTIME_BALD_GROUP_INDEX * RUNTIME_GROUP_SIZE
+    code = bytearray()
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend((record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def install_start_wrapper(
     probe: bytearray,
     source: bytes,
@@ -148,7 +166,10 @@ def patch_probe(
     source: bytes,
     *,
     protagonist_death: bool = False,
+    runtime_defeat_bald: bool = False,
 ) -> int:
+    if protagonist_death and runtime_defeat_bald:
+        raise ValueError("probe modes are mutually exclusive")
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     if protagonist_death:
@@ -169,6 +190,12 @@ def patch_probe(
         probe[base + FIELD_OFFSETS["y"]] = PROBE_BALD_Y
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+        if runtime_defeat_bald:
+            install_start_wrapper(
+                probe,
+                source,
+                bald_defeat_wrapper_code(),
+            )
     return builder.update_md_checksum(probe)
 
 
@@ -190,6 +217,14 @@ def parse_args() -> argparse.Namespace:
             "only runtime player group 0 defeated through Start"
         ),
     )
+    parser.add_argument(
+        "--runtime-defeat-bald",
+        action="store_true",
+        help=(
+            "mark only the live Bald group defeated through Start so a "
+            "later-turn persistence probe can enter the stock clear path"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -201,6 +236,7 @@ def main() -> int:
         probe,
         source,
         protagonist_death=args.protagonist_death,
+        runtime_defeat_bald=args.runtime_defeat_bald,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -218,6 +254,11 @@ def main() -> int:
             f"Scenario 1 Bald: ({PROBE_BALD_X},{PROBE_BALD_Y}), "
             "AT 0, DF 0, no mercenaries"
         )
+        if args.runtime_defeat_bald:
+            print(
+                "Start marks only the live Bald group defeated before opening "
+                "the stock Start menu"
+            )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0
