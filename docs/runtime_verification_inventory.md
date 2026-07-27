@@ -2271,7 +2271,7 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/ea22_debug_magic_page4.png`
   - `captures/run/d177_debug_summon_page1.png`
   - `captures/run/d177_debug_summon_page2.png`
-- `magic_targeting_results`: probe checksum `49A2/797C/E72D` (base `AD01/1AB2`). AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10. Final-1AB2-derived E72D uses the same source-locked target placement and all-magic branches to prove representative application paths on all four magic-list pages. 블래스트 selects Bald, spends Hein MP 12->2, renders the four Korean combat pages and Laird's post-effect page, drains both upper and lower portrait-dialogue positions, and returns stably to the map. 파이어볼 damages Bald from HP 10 to 9 and spends Hein MP 12->10. 힐1 selects an allied target and spends MP 12->10. 슬립 selects Bald, renders the distortion effect and status icon, and spends MP 12->10. 참 selects Bald, renders the allegiance-color change, and spends MP 12->6. Every accepted path retains 헤인/워록 and the surrounding status UI, then returns stably to the map. Two earlier Blast captures that stopped on a remaining or newly opened portrait window were rejected and led to regression-locked wide-dialogue and consecutive-clear checks. The all-magic runs are renderer/application evidence, not production ownership evidence.
+- `magic_targeting_results`: probe checksum `49A2/797C/E72D` (base `AD01/1AB2`). AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10. Final-1AB2-derived E72D uses the same source-locked target placement and all-magic branches to prove representative application paths on all four magic-list pages. 블래스트 selects Bald, spends Hein MP 12->2, renders the four Korean combat pages and Laird's post-effect page, drains both upper and lower portrait-dialogue positions, and returns stably to the map. 썬더 damages Bald from HP 10 to 7 and spends Hein MP 12->8. 파이어볼 damages Bald from HP 10 to 9 and spends Hein MP 12->10. 메테오 damages Bald from HP 10 to 4 and spends Hein MP 12->4. 블리져드 renders its map effect and spends Hein MP 12->9. 토네이도 renders its map effect and spends Hein MP 12->10. 힐1 selects an allied target and spends MP 12->10. 슬립 selects Bald, renders the distortion effect and status icon, and spends MP 12->10. 참 selects Bald, renders the allegiance-color change, and spends MP 12->6. Every accepted path retains 헤인/워록 and the surrounding status UI, then returns stably to the map. Two earlier Blast captures that stopped on a remaining or newly opened portrait window were rejected and led to regression-locked wide-dialogue and consecutive-clear checks. A missed Blizzard row and a target-screen false positive were rejected and led to regression-locked magic-list cursor detection and correction. The capture runner now defaults to isolated Xvfb display :104 with software rendering and Xlib capture; the physical desktop requires an explicit opt-in. The all-magic runs are renderer/application evidence, not production ownership evidence.
   - `captures/run/49a2_magic_00_selected.png`
   - `captures/run/49a2_magic_00_target.png`
   - `captures/run/49a2_magic_00_event_01.png`
@@ -2292,11 +2292,23 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/e72d_magic_01_event_04.png`
   - `captures/run/e72d_magic_01_post_event_02.png`
   - `captures/run/e72d_magic_01_result_stable.png`
+  - `captures/run/e72d_magic_02_selected.png`
+  - `captures/run/e72d_magic_02_target.png`
+  - `captures/run/e72d_magic_02_result_stable.png`
   - `captures/run/e72d_magic_03_hein_command.png`
   - `captures/run/e72d_magic_03_selected.png`
   - `captures/run/e72d_magic_03_target.png`
   - `captures/run/e72d_magic_03_result.png`
   - `captures/run/e72d_magic_03_result_stable.png`
+  - `captures/run/e72d_magic_04_selected.png`
+  - `captures/run/e72d_magic_04_target.png`
+  - `captures/run/e72d_magic_04_result_stable.png`
+  - `captures/run/e72d_magic_05_selected.png`
+  - `captures/run/e72d_magic_05_target.png`
+  - `captures/run/e72d_magic_05_result_stable.png`
+  - `captures/run/e72d_magic_06_selected.png`
+  - `captures/run/e72d_magic_06_target.png`
+  - `captures/run/e72d_magic_06_result_stable.png`
   - `captures/run/e72d_magic_09_selected.png`
   - `captures/run/e72d_magic_09_target.png`
   - `captures/run/e72d_magic_09_result_stable.png`

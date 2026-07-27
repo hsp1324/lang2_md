@@ -38,15 +38,21 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e72d_magic_03_result_stable.png",
             evidence["captures"],
         )
-        for magic_id in (9, 13, 21):
+        for magic_id in (2, 4, 5, 6, 9, 13, 21):
             self.assertIn(
                 f"captures/run/e72d_magic_{magic_id:02d}_result_stable.png",
                 evidence["captures"],
             )
         self.assertIn("all four magic-list pages", evidence["note"])
+        self.assertIn("썬더 damages Bald from HP 10 to 7", evidence["note"])
+        self.assertIn("메테오 damages Bald from HP 10 to 4", evidence["note"])
+        self.assertIn("블리져드 renders its map effect", evidence["note"])
+        self.assertIn("토네이도 renders its map effect", evidence["note"])
         self.assertIn("allegiance-color change", evidence["note"])
         self.assertIn("블래스트 selects Bald", evidence["note"])
         self.assertIn("consecutive-clear checks", evidence["note"])
+        self.assertIn("magic-list cursor detection", evidence["note"])
+        self.assertIn("isolated Xvfb display :104", evidence["note"])
 
     def test_summon_application_evidence_is_diagnostic(self):
         data = inventory.load_inventory()

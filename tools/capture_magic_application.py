@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -44,6 +45,13 @@ DIALOGUE_SCAN_X_RANGE = range(15, 305)
 DIALOGUE_SCAN_Y_RANGE = range(45, 195)
 DIALOGUE_MIN_WIDE_BLUE_PIXELS = 200
 DIALOGUE_MIN_WIDE_BLUE_ROWS = 20
+MAGIC_CURSOR_X_RANGE = range(34, 53)
+MAGIC_CURSOR_Y_STARTS = (25, 43, 61, 79, 97, 115)
+MAGIC_CURSOR_ROW_HEIGHT = 16
+MAGIC_CURSOR_MIN_SCORE = 8
+MAGIC_CURSOR_MAX_RUNNER_UP_RATIO = 0.7
+DEFAULT_VIRTUAL_DISPLAY = os.environ.get("BLASTEM_VIRTUAL_DISPLAY", ":104")
+XLIB_ONLY_CAPTURE = False
 
 
 def magic_position(magic_id: int) -> tuple[int, int]:
@@ -67,6 +75,54 @@ def runtime_mp(gst: bytes, runtime_record_index: int = HEIN_RUNTIME_RECORD) -> t
     if len(gst) < end:
         raise ValueError("GST is too short to contain the runtime record")
     return gst[offset + CURRENT_MP_OFFSET], gst[offset + MAX_MP_OFFSET]
+
+
+def list_cursor_scores(path: Path) -> list[int]:
+    image = Image.open(path).convert("RGB")
+    scores = []
+    for start_y in MAGIC_CURSOR_Y_STARTS:
+        score = 0
+        for y in range(start_y, start_y + MAGIC_CURSOR_ROW_HEIGHT):
+            for x in MAGIC_CURSOR_X_RANGE:
+                red, green, blue = image.getpixel((x, y))
+                if max(red, green, blue) - min(red, green, blue) < 40:
+                    if red + green + blue > 300:
+                        score += 1
+        scores.append(score)
+    return scores
+
+
+def selected_list_row(path: Path) -> int:
+    scores = list_cursor_scores(path)
+    selected = max(range(len(scores)), key=scores.__getitem__)
+    if scores[selected] < MAGIC_CURSOR_MIN_SCORE:
+        raise RuntimeError(f"magic list cursor not detected: scores={scores}")
+    runner_up = sorted(scores)[-2]
+    if runner_up >= scores[selected] * MAGIC_CURSOR_MAX_RUNNER_UP_RATIO:
+        raise RuntimeError(f"magic list cursor is ambiguous: scores={scores}")
+    return selected
+
+
+def correct_selected_row(prefix: Path, expected_row: int) -> Path:
+    selected_path = Path(f"{prefix}_selected.png")
+    for attempt in range(8):
+        attempt_path = Path(f"{prefix}_selected_attempt_{attempt + 1:02d}.png")
+        capture(attempt_path)
+        actual_row = selected_list_row(attempt_path)
+        if actual_row == expected_row:
+            shutil.copy2(attempt_path, selected_path)
+            return selected_path
+        direction = "down" if actual_row < expected_row else "up"
+        send_keys(f"{direction}@0.02:0.55")
+        print(
+            f"correcting magic cursor row {actual_row + 1} "
+            f"to {expected_row + 1} (attempt {attempt + 1})",
+            flush=True,
+        )
+    raise RuntimeError(
+        f"magic cursor row mismatch after 8 attempts: "
+        f"expected {expected_row + 1}"
+    )
 
 
 def quicksave_path(runtime_name: str) -> Path:
@@ -124,8 +180,17 @@ def send_steps(keys: list[str] | tuple[str, ...]) -> None:
 
 def capture(path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    run([sys.executable, str(CAPTURE_WINDOW), str(path)])
+    command = [sys.executable, str(CAPTURE_WINDOW), str(path)]
+    if XLIB_ONLY_CAPTURE:
+        command.append("--xlib-only")
+    run(command)
     return path
+
+
+def sequence_display_args(desktop_display: bool) -> list[str]:
+    if desktop_display:
+        return []
+    return ["--xlib-capture", "--software-renderer"]
 
 
 def parse_args() -> argparse.Namespace:
@@ -192,11 +257,44 @@ def parse_args() -> argparse.Namespace:
         help="maximum inserted event-dialogue pages to advance before MP changes",
     )
     parser.add_argument("--max-confirmations", type=int, default=40)
+    parser.add_argument(
+        "--virtual-display",
+        default=DEFAULT_VIRTUAL_DISPLAY,
+        help=(
+            "isolated Xvfb display used by default; override with "
+            "BLASTEM_VIRTUAL_DISPLAY or this option"
+        ),
+    )
+    parser.add_argument(
+        "--desktop-display",
+        action="store_true",
+        help=(
+            "explicit opt-in to the caller's current desktop display; never "
+            "use while the user is working"
+        ),
+    )
+    parser.add_argument(
+        "--no-launch",
+        action="store_true",
+        help=(
+            "resume an existing isolated BlastEm instance already stopped at "
+            "Elwin's battle command menu"
+        ),
+    )
     return parser.parse_args()
 
 
 def main() -> int:
+    global XLIB_ONLY_CAPTURE
     args = parse_args()
+    if not args.desktop_display:
+        os.environ["DISPLAY"] = args.virtual_display
+        XLIB_ONLY_CAPTURE = True
+        print(
+            f"isolated virtual display {args.virtual_display}; "
+            "software renderer and Xlib capture enabled",
+            flush=True,
+        )
     if args.stock_magic and args.magic_id != 0:
         raise ValueError("stock Hein magic verification supports only magic ID 0")
     page, row = magic_position(args.magic_id)
@@ -228,8 +326,8 @@ def main() -> int:
         flush=True,
     )
     try:
-        run(
-            [
+        if not args.no_launch:
+            sequence_command = [
                 sys.executable,
                 str(RUN_SEQUENCE),
                 "battle-command",
@@ -246,7 +344,8 @@ def main() -> int:
                 "--confirmation-delay",
                 str(args.confirmation_delay),
             ]
-        )
+            sequence_command.extend(sequence_display_args(args.desktop_display))
+            run(sequence_command)
         # Elwin (11,17) is selected. Hein is at (13,20).
         send_keys("b:0.5")
         # Reach Hein without crossing diagnostic Bald at (13,19). A missed
@@ -261,7 +360,7 @@ def main() -> int:
         send_keys("c:0.7")
         send_steps(["right@0.02:0.4"] * page)
         send_steps(["down@0.02:0.35"] * row)
-        capture(Path(f"{prefix}_selected.png"))
+        correct_selected_row(prefix, row)
         send_keys("c:1.0")
         capture(Path(f"{prefix}_target_or_result.png"))
 

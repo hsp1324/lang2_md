@@ -48,6 +48,42 @@ class CaptureMagicApplicationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "too short"):
             capture_tool.runtime_mp(b"")
 
+    def test_detects_each_magic_list_cursor_row(self):
+        with TemporaryDirectory() as directory:
+            for expected_row, start_y in enumerate(
+                capture_tool.MAGIC_CURSOR_Y_STARTS
+            ):
+                with self.subTest(expected_row=expected_row):
+                    image = Image.new("RGB", (320, 240), (0, 0, 80))
+                    for x in range(36, 44):
+                        for y in range(start_y + 5, start_y + 7):
+                            image.putpixel((x, y), (220, 220, 220))
+                    path = Path(directory) / f"row-{expected_row}.png"
+                    image.save(path)
+                    self.assertEqual(
+                        capture_tool.selected_list_row(path),
+                        expected_row,
+                    )
+
+    def test_rejects_capture_without_magic_list_cursor(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "blank.png"
+            Image.new("RGB", (320, 240), (0, 0, 80)).save(path)
+            with self.assertRaisesRegex(RuntimeError, "cursor not detected"):
+                capture_tool.selected_list_row(path)
+
+    def test_rejects_ambiguous_non_list_cursor_pattern(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "ambiguous.png"
+            image = Image.new("RGB", (320, 240), (0, 0, 80))
+            for start_y in capture_tool.MAGIC_CURSOR_Y_STARTS[:2]:
+                for x in range(36, 44):
+                    for y in range(start_y + 5, start_y + 7):
+                        image.putpixel((x, y), (220, 220, 220))
+            image.save(path)
+            with self.assertRaisesRegex(RuntimeError, "is ambiguous"):
+                capture_tool.selected_list_row(path)
+
     def test_quicksave_path_requires_exactly_one_state(self):
         with TemporaryDirectory() as directory:
             with patch.object(capture_tool, "RUNTIME_ROOT", Path(directory)):
@@ -110,6 +146,36 @@ class CaptureMagicApplicationTests(unittest.TestCase):
         self.assertEqual(capture_tool.DEFAULT_FINAL_CONFIRMATIONS, 2)
         self.assertEqual(capture_tool.POST_EFFECT_SETTLE_DELAY, 1.2)
         self.assertEqual(capture_tool.POST_EFFECT_CLEAR_CHECKS, 2)
+
+    def test_virtual_display_is_the_default_transport(self):
+        self.assertEqual(capture_tool.DEFAULT_VIRTUAL_DISPLAY, ":104")
+        self.assertEqual(
+            capture_tool.sequence_display_args(desktop_display=False),
+            ["--xlib-capture", "--software-renderer"],
+        )
+        self.assertEqual(
+            capture_tool.sequence_display_args(desktop_display=True),
+            [],
+        )
+
+    def test_virtual_capture_uses_xlib_only(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "capture.png"
+            previous = capture_tool.XLIB_ONLY_CAPTURE
+            try:
+                capture_tool.XLIB_ONLY_CAPTURE = True
+                with patch.object(capture_tool, "run") as run:
+                    capture_tool.capture(path)
+                run.assert_called_once_with(
+                    [
+                        capture_tool.sys.executable,
+                        str(capture_tool.CAPTURE_WINDOW),
+                        str(path),
+                        "--xlib-only",
+                    ]
+                )
+            finally:
+                capture_tool.XLIB_ONLY_CAPTURE = previous
 
     def test_send_steps_reactivates_for_each_input(self):
         with patch.object(capture_tool, "send_keys") as send:

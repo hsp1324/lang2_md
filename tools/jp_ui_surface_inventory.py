@@ -631,8 +631,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "ending and credits UI variants outside the verified Scenario 27, "
             "all-epilogue, ending-visit, and final-credit paths",
             "magic targeting and result paths beyond the production-faithful "
-            "Magic Arrow and diagnostic Attack, Blast, Fireball, Heal, Sleep, "
-            "and Charm probes; natural summon ownership and the production 15-MP 형님 "
+            "Magic Arrow and diagnostic Attack, Blast, Thunder, Fireball, Meteor, "
+            "Blizzard, Tornado, Heal, Sleep, and Charm probes; natural summon "
+            "ownership and the production 15-MP 형님 "
             "application path beyond source-locked table validation and the "
             "all-eight diagnostic renderer/application probes",
             "ownership and purpose of 425 compressed resources beyond byte-font "
