@@ -137,6 +137,8 @@ def build_inventory(
     scenarios = []
     all_sides: Counter[int] = Counter()
     all_mercenaries: Counter[int] = Counter()
+    hidden_fixed_records = 0
+    hidden_enemy_fixed_records = 0
     for number in range(1, SCENARIO_COUNT + 1):
         model = read_scenario(source, source, number)
         records = list(model["records"])
@@ -144,7 +146,12 @@ def build_inventory(
         side_counts = Counter(int(row["side_id"]) for row in records)
         mercenary_counts: Counter[int] = Counter()
         for row in records:
-            all_sides[int(row["side_id"])] += 1
+            side_id = int(row["side_id"])
+            all_sides[side_id] += 1
+            if bool(row["hidden"]):
+                hidden_fixed_records += 1
+                if side_id == 0x04:
+                    hidden_enemy_fixed_records += 1
             for class_id in row["mercenaries"]:
                 if int(class_id) != 0xFF:
                     mercenary_counts[int(class_id)] += 1
@@ -184,7 +191,7 @@ def build_inventory(
         })
 
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -228,6 +235,15 @@ def build_inventory(
                 ),
                 "scope": "global_per_class",
             },
+            "reinforcement_model": {
+                "hidden_fixed_records_included": True,
+                "total_hidden_fixed_records": hidden_fixed_records,
+                "hidden_enemy_fixed_records": hidden_enemy_fixed_records,
+                "hidden_non_enemy_fixed_records": (
+                    hidden_fixed_records - hidden_enemy_fixed_records
+                ),
+                "runtime_event_rewrites_require_audit": True,
+            },
             "hard_mode_implementation_rule": {
                 "commander_stats": (
                     "patch fixed-record signed modifiers after approval"
@@ -238,10 +254,78 @@ def build_inventory(
                     "applied after the fixed-record loader"
                 ),
                 "dynamic_event_spawns": (
-                    "not represented by the 340 fixed records and must be "
-                    "inventoried separately before scenario approval"
+                    "all 63 hidden fixed records, including 53 side-04 enemy "
+                    "records, are represented by the 340 fixed records; event "
+                    "handlers can reveal or rewrite runtime records, so known "
+                    "rewrites and any true non-fixed spawns require an explicit "
+                    "exception audit before scenario approval"
                 ),
             },
+            "known_runtime_exceptions": [
+                {
+                    "scenario": 22,
+                    "kind": "special_faction_ownership",
+                    "side_08_record_count": 10,
+                    "hidden_boss": {
+                        "offset": "0x182822",
+                        "side_id": "04",
+                        "name_korean": "베른하르트",
+                        "class_id": "4E",
+                        "class_korean": "엠퍼러",
+                    },
+                    "rule": (
+                        "do not assign the ten side-08 records an enemy hard-mode "
+                        "formula until the user approves their ownership"
+                    ),
+                },
+                {
+                    "scenario": 25,
+                    "kind": "allied_runtime_class_rewrite",
+                    "fixed_record": {
+                        "offset": "0x182D62",
+                        "side_id": "03",
+                        "name_korean": "제시카",
+                        "class_id": "03",
+                        "class_korean": "워록",
+                    },
+                    "verified_runtime_result": {
+                        "class_id": "09",
+                        "class_korean": "소서러",
+                        "level": 5,
+                        "at": 29,
+                        "df": 17,
+                    },
+                    "rule": (
+                        "always exclude allied Jessica from enemy hard-mode "
+                        "bonuses even after the event rewrites her runtime record"
+                    ),
+                },
+                {
+                    "scenario": 30,
+                    "kind": "two_phase_boss",
+                    "phases": [
+                        {
+                            "offset": "0x183724",
+                            "side_id": "04",
+                            "hidden": False,
+                            "class_id": "3F",
+                            "class_korean": "메이지",
+                        },
+                        {
+                            "offset": "0x183748",
+                            "side_id": "04",
+                            "hidden": True,
+                            "class_id": "48",
+                            "class_korean": "세인트",
+                        },
+                    ],
+                    "rule": (
+                        "treat both Mina records as one transformation route and "
+                        "apply the approved boss rule per phase without accidental "
+                        "stacking"
+                    ),
+                },
+            ],
             "editable_fields_after_approval": [
                 "level",
                 "at",
@@ -323,8 +407,11 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "- 승인 후에는 확장 ROM에 시나리오·배치별 적 전용 병사 보정표를",
         "  두고 고정 배치 로더 직후에만 적용한다. 일반 한국어판과 원본",
         "  클래스 표는 그대로 보존한다.",
-        "- 아래 340개는 고정 배치만 포함한다. 턴 이벤트로 생성되는 지원군과",
-        "  증원은 별도 소유권 조사 후 같은 승인표에 추가해야 한다.",
+        "- 아래 340개에는 처음에 숨겨진 고정 레코드 63개도 포함된다.",
+        "  그중 53개는 적군 진영 `04`다. 원판의 증원 대부분은 새 레코드를",
+        "  생성하지 않고 이 숨김 레코드를 이벤트로 공개한다.",
+        "- 이벤트가 런타임 레코드의 클래스나 진영을 다시 쓰는 경우와 실제",
+        "  비고정 생성이 있는지는 시나리오별 예외로 계속 감사한다.",
         "",
         "## 일본 원판 시나리오 분포",
         "",
@@ -352,7 +439,18 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "",
         "시나리오 22는 고정 레코드상 적군 진영 `04`가 1개뿐이고 특수 진영",
         "`08`이 10개다. 따라서 단순히 `04`에만 일괄 공식을 적용하면 주요",
-        "배치를 놓칠 수 있으며, 시나리오별 예외 검토가 필요하다.",
+        "배치를 놓칠 수 있다. 이 10개의 소유권은 사용자 승인 전까지 미정이다.",
+        "",
+        "## 확인된 이벤트 예외",
+        "",
+        "- 시나리오 22: `08` 진영 10개와 숨김 베른하르트/엠퍼러",
+        "  (`0x182822`, 진영 `04`)를 분리해 다룬다.",
+        "- 시나리오 25: 고정 레코드 `0x182D62`의 아군 제시카/워록은",
+        "  이벤트 후 런타임에서 소서러 LV5, AT29, DF17로 바뀐다. 런타임",
+        "  변경 뒤에도 적군 하드 모드 보너스 대상에서 제외한다.",
+        "- 시나리오 30: `0x183724` 메이지와 숨김 `0x183748` 세인트는",
+        "  미나의 2단계 변신 경로다. 별개의 보스로 중복 계산하지 않고,",
+        "  승인된 보스 규칙을 각 단계에 의도한 만큼만 적용한다.",
         "",
         "## 원판 용병 슬롯 사용량",
         "",

@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "status": "balance_discussion_required",
   "approval_gate": {
     "user_approved": false,
@@ -41,11 +41,73 @@
       "soldier_df_correction_offset": "0x10",
       "scope": "global_per_class"
     },
+    "reinforcement_model": {
+      "hidden_fixed_records_included": true,
+      "total_hidden_fixed_records": 63,
+      "hidden_enemy_fixed_records": 53,
+      "hidden_non_enemy_fixed_records": 10,
+      "runtime_event_rewrites_require_audit": true
+    },
     "hard_mode_implementation_rule": {
       "commander_stats": "patch fixed-record signed modifiers after approval",
       "soldier_corrections": "do not patch shared class records globally; after approval use a separate enemy-only expanded-ROM correction table applied after the fixed-record loader",
-      "dynamic_event_spawns": "not represented by the 340 fixed records and must be inventoried separately before scenario approval"
+      "dynamic_event_spawns": "all 63 hidden fixed records, including 53 side-04 enemy records, are represented by the 340 fixed records; event handlers can reveal or rewrite runtime records, so known rewrites and any true non-fixed spawns require an explicit exception audit before scenario approval"
     },
+    "known_runtime_exceptions": [
+      {
+        "scenario": 22,
+        "kind": "special_faction_ownership",
+        "side_08_record_count": 10,
+        "hidden_boss": {
+          "offset": "0x182822",
+          "side_id": "04",
+          "name_korean": "베른하르트",
+          "class_id": "4E",
+          "class_korean": "엠퍼러"
+        },
+        "rule": "do not assign the ten side-08 records an enemy hard-mode formula until the user approves their ownership"
+      },
+      {
+        "scenario": 25,
+        "kind": "allied_runtime_class_rewrite",
+        "fixed_record": {
+          "offset": "0x182D62",
+          "side_id": "03",
+          "name_korean": "제시카",
+          "class_id": "03",
+          "class_korean": "워록"
+        },
+        "verified_runtime_result": {
+          "class_id": "09",
+          "class_korean": "소서러",
+          "level": 5,
+          "at": 29,
+          "df": 17
+        },
+        "rule": "always exclude allied Jessica from enemy hard-mode bonuses even after the event rewrites her runtime record"
+      },
+      {
+        "scenario": 30,
+        "kind": "two_phase_boss",
+        "phases": [
+          {
+            "offset": "0x183724",
+            "side_id": "04",
+            "hidden": false,
+            "class_id": "3F",
+            "class_korean": "메이지"
+          },
+          {
+            "offset": "0x183748",
+            "side_id": "04",
+            "hidden": true,
+            "class_id": "48",
+            "class_korean": "세인트"
+          }
+        ],
+        "rule": "treat both Mina records as one transformation route and apply the approved boss rule per phase without accidental stacking"
+      }
+    ],
     "editable_fields_after_approval": [
       "level",
       "at",

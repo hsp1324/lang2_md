@@ -68,6 +68,89 @@ class HardModeBaselineTests(unittest.TestCase):
         )
         self.assertEqual(scenario_22["enemy_summary"]["record_count"], 1)
 
+    def test_hidden_reinforcement_records_are_already_in_the_fixed_inventory(self):
+        model = self.inventory["source_model"]["reinforcement_model"]
+        self.assertEqual(
+            model,
+            {
+                "hidden_fixed_records_included": True,
+                "total_hidden_fixed_records": 63,
+                "hidden_enemy_fixed_records": 53,
+                "hidden_non_enemy_fixed_records": 10,
+                "runtime_event_rewrites_require_audit": True,
+            },
+        )
+        records = [
+            record
+            for scenario in self.inventory["scenarios"]
+            for record in scenario["records"]
+        ]
+        self.assertEqual(sum(record["hidden"] for record in records), 63)
+        self.assertEqual(
+            sum(
+                record["hidden"] and record["side_id"] == "04"
+                for record in records
+            ),
+            53,
+        )
+
+    def test_known_runtime_exceptions_are_source_locked(self):
+        exceptions = {
+            row["scenario"]: row
+            for row in self.inventory["source_model"]["known_runtime_exceptions"]
+        }
+        self.assertEqual(set(exceptions), {22, 25, 30})
+        self.assertEqual(exceptions[22]["side_08_record_count"], 10)
+        self.assertEqual(
+            exceptions[22]["hidden_boss"],
+            {
+                "offset": "0x182822",
+                "side_id": "04",
+                "name_korean": "베른하르트",
+                "class_id": "4E",
+                "class_korean": "엠퍼러",
+            },
+        )
+        self.assertEqual(
+            exceptions[25]["fixed_record"],
+            {
+                "offset": "0x182D62",
+                "side_id": "03",
+                "name_korean": "제시카",
+                "class_id": "03",
+                "class_korean": "워록",
+            },
+        )
+        self.assertEqual(
+            exceptions[25]["verified_runtime_result"],
+            {
+                "class_id": "09",
+                "class_korean": "소서러",
+                "level": 5,
+                "at": 29,
+                "df": 17,
+            },
+        )
+        self.assertEqual(
+            exceptions[30]["phases"],
+            [
+                {
+                    "offset": "0x183724",
+                    "side_id": "04",
+                    "hidden": False,
+                    "class_id": "3F",
+                    "class_korean": "메이지",
+                },
+                {
+                    "offset": "0x183748",
+                    "side_id": "04",
+                    "hidden": True,
+                    "class_id": "48",
+                    "class_korean": "세인트",
+                },
+            ],
+        )
+
     def test_fixed_record_and_class_stat_ownership_is_source_locked(self):
         source = JP_ROM.read_bytes()
         model = self.inventory["source_model"]
@@ -140,6 +223,17 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertIn("do not patch shared class records globally", rule["soldier_corrections"])
         self.assertIn("enemy-only expanded-ROM", rule["soldier_corrections"])
         self.assertIn("340 fixed records", rule["dynamic_event_spawns"])
+        self.assertIn("63 hidden fixed records", rule["dynamic_event_spawns"])
+        self.assertIn("53 side-04 enemy", rule["dynamic_event_spawns"])
+        self.assertNotIn("not represented", rule["dynamic_event_spawns"])
+
+    def test_exception_inventory_does_not_approve_or_propose_balance_values(self):
+        gate = self.inventory["approval_gate"]
+        self.assertFalse(gate["user_approved"])
+        self.assertFalse(gate["implementation_started"])
+        self.assertFalse(gate["rom_values_may_be_applied"])
+        self.assertNotIn("proposed_values", self.inventory)
+        self.assertNotIn("approved_values", self.inventory)
 
     def test_checked_in_artifacts_are_current(self):
         subprocess.run(
