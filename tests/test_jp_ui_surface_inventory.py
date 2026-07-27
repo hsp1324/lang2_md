@@ -293,6 +293,14 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             "all equipment and shop variants beyond declared Scenario 1 paths",
             self.result["remaining_inventory_gaps"],
         )
+        self.assertIn(
+            "exact ownership of low-signal byte sequences outside the 38 reviewed "
+            "text/UI-bank candidates: the one/two-signal scan region-classifies "
+            "6,612 candidates, and proves the 38 text/UI-bank rows are word/layout "
+            "data with no exact aligned-32-bit or LEA/PEA PC-relative reference; "
+            "base-relative, indexed, and dynamic access elsewhere remains possible",
+            self.result["remaining_inventory_gaps"],
+        )
 
 
 if __name__ == "__main__":

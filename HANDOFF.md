@@ -11370,3 +11370,34 @@ contains 57 safe syllables as documented below and in
   still has six categories, but the compressed-resource category now says 423
   exact owners remain unknown, with all 429 broad raw-tile families classified.
   UI/compressed/atlas/display focused tests pass 38/38.
+
+### One/Two-Signal Inline Byte Candidate Audit (2026-07-27)
+
+- `tools/jp_short_inline_byte_inventory.py` now covers the maximal
+  `FF`-terminated half-width/uppercase-ASCII runs deliberately excluded by the
+  existing three-signal inline scanner. The Japanese ROM has 6,612 such
+  one/two-signal candidates: 4,435 half-width and 2,177 ASCII. The generated
+  report keeps aggregate counts by coarse ROM region instead of pretending all
+  6,612 binary coincidences are strings.
+- The only 38 candidates whose starts fall in the main
+  `0x0A0000..0x0AFFFF` text/UI bank were reviewed address by address with
+  aligned 16-bit context. Twenty-eight are one byte lane of an existing glyph
+  or token word, including title, credits, name-entry, item/shop, and opening
+  streams. Ten are structured item/name-entry/graphics layout boundaries.
+  None is a standalone user-facing Japanese byte string and none should be
+  patched as one.
+- Exact even-aligned 32-bit-pointer scanning and executable
+  `LEA d16(PC)`/`PEA d16(PC)` target scanning find zero references to the start
+  of those 38 rows. The JSON preserves the containing word, surrounding word
+  context, category, owner, and empty reference lists for every address.
+- This narrows but does not close the short-inline gap. Base-relative, indexed,
+  or dynamically calculated access remains possible, and the other regions
+  retain only coarse structural classification. The UI gap registry therefore
+  stays at six categories with more precise wording rather than claiming
+  completion.
+- `tests/test_jp_short_inline_byte_inventory.py` locks the 6,612 total,
+  4,435/2,177 kind split, 22/16 text/UI-bank split, exact 38-address review
+  set, 28/10 verdict split, word-context samples, zero-reference result, and
+  generated JSON/Markdown. The focused short-inline, UI, three-signal inline,
+  direct-byte, and direct-word inventories pass 56/56. This work required no
+  emulator launch; Xvfb `:104` remained isolated and BlastEm stayed stopped.
