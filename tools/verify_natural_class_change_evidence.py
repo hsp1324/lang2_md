@@ -75,7 +75,27 @@ SHERRY_PROOF = NaturalClassChangeProof(
     after=RuntimeIdentity(0x04, 4, 1, 0),
     candidates=(0x04, 0x06, 0x0A),
 )
-PROOFS = {proof.slug: proof for proof in (LIANA_PROOF, SHERRY_PROOF)}
+AARON_PROOF = NaturalClassChangeProof(
+    slug="aaron",
+    character="Aaron",
+    before_class="Fighter",
+    after_class="Lord",
+    before_path=(
+        ROOT / "captures/analysis/18c6_aaron_natural_class_change_before.gst"
+    ),
+    after_path=(
+        ROOT / "captures/analysis/18c6_aaron_natural_class_change_after.gst"
+    ),
+    probe_checksum=0x18C6,
+    runtime_record=3,
+    before=RuntimeIdentity(0x01, 8, 8, 6),
+    after=RuntimeIdentity(0x04, 8, 1, 0),
+    candidates=(0x04, 0x05, 0x0A),
+)
+PROOFS = {
+    proof.slug: proof
+    for proof in (LIANA_PROOF, SHERRY_PROOF, AARON_PROOF)
+}
 
 # Keep the original public constants for callers that use the default Liana
 # proof directly.

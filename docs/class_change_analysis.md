@@ -225,7 +225,7 @@ candidate frames were reviewed through terminal Zveler. Korean classes, stats,
 mercenaries, and magic lists are intact. The inventory now has screen evidence
 for all 76 unique current/candidate combinations, and every commander reports
 zero pending unique rows. This closes candidate-screen coverage only. Runtime
-application has four natural proofs and two forced-context diagnostic proofs.
+application has five natural proofs and two forced-context diagnostic proofs.
 Normal scenario-clear save persistence is now proven for Elwin's and Hein's
 initial transitions and remains pending for all other source transitions.
 

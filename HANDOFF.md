@@ -11047,3 +11047,40 @@ contains 57 safe syllables as documented below and in
 - This raises application evidence to six transitions: four natural and two
   forced-context. Sherry's normal scenario-clear SRAM persistence is not yet
   proven; only Elwin and Hein retain that stronger save-boundary evidence.
+
+### Aaron Natural Initial Class Change (2026-07-27)
+
+- Read-only inspection of `captures/analysis/53ad_s25_map_current.gst`
+  identifies Scenario 25 player runtime record 3 as
+  `class 01 / commander ID 8 / LV8 / EXP6`, namely Aaron/Fighter. The
+  Japanese source threshold is EXP16 and its untouched initial candidates are
+  `04/05/0A`, or `로드/나이트/샤먼`.
+- The accepted diagnostic was built from the frozen production-`1AB2` ROM and
+  Japanese source with `tools/build_class_change_probe_rom.py --commander-id
+  8 --current-class 0x01 --runtime-record-index 3 --end-turn-only`. Its
+  checksum is `18C6`. The wrapper is guarded by Fighter class `01`, does not
+  write commander identity, and leaves the stock Start-menu operand unchanged.
+- A fresh isolated `DISPLAY=:104` run recovered only the valid Scenario 25
+  manual slot, entered the normal route, traversed all fourteen description
+  confirmations, reviewed preparation, used automatic deployment, and
+  completed the opening. The command detector stopped on the ordinary map
+  after 23 confirmations without sending an unsafe map confirmation. One
+  subsequent Start input resumed the pending stock level-up path and visibly
+  rendered `클래스체인지 가능`.
+- Accepted frames
+  `captures/run/18c6_aaron_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` retain the notification, all
+  three Korean candidate names, and the resulting `아론/로드` LV1 command
+  panel without broken name or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/18c6_aaron_natural_class_change_before.gst` and
+  `_after.gst` prove record 3 changed
+  `01/ID8/LV8/EXP6 -> 04/ID8/LV1/EXP0`. All other nine player runtime records
+  retain byte-identical class, commander ID, level, and experience tuples.
+  `tools/verify_natural_class_change_evidence.py --proof aaron` locks this
+  result and can additionally verify checksum `18C6`, the Japanese candidate
+  tuple, wrapper bytes, and unchanged Start entry against the exact ignored
+  probe ROM.
+- This raises application evidence to seven transitions: five natural and two
+  forced-context. Aaron's normal scenario-clear SRAM persistence is not yet
+  proven; only Elwin and Hein retain that stronger save-boundary evidence.

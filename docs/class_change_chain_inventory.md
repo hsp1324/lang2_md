@@ -7,10 +7,10 @@ A translated static name does not imply that its candidate screen was live verif
 - Commanders: 10
 - Source transitions: 100
 - Unique current/candidate combinations: 76
-- Live-verified transitions: 76
+- Live-verified transitions: 77
 - Live-verified unique combinations: 76
-- Application-verified transitions: 6
-- Natural application proofs: 4
+- Application-verified transitions: 7
+- Natural application proofs: 5
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -139,7 +139,7 @@ Source pointer: `0x08280A`
 
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
-| `0x08280A` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `05` 나이트 (ﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | pending | pending | pending |
+| `0x08280A` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `05` 나이트 (ﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | natural | pending |
 | `0x082812` | `04` 로드 (ﾛｰﾄﾞ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | pending | pending | pending |
 | `0x08281A` | `05` 나이트 (ﾅｲﾄ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | pending | pending | pending |
 | `0x082822` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `13` 메이지 (ﾒｲｼﾞ) | pending | pending | pending |
