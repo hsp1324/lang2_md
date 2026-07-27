@@ -3,6 +3,8 @@ from pathlib import Path
 import unittest
 
 from tools.jp_short_inline_byte_inventory import (
+    CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS,
+    CLASS_SPRITE_GRAPHICS_REVIEWS,
     ENDING_SCENARIO_STRUCTURED_REVIEWS,
     ITEM_NAME_GRAPHICS_ALIGNED_REFERENCE_REVIEWS,
     ITEM_NAME_GRAPHICS_REVIEWS,
@@ -29,6 +31,7 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
     def setUpClass(cls):
         cls.japanese = JP_ROM.read_bytes()
         cls.result = inventory(cls.japanese, KO_ROM.read_bytes())
+        cls.class_bank = cls.result["class_sprite_graphics_bank"]
         cls.item_bank = cls.result["item_name_graphics_bank"]
         cls.system_bank = cls.result["system_graphics_ending_bank"]
         cls.ending_bank = cls.result["ending_scenario_bank"]
@@ -47,6 +50,90 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         self.assertEqual(
             self.result["region_counts"]["ascii"]["text_ui_bank"],
             16,
+        )
+
+    def test_class_sprite_graphics_bank_has_no_unknown_or_ui_string(self):
+        self.assertEqual(self.class_bank["candidate_count"], 62)
+        self.assertEqual(
+            self.class_bank["category_counts"],
+            {
+                "class_pointer_table_boundary_false_positive": 1,
+                "commander_sprite_mapping_false_positive": 4,
+                "packed_sprite_graphics_false_positive": 57,
+            },
+        )
+        self.assertEqual(self.class_bank["unclassified_count"], 0)
+        self.assertEqual(self.class_bank["missing_review_addresses"], [])
+        self.assertEqual(self.class_bank["stale_review_addresses"], [])
+
+    def test_class_sprite_graphics_review_set_is_exact(self):
+        rows = {
+            int(row["address"], 16)
+            for row in self.class_bank["candidates"]
+        }
+        self.assertEqual(rows, set(CLASS_SPRITE_GRAPHICS_REVIEWS))
+
+    def test_class_sprite_graphics_examples_preserve_structural_evidence(self):
+        rows = {
+            int(row["address"], 16): row
+            for row in self.class_bank["candidates"]
+        }
+        expected = {
+            0x050019: (
+                "AB",
+                "0xF4AB",
+                "packed_sprite_graphics_false_positive",
+            ),
+            0x05DD02: (
+                "41",
+                "0x41FF",
+                "commander_sprite_mapping_false_positive",
+            ),
+            0x05DDA7: (
+                "47",
+                "0x0047",
+                "commander_sprite_mapping_false_positive",
+            ),
+            0x05E949: (
+                "D4 20 20 20 20 20 20 20 20",
+                "0xEDD4",
+                "class_pointer_table_boundary_false_positive",
+            ),
+        }
+        for address, (raw, word, category) in expected.items():
+            with self.subTest(address=f"0x{address:06X}"):
+                self.assertEqual(rows[address]["raw_hex"], raw)
+                self.assertEqual(rows[address]["containing_word"], word)
+                self.assertEqual(rows[address]["category"], category)
+                self.assertTrue(rows[address]["context_words"])
+
+    def test_class_sprite_apparent_references_are_reviewed_non_pointers(self):
+        self.assertEqual(
+            self.class_bank["aligned_absolute_32_reference_count"], 2
+        )
+        self.assertEqual(
+            self.class_bank["pc_relative_lea_pea_reference_count"], 0
+        )
+        self.assertEqual(
+            self.class_bank["missing_aligned_reference_reviews"], []
+        )
+        self.assertEqual(
+            self.class_bank["stale_aligned_reference_reviews"], []
+        )
+        rows = {
+            (int(row["target"], 16), int(row["address"], 16)): row
+            for row in self.class_bank["aligned_reference_reviews"]
+        }
+        self.assertEqual(
+            set(rows), set(CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS)
+        )
+        self.assertEqual(
+            rows[(0x050019, 0x01CAA2)]["classification"],
+            "cross_operand_window",
+        )
+        self.assertEqual(
+            rows[(0x050019, 0x095398)]["classification"],
+            "coincidental_data_window",
         )
 
     def test_item_name_graphics_bank_has_no_unknown_or_ui_string(self):

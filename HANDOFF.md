@@ -11485,3 +11485,30 @@ contains 57 safe syllables as documented below and in
   were regenerated from the isolated current-source ROM only. BlastEm was not
   launched; Xvfb `:104` remained the configured emulator display and the
   physical monitor was untouched.
+
+### Class/Sprite/Graphics Low-Signal Byte Audit (2026-07-27)
+
+- The short-inline inventory now covers all 62 low-signal rows in
+  `0x050000..0x05FFFF`. Fifty-seven addresses are pinned packed 4bpp
+  sprite/tile pixel data. Four addresses, `0x05DD02`, `0x05DD38`,
+  `0x05DD6E`, and `0x05DDA7`, are byte lanes of the ten commander
+  class-to-sprite mapping records at `0x05DB80`; the last one must not be
+  misclassified as a glyph word merely because its surrounding bytes resemble
+  a 16-bit text terminator.
+- `0x05E949` is the low byte of the final class-name pointer
+  `0x0005E94A` followed by eight padding spaces. This mirrors the reviewed
+  name-table boundary at `0x061ABB` and is not a half-width string.
+- Both apparent aligned references to `0x050019` are non-pointers.
+  `0x01CAA2` spans the source displacement `0005` and destination displacement
+  `0019` of `MOVE.B 5(A0),25(A1)`. `0x095398` is the sliding window
+  `0005 0019` inside a 16-bit numeric/index row. No executable
+  `LEA d16(PC)`/`PEA d16(PC)` reference exists.
+- The cumulative exact review is now 401 candidates across
+  `0x050000..0x0AFFFF`: 400 pointer-boundary/word/graphics/layout false
+  positives and the retained `L-` level prefix. Every new candidate in these
+  reviewed banks fails closed until its address and structural evidence are
+  added explicitly.
+- Focused short-inline/UI/inline/direct inventory tests pass 73/73. Reports
+  were regenerated from the isolated current-source ROM. BlastEm remained
+  stopped, Xvfb `:104` remained configured, and the physical monitor was not
+  used.

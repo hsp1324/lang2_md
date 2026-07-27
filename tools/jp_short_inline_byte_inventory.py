@@ -14,6 +14,8 @@ from tools.jp_inline_byte_string_inventory import SCAN_END, scan_runs
 
 
 EXECUTABLE_END = 0x040000
+CLASS_SPRITE_GRAPHICS_BANK_START = 0x050000
+CLASS_SPRITE_GRAPHICS_BANK_END = 0x060000
 ITEM_NAME_GRAPHICS_BANK_START = 0x060000
 ITEM_NAME_GRAPHICS_BANK_END = 0x080000
 SYSTEM_GRAPHICS_ENDING_BANK_START = 0x080000
@@ -46,6 +48,107 @@ ASCII_ALLOWED = {
     ord("+"),
     ord("-"),
     ord(":"),
+}
+
+PACKED_SPRITE_GRAPHICS_REVIEW_ADDRESSES = {
+    0x050019,
+    0x0501B1,
+    0x0501B3,
+    0x0502DE,
+    0x05061E,
+    0x050709,
+    0x050725,
+    0x050F9B,
+    0x05124D,
+    0x0512C5,
+    0x0512CD,
+    0x0512E9,
+    0x051564,
+    0x051857,
+    0x051917,
+    0x051A99,
+    0x051AD7,
+    0x051C19,
+    0x051C57,
+    0x051D4F,
+    0x051D8F,
+    0x051DCF,
+    0x0521C9,
+    0x05224F,
+    0x0523B9,
+    0x0525C9,
+    0x0525E9,
+    0x0525EB,
+    0x053078,
+    0x0531C0,
+    0x054BE6,
+    0x054FD1,
+    0x054FDE,
+    0x0553E6,
+    0x056F5E,
+    0x057056,
+    0x057748,
+    0x057CE0,
+    0x057DA0,
+    0x05897C,
+    0x058AC4,
+    0x05A085,
+    0x05A4E8,
+    0x05A4EA,
+    0x05A8CC,
+    0x05A8D5,
+    0x05ACE8,
+    0x05ACEA,
+    0x05C3DB,
+    0x05C59E,
+    0x05C7DB,
+    0x05C862,
+    0x05C952,
+    0x05CFBA,
+    0x05D5DC,
+    0x05D5F4,
+    0x05D836,
+}
+
+COMMANDER_SPRITE_MAPPING_REVIEW_ADDRESSES = {
+    0x05DD02,
+    0x05DD38,
+    0x05DD6E,
+    0x05DDA7,
+}
+
+CLASS_POINTER_TABLE_BOUNDARY_REVIEW_ADDRESS = 0x05E949
+
+CLASS_SPRITE_GRAPHICS_REVIEWS = {
+    **{
+        address: (
+            "packed_sprite_graphics_false_positive",
+            "packed 4bpp sprite/tile graphics bytes",
+        )
+        for address in PACKED_SPRITE_GRAPHICS_REVIEW_ADDRESSES
+    },
+    **{
+        address: (
+            "commander_sprite_mapping_false_positive",
+            "commander class-to-sprite mapping record",
+        )
+        for address in COMMANDER_SPRITE_MAPPING_REVIEW_ADDRESSES
+    },
+    CLASS_POINTER_TABLE_BOUNDARY_REVIEW_ADDRESS: (
+        "class_pointer_table_boundary_false_positive",
+        "low byte of final class pointer 0x0005E94A plus space padding",
+    ),
+}
+
+CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS = {
+    (0x050019, 0x01CAA2): (
+        "cross_operand_window",
+        "`MOVE.B 5(A0),25(A1)` source/destination displacement bytes",
+    ),
+    (0x050019, 0x095398): (
+        "coincidental_data_window",
+        "16-bit numeric/index row `0005 0019 0008 000C`",
+    ),
 }
 
 PACKED_GAME_GRAPHICS_REVIEW_ADDRESSES = {
@@ -511,6 +614,13 @@ def system_graphics_word_owner(address: int) -> str:
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     candidates = low_signal_runs(japanese)
+    class_sprite_graphics = [
+        row
+        for row in candidates
+        if CLASS_SPRITE_GRAPHICS_BANK_START
+        <= int(row["start_int"])
+        < CLASS_SPRITE_GRAPHICS_BANK_END
+    ]
     item_name_graphics = [
         row
         for row in candidates
@@ -537,6 +647,74 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for row in candidates
         if TEXT_UI_BANK_START <= int(row["start_int"]) < TEXT_UI_BANK_END
     ]
+
+    class_sprite_graphics_addresses = {
+        int(row["start_int"]) for row in class_sprite_graphics
+    }
+    class_sprite_graphics_absolute = aligned_absolute_references(
+        japanese, class_sprite_graphics_addresses
+    )
+    class_sprite_graphics_pc_relative = pc_relative_lea_pea_references(
+        japanese, class_sprite_graphics_addresses
+    )
+    class_sprite_graphics_rows = []
+    class_sprite_graphics_reference_reviews = []
+    for row in class_sprite_graphics:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        category, owner = CLASS_SPRITE_GRAPHICS_REVIEWS.get(
+            start, ("unclassified", "requires manual ownership review")
+        )
+        context_start, context = word_context(japanese, start, end)
+        class_sprite_graphics_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": category,
+                "owner": owner,
+                "containing_word_address": f"0x{start & ~1:06X}",
+                "containing_word": (
+                    f"0x{int.from_bytes(japanese[start & ~1 : (start & ~1) + 2], 'big'):04X}"
+                ),
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in class_sprite_graphics_absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in class_sprite_graphics_pc_relative.get(
+                        start, []
+                    )
+                ],
+            }
+        )
+        for reference in class_sprite_graphics_absolute.get(start, []):
+            review = CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS.get(
+                (start, reference)
+            )
+            if review is None:
+                classification = "unclassified"
+                evidence = "requires instruction/data-boundary review"
+            else:
+                classification, evidence = review
+            class_sprite_graphics_reference_reviews.append(
+                {
+                    "target": f"0x{start:06X}",
+                    "address": f"0x{reference:06X}",
+                    "classification": classification,
+                    "evidence": evidence,
+                }
+            )
 
     item_name_graphics_addresses = {
         int(row["start_int"]) for row in item_name_graphics
@@ -777,6 +955,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for kind in ("halfwidth", "ascii")
     }
     category_counts = Counter(str(row["category"]) for row in detailed_rows)
+    class_sprite_graphics_category_counts = Counter(
+        str(row["category"]) for row in class_sprite_graphics_rows
+    )
     item_name_graphics_category_counts = Counter(
         str(row["category"]) for row in item_name_graphics_rows
     )
@@ -799,6 +980,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for target, references in item_name_graphics_absolute.items()
         for reference in references
     }
+    class_sprite_graphics_reference_pairs = {
+        (target, reference)
+        for target, references in class_sprite_graphics_absolute.items()
+        for reference in references
+    }
     ending_scenario_reviewed_addresses = (
         set(ENDING_SCENARIO_STRUCTURED_REVIEWS)
         | {SCENARIO_LEVEL_PREFIX}
@@ -812,8 +998,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "warning": (
             "This scan inventories maximal FF-terminated half-width/uppercase-ASCII "
             "runs with only one or two signal bytes. Most are binary coincidences. "
-            "The 0x060000..0x0AFFFF item/name/graphics/system/ending/scenario/"
-            "text/UI-bank "
+            "The 0x050000..0x0AFFFF class/sprite/item/name/graphics/system/"
+            "ending/scenario/text/UI-bank "
             "candidates are classified here. Exact aligned 32-bit and LEA/PEA "
             "PC-relative references do not exclude base-relative, indexed, or "
             "dynamic access."
@@ -823,6 +1009,60 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "candidate_count": len(candidates),
         "kind_counts": dict(sorted(kind_counts.items())),
         "region_counts": region_counts,
+        "class_sprite_graphics_bank": {
+            "range": "0x050000..0x060000",
+            "candidate_count": len(class_sprite_graphics_rows),
+            "category_counts": dict(
+                sorted(class_sprite_graphics_category_counts.items())
+            ),
+            "unclassified_count": class_sprite_graphics_category_counts.get(
+                "unclassified", 0
+            ),
+            "missing_review_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    class_sprite_graphics_addresses
+                    - set(CLASS_SPRITE_GRAPHICS_REVIEWS)
+                )
+            ],
+            "stale_review_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    set(CLASS_SPRITE_GRAPHICS_REVIEWS)
+                    - class_sprite_graphics_addresses
+                )
+            ],
+            "aligned_absolute_32_reference_count": sum(
+                len(row["aligned_absolute_32_references"])
+                for row in class_sprite_graphics_rows
+            ),
+            "pc_relative_lea_pea_reference_count": sum(
+                len(row["pc_relative_lea_pea_references"])
+                for row in class_sprite_graphics_rows
+            ),
+            "aligned_reference_reviews": class_sprite_graphics_reference_reviews,
+            "missing_aligned_reference_reviews": [
+                {
+                    "target": f"0x{target:06X}",
+                    "address": f"0x{reference:06X}",
+                }
+                for target, reference in sorted(
+                    class_sprite_graphics_reference_pairs
+                    - set(CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS)
+                )
+            ],
+            "stale_aligned_reference_reviews": [
+                {
+                    "target": f"0x{target:06X}",
+                    "address": f"0x{reference:06X}",
+                }
+                for target, reference in sorted(
+                    set(CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS)
+                    - class_sprite_graphics_reference_pairs
+                )
+            ],
+            "candidates": class_sprite_graphics_rows,
+        },
         "item_name_graphics_bank": {
             "range": "0x060000..0x080000",
             "candidate_count": len(item_name_graphics_rows),
@@ -1002,6 +1242,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
 
 def markdown_report(result: dict[str, object]) -> str:
+    class_bank = result["class_sprite_graphics_bank"]
     item_bank = result["item_name_graphics_bank"]
     system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
@@ -1017,6 +1258,14 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Low-signal candidates: {result['candidate_count']}",
         f"- Half-width candidates: {result['kind_counts']['halfwidth']}",
         f"- Uppercase ASCII candidates: {result['kind_counts']['ascii']}",
+        (
+            "- Class/sprite/graphics-bank candidates: "
+            f"{class_bank['candidate_count']}"
+        ),
+        (
+            "- Class/sprite/graphics-bank unclassified: "
+            f"{class_bank['unclassified_count']}"
+        ),
         (
             "- Item/name/graphics-bank candidates: "
             f"{item_bank['candidate_count']}"
@@ -1069,6 +1318,61 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Class/Sprite/Graphics-Bank Candidates",
+            "",
+            (
+                "- Category totals: "
+                + ", ".join(
+                    f"`{category}` {count}"
+                    for category, count in class_bank[
+                        "category_counts"
+                    ].items()
+                )
+                + "."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{class_bank['aligned_absolute_32_reference_count']}; all are "
+                "reviewed below as non-pointer coincidences."
+            ),
+            (
+                "- Exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{class_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Address | Kind | Raw | Classification | Owner |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+    )
+    for row in class_bank["candidates"]:
+        lines.append(
+            f"| `{row['address']}` | `{row['kind']}` | `{row['raw_hex']}` | "
+            f"`{row['category']}` | {row['owner']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "The 57 rows before the commander sprite-map table are packed 4bpp",
+            "pixel data. Four rows are byte lanes of class-to-sprite mapping",
+            "records. `0x05E949` is the low byte of final class-name pointer",
+            "`0x0005E94A` followed by eight padding spaces.",
+            "",
+            "| Apparent target | Four-byte window | Classification | Evidence |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in class_bank["aligned_reference_reviews"]:
+        lines.append(
+            f"| `{row['target']}` | `{row['address']}` | "
+            f"`{row['classification']}` | {row['evidence']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "The executable `0x050019` match spans the source and destination",
+            "displacements of one `MOVE.B` instruction. The second is a sliding",
+            "window in a 16-bit numeric/index row. Neither is an absolute pointer.",
             "",
             "## Reviewed Item/Name/Graphics-Bank Candidates",
             "",
@@ -1266,17 +1570,19 @@ def main() -> None:
         encoding="utf-8",
     )
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
+    class_bank = result["class_sprite_graphics_bank"]
     item_bank = result["item_name_graphics_bank"]
     system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
     bank = result["text_ui_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
+        f"{class_bank['candidate_count']} class/sprite/graphics-bank, "
         f"{item_bank['candidate_count']} item/name/graphics-bank, "
         f"{system_bank['candidate_count']} system/graphics/ending-bank, "
         f"{ending_bank['candidate_count']} ending/scenario-bank, and "
         f"{bank['candidate_count']} text/UI-bank candidates, "
-        f"{item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
+        f"{class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
         "unclassified"
     )
 
