@@ -34003,5 +34003,384 @@
         "pc_relative_lea_pea_references": []
       }
     ]
+  },
+  "executable_core_k_bank": {
+    "range": "0x01DC5A..0x01E05C",
+    "source_bytes": 1026,
+    "source_sha256": "1c193f25105ac8cc2095fd6897f233e4c04acbfd56d8599530e3709b21fce95b",
+    "expected_source_sha256": "1c193f25105ac8cc2095fd6897f233e4c04acbfd56d8599530e3709b21fce95b",
+    "source_layout_valid": true,
+    "candidate_manifest_sha256": "7e5e9123965a6893d41847d3dec2284bae8fa01c400793505de2e5042518770c",
+    "expected_candidate_manifest_sha256": "7e5e9123965a6893d41847d3dec2284bae8fa01c400793505de2e5042518770c",
+    "code_candidate_manifest_sha256": "d31343a67bbb5fa38cb32785ca46849b8dcc28c14821bc6f3c0ad125d3e4cad5",
+    "candidate_count": 10,
+    "kind_counts": {
+      "ascii": 4,
+      "halfwidth": 6
+    },
+    "category_counts": {
+      "contiguous_instruction_stream_false_positive": 6,
+      "structured_numeric_record_false_positive": 4
+    },
+    "unclassified_count": 0,
+    "code_segment": {
+      "range": "0x01DC64..0x01DFFA",
+      "source_bytes": 918,
+      "source_sha256": "293851f0463f41f28e93747b7370cf91927904f51dd0373b01d620f4a78ee85a",
+      "expected_source_sha256": "293851f0463f41f28e93747b7370cf91927904f51dd0373b01d620f4a78ee85a",
+      "linear_instruction_count": 251,
+      "rts_instruction_count": 6,
+      "candidate_count": 6,
+      "source_layout_valid": true
+    },
+    "data_segments": [
+      {
+        "range": "0x01DC5A..0x01DC64",
+        "owner": "five-word decimal place-value table",
+        "source_bytes": 10,
+        "source_sha256": "b8456acf5b863805584ae3ddd08fa48936a9d75a821eaf39fe4e09080cb7c1ca",
+        "expected_source_sha256": "b8456acf5b863805584ae3ddd08fa48936a9d75a821eaf39fe4e09080cb7c1ca",
+        "candidate_count": 0,
+        "candidate_manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "expected_candidate_manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DFFA..0x01E004",
+        "owner": "five-word interleaved-region element-count table",
+        "source_bytes": 10,
+        "source_sha256": "faca806d44e66d82efb3370b0d828d351cf4c137fa5060c6e2936bb66afdeac4",
+        "expected_source_sha256": "faca806d44e66d82efb3370b0d828d351cf4c137fa5060c6e2936bb66afdeac4",
+        "candidate_count": 0,
+        "candidate_manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "expected_candidate_manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01E004..0x01E018",
+        "owner": "five-longword interleaved-region start-pointer table",
+        "source_bytes": 20,
+        "source_sha256": "55f2372ff6faaa3771f2108844c1eb2a446dd65cc33b40860648235d9369709b",
+        "expected_source_sha256": "55f2372ff6faaa3771f2108844c1eb2a446dd65cc33b40860648235d9369709b",
+        "candidate_count": 0,
+        "candidate_manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "expected_candidate_manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01E018..0x01E046",
+        "owner": "primary address/count transfer-descriptor list",
+        "source_bytes": 46,
+        "source_sha256": "52b10ed9fd91e5a991d2a47b11ee2463a9fb602b04917c4f4b5b8c7265067926",
+        "expected_source_sha256": "52b10ed9fd91e5a991d2a47b11ee2463a9fb602b04917c4f4b5b8c7265067926",
+        "candidate_count": 2,
+        "candidate_manifest_sha256": "e7316a0468438f6bf821f4b6e2fbc25bd634c73c2a9798ef1e5187b99b1bab78",
+        "expected_candidate_manifest_sha256": "e7316a0468438f6bf821f4b6e2fbc25bd634c73c2a9798ef1e5187b99b1bab78",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01E046..0x01E05C",
+        "owner": "secondary address/count transfer-descriptor list",
+        "source_bytes": 22,
+        "source_sha256": "3cc7f67f3e37c93927424e379722157840cf6dc2aea22725347d822fed3d4a5d",
+        "expected_source_sha256": "3cc7f67f3e37c93927424e379722157840cf6dc2aea22725347d822fed3d4a5d",
+        "candidate_count": 2,
+        "candidate_manifest_sha256": "292becd02c306be77178895bbd6a756d89226ba15b881f35e0ebb44015fd46f1",
+        "expected_candidate_manifest_sha256": "292becd02c306be77178895bbd6a756d89226ba15b881f35e0ebb44015fd46f1",
+        "source_layout_valid": true
+      }
+    ],
+    "decimal_place_values": [
+      10000,
+      1000,
+      100,
+      10,
+      1
+    ],
+    "region_element_counts": [
+      3236,
+      211,
+      211,
+      211,
+      211
+    ],
+    "region_start_pointers": [
+      "0x00200009",
+      "0x0020329D",
+      "0x002035ED",
+      "0x0020393D",
+      "0x00203C8D"
+    ],
+    "primary_transfer_descriptors": [
+      {
+        "address": "0xFFFFA49C",
+        "count": 2
+      },
+      {
+        "address": "0xFFFFA5F0",
+        "count": 34
+      },
+      {
+        "address": "0x00FF603C",
+        "count": 1920
+      },
+      {
+        "address": "0x00FF3000",
+        "count": 4096
+      },
+      {
+        "address": "0xFFFFA49E",
+        "count": 338
+      },
+      {
+        "address": "0xFFFFBD6E",
+        "count": 2
+      },
+      {
+        "address": "0xFFFFC7F2",
+        "count": 80
+      }
+    ],
+    "secondary_transfer_descriptors": [
+      {
+        "address": "0xFFFFA49C",
+        "count": 340
+      },
+      {
+        "address": "0xFFFFBD6E",
+        "count": 2
+      },
+      {
+        "address": "0xFFFFC7F2",
+        "count": 80
+      }
+    ],
+    "primary_descriptor_terminated": true,
+    "secondary_descriptor_terminated": true,
+    "data_reference_instructions": [
+      {
+        "range": "0x01DC08..0x01DC0E",
+        "instruction": "LEA $01DC5A.L,A1",
+        "raw_hex": "43 F9 00 01 DC 5A",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DDE6..0x01DDEC",
+        "instruction": "LEA $01E004.L,A0",
+        "raw_hex": "41 F9 00 01 E0 04",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DE4E..0x01DE54",
+        "instruction": "LEA $01E018.L,A1",
+        "raw_hex": "43 F9 00 01 E0 18",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DE58..0x01DE5E",
+        "instruction": "LEA $01E046.L,A1",
+        "raw_hex": "43 F9 00 01 E0 46",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DE62..0x01DE68",
+        "instruction": "LEA $01E004.L,A0",
+        "raw_hex": "41 F9 00 01 E0 04",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DEC6..0x01DECC",
+        "instruction": "LEA $01E018.L,A1",
+        "raw_hex": "43 F9 00 01 E0 18",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DED0..0x01DED6",
+        "instruction": "LEA $01E046.L,A1",
+        "raw_hex": "43 F9 00 01 E0 46",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DEDA..0x01DEE0",
+        "instruction": "LEA $01E004.L,A0",
+        "raw_hex": "41 F9 00 01 E0 04",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DF68..0x01DF6E",
+        "instruction": "LEA $01E004.L,A0",
+        "raw_hex": "41 F9 00 01 E0 04",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DF76..0x01DF7C",
+        "instruction": "LEA $01E004.L,A1",
+        "raw_hex": "43 F9 00 01 E0 04",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DFBC..0x01DFC2",
+        "instruction": "LEA $01DFFA.L,A0",
+        "raw_hex": "41 F9 00 01 DF FA",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01DFCA..0x01DFD0",
+        "instruction": "LEA $01E004.L,A0",
+        "raw_hex": "41 F9 00 01 E0 04",
+        "source_layout_valid": true
+      },
+      {
+        "range": "0x01E07C..0x01E082",
+        "instruction": "LEA $01E004.L,A0",
+        "raw_hex": "41 F9 00 01 E0 04",
+        "source_layout_valid": true
+      }
+    ],
+    "aligned_absolute_32_reference_count": 0,
+    "aligned_absolute_32_references": [],
+    "pc_relative_lea_pea_reference_count": 0,
+    "candidates": [
+      {
+        "kind": "halfwidth",
+        "address": "0x01DDFB",
+        "end": "0x01DDFD",
+        "signal_count": 1,
+        "original_text": "ﾉ",
+        "raw_hex": "C9",
+        "category": "contiguous_instruction_stream_false_positive",
+        "owner": "core 68000 instruction bytes",
+        "context_start": "0x01DDEA",
+        "context_words": "E004 2070 0000 4240 0188 0000 D0FC 0004 51C9 FFF6 4CDF 0303 4E75 207C 0020 3FDD 0108 0000",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x01DE2B",
+        "end": "0x01DE2D",
+        "signal_count": 1,
+        "original_text": "ﾉ",
+        "raw_hex": "C9",
+        "category": "contiguous_instruction_stream_false_positive",
+        "owner": "core 68000 instruction bytes",
+        "context_start": "0x01DE1A",
+        "context_words": "0001 323C 0FFF 7000 0188 0000 D0FC 0004 51C9 FFF6 207C 0020 3FDD 303C 07CA 0188 0000 6000",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x01DE8D",
+        "end": "0x01DE8F",
+        "signal_count": 1,
+        "original_text": "ﾉ",
+        "raw_hex": "C9",
+        "category": "contiguous_instruction_stream_false_positive",
+        "owner": "core 68000 instruction bytes",
+        "context_start": "0x01DE7C",
+        "context_words": "E249 5341 301A D440 0188 0000 D0FC 0004 51C9 FFF2 6000 FFDC 5242 0588 0000 4CDF 0001 227C",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x01DF05",
+        "end": "0x01DF07",
+        "signal_count": 1,
+        "original_text": "ﾉ",
+        "raw_hex": "C9",
+        "category": "contiguous_instruction_stream_false_positive",
+        "owner": "core 68000 instruction bytes",
+        "context_start": "0x01DEF4",
+        "context_words": "E249 5341 0108 0000 D440 34C0 D0FC 0004 51C9 FFF2 6000 FFDC 5242 0308 0000 7000 B441 6700",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x01DF95",
+        "end": "0x01DF97",
+        "signal_count": 1,
+        "original_text": "ﾉ",
+        "raw_hex": "C9",
+        "category": "contiguous_instruction_stream_false_positive",
+        "owner": "core 68000 instruction bytes",
+        "context_start": "0x01DF84",
+        "context_words": "0108 0000 0189 0000 D0FC 0004 D2FC 0004 51C9 FFEE 4CDF 0307 4E75 48E7 6080 0C40 0005 6400",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x01DFE1",
+        "end": "0x01DFE3",
+        "signal_count": 1,
+        "original_text": "ﾉ",
+        "raw_hex": "C9",
+        "category": "contiguous_instruction_stream_false_positive",
+        "owner": "core 68000 instruction bytes",
+        "context_start": "0x01DFD0",
+        "context_words": "2070 0000 7400 0108 0000 D440 D0FC 0004 51C9 FFF4 5242 0308 0000 7000 B441 6700 0004 70FF",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x01E035",
+        "end": "0x01E037",
+        "signal_count": 1,
+        "original_text": "R",
+        "raw_hex": "52",
+        "category": "structured_numeric_record_false_positive",
+        "owner": "primary address/count transfer-descriptor list",
+        "context_start": "0x01E024",
+        "context_words": "00FF 603C 0780 00FF 3000 1000 FFFF A49E 0152 FFFF BD6E 0002 FFFF C7F2 0050 FFFF FFFF FFFF",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x01E041",
+        "end": "0x01E043",
+        "signal_count": 1,
+        "original_text": "P",
+        "raw_hex": "50",
+        "category": "structured_numeric_record_false_positive",
+        "owner": "primary address/count transfer-descriptor list",
+        "context_start": "0x01E030",
+        "context_words": "FFFF A49E 0152 FFFF BD6E 0002 FFFF C7F2 0050 FFFF FFFF FFFF A49C 0154 FFFF BD6E 0002 FFFF",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x01E04B",
+        "end": "0x01E04D",
+        "signal_count": 1,
+        "original_text": "T",
+        "raw_hex": "54",
+        "category": "structured_numeric_record_false_positive",
+        "owner": "secondary address/count transfer-descriptor list",
+        "context_start": "0x01E03A",
+        "context_words": "0002 FFFF C7F2 0050 FFFF FFFF FFFF A49C 0154 FFFF BD6E 0002 FFFF C7F2 0050 FFFF FFFF 48E7",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x01E057",
+        "end": "0x01E059",
+        "signal_count": 1,
+        "original_text": "P",
+        "raw_hex": "50",
+        "category": "structured_numeric_record_false_positive",
+        "owner": "secondary address/count transfer-descriptor list",
+        "context_start": "0x01E046",
+        "context_words": "FFFF A49C 0154 FFFF BD6E 0002 FFFF C7F2 0050 FFFF FFFF 48E7 4080 0C40 0005 6400 0028 207C",
+        "aligned_absolute_32_references": [],
+        "pc_relative_lea_pea_references": []
+      }
+    ]
   }
 }

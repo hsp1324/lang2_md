@@ -12024,3 +12024,52 @@ contains 57 safe syllables as documented below and in
   No production ROM bytes changed and no emulator was launched.
 - The next static audit resumes at `0x01DC5A`. Do not assume code or data
   ownership beyond that boundary without a fresh source-locked analysis.
+
+### Executable Core K Low-Signal Audit (2026-07-28)
+
+- The source-locked `0x01DC5A..0x01E05B` region has SHA-256
+  `1c193f25105ac8cc2095fd6897f233e4c04acbfd56d8599530e3709b21fce95b`
+  and contains ten low-signal candidates: six half-width-looking and four
+  ASCII-looking rows. Its ordered candidate manifest is
+  `7e5e9123965a6893d41847d3dec2284bae8fa01c400793505de2e5042518770c`.
+- The exact `0x01DC64..0x01DFF9` code stream owns six candidates. It has
+  251 contiguous 68000 instructions, six `RTS` instructions, no `dc.w`
+  fallback, and ends exactly at `0x01DFFA`. All six candidates are low
+  bytes inside `DBRA D1,...` instructions. The code SHA-256 is
+  `293851f0463f41f28e93747b7370cf91927904f51dd0373b01d620f4a78ee85a`;
+  its candidate manifest is
+  `d31343a67bbb5fa38cb32785ca46849b8dcc28c14821bc6f3c0ad125d3e4cad5`.
+- Five directly referenced structured data segments surround the code:
+  decimal place values `[10000,1000,100,10,1]`, five element counts
+  `[0CA4,00D3,00D3,00D3,00D3]`, five long pointers, a seven-record
+  transfer descriptor list, and a three-record transfer descriptor list.
+  Both descriptor lists end in `FFFFFFFF`.
+- The four ASCII-looking rows `R/P/T/P` are the low bytes of numeric
+  descriptor counts `0152/0050/0154/0050`, not text. Thirteen source-locked
+  `LEA` instructions reference the data starts or the shared pointer table.
+  No aligned absolute candidate-start reference and no executable
+  PC-relative `LEA`/`PEA` candidate reference exists.
+- The cumulative exact review is now 6,472 of 6,612 short-inline candidates:
+  6,471 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 140 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 139/139. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed and no emulator was launched.
+- The next static audit resumes at `0x01E05C`. Do not assume code or data
+  ownership beyond that boundary without a fresh source-locked analysis.
+
+### Post-Localization Hard Mode Requirement (2026-07-28)
+
+- After the normal Korean ROM is fully localized and regression-tested,
+  create a separate hard-mode ROM/profile. The normal build must preserve
+  the original Japanese balance and must never be overwritten by this work.
+- Do not choose or apply balance numbers before discussing them with the
+  user. Agreement is required for the scenario difficulty curve, enemy
+  commander AT/DF policy, mercenary correction, stronger-troop introduction
+  points, late-game summoned-creature ratios, and boss/support exceptions.
+- Implement approved values through the verified editor data model for
+  scenario faction/class/mercenary/LV/AT/DF fields rather than scattered
+  address patches. Preserve event order, AI, victory conditions, and route
+  structure unless separately approved, then validate each scenario.

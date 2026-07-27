@@ -103,6 +103,23 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_CORE_J_RTS_COUNT,
     EXECUTABLE_CORE_J_SOURCE_SHA256,
     EXECUTABLE_CORE_J_START,
+    EXECUTABLE_CORE_K_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_CORE_K_CODE_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_CORE_K_CODE_END,
+    EXECUTABLE_CORE_K_CODE_SOURCE_SHA256,
+    EXECUTABLE_CORE_K_CODE_START,
+    EXECUTABLE_CORE_K_DATA_REFERENCE_INSTRUCTIONS,
+    EXECUTABLE_CORE_K_DATA_SEGMENTS,
+    EXECUTABLE_CORE_K_DECIMAL_VALUES,
+    EXECUTABLE_CORE_K_END,
+    EXECUTABLE_CORE_K_INSTRUCTION_COUNT,
+    EXECUTABLE_CORE_K_PRIMARY_TRANSFER_DESCRIPTORS,
+    EXECUTABLE_CORE_K_REGION_COUNTS,
+    EXECUTABLE_CORE_K_REGION_POINTERS,
+    EXECUTABLE_CORE_K_RTS_COUNT,
+    EXECUTABLE_CORE_K_SECONDARY_TRANSFER_DESCRIPTORS,
+    EXECUTABLE_CORE_K_SOURCE_SHA256,
+    EXECUTABLE_CORE_K_START,
     EXECUTABLE_STARTUP_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_SEGMENTS,
@@ -188,6 +205,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         ]
         cls.executable_core_j_bank = cls.result[
             "executable_core_j_bank"
+        ]
+        cls.executable_core_k_bank = cls.result[
+            "executable_core_k_bank"
         ]
 
     def test_low_signal_candidate_baseline(self):
@@ -2081,6 +2101,148 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
                 for row in bank["reference_instruction_owners"]
             )
         )
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+
+    def test_executable_core_k_is_source_locked_and_fully_classified(self):
+        bank = self.executable_core_k_bank
+        self.assertEqual(bank["candidate_count"], 10)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 4, "halfwidth": 6},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {
+                "contiguous_instruction_stream_false_positive": 6,
+                "structured_numeric_record_false_positive": 4,
+            },
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(
+            bank["source_sha256"], EXECUTABLE_CORE_K_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_CORE_K_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["code_candidate_manifest_sha256"],
+            EXECUTABLE_CORE_K_CODE_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+
+    def test_executable_core_k_code_stream_is_exact(self):
+        bank = self.executable_core_k_bank
+        code = bank["code_segment"]
+        self.assertEqual(
+            code["source_sha256"], EXECUTABLE_CORE_K_CODE_SOURCE_SHA256
+        )
+        self.assertTrue(code["source_layout_valid"])
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        instructions = list(
+            md.disasm(
+                self.japanese[
+                    EXECUTABLE_CORE_K_CODE_START:EXECUTABLE_CORE_K_CODE_END
+                ],
+                EXECUTABLE_CORE_K_CODE_START,
+            )
+        )
+        self.assertEqual(len(instructions), EXECUTABLE_CORE_K_INSTRUCTION_COUNT)
+        self.assertEqual(instructions[0].address, EXECUTABLE_CORE_K_CODE_START)
+        self.assertEqual(
+            instructions[-1].address + instructions[-1].size,
+            EXECUTABLE_CORE_K_CODE_END,
+        )
+        self.assertEqual(instructions[-1].mnemonic, "rts")
+        self.assertEqual(
+            sum(
+                instruction.mnemonic == "rts"
+                for instruction in instructions
+            ),
+            EXECUTABLE_CORE_K_RTS_COUNT,
+        )
+        self.assertFalse(
+            any(
+                instruction.mnemonic == "dc.w"
+                for instruction in instructions
+            )
+        )
+        covered_bytes = {
+            address
+            for instruction in instructions
+            for address in range(
+                instruction.address,
+                instruction.address + instruction.size,
+            )
+        }
+        for row in bank["candidates"]:
+            if row["category"] != (
+                "contiguous_instruction_stream_false_positive"
+            ):
+                continue
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(set(range(start, end)) <= covered_bytes)
+
+    def test_executable_core_k_structured_tables_and_references_are_exact(self):
+        bank = self.executable_core_k_bank
+        self.assertEqual(
+            len(bank["data_segments"]),
+            len(EXECUTABLE_CORE_K_DATA_SEGMENTS),
+        )
+        self.assertTrue(
+            all(
+                row["source_layout_valid"]
+                for row in bank["data_segments"]
+            )
+        )
+        self.assertEqual(
+            tuple(bank["decimal_place_values"]),
+            EXECUTABLE_CORE_K_DECIMAL_VALUES,
+        )
+        self.assertEqual(
+            tuple(bank["region_element_counts"]),
+            EXECUTABLE_CORE_K_REGION_COUNTS,
+        )
+        self.assertEqual(
+            tuple(
+                int(pointer, 16)
+                for pointer in bank["region_start_pointers"]
+            ),
+            EXECUTABLE_CORE_K_REGION_POINTERS,
+        )
+        self.assertEqual(
+            tuple(
+                (int(row["address"], 16), row["count"])
+                for row in bank["primary_transfer_descriptors"]
+            ),
+            EXECUTABLE_CORE_K_PRIMARY_TRANSFER_DESCRIPTORS,
+        )
+        self.assertEqual(
+            tuple(
+                (int(row["address"], 16), row["count"])
+                for row in bank["secondary_transfer_descriptors"]
+            ),
+            EXECUTABLE_CORE_K_SECONDARY_TRANSFER_DESCRIPTORS,
+        )
+        self.assertTrue(bank["primary_descriptor_terminated"])
+        self.assertTrue(bank["secondary_descriptor_terminated"])
+        self.assertEqual(
+            len(bank["data_reference_instructions"]),
+            len(EXECUTABLE_CORE_K_DATA_REFERENCE_INSTRUCTIONS),
+        )
+        self.assertTrue(
+            all(
+                row["source_layout_valid"]
+                for row in bank["data_reference_instructions"]
+            )
+        )
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 0)
+        self.assertEqual(bank["aligned_absolute_32_references"], [])
         self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):

@@ -51,6 +51,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-I unclassified: 0
 - Executable-core-J candidates: 69
 - Executable-core-J unclassified: 0
+- Executable-core-K candidates: 10
+- Executable-core-K unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -67,6 +69,16 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-K Candidates
+
+- The source-locked `0x01DC5A..0x01E05C` region contains one exact 68000 code stream plus decimal, count, pointer, and transfer-descriptor data tables.
+- Source SHA-256: `1c193f25105ac8cc2095fd6897f233e4c04acbfd56d8599530e3709b21fce95b`; candidate manifest SHA-256: `7e5e9123965a6893d41847d3dec2284bae8fa01c400793505de2e5042518770c` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 6, `structured_numeric_record_false_positive` 4.
+- Code instructions: 251; `RTS`: 6.
+- Decimal values: 10000, 1000, 100, 10, 1; region counts: 3236, 211, 211, 211, 211.
+- Transfer descriptors: 7 primary and 3 secondary records, both terminated by `0xFFFFFFFF`.
+- Candidate-target aligned four-byte windows: 0; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
 
 ## Reviewed Executable-Core-J Candidates
 
