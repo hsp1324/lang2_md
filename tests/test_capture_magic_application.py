@@ -65,8 +65,34 @@ class CaptureMagicApplicationTests(unittest.TestCase):
             image.paste((0, 0, 128), (30, 110, 295, 185))
             image.save(path)
             self.assertTrue(capture_tool.portrait_dialogue_visible(path))
+
+            image = Image.new("RGB", (320, 240), (0, 128, 0))
+            image.paste((0, 0, 128), (25, 70, 295, 120))
+            image.save(path)
+            self.assertTrue(capture_tool.portrait_dialogue_visible(path))
+
+            image = Image.new("RGB", (320, 240), (0, 128, 0))
+            image.paste((0, 0, 128), (30, 70, 135, 185))
+            image.save(path)
+            self.assertFalse(capture_tool.portrait_dialogue_visible(path))
+
             Image.new("RGB", (320, 240), (0, 128, 0)).save(path)
             self.assertFalse(capture_tool.portrait_dialogue_visible(path))
+
+    def test_rejects_unfinished_post_effect_dialogue(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "frame.png"
+            image = Image.new("RGB", (320, 240), (0, 128, 0))
+            image.paste((0, 0, 128), (30, 110, 295, 185))
+            image.save(path)
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "remained after 12 confirmations",
+            ):
+                capture_tool.require_effect_settled(path, 12)
+
+            Image.new("RGB", (320, 240), (0, 128, 0)).save(path)
+            capture_tool.require_effect_settled(path, 12)
 
     def test_target_probe_checksum_is_stable(self):
         with TemporaryDirectory() as directory:
@@ -80,7 +106,10 @@ class CaptureMagicApplicationTests(unittest.TestCase):
 
     def test_effect_delay_defaults_past_the_stock_animation(self):
         self.assertEqual(capture_tool.DEFAULT_EFFECT_DELAY, 8.0)
+        self.assertEqual(capture_tool.DEFAULT_DIALOGUE_DELAY, 0.9)
         self.assertEqual(capture_tool.DEFAULT_FINAL_CONFIRMATIONS, 2)
+        self.assertEqual(capture_tool.POST_EFFECT_SETTLE_DELAY, 1.2)
+        self.assertEqual(capture_tool.POST_EFFECT_CLEAR_CHECKS, 2)
 
     def test_send_steps_reactivates_for_each_input(self):
         with patch.object(capture_tool, "send_keys") as send:

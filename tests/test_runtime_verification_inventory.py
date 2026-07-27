@@ -27,6 +27,14 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             evidence["captures"],
         )
         self.assertIn(
+            "captures/run/e72d_magic_01_result_stable.png",
+            evidence["captures"],
+        )
+        self.assertIn(
+            "captures/run/e72d_magic_01_post_event_02.png",
+            evidence["captures"],
+        )
+        self.assertIn(
             "captures/run/e72d_magic_03_result_stable.png",
             evidence["captures"],
         )
@@ -37,6 +45,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             )
         self.assertIn("all four magic-list pages", evidence["note"])
         self.assertIn("allegiance-color change", evidence["note"])
+        self.assertIn("블래스트 selects Bald", evidence["note"])
+        self.assertIn("consecutive-clear checks", evidence["note"])
 
     def test_summon_application_evidence_is_diagnostic(self):
         data = inventory.load_inventory()

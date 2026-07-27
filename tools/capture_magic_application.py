@@ -36,7 +36,14 @@ RUNTIME_RECORD_SIZE = 0x60
 CURRENT_MP_OFFSET = 0x38
 MAX_MP_OFFSET = 0x39
 DEFAULT_EFFECT_DELAY = 8.0
+DEFAULT_DIALOGUE_DELAY = 0.9
 DEFAULT_FINAL_CONFIRMATIONS = 2
+POST_EFFECT_SETTLE_DELAY = 1.2
+POST_EFFECT_CLEAR_CHECKS = 2
+DIALOGUE_SCAN_X_RANGE = range(15, 305)
+DIALOGUE_SCAN_Y_RANGE = range(45, 195)
+DIALOGUE_MIN_WIDE_BLUE_PIXELS = 200
+DIALOGUE_MIN_WIDE_BLUE_ROWS = 20
 
 
 def magic_position(magic_id: int) -> tuple[int, int]:
@@ -82,14 +89,24 @@ def portrait_dialogue_visible(path: Path) -> bool:
     image = Image.open(path).convert("RGB")
     if image.size != (320, 240):
         return False
-    crop = image.crop((30, 110, 295, 185))
-    pixels = list(crop.get_flattened_data())
-    blue_pixels = sum(
-        1
-        for red, green, blue in pixels
-        if blue > 60 and blue > red * 1.2 and blue > green * 1.2
-    )
-    return blue_pixels / len(pixels) > 0.6
+    wide_blue_rows = 0
+    for y in DIALOGUE_SCAN_Y_RANGE:
+        blue_pixels = 0
+        for x in DIALOGUE_SCAN_X_RANGE:
+            red, green, blue = image.getpixel((x, y))
+            if blue > 60 and blue > red * 1.2 and blue > green * 1.2:
+                blue_pixels += 1
+        if blue_pixels > DIALOGUE_MIN_WIDE_BLUE_PIXELS:
+            wide_blue_rows += 1
+    return wide_blue_rows >= DIALOGUE_MIN_WIDE_BLUE_ROWS
+
+
+def require_effect_settled(path: Path, confirmation_limit: int) -> None:
+    if portrait_dialogue_visible(path):
+        raise RuntimeError(
+            "post-effect dialogue remained after "
+            f"{confirmation_limit} confirmations"
+        )
 
 
 def run(command: list[str]) -> None:
@@ -155,6 +172,12 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=DEFAULT_EFFECT_DELAY,
         help="seconds to keep BlastEm focused after the final confirmation",
+    )
+    parser.add_argument(
+        "--dialogue-delay",
+        type=float,
+        default=DEFAULT_DIALOGUE_DELAY,
+        help="seconds between post-effect portrait-dialogue confirmations",
     )
     parser.add_argument(
         "--final-confirmations",
@@ -271,15 +294,27 @@ def main() -> int:
             state, current_mp, max_mp = save_and_read_mp(runtime_name)
 
         result = capture(Path(f"{prefix}_result.png"))
-        for event_index in range(args.max_event_confirmations):
-            if not portrait_dialogue_visible(result):
-                break
-            send_keys(f"c@0.12:{args.effect_delay}")
+        dialogue_confirmations = 0
+        clear_checks = 0
+        max_observations = args.max_event_confirmations * 4 + 4
+        for event_index in range(max_observations):
+            if portrait_dialogue_visible(result):
+                if dialogue_confirmations >= args.max_event_confirmations:
+                    break
+                send_keys(f"c@0.12:{args.dialogue_delay}")
+                dialogue_confirmations += 1
+                clear_checks = 0
+            else:
+                clear_checks += 1
+                if clear_checks >= POST_EFFECT_CLEAR_CHECKS:
+                    break
+                time.sleep(POST_EFFECT_SETTLE_DELAY)
             result = capture(
                 Path(f"{prefix}_post_event_{event_index + 1:02d}.png")
             )
-        time.sleep(1.2)
-        capture(Path(f"{prefix}_result_stable.png"))
+        require_effect_settled(result, args.max_event_confirmations)
+        stable = capture(Path(f"{prefix}_result_stable.png"))
+        require_effect_settled(stable, args.max_event_confirmations)
         state, final_current_mp, final_max_mp = save_and_read_mp(runtime_name)
         if (final_current_mp, final_max_mp) != (current_mp, max_mp):
             raise RuntimeError(
