@@ -10,6 +10,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_korean_jp_probe as builder
 from tools import class_change_flow_inventory as class_change_flow_report
+from tools import jp_compressed_resource_inventory as compressed_resource_report
 from tools import magic_flow_inventory as magic_flow_report
 
 
@@ -198,6 +199,20 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         and all(
             row["production_source_equivalent"]
             for row in magic_flow["source_locked_ranges"]
+        )
+    )
+    compressed_resources = compressed_resource_report.inventory(japanese, korean)
+    compressed_resources_complete = (
+        compressed_resources["entry_count"] == 429
+        and compressed_resources["known_owner_count"] == 429
+        and compressed_resources["unknown_owner_count"] == 0
+        and compressed_resources["ownership_record_count"] == 763
+        and compressed_resources["dynamic_load_call_count"] == 11
+        and len(compressed_resources["dynamic_load_call_owners"]) == 11
+        and compressed_resources["unreferenced_candidate_count"] == 2
+        and all(
+            row["structurally_verified"]
+            for row in compressed_resources["entries"]
         )
     )
     rows: list[dict[str, object]] = []
@@ -781,6 +796,19 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "modified_patch_count": sum(bool(row["modified"]) for row in rows),
         "groups": group_summary,
         "compressed_byte_ui_font": compressed,
+        "compressed_resource_ownership": {
+            "entry_count": compressed_resources["entry_count"],
+            "known_owner_count": compressed_resources["known_owner_count"],
+            "unknown_owner_count": compressed_resources["unknown_owner_count"],
+            "ownership_record_count": compressed_resources[
+                "ownership_record_count"
+            ],
+            "unreferenced_candidate_count": compressed_resources[
+                "unreferenced_candidate_count"
+            ],
+            "complete": compressed_resources_complete,
+            "report": "docs/compressed_resource_inventory.md",
+        },
         "declared_patches": rows,
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
@@ -802,11 +830,14 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     "source-locked flow inventory"
                 ]
             ),
-            "exact ownership and purpose of 423 compressed resources beyond "
-            "SEGA boot-logo resource index 0, byte-font resource index 1, "
-            "battle-terrain resource index 223, item-icon resource index 391, "
-            "MASAYA publisher-logo resource index 392, and title-logo resource "
-            "index 393; broad raw-tile asset families are classified for all 429",
+            *(
+                []
+                if compressed_resources_complete
+                else [
+                    "compressed-resource ownership no longer satisfies the "
+                    "source-locked 429-entry inventory"
+                ]
+            ),
         ],
     }
 

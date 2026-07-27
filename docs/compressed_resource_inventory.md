@@ -13,8 +13,12 @@ A valid record does not establish that it contains text or UI data.
 - Total calculated output bytes: 903,296
 - Decoded and hashed by type: type 1: 2, type 2: 248, type 3: 179
 - Modified resources in current build: 3
-- Known owners: 6
-- Unknown owners: 423
+- Known owners: 429
+- Unknown owners: 0
+- Source-traced owners: 421
+- Retained live-verified owners: 6
+- No-reference candidates: 2
+- Exact ownership records: 763
 - Broad asset families reviewed in raw tile order: 429
 - Raw tile text/lettering signals: 5
 - Direct loader calls: 75
@@ -31,7 +35,88 @@ A valid record does not establish that it contains text or UI data.
 
 The lookup routine masks the high flag bit, multiplies the remaining ID by four,
 and reads `0x0B0000[index]`. Immediate calls are linked to resource entries; dynamic
-calls remain listed by code address without a guessed resource owner.
+calls are tied to their source-locked selector tables and descriptor routines.
+
+## Source-Locked Ownership
+
+| Source range | Offset | Length | SHA-256 |
+| --- | --- | ---: | --- |
+| `scenario_map_resource_table` | `0x061C34` | 124 | `fac42d9dffaca3143d0eb37deace4cf63df6b3f6cd0df868f1dd744eeccc5387` |
+| `scenario_map_loader` | `0x01C5A0` | 40 | `cff4956b11a2d008c283d14477d86d9e57035bc3eda5c17265a07b82d95e05e4` |
+| `battle_background_resource_table` | `0x08654C` | 40 | `c13a99f2a4eb4f6be32110af1d47438428266ea54760ae1cbdce43f21c407495` |
+| `battle_background_loader` | `0x01CD10` | 22 | `a1c2e0cd8ce636af2a22f0342e2debb24584bb33cb57487d9b81f73516dece62` |
+| `commander_combat_pointer_table` | `0x087726` | 40 | `ddf61f9404940f9c8520e3f9d5a7ddca2388170365e64b449654292652bf29c5` |
+| `commander_combat_records` | `0x08774E` | 3260 | `ad4260a2f63bbd2840a61440d118d7b9a9566298ae62a4b06fb1b105ae62bfe9` |
+| `generic_combat_descriptor_table` | `0x08840A` | 2512 | `f7ee226f64b6582e0117c962b573af1d19902b601aab19521c848930623e2e00` |
+| `map_combat_selector` | `0x01B6FA` | 114 | `0b6727402de682cda58c7f10210a50e98721491325a9f97669112c3098080811` |
+| `battle_combat_selector` | `0x01DB34` | 102 | `31034f724ea5dd91a4b739e01fd4a9c919126872dfdba49659d428a41a0269b5` |
+| `portrait_lookup_table` | `0x0977A6` | 256 | `31ce43a1127a9d2dd9d64a84479ec25cef34fbc0fc535b8d55f0a38cab17a1a5` |
+| `portrait_loader` | `0x01CC7A` | 28 | `13fa5a04dbce2fa916c7e32b1fbae234d00081fcf7e733c9d5fe6f3f24916b72` |
+| `route_fragment_pointer_table` | `0x0A1124` | 124 | `ab633779c6700d176759c519c5417ebe1117db3f18727bb94dabf6e71e55462f` |
+| `route_fragment_descriptors` | `0x0A11A0` | 780 | `adcd9be6748bb352dd81dff902098f22568234a88ef7e5227e440768be432148` |
+| `route_fragment_loader` | `0x026056` | 184 | `1d83d7848116841bb9873262765ef55e265a6755e05001b69bb3c2ad2ecea582` |
+| `battle_variant_loader` | `0x01E0D2` | 152 | `d59a0ed676cf4e9329b4c49a5ea7b5f4c169712c1ac0794a88136a129578bb49` |
+| `common_battle_loader` | `0x01C5EE` | 14 | `75331e1f4c613508950783bafea71e083036292679ba9b0ec19f6d277d4976c4` |
+
+All 11 dynamic wrapper calls have an exact producer:
+
+| Call | Producer |
+| --- | --- |
+| `0x018220` | `battle_background_selector_left` |
+| `0x0182E6` | `battle_background_selector_right` |
+| `0x01840C` | `battle_background_selector_shared` |
+| `0x01B3F2` | `character_portrait_map_status` |
+| `0x01B47E` | `combat_sprite_map_status` |
+| `0x01C5C0` | `scenario_map_tileset` |
+| `0x01CC90` | `character_portrait_battle_status` |
+| `0x01CD20` | `battle_background_selector_battle` |
+| `0x01CE1C` | `combat_sprite_battle_scene` |
+| `0x021B8A` | `character_portrait_menu` |
+| `0x0260B8` | `route_map_fragment` |
+
+The ownership records cover Scenario 1-31 map descriptors, all 20 battle
+background selectors, all 157 generic class combat descriptors, all ten
+commander override lists, all 256 portrait lookup IDs, all 31 route-map
+fragment descriptors, and every immediate opening/ending scene load.
+Resources 2 and 224 have no immediate call and do not occur in any of those
+dynamic producer tables. They remain explicit no-reference candidates instead
+of being assigned a guessed live purpose.
+
+### Primary Owner Counts
+
+| Owner | Resources |
+| --- | ---: |
+| `sega_boot_logo` | 1 |
+| `byte_ui_font` | 1 |
+| `unreferenced_map_graphic_candidate` | 1 |
+| `scenario_map_tileset` | 23 |
+| `battle_background_selector` | 20 |
+| `shared_battle_scene_tiles` | 1 |
+| `generic_combat_sprite` | 108 |
+| `commander_combat_sprite` | 68 |
+| `battle_ui_terrain` | 1 |
+| `unreferenced_battle_graphic_candidate` | 1 |
+| `battle_scene_layout_variant` | 5 |
+| `battle_scene_shared_overlay` | 1 |
+| `character_portrait` | 132 |
+| `route_map_fragment` | 25 |
+| `shared_ui_marker_tiles` | 1 |
+| `shared_ui_pattern_tiles` | 1 |
+| `world_map_graphics` | 1 |
+| `item_icons` | 1 |
+| `masaya_publisher_logo` | 1 |
+| `title_logo` | 1 |
+| `title_screen_group_02D672` | 3 |
+| `opening_ending_scene_group_02DEE2` | 3 |
+| `opening_ending_scene_group_02E434` | 3 |
+| `opening_ending_scene_group_02E63A` | 4 |
+| `opening_ending_scene_group_02E972` | 5 |
+| `opening_ending_scene_group_02EF1E` | 1 |
+| `opening_ending_scene_group_02F17E` | 4 |
+| `opening_ending_scene_group_02F748` | 1 |
+| `opening_ending_scene_group_02FACA` | 6 |
+| `opening_ending_scene_group_02F87E` | 2 |
+| `opening_ending_scene_group_030C72` | 3 |
 
 ## Raw Tile Atlas Review
 
@@ -40,7 +125,8 @@ resources reached by immediate-ID loader calls, or pass `--indices 0-428`
 to render the complete table. The atlas uses raw decompressed 4bpp tile order,
 so it can separate broad graphics families and expose obvious lettering but
 does not reconstruct tile maps, palettes, animation frames, or exact runtime
-ownership. Absence of readable Japanese in this view is not translation proof.
+ownership by itself. Exact ownership above comes from code and tables, not atlas
+appearance. Absence of readable Japanese in this view is not translation proof.
 
 | Asset family | Resources |
 | --- | ---: |
@@ -77,16 +163,439 @@ Obvious lettering/font signals in raw tile order:
 | `0x02` | 248 |
 | `0x03` | 179 |
 
-## Known And Modified Resources
+## Per-Resource Ownership
 
-| Index | Owner | Original | Current | Type | Size | Pointer changed | Content changed |
-| ---: | --- | --- | --- | ---: | ---: | --- | --- |
-| 0 | sega_boot_logo | `0x0B06B4` | `0x0B06B4` | `0x03` | 1568 | False | False |
-| 1 | byte_ui_font | `0x0B0A84` | `0x290000` | `0x03` | 8192 | True | True |
-| 223 | battle_ui_terrain | `0x0FEB2A` | `0x2E2000` | `0x03` | 2368 | True | True |
-| 391 | item_icons | `0x11FAE4` | `0x11FAE4` | `0x03` | 8192 | False | False |
-| 392 | masaya_publisher_logo | `0x120BEE` | `0x120BEE` | `0x03` | 1632 | False | False |
-| 393 | title_logo | `0x120EEE` | `0x2E0000` | `0x03` | 5984 | True | True |
+| Index | Owner | Status | Records | Original | Current | Type | Size | Modified |
+| ---: | --- | --- | ---: | --- | --- | ---: | ---: | --- |
+| 0 | `sega_boot_logo` | `live_verified` | 1 | `0x0B06B4` | `0x0B06B4` | `0x03` | 1568 | False |
+| 1 | `byte_ui_font` | `live_verified` | 1 | `0x0B0A84` | `0x290000` | `0x03` | 8192 | True |
+| 2 | `unreferenced_map_graphic_candidate` | `unreferenced_candidate` | 1 | `0x0B1B32` | `0x0B1B32` | `0x03` | 1248 | False |
+| 3 | `scenario_map_tileset` | `source_traced` | 18 | `0x0B1DBC` | `0x0B1DBC` | `0x03` | 8192 | False |
+| 4 | `scenario_map_tileset` | `source_traced` | 2 | `0x0B3550` | `0x0B3550` | `0x03` | 8192 | False |
+| 5 | `scenario_map_tileset` | `source_traced` | 2 | `0x0B4912` | `0x0B4912` | `0x03` | 8192 | False |
+| 6 | `scenario_map_tileset` | `source_traced` | 1 | `0x0B5EB0` | `0x0B5EB0` | `0x03` | 8192 | False |
+| 7 | `scenario_map_tileset` | `source_traced` | 1 | `0x0B7268` | `0x0B7268` | `0x03` | 8192 | False |
+| 8 | `scenario_map_tileset` | `source_traced` | 2 | `0x0B87BC` | `0x0B87BC` | `0x03` | 8192 | False |
+| 9 | `scenario_map_tileset` | `source_traced` | 2 | `0x0B970A` | `0x0B970A` | `0x03` | 8192 | False |
+| 10 | `scenario_map_tileset` | `source_traced` | 1 | `0x0BA652` | `0x0BA652` | `0x03` | 8192 | False |
+| 11 | `scenario_map_tileset` | `source_traced` | 2 | `0x0BB8DA` | `0x0BB8DA` | `0x03` | 8192 | False |
+| 12 | `scenario_map_tileset` | `source_traced` | 1 | `0x0BCB1C` | `0x0BCB1C` | `0x03` | 8192 | False |
+| 13 | `scenario_map_tileset` | `source_traced` | 3 | `0x0BDB34` | `0x0BDB34` | `0x03` | 8192 | False |
+| 14 | `scenario_map_tileset` | `source_traced` | 2 | `0x0BF09E` | `0x0BF09E` | `0x03` | 8192 | False |
+| 15 | `scenario_map_tileset` | `source_traced` | 4 | `0x0BFD24` | `0x0BFD24` | `0x03` | 8192 | False |
+| 16 | `scenario_map_tileset` | `source_traced` | 3 | `0x0C0CB2` | `0x0C0CB2` | `0x03` | 8192 | False |
+| 17 | `scenario_map_tileset` | `source_traced` | 2 | `0x0C1E0E` | `0x0C1E0E` | `0x03` | 8192 | False |
+| 18 | `scenario_map_tileset` | `source_traced` | 1 | `0x0C2E4C` | `0x0C2E4C` | `0x03` | 8192 | False |
+| 19 | `scenario_map_tileset` | `source_traced` | 1 | `0x0C3F10` | `0x0C3F10` | `0x03` | 8192 | False |
+| 20 | `scenario_map_tileset` | `source_traced` | 4 | `0x0C50A0` | `0x0C50A0` | `0x03` | 8192 | False |
+| 21 | `scenario_map_tileset` | `source_traced` | 2 | `0x0C60DC` | `0x0C60DC` | `0x03` | 8192 | False |
+| 22 | `scenario_map_tileset` | `source_traced` | 3 | `0x0C6CF8` | `0x0C6CF8` | `0x03` | 8192 | False |
+| 23 | `scenario_map_tileset` | `source_traced` | 3 | `0x0C7D60` | `0x0C7D60` | `0x03` | 8192 | False |
+| 24 | `scenario_map_tileset` | `source_traced` | 1 | `0x0C9214` | `0x0C9214` | `0x03` | 8192 | False |
+| 25 | `scenario_map_tileset` | `source_traced` | 1 | `0x0CA04C` | `0x0CA04C` | `0x03` | 8192 | False |
+| 26 | `battle_background_selector` | `source_traced` | 1 | `0x0CB0E6` | `0x0CB0E6` | `0x03` | 3328 | False |
+| 27 | `battle_background_selector` | `source_traced` | 1 | `0x0CB86A` | `0x0CB86A` | `0x03` | 3328 | False |
+| 28 | `battle_background_selector` | `source_traced` | 1 | `0x0CBF66` | `0x0CBF66` | `0x03` | 3520 | False |
+| 29 | `battle_background_selector` | `source_traced` | 1 | `0x0CC856` | `0x0CC856` | `0x02` | 3776 | False |
+| 30 | `battle_background_selector` | `source_traced` | 1 | `0x0CD24C` | `0x0CD24C` | `0x03` | 3136 | False |
+| 31 | `battle_background_selector` | `source_traced` | 1 | `0x0CDAA4` | `0x0CDAA4` | `0x03` | 2848 | False |
+| 32 | `battle_background_selector` | `source_traced` | 1 | `0x0CE106` | `0x0CE106` | `0x03` | 1344 | False |
+| 33 | `battle_background_selector` | `source_traced` | 1 | `0x0CE328` | `0x0CE328` | `0x03` | 2528 | False |
+| 34 | `battle_background_selector` | `source_traced` | 1 | `0x0CE9FC` | `0x0CE9FC` | `0x03` | 2528 | False |
+| 35 | `battle_background_selector` | `source_traced` | 1 | `0x0CF0D0` | `0x0CF0D0` | `0x03` | 3072 | False |
+| 36 | `battle_background_selector` | `source_traced` | 1 | `0x0CF730` | `0x0CF730` | `0x03` | 3296 | False |
+| 37 | `battle_background_selector` | `source_traced` | 1 | `0x0CFEA8` | `0x0CFEA8` | `0x03` | 1792 | False |
+| 38 | `battle_background_selector` | `source_traced` | 1 | `0x0D02C6` | `0x0D02C6` | `0x02` | 3616 | False |
+| 39 | `battle_background_selector` | `source_traced` | 1 | `0x0D0B46` | `0x0D0B46` | `0x03` | 2560 | False |
+| 40 | `battle_background_selector` | `source_traced` | 1 | `0x0D0F76` | `0x0D0F76` | `0x03` | 2432 | False |
+| 41 | `battle_background_selector` | `source_traced` | 1 | `0x0D1426` | `0x0D1426` | `0x03` | 2944 | False |
+| 42 | `battle_background_selector` | `source_traced` | 1 | `0x0D1AA2` | `0x0D1AA2` | `0x03` | 2752 | False |
+| 43 | `battle_background_selector` | `source_traced` | 1 | `0x0D2166` | `0x0D2166` | `0x03` | 2848 | False |
+| 44 | `battle_background_selector` | `source_traced` | 1 | `0x0D280E` | `0x0D280E` | `0x03` | 3200 | False |
+| 45 | `battle_background_selector` | `source_traced` | 1 | `0x0D2E48` | `0x0D2E48` | `0x03` | 3360 | False |
+| 46 | `shared_battle_scene_tiles` | `source_traced` | 1 | `0x0D34D8` | `0x0D34D8` | `0x02` | 7808 | False |
+| 47 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D440E` | `0x0D440E` | `0x03` | 1728 | False |
+| 48 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D47E6` | `0x0D47E6` | `0x03` | 1728 | False |
+| 49 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D4BA8` | `0x0D4BA8` | `0x03` | 1728 | False |
+| 50 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D505A` | `0x0D505A` | `0x03` | 1728 | False |
+| 51 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D54A6` | `0x0D54A6` | `0x03` | 1728 | False |
+| 52 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D58B2` | `0x0D58B2` | `0x03` | 2336 | False |
+| 53 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D5E96` | `0x0D5E96` | `0x03` | 2336 | False |
+| 54 | `generic_combat_sprite` | `source_traced` | 2 | `0x0D641C` | `0x0D641C` | `0x02` | 2336 | False |
+| 55 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D6A76` | `0x0D6A76` | `0x03` | 1152 | False |
+| 56 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D6D84` | `0x0D6D84` | `0x03` | 1440 | False |
+| 57 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D7112` | `0x0D7112` | `0x03` | 1728 | False |
+| 58 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D75C0` | `0x0D75C0` | `0x03` | 1728 | False |
+| 59 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D799E` | `0x0D799E` | `0x03` | 1728 | False |
+| 60 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D7E46` | `0x0D7E46` | `0x03` | 1824 | False |
+| 61 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D82FA` | `0x0D82FA` | `0x03` | 1824 | False |
+| 62 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D873C` | `0x0D873C` | `0x03` | 1152 | False |
+| 63 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D89F4` | `0x0D89F4` | `0x02` | 864 | False |
+| 64 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D8C36` | `0x0D8C36` | `0x03` | 1824 | False |
+| 65 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D8FA0` | `0x0D8FA0` | `0x02` | 4096 | False |
+| 66 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D98B2` | `0x0D98B2` | `0x02` | 864 | False |
+| 67 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D9B8A` | `0x0D9B8A` | `0x02` | 2048 | False |
+| 68 | `generic_combat_sprite` | `source_traced` | 1 | `0x0D9FE2` | `0x0D9FE2` | `0x02` | 1824 | False |
+| 69 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DA2B6` | `0x0DA2B6` | `0x02` | 4096 | False |
+| 70 | `generic_combat_sprite` | `source_traced` | 2 | `0x0DAC0A` | `0x0DAC0A` | `0x02` | 2048 | False |
+| 71 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DAFE6` | `0x0DAFE6` | `0x03` | 1728 | False |
+| 72 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DB498` | `0x0DB498` | `0x03` | 1728 | False |
+| 73 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DB8D6` | `0x0DB8D6` | `0x03` | 1728 | False |
+| 74 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DBD0A` | `0x0DBD0A` | `0x03` | 1728 | False |
+| 75 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DC14E` | `0x0DC14E` | `0x03` | 1152 | False |
+| 76 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DC45C` | `0x0DC45C` | `0x03` | 1440 | False |
+| 77 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DC820` | `0x0DC820` | `0x03` | 1728 | False |
+| 78 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DCBE6` | `0x0DCBE6` | `0x03` | 2336 | False |
+| 79 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DD1CA` | `0x0DD1CA` | `0x03` | 2336 | False |
+| 80 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DD7DA` | `0x0DD7DA` | `0x03` | 2336 | False |
+| 81 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DDE5A` | `0x0DDE5A` | `0x03` | 1728 | False |
+| 82 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DE2E2` | `0x0DE2E2` | `0x03` | 1824 | False |
+| 83 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DE7A2` | `0x0DE7A2` | `0x03` | 1728 | False |
+| 84 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DEB74` | `0x0DEB74` | `0x03` | 1728 | False |
+| 85 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DEF1A` | `0x0DEF1A` | `0x03` | 1728 | False |
+| 86 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DF354` | `0x0DF354` | `0x03` | 1728 | False |
+| 87 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DF78C` | `0x0DF78C` | `0x03` | 1824 | False |
+| 88 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DFB66` | `0x0DFB66` | `0x03` | 1728 | False |
+| 89 | `generic_combat_sprite` | `source_traced` | 1 | `0x0DFFD8` | `0x0DFFD8` | `0x03` | 1920 | False |
+| 90 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E03CC` | `0x0E03CC` | `0x03` | 2336 | False |
+| 91 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E088E` | `0x0E088E` | `0x03` | 2336 | False |
+| 92 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E0D88` | `0x0E0D88` | `0x02` | 384 | False |
+| 93 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E0E6E` | `0x0E0E6E` | `0x02` | 1824 | False |
+| 94 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E11AA` | `0x0E11AA` | `0x03` | 1728 | False |
+| 95 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E16D8` | `0x0E16D8` | `0x02` | 1152 | False |
+| 96 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E19AE` | `0x0E19AE` | `0x02` | 1824 | False |
+| 97 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E1C42` | `0x0E1C42` | `0x02` | 896 | False |
+| 98 | `generic_combat_sprite` | `source_traced` | 2 | `0x0E1DF2` | `0x0E1DF2` | `0x03` | 864 | False |
+| 99 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E205E` | `0x0E205E` | `0x02` | 864 | False |
+| 100 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E22D2` | `0x0E22D2` | `0x02` | 864 | False |
+| 101 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E259C` | `0x0E259C` | `0x03` | 2336 | False |
+| 102 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E2B64` | `0x0E2B64` | `0x03` | 864 | False |
+| 103 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E2DF6` | `0x0E2DF6` | `0x02` | 864 | False |
+| 104 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E30A0` | `0x0E30A0` | `0x02` | 864 | False |
+| 105 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E331C` | `0x0E331C` | `0x03` | 1824 | False |
+| 106 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E36EE` | `0x0E36EE` | `0x03` | 864 | False |
+| 107 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E39DE` | `0x0E39DE` | `0x03` | 2336 | False |
+| 108 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E4032` | `0x0E4032` | `0x02` | 864 | False |
+| 109 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E431A` | `0x0E431A` | `0x03` | 864 | False |
+| 110 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E45C2` | `0x0E45C2` | `0x02` | 864 | False |
+| 111 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E4852` | `0x0E4852` | `0x03` | 2336 | False |
+| 112 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E4EAC` | `0x0E4EAC` | `0x02` | 864 | False |
+| 113 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E517A` | `0x0E517A` | `0x03` | 1824 | False |
+| 114 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E5656` | `0x0E5656` | `0x03` | 864 | False |
+| 115 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E595E` | `0x0E595E` | `0x02` | 864 | False |
+| 116 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E5C18` | `0x0E5C18` | `0x02` | 864 | False |
+| 117 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E5EF0` | `0x0E5EF0` | `0x02` | 864 | False |
+| 118 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E61E6` | `0x0E61E6` | `0x03` | 2336 | False |
+| 119 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E6872` | `0x0E6872` | `0x03` | 2336 | False |
+| 120 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E6EA6` | `0x0E6EA6` | `0x03` | 2336 | False |
+| 121 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E74E0` | `0x0E74E0` | `0x02` | 864 | False |
+| 122 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E7762` | `0x0E7762` | `0x03` | 1824 | False |
+| 123 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E7C2A` | `0x0E7C2A` | `0x03` | 2336 | False |
+| 124 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E82B6` | `0x0E82B6` | `0x03` | 2336 | False |
+| 125 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E8972` | `0x0E8972` | `0x03` | 2336 | False |
+| 126 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E8FFA` | `0x0E8FFA` | `0x03` | 2336 | False |
+| 127 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E9610` | `0x0E9610` | `0x03` | 2336 | False |
+| 128 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E9C18` | `0x0E9C18` | `0x02` | 864 | False |
+| 129 | `generic_combat_sprite` | `source_traced` | 1 | `0x0E9EC2` | `0x0E9EC2` | `0x02` | 864 | False |
+| 130 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EA162` | `0x0EA162` | `0x03` | 864 | False |
+| 131 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EA412` | `0x0EA412` | `0x02` | 864 | False |
+| 132 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EA670` | `0x0EA670` | `0x02` | 864 | False |
+| 133 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EA906` | `0x0EA906` | `0x02` | 864 | False |
+| 134 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EAB40` | `0x0EAB40` | `0x02` | 1280 | False |
+| 135 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EAD8E` | `0x0EAD8E` | `0x02` | 1536 | False |
+| 136 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EB14A` | `0x0EB14A` | `0x02` | 1152 | False |
+| 137 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EB408` | `0x0EB408` | `0x02` | 864 | False |
+| 138 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EB616` | `0x0EB616` | `0x02` | 1920 | False |
+| 139 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EB984` | `0x0EB984` | `0x02` | 1792 | False |
+| 140 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EBCD8` | `0x0EBCD8` | `0x02` | 1024 | False |
+| 141 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EBF18` | `0x0EBF18` | `0x02` | 864 | False |
+| 142 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EC1B8` | `0x0EC1B8` | `0x02` | 864 | False |
+| 143 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EC478` | `0x0EC478` | `0x02` | 864 | False |
+| 144 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EC72C` | `0x0EC72C` | `0x02` | 864 | False |
+| 145 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EC9D2` | `0x0EC9D2` | `0x03` | 1824 | False |
+| 146 | `generic_combat_sprite` | `source_traced` | 1 | `0x0ECDA0` | `0x0ECDA0` | `0x03` | 2048 | False |
+| 147 | `generic_combat_sprite` | `source_traced` | 1 | `0x0ED136` | `0x0ED136` | `0x02` | 864 | False |
+| 148 | `generic_combat_sprite` | `source_traced` | 1 | `0x0ED30C` | `0x0ED30C` | `0x02` | 4096 | False |
+| 149 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EDB78` | `0x0EDB78` | `0x02` | 1824 | False |
+| 150 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EE0AE` | `0x0EE0AE` | `0x02` | 864 | False |
+| 151 | `generic_combat_sprite` | `source_traced` | 2 | `0x0EE302` | `0x0EE302` | `0x02` | 864 | False |
+| 152 | `generic_combat_sprite` | `source_traced` | 1 | `0x0EE540` | `0x0EE540` | `0x03` | 864 | False |
+| 153 | `generic_combat_sprite` | `source_traced` | 7 | `0x0EE818` | `0x0EE818` | `0x03` | 864 | False |
+| 154 | `generic_combat_sprite` | `source_traced` | 44 | `0x0EEA8A` | `0x0EEA8A` | `0x02` | 864 | False |
+| 155 | `commander_combat_sprite` | `source_traced` | 4 | `0x0EED62` | `0x0EED62` | `0x02` | 864 | False |
+| 156 | `commander_combat_sprite` | `source_traced` | 1 | `0x0EF018` | `0x0EF018` | `0x02` | 864 | False |
+| 157 | `commander_combat_sprite` | `source_traced` | 2 | `0x0EF2BE` | `0x0EF2BE` | `0x02` | 864 | False |
+| 158 | `commander_combat_sprite` | `source_traced` | 4 | `0x0EF596` | `0x0EF596` | `0x03` | 2336 | False |
+| 159 | `commander_combat_sprite` | `source_traced` | 2 | `0x0EFC14` | `0x0EFC14` | `0x03` | 2336 | False |
+| 160 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F022A` | `0x0F022A` | `0x03` | 2336 | False |
+| 161 | `commander_combat_sprite` | `source_traced` | 5 | `0x0F0784` | `0x0F0784` | `0x02` | 864 | False |
+| 162 | `commander_combat_sprite` | `source_traced` | 5 | `0x0F0A2A` | `0x0F0A2A` | `0x02` | 864 | False |
+| 163 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F0CDE` | `0x0F0CDE` | `0x02` | 864 | False |
+| 164 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F0FC0` | `0x0F0FC0` | `0x02` | 864 | False |
+| 165 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F1274` | `0x0F1274` | `0x02` | 864 | False |
+| 166 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F1522` | `0x0F1522` | `0x03` | 2336 | False |
+| 167 | `commander_combat_sprite` | `source_traced` | 5 | `0x0F1B5A` | `0x0F1B5A` | `0x02` | 864 | False |
+| 168 | `commander_combat_sprite` | `source_traced` | 5 | `0x0F1E00` | `0x0F1E00` | `0x02` | 864 | False |
+| 169 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F20AC` | `0x0F20AC` | `0x02` | 864 | False |
+| 170 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F2390` | `0x0F2390` | `0x02` | 864 | False |
+| 171 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F2646` | `0x0F2646` | `0x02` | 864 | False |
+| 172 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F28F4` | `0x0F28F4` | `0x03` | 2336 | False |
+| 173 | `commander_combat_sprite` | `source_traced` | 6 | `0x0F2F2C` | `0x0F2F2C` | `0x02` | 864 | False |
+| 174 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F318A` | `0x0F318A` | `0x02` | 864 | False |
+| 175 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F33EE` | `0x0F33EE` | `0x02` | 864 | False |
+| 176 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F367A` | `0x0F367A` | `0x02` | 864 | False |
+| 177 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F38E4` | `0x0F38E4` | `0x02` | 864 | False |
+| 178 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F3B68` | `0x0F3B68` | `0x03` | 2336 | False |
+| 179 | `commander_combat_sprite` | `source_traced` | 5 | `0x0F41B2` | `0x0F41B2` | `0x02` | 864 | False |
+| 180 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F442C` | `0x0F442C` | `0x02` | 864 | False |
+| 181 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F468C` | `0x0F468C` | `0x02` | 864 | False |
+| 182 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F48CC` | `0x0F48CC` | `0x03` | 864 | False |
+| 183 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F4B3C` | `0x0F4B3C` | `0x03` | 2336 | False |
+| 184 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F512A` | `0x0F512A` | `0x03` | 1824 | False |
+| 185 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F5580` | `0x0F5580` | `0x03` | 1824 | False |
+| 186 | `commander_combat_sprite` | `source_traced` | 6 | `0x0F5A6C` | `0x0F5A6C` | `0x02` | 864 | False |
+| 187 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F5D1E` | `0x0F5D1E` | `0x03` | 864 | False |
+| 188 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F5FE2` | `0x0F5FE2` | `0x02` | 864 | False |
+| 189 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F6292` | `0x0F6292` | `0x03` | 864 | False |
+| 190 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F652C` | `0x0F652C` | `0x02` | 864 | False |
+| 191 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F67EE` | `0x0F67EE` | `0x03` | 2336 | False |
+| 192 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F6DEA` | `0x0F6DEA` | `0x02` | 864 | False |
+| 193 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F7048` | `0x0F7048` | `0x02` | 864 | False |
+| 194 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F72A6` | `0x0F72A6` | `0x02` | 864 | False |
+| 195 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F750E` | `0x0F750E` | `0x02` | 864 | False |
+| 196 | `commander_combat_sprite` | `source_traced` | 4 | `0x0F7788` | `0x0F7788` | `0x03` | 2336 | False |
+| 197 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F7DC4` | `0x0F7DC4` | `0x03` | 2336 | False |
+| 198 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F836E` | `0x0F836E` | `0x03` | 1824 | False |
+| 199 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F8728` | `0x0F8728` | `0x03` | 1824 | False |
+| 200 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F8BB8` | `0x0F8BB8` | `0x03` | 2336 | False |
+| 201 | `commander_combat_sprite` | `source_traced` | 4 | `0x0F908C` | `0x0F908C` | `0x02` | 864 | False |
+| 202 | `commander_combat_sprite` | `source_traced` | 2 | `0x0F9320` | `0x0F9320` | `0x02` | 864 | False |
+| 203 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F95A8` | `0x0F95A8` | `0x02` | 864 | False |
+| 204 | `commander_combat_sprite` | `source_traced` | 1 | `0x0F9846` | `0x0F9846` | `0x02` | 864 | False |
+| 205 | `commander_combat_sprite` | `source_traced` | 3 | `0x0F9ABC` | `0x0F9ABC` | `0x03` | 2336 | False |
+| 206 | `commander_combat_sprite` | `source_traced` | 1 | `0x0FA0B2` | `0x0FA0B2` | `0x03` | 1824 | False |
+| 207 | `commander_combat_sprite` | `source_traced` | 3 | `0x0FA4A8` | `0x0FA4A8` | `0x03` | 1824 | False |
+| 208 | `commander_combat_sprite` | `source_traced` | 5 | `0x0FA998` | `0x0FA998` | `0x02` | 864 | False |
+| 209 | `commander_combat_sprite` | `source_traced` | 3 | `0x0FAC06` | `0x0FAC06` | `0x02` | 864 | False |
+| 210 | `commander_combat_sprite` | `source_traced` | 1 | `0x0FAE78` | `0x0FAE78` | `0x02` | 864 | False |
+| 211 | `commander_combat_sprite` | `source_traced` | 2 | `0x0FB10A` | `0x0FB10A` | `0x02` | 864 | False |
+| 212 | `commander_combat_sprite` | `source_traced` | 3 | `0x0FB37C` | `0x0FB37C` | `0x02` | 2336 | False |
+| 213 | `commander_combat_sprite` | `source_traced` | 2 | `0x0FB9BC` | `0x0FB9BC` | `0x02` | 2336 | False |
+| 214 | `commander_combat_sprite` | `source_traced` | 1 | `0x0FBFB0` | `0x0FBFB0` | `0x03` | 2336 | False |
+| 215 | `commander_combat_sprite` | `source_traced` | 1 | `0x0FC4E2` | `0x0FC4E2` | `0x02` | 864 | False |
+| 216 | `commander_combat_sprite` | `source_traced` | 4 | `0x0FC782` | `0x0FC782` | `0x02` | 864 | False |
+| 217 | `commander_combat_sprite` | `source_traced` | 2 | `0x0FCA2C` | `0x0FCA2C` | `0x02` | 864 | False |
+| 218 | `commander_combat_sprite` | `source_traced` | 4 | `0x0FCCCC` | `0x0FCCCC` | `0x02` | 2336 | False |
+| 219 | `commander_combat_sprite` | `source_traced` | 2 | `0x0FD348` | `0x0FD348` | `0x02` | 2336 | False |
+| 220 | `commander_combat_sprite` | `source_traced` | 1 | `0x0FD990` | `0x0FD990` | `0x03` | 2336 | False |
+| 221 | `commander_combat_sprite` | `source_traced` | 3 | `0x0FDEA4` | `0x0FDEA4` | `0x03` | 2336 | False |
+| 222 | `commander_combat_sprite` | `source_traced` | 1 | `0x0FE54E` | `0x0FE54E` | `0x03` | 2336 | False |
+| 223 | `battle_ui_terrain` | `live_verified` | 2 | `0x0FEB2A` | `0x2E2000` | `0x03` | 2368 | True |
+| 224 | `unreferenced_battle_graphic_candidate` | `unreferenced_candidate` | 1 | `0x0FEE5E` | `0x0FEE5E` | `0x02` | 1152 | False |
+| 225 | `battle_scene_layout_variant` | `source_traced` | 1 | `0x0FF24E` | `0x0FF24E` | `0x03` | 3840 | False |
+| 226 | `battle_scene_layout_variant` | `source_traced` | 1 | `0x0FF87A` | `0x0FF87A` | `0x02` | 768 | False |
+| 227 | `battle_scene_layout_variant` | `source_traced` | 1 | `0x0FF95C` | `0x0FF95C` | `0x03` | 6912 | False |
+| 228 | `battle_scene_layout_variant` | `source_traced` | 1 | `0x10011C` | `0x10011C` | `0x02` | 4096 | False |
+| 229 | `battle_scene_layout_variant` | `source_traced` | 1 | `0x100B0E` | `0x100B0E` | `0x02` | 4096 | False |
+| 230 | `battle_scene_shared_overlay` | `source_traced` | 1 | `0x101052` | `0x101052` | `0x02` | 2176 | False |
+| 231 | `character_portrait` | `source_traced` | 45 | `0x101466` | `0x101466` | `0x02` | 1152 | False |
+| 232 | `character_portrait` | `source_traced` | 1 | `0x101862` | `0x101862` | `0x02` | 1152 | False |
+| 233 | `character_portrait` | `source_traced` | 1 | `0x101C22` | `0x101C22` | `0x02` | 1152 | False |
+| 234 | `character_portrait` | `source_traced` | 1 | `0x102002` | `0x102002` | `0x02` | 1152 | False |
+| 235 | `character_portrait` | `source_traced` | 1 | `0x1023BE` | `0x1023BE` | `0x02` | 1152 | False |
+| 236 | `character_portrait` | `source_traced` | 1 | `0x1027A4` | `0x1027A4` | `0x02` | 1152 | False |
+| 237 | `character_portrait` | `source_traced` | 1 | `0x102B76` | `0x102B76` | `0x02` | 1152 | False |
+| 238 | `character_portrait` | `source_traced` | 1 | `0x102F6C` | `0x102F6C` | `0x02` | 1152 | False |
+| 239 | `character_portrait` | `source_traced` | 1 | `0x10333A` | `0x10333A` | `0x02` | 1152 | False |
+| 240 | `character_portrait` | `source_traced` | 1 | `0x103738` | `0x103738` | `0x02` | 1152 | False |
+| 241 | `character_portrait` | `source_traced` | 1 | `0x103B40` | `0x103B40` | `0x02` | 1152 | False |
+| 242 | `character_portrait` | `source_traced` | 1 | `0x103F38` | `0x103F38` | `0x02` | 1152 | False |
+| 243 | `character_portrait` | `source_traced` | 1 | `0x104328` | `0x104328` | `0x02` | 1152 | False |
+| 244 | `character_portrait` | `source_traced` | 1 | `0x1046C8` | `0x1046C8` | `0x02` | 1152 | False |
+| 245 | `character_portrait` | `source_traced` | 1 | `0x104A4A` | `0x104A4A` | `0x02` | 1152 | False |
+| 246 | `character_portrait` | `source_traced` | 1 | `0x104DE0` | `0x104DE0` | `0x02` | 1152 | False |
+| 247 | `character_portrait` | `source_traced` | 1 | `0x105160` | `0x105160` | `0x02` | 1152 | False |
+| 248 | `character_portrait` | `source_traced` | 1 | `0x1054F8` | `0x1054F8` | `0x02` | 1152 | False |
+| 249 | `character_portrait` | `source_traced` | 1 | `0x1058AE` | `0x1058AE` | `0x02` | 1152 | False |
+| 250 | `character_portrait` | `source_traced` | 1 | `0x105C78` | `0x105C78` | `0x02` | 1152 | False |
+| 251 | `character_portrait` | `source_traced` | 1 | `0x106022` | `0x106022` | `0x02` | 1152 | False |
+| 252 | `character_portrait` | `source_traced` | 1 | `0x106348` | `0x106348` | `0x02` | 1152 | False |
+| 253 | `character_portrait` | `source_traced` | 1 | `0x106686` | `0x106686` | `0x02` | 1152 | False |
+| 254 | `character_portrait` | `source_traced` | 1 | `0x1069A6` | `0x1069A6` | `0x02` | 1152 | False |
+| 255 | `character_portrait` | `source_traced` | 1 | `0x106C58` | `0x106C58` | `0x02` | 1152 | False |
+| 256 | `character_portrait` | `source_traced` | 1 | `0x106F66` | `0x106F66` | `0x02` | 1152 | False |
+| 257 | `character_portrait` | `source_traced` | 1 | `0x1072A4` | `0x1072A4` | `0x02` | 1152 | False |
+| 258 | `character_portrait` | `source_traced` | 1 | `0x10759E` | `0x10759E` | `0x02` | 1152 | False |
+| 259 | `character_portrait` | `source_traced` | 1 | `0x10785C` | `0x10785C` | `0x02` | 1152 | False |
+| 260 | `character_portrait` | `source_traced` | 1 | `0x107C12` | `0x107C12` | `0x02` | 1152 | False |
+| 261 | `character_portrait` | `source_traced` | 1 | `0x107FCE` | `0x107FCE` | `0x02` | 1152 | False |
+| 262 | `character_portrait` | `source_traced` | 1 | `0x108364` | `0x108364` | `0x02` | 1152 | False |
+| 263 | `character_portrait` | `source_traced` | 1 | `0x108700` | `0x108700` | `0x02` | 1152 | False |
+| 264 | `character_portrait` | `source_traced` | 1 | `0x108A7A` | `0x108A7A` | `0x02` | 1152 | False |
+| 265 | `character_portrait` | `source_traced` | 1 | `0x108DF4` | `0x108DF4` | `0x02` | 1152 | False |
+| 266 | `character_portrait` | `source_traced` | 1 | `0x1091A4` | `0x1091A4` | `0x02` | 1152 | False |
+| 267 | `character_portrait` | `source_traced` | 1 | `0x1094DE` | `0x1094DE` | `0x02` | 1152 | False |
+| 268 | `character_portrait` | `source_traced` | 1 | `0x1098A4` | `0x1098A4` | `0x02` | 1152 | False |
+| 269 | `character_portrait` | `source_traced` | 1 | `0x109C5E` | `0x109C5E` | `0x02` | 1152 | False |
+| 270 | `character_portrait` | `source_traced` | 1 | `0x10A006` | `0x10A006` | `0x02` | 1152 | False |
+| 271 | `character_portrait` | `source_traced` | 3 | `0x10A3B2` | `0x10A3B2` | `0x03` | 1152 | False |
+| 272 | `character_portrait` | `source_traced` | 3 | `0x10A742` | `0x10A742` | `0x03` | 1152 | False |
+| 273 | `character_portrait` | `source_traced` | 3 | `0x10AAB4` | `0x10AAB4` | `0x02` | 1152 | False |
+| 274 | `character_portrait` | `source_traced` | 3 | `0x10AE66` | `0x10AE66` | `0x02` | 1152 | False |
+| 275 | `character_portrait` | `source_traced` | 1 | `0x10B1AA` | `0x10B1AA` | `0x02` | 1152 | False |
+| 276 | `character_portrait` | `source_traced` | 3 | `0x10B51C` | `0x10B51C` | `0x03` | 1152 | False |
+| 277 | `character_portrait` | `source_traced` | 3 | `0x10B866` | `0x10B866` | `0x03` | 1152 | False |
+| 278 | `character_portrait` | `source_traced` | 3 | `0x10BBD6` | `0x10BBD6` | `0x02` | 1152 | False |
+| 279 | `character_portrait` | `source_traced` | 3 | `0x10BF8C` | `0x10BF8C` | `0x03` | 1152 | False |
+| 280 | `character_portrait` | `source_traced` | 2 | `0x10C36A` | `0x10C36A` | `0x03` | 1152 | False |
+| 281 | `character_portrait` | `source_traced` | 2 | `0x10C660` | `0x10C660` | `0x03` | 1152 | False |
+| 282 | `character_portrait` | `source_traced` | 2 | `0x10C964` | `0x10C964` | `0x02` | 1152 | False |
+| 283 | `character_portrait` | `source_traced` | 2 | `0x10CD00` | `0x10CD00` | `0x02` | 1152 | False |
+| 284 | `character_portrait` | `source_traced` | 1 | `0x10D0B6` | `0x10D0B6` | `0x02` | 1152 | False |
+| 285 | `character_portrait` | `source_traced` | 1 | `0x10D3DC` | `0x10D3DC` | `0x02` | 1152 | False |
+| 286 | `character_portrait` | `source_traced` | 1 | `0x10D72E` | `0x10D72E` | `0x02` | 1152 | False |
+| 287 | `character_portrait` | `source_traced` | 1 | `0x10DA68` | `0x10DA68` | `0x03` | 1152 | False |
+| 288 | `character_portrait` | `source_traced` | 1 | `0x10DE28` | `0x10DE28` | `0x02` | 1152 | False |
+| 289 | `character_portrait` | `source_traced` | 1 | `0x10E1CA` | `0x10E1CA` | `0x03` | 1152 | False |
+| 290 | `character_portrait` | `source_traced` | 1 | `0x10E578` | `0x10E578` | `0x02` | 1152 | False |
+| 291 | `character_portrait` | `source_traced` | 1 | `0x10E922` | `0x10E922` | `0x02` | 1152 | False |
+| 292 | `character_portrait` | `source_traced` | 1 | `0x10ECE2` | `0x10ECE2` | `0x02` | 1152 | False |
+| 293 | `character_portrait` | `source_traced` | 1 | `0x10F09E` | `0x10F09E` | `0x02` | 1152 | False |
+| 294 | `character_portrait` | `source_traced` | 1 | `0x10F460` | `0x10F460` | `0x02` | 1152 | False |
+| 295 | `character_portrait` | `source_traced` | 1 | `0x10F7BA` | `0x10F7BA` | `0x02` | 1152 | False |
+| 296 | `character_portrait` | `source_traced` | 1 | `0x10FA88` | `0x10FA88` | `0x02` | 1152 | False |
+| 297 | `character_portrait` | `source_traced` | 1 | `0x10FDB8` | `0x10FDB8` | `0x02` | 1152 | False |
+| 298 | `character_portrait` | `source_traced` | 1 | `0x110180` | `0x110180` | `0x02` | 1152 | False |
+| 299 | `character_portrait` | `source_traced` | 1 | `0x110500` | `0x110500` | `0x02` | 1152 | False |
+| 300 | `character_portrait` | `source_traced` | 1 | `0x110888` | `0x110888` | `0x02` | 1152 | False |
+| 301 | `character_portrait` | `source_traced` | 1 | `0x110BF0` | `0x110BF0` | `0x02` | 1152 | False |
+| 302 | `character_portrait` | `source_traced` | 1 | `0x110F46` | `0x110F46` | `0x02` | 1152 | False |
+| 303 | `character_portrait` | `source_traced` | 1 | `0x1112AE` | `0x1112AE` | `0x02` | 1152 | False |
+| 304 | `character_portrait` | `source_traced` | 1 | `0x111654` | `0x111654` | `0x02` | 1152 | False |
+| 305 | `character_portrait` | `source_traced` | 1 | `0x111A0C` | `0x111A0C` | `0x02` | 1152 | False |
+| 306 | `character_portrait` | `source_traced` | 1 | `0x111D84` | `0x111D84` | `0x02` | 1152 | False |
+| 307 | `character_portrait` | `source_traced` | 1 | `0x112122` | `0x112122` | `0x02` | 1152 | False |
+| 308 | `character_portrait` | `source_traced` | 1 | `0x1124BC` | `0x1124BC` | `0x02` | 1152 | False |
+| 309 | `character_portrait` | `source_traced` | 1 | `0x11286E` | `0x11286E` | `0x02` | 1152 | False |
+| 310 | `character_portrait` | `source_traced` | 3 | `0x112C2E` | `0x112C2E` | `0x03` | 1152 | False |
+| 311 | `character_portrait` | `source_traced` | 3 | `0x112FB8` | `0x112FB8` | `0x03` | 1152 | False |
+| 312 | `character_portrait` | `source_traced` | 3 | `0x113344` | `0x113344` | `0x02` | 1152 | False |
+| 313 | `character_portrait` | `source_traced` | 3 | `0x113676` | `0x113676` | `0x02` | 1152 | False |
+| 314 | `character_portrait` | `source_traced` | 2 | `0x1139CA` | `0x1139CA` | `0x02` | 1152 | False |
+| 315 | `character_portrait` | `source_traced` | 2 | `0x113D1A` | `0x113D1A` | `0x02` | 1152 | False |
+| 316 | `character_portrait` | `source_traced` | 3 | `0x11405A` | `0x11405A` | `0x02` | 1152 | False |
+| 317 | `character_portrait` | `source_traced` | 3 | `0x1143D4` | `0x1143D4` | `0x03` | 1152 | False |
+| 318 | `character_portrait` | `source_traced` | 3 | `0x114796` | `0x114796` | `0x02` | 1152 | False |
+| 319 | `character_portrait` | `source_traced` | 3 | `0x114B4C` | `0x114B4C` | `0x02` | 1152 | False |
+| 320 | `character_portrait` | `source_traced` | 3 | `0x114EEA` | `0x114EEA` | `0x02` | 1152 | False |
+| 321 | `character_portrait` | `source_traced` | 3 | `0x11526A` | `0x11526A` | `0x02` | 1152 | False |
+| 322 | `character_portrait` | `source_traced` | 3 | `0x11560C` | `0x11560C` | `0x02` | 1152 | False |
+| 323 | `character_portrait` | `source_traced` | 3 | `0x11597C` | `0x11597C` | `0x02` | 1152 | False |
+| 324 | `character_portrait` | `source_traced` | 3 | `0x115CEC` | `0x115CEC` | `0x02` | 1152 | False |
+| 325 | `character_portrait` | `source_traced` | 3 | `0x11601E` | `0x11601E` | `0x02` | 1152 | False |
+| 326 | `character_portrait` | `source_traced` | 3 | `0x11637C` | `0x11637C` | `0x02` | 1152 | False |
+| 327 | `character_portrait` | `source_traced` | 3 | `0x11677E` | `0x11677E` | `0x02` | 1152 | False |
+| 328 | `character_portrait` | `source_traced` | 3 | `0x116B66` | `0x116B66` | `0x02` | 1152 | False |
+| 329 | `character_portrait` | `source_traced` | 3 | `0x116E72` | `0x116E72` | `0x03` | 1152 | False |
+| 330 | `character_portrait` | `source_traced` | 3 | `0x11718E` | `0x11718E` | `0x02` | 1152 | False |
+| 331 | `character_portrait` | `source_traced` | 3 | `0x1174F0` | `0x1174F0` | `0x02` | 1152 | False |
+| 332 | `character_portrait` | `source_traced` | 2 | `0x11784A` | `0x11784A` | `0x02` | 1152 | False |
+| 333 | `character_portrait` | `source_traced` | 2 | `0x117B6C` | `0x117B6C` | `0x02` | 1152 | False |
+| 334 | `character_portrait` | `source_traced` | 3 | `0x117EAC` | `0x117EAC` | `0x02` | 1152 | False |
+| 335 | `character_portrait` | `source_traced` | 3 | `0x11821E` | `0x11821E` | `0x02` | 1152 | False |
+| 336 | `character_portrait` | `source_traced` | 1 | `0x11859C` | `0x11859C` | `0x02` | 1152 | False |
+| 337 | `character_portrait` | `source_traced` | 1 | `0x118882` | `0x118882` | `0x02` | 1152 | False |
+| 338 | `character_portrait` | `source_traced` | 1 | `0x118BD8` | `0x118BD8` | `0x02` | 1152 | False |
+| 339 | `character_portrait` | `source_traced` | 3 | `0x118F2C` | `0x118F2C` | `0x02` | 1152 | False |
+| 340 | `character_portrait` | `source_traced` | 1 | `0x1192A8` | `0x1192A8` | `0x02` | 1152 | False |
+| 341 | `character_portrait` | `source_traced` | 1 | `0x119570` | `0x119570` | `0x02` | 1152 | False |
+| 342 | `character_portrait` | `source_traced` | 1 | `0x1198FC` | `0x1198FC` | `0x02` | 1152 | False |
+| 343 | `character_portrait` | `source_traced` | 1 | `0x119BEC` | `0x119BEC` | `0x02` | 1152 | False |
+| 344 | `character_portrait` | `source_traced` | 3 | `0x119F6A` | `0x119F6A` | `0x02` | 1152 | False |
+| 345 | `character_portrait` | `source_traced` | 3 | `0x11A2A4` | `0x11A2A4` | `0x02` | 1152 | False |
+| 346 | `character_portrait` | `source_traced` | 3 | `0x11A5F6` | `0x11A5F6` | `0x02` | 1152 | False |
+| 347 | `character_portrait` | `source_traced` | 1 | `0x11A99A` | `0x11A99A` | `0x02` | 1152 | False |
+| 348 | `character_portrait` | `source_traced` | 1 | `0x11AD06` | `0x11AD06` | `0x02` | 1152 | False |
+| 349 | `character_portrait` | `source_traced` | 1 | `0x11B0A8` | `0x11B0A8` | `0x02` | 1152 | False |
+| 350 | `character_portrait` | `source_traced` | 1 | `0x11B402` | `0x11B402` | `0x02` | 1152 | False |
+| 351 | `character_portrait` | `source_traced` | 1 | `0x11B788` | `0x11B788` | `0x02` | 1152 | False |
+| 352 | `character_portrait` | `source_traced` | 1 | `0x11BB22` | `0x11BB22` | `0x02` | 1152 | False |
+| 353 | `character_portrait` | `source_traced` | 1 | `0x11BECA` | `0x11BECA` | `0x02` | 1152 | False |
+| 354 | `character_portrait` | `source_traced` | 1 | `0x11C244` | `0x11C244` | `0x02` | 1152 | False |
+| 355 | `character_portrait` | `source_traced` | 2 | `0x11C568` | `0x11C568` | `0x02` | 1152 | False |
+| 356 | `character_portrait` | `source_traced` | 2 | `0x11C98C` | `0x11C98C` | `0x03` | 1152 | False |
+| 357 | `character_portrait` | `source_traced` | 1 | `0x11CDD0` | `0x11CDD0` | `0x02` | 1152 | False |
+| 358 | `character_portrait` | `source_traced` | 1 | `0x11D14C` | `0x11D14C` | `0x02` | 1152 | False |
+| 359 | `character_portrait` | `source_traced` | 1 | `0x11D4DE` | `0x11D4DE` | `0x02` | 1152 | False |
+| 360 | `character_portrait` | `source_traced` | 3 | `0x11D8BA` | `0x11D8BA` | `0x02` | 1152 | False |
+| 361 | `character_portrait` | `source_traced` | 1 | `0x11DCBA` | `0x11DCBA` | `0x02` | 1152 | False |
+| 362 | `character_portrait` | `source_traced` | 1 | `0x11E096` | `0x11E096` | `0x02` | 1152 | False |
+| 363 | `route_map_fragment` | `source_traced` | 1 | `0x11E42E` | `0x11E42E` | `0x02` | 32 | False |
+| 364 | `route_map_fragment` | `source_traced` | 1 | `0x11E438` | `0x11E438` | `0x02` | 224 | False |
+| 365 | `route_map_fragment` | `source_traced` | 1 | `0x11E460` | `0x11E460` | `0x02` | 288 | False |
+| 366 | `route_map_fragment` | `source_traced` | 1 | `0x11E498` | `0x11E498` | `0x02` | 256 | False |
+| 367 | `route_map_fragment` | `source_traced` | 1 | `0x11E4CC` | `0x11E4CC` | `0x02` | 192 | False |
+| 368 | `route_map_fragment` | `source_traced` | 2 | `0x11E4FA` | `0x11E4FA` | `0x02` | 160 | False |
+| 369 | `route_map_fragment` | `source_traced` | 1 | `0x11E520` | `0x11E520` | `0x02` | 192 | False |
+| 370 | `route_map_fragment` | `source_traced` | 1 | `0x11E54E` | `0x11E54E` | `0x02` | 224 | False |
+| 371 | `route_map_fragment` | `source_traced` | 1 | `0x11E57E` | `0x11E57E` | `0x02` | 160 | False |
+| 372 | `route_map_fragment` | `source_traced` | 1 | `0x11E5AC` | `0x11E5AC` | `0x02` | 128 | False |
+| 373 | `route_map_fragment` | `source_traced` | 2 | `0x11E5CC` | `0x11E5CC` | `0x03` | 384 | False |
+| 374 | `route_map_fragment` | `source_traced` | 1 | `0x11E616` | `0x11E616` | `0x02` | 224 | False |
+| 375 | `route_map_fragment` | `source_traced` | 1 | `0x11E63A` | `0x11E63A` | `0x03` | 224 | False |
+| 376 | `route_map_fragment` | `source_traced` | 1 | `0x11E66A` | `0x11E66A` | `0x02` | 192 | False |
+| 377 | `route_map_fragment` | `source_traced` | 1 | `0x11E688` | `0x11E688` | `0x02` | 224 | False |
+| 378 | `route_map_fragment` | `source_traced` | 1 | `0x11E6B2` | `0x11E6B2` | `0x02` | 192 | False |
+| 379 | `route_map_fragment` | `source_traced` | 1 | `0x11E6E2` | `0x11E6E2` | `0x02` | 128 | False |
+| 380 | `route_map_fragment` | `source_traced` | 2 | `0x11E702` | `0x11E702` | `0x02` | 224 | False |
+| 381 | `route_map_fragment` | `source_traced` | 1 | `0x11E730` | `0x11E730` | `0x02` | 224 | False |
+| 382 | `route_map_fragment` | `source_traced` | 1 | `0x11E75A` | `0x11E75A` | `0x02` | 128 | False |
+| 383 | `route_map_fragment` | `source_traced` | 2 | `0x11E77E` | `0x11E77E` | `0x02` | 160 | False |
+| 384 | `route_map_fragment` | `source_traced` | 1 | `0x11E7A6` | `0x11E7A6` | `0x02` | 96 | False |
+| 385 | `route_map_fragment` | `source_traced` | 1 | `0x11E7BE` | `0x11E7BE` | `0x02` | 64 | False |
+| 386 | `route_map_fragment` | `source_traced` | 1 | `0x11E7CE` | `0x11E7CE` | `0x02` | 64 | False |
+| 387 | `route_map_fragment` | `source_traced` | 3 | `0x11E7E2` | `0x11E7E2` | `0x02` | 96 | False |
+| 388 | `shared_ui_marker_tiles` | `source_traced` | 1 | `0x11E7FE` | `0x11E7FE` | `0x03` | 128 | False |
+| 389 | `shared_ui_pattern_tiles` | `source_traced` | 1 | `0x11E820` | `0x11E820` | `0x01` | 384 | False |
+| 390 | `world_map_graphics` | `source_traced` | 1 | `0x11E898` | `0x11E898` | `0x03` | 8192 | False |
+| 391 | `item_icons` | `live_verified` | 2 | `0x11FAE4` | `0x11FAE4` | `0x03` | 8192 | False |
+| 392 | `masaya_publisher_logo` | `live_verified` | 2 | `0x120BEE` | `0x120BEE` | `0x03` | 1632 | False |
+| 393 | `title_logo` | `live_verified` | 2 | `0x120EEE` | `0x2E0000` | `0x03` | 5984 | True |
+| 394 | `title_screen_group_02D672` | `source_traced` | 1 | `0x121B4C` | `0x121B4C` | `0x03` | 928 | False |
+| 395 | `title_screen_group_02D672` | `source_traced` | 1 | `0x121CB6` | `0x121CB6` | `0x02` | 6304 | False |
+| 396 | `opening_ending_scene_group_02DEE2` | `source_traced` | 1 | `0x122C46` | `0x122C46` | `0x03` | 7808 | False |
+| 397 | `opening_ending_scene_group_02DEE2` | `source_traced` | 1 | `0x123D38` | `0x123D38` | `0x02` | 2368 | False |
+| 398 | `opening_ending_scene_group_02DEE2` | `source_traced` | 1 | `0x12425E` | `0x12425E` | `0x02` | 3936 | False |
+| 399 | `opening_ending_scene_group_02E434` | `source_traced` | 1 | `0x1249D4` | `0x1249D4` | `0x03` | 6528 | False |
+| 400 | `opening_ending_scene_group_02E434` | `source_traced` | 1 | `0x1259AE` | `0x1259AE` | `0x03` | 6400 | False |
+| 401 | `opening_ending_scene_group_02E434` | `source_traced` | 1 | `0x126952` | `0x126952` | `0x03` | 8192 | False |
+| 402 | `opening_ending_scene_group_02E63A` | `source_traced` | 1 | `0x1279FE` | `0x1279FE` | `0x03` | 8192 | False |
+| 403 | `opening_ending_scene_group_02E63A` | `source_traced` | 1 | `0x128B54` | `0x128B54` | `0x02` | 2368 | False |
+| 404 | `opening_ending_scene_group_02E63A` | `source_traced` | 1 | `0x128F52` | `0x128F52` | `0x02` | 5888 | False |
+| 405 | `opening_ending_scene_group_02E63A` | `source_traced` | 1 | `0x129C9C` | `0x129C9C` | `0x03` | 7328 | False |
+| 406 | `opening_ending_scene_group_02E972` | `source_traced` | 1 | `0x12ACD8` | `0x12ACD8` | `0x03` | 2528 | False |
+| 407 | `opening_ending_scene_group_02E972` | `source_traced` | 1 | `0x12AF14` | `0x12AF14` | `0x03` | 7808 | False |
+| 408 | `opening_ending_scene_group_02E972` | `source_traced` | 1 | `0x12BF1A` | `0x12BF1A` | `0x02` | 3456 | False |
+| 409 | `opening_ending_scene_group_02E972` | `source_traced` | 1 | `0x12C6E8` | `0x12C6E8` | `0x03` | 3840 | False |
+| 410 | `opening_ending_scene_group_02E972` | `source_traced` | 1 | `0x12CEAA` | `0x12CEAA` | `0x03` | 6208 | False |
+| 411 | `opening_ending_scene_group_02EF1E` | `source_traced` | 1 | `0x12DE8E` | `0x12DE8E` | `0x01` | 224 | False |
+| 412 | `opening_ending_scene_group_02F17E` | `source_traced` | 1 | `0x12DEC2` | `0x12DEC2` | `0x03` | 8192 | False |
+| 413 | `opening_ending_scene_group_02F17E` | `source_traced` | 1 | `0x12F028` | `0x12F028` | `0x03` | 5440 | False |
+| 414 | `opening_ending_scene_group_02F17E` | `source_traced` | 1 | `0x12FD3C` | `0x12FD3C` | `0x03` | 8192 | False |
+| 415 | `title_screen_group_02D672` | `source_traced` | 1 | `0x130C48` | `0x130C48` | `0x02` | 2048 | False |
+| 416 | `opening_ending_scene_group_02F748` | `source_traced` | 1 | `0x131024` | `0x131024` | `0x03` | 4160 | False |
+| 417 | `opening_ending_scene_group_02FACA` | `source_traced` | 1 | `0x131A00` | `0x131A00` | `0x03` | 7424 | False |
+| 418 | `opening_ending_scene_group_02FACA` | `source_traced` | 1 | `0x13283E` | `0x13283E` | `0x03` | 7392 | False |
+| 419 | `opening_ending_scene_group_02FACA` | `source_traced` | 1 | `0x13395E` | `0x13395E` | `0x03` | 8192 | False |
+| 420 | `opening_ending_scene_group_02FACA` | `source_traced` | 1 | `0x13502A` | `0x13502A` | `0x03` | 2720 | False |
+| 421 | `opening_ending_scene_group_02F87E` | `source_traced` | 1 | `0x135888` | `0x135888` | `0x02` | 5376 | False |
+| 422 | `opening_ending_scene_group_030C72` | `source_traced` | 1 | `0x13633E` | `0x13633E` | `0x03` | 6304 | False |
+| 423 | `opening_ending_scene_group_030C72` | `source_traced` | 1 | `0x1371EC` | `0x1371EC` | `0x02` | 2048 | False |
+| 424 | `opening_ending_scene_group_02F87E` | `source_traced` | 1 | `0x137638` | `0x137638` | `0x02` | 1664 | False |
+| 425 | `opening_ending_scene_group_02FACA` | `source_traced` | 1 | `0x137764` | `0x137764` | `0x03` | 2688 | False |
+| 426 | `opening_ending_scene_group_02FACA` | `source_traced` | 1 | `0x137AFC` | `0x137AFC` | `0x03` | 1920 | False |
+| 427 | `opening_ending_scene_group_030C72` | `source_traced` | 1 | `0x137EBC` | `0x137EBC` | `0x03` | 2048 | False |
+| 428 | `opening_ending_scene_group_02F17E` | `source_traced` | 1 | `0x13807E` | `0x13807E` | `0x03` | 608 | False |
 
 All pointers, output sizes, decoded hashes, ownership fields, and review flags
 are in `localization/compressed_resources.json`.

@@ -248,8 +248,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["reviewed"] for row in rows))
         self.assertTrue(all(row["live_verified"] for row in rows))
 
-    def test_stage_one_keeps_explicit_unknowns(self):
-        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 2)
+    def test_stage_one_keeps_only_current_explicit_unknowns(self):
+        self.assertEqual(len(self.result["remaining_inventory_gaps"]), 1)
         class_change_gaps = [
             gap
             for gap in self.result["remaining_inventory_gaps"]
@@ -273,14 +273,19 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             "all-epilogue, ending-visit, and final-credit paths",
             self.result["remaining_inventory_gaps"],
         )
-        self.assertIn(
-            "exact ownership and purpose of 423 compressed resources beyond "
-            "SEGA boot-logo resource index 0, byte-font resource index 1, "
-            "battle-terrain resource index 223, item-icon resource index 391, "
-            "MASAYA publisher-logo resource index 392, and title-logo resource "
-            "index 393; broad raw-tile asset families are classified for all 429",
-            self.result["remaining_inventory_gaps"],
+        self.assertFalse(
+            any(
+                "compressed-resource ownership" in gap
+                for gap in self.result["remaining_inventory_gaps"]
+            )
         )
+        compressed = self.result["compressed_resource_ownership"]
+        self.assertEqual(compressed["entry_count"], 429)
+        self.assertEqual(compressed["known_owner_count"], 429)
+        self.assertEqual(compressed["unknown_owner_count"], 0)
+        self.assertEqual(compressed["ownership_record_count"], 763)
+        self.assertEqual(compressed["unreferenced_candidate_count"], 2)
+        self.assertTrue(compressed["complete"])
         self.assertNotIn(
             "all equipment and shop variants beyond declared Scenario 1 paths",
             self.result["remaining_inventory_gaps"],

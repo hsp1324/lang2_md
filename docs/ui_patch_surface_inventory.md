@@ -77,6 +77,5 @@ Resource table `0x0B0000` index 1 uses entry
 ## Remaining Inventory Gaps
 
 - arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
-- exact ownership and purpose of 423 compressed resources beyond SEGA boot-logo resource index 0, byte-font resource index 1, battle-terrain resource index 223, item-icon resource index 391, MASAYA publisher-logo resource index 392, and title-logo resource index 393; broad raw-tile asset families are classified for all 429
 
 Detailed declarations are in `localization/ui_patch_surfaces.json`.
