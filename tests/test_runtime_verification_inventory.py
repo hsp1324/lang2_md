@@ -75,6 +75,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
                 evidence["captures"],
             )
         self.assertIn("source-locked production costs", evidence["note"])
+        self.assertIn("펜릴 consumes MP 12->2", evidence["note"])
+        self.assertNotIn("펜리르 consumes", evidence["note"])
         self.assertIn("production 형님 cost remains 15 MP", evidence["note"])
         self.assertIn("ID 4 status capture focused Hein", evidence["note"])
         self.assertIn("all eight Korean names", evidence["note"])
