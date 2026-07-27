@@ -12,7 +12,7 @@ A translated static name does not imply that its candidate screen was live verif
 - Application-verified transitions: 4
 - Natural application proofs: 2
 - Forced-context diagnostic application proofs: 2
-- Normal scenario-clear save-persistence proofs: 1
+- Normal scenario-clear save-persistence proofs: 2
 
 ## 1. 엘윈
 
@@ -20,7 +20,7 @@ Source pointer: `0x082562`
 
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
-| `0x082562` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `05` 나이트 (ﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | natural | pending |
+| `0x082562` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `05` 나이트 (ﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | natural | yes |
 | `0x08256A` | `04` 로드 (ﾛｰﾄﾞ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | yes | pending | pending |
 | `0x082572` | `05` 나이트 (ﾅｲﾄ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | yes | pending | pending |
 | `0x08257A` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending | pending |

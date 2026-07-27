@@ -437,6 +437,11 @@ APPLICATION_VERIFIED = (
     NATURAL_APPLICATION_VERIFIED | FORCED_CONTEXT_APPLICATION_VERIFIED
 )
 SAVE_PERSISTENCE_EVIDENCE = {
+    (1, 0x01): [
+        "captures/run/b213_c1_s01_scenario2_save.png",
+        "captures/analysis/b213_c1_s01_scenario2_save.gst",
+        "captures/analysis/b213_c1_s01_scenario2_save.sram",
+    ],
     (5, 0x03): [
         "captures/run/b335_c5_s03_scenario2_save.png",
         "captures/analysis/b335_c5_s03_scenario2_save.gst",

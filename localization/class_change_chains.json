@@ -8,7 +8,7 @@
   "application_verified_transition_count": 4,
   "natural_application_verified_transition_count": 2,
   "forced_context_application_verified_transition_count": 2,
-  "save_persistence_verified_transition_count": 1,
+  "save_persistence_verified_transition_count": 2,
   "commanders": [
     {
       "id": 1,
@@ -43,8 +43,12 @@
           "live_verified": true,
           "application_verified": true,
           "application_evidence_type": "natural",
-          "save_persistence_verified": false,
-          "save_persistence_evidence": [],
+          "save_persistence_verified": true,
+          "save_persistence_evidence": [
+            "captures/run/b213_c1_s01_scenario2_save.png",
+            "captures/analysis/b213_c1_s01_scenario2_save.gst",
+            "captures/analysis/b213_c1_s01_scenario2_save.sram"
+          ],
           "evidence": [
             "captures/run/d1d7_class_change_candidate1.png",
             "captures/run/d1d7_class_change_candidate2.png",

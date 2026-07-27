@@ -222,18 +222,27 @@ mercenaries, and magic lists are intact. The inventory now has screen evidence
 for all 76 unique current/candidate combinations, and every commander reports
 zero pending unique rows. This closes candidate-screen coverage only. Runtime
 application has two natural proofs and two forced-context diagnostic proofs.
-Normal scenario-clear save persistence is now proven for Hein's initial
-transition and remains pending for all other source transitions.
+Normal scenario-clear save persistence is now proven for Elwin's and Hein's
+initial transitions and remains pending for all other source transitions.
 
 ## Normal Save-Persistence Proof
 
 Production checksum `1AB2` was combined only with two ignored diagnostics:
-the end-turn-only Hein trigger and a Scenario 1 Start wrapper that marks only
-the live Bald group defeated. The latter avoids the rejected runtime-coordinate
-shortcut and leaves the stock class-change, result, SAVE, and next-scenario
-handlers intact. The resulting checksum is `B335`.
+an end-turn-only natural active-commander trigger and a Scenario 1 Start
+wrapper that marks only the live Bald group defeated. The latter avoids the
+rejected runtime-coordinate shortcut and leaves the stock class-change,
+result, SAVE, and next-scenario handlers intact.
 
-Fresh isolated playback applied
+Checksum `B213` applies `파이터(01) -> 로드(04)` to natural Scenario 1
+runtime record 0. The real Scenario 2 save stores commander ID 1 as class
+`04`, LV1, EXP9, AT23, and DF18 with slot checksum `211E`. Evidence is retained
+at:
+
+- `captures/run/b213_c1_s01_scenario2_save.png`
+- `captures/analysis/b213_c1_s01_scenario2_save.gst`
+- `captures/analysis/b213_c1_s01_scenario2_save.sram`
+
+Checksum `B335` applies
 `워록(03) -> 샤먼(0A)` to natural Scenario 1 runtime record 1, completed the
 source Scenario 1 result path, and wrote manual slot 1 as `시나리오 2`.
 The flushed 8192-byte SRAM has a valid format marker, slot-valid flag, and
@@ -244,19 +253,19 @@ AT23, and DF13. Evidence is retained at:
 - `captures/analysis/b335_c5_s03_scenario2_save.gst`
 - `captures/analysis/b335_c5_s03_scenario2_save.sram`
 
-`tools/verify_class_change_persistence.py` validates the slot checksum,
+`tools/verify_class_change_persistence.py` validates each slot checksum,
 scenario number, commander ID, class, level, and experience without modifying
-the SRAM. This proves one natural non-Elwin class result survives the ordinary
-scenario-clear synchronization path; it does not generalize persistence to
-the other 99 source transitions.
+the SRAM. Together these prove both natural Scenario 1 active commanders
+survive the ordinary scenario-clear synchronization path; they do not
+generalize persistence to the other 98 source transitions.
 
 Rejected persistence shortcuts must not be repeated. Loading the retained GST
 through BlastEm `ui.load_state` returned to the title instead of a playable
 map. Writing Bald's runtime X/Y bytes through Start changed the unit record but
 not the separate map-occupancy grid, so no attack target existed at the new
 tile. Moving Elwin's fixed deployment instead changed Bald's event movement
-and did not produce a stable adjacent target. `B335` therefore uses no
-save-state reload or runtime-coordinate claim.
+and did not produce a stable adjacent target. `B213` and `B335` therefore use
+no save-state reload or runtime-coordinate claim.
 
 ## Forced-Context Application Diagnostics
 

@@ -267,6 +267,7 @@ python3 tools/run_blastem_sequence.py shop
 - `launch-only`도 `load-screen` 격리 런타임을 보존하며 게임 입력을 전혀 보내지 않습니다. `--manual-slot-gst`는 GST 작업 RAM의 `0xA49C/0xBD6E/0xC7F2` 세 구간을 수동 슬롯 1로 직렬화하고 체크섬과 유효 비트를 다시 계산하므로, 빌드가 달라 이전 GST 자체를 직접 로드할 수 없을 때 사용합니다.
 - 복구한 수동 슬롯의 지휘관 진행도만 실험할 때는 `--runtime-name`으로 격리 폴더를 지정하고 `--manual-slot-commander-id 1 --manual-slot-level 9 --manual-slot-experience 16 --manual-slot-expected-class 0x01`을 함께 사용합니다. 필요하면 `--manual-slot-class`, `--manual-slot-at`, `--manual-slot-df`도 덧붙입니다. 24바이트 지휘관 레코드의 확인된 오프셋은 클래스 `+0`, 레벨 `+2`, EXP `+3`, AT `+4`, DF `+5`이며 도구는 원본 클래스와 `0..99` 능력치 범위를 검사하고 슬롯 체크섬을 다시 계산합니다. 준비/배치 중 런타임 동기화가 값을 되돌릴 수 있으므로 클래스 체인지 실기 확인에는 `tools/build_class_change_probe_rom.py`의 원본 핸들러 경로를 사용합니다.
 - checksum `B335`는 시나리오 1의 자연 활성 지휘관인 헤인이 원본 턴 종료 핸들러에서 `워록(03) -> 샤먼(0A)`으로 전직한 뒤 실제 결과·SAVE 경로를 거쳐 슬롯 1의 `시나리오 2`에 유지됨을 검증합니다. 저장된 헤인 레코드는 클래스 `0A`, LV1, EXP17, AT23, DF13이고 슬롯 체크섬은 `2330`입니다. `captures/analysis/b335_c5_s03_scenario2_save.sram`과 `tools/verify_class_change_persistence.py`가 이 경계를 고정합니다.
+- checksum `B213`은 같은 원본 경계에서 자연 활성 엘윈의 `파이터(01) -> 로드(04)`를 검증합니다. 저장된 엘윈 레코드는 클래스 `04`, LV1, EXP9, AT23, DF18이고 슬롯 체크섬은 `211E`입니다. `captures/analysis/b213_c1_s01_scenario2_save.sram`에 독립된 두 번째 정상 저장 증거를 보존합니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:

@@ -33,7 +33,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
         )
         self.assertEqual(
             self.result["save_persistence_verified_transition_count"],
-            1,
+            2,
         )
 
         verified = [
@@ -159,6 +159,13 @@ class ClassChangeInventoryTests(unittest.TestCase):
             "captures/analysis/b335_c5_s03_scenario2_save.sram",
             by_key[(5, 0x03)]["save_persistence_evidence"],
         )
+        self.assertTrue(
+            by_key[(1, 0x01)]["save_persistence_verified"]
+        )
+        self.assertIn(
+            "captures/analysis/b213_c1_s01_scenario2_save.sram",
+            by_key[(1, 0x01)]["save_persistence_evidence"],
+        )
         forced_evidence = {
             (7, 0x01): "captures/analysis/715f_c7_s01_forced_apply.gst",
             (10, 0x03): (
@@ -183,7 +190,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
                 self.assertEqual(
                     transition["application_evidence_type"], "pending"
                 )
-            if key != (5, 0x03):
+            if key not in {(1, 0x01), (5, 0x03)}:
                 self.assertFalse(
                     transition["save_persistence_verified"]
                 )
