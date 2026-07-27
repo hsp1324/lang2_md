@@ -16,7 +16,7 @@ follow this status table so a resume does not repeat already accepted work.
 | 3. Scenarios 2-10 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; replay only when a shared owner changes or evidence is explicitly promoted. |
 | 4. Scenarios 11-20 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; preserve the distinction between natural and diagnostic evidence. |
 | 5. Scenarios 21-31 and endings | Runtime and ending inventory complete | The 90 epilogues, 23 ending visits, 12 montage records, 16 credit groups, and all 61 production credit records are structurally inventoried and renderer-verified through `Fin`. |
-| 6. Full regression and release | In progress | Current source reproduces checksum `99FD`. Scenario diagnostic checksum locks are rebased; finish isolated full-suite and current-build emulator smoke before release acceptance. |
+| 6. Full regression and release | Complete | Current source reproduces checksum `99FD`. All 35 release-acceptance checks and 1,199 non-experimental localization/ROM/editor regression tests pass. The inventory links all eight Goal criteria, the `1AB2` runtime matrix, the `5ED9` full-game baseline, and the fully owned `99FD` delta. |
 | 7. Separate hard-mode build | Deferred for balance discussion | Start only after the normal Korean ROM passes Stage 6. Agree on stat scaling, stronger mercenary timing, summon-unit composition, and scenario exceptions with the user before changing any balance value. |
 
 Stage 2 complete-item checkpoint is closed. Accepted item checkpoint `6C85` splits
@@ -46,6 +46,32 @@ or freeze. Evidence is retained as
 `captures/run/99fd_final_s01_command.png`,
 `captures/run/99fd_final_s01_turn_end.png`, and
 `captures/run/99fd_final_s01_turn1_dialogue_82.png`.
+
+The previous full-game runtime baseline was rebuilt from commit `3e4954a` as
+checksum `5ED9` and compared byte-for-byte with `99FD`. All 2,244 changes are
+owned: 2 header-checksum bytes, 16 Shaman sprite-pointer bytes, 88 bytes in the
+two reviewed villain-montage records, 94 Loren sprite bytes, and 2,044 Shaman
+sprite bytes. There are zero unclassified changes and no changed scenario
+event, shared UI code, text-pointer, unit-stat, or balance bytes. Current
+`99FD` playback additionally verifies the applied Shaman candidate/map/status
+path and Scenario 2 `로렌/하이로드` map/status/popup path. The reproducible
+report, exact ranges, evidence hashes, and regression test are in
+`localization/release_delta_5ed9_to_99fd.json`,
+`docs/release_delta_5ed9_to_99fd.md`, and
+`tests/test_release_delta_inventory.py`.
+
+`python3 tools/release_acceptance.py --write` generates
+`localization/release_acceptance.json` and
+`docs/release_acceptance.md`. It fails unless all eight active Goal criteria
+pass, the canonical ROM is checksum `99FD` with the locked SHA-256, all final
+delta evidence hashes match, and a no-op editor round trip remains byte
+identical. The runtime matrix keeps its original `1AB2` evidence checksum
+rather than relabeling historical playback; the acceptance inventory records
+the explicit `1AB2 -> 5ED9 -> 99FD` verification lineage.
+The final isolated suite excludes only
+`tests/test_experimental_class_sprite_assets.py`, which belongs to the separate
+preview-design work and does not affect the production ROM. The remaining
+1,199 tests pass in 222.925 seconds.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run
 it only when a later change shares its renderer/data ownership or an automated

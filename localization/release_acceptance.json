@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "release": {
+    "path": "roms/builds/Langrisser II (Korean).md",
+    "size": 4194304,
+    "header_checksum": "99FD",
+    "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+  },
+  "verification_lineage": {
+    "runtime_matrix_checksum": "1AB2",
+    "last_full_game_baseline_checksum": "5ED9",
+    "candidate_checksum": "99FD",
+    "candidate_delta_changed_bytes": 2244,
+    "candidate_delta_unclassified_bytes": 0
+  },
+  "requirements": [
+    {
+      "id": 1,
+      "title": "31 scenarios, dialogue, branches, and endings",
+      "passed": true,
+      "checks": [
+        {
+          "label": "scenario count",
+          "passed": true,
+          "actual": 31,
+          "expected": 31
+        },
+        {
+          "label": "all logical text pages modified",
+          "passed": true,
+          "actual": 2966,
+          "expected": 2966
+        },
+        {
+          "label": "all physical text pages modified",
+          "passed": true,
+          "actual": 3565,
+          "expected": 3565
+        },
+        {
+          "label": "all scenario runtime surfaces accepted",
+          "passed": true,
+          "actual": 248,
+          "expected": 248
+        },
+        {
+          "label": "ending and credits inventory complete",
+          "passed": true,
+          "actual": true,
+          "expected": true
+        }
+      ],
+      "evidence": [
+        "localization/event_pages.json",
+        "localization/runtime_verification.json",
+        "docs/runtime_verification_inventory.md",
+        "localization/ending_credits_inventory.json"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "shared UI and interactive flows",
+      "passed": true,
+      "checks": [
+        {
+          "label": "all declared UI surfaces reviewed",
+          "passed": true,
+          "actual": 143,
+          "expected": 143
+        },
+        {
+          "label": "no explicit UI inventory gaps",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "label": "only retained NPC abbreviation is unmodified",
+          "passed": true,
+          "actual": [
+            [
+              "fixed_byte_strings",
+              "NPC"
+            ]
+          ],
+          "expected": [
+            [
+              "fixed_byte_strings",
+              "NPC"
+            ]
+          ]
+        },
+        {
+          "label": "only superseded load fallback lacks live evidence",
+          "passed": true,
+          "actual": [
+            [
+              "title_load_header_fallback",
+              "0x0A3138"
+            ]
+          ],
+          "expected": [
+            [
+              "title_load_header_fallback",
+              "0x0A3138"
+            ]
+          ]
+        },
+        {
+          "label": "name-entry flow complete",
+          "passed": true,
+          "actual": true,
+          "expected": true
+        },
+        {
+          "label": "all item and shop rows accepted",
+          "passed": true,
+          "actual": 37,
+          "expected": 37
+        }
+      ],
+      "evidence": [
+        "localization/ui_patch_surfaces.json",
+        "docs/ui_patch_surface_inventory.md",
+        "localization/name_entry_flow_inventory.json",
+        "localization/item_shop_inventory.json"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "names, classes, mercenaries, items, magic, and summons",
+      "passed": true,
+      "checks": [
+        {
+          "label": "class names have Korean targets",
+          "passed": true,
+          "actual": 157,
+          "expected": 157
+        },
+        {
+          "label": "commander and NPC names have Korean targets",
+          "passed": true,
+          "actual": 117,
+          "expected": 117
+        },
+        {
+          "label": "item names have Korean targets",
+          "passed": true,
+          "actual": 38,
+          "expected": 38
+        },
+        {
+          "label": "all class-change transitions structurally covered",
+          "passed": true,
+          "actual": 100,
+          "expected": 100
+        },
+        {
+          "label": "all magic IDs have application evidence",
+          "passed": true,
+          "actual": 22,
+          "expected": 22
+        },
+        {
+          "label": "source-unreachable magic is bounded",
+          "passed": true,
+          "actual": [
+            18
+          ],
+          "expected": [
+            18
+          ]
+        }
+      ],
+      "evidence": [
+        "localization/global_strings.json",
+        "localization/class_change_flow_inventory.json",
+        "localization/magic_flow_inventory.json",
+        "localization/class_abilities.json"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "patch ownership and regression safety",
+      "passed": true,
+      "checks": [
+        {
+          "label": "release delta is complete",
+          "passed": true,
+          "actual": true,
+          "expected": true
+        },
+        {
+          "label": "release delta has no unclassified bytes",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "label": "all current release evidence hashes match",
+          "passed": true,
+          "actual": true,
+          "expected": true
+        },
+        {
+          "label": "all compressed resources have owners",
+          "passed": true,
+          "actual": 429,
+          "expected": 429
+        }
+      ],
+      "evidence": [
+        "localization/release_delta_5ed9_to_99fd.json",
+        "docs/release_delta_5ed9_to_99fd.md",
+        "localization/compressed_resources.json"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "static residue inventory and live verification matrix",
+      "passed": true,
+      "checks": [
+        {
+          "label": "direct-word candidates classified",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "label": "direct-byte candidates classified",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "label": "inline-byte candidates classified",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "label": "short inline candidates classified",
+          "passed": true,
+          "actual": {
+            "candidate_count": 6612,
+            "unclassified_count": 0
+          },
+          "expected": {
+            "candidate_count": 6612,
+            "unclassified_count": 0
+          }
+        },
+        {
+          "label": "runtime matrix contains only accepted states",
+          "passed": true,
+          "actual": 248,
+          "expected": 248
+        }
+      ],
+      "evidence": [
+        "localization/direct_word_candidates.json",
+        "localization/direct_byte_string_candidates.json",
+        "localization/inline_byte_strings.json",
+        "localization/short_inline_byte_candidates.json",
+        "localization/runtime_verification.json"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "source-identified editor data",
+      "passed": true,
+      "checks": [
+        {
+          "label": "scenario editor covers all scenarios",
+          "passed": true,
+          "actual": 31,
+          "expected": 31
+        },
+        {
+          "label": "class editor covers every class",
+          "passed": true,
+          "actual": 157,
+          "expected": 157
+        },
+        {
+          "label": "no-op editor build is byte-identical",
+          "passed": true,
+          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+        }
+      ],
+      "evidence": [
+        "docs/editor_data_model.md",
+        "tools/scenario_data.py",
+        "editor/model.py",
+        "editor/server.py"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "handoff and reproducibility records",
+      "passed": true,
+      "checks": [
+        {
+          "label": "required handoff documents exist",
+          "passed": true,
+          "actual": true,
+          "expected": true
+        },
+        {
+          "label": "release delta records both build identities",
+          "passed": true,
+          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+        }
+      ],
+      "evidence": [
+        "README.md",
+        "HANDOFF.md",
+        "docs/full_localization_plan.md",
+        "docs/editor_data_model.md"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "canonical release ROM",
+      "passed": true,
+      "checks": [
+        {
+          "label": "ROM size",
+          "passed": true,
+          "actual": 4194304,
+          "expected": 4194304
+        },
+        {
+          "label": "header checksum",
+          "passed": true,
+          "actual": "99FD",
+          "expected": "99FD"
+        },
+        {
+          "label": "SHA-256",
+          "passed": true,
+          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+        },
+        {
+          "label": "ending inventory uses canonical ROM",
+          "passed": true,
+          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+        }
+      ],
+      "evidence": [
+        "roms/builds/Langrisser II (Korean).md",
+        "localization/ending_credits_inventory.json",
+        "localization/release_delta_5ed9_to_99fd.json"
+      ]
+    }
+  ],
+  "complete": true,
+  "hard_mode_follow_up": {
+    "required": true,
+    "status": "balance_discussion_required",
+    "normal_release_must_remain_unchanged": true,
+    "implementation_started": false,
+    "policy": "docs/editor_data_model.md#후속-하드-모드-빌드"
+  }
+}

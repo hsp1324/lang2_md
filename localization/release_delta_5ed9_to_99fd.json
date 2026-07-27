@@ -1,0 +1,709 @@
+{
+  "baseline": {
+    "source_commit": "3e4954a8a493344cb31fb29b91e71f3a5c61ef54",
+    "header_checksum": "5ED9",
+    "sha256": "ba9d3ae0f481a3f1421a1286d5e215fe4d49143d49fc1e32737c9868b66d4d27"
+  },
+  "candidate": {
+    "last_rom_change_commit": "ed82c841a710125d90b371f81fb12a76db873a61",
+    "header_checksum": "99FD",
+    "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+  },
+  "scope": {
+    "purpose": "prove that post-full-game changes are limited to the reviewed villain montage and custom class sprites",
+    "normal_game_balance_changed": false,
+    "scenario_event_or_ui_code_changed": false
+  },
+  "delta": {
+    "rom_size": 4194304,
+    "changed_byte_count": 2244,
+    "unchanged_byte_count": 4192060,
+    "contiguous_changed_range_count": 96,
+    "unclassified_changed_byte_count": 0,
+    "owners": [
+      {
+        "owner": "bald_custom_sprite",
+        "permitted_byte_count": 256,
+        "changed_byte_count": 0,
+        "changed_range_count": 0
+      },
+      {
+        "owner": "header_checksum",
+        "permitted_byte_count": 2,
+        "changed_byte_count": 2,
+        "changed_range_count": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "permitted_byte_count": 256,
+        "changed_byte_count": 94,
+        "changed_range_count": 51
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "permitted_byte_count": 1792,
+        "changed_byte_count": 1788,
+        "changed_range_count": 6
+      },
+      {
+        "owner": "shaman_generic_sprite",
+        "permitted_byte_count": 256,
+        "changed_byte_count": 256,
+        "changed_range_count": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "permitted_byte_count": 16,
+        "changed_byte_count": 16,
+        "changed_range_count": 8
+      },
+      {
+        "owner": "villain_montage_records",
+        "permitted_byte_count": 136,
+        "changed_byte_count": 88,
+        "changed_range_count": 28
+      }
+    ],
+    "changed_ranges": [
+      {
+        "owner": "header_checksum",
+        "start": "0x00018E",
+        "end": "0x000190",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DBB2",
+        "end": "0x05DBB4",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DBE6",
+        "end": "0x05DBE8",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DC22",
+        "end": "0x05DC24",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DC64",
+        "end": "0x05DC66",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DC9A",
+        "end": "0x05DC9C",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DD46",
+        "end": "0x05DD48",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DD7C",
+        "end": "0x05DD7E",
+        "size": 2
+      },
+      {
+        "owner": "shaman_sprite_pointers",
+        "start": "0x05DDFA",
+        "end": "0x05DDFC",
+        "size": 2
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B2A",
+        "end": "0x0A6B30",
+        "size": 6
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B32",
+        "end": "0x0A6B3C",
+        "size": 10
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B3E",
+        "end": "0x0A6B44",
+        "size": 6
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B46",
+        "end": "0x0A6B4A",
+        "size": 4
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B4B",
+        "end": "0x0A6B4C",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B4E",
+        "end": "0x0A6B52",
+        "size": 4
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B55",
+        "end": "0x0A6B56",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B57",
+        "end": "0x0A6B62",
+        "size": 11
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B63",
+        "end": "0x0A6B64",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B65",
+        "end": "0x0A6B66",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B67",
+        "end": "0x0A6B6A",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B6B",
+        "end": "0x0A6B6C",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B6D",
+        "end": "0x0A6B70",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B71",
+        "end": "0x0A6B72",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B73",
+        "end": "0x0A6B76",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B77",
+        "end": "0x0A6B7A",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B7B",
+        "end": "0x0A6B7E",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B7F",
+        "end": "0x0A6B80",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B81",
+        "end": "0x0A6B84",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B85",
+        "end": "0x0A6B86",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B88",
+        "end": "0x0A6B8E",
+        "size": 6
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B90",
+        "end": "0x0A6B92",
+        "size": 2
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B93",
+        "end": "0x0A6B96",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B98",
+        "end": "0x0A6B9C",
+        "size": 4
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6B9D",
+        "end": "0x0A6B9E",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6BA1",
+        "end": "0x0A6BA4",
+        "size": 3
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6BA5",
+        "end": "0x0A6BA6",
+        "size": 1
+      },
+      {
+        "owner": "villain_montage_records",
+        "start": "0x0A6BA7",
+        "end": "0x0A6BA8",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F0082",
+        "end": "0x2F0084",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F0086",
+        "end": "0x2F0088",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F0089",
+        "end": "0x2F008C",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F008E",
+        "end": "0x2F0090",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F0092",
+        "end": "0x2F0094",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F009B",
+        "end": "0x2F009C",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F009D",
+        "end": "0x2F00A0",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00A9",
+        "end": "0x2F00AB",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00AD",
+        "end": "0x2F00AF",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00B1",
+        "end": "0x2F00B3",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00B5",
+        "end": "0x2F00B8",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00BB",
+        "end": "0x2F00BC",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00BD",
+        "end": "0x2F00BE",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00BF",
+        "end": "0x2F00C1",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00C4",
+        "end": "0x2F00C6",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00C8",
+        "end": "0x2F00C9",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00CC",
+        "end": "0x2F00CD",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00DC",
+        "end": "0x2F00DE",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00E0",
+        "end": "0x2F00E2",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00E6",
+        "end": "0x2F00E8",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00EA",
+        "end": "0x2F00EB",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00ED",
+        "end": "0x2F00EE",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00F1",
+        "end": "0x2F00F3",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00F4",
+        "end": "0x2F00F5",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00F9",
+        "end": "0x2F00FA",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F00FC",
+        "end": "0x2F00FE",
+        "size": 2
+      },
+      {
+        "owner": "shaman_generic_sprite",
+        "start": "0x2F0100",
+        "end": "0x2F0180",
+        "size": 128
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "start": "0x2F0180",
+        "end": "0x2F03C4",
+        "size": 580
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "start": "0x2F03C5",
+        "end": "0x2F03D5",
+        "size": 16
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "start": "0x2F03D6",
+        "end": "0x2F0500",
+        "size": 298
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F5983",
+        "end": "0x2F5984",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F5986",
+        "end": "0x2F5988",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F598A",
+        "end": "0x2F598C",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F598E",
+        "end": "0x2F5990",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F5992",
+        "end": "0x2F5994",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F599B",
+        "end": "0x2F599C",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F599E",
+        "end": "0x2F59A0",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59A5",
+        "end": "0x2F59A8",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59A9",
+        "end": "0x2F59AC",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59AD",
+        "end": "0x2F59B0",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59B2",
+        "end": "0x2F59B3",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59B7",
+        "end": "0x2F59B8",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59BA",
+        "end": "0x2F59BB",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59BE",
+        "end": "0x2F59C2",
+        "size": 4
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59C4",
+        "end": "0x2F59C7",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59C8",
+        "end": "0x2F59CA",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59CC",
+        "end": "0x2F59CD",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59D8",
+        "end": "0x2F59D9",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59DC",
+        "end": "0x2F59DF",
+        "size": 3
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59E0",
+        "end": "0x2F59E4",
+        "size": 4
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59E7",
+        "end": "0x2F59E8",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59EA",
+        "end": "0x2F59EB",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59EE",
+        "end": "0x2F59EF",
+        "size": 1
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59F4",
+        "end": "0x2F59F6",
+        "size": 2
+      },
+      {
+        "owner": "loren_custom_sprite",
+        "start": "0x2F59FD",
+        "end": "0x2F59FE",
+        "size": 1
+      },
+      {
+        "owner": "shaman_generic_sprite",
+        "start": "0x2F5A00",
+        "end": "0x2F5A80",
+        "size": 128
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "start": "0x2F5A80",
+        "end": "0x2F5CC4",
+        "size": 580
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "start": "0x2F5CC5",
+        "end": "0x2F5CC9",
+        "size": 4
+      },
+      {
+        "owner": "shaman_commander_sprites",
+        "start": "0x2F5CCA",
+        "end": "0x2F5E00",
+        "size": 310
+      }
+    ]
+  },
+  "live_evidence": [
+    {
+      "owner": "villain_montage_records",
+      "role": "cold-boot Alhazard line",
+      "path": "captures/run/99fd_opening_villain_alhazard.png",
+      "sha256": "68d423bfc1fc728e41c0abd3ea02d3dd1b5a963fd0a13edfa816ce57af473e60"
+    },
+    {
+      "owner": "villain_montage_records",
+      "role": "cold-boot power line",
+      "path": "captures/run/99fd_opening_villain_power.png",
+      "sha256": "f0c32e25ed3ac1b733dc9509d98355a2df5bf0c716eadda431e3516eea2c219d"
+    },
+    {
+      "owner": "villain_montage_records",
+      "role": "cold-boot world line",
+      "path": "captures/run/99fd_opening_villain_world.png",
+      "sha256": "53e1ae5d9da6589d2fb2622e5eabfc4d810a9236331ca631cfaa124c25b5eef3"
+    },
+    {
+      "owner": "villain_montage_records",
+      "role": "return to intact title",
+      "path": "captures/run/99fd_opening_villain_title_return.png",
+      "sha256": "4f7985b3f7e79eaed2f6deb8f4162003718b88e32fc7bee8468d03e731feae61"
+    },
+    {
+      "owner": "shaman_generic_sprite",
+      "role": "source candidate screen",
+      "path": "captures/run/99fd_release_shaman_candidate1.png",
+      "sha256": "c51df1994b04395969b265402e36635c91b57f4715e19e49b2cb533a87691660"
+    },
+    {
+      "owner": "shaman_commander_sprites",
+      "role": "applied Shaman stable map",
+      "path": "captures/run/99fd_release_shaman_stable_map.png",
+      "sha256": "5047664afe51b2b57f1f6b373003b97258ecb1cad362d0d37a1355b33b6f61bb"
+    },
+    {
+      "owner": "shaman_commander_sprites",
+      "role": "applied Shaman command and status panel",
+      "path": "captures/run/99fd_release_shaman_applied_status.png",
+      "sha256": "55a59a07a8bce3db9aaf96367a00ec6738549f2d3c8bd9e1f79bd92e0c8045ae"
+    },
+    {
+      "owner": "shaman_sprite_pointers",
+      "role": "applied class 0A / commander 1 / LV1 GST",
+      "path": "captures/analysis/99fd_release_shaman.gst",
+      "sha256": "74464277f3977e4dff2dc2aaddcc09a992679efabb14c9bc67553453ac6ba9b7"
+    },
+    {
+      "owner": "loren_custom_sprite",
+      "role": "Scenario 2 Loren map and status row",
+      "path": "captures/run/99fd_release_loren_status.png",
+      "sha256": "ab8bd0090b7f680ecce5134753e408da9e6e9d9258c2345d96121d7009a81edc"
+    },
+    {
+      "owner": "loren_custom_sprite",
+      "role": "Scenario 2 Loren popup",
+      "path": "captures/run/99fd_release_loren_popup.png",
+      "sha256": "7002e058d071178e7c0902a1c0769c28d6f3ca8676e39fd1df20f6b11ba58cf2"
+    }
+  ],
+  "complete": true
+}
