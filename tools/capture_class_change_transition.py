@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -12,12 +13,14 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools import build_class_change_probe_rom as probe_builder
+from tools import blastem_display
 from tools.run_blastem_sequence import terminate_blastem_processes
 
 
 RUN_SEQUENCE = ROOT / "tools/run_blastem_sequence.py"
 SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
+XLIB_ONLY_CAPTURE = False
 
 
 def artifact_stem(checksum: int, commander_id: int, current_class: int) -> str:
@@ -59,7 +62,10 @@ def send_keys(*keys: str) -> None:
 
 def capture(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    run([sys.executable, str(CAPTURE_WINDOW), str(path)])
+    command = [sys.executable, str(CAPTURE_WINDOW), str(path)]
+    if XLIB_ONLY_CAPTURE:
+        command.append("--xlib-only")
+    run(command)
 
 
 def parse_args() -> argparse.Namespace:
@@ -86,11 +92,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--confirmation-delay", type=float, default=0.9)
     parser.add_argument("--max-confirmations", type=int, default=40)
+    blastem_display.add_display_arguments(parser)
     return parser.parse_args()
 
 
 def main() -> int:
+    global XLIB_ONLY_CAPTURE
     args = parse_args()
+    if blastem_display.configure_display(args):
+        XLIB_ONLY_CAPTURE = True
+        print(
+            f"isolated virtual display {os.environ['DISPLAY']}; "
+            "software renderer and Xlib capture enabled",
+            flush=True,
+        )
     output_rom = args.output_rom or (
         ROOT
         / "roms/builds"
@@ -117,8 +132,7 @@ def main() -> int:
         + "/".join(f"0x{candidate:02X}" for candidate in candidates)
     )
     try:
-        run(
-            [
+        sequence_command = [
                 sys.executable,
                 str(RUN_SEQUENCE),
                 "battle-command",
@@ -134,8 +148,11 @@ def main() -> int:
                 str(args.max_confirmations),
                 "--confirmation-delay",
                 str(args.confirmation_delay),
-            ]
+        ]
+        sequence_command.extend(
+            blastem_display.sequence_display_args(args.desktop_display)
         )
+        run(sequence_command)
         send_keys("b:0.8", "b:0.8", "start:2.0")
         capture(Path(f"{capture_prefix}_trigger.png"))
         send_keys("c:1.5")
@@ -146,7 +163,7 @@ def main() -> int:
             capture(path)
             print(path)
     finally:
-        terminate_blastem_processes()
+        terminate_blastem_processes(display=os.environ.get("DISPLAY"))
     return 0
 
 

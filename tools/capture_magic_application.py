@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as production_builder
 from tools import build_magic_application_probe_rom as probe_builder
+from tools import blastem_display
 from tools.run_blastem_sequence import (
     GST_WORK_RAM_FILE_OFFSET,
     RUNTIME_ROOT,
@@ -52,7 +53,7 @@ MAGIC_CURSOR_MIN_SCORE = 8
 MAGIC_CURSOR_MAX_RUNNER_UP_RATIO = 0.7
 DIRECTION_HOLD = 0.08
 UNACCEPTED_TARGET_MAX_CHANGE_RATIO = 0.15
-DEFAULT_VIRTUAL_DISPLAY = os.environ.get("BLASTEM_VIRTUAL_DISPLAY", ":104")
+DEFAULT_VIRTUAL_DISPLAY = blastem_display.DEFAULT_VIRTUAL_DISPLAY
 XLIB_ONLY_CAPTURE = False
 
 
@@ -220,9 +221,7 @@ def capture(path: Path) -> Path:
 
 
 def sequence_display_args(desktop_display: bool) -> list[str]:
-    if desktop_display:
-        return []
-    return ["--xlib-capture", "--software-renderer"]
+    return blastem_display.sequence_display_args(desktop_display)
 
 
 def parse_args() -> argparse.Namespace:
@@ -289,22 +288,7 @@ def parse_args() -> argparse.Namespace:
         help="maximum inserted event-dialogue pages to advance before MP changes",
     )
     parser.add_argument("--max-confirmations", type=int, default=40)
-    parser.add_argument(
-        "--virtual-display",
-        default=DEFAULT_VIRTUAL_DISPLAY,
-        help=(
-            "isolated Xvfb display used by default; override with "
-            "BLASTEM_VIRTUAL_DISPLAY or this option"
-        ),
-    )
-    parser.add_argument(
-        "--desktop-display",
-        action="store_true",
-        help=(
-            "explicit opt-in to the caller's current desktop display; never "
-            "use while the user is working"
-        ),
-    )
+    blastem_display.add_display_arguments(parser)
     parser.add_argument(
         "--no-launch",
         action="store_true",
@@ -319,11 +303,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     global XLIB_ONLY_CAPTURE
     args = parse_args()
-    if not args.desktop_display:
-        os.environ["DISPLAY"] = args.virtual_display
+    if blastem_display.configure_display(args):
         XLIB_ONLY_CAPTURE = True
         print(
-            f"isolated virtual display {args.virtual_display}; "
+            f"isolated virtual display {os.environ['DISPLAY']}; "
             "software renderer and Xlib capture enabled",
             flush=True,
         )
@@ -469,7 +452,7 @@ def main() -> int:
         print(f"verified post-effect MP {current_mp}/{max_mp}", flush=True)
         print(gst_output, flush=True)
     finally:
-        terminate_blastem_processes()
+        terminate_blastem_processes(display=os.environ.get("DISPLAY"))
     return 0
 
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -15,6 +16,7 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as production_builder
 from tools import build_item_shop_probe_rom as probe_builder
+from tools import blastem_display
 from tools.run_blastem_sequence import terminate_blastem_processes
 
 
@@ -145,11 +147,19 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    blastem_display.add_display_arguments(parser)
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if blastem_display.configure_display(args):
+        args.xlib_only = True
+        print(
+            f"isolated virtual display {os.environ['DISPLAY']}; "
+            "software renderer and Xlib capture enabled",
+            flush=True,
+        )
     item_position(args.start_item)
     item_position(args.end_item)
     if args.start_item > args.end_item:
@@ -183,8 +193,7 @@ def main() -> int:
 
     entry_path = Path(f"{capture_prefix}_entry.png")
     try:
-        run(
-            [
+        sequence_command = [
                 sys.executable,
                 str(RUN_SEQUENCE),
                 "shop-buy-list",
@@ -196,8 +205,11 @@ def main() -> int:
                 "--send-event",
                 "--initial-delay",
                 str(args.initial_delay),
-            ]
+        ]
+        sequence_command.extend(
+            blastem_display.sequence_display_args(args.desktop_display)
         )
+        run(sequence_command)
         capture(entry_path, xlib_only=args.xlib_only)
         if not shop_detail_visible(entry_path):
             raise RuntimeError(
@@ -230,7 +242,7 @@ def main() -> int:
                 send_steps(movement_after(item_id, args.movement_delay))
         print(f"captured {captured}, resumed {skipped}; visual review still required")
     finally:
-        terminate_blastem_processes()
+        terminate_blastem_processes(display=os.environ.get("DISPLAY"))
     return 0
 
 

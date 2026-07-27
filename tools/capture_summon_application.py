@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import shutil
 import sys
@@ -16,6 +17,7 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as production_builder
 from tools import build_summon_application_probe_rom as probe_builder
+from tools import blastem_display
 from tools import capture_magic_application as magic_capture
 from tools.run_blastem_sequence import (
     battle_command_menu_visible,
@@ -147,11 +149,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--final-confirmations", type=int, default=2)
     parser.add_argument("--max-event-confirmations", type=int, default=12)
     parser.add_argument("--max-confirmations", type=int, default=40)
+    blastem_display.add_display_arguments(parser)
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if blastem_display.configure_display(args):
+        magic_capture.XLIB_ONLY_CAPTURE = True
+        print(
+            f"isolated virtual display {os.environ['DISPLAY']}; "
+            "software renderer and Xlib capture enabled",
+            flush=True,
+        )
     page, row = summon_position(args.summon_id)
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
@@ -180,8 +190,7 @@ def main() -> int:
     )
 
     try:
-        magic_capture.run(
-            [
+        sequence_command = [
                 sys.executable,
                 str(magic_capture.RUN_SEQUENCE),
                 "battle-command",
@@ -197,8 +206,11 @@ def main() -> int:
                 str(args.max_confirmations),
                 "--confirmation-delay",
                 str(args.confirmation_delay),
-            ]
+        ]
+        sequence_command.extend(
+            blastem_display.sequence_display_args(args.desktop_display)
         )
+        magic_capture.run(sequence_command)
         magic_capture.send_keys("b:0.5")
         magic_capture.send_steps(magic_capture.movement_specs(0, 3, wait=0.45))
         magic_capture.send_steps(magic_capture.movement_specs(2, 0, wait=0.45))
@@ -287,7 +299,7 @@ def main() -> int:
         )
         print(gst_output, flush=True)
     finally:
-        terminate_blastem_processes()
+        terminate_blastem_processes(display=os.environ.get("DISPLAY"))
     return 0
 
 

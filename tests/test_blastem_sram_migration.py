@@ -480,6 +480,24 @@ class BlastEmProcessTests(unittest.TestCase):
             self.write_process(root, 10, "python3", "R")
             self.assertEqual(running_blastem_pids(root), [30])
 
+    def test_running_pids_can_be_limited_to_one_display(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_process(root, 30, "blastem", "S")
+            self.write_process(root, 40, "blastem", "S")
+            (root / "30" / "environ").write_bytes(b"HOME=/tmp/a\x00DISPLAY=:0\x00")
+            (root / "40" / "environ").write_bytes(
+                b"HOME=/tmp/b\x00DISPLAY=:104.0\x00"
+            )
+            self.assertEqual(
+                running_blastem_pids(root, display=":104"),
+                [40],
+            )
+            self.assertEqual(
+                running_blastem_pids(root, display=":0.0"),
+                [30],
+            )
+
     @mock.patch("tools.run_blastem_sequence.time.sleep")
     @mock.patch("tools.run_blastem_sequence.os.kill")
     @mock.patch("tools.run_blastem_sequence.running_blastem_pids")

@@ -15,6 +15,12 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools import blastem_display
+
+
 DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 BLASTEM = ROOT / "tools/blastem/blastem"
 SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
@@ -241,7 +247,32 @@ def scenario_select_keys(
     ]
 
 
-def running_blastem_pids(proc_root: Path = Path("/proc")) -> list[int]:
+def process_display(process_root: Path) -> str | None:
+    try:
+        environment = (process_root / "environ").read_bytes()
+    except (FileNotFoundError, PermissionError, ProcessLookupError):
+        return None
+    for entry in environment.split(b"\x00"):
+        if entry.startswith(b"DISPLAY="):
+            try:
+                return blastem_display.normalize_display(
+                    entry.removeprefix(b"DISPLAY=").decode("ascii")
+                )
+            except (UnicodeDecodeError, ValueError):
+                return None
+    return None
+
+
+def running_blastem_pids(
+    proc_root: Path = Path("/proc"),
+    *,
+    display: str | None = None,
+) -> list[int]:
+    normalized_display = (
+        blastem_display.normalize_display(display)
+        if display is not None
+        else None
+    )
     pids = []
     for entry in proc_root.iterdir():
         if not entry.name.isdigit():
@@ -256,12 +287,21 @@ def running_blastem_pids(proc_root: Path = Path("/proc")) -> list[int]:
         if closing_parenthesis < 0 or len(stat) <= closing_parenthesis + 2:
             continue
         if stat[closing_parenthesis + 2] != "Z":
+            if (
+                normalized_display is not None
+                and process_display(entry) != normalized_display
+            ):
+                continue
             pids.append(int(entry.name))
     return sorted(pids)
 
 
-def terminate_blastem_processes(timeout: float = 2.0) -> None:
-    pids = running_blastem_pids()
+def terminate_blastem_processes(
+    timeout: float = 2.0,
+    *,
+    display: str | None = None,
+) -> None:
+    pids = running_blastem_pids(display=display)
     if not pids:
         return
     for pid in pids:
@@ -271,10 +311,10 @@ def terminate_blastem_processes(timeout: float = 2.0) -> None:
             pass
 
     deadline = time.monotonic() + timeout
-    while running_blastem_pids() and time.monotonic() < deadline:
+    while running_blastem_pids(display=display) and time.monotonic() < deadline:
         time.sleep(0.05)
 
-    survivors = running_blastem_pids()
+    survivors = running_blastem_pids(display=display)
     for pid in survivors:
         try:
             os.kill(pid, signal.SIGKILL)
@@ -282,9 +322,9 @@ def terminate_blastem_processes(timeout: float = 2.0) -> None:
             pass
 
     deadline = time.monotonic() + timeout
-    while running_blastem_pids() and time.monotonic() < deadline:
+    while running_blastem_pids(display=display) and time.monotonic() < deadline:
         time.sleep(0.05)
-    survivors = running_blastem_pids()
+    survivors = running_blastem_pids(display=display)
     if survivors:
         raise RuntimeError(
             "BlastEm did not terminate (PID "
@@ -1033,6 +1073,7 @@ def main() -> int:
             "display without a hardware-backed GL context"
         ),
     )
+    blastem_display.add_display_arguments(parser)
     parser.add_argument(
         "--replace-existing",
         action="store_true",
@@ -1074,6 +1115,15 @@ def main() -> int:
         help="retain each screen-detection frame as PREFIX_NN.png",
     )
     args = parser.parse_args()
+    isolated_display = blastem_display.configure_display(args)
+    if isolated_display:
+        args.xlib_capture = True
+        args.software_renderer = True
+        print(
+            f"isolated virtual display {os.environ['DISPLAY']}; "
+            "software renderer and Xlib capture enabled",
+            flush=True,
+        )
 
     if not 1 <= args.scenario_number <= 31:
         raise ValueError("--scenario-number must be 1..31")
@@ -1104,7 +1154,8 @@ def main() -> int:
 
     if not args.no_launch:
         if not args.dry_run:
-            existing_pids = running_blastem_pids()
+            active_display = os.environ.get("DISPLAY")
+            existing_pids = running_blastem_pids(display=active_display)
             if existing_pids and not args.replace_existing:
                 raise RuntimeError(
                     "BlastEm is already running (PID "
@@ -1112,7 +1163,7 @@ def main() -> int:
                     + "); close it or pass --replace-existing"
                 )
             if existing_pids:
-                terminate_blastem_processes()
+                terminate_blastem_processes(display=active_display)
         runtime_name = args.runtime_name or (
             "load-screen"
             if args.sequence in scenario_selector_sequences | {"launch-only"}

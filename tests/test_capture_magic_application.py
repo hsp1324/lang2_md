@@ -198,7 +198,7 @@ class CaptureMagicApplicationTests(unittest.TestCase):
         )
         self.assertEqual(
             capture_tool.sequence_display_args(desktop_display=True),
-            [],
+            ["--desktop-display"],
         )
 
     def test_virtual_capture_uses_xlib_only(self):

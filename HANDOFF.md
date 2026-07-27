@@ -10942,3 +10942,29 @@ contains 57 safe syllables as documented below and in
 - A prior state-load failure used a GST from a different diagnostic checksum.
   Same-ROM `7256` state loading is reproducible and must not be conflated with
   the rejected cross-ROM shortcut.
+
+### Isolated BlastEm Display Guard (2026-07-27)
+
+- `tools/blastem_display.py` centralizes the automation display contract.
+  `tools/run_blastem_sequence.py` and the magic, summon, class-change, and
+  item-shop capture entry points now override an inherited desktop `DISPLAY`
+  with isolated Xvfb `:104` by default. They also force the software renderer
+  and Xlib capture. The physical desktop requires explicit
+  `--desktop-display`; trying to pass `--virtual-display :0` is rejected.
+- BlastEm process discovery reads each process's `DISPLAY` from `/proc`.
+  Replacement and final cleanup are limited to the active display instead of
+  terminating every BlastEm process owned by the user.
+- A smoke test deliberately launched with parent `DISPLAY=:0`. The child
+  process reported `DISPLAY=:104`, `running_blastem_pids(display=":0")`
+  returned no process, and the Xlib-only capture on `:104` contained the
+  running title animation. Cleanup removed only the `:104` process.
+- The first four-second smoke capture was an all-black boot frame and is
+  rejected as visual evidence. Waiting twelve seconds produced the accepted
+  nonblank frame; do not treat a very early black frame as a display-routing
+  failure.
+- The display/process/capture regression set passes 77 tests. Three unrelated
+  probe-checksum assertions were excluded because another live design session
+  had rebuilt the shared ignored production ROM from checksum `1AB2` to
+  `5ED9`; their probe outputs therefore changed before this patch ran. Do not
+  update those expected checksums from a transient shared build. Re-run them
+  against the finalized production ROM after the design session commits.

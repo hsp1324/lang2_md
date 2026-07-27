@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools import build_class_change_probe_rom as probe_builder
+from tools import blastem_display
 from tools import capture_class_change_transition as capture_tool
 from tools.class_change_data import ClassTransition, read_class_change_chain
 from tools.class_change_inventory import (
@@ -75,11 +76,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--confirmation-delay", type=float, default=0.9)
     parser.add_argument("--max-confirmations", type=int, default=40)
+    blastem_display.add_display_arguments(parser)
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    blastem_display.configure_display(args)
     source = args.source_rom.read_bytes()
     transitions = pending_transitions(
         source, args.commander_id, include_verified=args.include_verified
@@ -148,6 +151,10 @@ def main() -> int:
             "--max-confirmations",
             str(args.max_confirmations),
         ]
+        if args.desktop_display:
+            command.append("--desktop-display")
+        else:
+            command.extend(["--virtual-display", args.virtual_display])
         subprocess.run(command, cwd=ROOT, check=True)
         completed += 1
 
