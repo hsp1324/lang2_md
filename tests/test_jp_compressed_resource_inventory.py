@@ -9,6 +9,7 @@ from tools.jp_compressed_resource_inventory import (
     direct_load_calls,
     inventory,
     markdown_report,
+    resource_encoded_end,
     resource_output_size,
     resource_pointers,
 )
@@ -33,6 +34,32 @@ class CompressedResourceInventoryTests(unittest.TestCase):
         self.assertEqual(len(pointers), 429)
         self.assertEqual(pointers[0], 0x0B06B4)
         self.assertEqual(pointers[-1], 0x13807E)
+
+    def test_encoded_stream_boundaries_are_inside_pointer_allocations(self):
+        pointers = resource_pointers(self.japanese)
+        encoded_ends = [
+            resource_encoded_end(self.japanese, pointer)
+            for pointer in pointers
+        ]
+        allocation_ends = [*pointers[1:], 0x180000]
+        self.assertEqual(encoded_ends[-1], 0x138152)
+        self.assertTrue(
+            all(
+                pointer < encoded_end <= allocation_end
+                for pointer, encoded_end, allocation_end in zip(
+                    pointers, encoded_ends, allocation_ends
+                )
+            )
+        )
+        padding = b"".join(
+            self.japanese[encoded_end:allocation_end]
+            for encoded_end, allocation_end in zip(
+                encoded_ends, allocation_ends
+            )
+        )
+        self.assertEqual(len(padding), 294720)
+        self.assertEqual(padding.count(0x00), 146)
+        self.assertEqual(padding.count(0xFF), 294574)
 
     def test_checked_in_reports_match_current_rom(self):
         stored = json.loads(INVENTORY_JSON.read_text(encoding="utf-8"))

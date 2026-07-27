@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from bisect import bisect_right
 from collections import Counter, defaultdict
 import hashlib
 import json
@@ -11,6 +12,12 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from tools.jp_inline_byte_string_inventory import SCAN_END, scan_runs
+from tools.jp_compressed_resource_inventory import (
+    RESOURCE_TABLE,
+    asset_family,
+    resource_encoded_end,
+    resource_pointers,
+)
 
 
 EXECUTABLE_END = 0x040000
@@ -39,6 +46,30 @@ ENDING_SCENARIO_BANK_START = 0x090000
 ENDING_SCENARIO_BANK_END = 0x0A0000
 TEXT_UI_BANK_START = 0x0A0000
 TEXT_UI_BANK_END = 0x0B0000
+COMPRESSED_RESOURCE_BANK_START = RESOURCE_TABLE
+COMPRESSED_RESOURCE_BANK_END = SCAN_END
+COMPRESSED_RESOURCE_BANK_SOURCE_SHA256 = (
+    "9c906c718b449f3b5288e115bc804e0fd30c26991eb7b4777ab84f76632d1163"
+)
+COMPRESSED_RESOURCE_POINTER_TABLE_SHA256 = (
+    "3a319874035415d264944f87faa897a8d84d95390173d27fc76447f31862528b"
+)
+COMPRESSED_RESOURCE_CANDIDATE_MANIFEST_SHA256 = (
+    "f0c731570dea4403306522bc4422efb1b51943d422f712476bc5cf63dffcf995"
+)
+COMPRESSED_RESOURCE_REPRESENTATIVE_ADDRESSES = {
+    0x0B0739,
+    0x0B0AF2,
+    0x0B1B49,
+    0x0C7D7A,
+    0x0D4410,
+    0x0FEBA8,
+    0x10149D,
+    0x11E964,
+    0x11FB91,
+    0x120F0E,
+    0x121B4F,
+}
 MAX_LOW_SIGNAL = 2
 WORD_STREAM_CONTROLS = {
     0xFFF3,
@@ -605,6 +636,229 @@ def candidate_manifest_sha256(rows: list[dict[str, object]]) -> str:
     return digest.hexdigest()
 
 
+def compressed_resource_candidate_inventory(
+    data: bytes, candidates: list[dict[str, object]]
+) -> dict[str, object]:
+    pointers = resource_pointers(data)
+    encoded_ends = [
+        resource_encoded_end(data, pointer) for pointer in pointers
+    ]
+    allocation_ends = [
+        *pointers[1:],
+        COMPRESSED_RESOURCE_BANK_END,
+    ]
+    table_end = pointers[0]
+    payload_rows: list[tuple[dict[str, object], int]] = []
+    pointer_table_rows: list[dict[str, object]] = []
+    padding_rows: list[dict[str, object]] = []
+    unowned_rows: list[dict[str, object]] = []
+
+    for row in candidates:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        if start < table_end:
+            pointer_table_rows.append(row)
+            continue
+        index = bisect_right(pointers, start) - 1
+        if index < 0 or index >= len(pointers):
+            unowned_rows.append(row)
+        elif start >= encoded_ends[index]:
+            if end <= allocation_ends[index]:
+                padding_rows.append(row)
+            else:
+                unowned_rows.append(row)
+        elif end <= encoded_ends[index]:
+            payload_rows.append((row, index))
+        else:
+            unowned_rows.append(row)
+
+    payload_addresses = {
+        int(row["start_int"]) for row, _ in payload_rows
+    }
+    absolute = aligned_absolute_references(data, payload_addresses)
+    pc_relative = pc_relative_lea_pea_references(data, payload_addresses)
+    rows_by_resource: dict[int, list[dict[str, object]]] = defaultdict(list)
+    for row, index in payload_rows:
+        rows_by_resource[index].append(row)
+
+    resource_summaries = []
+    for index, rows in sorted(rows_by_resource.items()):
+        pointer = pointers[index]
+        encoded_end = encoded_ends[index]
+        allocation_end = allocation_ends[index]
+        kind_counts = Counter(str(row["kind"]) for row in rows)
+        resource_summaries.append(
+            {
+                "index": index,
+                "asset_family": asset_family(index),
+                "resource_type": data[pointer],
+                "pointer": f"0x{pointer:06X}",
+                "encoded_end": f"0x{encoded_end:06X}",
+                "allocation_end": f"0x{allocation_end:06X}",
+                "padding_bytes": allocation_end - encoded_end,
+                "candidate_count": len(rows),
+                "kind_counts": dict(sorted(kind_counts.items())),
+                "first_candidate": (
+                    f"0x{min(int(row['start_int']) for row in rows):06X}"
+                ),
+                "last_candidate": (
+                    f"0x{max(int(row['start_int']) for row in rows):06X}"
+                ),
+            }
+        )
+
+    representatives = []
+    for row, index in payload_rows:
+        start = int(row["start_int"])
+        if start not in COMPRESSED_RESOURCE_REPRESENTATIVE_ADDRESSES:
+            continue
+        end = int(row["end_int"])
+        context_start, context = word_context(data, start, end)
+        representatives.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": "compressed_resource_payload_false_positive",
+                "owner": "encoded compressed graphics/resource bytes",
+                "resource_index": index,
+                "asset_family": asset_family(index),
+                "resource_pointer": f"0x{pointers[index]:06X}",
+                "resource_encoded_end": f"0x{encoded_ends[index]:06X}",
+                "encoded_byte_offset": start - pointers[index],
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in absolute.get(start, [])
+                ],
+            }
+        )
+
+    bank_bytes = data[
+        COMPRESSED_RESOURCE_BANK_START:COMPRESSED_RESOURCE_BANK_END
+    ]
+    table_bytes = data[RESOURCE_TABLE:table_end]
+    padding_values = Counter()
+    for encoded_end, allocation_end in zip(
+        encoded_ends, allocation_ends
+    ):
+        padding_values.update(data[encoded_end:allocation_end])
+    family_counts = Counter(
+        asset_family(index) for _, index in payload_rows
+    )
+    kind_counts = Counter(str(row["kind"]) for row, _ in payload_rows)
+    unclassified_count = (
+        len(pointer_table_rows) + len(padding_rows) + len(unowned_rows)
+    )
+    return {
+        "range": "0x0B0000..0x180000",
+        "pointer_table_range": (
+            f"0x{RESOURCE_TABLE:06X}..0x{table_end:06X}"
+        ),
+        "resource_count": len(pointers),
+        "first_resource_pointer": f"0x{pointers[0]:06X}",
+        "last_resource_pointer": f"0x{pointers[-1]:06X}",
+        "last_resource_encoded_end": f"0x{encoded_ends[-1]:06X}",
+        "source_sha256": hashlib.sha256(bank_bytes).hexdigest(),
+        "expected_source_sha256": COMPRESSED_RESOURCE_BANK_SOURCE_SHA256,
+        "pointer_table_sha256": hashlib.sha256(table_bytes).hexdigest(),
+        "expected_pointer_table_sha256": (
+            COMPRESSED_RESOURCE_POINTER_TABLE_SHA256
+        ),
+        "source_layout_valid": (
+            hashlib.sha256(bank_bytes).hexdigest()
+            == COMPRESSED_RESOURCE_BANK_SOURCE_SHA256
+            and hashlib.sha256(table_bytes).hexdigest()
+            == COMPRESSED_RESOURCE_POINTER_TABLE_SHA256
+            and len(pointers) == 429
+            and pointers[0] == 0x0B06B4
+            and pointers[-1] == 0x13807E
+            and encoded_ends[-1] == 0x138152
+            and all(
+                pointer < encoded_end <= allocation_end
+                for pointer, encoded_end, allocation_end in zip(
+                    pointers, encoded_ends, allocation_ends
+                )
+            )
+            and set(padding_values) <= {0x00, 0xFF}
+        ),
+        "encoded_payload_bytes": sum(
+            encoded_end - pointer
+            for pointer, encoded_end in zip(pointers, encoded_ends)
+        ),
+        "padding_bytes": sum(padding_values.values()),
+        "padding_value_counts": {
+            f"0x{value:02X}": count
+            for value, count in sorted(padding_values.items())
+        },
+        "candidate_count": len(payload_rows),
+        "kind_counts": dict(sorted(kind_counts.items())),
+        "category_counts": {
+            "compressed_resource_payload_false_positive": len(payload_rows)
+        },
+        "unclassified_count": unclassified_count,
+        "pointer_table_candidate_addresses": [
+            f"0x{int(row['start_int']):06X}" for row in pointer_table_rows
+        ],
+        "padding_candidate_addresses": [
+            f"0x{int(row['start_int']):06X}" for row in padding_rows
+        ],
+        "unowned_candidate_addresses": [
+            f"0x{int(row['start_int']):06X}" for row in unowned_rows
+        ],
+        "candidate_manifest_sha256": candidate_manifest_sha256(
+            [row for row, _ in payload_rows]
+        ),
+        "expected_candidate_manifest_sha256": (
+            COMPRESSED_RESOURCE_CANDIDATE_MANIFEST_SHA256
+        ),
+        "resource_count_with_candidates": len(rows_by_resource),
+        "asset_family_candidate_counts": dict(sorted(family_counts.items())),
+        "resources_with_candidates": resource_summaries,
+        "missing_representative_addresses": [
+            f"0x{address:06X}"
+            for address in sorted(
+                COMPRESSED_RESOURCE_REPRESENTATIVE_ADDRESSES
+                - payload_addresses
+            )
+        ],
+        "aligned_absolute_32_reference_count": sum(
+            len(references) for references in absolute.values()
+        ),
+        "aligned_absolute_32_references": [
+            {
+                "target": f"0x{target:06X}",
+                "addresses": [
+                    f"0x{address:06X}" for address in addresses
+                ],
+            }
+            for target, addresses in sorted(absolute.items())
+        ],
+        "pc_relative_lea_pea_reference_count": sum(
+            len(references) for references in pc_relative.values()
+        ),
+        "pc_relative_lea_pea_references": [
+            {
+                "target": f"0x{target:06X}",
+                "references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in references
+                ],
+            }
+            for target, references in sorted(pc_relative.items())
+        ],
+        "representative_candidates": representatives,
+    }
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -681,6 +935,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for row in candidates
         if TEXT_UI_BANK_START <= int(row["start_int"]) < TEXT_UI_BANK_END
     ]
+    compressed_resources = [
+        row
+        for row in candidates
+        if COMPRESSED_RESOURCE_BANK_START
+        <= int(row["start_int"])
+        < COMPRESSED_RESOURCE_BANK_END
+    ]
+    compressed_resource_bank = compressed_resource_candidate_inventory(
+        japanese, compressed_resources
+    )
 
     font_bitmap_addresses = {
         int(row["start_int"]) for row in font_bitmap
@@ -1078,8 +1342,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "warning": (
             "This scan inventories maximal FF-terminated half-width/uppercase-ASCII "
             "runs with only one or two signal bytes. Most are binary coincidences. "
-            "The 0x040000..0x0AFFFF font/class/sprite/item/name/graphics/"
-            "system/ending/scenario/text/UI-bank "
+            "The 0x040000..0x17FFFF font/class/sprite/item/name/graphics/"
+            "system/ending/scenario/text/UI/compressed-resource-bank "
             "candidates are classified here. Exact aligned 32-bit and LEA/PEA "
             "PC-relative references do not exclude base-relative, indexed, or "
             "dynamic access."
@@ -1388,6 +1652,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             ),
             "candidates": detailed_rows,
         },
+        "compressed_resource_bank": compressed_resource_bank,
     }
 
 
@@ -1399,6 +1664,7 @@ def markdown_report(result: dict[str, object]) -> str:
     ending_bank = result["ending_scenario_bank"]
     level_prefix = ending_bank["retained_level_prefix"]
     bank = result["text_ui_bank"]
+    compressed_bank = result["compressed_resource_bank"]
     lines = [
         "# Short Inline Byte Candidate Inventory",
         "",
@@ -1449,6 +1715,14 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Text/UI-bank candidates: {bank['candidate_count']}",
         f"- Text/UI-bank unclassified: {bank['unclassified_count']}",
         (
+            "- Compressed-resource-bank candidates: "
+            f"{compressed_bank['candidate_count']}"
+        ),
+        (
+            "- Compressed-resource-bank unclassified: "
+            f"{compressed_bank['unclassified_count']}"
+        ),
+        (
             "- Exact aligned 32-bit references to text/UI-bank candidates: "
             f"{bank['aligned_absolute_32_reference_count']}"
         ),
@@ -1474,6 +1748,85 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Compressed-Resource-Bank Candidates",
+            "",
+            (
+                f"- The source-locked `{compressed_bank['range']}` bank "
+                f"contains {compressed_bank['resource_count']} resources; "
+                f"{compressed_bank['resource_count_with_candidates']} contain "
+                "one or more low-signal candidates."
+            ),
+            (
+                f"- Resource pointers run from "
+                f"`{compressed_bank['first_resource_pointer']}` to "
+                f"`{compressed_bank['last_resource_pointer']}`; the final "
+                f"encoded stream ends at "
+                f"`{compressed_bank['last_resource_encoded_end']}`."
+            ),
+            (
+                f"- Bank SHA-256: `{compressed_bank['source_sha256']}`; "
+                f"pointer-table SHA-256: "
+                f"`{compressed_bank['pointer_table_sha256']}` "
+                f"(layout valid: `{compressed_bank['source_layout_valid']}`)."
+            ),
+            (
+                f"- Candidate manifest SHA-256: "
+                f"`{compressed_bank['candidate_manifest_sha256']}`."
+            ),
+            (
+                "- Category total: "
+                "`compressed_resource_payload_false_positive` "
+                f"{compressed_bank['candidate_count']}."
+            ),
+            (
+                "- Exact encoded payload bytes: "
+                f"{compressed_bank['encoded_payload_bytes']}; alignment/tail "
+                f"padding bytes: {compressed_bank['padding_bytes']} "
+                f"({compressed_bank['padding_value_counts']})."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{compressed_bank['aligned_absolute_32_reference_count']} "
+                f"across "
+                f"{len(compressed_bank['aligned_absolute_32_references'])} "
+                "targets."
+            ),
+            (
+                "- Exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{compressed_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Asset family | Candidate count |",
+            "| --- | ---: |",
+        ]
+    )
+    for family, count in compressed_bank[
+        "asset_family_candidate_counts"
+    ].items():
+        lines.append(f"| `{family}` | {count} |")
+    lines.extend(
+        [
+            "",
+            "| Representative | Raw | Resource | Asset family | Encoded offset |",
+            "| --- | --- | ---: | --- | ---: |",
+        ]
+    )
+    for row in compressed_bank["representative_candidates"]:
+        lines.append(
+            f"| `{row['address']}` | `{row['raw_hex']}` | "
+            f"{row['resource_index']} | `{row['asset_family']}` | "
+            f"{row['encoded_byte_offset']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "The pointer table, every type 1/2/3 encoded-stream boundary, the",
+            "inter-resource alignment bytes, and the final `FF` tail padding are",
+            "parsed independently. All 3,254 candidates lie inside actual encoded",
+            "payload bytes; none begins in the pointer table, alignment padding,",
+            "or unowned space. Their half-width/ASCII appearance is therefore a",
+            "compression-byte coincidence, not untranslated standalone text.",
             "",
             "## Reviewed Font-Bitmap-Bank Candidates",
             "",
@@ -1801,6 +2154,7 @@ def main() -> None:
     system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
     bank = result["text_ui_bank"]
+    compressed_bank = result["compressed_resource_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
         f"{font_bank['candidate_count']} font-bitmap-bank, "
@@ -1808,8 +2162,9 @@ def main() -> None:
         f"{item_bank['candidate_count']} item/name/graphics-bank, "
         f"{system_bank['candidate_count']} system/graphics/ending-bank, "
         f"{ending_bank['candidate_count']} ending/scenario-bank, and "
-        f"{bank['candidate_count']} text/UI-bank candidates, "
-        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
+        f"{bank['candidate_count']} text/UI-bank, and "
+        f"{compressed_bank['candidate_count']} compressed-resource-bank candidates, "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count']} "
         "unclassified"
     )
 

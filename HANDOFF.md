@@ -11538,3 +11538,41 @@ contains 57 safe syllables as documented below and in
   were regenerated from the isolated current-source ROM only. BlastEm was not
   launched; Xvfb `:104` remained configured and the physical monitor was not
   used.
+
+### Compressed-Resource Low-Signal Byte Audit (2026-07-27)
+
+- The short-inline inventory now covers all 3,254 one/two-signal candidates
+  whose starts fall in the stock compressed-resource bank
+  `0x0B0000..0x17FFFF`: 2,240 half-width-looking and 1,014
+  uppercase-ASCII-looking rows.
+- The 429-entry pointer table is parsed from `0x0B0000`; resource pointers run
+  from `0x0B06B4` through `0x13807E`. New
+  `resource_encoded_end()` parsing independently walks type 1 nibble RLE,
+  type 2 mask/value planes, and type 3 LZ records. The last encoded resource
+  ends at `0x138152`; 146 inter-resource alignment bytes are `00`, and the
+  294,574-byte tail is `FF`.
+- Every candidate, including its terminating `FF`, lies inside an actual
+  encoded resource payload. None starts in the pointer table, alignment
+  padding, tail padding, or unowned space. The bank SHA-256 is
+  `9c906c718b449f3b5288e115bc804e0fd30c26991eb7b4777ab84f76632d1163`,
+  the pointer-table SHA-256 is
+  `3a319874035415d264944f87faa897a8d84d95390173d27fc76447f31862528b`,
+  and the ordered candidate manifest SHA-256 is
+  `f0c731570dea4403306522bc4422efb1b51943d422f712476bc5cf63dffcf995`.
+- Candidates occur in 373 resources. Exact family totals and per-resource
+  encoded ranges are stored in
+  `localization/short_inline_byte_candidates.json`; representative ownership
+  covers platform logo, UI font, map tilesets, combat sprites, battle UI,
+  portraits, world map, item icons, title logo, and opening/ending graphics.
+  The aligned scanner sees 72 four-byte windows across 17 compressed-byte
+  targets and no executable `LEA d16(PC)`/`PEA d16(PC)` target. Reference
+  appearance does not turn encoded graphics bytes into user-facing strings.
+- The cumulative exact review is now 5,132 of 6,612 short-inline candidates:
+  5,131 structural false positives and the retained scenario-level prefix
+  `L-`. The remaining 1,480 candidates are confined to executable/numeric
+  space and remain open for instruction/data ownership review.
+- Focused short-inline/UI/inline/direct/compressed-resource inventory tests
+  pass 89/89. Reports were regenerated from the isolated current-source ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md`. No production
+  ROM bytes were changed, BlastEm was not launched, Xvfb `:104` remained the
+  sole configured emulator display, and the physical monitor was untouched.

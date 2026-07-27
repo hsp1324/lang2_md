@@ -5,6 +5,10 @@ import unittest
 from tools.jp_short_inline_byte_inventory import (
     CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS,
     CLASS_SPRITE_GRAPHICS_REVIEWS,
+    COMPRESSED_RESOURCE_BANK_SOURCE_SHA256,
+    COMPRESSED_RESOURCE_CANDIDATE_MANIFEST_SHA256,
+    COMPRESSED_RESOURCE_POINTER_TABLE_SHA256,
+    COMPRESSED_RESOURCE_REPRESENTATIVE_ADDRESSES,
     ENDING_SCENARIO_STRUCTURED_REVIEWS,
     FONT_BITMAP_BANK_END,
     FONT_BITMAP_BANK_START,
@@ -42,6 +46,7 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         cls.system_bank = cls.result["system_graphics_ending_bank"]
         cls.ending_bank = cls.result["ending_scenario_bank"]
         cls.bank = cls.result["text_ui_bank"]
+        cls.compressed_bank = cls.result["compressed_resource_bank"]
 
     def test_low_signal_candidate_baseline(self):
         self.assertEqual(self.result["candidate_count"], 6612)
@@ -57,6 +62,106 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
             self.result["region_counts"]["ascii"]["text_ui_bank"],
             16,
         )
+
+    def test_compressed_resource_bank_is_source_locked_and_fully_classified(self):
+        bank = self.compressed_bank
+        self.assertEqual(bank["candidate_count"], 3254)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 1014, "halfwidth": 2240},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {"compressed_resource_payload_false_positive": 3254},
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(bank["pointer_table_candidate_addresses"], [])
+        self.assertEqual(bank["padding_candidate_addresses"], [])
+        self.assertEqual(bank["unowned_candidate_addresses"], [])
+        self.assertEqual(bank["resource_count"], 429)
+        self.assertEqual(bank["first_resource_pointer"], "0x0B06B4")
+        self.assertEqual(bank["last_resource_pointer"], "0x13807E")
+        self.assertEqual(bank["last_resource_encoded_end"], "0x138152")
+        self.assertEqual(
+            bank["source_sha256"], COMPRESSED_RESOURCE_BANK_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["pointer_table_sha256"],
+            COMPRESSED_RESOURCE_POINTER_TABLE_SHA256,
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            COMPRESSED_RESOURCE_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["expected_candidate_manifest_sha256"],
+            COMPRESSED_RESOURCE_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+        self.assertEqual(bank["encoded_payload_bytes"], 555532)
+        self.assertEqual(bank["padding_bytes"], 294720)
+        self.assertEqual(
+            bank["padding_value_counts"],
+            {"0x00": 146, "0xFF": 294574},
+        )
+
+    def test_compressed_candidates_have_exact_resource_family_ownership(self):
+        bank = self.compressed_bank
+        self.assertEqual(bank["resource_count_with_candidates"], 373)
+        self.assertEqual(
+            bank["asset_family_candidate_counts"],
+            {
+                "battle_background": 221,
+                "battle_scene_graphics": 51,
+                "battle_ui": 4,
+                "character_portrait": 648,
+                "combat_sprite": 867,
+                "item_icon_graphics": 17,
+                "map_tileset": 660,
+                "opening_ending_graphics": 729,
+                "platform_logo": 1,
+                "title_logo_graphics": 17,
+                "ui_font": 29,
+                "world_map_graphics": 10,
+            },
+        )
+        rows = {
+            int(row["address"], 16): row
+            for row in bank["representative_candidates"]
+        }
+        self.assertEqual(
+            rows.keys(), COMPRESSED_RESOURCE_REPRESENTATIVE_ADDRESSES
+        )
+        self.assertEqual(bank["missing_representative_addresses"], [])
+        expected = {
+            0x0B0739: (0, "platform_logo"),
+            0x0B0AF2: (1, "ui_font"),
+            0x0B1B49: (2, "map_tileset"),
+            0x0C7D7A: (23, "map_tileset"),
+            0x0D4410: (47, "combat_sprite"),
+            0x0FEBA8: (223, "battle_ui"),
+            0x10149D: (231, "character_portrait"),
+            0x11E964: (390, "world_map_graphics"),
+            0x11FB91: (391, "item_icon_graphics"),
+            0x120F0E: (393, "title_logo_graphics"),
+            0x121B4F: (394, "opening_ending_graphics"),
+        }
+        for address, (index, family) in expected.items():
+            with self.subTest(address=f"0x{address:06X}"):
+                self.assertEqual(rows[address]["resource_index"], index)
+                self.assertEqual(rows[address]["asset_family"], family)
+                self.assertEqual(
+                    rows[address]["category"],
+                    "compressed_resource_payload_false_positive",
+                )
+                self.assertTrue(rows[address]["context_words"])
+
+    def test_compressed_candidate_reference_windows_do_not_change_ownership(self):
+        bank = self.compressed_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 72)
+        self.assertEqual(len(bank["aligned_absolute_32_references"]), 17)
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertEqual(bank["pc_relative_lea_pea_references"], [])
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):
         self.assertEqual(self.font_bank["candidate_count"], 1477)

@@ -125,6 +125,87 @@ def resource_output_size(data: bytes, pointer: int) -> int:
     raise ValueError(f"unsupported resource type {resource_type} at 0x{pointer:06X}")
 
 
+def resource_encoded_end(data: bytes, pointer: int) -> int:
+    """Return the first byte after one encoded resource."""
+    resource_type = data[pointer]
+    if resource_type == 1:
+        remaining_nibbles = be16(data, pointer + 1) * 2
+        pos = pointer + 3
+        high_nibble = True
+        previous = 0x7F
+        output_nibbles = 0
+
+        def read_nibble() -> int:
+            nonlocal pos, high_nibble
+            if high_nibble:
+                value = data[pos] >> 4
+                high_nibble = False
+            else:
+                value = data[pos] & 0x0F
+                pos += 1
+                high_nibble = True
+            return value
+
+        while output_nibbles < remaining_nibbles:
+            value = read_nibble()
+            if value == previous:
+                output_nibbles += read_nibble() + 1
+            else:
+                previous = value
+                output_nibbles += 1
+        if output_nibbles != remaining_nibbles:
+            raise ValueError(
+                f"type 1 resource at 0x{pointer:06X} overruns its output size"
+            )
+        return pos if high_nibble else pos + 1
+
+    if resource_type == 2:
+        header = data[pointer + 1]
+        width = header & 0x7F
+        if width not in (1, 2, 4):
+            raise ValueError(
+                f"unsupported type 2 width {width} at 0x{pointer:06X}"
+            )
+        pos = pointer + 2 + (8 if header & 0x80 else 0)
+        mask_length = be16(data, pos)
+        mask_pos = pos + 2
+        mask_end = mask_pos + mask_length
+        value_pos = mask_end
+        groups_per_tile = {1: 4, 2: 2, 4: 1}[width]
+        while mask_pos < mask_end:
+            for _ in range(groups_per_tile):
+                mask = data[mask_pos]
+                mask_pos += 1
+                for _ in range(8):
+                    if mask & 0x80:
+                        value_pos += width
+                    mask = (mask << 1) & 0xFF
+        return value_pos
+
+    if resource_type == 3:
+        remaining = be16(data, pointer + 1)
+        pos = pointer + 3
+        while remaining > 0:
+            flags = data[pos]
+            pos += 1
+            for _ in range(8):
+                if flags & 1:
+                    pos += 1
+                    remaining -= 1
+                else:
+                    count = (data[pos + 1] & 0x0F) + 3
+                    pos += 2
+                    remaining -= min(count, remaining)
+                flags >>= 1
+                if remaining <= 0:
+                    break
+        return pos
+
+    raise ValueError(
+        f"unsupported resource type {resource_type} at 0x{pointer:06X}"
+    )
+
+
 def decompress_type1(data: bytes, pointer: int) -> bytes:
     expected_size = be16(data, pointer + 1)
     pos = pointer + 3

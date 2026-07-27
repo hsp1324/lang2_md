@@ -1,5 +1,5 @@
 {
-  "warning": "This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with only one or two signal bytes. Most are binary coincidences. The 0x040000..0x0AFFFF font/class/sprite/item/name/graphics/system/ending/scenario/text/UI-bank candidates are classified here. Exact aligned 32-bit and LEA/PEA PC-relative references do not exclude base-relative, indexed, or dynamic access.",
+  "warning": "This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with only one or two signal bytes. Most are binary coincidences. The 0x040000..0x17FFFF font/class/sprite/item/name/graphics/system/ending/scenario/text/UI/compressed-resource-bank candidates are classified here. Exact aligned 32-bit and LEA/PEA PC-relative references do not exclude base-relative, indexed, or dynamic access.",
   "source_sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
   "scan_end": "0x180000",
   "candidate_count": 6612,
@@ -6835,6 +6835,6237 @@
         "context_words": "0072 007B 0093 0074 0072 007D 00CB 00AA 00AA FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF",
         "aligned_absolute_32_references": [],
         "pc_relative_lea_pea_references": []
+      }
+    ]
+  },
+  "compressed_resource_bank": {
+    "range": "0x0B0000..0x180000",
+    "pointer_table_range": "0x0B0000..0x0B06B4",
+    "resource_count": 429,
+    "first_resource_pointer": "0x0B06B4",
+    "last_resource_pointer": "0x13807E",
+    "last_resource_encoded_end": "0x138152",
+    "source_sha256": "9c906c718b449f3b5288e115bc804e0fd30c26991eb7b4777ab84f76632d1163",
+    "expected_source_sha256": "9c906c718b449f3b5288e115bc804e0fd30c26991eb7b4777ab84f76632d1163",
+    "pointer_table_sha256": "3a319874035415d264944f87faa897a8d84d95390173d27fc76447f31862528b",
+    "expected_pointer_table_sha256": "3a319874035415d264944f87faa897a8d84d95390173d27fc76447f31862528b",
+    "source_layout_valid": true,
+    "encoded_payload_bytes": 555532,
+    "padding_bytes": 294720,
+    "padding_value_counts": {
+      "0x00": 146,
+      "0xFF": 294574
+    },
+    "candidate_count": 3254,
+    "kind_counts": {
+      "ascii": 1014,
+      "halfwidth": 2240
+    },
+    "category_counts": {
+      "compressed_resource_payload_false_positive": 3254
+    },
+    "unclassified_count": 0,
+    "pointer_table_candidate_addresses": [],
+    "padding_candidate_addresses": [],
+    "unowned_candidate_addresses": [],
+    "candidate_manifest_sha256": "f0c731570dea4403306522bc4422efb1b51943d422f712476bc5cf63dffcf995",
+    "expected_candidate_manifest_sha256": "f0c731570dea4403306522bc4422efb1b51943d422f712476bc5cf63dffcf995",
+    "resource_count_with_candidates": 373,
+    "asset_family_candidate_counts": {
+      "battle_background": 221,
+      "battle_scene_graphics": 51,
+      "battle_ui": 4,
+      "character_portrait": 648,
+      "combat_sprite": 867,
+      "item_icon_graphics": 17,
+      "map_tileset": 660,
+      "opening_ending_graphics": 729,
+      "platform_logo": 1,
+      "title_logo_graphics": 17,
+      "ui_font": 29,
+      "world_map_graphics": 10
+    },
+    "resources_with_candidates": [
+      {
+        "index": 0,
+        "asset_family": "platform_logo",
+        "resource_type": 3,
+        "pointer": "0x0B06B4",
+        "encoded_end": "0x0B0A84",
+        "allocation_end": "0x0B0A84",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0B0739",
+        "last_candidate": "0x0B0739"
+      },
+      {
+        "index": 1,
+        "asset_family": "ui_font",
+        "resource_type": 3,
+        "pointer": "0x0B0A84",
+        "encoded_end": "0x0B1B32",
+        "allocation_end": "0x0B1B32",
+        "padding_bytes": 0,
+        "candidate_count": 29,
+        "kind_counts": {
+          "ascii": 9,
+          "halfwidth": 20
+        },
+        "first_candidate": "0x0B0AF2",
+        "last_candidate": "0x0B1B00"
+      },
+      {
+        "index": 2,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B1B32",
+        "encoded_end": "0x0B1DBB",
+        "allocation_end": "0x0B1DBC",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0B1B49",
+        "last_candidate": "0x0B1D5E"
+      },
+      {
+        "index": 3,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B1DBC",
+        "encoded_end": "0x0B354F",
+        "allocation_end": "0x0B3550",
+        "padding_bytes": 1,
+        "candidate_count": 36,
+        "kind_counts": {
+          "ascii": 21,
+          "halfwidth": 15
+        },
+        "first_candidate": "0x0B1E5C",
+        "last_candidate": "0x0B353A"
+      },
+      {
+        "index": 4,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B3550",
+        "encoded_end": "0x0B4911",
+        "allocation_end": "0x0B4912",
+        "padding_bytes": 1,
+        "candidate_count": 26,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 20
+        },
+        "first_candidate": "0x0B358D",
+        "last_candidate": "0x0B48B1"
+      },
+      {
+        "index": 5,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B4912",
+        "encoded_end": "0x0B5EB0",
+        "allocation_end": "0x0B5EB0",
+        "padding_bytes": 0,
+        "candidate_count": 40,
+        "kind_counts": {
+          "ascii": 14,
+          "halfwidth": 26
+        },
+        "first_candidate": "0x0B4954",
+        "last_candidate": "0x0B5E6F"
+      },
+      {
+        "index": 6,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B5EB0",
+        "encoded_end": "0x0B7267",
+        "allocation_end": "0x0B7268",
+        "padding_bytes": 1,
+        "candidate_count": 25,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 20
+        },
+        "first_candidate": "0x0B5EFF",
+        "last_candidate": "0x0B7207"
+      },
+      {
+        "index": 7,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B7268",
+        "encoded_end": "0x0B87BB",
+        "allocation_end": "0x0B87BC",
+        "padding_bytes": 1,
+        "candidate_count": 25,
+        "kind_counts": {
+          "ascii": 10,
+          "halfwidth": 15
+        },
+        "first_candidate": "0x0B72D1",
+        "last_candidate": "0x0B8504"
+      },
+      {
+        "index": 8,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B87BC",
+        "encoded_end": "0x0B9709",
+        "allocation_end": "0x0B970A",
+        "padding_bytes": 1,
+        "candidate_count": 20,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 14
+        },
+        "first_candidate": "0x0B893F",
+        "last_candidate": "0x0B960F"
+      },
+      {
+        "index": 9,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0B970A",
+        "encoded_end": "0x0BA652",
+        "allocation_end": "0x0BA652",
+        "padding_bytes": 0,
+        "candidate_count": 18,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 12
+        },
+        "first_candidate": "0x0B9790",
+        "last_candidate": "0x0BA559"
+      },
+      {
+        "index": 10,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0BA652",
+        "encoded_end": "0x0BB8D9",
+        "allocation_end": "0x0BB8DA",
+        "padding_bytes": 1,
+        "candidate_count": 36,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 30
+        },
+        "first_candidate": "0x0BA7DF",
+        "last_candidate": "0x0BB6FE"
+      },
+      {
+        "index": 11,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0BB8DA",
+        "encoded_end": "0x0BCB1B",
+        "allocation_end": "0x0BCB1C",
+        "padding_bytes": 1,
+        "candidate_count": 22,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 14
+        },
+        "first_candidate": "0x0BB9E7",
+        "last_candidate": "0x0BC903"
+      },
+      {
+        "index": 12,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0BCB1C",
+        "encoded_end": "0x0BDB33",
+        "allocation_end": "0x0BDB34",
+        "padding_bytes": 1,
+        "candidate_count": 20,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 15
+        },
+        "first_candidate": "0x0BCB8A",
+        "last_candidate": "0x0BDA68"
+      },
+      {
+        "index": 13,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0BDB34",
+        "encoded_end": "0x0BF09E",
+        "allocation_end": "0x0BF09E",
+        "padding_bytes": 0,
+        "candidate_count": 54,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 48
+        },
+        "first_candidate": "0x0BDC50",
+        "last_candidate": "0x0BF052"
+      },
+      {
+        "index": 14,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0BF09E",
+        "encoded_end": "0x0BFD24",
+        "allocation_end": "0x0BFD24",
+        "padding_bytes": 0,
+        "candidate_count": 21,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 17
+        },
+        "first_candidate": "0x0BF0C0",
+        "last_candidate": "0x0BFD20"
+      },
+      {
+        "index": 15,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0BFD24",
+        "encoded_end": "0x0C0CB2",
+        "allocation_end": "0x0C0CB2",
+        "padding_bytes": 0,
+        "candidate_count": 20,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 18
+        },
+        "first_candidate": "0x0BFD7E",
+        "last_candidate": "0x0C08AB"
+      },
+      {
+        "index": 16,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C0CB2",
+        "encoded_end": "0x0C1E0D",
+        "allocation_end": "0x0C1E0E",
+        "padding_bytes": 1,
+        "candidate_count": 24,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 21
+        },
+        "first_candidate": "0x0C0D33",
+        "last_candidate": "0x0C1DFB"
+      },
+      {
+        "index": 17,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C1E0E",
+        "encoded_end": "0x0C2E4B",
+        "allocation_end": "0x0C2E4C",
+        "padding_bytes": 1,
+        "candidate_count": 25,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 24
+        },
+        "first_candidate": "0x0C1E84",
+        "last_candidate": "0x0C2E44"
+      },
+      {
+        "index": 18,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C2E4C",
+        "encoded_end": "0x0C3F10",
+        "allocation_end": "0x0C3F10",
+        "padding_bytes": 0,
+        "candidate_count": 22,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 20
+        },
+        "first_candidate": "0x0C2ED9",
+        "last_candidate": "0x0C3B6D"
+      },
+      {
+        "index": 19,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C3F10",
+        "encoded_end": "0x0C50A0",
+        "allocation_end": "0x0C50A0",
+        "padding_bytes": 0,
+        "candidate_count": 54,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 50
+        },
+        "first_candidate": "0x0C3F29",
+        "last_candidate": "0x0C509D"
+      },
+      {
+        "index": 20,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C50A0",
+        "encoded_end": "0x0C60DC",
+        "allocation_end": "0x0C60DC",
+        "padding_bytes": 0,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 14
+        },
+        "first_candidate": "0x0C5208",
+        "last_candidate": "0x0C6081"
+      },
+      {
+        "index": 21,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C60DC",
+        "encoded_end": "0x0C6CF8",
+        "allocation_end": "0x0C6CF8",
+        "padding_bytes": 0,
+        "candidate_count": 13,
+        "kind_counts": {
+          "halfwidth": 13
+        },
+        "first_candidate": "0x0C6130",
+        "last_candidate": "0x0C69B2"
+      },
+      {
+        "index": 22,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C6CF8",
+        "encoded_end": "0x0C7D5F",
+        "allocation_end": "0x0C7D60",
+        "padding_bytes": 1,
+        "candidate_count": 18,
+        "kind_counts": {
+          "ascii": 11,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0C6D61",
+        "last_candidate": "0x0C7D5C"
+      },
+      {
+        "index": 23,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C7D60",
+        "encoded_end": "0x0C9213",
+        "allocation_end": "0x0C9214",
+        "padding_bytes": 1,
+        "candidate_count": 82,
+        "kind_counts": {
+          "ascii": 20,
+          "halfwidth": 62
+        },
+        "first_candidate": "0x0C7D7A",
+        "last_candidate": "0x0C920F"
+      },
+      {
+        "index": 24,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0C9214",
+        "encoded_end": "0x0CA04B",
+        "allocation_end": "0x0CA04C",
+        "padding_bytes": 1,
+        "candidate_count": 19,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 13
+        },
+        "first_candidate": "0x0C9399",
+        "last_candidate": "0x0C9F7E"
+      },
+      {
+        "index": 25,
+        "asset_family": "map_tileset",
+        "resource_type": 3,
+        "pointer": "0x0CA04C",
+        "encoded_end": "0x0CB0E6",
+        "allocation_end": "0x0CB0E6",
+        "padding_bytes": 0,
+        "candidate_count": 21,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 18
+        },
+        "first_candidate": "0x0CA0A0",
+        "last_candidate": "0x0CB0CF"
+      },
+      {
+        "index": 26,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CB0E6",
+        "encoded_end": "0x0CB869",
+        "allocation_end": "0x0CB86A",
+        "padding_bytes": 1,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0CB0F9",
+        "last_candidate": "0x0CB763"
+      },
+      {
+        "index": 27,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CB86A",
+        "encoded_end": "0x0CBF66",
+        "allocation_end": "0x0CBF66",
+        "padding_bytes": 0,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x0CB87D",
+        "last_candidate": "0x0CBF31"
+      },
+      {
+        "index": 28,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CBF66",
+        "encoded_end": "0x0CC855",
+        "allocation_end": "0x0CC856",
+        "padding_bytes": 1,
+        "candidate_count": 17,
+        "kind_counts": {
+          "ascii": 10,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0CBF8E",
+        "last_candidate": "0x0CC73A"
+      },
+      {
+        "index": 29,
+        "asset_family": "battle_background",
+        "resource_type": 2,
+        "pointer": "0x0CC856",
+        "encoded_end": "0x0CD24C",
+        "allocation_end": "0x0CD24C",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "halfwidth": 8
+        },
+        "first_candidate": "0x0CC9E4",
+        "last_candidate": "0x0CCCD7"
+      },
+      {
+        "index": 30,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CD24C",
+        "encoded_end": "0x0CDAA3",
+        "allocation_end": "0x0CDAA4",
+        "padding_bytes": 1,
+        "candidate_count": 16,
+        "kind_counts": {
+          "ascii": 12,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0CD255",
+        "last_candidate": "0x0CD988"
+      },
+      {
+        "index": 31,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CDAA4",
+        "encoded_end": "0x0CE105",
+        "allocation_end": "0x0CE106",
+        "padding_bytes": 1,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0CDAD9",
+        "last_candidate": "0x0CDFD7"
+      },
+      {
+        "index": 33,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CE328",
+        "encoded_end": "0x0CE9FB",
+        "allocation_end": "0x0CE9FC",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0CE388",
+        "last_candidate": "0x0CE95A"
+      },
+      {
+        "index": 34,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CE9FC",
+        "encoded_end": "0x0CF0CF",
+        "allocation_end": "0x0CF0D0",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0CEA5C",
+        "last_candidate": "0x0CF02E"
+      },
+      {
+        "index": 35,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CF0D0",
+        "encoded_end": "0x0CF72F",
+        "allocation_end": "0x0CF730",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0CF203",
+        "last_candidate": "0x0CF6A4"
+      },
+      {
+        "index": 36,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CF730",
+        "encoded_end": "0x0CFEA8",
+        "allocation_end": "0x0CFEA8",
+        "padding_bytes": 0,
+        "candidate_count": 14,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 13
+        },
+        "first_candidate": "0x0CF762",
+        "last_candidate": "0x0CFDEB"
+      },
+      {
+        "index": 37,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0CFEA8",
+        "encoded_end": "0x0D02C6",
+        "allocation_end": "0x0D02C6",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 5
+        },
+        "first_candidate": "0x0CFF6E",
+        "last_candidate": "0x0D004B"
+      },
+      {
+        "index": 38,
+        "asset_family": "battle_background",
+        "resource_type": 2,
+        "pointer": "0x0D02C6",
+        "encoded_end": "0x0D0B46",
+        "allocation_end": "0x0D0B46",
+        "padding_bytes": 0,
+        "candidate_count": 14,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x0D032D",
+        "last_candidate": "0x0D0A64"
+      },
+      {
+        "index": 39,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D0B46",
+        "encoded_end": "0x0D0F75",
+        "allocation_end": "0x0D0F76",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0D0B7F",
+        "last_candidate": "0x0D0DDA"
+      },
+      {
+        "index": 40,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D0F76",
+        "encoded_end": "0x0D1426",
+        "allocation_end": "0x0D1426",
+        "padding_bytes": 0,
+        "candidate_count": 11,
+        "kind_counts": {
+          "ascii": 9,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D0FB2",
+        "last_candidate": "0x0D1406"
+      },
+      {
+        "index": 41,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D1426",
+        "encoded_end": "0x0D1AA1",
+        "allocation_end": "0x0D1AA2",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D155B",
+        "last_candidate": "0x0D17A4"
+      },
+      {
+        "index": 42,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D1AA2",
+        "encoded_end": "0x0D2165",
+        "allocation_end": "0x0D2166",
+        "padding_bytes": 1,
+        "candidate_count": 19,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 16
+        },
+        "first_candidate": "0x0D1AE4",
+        "last_candidate": "0x0D20C2"
+      },
+      {
+        "index": 43,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D2166",
+        "encoded_end": "0x0D280D",
+        "allocation_end": "0x0D280E",
+        "padding_bytes": 1,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 10,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0D220C",
+        "last_candidate": "0x0D273E"
+      },
+      {
+        "index": 44,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D280E",
+        "encoded_end": "0x0D2E47",
+        "allocation_end": "0x0D2E48",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 6
+        },
+        "first_candidate": "0x0D28B1",
+        "last_candidate": "0x0D2DAA"
+      },
+      {
+        "index": 45,
+        "asset_family": "battle_background",
+        "resource_type": 3,
+        "pointer": "0x0D2E48",
+        "encoded_end": "0x0D34D7",
+        "allocation_end": "0x0D34D8",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D2F04",
+        "last_candidate": "0x0D34A6"
+      },
+      {
+        "index": 46,
+        "asset_family": "battle_background",
+        "resource_type": 2,
+        "pointer": "0x0D34D8",
+        "encoded_end": "0x0D440E",
+        "allocation_end": "0x0D440E",
+        "padding_bytes": 0,
+        "candidate_count": 19,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 17
+        },
+        "first_candidate": "0x0D3580",
+        "last_candidate": "0x0D3D68"
+      },
+      {
+        "index": 47,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D440E",
+        "encoded_end": "0x0D47E5",
+        "allocation_end": "0x0D47E6",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D4410",
+        "last_candidate": "0x0D4423"
+      },
+      {
+        "index": 48,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D47E6",
+        "encoded_end": "0x0D4BA7",
+        "allocation_end": "0x0D4BA8",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D47E8",
+        "last_candidate": "0x0D47E8"
+      },
+      {
+        "index": 49,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D4BA8",
+        "encoded_end": "0x0D505A",
+        "allocation_end": "0x0D505A",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D4D31",
+        "last_candidate": "0x0D4D31"
+      },
+      {
+        "index": 51,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D54A6",
+        "encoded_end": "0x0D58B1",
+        "allocation_end": "0x0D58B2",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0D54A8",
+        "last_candidate": "0x0D5892"
+      },
+      {
+        "index": 52,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D58B2",
+        "encoded_end": "0x0D5E95",
+        "allocation_end": "0x0D5E96",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D5AB4",
+        "last_candidate": "0x0D5E05"
+      },
+      {
+        "index": 53,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D5E96",
+        "encoded_end": "0x0D641B",
+        "allocation_end": "0x0D641C",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D63A4",
+        "last_candidate": "0x0D63A4"
+      },
+      {
+        "index": 54,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0D641C",
+        "encoded_end": "0x0D6A75",
+        "allocation_end": "0x0D6A76",
+        "padding_bytes": 1,
+        "candidate_count": 7,
+        "kind_counts": {
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0D650D",
+        "last_candidate": "0x0D6932"
+      },
+      {
+        "index": 55,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D6A76",
+        "encoded_end": "0x0D6D83",
+        "allocation_end": "0x0D6D84",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D6C05",
+        "last_candidate": "0x0D6C05"
+      },
+      {
+        "index": 56,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D6D84",
+        "encoded_end": "0x0D7111",
+        "allocation_end": "0x0D7112",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D70E4",
+        "last_candidate": "0x0D70E4"
+      },
+      {
+        "index": 57,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D7112",
+        "encoded_end": "0x0D75BF",
+        "allocation_end": "0x0D75C0",
+        "padding_bytes": 1,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D7128",
+        "last_candidate": "0x0D75A7"
+      },
+      {
+        "index": 58,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D75C0",
+        "encoded_end": "0x0D799D",
+        "allocation_end": "0x0D799E",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D769C",
+        "last_candidate": "0x0D7874"
+      },
+      {
+        "index": 59,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D799E",
+        "encoded_end": "0x0D7E46",
+        "allocation_end": "0x0D7E46",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 7,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D7A55",
+        "last_candidate": "0x0D7E35"
+      },
+      {
+        "index": 60,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D7E46",
+        "encoded_end": "0x0D82F9",
+        "allocation_end": "0x0D82FA",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0D7E81",
+        "last_candidate": "0x0D822A"
+      },
+      {
+        "index": 61,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D82FA",
+        "encoded_end": "0x0D873C",
+        "allocation_end": "0x0D873C",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0D83C3",
+        "last_candidate": "0x0D86B9"
+      },
+      {
+        "index": 62,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D873C",
+        "encoded_end": "0x0D89F3",
+        "allocation_end": "0x0D89F4",
+        "padding_bytes": 1,
+        "candidate_count": 9,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D875C",
+        "last_candidate": "0x0D899A"
+      },
+      {
+        "index": 64,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0D8C36",
+        "encoded_end": "0x0D8F9F",
+        "allocation_end": "0x0D8FA0",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0D8C8E",
+        "last_candidate": "0x0D8F6A"
+      },
+      {
+        "index": 65,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0D8FA0",
+        "encoded_end": "0x0D98B2",
+        "allocation_end": "0x0D98B2",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0D8FF3",
+        "last_candidate": "0x0D9778"
+      },
+      {
+        "index": 66,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0D98B2",
+        "encoded_end": "0x0D9B8A",
+        "allocation_end": "0x0D9B8A",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0D98C1",
+        "last_candidate": "0x0D9AC3"
+      },
+      {
+        "index": 67,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0D9B8A",
+        "encoded_end": "0x0D9FE2",
+        "allocation_end": "0x0D9FE2",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0D9CDF",
+        "last_candidate": "0x0D9F9E"
+      },
+      {
+        "index": 69,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0DA2B6",
+        "encoded_end": "0x0DAC0A",
+        "allocation_end": "0x0DAC0A",
+        "padding_bytes": 0,
+        "candidate_count": 14,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 11
+        },
+        "first_candidate": "0x0DA2E5",
+        "last_candidate": "0x0DAB5C"
+      },
+      {
+        "index": 72,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DB498",
+        "encoded_end": "0x0DB8D5",
+        "allocation_end": "0x0DB8D6",
+        "padding_bytes": 1,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 11,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0DB49A",
+        "last_candidate": "0x0DB80D"
+      },
+      {
+        "index": 73,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DB8D6",
+        "encoded_end": "0x0DBD0A",
+        "allocation_end": "0x0DBD0A",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0DBBF7",
+        "last_candidate": "0x0DBBF7"
+      },
+      {
+        "index": 75,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DC14E",
+        "encoded_end": "0x0DC45B",
+        "allocation_end": "0x0DC45C",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0DC2DD",
+        "last_candidate": "0x0DC2DD"
+      },
+      {
+        "index": 76,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DC45C",
+        "encoded_end": "0x0DC81F",
+        "allocation_end": "0x0DC820",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x0DC73C",
+        "last_candidate": "0x0DC73C"
+      },
+      {
+        "index": 77,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DC820",
+        "encoded_end": "0x0DCBE5",
+        "allocation_end": "0x0DCBE6",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x0DC8F3",
+        "last_candidate": "0x0DC8F3"
+      },
+      {
+        "index": 79,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DD1CA",
+        "encoded_end": "0x0DD7D9",
+        "allocation_end": "0x0DD7DA",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 3
+        },
+        "first_candidate": "0x0DD460",
+        "last_candidate": "0x0DD69E"
+      },
+      {
+        "index": 80,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DD7DA",
+        "encoded_end": "0x0DDE5A",
+        "allocation_end": "0x0DDE5A",
+        "padding_bytes": 0,
+        "candidate_count": 16,
+        "kind_counts": {
+          "ascii": 14,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0DD84E",
+        "last_candidate": "0x0DDDF3"
+      },
+      {
+        "index": 81,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DDE5A",
+        "encoded_end": "0x0DE2E2",
+        "allocation_end": "0x0DE2E2",
+        "padding_bytes": 0,
+        "candidate_count": 10,
+        "kind_counts": {
+          "halfwidth": 10
+        },
+        "first_candidate": "0x0DDE5C",
+        "last_candidate": "0x0DE2BF"
+      },
+      {
+        "index": 82,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DE2E2",
+        "encoded_end": "0x0DE7A1",
+        "allocation_end": "0x0DE7A2",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0DE31D",
+        "last_candidate": "0x0DE6DE"
+      },
+      {
+        "index": 83,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DE7A2",
+        "encoded_end": "0x0DEB74",
+        "allocation_end": "0x0DEB74",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0DE7A4",
+        "last_candidate": "0x0DE8A8"
+      },
+      {
+        "index": 84,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DEB74",
+        "encoded_end": "0x0DEF1A",
+        "allocation_end": "0x0DEF1A",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0DEB76",
+        "last_candidate": "0x0DEDDE"
+      },
+      {
+        "index": 85,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DEF1A",
+        "encoded_end": "0x0DF353",
+        "allocation_end": "0x0DF354",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0DEF5A",
+        "last_candidate": "0x0DF247"
+      },
+      {
+        "index": 86,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DF354",
+        "encoded_end": "0x0DF78C",
+        "allocation_end": "0x0DF78C",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0DF363",
+        "last_candidate": "0x0DF699"
+      },
+      {
+        "index": 87,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DF78C",
+        "encoded_end": "0x0DFB66",
+        "allocation_end": "0x0DFB66",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0DF820",
+        "last_candidate": "0x0DFAFE"
+      },
+      {
+        "index": 88,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0DFB66",
+        "encoded_end": "0x0DFFD8",
+        "allocation_end": "0x0DFFD8",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0DFB68",
+        "last_candidate": "0x0DFF56"
+      },
+      {
+        "index": 90,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E03CC",
+        "encoded_end": "0x0E088E",
+        "allocation_end": "0x0E088E",
+        "padding_bytes": 0,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 11
+        },
+        "first_candidate": "0x0E03E6",
+        "last_candidate": "0x0E0809"
+      },
+      {
+        "index": 91,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E088E",
+        "encoded_end": "0x0E0D88",
+        "allocation_end": "0x0E0D88",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E0966",
+        "last_candidate": "0x0E0B7B"
+      },
+      {
+        "index": 92,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E0D88",
+        "encoded_end": "0x0E0E6E",
+        "allocation_end": "0x0E0E6E",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0E0E5E",
+        "last_candidate": "0x0E0E5E"
+      },
+      {
+        "index": 93,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E0E6E",
+        "encoded_end": "0x0E11AA",
+        "allocation_end": "0x0E11AA",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0E10F7",
+        "last_candidate": "0x0E1177"
+      },
+      {
+        "index": 94,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E11AA",
+        "encoded_end": "0x0E16D7",
+        "allocation_end": "0x0E16D8",
+        "padding_bytes": 1,
+        "candidate_count": 9,
+        "kind_counts": {
+          "halfwidth": 9
+        },
+        "first_candidate": "0x0E11AC",
+        "last_candidate": "0x0E157E"
+      },
+      {
+        "index": 95,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E16D8",
+        "encoded_end": "0x0E19AE",
+        "allocation_end": "0x0E19AE",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0E1822",
+        "last_candidate": "0x0E194C"
+      },
+      {
+        "index": 96,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E19AE",
+        "encoded_end": "0x0E1C42",
+        "allocation_end": "0x0E1C42",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0E1BF5",
+        "last_candidate": "0x0E1C14"
+      },
+      {
+        "index": 97,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E1C42",
+        "encoded_end": "0x0E1DF2",
+        "allocation_end": "0x0E1DF2",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0E1D00",
+        "last_candidate": "0x0E1D7C"
+      },
+      {
+        "index": 98,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E1DF2",
+        "encoded_end": "0x0E205D",
+        "allocation_end": "0x0E205E",
+        "padding_bytes": 1,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0E1DFD",
+        "last_candidate": "0x0E1FF9"
+      },
+      {
+        "index": 99,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E205E",
+        "encoded_end": "0x0E22D1",
+        "allocation_end": "0x0E22D2",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0E206F",
+        "last_candidate": "0x0E20A1"
+      },
+      {
+        "index": 100,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E22D2",
+        "encoded_end": "0x0E259B",
+        "allocation_end": "0x0E259C",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0E22EF",
+        "last_candidate": "0x0E2319"
+      },
+      {
+        "index": 101,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E259C",
+        "encoded_end": "0x0E2B64",
+        "allocation_end": "0x0E2B64",
+        "padding_bytes": 0,
+        "candidate_count": 19,
+        "kind_counts": {
+          "ascii": 16,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E25D3",
+        "last_candidate": "0x0E2A38"
+      },
+      {
+        "index": 102,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E2B64",
+        "encoded_end": "0x0E2DF6",
+        "allocation_end": "0x0E2DF6",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0E2B6F",
+        "last_candidate": "0x0E2CE7"
+      },
+      {
+        "index": 103,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E2DF6",
+        "encoded_end": "0x0E30A0",
+        "allocation_end": "0x0E30A0",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E2E1E",
+        "last_candidate": "0x0E2E60"
+      },
+      {
+        "index": 104,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E30A0",
+        "encoded_end": "0x0E331C",
+        "allocation_end": "0x0E331C",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0E30B5",
+        "last_candidate": "0x0E32C3"
+      },
+      {
+        "index": 105,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E331C",
+        "encoded_end": "0x0E36EE",
+        "allocation_end": "0x0E36EE",
+        "padding_bytes": 0,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 11,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0E3361",
+        "last_candidate": "0x0E36BB"
+      },
+      {
+        "index": 106,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E36EE",
+        "encoded_end": "0x0E39DE",
+        "allocation_end": "0x0E39DE",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E3715",
+        "last_candidate": "0x0E38DB"
+      },
+      {
+        "index": 107,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E39DE",
+        "encoded_end": "0x0E4032",
+        "allocation_end": "0x0E4032",
+        "padding_bytes": 0,
+        "candidate_count": 18,
+        "kind_counts": {
+          "ascii": 15,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E3A17",
+        "last_candidate": "0x0E3FF7"
+      },
+      {
+        "index": 108,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E4032",
+        "encoded_end": "0x0E431A",
+        "allocation_end": "0x0E431A",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E4048",
+        "last_candidate": "0x0E415A"
+      },
+      {
+        "index": 109,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E431A",
+        "encoded_end": "0x0E45C2",
+        "allocation_end": "0x0E45C2",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 3
+        },
+        "first_candidate": "0x0E4325",
+        "last_candidate": "0x0E438C"
+      },
+      {
+        "index": 110,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E45C2",
+        "encoded_end": "0x0E4851",
+        "allocation_end": "0x0E4852",
+        "padding_bytes": 1,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0E45D8",
+        "last_candidate": "0x0E462D"
+      },
+      {
+        "index": 111,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E4852",
+        "encoded_end": "0x0E4EAB",
+        "allocation_end": "0x0E4EAC",
+        "padding_bytes": 1,
+        "candidate_count": 17,
+        "kind_counts": {
+          "ascii": 14,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E48FF",
+        "last_candidate": "0x0E4E71"
+      },
+      {
+        "index": 112,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E4EAC",
+        "encoded_end": "0x0E5179",
+        "allocation_end": "0x0E517A",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E4EF3",
+        "last_candidate": "0x0E5106"
+      },
+      {
+        "index": 113,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E517A",
+        "encoded_end": "0x0E5655",
+        "allocation_end": "0x0E5656",
+        "padding_bytes": 1,
+        "candidate_count": 17,
+        "kind_counts": {
+          "ascii": 14,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E51B2",
+        "last_candidate": "0x0E5523"
+      },
+      {
+        "index": 114,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E5656",
+        "encoded_end": "0x0E595D",
+        "allocation_end": "0x0E595E",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E571C",
+        "last_candidate": "0x0E5914"
+      },
+      {
+        "index": 115,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E595E",
+        "encoded_end": "0x0E5C17",
+        "allocation_end": "0x0E5C18",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E5996",
+        "last_candidate": "0x0E5BB3"
+      },
+      {
+        "index": 116,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E5C18",
+        "encoded_end": "0x0E5EEF",
+        "allocation_end": "0x0E5EF0",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E5C35",
+        "last_candidate": "0x0E5C5C"
+      },
+      {
+        "index": 117,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E5EF0",
+        "encoded_end": "0x0E61E6",
+        "allocation_end": "0x0E61E6",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "halfwidth": 8
+        },
+        "first_candidate": "0x0E5F0D",
+        "last_candidate": "0x0E5F60"
+      },
+      {
+        "index": 118,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E61E6",
+        "encoded_end": "0x0E6872",
+        "allocation_end": "0x0E6872",
+        "padding_bytes": 0,
+        "candidate_count": 20,
+        "kind_counts": {
+          "ascii": 11,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x0E62BF",
+        "last_candidate": "0x0E6839"
+      },
+      {
+        "index": 119,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E6872",
+        "encoded_end": "0x0E6EA6",
+        "allocation_end": "0x0E6EA6",
+        "padding_bytes": 0,
+        "candidate_count": 16,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x0E68B4",
+        "last_candidate": "0x0E6E68"
+      },
+      {
+        "index": 120,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E6EA6",
+        "encoded_end": "0x0E74DF",
+        "allocation_end": "0x0E74E0",
+        "padding_bytes": 1,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x0E6EF1",
+        "last_candidate": "0x0E72C7"
+      },
+      {
+        "index": 121,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E74E0",
+        "encoded_end": "0x0E7761",
+        "allocation_end": "0x0E7762",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0E7521",
+        "last_candidate": "0x0E752D"
+      },
+      {
+        "index": 122,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E7762",
+        "encoded_end": "0x0E7C29",
+        "allocation_end": "0x0E7C2A",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E788D",
+        "last_candidate": "0x0E7AEC"
+      },
+      {
+        "index": 123,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E7C2A",
+        "encoded_end": "0x0E82B5",
+        "allocation_end": "0x0E82B6",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E7CC2",
+        "last_candidate": "0x0E827B"
+      },
+      {
+        "index": 124,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E82B6",
+        "encoded_end": "0x0E8972",
+        "allocation_end": "0x0E8972",
+        "padding_bytes": 0,
+        "candidate_count": 19,
+        "kind_counts": {
+          "ascii": 7,
+          "halfwidth": 12
+        },
+        "first_candidate": "0x0E832C",
+        "last_candidate": "0x0E8955"
+      },
+      {
+        "index": 125,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E8972",
+        "encoded_end": "0x0E8FF9",
+        "allocation_end": "0x0E8FFA",
+        "padding_bytes": 1,
+        "candidate_count": 14,
+        "kind_counts": {
+          "ascii": 10,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0E8AA5",
+        "last_candidate": "0x0E8FD2"
+      },
+      {
+        "index": 126,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E8FFA",
+        "encoded_end": "0x0E960F",
+        "allocation_end": "0x0E9610",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0E9174",
+        "last_candidate": "0x0E91FE"
+      },
+      {
+        "index": 127,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0E9610",
+        "encoded_end": "0x0E9C17",
+        "allocation_end": "0x0E9C18",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x0E9AF7",
+        "last_candidate": "0x0E9AF7"
+      },
+      {
+        "index": 128,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E9C18",
+        "encoded_end": "0x0E9EC2",
+        "allocation_end": "0x0E9EC2",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E9C25",
+        "last_candidate": "0x0E9C71"
+      },
+      {
+        "index": 129,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0E9EC2",
+        "encoded_end": "0x0EA161",
+        "allocation_end": "0x0EA162",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0E9ED5",
+        "last_candidate": "0x0E9FA8"
+      },
+      {
+        "index": 130,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0EA162",
+        "encoded_end": "0x0EA411",
+        "allocation_end": "0x0EA412",
+        "padding_bytes": 1,
+        "candidate_count": 11,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 10
+        },
+        "first_candidate": "0x0EA1C1",
+        "last_candidate": "0x0EA3EB"
+      },
+      {
+        "index": 131,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EA412",
+        "encoded_end": "0x0EA66F",
+        "allocation_end": "0x0EA670",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0EA5E9",
+        "last_candidate": "0x0EA62A"
+      },
+      {
+        "index": 132,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EA670",
+        "encoded_end": "0x0EA906",
+        "allocation_end": "0x0EA906",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0EA68F",
+        "last_candidate": "0x0EA744"
+      },
+      {
+        "index": 133,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EA906",
+        "encoded_end": "0x0EAB40",
+        "allocation_end": "0x0EAB40",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0EA9C5",
+        "last_candidate": "0x0EAA5F"
+      },
+      {
+        "index": 134,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EAB40",
+        "encoded_end": "0x0EAD8E",
+        "allocation_end": "0x0EAD8E",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0EABC1",
+        "last_candidate": "0x0EAD56"
+      },
+      {
+        "index": 135,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EAD8E",
+        "encoded_end": "0x0EB14A",
+        "allocation_end": "0x0EB14A",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0EAE8F",
+        "last_candidate": "0x0EAE8F"
+      },
+      {
+        "index": 136,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EB14A",
+        "encoded_end": "0x0EB408",
+        "allocation_end": "0x0EB408",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0EB193",
+        "last_candidate": "0x0EB2A0"
+      },
+      {
+        "index": 137,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EB408",
+        "encoded_end": "0x0EB616",
+        "allocation_end": "0x0EB616",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0EB48F",
+        "last_candidate": "0x0EB5D2"
+      },
+      {
+        "index": 138,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EB616",
+        "encoded_end": "0x0EB984",
+        "allocation_end": "0x0EB984",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0EB635",
+        "last_candidate": "0x0EB95D"
+      },
+      {
+        "index": 139,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EB984",
+        "encoded_end": "0x0EBCD8",
+        "allocation_end": "0x0EBCD8",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0EBAD2",
+        "last_candidate": "0x0EBAD2"
+      },
+      {
+        "index": 141,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EBF18",
+        "encoded_end": "0x0EC1B8",
+        "allocation_end": "0x0EC1B8",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0EBF43",
+        "last_candidate": "0x0EC152"
+      },
+      {
+        "index": 142,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EC1B8",
+        "encoded_end": "0x0EC478",
+        "allocation_end": "0x0EC478",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0EC1E4",
+        "last_candidate": "0x0EC1E4"
+      },
+      {
+        "index": 143,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EC478",
+        "encoded_end": "0x0EC72C",
+        "allocation_end": "0x0EC72C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0EC4AD",
+        "last_candidate": "0x0EC5B8"
+      },
+      {
+        "index": 144,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EC72C",
+        "encoded_end": "0x0EC9D2",
+        "allocation_end": "0x0EC9D2",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0EC7B3",
+        "last_candidate": "0x0EC937"
+      },
+      {
+        "index": 145,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0EC9D2",
+        "encoded_end": "0x0ECDA0",
+        "allocation_end": "0x0ECDA0",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0ECAD5",
+        "last_candidate": "0x0ECD6F"
+      },
+      {
+        "index": 146,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0ECDA0",
+        "encoded_end": "0x0ED136",
+        "allocation_end": "0x0ED136",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 3
+        },
+        "first_candidate": "0x0ECE12",
+        "last_candidate": "0x0ECEF7"
+      },
+      {
+        "index": 148,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0ED30C",
+        "encoded_end": "0x0EDB78",
+        "allocation_end": "0x0EDB78",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0ED3B5",
+        "last_candidate": "0x0ED9DC"
+      },
+      {
+        "index": 149,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EDB78",
+        "encoded_end": "0x0EE0AD",
+        "allocation_end": "0x0EE0AE",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0EDBEB",
+        "last_candidate": "0x0EDF96"
+      },
+      {
+        "index": 152,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0EE540",
+        "encoded_end": "0x0EE817",
+        "allocation_end": "0x0EE818",
+        "padding_bytes": 1,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0EE57E",
+        "last_candidate": "0x0EE7AA"
+      },
+      {
+        "index": 153,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0EE818",
+        "encoded_end": "0x0EEA8A",
+        "allocation_end": "0x0EEA8A",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x0EE859",
+        "last_candidate": "0x0EE859"
+      },
+      {
+        "index": 154,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EEA8A",
+        "encoded_end": "0x0EED61",
+        "allocation_end": "0x0EED62",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0EEADD",
+        "last_candidate": "0x0EED2B"
+      },
+      {
+        "index": 155,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EED62",
+        "encoded_end": "0x0EF017",
+        "allocation_end": "0x0EF018",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0EED85",
+        "last_candidate": "0x0EEFDE"
+      },
+      {
+        "index": 156,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EF018",
+        "encoded_end": "0x0EF2BE",
+        "allocation_end": "0x0EF2BE",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0EF02F",
+        "last_candidate": "0x0EF236"
+      },
+      {
+        "index": 157,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0EF2BE",
+        "encoded_end": "0x0EF595",
+        "allocation_end": "0x0EF596",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0EF305",
+        "last_candidate": "0x0EF3CC"
+      },
+      {
+        "index": 158,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0EF596",
+        "encoded_end": "0x0EFC14",
+        "allocation_end": "0x0EFC14",
+        "padding_bytes": 0,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 11
+        },
+        "first_candidate": "0x0EF60A",
+        "last_candidate": "0x0EFB10"
+      },
+      {
+        "index": 159,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0EFC14",
+        "encoded_end": "0x0F0229",
+        "allocation_end": "0x0F022A",
+        "padding_bytes": 1,
+        "candidate_count": 7,
+        "kind_counts": {
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0EFC86",
+        "last_candidate": "0x0F015E"
+      },
+      {
+        "index": 160,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F022A",
+        "encoded_end": "0x0F0784",
+        "allocation_end": "0x0F0784",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0F0286",
+        "last_candidate": "0x0F0767"
+      },
+      {
+        "index": 161,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F0784",
+        "encoded_end": "0x0F0A29",
+        "allocation_end": "0x0F0A2A",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F079C",
+        "last_candidate": "0x0F07C7"
+      },
+      {
+        "index": 162,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F0A2A",
+        "encoded_end": "0x0F0CDD",
+        "allocation_end": "0x0F0CDE",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F0A49",
+        "last_candidate": "0x0F0BAA"
+      },
+      {
+        "index": 163,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F0CDE",
+        "encoded_end": "0x0F0FC0",
+        "allocation_end": "0x0F0FC0",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0F0D17",
+        "last_candidate": "0x0F0E83"
+      },
+      {
+        "index": 164,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F0FC0",
+        "encoded_end": "0x0F1274",
+        "allocation_end": "0x0F1274",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F0FDF",
+        "last_candidate": "0x0F1011"
+      },
+      {
+        "index": 165,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F1274",
+        "encoded_end": "0x0F1521",
+        "allocation_end": "0x0F1522",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 2
+        },
+        "first_candidate": "0x0F1293",
+        "last_candidate": "0x0F12B7"
+      },
+      {
+        "index": 166,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F1522",
+        "encoded_end": "0x0F1B59",
+        "allocation_end": "0x0F1B5A",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0F15A0",
+        "last_candidate": "0x0F1B22"
+      },
+      {
+        "index": 167,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F1B5A",
+        "encoded_end": "0x0F1E00",
+        "allocation_end": "0x0F1E00",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F1B72",
+        "last_candidate": "0x0F1B9D"
+      },
+      {
+        "index": 169,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F20AC",
+        "encoded_end": "0x0F238F",
+        "allocation_end": "0x0F2390",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F20CB",
+        "last_candidate": "0x0F20EF"
+      },
+      {
+        "index": 170,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F2390",
+        "encoded_end": "0x0F2646",
+        "allocation_end": "0x0F2646",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F23AF",
+        "last_candidate": "0x0F23E1"
+      },
+      {
+        "index": 171,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F2646",
+        "encoded_end": "0x0F28F3",
+        "allocation_end": "0x0F28F4",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 2
+        },
+        "first_candidate": "0x0F2665",
+        "last_candidate": "0x0F2689"
+      },
+      {
+        "index": 172,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F28F4",
+        "encoded_end": "0x0F2F2B",
+        "allocation_end": "0x0F2F2C",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0F2972",
+        "last_candidate": "0x0F2E73"
+      },
+      {
+        "index": 173,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F2F2C",
+        "encoded_end": "0x0F318A",
+        "allocation_end": "0x0F318A",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F2F4B",
+        "last_candidate": "0x0F2F96"
+      },
+      {
+        "index": 174,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F318A",
+        "encoded_end": "0x0F33EE",
+        "allocation_end": "0x0F33EE",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F3239",
+        "last_candidate": "0x0F32CE"
+      },
+      {
+        "index": 176,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F367A",
+        "encoded_end": "0x0F38E4",
+        "allocation_end": "0x0F38E4",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F36A3",
+        "last_candidate": "0x0F36BB"
+      },
+      {
+        "index": 178,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F3B68",
+        "encoded_end": "0x0F41B1",
+        "allocation_end": "0x0F41B2",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0F3BCC",
+        "last_candidate": "0x0F417D"
+      },
+      {
+        "index": 179,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F41B2",
+        "encoded_end": "0x0F442C",
+        "allocation_end": "0x0F442C",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F432C",
+        "last_candidate": "0x0F432C"
+      },
+      {
+        "index": 181,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F468C",
+        "encoded_end": "0x0F48CC",
+        "allocation_end": "0x0F48CC",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F46B9",
+        "last_candidate": "0x0F46B9"
+      },
+      {
+        "index": 182,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F48CC",
+        "encoded_end": "0x0F4B3C",
+        "allocation_end": "0x0F4B3C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0F4938",
+        "last_candidate": "0x0F4B25"
+      },
+      {
+        "index": 183,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F4B3C",
+        "encoded_end": "0x0F512A",
+        "allocation_end": "0x0F512A",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0F4BD1",
+        "last_candidate": "0x0F50CB"
+      },
+      {
+        "index": 184,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F512A",
+        "encoded_end": "0x0F557F",
+        "allocation_end": "0x0F5580",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F52F1",
+        "last_candidate": "0x0F54BE"
+      },
+      {
+        "index": 185,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F5580",
+        "encoded_end": "0x0F5A6C",
+        "allocation_end": "0x0F5A6C",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0F560A",
+        "last_candidate": "0x0F5A39"
+      },
+      {
+        "index": 186,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F5A6C",
+        "encoded_end": "0x0F5D1E",
+        "allocation_end": "0x0F5D1E",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0F5A9A",
+        "last_candidate": "0x0F5AD2"
+      },
+      {
+        "index": 187,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F5D1E",
+        "encoded_end": "0x0F5FE2",
+        "allocation_end": "0x0F5FE2",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F5D37",
+        "last_candidate": "0x0F5F11"
+      },
+      {
+        "index": 188,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F5FE2",
+        "encoded_end": "0x0F6292",
+        "allocation_end": "0x0F6292",
+        "padding_bytes": 0,
+        "candidate_count": 9,
+        "kind_counts": {
+          "halfwidth": 9
+        },
+        "first_candidate": "0x0F5FFE",
+        "last_candidate": "0x0F61D5"
+      },
+      {
+        "index": 189,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F6292",
+        "encoded_end": "0x0F652C",
+        "allocation_end": "0x0F652C",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F62E7",
+        "last_candidate": "0x0F6430"
+      },
+      {
+        "index": 190,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F652C",
+        "encoded_end": "0x0F67EE",
+        "allocation_end": "0x0F67EE",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0F654B",
+        "last_candidate": "0x0F66D6"
+      },
+      {
+        "index": 191,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F67EE",
+        "encoded_end": "0x0F6DEA",
+        "allocation_end": "0x0F6DEA",
+        "padding_bytes": 0,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0F68D6",
+        "last_candidate": "0x0F6DD8"
+      },
+      {
+        "index": 192,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F6DEA",
+        "encoded_end": "0x0F7048",
+        "allocation_end": "0x0F7048",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F6E0D",
+        "last_candidate": "0x0F6EEE"
+      },
+      {
+        "index": 193,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F7048",
+        "encoded_end": "0x0F72A6",
+        "allocation_end": "0x0F72A6",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0F706B",
+        "last_candidate": "0x0F70B7"
+      },
+      {
+        "index": 194,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F72A6",
+        "encoded_end": "0x0F750D",
+        "allocation_end": "0x0F750E",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F72C2",
+        "last_candidate": "0x0F7318"
+      },
+      {
+        "index": 195,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F750E",
+        "encoded_end": "0x0F7787",
+        "allocation_end": "0x0F7788",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F7552",
+        "last_candidate": "0x0F7616"
+      },
+      {
+        "index": 196,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F7788",
+        "encoded_end": "0x0F7DC4",
+        "allocation_end": "0x0F7DC4",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0F78E1",
+        "last_candidate": "0x0F7CE6"
+      },
+      {
+        "index": 197,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F7DC4",
+        "encoded_end": "0x0F836D",
+        "allocation_end": "0x0F836E",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0F7E49",
+        "last_candidate": "0x0F82AA"
+      },
+      {
+        "index": 198,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F836E",
+        "encoded_end": "0x0F8728",
+        "allocation_end": "0x0F8728",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F83F6",
+        "last_candidate": "0x0F83F6"
+      },
+      {
+        "index": 199,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F8728",
+        "encoded_end": "0x0F8BB7",
+        "allocation_end": "0x0F8BB8",
+        "padding_bytes": 1,
+        "candidate_count": 16,
+        "kind_counts": {
+          "ascii": 15,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F8760",
+        "last_candidate": "0x0F8AE4"
+      },
+      {
+        "index": 200,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F8BB8",
+        "encoded_end": "0x0F908B",
+        "allocation_end": "0x0F908C",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F8D7F",
+        "last_candidate": "0x0F9018"
+      },
+      {
+        "index": 201,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F908C",
+        "encoded_end": "0x0F9320",
+        "allocation_end": "0x0F9320",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0F90C9",
+        "last_candidate": "0x0F915C"
+      },
+      {
+        "index": 202,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F9320",
+        "encoded_end": "0x0F95A7",
+        "allocation_end": "0x0F95A8",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0F9349",
+        "last_candidate": "0x0F9545"
+      },
+      {
+        "index": 203,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F95A8",
+        "encoded_end": "0x0F9846",
+        "allocation_end": "0x0F9846",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0F97D2",
+        "last_candidate": "0x0F97E7"
+      },
+      {
+        "index": 204,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0F9846",
+        "encoded_end": "0x0F9ABC",
+        "allocation_end": "0x0F9ABC",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0F9AAC",
+        "last_candidate": "0x0F9AAC"
+      },
+      {
+        "index": 205,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0F9ABC",
+        "encoded_end": "0x0FA0B2",
+        "allocation_end": "0x0FA0B2",
+        "padding_bytes": 0,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 11
+        },
+        "first_candidate": "0x0F9B4B",
+        "last_candidate": "0x0FA09E"
+      },
+      {
+        "index": 206,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0FA0B2",
+        "encoded_end": "0x0FA4A8",
+        "allocation_end": "0x0FA4A8",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0FA3CD",
+        "last_candidate": "0x0FA3D8"
+      },
+      {
+        "index": 207,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0FA4A8",
+        "encoded_end": "0x0FA997",
+        "allocation_end": "0x0FA998",
+        "padding_bytes": 1,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 7,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x0FA4E0",
+        "last_candidate": "0x0FA914"
+      },
+      {
+        "index": 208,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FA998",
+        "encoded_end": "0x0FAC06",
+        "allocation_end": "0x0FAC06",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x0FAA81",
+        "last_candidate": "0x0FAA81"
+      },
+      {
+        "index": 209,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FAC06",
+        "encoded_end": "0x0FAE77",
+        "allocation_end": "0x0FAE78",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0FAC30",
+        "last_candidate": "0x0FAE65"
+      },
+      {
+        "index": 210,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FAE78",
+        "encoded_end": "0x0FB109",
+        "allocation_end": "0x0FB10A",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0FAEC7",
+        "last_candidate": "0x0FB00B"
+      },
+      {
+        "index": 211,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FB10A",
+        "encoded_end": "0x0FB37C",
+        "allocation_end": "0x0FB37C",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0FB15B",
+        "last_candidate": "0x0FB15B"
+      },
+      {
+        "index": 212,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FB37C",
+        "encoded_end": "0x0FB9BB",
+        "allocation_end": "0x0FB9BC",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "halfwidth": 10
+        },
+        "first_candidate": "0x0FB3A9",
+        "last_candidate": "0x0FB96F"
+      },
+      {
+        "index": 213,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FB9BC",
+        "encoded_end": "0x0FBFAF",
+        "allocation_end": "0x0FBFB0",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x0FB9ED",
+        "last_candidate": "0x0FBF6A"
+      },
+      {
+        "index": 214,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0FBFB0",
+        "encoded_end": "0x0FC4E2",
+        "allocation_end": "0x0FC4E2",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0FC036",
+        "last_candidate": "0x0FC1B8"
+      },
+      {
+        "index": 215,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FC4E2",
+        "encoded_end": "0x0FC781",
+        "allocation_end": "0x0FC782",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x0FC5C8",
+        "last_candidate": "0x0FC5C8"
+      },
+      {
+        "index": 217,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FCA2C",
+        "encoded_end": "0x0FCCCB",
+        "allocation_end": "0x0FCCCC",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x0FCA4E",
+        "last_candidate": "0x0FCAB4"
+      },
+      {
+        "index": 218,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FCCCC",
+        "encoded_end": "0x0FD348",
+        "allocation_end": "0x0FD348",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "halfwidth": 8
+        },
+        "first_candidate": "0x0FCD39",
+        "last_candidate": "0x0FD339"
+      },
+      {
+        "index": 219,
+        "asset_family": "combat_sprite",
+        "resource_type": 2,
+        "pointer": "0x0FD348",
+        "encoded_end": "0x0FD990",
+        "allocation_end": "0x0FD990",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x0FD381",
+        "last_candidate": "0x0FD830"
+      },
+      {
+        "index": 220,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0FD990",
+        "encoded_end": "0x0FDEA3",
+        "allocation_end": "0x0FDEA4",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0FDA6C",
+        "last_candidate": "0x0FDE8C"
+      },
+      {
+        "index": 221,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0FDEA4",
+        "encoded_end": "0x0FE54E",
+        "allocation_end": "0x0FE54E",
+        "padding_bytes": 0,
+        "candidate_count": 20,
+        "kind_counts": {
+          "ascii": 20
+        },
+        "first_candidate": "0x0FDEE1",
+        "last_candidate": "0x0FE4EE"
+      },
+      {
+        "index": 222,
+        "asset_family": "combat_sprite",
+        "resource_type": 3,
+        "pointer": "0x0FE54E",
+        "encoded_end": "0x0FEB2A",
+        "allocation_end": "0x0FEB2A",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0FE75E",
+        "last_candidate": "0x0FEB14"
+      },
+      {
+        "index": 223,
+        "asset_family": "battle_ui",
+        "resource_type": 3,
+        "pointer": "0x0FEB2A",
+        "encoded_end": "0x0FEE5D",
+        "allocation_end": "0x0FEE5E",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x0FEBA8",
+        "last_candidate": "0x0FECBC"
+      },
+      {
+        "index": 224,
+        "asset_family": "battle_scene_graphics",
+        "resource_type": 2,
+        "pointer": "0x0FEE5E",
+        "encoded_end": "0x0FF24E",
+        "allocation_end": "0x0FF24E",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x0FEE9B",
+        "last_candidate": "0x0FF206"
+      },
+      {
+        "index": 225,
+        "asset_family": "battle_scene_graphics",
+        "resource_type": 3,
+        "pointer": "0x0FF24E",
+        "encoded_end": "0x0FF879",
+        "allocation_end": "0x0FF87A",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x0FF26B",
+        "last_candidate": "0x0FF728"
+      },
+      {
+        "index": 227,
+        "asset_family": "battle_scene_graphics",
+        "resource_type": 3,
+        "pointer": "0x0FF95C",
+        "encoded_end": "0x10011C",
+        "allocation_end": "0x10011C",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x0FFEA5",
+        "last_candidate": "0x0FFEB3"
+      },
+      {
+        "index": 228,
+        "asset_family": "battle_scene_graphics",
+        "resource_type": 2,
+        "pointer": "0x10011C",
+        "encoded_end": "0x100B0E",
+        "allocation_end": "0x100B0E",
+        "padding_bytes": 0,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 14
+        },
+        "first_candidate": "0x100169",
+        "last_candidate": "0x1008AC"
+      },
+      {
+        "index": 229,
+        "asset_family": "battle_scene_graphics",
+        "resource_type": 2,
+        "pointer": "0x100B0E",
+        "encoded_end": "0x101052",
+        "allocation_end": "0x101052",
+        "padding_bytes": 0,
+        "candidate_count": 19,
+        "kind_counts": {
+          "halfwidth": 19
+        },
+        "first_candidate": "0x100C41",
+        "last_candidate": "0x100F5B"
+      },
+      {
+        "index": 230,
+        "asset_family": "battle_scene_graphics",
+        "resource_type": 2,
+        "pointer": "0x101052",
+        "encoded_end": "0x101466",
+        "allocation_end": "0x101466",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x101087",
+        "last_candidate": "0x1012CE"
+      },
+      {
+        "index": 231,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x101466",
+        "encoded_end": "0x101862",
+        "allocation_end": "0x101862",
+        "padding_bytes": 0,
+        "candidate_count": 9,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x10149D",
+        "last_candidate": "0x10167F"
+      },
+      {
+        "index": 232,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x101862",
+        "encoded_end": "0x101C22",
+        "allocation_end": "0x101C22",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x1018C5",
+        "last_candidate": "0x101A2B"
+      },
+      {
+        "index": 233,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x101C22",
+        "encoded_end": "0x102001",
+        "allocation_end": "0x102002",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x101C4E",
+        "last_candidate": "0x101CB3"
+      },
+      {
+        "index": 234,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x102002",
+        "encoded_end": "0x1023BD",
+        "allocation_end": "0x1023BE",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x102049",
+        "last_candidate": "0x10229D"
+      },
+      {
+        "index": 235,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1023BE",
+        "encoded_end": "0x1027A4",
+        "allocation_end": "0x1027A4",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x1023EB",
+        "last_candidate": "0x102488"
+      },
+      {
+        "index": 236,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1027A4",
+        "encoded_end": "0x102B75",
+        "allocation_end": "0x102B76",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x1027FF",
+        "last_candidate": "0x102AF9"
+      },
+      {
+        "index": 237,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x102B76",
+        "encoded_end": "0x102F6C",
+        "allocation_end": "0x102F6C",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x102B81",
+        "last_candidate": "0x102DBC"
+      },
+      {
+        "index": 238,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x102F6C",
+        "encoded_end": "0x10333A",
+        "allocation_end": "0x10333A",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x1030FD",
+        "last_candidate": "0x1031DA"
+      },
+      {
+        "index": 239,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10333A",
+        "encoded_end": "0x103738",
+        "allocation_end": "0x103738",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x1035BA",
+        "last_candidate": "0x103730"
+      },
+      {
+        "index": 240,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x103738",
+        "encoded_end": "0x103B40",
+        "allocation_end": "0x103B40",
+        "padding_bytes": 0,
+        "candidate_count": 9,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x103743",
+        "last_candidate": "0x103B1E"
+      },
+      {
+        "index": 241,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x103B40",
+        "encoded_end": "0x103F38",
+        "allocation_end": "0x103F38",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x103EC5",
+        "last_candidate": "0x103F30"
+      },
+      {
+        "index": 242,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x103F38",
+        "encoded_end": "0x104328",
+        "allocation_end": "0x104328",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x1041B2",
+        "last_candidate": "0x104320"
+      },
+      {
+        "index": 243,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x104328",
+        "encoded_end": "0x1046C8",
+        "allocation_end": "0x1046C8",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x104345",
+        "last_candidate": "0x1044BD"
+      },
+      {
+        "index": 244,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1046C8",
+        "encoded_end": "0x104A4A",
+        "allocation_end": "0x104A4A",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x1046DA",
+        "last_candidate": "0x104A45"
+      },
+      {
+        "index": 245,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x104A4A",
+        "encoded_end": "0x104DDF",
+        "allocation_end": "0x104DE0",
+        "padding_bytes": 1,
+        "candidate_count": 9,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x104A86",
+        "last_candidate": "0x104BF4"
+      },
+      {
+        "index": 246,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x104DE0",
+        "encoded_end": "0x105160",
+        "allocation_end": "0x105160",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x104F56",
+        "last_candidate": "0x10505C"
+      },
+      {
+        "index": 247,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x105160",
+        "encoded_end": "0x1054F8",
+        "allocation_end": "0x1054F8",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10517F",
+        "last_candidate": "0x10534E"
+      },
+      {
+        "index": 248,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1054F8",
+        "encoded_end": "0x1058AE",
+        "allocation_end": "0x1058AE",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10552F",
+        "last_candidate": "0x10570F"
+      },
+      {
+        "index": 249,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1058AE",
+        "encoded_end": "0x105C78",
+        "allocation_end": "0x105C78",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x1058B9",
+        "last_candidate": "0x105C6B"
+      },
+      {
+        "index": 250,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x105C78",
+        "encoded_end": "0x106022",
+        "allocation_end": "0x106022",
+        "padding_bytes": 0,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x105C83",
+        "last_candidate": "0x105ED5"
+      },
+      {
+        "index": 251,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x106022",
+        "encoded_end": "0x106348",
+        "allocation_end": "0x106348",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x10603F",
+        "last_candidate": "0x106331"
+      },
+      {
+        "index": 252,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x106348",
+        "encoded_end": "0x106686",
+        "allocation_end": "0x106686",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x106365",
+        "last_candidate": "0x106662"
+      },
+      {
+        "index": 253,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x106686",
+        "encoded_end": "0x1069A6",
+        "allocation_end": "0x1069A6",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x1066A3",
+        "last_candidate": "0x10697C"
+      },
+      {
+        "index": 254,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1069A6",
+        "encoded_end": "0x106C58",
+        "allocation_end": "0x106C58",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x1069C3",
+        "last_candidate": "0x106C0F"
+      },
+      {
+        "index": 255,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x106C58",
+        "encoded_end": "0x106F66",
+        "allocation_end": "0x106F66",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x106C6B",
+        "last_candidate": "0x106E70"
+      },
+      {
+        "index": 256,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x106F66",
+        "encoded_end": "0x1072A4",
+        "allocation_end": "0x1072A4",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x106F71",
+        "last_candidate": "0x1070C1"
+      },
+      {
+        "index": 257,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1072A4",
+        "encoded_end": "0x10759E",
+        "allocation_end": "0x10759E",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x1072AF",
+        "last_candidate": "0x1074BC"
+      },
+      {
+        "index": 258,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10759E",
+        "encoded_end": "0x10785C",
+        "allocation_end": "0x10785C",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x1076F9",
+        "last_candidate": "0x1076F9"
+      },
+      {
+        "index": 260,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x107C12",
+        "encoded_end": "0x107FCE",
+        "allocation_end": "0x107FCE",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x107C1D",
+        "last_candidate": "0x107D93"
+      },
+      {
+        "index": 261,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x107FCE",
+        "encoded_end": "0x108364",
+        "allocation_end": "0x108364",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x107FD9",
+        "last_candidate": "0x108002"
+      },
+      {
+        "index": 262,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x108364",
+        "encoded_end": "0x108700",
+        "allocation_end": "0x108700",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x1085B4",
+        "last_candidate": "0x1085B4"
+      },
+      {
+        "index": 263,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x108700",
+        "encoded_end": "0x108A79",
+        "allocation_end": "0x108A7A",
+        "padding_bytes": 1,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x108731",
+        "last_candidate": "0x10893A"
+      },
+      {
+        "index": 264,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x108A7A",
+        "encoded_end": "0x108DF3",
+        "allocation_end": "0x108DF4",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x108ABE",
+        "last_candidate": "0x108C65"
+      },
+      {
+        "index": 265,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x108DF4",
+        "encoded_end": "0x1091A3",
+        "allocation_end": "0x1091A4",
+        "padding_bytes": 1,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x108E09",
+        "last_candidate": "0x1090A2"
+      },
+      {
+        "index": 266,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1091A4",
+        "encoded_end": "0x1094DD",
+        "allocation_end": "0x1094DE",
+        "padding_bytes": 1,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x1091DC",
+        "last_candidate": "0x1093EF"
+      },
+      {
+        "index": 267,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1094DE",
+        "encoded_end": "0x1098A4",
+        "allocation_end": "0x1098A4",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x1094E9",
+        "last_candidate": "0x109779"
+      },
+      {
+        "index": 268,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1098A4",
+        "encoded_end": "0x109C5E",
+        "allocation_end": "0x109C5E",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x1098AF",
+        "last_candidate": "0x109B43"
+      },
+      {
+        "index": 269,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x109C5E",
+        "encoded_end": "0x10A006",
+        "allocation_end": "0x10A006",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x109C69",
+        "last_candidate": "0x109EE7"
+      },
+      {
+        "index": 270,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10A006",
+        "encoded_end": "0x10A3B2",
+        "allocation_end": "0x10A3B2",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x10A011",
+        "last_candidate": "0x10A28D"
+      },
+      {
+        "index": 271,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10A3B2",
+        "encoded_end": "0x10A742",
+        "allocation_end": "0x10A742",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10A5AA",
+        "last_candidate": "0x10A736"
+      },
+      {
+        "index": 272,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10A742",
+        "encoded_end": "0x10AAB4",
+        "allocation_end": "0x10AAB4",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x10A7C6",
+        "last_candidate": "0x10A9D0"
+      },
+      {
+        "index": 273,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10AAB4",
+        "encoded_end": "0x10AE66",
+        "allocation_end": "0x10AE66",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10AAC2",
+        "last_candidate": "0x10AAE4"
+      },
+      {
+        "index": 274,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10AE66",
+        "encoded_end": "0x10B1AA",
+        "allocation_end": "0x10B1AA",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10B038",
+        "last_candidate": "0x10B173"
+      },
+      {
+        "index": 275,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10B1AA",
+        "encoded_end": "0x10B51C",
+        "allocation_end": "0x10B51C",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x10B1BE",
+        "last_candidate": "0x10B493"
+      },
+      {
+        "index": 276,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10B51C",
+        "encoded_end": "0x10B866",
+        "allocation_end": "0x10B866",
+        "padding_bytes": 0,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x10B535",
+        "last_candidate": "0x10B857"
+      },
+      {
+        "index": 277,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10B866",
+        "encoded_end": "0x10BBD5",
+        "allocation_end": "0x10BBD6",
+        "padding_bytes": 1,
+        "candidate_count": 11,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x10B880",
+        "last_candidate": "0x10BBAF"
+      },
+      {
+        "index": 278,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10BBD6",
+        "encoded_end": "0x10BF8C",
+        "allocation_end": "0x10BF8C",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x10BBF6",
+        "last_candidate": "0x10BE0B"
+      },
+      {
+        "index": 279,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10BF8C",
+        "encoded_end": "0x10C36A",
+        "allocation_end": "0x10C36A",
+        "padding_bytes": 0,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 13
+        },
+        "first_candidate": "0x10BFEC",
+        "last_candidate": "0x10C350"
+      },
+      {
+        "index": 280,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10C36A",
+        "encoded_end": "0x10C65F",
+        "allocation_end": "0x10C660",
+        "padding_bytes": 1,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x10C40C",
+        "last_candidate": "0x10C40C"
+      },
+      {
+        "index": 281,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10C660",
+        "encoded_end": "0x10C963",
+        "allocation_end": "0x10C964",
+        "padding_bytes": 1,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10C708",
+        "last_candidate": "0x10C93D"
+      },
+      {
+        "index": 282,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10C964",
+        "encoded_end": "0x10CD00",
+        "allocation_end": "0x10CD00",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x10C974",
+        "last_candidate": "0x10CACB"
+      },
+      {
+        "index": 283,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10CD00",
+        "encoded_end": "0x10D0B6",
+        "allocation_end": "0x10D0B6",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x10CD11",
+        "last_candidate": "0x10CF3E"
+      },
+      {
+        "index": 284,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10D0B6",
+        "encoded_end": "0x10D3DC",
+        "allocation_end": "0x10D3DC",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10D0C1",
+        "last_candidate": "0x10D2EE"
+      },
+      {
+        "index": 285,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10D3DC",
+        "encoded_end": "0x10D72E",
+        "allocation_end": "0x10D72E",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10D3E7",
+        "last_candidate": "0x10D61E"
+      },
+      {
+        "index": 286,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10D72E",
+        "encoded_end": "0x10DA68",
+        "allocation_end": "0x10DA68",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10D739",
+        "last_candidate": "0x10D986"
+      },
+      {
+        "index": 287,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10DA68",
+        "encoded_end": "0x10DE27",
+        "allocation_end": "0x10DE28",
+        "padding_bytes": 1,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x10DB3E",
+        "last_candidate": "0x10DD37"
+      },
+      {
+        "index": 288,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10DE28",
+        "encoded_end": "0x10E1CA",
+        "allocation_end": "0x10E1CA",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10DE49",
+        "last_candidate": "0x10DE56"
+      },
+      {
+        "index": 289,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x10E1CA",
+        "encoded_end": "0x10E578",
+        "allocation_end": "0x10E578",
+        "padding_bytes": 0,
+        "candidate_count": 13,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 8
+        },
+        "first_candidate": "0x10E1CD",
+        "last_candidate": "0x10E498"
+      },
+      {
+        "index": 290,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10E578",
+        "encoded_end": "0x10E922",
+        "allocation_end": "0x10E922",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x10E5A2",
+        "last_candidate": "0x10E90A"
+      },
+      {
+        "index": 291,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10E922",
+        "encoded_end": "0x10ECE2",
+        "allocation_end": "0x10ECE2",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10E937",
+        "last_candidate": "0x10EA50"
+      },
+      {
+        "index": 292,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10ECE2",
+        "encoded_end": "0x10F09E",
+        "allocation_end": "0x10F09E",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10ED16",
+        "last_candidate": "0x10EEC1"
+      },
+      {
+        "index": 293,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10F09E",
+        "encoded_end": "0x10F460",
+        "allocation_end": "0x10F460",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10F0B3",
+        "last_candidate": "0x10F1CC"
+      },
+      {
+        "index": 294,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10F460",
+        "encoded_end": "0x10F7BA",
+        "allocation_end": "0x10F7BA",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10F46B",
+        "last_candidate": "0x10F764"
+      },
+      {
+        "index": 295,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10F7BA",
+        "encoded_end": "0x10FA88",
+        "allocation_end": "0x10FA88",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x10F825",
+        "last_candidate": "0x10F825"
+      },
+      {
+        "index": 296,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10FA88",
+        "encoded_end": "0x10FDB8",
+        "allocation_end": "0x10FDB8",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x10FACF",
+        "last_candidate": "0x10FCBD"
+      },
+      {
+        "index": 297,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x10FDB8",
+        "encoded_end": "0x110180",
+        "allocation_end": "0x110180",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x10FDC3",
+        "last_candidate": "0x110035"
+      },
+      {
+        "index": 298,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x110180",
+        "encoded_end": "0x110500",
+        "allocation_end": "0x110500",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x11018B",
+        "last_candidate": "0x1103BF"
+      },
+      {
+        "index": 299,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x110500",
+        "encoded_end": "0x110888",
+        "allocation_end": "0x110888",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x11050B",
+        "last_candidate": "0x110756"
+      },
+      {
+        "index": 300,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x110888",
+        "encoded_end": "0x110BF0",
+        "allocation_end": "0x110BF0",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x1108C9",
+        "last_candidate": "0x1108C9"
+      },
+      {
+        "index": 302,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x110F46",
+        "encoded_end": "0x1112AE",
+        "allocation_end": "0x1112AE",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x110F87",
+        "last_candidate": "0x110F87"
+      },
+      {
+        "index": 303,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1112AE",
+        "encoded_end": "0x111654",
+        "allocation_end": "0x111654",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x1112B9",
+        "last_candidate": "0x111568"
+      },
+      {
+        "index": 304,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x111654",
+        "encoded_end": "0x111A0C",
+        "allocation_end": "0x111A0C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x11165F",
+        "last_candidate": "0x111914"
+      },
+      {
+        "index": 305,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x111A0C",
+        "encoded_end": "0x111D84",
+        "allocation_end": "0x111D84",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x111C4B",
+        "last_candidate": "0x111D39"
+      },
+      {
+        "index": 306,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x111D84",
+        "encoded_end": "0x112122",
+        "allocation_end": "0x112122",
+        "padding_bytes": 0,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x111DB1",
+        "last_candidate": "0x1120AF"
+      },
+      {
+        "index": 307,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x112122",
+        "encoded_end": "0x1124BC",
+        "allocation_end": "0x1124BC",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x11212D",
+        "last_candidate": "0x112437"
+      },
+      {
+        "index": 308,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1124BC",
+        "encoded_end": "0x11286D",
+        "allocation_end": "0x11286E",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x1124F1",
+        "last_candidate": "0x1127F9"
+      },
+      {
+        "index": 309,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11286E",
+        "encoded_end": "0x112C2E",
+        "allocation_end": "0x112C2E",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x112879",
+        "last_candidate": "0x112B46"
+      },
+      {
+        "index": 310,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x112C2E",
+        "encoded_end": "0x112FB8",
+        "allocation_end": "0x112FB8",
+        "padding_bytes": 0,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x112C3D",
+        "last_candidate": "0x112F9F"
+      },
+      {
+        "index": 311,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x112FB8",
+        "encoded_end": "0x113344",
+        "allocation_end": "0x113344",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x112FC7",
+        "last_candidate": "0x11321A"
+      },
+      {
+        "index": 312,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x113344",
+        "encoded_end": "0x113676",
+        "allocation_end": "0x113676",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x113386",
+        "last_candidate": "0x11363B"
+      },
+      {
+        "index": 313,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x113676",
+        "encoded_end": "0x1139CA",
+        "allocation_end": "0x1139CA",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x113810",
+        "last_candidate": "0x11398F"
+      },
+      {
+        "index": 314,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1139CA",
+        "encoded_end": "0x113D1A",
+        "allocation_end": "0x113D1A",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x1139E5",
+        "last_candidate": "0x113A17"
+      },
+      {
+        "index": 315,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x113D1A",
+        "encoded_end": "0x11405A",
+        "allocation_end": "0x11405A",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x113D25",
+        "last_candidate": "0x113D25"
+      },
+      {
+        "index": 316,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11405A",
+        "encoded_end": "0x1143D4",
+        "allocation_end": "0x1143D4",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x11407B",
+        "last_candidate": "0x1142C2"
+      },
+      {
+        "index": 317,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x1143D4",
+        "encoded_end": "0x114796",
+        "allocation_end": "0x114796",
+        "padding_bytes": 0,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 4,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x1143FE",
+        "last_candidate": "0x114787"
+      },
+      {
+        "index": 318,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x114796",
+        "encoded_end": "0x114B4C",
+        "allocation_end": "0x114B4C",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x1147A1",
+        "last_candidate": "0x114A31"
+      },
+      {
+        "index": 319,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x114B4C",
+        "encoded_end": "0x114EEA",
+        "allocation_end": "0x114EEA",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x114B5A",
+        "last_candidate": "0x114DCF"
+      },
+      {
+        "index": 320,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x114EEA",
+        "encoded_end": "0x11526A",
+        "allocation_end": "0x11526A",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x114EF5",
+        "last_candidate": "0x1150A3"
+      },
+      {
+        "index": 321,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11526A",
+        "encoded_end": "0x11560C",
+        "allocation_end": "0x11560C",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x115289",
+        "last_candidate": "0x1152A1"
+      },
+      {
+        "index": 322,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11560C",
+        "encoded_end": "0x11597C",
+        "allocation_end": "0x11597C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x115658",
+        "last_candidate": "0x1157EE"
+      },
+      {
+        "index": 323,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11597C",
+        "encoded_end": "0x115CEB",
+        "allocation_end": "0x115CEC",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x1159ED",
+        "last_candidate": "0x115C0A"
+      },
+      {
+        "index": 324,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x115CEC",
+        "encoded_end": "0x11601D",
+        "allocation_end": "0x11601E",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x115D36",
+        "last_candidate": "0x115F0F"
+      },
+      {
+        "index": 325,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11601E",
+        "encoded_end": "0x11637B",
+        "allocation_end": "0x11637C",
+        "padding_bytes": 1,
+        "candidate_count": 6,
+        "kind_counts": {
+          "halfwidth": 6
+        },
+        "first_candidate": "0x116036",
+        "last_candidate": "0x11626B"
+      },
+      {
+        "index": 326,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11637C",
+        "encoded_end": "0x11677E",
+        "allocation_end": "0x11677E",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x116387",
+        "last_candidate": "0x1165DC"
+      },
+      {
+        "index": 327,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11677E",
+        "encoded_end": "0x116B66",
+        "allocation_end": "0x116B66",
+        "padding_bytes": 0,
+        "candidate_count": 6,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x116789",
+        "last_candidate": "0x1169F2"
+      },
+      {
+        "index": 328,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x116B66",
+        "encoded_end": "0x116E71",
+        "allocation_end": "0x116E72",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x116B8F",
+        "last_candidate": "0x116B97"
+      },
+      {
+        "index": 329,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x116E72",
+        "encoded_end": "0x11718E",
+        "allocation_end": "0x11718E",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x116E75",
+        "last_candidate": "0x1170FC"
+      },
+      {
+        "index": 330,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11718E",
+        "encoded_end": "0x1174F0",
+        "allocation_end": "0x1174F0",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x1171A8",
+        "last_candidate": "0x117217"
+      },
+      {
+        "index": 331,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1174F0",
+        "encoded_end": "0x117849",
+        "allocation_end": "0x11784A",
+        "padding_bytes": 1,
+        "candidate_count": 9,
+        "kind_counts": {
+          "halfwidth": 9
+        },
+        "first_candidate": "0x11750A",
+        "last_candidate": "0x1176E0"
+      },
+      {
+        "index": 332,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11784A",
+        "encoded_end": "0x117B6C",
+        "allocation_end": "0x117B6C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x117855",
+        "last_candidate": "0x117AA4"
+      },
+      {
+        "index": 333,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x117B6C",
+        "encoded_end": "0x117EAC",
+        "allocation_end": "0x117EAC",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x117DCD",
+        "last_candidate": "0x117DE5"
+      },
+      {
+        "index": 334,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x117EAC",
+        "encoded_end": "0x11821E",
+        "allocation_end": "0x11821E",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x117EE7",
+        "last_candidate": "0x117EEE"
+      },
+      {
+        "index": 335,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11821E",
+        "encoded_end": "0x11859C",
+        "allocation_end": "0x11859C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x118275",
+        "last_candidate": "0x1184AF"
+      },
+      {
+        "index": 336,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11859C",
+        "encoded_end": "0x118881",
+        "allocation_end": "0x118882",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x1185B8",
+        "last_candidate": "0x118625"
+      },
+      {
+        "index": 337,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x118882",
+        "encoded_end": "0x118BD8",
+        "allocation_end": "0x118BD8",
+        "padding_bytes": 0,
+        "candidate_count": 11,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 10
+        },
+        "first_candidate": "0x11889F",
+        "last_candidate": "0x118BD0"
+      },
+      {
+        "index": 338,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x118BD8",
+        "encoded_end": "0x118F2B",
+        "allocation_end": "0x118F2C",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x118BF1",
+        "last_candidate": "0x118EDA"
+      },
+      {
+        "index": 340,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1192A8",
+        "encoded_end": "0x119570",
+        "allocation_end": "0x119570",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "halfwidth": 1
+        },
+        "first_candidate": "0x11948F",
+        "last_candidate": "0x11948F"
+      },
+      {
+        "index": 341,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x119570",
+        "encoded_end": "0x1198FC",
+        "allocation_end": "0x1198FC",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x11957B",
+        "last_candidate": "0x1197C4"
+      },
+      {
+        "index": 342,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x1198FC",
+        "encoded_end": "0x119BEC",
+        "allocation_end": "0x119BEC",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x119981",
+        "last_candidate": "0x119AFD"
+      },
+      {
+        "index": 343,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x119BEC",
+        "encoded_end": "0x119F6A",
+        "allocation_end": "0x119F6A",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x119C07",
+        "last_candidate": "0x119F1C"
+      },
+      {
+        "index": 344,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x119F6A",
+        "encoded_end": "0x11A2A4",
+        "allocation_end": "0x11A2A4",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x119F9F",
+        "last_candidate": "0x119FD7"
+      },
+      {
+        "index": 345,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11A2A4",
+        "encoded_end": "0x11A5F6",
+        "allocation_end": "0x11A5F6",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x11A2AF",
+        "last_candidate": "0x11A453"
+      },
+      {
+        "index": 346,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11A5F6",
+        "encoded_end": "0x11A99A",
+        "allocation_end": "0x11A99A",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x11A625",
+        "last_candidate": "0x11A8DB"
+      },
+      {
+        "index": 347,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11A99A",
+        "encoded_end": "0x11AD05",
+        "allocation_end": "0x11AD06",
+        "padding_bytes": 1,
+        "candidate_count": 14,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x11A9B1",
+        "last_candidate": "0x11ABF3"
+      },
+      {
+        "index": 348,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11AD06",
+        "encoded_end": "0x11B0A8",
+        "allocation_end": "0x11B0A8",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 2
+        },
+        "first_candidate": "0x11AD11",
+        "last_candidate": "0x11B072"
+      },
+      {
+        "index": 349,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11B0A8",
+        "encoded_end": "0x11B402",
+        "allocation_end": "0x11B402",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x11B0B3",
+        "last_candidate": "0x11B102"
+      },
+      {
+        "index": 350,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11B402",
+        "encoded_end": "0x11B788",
+        "allocation_end": "0x11B788",
+        "padding_bytes": 0,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 11
+        },
+        "first_candidate": "0x11B41A",
+        "last_candidate": "0x11B6C3"
+      },
+      {
+        "index": 351,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11B788",
+        "encoded_end": "0x11BB21",
+        "allocation_end": "0x11BB22",
+        "padding_bytes": 1,
+        "candidate_count": 9,
+        "kind_counts": {
+          "halfwidth": 9
+        },
+        "first_candidate": "0x11B7A5",
+        "last_candidate": "0x11BA9E"
+      },
+      {
+        "index": 352,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11BB22",
+        "encoded_end": "0x11BEC9",
+        "allocation_end": "0x11BECA",
+        "padding_bytes": 1,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x11BB5D",
+        "last_candidate": "0x11BD84"
+      },
+      {
+        "index": 353,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11BECA",
+        "encoded_end": "0x11C243",
+        "allocation_end": "0x11C244",
+        "padding_bytes": 1,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x11BF05",
+        "last_candidate": "0x11C110"
+      },
+      {
+        "index": 354,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11C244",
+        "encoded_end": "0x11C568",
+        "allocation_end": "0x11C568",
+        "padding_bytes": 0,
+        "candidate_count": 2,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x11C24F",
+        "last_candidate": "0x11C4E9"
+      },
+      {
+        "index": 355,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11C568",
+        "encoded_end": "0x11C98C",
+        "allocation_end": "0x11C98C",
+        "padding_bytes": 0,
+        "candidate_count": 5,
+        "kind_counts": {
+          "halfwidth": 5
+        },
+        "first_candidate": "0x11C587",
+        "last_candidate": "0x11C851"
+      },
+      {
+        "index": 356,
+        "asset_family": "character_portrait",
+        "resource_type": 3,
+        "pointer": "0x11C98C",
+        "encoded_end": "0x11CDCF",
+        "allocation_end": "0x11CDD0",
+        "padding_bytes": 1,
+        "candidate_count": 18,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 17
+        },
+        "first_candidate": "0x11C9AE",
+        "last_candidate": "0x11CDC5"
+      },
+      {
+        "index": 357,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11CDD0",
+        "encoded_end": "0x11D14C",
+        "allocation_end": "0x11D14C",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x11CDF7",
+        "last_candidate": "0x11CFC5"
+      },
+      {
+        "index": 358,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11D14C",
+        "encoded_end": "0x11D4DE",
+        "allocation_end": "0x11D4DE",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x11D16E",
+        "last_candidate": "0x11D366"
+      },
+      {
+        "index": 359,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11D4DE",
+        "encoded_end": "0x11D8BA",
+        "allocation_end": "0x11D8BA",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 5
+        },
+        "first_candidate": "0x11D4E9",
+        "last_candidate": "0x11D802"
+      },
+      {
+        "index": 360,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11D8BA",
+        "encoded_end": "0x11DCBA",
+        "allocation_end": "0x11DCBA",
+        "padding_bytes": 0,
+        "candidate_count": 7,
+        "kind_counts": {
+          "halfwidth": 7
+        },
+        "first_candidate": "0x11D952",
+        "last_candidate": "0x11DC79"
+      },
+      {
+        "index": 361,
+        "asset_family": "character_portrait",
+        "resource_type": 2,
+        "pointer": "0x11DCBA",
+        "encoded_end": "0x11E096",
+        "allocation_end": "0x11E096",
+        "padding_bytes": 0,
+        "candidate_count": 4,
+        "kind_counts": {
+          "halfwidth": 4
+        },
+        "first_candidate": "0x11DD0B",
+        "last_candidate": "0x11DE43"
+      },
+      {
+        "index": 390,
+        "asset_family": "world_map_graphics",
+        "resource_type": 3,
+        "pointer": "0x11E898",
+        "encoded_end": "0x11FAE3",
+        "allocation_end": "0x11FAE4",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 10
+        },
+        "first_candidate": "0x11E964",
+        "last_candidate": "0x11F6B5"
+      },
+      {
+        "index": 391,
+        "asset_family": "item_icon_graphics",
+        "resource_type": 3,
+        "pointer": "0x11FAE4",
+        "encoded_end": "0x120BEE",
+        "allocation_end": "0x120BEE",
+        "padding_bytes": 0,
+        "candidate_count": 17,
+        "kind_counts": {
+          "ascii": 14,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x11FB91",
+        "last_candidate": "0x120BEA"
+      },
+      {
+        "index": 393,
+        "asset_family": "title_logo_graphics",
+        "resource_type": 3,
+        "pointer": "0x120EEE",
+        "encoded_end": "0x121B4B",
+        "allocation_end": "0x121B4C",
+        "padding_bytes": 1,
+        "candidate_count": 17,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x120F0E",
+        "last_candidate": "0x121831"
+      },
+      {
+        "index": 394,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x121B4C",
+        "encoded_end": "0x121CB6",
+        "allocation_end": "0x121CB6",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x121B4F",
+        "last_candidate": "0x121C89"
+      },
+      {
+        "index": 395,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x121CB6",
+        "encoded_end": "0x122C46",
+        "allocation_end": "0x122C46",
+        "padding_bytes": 0,
+        "candidate_count": 11,
+        "kind_counts": {
+          "halfwidth": 11
+        },
+        "first_candidate": "0x121D2F",
+        "last_candidate": "0x122BD9"
+      },
+      {
+        "index": 396,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x122C46",
+        "encoded_end": "0x123D38",
+        "allocation_end": "0x123D38",
+        "padding_bytes": 0,
+        "candidate_count": 25,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 22
+        },
+        "first_candidate": "0x122CC4",
+        "last_candidate": "0x123719"
+      },
+      {
+        "index": 397,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x123D38",
+        "encoded_end": "0x12425E",
+        "allocation_end": "0x12425E",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "halfwidth": 3
+        },
+        "first_candidate": "0x123D51",
+        "last_candidate": "0x123FF3"
+      },
+      {
+        "index": 398,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x12425E",
+        "encoded_end": "0x1249D4",
+        "allocation_end": "0x1249D4",
+        "padding_bytes": 0,
+        "candidate_count": 16,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 13
+        },
+        "first_candidate": "0x1242BF",
+        "last_candidate": "0x1248E7"
+      },
+      {
+        "index": 399,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x1249D4",
+        "encoded_end": "0x1259AE",
+        "allocation_end": "0x1259AE",
+        "padding_bytes": 0,
+        "candidate_count": 51,
+        "kind_counts": {
+          "ascii": 9,
+          "halfwidth": 42
+        },
+        "first_candidate": "0x124A81",
+        "last_candidate": "0x12586A"
+      },
+      {
+        "index": 400,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x1259AE",
+        "encoded_end": "0x126952",
+        "allocation_end": "0x126952",
+        "padding_bytes": 0,
+        "candidate_count": 39,
+        "kind_counts": {
+          "ascii": 17,
+          "halfwidth": 22
+        },
+        "first_candidate": "0x1259E5",
+        "last_candidate": "0x126868"
+      },
+      {
+        "index": 401,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x126952",
+        "encoded_end": "0x1279FE",
+        "allocation_end": "0x1279FE",
+        "padding_bytes": 0,
+        "candidate_count": 46,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 38
+        },
+        "first_candidate": "0x1269A6",
+        "last_candidate": "0x1279FA"
+      },
+      {
+        "index": 402,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x1279FE",
+        "encoded_end": "0x128B53",
+        "allocation_end": "0x128B54",
+        "padding_bytes": 1,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 4
+        },
+        "first_candidate": "0x127CF3",
+        "last_candidate": "0x128B4B"
+      },
+      {
+        "index": 403,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x128B54",
+        "encoded_end": "0x128F52",
+        "allocation_end": "0x128F52",
+        "padding_bytes": 0,
+        "candidate_count": 24,
+        "kind_counts": {
+          "ascii": 10,
+          "halfwidth": 14
+        },
+        "first_candidate": "0x128BD1",
+        "last_candidate": "0x128F29"
+      },
+      {
+        "index": 404,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x128F52",
+        "encoded_end": "0x129C9C",
+        "allocation_end": "0x129C9C",
+        "padding_bytes": 0,
+        "candidate_count": 9,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 6
+        },
+        "first_candidate": "0x129139",
+        "last_candidate": "0x129C9A"
+      },
+      {
+        "index": 405,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x129C9C",
+        "encoded_end": "0x12ACD8",
+        "allocation_end": "0x12ACD8",
+        "padding_bytes": 0,
+        "candidate_count": 44,
+        "kind_counts": {
+          "ascii": 12,
+          "halfwidth": 32
+        },
+        "first_candidate": "0x129DE8",
+        "last_candidate": "0x12AC29"
+      },
+      {
+        "index": 407,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x12AF14",
+        "encoded_end": "0x12BF1A",
+        "allocation_end": "0x12BF1A",
+        "padding_bytes": 0,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 14
+        },
+        "first_candidate": "0x12B211",
+        "last_candidate": "0x12BEBF"
+      },
+      {
+        "index": 408,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x12BF1A",
+        "encoded_end": "0x12C6E8",
+        "allocation_end": "0x12C6E8",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 1,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x12BFB1",
+        "last_candidate": "0x12C27B"
+      },
+      {
+        "index": 409,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x12C6E8",
+        "encoded_end": "0x12CEA9",
+        "allocation_end": "0x12CEAA",
+        "padding_bytes": 1,
+        "candidate_count": 37,
+        "kind_counts": {
+          "ascii": 27,
+          "halfwidth": 10
+        },
+        "first_candidate": "0x12C744",
+        "last_candidate": "0x12CE8B"
+      },
+      {
+        "index": 410,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x12CEAA",
+        "encoded_end": "0x12DE8D",
+        "allocation_end": "0x12DE8E",
+        "padding_bytes": 1,
+        "candidate_count": 81,
+        "kind_counts": {
+          "ascii": 39,
+          "halfwidth": 42
+        },
+        "first_candidate": "0x12CEF3",
+        "last_candidate": "0x12DE61"
+      },
+      {
+        "index": 412,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x12DEC2",
+        "encoded_end": "0x12F027",
+        "allocation_end": "0x12F028",
+        "padding_bytes": 1,
+        "candidate_count": 64,
+        "kind_counts": {
+          "ascii": 17,
+          "halfwidth": 47
+        },
+        "first_candidate": "0x12DF92",
+        "last_candidate": "0x12F023"
+      },
+      {
+        "index": 413,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x12F028",
+        "encoded_end": "0x12FD3C",
+        "allocation_end": "0x12FD3C",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x12F2E4",
+        "last_candidate": "0x12F9C3"
+      },
+      {
+        "index": 414,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x12FD3C",
+        "encoded_end": "0x130C47",
+        "allocation_end": "0x130C48",
+        "padding_bytes": 1,
+        "candidate_count": 32,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 24
+        },
+        "first_candidate": "0x12FE12",
+        "last_candidate": "0x130C43"
+      },
+      {
+        "index": 416,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x131024",
+        "encoded_end": "0x1319FF",
+        "allocation_end": "0x131A00",
+        "padding_bytes": 1,
+        "candidate_count": 58,
+        "kind_counts": {
+          "ascii": 35,
+          "halfwidth": 23
+        },
+        "first_candidate": "0x131066",
+        "last_candidate": "0x1319DE"
+      },
+      {
+        "index": 417,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x131A00",
+        "encoded_end": "0x13283E",
+        "allocation_end": "0x13283E",
+        "padding_bytes": 0,
+        "candidate_count": 10,
+        "kind_counts": {
+          "ascii": 3,
+          "halfwidth": 7
+        },
+        "first_candidate": "0x131D04",
+        "last_candidate": "0x1327A7"
+      },
+      {
+        "index": 418,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x13283E",
+        "encoded_end": "0x13395D",
+        "allocation_end": "0x13395E",
+        "padding_bytes": 1,
+        "candidate_count": 27,
+        "kind_counts": {
+          "ascii": 7,
+          "halfwidth": 20
+        },
+        "first_candidate": "0x1328EE",
+        "last_candidate": "0x1336D9"
+      },
+      {
+        "index": 419,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x13395E",
+        "encoded_end": "0x135029",
+        "allocation_end": "0x13502A",
+        "padding_bytes": 1,
+        "candidate_count": 31,
+        "kind_counts": {
+          "ascii": 13,
+          "halfwidth": 18
+        },
+        "first_candidate": "0x133BB1",
+        "last_candidate": "0x134D22"
+      },
+      {
+        "index": 420,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x13502A",
+        "encoded_end": "0x135888",
+        "allocation_end": "0x135888",
+        "padding_bytes": 0,
+        "candidate_count": 15,
+        "kind_counts": {
+          "ascii": 6,
+          "halfwidth": 9
+        },
+        "first_candidate": "0x13515E",
+        "last_candidate": "0x13581E"
+      },
+      {
+        "index": 421,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x135888",
+        "encoded_end": "0x13633E",
+        "allocation_end": "0x13633E",
+        "padding_bytes": 0,
+        "candidate_count": 41,
+        "kind_counts": {
+          "ascii": 8,
+          "halfwidth": 33
+        },
+        "first_candidate": "0x135962",
+        "last_candidate": "0x1362AF"
+      },
+      {
+        "index": 422,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x13633E",
+        "encoded_end": "0x1371EB",
+        "allocation_end": "0x1371EC",
+        "padding_bytes": 1,
+        "candidate_count": 12,
+        "kind_counts": {
+          "ascii": 9,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x13661A",
+        "last_candidate": "0x136FD8"
+      },
+      {
+        "index": 423,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 2,
+        "pointer": "0x1371EC",
+        "encoded_end": "0x137638",
+        "allocation_end": "0x137638",
+        "padding_bytes": 0,
+        "candidate_count": 3,
+        "kind_counts": {
+          "ascii": 2,
+          "halfwidth": 1
+        },
+        "first_candidate": "0x137380",
+        "last_candidate": "0x1373E1"
+      },
+      {
+        "index": 425,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x137764",
+        "encoded_end": "0x137AFB",
+        "allocation_end": "0x137AFC",
+        "padding_bytes": 1,
+        "candidate_count": 2,
+        "kind_counts": {
+          "halfwidth": 2
+        },
+        "first_candidate": "0x137781",
+        "last_candidate": "0x1378F0"
+      },
+      {
+        "index": 426,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x137AFC",
+        "encoded_end": "0x137EBC",
+        "allocation_end": "0x137EBC",
+        "padding_bytes": 0,
+        "candidate_count": 8,
+        "kind_counts": {
+          "ascii": 5,
+          "halfwidth": 3
+        },
+        "first_candidate": "0x137B1A",
+        "last_candidate": "0x137EA6"
+      },
+      {
+        "index": 427,
+        "asset_family": "opening_ending_graphics",
+        "resource_type": 3,
+        "pointer": "0x137EBC",
+        "encoded_end": "0x13807E",
+        "allocation_end": "0x13807E",
+        "padding_bytes": 0,
+        "candidate_count": 1,
+        "kind_counts": {
+          "ascii": 1
+        },
+        "first_candidate": "0x137FF7",
+        "last_candidate": "0x137FF7"
+      }
+    ],
+    "missing_representative_addresses": [],
+    "aligned_absolute_32_reference_count": 72,
+    "aligned_absolute_32_references": [
+      {
+        "target": "0x0C0026",
+        "addresses": [
+          "0x0A089C"
+        ]
+      },
+      {
+        "target": "0x0C1369",
+        "addresses": [
+          "0x01770A"
+        ]
+      },
+      {
+        "target": "0x0C3179",
+        "addresses": [
+          "0x01FF68"
+        ]
+      },
+      {
+        "target": "0x0D0006",
+        "addresses": [
+          "0x004FDA",
+          "0x099044",
+          "0x099754",
+          "0x099F46",
+          "0x09A028",
+          "0x09A10A",
+          "0x09A2CE",
+          "0x09A3B0",
+          "0x09A656",
+          "0x09A738",
+          "0x09A8FC",
+          "0x09A9DE"
+        ]
+      },
+      {
+        "target": "0x0D0040",
+        "addresses": [
+          "0x0A03E2"
+        ]
+      },
+      {
+        "target": "0x0E0801",
+        "addresses": [
+          "0x014148"
+        ]
+      },
+      {
+        "target": "0x0E83C0",
+        "addresses": [
+          "0x12C380"
+        ]
+      },
+      {
+        "target": "0x0EFFFF",
+        "addresses": [
+          "0x01DC7E",
+          "0x01DCE8",
+          "0x02E1C8",
+          "0x02FF9E",
+          "0x030028",
+          "0x09ADFA",
+          "0x0A1E68",
+          "0x0A1EC4",
+          "0x0A1F20",
+          "0x0A1F7C",
+          "0x0A1FD8",
+          "0x0A2034",
+          "0x0A2090",
+          "0x0A21A4",
+          "0x0A2200",
+          "0x0A225C",
+          "0x0A22B8",
+          "0x0A2370",
+          "0x0A23CC",
+          "0x0A2428",
+          "0x0A2484",
+          "0x0A24E0",
+          "0x0A253C",
+          "0x0A2598",
+          "0x0A25F4",
+          "0x0A2650",
+          "0x0A26AC",
+          "0x0A2708",
+          "0x0A2764",
+          "0x0A27C0",
+          "0x0A281C",
+          "0x0A2878",
+          "0x0A28D4",
+          "0x0A2930",
+          "0x0A298C",
+          "0x0A29E8",
+          "0x0A2A44",
+          "0x0A2AA0",
+          "0x0A2AFC",
+          "0x0A2B58",
+          "0x12440A"
+        ]
+      },
+      {
+        "target": "0x102049",
+        "addresses": [
+          "0x00294E",
+          "0x0033C2"
+        ]
+      },
+      {
+        "target": "0x108002",
+        "addresses": [
+          "0x0820CC",
+          "0x106874"
+        ]
+      },
+      {
+        "target": "0x110035",
+        "addresses": [
+          "0x0A2944"
+        ]
+      },
+      {
+        "target": "0x1202B0",
+        "addresses": [
+          "0x0CE474",
+          "0x0CEB48"
+        ]
+      },
+      {
+        "target": "0x1248E7",
+        "addresses": [
+          "0x0146AC"
+        ]
+      },
+      {
+        "target": "0x126618",
+        "addresses": [
+          "0x02F602"
+        ]
+      },
+      {
+        "target": "0x12A6DA",
+        "addresses": [
+          "0x01772E"
+        ]
+      },
+      {
+        "target": "0x12B840",
+        "addresses": [
+          "0x002D9C",
+          "0x003718"
+        ]
+      },
+      {
+        "target": "0x131700",
+        "addresses": [
+          "0x0FE834"
+        ]
+      }
+    ],
+    "pc_relative_lea_pea_reference_count": 0,
+    "pc_relative_lea_pea_references": [],
+    "representative_candidates": [
+      {
+        "kind": "halfwidth",
+        "address": "0x0B0739",
+        "end": "0x0B073B",
+        "signal_count": 1,
+        "original_text": "ｪ",
+        "raw_hex": "AA",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 0,
+        "asset_family": "platform_logo",
+        "resource_pointer": "0x0B06B4",
+        "resource_encoded_end": "0x0B0A84",
+        "encoded_byte_offset": 133,
+        "context_start": "0x0B0728",
+        "context_words": "9999 9601 E037 009D 0232 0296 002E 0300 00AA FFA1 0011 AAA1 0166 9AF3 A115 BD02 6700 5699",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x0B0AF2",
+        "end": "0x0B0AF4",
+        "signal_count": 1,
+        "original_text": "ｲ",
+        "raw_hex": "B2",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 1,
+        "asset_family": "ui_font",
+        "resource_pointer": "0x0B0A84",
+        "resource_encoded_end": "0x0B1B32",
+        "encoded_byte_offset": 110,
+        "context_start": "0x0B0AE2",
+        "context_words": "F616 CCCC 4605 2F3A FFAA 3F22 2FFC 2AFB B2FF F2A3 2FF2 32AA B22F FF22 2EF7 6276 627C",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x0B1B49",
+        "end": "0x0B1B4B",
+        "signal_count": 1,
+        "original_text": "F",
+        "raw_hex": "46",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 2,
+        "asset_family": "map_tileset",
+        "resource_pointer": "0x0B1B32",
+        "resource_encoded_end": "0x0B1DBB",
+        "encoded_byte_offset": 23,
+        "context_start": "0x0B1B38",
+        "context_words": "F102 2222 002A AA7F AA02 A333 3302 A3F1 F046 FFF8 0023 0C0F 1A0A 2C04 2236 0001 333A 002C",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x0C7D7A",
+        "end": "0x0C7D7C",
+        "signal_count": 1,
+        "original_text": "ﾏ",
+        "raw_hex": "CF",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 23,
+        "asset_family": "map_tileset",
+        "resource_pointer": "0x0C7D60",
+        "resource_encoded_end": "0x0C9213",
+        "encoded_byte_offset": 26,
+        "context_start": "0x0C7D6A",
+        "context_words": "F00F 00F0 4FF0 FF00 000F 0018 01F0 1B04 CFFF F0FF F0FC FF3B 0FBD CCFF CDCB BCCD DCDB",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x0D4410",
+        "end": "0x0D4412",
+        "signal_count": 1,
+        "original_text": "ﾀ",
+        "raw_hex": "C0",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 47,
+        "asset_family": "combat_sprite",
+        "resource_pointer": "0x0D440E",
+        "resource_encoded_end": "0x0D47E5",
+        "encoded_byte_offset": 2,
+        "context_start": "0x0D4400",
+        "context_words": "F078 38C0 E0E0 3878 F0F0 C0E0 E0C0 0306 C0FF 2300 002E 2300 02EE EF23 002E E1F6 F202",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x0FEBA8",
+        "end": "0x0FEBAA",
+        "signal_count": 1,
+        "original_text": "ｫ",
+        "raw_hex": "AB",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 223,
+        "asset_family": "battle_ui",
+        "resource_pointer": "0x0FEB2A",
+        "resource_encoded_end": "0x0FEE5D",
+        "encoded_byte_offset": 126,
+        "context_start": "0x0FEB98",
+        "context_words": "FD5E 00B1 2264 0F35 0F47 0112 22E2 031C ABFF F112 121D 1410 1240 0011 4D2D 3D00 122D",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x10149D",
+        "end": "0x10149F",
+        "signal_count": 1,
+        "original_text": "ｮ",
+        "raw_hex": "AE",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 231,
+        "asset_family": "character_portrait",
+        "resource_pointer": "0x101466",
+        "resource_encoded_end": "0x101862",
+        "encoded_byte_offset": 55,
+        "context_start": "0x10148C",
+        "context_words": "FF80 FFFC FF30 FFFF FF05 FFFF FEFC FFF9 FFAE FFC0 729F 9797 FF0F FFBE 03FB FFBF FFA3 FFFF",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x11E964",
+        "end": "0x11E966",
+        "signal_count": 1,
+        "original_text": "R",
+        "raw_hex": "52",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 390,
+        "asset_family": "world_map_graphics",
+        "resource_pointer": "0x11E898",
+        "resource_encoded_end": "0x11FAE3",
+        "encoded_byte_offset": 204,
+        "context_start": "0x11E954",
+        "context_words": "5327 1242 3333 4542 FF33 3456 2234 4566 52FF 7711 5777 7714 4555 FF77 7134 3317 7113",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x11FB91",
+        "end": "0x11FB93",
+        "signal_count": 1,
+        "original_text": "A",
+        "raw_hex": "41",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 391,
+        "asset_family": "item_icon_graphics",
+        "resource_pointer": "0x11FAE4",
+        "resource_encoded_end": "0x120BEE",
+        "encoded_byte_offset": 173,
+        "context_start": "0x11FB80",
+        "context_words": "1772 2333 71B7 004E 03FF 4446 7646 1114 1441 FF42 1444 1142 1422 41F7 1114 32FC 0033 4211",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x120F0E",
+        "end": "0x120F10",
+        "signal_count": 1,
+        "original_text": "ﾏ",
+        "raw_hex": "CF",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 393,
+        "asset_family": "title_logo_graphics",
+        "resource_pointer": "0x120EEE",
+        "resource_encoded_end": "0x121B4B",
+        "encoded_byte_offset": 32,
+        "context_start": "0x120EFE",
+        "context_words": "0DC1 1111 00DC 1254 EF00 0DF1 420E 0EFF CFFF 7D11 4200 4332 1111 2142 00E2 0C0D FF5E",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "ascii",
+        "address": "0x121B4F",
+        "end": "0x121B51",
+        "signal_count": 1,
+        "original_text": "U",
+        "raw_hex": "55",
+        "category": "compressed_resource_payload_false_positive",
+        "owner": "encoded compressed graphics/resource bytes",
+        "resource_index": 394,
+        "asset_family": "opening_ending_graphics",
+        "resource_pointer": "0x121B4C",
+        "resource_encoded_end": "0x121CB6",
+        "encoded_byte_offset": 3,
+        "context_start": "0x121B3E",
+        "context_words": "047F E9E7 000D CB18 18E6 BD49 7100 0303 A055 FFEE F0EE F2F0 88F6 F499 FEF4 85AA 060C BB16",
+        "aligned_absolute_32_references": []
       }
     ]
   }
