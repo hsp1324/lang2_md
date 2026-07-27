@@ -43,14 +43,20 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         evidence = {
             row["surface"]: row for row in data["global_evidence"]
         }["summon_targeting_results"]
-        self.assertEqual(evidence["checksum"], "C41E")
-        self.assertEqual(evidence["based_on"], "AD01")
+        self.assertEqual(evidence["checksum"], "C41E/31CF")
+        self.assertEqual(evidence["based_on"], "AD01/1AB2")
         self.assertIn("member slot 7", evidence["note"])
         self.assertIn("not natural summon ownership evidence", evidence["note"])
         self.assertIn(
             "captures/run/c41e_summon_00_summoned_status.png",
             evidence["captures"],
         )
+        for summon_id in (2, 6):
+            self.assertIn(
+                f"captures/run/31cf_summon_{summon_id:02d}_summoned_status.png",
+                evidence["captures"],
+            )
+        self.assertIn("both summon-list pages", evidence["note"])
 
     def test_ending_visit_dialogue_evidence_is_renderer_diagnostic(self):
         data = inventory.load_inventory()

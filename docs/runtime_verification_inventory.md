@@ -2299,13 +2299,21 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/e72d_magic_21_selected.png`
   - `captures/run/e72d_magic_21_target.png`
   - `captures/run/e72d_magic_21_result_stable.png`
-- `summon_targeting_results`: probe checksum `C41E` (base `AD01`). AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. This is renderer/runtime-application evidence, not natural summon ownership evidence.
+- `summon_targeting_results`: probe checksum `C41E/31CF` (base `AD01/1AB2`). AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. Final-1AB2-derived 31CF proves representative application paths on both summon-list pages. 화이트드래곤 consumes MP 12->0 and creates class 8F; 요르문간드 consumes MP 12->2 and creates class 93. Both appear in member slot 7 at (12,20), retain clean Korean names and 이동/공격/마법 commands, and return stably to the map. These are renderer/runtime-application paths, not natural summon ownership evidence.
   - `captures/run/c41e_summon_00_hein_command.png`
   - `captures/run/c41e_summon_00_selected.png`
   - `captures/run/c41e_summon_00_target.png`
   - `captures/run/c41e_summon_00_result.png`
   - `captures/run/c41e_summon_00_result_stable.png`
   - `captures/run/c41e_summon_00_summoned_status.png`
+  - `captures/run/31cf_summon_02_selected.png`
+  - `captures/run/31cf_summon_02_target.png`
+  - `captures/run/31cf_summon_02_result_stable.png`
+  - `captures/run/31cf_summon_02_summoned_status.png`
+  - `captures/run/31cf_summon_06_selected.png`
+  - `captures/run/31cf_summon_06_target.png`
+  - `captures/run/31cf_summon_06_result_stable.png`
+  - `captures/run/31cf_summon_06_summoned_status.png`
 - `ending_visit_dialogue`: probe checksum `F852` (base `E38B`). E38B relocates all 23 ending-visit records with natural Korean spacing. Diagnostic F852 redirects every stock visit selector pointer to one 83-page concatenated stream; Scenario 27 playback rendered every page through the stock visit renderer, reached the final Elwin/Liana page, then followed the normal forest ending and SEGA restart without clipping, Japanese residue, reset, freeze, or premature termination. This proves renderer coverage, not all natural visit-condition selections.
   - `captures/run/f852_ending_dialogue_watch/240.png`
   - `captures/run/f852_ending_dialogue_watch/320.png`
