@@ -109,9 +109,32 @@ SCOTT_PROOF = NaturalClassChangeProof(
     after=RuntimeIdentity(0x06, 6, 1, 0),
     candidates=(0x06, 0x05, 0x04),
 )
+LANA_PROOF = NaturalClassChangeProof(
+    slug="lana",
+    character="Lana",
+    before_class="Cleric",
+    after_class="Shaman",
+    before_path=(
+        ROOT / "captures/analysis/1e67_lana_natural_class_change_before.gst"
+    ),
+    after_path=(
+        ROOT / "captures/analysis/1e67_lana_natural_class_change_after.gst"
+    ),
+    probe_checksum=0x1E67,
+    runtime_record=8,
+    before=RuntimeIdentity(0x02, 3, 1, 0),
+    after=RuntimeIdentity(0x0A, 3, 1, 0),
+    candidates=(0x0A, 0x08, 0x04),
+)
 PROOFS = {
     proof.slug: proof
-    for proof in (LIANA_PROOF, SHERRY_PROOF, AARON_PROOF, SCOTT_PROOF)
+    for proof in (
+        LIANA_PROOF,
+        SHERRY_PROOF,
+        AARON_PROOF,
+        SCOTT_PROOF,
+        LANA_PROOF,
+    )
 }
 
 # Keep the original public constants for callers that use the default Liana

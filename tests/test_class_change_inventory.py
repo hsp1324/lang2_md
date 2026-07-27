@@ -21,11 +21,11 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["commander_count"], 10)
         self.assertEqual(self.result["transition_count"], 100)
         self.assertEqual(self.result["unique_transition_count"], 76)
-        self.assertEqual(self.result["live_verified_transition_count"], 77)
+        self.assertEqual(self.result["live_verified_transition_count"], 78)
         self.assertEqual(self.result["live_verified_unique_transition_count"], 76)
-        self.assertEqual(self.result["application_verified_transition_count"], 8)
+        self.assertEqual(self.result["application_verified_transition_count"], 9)
         self.assertEqual(
-            self.result["natural_application_verified_transition_count"], 6
+            self.result["natural_application_verified_transition_count"], 7
         )
         self.assertEqual(
             self.result["forced_context_application_verified_transition_count"],
@@ -42,7 +42,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             for transition in commander["transitions"]
             if transition["live_verified"]
         ]
-        self.assertEqual(len(verified), 77)
+        self.assertEqual(len(verified), 78)
         by_key = {
             (commander_id, transition["current"]["id"]): transition
             for commander_id, transition in verified
@@ -68,6 +68,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             (2, 0x12): [0x16, 0x15, 0x18],
             (2, 0x0B): [0x15, 0x18, 0x17],
             (2, 0x19): [0x28],
+            (3, 0x02): [0x0A, 0x08, 0x04],
             (4, 0x01): [0x04, 0x06, 0x0A],
             (4, 0x04): [0x0B, 0x0E, 0x0F],
             (4, 0x06): [0x0E, 0x0F, 0x12],
@@ -153,6 +154,14 @@ class ClassChangeInventoryTests(unittest.TestCase):
             "captures/analysis/1d47_liana_natural_class_change_after.gst",
             by_key[(2, 0x02)]["evidence"],
         )
+        self.assertTrue(by_key[(3, 0x02)]["application_verified"])
+        self.assertEqual(
+            by_key[(3, 0x02)]["application_evidence_type"], "natural"
+        )
+        self.assertIn(
+            "captures/analysis/1e67_lana_natural_class_change_after.gst",
+            by_key[(3, 0x02)]["evidence"],
+        )
         self.assertTrue(by_key[(4, 0x01)]["application_verified"])
         self.assertEqual(
             by_key[(4, 0x01)]["application_evidence_type"], "natural"
@@ -216,6 +225,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             if key not in {
                 (1, 0x01),
                 (2, 0x02),
+                (3, 0x02),
                 (4, 0x01),
                 (5, 0x03),
                 (6, 0x01),

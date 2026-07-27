@@ -11117,3 +11117,38 @@ contains 57 safe syllables as documented below and in
 - This raises application evidence to eight transitions: six natural and two
   forced-context. Scott's normal scenario-clear SRAM persistence remains
   unproven; only Elwin and Hein retain that stronger save-boundary evidence.
+
+### Lana Natural Initial Class Change (2026-07-27)
+
+- Read-only Scenario 25 GST inspection identifies player runtime record 8 as
+  `class 02 / commander ID 3 / LV1 / EXP0`, namely Lana/Cleric. The Japanese
+  source threshold is EXP16 and its untouched candidates are `0A/08/04`, or
+  `샤먼/힐러/로드`.
+- The accepted diagnostic uses the frozen production-`1AB2` ROM, Japanese
+  source, and `tools/build_class_change_probe_rom.py --commander-id 3
+  --current-class 0x02 --runtime-record-index 8 --end-turn-only`. Checksum
+  `1E67` retains the stock Start operand and guards the wrapper on class `02`
+  without writing commander identity.
+- The first isolated `DISPLAY=:104` attempt used a transition delay that was
+  too short and entered mercenary hire before the preparation detector
+  recognized the screen. That entire runtime was discarded. A clean rebuild
+  from the same validated manual slot used a 1.2-second detector delay,
+  stopped on the preparation menu, then entered automatic deployment and the
+  normal opening without retaining the failed run's state.
+- After the two opening banners and 23 stable dialogue confirmations, the
+  stock level-up path rendered `클래스체인지 가능`. Accepted frames
+  `captures/run/1e67_lana_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` show
+  `샤먼/힐러/로드` and the resulting `라나/샤먼` LV1 panel without broken name
+  or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/1e67_lana_natural_class_change_before.gst` and
+  `_after.gst` prove record 8 changed
+  `02/ID3/LV1/EXP0 -> 0A/ID3/LV1/EXP0`. All other nine player runtime records
+  retain byte-identical class, commander ID, level, and experience tuples.
+  `tools/verify_natural_class_change_evidence.py --proof lana` additionally
+  locks checksum `1E67`, Japanese candidates, wrapper bytes, and unchanged
+  Start entry against the exact ignored probe ROM.
+- This raises application evidence to nine transitions: seven natural and two
+  forced-context. Lana's normal scenario-clear SRAM persistence remains
+  unproven; only Elwin and Hein retain that stronger save-boundary evidence.

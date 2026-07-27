@@ -7,10 +7,10 @@ A translated static name does not imply that its candidate screen was live verif
 - Commanders: 10
 - Source transitions: 100
 - Unique current/candidate combinations: 76
-- Live-verified transitions: 77
+- Live-verified transitions: 78
 - Live-verified unique combinations: 76
-- Application-verified transitions: 8
-- Natural application proofs: 6
+- Application-verified transitions: 9
+- Natural application proofs: 7
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -54,7 +54,7 @@ Source pointer: `0x08262A`
 
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
-| `0x08262A` | `02` 클레릭 (ｸﾚﾘｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `08` 힐러 (ﾋｰﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | pending | pending | pending |
+| `0x08262A` | `02` 클레릭 (ｸﾚﾘｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `08` 힐러 (ﾋｰﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | natural | pending |
 | `0x082632` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | pending | pending | pending |
 | `0x08263A` | `08` 힐러 (ﾋｰﾗｰ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | pending | pending | pending |
 | `0x082642` | `04` 로드 (ﾛｰﾄﾞ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | pending | pending | pending |
