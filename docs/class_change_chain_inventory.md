@@ -9,8 +9,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Unique current/candidate combinations: 76
 - Live-verified transitions: 76
 - Live-verified unique combinations: 76
-- Application-verified transitions: 4
-- Natural application proofs: 2
+- Application-verified transitions: 5
+- Natural application proofs: 3
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -37,7 +37,7 @@ Source pointer: `0x0825C2`
 
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
-| `0x0825C2` | `02` 클레릭 (ｸﾚﾘｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `08` 힐러 (ﾋｰﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | pending | pending |
+| `0x0825C2` | `02` 클레릭 (ｸﾚﾘｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `08` 힐러 (ﾋｰﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | natural | pending |
 | `0x0825CA` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | yes | pending | pending |
 | `0x0825D2` | `08` 힐러 (ﾋｰﾗｰ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | pending | pending |
 | `0x0825DA` | `04` 로드 (ﾛｰﾄﾞ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | yes | pending | pending |

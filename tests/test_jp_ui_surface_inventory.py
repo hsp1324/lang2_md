@@ -238,9 +238,9 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(
             class_change_gaps,
             [
-                "natural active-commander and save-persistence verification "
-                "for class-change paths beyond the two natural Elwin and "
-                "Hein proofs"
+                "class-change natural active-commander verification beyond "
+                "Elwin, Hein, and Liana, plus normal scenario-clear save "
+                "persistence beyond Elwin and Hein"
             ],
         )
         self.assertIn(

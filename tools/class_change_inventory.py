@@ -46,6 +46,12 @@ LIVE_EVIDENCE = {
         "captures/run/8e91_c2_s02_candidate1.png",
         "captures/run/8e91_c2_s02_candidate2.png",
         "captures/run/8e91_c2_s02_candidate3.png",
+        "captures/run/1d47_liana_natural_class_change_levelup.png",
+        "captures/run/1d47_liana_natural_class_change_available.png",
+        "captures/run/1d47_liana_natural_class_change_candidates.png",
+        "captures/run/1d47_liana_natural_class_change_applied_status.png",
+        "captures/analysis/1d47_liana_natural_class_change_before.gst",
+        "captures/analysis/1d47_liana_natural_class_change_after.gst",
     ],
     (2, 0x0A): [
         "captures/run/8eb4_c2_s0a_trigger.png",
@@ -431,7 +437,7 @@ LIVE_EVIDENCE = {
         "captures/run/8eb9_c10_s14_candidate1.png",
     ],
 }
-NATURAL_APPLICATION_VERIFIED = {(1, 0x01), (5, 0x03)}
+NATURAL_APPLICATION_VERIFIED = {(1, 0x01), (2, 0x02), (5, 0x03)}
 FORCED_CONTEXT_APPLICATION_VERIFIED = {(7, 0x01), (10, 0x03)}
 APPLICATION_VERIFIED = (
     NATURAL_APPLICATION_VERIFIED | FORCED_CONTEXT_APPLICATION_VERIFIED

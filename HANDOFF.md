@@ -10968,3 +10968,44 @@ contains 57 safe syllables as documented below and in
   `5ED9`; their probe outputs therefore changed before this patch ran. Do not
   update those expected checksums from a transient shared build. Re-run them
   against the finalized production ROM after the design session commits.
+
+### Liana Natural Initial Class Change (2026-07-27)
+
+- Read-only inspection of the current Scenario 25 GST proves the player runtime
+  order independently of preparation-screen assumptions. Record 7 is
+  `class 02 / commander ID 2 / LV3 / EXP0`, namely Liana/Cleric; record 8 is
+  Lana and record 9 is the event-spawned Jessica. The valid manual slot
+  recovered from `captures/analysis/53ad_s25_map_current.gst` independently
+  stores Liana as `02/LV3/EXP0`.
+- The accepted diagnostic was built from the frozen production-`1AB2` ROM and
+  Japanese source as checksum `1D47`. It uses
+  `tools/build_class_change_probe_rom.py --commander-id 2 --current-class
+  0x02 --runtime-record-index 7 --end-turn-only`. The wrapper is guarded by
+  class `02`, does not write commander identity, and leaves the normal Start
+  menu unchanged. The source candidates remain `0A/08/04`, or
+  `샤먼/힐러/로드`.
+- A fresh isolated `DISPLAY=:104` run restored only the valid Scenario 25
+  manual slot, entered the normal route, preparation, automatic deployment,
+  and opening flow. Accepted frames
+  `captures/run/1d47_liana_natural_class_change_levelup.png`,
+  `_available.png`, `_candidates.png`, and `_applied_status.png` visibly show
+  Liana's level-up, class-change notification, all three Korean candidates,
+  first-candidate selection, and the resulting `리아나/샤먼` command panel.
+- Same-ROM GSTs
+  `captures/analysis/1d47_liana_natural_class_change_before.gst` and
+  `_after.gst` prove record 7 changed
+  `02/ID2/LV3/EXP0 -> 0A/ID2/LV1/EXP0`. All other nine player runtime records
+  keep byte-identical class, commander ID, level, and experience tuples.
+  `tools/verify_natural_class_change_evidence.py` locks this result and can
+  additionally validate checksum `1D47`, the source candidate tuple, guarded
+  wrapper bytes, and unchanged Start entry when given the exact ignored probe
+  ROM.
+- This raises application evidence to five transitions: three natural and two
+  forced-context. It is not a normal scenario-clear SRAM persistence proof;
+  only Elwin and Hein currently have that stronger save boundary. Do not mark
+  Liana's Save column complete until an ordinary clear writes the result to a
+  later valid manual slot.
+- Cross-ROM GST loading was deliberately not used. An earlier unrelated
+  attempt proved that states from different diagnostic checksums can fail;
+  recovering the validated manual slot and booting `1D47` normally avoids
+  that shortcut.

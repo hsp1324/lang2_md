@@ -5,8 +5,8 @@
   "unique_transition_count": 76,
   "live_verified_transition_count": 76,
   "live_verified_unique_transition_count": 76,
-  "application_verified_transition_count": 4,
-  "natural_application_verified_transition_count": 2,
+  "application_verified_transition_count": 5,
+  "natural_application_verified_transition_count": 3,
   "forced_context_application_verified_transition_count": 2,
   "save_persistence_verified_transition_count": 2,
   "commanders": [
@@ -411,15 +411,21 @@
             }
           ],
           "live_verified": true,
-          "application_verified": false,
-          "application_evidence_type": "pending",
+          "application_verified": true,
+          "application_evidence_type": "natural",
           "save_persistence_verified": false,
           "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8e91_c2_s02_trigger.png",
             "captures/run/8e91_c2_s02_candidate1.png",
             "captures/run/8e91_c2_s02_candidate2.png",
-            "captures/run/8e91_c2_s02_candidate3.png"
+            "captures/run/8e91_c2_s02_candidate3.png",
+            "captures/run/1d47_liana_natural_class_change_levelup.png",
+            "captures/run/1d47_liana_natural_class_change_available.png",
+            "captures/run/1d47_liana_natural_class_change_candidates.png",
+            "captures/run/1d47_liana_natural_class_change_applied_status.png",
+            "captures/analysis/1d47_liana_natural_class_change_before.gst",
+            "captures/analysis/1d47_liana_natural_class_change_after.gst"
           ]
         },
         {
