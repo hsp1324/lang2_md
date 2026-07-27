@@ -1,5 +1,5 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "status": "balance_discussion_required",
   "approval_gate": {
     "user_approved": false,
@@ -260,7 +260,209 @@
           "filled_mercenary_slots": 226
         }
       }
-    ]
+    ],
+    "recommended_unapproved_proposal": {
+      "id": "standard_hard_ramp_v1",
+      "status": "unapproved_discussion_only",
+      "target_difficulty": "standard_hard",
+      "design_intent": "비기와 노가다 없이 완주할 수 있지만 상성과 진형을 활용해야 하는 숙련자용 점증 하드",
+      "global_rules": {
+        "enemy_level_delta": 0,
+        "enemy_hp_mp_delta": 0,
+        "commander_formula": "min(original + scenario_delta, main_story_absolute_cap)",
+        "main_story_absolute_cap": {
+          "commander_at": 64,
+          "commander_df": 46,
+          "soldier_at_correction": 15,
+          "soldier_df_correction": 12
+        },
+        "mercenary_replacement_rule": "occupied slots only; preserve combat role, movement constraints, and scenario terrain unless individually approved",
+        "secret_scenario_rule": "X1-X4 are tuned individually because entry timing and original stats differ too much for the main-story formula"
+      },
+      "scenario_steps": [
+        {
+          "label": "초반",
+          "scenarios": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "commander_at_delta": 2,
+          "commander_df_delta": 1,
+          "soldier_at_correction_delta": 1,
+          "soldier_df_correction_delta": 1,
+          "stronger_mercenary_slots_per_six": 0,
+          "summon_slots_per_six": 0
+        },
+        {
+          "label": "전반",
+          "scenarios": [
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "commander_at_delta": 3,
+          "commander_df_delta": 2,
+          "soldier_at_correction_delta": 1,
+          "soldier_df_correction_delta": 1,
+          "stronger_mercenary_slots_per_six": 1,
+          "summon_slots_per_six": 0
+        },
+        {
+          "label": "중반",
+          "scenarios": [
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "commander_at_delta": 4,
+          "commander_df_delta": 3,
+          "soldier_at_correction_delta": 2,
+          "soldier_df_correction_delta": 2,
+          "stronger_mercenary_slots_per_six": 2,
+          "summon_slots_per_six": 0
+        },
+        {
+          "label": "후반",
+          "scenarios": [
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "commander_at_delta": 5,
+          "commander_df_delta": 4,
+          "soldier_at_correction_delta": 3,
+          "soldier_df_correction_delta": 3,
+          "stronger_mercenary_slots_per_six": 3,
+          "summon_slots_per_six": 0
+        },
+        {
+          "label": "종반 전반",
+          "scenarios": [
+            21,
+            22,
+            23,
+            24
+          ],
+          "commander_at_delta": 6,
+          "commander_df_delta": 4,
+          "soldier_at_correction_delta": 4,
+          "soldier_df_correction_delta": 3,
+          "stronger_mercenary_slots_per_six": 3,
+          "summon_slots_per_six": 0
+        },
+        {
+          "label": "종반 후반",
+          "scenarios": [
+            25
+          ],
+          "commander_at_delta": 6,
+          "commander_df_delta": 5,
+          "soldier_at_correction_delta": 4,
+          "soldier_df_correction_delta": 4,
+          "stronger_mercenary_slots_per_six": 4,
+          "summon_slots_per_six": 0
+        },
+        {
+          "label": "최종장 직전",
+          "scenarios": [
+            26
+          ],
+          "commander_at_delta": 6,
+          "commander_df_delta": 5,
+          "soldier_at_correction_delta": 4,
+          "soldier_df_correction_delta": 4,
+          "stronger_mercenary_slots_per_six": 4,
+          "summon_slots_per_six": 1,
+          "summon_scope": "named enemy commanders only"
+        },
+        {
+          "label": "본편 최종장",
+          "scenarios": [
+            27
+          ],
+          "commander_at_delta": 6,
+          "commander_df_delta": 5,
+          "soldier_at_correction_delta": 5,
+          "soldier_df_correction_delta": 4,
+          "stronger_mercenary_slots_per_six": 6,
+          "summon_slots_per_six": 4,
+          "summon_scope": "four of six slots for major commanders; at most two of six for ordinary commanders"
+        }
+      ],
+      "summon_policy": {
+        "candidate_class_ids": [
+          "8D",
+          "8E",
+          "8F",
+          "90",
+          "91",
+          "92",
+          "93"
+        ],
+        "excluded_class_ids": [
+          "94"
+        ],
+        "excluded_reason": "아니키는 비기·개그 성격이므로 기본 하드 편성에서 제외"
+      },
+      "exception_candidates": [
+        {
+          "scenario": 1,
+          "offsets": [
+            "0x1802FC",
+            "0x180320"
+          ],
+          "names": [
+            "레온",
+            "레아드"
+          ],
+          "rule": "연출용 강적이므로 자동 능력치·용병 강화에서 제외"
+        },
+        {
+          "scenario": 22,
+          "rule": "진영 08 열 개는 적대 상태와 이벤트 소유권 확인 후 개별 승인"
+        },
+        {
+          "scenario": 25,
+          "offsets": [
+            "0x182D62"
+          ],
+          "names": [
+            "제시카"
+          ],
+          "rule": "아군 지원 이벤트이므로 모든 적 전용 보너스에서 제외"
+        },
+        {
+          "scenario": 30,
+          "offsets": [
+            "0x183724",
+            "0x183748"
+          ],
+          "names": [
+            "미나 1단계",
+            "미나 2단계"
+          ],
+          "rule": "한 보스의 두 단계로 취급하고 중복 누적 금지"
+        },
+        {
+          "scenarios": [
+            28,
+            29,
+            30,
+            31
+          ],
+          "rule": "비밀 시나리오는 본편 공식에서 제외하고 개별 조정"
+        }
+      ]
+    }
   },
   "normal_release": {
     "size": 4194304,

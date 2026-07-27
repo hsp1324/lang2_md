@@ -78,6 +78,159 @@ DISCUSSION_SCENARIO_BANDS = (
     },
 )
 
+RECOMMENDED_DISCUSSION_PROPOSAL = {
+    "id": "standard_hard_ramp_v1",
+    "status": "unapproved_discussion_only",
+    "target_difficulty": "standard_hard",
+    "design_intent": (
+        "비기와 노가다 없이 완주할 수 있지만 상성과 진형을 활용해야 하는 "
+        "숙련자용 점증 하드"
+    ),
+    "global_rules": {
+        "enemy_level_delta": 0,
+        "enemy_hp_mp_delta": 0,
+        "commander_formula": (
+            "min(original + scenario_delta, main_story_absolute_cap)"
+        ),
+        "main_story_absolute_cap": {
+            "commander_at": 64,
+            "commander_df": 46,
+            "soldier_at_correction": 15,
+            "soldier_df_correction": 12,
+        },
+        "mercenary_replacement_rule": (
+            "occupied slots only; preserve combat role, movement constraints, "
+            "and scenario terrain unless individually approved"
+        ),
+        "secret_scenario_rule": (
+            "X1-X4 are tuned individually because entry timing and original "
+            "stats differ too much for the main-story formula"
+        ),
+    },
+    "scenario_steps": [
+        {
+            "label": "초반",
+            "scenarios": [1, 2, 3, 4, 5],
+            "commander_at_delta": 2,
+            "commander_df_delta": 1,
+            "soldier_at_correction_delta": 1,
+            "soldier_df_correction_delta": 1,
+            "stronger_mercenary_slots_per_six": 0,
+            "summon_slots_per_six": 0,
+        },
+        {
+            "label": "전반",
+            "scenarios": [6, 7, 8, 9, 10],
+            "commander_at_delta": 3,
+            "commander_df_delta": 2,
+            "soldier_at_correction_delta": 1,
+            "soldier_df_correction_delta": 1,
+            "stronger_mercenary_slots_per_six": 1,
+            "summon_slots_per_six": 0,
+        },
+        {
+            "label": "중반",
+            "scenarios": [11, 12, 13, 14, 15],
+            "commander_at_delta": 4,
+            "commander_df_delta": 3,
+            "soldier_at_correction_delta": 2,
+            "soldier_df_correction_delta": 2,
+            "stronger_mercenary_slots_per_six": 2,
+            "summon_slots_per_six": 0,
+        },
+        {
+            "label": "후반",
+            "scenarios": [16, 17, 18, 19, 20],
+            "commander_at_delta": 5,
+            "commander_df_delta": 4,
+            "soldier_at_correction_delta": 3,
+            "soldier_df_correction_delta": 3,
+            "stronger_mercenary_slots_per_six": 3,
+            "summon_slots_per_six": 0,
+        },
+        {
+            "label": "종반 전반",
+            "scenarios": [21, 22, 23, 24],
+            "commander_at_delta": 6,
+            "commander_df_delta": 4,
+            "soldier_at_correction_delta": 4,
+            "soldier_df_correction_delta": 3,
+            "stronger_mercenary_slots_per_six": 3,
+            "summon_slots_per_six": 0,
+        },
+        {
+            "label": "종반 후반",
+            "scenarios": [25],
+            "commander_at_delta": 6,
+            "commander_df_delta": 5,
+            "soldier_at_correction_delta": 4,
+            "soldier_df_correction_delta": 4,
+            "stronger_mercenary_slots_per_six": 4,
+            "summon_slots_per_six": 0,
+        },
+        {
+            "label": "최종장 직전",
+            "scenarios": [26],
+            "commander_at_delta": 6,
+            "commander_df_delta": 5,
+            "soldier_at_correction_delta": 4,
+            "soldier_df_correction_delta": 4,
+            "stronger_mercenary_slots_per_six": 4,
+            "summon_slots_per_six": 1,
+            "summon_scope": "named enemy commanders only",
+        },
+        {
+            "label": "본편 최종장",
+            "scenarios": [27],
+            "commander_at_delta": 6,
+            "commander_df_delta": 5,
+            "soldier_at_correction_delta": 5,
+            "soldier_df_correction_delta": 4,
+            "stronger_mercenary_slots_per_six": 6,
+            "summon_slots_per_six": 4,
+            "summon_scope": (
+                "four of six slots for major commanders; at most two of six "
+                "for ordinary commanders"
+            ),
+        },
+    ],
+    "summon_policy": {
+        "candidate_class_ids": [
+            f"{class_id:02X}" for class_id in range(0x8D, 0x94)
+        ],
+        "excluded_class_ids": ["94"],
+        "excluded_reason": "아니키는 비기·개그 성격이므로 기본 하드 편성에서 제외",
+    },
+    "exception_candidates": [
+        {
+            "scenario": 1,
+            "offsets": ["0x1802FC", "0x180320"],
+            "names": ["레온", "레아드"],
+            "rule": "연출용 강적이므로 자동 능력치·용병 강화에서 제외",
+        },
+        {
+            "scenario": 22,
+            "rule": "진영 08 열 개는 적대 상태와 이벤트 소유권 확인 후 개별 승인",
+        },
+        {
+            "scenario": 25,
+            "offsets": ["0x182D62"],
+            "names": ["제시카"],
+            "rule": "아군 지원 이벤트이므로 모든 적 전용 보너스에서 제외",
+        },
+        {
+            "scenario": 30,
+            "offsets": ["0x183724", "0x183748"],
+            "names": ["미나 1단계", "미나 2단계"],
+            "rule": "한 보스의 두 단계로 취급하고 중복 누적 금지",
+        },
+        {
+            "scenarios": [28, 29, 30, 31],
+            "rule": "비밀 시나리오는 본편 공식에서 제외하고 개별 조정",
+        },
+    ],
+}
+
 
 def rom_identity(data: bytes) -> dict[str, object]:
     return {
@@ -335,7 +488,7 @@ def build_inventory(
         })
 
     return {
-        "schema_version": 5,
+        "schema_version": 6,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -382,6 +535,7 @@ def build_inventory(
                 },
             ],
             "candidate_scenario_bands": discussion_band_rows(scenarios),
+            "recommended_unapproved_proposal": RECOMMENDED_DISCUSSION_PROPOSAL,
         },
         "normal_release": {
             **normal_identity,
@@ -626,7 +780,61 @@ def render_markdown(inventory: dict[str, object]) -> str:
     lines.extend([
         "",
         "각 구간의 승인 상태와 모든 사용자 선택은 현재 비어 있다. 목표",
-        "난이도를 먼저 고른 뒤에만 AT/DF·용병·소환물 수치를 협의한다.",
+        "난이도와 아래 협의 초안을 사용자가 명시적으로 승인하기 전에는",
+        "어떤 값도 ROM에 적용하지 않는다.",
+        "",
+        "## 권장 협의 초안: 숙련자용 점증 하드",
+        "",
+        "> 상태: **미승인 제안**. 구현값이 아니며 일반판과 다른 ROM에도",
+        "> 아직 적용되지 않았다.",
+        "",
+        "비기·노가다 없이 완주할 수 있되 상성·진형·장비 선택을 요구하는",
+        "난이도를 목표로 한다. 적 LV는 올리지 않아 경험치와 성장 속도를",
+        "바꾸지 않고, HP·MP도 원판을 유지한다.",
+        "",
+        "| 구간 | 장 | 지휘관 AT/DF | 병사 A+/D+ | 상위 용병 | 소환물 |",
+        "|:---|:---:|:---:|:---:|:---:|:---:|",
+    ])
+    proposal = inventory["balance_discussion"]["recommended_unapproved_proposal"]
+    for step in proposal["scenario_steps"]:
+        scenarios = step["scenarios"]
+        scenario_text = (
+            str(scenarios[0])
+            if len(scenarios) == 1
+            else f"{scenarios[0]}~{scenarios[-1]}"
+        )
+        lines.append(
+            f"| {step['label']} | {scenario_text} | "
+            f"+{step['commander_at_delta']}/+{step['commander_df_delta']} | "
+            f"+{step['soldier_at_correction_delta']}/"
+            f"+{step['soldier_df_correction_delta']} | "
+            f"{step['stronger_mercenary_slots_per_six']}/6 | "
+            f"{step['summon_slots_per_six']}/6 |"
+        )
+    caps = proposal["global_rules"]["main_story_absolute_cap"]
+    lines.extend([
+        "",
+        f"- 본편 지휘관 상한 후보: AT {caps['commander_at']}, "
+        f"DF {caps['commander_df']}",
+        f"- 본편 병사 보정 상한 후보: A+ {caps['soldier_at_correction']}, "
+        f"D+ {caps['soldier_df_correction']}",
+        "- 상위 용병은 빈칸을 채우지 않고 기존 용병 칸만 교체하며,",
+        "  보병·창병·기병 등 상성과 수상·비행 같은 지형 역할을 보존한다.",
+        "- 26장은 이름 있는 적 지휘관만 최대 1/6을 소환물로 교체한다.",
+        "- 27장은 주요 지휘관 4/6, 일반 지휘관 최대 2/6만 소환물로",
+        "  교체한다. 아니키(`94`)는 기본 하드 편성에서 제외한다.",
+        "- X1~X4는 진입 시점과 원본 수치 차이가 커 본편 공식을 적용하지",
+        "  않고 각각 조정한다.",
+        "",
+        "### 제안된 예외",
+        "",
+        "- 1장 레온(`0x1802FC`)·레아드(`0x180320`): 쓰러뜨리기 위한",
+        "  일반 적이 아닌 연출용 강적이므로 자동 강화에서 제외한다.",
+        "- 22장 진영 `08` 10개: 실제 적대 상태와 이벤트 소유권을 확인한",
+        "  뒤 개별 승인한다.",
+        "- 25장 제시카(`0x182D62`): 아군 지원 이벤트이므로 제외한다.",
+        "- 30장 미나의 메이지·세인트 두 레코드는 한 보스의 2단계로",
+        "  취급하고 보너스를 중복 누적하지 않는다.",
         "",
         "## 기술적으로 확정된 능력치 구조",
         "",
@@ -728,8 +936,8 @@ def render_markdown(inventory: dict[str, object]) -> str:
     lines.extend([
         "",
         "각 레코드의 정확한 원본 주소와 6개 용병 칸은",
-        "`localization/hard_mode_baseline.json`에 기록한다. 이 기준표에는",
-        "제안 수치나 승인되지 않은 교체 병종을 넣지 않는다.",
+        "`localization/hard_mode_baseline.json`에 기록한다. 협의 초안과",
+        "실제 승인값은 분리하며, 승인 전에는 빌드 프로필을 만들지 않는다.",
         "",
     ])
     return "\n".join(lines)

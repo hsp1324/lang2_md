@@ -120,6 +120,80 @@ class HardModeBaselineTests(unittest.TestCase):
             {"minimum": 26, "maximum": 41, "mean": 31.3},
         )
 
+    def test_recommended_policy_is_unapproved_and_covers_main_story(self):
+        proposal = self.inventory["balance_discussion"][
+            "recommended_unapproved_proposal"
+        ]
+        self.assertEqual(proposal["id"], "standard_hard_ramp_v1")
+        self.assertEqual(proposal["status"], "unapproved_discussion_only")
+        self.assertEqual(proposal["target_difficulty"], "standard_hard")
+        self.assertEqual(
+            sorted(
+                scenario
+                for step in proposal["scenario_steps"]
+                for scenario in step["scenarios"]
+            ),
+            list(range(1, 28)),
+        )
+        self.assertEqual(
+            [
+                (
+                    step["scenarios"],
+                    step["commander_at_delta"],
+                    step["commander_df_delta"],
+                    step["soldier_at_correction_delta"],
+                    step["soldier_df_correction_delta"],
+                    step["stronger_mercenary_slots_per_six"],
+                    step["summon_slots_per_six"],
+                )
+                for step in proposal["scenario_steps"]
+            ],
+            [
+                ([1, 2, 3, 4, 5], 2, 1, 1, 1, 0, 0),
+                ([6, 7, 8, 9, 10], 3, 2, 1, 1, 1, 0),
+                ([11, 12, 13, 14, 15], 4, 3, 2, 2, 2, 0),
+                ([16, 17, 18, 19, 20], 5, 4, 3, 3, 3, 0),
+                ([21, 22, 23, 24], 6, 4, 4, 3, 3, 0),
+                ([25], 6, 5, 4, 4, 4, 0),
+                ([26], 6, 5, 4, 4, 4, 1),
+                ([27], 6, 5, 5, 4, 6, 4),
+            ],
+        )
+
+    def test_recommended_policy_caps_summons_and_exceptions_are_explicit(self):
+        proposal = self.inventory["balance_discussion"][
+            "recommended_unapproved_proposal"
+        ]
+        self.assertEqual(
+            proposal["global_rules"]["main_story_absolute_cap"],
+            {
+                "commander_at": 64,
+                "commander_df": 46,
+                "soldier_at_correction": 15,
+                "soldier_df_correction": 12,
+            },
+        )
+        self.assertEqual(
+            proposal["summon_policy"]["candidate_class_ids"],
+            ["8D", "8E", "8F", "90", "91", "92", "93"],
+        )
+        self.assertEqual(
+            proposal["summon_policy"]["excluded_class_ids"],
+            ["94"],
+        )
+        exceptions = proposal["exception_candidates"]
+        self.assertEqual(
+            exceptions[0]["offsets"],
+            ["0x1802FC", "0x180320"],
+        )
+        self.assertEqual(exceptions[1]["scenario"], 22)
+        self.assertEqual(exceptions[2]["offsets"], ["0x182D62"])
+        self.assertEqual(
+            exceptions[3]["offsets"],
+            ["0x183724", "0x183748"],
+        )
+        self.assertEqual(exceptions[4]["scenarios"], [28, 29, 30, 31])
+
     def test_all_source_records_have_addresses_and_six_mercenary_slots(self):
         scenarios = self.inventory["scenarios"]
         self.assertEqual([row["number"] for row in scenarios], list(range(1, 32)))
@@ -395,12 +469,15 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertIn("53 side-04 enemy", rule["dynamic_event_spawns"])
         self.assertNotIn("not represented", rule["dynamic_event_spawns"])
 
-    def test_exception_inventory_does_not_approve_or_propose_balance_values(self):
+    def test_discussion_proposal_does_not_approve_or_apply_balance_values(self):
         gate = self.inventory["approval_gate"]
         self.assertFalse(gate["user_approved"])
         self.assertFalse(gate["implementation_started"])
         self.assertFalse(gate["rom_values_may_be_applied"])
-        self.assertNotIn("proposed_values", self.inventory)
+        proposal = self.inventory["balance_discussion"][
+            "recommended_unapproved_proposal"
+        ]
+        self.assertEqual(proposal["status"], "unapproved_discussion_only")
         self.assertNotIn("approved_values", self.inventory)
 
     def test_checked_in_artifacts_are_current(self):
