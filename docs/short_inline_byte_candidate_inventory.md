@@ -33,6 +33,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-startup unclassified: 0
 - Executable-core-A candidates: 67
 - Executable-core-A unclassified: 0
+- Executable-core-B candidates: 174
+- Executable-core-B unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -49,6 +51,20 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-B Candidates
+
+- The source-locked `0x0099FA..0x00D47E` region is one exact contiguous 68000 instruction stream.
+- Source SHA-256: `79034afb5b8b33a9d06d6ce209bbd2df5edb514cc5bceeed8bc09a7589403f0e`; candidate manifest SHA-256: `6bf6db8d02acea60f7a01868dec1e2fb967cdd8ad7771cb560e43ed7cd35897c` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 174.
+- The code segment contains 3980 instructions and 174 candidates.
+- Exact aligned four-byte windows: 1; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+- The following source-locked ASCII boundary marker is `LOADSAVECONTINUESCENARIONOTHING !` at `0x00D47E..0x00D49F`.
+
+Independent Capstone tests require the stream to cover every byte,
+end on its final `RTS`, and contain every candidate span. The
+indexed jump block at `0x00B69A` resolves through valid `BRA`
+instructions rather than an embedded byte-string table.
 
 ## Reviewed Executable-Core-A Candidates
 

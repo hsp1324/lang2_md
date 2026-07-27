@@ -11756,3 +11756,33 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core B Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x0099FA..0x00D47D` region has SHA-256
+  `79034afb5b8b33a9d06d6ce209bbd2df5edb514cc5bceeed8bc09a7589403f0e`
+  and contains 174 low-signal candidates: 155 half-width-looking and 19
+  ASCII-looking rows. Its ordered candidate manifest is
+  `6bf6db8d02acea60f7a01868dec1e2fb967cdd8ad7771cb560e43ed7cd35897c`.
+- All 174 candidates are fully covered by 3,980 contiguous Capstone 68000
+  instructions. The stream begins at `0x0099FA`, ends exactly at
+  `0x00D47E`, contains 109 normal `RTS` instructions, and its final
+  instruction is an `RTS`.
+- The indexed jump at `0x00B69A` enters 23 valid four-byte `BRA` instructions
+  at `0x00B69E..0x00B6F9`; this is executable dispatch code, not an embedded
+  byte-string table.
+- The next 33 bytes at `0x00D47E..0x00D49E` are the source-locked menu marker
+  `LOADSAVECONTINUESCENARIONOTHING !`, with SHA-256
+  `928c52fe19267c02951cacbc21167fc40c0b8a874936b226887355eb94340692`.
+  It provides an exact end boundary for this executable stream.
+- The aligned scan finds one four-byte window at `0x100F2A` targeting
+  candidate `0x00A0CF`. That target is odd and therefore cannot be a 68000
+  instruction entry. No executable PC-relative `LEA`/`PEA` targets a row.
+- The cumulative exact review is now 5,898 of 6,612 short-inline candidates:
+  5,897 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 714 candidates.
+- Focused inventory tests pass 112/112. Reports were regenerated from isolated
+  ROM `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.
