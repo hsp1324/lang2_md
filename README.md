@@ -53,7 +53,8 @@
 - `tools/build_discard_prompt_probe_rom.py`: 40칸이 찬 진단 상점에서 원본 아이템 지급 루틴과 사용되지 않던 폐기 목록 콜백을 연결합니다. 배포 ROM에는 없는 진단 흐름이며 `버릴 아이템`, 5행 목록, 9페이지 이동과 확정 복귀를 검사할 때만 사용합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/generate_byte_ui_slot_inventory.py`: 이름·클래스·용병용 작은 UI의 로컬 인덱스 174개와 확장 VRAM 슬롯 118개를 `localization/byte_ui_slot_inventory.json`으로 생성합니다. 활성 글자, 전투 안전 고정 슬롯, 애니메이션에 덮여 폐기된 슬롯, 아직 소유권을 확인하지 않은 미할당 슬롯, 위험 바이트 코드 `0xA1..0xA4`를 구분합니다. `unassigned`는 안전하다는 뜻이 아니며 `--check`와 단위 테스트가 코드/목록 불일치를 막습니다.
-- `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경과 확인된 소유권을 기록합니다.
+- `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경, 확인된 개별 소유권과 원시 타일 순서에서 검토한 넓은 자산 계열을 기록합니다.
+- `tools/render_compressed_resource_atlas.py`: 해제한 압축 리소스를 Mega Drive 4bpp 타일 그대로 PNG 아틀라스로 렌더링합니다. 기본값은 코드에 즉시 ID로 나타나는 50개이며 `--indices 0-428`로 전체 표를 검사합니다. 타일맵·팔레트·애니메이션을 재구성하지 않으므로 이 화면에서 일본어가 안 보인다는 사실만으로 번역 완료를 판정하지 않습니다.
 - `tools/jp_direct_string_inventory.py`: 이벤트 블록 밖의 보수적인 `FFFF` 종료 16비트 문자열 후보를 소유권별로 분류합니다.
 - `tools/jp_direct_byte_string_inventory.py`: ROM의 짝수 주소를 32비트 포인터로 보수적으로 해석해 실제 참조되는 `FF` 종료 CP932/ASCII 바이트 문자열 후보를 분류합니다.
 - `tools/jp_inline_byte_string_inventory.py`: 포인터 표에 잡히지 않는 `FF` 종료 반각 일본어/ASCII 연속열 중 의미 문자가 3개 이상인 후보를 보수적으로 스캔합니다. 현재 646개를 전부 분류하며, 실기 검증된 77행 숨김 사운드 테스트 표와 정적으로 소유권을 확인한 원본 `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` 레코드를 구분해 기록합니다. 폐기 목록의 실제 한글 실기 증거는 별도 16x16 렌더러 진단으로 관리합니다.

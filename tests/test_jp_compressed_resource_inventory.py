@@ -58,6 +58,53 @@ class CompressedResourceInventoryTests(unittest.TestCase):
             )
         )
 
+    def test_raw_tile_asset_families_cover_the_table_without_guessing_owners(self):
+        self.assertEqual(
+            self.result["asset_family_counts"],
+            {
+                "publisher_logo": 1,
+                "ui_font": 1,
+                "map_tileset": 24,
+                "battle_background": 21,
+                "combat_sprite": 176,
+                "battle_ui": 1,
+                "battle_scene_graphics": 7,
+                "character_portrait": 132,
+                "small_graphic_fragment": 27,
+                "world_map_graphics": 1,
+                "item_icon_graphics": 1,
+                "opening_logo_graphics": 1,
+                "title_logo_graphics": 1,
+                "opening_ending_graphics": 35,
+            },
+        )
+        self.assertEqual(self.result["raw_tile_visual_reviewed_count"], 429)
+        self.assertEqual(self.result["raw_tile_text_signal_count"], 5)
+        self.assertEqual(
+            {
+                entry["index"]: entry["raw_tile_text_signal"]
+                for entry in self.result["entries"]
+                if entry["raw_tile_text_signal"] is not None
+            },
+            {
+                0: "publisher_brand_lettering",
+                1: "font_glyphs",
+                223: "battle_ui_label_tiles",
+                392: "opening_logo_lettering",
+                393: "title_lettering",
+            },
+        )
+        self.assertEqual(self.result["entries"][2]["asset_family"], "map_tileset")
+        self.assertEqual(self.result["entries"][46]["asset_family"], "battle_background")
+        self.assertEqual(self.result["entries"][47]["asset_family"], "combat_sprite")
+        self.assertEqual(
+            self.result["entries"][231]["asset_family"], "character_portrait"
+        )
+        self.assertEqual(
+            self.result["entries"][428]["asset_family"], "opening_ending_graphics"
+        )
+        self.assertEqual(self.result["unknown_owner_count"], 425)
+
     def test_type1_rle_and_type2_plane_decoder(self):
         pointers = resource_pointers(self.japanese)
         type1 = [index for index, pointer in enumerate(pointers) if self.japanese[pointer] == 1]

@@ -25,9 +25,18 @@ class BlastEmDisplayTests(unittest.TestCase):
             desktop_display=False,
             virtual_display=":104.0",
         )
-        with patch.dict(os.environ, {"DISPLAY": ":0"}):
+        with patch.dict(
+            os.environ,
+            {
+                "DISPLAY": ":0",
+                "WAYLAND_DISPLAY": "wayland-0",
+                "SDL_VIDEODRIVER": "wayland",
+            },
+        ):
             self.assertTrue(blastem_display.configure_display(args))
             self.assertEqual(os.environ["DISPLAY"], ":104")
+            self.assertNotIn("WAYLAND_DISPLAY", os.environ)
+            self.assertEqual(os.environ["SDL_VIDEODRIVER"], "x11")
 
     def test_physical_display_requires_explicit_opt_in(self):
         args = argparse.Namespace(
@@ -38,9 +47,18 @@ class BlastEmDisplayTests(unittest.TestCase):
             blastem_display.configure_display(args)
 
         args.desktop_display = True
-        with patch.dict(os.environ, {"DISPLAY": ":0"}):
+        with patch.dict(
+            os.environ,
+            {
+                "DISPLAY": ":0",
+                "WAYLAND_DISPLAY": "wayland-0",
+                "SDL_VIDEODRIVER": "wayland",
+            },
+        ):
             self.assertFalse(blastem_display.configure_display(args))
             self.assertEqual(os.environ["DISPLAY"], ":0")
+            self.assertEqual(os.environ["WAYLAND_DISPLAY"], "wayland-0")
+            self.assertEqual(os.environ["SDL_VIDEODRIVER"], "wayland")
 
     def test_child_sequence_transport_matches_display_mode(self):
         self.assertEqual(

@@ -37,6 +37,42 @@ LIVE_VERIFIED_OWNERS = frozenset(
         builder.TITLE_LOGO_RESOURCE_INDEX,
     }
 )
+ASSET_FAMILY_RANGES = (
+    (0, 0, "publisher_logo"),
+    (1, 1, "ui_font"),
+    (2, 25, "map_tileset"),
+    (26, 46, "battle_background"),
+    (47, 222, "combat_sprite"),
+    (223, 223, "battle_ui"),
+    (224, 230, "battle_scene_graphics"),
+    (231, 362, "character_portrait"),
+    (363, 389, "small_graphic_fragment"),
+    (390, 390, "world_map_graphics"),
+    (391, 391, "item_icon_graphics"),
+    (392, 392, "opening_logo_graphics"),
+    (393, 393, "title_logo_graphics"),
+    (394, 428, "opening_ending_graphics"),
+)
+RAW_TILE_TEXT_SIGNALS = {
+    0: "publisher_brand_lettering",
+    1: "font_glyphs",
+    223: "battle_ui_label_tiles",
+    392: "opening_logo_lettering",
+    393: "title_lettering",
+}
+
+
+def asset_family(index: int) -> str:
+    matches = [
+        family
+        for first, last, family in ASSET_FAMILY_RANGES
+        if first <= index <= last
+    ]
+    if len(matches) != 1:
+        raise ValueError(
+            f"compressed resource {index} has {len(matches)} asset-family matches"
+        )
+    return matches[0]
 
 
 def be32(data: bytes, offset: int) -> int:
@@ -308,6 +344,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "content_modified": content_modified,
                 "modified": pointer_modified or content_modified is True,
                 "owner": KNOWN_OWNERS.get(index),
+                "asset_family": asset_family(index),
+                "raw_tile_visual_reviewed": True,
+                "raw_tile_text_signal": RAW_TILE_TEXT_SIGNALS.get(index),
                 "direct_immediate_call_count": len(calls_by_index.get(index, [])),
                 "direct_immediate_calls": calls_by_index.get(index, []),
                 "reviewed": index in LIVE_VERIFIED_OWNERS,
@@ -329,6 +368,18 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "modified_count": sum(bool(entry["modified"]) for entry in entries),
         "known_owner_count": sum(entry["owner"] is not None for entry in entries),
         "unknown_owner_count": sum(entry["owner"] is None for entry in entries),
+        "asset_family_counts": {
+            family: sum(entry["asset_family"] == family for entry in entries)
+            for family in dict.fromkeys(
+                family for _, _, family in ASSET_FAMILY_RANGES
+            )
+        },
+        "raw_tile_visual_reviewed_count": sum(
+            bool(entry["raw_tile_visual_reviewed"]) for entry in entries
+        ),
+        "raw_tile_text_signal_count": sum(
+            entry["raw_tile_text_signal"] is not None for entry in entries
+        ),
         "loader_routines": {
             "load": f"0x{RESOURCE_LOAD_ROUTINE:06X}",
             "dispatch": f"0x{RESOURCE_DISPATCH_ROUTINE:06X}",
@@ -370,6 +421,9 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Modified resources in current build: {result['modified_count']}",
         f"- Known owners: {result['known_owner_count']}",
         f"- Unknown owners: {result['unknown_owner_count']}",
+        f"- Broad asset families reviewed in raw tile order: "
+        f"{result['raw_tile_visual_reviewed_count']}",
+        f"- Raw tile text/lettering signals: {result['raw_tile_text_signal_count']}",
         f"- Direct loader calls: {result['direct_load_call_count']}",
         f"- Immediate-ID calls: {result['immediate_load_call_count']}",
         f"- Dynamic-ID calls: {result['dynamic_load_call_count']}",
@@ -390,11 +444,46 @@ def markdown_report(result: dict[str, object]) -> str:
         "and reads `0x0B0000[index]`. Immediate calls are linked to resource entries; dynamic",
         "calls remain listed by code address without a guessed resource owner.",
         "",
+        "## Raw Tile Atlas Review",
+        "",
+        "Run `python3 tools/render_compressed_resource_atlas.py` to render the 50",
+        "resources reached by immediate-ID loader calls, or pass `--indices 0-428`",
+        "to render the complete table. The atlas uses raw decompressed 4bpp tile order,",
+        "so it can separate broad graphics families and expose obvious lettering but",
+        "does not reconstruct tile maps, palettes, animation frames, or exact runtime",
+        "ownership. Absence of readable Japanese in this view is not translation proof.",
+        "",
+        "| Asset family | Resources |",
+        "| --- | ---: |",
+    ]
+    for family, count in result["asset_family_counts"].items():
+        lines.append(f"| `{family}` | {count} |")
+    lines.extend(
+        [
+            "",
+            "Obvious lettering/font signals in raw tile order:",
+            "",
+            "| Index | Family | Signal | Owner |",
+            "| ---: | --- | --- | --- |",
+        ]
+    )
+    for entry in result["entries"]:
+        if entry["raw_tile_text_signal"] is None:
+            continue
+        owner_cell = f"`{entry['owner']}`" if entry["owner"] else ""
+        lines.append(
+            f"| {entry['index']} | `{entry['asset_family']}` | "
+            f"`{entry['raw_tile_text_signal']}` | {owner_cell} |"
+        )
+    lines.extend(
+        [
+            "",
         "## Type Distribution",
         "",
         "| Type byte | Entries |",
         "| ---: | ---: |",
-    ]
+        ]
+    )
     for resource_type, count in sorted(
         result["type_counts"].items(), key=lambda item: int(item[0])
     ):

@@ -11328,3 +11328,39 @@ contains 57 safe syllables as documented below and in
   regression back to an empty target list.
 - Regeneration keeps 646 conservative inline candidates and zero unclassified.
   The corrected inline/UI/discard/sound-test set passes 30/30 focused tests.
+
+### Compressed Resource Raw-Tile Atlas (2026-07-27)
+
+- `tools/render_compressed_resource_atlas.py` now decodes the same type 1/2/3
+  payloads as the compressed-resource inventory and renders their Mega Drive
+  4bpp tiles to nearest-neighbor PNG panels. With no `--indices` it renders
+  the 50 resources reached by immediate-ID load calls; `--indices 0-428`
+  covers the complete stock table.
+- All 429 Japanese resources were reviewed in raw decompressed tile order.
+  `tools/jp_compressed_resource_inventory.py` records only broad, visually
+  defensible families: publisher/UI font, map tiles, battle backgrounds and
+  sprites, battle UI/scene graphics, portraits, small fragments, world map,
+  item icons, opening logo/title, and opening/ending graphics. Exact owner
+  count deliberately remains 4 and unknown owner count remains 425; family
+  assignment is not promoted to unsupported address ownership.
+- Five records have an obvious raw-tile lettering or font signal: MASAYA
+  publisher logo `0`, UI font `1`, localized battle terrain label `223`,
+  opening logo graphic `392`, and localized title logo `393`. Resource `0`
+  was additionally seen during an input-free Japanese cold boot on isolated
+  virtual `DISPLAY=:104`; it is the retained publisher brand rather than
+  untranslated game UI.
+- The atlas cannot reconstruct tile maps, runtime palettes, animation, or
+  dynamic loader ownership. A resource with no readable Japanese in raw tile
+  order is therefore not considered translation-complete. The generated JSON
+  and Markdown state this limitation so later sessions do not close the
+  remaining compressed-graphics gap based on the atlas alone.
+- The Japanese cold-boot BlastEm used for the owner check was connected by
+  both of its display sockets to Xvfb PID 5324 on `:104`, then terminated.
+  No Windows BlastEm process was running and the physical display was not
+  used. Virtual-mode setup now also removes inherited `WAYLAND_DISPLAY` and
+  forces `SDL_VIDEODRIVER=x11`, preventing SDL from selecting WSLg while
+  `DISPLAY=:104` is configured. A post-change no-input smoke launch had no
+  `WAYLAND_DISPLAY`; both BlastEm display sockets were connected to
+  `@/tmp/.X11-unix/X104` on Xvfb PID 5324, and the process was immediately
+  terminated. Atlas, compressed-inventory, and display isolation focused tests
+  pass 20/20.

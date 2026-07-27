@@ -15,6 +15,8 @@ A valid record does not establish that it contains text or UI data.
 - Modified resources in current build: 3
 - Known owners: 4
 - Unknown owners: 425
+- Broad asset families reviewed in raw tile order: 429
+- Raw tile text/lettering signals: 5
 - Direct loader calls: 75
 - Immediate-ID calls: 64
 - Dynamic-ID calls: 11
@@ -30,6 +32,42 @@ A valid record does not establish that it contains text or UI data.
 The lookup routine masks the high flag bit, multiplies the remaining ID by four,
 and reads `0x0B0000[index]`. Immediate calls are linked to resource entries; dynamic
 calls remain listed by code address without a guessed resource owner.
+
+## Raw Tile Atlas Review
+
+Run `python3 tools/render_compressed_resource_atlas.py` to render the 50
+resources reached by immediate-ID loader calls, or pass `--indices 0-428`
+to render the complete table. The atlas uses raw decompressed 4bpp tile order,
+so it can separate broad graphics families and expose obvious lettering but
+does not reconstruct tile maps, palettes, animation frames, or exact runtime
+ownership. Absence of readable Japanese in this view is not translation proof.
+
+| Asset family | Resources |
+| --- | ---: |
+| `publisher_logo` | 1 |
+| `ui_font` | 1 |
+| `map_tileset` | 24 |
+| `battle_background` | 21 |
+| `combat_sprite` | 176 |
+| `battle_ui` | 1 |
+| `battle_scene_graphics` | 7 |
+| `character_portrait` | 132 |
+| `small_graphic_fragment` | 27 |
+| `world_map_graphics` | 1 |
+| `item_icon_graphics` | 1 |
+| `opening_logo_graphics` | 1 |
+| `title_logo_graphics` | 1 |
+| `opening_ending_graphics` | 35 |
+
+Obvious lettering/font signals in raw tile order:
+
+| Index | Family | Signal | Owner |
+| ---: | --- | --- | --- |
+| 0 | `publisher_logo` | `publisher_brand_lettering` |  |
+| 1 | `ui_font` | `font_glyphs` | `byte_ui_font` |
+| 223 | `battle_ui` | `battle_ui_label_tiles` | `battle_ui_terrain` |
+| 392 | `opening_logo_graphics` | `opening_logo_lettering` |  |
+| 393 | `title_logo_graphics` | `title_lettering` | `title_logo` |
 
 ## Type Distribution
 

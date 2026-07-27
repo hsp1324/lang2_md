@@ -51,6 +51,8 @@ def configure_display(args: argparse.Namespace) -> bool:
             "to the physical desktop"
         )
     os.environ["DISPLAY"] = display
+    os.environ.pop("WAYLAND_DISPLAY", None)
+    os.environ["SDL_VIDEODRIVER"] = "x11"
     return True
 
 
