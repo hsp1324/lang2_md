@@ -11457,3 +11457,31 @@ contains 57 safe syllables as documented below and in
   `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` was used only to
   regenerate reports. BlastEm was not launched, Xvfb `:104` remained the sole
   configured emulator display, and the physical monitor was untouched.
+
+### Item/Name/Packed Graphics Low-Signal Byte Audit (2026-07-27)
+
+- `tools/jp_short_inline_byte_inventory.py` now covers the 83 low-signal rows
+  whose starts fall in `0x060000..0x07FFFF`. Seven early rows are packed 4bpp
+  item/system tile bytes. `0x061ABB` is the low byte of the final name-table
+  pointer `0x00061ABC` followed by eight padding spaces, not a byte string.
+- The other 75 addresses repeat inside packed 4bpp tile/sprite blocks. The
+  common `CC CF`/`CF` rows and three `57 58` rows occur in identical pixel-nibble
+  neighborhoods; none is a standalone half-width or ASCII UI string. All 83
+  addresses are pinned individually so a new candidate fails closed as
+  unclassified instead of inheriting a broad range verdict.
+- The aligned four-byte scan finds three apparent references, all manually
+  disproved as pointers. At `0x0A4440`, bytes `00 06 12 1F` are a sliding
+  window inside the numeric/graphics index row
+  `00 06 12 1F 2E 3C`. At `0x01F0A6` and `0x01F1A8`, bytes
+  `00 07 0C 2A` cross a 68000 instruction boundary: immediate value `0007`
+  from `MOVE.W #$0007,D7` is followed by the `CMPI.B` opcode `0C2A`.
+  No executable `LEA d16(PC)`/`PEA d16(PC)` reference exists.
+- The short-inline inventory now records 339 reviewed candidates across
+  `0x060000..0x0AFFFF`: 338 pointer-boundary/word/graphics/layout false
+  positives and the intentionally retained scenario-level prefix `L-`.
+  Full contexts and the three non-pointer reference verdicts are in
+  `localization/short_inline_byte_candidates.json`.
+- Focused short-inline/UI/inline/direct inventory tests pass 69/69. Reports
+  were regenerated from the isolated current-source ROM only. BlastEm was not
+  launched; Xvfb `:104` remained the configured emulator display and the
+  physical monitor was untouched.

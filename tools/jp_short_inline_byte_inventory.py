@@ -14,6 +14,8 @@ from tools.jp_inline_byte_string_inventory import SCAN_END, scan_runs
 
 
 EXECUTABLE_END = 0x040000
+ITEM_NAME_GRAPHICS_BANK_START = 0x060000
+ITEM_NAME_GRAPHICS_BANK_END = 0x080000
 SYSTEM_GRAPHICS_ENDING_BANK_START = 0x080000
 SYSTEM_GRAPHICS_ENDING_BANK_END = 0x090000
 ENDING_SCENARIO_BANK_START = 0x090000
@@ -44,6 +46,136 @@ ASCII_ALLOWED = {
     ord("+"),
     ord("-"),
     ord(":"),
+}
+
+PACKED_GAME_GRAPHICS_REVIEW_ADDRESSES = {
+    0x060D35,
+    0x060D39,
+    0x060D41,
+    0x060D50,
+    0x061212,
+    0x06121F,
+    0x06146D,
+}
+
+NAME_POINTER_TABLE_BOUNDARY_REVIEW_ADDRESS = 0x061ABB
+
+PACKED_TILE_SPRITE_GRAPHICS_REVIEW_ADDRESSES = {
+    0x06EFF1,
+    0x06EFFB,
+    0x06F039,
+    0x06F043,
+    0x06F8F1,
+    0x06F8FB,
+    0x06F939,
+    0x06F943,
+    0x0701F1,
+    0x0701FB,
+    0x070239,
+    0x070243,
+    0x070AF1,
+    0x070AFB,
+    0x070B39,
+    0x070B43,
+    0x070C2A,
+    0x0713F1,
+    0x0713FB,
+    0x071439,
+    0x071443,
+    0x071CF1,
+    0x071CFB,
+    0x071D39,
+    0x071D43,
+    0x0725F1,
+    0x0725FB,
+    0x072639,
+    0x072643,
+    0x072EF1,
+    0x072EFB,
+    0x072F39,
+    0x072F43,
+    0x0737F1,
+    0x0737FB,
+    0x073839,
+    0x073843,
+    0x0740F1,
+    0x0740FB,
+    0x074139,
+    0x074143,
+    0x0749F1,
+    0x0749FB,
+    0x074A39,
+    0x074A43,
+    0x07542A,
+    0x0764F1,
+    0x0764FB,
+    0x076539,
+    0x076543,
+    0x076DF1,
+    0x076DFB,
+    0x076E39,
+    0x076E43,
+    0x0776F1,
+    0x0776FB,
+    0x077739,
+    0x077743,
+    0x0788F1,
+    0x0788FB,
+    0x078939,
+    0x078943,
+    0x07A3F1,
+    0x07A3FB,
+    0x07A439,
+    0x07A443,
+    0x07B72A,
+    0x07BEF1,
+    0x07BEFB,
+    0x07BF39,
+    0x07BF43,
+    0x07C7F1,
+    0x07C7FB,
+    0x07C839,
+    0x07C843,
+}
+
+ITEM_NAME_GRAPHICS_REVIEWS = {
+    **{
+        address: (
+            "packed_game_graphics_false_positive",
+            "packed 4bpp item/system tile bytes",
+        )
+        for address in PACKED_GAME_GRAPHICS_REVIEW_ADDRESSES
+    },
+    NAME_POINTER_TABLE_BOUNDARY_REVIEW_ADDRESS: (
+        "name_pointer_table_boundary_false_positive",
+        "low byte of final name pointer 0x00061ABC plus space padding",
+    ),
+    **{
+        address: (
+            "packed_tile_sprite_graphics_false_positive",
+            "repeating packed 4bpp tile/sprite bytes",
+        )
+        for address in PACKED_TILE_SPRITE_GRAPHICS_REVIEW_ADDRESSES
+    },
+}
+
+# The aligned four-byte scanner deliberately over-approximates. These three
+# apparent references are pinned with their decoded context so they cannot be
+# mistaken for live pointers merely because their four bytes equal a candidate
+# address.
+ITEM_NAME_GRAPHICS_ALIGNED_REFERENCE_REVIEWS = {
+    (0x06121F, 0x0A4440): (
+        "coincidental_data_window",
+        "numeric/graphics index row `00 06 12 1F 2E 3C`",
+    ),
+    (0x070C2A, 0x01F0A6): (
+        "cross_instruction_window",
+        "`MOVE.W #$0007,D7` immediate followed by `CMPI.B` opcode `0C2A`",
+    ),
+    (0x070C2A, 0x01F1A8): (
+        "cross_instruction_window",
+        "`MOVE.W #$0007,D7` immediate followed by `CMPI.B` opcode `0C2A`",
+    ),
 }
 
 # Each address was reviewed as an address within the containing 16-bit
@@ -379,6 +511,13 @@ def system_graphics_word_owner(address: int) -> str:
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     candidates = low_signal_runs(japanese)
+    item_name_graphics = [
+        row
+        for row in candidates
+        if ITEM_NAME_GRAPHICS_BANK_START
+        <= int(row["start_int"])
+        < ITEM_NAME_GRAPHICS_BANK_END
+    ]
     system_graphics_ending = [
         row
         for row in candidates
@@ -398,6 +537,74 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for row in candidates
         if TEXT_UI_BANK_START <= int(row["start_int"]) < TEXT_UI_BANK_END
     ]
+
+    item_name_graphics_addresses = {
+        int(row["start_int"]) for row in item_name_graphics
+    }
+    item_name_graphics_absolute = aligned_absolute_references(
+        japanese, item_name_graphics_addresses
+    )
+    item_name_graphics_pc_relative = pc_relative_lea_pea_references(
+        japanese, item_name_graphics_addresses
+    )
+    item_name_graphics_rows = []
+    item_name_graphics_reference_reviews = []
+    for row in item_name_graphics:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        category, owner = ITEM_NAME_GRAPHICS_REVIEWS.get(
+            start, ("unclassified", "requires manual ownership review")
+        )
+        context_start, context = word_context(japanese, start, end)
+        item_name_graphics_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": category,
+                "owner": owner,
+                "containing_word_address": f"0x{start & ~1:06X}",
+                "containing_word": (
+                    f"0x{int.from_bytes(japanese[start & ~1 : (start & ~1) + 2], 'big'):04X}"
+                ),
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in item_name_graphics_absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in item_name_graphics_pc_relative.get(
+                        start, []
+                    )
+                ],
+            }
+        )
+        for reference in item_name_graphics_absolute.get(start, []):
+            review = ITEM_NAME_GRAPHICS_ALIGNED_REFERENCE_REVIEWS.get(
+                (start, reference)
+            )
+            if review is None:
+                classification = "unclassified"
+                evidence = "requires instruction/data-boundary review"
+            else:
+                classification, evidence = review
+            item_name_graphics_reference_reviews.append(
+                {
+                    "target": f"0x{start:06X}",
+                    "address": f"0x{reference:06X}",
+                    "classification": classification,
+                    "evidence": evidence,
+                }
+            )
 
     system_graphics_ending_addresses = {
         int(row["start_int"]) for row in system_graphics_ending
@@ -570,6 +777,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for kind in ("halfwidth", "ascii")
     }
     category_counts = Counter(str(row["category"]) for row in detailed_rows)
+    item_name_graphics_category_counts = Counter(
+        str(row["category"]) for row in item_name_graphics_rows
+    )
     ending_scenario_category_counts = Counter(
         str(row["category"]) for row in ending_scenario_rows
     )
@@ -584,6 +794,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             if row["category"] == "word_stream_byte_false_positive"
         }
     )
+    item_name_graphics_reference_pairs = {
+        (target, reference)
+        for target, references in item_name_graphics_absolute.items()
+        for reference in references
+    }
     ending_scenario_reviewed_addresses = (
         set(ENDING_SCENARIO_STRUCTURED_REVIEWS)
         | {SCENARIO_LEVEL_PREFIX}
@@ -597,7 +812,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "warning": (
             "This scan inventories maximal FF-terminated half-width/uppercase-ASCII "
             "runs with only one or two signal bytes. Most are binary coincidences. "
-            "The 0x080000..0x0AFFFF system/graphics/ending/scenario/text/UI-bank "
+            "The 0x060000..0x0AFFFF item/name/graphics/system/ending/scenario/"
+            "text/UI-bank "
             "candidates are classified here. Exact aligned 32-bit and LEA/PEA "
             "PC-relative references do not exclude base-relative, indexed, or "
             "dynamic access."
@@ -607,6 +823,60 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "candidate_count": len(candidates),
         "kind_counts": dict(sorted(kind_counts.items())),
         "region_counts": region_counts,
+        "item_name_graphics_bank": {
+            "range": "0x060000..0x080000",
+            "candidate_count": len(item_name_graphics_rows),
+            "category_counts": dict(
+                sorted(item_name_graphics_category_counts.items())
+            ),
+            "unclassified_count": item_name_graphics_category_counts.get(
+                "unclassified", 0
+            ),
+            "missing_review_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    item_name_graphics_addresses
+                    - set(ITEM_NAME_GRAPHICS_REVIEWS)
+                )
+            ],
+            "stale_review_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    set(ITEM_NAME_GRAPHICS_REVIEWS)
+                    - item_name_graphics_addresses
+                )
+            ],
+            "aligned_absolute_32_reference_count": sum(
+                len(row["aligned_absolute_32_references"])
+                for row in item_name_graphics_rows
+            ),
+            "pc_relative_lea_pea_reference_count": sum(
+                len(row["pc_relative_lea_pea_references"])
+                for row in item_name_graphics_rows
+            ),
+            "aligned_reference_reviews": item_name_graphics_reference_reviews,
+            "missing_aligned_reference_reviews": [
+                {
+                    "target": f"0x{target:06X}",
+                    "address": f"0x{reference:06X}",
+                }
+                for target, reference in sorted(
+                    item_name_graphics_reference_pairs
+                    - set(ITEM_NAME_GRAPHICS_ALIGNED_REFERENCE_REVIEWS)
+                )
+            ],
+            "stale_aligned_reference_reviews": [
+                {
+                    "target": f"0x{target:06X}",
+                    "address": f"0x{reference:06X}",
+                }
+                for target, reference in sorted(
+                    set(ITEM_NAME_GRAPHICS_ALIGNED_REFERENCE_REVIEWS)
+                    - item_name_graphics_reference_pairs
+                )
+            ],
+            "candidates": item_name_graphics_rows,
+        },
         "system_graphics_ending_bank": {
             "range": "0x080000..0x090000",
             "candidate_count": len(system_graphics_ending_rows),
@@ -732,6 +1002,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
 
 def markdown_report(result: dict[str, object]) -> str:
+    item_bank = result["item_name_graphics_bank"]
     system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
     level_prefix = ending_bank["retained_level_prefix"]
@@ -746,6 +1017,14 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Low-signal candidates: {result['candidate_count']}",
         f"- Half-width candidates: {result['kind_counts']['halfwidth']}",
         f"- Uppercase ASCII candidates: {result['kind_counts']['ascii']}",
+        (
+            "- Item/name/graphics-bank candidates: "
+            f"{item_bank['candidate_count']}"
+        ),
+        (
+            "- Item/name/graphics-bank unclassified: "
+            f"{item_bank['unclassified_count']}"
+        ),
         (
             "- System/graphics/ending-bank candidates: "
             f"{system_bank['candidate_count']}"
@@ -790,6 +1069,63 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Item/Name/Graphics-Bank Candidates",
+            "",
+            (
+                "- Category totals: "
+                + ", ".join(
+                    f"`{category}` {count}"
+                    for category, count in item_bank[
+                        "category_counts"
+                    ].items()
+                )
+                + "."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{item_bank['aligned_absolute_32_reference_count']}; all are "
+                "reviewed below as non-pointer coincidences."
+            ),
+            (
+                "- Exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{item_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Address | Kind | Raw | Classification | Owner |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+    )
+    for row in item_bank["candidates"]:
+        lines.append(
+            f"| `{row['address']}` | `{row['kind']}` | `{row['raw_hex']}` | "
+            f"`{row['category']}` | {row['owner']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "The seven early rows are packed 4bpp item/system graphics. "
+            "`0x061ABB` is the low byte of the final name-table pointer "
+            "`0x00061ABC` followed by eight padding spaces. The remaining "
+            "75 rows repeat inside packed 4bpp tile/sprite blocks; they are "
+            "pixel nibbles, not half-width or ASCII text.",
+            "",
+            "| Apparent target | Four-byte window | Classification | Evidence |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in item_bank["aligned_reference_reviews"]:
+        lines.append(
+            f"| `{row['target']}` | `{row['address']}` | "
+            f"`{row['classification']}` | {row['evidence']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "The `0x06121F` match is a sliding four-byte window inside a numeric/",
+            "graphics index row. Both `0x070C2A` matches cross a 68000 instruction",
+            "boundary: immediate value `0007` is followed by opcode `0C2A`.",
+            "They are not absolute pointers.",
             "",
             "## Reviewed System/Graphics/Ending-Bank Candidates",
             "",
@@ -930,15 +1266,17 @@ def main() -> None:
         encoding="utf-8",
     )
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
+    item_bank = result["item_name_graphics_bank"]
     system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
     bank = result["text_ui_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
+        f"{item_bank['candidate_count']} item/name/graphics-bank, "
         f"{system_bank['candidate_count']} system/graphics/ending-bank, "
         f"{ending_bank['candidate_count']} ending/scenario-bank, and "
         f"{bank['candidate_count']} text/UI-bank candidates, "
-        f"{system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
+        f"{item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
         "unclassified"
     )
 
