@@ -11818,3 +11818,41 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core D Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x00FE28..0x011FC7` region has SHA-256
+  `06eeb2fbee39f135e077893dc876854395a2772eb599558783b5b8db95550f3a`
+  and contains 102 low-signal candidates: 85 half-width-looking and 17
+  ASCII-looking rows. Its ordered candidate manifest is
+  `8c9852d9b2c340b8b9ca95877a64fcc2f4d4c5de0cf449bc89b5377ebf7a51ab`.
+- Five exact code streams own all 102 candidates:
+  `0x00FE28..0x0106EB` has 555 instructions and 28 candidates;
+  `0x0106F6..0x010931` has 156 and four; `0x010A34..0x01179D` has
+  930 and 48; `0x0117AE..0x011EB9` has 434 and 19; and
+  `0x011F46..0x011FA7` has 29 and three. Capstone tests require each
+  stream to end exactly at its declared boundary and every candidate span
+  to be covered by instruction bytes.
+- Five intervening source-locked data ranges contain no candidate:
+  `0x0106EC..0x0106F5` is the decimal place-value table
+  `10000,1000,100,10,1`; `0x010932..0x010A33` begins with ten pointers
+  to equal-size numeric/`FF` records; `0x01179E..0x0117AD` is a 16-byte
+  bit/direction pattern; `0x011EBA..0x011F45` holds fourteen 10-byte
+  layout records; and `0x011FA8..0x011FC7` is the following configuration
+  and numeric table.
+- The aligned scanner finds 35 four-byte windows targeting four candidates:
+  `0x00FFED` once, `0x010003` ten times, `0x010017` four times, and
+  `0x010027` twenty times. All four targets are odd instruction-internal
+  bytes. Source locks identify their owners as `DBRA D1,$FFEA`,
+  `MOVE.W D0,$FFFFA70A.L`, `MOVE.B D0,$FFFFA7F4.L`, and
+  `MOVE.B D1,$FFFFA7F5.L`; none is a valid 68000 entry point or byte string.
+  No executable PC-relative `LEA`/`PEA` targets a row.
+- The cumulative exact review is now 6,085 of 6,612 short-inline candidates:
+  6,084 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 527 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 118/118. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.

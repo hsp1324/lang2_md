@@ -37,6 +37,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-B unclassified: 0
 - Executable-core-C candidates: 85
 - Executable-core-C unclassified: 0
+- Executable-core-D candidates: 102
+- Executable-core-D unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -53,6 +55,33 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-D Candidates
+
+- The source-locked `0x00FE28..0x011FC8` region contains five exact 68000 instruction streams and five explicit candidate-free data tables.
+- Source SHA-256: `06eeb2fbee39f135e077893dc876854395a2772eb599558783b5b8db95550f3a`; candidate manifest SHA-256: `8c9852d9b2c340b8b9ca95877a64fcc2f4d4c5de0cf449bc89b5377ebf7a51ab` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 102.
+- Exact aligned four-byte windows: 35; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Code segment | Bytes | Instructions | Candidates | Source SHA-256 |
+| --- | ---: | ---: | ---: | --- |
+| `0x00FE28..0x0106EC` | 2244 | 555 | 28 | `618f2711e8d7d1cc2464f4deac820ddc66e3f07cbf9f7da1ce952490715a0bca` |
+| `0x0106F6..0x010932` | 572 | 156 | 4 | `ce3d6560e1b081a11ce13f92fdd873c9b1266d66315f847a4b4850a598963e36` |
+| `0x010A34..0x01179E` | 3434 | 930 | 48 | `42716efc78ac6c0bcdca2df8fd539287d60647384ea38adcfbb4a4f14fe7fa8e` |
+| `0x0117AE..0x011EBA` | 1804 | 434 | 19 | `d99cadb143d42389fcacd63f6b4bf97184d57717ee1de92805b88ed6063b22e4` |
+| `0x011F46..0x011FA8` | 98 | 29 | 3 | `6ea709b158dfba50fae83ec76342f025d60ceeaf413284d767ac40fe466be37d` |
+
+| Data segment | Owner | Bytes | Candidates | Source SHA-256 |
+| --- | --- | ---: | ---: | --- |
+| `0x0106EC..0x0106F6` | decimal place-value table | 10 | 0 | `b8456acf5b863805584ae3ddd08fa48936a9d75a821eaf39fe4e09080cb7c1ca` |
+| `0x010932..0x010A34` | ten-pointer numeric-record table | 258 | 0 | `cf6b8495b1faff6e3c4788c35dea07630b985dcf8bdc44e27fa52e5554d3150d` |
+| `0x01179E..0x0117AE` | bit and direction pattern table | 16 | 0 | `9495ccc78ccca6f4ee5d3836675805a8c7c17ff86d1ede18076eee8a25f6c133` |
+| `0x011EBA..0x011F46` | fourteen ten-byte layout records | 140 | 0 | `88667c472e04944f5138caee6de922dc50bb7750d3e20b079a1682ce490b8fb4` |
+| `0x011FA8..0x011FC8` | configuration and numeric table | 32 | 0 | `0f9728d816d2e4cf5d45e9cd47e3a9429226212fac9a448716af3af50f96352a` |
+
+The 35 aligned four-byte windows target four odd candidate
+addresses. Each target is source-locked inside a `DBRA` or
+`MOVE` instruction rather than at an executable entry boundary.
 
 ## Reviewed Executable-Core-C Candidates
 

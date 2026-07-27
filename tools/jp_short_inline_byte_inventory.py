@@ -379,6 +379,104 @@ EXECUTABLE_CORE_C_DATA_SEGMENTS = (
         "250ee5465c85e58924609b7f2ed6d4cbd0cab3050e36e9a4d71e7103a38ed155",
     ),
 )
+EXECUTABLE_CORE_D_START = 0x00FE28
+EXECUTABLE_CORE_D_END = 0x011FC8
+EXECUTABLE_CORE_D_SOURCE_SHA256 = (
+    "06eeb2fbee39f135e077893dc876854395a2772eb599558783b5b8db95550f3a"
+)
+EXECUTABLE_CORE_D_CANDIDATE_MANIFEST_SHA256 = (
+    "8c9852d9b2c340b8b9ca95877a64fcc2f4d4c5de0cf449bc89b5377ebf7a51ab"
+)
+EXECUTABLE_CORE_D_CODE_SEGMENTS = (
+    (
+        0x00FE28,
+        0x0106EC,
+        555,
+        "618f2711e8d7d1cc2464f4deac820ddc66e3f07cbf9f7da1ce952490715a0bca",
+        "f218dc7736ba1f55691f1037dc8e55752b4f2153207af1db6442eb626057e953",
+    ),
+    (
+        0x0106F6,
+        0x010932,
+        156,
+        "ce3d6560e1b081a11ce13f92fdd873c9b1266d66315f847a4b4850a598963e36",
+        "4d7398fad92d26546817cbd6910d84c7daee258a631faf719ee9d69a4d50255e",
+    ),
+    (
+        0x010A34,
+        0x01179E,
+        930,
+        "42716efc78ac6c0bcdca2df8fd539287d60647384ea38adcfbb4a4f14fe7fa8e",
+        "e2bcaab1ae92ad1c71f01cb53a1c3c51565d8f6e0bade940e5107c0c05ccd094",
+    ),
+    (
+        0x0117AE,
+        0x011EBA,
+        434,
+        "d99cadb143d42389fcacd63f6b4bf97184d57717ee1de92805b88ed6063b22e4",
+        "d00e8597397de7564d2f7a1c3673a23e44e888e95aa83dc97a1c5fc1d52ec5fd",
+    ),
+    (
+        0x011F46,
+        0x011FA8,
+        29,
+        "6ea709b158dfba50fae83ec76342f025d60ceeaf413284d767ac40fe466be37d",
+        "f6a23bba19f1daf02dbd0358392b3f9c2a8d9838600788d7b3a142ed11523663",
+    ),
+)
+EXECUTABLE_CORE_D_DATA_SEGMENTS = (
+    (
+        0x0106EC,
+        0x0106F6,
+        "decimal place-value table",
+        "b8456acf5b863805584ae3ddd08fa48936a9d75a821eaf39fe4e09080cb7c1ca",
+    ),
+    (
+        0x010932,
+        0x010A34,
+        "ten-pointer numeric-record table",
+        "cf6b8495b1faff6e3c4788c35dea07630b985dcf8bdc44e27fa52e5554d3150d",
+    ),
+    (
+        0x01179E,
+        0x0117AE,
+        "bit and direction pattern table",
+        "9495ccc78ccca6f4ee5d3836675805a8c7c17ff86d1ede18076eee8a25f6c133",
+    ),
+    (
+        0x011EBA,
+        0x011F46,
+        "fourteen ten-byte layout records",
+        "88667c472e04944f5138caee6de922dc50bb7750d3e20b079a1682ce490b8fb4",
+    ),
+    (
+        0x011FA8,
+        0x011FC8,
+        "configuration and numeric table",
+        "0f9728d816d2e4cf5d45e9cd47e3a9429226212fac9a448716af3af50f96352a",
+    ),
+)
+EXECUTABLE_CORE_D_REFERENCE_INSTRUCTION_OWNERS = {
+    0x00FFED: (0x00FFEC, 0x00FFF0, "DBRA D1,$FFEA", "51 C9 FF FC"),
+    0x010003: (
+        0x010002,
+        0x010008,
+        "MOVE.W D0,$FFFFA70A.L",
+        "33 C0 FF FF A7 0A",
+    ),
+    0x010017: (
+        0x010016,
+        0x01001C,
+        "MOVE.B D0,$FFFFA7F4.L",
+        "13 C0 FF FF A7 F4",
+    ),
+    0x010027: (
+        0x010026,
+        0x01002C,
+        "MOVE.B D1,$FFFFA7F5.L",
+        "13 C1 FF FF A7 F5",
+    ),
+}
 MAX_LOW_SIGNAL = 2
 WORD_STREAM_CONTROLS = {
     0xFFF3,
@@ -2529,6 +2627,253 @@ def executable_core_c_candidate_inventory(
     }
 
 
+def executable_core_d_candidate_inventory(
+    data: bytes, candidates: list[dict[str, object]]
+) -> dict[str, object]:
+    addresses = {int(row["start_int"]) for row in candidates}
+    absolute = aligned_absolute_references(data, addresses)
+    pc_relative = pc_relative_lea_pea_references(data, addresses)
+    code_rows = [
+        row
+        for row in candidates
+        if any(
+            start <= int(row["start_int"]) < end
+            for start, end, _, _, _ in EXECUTABLE_CORE_D_CODE_SEGMENTS
+        )
+    ]
+    data_rows = [
+        row
+        for row in candidates
+        if any(
+            start <= int(row["start_int"]) < end
+            for start, end, _, _ in EXECUTABLE_CORE_D_DATA_SEGMENTS
+        )
+    ]
+
+    detailed_rows = []
+    for row in candidates:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        context_start, context = word_context(data, start, end)
+        in_code = any(
+            segment_start <= start < segment_end
+            for segment_start, segment_end, _, _, _ in (
+                EXECUTABLE_CORE_D_CODE_SEGMENTS
+            )
+        )
+        detailed_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": (
+                    "contiguous_instruction_stream_false_positive"
+                    if in_code
+                    else "unclassified"
+                ),
+                "owner": (
+                    "core 68000 instruction bytes"
+                    if in_code
+                    else "requires core-D data ownership review"
+                ),
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in pc_relative.get(start, [])
+                ],
+            }
+        )
+
+    code_segment_summaries = []
+    code_layout_valid = True
+    for (
+        start,
+        end,
+        instruction_count,
+        expected_source_sha256,
+        expected_manifest_sha256,
+    ) in EXECUTABLE_CORE_D_CODE_SEGMENTS:
+        rows = [
+            row
+            for row in candidates
+            if start <= int(row["start_int"]) < end
+        ]
+        source_sha256 = hashlib.sha256(data[start:end]).hexdigest()
+        manifest_sha256 = candidate_manifest_sha256(rows)
+        segment_valid = (
+            source_sha256 == expected_source_sha256
+            and manifest_sha256 == expected_manifest_sha256
+        )
+        code_layout_valid &= segment_valid
+        code_segment_summaries.append(
+            {
+                "range": f"0x{start:06X}..0x{end:06X}",
+                "source_bytes": end - start,
+                "linear_instruction_count": instruction_count,
+                "source_sha256": source_sha256,
+                "expected_source_sha256": expected_source_sha256,
+                "candidate_count": len(rows),
+                "candidate_manifest_sha256": manifest_sha256,
+                "expected_candidate_manifest_sha256": (
+                    expected_manifest_sha256
+                ),
+                "source_layout_valid": segment_valid,
+            }
+        )
+
+    data_segment_summaries = []
+    data_layout_valid = True
+    for start, end, owner, expected_source_sha256 in (
+        EXECUTABLE_CORE_D_DATA_SEGMENTS
+    ):
+        rows = [
+            row
+            for row in candidates
+            if start <= int(row["start_int"]) < end
+        ]
+        source_sha256 = hashlib.sha256(data[start:end]).hexdigest()
+        segment_valid = (
+            source_sha256 == expected_source_sha256 and not rows
+        )
+        data_layout_valid &= segment_valid
+        data_segment_summaries.append(
+            {
+                "range": f"0x{start:06X}..0x{end:06X}",
+                "owner": owner,
+                "source_bytes": end - start,
+                "source_sha256": source_sha256,
+                "expected_source_sha256": expected_source_sha256,
+                "candidate_count": len(rows),
+                "source_layout_valid": segment_valid,
+            }
+        )
+
+    reference_instruction_owners = []
+    reference_instruction_owners_valid = True
+    for target, (
+        start,
+        end,
+        instruction,
+        expected_raw_hex,
+    ) in EXECUTABLE_CORE_D_REFERENCE_INSTRUCTION_OWNERS.items():
+        raw_hex = data[start:end].hex(" ").upper()
+        valid = (
+            start <= target < end
+            and bool(target & 1)
+            and raw_hex == expected_raw_hex
+        )
+        reference_instruction_owners_valid &= valid
+        reference_instruction_owners.append(
+            {
+                "target": f"0x{target:06X}",
+                "target_is_odd": bool(target & 1),
+                "instruction_range": f"0x{start:06X}..0x{end:06X}",
+                "instruction": instruction,
+                "raw_hex": raw_hex,
+                "source_layout_valid": valid,
+            }
+        )
+
+    source_sha256 = hashlib.sha256(
+        data[EXECUTABLE_CORE_D_START:EXECUTABLE_CORE_D_END]
+    ).hexdigest()
+    manifest_sha256 = candidate_manifest_sha256(candidates)
+    code_manifest_sha256 = candidate_manifest_sha256(code_rows)
+    data_manifest_sha256 = candidate_manifest_sha256(data_rows)
+    category_counts = Counter(
+        str(row["category"]) for row in detailed_rows
+    )
+    source_layout_valid = (
+        source_sha256 == EXECUTABLE_CORE_D_SOURCE_SHA256
+        and manifest_sha256
+        == EXECUTABLE_CORE_D_CANDIDATE_MANIFEST_SHA256
+        and code_manifest_sha256
+        == EXECUTABLE_CORE_D_CANDIDATE_MANIFEST_SHA256
+        and data_manifest_sha256 == EMPTY_SHA256
+        and code_layout_valid
+        and data_layout_valid
+        and reference_instruction_owners_valid
+        and set(absolute) == set(EXECUTABLE_CORE_D_REFERENCE_INSTRUCTION_OWNERS)
+        and all(target & 1 for target in absolute)
+        and not pc_relative
+        and len(code_rows) == 102
+        and len(data_rows) == 0
+        and len(code_rows) == len(candidates)
+    )
+    return {
+        "range": (
+            f"0x{EXECUTABLE_CORE_D_START:06X}.."
+            f"0x{EXECUTABLE_CORE_D_END:06X}"
+        ),
+        "source_bytes": EXECUTABLE_CORE_D_END - EXECUTABLE_CORE_D_START,
+        "source_sha256": source_sha256,
+        "expected_source_sha256": EXECUTABLE_CORE_D_SOURCE_SHA256,
+        "candidate_manifest_sha256": manifest_sha256,
+        "expected_candidate_manifest_sha256": (
+            EXECUTABLE_CORE_D_CANDIDATE_MANIFEST_SHA256
+        ),
+        "code_candidate_manifest_sha256": code_manifest_sha256,
+        "data_candidate_manifest_sha256": data_manifest_sha256,
+        "source_layout_valid": source_layout_valid,
+        "candidate_count": len(detailed_rows),
+        "kind_counts": dict(
+            sorted(Counter(str(row["kind"]) for row in detailed_rows).items())
+        ),
+        "category_counts": dict(sorted(category_counts.items())),
+        "unclassified_count": category_counts.get("unclassified", 0),
+        "code_segments": code_segment_summaries,
+        "data_segments": data_segment_summaries,
+        "decimal_place_values": [
+            int.from_bytes(data[offset : offset + 2], "big")
+            for offset in range(0x0106EC, 0x0106F6, 2)
+        ],
+        "numeric_record_pointer_table": {
+            "range": "0x010932..0x01095A",
+            "pointer_count": 10,
+            "pointers": [
+                f"0x{int.from_bytes(data[offset : offset + 4], 'big'):06X}"
+                for offset in range(0x010932, 0x01095A, 4)
+            ],
+        },
+        "bit_direction_pattern_hex": data[
+            0x01179E:0x0117AE
+        ].hex(" ").upper(),
+        "layout_record_count": (
+            (0x011F46 - 0x011EBA) // 10
+        ),
+        "aligned_absolute_32_reference_count": sum(
+            len(references) for references in absolute.values()
+        ),
+        "aligned_absolute_32_references": [
+            {
+                "target": f"0x{target:06X}",
+                "target_is_odd": bool(target & 1),
+                "addresses": [
+                    f"0x{address:06X}" for address in references
+                ],
+            }
+            for target, references in sorted(absolute.items())
+        ],
+        "reference_instruction_owners": reference_instruction_owners,
+        "pc_relative_lea_pea_reference_count": sum(
+            len(references) for references in pc_relative.values()
+        ),
+        "candidates": detailed_rows,
+    }
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -2695,6 +3040,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ]
     executable_core_c_bank = executable_core_c_candidate_inventory(
         japanese, executable_core_c
+    )
+    executable_core_d = [
+        row
+        for row in candidates
+        if EXECUTABLE_CORE_D_START
+        <= int(row["start_int"])
+        < EXECUTABLE_CORE_D_END
+    ]
+    executable_core_d_bank = executable_core_d_candidate_inventory(
+        japanese, executable_core_d
     )
 
     font_bitmap_addresses = {
@@ -3412,6 +3767,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "executable_core_a_bank": executable_core_a_bank,
         "executable_core_b_bank": executable_core_b_bank,
         "executable_core_c_bank": executable_core_c_bank,
+        "executable_core_d_bank": executable_core_d_bank,
     }
 
 
@@ -3432,6 +3788,7 @@ def markdown_report(result: dict[str, object]) -> str:
     executable_core_a_bank = result["executable_core_a_bank"]
     executable_core_b_bank = result["executable_core_b_bank"]
     executable_core_c_bank = result["executable_core_c_bank"]
+    executable_core_d_bank = result["executable_core_d_bank"]
     lines = [
         "# Short Inline Byte Candidate Inventory",
         "",
@@ -3554,6 +3911,14 @@ def markdown_report(result: dict[str, object]) -> str:
             f"{executable_core_c_bank['unclassified_count']}"
         ),
         (
+            "- Executable-core-D candidates: "
+            f"{executable_core_d_bank['candidate_count']}"
+        ),
+        (
+            "- Executable-core-D unclassified: "
+            f"{executable_core_d_bank['unclassified_count']}"
+        ),
+        (
             "- Exact aligned 32-bit references to text/UI-bank candidates: "
             f"{bank['aligned_absolute_32_reference_count']}"
         ),
@@ -3579,6 +3944,68 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Executable-Core-D Candidates",
+            "",
+            (
+                f"- The source-locked `{executable_core_d_bank['range']}` "
+                "region contains five exact 68000 instruction streams and "
+                "five explicit candidate-free data tables."
+            ),
+            (
+                f"- Source SHA-256: `{executable_core_d_bank['source_sha256']}`; "
+                "candidate manifest SHA-256: "
+                f"`{executable_core_d_bank['candidate_manifest_sha256']}` "
+                f"(layout valid: "
+                f"`{executable_core_d_bank['source_layout_valid']}`)."
+            ),
+            (
+                "- Category totals: "
+                + ", ".join(
+                    f"`{category}` {count}"
+                    for category, count in executable_core_d_bank[
+                        "category_counts"
+                    ].items()
+                )
+                + "."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{executable_core_d_bank['aligned_absolute_32_reference_count']}; "
+                "exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{executable_core_d_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Code segment | Bytes | Instructions | Candidates | Source SHA-256 |",
+            "| --- | ---: | ---: | ---: | --- |",
+        ]
+    )
+    for segment in executable_core_d_bank["code_segments"]:
+        lines.append(
+            f"| `{segment['range']}` | {segment['source_bytes']} | "
+            f"{segment['linear_instruction_count']} | "
+            f"{segment['candidate_count']} | "
+            f"`{segment['source_sha256']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "| Data segment | Owner | Bytes | Candidates | Source SHA-256 |",
+            "| --- | --- | ---: | ---: | --- |",
+        ]
+    )
+    for segment in executable_core_d_bank["data_segments"]:
+        lines.append(
+            f"| `{segment['range']}` | {segment['owner']} | "
+            f"{segment['source_bytes']} | {segment['candidate_count']} | "
+            f"`{segment['source_sha256']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "The 35 aligned four-byte windows target four odd candidate",
+            "addresses. Each target is source-locked inside a `DBRA` or",
+            "`MOVE` instruction rather than at an executable entry boundary.",
             "",
             "## Reviewed Executable-Core-C Candidates",
             "",
@@ -4456,6 +4883,7 @@ def main() -> None:
     executable_core_a_bank = result["executable_core_a_bank"]
     executable_core_b_bank = result["executable_core_b_bank"]
     executable_core_c_bank = result["executable_core_c_bank"]
+    executable_core_d_bank = result["executable_core_d_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
         f"{font_bank['candidate_count']} font-bitmap-bank, "
@@ -4473,7 +4901,8 @@ def main() -> None:
         f"{executable_core_a_bank['candidate_count']} executable-core-A candidates, "
         f"{executable_core_b_bank['candidate_count']} executable-core-B candidates, "
         f"{executable_core_c_bank['candidate_count']} executable-core-C candidates, "
-        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count'] + executable_auxiliary_bank['unclassified_count'] + executable_startup_bank['unclassified_count'] + executable_core_a_bank['unclassified_count'] + executable_core_b_bank['unclassified_count'] + executable_core_c_bank['unclassified_count']} "
+        f"{executable_core_d_bank['candidate_count']} executable-core-D candidates, "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count'] + executable_auxiliary_bank['unclassified_count'] + executable_startup_bank['unclassified_count'] + executable_core_a_bank['unclassified_count'] + executable_core_b_bank['unclassified_count'] + executable_core_c_bank['unclassified_count'] + executable_core_d_bank['unclassified_count']} "
         "unclassified"
     )
 
