@@ -31,6 +31,14 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_AUXILIARY_CODE_SEGMENTS,
     EXECUTABLE_AUXILIARY_SOURCE_SHA256,
     EXECUTABLE_AUXILIARY_WORD_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_CORE_A_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_CORE_A_CODE_END,
+    EXECUTABLE_CORE_A_CODE_SOURCE_SHA256,
+    EXECUTABLE_CORE_A_END,
+    EXECUTABLE_CORE_A_INSTRUCTION_COUNT,
+    EXECUTABLE_CORE_A_SOURCE_SHA256,
+    EXECUTABLE_CORE_A_START,
+    EXECUTABLE_CORE_A_TABLE_SOURCE_SHA256,
     EXECUTABLE_STARTUP_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_SEGMENTS,
@@ -86,6 +94,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         ]
         cls.executable_startup_bank = cls.result[
             "executable_startup_bank"
+        ]
+        cls.executable_core_a_bank = cls.result[
+            "executable_core_a_bank"
         ]
 
     def test_low_signal_candidate_baseline(self):
@@ -803,6 +814,98 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
             all(
                 row["target_is_odd"]
                 for row in bank["aligned_absolute_32_references"]
+            )
+        )
+
+    def test_executable_core_a_is_source_locked_and_fully_classified(self):
+        bank = self.executable_core_a_bank
+        self.assertEqual(bank["candidate_count"], 67)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 11, "halfwidth": 56},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {"contiguous_instruction_stream_false_positive": 67},
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(
+            bank["source_sha256"], EXECUTABLE_CORE_A_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_CORE_A_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["code_segment"]["source_sha256"],
+            EXECUTABLE_CORE_A_CODE_SOURCE_SHA256,
+        )
+        self.assertEqual(
+            bank["code_segment"]["candidate_manifest_sha256"],
+            EXECUTABLE_CORE_A_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["dispatch_table"]["source_sha256"],
+            EXECUTABLE_CORE_A_TABLE_SOURCE_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+
+    def test_executable_core_a_candidates_are_inside_exact_instructions(self):
+        bank = self.executable_core_a_bank
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        instructions = list(
+            md.disasm(
+                self.japanese[
+                    EXECUTABLE_CORE_A_START:EXECUTABLE_CORE_A_CODE_END
+                ],
+                EXECUTABLE_CORE_A_START,
+            )
+        )
+        self.assertEqual(len(instructions), EXECUTABLE_CORE_A_INSTRUCTION_COUNT)
+        self.assertEqual(instructions[0].address, EXECUTABLE_CORE_A_START)
+        self.assertEqual(
+            instructions[-1].address + instructions[-1].size,
+            EXECUTABLE_CORE_A_CODE_END,
+        )
+        self.assertEqual(instructions[-1].mnemonic, "rts")
+        covered_bytes = {
+            address
+            for instruction in instructions
+            for address in range(
+                instruction.address,
+                instruction.address + instruction.size,
+            )
+        }
+        for row in bank["candidates"]:
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(set(range(start, end)) <= covered_bytes)
+        table = bank["dispatch_table"]
+        self.assertEqual(
+            table["range"],
+            (
+                f"0x{EXECUTABLE_CORE_A_CODE_END:06X}.."
+                f"0x{EXECUTABLE_CORE_A_END:06X}"
+            ),
+        )
+        self.assertEqual(table["source_bytes"], 10)
+        self.assertEqual(table["raw_hex"], "00 30 00 48 02 20 04 0E 00 BA")
+        self.assertEqual(table["candidate_count"], 0)
+
+    def test_executable_core_a_candidate_reference_windows_are_empty(self):
+        bank = self.executable_core_a_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 0)
+        self.assertEqual(bank["aligned_absolute_32_references"], [])
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertTrue(
+            all(
+                row["aligned_absolute_32_references"] == []
+                and row["pc_relative_lea_pea_references"] == []
+                for row in bank["candidates"]
             )
         )
 

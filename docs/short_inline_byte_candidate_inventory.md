@@ -31,6 +31,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-auxiliary unclassified: 0
 - Executable-startup candidates: 41
 - Executable-startup unclassified: 0
+- Executable-core-A candidates: 67
+- Executable-core-A unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -47,6 +49,23 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-A Candidates
+
+- The source-locked `0x008F4E..0x0099FA` region contains one exact 68000 instruction stream followed by its PC-indexed dispatch offset table.
+- Source SHA-256: `822ea425d6fb92e0d1686aacd19e138a52e5b6560d2b8f0a57d7a20865420384`; candidate manifest SHA-256: `6a06784c5a2d07c753844dee2ff201553785de3c44b9c303ddb2f2d97ed83d64` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 67.
+- The code segment contains 742 instructions and 67 candidates. The following dispatch table contains 0.
+- Exact aligned four-byte windows: 0; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Segment | Bytes | Instructions | Candidates | Source SHA-256 |
+| --- | ---: | ---: | ---: | --- |
+| `0x008F4E..0x0099F0` | 2722 | 742 | 67 | `85f6868fa9cb4ad3e5c1c28abf98277abff2a932bae62d1f5736e9b471ed97cf` |
+| `0x0099F0..0x0099FA` | 10 | 0 | 0 | `ccde039e43d027c427414cdd2213be9e863f78e1be0c1b601162794cb749d2f3` |
+
+Independent Capstone tests require the code segment to end on its
+final `RTS`. The next ten bytes are the exact five-word table
+read by the following PC-indexed dispatch routine.
 
 ## Reviewed Executable-Startup Candidates
 

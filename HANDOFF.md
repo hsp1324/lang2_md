@@ -11728,3 +11728,31 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core A Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x008F4E..0x0099F9` region has SHA-256
+  `822ea425d6fb92e0d1686aacd19e138a52e5b6560d2b8f0a57d7a20865420384`
+  and contains 67 low-signal candidates: 56 half-width-looking and 11
+  ASCII-looking rows. Its ordered candidate manifest is
+  `6a06784c5a2d07c753844dee2ff201553785de3c44b9c303ddb2f2d97ed83d64`.
+- All 67 candidates are fully covered by the exact
+  `0x008F4E..0x0099EF` Capstone instruction stream: 742 contiguous 68000
+  instructions ending on the final `RTS`. The code source SHA-256 is
+  `85f6868fa9cb4ad3e5c1c28abf98277abff2a932bae62d1f5736e9b471ed97cf`.
+- The following `0x0099F0..0x0099F9` bytes are the five-word PC-indexed
+  dispatch offset table `00 30 00 48 02 20 04 0E 00 BA`, not text. Its
+  SHA-256 is
+  `ccde039e43d027c427414cdd2213be9e863f78e1be0c1b601162794cb749d2f3`
+  and it contains no low-signal candidate. The next routine reads the table
+  with PC-indexed `move.w` and `jsr` instructions.
+- Neither the aligned four-byte scan nor the executable PC-relative
+  `LEA`/`PEA` scan targets any of the 67 candidates.
+- The cumulative exact review is now 5,724 of 6,612 short-inline candidates:
+  5,723 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 888 candidates.
+- Focused inventory tests pass 109/109. Reports were regenerated from isolated
+  ROM `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.
