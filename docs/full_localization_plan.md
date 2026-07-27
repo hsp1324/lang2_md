@@ -50,7 +50,10 @@ test fails. The authoritative machine-readable state is
   keep unresolved UI discovery categories explicit until their ROM ownership is proven.
 - Parse and decompress the complete resource table with its type-specific RLE,
   tile-plane, and LZSS paths independently of UI assumptions; record size, hash,
-  and pointer changes while leaving unknown ownership unknown.
+  pointer changes, and broad raw-tile asset families while leaving the 423
+  individually unknown owners unknown. Exact live owners currently cover SEGA
+  boot logo `0`, UI font `1`, battle terrain `223`, item icons `391`, MASAYA
+  publisher logo `392`, and title logo `393`.
 - Link immediate resource-loader call sites to table IDs and retain dynamic call sites
   without guessing their runtime-selected IDs.
 - Scan direct `FFFF` word-string candidates outside event blocks, classify known

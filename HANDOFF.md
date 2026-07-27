@@ -11366,3 +11366,7 @@ contains 57 safe syllables as documented below and in
   `@/tmp/.X11-unix/X104` on Xvfb PID 5324, and the process was immediately
   terminated. Atlas, compressed-inventory, and display isolation focused tests
   pass 21/21.
+- The generated UI gap registry was reconciled after those owner proofs. It
+  still has six categories, but the compressed-resource category now says 423
+  exact owners remain unknown, with all 429 broad raw-tile families classified.
+  UI/compressed/atlas/display focused tests pass 38/38.

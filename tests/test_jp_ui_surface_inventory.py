@@ -281,6 +281,14 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             "all-epilogue, ending-visit, and final-credit paths",
             self.result["remaining_inventory_gaps"],
         )
+        self.assertIn(
+            "exact ownership and purpose of 423 compressed resources beyond "
+            "SEGA boot-logo resource index 0, byte-font resource index 1, "
+            "battle-terrain resource index 223, item-icon resource index 391, "
+            "MASAYA publisher-logo resource index 392, and title-logo resource "
+            "index 393; broad raw-tile asset families are classified for all 429",
+            self.result["remaining_inventory_gaps"],
+        )
         self.assertNotIn(
             "all equipment and shop variants beyond declared Scenario 1 paths",
             self.result["remaining_inventory_gaps"],
