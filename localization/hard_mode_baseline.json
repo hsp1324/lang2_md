@@ -3560,6 +3560,10 @@
       "fixed_enemy_mercenary_runtime_behavior_verified": false,
       "fixed_enemy_loading_and_command_menu_verified": true,
       "fixed_enemy_ai_and_event_behavior_verified": false,
+      "fixed_enemy_ordinary_ai_movement_verified": true,
+      "fixed_enemy_first_turn_event_path_verified": true,
+      "fixed_enemy_ordinary_attack_verified": false,
+      "fixed_enemy_natural_magic_ownership_verified": false,
       "runtime_evidence": {
         "inventory": "localization/runtime_verification.json:summon_targeting_results",
         "fixed_enemy_probe_checksum": "A205",
@@ -3576,7 +3580,22 @@
           "captures/run/a205_s27_fixed_white_dragon_status.png",
           "captures/run/a205_s27_fixed_white_dragon_command.png"
         ],
-        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces. Diagnostic A205 further proves that Scenario 27 fixed enemy slots load two class 8F White Dragons at the expected coordinates and expose Move/Attack/Magic under the stock all-factions command. It does not yet prove ordinary enemy AI, natural magic ownership, or event behavior"
+        "ordinary_ai_probe_checksum": "9A15",
+        "ordinary_ai_probe_scenario": 26,
+        "ordinary_ai_probe_record_offset": "0x182F64",
+        "ordinary_ai_probe_slots": [
+          5
+        ],
+        "ordinary_ai_probe_source_class": "77",
+        "ordinary_ai_probe_target_class": "8F",
+        "ordinary_ai_probe_pre_gst": "captures/analysis/9a15_s26_fixed_white_dragon_pre_enemy_turn.gst",
+        "ordinary_ai_probe_post_gst": "captures/analysis/9a15_s26_fixed_white_dragon_post_gameover.gst",
+        "ordinary_ai_probe_captures": [
+          "captures/run/9a15_s26_fixed_white_dragon_ai_move.png",
+          "captures/run/9a15_s26_fixed_white_dragon_event.png",
+          "captures/run/9a15_s26_fixed_white_dragon_gameover.png"
+        ],
+        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces. Diagnostic A205 further proves that Scenario 27 fixed enemy slots load two class 8F White Dragons at the expected coordinates and expose Move/Attack/Magic under the stock all-factions command. Diagnostic 9A15 uses no all-factions command and proves that a fixed class 8F White Dragon moves from (25,19) to (24,21) during Scenario 26's ordinary enemy phase, while the source first-turn event and GAME OVER path complete normally. It does not yet prove a fixed summon personally attacks or receives natural magic ownership"
       },
       "candidate_classes": [
         {

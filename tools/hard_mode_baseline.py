@@ -1060,6 +1060,10 @@ def build_inventory(
                 "fixed_enemy_mercenary_runtime_behavior_verified": False,
                 "fixed_enemy_loading_and_command_menu_verified": True,
                 "fixed_enemy_ai_and_event_behavior_verified": False,
+                "fixed_enemy_ordinary_ai_movement_verified": True,
+                "fixed_enemy_first_turn_event_path_verified": True,
+                "fixed_enemy_ordinary_attack_verified": False,
+                "fixed_enemy_natural_magic_ownership_verified": False,
                 "runtime_evidence": {
                     "inventory": (
                         "localization/runtime_verification.json:"
@@ -1081,14 +1085,41 @@ def build_inventory(
                         "captures/run/"
                         "a205_s27_fixed_white_dragon_command.png",
                     ],
+                    "ordinary_ai_probe_checksum": "9A15",
+                    "ordinary_ai_probe_scenario": 26,
+                    "ordinary_ai_probe_record_offset": "0x182F64",
+                    "ordinary_ai_probe_slots": [5],
+                    "ordinary_ai_probe_source_class": "77",
+                    "ordinary_ai_probe_target_class": "8F",
+                    "ordinary_ai_probe_pre_gst": (
+                        "captures/analysis/"
+                        "9a15_s26_fixed_white_dragon_pre_enemy_turn.gst"
+                    ),
+                    "ordinary_ai_probe_post_gst": (
+                        "captures/analysis/"
+                        "9a15_s26_fixed_white_dragon_post_gameover.gst"
+                    ),
+                    "ordinary_ai_probe_captures": [
+                        "captures/run/"
+                        "9a15_s26_fixed_white_dragon_ai_move.png",
+                        "captures/run/"
+                        "9a15_s26_fixed_white_dragon_event.png",
+                        "captures/run/"
+                        "9a15_s26_fixed_white_dragon_gameover.png",
+                    ],
                     "meaning": (
                         "stock summon application creates classes 8D-93 and "
                         "their Korean status surfaces. Diagnostic A205 further "
                         "proves that Scenario 27 fixed enemy slots load two "
                         "class 8F White Dragons at the expected coordinates "
                         "and expose Move/Attack/Magic under the stock "
-                        "all-factions command. It does not yet prove ordinary "
-                        "enemy AI, natural magic ownership, or event behavior"
+                        "all-factions command. Diagnostic 9A15 uses no "
+                        "all-factions command and proves that a fixed class "
+                        "8F White Dragon moves from (25,19) to (24,21) during "
+                        "Scenario 26's ordinary enemy phase, while the source "
+                        "first-turn event and GAME OVER path complete normally. "
+                        "It does not yet prove a fixed summon personally "
+                        "attacks or receives natural magic ownership"
                     ),
                 },
                 "candidate_classes": summon_candidates,
@@ -1558,15 +1589,25 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "  생성됐고, 전 진영 조작 비기에서 `이동 / 공격 / 마법` 명령 메뉴가",
         "  정상적으로 열렸다.",
         "- 이 결과는 고정 적 로더·맵 생성·명령 메뉴 호환성까지만 증명한다.",
-        "  비기가 모든 마법을 임시 부여하므로 원래 마법 소유권, 일반 적 AI,",
-        "  이벤트 진행이 동일하다고 아직 간주하지 않는다. 클래스 ID만으로",
-        "  자연 마법 권한까지 붙는다고 가정하지 않는다.",
+        "  비기가 모든 마법을 임시 부여하므로 클래스 ID만으로 자연 마법",
+        "  권한까지 붙는다고 가정하지 않는다.",
+        "- 비배포 진단본 `9A15`는 26장 고정 레코드 `0x182F64`의 마지막",
+        "  발리스타 한 칸만 화이트드래곤으로 바꿨다. 비기 없이 적 차례를",
+        "  진행한 전후 GST에서 클래스 `8F`가 `(25,19)`에서 `(24,21)`로",
+        "  이동했고, 원본 첫 턴 이벤트·전투·게임오버가 재시작이나 멈춤 없이",
+        "  정상 완료됐다.",
+        "- 따라서 고정 소환물의 일반 적 이동 AI와 첫 턴 이벤트 호환성은",
+        "  검증됐다. 이 배치에서는 화이트드래곤 본인의 공격이 발생하지",
+        "  않았으므로 직접 공격과 자연 마법 사용은 계속 미확인이다.",
         "- 권장 방식은 일괄 N/6 변환이 아니라, 진단 통과 뒤 지휘관별로",
         "  후보를 골라 넣는 방식이다.",
         "- 재현 도구는 `tools/build_fixed_enemy_summon_probe_rom.py`,",
         "  런타임 증거 검증기는",
         "  `tools/verify_fixed_enemy_summon_probe_evidence.py`다. 진단 ROM은",
-        "  `tmp/`에만 만들고 배포·커밋하지 않는다.",
+        "  `loading`(`A205`)과 `ordinary-ai`(`9A15`) 케이스를 `tmp/`에만",
+        "  만들며 배포·커밋하지 않는다. 런타임 클래스 바이트를 GST에서",
+        "  직접 바꾼 시도는 다음 입력에서 타이틀로 재시작되어 증거에서",
+        "  제외했으며 반복하지 않는다.",
         "",
         "| ID | 소환물 | AT/DF | MV | family | 원본 클래스 능력 |",
         "|:---:|:---|:---:|---:|:---:|:---|",

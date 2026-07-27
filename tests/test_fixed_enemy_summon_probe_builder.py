@@ -64,19 +64,62 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
             report["status"],
             "diagnostic_only_not_for_distribution",
         )
+        self.assertEqual(report["case"], "loading")
+        self.assertEqual(report["header_checksum"], "A205")
+        self.assertEqual(
+            report["output_sha256"],
+            probe_builder.PROBE_CASES["loading"].expected_sha256,
+        )
+
+    def test_ordinary_ai_probe_changes_only_last_ballista_and_checksum(self):
+        probe, report = probe_builder.patch_probe(self.normal, "ordinary-ai")
+        case = probe_builder.PROBE_CASES["ordinary-ai"]
+        layout = scenario_layout(self.normal, case.scenario)
+        record = layout.records_offset + case.record_index * 0x24
+        mercenary_offset = record + FIELD_OFFSETS["mercenaries"]
+        target_offsets = {
+            mercenary_offset + slot for slot in case.slots
+        }
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.normal, probe))
+            if before != after
+        }
+
+        self.assertEqual(record, case.record_offset)
+        self.assertEqual(
+            probe[mercenary_offset : mercenary_offset + 6],
+            bytes((0x76, 0x76, 0x76, 0x76, 0x77, 0x8F)),
+        )
+        self.assertEqual(
+            changed - set(probe_builder.CHECKSUM_OFFSETS),
+            target_offsets,
+        )
+        self.assertEqual(
+            int.from_bytes(probe[0x18E:0x190], "big"),
+            md_checksum(probe),
+        )
+        self.assertEqual(report["case"], "ordinary-ai")
+        self.assertEqual(report["header_checksum"], "9A15")
+        self.assertEqual(report["output_sha256"], case.expected_sha256)
 
     def test_probe_keeps_normal_release_immutable(self):
-        _, report = probe_builder.patch_probe(self.normal)
-        current = NORMAL_ROM.read_bytes()
-        self.assertEqual(current, self.normal)
-        self.assertEqual(
-            hashlib.sha256(current).hexdigest(),
-            hard_mode_baseline.NORMAL_SHA256,
-        )
-        self.assertNotEqual(
-            report["output_sha256"],
-            hard_mode_baseline.NORMAL_SHA256,
-        )
+        for case_name in probe_builder.PROBE_CASES:
+            with self.subTest(case=case_name):
+                _, report = probe_builder.patch_probe(
+                    self.normal,
+                    case_name,
+                )
+                current = NORMAL_ROM.read_bytes()
+                self.assertEqual(current, self.normal)
+                self.assertEqual(
+                    hashlib.sha256(current).hexdigest(),
+                    hard_mode_baseline.NORMAL_SHA256,
+                )
+                self.assertNotEqual(
+                    report["output_sha256"],
+                    hard_mode_baseline.NORMAL_SHA256,
+                )
 
     def test_probe_rejects_non_release_source(self):
         damaged = bytearray(self.normal)
@@ -99,6 +142,10 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
         ):
             with self.assertRaisesRegex(ValueError, "mercenary layout"):
                 probe_builder.patch_probe(damaged_bytes)
+
+    def test_probe_rejects_unknown_case(self):
+        with self.assertRaisesRegex(ValueError, "unknown fixed-enemy"):
+            probe_builder.patch_probe(self.normal, "not-a-case")
 
     def test_retained_runtime_evidence_has_two_fixed_white_dragons(self):
         gst = evidence_verifier.DEFAULT_GST.read_bytes()
@@ -125,6 +172,48 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
         group = evidence_verifier.read_runtime_group(bytes(gst))
         with self.assertRaisesRegex(ValueError, "runtime members"):
             evidence_verifier.verify_runtime_group(group)
+
+    def test_retained_ordinary_ai_evidence_moves_fixed_white_dragon(self):
+        for relative_path in (
+            "captures/run/9a15_s26_fixed_white_dragon_ai_move.png",
+            "captures/run/9a15_s26_fixed_white_dragon_event.png",
+            "captures/run/9a15_s26_fixed_white_dragon_gameover.png",
+        ):
+            self.assertTrue((ROOT / relative_path).is_file(), relative_path)
+        before = evidence_verifier.read_runtime_group(
+            evidence_verifier.DEFAULT_AI_PRE_GST.read_bytes(),
+            evidence_verifier.AI_RUNTIME_GROUP,
+        )
+        after = evidence_verifier.read_runtime_group(
+            evidence_verifier.DEFAULT_AI_POST_GST.read_bytes(),
+            evidence_verifier.AI_RUNTIME_GROUP,
+        )
+        evidence_verifier.verify_ordinary_ai_evidence(before, after)
+        member_index = evidence_verifier.AI_WHITE_DRAGON_MEMBER_INDEX
+        self.assertEqual(
+            (
+                before.members[member_index].class_id,
+                before.members[member_index].x,
+                before.members[member_index].y,
+            ),
+            (0x8F, 25, 19),
+        )
+        self.assertEqual(
+            (
+                after.members[member_index].class_id,
+                after.members[member_index].x,
+                after.members[member_index].y,
+            ),
+            (0x8F, 24, 21),
+        )
+
+    def test_ordinary_ai_evidence_rejects_static_white_dragon(self):
+        before = evidence_verifier.read_runtime_group(
+            evidence_verifier.DEFAULT_AI_PRE_GST.read_bytes(),
+            evidence_verifier.AI_RUNTIME_GROUP,
+        )
+        with self.assertRaisesRegex(ValueError, "post-event members"):
+            evidence_verifier.verify_ordinary_ai_evidence(before, before)
 
 
 if __name__ == "__main__":
