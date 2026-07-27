@@ -5,6 +5,7 @@ from tools import build_class_change_probe_rom as class_probe
 from tools import build_item_shop_probe_rom as shop_probe
 from tools import build_natural_summon_probe_rom as probe_builder
 from tools import verify_natural_summon_evidence as evidence
+from tools import verify_natural_magic_evidence as magic_evidence
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +65,7 @@ class NaturalSummonProbeBuilderTests(unittest.TestCase):
                     probe[offset : offset + size],
                     self.source[offset : offset + size],
                 )
+        magic_evidence.validate_stock_magic_path(probe, self.source)
 
     def test_retained_gst_proves_natural_bit_cost_and_spawn(self):
         before = evidence.read_runtime(evidence.DEFAULT_BEFORE.read_bytes())

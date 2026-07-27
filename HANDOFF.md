@@ -10906,3 +10906,39 @@ contains 57 safe syllables as documented below and in
   `b33c/b353/b36f_hein_*` save evidence. Direct GST MP editing and a Start-menu
   summon wrapper remain rejected because they caused reset/title-flow
   interference.
+
+### Class Ability Inventory And Natural Magic (2026-07-27)
+
+- `tools/class_ability_data.py` now owns the Japanese-ROM contract for class
+  record ability bytes `+0x16..+0x19`, requirement table `0x0829CC`, mask
+  table `0x0829FA`, magic command bit 0, magic bits 1..22, and summon bit 23.
+  `tools/class_ability_inventory.py` generates the complete 157-class result
+  in `localization/class_abilities.json` and
+  `docs/class_ability_inventory.md`.
+- Following all 27 terminal paths for each of the ten source commander trees
+  finds every ability except ID `18` (`텔레포트`). The owning `에이전트(25)`
+  class is absent from both those trees and all 31 fixed scenario record
+  lists. Do not broaden that bounded result into a claim about unknown secret
+  or debug selectors.
+- Hein's source-maximal path
+  `03 -> 0A -> 11 -> 15 -> 28` has 13 potential abilities. The retained
+  same-ROM `7256` state actually learned magic IDs
+  `0,1,2,4,7,10,14,16,17,19,20` plus summon ID `22`; Protection ID `15`
+  was not yet learned at the observed levels.
+- The byte-identical checksum `7256` ROM and its own retained GST were replayed
+  only on isolated Xvfb `DISPLAY=:104`. The stock magic branches at
+  `0x021228` and `0x02141E` remain source-identical. Two live pages render all
+  eleven learned Korean rows without damaged glyphs.
+- Natural `어택` first rejected Hein himself, then accepted allied Elwin,
+  rendered `헤인의 마법이 효과! / 엘윈의 공격 상승`, consumed MP `16->14`,
+  and returned to a valid map. The maximum-MP refresh `18->20` is deferred
+  level-up bookkeeping, not part of the 2-MP cost.
+- Accepted screens use prefix `captures/run/7256_natural_magic_`; the final
+  state is `captures/analysis/7256_natural_magic_attack_after.gst`.
+  `tools/verify_natural_magic_evidence.py` verifies learned IDs, unchanged
+  flags, MP delta, and no summoned member. Passing the exact ROM with
+  `--probe-rom` additionally verifies checksum `7256` and source-locked
+  branches.
+- A prior state-load failure used a GST from a different diagnostic checksum.
+  Same-ROM `7256` state loading is reproducible and must not be conflated with
+  the rejected cross-ROM shortcut.

@@ -118,6 +118,29 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         ):
             self.assertIn(capture, evidence["captures"])
 
+    def test_natural_magic_evidence_keeps_stock_branches_and_real_cost(self):
+        data = inventory.load_inventory()
+        evidence = {
+            row["surface"]: row for row in data["global_evidence"]
+        }["natural_magic_ownership_application"]
+        self.assertEqual(evidence["state"], "verified_probe")
+        self.assertEqual(evidence["checksum"], "7256")
+        self.assertEqual(evidence["based_on"], "1AB2")
+        self.assertIn("source-identical", evidence["note"])
+        self.assertIn("eleven Korean magic rows", evidence["note"])
+        self.assertIn("MP 16->14", evidence["note"])
+        self.assertIn("rejects Hein himself", evidence["note"])
+        self.assertIn("accepts allied Elwin", evidence["note"])
+        self.assertIn("DISPLAY=:104", evidence["note"])
+        self.assertIn(
+            "captures/run/7256_natural_magic_attack_return.png",
+            evidence["captures"],
+        )
+        self.assertIn(
+            "captures/analysis/7256_natural_magic_attack_after.gst",
+            evidence["captures"],
+        )
+
     def test_ending_visit_dialogue_evidence_is_renderer_diagnostic(self):
         data = inventory.load_inventory()
         evidence = {

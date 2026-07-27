@@ -316,12 +316,71 @@ verifier are `tools/build_natural_summon_probe_rom.py` and
 `tools/verify_natural_summon_evidence.py`.
 
 Rejected persistence shortcuts must not be repeated. Loading the retained GST
-through BlastEm `ui.load_state` returned to the title instead of a playable
-map. Writing Bald's runtime X/Y bytes through Start changed the unit record but
-not the separate map-occupancy grid, so no attack target existed at the new
-tile. Moving Elwin's fixed deployment instead changed Bald's event movement
-and did not produce a stable adjacent target. `B213` and `B335` therefore use
-no save-state reload or runtime-coordinate claim.
+from a different diagnostic checksum through BlastEm `ui.load_state` returned
+to the title instead of a playable map. Writing Bald's runtime X/Y bytes
+through Start changed the unit record but not the separate map-occupancy grid,
+so no attack target existed at the new tile. Moving Elwin's fixed deployment
+instead changed Bald's event movement and did not produce a stable adjacent
+target. `B213` and `B335` therefore use no cross-ROM save-state reload or
+runtime-coordinate claim.
+
+## Class Ability Table And Natural Magic
+
+The stock level-up scan and command builders establish one shared ownership
+contract:
+
+- class record `0x05EDDC + class_id * 0x1C`, bytes `+0x16..+0x19`: four
+  ability IDs or `FF`
+- `0x0829CC`: 23 big-endian required-level words
+- `0x0829FA`: 23 long-word masks, exactly bits 1 through 23
+- runtime record `+0x50`: accumulated command and ability flags
+- bit 0: magic command; bits 1..22: magic IDs 0..21; bit 23: summon
+- `0x0211A2..0x02125A`: stock magic list builder
+
+`tools/class_ability_data.py` reads and validates these tables.
+`tools/class_ability_inventory.py` follows every source class-change edge and
+generates `localization/class_abilities.json` plus
+`docs/class_ability_inventory.md`. Each commander has 27 terminal paths.
+Across all ten trees the only absent ability ID is `18` (`텔레포트`).
+Class `25` (`에이전트`) owns `메테오/어택/텔레포트/참`, but appears in
+neither a natural player chain nor any of the 31 fixed scenario record lists.
+That is a bounded source-reachability result, not a claim that no secret or
+debug mechanism can ever select the class.
+
+Hein's maximal source path
+`워록(03) -> 샤먼(0A) -> 프리스트(11) -> 위저드(15) -> 서머너(28)`
+contains 13 potential ability IDs. The accepted `7256` GST reflects the
+abilities actually learned at the levels used during that progression:
+magic IDs `0,1,2,4,7,10,14,16,17,19,20` and summon ID `22`.
+
+The byte-identical `7256` ROM and its own retained GST were replayed on
+isolated Xvfb `DISPLAY=:104`. The stock all-magic branch at `0x021228` and
+MP branch at `0x02141E` remain Japanese-source identical. The live list has
+exactly eleven Korean rows across two pages:
+
+- `매직애로우/블래스트/썬더/메테오/턴언데드/힐2`
+- `뮤트/어택/존/일루전/레지스트`
+
+The stock `어택` path rejected Hein as its own target, accepted allied Elwin,
+rendered `헤인의 마법이 효과! / 엘윈의 공격 상승`, consumed MP `16->14`,
+and returned to a valid map. The maximum-MP field refreshed from 18 to 20
+during application because the earlier level-up bonus was deferred; the
+current-MP delta still proves the source 2-MP cost. Evidence is retained as:
+
+- `captures/run/7256_natural_magic_list_page1.png`
+- `captures/run/7256_natural_magic_list_page2.png`
+- `captures/run/7256_natural_magic_attack_selected.png`
+- `captures/run/7256_natural_magic_attack_elwin_target.png`
+- `captures/run/7256_natural_magic_attack_elwin_result.png`
+- `captures/run/7256_natural_magic_attack_return.png`
+- `captures/analysis/7256_natural_summon_before.gst`
+- `captures/analysis/7256_natural_magic_attack_after.gst`
+
+`tools/verify_natural_magic_evidence.py` checks learned IDs, unchanged flags,
+2-MP consumption, and absence of a summoned member. Supplying the exact ROM
+with `--probe-rom` additionally checks checksum `7256` and both stock magic
+branches. This is natural ownership and application proof for one maximal
+Hein path, not all possible class-path combinations.
 
 ## Forced-Context Application Diagnostics
 
