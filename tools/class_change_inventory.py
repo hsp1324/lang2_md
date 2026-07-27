@@ -505,6 +505,21 @@ SAVE_PERSISTENCE_EVIDENCE = {
         "captures/analysis/b335_c5_s03_scenario2_save.gst",
         "captures/analysis/b335_c5_s03_scenario2_save.sram",
     ],
+    (5, 0x0A): [
+        "captures/run/b33c_hein_priest_command.png",
+        "captures/analysis/b33c_hein_priest_scenario2.gst",
+        "captures/analysis/b33c_hein_priest_scenario2.sram",
+    ],
+    (5, 0x11): [
+        "captures/run/b353_hein_wizard_scenario2_save.png",
+        "captures/analysis/b353_hein_wizard_scenario2.gst",
+        "captures/analysis/b353_hein_wizard_scenario2.sram",
+    ],
+    (5, 0x15): [
+        "captures/run/b36f_hein_summoner_scenario2_save.png",
+        "captures/analysis/b36f_hein_summoner_scenario2.gst",
+        "captures/analysis/b36f_hein_summoner_scenario2.sram",
+    ],
 }
 
 

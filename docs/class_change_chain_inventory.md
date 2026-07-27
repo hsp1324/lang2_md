@@ -12,7 +12,7 @@ A translated static name does not imply that its candidate screen was live verif
 - Application-verified transitions: 12
 - Natural application proofs: 10
 - Forced-context diagnostic application proofs: 2
-- Normal scenario-clear save-persistence proofs: 2
+- Normal scenario-clear save-persistence proofs: 5
 
 ## 1. 엘윈
 
@@ -89,15 +89,15 @@ Source pointer: `0x0826FA`
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
 | `0x0826FA` | `03` 워록 (ｳｫｰﾛｯｸ) | `0A` 샤먼 (ｼｬｰﾏﾝ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | natural | yes |
-| `0x082702` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending | pending |
+| `0x082702` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending | yes |
 | `0x08270A` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | yes | pending | pending |
 | `0x082712` | `04` 로드 (ﾛｰﾄﾞ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | yes | pending | pending |
-| `0x08271A` | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | yes | pending | pending |
+| `0x08271A` | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | yes | pending | yes |
 | `0x082722` | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) / `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) | yes | pending | pending |
 | `0x08272A` | `13` 메이지 (ﾒｲｼﾞ) | `15` 위저드 (ｳｨｻﾞｰﾄﾞ) / `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) / `18` 세이지 (ｾｰｼﾞ) | yes | pending | pending |
 | `0x082732` | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) / `18` 세이지 (ｾｰｼﾞ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) | yes | pending | pending |
 | `0x08273A` | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | `18` 세이지 (ｾｰｼﾞ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) | yes | pending | pending |
-| `0x082742` | `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | `28` 서머너 (ｻﾓﾅｰ) | yes | pending | pending |
+| `0x082742` | `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | `28` 서머너 (ｻﾓﾅｰ) | yes | pending | yes |
 
 ## 6. 스코트
 

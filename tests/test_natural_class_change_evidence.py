@@ -5,6 +5,11 @@ from tools import verify_natural_class_change_evidence as evidence
 
 
 class NaturalClassChangeEvidenceTests(unittest.TestCase):
+    def test_all_retained_pair_proofs_verify_together(self):
+        proofs = evidence.verify_all()
+        self.assertEqual(len(proofs), 8)
+        self.assertEqual(set(proofs), set(evidence.PROOFS.values()))
+
     def test_retained_gsts_prove_liana_natural_application(self):
         before = evidence.read_identities(evidence.DEFAULT_BEFORE.read_bytes())
         after = evidence.read_identities(evidence.DEFAULT_AFTER.read_bytes())

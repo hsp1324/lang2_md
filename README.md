@@ -37,6 +37,7 @@
 - `tools/verify_class_change_persistence.py`: 정상 시나리오 클리어 뒤의 8192바이트 SRAM에서 슬롯 형식·유효 플래그·체크섬·시나리오 번호를 검증하고 지정 지휘관의 클래스/LV/EXP가 저장됐는지 확인합니다.
 - `tools/verify_natural_class_change_evidence.py`: 같은 진단 ROM의 적용 전후 GST에서 시나리오 25 자연 활성 지휘관의 선택한 클래스 체인지가 지정 런타임 레코드에만 적용되고 다른 아홉 지휘관의 클래스·ID·LV·EXP는 유지되는지 확인합니다.
 - `tools/class_change_inventory.py`: 일본판의 플레이어 지휘관 10명 클래스 체인 100개 전이를 주소·원문·한글 표기·화면/적용 실기 상태와 함께 JSON/Markdown으로 생성합니다.
+- `tools/class_change_flow_inventory.py`: 100개 전직이 공유하는 원본 적용 루틴, 런타임↔영구 로스터 동기화, 수동 저장 설명자와 SRAM 재배치만 허용한 생산 ROM 동등성을 검증합니다. 76개 고유 후보 화면, 지휘관 10명의 대표 자연 적용, 엘윈·헤인 5개 일반 시나리오 저장 증거를 `localization/class_change_flow_inventory.json`과 `docs/class_change_flow_inventory.md`로 생성하며, 구조 검증과 실제 플레이 증거를 구분합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. Windows 배율을 반영한 DWM 데스크톱 캡처를 우선하고 `xwd`, Xlib 순으로 fallback하며 자동 경로는 포커스를 바꾸지 않습니다. `--print-window`는 가려진 OpenGL 창에서 이전 프레임 잔상이 섞일 수 있는 진단 전용 옵션입니다. `--allow-focus-steal`은 사용자가 다른 작업을 하지 않을 때 한 번만 명시적으로 허용해야 합니다.
 - `tools/send_blastem_keys.py`: BlastEm 창에 테스트용 키 입력을 보냅니다.

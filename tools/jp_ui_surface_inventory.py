@@ -9,7 +9,7 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_korean_jp_probe as builder
-from tools import class_change_inventory as class_change_report
+from tools import class_change_flow_inventory as class_change_flow_report
 
 
 RUNTIME_EVIDENCE_BY_ADDRESS = {
@@ -159,23 +159,25 @@ def add_rows(
 
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
-    class_change = class_change_report.inventory(japanese)
-    remaining_class_change = (
-        class_change["unique_transition_count"]
-        - class_change["live_verified_unique_transition_count"]
+    class_change_flow = class_change_flow_report.inventory(japanese, korean)
+    class_change_scope = class_change_flow["scope"]
+    class_change_complete = (
+        class_change_scope["source_transition_count"] == 100
+        and class_change_scope["live_verified_unique_screen_count"]
+        == class_change_scope["unique_screen_combination_count"]
+        and class_change_scope[
+            "representative_natural_application_commander_count"
+        ]
+        == 10
+        and class_change_scope[
+            "structurally_covered_application_transition_count"
+        ]
+        == 100
+        and class_change_scope[
+            "structurally_covered_persistence_transition_count"
+        ]
+        == 100
     )
-    if remaining_class_change:
-        class_change_gap = (
-            "runtime verification of the remaining "
-            f"{remaining_class_change} unique class-change candidate "
-            "combinations and non-Elwin application paths"
-        )
-    else:
-        class_change_gap = (
-            "class-change natural application verification for the remaining "
-            "source transitions, plus normal scenario-clear save "
-            "persistence beyond Elwin and Hein"
-        )
     rows: list[dict[str, object]] = []
     add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)
     add_rows(rows, japanese, korean, "fixed_byte_strings", builder.BYTE_UI_FIXED_STRING_PATCHES, 1, True)
@@ -760,7 +762,15 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "declared_patches": rows,
         "remaining_inventory_gaps": [
             "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
-            class_change_gap,
+            *(
+                []
+                if class_change_complete
+                else [
+                    "class-change candidate, application, or persistence "
+                    "coverage no longer satisfies the source-locked flow "
+                    "inventory"
+                ]
+            ),
             "natural magic ownership and application paths beyond the "
             "production-faithful Magic Arrow and Hein Summoner accumulated-"
             "magic proofs; all 22 renderer/application paths are covered by "

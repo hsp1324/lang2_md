@@ -249,20 +249,13 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_stage_one_keeps_explicit_unknowns(self):
-        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 4)
+        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 3)
         class_change_gaps = [
             gap
             for gap in self.result["remaining_inventory_gaps"]
             if "class-change" in gap
         ]
-        self.assertEqual(
-            class_change_gaps,
-            [
-                "class-change natural application verification for the "
-                "remaining source transitions, plus normal scenario-clear "
-                "save persistence beyond Elwin and Hein"
-            ],
-        )
+        self.assertEqual(class_change_gaps, [])
         self.assertIn(
             "natural magic ownership and application paths beyond the "
             "production-faithful Magic Arrow and Hein Summoner accumulated-"

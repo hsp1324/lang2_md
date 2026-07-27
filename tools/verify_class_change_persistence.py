@@ -69,6 +69,9 @@ def verify_progress(
     expected_class: int,
     expected_level: int | None = None,
     expected_experience: int | None = None,
+    expected_at: int | None = None,
+    expected_df: int | None = None,
+    expected_checksum: int | None = None,
 ) -> dict[str, int]:
     progress = commander_progress(
         sram_path,
@@ -83,6 +86,12 @@ def verify_progress(
         expected["level"] = expected_level
     if expected_experience is not None:
         expected["experience"] = expected_experience
+    if expected_at is not None:
+        expected["at"] = expected_at
+    if expected_df is not None:
+        expected["df"] = expected_df
+    if expected_checksum is not None:
+        expected["checksum"] = expected_checksum
     mismatches = [
         f"{field}={progress[field]} (expected {value})"
         for field, value in expected.items()
@@ -111,6 +120,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--class-id", type=parse_int, required=True)
     parser.add_argument("--level", type=int)
     parser.add_argument("--experience", type=int)
+    parser.add_argument("--at", type=int)
+    parser.add_argument("--df", type=int)
+    parser.add_argument("--checksum", type=parse_int)
     return parser.parse_args()
 
 
@@ -124,6 +136,9 @@ def main() -> int:
         expected_class=args.class_id,
         expected_level=args.level,
         expected_experience=args.experience,
+        expected_at=args.at,
+        expected_df=args.df,
+        expected_checksum=args.checksum,
     )
     print(json.dumps(progress, ensure_ascii=False, sort_keys=True))
     return 0

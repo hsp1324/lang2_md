@@ -226,8 +226,11 @@ mercenaries, and magic lists are intact. The inventory now has screen evidence
 for all 76 unique current/candidate combinations, and every commander reports
 zero pending unique rows. This closes candidate-screen coverage only. Runtime
 application has ten natural proofs and two forced-context diagnostic proofs.
-Normal scenario-clear save persistence is now proven for Elwin's and Hein's
-initial transitions and remains pending for all other source transitions.
+Normal scenario-clear save persistence has five retained artifacts: Elwin's
+initial transition and four consecutive Hein transitions through Summoner.
+The shared application and persistence control flow is source-locked
+separately below; individual rows without an application capture remain
+screen-only evidence.
 
 ## Normal Save-Persistence Proof
 
@@ -258,10 +261,13 @@ AT23, and DF13. Evidence is retained at:
 - `captures/analysis/b335_c5_s03_scenario2_save.sram`
 
 `tools/verify_class_change_persistence.py` validates each slot checksum,
-scenario number, commander ID, class, level, and experience without modifying
-the SRAM. Together these prove both natural Scenario 1 active commanders
-survive the ordinary scenario-clear synchronization path; they do not
-generalize persistence to the other 98 source transitions.
+scenario number, commander ID, class, level, experience, AT, and DF without
+modifying the SRAM. `B213` and `B335` prove both natural Scenario 1 active
+commanders survive the ordinary scenario-clear synchronization path. The
+three later Hein saves below extend direct save evidence to five transitions;
+generic ownership of the remaining results is established by the
+source-locked control-flow inventory rather than by claiming 100 natural
+playthroughs.
 
 ## Hein Natural Summoner And Ability Unlock
 
@@ -284,6 +290,32 @@ Accepted screens use prefixes `captures/run/b33c_hein_`,
 `captures/run/b353_hein_`, and `captures/run/b36f_hein_`. Their GST and SRAM
 counterparts are retained under `captures/analysis` and are independently
 accepted by `tools/verify_class_change_persistence.py`.
+
+## Shared Application And Persistence Closure
+
+`python3 tools/class_change_flow_inventory.py` verifies the complete ownership
+chain without treating a diagnostic screen as a save proof:
+
+- all 100 source transition records and all 76 unique candidate-screen
+  combinations remain inventoried, with 76/76 combinations live captured;
+- one natural application is retained for each of the ten player commanders;
+- five checksum-valid ordinary Scenario 2 SRAM files cover Elwin's first
+  branch and Hein's four-step Summoner route;
+- the production class application handler `0x01480C..0x014D2C`, generic
+  runtime-to-roster loop `0x011C78..0x011D7A`, inverse synchronization routine
+  `0x0177D8..0x0178F2`, and result-path call at `0x00CEC4` are byte-identical
+  to the source ROM;
+- the save writer/reader and slot-pointer ranges are source-equivalent after
+  normalizing only the declared `+0x200000` SRAM relocation;
+- the source descriptor at `0x01E046` saves `0xFFFFA49C + 0x154`, which wholly
+  contains all ten persistent records at
+  `0xFFFFA4CC..0xFFFFA5BC`.
+
+This closes application and persistence ownership for the 100 source
+transitions structurally. It does not claim that every branch was naturally
+played, selected, and saved. The generated details are
+`localization/class_change_flow_inventory.json` and
+`docs/class_change_flow_inventory.md`.
 
 The level-up handler also explains the missing LV1 command. At
 `0x014946..0x01498A` it scans class-record bytes `+0x16..+0x19`, reads the

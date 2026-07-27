@@ -255,6 +255,16 @@ def verify(
         )
 
 
+def verify_all() -> tuple[NaturalClassChangeProof, ...]:
+    verified = []
+    for proof in PROOFS.values():
+        before = read_identities(proof.before_path.read_bytes())
+        after = read_identities(proof.after_path.read_bytes())
+        verify(before, after, proof)
+        verified.append(proof)
+    return tuple(verified)
+
+
 def verify_probe_rom(
     probe: bytes | bytearray,
     source: bytes | bytearray,
@@ -311,6 +321,11 @@ def parse_args() -> argparse.Namespace:
         )
     )
     parser.add_argument("--proof", choices=sorted(PROOFS), default="liana")
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="verify every retained natural before/after proof",
+    )
     parser.add_argument("--before", type=Path)
     parser.add_argument("--after", type=Path)
     parser.add_argument("--probe-rom", type=Path)
@@ -320,6 +335,17 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if args.all:
+        if args.before or args.after or args.probe_rom:
+            raise ValueError(
+                "--all cannot be combined with --before, --after, or --probe-rom"
+            )
+        proofs = verify_all()
+        print(
+            f"verified {len(proofs)} natural before/after proof pairs: "
+            + ", ".join(proof.character for proof in proofs)
+        )
+        return 0
     proof = PROOFS[args.proof]
     if args.probe_rom is not None:
         verify_probe_rom(

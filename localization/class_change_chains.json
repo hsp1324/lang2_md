@@ -8,7 +8,7 @@
   "application_verified_transition_count": 12,
   "natural_application_verified_transition_count": 10,
   "forced_context_application_verified_transition_count": 2,
-  "save_persistence_verified_transition_count": 2,
+  "save_persistence_verified_transition_count": 5,
   "commanders": [
     {
       "id": 1,
@@ -1519,8 +1519,12 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
-          "save_persistence_verified": false,
-          "save_persistence_evidence": [],
+          "save_persistence_verified": true,
+          "save_persistence_evidence": [
+            "captures/run/b33c_hein_priest_command.png",
+            "captures/analysis/b33c_hein_priest_scenario2.gst",
+            "captures/analysis/b33c_hein_priest_scenario2.sram"
+          ],
           "evidence": [
             "captures/analysis/903c_c5_s0a_trigger.png",
             "captures/run/903c_c5_s0a_candidate1.png",
@@ -1630,8 +1634,12 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
-          "save_persistence_verified": false,
-          "save_persistence_evidence": [],
+          "save_persistence_verified": true,
+          "save_persistence_evidence": [
+            "captures/run/b353_hein_wizard_scenario2_save.png",
+            "captures/analysis/b353_hein_wizard_scenario2.gst",
+            "captures/analysis/b353_hein_wizard_scenario2.sram"
+          ],
           "evidence": [
             "captures/run/904f_c5_s11_trigger.png",
             "captures/run/904f_c5_s11_candidate1.png",
@@ -1805,8 +1813,12 @@
           "live_verified": true,
           "application_verified": false,
           "application_evidence_type": "pending",
-          "save_persistence_verified": false,
-          "save_persistence_evidence": [],
+          "save_persistence_verified": true,
+          "save_persistence_evidence": [
+            "captures/run/b36f_hein_summoner_scenario2_save.png",
+            "captures/analysis/b36f_hein_summoner_scenario2.gst",
+            "captures/analysis/b36f_hein_summoner_scenario2.sram"
+          ],
           "evidence": [
             "captures/run/9037_c5_s15_trigger.png",
             "captures/run/9037_c5_s15_candidate1.png"
