@@ -11152,3 +11152,36 @@ contains 57 safe syllables as documented below and in
 - This raises application evidence to nine transitions: seven natural and two
   forced-context. Lana's normal scenario-clear SRAM persistence remains
   unproven; only Elwin and Hein retain that stronger save-boundary evidence.
+
+### Keith Natural Active Class Change (2026-07-27)
+
+- Scenario 25 runtime record 4 is
+  `class 06 / commander ID 7 / LV1 / EXP5`, namely Keith/Hawk Knight. This is
+  not his initial Fighter row. Japanese class record `06` requires EXP32 and
+  the source candidates are `0D/0F/12`, or
+  `매직나이트/드래곤나이트/비숍`.
+- The accepted diagnostic was built from frozen production `1AB2` and the
+  Japanese ROM with `--commander-id 7 --current-class 0x06
+  --runtime-record-index 4 --end-turn-only`. Checksum `19FB` derives EXP32
+  from the source class record, guards the wrapper on class `06`, does not
+  write commander identity, and preserves the stock Start operand.
+- A fresh isolated `DISPLAY=:104` run recovered the validated Scenario 25
+  manual slot and reached automatic deployment. The first post-deployment
+  frame looked like an ordinary map but was still waiting for the scenario
+  start transition; one Start input opened the stock `SCENARIO 25` banner.
+  After both banners and 23 stable opening dialogue confirmations, the stock
+  path rendered `클래스체인지 가능`.
+- Accepted frames
+  `captures/run/19fb_keith_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` show all three source
+  candidates and `키스/매직나이트` LV1 without broken name or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/19fb_keith_natural_class_change_before.gst` and
+  `_after.gst` prove record 4 changed
+  `06/ID7/LV1/EXP5 -> 0D/ID7/LV1/EXP0`; all other nine identity tuples remain
+  byte-identical. `tools/verify_natural_class_change_evidence.py --proof
+  keith` additionally verifies checksum `19FB`, Japanese candidates, wrapper
+  bytes, and the unchanged Start entry against the exact ignored probe ROM.
+- This raises application evidence to ten transitions: eight natural and two
+  forced-context. Keith's normal scenario-clear SRAM persistence remains
+  unproven; only Elwin and Hein retain that stronger save-boundary evidence.

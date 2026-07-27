@@ -126,6 +126,23 @@ LANA_PROOF = NaturalClassChangeProof(
     after=RuntimeIdentity(0x0A, 3, 1, 0),
     candidates=(0x0A, 0x08, 0x04),
 )
+KEITH_PROOF = NaturalClassChangeProof(
+    slug="keith",
+    character="Keith",
+    before_class="Hawk Knight",
+    after_class="Magic Knight",
+    before_path=(
+        ROOT / "captures/analysis/19fb_keith_natural_class_change_before.gst"
+    ),
+    after_path=(
+        ROOT / "captures/analysis/19fb_keith_natural_class_change_after.gst"
+    ),
+    probe_checksum=0x19FB,
+    runtime_record=4,
+    before=RuntimeIdentity(0x06, 7, 1, 5),
+    after=RuntimeIdentity(0x0D, 7, 1, 0),
+    candidates=(0x0D, 0x0F, 0x12),
+)
 PROOFS = {
     proof.slug: proof
     for proof in (
@@ -134,6 +151,7 @@ PROOFS = {
         AARON_PROOF,
         SCOTT_PROOF,
         LANA_PROOF,
+        KEITH_PROOF,
     )
 }
 

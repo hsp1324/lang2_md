@@ -67,7 +67,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     else:
         class_change_gap = (
             "class-change natural active-commander verification beyond Elwin, "
-            "Hein, Liana, Sherry, Aaron, Scott, and Lana, plus normal "
+            "Hein, Liana, Sherry, Aaron, Scott, Lana, and Keith, plus normal "
             "scenario-clear save "
             "persistence beyond Elwin and Hein"
         )

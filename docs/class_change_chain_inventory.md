@@ -9,8 +9,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Unique current/candidate combinations: 76
 - Live-verified transitions: 78
 - Live-verified unique combinations: 76
-- Application-verified transitions: 9
-- Natural application proofs: 7
+- Application-verified transitions: 10
+- Natural application proofs: 8
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -124,7 +124,7 @@ Source pointer: `0x0827B2`
 | --- | --- | --- | --- | --- | --- |
 | `0x0827B2` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `08` 힐러 (ﾋｰﾗｰ) | yes | forced-context | pending |
 | `0x0827BA` | `04` 로드 (ﾛｰﾄﾞ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) | yes | pending | pending |
-| `0x0827C2` | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | pending | pending |
+| `0x0827C2` | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | natural | pending |
 | `0x0827CA` | `08` 힐러 (ﾋｰﾗｰ) | `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | yes | pending | pending |
 | `0x0827D2` | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | `17` 세인트 (ｾｲﾝﾄ) / `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) | yes | pending | pending |
 | `0x0827DA` | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | `1A` 소드마스터 (ｿｰﾄﾞﾏｽﾀｰ) / `19` 팔라딘 (ﾊﾟﾗﾃﾞｨﾝ) / `1E` 드래곤로드 (ﾄﾞﾗｺﾞﾝﾛｰﾄﾞ) | yes | pending | pending |

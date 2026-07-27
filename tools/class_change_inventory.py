@@ -319,6 +319,11 @@ LIVE_EVIDENCE = {
         "captures/run/8eb2_c7_s06_candidate1.png",
         "captures/run/8eb2_c7_s06_candidate2.png",
         "captures/run/8eb2_c7_s06_candidate3.png",
+        "captures/run/19fb_keith_natural_class_change_available.png",
+        "captures/run/19fb_keith_natural_class_change_candidates.png",
+        "captures/run/19fb_keith_natural_class_change_applied_status.png",
+        "captures/analysis/19fb_keith_natural_class_change_before.gst",
+        "captures/analysis/19fb_keith_natural_class_change_after.gst",
     ],
     (7, 0x08): [
         "captures/run/8eb8_c7_s08_trigger.png",
@@ -468,6 +473,7 @@ NATURAL_APPLICATION_VERIFIED = {
     (4, 0x01),
     (5, 0x03),
     (6, 0x01),
+    (7, 0x06),
     (8, 0x01),
 }
 FORCED_CONTEXT_APPLICATION_VERIFIED = {(7, 0x01), (10, 0x03)}
