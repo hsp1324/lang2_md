@@ -16,6 +16,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts import build_korean_jp_probe as korean_builder
+from tools.class_ability_data import (
+    read_ability_definitions,
+    read_class_ability_unlocks,
+)
 from tools.scenario_data import SCENARIO_COUNT, class_names, read_scenario
 
 
@@ -78,6 +83,8 @@ CONDITIONAL_ROLE_AWARE_MERCENARY_UPGRADE_PAIRS = (
     (0x88, 0x89),
     (0x7D, 0x87),
 )
+SUMMON_CLASS_IDS = tuple(range(0x8D, 0x94))
+SUMMON_DISCUSSION_SCENARIOS = (25, 26, 27)
 
 DISCUSSION_SCENARIO_BANDS = (
     {
@@ -678,6 +685,162 @@ def mercenary_replacement_preview(
     }
 
 
+def summon_candidate_rows(
+    source: bytes,
+    combat_classes: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    by_id = {
+        int(row["class_id"], 16): row
+        for row in combat_classes
+    }
+    definitions = read_ability_definitions(source)
+    ability_names = korean_builder.MAGIC_LIST_NAMES
+    if len(ability_names) <= max(
+        definition.ability_id for definition in definitions
+    ):
+        raise ValueError("localized ability name table is incomplete")
+
+    ordinary_sources = [
+        row
+        for row in combat_classes
+        if 0x62 <= int(row["class_id"], 16) <= 0x8C
+        and int(row["all_fixed_slot_count"]) > 0
+    ]
+    result = []
+    for class_id in SUMMON_CLASS_IDS:
+        summon = by_id[class_id]
+        compatible = [
+            row
+            for row in ordinary_sources
+            if row["family_code"] == summon["family_code"]
+        ]
+        nondecreasing = [
+            row
+            for row in compatible
+            if int(summon["base_at"]) >= int(row["base_at"])
+            and int(summon["base_df"]) >= int(row["base_df"])
+        ]
+        unlocks = read_class_ability_unlocks(source, class_id)
+        result.append({
+            "class_id": summon["class_id"],
+            "korean": summon["korean"],
+            "japanese": summon["japanese"],
+            "base_at": summon["base_at"],
+            "base_df": summon["base_df"],
+            "movement": summon["movement"],
+            "family_code": summon["family_code"],
+            "fixed_mercenary_slot_count": summon["all_fixed_slot_count"],
+            "abilities": [
+                {
+                    "ability_id": f"{ability_id:02X}",
+                    "name": ability_names[ability_id],
+                    "required_level": definitions[ability_id].required_level,
+                }
+                for ability_id in unlocks.ability_ids
+            ],
+            "same_family_source_classes": [
+                {
+                    "class_id": row["class_id"],
+                    "korean": row["korean"],
+                    "base_at": row["base_at"],
+                    "base_df": row["base_df"],
+                    "movement": row["movement"],
+                    "fixed_mercenary_slot_count": row["all_fixed_slot_count"],
+                }
+                for row in compatible
+            ],
+            "same_family_nondecreasing_at_df_source_ids": [
+                row["class_id"] for row in nondecreasing
+            ],
+        })
+    return result
+
+
+def summon_replacement_preview(
+    scenarios: list[dict[str, object]],
+    combat_classes: list[dict[str, object]],
+    summon_candidates: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    by_id = {
+        int(row["class_id"], 16): row
+        for row in combat_classes
+    }
+    summons_by_family: dict[str, list[dict[str, object]]] = {}
+    for row in summon_candidates:
+        summons_by_family.setdefault(str(row["family_code"]), []).append(row)
+
+    result = []
+    for scenario in scenarios:
+        number = int(scenario["number"])
+        if number not in SUMMON_DISCUSSION_SCENARIOS:
+            continue
+        enemy_records = [
+            record
+            for record in scenario["records"]
+            if record["side_id"] == "04"
+        ]
+        distribution: Counter[int] = Counter()
+        exact_family_slots = 0
+        nondecreasing_slots = 0
+        for record in enemy_records:
+            for mercenary in record["mercenaries"]:
+                if mercenary is None:
+                    continue
+                class_id = int(mercenary["class_id"], 16)
+                distribution[class_id] += 1
+                source_row = by_id[class_id]
+                candidates = summons_by_family.get(
+                    str(source_row["family_code"]),
+                    [],
+                )
+                exact_family_slots += bool(candidates)
+                nondecreasing_slots += any(
+                    int(candidate["base_at"]) >= int(source_row["base_at"])
+                    and int(candidate["base_df"]) >= int(source_row["base_df"])
+                    for candidate in candidates
+                )
+        result.append({
+            "scenario": number,
+            "enemy_record_count": len(enemy_records),
+            "named_enemy_record_count": sum(
+                record["name_korean"] != "제국지휘관"
+                for record in enemy_records
+            ),
+            "occupied_mercenary_slot_count": sum(distribution.values()),
+            "same_family_summon_candidate_slot_count": exact_family_slots,
+            "same_family_nondecreasing_at_df_slot_count": (
+                nondecreasing_slots
+            ),
+            "source_distribution": [
+                {
+                    "class_id": f"{class_id:02X}",
+                    "korean": by_id[class_id]["korean"],
+                    "slot_count": count,
+                    "same_family_summon_ids": [
+                        row["class_id"]
+                        for row in summons_by_family.get(
+                            str(by_id[class_id]["family_code"]),
+                            [],
+                        )
+                    ],
+                    "same_family_nondecreasing_at_df_summon_ids": [
+                        row["class_id"]
+                        for row in summons_by_family.get(
+                            str(by_id[class_id]["family_code"]),
+                            [],
+                        )
+                        if int(row["base_at"])
+                        >= int(by_id[class_id]["base_at"])
+                        and int(row["base_df"])
+                        >= int(by_id[class_id]["base_df"])
+                    ],
+                }
+                for class_id, count in sorted(distribution.items())
+            ],
+        })
+    return result
+
+
 def mercenary_row(class_id: int, classes: list[dict[str, object]]) -> dict[str, object] | None:
     if class_id == 0xFF:
         return None
@@ -816,8 +979,9 @@ def build_inventory(
         combat_classes,
         "role_aware_but_movement_range_or_species_changes",
     )
+    summon_candidates = summon_candidate_rows(source, combat_classes)
     return {
-        "schema_version": 9,
+        "schema_version": 10,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -884,6 +1048,39 @@ def build_inventory(
                         *CONSERVATIVE_MERCENARY_UPGRADE_PAIRS,
                         *CONDITIONAL_ROLE_AWARE_MERCENARY_UPGRADE_PAIRS,
                     ),
+                ),
+            },
+            "summon_replacement_discussion": {
+                "status": "unapproved_discussion_only",
+                "rom_values_applied": False,
+                "recommended_interpretation": (
+                    "curated_per_record_after_fixed_mercenary_runtime_probe"
+                ),
+                "natural_summon_application_verified": True,
+                "fixed_enemy_mercenary_runtime_behavior_verified": False,
+                "runtime_evidence": {
+                    "inventory": (
+                        "localization/runtime_verification.json:"
+                        "summon_targeting_results"
+                    ),
+                    "meaning": (
+                        "stock summon application creates classes 8D-93 and "
+                        "their Korean status surfaces; it does not prove that "
+                        "placing those IDs in fixed enemy mercenary slots "
+                        "preserves commands, AI, or event behavior"
+                    ),
+                },
+                "candidate_classes": summon_candidates,
+                "late_scenario_preview": summon_replacement_preview(
+                    scenarios,
+                    combat_classes,
+                    summon_candidates,
+                ),
+                "decision_warning": (
+                    "the proposed scenario 26/27 ratios cannot be treated as "
+                    "strict stat upgrades: scenario 26 has zero and scenario "
+                    "27 has only two same-family slots whose summon candidate "
+                    "does not reduce either base AT or base DF"
                 ),
             },
         },
@@ -1320,6 +1517,63 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "역할 검토 후보는 사거리·이동·수상/비행·종족 역할이 달라질 수",
         "있으므로 사용자가 교체 원칙을 승인한 뒤 장별 지형과 AI를",
         "에뮬레이터에서 확인해야 한다.",
+        "",
+        "### 후반 소환물 편성 감사",
+        "",
+        "> 상태: **미승인 제안**. 원본 후보와 위험만 정리했으며 ROM에는",
+        "> 적용하지 않았다.",
+        "",
+    ])
+    summon_discussion = inventory["balance_discussion"][
+        "summon_replacement_discussion"
+    ]
+    lines.extend([
+        "- 소환물 `8D..93`은 원판 소환 명령으로 생성되고 한국어 이름·상태",
+        "  화면이 검증되었지만, 원판 31개 시나리오의 고정 용병 칸에는",
+        "  한 번도 들어가지 않는다.",
+        "- 따라서 고정 적 용병 칸에 넣었을 때 이동·공격·마법 명령, 적 AI,",
+        "  이벤트 진행이 동일하게 작동하는지는 별도 진단 ROM으로 먼저",
+        "  검증해야 한다. 클래스 ID만으로 마법 권한까지 붙는다고 가정하지",
+        "  않는다.",
+        "- 권장 방식은 일괄 N/6 변환이 아니라, 진단 통과 뒤 지휘관별로",
+        "  후보를 골라 넣는 방식이다.",
+        "",
+        "| ID | 소환물 | AT/DF | MV | family | 원본 클래스 능력 |",
+        "|:---:|:---|:---:|---:|:---:|:---|",
+    ])
+    for row in summon_discussion["candidate_classes"]:
+        ability_text = " / ".join(
+            f"{ability['name']}@LV{ability['required_level']}"
+            for ability in row["abilities"]
+        ) or "-"
+        lines.append(
+            f"| `{row['class_id']}` | {row['korean']} | "
+            f"{row['base_at']}/{row['base_df']} | {row['movement']} | "
+            f"`{row['family_code']}` | {ability_text} |"
+        )
+    lines.extend([
+        "",
+        "| 장 | 적 지휘관 | 채워진 칸 | 같은 family 후보 | AT/DF 비감소까지 충족 |",
+        "|---:|---:|---:|---:|---:|",
+    ])
+    for row in summon_discussion["late_scenario_preview"]:
+        lines.append(
+            f"| {row['scenario']} | {row['enemy_record_count']} | "
+            f"{row['occupied_mercenary_slot_count']} | "
+            f"{row['same_family_summon_candidate_slot_count']} | "
+            f"{row['same_family_nondecreasing_at_df_slot_count']} |"
+        )
+    lines.extend([
+        "",
+        "- 25장은 그리폰 계열 6칸이 화이트드래곤·발키리와 같은 family이고",
+        "  AT/DF 비감소도 만족해 가장 자연스러운 시험 진입점이다.",
+        "- 26장은 같은 family 후보가 14칸이지만 AT/DF 비감소를 함께",
+        "  만족하는 칸은 0개다.",
+        "- 27장은 같은 family 후보가 12칸이며, 뱀파이어배트 2칸을",
+        "  화이트드래곤으로 바꾸는 경우만 AT/DF 비감소를 함께 만족한다.",
+        "- 그러므로 기존 초안의 26장 1/6과 27장 주요 지휘관 4/6은",
+        "  순수 상위 승급이 아니다. 그 비율을 원하면 역할 변경과 마법 AI",
+        "  위험까지 포함한 별도 선택으로 승인받아야 한다.",
         "",
         "### 제안된 예외",
         "",

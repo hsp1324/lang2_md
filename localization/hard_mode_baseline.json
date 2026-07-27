@@ -1,5 +1,5 @@
 {
-  "schema_version": 9,
+  "schema_version": 10,
   "status": "balance_discussion_required",
   "approval_gate": {
     "user_approved": false,
@@ -3551,6 +3551,582 @@
           }
         ]
       }
+    },
+    "summon_replacement_discussion": {
+      "status": "unapproved_discussion_only",
+      "rom_values_applied": false,
+      "recommended_interpretation": "curated_per_record_after_fixed_mercenary_runtime_probe",
+      "natural_summon_application_verified": true,
+      "fixed_enemy_mercenary_runtime_behavior_verified": false,
+      "runtime_evidence": {
+        "inventory": "localization/runtime_verification.json:summon_targeting_results",
+        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces; it does not prove that placing those IDs in fixed enemy mercenary slots preserves commands, AI, or event behavior"
+      },
+      "candidate_classes": [
+        {
+          "class_id": "8D",
+          "korean": "엘리멘탈",
+          "japanese": "ｴﾚﾒﾝﾀﾙ",
+          "base_at": 22,
+          "base_df": 20,
+          "movement": 7,
+          "family_code": "0D",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [
+            {
+              "ability_id": "09",
+              "name": "힐1",
+              "required_level": 2
+            }
+          ],
+          "same_family_source_classes": [
+            {
+              "class_id": "88",
+              "korean": "엘리멘탈",
+              "base_at": 28,
+              "base_df": 22,
+              "movement": 6,
+              "fixed_mercenary_slot_count": 64
+            },
+            {
+              "class_id": "8A",
+              "korean": "레이스",
+              "base_at": 25,
+              "base_df": 21,
+              "movement": 6,
+              "fixed_mercenary_slot_count": 70
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": []
+        },
+        {
+          "class_id": "8E",
+          "korean": "프레이야",
+          "japanese": "ﾌﾚｲﾔ",
+          "base_at": 23,
+          "base_df": 25,
+          "movement": 7,
+          "family_code": "05",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [
+            {
+              "ability_id": "15",
+              "name": "참",
+              "required_level": 3
+            },
+            {
+              "ability_id": "0D",
+              "name": "슬립",
+              "required_level": 2
+            },
+            {
+              "ability_id": "0F",
+              "name": "프로텍션",
+              "required_level": 6
+            },
+            {
+              "ability_id": "0B",
+              "name": "포스힐1",
+              "required_level": 3
+            }
+          ],
+          "same_family_source_classes": [
+            {
+              "class_id": "6F",
+              "korean": "그리폰",
+              "base_at": 26,
+              "base_df": 13,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 6
+            },
+            {
+              "class_id": "70",
+              "korean": "엔젤",
+              "base_at": 24,
+              "base_df": 19,
+              "movement": 12,
+              "fixed_mercenary_slot_count": 4
+            },
+            {
+              "class_id": "7D",
+              "korean": "그리폰",
+              "base_at": 27,
+              "base_df": 14,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 126
+            },
+            {
+              "class_id": "82",
+              "korean": "가고일",
+              "base_at": 25,
+              "base_df": 13,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 46
+            },
+            {
+              "class_id": "87",
+              "korean": "뱀파이어배트",
+              "base_at": 31,
+              "base_df": 18,
+              "movement": 6,
+              "fixed_mercenary_slot_count": 34
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": []
+        },
+        {
+          "class_id": "8F",
+          "korean": "화이트드래곤",
+          "japanese": "ﾎﾜｲﾄﾄﾞﾗｺﾞﾝ",
+          "base_at": 33,
+          "base_df": 22,
+          "movement": 5,
+          "family_code": "05",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [
+            {
+              "ability_id": "03",
+              "name": "파이어볼",
+              "required_level": 3
+            },
+            {
+              "ability_id": "05",
+              "name": "블리져드",
+              "required_level": 3
+            }
+          ],
+          "same_family_source_classes": [
+            {
+              "class_id": "6F",
+              "korean": "그리폰",
+              "base_at": 26,
+              "base_df": 13,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 6
+            },
+            {
+              "class_id": "70",
+              "korean": "엔젤",
+              "base_at": 24,
+              "base_df": 19,
+              "movement": 12,
+              "fixed_mercenary_slot_count": 4
+            },
+            {
+              "class_id": "7D",
+              "korean": "그리폰",
+              "base_at": 27,
+              "base_df": 14,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 126
+            },
+            {
+              "class_id": "82",
+              "korean": "가고일",
+              "base_at": 25,
+              "base_df": 13,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 46
+            },
+            {
+              "class_id": "87",
+              "korean": "뱀파이어배트",
+              "base_at": 31,
+              "base_df": 18,
+              "movement": 6,
+              "fixed_mercenary_slot_count": 34
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": [
+            "6F",
+            "70",
+            "7D",
+            "82",
+            "87"
+          ]
+        },
+        {
+          "class_id": "90",
+          "korean": "발키리",
+          "japanese": "ｳﾞｧﾙｷﾘｰ",
+          "base_at": 29,
+          "base_df": 21,
+          "movement": 7,
+          "family_code": "05",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [
+            {
+              "ability_id": "02",
+              "name": "썬더",
+              "required_level": 5
+            },
+            {
+              "ability_id": "01",
+              "name": "블래스트",
+              "required_level": 6
+            },
+            {
+              "ability_id": "04",
+              "name": "메테오",
+              "required_level": 2
+            }
+          ],
+          "same_family_source_classes": [
+            {
+              "class_id": "6F",
+              "korean": "그리폰",
+              "base_at": 26,
+              "base_df": 13,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 6
+            },
+            {
+              "class_id": "70",
+              "korean": "엔젤",
+              "base_at": 24,
+              "base_df": 19,
+              "movement": 12,
+              "fixed_mercenary_slot_count": 4
+            },
+            {
+              "class_id": "7D",
+              "korean": "그리폰",
+              "base_at": 27,
+              "base_df": 14,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 126
+            },
+            {
+              "class_id": "82",
+              "korean": "가고일",
+              "base_at": 25,
+              "base_df": 13,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 46
+            },
+            {
+              "class_id": "87",
+              "korean": "뱀파이어배트",
+              "base_at": 31,
+              "base_df": 18,
+              "movement": 6,
+              "fixed_mercenary_slot_count": 34
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": [
+            "6F",
+            "70",
+            "7D",
+            "82"
+          ]
+        },
+        {
+          "class_id": "91",
+          "korean": "슬레이프니르",
+          "japanese": "ｽﾚｲﾌﾟﾆﾙ",
+          "base_at": 31,
+          "base_df": 18,
+          "movement": 10,
+          "family_code": "03",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [],
+          "same_family_source_classes": [
+            {
+              "class_id": "67",
+              "korean": "호스맨",
+              "base_at": 24,
+              "base_df": 15,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 12
+            },
+            {
+              "class_id": "79",
+              "korean": "호스맨",
+              "base_at": 22,
+              "base_df": 14,
+              "movement": 10,
+              "fixed_mercenary_slot_count": 66
+            },
+            {
+              "class_id": "7A",
+              "korean": "헤비호스맨",
+              "base_at": 27,
+              "base_df": 19,
+              "movement": 9,
+              "fixed_mercenary_slot_count": 80
+            },
+            {
+              "class_id": "7B",
+              "korean": "로얄호스",
+              "base_at": 34,
+              "base_df": 23,
+              "movement": 13,
+              "fixed_mercenary_slot_count": 53
+            },
+            {
+              "class_id": "84",
+              "korean": "본디노",
+              "base_at": 26,
+              "base_df": 24,
+              "movement": 8,
+              "fixed_mercenary_slot_count": 36
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": [
+            "67",
+            "79"
+          ]
+        },
+        {
+          "class_id": "92",
+          "korean": "펜릴",
+          "japanese": "ﾌｪﾝﾘﾙ",
+          "base_at": 31,
+          "base_df": 25,
+          "movement": 8,
+          "family_code": "0B",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [
+            {
+              "ability_id": "05",
+              "name": "블리져드",
+              "required_level": 3
+            },
+            {
+              "ability_id": "06",
+              "name": "토네이도",
+              "required_level": 2
+            }
+          ],
+          "same_family_source_classes": [
+            {
+              "class_id": "83",
+              "korean": "울프맨",
+              "base_at": 19,
+              "base_df": 14,
+              "movement": 7,
+              "fixed_mercenary_slot_count": 42
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": [
+            "83"
+          ]
+        },
+        {
+          "class_id": "93",
+          "korean": "요르문간드",
+          "japanese": "ｲｪﾙﾑﾝｶﾞﾙﾄﾞ",
+          "base_at": 29,
+          "base_df": 28,
+          "movement": 5,
+          "family_code": "0A",
+          "fixed_mercenary_slot_count": 0,
+          "abilities": [
+            {
+              "ability_id": "08",
+              "name": "어스퀘이크",
+              "required_level": 3
+            }
+          ],
+          "same_family_source_classes": [
+            {
+              "class_id": "85",
+              "korean": "리바이어선",
+              "base_at": 26,
+              "base_df": 15,
+              "movement": 6,
+              "fixed_mercenary_slot_count": 60
+            }
+          ],
+          "same_family_nondecreasing_at_df_source_ids": [
+            "85"
+          ]
+        }
+      ],
+      "late_scenario_preview": [
+        {
+          "scenario": 25,
+          "enemy_record_count": 11,
+          "named_enemy_record_count": 3,
+          "occupied_mercenary_slot_count": 60,
+          "same_family_summon_candidate_slot_count": 48,
+          "same_family_nondecreasing_at_df_slot_count": 6,
+          "source_distribution": [
+            {
+              "class_id": "73",
+              "korean": "아머솔저",
+              "slot_count": 12,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7A",
+              "korean": "헤비호스맨",
+              "slot_count": 24,
+              "same_family_summon_ids": [
+                "91"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7B",
+              "korean": "로얄호스",
+              "slot_count": 18,
+              "same_family_summon_ids": [
+                "91"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7D",
+              "korean": "그리폰",
+              "slot_count": 6,
+              "same_family_summon_ids": [
+                "8E",
+                "8F",
+                "90"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": [
+                "8F",
+                "90"
+              ]
+            }
+          ]
+        },
+        {
+          "scenario": 26,
+          "enemy_record_count": 10,
+          "named_enemy_record_count": 1,
+          "occupied_mercenary_slot_count": 60,
+          "same_family_summon_candidate_slot_count": 14,
+          "same_family_nondecreasing_at_df_slot_count": 0,
+          "source_distribution": [
+            {
+              "class_id": "73",
+              "korean": "아머솔저",
+              "slot_count": 16,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "76",
+              "korean": "다크엘프",
+              "slot_count": 12,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "77",
+              "korean": "발리스타",
+              "slot_count": 16,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7A",
+              "korean": "헤비호스맨",
+              "slot_count": 8,
+              "same_family_summon_ids": [
+                "91"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7C",
+              "korean": "다크가드",
+              "slot_count": 2,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "88",
+              "korean": "엘리멘탈",
+              "slot_count": 6,
+              "same_family_summon_ids": [
+                "8D"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            }
+          ]
+        },
+        {
+          "scenario": 27,
+          "enemy_record_count": 10,
+          "named_enemy_record_count": 6,
+          "occupied_mercenary_slot_count": 60,
+          "same_family_summon_candidate_slot_count": 12,
+          "same_family_nondecreasing_at_df_slot_count": 2,
+          "source_distribution": [
+            {
+              "class_id": "76",
+              "korean": "다크엘프",
+              "slot_count": 10,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "77",
+              "korean": "발리스타",
+              "slot_count": 4,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7B",
+              "korean": "로얄호스",
+              "slot_count": 4,
+              "same_family_summon_ids": [
+                "91"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7C",
+              "korean": "다크가드",
+              "slot_count": 12,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "7F",
+              "korean": "팔랑크스",
+              "slot_count": 6,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "87",
+              "korean": "뱀파이어배트",
+              "slot_count": 2,
+              "same_family_summon_ids": [
+                "8E",
+                "8F",
+                "90"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": [
+                "8F"
+              ]
+            },
+            {
+              "class_id": "88",
+              "korean": "엘리멘탈",
+              "slot_count": 6,
+              "same_family_summon_ids": [
+                "8D"
+              ],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            },
+            {
+              "class_id": "89",
+              "korean": "아크데몬",
+              "slot_count": 16,
+              "same_family_summon_ids": [],
+              "same_family_nondecreasing_at_df_summon_ids": []
+            }
+          ]
+        }
+      ],
+      "decision_warning": "the proposed scenario 26/27 ratios cannot be treated as strict stat upgrades: scenario 26 has zero and scenario 27 has only two same-family slots whose summon candidate does not reduce either base AT or base DF"
     }
   },
   "normal_release": {

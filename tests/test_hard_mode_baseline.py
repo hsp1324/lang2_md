@@ -396,6 +396,137 @@ class HardModeBaselineTests(unittest.TestCase):
             (1445, 971, 371, []),
         )
 
+    def test_summon_replacement_options_are_unapproved_and_source_bounded(self):
+        discussion = self.inventory["balance_discussion"][
+            "summon_replacement_discussion"
+        ]
+        self.assertEqual(discussion["status"], "unapproved_discussion_only")
+        self.assertFalse(discussion["rom_values_applied"])
+        self.assertTrue(discussion["natural_summon_application_verified"])
+        self.assertFalse(
+            discussion["fixed_enemy_mercenary_runtime_behavior_verified"]
+        )
+        self.assertEqual(
+            discussion["recommended_interpretation"],
+            "curated_per_record_after_fixed_mercenary_runtime_probe",
+        )
+        candidates = discussion["candidate_classes"]
+        self.assertEqual(
+            [
+                (
+                    row["class_id"],
+                    row["korean"],
+                    row["base_at"],
+                    row["base_df"],
+                    row["movement"],
+                    row["family_code"],
+                    [
+                        (
+                            ability["ability_id"],
+                            ability["name"],
+                            ability["required_level"],
+                        )
+                        for ability in row["abilities"]
+                    ],
+                )
+                for row in candidates
+            ],
+            [
+                ("8D", "엘리멘탈", 22, 20, 7, "0D", [("09", "힐1", 2)]),
+                (
+                    "8E",
+                    "프레이야",
+                    23,
+                    25,
+                    7,
+                    "05",
+                    [
+                        ("15", "참", 3),
+                        ("0D", "슬립", 2),
+                        ("0F", "프로텍션", 6),
+                        ("0B", "포스힐1", 3),
+                    ],
+                ),
+                (
+                    "8F",
+                    "화이트드래곤",
+                    33,
+                    22,
+                    5,
+                    "05",
+                    [("03", "파이어볼", 3), ("05", "블리져드", 3)],
+                ),
+                (
+                    "90",
+                    "발키리",
+                    29,
+                    21,
+                    7,
+                    "05",
+                    [
+                        ("02", "썬더", 5),
+                        ("01", "블래스트", 6),
+                        ("04", "메테오", 2),
+                    ],
+                ),
+                ("91", "슬레이프니르", 31, 18, 10, "03", []),
+                (
+                    "92",
+                    "펜릴",
+                    31,
+                    25,
+                    8,
+                    "0B",
+                    [("05", "블리져드", 3), ("06", "토네이도", 2)],
+                ),
+                (
+                    "93",
+                    "요르문간드",
+                    29,
+                    28,
+                    5,
+                    "0A",
+                    [("08", "어스퀘이크", 3)],
+                ),
+            ],
+        )
+        self.assertTrue(
+            all(row["fixed_mercenary_slot_count"] == 0 for row in candidates)
+        )
+        preview = discussion["late_scenario_preview"]
+        self.assertEqual(
+            [
+                (
+                    row["scenario"],
+                    row["enemy_record_count"],
+                    row["occupied_mercenary_slot_count"],
+                    row["same_family_summon_candidate_slot_count"],
+                    row["same_family_nondecreasing_at_df_slot_count"],
+                )
+                for row in preview
+            ],
+            [
+                (25, 11, 60, 48, 6),
+                (26, 10, 60, 14, 0),
+                (27, 10, 60, 12, 2),
+            ],
+        )
+        scenario_27 = preview[-1]
+        vampire_bat = next(
+            row
+            for row in scenario_27["source_distribution"]
+            if row["class_id"] == "87"
+        )
+        self.assertEqual(vampire_bat["slot_count"], 2)
+        self.assertEqual(
+            vampire_bat["same_family_summon_ids"],
+            ["8E", "8F", "90"],
+        )
+        self.assertEqual(
+            vampire_bat["same_family_nondecreasing_at_df_summon_ids"],
+            ["8F"],
+        )
+
     def test_all_source_records_have_addresses_and_six_mercenary_slots(self):
         scenarios = self.inventory["scenarios"]
         self.assertEqual([row["number"] for row in scenarios], list(range(1, 32)))
