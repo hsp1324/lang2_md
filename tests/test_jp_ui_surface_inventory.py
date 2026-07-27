@@ -294,11 +294,11 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             self.result["remaining_inventory_gaps"],
         )
         self.assertIn(
-            "exact ownership of low-signal byte sequences outside the 38 reviewed "
-            "text/UI-bank candidates: the one/two-signal scan region-classifies "
-            "6,612 candidates, and proves the 38 text/UI-bank rows are word/layout "
-            "data with no exact aligned-32-bit or LEA/PEA PC-relative reference; "
-            "base-relative, indexed, and dynamic access elsewhere remains possible",
+            "exact ownership of low-signal byte sequences outside the 176 reviewed "
+            "ending/scenario/text/UI-bank candidates: the one/two-signal scan "
+            "region-classifies 6,612 candidates, proves 175 rows are word/layout "
+            "data, and identifies retained scenario-level prefix L-; base-relative, "
+            "indexed, and dynamic access elsewhere remains possible",
             self.result["remaining_inventory_gaps"],
         )
 

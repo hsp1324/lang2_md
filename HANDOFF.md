@@ -11401,3 +11401,31 @@ contains 57 safe syllables as documented below and in
   generated JSON/Markdown. The focused short-inline, UI, three-signal inline,
   direct-byte, and direct-word inventories pass 56/56. This work required no
   emulator launch; Xvfb `:104` remained isolated and BlastEm stayed stopped.
+
+### Ending/Scenario Low-Signal Byte Audit (2026-07-27)
+
+- The same short-inline inventory now covers the adjacent
+  `0x090000..0x09FFFF` ending/scenario resource bank. Its 138 low-signal rows
+  divide into 116 low-byte lanes of verified 16-bit glyph/control streams, 21
+  pinned ending/UI/layout records, and one real compact UI string. There are no
+  unclassified rows in this bank.
+- The real record is `L-` at `0x09B2E7`. Stock instruction
+  `0x025CDC` is `LEA $0009B2E7,A0`; the following code draws the record and
+  appends the unit's dynamic numeric level during the scrolling scenario
+  briefing. Original, isolated current-source, and shared production ROMs all
+  preserve record bytes `4C 2D FF` and hook bytes `41 F9 00 09 B2 E7`.
+- `captures/run/1391_s19_canonical_brief_06.png` visibly proves this owner with
+  `L-5`, `L-4`, `L-8`, `L-10`, and other troop levels. `L-` is retained
+  intentionally as a compact level abbreviation under the same policy that
+  permits `LV`, `AT`, and `DF`; it is not untranslated Japanese.
+- The one exact aligned 32-bit reference among the 138 rows is the `L-` load.
+  No exact `LEA d16(PC)`/`PEA d16(PC)` reference exists. Together with the
+  earlier text/UI audit, 176 candidates across the two main text-oriented
+  banks are now classified: 175 word/layout false positives and the retained
+  `L-` UI.
+- The generated short-inline JSON/Markdown now records all 176 detailed rows,
+  the 21-address structured review set, the `L-` hook/preservation/evidence
+  contract, and the unchanged wider 6,612-candidate region counts. Focused
+  short-inline/UI/inline/direct inventories pass 60/60. No emulator was
+  launched for this extension; the accepted existing briefing capture was
+  inspected directly.
