@@ -11940,3 +11940,32 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core H Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x018092..0x018C37` region has SHA-256
+  `3413cf19846f47b40fffdbc9951ef3565eccca8ff558d17ee3ff983c273950b5`
+  and contains 18 low-signal candidates: 16 half-width-looking and two
+  ASCII-looking rows. Its ordered candidate manifest is
+  `cb7cad1e86bd40997629fee9fcddf2710143dd5c19ae3ebc6fe9a98702b79195`.
+- The exact `0x018092..0x018B5F` code stream owns all 18 candidates. It
+  contains 612 contiguous 68000 instructions, 18 `RTS` instructions, and
+  no `dc.w` fallback. The final `RTS` ends exactly at `0x018B60`.
+- The following candidate-free `0x018B60..0x018C37` data is a 216-byte
+  table of 54 aligned, even function pointers. Its targets range from
+  `0x018C3A` to `0x01A126`. `LEA` operands at `0x018B3E` and `0x01A63E`
+  both reference the exact table start.
+- The aligned scanner finds one candidate-target window: the value at
+  `0x129268` points to odd byte `0x018507` inside
+  `DBRA D2,$18504` (`51 CA FF FC`) at `0x018506..0x018509`. It is not a
+  valid 68000 entry point or byte string. No executable PC-relative
+  `LEA`/`PEA` targets a candidate.
+- The cumulative exact review is now 6,351 of 6,612 short-inline candidates:
+  6,350 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 261 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 130/130. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.
