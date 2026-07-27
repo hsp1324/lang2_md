@@ -34,6 +34,19 @@ current item-surface derivative is checksum `F586`. Resume Stage 2 only
 when its shared renderer/data owner changes or a new explicit inventory gap is
 generated.
 
+The Stage 6 isolated source-reproducible ROM has header checksum `99FD` and
+SHA-256
+`526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+Fresh `DISPLAY=:104` playback reaches the Scenario 1 preparation screen with
+intact 엘윈/파이터, 헤인/워록, menu labels, and money display; reaches the
+post-deployment 엘윈 command/status panel; and returns to that command panel
+after the first turn-end sequence and 39 dialogue confirmations without reset
+or freeze. Evidence is retained as
+`captures/run/99fd_final_s01_prep.png`,
+`captures/run/99fd_final_s01_command.png`,
+`captures/run/99fd_final_s01_turn_end.png`, and
+`captures/run/99fd_final_s01_turn1_dialogue_82.png`.
+
 Accepted completed work is a regression contract, not a recurring task. Re-run
 it only when a later change shares its renderer/data ownership or an automated
 test fails. The authoritative machine-readable state is
