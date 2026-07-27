@@ -11997,3 +11997,30 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core J Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x01A870..0x01DC59` region has SHA-256
+  `2005ddc3500373238381e58cf3e3e5443530158b77bfcb413c8a9605e1225e50`
+  and contains 69 low-signal candidates: 66 half-width-looking and three
+  ASCII-looking rows. Its ordered candidate manifest is
+  `12d0cc8d13ae1e08bd30b4c752ee8034d27b38887910453aa2b56a0fd51e44d1`.
+- All 69 candidates are fully covered by the exact
+  `0x01A870..0x01DC59` Capstone instruction stream: 3,305 contiguous 68000
+  instructions ending exactly at `0x01DC5A` on `RTS`. The stream contains
+  91 `RTS` instructions and no `dc.w` fallback.
+- The aligned scanner finds one candidate-target window. The value at
+  `0x01326C` points to odd byte `0x01B029` inside
+  `DBRA D0,$1B01E` (`51 C8 FF F4`) at `0x01B028..0x01B02B`. It is not a
+  valid 68000 entry point or byte string. No executable PC-relative
+  `LEA`/`PEA` targets a candidate.
+- The cumulative exact review is now 6,462 of 6,612 short-inline candidates:
+  6,461 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 150 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 136/136. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed and no emulator was launched.
+- The next static audit resumes at `0x01DC5A`. Do not assume code or data
+  ownership beyond that boundary without a fresh source-locked analysis.
