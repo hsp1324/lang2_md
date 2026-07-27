@@ -182,17 +182,39 @@ class HardModeBaselineTests(unittest.TestCase):
             ["94"],
         )
         exceptions = proposal["exception_candidates"]
+        by_scenario = {
+            row["scenario"]: row
+            for row in exceptions
+            if "scenario" in row
+        }
+        secret_rule = next(row for row in exceptions if "scenarios" in row)
         self.assertEqual(
-            exceptions[0]["offsets"],
+            by_scenario[1]["offsets"],
             ["0x1802FC", "0x180320"],
         )
-        self.assertEqual(exceptions[1]["scenario"], 22)
-        self.assertEqual(exceptions[2]["offsets"], ["0x182D62"])
         self.assertEqual(
-            exceptions[3]["offsets"],
+            by_scenario[22]["offsets"],
+            [
+                "0x1827DA",
+                "0x1827FE",
+                "0x182846",
+                "0x18286A",
+                "0x18288E",
+                "0x1828B2",
+                "0x1828D6",
+                "0x1828FA",
+                "0x18291E",
+                "0x182942",
+            ],
+        )
+        self.assertEqual(by_scenario[24]["offsets"], ["0x182B8A"])
+        self.assertEqual(by_scenario[25]["offsets"], ["0x182D62"])
+        self.assertEqual(
+            by_scenario[30]["offsets"],
             ["0x183724", "0x183748"],
         )
-        self.assertEqual(exceptions[4]["scenarios"], [28, 29, 30, 31])
+        self.assertEqual(by_scenario[31]["offsets"], ["0x183902"])
+        self.assertEqual(secret_rule["scenarios"], [28, 29, 30, 31])
 
     def test_all_source_records_have_addresses_and_six_mercenary_slots(self):
         scenarios = self.inventory["scenarios"]
@@ -250,8 +272,23 @@ class HardModeBaselineTests(unittest.TestCase):
             row["scenario"]: row
             for row in self.inventory["source_model"]["known_runtime_exceptions"]
         }
-        self.assertEqual(set(exceptions), {22, 25, 30})
+        self.assertEqual(set(exceptions), {22, 24, 25, 30, 31})
         self.assertEqual(exceptions[22]["side_08_record_count"], 10)
+        self.assertEqual(
+            exceptions[22]["verified_hostile_side_08_offsets"],
+            [
+                "0x1827DA",
+                "0x1827FE",
+                "0x182846",
+                "0x18286A",
+                "0x18288E",
+                "0x1828B2",
+                "0x1828D6",
+                "0x1828FA",
+                "0x18291E",
+                "0x182942",
+            ],
+        )
         self.assertEqual(
             exceptions[22]["hidden_boss"],
             {
@@ -260,6 +297,19 @@ class HardModeBaselineTests(unittest.TestCase):
                 "name_korean": "베른하르트",
                 "class_id": "4E",
                 "class_korean": "엠퍼러",
+            },
+        )
+        self.assertEqual(
+            exceptions[24]["fixed_record"],
+            {
+                "offset": "0x182B8A",
+                "side_id": "08",
+                "name_korean": "베른하르트",
+                "class_id": "4E",
+                "class_korean": "엠퍼러",
+                "at": 58,
+                "df": 41,
+                "mercenary_slots": 0,
             },
         )
         self.assertEqual(
@@ -301,6 +351,43 @@ class HardModeBaselineTests(unittest.TestCase):
                 },
             ],
         )
+        self.assertTrue(exceptions[31]["completion_target"])
+        self.assertEqual(
+            exceptions[31]["fixed_record"],
+            {
+                "offset": "0x183902",
+                "side_id": "08",
+                "name_korean": "베른하르트",
+                "class_id": "4E",
+                "class_korean": "엠퍼러",
+                "at": 87,
+                "df": 61,
+                "mercenaries": ["7C", "7C", "7C", "7C", "77", "77"],
+            },
+        )
+
+    def test_every_special_side_08_record_has_a_hard_mode_policy(self):
+        side_08 = [
+            (scenario["number"], record["offset"])
+            for scenario in self.inventory["scenarios"]
+            for record in scenario["records"]
+            if record["side_id"] == "08"
+        ]
+        exceptions = {
+            row["scenario"]: row
+            for row in self.inventory["source_model"]["known_runtime_exceptions"]
+        }
+        classified = [
+            *(
+                (22, offset)
+                for offset in exceptions[22][
+                    "verified_hostile_side_08_offsets"
+                ]
+            ),
+            (24, exceptions[24]["fixed_record"]["offset"]),
+            (31, exceptions[31]["fixed_record"]["offset"]),
+        ]
+        self.assertEqual(sorted(side_08), sorted(classified))
 
     def test_fixed_record_and_class_stat_ownership_is_source_locked(self):
         source = JP_ROM.read_bytes()

@@ -1,5 +1,5 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "status": "balance_discussion_required",
   "approval_gate": {
     "user_approved": false,
@@ -428,7 +428,29 @@
         },
         {
           "scenario": 22,
-          "rule": "진영 08 열 개는 적대 상태와 이벤트 소유권 확인 후 개별 승인"
+          "offsets": [
+            "0x1827DA",
+            "0x1827FE",
+            "0x182846",
+            "0x18286A",
+            "0x18288E",
+            "0x1828B2",
+            "0x1828D6",
+            "0x1828FA",
+            "0x18291E",
+            "0x182942"
+          ],
+          "rule": "실기에서 적대 대상으로 확인된 진영 08 열 개를 21~24장 공식 대상에 포함하되 원본 진영 08은 보존"
+        },
+        {
+          "scenario": 24,
+          "offsets": [
+            "0x182B8A"
+          ],
+          "names": [
+            "베른하르트"
+          ],
+          "rule": "원작 이벤트가 진영을 바꾸는 특수 레코드이므로 고정 레코드 자동 강화에서 제외"
         },
         {
           "scenario": 25,
@@ -451,6 +473,16 @@
             "미나 2단계"
           ],
           "rule": "한 보스의 두 단계로 취급하고 중복 누적 금지"
+        },
+        {
+          "scenario": 31,
+          "offsets": [
+            "0x183902"
+          ],
+          "names": [
+            "베른하르트"
+          ],
+          "rule": "적대 최종 보스지만 X4 원본 수치가 본편 상한보다 높으므로 본편 공식·상한을 적용하지 않고 X4에서 개별 조정"
         },
         {
           "scenarios": [
@@ -1175,8 +1207,20 @@
     "known_runtime_exceptions": [
       {
         "scenario": 22,
-        "kind": "special_faction_ownership",
+        "kind": "verified_hostile_special_faction",
         "side_08_record_count": 10,
+        "verified_hostile_side_08_offsets": [
+          "0x1827DA",
+          "0x1827FE",
+          "0x182846",
+          "0x18286A",
+          "0x18288E",
+          "0x1828B2",
+          "0x1828D6",
+          "0x1828FA",
+          "0x18291E",
+          "0x182942"
+        ],
         "hidden_boss": {
           "offset": "0x182822",
           "side_id": "04",
@@ -1184,7 +1228,22 @@
           "class_id": "4E",
           "class_korean": "엠퍼러"
         },
-        "rule": "do not assign the ten side-08 records an enemy hard-mode formula until the user approves their ownership"
+        "rule": "treat all ten side-08 records as hostile hard-mode targets after balance approval, but preserve side 08 and all stock event ownership"
+      },
+      {
+        "scenario": 24,
+        "kind": "stock_allegiance_transition",
+        "fixed_record": {
+          "offset": "0x182B8A",
+          "side_id": "08",
+          "name_korean": "베른하르트",
+          "class_id": "4E",
+          "class_korean": "엠퍼러",
+          "at": 58,
+          "df": 41,
+          "mercenary_slots": 0
+        },
+        "rule": "exclude this fixed record from automatic enemy bonuses because stock events change its allegiance; any hard-mode change must be runtime-event-specific and separately approved"
       },
       {
         "scenario": 25,
@@ -1225,6 +1284,29 @@
           }
         ],
         "rule": "treat both Mina records as one transformation route and apply the approved boss rule per phase without accidental stacking"
+      },
+      {
+        "scenario": 31,
+        "kind": "secret_final_boss_special_faction",
+        "fixed_record": {
+          "offset": "0x183902",
+          "side_id": "08",
+          "name_korean": "베른하르트",
+          "class_id": "4E",
+          "class_korean": "엠퍼러",
+          "at": 87,
+          "df": 61,
+          "mercenaries": [
+            "7C",
+            "7C",
+            "7C",
+            "7C",
+            "77",
+            "77"
+          ]
+        },
+        "completion_target": true,
+        "rule": "keep as a hostile final boss, but exclude it from the main-story formula and cap; tune only in the approved X4 individual policy"
       }
     ],
     "editable_fields_after_approval": [

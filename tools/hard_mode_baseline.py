@@ -210,7 +210,31 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
         },
         {
             "scenario": 22,
-            "rule": "진영 08 열 개는 적대 상태와 이벤트 소유권 확인 후 개별 승인",
+            "offsets": [
+                "0x1827DA",
+                "0x1827FE",
+                "0x182846",
+                "0x18286A",
+                "0x18288E",
+                "0x1828B2",
+                "0x1828D6",
+                "0x1828FA",
+                "0x18291E",
+                "0x182942",
+            ],
+            "rule": (
+                "실기에서 적대 대상으로 확인된 진영 08 열 개를 21~24장 "
+                "공식 대상에 포함하되 원본 진영 08은 보존"
+            ),
+        },
+        {
+            "scenario": 24,
+            "offsets": ["0x182B8A"],
+            "names": ["베른하르트"],
+            "rule": (
+                "원작 이벤트가 진영을 바꾸는 특수 레코드이므로 고정 "
+                "레코드 자동 강화에서 제외"
+            ),
         },
         {
             "scenario": 25,
@@ -223,6 +247,15 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
             "offsets": ["0x183724", "0x183748"],
             "names": ["미나 1단계", "미나 2단계"],
             "rule": "한 보스의 두 단계로 취급하고 중복 누적 금지",
+        },
+        {
+            "scenario": 31,
+            "offsets": ["0x183902"],
+            "names": ["베른하르트"],
+            "rule": (
+                "적대 최종 보스지만 X4 원본 수치가 본편 상한보다 높으므로 "
+                "본편 공식·상한을 적용하지 않고 X4에서 개별 조정"
+            ),
         },
         {
             "scenarios": [28, 29, 30, 31],
@@ -488,7 +521,7 @@ def build_inventory(
         })
 
     return {
-        "schema_version": 6,
+        "schema_version": 7,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -604,8 +637,20 @@ def build_inventory(
             "known_runtime_exceptions": [
                 {
                     "scenario": 22,
-                    "kind": "special_faction_ownership",
+                    "kind": "verified_hostile_special_faction",
                     "side_08_record_count": 10,
+                    "verified_hostile_side_08_offsets": [
+                        "0x1827DA",
+                        "0x1827FE",
+                        "0x182846",
+                        "0x18286A",
+                        "0x18288E",
+                        "0x1828B2",
+                        "0x1828D6",
+                        "0x1828FA",
+                        "0x18291E",
+                        "0x182942",
+                    ],
                     "hidden_boss": {
                         "offset": "0x182822",
                         "side_id": "04",
@@ -614,8 +659,28 @@ def build_inventory(
                         "class_korean": "엠퍼러",
                     },
                     "rule": (
-                        "do not assign the ten side-08 records an enemy hard-mode "
-                        "formula until the user approves their ownership"
+                        "treat all ten side-08 records as hostile hard-mode targets "
+                        "after balance approval, but preserve side 08 and all stock "
+                        "event ownership"
+                    ),
+                },
+                {
+                    "scenario": 24,
+                    "kind": "stock_allegiance_transition",
+                    "fixed_record": {
+                        "offset": "0x182B8A",
+                        "side_id": "08",
+                        "name_korean": "베른하르트",
+                        "class_id": "4E",
+                        "class_korean": "엠퍼러",
+                        "at": 58,
+                        "df": 41,
+                        "mercenary_slots": 0,
+                    },
+                    "rule": (
+                        "exclude this fixed record from automatic enemy bonuses "
+                        "because stock events change its allegiance; any hard-mode "
+                        "change must be runtime-event-specific and separately approved"
                     ),
                 },
                 {
@@ -663,6 +728,33 @@ def build_inventory(
                         "treat both Mina records as one transformation route and "
                         "apply the approved boss rule per phase without accidental "
                         "stacking"
+                    ),
+                },
+                {
+                    "scenario": 31,
+                    "kind": "secret_final_boss_special_faction",
+                    "fixed_record": {
+                        "offset": "0x183902",
+                        "side_id": "08",
+                        "name_korean": "베른하르트",
+                        "class_id": "4E",
+                        "class_korean": "엠퍼러",
+                        "at": 87,
+                        "df": 61,
+                        "mercenaries": [
+                            "7C",
+                            "7C",
+                            "7C",
+                            "7C",
+                            "77",
+                            "77",
+                        ],
+                    },
+                    "completion_target": True,
+                    "rule": (
+                        "keep as a hostile final boss, but exclude it from the "
+                        "main-story formula and cap; tune only in the approved X4 "
+                        "individual policy"
                     ),
                 },
             ],
@@ -830,11 +922,15 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "",
         "- 1장 레온(`0x1802FC`)·레아드(`0x180320`): 쓰러뜨리기 위한",
         "  일반 적이 아닌 연출용 강적이므로 자동 강화에서 제외한다.",
-        "- 22장 진영 `08` 10개: 실제 적대 상태와 이벤트 소유권을 확인한",
-        "  뒤 개별 승인한다.",
+        "- 22장 진영 `08` 10개: 적대 대상으로 확인되었으므로 21~24장",
+        "  공식에 포함하되 진영 `08`과 원작 이벤트 소유권은 보존한다.",
+        "- 24장 베른하르트(`0x182B8A`): 이벤트 중 진영이 바뀌므로 고정",
+        "  레코드 자동 강화에서 제외한다.",
         "- 25장 제시카(`0x182D62`): 아군 지원 이벤트이므로 제외한다.",
         "- 30장 미나의 메이지·세인트 두 레코드는 한 보스의 2단계로",
         "  취급하고 보너스를 중복 누적하지 않는다.",
+        "- X4 베른하르트(`0x183902`): 적대 최종 보스지만 원본 AT87/DF61이",
+        "  본편 상한보다 높아 X4 개별 조정만 적용한다.",
         "",
         "## 기술적으로 확정된 능력치 구조",
         "",
@@ -883,19 +979,27 @@ def render_markdown(inventory: dict[str, object]) -> str:
     lines.extend([
         "",
         "시나리오 22는 고정 레코드상 적군 진영 `04`가 1개뿐이고 특수 진영",
-        "`08`이 10개다. 따라서 단순히 `04`에만 일괄 공식을 적용하면 주요",
-        "배치를 놓칠 수 있다. 이 10개의 소유권은 사용자 승인 전까지 미정이다.",
+        "`08`이 10개다. 실기 진행과 클리어 프로브에서 이 10개가 모두 적대",
+        "대상임을 확인했다. 승인 후 적 전용 공식에는 포함하되 진영 `08`과",
+        "원작 이벤트 소유권은 그대로 보존한다.",
         "",
         "## 확인된 이벤트 예외",
         "",
         "- 시나리오 22: `08` 진영 10개와 숨김 베른하르트/엠퍼러",
-        "  (`0x182822`, 진영 `04`)를 분리해 다룬다.",
+        "  (`0x182822`, 진영 `04`)를 분리한다. 전자는 적대 대상으로",
+        "  강화하되 진영값을 바꾸지 않는다.",
+        "- 시나리오 24: `0x182B8A` 베른하르트/엠퍼러는 원작 이벤트가",
+        "  진영을 바꾸는 레코드다. 고정 레코드 자동 강화에서 제외하고,",
+        "  필요하면 런타임 이벤트 단계별 변경을 별도로 승인받는다.",
         "- 시나리오 25: 고정 레코드 `0x182D62`의 아군 제시카/워록은",
         "  이벤트 후 런타임에서 소서러 LV5, AT29, DF17로 바뀐다. 런타임",
         "  변경 뒤에도 적군 하드 모드 보너스 대상에서 제외한다.",
         "- 시나리오 30: `0x183724` 메이지와 숨김 `0x183748` 세인트는",
         "  미나의 2단계 변신 경로다. 별개의 보스로 중복 계산하지 않고,",
         "  승인된 보스 규칙을 각 단계에 의도한 만큼만 적용한다.",
+        "- 비밀 시나리오 X4(31장): `0x183902` 진영 `08` 베른하르트는",
+        "  클리어에 필요한 적대 최종 보스다. AT87/DF61로 본편 상한보다",
+        "  이미 높으므로 본편 공식에서 제외하고 X4 안에서 개별 조정한다.",
         "",
         "## 원판 용병 슬롯 사용량",
         "",
