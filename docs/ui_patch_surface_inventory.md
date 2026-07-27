@@ -10,63 +10,63 @@ closed merely because every known patch declaration changed bytes.
 - Byte-modified declarations: 142
 - The unchanged `NPC` declaration is an intentional retained abbreviation.
 
-| Group | Entries | Modified |
-| --- | ---: | ---: |
-| byte_ff_strings | 27 | 27 |
-| fixed_byte_strings | 7 | 6 |
-| fixed_word_strings | 16 | 16 |
-| direct_word_sequences | 3 | 3 |
-| fixed_direct_strings | 17 | 17 |
-| route_titles | 1 | 1 |
-| scenario_headers | 1 | 1 |
-| arrange_glyph_lists | 1 | 1 |
-| opening_text_lists | 12 | 12 |
-| global_wide_glyphs | 3 | 3 |
-| class_change_glyph_list | 1 | 1 |
-| name_entry_default_buffer | 1 | 1 |
-| name_entry_glyph_list | 1 | 1 |
-| name_entry_layout | 1 | 1 |
-| name_entry_byte_values | 1 | 1 |
-| name_entry_confirm_hook | 1 | 1 |
-| name_entry_confirm_routine | 1 | 1 |
-| title_logo_original_resource_pointer | 1 | 1 |
-| title_logo_active_resource_pointer | 1 | 1 |
-| title_logo_layout_record | 1 | 1 |
-| title_logo_resource_payload | 1 | 1 |
-| battle_ui_terrain_original_resource_pointer | 1 | 1 |
-| battle_ui_terrain_active_resource_pointer | 1 | 1 |
-| battle_ui_terrain_resource_payload | 1 | 1 |
-| shop_inventory_full_glyphs | 1 | 1 |
-| shop_inventory_full_message | 1 | 1 |
-| control_settings_glyph_list | 1 | 1 |
-| control_settings_layout_rows | 7 | 7 |
-| sound_test_render_hook | 1 | 1 |
-| sound_test_render_routine | 1 | 1 |
-| sound_test_tile_table | 1 | 1 |
-| inline_discard_prompt_hook | 1 | 1 |
-| inline_discard_prompt_routine | 1 | 1 |
-| inline_discard_prompt_record | 1 | 1 |
-| item_discard_notice_glyph_pointer | 1 | 1 |
-| item_discard_notice_token_pointer | 1 | 1 |
-| item_discard_notice_glyphs | 1 | 1 |
-| item_discard_notice_tokens | 1 | 1 |
-| shop_item_selection_prompt | 1 | 1 |
-| item_discard_list_hook | 1 | 1 |
-| item_discard_list_routine | 1 | 1 |
-| item_discard_prompt_tokens | 1 | 1 |
-| title_load_glyph_list | 1 | 1 |
-| title_load_slot_records | 5 | 5 |
-| title_save_header | 1 | 1 |
-| title_load_header_fallback | 1 | 1 |
-| title_load_header_hook | 1 | 1 |
-| title_load_header_relocation | 1 | 1 |
-| title_main_menu_record | 1 | 1 |
-| title_credit_font_load_hook | 1 | 1 |
-| title_credit_render_hook | 1 | 1 |
-| title_credit_font_load_routine | 1 | 1 |
-| title_credit_render_routine | 1 | 1 |
-| title_credit_text_record | 1 | 1 |
-| title_credit_resource_pointer | 1 | 1 |
+| Group | Entries | Modified | Reviewed | Live verified |
+| --- | ---: | ---: | ---: | ---: |
+| byte_ff_strings | 27 | 27 | 27 | 27 |
+| fixed_byte_strings | 7 | 6 | 7 | 7 |
+| fixed_word_strings | 16 | 16 | 16 | 16 |
+| direct_word_sequences | 3 | 3 | 3 | 3 |
+| fixed_direct_strings | 17 | 17 | 17 | 17 |
+| route_titles | 1 | 1 | 1 | 1 |
+| scenario_headers | 1 | 1 | 1 | 1 |
+| arrange_glyph_lists | 1 | 1 | 1 | 1 |
+| opening_text_lists | 12 | 12 | 12 | 12 |
+| global_wide_glyphs | 3 | 3 | 3 | 3 |
+| class_change_glyph_list | 1 | 1 | 1 | 1 |
+| name_entry_default_buffer | 1 | 1 | 1 | 1 |
+| name_entry_glyph_list | 1 | 1 | 1 | 1 |
+| name_entry_layout | 1 | 1 | 1 | 1 |
+| name_entry_byte_values | 1 | 1 | 1 | 1 |
+| name_entry_confirm_hook | 1 | 1 | 1 | 1 |
+| name_entry_confirm_routine | 1 | 1 | 1 | 1 |
+| title_logo_original_resource_pointer | 1 | 1 | 1 | 1 |
+| title_logo_active_resource_pointer | 1 | 1 | 1 | 1 |
+| title_logo_layout_record | 1 | 1 | 1 | 1 |
+| title_logo_resource_payload | 1 | 1 | 1 | 1 |
+| battle_ui_terrain_original_resource_pointer | 1 | 1 | 1 | 1 |
+| battle_ui_terrain_active_resource_pointer | 1 | 1 | 1 | 1 |
+| battle_ui_terrain_resource_payload | 1 | 1 | 1 | 1 |
+| shop_inventory_full_glyphs | 1 | 1 | 1 | 1 |
+| shop_inventory_full_message | 1 | 1 | 1 | 1 |
+| control_settings_glyph_list | 1 | 1 | 1 | 1 |
+| control_settings_layout_rows | 7 | 7 | 7 | 7 |
+| sound_test_render_hook | 1 | 1 | 1 | 1 |
+| sound_test_render_routine | 1 | 1 | 1 | 1 |
+| sound_test_tile_table | 1 | 1 | 1 | 1 |
+| inline_discard_prompt_hook | 1 | 1 | 1 | 1 |
+| inline_discard_prompt_routine | 1 | 1 | 1 | 1 |
+| inline_discard_prompt_record | 1 | 1 | 1 | 1 |
+| item_discard_notice_glyph_pointer | 1 | 1 | 1 | 1 |
+| item_discard_notice_token_pointer | 1 | 1 | 1 | 1 |
+| item_discard_notice_glyphs | 1 | 1 | 1 | 1 |
+| item_discard_notice_tokens | 1 | 1 | 1 | 1 |
+| shop_item_selection_prompt | 1 | 1 | 1 | 1 |
+| item_discard_list_hook | 1 | 1 | 1 | 1 |
+| item_discard_list_routine | 1 | 1 | 1 | 1 |
+| item_discard_prompt_tokens | 1 | 1 | 1 | 1 |
+| title_load_glyph_list | 1 | 1 | 1 | 1 |
+| title_load_slot_records | 5 | 5 | 5 | 5 |
+| title_save_header | 1 | 1 | 1 | 1 |
+| title_load_header_fallback | 1 | 1 | 1 | 0 |
+| title_load_header_hook | 1 | 1 | 1 | 1 |
+| title_load_header_relocation | 1 | 1 | 1 | 1 |
+| title_main_menu_record | 1 | 1 | 1 | 1 |
+| title_credit_font_load_hook | 1 | 1 | 1 | 1 |
+| title_credit_render_hook | 1 | 1 | 1 | 1 |
+| title_credit_font_load_routine | 1 | 1 | 1 | 1 |
+| title_credit_render_routine | 1 | 1 | 1 | 1 |
+| title_credit_text_record | 1 | 1 | 1 | 1 |
+| title_credit_resource_pointer | 1 | 1 | 1 | 1 |
 
 ## Compressed Byte UI Font
 

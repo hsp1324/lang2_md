@@ -4,223 +4,333 @@
   "groups": {
     "byte_ff_strings": {
       "entry_count": 27,
-      "modified_count": 27
+      "modified_count": 27,
+      "reviewed_count": 27,
+      "live_verified_count": 27
     },
     "fixed_byte_strings": {
       "entry_count": 7,
-      "modified_count": 6
+      "modified_count": 6,
+      "reviewed_count": 7,
+      "live_verified_count": 7
     },
     "fixed_word_strings": {
       "entry_count": 16,
-      "modified_count": 16
+      "modified_count": 16,
+      "reviewed_count": 16,
+      "live_verified_count": 16
     },
     "direct_word_sequences": {
       "entry_count": 3,
-      "modified_count": 3
+      "modified_count": 3,
+      "reviewed_count": 3,
+      "live_verified_count": 3
     },
     "fixed_direct_strings": {
       "entry_count": 17,
-      "modified_count": 17
+      "modified_count": 17,
+      "reviewed_count": 17,
+      "live_verified_count": 17
     },
     "route_titles": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "scenario_headers": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "arrange_glyph_lists": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "opening_text_lists": {
       "entry_count": 12,
-      "modified_count": 12
+      "modified_count": 12,
+      "reviewed_count": 12,
+      "live_verified_count": 12
     },
     "global_wide_glyphs": {
       "entry_count": 3,
-      "modified_count": 3
+      "modified_count": 3,
+      "reviewed_count": 3,
+      "live_verified_count": 3
     },
     "class_change_glyph_list": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "name_entry_default_buffer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "name_entry_glyph_list": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "name_entry_layout": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "name_entry_byte_values": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "name_entry_confirm_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "name_entry_confirm_routine": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_logo_original_resource_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_logo_active_resource_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_logo_layout_record": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_logo_resource_payload": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "battle_ui_terrain_original_resource_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "battle_ui_terrain_active_resource_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "battle_ui_terrain_resource_payload": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "shop_inventory_full_glyphs": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "shop_inventory_full_message": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "control_settings_glyph_list": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "control_settings_layout_rows": {
       "entry_count": 7,
-      "modified_count": 7
+      "modified_count": 7,
+      "reviewed_count": 7,
+      "live_verified_count": 7
     },
     "sound_test_render_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "sound_test_render_routine": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "sound_test_tile_table": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "inline_discard_prompt_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "inline_discard_prompt_routine": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "inline_discard_prompt_record": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_notice_glyph_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_notice_token_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_notice_glyphs": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_notice_tokens": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "shop_item_selection_prompt": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_list_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_list_routine": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "item_discard_prompt_tokens": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_load_glyph_list": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_load_slot_records": {
       "entry_count": 5,
-      "modified_count": 5
+      "modified_count": 5,
+      "reviewed_count": 5,
+      "live_verified_count": 5
     },
     "title_save_header": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_load_header_fallback": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 0
     },
     "title_load_header_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_load_header_relocation": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_main_menu_record": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_credit_font_load_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_credit_render_hook": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_credit_font_load_routine": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_credit_render_routine": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_credit_text_record": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     },
     "title_credit_resource_pointer": {
       "entry_count": 1,
-      "modified_count": 1
+      "modified_count": 1,
+      "reviewed_count": 1,
+      "live_verified_count": 1
     }
   },
   "compressed_byte_ui_font": {
@@ -240,8 +350,9 @@
       "size_bytes": 6,
       "target_korean": "엘윈",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -249,8 +360,9 @@
       "size_bytes": 4,
       "target_korean": "리아나",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -258,8 +370,9 @@
       "size_bytes": 4,
       "target_korean": "라나",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-26"
     },
     {
       "group": "byte_ff_strings",
@@ -267,8 +380,9 @@
       "size_bytes": 5,
       "target_korean": "쉐리",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-25"
     },
     {
       "group": "byte_ff_strings",
@@ -276,8 +390,9 @@
       "size_bytes": 4,
       "target_korean": "헤인",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -285,8 +400,9 @@
       "size_bytes": 5,
       "target_korean": "스코트",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-25"
     },
     {
       "group": "byte_ff_strings",
@@ -294,8 +410,9 @@
       "size_bytes": 4,
       "target_korean": "키스",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-25"
     },
     {
       "group": "byte_ff_strings",
@@ -303,8 +420,9 @@
       "size_bytes": 5,
       "target_korean": "아론",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-25"
     },
     {
       "group": "byte_ff_strings",
@@ -312,8 +430,9 @@
       "size_bytes": 5,
       "target_korean": "레스터",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-25"
     },
     {
       "group": "byte_ff_strings",
@@ -321,8 +440,9 @@
       "size_bytes": 6,
       "target_korean": "제시카",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-25"
     },
     {
       "group": "byte_ff_strings",
@@ -330,8 +450,9 @@
       "size_bytes": 4,
       "target_korean": "레온",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -339,8 +460,9 @@
       "size_bytes": 8,
       "target_korean": "베른하르트",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-27"
     },
     {
       "group": "byte_ff_strings",
@@ -348,8 +470,9 @@
       "size_bytes": 8,
       "target_korean": "에그베르트",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-26"
     },
     {
       "group": "byte_ff_strings",
@@ -357,8 +480,9 @@
       "size_bytes": 6,
       "target_korean": "레아드",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -366,8 +490,9 @@
       "size_bytes": 7,
       "target_korean": "발드",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -375,8 +500,9 @@
       "size_bytes": 8,
       "target_korean": "병사",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -384,8 +510,9 @@
       "size_bytes": 5,
       "target_korean": "지휘관",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -393,8 +520,9 @@
       "size_bytes": 4,
       "target_korean": "사제",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -402,8 +530,9 @@
       "size_bytes": 6,
       "target_korean": "시민",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -411,8 +540,9 @@
       "size_bytes": 8,
       "target_korean": "민병",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -420,8 +550,9 @@
       "size_bytes": 5,
       "target_korean": "아돈",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-28"
     },
     {
       "group": "byte_ff_strings",
@@ -429,8 +560,9 @@
       "size_bytes": 5,
       "target_korean": "삼손",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-28"
     },
     {
       "group": "byte_ff_strings",
@@ -438,8 +570,9 @@
       "size_bytes": 5,
       "target_korean": "바란",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-28"
     },
     {
       "group": "byte_ff_strings",
@@ -447,8 +580,9 @@
       "size_bytes": 9,
       "target_korean": "제국지휘관",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "byte_ff_strings",
@@ -456,8 +590,9 @@
       "size_bytes": 10,
       "target_korean": "무기",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_equipment_current.png"
     },
     {
       "group": "byte_ff_strings",
@@ -465,8 +600,9 @@
       "size_bytes": 10,
       "target_korean": "방어구",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_equipment_current.png"
     },
     {
       "group": "byte_ff_strings",
@@ -474,8 +610,9 @@
       "size_bytes": 10,
       "target_korean": "장신구",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_equipment_current.png"
     },
     {
       "group": "fixed_byte_strings",
@@ -483,8 +620,9 @@
       "size_bytes": 6,
       "target_korean": "아군",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_byte_strings",
@@ -492,8 +630,9 @@
       "size_bytes": 5,
       "target_korean": "적군",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_byte_strings",
@@ -501,8 +640,9 @@
       "size_bytes": 3,
       "target_korean": "NPC",
       "modified": false,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_byte_strings",
@@ -510,8 +650,9 @@
       "size_bytes": 6,
       "target_korean": "아군",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_byte_strings",
@@ -519,8 +660,9 @@
       "size_bytes": 6,
       "target_korean": "아군",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_byte_strings",
@@ -528,8 +670,9 @@
       "size_bytes": 5,
       "target_korean": "적군",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_byte_strings",
@@ -537,8 +680,9 @@
       "size_bytes": 5,
       "target_korean": "지휘범위",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -546,8 +690,9 @@
       "size_bytes": 10,
       "target_korean": "지휘범위",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -555,8 +700,9 @@
       "size_bytes": 10,
       "target_korean": "지휘범위",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -564,8 +710,9 @@
       "size_bytes": 10,
       "target_korean": "수정",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -573,8 +720,9 @@
       "size_bytes": 10,
       "target_korean": "수정",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -582,8 +730,9 @@
       "size_bytes": 4,
       "target_korean": "AT",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -591,8 +740,9 @@
       "size_bytes": 4,
       "target_korean": "DF",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -600,8 +750,9 @@
       "size_bytes": 4,
       "target_korean": "LV",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -609,8 +760,9 @@
       "size_bytes": 4,
       "target_korean": "MV",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -618,8 +770,9 @@
       "size_bytes": 4,
       "target_korean": "MP",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -627,8 +780,9 @@
       "size_bytes": 4,
       "target_korean": "AT",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -636,8 +790,9 @@
       "size_bytes": 4,
       "target_korean": "DF",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -645,8 +800,9 @@
       "size_bytes": 4,
       "target_korean": "LV",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -654,8 +810,9 @@
       "size_bytes": 4,
       "target_korean": "MV",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -663,8 +820,9 @@
       "size_bytes": 4,
       "target_korean": "MP",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -672,8 +830,9 @@
       "size_bytes": 10,
       "target_korean": "소지금",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "fixed_word_strings",
@@ -681,8 +840,9 @@
       "size_bytes": 10,
       "target_korean": "소지금",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_prep_current.png"
     },
     {
       "group": "direct_word_sequences",
@@ -690,8 +850,9 @@
       "size_bytes": 24,
       "target_korean": "이동공격마법소환치료명령",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/ea22_s01_command_magic_fresh.png"
     },
     {
       "group": "direct_word_sequences",
@@ -717,8 +878,9 @@
       "size_bytes": 8,
       "target_korean": "출격준비",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -726,8 +888,9 @@
       "size_bytes": 8,
       "target_korean": "용병고용",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -735,8 +898,9 @@
       "size_bytes": 12,
       "target_korean": "장비착용",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -744,8 +908,9 @@
       "size_bytes": 8,
       "target_korean": "상점",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -753,8 +918,9 @@
       "size_bytes": 10,
       "target_korean": "지휘관배치",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -762,8 +928,9 @@
       "size_bytes": 4,
       "target_korean": "구입",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -771,8 +938,9 @@
       "size_bytes": 4,
       "target_korean": "판매",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -780,8 +948,9 @@
       "size_bytes": 6,
       "target_korean": "취소",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-1"
     },
     {
       "group": "fixed_direct_strings",
@@ -789,8 +958,9 @@
       "size_bytes": 8,
       "target_korean": "시나리오",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_direct_strings",
@@ -798,8 +968,9 @@
       "size_bytes": 10,
       "target_korean": "합계",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_direct_strings",
@@ -807,8 +978,9 @@
       "size_bytes": 6,
       "target_korean": "턴",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "HANDOFF.md#verified-working-areas"
     },
     {
       "group": "fixed_direct_strings",
@@ -825,8 +997,9 @@
       "size_bytes": 10,
       "target_korean": "지휘관배치",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_arrangement_current.png"
     },
     {
       "group": "fixed_direct_strings",
@@ -834,8 +1007,9 @@
       "size_bytes": 10,
       "target_korean": "적군보기",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_arrangement_current.png"
     },
     {
       "group": "fixed_direct_strings",
@@ -843,8 +1017,9 @@
       "size_bytes": 8,
       "target_korean": "출격배치",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_arrangement_current.png"
     },
     {
       "group": "fixed_direct_strings",
@@ -852,8 +1027,9 @@
       "size_bytes": 10,
       "target_korean": "부대보기",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_arrangement_current.png"
     },
     {
       "group": "fixed_direct_strings",
@@ -861,8 +1037,9 @@
       "size_bytes": 4,
       "target_korean": "출격",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_arrangement_current.png"
     },
     {
       "group": "route_titles",
@@ -870,8 +1047,9 @@
       "size_bytes": 10,
       "target_korean": "진군루트",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "docs/runtime_verification_inventory.md#scenario-2"
     },
     {
       "group": "scenario_headers",
@@ -879,8 +1057,9 @@
       "size_bytes": 10,
       "target_korean": "프롤로그",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/c7ab_s01_title.png"
     },
     {
       "group": "arrange_glyph_lists",
@@ -888,8 +1067,9 @@
       "size_bytes": 12,
       "target_korean": "이동순변경자",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_arrangement_current.png"
     },
     {
       "group": "opening_text_lists",
@@ -1005,8 +1185,9 @@
       "size_bytes": 64,
       "target_korean": "단",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_shop_buy_popup.png"
     },
     {
       "group": "global_wide_glyphs",
@@ -1014,8 +1195,9 @@
       "size_bytes": 64,
       "target_korean": "검",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_shop_buy_popup.png"
     },
     {
       "group": "global_wide_glyphs",
@@ -1023,8 +1205,9 @@
       "size_bytes": 64,
       "target_korean": " ",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/212a_s01_shop_buy_popup.png"
     },
     {
       "group": "class_change_glyph_list",
@@ -1032,8 +1215,9 @@
       "size_bytes": 30,
       "target_korean": "클래스체인지 가능  용병마법",
       "modified": true,
-      "reviewed": false,
-      "live_verified": false
+      "reviewed": true,
+      "live_verified": true,
+      "evidence": "captures/run/d1d7_class_change_start_trigger.png"
     },
     {
       "group": "name_entry_default_buffer",
@@ -1276,7 +1460,7 @@
       "target_korean": "redirect fixed item-discard prompt to localized renderer",
       "modified": true,
       "reviewed": true,
-      "live_verified": false
+      "live_verified": true
     },
     {
       "group": "inline_discard_prompt_routine",
@@ -1285,7 +1469,7 @@
       "target_korean": "render 13 full localized tile IDs without consuming base byte-font slots",
       "modified": true,
       "reviewed": true,
-      "live_verified": false
+      "live_verified": true
     },
     {
       "group": "inline_discard_prompt_record",
@@ -1294,7 +1478,7 @@
       "target_korean": "버릴 아이템",
       "modified": true,
       "reviewed": true,
-      "live_verified": false
+      "live_verified": true
     },
     {
       "group": "item_discard_notice_glyph_pointer",

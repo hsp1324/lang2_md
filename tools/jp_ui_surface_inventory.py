@@ -12,6 +12,112 @@ from scripts import build_korean_jp_probe as builder
 from tools import class_change_inventory as class_change_report
 
 
+RUNTIME_EVIDENCE_BY_ADDRESS = {
+    # Scenario 1 preparation, deployment, map status, and four-turn playback.
+    **dict.fromkeys(
+        (
+            0x061AC5,
+            0x061ACB,
+            0x061AD8,
+            0x061AFC,
+            0x061B16,
+            0x061B1C,
+            0x061B54,
+            0x061B5C,
+            0x061B61,
+            0x061B65,
+            0x061B71,
+            0x061B8D,
+        ),
+        "docs/runtime_verification_inventory.md#scenario-1",
+    ),
+    # The complete two-page playable roster was opened through equipment/status
+    # panels, so this covers the byte-font names rather than dialogue aliases.
+    **dict.fromkeys(
+        (
+            0x061AD3,
+            0x061ADC,
+            0x061AE1,
+            0x061AE5,
+            0x061AEA,
+            0x061AEF,
+        ),
+        "docs/runtime_verification_inventory.md#scenario-25",
+    ),
+    0x061ACF: "docs/runtime_verification_inventory.md#scenario-26",
+    0x061B00: "docs/runtime_verification_inventory.md#scenario-27",
+    0x061B28: "docs/runtime_verification_inventory.md#scenario-26",
+    **dict.fromkeys(
+        (0x061B7E, 0x061B83, 0x061B88),
+        "docs/runtime_verification_inventory.md#scenario-28",
+    ),
+    # Scenario 1 shop/equipment proof includes all three category labels.
+    **dict.fromkeys(
+        (0x0A18E0, 0x0A18EC, 0x0A18F8),
+        "captures/run/212a_s01_equipment_current.png",
+    ),
+    # Conditions, unit notices, and the preparation/status panel.
+    **dict.fromkeys(
+        (0x09B26D, 0x09B278, 0x09B2A3, 0x0A1099, 0x0A2DD4, 0x0A2E63),
+        "HANDOFF.md#verified-working-areas",
+    ),
+    **dict.fromkeys(
+        (
+            0x0A3D15,
+            0x09AB36,
+            0x09ACA8,
+            0x09AB8C,
+            0x09ACF0,
+            0x09AB22,
+            0x09AB2C,
+            0x09AB5E,
+            0x09AB6C,
+            0x09AB7E,
+            0x09AC8E,
+            0x09AC98,
+            0x09ACC8,
+            0x09ACD2,
+            0x09ACE0,
+            0x09ABC2,
+            0x0A1896,
+        ),
+        "captures/run/212a_s01_prep_current.png",
+    ),
+    0x09706A: "captures/run/ea22_s01_command_magic_fresh.png",
+    # Preparation, shop, arrangement, and name-entry fixed records.
+    **dict.fromkeys(
+        (
+            0x09702C,
+            0x097034,
+            0x09703C,
+            0x097048,
+            0x097050,
+            0x09705A,
+            0x09705E,
+            0x097062,
+        ),
+        "docs/runtime_verification_inventory.md#scenario-1",
+    ),
+    **dict.fromkeys(
+        (0x0A2B72, 0x0A2B7C, 0x0A2B86, 0x0A2B8E, 0x0A2B98, 0x0A2BAC),
+        "captures/run/212a_s01_arrangement_current.png",
+    ),
+    **dict.fromkeys(
+        (0x0A37A0, 0x0A37AA, 0x0A37B6),
+        "HANDOFF.md#verified-working-areas",
+    ),
+    0x0A10E0: "docs/runtime_verification_inventory.md#scenario-2",
+    0x09B1B6: "captures/run/c7ab_s01_title.png",
+    # These global glyphs are visibly exercised by the Scenario 1 dagger/shop
+    # path and its spaced completion messages.
+    **dict.fromkeys(
+        (0x043140, 0x042C80, 0x043300),
+        "captures/run/212a_s01_shop_buy_popup.png",
+    ),
+    0x0A3C9C: "captures/run/d1d7_class_change_start_trigger.png",
+}
+
+
 def changed(japanese: bytes, korean: bytes, offset: int, size: int) -> bool:
     return japanese[offset : offset + size] != korean[offset : offset + size]
 
@@ -392,7 +498,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 "target_korean": target,
                 "modified": changed(japanese, korean, offset, size),
                 "reviewed": True,
-                "live_verified": False,
+                "live_verified": True,
             }
         )
 
@@ -601,6 +707,21 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             }
         )
 
+    evidence_addresses = set(RUNTIME_EVIDENCE_BY_ADDRESS)
+    declared_addresses = {int(str(row["address"]), 16) for row in rows}
+    unknown_evidence = evidence_addresses - declared_addresses
+    if unknown_evidence:
+        rendered = ", ".join(f"0x{address:06X}" for address in sorted(unknown_evidence))
+        raise ValueError(f"runtime evidence references undeclared patches: {rendered}")
+    for row in rows:
+        address = int(str(row["address"]), 16)
+        evidence = RUNTIME_EVIDENCE_BY_ADDRESS.get(address)
+        if evidence is None:
+            continue
+        row["reviewed"] = True
+        row["live_verified"] = True
+        row["evidence"] = evidence
+
     resource_entry = builder.BYTE_UI_FONT_RESOURCE_TABLE + builder.BYTE_UI_FONT_RESOURCE_INDEX * 4
     original_resource = int.from_bytes(japanese[resource_entry : resource_entry + 4], "big")
     current_resource = int.from_bytes(korean[resource_entry : resource_entry + 4], "big")
@@ -617,9 +738,19 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
     group_summary = {}
     for row in rows:
-        summary = group_summary.setdefault(row["group"], {"entry_count": 0, "modified_count": 0})
+        summary = group_summary.setdefault(
+            row["group"],
+            {
+                "entry_count": 0,
+                "modified_count": 0,
+                "reviewed_count": 0,
+                "live_verified_count": 0,
+            },
+        )
         summary["entry_count"] += 1
         summary["modified_count"] += bool(row["modified"])
+        summary["reviewed_count"] += bool(row["reviewed"])
+        summary["live_verified_count"] += bool(row["live_verified"])
 
     return {
         "declared_patch_count": len(rows),
@@ -660,11 +791,14 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Byte-modified declarations: {result['modified_patch_count']}",
         "- The unchanged `NPC` declaration is an intentional retained abbreviation.",
         "",
-        "| Group | Entries | Modified |",
-        "| --- | ---: | ---: |",
+        "| Group | Entries | Modified | Reviewed | Live verified |",
+        "| --- | ---: | ---: | ---: | ---: |",
     ]
     for name, group in result["groups"].items():
-        lines.append(f"| {name} | {group['entry_count']} | {group['modified_count']} |")
+        lines.append(
+            f"| {name} | {group['entry_count']} | {group['modified_count']} | "
+            f"{group['reviewed_count']} | {group['live_verified_count']} |"
+        )
     font = result["compressed_byte_ui_font"]
     lines.extend(
         [

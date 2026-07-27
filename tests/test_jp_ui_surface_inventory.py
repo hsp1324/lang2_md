@@ -174,7 +174,7 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(font["current_pointer"], "0x290000")
         self.assertTrue(font["relocated"])
 
-    def test_inline_discard_prompt_is_declared_without_runtime_overclaim(self):
+    def test_inline_discard_prompt_is_declared_and_live_verified(self):
         rows = [
             row
             for row in self.result["declared_patches"]
@@ -183,7 +183,27 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertEqual(len(rows), 3)
         self.assertTrue(all(row["modified"] for row in rows))
         self.assertTrue(all(row["reviewed"] for row in rows))
-        self.assertTrue(all(not row["live_verified"] for row in rows))
+        self.assertTrue(all(row["live_verified"] for row in rows))
+
+    def test_runtime_evidence_closes_stale_ui_statuses_only(self):
+        rows = self.result["declared_patches"]
+        self.assertEqual(sum(bool(row["reviewed"]) for row in rows), 143)
+        self.assertEqual(sum(bool(row["live_verified"]) for row in rows), 142)
+
+        pending_live = [row for row in rows if not row["live_verified"]]
+        self.assertEqual(len(pending_live), 1)
+        self.assertEqual(pending_live[0]["group"], "title_load_header_fallback")
+        self.assertEqual(pending_live[0]["address"], "0x0A3138")
+        self.assertNotIn("evidence", pending_live[0])
+
+        evidenced = [row for row in rows if "evidence" in row]
+        self.assertEqual(len(evidenced), 74)
+        for row in evidenced:
+            evidence_path = str(row["evidence"]).split("#", 1)[0]
+            self.assertTrue(
+                (ROOT / evidence_path).exists(),
+                f"missing evidence for {row['address']}: {evidence_path}",
+            )
 
     def test_expanded_discard_ui_is_declared_and_live_verified(self):
         groups = {

@@ -11281,3 +11281,32 @@ contains 57 safe syllables as documented below and in
   reached the intact Korean title without a reset or freeze. Together with the
   existing Scenario 27 ending run, all twelve opening/ending montage rows are
   source-reviewed and live-verified.
+
+### Declared UI Runtime Evidence Registry (2026-07-27)
+
+- `tools/jp_ui_surface_inventory.py` now records runtime evidence against exact
+  patch addresses instead of leaving old global-name and shared-UI rows at the
+  default `reviewed=false / live_verified=false`. This prevents already
+  accepted preparation, status, shop, arrangement, and class-change checks from
+  being repeated merely because the generated inventory was stale.
+- The explicit registry covers 74 addresses. Its evidence points to the
+  Scenario 1 and Scenario 25-28 runtime sections or to accepted captures for
+  equipment, status labels, commands, arrangement, shop glyphs, and the
+  class-change screen. A validation error is raised if an evidence address no
+  longer belongs to a declared patch, so future builder additions are not
+  silently marked verified.
+- The regenerated inventory has 143/143 source-reviewed declarations and
+  142/143 live-verified declarations. The one non-live row is the original
+  `로드` header record at `0x0A3138`; the active renderer is redirected to the
+  separately verified relocated `불러오기` header, so the superseded fallback
+  remains deliberately unclaimed.
+- The three fixed `버릴 아이템` hook/routine/record rows are live-verified by
+  the existing `94DB` discard-list proof, including page navigation,
+  confirmation, and stable return. Their earlier `live_verified=false` state
+  was metadata drift, not missing gameplay coverage.
+- `docs/ui_patch_surface_inventory.md` now reports reviewed and live counts per
+  group, and `docs/full_localization_plan.md` carries the corrected 142/143
+  modified, 143 reviewed, and 142 live totals. Focused inventory/discard tests
+  pass 24/24 against these invariants. Generation used the isolated current-
+  source checksum `99FD` ROM; the shared ignored production ROM was not
+  overwritten while the separate design session was active.
