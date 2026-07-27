@@ -28,6 +28,14 @@ SPRITE_DIR = ROOT / "editor/static/class-sprites/commanders"
 TRANSPARENT = (0, 0, 0, 0)
 INK = (36, 36, 36, 255)
 RESAMPLING = getattr(Image, "Resampling", Image)
+AARON_BLUE_CAPE_COLORS = {
+    (73, 109, 255, 255),
+    (109, 219, 255, 255),
+}
+AARON_OCHRE_CAPE = {
+    (73, 109, 255, 255): (219, 146, 36, 255),
+    (109, 219, 255, 255): (255, 255, 255, 255),
+}
 
 CLASS_SPECS = {
     0x11: {
@@ -98,6 +106,51 @@ def visible_palette(image: Image.Image) -> list[str]:
     ]
 
 
+def comparison_font() -> ImageFont.ImageFont:
+    noto = Path(
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc"
+    )
+    if noto.is_file():
+        return ImageFont.truetype(str(noto), 12)
+    return ImageFont.load_default()
+
+
+def recolor_largest_component(
+    image: Image.Image,
+    source_colors: set[tuple[int, int, int, int]],
+    mapping: dict[
+        tuple[int, int, int, int],
+        tuple[int, int, int, int],
+    ],
+) -> None:
+    """Recolor one connected garment without changing detached magic effects."""
+    remaining = {
+        (x, y)
+        for y in range(16)
+        for x in range(16)
+        if image.getpixel((x, y)) in source_colors
+    }
+    components: list[set[tuple[int, int]]] = []
+    while remaining:
+        start = remaining.pop()
+        component = {start}
+        frontier = [start]
+        while frontier:
+            x, y = frontier.pop()
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    neighbor = (x + dx, y + dy)
+                    if neighbor in remaining:
+                        remaining.remove(neighbor)
+                        component.add(neighbor)
+                        frontier.append(neighbor)
+        components.append(component)
+    if not components:
+        raise ValueError("expected a connected garment color component")
+    for point in max(components, key=len):
+        image.putpixel(point, mapping[image.getpixel(point)])
+
+
 def role_mapping(
     class_id: int,
     commander_id: int,
@@ -157,6 +210,15 @@ def build_variants() -> dict[str, object]:
                 preserve_generated_palette=True,
                 restore_transparent_locked_points=False,
             )
+            if class_id == 0x13 and commander_id == 8:
+                # Aaron's face remains identity-locked. Only the connected
+                # left cape changes to his original white/ochre identity;
+                # detached blue robe accents and magic effects stay blue.
+                recolor_largest_component(
+                    converted,
+                    AARON_BLUE_CAPE_COLORS,
+                    AARON_OCHRE_CAPE,
+                )
             output_path = (
                 logical_dir / f"{commander_id:02d}-{class_id:02X}.png"
             )
@@ -218,7 +280,7 @@ def build_variants() -> dict[str, object]:
         (18, 18, 18),
     )
     draw = ImageDraw.Draw(canvas)
-    font = ImageFont.load_default()
+    font = comparison_font()
     for index, report in enumerate(reports):
         x = (index % columns) * card_width
         y = (index // columns) * card_height

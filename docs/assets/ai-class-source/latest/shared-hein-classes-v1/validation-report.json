@@ -307,16 +307,16 @@
       "visible_color_count": 11,
       "palette": [
         "#242424",
+        "#ffffff",
         "#924924",
         "#49496d",
-        "#496dff",
         "#929292",
         "#dbb66d",
-        "#6ddbff",
-        "#ffffff",
+        "#496dff",
+        "#db9224",
         "#ffdb6d",
         "#24b624",
-        "#db9224"
+        "#6ddbff"
       ],
       "empty_rows": [],
       "empty_columns": [],

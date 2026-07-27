@@ -45,7 +45,7 @@
       "identity_pixel_count": 69,
       "mask_pixel_count": 69,
       "equipment_priority_transparent_pixels": 0,
-      "visible_color_count": 9,
+      "visible_color_count": 10,
       "palette": [
         "#242424",
         "#49496d",
@@ -53,9 +53,10 @@
         "#6d0000",
         "#ffffff",
         "#924924",
-        "#db0000",
         "#dbb66d",
-        "#ffb600"
+        "#ffb600",
+        "#db0000",
+        "#2449db"
       ],
       "empty_rows": [],
       "empty_columns": [],
@@ -162,15 +163,19 @@
       "identity_pixel_count": 69,
       "mask_pixel_count": 69,
       "equipment_priority_transparent_pixels": 0,
-      "visible_color_count": 7,
+      "visible_color_count": 11,
       "palette": [
         "#929292",
         "#242424",
         "#ffffff",
+        "#496dff",
         "#dbb66d",
-        "#6d6d6d",
         "#924924",
-        "#49496d"
+        "#db9224",
+        "#49496d",
+        "#6d6d6d",
+        "#6ddbff",
+        "#244992"
       ],
       "empty_rows": [],
       "empty_columns": [],

@@ -39,6 +39,16 @@ MASTER_CRIMSON = (146, 0, 36, 255)
 MASTER_DARK_RED = (109, 0, 0, 255)
 MASTER_BRONZE = (182, 109, 36, 255)
 MASTER_GOLD_LIGHT = (255, 219, 146, 255)
+AARON_BLUE_GARMENT_COLORS = {
+    (73, 109, 255, 255),
+    (109, 219, 255, 255),
+    (182, 219, 255, 255),
+}
+AARON_WHITE_OCHRE_GARMENT = {
+    (73, 109, 255, 255): (255, 255, 255, 255),
+    (109, 219, 255, 255): (219, 146, 36, 255),
+    (182, 219, 255, 255): (255, 255, 255, 255),
+}
 
 # The silhouette stays byte-identical to Lester's edited equipment. Only the
 # six role colors change; skin, white/silver, gray, and ink remain shared.
@@ -124,6 +134,51 @@ def visible_palette(image: Image.Image) -> list[str]:
     ]
 
 
+def comparison_font() -> ImageFont.ImageFont:
+    noto = Path(
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc"
+    )
+    if noto.is_file():
+        return ImageFont.truetype(str(noto), 12)
+    return ImageFont.load_default()
+
+
+def recolor_largest_component(
+    image: Image.Image,
+    source_colors: set[tuple[int, int, int, int]],
+    mapping: dict[
+        tuple[int, int, int, int],
+        tuple[int, int, int, int],
+    ],
+) -> None:
+    """Recolor the connected cloak while preserving detached staff magic."""
+    remaining = {
+        (x, y)
+        for y in range(16)
+        for x in range(16)
+        if image.getpixel((x, y)) in source_colors
+    }
+    components: list[set[tuple[int, int]]] = []
+    while remaining:
+        start = remaining.pop()
+        component = {start}
+        frontier = [start]
+        while frontier:
+            x, y = frontier.pop()
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    neighbor = (x + dx, y + dy)
+                    if neighbor in remaining:
+                        remaining.remove(neighbor)
+                        component.add(neighbor)
+                        frontier.append(neighbor)
+        components.append(component)
+    if not components:
+        raise ValueError("expected a connected Archmage garment component")
+    for point in max(components, key=len):
+        image.putpixel(point, mapping[image.getpixel(point)])
+
+
 def build_variants() -> dict[str, object]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     master = Image.open(MASTER_PATH).convert("RGBA")
@@ -169,6 +224,14 @@ def build_variants() -> dict[str, object]:
             preserve_generated_palette=True,
             restore_transparent_locked_points=False,
         )
+        if commander_id == 8:
+            # Aaron keeps blue spell energy on the detached staff orb while
+            # his connected robe/cape returns to the base white/ochre motif.
+            recolor_largest_component(
+                converted,
+                AARON_BLUE_GARMENT_COLORS,
+                AARON_WHITE_OCHRE_GARMENT,
+            )
         output_path = (
             logical_dir
             / f"{commander_id:02d}-{ARCHMAGE_CLASS_ID:02X}.png"
@@ -231,7 +294,7 @@ def build_variants() -> dict[str, object]:
         (18, 18, 18),
     )
     draw = ImageDraw.Draw(canvas)
-    font = ImageFont.load_default()
+    font = comparison_font()
     for index, report in enumerate(reports):
         x = (index % 4) * card_width
         y = (index // 4) * card_height

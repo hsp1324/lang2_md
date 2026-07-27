@@ -102,7 +102,7 @@ AI_ASSET_BUILD_LOCK_PATH = (
 )
 GRID_COLUMNS = 5
 GRID_ROWS = 10
-ASSET_VERSION = "aaron-sky-blue-classes-v51"
+ASSET_VERSION = "elwin-lord-high-lord-shield-v55"
 
 ROM_INK = (36, 36, 36, 255)
 ROM_WHITE = (255, 255, 255, 255)
