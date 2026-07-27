@@ -11910,3 +11910,33 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core G Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x017386..0x018091` region has SHA-256
+  `e1a6825dd5c457ecdfd545bdef04d6d3e503301258e11fb5d1288f499cfcff1f`
+  and contains 35 low-signal candidates: 33 half-width-looking and two
+  ASCII-looking rows. Its ordered candidate manifest is
+  `9e85e58453e9afed02f6e85ccd7aa1b38b80c9fed46d5b12af3f316740bfb2be`.
+- Two exact code streams own all 35 candidates:
+  `0x017386..0x01773F` has 211 instructions, four `RTS`, and 12 candidates;
+  `0x017744..0x01807D` has 599 instructions, 17 `RTS`, and 23 candidates.
+  Both streams end exactly at their declared boundary and contain no `dc.w`
+  fallback.
+- `0x017740..0x017743` is the candidate-free byte lookup
+  `6B 6C FD 00`, read by the PC-indexed `MOVE.B` at `0x01772C`.
+  `0x01807E..0x018091` holds the source labels
+  `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` and `PAGE`, each terminated by `FF`, followed by the
+  alignment byte. `LEA` instructions at `0x017FFE` and `0x01804C` load
+  their exact starts.
+- Neither the aligned four-byte scan nor the executable PC-relative
+  `LEA`/`PEA` scan targets any of the 35 candidates.
+- The cumulative exact review is now 6,333 of 6,612 short-inline candidates:
+  6,332 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 279 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 127/127. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.

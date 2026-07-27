@@ -43,6 +43,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-E unclassified: 0
 - Executable-core-F candidates: 189
 - Executable-core-F unclassified: 0
+- Executable-core-G candidates: 35
+- Executable-core-G unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -59,6 +61,14 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-G Candidates
+
+- The source-locked `0x017386..0x018092` region contains two exact 68000 code streams and two candidate-free data records.
+- Source SHA-256: `e1a6825dd5c457ecdfd545bdef04d6d3e503301258e11fb5d1288f499cfcff1f`; candidate manifest SHA-256: `9e85e58453e9afed02f6e85ccd7aa1b38b80c9fed46d5b12af3f316740bfb2be` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 35.
+- Data: indexed lookup `6B 6C FD 00`; labels `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` and `PAGE`.
+- Candidate-target aligned four-byte windows: 0; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
 
 ## Reviewed Executable-Core-F Candidates
 
