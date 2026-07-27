@@ -294,17 +294,17 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             self.result["remaining_inventory_gaps"],
         )
         self.assertIn(
-            "exact ownership of low-signal byte sequences outside the 6,351 reviewed "
+            "exact ownership of low-signal byte sequences outside the 6,393 reviewed "
             "font/class/sprite/item/name/graphics/system/ending/scenario/text/UI/"
             "compressed-resource/executable-core-A/core-B/core-C/core-D/core-E/core-F/"
-            "core-G/core-H/startup/"
+            "core-G/core-H/core-I/startup/"
             "auxiliary/gameplay/renderer/tail candidates: "
             "the one/two-signal scan region-classifies 6,612 candidates, proves "
-            "6,350 rows are instruction/bitmap/pointer-boundary/word/graphics/layout/"
+            "6,392 rows are instruction/bitmap/pointer-boundary/word/graphics/layout/"
             "compressed payload data, and "
             "identifies "
             "retained scenario-level prefix L-; exact ownership of the remaining "
-            "261 executable/numeric candidates and base-relative, indexed, or "
+            "219 executable/numeric candidates and base-relative, indexed, or "
             "dynamic access remains open",
             self.result["remaining_inventory_gaps"],
         )

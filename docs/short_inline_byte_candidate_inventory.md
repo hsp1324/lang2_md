@@ -47,6 +47,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-G unclassified: 0
 - Executable-core-H candidates: 18
 - Executable-core-H unclassified: 0
+- Executable-core-I candidates: 42
+- Executable-core-I unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -63,6 +65,15 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-I Candidates
+
+- The source-locked `0x018C38..0x01A870` region contains two exact 68000 code streams and two directly referenced numeric lookup tables.
+- Source SHA-256: `440177e684a24d17e3f928a16a000f8357f9b33a38c0c8290cac5ea68724ae21`; candidate manifest SHA-256: `c119dd03517cb769938d93200bcf1e32c34cbc1020d1b60b2e7be3b9512c0044` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 19, `numeric_lookup_table_false_positive` 23.
+- Numeric lookup values: 5,4,3,3,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0.
+- Signed trigonometric table: 271 words; range -255..256.
+- Candidate-target aligned four-byte windows: 0; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
 
 ## Reviewed Executable-Core-H Candidates
 

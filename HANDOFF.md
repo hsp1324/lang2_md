@@ -11969,3 +11969,31 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core I Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x018C38..0x01A86F` region has SHA-256
+  `440177e684a24d17e3f928a16a000f8357f9b33a38c0c8290cac5ea68724ae21`
+  and contains 42 low-signal candidates: 33 half-width-looking and nine
+  ASCII-looking rows. Its ordered candidate manifest is
+  `c119dd03517cb769938d93200bcf1e32c34cbc1020d1b60b2e7be3b9512c0044`.
+- Two exact code streams own 19 candidates. `0x018C38..0x01A61D` has
+  1,648 contiguous 68000 instructions and 19 `RTS`; the candidate-free
+  `0x01A634..0x01A651` dispatch tail has nine instructions. Both end exactly
+  at their declared boundaries and contain no `dc.w` fallback.
+- `0x01A61E..0x01A633` is the candidate-free 22-byte numeric lookup
+  `5,4,3,3,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0`. Three `LEA` operands
+  at `0x018CAA`, `0x0192B8`, and `0x019F50` reference its exact start.
+- The remaining 23 candidates are low bytes of the source-locked
+  `0x01A652..0x01A86F` table: 271 signed words spanning -255 through 256.
+  The `LEA` operand at `0x01A876` references its exact start. No aligned
+  four-byte window or executable PC-relative `LEA`/`PEA` targets a candidate.
+- The cumulative exact review is now 6,393 of 6,612 short-inline candidates:
+  6,392 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 219 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 133/133. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.
