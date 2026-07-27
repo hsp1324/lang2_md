@@ -1,0 +1,684 @@
+{
+  "source_rom_sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
+  "production_rom_sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+  "ending_slot_count": 16,
+  "ending_loop": {
+    "slot_initialization": {
+      "range": "0x01C718..0x01C7B8",
+      "source_sha256": "07b6471ebbf8fb6ba26a92719d623c596d39733751fc140d7e95f46f9dd46fd7",
+      "production_source_identical": true
+    },
+    "slot_advance": {
+      "range": "0x01CF96..0x01CFBE",
+      "source_sha256": "169e2a3892eea05ab3681ebafc999497d131580362d0a51f9308c95b6cd53f18",
+      "production_source_identical": true
+    },
+    "credit_dispatch": {
+      "range": "0x01D1C0..0x01D1EA",
+      "source_sha256": "7d6443e48d19574faf982cec524126ca0e22b544bb61530acba941e6155d29cc",
+      "production_source_identical": true
+    },
+    "fin_requires_all_slots": true
+  },
+  "ending_montage": {
+    "record_count": 12,
+    "all_modified_reviewed_live": true
+  },
+  "epilogues": {
+    "record_count": 90,
+    "page_count": 515,
+    "unique_increasing_relocated_pointers": true,
+    "relocation_range": "0x2C0000..0x2D0000"
+  },
+  "ending_visits": {
+    "record_count": 23,
+    "page_count": 83,
+    "unique_increasing_relocated_pointers": true,
+    "relocation_range": "0x2D0000..0x2D8000"
+  },
+  "credits": {
+    "source_record_count": 60,
+    "production_record_count": 61,
+    "sequence_inventory": {
+      "sequence_count": 16,
+      "source_record_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "production_record_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "source_records_covered_once": true,
+      "production_records_covered_once": true,
+      "final_sequence_record_ids": [
+        59,
+        60
+      ],
+      "sequences": [
+        {
+          "index": 0,
+          "address": "0x2BB040",
+          "entries": [
+            {
+              "record_id": 0,
+              "motion": 1,
+              "x": 32,
+              "y": 64
+            },
+            {
+              "record_id": 1,
+              "motion": 3,
+              "x": 208,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "address": "0x2BB04E",
+          "entries": [
+            {
+              "record_id": 2,
+              "motion": 0,
+              "x": 80,
+              "y": 64
+            },
+            {
+              "record_id": 3,
+              "motion": 2,
+              "x": 174,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "address": "0x2BB05C",
+          "entries": [
+            {
+              "record_id": 4,
+              "motion": 3,
+              "x": 96,
+              "y": 64
+            },
+            {
+              "record_id": 5,
+              "motion": 3,
+              "x": 176,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "address": "0x2BB06A",
+          "entries": [
+            {
+              "record_id": 6,
+              "motion": 0,
+              "x": 80,
+              "y": 64
+            },
+            {
+              "record_id": 7,
+              "motion": 3,
+              "x": 192,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "address": "0x2BB078",
+          "entries": [
+            {
+              "record_id": 8,
+              "motion": 2,
+              "x": 32,
+              "y": 16
+            },
+            {
+              "record_id": 9,
+              "motion": 0,
+              "x": 176,
+              "y": 36
+            },
+            {
+              "record_id": 10,
+              "motion": 3,
+              "x": 32,
+              "y": 66
+            },
+            {
+              "record_id": 11,
+              "motion": 1,
+              "x": 80,
+              "y": 86
+            },
+            {
+              "record_id": 12,
+              "motion": 1,
+              "x": 176,
+              "y": 86
+            },
+            {
+              "record_id": 13,
+              "motion": 1,
+              "x": 32,
+              "y": 116
+            },
+            {
+              "record_id": 14,
+              "motion": 3,
+              "x": 80,
+              "y": 136
+            },
+            {
+              "record_id": 15,
+              "motion": 3,
+              "x": 176,
+              "y": 136
+            },
+            {
+              "record_id": 16,
+              "motion": 3,
+              "x": 176,
+              "y": 156
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "address": "0x2BB0B0",
+          "entries": [
+            {
+              "record_id": 17,
+              "motion": 3,
+              "x": 96,
+              "y": 64
+            },
+            {
+              "record_id": 18,
+              "motion": 1,
+              "x": 192,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "address": "0x2BB0BE",
+          "entries": [
+            {
+              "record_id": 19,
+              "motion": 0,
+              "x": 96,
+              "y": 32
+            },
+            {
+              "record_id": 20,
+              "motion": 1,
+              "x": 176,
+              "y": 58
+            },
+            {
+              "record_id": 21,
+              "motion": 3,
+              "x": 176,
+              "y": 84
+            },
+            {
+              "record_id": 22,
+              "motion": 1,
+              "x": 176,
+              "y": 110
+            },
+            {
+              "record_id": 23,
+              "motion": 3,
+              "x": 176,
+              "y": 136
+            },
+            {
+              "record_id": 24,
+              "motion": 1,
+              "x": 176,
+              "y": 162
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "address": "0x2BB0E4",
+          "entries": [
+            {
+              "record_id": 25,
+              "motion": 0,
+              "x": 40,
+              "y": 32
+            },
+            {
+              "record_id": 26,
+              "motion": 3,
+              "x": 40,
+              "y": 58
+            },
+            {
+              "record_id": 27,
+              "motion": 3,
+              "x": 216,
+              "y": 58
+            },
+            {
+              "record_id": 28,
+              "motion": 3,
+              "x": 40,
+              "y": 84
+            },
+            {
+              "record_id": 29,
+              "motion": 3,
+              "x": 216,
+              "y": 84
+            },
+            {
+              "record_id": 30,
+              "motion": 3,
+              "x": 40,
+              "y": 110
+            },
+            {
+              "record_id": 31,
+              "motion": 3,
+              "x": 216,
+              "y": 110
+            },
+            {
+              "record_id": 32,
+              "motion": 3,
+              "x": 40,
+              "y": 136
+            },
+            {
+              "record_id": 33,
+              "motion": 3,
+              "x": 216,
+              "y": 136
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "address": "0x2BB11C",
+          "entries": [
+            {
+              "record_id": 34,
+              "motion": 3,
+              "x": 64,
+              "y": 64
+            },
+            {
+              "record_id": 35,
+              "motion": 1,
+              "x": 160,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "address": "0x2BB12A",
+          "entries": [
+            {
+              "record_id": 36,
+              "motion": 2,
+              "x": 96,
+              "y": 32
+            },
+            {
+              "record_id": 37,
+              "motion": 2,
+              "x": 144,
+              "y": 58
+            },
+            {
+              "record_id": 38,
+              "motion": 2,
+              "x": 144,
+              "y": 84
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "address": "0x2BB13E",
+          "entries": [
+            {
+              "record_id": 39,
+              "motion": 0,
+              "x": 64,
+              "y": 32
+            },
+            {
+              "record_id": 40,
+              "motion": 1,
+              "x": 160,
+              "y": 58
+            },
+            {
+              "record_id": 41,
+              "motion": 3,
+              "x": 160,
+              "y": 84
+            },
+            {
+              "record_id": 42,
+              "motion": 1,
+              "x": 160,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "address": "0x2BB158",
+          "entries": [
+            {
+              "record_id": 43,
+              "motion": 3,
+              "x": 64,
+              "y": 64
+            },
+            {
+              "record_id": 44,
+              "motion": 1,
+              "x": 176,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "address": "0x2BB166",
+          "entries": [
+            {
+              "record_id": 45,
+              "motion": 0,
+              "x": 64,
+              "y": 32
+            },
+            {
+              "record_id": 46,
+              "motion": 1,
+              "x": 192,
+              "y": 58
+            },
+            {
+              "record_id": 47,
+              "motion": 3,
+              "x": 192,
+              "y": 84
+            },
+            {
+              "record_id": 48,
+              "motion": 1,
+              "x": 192,
+              "y": 110
+            },
+            {
+              "record_id": 49,
+              "motion": 3,
+              "x": 192,
+              "y": 136
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "address": "0x2BB186",
+          "entries": [
+            {
+              "record_id": 50,
+              "motion": 3,
+              "x": 112,
+              "y": 16
+            },
+            {
+              "record_id": 51,
+              "motion": 1,
+              "x": 160,
+              "y": 38
+            },
+            {
+              "record_id": 52,
+              "motion": 3,
+              "x": 160,
+              "y": 60
+            },
+            {
+              "record_id": 53,
+              "motion": 1,
+              "x": 160,
+              "y": 82
+            },
+            {
+              "record_id": 54,
+              "motion": 3,
+              "x": 160,
+              "y": 104
+            },
+            {
+              "record_id": 55,
+              "motion": 1,
+              "x": 160,
+              "y": 126
+            },
+            {
+              "record_id": 56,
+              "motion": 3,
+              "x": 160,
+              "y": 148
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "address": "0x2BB1B2",
+          "entries": [
+            {
+              "record_id": 57,
+              "motion": 3,
+              "x": 64,
+              "y": 64
+            },
+            {
+              "record_id": 58,
+              "motion": 1,
+              "x": 144,
+              "y": 90
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "address": "0x2BB1C0",
+          "entries": [
+            {
+              "record_id": 59,
+              "motion": 1,
+              "x": 16,
+              "y": 90
+            },
+            {
+              "record_id": 60,
+              "motion": 1,
+              "x": 64,
+              "y": 120
+            }
+          ]
+        }
+      ]
+    },
+    "renderer": {
+      "range": "0x02A626..0x02A818",
+      "source_sha256": "7f37e4a065d308e7b42d8a256ae983a39a31282cf19b7b49cc6bc2d45f27ed0b",
+      "only_relocation_hooks_changed": true,
+      "sequence_table_hook": "0x2BB000",
+      "pointer_table_hook": "0x2BB800"
+    }
+  },
+  "runtime_evidence": {
+    "complete_ending_credits": {
+      "state": "verified_probe",
+      "checksum": "E93E/F2FC/1BE7/F852",
+      "capture_count": 12,
+      "captures": [
+        "captures/run/e93e_s27_ending_watch/075.png",
+        "captures/run/e93e_s27_ending_watch/225.png",
+        "captures/run/e93e_s27_ending_watch/400.png",
+        "captures/run/e93e_s27_ending_watch/575.png",
+        "captures/run/e93e_s27_ending_watch/650.png",
+        "captures/run/e93e_s27_ending_watch/725.png",
+        "captures/run/e93e_s27_ending_watch/800.png",
+        "captures/run/e93e_s27_ending_watch/825.png",
+        "captures/run/e93e_s27_ending_watch/875.png",
+        "captures/run/f2fc_credit_final_watch/324.png",
+        "captures/run/1be7_full_ending_watch/1241.png",
+        "captures/run/f852_ending_dialogue_watch/475.png"
+      ]
+    },
+    "ending_visit_dialogue": {
+      "state": "verified_probe",
+      "checksum": "F852",
+      "capture_count": 7,
+      "captures": [
+        "captures/run/f852_ending_dialogue_watch/240.png",
+        "captures/run/f852_ending_dialogue_watch/320.png",
+        "captures/run/f852_ending_dialogue_watch/400.png",
+        "captures/run/f852_ending_dialogue_watch/420.png",
+        "captures/run/f852_ending_dialogue_watch/470.png",
+        "captures/run/f852_ending_dialogue_watch/475.png",
+        "captures/run/f852_ending_dialogue_watch/477.png"
+      ]
+    }
+  },
+  "complete": true
+}

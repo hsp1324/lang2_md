@@ -2414,6 +2414,19 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/f852_ending_dialogue_watch/470.png`
   - `captures/run/f852_ending_dialogue_watch/475.png`
   - `captures/run/f852_ending_dialogue_watch/477.png`
+- `ending_credits_complete`: probe checksum `E93E/F2FC/1BE7/F852` (base `9DD0/743F/5F82/E38B`). The source-locked ending controller initializes slot 0 at 0x01C7A8, increments the same slot at 0x01CF96, compares it with 16 at 0x01CF9C, and dispatches it unchanged to the credit renderer at 0x01D1C0. Fin is reachable only after all 16 slots. The source sequence table contains 16 groups whose entries are exactly record IDs 0..59 once each; production preserves those entries and appends only localization credit ID 60 to the final group. E93E traversed the reviewed 12-record montage, selected character/villain/world outcomes, every interleaved credit group, and Fin. F2FC visibly verifies the final copyright plus 한국어화 HSP1324 group. 1BE7 consumes the 90-record/515-page combined epilogue stream through Fin, and F852 consumes all 23 ending-visit records/83 pages through the stock visit renderer. The normal, Liana, and world selector classes already have separate live evidence. Together with source hashes and pointer/control tests, this covers all authored ending and credits text surfaces; natural statistics and visit conditions only select an inventoried record and do not introduce another text store or renderer.
+  - `captures/run/e93e_s27_ending_watch/075.png`
+  - `captures/run/e93e_s27_ending_watch/225.png`
+  - `captures/run/e93e_s27_ending_watch/400.png`
+  - `captures/run/e93e_s27_ending_watch/575.png`
+  - `captures/run/e93e_s27_ending_watch/650.png`
+  - `captures/run/e93e_s27_ending_watch/725.png`
+  - `captures/run/e93e_s27_ending_watch/800.png`
+  - `captures/run/e93e_s27_ending_watch/825.png`
+  - `captures/run/e93e_s27_ending_watch/875.png`
+  - `captures/run/f2fc_credit_final_watch/324.png`
+  - `captures/run/1be7_full_ending_watch/1241.png`
+  - `captures/run/f852_ending_dialogue_watch/475.png`
 - `arrangement_warning`: current checksum `544B` (base `544B`). The shared incomplete-deployment warning uses its screen-local glyph list and visibly renders 지휘관 배치 미완료입니다 with readable spacing.
   - `captures/run/544b_s23_arrange_warning.png`
 - `start_and_control_settings`: probe checksum `6B21` (base `9DD0`). Production 9DD0 changes the misleading fourth game-settings row from 설정완료 to 조작설정 and localizes the independent screen-local list at 0x0971A2 and layout beginning at 0x09AFD0. The 6B21 Scenario 26 battle/UI derivative visibly verifies 게임속도, 표시속도, 전투장면, 조작설정, 색상설정, 키 설정, 유닛검색, 취소, 결정/메뉴, 설정메뉴, and 나가기. Source glyph slots 5..19 remain byte-identical so R/G/B, digits 0..7, and hard-coded A/B/C/S prefixes all render correctly; no Japanese or damaged glyph remains on either screen.

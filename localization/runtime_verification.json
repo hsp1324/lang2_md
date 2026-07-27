@@ -253,6 +253,27 @@
       "note": "E38B relocates all 23 ending-visit records with natural Korean spacing. Diagnostic F852 redirects every stock visit selector pointer to one 83-page concatenated stream; Scenario 27 playback rendered every page through the stock visit renderer, reached the final Elwin/Liana page, then followed the normal forest ending and SEGA restart without clipping, Japanese residue, reset, freeze, or premature termination. This proves renderer coverage, not all natural visit-condition selections."
     },
     {
+      "surface": "ending_credits_complete",
+      "state": "verified_probe",
+      "checksum": "E93E/F2FC/1BE7/F852",
+      "based_on": "9DD0/743F/5F82/E38B",
+      "captures": [
+        "captures/run/e93e_s27_ending_watch/075.png",
+        "captures/run/e93e_s27_ending_watch/225.png",
+        "captures/run/e93e_s27_ending_watch/400.png",
+        "captures/run/e93e_s27_ending_watch/575.png",
+        "captures/run/e93e_s27_ending_watch/650.png",
+        "captures/run/e93e_s27_ending_watch/725.png",
+        "captures/run/e93e_s27_ending_watch/800.png",
+        "captures/run/e93e_s27_ending_watch/825.png",
+        "captures/run/e93e_s27_ending_watch/875.png",
+        "captures/run/f2fc_credit_final_watch/324.png",
+        "captures/run/1be7_full_ending_watch/1241.png",
+        "captures/run/f852_ending_dialogue_watch/475.png"
+      ],
+      "note": "The source-locked ending controller initializes slot 0 at 0x01C7A8, increments the same slot at 0x01CF96, compares it with 16 at 0x01CF9C, and dispatches it unchanged to the credit renderer at 0x01D1C0. Fin is reachable only after all 16 slots. The source sequence table contains 16 groups whose entries are exactly record IDs 0..59 once each; production preserves those entries and appends only localization credit ID 60 to the final group. E93E traversed the reviewed 12-record montage, selected character/villain/world outcomes, every interleaved credit group, and Fin. F2FC visibly verifies the final copyright plus 한국어화 HSP1324 group. 1BE7 consumes the 90-record/515-page combined epilogue stream through Fin, and F852 consumes all 23 ending-visit records/83 pages through the stock visit renderer. The normal, Liana, and world selector classes already have separate live evidence. Together with source hashes and pointer/control tests, this covers all authored ending and credits text surfaces; natural statistics and visit conditions only select an inventoried record and do not introduce another text store or renderer."
+    },
+    {
       "surface": "arrangement_warning",
       "state": "verified_current",
       "checksum": "544B",

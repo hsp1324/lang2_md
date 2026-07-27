@@ -13,7 +13,7 @@ It writes:
 roms/builds/Langrisser II (Korean).md
 ```
 
-## Resume Dashboard (2026-07-23)
+## Resume Dashboard (2026-07-28)
 
 This section is the first stop after a Goal resume or interrupted session. Do
 not restart completed investigations merely because their details also remain
@@ -29,8 +29,10 @@ unit tests: 988 passing
 direct-word candidates: 783 classified, 0 unclassified
 pointer-referenced direct-byte candidates: 348 classified, 0 unclassified
 conservative inline-byte candidates: 646 classified, 0 unclassified
+short-inline candidates: 6,612 classified, 0 unclassified
 declared UI patches: 142/143 byte-modified; NPC is intentionally unchanged
-explicit UI verification gaps: 6
+runtime scenario matrix: 248/248 verified_current or verified_probe
+explicit UI verification gaps: 4
 ```
 
 Completed and closed unless a later edit touches the same renderer, pointer,
@@ -41,7 +43,12 @@ glyph bank, or visible screen:
   evidence recorded in `localization/runtime_verification.json`;
 - the 90 outcome epilogues are relocated at `0x2C0000` and the 23 naturally
   spaced ending-visit records are relocated at `0x2D0000`; the combined visit
-  renderer completed all 83 pages on checksum `F852`;
+  renderer completed all 83 pages on checksum `F852`. The source-locked ending
+  loop proves that reaching `Fin` traverses all 16 credit groups; those groups
+  reference source IDs `0..59` exactly once, and production appends only
+  localization credit ID 60. `tools/ending_credits_inventory.py` ties that
+  control flow to the 12 reviewed montage records, 90 epilogues, 23 visits,
+  and accepted E93E/F2FC/1BE7/F852 playback;
 - the direct-string inventory has no unclassified candidate, so do not repeat a
   whole-ROM direct-string scan unless the builder changes reachable pointers;
 - the Scenario 1 preparation, hire, equipment, shop, arrangement, battle menu,
@@ -66,9 +73,10 @@ glyph bank, or visible screen:
   five-row `버릴 아이템` UI. Diagnostic `94DB` proves pages 1 and 9,
   cursor movement, confirmation, and stable return; a natural treasure/event
   trigger remains to be identified if one exists in normal play.
-- compressed resource `391` is now owned as the stock item-icon payload from
-  direct load call `0x025E62` (`0x8187` to VRAM `0x4000`), reducing unknown
-  original compressed-resource ownership from 428 entries to 427.
+- compressed resources `0`, `1`, `223`, `391`, `392`, and `393` have exact
+  owners. Resource `391` is the stock item-icon payload from direct load call
+  `0x025E62` (`0x8187` to VRAM `0x4000`); 423 resources retain broad family
+  classification but not exact individual purpose.
 - the conservative 32-bit pointer scan now classifies all 348 strict CP932/ASCII
   `FF` byte-string candidates. It found the separate illusion-unit class pointer
   at `0x05E5CA`, selected by the status instruction at `0x010420`; production relocates its
@@ -85,11 +93,12 @@ glyph bank, or visible screen:
 
 Active work, in order:
 
-1. Upgrade scenario `completion` and `branches_endings` cells that are still
-   `pending` in `docs/runtime_verification_inventory.md`. `progressed` is useful
-   continuity evidence but is not a page-by-page visual review.
-2. Work only from the six explicit shared-UI gaps in
-   `docs/ui_patch_surface_inventory.md`; the item-shop gap is closed.
+1. Work only from the four explicit shared-UI gaps in
+   `docs/ui_patch_surface_inventory.md`; the scenario runtime matrix and the
+   ending/credits surface inventory are closed.
+2. Preserve the distinction between `verified_current` and
+   `verified_probe`; promote diagnostic evidence only through a natural route,
+   without repeating already accepted playback.
 3. Re-run a completed path only when a new patch shares its glyphs, pointers,
    tokens, compressed resource, or control flow, or when an automated regression
    fails. Record why the regression was necessary.
@@ -12099,3 +12108,24 @@ contains 57 safe syllables as documented below and in
   `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed and no emulator was launched.
+
+### Complete Ending And Credits Surface Inventory (2026-07-28)
+
+- `tools/ending_credits_inventory.py` source-locks the 16-slot ending loop,
+  credit dispatch, and group renderer. Source groups cover record IDs `0..59`
+  exactly once; production preserves them and appends only ID 60,
+  `한국어화 HSP1324`, to the last group.
+- The same inventory validates all 90 outcome epilogues / 515 pages, all 23
+  ending visits / 83 pages, all 12 reviewed montage records, unique increasing
+  relocation pointers, and the existing E93E/F2FC/1BE7/F852 capture set.
+  Since the terminal branch follows slot 15, accepted playback reaching `Fin`
+  necessarily traversed all 16 credit groups. The former open-ended
+  ending/credits UI gap is closed.
+- Reports were generated from isolated checksum `99FD`, SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  The focused ending/UI/credits/epilogue/runtime suite passes 48/48.
+- Full discovery ran 1,191 tests and had 52 failures unrelated to this closure:
+  three current experimental-class-sprite asset assertions and 49 legacy
+  probe-checksum or ignored production-ROM/report baseline assertions. Do not
+  rewrite those expected values as part of localization; the owning design and
+  probe-baseline work must reconcile them separately.

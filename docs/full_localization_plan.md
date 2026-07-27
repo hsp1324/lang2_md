@@ -4,19 +4,19 @@ The active Goal is full Korean localization of the Japanese Mega Drive ROM.
 Work is split into stages so each checkpoint can be built, tested, live-checked,
 documented, committed, and pushed independently.
 
-## Current Stage Status (2026-07-19)
+## Current Stage Status (2026-07-28)
 
 The broad Goal below remains the final acceptance contract. Day-to-day work must
 follow this status table so a resume does not repeat already accepted work.
 
 | Stage | Status | Resume rule |
 | --- | --- | --- |
-| 1. Inventory and coverage | Complete baseline | 783 direct-word, 348 pointer-referenced direct-byte, and 449 conservative inline-byte candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
-| 2. Shared UI and global names | In progress | 142/143 declared patches differ intentionally; all 143 are source-reviewed and 142 have live evidence. The sole non-live row is the superseded `로드` fallback; work only from the six explicit gaps in `docs/ui_patch_surface_inventory.md`. |
-| 3. Scenarios 2-10 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
-| 4. Scenarios 11-20 | Static/opening complete; route completion pending | Use pending `completion` and `branches_endings` cells in the generated runtime inventory. |
-| 5. Scenarios 21-31 and endings | Static/opening complete; route completion pending | The 90 epilogues and 23 ending-visit records are structurally complete and renderer-verified; natural branch selection remains distinct evidence. |
-| 6. Full regression and release | Pending | Start only after the runtime inventory has no required pending paths and the six UI gaps are resolved or explicitly accepted. |
+| 1. Inventory and coverage | Complete baseline | 783 direct-word, 348 pointer-referenced direct-byte, 646 conservative inline-byte, and 6,612 short-inline candidates are classified with zero unknowns. Re-scan only after reachable pointer or builder coverage changes. |
+| 2. Shared UI and global names | In progress | 142/143 declared patches differ intentionally; all 143 are source-reviewed and 142 have live evidence. The sole non-live row is the superseded `로드` fallback; work only from the four explicit gaps in `docs/ui_patch_surface_inventory.md`. |
+| 3. Scenarios 2-10 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; replay only when a shared owner changes or evidence is explicitly promoted. |
+| 4. Scenarios 11-20 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; preserve the distinction between natural and diagnostic evidence. |
+| 5. Scenarios 21-31 and endings | Runtime and ending inventory complete | The 90 epilogues, 23 ending visits, 12 montage records, 16 credit groups, and all 61 production credit records are structurally inventoried and renderer-verified through `Fin`. |
+| 6. Full regression and release | Pending | Resolve or explicitly accept the four shared-UI gaps, then run the final isolated build and release regression. |
 
 Stage 2 complete-item checkpoint is closed. Production checksum `6C85` splits
 the 86 item-name glyphs at the stock 64-slot VRAM boundary: slots `0..63` stay
@@ -29,7 +29,7 @@ late names and messages no longer turn into item icons. Diagnostic checksum
 its 37 captures verify every item from 단검 through 아뮬렛. Free-price
 derivative `9607` and discard diagnostic `94DB` retain the capacity paths.
 Decoded icon resource 391 remains byte-identical to the Japanese ROM. Resume
-Stage 2 only from the six gaps in
+Stage 2 only from the four gaps in
 `docs/ui_patch_surface_inventory.md`.
 
 Accepted completed work is a regression contract, not a recurring task. Re-run
