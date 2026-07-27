@@ -2271,7 +2271,7 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/ea22_debug_magic_page4.png`
   - `captures/run/d177_debug_summon_page1.png`
   - `captures/run/d177_debug_summon_page2.png`
-- `magic_targeting_results`: probe checksum `49A2/797C/E72D` (base `AD01/1AB2`). AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10. Final-1AB2-derived E72D uses the same source-locked target placement and all-magic branches to prove the separate Fireball attack path: 헤인/워록 and 파이어볼 render cleanly, Bald falls from HP 10 to 9, Hein spends MP 12->10, and the effect returns stably to the map. The all-magic runs are renderer/application evidence, not production ownership evidence.
+- `magic_targeting_results`: probe checksum `49A2/797C/E72D` (base `AD01/1AB2`). AD01-derived 49A2 changes only Bald's documented Scenario 1 target fields and preserves stock magic ownership/MP branches; Magic Arrow consumed MP 12->11, damaged Bald, rendered all inserted combat dialogue in Korean, and returned to the map. Diagnostic 797C additionally exposes all 22 spell IDs and proves the Attack support path with MP 12->10. Final-1AB2-derived E72D uses the same source-locked target placement and all-magic branches to prove representative application paths on all four magic-list pages. 파이어볼 damages Bald from HP 10 to 9 and spends Hein MP 12->10. 힐1 selects an allied target and spends MP 12->10. 슬립 selects Bald, renders the distortion effect and status icon, and spends MP 12->10. 참 selects Bald, renders the allegiance-color change, and spends MP 12->6. Every path retains 헤인/워록 and the surrounding status UI, then returns stably to the map. The all-magic runs are renderer/application evidence, not production ownership evidence.
   - `captures/run/49a2_magic_00_selected.png`
   - `captures/run/49a2_magic_00_target.png`
   - `captures/run/49a2_magic_00_event_01.png`
@@ -2289,6 +2289,16 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/e72d_magic_03_target.png`
   - `captures/run/e72d_magic_03_result.png`
   - `captures/run/e72d_magic_03_result_stable.png`
+  - `captures/run/e72d_magic_09_selected.png`
+  - `captures/run/e72d_magic_09_target.png`
+  - `captures/run/e72d_magic_09_result_stable.png`
+  - `captures/run/e72d_magic_13_selected.png`
+  - `captures/run/e72d_magic_13_target.png`
+  - `captures/run/e72d_magic_13_event_01.png`
+  - `captures/run/e72d_magic_13_result_stable.png`
+  - `captures/run/e72d_magic_21_selected.png`
+  - `captures/run/e72d_magic_21_target.png`
+  - `captures/run/e72d_magic_21_result_stable.png`
 - `summon_targeting_results`: probe checksum `C41E` (base `AD01`). AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. This is renderer/runtime-application evidence, not natural summon ownership evidence.
   - `captures/run/c41e_summon_00_hein_command.png`
   - `captures/run/c41e_summon_00_selected.png`

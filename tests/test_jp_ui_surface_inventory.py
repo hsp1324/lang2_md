@@ -245,7 +245,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         )
         self.assertIn(
             "magic/summon targeting and result paths beyond the production-faithful "
-            "Magic Arrow and diagnostic Attack/Fireball/Elemental probes",
+            "Magic Arrow and diagnostic Attack/Fireball/Heal/Sleep/Charm/Elemental "
+            "probes",
             self.result["remaining_inventory_gaps"],
         )
         self.assertIn(

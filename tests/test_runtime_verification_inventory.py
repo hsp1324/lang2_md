@@ -30,6 +30,13 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e72d_magic_03_result_stable.png",
             evidence["captures"],
         )
+        for magic_id in (9, 13, 21):
+            self.assertIn(
+                f"captures/run/e72d_magic_{magic_id:02d}_result_stable.png",
+                evidence["captures"],
+            )
+        self.assertIn("all four magic-list pages", evidence["note"])
+        self.assertIn("allegiance-color change", evidence["note"])
 
     def test_summon_application_evidence_is_diagnostic(self):
         data = inventory.load_inventory()
