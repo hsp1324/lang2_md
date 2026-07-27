@@ -40,6 +40,39 @@ RESAMPLING = getattr(Image, "Resampling", Image)
 MASTER_DARK_BLUE = (73, 73, 109, 255)
 MASTER_RED = (109, 0, 0, 255)
 MASTER_GOLD = (255, 182, 0, 255)
+AARON_OCHRE = (219, 146, 36, 255)
+AARON_SHIELD_DARK = (36, 73, 146, 255)
+AARON_SHIELD_BLUE = (73, 109, 255, 255)
+AARON_SHIELD_LIGHT = (109, 219, 255, 255)
+ELWIN_SHIELD_BLUE = (36, 73, 219, 255)
+ELWIN_SHIELD_TAN = (219, 182, 109, 255)
+
+# Rebuild the right-side Lord shield with the same rounded blue/gold pixel
+# rhythm as Elwin's current High Lord shield.
+ELWIN_LORD_SHIELD_PATTERN = (
+    " GGG ",
+    "GBGBG",
+    "TGBGT",
+    "GBGBG",
+    "TBBBT",
+    " TBT ",
+)
+
+# Aaron's cape is the small lower-left triangle in the shared Lord template.
+# Keep this coordinate mask explicit: the same gray also appears on the legs
+# and shield, so a global replacement would merge those parts again.
+AARON_LORD_CAPE_POINTS = {
+    (4, 12),
+    (2, 13),
+    (3, 13),
+    (4, 13),
+    (1, 14),
+    (2, 14),
+    (3, 14),
+    (1, 15),
+    (2, 15),
+    (3, 15),
+}
 
 # Colors are sampled from each target's original Lord equipment palette.
 COLOR_SCHEMES = {
@@ -81,6 +114,55 @@ def visible_palette(image: Image.Image) -> list[str]:
         "#{:02x}{:02x}{:02x}".format(*color[:3])
         for color, _ in colors.most_common()
     ]
+
+
+def comparison_font() -> ImageFont.ImageFont:
+    noto = Path(
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc"
+    )
+    if noto.is_file():
+        return ImageFont.truetype(str(noto), 12)
+    return ImageFont.load_default()
+
+
+def apply_aaron_lord_palette(image: Image.Image) -> None:
+    """Separate Aaron's ochre cape from his large blue shield."""
+    for point in AARON_LORD_CAPE_POINTS:
+        if image.getpixel(point)[3]:
+            image.putpixel(point, AARON_OCHRE)
+
+    shield_mapping = {
+        (109, 109, 109, 255): AARON_SHIELD_DARK,
+        (146, 146, 146, 255): AARON_SHIELD_BLUE,
+        (255, 255, 255, 255): AARON_SHIELD_LIGHT,
+    }
+    for y in range(9, 16):
+        for x in range(11, 16):
+            point = (x, y)
+            color = image.getpixel(point)
+            if color in shield_mapping:
+                image.putpixel(point, shield_mapping[color])
+
+
+def apply_elwin_lord_shield_palette(image: Image.Image) -> None:
+    """Rebuild the right shield in Elwin's current High Lord style."""
+    colors = {
+        "G": MASTER_GOLD,
+        "B": ELWIN_SHIELD_BLUE,
+        "T": ELWIN_SHIELD_TAN,
+    }
+    for y in range(9, 15):
+        for x in range(11, 16):
+            image.putpixel((x, y), TRANSPARENT)
+    for dy, row in enumerate(ELWIN_LORD_SHIELD_PATTERN):
+        for dx, symbol in enumerate(row):
+            if symbol in colors:
+                image.putpixel((11 + dx, 9 + dy), colors[symbol])
+    # Preserve the user's final editor adjustment: lift the shield's crown
+    # one row and use a blue center pixel below it.
+    image.putpixel((11, 8), TRANSPARENT)
+    image.putpixel((13, 8), MASTER_GOLD)
+    image.putpixel((13, 9), ELWIN_SHIELD_BLUE)
 
 
 def build_variants() -> dict[str, object]:
@@ -127,6 +209,10 @@ def build_variants() -> dict[str, object]:
         # the full 16-column canvas without stretching the whole sprite.
         for y in (10, 11, 12):
             converted.putpixel((15, y), converted.getpixel((14, y)))
+        if commander_id == 1:
+            apply_elwin_lord_shield_palette(converted)
+        elif commander_id == 8:
+            apply_aaron_lord_palette(converted)
         output_path = logical_dir / f"{commander_id:02d}-04.png"
         converted.save(output_path, optimize=True)
 
@@ -198,7 +284,7 @@ def build_variants() -> dict[str, object]:
         (18, 18, 18),
     )
     draw = ImageDraw.Draw(canvas)
-    font = ImageFont.load_default()
+    font = comparison_font()
     for index, report in enumerate(reports):
         x = index * card_width
         color = (

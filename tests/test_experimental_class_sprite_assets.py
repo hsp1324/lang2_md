@@ -431,7 +431,11 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     "공통 16×16 클래스 템플릿",
                     elwin_row["ai_source_kind"],
                 )
-                self.assertFalse(elwin_row["design_override"])
+                self.assertTrue(elwin_row["design_override"])
+                self.assertGreater(
+                    elwin_row["design_revision"],
+                    elwin_row["superseded_design_revision"],
+                )
                 self.assertTrue(
                     elwin_row["design_override_superseded"]
                 )
@@ -494,46 +498,116 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         ).convert("RGBA")
         self.assertEqual(actual.tobytes(), expected.tobytes())
 
-    def test_aaron_mage_uses_bishop_sky_blue_palette(self):
-        class_id = 0x13
-        row = self.ai_manifest["commanders"]["8"]["classes"][
-            str(class_id)
-        ]
+    def test_aaron_lord_separates_ochre_cape_from_blue_shield(self):
+        image = Image.open(
+            AI_ASSET_DIR / "8/04.png"
+        ).convert("RGBA")
+        cape_points = {
+            (4, 12),
+            (2, 13),
+            (3, 13),
+            (4, 13),
+            (1, 14),
+            (2, 14),
+            (3, 14),
+            (1, 15),
+            (2, 15),
+            (3, 15),
+        }
+        cape_colors = {
+            image.getpixel(point)
+            for point in cape_points
+        }
+        shield_colors = {
+            image.getpixel((x, y))
+            for y in range(9, 16)
+            for x in range(11, 16)
+            if image.getpixel((x, y))[3]
+        }
+        self.assertEqual(cape_colors, {(219, 146, 36, 255)})
+        self.assertIn((73, 109, 255, 255), shield_colors)
+        self.assertIn((109, 219, 255, 255), shield_colors)
+        self.assertNotIn((219, 146, 36, 255), shield_colors)
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "aaron-before-ochre-capes-v1/08-04-v51.png"
+            ).is_file()
+        )
+        expected = Image.open(
+            ROOT
+            / "docs/assets/ai-class-source/latest/"
+            "shared-lord-elwin-high-lord-v1/logical16/08-04.png"
+        ).convert("RGBA")
+        self.assertEqual(image.tobytes(), expected.tobytes())
+
+    def test_elwin_lord_uses_high_lord_style_shield(self):
+        image = Image.open(
+            AI_ASSET_DIR / "1/04.png"
+        ).convert("RGBA")
+        palette = {
+            "G": (255, 182, 0, 255),
+            "B": (36, 73, 219, 255),
+            "T": (219, 182, 109, 255),
+            " ": (0, 0, 0, 0),
+        }
+        pattern = (
+            " GBG ",
+            "GBGBG",
+            "TGBGT",
+            "GBGBG",
+            "TBBBT",
+            " TBT ",
+        )
+        self.assertEqual(
+            [
+                image.getpixel((11 + x, 9 + y))
+                for y in range(6)
+                for x in range(5)
+            ],
+            [
+                palette[symbol]
+                for row in pattern
+                for symbol in row
+            ],
+        )
+        self.assertEqual(
+            image.getpixel((11, 8)),
+            (0, 0, 0, 0),
+        )
+        self.assertEqual(
+            image.getpixel((13, 8)),
+            (255, 182, 0, 255),
+        )
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "elwin-lord-before-high-lord-shield-v1/"
+                "01-04-v54.png"
+            ).is_file()
+        )
+
+    def test_aaron_mage_uses_white_and_ochre_cape(self):
         image = Image.open(
             AI_ASSET_DIR / "8/13.png"
         ).convert("RGBA")
-        original = render_sprite(
-            self.rom,
-            row["face_source_sprite_id"],
-            1,
-        )
-        visible_identity = {
-            tuple(point)
-            for point in row["identity_lock_points"]
-            if original.getpixel(tuple(point))[3]
-        }
-        equipment_colors = [
+        cape_colors = {
             image.getpixel((x, y))
-            for y in range(16)
-            for x in range(16)
-            if (
-                (x, y) not in visible_identity
-                and image.getpixel((x, y))[3]
-            )
-        ]
-        self.assertGreaterEqual(
-            sum(
-                blue >= red + 36 and blue >= green
-                for red, green, blue, _ in equipment_colors
-            ),
-            50,
-        )
-        self.assertFalse(
-            any(
-                red >= 182 and green <= 73 and blue <= 73
-                for red, green, blue, _ in equipment_colors
-            )
-        )
+            for y in range(7, 16)
+            for x in range(0, 8)
+            if image.getpixel((x, y))[3]
+        }
+        all_colors = {
+            color
+            for _, color in (image.getcolors(maxcolors=256) or [])
+            if color[3]
+        }
+        self.assertIn((219, 146, 36, 255), cape_colors)
+        self.assertIn((255, 255, 255, 255), cape_colors)
+        self.assertIn((73, 109, 255, 255), all_colors)
+        self.assertIn((109, 219, 255, 255), all_colors)
         self.assertTrue(
             (
                 ROOT
@@ -541,7 +615,6 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 "aaron-magic-before-deeper-blue-v1/08-13-v49.png"
             ).is_file()
         )
-        self.assertIn((109, 219, 255, 255), equipment_colors)
         self.assertTrue(
             (
                 ROOT
@@ -549,8 +622,15 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 "aaron-before-sky-blue-v1/08-13-v50.png"
             ).is_file()
         )
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "aaron-before-ochre-capes-v1/08-13-v51.png"
+            ).is_file()
+        )
 
-    def test_aaron_archmage_uses_readable_sky_blue_palette(self):
+    def test_aaron_archmage_uses_white_and_ochre_cape(self):
         row = self.ai_manifest["commanders"]["8"]["classes"][
             str(0x14)
         ]
@@ -561,38 +641,19 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         image = Image.open(
             AI_ASSET_DIR / "8/14.png"
         ).convert("RGBA")
-        original = render_sprite(
-            self.rom,
-            row["face_source_sprite_id"],
-            1,
-        )
-        visible_identity = {
-            tuple(point)
-            for point in row["identity_lock_points"]
-            if original.getpixel(tuple(point))[3]
+        all_colors = {
+            color
+            for _, color in (image.getcolors(maxcolors=256) or [])
+            if color[3]
         }
-        equipment_colors = [
-            image.getpixel((x, y))
-            for y in range(16)
-            for x in range(16)
-            if (
-                (x, y) not in visible_identity
-                and image.getpixel((x, y))[3]
-            )
-        ]
-        self.assertGreaterEqual(
-            sum(
-                blue >= red + 36 and blue >= green
-                for red, green, blue, _ in equipment_colors
-            ),
-            70,
+        self.assertIn((219, 146, 36, 255), all_colors)
+        self.assertIn((255, 255, 255, 255), all_colors)
+        self.assertGreater(
+            list(image.getdata()).count((255, 255, 255, 255)),
+            list(image.getdata()).count((219, 146, 36, 255)),
         )
-        self.assertFalse(
-            any(
-                red >= 182 and green <= 73 and blue <= 73
-                for red, green, blue, _ in equipment_colors
-            )
-        )
+        self.assertIn((73, 109, 255, 255), all_colors)
+        self.assertIn((109, 219, 255, 255), all_colors)
         self.assertTrue(
             (
                 ROOT
@@ -600,12 +661,18 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 "aaron-magic-before-deeper-blue-v1/08-14-v49.png"
             ).is_file()
         )
-        self.assertIn((109, 219, 255, 255), equipment_colors)
         self.assertTrue(
             (
                 ROOT
                 / "docs/assets/ai-class-source/archive/"
                 "aaron-before-sky-blue-v1/08-14-v50.png"
+            ).is_file()
+        )
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "aaron-before-ochre-capes-v1/08-14-v51.png"
             ).is_file()
         )
         expected = Image.open(
@@ -1107,7 +1174,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
     def test_elwin_and_logical16_commanders_change_only_upper_classes(self):
         self.assertEqual(
             self.ai_manifest["asset_version"],
-            "aaron-sky-blue-classes-v51",
+            "elwin-lord-high-lord-shield-v55",
         )
         source_paths = self.ai_manifest["ai_source_images"]
         self.assertEqual(len(source_paths), 99)

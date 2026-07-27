@@ -1,5 +1,5 @@
 {
-  "asset_version": "aaron-sky-blue-classes-v51",
+  "asset_version": "elwin-lord-high-lord-shield-v55",
   "generated_from": "roms/original/Langrisser II (Japan).md",
   "ai_source_sheets": [
     "docs/assets/ai-class-source/logical16-v3/liana/liana-logical16-sheet-ai.png",
@@ -203,16 +203,16 @@
             "#929292",
             "#6d0000",
             "#ffffff",
-            "#924924",
-            "#db0000"
+            "#ffb600",
+            "#dbb66d"
           ],
           "pixel_palette": [
+            "#242424",
             "#49496d",
-            "#929292",
             "#6d0000",
+            "#929292",
             "#ffffff",
-            "#924924",
-            "#db0000"
+            "#924924"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -875,8 +875,8 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
+          "design_override": true,
+          "design_revision": 1785139025568946506,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -894,8 +894,8 @@
             14,
             9
           ],
-          "changed_pixel_count": 121,
-          "feature": "엘윈 사용자 편집 하이로드 기반 로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 121픽셀",
+          "changed_pixel_count": 122,
+          "feature": "엘윈 사용자 편집 하이로드 기반 로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 122픽셀·사용자 16×16 디자인 편집 적용",
           "file": "1/04.png"
         },
         "5": {
@@ -1047,12 +1047,12 @@
             "#ffb600"
           ],
           "pixel_palette": [
-            "#ffffff",
             "#dbb66d",
+            "#ffffff",
             "#2449db",
             "#6d0000",
             "#db0000",
-            "#ffb600"
+            "#924924"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -1715,8 +1715,8 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
+          "design_override": true,
+          "design_revision": 1785139123792244742,
           "design_override_superseded": true,
           "superseded_design_revision": 1785122174110219547,
           "duplicate_group": [
@@ -1734,8 +1734,8 @@
             14,
             9
           ],
-          "changed_pixel_count": 142,
-          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 142픽셀·기존 사용자 16×16 디자인 편집 이력 보존·새 공통 클래스 배치 우선",
+          "changed_pixel_count": 143,
+          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 142픽셀·기존 사용자 16×16 디자인 편집 이력 보존·새 공통 클래스 배치 우선·사용자 16×16 디자인 편집 적용",
           "file": "1/0B.png"
         },
         "12": {
@@ -49080,18 +49080,18 @@
           "source_palette": [
             "#929292",
             "#ffffff",
+            "#496dff",
             "#dbb66d",
-            "#6d6d6d",
-            "#924924",
-            "#49496d"
+            "#db9224",
+            "#924924"
           ],
           "pixel_palette": [
             "#929292",
             "#ffffff",
+            "#496dff",
             "#dbb66d",
-            "#6d6d6d",
-            "#924924",
-            "#49496d"
+            "#db9224",
+            "#924924"
           ],
           "face_source_sprite_id": 85,
           "face_pixel_count": 0,
@@ -51496,20 +51496,20 @@
           "ai_source_kind": "헤인 사용자 편집 메이지 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-hein-classes-v1/logical16/08-13.png",
           "source_palette": [
+            "#ffffff",
             "#924924",
             "#49496d",
-            "#496dff",
             "#929292",
             "#dbb66d",
-            "#6ddbff"
+            "#496dff"
           ],
           "pixel_palette": [
+            "#ffffff",
             "#924924",
             "#49496d",
-            "#496dff",
             "#929292",
             "#dbb66d",
-            "#6ddbff"
+            "#496dff"
           ],
           "face_source_sprite_id": 86,
           "face_pixel_count": 0,
@@ -52164,20 +52164,20 @@
           "ai_source_kind": "레스터 사용자 편집 아크메이지 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-archmage-lester-v1/logical16/08-14.png",
           "source_palette": [
-            "#496dff",
+            "#ffffff",
             "#49496d",
             "#929292",
-            "#6ddbff",
+            "#db9224",
             "#dbb66d",
-            "#ffffff"
+            "#924924"
           ],
           "pixel_palette": [
-            "#496dff",
+            "#ffffff",
             "#49496d",
             "#929292",
-            "#6ddbff",
+            "#db9224",
             "#dbb66d",
-            "#ffffff"
+            "#924924"
           ],
           "face_source_sprite_id": 86,
           "face_pixel_count": 0,
