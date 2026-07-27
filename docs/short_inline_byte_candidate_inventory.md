@@ -39,6 +39,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-C unclassified: 0
 - Executable-core-D candidates: 102
 - Executable-core-D unclassified: 0
+- Executable-core-E candidates: 24
+- Executable-core-E unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -55,6 +57,14 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-E Candidates
+
+- The source-locked `0x011FC8..0x012EBE` region is one exact contiguous 68000 instruction stream.
+- Source SHA-256: `41c3a2f3e03710ff517dcbb2de5399727198d5a0b0df161cd04d1effcbb71e37`; candidate manifest SHA-256: `abe211f72f2d9820f9873a5c316d0a5e526b0079f38ec2a28a4310b096d234f6` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 24.
+- Instructions: 853; `RTS`: 20.
+- Exact aligned four-byte windows: 0; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
 
 ## Reviewed Executable-Core-D Candidates
 

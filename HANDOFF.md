@@ -11856,3 +11856,26 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core E Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x011FC8..0x012EBD` region has SHA-256
+  `41c3a2f3e03710ff517dcbb2de5399727198d5a0b0df161cd04d1effcbb71e37`
+  and contains 24 low-signal candidates: 20 half-width-looking and four
+  ASCII-looking rows. Its ordered candidate manifest is
+  `abe211f72f2d9820f9873a5c316d0a5e526b0079f38ec2a28a4310b096d234f6`.
+- All 24 candidates are fully covered by the exact
+  `0x011FC8..0x012EBD` Capstone instruction stream: 853 contiguous 68000
+  instructions ending exactly at `0x012EBE` on the final `RTS`. The stream
+  contains 20 `RTS` instructions and no `dc.w` fallback.
+- Neither the aligned four-byte scan nor the executable PC-relative
+  `LEA`/`PEA` scan targets any of the 24 candidates.
+- The cumulative exact review is now 6,109 of 6,612 short-inline candidates:
+  6,108 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 503 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 121/121. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.

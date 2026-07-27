@@ -55,6 +55,12 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_CORE_D_DATA_SEGMENTS,
     EXECUTABLE_CORE_D_REFERENCE_INSTRUCTION_OWNERS,
     EXECUTABLE_CORE_D_SOURCE_SHA256,
+    EXECUTABLE_CORE_E_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_CORE_E_END,
+    EXECUTABLE_CORE_E_INSTRUCTION_COUNT,
+    EXECUTABLE_CORE_E_RTS_COUNT,
+    EXECUTABLE_CORE_E_SOURCE_SHA256,
+    EXECUTABLE_CORE_E_START,
     EXECUTABLE_STARTUP_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_SEGMENTS,
@@ -122,6 +128,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         ]
         cls.executable_core_d_bank = cls.result[
             "executable_core_d_bank"
+        ]
+        cls.executable_core_e_bank = cls.result[
+            "executable_core_e_bank"
         ]
 
     def test_low_signal_candidate_baseline(self):
@@ -1334,6 +1343,79 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
             all(
                 row["target_is_odd"] and row["source_layout_valid"]
                 for row in bank["reference_instruction_owners"]
+            )
+        )
+
+    def test_executable_core_e_is_source_locked_and_fully_classified(self):
+        bank = self.executable_core_e_bank
+        self.assertEqual(bank["candidate_count"], 24)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 4, "halfwidth": 20},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {"contiguous_instruction_stream_false_positive": 24},
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(
+            bank["source_sha256"], EXECUTABLE_CORE_E_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_CORE_E_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+
+    def test_executable_core_e_candidates_are_inside_exact_instructions(self):
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        instructions = list(
+            md.disasm(
+                self.japanese[EXECUTABLE_CORE_E_START:EXECUTABLE_CORE_E_END],
+                EXECUTABLE_CORE_E_START,
+            )
+        )
+        self.assertEqual(len(instructions), EXECUTABLE_CORE_E_INSTRUCTION_COUNT)
+        self.assertEqual(instructions[0].address, EXECUTABLE_CORE_E_START)
+        self.assertEqual(
+            instructions[-1].address + instructions[-1].size,
+            EXECUTABLE_CORE_E_END,
+        )
+        self.assertEqual(instructions[-1].mnemonic, "rts")
+        self.assertEqual(
+            sum(instruction.mnemonic == "rts" for instruction in instructions),
+            EXECUTABLE_CORE_E_RTS_COUNT,
+        )
+        self.assertFalse(
+            any(instruction.mnemonic == "dc.w" for instruction in instructions)
+        )
+        covered_bytes = {
+            address
+            for instruction in instructions
+            for address in range(
+                instruction.address,
+                instruction.address + instruction.size,
+            )
+        }
+        for row in self.executable_core_e_bank["candidates"]:
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(set(range(start, end)) <= covered_bytes)
+
+    def test_executable_core_e_has_no_candidate_target_references(self):
+        bank = self.executable_core_e_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 0)
+        self.assertEqual(bank["aligned_absolute_32_references"], [])
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertTrue(
+            all(
+                not row["aligned_absolute_32_references"]
+                and not row["pc_relative_lea_pea_references"]
+                for row in bank["candidates"]
             )
         )
 
