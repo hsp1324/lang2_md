@@ -11185,3 +11185,40 @@ contains 57 safe syllables as documented below and in
 - This raises application evidence to ten transitions: eight natural and two
   forced-context. Keith's normal scenario-clear SRAM persistence remains
   unproven; only Elwin and Hein retain that stronger save-boundary evidence.
+
+### Lester Natural Active Class Change (2026-07-27)
+
+- Scenario 25 runtime record 5 is
+  `class 07 / commander ID 9 / LV7 / EXP15`, namely
+  Lester/Crocoknight. Japanese class record `07` requires EXP24 and the source
+  candidates are `0D/10/12`, or
+  `매직나이트/서펜나이트/비숍`.
+- The accepted diagnostic was built from frozen production `1AB2` and the
+  Japanese ROM with `--commander-id 9 --current-class 0x07
+  --runtime-record-index 5 --end-turn-only`. Checksum `1B14` derives EXP24
+  from the source class record, guards the wrapper on class `07`, does not
+  write commander identity, and preserves the stock Start operand.
+- A fresh isolated `DISPLAY=:104` run recovered the validated Scenario 25
+  manual slot, reached preparation with a conservative 1.2-second detector
+  delay, and used automatic deployment. The first post-deployment frame still
+  awaited one Start input before the stock `SCENARIO 25` banner.
+- The opening command detector first stopped on an ordinary map after 15
+  confirmations. One Start input advanced the pending dialogue. A second
+  detector call then reported `dialogue disappeared before its text
+  stabilized` while the game correctly transitioned to
+  `클래스체인지 가능`; this is a detector timing limitation, not a ROM reset
+  or class-change failure.
+- Accepted frames
+  `captures/run/1b14_lester_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` show all three source
+  candidates and `레스터/매직나이트` LV1 without broken name or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/1b14_lester_natural_class_change_before.gst` and
+  `_after.gst` prove record 5 changed
+  `07/ID9/LV7/EXP15 -> 0D/ID9/LV1/EXP0`; all other nine identity tuples remain
+  byte-identical. `tools/verify_natural_class_change_evidence.py --proof
+  lester` additionally verifies checksum `1B14`, Japanese candidates, wrapper
+  bytes, and the unchanged Start entry against the exact ignored probe ROM.
+- This raises application evidence to eleven transitions: nine natural and two
+  forced-context. Lester's normal scenario-clear SRAM persistence remains
+  unproven; only Elwin and Hein retain that stronger save-boundary evidence.

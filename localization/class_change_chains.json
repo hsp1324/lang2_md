@@ -5,8 +5,8 @@
   "unique_transition_count": 76,
   "live_verified_transition_count": 78,
   "live_verified_unique_transition_count": 76,
-  "application_verified_transition_count": 10,
-  "natural_application_verified_transition_count": 8,
+  "application_verified_transition_count": 11,
+  "natural_application_verified_transition_count": 9,
   "forced_context_application_verified_transition_count": 2,
   "save_persistence_verified_transition_count": 2,
   "commanders": [
@@ -3000,15 +3000,20 @@
             }
           ],
           "live_verified": true,
-          "application_verified": false,
-          "application_evidence_type": "pending",
+          "application_verified": true,
+          "application_evidence_type": "natural",
           "save_persistence_verified": false,
           "save_persistence_evidence": [],
           "evidence": [
             "captures/run/8eb6_c9_s07_trigger.png",
             "captures/run/8eb6_c9_s07_candidate1.png",
             "captures/run/8eb6_c9_s07_candidate2.png",
-            "captures/run/8eb6_c9_s07_candidate3.png"
+            "captures/run/8eb6_c9_s07_candidate3.png",
+            "captures/run/1b14_lester_natural_class_change_available.png",
+            "captures/run/1b14_lester_natural_class_change_candidates.png",
+            "captures/run/1b14_lester_natural_class_change_applied_status.png",
+            "captures/analysis/1b14_lester_natural_class_change_before.gst",
+            "captures/analysis/1b14_lester_natural_class_change_after.gst"
           ]
         },
         {

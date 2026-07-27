@@ -405,6 +405,11 @@ LIVE_EVIDENCE = {
         "captures/run/8eb6_c9_s07_candidate1.png",
         "captures/run/8eb6_c9_s07_candidate2.png",
         "captures/run/8eb6_c9_s07_candidate3.png",
+        "captures/run/1b14_lester_natural_class_change_available.png",
+        "captures/run/1b14_lester_natural_class_change_candidates.png",
+        "captures/run/1b14_lester_natural_class_change_applied_status.png",
+        "captures/analysis/1b14_lester_natural_class_change_before.gst",
+        "captures/analysis/1b14_lester_natural_class_change_after.gst",
     ],
     (9, 0x0A): [
         "captures/run/8ebf_c9_s0a_trigger.png",
@@ -475,6 +480,7 @@ NATURAL_APPLICATION_VERIFIED = {
     (6, 0x01),
     (7, 0x06),
     (8, 0x01),
+    (9, 0x07),
 }
 FORCED_CONTEXT_APPLICATION_VERIFIED = {(7, 0x01), (10, 0x03)}
 APPLICATION_VERIFIED = (

@@ -143,6 +143,23 @@ KEITH_PROOF = NaturalClassChangeProof(
     after=RuntimeIdentity(0x0D, 7, 1, 0),
     candidates=(0x0D, 0x0F, 0x12),
 )
+LESTER_PROOF = NaturalClassChangeProof(
+    slug="lester",
+    character="Lester",
+    before_class="Crocoknight",
+    after_class="Magic Knight",
+    before_path=(
+        ROOT / "captures/analysis/1b14_lester_natural_class_change_before.gst"
+    ),
+    after_path=(
+        ROOT / "captures/analysis/1b14_lester_natural_class_change_after.gst"
+    ),
+    probe_checksum=0x1B14,
+    runtime_record=5,
+    before=RuntimeIdentity(0x07, 9, 7, 15),
+    after=RuntimeIdentity(0x0D, 9, 1, 0),
+    candidates=(0x0D, 0x10, 0x12),
+)
 PROOFS = {
     proof.slug: proof
     for proof in (
@@ -152,6 +169,7 @@ PROOFS = {
         SCOTT_PROOF,
         LANA_PROOF,
         KEITH_PROOF,
+        LESTER_PROOF,
     )
 }
 

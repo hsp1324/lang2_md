@@ -9,8 +9,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Unique current/candidate combinations: 76
 - Live-verified transitions: 78
 - Live-verified unique combinations: 76
-- Application-verified transitions: 10
-- Natural application proofs: 8
+- Application-verified transitions: 11
+- Natural application proofs: 9
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -158,7 +158,7 @@ Source pointer: `0x082862`
 | --- | --- | --- | --- | --- | --- |
 | `0x082862` | `01` 파이터 (ﾌｧｲﾀｰ) | `05` 나이트 (ﾅｲﾄ) / `07` 크로코나이트 (ｸﾛｺﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | pending | pending |
 | `0x08286A` | `05` 나이트 (ﾅｲﾄ) | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `10` 서펜나이트 (ｻｰﾍﾟﾝﾅｲﾄ) | yes | pending | pending |
-| `0x082872` | `07` 크로코나이트 (ｸﾛｺﾅｲﾄ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `10` 서펜나이트 (ｻｰﾍﾟﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | pending | pending |
+| `0x082872` | `07` 크로코나이트 (ｸﾛｺﾅｲﾄ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `10` 서펜나이트 (ｻｰﾍﾟﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | natural | pending |
 | `0x08287A` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `10` 서펜나이트 (ｻｰﾍﾟﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending | pending |
 | `0x082882` | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | `1B` 나이트마스터 (ﾅｲﾄﾏｽﾀｰ) / `1C` 그랑나이트 (ｸﾞﾗﾝﾅｲﾄ) / `1D` 실버나이트 (ｼﾙﾊﾞｰﾅｲﾄ) | yes | pending | pending |
 | `0x08288A` | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | `1C` 그랑나이트 (ｸﾞﾗﾝﾅｲﾄ) / `1D` 실버나이트 (ｼﾙﾊﾞｰﾅｲﾄ) / `1F` 서펜로드 (ｻｰﾍﾟﾝﾛｰﾄﾞ) | yes | pending | pending |

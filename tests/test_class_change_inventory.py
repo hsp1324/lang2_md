@@ -23,9 +23,9 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["unique_transition_count"], 76)
         self.assertEqual(self.result["live_verified_transition_count"], 78)
         self.assertEqual(self.result["live_verified_unique_transition_count"], 76)
-        self.assertEqual(self.result["application_verified_transition_count"], 10)
+        self.assertEqual(self.result["application_verified_transition_count"], 11)
         self.assertEqual(
-            self.result["natural_application_verified_transition_count"], 8
+            self.result["natural_application_verified_transition_count"], 9
         )
         self.assertEqual(
             self.result["forced_context_application_verified_transition_count"],
@@ -209,6 +209,14 @@ class ClassChangeInventoryTests(unittest.TestCase):
             "captures/analysis/18c6_aaron_natural_class_change_after.gst",
             by_key[(8, 0x01)]["evidence"],
         )
+        self.assertTrue(by_key[(9, 0x07)]["application_verified"])
+        self.assertEqual(
+            by_key[(9, 0x07)]["application_evidence_type"], "natural"
+        )
+        self.assertIn(
+            "captures/analysis/1b14_lester_natural_class_change_after.gst",
+            by_key[(9, 0x07)]["evidence"],
+        )
         self.assertTrue(
             by_key[(1, 0x01)]["save_persistence_verified"]
         )
@@ -240,6 +248,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
                 (7, 0x01),
                 (7, 0x06),
                 (8, 0x01),
+                (9, 0x07),
                 (10, 0x03),
             }:
                 self.assertFalse(transition["application_verified"])
