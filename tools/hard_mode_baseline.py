@@ -36,6 +36,45 @@ FIXED_COMMANDER_DF_MODIFIER_OFFSET = 0x13
 FIXED_RECORD_LOADER = 0x010E46
 FIXED_RECORD_LOADER_END = 0x010ED8
 
+DISCUSSION_SCENARIO_BANDS = (
+    {
+        "id": "opening",
+        "label": "초반",
+        "scenarios": tuple(range(1, 6)),
+        "rationale": "초기 성장과 기본 병종 중심의 시나리오",
+    },
+    {
+        "id": "early_campaign",
+        "label": "전반",
+        "scenarios": tuple(range(6, 11)),
+        "rationale": "첫 증원·시간 제한·몬스터 공개가 섞이는 시나리오",
+    },
+    {
+        "id": "mid_campaign",
+        "label": "중반",
+        "scenarios": tuple(range(11, 16)),
+        "rationale": "이벤트와 특수 목표 비중이 커지는 시나리오",
+    },
+    {
+        "id": "late_campaign",
+        "label": "후반",
+        "scenarios": tuple(range(16, 21)),
+        "rationale": "상위 클래스와 장기 목표가 본격화되는 시나리오",
+    },
+    {
+        "id": "endgame",
+        "label": "종반",
+        "scenarios": tuple(range(21, 28)),
+        "rationale": "주요 보스와 본편 결말을 포함하는 시나리오",
+    },
+    {
+        "id": "secret",
+        "label": "비밀",
+        "scenarios": tuple(range(28, 32)),
+        "rationale": "진입 시점이 다른 선택형 X1~X4 시나리오",
+    },
+)
+
 
 def rom_identity(data: bytes) -> dict[str, object]:
     return {
@@ -66,6 +105,50 @@ def stat_summary(records: list[dict[str, object]], field: str) -> dict[str, obje
         "maximum": max(values),
         "mean": round(statistics.mean(values), 1),
     }
+
+
+def discussion_band_rows(scenarios: list[dict[str, object]]) -> list[dict[str, object]]:
+    by_number = {int(row["number"]): row for row in scenarios}
+    result = []
+    for band in DISCUSSION_SCENARIO_BANDS:
+        numbers = list(band["scenarios"])
+        selected = [by_number[number] for number in numbers]
+        enemies = [
+            record
+            for scenario in selected
+            for record in scenario["records"]
+            if record["side_id"] == "04"
+        ]
+        result.append({
+            "id": band["id"],
+            "label": band["label"],
+            "scenarios": numbers,
+            "rationale": band["rationale"],
+            "user_approved": False,
+            "original_side_04_summary": {
+                "record_count": len(enemies),
+                "hidden_record_count": sum(
+                    bool(record["hidden"]) for record in enemies
+                ),
+                "side_08_record_count": sum(
+                    int(scenario["side_counts"].get("08", 0))
+                    for scenario in selected
+                ),
+                "level": stat_summary(enemies, "level"),
+                "commander_at_modifier": stat_summary(
+                    enemies, "commander_at_modifier"
+                ),
+                "commander_df_modifier": stat_summary(
+                    enemies, "commander_df_modifier"
+                ),
+                "filled_mercenary_slots": sum(
+                    mercenary is not None
+                    for record in enemies
+                    for mercenary in record["mercenaries"]
+                ),
+            },
+        })
+    return result
 
 
 def mercenary_row(class_id: int, classes: list[dict[str, object]]) -> dict[str, object] | None:
@@ -191,7 +274,7 @@ def build_inventory(
         })
 
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -204,6 +287,40 @@ def build_inventory(
                 "late_summon_unit_start_and_ratio",
                 "boss_reinforcement_branch_ending_exceptions",
             ],
+        },
+        "balance_discussion": {
+            "user_selections": {
+                "difficulty_target": None,
+                "scenario_band_policy": None,
+                "enemy_commander_and_soldier_formula": None,
+                "stronger_mercenary_policy": None,
+                "late_summon_unit_policy": None,
+                "exception_policy": None,
+            },
+            "difficulty_options": [
+                {
+                    "id": "standard_hard",
+                    "label": "숙련자용 표준 하드",
+                    "recommended": True,
+                    "expected_retries_per_major_battle": [1, 3],
+                    "assumption": "비기·노가다 없이 기본적인 클래스와 장비 운용",
+                },
+                {
+                    "id": "high_difficulty",
+                    "label": "고난도",
+                    "recommended": False,
+                    "expected_retries_per_major_battle": [3, 5],
+                    "assumption": "클래스·장비·용병 상성 최적화",
+                },
+                {
+                    "id": "extreme",
+                    "label": "극한",
+                    "recommended": False,
+                    "expected_retries_per_major_battle": [5, None],
+                    "assumption": "비기·세이브 로드·사전 공략 지식을 허용",
+                },
+            ],
+            "candidate_scenario_bands": discussion_band_rows(scenarios),
         },
         "normal_release": {
             **normal_identity,
@@ -393,6 +510,55 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "4. 후반 소환물 계열 병사 투입 시점과 편성 비율",
         "5. 보스·지원군·분기·엔딩·비기 시나리오 예외",
         "",
+        "## 첫 결정: 목표 난이도",
+        "",
+        "| 선택 | 플레이 전제 | 주요 전투 예상 재도전 | 권장 |",
+        "|:---|:---|:---:|:---:|",
+    ]
+    for option in inventory["balance_discussion"]["difficulty_options"]:
+        retries = option["expected_retries_per_major_battle"]
+        retry_text = (
+            f"{retries[0]}회 이상"
+            if retries[1] is None
+            else f"{retries[0]}~{retries[1]}회"
+        )
+        lines.append(
+            f"| {option['label']} | {option['assumption']} | "
+            f"{retry_text} | {'예' if option['recommended'] else '-'} |"
+        )
+
+    lines.extend([
+        "",
+        "## 협의용 시나리오 구간 후보",
+        "",
+        "> 아래 구간은 비교를 위한 후보이며 아직 승인되지 않았다. 수치는",
+        "> 일본 원판의 적군 진영 `04` 고정 레코드를 합산한 값이다.",
+        "",
+        "| 구간 | 장 | 적 | 숨김 | 특수 08 | LV | AT 보정 | DF 보정 | 용병 칸 |",
+        "|:---|:---|---:|---:|---:|:---|:---|:---|---:|",
+    ])
+    for band in inventory["balance_discussion"]["candidate_scenario_bands"]:
+        summary = band["original_side_04_summary"]
+        numbers = band["scenarios"]
+        scenario_text = (
+            f"X1~X4"
+            if band["id"] == "secret"
+            else f"{numbers[0]}~{numbers[-1]}"
+        )
+        lines.append(
+            f"| {band['label']} | {scenario_text} | "
+            f"{summary['record_count']} | {summary['hidden_record_count']} | "
+            f"{summary['side_08_record_count']} | "
+            f"{_stat_cell(summary['level'])} | "
+            f"{_stat_cell(summary['commander_at_modifier'])} | "
+            f"{_stat_cell(summary['commander_df_modifier'])} | "
+            f"{summary['filled_mercenary_slots']} |"
+        )
+    lines.extend([
+        "",
+        "각 구간의 승인 상태와 모든 사용자 선택은 현재 비어 있다. 목표",
+        "난이도를 먼저 고른 뒤에만 AT/DF·용병·소환물 수치를 협의한다.",
+        "",
         "## 기술적으로 확정된 능력치 구조",
         "",
         "- 36바이트 고정 배치 레코드의 `+0x12/+0x13`은 지휘관",
@@ -417,7 +583,7 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "",
         "| 장 | 전체 | 적군(04) | 기타 진영 | 숨김 | 적 LV | 적 AT | 적 DF | 적 용병 칸 |",
         "|---:|---:|---:|:---|---:|:---|:---|:---|---:|",
-    ]
+    ])
     for scenario in inventory["scenarios"]:
         summary = scenario["enemy_summary"]
         other_sides = ", ".join(

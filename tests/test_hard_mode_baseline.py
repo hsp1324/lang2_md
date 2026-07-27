@@ -43,6 +43,83 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertFalse(gate["rom_values_may_be_applied"])
         self.assertEqual(len(gate["required_decisions"]), 5)
 
+    def test_discussion_choices_remain_unselected(self):
+        discussion = self.inventory["balance_discussion"]
+        self.assertEqual(
+            discussion["user_selections"],
+            {
+                "difficulty_target": None,
+                "scenario_band_policy": None,
+                "enemy_commander_and_soldier_formula": None,
+                "stronger_mercenary_policy": None,
+                "late_summon_unit_policy": None,
+                "exception_policy": None,
+            },
+        )
+        options = discussion["difficulty_options"]
+        self.assertEqual(
+            [option["id"] for option in options],
+            ["standard_hard", "high_difficulty", "extreme"],
+        )
+        self.assertEqual(
+            [option["recommended"] for option in options],
+            [True, False, False],
+        )
+
+    def test_candidate_scenario_bands_cover_every_scenario_once(self):
+        bands = self.inventory["balance_discussion"]["candidate_scenario_bands"]
+        self.assertEqual(
+            [(band["label"], band["scenarios"]) for band in bands],
+            [
+                ("초반", [1, 2, 3, 4, 5]),
+                ("전반", [6, 7, 8, 9, 10]),
+                ("중반", [11, 12, 13, 14, 15]),
+                ("후반", [16, 17, 18, 19, 20]),
+                ("종반", [21, 22, 23, 24, 25, 26, 27]),
+                ("비밀", [28, 29, 30, 31]),
+            ],
+        )
+        self.assertEqual(
+            sorted(number for band in bands for number in band["scenarios"]),
+            list(range(1, 32)),
+        )
+        self.assertTrue(all(not band["user_approved"] for band in bands))
+
+    def test_candidate_band_original_aggregate_is_stable(self):
+        bands = {
+            band["id"]: band["original_side_04_summary"]
+            for band in self.inventory["balance_discussion"][
+                "candidate_scenario_bands"
+            ]
+        }
+        self.assertEqual(
+            {
+                band_id: (
+                    row["record_count"],
+                    row["hidden_record_count"],
+                    row["side_08_record_count"],
+                    row["filled_mercenary_slots"],
+                )
+                for band_id, row in bands.items()
+            },
+            {
+                "opening": (33, 10, 0, 174),
+                "early_campaign": (51, 14, 0, 270),
+                "mid_campaign": (56, 10, 0, 300),
+                "late_campaign": (50, 11, 0, 286),
+                "endgame": (64, 7, 11, 370),
+                "secret": (38, 1, 1, 226),
+            },
+        )
+        self.assertEqual(
+            bands["opening"]["commander_at_modifier"],
+            {"minimum": 19, "maximum": 40, "mean": 23.6},
+        )
+        self.assertEqual(
+            bands["endgame"]["commander_df_modifier"],
+            {"minimum": 26, "maximum": 41, "mean": 31.3},
+        )
+
     def test_all_source_records_have_addresses_and_six_mercenary_slots(self):
         scenarios = self.inventory["scenarios"]
         self.assertEqual([row["number"] for row in scenarios], list(range(1, 32)))
