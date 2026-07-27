@@ -11879,3 +11879,34 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core F Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x012EBE..0x017385` region has SHA-256
+  `e12667e53945c6578d6c800efdeabb1dcb4c7f99f541d9c95cd5990065a618f8`
+  and contains 189 low-signal candidates: 172 half-width-looking and 17
+  ASCII-looking rows. Its ordered candidate manifest is
+  `fdb02f906aeefe9150ad1b4fd0931077e34429ba105c97e3d7942a1d937e8a64`.
+- All 189 candidates are fully covered by the exact
+  `0x012EBE..0x017373` Capstone instruction stream: 4,317 contiguous 68000
+  instructions ending exactly at `0x017374` on `BRA.W $01592C`. The stream
+  contains 61 `RTS` instructions and no `dc.w` fallback.
+- The following candidate-free `0x017374..0x017385` data is the nine-word
+  pattern `01DD,01DE,01DF,01ED,01EE,01EF,01FD,01FE,01FF`. The instruction
+  at `0x017206` loads it with `LEA $017374,A0`; the address operand begins
+  at `0x017208`.
+- The aligned scanner finds 27 windows targeting three candidates. Nine
+  intentional function-pointer writes target exact instruction start
+  `0x014DA6` (`TST.B $FFFFAA11.L`). Two windows target odd byte
+  `0x01381D` inside `MOVE.L $FFFFA9F8.L,(A6)`, and sixteen target odd byte
+  `0x014E75` inside `MOVE.L A0,$FFFFAA12.L`; neither odd address is a valid
+  68000 entry. No executable PC-relative `LEA`/`PEA` targets a candidate.
+- The cumulative exact review is now 6,298 of 6,612 short-inline candidates:
+  6,297 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 314 candidates.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 124/124. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.

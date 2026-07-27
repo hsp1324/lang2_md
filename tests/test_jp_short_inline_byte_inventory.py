@@ -61,6 +61,17 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_CORE_E_RTS_COUNT,
     EXECUTABLE_CORE_E_SOURCE_SHA256,
     EXECUTABLE_CORE_E_START,
+    EXECUTABLE_CORE_F_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_CORE_F_CODE_END,
+    EXECUTABLE_CORE_F_CODE_SOURCE_SHA256,
+    EXECUTABLE_CORE_F_END,
+    EXECUTABLE_CORE_F_INSTRUCTION_COUNT,
+    EXECUTABLE_CORE_F_PATTERN_REFERENCE,
+    EXECUTABLE_CORE_F_PATTERN_SOURCE_SHA256,
+    EXECUTABLE_CORE_F_REFERENCE_INSTRUCTION_OWNERS,
+    EXECUTABLE_CORE_F_RTS_COUNT,
+    EXECUTABLE_CORE_F_SOURCE_SHA256,
+    EXECUTABLE_CORE_F_START,
     EXECUTABLE_STARTUP_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_CANDIDATE_MANIFEST_SHA256,
     EXECUTABLE_STARTUP_CODE_SEGMENTS,
@@ -131,6 +142,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         ]
         cls.executable_core_e_bank = cls.result[
             "executable_core_e_bank"
+        ]
+        cls.executable_core_f_bank = cls.result[
+            "executable_core_f_bank"
         ]
 
     def test_low_signal_candidate_baseline(self):
@@ -1418,6 +1432,161 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
                 for row in bank["candidates"]
             )
         )
+
+    def test_executable_core_f_is_source_locked_and_fully_classified(self):
+        bank = self.executable_core_f_bank
+        self.assertEqual(bank["candidate_count"], 189)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 17, "halfwidth": 172},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {"contiguous_instruction_stream_false_positive": 189},
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(
+            bank["source_sha256"], EXECUTABLE_CORE_F_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["code_segment"]["source_sha256"],
+            EXECUTABLE_CORE_F_CODE_SOURCE_SHA256,
+        )
+        self.assertEqual(
+            bank["pattern_table"]["source_sha256"],
+            EXECUTABLE_CORE_F_PATTERN_SOURCE_SHA256,
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_CORE_F_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["code_candidate_manifest_sha256"],
+            EXECUTABLE_CORE_F_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["data_candidate_manifest_sha256"],
+            "e3b0c44298fc1c149afbf4c8996fb924"
+            "27ae41e4649b934ca495991b7852b855",
+        )
+        self.assertEqual(bank["pattern_table"]["candidate_count"], 0)
+        self.assertEqual(
+            bank["pattern_table"]["values"],
+            [0x01DD, 0x01DE, 0x01DF, 0x01ED, 0x01EE, 0x01EF,
+             0x01FD, 0x01FE, 0x01FF],
+        )
+        self.assertEqual(
+            bank["pattern_table"]["aligned_absolute_32_references"],
+            [f"0x{EXECUTABLE_CORE_F_PATTERN_REFERENCE:06X}"],
+        )
+        self.assertTrue(bank["source_layout_valid"])
+
+    def test_executable_core_f_candidates_are_inside_exact_instructions(self):
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        instructions = list(
+            md.disasm(
+                self.japanese[
+                    EXECUTABLE_CORE_F_START:EXECUTABLE_CORE_F_CODE_END
+                ],
+                EXECUTABLE_CORE_F_START,
+            )
+        )
+        self.assertEqual(len(instructions), EXECUTABLE_CORE_F_INSTRUCTION_COUNT)
+        self.assertEqual(instructions[0].address, EXECUTABLE_CORE_F_START)
+        self.assertEqual(
+            instructions[-1].address + instructions[-1].size,
+            EXECUTABLE_CORE_F_CODE_END,
+        )
+        self.assertEqual(instructions[-1].mnemonic, "bra.w")
+        self.assertEqual(
+            sum(instruction.mnemonic == "rts" for instruction in instructions),
+            EXECUTABLE_CORE_F_RTS_COUNT,
+        )
+        self.assertFalse(
+            any(instruction.mnemonic == "dc.w" for instruction in instructions)
+        )
+        covered_bytes = {
+            address
+            for instruction in instructions
+            for address in range(
+                instruction.address,
+                instruction.address + instruction.size,
+            )
+        }
+        for row in self.executable_core_f_bank["candidates"]:
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(set(range(start, end)) <= covered_bytes)
+
+    def test_executable_core_f_reference_targets_are_instruction_owned(self):
+        bank = self.executable_core_f_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 27)
+        self.assertEqual(
+            {
+                int(row["target"], 16): [
+                    int(address, 16) for address in row["addresses"]
+                ]
+                for row in bank["aligned_absolute_32_references"]
+            },
+            {
+                0x01381D: [0x00B83E, 0x017B34],
+                0x014DA6: [
+                    0x014DA0,
+                    0x014E60,
+                    0x014F3A,
+                    0x01507A,
+                    0x0151E8,
+                    0x0152E8,
+                    0x015542,
+                    0x015642,
+                    0x0157EE,
+                ],
+                0x014E75: [
+                    0x001524,
+                    0x01089E,
+                    0x0108C4,
+                    0x013B10,
+                    0x013C12,
+                    0x013CAE,
+                    0x013F78,
+                    0x013FFC,
+                    0x01A9B8,
+                    0x01A9C2,
+                    0x01AC52,
+                    0x01AC60,
+                    0x01B032,
+                    0x01B03C,
+                    0x01B094,
+                    0x01B0A2,
+                ],
+            },
+        )
+        self.assertEqual(
+            {
+                int(row["target"], 16)
+                for row in bank["reference_instruction_owners"]
+            },
+            set(EXECUTABLE_CORE_F_REFERENCE_INSTRUCTION_OWNERS),
+        )
+        self.assertEqual(
+            {
+                int(row["target"], 16)
+                for row in bank["reference_instruction_owners"]
+                if row["target_is_instruction_start"]
+            },
+            {0x014DA6},
+        )
+        self.assertTrue(
+            all(
+                row["source_layout_valid"]
+                for row in bank["reference_instruction_owners"]
+            )
+        )
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):
         self.assertEqual(self.font_bank["candidate_count"], 1477)

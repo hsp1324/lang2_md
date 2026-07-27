@@ -41,6 +41,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-D unclassified: 0
 - Executable-core-E candidates: 24
 - Executable-core-E unclassified: 0
+- Executable-core-F candidates: 189
+- Executable-core-F unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -57,6 +59,15 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-F Candidates
+
+- The source-locked `0x012EBE..0x017386` region contains one exact 68000 code stream followed by one directly referenced candidate-free pattern table.
+- Source SHA-256: `e12667e53945c6578d6c800efdeabb1dcb4c7f99f541d9c95cd5990065a618f8`; candidate manifest SHA-256: `fdb02f906aeefe9150ad1b4fd0931077e34429ba105c97e3d7942a1d937e8a64` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 189.
+- Code instructions: 4317; `RTS`: 61.
+- Pattern values: `0x01DD`, `0x01DE`, `0x01DF`, `0x01ED`, `0x01EE`, `0x01EF`, `0x01FD`, `0x01FE`, `0x01FF`; reference operand at `0x017208`.
+- Candidate-target aligned four-byte windows: 27; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
 
 ## Reviewed Executable-Core-E Candidates
 
