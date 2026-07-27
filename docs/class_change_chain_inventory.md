@@ -9,8 +9,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Unique current/candidate combinations: 76
 - Live-verified transitions: 76
 - Live-verified unique combinations: 76
-- Application-verified transitions: 5
-- Natural application proofs: 3
+- Application-verified transitions: 6
+- Natural application proofs: 4
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -71,7 +71,7 @@ Source pointer: `0x082692`
 
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
-| `0x082692` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | pending | pending |
+| `0x082692` | `01` 파이터 (ﾌｧｲﾀｰ) | `04` 로드 (ﾛｰﾄﾞ) / `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `0A` 샤먼 (ｼｬｰﾏﾝ) | yes | natural | pending |
 | `0x08269A` | `04` 로드 (ﾛｰﾄﾞ) | `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) / `0E` 유니콘나이트 (ﾕﾆｺｰﾝﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) | yes | pending | pending |
 | `0x0826A2` | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) | `0E` 유니콘나이트 (ﾕﾆｺｰﾝﾅｲﾄ) / `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | yes | pending | pending |
 | `0x0826AA` | `0A` 샤먼 (ｼｬｰﾏﾝ) | `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending | pending |

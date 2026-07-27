@@ -8,7 +8,7 @@ class NaturalClassChangeEvidenceTests(unittest.TestCase):
     def test_retained_gsts_prove_liana_natural_application(self):
         before = evidence.read_identities(evidence.DEFAULT_BEFORE.read_bytes())
         after = evidence.read_identities(evidence.DEFAULT_AFTER.read_bytes())
-        evidence.verify(before, after)
+        evidence.verify(before, after, evidence.LIANA_PROOF)
         self.assertEqual(
             before[evidence.LIANA_RUNTIME_RECORD],
             evidence.RuntimeIdentity(0x02, 2, 3, 0),
@@ -16,6 +16,20 @@ class NaturalClassChangeEvidenceTests(unittest.TestCase):
         self.assertEqual(
             after[evidence.LIANA_RUNTIME_RECORD],
             evidence.RuntimeIdentity(0x0A, 2, 1, 0),
+        )
+
+    def test_retained_gsts_prove_sherry_natural_application(self):
+        proof = evidence.SHERRY_PROOF
+        before = evidence.read_identities(proof.before_path.read_bytes())
+        after = evidence.read_identities(proof.after_path.read_bytes())
+        evidence.verify(before, after, proof)
+        self.assertEqual(
+            before[proof.runtime_record],
+            evidence.RuntimeIdentity(0x01, 4, 9, 15),
+        )
+        self.assertEqual(
+            after[proof.runtime_record],
+            evidence.RuntimeIdentity(0x04, 4, 1, 0),
         )
 
     def test_rejects_an_unrelated_identity_change(self):
@@ -26,7 +40,7 @@ class NaturalClassChangeEvidenceTests(unittest.TestCase):
             ValueError,
             "unrelated player runtime identities changed: 1",
         ):
-            evidence.verify(before, tuple(after))
+            evidence.verify(before, tuple(after), evidence.LIANA_PROOF)
 
     def test_rejects_a_short_gst(self):
         with self.assertRaisesRegex(ValueError, "runtime record 0"):

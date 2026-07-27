@@ -23,9 +23,9 @@ class ClassChangeInventoryTests(unittest.TestCase):
         self.assertEqual(self.result["unique_transition_count"], 76)
         self.assertEqual(self.result["live_verified_transition_count"], 76)
         self.assertEqual(self.result["live_verified_unique_transition_count"], 76)
-        self.assertEqual(self.result["application_verified_transition_count"], 5)
+        self.assertEqual(self.result["application_verified_transition_count"], 6)
         self.assertEqual(
-            self.result["natural_application_verified_transition_count"], 3
+            self.result["natural_application_verified_transition_count"], 4
         )
         self.assertEqual(
             self.result["forced_context_application_verified_transition_count"],
@@ -152,6 +152,14 @@ class ClassChangeInventoryTests(unittest.TestCase):
             "captures/analysis/1d47_liana_natural_class_change_after.gst",
             by_key[(2, 0x02)]["evidence"],
         )
+        self.assertTrue(by_key[(4, 0x01)]["application_verified"])
+        self.assertEqual(
+            by_key[(4, 0x01)]["application_evidence_type"], "natural"
+        )
+        self.assertIn(
+            "captures/analysis/17a6_sherry_natural_class_change_after.gst",
+            by_key[(4, 0x01)]["evidence"],
+        )
         self.assertTrue(by_key[(5, 0x03)]["application_verified"])
         self.assertEqual(
             by_key[(5, 0x03)]["application_evidence_type"], "natural"
@@ -191,6 +199,7 @@ class ClassChangeInventoryTests(unittest.TestCase):
             if key not in {
                 (1, 0x01),
                 (2, 0x02),
+                (4, 0x01),
                 (5, 0x03),
                 (7, 0x01),
                 (10, 0x03),

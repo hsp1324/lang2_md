@@ -11009,3 +11009,41 @@ contains 57 safe syllables as documented below and in
   attempt proved that states from different diagnostic checksums can fail;
   recovering the validated manual slot and booting `1D47` normally avoids
   that shortcut.
+
+### Sherry Natural Initial Class Change (2026-07-27)
+
+- Read-only inspection of `captures/analysis/53ad_s25_map_current.gst`
+  identifies Scenario 25 player runtime record 2 as
+  `class 01 / commander ID 4 / LV9 / EXP15`, namely Sherry/Fighter. The
+  Japanese source threshold is EXP16 and its untouched initial candidates are
+  `04/06/0A`, or `로드/드래곤나이트/샤먼`.
+- The accepted diagnostic was built from the frozen production-`1AB2` ROM and
+  Japanese source with `tools/build_class_change_probe_rom.py --commander-id
+  4 --current-class 0x01 --runtime-record-index 2 --end-turn-only`. Its
+  checksum is `17A6`. The wrapper is guarded by Fighter class `01`, does not
+  write commander identity, and leaves the stock Start-menu operand unchanged.
+- A fresh isolated `DISPLAY=:104` run recovered only the valid Scenario 25
+  manual slot, entered the normal route, traversed all fourteen description
+  confirmations, reviewed the nine-member preparation roster, used automatic
+  deployment, and completed the opening. The command detector stopped on an
+  ordinary map after fourteen opening frames without sending an unsafe map
+  confirmation. One subsequent Start input resumed the pending stock
+  level-up path and visibly rendered `클래스체인지 가능`.
+- Accepted frames
+  `captures/run/17a6_sherry_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` retain the notification, all
+  three Korean candidate names, and the resulting `쉐리/로드` LV1 command
+  panel. The preparation roster and candidate/status panels contain no broken
+  commander or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/17a6_sherry_natural_class_change_before.gst` and
+  `_after.gst` prove record 2 changed
+  `01/ID4/LV9/EXP15 -> 04/ID4/LV1/EXP0`. All other nine player runtime records
+  retain byte-identical class, commander ID, level, and experience tuples.
+  `tools/verify_natural_class_change_evidence.py --proof sherry` locks this
+  result and can additionally verify checksum `17A6`, the Japanese candidate
+  tuple, wrapper bytes, and unchanged Start entry against the exact ignored
+  probe ROM.
+- This raises application evidence to six transitions: four natural and two
+  forced-context. Sherry's normal scenario-clear SRAM persistence is not yet
+  proven; only Elwin and Hein retain that stronger save-boundary evidence.

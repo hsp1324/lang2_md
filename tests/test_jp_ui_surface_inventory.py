@@ -239,8 +239,8 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             class_change_gaps,
             [
                 "class-change natural active-commander verification beyond "
-                "Elwin, Hein, and Liana, plus normal scenario-clear save "
-                "persistence beyond Elwin and Hein"
+                "Elwin, Hein, Liana, and Sherry, plus normal scenario-clear "
+                "save persistence beyond Elwin and Hein"
             ],
         )
         self.assertIn(

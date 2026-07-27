@@ -67,8 +67,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     else:
         class_change_gap = (
             "class-change natural active-commander verification beyond Elwin, "
-            "Hein, and Liana, plus normal scenario-clear save persistence "
-            "beyond Elwin and Hein"
+            "Hein, Liana, and Sherry, plus normal scenario-clear save "
+            "persistence beyond Elwin and Hein"
         )
     rows: list[dict[str, object]] = []
     add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)

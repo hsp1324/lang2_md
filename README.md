@@ -35,7 +35,7 @@
 - `tools/capture_class_change_transition.py`: 지정한 원본 클래스 전이의 진단 ROM 빌드, 격리 BlastEm 새 부팅, 명령 화면 감지, Start 진단 진입, 모든 후보 행 캡처와 종료를 한 번에 수행합니다.
 - `tools/capture_class_change_chain.py`: 한 지휘관 체인에서 아직 화면 검증되지 않은 고유 전이만 골라 위 자동 캡처를 순차 실행하고, 완전한 기존 캡처 세트는 건너뛰어 중단 후 재개합니다.
 - `tools/verify_class_change_persistence.py`: 정상 시나리오 클리어 뒤의 8192바이트 SRAM에서 슬롯 형식·유효 플래그·체크섬·시나리오 번호를 검증하고 지정 지휘관의 클래스/LV/EXP가 저장됐는지 확인합니다.
-- `tools/verify_natural_class_change_evidence.py`: 같은 진단 ROM의 적용 전후 GST에서 시나리오 25 런타임 레코드 7이 `리아나/클레릭`에서 `리아나/샤먼`으로 바뀌고 다른 아홉 지휘관의 클래스·ID·LV·EXP는 유지되는지 확인합니다.
+- `tools/verify_natural_class_change_evidence.py`: 같은 진단 ROM의 적용 전후 GST에서 시나리오 25의 `리아나/클레릭 → 샤먼` 또는 `쉐리/파이터 → 로드`가 지정 런타임 레코드에만 적용되고 다른 아홉 지휘관의 클래스·ID·LV·EXP는 유지되는지 확인합니다.
 - `tools/class_change_inventory.py`: 일본판의 플레이어 지휘관 10명 클래스 체인 100개 전이를 주소·원문·한글 표기·화면/적용 실기 상태와 함께 JSON/Markdown으로 생성합니다.
 - `tools/match_vram_glyph_crops.py`: 실행 캡처의 특정 글자 crop을 VRAM 타일 후보와 비교해 어떤 tile ID가 화면에 보이는지 좁히는 도구입니다.
 - `tools/capture_blastem_window.py`: 실행 중인 BlastEm 화면을 캡처합니다. Windows 배율을 반영한 DWM 데스크톱 캡처를 우선하고 `xwd`, Xlib 순으로 fallback하며 자동 경로는 포커스를 바꾸지 않습니다. `--print-window`는 가려진 OpenGL 창에서 이전 프레임 잔상이 섞일 수 있는 진단 전용 옵션입니다. `--allow-focus-steal`은 사용자가 다른 작업을 하지 않을 때 한 번만 명시적으로 허용해야 합니다.
@@ -278,6 +278,7 @@ python3 tools/run_blastem_sequence.py shop
 - checksum `B335`는 시나리오 1의 자연 활성 지휘관인 헤인이 원본 턴 종료 핸들러에서 `워록(03) -> 샤먼(0A)`으로 전직한 뒤 실제 결과·SAVE 경로를 거쳐 슬롯 1의 `시나리오 2`에 유지됨을 검증합니다. 저장된 헤인 레코드는 클래스 `0A`, LV1, EXP17, AT23, DF13이고 슬롯 체크섬은 `2330`입니다. `captures/analysis/b335_c5_s03_scenario2_save.sram`과 `tools/verify_class_change_persistence.py`가 이 경계를 고정합니다.
 - checksum `B213`은 같은 원본 경계에서 자연 활성 엘윈의 `파이터(01) -> 로드(04)`를 검증합니다. 저장된 엘윈 레코드는 클래스 `04`, LV1, EXP9, AT23, DF18이고 슬롯 체크섬은 `211E`입니다. `captures/analysis/b213_c1_s01_scenario2_save.sram`에 독립된 두 번째 정상 저장 증거를 보존합니다.
 - checksum `1D47`은 시나리오 25의 자연 활성 리아나 레코드 7을 사용해 `클레릭(02) -> 샤먼(0A)` 적용을 검증합니다. 같은 ROM의 전후 GST는 `02/ID2/LV3/EXP0 -> 0A/ID2/LV1/EXP0`을 기록하며 다른 아홉 플레이어 레코드의 클래스·ID·LV·EXP는 그대로입니다. `샤먼/힐러/로드` 후보와 적용 후 `리아나/샤먼` 화면도 보존했습니다. 정상 시나리오 클리어 뒤 SRAM 저장 지속성은 아직 별도 미검증입니다.
+- checksum `17A6`은 같은 시나리오 25 수동 슬롯의 자연 활성 쉐리 레코드 2를 사용해 `파이터(01) -> 로드(04)` 적용을 검증합니다. 같은 ROM의 전후 GST는 `01/ID4/LV9/EXP15 -> 04/ID4/LV1/EXP0`을 기록하며 다른 아홉 플레이어 레코드는 그대로입니다. 일본판 후보 `로드/드래곤나이트/샤먼`, `클래스체인지 가능`, 적용 후 `쉐리/로드` 화면을 보존했습니다. 정상 클리어 뒤 SRAM 저장 지속성은 아직 별도 미검증입니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:
