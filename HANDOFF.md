@@ -11084,3 +11084,36 @@ contains 57 safe syllables as documented below and in
 - This raises application evidence to seven transitions: five natural and two
   forced-context. Aaron's normal scenario-clear SRAM persistence is not yet
   proven; only Elwin and Hein retain that stronger save-boundary evidence.
+
+### Scott Natural Initial Class Change (2026-07-27)
+
+- Read-only Scenario 25 GST inspection identifies player runtime record 6 as
+  `class 01 / commander ID 6 / LV1 / EXP0`, namely Scott/Fighter. The
+  Japanese source threshold is EXP16 and its untouched candidates are
+  `06/05/04`, or `호크나이트/나이트/로드`.
+- The diagnostic was built from the frozen production-`1AB2` ROM and Japanese
+  source with `tools/build_class_change_probe_rom.py --commander-id 6
+  --current-class 0x01 --runtime-record-index 6 --end-turn-only`. Its checksum
+  is `1C26`; the wrapper is class-guarded, does not write commander identity,
+  and preserves the stock Start-menu operand.
+- A fresh isolated `DISPLAY=:104` run recovered only the valid Scenario 25
+  manual slot. It traversed the route, fourteen description confirmations,
+  preparation, automatic deployment, both opening banners, and 23 stable
+  opening dialogue pages. The guarded stock level-up path then rendered
+  `클래스체인지 가능` without sending a map command.
+- Accepted frames
+  `captures/run/1c26_scott_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` show all three Korean source
+  candidates and the resulting `스코트/호크나이트` LV1 command panel without
+  broken name or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/1c26_scott_natural_class_change_before.gst` and
+  `_after.gst` prove record 6 changed
+  `01/ID6/LV1/EXP0 -> 06/ID6/LV1/EXP0`. All other nine player runtime records
+  retain byte-identical class, commander ID, level, and experience tuples.
+  `tools/verify_natural_class_change_evidence.py --proof scott` additionally
+  locks checksum `1C26`, the Japanese candidate tuple, guarded wrapper bytes,
+  and unchanged Start entry against the exact ignored probe ROM.
+- This raises application evidence to eight transitions: six natural and two
+  forced-context. Scott's normal scenario-clear SRAM persistence remains
+  unproven; only Elwin and Hein retain that stronger save-boundary evidence.

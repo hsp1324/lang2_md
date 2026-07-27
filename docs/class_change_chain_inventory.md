@@ -9,8 +9,8 @@ A translated static name does not imply that its candidate screen was live verif
 - Unique current/candidate combinations: 76
 - Live-verified transitions: 77
 - Live-verified unique combinations: 76
-- Application-verified transitions: 7
-- Natural application proofs: 5
+- Application-verified transitions: 8
+- Natural application proofs: 6
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -105,7 +105,7 @@ Source pointer: `0x08275A`
 
 | Offset | Current | Candidates | Screen | Apply | Save |
 | --- | --- | --- | --- | --- | --- |
-| `0x08275A` | `01` 파이터 (ﾌｧｲﾀｰ) | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `05` 나이트 (ﾅｲﾄ) / `04` 로드 (ﾛｰﾄﾞ) | yes | pending | pending |
+| `0x08275A` | `01` 파이터 (ﾌｧｲﾀｰ) | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) / `05` 나이트 (ﾅｲﾄ) / `04` 로드 (ﾛｰﾄﾞ) | yes | natural | pending |
 | `0x082762` | `06` 호크나이트 (ﾎｰｸﾅｲﾄ) | `0F` 드래곤나이트 (ﾄﾞﾗｺﾞﾝﾅｲﾄ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) | yes | pending | pending |
 | `0x08276A` | `05` 나이트 (ﾅｲﾄ) | `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | yes | pending | pending |
 | `0x082772` | `04` 로드 (ﾛｰﾄﾞ) | `0C` 하이랜더 (ﾊｲﾗﾝﾀﾞｰ) / `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | yes | pending | pending |

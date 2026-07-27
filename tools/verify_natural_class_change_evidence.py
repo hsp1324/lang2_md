@@ -92,9 +92,26 @@ AARON_PROOF = NaturalClassChangeProof(
     after=RuntimeIdentity(0x04, 8, 1, 0),
     candidates=(0x04, 0x05, 0x0A),
 )
+SCOTT_PROOF = NaturalClassChangeProof(
+    slug="scott",
+    character="Scott",
+    before_class="Fighter",
+    after_class="Hawk Knight",
+    before_path=(
+        ROOT / "captures/analysis/1c26_scott_natural_class_change_before.gst"
+    ),
+    after_path=(
+        ROOT / "captures/analysis/1c26_scott_natural_class_change_after.gst"
+    ),
+    probe_checksum=0x1C26,
+    runtime_record=6,
+    before=RuntimeIdentity(0x01, 6, 1, 0),
+    after=RuntimeIdentity(0x06, 6, 1, 0),
+    candidates=(0x06, 0x05, 0x04),
+)
 PROOFS = {
     proof.slug: proof
-    for proof in (LIANA_PROOF, SHERRY_PROOF, AARON_PROOF)
+    for proof in (LIANA_PROOF, SHERRY_PROOF, AARON_PROOF, SCOTT_PROOF)
 }
 
 # Keep the original public constants for callers that use the default Liana

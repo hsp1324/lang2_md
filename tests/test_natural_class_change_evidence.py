@@ -46,6 +46,20 @@ class NaturalClassChangeEvidenceTests(unittest.TestCase):
             evidence.RuntimeIdentity(0x04, 8, 1, 0),
         )
 
+    def test_retained_gsts_prove_scott_natural_application(self):
+        proof = evidence.SCOTT_PROOF
+        before = evidence.read_identities(proof.before_path.read_bytes())
+        after = evidence.read_identities(proof.after_path.read_bytes())
+        evidence.verify(before, after, proof)
+        self.assertEqual(
+            before[proof.runtime_record],
+            evidence.RuntimeIdentity(0x01, 6, 1, 0),
+        )
+        self.assertEqual(
+            after[proof.runtime_record],
+            evidence.RuntimeIdentity(0x06, 6, 1, 0),
+        )
+
     def test_rejects_an_unrelated_identity_change(self):
         before = evidence.read_identities(evidence.DEFAULT_BEFORE.read_bytes())
         after = list(evidence.read_identities(evidence.DEFAULT_AFTER.read_bytes()))
