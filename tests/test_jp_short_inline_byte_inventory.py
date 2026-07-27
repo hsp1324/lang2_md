@@ -21,6 +21,11 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_RENDERER_END,
     EXECUTABLE_RENDERER_SOURCE_SHA256,
     EXECUTABLE_RENDERER_START,
+    EXECUTABLE_GAMEPLAY_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_GAMEPLAY_GAP_BYTES,
+    EXECUTABLE_GAMEPLAY_GAP_END,
+    EXECUTABLE_GAMEPLAY_GAP_START,
+    EXECUTABLE_GAMEPLAY_SEGMENTS,
     FONT_BITMAP_BANK_END,
     FONT_BITMAP_BANK_START,
     FONT_BITMAP_GLYPH_BYTES,
@@ -61,6 +66,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         cls.executable_tail_bank = cls.result["executable_tail_bank"]
         cls.executable_renderer_bank = cls.result[
             "executable_renderer_bank"
+        ]
+        cls.executable_gameplay_bank = cls.result[
+            "executable_gameplay_bank"
         ]
 
     def test_low_signal_candidate_baseline(self):
@@ -378,6 +386,106 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
                     0x030B44,
                 ],
             },
+        )
+
+    def test_executable_gameplay_is_source_locked_and_fully_classified(self):
+        bank = self.executable_gameplay_bank
+        self.assertEqual(bank["candidate_count"], 228)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 21, "halfwidth": 207},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {"contiguous_instruction_stream_false_positive": 228},
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_GAMEPLAY_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+        gap = bank["numeric_table_gap"]
+        self.assertEqual(
+            gap["range"],
+            (
+                f"0x{EXECUTABLE_GAMEPLAY_GAP_START:06X}.."
+                f"0x{EXECUTABLE_GAMEPLAY_GAP_END:06X}"
+            ),
+        )
+        self.assertEqual(gap["source_bytes"], len(EXECUTABLE_GAMEPLAY_GAP_BYTES))
+        self.assertEqual(
+            gap["raw_hex"],
+            EXECUTABLE_GAMEPLAY_GAP_BYTES.hex(" ").upper(),
+        )
+        self.assertEqual(gap["candidate_count"], 0)
+        self.assertTrue(gap["source_layout_valid"])
+
+    def test_executable_gameplay_candidates_are_inside_contiguous_instructions(self):
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        covered_bytes = set()
+        summaries = self.executable_gameplay_bank["segments"]
+        self.assertEqual(len(summaries), len(EXECUTABLE_GAMEPLAY_SEGMENTS))
+        for summary, (
+            start,
+            end,
+            instruction_count,
+            source_sha256,
+        ) in zip(summaries, EXECUTABLE_GAMEPLAY_SEGMENTS):
+            with self.subTest(segment=summary["range"]):
+                instructions = list(
+                    md.disasm(self.japanese[start:end], start)
+                )
+                self.assertEqual(len(instructions), instruction_count)
+                self.assertEqual(instructions[0].address, start)
+                self.assertEqual(
+                    instructions[-1].address + instructions[-1].size,
+                    end,
+                )
+                self.assertEqual(summary["source_sha256"], source_sha256)
+                self.assertTrue(summary["source_layout_valid"])
+                covered_bytes.update(
+                    address
+                    for instruction in instructions
+                    for address in range(
+                        instruction.address,
+                        instruction.address + instruction.size,
+                    )
+                )
+        for row in self.executable_gameplay_bank["candidates"]:
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(set(range(start, end)) <= covered_bytes)
+
+    def test_executable_gameplay_reference_windows_are_odd_instruction_bytes(self):
+        bank = self.executable_gameplay_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 7)
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertEqual(
+            {
+                int(row["target"], 16): [
+                    int(address, 16) for address in row["addresses"]
+                ]
+                for row in bank["aligned_absolute_32_references"]
+            },
+            {
+                0x020223: [0x12285C],
+                0x0221E1: [0x0FDB46, 0x0FE0F4],
+                0x0222F3: [0x059030],
+                0x022921: [0x05D29C],
+                0x024525: [0x057C92],
+                0x02A555: [0x0E624E],
+            },
+        )
+        self.assertTrue(
+            all(
+                row["target_is_odd"]
+                for row in bank["aligned_absolute_32_references"]
+            )
         )
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):

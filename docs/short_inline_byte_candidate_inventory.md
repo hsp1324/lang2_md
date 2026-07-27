@@ -25,6 +25,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-tail unclassified: 0
 - Executable-renderer candidates: 108
 - Executable-renderer unclassified: 0
+- Executable-gameplay candidates: 228
+- Executable-gameplay unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -41,6 +43,23 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Gameplay Candidates
+
+- Two source-locked contiguous 68000 instruction segments cover 228 candidates around one explicitly separated 20-byte numeric lookup table.
+- Combined candidate manifest SHA-256: `749a6c28493c0907e733a997745f3d035e1ed6834ae4cb96021c42efae31263d` (layout valid: `True`).
+- Exact aligned four-byte windows: 7 across 6 odd candidate addresses; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Instruction segment | Bytes | Instructions | Candidates | Source SHA-256 | Candidate manifest |
+| --- | ---: | ---: | ---: | --- | --- |
+| `0x020000..0x02A19C` | 41372 | 10094 | 206 | `c01b6c215be237c758a5fd6c6c7d923e0da926818c8cdf49e77838536fe045cd` | `a369a4971c6d87976375e82372c28125096f69aa47bdb54be99c171b5205ae96` |
+| `0x02A1B0..0x02BFC8` | 7704 | 1754 | 22 | `4343cc0a8786c911aa4b59e76c2b6e962f179fe25657e54f1849086db9ad787e` | `0d82f38f8a23c0225df88de3c6b731387dd940bba06947c91591349dd03a150c` |
+
+The gap `0x02A19C..0x02A1B0` contains decimal place values and bit/index masks, has no low-signal candidate, and is deliberately not classified as code.
+Every candidate span in the two surrounding segments is independently
+covered by a contiguous Capstone 68000 instruction stream. All six
+apparent aligned target values are odd addresses, so they cannot be
+valid 68000 instruction entry points; they remain instruction bytes.
 
 ## Reviewed Executable-Renderer Candidates
 

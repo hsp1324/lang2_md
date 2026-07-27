@@ -11624,3 +11624,37 @@ contains 57 safe syllables as documented below and in
   from the isolated current-source ROM. No production ROM bytes changed,
   BlastEm remained stopped, and only virtual display `:104` remains reserved
   for future emulator checks.
+
+### Executable Gameplay-Block Low-Signal Audit (2026-07-27)
+
+- The remaining source region `0x020000..0x02BFC7` is split at the exact
+  20-byte numeric table `0x02A19C..0x02A1AF`. The surrounding executable
+  segments are `0x020000..0x02A19B` (41,372 bytes, 10,094 contiguous 68000
+  instructions) and `0x02A1B0..0x02BFC7` (7,704 bytes, 1,754 instructions).
+- Segment SHA-256 values are
+  `c01b6c215be237c758a5fd6c6c7d923e0da926818c8cdf49e77838536fe045cd`
+  and
+  `4343cc0a8786c911aa4b59e76c2b6e962f179fe25657e54f1849086db9ad787e`.
+  Their candidate manifests are
+  `a369a4971c6d87976375e82372c28125096f69aa47bdb54be99c171b5205ae96`
+  and
+  `0d82f38f8a23c0225df88de3c6b731387dd940bba06947c91591349dd03a150c`;
+  the combined 228-row manifest is
+  `749a6c28493c0907e733a997745f3d035e1ed6834ae4cb96021c42efae31263d`.
+- All 228 candidates (207 half-width-looking and 21 ASCII-looking) are fully
+  covered by the two independent Capstone instruction streams. The separated
+  table bytes are
+  `27 10 03 E8 00 64 00 0A 00 01 00 07 04 00 08 00 80 00 20 00`;
+  they begin with decimal place values and contain no low-signal candidate.
+- The aligned scan finds seven four-byte windows targeting six candidate
+  starts: `0x020223`, `0x0221E1`, `0x0222F3`, `0x022921`, `0x024525`, and
+  `0x02A555`. Every target is odd and therefore cannot be a valid 68000
+  instruction pointer. There are no exact executable PC-relative references.
+- The cumulative exact review is now 5,489 of 6,612 short-inline candidates:
+  5,488 structural false positives plus the retained `L-`. The remaining open
+  executable/numeric set is 1,123.
+- Focused inventory tests pass 98/98. Reports were regenerated from isolated
+  ROM `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and only virtual
+  display `:104` remained active.

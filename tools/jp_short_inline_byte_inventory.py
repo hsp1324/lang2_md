@@ -115,6 +115,36 @@ EXECUTABLE_RENDERER_SOURCE_SHA256 = (
 EXECUTABLE_RENDERER_CANDIDATE_MANIFEST_SHA256 = (
     "7617dc0672ad2a47e0bacf10051a5ccd12f7c7060d5b7bfad103f58bc1c0c805"
 )
+EXECUTABLE_GAMEPLAY_SEGMENTS = (
+    (
+        0x020000,
+        0x02A19C,
+        10094,
+        "c01b6c215be237c758a5fd6c6c7d923e0da926818c8cdf49e77838536fe045cd",
+    ),
+    (
+        0x02A1B0,
+        0x02BFC8,
+        1754,
+        "4343cc0a8786c911aa4b59e76c2b6e962f179fe25657e54f1849086db9ad787e",
+    ),
+)
+EXECUTABLE_GAMEPLAY_GAP_START = 0x02A19C
+EXECUTABLE_GAMEPLAY_GAP_END = 0x02A1B0
+EXECUTABLE_GAMEPLAY_GAP_BYTES = bytes.fromhex(
+    "27 10 03 E8 00 64 00 0A 00 01 00 07 04 00 08 00 80 00 20 00"
+)
+EXECUTABLE_GAMEPLAY_CANDIDATE_MANIFEST_SHA256 = (
+    "749a6c28493c0907e733a997745f3d035e1ed6834ae4cb96021c42efae31263d"
+)
+EXECUTABLE_GAMEPLAY_SEGMENT_CANDIDATE_MANIFEST_SHA256 = {
+    (0x020000, 0x02A19C): (
+        "a369a4971c6d87976375e82372c28125096f69aa47bdb54be99c171b5205ae96"
+    ),
+    (0x02A1B0, 0x02BFC8): (
+        "0d82f38f8a23c0225df88de3c6b731387dd940bba06947c91591349dd03a150c"
+    ),
+}
 MAX_LOW_SIGNAL = 2
 WORD_STREAM_CONTROLS = {
     0xFFF3,
@@ -1122,6 +1152,161 @@ def executable_renderer_candidate_inventory(
     }
 
 
+def executable_gameplay_candidate_inventory(
+    data: bytes, candidates: list[dict[str, object]]
+) -> dict[str, object]:
+    addresses = {int(row["start_int"]) for row in candidates}
+    absolute = aligned_absolute_references(data, addresses)
+    pc_relative = pc_relative_lea_pea_references(data, addresses)
+    detailed_rows = []
+    for row in candidates:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        context_start, context = word_context(data, start, end)
+        detailed_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": "contiguous_instruction_stream_false_positive",
+                "owner": "68000 gameplay/system executable instruction bytes",
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in pc_relative.get(start, [])
+                ],
+            }
+        )
+
+    segment_summaries = []
+    segment_layout_valid = True
+    for start, end, instruction_count, expected_source_sha256 in (
+        EXECUTABLE_GAMEPLAY_SEGMENTS
+    ):
+        rows = [
+            row
+            for row in candidates
+            if start <= int(row["start_int"]) < end
+        ]
+        source_sha256 = hashlib.sha256(data[start:end]).hexdigest()
+        manifest_sha256 = candidate_manifest_sha256(rows)
+        expected_manifest_sha256 = (
+            EXECUTABLE_GAMEPLAY_SEGMENT_CANDIDATE_MANIFEST_SHA256[
+                (start, end)
+            ]
+        )
+        valid = (
+            source_sha256 == expected_source_sha256
+            and manifest_sha256 == expected_manifest_sha256
+        )
+        segment_layout_valid &= valid
+        segment_summaries.append(
+            {
+                "range": f"0x{start:06X}..0x{end:06X}",
+                "start": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "source_bytes": end - start,
+                "linear_instruction_count": instruction_count,
+                "source_sha256": source_sha256,
+                "expected_source_sha256": expected_source_sha256,
+                "candidate_count": len(rows),
+                "kind_counts": dict(
+                    sorted(Counter(str(row["kind"]) for row in rows).items())
+                ),
+                "candidate_manifest_sha256": manifest_sha256,
+                "expected_candidate_manifest_sha256": (
+                    expected_manifest_sha256
+                ),
+                "source_layout_valid": valid,
+            }
+        )
+
+    gap = data[
+        EXECUTABLE_GAMEPLAY_GAP_START:EXECUTABLE_GAMEPLAY_GAP_END
+    ]
+    gap_candidates = [
+        row
+        for row in low_signal_runs(data)
+        if EXECUTABLE_GAMEPLAY_GAP_START
+        <= int(row["start_int"])
+        < EXECUTABLE_GAMEPLAY_GAP_END
+    ]
+    manifest_sha256 = candidate_manifest_sha256(candidates)
+    source_layout_valid = (
+        segment_layout_valid
+        and gap == EXECUTABLE_GAMEPLAY_GAP_BYTES
+        and not gap_candidates
+        and manifest_sha256
+        == EXECUTABLE_GAMEPLAY_CANDIDATE_MANIFEST_SHA256
+        and sum(
+            int(summary["candidate_count"])
+            for summary in segment_summaries
+        )
+        == len(candidates)
+    )
+    return {
+        "range": "0x020000..0x02BFC8 excluding 0x02A19C..0x02A1B0",
+        "segments": segment_summaries,
+        "numeric_table_gap": {
+            "range": (
+                f"0x{EXECUTABLE_GAMEPLAY_GAP_START:06X}.."
+                f"0x{EXECUTABLE_GAMEPLAY_GAP_END:06X}"
+            ),
+            "source_bytes": len(gap),
+            "raw_hex": gap.hex(" ").upper(),
+            "expected_raw_hex": (
+                EXECUTABLE_GAMEPLAY_GAP_BYTES.hex(" ").upper()
+            ),
+            "candidate_count": len(gap_candidates),
+            "source_layout_valid": gap == EXECUTABLE_GAMEPLAY_GAP_BYTES,
+        },
+        "candidate_count": len(detailed_rows),
+        "kind_counts": dict(
+            sorted(Counter(str(row["kind"]) for row in detailed_rows).items())
+        ),
+        "category_counts": {
+            "contiguous_instruction_stream_false_positive": len(
+                detailed_rows
+            )
+        },
+        "unclassified_count": 0,
+        "candidate_manifest_sha256": manifest_sha256,
+        "expected_candidate_manifest_sha256": (
+            EXECUTABLE_GAMEPLAY_CANDIDATE_MANIFEST_SHA256
+        ),
+        "source_layout_valid": source_layout_valid,
+        "aligned_absolute_32_reference_count": sum(
+            len(references) for references in absolute.values()
+        ),
+        "aligned_absolute_32_references": [
+            {
+                "target": f"0x{target:06X}",
+                "target_is_odd": bool(target & 1),
+                "addresses": [
+                    f"0x{address:06X}" for address in references
+                ],
+            }
+            for target, references in sorted(absolute.items())
+        ],
+        "pc_relative_lea_pea_reference_count": sum(
+            len(references) for references in pc_relative.values()
+        ),
+        "candidates": detailed_rows,
+    }
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -1227,6 +1412,17 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ]
     executable_renderer_bank = executable_renderer_candidate_inventory(
         japanese, executable_renderer
+    )
+    executable_gameplay = [
+        row
+        for row in candidates
+        if any(
+            start <= int(row["start_int"]) < end
+            for start, end, _, _ in EXECUTABLE_GAMEPLAY_SEGMENTS
+        )
+    ]
+    executable_gameplay_bank = executable_gameplay_candidate_inventory(
+        japanese, executable_gameplay
     )
 
     font_bitmap_addresses = {
@@ -1938,6 +2134,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "compressed_resource_bank": compressed_resource_bank,
         "executable_tail_bank": executable_tail_bank,
         "executable_renderer_bank": executable_renderer_bank,
+        "executable_gameplay_bank": executable_gameplay_bank,
     }
 
 
@@ -1952,6 +2149,7 @@ def markdown_report(result: dict[str, object]) -> str:
     compressed_bank = result["compressed_resource_bank"]
     executable_tail_bank = result["executable_tail_bank"]
     executable_renderer_bank = result["executable_renderer_bank"]
+    executable_gameplay_bank = result["executable_gameplay_bank"]
     lines = [
         "# Short Inline Byte Candidate Inventory",
         "",
@@ -2026,6 +2224,14 @@ def markdown_report(result: dict[str, object]) -> str:
             f"{executable_renderer_bank['unclassified_count']}"
         ),
         (
+            "- Executable-gameplay candidates: "
+            f"{executable_gameplay_bank['candidate_count']}"
+        ),
+        (
+            "- Executable-gameplay unclassified: "
+            f"{executable_gameplay_bank['unclassified_count']}"
+        ),
+        (
             "- Exact aligned 32-bit references to text/UI-bank candidates: "
             f"{bank['aligned_absolute_32_reference_count']}"
         ),
@@ -2051,6 +2257,53 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Executable-Gameplay Candidates",
+            "",
+            (
+                "- Two source-locked contiguous 68000 instruction segments cover "
+                f"{executable_gameplay_bank['candidate_count']} candidates around "
+                "one explicitly separated 20-byte numeric lookup table."
+            ),
+            (
+                "- Combined candidate manifest SHA-256: "
+                f"`{executable_gameplay_bank['candidate_manifest_sha256']}` "
+                f"(layout valid: "
+                f"`{executable_gameplay_bank['source_layout_valid']}`)."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{executable_gameplay_bank['aligned_absolute_32_reference_count']} "
+                f"across "
+                f"{len(executable_gameplay_bank['aligned_absolute_32_references'])} "
+                "odd candidate addresses; exact `LEA d16(PC)`/`PEA d16(PC)` "
+                "references: "
+                f"{executable_gameplay_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Instruction segment | Bytes | Instructions | Candidates | Source SHA-256 | Candidate manifest |",
+            "| --- | ---: | ---: | ---: | --- | --- |",
+        ]
+    )
+    for segment in executable_gameplay_bank["segments"]:
+        lines.append(
+            f"| `{segment['range']}` | {segment['source_bytes']} | "
+            f"{segment['linear_instruction_count']} | "
+            f"{segment['candidate_count']} | `{segment['source_sha256']}` | "
+            f"`{segment['candidate_manifest_sha256']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            (
+                f"The gap `{executable_gameplay_bank['numeric_table_gap']['range']}` "
+                "contains decimal place values and bit/index masks, has no "
+                "low-signal candidate, and is deliberately not classified as code."
+            ),
+            "Every candidate span in the two surrounding segments is independently",
+            "covered by a contiguous Capstone 68000 instruction stream. All six",
+            "apparent aligned target values are odd addresses, so they cannot be",
+            "valid 68000 instruction entry points; they remain instruction bytes.",
             "",
             "## Reviewed Executable-Renderer Candidates",
             "",
@@ -2566,6 +2819,7 @@ def main() -> None:
     compressed_bank = result["compressed_resource_bank"]
     executable_tail_bank = result["executable_tail_bank"]
     executable_renderer_bank = result["executable_renderer_bank"]
+    executable_gameplay_bank = result["executable_gameplay_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
         f"{font_bank['candidate_count']} font-bitmap-bank, "
@@ -2577,7 +2831,8 @@ def main() -> None:
         f"{compressed_bank['candidate_count']} compressed-resource-bank, and "
         f"{executable_tail_bank['candidate_count']} executable-tail, and "
         f"{executable_renderer_bank['candidate_count']} executable-renderer candidates, "
-        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count']} "
+        f"{executable_gameplay_bank['candidate_count']} executable-gameplay candidates, "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count']} "
         "unclassified"
     )
 
