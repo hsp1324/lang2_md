@@ -7,6 +7,8 @@ import shutil
 import sys
 import time
 
+from PIL import Image
+
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -29,6 +31,10 @@ MEMBER_RECORD_SIZE = 0x0C
 SUMMONED_MEMBER_INDEX = 7
 HEIN_X = 13
 HEIN_Y = 20
+SUMMON_CURSOR_X_RANGE = range(34, 53)
+SUMMON_CURSOR_Y_STARTS = (25, 43, 61, 79, 97, 115)
+SUMMON_CURSOR_ROW_HEIGHT = 16
+SUMMON_CURSOR_MIN_SCORE = 8
 
 
 def summon_position(summon_id: int) -> tuple[int, int]:
@@ -54,6 +60,46 @@ def runtime_member(gst: bytes, member_index: int) -> tuple[int, int, int]:
     if len(gst) < end:
         raise ValueError("GST is too short to contain the runtime member")
     return gst[offset], gst[offset + 6], gst[offset + 7]
+
+
+def selected_list_row(path: Path) -> int:
+    image = Image.open(path).convert("RGB")
+    scores = []
+    for start_y in SUMMON_CURSOR_Y_STARTS:
+        score = 0
+        for y in range(start_y, start_y + SUMMON_CURSOR_ROW_HEIGHT):
+            for x in SUMMON_CURSOR_X_RANGE:
+                red, green, blue = image.getpixel((x, y))
+                if max(red, green, blue) - min(red, green, blue) < 40:
+                    if red + green + blue > 300:
+                        score += 1
+        scores.append(score)
+    selected = max(range(len(scores)), key=scores.__getitem__)
+    if scores[selected] < SUMMON_CURSOR_MIN_SCORE:
+        raise RuntimeError(f"summon list cursor not detected: scores={scores}")
+    return selected
+
+
+def correct_selected_row(prefix: Path, expected_row: int) -> Path:
+    selected_path = Path(f"{prefix}_selected.png")
+    for attempt in range(3):
+        magic_capture.capture(selected_path)
+        actual_row = selected_list_row(selected_path)
+        if actual_row == expected_row:
+            return selected_path
+        direction = "down" if actual_row < expected_row else "up"
+        for _ in range(abs(expected_row - actual_row)):
+            magic_capture.send_keys(f"{direction}@0.02:0.55")
+        print(
+            f"correcting summon cursor row {actual_row + 1} "
+            f"to {expected_row + 1} (attempt {attempt + 1})",
+            flush=True,
+        )
+    actual_row = selected_list_row(selected_path)
+    raise RuntimeError(
+        f"summon cursor row mismatch: expected {expected_row + 1}, "
+        f"saw {actual_row + 1}"
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -85,6 +131,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--confirmation-delay", type=float, default=0.9)
     parser.add_argument("--effect-delay", type=float, default=8.0)
+    parser.add_argument(
+        "--diagnostic-summon-cost",
+        type=int,
+        help=(
+            "source-check and replace only the selected summon's ROM cost "
+            "word for application diagnostics"
+        ),
+    )
+    parser.add_argument(
+        "--list-only",
+        action="store_true",
+        help="stop after verifying and capturing the selected summon-list row",
+    )
     parser.add_argument("--final-confirmations", type=int, default=2)
     parser.add_argument("--max-event-confirmations", type=int, default=12)
     parser.add_argument("--max-confirmations", type=int, default=40)
@@ -96,7 +155,16 @@ def main() -> int:
     page, row = summon_position(args.summon_id)
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = probe_builder.patch_probe(probe, source)
+    checksum = probe_builder.patch_probe(
+        probe,
+        source,
+        diagnostic_summon_id=(
+            args.summon_id
+            if args.diagnostic_summon_cost is not None
+            else None
+        ),
+        diagnostic_summon_cost=args.diagnostic_summon_cost,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
 
@@ -143,7 +211,10 @@ def main() -> int:
         magic_capture.send_keys("c:0.7")
         magic_capture.send_steps(["right@0.02:0.4"] * page)
         magic_capture.send_steps(["down@0.02:0.35"] * row)
-        magic_capture.capture(Path(f"{prefix}_selected.png"))
+        selected_path = correct_selected_row(prefix, row)
+        if args.list_only:
+            print(f"verified summon list selection: {selected_path}", flush=True)
+            return 0
         magic_capture.send_keys("c:1.0")
         magic_capture.capture(Path(f"{prefix}_target_or_result.png"))
 
@@ -182,7 +253,12 @@ def main() -> int:
         state, final_current_mp, final_max_mp = magic_capture.save_and_read_mp(
             runtime_name
         )
-        expected_mp = max_mp - SUMMON_MP_COSTS[args.summon_id]
+        applied_cost = (
+            args.diagnostic_summon_cost
+            if args.diagnostic_summon_cost is not None
+            else SUMMON_MP_COSTS[args.summon_id]
+        )
+        expected_mp = max_mp - applied_cost
         if current_mp != expected_mp or final_current_mp != expected_mp:
             raise RuntimeError(
                 f"summon MP mismatch: expected {expected_mp}/{max_mp}, "

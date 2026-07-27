@@ -43,7 +43,7 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         evidence = {
             row["surface"]: row for row in data["global_evidence"]
         }["summon_targeting_results"]
-        self.assertEqual(evidence["checksum"], "C41E/31CF")
+        self.assertEqual(evidence["checksum"], "C41E/31CF/31CC")
         self.assertEqual(evidence["based_on"], "AD01/1AB2")
         self.assertIn("member slot 7", evidence["note"])
         self.assertIn("not natural summon ownership evidence", evidence["note"])
@@ -51,12 +51,33 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/c41e_summon_00_summoned_status.png",
             evidence["captures"],
         )
-        for summon_id in (2, 6):
+        for summon_id in range(1, 7):
+            self.assertIn(
+                f"captures/run/31cf_summon_{summon_id:02d}_selected.png",
+                evidence["captures"],
+            )
+            self.assertIn(
+                f"captures/run/31cf_summon_{summon_id:02d}_target.png",
+                evidence["captures"],
+            )
+            self.assertIn(
+                f"captures/run/31cf_summon_{summon_id:02d}_result_stable.png",
+                evidence["captures"],
+            )
+        for summon_id in (1, 2, 3, 5, 6):
             self.assertIn(
                 f"captures/run/31cf_summon_{summon_id:02d}_summoned_status.png",
                 evidence["captures"],
             )
-        self.assertIn("both summon-list pages", evidence["note"])
+        for suffix in ("selected", "target", "result_stable", "summoned_status"):
+            self.assertIn(
+                f"captures/run/31cc_summon_07_{suffix}.png",
+                evidence["captures"],
+            )
+        self.assertIn("source-locked production costs", evidence["note"])
+        self.assertIn("production 형님 cost remains 15 MP", evidence["note"])
+        self.assertIn("ID 4 status capture focused Hein", evidence["note"])
+        self.assertIn("all eight Korean names", evidence["note"])
 
     def test_ending_visit_dialogue_evidence_is_renderer_diagnostic(self):
         data = inventory.load_inventory()

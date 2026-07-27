@@ -2299,21 +2299,40 @@ Selector record 31 intentionally enters the on-screen secret Scenario X4 죽음�
   - `captures/run/e72d_magic_21_selected.png`
   - `captures/run/e72d_magic_21_target.png`
   - `captures/run/e72d_magic_21_result_stable.png`
-- `summon_targeting_results`: probe checksum `C41E/31CF` (base `AD01/1AB2`). AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. Elemental consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean Elemental with Move/Attack/Magic commands. Final-1AB2-derived 31CF proves representative application paths on both summon-list pages. 화이트드래곤 consumes MP 12->0 and creates class 8F; 요르문간드 consumes MP 12->2 and creates class 93. Both appear in member slot 7 at (12,20), retain clean Korean names and 이동/공격/마법 commands, and return stably to the map. These are renderer/runtime-application paths, not natural summon ownership evidence.
+- `summon_targeting_results`: probe checksum `C41E/31CF/31CC` (base `AD01/1AB2`). AD01-derived C41E forces the Summon command, all eight list IDs, and selection acceptance without changing production. 엘리멘탈 consumed Hein MP 12->7, created class 8D in member slot 7 at (12,20), returned stably, and displayed Korean 엘리멘탈 with 이동/공격/마법 commands. Final-1AB2-derived 31CF applies the source-locked production costs and proves the remaining affordable IDs: 프레이야 consumes MP 12->2 and creates class 8E; 화이트드래곤 consumes MP 12->0 and creates class 8F; 발키리 consumes MP 12->2 and creates class 90; 슬레이프니르 consumes MP 12->4 and creates class 91; 펜리르 consumes MP 12->2 and creates class 92; 요르문간드 consumes MP 12->2 and creates class 93. Final-1AB2-derived 31CC differs from 31CF only by changing the source-locked 형님 cost word from 15 to 12 for diagnostics; it consumes MP 12->0 and creates class 94. Every created unit occupies member slot 7 at (12,20) and returns stably to the map. Selected-list captures cover all eight Korean names; correctly focused status captures for IDs 0, 1, 2, 3, 5, 6, and 7 retain their Korean names and 이동/공격/마법 commands. The ID 4 status capture focused Hein, so its class and MP memory result is recorded without claiming post-spawn visual status evidence. Direct GST MP editing and a Start-menu wrapper were rejected after causing a reset and title-flow interference, respectively. These are renderer/runtime-application paths, not natural summon ownership evidence; the production 형님 cost remains 15 MP.
   - `captures/run/c41e_summon_00_hein_command.png`
   - `captures/run/c41e_summon_00_selected.png`
   - `captures/run/c41e_summon_00_target.png`
   - `captures/run/c41e_summon_00_result.png`
   - `captures/run/c41e_summon_00_result_stable.png`
   - `captures/run/c41e_summon_00_summoned_status.png`
+  - `captures/run/31cf_summon_01_selected.png`
+  - `captures/run/31cf_summon_01_target.png`
+  - `captures/run/31cf_summon_01_result_stable.png`
+  - `captures/run/31cf_summon_01_summoned_status.png`
   - `captures/run/31cf_summon_02_selected.png`
   - `captures/run/31cf_summon_02_target.png`
   - `captures/run/31cf_summon_02_result_stable.png`
   - `captures/run/31cf_summon_02_summoned_status.png`
+  - `captures/run/31cf_summon_03_selected.png`
+  - `captures/run/31cf_summon_03_target.png`
+  - `captures/run/31cf_summon_03_result_stable.png`
+  - `captures/run/31cf_summon_03_summoned_status.png`
+  - `captures/run/31cf_summon_04_selected.png`
+  - `captures/run/31cf_summon_04_target.png`
+  - `captures/run/31cf_summon_04_result_stable.png`
+  - `captures/run/31cf_summon_05_selected.png`
+  - `captures/run/31cf_summon_05_target.png`
+  - `captures/run/31cf_summon_05_result_stable.png`
+  - `captures/run/31cf_summon_05_summoned_status.png`
   - `captures/run/31cf_summon_06_selected.png`
   - `captures/run/31cf_summon_06_target.png`
   - `captures/run/31cf_summon_06_result_stable.png`
   - `captures/run/31cf_summon_06_summoned_status.png`
+  - `captures/run/31cc_summon_07_selected.png`
+  - `captures/run/31cc_summon_07_target.png`
+  - `captures/run/31cc_summon_07_result_stable.png`
+  - `captures/run/31cc_summon_07_summoned_status.png`
 - `ending_visit_dialogue`: probe checksum `F852` (base `E38B`). E38B relocates all 23 ending-visit records with natural Korean spacing. Diagnostic F852 redirects every stock visit selector pointer to one 83-page concatenated stream; Scenario 27 playback rendered every page through the stock visit renderer, reached the final Elwin/Liana page, then followed the normal forest ending and SEGA restart without clipping, Japanese residue, reset, freeze, or premature termination. This proves renderer coverage, not all natural visit-condition selections.
   - `captures/run/f852_ending_dialogue_watch/240.png`
   - `captures/run/f852_ending_dialogue_watch/320.png`

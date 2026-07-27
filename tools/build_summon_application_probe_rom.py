@@ -28,9 +28,46 @@ ALL_SUMMON_BRANCH_PATCH = bytes.fromhex("4E 71 4E 71")
 SUMMON_MP_BRANCH_OFFSET = 0x021938
 SUMMON_MP_BRANCH_SOURCE = bytes.fromhex("66 00 00 CE")
 SUMMON_MP_BRANCH_PATCH = bytes.fromhex("60 00 00 CE")
+SUMMON_DATA_TABLE = 0x0820F4
+SUMMON_DATA_RECORD_SIZE = 4
+SUMMON_COST_OFFSET = 2
+SUMMON_SOURCE_COSTS = (5, 10, 12, 10, 8, 10, 10, 15)
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def patch_summon_cost(
+    probe: bytearray,
+    source: bytes,
+    summon_id: int,
+    value: int,
+) -> None:
+    if not 0 <= summon_id < len(SUMMON_SOURCE_COSTS):
+        raise ValueError("diagnostic summon ID must be 0..7")
+    if not 0 <= value <= 99:
+        raise ValueError("diagnostic summon cost must be 0..99")
+    offset = (
+        SUMMON_DATA_TABLE
+        + summon_id * SUMMON_DATA_RECORD_SIZE
+        + SUMMON_COST_OFFSET
+    )
+    expected = SUMMON_SOURCE_COSTS[summon_id].to_bytes(2, "big")
+    for label, data in (("Japanese", source), ("input", probe)):
+        actual = data[offset : offset + 2]
+        if actual != expected:
+            raise ValueError(
+                f"{label} summon {summon_id} cost changed: "
+                f"{actual.hex()} != {expected.hex()}"
+            )
+    probe[offset : offset + 2] = value.to_bytes(2, "big")
+
+
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    diagnostic_summon_id: int | None = None,
+    diagnostic_summon_cost: int | None = None,
+) -> int:
+    if (diagnostic_summon_id is None) != (diagnostic_summon_cost is None):
+        raise ValueError("diagnostic summon ID and cost must be supplied together")
     patches = (
         (
             "summon command branch",
@@ -57,6 +94,13 @@ def patch_probe(probe: bytearray, source: bytes) -> int:
         if probe[offset : offset + len(expected)] != expected:
             raise ValueError(f"input {label} changed")
         probe[offset : offset + len(replacement)] = replacement
+    if diagnostic_summon_id is not None and diagnostic_summon_cost is not None:
+        patch_summon_cost(
+            probe,
+            source,
+            diagnostic_summon_id,
+            diagnostic_summon_cost,
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -70,6 +114,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-rom", type=Path, default=DEFAULT_INPUT_ROM)
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
+    parser.add_argument("--diagnostic-summon-id", type=int)
+    parser.add_argument("--diagnostic-summon-cost", type=int)
     return parser.parse_args()
 
 
@@ -77,10 +123,20 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
-    checksum = patch_probe(probe, source)
+    checksum = patch_probe(
+        probe,
+        source,
+        diagnostic_summon_id=args.diagnostic_summon_id,
+        diagnostic_summon_cost=args.diagnostic_summon_cost,
+    )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print("summon command and all eight summon IDs enabled for diagnostics")
+    if args.diagnostic_summon_id is not None:
+        print(
+            f"summon {args.diagnostic_summon_id} cost changed only for "
+            f"diagnostics: {args.diagnostic_summon_cost}"
+        )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

@@ -630,9 +630,11 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             class_change_gap,
             "ending and credits UI variants outside the verified Scenario 27, "
             "all-epilogue, ending-visit, and final-credit paths",
-            "magic/summon targeting and result paths beyond the production-faithful "
-            "Magic Arrow and diagnostic Attack, Fireball, Heal, Sleep, Charm, "
-            "Elemental, White Dragon, and Yormungand probes",
+            "magic targeting and result paths beyond the production-faithful "
+            "Magic Arrow and diagnostic Attack, Fireball, Heal, Sleep, and Charm "
+            "probes; natural summon ownership and the production 15-MP 형님 "
+            "application path beyond source-locked table validation and the "
+            "all-eight diagnostic renderer/application probes",
             "ownership and purpose of 425 compressed resources beyond byte-font "
             "resource index 1, battle-terrain resource index 223, item-icon "
             "resource index 391, and title-logo resource index 393",
