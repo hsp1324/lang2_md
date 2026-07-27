@@ -1,5 +1,5 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "status": "balance_discussion_required",
   "approval_gate": {
     "user_approved": false,
@@ -2748,6 +2748,809 @@
           }
         }
       ]
+    },
+    "mercenary_replacement_discussion": {
+      "status": "unapproved_discussion_only",
+      "rom_values_applied": false,
+      "recommended_interpretation": "up_to_quota_on_eligible_slots",
+      "conservative_upgrade_candidates": [
+        {
+          "source": {
+            "class_id": "72",
+            "korean": "솔저",
+            "base_at": 20,
+            "base_df": 14,
+            "movement": 6,
+            "family_code": "00"
+          },
+          "target": {
+            "class_id": "74",
+            "korean": "버서커",
+            "base_at": 24,
+            "base_df": 15,
+            "movement": 6,
+            "family_code": "00"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "74",
+            "korean": "버서커",
+            "base_at": 24,
+            "base_df": 15,
+            "movement": 6,
+            "family_code": "00"
+          },
+          "target": {
+            "class_id": "73",
+            "korean": "아머솔저",
+            "base_at": 25,
+            "base_df": 22,
+            "movement": 5,
+            "family_code": "00"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "73",
+            "korean": "아머솔저",
+            "base_at": 25,
+            "base_df": 22,
+            "movement": 5,
+            "family_code": "00"
+          },
+          "target": {
+            "class_id": "7C",
+            "korean": "다크가드",
+            "base_at": 30,
+            "base_df": 25,
+            "movement": 6,
+            "family_code": "00"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "75",
+            "korean": "바바리안",
+            "base_at": 19,
+            "base_df": 12,
+            "movement": 6,
+            "family_code": "00"
+          },
+          "target": {
+            "class_id": "72",
+            "korean": "솔저",
+            "base_at": 20,
+            "base_df": 14,
+            "movement": 6,
+            "family_code": "00"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "79",
+            "korean": "호스맨",
+            "base_at": 22,
+            "base_df": 14,
+            "movement": 10,
+            "family_code": "03"
+          },
+          "target": {
+            "class_id": "7A",
+            "korean": "헤비호스맨",
+            "base_at": 27,
+            "base_df": 19,
+            "movement": 9,
+            "family_code": "03"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "7A",
+            "korean": "헤비호스맨",
+            "base_at": 27,
+            "base_df": 19,
+            "movement": 9,
+            "family_code": "03"
+          },
+          "target": {
+            "class_id": "7B",
+            "korean": "로얄호스",
+            "base_at": 34,
+            "base_df": 23,
+            "movement": 13,
+            "family_code": "03"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "7E",
+            "korean": "파이크",
+            "base_at": 18,
+            "base_df": 17,
+            "movement": 5,
+            "family_code": "02"
+          },
+          "target": {
+            "class_id": "7F",
+            "korean": "팔랑크스",
+            "base_at": 20,
+            "base_df": 23,
+            "movement": 5,
+            "family_code": "02"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "80",
+            "korean": "스켈톤",
+            "base_at": 20,
+            "base_df": 12,
+            "movement": 4,
+            "family_code": "0E"
+          },
+          "target": {
+            "class_id": "81",
+            "korean": "좀비",
+            "base_at": 22,
+            "base_df": 14,
+            "movement": 4,
+            "family_code": "0E"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "82",
+            "korean": "가고일",
+            "base_at": 25,
+            "base_df": 13,
+            "movement": 10,
+            "family_code": "05"
+          },
+          "target": {
+            "class_id": "7D",
+            "korean": "그리폰",
+            "base_at": 27,
+            "base_df": 14,
+            "movement": 10,
+            "family_code": "05"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "8A",
+            "korean": "레이스",
+            "base_at": 25,
+            "base_df": 21,
+            "movement": 6,
+            "family_code": "0D"
+          },
+          "target": {
+            "class_id": "88",
+            "korean": "엘리멘탈",
+            "base_at": 28,
+            "base_df": 22,
+            "movement": 6,
+            "family_code": "0D"
+          },
+          "confidence": "same_role_or_family_conservative",
+          "same_family_code": true
+        }
+      ],
+      "conditional_role_aware_upgrade_candidates": [
+        {
+          "source": {
+            "class_id": "6E",
+            "korean": "머맨",
+            "base_at": 25,
+            "base_df": 13,
+            "movement": 8,
+            "family_code": "07"
+          },
+          "target": {
+            "class_id": "85",
+            "korean": "리바이어선",
+            "base_at": 26,
+            "base_df": 15,
+            "movement": 6,
+            "family_code": "0A"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": false
+        },
+        {
+          "source": {
+            "class_id": "78",
+            "korean": "리자드맨",
+            "base_at": 24,
+            "base_df": 6,
+            "movement": 7,
+            "family_code": "07"
+          },
+          "target": {
+            "class_id": "85",
+            "korean": "리바이어선",
+            "base_at": 26,
+            "base_df": 15,
+            "movement": 6,
+            "family_code": "0A"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": false
+        },
+        {
+          "source": {
+            "class_id": "83",
+            "korean": "울프맨",
+            "base_at": 19,
+            "base_df": 14,
+            "movement": 7,
+            "family_code": "0B"
+          },
+          "target": {
+            "class_id": "8B",
+            "korean": "헬하운드",
+            "base_at": 24,
+            "base_df": 22,
+            "movement": 9,
+            "family_code": "04"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": false
+        },
+        {
+          "source": {
+            "class_id": "76",
+            "korean": "다크엘프",
+            "base_at": 20,
+            "base_df": 8,
+            "movement": 7,
+            "family_code": "0F"
+          },
+          "target": {
+            "class_id": "77",
+            "korean": "발리스타",
+            "base_at": 22,
+            "base_df": 10,
+            "movement": 2,
+            "family_code": "10"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": false
+        },
+        {
+          "source": {
+            "class_id": "7F",
+            "korean": "팔랑크스",
+            "base_at": 20,
+            "base_df": 23,
+            "movement": 5,
+            "family_code": "02"
+          },
+          "target": {
+            "class_id": "86",
+            "korean": "골렘",
+            "base_at": 23,
+            "base_df": 28,
+            "movement": 4,
+            "family_code": "02"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": true
+        },
+        {
+          "source": {
+            "class_id": "88",
+            "korean": "엘리멘탈",
+            "base_at": 28,
+            "base_df": 22,
+            "movement": 6,
+            "family_code": "0D"
+          },
+          "target": {
+            "class_id": "89",
+            "korean": "아크데몬",
+            "base_at": 33,
+            "base_df": 24,
+            "movement": 7,
+            "family_code": "09"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": false
+        },
+        {
+          "source": {
+            "class_id": "7D",
+            "korean": "그리폰",
+            "base_at": 27,
+            "base_df": 14,
+            "movement": 10,
+            "family_code": "05"
+          },
+          "target": {
+            "class_id": "87",
+            "korean": "뱀파이어배트",
+            "base_at": 31,
+            "base_df": 18,
+            "movement": 6,
+            "family_code": "05"
+          },
+          "confidence": "role_aware_but_movement_range_or_species_changes",
+          "same_family_code": true
+        }
+      ],
+      "conservative_preview": {
+        "interpretation": "replace at most the scenario quota per target commander; never fill empty slots and never replace an already-unmapped top unit merely to reach a numeric quota",
+        "occupied_slot_count": 1445,
+        "eligible_slot_count": 580,
+        "planned_replacement_count": 217,
+        "scenarios_with_quota_but_no_candidates": [
+          10,
+          24,
+          27
+        ],
+        "scenarios": [
+          {
+            "scenario": 1,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 12,
+            "eligible_slot_count": 12,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 2
+          },
+          {
+            "scenario": 2,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 27,
+            "eligible_slot_count": 27,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 3,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 48,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 8
+          },
+          {
+            "scenario": 4,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 36,
+            "eligible_slot_count": 32,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 5,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 14,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 3
+          },
+          {
+            "scenario": 6,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 54,
+            "eligible_slot_count": 46,
+            "planned_replacement_count": 8,
+            "commander_count_with_candidates": 8
+          },
+          {
+            "scenario": 7,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 18,
+            "planned_replacement_count": 3,
+            "commander_count_with_candidates": 3
+          },
+          {
+            "scenario": 8,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 26,
+            "planned_replacement_count": 6,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 9,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 46,
+            "eligible_slot_count": 30,
+            "planned_replacement_count": 6,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 10,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 74,
+            "eligible_slot_count": 0,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 0
+          },
+          {
+            "scenario": 11,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 56,
+            "eligible_slot_count": 32,
+            "planned_replacement_count": 14,
+            "commander_count_with_candidates": 7
+          },
+          {
+            "scenario": 12,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 54,
+            "eligible_slot_count": 20,
+            "planned_replacement_count": 8,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 13,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 74,
+            "eligible_slot_count": 46,
+            "planned_replacement_count": 20,
+            "commander_count_with_candidates": 10
+          },
+          {
+            "scenario": 14,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 56,
+            "eligible_slot_count": 16,
+            "planned_replacement_count": 8,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 15,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 14,
+            "planned_replacement_count": 6,
+            "commander_count_with_candidates": 3
+          },
+          {
+            "scenario": 16,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 56,
+            "eligible_slot_count": 22,
+            "planned_replacement_count": 14,
+            "commander_count_with_candidates": 5
+          },
+          {
+            "scenario": 17,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 66,
+            "eligible_slot_count": 26,
+            "planned_replacement_count": 18,
+            "commander_count_with_candidates": 7
+          },
+          {
+            "scenario": 18,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 44,
+            "eligible_slot_count": 18,
+            "planned_replacement_count": 12,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 19,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 12,
+            "planned_replacement_count": 6,
+            "commander_count_with_candidates": 2
+          },
+          {
+            "scenario": 20,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 20,
+            "planned_replacement_count": 12,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 21,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 66,
+            "eligible_slot_count": 8,
+            "planned_replacement_count": 7,
+            "commander_count_with_candidates": 3
+          },
+          {
+            "scenario": 22,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 54,
+            "eligible_slot_count": 17,
+            "planned_replacement_count": 11,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 23,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 58,
+            "eligible_slot_count": 16,
+            "planned_replacement_count": 14,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 24,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 0,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 0
+          },
+          {
+            "scenario": 25,
+            "quota_per_commander": 4,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 36,
+            "planned_replacement_count": 24,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 26,
+            "quota_per_commander": 4,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 24,
+            "planned_replacement_count": 20,
+            "commander_count_with_candidates": 5
+          },
+          {
+            "scenario": 27,
+            "quota_per_commander": 6,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 0,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 0
+          }
+        ]
+      },
+      "role_aware_preview": {
+        "interpretation": "replace at most the scenario quota per target commander; never fill empty slots and never replace an already-unmapped top unit merely to reach a numeric quota",
+        "occupied_slot_count": 1445,
+        "eligible_slot_count": 971,
+        "planned_replacement_count": 371,
+        "scenarios_with_quota_but_no_candidates": [],
+        "scenarios": [
+          {
+            "scenario": 1,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 12,
+            "eligible_slot_count": 12,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 2
+          },
+          {
+            "scenario": 2,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 27,
+            "eligible_slot_count": 27,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 3,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 48,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 8
+          },
+          {
+            "scenario": 4,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 36,
+            "eligible_slot_count": 36,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 5,
+            "quota_per_commander": 0,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 48,
+            "planned_replacement_count": 0,
+            "commander_count_with_candidates": 9
+          },
+          {
+            "scenario": 6,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 54,
+            "eligible_slot_count": 54,
+            "planned_replacement_count": 9,
+            "commander_count_with_candidates": 9
+          },
+          {
+            "scenario": 7,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 30,
+            "planned_replacement_count": 5,
+            "commander_count_with_candidates": 5
+          },
+          {
+            "scenario": 8,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 48,
+            "eligible_slot_count": 48,
+            "planned_replacement_count": 11,
+            "commander_count_with_candidates": 11
+          },
+          {
+            "scenario": 9,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 46,
+            "eligible_slot_count": 42,
+            "planned_replacement_count": 9,
+            "commander_count_with_candidates": 9
+          },
+          {
+            "scenario": 10,
+            "quota_per_commander": 1,
+            "occupied_slot_count": 74,
+            "eligible_slot_count": 56,
+            "planned_replacement_count": 10,
+            "commander_count_with_candidates": 10
+          },
+          {
+            "scenario": 11,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 56,
+            "eligible_slot_count": 56,
+            "planned_replacement_count": 20,
+            "commander_count_with_candidates": 10
+          },
+          {
+            "scenario": 12,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 54,
+            "eligible_slot_count": 20,
+            "planned_replacement_count": 8,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 13,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 74,
+            "eligible_slot_count": 62,
+            "planned_replacement_count": 24,
+            "commander_count_with_candidates": 12
+          },
+          {
+            "scenario": 14,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 56,
+            "eligible_slot_count": 40,
+            "planned_replacement_count": 18,
+            "commander_count_with_candidates": 9
+          },
+          {
+            "scenario": 15,
+            "quota_per_commander": 2,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 30,
+            "planned_replacement_count": 12,
+            "commander_count_with_candidates": 6
+          },
+          {
+            "scenario": 16,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 56,
+            "eligible_slot_count": 42,
+            "planned_replacement_count": 25,
+            "commander_count_with_candidates": 9
+          },
+          {
+            "scenario": 17,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 66,
+            "eligible_slot_count": 34,
+            "planned_replacement_count": 23,
+            "commander_count_with_candidates": 9
+          },
+          {
+            "scenario": 18,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 44,
+            "eligible_slot_count": 24,
+            "planned_replacement_count": 15,
+            "commander_count_with_candidates": 5
+          },
+          {
+            "scenario": 19,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 48,
+            "planned_replacement_count": 27,
+            "commander_count_with_candidates": 10
+          },
+          {
+            "scenario": 20,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 20,
+            "planned_replacement_count": 12,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 21,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 66,
+            "eligible_slot_count": 14,
+            "planned_replacement_count": 10,
+            "commander_count_with_candidates": 4
+          },
+          {
+            "scenario": 22,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 54,
+            "eligible_slot_count": 22,
+            "planned_replacement_count": 13,
+            "commander_count_with_candidates": 5
+          },
+          {
+            "scenario": 23,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 58,
+            "eligible_slot_count": 46,
+            "planned_replacement_count": 28,
+            "commander_count_with_candidates": 10
+          },
+          {
+            "scenario": 24,
+            "quota_per_commander": 3,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 6,
+            "planned_replacement_count": 6,
+            "commander_count_with_candidates": 3
+          },
+          {
+            "scenario": 25,
+            "quota_per_commander": 4,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 42,
+            "planned_replacement_count": 28,
+            "commander_count_with_candidates": 7
+          },
+          {
+            "scenario": 26,
+            "quota_per_commander": 4,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 42,
+            "planned_replacement_count": 36,
+            "commander_count_with_candidates": 10
+          },
+          {
+            "scenario": 27,
+            "quota_per_commander": 6,
+            "occupied_slot_count": 60,
+            "eligible_slot_count": 22,
+            "planned_replacement_count": 22,
+            "commander_count_with_candidates": 8
+          }
+        ]
+      }
     }
   },
   "normal_release": {
@@ -2777,6 +3580,7 @@
       "base_at_offset": "0x0B",
       "base_df_offset": "0x0C",
       "movement_offset": "0x0D",
+      "family_code_offset": "0x06",
       "soldier_at_correction_offset": "0x0F",
       "soldier_df_correction_offset": "0x10",
       "scope": "global_per_class"
@@ -2790,6 +3594,7 @@
         "base_at": 18,
         "base_df": 18,
         "movement": 5,
+        "family_code": "02",
         "all_fixed_slot_count": 6,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2803,6 +3608,7 @@
         "base_at": 22,
         "base_df": 22,
         "movement": 5,
+        "family_code": "02",
         "all_fixed_slot_count": 8,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2816,6 +3622,7 @@
         "base_at": 20,
         "base_df": 14,
         "movement": 5,
+        "family_code": "00",
         "all_fixed_slot_count": 41,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2829,6 +3636,7 @@
         "base_at": 23,
         "base_df": 19,
         "movement": 6,
+        "family_code": "00",
         "all_fixed_slot_count": 6,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 4,
@@ -2842,6 +3650,7 @@
         "base_at": 25,
         "base_df": 22,
         "movement": 5,
+        "family_code": "00",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -2855,6 +3664,7 @@
         "base_at": 24,
         "base_df": 15,
         "movement": 10,
+        "family_code": "03",
         "all_fixed_slot_count": 12,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2868,6 +3678,7 @@
         "base_at": 26,
         "base_df": 19,
         "movement": 9,
+        "family_code": "03",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -2881,6 +3692,7 @@
         "base_at": 27,
         "base_df": 21,
         "movement": 8,
+        "family_code": "03",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -2894,6 +3706,7 @@
         "base_at": 19,
         "base_df": 8,
         "movement": 6,
+        "family_code": "0F",
         "all_fixed_slot_count": 6,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2907,6 +3720,7 @@
         "base_at": 22,
         "base_df": 10,
         "movement": 3,
+        "family_code": "10",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -2920,6 +3734,7 @@
         "base_at": 21,
         "base_df": 19,
         "movement": 6,
+        "family_code": "01",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -2933,6 +3748,7 @@
         "base_at": 18,
         "base_df": 12,
         "movement": 5,
+        "family_code": "11",
         "all_fixed_slot_count": 20,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2946,6 +3762,7 @@
         "base_at": 25,
         "base_df": 13,
         "movement": 8,
+        "family_code": "07",
         "all_fixed_slot_count": 14,
         "enemy_side_04_slot_count": 14,
         "first_fixed_scenario": 10,
@@ -2959,6 +3776,7 @@
         "base_at": 26,
         "base_df": 13,
         "movement": 10,
+        "family_code": "05",
         "all_fixed_slot_count": 6,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 7,
@@ -2972,6 +3790,7 @@
         "base_at": 24,
         "base_df": 19,
         "movement": 12,
+        "family_code": "05",
         "all_fixed_slot_count": 4,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 15,
@@ -2985,6 +3804,7 @@
         "base_at": 0,
         "base_df": 6,
         "movement": 5,
+        "family_code": "00",
         "all_fixed_slot_count": 35,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": 1,
@@ -2998,6 +3818,7 @@
         "base_at": 20,
         "base_df": 14,
         "movement": 6,
+        "family_code": "00",
         "all_fixed_slot_count": 90,
         "enemy_side_04_slot_count": 90,
         "first_fixed_scenario": 1,
@@ -3011,6 +3832,7 @@
         "base_at": 25,
         "base_df": 22,
         "movement": 5,
+        "family_code": "00",
         "all_fixed_slot_count": 65,
         "enemy_side_04_slot_count": 60,
         "first_fixed_scenario": 11,
@@ -3024,6 +3846,7 @@
         "base_at": 24,
         "base_df": 15,
         "movement": 6,
+        "family_code": "00",
         "all_fixed_slot_count": 80,
         "enemy_side_04_slot_count": 80,
         "first_fixed_scenario": 9,
@@ -3037,6 +3860,7 @@
         "base_at": 19,
         "base_df": 12,
         "movement": 6,
+        "family_code": "00",
         "all_fixed_slot_count": 57,
         "enemy_side_04_slot_count": 57,
         "first_fixed_scenario": 2,
@@ -3050,6 +3874,7 @@
         "base_at": 20,
         "base_df": 8,
         "movement": 7,
+        "family_code": "0F",
         "all_fixed_slot_count": 80,
         "enemy_side_04_slot_count": 78,
         "first_fixed_scenario": 4,
@@ -3063,6 +3888,7 @@
         "base_at": 22,
         "base_df": 10,
         "movement": 2,
+        "family_code": "10",
         "all_fixed_slot_count": 158,
         "enemy_side_04_slot_count": 142,
         "first_fixed_scenario": 13,
@@ -3076,6 +3902,7 @@
         "base_at": 24,
         "base_df": 6,
         "movement": 7,
+        "family_code": "07",
         "all_fixed_slot_count": 92,
         "enemy_side_04_slot_count": 92,
         "first_fixed_scenario": 7,
@@ -3089,6 +3916,7 @@
         "base_at": 22,
         "base_df": 14,
         "movement": 10,
+        "family_code": "03",
         "all_fixed_slot_count": 66,
         "enemy_side_04_slot_count": 66,
         "first_fixed_scenario": 3,
@@ -3102,6 +3930,7 @@
         "base_at": 27,
         "base_df": 19,
         "movement": 9,
+        "family_code": "03",
         "all_fixed_slot_count": 80,
         "enemy_side_04_slot_count": 80,
         "first_fixed_scenario": 1,
@@ -3115,6 +3944,7 @@
         "base_at": 34,
         "base_df": 23,
         "movement": 13,
+        "family_code": "03",
         "all_fixed_slot_count": 53,
         "enemy_side_04_slot_count": 53,
         "first_fixed_scenario": 1,
@@ -3128,6 +3958,7 @@
         "base_at": 30,
         "base_df": 25,
         "movement": 6,
+        "family_code": "00",
         "all_fixed_slot_count": 34,
         "enemy_side_04_slot_count": 30,
         "first_fixed_scenario": 17,
@@ -3141,6 +3972,7 @@
         "base_at": 27,
         "base_df": 14,
         "movement": 10,
+        "family_code": "05",
         "all_fixed_slot_count": 126,
         "enemy_side_04_slot_count": 126,
         "first_fixed_scenario": 6,
@@ -3154,6 +3986,7 @@
         "base_at": 18,
         "base_df": 17,
         "movement": 5,
+        "family_code": "02",
         "all_fixed_slot_count": 78,
         "enemy_side_04_slot_count": 78,
         "first_fixed_scenario": 3,
@@ -3167,6 +4000,7 @@
         "base_at": 20,
         "base_df": 23,
         "movement": 5,
+        "family_code": "02",
         "all_fixed_slot_count": 51,
         "enemy_side_04_slot_count": 48,
         "first_fixed_scenario": 16,
@@ -3180,6 +4014,7 @@
         "base_at": 20,
         "base_df": 12,
         "movement": 4,
+        "family_code": "0E",
         "all_fixed_slot_count": 12,
         "enemy_side_04_slot_count": 12,
         "first_fixed_scenario": 7,
@@ -3193,6 +4028,7 @@
         "base_at": 22,
         "base_df": 14,
         "movement": 4,
+        "family_code": "0E",
         "all_fixed_slot_count": 6,
         "enemy_side_04_slot_count": 6,
         "first_fixed_scenario": 7,
@@ -3206,6 +4042,7 @@
         "base_at": 25,
         "base_df": 13,
         "movement": 10,
+        "family_code": "05",
         "all_fixed_slot_count": 46,
         "enemy_side_04_slot_count": 46,
         "first_fixed_scenario": 12,
@@ -3219,6 +4056,7 @@
         "base_at": 19,
         "base_df": 14,
         "movement": 7,
+        "family_code": "0B",
         "all_fixed_slot_count": 42,
         "enemy_side_04_slot_count": 42,
         "first_fixed_scenario": 5,
@@ -3232,6 +4070,7 @@
         "base_at": 26,
         "base_df": 24,
         "movement": 8,
+        "family_code": "03",
         "all_fixed_slot_count": 36,
         "enemy_side_04_slot_count": 36,
         "first_fixed_scenario": 12,
@@ -3245,6 +4084,7 @@
         "base_at": 26,
         "base_df": 15,
         "movement": 6,
+        "family_code": "0A",
         "all_fixed_slot_count": 60,
         "enemy_side_04_slot_count": 60,
         "first_fixed_scenario": 15,
@@ -3258,6 +4098,7 @@
         "base_at": 23,
         "base_df": 28,
         "movement": 4,
+        "family_code": "02",
         "all_fixed_slot_count": 52,
         "enemy_side_04_slot_count": 40,
         "first_fixed_scenario": 20,
@@ -3271,6 +4112,7 @@
         "base_at": 31,
         "base_df": 18,
         "movement": 6,
+        "family_code": "05",
         "all_fixed_slot_count": 34,
         "enemy_side_04_slot_count": 34,
         "first_fixed_scenario": 15,
@@ -3284,6 +4126,7 @@
         "base_at": 28,
         "base_df": 22,
         "movement": 6,
+        "family_code": "0D",
         "all_fixed_slot_count": 64,
         "enemy_side_04_slot_count": 64,
         "first_fixed_scenario": 16,
@@ -3297,6 +4140,7 @@
         "base_at": 33,
         "base_df": 24,
         "movement": 7,
+        "family_code": "09",
         "all_fixed_slot_count": 52,
         "enemy_side_04_slot_count": 52,
         "first_fixed_scenario": 20,
@@ -3310,6 +4154,7 @@
         "base_at": 25,
         "base_df": 21,
         "movement": 6,
+        "family_code": "0D",
         "all_fixed_slot_count": 70,
         "enemy_side_04_slot_count": 58,
         "first_fixed_scenario": 12,
@@ -3323,6 +4168,7 @@
         "base_at": 24,
         "base_df": 22,
         "movement": 9,
+        "family_code": "04",
         "all_fixed_slot_count": 24,
         "enemy_side_04_slot_count": 24,
         "first_fixed_scenario": 12,
@@ -3336,6 +4182,7 @@
         "base_at": 20,
         "base_df": 20,
         "movement": 6,
+        "family_code": "08",
         "all_fixed_slot_count": 58,
         "enemy_side_04_slot_count": 58,
         "first_fixed_scenario": 7,
@@ -3349,6 +4196,7 @@
         "base_at": 22,
         "base_df": 20,
         "movement": 7,
+        "family_code": "0D",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3362,6 +4210,7 @@
         "base_at": 23,
         "base_df": 25,
         "movement": 7,
+        "family_code": "05",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3375,6 +4224,7 @@
         "base_at": 33,
         "base_df": 22,
         "movement": 5,
+        "family_code": "05",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3388,6 +4238,7 @@
         "base_at": 29,
         "base_df": 21,
         "movement": 7,
+        "family_code": "05",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3401,6 +4252,7 @@
         "base_at": 31,
         "base_df": 18,
         "movement": 10,
+        "family_code": "03",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3414,6 +4266,7 @@
         "base_at": 31,
         "base_df": 25,
         "movement": 8,
+        "family_code": "0B",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3427,6 +4280,7 @@
         "base_at": 29,
         "base_df": 28,
         "movement": 5,
+        "family_code": "0A",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,
@@ -3440,6 +4294,7 @@
         "base_at": 35,
         "base_df": 30,
         "movement": 5,
+        "family_code": "00",
         "all_fixed_slot_count": 0,
         "enemy_side_04_slot_count": 0,
         "first_fixed_scenario": null,

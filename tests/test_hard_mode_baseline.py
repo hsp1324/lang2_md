@@ -310,6 +310,92 @@ class HardModeBaselineTests(unittest.TestCase):
             ],
         )
 
+    def test_mercenary_replacement_options_are_unapproved_and_quantified(self):
+        discussion = self.inventory["balance_discussion"][
+            "mercenary_replacement_discussion"
+        ]
+        self.assertEqual(discussion["status"], "unapproved_discussion_only")
+        self.assertFalse(discussion["rom_values_applied"])
+        self.assertEqual(
+            discussion["recommended_interpretation"],
+            "up_to_quota_on_eligible_slots",
+        )
+        conservative = discussion["conservative_upgrade_candidates"]
+        conditional = discussion["conditional_role_aware_upgrade_candidates"]
+        self.assertEqual(
+            [
+                (
+                    row["source"]["class_id"],
+                    row["target"]["class_id"],
+                )
+                for row in conservative
+            ],
+            [
+                ("72", "74"),
+                ("74", "73"),
+                ("73", "7C"),
+                ("75", "72"),
+                ("79", "7A"),
+                ("7A", "7B"),
+                ("7E", "7F"),
+                ("80", "81"),
+                ("82", "7D"),
+                ("8A", "88"),
+            ],
+        )
+        self.assertEqual(
+            [
+                (
+                    row["source"]["class_id"],
+                    row["target"]["class_id"],
+                )
+                for row in conditional
+            ],
+            [
+                ("6E", "85"),
+                ("78", "85"),
+                ("83", "8B"),
+                ("76", "77"),
+                ("7F", "86"),
+                ("88", "89"),
+                ("7D", "87"),
+            ],
+        )
+        self.assertTrue(all(row["same_family_code"] for row in conservative))
+        self.assertEqual(
+            sum(row["same_family_code"] for row in conditional),
+            2,
+        )
+        for row in [*conservative, *conditional]:
+            self.assertGreaterEqual(
+                row["target"]["base_at"],
+                row["source"]["base_at"],
+            )
+            self.assertGreaterEqual(
+                row["target"]["base_df"],
+                row["source"]["base_df"],
+            )
+        conservative_preview = discussion["conservative_preview"]
+        self.assertEqual(
+            (
+                conservative_preview["occupied_slot_count"],
+                conservative_preview["eligible_slot_count"],
+                conservative_preview["planned_replacement_count"],
+                conservative_preview["scenarios_with_quota_but_no_candidates"],
+            ),
+            (1445, 580, 217, [10, 24, 27]),
+        )
+        role_aware_preview = discussion["role_aware_preview"]
+        self.assertEqual(
+            (
+                role_aware_preview["occupied_slot_count"],
+                role_aware_preview["eligible_slot_count"],
+                role_aware_preview["planned_replacement_count"],
+                role_aware_preview["scenarios_with_quota_but_no_candidates"],
+            ),
+            (1445, 971, 371, []),
+        )
+
     def test_all_source_records_have_addresses_and_six_mercenary_slots(self):
         scenarios = self.inventory["scenarios"]
         self.assertEqual([row["number"] for row in scenarios], list(range(1, 32)))
@@ -504,6 +590,7 @@ class HardModeBaselineTests(unittest.TestCase):
                 "base_at_offset": "0x0B",
                 "base_df_offset": "0x0C",
                 "movement_offset": "0x0D",
+                "family_code_offset": "0x06",
                 "soldier_at_correction_offset": "0x0F",
                 "soldier_df_correction_offset": "0x10",
                 "scope": "global_per_class",

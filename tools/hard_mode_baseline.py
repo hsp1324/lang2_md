@@ -32,6 +32,7 @@ CLASS_RECORD_SIZE = 0x1C
 CLASS_BASE_AT_OFFSET = 0x0B
 CLASS_BASE_DF_OFFSET = 0x0C
 CLASS_MOVEMENT_OFFSET = 0x0D
+CLASS_FAMILY_CODE_OFFSET = 0x06
 CLASS_SOLDIER_AT_CORRECTION_OFFSET = 0x0F
 CLASS_SOLDIER_DF_CORRECTION_OFFSET = 0x10
 FIXED_COMMANDER_AT_MODIFIER_OFFSET = 0x12
@@ -56,6 +57,27 @@ MAIN_STORY_AUTOMATIC_EXCLUDED_OFFSETS = frozenset({
     "0x180320",
     "0x182B8A",
 })
+CONSERVATIVE_MERCENARY_UPGRADE_PAIRS = (
+    (0x72, 0x74),
+    (0x74, 0x73),
+    (0x73, 0x7C),
+    (0x75, 0x72),
+    (0x79, 0x7A),
+    (0x7A, 0x7B),
+    (0x7E, 0x7F),
+    (0x80, 0x81),
+    (0x82, 0x7D),
+    (0x8A, 0x88),
+)
+CONDITIONAL_ROLE_AWARE_MERCENARY_UPGRADE_PAIRS = (
+    (0x6E, 0x85),
+    (0x78, 0x85),
+    (0x83, 0x8B),
+    (0x76, 0x77),
+    (0x7F, 0x86),
+    (0x88, 0x89),
+    (0x7D, 0x87),
+)
 
 DISCUSSION_SCENARIO_BANDS = (
     {
@@ -340,6 +362,7 @@ def combat_class_rows(
             "base_at": source[base + CLASS_BASE_AT_OFFSET],
             "base_df": source[base + CLASS_BASE_DF_OFFSET],
             "movement": source[base + CLASS_MOVEMENT_OFFSET],
+            "family_code": f"{source[base + CLASS_FAMILY_CODE_OFFSET]:02X}",
             "all_fixed_slot_count": all_slot_count,
             "enemy_side_04_slot_count": enemy_slot_count,
             "first_fixed_scenario": all_scenarios[0] if all_scenarios else None,
@@ -532,6 +555,129 @@ def recommended_proposal_preview(
     }
 
 
+def mercenary_upgrade_pair_rows(
+    pairs: tuple[tuple[int, int], ...],
+    combat_classes: list[dict[str, object]],
+    confidence: str,
+) -> list[dict[str, object]]:
+    by_id = {
+        int(row["class_id"], 16): row
+        for row in combat_classes
+    }
+    result = []
+    for source_id, target_id in pairs:
+        source = by_id[source_id]
+        target = by_id[target_id]
+        if (
+            int(target["base_at"]) < int(source["base_at"])
+            or int(target["base_df"]) < int(source["base_df"])
+        ):
+            raise ValueError(
+                f"mercenary upgrade 0x{source_id:02X}->0x{target_id:02X} "
+                "must not lower base AT or DF"
+            )
+        result.append({
+            "source": {
+                "class_id": source["class_id"],
+                "korean": source["korean"],
+                "base_at": source["base_at"],
+                "base_df": source["base_df"],
+                "movement": source["movement"],
+                "family_code": source["family_code"],
+            },
+            "target": {
+                "class_id": target["class_id"],
+                "korean": target["korean"],
+                "base_at": target["base_at"],
+                "base_df": target["base_df"],
+                "movement": target["movement"],
+                "family_code": target["family_code"],
+            },
+            "confidence": confidence,
+            "same_family_code": (
+                source["family_code"] == target["family_code"]
+            ),
+        })
+    return result
+
+
+def mercenary_replacement_preview(
+    scenarios: list[dict[str, object]],
+    proposal_preview: dict[str, object],
+    upgrade_pairs: tuple[tuple[int, int], ...],
+) -> dict[str, object]:
+    step_by_scenario = {
+        int(number): step
+        for step in RECOMMENDED_DISCUSSION_PROPOSAL["scenario_steps"]
+        for number in step["scenarios"]
+    }
+    targets_by_scenario = {
+        int(row["scenario"]): set(row["target_offsets"])
+        for row in proposal_preview["scenarios"]
+    }
+    upgrade_map = dict(upgrade_pairs)
+    rows = []
+    total_occupied = 0
+    total_eligible = 0
+    total_planned = 0
+    for scenario in scenarios:
+        number = int(scenario["number"])
+        if number not in step_by_scenario:
+            continue
+        quota = int(
+            step_by_scenario[number]["stronger_mercenary_slots_per_six"]
+        )
+        target_offsets = targets_by_scenario[number]
+        occupied = 0
+        eligible = 0
+        planned = 0
+        commanders_with_candidates = 0
+        for record in scenario["records"]:
+            if record["offset"] not in target_offsets:
+                continue
+            class_ids = [
+                int(mercenary["class_id"], 16)
+                for mercenary in record["mercenaries"]
+                if mercenary is not None
+            ]
+            record_eligible = sum(
+                class_id in upgrade_map
+                for class_id in class_ids
+            )
+            occupied += len(class_ids)
+            eligible += record_eligible
+            planned += min(quota, record_eligible)
+            commanders_with_candidates += record_eligible > 0
+        total_occupied += occupied
+        total_eligible += eligible
+        total_planned += planned
+        rows.append({
+            "scenario": number,
+            "quota_per_commander": quota,
+            "occupied_slot_count": occupied,
+            "eligible_slot_count": eligible,
+            "planned_replacement_count": planned,
+            "commander_count_with_candidates": commanders_with_candidates,
+        })
+    return {
+        "interpretation": (
+            "replace at most the scenario quota per target commander; never "
+            "fill empty slots and never replace an already-unmapped top unit "
+            "merely to reach a numeric quota"
+        ),
+        "occupied_slot_count": total_occupied,
+        "eligible_slot_count": total_eligible,
+        "planned_replacement_count": total_planned,
+        "scenarios_with_quota_but_no_candidates": [
+            row["scenario"]
+            for row in rows
+            if row["quota_per_commander"] > 0
+            and row["eligible_slot_count"] == 0
+        ],
+        "scenarios": rows,
+    }
+
+
 def mercenary_row(class_id: int, classes: list[dict[str, object]]) -> dict[str, object] | None:
     if class_id == 0xFF:
         return None
@@ -654,8 +800,24 @@ def build_inventory(
             "records": [record_row(row, classes, source) for row in records],
         })
 
+    combat_classes = combat_class_rows(
+        source,
+        classes,
+        scenarios,
+    )
+    proposal_preview = recommended_proposal_preview(scenarios)
+    conservative_pairs = mercenary_upgrade_pair_rows(
+        CONSERVATIVE_MERCENARY_UPGRADE_PAIRS,
+        combat_classes,
+        "same_role_or_family_conservative",
+    )
+    conditional_pairs = mercenary_upgrade_pair_rows(
+        CONDITIONAL_ROLE_AWARE_MERCENARY_UPGRADE_PAIRS,
+        combat_classes,
+        "role_aware_but_movement_range_or_species_changes",
+    )
     return {
-        "schema_version": 8,
+        "schema_version": 9,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -703,9 +865,27 @@ def build_inventory(
             ],
             "candidate_scenario_bands": discussion_band_rows(scenarios),
             "recommended_unapproved_proposal": RECOMMENDED_DISCUSSION_PROPOSAL,
-            "recommended_unapproved_proposal_preview": (
-                recommended_proposal_preview(scenarios)
-            ),
+            "recommended_unapproved_proposal_preview": proposal_preview,
+            "mercenary_replacement_discussion": {
+                "status": "unapproved_discussion_only",
+                "rom_values_applied": False,
+                "recommended_interpretation": "up_to_quota_on_eligible_slots",
+                "conservative_upgrade_candidates": conservative_pairs,
+                "conditional_role_aware_upgrade_candidates": conditional_pairs,
+                "conservative_preview": mercenary_replacement_preview(
+                    scenarios,
+                    proposal_preview,
+                    CONSERVATIVE_MERCENARY_UPGRADE_PAIRS,
+                ),
+                "role_aware_preview": mercenary_replacement_preview(
+                    scenarios,
+                    proposal_preview,
+                    (
+                        *CONSERVATIVE_MERCENARY_UPGRADE_PAIRS,
+                        *CONDITIONAL_ROLE_AWARE_MERCENARY_UPGRADE_PAIRS,
+                    ),
+                ),
+            },
         },
         "normal_release": {
             **normal_identity,
@@ -732,6 +912,7 @@ def build_inventory(
                 "base_at_offset": f"0x{CLASS_BASE_AT_OFFSET:02X}",
                 "base_df_offset": f"0x{CLASS_BASE_DF_OFFSET:02X}",
                 "movement_offset": f"0x{CLASS_MOVEMENT_OFFSET:02X}",
+                "family_code_offset": f"0x{CLASS_FAMILY_CODE_OFFSET:02X}",
                 "soldier_at_correction_offset": (
                     f"0x{CLASS_SOLDIER_AT_CORRECTION_OFFSET:02X}"
                 ),
@@ -740,11 +921,7 @@ def build_inventory(
                 ),
                 "scope": "global_per_class",
             },
-            "combat_class_catalog": combat_class_rows(
-                source,
-                classes,
-                scenarios,
-            ),
+            "combat_class_catalog": combat_classes,
             "reinforcement_model": {
                 "hidden_fixed_records_included": True,
                 "total_hidden_fixed_records": hidden_fixed_records,
@@ -1076,7 +1253,73 @@ def render_markdown(inventory: dict[str, object]) -> str:
             f"{projections['commander_at']['result_at_cap_count']}/"
             f"{projections['commander_df']['result_at_cap_count']} |"
         )
+    mercenary_discussion = inventory["balance_discussion"][
+        "mercenary_replacement_discussion"
+    ]
+    conservative_preview = mercenary_discussion["conservative_preview"]
+    role_aware_preview = mercenary_discussion["role_aware_preview"]
     lines.extend([
+        "",
+        "### 상위 용병 교체 미리보기",
+        "",
+        "> 상태: **미승인 제안**. 교체 후보와 수량만 계산했으며 ROM에는",
+        "> 적용하지 않았다.",
+        "",
+        "- 권장 해석: 각 대상 지휘관의 채워진 용병 칸 가운데 승급 후보가",
+        "  있는 칸만 장별 상한 N칸까지 교체한다. 빈칸은 채우지 않고,",
+        "  이미 최상위이거나 후보가 없는 병종을 억지로 바꾸지 않는다.",
+        "- 보수 후보만 사용하면 전체 채워진 1,445칸 중 "
+        f"{conservative_preview['eligible_slot_count']}칸이 승급 가능하고, "
+        "장별 상한을 적용한 실제 교체 후보는 "
+        f"{conservative_preview['planned_replacement_count']}칸이다.",
+        "- 보수 후보만으로 장별 상한이 있으나 교체 후보가 없는 장: "
+        + ", ".join(
+            str(number)
+            for number in conservative_preview[
+                "scenarios_with_quota_but_no_candidates"
+            ]
+        ),
+        "- 역할 검토 후보까지 허용하면 승급 가능 "
+        f"{role_aware_preview['eligible_slot_count']}칸, 실제 교체 후보 "
+        f"{role_aware_preview['planned_replacement_count']}칸이며 후보가 "
+        "없는 장은 없다.",
+        "- 아래 `family`는 원판 클래스 레코드 `+0x06`의 관측 코드다.",
+        "  이동형·공격형 같은 의미는 아직 확정하지 않았으므로 같은 코드도",
+        "  역할 보존의 보조 근거로만 사용한다.",
+        "",
+        "| 구분 | 교체 후보 | 원본 AT/DF·MV·family | 결과 AT/DF·MV·family |",
+        "|:---|:---|:---|:---|",
+    ])
+    for row in mercenary_discussion["conservative_upgrade_candidates"]:
+        source_row = row["source"]
+        target_row = row["target"]
+        lines.append(
+            f"| 보수 | `{source_row['class_id']}` {source_row['korean']} → "
+            f"`{target_row['class_id']}` {target_row['korean']} | "
+            f"{source_row['base_at']}/{source_row['base_df']}·"
+            f"{source_row['movement']}·`{source_row['family_code']}` | "
+            f"{target_row['base_at']}/{target_row['base_df']}·"
+            f"{target_row['movement']}·`{target_row['family_code']}` |"
+        )
+    for row in mercenary_discussion[
+        "conditional_role_aware_upgrade_candidates"
+    ]:
+        source_row = row["source"]
+        target_row = row["target"]
+        lines.append(
+            f"| 역할 검토 필요 | `{source_row['class_id']}` "
+            f"{source_row['korean']} → `{target_row['class_id']}` "
+            f"{target_row['korean']} | "
+            f"{source_row['base_at']}/{source_row['base_df']}·"
+            f"{source_row['movement']}·`{source_row['family_code']}` | "
+            f"{target_row['base_at']}/{target_row['base_df']}·"
+            f"{target_row['movement']}·`{target_row['family_code']}` |"
+        )
+    lines.extend([
+        "",
+        "역할 검토 후보는 사거리·이동·수상/비행·종족 역할이 달라질 수",
+        "있으므로 사용자가 교체 원칙을 승인한 뒤 장별 지형과 AI를",
+        "에뮬레이터에서 확인해야 한다.",
         "",
         "### 제안된 예외",
         "",
