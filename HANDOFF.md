@@ -12073,3 +12073,29 @@ contains 57 safe syllables as documented below and in
   scenario faction/class/mercenary/LV/AT/DF fields rather than scattered
   address patches. Preserve event order, AI, victory conditions, and route
   structure unless separately approved, then validate each scenario.
+
+### Executable Core L Low-Signal Audit (2026-07-28)
+
+- The final source-locked executable gap `0x01E05C..0x01FFFF` has SHA-256
+  `6f063b24d19f2799f0734ef844dadac0331c3e7ed795127d10e2947befc86615`
+  and contains 140 low-signal candidates: 137 half-width-looking and three
+  ASCII-looking rows. Its ordered candidate manifest is
+  `269394c869fa266e023e4bb68390be54db31bb0ee28a30a236f317ff93520e1d`.
+- All 140 candidates are fully covered by one exact Capstone stream of
+  1,543 contiguous 68000 instructions. The stream contains 29 `RTS`
+  instructions, has no `dc.w` fallback, and ends exactly at the existing
+  gameplay segment boundary `0x020000`.
+- Six source-locked `JSR $01E05C.L` instructions at `0x00D0D0`,
+  `0x00D0F4`, `0x00D37E`, `0x02306C`, `0x029C22`, and `0x029E5C`
+  directly call the exact stream start. No aligned absolute candidate-start
+  reference and no executable PC-relative `LEA`/`PEA` candidate reference
+  exists.
+- The one/two-signal inventory is now fully classified: all 6,612 candidates
+  have exact region ownership, comprising 6,611 structural false positives
+  and the retained scenario-level `L-`. The low-signal ownership item was
+  removed from the explicit UI inventory gaps.
+- Focused short-inline/UI/inline/direct-byte/direct-string/compressed-resource
+  inventory tests pass 141/141. Reports were regenerated from isolated ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed and no emulator was launched.

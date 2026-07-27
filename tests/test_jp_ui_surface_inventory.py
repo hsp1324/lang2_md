@@ -249,7 +249,7 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_stage_one_keeps_explicit_unknowns(self):
-        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 6)
+        self.assertGreaterEqual(len(self.result["remaining_inventory_gaps"]), 5)
         class_change_gaps = [
             gap
             for gap in self.result["remaining_inventory_gaps"]
@@ -293,20 +293,11 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             "all equipment and shop variants beyond declared Scenario 1 paths",
             self.result["remaining_inventory_gaps"],
         )
-        self.assertIn(
-            "exact ownership of low-signal byte sequences outside the 6,472 reviewed "
-            "font/class/sprite/item/name/graphics/system/ending/scenario/text/UI/"
-            "compressed-resource/executable-core-A/core-B/core-C/core-D/core-E/core-F/"
-            "core-G/core-H/core-I/core-J/core-K/startup/"
-            "auxiliary/gameplay/renderer/tail candidates: "
-            "the one/two-signal scan region-classifies 6,612 candidates, proves "
-            "6,471 rows are instruction/bitmap/pointer-boundary/word/graphics/layout/"
-            "compressed payload data, and "
-            "identifies "
-            "retained scenario-level prefix L-; exact ownership of the remaining "
-            "140 executable/numeric candidates and base-relative, indexed, or "
-            "dynamic access remains open",
-            self.result["remaining_inventory_gaps"],
+        self.assertFalse(
+            any(
+                "low-signal byte sequences" in gap
+                for gap in self.result["remaining_inventory_gaps"]
+            )
         )
 
 

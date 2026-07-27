@@ -800,6 +800,24 @@ EXECUTABLE_CORE_K_DATA_REFERENCE_INSTRUCTIONS = (
     (0x01DFCA, 0x01DFD0, "LEA $01E004.L,A0", "41 F9 00 01 E0 04"),
     (0x01E07C, 0x01E082, "LEA $01E004.L,A0", "41 F9 00 01 E0 04"),
 )
+EXECUTABLE_CORE_L_START = 0x01E05C
+EXECUTABLE_CORE_L_END = 0x020000
+EXECUTABLE_CORE_L_SOURCE_SHA256 = (
+    "6f063b24d19f2799f0734ef844dadac0331c3e7ed795127d10e2947befc86615"
+)
+EXECUTABLE_CORE_L_CANDIDATE_MANIFEST_SHA256 = (
+    "269394c869fa266e023e4bb68390be54db31bb0ee28a30a236f317ff93520e1d"
+)
+EXECUTABLE_CORE_L_INSTRUCTION_COUNT = 1543
+EXECUTABLE_CORE_L_RTS_COUNT = 29
+EXECUTABLE_CORE_L_ENTRY_REFERENCES = (
+    (0x00D0D0, 0x00D0D6, "JSR $01E05C.L", "4E B9 00 01 E0 5C"),
+    (0x00D0F4, 0x00D0FA, "JSR $01E05C.L", "4E B9 00 01 E0 5C"),
+    (0x00D37E, 0x00D384, "JSR $01E05C.L", "4E B9 00 01 E0 5C"),
+    (0x02306C, 0x023072, "JSR $01E05C.L", "4E B9 00 01 E0 5C"),
+    (0x029C22, 0x029C28, "JSR $01E05C.L", "4E B9 00 01 E0 5C"),
+    (0x029E5C, 0x029E62, "JSR $01E05C.L", "4E B9 00 01 E0 5C"),
+)
 MAX_LOW_SIGNAL = 2
 WORD_STREAM_CONTROLS = {
     0xFFF3,
@@ -4602,6 +4620,123 @@ def executable_core_k_candidate_inventory(
     }
 
 
+def executable_core_l_candidate_inventory(
+    data: bytes, candidates: list[dict[str, object]]
+) -> dict[str, object]:
+    addresses = {int(row["start_int"]) for row in candidates}
+    absolute = aligned_absolute_references(data, addresses)
+    pc_relative = pc_relative_lea_pea_references(data, addresses)
+    detailed_rows = []
+    for row in candidates:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        context_start, context = word_context(data, start, end)
+        detailed_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": "contiguous_instruction_stream_false_positive",
+                "owner": "core 68000 instruction bytes",
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in pc_relative.get(start, [])
+                ],
+            }
+        )
+
+    entry_reference_instructions = []
+    entry_references_valid = True
+    for start, end, instruction, expected_raw_hex in (
+        EXECUTABLE_CORE_L_ENTRY_REFERENCES
+    ):
+        raw_hex = data[start:end].hex(" ").upper()
+        valid = (
+            raw_hex == expected_raw_hex
+            and int.from_bytes(data[start + 2 : end], "big")
+            == EXECUTABLE_CORE_L_START
+        )
+        entry_references_valid &= valid
+        entry_reference_instructions.append(
+            {
+                "range": f"0x{start:06X}..0x{end:06X}",
+                "instruction": instruction,
+                "raw_hex": raw_hex,
+                "source_layout_valid": valid,
+            }
+        )
+
+    source_sha256 = hashlib.sha256(
+        data[EXECUTABLE_CORE_L_START:EXECUTABLE_CORE_L_END]
+    ).hexdigest()
+    manifest_sha256 = candidate_manifest_sha256(candidates)
+    category_counts = Counter(
+        str(row["category"]) for row in detailed_rows
+    )
+    source_layout_valid = (
+        source_sha256 == EXECUTABLE_CORE_L_SOURCE_SHA256
+        and manifest_sha256
+        == EXECUTABLE_CORE_L_CANDIDATE_MANIFEST_SHA256
+        and len(candidates) == 140
+        and entry_references_valid
+        and not absolute
+        and not pc_relative
+    )
+    return {
+        "range": (
+            f"0x{EXECUTABLE_CORE_L_START:06X}.."
+            f"0x{EXECUTABLE_CORE_L_END:06X}"
+        ),
+        "source_bytes": EXECUTABLE_CORE_L_END - EXECUTABLE_CORE_L_START,
+        "source_sha256": source_sha256,
+        "expected_source_sha256": EXECUTABLE_CORE_L_SOURCE_SHA256,
+        "linear_instruction_count": EXECUTABLE_CORE_L_INSTRUCTION_COUNT,
+        "rts_instruction_count": EXECUTABLE_CORE_L_RTS_COUNT,
+        "source_layout_valid": source_layout_valid,
+        "candidate_manifest_sha256": manifest_sha256,
+        "expected_candidate_manifest_sha256": (
+            EXECUTABLE_CORE_L_CANDIDATE_MANIFEST_SHA256
+        ),
+        "candidate_count": len(detailed_rows),
+        "kind_counts": dict(
+            sorted(Counter(str(row["kind"]) for row in detailed_rows).items())
+        ),
+        "category_counts": dict(sorted(category_counts.items())),
+        "unclassified_count": category_counts.get("unclassified", 0),
+        "entry_reference_instructions": entry_reference_instructions,
+        "aligned_absolute_32_reference_count": sum(
+            len(references) for references in absolute.values()
+        ),
+        "aligned_absolute_32_references": [
+            {
+                "target": f"0x{target:06X}",
+                "target_is_odd": bool(target & 1),
+                "addresses": [
+                    f"0x{address:06X}" for address in references
+                ],
+            }
+            for target, references in sorted(absolute.items())
+        ],
+        "pc_relative_lea_pea_reference_count": sum(
+            len(references) for references in pc_relative.values()
+        ),
+        "candidates": detailed_rows,
+    }
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -4848,6 +4983,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ]
     executable_core_k_bank = executable_core_k_candidate_inventory(
         japanese, executable_core_k
+    )
+    executable_core_l = [
+        row
+        for row in candidates
+        if EXECUTABLE_CORE_L_START
+        <= int(row["start_int"])
+        < EXECUTABLE_CORE_L_END
+    ]
+    executable_core_l_bank = executable_core_l_candidate_inventory(
+        japanese, executable_core_l
     )
 
     font_bitmap_addresses = {
@@ -5573,6 +5718,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "executable_core_i_bank": executable_core_i_bank,
         "executable_core_j_bank": executable_core_j_bank,
         "executable_core_k_bank": executable_core_k_bank,
+        "executable_core_l_bank": executable_core_l_bank,
     }
 
 
@@ -5601,6 +5747,7 @@ def markdown_report(result: dict[str, object]) -> str:
     executable_core_i_bank = result["executable_core_i_bank"]
     executable_core_j_bank = result["executable_core_j_bank"]
     executable_core_k_bank = result["executable_core_k_bank"]
+    executable_core_l_bank = result["executable_core_l_bank"]
     lines = [
         "# Short Inline Byte Candidate Inventory",
         "",
@@ -5787,6 +5934,14 @@ def markdown_report(result: dict[str, object]) -> str:
             f"{executable_core_k_bank['unclassified_count']}"
         ),
         (
+            "- Executable-core-L candidates: "
+            f"{executable_core_l_bank['candidate_count']}"
+        ),
+        (
+            "- Executable-core-L unclassified: "
+            f"{executable_core_l_bank['unclassified_count']}"
+        ),
+        (
             "- Exact aligned 32-bit references to text/UI-bank candidates: "
             f"{bank['aligned_absolute_32_reference_count']}"
         ),
@@ -5812,6 +5967,45 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Executable-Core-L Candidates",
+            "",
+            (
+                f"- The source-locked `{executable_core_l_bank['range']}` "
+                "region is one exact contiguous 68000 code stream."
+            ),
+            (
+                f"- Source SHA-256: `{executable_core_l_bank['source_sha256']}`; "
+                "candidate manifest SHA-256: "
+                f"`{executable_core_l_bank['candidate_manifest_sha256']}` "
+                f"(layout valid: "
+                f"`{executable_core_l_bank['source_layout_valid']}`)."
+            ),
+            (
+                "- Category totals: "
+                + ", ".join(
+                    f"`{category}` {count}"
+                    for category, count in executable_core_l_bank[
+                        "category_counts"
+                    ].items()
+                )
+                + "."
+            ),
+            (
+                "- Code instructions: "
+                f"{executable_core_l_bank['linear_instruction_count']}; "
+                f"`RTS`: {executable_core_l_bank['rts_instruction_count']}."
+            ),
+            (
+                "- Direct `JSR` references to the exact code start: "
+                f"{len(executable_core_l_bank['entry_reference_instructions'])}."
+            ),
+            (
+                "- Candidate-target aligned four-byte windows: "
+                f"{executable_core_l_bank['aligned_absolute_32_reference_count']}; "
+                "exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{executable_core_l_bank['pc_relative_lea_pea_reference_count']}."
+            ),
             "",
             "## Reviewed Executable-Core-K Candidates",
             "",
@@ -7083,6 +7277,7 @@ def main() -> None:
     executable_core_i_bank = result["executable_core_i_bank"]
     executable_core_j_bank = result["executable_core_j_bank"]
     executable_core_k_bank = result["executable_core_k_bank"]
+    executable_core_l_bank = result["executable_core_l_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
         f"{font_bank['candidate_count']} font-bitmap-bank, "
@@ -7108,7 +7303,8 @@ def main() -> None:
         f"{executable_core_i_bank['candidate_count']} executable-core-I candidates, "
         f"{executable_core_j_bank['candidate_count']} executable-core-J candidates, "
         f"{executable_core_k_bank['candidate_count']} executable-core-K candidates, "
-        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count'] + executable_auxiliary_bank['unclassified_count'] + executable_startup_bank['unclassified_count'] + executable_core_a_bank['unclassified_count'] + executable_core_b_bank['unclassified_count'] + executable_core_c_bank['unclassified_count'] + executable_core_d_bank['unclassified_count'] + executable_core_e_bank['unclassified_count'] + executable_core_f_bank['unclassified_count'] + executable_core_g_bank['unclassified_count'] + executable_core_h_bank['unclassified_count'] + executable_core_i_bank['unclassified_count'] + executable_core_j_bank['unclassified_count'] + executable_core_k_bank['unclassified_count']} "
+        f"{executable_core_l_bank['candidate_count']} executable-core-L candidates, "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count'] + executable_auxiliary_bank['unclassified_count'] + executable_startup_bank['unclassified_count'] + executable_core_a_bank['unclassified_count'] + executable_core_b_bank['unclassified_count'] + executable_core_c_bank['unclassified_count'] + executable_core_d_bank['unclassified_count'] + executable_core_e_bank['unclassified_count'] + executable_core_f_bank['unclassified_count'] + executable_core_g_bank['unclassified_count'] + executable_core_h_bank['unclassified_count'] + executable_core_i_bank['unclassified_count'] + executable_core_j_bank['unclassified_count'] + executable_core_k_bank['unclassified_count'] + executable_core_l_bank['unclassified_count']} "
         "unclassified"
     )
 
