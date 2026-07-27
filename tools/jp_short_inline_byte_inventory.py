@@ -145,6 +145,87 @@ EXECUTABLE_GAMEPLAY_SEGMENT_CANDIDATE_MANIFEST_SHA256 = {
         "0d82f38f8a23c0225df88de3c6b731387dd940bba06947c91591349dd03a150c"
     ),
 }
+EXECUTABLE_AUXILIARY_START = 0x000270
+EXECUTABLE_AUXILIARY_END = 0x005DD4
+EXECUTABLE_AUXILIARY_SOURCE_SHA256 = (
+    "d1ae52bac4f581a1064838c465d4165b88c71e6c60e4c07f48fe8e68a525a8d7"
+)
+EXECUTABLE_AUXILIARY_CANDIDATE_MANIFEST_SHA256 = (
+    "95c704b17e29e1f400c8d048880b31820174df7083dbdd61d6caa8c0dd1270cb"
+)
+EXECUTABLE_AUXILIARY_CODE_CANDIDATE_MANIFEST_SHA256 = (
+    "b9462ee081d305a2e43ec944835a3b3606596126be4d91562fa861ee678f8d3d"
+)
+EXECUTABLE_AUXILIARY_WORD_CANDIDATE_MANIFEST_SHA256 = (
+    "842d384c439d3299bb9a02dc5932b011956ec94a0c17ed9b161f9cfec33054f0"
+)
+EXECUTABLE_AUXILIARY_CODE_SEGMENTS = (
+    (
+        0x000270,
+        0x00090C,
+        399,
+        "ef247174565f4d28fcface0980b5622c6da9e37573e794435465c009088b21be",
+        "7d81628127fa8ccbdaf960ef0252614b2b1dd6d8fd27181de45be2d9f636b670",
+    ),
+    (
+        0x000916,
+        0x001066,
+        452,
+        "01718f697efff2689ce6315c1130cdd42b38d2d67954d499e784a70516a77c89",
+        "a984633763f4b095290434be9eb564994c9b5e49d2c92c84dd72e368bc50db52",
+    ),
+    (
+        0x0012F6,
+        0x001770,
+        333,
+        "dcb7f997e0ad83c2d07b7807b1036fa9d67e4aa0dd1b9fb7e1e5d66352a8a5bc",
+        "be2425c3a9d309473996a9cc3f14e3144b2c5c40f19ad6fd7eb0af3579eacd72",
+    ),
+    (
+        0x001788,
+        0x001D9A,
+        430,
+        "42a30d50b91e90c6438658e58e8c0fb9065fdaff09d7ef8c4979070d29a10ff8",
+        "92a59080fde758aa5b1132322035c171f3c11f60601202d96f57f0167a72766d",
+    ),
+    (
+        0x001DA6,
+        0x005DD4,
+        4176,
+        "2ac368f7baae23c6892262f8cb1ed5654fc4b37c4d3b0692c46c904b9009b9b7",
+        "c8b8167a72f70590be31c64de2d3e9a22cc818b0f2de4b3e4b445c6a5f278bcc",
+    ),
+)
+EXECUTABLE_AUXILIARY_DATA_SEGMENTS = (
+    (
+        0x00090C,
+        0x000916,
+        "byte lookup table",
+        "c34811b4832cf38c15f83e94fc16032990157f40f1ae61f750b4611ac8625cc1",
+    ),
+    (
+        0x001066,
+        0x0012F6,
+        "pointer-indexed 16-bit word records",
+        "6a268783c273e671a0a6311a309c4fa6245de0c6f0a4d2569901fd6a5a98943d",
+    ),
+    (
+        0x001770,
+        0x001788,
+        "16-bit code-offset table",
+        "1983371e27eeac98e0805be367f5469417857328b44ef1d245b7aed58e6f50fa",
+    ),
+    (
+        0x001D9A,
+        0x001DA6,
+        "16-bit code-offset table",
+        "222c75b94c4717a1b4fe6d4d06b67117127613bed7a7b1c05b3a2141b5ad08e9",
+    ),
+)
+EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_START = 0x001066
+EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_END = 0x0010FE
+EXECUTABLE_AUXILIARY_WORD_RECORD_START = 0x0010FE
+EXECUTABLE_AUXILIARY_WORD_RECORD_END = 0x0012F6
 MAX_LOW_SIGNAL = 2
 WORD_STREAM_CONTROLS = {
     0xFFF3,
@@ -1307,6 +1388,292 @@ def executable_gameplay_candidate_inventory(
     }
 
 
+def executable_auxiliary_candidate_inventory(
+    data: bytes, candidates: list[dict[str, object]]
+) -> dict[str, object]:
+    addresses = {int(row["start_int"]) for row in candidates}
+    absolute = aligned_absolute_references(data, addresses)
+    pc_relative = pc_relative_lea_pea_references(data, addresses)
+    word_pointers = [
+        int.from_bytes(data[offset : offset + 4], "big")
+        for offset in range(
+            EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_START,
+            EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_END,
+            4,
+        )
+    ]
+    unique_word_pointers = sorted(set(word_pointers))
+
+    code_rows = [
+        row
+        for row in candidates
+        if any(
+            start <= int(row["start_int"]) < end
+            for start, end, _, _, _ in EXECUTABLE_AUXILIARY_CODE_SEGMENTS
+        )
+    ]
+    word_rows = [
+        row
+        for row in candidates
+        if EXECUTABLE_AUXILIARY_WORD_RECORD_START
+        <= int(row["start_int"])
+        < EXECUTABLE_AUXILIARY_WORD_RECORD_END
+    ]
+    detailed_rows = []
+    for row in candidates:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        context_start, context = word_context(data, start, end)
+        if row in code_rows:
+            category = "contiguous_instruction_stream_false_positive"
+            owner = "68000 executable instruction bytes"
+            containing_word = None
+            following_word = None
+            record_start = None
+            pointer_entries = []
+        elif row in word_rows:
+            category = "pointer_indexed_16bit_word_stream_false_positive"
+            owner = "pointer-indexed 16-bit glyph/control word record"
+            word_address = start & ~1
+            containing_word = int.from_bytes(
+                data[word_address : word_address + 2], "big"
+            )
+            following_word = int.from_bytes(
+                data[word_address + 2 : word_address + 4], "big"
+            )
+            pointer_index = bisect_right(
+                unique_word_pointers, word_address
+            ) - 1
+            record_start = (
+                unique_word_pointers[pointer_index]
+                if pointer_index >= 0
+                else None
+            )
+            pointer_entries = [
+                EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_START + index * 4
+                for index, pointer in enumerate(word_pointers)
+                if pointer == record_start
+            ]
+        else:
+            category = "unclassified"
+            owner = "requires executable/data ownership review"
+            containing_word = None
+            following_word = None
+            record_start = None
+            pointer_entries = []
+        detailed_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": category,
+                "owner": owner,
+                "containing_word": (
+                    None
+                    if containing_word is None
+                    else f"0x{containing_word:04X}"
+                ),
+                "following_word": (
+                    None
+                    if following_word is None
+                    else f"0x{following_word:04X}"
+                ),
+                "record_start": (
+                    None
+                    if record_start is None
+                    else f"0x{record_start:06X}"
+                ),
+                "pointer_entries": [
+                    f"0x{offset:06X}" for offset in pointer_entries
+                ],
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in pc_relative.get(start, [])
+                ],
+            }
+        )
+
+    code_segment_summaries = []
+    code_layout_valid = True
+    for (
+        start,
+        end,
+        instruction_count,
+        expected_source_sha256,
+        expected_manifest_sha256,
+    ) in EXECUTABLE_AUXILIARY_CODE_SEGMENTS:
+        rows = [
+            row
+            for row in code_rows
+            if start <= int(row["start_int"]) < end
+        ]
+        source_sha256 = hashlib.sha256(data[start:end]).hexdigest()
+        manifest_sha256 = candidate_manifest_sha256(rows)
+        valid = (
+            source_sha256 == expected_source_sha256
+            and manifest_sha256 == expected_manifest_sha256
+        )
+        code_layout_valid &= valid
+        code_segment_summaries.append(
+            {
+                "range": f"0x{start:06X}..0x{end:06X}",
+                "start": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "source_bytes": end - start,
+                "linear_instruction_count": instruction_count,
+                "source_sha256": source_sha256,
+                "expected_source_sha256": expected_source_sha256,
+                "candidate_count": len(rows),
+                "candidate_manifest_sha256": manifest_sha256,
+                "expected_candidate_manifest_sha256": (
+                    expected_manifest_sha256
+                ),
+                "source_layout_valid": valid,
+            }
+        )
+
+    data_segment_summaries = []
+    data_layout_valid = True
+    for start, end, owner, expected_source_sha256 in (
+        EXECUTABLE_AUXILIARY_DATA_SEGMENTS
+    ):
+        rows = [
+            row
+            for row in candidates
+            if start <= int(row["start_int"]) < end
+        ]
+        source_sha256 = hashlib.sha256(data[start:end]).hexdigest()
+        valid = source_sha256 == expected_source_sha256
+        data_layout_valid &= valid
+        data_segment_summaries.append(
+            {
+                "range": f"0x{start:06X}..0x{end:06X}",
+                "source_bytes": end - start,
+                "owner": owner,
+                "source_sha256": source_sha256,
+                "expected_source_sha256": expected_source_sha256,
+                "candidate_count": len(rows),
+                "source_layout_valid": valid,
+            }
+        )
+
+    category_counts = Counter(
+        str(row["category"]) for row in detailed_rows
+    )
+    source_sha256 = hashlib.sha256(
+        data[EXECUTABLE_AUXILIARY_START:EXECUTABLE_AUXILIARY_END]
+    ).hexdigest()
+    manifest_sha256 = candidate_manifest_sha256(candidates)
+    source_layout_valid = (
+        source_sha256 == EXECUTABLE_AUXILIARY_SOURCE_SHA256
+        and manifest_sha256
+        == EXECUTABLE_AUXILIARY_CANDIDATE_MANIFEST_SHA256
+        and candidate_manifest_sha256(code_rows)
+        == EXECUTABLE_AUXILIARY_CODE_CANDIDATE_MANIFEST_SHA256
+        and candidate_manifest_sha256(word_rows)
+        == EXECUTABLE_AUXILIARY_WORD_CANDIDATE_MANIFEST_SHA256
+        and code_layout_valid
+        and data_layout_valid
+        and len(code_rows) == 123
+        and len(word_rows) == 4
+        and len(code_rows) + len(word_rows) == len(candidates)
+        and len(word_pointers) == 38
+        and all(
+            EXECUTABLE_AUXILIARY_WORD_RECORD_START
+            <= pointer
+            < EXECUTABLE_AUXILIARY_WORD_RECORD_END
+            for pointer in word_pointers
+        )
+        and all(
+            row["containing_word"] == "0x004A"
+            and row["following_word"] == "0xFFFF"
+            and row["record_start"] is not None
+            and row["pointer_entries"]
+            for row in detailed_rows
+            if row["category"]
+            == "pointer_indexed_16bit_word_stream_false_positive"
+        )
+    )
+    return {
+        "range": (
+            f"0x{EXECUTABLE_AUXILIARY_START:06X}.."
+            f"0x{EXECUTABLE_AUXILIARY_END:06X}"
+        ),
+        "source_bytes": (
+            EXECUTABLE_AUXILIARY_END - EXECUTABLE_AUXILIARY_START
+        ),
+        "source_sha256": source_sha256,
+        "expected_source_sha256": EXECUTABLE_AUXILIARY_SOURCE_SHA256,
+        "candidate_manifest_sha256": manifest_sha256,
+        "expected_candidate_manifest_sha256": (
+            EXECUTABLE_AUXILIARY_CANDIDATE_MANIFEST_SHA256
+        ),
+        "code_candidate_manifest_sha256": candidate_manifest_sha256(
+            code_rows
+        ),
+        "expected_code_candidate_manifest_sha256": (
+            EXECUTABLE_AUXILIARY_CODE_CANDIDATE_MANIFEST_SHA256
+        ),
+        "word_candidate_manifest_sha256": candidate_manifest_sha256(
+            word_rows
+        ),
+        "expected_word_candidate_manifest_sha256": (
+            EXECUTABLE_AUXILIARY_WORD_CANDIDATE_MANIFEST_SHA256
+        ),
+        "source_layout_valid": source_layout_valid,
+        "candidate_count": len(detailed_rows),
+        "kind_counts": dict(
+            sorted(Counter(str(row["kind"]) for row in detailed_rows).items())
+        ),
+        "category_counts": dict(sorted(category_counts.items())),
+        "unclassified_count": category_counts.get("unclassified", 0),
+        "code_segments": code_segment_summaries,
+        "data_segments": data_segment_summaries,
+        "word_pointer_table": {
+            "range": (
+                f"0x{EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_START:06X}.."
+                f"0x{EXECUTABLE_AUXILIARY_WORD_POINTER_TABLE_END:06X}"
+            ),
+            "pointer_count": len(word_pointers),
+            "unique_pointer_count": len(set(word_pointers)),
+            "first_pointer": f"0x{word_pointers[0]:06X}",
+            "last_pointer": f"0x{word_pointers[-1]:06X}",
+            "minimum_pointer": f"0x{min(word_pointers):06X}",
+            "maximum_pointer": f"0x{max(word_pointers):06X}",
+        },
+        "aligned_absolute_32_reference_count": sum(
+            len(references) for references in absolute.values()
+        ),
+        "aligned_absolute_32_references": [
+            {
+                "target": f"0x{target:06X}",
+                "target_is_odd": bool(target & 1),
+                "addresses": [
+                    f"0x{address:06X}" for address in references
+                ],
+            }
+            for target, references in sorted(absolute.items())
+        ],
+        "pc_relative_lea_pea_reference_count": sum(
+            len(references) for references in pc_relative.values()
+        ),
+        "candidates": detailed_rows,
+    }
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -1423,6 +1790,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ]
     executable_gameplay_bank = executable_gameplay_candidate_inventory(
         japanese, executable_gameplay
+    )
+    executable_auxiliary = [
+        row
+        for row in candidates
+        if EXECUTABLE_AUXILIARY_START
+        <= int(row["start_int"])
+        < EXECUTABLE_AUXILIARY_END
+    ]
+    executable_auxiliary_bank = executable_auxiliary_candidate_inventory(
+        japanese, executable_auxiliary
     )
 
     font_bitmap_addresses = {
@@ -2135,6 +2512,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "executable_tail_bank": executable_tail_bank,
         "executable_renderer_bank": executable_renderer_bank,
         "executable_gameplay_bank": executable_gameplay_bank,
+        "executable_auxiliary_bank": executable_auxiliary_bank,
     }
 
 
@@ -2150,6 +2528,7 @@ def markdown_report(result: dict[str, object]) -> str:
     executable_tail_bank = result["executable_tail_bank"]
     executable_renderer_bank = result["executable_renderer_bank"]
     executable_gameplay_bank = result["executable_gameplay_bank"]
+    executable_auxiliary_bank = result["executable_auxiliary_bank"]
     lines = [
         "# Short Inline Byte Candidate Inventory",
         "",
@@ -2232,6 +2611,14 @@ def markdown_report(result: dict[str, object]) -> str:
             f"{executable_gameplay_bank['unclassified_count']}"
         ),
         (
+            "- Executable-auxiliary candidates: "
+            f"{executable_auxiliary_bank['candidate_count']}"
+        ),
+        (
+            "- Executable-auxiliary unclassified: "
+            f"{executable_auxiliary_bank['unclassified_count']}"
+        ),
+        (
             "- Exact aligned 32-bit references to text/UI-bank candidates: "
             f"{bank['aligned_absolute_32_reference_count']}"
         ),
@@ -2257,6 +2644,75 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Executable-Auxiliary Candidates",
+            "",
+            (
+                f"- The source-locked `{executable_auxiliary_bank['range']}` "
+                "region is split into five contiguous 68000 instruction "
+                "segments and four explicit lookup/pointer data segments."
+            ),
+            (
+                f"- Source SHA-256: `{executable_auxiliary_bank['source_sha256']}`; "
+                "candidate manifest SHA-256: "
+                f"`{executable_auxiliary_bank['candidate_manifest_sha256']}` "
+                f"(layout valid: "
+                f"`{executable_auxiliary_bank['source_layout_valid']}`)."
+            ),
+            (
+                "- Category totals: "
+                + ", ".join(
+                    f"`{category}` {count}"
+                    for category, count in executable_auxiliary_bank[
+                        "category_counts"
+                    ].items()
+                )
+                + "."
+            ),
+            (
+                "- The 38-entry long-pointer table resolves into 36 unique "
+                "16-bit word records. Four candidates are low bytes of word "
+                "`0x004A` immediately before a `0xFFFF` record terminator."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{executable_auxiliary_bank['aligned_absolute_32_reference_count']} "
+                f"across "
+                f"{len(executable_auxiliary_bank['aligned_absolute_32_references'])} "
+                "candidate starts; exact `LEA d16(PC)`/`PEA d16(PC)` "
+                f"references: "
+                f"{executable_auxiliary_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Code segment | Bytes | Instructions | Candidates | Source SHA-256 |",
+            "| --- | ---: | ---: | ---: | --- |",
+        ]
+    )
+    for segment in executable_auxiliary_bank["code_segments"]:
+        lines.append(
+            f"| `{segment['range']}` | {segment['source_bytes']} | "
+            f"{segment['linear_instruction_count']} | "
+            f"{segment['candidate_count']} | `{segment['source_sha256']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "| Data segment | Owner | Candidates | Source SHA-256 |",
+            "| --- | --- | ---: | --- |",
+        ]
+    )
+    for segment in executable_auxiliary_bank["data_segments"]:
+        lines.append(
+            f"| `{segment['range']}` | {segment['owner']} | "
+            f"{segment['candidate_count']} | `{segment['source_sha256']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "Independent Capstone tests require each code segment to end exactly",
+            "at its declared boundary and cover all 123 code-candidate spans.",
+            "The other four rows retain their containing word, following",
+            "terminator, record start, and pointer-table entries in the JSON report.",
             "",
             "## Reviewed Executable-Gameplay Candidates",
             "",
@@ -2820,6 +3276,7 @@ def main() -> None:
     executable_tail_bank = result["executable_tail_bank"]
     executable_renderer_bank = result["executable_renderer_bank"]
     executable_gameplay_bank = result["executable_gameplay_bank"]
+    executable_auxiliary_bank = result["executable_auxiliary_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
         f"{font_bank['candidate_count']} font-bitmap-bank, "
@@ -2832,7 +3289,8 @@ def main() -> None:
         f"{executable_tail_bank['candidate_count']} executable-tail, and "
         f"{executable_renderer_bank['candidate_count']} executable-renderer candidates, "
         f"{executable_gameplay_bank['candidate_count']} executable-gameplay candidates, "
-        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count']} "
+        f"{executable_auxiliary_bank['candidate_count']} executable-auxiliary candidates, "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count'] + compressed_bank['unclassified_count'] + executable_tail_bank['unclassified_count'] + executable_renderer_bank['unclassified_count'] + executable_gameplay_bank['unclassified_count'] + executable_auxiliary_bank['unclassified_count']} "
         "unclassified"
     )
 

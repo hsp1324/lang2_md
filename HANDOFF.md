@@ -11658,3 +11658,38 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and only virtual
   display `:104` remained active.
+
+### Executable Auxiliary Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x000270..0x005DD3` auxiliary region has SHA-256
+  `d1ae52bac4f581a1064838c465d4165b88c71e6c60e4c07f48fe8e68a525a8d7`
+  and contains 127 low-signal candidates: 79 half-width-looking and 48
+  ASCII-looking rows. The ordered candidate manifest is
+  `95c704b17e29e1f400c8d048880b31820174df7083dbdd61d6caa8c0dd1270cb`.
+- Five exact code segments cover 123 candidates:
+  `0x000270..0x00090B` (399 instructions, 21 candidates),
+  `0x000916..0x001065` (452, 16), `0x0012F6..0x00176F` (333, 13),
+  `0x001788..0x001D99` (430, 2), and `0x001DA6..0x005DD3`
+  (4,176, 71). Independent Capstone tests require every stream to end exactly
+  at its declared boundary and every candidate byte to fall inside it. The
+  combined code-candidate manifest is
+  `b9462ee081d305a2e43ec944835a3b3606596126be4d91562fa861ee678f8d3d`.
+- Four explicit data gaps separate those streams. The only gap containing
+  candidates is `0x001066..0x0012F5`: a 38-entry long-pointer table followed
+  by 36 unique 16-bit word records. Candidates `0x001113`, `0x00115B`,
+  `0x00116B`, and `0x00120B` are each the low byte of word `0x004A`
+  immediately before a `0xFFFF` terminator and retain their owning pointer
+  entries in the JSON report. Their manifest is
+  `842d384c439d3299bb9a02dc5932b011956ec94a0c17ed9b161f9cfec33054f0`.
+- The aligned scan finds 17 four-byte windows across six candidate starts:
+  `0x0004AC`, `0x000A00`, `0x000A08`, `0x001113`, `0x003839`, and
+  `0x004555`. Source structure already proves code or word-record ownership;
+  no executable PC-relative reference targets a row.
+- The cumulative exact review is now 5,616 of 6,612 short-inline candidates:
+  5,615 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 996 candidates.
+- Focused inventory tests pass 102/102. Reports were regenerated from isolated
+  ROM `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.

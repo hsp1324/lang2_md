@@ -26,6 +26,11 @@ from tools.jp_short_inline_byte_inventory import (
     EXECUTABLE_GAMEPLAY_GAP_END,
     EXECUTABLE_GAMEPLAY_GAP_START,
     EXECUTABLE_GAMEPLAY_SEGMENTS,
+    EXECUTABLE_AUXILIARY_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_AUXILIARY_CODE_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_AUXILIARY_CODE_SEGMENTS,
+    EXECUTABLE_AUXILIARY_SOURCE_SHA256,
+    EXECUTABLE_AUXILIARY_WORD_CANDIDATE_MANIFEST_SHA256,
     FONT_BITMAP_BANK_END,
     FONT_BITMAP_BANK_START,
     FONT_BITMAP_GLYPH_BYTES,
@@ -69,6 +74,9 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         ]
         cls.executable_gameplay_bank = cls.result[
             "executable_gameplay_bank"
+        ]
+        cls.executable_auxiliary_bank = cls.result[
+            "executable_auxiliary_bank"
         ]
 
     def test_low_signal_candidate_baseline(self):
@@ -486,6 +494,160 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
                 row["target_is_odd"]
                 for row in bank["aligned_absolute_32_references"]
             )
+        )
+
+    def test_executable_auxiliary_is_source_locked_and_fully_classified(self):
+        bank = self.executable_auxiliary_bank
+        self.assertEqual(bank["candidate_count"], 127)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 48, "halfwidth": 79},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {
+                "contiguous_instruction_stream_false_positive": 123,
+                "pointer_indexed_16bit_word_stream_false_positive": 4,
+            },
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(
+            bank["source_sha256"], EXECUTABLE_AUXILIARY_SOURCE_SHA256
+        )
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_AUXILIARY_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["code_candidate_manifest_sha256"],
+            EXECUTABLE_AUXILIARY_CODE_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            bank["word_candidate_manifest_sha256"],
+            EXECUTABLE_AUXILIARY_WORD_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+
+    def test_executable_auxiliary_code_candidates_are_inside_exact_instructions(self):
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        summaries = self.executable_auxiliary_bank["code_segments"]
+        self.assertEqual(len(summaries), len(EXECUTABLE_AUXILIARY_CODE_SEGMENTS))
+        covered_bytes = set()
+        expected_candidate_counts = [21, 16, 13, 2, 71]
+        for summary, segment, candidate_count in zip(
+            summaries,
+            EXECUTABLE_AUXILIARY_CODE_SEGMENTS,
+            expected_candidate_counts,
+        ):
+            (
+                start,
+                end,
+                instruction_count,
+                source_sha256,
+                candidate_manifest_sha256,
+            ) = segment
+            with self.subTest(segment=summary["range"]):
+                instructions = list(
+                    md.disasm(self.japanese[start:end], start)
+                )
+                self.assertEqual(len(instructions), instruction_count)
+                self.assertEqual(instructions[0].address, start)
+                self.assertEqual(
+                    instructions[-1].address + instructions[-1].size,
+                    end,
+                )
+                self.assertEqual(summary["source_sha256"], source_sha256)
+                self.assertEqual(
+                    summary["candidate_manifest_sha256"],
+                    candidate_manifest_sha256,
+                )
+                self.assertEqual(
+                    summary["candidate_count"], candidate_count
+                )
+                self.assertTrue(summary["source_layout_valid"])
+                covered_bytes.update(
+                    address
+                    for instruction in instructions
+                    for address in range(
+                        instruction.address,
+                        instruction.address + instruction.size,
+                    )
+                )
+        code_rows = [
+            row
+            for row in self.executable_auxiliary_bank["candidates"]
+            if row["category"]
+            == "contiguous_instruction_stream_false_positive"
+        ]
+        self.assertEqual(len(code_rows), 123)
+        for row in code_rows:
+            with self.subTest(address=row["address"]):
+                start = int(row["address"], 16)
+                end = int(row["end"], 16)
+                self.assertTrue(set(range(start, end)) <= covered_bytes)
+
+    def test_executable_auxiliary_word_candidates_have_pointer_ownership(self):
+        bank = self.executable_auxiliary_bank
+        table = bank["word_pointer_table"]
+        self.assertEqual(table["pointer_count"], 38)
+        self.assertEqual(table["unique_pointer_count"], 36)
+        self.assertEqual(table["first_pointer"], "0x0010FE")
+        self.assertEqual(table["last_pointer"], "0x00118A")
+        self.assertEqual(table["minimum_pointer"], "0x0010FE")
+        self.assertEqual(table["maximum_pointer"], "0x0012E8")
+        word_rows = {
+            int(row["address"], 16): row
+            for row in bank["candidates"]
+            if row["category"]
+            == "pointer_indexed_16bit_word_stream_false_positive"
+        }
+        self.assertEqual(
+            set(word_rows),
+            {0x001113, 0x00115B, 0x00116B, 0x00120B},
+        )
+        for row in word_rows.values():
+            with self.subTest(address=row["address"]):
+                self.assertEqual(row["containing_word"], "0x004A")
+                self.assertEqual(row["following_word"], "0xFFFF")
+                self.assertIsNotNone(row["record_start"])
+                self.assertTrue(row["pointer_entries"])
+
+    def test_executable_auxiliary_reference_windows_are_structural(self):
+        bank = self.executable_auxiliary_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 17)
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertEqual(
+            {
+                int(row["target"], 16): [
+                    int(address, 16) for address in row["addresses"]
+                ]
+                for row in bank["aligned_absolute_32_references"]
+            },
+            {
+                0x0004AC: [
+                    0x08223A,
+                    0x0822BA,
+                    0x08233A,
+                    0x0823BA,
+                    0x08243A,
+                    0x097BC6,
+                ],
+                0x000A00: [
+                    0x05F1F0,
+                    0x0602BC,
+                    0x0602D6,
+                    0x060324,
+                    0x060358,
+                    0x080B66,
+                ],
+                0x000A08: [0x05F784],
+                0x001113: [0x05714E],
+                0x003839: [0x0A5C50],
+                0x004555: [0x0B3570, 0x0B5EC6],
+            },
         )
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):

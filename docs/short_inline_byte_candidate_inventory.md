@@ -27,6 +27,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-renderer unclassified: 0
 - Executable-gameplay candidates: 228
 - Executable-gameplay unclassified: 0
+- Executable-auxiliary candidates: 127
+- Executable-auxiliary unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -43,6 +45,34 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Auxiliary Candidates
+
+- The source-locked `0x000270..0x005DD4` region is split into five contiguous 68000 instruction segments and four explicit lookup/pointer data segments.
+- Source SHA-256: `d1ae52bac4f581a1064838c465d4165b88c71e6c60e4c07f48fe8e68a525a8d7`; candidate manifest SHA-256: `95c704b17e29e1f400c8d048880b31820174df7083dbdd61d6caa8c0dd1270cb` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 123, `pointer_indexed_16bit_word_stream_false_positive` 4.
+- The 38-entry long-pointer table resolves into 36 unique 16-bit word records. Four candidates are low bytes of word `0x004A` immediately before a `0xFFFF` record terminator.
+- Exact aligned four-byte windows: 17 across 6 candidate starts; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Code segment | Bytes | Instructions | Candidates | Source SHA-256 |
+| --- | ---: | ---: | ---: | --- |
+| `0x000270..0x00090C` | 1692 | 399 | 21 | `ef247174565f4d28fcface0980b5622c6da9e37573e794435465c009088b21be` |
+| `0x000916..0x001066` | 1872 | 452 | 16 | `01718f697efff2689ce6315c1130cdd42b38d2d67954d499e784a70516a77c89` |
+| `0x0012F6..0x001770` | 1146 | 333 | 13 | `dcb7f997e0ad83c2d07b7807b1036fa9d67e4aa0dd1b9fb7e1e5d66352a8a5bc` |
+| `0x001788..0x001D9A` | 1554 | 430 | 2 | `42a30d50b91e90c6438658e58e8c0fb9065fdaff09d7ef8c4979070d29a10ff8` |
+| `0x001DA6..0x005DD4` | 16430 | 4176 | 71 | `2ac368f7baae23c6892262f8cb1ed5654fc4b37c4d3b0692c46c904b9009b9b7` |
+
+| Data segment | Owner | Candidates | Source SHA-256 |
+| --- | --- | ---: | --- |
+| `0x00090C..0x000916` | byte lookup table | 0 | `c34811b4832cf38c15f83e94fc16032990157f40f1ae61f750b4611ac8625cc1` |
+| `0x001066..0x0012F6` | pointer-indexed 16-bit word records | 4 | `6a268783c273e671a0a6311a309c4fa6245de0c6f0a4d2569901fd6a5a98943d` |
+| `0x001770..0x001788` | 16-bit code-offset table | 0 | `1983371e27eeac98e0805be367f5469417857328b44ef1d245b7aed58e6f50fa` |
+| `0x001D9A..0x001DA6` | 16-bit code-offset table | 0 | `222c75b94c4717a1b4fe6d4d06b67117127613bed7a7b1c05b3a2141b5ad08e9` |
+
+Independent Capstone tests require each code segment to end exactly
+at its declared boundary and cover all 123 code-candidate spans.
+The other four rows retain their containing word, following
+terminator, record start, and pointer-table entries in the JSON report.
 
 ## Reviewed Executable-Gameplay Candidates
 
