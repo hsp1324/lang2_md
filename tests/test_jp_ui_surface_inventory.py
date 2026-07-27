@@ -244,12 +244,12 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             ],
         )
         self.assertIn(
-            "magic targeting and result paths beyond the production-faithful "
-            "Magic Arrow and diagnostic Attack, Blast, Thunder, Fireball, Meteor, "
-            "Blizzard, Tornado, Heal, Sleep, and Charm probes; natural summon "
-            "ownership and the production 15-MP 형님 "
-            "application path beyond source-locked table validation and the "
-            "all-eight diagnostic renderer/application probes",
+            "natural magic ownership and application paths beyond the "
+            "production-faithful Magic Arrow proof; all 22 renderer/application "
+            "paths are covered by diagnostic all-magic probes only. Natural "
+            "summon ownership and the production 15-MP 형님 application path "
+            "remain beyond source-locked table validation and the all-eight "
+            "diagnostic renderer/application probes",
             self.result["remaining_inventory_gaps"],
         )
         self.assertIn(

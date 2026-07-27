@@ -50,6 +50,8 @@ MAGIC_CURSOR_Y_STARTS = (25, 43, 61, 79, 97, 115)
 MAGIC_CURSOR_ROW_HEIGHT = 16
 MAGIC_CURSOR_MIN_SCORE = 8
 MAGIC_CURSOR_MAX_RUNNER_UP_RATIO = 0.7
+DIRECTION_HOLD = 0.08
+UNACCEPTED_TARGET_MAX_CHANGE_RATIO = 0.15
 DEFAULT_VIRTUAL_DISPLAY = os.environ.get("BLASTEM_VIRTUAL_DISPLAY", ":104")
 XLIB_ONLY_CAPTURE = False
 
@@ -63,8 +65,8 @@ def magic_position(magic_id: int) -> tuple[int, int]:
 def movement_specs(dx: int, dy: int, wait: float = 0.35) -> list[str]:
     horizontal = "right" if dx > 0 else "left"
     vertical = "down" if dy > 0 else "up"
-    return [f"{horizontal}@0.02:{wait}"] * abs(dx) + [
-        f"{vertical}@0.02:{wait}"
+    return [f"{horizontal}@{DIRECTION_HOLD}:{wait}"] * abs(dx) + [
+        f"{vertical}@{DIRECTION_HOLD}:{wait}"
     ] * abs(dy)
 
 
@@ -103,6 +105,36 @@ def selected_list_row(path: Path) -> int:
     return selected
 
 
+def image_change_ratio(before_path: Path, after_path: Path) -> float:
+    before = Image.open(before_path).convert("RGB")
+    after = Image.open(after_path).convert("RGB")
+    if before.size != after.size:
+        return 1.0
+    before_bytes = before.tobytes()
+    after_bytes = after.tobytes()
+    changed = sum(
+        before_bytes[index : index + 3] != after_bytes[index : index + 3]
+        for index in range(0, len(before_bytes), 3)
+    )
+    return changed / (before.width * before.height)
+
+
+def require_target_confirmation_accepted(
+    target_path: Path,
+    after_path: Path,
+    current_mp: int,
+    max_mp: int,
+) -> None:
+    if current_mp < max_mp:
+        return
+    change_ratio = image_change_ratio(target_path, after_path)
+    if change_ratio <= UNACCEPTED_TARGET_MAX_CHANGE_RATIO:
+        raise RuntimeError(
+            "target confirmation was not accepted: "
+            f"MP {current_mp}/{max_mp}, frame change {change_ratio:.1%}"
+        )
+
+
 def correct_selected_row(prefix: Path, expected_row: int) -> Path:
     selected_path = Path(f"{prefix}_selected.png")
     for attempt in range(8):
@@ -113,7 +145,7 @@ def correct_selected_row(prefix: Path, expected_row: int) -> Path:
             shutil.copy2(attempt_path, selected_path)
             return selected_path
         direction = "down" if actual_row < expected_row else "up"
-        send_keys(f"{direction}@0.02:0.55")
+        send_keys(f"{direction}@{DIRECTION_HOLD}:0.55")
         print(
             f"correcting magic cursor row {actual_row + 1} "
             f"to {expected_row + 1} (attempt {attempt + 1})",
@@ -356,22 +388,22 @@ def main() -> int:
         hein_command = capture(Path(f"{prefix}_hein_command.png"))
         if not battle_command_menu_visible(hein_command):
             raise RuntimeError("Hein command menu was not detected")
-        send_steps(["down@0.02:0.35", "down@0.02:0.35"])
+        send_steps([f"down@{DIRECTION_HOLD}:0.35"] * 2)
         send_keys("c:0.7")
-        send_steps(["right@0.02:0.4"] * page)
-        send_steps(["down@0.02:0.35"] * row)
+        send_steps([f"right@{DIRECTION_HOLD}:0.4"] * page)
+        send_steps([f"down@{DIRECTION_HOLD}:0.35"] * row)
         correct_selected_row(prefix, row)
         send_keys("c:1.0")
-        capture(Path(f"{prefix}_target_or_result.png"))
+        target_path = capture(Path(f"{prefix}_target_or_result.png"))
 
         if not args.immediate:
             target_movement = movement_specs(args.target_dx, args.target_dy)
             target_movement.extend(
-                f"{key}@0.02:0.35" for key in args.target_key
+                f"{key}@{DIRECTION_HOLD}:0.35" for key in args.target_key
             )
             if target_movement:
                 send_steps(target_movement)
-            capture(Path(f"{prefix}_target.png"))
+            target_path = capture(Path(f"{prefix}_target.png"))
             if args.final_confirmations < 1:
                 raise ValueError("final confirmations must be at least one")
             for index in range(args.final_confirmations):
@@ -385,6 +417,14 @@ def main() -> int:
                     capture(Path(f"{prefix}_target_confirmed_{index + 1:02d}.png"))
 
         state, current_mp, max_mp = save_and_read_mp(runtime_name)
+        if current_mp >= max_mp:
+            pending_path = capture(Path(f"{prefix}_pending.png"))
+            require_target_confirmation_accepted(
+                target_path,
+                pending_path,
+                current_mp,
+                max_mp,
+            )
         for event_index in range(args.max_event_confirmations):
             if current_mp < max_mp:
                 break

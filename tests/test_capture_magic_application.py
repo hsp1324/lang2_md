@@ -27,9 +27,10 @@ class CaptureMagicApplicationTests(unittest.TestCase):
     def test_builds_stable_target_movement(self):
         self.assertEqual(
             capture_tool.movement_specs(-2, 1),
-            ["left@0.02:0.35", "left@0.02:0.35", "down@0.02:0.35"],
+            ["left@0.08:0.35", "left@0.08:0.35", "down@0.08:0.35"],
         )
         self.assertEqual(capture_tool.movement_specs(0, 0), [])
+        self.assertGreaterEqual(capture_tool.DIRECTION_HOLD, 0.05)
 
     def test_reads_hein_mp_from_gst(self):
         record = (
@@ -83,6 +84,48 @@ class CaptureMagicApplicationTests(unittest.TestCase):
             image.save(path)
             with self.assertRaisesRegex(RuntimeError, "is ambiguous"):
                 capture_tool.selected_list_row(path)
+
+    def test_rejects_unaccepted_target_before_confirmation_loop(self):
+        with TemporaryDirectory() as directory:
+            before = Path(directory) / "before.png"
+            after = Path(directory) / "after.png"
+            Image.new("RGB", (320, 240), (0, 0, 80)).save(before)
+            image = Image.new("RGB", (320, 240), (0, 0, 80))
+            image.paste((0, 32, 80), (0, 0, 40, 40))
+            image.save(after)
+            self.assertLess(
+                capture_tool.image_change_ratio(before, after),
+                capture_tool.UNACCEPTED_TARGET_MAX_CHANGE_RATIO,
+            )
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "target confirmation was not accepted",
+            ):
+                capture_tool.require_target_confirmation_accepted(
+                    before,
+                    after,
+                    12,
+                    12,
+                )
+
+    def test_accepts_changed_effect_frame_or_spent_mp(self):
+        with TemporaryDirectory() as directory:
+            before = Path(directory) / "before.png"
+            after = Path(directory) / "after.png"
+            Image.new("RGB", (320, 240), (0, 0, 80)).save(before)
+            Image.new("RGB", (320, 240), (80, 0, 0)).save(after)
+            capture_tool.require_target_confirmation_accepted(
+                before,
+                after,
+                12,
+                12,
+            )
+            capture_tool.require_target_confirmation_accepted(
+                before,
+                before,
+                10,
+                12,
+            )
 
     def test_quicksave_path_requires_exactly_one_state(self):
         with TemporaryDirectory() as directory:

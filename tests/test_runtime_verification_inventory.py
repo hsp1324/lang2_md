@@ -38,20 +38,26 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             "captures/run/e72d_magic_03_result_stable.png",
             evidence["captures"],
         )
-        for magic_id in (2, 4, 5, 6, 9, 13, 21):
+        for magic_id in range(22):
+            prefix = "49a2" if magic_id == 0 else (
+                "797c" if magic_id == 16 else "e72d"
+            )
             self.assertIn(
-                f"captures/run/e72d_magic_{magic_id:02d}_result_stable.png",
+                f"captures/run/{prefix}_magic_{magic_id:02d}_result_stable.png",
                 evidence["captures"],
             )
-        self.assertIn("all four magic-list pages", evidence["note"])
-        self.assertIn("썬더 damages Bald from HP 10 to 7", evidence["note"])
-        self.assertIn("메테오 damages Bald from HP 10 to 4", evidence["note"])
-        self.assertIn("블리져드 renders its map effect", evidence["note"])
-        self.assertIn("토네이도 renders its map effect", evidence["note"])
-        self.assertIn("allegiance-color change", evidence["note"])
-        self.assertIn("블래스트 selects Bald", evidence["note"])
+        self.assertIn("every one of the 22 magic IDs", evidence["note"])
+        self.assertIn("all four pages", evidence["note"])
+        self.assertIn("썬더 12->8", evidence["note"])
+        self.assertIn("메테오 12->4", evidence["note"])
+        self.assertIn("어스퀘이크 12->0", evidence["note"])
+        self.assertIn("Zone rejects the allied default target", evidence["note"])
+        self.assertIn("Force Heal 2 and Illusion", evidence["note"])
+        self.assertIn("22-screen visual audit", evidence["note"])
         self.assertIn("consecutive-clear checks", evidence["note"])
         self.assertIn("magic-list cursor detection", evidence["note"])
+        self.assertIn("0.08-second multi-frame hold", evidence["note"])
+        self.assertIn("early unchanged-target rejection", evidence["note"])
         self.assertIn("isolated Xvfb display :104", evidence["note"])
 
     def test_summon_application_evidence_is_diagnostic(self):
