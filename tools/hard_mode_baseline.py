@@ -1058,16 +1058,37 @@ def build_inventory(
                 ),
                 "natural_summon_application_verified": True,
                 "fixed_enemy_mercenary_runtime_behavior_verified": False,
+                "fixed_enemy_loading_and_command_menu_verified": True,
+                "fixed_enemy_ai_and_event_behavior_verified": False,
                 "runtime_evidence": {
                     "inventory": (
                         "localization/runtime_verification.json:"
                         "summon_targeting_results"
                     ),
+                    "fixed_enemy_probe_checksum": "A205",
+                    "fixed_enemy_probe_scenario": 27,
+                    "fixed_enemy_probe_record_offset": "0x18321A",
+                    "fixed_enemy_probe_slots": [4, 5],
+                    "fixed_enemy_probe_source_class": "87",
+                    "fixed_enemy_probe_target_class": "8F",
+                    "fixed_enemy_probe_gst": (
+                        "captures/analysis/"
+                        "a205_s27_fixed_summon_loaded.gst"
+                    ),
+                    "fixed_enemy_probe_captures": [
+                        "captures/run/"
+                        "a205_s27_fixed_white_dragon_status.png",
+                        "captures/run/"
+                        "a205_s27_fixed_white_dragon_command.png",
+                    ],
                     "meaning": (
                         "stock summon application creates classes 8D-93 and "
-                        "their Korean status surfaces; it does not prove that "
-                        "placing those IDs in fixed enemy mercenary slots "
-                        "preserves commands, AI, or event behavior"
+                        "their Korean status surfaces. Diagnostic A205 further "
+                        "proves that Scenario 27 fixed enemy slots load two "
+                        "class 8F White Dragons at the expected coordinates "
+                        "and expose Move/Attack/Magic under the stock "
+                        "all-factions command. It does not yet prove ordinary "
+                        "enemy AI, natural magic ownership, or event behavior"
                     ),
                 },
                 "candidate_classes": summon_candidates,
@@ -1531,12 +1552,21 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "- 소환물 `8D..93`은 원판 소환 명령으로 생성되고 한국어 이름·상태",
         "  화면이 검증되었지만, 원판 31개 시나리오의 고정 용병 칸에는",
         "  한 번도 들어가지 않는다.",
-        "- 따라서 고정 적 용병 칸에 넣었을 때 이동·공격·마법 명령, 적 AI,",
-        "  이벤트 진행이 동일하게 작동하는지는 별도 진단 ROM으로 먼저",
-        "  검증해야 한다. 클래스 ID만으로 마법 권한까지 붙는다고 가정하지",
-        "  않는다.",
+        "- 비배포 진단본 `A205`는 27장 고정 레코드 `0x18321A`의",
+        "  뱀파이어배트 두 칸만 화이트드래곤으로 바꿨다. GST 런타임 그룹",
+        "  17에서 실제 클래스 `8F` 두 개가 원래 좌표 `(14,9)`, `(16,7)`에",
+        "  생성됐고, 전 진영 조작 비기에서 `이동 / 공격 / 마법` 명령 메뉴가",
+        "  정상적으로 열렸다.",
+        "- 이 결과는 고정 적 로더·맵 생성·명령 메뉴 호환성까지만 증명한다.",
+        "  비기가 모든 마법을 임시 부여하므로 원래 마법 소유권, 일반 적 AI,",
+        "  이벤트 진행이 동일하다고 아직 간주하지 않는다. 클래스 ID만으로",
+        "  자연 마법 권한까지 붙는다고 가정하지 않는다.",
         "- 권장 방식은 일괄 N/6 변환이 아니라, 진단 통과 뒤 지휘관별로",
         "  후보를 골라 넣는 방식이다.",
+        "- 재현 도구는 `tools/build_fixed_enemy_summon_probe_rom.py`,",
+        "  런타임 증거 검증기는",
+        "  `tools/verify_fixed_enemy_summon_probe_evidence.py`다. 진단 ROM은",
+        "  `tmp/`에만 만들고 배포·커밋하지 않는다.",
         "",
         "| ID | 소환물 | AT/DF | MV | family | 원본 클래스 능력 |",
         "|:---:|:---|:---:|---:|:---:|:---|",

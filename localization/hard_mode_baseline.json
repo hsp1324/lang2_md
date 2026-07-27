@@ -3558,9 +3558,25 @@
       "recommended_interpretation": "curated_per_record_after_fixed_mercenary_runtime_probe",
       "natural_summon_application_verified": true,
       "fixed_enemy_mercenary_runtime_behavior_verified": false,
+      "fixed_enemy_loading_and_command_menu_verified": true,
+      "fixed_enemy_ai_and_event_behavior_verified": false,
       "runtime_evidence": {
         "inventory": "localization/runtime_verification.json:summon_targeting_results",
-        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces; it does not prove that placing those IDs in fixed enemy mercenary slots preserves commands, AI, or event behavior"
+        "fixed_enemy_probe_checksum": "A205",
+        "fixed_enemy_probe_scenario": 27,
+        "fixed_enemy_probe_record_offset": "0x18321A",
+        "fixed_enemy_probe_slots": [
+          4,
+          5
+        ],
+        "fixed_enemy_probe_source_class": "87",
+        "fixed_enemy_probe_target_class": "8F",
+        "fixed_enemy_probe_gst": "captures/analysis/a205_s27_fixed_summon_loaded.gst",
+        "fixed_enemy_probe_captures": [
+          "captures/run/a205_s27_fixed_white_dragon_status.png",
+          "captures/run/a205_s27_fixed_white_dragon_command.png"
+        ],
+        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces. Diagnostic A205 further proves that Scenario 27 fixed enemy slots load two class 8F White Dragons at the expected coordinates and expose Move/Attack/Magic under the stock all-factions command. It does not yet prove ordinary enemy AI, natural magic ownership, or event behavior"
       },
       "candidate_classes": [
         {

@@ -406,6 +406,22 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertFalse(
             discussion["fixed_enemy_mercenary_runtime_behavior_verified"]
         )
+        self.assertTrue(
+            discussion["fixed_enemy_loading_and_command_menu_verified"]
+        )
+        self.assertFalse(
+            discussion["fixed_enemy_ai_and_event_behavior_verified"]
+        )
+        evidence = discussion["runtime_evidence"]
+        self.assertEqual(evidence["fixed_enemy_probe_checksum"], "A205")
+        self.assertEqual(evidence["fixed_enemy_probe_scenario"], 27)
+        self.assertEqual(
+            evidence["fixed_enemy_probe_record_offset"],
+            "0x18321A",
+        )
+        self.assertEqual(evidence["fixed_enemy_probe_slots"], [4, 5])
+        self.assertEqual(evidence["fixed_enemy_probe_source_class"], "87")
+        self.assertEqual(evidence["fixed_enemy_probe_target_class"], "8F")
         self.assertEqual(
             discussion["recommended_interpretation"],
             "curated_per_record_after_fixed_mercenary_runtime_probe",
