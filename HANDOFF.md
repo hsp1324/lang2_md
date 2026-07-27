@@ -10868,3 +10868,41 @@ contains 57 safe syllables as documented below and in
 - No Japanese residue, damaged glyph, red screen, reset, or freeze appeared.
   Scenario 27 `battle_ui` is now `verified_current`; completion and branches
   remain probe-backed.
+
+### Hein Natural Summoner And Brother Path (2026-07-27)
+
+- Disassembly of the stock level-up handler `0x01480C` corrected two earlier
+  assumptions. EXP is class-specific: record byte `+0x14` is multiplied by
+  eight. Ability learning at `0x014946..0x01498A` scans class bytes
+  `+0x16..+0x19`, requirements `0x0829CC`, and masks `0x0829FA`.
+- The natural active Hein route now has four consecutive proofs:
+  `B33C` Shaman `0A` to Priest `11`, `B353` Priest `11` to Wizard `15`,
+  `B36F` Wizard `15` to Summoner `28`, and `16CD` Summoner LV1 to LV2.
+  The first three write real Scenario 2 manual saves. Slot checksums and stored
+  records are `457A: 11/LV1/EXP1/AT23/DF14`,
+  `D8C2: 15/LV1/EXP9/AT23/DF15`, and
+  `F52F: 28/LV1/EXP9/AT24/DF16`.
+- Summoner `28` contains ability IDs `04/0F/16/FF`. ID `16` (decimal 22)
+  requires level 1 and sets runtime command bit 23. Class change does not scan
+  the new class immediately, so LV1 correctly lacks `소환`; the next stock
+  level-up produces Summoner LV2 and the natural command.
+- Reproducible probe `tools/build_natural_summon_probe_rom.py` composes only
+  that stock level-up trigger with the Japanese all-item shop selector. Against
+  production `1AB2` it rebuilds byte-identical checksum `7256`. It explicitly
+  verifies that command gate `0x020DFA`, list branch `0x021724`, MP branch
+  `0x021938`, all records at `0x0820F4`, and all costs remain source-identical.
+- The live route bought `철아령` for 10P and equipped item `0B`. The original
+  item-effect lookup added `형님` to the natural list. `형님 15/16` consumed
+  MP `16->1` and created class `94` in Hein member slot 7 at `(14,20)`.
+  `tools/verify_natural_summon_evidence.py` locks the before/after GST fields.
+- `형님` only appears to return to the map briefly. It then enters a long
+  stock special title/attract sequence. The older
+  `31cc_summon_07_result_stable.png` stopped before that delayed sequence and
+  must not be cited as a stable map return. Replaying the old `31CC` GST also
+  reaches the same title/attract path, independently excluding the new
+  level-up result dialogue as the cause.
+- Accepted evidence uses `captures/run/7256_natural_summon_*`,
+  `captures/analysis/7256_natural_summon_*.gst`, and the retained
+  `b33c/b353/b36f_hein_*` save evidence. Direct GST MP editing and a Start-menu
+  summon wrapper remain rejected because they caused reset/title-flow
+  interference.

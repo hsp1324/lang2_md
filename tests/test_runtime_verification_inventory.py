@@ -60,15 +60,15 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("early unchanged-target rejection", evidence["note"])
         self.assertIn("isolated Xvfb display :104", evidence["note"])
 
-    def test_summon_application_evidence_is_diagnostic(self):
+    def test_summon_application_evidence_includes_natural_brother_path(self):
         data = inventory.load_inventory()
         evidence = {
             row["surface"]: row for row in data["global_evidence"]
         }["summon_targeting_results"]
-        self.assertEqual(evidence["checksum"], "C41E/31CF/31CC")
+        self.assertEqual(evidence["checksum"], "C41E/31CF/31CC/7256")
         self.assertEqual(evidence["based_on"], "AD01/1AB2")
         self.assertIn("member slot 7", evidence["note"])
-        self.assertIn("not natural summon ownership evidence", evidence["note"])
+        self.assertIn("natural summon ownership", evidence["note"])
         self.assertIn(
             "captures/run/c41e_summon_00_summoned_status.png",
             evidence["captures"],
@@ -99,9 +99,24 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("source-locked production costs", evidence["note"])
         self.assertIn("펜릴 consumes MP 12->2", evidence["note"])
         self.assertNotIn("펜리르 consumes", evidence["note"])
-        self.assertIn("production 형님 cost remains 15 MP", evidence["note"])
+        self.assertIn("production 형님 cost of 15 MP", evidence["note"])
         self.assertIn("ID 4 status capture focused Hein", evidence["note"])
         self.assertIn("all eight Korean names", evidence["note"])
+        self.assertIn("형님 15/16", evidence["note"])
+        self.assertIn("MP 16->1", evidence["note"])
+        self.assertIn("class 94", evidence["note"])
+        self.assertIn("not a stable map-return claim", evidence["note"])
+        for capture in (
+            "captures/run/7256_natural_summon_lv2_command.png",
+            "captures/run/7256_natural_summon_list.png",
+            "captures/run/7256_natural_summon_brother_selected_15mp.png",
+            "captures/run/7256_natural_summon_brother_spawn.png",
+            "captures/run/7256_natural_summon_brother_special_title.png",
+            "captures/run/7256_natural_summon_brother_attract.png",
+            "captures/analysis/7256_natural_summon_before.gst",
+            "captures/analysis/7256_natural_summon_brother_after.gst",
+        ):
+            self.assertIn(capture, evidence["captures"])
 
     def test_ending_visit_dialogue_evidence_is_renderer_diagnostic(self):
         data = inventory.load_inventory()

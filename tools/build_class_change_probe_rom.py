@@ -13,8 +13,14 @@ if str(ROOT) not in sys.path:
 from scripts import build_korean_jp_probe as builder
 from tools.class_change_data import (
     ClassTransition,
+    class_change_chain_pointer,
     read_class_change_chain,
     transition_for_class,
+)
+from tools.class_hire_data import (
+    CLASS_COUNT,
+    CLASS_RECORD_SIZE,
+    CLASS_RECORD_TABLE,
 )
 
 
@@ -41,6 +47,7 @@ ELWIN_EXPERIENCE_OFFSET = 0x2F
 ELWIN_FIGHTER_CLASS = 0x01
 PROBE_LEVEL = 9
 PROBE_EXPERIENCE = 16
+CLASS_EXPERIENCE_FACTOR_OFFSET = 0x14
 
 
 def runtime_record_address(runtime_record_index: int) -> int:
@@ -49,15 +56,32 @@ def runtime_record_address(runtime_record_index: int) -> int:
     return RUNTIME_RECORD_BASE + runtime_record_index * RUNTIME_RECORD_SIZE
 
 
+def class_change_experience(source: bytes, class_id: int) -> int:
+    if not 0 <= class_id < CLASS_COUNT:
+        raise ValueError(f"class ID must be 0..{CLASS_COUNT - 1}")
+    offset = (
+        CLASS_RECORD_TABLE
+        + class_id * CLASS_RECORD_SIZE
+        + CLASS_EXPERIENCE_FACTOR_OFFSET
+    )
+    return source[offset] << 3
+
+
 def wrapper_code(
     runtime_record_index: int = 0,
     expected_class: int = ELWIN_FIGHTER_CLASS,
     forced_commander_id: int | None = None,
+    probe_level: int = PROBE_LEVEL,
+    probe_experience: int = PROBE_EXPERIENCE,
 ) -> bytes:
     if not 0 <= expected_class <= 0xFF:
         raise ValueError("expected class ID must fit one byte")
     if forced_commander_id is not None and not 1 <= forced_commander_id <= 10:
         raise ValueError("forced commander ID must be 1..10")
+    if not 1 <= probe_level <= 9:
+        raise ValueError("probe level must be 1..9")
+    if not 0 <= probe_experience <= 0xFF:
+        raise ValueError("probe experience must fit one byte")
     record = runtime_record_address(runtime_record_index)
     code = bytearray()
     if forced_commander_id is None:
@@ -74,8 +98,8 @@ def wrapper_code(
             code.extend(value.to_bytes(2, "big"))
             code.extend((record + field_offset).to_bytes(4, "big"))
     for value, field_offset in (
-        (PROBE_LEVEL, ELWIN_LEVEL_OFFSET),
-        (PROBE_EXPERIENCE, ELWIN_EXPERIENCE_OFFSET),
+        (probe_level, ELWIN_LEVEL_OFFSET),
+        (probe_experience, ELWIN_EXPERIENCE_OFFSET),
     ):
         code.extend(bytes.fromhex("13 FC"))
         code.extend(value.to_bytes(2, "big"))
@@ -133,6 +157,49 @@ def selected_transition(
     return transition_for_class(source, commander_id, current_class)
 
 
+def prefer_transition_candidate(
+    probe: bytearray,
+    source: bytes,
+    commander_id: int,
+    transition: ClassTransition,
+    preferred_candidate: int | None,
+) -> ClassTransition:
+    if preferred_candidate is None:
+        return transition
+    if preferred_candidate not in transition.candidates:
+        candidates = "/".join(f"0x{value:02X}" for value in transition.candidates)
+        raise ValueError(
+            f"preferred class 0x{preferred_candidate:02X} is not a source "
+            f"candidate ({candidates})"
+        )
+    reordered = (
+        preferred_candidate,
+        *(value for value in transition.candidates if value != preferred_candidate),
+    )
+    if reordered == transition.candidates:
+        return transition
+
+    chain = read_class_change_chain(source, commander_id)
+    transition_index = next(
+        index
+        for index, source_transition in enumerate(chain)
+        if source_transition.current_class == transition.current_class
+    )
+    candidate_offset = (
+        class_change_chain_pointer(source, commander_id)
+        + transition_index * 8
+        + 2
+    )
+    expected = b"".join(
+        value.to_bytes(2, "big") for value in transition.candidates
+    )
+    if probe[candidate_offset : candidate_offset + len(expected)] != expected:
+        raise ValueError("input class-change candidate record changed")
+    replacement = b"".join(value.to_bytes(2, "big") for value in reordered)
+    probe[candidate_offset : candidate_offset + len(replacement)] = replacement
+    return ClassTransition(transition.current_class, reordered)
+
+
 def patch_probe(
     probe: bytearray,
     source: bytes,
@@ -142,12 +209,19 @@ def patch_probe(
     enable_start_menu_probe: bool = True,
     force_runtime_context: bool = False,
     restore_commander_id: int = 1,
+    preferred_candidate: int | None = None,
 ) -> int:
     if force_runtime_context and enable_start_menu_probe:
         raise ValueError(
             "forced runtime context requires the end-turn-only probe"
         )
-    transition = selected_transition(source, commander_id, current_class)
+    transition = prefer_transition_candidate(
+        probe,
+        source,
+        commander_id,
+        selected_transition(source, commander_id, current_class),
+        preferred_candidate,
+    )
     expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
     offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
     if source[offset : offset + 4] != expected:
@@ -159,6 +233,10 @@ def patch_probe(
         runtime_record_index=runtime_record_index,
         expected_class=transition.current_class,
         forced_commander_id=commander_id if force_runtime_context else None,
+        probe_experience=class_change_experience(
+            source,
+            transition.current_class,
+        ),
     )
     wrapper_end = PROBE_WRAPPER + len(code)
     if probe[PROBE_WRAPPER:wrapper_end] != b"\xFF" * len(code):
@@ -210,6 +288,38 @@ def patch_probe(
     return builder.update_md_checksum(probe)
 
 
+def patch_level_up_only_probe(
+    probe: bytearray,
+    source: bytes,
+    current_class: int,
+    runtime_record_index: int,
+    probe_level: int = 1,
+) -> int:
+    if not 0 <= current_class < CLASS_COUNT:
+        raise ValueError(f"class ID must be 0..{CLASS_COUNT - 1}")
+
+    expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
+    offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
+    if source[offset : offset + 4] != expected:
+        raise ValueError("Japanese end-turn level-up operand changed")
+    if probe[offset : offset + 4] != expected:
+        raise ValueError("input end-turn level-up operand changed")
+
+    code = wrapper_code(
+        runtime_record_index=runtime_record_index,
+        expected_class=current_class,
+        probe_level=probe_level,
+        probe_experience=class_change_experience(source, current_class),
+    )
+    wrapper_end = PROBE_WRAPPER + len(code)
+    if probe[PROBE_WRAPPER:wrapper_end] != b"\xFF" * len(code):
+        raise ValueError("input probe wrapper region is not empty")
+
+    probe[offset : offset + 4] = PROBE_WRAPPER.to_bytes(4, "big")
+    probe[PROBE_WRAPPER:wrapper_end] = code
+    return builder.update_md_checksum(probe)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -239,6 +349,20 @@ def parse_args() -> argparse.Namespace:
         help="preserve the normal Start menu and install only the end-turn trigger",
     )
     parser.add_argument(
+        "--level-up-only",
+        action="store_true",
+        help=(
+            "preserve the normal Start menu and perform one stock level-up "
+            "without requiring a class-change transition"
+        ),
+    )
+    parser.add_argument(
+        "--probe-level",
+        type=int,
+        default=1,
+        help="current level used by --level-up-only before the stock level-up",
+    )
+    parser.add_argument(
         "--force-runtime-context",
         action="store_true",
         help=(
@@ -260,6 +384,14 @@ def parse_args() -> argparse.Namespace:
         type=lambda value: int(value, 0),
         help="source class ID; defaults to the commander's initial class",
     )
+    parser.add_argument(
+        "--preferred-candidate",
+        type=lambda value: int(value, 0),
+        help=(
+            "diagnostic only: retain the source candidate set but move this "
+            "candidate to the first row so held confirm input selects it"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -267,6 +399,37 @@ def main() -> int:
     args = parse_args()
     source = args.source_rom.read_bytes()
     probe = bytearray(args.input_rom.read_bytes())
+    if args.level_up_only:
+        if args.current_class is None:
+            raise ValueError("--level-up-only requires --current-class")
+        if args.force_runtime_context:
+            raise ValueError("--level-up-only does not force commander identity")
+        if args.preferred_candidate is not None:
+            raise ValueError(
+                "--preferred-candidate requires a class-change transition"
+            )
+        checksum = patch_level_up_only_probe(
+            probe,
+            source,
+            current_class=args.current_class,
+            runtime_record_index=args.runtime_record_index,
+            probe_level=args.probe_level,
+        )
+        args.output_rom.parent.mkdir(parents=True, exist_ok=True)
+        args.output_rom.write_bytes(probe)
+        print(
+            "end-turn level-up handler redirected through runtime record "
+            f"{args.runtime_record_index} class 0x{args.current_class:02X} "
+            f"LV{args.probe_level}/EXP"
+            f"{class_change_experience(source, args.current_class)} probe"
+        )
+        print("normal Start menu and source ability-learning path preserved")
+        print(f"checksum: {checksum:04X}")
+        print(args.output_rom)
+        return 0
+    if args.probe_level != 1:
+        raise ValueError("--probe-level is only valid with --level-up-only")
+
     transition = selected_transition(source, args.commander_id, args.current_class)
     checksum = patch_probe(
         probe,
@@ -277,15 +440,22 @@ def main() -> int:
         enable_start_menu_probe=not args.end_turn_only,
         force_runtime_context=args.force_runtime_context,
         restore_commander_id=args.restore_commander_id,
+        preferred_candidate=args.preferred_candidate,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
     print(
         "end-turn level-up handler redirected through runtime record "
         f"{args.runtime_record_index} class 0x{transition.current_class:02X} "
-        f"LV{PROBE_LEVEL}/EXP{PROBE_EXPERIENCE} probe"
+        f"LV{PROBE_LEVEL}/EXP"
+        f"{class_change_experience(source, transition.current_class)} probe"
     )
     candidates = "/".join(f"0x{value:02X}" for value in transition.candidates)
+    if args.preferred_candidate is not None:
+        print(
+            "diagnostic candidate order prefers "
+            f"0x{args.preferred_candidate:02X}; source membership preserved"
+        )
     if args.end_turn_only:
         print("normal Start menu preserved for end-turn application verification")
         if args.force_runtime_context:

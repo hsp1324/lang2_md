@@ -246,11 +246,14 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertIn(
             "natural magic ownership and application paths beyond the "
             "production-faithful Magic Arrow proof; all 22 renderer/application "
-            "paths are covered by diagnostic all-magic probes only. Natural "
-            "summon ownership and the production 15-MP 형님 application path "
-            "remain beyond source-locked table validation and the all-eight "
-            "diagnostic renderer/application probes",
+            "paths are covered by diagnostic all-magic probes only",
             self.result["remaining_inventory_gaps"],
+        )
+        self.assertFalse(
+            any(
+                "natural summon ownership" in gap
+                for gap in self.result["remaining_inventory_gaps"]
+            )
         )
         self.assertIn(
             "ending and credits UI variants outside the verified Scenario 27, "

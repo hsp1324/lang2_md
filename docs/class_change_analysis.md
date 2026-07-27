@@ -44,8 +44,12 @@ patching.
   Routine `0x0177D8` copies persistent progress into runtime units. Patching
   only the save-slot level/experience is therefore not stable across all
   preparation/deployment synchronization points.
-- The level-up handler is `0x01480C`. Fighter class ID `0x01` needs 16 EXP at
-  level 9 to reach the first class-change branch.
+- The level-up handler is `0x01480C`. At `0x014856..0x014864` it reads the
+  current class record's `+0x14` byte, multiplies it by eight, compares that
+  class-specific EXP requirement, and subtracts it on level-up. Fighter `01`
+  therefore needs 16 EXP at level 9, while Shaman `0A`, Priest `11`, and Wizard
+  `15` need 24, 32, and 56. The diagnostic builder derives this value from the
+  Japanese source instead of reusing Fighter's threshold.
 
 `tools/run_blastem_sequence.py` can patch a recovered manual slot with
 `--manual-slot-commander-id`, `--manual-slot-level`,
@@ -258,6 +262,58 @@ scenario number, commander ID, class, level, and experience without modifying
 the SRAM. Together these prove both natural Scenario 1 active commanders
 survive the ordinary scenario-clear synchronization path; they do not
 generalize persistence to the other 98 source transitions.
+
+## Hein Natural Summoner And Ability Unlock
+
+The same ordinary Scenario 1 clear/save path was repeated through Hein's
+preferred summoner branch. Each diagnostic changes only the stock end-turn
+level-up entry, uses the Japanese class-specific EXP threshold, and preserves
+the result/SAVE/next-scenario handlers:
+
+- `B33C` applies `샤먼(0A) -> 프리스트(11)`. The real Scenario 2 slot stores
+  class `11`, LV1, EXP1, AT23, DF14, and checksum `457A`.
+- `B353` keeps the Japanese Priest candidate set but moves its existing Wizard
+  candidate first for deterministic confirmation, then applies
+  `프리스트(11) -> 위저드(15)`. The real Scenario 2 slot stores class `15`,
+  LV1, EXP9, AT23, DF15, and checksum `D8C2`.
+- `B36F` applies `위저드(15) -> 서머너(28)`. The real Scenario 2 slot stores
+  class `28`, LV1, EXP9, AT24, DF16, and checksum `F52F`. Its live command
+  panel correctly has no `소환` at LV1.
+
+Accepted screens use prefixes `captures/run/b33c_hein_`,
+`captures/run/b353_hein_`, and `captures/run/b36f_hein_`. Their GST and SRAM
+counterparts are retained under `captures/analysis` and are independently
+accepted by `tools/verify_class_change_persistence.py`.
+
+The level-up handler also explains the missing LV1 command. At
+`0x014946..0x01498A` it scans class-record bytes `+0x16..+0x19`, reads the
+per-ability level requirement at `0x0829CC`, and ORs the corresponding mask
+from `0x0829FA` into runtime record `+0x50`. Summoner class `28` contains
+ability IDs `04/0F/16/FF`; ability ID `16` (decimal 22) requires level 1 and
+sets command bit 23. Class change itself does not rerun this scan for the new
+class, so the next stock level-up from Summoner LV1 to LV2 is the natural
+unlock point.
+
+Final-`1AB2` derivative `7256` performs only that LV1-to-LV2 stock level-up and
+exposes the Japanese all-item shop list. It does not modify the summon command
+gate, list builder, MP acceptance branch, summon records, or costs. Live
+playback shows `서머너` LV2 with `소환`; buying and equipping source item
+`철아령` (ID `0B`) adds `형님`, whose source cost is displayed as `15/16`.
+Application consumes MP `16->1` and creates class `94` in member slot 7 at
+`(14,20)`. The retained evidence is:
+
+- `captures/run/7256_natural_summon_lv2_command.png`
+- `captures/run/7256_natural_summon_list.png`
+- `captures/run/7256_natural_summon_brother_selected_15mp.png`
+- `captures/run/7256_natural_summon_brother_spawn.png`
+- `captures/analysis/7256_natural_summon_before.gst`
+- `captures/analysis/7256_natural_summon_brother_after.gst`
+
+`형님` then starts its long stock special title/attract sequence. A frame taken
+immediately after creation is not a stable map return; retained title and
+attract captures document the delayed behavior. The dedicated builder and GST
+verifier are `tools/build_natural_summon_probe_rom.py` and
+`tools/verify_natural_summon_evidence.py`.
 
 Rejected persistence shortcuts must not be repeated. Loading the retained GST
 through BlastEm `ui.load_state` returned to the title instead of a playable

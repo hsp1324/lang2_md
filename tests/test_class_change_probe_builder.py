@@ -59,6 +59,132 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
         self.assertIn(bytes.fromhex("13 FC 00 10 FF FF 60 6B"), code)
         self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
 
+    def test_experience_comes_from_each_source_class_record(self):
+        expected = {
+            0x01: 16,
+            0x03: 8,
+            0x0A: 24,
+            0x11: 32,
+            0x15: 56,
+        }
+        for class_id, experience in expected.items():
+            with self.subTest(class_id=class_id):
+                self.assertEqual(
+                    probe_builder.class_change_experience(
+                        self.source,
+                        class_id,
+                    ),
+                    experience,
+                )
+
+    def test_selected_probe_writes_source_class_experience(self):
+        probe = bytearray(self.production)
+        probe_builder.patch_probe(
+            probe,
+            self.source,
+            commander_id=5,
+            current_class=0x11,
+            runtime_record_index=1,
+            enable_start_menu_probe=False,
+        )
+        code = probe_builder.wrapper_code(
+            runtime_record_index=1,
+            expected_class=0x11,
+            probe_experience=32,
+        )
+        start = probe_builder.PROBE_WRAPPER
+        self.assertEqual(probe[start : start + len(code)], code)
+        self.assertIn(bytes.fromhex("13 FC 00 20 FF FF 60 CB"), code)
+
+    def test_level_up_only_probe_uses_terminal_class_without_candidate_patch(self):
+        probe = bytearray(self.production)
+        checksum = probe_builder.patch_level_up_only_probe(
+            probe,
+            self.source,
+            current_class=0x28,
+            runtime_record_index=1,
+            probe_level=1,
+        )
+        code = probe_builder.wrapper_code(
+            runtime_record_index=1,
+            expected_class=0x28,
+            probe_level=1,
+            probe_experience=56,
+        )
+        operand = probe_builder.END_TURN_LEVEL_UP_ENTRY_OPERAND
+        wrapper = probe_builder.PROBE_WRAPPER
+        self.assertEqual(
+            probe[operand : operand + 4],
+            wrapper.to_bytes(4, "big"),
+        )
+        self.assertEqual(probe[wrapper : wrapper + len(code)], code)
+        self.assertIn(bytes.fromhex("13 FC 00 01 FF FF 60 CA"), code)
+        self.assertIn(bytes.fromhex("13 FC 00 38 FF FF 60 CB"), code)
+        self.assertEqual(
+            probe[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+        self.assertEqual(probe[0x18E:0x190], checksum.to_bytes(2, "big"))
+
+    def test_level_up_only_probe_rejects_level_ten(self):
+        with self.assertRaisesRegex(ValueError, "probe level"):
+            probe_builder.patch_level_up_only_probe(
+                bytearray(self.production),
+                self.source,
+                current_class=0x28,
+                runtime_record_index=1,
+                probe_level=10,
+            )
+
+    def test_preferred_candidate_reorders_only_the_selected_source_row(self):
+        probe = bytearray(self.production)
+        transition = probe_builder.selected_transition(self.source, 5, 0x11)
+        self.assertEqual(transition.candidates, (0x16, 0x17, 0x15))
+        pointer = probe_builder.class_change_chain_pointer(self.source, 5)
+        transition_index = next(
+            index
+            for index, row in enumerate(
+                probe_builder.read_class_change_chain(self.source, 5)
+            )
+            if row.current_class == 0x11
+        )
+        candidate_offset = pointer + transition_index * 8 + 2
+
+        reordered = probe_builder.prefer_transition_candidate(
+            probe,
+            self.source,
+            5,
+            transition,
+            0x15,
+        )
+
+        self.assertEqual(reordered.candidates, (0x15, 0x16, 0x17))
+        self.assertEqual(
+            probe[candidate_offset : candidate_offset + 6],
+            bytes.fromhex("00 15 00 16 00 17"),
+        )
+        self.assertEqual(
+            probe[:candidate_offset],
+            self.production[:candidate_offset],
+        )
+        self.assertEqual(
+            probe[candidate_offset + 6 :],
+            self.production[candidate_offset + 6 :],
+        )
+
+    def test_preferred_candidate_rejects_a_non_source_class(self):
+        with self.assertRaisesRegex(ValueError, "not a source candidate"):
+            probe_builder.prefer_transition_candidate(
+                bytearray(self.production),
+                self.source,
+                5,
+                probe_builder.selected_transition(self.source, 5, 0x11),
+                0x28,
+            )
+
     def test_end_turn_wrapper_can_target_hein_runtime_record(self):
         code = probe_builder.wrapper_code(
             runtime_record_index=1,

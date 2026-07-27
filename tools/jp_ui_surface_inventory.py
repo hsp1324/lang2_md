@@ -632,10 +632,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "all-epilogue, ending-visit, and final-credit paths",
             "natural magic ownership and application paths beyond the "
             "production-faithful Magic Arrow proof; all 22 renderer/application "
-            "paths are covered by diagnostic all-magic probes only. Natural "
-            "summon ownership and the production 15-MP 형님 application path "
-            "remain beyond source-locked table validation and the all-eight "
-            "diagnostic renderer/application probes",
+            "paths are covered by diagnostic all-magic probes only",
             "ownership and purpose of 425 compressed resources beyond byte-font "
             "resource index 1, battle-terrain resource index 223, item-icon "
             "resource index 391, and title-logo resource index 393",
