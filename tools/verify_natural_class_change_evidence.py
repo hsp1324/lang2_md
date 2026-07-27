@@ -160,6 +160,23 @@ LESTER_PROOF = NaturalClassChangeProof(
     after=RuntimeIdentity(0x0D, 9, 1, 0),
     candidates=(0x0D, 0x10, 0x12),
 )
+JESSICA_PROOF = NaturalClassChangeProof(
+    slug="jessica",
+    character="Jessica",
+    before_class="Sorcerer",
+    after_class="Bishop",
+    before_path=(
+        ROOT / "captures/analysis/1f96_jessica_natural_class_change_before.gst"
+    ),
+    after_path=(
+        ROOT / "captures/analysis/1f96_jessica_natural_class_change_after.gst"
+    ),
+    probe_checksum=0x1F96,
+    runtime_record=9,
+    before=RuntimeIdentity(0x09, 10, 5, 0),
+    after=RuntimeIdentity(0x12, 10, 1, 0),
+    candidates=(0x12, 0x13, 0x0D),
+)
 PROOFS = {
     proof.slug: proof
     for proof in (
@@ -170,6 +187,7 @@ PROOFS = {
         LANA_PROOF,
         KEITH_PROOF,
         LESTER_PROOF,
+        JESSICA_PROOF,
     )
 }
 

@@ -11222,3 +11222,41 @@ contains 57 safe syllables as documented below and in
 - This raises application evidence to eleven transitions: nine natural and two
   forced-context. Lester's normal scenario-clear SRAM persistence remains
   unproven; only Elwin and Hein retain that stronger save-boundary evidence.
+
+### Jessica Natural Active Class Change (2026-07-27)
+
+- Scenario 25 runtime record 9 is
+  `class 09 / commander ID 10 / LV5 / EXP0`, namely Jessica/Sorcerer. Japanese
+  class record `09` requires EXP24 and its source candidates are `12/13/0D`,
+  or `비숍/메이지/매직나이트`.
+- The accepted diagnostic was built from frozen production `1AB2` and the
+  Japanese ROM with `--commander-id 10 --current-class 0x09
+  --runtime-record-index 9 --end-turn-only`. Checksum `1F96` derives EXP24
+  from the source class record, guards the wrapper on class `09`, does not
+  write commander identity, and preserves the stock Start operand.
+- A fresh isolated `DISPLAY=:104` run recovered the validated Scenario 25
+  manual slot, reached preparation with a 1.2-second detector delay, used
+  automatic deployment, and sent the single Start input required to open the
+  stock `SCENARIO 25` banner.
+- The first command detector stopped during the remaining opening dialogue
+  after a transient command-ready-looking frame. A second detector call then
+  reported `dialogue disappeared before its text stabilized` while the game
+  correctly transitioned to `클래스체인지 가능`. This matches the harmless
+  detector timing limitation seen on Lester and is not a ROM reset.
+- Accepted frames
+  `captures/run/1f96_jessica_natural_class_change_available.png`,
+  `_candidates.png`, and `_applied_status.png` show all three source
+  candidates and `제시카/비숍` LV1 without broken name or class glyphs.
+- Same-ROM GSTs
+  `captures/analysis/1f96_jessica_natural_class_change_before.gst` and
+  `_after.gst` prove record 9 changed
+  `09/ID10/LV5/EXP0 -> 12/ID10/LV1/EXP0`; all other nine identity tuples
+  remain byte-identical.
+  `tools/verify_natural_class_change_evidence.py --proof jessica` additionally
+  verifies checksum `1F96`, Japanese candidates, wrapper bytes, and the
+  unchanged Start entry against the exact ignored probe ROM.
+- This raises application evidence to twelve transitions: ten natural and two
+  forced-context. Every player commander now has at least one natural active
+  application proof. Normal scenario-clear SRAM persistence remains unproven
+  beyond Elwin and Hein, and the remaining source transitions still lack
+  natural application evidence.

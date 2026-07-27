@@ -29,7 +29,7 @@
 - `docs/name_entry_analysis.md`: 일본판 이름 입력 레이아웃, 현재 안전한 57자 한글 선택표, 저장 바이트, 확정 시 인덱스→글리프 변환 훅과 실기 검증 기록입니다.
 - `docs/sram_relocation.md`: 4 MiB ROM 확장으로 겹친 SRAM을 `0x400001`로 옮긴 주소 패치와 저장/불러오기 실기 검증 기록입니다.
 - `docs/class_change_analysis.md`: 클래스 체인지 15슬롯 공유 글리프와 두 레이아웃의 인덱스 소유권 및 한국어 슬롯 배치를 기록합니다.
-- `tools/build_class_change_probe_rom.py`: 지정한 지휘관·현재 클래스·활성 런타임 슬롯의 원본 후보 ID로 클래스 체인지 화면을 직접 열거나, `--end-turn-only`로 정상 턴 종료 레벨업 적용 경로를 재현하는 비배포 진단 ROM을 만듭니다. 턴 종료 프로브의 EXP는 클래스 레코드 `+0x14` 배수를 읽어 클래스별 원본 요구치로 설정합니다. Start 직접 진입은 화면/이동 검사용이며 실제 적용 증거로 사용하지 않습니다. `tools/verify_natural_class_change_evidence.py`는 리아나·쉐리·아론·스코트·라나·키스·레스터의 같은-ROM 전후 GST와 해당 진단 ROM 구조를 검증합니다.
+- `tools/build_class_change_probe_rom.py`: 지정한 지휘관·현재 클래스·활성 런타임 슬롯의 원본 후보 ID로 클래스 체인지 화면을 직접 열거나, `--end-turn-only`로 정상 턴 종료 레벨업 적용 경로를 재현하는 비배포 진단 ROM을 만듭니다. 턴 종료 프로브의 EXP는 클래스 레코드 `+0x14` 배수를 읽어 클래스별 원본 요구치로 설정합니다. Start 직접 진입은 화면/이동 검사용이며 실제 적용 증거로 사용하지 않습니다. `tools/verify_natural_class_change_evidence.py`는 리아나·쉐리·아론·스코트·라나·키스·레스터·제시카의 같은-ROM 전후 GST와 해당 진단 ROM 구조를 검증합니다.
 - `tools/build_natural_summon_probe_rom.py`: 하인의 서머너 LV1→LV2 원본 능력 학습과 일본판 전체 아이템 상점을 합성하되 소환 명령·목록·MP 분기·비용표를 그대로 두는 비배포 진단 ROM을 만듭니다. `tools/verify_natural_summon_evidence.py`는 보존 GST에서 자연 소환 비트, 철아령, 15MP 소비와 형님 생성 결과를 검증합니다.
 - `tools/class_ability_data.py`와 `tools/class_ability_inventory.py`: 일본판 클래스 레코드 `+0x16..+0x19`, 요구 레벨표 `0x0829CC`, 런타임 비트표 `0x0829FA` 및 10명 전직 트리를 읽어 `localization/class_abilities.json`과 `docs/class_ability_inventory.md`를 생성합니다. `tools/verify_natural_magic_evidence.py`는 체크섬 `7256`의 원본 마법 분기, 헤인 서머너의 자연 누적 마법 11종, 어택 2MP 소비와 정상 복귀를 보존 GST로 검증합니다.
 - `tools/capture_class_change_transition.py`: 지정한 원본 클래스 전이의 진단 ROM 빌드, 격리 BlastEm 새 부팅, 명령 화면 감지, Start 진단 진입, 모든 후보 행 캡처와 종료를 한 번에 수행합니다.
@@ -284,6 +284,7 @@ python3 tools/run_blastem_sequence.py shop
 - checksum `1E67`은 같은 시나리오 25 수동 슬롯의 자연 활성 라나 레코드 8을 사용해 `클레릭(02) -> 샤먼(0A)` 적용을 검증합니다. 같은 ROM의 전후 GST는 `02/ID3/LV1/EXP0 -> 0A/ID3/LV1/EXP0`을 기록하며 다른 아홉 플레이어 레코드는 그대로입니다. 일본판 후보 `샤먼/힐러/로드`, `클래스체인지 가능`, 적용 후 `라나/샤먼` 화면을 보존했습니다. 정상 클리어 뒤 SRAM 저장 지속성은 아직 별도 미검증입니다.
 - checksum `19FB`는 같은 시나리오 25 수동 슬롯의 자연 활성 키스 레코드 4를 사용해 `호크나이트(06) -> 매직나이트(0D)` 적용을 검증합니다. 같은 ROM의 전후 GST는 `06/ID7/LV1/EXP5 -> 0D/ID7/LV1/EXP0`을 기록하며 다른 아홉 플레이어 레코드는 그대로입니다. 일본판 후보 `매직나이트/드래곤나이트/비숍`, `클래스체인지 가능`, 적용 후 `키스/매직나이트` 화면을 보존했습니다. 정상 클리어 뒤 SRAM 저장 지속성은 아직 별도 미검증입니다.
 - checksum `1B14`는 같은 시나리오 25 수동 슬롯의 자연 활성 레스터 레코드 5를 사용해 `크로코나이트(07) -> 매직나이트(0D)` 적용을 검증합니다. 같은 ROM의 전후 GST는 `07/ID9/LV7/EXP15 -> 0D/ID9/LV1/EXP0`을 기록하며 다른 아홉 플레이어 레코드는 그대로입니다. 일본판 후보 `매직나이트/서펜나이트/비숍`, `클래스체인지 가능`, 적용 후 `레스터/매직나이트` 화면을 보존했습니다. 정상 클리어 뒤 SRAM 저장 지속성은 아직 별도 미검증입니다.
+- checksum `1F96`은 같은 시나리오 25 수동 슬롯의 자연 활성 제시카 레코드 9를 사용해 `소서러(09) -> 비숍(12)` 적용을 검증합니다. 같은 ROM의 전후 GST는 `09/ID10/LV5/EXP0 -> 12/ID10/LV1/EXP0`을 기록하며 다른 아홉 플레이어 레코드는 그대로입니다. 일본판 후보 `비숍/메이지/매직나이트`, `클래스체인지 가능`, 적용 후 `제시카/비숍` 화면을 보존했습니다. 정상 클리어 뒤 SRAM 저장 지속성은 아직 별도 미검증입니다.
 - 실행 중인 BlastEm이 있으면 캡처 도구가 이전 창을 잡을 수 있으므로 시퀀스는 기본적으로 중단됩니다. 테스트 창으로 교체해도 될 때만 `--replace-existing`을 사용합니다. 새 창에 `--click-window`를 지정하면 원격 데스크톱 뒤 입력 누락을 줄이기 위해 첫 입력 전에 BlastEm 키보드 캡처를 한 번 켭니다.
 
 영어판 기반 WIP의 1장 진입 테스트 흐름:

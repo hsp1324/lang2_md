@@ -7,10 +7,10 @@ A translated static name does not imply that its candidate screen was live verif
 - Commanders: 10
 - Source transitions: 100
 - Unique current/candidate combinations: 76
-- Live-verified transitions: 78
+- Live-verified transitions: 79
 - Live-verified unique combinations: 76
-- Application-verified transitions: 11
-- Natural application proofs: 9
+- Application-verified transitions: 12
+- Natural application proofs: 10
 - Forced-context diagnostic application proofs: 2
 - Normal scenario-clear save-persistence proofs: 2
 
@@ -175,7 +175,7 @@ Source pointer: `0x0828C2`
 | --- | --- | --- | --- | --- | --- |
 | `0x0828C2` | `03` 워록 (ｳｫｰﾛｯｸ) | `08` 힐러 (ﾋｰﾗｰ) / `09` 소서러 (ｿｰｻﾗｰ) / `04` 로드 (ﾛｰﾄﾞ) | yes | forced-context | pending |
 | `0x0828CA` | `08` 힐러 (ﾋｰﾗｰ) | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) / `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) | yes | pending | pending |
-| `0x0828D2` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | pending | pending | pending |
+| `0x0828D2` | `09` 소서러 (ｿｰｻﾗｰ) | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) / `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) | yes | natural | pending |
 | `0x0828DA` | `04` 로드 (ﾛｰﾄﾞ) | `13` 메이지 (ﾒｲｼﾞ) / `0D` 매직나이트 (ﾏｼﾞｯｸﾅｲﾄ) / `0B` 하이로드 (ﾊｲﾛｰﾄﾞ) | pending | pending | pending |
 | `0x0828E2` | `11` 프리스트 (ﾌﾟﾘｰｽﾄ) | `16` 하이프리스트 (ﾊｲﾌﾟﾘｰｽﾄ) / `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) | pending | pending | pending |
 | `0x0828EA` | `12` 비숍 (ﾋﾞｼｮｯﾌﾟ) | `17` 세인트 (ｾｲﾝﾄ) / `15` 위저드 (ｳｨｻﾞｰﾄﾞ) / `14` 아크메이지 (ｱｰｸﾒｲｼﾞ) | pending | pending | pending |
