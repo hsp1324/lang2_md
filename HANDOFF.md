@@ -11576,3 +11576,28 @@ contains 57 safe syllables as documented below and in
   `/tmp/Langrisser II (Korean Ending Villain Probe Base).md`. No production
   ROM bytes were changed, BlastEm was not launched, Xvfb `:104` remained the
   sole configured emulator display, and the physical monitor was untouched.
+
+### Executable-Tail Low-Signal Byte Audit (2026-07-27)
+
+- The source-locked `0x030000..0x03109F` block disassembles linearly from its
+  first byte through its last byte as 699 contiguous 68000 instructions.
+  Its SHA-256 is
+  `6fcf21965cccf311dbf8b8a14d1afc215f00e9d289e1a254865a678ba1c2b6d8`.
+- All 21 low-signal candidates in the block are exact instruction-byte
+  coincidences: 17 begin in an immediate operand and four begin in opcode
+  bytes. In every row, the scanner interprets the following `FF` byte of an
+  absolute `FFFFFxxx` destination operand as a string terminator. The ordered
+  candidate manifest SHA-256 is
+  `2a39fe8e38ee8f746d0321cab98ef4f7339433cf191b6292721b4bfa1aeceda3`.
+- `localization/short_inline_byte_candidates.json` records the containing
+  instruction address and complete raw instruction bytes for every row.
+  Tests independently disassemble the source block with Capstone and require
+  all 21 candidates to map to exactly one of the pinned instructions. No
+  aligned 32-bit or executable PC-relative reference targets a candidate.
+- The cumulative exact review is now 5,153 of 6,612 short-inline candidates:
+  5,152 structural false positives and the retained `L-` prefix. The remaining
+  open set is 1,459 executable/numeric candidates.
+- Focused inventory tests pass 92/92. Reports were regenerated from the
+  isolated current-source ROM; no production ROM bytes changed, BlastEm was
+  not launched, Xvfb `:104` remained the only emulator display, and the
+  physical monitor was untouched.

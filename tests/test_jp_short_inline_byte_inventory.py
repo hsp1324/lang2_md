@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 import unittest
 
+from capstone import Cs, CS_ARCH_M68K, CS_MODE_BIG_ENDIAN, CS_MODE_M68K_000
+
 from tools.jp_short_inline_byte_inventory import (
     CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS,
     CLASS_SPRITE_GRAPHICS_REVIEWS,
@@ -10,6 +12,11 @@ from tools.jp_short_inline_byte_inventory import (
     COMPRESSED_RESOURCE_POINTER_TABLE_SHA256,
     COMPRESSED_RESOURCE_REPRESENTATIVE_ADDRESSES,
     ENDING_SCENARIO_STRUCTURED_REVIEWS,
+    EXECUTABLE_TAIL_CANDIDATE_MANIFEST_SHA256,
+    EXECUTABLE_TAIL_END,
+    EXECUTABLE_TAIL_INSTRUCTION_REVIEWS,
+    EXECUTABLE_TAIL_SOURCE_SHA256,
+    EXECUTABLE_TAIL_START,
     FONT_BITMAP_BANK_END,
     FONT_BITMAP_BANK_START,
     FONT_BITMAP_GLYPH_BYTES,
@@ -47,6 +54,7 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         cls.ending_bank = cls.result["ending_scenario_bank"]
         cls.bank = cls.result["text_ui_bank"]
         cls.compressed_bank = cls.result["compressed_resource_bank"]
+        cls.executable_tail_bank = cls.result["executable_tail_bank"]
 
     def test_low_signal_candidate_baseline(self):
         self.assertEqual(self.result["candidate_count"], 6612)
@@ -162,6 +170,95 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         self.assertEqual(len(bank["aligned_absolute_32_references"]), 17)
         self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
         self.assertEqual(bank["pc_relative_lea_pea_references"], [])
+
+    def test_executable_tail_is_source_locked_and_fully_classified(self):
+        bank = self.executable_tail_bank
+        self.assertEqual(bank["candidate_count"], 21)
+        self.assertEqual(
+            bank["kind_counts"],
+            {"ascii": 6, "halfwidth": 15},
+        )
+        self.assertEqual(
+            bank["category_counts"],
+            {
+                "instruction_immediate_boundary_false_positive": 17,
+                "instruction_opcode_boundary_false_positive": 4,
+            },
+        )
+        self.assertEqual(bank["unclassified_count"], 0)
+        self.assertEqual(bank["missing_review_addresses"], [])
+        self.assertEqual(bank["stale_review_addresses"], [])
+        self.assertEqual(bank["source_bytes"], 4256)
+        self.assertEqual(bank["source_sha256"], EXECUTABLE_TAIL_SOURCE_SHA256)
+        self.assertEqual(
+            bank["candidate_manifest_sha256"],
+            EXECUTABLE_TAIL_CANDIDATE_MANIFEST_SHA256,
+        )
+        self.assertTrue(bank["source_layout_valid"])
+        self.assertTrue(
+            all(
+                row["instruction_bytes_valid"]
+                and row["candidate_inside_instruction"]
+                for row in bank["candidates"]
+            )
+        )
+
+    def test_executable_tail_candidates_map_to_contiguous_68000_instructions(self):
+        md = Cs(
+            CS_ARCH_M68K,
+            CS_MODE_BIG_ENDIAN | CS_MODE_M68K_000,
+        )
+        instructions = list(
+            md.disasm(
+                self.japanese[EXECUTABLE_TAIL_START:EXECUTABLE_TAIL_END],
+                EXECUTABLE_TAIL_START,
+            )
+        )
+        self.assertEqual(len(instructions), 699)
+        self.assertEqual(instructions[0].address, EXECUTABLE_TAIL_START)
+        self.assertEqual(
+            instructions[-1].address + instructions[-1].size,
+            EXECUTABLE_TAIL_END,
+        )
+        by_candidate = {
+            int(row["address"], 16): row
+            for row in self.executable_tail_bank["candidates"]
+        }
+        self.assertEqual(
+            set(by_candidate), set(EXECUTABLE_TAIL_INSTRUCTION_REVIEWS)
+        )
+        for address, (instruction_address, expected_hex) in (
+            EXECUTABLE_TAIL_INSTRUCTION_REVIEWS.items()
+        ):
+            with self.subTest(address=f"0x{address:06X}"):
+                matches = [
+                    instruction
+                    for instruction in instructions
+                    if instruction.address
+                    <= address
+                    < instruction.address + instruction.size
+                ]
+                self.assertEqual(len(matches), 1)
+                self.assertEqual(matches[0].address, instruction_address)
+                self.assertEqual(
+                    matches[0].bytes.hex(" ").upper(), expected_hex
+                )
+                self.assertEqual(
+                    by_candidate[address]["instruction_address"],
+                    f"0x{instruction_address:06X}",
+                )
+
+    def test_executable_tail_candidates_have_no_exact_reference(self):
+        bank = self.executable_tail_bank
+        self.assertEqual(bank["aligned_absolute_32_reference_count"], 0)
+        self.assertEqual(bank["pc_relative_lea_pea_reference_count"], 0)
+        self.assertTrue(
+            all(
+                not row["aligned_absolute_32_references"]
+                and not row["pc_relative_lea_pea_references"]
+                for row in bank["candidates"]
+            )
+        )
 
     def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):
         self.assertEqual(self.font_bank["candidate_count"], 1477)
