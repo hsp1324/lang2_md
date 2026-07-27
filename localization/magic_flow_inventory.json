@@ -1,0 +1,1927 @@
+{
+  "scope": {
+    "magic_count": 22,
+    "source_natural_learnable_magic_count": 21,
+    "source_unreachable_magic_count": 1,
+    "source_unreachable_magic_ids": [
+      18
+    ],
+    "diagnostic_application_evidence_count": 22,
+    "live_natural_learned_magic_count": 11,
+    "source_locked_range_count": 9
+  },
+  "conclusion": "Twenty-one of 22 magic IDs have at least one source class-change ownership path. Teleport is the bounded source exception: only Agent 25 owns it, and that class is absent from all ten player trees and all fixed scenario records. Every ID still shares the source-locked production list, selection, parameter, and application path and has retained diagnostic application evidence. This is structural coverage, not a claim that every commander/class ownership combination was naturally played.",
+  "source_locked_ranges": [
+    {
+      "name": "class_records",
+      "start": "0x05EDDC",
+      "end": "0x05FF08",
+      "size": 4396,
+      "source_sha256": "07efffd287c2a6787dc1cefee3b3ef3efae1481767117e3d899f2c65eeaaeebd",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "level_up_learning",
+      "start": "0x014946",
+      "end": "0x01498E",
+      "size": 72,
+      "source_sha256": "2e0177dfd678207bcb3701b954b9c2d893ef7a98eb3dcd0ee2e35ec9ac250f4d",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "magic_command_gate",
+      "start": "0x020DAE",
+      "end": "0x020DC0",
+      "size": 18,
+      "source_sha256": "a176129752052073e838579d646b42a1b34fdfef74e9f99b70c76e74348f1254",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "magic_list_builder",
+      "start": "0x0211A2",
+      "end": "0x02125A",
+      "size": 184,
+      "source_sha256": "33139cb0ec237628bfcfdf90b85a029b5db8c922b138b326452a10139503a9b2",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "magic_selection",
+      "start": "0x0213D0",
+      "end": "0x021578",
+      "size": 424,
+      "source_sha256": "3370433847d778fa3bd021a80fd791520373e4d67d937cd91c367975a54c5d87",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "magic_application",
+      "start": "0x00E798",
+      "end": "0x00EDB0",
+      "size": 1560,
+      "source_sha256": "a53bfcac3fac803fa38ab73c531167fb45d70acf1bf73b38340d43e9f5199824",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "magic_parameters",
+      "start": "0x08203C",
+      "end": "0x0820EC",
+      "size": 176,
+      "source_sha256": "6b7eeb2782426146925e4541fada3c5e46d277ede13478188b56491e2782865c",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "ability_requirements",
+      "start": "0x0829CC",
+      "end": "0x0829FA",
+      "size": 46,
+      "source_sha256": "5aa6300a3780d58a3375fff8379b54b4f665885547f414fe047b10aca412b1d9",
+      "production_source_equivalent": true
+    },
+    {
+      "name": "ability_masks",
+      "start": "0x0829FA",
+      "end": "0x082A56",
+      "size": 92,
+      "source_sha256": "5f2d087f77e236be888480b27918f533962b4ba3c787aa3755fa216aa0361599",
+      "production_source_equivalent": true
+    }
+  ],
+  "control_flow": {
+    "class_record_table": "0x05EDDC",
+    "class_record_size": 28,
+    "class_ability_offsets": [
+      "0x16",
+      "0x17",
+      "0x18",
+      "0x19"
+    ],
+    "runtime_ability_flags_offset": "0x50",
+    "selected_magic_word": "0xFFFFA958",
+    "magic_parameter_table": "0x08203C",
+    "magic_parameter_record_size": 8,
+    "semantic_anchor_count": 23
+  },
+  "natural_live_evidence": {
+    "checksum": "7256",
+    "commander_id": 5,
+    "commander": "헤인",
+    "class_id": 40,
+    "class": "서머너",
+    "level": 2,
+    "learned_magic_ids": [
+      0,
+      1,
+      2,
+      4,
+      7,
+      10,
+      14,
+      16,
+      17,
+      19,
+      20
+    ],
+    "applied_magic_id": 16,
+    "mp_before": 16,
+    "mp_after": 14,
+    "before_state": "captures/analysis/7256_natural_summon_before.gst",
+    "after_state": "captures/analysis/7256_natural_magic_attack_after.gst",
+    "natural_application_verified": true
+  },
+  "magic": [
+    {
+      "magic_id": 0,
+      "name": "매직애로우",
+      "required_level": 1,
+      "runtime_mask": "0x00000002",
+      "source_mp_cost": 1,
+      "owner_class_ids": [
+        0,
+        3,
+        48
+      ],
+      "owner_classes": [
+        "        ",
+        "워록",
+        "워록"
+      ],
+      "natural_owner_class_ids": [
+        3
+      ],
+      "natural_reachable_commander_ids": [
+        5,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "헤인",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 5,
+        "commander": "헤인",
+        "owner_class_id": 3,
+        "owner_class": "워록",
+        "path_class_ids": [
+          3,
+          4,
+          11,
+          24
+        ],
+        "path_classes": [
+          "워록",
+          "로드",
+          "하이로드",
+          "세이지"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 4,
+      "diagnostic_application": {
+        "magic_id": 0,
+        "checksum": "49A2",
+        "selected_capture": "captures/run/49a2_magic_00_selected.png",
+        "stable_capture": "captures/run/49a2_magic_00_result_stable.png",
+        "state": "captures/analysis/49a2_magic_00.gst",
+        "mp_before": 12,
+        "mp_after": 11,
+        "source_mp_cost": 1,
+        "list_page": 0,
+        "list_row": 0,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 1,
+      "name": "블래스트",
+      "required_level": 6,
+      "runtime_mask": "0x00000004",
+      "source_mp_cost": 10,
+      "owner_class_ids": [
+        21,
+        33,
+        34,
+        36,
+        38,
+        41,
+        144,
+        148
+      ],
+      "owner_classes": [
+        "위저드",
+        "레인저",
+        "히어로",
+        "드래곤마스터",
+        "자베라",
+        "로얄나이트",
+        "발키리",
+        "아니키"
+      ],
+      "natural_owner_class_ids": [
+        21,
+        33,
+        34,
+        36,
+        38,
+        41
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 21,
+        "owner_class": "위저드",
+        "path_class_ids": [
+          2,
+          4,
+          11,
+          21
+        ],
+        "path_classes": [
+          "클레릭",
+          "로드",
+          "하이로드",
+          "위저드"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 1,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_01_selected.png",
+        "stable_capture": "captures/run/e72d_magic_01_result_stable.png",
+        "state": "captures/analysis/e72d_magic_01.gst",
+        "mp_before": 12,
+        "mp_after": 2,
+        "source_mp_cost": 10,
+        "list_page": 0,
+        "list_row": 1,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 2,
+      "name": "썬더",
+      "required_level": 5,
+      "runtime_mask": "0x00000008",
+      "source_mp_cost": 4,
+      "owner_class_ids": [
+        10,
+        30,
+        31,
+        35,
+        144
+      ],
+      "owner_classes": [
+        "샤먼",
+        "드래곤로드",
+        "서펜로드",
+        "하이마스터",
+        "발키리"
+      ],
+      "natural_owner_class_ids": [
+        10,
+        30,
+        31,
+        35
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 10,
+        "owner_class": "샤먼",
+        "path_class_ids": [
+          1,
+          10,
+          12,
+          26,
+          34
+        ],
+        "path_classes": [
+          "파이터",
+          "샤먼",
+          "하이랜더",
+          "소드마스터",
+          "히어로"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 2,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_02_selected.png",
+        "stable_capture": "captures/run/e72d_magic_02_result_stable.png",
+        "state": "captures/analysis/e72d_magic_02.gst",
+        "mp_before": 12,
+        "mp_after": 8,
+        "source_mp_cost": 4,
+        "list_page": 0,
+        "list_row": 2,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 3,
+      "name": "파이어볼",
+      "required_level": 3,
+      "runtime_mask": "0x00000010",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        9,
+        13,
+        15,
+        18,
+        143
+      ],
+      "owner_classes": [
+        "소서러",
+        "매직나이트",
+        "드래곤나이트",
+        "비숍",
+        "화이트드래곤"
+      ],
+      "natural_owner_class_ids": [
+        9,
+        13,
+        15,
+        18
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 5,
+        "commander": "헤인",
+        "owner_class_id": 9,
+        "owner_class": "소서러",
+        "path_class_ids": [
+          3,
+          9,
+          13,
+          20
+        ],
+        "path_classes": [
+          "워록",
+          "소서러",
+          "매직나이트",
+          "아크메이지"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 1,
+      "diagnostic_application": {
+        "magic_id": 3,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_03_selected.png",
+        "stable_capture": "captures/run/e72d_magic_03_result_stable.png",
+        "state": "captures/analysis/e72d_magic_03.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 0,
+        "list_row": 3,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 4,
+      "name": "메테오",
+      "required_level": 2,
+      "runtime_mask": "0x00000020",
+      "source_mp_cost": 8,
+      "owner_class_ids": [
+        20,
+        37,
+        38,
+        40,
+        144
+      ],
+      "owner_classes": [
+        "아크메이지",
+        "에이전트",
+        "자베라",
+        "서머너",
+        "발키리"
+      ],
+      "natural_owner_class_ids": [
+        20,
+        38,
+        40
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 20,
+        "owner_class": "아크메이지",
+        "path_class_ids": [
+          1,
+          10,
+          19,
+          20
+        ],
+        "path_classes": [
+          "파이터",
+          "샤먼",
+          "메이지",
+          "아크메이지"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 4,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_04_selected.png",
+        "stable_capture": "captures/run/e72d_magic_04_result_stable.png",
+        "state": "captures/analysis/e72d_magic_04.gst",
+        "mp_before": 12,
+        "mp_after": 4,
+        "source_mp_cost": 8,
+        "list_page": 0,
+        "list_row": 4,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 5,
+      "name": "블리져드",
+      "required_level": 3,
+      "runtime_mask": "0x00000040",
+      "source_mp_cost": 3,
+      "owner_class_ids": [
+        16,
+        20,
+        27,
+        143,
+        146
+      ],
+      "owner_classes": [
+        "서펜나이트",
+        "아크메이지",
+        "나이트마스터",
+        "화이트드래곤",
+        "펜릴"
+      ],
+      "natural_owner_class_ids": [
+        16,
+        20,
+        27
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 9,
+        "commander": "레스터",
+        "owner_class_id": 16,
+        "owner_class": "서펜나이트",
+        "path_class_ids": [
+          1,
+          5,
+          16,
+          25
+        ],
+        "path_classes": [
+          "파이터",
+          "나이트",
+          "서펜나이트",
+          "팔라딘"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 5,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_05_selected.png",
+        "stable_capture": "captures/run/e72d_magic_05_result_stable.png",
+        "state": "captures/analysis/e72d_magic_05.gst",
+        "mp_before": 12,
+        "mp_after": 9,
+        "source_mp_cost": 3,
+        "list_page": 0,
+        "list_row": 5,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 6,
+      "name": "토네이도",
+      "required_level": 2,
+      "runtime_mask": "0x00000080",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        6,
+        19,
+        23,
+        25,
+        26,
+        29,
+        33,
+        146
+      ],
+      "owner_classes": [
+        "호크나이트",
+        "메이지",
+        "세인트",
+        "팔라딘",
+        "소드마스터",
+        "실버나이트",
+        "레인저",
+        "펜릴"
+      ],
+      "natural_owner_class_ids": [
+        6,
+        19,
+        23,
+        25,
+        26,
+        29,
+        33
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 4,
+        "commander": "쉐리",
+        "owner_class_id": 6,
+        "owner_class": "호크나이트",
+        "path_class_ids": [
+          1,
+          6,
+          14,
+          25
+        ],
+        "path_classes": [
+          "파이터",
+          "호크나이트",
+          "유니콘나이트",
+          "팔라딘"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 1,
+      "diagnostic_application": {
+        "magic_id": 6,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_06_selected.png",
+        "stable_capture": "captures/run/e72d_magic_06_result_stable.png",
+        "state": "captures/analysis/e72d_magic_06.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 1,
+        "list_row": 0,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 7,
+      "name": "턴언데드",
+      "required_level": 2,
+      "runtime_mask": "0x00000100",
+      "source_mp_cost": 5,
+      "owner_class_ids": [
+        8,
+        17
+      ],
+      "owner_classes": [
+        "힐러",
+        "프리스트"
+      ],
+      "natural_owner_class_ids": [
+        8,
+        17
+      ],
+      "natural_reachable_commander_ids": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "리아나",
+        "라나",
+        "헤인",
+        "스코트",
+        "키스",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 8,
+        "owner_class": "힐러",
+        "path_class_ids": [
+          2,
+          8,
+          13,
+          22
+        ],
+        "path_classes": [
+          "클레릭",
+          "힐러",
+          "매직나이트",
+          "하이프리스트"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 7,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_07_selected.png",
+        "stable_capture": "captures/run/e72d_magic_07_result_stable.png",
+        "state": "captures/analysis/e72d_magic_07.gst",
+        "mp_before": 12,
+        "mp_after": 7,
+        "source_mp_cost": 5,
+        "list_page": 1,
+        "list_row": 1,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 8,
+      "name": "어스퀘이크",
+      "required_level": 3,
+      "runtime_mask": "0x00000200",
+      "source_mp_cost": 12,
+      "owner_class_ids": [
+        24,
+        28,
+        35,
+        38,
+        42,
+        147
+      ],
+      "owner_classes": [
+        "세이지",
+        "그랑나이트",
+        "하이마스터",
+        "자베라",
+        "서펜마스터",
+        "요르문간드"
+      ],
+      "natural_owner_class_ids": [
+        24,
+        28,
+        35,
+        38,
+        42
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 28,
+        "owner_class": "그랑나이트",
+        "path_class_ids": [
+          1,
+          4,
+          12,
+          28
+        ],
+        "path_classes": [
+          "파이터",
+          "로드",
+          "하이랜더",
+          "그랑나이트"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 8,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_08_selected.png",
+        "stable_capture": "captures/run/e72d_magic_08_result_stable.png",
+        "state": "captures/analysis/e72d_magic_08.gst",
+        "mp_before": 12,
+        "mp_after": 0,
+        "source_mp_cost": 12,
+        "list_page": 1,
+        "list_row": 2,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 9,
+      "name": "힐1",
+      "required_level": 2,
+      "runtime_mask": "0x00000400",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        2,
+        4,
+        8,
+        14,
+        47,
+        141,
+        148
+      ],
+      "owner_classes": [
+        "클레릭",
+        "로드",
+        "힐러",
+        "유니콘나이트",
+        "클레릭",
+        "엘리멘탈",
+        "아니키"
+      ],
+      "natural_owner_class_ids": [
+        2,
+        4,
+        8,
+        14
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 2,
+        "owner_class": "클레릭",
+        "path_class_ids": [
+          2,
+          4,
+          11,
+          21
+        ],
+        "path_classes": [
+          "클레릭",
+          "로드",
+          "하이로드",
+          "위저드"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 4,
+      "diagnostic_application": {
+        "magic_id": 9,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_09_selected.png",
+        "stable_capture": "captures/run/e72d_magic_09_result_stable.png",
+        "state": "captures/analysis/e72d_magic_09.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 1,
+        "list_row": 3,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 10,
+      "name": "힐2",
+      "required_level": 4,
+      "runtime_mask": "0x00000800",
+      "source_mp_cost": 4,
+      "owner_class_ids": [
+        17,
+        23,
+        24,
+        32,
+        36,
+        41
+      ],
+      "owner_classes": [
+        "프리스트",
+        "세인트",
+        "세이지",
+        "킹",
+        "드래곤마스터",
+        "로얄나이트"
+      ],
+      "natural_owner_class_ids": [
+        17,
+        23,
+        24,
+        32,
+        36,
+        41
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 17,
+        "owner_class": "프리스트",
+        "path_class_ids": [
+          2,
+          4,
+          17,
+          21
+        ],
+        "path_classes": [
+          "클레릭",
+          "로드",
+          "프리스트",
+          "위저드"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 10,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_10_selected.png",
+        "stable_capture": "captures/run/e72d_magic_10_result_stable.png",
+        "state": "captures/analysis/e72d_magic_10.gst",
+        "mp_before": 12,
+        "mp_after": 8,
+        "source_mp_cost": 4,
+        "list_page": 1,
+        "list_row": 4,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 11,
+      "name": "포스힐1",
+      "required_level": 3,
+      "runtime_mask": "0x00001000",
+      "source_mp_cost": 3,
+      "owner_class_ids": [
+        8,
+        11,
+        18,
+        25,
+        30,
+        31,
+        142
+      ],
+      "owner_classes": [
+        "힐러",
+        "하이로드",
+        "비숍",
+        "팔라딘",
+        "드래곤로드",
+        "서펜로드",
+        "프레이야"
+      ],
+      "natural_owner_class_ids": [
+        8,
+        11,
+        18,
+        25,
+        30,
+        31
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 8,
+        "owner_class": "힐러",
+        "path_class_ids": [
+          2,
+          8,
+          13,
+          22
+        ],
+        "path_classes": [
+          "클레릭",
+          "힐러",
+          "매직나이트",
+          "하이프리스트"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 11,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_11_selected.png",
+        "stable_capture": "captures/run/e72d_magic_11_result_stable.png",
+        "state": "captures/analysis/e72d_magic_11.gst",
+        "mp_before": 12,
+        "mp_after": 9,
+        "source_mp_cost": 3,
+        "list_page": 1,
+        "list_row": 5,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 12,
+      "name": "포스힐2",
+      "required_level": 5,
+      "runtime_mask": "0x00002000",
+      "source_mp_cost": 6,
+      "owner_class_ids": [
+        22,
+        39
+      ],
+      "owner_classes": [
+        "하이프리스트",
+        "프린세스"
+      ],
+      "natural_owner_class_ids": [
+        22
+      ],
+      "natural_reachable_commander_ids": [
+        2,
+        3,
+        5,
+        7,
+        8,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "리아나",
+        "라나",
+        "헤인",
+        "키스",
+        "아론",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 22,
+        "owner_class": "하이프리스트",
+        "path_class_ids": [
+          2,
+          4,
+          17,
+          22
+        ],
+        "path_classes": [
+          "클레릭",
+          "로드",
+          "프리스트",
+          "하이프리스트"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 12,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_12_selected.png",
+        "stable_capture": "captures/run/e72d_magic_12_result_stable.png",
+        "state": "captures/analysis/e72d_magic_12.gst",
+        "mp_before": 12,
+        "mp_after": 6,
+        "source_mp_cost": 6,
+        "list_page": 2,
+        "list_row": 0,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 13,
+      "name": "슬립",
+      "required_level": 2,
+      "runtime_mask": "0x00004000",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        12,
+        13,
+        19,
+        22,
+        23,
+        142
+      ],
+      "owner_classes": [
+        "하이랜더",
+        "매직나이트",
+        "메이지",
+        "하이프리스트",
+        "세인트",
+        "프레이야"
+      ],
+      "natural_owner_class_ids": [
+        12,
+        13,
+        19,
+        22,
+        23
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 12,
+        "owner_class": "하이랜더",
+        "path_class_ids": [
+          1,
+          4,
+          12,
+          26,
+          34
+        ],
+        "path_classes": [
+          "파이터",
+          "로드",
+          "하이랜더",
+          "소드마스터",
+          "히어로"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 13,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_13_selected.png",
+        "stable_capture": "captures/run/e72d_magic_13_result_stable.png",
+        "state": "captures/analysis/e72d_magic_13.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 2,
+        "list_row": 1,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 14,
+      "name": "뮤트",
+      "required_level": 4,
+      "runtime_mask": "0x00008000",
+      "source_mp_cost": 3,
+      "owner_class_ids": [
+        14,
+        17,
+        18,
+        24
+      ],
+      "owner_classes": [
+        "유니콘나이트",
+        "프리스트",
+        "비숍",
+        "세이지"
+      ],
+      "natural_owner_class_ids": [
+        14,
+        17,
+        18,
+        24
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 18,
+        "owner_class": "비숍",
+        "path_class_ids": [
+          1,
+          4,
+          18,
+          23
+        ],
+        "path_classes": [
+          "파이터",
+          "로드",
+          "비숍",
+          "세인트"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 14,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_14_selected.png",
+        "stable_capture": "captures/run/e72d_magic_14_result_stable.png",
+        "state": "captures/analysis/e72d_magic_14.gst",
+        "mp_before": 12,
+        "mp_after": 9,
+        "source_mp_cost": 3,
+        "list_page": 2,
+        "list_row": 2,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 15,
+      "name": "프로텍션",
+      "required_level": 6,
+      "runtime_mask": "0x00010000",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        2,
+        4,
+        12,
+        16,
+        26,
+        28,
+        38,
+        39,
+        40,
+        41,
+        47,
+        142
+      ],
+      "owner_classes": [
+        "클레릭",
+        "로드",
+        "하이랜더",
+        "서펜나이트",
+        "소드마스터",
+        "그랑나이트",
+        "자베라",
+        "프린세스",
+        "서머너",
+        "로얄나이트",
+        "클레릭",
+        "프레이야"
+      ],
+      "natural_owner_class_ids": [
+        2,
+        4,
+        12,
+        16,
+        26,
+        28,
+        38,
+        40,
+        41
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 2,
+        "commander": "리아나",
+        "owner_class_id": 2,
+        "owner_class": "클레릭",
+        "path_class_ids": [
+          2,
+          4,
+          11,
+          21
+        ],
+        "path_classes": [
+          "클레릭",
+          "로드",
+          "하이로드",
+          "위저드"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 4,
+      "diagnostic_application": {
+        "magic_id": 15,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_15_selected.png",
+        "stable_capture": "captures/run/e72d_magic_15_result_stable.png",
+        "state": "captures/analysis/e72d_magic_15.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 2,
+        "list_row": 3,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 16,
+      "name": "어택",
+      "required_level": 5,
+      "runtime_mask": "0x00020000",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        3,
+        5,
+        7,
+        11,
+        15,
+        27,
+        32,
+        36,
+        37,
+        48
+      ],
+      "owner_classes": [
+        "워록",
+        "나이트",
+        "크로코나이트",
+        "하이로드",
+        "드래곤나이트",
+        "나이트마스터",
+        "킹",
+        "드래곤마스터",
+        "에이전트",
+        "워록"
+      ],
+      "natural_owner_class_ids": [
+        3,
+        5,
+        7,
+        11,
+        15,
+        27,
+        32,
+        36
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 5,
+        "commander": "헤인",
+        "owner_class_id": 3,
+        "owner_class": "워록",
+        "path_class_ids": [
+          3,
+          4,
+          11,
+          24
+        ],
+        "path_classes": [
+          "워록",
+          "로드",
+          "하이로드",
+          "세이지"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 6,
+      "diagnostic_application": {
+        "magic_id": 16,
+        "checksum": "797C",
+        "selected_capture": "captures/run/797c_magic_16_selected.png",
+        "stable_capture": "captures/run/797c_magic_16_result_stable.png",
+        "state": "captures/analysis/797c_magic_16.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 2,
+        "list_row": 4,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 17,
+      "name": "존",
+      "required_level": 7,
+      "runtime_mask": "0x00040000",
+      "source_mp_cost": 6,
+      "owner_class_ids": [
+        20,
+        21,
+        28,
+        29,
+        34,
+        42
+      ],
+      "owner_classes": [
+        "아크메이지",
+        "위저드",
+        "그랑나이트",
+        "실버나이트",
+        "히어로",
+        "서펜마스터"
+      ],
+      "natural_owner_class_ids": [
+        20,
+        21,
+        28,
+        29,
+        34,
+        42
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "스코트",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 28,
+        "owner_class": "그랑나이트",
+        "path_class_ids": [
+          1,
+          4,
+          12,
+          28
+        ],
+        "path_classes": [
+          "파이터",
+          "로드",
+          "하이랜더",
+          "그랑나이트"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 17,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_17_selected.png",
+        "stable_capture": "captures/run/e72d_magic_17_result_stable.png",
+        "state": "captures/analysis/e72d_magic_17.gst",
+        "mp_before": 12,
+        "mp_after": 6,
+        "source_mp_cost": 6,
+        "list_page": 2,
+        "list_row": 5,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 18,
+      "name": "텔레포트",
+      "required_level": 4,
+      "runtime_mask": "0x00080000",
+      "source_mp_cost": 5,
+      "owner_class_ids": [
+        37
+      ],
+      "owner_classes": [
+        "에이전트"
+      ],
+      "natural_owner_class_ids": [],
+      "natural_reachable_commander_ids": [],
+      "natural_reachable_commanders": [],
+      "natural_learnable": false,
+      "natural_witness": null,
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 18,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_18_selected.png",
+        "stable_capture": "captures/run/e72d_magic_18_result_stable.png",
+        "state": "captures/analysis/e72d_magic_18.gst",
+        "mp_before": 12,
+        "mp_after": 7,
+        "source_mp_cost": 5,
+        "list_page": 3,
+        "list_row": 0,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 19,
+      "name": "일루전",
+      "required_level": 2,
+      "runtime_mask": "0x00100000",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        9,
+        10
+      ],
+      "owner_classes": [
+        "소서러",
+        "샤먼"
+      ],
+      "natural_owner_class_ids": [
+        9,
+        10
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 10,
+        "owner_class": "샤먼",
+        "path_class_ids": [
+          1,
+          10,
+          12,
+          26,
+          34
+        ],
+        "path_classes": [
+          "파이터",
+          "샤먼",
+          "하이랜더",
+          "소드마스터",
+          "히어로"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 1,
+      "diagnostic_application": {
+        "magic_id": 19,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_19_selected.png",
+        "stable_capture": "captures/run/e72d_magic_19_result_stable.png",
+        "state": "captures/analysis/e72d_magic_19.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 3,
+        "list_row": 1,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 20,
+      "name": "레지스트",
+      "required_level": 4,
+      "runtime_mask": "0x00200000",
+      "source_mp_cost": 2,
+      "owner_class_ids": [
+        19,
+        21,
+        22,
+        32,
+        33,
+        34,
+        35,
+        42
+      ],
+      "owner_classes": [
+        "메이지",
+        "위저드",
+        "하이프리스트",
+        "킹",
+        "레인저",
+        "히어로",
+        "하이마스터",
+        "서펜마스터"
+      ],
+      "natural_owner_class_ids": [
+        19,
+        21,
+        22,
+        32,
+        33,
+        34,
+        35,
+        42
+      ],
+      "natural_reachable_commander_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10
+      ],
+      "natural_reachable_commanders": [
+        "엘윈",
+        "리아나",
+        "라나",
+        "쉐리",
+        "헤인",
+        "키스",
+        "아론",
+        "레스터",
+        "제시카"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 1,
+        "commander": "엘윈",
+        "owner_class_id": 19,
+        "owner_class": "메이지",
+        "path_class_ids": [
+          1,
+          10,
+          19,
+          20
+        ],
+        "path_classes": [
+          "파이터",
+          "샤먼",
+          "메이지",
+          "아크메이지"
+        ]
+      },
+      "live_natural_ownership_evidence": true,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 20,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_20_selected.png",
+        "stable_capture": "captures/run/e72d_magic_20_result_stable.png",
+        "state": "captures/analysis/e72d_magic_20.gst",
+        "mp_before": 12,
+        "mp_after": 10,
+        "source_mp_cost": 2,
+        "list_page": 3,
+        "list_row": 2,
+        "application_verified": true
+      }
+    },
+    {
+      "magic_id": 21,
+      "name": "참",
+      "required_level": 3,
+      "runtime_mask": "0x00400000",
+      "source_mp_cost": 6,
+      "owner_class_ids": [
+        14,
+        37,
+        39,
+        142
+      ],
+      "owner_classes": [
+        "유니콘나이트",
+        "에이전트",
+        "프린세스",
+        "프레이야"
+      ],
+      "natural_owner_class_ids": [
+        14
+      ],
+      "natural_reachable_commander_ids": [
+        4
+      ],
+      "natural_reachable_commanders": [
+        "쉐리"
+      ],
+      "natural_learnable": true,
+      "natural_witness": {
+        "commander_id": 4,
+        "commander": "쉐리",
+        "owner_class_id": 14,
+        "owner_class": "유니콘나이트",
+        "path_class_ids": [
+          1,
+          4,
+          14,
+          25
+        ],
+        "path_classes": [
+          "파이터",
+          "로드",
+          "유니콘나이트",
+          "팔라딘"
+        ]
+      },
+      "live_natural_ownership_evidence": false,
+      "fixed_scenario_owner_record_count": 0,
+      "diagnostic_application": {
+        "magic_id": 21,
+        "checksum": "E72D",
+        "selected_capture": "captures/run/e72d_magic_21_selected.png",
+        "stable_capture": "captures/run/e72d_magic_21_result_stable.png",
+        "state": "captures/analysis/e72d_magic_21.gst",
+        "mp_before": 12,
+        "mp_after": 6,
+        "source_mp_cost": 6,
+        "list_page": 3,
+        "list_row": 3,
+        "application_verified": true
+      }
+    }
+  ]
+}

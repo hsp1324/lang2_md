@@ -414,6 +414,20 @@ with `--probe-rom` additionally checks checksum `7256` and both stock magic
 branches. This is natural ownership and application proof for one maximal
 Hein path, not all possible class-path combinations.
 
+The complete ownership/application closure is generated separately by
+`tools/magic_flow_inventory.py`. It follows all ten source class trees and
+records at least one ownership witness for 21/22 magic IDs. ID `12`
+(`텔레포트`) is the bounded source exception: only `에이전트(25)` owns it,
+and that class appears in neither the ten player trees nor the 31 fixed
+scenario record lists. The production level-up, command gate, list builder,
+selection, parameter table, and application handler are byte-identical to the
+Japanese ROM. A retained selected screen, stable result screen, and
+post-application GST cover each of all 22 IDs, including the unreachable
+Teleport application through the diagnostic all-magic list. Details are in
+`localization/magic_flow_inventory.json` and
+`docs/magic_flow_inventory.md`. This is structural coverage and does not claim
+that every commander/class ownership combination was naturally played.
+
 ## Forced-Context Application Diagnostics
 
 Disassembly of the stock level-up handler confirms the runtime record ownership

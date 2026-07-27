@@ -10,6 +10,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_korean_jp_probe as builder
 from tools import class_change_flow_inventory as class_change_flow_report
+from tools import magic_flow_inventory as magic_flow_report
 
 
 RUNTIME_EVIDENCE_BY_ADDRESS = {
@@ -177,6 +178,27 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "structurally_covered_persistence_transition_count"
         ]
         == 100
+    )
+    magic_flow = magic_flow_report.inventory(
+        japanese,
+        korean,
+        json.loads(
+            magic_flow_report.DEFAULT_RUNTIME_INVENTORY.read_text(
+                encoding="utf-8"
+            )
+        ),
+    )
+    magic_scope = magic_flow["scope"]
+    magic_complete = (
+        magic_scope["magic_count"] == 22
+        and magic_scope["source_natural_learnable_magic_count"] == 21
+        and magic_scope["source_unreachable_magic_ids"] == [18]
+        and magic_scope["diagnostic_application_evidence_count"] == 22
+        and magic_scope["live_natural_learned_magic_count"] == 11
+        and all(
+            row["production_source_equivalent"]
+            for row in magic_flow["source_locked_ranges"]
+        )
     )
     rows: list[dict[str, object]] = []
     add_rows(rows, japanese, korean, "byte_ff_strings", builder.BYTE_UI_STRING_PATCHES, 1, False)
@@ -771,10 +793,15 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                     "inventory"
                 ]
             ),
-            "natural magic ownership and application paths beyond the "
-            "production-faithful Magic Arrow and Hein Summoner accumulated-"
-            "magic proofs; all 22 renderer/application paths are covered by "
-            "diagnostic all-magic probes",
+            *(
+                []
+                if magic_complete
+                else [
+                    "magic ownership, natural reachability exceptions, or "
+                    "application coverage no longer satisfies the "
+                    "source-locked flow inventory"
+                ]
+            ),
             "exact ownership and purpose of 423 compressed resources beyond "
             "SEGA boot-logo resource index 0, byte-font resource index 1, "
             "battle-terrain resource index 223, item-icon resource index 391, "

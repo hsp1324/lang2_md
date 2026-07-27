@@ -32,6 +32,7 @@
 - `tools/build_class_change_probe_rom.py`: 지정한 지휘관·현재 클래스·활성 런타임 슬롯의 원본 후보 ID로 클래스 체인지 화면을 직접 열거나, `--end-turn-only`로 정상 턴 종료 레벨업 적용 경로를 재현하는 비배포 진단 ROM을 만듭니다. 턴 종료 프로브의 EXP는 클래스 레코드 `+0x14` 배수를 읽어 클래스별 원본 요구치로 설정합니다. Start 직접 진입은 화면/이동 검사용이며 실제 적용 증거로 사용하지 않습니다. `tools/verify_natural_class_change_evidence.py`는 리아나·쉐리·아론·스코트·라나·키스·레스터·제시카의 같은-ROM 전후 GST와 해당 진단 ROM 구조를 검증합니다.
 - `tools/build_natural_summon_probe_rom.py`: 하인의 서머너 LV1→LV2 원본 능력 학습과 일본판 전체 아이템 상점을 합성하되 소환 명령·목록·MP 분기·비용표를 그대로 두는 비배포 진단 ROM을 만듭니다. `tools/verify_natural_summon_evidence.py`는 보존 GST에서 자연 소환 비트, 철아령, 15MP 소비와 형님 생성 결과를 검증합니다.
 - `tools/class_ability_data.py`와 `tools/class_ability_inventory.py`: 일본판 클래스 레코드 `+0x16..+0x19`, 요구 레벨표 `0x0829CC`, 런타임 비트표 `0x0829FA` 및 10명 전직 트리를 읽어 `localization/class_abilities.json`과 `docs/class_ability_inventory.md`를 생성합니다. `tools/verify_natural_magic_evidence.py`는 체크섬 `7256`의 원본 마법 분기, 헤인 서머너의 자연 누적 마법 11종, 어택 2MP 소비와 정상 복귀를 보존 GST로 검증합니다.
+- `tools/magic_flow_inventory.py`: 마법 22종의 원본 소유 클래스, 자연 전직 경로, 요구 레벨, MP 비용을 전부 연결합니다. 21종은 자연 획득 가능한 대표 경로를 기록하고, `텔레포트`는 플레이어 트리와 고정 시나리오에 없는 `에이전트(25)` 전용 원본 예외로 고정합니다. 공용 학습·명령·목록·선택·실행 루틴의 일본판 동등성과 22종 선택/실행 화면·GST를 검증해 `localization/magic_flow_inventory.json`과 `docs/magic_flow_inventory.md`를 생성합니다.
 - `tools/capture_class_change_transition.py`: 지정한 원본 클래스 전이의 진단 ROM 빌드, 격리 BlastEm 새 부팅, 명령 화면 감지, Start 진단 진입, 모든 후보 행 캡처와 종료를 한 번에 수행합니다.
 - `tools/capture_class_change_chain.py`: 한 지휘관 체인에서 아직 화면 검증되지 않은 고유 전이만 골라 위 자동 캡처를 순차 실행하고, 완전한 기존 캡처 세트는 건너뛰어 중단 후 재개합니다.
 - `tools/verify_class_change_persistence.py`: 정상 시나리오 클리어 뒤의 8192바이트 SRAM에서 슬롯 형식·유효 플래그·체크섬·시나리오 번호를 검증하고 지정 지휘관의 클래스/LV/EXP가 저장됐는지 확인합니다.
@@ -174,6 +175,7 @@ python3 tools/jp_global_inventory.py
 python3 tools/jp_resource_inventory.py
 python3 tools/jp_ui_surface_inventory.py
 python3 tools/class_change_inventory.py
+python3 tools/magic_flow_inventory.py
 python3 tools/jp_compressed_resource_inventory.py
 python3 tools/jp_direct_string_inventory.py
 python3 tools/jp_direct_byte_string_inventory.py
