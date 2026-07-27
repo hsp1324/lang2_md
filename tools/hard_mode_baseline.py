@@ -485,6 +485,7 @@ def recommended_proposal_preview(
     }
     scenario_rows = []
     all_target_offsets = []
+    clamped_records = []
     for scenario in scenarios:
         number = int(scenario["number"])
         if number not in step_by_scenario:
@@ -513,6 +514,26 @@ def recommended_proposal_preview(
             clamped_count = sum(value > cap for value in raw_values)
             totals[field_name]["result_at_cap_count"] += at_cap_count
             totals[field_name]["clamped_by_cap_count"] += clamped_count
+            for record, original, raw, projected in zip(
+                targets,
+                original_values,
+                raw_values,
+                projected_values,
+            ):
+                if raw <= cap:
+                    continue
+                clamped_records.append({
+                    "scenario": number,
+                    "offset": str(record["offset"]),
+                    "name_korean": str(record["name_korean"]),
+                    "class_korean": str(record["class_korean"]),
+                    "field": field_name,
+                    "original": original,
+                    "delta": int(step[delta_field]),
+                    "raw_result": raw,
+                    "cap": cap,
+                    "projected": projected,
+                })
             projections[field_name] = {
                 "original": value_summary(original_values),
                 "projected": value_summary(projected_values),
@@ -558,6 +579,14 @@ def recommended_proposal_preview(
             },
         ],
         "cap_diagnostics": totals,
+        "clamped_records": sorted(
+            clamped_records,
+            key=lambda row: (
+                int(row["scenario"]),
+                str(row["offset"]),
+                str(row["field"]),
+            ),
+        ),
         "scenarios": scenario_rows,
     }
 
@@ -1505,6 +1534,28 @@ def render_markdown(inventory: dict[str, object]) -> str:
             f"{_stat_cell(projections['soldier_df_correction']['projected'])} | "
             f"{projections['commander_at']['result_at_cap_count']}/"
             f"{projections['commander_df']['result_at_cap_count']} |"
+        )
+    lines.extend([
+        "",
+        "### 병사 보정 상한 적용 후보",
+        "",
+        "> 아래는 미승인 수치안에서 원본값+증가량이 상한을 넘는 항목이다.",
+        "> 지휘관 AT/DF는 상한으로 잘리는 대상이 없다.",
+        "",
+        "| 장 | 주소 | 적/클래스 | 항목 | 계산 | 적용 후보 |",
+        "|---:|:---:|:---|:---:|:---:|:---:|",
+    ])
+    field_labels = {
+        "soldier_at_correction": "A+",
+        "soldier_df_correction": "D+",
+    }
+    for row in preview["clamped_records"]:
+        lines.append(
+            f"| {row['scenario']} | `{row['offset']}` | "
+            f"{row['name_korean']}/{row['class_korean']} | "
+            f"{field_labels[row['field']]} | "
+            f"{row['original']}+{row['delta']}={row['raw_result']} | "
+            f"{row['projected']} |"
         )
     mercenary_discussion = inventory["balance_discussion"][
         "mercenary_replacement_discussion"

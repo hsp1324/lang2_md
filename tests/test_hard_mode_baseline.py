@@ -281,6 +281,46 @@ class HardModeBaselineTests(unittest.TestCase):
                 },
             },
         )
+        clamped = preview["clamped_records"]
+        self.assertEqual(len(clamped), 19)
+        self.assertEqual(
+            len({row["offset"] for row in clamped}),
+            14,
+        )
+        self.assertEqual(
+            {row["field"] for row in clamped},
+            {"soldier_at_correction", "soldier_df_correction"},
+        )
+        self.assertEqual(
+            clamped[0],
+            {
+                "scenario": 16,
+                "offset": "0x181D36",
+                "name_korean": "레온",
+                "class_korean": "로얄가드",
+                "field": "soldier_at_correction",
+                "original": 13,
+                "delta": 3,
+                "raw_result": 16,
+                "cap": 15,
+                "projected": 15,
+            },
+        )
+        self.assertEqual(
+            clamped[-1],
+            {
+                "scenario": 27,
+                "offset": "0x183262",
+                "name_korean": "레온",
+                "class_korean": "로얄가드",
+                "field": "soldier_df_correction",
+                "original": 9,
+                "delta": 4,
+                "raw_result": 13,
+                "cap": 12,
+                "projected": 12,
+            },
+        )
         scenario_22 = preview["scenarios"][21]
         self.assertEqual(
             scenario_22["projections"]["commander_at"]["projected"],
