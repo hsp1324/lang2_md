@@ -56,11 +56,11 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
             if row["group"] == "opening_text_lists"
         ]
         reviewed = [row for row in rows if row["reviewed"]]
-        unreviewed = [row for row in rows if not row["reviewed"]]
-        self.assertEqual(len(reviewed), 10)
-        self.assertEqual(len(unreviewed), 2)
-        self.assertTrue(all(row["live_verified"] for row in reviewed))
-        self.assertTrue(all(not row["live_verified"] for row in unreviewed))
+        live_verified = [row for row in rows if row["live_verified"]]
+        pending_live = [row for row in rows if not row["live_verified"]]
+        self.assertEqual(len(reviewed), 12)
+        self.assertEqual(len(live_verified), 12)
+        self.assertEqual(pending_live, [])
         self.assertNotIn(
             "리아나가 위험해",
             "".join(str(row["target_korean"]) for row in reviewed),

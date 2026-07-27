@@ -11260,3 +11260,24 @@ contains 57 safe syllables as documented below and in
   application proof. Normal scenario-clear SRAM persistence remains unproven
   beyond Elwin and Hein, and the remaining source transitions still lack
   natural application evidence.
+
+### Cold-Boot Villain Montage Completion (2026-07-27)
+
+- Direct Japanese-ROM rendering identified the two previously unreviewed
+  fixed-count records at `0x0A6B20` and `0x0A6B54`. They say, in full, that
+  Alhazard is the legendary demon sword and that its wielder wants the power
+  to take the continent and world.
+- The records have renderer counts 33 and 42 and overlap by seven ROM words:
+  the first starts 26 words before the second. The Korean strings now preserve
+  that layout with the identical shared sequence `내가 원하던 `. The builder
+  and `tests/test_opening_text_lists.py` reject changed lengths, overlap
+  geometry, or mismatched shared text.
+- An isolated current-source build produced checksum `99FD`. A completely cold
+  boot on virtual `DISPLAY=:104` used no input and naturally replayed both
+  records through the stock cutscene renderer. Accepted captures are
+  `captures/run/99fd_opening_villain_alhazard.png`,
+  `_power.png`, and `_world.png`.
+- `captures/run/99fd_opening_villain_title_return.png` proves the same run
+  reached the intact Korean title without a reset or freeze. Together with the
+  existing Scenario 27 ending run, all twelve opening/ending montage rows are
+  source-reviewed and live-verified.

@@ -73,12 +73,20 @@ class OpeningTextListTests(unittest.TestCase):
         for offset, expected in expected_words.items():
             self.assertEqual(builder.be16(data, offset), expected)
 
-    def test_reviewed_ending_montage_drops_invented_scenario_one_recap(self):
+    def test_reviewed_ending_montage_matches_japanese_source(self):
         texts = {
             offset: text
             for offset, (_, text) in builder.OPENING_TEXT_LIST_PATCHES.items()
         }
         self.assertNotIn("리아나가 위험해", "".join(texts.values()))
+        self.assertEqual(
+            texts[0xA6B20],
+            "후후후… 이것이 알하자드. 전설의 마검… 바로 내가 원하던 ",
+        )
+        self.assertEqual(
+            texts[0xA6B54],
+            "내가 원하던 무한한 힘… 검이여, 내게 힘을! 대륙과 세계를 지배할 힘을!!",
+        )
         self.assertEqual(
             texts[0xA6CEC],
             "리아나: 그 마음 덕분에 많은 동료를 얻었고... 폭주한 제국도 막을 수 있었어.",
@@ -90,7 +98,21 @@ class OpeningTextListTests(unittest.TestCase):
             self.assertTrue(texts[address].startswith(": "))
         self.assertEqual(
             builder.OPENING_TEXT_LIST_REVIEWED_ADDRESSES,
-            set(texts) - {0xA6B20, 0xA6B54},
+            set(texts),
+        )
+
+    def test_villain_records_preserve_the_source_overlap(self):
+        first_count, first = builder.OPENING_TEXT_LIST_PATCHES[0xA6B20]
+        second_count, second = builder.OPENING_TEXT_LIST_PATCHES[0xA6B54]
+        self.assertEqual(first_count, 0x21)
+        self.assertEqual(second_count, 0x2A)
+        self.assertEqual(len(first), first_count)
+        self.assertEqual(len(second), second_count)
+        self.assertEqual(first[-7:], "내가 원하던 ")
+        self.assertEqual(second[:7], "내가 원하던 ")
+        self.assertEqual(
+            builder.OPENING_TEXT_LIST_OVERLAPS,
+            {(0xA6B20, 0xA6B54): 7},
         )
 
 

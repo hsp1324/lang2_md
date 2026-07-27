@@ -2029,8 +2029,11 @@ DIRECT_FIXED_SCENARIO_HEADER_PATCHES = {
 
 OPENING_TEXT_LIST_PATCHES = OrderedDict(
     [
-        (0xA6B20, (0x21, "후후후…")),
-        (0xA6B54, (0x2A, "알하자드… 전설의마검… 바라던 무한한 힘…")),
+        (0xA6B20, (0x21, "후후후… 이것이 알하자드. 전설의 마검… 바로 내가 원하던 ")),
+        (
+            0xA6B54,
+            (0x2A, "내가 원하던 무한한 힘… 검이여, 내게 힘을! 대륙과 세계를 지배할 힘을!!"),
+        ),
         (0xA6BA8, (0x40, "리아나: 하늘이... 어두워져... 다 끝난 거야...")),
         (0xA6BEA, (0x40, ": 싸움에선 아무것도 생기지 않아. 남는 건 슬픔뿐...")),
         (
@@ -2065,6 +2068,12 @@ OPENING_TEXT_LIST_PATCHES = OrderedDict(
     ]
 )
 
+# These fixed-count records deliberately share seven source words.  The later
+# record is written last, so its prefix must exactly match the earlier suffix.
+OPENING_TEXT_LIST_OVERLAPS = {
+    (0xA6B20, 0xA6B54): 7,
+}
+
 # The ending/opening cutscene renderer passes a maximum glyph count, but most
 # source records stop earlier at FFFF.  The old patch padded all records to the
 # renderer count and erased those terminators, so one line consumed the start
@@ -2085,15 +2094,18 @@ OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES = {
     0xA6F02: 19,
 }
 
-# These ten ending-montage records were replayed from the Japanese ROM and
-# translated from that playback. The first two villain lines still need the
-# same source-review pass.
-OPENING_TEXT_LIST_REVIEWED_ADDRESSES = frozenset(
-    range(0xA6BA8, 0xA6F03)
-) & frozenset(OPENING_TEXT_LIST_PATCHES)
+# All twelve ending-montage records were translated from the Japanese source.
+OPENING_TEXT_LIST_REVIEWED_ADDRESSES = frozenset(OPENING_TEXT_LIST_PATCHES)
+
+# All twelve records have completed stock-renderer playback. The first two run
+# automatically during the cold-boot villain montage; the other ten run on the
+# stock Scenario 27 closing path.
+OPENING_TEXT_LIST_LIVE_VERIFIED_ADDRESSES = frozenset(
+    OPENING_TEXT_LIST_PATCHES
+)
 
 # Keep the established custom-glyph allocation stable while replacing the
-# source-unreviewed montage wording.  New-only characters are appended after
+# older montage wording. New-only characters are appended after
 # all existing consumers in main().
 RETIRED_OPENING_TEXT_GLYPH_COMPATIBILITY_TEXT = (
     "후후후…"
@@ -7428,6 +7440,16 @@ def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> 
         OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES
     ):
         raise ValueError("opening text source-layout table does not match patches")
+
+    for (earlier, later), overlap in OPENING_TEXT_LIST_OVERLAPS.items():
+        earlier_count, earlier_text = OPENING_TEXT_LIST_PATCHES[earlier]
+        later_count, later_text = OPENING_TEXT_LIST_PATCHES[later]
+        if later != earlier + (earlier_count - overlap) * 2:
+            raise ValueError("opening text overlap geometry changed")
+        if len(earlier_text) != earlier_count or len(later_text) != later_count:
+            raise ValueError("overlapping opening text must fill its renderer count")
+        if earlier_text[-overlap:] != later_text[:overlap]:
+            raise ValueError("overlapping opening text translations diverged")
 
     # Validate every source boundary before writing because several renderer
     # counts overlap the next record even though an earlier FFFF stops reading.

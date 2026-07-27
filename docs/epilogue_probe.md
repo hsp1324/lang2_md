@@ -394,6 +394,21 @@ concatenation probe. Representative status screens include
 (`보젤/다크마스터`), `650` (`레온/로얄가드`), `725`
 (`베른하르트/엠퍼러`), `800` (`리아나/클레릭`), and `825` (Elwin's
 conclusion). Credits remain interleaved with the original battle scenes, and
-frame `875` reaches `Fin` without a reset or freeze. The ten source-reviewed
-montage rows may therefore be `live_verified: true`; the two preceding,
-unreviewed villain records remain false.
+frame `875` reaches `Fin` without a reset or freeze.
+
+The two preceding cold-boot villain records were then reviewed directly
+against the Japanese ROM. `0x0A6B20` has a renderer count of 33 words and
+`0x0A6B54` has 42; their addresses overlap by seven words. The Korean records
+therefore deliberately end and begin with the identical seven-character
+sequence `내가 원하던 `. Unit tests and the builder reject a changed length,
+address geometry, or divergent overlap.
+
+An isolated build from the current source produced checksum `99FD`. A cold
+boot on `DISPLAY=:104` replayed both records through the stock renderer:
+`captures/run/99fd_opening_villain_alhazard.png` shows
+`후후후… 이것이 알하자드. 전설의 마검… 바로`, while
+`99fd_opening_villain_power.png` and `99fd_opening_villain_world.png`
+cover `내가 원하던 무한한 힘… 검이여, 내게 힘을! 대륙과 세계를 지배할
+힘을!!`. `99fd_opening_villain_title_return.png` reaches the intact Korean
+title afterward without a reset or freeze. All twelve source-reviewed montage
+rows are now `live_verified: true`.
