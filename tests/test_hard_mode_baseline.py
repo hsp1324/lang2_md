@@ -246,6 +246,9 @@ class HardModeBaselineTests(unittest.TestCase):
             {
                 "table": "0x05EDDC",
                 "record_size": 0x1C,
+                "base_at_offset": "0x0B",
+                "base_df_offset": "0x0C",
+                "movement_offset": "0x0D",
                 "soldier_at_correction_offset": "0x0F",
                 "soldier_df_correction_offset": "0x10",
                 "scope": "global_per_class",
@@ -267,6 +270,94 @@ class HardModeBaselineTests(unittest.TestCase):
                 "13 6A 00 0D 00 44 13 6A 00 0E 00 45 "
                 "13 6A 00 0F 00 46 13 6A 00 10 00 47"
             ),
+        )
+
+    def test_combat_class_catalog_covers_hire_enemy_and_summon_ranges(self):
+        rows = self.inventory["source_model"]["combat_class_catalog"]
+        self.assertEqual(
+            [row["class_id"] for row in rows],
+            [f"{class_id:02X}" for class_id in range(0x62, 0x95)],
+        )
+        groups = {}
+        for row in rows:
+            groups[row["group"]] = groups.get(row["group"], 0) + 1
+        self.assertEqual(
+            groups,
+            {
+                "ordinary_hireable": 16,
+                "scenario_enemy_variant_or_monster": 27,
+                "summon_class": 8,
+            },
+        )
+
+    def test_known_combat_class_stats_and_usage_are_source_locked(self):
+        rows = {
+            row["class_id"]: row
+            for row in self.inventory["source_model"]["combat_class_catalog"]
+        }
+        self.assertEqual(
+            (
+                rows["64"]["korean"],
+                rows["64"]["base_at"],
+                rows["64"]["base_df"],
+                rows["64"]["movement"],
+            ),
+            ("솔저", 20, 14, 5),
+        )
+        self.assertEqual(
+            (
+                rows["7B"]["korean"],
+                rows["7B"]["base_at"],
+                rows["7B"]["base_df"],
+                rows["7B"]["movement"],
+            ),
+            ("로얄호스", 34, 23, 13),
+        )
+        self.assertEqual(rows["72"]["first_enemy_scenario"], 1)
+        self.assertEqual(rows["72"]["enemy_side_04_slot_count"], 90)
+        self.assertEqual(rows["89"]["first_enemy_scenario"], 20)
+        self.assertEqual(rows["89"]["enemy_side_04_slot_count"], 52)
+
+    def test_summons_are_not_used_in_original_fixed_mercenary_slots(self):
+        summons = [
+            row
+            for row in self.inventory["source_model"]["combat_class_catalog"]
+            if row["group"] == "summon_class"
+        ]
+        self.assertEqual(
+            [(row["class_id"], row["korean"]) for row in summons],
+            [
+                ("8D", "엘리멘탈"),
+                ("8E", "프레이야"),
+                ("8F", "화이트드래곤"),
+                ("90", "발키리"),
+                ("91", "슬레이프니르"),
+                ("92", "펜릴"),
+                ("93", "요르문간드"),
+                ("94", "아니키"),
+            ],
+        )
+        self.assertTrue(
+            all(row["all_fixed_slot_count"] == 0 for row in summons)
+        )
+        self.assertTrue(
+            all(row["enemy_side_04_slot_count"] == 0 for row in summons)
+        )
+        self.assertEqual(
+            [
+                (row["class_id"], row["base_at"], row["base_df"])
+                for row in summons
+            ],
+            [
+                ("8D", 22, 20),
+                ("8E", 23, 25),
+                ("8F", 33, 22),
+                ("90", 29, 21),
+                ("91", 31, 18),
+                ("92", 31, 25),
+                ("93", 29, 28),
+                ("94", 35, 30),
+            ],
         )
 
     def test_known_scenario_one_stat_sources_are_not_conflated(self):

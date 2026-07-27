@@ -29,6 +29,9 @@ NORMAL_CHECKSUM = "99FD"
 NORMAL_SHA256 = "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
 CLASS_RECORD_TABLE = 0x05EDDC
 CLASS_RECORD_SIZE = 0x1C
+CLASS_BASE_AT_OFFSET = 0x0B
+CLASS_BASE_DF_OFFSET = 0x0C
+CLASS_MOVEMENT_OFFSET = 0x0D
 CLASS_SOLDIER_AT_CORRECTION_OFFSET = 0x0F
 CLASS_SOLDIER_DF_CORRECTION_OFFSET = 0x10
 FIXED_COMMANDER_AT_MODIFIER_OFFSET = 0x12
@@ -94,6 +97,64 @@ def class_corrections(source: bytes, class_id: int) -> tuple[int, int]:
         signed_byte(source[base + CLASS_SOLDIER_AT_CORRECTION_OFFSET]),
         signed_byte(source[base + CLASS_SOLDIER_DF_CORRECTION_OFFSET]),
     )
+
+
+def combat_class_group(class_id: int) -> str:
+    if 0x62 <= class_id <= 0x71:
+        return "ordinary_hireable"
+    if 0x72 <= class_id <= 0x8C:
+        return "scenario_enemy_variant_or_monster"
+    if 0x8D <= class_id <= 0x94:
+        return "summon_class"
+    raise ValueError(f"class 0x{class_id:02X} is not a combat-unit class")
+
+
+def combat_class_rows(
+    source: bytes,
+    classes: list[dict[str, object]],
+    scenarios: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    result = []
+    for class_id in range(0x62, 0x95):
+        base = CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
+        all_scenarios = []
+        enemy_scenarios = []
+        all_slot_count = 0
+        enemy_slot_count = 0
+        for scenario in scenarios:
+            scenario_all = 0
+            scenario_enemy = 0
+            for record in scenario["records"]:
+                occurrences = sum(
+                    mercenary is not None
+                    and mercenary["class_id"] == f"{class_id:02X}"
+                    for mercenary in record["mercenaries"]
+                )
+                scenario_all += occurrences
+                if record["side_id"] == "04":
+                    scenario_enemy += occurrences
+            if scenario_all:
+                all_scenarios.append(int(scenario["number"]))
+                all_slot_count += scenario_all
+            if scenario_enemy:
+                enemy_scenarios.append(int(scenario["number"]))
+                enemy_slot_count += scenario_enemy
+        result.append({
+            "class_id": f"{class_id:02X}",
+            "japanese": classes[class_id]["jp"],
+            "korean": classes[class_id]["ko"],
+            "group": combat_class_group(class_id),
+            "base_at": source[base + CLASS_BASE_AT_OFFSET],
+            "base_df": source[base + CLASS_BASE_DF_OFFSET],
+            "movement": source[base + CLASS_MOVEMENT_OFFSET],
+            "all_fixed_slot_count": all_slot_count,
+            "enemy_side_04_slot_count": enemy_slot_count,
+            "first_fixed_scenario": all_scenarios[0] if all_scenarios else None,
+            "first_enemy_scenario": (
+                enemy_scenarios[0] if enemy_scenarios else None
+            ),
+        })
+    return result
 
 
 def stat_summary(records: list[dict[str, object]], field: str) -> dict[str, object] | None:
@@ -274,7 +335,7 @@ def build_inventory(
         })
 
     return {
-        "schema_version": 4,
+        "schema_version": 5,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -344,6 +405,9 @@ def build_inventory(
             "class_record_model": {
                 "table": f"0x{CLASS_RECORD_TABLE:06X}",
                 "record_size": CLASS_RECORD_SIZE,
+                "base_at_offset": f"0x{CLASS_BASE_AT_OFFSET:02X}",
+                "base_df_offset": f"0x{CLASS_BASE_DF_OFFSET:02X}",
+                "movement_offset": f"0x{CLASS_MOVEMENT_OFFSET:02X}",
                 "soldier_at_correction_offset": (
                     f"0x{CLASS_SOLDIER_AT_CORRECTION_OFFSET:02X}"
                 ),
@@ -352,6 +416,11 @@ def build_inventory(
                 ),
                 "scope": "global_per_class",
             },
+            "combat_class_catalog": combat_class_rows(
+                source,
+                classes,
+                scenarios,
+            ),
             "reinforcement_model": {
                 "hidden_fixed_records_included": True,
                 "total_hidden_fixed_records": hidden_fixed_records,
@@ -567,6 +636,8 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "- 병사 상태창의 `A+/D+`는 고정 배치 레코드가 아니라 28바이트",
         "  클래스 레코드 `0x05EDDC + class_id * 0x1C`의",
         "  `+0x0F/+0x10`에서 온다.",
+        "- 같은 클래스 레코드의 `+0x0B/+0x0C`는 병사의 기본 AT/DF,",
+        "  `+0x0D`는 MV다. 아래 병종 비교는 이 원판 값을 사용한다.",
         "- 클래스 레코드는 아군·적군·NPC가 공유할 수 있다. 따라서 이 두",
         "  바이트를 전역으로 올리면 같은 클래스를 쓰는 일반판 아군까지",
         "  강해질 수 있으므로 하드 모드 구현에는 사용하지 않는다.",
@@ -620,13 +691,39 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "",
         "## 원판 용병 슬롯 사용량",
         "",
-        "| 클래스 ID | 일본어 | 한국어 | 사용 칸 |",
-        "|:---:|:---|:---|---:|",
+        "| ID | 일본어 | 한국어 | 기본 AT/DF | MV | 첫 적군 장 | 적군 칸 | 전체 칸 |",
+        "|:---:|:---|:---|:---:|---:|:---:|---:|---:|",
     ])
-    for row in inventory["source_model"]["mercenary_distribution"]:
+    combat_classes = {
+        row["class_id"]: row
+        for row in inventory["source_model"]["combat_class_catalog"]
+    }
+    for usage in inventory["source_model"]["mercenary_distribution"]:
+        row = combat_classes[usage["class_id"]]
         lines.append(
-            f"| `{row['class_id']}` | {row['japanese']} | "
-            f"{row['korean']} | {row['slot_count']} |"
+            f"| `{row['class_id']}` | {row['japanese']} | {row['korean']} | "
+            f"{row['base_at']}/{row['base_df']} | {row['movement']} | "
+            f"{row['first_enemy_scenario'] or '-'} | "
+            f"{row['enemy_side_04_slot_count']} | {row['all_fixed_slot_count']} |"
+        )
+    lines.extend([
+        "",
+        "## 소환물 원판 수치",
+        "",
+        "소환물 클래스 `8D..94`는 원판의 고정 배치 용병 6칸에서는 사용되지",
+        "않는다. 하드 모드에 넣으면 단순 수치 상승뿐 아니라 이동·마법·상성도",
+        "달라지므로 별도 투입 시점과 비율 승인이 필요하다.",
+        "",
+        "| ID | 한국어 | 기본 AT/DF | MV | 원판 적군 용병 칸 |",
+        "|:---:|:---|:---:|---:|---:|",
+    ])
+    for row in inventory["source_model"]["combat_class_catalog"]:
+        if row["group"] != "summon_class":
+            continue
+        lines.append(
+            f"| `{row['class_id']}` | {row['korean']} | "
+            f"{row['base_at']}/{row['base_df']} | {row['movement']} | "
+            f"{row['enemy_side_04_slot_count']} |"
         )
     lines.extend([
         "",
