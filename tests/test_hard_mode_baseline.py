@@ -43,12 +43,12 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertFalse(gate["rom_values_may_be_applied"])
         self.assertEqual(len(gate["required_decisions"]), 5)
 
-    def test_discussion_choices_remain_unselected(self):
+    def test_standard_hard_is_the_only_recorded_user_selection(self):
         discussion = self.inventory["balance_discussion"]
         self.assertEqual(
             discussion["user_selections"],
             {
-                "difficulty_target": None,
+                "difficulty_target": "standard_hard",
                 "scenario_band_policy": None,
                 "enemy_commander_and_soldier_formula": None,
                 "stronger_mercenary_policy": None,

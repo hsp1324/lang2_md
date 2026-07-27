@@ -997,7 +997,7 @@ def build_inventory(
         },
         "balance_discussion": {
             "user_selections": {
-                "difficulty_target": None,
+                "difficulty_target": "standard_hard",
                 "scenario_band_policy": None,
                 "enemy_commander_and_soldier_formula": None,
                 "stronger_mercenary_policy": None,
@@ -1398,6 +1398,10 @@ def render_markdown(inventory: dict[str, object]) -> str:
 
     lines.extend([
         "",
+        "**사용자 확정:** `숙련자용 표준 하드` (`standard_hard`). "
+        "비기·노가다 없이 기본적인 클래스·장비·상성 운용으로 완주하되, "
+        "주요 전투는 1~3회 재도전을 허용한다.",
+        "",
         "## 협의용 시나리오 구간 후보",
         "",
         "> 아래 구간은 비교를 위한 후보이며 아직 승인되지 않았다. 수치는",
@@ -1425,9 +1429,9 @@ def render_markdown(inventory: dict[str, object]) -> str:
         )
     lines.extend([
         "",
-        "각 구간의 승인 상태와 모든 사용자 선택은 현재 비어 있다. 목표",
-        "난이도와 아래 협의 초안을 사용자가 명시적으로 승인하기 전에는",
-        "어떤 값도 ROM에 적용하지 않는다.",
+        "목표 난이도만 확정됐으며 각 구간의 수치·용병·소환물·예외 승인",
+        "상태는 아직 비어 있다. 아래 협의 초안의 나머지 네 항목을 사용자가",
+        "명시적으로 승인하기 전에는 어떤 값도 ROM에 적용하지 않는다.",
         "",
         "## 권장 협의 초안: 숙련자용 점증 하드",
         "",

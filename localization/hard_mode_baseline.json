@@ -15,7 +15,7 @@
   },
   "balance_discussion": {
     "user_selections": {
-      "difficulty_target": null,
+      "difficulty_target": "standard_hard",
       "scenario_band_policy": null,
       "enemy_commander_and_soldier_formula": null,
       "stronger_mercenary_policy": null,
