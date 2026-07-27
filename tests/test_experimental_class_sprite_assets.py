@@ -494,7 +494,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         ).convert("RGBA")
         self.assertEqual(actual.tobytes(), expected.tobytes())
 
-    def test_aaron_mage_uses_deeper_blue_palette(self):
+    def test_aaron_mage_uses_bishop_sky_blue_palette(self):
         class_id = 0x13
         row = self.ai_manifest["commanders"]["8"]["classes"][
             str(class_id)
@@ -539,6 +539,14 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 ROOT
                 / "docs/assets/ai-class-source/archive/"
                 "aaron-magic-before-deeper-blue-v1/08-13-v49.png"
+            ).is_file()
+        )
+        self.assertIn((109, 219, 255, 255), equipment_colors)
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "aaron-before-sky-blue-v1/08-13-v50.png"
             ).is_file()
         )
 
@@ -592,12 +600,39 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 "aaron-magic-before-deeper-blue-v1/08-14-v49.png"
             ).is_file()
         )
+        self.assertIn((109, 219, 255, 255), equipment_colors)
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "aaron-before-sky-blue-v1/08-14-v50.png"
+            ).is_file()
+        )
         expected = Image.open(
             ROOT
             / "docs/assets/ai-class-source/latest/"
             "shared-archmage-lester-v1/logical16/08-14.png"
         ).convert("RGBA")
         self.assertEqual(image.tobytes(), expected.tobytes())
+
+    def test_aaron_high_lord_uses_knight_shield_blue(self):
+        image = Image.open(
+            AI_ASSET_DIR / "8/0B.png"
+        ).convert("RGBA")
+        shield_colors = {
+            image.getpixel((x, y))
+            for y in range(8, 14)
+            for x in range(0, 4)
+        }
+        self.assertIn((73, 109, 255, 255), shield_colors)
+        self.assertIn((109, 219, 255, 255), shield_colors)
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "aaron-before-sky-blue-v1/08-0B-v50.png"
+            ).is_file()
+        )
 
     def test_aaron_swordmaster_uses_latest_saved_face_mask(self):
         mask_document = json.loads(
@@ -1072,7 +1107,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
     def test_elwin_and_logical16_commanders_change_only_upper_classes(self):
         self.assertEqual(
             self.ai_manifest["asset_version"],
-            "aaron-deeper-blue-magic-v50",
+            "aaron-sky-blue-classes-v51",
         )
         source_paths = self.ai_manifest["ai_source_images"]
         self.assertEqual(len(source_paths), 99)

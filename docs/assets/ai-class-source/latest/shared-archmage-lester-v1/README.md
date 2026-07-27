@@ -4,11 +4,12 @@
 16×16을 장비·실루엣 기준으로 사용한다. 아크메이지가 있는 상위 중복
 클래스 8명은 같은 옷·망토·지팡이 좌표를 공유하고, 각 캐릭터의 현재
 보이는 얼굴·머리 픽셀과 원본 클래스 팔레트를 적용한다. 얼굴 마스크의
-투명 좌표는 장비를 지우지 않는다. 아론 아크메이지는 밝은 백색만으로
-복장 형태가 흐려지지 않도록 짙은 왕청색·중청색·하늘색 명암을 사용한다.
-이전 밝은 은백색 결과와 첫 청색 결과는 각각
+투명 좌표는 장비를 지우지 않는다. 아론 아크메이지는 비숍과 같은 밝은
+하늘색·중간 파랑·청회색 명암으로 복장 형태를 선명하게 유지한다.
+이전 밝은 은백색 결과, 첫 청색 결과, 짙은 청색 결과는 각각
 `archive/aaron-archmage-before-blue-v1/`,
-`archive/aaron-magic-before-deeper-blue-v1/`에 보존한다.
+`archive/aaron-magic-before-deeper-blue-v1/`,
+`archive/aaron-before-sky-blue-v1/`에 보존한다.
 
 - 원본 기준: `master/lester-14-user-edited.png`
 - 실제 입력: `logical16/`

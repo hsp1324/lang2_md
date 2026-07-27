@@ -84,12 +84,14 @@ COLOR_SCHEMES = {
         MASTER_GOLD_LIGHT: (219, 219, 255, 255),
     },
     8: {
-        MASTER_BLUE: (0, 0, 146, 255),
-        MASTER_GOLD: (73, 146, 255, 255),
-        MASTER_CRIMSON: (36, 73, 219, 255),
-        MASTER_DARK_RED: (0, 0, 73, 255),
+        # Bishop-like sky blues keep the robe readable while making Aaron's
+        # two magic classes feel like one branch.
+        MASTER_BLUE: (73, 109, 255, 255),
+        MASTER_GOLD: (109, 219, 255, 255),
+        MASTER_CRIMSON: (73, 146, 255, 255),
+        MASTER_DARK_RED: (73, 73, 109, 255),
         MASTER_BRONZE: (73, 109, 255, 255),
-        MASTER_GOLD_LIGHT: (146, 182, 255, 255),
+        MASTER_GOLD_LIGHT: (182, 219, 255, 255),
     },
     9: {},
     10: {

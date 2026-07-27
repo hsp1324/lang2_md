@@ -137,6 +137,15 @@ def role_mapping(
         return {}
     scheme = COMMANDER_SCHEMES[commander_id]
     if class_id == 0x0B:
+        if commander_id == 8:
+            # Reuse Aaron Knight's blue shield ramp only on High Lord.
+            # Swordmaster keeps the user's existing silver palette.
+            scheme = {
+                **scheme,
+                "dark": (73, 109, 255, 255),
+                "main": (109, 219, 255, 255),
+                "light": (109, 219, 255, 255),
+            }
         return {
             (73, 73, 109, 255): scheme["dark"],
             (73, 109, 255, 255): scheme["main"],

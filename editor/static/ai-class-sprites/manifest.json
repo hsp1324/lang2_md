@@ -1,5 +1,5 @@
 {
-  "asset_version": "aaron-deeper-blue-magic-v50",
+  "asset_version": "aaron-sky-blue-classes-v51",
   "generated_from": "roms/original/Langrisser II (Japan).md",
   "ai_source_sheets": [
     "docs/assets/ai-class-source/logical16-v3/liana/liana-logical16-sheet-ai.png",
@@ -49942,19 +49942,19 @@
           "ai_source_kind": "헤인 사용자 편집 하이로드 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-high-lord-hein-v1/logical16/08-0B.png",
           "source_palette": [
-            "#929292",
             "#924924",
             "#ffffff",
             "#dbb66d",
-            "#49496d",
+            "#6ddbff",
+            "#929292",
             "#ffb600"
           ],
           "pixel_palette": [
-            "#929292",
             "#924924",
             "#ffffff",
             "#dbb66d",
-            "#49496d",
+            "#6ddbff",
+            "#929292",
             "#ffb600"
           ],
           "face_source_sprite_id": 85,
@@ -50666,8 +50666,8 @@
             12,
             11
           ],
-          "changed_pixel_count": 130,
-          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 130픽셀",
+          "changed_pixel_count": 134,
+          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 134픽셀",
           "file": "8/0B.png"
         },
         "12": {
@@ -51497,19 +51497,19 @@
           "ai_source_position": "latest/shared-hein-classes-v1/logical16/08-13.png",
           "source_palette": [
             "#924924",
-            "#2449db",
+            "#49496d",
+            "#496dff",
             "#929292",
             "#dbb66d",
-            "#4992ff",
-            "#00006d"
+            "#6ddbff"
           ],
           "pixel_palette": [
             "#924924",
-            "#2449db",
+            "#49496d",
+            "#496dff",
             "#929292",
             "#dbb66d",
-            "#4992ff",
-            "#00006d"
+            "#6ddbff"
           ],
           "face_source_sprite_id": 86,
           "face_pixel_count": 0,
@@ -52164,18 +52164,18 @@
           "ai_source_kind": "레스터 사용자 편집 아크메이지 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-archmage-lester-v1/logical16/08-14.png",
           "source_palette": [
-            "#000092",
-            "#4992ff",
+            "#496dff",
+            "#49496d",
             "#929292",
-            "#2449db",
+            "#6ddbff",
             "#dbb66d",
             "#ffffff"
           ],
           "pixel_palette": [
-            "#000092",
-            "#4992ff",
+            "#496dff",
+            "#49496d",
             "#929292",
-            "#2449db",
+            "#6ddbff",
             "#dbb66d",
             "#ffffff"
           ],
@@ -52822,8 +52822,8 @@
             12,
             10
           ],
-          "changed_pixel_count": 124,
-          "feature": "레스터 사용자 편집 아크메이지의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 124픽셀",
+          "changed_pixel_count": 125,
+          "feature": "레스터 사용자 편집 아크메이지의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 125픽셀",
           "file": "8/14.png"
         },
         "22": {
