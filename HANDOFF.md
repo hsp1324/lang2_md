@@ -11310,3 +11310,21 @@ contains 57 safe syllables as documented below and in
   pass 24/24 against these invariants. Generation used the isolated current-
   source checksum `99FD` ROM; the shared ignored production ROM was not
   overwritten while the separate design session was active.
+
+### Inline UI Evidence Reconciliation (2026-07-27)
+
+- The conservative inline-byte inventory had two stale metadata claims after
+  the runtime work was already accepted. The fixed `버릴 아이템` path still
+  said live verification was pending, and the hidden sound-test JSON still
+  reported zero localized rows with every row marked non-live.
+- `tools/jp_inline_byte_string_inventory.py` now links the discard prompt to
+  `captures/run/94db_discard_reused_state.png`. It also pairs all 77 original
+  sound IDs with the 77 production labels in `SOUND_TEST_LABELS`; all 39 rows
+  containing half-width Japanese are counted as localized, while intentionally
+  retained compact English stays explicit.
+- The sound-test table points to the existing F91E traversal proof covering
+  Japanese-bearing rows, row 76, wrap to row 0, and clean exit. New assertions
+  reject a target-count mismatch, missing evidence files, a non-live row, or a
+  regression back to an empty target list.
+- Regeneration keeps 646 conservative inline candidates and zero unclassified.
+  The corrected inline/UI/discard/sound-test set passes 30/30 focused tests.

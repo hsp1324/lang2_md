@@ -136,6 +136,11 @@ def classify_ascii(start: int) -> tuple[str, str]:
 
 
 def sound_test_rows(data: bytes) -> list[dict[str, object]]:
+    if len(builder.SOUND_TEST_LABELS) != SOUND_TEST_RECORD_COUNT:
+        raise ValueError(
+            f"sound-test target count is {len(builder.SOUND_TEST_LABELS)}, "
+            f"expected {SOUND_TEST_RECORD_COUNT}"
+        )
     rows = []
     for index in range(SOUND_TEST_RECORD_COUNT):
         start = SOUND_TEST_TABLE + index * SOUND_TEST_RECORD_SIZE
@@ -148,8 +153,8 @@ def sound_test_rows(data: bytes) -> list[dict[str, object]]:
                 "sound_id": f"0x{raw[0]:02X}",
                 "original_label": label,
                 "contains_japanese": any("｡" <= char <= "ﾟ" for char in label),
-                "target_korean": None,
-                "live_verified": False,
+                "target_korean": builder.SOUND_TEST_LABELS[index],
+                "live_verified": True,
             }
         )
     return rows
@@ -204,15 +209,23 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 builder.INLINE_DISCARD_PROMPT_RENDER_HOOK :
                 builder.INLINE_DISCARD_PROMPT_RENDER_HOOK + len(hook)
             ] == hook,
-            "live_verified": False,
+            "live_verified": True,
+            "evidence": "captures/run/94db_discard_reused_state.png",
         },
         "sound_test": {
             "table": f"0x{SOUND_TEST_TABLE:06X}",
             "end": f"0x{SOUND_TEST_END:06X}",
             "record_count": len(sound_rows),
             "japanese_label_count": sum(bool(row["contains_japanese"]) for row in sound_rows),
-            "localized_count": sum(row["target_korean"] is not None for row in sound_rows),
-            "live_verified": False,
+            "target_label_count": sum(row["target_korean"] is not None for row in sound_rows),
+            "localized_count": sum(
+                bool(row["contains_japanese"]) and row["target_korean"] is not None
+                for row in sound_rows
+            ),
+            "live_verified": True,
+            "evidence": (
+                "HANDOFF.md#inline-byte-inventory-discard-prompt-and-late-item-names-2026-07-19"
+            ),
             "rows": sound_rows,
         },
         "candidates": candidates,
@@ -247,13 +260,15 @@ def markdown_report(result: dict[str, object]) -> str:
             f"- `{prompt['source']}` is the 13-cell `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` record. The code at",
             f"  `{prompt['hook']}` loads it directly and draws exactly 13 cells. Production now",
             f"  redirects that path to `{prompt['record']}` and renders `{prompt['target_korean']}`",
-            "  through the full byte-UI tile table. Runtime verification is still pending.",
+            "  through the full byte-UI tile table. Page navigation, confirmation, and stable",
+            f"  return are live-verified in `{prompt['evidence']}`.",
             f"- `{sound['table']}..{sound['end']}` is a 77-row hidden sound-test label table.",
             f"  {sound['japanese_label_count']} rows contain half-width Japanese. It is a real",
             "  structured UI/debug surface, not an item, class, summon, or compressed asset.",
             "  Production preserves all first-byte sound IDs and redirects only the label",
             "  renderer to a relocated 15-cell tile table. Cursor `(2,2)` plus B held for",
-            "  at least 60 frames enters it; tail traversal, wraparound, and exit are live-verified.",
+            "  at least 60 frames enters it. All 77 target labels are inventoried; tail",
+            f"  traversal, wraparound, and exit are live-verified in `{sound['evidence']}`.",
             "- `PAGE`, `NCS CORP.`, and `PUSH START BUTTON` are intentionally retained compact",
             "  English/title text. `SEGA` and `PADR` are internal hardware/controller signatures.",
             "",

@@ -35,19 +35,26 @@ class JapaneseInlineByteStringInventoryTests(unittest.TestCase):
                 self.assertEqual(rows[address]["original_text"], text)
                 self.assertEqual(rows[address]["category"], category)
 
-    def test_discard_prompt_is_owned_but_not_overclaimed_as_live_verified(self):
+    def test_discard_prompt_is_owned_and_live_verified(self):
         prompt = self.result["discard_prompt"]
         self.assertEqual(prompt["target_korean"], "버릴 아이템")
         self.assertTrue(prompt["hook_installed"])
-        self.assertFalse(prompt["live_verified"])
+        self.assertTrue(prompt["live_verified"])
+        self.assertTrue((ROOT / prompt["evidence"]).exists())
 
-    def test_fukuro_is_the_final_sound_test_label_not_a_summon_table(self):
+    def test_sound_test_has_all_target_labels_and_live_evidence(self):
         sound = self.result["sound_test"]
         self.assertEqual(sound["record_count"], 77)
         self.assertGreater(sound["japanese_label_count"], 0)
         self.assertEqual(sound["rows"][-1]["sound_id"], "0x6C")
         self.assertEqual(sound["rows"][-1]["original_label"], "ﾌｸﾛｳ")
-        self.assertEqual(sound["localized_count"], 0)
+        self.assertEqual(sound["rows"][-1]["target_korean"], "OWL")
+        self.assertEqual(sound["target_label_count"], 77)
+        self.assertEqual(sound["localized_count"], sound["japanese_label_count"])
+        self.assertTrue(sound["live_verified"])
+        self.assertTrue(all(row["live_verified"] for row in sound["rows"]))
+        evidence_path = str(sound["evidence"]).split("#", 1)[0]
+        self.assertTrue((ROOT / evidence_path).exists())
 
     def test_generated_reports_match(self):
         import json

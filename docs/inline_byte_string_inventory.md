@@ -34,13 +34,15 @@ This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF
 - `0x01807E` is the 13-cell `ｽﾃﾙ ｱｲﾃﾑ ｾﾝﾀｸ` record. The code at
   `0x01804C` loads it directly and draws exactly 13 cells. Production now
   redirects that path to `0x2B8400` and renders `버릴 아이템`
-  through the full byte-UI tile table. Runtime verification is still pending.
+  through the full byte-UI tile table. Page navigation, confirmation, and stable
+  return are live-verified in `captures/run/94db_discard_reused_state.png`.
 - `0x05E040..0x05E510` is a 77-row hidden sound-test label table.
   39 rows contain half-width Japanese. It is a real
   structured UI/debug surface, not an item, class, summon, or compressed asset.
   Production preserves all first-byte sound IDs and redirects only the label
   renderer to a relocated 15-cell tile table. Cursor `(2,2)` plus B held for
-  at least 60 frames enters it; tail traversal, wraparound, and exit are live-verified.
+  at least 60 frames enters it. All 77 target labels are inventoried; tail
+  traversal, wraparound, and exit are live-verified in `HANDOFF.md#inline-byte-inventory-discard-prompt-and-late-item-names-2026-07-19`.
 - `PAGE`, `NCS CORP.`, and `PUSH START BUTTON` are intentionally retained compact
   English/title text. `SEGA` and `PADR` are internal hardware/controller signatures.
 
