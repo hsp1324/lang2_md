@@ -70,6 +70,7 @@ SCENARIO18_RELOCATED_DIALOGUE = 0x3FEE00
 # high ID can point at an aligned expansion slot without moving either stock
 # bank or the tables that follow it.
 GENERIC_CLASS_SPRITE_TABLE = 0x05DDE6
+COMMANDER_SPRITE_POINTER_TABLE = 0x05DB80
 MAP_SPRITE_FRAME_BASES = (0x052980, 0x058280)
 MAP_SPRITE_BYTES = 0x80
 BALD_CLASS_ID = 0x2E
@@ -90,6 +91,58 @@ BALD_SPRITE_COLOR_INDEX_REMAP = {
     0xF: 0xD,  # cyan armor highlight -> bright violet
 }
 
+SHAMAN_CLASS_ID = 0x0A
+SHAMAN_SOURCE_SPRITE_ID = 0x001D
+SHAMAN_CUSTOM_SPRITE_ID = 0x53AF
+SHAMAN_CUSTOM_FRAME_OFFSETS = tuple(
+    base + SHAMAN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
+    for base in MAP_SPRITE_FRAME_BASES
+)
+SHAMAN_COMMANDER_SOURCE_SPRITE_IDS = {
+    1: 0x001F,
+    2: 0x0026,
+    3: 0x002C,
+    4: 0x005D,
+    5: 0x0037,
+    8: 0x0056,
+    9: 0x0047,
+}
+SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS = {
+    commander_id: 0x53B0 + index
+    for index, commander_id in enumerate(
+        SHAMAN_COMMANDER_SOURCE_SPRITE_IDS
+    )
+}
+SHAMAN_COMMANDER_CUSTOM_FRAME_OFFSETS = {
+    commander_id: tuple(
+        base + custom_sprite_id * MAP_SPRITE_BYTES
+        for base in MAP_SPRITE_FRAME_BASES
+    )
+    for commander_id, custom_sprite_id in (
+        SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS.items()
+    )
+}
+SHAMAN_ROBE_MIN_Y = 9
+SHAMAN_ROBE_MIN_X = 1
+SHAMAN_ROBE_MAX_X = 10
+# Shaman 0x0A and NPC Priest 0x9C share stock sprite 0x1D. Recolor only the
+# Shaman robe's blue ramp to silver-gray, muted violet, and white. The Priest
+# table entry remains on the untouched stock sprite.
+SHAMAN_SPRITE_COLOR_INDEX_REMAP = {
+    0x4: 0xE,  # blue robe face -> muted violet
+    0x5: 0x2,  # navy robe shadow -> charcoal violet
+    0xF: 0x3,  # cyan robe highlight -> white
+}
+SHAMAN_COMMANDER_COLOR_INDEX_REMAPS = {
+    1: {0x4: 0xE, 0x5: 0x2, 0xF: 0x3},
+    2: {0x6: 0xE, 0x7: 0x2},
+    3: {0x4: 0xE, 0x6: 0xE, 0x7: 0x2},
+    4: {0x6: 0xE, 0x7: 0x2, 0xB: 0xE, 0xC: 0x2},
+    5: {0x1: 0xE, 0xE: 0x2},
+    8: {0x6: 0xE, 0x7: 0x2},
+    9: {0x6: 0xE, 0x7: 0x2},
+}
+
 LOREN_CLASS_ID = 0x9B
 LOREN_SOURCE_SPRITE_ID = 0x001C
 LOREN_CUSTOM_SPRITE_ID = 0x53AE
@@ -97,13 +150,43 @@ LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     base + LOREN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
 )
-# Loren's NPC-only High Lord keeps every source pixel and uses only colors
-# already present in the live map CRAM row: green armor with a gold highlight.
+# Recolor only the stock High Lord's gray armor faces: keep white index 3 as
+# the highlight, turn gray index 1 pale gold, and turn the deepest gray index E
+# warm brown. Indexes 4/F remain the original blue/cyan shield, while the blade
+# coordinates below retain all of their original white-gray 1/3/E values.
 LOREN_SPRITE_COLOR_INDEX_REMAP = {
-    0x4: 0x8,  # blue armor -> bright green
-    0xE: 0x9,  # dark blue armor -> dark green
-    0xF: 0xA,  # cyan highlight -> gold
+    0x1: 0x6,  # gray armor shade -> pale gold
+    0xE: 0x7,  # deepest armor shade -> warm brown
 }
+LOREN_BLADE_COORDS_BY_FRAME = (
+    frozenset(
+        {
+            (14, 3),
+            (14, 4),
+            (14, 5),
+            (14, 6),
+            (13, 7),
+            (14, 7),
+            (13, 8),
+            (14, 8),
+            (13, 9),
+        }
+    ),
+    frozenset(
+        {
+            (15, 2),
+            (15, 3),
+            (15, 4),
+            (15, 5),
+            (14, 6),
+            (15, 6),
+            (14, 7),
+            (15, 7),
+            (14, 8),
+            (15, 8),
+        }
+    ),
+)
 
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
@@ -2419,6 +2502,111 @@ def patch_bald_map_sprite(data: bytearray) -> None:
     put16(data, table_offset, BALD_CUSTOM_SPRITE_ID)
 
 
+def commander_sprite_record_offset(
+    data: bytes | bytearray,
+    commander_id: int,
+    class_id: int,
+) -> int:
+    if not 1 <= commander_id <= 10:
+        raise ValueError(f"commander ID must be 1..10: {commander_id}")
+    pointer = be32(
+        data,
+        COMMANDER_SPRITE_POINTER_TABLE + (commander_id - 1) * 4,
+    )
+    while pointer < len(data) and data[pointer] != 0xFF:
+        if data[pointer] == class_id:
+            return pointer
+        pointer += 3
+    raise ValueError(
+        f"commander {commander_id} has no class sprite 0x{class_id:02X}"
+    )
+
+
+def write_shaman_custom_sprite(
+    data: bytearray,
+    source_sprite_id: int,
+    custom_sprite_id: int,
+    color_index_remap: dict[int, int],
+    label: str,
+) -> None:
+    for frame_base in MAP_SPRITE_FRAME_BASES:
+        source = frame_base + source_sprite_id * MAP_SPRITE_BYTES
+        target = frame_base + custom_sprite_id * MAP_SPRITE_BYTES
+        source_payload = bytes(data[source : source + MAP_SPRITE_BYTES])
+        if len(source_payload) != MAP_SPRITE_BYTES:
+            raise ValueError(f"{label} source map sprite is truncated")
+        if target + MAP_SPRITE_BYTES > EXPANDED_ROM_SIZE:
+            raise ValueError(f"{label} custom map sprite exceeds expanded ROM")
+        if any(value != 0xFF for value in data[target : target + MAP_SPRITE_BYTES]):
+            raise ValueError(
+                f"{label} custom map-sprite area at 0x{target:06X} is not blank"
+            )
+
+        remapped = bytearray(source_payload)
+        for tile_index in range(4):
+            tile_x = (tile_index // 2) * 8
+            tile_y = (tile_index % 2) * 8
+            tile_offset = tile_index * 32
+            for y in range(8):
+                for pair_x in range(4):
+                    offset = tile_offset + y * 4 + pair_x
+                    packed = source_payload[offset]
+                    indexes = [packed >> 4, packed & 0x0F]
+                    for nibble, index in enumerate(indexes):
+                        x = tile_x + pair_x * 2 + nibble
+                        if (
+                            tile_y + y >= SHAMAN_ROBE_MIN_Y
+                            and SHAMAN_ROBE_MIN_X
+                            <= x
+                            <= SHAMAN_ROBE_MAX_X
+                        ):
+                            indexes[nibble] = color_index_remap.get(
+                                index, index
+                            )
+                    remapped[offset] = (indexes[0] << 4) | indexes[1]
+        data[target : target + MAP_SPRITE_BYTES] = remapped
+
+
+def patch_shaman_map_sprite(data: bytearray) -> None:
+    table_offset = GENERIC_CLASS_SPRITE_TABLE + SHAMAN_CLASS_ID * 2
+    actual_sprite_id = be16(data, table_offset)
+    if actual_sprite_id != SHAMAN_SOURCE_SPRITE_ID:
+        raise ValueError(
+            f"unexpected Shaman class sprite: 0x{actual_sprite_id:04X} "
+            f"!= 0x{SHAMAN_SOURCE_SPRITE_ID:04X}"
+        )
+    write_shaman_custom_sprite(
+        data,
+        SHAMAN_SOURCE_SPRITE_ID,
+        SHAMAN_CUSTOM_SPRITE_ID,
+        SHAMAN_SPRITE_COLOR_INDEX_REMAP,
+        "Shaman",
+    )
+    put16(data, table_offset, SHAMAN_CUSTOM_SPRITE_ID)
+
+    for commander_id, source_sprite_id in (
+        SHAMAN_COMMANDER_SOURCE_SPRITE_IDS.items()
+    ):
+        record_offset = commander_sprite_record_offset(
+            data, commander_id, SHAMAN_CLASS_ID
+        )
+        actual_sprite_id = be16(data, record_offset + 1)
+        if actual_sprite_id != source_sprite_id:
+            raise ValueError(
+                f"unexpected commander {commander_id} Shaman sprite: "
+                f"0x{actual_sprite_id:04X} != 0x{source_sprite_id:04X}"
+            )
+        custom_sprite_id = SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS[commander_id]
+        write_shaman_custom_sprite(
+            data,
+            source_sprite_id,
+            custom_sprite_id,
+            SHAMAN_COMMANDER_COLOR_INDEX_REMAPS[commander_id],
+            f"commander {commander_id} Shaman",
+        )
+        put16(data, record_offset + 1, custom_sprite_id)
+
+
 def patch_loren_map_sprite(data: bytearray) -> None:
     table_offset = GENERIC_CLASS_SPRITE_TABLE + LOREN_CLASS_ID * 2
     actual_sprite_id = be16(data, table_offset)
@@ -2428,8 +2616,10 @@ def patch_loren_map_sprite(data: bytearray) -> None:
             f"!= 0x{LOREN_SOURCE_SPRITE_ID:04X}"
         )
 
-    for frame_base, target in zip(
-        MAP_SPRITE_FRAME_BASES, LOREN_CUSTOM_FRAME_OFFSETS
+    for frame_base, target, blade_coords in zip(
+        MAP_SPRITE_FRAME_BASES,
+        LOREN_CUSTOM_FRAME_OFFSETS,
+        LOREN_BLADE_COORDS_BY_FRAME,
     ):
         source = frame_base + LOREN_SOURCE_SPRITE_ID * MAP_SPRITE_BYTES
         source_payload = bytes(data[source : source + MAP_SPRITE_BYTES])
@@ -2446,15 +2636,30 @@ def patch_loren_map_sprite(data: bytearray) -> None:
                 "is not blank"
             )
 
-        remapped = bytearray()
-        for packed in source_payload:
-            high = LOREN_SPRITE_COLOR_INDEX_REMAP.get(
-                packed >> 4, packed >> 4
-            )
-            low = LOREN_SPRITE_COLOR_INDEX_REMAP.get(
-                packed & 0x0F, packed & 0x0F
-            )
-            remapped.append((high << 4) | low)
+        remapped = bytearray(source_payload)
+        for tile_index in range(4):
+            tile_x = (tile_index // 2) * 8
+            tile_y = (tile_index % 2) * 8
+            tile_offset = tile_index * 32
+            for y in range(8):
+                for pair_x in range(4):
+                    offset = tile_offset + y * 4 + pair_x
+                    packed = source_payload[offset]
+                    indexes = (packed >> 4, packed & 0x0F)
+                    mapped = []
+                    for nibble, index in enumerate(indexes):
+                        coords = (
+                            tile_x + pair_x * 2 + nibble,
+                            tile_y + y,
+                        )
+                        mapped.append(
+                            index
+                            if coords in blade_coords
+                            else LOREN_SPRITE_COLOR_INDEX_REMAP.get(
+                                index, index
+                            )
+                        )
+                    remapped[offset] = (mapped[0] << 4) | mapped[1]
         data[target : target + MAP_SPRITE_BYTES] = remapped
 
     put16(data, table_offset, LOREN_CUSTOM_SPRITE_ID)
@@ -7353,6 +7558,7 @@ def main() -> None:
     data = bytearray(IN_ROM.read_bytes())
     expand_rom(data)
     patch_bald_map_sprite(data)
+    patch_shaman_map_sprite(data)
     patch_loren_map_sprite(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()

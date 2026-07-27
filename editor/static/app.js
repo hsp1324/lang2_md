@@ -42,6 +42,7 @@ let aiMaskEditorState = null;
 let aiMountMaskEditorState = null;
 let aiDesignEditorState = null;
 let aiSpriteReloadToken = Date.now();
+const classSpriteAssetVersion = "distinct-09-0a-9c-v3";
 
 function escapeHtml(value) {
   return String(value)
@@ -72,15 +73,18 @@ function classInfo(classId) {
 }
 
 function genericSpritePath(classId, palette = 1) {
-  return `/class-sprites/generic/${hexId(classId)}-p${palette}.png`;
+  return `/class-sprites/generic/${hexId(classId)}-p${palette}.png` +
+    `?v=${classSpriteAssetVersion}`;
 }
 
 function representativeSpritePath(classId) {
-  return `/class-sprites/representative/${hexId(classId)}-p1.png`;
+  return `/class-sprites/representative/${hexId(classId)}-p1.png` +
+    `?v=${classSpriteAssetVersion}`;
 }
 
 function commanderSpritePath(commanderId, classId) {
-  return `/class-sprites/commanders/${commanderId}/${hexId(classId)}-p1.png`;
+  return `/class-sprites/commanders/${commanderId}/${hexId(classId)}-p1.png` +
+    `?v=${classSpriteAssetVersion}`;
 }
 
 function testClassSpritePath(commanderId, classId) {
@@ -1032,22 +1036,41 @@ function cloneDesignPixels(pixels) {
 }
 
 function snapMegaDriveChannel(value) {
+  if (!Number.isFinite(value)) return null;
   return megaDriveColorLevels.reduce((best, level) =>
     Math.abs(level - value) < Math.abs(best - value) ? level : best
   );
 }
 
 function hexDesignColor(pixel) {
-  return `#${pixel.slice(0, 3)
-    .map(value => value.toString(16).padStart(2, "0"))
+  const channels = pixel?.slice?.(0, 3);
+  if (
+    !channels ||
+    channels.length !== 3 ||
+    channels.some(value => !Number.isFinite(value))
+  ) {
+    return "#49246d";
+  }
+  return `#${channels
+    .map(value => Math.max(0, Math.min(255, Math.round(value)))
+      .toString(16).padStart(2, "0"))
     .join("")}`;
 }
 
 function designColorFromHex(value) {
+  const match = /^#([0-9a-f]{6})$/i.exec(
+    String(value || "").trim()
+  );
+  if (!match) return null;
+  const hex = match[1];
+  const channels = [
+    parseInt(hex.slice(0, 2), 16),
+    parseInt(hex.slice(2, 4), 16),
+    parseInt(hex.slice(4, 6), 16),
+  ].map(snapMegaDriveChannel);
+  if (channels.some(channel => channel === null)) return null;
   return [
-    snapMegaDriveChannel(parseInt(value.slice(1, 3), 16)),
-    snapMegaDriveChannel(parseInt(value.slice(3, 5), 16)),
-    snapMegaDriveChannel(parseInt(value.slice(5, 7), 16)),
+    ...channels,
     255,
   ];
 }
@@ -1137,9 +1160,11 @@ function drawAiDesignEditor() {
     `).join("");
     palette.querySelectorAll("[data-design-color]").forEach(button => {
       button.addEventListener("click", () => {
-        state.selectedColor = designColorFromHex(
+        const selectedColor = designColorFromHex(
           button.dataset.designColor
         );
+        if (!selectedColor) return;
+        state.selectedColor = selectedColor;
         $("#aiDesignColor").value = hexDesignColor(
           state.selectedColor
         );
@@ -1342,12 +1367,27 @@ function setupAiDesignEditor(commander, classId, row) {
       setAiDesignTool(button.dataset.aiDesignTool)
     );
   });
-  $("#aiDesignColor").addEventListener("input", event => {
-    state.selectedColor = designColorFromHex(event.target.value);
-    event.target.value = hexDesignColor(state.selectedColor);
+  const applyColorInput = (event, canonicalize = false) => {
+    const selectedColor = designColorFromHex(event.target.value);
+    // Some native Linux color pickers emit a transient empty/non-hex value
+    // while "pick a screen color" is active. Ignore that intermediate event
+    // instead of allowing NaN into the RGB controls.
+    if (!selectedColor) return;
+    state.selectedColor = selectedColor;
+    if (canonicalize) {
+      event.target.value = hexDesignColor(state.selectedColor);
+    }
     setAiDesignTool("pencil");
     drawAiDesignEditor();
-  });
+  };
+  $("#aiDesignColor").addEventListener(
+    "input",
+    event => applyColorInput(event, false),
+  );
+  $("#aiDesignColor").addEventListener(
+    "change",
+    event => applyColorInput(event, true),
+  );
   $("#aiDesignUndo").addEventListener("click", () => {
     if (!state.undo.length) return;
     state.redo.push(cloneDesignPixels(state.pixels));

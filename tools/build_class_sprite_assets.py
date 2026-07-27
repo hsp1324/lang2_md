@@ -36,6 +36,14 @@ PALETTES = (
 # preview distinctive violet armor with a gold-rimmed crimson shield while
 # preserving the white blade and every ROM-backed pixel.
 REPRESENTATIVE_PALETTE_OVERRIDES = {
+    # Shaman (0x0A) and the NPC Priest (0x9C) share stock sprite 0x1D.
+    # Recolor only Shaman's blue robe to silver-lavender so the two classes are
+    # visually distinct without changing the face, staff, or silhouette.
+    0x0A: {
+        0x4: 0xA8A,  # blue robe face -> soft lavender
+        0x5: 0x646,  # navy robe shadow -> deep mauve
+        0xF: 0xEEE,  # cyan robe highlight -> white
+    },
     0x2E: {
         0x4: 0xE6C,  # light violet armor
         0x5: 0xA04,  # deep violet armor
@@ -44,14 +52,58 @@ REPRESENTATIVE_PALETTE_OVERRIDES = {
         0xE: 0x624,  # dark armor outline
         0xF: 0xEAC,  # pale lavender highlight
     },
-    # Loren uses the NPC-only High Lord record 0x9B. Keep the stock High Lord
-    # silhouette, but separate him from other NPC commanders with green armor
-    # and a gold highlight. These values match the production index remap.
+    # Loren keeps the stock High Lord silhouette, blue/cyan shield, gold trim,
+    # and white blade. Preserve the white armor highlights while changing the
+    # gray faces to pale gold and the deepest shade to warm brown. This keeps
+    # the silhouette intact and complements the stock blue shield.
     0x9B: {
-        0x4: 0x2C2,  # blue armor -> bright green
-        0xE: 0x062,  # dark blue armor -> dark green
-        0xF: 0x0AE,  # cyan highlight -> gold
+        0x1: 0x6AC,  # gray armor shade -> pale gold
+        0xE: 0x248,  # deepest armor shade -> warm brown
     },
+    # Sorcerer 0x09, Shaman 0x0A, and NPC Priest 0x9C all share sprite 0x1D.
+    # Keep Sorcerer blue, make Shaman violet above, and give only the Priest
+    # representative a white/silver/pale-gold holy robe.
+    0x9C: {
+        0x4: 0xEEE,  # blue robe face -> white
+        0x5: 0x888,  # navy robe shadow -> silver-gray
+        0xF: 0x6AC,  # cyan robe highlight -> pale gold
+    },
+}
+
+# The right-hand blade shares palette indexes 1/3/E with the armor. Render
+# these exact frame-0 coordinates with the stock palette so only the armor is
+# recolored.
+LOREN_BLADE_COORDS = frozenset(
+    {
+        (14, 3),
+        (14, 4),
+        (14, 5),
+        (14, 6),
+        (13, 7),
+        (14, 7),
+        (13, 8),
+        (14, 8),
+        (13, 9),
+    }
+)
+
+# Commander-specific Shaman sprites keep character-specific hair and faces.
+# Their robe pixels are confined to the lower body, so apply the Shaman color
+# ramp only there and leave blue hair or head ornaments untouched.
+SHAMAN_ROBE_COORDS = frozenset(
+    (x, y) for y in range(9, 16) for x in range(1, 11)
+)
+SHAMAN_LOWER_BODY_COORDS = frozenset(
+    (x, y) for y in range(9, 16) for x in range(16)
+)
+SHAMAN_COMMANDER_PALETTE_OVERRIDES = {
+    1: {0x4: 0xA8A, 0x5: 0x646, 0xF: 0xEEE},
+    2: {0x6: 0xA8A, 0x7: 0x646},
+    3: {0x4: 0xA8A, 0x6: 0xA8A, 0x7: 0x646},
+    4: {0x6: 0xA8A, 0x7: 0x646, 0xB: 0xA8A, 0xC: 0x646},
+    5: {0x1: 0xA8A, 0xE: 0x646},
+    8: {0x6: 0xA8A, 0x7: 0x646},
+    9: {0x6: 0xA8A, 0x7: 0x646},
 }
 
 
@@ -81,11 +133,17 @@ def render_sprite(
     palette_id: int,
     *,
     palette_override: dict[int, int] | None = None,
+    stock_palette_coords: frozenset[tuple[int, int]] = frozenset(),
+    palette_override_coords: frozenset[tuple[int, int]] | None = None,
 ) -> Image.Image:
     start = SPRITE_GRAPHICS + sprite_id * SPRITE_BYTES
     payload = data[start : start + SPRITE_BYTES]
     if len(payload) != SPRITE_BYTES:
         raise ValueError(f"sprite 0x{sprite_id:02X} exceeds the ROM")
+    stock_palette = [
+        genesis_color(value) for value in PALETTES[palette_id]
+    ]
+    stock_palette[0] = (0, 0, 0, 0)
     palette_values = list(PALETTES[palette_id])
     if palette_override:
         for color_index, value in palette_override.items():
@@ -104,7 +162,21 @@ def render_sprite(
                 color_index = (
                     (packed >> 4) & 0x0F if x % 2 == 0 else packed & 0x0F
                 )
-                image.putpixel((tile_x + x, tile_y + y), palette[color_index])
+                coords = (tile_x + x, tile_y + y)
+                use_override = (
+                    palette_override is not None
+                    and (
+                        palette_override_coords is None
+                        or coords in palette_override_coords
+                    )
+                    and coords not in stock_palette_coords
+                )
+                color = (
+                    palette[color_index]
+                    if use_override
+                    else stock_palette[color_index]
+                )
+                image.putpixel(coords, color)
     return image
 
 
@@ -159,7 +231,24 @@ def build_assets(
         ):
             representative_sprite_ids.setdefault(class_id, sprite_id)
             target = commander_dir / f"{class_id:02X}-p1.png"
-            render_sprite(data, sprite_id, 1).save(target, optimize=True)
+            palette_override = (
+                SHAMAN_COMMANDER_PALETTE_OVERRIDES[commander_id]
+                if (
+                    class_id == 0x0A
+                    and commander_id in SHAMAN_COMMANDER_PALETTE_OVERRIDES
+                )
+                else REPRESENTATIVE_PALETTE_OVERRIDES.get(class_id)
+            )
+            palette_override_coords = (
+                SHAMAN_ROBE_COORDS if class_id == 0x0A else None
+            )
+            render_sprite(
+                data,
+                sprite_id,
+                1,
+                palette_override=palette_override,
+                palette_override_coords=palette_override_coords,
+            ).save(target, optimize=True)
             rows[str(class_id)] = {
                 "sprite_id": sprite_id,
                 "file": str(target.relative_to(output_dir)),
@@ -182,11 +271,19 @@ def build_assets(
         )
         target = representative_dir / f"{class_id:02X}-p1.png"
         palette_override = REPRESENTATIVE_PALETTE_OVERRIDES.get(class_id)
+        stock_palette_coords = (
+            LOREN_BLADE_COORDS if class_id == 0x9B else frozenset()
+        )
+        palette_override_coords = (
+            SHAMAN_LOWER_BODY_COORDS if class_id == 0x0A else None
+        )
         render_sprite(
             data,
             sprite_id,
             1,
             palette_override=palette_override,
+            stock_palette_coords=stock_palette_coords,
+            palette_override_coords=palette_override_coords,
         ).save(target, optimize=True)
         representatives[str(class_id)] = {
             "sprite_id": sprite_id,

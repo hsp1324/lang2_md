@@ -117,9 +117,110 @@ class EditorModelTests(unittest.TestCase):
             self.assertIn((255, 0, 0, 255), bald_pixels)
             self.assertNotIn((36, 219, 36, 255), bald_pixels)
 
-    def test_loren_high_lord_has_distinct_green_representative_palette(self):
+    def test_sorcerer_shaman_and_priest_use_distinct_preview_palettes(self):
         import json
         from PIL import Image
+        from tools import build_class_sprite_assets as sprite_assets
+
+        preview_dir = ROOT / "editor/static/class-sprites"
+        manifest = json.loads(
+            (preview_dir / "manifest.json").read_text(encoding="utf-8")
+        )
+        sorcerer_entry = manifest["representatives"][str(0x09)]
+        shaman_entry = manifest["representatives"][str(0x0A)]
+        priest_entry = manifest["representatives"][str(0x9C)]
+        sorcerer_path = preview_dir / sorcerer_entry["file"]
+        shaman_path = preview_dir / shaman_entry["file"]
+        priest_path = preview_dir / priest_entry["file"]
+        self.assertFalse(sorcerer_entry["uses_palette_override"])
+        self.assertTrue(shaman_entry["uses_palette_override"])
+        self.assertTrue(priest_entry["uses_palette_override"])
+        self.assertEqual(
+            {
+                sorcerer_entry["sprite_id"],
+                shaman_entry["sprite_id"],
+                priest_entry["sprite_id"],
+            },
+            {0x1D},
+        )
+        with Image.open(sorcerer_path) as sorcerer, Image.open(
+            shaman_path
+        ) as shaman, Image.open(
+            priest_path
+        ) as priest:
+            self.assertNotEqual(sorcerer.tobytes(), shaman.tobytes())
+            self.assertNotEqual(sorcerer.tobytes(), priest.tobytes())
+            self.assertNotEqual(shaman.tobytes(), priest.tobytes())
+            self.assertEqual(
+                shaman.getpixel((7, 10)),
+                (182, 146, 182, 255),
+            )
+            self.assertEqual(
+                shaman.getpixel((6, 10)),
+                (109, 73, 109, 255),
+            )
+            self.assertEqual(
+                shaman.getpixel((4, 10)),
+                (255, 255, 255, 255),
+            )
+            self.assertEqual(
+                shaman.getpixel((11, 10)),
+                (182, 146, 182, 255),
+            )
+            original_blue = {
+                (73, 109, 255, 255),
+                (0, 0, 219, 255),
+                (109, 219, 255, 255),
+            }
+            self.assertTrue(
+                all(
+                    shaman.getpixel((x, y)) not in original_blue
+                    for y in range(9, 16)
+                    for x in range(16)
+                )
+            )
+            self.assertEqual(
+                sorcerer.getpixel((7, 10)),
+                (73, 109, 255, 255),
+            )
+            self.assertEqual(
+                priest.getpixel((7, 10)),
+                (255, 255, 255, 255),
+            )
+            self.assertEqual(
+                priest.getpixel((6, 10)),
+                (146, 146, 146, 255),
+            )
+            self.assertEqual(
+                priest.getpixel((4, 10)),
+                (219, 182, 109, 255),
+            )
+        for commander_id in (1, 2, 3, 4, 5, 8, 9):
+            row = manifest["commanders"][str(commander_id)][str(0x0A)]
+            path = preview_dir / row["file"]
+            stock = sprite_assets.render_sprite(
+                self.japanese,
+                row["sprite_id"],
+                1,
+            )
+            with Image.open(path) as shaman:
+                self.assertNotEqual(
+                    shaman.tobytes(),
+                    stock.tobytes(),
+                    f"commander {commander_id} Shaman stayed stock blue",
+                )
+                self.assertEqual(
+                    shaman.crop((0, 0, 16, 9)).tobytes(),
+                    stock.crop((0, 0, 16, 9)).tobytes(),
+                    f"commander {commander_id} Shaman identity changed",
+                )
+
+    def test_loren_high_lord_recolors_armor_but_preserves_blade_and_shield(
+        self,
+    ):
+        import json
+        from PIL import Image
+        from tools import build_class_sprite_assets as sprite_assets
 
         preview_dir = ROOT / "editor/static/class-sprites"
         manifest = json.loads(
@@ -135,11 +236,29 @@ class EditorModelTests(unittest.TestCase):
         with Image.open(regular_path) as regular, Image.open(
             loren_path
         ) as loren:
-            loren_pixels = set(loren.get_flattened_data())
             self.assertNotEqual(regular.tobytes(), loren.tobytes())
-            self.assertIn((36, 219, 36, 255), loren_pixels)
-            self.assertIn((36, 109, 0, 255), loren_pixels)
-            self.assertNotIn((73, 109, 255, 255), loren_pixels)
+            self.assertEqual(
+                loren.getpixel((10, 2)),
+                (255, 255, 255, 255),
+            )
+            self.assertEqual(
+                loren.getpixel((6, 0)),
+                (219, 182, 109, 255),
+            )
+            self.assertEqual(
+                loren.getpixel((5, 0)),
+                (146, 73, 36, 255),
+            )
+            for coords in sprite_assets.LOREN_BLADE_COORDS:
+                self.assertEqual(
+                    loren.getpixel(coords),
+                    regular.getpixel(coords),
+                )
+            for coords in ((2, 10), (4, 11)):
+                self.assertEqual(
+                    loren.getpixel(coords),
+                    regular.getpixel(coords),
+                )
 
     def test_playable_and_loren_high_lords_are_distinct_rom_records(self):
         from tools.class_hire_data import read_class_hire_unlocks

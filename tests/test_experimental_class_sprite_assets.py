@@ -1731,6 +1731,32 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 self.assertIsInstance(row["design_override"], bool)
                 self.assertIsInstance(row["design_revision"], int)
 
+    def test_liana_high_lord_keeps_identity_and_uses_blue_armor(self):
+        row = self.ai_manifest["commanders"]["2"]["classes"]["11"]
+        self.assertTrue(row["design_override"])
+        with Image.open(AI_ASSET_DIR / row["file"]) as image:
+            pixels = list(image.getdata())
+            self.assertEqual(
+                pixels.count((73, 109, 255, 255)),
+                45,
+            )
+            self.assertGreaterEqual(
+                pixels.count((73, 73, 109, 255)),
+                11,
+            )
+            self.assertEqual(
+                image.getpixel((7, 0)),
+                (146, 73, 36, 255),
+            )
+            self.assertEqual(
+                image.getpixel((11, 10)),
+                (73, 109, 255, 255),
+            )
+            self.assertEqual(
+                image.getpixel((12, 10)),
+                (73, 73, 109, 255),
+            )
+
     def test_shared_identity_masks_and_elwin_swordmaster_mask_are_saved(self):
         document = json.loads(
             (ROOT / "editor/ai_identity_masks.json").read_text(

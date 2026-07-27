@@ -74,83 +74,143 @@ class BaldMapSpriteTests(unittest.TestCase):
             builder.patch_bald_map_sprite(data)
 
 
-class LorenMapSpriteTests(unittest.TestCase):
+class ShamanMapSpriteTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.original = bytearray(builder.IN_ROM.read_bytes())
         cls.patched = bytearray(cls.original)
         builder.expand_rom(cls.patched)
-        builder.patch_bald_map_sprite(cls.patched)
-        builder.patch_loren_map_sprite(cls.patched)
+        builder.patch_shaman_map_sprite(cls.patched)
 
-    def test_only_npc_high_lord_9b_uses_loren_sprite(self) -> None:
+    def test_only_shaman_0a_uses_the_lavender_custom_sprite(self) -> None:
         table = builder.GENERIC_CLASS_SPRITE_TABLE
-        playable_high_lord = builder.be16(
-            self.patched, table + 0x0B * 2
-        )
-        loren_high_lord = builder.be16(
-            self.patched, table + 0x9B * 2
-        )
-        self.assertEqual(
-            playable_high_lord,
-            builder.LOREN_SOURCE_SPRITE_ID,
-        )
-        self.assertEqual(
-            loren_high_lord,
-            builder.LOREN_CUSTOM_SPRITE_ID,
-        )
-        self.assertNotEqual(
-            builder.LOREN_CUSTOM_SPRITE_ID,
-            builder.BALD_CUSTOM_SPRITE_ID,
-        )
+        shaman = builder.be16(self.patched, table + 0x0A * 2)
+        priest = builder.be16(self.patched, table + 0x9C * 2)
+        self.assertEqual(shaman, builder.SHAMAN_CUSTOM_SPRITE_ID)
+        self.assertEqual(priest, builder.SHAMAN_SOURCE_SPRITE_ID)
+        self.assertNotEqual(shaman, priest)
 
-    def test_loren_frames_use_green_and_gold_index_remap(self) -> None:
-        changed_indexes = set()
-        for frame_base, target in zip(
-            builder.MAP_SPRITE_FRAME_BASES,
-            builder.LOREN_CUSTOM_FRAME_OFFSETS,
+    def test_commander_shaman_entries_use_character_specific_custom_sprites(
+        self,
+    ) -> None:
+        for commander_id, custom_sprite_id in (
+            builder.SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS.items()
         ):
-            source = (
-                frame_base
-                + builder.LOREN_SOURCE_SPRITE_ID
-                * builder.MAP_SPRITE_BYTES
+            record = builder.commander_sprite_record_offset(
+                self.patched, commander_id, builder.SHAMAN_CLASS_ID
             )
-            source_payload = self.original[
-                source : source + builder.MAP_SPRITE_BYTES
-            ]
-            target_payload = self.patched[
-                target : target + builder.MAP_SPRITE_BYTES
-            ]
             self.assertEqual(
-                len(target_payload),
-                builder.MAP_SPRITE_BYTES,
+                builder.be16(self.patched, record + 1),
+                custom_sprite_id,
             )
-            for source_byte, target_byte in zip(
-                source_payload, target_payload
-            ):
-                for shift in (4, 0):
-                    source_index = (source_byte >> shift) & 0x0F
-                    target_index = (target_byte >> shift) & 0x0F
-                    expected = (
-                        builder.LOREN_SPRITE_COLOR_INDEX_REMAP.get(
-                            source_index, source_index
-                        )
-                    )
-                    self.assertEqual(target_index, expected)
-                    if source_index != target_index:
-                        changed_indexes.add(source_index)
+
+    def test_all_shaman_frames_recolor_only_the_lower_blue_robe_ramp(
+        self,
+    ) -> None:
+        self.assertEqual(
+            builder.SHAMAN_SPRITE_COLOR_INDEX_REMAP,
+            {0x4: 0xE, 0x5: 0x2, 0xF: 0x3},
+        )
+        changed_indexes = set()
+        protected_blue_pixels = 0
+        variants = [
+            (
+                builder.SHAMAN_SOURCE_SPRITE_ID,
+                builder.SHAMAN_CUSTOM_SPRITE_ID,
+                builder.SHAMAN_SPRITE_COLOR_INDEX_REMAP,
+            ),
+            *[
+                (
+                    source_sprite_id,
+                    builder.SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS[
+                        commander_id
+                    ],
+                    builder.SHAMAN_COMMANDER_COLOR_INDEX_REMAPS[
+                        commander_id
+                    ],
+                )
+                for commander_id, source_sprite_id in (
+                    builder.SHAMAN_COMMANDER_SOURCE_SPRITE_IDS.items()
+                )
+            ],
+        ]
+        expected_changed_indexes = set()
+        for source_sprite_id, custom_sprite_id, color_index_remap in variants:
+            expected_changed_indexes.update(color_index_remap)
+            for frame_base in builder.MAP_SPRITE_FRAME_BASES:
+                source = (
+                    frame_base
+                    + source_sprite_id * builder.MAP_SPRITE_BYTES
+                )
+                target = (
+                    frame_base
+                    + custom_sprite_id * builder.MAP_SPRITE_BYTES
+                )
+                source_payload = self.original[
+                    source : source + builder.MAP_SPRITE_BYTES
+                ]
+                target_payload = self.patched[
+                    target : target + builder.MAP_SPRITE_BYTES
+                ]
+                for tile_index in range(4):
+                    tile_x = (tile_index // 2) * 8
+                    tile_y = (tile_index % 2) * 8
+                    tile_offset = tile_index * 32
+                    for y in range(8):
+                        for pair_x in range(4):
+                            offset = tile_offset + y * 4 + pair_x
+                            source_byte = source_payload[offset]
+                            target_byte = target_payload[offset]
+                            for nibble, shift in enumerate((4, 0)):
+                                source_index = (
+                                    source_byte >> shift
+                                ) & 0x0F
+                                target_index = (
+                                    target_byte >> shift
+                                ) & 0x0F
+                                expected = source_index
+                                x = tile_x + pair_x * 2 + nibble
+                                in_robe = (
+                                    tile_y + y
+                                    >= builder.SHAMAN_ROBE_MIN_Y
+                                    and builder.SHAMAN_ROBE_MIN_X
+                                    <= x
+                                    <= builder.SHAMAN_ROBE_MAX_X
+                                )
+                                if in_robe:
+                                    expected = (
+                                        color_index_remap.get(
+                                            source_index, source_index
+                                        )
+                                    )
+                                self.assertEqual(target_index, expected)
+                                if source_index != target_index:
+                                    changed_indexes.add(source_index)
+                                if (
+                                    not in_robe
+                                    and source_index
+                                    in color_index_remap
+                                ):
+                                    protected_blue_pixels += 1
         self.assertEqual(
             changed_indexes,
-            set(builder.LOREN_SPRITE_COLOR_INDEX_REMAP),
+            expected_changed_indexes,
         )
+        self.assertGreater(protected_blue_pixels, 0)
 
-    def test_loren_custom_frames_use_separate_blank_expansion(self) -> None:
+    def test_shaman_custom_frames_use_separate_blank_expansion(self) -> None:
+        occupied = set(builder.BALD_CUSTOM_FRAME_OFFSETS)
+        occupied.update(builder.LOREN_CUSTOM_FRAME_OFFSETS)
+        shaman_targets = set(builder.SHAMAN_CUSTOM_FRAME_OFFSETS)
+        for targets in (
+            builder.SHAMAN_COMMANDER_CUSTOM_FRAME_OFFSETS.values()
+        ):
+            shaman_targets.update(targets)
         self.assertTrue(
-            set(builder.LOREN_CUSTOM_FRAME_OFFSETS).isdisjoint(
-                builder.BALD_CUSTOM_FRAME_OFFSETS
-            )
+            shaman_targets.isdisjoint(occupied)
         )
-        for target in builder.LOREN_CUSTOM_FRAME_OFFSETS:
+        self.assertEqual(len(shaman_targets), 16)
+        for target in shaman_targets:
             self.assertLessEqual(
                 target + builder.MAP_SPRITE_BYTES,
                 builder.EXPANDED_ROM_SIZE,
@@ -164,12 +224,88 @@ class LorenMapSpriteTests(unittest.TestCase):
                 b"",
             )
 
-    def test_loren_patch_rejects_reuse_of_custom_frame_area(self) -> None:
+    def test_shaman_patch_rejects_reuse_of_custom_frame_area(self) -> None:
         data = bytearray(self.original)
         builder.expand_rom(data)
-        data[builder.LOREN_CUSTOM_FRAME_OFFSETS[0]] = 0
+        data[builder.SHAMAN_CUSTOM_FRAME_OFFSETS[0]] = 0
         with self.assertRaisesRegex(ValueError, "is not blank"):
-            builder.patch_loren_map_sprite(data)
+            builder.patch_shaman_map_sprite(data)
+
+
+class LorenMapSpriteTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.original = bytearray(builder.IN_ROM.read_bytes())
+        cls.patched = bytearray(cls.original)
+        builder.expand_rom(cls.patched)
+        builder.patch_bald_map_sprite(cls.patched)
+        builder.patch_shaman_map_sprite(cls.patched)
+        builder.patch_loren_map_sprite(cls.patched)
+
+    def test_only_loren_9b_uses_the_custom_high_lord_sprite(self) -> None:
+        table = builder.GENERIC_CLASS_SPRITE_TABLE
+        patched_9b = builder.be16(self.patched, table + 0x9B * 2)
+        stock_npc_99 = builder.be16(self.patched, table + 0x99 * 2)
+        self.assertEqual(stock_npc_99, builder.LOREN_SOURCE_SPRITE_ID)
+        self.assertEqual(patched_9b, builder.LOREN_CUSTOM_SPRITE_ID)
+        self.assertNotEqual(patched_9b, stock_npc_99)
+
+    def test_loren_recolors_only_armor_and_preserves_blade(self) -> None:
+        self.assertEqual(
+            builder.LOREN_SPRITE_COLOR_INDEX_REMAP,
+            {0x1: 0x6, 0xE: 0x7},
+        )
+        changed_indexes = set()
+        for frame_base, target, blade_coords in zip(
+            builder.MAP_SPRITE_FRAME_BASES,
+            builder.LOREN_CUSTOM_FRAME_OFFSETS,
+            builder.LOREN_BLADE_COORDS_BY_FRAME,
+        ):
+            source = (
+                frame_base
+                + builder.LOREN_SOURCE_SPRITE_ID
+                * builder.MAP_SPRITE_BYTES
+            )
+            source_payload = self.original[
+                source : source + builder.MAP_SPRITE_BYTES
+            ]
+            target_payload = self.patched[
+                target : target + builder.MAP_SPRITE_BYTES
+            ]
+            for tile_index in range(4):
+                tile_x = (tile_index // 2) * 8
+                tile_y = (tile_index % 2) * 8
+                tile_offset = tile_index * 32
+                for y in range(8):
+                    for pair_x in range(4):
+                        offset = tile_offset + y * 4 + pair_x
+                        source_byte = source_payload[offset]
+                        target_byte = target_payload[offset]
+                        for nibble, shift in enumerate((4, 0)):
+                            source_index = (source_byte >> shift) & 0x0F
+                            target_index = (target_byte >> shift) & 0x0F
+                            coords = (
+                                tile_x + pair_x * 2 + nibble,
+                                tile_y + y,
+                            )
+                            expected = (
+                                source_index
+                                if coords in blade_coords
+                                else builder.LOREN_SPRITE_COLOR_INDEX_REMAP.get(
+                                    source_index, source_index
+                                )
+                            )
+                            self.assertEqual(target_index, expected)
+                            if source_index != target_index:
+                                changed_indexes.add(source_index)
+                            if coords in blade_coords:
+                                self.assertEqual(
+                                    target_index, source_index
+                                )
+        self.assertEqual(
+            changed_indexes,
+            set(builder.LOREN_SPRITE_COLOR_INDEX_REMAP),
+        )
 
 
 if __name__ == "__main__":

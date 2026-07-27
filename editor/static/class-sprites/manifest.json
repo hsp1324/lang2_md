@@ -1496,7 +1496,7 @@
       "sprite_id": 29,
       "generic_sprite_id": 29,
       "uses_commander_override": false,
-      "uses_palette_override": false,
+      "uses_palette_override": true,
       "file": "representative/0A-p1.png"
     },
     "11": {
@@ -2518,7 +2518,7 @@
       "sprite_id": 29,
       "generic_sprite_id": 29,
       "uses_commander_override": false,
-      "uses_palette_override": false,
+      "uses_palette_override": true,
       "file": "representative/9C-p1.png"
     }
   },

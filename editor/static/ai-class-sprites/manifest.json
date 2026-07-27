@@ -9217,12 +9217,12 @@
             "#6d0000"
           ],
           "pixel_palette": [
-            "#924924",
+            "#496dff",
             "#ffb600",
             "#ffffff",
+            "#924924",
             "#dbb66d",
-            "#db0000",
-            "#6d0000"
+            "#242424"
           ],
           "face_source_sprite_id": 41,
           "face_pixel_count": 0,
@@ -9465,18 +9465,6 @@
               1
             ],
             [
-              1,
-              11
-            ],
-            [
-              1,
-              12
-            ],
-            [
-              1,
-              13
-            ],
-            [
               2,
               2
             ],
@@ -9493,18 +9481,6 @@
               5
             ],
             [
-              2,
-              8
-            ],
-            [
-              2,
-              9
-            ],
-            [
-              2,
-              10
-            ],
-            [
               3,
               2
             ],
@@ -9515,10 +9491,6 @@
             [
               3,
               5
-            ],
-            [
-              3,
-              7
             ],
             [
               4,
@@ -9774,22 +9746,10 @@
             ],
             [
               12,
-              4
-            ],
-            [
-              13,
-              2
-            ],
-            [
-              13,
-              3
-            ],
-            [
-              13,
               4
             ]
           ],
-          "identity_lock_pixel_count": 82,
+          "identity_lock_pixel_count": 72,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -9797,8 +9757,8 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
+          "design_override": true,
+          "design_revision": 1785147647258792295,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -9814,8 +9774,8 @@
             11,
             11
           ],
-          "changed_pixel_count": 137,
-          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 137픽셀",
+          "changed_pixel_count": 141,
+          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 137픽셀·사용자 16×16 디자인 편집 적용",
           "file": "2/0B.png"
         },
         "13": {
@@ -67870,12 +67830,12 @@
             "#dbb66d"
           ],
           "pixel_palette": [
-            "#db9224",
-            "#db0000",
+            "#242424",
             "#496dff",
+            "#db0000",
+            "#db9224",
             "#ffffff",
-            "#0000db",
-            "#dbb66d"
+            "#0000db"
           ],
           "face_source_sprite_id": 50,
           "face_pixel_count": 0,
@@ -68434,8 +68394,8 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
+          "design_override": true,
+          "design_revision": 1785146801160065229,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -68453,7 +68413,7 @@
             11
           ],
           "changed_pixel_count": 147,
-          "feature": "헤인 사용자 편집 하이프리스트의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 147픽셀",
+          "feature": "헤인 사용자 편집 하이프리스트의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 147픽셀·사용자 16×16 디자인 편집 적용",
           "file": "10/16.png"
         },
         "23": {
