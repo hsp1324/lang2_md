@@ -1,5 +1,5 @@
 {
-  "warning": "This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with only one or two signal bytes. Most are binary coincidences. The 0x050000..0x0AFFFF class/sprite/item/name/graphics/system/ending/scenario/text/UI-bank candidates are classified here. Exact aligned 32-bit and LEA/PEA PC-relative references do not exclude base-relative, indexed, or dynamic access.",
+  "warning": "This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with only one or two signal bytes. Most are binary coincidences. The 0x040000..0x0AFFFF font/class/sprite/item/name/graphics/system/ending/scenario/text/UI-bank candidates are classified here. Exact aligned 32-bit and LEA/PEA PC-relative references do not exclude base-relative, indexed, or dynamic access.",
   "source_sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
   "scan_end": "0x180000",
   "candidate_count": 6612,
@@ -29,6 +29,257 @@
       "structured_game_data": 4,
       "text_ui_bank": 16
     }
+  },
+  "font_bitmap_bank": {
+    "range": "0x040000..0x050000",
+    "glyph_bytes": 64,
+    "glyph_count": 1024,
+    "source_sha256": "665c71c0bcd73a3a097f181d84eb3f4022e32f9c37628bcb22a840025433b5ed",
+    "expected_source_sha256": "665c71c0bcd73a3a097f181d84eb3f4022e32f9c37628bcb22a840025433b5ed",
+    "source_layout_valid": true,
+    "candidate_count": 1477,
+    "kind_counts": {
+      "ascii": 762,
+      "halfwidth": 715
+    },
+    "category_counts": {
+      "font_bitmap_false_positive": 1477
+    },
+    "unclassified_count": 0,
+    "candidate_manifest_sha256": "f5763ec3ad9d40cf8e5ae135b9ccae984847a1aca9f388121ba17502a011b956",
+    "missing_representative_addresses": [],
+    "aligned_absolute_32_reference_count": 32,
+    "aligned_absolute_32_references": [
+      {
+        "target": "0x043143",
+        "addresses": [
+          "0x00C2F2",
+          "0x01BA16",
+          "0x01BA5A",
+          "0x01BAAA",
+          "0x01C170",
+          "0x01C21C"
+        ]
+      },
+      {
+        "target": "0x04322E",
+        "addresses": [
+          "0x003BEC",
+          "0x00571A"
+        ]
+      },
+      {
+        "target": "0x044A69",
+        "addresses": [
+          "0x001936"
+        ]
+      },
+      {
+        "target": "0x044CDF",
+        "addresses": [
+          "0x00857A",
+          "0x00B732",
+          "0x011846",
+          "0x011C64",
+          "0x013678",
+          "0x0139FC",
+          "0x0155A8",
+          "0x018A0C",
+          "0x018A72",
+          "0x01A9B4",
+          "0x01AA00",
+          "0x01ABC2",
+          "0x01AC5C",
+          "0x01B038"
+        ]
+      },
+      {
+        "target": "0x047001",
+        "addresses": [
+          "0x00B3FC",
+          "0x00C33A",
+          "0x00CCEE",
+          "0x00D260",
+          "0x02A02C"
+        ]
+      },
+      {
+        "target": "0x04B428",
+        "addresses": [
+          "0x012D96"
+        ]
+      },
+      {
+        "target": "0x04C149",
+        "addresses": [
+          "0x01AE00"
+        ]
+      },
+      {
+        "target": "0x04E241",
+        "addresses": [
+          "0x0034B0",
+          "0x01B1B4"
+        ]
+      }
+    ],
+    "pc_relative_lea_pea_reference_count": 0,
+    "pc_relative_lea_pea_references": [],
+    "representative_candidates": [
+      {
+        "kind": "halfwidth",
+        "address": "0x040285",
+        "end": "0x040287",
+        "signal_count": 1,
+        "original_text": "ﾛ",
+        "raw_hex": "DB",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 10,
+        "glyph_byte_offset": 5,
+        "containing_word_address": "0x040284",
+        "containing_word": "0x3CDB",
+        "context_start": "0x040274",
+        "context_words": "38D7 F817 FCFB F807 00FF 00FF 10EF 38D7 3CDB FF10 FFFF FF50 7897 38D7 609F F06F 78A7 FC2B",
+        "aligned_absolute_32_references": []
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x043143",
+        "end": "0x043145",
+        "signal_count": 1,
+        "original_text": "ｫ",
+        "raw_hex": "AB",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 197,
+        "glyph_byte_offset": 3,
+        "containing_word_address": "0x043142",
+        "containing_word": "0x77AB",
+        "context_start": "0x043132",
+        "context_words": "78B7 78B7 70AF F06F E0DF C03F 00FF 73AC 77AB FF22 FFFA FF22 77AB FF72 FF6A FE01 FFFE FE01",
+        "aligned_absolute_32_references": [
+          "0x00C2F2",
+          "0x01BA16",
+          "0x01BA5A",
+          "0x01BAAA",
+          "0x01C170",
+          "0x01C21C"
+        ]
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x04322E",
+        "end": "0x043231",
+        "signal_count": 1,
+        "original_text": " ﾟ",
+        "raw_hex": "20 DF",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 200,
+        "glyph_byte_offset": 46,
+        "containing_word_address": "0x04322E",
+        "containing_word": "0x20DF",
+        "context_start": "0x04321E",
+        "context_words": "FF12 FF65 FFA5 FF25 7FA5 7FA5 7FAF 7FA0 20DF FF12 FFD2 FF12 FF12 FFD6 FE11 38D7 10EF 03FD",
+        "aligned_absolute_32_references": [
+          "0x003BEC",
+          "0x00571A"
+        ]
+      },
+      {
+        "kind": "ascii",
+        "address": "0x044CDF",
+        "end": "0x044CE1",
+        "signal_count": 1,
+        "original_text": "R",
+        "raw_hex": "52",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 307,
+        "glyph_byte_offset": 31,
+        "containing_word_address": "0x044CDE",
+        "containing_word": "0xFF52",
+        "context_start": "0x044CCE",
+        "context_words": "FF49 70AF FE21 FFFE FF02 07FA DE21 FFDE FF52 FF4A FF7B FF4C FD4A FF49 DFA9 FF9A 9A65 FF52",
+        "aligned_absolute_32_references": [
+          "0x00857A",
+          "0x00B732",
+          "0x011846",
+          "0x011C64",
+          "0x013678",
+          "0x0139FC",
+          "0x0155A8",
+          "0x018A0C",
+          "0x018A72",
+          "0x01A9B4",
+          "0x01AA00",
+          "0x01ABC2",
+          "0x01AC5C",
+          "0x01B038"
+        ]
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x047001",
+        "end": "0x047003",
+        "signal_count": 1,
+        "original_text": "ｿ",
+        "raw_hex": "BF",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 448,
+        "glyph_byte_offset": 1,
+        "containing_word_address": "0x047000",
+        "containing_word": "0x7FBF",
+        "context_start": "0x046FF0",
+        "context_words": "FC0B FCFB FC0B 1CEB 1CEB FC0B FCFB F807 7FBF FF00 FFFF FF00 3FC0 7FBF 3FC0 3FC0 F8F7 FC03",
+        "aligned_absolute_32_references": [
+          "0x00B3FC",
+          "0x00C33A",
+          "0x00CCEE",
+          "0x00D260",
+          "0x02A02C"
+        ]
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x04E241",
+        "end": "0x04E243",
+        "signal_count": 1,
+        "original_text": "ｮ",
+        "raw_hex": "AE",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 905,
+        "glyph_byte_offset": 1,
+        "containing_word_address": "0x04E240",
+        "containing_word": "0x71AE",
+        "context_start": "0x04E230",
+        "context_words": "F857 70AF 70AF B857 DCAB 8E75 07FA 02FD 71AE FF21 FFFC FD22 FC23 FEFD FFA4 FFFF F807 FCFB",
+        "aligned_absolute_32_references": [
+          "0x0034B0",
+          "0x01B1B4"
+        ]
+      },
+      {
+        "kind": "halfwidth",
+        "address": "0x04FDDE",
+        "end": "0x04FDE1",
+        "signal_count": 2,
+        "original_text": "ﾀｿ",
+        "raw_hex": "C0 BF",
+        "category": "font_bitmap_false_positive",
+        "owner": "packed Japanese 16x16 glyph pixels",
+        "glyph_index": 1015,
+        "glyph_byte_offset": 30,
+        "containing_word_address": "0x04FDDE",
+        "containing_word": "0xC0BF",
+        "context_start": "0x04FDCE",
+        "context_words": "FF47 00FF 00FF 00FF 00FF 00FF 00FF 807F C0BF FF78 F847 E05F E05F E05F 7FA0 3FDF 1FE0 906F",
+        "aligned_absolute_32_references": []
+      }
+    ]
   },
   "class_sprite_graphics_bank": {
     "range": "0x050000..0x060000",

@@ -11512,3 +11512,29 @@ contains 57 safe syllables as documented below and in
   were regenerated from the isolated current-source ROM. BlastEm remained
   stopped, Xvfb `:104` remained configured, and the physical monitor was not
   used.
+
+### Japanese Font-Bitmap Low-Signal Byte Audit (2026-07-27)
+
+- The fixed `0x040000..0x04FFFF` bank is exactly 1,024 Japanese 16x16 glyphs
+  at 64 bytes each. The complete Japanese source block SHA-256 is
+  `665c71c0bcd73a3a097f181d84eb3f4022e32f9c37628bcb22a840025433b5ed`;
+  the inventory rejects a different source layout.
+- All 1,477 one/two-signal candidates in this bank are packed pixel
+  coincidences: 715 half-width-looking runs and 762 uppercase-ASCII-looking
+  runs. Their ordered address/end/kind/raw manifest SHA-256 is
+  `f5763ec3ad9d40cf8e5ae135b9ccae984847a1aca9f388121ba17502a011b956`.
+  Representative rows record the containing glyph index and byte offset.
+- The aligned scanner finds 32 four-byte windows across eight bitmap targets;
+  some may be real glyph/pixel addresses and others may be code/data
+  coincidences. This does not change ownership: every target byte is
+  source-locked inside a 64-byte glyph bitmap, not an `FF`-terminated byte
+  string. No executable `LEA d16(PC)`/`PEA d16(PC)` target exists.
+- The cumulative exact review is now 1,878 candidates across
+  `0x040000..0x0AFFFF`: 1,877 bitmap/pointer-boundary/word/graphics/layout
+  false positives and the intentionally retained `L-` level prefix. The
+  remaining short-inline gap is explicitly limited to other regions and still
+  allows base-relative, indexed, and dynamic access.
+- Focused short-inline/UI/inline/direct inventory tests pass 76/76. Reports
+  were regenerated from the isolated current-source ROM only. BlastEm was not
+  launched; Xvfb `:104` remained configured and the physical monitor was not
+  used.

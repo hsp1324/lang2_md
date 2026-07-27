@@ -6,6 +6,11 @@ from tools.jp_short_inline_byte_inventory import (
     CLASS_SPRITE_GRAPHICS_ALIGNED_REFERENCE_REVIEWS,
     CLASS_SPRITE_GRAPHICS_REVIEWS,
     ENDING_SCENARIO_STRUCTURED_REVIEWS,
+    FONT_BITMAP_BANK_END,
+    FONT_BITMAP_BANK_START,
+    FONT_BITMAP_GLYPH_BYTES,
+    FONT_BITMAP_REPRESENTATIVE_ADDRESSES,
+    FONT_BITMAP_SOURCE_SHA256,
     ITEM_NAME_GRAPHICS_ALIGNED_REFERENCE_REVIEWS,
     ITEM_NAME_GRAPHICS_REVIEWS,
     SCENARIO_LEVEL_PREFIX,
@@ -31,6 +36,7 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
     def setUpClass(cls):
         cls.japanese = JP_ROM.read_bytes()
         cls.result = inventory(cls.japanese, KO_ROM.read_bytes())
+        cls.font_bank = cls.result["font_bitmap_bank"]
         cls.class_bank = cls.result["class_sprite_graphics_bank"]
         cls.item_bank = cls.result["item_name_graphics_bank"]
         cls.system_bank = cls.result["system_graphics_ending_bank"]
@@ -50,6 +56,117 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         self.assertEqual(
             self.result["region_counts"]["ascii"]["text_ui_bank"],
             16,
+        )
+
+    def test_font_bitmap_bank_is_source_locked_and_fully_classified(self):
+        self.assertEqual(self.font_bank["candidate_count"], 1477)
+        self.assertEqual(
+            self.font_bank["kind_counts"],
+            {"ascii": 762, "halfwidth": 715},
+        )
+        self.assertEqual(
+            self.font_bank["category_counts"],
+            {"font_bitmap_false_positive": 1477},
+        )
+        self.assertEqual(self.font_bank["unclassified_count"], 0)
+        self.assertEqual(
+            self.font_bank["glyph_count"],
+            (FONT_BITMAP_BANK_END - FONT_BITMAP_BANK_START)
+            // FONT_BITMAP_GLYPH_BYTES,
+        )
+        self.assertEqual(
+            self.font_bank["source_sha256"], FONT_BITMAP_SOURCE_SHA256
+        )
+        self.assertEqual(
+            self.font_bank["expected_source_sha256"],
+            FONT_BITMAP_SOURCE_SHA256,
+        )
+        self.assertTrue(self.font_bank["source_layout_valid"])
+        self.assertEqual(
+            self.font_bank["candidate_manifest_sha256"],
+            "f5763ec3ad9d40cf8e5ae135b9ccae984847a1aca9f388121ba17502a011b956",
+        )
+
+    def test_font_bitmap_representatives_have_exact_pixel_ownership(self):
+        rows = {
+            int(row["address"], 16): row
+            for row in self.font_bank["representative_candidates"]
+        }
+        self.assertEqual(rows.keys(), FONT_BITMAP_REPRESENTATIVE_ADDRESSES)
+        self.assertEqual(
+            self.font_bank["missing_representative_addresses"], []
+        )
+        for address, row in rows.items():
+            with self.subTest(address=f"0x{address:06X}"):
+                self.assertEqual(
+                    row["category"], "font_bitmap_false_positive"
+                )
+                self.assertEqual(
+                    row["glyph_index"],
+                    (address - FONT_BITMAP_BANK_START)
+                    // FONT_BITMAP_GLYPH_BYTES,
+                )
+                self.assertEqual(
+                    row["glyph_byte_offset"],
+                    (address - FONT_BITMAP_BANK_START)
+                    % FONT_BITMAP_GLYPH_BYTES,
+                )
+                self.assertTrue(row["context_words"])
+
+    def test_font_bitmap_reference_windows_do_not_change_bitmap_ownership(self):
+        self.assertEqual(
+            self.font_bank["aligned_absolute_32_reference_count"], 32
+        )
+        self.assertEqual(
+            self.font_bank["pc_relative_lea_pea_reference_count"], 0
+        )
+        self.assertEqual(
+            {
+                int(row["target"], 16): [
+                    int(address, 16) for address in row["addresses"]
+                ]
+                for row in self.font_bank[
+                    "aligned_absolute_32_references"
+                ]
+            },
+            {
+                0x043143: [
+                    0x00C2F2,
+                    0x01BA16,
+                    0x01BA5A,
+                    0x01BAAA,
+                    0x01C170,
+                    0x01C21C,
+                ],
+                0x04322E: [0x003BEC, 0x00571A],
+                0x044A69: [0x001936],
+                0x044CDF: [
+                    0x00857A,
+                    0x00B732,
+                    0x011846,
+                    0x011C64,
+                    0x013678,
+                    0x0139FC,
+                    0x0155A8,
+                    0x018A0C,
+                    0x018A72,
+                    0x01A9B4,
+                    0x01AA00,
+                    0x01ABC2,
+                    0x01AC5C,
+                    0x01B038,
+                ],
+                0x047001: [
+                    0x00B3FC,
+                    0x00C33A,
+                    0x00CCEE,
+                    0x00D260,
+                    0x02A02C,
+                ],
+                0x04B428: [0x012D96],
+                0x04C149: [0x01AE00],
+                0x04E241: [0x0034B0, 0x01B1B4],
+            },
         )
 
     def test_class_sprite_graphics_bank_has_no_unknown_or_ui_string(self):

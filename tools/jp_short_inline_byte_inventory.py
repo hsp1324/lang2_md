@@ -14,6 +14,21 @@ from tools.jp_inline_byte_string_inventory import SCAN_END, scan_runs
 
 
 EXECUTABLE_END = 0x040000
+FONT_BITMAP_BANK_START = 0x040000
+FONT_BITMAP_BANK_END = 0x050000
+FONT_BITMAP_GLYPH_BYTES = 64
+FONT_BITMAP_SOURCE_SHA256 = (
+    "665c71c0bcd73a3a097f181d84eb3f4022e32f9c37628bcb22a840025433b5ed"
+)
+FONT_BITMAP_REPRESENTATIVE_ADDRESSES = {
+    0x040285,
+    0x043143,
+    0x04322E,
+    0x044CDF,
+    0x047001,
+    0x04E241,
+    0x04FDDE,
+}
 CLASS_SPRITE_GRAPHICS_BANK_START = 0x050000
 CLASS_SPRITE_GRAPHICS_BANK_END = 0x060000
 ITEM_NAME_GRAPHICS_BANK_START = 0x060000
@@ -578,6 +593,18 @@ def word_context(data: bytes, start: int, end: int) -> tuple[int, str]:
     return context_start, " ".join(f"{word:04X}" for word in words)
 
 
+def candidate_manifest_sha256(rows: list[dict[str, object]]) -> str:
+    digest = hashlib.sha256()
+    for row in rows:
+        digest.update(int(row["start_int"]).to_bytes(4, "big"))
+        digest.update(int(row["end_int"]).to_bytes(4, "big"))
+        digest.update(str(row["kind"]).encode("ascii"))
+        digest.update(b"\0")
+        digest.update(bytes(row["raw"]))
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
 def is_word_stream_byte_lane(data: bytes, start: int, end: int) -> bool:
     if start % 2 != 1 or (end - 1) % 2 != 0:
         return False
@@ -614,6 +641,13 @@ def system_graphics_word_owner(address: int) -> str:
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     candidates = low_signal_runs(japanese)
+    font_bitmap = [
+        row
+        for row in candidates
+        if FONT_BITMAP_BANK_START
+        <= int(row["start_int"])
+        < FONT_BITMAP_BANK_END
+    ]
     class_sprite_graphics = [
         row
         for row in candidates
@@ -647,6 +681,49 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for row in candidates
         if TEXT_UI_BANK_START <= int(row["start_int"]) < TEXT_UI_BANK_END
     ]
+
+    font_bitmap_addresses = {
+        int(row["start_int"]) for row in font_bitmap
+    }
+    font_bitmap_absolute = aligned_absolute_references(
+        japanese, font_bitmap_addresses
+    )
+    font_bitmap_pc_relative = pc_relative_lea_pea_references(
+        japanese, font_bitmap_addresses
+    )
+    font_bitmap_representatives = []
+    for row in font_bitmap:
+        start = int(row["start_int"])
+        if start not in FONT_BITMAP_REPRESENTATIVE_ADDRESSES:
+            continue
+        end = int(row["end_int"])
+        context_start, context = word_context(japanese, start, end)
+        font_bitmap_representatives.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": "font_bitmap_false_positive",
+                "owner": "packed Japanese 16x16 glyph pixels",
+                "glyph_index": (start - FONT_BITMAP_BANK_START)
+                // FONT_BITMAP_GLYPH_BYTES,
+                "glyph_byte_offset": (start - FONT_BITMAP_BANK_START)
+                % FONT_BITMAP_GLYPH_BYTES,
+                "containing_word_address": f"0x{start & ~1:06X}",
+                "containing_word": (
+                    f"0x{int.from_bytes(japanese[start & ~1 : (start & ~1) + 2], 'big'):04X}"
+                ),
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in font_bitmap_absolute.get(start, [])
+                ],
+            }
+        )
 
     class_sprite_graphics_addresses = {
         int(row["start_int"]) for row in class_sprite_graphics
@@ -955,6 +1032,9 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for kind in ("halfwidth", "ascii")
     }
     category_counts = Counter(str(row["category"]) for row in detailed_rows)
+    font_bitmap_kind_counts = Counter(
+        str(row["kind"]) for row in font_bitmap
+    )
     class_sprite_graphics_category_counts = Counter(
         str(row["category"]) for row in class_sprite_graphics_rows
     )
@@ -998,8 +1078,8 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "warning": (
             "This scan inventories maximal FF-terminated half-width/uppercase-ASCII "
             "runs with only one or two signal bytes. Most are binary coincidences. "
-            "The 0x050000..0x0AFFFF class/sprite/item/name/graphics/system/"
-            "ending/scenario/text/UI-bank "
+            "The 0x040000..0x0AFFFF font/class/sprite/item/name/graphics/"
+            "system/ending/scenario/text/UI-bank "
             "candidates are classified here. Exact aligned 32-bit and LEA/PEA "
             "PC-relative references do not exclude base-relative, indexed, or "
             "dynamic access."
@@ -1009,6 +1089,76 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "candidate_count": len(candidates),
         "kind_counts": dict(sorted(kind_counts.items())),
         "region_counts": region_counts,
+        "font_bitmap_bank": {
+            "range": "0x040000..0x050000",
+            "glyph_bytes": FONT_BITMAP_GLYPH_BYTES,
+            "glyph_count": (
+                FONT_BITMAP_BANK_END - FONT_BITMAP_BANK_START
+            )
+            // FONT_BITMAP_GLYPH_BYTES,
+            "source_sha256": hashlib.sha256(
+                japanese[FONT_BITMAP_BANK_START:FONT_BITMAP_BANK_END]
+            ).hexdigest(),
+            "expected_source_sha256": FONT_BITMAP_SOURCE_SHA256,
+            "source_layout_valid": (
+                hashlib.sha256(
+                    japanese[FONT_BITMAP_BANK_START:FONT_BITMAP_BANK_END]
+                ).hexdigest()
+                == FONT_BITMAP_SOURCE_SHA256
+            ),
+            "candidate_count": len(font_bitmap),
+            "kind_counts": dict(sorted(font_bitmap_kind_counts.items())),
+            "category_counts": {
+                "font_bitmap_false_positive": len(font_bitmap)
+            },
+            "unclassified_count": 0,
+            "candidate_manifest_sha256": candidate_manifest_sha256(
+                font_bitmap
+            ),
+            "missing_representative_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    FONT_BITMAP_REPRESENTATIVE_ADDRESSES
+                    - font_bitmap_addresses
+                )
+            ],
+            "aligned_absolute_32_reference_count": sum(
+                len(references)
+                for references in font_bitmap_absolute.values()
+            ),
+            "aligned_absolute_32_references": [
+                {
+                    "target": f"0x{target:06X}",
+                    "addresses": [
+                        f"0x{address:06X}" for address in addresses
+                    ],
+                }
+                for target, addresses in sorted(font_bitmap_absolute.items())
+            ],
+            "pc_relative_lea_pea_reference_count": sum(
+                len(references)
+                for references in font_bitmap_pc_relative.values()
+            ),
+            "pc_relative_lea_pea_references": [
+                {
+                    "target": f"0x{target:06X}",
+                    "references": [
+                        {
+                            "instruction": reference["instruction"],
+                            "address": (
+                                f"0x{int(reference['address']):06X}"
+                            ),
+                            "displacement": reference["displacement"],
+                        }
+                        for reference in references
+                    ],
+                }
+                for target, references in sorted(
+                    font_bitmap_pc_relative.items()
+                )
+            ],
+            "representative_candidates": font_bitmap_representatives,
+        },
         "class_sprite_graphics_bank": {
             "range": "0x050000..0x060000",
             "candidate_count": len(class_sprite_graphics_rows),
@@ -1242,6 +1392,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
 
 def markdown_report(result: dict[str, object]) -> str:
+    font_bank = result["font_bitmap_bank"]
     class_bank = result["class_sprite_graphics_bank"]
     item_bank = result["item_name_graphics_bank"]
     system_bank = result["system_graphics_ending_bank"]
@@ -1258,6 +1409,11 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Low-signal candidates: {result['candidate_count']}",
         f"- Half-width candidates: {result['kind_counts']['halfwidth']}",
         f"- Uppercase ASCII candidates: {result['kind_counts']['ascii']}",
+        f"- Font-bitmap-bank candidates: {font_bank['candidate_count']}",
+        (
+            "- Font-bitmap-bank unclassified: "
+            f"{font_bank['unclassified_count']}"
+        ),
         (
             "- Class/sprite/graphics-bank candidates: "
             f"{class_bank['candidate_count']}"
@@ -1318,6 +1474,75 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed Font-Bitmap-Bank Candidates",
+            "",
+            (
+                f"- The fixed `{font_bank['range']}` bank contains "
+                f"{font_bank['glyph_count']} Japanese 16x16 glyphs at "
+                f"{font_bank['glyph_bytes']} bytes each."
+            ),
+            (
+                f"- Source SHA-256: `{font_bank['source_sha256']}` "
+                f"(layout valid: `{font_bank['source_layout_valid']}`)."
+            ),
+            (
+                f"- Candidate manifest SHA-256: "
+                f"`{font_bank['candidate_manifest_sha256']}`."
+            ),
+            (
+                "- Category total: `font_bitmap_false_positive` "
+                f"{font_bank['category_counts']['font_bitmap_false_positive']}."
+            ),
+            (
+                "- Kind totals: "
+                + ", ".join(
+                    f"`{kind}` {count}"
+                    for kind, count in font_bank["kind_counts"].items()
+                )
+                + "."
+            ),
+            (
+                "- Exact aligned four-byte windows: "
+                f"{font_bank['aligned_absolute_32_reference_count']} across "
+                f"{len(font_bank['aligned_absolute_32_references'])} targets."
+            ),
+            (
+                "- Exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{font_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Representative | Raw | Glyph index | Byte offset | Word context |",
+            "| --- | --- | ---: | ---: | --- |",
+        ]
+    )
+    for row in font_bank["representative_candidates"]:
+        lines.append(
+            f"| `{row['address']}` | `{row['raw_hex']}` | "
+            f"{row['glyph_index']} | {row['glyph_byte_offset']} | "
+            f"`{row['context_words']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "| Bitmap target | Aligned four-byte windows |",
+            "| --- | --- |",
+        ]
+    )
+    for row in font_bank["aligned_absolute_32_references"]:
+        lines.append(
+            f"| `{row['target']}` | "
+            + ", ".join(f"`{address}`" for address in row["addresses"])
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "Every byte in this source-locked bank is one of the 64 pixel bytes",
+            "for a Japanese 16x16 glyph. The short half-width/ASCII-looking runs",
+            "are therefore bitmap coincidences, regardless of whether an aligned",
+            "four-byte window is a real glyph/pixel address or a numeric/code",
+            "coincidence. They are not standalone byte strings.",
             "",
             "## Reviewed Class/Sprite/Graphics-Bank Candidates",
             "",
@@ -1570,6 +1795,7 @@ def main() -> None:
         encoding="utf-8",
     )
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
+    font_bank = result["font_bitmap_bank"]
     class_bank = result["class_sprite_graphics_bank"]
     item_bank = result["item_name_graphics_bank"]
     system_bank = result["system_graphics_ending_bank"]
@@ -1577,12 +1803,13 @@ def main() -> None:
     bank = result["text_ui_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
+        f"{font_bank['candidate_count']} font-bitmap-bank, "
         f"{class_bank['candidate_count']} class/sprite/graphics-bank, "
         f"{item_bank['candidate_count']} item/name/graphics-bank, "
         f"{system_bank['candidate_count']} system/graphics/ending-bank, "
         f"{ending_bank['candidate_count']} ending/scenario-bank, and "
         f"{bank['candidate_count']} text/UI-bank candidates, "
-        f"{class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
+        f"{font_bank['unclassified_count'] + class_bank['unclassified_count'] + item_bank['unclassified_count'] + system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
         "unclassified"
     )
 
