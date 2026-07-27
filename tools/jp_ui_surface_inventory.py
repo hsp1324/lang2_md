@@ -12,6 +12,7 @@ from scripts import build_korean_jp_probe as builder
 from tools import class_change_flow_inventory as class_change_flow_report
 from tools import jp_compressed_resource_inventory as compressed_resource_report
 from tools import magic_flow_inventory as magic_flow_report
+from tools import name_entry_flow_inventory as name_entry_flow_report
 
 
 RUNTIME_EVIDENCE_BY_ADDRESS = {
@@ -161,6 +162,8 @@ def add_rows(
 
 
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
+    name_entry_flow = name_entry_flow_report.inventory(japanese, korean)
+    name_entry_complete = bool(name_entry_flow["complete"])
     class_change_flow = class_change_flow_report.inventory(japanese, korean)
     class_change_scope = class_change_flow["scope"]
     class_change_complete = (
@@ -809,9 +812,32 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "complete": compressed_resources_complete,
             "report": "docs/compressed_resource_inventory.md",
         },
+        "name_entry_flow": {
+            "selectable_syllable_count": name_entry_flow["scope"][
+                "selectable_syllable_count"
+            ],
+            "maximum_name_syllables": name_entry_flow["scope"][
+                "maximum_name_syllables"
+            ],
+            "source_reference_count": name_entry_flow["scope"][
+                "source_reference_count"
+            ],
+            "source_locked_range_count": name_entry_flow["scope"][
+                "source_locked_range_count"
+            ],
+            "complete": name_entry_complete,
+            "report": "docs/name_entry_flow_inventory.md",
+        },
         "declared_patches": rows,
         "remaining_inventory_gaps": [
-            "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables",
+            *(
+                []
+                if name_entry_complete
+                else [
+                    "the fixed-palette name-entry flow no longer satisfies "
+                    "its source, storage, glyph, or confirmation inventory"
+                ]
+            ),
             *(
                 []
                 if class_change_complete
@@ -878,7 +904,11 @@ def markdown_report(result: dict[str, object]) -> str:
             "",
         ]
     )
-    lines.extend(f"- {gap}" for gap in result["remaining_inventory_gaps"])
+    gaps = result["remaining_inventory_gaps"]
+    if gaps:
+        lines.extend(f"- {gap}" for gap in gaps)
+    else:
+        lines.append("- None.")
     lines.extend(
         [
             "",

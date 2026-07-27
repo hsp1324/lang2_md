@@ -249,7 +249,13 @@ class JapaneseUiSurfaceInventoryTests(unittest.TestCase):
         self.assertTrue(all(row["live_verified"] for row in rows))
 
     def test_stage_one_keeps_only_current_explicit_unknowns(self):
-        self.assertEqual(len(self.result["remaining_inventory_gaps"]), 1)
+        self.assertEqual(self.result["remaining_inventory_gaps"], [])
+        name_entry = self.result["name_entry_flow"]
+        self.assertEqual(name_entry["selectable_syllable_count"], 57)
+        self.assertEqual(name_entry["maximum_name_syllables"], 8)
+        self.assertEqual(name_entry["source_reference_count"], 9)
+        self.assertEqual(name_entry["source_locked_range_count"], 5)
+        self.assertTrue(name_entry["complete"])
         class_change_gaps = [
             gap
             for gap in self.result["remaining_inventory_gaps"]

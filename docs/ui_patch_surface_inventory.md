@@ -76,6 +76,6 @@ Resource table `0x0B0000` index 1 uses entry
 
 ## Remaining Inventory Gaps
 
-- arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables
+- None.
 
 Detailed declarations are in `localization/ui_patch_surfaces.json`.

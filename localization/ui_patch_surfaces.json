@@ -352,6 +352,14 @@
     "complete": true,
     "report": "docs/compressed_resource_inventory.md"
   },
+  "name_entry_flow": {
+    "selectable_syllable_count": 57,
+    "maximum_name_syllables": 8,
+    "source_reference_count": 9,
+    "source_locked_range_count": 5,
+    "complete": true,
+    "report": "docs/name_entry_flow_inventory.md"
+  },
   "declared_patches": [
     {
       "group": "byte_ff_strings",
@@ -1715,7 +1723,5 @@
       "live_verified": true
     }
   ],
-  "remaining_inventory_gaps": [
-    "arbitrary-Hangul composition beyond the 57 production-safe name-entry syllables"
-  ]
+  "remaining_inventory_gaps": []
 }

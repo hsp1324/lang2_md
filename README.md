@@ -27,6 +27,7 @@
 - `tools/find_decompressed_tile.py`: `0x9DFE` 그래픽 압축 블록에서 특정 VRAM 타일 원본을 찾는 분석 도구입니다.
 - `tools/analyze_name_entry_vram.py`: GST 저장 상태에서 VRAM/plane CSV와 렌더 이미지를 뽑아 이름 입력 화면과 메뉴 타일 배치를 추적합니다.
 - `docs/name_entry_analysis.md`: 일본판 이름 입력 레이아웃, 현재 안전한 57자 한글 선택표, 저장 바이트, 확정 시 인덱스→글리프 변환 훅과 실기 검증 기록입니다.
+- `docs/name_entry_flow_inventory.md`: 이름 입력의 원본 참조·리소스 해시, 57음절 비트맵/바이트 매핑, 8칸 저장 버퍼, 예약 인덱스, 확정 훅과 실기 증거를 자동 검증한 완결성 보고서입니다.
 - `docs/sram_relocation.md`: 4 MiB ROM 확장으로 겹친 SRAM을 `0x400001`로 옮긴 주소 패치와 저장/불러오기 실기 검증 기록입니다.
 - `docs/class_change_analysis.md`: 클래스 체인지 15슬롯 공유 글리프와 두 레이아웃의 인덱스 소유권 및 한국어 슬롯 배치를 기록합니다.
 - `tools/build_class_change_probe_rom.py`: 지정한 지휘관·현재 클래스·활성 런타임 슬롯의 원본 후보 ID로 클래스 체인지 화면을 직접 열거나, `--end-turn-only`로 정상 턴 종료 레벨업 적용 경로를 재현하는 비배포 진단 ROM을 만듭니다. 턴 종료 프로브의 EXP는 클래스 레코드 `+0x14` 배수를 읽어 클래스별 원본 요구치로 설정합니다. Start 직접 진입은 화면/이동 검사용이며 실제 적용 증거로 사용하지 않습니다. `tools/verify_natural_class_change_evidence.py`는 리아나·쉐리·아론·스코트·라나·키스·레스터·제시카의 같은-ROM 전후 GST와 해당 진단 ROM 구조를 검증합니다.
@@ -183,7 +184,7 @@ python3 tools/jp_inline_byte_string_inventory.py
 python3 tools/jp_short_inline_byte_inventory.py
 ```
 
-전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에, 압축 리소스 전체 표는 `docs/compressed_resource_inventory.md`, `localization/compressed_resources.json`에, 16비트 직접 문자열 후보는 `docs/direct_word_candidate_inventory.md`, `localization/direct_word_candidates.json`에, 포인터 참조 바이트 문자열 후보는 `docs/direct_byte_string_candidate_inventory.md`, `localization/direct_byte_string_candidates.json`에 기록합니다. 엔딩·크레딧 전체 표면의 제어 흐름·포인터·페이지·실기 증거는 `docs/ending_credits_inventory.md`, `localization/ending_credits_inventory.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다. 현재 UI 선언 143개는 모두 원문/패치 검토가 끝났고 142개는 주소별 실기 증거가 연결되어 있습니다. 남은 한 개는 활성 훅이 우회하는 원위치 `로드` 폴백이며, 구조 조사 공백은 이름 입력에서 허용된 57음절 밖의 임의 한글 조합만 남아 있습니다.
+전체 한글화 단계와 현재 이벤트 범위는 `docs/full_localization_plan.md`, `docs/full_localization_inventory.md`, `localization/event_pages.json`에 기록합니다. 전역 이름 테이블 조사는 `docs/global_localization_inventory.md`, `localization/global_strings.json`에, 공유 16비트 리소스는 `docs/shared_word_resource_inventory.md`, `localization/shared_word_resources.json`에 기록합니다. UI 선언과 조사 공백은 `docs/ui_patch_surface_inventory.md`, `localization/ui_patch_surfaces.json`에, 압축 리소스 전체 표는 `docs/compressed_resource_inventory.md`, `localization/compressed_resources.json`에, 이름 입력 제어 흐름은 `docs/name_entry_flow_inventory.md`, `localization/name_entry_flow_inventory.json`에, 16비트 직접 문자열 후보는 `docs/direct_word_candidate_inventory.md`, `localization/direct_word_candidates.json`에, 포인터 참조 바이트 문자열 후보는 `docs/direct_byte_string_candidate_inventory.md`, `localization/direct_byte_string_candidates.json`에 기록합니다. 엔딩·크레딧 전체 표면의 제어 흐름·포인터·페이지·실기 증거는 `docs/ending_credits_inventory.md`, `localization/ending_credits_inventory.json`에 기록합니다. `modified`나 `touched`는 일본판과 바이트 또는 글꼴이 다르다는 뜻이며 완역·실기 검증 완료를 의미하지 않습니다. 현재 UI 선언 143개는 모두 원문/패치 검토가 끝났고 142개는 주소별 실기 증거가 연결되어 있습니다. 남은 한 개는 활성 훅이 우회하는 원위치 `로드` 폴백입니다. 이름 입력은 일본 원본과 같은 고정 문자표 방식으로 57개의 안전한 한글 음절, 8칸 저장, 삭제·확정·대사 반영까지 구조 검증되어 UI 조사 공백을 닫았습니다.
 3글자 미만의 짧은 비포인터 후보 집계와 텍스트/UI 뱅크 판정은 `docs/short_inline_byte_candidate_inventory.md`, `localization/short_inline_byte_candidates.json`에 기록합니다.
 
 직접 문자열 후보 783개는 모두 포인터 레코드, 선언된 패치, 엔딩/후일담,
@@ -306,7 +307,7 @@ Start, Start, C, B(A 선택), Left, Up, C(Done), C
 ```
 
 일본판 기반 probe에서는 이름 입력 화면의 기본 이름을 그대로 쓸 수 있으므로 이름 화면에서 `Start`를 누르면 바로 진행됩니다.
-현재 이름 입력표는 공유 상태/아이콘 타일을 침범하지 않는 57개 한글 음절을 선택할 수 있습니다. 기본 `엘윈`의 이름 확정과 시나리오 진입을 BlastEm에서 검증했습니다. 과거 84자 표에서 `폴`을 직접 선택하는 훅도 검증했지만 전역 작은 글꼴 충돌 때문에 현재 표에서는 제외했습니다. 임의의 모든 한글 조합을 지원하려면 이름 화면 전용 글꼴 또는 조합형 입력기가 필요합니다.
+현재 이름 입력표는 공유 상태/아이콘 타일을 침범하지 않는 57개 한글 음절을 선택할 수 있습니다. 기본 `엘윈`의 이름 확정과 시나리오 진입을 BlastEm에서 검증했습니다. 과거 84자 표에서 `폴`을 직접 선택하는 훅도 검증했지만 전역 작은 글꼴 충돌 때문에 현재 표에서는 제외했습니다. 일본 원본도 고정 문자표이므로 현재 57음절 입력·8칸 저장·삭제·확정·대사 반영을 한글화 완료 범위로 정의합니다. 임의의 모든 한글 조합은 이름 화면 전용 글꼴 또는 조합형 입력기가 필요한 선택적 확장 기능입니다.
 
 ```text
 Start(컷신 스킵), Start(타이틀), C, Start(이름 확정), C

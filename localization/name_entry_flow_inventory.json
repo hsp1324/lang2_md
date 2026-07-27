@@ -1,0 +1,683 @@
+{
+  "scope": {
+    "source_input_model": "fixed 95-glyph palette",
+    "localized_input_model": "fixed 57-syllable Korean palette",
+    "selectable_syllable_count": 57,
+    "unique_selectable_syllable_count": 57,
+    "maximum_name_syllables": 8,
+    "source_reference_count": 9,
+    "source_locked_range_count": 5,
+    "representative_name_count": 8,
+    "live_evidence_count": 6,
+    "arbitrary_hangul_composition_required_for_localization": false,
+    "optional_future_extension": "screen-local font paging or a composition engine, without reusing shared status/icon byte-font codes"
+  },
+  "complete": true,
+  "acceptance": "The Japanese game provides a fixed character palette rather than a general text composer. The Korean screen preserves that input, delete, confirmation, storage, route, and dialogue behavior with 57 production-safe syllables. Arbitrary Hangul composition is an optional feature, not an untranslated UI surface.",
+  "source_references": [
+    {
+      "offset": "0x02ABF8",
+      "bytes": "45 F9 00 0A 38 E0",
+      "verified": true
+    },
+    {
+      "offset": "0x02AC0E",
+      "bytes": "41 F9 00 0A 37 BE",
+      "verified": true
+    },
+    {
+      "offset": "0x02AC22",
+      "bytes": "41 F9 00 0A 38 A6",
+      "verified": true
+    },
+    {
+      "offset": "0x02AC3E",
+      "bytes": "41 F9 00 0A 3B 0C",
+      "verified": true
+    },
+    {
+      "offset": "0x02AC52",
+      "bytes": "41 F9 00 0A 37 E6",
+      "verified": true
+    },
+    {
+      "offset": "0x02B060",
+      "bytes": "45 F9 00 0A 3B 3E",
+      "verified": true
+    },
+    {
+      "offset": "0x02B4BE",
+      "bytes": "45 F9 00 0A 3B B0",
+      "verified": true
+    },
+    {
+      "offset": "0x02B67A",
+      "bytes": "41 F9 00 0A 3B B0",
+      "verified": true
+    },
+    {
+      "offset": "0x02B68E",
+      "bytes": "41 F9 00 0A 3B C0",
+      "verified": true
+    }
+  ],
+  "source_locked_ranges": [
+    {
+      "name": "selectable_glyph_list",
+      "start": "0x0A37E6",
+      "end": "0x0A38A6",
+      "size": 192,
+      "source_sha256": "0cc6a50297cf8cc222ebaefb73053b62e90479b4b05a2ef311a39ea5b372331b",
+      "verified": true
+    },
+    {
+      "name": "screen_layout",
+      "start": "0x0A38E0",
+      "end": "0x0A3B0B",
+      "size": 555,
+      "source_sha256": "bd71d36d26f9866d92b272c15c54fefb3253810c94d3f6565b0725e118eb403d",
+      "verified": true
+    },
+    {
+      "name": "default_name_buffer",
+      "start": "0x0A3B0C",
+      "end": "0x0A3B1C",
+      "size": 16,
+      "source_sha256": "c073d03089c690e53530eabc2842bc02d84f6d6082e33987b7a35b487e52ef7d",
+      "verified": true
+    },
+    {
+      "name": "selection_to_byte_table",
+      "start": "0x0A3B3E",
+      "end": "0x0A3B9D",
+      "size": 95,
+      "source_sha256": "50d1a1959f5d98185873049d2b4555315a1433f35ee960b87d6e3902beb9fb9a",
+      "verified": true
+    },
+    {
+      "name": "confirmation_copy_hook",
+      "start": "0x02B046",
+      "end": "0x02B058",
+      "size": 18,
+      "source_sha256": "c6a4d632a185a672fc1ee21ac90ddd1599219fd9e97df84e8c461c890ab8315c",
+      "verified": true
+    }
+  ],
+  "structure": {
+    "regions": [
+      {
+        "name": "default_name_buffer",
+        "offset": "0x0A3B0C",
+        "size": 16,
+        "builder_exact": true
+      },
+      {
+        "name": "screen_layout",
+        "offset": "0x0A38E0",
+        "size": 555,
+        "builder_exact": true
+      },
+      {
+        "name": "selection_to_byte_table",
+        "offset": "0x0A3B3E",
+        "size": 95,
+        "builder_exact": true
+      },
+      {
+        "name": "confirmation_hook",
+        "offset": "0x02B046",
+        "size": 18,
+        "builder_exact": true
+      },
+      {
+        "name": "confirmation_routine",
+        "offset": "0x2A0000",
+        "size": 38,
+        "builder_exact": true
+      }
+    ],
+    "controls": {
+      "maximum_name_syllables": 8,
+      "blank_delete_index": 84,
+      "japanese_composite_reserved_index": 70,
+      "unused_index_count": 38,
+      "unused_indexes_blank": true,
+      "glyph_list_terminator": "0xFFFF",
+      "confirmation_hook_exact": true,
+      "confirmation_routine_exact": true
+    }
+  },
+  "representative_names": [
+    {
+      "name": "엘윈",
+      "syllable_count": 2,
+      "selectable": true
+    },
+    {
+      "name": "리아나",
+      "syllable_count": 3,
+      "selectable": true
+    },
+    {
+      "name": "헤인",
+      "syllable_count": 2,
+      "selectable": true
+    },
+    {
+      "name": "레온",
+      "syllable_count": 2,
+      "selectable": true
+    },
+    {
+      "name": "베른하르트",
+      "syllable_count": 5,
+      "selectable": true
+    },
+    {
+      "name": "에그베르트",
+      "syllable_count": 5,
+      "selectable": true
+    },
+    {
+      "name": "발드",
+      "syllable_count": 2,
+      "selectable": true
+    },
+    {
+      "name": "레스터",
+      "syllable_count": 3,
+      "selectable": true
+    }
+  ],
+  "glyphs": [
+    {
+      "index": 0,
+      "syllable": "엘",
+      "glyph_id": "0x700B",
+      "byte_code": "0xB4",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 1,
+      "syllable": "윈",
+      "glyph_id": "0x700C",
+      "byte_code": "0xD9",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 2,
+      "syllable": "리",
+      "glyph_id": "0x7001",
+      "byte_code": "0xB3",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 3,
+      "syllable": "아",
+      "glyph_id": "0x7015",
+      "byte_code": "0xA8",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 4,
+      "syllable": "나",
+      "glyph_id": "0x7016",
+      "byte_code": "0xDD",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 5,
+      "syllable": "헤",
+      "glyph_id": "0x7075",
+      "byte_code": "0xD8",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 6,
+      "syllable": "인",
+      "glyph_id": "0x701D",
+      "byte_code": "0xB1",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 7,
+      "syllable": "레",
+      "glyph_id": "0x7030",
+      "byte_code": "0xD1",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 8,
+      "syllable": "온",
+      "glyph_id": "0x7046",
+      "byte_code": "0xD2",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 9,
+      "syllable": "베",
+      "glyph_id": "0x704D",
+      "byte_code": "0xDB",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 10,
+      "syllable": "른",
+      "glyph_id": "0x704E",
+      "byte_code": "0xBD",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 11,
+      "syllable": "하",
+      "glyph_id": "0x7011",
+      "byte_code": "0xA9",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 12,
+      "syllable": "르",
+      "glyph_id": "0x704F",
+      "byte_code": "0xAA",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 13,
+      "syllable": "트",
+      "glyph_id": "0x7050",
+      "byte_code": "0xB2",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 14,
+      "syllable": "에",
+      "glyph_id": "0x705C",
+      "byte_code": "0xBB",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 15,
+      "syllable": "그",
+      "glyph_id": "0x7044",
+      "byte_code": "0xBE",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 16,
+      "syllable": "드",
+      "glyph_id": "0x7006",
+      "byte_code": "0xBF",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 17,
+      "syllable": "발",
+      "glyph_id": "0x7005",
+      "byte_code": "0xC1",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 18,
+      "syllable": "병",
+      "glyph_id": "0x70C8",
+      "byte_code": "0xCF",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 19,
+      "syllable": "사",
+      "glyph_id": "0x700D",
+      "byte_code": "0xCA",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 20,
+      "syllable": "지",
+      "glyph_id": "0x7056",
+      "byte_code": "0xAD",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 21,
+      "syllable": "휘",
+      "glyph_id": "0x716E",
+      "byte_code": "0xAE",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 22,
+      "syllable": "관",
+      "glyph_id": "0x7021",
+      "byte_code": "0xC2",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 23,
+      "syllable": "제",
+      "glyph_id": "0x7026",
+      "byte_code": "0xC0",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 24,
+      "syllable": "시",
+      "glyph_id": "0x702A",
+      "byte_code": "0xAC",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 25,
+      "syllable": "민",
+      "glyph_id": "0x702B",
+      "byte_code": "0xB6",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 26,
+      "syllable": "국",
+      "glyph_id": "0x707A",
+      "byte_code": "0xCE",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 27,
+      "syllable": "파",
+      "glyph_id": "0x7008",
+      "byte_code": "0xCC",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 28,
+      "syllable": "이",
+      "glyph_id": "0x7031",
+      "byte_code": "0xA7",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 29,
+      "syllable": "터",
+      "glyph_id": "0x7037",
+      "byte_code": "0xAB",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 30,
+      "syllable": "클",
+      "glyph_id": "0x722F",
+      "byte_code": "0xD6",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 31,
+      "syllable": "릭",
+      "glyph_id": "0x725E",
+      "byte_code": "0xDA",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 32,
+      "syllable": "워",
+      "glyph_id": "0x70EE",
+      "byte_code": "0xC4",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 33,
+      "syllable": "록",
+      "glyph_id": "0x7238",
+      "byte_code": "0xF6",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 34,
+      "syllable": "로",
+      "glyph_id": "0x703A",
+      "byte_code": "0xDC",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 35,
+      "syllable": "마",
+      "glyph_id": "0x705D",
+      "byte_code": "0x57",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 36,
+      "syllable": "매",
+      "glyph_id": "0x7178",
+      "byte_code": "0xDE",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 37,
+      "syllable": "직",
+      "glyph_id": "0x7160",
+      "byte_code": "0xDF",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 38,
+      "syllable": "프",
+      "glyph_id": "0x7052",
+      "byte_code": "0x4A",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 39,
+      "syllable": "스",
+      "glyph_id": "0x7036",
+      "byte_code": "0xAF",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 40,
+      "syllable": "소",
+      "glyph_id": "0x7055",
+      "byte_code": "0x51",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 41,
+      "syllable": "맨",
+      "glyph_id": "0x721D",
+      "byte_code": "0xBC",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 42,
+      "syllable": "삼",
+      "glyph_id": "0x718D",
+      "byte_code": "0xC6",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 43,
+      "syllable": "솔",
+      "glyph_id": "0x721B",
+      "byte_code": "0xB8",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 44,
+      "syllable": "저",
+      "glyph_id": "0x70A8",
+      "byte_code": "0xD7",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 45,
+      "syllable": "호",
+      "glyph_id": "0x70AE",
+      "byte_code": "0x59",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 46,
+      "syllable": "손",
+      "glyph_id": "0x7121",
+      "byte_code": "0xC7",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 47,
+      "syllable": "바",
+      "glyph_id": "0x7069",
+      "byte_code": "0xC8",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 48,
+      "syllable": "란",
+      "glyph_id": "0x718E",
+      "byte_code": "0xC9",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 49,
+      "syllable": "돈",
+      "glyph_id": "0x715A",
+      "byte_code": "0xC3",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 50,
+      "syllable": "군",
+      "glyph_id": "0x703E",
+      "byte_code": "0xA5",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 51,
+      "syllable": "적",
+      "glyph_id": "0x701A",
+      "byte_code": "0xA6",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 52,
+      "syllable": "범",
+      "glyph_id": "0x7252",
+      "byte_code": "0xB5",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 53,
+      "syllable": "위",
+      "glyph_id": "0x707F",
+      "byte_code": "0xB7",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 55,
+      "syllable": "수",
+      "glyph_id": "0x70B7",
+      "byte_code": "0xB9",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 56,
+      "syllable": "정",
+      "glyph_id": "0x7119",
+      "byte_code": "0xBA",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    },
+    {
+      "index": 57,
+      "syllable": "금",
+      "glyph_id": "0x714C",
+      "byte_code": "0x5A",
+      "safe_glyph_bank": true,
+      "bitmap_verified": true
+    }
+  ],
+  "live_evidence": [
+    {
+      "role": "production-safe 57-syllable grid and default name",
+      "path": "captures/run/0267_name_entry.png",
+      "exists": true
+    },
+    {
+      "role": "default-name confirmation",
+      "path": "captures/run/0267_name_confirm.png",
+      "exists": true
+    },
+    {
+      "role": "confirmed name carried into route screen",
+      "path": "captures/run/0267_name_confirm_route.png",
+      "exists": true
+    },
+    {
+      "role": "extended word-font build retained the grid",
+      "path": "captures/run/69d4_name_entry.png",
+      "exists": true
+    },
+    {
+      "role": "extended word-font build retained confirmation",
+      "path": "captures/run/69d4_name_confirm.png",
+      "exists": true
+    },
+    {
+      "role": "index-to-glyph hook carried a manually selected custom name",
+      "path": "captures/run/0e8a_pol_dialogue_3.png",
+      "historical_palette": true,
+      "exists": true
+    }
+  ]
+}

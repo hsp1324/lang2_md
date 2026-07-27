@@ -82,7 +82,13 @@ list with `FFFF`.
   by live status, faction, and icon graphics. The historical captures remain
   under `captures/run/0e8a_*`.
 
-The production screen is a practical 57-syllable palette for game names, not
-arbitrary Hangul composition. Expanding it requires a screen-specific font
-resource or a new page/composition design; do not reuse reserved indexes or
-shared status/icon byte codes.
+The Japanese screen is a fixed 95-glyph palette, not a general Japanese text
+composer. The production Korean screen preserves the same input model with a
+production-safe 57-syllable palette, an eight-syllable editable buffer,
+blank/delete, confirmation, route propagation, and dialogue propagation.
+`tools/name_entry_flow_inventory.py` source-locks those paths and verifies every
+selectable glyph bitmap and byte mapping. That is the localized feature
+boundary; arbitrary Hangul composition is an optional extension rather than an
+untranslated UI surface. Such an extension still requires a screen-specific
+font resource or a new page/composition design. Do not reuse reserved indexes
+or shared status/icon byte codes.
