@@ -120,6 +120,9 @@ test fails. The authoritative machine-readable state is
 
 ## Stage 7: Separate Hard-Mode Build
 
+- Status: pending user balance discussion. This remains a required follow-up
+  stage of the active project goal, but implementation must not begin merely
+  because the normal Korean build is ready.
 - Preserve the normal Korean ROM's Japanese balance and emit hard mode under a
   separate build profile and filename.
 - Before implementation, discuss and agree with the user on scenario-band
@@ -128,6 +131,8 @@ test fails. The authoritative machine-readable state is
   and boss/support/branch exceptions.
 - Do not choose provisional balance values or patch the normal ROM while that
   discussion is pending.
+- Treat the completed balance discussion as an explicit approval gate: do not
+  generate or publish a hard-mode ROM until the user accepts the chosen rules.
 - Apply accepted changes through the documented scenario placement/editor data
   model and regression-test each scenario independently.
 
