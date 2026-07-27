@@ -631,7 +631,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "ending and credits UI variants outside the verified Scenario 27, "
             "all-epilogue, ending-visit, and final-credit paths",
             "magic/summon targeting and result paths beyond the production-faithful "
-            "Magic Arrow and diagnostic Attack/Elemental probes",
+            "Magic Arrow and diagnostic Attack/Fireball/Elemental probes",
             "ownership and purpose of 425 compressed resources beyond byte-font "
             "resource index 1, battle-terrain resource index 223, item-icon "
             "resource index 391, and title-logo resource index 393",

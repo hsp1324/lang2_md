@@ -180,6 +180,20 @@ class Scenario26ClearProbeTests(unittest.TestCase):
             self.assertEqual(data[base + FIELD_OFFSETS["name_id"]], name_id)
             self.assertEqual(data[base + FIELD_OFFSETS["class_id"]], class_id)
 
+    def test_pre_egbert_records_use_source_generic_commander_name_ids(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        self.assertEqual(
+            [
+                self.source[
+                    layout.records_offset
+                    + index * FIXED_RECORD_SIZE
+                    + FIELD_OFFSETS["name_id"]
+                ]
+                for index in range(probe_builder.EGBERT_RECORD_INDEX)
+            ],
+            list(range(0x2A, 0x33)),
+        )
+
     def test_preserves_player_deployments_and_event_header(self):
         data = self.patched()
         expected = probe_builder.deployment_bytes(
@@ -477,7 +491,7 @@ class Scenario26ClearProbeTests(unittest.TestCase):
     def test_current_protagonist_death_checksum_is_locked(self):
         self.assertEqual(
             self.protagonist_death_patched()[0x18E:0x190],
-            bytes.fromhex("D8 7E"),
+            bytes.fromhex("11 81"),
         )
 
 

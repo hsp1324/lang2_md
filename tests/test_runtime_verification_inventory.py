@@ -14,8 +14,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
             row["surface"]: row for row in data["global_evidence"]
         }["magic_targeting_results"]
         self.assertEqual(evidence["state"], "verified_probe")
-        self.assertEqual(evidence["checksum"], "49A2/797C")
-        self.assertEqual(evidence["based_on"], "AD01")
+        self.assertEqual(evidence["checksum"], "49A2/797C/E72D")
+        self.assertEqual(evidence["based_on"], "AD01/1AB2")
         self.assertIn("preserves stock magic", evidence["note"])
         self.assertIn("not production ownership evidence", evidence["note"])
         self.assertIn(
@@ -24,6 +24,10 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         )
         self.assertIn(
             "captures/run/797c_magic_16_result_stable.png",
+            evidence["captures"],
+        )
+        self.assertIn(
+            "captures/run/e72d_magic_03_result_stable.png",
             evidence["captures"],
         )
 
@@ -1517,6 +1521,8 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         self.assertIn("text pointers 0x1B2EE4", scenario26["note"])
         self.assertIn("것부/터", scenario26["note"])
         self.assertIn("AA6B", scenario26["note"])
+        self.assertIn("distinct name IDs 0x2A..0x32", scenario26["note"])
+        self.assertIn("not mislabeled Egbert dialogue", scenario26["note"])
         self.assertIn("젠장! 여기까지인가…", scenario26["note"])
         self.assertEqual(scenario27["preparation"], "verified_current")
         self.assertEqual(scenario27["conditions"], "verified_current")
