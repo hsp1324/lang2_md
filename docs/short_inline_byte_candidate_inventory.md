@@ -35,6 +35,8 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 - Executable-core-A unclassified: 0
 - Executable-core-B candidates: 174
 - Executable-core-B unclassified: 0
+- Executable-core-C candidates: 85
+- Executable-core-C unclassified: 0
 - Exact aligned 32-bit references to text/UI-bank candidates: 0
 - Exact `LEA d16(PC)`/`PEA d16(PC)` references to text/UI-bank candidates: 0
 
@@ -51,6 +53,27 @@ This scan inventories maximal FF-terminated half-width/uppercase-ASCII runs with
 | `other_90000_9ffff` | 79 | 59 |
 | `structured_game_data` | 0 | 4 |
 | `text_ui_bank` | 22 | 16 |
+
+## Reviewed Executable-Core-C Candidates
+
+- The source-locked `0x00D49E..0x00FE28` region contains two exact 68000 instruction streams and two explicit candidate-free data tables.
+- Source SHA-256: `d1913fc42d1ee942998c90be00824691f635964f647a81820b41690b6d65e27e`; candidate manifest SHA-256: `67dff3bcfc092e79e36c70607523ac284d1fefafea989cf1f8075c997032e715` (layout valid: `True`).
+- Category totals: `contiguous_instruction_stream_false_positive` 85.
+- Exact aligned four-byte windows: 2; exact `LEA d16(PC)`/`PEA d16(PC)` references: 0.
+
+| Code segment | Bytes | Instructions | Candidates | Source SHA-256 |
+| --- | ---: | ---: | ---: | --- |
+| `0x00D49E..0x00D7B6` | 792 | 131 | 3 | `6b7ebd588cba655e2e4ec510d782f5f1883c72d4e85bf9d03b7d3293d0ab5f41` |
+| `0x00D7D6..0x00FD42` | 9580 | 2133 | 82 | `6f9f0b9ba0634b2ea7830d4e4291538873f061c9f8591bba776e5ce542535dbc` |
+
+| Data segment | Owner | Bytes | Candidates | Source SHA-256 |
+| --- | --- | ---: | ---: | --- |
+| `0x00D7B6..0x00D7D6` | input and selection pattern table | 32 | 0 | `ee1e957def3d929d8965253f6b14049258f15b72a3fa938d1c190fdbe368b282` |
+| `0x00FD42..0x00FE28` | seven-pointer layout-record table | 230 | 0 | `250ee5465c85e58924609b7f2ed6d4cbd0cab3050e36e9a4d71e7103a38ed155` |
+
+The first code byte at `0x00D49E` is also the final ASCII `!`
+of the preceding source marker. Independent Capstone tests require
+both code streams to end exactly at their declared boundaries.
 
 ## Reviewed Executable-Core-B Candidates
 

@@ -772,16 +772,16 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
             "battle-terrain resource index 223, item-icon resource index 391, "
             "MASAYA publisher-logo resource index 392, and title-logo resource "
             "index 393; broad raw-tile asset families are classified for all 429",
-            "exact ownership of low-signal byte sequences outside the 5,898 reviewed "
+            "exact ownership of low-signal byte sequences outside the 5,983 reviewed "
             "font/class/sprite/item/name/graphics/system/ending/scenario/text/UI/"
-            "compressed-resource/executable-core-A/core-B/startup/auxiliary/gameplay/"
-            "renderer/tail candidates: "
+            "compressed-resource/executable-core-A/core-B/core-C/startup/"
+            "auxiliary/gameplay/renderer/tail candidates: "
             "the one/two-signal scan region-classifies 6,612 candidates, proves "
-            "5,897 rows are instruction/bitmap/pointer-boundary/word/graphics/layout/"
+            "5,982 rows are instruction/bitmap/pointer-boundary/word/graphics/layout/"
             "compressed payload data, and "
             "identifies "
             "retained scenario-level prefix L-; exact ownership of the remaining "
-            "714 executable/numeric candidates and base-relative, indexed, or "
+            "629 executable/numeric candidates and base-relative, indexed, or "
             "dynamic access remains open",
         ],
     }

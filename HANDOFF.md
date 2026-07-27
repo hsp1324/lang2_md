@@ -11786,3 +11786,35 @@ contains 57 safe syllables as documented below and in
   `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
   No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
   remained the sole emulator display.
+
+### Executable Core C Low-Signal Audit (2026-07-27)
+
+- The source-locked `0x00D49E..0x00FE27` region has SHA-256
+  `d1913fc42d1ee942998c90be00824691f635964f647a81820b41690b6d65e27e`
+  and contains 85 low-signal candidates: 40 half-width-looking and 45
+  ASCII-looking rows. Its ordered candidate manifest is
+  `67dff3bcfc092e79e36c70607523ac284d1fefafea989cf1f8075c997032e715`.
+- Two exact code streams own all 85 candidates:
+  `0x00D49E..0x00D7B5` has 131 instructions and three candidates;
+  `0x00D7D6..0x00FD41` has 2,133 instructions and 82 candidates. Independent
+  Capstone tests require every stream to end exactly at its declared boundary
+  and every candidate span to be covered by instruction bytes.
+- `0x00D7B6..0x00D7D5` is a 32-byte input/selection pattern table read through
+  `LEA 0x00D7B6`. `0x00FD42..0x00FE27` begins with seven pointers to
+  `0x00FD5E`, `0x00FD76`, `0x00FD94`, `0x00FDB2`, `0x00FDD0`,
+  `0x00FDEE`, and `0x00FE0C`, which own the following layout records. Both
+  data segments are source-locked and contain no low-signal candidate.
+- The first code byte at `0x00D49E` is also the final ASCII `!` byte of the
+  preceding menu marker. This overlap is intentional in the Japanese ROM.
+- Two aligned references target candidates `0x00DA2A` and `0x00FA28`.
+  Independent disassembly proves both are exact even instruction starts
+  (`TST.B` and `CLR.B` respectively), strengthening code ownership. No
+  executable PC-relative `LEA`/`PEA` targets a row.
+- The cumulative exact review is now 5,983 of 6,612 short-inline candidates:
+  5,982 structural false positives plus the retained scenario-level `L-`.
+  The remaining executable/numeric set is 629 candidates.
+- Focused inventory tests pass 115/115. Reports were regenerated from isolated
+  ROM `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` with SHA-256
+  `526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3`.
+  No production ROM bytes changed, BlastEm was not launched, and Xvfb `:104`
+  remained the sole emulator display.
