@@ -216,6 +216,100 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertEqual(by_scenario[31]["offsets"], ["0x183902"])
         self.assertEqual(secret_rule["scenarios"], [28, 29, 30, 31])
 
+    def test_recommended_policy_preview_is_complete_but_not_applied(self):
+        preview = self.inventory["balance_discussion"][
+            "recommended_unapproved_proposal_preview"
+        ]
+        self.assertEqual(preview["status"], "discussion_preview_only")
+        self.assertEqual(preview["proposal_id"], "standard_hard_ramp_v1")
+        self.assertFalse(preview["rom_values_applied"])
+        self.assertEqual(preview["target_record_count"], 262)
+        self.assertEqual(preview["target_offsets_unique"], 262)
+        self.assertEqual(
+            [
+                (row["scenario"], row["target_record_count"])
+                for row in preview["scenarios"]
+            ],
+            [
+                (1, 2),
+                (2, 6),
+                (3, 8),
+                (4, 6),
+                (5, 9),
+                (6, 9),
+                (7, 8),
+                (8, 11),
+                (9, 10),
+                (10, 13),
+                (11, 10),
+                (12, 11),
+                (13, 13),
+                (14, 11),
+                (15, 11),
+                (16, 10),
+                (17, 11),
+                (18, 9),
+                (19, 10),
+                (20, 10),
+                (21, 11),
+                (22, 11),
+                (23, 11),
+                (24, 10),
+                (25, 11),
+                (26, 10),
+                (27, 10),
+            ],
+        )
+        self.assertEqual(
+            preview["cap_diagnostics"],
+            {
+                "commander_at": {
+                    "result_at_cap_count": 2,
+                    "clamped_by_cap_count": 0,
+                },
+                "commander_df": {
+                    "result_at_cap_count": 2,
+                    "clamped_by_cap_count": 0,
+                },
+                "soldier_at_correction": {
+                    "result_at_cap_count": 15,
+                    "clamped_by_cap_count": 8,
+                },
+                "soldier_df_correction": {
+                    "result_at_cap_count": 23,
+                    "clamped_by_cap_count": 11,
+                },
+            },
+        )
+        scenario_22 = preview["scenarios"][21]
+        self.assertEqual(
+            scenario_22["projections"]["commander_at"]["projected"],
+            {"minimum": 41, "maximum": 64, "mean": 46.5},
+        )
+        self.assertEqual(
+            preview["explicit_automatic_exclusions"],
+            [
+                {
+                    "scenario": 1,
+                    "offset": "0x1802FC",
+                    "name_korean": "레온",
+                    "reason": "연출용 강적",
+                },
+                {
+                    "scenario": 1,
+                    "offset": "0x180320",
+                    "name_korean": "레아드",
+                    "reason": "연출용 강적",
+                },
+                {
+                    "scenario": 24,
+                    "offset": "0x182B8A",
+                    "name_korean": "베른하르트",
+                    "reason": "원작 이벤트 진영 전환",
+                },
+            ],
+        )
+
     def test_all_source_records_have_addresses_and_six_mercenary_slots(self):
         scenarios = self.inventory["scenarios"]
         self.assertEqual([row["number"] for row in scenarios], list(range(1, 32)))

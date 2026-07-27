@@ -1,5 +1,5 @@
 {
-  "schema_version": 7,
+  "schema_version": 8,
   "status": "balance_discussion_required",
   "approval_gate": {
     "user_approved": false,
@@ -492,6 +492,2260 @@
             31
           ],
           "rule": "비밀 시나리오는 본편 공식에서 제외하고 개별 조정"
+        }
+      ]
+    },
+    "recommended_unapproved_proposal_preview": {
+      "status": "discussion_preview_only",
+      "proposal_id": "standard_hard_ramp_v1",
+      "rom_values_applied": false,
+      "selection_policy": "main-story side 04 plus the ten verified-hostile scenario-22 side-08 records, minus explicit automatic exclusions",
+      "target_record_count": 262,
+      "target_offsets_unique": 262,
+      "explicit_automatic_exclusions": [
+        {
+          "scenario": 1,
+          "offset": "0x1802FC",
+          "name_korean": "레온",
+          "reason": "연출용 강적"
+        },
+        {
+          "scenario": 1,
+          "offset": "0x180320",
+          "name_korean": "레아드",
+          "reason": "연출용 강적"
+        },
+        {
+          "scenario": 24,
+          "offset": "0x182B8A",
+          "name_korean": "베른하르트",
+          "reason": "원작 이벤트 진영 전환"
+        }
+      ],
+      "cap_diagnostics": {
+        "commander_at": {
+          "result_at_cap_count": 2,
+          "clamped_by_cap_count": 0
+        },
+        "commander_df": {
+          "result_at_cap_count": 2,
+          "clamped_by_cap_count": 0
+        },
+        "soldier_at_correction": {
+          "result_at_cap_count": 15,
+          "clamped_by_cap_count": 8
+        },
+        "soldier_df_correction": {
+          "result_at_cap_count": 23,
+          "clamped_by_cap_count": 11
+        }
+      },
+      "scenarios": [
+        {
+          "scenario": 1,
+          "target_record_count": 2,
+          "target_offsets": [
+            "0x1802D8",
+            "0x180344"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 19,
+                "maximum": 21,
+                "mean": 20
+              },
+              "projected": {
+                "minimum": 21,
+                "maximum": 23,
+                "mean": 22
+              },
+              "delta": 2,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 18,
+                "maximum": 18,
+                "mean": 18
+              },
+              "projected": {
+                "minimum": 19,
+                "maximum": 19,
+                "mean": 19
+              },
+              "delta": 1,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 0,
+                "maximum": 2,
+                "mean": 1
+              },
+              "projected": {
+                "minimum": 1,
+                "maximum": 3,
+                "mean": 2
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 0,
+                "maximum": 2,
+                "mean": 1
+              },
+              "projected": {
+                "minimum": 1,
+                "maximum": 3,
+                "mean": 2
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 2,
+          "target_record_count": 6,
+          "target_offsets": [
+            "0x180420",
+            "0x180444",
+            "0x180468",
+            "0x18048C",
+            "0x1804B0",
+            "0x1804D4"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 20,
+                "maximum": 23,
+                "mean": 20.8
+              },
+              "projected": {
+                "minimum": 22,
+                "maximum": 25,
+                "mean": 22.8
+              },
+              "delta": 2,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 16,
+                "maximum": 21,
+                "mean": 18.5
+              },
+              "projected": {
+                "minimum": 17,
+                "maximum": 22,
+                "mean": 19.5
+              },
+              "delta": 1,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 0,
+                "maximum": 6,
+                "mean": 1.3
+              },
+              "projected": {
+                "minimum": 1,
+                "maximum": 7,
+                "mean": 2.3
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 4,
+                "mean": 2.3
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 5,
+                "mean": 3.3
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 3,
+          "target_record_count": 8,
+          "target_offsets": [
+            "0x180568",
+            "0x18058C",
+            "0x1805B0",
+            "0x1805D4",
+            "0x1805F8",
+            "0x18061C",
+            "0x180640",
+            "0x180664"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 19,
+                "maximum": 40,
+                "mean": 22.4
+              },
+              "projected": {
+                "minimum": 21,
+                "maximum": 42,
+                "mean": 24.4
+              },
+              "delta": 2,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 18,
+                "maximum": 30,
+                "mean": 20.1
+              },
+              "projected": {
+                "minimum": 19,
+                "maximum": 31,
+                "mean": 21.1
+              },
+              "delta": 1,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 0,
+                "maximum": 11,
+                "mean": 1.6
+              },
+              "projected": {
+                "minimum": 1,
+                "maximum": 12,
+                "mean": 2.6
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 8,
+                "mean": 3
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 4
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 4,
+          "target_record_count": 6,
+          "target_offsets": [
+            "0x180764",
+            "0x180788",
+            "0x1807AC",
+            "0x1807D0",
+            "0x1807F4",
+            "0x180818"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 24,
+                "maximum": 26,
+                "mean": 24.8
+              },
+              "projected": {
+                "minimum": 26,
+                "maximum": 28,
+                "mean": 26.8
+              },
+              "delta": 2,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 15,
+                "maximum": 19,
+                "mean": 17
+              },
+              "projected": {
+                "minimum": 16,
+                "maximum": 20,
+                "mean": 18
+              },
+              "delta": 1,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 4,
+                "maximum": 5,
+                "mean": 4.2
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 6,
+                "mean": 5.2
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 4,
+                "mean": 2.7
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 5,
+                "mean": 3.7
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 5,
+          "target_record_count": 9,
+          "target_offsets": [
+            "0x180870",
+            "0x180894",
+            "0x1808B8",
+            "0x1808DC",
+            "0x180900",
+            "0x180924",
+            "0x180948",
+            "0x18096C",
+            "0x180990"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 21,
+                "maximum": 30,
+                "mean": 23.6
+              },
+              "projected": {
+                "minimum": 23,
+                "maximum": 32,
+                "mean": 25.6
+              },
+              "delta": 2,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 16,
+                "maximum": 21,
+                "mean": 19.6
+              },
+              "projected": {
+                "minimum": 17,
+                "maximum": 22,
+                "mean": 20.6
+              },
+              "delta": 1,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 4,
+                "maximum": 5,
+                "mean": 4.1
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 6,
+                "mean": 5.1
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 4,
+                "mean": 2.2
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 5,
+                "mean": 3.2
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 6,
+          "target_record_count": 9,
+          "target_offsets": [
+            "0x180A78",
+            "0x180A9C",
+            "0x180AC0",
+            "0x180AE4",
+            "0x180B08",
+            "0x180B2C",
+            "0x180B50",
+            "0x180B74",
+            "0x180B98"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 22,
+                "maximum": 30,
+                "mean": 24.8
+              },
+              "projected": {
+                "minimum": 25,
+                "maximum": 33,
+                "mean": 27.8
+              },
+              "delta": 3,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 16,
+                "maximum": 21,
+                "mean": 18.7
+              },
+              "projected": {
+                "minimum": 18,
+                "maximum": 23,
+                "mean": 20.7
+              },
+              "delta": 2,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 0,
+                "maximum": 6,
+                "mean": 4.1
+              },
+              "projected": {
+                "minimum": 1,
+                "maximum": 7,
+                "mean": 5.1
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 4,
+                "mean": 3.3
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 5,
+                "mean": 4.3
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 7,
+          "target_record_count": 8,
+          "target_offsets": [
+            "0x180C86",
+            "0x180CAA",
+            "0x180CCE",
+            "0x180CF2",
+            "0x180D16",
+            "0x180D3A",
+            "0x180D5E",
+            "0x180D82"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 19,
+                "maximum": 34,
+                "mean": 27.5
+              },
+              "projected": {
+                "minimum": 22,
+                "maximum": 37,
+                "mean": 30.5
+              },
+              "delta": 3,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 18,
+                "maximum": 23,
+                "mean": 20.2
+              },
+              "projected": {
+                "minimum": 20,
+                "maximum": 25,
+                "mean": 22.2
+              },
+              "delta": 2,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 1,
+                "maximum": 7,
+                "mean": 4.2
+              },
+              "projected": {
+                "minimum": 2,
+                "maximum": 8,
+                "mean": 5.2
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 4,
+                "mean": 2.4
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 5,
+                "mean": 3.4
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 8,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x180DE6",
+            "0x180E0A",
+            "0x180E2E",
+            "0x180E52",
+            "0x180E76",
+            "0x180E9A",
+            "0x180EBE",
+            "0x180EE2",
+            "0x180F06",
+            "0x180F2A",
+            "0x180F4E"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 23,
+                "maximum": 40,
+                "mean": 27.9
+              },
+              "projected": {
+                "minimum": 26,
+                "maximum": 43,
+                "mean": 30.9
+              },
+              "delta": 3,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 21,
+                "maximum": 30,
+                "mean": 22.8
+              },
+              "projected": {
+                "minimum": 23,
+                "maximum": 32,
+                "mean": 24.8
+              },
+              "delta": 2,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 11,
+                "mean": 4.4
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 12,
+                "mean": 5.4
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 8,
+                "mean": 4.2
+              },
+              "projected": {
+                "minimum": 4,
+                "maximum": 9,
+                "mean": 5.2
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 9,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x18101E",
+            "0x181042",
+            "0x181066",
+            "0x18108A",
+            "0x1810AE",
+            "0x1810D2",
+            "0x1810F6",
+            "0x18111A",
+            "0x18113E",
+            "0x181162"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 24,
+                "maximum": 46,
+                "mean": 31.9
+              },
+              "projected": {
+                "minimum": 27,
+                "maximum": 49,
+                "mean": 34.9
+              },
+              "delta": 3,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 22,
+                "maximum": 35,
+                "mean": 24.7
+              },
+              "projected": {
+                "minimum": 24,
+                "maximum": 37,
+                "mean": 26.7
+              },
+              "delta": 2,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 13,
+                "mean": 6.1
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 14,
+                "mean": 7.1
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 9,
+                "mean": 4.3
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 10,
+                "mean": 5.3
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 10,
+          "target_record_count": 13,
+          "target_offsets": [
+            "0x1811BA",
+            "0x1811DE",
+            "0x181202",
+            "0x181226",
+            "0x18124A",
+            "0x18126E",
+            "0x181292",
+            "0x1812B6",
+            "0x1812DA",
+            "0x1812FE",
+            "0x181322",
+            "0x181346",
+            "0x18136A"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 20,
+                "maximum": 34,
+                "mean": 26.3
+              },
+              "projected": {
+                "minimum": 23,
+                "maximum": 37,
+                "mean": 29.3
+              },
+              "delta": 3,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 18,
+                "maximum": 25,
+                "mean": 20.8
+              },
+              "projected": {
+                "minimum": 20,
+                "maximum": 27,
+                "mean": 22.8
+              },
+              "delta": 2,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 0,
+                "maximum": 5,
+                "mean": 2
+              },
+              "projected": {
+                "minimum": 1,
+                "maximum": 6,
+                "mean": 3
+              },
+              "delta": 1,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 3,
+                "mean": 2.5
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 4,
+                "mean": 3.5
+              },
+              "delta": 1,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 11,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x1813EC",
+            "0x181410",
+            "0x181434",
+            "0x181458",
+            "0x18147C",
+            "0x1814A0",
+            "0x1814C4",
+            "0x1814E8",
+            "0x18150C",
+            "0x181530"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 26,
+                "maximum": 43,
+                "mean": 30.8
+              },
+              "projected": {
+                "minimum": 30,
+                "maximum": 47,
+                "mean": 34.8
+              },
+              "delta": 4,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 22,
+                "maximum": 32,
+                "mean": 23.7
+              },
+              "projected": {
+                "minimum": 25,
+                "maximum": 35,
+                "mean": 26.7
+              },
+              "delta": 3,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 10,
+                "mean": 5.1
+              },
+              "projected": {
+                "minimum": 4,
+                "maximum": 12,
+                "mean": 7.1
+              },
+              "delta": 2,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 9,
+                "mean": 4.1
+              },
+              "projected": {
+                "minimum": 4,
+                "maximum": 11,
+                "mean": 6.1
+              },
+              "delta": 2,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 12,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x181594",
+            "0x1815B8",
+            "0x1815DC",
+            "0x181600",
+            "0x181624",
+            "0x181648",
+            "0x18166C",
+            "0x181690",
+            "0x1816B4",
+            "0x1816D8",
+            "0x1816FC"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 20,
+                "maximum": 43,
+                "mean": 28.4
+              },
+              "projected": {
+                "minimum": 24,
+                "maximum": 47,
+                "mean": 32.4
+              },
+              "delta": 4,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 24,
+                "maximum": 32,
+                "mean": 27.1
+              },
+              "projected": {
+                "minimum": 27,
+                "maximum": 35,
+                "mean": 30.1
+              },
+              "delta": 3,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 1,
+                "maximum": 10,
+                "mean": 5.2
+              },
+              "projected": {
+                "minimum": 3,
+                "maximum": 12,
+                "mean": 7.2
+              },
+              "delta": 2,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 9,
+                "mean": 3.9
+              },
+              "projected": {
+                "minimum": 4,
+                "maximum": 11,
+                "mean": 5.9
+              },
+              "delta": 2,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 13,
+          "target_record_count": 13,
+          "target_offsets": [
+            "0x181760",
+            "0x181784",
+            "0x1817A8",
+            "0x1817CC",
+            "0x1817F0",
+            "0x181814",
+            "0x181838",
+            "0x18185C",
+            "0x181880",
+            "0x1818A4",
+            "0x1818C8",
+            "0x1818EC",
+            "0x181910"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 27,
+                "maximum": 48,
+                "mean": 32.6
+              },
+              "projected": {
+                "minimum": 31,
+                "maximum": 52,
+                "mean": 36.6
+              },
+              "delta": 4,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 23,
+                "maximum": 35,
+                "mean": 27
+              },
+              "projected": {
+                "minimum": 26,
+                "maximum": 38,
+                "mean": 30
+              },
+              "delta": 3,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 13,
+                "mean": 6.2
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 15,
+                "mean": 8.2
+              },
+              "delta": 2,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 4.8
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 11,
+                "mean": 6.8
+              },
+              "delta": 2,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 14,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x181974",
+            "0x181998",
+            "0x1819BC",
+            "0x1819E0",
+            "0x181A04",
+            "0x181A28",
+            "0x181A4C",
+            "0x181A70",
+            "0x181A94",
+            "0x181AB8",
+            "0x181ADC"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 22,
+                "maximum": 45,
+                "mean": 32.8
+              },
+              "projected": {
+                "minimum": 26,
+                "maximum": 49,
+                "mean": 36.8
+              },
+              "delta": 4,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 21,
+                "maximum": 34,
+                "mean": 25.7
+              },
+              "projected": {
+                "minimum": 24,
+                "maximum": 37,
+                "mean": 28.7
+              },
+              "delta": 3,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 13,
+                "mean": 5.5
+              },
+              "projected": {
+                "minimum": 4,
+                "maximum": 15,
+                "mean": 7.5
+              },
+              "delta": 2,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 4.4
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 11,
+                "mean": 6.4
+              },
+              "delta": 2,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 15,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x181B64",
+            "0x181B88",
+            "0x181BAC",
+            "0x181BD0",
+            "0x181BF4",
+            "0x181C18",
+            "0x181C3C",
+            "0x181C60",
+            "0x181C84",
+            "0x181CA8",
+            "0x181CCC"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 27,
+                "maximum": 46,
+                "mean": 33.1
+              },
+              "projected": {
+                "minimum": 31,
+                "maximum": 50,
+                "mean": 37.1
+              },
+              "delta": 4,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 22,
+                "maximum": 33,
+                "mean": 26.5
+              },
+              "projected": {
+                "minimum": 25,
+                "maximum": 36,
+                "mean": 29.5
+              },
+              "delta": 3,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 10,
+                "mean": 5
+              },
+              "projected": {
+                "minimum": 4,
+                "maximum": 12,
+                "mean": 7
+              },
+              "delta": 2,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 4.3
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 11,
+                "mean": 6.3
+              },
+              "delta": 2,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 16,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x181D36",
+            "0x181D5A",
+            "0x181D7E",
+            "0x181DA2",
+            "0x181DC6",
+            "0x181DEA",
+            "0x181E0E",
+            "0x181E32",
+            "0x181E56",
+            "0x181E7A"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 33,
+                "maximum": 46,
+                "mean": 36.6
+              },
+              "projected": {
+                "minimum": 38,
+                "maximum": 51,
+                "mean": 41.6
+              },
+              "delta": 5,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 24,
+                "maximum": 35,
+                "mean": 27.7
+              },
+              "projected": {
+                "minimum": 28,
+                "maximum": 39,
+                "mean": 31.7
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 7,
+                "maximum": 13,
+                "mean": 8.8
+              },
+              "projected": {
+                "minimum": 10,
+                "maximum": 15,
+                "mean": 11.7
+              },
+              "delta": 3,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 1
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 9,
+                "mean": 5.8
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 12,
+                "mean": 8.8
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 2,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 17,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x181EE4",
+            "0x181F08",
+            "0x181F2C",
+            "0x181F50",
+            "0x181F74",
+            "0x181F98",
+            "0x181FBC",
+            "0x181FE0",
+            "0x182004",
+            "0x182028",
+            "0x18204C"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 30,
+                "maximum": 52,
+                "mean": 36.3
+              },
+              "projected": {
+                "minimum": 35,
+                "maximum": 57,
+                "mean": 41.3
+              },
+              "delta": 5,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 26,
+                "maximum": 37,
+                "mean": 28.8
+              },
+              "projected": {
+                "minimum": 30,
+                "maximum": 41,
+                "mean": 32.8
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 13,
+                "mean": 7.8
+              },
+              "projected": {
+                "minimum": 9,
+                "maximum": 15,
+                "mean": 10.7
+              },
+              "delta": 3,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 1
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 11,
+                "mean": 6.2
+              },
+              "projected": {
+                "minimum": 6,
+                "maximum": 12,
+                "mean": 9
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 1
+            }
+          }
+        },
+        {
+          "scenario": 18,
+          "target_record_count": 9,
+          "target_offsets": [
+            "0x1820FE",
+            "0x182122",
+            "0x182146",
+            "0x18216A",
+            "0x18218E",
+            "0x1821B2",
+            "0x1821D6",
+            "0x1821FA",
+            "0x18221E"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 32,
+                "maximum": 39,
+                "mean": 35.8
+              },
+              "projected": {
+                "minimum": 37,
+                "maximum": 44,
+                "mean": 40.8
+              },
+              "delta": 5,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 26,
+                "maximum": 34,
+                "mean": 29.7
+              },
+              "projected": {
+                "minimum": 30,
+                "maximum": 38,
+                "mean": 33.7
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 10,
+                "mean": 6.9
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 13,
+                "mean": 9.9
+              },
+              "delta": 3,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 8,
+                "mean": 4.9
+              },
+              "projected": {
+                "minimum": 6,
+                "maximum": 11,
+                "mean": 7.9
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 19,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x182288",
+            "0x1822AC",
+            "0x1822D0",
+            "0x1822F4",
+            "0x182318",
+            "0x18233C",
+            "0x182360",
+            "0x182384",
+            "0x1823A8",
+            "0x1823CC"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 25,
+                "maximum": 48,
+                "mean": 35
+              },
+              "projected": {
+                "minimum": 30,
+                "maximum": 53,
+                "mean": 40
+              },
+              "delta": 5,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 22,
+                "maximum": 33,
+                "mean": 28
+              },
+              "projected": {
+                "minimum": 26,
+                "maximum": 37,
+                "mean": 32
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 12,
+                "mean": 6.7
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 15,
+                "mean": 9.7
+              },
+              "delta": 3,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 5.6
+              },
+              "projected": {
+                "minimum": 6,
+                "maximum": 12,
+                "mean": 8.6
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 2,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 20,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x182436",
+            "0x18245A",
+            "0x18247E",
+            "0x1824A2",
+            "0x1824C6",
+            "0x1824EA",
+            "0x18250E",
+            "0x182532",
+            "0x182556",
+            "0x18257A"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 32,
+                "maximum": 46,
+                "mean": 36.9
+              },
+              "projected": {
+                "minimum": 37,
+                "maximum": 51,
+                "mean": 41.9
+              },
+              "delta": 5,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 22,
+                "maximum": 34,
+                "mean": 28.6
+              },
+              "projected": {
+                "minimum": 26,
+                "maximum": 38,
+                "mean": 32.6
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 2,
+                "maximum": 10,
+                "mean": 6.7
+              },
+              "projected": {
+                "minimum": 5,
+                "maximum": 13,
+                "mean": 9.7
+              },
+              "delta": 3,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 4.9
+              },
+              "projected": {
+                "minimum": 6,
+                "maximum": 12,
+                "mean": 7.9
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 21,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x1825E4",
+            "0x182608",
+            "0x18262C",
+            "0x182650",
+            "0x182674",
+            "0x182698",
+            "0x1826BC",
+            "0x1826E0",
+            "0x182704",
+            "0x182728",
+            "0x18274C"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 33,
+                "maximum": 41,
+                "mean": 36.5
+              },
+              "projected": {
+                "minimum": 39,
+                "maximum": 47,
+                "mean": 42.5
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 27,
+                "maximum": 36,
+                "mean": 30.9
+              },
+              "projected": {
+                "minimum": 31,
+                "maximum": 40,
+                "mean": 34.9
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 7,
+                "maximum": 10,
+                "mean": 8.6
+              },
+              "projected": {
+                "minimum": 11,
+                "maximum": 14,
+                "mean": 12.6
+              },
+              "delta": 4,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 5,
+                "maximum": 8,
+                "mean": 6.5
+              },
+              "projected": {
+                "minimum": 8,
+                "maximum": 11,
+                "mean": 9.5
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 22,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x1827DA",
+            "0x1827FE",
+            "0x182822",
+            "0x182846",
+            "0x18286A",
+            "0x18288E",
+            "0x1828B2",
+            "0x1828D6",
+            "0x1828FA",
+            "0x18291E",
+            "0x182942"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 35,
+                "maximum": 58,
+                "mean": 40.5
+              },
+              "projected": {
+                "minimum": 41,
+                "maximum": 64,
+                "mean": 46.5
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 27,
+                "maximum": 41,
+                "mean": 33.2
+              },
+              "projected": {
+                "minimum": 31,
+                "maximum": 45,
+                "mean": 37.2
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 5,
+                "maximum": 13,
+                "mean": 8.3
+              },
+              "projected": {
+                "minimum": 9,
+                "maximum": 15,
+                "mean": 12.1
+              },
+              "delta": 4,
+              "cap": 15,
+              "result_at_cap_count": 2,
+              "clamped_by_cap_count": 1
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 5,
+                "maximum": 11,
+                "mean": 6.9
+              },
+              "projected": {
+                "minimum": 8,
+                "maximum": 12,
+                "mean": 9.7
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 2,
+              "clamped_by_cap_count": 1
+            }
+          }
+        },
+        {
+          "scenario": 23,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x1829B2",
+            "0x1829D6",
+            "0x1829FA",
+            "0x182A1E",
+            "0x182A42",
+            "0x182A66",
+            "0x182A8A",
+            "0x182AAE",
+            "0x182AD2",
+            "0x182AF6",
+            "0x182B1A"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 35,
+                "maximum": 47,
+                "mean": 42.1
+              },
+              "projected": {
+                "minimum": 41,
+                "maximum": 53,
+                "mean": 48.1
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 30,
+                "maximum": 33,
+                "mean": 31.1
+              },
+              "projected": {
+                "minimum": 34,
+                "maximum": 37,
+                "mean": 35.1
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 10,
+                "mean": 8.5
+              },
+              "projected": {
+                "minimum": 10,
+                "maximum": 14,
+                "mean": 12.5
+              },
+              "delta": 4,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 9,
+                "mean": 6.8
+              },
+              "projected": {
+                "minimum": 9,
+                "maximum": 12,
+                "mean": 9.8
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 2,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 24,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x182BAE",
+            "0x182BD2",
+            "0x182BF6",
+            "0x182C1A",
+            "0x182C3E",
+            "0x182C62",
+            "0x182C86",
+            "0x182CAA",
+            "0x182CCE",
+            "0x182CF2"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 37,
+                "maximum": 46,
+                "mean": 40.3
+              },
+              "projected": {
+                "minimum": 43,
+                "maximum": 52,
+                "mean": 46.3
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 28,
+                "maximum": 34,
+                "mean": 29.5
+              },
+              "projected": {
+                "minimum": 32,
+                "maximum": 38,
+                "mean": 33.5
+              },
+              "delta": 4,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 12,
+                "mean": 8.4
+              },
+              "projected": {
+                "minimum": 10,
+                "maximum": 15,
+                "mean": 12.3
+              },
+              "delta": 4,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 1
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 3,
+                "maximum": 9,
+                "mean": 5.9
+              },
+              "projected": {
+                "minimum": 6,
+                "maximum": 12,
+                "mean": 8.9
+              },
+              "delta": 3,
+              "cap": 12,
+              "result_at_cap_count": 3,
+              "clamped_by_cap_count": 0
+            }
+          }
+        },
+        {
+          "scenario": 25,
+          "target_record_count": 11,
+          "target_offsets": [
+            "0x182D86",
+            "0x182DAA",
+            "0x182DCE",
+            "0x182DF2",
+            "0x182E16",
+            "0x182E3A",
+            "0x182E5E",
+            "0x182E82",
+            "0x182EA6",
+            "0x182ECA",
+            "0x182EEE"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 32,
+                "maximum": 51,
+                "mean": 43.2
+              },
+              "projected": {
+                "minimum": 38,
+                "maximum": 57,
+                "mean": 49.2
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 26,
+                "maximum": 39,
+                "mean": 31.1
+              },
+              "projected": {
+                "minimum": 31,
+                "maximum": 44,
+                "mean": 36.1
+              },
+              "delta": 5,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 13,
+                "mean": 9.2
+              },
+              "projected": {
+                "minimum": 10,
+                "maximum": 15,
+                "mean": 13
+              },
+              "delta": 4,
+              "cap": 15,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 1
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 5,
+                "maximum": 9,
+                "mean": 6.8
+              },
+              "projected": {
+                "minimum": 9,
+                "maximum": 12,
+                "mean": 10.5
+              },
+              "delta": 4,
+              "cap": 12,
+              "result_at_cap_count": 3,
+              "clamped_by_cap_count": 3
+            }
+          }
+        },
+        {
+          "scenario": 26,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x182F64",
+            "0x182F88",
+            "0x182FAC",
+            "0x182FD0",
+            "0x182FF4",
+            "0x183018",
+            "0x18303C",
+            "0x183060",
+            "0x183084",
+            "0x1830A8"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 33,
+                "maximum": 46,
+                "mean": 38.6
+              },
+              "projected": {
+                "minimum": 39,
+                "maximum": 52,
+                "mean": 44.6
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 27,
+                "maximum": 33,
+                "mean": 29.6
+              },
+              "projected": {
+                "minimum": 32,
+                "maximum": 38,
+                "mean": 34.6
+              },
+              "delta": 5,
+              "cap": 46,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 10,
+                "mean": 7.6
+              },
+              "projected": {
+                "minimum": 10,
+                "maximum": 14,
+                "mean": 11.6
+              },
+              "delta": 4,
+              "cap": 15,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 5,
+                "maximum": 9,
+                "mean": 6
+              },
+              "projected": {
+                "minimum": 9,
+                "maximum": 12,
+                "mean": 9.9
+              },
+              "delta": 4,
+              "cap": 12,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 1
+            }
+          }
+        },
+        {
+          "scenario": 27,
+          "target_record_count": 10,
+          "target_offsets": [
+            "0x18311E",
+            "0x183142",
+            "0x183166",
+            "0x18318A",
+            "0x1831AE",
+            "0x1831D2",
+            "0x1831F6",
+            "0x18321A",
+            "0x18323E",
+            "0x183262"
+          ],
+          "projections": {
+            "commander_at": {
+              "original": {
+                "minimum": 34,
+                "maximum": 58,
+                "mean": 45.1
+              },
+              "projected": {
+                "minimum": 40,
+                "maximum": 64,
+                "mean": 51.1
+              },
+              "delta": 6,
+              "cap": 64,
+              "result_at_cap_count": 1,
+              "clamped_by_cap_count": 0
+            },
+            "commander_df": {
+              "original": {
+                "minimum": 30,
+                "maximum": 41,
+                "mean": 34.9
+              },
+              "projected": {
+                "minimum": 35,
+                "maximum": 46,
+                "mean": 39.9
+              },
+              "delta": 5,
+              "cap": 46,
+              "result_at_cap_count": 2,
+              "clamped_by_cap_count": 0
+            },
+            "soldier_at_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 13,
+                "mean": 9.6
+              },
+              "projected": {
+                "minimum": 11,
+                "maximum": 15,
+                "mean": 13.8
+              },
+              "delta": 5,
+              "cap": 15,
+              "result_at_cap_count": 6,
+              "clamped_by_cap_count": 3
+            },
+            "soldier_df_correction": {
+              "original": {
+                "minimum": 6,
+                "maximum": 11,
+                "mean": 8.1
+              },
+              "projected": {
+                "minimum": 10,
+                "maximum": 12,
+                "mean": 11.4
+              },
+              "delta": 4,
+              "cap": 12,
+              "result_at_cap_count": 6,
+              "clamped_by_cap_count": 5
+            }
+          }
         }
       ]
     }

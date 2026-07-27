@@ -39,6 +39,24 @@ FIXED_COMMANDER_DF_MODIFIER_OFFSET = 0x13
 FIXED_RECORD_LOADER = 0x010E46
 FIXED_RECORD_LOADER_END = 0x010ED8
 
+SCENARIO_22_HOSTILE_SIDE_08_OFFSETS = (
+    "0x1827DA",
+    "0x1827FE",
+    "0x182846",
+    "0x18286A",
+    "0x18288E",
+    "0x1828B2",
+    "0x1828D6",
+    "0x1828FA",
+    "0x18291E",
+    "0x182942",
+)
+MAIN_STORY_AUTOMATIC_EXCLUDED_OFFSETS = frozenset({
+    "0x1802FC",
+    "0x180320",
+    "0x182B8A",
+})
+
 DISCUSSION_SCENARIO_BANDS = (
     {
         "id": "opening",
@@ -210,18 +228,7 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
         },
         {
             "scenario": 22,
-            "offsets": [
-                "0x1827DA",
-                "0x1827FE",
-                "0x182846",
-                "0x18286A",
-                "0x18288E",
-                "0x1828B2",
-                "0x1828D6",
-                "0x1828FA",
-                "0x18291E",
-                "0x182942",
-            ],
+            "offsets": list(SCENARIO_22_HOSTILE_SIDE_08_OFFSETS),
             "rule": (
                 "실기에서 적대 대상으로 확인된 진영 08 열 개를 21~24장 "
                 "공식 대상에 포함하되 원본 진영 08은 보존"
@@ -398,6 +405,133 @@ def discussion_band_rows(scenarios: list[dict[str, object]]) -> list[dict[str, o
     return result
 
 
+def value_summary(values: list[int]) -> dict[str, object]:
+    return {
+        "minimum": min(values),
+        "maximum": max(values),
+        "mean": round(statistics.mean(values), 1),
+    }
+
+
+def recommended_proposal_preview(
+    scenarios: list[dict[str, object]],
+) -> dict[str, object]:
+    proposal = RECOMMENDED_DISCUSSION_PROPOSAL
+    caps = proposal["global_rules"]["main_story_absolute_cap"]
+    step_by_scenario = {
+        int(number): step
+        for step in proposal["scenario_steps"]
+        for number in step["scenarios"]
+    }
+    side_22_offsets = set(SCENARIO_22_HOSTILE_SIDE_08_OFFSETS)
+    field_rules = (
+        (
+            "commander_at",
+            "commander_at_modifier",
+            "commander_at_delta",
+        ),
+        (
+            "commander_df",
+            "commander_df_modifier",
+            "commander_df_delta",
+        ),
+        (
+            "soldier_at_correction",
+            "soldier_at_correction",
+            "soldier_at_correction_delta",
+        ),
+        (
+            "soldier_df_correction",
+            "soldier_df_correction",
+            "soldier_df_correction_delta",
+        ),
+    )
+    totals = {
+        field_name: {
+            "result_at_cap_count": 0,
+            "clamped_by_cap_count": 0,
+        }
+        for field_name, _, _ in field_rules
+    }
+    scenario_rows = []
+    all_target_offsets = []
+    for scenario in scenarios:
+        number = int(scenario["number"])
+        if number not in step_by_scenario:
+            continue
+        step = step_by_scenario[number]
+        targets = []
+        for record in scenario["records"]:
+            offset = str(record["offset"])
+            hostile = record["side_id"] == "04" or (
+                number == 22 and offset in side_22_offsets
+            )
+            if not hostile or offset in MAIN_STORY_AUTOMATIC_EXCLUDED_OFFSETS:
+                continue
+            targets.append(record)
+        all_target_offsets.extend(str(record["offset"]) for record in targets)
+        projections = {}
+        for field_name, source_field, delta_field in field_rules:
+            cap = int(caps[field_name])
+            original_values = [int(record[source_field]) for record in targets]
+            raw_values = [
+                value + int(step[delta_field])
+                for value in original_values
+            ]
+            projected_values = [min(value, cap) for value in raw_values]
+            at_cap_count = sum(value == cap for value in projected_values)
+            clamped_count = sum(value > cap for value in raw_values)
+            totals[field_name]["result_at_cap_count"] += at_cap_count
+            totals[field_name]["clamped_by_cap_count"] += clamped_count
+            projections[field_name] = {
+                "original": value_summary(original_values),
+                "projected": value_summary(projected_values),
+                "delta": int(step[delta_field]),
+                "cap": cap,
+                "result_at_cap_count": at_cap_count,
+                "clamped_by_cap_count": clamped_count,
+            }
+        scenario_rows.append({
+            "scenario": number,
+            "target_record_count": len(targets),
+            "target_offsets": [str(record["offset"]) for record in targets],
+            "projections": projections,
+        })
+    return {
+        "status": "discussion_preview_only",
+        "proposal_id": proposal["id"],
+        "rom_values_applied": False,
+        "selection_policy": (
+            "main-story side 04 plus the ten verified-hostile scenario-22 "
+            "side-08 records, minus explicit automatic exclusions"
+        ),
+        "target_record_count": len(all_target_offsets),
+        "target_offsets_unique": len(set(all_target_offsets)),
+        "explicit_automatic_exclusions": [
+            {
+                "scenario": 1,
+                "offset": "0x1802FC",
+                "name_korean": "레온",
+                "reason": "연출용 강적",
+            },
+            {
+                "scenario": 1,
+                "offset": "0x180320",
+                "name_korean": "레아드",
+                "reason": "연출용 강적",
+            },
+            {
+                "scenario": 24,
+                "offset": "0x182B8A",
+                "name_korean": "베른하르트",
+                "reason": "원작 이벤트 진영 전환",
+            },
+        ],
+        "cap_diagnostics": totals,
+        "scenarios": scenario_rows,
+    }
+
+
 def mercenary_row(class_id: int, classes: list[dict[str, object]]) -> dict[str, object] | None:
     if class_id == 0xFF:
         return None
@@ -521,7 +655,7 @@ def build_inventory(
         })
 
     return {
-        "schema_version": 7,
+        "schema_version": 8,
         "status": "balance_discussion_required",
         "approval_gate": {
             "user_approved": False,
@@ -569,6 +703,9 @@ def build_inventory(
             ],
             "candidate_scenario_bands": discussion_band_rows(scenarios),
             "recommended_unapproved_proposal": RECOMMENDED_DISCUSSION_PROPOSAL,
+            "recommended_unapproved_proposal_preview": (
+                recommended_proposal_preview(scenarios)
+            ),
         },
         "normal_release": {
             **normal_identity,
@@ -639,18 +776,9 @@ def build_inventory(
                     "scenario": 22,
                     "kind": "verified_hostile_special_faction",
                     "side_08_record_count": 10,
-                    "verified_hostile_side_08_offsets": [
-                        "0x1827DA",
-                        "0x1827FE",
-                        "0x182846",
-                        "0x18286A",
-                        "0x18288E",
-                        "0x1828B2",
-                        "0x1828D6",
-                        "0x1828FA",
-                        "0x18291E",
-                        "0x182942",
-                    ],
+                    "verified_hostile_side_08_offsets": list(
+                        SCENARIO_22_HOSTILE_SIDE_08_OFFSETS
+                    ),
                     "hidden_boss": {
                         "offset": "0x182822",
                         "side_id": "04",
@@ -904,6 +1032,10 @@ def render_markdown(inventory: dict[str, object]) -> str:
             f"{step['summon_slots_per_six']}/6 |"
         )
     caps = proposal["global_rules"]["main_story_absolute_cap"]
+    preview = inventory["balance_discussion"][
+        "recommended_unapproved_proposal_preview"
+    ]
+    diagnostics = preview["cap_diagnostics"]
     lines.extend([
         "",
         f"- 본편 지휘관 상한 후보: AT {caps['commander_at']}, "
@@ -917,6 +1049,34 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "  교체한다. 아니키(`94`)는 기본 하드 편성에서 제외한다.",
         "- X1~X4는 진입 시점과 원본 수치 차이가 커 본편 공식을 적용하지",
         "  않고 각각 조정한다.",
+        "",
+        "### 장별 수치 미리보기",
+        "",
+        f"> 자동 대상은 본편 고정 레코드 {preview['target_record_count']}개다. "
+        "아래 값은 토론용 계산 결과이며 ROM에는 적용되지 않았다.",
+        "",
+        "- 지휘관 AT/DF는 상한으로 잘리는 레코드가 각각 "
+        f"{diagnostics['commander_at']['clamped_by_cap_count']}개/"
+        f"{diagnostics['commander_df']['clamped_by_cap_count']}개다.",
+        "- 병사 A+/D+는 상한으로 잘리는 레코드가 각각 "
+        f"{diagnostics['soldier_at_correction']['clamped_by_cap_count']}개/"
+        f"{diagnostics['soldier_df_correction']['clamped_by_cap_count']}개다.",
+        "",
+        "| 장 | 대상 | AT 결과 | DF 결과 | A+ 결과 | D+ 결과 | AT/DF 상한 도달 |",
+        "|---:|---:|:---:|:---:|:---:|:---:|:---:|",
+    ])
+    for row in preview["scenarios"]:
+        projections = row["projections"]
+        lines.append(
+            f"| {row['scenario']} | {row['target_record_count']} | "
+            f"{_stat_cell(projections['commander_at']['projected'])} | "
+            f"{_stat_cell(projections['commander_df']['projected'])} | "
+            f"{_stat_cell(projections['soldier_at_correction']['projected'])} | "
+            f"{_stat_cell(projections['soldier_df_correction']['projected'])} | "
+            f"{projections['commander_at']['result_at_cap_count']}/"
+            f"{projections['commander_df']['result_at_cap_count']} |"
+        )
+    lines.extend([
         "",
         "### 제안된 예외",
         "",
