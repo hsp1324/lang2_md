@@ -5,6 +5,7 @@ import unittest
 from tools.jp_short_inline_byte_inventory import (
     ENDING_SCENARIO_STRUCTURED_REVIEWS,
     SCENARIO_LEVEL_PREFIX,
+    SYSTEM_GRAPHICS_ENDING_REVIEWS,
     TEXT_UI_REVIEWS,
     aligned_absolute_references,
     inventory,
@@ -26,6 +27,7 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
     def setUpClass(cls):
         cls.japanese = JP_ROM.read_bytes()
         cls.result = inventory(cls.japanese, KO_ROM.read_bytes())
+        cls.system_bank = cls.result["system_graphics_ending_bank"]
         cls.ending_bank = cls.result["ending_scenario_bank"]
         cls.bank = cls.result["text_ui_bank"]
 
@@ -42,6 +44,98 @@ class JapaneseShortInlineByteInventoryTests(unittest.TestCase):
         self.assertEqual(
             self.result["region_counts"]["ascii"]["text_ui_bank"],
             16,
+        )
+
+    def test_system_graphics_ending_bank_has_no_unknown_or_ui_string(self):
+        self.assertEqual(self.system_bank["candidate_count"], 80)
+        self.assertEqual(
+            self.system_bank["category_counts"],
+            {
+                "ending_selector_false_positive": 7,
+                "packed_tile_resource_false_positive": 7,
+                "structured_graphics_false_positive": 53,
+                "word_stream_byte_false_positive": 13,
+            },
+        )
+        self.assertEqual(self.system_bank["unclassified_count"], 0)
+        self.assertEqual(self.system_bank["missing_review_addresses"], [])
+        self.assertEqual(
+            self.system_bank["stale_structured_review_addresses"],
+            [],
+        )
+
+    def test_system_bank_word_stream_rows_end_at_known_controls(self):
+        rows = [
+            row
+            for row in self.system_bank["candidates"]
+            if row["category"] == "word_stream_byte_false_positive"
+        ]
+        self.assertEqual(len(rows), 13)
+        for row in rows:
+            with self.subTest(address=row["address"]):
+                self.assertTrue(
+                    is_word_stream_byte_lane(
+                        self.japanese,
+                        int(row["address"], 16),
+                        int(row["end"], 16),
+                    )
+                )
+
+    def test_system_bank_structured_review_set_is_exact(self):
+        rows = {
+            int(row["address"], 16)
+            for row in self.system_bank["candidates"]
+            if row["category"] != "word_stream_byte_false_positive"
+        }
+        self.assertEqual(rows, set(SYSTEM_GRAPHICS_ENDING_REVIEWS))
+
+    def test_system_bank_examples_preserve_structural_evidence(self):
+        rows = {
+            int(row["address"], 16): row
+            for row in self.system_bank["candidates"]
+        }
+        expected = {
+            0x082ACB: (
+                "C2",
+                "0x00C2",
+                "word_stream_byte_false_positive",
+            ),
+            0x084401: (
+                "45 46 2E 2E 2E",
+                "0x0E45",
+                "packed_tile_resource_false_positive",
+            ),
+            0x08721B: (
+                "CE",
+                "0xFFCE",
+                "structured_graphics_false_positive",
+            ),
+            0x089286: (
+                "B6 D8",
+                "0xB6D8",
+                "ending_selector_false_positive",
+            ),
+        }
+        for address, (raw, word, category) in expected.items():
+            with self.subTest(address=f"0x{address:06X}"):
+                self.assertEqual(rows[address]["raw_hex"], raw)
+                self.assertEqual(rows[address]["containing_word"], word)
+                self.assertEqual(rows[address]["category"], category)
+                self.assertTrue(rows[address]["context_words"])
+
+    def test_system_bank_candidates_have_no_exact_reference(self):
+        self.assertEqual(
+            self.system_bank["aligned_absolute_32_reference_count"], 0
+        )
+        self.assertEqual(
+            self.system_bank["pc_relative_lea_pea_reference_count"], 0
+        )
+        self.assertTrue(
+            all(
+                not row["aligned_absolute_32_references"]
+                and not row["pc_relative_lea_pea_references"]
+                for row in self.system_bank["candidates"]
+            )
         )
 
     def test_ending_scenario_bank_has_one_retained_ui_and_no_unknown(self):

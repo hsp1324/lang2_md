@@ -11429,3 +11429,31 @@ contains 57 safe syllables as documented below and in
   short-inline/UI/inline/direct inventories pass 60/60. No emulator was
   launched for this extension; the accepted existing briefing capture was
   inspected directly.
+
+### System/Graphics/Ending Low-Signal Byte Audit (2026-07-27)
+
+- `tools/jp_short_inline_byte_inventory.py` now also covers all 80 low-signal
+  rows whose starts fall in `0x080000..0x08FFFF`. Thirteen are proven low-byte
+  lanes of `FFFF`-terminated 16-bit system-message, magic-name, or
+  mercenary-name glyph streams.
+- The other 67 addresses are pinned individually: seven fall inside packed
+  tilemap/render scripts, 53 are sprite-frame/coordinate/animation records,
+  and seven are character-epilogue pointer or selector fields. Representative
+  source contexts include packed script bytes at `0x084401`, signed sprite
+  coordinates at `0x08721B`, and the epilogue pointer low word `0xB6D8` at
+  `0x089286`. None is a standalone user-facing Japanese byte string.
+- No candidate start has an exact even-aligned 32-bit reference or executable
+  `LEA d16(PC)`/`PEA d16(PC)` reference. This remains negative evidence only:
+  base-relative, indexed, and dynamically calculated access outside the
+  reviewed banks is still an open investigation gap.
+- The short-inline inventory now records 256 reviewed candidates across
+  `0x080000..0x0AFFFF`: 255 structural false positives and the intentionally
+  retained scenario-level prefix `L-`. Exact review sets, word contexts, and
+  reference lists are in
+  `localization/short_inline_byte_candidates.json`; any new candidate in the
+  reviewed bank fails closed as unclassified.
+- Focused short-inline/UI/inline/direct inventory tests pass 65/65. The
+  isolated current-source ROM
+  `/tmp/Langrisser II (Korean Ending Villain Probe Base).md` was used only to
+  regenerate reports. BlastEm was not launched, Xvfb `:104` remained the sole
+  configured emulator display, and the physical monitor was untouched.

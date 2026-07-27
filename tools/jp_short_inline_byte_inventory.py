@@ -14,6 +14,8 @@ from tools.jp_inline_byte_string_inventory import SCAN_END, scan_runs
 
 
 EXECUTABLE_END = 0x040000
+SYSTEM_GRAPHICS_ENDING_BANK_START = 0x080000
+SYSTEM_GRAPHICS_ENDING_BANK_END = 0x090000
 ENDING_SCENARIO_BANK_START = 0x090000
 ENDING_SCENARIO_BANK_END = 0x0A0000
 TEXT_UI_BANK_START = 0x0A0000
@@ -124,6 +126,106 @@ ENDING_SCENARIO_STRUCTURED_REVIEWS = {
     0x09B0D2: "system-local byte lookup/layout record",
     0x09B0D6: "system-local byte lookup/layout record",
     0x09CFF7: "scenario token/layout word",
+}
+
+PACKED_TILE_RESOURCE_REVIEW_ADDRESSES = {
+    0x083F76,
+    0x084401,
+    0x0845E6,
+    0x08546B,
+    0x08554C,
+    0x0859F4,
+    0x0860B4,
+}
+
+STRUCTURED_GRAPHICS_REVIEW_ADDRESSES = {
+    0x0861AD,
+    0x0861BB,
+    0x0861CD,
+    0x08664D,
+    0x086689,
+    0x086717,
+    0x086771,
+    0x08679B,
+    0x08681B,
+    0x08687B,
+    0x08689F,
+    0x0869A7,
+    0x086A1D,
+    0x086A9F,
+    0x086B3F,
+    0x086B61,
+    0x086B6F,
+    0x086B9F,
+    0x086BA9,
+    0x086C99,
+    0x086CB7,
+    0x086CC7,
+    0x086CE9,
+    0x086CF7,
+    0x086D27,
+    0x086D45,
+    0x086D55,
+    0x086D67,
+    0x086F79,
+    0x086F9B,
+    0x086FB3,
+    0x086FBD,
+    0x086FD5,
+    0x08709B,
+    0x0870BD,
+    0x0870D7,
+    0x087185,
+    0x0871B7,
+    0x0871E9,
+    0x08721B,
+    0x08724D,
+    0x08727F,
+    0x0872B1,
+    0x0872E3,
+    0x0873B1,
+    0x0873DB,
+    0x087405,
+    0x08742F,
+    0x087459,
+    0x087483,
+    0x0874AD,
+    0x0874D7,
+    0x08767B,
+}
+
+ENDING_SELECTOR_REVIEW_ADDRESSES = {
+    0x08913E,
+    0x089286,
+    0x0892F4,
+    0x0893D1,
+    0x089545,
+    0x089552,
+    0x089561,
+}
+
+SYSTEM_GRAPHICS_ENDING_REVIEWS = {
+    **{
+        address: (
+            "packed_tile_resource_false_positive",
+            "packed tilemap/render-script bytes",
+        )
+        for address in PACKED_TILE_RESOURCE_REVIEW_ADDRESSES
+    },
+    **{
+        address: (
+            "structured_graphics_false_positive",
+            "sprite frame, coordinate, or animation record",
+        )
+        for address in STRUCTURED_GRAPHICS_REVIEW_ADDRESSES
+    },
+    **{
+        address: (
+            "ending_selector_false_positive",
+            "character-epilogue pointer or selector record",
+        )
+        for address in ENDING_SELECTOR_REVIEW_ADDRESSES
+    },
 }
 
 
@@ -267,8 +369,23 @@ def ending_scenario_owner(address: int) -> str:
     return "scenario-description glyph/token resource"
 
 
+def system_graphics_word_owner(address: int) -> str:
+    if address < 0x082BFE:
+        return "shared system-message 16-bit glyph stream"
+    if address < 0x082D5A:
+        return "magic-name 16-bit glyph stream"
+    return "mercenary-name 16-bit glyph stream"
+
+
 def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     candidates = low_signal_runs(japanese)
+    system_graphics_ending = [
+        row
+        for row in candidates
+        if SYSTEM_GRAPHICS_ENDING_BANK_START
+        <= int(row["start_int"])
+        < SYSTEM_GRAPHICS_ENDING_BANK_END
+    ]
     ending_scenario = [
         row
         for row in candidates
@@ -281,6 +398,62 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         for row in candidates
         if TEXT_UI_BANK_START <= int(row["start_int"]) < TEXT_UI_BANK_END
     ]
+
+    system_graphics_ending_addresses = {
+        int(row["start_int"]) for row in system_graphics_ending
+    }
+    system_graphics_ending_absolute = aligned_absolute_references(
+        japanese, system_graphics_ending_addresses
+    )
+    system_graphics_ending_pc_relative = pc_relative_lea_pea_references(
+        japanese, system_graphics_ending_addresses
+    )
+    system_graphics_ending_rows = []
+    for row in system_graphics_ending:
+        start = int(row["start_int"])
+        end = int(row["end_int"])
+        if is_word_stream_byte_lane(japanese, start, end):
+            category = "word_stream_byte_false_positive"
+            owner = system_graphics_word_owner(start)
+        elif start in SYSTEM_GRAPHICS_ENDING_REVIEWS:
+            category, owner = SYSTEM_GRAPHICS_ENDING_REVIEWS[start]
+        else:
+            category = "unclassified"
+            owner = "requires manual ownership review"
+        context_start, context = word_context(japanese, start, end)
+        system_graphics_ending_rows.append(
+            {
+                "kind": row["kind"],
+                "address": f"0x{start:06X}",
+                "end": f"0x{end:06X}",
+                "signal_count": row["signal_count"],
+                "original_text": row["text"],
+                "raw_hex": bytes(row["raw"]).hex(" ").upper(),
+                "category": category,
+                "owner": owner,
+                "containing_word_address": f"0x{start & ~1:06X}",
+                "containing_word": (
+                    f"0x{int.from_bytes(japanese[start & ~1 : (start & ~1) + 2], 'big'):04X}"
+                ),
+                "context_start": f"0x{context_start:06X}",
+                "context_words": context,
+                "aligned_absolute_32_references": [
+                    f"0x{offset:06X}"
+                    for offset in system_graphics_ending_absolute.get(start, [])
+                ],
+                "pc_relative_lea_pea_references": [
+                    {
+                        "instruction": reference["instruction"],
+                        "address": f"0x{int(reference['address']):06X}",
+                        "displacement": reference["displacement"],
+                    }
+                    for reference in system_graphics_ending_pc_relative.get(
+                        start, []
+                    )
+                ],
+            }
+        )
+
     addresses = {int(row["start_int"]) for row in text_ui}
     reviewed_addresses = set(TEXT_UI_REVIEWS)
     missing_reviews = sorted(addresses - reviewed_addresses)
@@ -400,6 +573,17 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
     ending_scenario_category_counts = Counter(
         str(row["category"]) for row in ending_scenario_rows
     )
+    system_graphics_ending_category_counts = Counter(
+        str(row["category"]) for row in system_graphics_ending_rows
+    )
+    system_graphics_ending_reviewed_addresses = (
+        set(SYSTEM_GRAPHICS_ENDING_REVIEWS)
+        | {
+            int(row["address"], 16)
+            for row in system_graphics_ending_rows
+            if row["category"] == "word_stream_byte_false_positive"
+        }
+    )
     ending_scenario_reviewed_addresses = (
         set(ENDING_SCENARIO_STRUCTURED_REVIEWS)
         | {SCENARIO_LEVEL_PREFIX}
@@ -413,15 +597,49 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
         "warning": (
             "This scan inventories maximal FF-terminated half-width/uppercase-ASCII "
             "runs with only one or two signal bytes. Most are binary coincidences. "
-            "The 0x090000..0x0AFFFF ending/scenario and text/UI-bank candidates "
-            "are classified here. Exact aligned 32-bit and LEA/PEA PC-relative "
-            "references do not exclude base-relative, indexed, or dynamic access."
+            "The 0x080000..0x0AFFFF system/graphics/ending/scenario/text/UI-bank "
+            "candidates are classified here. Exact aligned 32-bit and LEA/PEA "
+            "PC-relative references do not exclude base-relative, indexed, or "
+            "dynamic access."
         ),
         "source_sha256": hashlib.sha256(japanese).hexdigest(),
         "scan_end": f"0x{SCAN_END:06X}",
         "candidate_count": len(candidates),
         "kind_counts": dict(sorted(kind_counts.items())),
         "region_counts": region_counts,
+        "system_graphics_ending_bank": {
+            "range": "0x080000..0x090000",
+            "candidate_count": len(system_graphics_ending_rows),
+            "category_counts": dict(
+                sorted(system_graphics_ending_category_counts.items())
+            ),
+            "unclassified_count": system_graphics_ending_category_counts.get(
+                "unclassified", 0
+            ),
+            "missing_review_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    system_graphics_ending_addresses
+                    - system_graphics_ending_reviewed_addresses
+                )
+            ],
+            "stale_structured_review_addresses": [
+                f"0x{address:06X}"
+                for address in sorted(
+                    set(SYSTEM_GRAPHICS_ENDING_REVIEWS)
+                    - system_graphics_ending_addresses
+                )
+            ],
+            "aligned_absolute_32_reference_count": sum(
+                len(row["aligned_absolute_32_references"])
+                for row in system_graphics_ending_rows
+            ),
+            "pc_relative_lea_pea_reference_count": sum(
+                len(row["pc_relative_lea_pea_references"])
+                for row in system_graphics_ending_rows
+            ),
+            "candidates": system_graphics_ending_rows,
+        },
         "ending_scenario_bank": {
             "range": "0x090000..0x0A0000",
             "candidate_count": len(ending_scenario_rows),
@@ -514,6 +732,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
 
 
 def markdown_report(result: dict[str, object]) -> str:
+    system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
     level_prefix = ending_bank["retained_level_prefix"]
     bank = result["text_ui_bank"]
@@ -527,6 +746,14 @@ def markdown_report(result: dict[str, object]) -> str:
         f"- Low-signal candidates: {result['candidate_count']}",
         f"- Half-width candidates: {result['kind_counts']['halfwidth']}",
         f"- Uppercase ASCII candidates: {result['kind_counts']['ascii']}",
+        (
+            "- System/graphics/ending-bank candidates: "
+            f"{system_bank['candidate_count']}"
+        ),
+        (
+            "- System/graphics/ending-bank unclassified: "
+            f"{system_bank['unclassified_count']}"
+        ),
         (
             "- Ending/scenario-bank candidates: "
             f"{ending_bank['candidate_count']}"
@@ -563,6 +790,45 @@ def markdown_report(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
+            "",
+            "## Reviewed System/Graphics/Ending-Bank Candidates",
+            "",
+            (
+                "- Category totals: "
+                + ", ".join(
+                    f"`{category}` {count}"
+                    for category, count in system_bank[
+                        "category_counts"
+                    ].items()
+                )
+                + "."
+            ),
+            (
+                "- Exact aligned 32-bit references: "
+                f"{system_bank['aligned_absolute_32_reference_count']}."
+            ),
+            (
+                "- Exact `LEA d16(PC)`/`PEA d16(PC)` references: "
+                f"{system_bank['pc_relative_lea_pea_reference_count']}."
+            ),
+            "",
+            "| Address | Kind | Raw | Classification | Owner |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+    )
+    for row in system_bank["candidates"]:
+        lines.append(
+            f"| `{row['address']}` | `{row['kind']}` | `{row['raw_hex']}` | "
+            f"`{row['category']}` | {row['owner']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "The 13 word-stream rows are low-byte lanes of shared system, magic,",
+            "or mercenary-name glyph words. The other 67 addresses are pinned",
+            "tilemap/render scripts, sprite frame/coordinate/animation records,",
+            "or character-epilogue pointer/selector fields. None is a standalone",
+            "user-facing Japanese byte string.",
             "",
             "## Reviewed Ending/Scenario-Bank Candidates",
             "",
@@ -664,13 +930,15 @@ def main() -> None:
         encoding="utf-8",
     )
     args.markdown.write_text(markdown_report(result), encoding="utf-8")
+    system_bank = result["system_graphics_ending_bank"]
     ending_bank = result["ending_scenario_bank"]
     bank = result["text_ui_bank"]
     print(
         f"{result['candidate_count']} low-signal candidates; "
-        f"{ending_bank['candidate_count']} ending/scenario-bank and "
+        f"{system_bank['candidate_count']} system/graphics/ending-bank, "
+        f"{ending_bank['candidate_count']} ending/scenario-bank, and "
         f"{bank['candidate_count']} text/UI-bank candidates, "
-        f"{ending_bank['unclassified_count'] + bank['unclassified_count']} "
+        f"{system_bank['unclassified_count'] + ending_bank['unclassified_count'] + bank['unclassified_count']} "
         "unclassified"
     )
 
