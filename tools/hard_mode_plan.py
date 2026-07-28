@@ -255,6 +255,11 @@ def build_plan(
                     "global_rules"
                 ]["runestone_expectation"]
             ),
+            "runestone_budget": (
+                hard_mode_baseline.RECOMMENDED_DISCUSSION_PROPOSAL[
+                    "global_rules"
+                ]["runestone_budget"]
+            ),
         },
         "summary": {
             "scenario_count": len(scenarios),
@@ -368,9 +373,11 @@ def render_markdown(plan: dict[str, Any]) -> str:
     lines.extend([
         "",
         "- 1~15장은 룬스톤을 쓰지 않아도 완주 가능한 성장선을 유지한다.",
-        "- 16~20장은 주력 지휘관 1회 재육성을 권장하고, 21장부터는",
+        "- 16~20장은 파티 전체 누적 1개 사용을 권장하고, 21장부터는",
         "  정상 입수한 룬스톤을 실제로 사용한 전력을 기준으로 검증한다.",
-        "- 25~27장은 주력 지휘관 2회 이상 재육성을 전제로 하며,",
+        "- 25~27장은 파티 전체에서 룬스톤 2개를 사용한 상태를 전제로",
+        "  한다. 한 명에게 2개 또는 주력 두 명에게 1개씩 배분할 수 있다.",
+        "- 전 캐릭터의 2회 재육성이나 숨겨진 추가 룬스톤은 요구하지 않는다.",
         "  27장은 룬스톤 없이 안정적으로 돌파할 수 없도록 조정한다.",
         "- 비밀 시나리오는 진입 시점에 대응하는 본편 구간의 전제를 따른다.",
         "",

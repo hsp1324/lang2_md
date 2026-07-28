@@ -141,10 +141,19 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
         "enemy_hp_mp_delta": 0,
         "runestone_expectation": {
             "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
-            "scenarios_16_20": "주력 지휘관 최소 1회 재육성 권장",
-            "scenarios_21_24": "주력 지휘관 1~2회 재육성 전제",
-            "scenarios_25_27": "주력 지휘관 2회 이상 재육성 전제",
+            "scenarios_16_20": "파티 전체 누적 1개 사용 권장",
+            "scenarios_21_24": "파티 전체 누적 1~2개 사용 전제",
+            "scenarios_25_27": "파티 전체 누적 2개 사용 전제",
             "secret_scenarios": "진입 시점에 대응하는 본편 전제를 사용",
+        },
+        "runestone_budget": {
+            "scope": "party_total_not_per_character",
+            "required_party_total_cap": 2,
+            "allowed_allocation": (
+                "한 주력 지휘관에게 2개 또는 주력 지휘관 2명에게 1개씩"
+            ),
+            "optional_or_hidden_extra_required": False,
+            "all_commanders_retrained_required": False,
         },
         "commander_formula": (
             "min(original + scenario_delta, main_story_absolute_cap)"
@@ -205,7 +214,7 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
             "soldier_df_correction_delta": 4,
             "stronger_mercenary_slots_per_six": 4,
             "summon_slots_per_six": 0,
-            "runestone_assumption": "주력 지휘관 최소 1회 재육성 권장",
+            "runestone_assumption": "파티 전체 누적 1개 사용 권장",
         },
         {
             "label": "종반 전반",
@@ -216,7 +225,7 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
             "soldier_df_correction_delta": 5,
             "stronger_mercenary_slots_per_six": 5,
             "summon_slots_per_six": 0,
-            "runestone_assumption": "주력 지휘관 1~2회 재육성 전제",
+            "runestone_assumption": "파티 전체 누적 1~2개 사용 전제",
         },
         {
             "label": "종반 후반",
@@ -227,7 +236,7 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
             "soldier_df_correction_delta": 7,
             "stronger_mercenary_slots_per_six": 6,
             "summon_slots_per_six": 0,
-            "runestone_assumption": "주력 지휘관 2회 이상 재육성 전제",
+            "runestone_assumption": "파티 전체 누적 2개 사용 전제",
         },
         {
             "label": "최종장 직전",
@@ -239,7 +248,7 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
             "stronger_mercenary_slots_per_six": 6,
             "summon_slots_per_six": 1,
             "summon_scope": "named enemy commanders only",
-            "runestone_assumption": "주력 지휘관 2회 이상 재육성 전제",
+            "runestone_assumption": "파티 전체 누적 2개 사용 전제",
         },
         {
             "label": "본편 최종장",
@@ -254,7 +263,7 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
                 "four of six slots for major commanders; at most two of six "
                 "for ordinary commanders"
             ),
-            "runestone_assumption": "주력 지휘관 2회 이상 재육성 필수",
+            "runestone_assumption": "파티 전체 누적 2개 사용 필수",
         },
     ],
     "summon_policy": {
@@ -1509,6 +1518,7 @@ def render_markdown(inventory: dict[str, object]) -> str:
             f"{step['summon_slots_per_six']}/6 |"
         )
     runestone = proposal["global_rules"]["runestone_expectation"]
+    runestone_budget = proposal["global_rules"]["runestone_budget"]
     caps = proposal["global_rules"]["main_story_absolute_cap"]
     preview = inventory["balance_discussion"][
         "recommended_unapproved_proposal_preview"
@@ -1523,6 +1533,9 @@ def render_markdown(inventory: dict[str, object]) -> str:
         f"- 21~24장: {runestone['scenarios_21_24']}",
         f"- 25~27장: {runestone['scenarios_25_27']}",
         f"- 비밀 시나리오: {runestone['secret_scenarios']}",
+        "- 이 횟수는 캐릭터별이 아니라 파티 전체 누적 사용량이다.",
+        f"- 배분 예시: {runestone_budget['allowed_allocation']}",
+        "- 숨겨진 추가 룬스톤이나 전 지휘관 재육성은 요구하지 않는다.",
         "- 27장은 룬스톤을 사용하지 않은 일반 성장만으로 안정적인",
         "  돌파가 어렵도록 실기 검증하고, 막히기만 하는 수치벽이 되면",
         "  지휘관 수치보다 병종·배치·상성부터 조정한다.",

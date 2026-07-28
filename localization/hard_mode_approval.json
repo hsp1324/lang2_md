@@ -2,7 +2,7 @@
   "schema_version": 1,
   "status": "pending_user_approval",
   "proposal_id": "standard_hard_runestone_v1",
-  "proposal_sha256": "aa06acbba190ad08babb159266e4e7c20996f5e7641a4f021f05a466a7a59eda",
+  "proposal_sha256": "8e6fec9bbf7e975988832676a593960dd140b75a643c24498639ccdac36c0933",
   "expected_confirmation": "룬스톤 표준안 v1 승인",
   "preliminary_user_selection": {
     "difficulty_target": "standard_hard"

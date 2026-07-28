@@ -59,9 +59,14 @@ class HardModePlanTests(unittest.TestCase):
             "runestone_expectation"
         ]
         self.assertIn("없이도", expectation["scenarios_1_15"])
-        self.assertIn("최소 1회", expectation["scenarios_16_20"])
-        self.assertIn("1~2회", expectation["scenarios_21_24"])
-        self.assertIn("2회 이상", expectation["scenarios_25_27"])
+        self.assertIn("누적 1개", expectation["scenarios_16_20"])
+        self.assertIn("누적 1~2개", expectation["scenarios_21_24"])
+        self.assertIn("누적 2개", expectation["scenarios_25_27"])
+        budget = self.plan["implementation_policy"]["runestone_budget"]
+        self.assertEqual(budget["scope"], "party_total_not_per_character")
+        self.assertEqual(budget["required_party_total_cap"], 2)
+        self.assertFalse(budget["optional_or_hidden_extra_required"])
+        self.assertFalse(budget["all_commanders_retrained_required"])
 
         formulas = {
             scenario["number"]: scenario["formula"]

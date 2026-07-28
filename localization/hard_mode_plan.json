@@ -11,7 +11,7 @@
   },
   "approval": {
     "manifest": "localization/hard_mode_approval.json",
-    "proposal_sha256": "aa06acbba190ad08babb159266e4e7c20996f5e7641a4f021f05a466a7a59eda",
+    "proposal_sha256": "8e6fec9bbf7e975988832676a593960dd140b75a643c24498639ccdac36c0933",
     "required_confirmation": "룬스톤 표준안 v1 승인"
   },
   "implementation_policy": {
@@ -24,10 +24,17 @@
     "summon_units_applied": false,
     "runestone_expectation": {
       "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
-      "scenarios_16_20": "주력 지휘관 최소 1회 재육성 권장",
-      "scenarios_21_24": "주력 지휘관 1~2회 재육성 전제",
-      "scenarios_25_27": "주력 지휘관 2회 이상 재육성 전제",
+      "scenarios_16_20": "파티 전체 누적 1개 사용 권장",
+      "scenarios_21_24": "파티 전체 누적 1~2개 사용 전제",
+      "scenarios_25_27": "파티 전체 누적 2개 사용 전제",
       "secret_scenarios": "진입 시점에 대응하는 본편 전제를 사용"
+    },
+    "runestone_budget": {
+      "scope": "party_total_not_per_character",
+      "required_party_total_cap": 2,
+      "allowed_allocation": "한 주력 지휘관에게 2개 또는 주력 지휘관 2명에게 1개씩",
+      "optional_or_hidden_extra_required": false,
+      "all_commanders_retrained_required": false
     }
   },
   "summary": {
