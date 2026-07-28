@@ -70,6 +70,7 @@
 - `tools/runtime_verification_inventory.py`: 31개 장의 설명·조건·준비·오프닝·전투·턴 이벤트·클리어·분기/엔딩 실기 상태를 `localization/runtime_verification.json`에서 검증해 Markdown 체크리스트로 만듭니다. 정적 번역 완료와 실기 완료를 구분합니다.
 - `tools/release_acceptance.py`: 현재 한국어 ROM의 체크섬·SHA-256, 31×8 실기 행렬, 전체 텍스트 페이지, UI·이름·아이템·클래스·전직·마법·엔딩, 잔존 문자열 후보, 압축 리소스 소유권, 마지막 빌드 델타와 편집기 무변경 왕복을 Goal 8개 완료 조건으로 묶어 검사합니다. `--write`는 `localization/release_acceptance.json`과 `docs/release_acceptance.md`를 생성하며, 하드 모드는 별도 밸런스 합의 전 미착수 상태로 고정합니다.
 - `tools/hard_mode_baseline.py`: 변경 불가 일반판 `99FD`의 체크섬·SHA-256을 잠그고 일본 원판 31개 장의 340개 고정 배치 레코드, 진영, 원본 주소, LV/AT/DF, 클래스와 용병 6칸을 읽기 전용 기준표로 생성합니다. `--check`는 `localization/hard_mode_baseline.json`과 `docs/hard_mode_balance_discussion.md`가 최신인지 검사하며, 사용자 밸런스 승인 전에는 구현 상태와 ROM 적용 권한이 항상 거짓이어야 합니다.
+- `tools/hard_mode_approval.py`: 제안 수치·용병 교체표·소환물 안전 조건·예외·비밀 시나리오 대응과 일반판 해시를 하나의 SHA-256 승인 대상으로 묶습니다. 사용자가 정확히 `표준안 v1 승인`이라고 명시하기 전에는 `--require-approved`가 실패하므로 하드 모드 빌더가 수치를 적용할 수 없습니다. 승인 뒤 제안이 바뀌면 해시가 달라져 다시 승인을 받아야 합니다.
 - `tools/build_epilogue_probe_rom.py`: 원본 엔딩 선택 루틴의 조건표를 임시로 바꿔 지정한 후일담 레코드를 실제 엔딩 렌더러로 확인할 개발용 ROM을 만듭니다. `--start-slot 14/15`로 리아나·세계 특수 경로부터 시작할 수 있습니다.
 - `tools/build_ending_dialogue_probe_rom.py`: 재배치된 엔딩 방문 대사 23개를 83페이지 진단 스트림으로 연결해 실제 방문 대사 렌더러에서 전 페이지를 확인합니다. 선택 조건 자체를 증명하는 ROM은 아니며 생성 ROM과 manifest는 커밋하지 않습니다.
 - `tools/build_scenario27_ending_probe_rom.py`: 시나리오 27의 베른하르트를 엘윈 바로 위에 두고 능력치와 용병을 제한해 원작 결말·후일담 진입을 단축합니다. 피해 난수로 HP 1이 남을 수 있으므로 공격 직전 상태 저장 후 재시도해야 합니다. 두 프로브 ROM은 배포·커밋하지 않으며 구조와 사용 순서는 `docs/epilogue_probe.md`에 기록합니다.
