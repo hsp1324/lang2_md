@@ -327,6 +327,86 @@
       "gst_sha256": "3a3a8fe1cdf0de4489f4a7555f1e189e01dc85756a06208bbb422769e28d0e09",
       "capture": "captures/run/hard_matrix_s20.png",
       "capture_sha256": "12a29d253f315083518c15e64abaf43d7dd35bd87a80e72e2749a37b0f92ba09"
+    },
+    {
+      "number": 21,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 8,
+      "target_record_count": 11,
+      "strict_runtime_target_record_count": 11,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        8,
+        18
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s21/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "1eda3d52cb754839212db58285934393d7ed16795dd82275c37cfd31c7cdafec",
+      "capture": "captures/run/hard_matrix_s21.png",
+      "capture_sha256": "9e36f7377aba6de93257132fd9bad7c75f525f0fe820c9ef49f5a08534a288f1"
+    },
+    {
+      "number": 22,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 8,
+      "target_record_count": 11,
+      "strict_runtime_target_record_count": 11,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        9,
+        19
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s22/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "52acfc67f80426a672236d8eb9404160c43f42692ef821ee324f6fd06d776eb9",
+      "capture": "captures/run/hard_matrix_s22.png",
+      "capture_sha256": "995d1bfd04cc2a975d7466273d8d301ada083ce9d35cf7fab1a377134c7617c0"
+    },
+    {
+      "number": 23,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 9,
+      "target_record_count": 11,
+      "strict_runtime_target_record_count": 11,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        9,
+        19
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s23/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "284a6fc1f1fb9e1e988cf02ea675bc213e1af85b8f1eed80ec9879f8bea268f1",
+      "capture": "captures/run/hard_matrix_s23.png",
+      "capture_sha256": "5d87f6a2525b86c3adbaa2f9b5f63388f04c0b83a91bc694827006a40478ef60"
+    },
+    {
+      "number": 24,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 9,
+      "target_record_count": 10,
+      "strict_runtime_target_record_count": 10,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        10,
+        19
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s24/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "56589e9cec92b13e3ec516f047490272eb5f1156b4ed520f6af45a15dee59203",
+      "capture": "captures/run/hard_matrix_s24.png",
+      "capture_sha256": "0c105f0109026b9651a5ec22bf0790ed0c3f1c39c05f0636c17af0d6169c69fd"
     }
   ]
 }
