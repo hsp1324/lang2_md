@@ -19,6 +19,13 @@ class TitleMainScreenTests(unittest.TestCase):
         cls.version_patch = bytearray(cls.jp)
         builder.expand_rom(cls.version_patch)
         builder.patch_byte_ui_strings(cls.version_patch)
+        cls.hard_version_text = "번역/밸런스: 1.0.0/1.0.0"
+        cls.hard_version_patch = bytearray(cls.jp)
+        builder.expand_rom(cls.hard_version_patch)
+        builder.patch_byte_ui_strings(
+            cls.hard_version_patch,
+            title_version_text=cls.hard_version_text,
+        )
 
     @staticmethod
     def words(data: bytes | bytearray, offset: int, count: int) -> list[int]:
@@ -153,16 +160,70 @@ class TitleMainScreenTests(unittest.TestCase):
         )
 
     def test_hard_version_text_fits_reserved_record_and_title_row(self):
-        text = "번역/밸런스: 1.0.0/1.0.0"
-        record = builder.build_title_version_record(text)
+        lines = builder.split_hard_title_version_text(self.hard_version_text)
+        self.assertEqual(lines, ("번역: 1.0.0", "하드: 1.0.0"))
+        self.assertIsNotNone(lines)
+        translation_text, balance_text = lines
+        translation_record = builder.build_title_version_record(
+            translation_text
+        )
+        balance_record = builder.build_title_version_record(balance_text)
         self.assertLessEqual(
-            builder.TITLE_VERSION_TEXT_RECORD + len(record),
-            builder.BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE,
+            builder.TITLE_HARD_TRANSLATION_TEXT_RECORD
+            + len(translation_record),
+            builder.TITLE_HARD_BALANCE_TEXT_RECORD,
         )
-        self.assertLess(
-            builder.title_version_render_position(text),
-            builder.TITLE_VERSION_RENDER_POSITION,
+        self.assertLessEqual(
+            builder.TITLE_HARD_BALANCE_TEXT_RECORD + len(balance_record),
+            builder.TITLE_HARD_CREDIT_RENDER_ROUTINE,
         )
+        translation_position = builder.hard_translation_render_position(
+            translation_text
+        )
+        balance_position = builder.title_version_render_position(balance_text)
+        self.assertEqual(
+            translation_position & 0xFF,
+            builder.TITLE_HARD_TRANSLATION_RENDER_START_CELL * 2,
+        )
+        self.assertLessEqual(
+            builder.TITLE_HARD_TRANSLATION_RENDER_START_CELL
+            + len(translation_text),
+            (balance_position & 0xFF) // 2,
+        )
+
+    def test_hard_version_uses_split_records_and_dedicated_renderer(self):
+        lines = builder.split_hard_title_version_text(self.hard_version_text)
+        self.assertIsNotNone(lines)
+        translation_text, balance_text = lines
+        self.assertEqual(
+            self.hard_version_patch[
+                builder.TITLE_COPYRIGHT_RENDER_HOOK:
+                builder.TITLE_COPYRIGHT_RENDER_HOOK
+                + len(builder.TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL)
+            ],
+            bytes.fromhex("4E F9")
+            + builder.TITLE_HARD_CREDIT_RENDER_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 71"),
+        )
+        hard_renderer = builder._build_title_credit_renderer(
+            self.hard_version_text
+        )
+        self.assertEqual(
+            self.hard_version_patch[
+                builder.TITLE_HARD_CREDIT_RENDER_ROUTINE:
+                builder.TITLE_HARD_CREDIT_RENDER_ROUTINE + len(hard_renderer)
+            ],
+            hard_renderer,
+        )
+        for offset, text in (
+            (builder.TITLE_HARD_TRANSLATION_TEXT_RECORD, translation_text),
+            (builder.TITLE_HARD_BALANCE_TEXT_RECORD, balance_text),
+        ):
+            record = builder.build_title_version_record(text)
+            self.assertEqual(
+                self.hard_version_patch[offset:offset + len(record)],
+                record,
+            )
 
     def test_rom_header_metadata_preserves_japanese_title(self):
         data = bytearray(self.jp)
@@ -241,6 +302,36 @@ class TitleMainScreenTests(unittest.TestCase):
         self.assertLessEqual(
             version_record_end,
             builder.BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE,
+        )
+        hard_renderer_end = (
+            builder.TITLE_HARD_CREDIT_RENDER_ROUTINE
+            + len(
+                builder._build_title_credit_renderer(
+                    self.hard_version_text
+                )
+            )
+        )
+        dynamic_direct_end = (
+            builder.BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE
+            + len(builder._build_byte_ui_dynamic_direct_map_renderer())
+        )
+        self.assertLessEqual(
+            dynamic_direct_end,
+            builder.TITLE_HARD_TRANSLATION_TEXT_RECORD,
+        )
+        self.assertLessEqual(
+            builder.TITLE_HARD_TRANSLATION_TEXT_RECORD
+            + len(builder.build_title_version_record("번역: 1.0.0")),
+            builder.TITLE_HARD_BALANCE_TEXT_RECORD,
+        )
+        self.assertLessEqual(
+            builder.TITLE_HARD_BALANCE_TEXT_RECORD
+            + len(builder.build_title_version_record("하드: 1.0.0")),
+            builder.TITLE_HARD_CREDIT_RENDER_ROUTINE,
+        )
+        self.assertLessEqual(
+            hard_renderer_end,
+            builder.TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT,
         )
 
 

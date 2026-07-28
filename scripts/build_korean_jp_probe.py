@@ -381,6 +381,8 @@ TITLE_CREDIT_TILE_OVERRIDES = {
     0x6A: "밸",
     0x6B: "런",
     0x6C: "스",
+    0x6D: "하",
+    0x6E: "드",
 }
 TITLE_CREDIT_BITMAP_OVERRIDES = {}
 TITLE_CREDIT_RESOURCE_INDEX = (
@@ -636,7 +638,11 @@ BYTE_UI_MAP_INFO_NAME_RENDER_ROUTINE = 0x2B77A0
 BYTE_UI_MAP_INFO_CLASS_RENDER_ROUTINE = 0x2B77C0
 BYTE_UI_DIRECT_MAP_RENDER_ROUTINE = 0x2B7800
 BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE = 0x2B88C0
-BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT = 0x2B9000
+BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT = 0x2B8A00
+TITLE_HARD_TRANSLATION_TEXT_RECORD = 0x2B8A00
+TITLE_HARD_BALANCE_TEXT_RECORD = 0x2B8A20
+TITLE_HARD_CREDIT_RENDER_ROUTINE = 0x2B8A40
+TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT = 0x2B8B00
 BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
@@ -718,6 +724,7 @@ TITLE_VERSION_TEXT_RECORD = TITLE_CREDIT_TEXT_RECORD + len(
 )
 TITLE_VERSION_RENDER_ROW = 0xCD00
 TITLE_VERSION_RENDER_END_CELL = 38
+TITLE_HARD_TRANSLATION_RENDER_START_CELL = 2
 TITLE_VERSION_BYTE_BY_CHAR = {
     char: code
     for code, char in TITLE_CREDIT_TILE_OVERRIDES.items()
@@ -731,6 +738,26 @@ def title_version_render_position(text: str) -> int:
     if start_cell < 0:
         raise ValueError("title version does not fit on the title row")
     return TITLE_VERSION_RENDER_ROW | (start_cell * 2)
+
+
+def split_hard_title_version_text(text: str) -> tuple[str, str] | None:
+    prefix = "번역/밸런스: "
+    if not text.startswith(prefix):
+        return None
+    versions = text[len(prefix):].split("/")
+    if len(versions) != 2 or not all(versions):
+        raise ValueError(f"invalid hard title version text: {text!r}")
+    return f"번역: {versions[0]}", f"하드: {versions[1]}"
+
+
+def hard_translation_render_position(text: str) -> int:
+    end_cell = TITLE_HARD_TRANSLATION_RENDER_START_CELL + len(text)
+    if end_cell >= TITLE_VERSION_RENDER_END_CELL:
+        raise ValueError("hard translation version overlaps right title edge")
+    return (
+        TITLE_VERSION_RENDER_ROW
+        | (TITLE_HARD_TRANSLATION_RENDER_START_CELL * 2)
+    )
 
 
 TITLE_VERSION_RENDER_POSITION = title_version_render_position(
@@ -6569,15 +6596,27 @@ def _build_title_credit_renderer(
             + bytes.fromhex("21 C9 81 C4")
         )
 
-    return (
+    records = (
         render_record(0xCB18, 0x0A44F8)
         + render_record(0xCC1C, TITLE_CREDIT_TEXT_RECORD)
-        + render_record(
+    )
+    hard_version_lines = split_hard_title_version_text(title_version_text)
+    if hard_version_lines is None:
+        records += render_record(
             title_version_render_position(title_version_text),
             TITLE_VERSION_TEXT_RECORD,
         )
-        + bytes.fromhex("4E 75")
-    )
+    else:
+        translation_text, balance_text = hard_version_lines
+        records += render_record(
+            hard_translation_render_position(translation_text),
+            TITLE_HARD_TRANSLATION_TEXT_RECORD,
+        )
+        records += render_record(
+            title_version_render_position(balance_text),
+            TITLE_HARD_BALANCE_TEXT_RECORD,
+        )
+    return records + bytes.fromhex("4E 75")
 
 
 def install_byte_ui_extension(
@@ -6817,6 +6856,17 @@ def install_byte_ui_extension(
     )
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer(title_version_text)
+    hard_version_lines = split_hard_title_version_text(title_version_text)
+    title_credit_renderer_address = (
+        TITLE_HARD_CREDIT_RENDER_ROUTINE
+        if hard_version_lines is not None
+        else TITLE_CREDIT_RENDER_ROUTINE
+    )
+    title_credit_renderer_limit = (
+        TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT
+        if hard_version_lines is not None
+        else TITLE_CREDIT_TEXT_RECORD
+    )
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
     sound_test_renderer = _build_sound_test_renderer()
     prep_local_tile_lookup = _build_byte_ui_prep_local_tile_lookup()
@@ -6850,7 +6900,6 @@ def install_byte_ui_extension(
         BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
         BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE: ending_result_final_bank_loader,
         TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
-        TITLE_CREDIT_RENDER_ROUTINE: title_credit_renderer,
         BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE: lookup_renderer,
         INLINE_DISCARD_PROMPT_RENDER_ROUTINE: discard_prompt_renderer,
         SOUND_TEST_RENDER_ROUTINE: sound_test_renderer,
@@ -6862,6 +6911,22 @@ def install_byte_ui_extension(
         if any(value != 0xFF for value in data[offset : offset + len(payload)]):
             raise ValueError(f"byte UI routine area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
+
+    title_credit_renderer_end = (
+        title_credit_renderer_address + len(title_credit_renderer)
+    )
+    if title_credit_renderer_end > title_credit_renderer_limit:
+        raise ValueError("title credit renderer exceeds reserved area")
+    if any(
+        value != 0xFF
+        for value in data[
+            title_credit_renderer_address:title_credit_renderer_end
+        ]
+    ):
+        raise ValueError("title credit renderer area is not blank")
+    data[
+        title_credit_renderer_address:title_credit_renderer_end
+    ] = title_credit_renderer
 
     dynamic_direct_end = (
         BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE
@@ -6967,22 +7032,39 @@ def install_byte_ui_extension(
     ):
         raise ValueError("title credit text record area is not blank")
     data[TITLE_CREDIT_TEXT_RECORD:title_credit_record_end] = TITLE_CREDIT_RECORD_BYTES
-    title_version_record = build_title_version_record(title_version_text)
-    title_version_record_end = TITLE_VERSION_TEXT_RECORD + len(
-        title_version_record
-    )
-    if title_version_record_end > BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE:
-        raise ValueError("title version record exceeds reserved bank")
-    if any(
-        value != 0xFF
-        for value in data[
-            TITLE_VERSION_TEXT_RECORD:title_version_record_end
-        ]
-    ):
-        raise ValueError("title version text record area is not blank")
-    data[
-        TITLE_VERSION_TEXT_RECORD:title_version_record_end
-    ] = title_version_record
+    if hard_version_lines is None:
+        title_version_records = (
+            (
+                TITLE_VERSION_TEXT_RECORD,
+                BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE,
+                title_version_text,
+            ),
+        )
+    else:
+        translation_text, balance_text = hard_version_lines
+        title_version_records = (
+            (
+                TITLE_HARD_TRANSLATION_TEXT_RECORD,
+                TITLE_HARD_BALANCE_TEXT_RECORD,
+                translation_text,
+            ),
+            (
+                TITLE_HARD_BALANCE_TEXT_RECORD,
+                TITLE_HARD_CREDIT_RENDER_ROUTINE,
+                balance_text,
+            ),
+        )
+    for record_offset, record_limit, record_text in title_version_records:
+        title_version_record = build_title_version_record(record_text)
+        title_version_record_end = record_offset + len(title_version_record)
+        if title_version_record_end > record_limit:
+            raise ValueError("title version record exceeds reserved bank")
+        if any(
+            value != 0xFF
+            for value in data[record_offset:title_version_record_end]
+        ):
+            raise ValueError("title version text record area is not blank")
+        data[record_offset:title_version_record_end] = title_version_record
     if data[
         TITLE_CREDIT_FONT_LOAD_HOOK :
         TITLE_CREDIT_FONT_LOAD_HOOK + len(TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL)
@@ -7006,7 +7088,7 @@ def install_byte_ui_extension(
         TITLE_COPYRIGHT_RENDER_HOOK + len(TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL)
     ] = (
         bytes.fromhex("4E F9")
-        + TITLE_CREDIT_RENDER_ROUTINE.to_bytes(4, "big")
+        + title_credit_renderer_address.to_bytes(4, "big")
         + bytes.fromhex("4E 71")
     )
     for offset in BYTE_UI_WORD_RENDER_CALLS:
@@ -7615,6 +7697,11 @@ def main() -> None:
         help="version profile from localization/rom_versions.json",
     )
     parser.add_argument(
+        "--rom-version-registry",
+        type=Path,
+        help="alternate version registry, primarily for preview builds",
+    )
+    parser.add_argument(
         "--scenario-count",
         type=int,
         default=31,
@@ -7688,7 +7775,14 @@ def main() -> None:
         ),
     )
     args = parser.parse_args()
-    rom_version_profile = get_rom_version_profile(args.rom_profile)
+    rom_version_profile = (
+        get_rom_version_profile(
+            args.rom_profile,
+            args.rom_version_registry,
+        )
+        if args.rom_version_registry is not None
+        else get_rom_version_profile(args.rom_profile)
+    )
 
     data = bytearray(IN_ROM.read_bytes())
     expand_rom(data)
