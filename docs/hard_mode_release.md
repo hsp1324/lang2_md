@@ -39,6 +39,10 @@
 40개 스프라이트를 다시 추출한 결과는
 `localization/ai_class_map_sprite_rom.json`과
 `docs/assets/ai_class_map_sprite_rom_contact_sheet.png`에 기록했다.
+직전 `0718` 후보를 커밋 `1360b69`에서 재현해 비교한 결과 변경
+10,266바이트는 모두 40개 매핑·80개 프레임·헤더 체크섬에 속하며,
+밸런스·이벤트·AI 영역 변경은 0이다:
+`localization/ai_class_release_delta.json`
 
 - 직전 `0718` 후보는 31/31개 시나리오에서 자동 배치·출격 후 하드 대상의 실제 RAM
   적재값을 확인했다:

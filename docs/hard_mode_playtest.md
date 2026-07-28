@@ -7,10 +7,12 @@
 
 - 릴리스 ID: `ko-hard-t1.0.0-b1.0.0`
 - ROM: `roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`
-- MD 체크섬: `0718`
-- SHA-256: `18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac`
-- 자동 런타임 적재: 31/31
-- 자동 첫 턴 진행: 31/31
+- MD 체크섬: `1011`
+- SHA-256: `c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b`
+- 자동 런타임 적재: 31/31 (증거 ROM `18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac`)
+- 자동 첫 턴 진행: 31/31 (증거 ROM `18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac`)
+- 현재 후보 전이: `verified_cosmetic_only_delta`
+- 현재 후보 변경 클래스 실기 표본: 6/6
 
 ## 완료 조건
 

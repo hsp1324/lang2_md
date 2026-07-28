@@ -21,8 +21,18 @@ class HardModePlaytestTests(unittest.TestCase):
         self.assertFalse(manifest["coverage"]["complete"])
         self.assertEqual(
             manifest["hard_release"]["sha256"],
+            "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
+        )
+        lineage = manifest["hard_release"]["verification_lineage"]
+        self.assertEqual(
+            lineage["runtime_source_sha256"],
             "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
         )
+        self.assertEqual(
+            lineage["cosmetic_delta_status"],
+            "verified_cosmetic_only_delta",
+        )
+        self.assertEqual(lineage["current_class_spot_checks_passed"], 6)
 
     def test_cleared_attempt_requires_rating_and_evidence(self):
         manifest = playtest.initial_manifest(self.identity)

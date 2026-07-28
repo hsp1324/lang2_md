@@ -18,6 +18,12 @@ DEFAULT_BUILD = ROOT / "localization/hard_mode_build.json"
 DEFAULT_PLAN = ROOT / "localization/hard_mode_plan.json"
 DEFAULT_RUNTIME = ROOT / "localization/hard_mode_scenario_smoke.json"
 DEFAULT_FIRST_TURN = ROOT / "localization/hard_mode_first_turn_smoke.json"
+DEFAULT_COSMETIC_DELTA = (
+    ROOT / "localization/ai_class_release_delta.json"
+)
+DEFAULT_CLASS_SPOT_CHECK = (
+    ROOT / "localization/ai_class_runtime_spot_check.json"
+)
 DEFAULT_RESULTS = ROOT / "localization/hard_mode_playtest.json"
 DEFAULT_MARKDOWN = ROOT / "docs/hard_mode_playtest.md"
 
@@ -65,6 +71,8 @@ def current_identity(
     plan_path: Path = DEFAULT_PLAN,
     runtime_path: Path = DEFAULT_RUNTIME,
     first_turn_path: Path = DEFAULT_FIRST_TURN,
+    cosmetic_delta_path: Path = DEFAULT_COSMETIC_DELTA,
+    class_spot_check_path: Path = DEFAULT_CLASS_SPOT_CHECK,
 ) -> dict[str, Any]:
     build = load_json(build_path)
     filename = build["release"]["rom_filename"]
@@ -85,6 +93,41 @@ def current_identity(
 
     runtime = load_json(runtime_path)
     first_turn = load_json(first_turn_path)
+    cosmetic_delta = load_json(cosmetic_delta_path)
+    class_spot_check = load_json(class_spot_check_path)
+    runtime_source = runtime["hard_rom"]["sha256"]
+    first_turn_source = first_turn["hard_rom"]["sha256"]
+    if runtime_source != first_turn_source:
+        raise ValueError(
+            "hard runtime and first-turn evidence use different ROMs"
+        )
+    if cosmetic_delta["before"]["sha256"] != runtime_source:
+        raise ValueError(
+            "cosmetic delta predecessor does not match runtime evidence"
+        )
+    if cosmetic_delta["after"]["sha256"] != digest:
+        raise ValueError(
+            "cosmetic delta target does not match current hard candidate"
+        )
+    delta = cosmetic_delta["delta"]
+    if (
+        cosmetic_delta["status"] != "verified_cosmetic_only_delta"
+        or delta["categories"]["outside_owned_ranges"] != 0
+        or delta["balance_event_ai_changed_bytes"] != 0
+    ):
+        raise ValueError(
+            "hard runtime evidence cannot cross an unverified ROM delta"
+        )
+    if (
+        class_spot_check["status"] != "passed"
+        or class_spot_check["rom"]["sha256"] != digest
+        or len(class_spot_check["checks"]) != 6
+        or any(
+            row["result"] != "passed"
+            for row in class_spot_check["checks"]
+        )
+    ):
+        raise ValueError("current hard class-sprite spot checks are incomplete")
     runtime_verified = sorted(
         int(row["number"])
         for row in runtime["scenarios"]
@@ -113,6 +156,24 @@ def current_identity(
         "first_turn_manifest_sha256": sha256_path(first_turn_path),
         "runtime_verified_scenarios": runtime_verified,
         "first_turn_verified_scenarios": first_turn_verified,
+        "verification_lineage": {
+            "runtime_source_sha256": runtime_source,
+            "first_turn_source_sha256": first_turn_source,
+            "cosmetic_delta_manifest": str(
+                cosmetic_delta_path.relative_to(ROOT)
+            ),
+            "cosmetic_delta_manifest_sha256": sha256_path(
+                cosmetic_delta_path
+            ),
+            "cosmetic_delta_status": cosmetic_delta["status"],
+            "current_class_spot_check_manifest": str(
+                class_spot_check_path.relative_to(ROOT)
+            ),
+            "current_class_spot_check_manifest_sha256": sha256_path(
+                class_spot_check_path
+            ),
+            "current_class_spot_checks_passed": 6,
+        },
     }
 
 
@@ -363,8 +424,22 @@ def render_markdown(manifest: dict[str, Any]) -> str:
         f"- ROM: `{identity['rom_path']}`",
         f"- MD 체크섬: `{identity['header_checksum']}`",
         f"- SHA-256: `{identity['sha256']}`",
-        "- 자동 런타임 적재: 31/31",
-        "- 자동 첫 턴 진행: 31/31",
+        (
+            "- 자동 런타임 적재: 31/31 "
+            f"(증거 ROM `{identity['verification_lineage']['runtime_source_sha256']}`)"
+        ),
+        (
+            "- 자동 첫 턴 진행: 31/31 "
+            f"(증거 ROM `{identity['verification_lineage']['first_turn_source_sha256']}`)"
+        ),
+        (
+            "- 현재 후보 전이: "
+            f"`{identity['verification_lineage']['cosmetic_delta_status']}`"
+        ),
+        (
+            "- 현재 후보 변경 클래스 실기 표본: "
+            f"{identity['verification_lineage']['current_class_spot_checks_passed']}/6"
+        ),
         "",
         "## 완료 조건",
         "",
