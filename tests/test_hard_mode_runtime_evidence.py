@@ -7,8 +7,12 @@ class HardModeRuntimeEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.groups = verifier.verify_evidence()
+        cls.scenario_sixteen_groups = verifier.verify_scenario_sixteen()
         cls.scenario_twenty_five_groups = (
             verifier.verify_scenario_twenty_five()
+        )
+        cls.scenario_twenty_seven_groups = (
+            verifier.verify_scenario_twenty_seven()
         )
 
     def test_scenario_one_retains_two_hard_targets(self):
@@ -57,6 +61,20 @@ class HardModeRuntimeEvidenceTests(unittest.TestCase):
             [expected.mercenaries for expected in verifier.SCENARIO_ONE_GROUPS],
         )
 
+    def test_scenario_sixteen_verifies_all_ten_hard_targets(self):
+        self.assertEqual(len(self.scenario_sixteen_groups), 10)
+        self.assertEqual(
+            (
+                self.scenario_sixteen_groups[0].class_id,
+                self.scenario_sixteen_groups[0].name_id,
+                self.scenario_sixteen_groups[0].commander_at,
+                self.scenario_sixteen_groups[0].commander_df,
+                self.scenario_sixteen_groups[0].soldier_at,
+                self.scenario_sixteen_groups[0].soldier_df,
+            ),
+            (0x4D, 0x0D, 54, 41, 17, 13),
+        )
+
     def test_scenario_twenty_five_verifies_all_eleven_hard_targets(self):
         self.assertEqual(len(self.scenario_twenty_five_groups), 11)
         self.assertEqual(
@@ -94,6 +112,31 @@ class HardModeRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(
             self.scenario_twenty_five_groups[-1].mercenaries,
             (0x7D,) * 6,
+        )
+
+    def test_scenario_twenty_seven_verifies_all_ten_hard_targets(self):
+        self.assertEqual(len(self.scenario_twenty_seven_groups), 10)
+        self.assertEqual(
+            (
+                self.scenario_twenty_seven_groups[0].class_id,
+                self.scenario_twenty_seven_groups[0].name_id,
+                self.scenario_twenty_seven_groups[0].commander_at,
+                self.scenario_twenty_seven_groups[0].commander_df,
+                self.scenario_twenty_seven_groups[0].soldier_at,
+                self.scenario_twenty_seven_groups[0].soldier_df,
+            ),
+            (0x5D, 0x65, 67, 47, 21, 18),
+        )
+        self.assertEqual(
+            (
+                self.scenario_twenty_seven_groups[-1].class_id,
+                self.scenario_twenty_seven_groups[-1].name_id,
+                self.scenario_twenty_seven_groups[-1].commander_at,
+                self.scenario_twenty_seven_groups[-1].commander_df,
+                self.scenario_twenty_seven_groups[-1].soldier_at,
+                self.scenario_twenty_seven_groups[-1].soldier_df,
+            ),
+            (0x4D, 0x0D, 68, 52, 22, 18),
         )
 
 

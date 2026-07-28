@@ -17,8 +17,14 @@ if str(ROOT) not in sys.path:
 from tools import hard_mode_plan
 
 DEFAULT_GST = ROOT / "captures/analysis/0718_hard_s01_turn1_command.gst"
+SCENARIO_SIXTEEN_GST = (
+    ROOT / "captures/analysis/0718_hard_s16_turn1_command.gst"
+)
 SCENARIO_TWENTY_FIVE_GST = (
     ROOT / "captures/analysis/0718_hard_s25_turn1_banner.gst"
+)
+SCENARIO_TWENTY_SEVEN_GST = (
+    ROOT / "captures/analysis/0718_hard_s27_turn1_command.gst"
 )
 
 GST_WORK_RAM_FILE_OFFSET = 0x2478
@@ -35,9 +41,17 @@ SCENARIO_ONE_PLAYER_GROUPS = 2
 SCENARIO_ONE_EXPECTED_GST_SHA256 = (
     "a9be34a13f38616617ce806f6b63821d1c15433b44e4e9e5d1ef1394b09a9256"
 )
+SCENARIO_SIXTEEN_PLAYER_GROUPS = 8
+SCENARIO_SIXTEEN_EXPECTED_GST_SHA256 = (
+    "29e409e300b0c4d333c037fe966fbbb69f4ec203e5902a9a0492d15cc0793ccf"
+)
 SCENARIO_TWENTY_FIVE_PLAYER_GROUPS = 9
 SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256 = (
     "a895583ab3d3b94789354c7f690c87a3b5f3dec7f1ff14530245441e73a0c8e2"
+)
+SCENARIO_TWENTY_SEVEN_PLAYER_GROUPS = 10
+SCENARIO_TWENTY_SEVEN_EXPECTED_GST_SHA256 = (
+    "7e0088f23ae05ab1ec8386a2e28b9044ad8673f25096efcb254f6d7fb91af6cc"
 )
 
 
@@ -246,22 +260,61 @@ def verify_planned_scenario(
     return tuple(actual_groups)
 
 
-def verify_scenario_twenty_five(
-    path: Path = SCENARIO_TWENTY_FIVE_GST,
+def verify_retained_planned_scenario(
+    scenario_number: int,
+    path: Path,
+    retained_path: Path,
+    expected_sha256: str,
+    player_group_count: int,
 ) -> tuple[RuntimeGroup, ...]:
     gst = path.read_bytes()
     digest = hashlib.sha256(gst).hexdigest()
-    if path.resolve() == SCENARIO_TWENTY_FIVE_GST.resolve():
-        if digest != SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256:
+    if path.resolve() == retained_path.resolve():
+        if digest != expected_sha256:
             raise ValueError(
-                "retained Scenario 25 GST hash changed: "
-                f"{digest} != "
-                f"{SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256}"
+                f"retained Scenario {scenario_number} GST hash changed: "
+                f"{digest} != {expected_sha256}"
             )
     return verify_planned_scenario(
         gst,
-        scenario_number=25,
-        player_group_count=SCENARIO_TWENTY_FIVE_PLAYER_GROUPS,
+        scenario_number=scenario_number,
+        player_group_count=player_group_count,
+    )
+
+
+def verify_scenario_sixteen(
+    path: Path = SCENARIO_SIXTEEN_GST,
+) -> tuple[RuntimeGroup, ...]:
+    return verify_retained_planned_scenario(
+        16,
+        path,
+        SCENARIO_SIXTEEN_GST,
+        SCENARIO_SIXTEEN_EXPECTED_GST_SHA256,
+        SCENARIO_SIXTEEN_PLAYER_GROUPS,
+    )
+
+
+def verify_scenario_twenty_five(
+    path: Path = SCENARIO_TWENTY_FIVE_GST,
+) -> tuple[RuntimeGroup, ...]:
+    return verify_retained_planned_scenario(
+        25,
+        path,
+        SCENARIO_TWENTY_FIVE_GST,
+        SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256,
+        SCENARIO_TWENTY_FIVE_PLAYER_GROUPS,
+    )
+
+
+def verify_scenario_twenty_seven(
+    path: Path = SCENARIO_TWENTY_SEVEN_GST,
+) -> tuple[RuntimeGroup, ...]:
+    return verify_retained_planned_scenario(
+        27,
+        path,
+        SCENARIO_TWENTY_SEVEN_GST,
+        SCENARIO_TWENTY_SEVEN_EXPECTED_GST_SHA256,
+        SCENARIO_TWENTY_SEVEN_PLAYER_GROUPS,
     )
 
 
@@ -275,8 +328,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--scenario",
         type=int,
-        choices=(1, 25),
-        help="verify only one retained scenario; default verifies both",
+        choices=(1, 16, 25, 27),
+        help="verify only one retained scenario; default verifies all",
     )
     parser.add_argument(
         "--gst",
@@ -302,12 +355,29 @@ def main() -> int:
                 "mercs "
                 + " ".join(f"{value:02X}" for value in actual.mercenaries)
             )
-    if args.scenario in (None, 25):
-        groups = verify_scenario_twenty_five(
-            args.gst or SCENARIO_TWENTY_FIVE_GST
+    planned_evidence = (
+        (16, SCENARIO_SIXTEEN_GST, SCENARIO_SIXTEEN_PLAYER_GROUPS,
+         verify_scenario_sixteen),
+        (25, SCENARIO_TWENTY_FIVE_GST, SCENARIO_TWENTY_FIVE_PLAYER_GROUPS,
+         verify_scenario_twenty_five),
+        (27, SCENARIO_TWENTY_SEVEN_GST, SCENARIO_TWENTY_SEVEN_PLAYER_GROUPS,
+         verify_scenario_twenty_seven),
+    )
+    for scenario_number, retained_path, player_groups, verifier in planned_evidence:
+        if args.scenario not in (None, scenario_number):
+            continue
+        groups = verifier(
+            args.gst or retained_path
         )
+        scenario = next(
+            row for row in hard_mode_plan.build_plan()["scenarios"]
+            if int(row["number"]) == scenario_number
+        )
+        record_indexes = [int(record["index"]) for record in scenario["records"]]
+        first_group = player_groups + min(record_indexes)
+        last_group = player_groups + max(record_indexes)
         print(
-            "S25 groups 10..20: "
+            f"S{scenario_number} groups {first_group}..{last_group}: "
             f"{len(groups)} hard targets match planned commander AT/DF, "
             "soldier corrections, and mercenaries"
         )
