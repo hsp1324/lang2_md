@@ -98,3 +98,17 @@ AT/DF·병사 A+/D+·용병을 고정 배치 원본과 대조했으며 예외가
 `captures/run/hard_8674_s08_entry.png`, 진입 상태는
 `captures/analysis/hard_8674_s07_entry_turn1_entry.gst`와
 `captures/analysis/hard_8674_s08_entry_turn1_entry.gst`에 보존한다.
+
+시나리오 9와 10도 같은 최신 후보 저장 슬롯 계보로 연속 진입했다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 9 | 7 | 10/10 | 10~19 | `6d5f549efa7e2db62b4fba1c3dacb1e51d2fb9d79ecd8b97bddcdaf7ea1162e8` |
+| 10 | 5 | 13개 중 엄격 12/12 | 5~17 | `e9ef42fa1a0a8abea32869eb46abdc9f0108cc76b32150c25b03c0ef90b35251` |
+
+시나리오 10 고정 레코드 1의 레스터는 원작이 플레이 가능한 로스터
+성장 데이터로 능력치를 다시 쓰는 이미 문서화된 예외다. 클래스·이름·
+용병은 엄격히 일치하고, AT/DF와 병사 보정만 원작 성장값을 유지한다.
+이 정책은 `localization/hard_mode_runtime_exceptions.json`에 고정되어
+있다. 화면은 `captures/run/hard_8674_s09_entry.png`와
+`captures/run/hard_8674_s10_entry.png`에 보존한다.
