@@ -18,6 +18,9 @@ DEFAULT_NORMAL_ROM = hard_mode_baseline.DEFAULT_NORMAL_ROM
 DEFAULT_JSON = ROOT / "localization/hard_mode_plan.json"
 DEFAULT_MARKDOWN = ROOT / "docs/hard_mode_changes.md"
 DEFAULT_BUILD_MANIFEST = ROOT / "localization/hard_mode_build.json"
+DEFAULT_RUNTIME_VERIFICATION = (
+    ROOT / "localization/hard_mode_runtime_verification.json"
+)
 
 SECRET_STEP_SOURCE = {
     28: 11,
@@ -325,6 +328,16 @@ def render_markdown(plan: dict[str, Any]) -> str:
         if DEFAULT_BUILD_MANIFEST.exists()
         else None
     )
+    runtime = (
+        json.loads(
+            DEFAULT_RUNTIME_VERIFICATION.read_text(encoding="utf-8")
+        )
+        if DEFAULT_RUNTIME_VERIFICATION.exists()
+        else {"scenarios": []}
+    )
+    runtime_scenarios = {
+        int(row["number"]): row for row in runtime["scenarios"]
+    }
     lines = [
         "# 랑그릿사 II 표준 하드 모드 변경 기록",
         "",
@@ -430,10 +443,17 @@ def render_markdown(plan: dict[str, Any]) -> str:
         mercenary = sum(
             len(row["mercenaries"]["changes"]) for row in records
         )
+        verification = runtime_scenarios.get(int(scenario["number"]))
+        verification_label = (
+            "런타임 적재 확인"
+            if verification is not None
+            and verification["status"] == "runtime_loader_verified"
+            else "미시작"
+        )
         lines.append(
             f"| {scenario['number']} | {scenario['label']} | "
             f"{len(records)} | {commander} | {soldier} | {mercenary} | "
-            "0 | 미시작 |"
+            f"0 | {verification_label} |"
         )
 
     lines.extend([
@@ -477,16 +497,53 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "## 실기 검증 기록",
         "",
         "- 후보 ROM 생성과 주소·체크섬·SRAM 호환 정적 검사는 완료했다.",
-        "- 자동 에뮬레이터 완주 검증은 사용자의 요청에 따라 생략했다.",
+        "- 자동 에뮬레이터 완주 검증은 사용자의 요청에 따라 생략하고,",
+        "  장별 진입·런타임 적재·이벤트 진행을 단계적으로 검증한다.",
         "- 실제 난이도, 진행 가능성, 증원·턴 이벤트·승패 조건은 사용자가",
         "  플레이하며 검증하고 발견한 문제를 이 문서에 누적한다.",
         "- 사용자가 명시적으로 릴리스했다고 말하기 전에는 번역과 밸런스",
         "  버전을 `1.0.0/1.0.0`으로 유지하고 후보 ROM만 교체한다.",
         "- 수정본은 같은 파일명에 적용하며 게임 내 SRAM 저장을 유지한다.",
         "  에뮬레이터 상태 저장은 호환을 보장하지 않는다.",
+    ])
+    for scenario_number in sorted(runtime_scenarios):
+        evidence = runtime_scenarios[scenario_number]
+        lines.extend([
+            "",
+            f"### {scenario_number}장",
+            "",
+            (
+                f"- 하드 후보 `{runtime['hard_rom']['md_checksum']}`을 "
+                f"{evidence['entry']} 경로로 실행해 "
+                f"{evidence['endpoint']}까지 정상 진입했다."
+            ),
+            f"- 보존 상태: `{evidence['gst']}`",
+            f"- 화면: `{evidence['capture']}`",
+        ])
+        for group in evidence["verified_groups"]:
+            commander_at, commander_df = group["commander_at_df"]
+            soldier_at, soldier_df = group["soldier_at_df"]
+            mercenaries = " ".join(group["mercenaries"])
+            target = "하드 대상" if group["hard_target"] else "자동 강화 제외"
+            lines.append(
+                f"- {group['name']} 런타임 그룹 "
+                f"{group['runtime_group']} ({target})은 지휘관 `AT/DF "
+                f"{commander_at}/{commander_df}`, 병사 수정 `A+/D+ "
+                f"{soldier_at}/{soldier_df}`, 용병 `{mercenaries}`로 "
+                "적재됐다."
+            )
+        lines.extend([
+            (
+                "- `python3 tools/verify_hard_mode_runtime_evidence.py`로 "
+                "보존 상태의 해시와 런타임 그룹을 재검증할 수 있다."
+            ),
+            f"- 남은 검증: {evidence['remaining']}",
+        ])
+    lines.extend([
         "",
         "정확한 변경 원장은 `localization/hard_mode_plan.json`, 실제 빌드",
-        "결과는 `localization/hard_mode_build.json`이다.",
+        "결과는 `localization/hard_mode_build.json`, 실기 상태는",
+        "`localization/hard_mode_runtime_verification.json`이다.",
         "",
     ])
     return "\n".join(lines)
