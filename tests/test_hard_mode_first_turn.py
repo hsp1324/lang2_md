@@ -107,13 +107,19 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 expected=expected,
             )
 
-    def test_title_defeat_exception_is_limited_to_scenario_six(self):
+    def test_title_defeat_exceptions_require_normal_comparison_evidence(self):
         self.assertEqual(
             first_turn.expected_endpoint(6)["endpoint"],
             "defeat_return_title_turn_1",
         )
+        self.assertEqual(
+            first_turn.expected_endpoint(13)["endpoint"],
+            "defeat_return_title_turn_1",
+        )
         self.assertIsNone(first_turn.expected_endpoint(5))
         self.assertIsNone(first_turn.expected_endpoint(7))
+        self.assertIsNone(first_turn.expected_endpoint(12))
+        self.assertIsNone(first_turn.expected_endpoint(14))
 
     def test_save_result_replaces_scenario_and_updates_coverage(self):
         with tempfile.TemporaryDirectory() as directory:

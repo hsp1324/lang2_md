@@ -278,6 +278,186 @@
       "endpoint_gst_sha256": "a919943297021fac5d5ce7047f28f39220aa86f59ad06458842ead4e6f54b403"
     },
     {
+      "number": 11,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 25,
+      "phase_dialogue_confirmations": 22,
+      "elapsed_seconds": 285.3,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s11_turn1_entry.gst",
+        "gst_sha256": "5e72677c448330a255d9455b4d7fde673fb77c45c2d1da2dde53facf0acfef5e",
+        "manifest_gst_sha256": "5e72677c448330a255d9455b4d7fde673fb77c45c2d1da2dde53facf0acfef5e",
+        "player_group_count": 6
+      },
+      "opening_capture": "captures/run/hard_first_turn_s11_command.png",
+      "opening_capture_sha256": "ddfb39d99a7e4f19def9338f47e16520870bf5befbc24cd50e68ca1e335e5e39",
+      "endpoint_capture": "captures/run/hard_first_turn_s11_endpoint.png",
+      "endpoint_capture_sha256": "662f6037f9e0e7a007255a00946717858ae60ab17aa5122d457037a2d9153bc5",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s11_endpoint.gst",
+      "endpoint_gst_sha256": "4d0c1553db4ad9c96713fbf830d363a1435a8506f93d7d345b76d4d673e30605"
+    },
+    {
+      "number": 12,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 8,
+      "phase_dialogue_confirmations": 1,
+      "elapsed_seconds": 153.7,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s12_turn1_entry.gst",
+        "gst_sha256": "a38956c80494626bff1cb4d2f1f891e7687f20c1b5c70d7a3716ae8f526d7112",
+        "manifest_gst_sha256": "a38956c80494626bff1cb4d2f1f891e7687f20c1b5c70d7a3716ae8f526d7112",
+        "player_group_count": 7
+      },
+      "opening_capture": "captures/run/hard_first_turn_s12_command.png",
+      "opening_capture_sha256": "e8e36be1637a00a032a028e74680862f482f8cde85f21d208cc432a1d789163f",
+      "endpoint_capture": "captures/run/hard_first_turn_s12_endpoint.png",
+      "endpoint_capture_sha256": "6463e931fbeba8b05eb29454befaa145e9c5f270b4822daf1eb347db3ae4ff4d",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s12_endpoint.gst",
+      "endpoint_gst_sha256": "1154c4dfd3019dc67a167b99d6edc031b3115fb61524d2c8d35adb6c87caad6c"
+    },
+    {
+      "number": 13,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "defeat_return_title_turn_1",
+      "turn_counter": 1,
+      "opening_confirmations": 8,
+      "phase_dialogue_confirmations": 4,
+      "elapsed_seconds": 89.3,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": {
+        "number": 13,
+        "endpoint": "defeat_return_title_turn_1",
+        "reason": "무행동 시 엘윈이 적 공격으로 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
+        "normal_rom": {
+          "path": "roms/releases/Langrisser II (Korean ko-99fd).md",
+          "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+        },
+        "normal_evidence": [
+          {
+            "path": "captures/analysis/normal_ko99fd_s13_first_turn_defeat_battle.png",
+            "sha256": "8fa23a9f744313aba9ef33e42c9fe7c17513dcf0ce9a06f5fc3b61b2941901de"
+          },
+          {
+            "path": "captures/analysis/normal_ko99fd_s13_first_turn_defeat_map.png",
+            "sha256": "47980dc7d72ff6554db2115e590047f66d4816500f3503da840f48a3dbc5b3a6"
+          },
+          {
+            "path": "captures/analysis/normal_ko99fd_s13_first_turn_defeat_title.png",
+            "sha256": "4f7985b3f7e79eaed2f6deb8f4162003718b88e32fc7bee8468d03e731feae61"
+          }
+        ],
+        "hard_evidence": [
+          {
+            "path": "captures/analysis/hard_s13_first_turn_defeat_battle.png",
+            "sha256": "db65cb0b5a619cf80cf6b8f0102ca5ad510a8a0102a08c2069959d355f0232d3"
+          },
+          {
+            "path": "captures/analysis/hard_s13_first_turn_defeat_map.png",
+            "sha256": "db12e294650932d8e60ec755bffbe11ccd9c6380b7d5c16871126e4459802861"
+          },
+          {
+            "path": "captures/analysis/hard_s13_first_turn_defeat_title.png",
+            "sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b"
+          }
+        ]
+      },
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s13_turn1_entry.gst",
+        "gst_sha256": "dc7a5cc7cae02bb94acc8e63933855dec7355bde3393a4999320df4830102f6a",
+        "manifest_gst_sha256": "dc7a5cc7cae02bb94acc8e63933855dec7355bde3393a4999320df4830102f6a",
+        "player_group_count": 7
+      },
+      "opening_capture": "captures/run/hard_first_turn_s13_command.png",
+      "opening_capture_sha256": "0f019876ba08e160559d1f0d1b0a973fdfee20cc95392e9db9cb94a9d1dd5b7e",
+      "endpoint_capture": "captures/run/hard_first_turn_s13_endpoint.png",
+      "endpoint_capture_sha256": "18f4f275a237072b422fdff2580e8fa7fef9e390792bc2fd56fb87f09c110be0",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s13_endpoint.gst",
+      "endpoint_gst_sha256": "5f7b88234735129ad3e7509a831a0b3b479631217edfe0a2f567dcb4f3928414"
+    },
+    {
+      "number": 14,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 22,
+      "phase_dialogue_confirmations": 8,
+      "elapsed_seconds": 200.5,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s14_turn1_entry.gst",
+        "gst_sha256": "4db19e52a0f31faa213dc5801d0e1862fb93a925d8fe38b01dcfcbb1b9352159",
+        "manifest_gst_sha256": "4db19e52a0f31faa213dc5801d0e1862fb93a925d8fe38b01dcfcbb1b9352159",
+        "player_group_count": 7
+      },
+      "opening_capture": "captures/run/hard_first_turn_s14_command.png",
+      "opening_capture_sha256": "e19b9968077bc6c9f32f75aa5c43050b6d593b1c9f6a8f798851f26d4491c117",
+      "endpoint_capture": "captures/run/hard_first_turn_s14_endpoint.png",
+      "endpoint_capture_sha256": "21a4113b8d03ed43363db316ea3df30f9bc14e157f41e9e66bc15185e34fe774",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s14_endpoint.gst",
+      "endpoint_gst_sha256": "4ecd5e6d1884365ab74908fcdf85e3fc4ed4cbd2af697e24f72e2b2145e03f5c"
+    },
+    {
+      "number": 15,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 6,
+      "phase_dialogue_confirmations": 4,
+      "elapsed_seconds": 122.1,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s15_turn1_entry.gst",
+        "gst_sha256": "40ef5352f6246624410721fa58dd0534f552d8f21d589ba6ae4b503538359b7f",
+        "manifest_gst_sha256": "40ef5352f6246624410721fa58dd0534f552d8f21d589ba6ae4b503538359b7f",
+        "player_group_count": 7
+      },
+      "opening_capture": "captures/run/hard_first_turn_s15_command.png",
+      "opening_capture_sha256": "2e6344876b0543fd31e8841c653a78182461db2cb38a008aa770e8155969f462",
+      "endpoint_capture": "captures/run/hard_first_turn_s15_endpoint.png",
+      "endpoint_capture_sha256": "53a92636ef5a62854ac414220d45c3d46a3c8b3af7670a162e02c8bb2276e1cf",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s15_endpoint.gst",
+      "endpoint_gst_sha256": "1cd2b899874875d60bd260cc83d985560a32c915b8115c97dba34385c2e1d22b"
+    },
+    {
+      "number": 16,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 5,
+      "phase_dialogue_confirmations": 3,
+      "elapsed_seconds": 122.0,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s16_turn1_entry.gst",
+        "gst_sha256": "3d134273f55644cae234e0a18e43fea5f0d4a23f3be6b9335acd59e23565d0ab",
+        "manifest_gst_sha256": "3d134273f55644cae234e0a18e43fea5f0d4a23f3be6b9335acd59e23565d0ab",
+        "player_group_count": 8
+      },
+      "opening_capture": "captures/run/hard_first_turn_s16_command.png",
+      "opening_capture_sha256": "caa83eab099fcfb439db2845892c9cbe0471284457c30a532b1ed02828da0a5e",
+      "endpoint_capture": "captures/run/hard_first_turn_s16_endpoint.png",
+      "endpoint_capture_sha256": "be74de83d999d46150bbb51857747fff6235988d819bc9ddeab5e4d9e463c2b4",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s16_endpoint.gst",
+      "endpoint_gst_sha256": "d992f2fd5c447591746010444f1275d44c0cf51667ba02ecc4d63654cb40cce9"
+    },
+    {
       "number": 28,
       "status": "first_turn_runtime_verified",
       "endpoint": "turn_2_command",
@@ -380,18 +560,18 @@
       8,
       9,
       10,
-      28,
-      29,
-      30,
-      31
-    ],
-    "missing_scenarios": [
       11,
       12,
       13,
       14,
       15,
       16,
+      28,
+      29,
+      30,
+      31
+    ],
+    "missing_scenarios": [
       17,
       18,
       19,

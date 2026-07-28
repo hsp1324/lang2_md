@@ -37,6 +37,43 @@
           "sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b"
         }
       ]
+    },
+    {
+      "number": 13,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 시 엘윈이 적 공격으로 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
+      "normal_rom": {
+        "path": "roms/releases/Langrisser II (Korean ko-99fd).md",
+        "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/normal_ko99fd_s13_first_turn_defeat_battle.png",
+          "sha256": "8fa23a9f744313aba9ef33e42c9fe7c17513dcf0ce9a06f5fc3b61b2941901de"
+        },
+        {
+          "path": "captures/analysis/normal_ko99fd_s13_first_turn_defeat_map.png",
+          "sha256": "47980dc7d72ff6554db2115e590047f66d4816500f3503da840f48a3dbc5b3a6"
+        },
+        {
+          "path": "captures/analysis/normal_ko99fd_s13_first_turn_defeat_title.png",
+          "sha256": "4f7985b3f7e79eaed2f6deb8f4162003718b88e32fc7bee8468d03e731feae61"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/hard_s13_first_turn_defeat_battle.png",
+          "sha256": "db65cb0b5a619cf80cf6b8f0102ca5ad510a8a0102a08c2069959d355f0232d3"
+        },
+        {
+          "path": "captures/analysis/hard_s13_first_turn_defeat_map.png",
+          "sha256": "db12e294650932d8e60ec755bffbe11ccd9c6380b7d5c16871126e4459802861"
+        },
+        {
+          "path": "captures/analysis/hard_s13_first_turn_defeat_title.png",
+          "sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b"
+        }
+      ]
     }
   ]
 }
