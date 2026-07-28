@@ -42,7 +42,7 @@ let aiMaskEditorState = null;
 let aiMountMaskEditorState = null;
 let aiDesignEditorState = null;
 let aiSpriteReloadToken = Date.now();
-const classSpriteAssetVersion = "distinct-09-0a-9c-v3";
+const classSpriteAssetVersion = "paired-npc-and-pirates-v11";
 
 function escapeHtml(value) {
   return String(value)

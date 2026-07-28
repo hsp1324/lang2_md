@@ -2497,14 +2497,14 @@
       "sprite_id": 28,
       "generic_sprite_id": 28,
       "uses_commander_override": false,
-      "uses_palette_override": false,
+      "uses_palette_override": true,
       "file": "representative/99-p1.png"
     },
     "154": {
       "sprite_id": 28,
       "generic_sprite_id": 28,
       "uses_commander_override": false,
-      "uses_palette_override": false,
+      "uses_palette_override": true,
       "file": "representative/9A-p1.png"
     },
     "155": {

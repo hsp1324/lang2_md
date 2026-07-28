@@ -37,11 +37,14 @@ PALETTES = (
 # preserving the white blade and every ROM-backed pixel.
 REPRESENTATIVE_PALETTE_OVERRIDES = {
     # Shaman (0x0A) and the NPC Priest (0x9C) share stock sprite 0x1D.
-    # Recolor only Shaman's blue robe to silver-lavender so the two classes are
-    # visually distinct without changing the face, staff, or silhouette.
+    # Recolor Shaman's robe and hood to one lavender-to-mauve ramp so the two
+    # classes are visually distinct without changing the white hood highlight,
+    # face, staff, or silhouette.
     0x0A: {
+        0x1: 0xA8A,  # gray hood face -> soft lavender
         0x4: 0xA8A,  # blue robe face -> soft lavender
         0x5: 0x646,  # navy robe shadow -> deep mauve
+        0xE: 0x646,  # rear hood shadow -> deep mauve
         0xF: 0xEEE,  # cyan robe highlight -> white
     },
     0x2E: {
@@ -52,21 +55,55 @@ REPRESENTATIVE_PALETTE_OVERRIDES = {
         0xE: 0x624,  # dark armor outline
         0xF: 0xEAC,  # pale lavender highlight
     },
-    # Loren keeps the stock High Lord silhouette, blue/cyan shield, gold trim,
-    # and white blade. Preserve the white armor highlights while changing the
-    # gray faces to pale gold and the deepest shade to warm brown. This keeps
-    # the silhouette intact and complements the stock blue shield.
-    0x9B: {
+    # Scenario 10's hostile Pirates use NPC class 0x9A. Keep their shared
+    # silhouette and blue shield, but cool the neutral armor into a restrained
+    # sky-blue naval ramp while preserving the blade.
+    0x9A: {
+        0x1: 0xECA,  # gray armor shade -> light sky blue
+        0xE: 0xA86,  # deepest gray -> muted naval blue-gray
+    },
+    # Scenario 1's Militia uses NPC Lord 0x99. Give it Loren's former ivory
+    # ramp so it matches the 0x9C Priest while retaining the stock blue/cyan
+    # shield, gold trim, white blade, and every original pixel coordinate.
+    0x99: {
         0x1: 0x6AC,  # gray armor shade -> pale gold
         0xE: 0x248,  # deepest armor shade -> warm brown
     },
+    # Loren keeps the same stock silhouette and protected equipment, but uses
+    # Shaman's lavender and deep-mauve ramp so the two read as a matched pair.
+    0x9B: {
+        0x1: 0xA8A,  # gray armor shade -> soft lavender
+        0xE: 0x646,  # deepest armor shade -> deep mauve
+    },
     # Sorcerer 0x09, Shaman 0x0A, and NPC Priest 0x9C all share sprite 0x1D.
     # Keep Sorcerer blue, make Shaman violet above, and give only the Priest
-    # representative a white/silver/pale-gold holy robe.
+    # representative the same white, pale-gold ivory, and warm-brown ramp as
+    # Loren's 0x9B High Lord. Their distinct silhouettes still communicate
+    # their roles while the shared colors make the pair read as a matched set.
     0x9C: {
-        0x4: 0xEEE,  # blue robe face -> white
-        0x5: 0x888,  # navy robe shadow -> silver-gray
-        0xF: 0x6AC,  # cyan robe highlight -> pale gold
+        0x1: 0x6AC,  # gray hood face -> same pale-gold ivory as High Lord
+        0x5: 0x6AC,  # navy robe shadow -> pale-gold ivory
+        0xE: 0x248,  # rear hood shadow -> High Lord's deep warm ivory
+        0xF: 0x248,  # cyan robe accent -> warm brown
+    },
+}
+
+# These near-white tints are editor-design colors rather than ROM palette
+# replacements. The Mega Drive's next legal channel step is too saturated for
+# the requested subtle tint, so keep this finer RGB adjustment preview-only.
+REPRESENTATIVE_RGBA_OVERRIDES = {
+    0x99: {
+        0x3: (255, 251, 234, 255),  # white armor -> barely warm ivory
+    },
+    0x9A: {
+        0x3: (240, 250, 255, 255),  # white armor -> barely icy sky blue
+    },
+    0x9B: {
+        0x3: (247, 240, 255, 255),  # white helmet -> barely pale lavender
+    },
+    0x9C: {
+        0x3: (255, 251, 234, 255),  # white hood -> barely warm ivory
+        0x4: (255, 251, 234, 255),  # white robe face -> same ivory
     },
 }
 
@@ -92,9 +129,6 @@ LOREN_BLADE_COORDS = frozenset(
 # ramp only there and leave blue hair or head ornaments untouched.
 SHAMAN_ROBE_COORDS = frozenset(
     (x, y) for y in range(9, 16) for x in range(1, 11)
-)
-SHAMAN_LOWER_BODY_COORDS = frozenset(
-    (x, y) for y in range(9, 16) for x in range(16)
 )
 SHAMAN_COMMANDER_PALETTE_OVERRIDES = {
     1: {0x4: 0xA8A, 0x5: 0x646, 0xF: 0xEEE},
@@ -133,6 +167,7 @@ def render_sprite(
     palette_id: int,
     *,
     palette_override: dict[int, int] | None = None,
+    rgba_override: dict[int, tuple[int, int, int, int]] | None = None,
     stock_palette_coords: frozenset[tuple[int, int]] = frozenset(),
     palette_override_coords: frozenset[tuple[int, int]] | None = None,
 ) -> Image.Image:
@@ -149,6 +184,9 @@ def render_sprite(
         for color_index, value in palette_override.items():
             palette_values[color_index] = value
     palette = [genesis_color(value) for value in palette_values]
+    if rgba_override:
+        for color_index, rgba in rgba_override.items():
+            palette[color_index] = rgba
     palette[0] = (0, 0, 0, 0)
     image = Image.new("RGBA", (16, 16))
     for tile_index in range(4):
@@ -271,19 +309,19 @@ def build_assets(
         )
         target = representative_dir / f"{class_id:02X}-p1.png"
         palette_override = REPRESENTATIVE_PALETTE_OVERRIDES.get(class_id)
+        rgba_override = REPRESENTATIVE_RGBA_OVERRIDES.get(class_id)
         stock_palette_coords = (
-            LOREN_BLADE_COORDS if class_id == 0x9B else frozenset()
-        )
-        palette_override_coords = (
-            SHAMAN_LOWER_BODY_COORDS if class_id == 0x0A else None
+            LOREN_BLADE_COORDS
+            if class_id in (0x99, 0x9A, 0x9B)
+            else frozenset()
         )
         render_sprite(
             data,
             sprite_id,
             1,
             palette_override=palette_override,
+            rgba_override=rgba_override,
             stock_palette_coords=stock_palette_coords,
-            palette_override_coords=palette_override_coords,
         ).save(target, optimize=True)
         representatives[str(class_id)] = {
             "sprite_id": sprite_id,

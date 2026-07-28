@@ -111,7 +111,7 @@ class EditorModelTests(unittest.TestCase):
         bald_path = preview_dir / bald_entry["file"]
         self.assertTrue(bald_entry["uses_palette_override"])
         with Image.open(generic_path) as generic, Image.open(bald_path) as bald:
-            bald_pixels = set(bald.get_flattened_data())
+            bald_pixels = set(bald.getdata())
             self.assertNotEqual(generic.tobytes(), bald.tobytes())
             self.assertIn((255, 255, 255, 255), bald_pixels)
             self.assertIn((255, 0, 0, 255), bald_pixels)
@@ -167,6 +167,29 @@ class EditorModelTests(unittest.TestCase):
                 shaman.getpixel((11, 10)),
                 (182, 146, 182, 255),
             )
+            self.assertEqual(
+                shaman.getpixel((7, 0)),
+                (182, 146, 182, 255),
+            )
+            self.assertEqual(
+                shaman.getpixel((6, 0)),
+                (109, 73, 109, 255),
+            )
+            self.assertEqual(
+                shaman.getpixel((8, 1)),
+                (255, 255, 255, 255),
+            )
+            original_hood_gray = {
+                (146, 146, 146, 255),
+                (73, 73, 109, 255),
+            }
+            self.assertTrue(
+                all(
+                    shaman.getpixel((x, y)) not in original_hood_gray
+                    for y in range(9)
+                    for x in range(16)
+                )
+            )
             original_blue = {
                 (73, 109, 255, 255),
                 (0, 0, 219, 255),
@@ -185,16 +208,44 @@ class EditorModelTests(unittest.TestCase):
             )
             self.assertEqual(
                 priest.getpixel((7, 10)),
-                (255, 255, 255, 255),
+                (255, 251, 234, 255),
+            )
+            self.assertEqual(
+                priest.getpixel((7, 0)),
+                (219, 182, 109, 255),
+            )
+            self.assertEqual(
+                priest.getpixel((6, 0)),
+                (146, 73, 36, 255),
+            )
+            self.assertEqual(
+                priest.getpixel((8, 1)),
+                (255, 251, 234, 255),
             )
             self.assertEqual(
                 priest.getpixel((6, 10)),
-                (146, 146, 146, 255),
+                (219, 182, 109, 255),
             )
             self.assertEqual(
                 priest.getpixel((4, 10)),
-                (219, 182, 109, 255),
+                (146, 73, 36, 255),
             )
+            militia_path = (
+                preview_dir
+                / manifest["representatives"][str(0x99)]["file"]
+            )
+            with Image.open(militia_path) as militia:
+                paired_ivory_ramp = {
+                    (255, 251, 234, 255),
+                    (219, 182, 109, 255),
+                    (146, 73, 36, 255),
+                }
+                self.assertTrue(
+                    paired_ivory_ramp.issubset(set(priest.getdata()))
+                )
+                self.assertTrue(
+                    paired_ivory_ramp.issubset(set(militia.getdata()))
+                )
         for commander_id in (1, 2, 3, 4, 5, 8, 9):
             row = manifest["commanders"][str(commander_id)][str(0x0A)]
             path = preview_dir / row["file"]
@@ -215,7 +266,7 @@ class EditorModelTests(unittest.TestCase):
                     f"commander {commander_id} Shaman identity changed",
                 )
 
-    def test_loren_high_lord_recolors_armor_but_preserves_blade_and_shield(
+    def test_militia_and_loren_use_paired_palettes_and_preserve_equipment(
         self,
     ):
         import json
@@ -229,34 +280,132 @@ class EditorModelTests(unittest.TestCase):
         regular_path = (
             preview_dir / manifest["representatives"][str(0x0B)]["file"]
         )
+        militia_entry = manifest["representatives"][str(0x99)]
+        militia_path = preview_dir / militia_entry["file"]
         loren_entry = manifest["representatives"][str(0x9B)]
         loren_path = preview_dir / loren_entry["file"]
+        self.assertEqual(militia_entry["sprite_id"], 0x1C)
+        self.assertTrue(militia_entry["uses_palette_override"])
         self.assertEqual(loren_entry["sprite_id"], 0x1C)
         self.assertTrue(loren_entry["uses_palette_override"])
         with Image.open(regular_path) as regular, Image.open(
+            militia_path
+        ) as militia, Image.open(
             loren_path
         ) as loren:
             self.assertNotEqual(regular.tobytes(), loren.tobytes())
+            self.assertNotEqual(regular.tobytes(), militia.tobytes())
+            self.assertNotEqual(militia.tobytes(), loren.tobytes())
             self.assertEqual(
-                loren.getpixel((10, 2)),
-                (255, 255, 255, 255),
+                militia.getpixel((10, 2)),
+                (255, 251, 234, 255),
             )
             self.assertEqual(
-                loren.getpixel((6, 0)),
+                militia.getpixel((6, 0)),
                 (219, 182, 109, 255),
             )
             self.assertEqual(
-                loren.getpixel((5, 0)),
+                militia.getpixel((5, 0)),
                 (146, 73, 36, 255),
             )
+            self.assertEqual(
+                loren.getpixel((10, 2)),
+                (247, 240, 255, 255),
+            )
+            self.assertEqual(
+                loren.getpixel((6, 0)),
+                (182, 146, 182, 255),
+            )
+            self.assertEqual(
+                loren.getpixel((5, 0)),
+                (109, 73, 109, 255),
+            )
             for coords in sprite_assets.LOREN_BLADE_COORDS:
+                self.assertEqual(
+                    militia.getpixel(coords),
+                    regular.getpixel(coords),
+                )
                 self.assertEqual(
                     loren.getpixel(coords),
                     regular.getpixel(coords),
                 )
             for coords in ((2, 10), (4, 11)):
                 self.assertEqual(
+                    militia.getpixel(coords),
+                    regular.getpixel(coords),
+                )
+                self.assertEqual(
                     loren.getpixel(coords),
+                    regular.getpixel(coords),
+                )
+
+            priest_path = (
+                preview_dir
+                / manifest["representatives"][str(0x9C)]["file"]
+            )
+            shaman_path = (
+                preview_dir
+                / manifest["representatives"][str(0x0A)]["file"]
+            )
+            with Image.open(priest_path) as priest, Image.open(
+                shaman_path
+            ) as shaman:
+                ivory_ramp = {
+                    (255, 251, 234, 255),
+                    (219, 182, 109, 255),
+                    (146, 73, 36, 255),
+                }
+                violet_ramp = {
+                    (182, 146, 182, 255),
+                    (109, 73, 109, 255),
+                }
+                self.assertTrue(ivory_ramp.issubset(set(militia.getdata())))
+                self.assertTrue(ivory_ramp.issubset(set(priest.getdata())))
+                self.assertTrue(violet_ramp.issubset(set(loren.getdata())))
+                self.assertTrue(violet_ramp.issubset(set(shaman.getdata())))
+
+    def test_pirates_use_sky_blue_naval_palette_and_preserve_equipment(
+        self,
+    ):
+        import json
+        from PIL import Image
+        from tools import build_class_sprite_assets as sprite_assets
+
+        preview_dir = ROOT / "editor/static/class-sprites"
+        manifest = json.loads(
+            (preview_dir / "manifest.json").read_text(encoding="utf-8")
+        )
+        regular_path = (
+            preview_dir / manifest["representatives"][str(0x0B)]["file"]
+        )
+        pirates_entry = manifest["representatives"][str(0x9A)]
+        pirates_path = preview_dir / pirates_entry["file"]
+        self.assertEqual(pirates_entry["sprite_id"], 0x1C)
+        self.assertTrue(pirates_entry["uses_palette_override"])
+        with Image.open(regular_path) as regular, Image.open(
+            pirates_path
+        ) as pirates:
+            self.assertNotEqual(regular.tobytes(), pirates.tobytes())
+            self.assertEqual(
+                pirates.getpixel((10, 2)),
+                (240, 250, 255, 255),
+            )
+            self.assertEqual(
+                pirates.getpixel((6, 0)),
+                (182, 219, 255, 255),
+            )
+            self.assertEqual(
+                pirates.getpixel((5, 0)),
+                (109, 146, 182, 255),
+            )
+            for coords in sprite_assets.LOREN_BLADE_COORDS:
+                self.assertEqual(
+                    pirates.getpixel(coords),
+                    regular.getpixel(coords),
+                )
+            for coords in ((2, 10), (4, 11)):
+                self.assertEqual(
+                    pirates.getpixel(coords),
                     regular.getpixel(coords),
                 )
 
