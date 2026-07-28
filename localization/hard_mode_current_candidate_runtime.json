@@ -513,6 +513,50 @@
       "runtime_name": "hard-8674-s26",
       "capture": "captures/run/hard_8674_s26_entry.png",
       "capture_sha256": "150b74f68b50e122ba35542fe736894034385a16496d1339fda8c2661af491c4"
+    },
+    {
+      "number": 27,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 10,
+      "target_record_count": 10,
+      "strict_runtime_target_record_count": 10,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        10,
+        19
+      ],
+      "seed": "captures/runtime/hard-8674-s26/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "seed_sha256": "ecb5bbee36e8560e0e568aaaac7bc77a12a99a4179446dedab8e5e520d7e1a46",
+      "gst": "captures/analysis/hard_8674_s27_entry_turn1_entry.gst",
+      "gst_sha256": "e35cd92cd482e98a5af0adbdf7f1be8d318f9cef087cd4d65fe6bfe56ab372cf",
+      "runtime_gst": "captures/runtime/hard-8674-s27/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "runtime_name": "hard-8674-s27",
+      "capture": "captures/run/hard_8674_s27_entry.png",
+      "capture_sha256": "4788d11c6c0623b766f44c44c61b72e4d7687cd3b6a64b9dc2b8e0265757fc8c"
+    },
+    {
+      "number": 28,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 9,
+      "strict_runtime_target_record_count": 9,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        7,
+        15
+      ],
+      "seed": "captures/runtime/hard-8674-s27/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "seed_sha256": "481cc5dbbe7911ee06db256fcee07ff1e78d8e59b3dbe0442053a1470bd4cd0e",
+      "gst": "captures/analysis/hard_8674_s28_entry_turn1_entry.gst",
+      "gst_sha256": "3ef850385b8d0a7e0191e9fb93e3501540a05f6debe05a4fb1b7009da5789b4b",
+      "runtime_gst": "captures/runtime/hard-8674-s28/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "runtime_name": "hard-8674-s28",
+      "capture": "captures/run/hard_8674_s28_entry.png",
+      "capture_sha256": "40eaef200abbbccf1cc68e89c1fbf16f483565ec20754b5023b4f654de8c7736"
     }
   ],
   "coverage": {
@@ -540,7 +584,9 @@
       23,
       24,
       25,
-      26
+      26,
+      27,
+      28
     ],
     "deep_evidence_scenarios": [
       1,
@@ -573,12 +619,12 @@
       24,
       25,
       26,
-      27
+      27,
+      28
     ],
     "missing_scenarios": [
       2,
       3,
-      28,
       29,
       30,
       31
