@@ -7,6 +7,13 @@ into Hangul-like fragments when they become gray after moving or acting. They
 return to normal at the start of the next player turn. The confirmed examples
 were Shaman, Hein High Lord, and Elwin Lord.
 
+The field report gives a precise state boundary: changing Hein to Shaman is
+not enough to corrupt the sprite, and the next player turn restores the active
+sprite. The corruption starts only after movement commits and the commander is
+drawn as the gray acted unit. That active -> gray -> active sequence identifies
+the separate 1bpp inactive-frame loader below; it is not a class-change record,
+palette, save-data, or ordinary two-frame animation failure.
+
 ## Root Cause
 
 The map loader at `0x0110A8` loads normal frames from:
@@ -130,6 +137,23 @@ to the stock 68000 routine's software expansion of original Shaman silhouette
 ID `0x37`. The current build therefore fixes the reported active -> gray ->
 active sequence; the still-published checksum-`1011` release does not contain
 this fix.
+
+The same exact-current ROM was also re-entered from a valid Scenario 2 save,
+then taken through the Scenario 3 preparation shop, item purchase list, return
+to preparation, automatic deployment, and opening dialogue. The post-shop map
+status rows remain intact:
+
+- `captures/run/hard_8674_s03_scott_after_shop_status.png`:
+  `스코트 / 파이터`;
+- `captures/run/hard_8674_s03_guardman_after_shop_status.png`:
+  `리아나 / 가드맨`;
+- `captures/run/hard_8674_s03_pike_after_shop_status.png`:
+  `적군 / 파이크`.
+
+This separates two previously conflated reports. The checksum-`1011` release
+really lacks the inactive-frame remap, while the checksum-`8674` candidate
+retains both the remap and the map-status glyphs after the shop renderer has
+run.
 
 Do not load a GST captured from another ROM hash as live proof, and do not
 change an acted flag inside a paused GST and treat its cached frame as proof.
