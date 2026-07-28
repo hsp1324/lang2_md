@@ -84,3 +84,17 @@ python3 -m unittest tests.test_hard_candidate_delta
 - 진입 GST: `captures/analysis/hard_8674_s06_entry_turn1_entry.gst`
 - 진입 GST SHA-256:
   `2ab66de2b9b9787e0cf4388736c6eb69fbb5dc291bc935dd24acf1396010fe2b`
+
+시나리오 7과 8도 직전 시나리오의 최신 후보 저장 슬롯을 차례로 복구해
+연속 진입했다. 두 장 모두 자동 배치·출격 뒤 클래스·이름·LV·지휘관
+AT/DF·병사 A+/D+·용병을 고정 배치 원본과 대조했으며 예외가 없었다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 7 | 6 | 8/8 | 10~17 | `6c18eb4612cbb8e6cf5a22ff822f563e20d6c94b596bc237b58d4967f3914953` |
+| 8 | 7 | 11/11 | 7~17 | `bfbb3a73e8e38fd39f0907b5715b14a57bfad4f8c4664d5c4251fabf713f4f84` |
+
+화면은 각각 `captures/run/hard_8674_s07_entry.png`와
+`captures/run/hard_8674_s08_entry.png`, 진입 상태는
+`captures/analysis/hard_8674_s07_entry_turn1_entry.gst`와
+`captures/analysis/hard_8674_s08_entry_turn1_entry.gst`에 보존한다.
