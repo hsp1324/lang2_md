@@ -54,3 +54,18 @@ python3 -m unittest tests.test_hard_candidate_delta
 - 진입 GST: `captures/analysis/hard_8674_s04_entry_turn1_entry.gst`
 - 진입 GST SHA-256:
   `ade2fee468a2318556faf02e80caf38ce6e001695eea896ec8be0d62ff59bc6d`
+
+시나리오 5는 위 시나리오 4의 최신 후보 GST에서 저장 슬롯을 복구해
+연속 진입했다.
+
+- 아군 런타임 그룹: 5개
+- 하드 대상 고정 레코드: 9개
+- 실제 적 런타임 그룹: 5~13
+- 클래스·이름·LV·지휘관 AT/DF·병사 A+/D+·용병: 9/9 일치
+- 런타임 예외: 0개
+- 화면: `captures/run/hard_8674_s05_entry.png`
+- 진입 GST: `captures/analysis/hard_8674_s05_entry_turn1_entry.gst`
+- 진입 GST SHA-256:
+  `7140fb55513bcefddb142c262ddd66e374b706252dfa05860965e1c54b1e54f9`
+- 추가 화면 `captures/run/hard_8674_s05_turn1_map.png`에서
+  `모건 / 소서러` 하단 상태 글자와 첫 대사 화면이 정상임을 확인했다.

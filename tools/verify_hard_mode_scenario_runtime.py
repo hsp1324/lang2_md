@@ -337,7 +337,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--entry-source-gst",
         type=Path,
-        help="GST used to recover the saved slot for a recorded existing run",
+        help="GST used to recover the saved slot for this scenario entry",
     )
     return parser.parse_args()
 
@@ -364,8 +364,6 @@ def main() -> int:
         "/" in args.evidence_tag or "\\" in args.evidence_tag
     ):
         raise ValueError("--evidence-tag must be a filename stem")
-    if args.entry_source_gst and not args.record_existing:
-        raise ValueError("--entry-source-gst requires --record-existing")
     rom = args.rom.resolve()
     results_path = args.results.resolve()
     results = load_results(results_path, rom)
