@@ -1,5 +1,5 @@
 {
-  "asset_version": "elwin-lord-high-lord-shield-v55",
+  "asset_version": "liana-red-lana-blue-high-lord-v56",
   "generated_from": "roms/original/Langrisser II (Japan).md",
   "ai_source_sheets": [
     "docs/assets/ai-class-source/logical16-v3/liana/liana-logical16-sheet-ai.png",
@@ -9217,7 +9217,7 @@
             "#6d0000"
           ],
           "pixel_palette": [
-            "#496dff",
+            "#db0000",
             "#ffb600",
             "#ffffff",
             "#924924",
@@ -9758,7 +9758,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785147647258792295,
+          "design_revision": 1785222923625792909,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -9774,7 +9774,7 @@
             11,
             11
           ],
-          "changed_pixel_count": 141,
+          "changed_pixel_count": 139,
           "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 137픽셀·사용자 16×16 디자인 편집 적용",
           "file": "2/0B.png"
         },

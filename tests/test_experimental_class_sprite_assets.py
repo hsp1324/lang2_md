@@ -408,16 +408,24 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         for point in row["identity_lock_points"]
                         if not original.getpixel(tuple(point))[3]
                     }
-                    self.assertTrue(
-                        any(
-                            image.getpixel(point)[3]
-                            for point in transparent_mask_points
-                        ),
-                        (
-                            f"{commander_id}:{class_id:02X} erased all "
-                            "equipment inside transparent hair-mask pixels"
-                        ),
-                    )
+                    if (commander_id, class_id) == (2, 0x0B):
+                        # Liana High Lord has a dedicated 72-point user mask.
+                        # Its only transparent point is outside the approved
+                        # cape, so the equipment-priority overlap check does
+                        # not apply to this one saved design.
+                        self.assertEqual(len(transparent_mask_points), 1)
+                    else:
+                        self.assertTrue(
+                            any(
+                                image.getpixel(point)[3]
+                                for point in transparent_mask_points
+                            ),
+                            (
+                                f"{commander_id}:{class_id:02X} erased all "
+                                "equipment inside transparent hair-mask "
+                                "pixels"
+                            ),
+                        )
 
             elwin_row = self.ai_manifest["commanders"]["1"][
                 "classes"
@@ -1174,7 +1182,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
     def test_elwin_and_logical16_commanders_change_only_upper_classes(self):
         self.assertEqual(
             self.ai_manifest["asset_version"],
-            "elwin-lord-high-lord-shield-v55",
+            "liana-red-lana-blue-high-lord-v56",
         )
         source_paths = self.ai_manifest["ai_source_images"]
         self.assertEqual(len(source_paths), 99)
@@ -1731,30 +1739,26 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 self.assertIsInstance(row["design_override"], bool)
                 self.assertIsInstance(row["design_revision"], int)
 
-    def test_liana_high_lord_keeps_identity_and_uses_blue_armor(self):
+    def test_liana_high_lord_keeps_identity_and_uses_red_cape(self):
         row = self.ai_manifest["commanders"]["2"]["classes"]["11"]
         self.assertTrue(row["design_override"])
         with Image.open(AI_ASSET_DIR / row["file"]) as image:
             pixels = list(image.getdata())
             self.assertEqual(
-                pixels.count((73, 109, 255, 255)),
+                pixels.count((219, 0, 0, 255)),
                 45,
             )
-            self.assertGreaterEqual(
-                pixels.count((73, 73, 109, 255)),
-                11,
+            self.assertEqual(
+                pixels.count((109, 0, 0, 255)),
+                8,
             )
             self.assertEqual(
                 image.getpixel((7, 0)),
                 (146, 73, 36, 255),
             )
             self.assertEqual(
-                image.getpixel((11, 10)),
-                (73, 109, 255, 255),
-            )
-            self.assertEqual(
                 image.getpixel((12, 10)),
-                (73, 73, 109, 255),
+                (109, 0, 0, 255),
             )
 
     def test_shared_identity_masks_and_elwin_swordmaster_mask_are_saved(self):
@@ -1784,10 +1788,13 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 masks[f"3:{class_id:02X}"],
                 sage_reference,
             )
-            self.assertEqual(
-                masks[f"2:{class_id:02X}"],
-                sage_reference,
-            )
+            if class_id != 0x0B:
+                self.assertEqual(
+                    masks[f"2:{class_id:02X}"],
+                    sage_reference,
+                )
+        self.assertEqual(len(masks["2:0B"]), 72)
+        self.assertNotEqual(masks["2:0B"], sage_reference)
 
         jessica_sorcerer = masks["10:09"]
         for class_id in (
@@ -1861,6 +1868,37 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 row["selected_source_identity_exact_pixels"] == 82
                 for row in validation["classes"]
             )
+        )
+        liana_high_lord = Image.open(
+            AI_ASSET_DIR / "2/0B.png"
+        ).convert("RGBA")
+        lana_high_lord = Image.open(
+            AI_ASSET_DIR / "3/0B.png"
+        ).convert("RGBA")
+        liana_colors = {
+            color for color in liana_high_lord.getdata() if color[3]
+        }
+        lana_colors = {
+            color for color in lana_high_lord.getdata() if color[3]
+        }
+        self.assertIn((219, 0, 0, 255), liana_colors)
+        self.assertIn((109, 0, 0, 255), liana_colors)
+        self.assertNotIn((0, 73, 219, 255), liana_colors)
+        self.assertIn((0, 73, 219, 255), lana_colors)
+        self.assertIn((0, 0, 219, 255), lana_colors)
+        self.assertNotIn((219, 0, 0, 255), lana_colors)
+        self.assertTrue(
+            self.ai_manifest["commanders"]["2"]["classes"][
+                str(0x0B)
+            ]["design_override"]
+        )
+        self.assertTrue(
+            (
+                ROOT
+                / "docs/assets/ai-class-source/archive/"
+                "liana-high-lord-before-red-cape-v1/"
+                "02-0B-blue-v1.png"
+            ).is_file()
         )
         for class_id in class_ids:
             with Image.open(
