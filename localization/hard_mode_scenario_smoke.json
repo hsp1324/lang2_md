@@ -147,6 +147,106 @@
       "gst_sha256": "8173f841fc9c18eac796f03517fd879de9bf4c55326bfaaa58fbba0812478b88",
       "capture": "captures/run/hard_matrix_s10.png",
       "capture_sha256": "86cc44c73fa1a2c78dc974c897c93e266b915f32a9be35e73e16753b045bf2e5"
+    },
+    {
+      "number": 11,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 6,
+      "target_record_count": 10,
+      "strict_runtime_target_record_count": 10,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        7,
+        16
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s11/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "501a5b8073edd59abc332bfd50ade49fb8ec17fe1e993645c08ef873708586c7",
+      "capture": "captures/run/hard_matrix_s11.png",
+      "capture_sha256": "1bd867cd46950023277ce65f7773a50cf9e917d9859c182f708c9a5cd4cd2edc"
+    },
+    {
+      "number": 12,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 11,
+      "strict_runtime_target_record_count": 11,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        7,
+        17
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s12/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "a83b256433633ef94508fd1eb3120e9ea7d53b335604042f8e4bdb43e7f3b1b9",
+      "capture": "captures/run/hard_matrix_s12.png",
+      "capture_sha256": "e5809136184c0c8931c96615a000ce89a70b9b10ab571b403ddf9f6df5390022"
+    },
+    {
+      "number": 13,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 13,
+      "strict_runtime_target_record_count": 13,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        7,
+        19
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s13/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "7a1db2500dda49879e786580bfdfeda5c74d7213309da1fa9525632079c6e81c",
+      "capture": "captures/run/hard_matrix_s13.png",
+      "capture_sha256": "969f20f2a4400d1a8bc1fbe5d622902533f163e75fc94e10fd5413ae28766c10"
+    },
+    {
+      "number": 14,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 11,
+      "strict_runtime_target_record_count": 11,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        7,
+        17
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s14/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "e336b9c27c5b3bcd556bb6af791974622120227d7c1361d23f9ecd18523f47cd",
+      "capture": "captures/run/hard_matrix_s14.png",
+      "capture_sha256": "8efe7b357c1d5dce7de1c5443a1fcd62a33c1bce71565f9b556e674134c99834"
+    },
+    {
+      "number": 15,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 11,
+      "strict_runtime_target_record_count": 11,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        8,
+        18
+      ],
+      "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+      "seed_sha256": "248b933c10f8d28daa6523ed4d7ef14bd2a41953f071259094fe80eab7b31822",
+      "gst": "captures/runtime/hard-matrix-s15/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "e4302cbaff34c404c9a07514a885b079fa8e1423c8e7d2e996e4fbe9ff07b1ec",
+      "capture": "captures/run/hard_matrix_s15.png",
+      "capture_sha256": "3964809fc019043d38ba88b87542cd53efd53798e5d18b72272351a9920a66f9"
     }
   ]
 }
