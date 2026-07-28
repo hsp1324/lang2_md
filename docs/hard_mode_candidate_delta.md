@@ -112,3 +112,14 @@ AT/DF·병사 A+/D+·용병을 고정 배치 원본과 대조했으며 예외가
 이 정책은 `localization/hard_mode_runtime_exceptions.json`에 고정되어
 있다. 화면은 `captures/run/hard_8674_s09_entry.png`와
 `captures/run/hard_8674_s10_entry.png`에 보존한다.
+
+시나리오 11과 12도 같은 방식으로 연속 진입했으며 런타임 예외 없이
+모든 하드 대상 레코드가 일치했다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 11 | 6 | 10/10 | 7~16 | `fb1a1e2aba3924dd54022ea9f524165f91fc8aeafc28003eac99615ec3408d59` |
+| 12 | 7 | 11/11 | 7~17 | `f99778e7c8f7222ea36935dd1d6359d3aa76abedee7d7c00e3e088eabab6a179` |
+
+화면은 `captures/run/hard_8674_s11_entry.png`와
+`captures/run/hard_8674_s12_entry.png`에 보존한다.
