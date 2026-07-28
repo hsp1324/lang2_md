@@ -49,13 +49,36 @@
       "runtime_name": "hard-8674-s05",
       "capture": "captures/run/hard_8674_s05_entry.png",
       "capture_sha256": "478c87c02baaee079332a91a6d96471d7135730a3344a1c4bc52263dc6e4d211"
+    },
+    {
+      "number": 6,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 5,
+      "target_record_count": 9,
+      "strict_runtime_target_record_count": 9,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        9,
+        17
+      ],
+      "seed": "captures/runtime/hard-8674-s05/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "seed_sha256": "a206df71c769399e25a98d72b1bfedcc0e6e53663170ed64f4943574d1f49e5e",
+      "gst": "captures/analysis/hard_8674_s06_entry_turn1_entry.gst",
+      "gst_sha256": "2ab66de2b9b9787e0cf4388736c6eb69fbb5dc291bc935dd24acf1396010fe2b",
+      "runtime_gst": "captures/runtime/hard-8674-s06/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "runtime_name": "hard-8674-s06",
+      "capture": "captures/run/hard_8674_s06_entry.png",
+      "capture_sha256": "1d438f5e41d5997465125c099f03fc722b4c577a85cb77faa4ab37059efb5727"
     }
   ],
   "coverage": {
     "scenario_count": 31,
     "smoke_scenarios": [
       4,
-      5
+      5,
+      6
     ],
     "deep_evidence_scenarios": [
       1,
@@ -67,6 +90,7 @@
       1,
       4,
       5,
+      6,
       16,
       25,
       27
@@ -74,7 +98,6 @@
     "missing_scenarios": [
       2,
       3,
-      6,
       7,
       8,
       9,

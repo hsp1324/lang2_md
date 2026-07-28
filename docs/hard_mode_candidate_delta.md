@@ -69,3 +69,18 @@ python3 -m unittest tests.test_hard_candidate_delta
   `7140fb55513bcefddb142c262ddd66e374b706252dfa05860965e1c54b1e54f9`
 - 추가 화면 `captures/run/hard_8674_s05_turn1_map.png`에서
   `모건 / 소서러` 하단 상태 글자와 첫 대사 화면이 정상임을 확인했다.
+
+시나리오 6은 시나리오 5의 최신 후보 GST에서 연속 진입했다. 표준 하드
+프로필에서 용병 교체가 처음 적용되는 장이므로, 지휘관과 병사 보정뿐
+아니라 계획된 용병 8칸의 교체값도 함께 대조했다.
+
+- 아군 런타임 그룹: 5개
+- 하드 대상 고정 레코드: 9개
+- 실제 적 런타임 그룹: 9~17
+- 클래스·이름·LV·지휘관 AT/DF·병사 A+/D+·용병: 9/9 일치
+- 계획된 용병 교체: 8/8칸 일치
+- 런타임 예외: 0개
+- 화면: `captures/run/hard_8674_s06_entry.png`
+- 진입 GST: `captures/analysis/hard_8674_s06_entry_turn1_entry.gst`
+- 진입 GST SHA-256:
+  `2ab66de2b9b9787e0cf4388736c6eb69fbb5dc291bc935dd24acf1396010fe2b`
