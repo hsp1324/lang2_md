@@ -21,6 +21,9 @@ DEFAULT_BUILD_MANIFEST = ROOT / "localization/hard_mode_build.json"
 DEFAULT_RUNTIME_VERIFICATION = (
     ROOT / "localization/hard_mode_runtime_verification.json"
 )
+DEFAULT_RUNTIME_SMOKE = (
+    ROOT / "localization/hard_mode_scenario_smoke.json"
+)
 
 SECRET_STEP_SOURCE = {
     28: 11,
@@ -338,6 +341,14 @@ def render_markdown(plan: dict[str, Any]) -> str:
     runtime_scenarios = {
         int(row["number"]): row for row in runtime["scenarios"]
     }
+    runtime_smoke = (
+        json.loads(DEFAULT_RUNTIME_SMOKE.read_text(encoding="utf-8"))
+        if DEFAULT_RUNTIME_SMOKE.exists()
+        else {"scenarios": []}
+    )
+    smoke_scenarios = {
+        int(row["number"]): row for row in runtime_smoke["scenarios"]
+    }
     lines = [
         "# 랑그릿사 II 표준 하드 모드 변경 기록",
         "",
@@ -444,12 +455,19 @@ def render_markdown(plan: dict[str, Any]) -> str:
             len(row["mercenaries"]["changes"]) for row in records
         )
         verification = runtime_scenarios.get(int(scenario["number"]))
-        verification_label = (
-            "런타임 적재 확인"
-            if verification is not None
+        smoke = smoke_scenarios.get(int(scenario["number"]))
+        if (
+            verification is not None
             and verification["status"] == "runtime_loader_verified"
-            else "미시작"
-        )
+        ):
+            verification_label = "실기 보존 확인"
+        elif (
+            smoke is not None
+            and smoke["status"] == "runtime_loader_smoke_verified"
+        ):
+            verification_label = "출격 적재 확인"
+        else:
+            verification_label = "미시작"
         lines.append(
             f"| {scenario['number']} | {scenario['label']} | "
             f"{len(records)} | {commander} | {soldier} | {mercenary} | "
@@ -505,6 +523,9 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "  버전을 `1.0.0/1.0.0`으로 유지하고 후보 ROM만 교체한다.",
         "- 수정본은 같은 파일명에 적용하며 게임 내 SRAM 저장을 유지한다.",
         "  에뮬레이터 상태 저장은 호환을 보장하지 않는다.",
+        "- `python3 tools/verify_hard_mode_scenario_runtime.py --scenario N`은",
+        "  장별 자동 배치·출격 뒤 모든 하드 대상의 실제 RAM 값을 대조하고",
+        "  `localization/hard_mode_scenario_smoke.json`에 즉시 기록한다.",
     ])
     for scenario_number in sorted(runtime_scenarios):
         evidence = runtime_scenarios[scenario_number]
