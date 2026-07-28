@@ -80,6 +80,73 @@
       "gst_sha256": "af22eddab596f46190c1f17aa5e3632864cbcbdb92e39f286256a833aaec282a",
       "capture": "captures/run/hard_matrix_s06.png",
       "capture_sha256": "63a65454e342c259483a413a8a2253a8330846bf78e82e25d4d60ae627c08034"
+    },
+    {
+      "number": 7,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 6,
+      "target_record_count": 8,
+      "runtime_group_range": [
+        10,
+        17
+      ],
+      "gst": "captures/runtime/hard-matrix-s07/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "0a8053bc1c6631056458a9c9f9151dedf56ac591e9a6105fb2aad4054e4e7a1d",
+      "capture": "captures/run/hard_matrix_s07.png",
+      "capture_sha256": "41faff9e3bc593ad4c4cc114c5fd8e33c5821872449f8287d4c44bc6b0d0bdf3"
+    },
+    {
+      "number": 8,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 11,
+      "runtime_group_range": [
+        7,
+        17
+      ],
+      "gst": "captures/runtime/hard-matrix-s08/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "279de27b4ec8273b6dbf8621887ef3f4df61332d0d7fef7148fc50698a203d74",
+      "capture": "captures/run/hard_matrix_s08.png",
+      "capture_sha256": "7c981e2d66fe76044785096648a063828dd45550931c476067912fef0d81d520"
+    },
+    {
+      "number": 9,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 7,
+      "target_record_count": 10,
+      "runtime_group_range": [
+        10,
+        19
+      ],
+      "gst": "captures/runtime/hard-matrix-s09/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "784bdaec506f02bdf3eb1e4d508cdf480e12ef99fb13c6ab3fd6718f4765251f",
+      "capture": "captures/run/hard_matrix_s09.png",
+      "capture_sha256": "6f212d876d38ba43fa15b999f1509d36dd53bf68f92a2809909e3b57df1aac25"
+    },
+    {
+      "number": 10,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 5,
+      "target_record_count": 13,
+      "strict_runtime_target_record_count": 12,
+      "runtime_exception_record_count": 1,
+      "runtime_exception_indexes": [
+        1
+      ],
+      "runtime_group_range": [
+        5,
+        17
+      ],
+      "seed": "captures/analysis/0718_hard_s01_turn1_command.gst",
+      "seed_sha256": "a9be34a13f38616617ce806f6b63821d1c15433b44e4e9e5d1ef1394b09a9256",
+      "gst": "captures/runtime/hard-matrix-s10/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "gst_sha256": "8173f841fc9c18eac796f03517fd879de9bf4c55326bfaaa58fbba0812478b88",
+      "capture": "captures/run/hard_matrix_s10.png",
+      "capture_sha256": "86cc44c73fa1a2c78dc974c897c93e266b915f32a9be35e73e16753b045bf2e5"
     }
   ]
 }

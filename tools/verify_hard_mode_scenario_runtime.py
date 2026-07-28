@@ -25,6 +25,9 @@ DEFAULT_ROM = (
     / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
 )
 DEFAULT_RESULTS = ROOT / "localization/hard_mode_scenario_smoke.json"
+EARLYGAME_SEED = (
+    ROOT / "captures/analysis/0718_hard_s01_turn1_command.gst"
+)
 MIDGAME_SEED = ROOT / "captures/analysis/733a_s16_result_fixed_stable.gst"
 LATEGAME_SEED = ROOT / "captures/analysis/a205_s27_fixed_summon_loaded.gst"
 RUNNER = ROOT / "tools/run_blastem_sequence.py"
@@ -38,7 +41,11 @@ def sha256(path: Path) -> str:
 
 
 def seed_for_scenario(scenario_number: int) -> Path:
-    return LATEGAME_SEED if scenario_number >= 25 else MIDGAME_SEED
+    if scenario_number <= 10:
+        return EARLYGAME_SEED
+    if scenario_number < 25:
+        return MIDGAME_SEED
+    return LATEGAME_SEED
 
 
 def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
@@ -83,6 +90,18 @@ def scenario_record_indexes(scenario_number: int) -> list[int]:
     return [int(record["index"]) for record in scenario["records"]]
 
 
+def scenario_runtime_exception_indexes(
+    scenario_number: int,
+) -> list[int]:
+    return sorted(
+        fixed_record_index
+        for (number, fixed_record_index) in (
+            runtime_evidence.load_runtime_exceptions()
+        )
+        if number == scenario_number
+    )
+
+
 def load_results(path: Path, rom: Path) -> dict:
     if path.exists():
         results = json.loads(path.read_text(encoding="utf-8"))
@@ -120,58 +139,61 @@ def verify_scenario(
     *,
     rom: Path,
     display: str,
+    resume_running: bool = False,
+    record_existing: bool = False,
 ) -> dict:
     runtime_name = f"hard-matrix-s{scenario_number:02d}"
     seed = seed_for_scenario(scenario_number)
-    run([
-        sys.executable,
-        str(RUNNER),
-        "scenario-select",
-        "--scenario-number",
-        str(scenario_number),
-        "--rom",
-        str(rom),
-        "--manual-slot-gst",
-        str(seed),
-        "--runtime-name",
-        runtime_name,
-        "--virtual-display",
-        display,
-        "--replace-existing",
-        "--send-event",
-    ])
-    run([
-        sys.executable,
-        str(RUNNER),
-        "detect-prep",
-        "--no-launch",
-        "--send-event",
-        "--virtual-display",
-        display,
-        "--max-confirmations",
-        "180",
-        "--confirmation-delay",
-        "0.4",
-    ])
-
     env = os.environ.copy()
     env["DISPLAY"] = display
-    run([
-        sys.executable,
-        str(KEY_SENDER),
-        "--send-event",
-        "down:0.25",
-        "down:0.25",
-        "down:0.25",
-        "c:0.8",
-        "down:0.25",
-        "down:0.25",
-        "c:1.0",
-        "down:0.25",
-        "down:0.25",
-        "c:3.0",
-        "save:1.0",
-    ], env=env)
+    if not record_existing:
+        if not resume_running:
+            run([
+                sys.executable,
+                str(RUNNER),
+                "scenario-select",
+                "--scenario-number",
+                str(scenario_number),
+                "--rom",
+                str(rom),
+                "--manual-slot-gst",
+                str(seed),
+                "--runtime-name",
+                runtime_name,
+                "--virtual-display",
+                display,
+                "--replace-existing",
+                "--send-event",
+            ])
+        run([
+            sys.executable,
+            str(RUNNER),
+            "detect-prep",
+            "--no-launch",
+            "--send-event",
+            "--virtual-display",
+            display,
+            "--max-confirmations",
+            "180",
+            "--confirmation-delay",
+            "0.4",
+        ])
+        run([
+            sys.executable,
+            str(KEY_SENDER),
+            "--send-event",
+            "down:0.25",
+            "down:0.25",
+            "down:0.25",
+            "c:0.8",
+            "down:0.25",
+            "down:0.25",
+            "c:1.0",
+            "down:0.25",
+            "down:0.25",
+            "c:3.0",
+            "save:1.0",
+        ], env=env)
 
     capture = ROOT / f"captures/run/hard_matrix_s{scenario_number:02d}.png"
     run([
@@ -187,16 +209,26 @@ def verify_scenario(
         scenario_number,
     )
     indexes = scenario_record_indexes(scenario_number)
+    exception_indexes = scenario_runtime_exception_indexes(
+        scenario_number
+    )
     return {
         "number": scenario_number,
         "status": "runtime_loader_smoke_verified",
         "endpoint": "자동 배치 후 출격",
         "player_group_count": player_group_count,
         "target_record_count": len(indexes),
+        "strict_runtime_target_record_count": (
+            len(indexes) - len(exception_indexes)
+        ),
+        "runtime_exception_record_count": len(exception_indexes),
+        "runtime_exception_indexes": exception_indexes,
         "runtime_group_range": [
             player_group_count + min(indexes),
             player_group_count + max(indexes),
         ],
+        "seed": str(seed.relative_to(ROOT)),
+        "seed_sha256": sha256(seed),
         "gst": str(gst.relative_to(ROOT)),
         "gst_sha256": hashlib.sha256(gst_bytes).hexdigest(),
         "capture": str(capture.relative_to(ROOT)),
@@ -216,6 +248,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rom", type=Path, default=DEFAULT_ROM)
     parser.add_argument("--virtual-display", default=":114")
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
+    parser.add_argument(
+        "--resume-running",
+        action="store_true",
+        help="continue a scenario already open on the selected display",
+    )
+    parser.add_argument(
+        "--record-existing",
+        action="store_true",
+        help="verify and record an existing quicksave without sending input",
+    )
     return parser.parse_args()
 
 
@@ -224,6 +266,15 @@ def main() -> int:
     scenarios = list(dict.fromkeys(args.scenario))
     if any(not 1 <= number <= 31 for number in scenarios):
         raise ValueError("--scenario must be 1..31")
+    if (args.resume_running or args.record_existing) and len(scenarios) != 1:
+        raise ValueError(
+            "--resume-running and --record-existing require exactly one "
+            "--scenario"
+        )
+    if args.resume_running and args.record_existing:
+        raise ValueError(
+            "--resume-running and --record-existing are mutually exclusive"
+        )
     rom = args.rom.resolve()
     results_path = args.results.resolve()
     results = load_results(results_path, rom)
@@ -232,6 +283,8 @@ def main() -> int:
             scenario_number,
             rom=rom,
             display=args.virtual_display,
+            resume_running=args.resume_running,
+            record_existing=args.record_existing,
         )
         save_result(results_path, results, result)
         first_group, last_group = result["runtime_group_range"]

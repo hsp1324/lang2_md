@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "runtime_audited",
+  "exceptions": [
+    {
+      "scenario": 10,
+      "fixed_record_index": 1,
+      "fixed_record_offset": "0x1811DE",
+      "name_id": "09",
+      "name_korean": "레스터",
+      "class_id": "07",
+      "class_korean": "크로코나이트",
+      "kind": "stock_playable_roster_rewrite",
+      "runtime_overridden_fields": [
+        "commander_at",
+        "commander_df",
+        "soldier_at",
+        "soldier_df"
+      ],
+      "strict_runtime_fields": [
+        "class_id",
+        "name_id",
+        "mercenaries"
+      ],
+      "balance_policy": "플레이 가능한 레스터의 성장 데이터가 적 배치를 다시 쓰므로 레스터의 런타임 능력치는 원작 로스터 값을 보존하고, 같은 장의 나머지 적 12개에 표준 하드 보너스를 적용한다.",
+      "retained_evidence": {
+        "gst": "captures/analysis/0718_hard_s10_early_seed_turn1.gst",
+        "gst_sha256": "8bc9b52b8218ca6f144ef7736472d99cc1b062f961bef001aafcd96a0a50e094",
+        "capture": "captures/analysis/0718_hard_s10_early_seed_turn1.png",
+        "capture_sha256": "86cc44c73fa1a2c78dc974c897c93e266b915f32a9be35e73e16753b045bf2e5"
+      },
+      "evidence": [
+        {
+          "seed": "captures/analysis/0718_hard_s01_turn1_command.gst",
+          "result": "레스터 LV7, AT/DF 26/22, 병사 A+/D+ 5/5"
+        },
+        {
+          "seed": "captures/analysis/733a_s16_result_fixed_stable.gst",
+          "result": "레스터 LV9, AT/DF 27/23, 병사 A+/D+ 6/5"
+        }
+      ]
+    }
+  ]
+}

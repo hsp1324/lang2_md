@@ -38,6 +38,22 @@ class HardModeScenarioSmokeTests(unittest.TestCase):
                 "runtime_loader_smoke_verified",
             )
             self.assertEqual(result["target_record_count"], len(indexes))
+            exception_indexes = (
+                scenario_runtime.scenario_runtime_exception_indexes(
+                    int(result["number"])
+                )
+            )
+            self.assertEqual(
+                result.get("runtime_exception_indexes", []),
+                exception_indexes,
+            )
+            self.assertEqual(
+                result.get(
+                    "strict_runtime_target_record_count",
+                    len(indexes),
+                ),
+                len(indexes) - len(exception_indexes),
+            )
             self.assertEqual(
                 result["runtime_group_range"],
                 [

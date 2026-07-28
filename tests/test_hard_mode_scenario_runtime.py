@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from tools import verify_hard_mode_scenario_runtime as scenario_runtime
+from tools import verify_hard_mode_runtime_evidence as runtime_evidence
 
 
 class HardModeScenarioRuntimeTests(unittest.TestCase):
@@ -47,7 +48,15 @@ class HardModeScenarioRuntimeTests(unittest.TestCase):
                 [(2, "kept"), (16, "new")],
             )
 
-    def test_seed_selection_uses_late_progress_only_from_scenario_twenty_five(self):
+    def test_seed_selection_avoids_future_roster_data_in_early_scenarios(self):
+        self.assertEqual(
+            scenario_runtime.seed_for_scenario(10),
+            scenario_runtime.EARLYGAME_SEED,
+        )
+        self.assertEqual(
+            scenario_runtime.seed_for_scenario(11),
+            scenario_runtime.MIDGAME_SEED,
+        )
         self.assertEqual(
             scenario_runtime.seed_for_scenario(24),
             scenario_runtime.MIDGAME_SEED,
@@ -56,6 +65,28 @@ class HardModeScenarioRuntimeTests(unittest.TestCase):
             scenario_runtime.seed_for_scenario(25),
             scenario_runtime.LATEGAME_SEED,
         )
+
+    def test_scenario_ten_lester_stock_roster_rewrite_is_explicit(self):
+        gst = runtime_evidence.SCENARIO_TEN_GST.read_bytes()
+        self.assertEqual(
+            scenario_runtime.matching_player_group_count(gst, 10),
+            5,
+        )
+        self.assertEqual(
+            scenario_runtime.scenario_runtime_exception_indexes(10),
+            [1],
+        )
+
+    def test_scenario_ten_exception_still_checks_identity(self):
+        gst = bytearray(runtime_evidence.SCENARIO_TEN_GST.read_bytes())
+        start = (
+            runtime_evidence.GST_WORK_RAM_FILE_OFFSET
+            + runtime_evidence.RUNTIME_GROUP_BASE
+            + 6 * runtime_evidence.RUNTIME_GROUP_SIZE
+        )
+        gst[start] ^= 1
+        with self.assertRaises(ValueError):
+            runtime_evidence.verify_planned_scenario(bytes(gst), 10, 5)
 
 
 if __name__ == "__main__":

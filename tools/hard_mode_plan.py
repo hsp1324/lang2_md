@@ -24,6 +24,9 @@ DEFAULT_RUNTIME_VERIFICATION = (
 DEFAULT_RUNTIME_SMOKE = (
     ROOT / "localization/hard_mode_scenario_smoke.json"
 )
+DEFAULT_RUNTIME_EXCEPTIONS = (
+    ROOT / "localization/hard_mode_runtime_exceptions.json"
+)
 
 SECRET_STEP_SOURCE = {
     28: 11,
@@ -264,6 +267,9 @@ def build_plan(
             ),
             "conditional_mercenary_pairs_applied": False,
             "summon_units_applied": False,
+            "runtime_exception_manifest": str(
+                DEFAULT_RUNTIME_EXCEPTIONS.relative_to(ROOT)
+            ),
             "runestone_expectation": (
                 hard_mode_baseline.RECOMMENDED_DISCUSSION_PROPOSAL[
                     "global_rules"
@@ -349,6 +355,13 @@ def render_markdown(plan: dict[str, Any]) -> str:
     smoke_scenarios = {
         int(row["number"]): row for row in runtime_smoke["scenarios"]
     }
+    runtime_exceptions = (
+        json.loads(
+            DEFAULT_RUNTIME_EXCEPTIONS.read_text(encoding="utf-8")
+        )
+        if DEFAULT_RUNTIME_EXCEPTIONS.exists()
+        else {"exceptions": []}
+    )
     lines = [
         "# 랑그릿사 II 표준 하드 모드 변경 기록",
         "",
@@ -489,6 +502,31 @@ def render_markdown(plan: dict[str, Any]) -> str:
 
     lines.extend([
         "",
+        "## 원작 런타임 재작성 예외",
+        "",
+        "| 장 | 주소 | 대상 | 엄격 검증 | 동적 필드 | 처리 |",
+        "|---:|:---:|:---|:---|:---|:---|",
+    ])
+    for row in runtime_exceptions["exceptions"]:
+        strict_fields = ", ".join(row["strict_runtime_fields"])
+        dynamic_fields = ", ".join(row["runtime_overridden_fields"])
+        lines.append(
+            f"| {row['scenario']} | `{row['fixed_record_offset']}` | "
+            f"{row['name_korean']}/{row['class_korean']} | "
+            f"`{strict_fields}` | `{dynamic_fields}` | "
+            f"{row['balance_policy']} |"
+        )
+    lines.extend([
+        "",
+        "- 이 예외는 하드 ROM의 오류를 숨기는 허용 목록이 아니다. 두 개의",
+        "  서로 다른 정상 저장 상태에서 같은 고정 레코드가 로스터 성장값으로",
+        "  다시 쓰이는 원작 동작을 확인한 경우만 기록한다.",
+        "- 예외로 적힌 동적 필드 외의 신원·클래스·용병·나머지 적 레코드는",
+        "  계속 바이트 단위로 엄격하게 검사한다.",
+    ])
+
+    lines.extend([
+        "",
         "## 레코드별 변경",
         "",
         "| 장 | 주소 | 적/클래스 | 지휘관 AT/DF | 병사 A+/D+ | 용병 전 → 후 |",
@@ -526,6 +564,9 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "- `python3 tools/verify_hard_mode_scenario_runtime.py --scenario N`은",
         "  장별 자동 배치·출격 뒤 모든 하드 대상의 실제 RAM 값을 대조하고",
         "  `localization/hard_mode_scenario_smoke.json`에 즉시 기록한다.",
+        "- 원작이 플레이 가능 캐릭터의 성장값으로 적 레코드를 다시 쓰는",
+        "  예외는 `localization/hard_mode_runtime_exceptions.json`에서만",
+        "  관리하며 검증기가 지정된 동적 필드만 제외한다.",
     ])
     for scenario_number in sorted(runtime_scenarios):
         evidence = runtime_scenarios[scenario_number]

@@ -23,6 +23,7 @@
     "mercenary_policy": "conservative same-family replacements first, left-to-right up to the per-commander quota; empty slots stay empty",
     "conditional_mercenary_pairs_applied": false,
     "summon_units_applied": false,
+    "runtime_exception_manifest": "localization/hard_mode_runtime_exceptions.json",
     "runestone_expectation": {
       "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
       "scenarios_16_20": "파티 전체 누적 1개 사용 권장",

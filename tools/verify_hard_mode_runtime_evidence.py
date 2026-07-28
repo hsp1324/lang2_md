@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 import hashlib
+import json
 from pathlib import Path
 import sys
 
@@ -17,6 +18,9 @@ if str(ROOT) not in sys.path:
 from tools import hard_mode_plan
 
 DEFAULT_GST = ROOT / "captures/analysis/0718_hard_s01_turn1_command.gst"
+SCENARIO_TEN_GST = (
+    ROOT / "captures/analysis/0718_hard_s10_early_seed_turn1.gst"
+)
 SCENARIO_SIXTEEN_GST = (
     ROOT / "captures/analysis/0718_hard_s16_turn1_command.gst"
 )
@@ -25,6 +29,9 @@ SCENARIO_TWENTY_FIVE_GST = (
 )
 SCENARIO_TWENTY_SEVEN_GST = (
     ROOT / "captures/analysis/0718_hard_s27_turn1_command.gst"
+)
+RUNTIME_EXCEPTIONS = (
+    ROOT / "localization/hard_mode_runtime_exceptions.json"
 )
 
 GST_WORK_RAM_FILE_OFFSET = 0x2478
@@ -40,6 +47,9 @@ RUNTIME_SOLDIER_DF_OFFSET = 0x47
 SCENARIO_ONE_PLAYER_GROUPS = 2
 SCENARIO_ONE_EXPECTED_GST_SHA256 = (
     "a9be34a13f38616617ce806f6b63821d1c15433b44e4e9e5d1ef1394b09a9256"
+)
+SCENARIO_TEN_EXPECTED_GST_SHA256 = (
+    "8bc9b52b8218ca6f144ef7736472d99cc1b062f961bef001aafcd96a0a50e094"
 )
 SCENARIO_SIXTEEN_PLAYER_GROUPS = 8
 SCENARIO_SIXTEEN_EXPECTED_GST_SHA256 = (
@@ -189,6 +199,30 @@ def expected_runtime_group(expected: ExpectedRuntimeGroup) -> RuntimeGroup:
     )
 
 
+def load_runtime_exceptions(
+    path: Path = RUNTIME_EXCEPTIONS,
+) -> dict[tuple[int, int], dict]:
+    model = json.loads(path.read_text(encoding="utf-8"))
+    if model.get("schema_version") != 1:
+        raise ValueError("unsupported hard-mode runtime exception schema")
+    result = {}
+    for row in model.get("exceptions", []):
+        key = (int(row["scenario"]), int(row["fixed_record_index"]))
+        if key in result:
+            raise ValueError(f"duplicate hard-mode runtime exception: {key}")
+        result[key] = row
+    return result
+
+
+def runtime_exception_for(
+    scenario_number: int,
+    fixed_record_index: int,
+) -> dict | None:
+    return load_runtime_exceptions().get(
+        (scenario_number, fixed_record_index)
+    )
+
+
 def verify_scenario_one(gst: bytes) -> tuple[RuntimeGroup, ...]:
     actual_groups = []
     for expected in SCENARIO_ONE_GROUPS:
@@ -228,7 +262,8 @@ def verify_planned_scenario(
     )
     actual_groups = []
     for record in scenario["records"]:
-        runtime_group = player_group_count + int(record["index"])
+        fixed_record_index = int(record["index"])
+        runtime_group = player_group_count + fixed_record_index
         actual = read_runtime_group(gst, runtime_group)
         commander = record["commander"]
         soldier = record["enemy_soldier_correction"]
@@ -250,6 +285,24 @@ def verify_planned_scenario(
             "soldier_df": actual.soldier_df,
             "mercenaries": actual.mercenaries,
         }
+        exception = runtime_exception_for(
+            scenario_number,
+            fixed_record_index,
+        )
+        if exception is not None:
+            if (
+                str(record["offset"])
+                != str(exception["fixed_record_offset"])
+                or str(record["name_id"]) != str(exception["name_id"])
+                or str(record["class_id"]) != str(exception["class_id"])
+            ):
+                raise ValueError(
+                    f"Scenario {scenario_number} runtime exception no longer "
+                    f"matches fixed record {fixed_record_index}"
+                )
+            for field in exception["runtime_overridden_fields"]:
+                expected.pop(field)
+                actual_projection.pop(field)
         if actual_projection != expected:
             raise ValueError(
                 f"Scenario {scenario_number} {record['name_korean']} "

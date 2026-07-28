@@ -1,5 +1,6 @@
 from pathlib import Path
 import hashlib
+import json
 import subprocess
 import sys
 import unittest
@@ -128,6 +129,44 @@ class HardModePlanTests(unittest.TestCase):
                     "expanded-ROM per-record table",
                     row["enemy_soldier_correction"]["implementation"],
                 )
+
+    def test_runtime_rewrite_exceptions_have_a_separate_audited_manifest(self):
+        relative_path = self.plan["implementation_policy"][
+            "runtime_exception_manifest"
+        ]
+        manifest = json.loads(
+            (ROOT / relative_path).read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["status"], "runtime_audited")
+        self.assertEqual(
+            [
+                (
+                    row["scenario"],
+                    row["fixed_record_index"],
+                    row["fixed_record_offset"],
+                    row["name_korean"],
+                )
+                for row in manifest["exceptions"]
+            ],
+            [(10, 1, "0x1811DE", "레스터")],
+        )
+        exception = manifest["exceptions"][0]
+        self.assertEqual(
+            set(exception["runtime_overridden_fields"]),
+            {
+                "commander_at",
+                "commander_df",
+                "soldier_at",
+                "soldier_df",
+            },
+        )
+        for key in ("gst", "capture"):
+            evidence_path = ROOT / exception["retained_evidence"][key]
+            self.assertTrue(evidence_path.is_file())
+            self.assertEqual(
+                hashlib.sha256(evidence_path.read_bytes()).hexdigest(),
+                exception["retained_evidence"][f"{key}_sha256"],
+            )
 
     def test_mercenary_changes_never_fill_empty_slots(self):
         for scenario in self.plan["scenarios"]:
