@@ -56,6 +56,10 @@
 - `tools/build_discard_prompt_probe_rom.py`: 40칸이 찬 진단 상점에서 원본 아이템 지급 루틴과 사용되지 않던 폐기 목록 콜백을 연결합니다. 배포 ROM에는 없는 진단 흐름이며 `버릴 아이템`, 5행 목록, 9페이지 이동과 확정 복귀를 검사할 때만 사용합니다.
 - `tools/jp_ui_surface_inventory.py`: 빌더가 선언한 UI 패치 주소와 압축 작은 글꼴 재배치, 아직 조사할 UI 범주를 기록합니다.
 - `tools/ending_credits_inventory.py`: 원본 엔딩 제어 흐름과 16개 크레딧 그룹, 후일담 90개·515페이지, 엔딩 방문 23개·83페이지, 몽타주 12개와 실기 증거를 함께 검증해 엔딩·크레딧 텍스트 표면 전체를 목록화합니다.
+- `tools/archive_rom_release.py`: 새 수정본을 만들기 전에 현재 배포 ROM의 SHA-256·MD 체크섬·SRAM 설명자를 릴리스 목록과 대조하고, Git에서 제외된 `roms/releases/`에 직전 배포본을 보관합니다.
+- `tools/build_rom_update_package.py`: 지원할 이전 한국어판과 새 한국어판 사이의 표준 BPS 패치, 버전·해시 manifest, Windows/Linux 적용기와 플레이어 안내를 하나의 ZIP으로 만듭니다. 전체 ROM은 패키지에 포함하지 않습니다.
+- `tools/rom_update.py`: 패키지와 이전 ROM을 검증하고 기존 ROM을 `.bak`으로 백업한 뒤 같은 경로·같은 파일명에서 원자적으로 교체합니다. 에뮬레이터 SRAM·세이브·상태 저장 파일은 열거나 수정하지 않습니다.
+- `docs/save_preserving_rom_updates.md`: 기존 게임 내 저장을 유지하는 Windows·Android RetroArch 적용법, 상태 저장 비호환 주의, 개발자 릴리스 절차와 회귀 테스트입니다.
 - `tools/generate_byte_ui_slot_inventory.py`: 이름·클래스·용병용 작은 UI의 로컬 인덱스 174개와 확장 VRAM 슬롯 118개를 `localization/byte_ui_slot_inventory.json`으로 생성합니다. 활성 글자, 전투 안전 고정 슬롯, 애니메이션에 덮여 폐기된 슬롯, 아직 소유권을 확인하지 않은 미할당 슬롯, 위험 바이트 코드 `0xA1..0xA4`를 구분합니다. `unassigned`는 안전하다는 뜻이 아니며 `--check`와 단위 테스트가 코드/목록 불일치를 막습니다.
 - `tools/jp_compressed_resource_inventory.py`: `0x0B0000`의 429개 압축 리소스를 타입 1 RLE·타입 2 타일 평면·타입 3 LZSS 전용 디코더로 해제해 크기·해시·포인터 변경을 기록합니다. 원본 SHA로 잠근 시나리오 맵·전투 배경·157개 클래스와 10명 지휘관 전투 스프라이트·256개 초상화 조회·31개 루트맵 조각·오프닝/엔딩 로더를 추적해 429개 모두에 763개 소유권 레코드를 연결하며, 로더에서 도달하지 않는 2번·224번은 미사용 후보로 명시합니다.
 - `tools/render_compressed_resource_atlas.py`: 해제한 압축 리소스를 Mega Drive 4bpp 타일 그대로 PNG 아틀라스로 렌더링합니다. 기본값은 코드에 즉시 ID로 나타나는 50개이며 `--indices 0-428`로 전체 표를 검사합니다. 타일맵·팔레트·애니메이션을 재구성하지 않으므로 이 화면에서 일본어가 안 보인다는 사실만으로 번역 완료를 판정하지 않습니다.
@@ -135,6 +139,36 @@ python3 scripts/build_korean_jp_probe.py
 ```text
 roms/builds/Langrisser II (Korean).md
 ```
+
+## 세이브를 유지하는 한국어판 업데이트
+
+현재 배포 ROM은
+`localization/rom_update_releases.json`의 `ko-99fd`로 해시가 고정되어
+있습니다. 한국어 수정 전에 직전 ROM을 보관합니다.
+
+```bash
+python3 tools/archive_rom_release.py
+```
+
+수정·검증한 새 ROM은 이전 배포본을 입력으로 표준 BPS 업데이트 ZIP을
+만듭니다.
+
+```bash
+python3 tools/build_rom_update_package.py \
+  --target-release ko-2026.08.01.1 \
+  --source \
+    "ko-99fd=roms/releases/Langrisser II (Korean ko-99fd).md" \
+  --output "dist/Langrisser-II-Korean-update.zip"
+```
+
+플레이어 적용기는 지원 ROM의 SHA-256을 먼저 확인하고, 새 ROM을 임시
+파일에서 완전히 검증한 뒤 기존 ROM과 같은 이름으로 교체합니다. 이전
+ROM은 `.bak`으로 남고 `.srm`, `.sav`, `.state`, `.gst`는 건드리지
+않습니다. 게임 내 저장(SRAM)은 유지되지만 에뮬레이터 상태 저장은
+새 코드와 호환을 보장하지 않으므로 업데이트 전에 게임 안에서 저장해야
+합니다. Windows와 Android RetroArch 절차 및 롤백 방법은
+[`docs/save_preserving_rom_updates.md`](docs/save_preserving_rom_updates.md)에
+정리했습니다.
 
 ## 게임 데이터 편집기
 
