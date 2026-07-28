@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "number": 6,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 시 헤인이 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
+      "normal_rom": {
+        "path": "roms/releases/Langrisser II (Korean ko-99fd).md",
+        "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/normal_ko99fd_s06_first_turn_defeat_battle.png",
+          "sha256": "d18cc0d93f60e1482c6da5054c3b1dfb2739ef7564fedbcdcf9546f558c4979d"
+        },
+        {
+          "path": "captures/analysis/normal_ko99fd_s06_first_turn_defeat_map.png",
+          "sha256": "67800f946dcdae90989c8b0318b5d06a414b3e9c8ccaf68851c91ecaca38a2ce"
+        },
+        {
+          "path": "captures/analysis/normal_ko99fd_s06_first_turn_defeat_title.png",
+          "sha256": "4f7985b3f7e79eaed2f6deb8f4162003718b88e32fc7bee8468d03e731feae61"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/hard_s06_first_turn_defeat_battle.png",
+          "sha256": "1843c62d27cd2307e54a8b2b615d8995bc6e555e9bbfe5b1f526d27d2830d3ad"
+        },
+        {
+          "path": "captures/analysis/hard_s06_first_turn_defeat_map.png",
+          "sha256": "a927d8ad4532ca87bdbf6b7ea0d988370c6a932e31a3cc826ff8b7cb86d55e1d"
+        },
+        {
+          "path": "captures/analysis/hard_s06_first_turn_defeat_title.png",
+          "sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b"
+        }
+      ]
+    }
+  ]
+}

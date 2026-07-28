@@ -237,6 +237,28 @@ class BlastemCommandDetectionTests(unittest.TestCase):
 
             self.assertTrue(REAL_TITLE_SCREEN_VISIBLE(path))
 
+    def test_water_battle_map_is_not_detected_as_title_screen(self):
+        with TemporaryDirectory() as temporary_directory:
+            path = Path(temporary_directory) / "water-battle-map.png"
+            image = Image.new("RGB", (320, 240), (0, 0, 96))
+            pixels = image.load()
+            for y in range(165, 174):
+                for x in range(90, 230):
+                    if x % 5 < 2:
+                        pixels[x, y] = (255, 255, 255)
+            for y in range(195, 235):
+                for x in range(320):
+                    pixels[x, y] = (
+                        (0, 0, 119) if x % 20 < 10 else (0, 0, 0)
+                    )
+            for y in range(195, 235):
+                for x in range(0, 320, 10):
+                    pixels[x, y] = (160, 112, 32)
+            image.save(path)
+
+            self.assertTrue(runner.battle_map_surface_visible(path))
+            self.assertFalse(REAL_TITLE_SCREEN_VISIBLE(path))
+
     @mock.patch.object(runner.subprocess, "call")
     @mock.patch.object(runner, "title_screen_visible", return_value=True)
     @mock.patch.object(runner, "game_over_visible", return_value=False)

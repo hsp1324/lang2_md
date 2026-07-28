@@ -11,7 +11,6 @@ class HardModeFirstTurnTests(unittest.TestCase):
         self.assertEqual(first_turn.entry_evidence(2)["kind"], "loader_smoke")
         self.assertEqual(first_turn.entry_evidence(1)["kind"], "loader_smoke")
         self.assertTrue(first_turn.entry_evidence(1)["hash_locked"])
-        self.assertFalse(first_turn.entry_evidence(2)["hash_locked"])
 
     def test_retained_entry_hashes_match_manifests(self):
         for number in (1, 2, 16, 25, 27):
@@ -31,12 +30,37 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 )
 
     def test_mutable_loader_entry_is_validated_by_runtime_data(self):
-        evidence = first_turn.entry_evidence(31)
-        path, digest, player_group_count = (
-            first_turn.validate_entry_evidence(31, evidence)
-        )
-        self.assertEqual(first_turn.sha256(path), digest)
-        self.assertEqual(player_group_count, 10)
+        source = first_turn.entry_evidence(31)
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = Path(directory) / "loader.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "scenarios": [
+                            {
+                                "number": 31,
+                                "gst": str(
+                                    Path(source["path"]).relative_to(
+                                        first_turn.ROOT
+                                    )
+                                ),
+                                "gst_sha256": source["sha256"],
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            evidence = first_turn.entry_evidence(
+                31,
+                loader_results_path=manifest,
+            )
+            self.assertFalse(evidence["hash_locked"])
+            path, digest, player_group_count = (
+                first_turn.validate_entry_evidence(31, evidence)
+            )
+            self.assertEqual(first_turn.sha256(path), digest)
+            self.assertEqual(player_group_count, 10)
 
     def test_turn_counter_reads_work_ram_byte(self):
         data = bytearray(first_turn.TURN_COUNTER_FILE_OFFSET + 1)
@@ -67,6 +91,29 @@ class HardModeFirstTurnTests(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             first_turn.classify_endpoint("title_screen", 1)
+        expected = first_turn.expected_endpoint(6)
+        self.assertEqual(
+            first_turn.classify_endpoint(
+                "title_screen",
+                1,
+                expected=expected,
+            ),
+            "defeat_return_title_turn_1",
+        )
+        with self.assertRaises(ValueError):
+            first_turn.classify_endpoint(
+                "title_screen",
+                2,
+                expected=expected,
+            )
+
+    def test_title_defeat_exception_is_limited_to_scenario_six(self):
+        self.assertEqual(
+            first_turn.expected_endpoint(6)["endpoint"],
+            "defeat_return_title_turn_1",
+        )
+        self.assertIsNone(first_turn.expected_endpoint(5))
+        self.assertIsNone(first_turn.expected_endpoint(7))
 
     def test_save_result_replaces_scenario_and_updates_coverage(self):
         with tempfile.TemporaryDirectory() as directory:

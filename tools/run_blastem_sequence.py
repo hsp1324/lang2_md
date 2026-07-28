@@ -867,6 +867,10 @@ def title_screen_visible(path: Path) -> bool:
         navy_ratio > 0.70
         and white_ratio > 0.035
         and black_ratio < 0.25
+        # Scenario 10's ocean can fill the same crop with navy pixels while
+        # labels in the battle status bar supply enough white pixels to mimic
+        # PUSH START. The real title never has the framed battle status bar.
+        and not battle_map_surface_visible(path)
     )
 
 

@@ -31,6 +31,9 @@ DEFAULT_RESULTS = ROOT / "localization/hard_mode_first_turn_smoke.json"
 DEFAULT_DOCUMENTATION = ROOT / "docs/hard_mode_first_turn_verification.md"
 LOADER_SMOKE_RESULTS = ROOT / "localization/hard_mode_scenario_smoke.json"
 DEEP_RESULTS = ROOT / "localization/hard_mode_runtime_verification.json"
+EXPECTED_ENDPOINTS = (
+    ROOT / "localization/hard_mode_first_turn_expected_endpoints.json"
+)
 RUNNER = ROOT / "tools/run_blastem_sequence.py"
 KEY_SENDER = ROOT / "tools/send_blastem_keys.py"
 CAPTURE = ROOT / "tools/capture_blastem_window.py"
@@ -63,6 +66,44 @@ def relative(path: Path) -> str:
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def validate_expected_endpoint(row: dict) -> dict:
+    normal_rom = row["normal_rom"]
+    normal_path = ROOT / normal_rom["path"]
+    if not normal_path.is_file():
+        raise FileNotFoundError(normal_path)
+    if sha256(normal_path) != normal_rom["sha256"]:
+        raise ValueError(
+            f"normal comparison ROM hash changed for {normal_path}"
+        )
+    for evidence_group in ("normal_evidence", "hard_evidence"):
+        for evidence in row.get(evidence_group, []):
+            evidence_path = ROOT / evidence["path"]
+            if not evidence_path.is_file():
+                raise FileNotFoundError(evidence_path)
+            if sha256(evidence_path) != evidence["sha256"]:
+                raise ValueError(
+                    f"expected-endpoint evidence hash changed for "
+                    f"{evidence_path}"
+                )
+    return row
+
+
+def expected_endpoint(
+    scenario_number: int,
+    path: Path = EXPECTED_ENDPOINTS,
+) -> dict | None:
+    data = load_json(path)
+    row = next(
+        (
+            row
+            for row in data.get("scenarios", [])
+            if int(row["number"]) == scenario_number
+        ),
+        None,
+    )
+    return validate_expected_endpoint(row) if row is not None else None
 
 
 def entry_evidence(
@@ -313,7 +354,12 @@ def turn_counter(gst: bytes) -> int:
     return gst[TURN_COUNTER_FILE_OFFSET]
 
 
-def classify_endpoint(detector_endpoint: str, counter: int) -> str:
+def classify_endpoint(
+    detector_endpoint: str,
+    counter: int,
+    *,
+    expected: dict | None = None,
+) -> str:
     if detector_endpoint == "turn_command":
         if counter != 2:
             raise ValueError(
@@ -326,6 +372,19 @@ def classify_endpoint(detector_endpoint: str, counter: int) -> str:
                 f"first-turn GAME OVER has unexpected turn counter {counter}"
             )
         return f"game_over_turn_{counter}"
+    if detector_endpoint == "title_screen":
+        if (
+            expected is None
+            or expected.get("endpoint") != "defeat_return_title_turn_1"
+        ):
+            raise ValueError(
+                "title-screen return is not an approved first-turn endpoint"
+            )
+        if counter != 1:
+            raise ValueError(
+                f"approved first-turn title return has turn counter {counter}"
+            )
+        return "defeat_return_title_turn_1"
     raise ValueError(f"unknown detector endpoint: {detector_endpoint}")
 
 
@@ -404,8 +463,11 @@ def render_document(results: dict) -> str:
         "`턴 종료` command, and wait through event, AI, movement, and battle "
         "animation frames.",
         "- Accept only a real Turn 2 command menu or the scenario's normal "
-        "GAME OVER path. The Turn 2 endpoint is also checked against work-RAM "
-        "counter `$FFFFA5F1`.",
+        "defeat path. A title return is accepted only when the immutable "
+        "normal ROM reproduces the same route and the scenario is listed in "
+        "`localization/hard_mode_first_turn_expected_endpoints.json`. The "
+        "Turn 2 endpoint is also checked against work-RAM counter "
+        "`$FFFFA5F1`.",
         "- Store endpoint screenshots, GST paths, and SHA-256 values in the "
         "JSON manifest. Runtime captures are local evidence and are not "
         "release ROM inputs.",
@@ -445,8 +507,9 @@ def render_document(results: dict) -> str:
             "`turn_2_command` proves that the stock first-turn event and "
             "faction phases returned to a playable command state. "
             "`game_over_turn_1` is accepted only where the no-action route "
-            "naturally defeats the party; it does not claim a successful "
-            "scenario clear.",
+            "naturally defeats the party. `defeat_return_title_turn_1` "
+            "requires a matching immutable-normal-ROM defeat trace. Neither "
+            "defeat endpoint claims a successful scenario clear.",
             "",
         ]
     )
@@ -603,7 +666,12 @@ def verify_scenario(
         )
         gst_bytes = quicksave.read_bytes()
         counter = turn_counter(gst_bytes)
-        endpoint = classify_endpoint(detector_endpoint, counter)
+        approved_endpoint = expected_endpoint(scenario_number)
+        endpoint = classify_endpoint(
+            detector_endpoint,
+            counter,
+            expected=approved_endpoint,
+        )
         endpoint_gst = retain_endpoint_gst(scenario_number, gst_bytes)
         return {
             "number": scenario_number,
@@ -616,6 +684,11 @@ def verify_scenario(
             "emulator_speed_percent": EMULATOR_SPEED_PERCENT[
                 emulator_speed
             ],
+            "expected_endpoint_evidence": (
+                approved_endpoint
+                if endpoint == "defeat_return_title_turn_1"
+                else None
+            ),
             "entry_evidence": {
                 "kind": evidence["kind"],
                 "gst": relative(Path(evidence["path"])),
