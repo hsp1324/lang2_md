@@ -5,13 +5,13 @@
   "approval_confirmation": "표준 하드로 해줘",
   "base": {
     "size": 4194304,
-    "sha256": "55281753a566e58ef9b2b3bb4cf2ee0a1f454faa1a26ff6a7a75819b6856afbf",
+    "sha256": "9b9fd3882d9cce4c06f05fe1ec39662176b6d101d388068267fd12931ab71f2c",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "hard": {
     "size": 4194304,
-    "header_checksum": "1011",
-    "sha256": "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
+    "header_checksum": "8674",
+    "sha256": "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "implementation": {
