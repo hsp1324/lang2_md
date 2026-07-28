@@ -154,13 +154,12 @@ LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     base + LOREN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
 )
-# Recolor only the stock High Lord's gray armor faces: keep white index 3 as
-# the highlight, turn gray index 1 pale gold, and turn the deepest gray index E
-# warm brown. Indexes 4/F remain the original blue/cyan shield, while the blade
-# coordinates below retain all of their original white-gray 1/3/E values.
+# The editor's paired NPC design uses a soft lavender ramp for Loren. The live
+# map palette cannot add per-class CRAM colors, so use white armor with its
+# existing muted-violet shadow while preserving the stock shield, trim, and
+# blade pixels. Mapping to the only bright violet entry would turn it neon.
 LOREN_SPRITE_COLOR_INDEX_REMAP = {
-    0x1: 0x6,  # gray armor shade -> pale gold
-    0xE: 0x7,  # deepest armor shade -> warm brown
+    0x1: 0x3,  # gray armor shade -> pale highlight above violet shadow
 }
 LOREN_BLADE_COORDS_BY_FRAME = (
     frozenset(
@@ -191,6 +190,39 @@ LOREN_BLADE_COORDS_BY_FRAME = (
         }
     ),
 )
+
+PAIRED_NPC_MAP_SPRITES = {
+    # Scenario 1 militia: ivory armor paired with the NPC Priest.
+    0x99: {
+        "label": "Militia",
+        "source_sprite_id": 0x001C,
+        "custom_sprite_id": 0x53B7,
+        "color_index_remap": {0x1: 0x6, 0xE: 0x7},
+        "protected_coords": LOREN_BLADE_COORDS_BY_FRAME,
+    },
+    # Scenario 10 pirates: the closest live-palette sky/naval blue pair.
+    0x9A: {
+        "label": "Pirates",
+        "source_sprite_id": 0x001C,
+        "custom_sprite_id": 0x53B8,
+        "color_index_remap": {0x1: 0xF},
+        "protected_coords": LOREN_BLADE_COORDS_BY_FRAME,
+    },
+    # Scenario 1 priest: white/ivory robe paired with the militia.
+    0x9C: {
+        "label": "Priest",
+        "source_sprite_id": 0x001D,
+        "custom_sprite_id": 0x53B9,
+        "color_index_remap": {
+            0x1: 0x6,
+            0x4: 0x3,
+            0x5: 0x6,
+            0xE: 0x7,
+            0xF: 0x7,
+        },
+        "protected_coords": (frozenset(), frozenset()),
+    },
+}
 
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
@@ -741,13 +773,13 @@ def title_version_render_position(text: str) -> int:
 
 
 def split_hard_title_version_text(text: str) -> tuple[str, str] | None:
-    prefix = "번역/밸런스: "
+    prefix = "번역/밸런스:"
     if not text.startswith(prefix):
         return None
     versions = text[len(prefix):].split("/")
     if len(versions) != 2 or not all(versions):
         raise ValueError(f"invalid hard title version text: {text!r}")
-    return f"번역: {versions[0]}", f"하드: {versions[1]}"
+    return f"번역:{versions[0]}", f"하드:{versions[1]}"
 
 
 def hard_translation_render_position(text: str) -> int:
@@ -2735,23 +2767,50 @@ def patch_loren_map_sprite(data: bytearray) -> None:
             f"!= 0x{LOREN_SOURCE_SPRITE_ID:04X}"
         )
 
-    for frame_base, target, blade_coords in zip(
+    write_palette_remapped_map_sprite(
+        data,
+        source_sprite_id=LOREN_SOURCE_SPRITE_ID,
+        custom_sprite_id=LOREN_CUSTOM_SPRITE_ID,
+        color_index_remap=LOREN_SPRITE_COLOR_INDEX_REMAP,
+        protected_coords_by_frame=LOREN_BLADE_COORDS_BY_FRAME,
+        label="Loren",
+    )
+    put16(data, table_offset, LOREN_CUSTOM_SPRITE_ID)
+
+
+def write_palette_remapped_map_sprite(
+    data: bytearray,
+    *,
+    source_sprite_id: int,
+    custom_sprite_id: int,
+    color_index_remap: dict[int, int],
+    protected_coords_by_frame: tuple[
+        frozenset[tuple[int, int]],
+        frozenset[tuple[int, int]],
+    ],
+    label: str,
+) -> None:
+    custom_frame_offsets = tuple(
+        base + custom_sprite_id * MAP_SPRITE_BYTES
+        for base in MAP_SPRITE_FRAME_BASES
+    )
+    for frame_base, target, protected_coords in zip(
         MAP_SPRITE_FRAME_BASES,
-        LOREN_CUSTOM_FRAME_OFFSETS,
-        LOREN_BLADE_COORDS_BY_FRAME,
+        custom_frame_offsets,
+        protected_coords_by_frame,
     ):
-        source = frame_base + LOREN_SOURCE_SPRITE_ID * MAP_SPRITE_BYTES
+        source = frame_base + source_sprite_id * MAP_SPRITE_BYTES
         source_payload = bytes(data[source : source + MAP_SPRITE_BYTES])
         if len(source_payload) != MAP_SPRITE_BYTES:
-            raise ValueError("Loren source map sprite is truncated")
+            raise ValueError(f"{label} source map sprite is truncated")
         if target + MAP_SPRITE_BYTES > EXPANDED_ROM_SIZE:
-            raise ValueError("Loren custom map sprite exceeds expanded ROM")
+            raise ValueError(f"{label} custom map sprite exceeds expanded ROM")
         if any(
             value != 0xFF
             for value in data[target : target + MAP_SPRITE_BYTES]
         ):
             raise ValueError(
-                f"Loren custom map-sprite area at 0x{target:06X} "
+                f"{label} custom map-sprite area at 0x{target:06X} "
                 "is not blank"
             )
 
@@ -2773,15 +2832,35 @@ def patch_loren_map_sprite(data: bytearray) -> None:
                         )
                         mapped.append(
                             index
-                            if coords in blade_coords
-                            else LOREN_SPRITE_COLOR_INDEX_REMAP.get(
+                            if coords in protected_coords
+                            else color_index_remap.get(
                                 index, index
                             )
                         )
                     remapped[offset] = (mapped[0] << 4) | mapped[1]
         data[target : target + MAP_SPRITE_BYTES] = remapped
 
-    put16(data, table_offset, LOREN_CUSTOM_SPRITE_ID)
+
+def patch_paired_npc_map_sprites(data: bytearray) -> None:
+    for class_id, spec in PAIRED_NPC_MAP_SPRITES.items():
+        table_offset = GENERIC_CLASS_SPRITE_TABLE + class_id * 2
+        source_sprite_id = int(spec["source_sprite_id"])
+        custom_sprite_id = int(spec["custom_sprite_id"])
+        actual_sprite_id = be16(data, table_offset)
+        if actual_sprite_id != source_sprite_id:
+            raise ValueError(
+                f"unexpected {spec['label']} class sprite: "
+                f"0x{actual_sprite_id:04X} != 0x{source_sprite_id:04X}"
+            )
+        write_palette_remapped_map_sprite(
+            data,
+            source_sprite_id=source_sprite_id,
+            custom_sprite_id=custom_sprite_id,
+            color_index_remap=dict(spec["color_index_remap"]),
+            protected_coords_by_frame=spec["protected_coords"],
+            label=str(spec["label"]),
+        )
+        put16(data, table_offset, custom_sprite_id)
 
 
 def relocate_sram(data: bytearray) -> None:
@@ -7789,6 +7868,7 @@ def main() -> None:
     patch_bald_map_sprite(data)
     patch_shaman_map_sprite(data)
     patch_loren_map_sprite(data)
+    patch_paired_npc_map_sprites(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()

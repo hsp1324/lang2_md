@@ -94,10 +94,10 @@ def _title_text(
     balance_version: str | None,
 ) -> str:
     if name == "normal":
-        return f"번역: {translation_version}"
+        return f"번역:{translation_version}"
     if balance_version is None:
         raise ValueError(f"ROM version profile {name!r} has no balance version")
-    return f"번역/밸런스: {translation_version}/{balance_version}"
+    return f"번역/밸런스:{translation_version}/{balance_version}"
 
 
 def _rom_filename(

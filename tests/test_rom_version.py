@@ -16,7 +16,7 @@ class RomVersionTests(unittest.TestCase):
         self.assertEqual(profile["release_id"], "ko-1.0.0")
         self.assertEqual(profile["translation_version"], "1.0.0")
         self.assertIsNone(profile["balance_version"])
-        self.assertEqual(profile["title_text"], "번역: 1.0.0")
+        self.assertEqual(profile["title_text"], "번역:1.0.0")
         self.assertEqual(
             profile["rom_filename"],
             "Langrisser II (Korean v1.0.0).md",
@@ -57,7 +57,7 @@ class RomVersionTests(unittest.TestCase):
             profile = rom_version.get_profile("hard", path)
         self.assertEqual(
             profile["title_text"],
-            "번역/밸런스: 1.0.0/1.0.0",
+            "번역/밸런스:1.0.0/1.0.0",
         )
         self.assertEqual(
             profile["rom_filename"],

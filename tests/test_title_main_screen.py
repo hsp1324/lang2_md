@@ -19,7 +19,7 @@ class TitleMainScreenTests(unittest.TestCase):
         cls.version_patch = bytearray(cls.jp)
         builder.expand_rom(cls.version_patch)
         builder.patch_byte_ui_strings(cls.version_patch)
-        cls.hard_version_text = "번역/밸런스: 1.0.0/1.0.0"
+        cls.hard_version_text = "번역/밸런스:1.0.0/1.0.0"
         cls.hard_version_patch = bytearray(cls.jp)
         builder.expand_rom(cls.hard_version_patch)
         builder.patch_byte_ui_strings(
@@ -145,10 +145,10 @@ class TitleMainScreenTests(unittest.TestCase):
         )
 
     def test_version_record_is_installed_in_new_builds(self):
-        self.assertEqual(builder.TITLE_VERSION_TEXT, "번역: 1.0.0")
+        self.assertEqual(builder.TITLE_VERSION_TEXT, "번역:1.0.0")
         self.assertEqual(
             builder.TITLE_VERSION_RENDER_POSITION,
-            builder.title_version_render_position("번역: 1.0.0"),
+            builder.title_version_render_position("번역:1.0.0"),
         )
         self.assertEqual(
             self.version_patch[
@@ -161,7 +161,7 @@ class TitleMainScreenTests(unittest.TestCase):
 
     def test_hard_version_text_fits_reserved_record_and_title_row(self):
         lines = builder.split_hard_title_version_text(self.hard_version_text)
-        self.assertEqual(lines, ("번역: 1.0.0", "하드: 1.0.0"))
+        self.assertEqual(lines, ("번역:1.0.0", "하드:1.0.0"))
         self.assertIsNotNone(lines)
         translation_text, balance_text = lines
         translation_record = builder.build_title_version_record(
@@ -321,12 +321,12 @@ class TitleMainScreenTests(unittest.TestCase):
         )
         self.assertLessEqual(
             builder.TITLE_HARD_TRANSLATION_TEXT_RECORD
-            + len(builder.build_title_version_record("번역: 1.0.0")),
+            + len(builder.build_title_version_record("번역:1.0.0")),
             builder.TITLE_HARD_BALANCE_TEXT_RECORD,
         )
         self.assertLessEqual(
             builder.TITLE_HARD_BALANCE_TEXT_RECORD
-            + len(builder.build_title_version_record("하드: 1.0.0")),
+            + len(builder.build_title_version_record("하드:1.0.0")),
             builder.TITLE_HARD_CREDIT_RENDER_ROUTINE,
         )
         self.assertLessEqual(
