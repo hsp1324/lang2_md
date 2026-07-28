@@ -52,6 +52,11 @@ ROM 크기, 소유 주소 범위, 300개 레코드의 적용값, MD 체크섬, S
 검증한다. 따라서 현재 파일은 계속 플레이 후보이며 최종 릴리스가
 아니다.
 
+실제 플레이 결과는 `localization/hard_mode_playtest.json`과
+`docs/hard_mode_playtest.md`에 후보 SHA-256별로 누적한다.
+`python3 tools/hard_mode_playtest.py --check --require-complete`가
+31/31을 통과하기 전에는 최종 릴리스로 판정하지 않는다.
+
 ## 저장을 유지하며 후보 갱신
 
 1. 게임 안에서 저장한다.

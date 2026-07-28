@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "status": "awaiting_player_clear_verification",
+  "hard_release": {
+    "release_id": "ko-hard-t1.0.0-b1.0.0",
+    "profile_id": "standard_hard_runestone_v1",
+    "rom_path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "size": 4194304,
+    "header_checksum": "0718",
+    "sha256": "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
+    "plan_sha256": "ee1e10bb80c6d36513b07826aaf03b6da9c443800b1005bd5ec4e8b8364ec133",
+    "runtime_manifest_sha256": "d847066d3b3396a2c2320f0c21f8c76bdb1d418922cca58c5dbd1e4e713d1a65",
+    "first_turn_manifest_sha256": "dde9f0d6de760106a24f1a0568e6a29025e986328cddde2ce35c23d76ea9dac0",
+    "runtime_verified_scenarios": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "first_turn_verified_scenarios": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ]
+  },
+  "completion_policy": {
+    "required_scenarios": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "accepted_result": "cleared",
+    "difficulty_rating_required": true,
+    "hash_locked_evidence_required": true,
+    "candidate_sha256_must_match": true,
+    "scope": "complete each scenario on the unmodified Standard Hard candidate, including its normal victory transition"
+  },
+  "scenarios": [
+    {
+      "number": 1,
+      "display": "시나리오 1",
+      "attempts": []
+    },
+    {
+      "number": 2,
+      "display": "시나리오 2",
+      "attempts": []
+    },
+    {
+      "number": 3,
+      "display": "시나리오 3",
+      "attempts": []
+    },
+    {
+      "number": 4,
+      "display": "시나리오 4",
+      "attempts": []
+    },
+    {
+      "number": 5,
+      "display": "시나리오 5",
+      "attempts": []
+    },
+    {
+      "number": 6,
+      "display": "시나리오 6",
+      "attempts": []
+    },
+    {
+      "number": 7,
+      "display": "시나리오 7",
+      "attempts": []
+    },
+    {
+      "number": 8,
+      "display": "시나리오 8",
+      "attempts": []
+    },
+    {
+      "number": 9,
+      "display": "시나리오 9",
+      "attempts": []
+    },
+    {
+      "number": 10,
+      "display": "시나리오 10",
+      "attempts": []
+    },
+    {
+      "number": 11,
+      "display": "시나리오 11",
+      "attempts": []
+    },
+    {
+      "number": 12,
+      "display": "시나리오 12",
+      "attempts": []
+    },
+    {
+      "number": 13,
+      "display": "시나리오 13",
+      "attempts": []
+    },
+    {
+      "number": 14,
+      "display": "시나리오 14",
+      "attempts": []
+    },
+    {
+      "number": 15,
+      "display": "시나리오 15",
+      "attempts": []
+    },
+    {
+      "number": 16,
+      "display": "시나리오 16",
+      "attempts": []
+    },
+    {
+      "number": 17,
+      "display": "시나리오 17",
+      "attempts": []
+    },
+    {
+      "number": 18,
+      "display": "시나리오 18",
+      "attempts": []
+    },
+    {
+      "number": 19,
+      "display": "시나리오 19",
+      "attempts": []
+    },
+    {
+      "number": 20,
+      "display": "시나리오 20",
+      "attempts": []
+    },
+    {
+      "number": 21,
+      "display": "시나리오 21",
+      "attempts": []
+    },
+    {
+      "number": 22,
+      "display": "시나리오 22",
+      "attempts": []
+    },
+    {
+      "number": 23,
+      "display": "시나리오 23",
+      "attempts": []
+    },
+    {
+      "number": 24,
+      "display": "시나리오 24",
+      "attempts": []
+    },
+    {
+      "number": 25,
+      "display": "시나리오 25",
+      "attempts": []
+    },
+    {
+      "number": 26,
+      "display": "시나리오 26",
+      "attempts": []
+    },
+    {
+      "number": 27,
+      "display": "시나리오 27",
+      "attempts": []
+    },
+    {
+      "number": 28,
+      "display": "시나리오 X1",
+      "attempts": []
+    },
+    {
+      "number": 29,
+      "display": "시나리오 X2",
+      "attempts": []
+    },
+    {
+      "number": 30,
+      "display": "시나리오 X3",
+      "attempts": []
+    },
+    {
+      "number": 31,
+      "display": "시나리오 X4",
+      "attempts": []
+    }
+  ],
+  "coverage": {
+    "cleared_count": 0,
+    "required_count": 31,
+    "cleared_scenarios": [],
+    "in_progress_scenarios": [],
+    "blocked_scenarios": [],
+    "stale_scenarios": [],
+    "pending_scenarios": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "complete": false
+  }
+}
