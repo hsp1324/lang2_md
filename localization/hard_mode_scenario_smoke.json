@@ -7,6 +7,27 @@
   },
   "scenarios": [
     {
+      "number": 1,
+      "status": "runtime_loader_smoke_verified",
+      "endpoint": "자동 배치 후 출격",
+      "player_group_count": 2,
+      "target_record_count": 2,
+      "strict_runtime_target_record_count": 2,
+      "runtime_exception_record_count": 0,
+      "runtime_exception_indexes": [],
+      "runtime_group_range": [
+        10,
+        13
+      ],
+      "seed": "captures/analysis/0718_hard_s01_turn1_command.gst",
+      "seed_sha256": "a9be34a13f38616617ce806f6b63821d1c15433b44e4e9e5d1ef1394b09a9256",
+      "gst": "captures/analysis/hard_matrix_s01_turn1_entry.gst",
+      "gst_sha256": "b6bfe80f164ecbc47f7cd74c5fb3b10af6600c461e7d825b5cd2a86c48061db2",
+      "runtime_gst": "captures/runtime/hard-matrix-s01/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "capture": "captures/run/hard_matrix_s01.png",
+      "capture_sha256": "81fc89d0e8184fc12334fb62413decc6b87c85a0f0303cd003603fe4d38aa816"
+    },
+    {
       "number": 2,
       "status": "runtime_loader_smoke_verified",
       "endpoint": "자동 배치 후 출격",
@@ -512,6 +533,7 @@
   "coverage": {
     "scenario_count": 31,
     "smoke_scenarios": [
+      1,
       2,
       3,
       4,

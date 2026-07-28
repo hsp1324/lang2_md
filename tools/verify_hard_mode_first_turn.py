@@ -78,6 +78,7 @@ def entry_evidence(
                 "kind": "loader_smoke",
                 "path": ROOT / row["gst"],
                 "sha256": row["gst_sha256"],
+                "hash_locked": "runtime_gst" in row,
             }
     deep = load_json(deep_results_path)
     for row in deep.get("scenarios", []):
@@ -89,6 +90,7 @@ def entry_evidence(
                 "kind": "deep_runtime",
                 "path": ROOT / row["gst"],
                 "sha256": row["gst_sha256"],
+                "hash_locked": True,
             }
     raise ValueError(
         f"Scenario {scenario_number} has no verified hard-mode entry GST"
@@ -109,7 +111,7 @@ def validate_entry_evidence(
             f"Scenario {scenario_number} entry GST is on turn "
             f"{turn_counter(gst)}, not turn 1"
         )
-    if evidence["kind"] == "deep_runtime" and actual != evidence["sha256"]:
+    if evidence.get("hash_locked") and actual != evidence["sha256"]:
         raise ValueError(
             f"entry GST hash changed for {path}: "
             f"{actual} != {evidence['sha256']}"
@@ -150,6 +152,63 @@ def prepare_runtime(
     )
     shutil.copy2(source, destination)
     return runtime_name, destination, digest, player_group_count
+
+
+def prepare_running_runtime(
+    scenario_number: int,
+    *,
+    rom: Path,
+    evidence: dict,
+    display: str,
+) -> tuple[str, Path, str, int | None]:
+    pids = sequence_runner.running_blastem_pids(display=display)
+    if len(pids) != 1:
+        raise RuntimeError(
+            f"expected one BlastEm process on {display}, found {pids}"
+        )
+    runtime_name = f"hard-matrix-s{scenario_number:02d}"
+    quicksave = runtime_quicksave(runtime_name, rom)
+    if not quicksave.is_file():
+        raise FileNotFoundError(quicksave)
+    _, digest, player_group_count = validate_entry_evidence(
+        scenario_number,
+        evidence,
+    )
+    live_gst = quicksave.read_bytes()
+    if turn_counter(live_gst) != 1:
+        raise ValueError(
+            f"Scenario {scenario_number} running GST is on turn "
+            f"{turn_counter(live_gst)}, not turn 1"
+        )
+    live_player_group_count = loader_verifier.matching_player_group_count(
+        live_gst,
+        scenario_number,
+    )
+    if (
+        player_group_count is not None
+        and live_player_group_count != player_group_count
+    ):
+        raise ValueError(
+            f"Scenario {scenario_number} running player-group alignment "
+            f"{live_player_group_count} != retained {player_group_count}"
+        )
+    return runtime_name, quicksave, digest, live_player_group_count
+
+
+def retain_endpoint_gst(
+    scenario_number: int,
+    gst_bytes: bytes,
+) -> Path:
+    destination = (
+        ROOT
+        / "captures/analysis"
+        / f"hard_first_turn_s{scenario_number:02d}_endpoint.gst"
+    )
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_suffix(".gst.tmp")
+    temporary.write_bytes(gst_bytes)
+    temporary.replace(destination)
+    return destination
 
 
 def run_command(
@@ -337,8 +396,10 @@ def render_document(results: dict) -> str:
         "",
         "- Revalidate the source GST as Turn 1 and confirm every planned hard "
         "enemy runtime group before input.",
-        "- Copy the source GST into an isolated `hard-first-turn-sXX` runtime; "
-        "never advance the loader evidence in place.",
+        "- Preserve scenario-selector Turn 1 states as hash-locked snapshots. "
+        "Continue the live process when a scenario entry is not safely "
+        "resumable after a BlastEm relaunch; otherwise copy the source into "
+        "an isolated `hard-first-turn-sXX` runtime.",
         "- Advance completed dialogue one page at a time, choose the stock "
         "`턴 종료` command, and wait through event, AI, movement, and battle "
         "animation frames.",
@@ -350,10 +411,10 @@ def render_document(results: dict) -> str:
         "release ROM inputs.",
         "",
         "BlastEm rewrites its mutable runtime `quicksave.gst` when a process "
-        "closes. Loader-smoke entry files are therefore revalidated from RAM "
-        "content and the live digest is recorded instead of trusting an older "
-        "manifest digest alone. Retained deep-evidence GST files remain "
-        "strictly hash-locked.",
+        "closes. Newly retained entry and endpoint snapshots are therefore "
+        "stored under `captures/analysis` and strictly hash-locked. Older "
+        "loader-smoke runtime files are revalidated from RAM content instead "
+        "of trusting an older manifest digest alone.",
         "",
         "## Coverage",
         "",
@@ -411,47 +472,62 @@ def verify_scenario(
     keep_running: bool,
     retain_detector_frames: bool,
     emulator_speed: int,
+    resume_running: bool,
 ) -> dict:
     evidence = entry_evidence(scenario_number)
-    (
-        runtime_name,
-        quicksave,
-        entry_digest,
-        player_group_count,
-    ) = prepare_runtime(
-        scenario_number,
-        rom=rom,
-        evidence=evidence,
-    )
+    if resume_running:
+        (
+            runtime_name,
+            quicksave,
+            entry_digest,
+            player_group_count,
+        ) = prepare_running_runtime(
+            scenario_number,
+            rom=rom,
+            evidence=evidence,
+            display=display,
+        )
+    else:
+        (
+            runtime_name,
+            quicksave,
+            entry_digest,
+            player_group_count,
+        ) = prepare_runtime(
+            scenario_number,
+            rom=rom,
+            evidence=evidence,
+        )
     env = os.environ.copy()
     env["DISPLAY"] = display
     started = time.monotonic()
     try:
-        run_command([
-            sys.executable,
-            str(RUNNER),
-            "launch-only",
-            "--rom",
-            str(rom),
-            "--runtime-name",
-            runtime_name,
-            "--reuse-runtime-state",
-            "--virtual-display",
-            display,
-            "--replace-existing",
-            "--send-event",
-            "--initial-delay",
-            str(initial_delay),
-        ])
-        run_command(
-            [
+        if not resume_running:
+            run_command([
                 sys.executable,
-                str(KEY_SENDER),
+                str(RUNNER),
+                "launch-only",
+                "--rom",
+                str(rom),
+                "--runtime-name",
+                runtime_name,
+                "--reuse-runtime-state",
+                "--virtual-display",
+                display,
+                "--replace-existing",
                 "--send-event",
-                "load:2.0",
-            ],
-            env=env,
-        )
+                "--initial-delay",
+                str(initial_delay),
+            ])
+            run_command(
+                [
+                    sys.executable,
+                    str(KEY_SENDER),
+                    "--send-event",
+                    "load:2.0",
+                ],
+                env=env,
+            )
         opening_endpoint, opening_confirmations = run_detector(
             display=display,
             max_checks=opening_checks,
@@ -484,7 +560,9 @@ def verify_scenario(
                 "down:0.5",
                 "down:0.5",
                 "down:0.8",
-                "c:3.0",
+                # Start detection promptly. A hard-mode defeat can show and
+                # leave GAME OVER during the former three-second wait.
+                "c:0.6",
             ],
             env=env,
         )
@@ -526,6 +604,7 @@ def verify_scenario(
         gst_bytes = quicksave.read_bytes()
         counter = turn_counter(gst_bytes)
         endpoint = classify_endpoint(detector_endpoint, counter)
+        endpoint_gst = retain_endpoint_gst(scenario_number, gst_bytes)
         return {
             "number": scenario_number,
             "status": "first_turn_runtime_verified",
@@ -548,7 +627,7 @@ def verify_scenario(
             "opening_capture_sha256": sha256(opening_capture),
             "endpoint_capture": relative(endpoint_capture),
             "endpoint_capture_sha256": sha256(endpoint_capture),
-            "endpoint_gst": relative(quicksave),
+            "endpoint_gst": relative(endpoint_gst),
             "endpoint_gst_sha256": hashlib.sha256(gst_bytes).hexdigest(),
         }
     finally:
@@ -571,6 +650,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--confirmation-delay", type=float, default=0.3)
     parser.add_argument("--initial-delay", type=float, default=3.0)
     parser.add_argument("--keep-running", action="store_true")
+    parser.add_argument(
+        "--resume-running",
+        action="store_true",
+        help=(
+            "continue the hard-matrix scenario already open on the selected "
+            "display instead of reloading its GST"
+        ),
+    )
     parser.add_argument(
         "--retain-detector-frames",
         action="store_true",
@@ -606,6 +693,7 @@ def main() -> int:
         keep_running=args.keep_running,
         retain_detector_frames=args.retain_detector_frames,
         emulator_speed=args.emulator_speed,
+        resume_running=args.resume_running,
     )
     save_result(results_path, results, result)
     if results_path == DEFAULT_RESULTS.resolve():

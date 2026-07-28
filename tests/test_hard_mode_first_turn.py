@@ -9,7 +9,9 @@ from tools import verify_hard_mode_first_turn as first_turn
 class HardModeFirstTurnTests(unittest.TestCase):
     def test_entry_evidence_uses_loader_and_deep_manifests(self):
         self.assertEqual(first_turn.entry_evidence(2)["kind"], "loader_smoke")
-        self.assertEqual(first_turn.entry_evidence(1)["kind"], "deep_runtime")
+        self.assertEqual(first_turn.entry_evidence(1)["kind"], "loader_smoke")
+        self.assertTrue(first_turn.entry_evidence(1)["hash_locked"])
+        self.assertFalse(first_turn.entry_evidence(2)["hash_locked"])
 
     def test_retained_entry_hashes_match_manifests(self):
         for number in (1, 2, 16, 25, 27):
@@ -22,10 +24,11 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 first_turn.sha256(path),
                 digest,
             )
-            self.assertEqual(
-                digest,
-                evidence["sha256"],
-            )
+            if evidence["hash_locked"]:
+                self.assertEqual(
+                    digest,
+                    evidence["sha256"],
+                )
 
     def test_mutable_loader_entry_is_validated_by_runtime_data(self):
         evidence = first_turn.entry_evidence(31)
@@ -39,6 +42,17 @@ class HardModeFirstTurnTests(unittest.TestCase):
         data = bytearray(first_turn.TURN_COUNTER_FILE_OFFSET + 1)
         data[first_turn.TURN_COUNTER_FILE_OFFSET] = 2
         self.assertEqual(first_turn.turn_counter(bytes(data)), 2)
+
+    def test_retain_endpoint_gst_replaces_snapshot_atomically(self):
+        with tempfile.TemporaryDirectory() as directory:
+            original_root = first_turn.ROOT
+            try:
+                first_turn.ROOT = Path(directory)
+                destination = first_turn.retain_endpoint_gst(7, b"endpoint")
+                self.assertEqual(destination.read_bytes(), b"endpoint")
+                self.assertFalse(destination.with_suffix(".gst.tmp").exists())
+            finally:
+                first_turn.ROOT = original_root
 
     def test_endpoint_classification_requires_turn_two_command(self):
         self.assertEqual(

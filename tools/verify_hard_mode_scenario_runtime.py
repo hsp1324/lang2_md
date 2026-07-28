@@ -37,6 +37,7 @@ RUNNER = ROOT / "tools/run_blastem_sequence.py"
 KEY_SENDER = ROOT / "tools/send_blastem_keys.py"
 CAPTURE = ROOT / "tools/capture_blastem_window.py"
 RUNTIME_ROOT = ROOT / "captures/runtime"
+RETAINED_ENTRY_ROOT = ROOT / "captures/analysis"
 
 
 def sha256(path: Path) -> str:
@@ -62,6 +63,21 @@ def locate_quicksave(runtime_name: str) -> Path:
             f"expected one quicksave for {runtime_name}, found {len(matches)}"
         )
     return matches[0]
+
+
+def retain_entry_gst(
+    scenario_number: int,
+    gst_bytes: bytes,
+) -> Path:
+    destination = (
+        RETAINED_ENTRY_ROOT
+        / f"hard_matrix_s{scenario_number:02d}_turn1_entry.gst"
+    )
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_suffix(".gst.tmp")
+    temporary.write_bytes(gst_bytes)
+    temporary.replace(destination)
+    return destination
 
 
 def matching_player_group_count(gst: bytes, scenario_number: int) -> int:
@@ -243,6 +259,7 @@ def verify_scenario(
         gst_bytes,
         scenario_number,
     )
+    retained_gst = retain_entry_gst(scenario_number, gst_bytes)
     indexes = scenario_record_indexes(scenario_number)
     exception_indexes = scenario_runtime_exception_indexes(
         scenario_number
@@ -264,8 +281,9 @@ def verify_scenario(
         ],
         "seed": str(seed.relative_to(ROOT)),
         "seed_sha256": sha256(seed),
-        "gst": str(gst.relative_to(ROOT)),
+        "gst": str(retained_gst.relative_to(ROOT)),
         "gst_sha256": hashlib.sha256(gst_bytes).hexdigest(),
+        "runtime_gst": str(gst.relative_to(ROOT)),
         "capture": str(capture.relative_to(ROOT)),
         "capture_sha256": sha256(capture),
     }

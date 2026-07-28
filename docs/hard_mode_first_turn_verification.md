@@ -5,24 +5,25 @@ This document records no-action first-turn playback on the separate Standard Har
 ## Method
 
 - Revalidate the source GST as Turn 1 and confirm every planned hard enemy runtime group before input.
-- Copy the source GST into an isolated `hard-first-turn-sXX` runtime; never advance the loader evidence in place.
+- Preserve scenario-selector Turn 1 states as hash-locked snapshots. Continue the live process when a scenario entry is not safely resumable after a BlastEm relaunch; otherwise copy the source into an isolated `hard-first-turn-sXX` runtime.
 - Advance completed dialogue one page at a time, choose the stock `턴 종료` command, and wait through event, AI, movement, and battle animation frames.
 - Accept only a real Turn 2 command menu or the scenario's normal GAME OVER path. The Turn 2 endpoint is also checked against work-RAM counter `$FFFFA5F1`.
 - Store endpoint screenshots, GST paths, and SHA-256 values in the JSON manifest. Runtime captures are local evidence and are not release ROM inputs.
 
-BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Loader-smoke entry files are therefore revalidated from RAM content and the live digest is recorded instead of trusting an older manifest digest alone. Retained deep-evidence GST files remain strictly hash-locked.
+BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Newly retained entry and endpoint snapshots are therefore stored under `captures/analysis` and strictly hash-locked. Older loader-smoke runtime files are revalidated from RAM content instead of trusting an older manifest digest alone.
 
 ## Coverage
 
 - Status: `in_progress`
-- Verified: 4/31
-- Verified scenarios: 28, 29, 30, 31
-- Missing scenarios: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+- Verified: 5/31
+- Verified scenarios: 1, 28, 29, 30, 31
+- Missing scenarios: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
 
 ## Results
 
 | Scenario | Endpoint | Opening confirmations | Phase confirmations | Speed | Elapsed |
 |---:|---|---:|---:|---:|---:|
+| 1 | `turn_2_command` | 4 | 30 | 100% | 145.4s |
 | 28 | `turn_2_command` | 13 | 3 | 100% | 194.6s |
 | 29 | `turn_2_command` | 5 | 4 | 100% | 239.1s |
 | 30 | `game_over_turn_1` | 12 | 1 | 100% | 126.0s |

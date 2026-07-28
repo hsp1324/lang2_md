@@ -8,6 +8,20 @@ from tools import verify_hard_mode_runtime_evidence as runtime_evidence
 
 
 class HardModeScenarioRuntimeTests(unittest.TestCase):
+    def test_retain_entry_gst_replaces_snapshot_atomically(self):
+        with tempfile.TemporaryDirectory() as directory:
+            original_root = scenario_runtime.RETAINED_ENTRY_ROOT
+            try:
+                scenario_runtime.RETAINED_ENTRY_ROOT = Path(directory)
+                destination = scenario_runtime.retain_entry_gst(
+                    4,
+                    b"entry",
+                )
+                self.assertEqual(destination.read_bytes(), b"entry")
+                self.assertFalse(destination.with_suffix(".gst.tmp").exists())
+            finally:
+                scenario_runtime.RETAINED_ENTRY_ROOT = original_root
+
     def test_matching_player_group_count_finds_retained_scenario_sixteen(self):
         gst = scenario_runtime.runtime_evidence.SCENARIO_SIXTEEN_GST.read_bytes()
         self.assertEqual(
