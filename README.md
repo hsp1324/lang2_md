@@ -160,8 +160,11 @@ python3 tools/rom_version.py --profile normal --json
 ## 세이브를 유지하는 한국어판 업데이트
 
 현재 배포 ROM은
-`localization/rom_update_releases.json`의 `ko-99fd`로 해시가 고정되어
-있습니다. 한국어 수정 전에 직전 ROM을 보관합니다.
+`localization/rom_update_releases.json`의 `ko-1.0.0`으로 해시가
+고정되어 있으며
+`roms/releases/Langrisser II (Korean v1.0.0).md`에 보관합니다.
+이전 `ko-99fd`도 같은 디렉터리에 남겨 업데이트 원본으로 사용합니다.
+다음 한국어 수정 전에 현재 ROM을 보관합니다.
 
 ```bash
 python3 tools/archive_rom_release.py
@@ -172,10 +175,11 @@ python3 tools/archive_rom_release.py
 
 ```bash
 python3 tools/build_rom_update_package.py \
-  --target-release ko-2026.08.01.1 \
+  --target-rom "roms/releases/Langrisser II (Korean v1.0.0).md" \
+  --target-release ko-1.0.0 \
   --source \
     "ko-99fd=roms/releases/Langrisser II (Korean ko-99fd).md" \
-  --output "dist/Langrisser-II-Korean-update.zip"
+  --output "dist/Langrisser-II-Korean-v1.0.0-update.zip"
 ```
 
 플레이어 적용기는 지원 ROM의 SHA-256을 먼저 확인하고, 새 ROM을 임시

@@ -4,7 +4,7 @@
   "current_profile": "normal",
   "profiles": {
     "normal": {
-      "status": "release_candidate",
+      "status": "released",
       "release_id": "ko-1.0.0",
       "translation_version": "1.0.0",
       "balance_version": null,

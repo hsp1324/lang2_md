@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class RomVersionTests(unittest.TestCase):
     def test_normal_profile_is_first_semantic_release(self):
         profile = rom_version.get_profile("normal")
+        self.assertEqual(profile["status"], "released")
         self.assertEqual(profile["release_id"], "ko-1.0.0")
         self.assertEqual(profile["translation_version"], "1.0.0")
         self.assertIsNone(profile["balance_version"])

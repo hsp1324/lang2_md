@@ -284,13 +284,13 @@ class ReleaseRegistryTests(unittest.TestCase):
         registry = json.loads(
             RELEASE_REGISTRY.read_text(encoding="utf-8")
         )
-        self.assertEqual(registry["current_release"], "ko-99fd")
+        self.assertEqual(registry["current_release"], "ko-1.0.0")
         record = next(
             row
             for row in registry["releases"]
             if row["release_id"] == registry["current_release"]
         )
-        payload = PRODUCTION_ROM.read_bytes()
+        payload = (ROOT / record["rom_path"]).read_bytes()
         self.assertEqual(record["size"], len(payload))
         self.assertEqual(record["sha256"], rom_update.sha256_bytes(payload))
         self.assertEqual(
