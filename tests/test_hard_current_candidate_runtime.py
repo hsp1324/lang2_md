@@ -29,7 +29,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
             [row["number"] for row in self.model["scenarios"]],
             [
                 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18,
+                18, 19, 20,
             ],
         )
         row = self.model["scenarios"][0]
@@ -304,6 +304,42 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(
             row["capture_sha256"],
             "12d6fbf153b691607ea598db75bd33ca3bcfac06cb916ebd7ad41dbd565d2010",
+        )
+
+    def test_scenario_nineteen_runtime_targets_are_verified(self) -> None:
+        row = self.model["scenarios"][15]
+        self.assertEqual(row["number"], 19)
+        self.assertEqual(row["status"], "runtime_loader_smoke_verified")
+        self.assertEqual(row["player_group_count"], 8)
+        self.assertEqual(row["target_record_count"], 10)
+        self.assertEqual(row["strict_runtime_target_record_count"], 10)
+        self.assertEqual(row["runtime_exception_record_count"], 0)
+        self.assertEqual(row["runtime_group_range"], [8, 17])
+        self.assertEqual(
+            row["gst_sha256"],
+            "23a6b67050d9eae1eaa0e809fce8e606bbc6048ecb797bd3ff49f2975a9e0856",
+        )
+        self.assertEqual(
+            row["capture_sha256"],
+            "c83db18ea9ec67c0180c4c3e0c6d159772fc6576658ab10b339224819a023f5b",
+        )
+
+    def test_scenario_twenty_runtime_targets_are_verified(self) -> None:
+        row = self.model["scenarios"][16]
+        self.assertEqual(row["number"], 20)
+        self.assertEqual(row["status"], "runtime_loader_smoke_verified")
+        self.assertEqual(row["player_group_count"], 8)
+        self.assertEqual(row["target_record_count"], 10)
+        self.assertEqual(row["strict_runtime_target_record_count"], 10)
+        self.assertEqual(row["runtime_exception_record_count"], 0)
+        self.assertEqual(row["runtime_group_range"], [8, 17])
+        self.assertEqual(
+            row["gst_sha256"],
+            "0f3bd3e1baa162b53ae33aad155e04bebb50f43f829508be590cc50455e0dae5",
+        )
+        self.assertEqual(
+            row["capture_sha256"],
+            "67f6c861eb53ad831384fb9b2dc7275df6a325eadfaf7d4c6026a60da20c36f2",
         )
 
 

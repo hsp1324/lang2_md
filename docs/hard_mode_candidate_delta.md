@@ -161,3 +161,14 @@ BlastEm 프로세스와 동일 저장 슬롯은 유지됐다. 같은 런타임�
 준비 화면, 자동 배치, 출격을 통과했으며 ROM 재시작이나 타 ROM GST
 이식은 없었다. 화면은 `captures/run/hard_8674_s17_entry.png`와
 `captures/run/hard_8674_s18_entry.png`에 보존한다.
+
+시나리오 19와 20도 직전 최신 후보 상태에서 연속 진입했으며 런타임
+예외 없이 모든 하드 대상 레코드가 일치했다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 19 | 8 | 10/10 | 8~17 | `23a6b67050d9eae1eaa0e809fce8e606bbc6048ecb797bd3ff49f2975a9e0856` |
+| 20 | 8 | 10/10 | 8~17 | `0f3bd3e1baa162b53ae33aad155e04bebb50f43f829508be590cc50455e0dae5` |
+
+화면은 `captures/run/hard_8674_s19_entry.png`와
+`captures/run/hard_8674_s20_entry.png`에 보존한다.
