@@ -14,10 +14,10 @@ BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Newl
 
 ## Coverage
 
-- Status: `in_progress`
-- Verified: 28/31
-- Verified scenarios: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30, 31
-- Missing scenarios: 25, 26, 27
+- Status: `all_scenarios_first_turn_verified`
+- Verified: 31/31
+- Verified scenarios: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+- Missing scenarios: none
 
 ## Results
 
@@ -47,6 +47,9 @@ BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Newl
 | 22 | `turn_2_command` | 9 | 4 | 100% | 150.6s |
 | 23 | `turn_2_command` | 12 | 4 | 100% | 193.3s |
 | 24 | `turn_2_command` | 1 | 3 | 100% | 149.2s |
+| 25 | `game_over_turn_1` | 17 | 12 | 300% | 105.0s |
+| 26 | `game_over_turn_1` | 6 | 9 | 300% | 69.9s |
+| 27 | `game_over_turn_1` | 15 | 2 | 300% | 93.3s |
 | 28 | `turn_2_command` | 13 | 3 | 100% | 194.6s |
 | 29 | `turn_2_command` | 5 | 4 | 100% | 239.1s |
 | 30 | `game_over_turn_1` | 12 | 1 | 100% | 126.0s |

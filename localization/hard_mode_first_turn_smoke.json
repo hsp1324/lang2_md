@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "in_progress",
+  "status": "all_scenarios_first_turn_verified",
   "hard_rom": {
     "path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
     "sha256": "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac"
@@ -650,6 +650,78 @@
       "endpoint_gst_sha256": "68dbe5e9664b061c073beef54578f20f87482794795058621c94c02125c86e1a"
     },
     {
+      "number": 25,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "game_over_turn_1",
+      "turn_counter": 1,
+      "opening_confirmations": 17,
+      "phase_dialogue_confirmations": 12,
+      "elapsed_seconds": 105.0,
+      "emulator_speed_percent": 300,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s25_turn1_entry.gst",
+        "gst_sha256": "da964ea31280741cd8abd6c7a12cb9ba6e59d99cbb44d58cd0173fbf748ba307",
+        "manifest_gst_sha256": "da964ea31280741cd8abd6c7a12cb9ba6e59d99cbb44d58cd0173fbf748ba307",
+        "player_group_count": 9
+      },
+      "opening_capture": "captures/run/hard_first_turn_s25_command.png",
+      "opening_capture_sha256": "722c4ae0b6b843f3b6c7b030b5abc672d7f1bb2dfcde9a04e9744ecaf74166c4",
+      "endpoint_capture": "captures/run/hard_first_turn_s25_endpoint.png",
+      "endpoint_capture_sha256": "77d96dbba8c3b200125dbc75091df7e889f2ec04d54ccea43608c54dcbfebb64",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s25_endpoint.gst",
+      "endpoint_gst_sha256": "8c3f09d69d31c931dc62e32b58bd9eee0571a25a4d86ac8f59652e437ce736f6"
+    },
+    {
+      "number": 26,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "game_over_turn_1",
+      "turn_counter": 1,
+      "opening_confirmations": 6,
+      "phase_dialogue_confirmations": 9,
+      "elapsed_seconds": 69.9,
+      "emulator_speed_percent": 300,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s26_turn1_entry.gst",
+        "gst_sha256": "32ecde71d845f9d9f64e219e51def21b3e18907d84e88edbb6889b84f3a1ed85",
+        "manifest_gst_sha256": "32ecde71d845f9d9f64e219e51def21b3e18907d84e88edbb6889b84f3a1ed85",
+        "player_group_count": 10
+      },
+      "opening_capture": "captures/run/hard_first_turn_s26_command.png",
+      "opening_capture_sha256": "ae35b5bb6d2cf22884aac21ee59f09cbbb4664e6336302ca07b52de0f299f38f",
+      "endpoint_capture": "captures/run/hard_first_turn_s26_endpoint.png",
+      "endpoint_capture_sha256": "ddf151cb5ab705f01e58744584641b6600866fc454c3863603d157b494f7eb51",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s26_endpoint.gst",
+      "endpoint_gst_sha256": "faed7d88bc970a6cfff35a92a43bb737ac3ed3876a929534d5c559ae0ace2e5b"
+    },
+    {
+      "number": 27,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "game_over_turn_1",
+      "turn_counter": 1,
+      "opening_confirmations": 15,
+      "phase_dialogue_confirmations": 2,
+      "elapsed_seconds": 93.3,
+      "emulator_speed_percent": 300,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/analysis/hard_matrix_s27_turn1_entry.gst",
+        "gst_sha256": "127dda823dd026e5759616ee5b1e3d0dde5cc583355388f43c17ee3148a39c88",
+        "manifest_gst_sha256": "127dda823dd026e5759616ee5b1e3d0dde5cc583355388f43c17ee3148a39c88",
+        "player_group_count": 10
+      },
+      "opening_capture": "captures/run/hard_first_turn_s27_command.png",
+      "opening_capture_sha256": "b3f3b5e5d2a6ca9d0a84428011bf2d45a4a591eb61e96a4b9f9014d9e9e36be3",
+      "endpoint_capture": "captures/run/hard_first_turn_s27_endpoint.png",
+      "endpoint_capture_sha256": "f030663692930f320311ee5d427a2a29308c2003385523fbce9c621e3e4a99a5",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s27_endpoint.gst",
+      "endpoint_gst_sha256": "13e5670c594cb3e1ee22892db5a3c144edfbb074e8deaa3a38fd5175852c2f82"
+    },
+    {
       "number": 28,
       "status": "first_turn_runtime_verified",
       "endpoint": "turn_2_command",
@@ -766,15 +838,14 @@
       22,
       23,
       24,
+      25,
+      26,
+      27,
       28,
       29,
       30,
       31
     ],
-    "missing_scenarios": [
-      25,
-      26,
-      27
-    ]
+    "missing_scenarios": []
   }
 }
