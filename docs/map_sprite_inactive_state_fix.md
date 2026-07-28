@@ -94,3 +94,46 @@ Candidate:
 Focused tests pass 68/68. `tests/test_map_sprite_gray_source_remap.py` locks
 the mapping, hook, table, source IDs, blank-space ownership, and old word-wrap
 failure.
+
+## Current Hard Candidate
+
+The same symptom was reported again while playing the unchanged `1.0.0/1.0.0`
+release ROM. This does not indicate that the remap regressed:
+
+- released predecessor checksum `1011`, SHA-256
+  `c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b`
+  still contains the stock bytes `02 80 00 00 FF FF` at `0x011DD8`;
+- current build checksum `8674`, SHA-256
+  `142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27`
+  contains the jump `4E F9 00 2B 8D 40`;
+- the current build's complete hook, routine, and 53-entry table are
+  byte-identical to the live-verified gray-remap candidate.
+
+`tests/test_hard_candidate_delta.py` now validates the current hard ROM's
+semantic hook, generated routine, and generated table directly, in addition
+to locking its hash. The release file remains unchanged until the user
+explicitly approves a new release.
+
+Fresh exact-current playback then recovered a valid manual slot under checksum
+`8674`, entered Scenario 3 normally, and set only Hein's class to Shaman before
+entry. The live runtime sequence was:
+
+| State | Class/commander | Acted | Position | Capture |
+| --- | --- | ---: | --- | --- |
+| active on turn 1 | `0A/05` | `00` | `(0F,14)` | `captures/run/hard_8674_s03_shaman_fresh5_hein_command.png` |
+| actual one-tile move complete | `0A/05` | `01` | `(0E,14)` | `captures/run/hard_8674_s03_shaman_inactive_actual.png` |
+| active again on turn 2 | `0A/05` | `00` | `(0E,14)` | `captures/run/hard_8674_s03_shaman_turn2_active_actual.png` |
+
+The complete gray payload at VRAM `0x9680` in
+`captures/analysis/hard_8674_s03_shaman_inactive_actual.gst` is byte-identical
+to the stock 68000 routine's software expansion of original Shaman silhouette
+ID `0x37`. The current build therefore fixes the reported active -> gray ->
+active sequence; the still-published checksum-`1011` release does not contain
+this fix.
+
+Do not load a GST captured from another ROM hash as live proof, and do not
+change an acted flag inside a paused GST and treat its cached frame as proof.
+Both diagnostics can display a cached map and then reset on the next input.
+Emulator proof must start or recover a manual save under the exact candidate
+ROM and reach the acted state through the real movement command, as the
+checksum-`8674` verification above did.

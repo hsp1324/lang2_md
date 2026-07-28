@@ -4,6 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from scripts import build_korean_jp_probe as builder
 from tools import verify_hard_candidate_delta as verifier
 
 
@@ -27,6 +28,43 @@ class HardCandidateDeltaTests(unittest.TestCase):
             self.model["after"]["sha256"],
         )
         self.assertEqual(self.model["after"]["md_checksum"], "8674")
+
+    def test_current_build_contains_inactive_sprite_remap(self) -> None:
+        mapping = builder.custom_map_sprite_gray_source_map(
+            builder.IN_ROM.read_bytes()
+        )
+        first_custom_id = min(mapping)
+        last_custom_id = max(mapping)
+        hook = builder.MAP_SPRITE_GRAY_SOURCE_HOOK
+        self.assertEqual(
+            self.hard[hook:hook + 6],
+            bytes.fromhex("4E F9")
+            + builder.MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE.to_bytes(
+                4, "big"
+            ),
+        )
+
+        expected_routine = (
+            builder._build_map_sprite_gray_source_remap_routine(
+                first_custom_id,
+                last_custom_id,
+            )
+        )
+        routine = builder.MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE
+        self.assertEqual(
+            self.hard[routine:routine + len(expected_routine)],
+            expected_routine,
+        )
+
+        expected_table = b"".join(
+            mapping[sprite_id].to_bytes(2, "big")
+            for sprite_id in range(first_custom_id, last_custom_id + 1)
+        )
+        table = builder.MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE
+        self.assertEqual(
+            self.hard[table:table + len(expected_table)],
+            expected_table,
+        )
 
     def test_delta_is_ui_and_sprite_only(self) -> None:
         delta = self.model["delta"]
