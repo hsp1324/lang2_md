@@ -15,14 +15,16 @@ BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Load
 ## Coverage
 
 - Status: `in_progress`
-- Verified: 1/31
-- Verified scenarios: 28
-- Missing scenarios: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31
+- Verified: 3/31
+- Verified scenarios: 28, 29, 30
+- Missing scenarios: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 31
 
 ## Results
 
 | Scenario | Endpoint | Opening confirmations | Phase confirmations | Elapsed |
 |---:|---|---:|---:|---:|
 | 28 | `turn_2_command` | 13 | 3 | 194.6s |
+| 29 | `turn_2_command` | 5 | 4 | 239.1s |
+| 30 | `game_over_turn_1` | 12 | 1 | 126.0s |
 
 `turn_2_command` proves that the stock first-turn event and faction phases returned to a playable command state. `game_over_turn_1` is accepted only where the no-action route naturally defeats the party; it does not claim a successful scenario clear.

@@ -742,7 +742,10 @@ def battle_map_surface_visible(path: Path) -> bool:
     # Battle maps retain the framed status bar while SCENARIO/TURN banners
     # close and while the cursor waits on its first commander. Preparation
     # screens fill more of this band with blue and have less of this frame.
-    return 0.45 < blue_ratio < 0.505 and gold_ratio > 0.08
+    # Secret Scenario X4's crowded status row is only about 41.5% blue. The
+    # preparation screens that can reach this blue range have less than 8%
+    # gold in the same band, so the frame check still separates them.
+    return 0.40 < blue_ratio < 0.55 and gold_ratio > 0.08
 
 
 def battle_dialogue_visible(path: Path) -> bool:
@@ -918,19 +921,22 @@ def wait_for_dialogue_stability(
     frame: Path,
     *,
     max_checks: int = 8,
-) -> None:
+) -> bool:
     previous = dialogue_text_fingerprint(frame)
     stable_checks = 0
     for _ in range(max_checks):
         time.sleep(max(args.confirmation_delay, 0.25))
         capture_window(frame, xlib_only=args.xlib_capture)
         if not battle_dialogue_visible(frame):
-            raise RuntimeError("dialogue disappeared before its text stabilized")
+            # Some event and battle-result panels overlap the broad dialogue
+            # crop but close automatically. Do not send C into the screen that
+            # follows; let the outer detector classify its next stable frame.
+            return False
         current = dialogue_text_fingerprint(frame)
         if current == previous:
             stable_checks += 1
             if stable_checks >= 2:
-                return
+                return True
         else:
             stable_checks = 0
         previous = current
@@ -995,7 +1001,8 @@ def advance_to_battle_command(
         if step == args.max_confirmations:
             break
         if battle_dialogue_visible(frame):
-            wait_for_dialogue_stability(args, frame)
+            if not wait_for_dialogue_stability(args, frame):
+                continue
             status = subprocess.call(
                 make_key_command(args, [f"c:{args.confirmation_delay}"]),
                 cwd=ROOT,

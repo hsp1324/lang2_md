@@ -63,6 +63,23 @@ class BlastemCommandDetectionTests(unittest.TestCase):
 
             self.assertTrue(runner.battle_map_surface_visible(path))
 
+    def test_crowded_secret_scenario_status_bar_is_detected(self):
+        with TemporaryDirectory() as temporary_directory:
+            path = Path(temporary_directory) / "secret-battle-map.png"
+            image = Image.new("RGB", (320, 240), (48, 128, 48))
+            pixels = image.load()
+            for y in range(195, 235):
+                for x in range(320):
+                    pixels[x, y] = (
+                        (0, 0, 119) if x % 20 < 10 else (0, 0, 0)
+                    )
+            for y in range(195, 235):
+                for x in range(0, 320, 10):
+                    pixels[x, y] = (160, 112, 32)
+            image.save(path)
+
+            self.assertTrue(runner.battle_map_surface_visible(path))
+
     @mock.patch.object(runner.time, "sleep")
     @mock.patch.object(runner.subprocess, "call")
     @mock.patch.object(runner, "battle_dialogue_visible")
@@ -150,6 +167,30 @@ class BlastemCommandDetectionTests(unittest.TestCase):
                 runner.dialogue_text_fingerprint(frame),
                 runner.dialogue_text_fingerprint(complete_path),
             )
+
+    @mock.patch.object(
+        runner,
+        "battle_dialogue_visible",
+        return_value=False,
+    )
+    @mock.patch.object(runner, "capture_window")
+    @mock.patch.object(runner.time, "sleep")
+    def test_auto_closing_panel_does_not_request_confirmation(
+        self,
+        sleep,
+        capture_window,
+        battle_dialogue_visible,
+    ):
+        with TemporaryDirectory() as temporary_directory:
+            frame = Path(temporary_directory) / "panel.png"
+            Image.new("RGB", (320, 240), (0, 0, 119)).save(frame)
+
+            self.assertFalse(
+                runner.wait_for_dialogue_stability(self.args(), frame)
+            )
+
+            capture_window.assert_called_once()
+            battle_dialogue_visible.assert_called_once_with(frame)
 
     @mock.patch.object(runner.subprocess, "call")
     @mock.patch.object(runner, "battle_dialogue_visible")
