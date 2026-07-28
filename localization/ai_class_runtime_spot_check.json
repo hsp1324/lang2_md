@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "date": "2026-07-28",
+  "rom": {
+    "path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "size": 4194304,
+    "md_checksum": "1011",
+    "sha256": "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b"
+  },
+  "method": {
+    "tool": "tools/capture_class_change_application.py",
+    "display": ":114",
+    "full_playthrough": false,
+    "mercenary_hiring_or_manual_movement": false,
+    "description": "A disposable diagnostic ROM entered each stock class-change result directly, returned to the map, waited three seconds, opened the status panel, and verified class and commander IDs in the saved GST."
+  },
+  "contact_sheet": {
+    "path": "docs/assets/ai_class_runtime_spot_check.png",
+    "sha256": "6f76bc28865b07b27b222bf707a3a4009ba32527c46a0c5be17d1e60cd394942"
+  },
+  "checks": [
+    {
+      "class_id": "0x04",
+      "class_name": "로드",
+      "commander_id": 1,
+      "probe_md_checksum": "D469",
+      "status_capture": "captures/run/c462_lord_applied_status.png",
+      "stable_map_capture": "captures/run/c462_lord_stable_map.png",
+      "result": "passed"
+    },
+    {
+      "class_id": "0x0B",
+      "class_name": "하이로드",
+      "commander_id": 4,
+      "probe_md_checksum": "D47A",
+      "status_capture": "captures/run/c462_highlord_applied_status.png",
+      "stable_map_capture": "captures/run/c462_highlord_stable_map.png",
+      "result": "passed"
+    },
+    {
+      "class_id": "0x13",
+      "class_name": "메이지",
+      "commander_id": 5,
+      "probe_md_checksum": "D47C",
+      "status_capture": "captures/run/c462_mage_applied_status.png",
+      "stable_map_capture": "captures/run/c462_mage_stable_map.png",
+      "result": "passed"
+    },
+    {
+      "class_id": "0x14",
+      "class_name": "아크메이지",
+      "commander_id": 2,
+      "probe_md_checksum": "D495",
+      "status_capture": "captures/run/c462_archmage_applied_status.png",
+      "stable_map_capture": "captures/run/c462_archmage_stable_map.png",
+      "result": "passed"
+    },
+    {
+      "class_id": "0x11",
+      "class_name": "프리스트",
+      "commander_id": 5,
+      "probe_md_checksum": "D482",
+      "status_capture": "captures/run/c462_priest_applied_status.png",
+      "stable_map_capture": "captures/run/c462_priest_stable_map.png",
+      "result": "passed"
+    },
+    {
+      "class_id": "0x16",
+      "class_name": "하이프리스트",
+      "commander_id": 5,
+      "probe_md_checksum": "D491",
+      "status_capture": "captures/run/c462_highpriest_applied_status.png",
+      "stable_map_capture": "captures/run/c462_highpriest_stable_map.png",
+      "result": "passed"
+    }
+  ]
+}

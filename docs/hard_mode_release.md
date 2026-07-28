@@ -4,9 +4,9 @@
 
 - ROM: `roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`
 - 릴리스 ID: `ko-hard-t1.0.0-b1.0.0`
-- MD 체크섬: `0718`
+- MD 체크섬: `1011`
 - SHA-256:
-  `18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac`
+  `c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b`
 - 크기: 4 MiB
 - 세이브 형식: `lang2-ko-sram-v1`
 - SRAM 설명자: `5241F8200040000100403FFF`
@@ -25,26 +25,38 @@
 - 소환물 병사 교체는 런타임 안전성이 충분히 확인되지 않아 보류
 - 하드판 타이틀만 영문 로고를 금색 계열로 바꾸고 `하드 모드`,
   `새 게임(하드)`를 표시
+- 메이지·아크메이지·로드·하이로드·프리스트·하이프리스트의 승인된
+  지휘관별 새 맵 스프라이트 40개 적용
 
 정확한 장별 수치와 주소는 `docs/hard_mode_changes.md` 및
 `localization/hard_mode_plan.json`에 기록한다.
 
 ## 검증 상태
 
-ROM 크기, 소유 주소 범위, 300개 레코드의 적용값, MD 체크섬, SRAM
-설명자 및 일반판 불변 검사는 자동 테스트로 통과했다.
+현재 `1011` 후보는 ROM 크기, 소유 주소 범위, 300개 레코드의 적용값,
+40개 클래스 스프라이트의 매핑·두 프레임 데이터, MD 체크섬, SRAM
+설명자 및 일반판 불변 검사를 자동 테스트로 통과했다. 완성 ROM에서
+40개 스프라이트를 다시 추출한 결과는
+`localization/ai_class_map_sprite_rom.json`과
+`docs/assets/ai_class_map_sprite_rom_contact_sheet.png`에 기록했다.
 
-- 31/31개 시나리오에서 자동 배치·출격 후 하드 대상의 실제 RAM
+- 직전 `0718` 후보는 31/31개 시나리오에서 자동 배치·출격 후 하드 대상의 실제 RAM
   적재값을 확인했다:
   `localization/hard_mode_scenario_smoke.json`
-- 31/31개 시나리오에서 대사를 넘기고 첫 턴을 종료했다. 24개 장은
+- 직전 `0718` 후보는 31/31개 시나리오에서 대사를 넘기고 첫 턴을 종료했다. 24개 장은
   2턴 명령창으로 돌아왔고, 시나리오 6·13은 변경 불가 일반판과 같은
   첫 턴 패배·타이틀 복귀, 시나리오 25·26·27·X3·X4는 정상 GAME
   OVER를 확인했다:
   `localization/hard_mode_first_turn_smoke.json`,
   `docs/hard_mode_first_turn_verification.md`
-- 하드 모드 단위 테스트 75개와 에뮬레이터 입출력·감지 회귀 테스트
-  72개를 통과했다.
+- 현재 후보는 전체 장 공략이나 용병 고용·이동 없이 일회용 진단
+  ROM으로 여섯 변경 클래스에 직접 진입했다. 각 클래스가 변경 후
+  맵으로 복귀하고, 3초 안정 대기와 상태창 표시를 통과했으며 GST의
+  클래스·지휘관 ID도 일치했다:
+  `localization/ai_class_runtime_spot_check.json`,
+  `docs/assets/ai_class_runtime_spot_check.png`
+- 빌드·스프라이트·체크섬·SRAM·일반판 불변성 관련 정적 검사 62개를
+  통과했다.
 
 이 검증은 모든 장의 로딩, 첫 턴 이벤트, 진영 진행과 기본 진행
 가능성을 확인한 것이다. 실제 난이도, 전투 감각, 장 전체 클리어

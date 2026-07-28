@@ -288,6 +288,32 @@ def apply_hard_mode(
             "loader_routine": f"0x{SOLDIER_CORRECTION_ROUTINE:06X}",
             "correction_table": f"0x{SOLDIER_CORRECTION_TABLE:06X}",
             "shared_class_records_modified": False,
+            "custom_class_map_sprites": {
+                "count": len(
+                    korean_builder.AI_CLASS_MAP_SPRITE_SPECS
+                ),
+                "class_ids": [
+                    f"0x{class_id:02X}"
+                    for class_id in sorted({
+                        class_id
+                        for _, class_id, _ in (
+                            korean_builder.AI_CLASS_MAP_SPRITE_SPECS
+                        )
+                    })
+                ],
+                "sprite_id_range": [
+                    (
+                        "0x"
+                        f"{korean_builder.AI_CLASS_MAP_SPRITE_SPECS[0][2]:04X}"
+                    ),
+                    (
+                        "0x"
+                        f"{korean_builder.AI_CLASS_MAP_SPRITE_SPECS[-1][2]:04X}"
+                    ),
+                ],
+                "animation_frames": 2,
+                "source": "editor/static/ai-class-sprites",
+            },
             "title_identity": {
                 "new_game_label": korean_builder.TITLE_HARD_MAIN_MENU_START_TEXT,
                 "marker": korean_builder.TITLE_HARD_MARKER_TEXT,

@@ -5,13 +5,13 @@
   "approval_confirmation": "표준 하드로 해줘",
   "base": {
     "size": 4194304,
-    "sha256": "6589f594324dde22834923a6e0c87ea6a2b3ad65063dd5cfa33379fe568d519b",
+    "sha256": "55281753a566e58ef9b2b3bb4cf2ee0a1f454faa1a26ff6a7a75819b6856afbf",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "hard": {
     "size": 4194304,
-    "header_checksum": "0718",
-    "sha256": "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
+    "header_checksum": "1011",
+    "sha256": "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "implementation": {
@@ -25,6 +25,23 @@
     "loader_routine": "0x300000",
     "correction_table": "0x300080",
     "shared_class_records_modified": false,
+    "custom_class_map_sprites": {
+      "count": 40,
+      "class_ids": [
+        "0x04",
+        "0x0B",
+        "0x11",
+        "0x13",
+        "0x14",
+        "0x16"
+      ],
+      "sprite_id_range": [
+        "0x53BA",
+        "0x53E1"
+      ],
+      "animation_frames": 2,
+      "source": "editor/static/ai-class-sprites"
+    },
     "title_identity": {
       "new_game_label": "새 게임(하드)",
       "marker": "하드 모드",

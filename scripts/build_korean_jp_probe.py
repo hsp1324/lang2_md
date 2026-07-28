@@ -224,6 +224,61 @@ PAIRED_NPC_MAP_SPRITES = {
     },
 }
 
+# The accepted AI-class editor designs are 16x16 map sprites. Only entries
+# marked as redesigned in the reviewed manifest are promoted to production.
+# Each commander/class pair gets a private expansion-backed sprite so changing
+# one class cannot overwrite another commander's face or equipment.
+AI_CLASS_MAP_SPRITE_ASSET_ROOT = Path("editor/static/ai-class-sprites")
+AI_CLASS_MAP_SPRITE_START_ID = 0x53BA
+AI_CLASS_MAP_SPRITE_CLASSES_BY_COMMANDER = {
+    1: (0x04, 0x0B, 0x13, 0x14),
+    2: (0x0B, 0x11, 0x13, 0x14, 0x16),
+    3: (0x0B, 0x11, 0x13, 0x14, 0x16),
+    4: (0x04, 0x0B, 0x13, 0x14),
+    5: (0x0B, 0x11, 0x13, 0x14, 0x16),
+    6: (0x04, 0x0B),
+    7: (0x04, 0x0B, 0x11, 0x16),
+    8: (0x04, 0x0B, 0x13, 0x14),
+    9: (0x13, 0x14),
+    10: (0x0B, 0x11, 0x13, 0x14, 0x16),
+}
+AI_CLASS_MAP_SPRITE_SPECS = tuple(
+    (
+        commander_id,
+        class_id,
+        AI_CLASS_MAP_SPRITE_START_ID + index,
+    )
+    for index, (commander_id, class_id) in enumerate(
+        (
+            (commander_id, class_id)
+            for commander_id, class_ids in (
+                AI_CLASS_MAP_SPRITE_CLASSES_BY_COMMANDER.items()
+            )
+            for class_id in class_ids
+        )
+    )
+)
+# CRAM row 1 is the live commander map palette. These RGB values are exact
+# Mega Drive channel steps, not editor-only colors.
+AI_CLASS_MAP_PALETTE = (
+    (0, 0, 0, 0),
+    (146, 146, 146, 255),
+    (36, 36, 36, 255),
+    (255, 255, 255, 255),
+    (73, 109, 255, 255),
+    (0, 0, 219, 255),
+    (219, 182, 109, 255),
+    (146, 73, 36, 255),
+    (36, 219, 36, 255),
+    (36, 109, 0, 255),
+    (255, 182, 0, 255),
+    (219, 0, 0, 255),
+    (109, 0, 0, 255),
+    (255, 0, 255, 255),
+    (73, 73, 109, 255),
+    (109, 219, 255, 255),
+)
+
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
 
@@ -2700,6 +2755,94 @@ def commander_sprite_record_offset(
     raise ValueError(
         f"commander {commander_id} has no class sprite 0x{class_id:02X}"
     )
+
+
+def encode_ai_class_map_sprite(image: Image.Image) -> bytes:
+    rgba = image.convert("RGBA")
+    if rgba.size != (16, 16):
+        raise ValueError(
+            f"AI class map sprite must be 16x16, got {rgba.size}"
+        )
+
+    indexes: list[list[int]] = [[0] * 16 for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            pixel = rgba.getpixel((x, y))
+            if pixel[3] < 128:
+                continue
+            indexes[y][x] = min(
+                range(1, len(AI_CLASS_MAP_PALETTE)),
+                key=lambda index: sum(
+                    (
+                        pixel[channel]
+                        - AI_CLASS_MAP_PALETTE[index][channel]
+                    )
+                    ** 2
+                    for channel in range(3)
+                ),
+            )
+
+    encoded = bytearray()
+    for tile_index in range(4):
+        tile_x = (tile_index // 2) * 8
+        tile_y = (tile_index % 2) * 8
+        for y in range(8):
+            for pair_x in range(4):
+                left = indexes[tile_y + y][tile_x + pair_x * 2]
+                right = indexes[tile_y + y][tile_x + pair_x * 2 + 1]
+                encoded.append((left << 4) | right)
+    if len(encoded) != MAP_SPRITE_BYTES:
+        raise AssertionError("AI class map sprite encoding is not 0x80 bytes")
+    return bytes(encoded)
+
+
+def patch_ai_class_map_sprites(data: bytearray) -> None:
+    for commander_id, class_id, custom_sprite_id in (
+        AI_CLASS_MAP_SPRITE_SPECS
+    ):
+        asset_path = (
+            AI_CLASS_MAP_SPRITE_ASSET_ROOT
+            / str(commander_id)
+            / f"{class_id:02X}.png"
+        )
+        if not asset_path.is_file():
+            raise ValueError(
+                f"missing accepted AI class map sprite: {asset_path}"
+            )
+        payload = encode_ai_class_map_sprite(Image.open(asset_path))
+        if not any(payload):
+            raise ValueError(f"empty AI class map sprite: {asset_path}")
+
+        record_offset = commander_sprite_record_offset(
+            data, commander_id, class_id
+        )
+        source_sprite_id = be16(data, record_offset + 1)
+        if source_sprite_id >= AI_CLASS_MAP_SPRITE_START_ID:
+            raise ValueError(
+                f"commander {commander_id} class 0x{class_id:02X} "
+                f"already uses expansion sprite 0x{source_sprite_id:04X}"
+            )
+
+        # Use the same accepted design for both animation frames. This avoids
+        # inventing pixels that were not reviewed while retaining the stock
+        # map loader and timing; the unit remains visually stable in motion.
+        for frame_base in MAP_SPRITE_FRAME_BASES:
+            target = frame_base + custom_sprite_id * MAP_SPRITE_BYTES
+            if target + MAP_SPRITE_BYTES > EXPANDED_ROM_SIZE:
+                raise ValueError(
+                    f"AI class map sprite exceeds expanded ROM: {asset_path}"
+                )
+            if any(
+                value != 0xFF
+                for value in data[target : target + MAP_SPRITE_BYTES]
+            ):
+                raise ValueError(
+                    f"AI class map-sprite area at 0x{target:06X} "
+                    f"is not blank for {asset_path}"
+                )
+            data[target : target + MAP_SPRITE_BYTES] = payload
+
+        put16(data, record_offset + 1, custom_sprite_id)
 
 
 def write_shaman_custom_sprite(
@@ -7982,6 +8125,7 @@ def main() -> None:
     patch_shaman_map_sprite(data)
     patch_loren_map_sprite(data)
     patch_paired_npc_map_sprites(data)
+    patch_ai_class_map_sprites(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()
