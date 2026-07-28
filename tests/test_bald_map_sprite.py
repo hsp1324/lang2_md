@@ -253,7 +253,7 @@ class LorenMapSpriteTests(unittest.TestCase):
     def test_loren_recolors_only_armor_and_preserves_blade(self) -> None:
         self.assertEqual(
             builder.LOREN_SPRITE_COLOR_INDEX_REMAP,
-            {0x1: 0x3},
+            {0x1: 0xE, 0xE: 0x2},
         )
         changed_indexes = set()
         for frame_base, target, blade_coords in zip(

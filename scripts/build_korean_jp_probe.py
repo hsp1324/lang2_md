@@ -155,11 +155,12 @@ LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     for base in MAP_SPRITE_FRAME_BASES
 )
 # The editor's paired NPC design uses a soft lavender ramp for Loren. The live
-# map palette cannot add per-class CRAM colors, so use white armor with its
-# existing muted-violet shadow while preserving the stock shield, trim, and
-# blade pixels. Mapping to the only bright violet entry would turn it neon.
+# map palette cannot add per-class CRAM colors, so reuse the same muted-violet
+# and charcoal-violet indexes as Shaman while preserving the stock shield,
+# trim, and blade pixels.
 LOREN_SPRITE_COLOR_INDEX_REMAP = {
-    0x1: 0x3,  # gray armor shade -> pale highlight above violet shadow
+    0x1: 0xE,  # gray armor shade -> muted violet
+    0xE: 0x2,  # dark gray armor shade -> charcoal violet
 }
 LOREN_BLADE_COORDS_BY_FRAME = (
     frozenset(
