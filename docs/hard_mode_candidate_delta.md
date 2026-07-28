@@ -123,3 +123,14 @@ AT/DF·병사 A+/D+·용병을 고정 배치 원본과 대조했으며 예외가
 
 화면은 `captures/run/hard_8674_s11_entry.png`와
 `captures/run/hard_8674_s12_entry.png`에 보존한다.
+
+시나리오 13과 14도 같은 방식으로 연속 진입했으며 런타임 예외 없이
+모든 하드 대상 레코드가 일치했다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 13 | 7 | 13/13 | 7~19 | `455333e1bf26129811f4788022c1585d64642eebaaa65af5b8bf2488a97ec358` |
+| 14 | 7 | 11/11 | 7~17 | `a39b7c75faf91aaac0cfbb5c86f346771e8a0773bdb9bfdcc1091e66410b3cd3` |
+
+화면은 `captures/run/hard_8674_s13_entry.png`와
+`captures/run/hard_8674_s14_entry.png`에 보존한다.
