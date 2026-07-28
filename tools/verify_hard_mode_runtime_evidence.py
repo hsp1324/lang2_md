@@ -7,10 +7,19 @@ import argparse
 from dataclasses import dataclass
 import hashlib
 from pathlib import Path
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools import hard_mode_plan
+
 DEFAULT_GST = ROOT / "captures/analysis/0718_hard_s01_turn1_command.gst"
+SCENARIO_TWENTY_FIVE_GST = (
+    ROOT / "captures/analysis/0718_hard_s25_turn1_banner.gst"
+)
 
 GST_WORK_RAM_FILE_OFFSET = 0x2478
 RUNTIME_GROUP_BASE = 0x603C
@@ -25,6 +34,10 @@ RUNTIME_SOLDIER_DF_OFFSET = 0x47
 SCENARIO_ONE_PLAYER_GROUPS = 2
 SCENARIO_ONE_EXPECTED_GST_SHA256 = (
     "a9be34a13f38616617ce806f6b63821d1c15433b44e4e9e5d1ef1394b09a9256"
+)
+SCENARIO_TWENTY_FIVE_PLAYER_GROUPS = 9
+SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256 = (
+    "a895583ab3d3b94789354c7f690c87a3b5f3dec7f1ff14530245441e73a0c8e2"
 )
 
 
@@ -189,6 +202,69 @@ def verify_evidence(path: Path = DEFAULT_GST) -> tuple[RuntimeGroup, ...]:
     return verify_scenario_one(gst)
 
 
+def verify_planned_scenario(
+    gst: bytes,
+    scenario_number: int,
+    player_group_count: int,
+) -> tuple[RuntimeGroup, ...]:
+    plan = hard_mode_plan.build_plan()
+    scenario = next(
+        row for row in plan["scenarios"]
+        if int(row["number"]) == scenario_number
+    )
+    actual_groups = []
+    for record in scenario["records"]:
+        runtime_group = player_group_count + int(record["index"])
+        actual = read_runtime_group(gst, runtime_group)
+        commander = record["commander"]
+        soldier = record["enemy_soldier_correction"]
+        expected = {
+            "class_id": int(str(record["class_id"]), 16),
+            "name_id": int(str(record["name_id"]), 16),
+            "commander_at": int(commander["at"]["planned"]),
+            "commander_df": int(commander["df"]["planned"]),
+            "soldier_at": int(soldier["at"]["planned"]),
+            "soldier_df": int(soldier["df"]["planned"]),
+            "mercenaries": tuple(record["mercenaries"]["planned"]),
+        }
+        actual_projection = {
+            "class_id": actual.class_id,
+            "name_id": actual.name_id,
+            "commander_at": actual.commander_at,
+            "commander_df": actual.commander_df,
+            "soldier_at": actual.soldier_at,
+            "soldier_df": actual.soldier_df,
+            "mercenaries": actual.mercenaries,
+        }
+        if actual_projection != expected:
+            raise ValueError(
+                f"Scenario {scenario_number} {record['name_korean']} "
+                f"runtime group {runtime_group} differs: "
+                f"expected {expected!r}, found {actual_projection!r}"
+            )
+        actual_groups.append(actual)
+    return tuple(actual_groups)
+
+
+def verify_scenario_twenty_five(
+    path: Path = SCENARIO_TWENTY_FIVE_GST,
+) -> tuple[RuntimeGroup, ...]:
+    gst = path.read_bytes()
+    digest = hashlib.sha256(gst).hexdigest()
+    if path.resolve() == SCENARIO_TWENTY_FIVE_GST.resolve():
+        if digest != SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256:
+            raise ValueError(
+                "retained Scenario 25 GST hash changed: "
+                f"{digest} != "
+                f"{SCENARIO_TWENTY_FIVE_EXPECTED_GST_SHA256}"
+            )
+    return verify_planned_scenario(
+        gst,
+        scenario_number=25,
+        player_group_count=SCENARIO_TWENTY_FIVE_PLAYER_GROUPS,
+    )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -196,22 +272,44 @@ def parse_args() -> argparse.Namespace:
             "corrections, mercenaries, and excluded scripted commanders"
         )
     )
-    parser.add_argument("--gst", type=Path, default=DEFAULT_GST)
+    parser.add_argument(
+        "--scenario",
+        type=int,
+        choices=(1, 25),
+        help="verify only one retained scenario; default verifies both",
+    )
+    parser.add_argument(
+        "--gst",
+        type=Path,
+        help="override the retained GST for --scenario",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    groups = verify_evidence(args.gst)
-    for expected, actual in zip(SCENARIO_ONE_GROUPS, groups):
-        target = "hard target" if expected.hard_target else "excluded"
+    if args.gst is not None and args.scenario is None:
+        raise ValueError("--gst requires --scenario")
+    if args.scenario in (None, 1):
+        groups = verify_evidence(args.gst or DEFAULT_GST)
+        for expected, actual in zip(SCENARIO_ONE_GROUPS, groups):
+            target = "hard target" if expected.hard_target else "excluded"
+            print(
+                f"S1 group {expected.runtime_group_index:02d} "
+                f"{expected.name} ({target}): "
+                f"AT/DF {actual.commander_at}/{actual.commander_df}, "
+                f"soldier {actual.soldier_at}/{actual.soldier_df}, "
+                "mercs "
+                + " ".join(f"{value:02X}" for value in actual.mercenaries)
+            )
+    if args.scenario in (None, 25):
+        groups = verify_scenario_twenty_five(
+            args.gst or SCENARIO_TWENTY_FIVE_GST
+        )
         print(
-            f"S1 group {expected.runtime_group_index:02d} "
-            f"{expected.name} ({target}): "
-            f"AT/DF {actual.commander_at}/{actual.commander_df}, "
-            f"soldier {actual.soldier_at}/{actual.soldier_df}, "
-            "mercs "
-            + " ".join(f"{value:02X}" for value in actual.mercenaries)
+            "S25 groups 10..20: "
+            f"{len(groups)} hard targets match planned commander AT/DF, "
+            "soldier corrections, and mercenaries"
         )
     return 0
 

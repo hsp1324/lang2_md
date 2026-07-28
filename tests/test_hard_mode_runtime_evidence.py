@@ -7,6 +7,9 @@ class HardModeRuntimeEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.groups = verifier.verify_evidence()
+        cls.scenario_twenty_five_groups = (
+            verifier.verify_scenario_twenty_five()
+        )
 
     def test_scenario_one_retains_two_hard_targets(self):
         targets = [
@@ -52,6 +55,45 @@ class HardModeRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(
             [group.mercenaries for group in self.groups],
             [expected.mercenaries for expected in verifier.SCENARIO_ONE_GROUPS],
+        )
+
+    def test_scenario_twenty_five_verifies_all_eleven_hard_targets(self):
+        self.assertEqual(len(self.scenario_twenty_five_groups), 11)
+        self.assertEqual(
+            (
+                self.scenario_twenty_five_groups[0].class_id,
+                self.scenario_twenty_five_groups[0].name_id,
+                self.scenario_twenty_five_groups[0].commander_at,
+                self.scenario_twenty_five_groups[0].commander_df,
+                self.scenario_twenty_five_groups[0].soldier_at,
+                self.scenario_twenty_five_groups[0].soldier_df,
+            ),
+            (0x4D, 0x0D, 64, 49, 21, 16),
+        )
+        self.assertEqual(
+            (
+                self.scenario_twenty_five_groups[-1].class_id,
+                self.scenario_twenty_five_groups[-1].name_id,
+                self.scenario_twenty_five_groups[-1].commander_at,
+                self.scenario_twenty_five_groups[-1].commander_df,
+                self.scenario_twenty_five_groups[-1].soldier_at,
+                self.scenario_twenty_five_groups[-1].soldier_df,
+            ),
+            (0x4B, 0x31, 58, 41, 18, 16),
+        )
+
+    def test_scenario_twenty_five_uses_full_planned_mercenary_rosters(self):
+        self.assertEqual(
+            self.scenario_twenty_five_groups[0].mercenaries,
+            (0x7B,) * 6,
+        )
+        self.assertEqual(
+            self.scenario_twenty_five_groups[3].mercenaries,
+            (0x7C,) * 6,
+        )
+        self.assertEqual(
+            self.scenario_twenty_five_groups[-1].mercenaries,
+            (0x7D,) * 6,
         )
 
 

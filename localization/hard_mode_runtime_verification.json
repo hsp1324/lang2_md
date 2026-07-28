@@ -60,6 +60,130 @@
       ],
       "normal_regression": "레온과 레아드는 자동 강화 제외 수치가 유지됨",
       "remaining": "전투 체감·승리 가능성은 사용자 플레이 결과로 조정"
+    },
+    {
+      "number": 25,
+      "status": "runtime_loader_verified",
+      "entry": "시나리오 선택 후 자동 배치·출격",
+      "endpoint": "1턴 시나리오 배너",
+      "player_group_count": 9,
+      "gst": "captures/analysis/0718_hard_s25_turn1_banner.gst",
+      "gst_sha256": "a895583ab3d3b94789354c7f690c87a3b5f3dec7f1ff14530245441e73a0c8e2",
+      "capture": "captures/analysis/0718_hard_s25_turn1_banner.png",
+      "verified_groups": [
+        {
+          "runtime_group": 10,
+          "fixed_record": 1,
+          "fixed_offset": "0x182D86",
+          "name": "레온",
+          "hard_target": true,
+          "commander_at_df": [64, 49],
+          "soldier_at_df": [21, 16],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 11,
+          "fixed_record": 2,
+          "fixed_offset": "0x182DAA",
+          "name": "레아드",
+          "hard_target": true,
+          "commander_at_df": [56, 40],
+          "soldier_at_df": [18, 14],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 12,
+          "fixed_record": 3,
+          "fixed_offset": "0x182DCE",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [51, 36],
+          "soldier_at_df": [18, 12],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 13,
+          "fixed_record": 4,
+          "fixed_offset": "0x182DF2",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [45, 39],
+          "soldier_at_df": [14, 13],
+          "mercenaries": ["7C", "7C", "7C", "7C", "7C", "7C"]
+        },
+        {
+          "runtime_group": 14,
+          "fixed_record": 5,
+          "fixed_offset": "0x182E16",
+          "name": "에그베르트",
+          "hard_target": true,
+          "commander_at_df": [58, 43],
+          "soldier_at_df": [18, 16],
+          "mercenaries": ["FF", "FF", "FF", "FF", "FF", "FF"]
+        },
+        {
+          "runtime_group": 15,
+          "fixed_record": 6,
+          "fixed_offset": "0x182E3A",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [46, 40],
+          "soldier_at_df": [14, 13],
+          "mercenaries": ["7C", "7C", "7C", "7C", "7C", "7C"]
+        },
+        {
+          "runtime_group": 16,
+          "fixed_record": 7,
+          "fixed_offset": "0x182E5E",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [60, 41],
+          "soldier_at_df": [17, 13],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 17,
+          "fixed_record": 8,
+          "fixed_offset": "0x182E82",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [60, 41],
+          "soldier_at_df": [17, 13],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 18,
+          "fixed_record": 9,
+          "fixed_offset": "0x182EA6",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [60, 41],
+          "soldier_at_df": [17, 13],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 19,
+          "fixed_record": 10,
+          "fixed_offset": "0x182ECA",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [60, 41],
+          "soldier_at_df": [17, 13],
+          "mercenaries": ["7B", "7B", "7B", "7B", "7B", "7B"]
+        },
+        {
+          "runtime_group": 20,
+          "fixed_record": 11,
+          "fixed_offset": "0x182EEE",
+          "name": "제국지휘관",
+          "hard_target": true,
+          "commander_at_df": [58, 41],
+          "soldier_at_df": [18, 16],
+          "mercenaries": ["7D", "7D", "7D", "7D", "7D", "7D"]
+        }
+      ],
+      "normal_regression": "원본 이벤트 대기 레코드 0은 자동 강화 대상에서 제외",
+      "remaining": "후반 룬스톤 전제의 전투 체감과 승리 가능성은 사용자 플레이 결과로 조정"
     }
   ]
 }
