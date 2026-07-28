@@ -36,6 +36,29 @@ AARON_OCHRE_CAPE = {
     (73, 109, 255, 255): (219, 146, 36, 255),
     (109, 219, 255, 255): (255, 255, 255, 255),
 }
+ELWIN_BLUE_CAPE_COLORS = {
+    (0, 0, 219, 255),
+    (73, 109, 255, 255),
+}
+ELWIN_RED_CAPE = {
+    (0, 0, 219, 255): (109, 0, 0, 255),
+    (73, 109, 255, 255): (219, 0, 0, 255),
+}
+JESSICA_MAGE_RED_SHOULDER_MAIN_POINTS = {
+    (12, 6),
+    (11, 7),
+    (12, 7),
+    (3, 8),
+    (4, 8),
+    (2, 9),
+    (4, 9),
+    (2, 10),
+    (3, 10),
+}
+JESSICA_MAGE_RED_SHOULDER_DARK_POINTS = {
+    (5, 9),
+    (4, 10),
+}
 
 CLASS_SPECS = {
     0x11: {
@@ -86,7 +109,13 @@ CLASS_COMMANDER_SCHEMES = {
     # darker royal-blue v50 pass.
     (0x13, 8): ((73, 73, 109, 255), (73, 109, 255, 255), (109, 219, 255, 255)),
     (0x13, 9): ((73, 73, 109, 255), (146, 146, 146, 255), (219, 182, 109, 255)),
-    (0x13, 10): ((109, 0, 0, 255), (219, 0, 0, 255), (255, 109, 109, 255)),
+    # Jessica keeps her original blue/cyan hair, while Mage equipment uses
+    # the same separated royal-blue and sky-blue ramp as her High Lord.
+    (0x13, 10): (
+        (36, 73, 219, 255),
+        (73, 146, 255, 255),
+        (109, 219, 255, 255),
+    ),
     (0x16, 2): ((109, 0, 0, 255), (219, 0, 0, 255), (255, 109, 109, 255)),
     (0x16, 3): ((0, 0, 109, 255), (0, 0, 219, 255), (73, 109, 255, 255)),
     (0x16, 7): ((36, 109, 0, 255), (0, 0, 219, 255), (36, 219, 36, 255)),
@@ -167,6 +196,160 @@ def role_mapping(
     return dict(zip(source_colors, (dark, main, main, light)))
 
 
+def apply_variant_details(
+    class_id: int,
+    commander_id: int,
+    converted: Image.Image,
+) -> None:
+    if (commander_id, class_id) != (10, 0x13):
+        return
+    for point in JESSICA_MAGE_RED_SHOULDER_MAIN_POINTS:
+        converted.putpixel(point, (219, 0, 0, 255))
+    for point in JESSICA_MAGE_RED_SHOULDER_DARK_POINTS:
+        converted.putpixel(point, (109, 0, 0, 255))
+
+
+def variant_validation(
+    converted: Image.Image,
+    original: Image.Image,
+    target_identity: set[tuple[int, int]],
+) -> dict[str, object]:
+    colors = visible_palette(converted)
+    empty_rows = [
+        y for y in range(16)
+        if not any(converted.getpixel((x, y))[3] for x in range(16))
+    ]
+    empty_columns = [
+        x for x in range(16)
+        if not any(converted.getpixel((x, y))[3] for y in range(16))
+    ]
+    visible_identity = {
+        point
+        for point in target_identity
+        if original.getpixel(point)[3]
+    }
+    identity_match = sum(
+        converted.getpixel(point) == original.getpixel(point)
+        for point in visible_identity
+    )
+    return {
+        "identity_match": identity_match,
+        "identity_pixel_count": len(visible_identity),
+        "mask_pixel_count": len(target_identity),
+        "equipment_priority_transparent_pixels": sum(
+            converted.getpixel(point)[3] != 0
+            for point in target_identity - visible_identity
+        ),
+        "visible_color_count": len(colors),
+        "palette": colors,
+        "empty_rows": empty_rows,
+        "empty_columns": empty_columns,
+        "accepted": (
+            identity_match == len(visible_identity)
+            and len(colors) <= 15
+            and not empty_rows
+            and not empty_columns
+        ),
+    }
+
+
+def write_comparison(reports: list[dict[str, object]]) -> None:
+    columns = 5
+    card_width = 270
+    card_height = 305
+    rows = (len(reports) + columns - 1) // columns
+    canvas = Image.new(
+        "RGB",
+        (columns * card_width, rows * card_height),
+        (18, 18, 18),
+    )
+    draw = ImageDraw.Draw(canvas)
+    font = comparison_font()
+    for index, report in enumerate(reports):
+        x = (index % columns) * card_width
+        y = (index // columns) * card_height
+        color = (
+            (70, 170, 90)
+            if report["accepted"]
+            else (210, 70, 70)
+        )
+        draw.rectangle(
+            (x + 5, y + 5, x + card_width - 6, y + card_height - 6),
+            outline=color,
+            width=2,
+        )
+        draw.text(
+            (x + 12, y + 12),
+            (
+                f"{report['commander_id']:02d} "
+                f"{report['commander_name']} {report['class_name']}"
+            ),
+            fill=(245, 245, 245),
+            font=font,
+        )
+        draw.text(
+            (x + 12, y + 27),
+            (
+                f"identity {report['identity_match']}/"
+                f"{report['identity_pixel_count']} "
+                f"colors {report['visible_color_count']}"
+            ),
+            fill=(180, 190, 180),
+            font=font,
+        )
+        preview = Image.open(
+            SOURCE_DIR / report["file"]
+        ).convert("RGB").resize((240, 240), RESAMPLING.NEAREST)
+        canvas.paste(preview, (x + 15, y + 50))
+    canvas.save(
+        SOURCE_DIR / "all-hein-template-variants.png",
+        optimize=True,
+    )
+
+
+def refresh_variant_report(
+    class_id: int,
+    commander_ids: set[int],
+) -> None:
+    report_path = SOURCE_DIR / "validation-report.json"
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    for report_row in report["classes"]:
+        commander_id = int(report_row["commander_id"])
+        if (
+            commander_id not in commander_ids
+            or int(report_row["class_id"], 16) != class_id
+        ):
+            continue
+        row = manifest["commanders"][str(commander_id)]["classes"][
+            str(class_id)
+        ]
+        target_identity = points_for(row)
+        original = Image.open(
+            SPRITE_DIR
+            / str(commander_id)
+            / f"{class_id:02X}-p1.png"
+        ).convert("RGBA")
+        converted = Image.open(
+            SOURCE_DIR / report_row["file"]
+        ).convert("RGBA")
+        report_row.update(
+            variant_validation(
+                converted,
+                original,
+                target_identity,
+            )
+        )
+    report["all_accepted"] = all(
+        row["accepted"] for row in report["classes"]
+    )
+    report_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    write_comparison(report["classes"])
+
+
 def build_variants() -> dict[str, object]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     logical_dir = SOURCE_DIR / "logical16"
@@ -219,104 +402,34 @@ def build_variants() -> dict[str, object]:
                     AARON_BLUE_CAPE_COLORS,
                     AARON_OCHRE_CAPE,
                 )
+            if class_id == 0x13 and commander_id == 1:
+                # Keep Hein's accepted Mage equipment and staff silhouette,
+                # but give the connected left cape Elwin's original crimson
+                # ramp. Detached blue robe and magic accents stay blue.
+                recolor_largest_component(
+                    converted,
+                    ELWIN_BLUE_CAPE_COLORS,
+                    ELWIN_RED_CAPE,
+                )
+            apply_variant_details(class_id, commander_id, converted)
             output_path = (
                 logical_dir / f"{commander_id:02d}-{class_id:02X}.png"
             )
             converted.save(output_path, optimize=True)
-            colors = visible_palette(converted)
-            empty_rows = [
-                y for y in range(16)
-                if not any(
-                    converted.getpixel((x, y))[3] for x in range(16)
-                )
-            ]
-            empty_columns = [
-                x for x in range(16)
-                if not any(
-                    converted.getpixel((x, y))[3] for y in range(16)
-                )
-            ]
-            visible_identity = {
-                point
-                for point in target_identity
-                if original.getpixel(point)[3]
-            }
-            identity_match = sum(
-                converted.getpixel(point) == original.getpixel(point)
-                for point in visible_identity
-            )
             reports.append({
                 "commander_id": commander_id,
                 "commander_name": commander["name"],
                 "class_id": f"{class_id:02X}",
                 "class_name": spec["name"],
-                "identity_match": identity_match,
-                "identity_pixel_count": len(visible_identity),
-                "mask_pixel_count": len(target_identity),
-                "equipment_priority_transparent_pixels": sum(
-                    converted.getpixel(point)[3] != 0
-                    for point in target_identity - visible_identity
-                ),
-                "visible_color_count": len(colors),
-                "palette": colors,
-                "empty_rows": empty_rows,
-                "empty_columns": empty_columns,
                 "file": str(output_path.relative_to(SOURCE_DIR)),
-                "accepted": (
-                    identity_match == len(visible_identity)
-                    and len(colors) <= 15
-                    and not empty_rows
-                    and not empty_columns
+                **variant_validation(
+                    converted,
+                    original,
+                    target_identity,
                 ),
             })
 
-    columns = 5
-    card_width = 270
-    card_height = 305
-    rows = (len(reports) + columns - 1) // columns
-    canvas = Image.new(
-        "RGB",
-        (columns * card_width, rows * card_height),
-        (18, 18, 18),
-    )
-    draw = ImageDraw.Draw(canvas)
-    font = comparison_font()
-    for index, report in enumerate(reports):
-        x = (index % columns) * card_width
-        y = (index // columns) * card_height
-        color = (70, 170, 90) if report["accepted"] else (210, 70, 70)
-        draw.rectangle(
-            (x + 5, y + 5, x + card_width - 6, y + card_height - 6),
-            outline=color,
-            width=2,
-        )
-        draw.text(
-            (x + 12, y + 12),
-            (
-                f"{report['commander_id']:02d} "
-                f"{report['commander_name']} {report['class_name']}"
-            ),
-            fill=(245, 245, 245),
-            font=font,
-        )
-        draw.text(
-            (x + 12, y + 27),
-            (
-                f"identity {report['identity_match']}/"
-                f"{report['identity_pixel_count']} "
-                f"colors {report['visible_color_count']}"
-            ),
-            fill=(180, 190, 180),
-            font=font,
-        )
-        preview = Image.open(
-            SOURCE_DIR / report["file"]
-        ).convert("RGB").resize((240, 240), RESAMPLING.NEAREST)
-        canvas.paste(preview, (x + 15, y + 50))
-    canvas.save(
-        SOURCE_DIR / "all-hein-template-variants.png",
-        optimize=True,
-    )
+    write_comparison(reports)
 
     result = {
         "version": 1,

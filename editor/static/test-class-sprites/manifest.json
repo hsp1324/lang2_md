@@ -2,7 +2,7 @@
   "generated_from": "roms/original/Langrisser II (Japan).md",
   "concept_sheet": "docs/assets/allied_class_redesign_concept.png",
   "commander_count": 10,
-  "redesigned_count": 102,
+  "redesigned_count": 111,
   "policy": "preserve the lowest class in each duplicate sprite group; dramatically redesign only later classes for editor comparison",
   "rom_effect": "none; preview PNG assets only",
   "commanders": {
@@ -55,7 +55,8 @@
           "duplicate_group": [
             5,
             12,
-            27
+            27,
+            41
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -111,7 +112,8 @@
           "duplicate_group": [
             5,
             12,
-            27
+            27,
+            41
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -238,7 +240,8 @@
           "duplicate_group": [
             5,
             12,
-            27
+            27,
+            41
           ],
           "group_rank": 2,
           "redesigned": true,
@@ -314,6 +317,25 @@
           "changed_pixel_count": 114,
           "changed_ratio": 0.543,
           "file": "1/22.png"
+        },
+        "41": {
+          "class_id": 41,
+          "class_name": "로얄나이트",
+          "tier": 5,
+          "source_sprite_id": 34,
+          "duplicate_group": [
+            5,
+            12,
+            27,
+            41
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "백마·금홍 왕실 마갑",
+          "protected_face_pixel_count": 29,
+          "changed_pixel_count": 122,
+          "changed_ratio": 0.601,
+          "file": "1/29.png"
         }
       }
     },
@@ -329,7 +351,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -365,7 +388,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -439,7 +463,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 2,
           "redesigned": true,
@@ -456,7 +481,8 @@
           "source_sprite_id": 39,
           "duplicate_group": [
             18,
-            24
+            24,
+            38
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -535,7 +561,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 3,
           "redesigned": true,
@@ -568,7 +595,8 @@
           "source_sprite_id": 39,
           "duplicate_group": [
             18,
-            24
+            24,
+            38
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -614,6 +642,44 @@
           "changed_ratio": 0.7,
           "file": "2/1D.png"
         },
+        "37": {
+          "class_id": 37,
+          "class_name": "에이전트",
+          "tier": 5,
+          "source_sprite_id": 37,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22,
+            37
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "왕실 갑옷·대형 무기",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 127,
+          "changed_ratio": 0.73,
+          "file": "2/25.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "source_sprite_id": 39,
+          "duplicate_group": [
+            18,
+            24,
+            38
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑자색 마도복·소환 문장",
+          "protected_face_pixel_count": 40,
+          "changed_pixel_count": 134,
+          "changed_ratio": 0.702,
+          "file": "2/26.png"
+        },
         "40": {
           "class_id": 40,
           "class_name": "서머너",
@@ -648,7 +714,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -684,7 +751,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -758,7 +826,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 2,
           "redesigned": true,
@@ -775,7 +844,8 @@
           "source_sprite_id": 45,
           "duplicate_group": [
             18,
-            24
+            24,
+            38
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -854,7 +924,8 @@
             2,
             8,
             17,
-            22
+            22,
+            37
           ],
           "group_rank": 3,
           "redesigned": true,
@@ -887,7 +958,8 @@
           "source_sprite_id": 45,
           "duplicate_group": [
             18,
-            24
+            24,
+            38
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -932,6 +1004,44 @@
           "changed_pixel_count": 145,
           "changed_ratio": 0.7,
           "file": "3/1D.png"
+        },
+        "37": {
+          "class_id": 37,
+          "class_name": "에이전트",
+          "tier": 5,
+          "source_sprite_id": 43,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22,
+            37
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "feature": "왕실 갑옷·대형 무기",
+          "protected_face_pixel_count": 36,
+          "changed_pixel_count": 127,
+          "changed_ratio": 0.73,
+          "file": "3/25.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "source_sprite_id": 45,
+          "duplicate_group": [
+            18,
+            24,
+            38
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "흑자색 마도복·소환 문장",
+          "protected_face_pixel_count": 40,
+          "changed_pixel_count": 135,
+          "changed_ratio": 0.707,
+          "file": "3/26.png"
         },
         "40": {
           "class_id": 40,
@@ -1077,7 +1187,8 @@
           "source_sprite_id": 98,
           "duplicate_group": [
             15,
-            30
+            30,
+            36
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -1220,7 +1331,8 @@
           "source_sprite_id": 98,
           "duplicate_group": [
             15,
-            30
+            30,
+            36
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -1269,6 +1381,40 @@
           "changed_pixel_count": 151,
           "changed_ratio": 0.844,
           "file": "4/23.png"
+        },
+        "36": {
+          "class_id": 36,
+          "class_name": "드래곤마스터",
+          "tier": 5,
+          "source_sprite_id": 98,
+          "duplicate_group": [
+            15,
+            30,
+            36
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "자색 고룡·금빛 용창",
+          "protected_face_pixel_count": 22,
+          "changed_pixel_count": 131,
+          "changed_ratio": 0.585,
+          "file": "4/24.png"
+        },
+        "39": {
+          "class_id": 39,
+          "class_name": "프린세스",
+          "tier": 5,
+          "source_sprite_id": 95,
+          "duplicate_group": [
+            39
+          ],
+          "group_rank": 0,
+          "redesigned": false,
+          "feature": "원본 유지",
+          "protected_face_pixel_count": 0,
+          "changed_pixel_count": 0,
+          "changed_ratio": 0.0,
+          "file": "4/27.png"
         }
       }
     },
@@ -1285,7 +1431,8 @@
             9,
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -1323,7 +1470,8 @@
             9,
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -1343,7 +1491,8 @@
             9,
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 2,
           "redesigned": true,
@@ -1433,7 +1582,8 @@
             9,
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 3,
           "redesigned": true,
@@ -1453,7 +1603,8 @@
             9,
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 4,
           "redesigned": true,
@@ -1566,6 +1717,27 @@
           "changed_pixel_count": 147,
           "changed_ratio": 0.79,
           "file": "5/1A.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "source_sprite_id": 55,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20,
+            38
+          ],
+          "group_rank": 5,
+          "redesigned": true,
+          "feature": "흑자색 마도복·소환 문장",
+          "protected_face_pixel_count": 16,
+          "changed_pixel_count": 156,
+          "changed_ratio": 0.808,
+          "file": "5/26.png"
         },
         "40": {
           "class_id": 40,
@@ -2574,7 +2746,8 @@
           "duplicate_group": [
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -2663,7 +2836,8 @@
           "duplicate_group": [
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -2681,7 +2855,8 @@
           "duplicate_group": [
             10,
             19,
-            20
+            20,
+            38
           ],
           "group_rank": 2,
           "redesigned": true,
@@ -2796,6 +2971,25 @@
           "changed_pixel_count": 143,
           "changed_ratio": 0.622,
           "file": "9/1F.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "source_sprite_id": 71,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            38
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "feature": "흑자색 마도복·소환 문장",
+          "protected_face_pixel_count": 20,
+          "changed_pixel_count": 146,
+          "changed_ratio": 0.741,
+          "file": "9/26.png"
         },
         "42": {
           "class_id": 42,
@@ -2958,7 +3152,8 @@
           "source_sprite_id": 51,
           "duplicate_group": [
             18,
-            24
+            24,
+            40
           ],
           "group_rank": 0,
           "redesigned": false,
@@ -3072,7 +3267,8 @@
           "source_sprite_id": 51,
           "duplicate_group": [
             18,
-            24
+            24,
+            40
           ],
           "group_rank": 1,
           "redesigned": true,
@@ -3137,6 +3333,24 @@
           "changed_pixel_count": 163,
           "changed_ratio": 0.906,
           "file": "10/26.png"
+        },
+        "40": {
+          "class_id": 40,
+          "class_name": "서머너",
+          "tier": 5,
+          "source_sprite_id": 51,
+          "duplicate_group": [
+            18,
+            24,
+            40
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "feature": "암흑 소환복·쌍보주",
+          "protected_face_pixel_count": 27,
+          "changed_pixel_count": 154,
+          "changed_ratio": 0.846,
+          "file": "10/28.png"
         }
       }
     }

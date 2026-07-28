@@ -110,9 +110,74 @@ COMMANDER_SCHEMES = {
     },
 }
 
+JESSICA_HIGH_LORD_CAPE_POINTS = {
+    (5, 10),
+    (11, 10),
+    (5, 11),
+    (11, 11),
+    (11, 12),
+    (12, 12),
+    (4, 13),
+    (12, 13),
+    (13, 13),
+    (3, 14),
+    (4, 14),
+    (12, 14),
+    (13, 14),
+    (2, 15),
+    (3, 15),
+    (6, 15),
+    (7, 15),
+    (8, 15),
+    (9, 15),
+    (13, 15),
+}
+JESSICA_HIGH_LORD_CAPE_LIGHT_POINTS = {
+    (5, 10),
+    (11, 10),
+    (12, 12),
+    (13, 13),
+    (3, 14),
+    (13, 14),
+    (2, 15),
+    (6, 15),
+    (13, 15),
+}
+JESSICA_HIGH_LORD_CAPE_DARK_POINTS = {
+    (5, 11),
+    (11, 12),
+    (4, 13),
+    (12, 14),
+    (3, 15),
+    (8, 15),
+    (9, 15),
+}
+LANA_HIGH_LORD_GRAY_FOOT_POINTS = {
+    (5, 14),
+    (6, 14),
+    (4, 15),
+    (5, 15),
+    (10, 15),
+    (11, 15),
+    (12, 15),
+}
+
 
 def points_for(row: dict[str, object]) -> set[tuple[int, int]]:
     return {tuple(point) for point in row["identity_lock_points"]}
+
+
+def source_points_for(row: dict[str, object]) -> set[tuple[int, int]]:
+    """Return identity points before the editor-only final translation."""
+    points = points_for(row)
+    translation = row.get("identity_translation")
+    if (
+        translation is None
+        or row.get("identity_translation_applied_in_override", False)
+    ):
+        return points
+    dx, dy = translation
+    return {(x - int(dx), y - int(dy)) for x, y in points}
 
 
 def visible_palette(image: Image.Image) -> list[str]:
@@ -137,6 +202,19 @@ def role_mapping(
         return {}
     scheme = COMMANDER_SCHEMES[commander_id]
     if class_id == 0x0B:
+        if commander_id == 3:
+            # Match Lana's original High Lord ramp: cyan armor, blue cape.
+            return {
+                (73, 73, 109, 255): (73, 109, 255, 255),
+                (73, 109, 255, 255): (109, 219, 255, 255),
+                (146, 36, 0, 255): (0, 73, 219, 255),
+            }
+        if commander_id == 10:
+            # Keep Hein's blue-and-gold armor language. Only replace the
+            # master's red cape with Jessica's blue/cyan cloth ramp.
+            return {
+                (146, 36, 0, 255): (73, 146, 255, 255),
+            }
         if commander_id == 8:
             # Reuse Aaron Knight's blue shield ramp only on High Lord.
             # Swordmaster keeps the user's existing silver palette.
@@ -156,6 +234,31 @@ def role_mapping(
         (73, 36, 36, 255): scheme["dark"],
         (146, 36, 36, 255): scheme["main"],
     }
+
+
+def apply_variant_details(
+    class_id: int,
+    commander_id: int,
+    converted: Image.Image,
+) -> None:
+    if (commander_id, class_id) != (10, 0x0B):
+        if (commander_id, class_id) != (3, 0x0B):
+            return
+        for point in JESSICA_HIGH_LORD_CAPE_POINTS:
+            converted.putpixel(point, (0, 73, 219, 255))
+        for point in JESSICA_HIGH_LORD_CAPE_DARK_POINTS:
+            converted.putpixel(point, (0, 0, 219, 255))
+        for point in JESSICA_HIGH_LORD_CAPE_LIGHT_POINTS:
+            converted.putpixel(point, (73, 109, 255, 255))
+        for point in LANA_HIGH_LORD_GRAY_FOOT_POINTS:
+            converted.putpixel(point, (146, 146, 146, 255))
+        return
+    for point in JESSICA_HIGH_LORD_CAPE_POINTS:
+        converted.putpixel(point, (73, 146, 255, 255))
+    for point in JESSICA_HIGH_LORD_CAPE_DARK_POINTS:
+        converted.putpixel(point, (36, 73, 219, 255))
+    for point in JESSICA_HIGH_LORD_CAPE_LIGHT_POINTS:
+        converted.putpixel(point, (109, 219, 255, 255))
 
 
 def validate_variant(
@@ -249,7 +352,7 @@ def write_comparison(
             (x + 12, y + 12),
             (
                 f"{report['commander_id']:02d} "
-                f"{report['commander_name']} {report['class_name']}"
+                f"{report['class_name']}"
             ),
             fill=(245, 245, 245),
             font=font,
@@ -271,6 +374,51 @@ def write_comparison(
     canvas.save(source_dir / filename, optimize=True)
 
 
+def refresh_variant_report(
+    class_id: int,
+    commander_ids: set[int],
+) -> None:
+    """Refresh selected rows without rebuilding other commanders."""
+    spec = CLASS_SPECS[class_id]
+    source_dir = spec["source_dir"]
+    report_path = source_dir / "validation-report.json"
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    for row in report["classes"]:
+        commander_id = int(row["commander_id"])
+        if commander_id not in commander_ids:
+            continue
+        manifest_row = manifest["commanders"][str(commander_id)][
+            "classes"
+        ][str(class_id)]
+        identity_points = source_points_for(manifest_row)
+        original = Image.open(
+            SPRITE_DIR
+            / str(commander_id)
+            / f"{class_id:02X}-p1.png"
+        ).convert("RGBA")
+        converted = Image.open(
+            source_dir / row["file"]
+        ).convert("RGBA")
+        row.update(validate_variant(
+            converted=converted,
+            original=original,
+            identity_points=identity_points,
+        ))
+    report["all_accepted"] = all(
+        row["accepted"] for row in report["classes"]
+    )
+    report_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    write_comparison(
+        source_dir=source_dir,
+        filename=spec["comparison"],
+        reports=report["classes"],
+    )
+
+
 def build_variants() -> dict[str, object]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     all_reports: list[dict[str, object]] = []
@@ -288,7 +436,7 @@ def build_variants() -> dict[str, object]:
         for commander_id in spec["targets"]:
             commander = manifest["commanders"][str(commander_id)]
             row = commander["classes"][str(class_id)]
-            target_identity = points_for(row)
+            target_identity = source_points_for(row)
             original = Image.open(
                 SPRITE_DIR
                 / str(commander_id)
@@ -322,6 +470,7 @@ def build_variants() -> dict[str, object]:
                     preserve_generated_palette=True,
                     restore_transparent_locked_points=False,
                 )
+            apply_variant_details(class_id, commander_id, converted)
 
             output_path = (
                 logical_dir / f"{commander_id:02d}-{class_id:02X}.png"

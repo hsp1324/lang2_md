@@ -14,7 +14,17 @@ from tools.build_class_sprite_assets import (
 from tools.build_test_class_sprite_assets import (
     protected_face_points,
 )
+from tools.build_shared_hein_martial_variants import (
+    JESSICA_HIGH_LORD_CAPE_POINTS,
+    LANA_HIGH_LORD_GRAY_FOOT_POINTS,
+)
+from tools.build_shared_hein_class_variants import (
+    JESSICA_MAGE_RED_SHOULDER_DARK_POINTS,
+    JESSICA_MAGE_RED_SHOULDER_MAIN_POINTS,
+)
+from tools.polish_jessica_swordmaster import POLISH_PIXELS
 from tools.build_ai_class_sprite_assets import (
+    ELWIN_SWORDMASTER_CAPE_POINTS,
     MEGA_DRIVE_CHANNEL_LEVELS,
     accent_hues,
     identity_locked_character_sprite,
@@ -45,15 +55,15 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
     def test_test_change_assets_are_preview_only_and_complete(self):
         manifest = self.test_manifest
         self.assertEqual(manifest["commander_count"], 10)
-        self.assertEqual(manifest["redesigned_count"], 102)
+        self.assertEqual(manifest["redesigned_count"], 111)
         self.assertIn("preview PNG assets only", manifest["rom_effect"])
         rows = [
             row
             for commander in manifest["commanders"].values()
             for row in commander["classes"].values()
         ]
-        self.assertEqual(len(rows), 170)
-        self.assertEqual(sum(row["redesigned"] for row in rows), 102)
+        self.assertEqual(len(rows), 180)
+        self.assertEqual(sum(row["redesigned"] for row in rows), 111)
         for row in rows:
             path = TEST_ASSET_DIR / row["file"]
             self.assertTrue(path.is_file(), path)
@@ -281,18 +291,14 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             (AI_ASSET_DIR / "5/0B.png").read_bytes(),
             hein_high_lord_master.read_bytes(),
         )
-        for commander_id, class_id, filename in (
-            (1, 0x1A, "01-1A-elwin-swordmaster.png"),
-            (5, 0x1A, "05-1A-hein-swordmaster.png"),
-        ):
-            self.assertEqual(
-                (
-                    AI_ASSET_DIR
-                    / str(commander_id)
-                    / f"{class_id:02X}.png"
-                ).read_bytes(),
-                (protected_dir / filename).read_bytes(),
-            )
+        self.assertNotEqual(
+            (AI_ASSET_DIR / "1/1A.png").read_bytes(),
+            (protected_dir / "01-1A-elwin-swordmaster.png").read_bytes(),
+        )
+        self.assertEqual(
+            (AI_ASSET_DIR / "5/1A.png").read_bytes(),
+            (protected_dir / "05-1A-hein-swordmaster.png").read_bytes(),
+        )
 
     def test_hein_martial_templates_apply_to_selected_commanders(self):
         policy = json.loads(
@@ -390,13 +396,15 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     row["face_source_sprite_id"],
                     1,
                 )
+                dx, dy = row.get("identity_translation") or (0, 0)
                 for point in row["identity_lock_points"]:
-                    point = tuple(point)
-                    if not original.getpixel(point)[3]:
+                    target = tuple(point)
+                    source_point = (target[0] - dx, target[1] - dy)
+                    if not original.getpixel(source_point)[3]:
                         continue
                     self.assertEqual(
-                        image.getpixel(point),
-                        original.getpixel(point),
+                        image.getpixel(target),
+                        original.getpixel(source_point),
                     )
                 self.assertEqual(
                     row["identity_lock_transparency_mode"],
@@ -472,6 +480,147 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         )
         self.assertGreaterEqual(colors[(36, 219, 36, 255)], 20)
         self.assertNotIn((146, 36, 0, 255), colors)
+
+    def test_jessica_high_lord_reuses_hein_design_with_blue_cape(self):
+        row = self.ai_manifest["commanders"]["10"]["classes"][
+            str(0x0B)
+        ]
+        self.assertEqual(row["identity_translation"], [1, 0])
+        self.assertFalse(
+            row["identity_translation_applied_in_override"]
+        )
+        self.assertEqual(row["identity_lock_pixel_count"], 73)
+        self.assertFalse(row["design_override"])
+        self.assertTrue(row["design_override_superseded"])
+        self.assertIn("하늘색", row["feature"])
+        self.assertIn("오른쪽 1칸", row["feature"])
+
+        source = Image.open(
+            ROOT
+            / "docs/assets/ai-class-source/latest/"
+            "shared-high-lord-hein-v1/logical16/10-0B.png"
+        ).convert("RGBA")
+        final = Image.open(AI_ASSET_DIR / "10/0B.png").convert("RGBA")
+        cape_colors = {
+            source.getpixel(point)
+            for point in JESSICA_HIGH_LORD_CAPE_POINTS
+        }
+        self.assertEqual(
+            cape_colors,
+            {
+                (109, 219, 255, 255),
+                (73, 146, 255, 255),
+                (36, 73, 219, 255),
+            },
+        )
+        original = render_sprite(
+            self.rom,
+            row["face_source_sprite_id"],
+            1,
+        )
+        for target in map(tuple, row["identity_lock_points"]):
+            source_point = (target[0] - 1, target[1])
+            if original.getpixel(source_point)[3]:
+                self.assertEqual(
+                    final.getpixel(target),
+                    original.getpixel(source_point),
+                )
+
+    def test_lana_high_lord_uses_original_cyan_armor_and_blue_cape(self):
+        row = self.ai_manifest["commanders"]["3"]["classes"][
+            str(0x0B)
+        ]
+        self.assertFalse(row["design_override"])
+        self.assertTrue(row["design_override_superseded"])
+        self.assertIn("갑옷 넓은 면은 하늘색", row["feature"])
+        self.assertIn("발·부츠 회색 7픽셀", row["feature"])
+        image = Image.open(AI_ASSET_DIR / "3/0B.png").convert("RGBA")
+        colors = Counter(color for color in image.getdata() if color[3])
+        self.assertGreaterEqual(colors[(109, 219, 255, 255)], 20)
+        cape_colors = {
+            image.getpixel(point)
+            for point in JESSICA_HIGH_LORD_CAPE_POINTS
+        }
+        self.assertEqual(
+            cape_colors,
+            {
+                (73, 109, 255, 255),
+                (0, 73, 219, 255),
+                (0, 0, 219, 255),
+            },
+        )
+        self.assertTrue(
+            all(
+                image.getpixel(point) == (146, 146, 146, 255)
+                for point in LANA_HIGH_LORD_GRAY_FOOT_POINTS
+            )
+        )
+
+    def test_jessica_mage_uses_blue_robe_and_original_red_shoulders(self):
+        row = self.ai_manifest["commanders"]["10"]["classes"][
+            str(0x13)
+        ]
+        self.assertFalse(row["design_override"])
+        self.assertTrue(row["design_override_superseded"])
+        self.assertIn("밝은 하늘색 3단 명암", row["feature"])
+        self.assertIn("어깨 장식 11픽셀", row["feature"])
+        image = Image.open(AI_ASSET_DIR / "10/13.png").convert("RGBA")
+        colors = {
+            color for color in image.getdata() if color[3]
+        }
+        self.assertTrue({
+            (36, 73, 219, 255),
+            (73, 109, 255, 255),
+            (109, 219, 255, 255),
+        }.issubset(colors))
+        self.assertTrue(
+            all(
+                image.getpixel(point) == (219, 0, 0, 255)
+                for point in JESSICA_MAGE_RED_SHOULDER_MAIN_POINTS
+            )
+        )
+        self.assertTrue(
+            all(
+                image.getpixel(point) == (109, 0, 0, 255)
+                for point in JESSICA_MAGE_RED_SHOULDER_DARK_POINTS
+            )
+        )
+        self.assertIn((36, 182, 36, 255), colors)
+
+    def test_jessica_swordmaster_polish_only_bridges_saved_gaps(self):
+        before = Image.open(
+            ROOT
+            / "docs/assets/ai-class-source/archive/"
+            "jessica-swordmaster-before-polish-v1/"
+            "10-1A-editor-v62.png"
+        ).convert("RGBA")
+        after = Image.open(AI_ASSET_DIR / "10/1A.png").convert("RGBA")
+        changed = {
+            (x, y)
+            for y in range(16)
+            for x in range(16)
+            if before.getpixel((x, y)) != after.getpixel((x, y))
+        }
+        self.assertGreaterEqual(len(changed), len(POLISH_PIXELS))
+        self.assertGreaterEqual(
+            sum(
+                after.getpixel(point) == color
+                for point, color in POLISH_PIXELS.items()
+            ),
+            12,
+        )
+        self.assertGreaterEqual(
+            sum(after.getpixel((x, 9))[3] != 0 for x in range(4, 13)),
+            8,
+        )
+        row = self.ai_manifest["commanders"]["10"]["classes"][
+            str(0x1A)
+        ]
+        self.assertTrue(row["design_override"])
+        self.assertTrue(
+            row["identity_translation_applied_in_override"]
+        )
+        self.assertIn("21픽셀 소폭 보정", row["feature"])
 
     def test_hein_archmage_uses_lester_template_over_saved_override(self):
         row = self.ai_manifest["commanders"]["5"]["classes"][
@@ -573,12 +722,18 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 image.getpixel((11 + x, 9 + y))
                 for y in range(6)
                 for x in range(5)
+                if (11 + x, 9 + y) != (11, 14)
             ],
             [
                 palette[symbol]
-                for row in pattern
-                for symbol in row
+                for y, row in enumerate(pattern)
+                for x, symbol in enumerate(row)
+                if (11 + x, 9 + y) != (11, 14)
             ],
+        )
+        self.assertEqual(
+            image.getpixel((11, 14)),
+            (219, 0, 0, 255),
         )
         self.assertEqual(
             image.getpixel((11, 8)),
@@ -864,7 +1019,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 AI_ASSET_DIR / "1" / f"{class_id:02X}.png"
             ).convert("RGBA")
             colors = Counter(
-                color for color in image.get_flattened_data() if color[3]
+                color for color in image.getdata() if color[3]
             )
             self.assertGreaterEqual(
                 colors[(219, 0, 0, 255)],
@@ -921,8 +1076,8 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             )
         )
         self.assertEqual(manifest["commander_count"], 10)
-        self.assertEqual(manifest["asset_count"], 170)
-        self.assertEqual(manifest["redesigned_count"], 103)
+        self.assertEqual(manifest["asset_count"], 180)
+        self.assertEqual(manifest["redesigned_count"], 113)
         self.assertEqual(manifest["pending_redesign_count"], 0)
         self.assertIn("preview PNG assets only", manifest["rom_effect"])
         source_cells = set()
@@ -942,14 +1097,28 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     1,
                 )
                 eye_points = protected_eye_points(source)
-                self.assertEqual(
-                    row["eye_lock_pixel_count"],
-                    len(eye_points),
+                dx, dy = row.get("identity_translation") or (0, 0)
+                manifest_eye_points = {
+                    (x + dx, y + dy) for x, y in eye_points
+                }
+                generated_identity = (
+                    row["identity_lock_mode"] == "generated"
                 )
-                self.assertEqual(
-                    row["eye_lock_points"],
-                    [list(point) for point in sorted(eye_points)],
-                )
+                if generated_identity:
+                    self.assertEqual(row["eye_lock_pixel_count"], 0)
+                    self.assertEqual(row["eye_lock_points"], [])
+                else:
+                    self.assertEqual(
+                        row["eye_lock_pixel_count"],
+                        len(eye_points),
+                    )
+                    self.assertEqual(
+                        row["eye_lock_points"],
+                        [
+                            list(point)
+                            for point in sorted(manifest_eye_points)
+                        ],
+                    )
                 if not row["redesigned"]:
                     self.assertIsNone(row["ai_source_cell_file"])
                     self.assertEqual(image.tobytes(), source.tobytes())
@@ -970,27 +1139,48 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     len(lock_points),
                     row["identity_lock_pixel_count"],
                 )
-                self.assertTrue(eye_points.issubset(lock_points))
+                if (
+                    not generated_identity
+                    and not row.get(
+                        "identity_translation_applied_in_override",
+                        False,
+                    )
+                ):
+                    self.assertTrue(
+                        manifest_eye_points.issubset(lock_points)
+                    )
                 if not row.get("identity_mask_pending_rebuild"):
-                    for point in lock_points:
+                    for target in lock_points:
+                        source_point = (
+                            target[0] - dx,
+                            target[1] - dy,
+                        )
                         if (
                             row["identity_lock_transparency_mode"]
                             == "equipment_priority"
-                            and not source.getpixel(point)[3]
+                            and not source.getpixel(source_point)[3]
                         ):
                             continue
                         self.assertEqual(
-                            image.getpixel(point),
-                            source.getpixel(point),
+                            image.getpixel(target),
+                            source.getpixel(source_point),
                         )
                 self.assertIn(
                     row["identity_lock_mode"],
-                    {"automatic", "custom"},
+                    {"automatic", "custom", "generated"},
                 )
                 self.assertIn(
                     row["identity_lock_transparency_mode"],
-                    {"exact", "equipment_priority"},
+                    {"exact", "equipment_priority", "generated"},
                 )
+                if generated_identity:
+                    self.assertEqual(lock_points, set())
+                    self.assertTrue(row["identity_mask_superseded"])
+                    self.assertIsNone(row["identity_lock_box"])
+                    self.assertIn(
+                        "원본 얼굴 덮어쓰기 없음",
+                        row["feature"],
+                    )
                 if (
                     row["identity_lock_transparency_mode"]
                     == "equipment_priority"
@@ -1001,7 +1191,14 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     )
                 source_cells.add(row["ai_source_cell_file"])
                 self.assertEqual(row["face_pixel_count"], 0)
-                self.assertNotEqual(image.tobytes(), source.tobytes())
+                if row.get("supplemental_hidden_baseline"):
+                    self.assertEqual(image.tobytes(), source.tobytes())
+                    self.assertEqual(row["changed_pixel_count"], 0)
+                else:
+                    self.assertNotEqual(
+                        image.tobytes(),
+                        source.tobytes(),
+                    )
                 self.assertEqual(
                     image.getchannel("A").getbbox()[3],
                     16,
@@ -1020,9 +1217,66 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         )
                     }.issubset({0, 255})
                 )
-        self.assertEqual(len(source_cells), 103)
+        self.assertEqual(len(source_cells), 113)
         for filename in source_cells:
             self.assertTrue((AI_ASSET_DIR / filename).is_file(), filename)
+
+    def test_hein_sorcerer_and_cleric_source_originals_are_explicit(self):
+        rows = self.ai_manifest["commanders"]["5"]["classes"]
+        expected_sources = {
+            0x09: (
+                ROOT
+                / "docs/assets/ai-class-source/latest/"
+                "hein-sorcerer-v2/clean/hein-09-sorcerer-ai.png"
+            ),
+            0x11: (
+                ROOT
+                / "docs/assets/ai-class-source/latest/"
+                "shared-hein-classes-v1/master/"
+                "hein-11-priest-user-approved.png"
+            ),
+            0x16: (
+                ROOT
+                / "docs/assets/ai-class-source/latest/"
+                "shared-hein-classes-v1/master/"
+                "hein-16-high-priest-user-approved.png"
+            ),
+        }
+        for class_id, expected_source in expected_sources.items():
+            row = rows[str(class_id)]
+            original_path = (
+                AI_ASSET_DIR / row["ai_source_original_file"]
+            )
+            self.assertTrue(original_path.is_file())
+            self.assertEqual(
+                original_path.read_bytes(),
+                expected_source.read_bytes(),
+            )
+
+        sorcerer_row = rows[str(0x09)]
+        self.assertEqual(
+            sorcerer_row["identity_lock_mode"],
+            "generated",
+        )
+        self.assertEqual(sorcerer_row["identity_lock_points"], [])
+        with Image.open(AI_ASSET_DIR / "5/09.png") as sorcerer:
+            self.assertEqual(sorcerer.size, (16, 16))
+            self.assertEqual(
+                sorcerer.getchannel("A").getbbox(),
+                (1, 0, 14, 16),
+            )
+            visible = {
+                color for color in sorcerer.convert("RGBA").getdata()
+                if color[3]
+            }
+            self.assertLessEqual(len(visible), 15)
+            self.assertTrue(
+                all(
+                    channel in MEGA_DRIVE_CHANNEL_LEVELS
+                    for color in visible
+                    for channel in color[:3]
+                )
+            )
 
     def test_ai_pixelizer_uses_full_extent_and_preserves_rare_accents(self):
         sheet = Image.open(
@@ -1182,10 +1436,10 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
     def test_elwin_and_logical16_commanders_change_only_upper_classes(self):
         self.assertEqual(
             self.ai_manifest["asset_version"],
-            "liana-red-lana-blue-high-lord-v56",
+            "jessica-swordmaster-polish-v63",
         )
         source_paths = self.ai_manifest["ai_source_images"]
-        self.assertEqual(len(source_paths), 99)
+        self.assertEqual(len(source_paths), 102)
         self.assertEqual(
             sum(
                 path.startswith(
@@ -1202,7 +1456,18 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 )
                 for path in source_paths
             ),
-            12,
+            11,
+        )
+        self.assertEqual(
+            sum("latest/hein-sorcerer-v2/" in path for path in source_paths),
+            2,
+        )
+        self.assertEqual(
+            sum(
+                "latest/shared-hein-classes-v1/master/" in path
+                for path in source_paths
+            ),
+            2,
         )
         self.assertEqual(
             sum(
@@ -1278,6 +1543,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 if (
                     "liana-lana-strict16-v1/native16-" in source_path
                     or "/logical16/" in source_path
+                    or "/master/" in source_path
                 ):
                     self.assertEqual(source.size, (16, 16))
                 else:
@@ -1287,9 +1553,9 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         elwin_direct_stages = {}
         elwin_character_ai = set()
         for commander_id, expected_class_count in (
-            ("1", 17),
-            ("4", 17),
-            ("5", 17),
+            ("1", 18),
+            ("4", 19),
+            ("5", 18),
         ):
             rows = self.ai_manifest["commanders"][commander_id]["classes"]
             self.assertEqual(len(rows), expected_class_count)
@@ -1300,13 +1566,11 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     if commander_id == "1"
                     else None
                 )
-                original = Image.open(
-                    ROOT
-                    / (
-                        "editor/static/class-sprites/commanders/"
-                        f"{commander_id}/{class_id:02X}-p1.png"
-                    )
-                ).convert("RGBA")
+                original = render_sprite(
+                    self.rom,
+                    row["face_source_sprite_id"],
+                    1,
+                )
                 actual = Image.open(
                     AI_ASSET_DIR
                     / commander_id
@@ -1318,6 +1582,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         commander_id == "5"
                         and class_id == 0x11
                     )
+                    or row.get("supplemental_hidden_baseline", False)
                 )
                 self.assertEqual(row["redesigned"], should_redesign)
                 self.assertFalse(row["pending_redesign"])
@@ -1352,7 +1617,9 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         row["ai_source_kind"],
                     )
                 else:
-                    if "공통 16×16 클래스 템플릿" in row[
+                    if row.get("supplemental_hidden_baseline"):
+                        expected_source = "히든 클래스"
+                    elif "공통 16×16 클래스 템플릿" in row[
                         "ai_source_kind"
                     ]:
                         expected_source = "공통 16×16 클래스 템플릿"
@@ -1365,13 +1632,28 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         expected_source = "메가드라이브 16×16"
                     elif commander_id == "4":
                         expected_source = "신규 쉐리"
+                    elif (
+                        commander_id == "5"
+                        and class_id == 0x09
+                    ):
+                        expected_source = "신규 헤인 소서러"
                     elif commander_id == "5":
                         expected_source = "신규 전폭 논리16"
                     else:
                         expected_source = "logical16-v3"
                     self.assertIn(expected_source, row["ai_source_kind"])
                 self.assertIsNotNone(row["ai_source_cell_file"])
-                self.assertGreaterEqual(row["changed_pixel_count"], 20)
+                if row.get("supplemental_hidden_baseline"):
+                    self.assertEqual(row["changed_pixel_count"], 0)
+                    self.assertIn(
+                        "히든 클래스",
+                        row["ai_source_kind"],
+                    )
+                else:
+                    self.assertGreaterEqual(
+                        row["changed_pixel_count"],
+                        20,
+                    )
                 self.assertEqual(
                     sum(
                         actual.getpixel((x, y))
@@ -1572,16 +1854,38 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             0x28: "28-summoner",
         }
         for class_id, stem in filenames.items():
-            with Image.open(source_dir / "raw" / f"{stem}.png") as raw:
+            raw_path = source_dir / "raw" / f"{stem}.png"
+            logical_path = source_dir / "logical16" / f"{stem}.png"
+            if class_id == 0x09:
+                raw_path = (
+                    ROOT
+                    / "docs/assets/ai-class-source/latest/"
+                    "hein-sorcerer-v2/clean/"
+                    "hein-09-sorcerer-ai.png"
+                )
+                logical_path = (
+                    ROOT
+                    / "docs/assets/ai-class-source/latest/"
+                    "hein-sorcerer-v2/logical16/"
+                    "hein-09-sorcerer-ai.png"
+                )
+            with Image.open(raw_path) as raw:
                 self.assertEqual(raw.size, (1254, 1254))
-            with Image.open(
-                source_dir / "logical16" / f"{stem}.png"
-            ) as logical:
+            with Image.open(logical_path) as logical:
                 self.assertEqual(logical.size, (16, 16))
             row = self.ai_manifest["commanders"]["5"]["classes"][
                 str(class_id)
             ]
-            if class_id in {
+            if class_id == 0x09:
+                self.assertIn(
+                    "신규 헤인 소서러",
+                    row["ai_source_kind"],
+                )
+                self.assertEqual(
+                    row["identity_lock_mode"],
+                    "generated",
+                )
+            elif class_id in {
                 0x0B,
                 0x11,
                 0x13,
@@ -1601,17 +1905,26 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             image = Image.open(
                 AI_ASSET_DIR / "5" / f"{class_id:02X}.png"
             ).convert("RGBA")
-            self.assertEqual(image.getchannel("A").getbbox(), (0, 0, 16, 16))
+            self.assertEqual(
+                image.getchannel("A").getbbox(),
+                (1, 0, 14, 16)
+                if class_id == 0x09
+                else (0, 0, 16, 16),
+            )
             for y in range(16):
                 self.assertTrue(
                     any(image.getpixel((x, y))[3] for x in range(16)),
                     f"class {class_id:02X} leaves row {y} empty",
                 )
-            for x in range(16):
-                self.assertTrue(
-                    any(image.getpixel((x, y))[3] for y in range(16)),
-                    f"class {class_id:02X} leaves column {x} empty",
-                )
+            if class_id != 0x09:
+                for x in range(16):
+                    self.assertTrue(
+                        any(
+                            image.getpixel((x, y))[3]
+                            for y in range(16)
+                        ),
+                        f"class {class_id:02X} leaves column {x} empty",
+                    )
             colors = {
                 color
                 for _, color in (image.getcolors(maxcolors=256) or [])
@@ -1784,11 +2097,14 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         sage_reference = masks["2:18"]
         self.assertEqual(len(sage_reference), 82)
         for class_id in shared_liana_classes:
-            self.assertEqual(
-                masks[f"3:{class_id:02X}"],
-                sage_reference,
-            )
-            if class_id != 0x0B:
+            if class_id == 0x0B:
+                self.assertEqual(len(masks["3:0B"]), 75)
+                self.assertNotEqual(masks["3:0B"], sage_reference)
+            else:
+                self.assertEqual(
+                    masks[f"3:{class_id:02X}"],
+                    sage_reference,
+                )
                 self.assertEqual(
                     masks[f"2:{class_id:02X}"],
                     sage_reference,
@@ -1798,7 +2114,6 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
 
         jessica_sorcerer = masks["10:09"]
         for class_id in (
-            0x0B,
             0x11,
             0x13,
             0x14,
@@ -1813,6 +2128,32 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 masks[f"10:{class_id:02X}"],
                 jessica_sorcerer,
             )
+        # High Lord now reuses Jessica's complete source-coordinate identity
+        # mask; the final composition moves those visible pixels right once.
+        self.assertEqual(masks["10:0B"], jessica_sorcerer)
+        self.assertTrue(
+            all(
+                0 <= x < 16 and 0 <= y < 16
+                for x, y in masks["10:0B"]
+            )
+        )
+        self.assertEqual(
+            self.ai_manifest["commanders"]["10"]["classes"]["11"][
+                "identity_translation"
+            ],
+            [1, 0],
+        )
+        self.assertFalse(
+            self.ai_manifest["commanders"]["10"]["classes"]["11"][
+                "identity_translation_applied_in_override"
+            ]
+        )
+        self.assertEqual(
+            self.ai_manifest["commanders"]["10"]["classes"]["26"][
+                "identity_translation"
+            ],
+            [1, 0],
+        )
 
         elwin_swordmaster = {
             tuple(point) for point in masks["1:1A"]
@@ -1823,6 +2164,73 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         self.assertTrue(
             {(0, 10), (0, 11)}.issubset(elwin_swordmaster)
         )
+
+    def test_elwin_red_capes_and_shared_hein_mage_layout_are_saved(self):
+        swordmaster = Image.open(
+            AI_ASSET_DIR / "1/1A.png"
+        ).convert("RGBA")
+        for point in ELWIN_SWORDMASTER_CAPE_POINTS:
+            self.assertEqual(
+                swordmaster.getpixel(point),
+                (219, 0, 0, 255),
+            )
+
+        mage_path = AI_ASSET_DIR / "1/13.png"
+        shared_mage_path = (
+            ROOT
+            / "docs/assets/ai-class-source/latest/"
+            "shared-hein-classes-v1/logical16/01-13.png"
+        )
+        self.assertEqual(
+            mage_path.read_bytes(),
+            shared_mage_path.read_bytes(),
+        )
+        row = self.ai_manifest["commanders"]["1"]["classes"]["19"]
+        self.assertIn("공통 16×16 클래스 템플릿", row["ai_source_kind"])
+        self.assertFalse(row["design_override"])
+        self.assertTrue(row["design_override_superseded"])
+        self.assertGreater(row["superseded_design_revision"], 0)
+        with Image.open(mage_path) as mage:
+            colors = Counter(mage.getdata())
+            self.assertGreaterEqual(colors[(219, 0, 0, 255)], 10)
+            self.assertGreaterEqual(colors[(0, 0, 219, 255)], 10)
+
+    def test_all_stock_multi_hidden_classes_are_editable_in_ai_manifest(self):
+        expected = {
+            1: {0x22, 0x29},
+            2: {0x25, 0x26, 0x28},
+            3: {0x25, 0x26, 0x28},
+            4: {0x23, 0x24, 0x27},
+            5: {0x26, 0x28},
+            6: {0x29},
+            7: {0x24},
+            8: {0x23},
+            9: {0x26, 0x2A},
+            10: {0x26, 0x28},
+        }
+        supplemental_count = 0
+        for commander_id, class_ids in expected.items():
+            rows = self.ai_manifest["commanders"][
+                str(commander_id)
+            ]["classes"]
+            actual = {
+                int(class_id)
+                for class_id, row in rows.items()
+                if row.get("hidden_class")
+            }
+            self.assertEqual(actual, class_ids)
+            for class_id in class_ids:
+                row = rows[str(class_id)]
+                self.assertEqual(row["tier"], 5)
+                self.assertTrue(row["redesigned"])
+                self.assertTrue(
+                    (AI_ASSET_DIR / row["file"]).is_file()
+                )
+                if row.get("supplemental_hidden_baseline"):
+                    supplemental_count += 1
+                    self.assertEqual(row["changed_pixel_count"], 0)
+                    self.assertIn("히든 클래스", row["ai_source_kind"])
+        self.assertEqual(supplemental_count, 10)
 
     def test_liana_lana_share_one_full_canvas_design_with_blue_red_contrast(
         self,

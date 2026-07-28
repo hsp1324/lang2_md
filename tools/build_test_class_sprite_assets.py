@@ -19,7 +19,11 @@ from tools.build_class_sprite_assets import (
     commander_sprite_map,
     render_sprite,
 )
-from tools.class_change_data import COMMANDER_COUNT, read_class_change_chain
+from tools.class_change_data import (
+    COMMANDER_COUNT,
+    hidden_class_routes,
+    read_class_change_chain,
+)
 from tools.scenario_data import KOREAN_NAME_BY_ID, class_names
 
 
@@ -140,6 +144,9 @@ def class_tiers(source: bytes, commander_id: int) -> dict[int, int]:
         tiers.setdefault(transition.current_class, source_tier)
         for candidate in transition.candidates:
             tiers.setdefault(candidate, source_tier + 1)
+    for route in hidden_class_routes(commander_id):
+        tiers.setdefault(route.current_class, 4)
+        tiers.setdefault(route.candidates[0], 5)
     return tiers
 
 
@@ -516,7 +523,7 @@ def build_assets(rom_path: Path, output_dir: Path) -> dict[str, object]:
                 redesigned_count += 1
             changed_pixel_count = changed_pixels(source_image, image)
             opaque_pixel_count = sum(
-                pixel[3] != 0 for pixel in source_image.get_flattened_data()
+                pixel[3] != 0 for pixel in source_image.getdata()
             )
             if redesigned and changed_pixel_count < 36:
                 raise ValueError(

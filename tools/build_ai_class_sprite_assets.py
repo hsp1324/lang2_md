@@ -26,7 +26,7 @@ from tools.build_test_class_sprite_assets import (
     TRANSPARENT,
     class_tiers,
 )
-from tools.class_change_data import COMMANDER_COUNT
+from tools.class_change_data import COMMANDER_COUNT, hidden_class_routes
 from tools.pixellab_elwin_inpaint import head_lock_box
 from tools.scenario_data import KOREAN_NAME_BY_ID, class_names
 
@@ -53,6 +53,15 @@ SHERRY_NATIVE_SOURCE_DIR = (
 )
 HEIN_LATEST_SOURCE_DIR = (
     ROOT / "docs/assets/ai-class-source/latest/hein/raw"
+)
+HEIN_SORCERER_V2_DIR = (
+    ROOT / "docs/assets/ai-class-source/latest/hein-sorcerer-v2"
+)
+HEIN_SORCERER_V2_CLEAN_SOURCE = (
+    HEIN_SORCERER_V2_DIR / "clean/hein-09-sorcerer-ai.png"
+)
+HEIN_SORCERER_V2_LOGICAL_SOURCE = (
+    HEIN_SORCERER_V2_DIR / "logical16/hein-09-sorcerer-ai.png"
 )
 LIANA_LANA_PAIRED_SOURCE_ROOT = (
     ROOT
@@ -102,7 +111,7 @@ AI_ASSET_BUILD_LOCK_PATH = (
 )
 GRID_COLUMNS = 5
 GRID_ROWS = 10
-ASSET_VERSION = "liana-red-lana-blue-high-lord-v56"
+ASSET_VERSION = "jessica-swordmaster-polish-v63"
 
 ROM_INK = (36, 36, 36, 255)
 ROM_WHITE = (255, 255, 255, 255)
@@ -128,6 +137,46 @@ def box_points(
         for y in range(top, bottom)
         for x in range(left, right)
     }
+
+
+def translate_selected_pixels(
+    image: Image.Image,
+    points: set[tuple[int, int]],
+    dx: int,
+    dy: int,
+) -> Image.Image:
+    """Move selected visible pixels without moving the equipment layer."""
+    translated = {
+        point: (point[0] + dx, point[1] + dy)
+        for point in points
+    }
+    if any(
+        not (0 <= target[0] < 16 and 0 <= target[1] < 16)
+        for target in translated.values()
+    ):
+        raise ValueError("translated identity pixel exceeds 16x16 canvas")
+    source = image.copy()
+    result = image.copy()
+    target_points = set(translated.values())
+    for point in points - target_points:
+        result.putpixel(point, TRANSPARENT)
+    for point, target in translated.items():
+        result.putpixel(target, source.getpixel(point))
+    return result
+
+
+def translate_points(
+    points: set[tuple[int, int]],
+    dx: int,
+    dy: int,
+) -> set[tuple[int, int]]:
+    translated = {(x + dx, y + dy) for x, y in points}
+    if any(
+        not (0 <= x < 16 and 0 <= y < 16)
+        for x, y in translated
+    ):
+        raise ValueError("translated mask point exceeds 16x16 canvas")
+    return translated
 
 
 def load_identity_mask_overrides(
@@ -375,8 +424,52 @@ SHARED_CLASS_TEMPLATE_SOURCES = {
 # override is now the Lord master, while live 1:0B uses Hein's High Lord design.
 SHARED_TEMPLATE_SUPERSEDES_DESIGN_OVERRIDES = {
     (1, 0x0B),
+    (1, 0x13),
+    (3, 0x0B),
     (5, 0x0B),
     (5, 0x14),
+    (10, 0x0B),
+    (10, 0x13),
+}
+SHARED_TEMPLATE_SUPERSEDED_DESIGN_REVISION_MAX = {
+    # A newer editor save is an explicit decision made after the template
+    # remap and must win on later rebuilds.
+    (10, 0x0B): 1785226835415926630,
+    (10, 0x13): 1785223392722184076,
+}
+
+# Jessica's shared High Lord and Swordmaster bodies sit one logical pixel to
+# the right of the restored ROM head. Move only the visible identity pixels at
+# the final composition stage so armor, weapons, and user designs stay fixed.
+IDENTITY_PIXEL_TRANSLATIONS = {
+    (10, 0x0B): (1, 0),
+    (10, 0x1A): (1, 0),
+}
+
+# Preserve the user's newly painted Elwin Swordmaster cape pixels, but use the
+# same vivid crimson as Elwin's original red commander capes.
+ELWIN_SWORDMASTER_CAPE_POINTS = {
+    (3, 13),
+    (4, 13),
+    (11, 13),
+    (2, 14),
+    (3, 14),
+    (7, 14),
+    (8, 14),
+    (12, 14),
+    (1, 15),
+    (2, 15),
+    (3, 15),
+    (7, 15),
+    (8, 15),
+    (12, 15),
+    (13, 15),
+}
+FINAL_PIXEL_OVERRIDES = {
+    (1, 0x1A): {
+        point: (219, 0, 0, 255)
+        for point in ELWIN_SWORDMASTER_CAPE_POINTS
+    },
 }
 
 ELWIN_EQUIPMENT_FEATURES = {
@@ -454,6 +547,22 @@ HEIN_EQUIPMENT_FEATURES = {
 HEIN_LATEST_SOURCE_FILES = {
     **HEIN_NATIVE_SOURCE_FILES,
     0x11: "11-priest.png",
+}
+
+AI_SOURCE_ORIGINAL_FILES = {
+    (5, 0x09): HEIN_SORCERER_V2_CLEAN_SOURCE,
+    (5, 0x11): (
+        SHARED_HEIN_CLASS_SOURCE_DIR.parent
+        / "master/hein-11-priest-user-approved.png"
+    ),
+    (5, 0x16): (
+        SHARED_HEIN_CLASS_SOURCE_DIR.parent
+        / "master/hein-16-high-priest-user-approved.png"
+    ),
+}
+
+AI_GENERATED_IDENTITY_KEYS = {
+    (5, 0x09),
 }
 
 LIANA_LANA_PAIRED_SOURCE_FILES = {
@@ -1412,6 +1521,24 @@ def _build_assets_unlocked(
         shutil.rmtree(output_dir)
     source_cell_dir = output_dir / "source-cells"
     source_cell_dir.mkdir(parents=True, exist_ok=True)
+    source_original_dir = output_dir / "source-originals"
+    source_original_dir.mkdir(parents=True, exist_ok=True)
+    source_original_files: dict[tuple[int, int], str] = {}
+    for key, source_original_path in AI_SOURCE_ORIGINAL_FILES.items():
+        if not source_original_path.is_file():
+            raise FileNotFoundError(
+                f"AI source original is missing: {source_original_path}"
+            )
+        target = (
+            source_original_dir / f"{key[0]}-{key[1]:02X}.png"
+        )
+        Image.open(source_original_path).convert("RGBA").save(
+            target,
+            optimize=True,
+        )
+        source_original_files[key] = str(
+            target.relative_to(output_dir)
+        )
 
     board_subjects: dict[tuple[int, int], Image.Image] = {}
     converted_subjects: dict[tuple[int, int], Image.Image] = {}
@@ -1643,10 +1770,17 @@ def _build_assets_unlocked(
             for class_id, filename in (
                 HEIN_LATEST_SOURCE_FILES.items()
             ):
+                key = (commander_id, class_id)
                 source_path = (
-                    HEIN_LATEST_SOURCE_DIR / filename
+                    HEIN_SORCERER_V2_CLEAN_SOURCE
+                    if key in AI_GENERATED_IDENTITY_KEYS
+                    else HEIN_LATEST_SOURCE_DIR / filename
                 )
                 targeted_native_source_paths.append(source_path)
+                if key in AI_GENERATED_IDENTITY_KEYS:
+                    targeted_native_source_paths.append(
+                        HEIN_SORCERER_V2_LOGICAL_SOURCE
+                    )
                 isolated = remove_all_magenta_background(
                     Image.open(source_path).convert("RGBA")
                 )
@@ -1667,45 +1801,74 @@ def _build_assets_unlocked(
                     / f"{commander_id}-{class_id:02X}.png"
                 )
                 preview_source.save(target, optimize=True)
-                generated_16 = fill_subject_across_16_columns(
-                    isolated,
-                    foreground_isolated=True,
-                )
-                key = (commander_id, class_id)
-                converted, changed, lock_box, automatic_points = (
-                    identity_locked_character_sprite(
-                        generated_16,
-                        originals[class_id],
-                        palette,
-                        identity_mask_overrides.get(key),
-                        additional_locked_points=mount_mask_overrides.get(key),
-                        preserve_generated_palette=True,
+                if key in AI_GENERATED_IDENTITY_KEYS:
+                    generated_16 = Image.open(
+                        HEIN_SORCERER_V2_LOGICAL_SOURCE
+                    ).convert("RGBA")
+                    converted = generated_16.copy()
+                    changed = sum(
+                        converted.getpixel((x, y))
+                        != originals[class_id].getpixel((x, y))
+                        for y in range(16)
+                        for x in range(16)
                     )
-                )
-                effective_points = (
-                    automatic_points
-                    if identity_mask_overrides.get(key) is None
-                    else (
-                        set(identity_mask_overrides[key])
-                        | protected_eye_points(originals[class_id])
+                    automatic_points: set[tuple[int, int]] = set()
+                    generated_bbox = converted.getchannel("A").getbbox()
+                    if (
+                        generated_bbox is None
+                        or generated_bbox[1] != 0
+                        or generated_bbox[3] != 16
+                    ):
+                        raise ValueError(
+                            "Hein Sorcerer AI logical source must use "
+                            "all 16 rows"
+                        )
+                    lock_box = None
+                else:
+                    generated_16 = fill_subject_across_16_columns(
+                        isolated,
+                        foreground_isolated=True,
                     )
-                )
-                effective_points |= mount_mask_overrides.get(key, set())
-                converted = remove_ai_border_colors(
-                    converted,
-                    effective_points,
-                )
-                require_full_16_canvas(
-                    converted,
-                    label=f"Hein class {class_id:02X}",
-                )
+                    converted, changed, lock_box, automatic_points = (
+                        identity_locked_character_sprite(
+                            generated_16,
+                            originals[class_id],
+                            palette,
+                            identity_mask_overrides.get(key),
+                            additional_locked_points=(
+                                mount_mask_overrides.get(key)
+                            ),
+                            preserve_generated_palette=True,
+                        )
+                    )
+                    effective_points = (
+                        automatic_points
+                        if identity_mask_overrides.get(key) is None
+                        else (
+                            set(identity_mask_overrides[key])
+                            | protected_eye_points(originals[class_id])
+                        )
+                    )
+                    effective_points |= mount_mask_overrides.get(
+                        key,
+                        set(),
+                    )
+                    converted = remove_ai_border_colors(
+                        converted,
+                        effective_points,
+                    )
+                    require_full_16_canvas(
+                        converted,
+                        label=f"Hein class {class_id:02X}",
+                    )
                 board_subjects[key] = preview_source
                 converted_subjects[key] = converted
                 source_cell_files[key] = str(
                     target.relative_to(output_dir)
                 )
                 native_changed_pixels[key] = changed
-                native_lock_boxes[key] = lock_box
+                if lock_box is not None:
+                    native_lock_boxes[key] = lock_box
                 native_automatic_mask_points[key] = automatic_points
 
     native_specs = {
@@ -2035,6 +2198,52 @@ def _build_assets_unlocked(
         native_automatic_mask_points[key] = automatic_points
         shared_template_labels[key] = template_label
 
+    # Each physical commander chain stores only one terminal fifth-tier
+    # transition, while the stock character tree and sprite table can expose
+    # additional hidden destinations. Give every supplemental hidden class an
+    # editable native 16x16 baseline even before a dedicated AI redesign is
+    # accepted. This keeps the editor complete without changing ROM data.
+    supplemental_hidden_keys: set[tuple[int, int]] = set()
+    for commander_id in range(1, COMMANDER_COUNT + 1):
+        sprite_map = commander_sprite_map(source, commander_id)
+        for route in hidden_class_routes(commander_id):
+            class_id = route.candidates[0]
+            key = (commander_id, class_id)
+            if key in converted_subjects:
+                continue
+            original = render_sprite(
+                source,
+                sprite_map[class_id],
+                1,
+            )
+            eye_points = protected_eye_points(original)
+            detected_box = head_lock_box(original)
+            lock_box = (
+                detected_box[0],
+                detected_box[1],
+                detected_box[2],
+                max(9, detected_box[3]),
+            )
+            automatic_points = box_points(lock_box) | eye_points
+            preview_source = original.resize(
+                (512, 512),
+                RESAMPLING.NEAREST,
+            )
+            target = (
+                source_cell_dir
+                / f"{commander_id}-{class_id:02X}.png"
+            )
+            preview_source.save(target, optimize=True)
+            board_subjects[key] = preview_source
+            converted_subjects[key] = original.copy()
+            source_cell_files[key] = str(
+                target.relative_to(output_dir)
+            )
+            native_changed_pixels[key] = 0
+            native_lock_boxes[key] = lock_box
+            native_automatic_mask_points[key] = automatic_points
+            supplemental_hidden_keys.add(key)
+
     pending_redesign_count = 0
     for commander_id in range(1, COMMANDER_COUNT + 1):
         tiers = class_tiers(source, commander_id)
@@ -2070,16 +2279,21 @@ def _build_assets_unlocked(
                     if key in native_automatic_mask_points
                     else set(eye_points)
                 )
-                identity_lock_points = (
-                    set(identity_mask_overrides[key]) | eye_points
-                    if key in identity_mask_overrides
-                    else automatic_mask_points
-                )
-                identity_lock_mode = (
-                    "custom"
-                    if key in identity_mask_overrides
-                    else "automatic"
-                )
+                if key in AI_GENERATED_IDENTITY_KEYS:
+                    automatic_mask_points = set()
+                    identity_lock_points = set()
+                    identity_lock_mode = "generated"
+                else:
+                    identity_lock_points = (
+                        set(identity_mask_overrides[key]) | eye_points
+                        if key in identity_mask_overrides
+                        else automatic_mask_points
+                    )
+                    identity_lock_mode = (
+                        "custom"
+                        if key in identity_mask_overrides
+                        else "automatic"
+                    )
                 mount_lock_points = set(
                     mount_mask_overrides.get(key, set())
                 )
@@ -2088,7 +2302,41 @@ def _build_assets_unlocked(
                     if key in mount_mask_overrides
                     else "none"
                 )
-                if key in shared_template_labels:
+                if key in AI_GENERATED_IDENTITY_KEYS:
+                    source_kind = (
+                        "OpenAI 신규 헤인 소서러 전용 네이티브 "
+                        "논리16 원화"
+                    )
+                    source_position = (
+                        "latest/hein-sorcerer-v2/clean/"
+                        "hein-09-sorcerer-ai.png + logical16/"
+                        "hein-09-sorcerer-ai.png"
+                    )
+                    feature = (
+                        "현재 헤인의 얼굴·눈·청색 머리 확대 원본과 "
+                        "승인된 헤인 메이지 장비 문법을 레퍼런스로 "
+                        "신규 AI 생성·생성 단계에서 헤인 얼굴·머리 "
+                        "형태 유지·남청색 소서러 로브·목제 지팡이·"
+                        "정확한 16×16 논리 격자·메가드라이브 15색·"
+                        "원본 얼굴 덮어쓰기 없음·실제 ROM 미적용"
+                    )
+                elif key in supplemental_hidden_keys:
+                    source_kind = (
+                        "원작 캐릭터 전용 히든 클래스 네이티브 "
+                        "16×16 편집 기준"
+                    )
+                    source_position = (
+                        f"{commander_id}번 지휘관 "
+                        f"{classes[class_id]['ko']} 원작 전용 스프라이트"
+                    )
+                    feature = (
+                        "ROM 전직 레코드의 대표 히든 경로 밖에 있던 "
+                        "원작 복수 히든 클래스를 에디터에 복원·캐릭터 "
+                        "전용 원작 16×16 스프라이트를 초기 디자인으로 "
+                        "사용·원본 머리·얼굴·눈 잠금·사용자 디자인 "
+                        "편집 가능·실제 ROM 미적용"
+                    )
+                elif key in shared_template_labels:
                     template_label = shared_template_labels[key]
                     template_root = (
                         "latest/shared-archmage-lester-v1"
@@ -2392,6 +2640,11 @@ def _build_assets_unlocked(
                 stored_design_override is not None
                 and key
                 in SHARED_TEMPLATE_SUPERSEDES_DESIGN_OVERRIDES
+                and int(stored_design_override["revision"])
+                <= SHARED_TEMPLATE_SUPERSEDED_DESIGN_REVISION_MAX.get(
+                    key,
+                    int(stored_design_override["revision"]),
+                )
             )
             design_override = (
                 None
@@ -2399,7 +2652,10 @@ def _build_assets_unlocked(
                 else stored_design_override
             )
             if redesigned:
-                if key not in native_lock_boxes:
+                if (
+                    key not in native_lock_boxes
+                    and key not in AI_GENERATED_IDENTITY_KEYS
+                ):
                     reserved_eye_colors = {
                         rom_face.getpixel(point)
                         for point in eye_points
@@ -2414,7 +2670,11 @@ def _build_assets_unlocked(
                 lock_restore_points = (
                     identity_lock_points | mount_lock_points
                 )
-                identity_lock_transparency_mode = "exact"
+                identity_lock_transparency_mode = (
+                    "generated"
+                    if key in AI_GENERATED_IDENTITY_KEYS
+                    else "exact"
+                )
                 if key in shared_template_labels:
                     lock_restore_points = {
                         point
@@ -2446,6 +2706,63 @@ def _build_assets_unlocked(
                     )
             else:
                 identity_lock_transparency_mode = "none"
+            identity_translation = (
+                IDENTITY_PIXEL_TRANSLATIONS.get(key)
+                if redesigned
+                else None
+            )
+            identity_translation_applied_in_override = (
+                identity_translation is not None
+                and design_override is not None
+            )
+            manifest_eye_points = (
+                set()
+                if key in AI_GENERATED_IDENTITY_KEYS
+                else set(eye_points)
+            )
+            manifest_identity_lock_points = set(identity_lock_points)
+            if (
+                identity_translation is not None
+                and not identity_translation_applied_in_override
+            ):
+                dx, dy = identity_translation
+                visible_identity_points = {
+                    point
+                    for point in identity_lock_points
+                    if rom_face.getpixel(point)[3]
+                }
+                image = translate_selected_pixels(
+                    image,
+                    visible_identity_points,
+                    dx,
+                    dy,
+                )
+                manifest_eye_points = translate_points(
+                    set(eye_points),
+                    dx,
+                    dy,
+                )
+                manifest_identity_lock_points = translate_points(
+                    set(identity_lock_points),
+                    dx,
+                    dy,
+                )
+                feature += (
+                    f"·머리·얼굴 픽셀을 장비 기준 "
+                    f"오른쪽 {dx}칸 이동"
+                )
+            elif identity_translation_applied_in_override:
+                feature += (
+                    "·머리·얼굴 오른쪽 1칸 이동을 사용자 최종 "
+                    "디자인에 고정"
+                )
+            for point, color in FINAL_PIXEL_OVERRIDES.get(
+                key,
+                {},
+            ).items():
+                image.putpixel(point, color)
+            if key in FINAL_PIXEL_OVERRIDES:
+                feature += "·사용자 망토를 원작형 진홍색으로 보정"
             changed_pixel_count = sum(
                 image.getpixel((x, y)) != rom_face.getpixel((x, y))
                 for y in range(16)
@@ -2453,6 +2770,14 @@ def _build_assets_unlocked(
             )
             target = commander_dir / f"{class_id:02X}.png"
             image.save(target, optimize=True)
+            hidden_source_class = next(
+                (
+                    route.current_class
+                    for route in hidden_class_routes(commander_id)
+                    if route.candidates[0] == class_id
+                ),
+                None,
+            )
             rows[str(class_id)] = {
                 "class_id": class_id,
                 "class_name": classes[class_id]["ko"],
@@ -2460,6 +2785,9 @@ def _build_assets_unlocked(
                 "ai_sheet_row": commander_id,
                 "ai_sheet_stage": tier,
                 "ai_source_cell_file": source_cell_file,
+                "ai_source_original_file": (
+                    source_original_files.get(key)
+                ),
                 "ai_source_kind": source_kind,
                 "ai_source_position": source_position,
                 "source_palette": dominant_colors(
@@ -2469,23 +2797,39 @@ def _build_assets_unlocked(
                 "face_source_sprite_id": sprite_map[class_id],
                 "face_pixel_count": face_pixel_count,
                 "eye_lock_points": [
-                    list(point) for point in sorted(eye_points)
+                    list(point)
+                    for point in sorted(manifest_eye_points)
                 ],
-                "eye_lock_pixel_count": len(eye_points),
+                "eye_lock_pixel_count": len(manifest_eye_points),
                 "identity_lock_default_points": [
                     list(point)
                     for point in sorted(automatic_mask_points)
                 ],
                 "identity_lock_points": [
                     list(point)
-                    for point in sorted(identity_lock_points)
+                    for point in sorted(
+                        manifest_identity_lock_points
+                    )
                 ],
-                "identity_lock_pixel_count": len(identity_lock_points),
+                "identity_lock_pixel_count": len(
+                    manifest_identity_lock_points
+                ),
                 "identity_lock_mode": identity_lock_mode,
                 "identity_lock_transparency_mode": (
                     identity_lock_transparency_mode
                 ),
                 "identity_mask_pending_rebuild": False,
+                "identity_mask_superseded": (
+                    key in AI_GENERATED_IDENTITY_KEYS
+                ),
+                "identity_translation": (
+                    list(identity_translation)
+                    if identity_translation is not None
+                    else None
+                ),
+                "identity_translation_applied_in_override": (
+                    identity_translation_applied_in_override
+                ),
                 "mount_lock_points": [
                     list(point)
                     for point in sorted(mount_lock_points)
@@ -2511,6 +2855,11 @@ def _build_assets_unlocked(
                 "group_rank": group_rank,
                 "redesigned": redesigned,
                 "pending_redesign": pending_redesign,
+                "hidden_class": hidden_source_class is not None,
+                "hidden_source_class": hidden_source_class,
+                "supplemental_hidden_baseline": (
+                    key in supplemental_hidden_keys
+                ),
                 "identity_lock_box": (
                     list(native_lock_boxes[key])
                     if key in native_lock_boxes and redesigned
@@ -2537,9 +2886,10 @@ def _build_assets_unlocked(
         ],
         "ai_source_images": [
             str(path.relative_to(ROOT))
-            for path in (
+            for path in dict.fromkeys(
                 native_source_paths
                 + targeted_native_source_paths
+                + list(AI_SOURCE_ORIGINAL_FILES.values())
             )
         ],
         "commander_count": len(commanders),
@@ -2557,14 +2907,19 @@ def _build_assets_unlocked(
             "sources with each current short-bob face mask locked before "
             "whole-canvas native16 sampling; Lester's user-edited Archmage "
             "and Hein's approved Mage/Priest/High Priest are shared as "
-            "same-class silhouettes with commander-specific recolors) -> connected "
+            "same-class silhouettes with commander-specific recolors; Hein's "
+            "Sorcerer uses its new generated-identity source without a pasted "
+            "ROM face, and explicit source originals are copied for editor "
+            "comparison) -> connected "
             "full-sprite recovery across nominal cell borders -> nearest "
             "16x16 sample -> adaptive 15-color 4bpp "
             "palette that reserves exact original identity colors and keeps "
             "generated equipment hues at Mega Drive channel levels -> every "
             "editable original head/face, protected eye, and selected mount "
-            "pixels restored; only upper classes that duplicate a lower sprite are "
-            "redesigned; base classes stay byte-exact"
+            "pixels restored; every stock fifth-tier route, including the "
+            "supplemental multi-hidden routes absent from the ten writable "
+            "chain records, is shown with an editable character-specific "
+            "native 16x16 baseline; base classes stay byte-exact"
         ),
         "rom_effect": "none; preview PNG assets only",
         "commanders": commanders,

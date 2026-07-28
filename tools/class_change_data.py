@@ -16,6 +16,61 @@ class ClassTransition:
     candidates: tuple[int, ...]
 
 
+# The ten writable chain records contain only one terminal fifth-tier route
+# per commander. The stock commander sprite tables and original class trees
+# expose these additional fifth-tier destinations too. Keep them as read-only
+# editor metadata; patch_class_change_chain() must continue writing exactly
+# the ten physical ROM records.
+HIDDEN_CLASS_ROUTES: dict[int, tuple[ClassTransition, ...]] = {
+    1: (
+        ClassTransition(0x1A, (0x22,)),  # Sword Master -> Hero
+        ClassTransition(0x1B, (0x29,)),  # Knight Master -> Royal Knight
+    ),
+    2: (
+        ClassTransition(0x19, (0x28,)),  # Paladin -> Summoner
+        ClassTransition(0x16, (0x25,)),  # High Priest -> Agent
+        ClassTransition(0x15, (0x26,)),  # Wizard -> Zarvera
+    ),
+    3: (
+        ClassTransition(0x19, (0x28,)),
+        ClassTransition(0x16, (0x25,)),
+        ClassTransition(0x15, (0x26,)),
+    ),
+    4: (
+        ClassTransition(0x21, (0x23,)),  # Ranger -> High Master
+        ClassTransition(0x1E, (0x24,)),  # Dragon Lord -> Dragon Master
+        ClassTransition(0x1D, (0x27,)),  # Silver Knight -> Princess
+    ),
+    5: (
+        ClassTransition(0x15, (0x28,)),  # Wizard -> Summoner
+        ClassTransition(0x14, (0x26,)),  # Arch Mage -> Zarvera
+    ),
+    6: (
+        ClassTransition(0x1B, (0x29,)),  # Knight Master -> Royal Knight
+    ),
+    7: (
+        ClassTransition(0x1E, (0x24,)),  # Dragon Lord -> Dragon Master
+    ),
+    8: (
+        ClassTransition(0x1A, (0x23,)),  # Sword Master -> High Master
+    ),
+    9: (
+        ClassTransition(0x1F, (0x2A,)),  # Serpent Lord -> Serpent Master
+        ClassTransition(0x14, (0x26,)),  # Arch Mage -> Zarvera
+    ),
+    10: (
+        ClassTransition(0x14, (0x26,)),  # Arch Mage -> Zarvera
+        ClassTransition(0x18, (0x28,)),  # Sage -> Summoner
+    ),
+}
+
+
+def hidden_class_routes(commander_id: int) -> tuple[ClassTransition, ...]:
+    if not 1 <= commander_id <= COMMANDER_COUNT:
+        raise ValueError(f"commander ID must be 1..{COMMANDER_COUNT}")
+    return HIDDEN_CLASS_ROUTES[commander_id]
+
+
 def be16(data: bytes | bytearray, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 2], "big")
 

@@ -49,6 +49,29 @@ class EditorModelTests(unittest.TestCase):
             },
         )
         self.assertEqual(model["preview_class_ids"][:3], [1, 2, 3])
+        self.assertEqual(
+            model["commanders"][0]["hidden_class_routes"],
+            [
+                {"current_class": 0x1A, "hidden_class": 0x22},
+                {"current_class": 0x1B, "hidden_class": 0x29},
+            ],
+        )
+        self.assertEqual(
+            {
+                row["hidden_class"]
+                for row in model["commanders"][1][
+                    "hidden_class_routes"
+                ]
+            },
+            {0x25, 0x26, 0x28},
+        )
+        self.assertEqual(
+            sum(
+                len(commander["hidden_class_routes"])
+                for commander in model["commanders"]
+            ),
+            20,
+        )
         self.assertEqual(len(model["class_hires"]), 157)
         self.assertEqual(
             model["class_hires"][1]["hire_class_ids"],

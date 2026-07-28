@@ -1,5 +1,5 @@
 {
-  "asset_version": "liana-red-lana-blue-high-lord-v56",
+  "asset_version": "jessica-swordmaster-polish-v63",
   "generated_from": "roms/original/Langrisser II (Japan).md",
   "ai_source_sheets": [
     "docs/assets/ai-class-source/logical16-v3/liana/liana-logical16-sheet-ai.png",
@@ -56,7 +56,6 @@
     "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-blue/19.png",
     "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-blue/1D.png",
     "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-blue/28.png",
-    "docs/assets/ai-class-source/latest/hein/raw/09-sorcerer.png",
     "docs/assets/ai-class-source/latest/hein/raw/0A-shaman.png",
     "docs/assets/ai-class-source/latest/hein/raw/0B-high-lord.png",
     "docs/assets/ai-class-source/latest/hein/raw/13-mage.png",
@@ -111,13 +110,17 @@
     "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/03-16.png",
     "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/05-16.png",
     "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/07-16.png",
-    "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/10-16.png"
+    "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/10-16.png",
+    "docs/assets/ai-class-source/latest/hein-sorcerer-v2/clean/hein-09-sorcerer-ai.png",
+    "docs/assets/ai-class-source/latest/hein-sorcerer-v2/logical16/hein-09-sorcerer-ai.png",
+    "docs/assets/ai-class-source/latest/shared-hein-classes-v1/master/hein-11-priest-user-approved.png",
+    "docs/assets/ai-class-source/latest/shared-hein-classes-v1/master/hein-16-high-priest-user-approved.png"
   ],
   "commander_count": 10,
-  "asset_count": 170,
-  "redesigned_count": 103,
+  "asset_count": 180,
+  "redesigned_count": 113,
   "pending_redesign_count": 0,
-  "pipeline": "original ROM reference board + current editable identity and mount masks -> per-commander logical16-v3 AI sheet drawn directly on a 4x4 grid of native 16x16 coordinates (Elwin keeps its accepted v16 sources; Liana/Lana use selected strict 16-cell AI sources with the shared 82-pixel Liana Sage face mask already locked before whole-canvas native16 sampling, with no subject crop or anisotropic resize; Sherry uses eleven new class-specific AI sources with each current short-bob face mask locked before whole-canvas native16 sampling; Lester's user-edited Archmage and Hein's approved Mage/Priest/High Priest are shared as same-class silhouettes with commander-specific recolors) -> connected full-sprite recovery across nominal cell borders -> nearest 16x16 sample -> adaptive 15-color 4bpp palette that reserves exact original identity colors and keeps generated equipment hues at Mega Drive channel levels -> every editable original head/face, protected eye, and selected mount pixels restored; only upper classes that duplicate a lower sprite are redesigned; base classes stay byte-exact",
+  "pipeline": "original ROM reference board + current editable identity and mount masks -> per-commander logical16-v3 AI sheet drawn directly on a 4x4 grid of native 16x16 coordinates (Elwin keeps its accepted v16 sources; Liana/Lana use selected strict 16-cell AI sources with the shared 82-pixel Liana Sage face mask already locked before whole-canvas native16 sampling, with no subject crop or anisotropic resize; Sherry uses eleven new class-specific AI sources with each current short-bob face mask locked before whole-canvas native16 sampling; Lester's user-edited Archmage and Hein's approved Mage/Priest/High Priest are shared as same-class silhouettes with commander-specific recolors) -> connected full-sprite recovery across nominal cell borders -> nearest 16x16 sample -> adaptive 15-color 4bpp palette that reserves exact original identity colors and keeps generated equipment hues at Mega Drive channel levels -> every editable original head/face, protected eye, and selected mount pixels restored; only upper classes that duplicate a lower sprite are redesigned; base classes stay byte-exact Every stock fifth-tier route is present, including supplemental multi-hidden routes stored outside the ten writable chain records; supplemental entries start from editable character-specific native 16x16 ROM art.",
   "rom_effect": "none; preview PNG assets only",
   "commanders": {
     "1": {
@@ -210,9 +213,9 @@
             "#242424",
             "#49496d",
             "#6d0000",
-            "#929292",
             "#ffffff",
-            "#924924"
+            "#929292",
+            "#dbb66d"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -876,7 +879,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785139025568946506,
+          "design_revision": 1785226783045358086,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -894,7 +897,7 @@
             14,
             9
           ],
-          "changed_pixel_count": 122,
+          "changed_pixel_count": 129,
           "feature": "엘윈 사용자 편집 하이로드 기반 로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 122픽셀·사용자 16×16 디자인 편집 적용",
           "file": "1/04.png"
         },
@@ -1716,7 +1719,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785139123792244742,
+          "design_revision": 1785226614151445208,
           "design_override_superseded": true,
           "superseded_design_revision": 1785122174110219547,
           "duplicate_group": [
@@ -3542,12 +3545,12 @@
             "#49496d"
           ],
           "pixel_palette": [
-            "#929292",
-            "#49496d",
-            "#6d0000",
             "#924924",
+            "#242424",
+            "#6d0000",
             "#dbb66d",
-            "#ffffff"
+            "#db0000",
+            "#49496d"
           ],
           "face_source_sprite_id": 31,
           "face_pixel_count": 0,
@@ -4211,9 +4214,9 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785087164294124889,
-          "design_override_superseded": false,
-          "superseded_design_revision": 0,
+          "design_revision": 1785226570917742985,
+          "design_override_superseded": true,
+          "superseded_design_revision": 1785087164294124889,
           "duplicate_group": [
             10,
             18,
@@ -4229,8 +4232,8 @@
             14,
             9
           ],
-          "changed_pixel_count": 77,
-          "feature": "헤인 사용자 편집 메이지의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 120픽셀·사용자 16×16 디자인 편집 적용",
+          "changed_pixel_count": 127,
+          "feature": "헤인 사용자 편집 메이지의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 120픽셀·기존 사용자 16×16 디자인 편집 이력 보존·새 공통 클래스 배치 우선·연결된 왼쪽 망토를 엘윈 원작형 진홍색으로 보정·사용자 16×16 디자인 편집 적용",
           "file": "1/13.png"
         },
         "20": {
@@ -5024,11 +5027,11 @@
           ],
           "pixel_palette": [
             "#ffffff",
-            "#929292",
-            "#924924",
             "#6d0000",
-            "#dbb66d",
-            "#ffb600"
+            "#242424",
+            "#924924",
+            "#929292",
+            "#db0000"
           ],
           "face_source_sprite_id": 30,
           "face_pixel_count": 0,
@@ -5732,7 +5735,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785087061511310892,
+          "design_revision": 1785228158057012029,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -5750,8 +5753,8 @@
             14,
             9
           ],
-          "changed_pixel_count": 111,
-          "feature": "사용자 마스크의 원본 얼굴·머리·눈 픽셀 79개 완전 잠금·원작과 같은 실제 머리 5~6논리픽셀·전체 15~16논리픽셀 비율로 재생성한 AI 갑옷·무기·클래스별 탈것 실루엣 유지·메가드라이브 원본 팔레트·원본 눈·흰자 2픽셀 잠금·경량 은색 검객 갑옷·진홍 허리띠·양손검·변경 113픽셀·사용자 16×16 디자인 편집 적용",
+          "changed_pixel_count": 119,
+          "feature": "사용자 마스크의 원본 얼굴·머리·눈 픽셀 79개 완전 잠금·원작과 같은 실제 머리 5~6논리픽셀·전체 15~16논리픽셀 비율로 재생성한 AI 갑옷·무기·클래스별 탈것 실루엣 유지·메가드라이브 원본 팔레트·원본 눈·흰자 2픽셀 잠금·경량 은색 검객 갑옷·진홍 허리띠·양손검·변경 113픽셀·사용자 16×16 디자인 편집 적용·사용자 망토를 원작형 진홍색으로 보정",
           "file": "1/1A.png"
         },
         "27": {
@@ -8374,7 +8377,807 @@
           ],
           "changed_pixel_count": 145,
           "feature": "원작 전체와 현재 73픽셀 얼굴 마스크만 정체성 기준으로 사용해 신규 생성·외소하지 않은 넓은 백은·왕청 중갑 몸통·금장 견갑·짧은 진홍 망토·손과 손잡이에 연결된 대형 히어로 검·보병·16개 행·열 전부 사용·보라색 배경 오염과 완전 검정 제거·메가드라이브 4bpp·원본 머리·얼굴·눈 73픽셀 완전 잠금·변경 145픽셀",
-          "file": "1/22.png"
+          "file": "1/22.png",
+          "hidden_class": true,
+          "hidden_source_class": 26,
+          "supplemental_hidden_baseline": false
+        },
+        "41": {
+          "class_id": 41,
+          "class_name": "로얄나이트",
+          "tier": 5,
+          "ai_sheet_row": 1,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/1-29.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "1번 지휘관 로얄나이트 원작 전용 스프라이트",
+          "source_palette": [
+            "#ffffff",
+            "#929292",
+            "#924924",
+            "#49496d",
+            "#6d0000",
+            "#ffb600"
+          ],
+          "pixel_palette": [
+            "#ffffff",
+            "#929292",
+            "#924924",
+            "#49496d",
+            "#6d0000",
+            "#ffb600"
+          ],
+          "face_source_sprite_id": 34,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              6,
+              7
+            ],
+            [
+              7,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              0
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              7,
+              0
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              0
+            ],
+            [
+              8,
+              1
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              0
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              9,
+              2
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              1
+            ],
+            [
+              10,
+              2
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              0
+            ],
+            [
+              11,
+              1
+            ],
+            [
+              11,
+              2
+            ],
+            [
+              11,
+              3
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              12,
+              1
+            ],
+            [
+              12,
+              2
+            ],
+            [
+              12,
+              3
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              0
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              7,
+              0
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              0
+            ],
+            [
+              8,
+              1
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              0
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              9,
+              2
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              1
+            ],
+            [
+              10,
+              2
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              0
+            ],
+            [
+              11,
+              1
+            ],
+            [
+              11,
+              2
+            ],
+            [
+              11,
+              3
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              12,
+              1
+            ],
+            [
+              12,
+              2
+            ],
+            [
+              12,
+              3
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ]
+          ],
+          "identity_lock_pixel_count": 90,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            5,
+            12,
+            27,
+            41
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 27,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            3,
+            0,
+            13,
+            9
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "1/29.png"
         }
       }
     },
@@ -9218,11 +10021,11 @@
           ],
           "pixel_palette": [
             "#db0000",
-            "#ffb600",
             "#ffffff",
+            "#ffb600",
             "#924924",
             "#dbb66d",
-            "#242424"
+            "#929292"
           ],
           "face_source_sprite_id": 41,
           "face_pixel_count": 0,
@@ -9758,7 +10561,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785222923625792909,
+          "design_revision": 1785227341887472025,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -9774,7 +10577,7 @@
             11,
             11
           ],
-          "changed_pixel_count": 139,
+          "changed_pixel_count": 140,
           "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 137픽셀·사용자 16×16 디자인 편집 적용",
           "file": "2/0B.png"
         },
@@ -15457,7 +16260,924 @@
           ],
           "changed_pixel_count": 122,
           "feature": "1254px 캔버스를 정확히 16개 행·열로 제한한 AI 원화 후보를 반복 생성·리아나 세이지에서 다시 저장한 얼굴 82픽셀 마스크를 리아나·라나 모든 클래스에 공통 적용·피사체 크롭이나 가로세로 강제 확대 없이 16칸 전체 캔버스를 같은 좌표로 직접 16×16화·리아나 적색과 좌표가 같은 라나 청색 짝 디자인·이미지 기준 오른쪽 끝에 왼손 주무기 배치·16개 행·열 모두 사용·보라색 키·검정 배경 제거·메가드라이브 4bpp·원본 머리·얼굴·눈 82픽셀 완전 잠금·남청색 서머너 로브·룬 문양·두루마리·지팡이",
-          "file": "2/28.png"
+          "file": "2/28.png",
+          "hidden_class": true,
+          "hidden_source_class": 25,
+          "supplemental_hidden_baseline": false
+        },
+        "37": {
+          "class_id": 37,
+          "class_name": "에이전트",
+          "tier": 5,
+          "ai_sheet_row": 2,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/2-25.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "2번 지휘관 에이전트 원작 전용 스프라이트",
+          "source_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#929292",
+            "#db0000"
+          ],
+          "pixel_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#929292",
+            "#db0000"
+          ],
+          "face_source_sprite_id": 37,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              7,
+              7
+            ],
+            [
+              8,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "identity_lock_pixel_count": 55,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22,
+            37
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 22,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            0,
+            6,
+            11,
+            11
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "2/25.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "ai_sheet_row": 2,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/2-26.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "2번 지휘관 자베라 원작 전용 스프라이트",
+          "source_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#6d0000",
+            "#929292"
+          ],
+          "pixel_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#6d0000",
+            "#929292"
+          ],
+          "face_source_sprite_id": 39,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              8,
+              7
+            ],
+            [
+              9,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              13,
+              4
+            ],
+            [
+              13,
+              5
+            ],
+            [
+              13,
+              6
+            ],
+            [
+              13,
+              7
+            ],
+            [
+              13,
+              8
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              14,
+              5
+            ],
+            [
+              14,
+              6
+            ],
+            [
+              14,
+              7
+            ],
+            [
+              14,
+              8
+            ],
+            [
+              15,
+              4
+            ],
+            [
+              15,
+              5
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              15,
+              7
+            ],
+            [
+              15,
+              8
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              13,
+              4
+            ],
+            [
+              13,
+              5
+            ],
+            [
+              13,
+              6
+            ],
+            [
+              13,
+              7
+            ],
+            [
+              13,
+              8
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              14,
+              5
+            ],
+            [
+              14,
+              6
+            ],
+            [
+              14,
+              7
+            ],
+            [
+              14,
+              8
+            ],
+            [
+              15,
+              4
+            ],
+            [
+              15,
+              5
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              15,
+              7
+            ],
+            [
+              15,
+              8
+            ]
+          ],
+          "identity_lock_pixel_count": 40,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            18,
+            24,
+            38
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 21,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            8,
+            4,
+            16,
+            9
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "2/26.png"
         }
       }
     },
@@ -16292,20 +18012,20 @@
           "ai_source_kind": "헤인 사용자 편집 하이로드 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-high-lord-hein-v1/logical16/03-0B.png",
           "source_palette": [
-            "#924924",
             "#ffb600",
             "#ffffff",
+            "#924924",
+            "#6ddbff",
             "#dbb66d",
-            "#0049db",
-            "#929292"
+            "#496dff"
           ],
           "pixel_palette": [
-            "#924924",
             "#ffb600",
             "#ffffff",
+            "#924924",
+            "#6ddbff",
             "#dbb66d",
-            "#0049db",
-            "#929292"
+            "#496dff"
           ],
           "face_source_sprite_id": 47,
           "face_pixel_count": 0,
@@ -16548,18 +18268,6 @@
               1
             ],
             [
-              1,
-              11
-            ],
-            [
-              1,
-              12
-            ],
-            [
-              1,
-              13
-            ],
-            [
               2,
               2
             ],
@@ -16576,18 +18284,6 @@
               5
             ],
             [
-              2,
-              8
-            ],
-            [
-              2,
-              9
-            ],
-            [
-              2,
-              10
-            ],
-            [
               3,
               2
             ],
@@ -16598,10 +18294,6 @@
             [
               3,
               5
-            ],
-            [
-              3,
-              7
             ],
             [
               4,
@@ -16872,7 +18564,7 @@
               4
             ]
           ],
-          "identity_lock_pixel_count": 82,
+          "identity_lock_pixel_count": 75,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -16882,8 +18574,8 @@
           "mount_mask_pending_rebuild": false,
           "design_override": false,
           "design_revision": 0,
-          "design_override_superseded": false,
-          "superseded_design_revision": 0,
+          "design_override_superseded": true,
+          "superseded_design_revision": 1785227477665587123,
           "duplicate_group": [
             4,
             11
@@ -16897,9 +18589,11 @@
             11,
             11
           ],
-          "changed_pixel_count": 134,
-          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 134픽셀",
-          "file": "3/0B.png"
+          "changed_pixel_count": 146,
+          "feature": "헤인의 사용자 승인 하이로드 장비·방패·검 실루엣을 라나에게 적용·라나 원본 하이로드 팔레트 기준·갑옷 넓은 면은 하늘색, 갑옷 음영은 중간 파랑·망토는 중간 파랑·진한 파랑 명암·양쪽 발·부츠 회색 7픽셀 유지·원본 얼굴·머리·눈 75픽셀 유지·메가드라이브 4bpp·기존 사용자 편집 이력 보존·실제 ROM 미적용",
+          "file": "3/0B.png",
+          "identity_translation": null,
+          "identity_translation_applied_in_override": false
         },
         "13": {
           "class_id": 13,
@@ -22580,7 +24274,924 @@
           ],
           "changed_pixel_count": 122,
           "feature": "1254px 캔버스를 정확히 16개 행·열로 제한한 AI 원화 후보를 반복 생성·리아나 세이지에서 다시 저장한 얼굴 82픽셀 마스크를 리아나·라나 모든 클래스에 공통 적용·피사체 크롭이나 가로세로 강제 확대 없이 16칸 전체 캔버스를 같은 좌표로 직접 16×16화·리아나 적색과 좌표가 같은 라나 청색 짝 디자인·이미지 기준 오른쪽 끝에 왼손 주무기 배치·16개 행·열 모두 사용·보라색 키·검정 배경 제거·메가드라이브 4bpp·원본 머리·얼굴·눈 82픽셀 완전 잠금·남청색 서머너 로브·룬 문양·두루마리·지팡이",
-          "file": "3/28.png"
+          "file": "3/28.png",
+          "hidden_class": true,
+          "hidden_source_class": 25,
+          "supplemental_hidden_baseline": false
+        },
+        "37": {
+          "class_id": 37,
+          "class_name": "에이전트",
+          "tier": 5,
+          "ai_sheet_row": 3,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/3-25.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "3번 지휘관 에이전트 원작 전용 스프라이트",
+          "source_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#929292",
+            "#496dff"
+          ],
+          "pixel_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#929292",
+            "#496dff"
+          ],
+          "face_source_sprite_id": 43,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              7,
+              7
+            ],
+            [
+              8,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "identity_lock_pixel_count": 55,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            2,
+            8,
+            17,
+            22,
+            37
+          ],
+          "group_rank": 4,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 22,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            0,
+            6,
+            11,
+            11
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "3/25.png"
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "ai_sheet_row": 3,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/3-26.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "3번 지휘관 자베라 원작 전용 스프라이트",
+          "source_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#0000db",
+            "#929292"
+          ],
+          "pixel_palette": [
+            "#924924",
+            "#ffb600",
+            "#ffffff",
+            "#dbb66d",
+            "#0000db",
+            "#929292"
+          ],
+          "face_source_sprite_id": 45,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              8,
+              7
+            ],
+            [
+              9,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              13,
+              4
+            ],
+            [
+              13,
+              5
+            ],
+            [
+              13,
+              6
+            ],
+            [
+              13,
+              7
+            ],
+            [
+              13,
+              8
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              14,
+              5
+            ],
+            [
+              14,
+              6
+            ],
+            [
+              14,
+              7
+            ],
+            [
+              14,
+              8
+            ],
+            [
+              15,
+              4
+            ],
+            [
+              15,
+              5
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              15,
+              7
+            ],
+            [
+              15,
+              8
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              13,
+              4
+            ],
+            [
+              13,
+              5
+            ],
+            [
+              13,
+              6
+            ],
+            [
+              13,
+              7
+            ],
+            [
+              13,
+              8
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              14,
+              5
+            ],
+            [
+              14,
+              6
+            ],
+            [
+              14,
+              7
+            ],
+            [
+              14,
+              8
+            ],
+            [
+              15,
+              4
+            ],
+            [
+              15,
+              5
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              15,
+              7
+            ],
+            [
+              15,
+              8
+            ]
+          ],
+          "identity_lock_pixel_count": 40,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            18,
+            24,
+            38
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 21,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            8,
+            4,
+            16,
+            9
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "3/26.png"
         }
       }
     },
@@ -28729,7 +31340,880 @@
           ],
           "changed_pixel_count": 112,
           "feature": "이전 쉐리 AI를 입력하지 않고 원작 전체와 현재 사용자 마스크만 참조해 클래스별 별도 생성·생성 장비 원화의 얼굴 논리셀을 변환 전에 원본으로 완전 고정·큰 얼굴·눈·흰자·턱선 길이 은발 단발 유지·16개 행·열 모두 사용·보라색 키와 검정 배경 제거·메가드라이브 4bpp·백청색 하이마스터 로브·금색 견갑·보석 지팡이·변경 112픽셀",
-          "file": "4/23.png"
+          "file": "4/23.png",
+          "hidden_class": true,
+          "hidden_source_class": 33,
+          "supplemental_hidden_baseline": false
+        },
+        "36": {
+          "class_id": 36,
+          "class_name": "드래곤마스터",
+          "tier": 5,
+          "ai_sheet_row": 4,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/4-24.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "4번 지휘관 드래곤마스터 원작 전용 스프라이트",
+          "source_palette": [
+            "#246d00",
+            "#24db24",
+            "#ffb600",
+            "#ffffff",
+            "#49496d",
+            "#929292"
+          ],
+          "pixel_palette": [
+            "#246d00",
+            "#24db24",
+            "#ffb600",
+            "#ffffff",
+            "#49496d",
+            "#929292"
+          ],
+          "face_source_sprite_id": 98,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              6,
+              6
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              9,
+              6
+            ]
+          ],
+          "eye_lock_pixel_count": 4,
+          "identity_lock_default_points": [
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ]
+          ],
+          "identity_lock_pixel_count": 48,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            15,
+            30,
+            36
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 30,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            2,
+            3,
+            10,
+            9
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "4/24.png"
+        },
+        "39": {
+          "class_id": 39,
+          "class_name": "프린세스",
+          "tier": 5,
+          "ai_sheet_row": 4,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/4-27.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "4번 지휘관 프린세스 원작 전용 스프라이트",
+          "source_palette": [
+            "#929292",
+            "#49496d",
+            "#ffffff",
+            "#924924",
+            "#dbb66d",
+            "#ffb600"
+          ],
+          "pixel_palette": [
+            "#929292",
+            "#49496d",
+            "#ffffff",
+            "#924924",
+            "#dbb66d",
+            "#ffb600"
+          ],
+          "face_source_sprite_id": 95,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              8,
+              7
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              11,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 4,
+          "identity_lock_default_points": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ]
+          ],
+          "identity_lock_pixel_count": 40,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            39
+          ],
+          "group_rank": 0,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 29,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            4,
+            4,
+            12,
+            9
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "4/27.png"
         }
       }
     },
@@ -28875,624 +32359,33 @@
           "ai_sheet_row": 5,
           "ai_sheet_stage": 2,
           "ai_source_cell_file": "source-cells/5-09.png",
-          "ai_source_kind": "OpenAI 헤인 11종 신규 전폭 논리16 원화",
-          "ai_source_position": "latest/hein/raw/09-sorcerer.png",
+          "ai_source_kind": "OpenAI 신규 헤인 소서러 전용 네이티브 논리16 원화",
+          "ai_source_position": "latest/hein-sorcerer-v2/clean/hein-09-sorcerer-ai.png + logical16/hein-09-sorcerer-ai.png",
           "source_palette": [
-            "#021764",
-            "#1c50f7",
-            "#021765",
-            "#69d6fc",
-            "#49496c",
-            "#68d6fc"
+            "#68d8fd",
+            "#68d7fc",
+            "#68d8fc",
+            "#69d8fd",
+            "#68d7fd",
+            "#67d7fc"
           ],
           "pixel_palette": [
-            "#49496d",
-            "#db9200",
             "#2449ff",
+            "#24246d",
             "#6ddbff",
-            "#496dff",
-            "#924924"
+            "#6d4900",
+            "#002449",
+            "#ffb66d"
           ],
           "face_source_sprite_id": 55,
           "face_pixel_count": 0,
-          "eye_lock_points": [
-            [
-              7,
-              7
-            ],
-            [
-              8,
-              7
-            ]
-          ],
-          "eye_lock_pixel_count": 2,
-          "identity_lock_default_points": [
-            [
-              0,
-              4
-            ],
-            [
-              0,
-              5
-            ],
-            [
-              0,
-              6
-            ],
-            [
-              0,
-              7
-            ],
-            [
-              0,
-              8
-            ],
-            [
-              0,
-              9
-            ],
-            [
-              0,
-              10
-            ],
-            [
-              1,
-              4
-            ],
-            [
-              1,
-              5
-            ],
-            [
-              1,
-              6
-            ],
-            [
-              1,
-              7
-            ],
-            [
-              1,
-              8
-            ],
-            [
-              1,
-              9
-            ],
-            [
-              1,
-              10
-            ],
-            [
-              2,
-              4
-            ],
-            [
-              2,
-              5
-            ],
-            [
-              2,
-              6
-            ],
-            [
-              2,
-              7
-            ],
-            [
-              2,
-              8
-            ],
-            [
-              2,
-              9
-            ],
-            [
-              2,
-              10
-            ],
-            [
-              3,
-              4
-            ],
-            [
-              3,
-              5
-            ],
-            [
-              3,
-              6
-            ],
-            [
-              3,
-              7
-            ],
-            [
-              3,
-              8
-            ],
-            [
-              3,
-              9
-            ],
-            [
-              3,
-              10
-            ],
-            [
-              4,
-              4
-            ],
-            [
-              4,
-              5
-            ],
-            [
-              4,
-              6
-            ],
-            [
-              4,
-              7
-            ],
-            [
-              4,
-              8
-            ],
-            [
-              4,
-              9
-            ],
-            [
-              4,
-              10
-            ],
-            [
-              5,
-              4
-            ],
-            [
-              5,
-              5
-            ],
-            [
-              5,
-              6
-            ],
-            [
-              5,
-              7
-            ],
-            [
-              5,
-              8
-            ],
-            [
-              5,
-              9
-            ],
-            [
-              5,
-              10
-            ],
-            [
-              6,
-              4
-            ],
-            [
-              6,
-              5
-            ],
-            [
-              6,
-              6
-            ],
-            [
-              6,
-              7
-            ],
-            [
-              6,
-              8
-            ],
-            [
-              6,
-              9
-            ],
-            [
-              6,
-              10
-            ],
-            [
-              7,
-              4
-            ],
-            [
-              7,
-              5
-            ],
-            [
-              7,
-              6
-            ],
-            [
-              7,
-              7
-            ],
-            [
-              7,
-              8
-            ],
-            [
-              7,
-              9
-            ],
-            [
-              7,
-              10
-            ],
-            [
-              8,
-              4
-            ],
-            [
-              8,
-              5
-            ],
-            [
-              8,
-              6
-            ],
-            [
-              8,
-              7
-            ],
-            [
-              8,
-              8
-            ],
-            [
-              8,
-              9
-            ],
-            [
-              8,
-              10
-            ],
-            [
-              9,
-              4
-            ],
-            [
-              9,
-              5
-            ],
-            [
-              9,
-              6
-            ],
-            [
-              9,
-              7
-            ],
-            [
-              9,
-              8
-            ],
-            [
-              9,
-              9
-            ],
-            [
-              9,
-              10
-            ],
-            [
-              10,
-              4
-            ],
-            [
-              10,
-              5
-            ],
-            [
-              10,
-              6
-            ],
-            [
-              10,
-              7
-            ],
-            [
-              10,
-              8
-            ],
-            [
-              10,
-              9
-            ],
-            [
-              10,
-              10
-            ]
-          ],
-          "identity_lock_points": [
-            [
-              3,
-              3
-            ],
-            [
-              3,
-              4
-            ],
-            [
-              3,
-              5
-            ],
-            [
-              3,
-              6
-            ],
-            [
-              4,
-              2
-            ],
-            [
-              4,
-              3
-            ],
-            [
-              4,
-              4
-            ],
-            [
-              4,
-              5
-            ],
-            [
-              4,
-              6
-            ],
-            [
-              5,
-              1
-            ],
-            [
-              5,
-              2
-            ],
-            [
-              5,
-              3
-            ],
-            [
-              5,
-              4
-            ],
-            [
-              5,
-              5
-            ],
-            [
-              5,
-              6
-            ],
-            [
-              5,
-              7
-            ],
-            [
-              6,
-              0
-            ],
-            [
-              6,
-              1
-            ],
-            [
-              6,
-              2
-            ],
-            [
-              6,
-              3
-            ],
-            [
-              6,
-              4
-            ],
-            [
-              6,
-              5
-            ],
-            [
-              6,
-              6
-            ],
-            [
-              6,
-              7
-            ],
-            [
-              6,
-              8
-            ],
-            [
-              7,
-              0
-            ],
-            [
-              7,
-              1
-            ],
-            [
-              7,
-              2
-            ],
-            [
-              7,
-              3
-            ],
-            [
-              7,
-              4
-            ],
-            [
-              7,
-              5
-            ],
-            [
-              7,
-              6
-            ],
-            [
-              7,
-              7
-            ],
-            [
-              7,
-              8
-            ],
-            [
-              8,
-              0
-            ],
-            [
-              8,
-              1
-            ],
-            [
-              8,
-              2
-            ],
-            [
-              8,
-              3
-            ],
-            [
-              8,
-              4
-            ],
-            [
-              8,
-              5
-            ],
-            [
-              8,
-              6
-            ],
-            [
-              8,
-              7
-            ],
-            [
-              8,
-              8
-            ],
-            [
-              9,
-              0
-            ],
-            [
-              9,
-              1
-            ],
-            [
-              9,
-              2
-            ],
-            [
-              9,
-              3
-            ],
-            [
-              9,
-              4
-            ],
-            [
-              9,
-              5
-            ],
-            [
-              9,
-              6
-            ],
-            [
-              9,
-              7
-            ],
-            [
-              9,
-              8
-            ],
-            [
-              10,
-              0
-            ],
-            [
-              10,
-              1
-            ],
-            [
-              10,
-              2
-            ],
-            [
-              10,
-              3
-            ],
-            [
-              10,
-              4
-            ],
-            [
-              10,
-              5
-            ],
-            [
-              10,
-              6
-            ],
-            [
-              11,
-              1
-            ],
-            [
-              11,
-              2
-            ],
-            [
-              11,
-              3
-            ],
-            [
-              11,
-              4
-            ],
-            [
-              11,
-              5
-            ],
-            [
-              11,
-              6
-            ],
-            [
-              11,
-              7
-            ],
-            [
-              12,
-              2
-            ],
-            [
-              12,
-              3
-            ]
-          ],
-          "identity_lock_pixel_count": 68,
-          "identity_lock_mode": "custom",
-          "identity_lock_transparency_mode": "exact",
+          "eye_lock_points": [],
+          "eye_lock_pixel_count": 0,
+          "identity_lock_default_points": [],
+          "identity_lock_points": [],
+          "identity_lock_pixel_count": 0,
+          "identity_lock_mode": "generated",
+          "identity_lock_transparency_mode": "generated",
           "identity_mask_pending_rebuild": false,
           "mount_lock_points": [],
           "mount_lock_pixel_count": 0,
@@ -29512,15 +32405,12 @@
           "group_rank": 1,
           "redesigned": true,
           "pending_redesign": false,
-          "identity_lock_box": [
-            0,
-            4,
-            11,
-            11
-          ],
-          "changed_pixel_count": 130,
-          "feature": "이전 AI를 사용하지 않고 원작·사용자 마스크만 레퍼런스로 네이티브 논리16에서 신규 생성·16개 행·열을 모두 실제 머리·옷·갑옷·망토·무기로 채운 전폭 실루엣·메가드라이브 4bpp·사용자 편집 머리·얼굴 마스크 68픽셀 완전 잠금",
-          "file": "5/09.png"
+          "identity_lock_box": null,
+          "changed_pixel_count": 181,
+          "feature": "현재 헤인의 얼굴·눈·청색 머리 확대 원본과 승인된 헤인 메이지 장비 문법을 레퍼런스로 신규 AI 생성·생성 단계에서 헤인 얼굴·머리 형태 유지·남청색 소서러 로브·목제 지팡이·정확한 16×16 논리 격자·메가드라이브 15색·원본 얼굴 덮어쓰기 없음·실제 ROM 미적용",
+          "file": "5/09.png",
+          "ai_source_original_file": "source-originals/5-09.png",
+          "identity_mask_superseded": true
         },
         "10": {
           "class_id": 10,
@@ -31549,7 +34439,8 @@
           ],
           "changed_pixel_count": 121,
           "feature": "헤인 사용자 승인 프리스트의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 121픽셀",
-          "file": "5/11.png"
+          "file": "5/11.png",
+          "ai_source_original_file": "source-originals/5-11.png"
         },
         "18": {
           "class_id": 18,
@@ -34217,7 +37108,8 @@
           ],
           "changed_pixel_count": 137,
           "feature": "헤인 사용자 편집 하이프리스트의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 137픽셀·사용자 16×16 디자인 편집 적용",
-          "file": "5/16.png"
+          "file": "5/16.png",
+          "ai_source_original_file": "source-originals/5-16.png"
         },
         "23": {
           "class_id": 23,
@@ -36851,7 +39743,705 @@
           ],
           "changed_pixel_count": 117,
           "feature": "이전 AI를 사용하지 않고 원작·사용자 마스크만 레퍼런스로 네이티브 논리16에서 신규 생성·16개 행·열을 모두 실제 머리·옷·갑옷·망토·무기로 채운 전폭 실루엣·메가드라이브 4bpp·사용자 편집 머리·얼굴 마스크 66픽셀 완전 잠금",
-          "file": "5/28.png"
+          "file": "5/28.png",
+          "hidden_class": true,
+          "hidden_source_class": 21,
+          "supplemental_hidden_baseline": false
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "ai_sheet_row": 5,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/5-26.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "5번 지휘관 자베라 원작 전용 스프라이트",
+          "source_palette": [
+            "#ffffff",
+            "#49496d",
+            "#929292",
+            "#924924",
+            "#496dff",
+            "#6ddbff"
+          ],
+          "pixel_palette": [
+            "#ffffff",
+            "#49496d",
+            "#929292",
+            "#924924",
+            "#496dff",
+            "#6ddbff"
+          ],
+          "face_source_sprite_id": 55,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              7,
+              7
+            ],
+            [
+              8,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ]
+          ],
+          "identity_lock_pixel_count": 77,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            3,
+            9,
+            10,
+            19,
+            20,
+            38
+          ],
+          "group_rank": 5,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 20,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            0,
+            4,
+            11,
+            11
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "5/26.png"
         }
       }
     },
@@ -41472,7 +45062,10 @@
           ],
           "changed_pixel_count": 134,
           "feature": "원본 4×4 논리16 좌표 위에서 생성한 단순한 메가드라이브급 AI 픽셀 원화·셀 경계를 넘은 연결 장비까지 완전 복원 후 16×16 최근접 축소·클래스별 장비·탈것 실루엣·원본 머리색을 먼저 예약하고 남은 4bpp 색 슬롯에 메가드라이브 채널값으로 보정한 AI 장비색 유지·사용자 편집 머리·얼굴 마스크 62픽셀 완전 잠금",
-          "file": "6/29.png"
+          "file": "6/29.png",
+          "hidden_class": true,
+          "hidden_source_class": 27,
+          "supplemental_hidden_baseline": false
         }
       }
     },
@@ -48954,7 +52547,10 @@
           ],
           "changed_pixel_count": 160,
           "feature": "원본 4×4 논리16 좌표 위에서 생성한 단순한 메가드라이브급 AI 픽셀 원화·셀 경계를 넘은 연결 장비까지 완전 복원 후 16×16 최근접 축소·클래스별 장비·탈것 실루엣·원본 머리색을 먼저 예약하고 남은 4bpp 색 슬롯에 메가드라이브 채널값으로 보정한 AI 장비색 유지·사용자 편집 머리·얼굴 마스크 52픽셀 완전 잠금",
-          "file": "7/24.png"
+          "file": "7/24.png",
+          "hidden_class": true,
+          "hidden_source_class": 30,
+          "supplemental_hidden_baseline": false
         }
       }
     },
@@ -56548,7 +60144,10 @@
           ],
           "changed_pixel_count": 112,
           "feature": "원본 4×4 논리16 좌표 위에서 생성한 단순한 메가드라이브급 AI 픽셀 원화·셀 경계를 넘은 연결 장비까지 완전 복원 후 16×16 최근접 축소·클래스별 장비·탈것 실루엣·원본 머리색을 먼저 예약하고 남은 4bpp 색 슬롯에 메가드라이브 채널값으로 보정한 AI 장비색 유지·사용자 편집 머리·얼굴 마스크 71픽셀 완전 잠금",
-          "file": "8/23.png"
+          "file": "8/23.png",
+          "hidden_class": true,
+          "hidden_source_class": 26,
+          "supplemental_hidden_baseline": false
         }
       }
     },
@@ -63843,7 +67442,951 @@
           ],
           "changed_pixel_count": 164,
           "feature": "원본 4×4 논리16 좌표 위에서 생성한 단순한 메가드라이브급 AI 픽셀 원화·셀 경계를 넘은 연결 장비까지 완전 복원 후 16×16 최근접 축소·클래스별 장비·탈것 실루엣·원본 머리색을 먼저 예약하고 남은 4bpp 색 슬롯에 메가드라이브 채널값으로 보정한 AI 장비색 유지·사용자 편집 머리·얼굴 마스크 64픽셀 완전 잠금",
-          "file": "9/2A.png"
+          "file": "9/2A.png",
+          "hidden_class": true,
+          "hidden_source_class": 31,
+          "supplemental_hidden_baseline": false
+        },
+        "38": {
+          "class_id": 38,
+          "class_name": "자베라",
+          "tier": 5,
+          "ai_sheet_row": 9,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/9-26.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "9번 지휘관 자베라 원작 전용 스프라이트",
+          "source_palette": [
+            "#dbb66d",
+            "#ffffff",
+            "#929292",
+            "#924924",
+            "#49496d",
+            "#496dff"
+          ],
+          "pixel_palette": [
+            "#dbb66d",
+            "#ffffff",
+            "#929292",
+            "#924924",
+            "#49496d",
+            "#496dff"
+          ],
+          "face_source_sprite_id": 71,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              7,
+              5
+            ],
+            [
+              8,
+              5
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              2
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              2
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              11,
+              2
+            ],
+            [
+              11,
+              3
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              11,
+              9
+            ],
+            [
+              11,
+              10
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              3,
+              10
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              2
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              2
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              11,
+              2
+            ],
+            [
+              11,
+              3
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              11,
+              9
+            ],
+            [
+              11,
+              10
+            ]
+          ],
+          "identity_lock_pixel_count": 108,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            10,
+            19,
+            20,
+            38
+          ],
+          "group_rank": 3,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 20,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            0,
+            2,
+            12,
+            11
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "9/26.png"
         }
       }
     },
@@ -64665,30 +69208,30 @@
           "ai_source_kind": "헤인 사용자 편집 하이로드 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-high-lord-hein-v1/logical16/10-0B.png",
           "source_palette": [
-            "#924924",
+            "#496dff",
             "#dbb66d",
             "#ffffff",
-            "#db0000",
-            "#496dff",
-            "#ffb600"
+            "#ffb600",
+            "#0000db",
+            "#6ddbff"
           ],
           "pixel_palette": [
-            "#924924",
+            "#496dff",
             "#dbb66d",
             "#ffffff",
-            "#db0000",
-            "#496dff",
-            "#ffb600"
+            "#6ddbff",
+            "#0000db",
+            "#242424"
           ],
           "face_source_sprite_id": 53,
           "face_pixel_count": 0,
           "eye_lock_points": [
             [
-              6,
+              7,
               7
             ],
             [
-              7,
+              8,
               7
             ]
           ],
@@ -64935,301 +69478,8 @@
               10
             ]
           ],
-          "identity_lock_points": [
-            [
-              1,
-              1
-            ],
-            [
-              1,
-              2
-            ],
-            [
-              1,
-              3
-            ],
-            [
-              1,
-              4
-            ],
-            [
-              1,
-              5
-            ],
-            [
-              1,
-              6
-            ],
-            [
-              1,
-              7
-            ],
-            [
-              1,
-              8
-            ],
-            [
-              1,
-              9
-            ],
-            [
-              2,
-              0
-            ],
-            [
-              2,
-              1
-            ],
-            [
-              2,
-              2
-            ],
-            [
-              2,
-              3
-            ],
-            [
-              2,
-              4
-            ],
-            [
-              3,
-              0
-            ],
-            [
-              3,
-              1
-            ],
-            [
-              3,
-              2
-            ],
-            [
-              3,
-              3
-            ],
-            [
-              3,
-              4
-            ],
-            [
-              3,
-              5
-            ],
-            [
-              4,
-              0
-            ],
-            [
-              4,
-              1
-            ],
-            [
-              4,
-              2
-            ],
-            [
-              4,
-              3
-            ],
-            [
-              4,
-              4
-            ],
-            [
-              4,
-              5
-            ],
-            [
-              4,
-              6
-            ],
-            [
-              5,
-              0
-            ],
-            [
-              5,
-              1
-            ],
-            [
-              5,
-              2
-            ],
-            [
-              5,
-              3
-            ],
-            [
-              5,
-              4
-            ],
-            [
-              5,
-              5
-            ],
-            [
-              5,
-              6
-            ],
-            [
-              5,
-              7
-            ],
-            [
-              6,
-              0
-            ],
-            [
-              6,
-              1
-            ],
-            [
-              6,
-              2
-            ],
-            [
-              6,
-              3
-            ],
-            [
-              6,
-              4
-            ],
-            [
-              6,
-              5
-            ],
-            [
-              6,
-              7
-            ],
-            [
-              6,
-              8
-            ],
-            [
-              7,
-              0
-            ],
-            [
-              7,
-              1
-            ],
-            [
-              7,
-              2
-            ],
-            [
-              7,
-              3
-            ],
-            [
-              7,
-              4
-            ],
-            [
-              7,
-              5
-            ],
-            [
-              7,
-              6
-            ],
-            [
-              7,
-              7
-            ],
-            [
-              7,
-              8
-            ],
-            [
-              8,
-              0
-            ],
-            [
-              8,
-              1
-            ],
-            [
-              8,
-              2
-            ],
-            [
-              8,
-              3
-            ],
-            [
-              8,
-              4
-            ],
-            [
-              8,
-              5
-            ],
-            [
-              8,
-              6
-            ],
-            [
-              8,
-              7
-            ],
-            [
-              8,
-              8
-            ],
-            [
-              9,
-              0
-            ],
-            [
-              9,
-              1
-            ],
-            [
-              9,
-              2
-            ],
-            [
-              9,
-              3
-            ],
-            [
-              10,
-              0
-            ],
-            [
-              10,
-              1
-            ],
-            [
-              10,
-              2
-            ],
-            [
-              10,
-              3
-            ],
-            [
-              10,
-              4
-            ],
-            [
-              11,
-              1
-            ],
-            [
-              11,
-              2
-            ],
-            [
-              11,
-              3
-            ]
-          ],
-          "identity_lock_pixel_count": 73,
+          "identity_lock_points": [],
+          "identity_lock_pixel_count": 0,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -65237,10 +69487,10 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
-          "design_override_superseded": false,
-          "superseded_design_revision": 0,
+          "design_override": true,
+          "design_revision": 1785230236848312055,
+          "design_override_superseded": true,
+          "superseded_design_revision": 1785226835415926630,
           "duplicate_group": [
             4,
             11,
@@ -65255,9 +69505,14 @@
             10,
             11
           ],
-          "changed_pixel_count": 139,
-          "feature": "헤인 사용자 편집 하이로드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 139픽셀",
-          "file": "10/0B.png"
+          "changed_pixel_count": 203,
+          "feature": "헤인의 사용자 승인 하이로드 장비·방패·검 실루엣을 제시카에게 다시 적용·파랑·금색 갑옷 유지·망토만 밝은 하늘색·파랑·진한 파랑 3단 명암으로 변경·제시카 원본 얼굴·머리·눈 73픽셀 유지·최종 합성에서 머리·얼굴 오른쪽 1칸 이동·메가드라이브 4bpp·기존 사용자 편집 이력 보존·실제 ROM 미적용·사용자 16×16 디자인 편집 적용",
+          "file": "10/0B.png",
+          "identity_translation": [
+            1,
+            0
+          ],
+          "identity_translation_applied_in_override": false
         },
         "13": {
           "class_id": 13,
@@ -66001,20 +70256,20 @@
           "ai_source_kind": "헤인 사용자 편집 메이지 공통 16×16 클래스 템플릿",
           "ai_source_position": "latest/shared-hein-classes-v1/logical16/10-13.png",
           "source_palette": [
-            "#dbb66d",
-            "#924924",
-            "#db0000",
             "#496dff",
+            "#924924",
+            "#6ddbff",
             "#0000db",
-            "#6d0000"
+            "#dbb66d",
+            "#2449db"
           ],
           "pixel_palette": [
-            "#dbb66d",
-            "#924924",
-            "#db0000",
             "#496dff",
+            "#924924",
+            "#6ddbff",
             "#0000db",
-            "#6d0000"
+            "#dbb66d",
+            "#2449db"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -66575,8 +70830,8 @@
           "mount_mask_pending_rebuild": false,
           "design_override": false,
           "design_revision": 0,
-          "design_override_superseded": false,
-          "superseded_design_revision": 0,
+          "design_override_superseded": true,
+          "superseded_design_revision": 1785223392722184076,
           "duplicate_group": [
             3,
             9,
@@ -66594,9 +70849,11 @@
             10,
             11
           ],
-          "changed_pixel_count": 145,
-          "feature": "헤인 사용자 편집 메이지의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 145픽셀",
-          "file": "10/13.png"
+          "changed_pixel_count": 136,
+          "feature": "헤인의 사용자 승인 메이지 로브·망토·지팡이 실루엣을 제시카에게 다시 적용·로브와 망토는 진한 파랑·중간 파랑·밝은 하늘색 3단 명암·양쪽 어깨 장식 11픽셀은 제시카 원본의 빨강·진홍 유지·청색 머리·얼굴·눈 73픽셀과 목제 지팡이·녹색 보석 유지·메가드라이브 4bpp·기존 사용자 편집 이력 보존·실제 ROM 미적용",
+          "file": "10/13.png",
+          "identity_translation": null,
+          "identity_translation_applied_in_override": false
         },
         "20": {
           "class_id": 20,
@@ -69715,22 +73972,22 @@
             "#ffffff"
           ],
           "pixel_palette": [
-            "#6d0000",
-            "#9292b6",
+            "#242424",
             "#496dff",
-            "#db0000",
             "#0000db",
-            "#ffffff"
+            "#db0000",
+            "#6d0000",
+            "#9292b6"
           ],
           "face_source_sprite_id": 53,
           "face_pixel_count": 0,
           "eye_lock_points": [
             [
-              6,
+              7,
               7
             ],
             [
-              7,
+              8,
               7
             ]
           ],
@@ -69977,301 +74234,8 @@
               10
             ]
           ],
-          "identity_lock_points": [
-            [
-              1,
-              1
-            ],
-            [
-              1,
-              2
-            ],
-            [
-              1,
-              3
-            ],
-            [
-              1,
-              4
-            ],
-            [
-              1,
-              5
-            ],
-            [
-              1,
-              6
-            ],
-            [
-              1,
-              7
-            ],
-            [
-              1,
-              8
-            ],
-            [
-              1,
-              9
-            ],
-            [
-              2,
-              0
-            ],
-            [
-              2,
-              1
-            ],
-            [
-              2,
-              2
-            ],
-            [
-              2,
-              3
-            ],
-            [
-              2,
-              4
-            ],
-            [
-              3,
-              0
-            ],
-            [
-              3,
-              1
-            ],
-            [
-              3,
-              2
-            ],
-            [
-              3,
-              3
-            ],
-            [
-              3,
-              4
-            ],
-            [
-              3,
-              5
-            ],
-            [
-              4,
-              0
-            ],
-            [
-              4,
-              1
-            ],
-            [
-              4,
-              2
-            ],
-            [
-              4,
-              3
-            ],
-            [
-              4,
-              4
-            ],
-            [
-              4,
-              5
-            ],
-            [
-              4,
-              6
-            ],
-            [
-              5,
-              0
-            ],
-            [
-              5,
-              1
-            ],
-            [
-              5,
-              2
-            ],
-            [
-              5,
-              3
-            ],
-            [
-              5,
-              4
-            ],
-            [
-              5,
-              5
-            ],
-            [
-              5,
-              6
-            ],
-            [
-              5,
-              7
-            ],
-            [
-              6,
-              0
-            ],
-            [
-              6,
-              1
-            ],
-            [
-              6,
-              2
-            ],
-            [
-              6,
-              3
-            ],
-            [
-              6,
-              4
-            ],
-            [
-              6,
-              5
-            ],
-            [
-              6,
-              7
-            ],
-            [
-              6,
-              8
-            ],
-            [
-              7,
-              0
-            ],
-            [
-              7,
-              1
-            ],
-            [
-              7,
-              2
-            ],
-            [
-              7,
-              3
-            ],
-            [
-              7,
-              4
-            ],
-            [
-              7,
-              5
-            ],
-            [
-              7,
-              6
-            ],
-            [
-              7,
-              7
-            ],
-            [
-              7,
-              8
-            ],
-            [
-              8,
-              0
-            ],
-            [
-              8,
-              1
-            ],
-            [
-              8,
-              2
-            ],
-            [
-              8,
-              3
-            ],
-            [
-              8,
-              4
-            ],
-            [
-              8,
-              5
-            ],
-            [
-              8,
-              6
-            ],
-            [
-              8,
-              7
-            ],
-            [
-              8,
-              8
-            ],
-            [
-              9,
-              0
-            ],
-            [
-              9,
-              1
-            ],
-            [
-              9,
-              2
-            ],
-            [
-              9,
-              3
-            ],
-            [
-              10,
-              0
-            ],
-            [
-              10,
-              1
-            ],
-            [
-              10,
-              2
-            ],
-            [
-              10,
-              3
-            ],
-            [
-              10,
-              4
-            ],
-            [
-              11,
-              1
-            ],
-            [
-              11,
-              2
-            ],
-            [
-              11,
-              3
-            ]
-          ],
-          "identity_lock_pixel_count": 73,
+          "identity_lock_points": [],
+          "identity_lock_pixel_count": 0,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -70279,8 +74243,8 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
+          "design_override": true,
+          "design_revision": 1785233578083392005,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -70297,9 +74261,14 @@
             10,
             11
           ],
-          "changed_pixel_count": 134,
-          "feature": "헤인 사용자 편집 소드마스터의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 134픽셀",
-          "file": "10/1A.png"
+          "changed_pixel_count": 131,
+          "feature": "헤인 사용자 편집 소드마스터의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 134픽셀·머리·얼굴 픽셀을 장비 기준 오른쪽 1칸 이동·사용자 16×16 디자인 편집 적용·사용자 저장본의 끊긴 몸통·오른쪽 소매·하단 망토 연결 21픽셀 소폭 보정",
+          "file": "10/1A.png",
+          "identity_translation": [
+            1,
+            0
+          ],
+          "identity_translation_applied_in_override": true
         },
         "38": {
           "class_id": 38,
@@ -70906,7 +74875,590 @@
           ],
           "changed_pixel_count": 102,
           "feature": "원본 4×4 논리16 좌표 위에서 생성한 단순한 메가드라이브급 AI 픽셀 원화·셀 경계를 넘은 연결 장비까지 완전 복원 후 16×16 최근접 축소·클래스별 장비·탈것 실루엣·원본 머리색을 먼저 예약하고 남은 4bpp 색 슬롯에 메가드라이브 채널값으로 보정한 AI 장비색 유지·사용자 편집 머리·얼굴 마스크 73픽셀 완전 잠금",
-          "file": "10/26.png"
+          "file": "10/26.png",
+          "hidden_class": true,
+          "hidden_source_class": 20,
+          "supplemental_hidden_baseline": false
+        },
+        "40": {
+          "class_id": 40,
+          "class_name": "서머너",
+          "tier": 5,
+          "ai_sheet_row": 10,
+          "ai_sheet_stage": 5,
+          "ai_source_cell_file": "source-cells/10-28.png",
+          "ai_source_kind": "원작 캐릭터 전용 히든 클래스 네이티브 16×16 편집 기준",
+          "ai_source_position": "10번 지휘관 서머너 원작 전용 스프라이트",
+          "source_palette": [
+            "#496dff",
+            "#0000db",
+            "#dbb66d",
+            "#924924",
+            "#6ddbff",
+            "#ffffff"
+          ],
+          "pixel_palette": [
+            "#496dff",
+            "#0000db",
+            "#dbb66d",
+            "#924924",
+            "#6ddbff",
+            "#ffffff"
+          ],
+          "face_source_sprite_id": 51,
+          "face_pixel_count": 0,
+          "eye_lock_points": [
+            [
+              6,
+              7
+            ],
+            [
+              7,
+              7
+            ]
+          ],
+          "eye_lock_pixel_count": 2,
+          "identity_lock_default_points": [
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              11,
+              9
+            ],
+            [
+              11,
+              10
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              12,
+              9
+            ],
+            [
+              12,
+              10
+            ],
+            [
+              13,
+              4
+            ],
+            [
+              13,
+              5
+            ],
+            [
+              13,
+              6
+            ],
+            [
+              13,
+              7
+            ],
+            [
+              13,
+              8
+            ],
+            [
+              13,
+              9
+            ],
+            [
+              13,
+              10
+            ]
+          ],
+          "identity_lock_points": [
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              6,
+              10
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              9,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              7
+            ],
+            [
+              10,
+              8
+            ],
+            [
+              10,
+              9
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              11,
+              4
+            ],
+            [
+              11,
+              5
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              11,
+              7
+            ],
+            [
+              11,
+              8
+            ],
+            [
+              11,
+              9
+            ],
+            [
+              11,
+              10
+            ],
+            [
+              12,
+              4
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              12,
+              9
+            ],
+            [
+              12,
+              10
+            ],
+            [
+              13,
+              4
+            ],
+            [
+              13,
+              5
+            ],
+            [
+              13,
+              6
+            ],
+            [
+              13,
+              7
+            ],
+            [
+              13,
+              8
+            ],
+            [
+              13,
+              9
+            ],
+            [
+              13,
+              10
+            ]
+          ],
+          "identity_lock_pixel_count": 63,
+          "identity_lock_mode": "automatic",
+          "identity_lock_transparency_mode": "exact",
+          "identity_mask_pending_rebuild": false,
+          "identity_translation": null,
+          "mount_lock_points": [],
+          "mount_lock_pixel_count": 0,
+          "mount_lock_mode": "none",
+          "mount_mask_pending_rebuild": false,
+          "design_override": false,
+          "design_revision": 0,
+          "design_override_superseded": false,
+          "superseded_design_revision": 0,
+          "duplicate_group": [
+            18,
+            24,
+            40
+          ],
+          "group_rank": 2,
+          "redesigned": true,
+          "pending_redesign": false,
+          "hidden_class": true,
+          "hidden_source_class": 24,
+          "supplemental_hidden_baseline": true,
+          "identity_lock_box": [
+            5,
+            4,
+            14,
+            11
+          ],
+          "changed_pixel_count": 0,
+          "feature": "ROM 전직 레코드의 대표 히든 경로 밖에 있던 원작 복수 히든 클래스를 에디터에 복원·캐릭터 전용 원작 16×16 스프라이트를 초기 디자인으로 사용·원본 머리·얼굴·눈 잠금·사용자 디자인 편집 가능·실제 ROM 미적용",
+          "file": "10/28.png"
         }
       }
     }

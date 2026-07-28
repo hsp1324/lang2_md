@@ -6,6 +6,7 @@ from pathlib import Path
 from tools.class_change_data import (
     COMMANDER_COUNT,
     class_change_chain_pointer,
+    hidden_class_routes,
     read_class_change_chain,
 )
 from tools.class_hire_data import read_class_hire_unlocks
@@ -91,11 +92,20 @@ def class_change_editor_model(
                 "candidates": list(transition.candidates),
                 "offset": pointer + index * 8,
             })
+        hidden_routes = []
+        for route in hidden_class_routes(commander_id):
+            preview_ids.add(route.current_class)
+            preview_ids.update(route.candidates)
+            hidden_routes.append({
+                "current_class": route.current_class,
+                "hidden_class": route.candidates[0],
+            })
         commanders.append({
             "commander_id": commander_id,
             "name": KOREAN_NAME_BY_ID[commander_id],
             "pointer": pointer,
             "transitions": transitions,
+            "hidden_class_routes": hidden_routes,
         })
     return {
         "classes": classes,

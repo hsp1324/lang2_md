@@ -346,7 +346,45 @@ function buildClassGraph(commander) {
       });
     });
   });
-  return {levels: levels.map(unique), edges};
+  (commander.hidden_class_routes || []).forEach(route => {
+    levels[3].push(route.current_class);
+    levels[4].push(route.hidden_class);
+    edges.push({
+      from: `3-${route.current_class}`,
+      to: `4-${route.hidden_class}`,
+    });
+  });
+  const uniqueEdges = [];
+  const seenEdges = new Set();
+  edges.forEach(edge => {
+    const key = `${edge.from}>${edge.to}`;
+    if (seenEdges.has(key)) return;
+    seenEdges.add(key);
+    uniqueEdges.push(edge);
+  });
+  return {levels: levels.map(unique), edges: uniqueEdges};
+}
+
+function isHiddenClass(commander, classId) {
+  return (commander.hidden_class_routes || []).some(
+    route => route.hidden_class === classId
+  );
+}
+
+function hiddenClassIdsFrom(commander, classId) {
+  return (commander.hidden_class_routes || [])
+    .filter(route => route.current_class === classId)
+    .map(route => route.hidden_class);
+}
+
+function nextClassIdsFor(commander, classId) {
+  const transition = commander.transitions.find(
+    entry => entry.current_class === classId
+  );
+  return unique([
+    ...(transition?.candidates || []),
+    ...hiddenClassIdsFrom(commander, classId),
+  ]);
 }
 
 function classNode(classId, level, commander, nextClassIds) {
@@ -360,7 +398,9 @@ function classNode(classId, level, commander, nextClassIds) {
         ${spriteImage(classId, {commanderId: commander.commander_id})}
       </span>
       <span><strong>${escapeHtml(info.ko)}</strong>
-        <small>${hexId(classId)} · ${escapeHtml(info.jp)}</small>
+        <small>${hexId(classId)} · ${escapeHtml(info.jp)}${
+          isHiddenClass(commander, classId) ? " · 히든" : ""
+        }</small>
       </span>
     </button>`;
 }
@@ -421,6 +461,7 @@ function renderClassInspector() {
   const transition = commander.transitions.find(
     entry => entry.current_class === classId
   );
+  const hiddenClassIds = hiddenClassIdsFrom(commander, classId);
   const hireRow = hireRowFor(classId);
   const choices = transition
     ? transition.candidates.map((candidate, slot) => `
@@ -432,6 +473,25 @@ function renderClassInspector() {
             {commanderId: commander.commander_id}
           )}
         </div>`).join("")
+    : hiddenClassIds.length
+    ? `<div class="nextClassEditor">
+        <h3>히든 클래스 ${hiddenClassIds.length}개</h3>
+        <div class="nextClassGrid">${hiddenClassIds.map(candidate => `
+          <div class="nextClassChoice">
+            <span>읽기 전용 히든 경로</span>
+            <div class="assetChoice inspectorChoice">
+              ${spriteImage(candidate, {
+                commanderId: commander.commander_id
+              })}
+              <span>${hexId(candidate)} ${escapeHtml(
+                classInfo(candidate).ko
+              )}</span>
+            </div>
+          </div>`).join("")}
+        </div>
+        <p>원작의 보조 5단계 경로이며 10개 물리 전직 레코드에는
+          쓰지 않습니다.</p>
+      </div>`
     : '<p class="terminalNote">이 경로에서 다음 클래스가 없는 종착 클래스입니다.</p>';
   classInspector.innerHTML = `
     <div class="inspectorTitle">
@@ -476,10 +536,10 @@ function renderClassRoutes() {
       !graph.levels.some(level => level.includes(selectedTreeClassId))) {
     selectedTreeClassId = graph.levels[0][0];
   }
-  const selectedTransition = commander.transitions.find(
-    entry => entry.current_class === selectedTreeClassId
+  const nextClassIds = nextClassIdsFor(
+    commander,
+    selectedTreeClassId,
   );
-  const nextClassIds = selectedTransition?.candidates || [];
   classTree.innerHTML = `
     <svg id="classEdges" class="classEdges" aria-hidden="true"></svg>
     ${graph.levels.map((level, levelIndex) => `
@@ -497,7 +557,9 @@ function renderClassRoutes() {
   installSpriteFallbacks(classTree);
   activeCommanderId = commander.commander_id;
   classSummary.textContent =
-    `${commander.name} · 실제 성장 최대 5단계 · ROM 분기 레코드 10개`;
+    `${commander.name} · 실제 성장 최대 5단계 · 히든 ${
+      (commander.hidden_class_routes || []).length
+    }개 · ROM 분기 레코드 10개`;
   renderClassInspector();
   requestAnimationFrame(() => drawClassEdges(graph.edges));
 }
@@ -526,7 +588,9 @@ function testClassNode(classId, level, commander, nextClassIds) {
         ${testSpriteImage(commander.commander_id, classId)}
       </span>
       <span><strong>${escapeHtml(info.ko)}</strong>
-        <small>${hexId(classId)} · ${escapeHtml(info.jp)}</small>
+        <small>${hexId(classId)} · ${escapeHtml(info.jp)}${
+          isHiddenClass(commander, classId) ? " · 히든" : ""
+        }</small>
       </span>
     </button>`;
 }
@@ -585,10 +649,10 @@ function renderTestClassRoutes() {
       !graph.levels.some(level => level.includes(selectedTestClassId))) {
     selectedTestClassId = graph.levels[0][0];
   }
-  const selectedTransition = commander.transitions.find(
-    entry => entry.current_class === selectedTestClassId
+  const nextClassIds = nextClassIdsFor(
+    commander,
+    selectedTestClassId,
   );
-  const nextClassIds = selectedTransition?.candidates || [];
   testClassTree.innerHTML = `
     <svg id="testClassEdges" class="classEdges" aria-hidden="true"></svg>
     ${graph.levels.map((level, levelIndex) => `
@@ -608,7 +672,9 @@ function renderTestClassRoutes() {
     testClassSpriteModel.commanders[String(commander.commander_id)].classes
   ).filter(row => row.redesigned).length;
   testClassSummary.textContent =
-    `${commander.name} · 새 디자인 ${redesignedCount}개 · 실제 ROM 미적용`;
+    `${commander.name} · 새 디자인 ${redesignedCount}개 · 히든 ${
+      (commander.hidden_class_routes || []).length
+    }개 · 실제 ROM 미적용`;
   renderTestClassInspector();
   requestAnimationFrame(() => drawClassEdges(
     graph.edges,
@@ -643,7 +709,9 @@ function aiClassNode(classId, level, commander, nextClassIds) {
         ${aiSpriteImage(commander.commander_id, classId)}
       </span>
       <span><strong>${escapeHtml(info.ko)}</strong>
-        <small>${hexId(classId)} · ${escapeHtml(info.jp)}</small>
+        <small>${hexId(classId)} · ${escapeHtml(info.jp)}${
+          isHiddenClass(commander, classId) ? " · 히든" : ""
+        }</small>
       </span>
     </button>`;
 }
@@ -1474,19 +1542,27 @@ function renderAiClassInspector() {
   );
   const eyeLockCount = Number(row.eye_lock_pixel_count || 0);
   const maskLockCount = Number(row.identity_lock_pixel_count || 0);
-  const maskMode = row.identity_lock_mode === "custom"
+  const generatedIdentity = row.identity_lock_mode === "generated";
+  const maskMode = generatedIdentity
+    ? "AI 생성 정체성"
+    : row.identity_lock_mode === "custom"
     ? "사용자 마스크"
     : "자동 마스크";
   const maskPending = Boolean(row.identity_mask_pending_rebuild);
-  const aiReferencePath = row.ai_source_cell_file
-    ? `/ai-class-sprites/${row.ai_source_cell_file}?v=${encodeURIComponent(
+  const aiOriginalFile = (
+    row.ai_source_original_file || row.ai_source_cell_file
+  );
+  const aiReferencePath = aiOriginalFile
+    ? `/ai-class-sprites/${aiOriginalFile}?v=${encodeURIComponent(
         aiClassSpriteModel.asset_version
       )}`
     : commanderSpritePath(commander.commander_id, classId);
   const headPreservation = pending
     ? "실패 시안 제거·현재 ROM 원본 전체 256픽셀"
     : row.redesigned
-    ? directStageAi
+    ? generatedIdentity
+      ? "AI 생성 단계에서 헤인 얼굴·눈·머리 형태 유지·원본 얼굴 덮어쓰기 없음"
+      : directStageAi
       ? "ROM 얼굴·머리·눈 사각형 잠금·선택된 5단계 보병 실루엣 유지"
       : characterSheetAi
       ? "ROM 얼굴·머리 사용자 마스크 잠금·캐릭터별 AI 클래스 실루엣 유지"
@@ -1510,15 +1586,17 @@ function renderAiClassInspector() {
         <span>${pending
           ? "전용 생성 대기"
           : row.redesigned
-          ? identityLockedAi16
+          ? row.ai_source_original_file
+            ? "AI 디자인 원본"
+            : identityLockedAi16
             ? characterSheetAi
               ? "캐릭터별 전용 AI 원화"
               : "AI 장비 참고 원화"
             : "AI 원화"
           : "AI 원화 · 미사용"}</span>
         <span class="aiSourceSprite">
-          ${row.redesigned && row.ai_source_cell_file
-            ? `<img src="/ai-class-sprites/${row.ai_source_cell_file}?v=${encodeURIComponent(
+          ${row.redesigned && aiOriginalFile
+            ? `<img src="/ai-class-sprites/${aiOriginalFile}?v=${encodeURIComponent(
                 aiClassSpriteModel.asset_version
               )}"
                 alt="${escapeHtml(commander.name)} ${escapeHtml(info.ko)} AI 원화">`
@@ -1563,13 +1641,15 @@ function renderAiClassInspector() {
       <div><dt>원본 고정</dt><dd>${headPreservation} · 그림 0x${hexId(
         row.face_source_sprite_id
       )}</dd></div>
-      ${row.redesigned
+      ${row.redesigned && !generatedIdentity
         ? `<div><dt>얼굴 마스크</dt><dd>${maskMode} · 원본 고정 ${
             maskLockCount
           }픽셀${maskPending ? " · 저장됨, 다음 AI 변환 때 적용" : ""}</dd></div>`
         : ""}
       <div><dt>눈 고정</dt><dd>${
-        row.redesigned
+        generatedIdentity
+          ? "확대 원본 레퍼런스를 따라 AI 원화 자체에서 헤인의 눈을 유지"
+          : row.redesigned
           ? `ROM 원본의 눈·흰자 ${eyeLockCount}픽셀 그대로 유지`
           : "ROM 원본 전체 유지에 포함"
       }</dd></div>
@@ -1589,9 +1669,9 @@ function renderAiClassInspector() {
     ${row.redesigned
       ? `<section class="aiDesignEditor">
           <h3>16×16 캐릭터 디자인 편집</h3>
-          <p>AI 원화를 보면서 최종 도트를 직접 수정합니다. 자주색
-            테두리의 얼굴 마스크 픽셀은 원작 정체성을 위해 잠겨
-            있습니다.</p>
+          <p>${generatedIdentity
+            ? "AI 디자인 원본을 보면서 최종 도트를 직접 수정합니다. 이 디자인은 얼굴을 덮어쓰지 않고 생성된 헤인 얼굴·머리를 그대로 사용합니다."
+            : "AI 원화를 보면서 최종 도트를 직접 수정합니다. 자주색 테두리의 얼굴 마스크 픽셀은 원작 정체성을 위해 잠겨 있습니다."}</p>
           <div class="aiDesignWorkspace">
             <div class="aiDesignPixelPane">
               <canvas id="aiDesignCanvas" width="320" height="320"
@@ -1619,7 +1699,7 @@ function renderAiClassInspector() {
             <div class="aiDesignReferencePane">
               <div class="aiDesignReferenceHeader">
                 <strong>참고할 AI 그림</strong>
-                <span id="aiDesignReferenceName">현재 클래스 AI 원화</span>
+                <span id="aiDesignReferenceName">현재 클래스 AI 디자인 원본</span>
               </div>
               <div class="aiDesignReferenceViewport">
                 <img id="aiDesignReferenceImage"
@@ -1656,7 +1736,7 @@ function renderAiClassInspector() {
             이후 AI 자산 재빌드 때도 유지됩니다.</p>
         </section>`
       : ""}
-    ${row.redesigned
+    ${row.redesigned && !generatedIdentity
       ? `<section class="identityMaskEditor">
           <h3>16×16 얼굴 마스크 편집</h3>
           <p>자주색 칸은 최종 이미지에서 ROM 원본 픽셀을 그대로
@@ -1677,7 +1757,7 @@ function renderAiClassInspector() {
             시점에는 PNG 170개나 실제 ROM을 다시 만들지 않습니다.</p>
         </section>`
       : ""}
-    ${row.redesigned
+    ${row.redesigned && !generatedIdentity
       ? `<section class="identityMaskEditor mountMaskEditor">
           <h3>16×16 탈것 마스크 편집</h3>
           <p>청록색 칸은 말·드래곤 등 탈것 부분을 ROM 원본 픽셀로
@@ -1712,10 +1792,10 @@ function renderAiClassRoutes() {
       !graph.levels.some(level => level.includes(selectedAiClassId))) {
     selectedAiClassId = graph.levels[0][0];
   }
-  const selectedTransition = commander.transitions.find(
-    entry => entry.current_class === selectedAiClassId
+  const nextClassIds = nextClassIdsFor(
+    commander,
+    selectedAiClassId,
   );
-  const nextClassIds = selectedTransition?.candidates || [];
   aiClassTree.innerHTML = `
     <svg id="aiClassEdges" class="classEdges" aria-hidden="true"></svg>
     ${graph.levels.map((level, levelIndex) => `
@@ -1736,7 +1816,9 @@ function renderAiClassRoutes() {
   );
   const redesignedCount = rows.filter(row => row.redesigned).length;
   aiClassSummary.textContent =
-    `${commander.name} · 중복 상위 클래스 AI 시안 ${redesignedCount}개 · 실제 ROM 미적용`;
+    `${commander.name} · 편집 가능 디자인 ${redesignedCount}개 · 히든 ${
+      (commander.hidden_class_routes || []).length
+    }개 · 실제 ROM 미적용`;
   renderAiClassInspector();
   requestAnimationFrame(() => drawClassEdges(
     graph.edges,

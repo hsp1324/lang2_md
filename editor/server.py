@@ -445,6 +445,13 @@ class Handler(SimpleHTTPRequestHandler):
                     row["pixel_palette"] = design_palette(pixels)
                     row["design_override"] = not reset
                     row["design_revision"] = revision
+                    row["design_override_superseded"] = False
+                    row["superseded_design_revision"] = 0
+                    row[
+                        "identity_translation_applied_in_override"
+                    ] = bool(
+                        row.get("identity_translation")
+                    ) and not reset
                     row["identity_mask_pending_rebuild"] = False
                     row["mount_mask_pending_rebuild"] = False
                     marker = "·사용자 16×16 디자인 편집 적용"
@@ -487,6 +494,11 @@ class Handler(SimpleHTTPRequestHandler):
                 if not row["redesigned"]:
                     raise ValueError(
                         "ROM 원본 유지 클래스에는 별도 마스크를 적용하지 않습니다"
+                    )
+                if row.get("identity_lock_mode") == "generated":
+                    raise ValueError(
+                        "이 클래스는 AI 생성 단계에서 얼굴·머리를 "
+                        "유지하므로 ROM 얼굴 마스크를 덮어쓰지 않습니다"
                     )
                 reset = request.get("reset", False)
                 if not isinstance(reset, bool):
