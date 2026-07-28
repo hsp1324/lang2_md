@@ -258,6 +258,54 @@ AI_CLASS_MAP_SPRITE_SPECS = tuple(
         )
     )
 )
+
+# The stock inactive-unit renderer does not recolor the two 0x80-byte map
+# frames directly. It expands a separate 1bpp silhouette at
+# 0x0510C0 + sprite_id * 0x40. The original 68000 routine performs that
+# multiplication in a word, so expansion-backed sprite IDs wrap into
+# unrelated ROM data when a unit becomes gray after acting. Keep the compact
+# expansion IDs for the normal frames, but translate every one back to the
+# stock silhouette that belonged to its source sprite.
+MAP_SPRITE_GRAY_SOURCE_HOOK = 0x011DD8
+MAP_SPRITE_GRAY_SOURCE_HOOK_ORIGINAL = bytes.fromhex(
+    "02 80 00 00 FF FF"
+)
+MAP_SPRITE_GRAY_SOURCE_RESUME = 0x011DDE
+MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE = 0x2B8D40
+MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE_LIMIT = 0x2B8E00
+MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE = 0x2B8E00
+MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT = 0x2B8E80
+
+
+def custom_map_sprite_gray_source_map(
+    source_data: bytes | bytearray,
+) -> dict[int, int]:
+    mapping = {
+        BALD_CUSTOM_SPRITE_ID: BALD_SOURCE_SPRITE_ID,
+        LOREN_CUSTOM_SPRITE_ID: LOREN_SOURCE_SPRITE_ID,
+        SHAMAN_CUSTOM_SPRITE_ID: SHAMAN_SOURCE_SPRITE_ID,
+        **{
+            SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS[commander_id]:
+            source_sprite_id
+            for commander_id, source_sprite_id in (
+                SHAMAN_COMMANDER_SOURCE_SPRITE_IDS.items()
+            )
+        },
+        **{
+            int(spec["custom_sprite_id"]): int(spec["source_sprite_id"])
+            for spec in PAIRED_NPC_MAP_SPRITES.values()
+        },
+    }
+    for commander_id, class_id, custom_sprite_id in (
+        AI_CLASS_MAP_SPRITE_SPECS
+    ):
+        record_offset = commander_sprite_record_offset(
+            source_data, commander_id, class_id
+        )
+        mapping[custom_sprite_id] = be16(source_data, record_offset + 1)
+    return mapping
+
+
 # CRAM row 1 is the live commander map palette. These RGB values are exact
 # Mega Drive channel steps, not editor-only colors.
 AI_CLASS_MAP_PALETTE = (
@@ -416,10 +464,18 @@ BYTE_UI_DYNAMIC_FIELD_WIDTH = 8
 BYTE_UI_BATTLE_DIRECT_RETURN_ADDRESS = 0x01B54C
 BYTE_UI_BATTLE_RETURN_STACK_OFFSET = 60
 BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
-# Preparation and hiring graphics overwrite the complete final static font
-# segment at 0x05D8..0x05F5. Give only the affected glyphs fixed scratch slots
-# so multiple visible rows can share them without overwriting one another.
-BYTE_UI_PREP_DYNAMIC_CHARS = ("록", "가", "스", "럴", "슬", "임", "비")
+# Preparation, hiring, and shop graphics overwrite both the escape bank at
+# 0x03F0..0x03FE and the final static font segment at 0x05D8..0x05F5. Give the
+# affected glyphs fixed scratch slots so multiple visible rows can share them
+# after returning from those screens.
+BYTE_UI_PREP_DYNAMIC_CHARS = (
+    "라", "론", "쉐", "카", "코", "키", "록", "적",
+    "가", "스", "럴", "슬", "임", "비", "크", "제",
+)
+BYTE_UI_RESULT_DYNAMIC_CODE = 0xA6
+BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR = {
+    "적": BYTE_UI_RESULT_DYNAMIC_CODE,
+}
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL = 0x0090A6
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL = bytes.fromhex("32 3C 00 B7")
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED = bytes.fromhex("32 3C 00 07")
@@ -504,11 +560,11 @@ BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
 # before their battle-safe remaps. Consuming these slots keeps every later
 # class/name tile (notably `렌`) byte-identical.
 BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR = {
+    "비": 0x039C,
     "럴": 0x0443,
     "가": 0x0444,
     "슬": 0x0499,
     "임": 0x049A,
-    "비": 0x039C,
 }
 BYTE_UI_RETIRED_FULL_EXT_TILE_REASON = {
     0x039C: "battle animation graphics overwrite the former 비 tile",
@@ -685,6 +741,7 @@ BYTE_UI_EXT_CODE_BY_CHAR = {
     "키": 0xF5,
     "록": 0xF6,
 }
+BYTE_UI_RESULT_LOCAL_CHARS = ("적",)
 BYTE_UI_EXT_CODE_FIRST = 0xF0
 BYTE_UI_EXT_CODE_LAST = 0xFE
 BYTE_UI_EXT_TILE_COUNT = BYTE_UI_EXT_CODE_LAST - BYTE_UI_EXT_CODE_FIRST + 1
@@ -735,6 +792,8 @@ TITLE_HARD_CREDIT_RENDER_ROUTINE = 0x2B8A40
 TITLE_HARD_MARKER_TEXT_RECORD = 0x2B8C00
 TITLE_HARD_MAIN_MENU_RECORD = 0x2B8C40
 TITLE_HARD_MAIN_MENU_RECORD_LIMIT = 0x2B8CC0
+BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE = 0x2B8CC0
+BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE_LIMIT = 0x2B8D40
 TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT = TITLE_HARD_MARKER_TEXT_RECORD
 BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
@@ -3033,6 +3092,98 @@ def patch_paired_npc_map_sprites(data: bytearray) -> None:
             label=str(spec["label"]),
         )
         put16(data, table_offset, custom_sprite_id)
+
+
+def _build_map_sprite_gray_source_remap_routine(
+    first_custom_id: int,
+    last_custom_id: int,
+) -> bytes:
+    code = _M68KCode()
+    code.emit("02 80 00 00 FF FF")  # andi.l #$ffff,d0
+    code.emit(
+        bytes.fromhex("0C 40") + first_custom_id.to_bytes(2, "big")
+    )
+    code.branch_word(0x6500, "resume")  # bcs.w
+    code.emit(
+        bytes.fromhex("0C 40") + last_custom_id.to_bytes(2, "big")
+    )
+    code.branch_word(0x6200, "resume")  # bhi.w
+    code.emit(
+        bytes.fromhex("04 40") + first_custom_id.to_bytes(2, "big")
+    )  # subi.w #first,d0
+    code.emit("D0 40")  # add.w d0,d0
+    code.emit(
+        bytes.fromhex("43 F9")
+        + MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE.to_bytes(4, "big")
+    )  # lea.l table,a1
+    code.emit("30 31 00 00")  # move.w (a1,d0.w),d0
+    code.label("resume")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + MAP_SPRITE_GRAY_SOURCE_RESUME.to_bytes(4, "big")
+    )
+    return code.finish()
+
+
+def patch_map_sprite_gray_source_remap(
+    data: bytearray,
+    source_data: bytes | bytearray,
+) -> None:
+    mapping = custom_map_sprite_gray_source_map(source_data)
+    first_custom_id = min(mapping)
+    last_custom_id = max(mapping)
+    expected_ids = set(range(first_custom_id, last_custom_id + 1))
+    if set(mapping) != expected_ids:
+        missing = sorted(expected_ids - set(mapping))
+        raise ValueError(
+            "custom map-sprite gray-source range is not dense: "
+            + ", ".join(f"0x{sprite_id:04X}" for sprite_id in missing)
+        )
+
+    table = b"".join(
+        mapping[sprite_id].to_bytes(2, "big")
+        for sprite_id in range(first_custom_id, last_custom_id + 1)
+    )
+    table_end = MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE + len(table)
+    if table_end > MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT:
+        raise ValueError("map-sprite gray-source remap table exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE:table_end
+        ]
+    ):
+        raise ValueError("map-sprite gray-source remap table is not blank")
+    data[MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE:table_end] = table
+
+    routine = _build_map_sprite_gray_source_remap_routine(
+        first_custom_id, last_custom_id
+    )
+    routine_end = MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE + len(routine)
+    if routine_end > MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE_LIMIT:
+        raise ValueError("map-sprite gray-source remap routine exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE:routine_end
+        ]
+    ):
+        raise ValueError("map-sprite gray-source remap routine area is not blank")
+    data[MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE:routine_end] = routine
+
+    hook_end = (
+        MAP_SPRITE_GRAY_SOURCE_HOOK
+        + len(MAP_SPRITE_GRAY_SOURCE_HOOK_ORIGINAL)
+    )
+    if (
+        bytes(data[MAP_SPRITE_GRAY_SOURCE_HOOK:hook_end])
+        != MAP_SPRITE_GRAY_SOURCE_HOOK_ORIGINAL
+    ):
+        raise ValueError("map-sprite gray-source hook changed")
+    data[MAP_SPRITE_GRAY_SOURCE_HOOK:hook_end] = (
+        bytes.fromhex("4E F9")
+        + MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE.to_bytes(4, "big")
+    )
 
 
 def relocate_sram(data: bytearray) -> None:
@@ -6290,13 +6441,18 @@ def _build_byte_ui_map_info_scratch_restore() -> bytes:
     # A000-targeted map and battle graphics may overwrite the transient scratch
     # cells after the bottom status row has already rendered. Re-resolve the
     # currently selected runtime record and synchronously rebuild both fields.
+    # A62C owns the selected subordinate while A628 owns its commander. Mirror
+    # the stock command-builder selection rule at 0x020CF2 so opening a
+    # mercenary command panel cannot redraw its class as the commander's class.
     # The scratch patterns overlap the unused tail of the H-scroll table and
     # are safe only while VDP register 11 is in full-screen scroll mode.
     code = _M68KCode()
     code.emit("48 E7 FF FE")
     code.emit("4A 79 FF FF 90 5A")
     code.branch_word(0x6600, "done")
-    code.emit("24 78 A6 28")  # a2 = current runtime unit record
+    code.emit("24 78 A6 2C")  # a2 = selected runtime record
+    code.emit("4A 2A 00 05 66 04")  # subordinate? keep it; else use commander
+    code.emit("24 78 A6 28")
     code.emit("B5 FC 00 FF 60 3C")
     code.branch_word(0x6500, "done")
     code.emit("B5 FC 00 FF 80 00")
@@ -6692,6 +6848,10 @@ def build_byte_ui_local_mapping(
     # after the shortened discard heading so the established mapping order is
     # identical to the former `버릴 아이템 선택` record.
     texts.append("선택")
+    # Append result-only local glyphs last so no established class/name local
+    # index moves. Their explicit full-extension tiles are restored after the
+    # result-screen character graphics have finished loading.
+    texts.extend(BYTE_UI_RESULT_LOCAL_CHARS)
     chars = [" ", *collect_chars(*texts)]
     extension_tiles = [
         tile
@@ -6705,6 +6865,8 @@ def build_byte_ui_local_mapping(
     for char in chars:
         if char == " ":
             tile = 0x20
+        elif char in BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR:
+            tile = BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR[char]
         elif char in BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR:
             tile = BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR[char]
             retired_tile = BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR.get(char)
@@ -6831,14 +6993,43 @@ def _build_byte_ui_ending_result_renderer() -> bytes:
     return bytes(wrapper)
 
 
+def _build_byte_ui_ending_result_glyph_renderer() -> bytes:
+    # D0 is the localized index returned by the legacy lookup. Result screens
+    # continuously clear the map-status scratch region, so write directly into
+    # the result's restored low-font code instead of a transient 0x7Axx cell.
+    address = BYTE_UI_RESULT_DYNAMIC_CODE * 32
+    command = ((0x4000 | (address & 0x3FFF)) << 16) | ((address >> 14) & 3)
+    code = bytearray(bytes.fromhex("48 E7 60 80"))  # preserve d1-d2/a0
+    code.extend(bytes.fromhex("34 00 C4 FC 00 20"))
+    code.extend(
+        bytes.fromhex("41 F9") + BYTE_UI_DYNAMIC_GLYPH_TABLE.to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("D1 C2"))
+    code.extend(bytes.fromhex("33 FC 8F 02 00 C0 00 04"))
+    code.extend(bytes.fromhex("23 FC") + command.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("00 C0 00 04"))
+    code.extend(bytes.fromhex("23 D8 00 C0 00 00") * 8)
+    code.extend(bytes.fromhex("4C DF 01 06 4E 75"))
+    return bytes(code)
+
+
 def _build_byte_ui_ending_result_final_bank_loader() -> bytes:
     # Result-screen character graphics overwrite the final localized bank after
     # the names have already been placed. Run the displaced setup call first,
-    # then restore the bank once the graphics setup is complete.
+    # then restore the bank and the result-only low-font 적 tile once every
+    # character-graphics request is complete.
     return (
         BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL
         + bytes.fromhex("4E B9")
         + BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("48 E7 FF FE")
+        + bytes.fromhex("42 40 10 3C 00")
+        + bytes((BYTE_UI_RESULT_DYNAMIC_CODE,))
+        + bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4E B9")
+        + BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4C DF 7F FF")
         + bytes.fromhex("4E 75")
     )
 
@@ -7181,6 +7372,7 @@ def install_byte_ui_extension(
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
     final_bank_loader = _build_byte_ui_final_bank_loader()
     ending_result_renderer = _build_byte_ui_ending_result_renderer()
+    ending_result_glyph_renderer = _build_byte_ui_ending_result_glyph_renderer()
     ending_result_final_bank_loader = (
         _build_byte_ui_ending_result_final_bank_loader()
     )
@@ -7241,6 +7433,23 @@ def install_byte_ui_extension(
         if any(value != 0xFF for value in data[offset : offset + len(payload)]):
             raise ValueError(f"byte UI routine area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
+
+    result_glyph_renderer_end = (
+        BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE
+        + len(ending_result_glyph_renderer)
+    )
+    if result_glyph_renderer_end > BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE_LIMIT:
+        raise ValueError("ending result glyph renderer exceeds reserved area")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE:result_glyph_renderer_end
+        ]
+    ):
+        raise ValueError("ending result glyph renderer area is not blank")
+    data[
+        BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE:result_glyph_renderer_end
+    ] = ending_result_glyph_renderer
 
     title_credit_renderer_end = (
         title_credit_renderer_address + len(title_credit_renderer)
@@ -7647,11 +7856,16 @@ def patch_byte_ui_strings(
         values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)
     for offset, (width, text) in BYTE_UI_FIXED_STRING_PATCHES.items():
-        values = [
-            ord(char) if ord(char) < 0x80 else code_by_char[char]
-            for char in text
-            if char != " "
-        ]
+        values: list[int] = []
+        for char in text:
+            if char == " ":
+                continue
+            if offset == 0x0A2E63 and char in BYTE_UI_RESULT_LOCAL_CHARS:
+                values.extend((BYTE_UI_LOCAL_MARKER, local_index_by_char[char]))
+            else:
+                values.append(
+                    ord(char) if ord(char) < 0x80 else code_by_char[char]
+                )
         if len(values) > width:
             raise ValueError(f"byte fixed string at 0x{offset:06X} needs {len(values)} bytes, only {width}")
         data[offset : offset + width] = bytes(values + [0x20] * (width - len(values)))
@@ -8126,6 +8340,7 @@ def main() -> None:
     patch_loren_map_sprite(data)
     patch_paired_npc_map_sprites(data)
     patch_ai_class_map_sprites(data)
+    patch_map_sprite_gray_source_remap(data, IN_ROM.read_bytes())
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()

@@ -52,6 +52,8 @@ def build_inventory(source_rom: bytes) -> dict[str, object]:
         code = code_by_char.get(char)
         if char == " ":
             allocation = "space"
+        elif char in builder.BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR:
+            allocation = "dynamic_scratch"
         elif char in builder.BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR:
             allocation = "battle_stable"
         elif code is not None:

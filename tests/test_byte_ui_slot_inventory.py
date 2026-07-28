@@ -61,6 +61,8 @@ class ByteUiSlotInventoryTests(unittest.TestCase):
         }
         self.assertEqual(by_char["비"]["vram_tile"], "0x05F5")
         self.assertEqual(by_char["비"]["allocation"], "battle_stable")
+        self.assertEqual(by_char["적"]["vram_tile"], "0x00A6")
+        self.assertEqual(by_char["적"]["allocation"], "dynamic_scratch")
 
 
 if __name__ == "__main__":

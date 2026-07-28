@@ -485,6 +485,71 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertLessEqual(final_start + final_count, 0x05F8)
         self.assertEqual(tile_by_index[index_by_char["렌"]], 0x05E9)
 
+    def test_prep_dynamic_slots_cover_shop_overwritten_escape_glyphs(self):
+        self.assertEqual(
+            builder.BYTE_UI_PREP_DYNAMIC_CHARS,
+            (
+                "라", "론", "쉐", "카", "코", "키", "록", "적",
+                "가", "스", "럴", "슬", "임", "비", "크", "제",
+            ),
+        )
+        self.assertLessEqual(
+            len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
+            len(builder.BYTE_UI_DYNAMIC_TILE_IDS),
+        )
+
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, _ = builder.build_byte_ui_local_mapping(codes)
+        for slot, char in enumerate(builder.BYTE_UI_PREP_DYNAMIC_CHARS):
+            self.assertEqual(
+                data[
+                    builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE
+                    + index_by_char[char]
+                ],
+                slot,
+            )
+
+    def test_battle_result_enemy_label_uses_final_local_bank_for_jeok(self):
+        data = bytearray(self.rom)
+        builder.expand_rom(data)
+        codes = builder.patch_byte_ui_strings(data)
+        index_by_char, tile_by_index = builder.build_byte_ui_local_mapping(codes)
+
+        self.assertEqual(codes["적"], 0xA6)
+        self.assertEqual(
+            tile_by_index[index_by_char["적"]],
+            builder.BYTE_UI_RESULT_DYNAMIC_CODE,
+        )
+        self.assertEqual(
+            data[0x0A2E63 : 0x0A2E68],
+            bytes(
+                (
+                    builder.BYTE_UI_LOCAL_MARKER,
+                    index_by_char["적"],
+                    codes["군"],
+                    0x20,
+                    0x20,
+                )
+            ),
+        )
+
+        renderer = builder._build_byte_ui_ending_result_final_bank_loader()
+        self.assertIn(bytes.fromhex("42 40 10 3C 00 A6"), renderer)
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE.to_bytes(4, "big"),
+            renderer,
+        )
+        glyph_renderer = builder._build_byte_ui_ending_result_glyph_renderer()
+        address = builder.BYTE_UI_RESULT_DYNAMIC_CODE * 32
+        command = (
+            ((0x4000 | (address & 0x3FFF)) << 16)
+            | ((address >> 14) & 3)
+        )
+        self.assertIn(bytes.fromhex("23 FC") + command.to_bytes(4, "big"), glyph_renderer)
+
     def test_map_info_renderer_uses_separate_dynamic_name_and_class_tiles(self):
         data = bytearray(self.rom)
         builder.expand_rom(data)
@@ -533,6 +598,21 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertTrue(
             all(0x07A1 <= tile <= 0x07B5 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
         )
+
+        restore = builder._build_byte_ui_map_info_scratch_restore()
+        self.assertIn(
+            bytes.fromhex(
+                "24 78 A6 2C "  # selected runtime record
+                "4A 2A 00 05 "  # subordinate flag
+                "66 04 "        # retain subordinate record
+                "24 78 A6 28"   # otherwise use commander
+            ),
+            restore,
+        )
+        self.assertLessEqual(
+            builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE + len(restore),
+            builder.BYTE_UI_ROSTER_RENDER_ROUTINE,
+        )
         self.assertNotIn(0x07A0, builder.BYTE_UI_DYNAMIC_TILE_IDS)
         self.assertNotIn(0x07BE, builder.BYTE_UI_DYNAMIC_TILE_IDS)
         self.assertNotIn(0x07BF, builder.BYTE_UI_DYNAMIC_TILE_IDS)
@@ -577,7 +657,10 @@ class NameEntryResourceTests(unittest.TestCase):
     def test_preparation_overwritten_glyphs_use_fixed_dynamic_slots(self):
         self.assertEqual(
             builder.BYTE_UI_PREP_DYNAMIC_CHARS,
-            ("록", "가", "스", "럴", "슬", "임", "비"),
+            (
+                "라", "론", "쉐", "카", "코", "키", "록", "적",
+                "가", "스", "럴", "슬", "임", "비", "크", "제",
+            ),
         )
         self.assertLessEqual(
             len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
@@ -919,13 +1002,15 @@ class NameEntryResourceTests(unittest.TestCase):
 
     def test_ending_result_restores_final_bank_after_character_graphics(self):
         routine = builder._build_byte_ui_ending_result_final_bank_loader()
-        self.assertEqual(
-            routine,
+        self.assertTrue(
+            routine.startswith(
             builder.BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL
             + bytes.fromhex("4E B9")
             + builder.BYTE_UI_FINAL_BANK_LOAD_ROUTINE.to_bytes(4, "big")
-            + bytes.fromhex("4E 75"),
+            )
         )
+        self.assertIn(bytes.fromhex("48 E7 FF FE"), routine)
+        self.assertIn(bytes.fromhex("4C DF 7F FF 4E 75"), routine)
 
         data = bytearray(self.rom)
         builder.expand_rom(data)
