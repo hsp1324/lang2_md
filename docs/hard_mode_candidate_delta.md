@@ -183,3 +183,16 @@ BlastEm 프로세스와 동일 저장 슬롯은 유지됐다. 같은 런타임�
 
 화면은 `captures/run/hard_8674_s21_entry.png`와
 `captures/run/hard_8674_s22_entry.png`에 보존한다.
+
+시나리오 23과 24도 직전 최신 후보 상태에서 연속 진입했으며 런타임
+예외 없이 모든 하드 대상 레코드가 일치했다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 23 | 9 | 11/11 | 9~19 | `3878d15305ba7ed95de2e9cbb63aca788ca58b8c4eb8c7ae3c8cd4877e08c666` |
+| 24 | 9 | 10/10 | 10~19 | `864cedcda80b28b70ec73b8edeae8fbaa1b079ad0676a25fc6dd485dfc7d4ff2` |
+
+시나리오 23의 첫 실행 래퍼도 준비 화면 전에 종료 코드 143을 반환했지만
+동일 BlastEm 런타임을 재개해 검증했다. 화면은
+`captures/run/hard_8674_s23_entry.png`와
+`captures/run/hard_8674_s24_entry.png`에 보존한다.
