@@ -16,6 +16,9 @@ class TitleMainScreenTests(unittest.TestCase):
     def setUpClass(cls):
         cls.jp = JP_ROM.read_bytes()
         cls.ko = KO_ROM.read_bytes()
+        cls.version_patch = bytearray(cls.jp)
+        builder.expand_rom(cls.version_patch)
+        builder.patch_byte_ui_strings(cls.version_patch)
 
     @staticmethod
     def words(data: bytes | bytearray, offset: int, count: int) -> list[int]:
@@ -134,14 +137,71 @@ class TitleMainScreenTests(unittest.TestCase):
             builder.TITLE_CREDIT_RECORD_BYTES,
         )
 
+    def test_version_record_is_installed_in_new_builds(self):
+        self.assertEqual(builder.TITLE_VERSION_TEXT, "번역: 1.0.0")
+        self.assertEqual(
+            builder.TITLE_VERSION_RENDER_POSITION,
+            builder.title_version_render_position("번역: 1.0.0"),
+        )
+        self.assertEqual(
+            self.version_patch[
+                builder.TITLE_VERSION_TEXT_RECORD :
+                builder.TITLE_VERSION_TEXT_RECORD
+                + len(builder.TITLE_VERSION_RECORD_BYTES)
+            ],
+            builder.TITLE_VERSION_RECORD_BYTES,
+        )
+
+    def test_hard_version_text_fits_reserved_record_and_title_row(self):
+        text = "번역/밸런스: 1.0.0/1.0.0"
+        record = builder.build_title_version_record(text)
+        self.assertLessEqual(
+            builder.TITLE_VERSION_TEXT_RECORD + len(record),
+            builder.BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE,
+        )
+        self.assertLess(
+            builder.title_version_render_position(text),
+            builder.TITLE_VERSION_RENDER_POSITION,
+        )
+
+    def test_rom_header_metadata_preserves_japanese_title(self):
+        data = bytearray(self.jp)
+        profile = builder.get_rom_version_profile("normal")
+        domestic = data[
+            builder.MD_HEADER_DOMESTIC_TITLE:
+            builder.MD_HEADER_INTERNATIONAL_TITLE
+        ]
+        builder.patch_rom_header_metadata(data, profile)
+        self.assertEqual(
+            data[
+                builder.MD_HEADER_DOMESTIC_TITLE:
+                builder.MD_HEADER_INTERNATIONAL_TITLE
+            ],
+            domestic,
+        )
+        metadata = data[
+            builder.MD_HEADER_INTERNATIONAL_TITLE:
+            builder.MD_HEADER_INTERNATIONAL_TITLE
+            + builder.MD_HEADER_TITLE_SIZE
+        ]
+        self.assertEqual(
+            metadata.rstrip(b" "),
+            b"LANGRISSER II KOREAN T1.0.0 BY HSP1324",
+        )
+
     def test_credit_font_is_a_separate_resource_with_exact_overrides(self):
         pointer_offset = (
             builder.BYTE_UI_EXT_RESOURCE_TABLE
             + builder.TITLE_CREDIT_RESOURCE_INDEX * 4
         )
-        resource_offset = builder.be32(self.ko, pointer_offset) & 0x00FFFFFF
-        self.assertEqual(self.ko[resource_offset], 0x03)
-        tiles = builder.decompress_9dfe(self.ko, resource_offset + 1)
+        resource_offset = (
+            builder.be32(self.version_patch, pointer_offset) & 0x00FFFFFF
+        )
+        self.assertEqual(self.version_patch[resource_offset], 0x03)
+        tiles = builder.decompress_9dfe(
+            self.version_patch,
+            resource_offset + 1,
+        )
         self.assertEqual(len(tiles), builder.TITLE_CREDIT_TILE_COUNT * 32)
 
         font_path = ROOT / "tools/fonts/Galmuri7.ttf"
@@ -172,9 +232,16 @@ class TitleMainScreenTests(unittest.TestCase):
         record_end = builder.TITLE_CREDIT_TEXT_RECORD + len(
             builder.TITLE_CREDIT_RECORD_BYTES
         )
+        version_record_end = builder.TITLE_VERSION_TEXT_RECORD + len(
+            builder.TITLE_VERSION_RECORD_BYTES
+        )
         self.assertLessEqual(font_loader_end, builder.TITLE_CREDIT_RENDER_ROUTINE)
         self.assertLessEqual(renderer_end, builder.TITLE_CREDIT_TEXT_RECORD)
-        self.assertLessEqual(record_end, builder.BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE)
+        self.assertEqual(record_end, builder.TITLE_VERSION_TEXT_RECORD)
+        self.assertLessEqual(
+            version_record_end,
+            builder.BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE,
+        )
 
 
 if __name__ == "__main__":

@@ -15,6 +15,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
+from tools.rom_version import (
+    TITLE_TEXT_MAX_CELLS,
+    get_profile as get_rom_version_profile,
+)
 from tools.scenario_data import KOREAN_NAME_BY_ID
 
 
@@ -370,6 +374,13 @@ TITLE_CREDIT_TILE_OVERRIDES = {
     0x65: "러",
     0x66: "오",
     0x67: "기",
+    # Version labels use title-only lowercase slots that no stock title,
+    # copyright, menu, or HSP1324 credit string references.
+    0x68: "번",
+    0x69: "역",
+    0x6A: "밸",
+    0x6B: "런",
+    0x6C: "스",
 }
 TITLE_CREDIT_BITMAP_OVERRIDES = {}
 TITLE_CREDIT_RESOURCE_INDEX = (
@@ -702,6 +713,62 @@ TITLE_CREDIT_RECORD_BYTES = (
     + TITLE_CREDIT_TEXT_BYTES
     + bytes([0xFF])
 )
+TITLE_VERSION_TEXT_RECORD = TITLE_CREDIT_TEXT_RECORD + len(
+    TITLE_CREDIT_RECORD_BYTES
+)
+TITLE_VERSION_RENDER_ROW = 0xCD00
+TITLE_VERSION_RENDER_END_CELL = 38
+TITLE_VERSION_BYTE_BY_CHAR = {
+    char: code
+    for code, char in TITLE_CREDIT_TILE_OVERRIDES.items()
+}
+DEFAULT_ROM_VERSION_PROFILE = get_rom_version_profile("normal")
+TITLE_VERSION_TEXT = str(DEFAULT_ROM_VERSION_PROFILE["title_text"])
+
+
+def title_version_render_position(text: str) -> int:
+    start_cell = TITLE_VERSION_RENDER_END_CELL - len(text)
+    if start_cell < 0:
+        raise ValueError("title version does not fit on the title row")
+    return TITLE_VERSION_RENDER_ROW | (start_cell * 2)
+
+
+TITLE_VERSION_RENDER_POSITION = title_version_render_position(
+    TITLE_VERSION_TEXT
+)
+
+
+def build_title_version_record(text: str) -> bytes:
+    values = []
+    for char in text:
+        if char == " ":
+            values.append(0x00)
+        elif ord(char) < 0x80:
+            values.append(ord(char))
+        else:
+            try:
+                values.append(TITLE_VERSION_BYTE_BY_CHAR[char])
+            except KeyError as exc:
+                raise ValueError(
+                    f"title version needs unavailable glyph {char!r}"
+                ) from exc
+    if len(values) > TITLE_TEXT_MAX_CELLS:
+        raise ValueError(
+            f"title version exceeds {TITLE_TEXT_MAX_CELLS} cells"
+        )
+    return (
+        bytes.fromhex("00 02")
+        + len(values).to_bytes(2, "big")
+        + bytes.fromhex("00 01 F8 00 F9 00 FA")
+        + bytes(values)
+        + bytes([0xFF])
+    )
+
+
+TITLE_VERSION_RECORD_BYTES = build_title_version_record(TITLE_VERSION_TEXT)
+MD_HEADER_DOMESTIC_TITLE = 0x120
+MD_HEADER_INTERNATIONAL_TITLE = 0x150
+MD_HEADER_TITLE_SIZE = 48
 TITLE_LOGO_RESOURCE_INDEX = 393
 TITLE_LOGO_RESOURCE_ORIGINAL_POINTER = 0x120EEE
 TITLE_LOGO_RESOURCE_ORIGINAL_SIZE = 5984
@@ -2371,6 +2438,19 @@ def expand_rom(data: bytearray) -> None:
     # Mega Drive header ROM end address. The checksum is updated separately.
     put32(data, 0x1A4, EXPANDED_ROM_SIZE - 1)
     relocate_sram(data)
+
+
+def patch_rom_header_metadata(
+    data: bytearray,
+    profile: dict[str, object],
+) -> None:
+    title = str(profile["header_title"]).encode("ascii")
+    if len(title) > MD_HEADER_TITLE_SIZE:
+        raise ValueError("ROM header metadata title exceeds 48 bytes")
+    data[
+        MD_HEADER_INTERNATIONAL_TITLE:
+        MD_HEADER_INTERNATIONAL_TITLE + MD_HEADER_TITLE_SIZE
+    ] = title.ljust(MD_HEADER_TITLE_SIZE, b" ")
 
 
 def patch_scenario18_resident_loss(
@@ -6472,7 +6552,9 @@ def _build_title_credit_font_loader() -> bytes:
     )
 
 
-def _build_title_credit_renderer() -> bytes:
+def _build_title_credit_renderer(
+    title_version_text: str = TITLE_VERSION_TEXT,
+) -> bytes:
     def render_record(d2: int, record: int) -> bytes:
         return (
             bytes.fromhex("22 78 81 C4")
@@ -6490,6 +6572,10 @@ def _build_title_credit_renderer() -> bytes:
     return (
         render_record(0xCB18, 0x0A44F8)
         + render_record(0xCC1C, TITLE_CREDIT_TEXT_RECORD)
+        + render_record(
+            title_version_render_position(title_version_text),
+            TITLE_VERSION_TEXT_RECORD,
+        )
         + bytes.fromhex("4E 75")
     )
 
@@ -6501,6 +6587,7 @@ def install_byte_ui_extension(
     index_by_char: dict[str, int],
     tile_by_index: list[int],
     font_tiles: bytes | bytearray,
+    title_version_text: str = TITLE_VERSION_TEXT,
 ) -> None:
     first_pointer = be32(data, BYTE_UI_FONT_RESOURCE_TABLE) & 0x00FFFFFF
     table_size = first_pointer - BYTE_UI_FONT_RESOURCE_TABLE
@@ -6729,7 +6816,7 @@ def install_byte_ui_extension(
         _build_byte_ui_ending_result_final_bank_loader()
     )
     title_credit_font_loader = _build_title_credit_font_loader()
-    title_credit_renderer = _build_title_credit_renderer()
+    title_credit_renderer = _build_title_credit_renderer(title_version_text)
     discard_prompt_renderer = _build_inline_discard_prompt_renderer()
     sound_test_renderer = _build_sound_test_renderer()
     prep_local_tile_lookup = _build_byte_ui_prep_local_tile_lookup()
@@ -6880,6 +6967,22 @@ def install_byte_ui_extension(
     ):
         raise ValueError("title credit text record area is not blank")
     data[TITLE_CREDIT_TEXT_RECORD:title_credit_record_end] = TITLE_CREDIT_RECORD_BYTES
+    title_version_record = build_title_version_record(title_version_text)
+    title_version_record_end = TITLE_VERSION_TEXT_RECORD + len(
+        title_version_record
+    )
+    if title_version_record_end > BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE:
+        raise ValueError("title version record exceeds reserved bank")
+    if any(
+        value != 0xFF
+        for value in data[
+            TITLE_VERSION_TEXT_RECORD:title_version_record_end
+        ]
+    ):
+        raise ValueError("title version text record area is not blank")
+    data[
+        TITLE_VERSION_TEXT_RECORD:title_version_record_end
+    ] = title_version_record
     if data[
         TITLE_CREDIT_FONT_LOAD_HOOK :
         TITLE_CREDIT_FONT_LOAD_HOOK + len(TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL)
@@ -7041,7 +7144,10 @@ def install_byte_ui_extension(
     data[BYTE_UI_STATUS_RENDER_HOOK:status_hook_end] = status_hook
 
 
-def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
+def patch_byte_ui_strings(
+    data: bytearray,
+    title_version_text: str = TITLE_VERSION_TEXT,
+) -> dict[str, int]:
     # Keep localized class names tied to the Japanese source table rather than
     # inferred unit appearance or generic cavalry/infantry descriptions.
     validate_scenario1_class_sources(data)
@@ -7116,6 +7222,7 @@ def patch_byte_ui_strings(data: bytearray) -> dict[str, int]:
         local_index_by_char,
         local_tile_by_index,
         font_tiles,
+        title_version_text,
     )
 
     for offset, text in BYTE_UI_STRING_PATCHES.items():
@@ -7503,6 +7610,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, default=OUT_ROM)
     parser.add_argument(
+        "--rom-profile",
+        default="normal",
+        help="version profile from localization/rom_versions.json",
+    )
+    parser.add_argument(
         "--scenario-count",
         type=int,
         default=31,
@@ -7576,6 +7688,7 @@ def main() -> None:
         ),
     )
     args = parser.parse_args()
+    rom_version_profile = get_rom_version_profile(args.rom_profile)
 
     data = bytearray(IN_ROM.read_bytes())
     expand_rom(data)
@@ -7751,7 +7864,10 @@ def main() -> None:
     patch_opening_text_lists(data, glyph_by_char)
     byte_ui_code_by_char: dict[str, int] = {}
     if args.patch_byte_ui_strings:
-        byte_ui_code_by_char = patch_byte_ui_strings(data)
+        byte_ui_code_by_char = patch_byte_ui_strings(
+            data,
+            str(rom_version_profile["title_text"]),
+        )
         patch_title_logo_resource(data)
         patch_battle_ui_terrain_resource(data)
     if args.patch_name_entry_reused_glyphs:
@@ -7804,6 +7920,7 @@ def main() -> None:
         patch_shop_title_glyph_loaders(data, glyph_by_char)
     if not args.skip_direct:
         patch_direct_token_streams(data)
+    patch_rom_header_metadata(data, rom_version_profile)
     checksum = update_md_checksum(data)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_bytes(data)
@@ -7814,6 +7931,12 @@ def main() -> None:
     else:
         print("custom glyphs: 0")
     print(f"checksum: {checksum:04X}")
+    print(
+        f"release: {rom_version_profile['release_id']} "
+        f"({rom_version_profile['title_text']})"
+    )
+    print(f"distribution filename: {rom_version_profile['rom_filename']}")
+    print(f"header metadata: {rom_version_profile['header_title']}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "creator": "hsp1324",
+  "current_profile": "normal",
+  "profiles": {
+    "normal": {
+      "status": "release_candidate",
+      "release_id": "ko-1.0.0",
+      "translation_version": "1.0.0",
+      "balance_version": null,
+      "base_release": "ko-99fd",
+      "save_format": "lang2-ko-sram-v1"
+    },
+    "hard": {
+      "status": "pending_balance_approval",
+      "release_id": null,
+      "translation_version": "1.0.0",
+      "balance_version": null,
+      "base_release": "ko-1.0.0",
+      "save_format": "lang2-ko-sram-v1"
+    }
+  }
+}
