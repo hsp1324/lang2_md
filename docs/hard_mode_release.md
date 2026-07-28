@@ -15,6 +15,14 @@
 사용자가 명시적으로 릴리스했다고 말할 때까지 타이틀과 파일명의
 번역/밸런스 버전은 `1.0.0/1.0.0`으로 유지한다.
 
+`roms/releases`의 `1011` 파일은 마지막으로 배포한 플레이 후보로
+보존한다. 이후 UI·비활성 맵 스프라이트·로렌 팔레트 수정을 포함한
+최신 `8674` 후보는
+`roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`에 있다.
+두 후보의 365바이트 전이와 최신 시나리오 4 런타임 표본은
+`docs/hard_mode_candidate_delta.md` 및
+`localization/hard_mode_candidate_delta.json`에 기록한다.
+
 ## 적용 범위
 
 - 적 고정 배치 레코드 300개의 지휘관 AT/DF 강화

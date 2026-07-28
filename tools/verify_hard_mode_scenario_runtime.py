@@ -22,7 +22,7 @@ from tools import verify_hard_mode_runtime_evidence as runtime_evidence
 
 DEFAULT_ROM = (
     ROOT
-    / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
+    / "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
 )
 DEFAULT_RESULTS = ROOT / "localization/hard_mode_scenario_smoke.json"
 DEEP_RESULTS = (
@@ -68,10 +68,12 @@ def locate_quicksave(runtime_name: str) -> Path:
 def retain_entry_gst(
     scenario_number: int,
     gst_bytes: bytes,
+    evidence_tag: str | None = None,
 ) -> Path:
+    stem = evidence_tag or f"hard_matrix_s{scenario_number:02d}"
     destination = (
         RETAINED_ENTRY_ROOT
-        / f"hard_matrix_s{scenario_number:02d}_turn1_entry.gst"
+        / f"{stem}_turn1_entry.gst"
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(".gst.tmp")
@@ -192,9 +194,17 @@ def verify_scenario(
     display: str,
     resume_running: bool = False,
     record_existing: bool = False,
+    runtime_name: str | None = None,
+    evidence_tag: str | None = None,
+    entry_source_gst: Path | None = None,
 ) -> dict:
-    runtime_name = f"hard-matrix-s{scenario_number:02d}"
-    seed = seed_for_scenario(scenario_number)
+    runtime_name = runtime_name or f"hard-matrix-s{scenario_number:02d}"
+    evidence_tag = evidence_tag or f"hard_matrix_s{scenario_number:02d}"
+    seed = (
+        entry_source_gst.resolve()
+        if entry_source_gst is not None
+        else seed_for_scenario(scenario_number)
+    )
     env = os.environ.copy()
     env["DISPLAY"] = display
     if not record_existing:
@@ -246,7 +256,7 @@ def verify_scenario(
             "save:1.0",
         ], env=env)
 
-    capture = ROOT / f"captures/run/hard_matrix_s{scenario_number:02d}.png"
+    capture = ROOT / f"captures/run/{evidence_tag}.png"
     run([
         sys.executable,
         str(CAPTURE),
@@ -259,7 +269,11 @@ def verify_scenario(
         gst_bytes,
         scenario_number,
     )
-    retained_gst = retain_entry_gst(scenario_number, gst_bytes)
+    retained_gst = retain_entry_gst(
+        scenario_number,
+        gst_bytes,
+        evidence_tag=evidence_tag,
+    )
     indexes = scenario_record_indexes(scenario_number)
     exception_indexes = scenario_runtime_exception_indexes(
         scenario_number
@@ -284,6 +298,7 @@ def verify_scenario(
         "gst": str(retained_gst.relative_to(ROOT)),
         "gst_sha256": hashlib.sha256(gst_bytes).hexdigest(),
         "runtime_gst": str(gst.relative_to(ROOT)),
+        "runtime_name": runtime_name,
         "capture": str(capture.relative_to(ROOT)),
         "capture_sha256": sha256(capture),
     }
@@ -311,6 +326,19 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="verify and record an existing quicksave without sending input",
     )
+    parser.add_argument(
+        "--runtime-name",
+        help="isolated runtime directory to launch or inspect",
+    )
+    parser.add_argument(
+        "--evidence-tag",
+        help="capture/GST filename stem; defaults to hard_matrix_sNN",
+    )
+    parser.add_argument(
+        "--entry-source-gst",
+        type=Path,
+        help="GST used to recover the saved slot for a recorded existing run",
+    )
     return parser.parse_args()
 
 
@@ -328,6 +356,16 @@ def main() -> int:
         raise ValueError(
             "--resume-running and --record-existing are mutually exclusive"
         )
+    if (args.runtime_name or args.evidence_tag) and len(scenarios) != 1:
+        raise ValueError(
+            "--runtime-name and --evidence-tag require exactly one --scenario"
+        )
+    if args.evidence_tag and (
+        "/" in args.evidence_tag or "\\" in args.evidence_tag
+    ):
+        raise ValueError("--evidence-tag must be a filename stem")
+    if args.entry_source_gst and not args.record_existing:
+        raise ValueError("--entry-source-gst requires --record-existing")
     rom = args.rom.resolve()
     results_path = args.results.resolve()
     results = load_results(results_path, rom)
@@ -338,6 +376,9 @@ def main() -> int:
             display=args.virtual_display,
             resume_running=args.resume_running,
             record_existing=args.record_existing,
+            runtime_name=args.runtime_name,
+            evidence_tag=args.evidence_tag,
+            entry_source_gst=args.entry_source_gst,
         )
         save_result(results_path, results, result)
         first_group, last_group = result["runtime_group_range"]

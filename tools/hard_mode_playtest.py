@@ -21,6 +21,9 @@ DEFAULT_FIRST_TURN = ROOT / "localization/hard_mode_first_turn_smoke.json"
 DEFAULT_COSMETIC_DELTA = (
     ROOT / "localization/ai_class_release_delta.json"
 )
+DEFAULT_CANDIDATE_DELTA = (
+    ROOT / "localization/hard_mode_candidate_delta.json"
+)
 DEFAULT_CLASS_SPOT_CHECK = (
     ROOT / "localization/ai_class_runtime_spot_check.json"
 )
@@ -72,11 +75,11 @@ def current_identity(
     runtime_path: Path = DEFAULT_RUNTIME,
     first_turn_path: Path = DEFAULT_FIRST_TURN,
     cosmetic_delta_path: Path = DEFAULT_COSMETIC_DELTA,
+    candidate_delta_path: Path = DEFAULT_CANDIDATE_DELTA,
     class_spot_check_path: Path = DEFAULT_CLASS_SPOT_CHECK,
 ) -> dict[str, Any]:
     build = load_json(build_path)
-    filename = build["release"]["rom_filename"]
-    rom_path = ROOT / "roms/releases" / filename
+    rom_path = ROOT / build["release"]["output"]
     payload = rom_path.read_bytes()
     digest = sha256_bytes(payload)
     expected = build["hard"]
@@ -94,6 +97,7 @@ def current_identity(
     runtime = load_json(runtime_path)
     first_turn = load_json(first_turn_path)
     cosmetic_delta = load_json(cosmetic_delta_path)
+    candidate_delta = load_json(candidate_delta_path)
     class_spot_check = load_json(class_spot_check_path)
     runtime_source = runtime["hard_rom"]["sha256"]
     first_turn_source = first_turn["hard_rom"]["sha256"]
@@ -105,9 +109,12 @@ def current_identity(
         raise ValueError(
             "cosmetic delta predecessor does not match runtime evidence"
         )
-    if cosmetic_delta["after"]["sha256"] != digest:
+    if (
+        candidate_delta["before"]["sha256"]
+        != cosmetic_delta["after"]["sha256"]
+    ):
         raise ValueError(
-            "cosmetic delta target does not match current hard candidate"
+            "post-release candidate delta does not follow cosmetic delta"
         )
     delta = cosmetic_delta["delta"]
     if (
@@ -118,9 +125,21 @@ def current_identity(
         raise ValueError(
             "hard runtime evidence cannot cross an unverified ROM delta"
         )
+    candidate_change = candidate_delta["delta"]
+    if (
+        candidate_delta["status"] != "verified_ui_sprite_only_delta"
+        or candidate_delta["after"]["sha256"] != digest
+        or candidate_change["outside_owned_ranges"] != 0
+        or candidate_change["balance_event_ai_changed_bytes"] != 0
+    ):
+        raise ValueError(
+            "hard runtime evidence cannot cross the post-release candidate "
+            "delta"
+        )
     if (
         class_spot_check["status"] != "passed"
-        or class_spot_check["rom"]["sha256"] != digest
+        or class_spot_check["rom"]["sha256"]
+        != candidate_delta["before"]["sha256"]
         or len(class_spot_check["checks"]) != 6
         or any(
             row["result"] != "passed"
@@ -166,6 +185,13 @@ def current_identity(
                 cosmetic_delta_path
             ),
             "cosmetic_delta_status": cosmetic_delta["status"],
+            "post_release_candidate_delta_manifest": str(
+                candidate_delta_path.relative_to(ROOT)
+            ),
+            "post_release_candidate_delta_manifest_sha256": sha256_path(
+                candidate_delta_path
+            ),
+            "post_release_candidate_delta_status": candidate_delta["status"],
             "current_class_spot_check_manifest": str(
                 class_spot_check_path.relative_to(ROOT)
             ),
@@ -433,11 +459,15 @@ def render_markdown(manifest: dict[str, Any]) -> str:
             f"(증거 ROM `{identity['verification_lineage']['first_turn_source_sha256']}`)"
         ),
         (
-            "- 현재 후보 전이: "
+            "- 승격 클래스 전이: "
             f"`{identity['verification_lineage']['cosmetic_delta_status']}`"
         ),
         (
-            "- 현재 후보 변경 클래스 실기 표본: "
+            "- 최신 UI/스프라이트 전이: "
+            f"`{identity['verification_lineage']['post_release_candidate_delta_status']}`"
+        ),
+        (
+            "- 승격 클래스 실기 표본(직전 후보): "
             f"{identity['verification_lineage']['current_class_spot_checks_passed']}/6"
         ),
         "",

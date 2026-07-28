@@ -4,10 +4,10 @@
   "hard_release": {
     "release_id": "ko-hard-t1.0.0-b1.0.0",
     "profile_id": "standard_hard_runestone_v1",
-    "rom_path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "rom_path": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
     "size": 4194304,
-    "header_checksum": "1011",
-    "sha256": "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
+    "header_checksum": "8674",
+    "sha256": "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
     "plan_sha256": "ee1e10bb80c6d36513b07826aaf03b6da9c443800b1005bd5ec4e8b8364ec133",
     "runtime_manifest_sha256": "d847066d3b3396a2c2320f0c21f8c76bdb1d418922cca58c5dbd1e4e713d1a65",
     "first_turn_manifest_sha256": "dde9f0d6de760106a24f1a0568e6a29025e986328cddde2ce35c23d76ea9dac0",
@@ -83,6 +83,9 @@
       "cosmetic_delta_manifest": "localization/ai_class_release_delta.json",
       "cosmetic_delta_manifest_sha256": "7ae7a7055ad87877d054ff9af3e8fc721fa097ed0dcf484507e876919ddcabe1",
       "cosmetic_delta_status": "verified_cosmetic_only_delta",
+      "post_release_candidate_delta_manifest": "localization/hard_mode_candidate_delta.json",
+      "post_release_candidate_delta_manifest_sha256": "0b2f3c20cb3221c1b68575f916892301cbd0873746bc4978bf7aa7b9ab0ca5f0",
+      "post_release_candidate_delta_status": "verified_ui_sprite_only_delta",
       "current_class_spot_check_manifest": "localization/ai_class_runtime_spot_check.json",
       "current_class_spot_check_manifest_sha256": "6852c825d7e1608745bfa5e6c6181bc4d1bdf1f3e933951e8b71fda578653368",
       "current_class_spot_checks_passed": 6

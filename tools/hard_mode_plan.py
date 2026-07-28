@@ -384,7 +384,7 @@ def render_markdown(plan: dict[str, Any]) -> str:
         lines.extend([
             (
                 "- 하드 후보 ROM: "
-                f"`roms/releases/{build['release']['rom_filename']}`"
+                f"`{build['release']['output']}`"
             ),
             f"- 하드 체크섬: `{build['hard']['header_checksum']}`",
             f"- 하드 SHA-256: `{build['hard']['sha256']}`",

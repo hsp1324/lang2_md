@@ -1,9 +1,12 @@
-import hashlib
 import json
+from pathlib import Path
 import unittest
 
 from tools import hard_mode_plan
 from tools import verify_hard_mode_scenario_runtime as scenario_runtime
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class HardModeScenarioSmokeTests(unittest.TestCase):
@@ -14,11 +17,43 @@ class HardModeScenarioSmokeTests(unittest.TestCase):
         )
         cls.plan = hard_mode_plan.build_plan()
 
-    def test_manifest_targets_the_current_hard_candidate(self):
-        rom = scenario_runtime.DEFAULT_ROM
+    def test_runtime_evidence_reaches_current_candidate_through_owned_deltas(
+        self,
+    ):
+        promoted = json.loads(
+            (ROOT / "localization/ai_class_release_delta.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        current = json.loads(
+            (ROOT / "localization/hard_mode_candidate_delta.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        build = json.loads(
+            (ROOT / "localization/hard_mode_build.json").read_text(
+                encoding="utf-8"
+            )
+        )
         self.assertEqual(
             self.manifest["hard_rom"]["sha256"],
-            hashlib.sha256(rom.read_bytes()).hexdigest(),
+            promoted["before"]["sha256"],
+        )
+        self.assertEqual(
+            promoted["after"]["sha256"],
+            current["before"]["sha256"],
+        )
+        self.assertEqual(
+            current["after"]["sha256"],
+            build["hard"]["sha256"],
+        )
+        self.assertEqual(
+            promoted["delta"]["balance_event_ai_changed_bytes"],
+            0,
+        )
+        self.assertEqual(
+            current["delta"]["balance_event_ai_changed_bytes"],
+            0,
         )
 
     def test_completed_scenarios_are_sorted_and_unique(self):

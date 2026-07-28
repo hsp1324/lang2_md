@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "status": "verified_ui_sprite_only_delta",
+  "before": {
+    "path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "size": 4194304,
+    "md_checksum": "1011",
+    "sha256": "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
+    "sram_descriptor": "5241F8200040000100403FFF"
+  },
+  "after": {
+    "path": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "size": 4194304,
+    "md_checksum": "8674",
+    "sha256": "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
+    "sram_descriptor": "5241F8200040000100403FFF"
+  },
+  "ownership": {
+    "header_checksum": [
+      {
+        "start": "0x00018E",
+        "end_exclusive": "0x000190"
+      }
+    ],
+    "result_label_record": [
+      {
+        "start": "0x0A2E63",
+        "end_exclusive": "0x0A2E68"
+      }
+    ],
+    "inactive_sprite_hook": [
+      {
+        "start": "0x011DD8",
+        "end_exclusive": "0x011DDE"
+      }
+    ],
+    "result_ui_routines": [
+      {
+        "start": "0x2B7D80",
+        "end_exclusive": "0x2B7E20"
+      }
+    ],
+    "result_glyph_routine": [
+      {
+        "start": "0x2B8CC0",
+        "end_exclusive": "0x2B8D40"
+      }
+    ],
+    "inactive_sprite_routine": [
+      {
+        "start": "0x2B8D40",
+        "end_exclusive": "0x2B8E00"
+      }
+    ],
+    "inactive_sprite_table": [
+      {
+        "start": "0x2B8E00",
+        "end_exclusive": "0x2B8E80"
+      }
+    ],
+    "dynamic_glyph_slot_table": [
+      {
+        "start": "0x2BE960",
+        "end_exclusive": "0x2BEA60"
+      }
+    ],
+    "loren_map_frames": [
+      {
+        "start": "0x2F0080",
+        "end_exclusive": "0x2F0100"
+      },
+      {
+        "start": "0x2F5980",
+        "end_exclusive": "0x2F5A00"
+      }
+    ]
+  },
+  "delta": {
+    "changed_byte_count": 365,
+    "categories": {
+      "header_checksum": 2,
+      "result_label_record": 3,
+      "inactive_sprite_hook": 5,
+      "result_ui_routines": 26,
+      "result_glyph_routine": 90,
+      "inactive_sprite_routine": 42,
+      "inactive_sprite_table": 106,
+      "dynamic_glyph_slot_table": 16,
+      "loren_map_frames": 75
+    },
+    "outside_owned_ranges": 0,
+    "unexpected_offsets": [],
+    "balance_event_ai_changed_bytes": 0,
+    "sram_descriptor_unchanged": true
+  },
+  "evidence_inheritance": {
+    "source_runtime_rom_sha256": "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
+    "runtime_loader_scenarios": 31,
+    "first_turn_scenarios": 31,
+    "scope": "Only loader/first-turn balance evidence is inherited. UI and sprite behavior must use current-candidate captures."
+  }
+}

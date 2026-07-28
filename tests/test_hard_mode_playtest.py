@@ -21,7 +21,11 @@ class HardModePlaytestTests(unittest.TestCase):
         self.assertFalse(manifest["coverage"]["complete"])
         self.assertEqual(
             manifest["hard_release"]["sha256"],
-            "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
+            "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
+        )
+        self.assertEqual(
+            manifest["hard_release"]["rom_path"],
+            "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
         )
         lineage = manifest["hard_release"]["verification_lineage"]
         self.assertEqual(
@@ -31,6 +35,10 @@ class HardModePlaytestTests(unittest.TestCase):
         self.assertEqual(
             lineage["cosmetic_delta_status"],
             "verified_cosmetic_only_delta",
+        )
+        self.assertEqual(
+            lineage["post_release_candidate_delta_status"],
+            "verified_ui_sprite_only_delta",
         )
         self.assertEqual(lineage["current_class_spot_checks_passed"], 6)
 
