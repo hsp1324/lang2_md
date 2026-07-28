@@ -172,3 +172,14 @@ BlastEm 프로세스와 동일 저장 슬롯은 유지됐다. 같은 런타임�
 
 화면은 `captures/run/hard_8674_s19_entry.png`와
 `captures/run/hard_8674_s20_entry.png`에 보존한다.
+
+시나리오 21과 22도 직전 최신 후보 상태에서 연속 진입했으며 런타임
+예외 없이 모든 하드 대상 레코드가 일치했다.
+
+| 시나리오 | 아군 그룹 | 하드 대상 | 실제 적 그룹 | GST SHA-256 |
+| ---: | ---: | ---: | --- | --- |
+| 21 | 8 | 11/11 | 8~18 | `c2bcca9b36e33f9872502a440a7ba98f831dc4805c990b5327661dc087817dd7` |
+| 22 | 8 | 11/11 | 9~19 | `835382bbfdfa71c86cd5c971f654b0c72881c41aa295178de93582013f83cd6f` |
+
+화면은 `captures/run/hard_8674_s21_entry.png`와
+`captures/run/hard_8674_s22_entry.png`에 보존한다.
