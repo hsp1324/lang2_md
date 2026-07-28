@@ -17,6 +17,7 @@ DEFAULT_SOURCE_ROM = hard_mode_baseline.DEFAULT_SOURCE_ROM
 DEFAULT_NORMAL_ROM = hard_mode_baseline.DEFAULT_NORMAL_ROM
 DEFAULT_JSON = ROOT / "localization/hard_mode_plan.json"
 DEFAULT_MARKDOWN = ROOT / "docs/hard_mode_changes.md"
+DEFAULT_BUILD_MANIFEST = ROOT / "localization/hard_mode_build.json"
 
 SECRET_STEP_SOURCE = {
     28: 11,
@@ -105,6 +106,8 @@ def build_plan(
     normal_rom: Path = DEFAULT_NORMAL_ROM,
 ) -> dict[str, Any]:
     baseline = hard_mode_baseline.build_inventory(source_rom, normal_rom)
+    approval_manifest = hard_mode_approval.load_manifest()
+    approved = approval_manifest["status"] == "approved"
     steps = proposal_steps()
     caps = hard_mode_baseline.RECOMMENDED_DISCUSSION_PROPOSAL[
         "global_rules"
@@ -227,13 +230,18 @@ def build_plan(
     return {
         "schema_version": 1,
         "profile_id": hard_mode_baseline.RECOMMENDED_DISCUSSION_PROPOSAL["id"],
-        "status": "planned_pending_explicit_approval",
+        "status": (
+            "approved_balance_plan"
+            if approved
+            else "planned_pending_explicit_approval"
+        ),
         "rom_values_applied": False,
         "normal_release": baseline["normal_release"],
         "approval": {
             "manifest": str(
                 hard_mode_approval.DEFAULT_APPROVAL.relative_to(ROOT)
             ),
+            "status": approval_manifest["status"],
             "proposal_sha256": hard_mode_approval.subject_sha256(),
             "required_confirmation": hard_mode_approval.EXPECTED_CONFIRMATION,
         },
@@ -312,12 +320,17 @@ def _fmt_mercenaries(values: list[int]) -> str:
 def render_markdown(plan: dict[str, Any]) -> str:
     normal = plan["normal_release"]
     summary = plan["summary"]
+    build = (
+        json.loads(DEFAULT_BUILD_MANIFEST.read_text(encoding="utf-8"))
+        if DEFAULT_BUILD_MANIFEST.exists()
+        else None
+    )
     lines = [
         "# 랑그릿사 II 표준 하드 모드 변경 기록",
         "",
         "> 이 문서는 일반 한국어판과 분리된 하드 모드 전용 기록이다.",
-        "> 현재 상태는 수치 적용 전 계획이며, 승인·빌드·실기 검증 결과를",
-        "> 같은 문서에 계속 누적한다.",
+        "> 표준 하드 수치는 승인되어 후보 ROM에 적용되었다. 실제 난이도와",
+        "> 진행 가능성은 사용자의 전체 플레이 결과로 계속 조정한다.",
         "",
         "## 기준판과 상태",
         "",
@@ -326,16 +339,28 @@ def render_markdown(plan: dict[str, Any]) -> str:
         f"- SHA-256: `{normal['sha256']}`",
         f"- 프로필: `{plan['profile_id']}`",
         f"- 상태: `{plan['status']}`",
+        f"- 승인 상태: `{plan['approval']['status']}`",
         f"- 필요한 승인 문구: `{plan['approval']['required_confirmation']}`",
         "- 일반판 수정: 없음",
+    ]
+    if build is not None:
+        lines.extend([
+            (
+                "- 하드 후보 ROM: "
+                f"`roms/releases/{build['release']['rom_filename']}`"
+            ),
+            f"- 하드 체크섬: `{build['hard']['header_checksum']}`",
+            f"- 하드 SHA-256: `{build['hard']['sha256']}`",
+        ])
+    lines.extend([
         "",
-        "## 계획 요약",
+        "## 승인·적용 요약",
         "",
         f"- 시나리오: {summary['scenario_count']}개",
         f"- 대상 적 레코드: {summary['target_record_count']}개",
-        f"- 지휘관 AT/DF 변경 예정: {summary['commander_change_record_count']}개",
-        f"- 적 전용 병사 A+/D+ 변경 예정: {summary['soldier_correction_record_count']}개",
-        f"- 보수적 용병 승급 예정: {summary['mercenary_replacement_slot_count']}칸",
+        f"- 지휘관 AT/DF 변경: {summary['commander_change_record_count']}개",
+        f"- 적 전용 병사 A+/D+ 변경: {summary['soldier_correction_record_count']}개",
+        f"- 보수적 용병 승급: {summary['mercenary_replacement_slot_count']}칸",
         "- 소환물 교체: 0칸 (고정 적의 일반 공격·자연 마법 검증 전 보류)",
         "",
         "## 구현 원칙",
@@ -351,7 +376,7 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "",
         "| 구간 | 플레이어 성장 전제 | 적 지휘관 AT/DF | 병사 A+/D+ | 상위 용병 |",
         "|:---|:---|:---:|:---:|:---:|",
-    ]
+    ])
     for step in hard_mode_baseline.RECOMMENDED_DISCUSSION_PROPOSAL[
         "scenario_steps"
     ]:
@@ -426,7 +451,7 @@ def render_markdown(plan: dict[str, Any]) -> str:
 
     lines.extend([
         "",
-        "## 레코드별 변경 계획",
+        "## 레코드별 변경",
         "",
         "| 장 | 주소 | 적/클래스 | 지휘관 AT/DF | 병사 A+/D+ | 용병 전 → 후 |",
         "|---:|:---:|:---|:---:|:---:|:---|",
@@ -451,11 +476,17 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "",
         "## 실기 검증 기록",
         "",
-        "- 아직 하드 ROM을 만들지 않았으므로 미시작이다.",
-        "- 승인 뒤 장별로 시작, 증원, 턴 이벤트, 승패 조건, 전투, 저장과",
-        "  다음 장 진입을 확인하고 결과 캡처와 체크섬을 여기에 기록한다.",
+        "- 후보 ROM 생성과 주소·체크섬·SRAM 호환 정적 검사는 완료했다.",
+        "- 자동 에뮬레이터 완주 검증은 사용자의 요청에 따라 생략했다.",
+        "- 실제 난이도, 진행 가능성, 증원·턴 이벤트·승패 조건은 사용자가",
+        "  플레이하며 검증하고 발견한 문제를 이 문서에 누적한다.",
+        "- 사용자가 명시적으로 릴리스했다고 말하기 전에는 번역과 밸런스",
+        "  버전을 `1.0.0/1.0.0`으로 유지하고 후보 ROM만 교체한다.",
+        "- 수정본은 같은 파일명에 적용하며 게임 내 SRAM 저장을 유지한다.",
+        "  에뮬레이터 상태 저장은 호환을 보장하지 않는다.",
         "",
-        "정확한 기계 판독 원장은 `localization/hard_mode_plan.json`이다.",
+        "정확한 변경 원장은 `localization/hard_mode_plan.json`, 실제 빌드",
+        "결과는 `localization/hard_mode_build.json`이다.",
         "",
     ])
     return "\n".join(lines)
@@ -483,7 +514,10 @@ def main() -> int:
             raise SystemExit(f"stale hard-mode plan: {args.json}")
         if args.markdown.read_text(encoding="utf-8") != markdown_text:
             raise SystemExit(f"stale hard-mode change log: {args.markdown}")
-        print("hard-mode plan is current; no ROM values have been applied")
+        print(
+            "hard-mode plan is current; plan generation itself does not "
+            "write ROM values"
+        )
         return 0
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.markdown.parent.mkdir(parents=True, exist_ok=True)

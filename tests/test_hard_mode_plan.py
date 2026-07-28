@@ -19,11 +19,12 @@ class HardModePlanTests(unittest.TestCase):
         cls.normal_before = NORMAL_ROM.read_bytes()
         cls.plan = hard_mode_plan.build_plan(SOURCE_ROM, NORMAL_ROM)
 
-    def test_plan_is_non_writing_and_pending_approval(self):
+    def test_plan_is_non_writing_and_records_current_approval(self):
         self.assertEqual(
             self.plan["status"],
-            "planned_pending_explicit_approval",
+            "approved_balance_plan",
         )
+        self.assertEqual(self.plan["approval"]["status"], "approved")
         self.assertFalse(self.plan["rom_values_applied"])
         self.assertTrue(
             self.plan["implementation_policy"]["normal_release_immutable"]

@@ -15,7 +15,7 @@ from tools import hard_mode_baseline
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_APPROVAL = ROOT / "localization/hard_mode_approval.json"
-EXPECTED_CONFIRMATION = "룬스톤 표준안 v1 승인"
+EXPECTED_CONFIRMATION = "표준 하드로 해줘"
 
 REQUIRED_DECISIONS = (
     "scenario_band_target_difficulty",

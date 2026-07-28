@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "release_candidate",
+  "profile_id": "standard_hard_runestone_v1",
+  "approval_confirmation": "표준 하드로 해줘",
+  "base": {
+    "size": 4194304,
+    "sha256": "6589f594324dde22834923a6e0c87ea6a2b3ad65063dd5cfa33379fe568d519b",
+    "sram_descriptor": "5241F8200040000100403FFF"
+  },
+  "hard": {
+    "size": 4194304,
+    "header_checksum": "0718",
+    "sha256": "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
+    "sram_descriptor": "5241F8200040000100403FFF"
+  },
+  "implementation": {
+    "target_record_count": 300,
+    "commander_change_record_count": 300,
+    "soldier_correction_record_count": 300,
+    "mercenary_replacement_slot_count": 304,
+    "correction_pair_count": 67,
+    "record_tag_offset": "0x1D",
+    "loader_hook": "0x010E90",
+    "loader_routine": "0x300000",
+    "correction_table": "0x300080",
+    "shared_class_records_modified": false,
+    "title_identity": {
+      "new_game_label": "새 게임(하드)",
+      "marker": "하드 모드",
+      "logo_palette": "amber_gold",
+      "normal_title_unchanged": true
+    }
+  },
+  "save_compatibility": {
+    "save_format": "lang2-ko-sram-v1",
+    "sram_descriptor_unchanged": true,
+    "update_rom_in_place": true,
+    "save_states_supported": false
+  },
+  "release": {
+    "release_id": "ko-hard-t1.0.0-b1.0.0",
+    "translation_version": "1.0.0",
+    "balance_version": "1.0.0",
+    "rom_filename": "Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "header_title": "LANGRISSER II KOREAN T1.0.0 B1.0.0 BY HSP1324",
+    "output": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
+  }
+}

@@ -415,6 +415,9 @@ TITLE_CREDIT_TILE_OVERRIDES = {
     0x6C: "스",
     0x6D: "하",
     0x6E: "드",
+    0x6F: "모",
+    0x70: "(",
+    0x71: ")",
 }
 TITLE_CREDIT_BITMAP_OVERRIDES = {}
 TITLE_CREDIT_RESOURCE_INDEX = (
@@ -674,7 +677,10 @@ BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE_LIMIT = 0x2B8A00
 TITLE_HARD_TRANSLATION_TEXT_RECORD = 0x2B8A00
 TITLE_HARD_BALANCE_TEXT_RECORD = 0x2B8A20
 TITLE_HARD_CREDIT_RENDER_ROUTINE = 0x2B8A40
-TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT = 0x2B8B00
+TITLE_HARD_MARKER_TEXT_RECORD = 0x2B8C00
+TITLE_HARD_MAIN_MENU_RECORD = 0x2B8C40
+TITLE_HARD_MAIN_MENU_RECORD_LIMIT = 0x2B8CC0
+TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT = TITLE_HARD_MARKER_TEXT_RECORD
 BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
@@ -763,6 +769,8 @@ TITLE_VERSION_BYTE_BY_CHAR = {
 }
 DEFAULT_ROM_VERSION_PROFILE = get_rom_version_profile("normal")
 TITLE_VERSION_TEXT = str(DEFAULT_ROM_VERSION_PROFILE["title_text"])
+TITLE_HARD_MARKER_TEXT = "하드 모드"
+TITLE_HARD_MARKER_RENDER_POSITION = 0xBA34
 
 
 def title_version_render_position(text: str) -> int:
@@ -846,6 +854,19 @@ TITLE_LOGO_ENGLISH_LAYOUT_SHA256 = (
 )
 TITLE_LOGO_RESOURCE_RELOC_BASE = 0x2E0000
 TITLE_LOGO_RESOURCE_RELOC_LIMIT = 0x2E2000
+TITLE_LOGO_PALETTE_ROW = 0x0A4542
+TITLE_LOGO_PALETTE_ROW_ORIGINAL = (
+    0x0400, 0x0002, 0x0004, 0x0006,
+    0x000C, 0x0EAE, 0x00E0, 0x0060,
+    0x0040, 0x00CE, 0x004A, 0x0024,
+    0x0888, 0x0444, 0x0000, 0x0CCC,
+)
+TITLE_HARD_LOGO_PALETTE_OVERRIDES = {
+    1: 0x0022,
+    2: 0x0046,
+    3: 0x008A,
+    4: 0x00CE,
+}
 BATTLE_UI_TERRAIN_RESOURCE_INDEX = 223
 BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER = 0x0FEB2A
 BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SIZE = 2368
@@ -1302,6 +1323,7 @@ TITLE_MAIN_MENU_RECORD_ORIGINAL = (
 TITLE_MAIN_MENU_START_OFFSET = 0x0A3158
 TITLE_MAIN_MENU_START_CAPACITY = 5
 TITLE_MAIN_MENU_START_TEXT = "새 게임"
+TITLE_HARD_MAIN_MENU_START_TEXT = "새 게임(하드)"
 TITLE_MAIN_MENU_LOAD_OFFSET = 0x0A3164
 TITLE_MAIN_MENU_LOAD_CAPACITY = 4
 TITLE_MAIN_MENU_LOAD_TEXT = "불러오기"
@@ -1312,8 +1334,15 @@ TITLE_MAIN_MENU_TEXTS = (
 TITLE_MAIN_MENU_BYTE_BY_CHAR = {
     char: code
     for code, char in TITLE_CREDIT_TILE_OVERRIDES.items()
-    if char in "새게임불러오기"
+    if char in "새게임불러오기하드()"
 }
+TITLE_MAIN_MENU_RECORD_LEA = 0x02A26E
+TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL = bytes.fromhex(
+    "41 F9 00 0A 31 46"
+)
+TITLE_MAIN_MENU_WINDOW_WIDTH_OFFSETS = (0x02A276, 0x02A290)
+TITLE_MAIN_MENU_WINDOW_WIDTH_ORIGINAL = 12
+TITLE_HARD_MAIN_MENU_WINDOW_WIDTH = 13
 SCENARIO_HEADER_TEXT = "프롤로그"
 CLASS_CHANGE_GLYPH_LIST = 0x0A3C9C
 CLASS_CHANGE_GLYPH_TEXT = "클래스체인지 가능  용병마법"
@@ -3844,7 +3873,11 @@ def build_title_logo_assets() -> tuple[bytes, bytes]:
     return tile_payload, layout_record
 
 
-def patch_title_logo_resource(data: bytearray) -> None:
+def patch_title_logo_resource(
+    data: bytearray,
+    *,
+    hard_mode: bool = False,
+) -> None:
     original_entry = BYTE_UI_FONT_RESOURCE_TABLE + TITLE_LOGO_RESOURCE_INDEX * 4
     extended_entry = BYTE_UI_EXT_RESOURCE_TABLE + TITLE_LOGO_RESOURCE_INDEX * 4
     original_pointer = be32(data, original_entry) & 0x00FFFFFF
@@ -3884,6 +3917,15 @@ def patch_title_logo_resource(data: bytearray) -> None:
     put32(data, original_entry, TITLE_LOGO_RESOURCE_RELOC_BASE)
     put32(data, extended_entry, TITLE_LOGO_RESOURCE_RELOC_BASE)
     data[TITLE_LOGO_LAYOUT_RECORD:layout_end] = layout_record
+    if hard_mode:
+        actual_palette = tuple(
+            be16(data, TITLE_LOGO_PALETTE_ROW + index * 2)
+            for index in range(len(TITLE_LOGO_PALETTE_ROW_ORIGINAL))
+        )
+        if actual_palette != TITLE_LOGO_PALETTE_ROW_ORIGINAL:
+            raise ValueError("title logo palette source changed")
+        for index, color in TITLE_HARD_LOGO_PALETTE_OVERRIDES.items():
+            put16(data, TITLE_LOGO_PALETTE_ROW + index * 2, color)
 
 
 def patch_battle_ui_terrain_resource(data: bytearray) -> None:
@@ -5196,7 +5238,39 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
     )
 
 
-def patch_title_main_menu(data: bytearray) -> None:
+def _title_main_menu_words(text: str) -> list[int]:
+    words = []
+    for char in text:
+        if char == " ":
+            words.append(0x0000)
+        elif char in TITLE_MAIN_MENU_BYTE_BY_CHAR:
+            words.append(TITLE_MAIN_MENU_BYTE_BY_CHAR[char])
+        elif ord(char) < 0x80:
+            words.append(ord(char))
+        else:
+            try:
+                words.append(TITLE_MAIN_MENU_BYTE_BY_CHAR[char])
+            except KeyError as exc:
+                raise ValueError(
+                    f"title main-menu needs unavailable glyph {char!r}"
+                ) from exc
+    return words
+
+
+def build_hard_title_main_menu_record() -> bytes:
+    words = list(TITLE_MAIN_MENU_RECORD_ORIGINAL[:9])
+    words.extend(_title_main_menu_words(TITLE_HARD_MAIN_MENU_START_TEXT))
+    words.append(0xFFFE)
+    words.extend(_title_main_menu_words(TITLE_MAIN_MENU_LOAD_TEXT))
+    words.append(0xFFFF)
+    return b"".join(value.to_bytes(2, "big") for value in words)
+
+
+def patch_title_main_menu(
+    data: bytearray,
+    *,
+    hard_mode: bool = False,
+) -> None:
     actual = tuple(
         be16(data, TITLE_MAIN_MENU_RECORD + index * 2)
         for index in range(len(TITLE_MAIN_MENU_RECORD_ORIGINAL))
@@ -5204,11 +5278,41 @@ def patch_title_main_menu(data: bytearray) -> None:
     if actual != TITLE_MAIN_MENU_RECORD_ORIGINAL:
         raise ValueError("title main-menu source record changed")
 
+    if hard_mode:
+        hook_end = (
+            TITLE_MAIN_MENU_RECORD_LEA
+            + len(TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL)
+        )
+        if (
+            bytes(data[TITLE_MAIN_MENU_RECORD_LEA:hook_end])
+            != TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL
+        ):
+            raise ValueError("title main-menu record LEA source changed")
+        record = build_hard_title_main_menu_record()
+        record_end = TITLE_HARD_MAIN_MENU_RECORD + len(record)
+        if record_end > TITLE_HARD_MAIN_MENU_RECORD_LIMIT:
+            raise ValueError("hard title main-menu record exceeds reserved bank")
+        if any(
+            value != 0xFF
+            for value in data[TITLE_HARD_MAIN_MENU_RECORD:record_end]
+        ):
+            raise ValueError("hard title main-menu record area is not blank")
+        data[TITLE_HARD_MAIN_MENU_RECORD:record_end] = record
+        data[TITLE_MAIN_MENU_RECORD_LEA:hook_end] = (
+            bytes.fromhex("41 F9")
+            + TITLE_HARD_MAIN_MENU_RECORD.to_bytes(4, "big")
+        )
+        for width_offset in TITLE_MAIN_MENU_WINDOW_WIDTH_OFFSETS:
+            if (
+                be16(data, width_offset)
+                != TITLE_MAIN_MENU_WINDOW_WIDTH_ORIGINAL
+            ):
+                raise ValueError("title main-menu window width source changed")
+            put16(data, width_offset, TITLE_HARD_MAIN_MENU_WINDOW_WIDTH)
+        return
+
     def write_text(offset: int, capacity: int, text: str, terminator: int) -> None:
-        values = [
-            0x0000 if char == " " else TITLE_MAIN_MENU_BYTE_BY_CHAR[char]
-            for char in text
-        ]
+        values = _title_main_menu_words(text)
         if len(values) > capacity:
             raise ValueError(
                 f"title main-menu text needs {len(values)} cells, only {capacity}: {text!r}"
@@ -6688,6 +6792,10 @@ def _build_title_credit_renderer(
     else:
         translation_text, balance_text = hard_version_lines
         records += render_record(
+            TITLE_HARD_MARKER_RENDER_POSITION,
+            TITLE_HARD_MARKER_TEXT_RECORD,
+        )
+        records += render_record(
             hard_translation_render_position(translation_text),
             TITLE_HARD_TRANSLATION_TEXT_RECORD,
         )
@@ -7131,6 +7239,11 @@ def install_byte_ui_extension(
                 TITLE_HARD_BALANCE_TEXT_RECORD,
                 TITLE_HARD_CREDIT_RENDER_ROUTINE,
                 balance_text,
+            ),
+            (
+                TITLE_HARD_MARKER_TEXT_RECORD,
+                TITLE_HARD_MAIN_MENU_RECORD,
+                TITLE_HARD_MARKER_TEXT,
             ),
         )
     for record_offset, record_limit, record_text in title_version_records:
@@ -8042,7 +8155,10 @@ def main() -> None:
             data,
             str(rom_version_profile["title_text"]),
         )
-        patch_title_logo_resource(data)
+        patch_title_logo_resource(
+            data,
+            hard_mode=rom_version_profile["profile"] == "hard",
+        )
         patch_battle_ui_terrain_resource(data)
     if args.patch_name_entry_reused_glyphs:
         if not byte_ui_code_by_char:
@@ -8087,7 +8203,10 @@ def main() -> None:
         patch_start_submenus(data, glyph_by_char)
         patch_control_settings_screen(data, glyph_by_char)
         patch_title_load_screen(data, glyph_by_char)
-        patch_title_main_menu(data)
+        patch_title_main_menu(
+            data,
+            hard_mode=rom_version_profile["profile"] == "hard",
+        )
     if not args.skip_items:
         patch_item_names(data, glyph_by_char)
         patch_item_descriptions(data, glyph_by_char)

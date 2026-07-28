@@ -94,6 +94,51 @@ class TitleMainScreenTests(unittest.TestCase):
             0xFFFF,
         )
 
+    def test_hard_main_menu_is_relocated_for_the_long_identity_label(self):
+        patch_data = bytearray(self.jp)
+        builder.expand_rom(patch_data)
+        builder.patch_title_main_menu(patch_data, hard_mode=True)
+        self.assertEqual(
+            patch_data[
+                builder.TITLE_MAIN_MENU_RECORD_LEA:
+                builder.TITLE_MAIN_MENU_RECORD_LEA
+                + len(builder.TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL)
+            ],
+            bytes.fromhex("41 F9")
+            + builder.TITLE_HARD_MAIN_MENU_RECORD.to_bytes(4, "big"),
+        )
+        record = builder.build_hard_title_main_menu_record()
+        self.assertEqual(
+            patch_data[
+                builder.TITLE_HARD_MAIN_MENU_RECORD:
+                builder.TITLE_HARD_MAIN_MENU_RECORD + len(record)
+            ],
+            record,
+        )
+        self.assertIn(
+            b"".join(
+                word.to_bytes(2, "big")
+                for word in builder._title_main_menu_words(
+                    builder.TITLE_HARD_MAIN_MENU_START_TEXT
+                )
+            ),
+            record,
+        )
+        self.assertEqual(
+            builder._title_main_menu_words("(하드)"),
+            [
+                builder.TITLE_MAIN_MENU_BYTE_BY_CHAR["("],
+                builder.TITLE_MAIN_MENU_BYTE_BY_CHAR["하"],
+                builder.TITLE_MAIN_MENU_BYTE_BY_CHAR["드"],
+                builder.TITLE_MAIN_MENU_BYTE_BY_CHAR[")"],
+            ],
+        )
+        for width_offset in builder.TITLE_MAIN_MENU_WINDOW_WIDTH_OFFSETS:
+            self.assertEqual(
+                builder.be16(patch_data, width_offset),
+                builder.TITLE_HARD_MAIN_MENU_WINDOW_WIDTH,
+            )
+
     def test_credit_hooks_and_record_are_installed_in_production_rom(self):
         self.assertEqual(builder.TITLE_CREDIT_TEXT, "한글화: HSP1324")
         self.assertEqual(
@@ -218,11 +263,37 @@ class TitleMainScreenTests(unittest.TestCase):
         for offset, text in (
             (builder.TITLE_HARD_TRANSLATION_TEXT_RECORD, translation_text),
             (builder.TITLE_HARD_BALANCE_TEXT_RECORD, balance_text),
+            (
+                builder.TITLE_HARD_MARKER_TEXT_RECORD,
+                builder.TITLE_HARD_MARKER_TEXT,
+            ),
         ):
             record = builder.build_title_version_record(text)
             self.assertEqual(
                 self.hard_version_patch[offset:offset + len(record)],
                 record,
+            )
+
+    def test_hard_title_logo_uses_a_dedicated_gold_palette(self):
+        patch_data = bytearray(self.jp)
+        builder.expand_rom(patch_data)
+        builder.patch_byte_ui_strings(
+            patch_data,
+            title_version_text=self.hard_version_text,
+        )
+        builder.patch_title_logo_resource(patch_data, hard_mode=True)
+        for index, original in enumerate(
+            builder.TITLE_LOGO_PALETTE_ROW_ORIGINAL
+        ):
+            expected = builder.TITLE_HARD_LOGO_PALETTE_OVERRIDES.get(
+                index, original
+            )
+            self.assertEqual(
+                builder.be16(
+                    patch_data,
+                    builder.TITLE_LOGO_PALETTE_ROW + index * 2,
+                ),
+                expected,
             )
 
     def test_rom_header_metadata_preserves_japanese_title(self):
@@ -332,6 +403,20 @@ class TitleMainScreenTests(unittest.TestCase):
         self.assertLessEqual(
             hard_renderer_end,
             builder.TITLE_HARD_CREDIT_RENDER_ROUTINE_LIMIT,
+        )
+        self.assertLessEqual(
+            builder.TITLE_HARD_MARKER_TEXT_RECORD
+            + len(
+                builder.build_title_version_record(
+                    builder.TITLE_HARD_MARKER_TEXT
+                )
+            ),
+            builder.TITLE_HARD_MAIN_MENU_RECORD,
+        )
+        self.assertLessEqual(
+            builder.TITLE_HARD_MAIN_MENU_RECORD
+            + len(builder.build_hard_title_main_menu_record()),
+            builder.TITLE_HARD_MAIN_MENU_RECORD_LIMIT,
         )
 
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "profile_id": "standard_hard_runestone_v1",
-  "status": "planned_pending_explicit_approval",
+  "status": "approved_balance_plan",
   "rom_values_applied": false,
   "normal_release": {
     "size": 4194304,
@@ -11,8 +11,9 @@
   },
   "approval": {
     "manifest": "localization/hard_mode_approval.json",
+    "status": "approved",
     "proposal_sha256": "8e6fec9bbf7e975988832676a593960dd140b75a643c24498639ccdac36c0933",
-    "required_confirmation": "룬스톤 표준안 v1 승인"
+    "required_confirmation": "표준 하드로 해줘"
   },
   "implementation_policy": {
     "normal_release_immutable": true,

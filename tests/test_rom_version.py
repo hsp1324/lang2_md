@@ -29,15 +29,27 @@ class RomVersionTests(unittest.TestCase):
         self.assertEqual(profile["base_release"], "ko-99fd")
         self.assertEqual(profile["save_format"], "lang2-ko-sram-v1")
 
-    def test_hard_profile_remains_unbuildable_until_balance_approval(self):
-        registry = rom_version.load_registry()
-        hard = registry["profiles"]["hard"]
-        self.assertEqual(hard["status"], "pending_balance_approval")
-        self.assertIsNone(hard["release_id"])
+    def test_hard_profile_is_the_standard_hard_release_candidate(self):
+        hard = rom_version.get_profile("hard")
+        self.assertEqual(hard["status"], "release_candidate")
+        self.assertEqual(
+            hard["release_id"],
+            "ko-hard-t1.0.0-b1.0.0",
+        )
         self.assertEqual(hard["translation_version"], "1.0.0")
-        self.assertIsNone(hard["balance_version"])
-        with self.assertRaisesRegex(ValueError, "invalid status"):
-            rom_version.get_profile("hard")
+        self.assertEqual(hard["balance_version"], "1.0.0")
+        self.assertEqual(
+            hard["title_text"],
+            "번역/밸런스:1.0.0/1.0.0",
+        )
+        self.assertEqual(
+            hard["rom_filename"],
+            "Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+        )
+        self.assertEqual(
+            hard["header_title"],
+            "LANGRISSER II KOREAN T1.0.0 B1.0.0 BY HSP1324",
+        )
 
     def test_released_hard_profile_uses_dual_version_title(self):
         registry = rom_version.load_registry()

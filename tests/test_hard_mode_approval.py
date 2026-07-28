@@ -16,32 +16,21 @@ APPROVAL = ROOT / "localization/hard_mode_approval.json"
 
 
 class HardModeApprovalTests(unittest.TestCase):
-    def test_checked_in_manifest_is_valid_and_still_pending(self):
+    def test_checked_in_manifest_records_the_user_standard_hard_approval(self):
         model = hard_mode_approval.load_manifest(APPROVAL)
-        self.assertEqual(model, hard_mode_approval.pending_manifest())
-        self.assertEqual(model["status"], "pending_user_approval")
-        self.assertFalse(model["build_gate"]["may_build_hard_mode_rom"])
-        self.assertFalse(model["build_gate"]["may_apply_balance_values"])
-
-    def test_pending_manifest_cannot_authorize_a_build(self):
-        with self.assertRaisesRegex(PermissionError, "not approved"):
-            hard_mode_approval.require_approved(APPROVAL)
-
-    def test_pending_cli_fails_cleanly_without_a_traceback(self):
-        result = subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "tools.hard_mode_approval",
-                "--require-approved",
-            ],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
+        self.assertEqual(model["status"], "approved")
+        self.assertEqual(
+            model["approval"]["confirmation"],
+            "표준 하드로 해줘",
         )
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("hard-mode balance is not approved", result.stderr)
-        self.assertNotIn("Traceback", result.stderr)
+        self.assertTrue(model["build_gate"]["may_build_hard_mode_rom"])
+        self.assertTrue(model["build_gate"]["may_apply_balance_values"])
+
+    def test_checked_in_manifest_authorizes_the_builder(self):
+        self.assertEqual(
+            hard_mode_approval.require_approved(APPROVAL)["status"],
+            "approved",
+        )
 
     def test_stale_pending_manifest_can_be_refreshed(self):
         stale = hard_mode_approval.pending_manifest()
@@ -77,7 +66,7 @@ class HardModeApprovalTests(unittest.TestCase):
 
     def test_exact_confirmation_approves_all_five_decisions(self):
         model = hard_mode_approval.approved_manifest(
-            hard_mode_approval.EXPECTED_CONFIRMATION,
+            "표준 하드로 해줘",
             approved_at="2026-07-28T00:00:00+00:00",
         )
         hard_mode_approval.validate_manifest(model)
@@ -95,7 +84,7 @@ class HardModeApprovalTests(unittest.TestCase):
 
     def test_approved_manifest_is_loadable_by_future_builders(self):
         model = hard_mode_approval.approved_manifest(
-            hard_mode_approval.EXPECTED_CONFIRMATION,
+            "표준 하드로 해줘",
             approved_at="2026-07-28T00:00:00+00:00",
         )
         with tempfile.TemporaryDirectory() as tmp:

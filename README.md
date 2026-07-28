@@ -144,7 +144,7 @@ roms/builds/Langrisser II (Korean).md
 
 배포용 버전 ROM은 `localization/rom_versions.json`을 단일 기준으로
 빌드합니다. 일반판은 타이틀에 번역 버전만 `번역:1.0.0`으로 표시하고,
-향후 하드판은 번역과 밸런스 버전을
+하드판은 번역과 밸런스 버전을
 아래쪽 왼쪽에 `번역:1.0.0`, 오른쪽에 `하드:1.0.0`으로 나눠
 표시합니다. 일반판 1.0.0의
 배포 파일명은 `Langrisser II (Korean v1.0.0).md`이며, ROM의 표준
@@ -158,6 +158,31 @@ python3 scripts/build_korean_jp_probe.py \
   --out "roms/builds/Langrisser II (Korean v1.0.0).md"
 python3 tools/rom_version.py --profile normal --json
 ```
+
+표준 하드 후보는 승인된 `standard_hard_runestone_v1` 계획을 일반판과
+분리해 적용합니다. 공용 클래스 표를 수정하지 않고 300개 적 배치
+레코드의 지휘관 AT/DF, 적 전용 병사 A+/D+, 304개 용병 칸만
+변경합니다.
+
+```bash
+python3 tools/build_hard_mode_rom.py
+```
+
+현재 플레이 후보:
+
+```text
+roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md
+MD checksum: 0718
+SHA-256: 18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac
+```
+
+실제 난이도와 클리어 가능성은 사용자 플레이로 검증한다. 사용자가
+명시적으로 릴리스했다고 말하기 전에는 번역/밸런스 버전을
+`1.0.0/1.0.0`으로 유지하고 후보 파일만 갱신한다. 이후 수정본도 게임
+내 저장을 유지할 수 있도록 같은 SRAM 형식과 같은 ROM 파일명을
+사용한다. 상태 저장은 새 코드 주소와 호환을 보장하지 않는다.
+하드판 타이틀은 일반판과 구별되도록 영문 로고의 붉은 글자를 금색
+계열로 바꾸고 `하드 모드`, `새 게임(하드)`를 표시한다.
 
 ## 세이브를 유지하는 한국어판 업데이트
 

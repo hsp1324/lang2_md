@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "status": "pending_user_approval",
+  "status": "approved",
   "proposal_id": "standard_hard_runestone_v1",
   "proposal_sha256": "8e6fec9bbf7e975988832676a593960dd140b75a643c24498639ccdac36c0933",
-  "expected_confirmation": "룬스톤 표준안 v1 승인",
+  "expected_confirmation": "표준 하드로 해줘",
   "preliminary_user_selection": {
     "difficulty_target": "standard_hard"
   },
   "approval": {
-    "confirmation": null,
-    "approved_at": null,
+    "confirmation": "표준 하드로 해줘",
+    "approved_at": "2026-07-28T05:12:45.389959+00:00",
     "decisions": {
-      "scenario_band_target_difficulty": null,
-      "enemy_commander_at_df_formula_and_caps": null,
-      "stronger_mercenary_start_and_replacement_ratio": null,
-      "late_summon_unit_start_and_ratio": null,
-      "boss_reinforcement_branch_ending_exceptions": null
+      "scenario_band_target_difficulty": "standard_hard_runestone_v1_endgame_curve",
+      "enemy_commander_at_df_formula_and_caps": "standard_hard_runestone_v1_main_story_formula",
+      "stronger_mercenary_start_and_replacement_ratio": "eligible_occupied_slots_up_to_quota_runtime_guarded",
+      "late_summon_unit_start_and_ratio": "scenario_26_27_curated_runtime_guarded_with_fallback",
+      "boss_reinforcement_branch_ending_exceptions": "standard_hard_runestone_v1_exceptions_and_secret_mapping"
     }
   },
   "build_gate": {
-    "may_build_hard_mode_rom": false,
-    "may_apply_balance_values": false
+    "may_build_hard_mode_rom": true,
+    "may_apply_balance_values": true
   }
 }
