@@ -15,7 +15,7 @@ from tools import hard_mode_baseline
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_APPROVAL = ROOT / "localization/hard_mode_approval.json"
-EXPECTED_CONFIRMATION = "표준안 v1 승인"
+EXPECTED_CONFIRMATION = "룬스톤 표준안 v1 승인"
 
 REQUIRED_DECISIONS = (
     "scenario_band_target_difficulty",
@@ -26,9 +26,11 @@ REQUIRED_DECISIONS = (
 )
 
 DECISION_APPROVAL_VALUES = {
-    "scenario_band_target_difficulty": "standard_hard_ramp_v1",
+    "scenario_band_target_difficulty": (
+        "standard_hard_runestone_v1_endgame_curve"
+    ),
     "enemy_commander_at_df_formula_and_caps": (
-        "standard_hard_ramp_v1_main_story_formula"
+        "standard_hard_runestone_v1_main_story_formula"
     ),
     "stronger_mercenary_start_and_replacement_ratio": (
         "eligible_occupied_slots_up_to_quota_runtime_guarded"
@@ -37,7 +39,7 @@ DECISION_APPROVAL_VALUES = {
         "scenario_26_27_curated_runtime_guarded_with_fallback"
     ),
     "boss_reinforcement_branch_ending_exceptions": (
-        "standard_hard_ramp_v1_exceptions_and_secret_mapping"
+        "standard_hard_runestone_v1_exceptions_and_secret_mapping"
     ),
 }
 
@@ -134,7 +136,9 @@ def pending_manifest() -> dict[str, Any]:
     return {
         "schema_version": 1,
         "status": "pending_user_approval",
-        "proposal_id": "standard_hard_ramp_v1",
+        "proposal_id": hard_mode_baseline.RECOMMENDED_DISCUSSION_PROPOSAL[
+            "id"
+        ],
         "proposal_sha256": subject_sha256(),
         "expected_confirmation": EXPECTED_CONFIRMATION,
         "preliminary_user_selection": {
@@ -259,8 +263,8 @@ def main() -> int:
 
     if args.write_pending:
         if args.manifest.exists():
-            current = load_manifest(args.manifest)
-            if current["status"] == "approved":
+            current = json.loads(args.manifest.read_text(encoding="utf-8"))
+            if current.get("status") == "approved":
                 raise SystemExit("refusing to overwrite an approved manifest")
         write_manifest(args.manifest, pending_manifest())
     elif args.approve:

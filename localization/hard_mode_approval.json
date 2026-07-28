@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "status": "pending_user_approval",
-  "proposal_id": "standard_hard_ramp_v1",
-  "proposal_sha256": "96a7e843d3783e48d1608be42b4f76efd26190e9b1f91945598d88b08689097c",
-  "expected_confirmation": "표준안 v1 승인",
+  "proposal_id": "standard_hard_runestone_v1",
+  "proposal_sha256": "aa06acbba190ad08babb159266e4e7c20996f5e7641a4f021f05a466a7a59eda",
+  "expected_confirmation": "룬스톤 표준안 v1 승인",
   "preliminary_user_selection": {
     "difficulty_target": "standard_hard"
   },

@@ -25,13 +25,15 @@ from tools.scenario_data import SCENARIO_COUNT, class_names, read_scenario
 
 
 DEFAULT_SOURCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-DEFAULT_NORMAL_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+DEFAULT_NORMAL_ROM = (
+    ROOT / "roms/releases/Langrisser II (Korean v1.0.0).md"
+)
 DEFAULT_JSON = ROOT / "localization/hard_mode_baseline.json"
 DEFAULT_MARKDOWN = ROOT / "docs/hard_mode_balance_discussion.md"
 
 NORMAL_SIZE = 0x400000
-NORMAL_CHECKSUM = "99FD"
-NORMAL_SHA256 = "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+NORMAL_CHECKSUM = "2979"
+NORMAL_SHA256 = "0936a2e9658158445adbded3dddf4ed61974f5297db631900c193d07ec188c6e"
 CLASS_RECORD_TABLE = 0x05EDDC
 CLASS_RECORD_SIZE = 0x1C
 CLASS_BASE_AT_OFFSET = 0x0B
@@ -126,24 +128,32 @@ DISCUSSION_SCENARIO_BANDS = (
 )
 
 RECOMMENDED_DISCUSSION_PROPOSAL = {
-    "id": "standard_hard_ramp_v1",
+    "id": "standard_hard_runestone_v1",
     "status": "unapproved_discussion_only",
-    "target_difficulty": "standard_hard",
+    "target_difficulty": "standard_hard_runestone_endgame",
     "design_intent": (
-        "비기와 노가다 없이 완주할 수 있지만 상성과 진형을 활용해야 하는 "
-        "숙련자용 점증 하드"
+        "초중반은 비기와 노가다 없이 진행하고, 후반은 정상 입수한 "
+        "룬스톤으로 주력 지휘관을 재육성해야 완주할 수 있는 숙련자용 "
+        "점증 하드"
     ),
     "global_rules": {
         "enemy_level_delta": 0,
         "enemy_hp_mp_delta": 0,
+        "runestone_expectation": {
+            "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
+            "scenarios_16_20": "주력 지휘관 최소 1회 재육성 권장",
+            "scenarios_21_24": "주력 지휘관 1~2회 재육성 전제",
+            "scenarios_25_27": "주력 지휘관 2회 이상 재육성 전제",
+            "secret_scenarios": "진입 시점에 대응하는 본편 전제를 사용",
+        },
         "commander_formula": (
             "min(original + scenario_delta, main_story_absolute_cap)"
         ),
         "main_story_absolute_cap": {
-            "commander_at": 64,
-            "commander_df": 46,
-            "soldier_at_correction": 15,
-            "soldier_df_correction": 12,
+            "commander_at": 80,
+            "commander_df": 58,
+            "soldier_at_correction": 22,
+            "soldier_df_correction": 18,
         },
         "mercenary_replacement_rule": (
             "occupied slots only; preserve combat role, movement constraints, "
@@ -178,67 +188,73 @@ RECOMMENDED_DISCUSSION_PROPOSAL = {
         {
             "label": "중반",
             "scenarios": [11, 12, 13, 14, 15],
-            "commander_at_delta": 4,
+            "commander_at_delta": 5,
             "commander_df_delta": 3,
             "soldier_at_correction_delta": 2,
             "soldier_df_correction_delta": 2,
             "stronger_mercenary_slots_per_six": 2,
             "summon_slots_per_six": 0,
+            "runestone_assumption": "재육성 없이도 진행 가능",
         },
         {
             "label": "후반",
             "scenarios": [16, 17, 18, 19, 20],
-            "commander_at_delta": 5,
-            "commander_df_delta": 4,
-            "soldier_at_correction_delta": 3,
-            "soldier_df_correction_delta": 3,
-            "stronger_mercenary_slots_per_six": 3,
+            "commander_at_delta": 8,
+            "commander_df_delta": 6,
+            "soldier_at_correction_delta": 4,
+            "soldier_df_correction_delta": 4,
+            "stronger_mercenary_slots_per_six": 4,
             "summon_slots_per_six": 0,
+            "runestone_assumption": "주력 지휘관 최소 1회 재육성 권장",
         },
         {
             "label": "종반 전반",
             "scenarios": [21, 22, 23, 24],
-            "commander_at_delta": 6,
-            "commander_df_delta": 4,
-            "soldier_at_correction_delta": 4,
-            "soldier_df_correction_delta": 3,
-            "stronger_mercenary_slots_per_six": 3,
+            "commander_at_delta": 11,
+            "commander_df_delta": 8,
+            "soldier_at_correction_delta": 6,
+            "soldier_df_correction_delta": 5,
+            "stronger_mercenary_slots_per_six": 5,
             "summon_slots_per_six": 0,
+            "runestone_assumption": "주력 지휘관 1~2회 재육성 전제",
         },
         {
             "label": "종반 후반",
             "scenarios": [25],
-            "commander_at_delta": 6,
-            "commander_df_delta": 5,
-            "soldier_at_correction_delta": 4,
-            "soldier_df_correction_delta": 4,
-            "stronger_mercenary_slots_per_six": 4,
+            "commander_at_delta": 13,
+            "commander_df_delta": 10,
+            "soldier_at_correction_delta": 8,
+            "soldier_df_correction_delta": 7,
+            "stronger_mercenary_slots_per_six": 6,
             "summon_slots_per_six": 0,
+            "runestone_assumption": "주력 지휘관 2회 이상 재육성 전제",
         },
         {
             "label": "최종장 직전",
             "scenarios": [26],
-            "commander_at_delta": 6,
-            "commander_df_delta": 5,
-            "soldier_at_correction_delta": 4,
-            "soldier_df_correction_delta": 4,
-            "stronger_mercenary_slots_per_six": 4,
+            "commander_at_delta": 15,
+            "commander_df_delta": 11,
+            "soldier_at_correction_delta": 9,
+            "soldier_df_correction_delta": 8,
+            "stronger_mercenary_slots_per_six": 6,
             "summon_slots_per_six": 1,
             "summon_scope": "named enemy commanders only",
+            "runestone_assumption": "주력 지휘관 2회 이상 재육성 전제",
         },
         {
             "label": "본편 최종장",
             "scenarios": [27],
-            "commander_at_delta": 6,
-            "commander_df_delta": 5,
-            "soldier_at_correction_delta": 5,
-            "soldier_df_correction_delta": 4,
+            "commander_at_delta": 17,
+            "commander_df_delta": 13,
+            "soldier_at_correction_delta": 11,
+            "soldier_df_correction_delta": 9,
             "stronger_mercenary_slots_per_six": 6,
             "summon_slots_per_six": 4,
             "summon_scope": (
                 "four of six slots for major commanders; at most two of six "
                 "for ordinary commanders"
             ),
+            "runestone_assumption": "주력 지휘관 2회 이상 재육성 필수",
         },
     ],
     "summon_policy": {
@@ -931,7 +947,7 @@ def build_inventory(
     }
     if normal_identity != expected_normal:
         raise ValueError(
-            "normal Korean release is not the immutable 99FD baseline: "
+            "normal Korean release is not the immutable v1.0.0 baseline: "
             f"{normal_identity}"
         )
 
@@ -1428,8 +1444,9 @@ def render_markdown(inventory: dict[str, object]) -> str:
     lines.extend([
         "",
         "**사용자 확정:** `숙련자용 표준 하드` (`standard_hard`). "
-        "비기·노가다 없이 기본적인 클래스·장비·상성 운용으로 완주하되, "
-        "주요 전투는 1~3회 재도전을 허용한다.",
+        "초중반은 기본적인 클래스·장비·상성 운용으로 진행하고, 후반은 "
+        "비기 없이 정상 입수한 룬스톤과 재육성을 활용한다. 주요 전투는 "
+        "1~3회 재도전을 허용한다.",
         "",
         "## 협의용 시나리오 구간 후보",
         "",
@@ -1467,9 +1484,10 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "> 상태: **미승인 제안**. 구현값이 아니며 일반판과 다른 ROM에도",
         "> 아직 적용되지 않았다.",
         "",
-        "비기·노가다 없이 완주할 수 있되 상성·진형·장비 선택을 요구하는",
-        "난이도를 목표로 한다. 적 LV는 올리지 않아 경험치와 성장 속도를",
-        "바꾸지 않고, HP·MP도 원판을 유지한다.",
+        "초중반은 상성·진형·장비 선택만으로 진행하고, 후반은 정상 입수한",
+        "룬스톤으로 주력 지휘관을 재육성해야 완주할 수 있는 난이도를",
+        "목표로 한다. 적 LV는 올리지 않아 경험치와 성장 속도를 바꾸지",
+        "않고, HP·MP도 원판을 유지한다.",
         "",
         "| 구간 | 장 | 지휘관 AT/DF | 병사 A+/D+ | 상위 용병 | 소환물 |",
         "|:---|:---:|:---:|:---:|:---:|:---:|",
@@ -1490,12 +1508,24 @@ def render_markdown(inventory: dict[str, object]) -> str:
             f"{step['stronger_mercenary_slots_per_six']}/6 | "
             f"{step['summon_slots_per_six']}/6 |"
         )
+    runestone = proposal["global_rules"]["runestone_expectation"]
     caps = proposal["global_rules"]["main_story_absolute_cap"]
     preview = inventory["balance_discussion"][
         "recommended_unapproved_proposal_preview"
     ]
     diagnostics = preview["cap_diagnostics"]
     lines.extend([
+        "",
+        "### 룬스톤 성장 전제",
+        "",
+        f"- 1~15장: {runestone['scenarios_1_15']}",
+        f"- 16~20장: {runestone['scenarios_16_20']}",
+        f"- 21~24장: {runestone['scenarios_21_24']}",
+        f"- 25~27장: {runestone['scenarios_25_27']}",
+        f"- 비밀 시나리오: {runestone['secret_scenarios']}",
+        "- 27장은 룬스톤을 사용하지 않은 일반 성장만으로 안정적인",
+        "  돌파가 어렵도록 실기 검증하고, 막히기만 하는 수치벽이 되면",
+        "  지휘관 수치보다 병종·배치·상성부터 조정한다.",
         "",
         f"- 본편 지휘관 상한 후보: AT {caps['commander_at']}, "
         f"DF {caps['commander_df']}",
@@ -1856,7 +1886,7 @@ def main() -> int:
             raise SystemExit(f"stale hard-mode baseline: {args.json}")
         if args.markdown.read_text(encoding="utf-8") != markdown_text:
             raise SystemExit(f"stale hard-mode discussion table: {args.markdown}")
-        print("hard-mode baseline is current; normal release remains 99FD")
+        print("hard-mode baseline is current; normal release remains v1.0.0")
         return 0
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.markdown.parent.mkdir(parents=True, exist_ok=True)

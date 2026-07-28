@@ -11,7 +11,7 @@ from tools import hard_mode_baseline
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NORMAL_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+NORMAL_ROM = ROOT / "roms/releases/Langrisser II (Korean v1.0.0).md"
 APPROVAL = ROOT / "localization/hard_mode_approval.json"
 
 
@@ -42,6 +42,34 @@ class HardModeApprovalTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("hard-mode balance is not approved", result.stderr)
         self.assertNotIn("Traceback", result.stderr)
+
+    def test_stale_pending_manifest_can_be_refreshed(self):
+        stale = hard_mode_approval.pending_manifest()
+        stale["proposal_sha256"] = "0" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "approval.json"
+            path.write_text(
+                json.dumps(stale, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "tools.hard_mode_approval",
+                    "--manifest",
+                    str(path),
+                    "--write-pending",
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(
+                hard_mode_approval.load_manifest(path),
+                hard_mode_approval.pending_manifest(),
+            )
 
     def test_wrong_confirmation_cannot_create_approval(self):
         with self.assertRaisesRegex(ValueError, "confirmation must be exactly"):
@@ -82,7 +110,7 @@ class HardModeApprovalTests(unittest.TestCase):
         subject = hard_mode_approval.approval_subject()
         self.assertEqual(
             subject["proposal"]["id"],
-            "standard_hard_ramp_v1",
+            "standard_hard_runestone_v1",
         )
         self.assertEqual(
             len(subject["mercenary_policy"]["conservative_pairs"]),

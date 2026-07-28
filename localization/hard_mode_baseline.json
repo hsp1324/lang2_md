@@ -262,19 +262,26 @@
       }
     ],
     "recommended_unapproved_proposal": {
-      "id": "standard_hard_ramp_v1",
+      "id": "standard_hard_runestone_v1",
       "status": "unapproved_discussion_only",
-      "target_difficulty": "standard_hard",
-      "design_intent": "비기와 노가다 없이 완주할 수 있지만 상성과 진형을 활용해야 하는 숙련자용 점증 하드",
+      "target_difficulty": "standard_hard_runestone_endgame",
+      "design_intent": "초중반은 비기와 노가다 없이 진행하고, 후반은 정상 입수한 룬스톤으로 주력 지휘관을 재육성해야 완주할 수 있는 숙련자용 점증 하드",
       "global_rules": {
         "enemy_level_delta": 0,
         "enemy_hp_mp_delta": 0,
+        "runestone_expectation": {
+          "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
+          "scenarios_16_20": "주력 지휘관 최소 1회 재육성 권장",
+          "scenarios_21_24": "주력 지휘관 1~2회 재육성 전제",
+          "scenarios_25_27": "주력 지휘관 2회 이상 재육성 전제",
+          "secret_scenarios": "진입 시점에 대응하는 본편 전제를 사용"
+        },
         "commander_formula": "min(original + scenario_delta, main_story_absolute_cap)",
         "main_story_absolute_cap": {
-          "commander_at": 64,
-          "commander_df": 46,
-          "soldier_at_correction": 15,
-          "soldier_df_correction": 12
+          "commander_at": 80,
+          "commander_df": 58,
+          "soldier_at_correction": 22,
+          "soldier_df_correction": 18
         },
         "mercenary_replacement_rule": "occupied slots only; preserve combat role, movement constraints, and scenario terrain unless individually approved",
         "secret_scenario_rule": "X1-X4 are tuned individually because entry timing and original stats differ too much for the main-story formula"
@@ -321,12 +328,13 @@
             14,
             15
           ],
-          "commander_at_delta": 4,
+          "commander_at_delta": 5,
           "commander_df_delta": 3,
           "soldier_at_correction_delta": 2,
           "soldier_df_correction_delta": 2,
           "stronger_mercenary_slots_per_six": 2,
-          "summon_slots_per_six": 0
+          "summon_slots_per_six": 0,
+          "runestone_assumption": "재육성 없이도 진행 가능"
         },
         {
           "label": "후반",
@@ -337,12 +345,13 @@
             19,
             20
           ],
-          "commander_at_delta": 5,
-          "commander_df_delta": 4,
-          "soldier_at_correction_delta": 3,
-          "soldier_df_correction_delta": 3,
-          "stronger_mercenary_slots_per_six": 3,
-          "summon_slots_per_six": 0
+          "commander_at_delta": 8,
+          "commander_df_delta": 6,
+          "soldier_at_correction_delta": 4,
+          "soldier_df_correction_delta": 4,
+          "stronger_mercenary_slots_per_six": 4,
+          "summon_slots_per_six": 0,
+          "runestone_assumption": "주력 지휘관 최소 1회 재육성 권장"
         },
         {
           "label": "종반 전반",
@@ -352,50 +361,54 @@
             23,
             24
           ],
-          "commander_at_delta": 6,
-          "commander_df_delta": 4,
-          "soldier_at_correction_delta": 4,
-          "soldier_df_correction_delta": 3,
-          "stronger_mercenary_slots_per_six": 3,
-          "summon_slots_per_six": 0
+          "commander_at_delta": 11,
+          "commander_df_delta": 8,
+          "soldier_at_correction_delta": 6,
+          "soldier_df_correction_delta": 5,
+          "stronger_mercenary_slots_per_six": 5,
+          "summon_slots_per_six": 0,
+          "runestone_assumption": "주력 지휘관 1~2회 재육성 전제"
         },
         {
           "label": "종반 후반",
           "scenarios": [
             25
           ],
-          "commander_at_delta": 6,
-          "commander_df_delta": 5,
-          "soldier_at_correction_delta": 4,
-          "soldier_df_correction_delta": 4,
-          "stronger_mercenary_slots_per_six": 4,
-          "summon_slots_per_six": 0
+          "commander_at_delta": 13,
+          "commander_df_delta": 10,
+          "soldier_at_correction_delta": 8,
+          "soldier_df_correction_delta": 7,
+          "stronger_mercenary_slots_per_six": 6,
+          "summon_slots_per_six": 0,
+          "runestone_assumption": "주력 지휘관 2회 이상 재육성 전제"
         },
         {
           "label": "최종장 직전",
           "scenarios": [
             26
           ],
-          "commander_at_delta": 6,
-          "commander_df_delta": 5,
-          "soldier_at_correction_delta": 4,
-          "soldier_df_correction_delta": 4,
-          "stronger_mercenary_slots_per_six": 4,
+          "commander_at_delta": 15,
+          "commander_df_delta": 11,
+          "soldier_at_correction_delta": 9,
+          "soldier_df_correction_delta": 8,
+          "stronger_mercenary_slots_per_six": 6,
           "summon_slots_per_six": 1,
-          "summon_scope": "named enemy commanders only"
+          "summon_scope": "named enemy commanders only",
+          "runestone_assumption": "주력 지휘관 2회 이상 재육성 전제"
         },
         {
           "label": "본편 최종장",
           "scenarios": [
             27
           ],
-          "commander_at_delta": 6,
-          "commander_df_delta": 5,
-          "soldier_at_correction_delta": 5,
-          "soldier_df_correction_delta": 4,
+          "commander_at_delta": 17,
+          "commander_df_delta": 13,
+          "soldier_at_correction_delta": 11,
+          "soldier_df_correction_delta": 9,
           "stronger_mercenary_slots_per_six": 6,
           "summon_slots_per_six": 4,
-          "summon_scope": "four of six slots for major commanders; at most two of six for ordinary commanders"
+          "summon_scope": "four of six slots for major commanders; at most two of six for ordinary commanders",
+          "runestone_assumption": "주력 지휘관 2회 이상 재육성 필수"
         }
       ],
       "summon_policy": {
@@ -497,7 +510,7 @@
     },
     "recommended_unapproved_proposal_preview": {
       "status": "discussion_preview_only",
-      "proposal_id": "standard_hard_ramp_v1",
+      "proposal_id": "standard_hard_runestone_v1",
       "rom_values_applied": false,
       "selection_policy": "main-story side 04 plus the ten verified-hostile scenario-22 side-08 records, minus explicit automatic exclusions",
       "target_record_count": 262,
@@ -524,191 +537,23 @@
       ],
       "cap_diagnostics": {
         "commander_at": {
-          "result_at_cap_count": 2,
+          "result_at_cap_count": 0,
           "clamped_by_cap_count": 0
         },
         "commander_df": {
-          "result_at_cap_count": 2,
+          "result_at_cap_count": 0,
           "clamped_by_cap_count": 0
         },
         "soldier_at_correction": {
-          "result_at_cap_count": 15,
-          "clamped_by_cap_count": 8
+          "result_at_cap_count": 3,
+          "clamped_by_cap_count": 3
         },
         "soldier_df_correction": {
-          "result_at_cap_count": 23,
-          "clamped_by_cap_count": 11
+          "result_at_cap_count": 5,
+          "clamped_by_cap_count": 1
         }
       },
       "clamped_records": [
-        {
-          "scenario": 16,
-          "offset": "0x181D36",
-          "name_korean": "레온",
-          "class_korean": "로얄가드",
-          "field": "soldier_at_correction",
-          "original": 13,
-          "delta": 3,
-          "raw_result": 16,
-          "cap": 15,
-          "projected": 15
-        },
-        {
-          "scenario": 17,
-          "offset": "0x181EE4",
-          "name_korean": "베른하르트",
-          "class_korean": "엠퍼러",
-          "field": "soldier_at_correction",
-          "original": 13,
-          "delta": 3,
-          "raw_result": 16,
-          "cap": 15,
-          "projected": 15
-        },
-        {
-          "scenario": 17,
-          "offset": "0x181EE4",
-          "name_korean": "베른하르트",
-          "class_korean": "엠퍼러",
-          "field": "soldier_df_correction",
-          "original": 11,
-          "delta": 3,
-          "raw_result": 14,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 22,
-          "offset": "0x182822",
-          "name_korean": "베른하르트",
-          "class_korean": "엠퍼러",
-          "field": "soldier_at_correction",
-          "original": 13,
-          "delta": 4,
-          "raw_result": 17,
-          "cap": 15,
-          "projected": 15
-        },
-        {
-          "scenario": 22,
-          "offset": "0x182822",
-          "name_korean": "베른하르트",
-          "class_korean": "엠퍼러",
-          "field": "soldier_df_correction",
-          "original": 11,
-          "delta": 3,
-          "raw_result": 14,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 24,
-          "offset": "0x182CF2",
-          "name_korean": "뱀파이어로드",
-          "class_korean": "뱀파이어로드",
-          "field": "soldier_at_correction",
-          "original": 12,
-          "delta": 4,
-          "raw_result": 16,
-          "cap": 15,
-          "projected": 15
-        },
-        {
-          "scenario": 25,
-          "offset": "0x182D86",
-          "name_korean": "레온",
-          "class_korean": "로얄가드",
-          "field": "soldier_at_correction",
-          "original": 13,
-          "delta": 4,
-          "raw_result": 17,
-          "cap": 15,
-          "projected": 15
-        },
-        {
-          "scenario": 25,
-          "offset": "0x182D86",
-          "name_korean": "레온",
-          "class_korean": "로얄가드",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 25,
-          "offset": "0x182E16",
-          "name_korean": "에그베르트",
-          "class_korean": "자베라",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 25,
-          "offset": "0x182EEE",
-          "name_korean": "제국지휘관",
-          "class_korean": "드래곤로드",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 26,
-          "offset": "0x1830A8",
-          "name_korean": "에그베르트",
-          "class_korean": "자베라",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 27,
-          "offset": "0x18311E",
-          "name_korean": "데몬로드",
-          "class_korean": "데몬로드",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 27,
-          "offset": "0x183142",
-          "name_korean": "데몬로드",
-          "class_korean": "데몬로드",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
-        {
-          "scenario": 27,
-          "offset": "0x1831F6",
-          "name_korean": "데몬로드",
-          "class_korean": "데몬로드",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
-        },
         {
           "scenario": 27,
           "offset": "0x18321A",
@@ -716,10 +561,10 @@
           "class_korean": "뱀파이어로드",
           "field": "soldier_at_correction",
           "original": 12,
-          "delta": 5,
-          "raw_result": 17,
-          "cap": 15,
-          "projected": 15
+          "delta": 11,
+          "raw_result": 23,
+          "cap": 22,
+          "projected": 22
         },
         {
           "scenario": 27,
@@ -728,10 +573,10 @@
           "class_korean": "엠퍼러",
           "field": "soldier_at_correction",
           "original": 13,
-          "delta": 5,
-          "raw_result": 18,
-          "cap": 15,
-          "projected": 15
+          "delta": 11,
+          "raw_result": 24,
+          "cap": 22,
+          "projected": 22
         },
         {
           "scenario": 27,
@@ -740,10 +585,10 @@
           "class_korean": "엠퍼러",
           "field": "soldier_df_correction",
           "original": 11,
-          "delta": 4,
-          "raw_result": 15,
-          "cap": 12,
-          "projected": 12
+          "delta": 9,
+          "raw_result": 20,
+          "cap": 18,
+          "projected": 18
         },
         {
           "scenario": 27,
@@ -752,22 +597,10 @@
           "class_korean": "로얄가드",
           "field": "soldier_at_correction",
           "original": 13,
-          "delta": 5,
-          "raw_result": 18,
-          "cap": 15,
-          "projected": 15
-        },
-        {
-          "scenario": 27,
-          "offset": "0x183262",
-          "name_korean": "레온",
-          "class_korean": "로얄가드",
-          "field": "soldier_df_correction",
-          "original": 9,
-          "delta": 4,
-          "raw_result": 13,
-          "cap": 12,
-          "projected": 12
+          "delta": 11,
+          "raw_result": 24,
+          "cap": 22,
+          "projected": 22
         }
       ],
       "scenarios": [
@@ -791,7 +624,7 @@
                 "mean": 22
               },
               "delta": 2,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -807,7 +640,7 @@
                 "mean": 19
               },
               "delta": 1,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -823,7 +656,7 @@
                 "mean": 2
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -839,7 +672,7 @@
                 "mean": 2
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -869,7 +702,7 @@
                 "mean": 22.8
               },
               "delta": 2,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -885,7 +718,7 @@
                 "mean": 19.5
               },
               "delta": 1,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -901,7 +734,7 @@
                 "mean": 2.3
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -917,7 +750,7 @@
                 "mean": 3.3
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -949,7 +782,7 @@
                 "mean": 24.4
               },
               "delta": 2,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -965,7 +798,7 @@
                 "mean": 21.1
               },
               "delta": 1,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -981,7 +814,7 @@
                 "mean": 2.6
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -997,7 +830,7 @@
                 "mean": 4
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1027,7 +860,7 @@
                 "mean": 26.8
               },
               "delta": 2,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1043,7 +876,7 @@
                 "mean": 18
               },
               "delta": 1,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1059,7 +892,7 @@
                 "mean": 5.2
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1075,7 +908,7 @@
                 "mean": 3.7
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1108,7 +941,7 @@
                 "mean": 25.6
               },
               "delta": 2,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1124,7 +957,7 @@
                 "mean": 20.6
               },
               "delta": 1,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1140,7 +973,7 @@
                 "mean": 5.1
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1156,7 +989,7 @@
                 "mean": 3.2
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1189,7 +1022,7 @@
                 "mean": 27.8
               },
               "delta": 3,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1205,7 +1038,7 @@
                 "mean": 20.7
               },
               "delta": 2,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1221,7 +1054,7 @@
                 "mean": 5.1
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1237,7 +1070,7 @@
                 "mean": 4.3
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1269,7 +1102,7 @@
                 "mean": 30.5
               },
               "delta": 3,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1285,7 +1118,7 @@
                 "mean": 22.2
               },
               "delta": 2,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1301,7 +1134,7 @@
                 "mean": 5.2
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1317,7 +1150,7 @@
                 "mean": 3.4
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1352,7 +1185,7 @@
                 "mean": 30.9
               },
               "delta": 3,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1368,7 +1201,7 @@
                 "mean": 24.8
               },
               "delta": 2,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1384,7 +1217,7 @@
                 "mean": 5.4
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1400,7 +1233,7 @@
                 "mean": 5.2
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1434,7 +1267,7 @@
                 "mean": 34.9
               },
               "delta": 3,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1450,7 +1283,7 @@
                 "mean": 26.7
               },
               "delta": 2,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1466,7 +1299,7 @@
                 "mean": 7.1
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1482,7 +1315,7 @@
                 "mean": 5.3
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1519,7 +1352,7 @@
                 "mean": 29.3
               },
               "delta": 3,
-              "cap": 64,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1535,7 +1368,7 @@
                 "mean": 22.8
               },
               "delta": 2,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1551,7 +1384,7 @@
                 "mean": 3
               },
               "delta": 1,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1567,7 +1400,7 @@
                 "mean": 3.5
               },
               "delta": 1,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1596,12 +1429,12 @@
                 "mean": 30.8
               },
               "projected": {
-                "minimum": 30,
-                "maximum": 47,
-                "mean": 34.8
+                "minimum": 31,
+                "maximum": 48,
+                "mean": 35.8
               },
-              "delta": 4,
-              "cap": 64,
+              "delta": 5,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1617,7 +1450,7 @@
                 "mean": 26.7
               },
               "delta": 3,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1633,7 +1466,7 @@
                 "mean": 7.1
               },
               "delta": 2,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1649,7 +1482,7 @@
                 "mean": 6.1
               },
               "delta": 2,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1679,12 +1512,12 @@
                 "mean": 28.4
               },
               "projected": {
-                "minimum": 24,
-                "maximum": 47,
-                "mean": 32.4
+                "minimum": 25,
+                "maximum": 48,
+                "mean": 33.4
               },
-              "delta": 4,
-              "cap": 64,
+              "delta": 5,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1700,7 +1533,7 @@
                 "mean": 30.1
               },
               "delta": 3,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1716,7 +1549,7 @@
                 "mean": 7.2
               },
               "delta": 2,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1732,7 +1565,7 @@
                 "mean": 5.9
               },
               "delta": 2,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1764,12 +1597,12 @@
                 "mean": 32.6
               },
               "projected": {
-                "minimum": 31,
-                "maximum": 52,
-                "mean": 36.6
+                "minimum": 32,
+                "maximum": 53,
+                "mean": 37.6
               },
-              "delta": 4,
-              "cap": 64,
+              "delta": 5,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1785,7 +1618,7 @@
                 "mean": 30
               },
               "delta": 3,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1801,8 +1634,8 @@
                 "mean": 8.2
               },
               "delta": 2,
-              "cap": 15,
-              "result_at_cap_count": 1,
+              "cap": 22,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
@@ -1817,7 +1650,7 @@
                 "mean": 6.8
               },
               "delta": 2,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1847,12 +1680,12 @@
                 "mean": 32.8
               },
               "projected": {
-                "minimum": 26,
-                "maximum": 49,
-                "mean": 36.8
+                "minimum": 27,
+                "maximum": 50,
+                "mean": 37.8
               },
-              "delta": 4,
-              "cap": 64,
+              "delta": 5,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1868,7 +1701,7 @@
                 "mean": 28.7
               },
               "delta": 3,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1884,8 +1717,8 @@
                 "mean": 7.5
               },
               "delta": 2,
-              "cap": 15,
-              "result_at_cap_count": 1,
+              "cap": 22,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
@@ -1900,7 +1733,7 @@
                 "mean": 6.4
               },
               "delta": 2,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -1930,12 +1763,12 @@
                 "mean": 33.1
               },
               "projected": {
-                "minimum": 31,
-                "maximum": 50,
-                "mean": 37.1
+                "minimum": 32,
+                "maximum": 51,
+                "mean": 38.1
               },
-              "delta": 4,
-              "cap": 64,
+              "delta": 5,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1951,7 +1784,7 @@
                 "mean": 29.5
               },
               "delta": 3,
-              "cap": 46,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1967,7 +1800,7 @@
                 "mean": 7
               },
               "delta": 2,
-              "cap": 15,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -1983,7 +1816,7 @@
                 "mean": 6.3
               },
               "delta": 2,
-              "cap": 12,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -2012,12 +1845,12 @@
                 "mean": 36.6
               },
               "projected": {
-                "minimum": 38,
-                "maximum": 51,
-                "mean": 41.6
+                "minimum": 41,
+                "maximum": 54,
+                "mean": 44.6
               },
-              "delta": 5,
-              "cap": 64,
+              "delta": 8,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2028,12 +1861,12 @@
                 "mean": 27.7
               },
               "projected": {
-                "minimum": 28,
-                "maximum": 39,
-                "mean": 31.7
+                "minimum": 30,
+                "maximum": 41,
+                "mean": 33.7
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 6,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2044,14 +1877,14 @@
                 "mean": 8.8
               },
               "projected": {
-                "minimum": 10,
-                "maximum": 15,
-                "mean": 11.7
+                "minimum": 11,
+                "maximum": 17,
+                "mean": 12.8
               },
-              "delta": 3,
-              "cap": 15,
-              "result_at_cap_count": 1,
-              "clamped_by_cap_count": 1
+              "delta": 4,
+              "cap": 22,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
               "original": {
@@ -2060,13 +1893,13 @@
                 "mean": 5.8
               },
               "projected": {
-                "minimum": 5,
-                "maximum": 12,
-                "mean": 8.8
+                "minimum": 6,
+                "maximum": 13,
+                "mean": 9.8
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 2,
+              "delta": 4,
+              "cap": 18,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
           }
@@ -2095,12 +1928,12 @@
                 "mean": 36.3
               },
               "projected": {
-                "minimum": 35,
-                "maximum": 57,
-                "mean": 41.3
+                "minimum": 38,
+                "maximum": 60,
+                "mean": 44.3
               },
-              "delta": 5,
-              "cap": 64,
+              "delta": 8,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2111,12 +1944,12 @@
                 "mean": 28.8
               },
               "projected": {
-                "minimum": 30,
-                "maximum": 41,
-                "mean": 32.8
+                "minimum": 32,
+                "maximum": 43,
+                "mean": 34.8
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 6,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2127,14 +1960,14 @@
                 "mean": 7.8
               },
               "projected": {
-                "minimum": 9,
-                "maximum": 15,
-                "mean": 10.7
+                "minimum": 10,
+                "maximum": 17,
+                "mean": 11.8
               },
-              "delta": 3,
-              "cap": 15,
-              "result_at_cap_count": 1,
-              "clamped_by_cap_count": 1
+              "delta": 4,
+              "cap": 22,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
               "original": {
@@ -2143,14 +1976,14 @@
                 "mean": 6.2
               },
               "projected": {
-                "minimum": 6,
-                "maximum": 12,
-                "mean": 9
+                "minimum": 7,
+                "maximum": 15,
+                "mean": 10.2
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 1,
-              "clamped_by_cap_count": 1
+              "delta": 4,
+              "cap": 18,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             }
           }
         },
@@ -2176,12 +2009,12 @@
                 "mean": 35.8
               },
               "projected": {
-                "minimum": 37,
-                "maximum": 44,
-                "mean": 40.8
+                "minimum": 40,
+                "maximum": 47,
+                "mean": 43.8
               },
-              "delta": 5,
-              "cap": 64,
+              "delta": 8,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2192,12 +2025,12 @@
                 "mean": 29.7
               },
               "projected": {
-                "minimum": 30,
-                "maximum": 38,
-                "mean": 33.7
+                "minimum": 32,
+                "maximum": 40,
+                "mean": 35.7
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 6,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2208,12 +2041,12 @@
                 "mean": 6.9
               },
               "projected": {
-                "minimum": 5,
-                "maximum": 13,
-                "mean": 9.9
+                "minimum": 6,
+                "maximum": 14,
+                "mean": 10.9
               },
-              "delta": 3,
-              "cap": 15,
+              "delta": 4,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2224,12 +2057,12 @@
                 "mean": 4.9
               },
               "projected": {
-                "minimum": 6,
-                "maximum": 11,
-                "mean": 7.9
+                "minimum": 7,
+                "maximum": 12,
+                "mean": 8.9
               },
-              "delta": 3,
-              "cap": 12,
+              "delta": 4,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -2258,12 +2091,12 @@
                 "mean": 35
               },
               "projected": {
-                "minimum": 30,
-                "maximum": 53,
-                "mean": 40
+                "minimum": 33,
+                "maximum": 56,
+                "mean": 43
               },
-              "delta": 5,
-              "cap": 64,
+              "delta": 8,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2274,12 +2107,12 @@
                 "mean": 28
               },
               "projected": {
-                "minimum": 26,
-                "maximum": 37,
-                "mean": 32
+                "minimum": 28,
+                "maximum": 39,
+                "mean": 34
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 6,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2290,13 +2123,13 @@
                 "mean": 6.7
               },
               "projected": {
-                "minimum": 5,
-                "maximum": 15,
-                "mean": 9.7
+                "minimum": 6,
+                "maximum": 16,
+                "mean": 10.7
               },
-              "delta": 3,
-              "cap": 15,
-              "result_at_cap_count": 1,
+              "delta": 4,
+              "cap": 22,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
@@ -2306,13 +2139,13 @@
                 "mean": 5.6
               },
               "projected": {
-                "minimum": 6,
-                "maximum": 12,
-                "mean": 8.6
+                "minimum": 7,
+                "maximum": 13,
+                "mean": 9.6
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 2,
+              "delta": 4,
+              "cap": 18,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
           }
@@ -2340,12 +2173,12 @@
                 "mean": 36.9
               },
               "projected": {
-                "minimum": 37,
-                "maximum": 51,
-                "mean": 41.9
+                "minimum": 40,
+                "maximum": 54,
+                "mean": 44.9
               },
-              "delta": 5,
-              "cap": 64,
+              "delta": 8,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2356,12 +2189,12 @@
                 "mean": 28.6
               },
               "projected": {
-                "minimum": 26,
-                "maximum": 38,
-                "mean": 32.6
+                "minimum": 28,
+                "maximum": 40,
+                "mean": 34.6
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 6,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2372,12 +2205,12 @@
                 "mean": 6.7
               },
               "projected": {
-                "minimum": 5,
-                "maximum": 13,
-                "mean": 9.7
+                "minimum": 6,
+                "maximum": 14,
+                "mean": 10.7
               },
-              "delta": 3,
-              "cap": 15,
+              "delta": 4,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2388,13 +2221,13 @@
                 "mean": 4.9
               },
               "projected": {
-                "minimum": 6,
-                "maximum": 12,
-                "mean": 7.9
+                "minimum": 7,
+                "maximum": 13,
+                "mean": 8.9
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 1,
+              "delta": 4,
+              "cap": 18,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
           }
@@ -2423,12 +2256,12 @@
                 "mean": 36.5
               },
               "projected": {
-                "minimum": 39,
-                "maximum": 47,
-                "mean": 42.5
+                "minimum": 44,
+                "maximum": 52,
+                "mean": 47.5
               },
-              "delta": 6,
-              "cap": 64,
+              "delta": 11,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2439,12 +2272,12 @@
                 "mean": 30.9
               },
               "projected": {
-                "minimum": 31,
-                "maximum": 40,
-                "mean": 34.9
+                "minimum": 35,
+                "maximum": 44,
+                "mean": 38.9
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 8,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2455,12 +2288,12 @@
                 "mean": 8.6
               },
               "projected": {
-                "minimum": 11,
-                "maximum": 14,
-                "mean": 12.6
+                "minimum": 13,
+                "maximum": 16,
+                "mean": 14.6
               },
-              "delta": 4,
-              "cap": 15,
+              "delta": 6,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2471,12 +2304,12 @@
                 "mean": 6.5
               },
               "projected": {
-                "minimum": 8,
-                "maximum": 11,
-                "mean": 9.5
+                "minimum": 10,
+                "maximum": 13,
+                "mean": 11.5
               },
-              "delta": 3,
-              "cap": 12,
+              "delta": 5,
+              "cap": 18,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
@@ -2506,13 +2339,13 @@
                 "mean": 40.5
               },
               "projected": {
-                "minimum": 41,
-                "maximum": 64,
-                "mean": 46.5
+                "minimum": 46,
+                "maximum": 69,
+                "mean": 51.5
               },
-              "delta": 6,
-              "cap": 64,
-              "result_at_cap_count": 1,
+              "delta": 11,
+              "cap": 80,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
             "commander_df": {
@@ -2522,12 +2355,12 @@
                 "mean": 33.2
               },
               "projected": {
-                "minimum": 31,
-                "maximum": 45,
-                "mean": 37.2
+                "minimum": 35,
+                "maximum": 49,
+                "mean": 41.2
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 8,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2538,14 +2371,14 @@
                 "mean": 8.3
               },
               "projected": {
-                "minimum": 9,
-                "maximum": 15,
-                "mean": 12.1
+                "minimum": 11,
+                "maximum": 19,
+                "mean": 14.3
               },
-              "delta": 4,
-              "cap": 15,
-              "result_at_cap_count": 2,
-              "clamped_by_cap_count": 1
+              "delta": 6,
+              "cap": 22,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
               "original": {
@@ -2554,14 +2387,14 @@
                 "mean": 6.9
               },
               "projected": {
-                "minimum": 8,
-                "maximum": 12,
-                "mean": 9.7
+                "minimum": 10,
+                "maximum": 16,
+                "mean": 11.9
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 2,
-              "clamped_by_cap_count": 1
+              "delta": 5,
+              "cap": 18,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             }
           }
         },
@@ -2589,12 +2422,12 @@
                 "mean": 42.1
               },
               "projected": {
-                "minimum": 41,
-                "maximum": 53,
-                "mean": 48.1
+                "minimum": 46,
+                "maximum": 58,
+                "mean": 53.1
               },
-              "delta": 6,
-              "cap": 64,
+              "delta": 11,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2605,12 +2438,12 @@
                 "mean": 31.1
               },
               "projected": {
-                "minimum": 34,
-                "maximum": 37,
-                "mean": 35.1
+                "minimum": 38,
+                "maximum": 41,
+                "mean": 39.1
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 8,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2621,12 +2454,12 @@
                 "mean": 8.5
               },
               "projected": {
-                "minimum": 10,
-                "maximum": 14,
-                "mean": 12.5
+                "minimum": 12,
+                "maximum": 16,
+                "mean": 14.5
               },
-              "delta": 4,
-              "cap": 15,
+              "delta": 6,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2637,13 +2470,13 @@
                 "mean": 6.8
               },
               "projected": {
-                "minimum": 9,
-                "maximum": 12,
-                "mean": 9.8
+                "minimum": 11,
+                "maximum": 14,
+                "mean": 11.8
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 2,
+              "delta": 5,
+              "cap": 18,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
           }
@@ -2671,12 +2504,12 @@
                 "mean": 40.3
               },
               "projected": {
-                "minimum": 43,
-                "maximum": 52,
-                "mean": 46.3
+                "minimum": 48,
+                "maximum": 57,
+                "mean": 51.3
               },
-              "delta": 6,
-              "cap": 64,
+              "delta": 11,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2687,12 +2520,12 @@
                 "mean": 29.5
               },
               "projected": {
-                "minimum": 32,
-                "maximum": 38,
-                "mean": 33.5
+                "minimum": 36,
+                "maximum": 42,
+                "mean": 37.5
               },
-              "delta": 4,
-              "cap": 46,
+              "delta": 8,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2703,14 +2536,14 @@
                 "mean": 8.4
               },
               "projected": {
-                "minimum": 10,
-                "maximum": 15,
-                "mean": 12.3
+                "minimum": 12,
+                "maximum": 18,
+                "mean": 14.4
               },
-              "delta": 4,
-              "cap": 15,
-              "result_at_cap_count": 1,
-              "clamped_by_cap_count": 1
+              "delta": 6,
+              "cap": 22,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
               "original": {
@@ -2719,13 +2552,13 @@
                 "mean": 5.9
               },
               "projected": {
-                "minimum": 6,
-                "maximum": 12,
-                "mean": 8.9
+                "minimum": 8,
+                "maximum": 14,
+                "mean": 10.9
               },
-              "delta": 3,
-              "cap": 12,
-              "result_at_cap_count": 3,
+              "delta": 5,
+              "cap": 18,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             }
           }
@@ -2754,12 +2587,12 @@
                 "mean": 43.2
               },
               "projected": {
-                "minimum": 38,
-                "maximum": 57,
-                "mean": 49.2
+                "minimum": 45,
+                "maximum": 64,
+                "mean": 56.2
               },
-              "delta": 6,
-              "cap": 64,
+              "delta": 13,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2770,12 +2603,12 @@
                 "mean": 31.1
               },
               "projected": {
-                "minimum": 31,
-                "maximum": 44,
-                "mean": 36.1
+                "minimum": 36,
+                "maximum": 49,
+                "mean": 41.1
               },
-              "delta": 5,
-              "cap": 46,
+              "delta": 10,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2786,14 +2619,14 @@
                 "mean": 9.2
               },
               "projected": {
-                "minimum": 10,
-                "maximum": 15,
-                "mean": 13
+                "minimum": 14,
+                "maximum": 21,
+                "mean": 17.2
               },
-              "delta": 4,
-              "cap": 15,
-              "result_at_cap_count": 1,
-              "clamped_by_cap_count": 1
+              "delta": 8,
+              "cap": 22,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             },
             "soldier_df_correction": {
               "original": {
@@ -2802,14 +2635,14 @@
                 "mean": 6.8
               },
               "projected": {
-                "minimum": 9,
-                "maximum": 12,
-                "mean": 10.5
+                "minimum": 12,
+                "maximum": 16,
+                "mean": 13.8
               },
-              "delta": 4,
-              "cap": 12,
-              "result_at_cap_count": 3,
-              "clamped_by_cap_count": 3
+              "delta": 7,
+              "cap": 18,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             }
           }
         },
@@ -2836,12 +2669,12 @@
                 "mean": 38.6
               },
               "projected": {
-                "minimum": 39,
-                "maximum": 52,
-                "mean": 44.6
+                "minimum": 48,
+                "maximum": 61,
+                "mean": 53.6
               },
-              "delta": 6,
-              "cap": 64,
+              "delta": 15,
+              "cap": 80,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2852,12 +2685,12 @@
                 "mean": 29.6
               },
               "projected": {
-                "minimum": 32,
-                "maximum": 38,
-                "mean": 34.6
+                "minimum": 38,
+                "maximum": 44,
+                "mean": 40.6
               },
-              "delta": 5,
-              "cap": 46,
+              "delta": 11,
+              "cap": 58,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2868,12 +2701,12 @@
                 "mean": 7.6
               },
               "projected": {
-                "minimum": 10,
-                "maximum": 14,
-                "mean": 11.6
+                "minimum": 15,
+                "maximum": 19,
+                "mean": 16.6
               },
-              "delta": 4,
-              "cap": 15,
+              "delta": 9,
+              "cap": 22,
               "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
@@ -2884,14 +2717,14 @@
                 "mean": 6
               },
               "projected": {
-                "minimum": 9,
-                "maximum": 12,
-                "mean": 9.9
+                "minimum": 13,
+                "maximum": 17,
+                "mean": 14
               },
-              "delta": 4,
-              "cap": 12,
-              "result_at_cap_count": 1,
-              "clamped_by_cap_count": 1
+              "delta": 8,
+              "cap": 18,
+              "result_at_cap_count": 0,
+              "clamped_by_cap_count": 0
             }
           }
         },
@@ -2918,13 +2751,13 @@
                 "mean": 45.1
               },
               "projected": {
-                "minimum": 40,
-                "maximum": 64,
-                "mean": 51.1
+                "minimum": 51,
+                "maximum": 75,
+                "mean": 62.1
               },
-              "delta": 6,
-              "cap": 64,
-              "result_at_cap_count": 1,
+              "delta": 17,
+              "cap": 80,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
             "commander_df": {
@@ -2934,13 +2767,13 @@
                 "mean": 34.9
               },
               "projected": {
-                "minimum": 35,
-                "maximum": 46,
-                "mean": 39.9
+                "minimum": 43,
+                "maximum": 54,
+                "mean": 47.9
               },
-              "delta": 5,
-              "cap": 46,
-              "result_at_cap_count": 2,
+              "delta": 13,
+              "cap": 58,
+              "result_at_cap_count": 0,
               "clamped_by_cap_count": 0
             },
             "soldier_at_correction": {
@@ -2950,13 +2783,13 @@
                 "mean": 9.6
               },
               "projected": {
-                "minimum": 11,
-                "maximum": 15,
-                "mean": 13.8
+                "minimum": 17,
+                "maximum": 22,
+                "mean": 20.1
               },
-              "delta": 5,
-              "cap": 15,
-              "result_at_cap_count": 6,
+              "delta": 11,
+              "cap": 22,
+              "result_at_cap_count": 3,
               "clamped_by_cap_count": 3
             },
             "soldier_df_correction": {
@@ -2966,14 +2799,14 @@
                 "mean": 8.1
               },
               "projected": {
-                "minimum": 10,
-                "maximum": 12,
-                "mean": 11.4
+                "minimum": 15,
+                "maximum": 18,
+                "mean": 16.9
               },
-              "delta": 4,
-              "cap": 12,
-              "result_at_cap_count": 6,
-              "clamped_by_cap_count": 5
+              "delta": 9,
+              "cap": 18,
+              "result_at_cap_count": 5,
+              "clamped_by_cap_count": 1
             }
           }
         }
@@ -3331,7 +3164,7 @@
         "interpretation": "replace at most the scenario quota per target commander; never fill empty slots and never replace an already-unmapped top unit merely to reach a numeric quota",
         "occupied_slot_count": 1445,
         "eligible_slot_count": 580,
-        "planned_replacement_count": 217,
+        "planned_replacement_count": 258,
         "scenarios_with_quota_but_no_candidates": [
           10,
           24,
@@ -3460,71 +3293,71 @@
           },
           {
             "scenario": 16,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 56,
             "eligible_slot_count": 22,
-            "planned_replacement_count": 14,
+            "planned_replacement_count": 18,
             "commander_count_with_candidates": 5
           },
           {
             "scenario": 17,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 66,
             "eligible_slot_count": 26,
-            "planned_replacement_count": 18,
+            "planned_replacement_count": 22,
             "commander_count_with_candidates": 7
           },
           {
             "scenario": 18,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 44,
             "eligible_slot_count": 18,
-            "planned_replacement_count": 12,
+            "planned_replacement_count": 16,
             "commander_count_with_candidates": 4
           },
           {
             "scenario": 19,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 60,
             "eligible_slot_count": 12,
-            "planned_replacement_count": 6,
+            "planned_replacement_count": 8,
             "commander_count_with_candidates": 2
           },
           {
             "scenario": 20,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 60,
             "eligible_slot_count": 20,
-            "planned_replacement_count": 12,
+            "planned_replacement_count": 16,
             "commander_count_with_candidates": 4
           },
           {
             "scenario": 21,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 66,
             "eligible_slot_count": 8,
-            "planned_replacement_count": 7,
+            "planned_replacement_count": 8,
             "commander_count_with_candidates": 3
           },
           {
             "scenario": 22,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 54,
             "eligible_slot_count": 17,
-            "planned_replacement_count": 11,
+            "planned_replacement_count": 15,
             "commander_count_with_candidates": 4
           },
           {
             "scenario": 23,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 58,
             "eligible_slot_count": 16,
-            "planned_replacement_count": 14,
+            "planned_replacement_count": 16,
             "commander_count_with_candidates": 6
           },
           {
             "scenario": 24,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 60,
             "eligible_slot_count": 0,
             "planned_replacement_count": 0,
@@ -3532,18 +3365,18 @@
           },
           {
             "scenario": 25,
-            "quota_per_commander": 4,
+            "quota_per_commander": 6,
             "occupied_slot_count": 60,
             "eligible_slot_count": 36,
-            "planned_replacement_count": 24,
+            "planned_replacement_count": 36,
             "commander_count_with_candidates": 6
           },
           {
             "scenario": 26,
-            "quota_per_commander": 4,
+            "quota_per_commander": 6,
             "occupied_slot_count": 60,
             "eligible_slot_count": 24,
-            "planned_replacement_count": 20,
+            "planned_replacement_count": 24,
             "commander_count_with_candidates": 5
           },
           {
@@ -3560,7 +3393,7 @@
         "interpretation": "replace at most the scenario quota per target commander; never fill empty slots and never replace an already-unmapped top unit merely to reach a numeric quota",
         "occupied_slot_count": 1445,
         "eligible_slot_count": 971,
-        "planned_replacement_count": 371,
+        "planned_replacement_count": 440,
         "scenarios_with_quota_but_no_candidates": [],
         "scenarios": [
           {
@@ -3685,71 +3518,71 @@
           },
           {
             "scenario": 16,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 56,
             "eligible_slot_count": 42,
-            "planned_replacement_count": 25,
+            "planned_replacement_count": 32,
             "commander_count_with_candidates": 9
           },
           {
             "scenario": 17,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 66,
             "eligible_slot_count": 34,
-            "planned_replacement_count": 23,
+            "planned_replacement_count": 28,
             "commander_count_with_candidates": 9
           },
           {
             "scenario": 18,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 44,
             "eligible_slot_count": 24,
-            "planned_replacement_count": 15,
+            "planned_replacement_count": 20,
             "commander_count_with_candidates": 5
           },
           {
             "scenario": 19,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 60,
             "eligible_slot_count": 48,
-            "planned_replacement_count": 27,
+            "planned_replacement_count": 34,
             "commander_count_with_candidates": 10
           },
           {
             "scenario": 20,
-            "quota_per_commander": 3,
+            "quota_per_commander": 4,
             "occupied_slot_count": 60,
             "eligible_slot_count": 20,
-            "planned_replacement_count": 12,
+            "planned_replacement_count": 16,
             "commander_count_with_candidates": 4
           },
           {
             "scenario": 21,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 66,
             "eligible_slot_count": 14,
-            "planned_replacement_count": 10,
+            "planned_replacement_count": 13,
             "commander_count_with_candidates": 4
           },
           {
             "scenario": 22,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 54,
             "eligible_slot_count": 22,
-            "planned_replacement_count": 13,
+            "planned_replacement_count": 19,
             "commander_count_with_candidates": 5
           },
           {
             "scenario": 23,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 58,
             "eligible_slot_count": 46,
-            "planned_replacement_count": 28,
+            "planned_replacement_count": 40,
             "commander_count_with_candidates": 10
           },
           {
             "scenario": 24,
-            "quota_per_commander": 3,
+            "quota_per_commander": 5,
             "occupied_slot_count": 60,
             "eligible_slot_count": 6,
             "planned_replacement_count": 6,
@@ -3757,18 +3590,18 @@
           },
           {
             "scenario": 25,
-            "quota_per_commander": 4,
+            "quota_per_commander": 6,
             "occupied_slot_count": 60,
             "eligible_slot_count": 42,
-            "planned_replacement_count": 28,
+            "planned_replacement_count": 42,
             "commander_count_with_candidates": 7
           },
           {
             "scenario": 26,
-            "quota_per_commander": 4,
+            "quota_per_commander": 6,
             "occupied_slot_count": 60,
             "eligible_slot_count": 42,
-            "planned_replacement_count": 36,
+            "planned_replacement_count": 42,
             "commander_count_with_candidates": 10
           },
           {
@@ -4396,8 +4229,8 @@
   },
   "normal_release": {
     "size": 4194304,
-    "header_checksum": "99FD",
-    "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+    "header_checksum": "2979",
+    "sha256": "0936a2e9658158445adbded3dddf4ed61974f5297db631900c193d07ec188c6e",
     "immutable": true
   },
   "source_rom": {

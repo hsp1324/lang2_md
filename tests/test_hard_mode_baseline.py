@@ -9,7 +9,7 @@ from tools import hard_mode_baseline
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-NORMAL_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+NORMAL_ROM = ROOT / "roms/releases/Langrisser II (Korean v1.0.0).md"
 
 
 class HardModeBaselineTests(unittest.TestCase):
@@ -21,10 +21,10 @@ class HardModeBaselineTests(unittest.TestCase):
     def test_normal_release_is_locked_and_not_modified(self):
         normal = self.inventory["normal_release"]
         self.assertTrue(normal["immutable"])
-        self.assertEqual(normal["header_checksum"], "99FD")
+        self.assertEqual(normal["header_checksum"], "2979")
         self.assertEqual(
             normal["sha256"],
-            "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+            "0936a2e9658158445adbded3dddf4ed61974f5297db631900c193d07ec188c6e",
         )
         self.assertEqual(NORMAL_ROM.read_bytes(), self.normal_before)
         self.assertEqual(
@@ -124,9 +124,12 @@ class HardModeBaselineTests(unittest.TestCase):
         proposal = self.inventory["balance_discussion"][
             "recommended_unapproved_proposal"
         ]
-        self.assertEqual(proposal["id"], "standard_hard_ramp_v1")
+        self.assertEqual(proposal["id"], "standard_hard_runestone_v1")
         self.assertEqual(proposal["status"], "unapproved_discussion_only")
-        self.assertEqual(proposal["target_difficulty"], "standard_hard")
+        self.assertEqual(
+            proposal["target_difficulty"],
+            "standard_hard_runestone_endgame",
+        )
         self.assertEqual(
             sorted(
                 scenario
@@ -151,12 +154,12 @@ class HardModeBaselineTests(unittest.TestCase):
             [
                 ([1, 2, 3, 4, 5], 2, 1, 1, 1, 0, 0),
                 ([6, 7, 8, 9, 10], 3, 2, 1, 1, 1, 0),
-                ([11, 12, 13, 14, 15], 4, 3, 2, 2, 2, 0),
-                ([16, 17, 18, 19, 20], 5, 4, 3, 3, 3, 0),
-                ([21, 22, 23, 24], 6, 4, 4, 3, 3, 0),
-                ([25], 6, 5, 4, 4, 4, 0),
-                ([26], 6, 5, 4, 4, 4, 1),
-                ([27], 6, 5, 5, 4, 6, 4),
+                ([11, 12, 13, 14, 15], 5, 3, 2, 2, 2, 0),
+                ([16, 17, 18, 19, 20], 8, 6, 4, 4, 4, 0),
+                ([21, 22, 23, 24], 11, 8, 6, 5, 5, 0),
+                ([25], 13, 10, 8, 7, 6, 0),
+                ([26], 15, 11, 9, 8, 6, 1),
+                ([27], 17, 13, 11, 9, 6, 4),
             ],
         )
 
@@ -167,10 +170,10 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertEqual(
             proposal["global_rules"]["main_story_absolute_cap"],
             {
-                "commander_at": 64,
-                "commander_df": 46,
-                "soldier_at_correction": 15,
-                "soldier_df_correction": 12,
+                "commander_at": 80,
+                "commander_df": 58,
+                "soldier_at_correction": 22,
+                "soldier_df_correction": 18,
             },
         )
         self.assertEqual(
@@ -221,7 +224,10 @@ class HardModeBaselineTests(unittest.TestCase):
             "recommended_unapproved_proposal_preview"
         ]
         self.assertEqual(preview["status"], "discussion_preview_only")
-        self.assertEqual(preview["proposal_id"], "standard_hard_ramp_v1")
+        self.assertEqual(
+            preview["proposal_id"],
+            "standard_hard_runestone_v1",
+        )
         self.assertFalse(preview["rom_values_applied"])
         self.assertEqual(preview["target_record_count"], 262)
         self.assertEqual(preview["target_offsets_unique"], 262)
@@ -264,28 +270,28 @@ class HardModeBaselineTests(unittest.TestCase):
             preview["cap_diagnostics"],
             {
                 "commander_at": {
-                    "result_at_cap_count": 2,
+                    "result_at_cap_count": 0,
                     "clamped_by_cap_count": 0,
                 },
                 "commander_df": {
-                    "result_at_cap_count": 2,
+                    "result_at_cap_count": 0,
                     "clamped_by_cap_count": 0,
                 },
                 "soldier_at_correction": {
-                    "result_at_cap_count": 15,
-                    "clamped_by_cap_count": 8,
+                    "result_at_cap_count": 3,
+                    "clamped_by_cap_count": 3,
                 },
                 "soldier_df_correction": {
-                    "result_at_cap_count": 23,
-                    "clamped_by_cap_count": 11,
+                    "result_at_cap_count": 5,
+                    "clamped_by_cap_count": 1,
                 },
             },
         )
         clamped = preview["clamped_records"]
-        self.assertEqual(len(clamped), 19)
+        self.assertEqual(len(clamped), 4)
         self.assertEqual(
             len({row["offset"] for row in clamped}),
-            14,
+            3,
         )
         self.assertEqual(
             {row["field"] for row in clamped},
@@ -294,16 +300,16 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertEqual(
             clamped[0],
             {
-                "scenario": 16,
-                "offset": "0x181D36",
-                "name_korean": "레온",
-                "class_korean": "로얄가드",
+                "scenario": 27,
+                "offset": "0x18321A",
+                "name_korean": "뱀파이어로드",
+                "class_korean": "뱀파이어로드",
                 "field": "soldier_at_correction",
-                "original": 13,
-                "delta": 3,
-                "raw_result": 16,
-                "cap": 15,
-                "projected": 15,
+                "original": 12,
+                "delta": 11,
+                "raw_result": 23,
+                "cap": 22,
+                "projected": 22,
             },
         )
         self.assertEqual(
@@ -313,18 +319,18 @@ class HardModeBaselineTests(unittest.TestCase):
                 "offset": "0x183262",
                 "name_korean": "레온",
                 "class_korean": "로얄가드",
-                "field": "soldier_df_correction",
-                "original": 9,
-                "delta": 4,
-                "raw_result": 13,
-                "cap": 12,
-                "projected": 12,
+                "field": "soldier_at_correction",
+                "original": 13,
+                "delta": 11,
+                "raw_result": 24,
+                "cap": 22,
+                "projected": 22,
             },
         )
         scenario_22 = preview["scenarios"][21]
         self.assertEqual(
             scenario_22["projections"]["commander_at"]["projected"],
-            {"minimum": 41, "maximum": 64, "mean": 46.5},
+            {"minimum": 46, "maximum": 69, "mean": 51.5},
         )
         self.assertEqual(
             preview["explicit_automatic_exclusions"],
@@ -423,7 +429,7 @@ class HardModeBaselineTests(unittest.TestCase):
                 conservative_preview["planned_replacement_count"],
                 conservative_preview["scenarios_with_quota_but_no_candidates"],
             ),
-            (1445, 580, 217, [10, 24, 27]),
+            (1445, 580, 258, [10, 24, 27]),
         )
         role_aware_preview = discussion["role_aware_preview"]
         self.assertEqual(
@@ -433,7 +439,7 @@ class HardModeBaselineTests(unittest.TestCase):
                 role_aware_preview["planned_replacement_count"],
                 role_aware_preview["scenarios_with_quota_but_no_candidates"],
             ),
-            (1445, 971, 371, []),
+            (1445, 971, 440, []),
         )
 
     def test_summon_replacement_options_are_unapproved_and_source_bounded(self):
