@@ -568,6 +568,20 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "  예외는 `localization/hard_mode_runtime_exceptions.json`에서만",
         "  관리하며 검증기가 지정된 동적 필드만 제외한다.",
     ])
+    coverage = runtime_smoke.get("coverage")
+    if coverage is not None:
+        lines.extend([
+            (
+                "- 장별 런타임 적재 범위: "
+                f"`{len(coverage['verified_scenarios'])}/"
+                f"{coverage['scenario_count']}`장 확인, "
+                f"누락 `{coverage['missing_scenarios']}`."
+            ),
+            (
+                "- 자동 출격 원장과 깊은 보존 증거의 합집합이 31장을 "
+                "모두 덮어야 회귀 테스트가 통과한다."
+            ),
+        ])
     for scenario_number in sorted(runtime_scenarios):
         evidence = runtime_scenarios[scenario_number]
         lines.extend([

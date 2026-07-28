@@ -25,6 +25,23 @@ class HardModeScenarioSmokeTests(unittest.TestCase):
         numbers = [row["number"] for row in self.manifest["scenarios"]]
         self.assertEqual(numbers, sorted(set(numbers)))
 
+    def test_smoke_and_deep_evidence_cover_all_scenarios(self):
+        self.assertEqual(
+            self.manifest["status"],
+            "all_scenarios_runtime_loaded",
+        )
+        coverage = self.manifest["coverage"]
+        self.assertEqual(coverage["scenario_count"], 31)
+        self.assertEqual(
+            coverage["verified_scenarios"],
+            list(range(1, 32)),
+        )
+        self.assertEqual(coverage["missing_scenarios"], [])
+        self.assertEqual(
+            coverage["deep_evidence_scenarios"],
+            [1, 16, 25, 27],
+        )
+
     def test_completed_scenarios_cover_every_planned_target(self):
         plan_by_number = {
             int(row["number"]): row for row in self.plan["scenarios"]

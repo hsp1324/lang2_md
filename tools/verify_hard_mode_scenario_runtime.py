@@ -25,6 +25,9 @@ DEFAULT_ROM = (
     / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
 )
 DEFAULT_RESULTS = ROOT / "localization/hard_mode_scenario_smoke.json"
+DEEP_RESULTS = (
+    ROOT / "localization/hard_mode_runtime_verification.json"
+)
 EARLYGAME_SEED = (
     ROOT / "captures/analysis/0718_hard_s01_turn1_command.gst"
 )
@@ -125,6 +128,7 @@ def save_result(path: Path, results: dict, result: dict) -> None:
     }
     by_number[int(result["number"])] = result
     results["scenarios"] = [by_number[number] for number in sorted(by_number)]
+    update_coverage(results)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(
@@ -132,6 +136,37 @@ def save_result(path: Path, results: dict, result: dict) -> None:
         encoding="utf-8",
     )
     temporary.replace(path)
+
+
+def update_coverage(
+    results: dict,
+    deep_results_path: Path = DEEP_RESULTS,
+) -> None:
+    smoke_numbers = {
+        int(row["number"]) for row in results.get("scenarios", [])
+    }
+    deep_results = json.loads(
+        deep_results_path.read_text(encoding="utf-8")
+    )
+    deep_numbers = {
+        int(row["number"])
+        for row in deep_results.get("scenarios", [])
+        if row["status"] == "runtime_loader_verified"
+    }
+    verified = sorted(smoke_numbers | deep_numbers)
+    missing = sorted(set(range(1, 32)) - set(verified))
+    results["coverage"] = {
+        "scenario_count": 31,
+        "smoke_scenarios": sorted(smoke_numbers),
+        "deep_evidence_scenarios": sorted(deep_numbers),
+        "verified_scenarios": verified,
+        "missing_scenarios": missing,
+    }
+    results["status"] = (
+        "all_scenarios_runtime_loaded"
+        if not missing
+        else "in_progress"
+    )
 
 
 def verify_scenario(

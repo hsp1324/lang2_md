@@ -47,6 +47,9 @@ class HardModeScenarioRuntimeTests(unittest.TestCase):
                 )["scenarios"]],
                 [(2, "kept"), (16, "new")],
             )
+            self.assertEqual(results["status"], "in_progress")
+            self.assertIn(1, results["coverage"]["verified_scenarios"])
+            self.assertIn(3, results["coverage"]["missing_scenarios"])
 
     def test_seed_selection_avoids_future_roster_data_in_early_scenarios(self):
         self.assertEqual(
