@@ -41,6 +41,16 @@ TURN_COUNTER_WORK_RAM_OFFSET = 0xA5F1
 TURN_COUNTER_FILE_OFFSET = (
     GST_WORK_RAM_FILE_OFFSET + TURN_COUNTER_WORK_RAM_OFFSET
 )
+EMULATOR_SPEED_PERCENT = {
+    0: 100,
+    1: 150,
+    2: 200,
+    3: 300,
+    4: 400,
+    5: 25,
+    6: 50,
+    7: 75,
+}
 
 
 def sha256(path: Path) -> str:
@@ -173,6 +183,7 @@ def run_detector(
     display: str,
     max_checks: int,
     delay: float,
+    capture_prefix: Path | None = None,
 ) -> tuple[str, int]:
     command = [
         sys.executable,
@@ -188,8 +199,10 @@ def run_detector(
         "--confirmation-delay",
         str(delay),
     ]
+    if capture_prefix is not None:
+        command.extend(["--capture-prefix", str(capture_prefix)])
     for attempt in range(4):
-        completed = run_command(command, allowed={0, 1, 2})
+        completed = run_command(command, allowed={0, 1, 2, 3})
         if completed.returncode != 1:
             break
         if (
@@ -213,7 +226,11 @@ def run_detector(
     endpoint = (
         "turn_command"
         if completed.returncode == 0
-        else "game_over"
+        else (
+            "game_over"
+            if completed.returncode == 2
+            else "title_screen"
+        )
     )
     return endpoint, int(match.group(1))
 
@@ -350,14 +367,15 @@ def render_document(results: dict) -> str:
         "## Results",
         "",
         "| Scenario | Endpoint | Opening confirmations | Phase confirmations | "
-        "Elapsed |",
-        "|---:|---|---:|---:|---:|",
+        "Speed | Elapsed |",
+        "|---:|---|---:|---:|---:|---:|",
     ]
     for row in results.get("scenarios", []):
         lines.append(
             f"| {row['number']} | `{row['endpoint']}` | "
             f"{row['opening_confirmations']} | "
             f"{row['phase_dialogue_confirmations']} | "
+            f"{row.get('emulator_speed_percent', 100)}% | "
             f"{row['elapsed_seconds']:.1f}s |"
         )
     lines.extend(
@@ -391,6 +409,8 @@ def verify_scenario(
     delay: float,
     initial_delay: float,
     keep_running: bool,
+    retain_detector_frames: bool,
+    emulator_speed: int,
 ) -> dict:
     evidence = entry_evidence(scenario_number)
     (
@@ -436,6 +456,12 @@ def verify_scenario(
             display=display,
             max_checks=opening_checks,
             delay=delay,
+            capture_prefix=(
+                CAPTURE_ROOT
+                / f"hard_first_turn_s{scenario_number:02d}_opening.png"
+                if retain_detector_frames
+                else None
+            ),
         )
         if opening_endpoint != "turn_command":
             raise RuntimeError(
@@ -462,10 +488,26 @@ def verify_scenario(
             ],
             env=env,
         )
+        if emulator_speed != 0:
+            run_command(
+                [
+                    sys.executable,
+                    str(KEY_SENDER),
+                    "--send-event",
+                    f"{emulator_speed}:0.5",
+                ],
+                env=env,
+            )
         detector_endpoint, phase_confirmations = run_detector(
             display=display,
             max_checks=phase_checks,
             delay=delay,
+            capture_prefix=(
+                CAPTURE_ROOT
+                / f"hard_first_turn_s{scenario_number:02d}_phase.png"
+                if retain_detector_frames
+                else None
+            ),
         )
         endpoint_capture = (
             CAPTURE_ROOT
@@ -492,6 +534,9 @@ def verify_scenario(
             "opening_confirmations": opening_confirmations,
             "phase_dialogue_confirmations": phase_confirmations,
             "elapsed_seconds": round(time.monotonic() - started, 1),
+            "emulator_speed_percent": EMULATOR_SPEED_PERCENT[
+                emulator_speed
+            ],
             "entry_evidence": {
                 "kind": evidence["kind"],
                 "gst": relative(Path(evidence["path"])),
@@ -526,6 +571,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--confirmation-delay", type=float, default=0.3)
     parser.add_argument("--initial-delay", type=float, default=3.0)
     parser.add_argument("--keep-running", action="store_true")
+    parser.add_argument(
+        "--retain-detector-frames",
+        action="store_true",
+        help="keep every opening and phase detector frame for diagnosis",
+    )
+    parser.add_argument(
+        "--emulator-speed",
+        type=int,
+        choices=tuple(EMULATOR_SPEED_PERCENT),
+        default=0,
+        help="BlastEm host speed slot used after selecting turn end",
+    )
     return parser.parse_args()
 
 
@@ -547,6 +604,8 @@ def main() -> int:
         delay=args.confirmation_delay,
         initial_delay=args.initial_delay,
         keep_running=args.keep_running,
+        retain_detector_frames=args.retain_detector_frames,
+        emulator_speed=args.emulator_speed,
     )
     save_result(results_path, results, result)
     if results_path == DEFAULT_RESULTS.resolve():

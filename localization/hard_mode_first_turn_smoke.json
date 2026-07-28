@@ -71,6 +71,29 @@
       "endpoint_capture_sha256": "19054e3d94b87dec52e12b2bb849c503ccc5774c7fbbcac62b5bb4a2d2e3ae71",
       "endpoint_gst": "captures/runtime/hard-first-turn-s30/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
       "endpoint_gst_sha256": "93b1fe873a6efbdaf664745dc8eb3bb5ca0513b2e82e59f49d97bd87205a6502"
+    },
+    {
+      "number": 31,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "game_over_turn_1",
+      "turn_counter": 1,
+      "opening_confirmations": 4,
+      "phase_dialogue_confirmations": 1,
+      "elapsed_seconds": 65.5,
+      "emulator_speed_percent": 150,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "gst": "captures/runtime/hard-matrix-s31/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+        "gst_sha256": "02c15a2597d2d168b7a336ed189b69c4e0fa5f2bb309c74af7639b983228916c",
+        "manifest_gst_sha256": "be8f09142b111f92bef64e35cf58b112b55ef86b4cab7fc86d93d1990ff427e7",
+        "player_group_count": 10
+      },
+      "opening_capture": "captures/run/hard_first_turn_s31_command.png",
+      "opening_capture_sha256": "493de78f3101bd032d2e3632d3ccb597c4c66670da84c077ece33714a752ef21",
+      "endpoint_capture": "captures/run/hard_first_turn_s31_endpoint.png",
+      "endpoint_capture_sha256": "278bd6d720411aa107f142fd1c8b63d1354bb25ecf1f431745171b27a9d673d0",
+      "endpoint_gst": "captures/runtime/hard-first-turn-s31/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "endpoint_gst_sha256": "e4e87963858f29807fdb741344da6d53a00191856c7e685c02f999ae22850ed1"
     }
   ],
   "coverage": {
@@ -78,7 +101,8 @@
     "verified_scenarios": [
       28,
       29,
-      30
+      30,
+      31
     ],
     "missing_scenarios": [
       1,
@@ -107,8 +131,7 @@
       24,
       25,
       26,
-      27,
-      31
+      27
     ]
   }
 }

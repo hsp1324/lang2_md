@@ -831,6 +831,45 @@ def game_over_visible(path: Path) -> bool:
     )
 
 
+def title_screen_visible(path: Path) -> bool:
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+    panel = frame.crop(
+        (
+            round(55 * scale_x),
+            round(140 * scale_y),
+            round(270 * scale_x),
+            round(205 * scale_y),
+        )
+    )
+    pixels = list(panel.get_flattened_data())
+    navy_ratio = sum(
+        1
+        for red, green, blue in pixels
+        if blue > 25
+        and blue > red * 1.3
+        and blue > green * 1.15
+    ) / len(pixels)
+    white_ratio = sum(
+        1
+        for red, green, blue in pixels
+        if red > 160 and green > 160 and blue > 160
+    ) / len(pixels)
+    black_ratio = sum(
+        1
+        for red, green, blue in pixels
+        if red < 25 and green < 25 and blue < 25
+    ) / len(pixels)
+    # The stable title has a broad navy field plus PUSH START/version text.
+    # GAME OVER and battle panels are bluer only in narrower framed regions.
+    return (
+        navy_ratio > 0.70
+        and white_ratio > 0.035
+        and black_ratio < 0.25
+    )
+
+
 def preparation_screen_visible(path: Path) -> bool:
     frame = Image.open(path).convert("RGB")
     scale_x = frame.width / 320
@@ -989,6 +1028,12 @@ def advance_to_battle_command(
         if game_over_visible(frame):
             print(f"game over detected after {confirmations} confirmations")
             return 2
+        if title_screen_visible(frame):
+            print(
+                "title screen detected after "
+                f"{confirmations} confirmations"
+            )
+            return 3
         if battle_command_menu_visible(frame):
             time.sleep(2.0)
             capture_window(frame, xlib_only=args.xlib_capture)

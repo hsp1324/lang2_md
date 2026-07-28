@@ -9,7 +9,19 @@ from PIL import Image
 from tools import run_blastem_sequence as runner
 
 
+REAL_TITLE_SCREEN_VISIBLE = runner.title_screen_visible
+
+
 class BlastemCommandDetectionTests(unittest.TestCase):
+    def setUp(self):
+        title_patcher = mock.patch.object(
+            runner,
+            "title_screen_visible",
+            return_value=False,
+        )
+        title_patcher.start()
+        self.addCleanup(title_patcher.stop)
+
     def args(self) -> SimpleNamespace:
         return SimpleNamespace(
             capture_prefix=Path("captures/run/detect.png"),
@@ -210,6 +222,35 @@ class BlastemCommandDetectionTests(unittest.TestCase):
         subprocess_call.assert_not_called()
         battle_dialogue_visible.assert_not_called()
         battle_command_menu_visible.assert_not_called()
+        capture_window.assert_called_once()
+
+    def test_stable_title_screen_is_detected(self):
+        with TemporaryDirectory() as temporary_directory:
+            path = Path(temporary_directory) / "title.png"
+            image = Image.new("RGB", (320, 240), (0, 0, 96))
+            pixels = image.load()
+            for y in range(165, 174):
+                for x in range(90, 230):
+                    if x % 5 < 2:
+                        pixels[x, y] = (255, 255, 255)
+            image.save(path)
+
+            self.assertTrue(REAL_TITLE_SCREEN_VISIBLE(path))
+
+    @mock.patch.object(runner.subprocess, "call")
+    @mock.patch.object(runner, "title_screen_visible", return_value=True)
+    @mock.patch.object(runner, "game_over_visible", return_value=False)
+    @mock.patch.object(runner, "capture_window")
+    def test_title_return_is_reported_separately_from_game_over(
+        self,
+        capture_window,
+        game_over_visible,
+        title_screen_visible,
+        subprocess_call,
+    ):
+        self.assertEqual(runner.advance_to_battle_command(self.args()), 3)
+
+        subprocess_call.assert_not_called()
         capture_window.assert_called_once()
 
     @mock.patch.object(runner.time, "sleep")

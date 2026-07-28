@@ -51,6 +51,8 @@ class HardModeFirstTurnTests(unittest.TestCase):
             first_turn.classify_endpoint("game_over", 1),
             "game_over_turn_1",
         )
+        with self.assertRaises(ValueError):
+            first_turn.classify_endpoint("title_screen", 1)
 
     def test_save_result_replaces_scenario_and_updates_coverage(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -96,6 +98,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
                     "endpoint": "turn_2_command",
                     "opening_confirmations": 13,
                     "phase_dialogue_confirmations": 3,
+                    "emulator_speed_percent": 100,
                     "elapsed_seconds": 194.6,
                 }
             ],
@@ -106,7 +109,10 @@ class HardModeFirstTurnTests(unittest.TestCase):
         }
         document = first_turn.render_document(results)
         self.assertIn("Verified: 1/31", document)
-        self.assertIn("| 28 | `turn_2_command` | 13 | 3 | 194.6s |", document)
+        self.assertIn(
+            "| 28 | `turn_2_command` | 13 | 3 | 100% | 194.6s |",
+            document,
+        )
         self.assertIn("Missing scenarios: 1, 2", document)
 
 
