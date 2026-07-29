@@ -2,19 +2,20 @@
 
 ## 대상
 
-- 이전 배포 후보: `roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`
+- 이전 배포 후보: `roms/releases/archive/Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md`
   - MD 체크섬 `1011`
   - SHA-256 `c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b`
 - 최신 플레이 후보: `roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`
-  - MD 체크섬 `8674`
-  - SHA-256 `142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27`
+  - MD 체크섬 `5BE8`
+  - SHA-256 `227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd`
 
-최신 파일은 사용자가 릴리스라고 명시하기 전의 빌드 후보다. 따라서
-`roms/releases`의 `1.0.0/1.0.0` 파일은 교체하지 않는다.
+최신 파일은 같은 버전의 현재 플레이 배포 후보다. 검증된 동일 바이트를
+`roms/releases`의 `1.0.0/1.0.0` 파일에도 반영했고, 이전 후보는 위
+보관 경로에 남겼다.
 
 ## 결과
 
-두 ROM 사이의 변경은 365바이트다. 모두 다음 소유 범위 안에 있다.
+두 ROM 사이의 변경은 578바이트다. 모두 다음 소유 범위 안에 있다.
 
 - MD 헤더 체크섬
 - 전과보고 `적군` 글자 레코드와 복원 루틴

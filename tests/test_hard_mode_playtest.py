@@ -21,7 +21,7 @@ class HardModePlaytestTests(unittest.TestCase):
         self.assertFalse(manifest["coverage"]["complete"])
         self.assertEqual(
             manifest["hard_release"]["sha256"],
-            "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
+            "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd",
         )
         self.assertEqual(
             manifest["hard_release"]["rom_path"],
@@ -30,7 +30,7 @@ class HardModePlaytestTests(unittest.TestCase):
         lineage = manifest["hard_release"]["verification_lineage"]
         self.assertEqual(
             lineage["runtime_source_sha256"],
-            "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
+            "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd",
         )
         self.assertEqual(
             lineage["cosmetic_delta_status"],

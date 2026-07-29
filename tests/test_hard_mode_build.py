@@ -20,6 +20,14 @@ PLAYTEST_ROM = (
     ROOT / "roms/releases/"
     "Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
 )
+PLAYTEST_BUILD = (
+    ROOT / "roms/builds/"
+    "Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
+)
+SUPERSEDED_PLAYTEST_ROM = (
+    ROOT / "roms/releases/archive/"
+    "Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md"
+)
 
 
 class HardModeBuildTests(unittest.TestCase):
@@ -219,6 +227,29 @@ class HardModeBuildTests(unittest.TestCase):
         self.assertEqual(
             release["sram_descriptor"],
             rom_update.md_sram_descriptor(playtest_payload).hex().upper(),
+        )
+        self.assertEqual(playtest_payload, PLAYTEST_BUILD.read_bytes())
+
+    def test_superseded_playtest_candidate_is_hash_locked(self):
+        registry = json.loads(
+            UPDATE_REGISTRY.read_text(encoding="utf-8")
+        )
+        history = registry["candidate_history"]
+        self.assertEqual(len(history), 1)
+        predecessor = history[0]
+        payload = SUPERSEDED_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor["md_checksum"], "1011")
+        self.assertEqual(
+            predecessor["sha256"],
+            hashlib.sha256(payload).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor["superseded_by"],
+            registry["releases"][0]["sha256"],
         )
 
 

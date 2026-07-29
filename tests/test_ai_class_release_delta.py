@@ -10,7 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DELTA = ROOT / "localization/ai_class_release_delta.json"
 HARD_ROM = (
     ROOT
-    / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
+    / "roms/releases/archive/"
+    "Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md"
 )
 NORMAL_ROM = (
     ROOT / "roms/releases/Langrisser II (Korean ko-99fd).md"

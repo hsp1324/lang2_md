@@ -49,6 +49,23 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
             "27cee3780f99e620239ac0519fb9275f7ec7595118105c2543f4aea894c96d8e",
         )
 
+    def test_scenario_one_runtime_targets_are_verified(self) -> None:
+        row = self.rows_by_number[1]
+        self.assertEqual(row["status"], "runtime_loader_smoke_verified")
+        self.assertEqual(row["player_group_count"], 2)
+        self.assertEqual(row["target_record_count"], 2)
+        self.assertEqual(row["strict_runtime_target_record_count"], 2)
+        self.assertEqual(row["runtime_exception_record_count"], 0)
+        self.assertEqual(row["runtime_group_range"], [10, 13])
+        self.assertEqual(
+            row["gst_sha256"],
+            "6e7203a44957612658dbf75efcfd5011d70a496b318eb221f5dc2bcd5deb9d19",
+        )
+        self.assertEqual(
+            row["capture_sha256"],
+            "81fc89d0e8184fc12334fb62413decc6b87c85a0f0303cd003603fe4d38aa816",
+        )
+
     def test_scenario_three_runtime_targets_are_verified(self) -> None:
         row = self.rows_by_number[3]
         self.assertEqual(row["status"], "runtime_loader_smoke_verified")
@@ -69,11 +86,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
     def test_scenario_four_runtime_targets_are_verified(self) -> None:
         self.assertEqual(
             [row["number"] for row in self.model["scenarios"]],
-            [
-                2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-                31,
-            ],
+            list(range(1, 32)),
         )
         row = self.rows_by_number[4]
         self.assertEqual(row["number"], 4)
@@ -378,11 +391,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [8, 17])
         self.assertEqual(
             row["gst_sha256"],
-            "0f3bd3e1baa162b53ae33aad155e04bebb50f43f829508be590cc50455e0dae5",
+            "9f96045d379559189afd68d4ce9e0e1e2b52fa7549cc2eb13b8e396e48da293a",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "67f6c861eb53ad831384fb9b2dc7275df6a325eadfaf7d4c6026a60da20c36f2",
+            "5959b7b1ae4e779831b5a62c231947b24a64fac7f0955571e76de7fdf9c91e94",
         )
 
     def test_scenario_twenty_one_runtime_targets_are_verified(self) -> None:
@@ -396,7 +409,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [8, 18])
         self.assertEqual(
             row["gst_sha256"],
-            "c2bcca9b36e33f9872502a440a7ba98f831dc4805c990b5327661dc087817dd7",
+            "2afa5e5af0f8a292b6b191224ef434d922c65ae2ae2c871ffeb4bee691f7835b",
         )
         self.assertEqual(
             row["capture_sha256"],
@@ -414,7 +427,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [9, 19])
         self.assertEqual(
             row["gst_sha256"],
-            "835382bbfdfa71c86cd5c971f654b0c72881c41aa295178de93582013f83cd6f",
+            "9d82473dd3688afb481f15f79aaf2a13796071820005af1b7a3ef5349a796f42",
         )
         self.assertEqual(
             row["capture_sha256"],
@@ -432,11 +445,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [9, 19])
         self.assertEqual(
             row["gst_sha256"],
-            "3878d15305ba7ed95de2e9cbb63aca788ca58b8c4eb8c7ae3c8cd4877e08c666",
+            "6293d7771d05a4353587416dbb852ac78a62a0f63b74f1e65c11ac09dba0cac9",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "5d87f6a2525b86c3adbaa2f9b5f63388f04c0b83a91bc694827006a40478ef60",
+            "63ad46b5fd2367202b839b658bfac17461d800d4924735a4618040a2aef0ea6e",
         )
 
     def test_scenario_twenty_four_runtime_targets_are_verified(self) -> None:
@@ -450,11 +463,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [10, 19])
         self.assertEqual(
             row["gst_sha256"],
-            "864cedcda80b28b70ec73b8edeae8fbaa1b079ad0676a25fc6dd485dfc7d4ff2",
+            "a97a1dd47001196286a0cbb5a81f0737e531557fb2bd5c2746f2a6259f9d2275",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "6028eae5fb729e846aa0168627c4d378a9917f2f0fb29b762d189073f59da279",
+            "dafe7a7803b99835318d1083104c89bd9b17a44e35537fa154adca46768d2b55",
         )
 
     def test_scenario_twenty_five_runtime_targets_are_verified(self) -> None:
@@ -468,11 +481,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [10, 20])
         self.assertEqual(
             row["gst_sha256"],
-            "b8dcaccfd7e9aca2024b977bcdfe570d14143ae3dd0211e0eb8944f4cb603457",
+            "8d3069aafe00cda087e8a8cf5cf658cf585372626960a7cf31dde091208ff4bf",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "030f7f6355a9341d84d65132ac4eae98b798dcc365ba729ae2b294f590e2f7ef",
+            "67e422c5130e928b29181b3beea4feeea0e76580868a2d080fd4dd44c42b6e1d",
         )
 
     def test_scenario_twenty_six_runtime_targets_are_verified(self) -> None:
@@ -486,11 +499,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [10, 19])
         self.assertEqual(
             row["gst_sha256"],
-            "363566df1964388dcc4ffa984328862e8c20ba352a0e96b8176f8f0e9925f5da",
+            "9ea6b57152d86852b1c181e58f76fa89ae03c080213a41ba7d05301eb40913b1",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "150b74f68b50e122ba35542fe736894034385a16496d1339fda8c2661af491c4",
+            "9ea0547d73645a719bc4f3748d3dd93c54ca80e40fa73aedeed008882c5572d1",
         )
 
     def test_scenario_twenty_seven_runtime_targets_are_verified(self) -> None:
@@ -504,11 +517,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [10, 19])
         self.assertEqual(
             row["gst_sha256"],
-            "e35cd92cd482e98a5af0adbdf7f1be8d318f9cef087cd4d65fe6bfe56ab372cf",
+            "c044cad7c04e312e49bf6b80dca39530028c09cf527286730b27248d06fa526a",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "4788d11c6c0623b766f44c44c61b72e4d7687cd3b6a64b9dc2b8e0265757fc8c",
+            "fc48ccc1ca9297456a60a31b5162bacc651e244eab9b247408de794d922f410f",
         )
 
     def test_scenario_twenty_eight_runtime_targets_are_verified(self) -> None:
@@ -522,7 +535,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [7, 15])
         self.assertEqual(
             row["gst_sha256"],
-            "3ef850385b8d0a7e0191e9fb93e3501540a05f6debe05a4fb1b7009da5789b4b",
+            "c7ece6f4f9dbf8369de697327856be066f5e12ecf2aed0be9e103a29189e79fe",
         )
         self.assertEqual(
             row["capture_sha256"],
@@ -540,7 +553,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [8, 16])
         self.assertEqual(
             row["gst_sha256"],
-            "91bc66ee344297b3a7572ac133f26d19f52587d0d234b1b0babe99ac0a883019",
+            "1d92e3ee04d144f0972895c51033ecdcc3f82ac6d4c6a0752986ee51512f79df",
         )
         self.assertEqual(
             row["capture_sha256"],
@@ -558,7 +571,7 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [9, 19])
         self.assertEqual(
             row["gst_sha256"],
-            "901555e61b57017effdbe5d0aa1c3875b8c518c960e79cb66083298757225a12",
+            "a0e5398ae5dd83b4a6330eb08007db139ff4e164082391784263f6d2fdf8f5c0",
         )
         self.assertEqual(
             row["capture_sha256"],
@@ -576,11 +589,11 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
         self.assertEqual(row["runtime_group_range"], [10, 18])
         self.assertEqual(
             row["gst_sha256"],
-            "3121953eb85889321bee4e236c0e9457c31c43f2ddb3f52759d56a4bc23179e9",
+            "d5cfc1a88903f8e58c4830d3ccbce730499a0efb68848094b8343fd01dcbc2c1",
         )
         self.assertEqual(
             row["capture_sha256"],
-            "e02b97e82aee85d804199d3bf37e4ddf120bcb6be37f4c9ec081c1099412e02c",
+            "d84b360c6c80b8080884fb08b37fde355e809899ffd33e226b6c021a512e978a",
         )
 
 

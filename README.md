@@ -175,8 +175,8 @@ python3 tools/build_hard_mode_rom.py
 
 ```text
 roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md
-MD checksum: 0718
-SHA-256: 18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac
+MD checksum: 5BE8
+SHA-256: 227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd
 ```
 
 실제 난이도와 클리어 가능성은 사용자 플레이로 검증한다. 사용자가

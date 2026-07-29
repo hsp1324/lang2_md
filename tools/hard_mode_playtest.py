@@ -16,8 +16,12 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BUILD = ROOT / "localization/hard_mode_build.json"
 DEFAULT_PLAN = ROOT / "localization/hard_mode_plan.json"
-DEFAULT_RUNTIME = ROOT / "localization/hard_mode_scenario_smoke.json"
-DEFAULT_FIRST_TURN = ROOT / "localization/hard_mode_first_turn_smoke.json"
+DEFAULT_RUNTIME = (
+    ROOT / "localization/hard_mode_current_candidate_runtime.json"
+)
+DEFAULT_FIRST_TURN = (
+    ROOT / "localization/hard_mode_current_candidate_first_turn.json"
+)
 DEFAULT_COSMETIC_DELTA = (
     ROOT / "localization/ai_class_release_delta.json"
 )
@@ -105,9 +109,10 @@ def current_identity(
         raise ValueError(
             "hard runtime and first-turn evidence use different ROMs"
         )
-    if cosmetic_delta["before"]["sha256"] != runtime_source:
+    if runtime_source != digest:
         raise ValueError(
-            "cosmetic delta predecessor does not match runtime evidence"
+            "hard runtime and first-turn evidence do not match the current "
+            "candidate"
         )
     if (
         candidate_delta["before"]["sha256"]

@@ -7,10 +7,10 @@
 
 - 릴리스 ID: `ko-hard-t1.0.0-b1.0.0`
 - ROM: `roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`
-- MD 체크섬: `8674`
-- SHA-256: `142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27`
-- 자동 런타임 적재: 31/31 (증거 ROM `18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac`)
-- 자동 첫 턴 진행: 31/31 (증거 ROM `18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac`)
+- MD 체크섬: `5BE8`
+- SHA-256: `227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd`
+- 자동 런타임 적재: 31/31 (증거 ROM `227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd`)
+- 자동 첫 턴 진행: 31/31 (증거 ROM `227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd`)
 - 승격 클래스 전이: `verified_cosmetic_only_delta`
 - 최신 UI/스프라이트 전이: `verified_ui_sprite_only_delta`
 - 승격 클래스 실기 표본(직전 후보): 6/6

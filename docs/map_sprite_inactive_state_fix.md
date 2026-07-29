@@ -118,8 +118,9 @@ release ROM. This does not indicate that the remap regressed:
 
 `tests/test_hard_candidate_delta.py` now validates the current hard ROM's
 semantic hook, generated routine, and generated table directly, in addition
-to locking its hash. The release file remains unchanged until the user
-explicitly approves a new release.
+to locking its hash. After full 31-scenario runtime and first-turn validation,
+this exact checksum-`5BE8` candidate replaced the same-version playtest file;
+the checksum-`1011` predecessor remains in `roms/releases/archive`.
 
 Fresh exact-current playback then recovered a valid manual slot under checksum
 `8674`, entered Scenario 3 normally, and set only Hein's class to Shaman before
@@ -135,8 +136,8 @@ The complete gray payload at VRAM `0x9680` in
 `captures/analysis/hard_8674_s03_shaman_inactive_actual.gst` is byte-identical
 to the stock 68000 routine's software expansion of original Shaman silhouette
 ID `0x37`. The current build therefore fixes the reported active -> gray ->
-active sequence; the still-published checksum-`1011` release does not contain
-this fix.
+active sequence. The superseded checksum-`1011` candidate did not contain this
+fix.
 
 The checksum-`8674` predecessor was also re-entered from a valid Scenario 2 save,
 then taken through the Scenario 3 preparation shop, item purchase list, return

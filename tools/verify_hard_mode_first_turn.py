@@ -29,8 +29,12 @@ DEFAULT_ROM = (
     ROOT
     / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
 )
-DEFAULT_RESULTS = ROOT / "localization/hard_mode_first_turn_smoke.json"
-DEFAULT_DOCUMENTATION = ROOT / "docs/hard_mode_first_turn_verification.md"
+DEFAULT_RESULTS = (
+    ROOT / "localization/hard_mode_current_candidate_first_turn.json"
+)
+DEFAULT_DOCUMENTATION = (
+    ROOT / "docs/hard_mode_current_candidate_first_turn.md"
+)
 LOADER_SMOKE_RESULTS = ROOT / "localization/hard_mode_scenario_smoke.json"
 DEEP_RESULTS = ROOT / "localization/hard_mode_runtime_verification.json"
 EXPECTED_ENDPOINTS = (

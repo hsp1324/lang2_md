@@ -21,7 +21,8 @@ from tools import rom_update
 
 DEFAULT_AFTER = (
     ROOT
-    / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
+    / "roms/releases/archive/"
+    "Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md"
 )
 DEFAULT_OUTPUT = ROOT / "localization/ai_class_release_delta.json"
 BEFORE_COMMIT = "1360b69"

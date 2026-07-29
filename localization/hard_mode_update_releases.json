@@ -13,11 +13,24 @@
       "release_id": "ko-hard-t1.0.0-b1.0.0",
       "rom_path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
       "size": 4194304,
+      "md_checksum": "5BE8",
+      "sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd",
+      "sram_descriptor": "5241F8200040000100403FFF",
+      "save_format": "lang2-ko-sram-v1",
+      "status": "playtest_candidate"
+    }
+  ],
+  "candidate_history": [
+    {
+      "release_id": "ko-hard-t1.0.0-b1.0.0-checksum-1011",
+      "rom_path": "roms/releases/archive/Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md",
+      "size": 4194304,
       "md_checksum": "1011",
       "sha256": "c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b",
       "sram_descriptor": "5241F8200040000100403FFF",
       "save_format": "lang2-ko-sram-v1",
-      "status": "playtest_candidate"
+      "status": "superseded_playtest_candidate",
+      "superseded_by": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd"
     }
   ]
 }

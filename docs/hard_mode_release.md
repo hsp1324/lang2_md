@@ -4,9 +4,9 @@
 
 - ROM: `roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`
 - 릴리스 ID: `ko-hard-t1.0.0-b1.0.0`
-- MD 체크섬: `1011`
+- MD 체크섬: `5BE8`
 - SHA-256:
-  `c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b`
+  `227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd`
 - 크기: 4 MiB
 - 세이브 형식: `lang2-ko-sram-v1`
 - SRAM 설명자: `5241F8200040000100403FFF`
@@ -15,11 +15,10 @@
 사용자가 명시적으로 릴리스했다고 말할 때까지 타이틀과 파일명의
 번역/밸런스 버전은 `1.0.0/1.0.0`으로 유지한다.
 
-`roms/releases`의 `1011` 파일은 마지막으로 배포한 플레이 후보로
-보존한다. 이후 UI·비활성 맵 스프라이트·로렌 팔레트 수정을 포함한
-최신 `8674` 후보는
-`roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md`에 있다.
-두 후보의 365바이트 전이와 최신 시나리오 4 런타임 표본은
+현재 `roms/releases` 파일과 검증된 `roms/builds` 파일은 바이트 단위로
+같다. 이전 체크섬 `1011` 후보는
+`roms/releases/archive/Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md`
+에 보존한다. 두 후보의 578바이트 전이와 현재 후보 실기 표본은
 `docs/hard_mode_candidate_delta.md` 및
 `localization/hard_mode_candidate_delta.json`에 기록한다.
 
@@ -41,9 +40,11 @@
 
 ## 검증 상태
 
-현재 `1011` 후보는 ROM 크기, 소유 주소 범위, 300개 레코드의 적용값,
+현재 `5BE8` 후보는 ROM 크기, 소유 주소 범위, 300개 레코드의 적용값,
 40개 클래스 스프라이트의 매핑·두 프레임 데이터, MD 체크섬, SRAM
-설명자 및 일반판 불변 검사를 자동 테스트로 통과했다. 완성 ROM에서
+설명자 및 일반판 불변 검사를 자동 테스트로 통과했다. 현재 ROM은
+준비·상태창 동적 글자와 커스텀 클래스 비활성 맵 스프라이트 수정도
+포함한다. 완성 ROM에서
 40개 스프라이트를 다시 추출한 결과는
 `localization/ai_class_map_sprite_rom.json`과
 `docs/assets/ai_class_map_sprite_rom_contact_sheet.png`에 기록했다.
@@ -52,15 +53,13 @@
 밸런스·이벤트·AI 영역 변경은 0이다:
 `localization/ai_class_release_delta.json`
 
-- 직전 `0718` 후보는 31/31개 시나리오에서 자동 배치·출격 후 하드 대상의 실제 RAM
-  적재값을 확인했다:
-  `localization/hard_mode_scenario_smoke.json`
-- 직전 `0718` 후보는 31/31개 시나리오에서 대사를 넘기고 첫 턴을 종료했다. 24개 장은
-  2턴 명령창으로 돌아왔고, 시나리오 6·13은 변경 불가 일반판과 같은
-  첫 턴 패배·타이틀 복귀, 시나리오 25·26·27·X3·X4는 정상 GAME
-  OVER를 확인했다:
-  `localization/hard_mode_first_turn_smoke.json`,
-  `docs/hard_mode_first_turn_verification.md`
+- 현재 `5BE8` 후보는 31/31개 시나리오에서 자동 배치·출격 후 하드
+  대상의 실제 RAM 적재값을 확인했다:
+  `localization/hard_mode_current_candidate_runtime.json`
+- 현재 `5BE8` 후보는 31/31개 시나리오에서 대사를 넘기고 첫 턴의
+  정상 종점까지 진행했다:
+  `localization/hard_mode_current_candidate_first_turn.json`,
+  `docs/hard_mode_current_candidate_first_turn.md`
 - 현재 후보는 전체 장 공략이나 용병 고용·이동 없이 일회용 진단
   ROM으로 여섯 변경 클래스에 직접 진입했다. 각 클래스가 변경 후
   맵으로 복귀하고, 3초 안정 대기와 상태창 표시를 통과했으며 GST의
