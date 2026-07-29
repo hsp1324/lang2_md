@@ -144,6 +144,13 @@ class HardModeFirstTurnTests(unittest.TestCase):
         self.assertTrue(first_turn.start_menu_visible(start_menu))
         self.assertFalse(first_turn.start_menu_visible(command_menu))
 
+    def test_start_menu_detector_accepts_blue_scenario_10_map(self):
+        start_menu = (
+            first_turn.ROOT
+            / "captures/run/hard_8674_s10_start_menu_detector.png"
+        )
+        self.assertTrue(first_turn.start_menu_visible(start_menu))
+
     def test_retain_endpoint_gst_replaces_snapshot_atomically(self):
         with tempfile.TemporaryDirectory() as directory:
             original_root = first_turn.ROOT

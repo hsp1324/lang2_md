@@ -436,7 +436,9 @@ def start_menu_visible(path: Path) -> bool:
     # but also opens the large commander/status panel on the right.
     return (
         dark_blue_ratio(menu) > 0.67
-        and dark_blue_ratio(map_side) < 0.35
+        # Scenario 10's blue terrain raises this crop to about 35.5%.
+        # Commander/status panels measured here remain above 49%.
+        and dark_blue_ratio(map_side) < 0.45
         and sequence_runner.battle_map_surface_visible(path)
     )
 

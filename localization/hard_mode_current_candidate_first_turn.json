@@ -258,6 +258,68 @@
       "endpoint_capture_sha256": "b80a360d4fce60b2f69f439375e3e6149ec066ed518e2423031ac91c0abc745c",
       "endpoint_gst": "captures/analysis/hard_first_turn_s08_endpoint.gst",
       "endpoint_gst_sha256": "5aa17aeb7217b2382d3f7146f1efbdafe6938920ff8af239977584b5c5900fa0"
+    },
+    {
+      "number": 9,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 15,
+      "phase_dialogue_confirmations": 20,
+      "turn_end_selection": {
+        "map_checks": 0,
+        "start_menu_checks": 0,
+        "turn_end_checks": 0
+      },
+      "elapsed_seconds": 244.9,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "manifest": "localization/hard_mode_current_candidate_runtime.json",
+        "manifest_rom_sha256": "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
+        "gst": "captures/analysis/hard_8674_s09_entry_turn1_entry.gst",
+        "gst_sha256": "6d5f549efa7e2db62b4fba1c3dacb1e51d2fb9d79ecd8b97bddcdaf7ea1162e8",
+        "manifest_gst_sha256": "6d5f549efa7e2db62b4fba1c3dacb1e51d2fb9d79ecd8b97bddcdaf7ea1162e8",
+        "player_group_count": 7
+      },
+      "opening_capture": "captures/run/hard_first_turn_s09_command.png",
+      "opening_capture_sha256": "6968adf418ef5a8e82027bbd72a452ae5aa090747260867be139fdcd4452379a",
+      "endpoint_capture": "captures/run/hard_first_turn_s09_endpoint.png",
+      "endpoint_capture_sha256": "2908e86a2658b58717771a1e7262c47c7ae77aa4c6a88137a305132f2c9939a9",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s09_endpoint.gst",
+      "endpoint_gst_sha256": "650ea4b631d2871d357a06b167b89326a9e9f9b093f470e3d948ab5b67dd77d4"
+    },
+    {
+      "number": 10,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 0,
+      "phase_dialogue_confirmations": 0,
+      "turn_end_selection": {
+        "map_checks": 0,
+        "start_menu_checks": 0,
+        "turn_end_checks": 0
+      },
+      "elapsed_seconds": 49.5,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "manifest": "localization/hard_mode_current_candidate_runtime.json",
+        "manifest_rom_sha256": "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
+        "gst": "captures/analysis/hard_8674_s10_entry_turn1_entry.gst",
+        "gst_sha256": "e9ef42fa1a0a8abea32869eb46abdc9f0108cc76b32150c25b03c0ef90b35251",
+        "manifest_gst_sha256": "e9ef42fa1a0a8abea32869eb46abdc9f0108cc76b32150c25b03c0ef90b35251",
+        "player_group_count": 5
+      },
+      "opening_capture": "captures/run/hard_first_turn_s10_command.png",
+      "opening_capture_sha256": "62dc5badcf4b38172dfa764e3329792651d6a4e17c601a7f2b6280d35bac4485",
+      "endpoint_capture": "captures/run/hard_first_turn_s10_endpoint.png",
+      "endpoint_capture_sha256": "65f8c990280f42bd57edd749a1a85f4f5f4de34eb4e3fd14ba93cafd7ae452ba",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s10_endpoint.gst",
+      "endpoint_gst_sha256": "41e29dc408c6ae66d62b25b433ab30fc0bb1c51c3c7fff17ea14440b12838701"
     }
   ],
   "coverage": {
@@ -269,12 +331,12 @@
       5,
       6,
       7,
-      8
+      8,
+      9,
+      10
     ],
     "missing_scenarios": [
       1,
-      9,
-      10,
       11,
       12,
       13,
