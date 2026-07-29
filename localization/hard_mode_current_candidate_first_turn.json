@@ -671,6 +671,42 @@
       "endpoint_capture_sha256": "f16dec004ecddc8945ccbec45ddd2c09165aaedcfe48fca25bc4aca58d438878",
       "endpoint_gst": "captures/analysis/hard_mode_current_candidate_first_turn_s20_endpoint.gst",
       "endpoint_gst_sha256": "fb8e6d6f257db050f24b19a4c736cc897aa10e987b9e74bbceb40cc8293676b7"
+    },
+    {
+      "number": 21,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "turn_2_command",
+      "turn_counter": 2,
+      "opening_confirmations": 9,
+      "phase_dialogue_confirmations": 0,
+      "turn_end_selection": {
+        "map_checks": 0,
+        "start_menu_checks": 0,
+        "initial_cursor_row": 0,
+        "initial_cursor_checks": 0,
+        "navigation_count": 4,
+        "final_cursor_row": 4,
+        "final_cursor_checks": 0,
+        "turn_end_dismiss_checks": 0
+      },
+      "elapsed_seconds": 70.6,
+      "emulator_speed_percent": 400,
+      "expected_endpoint_evidence": null,
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "manifest": "localization/hard_mode_current_candidate_runtime.json",
+        "manifest_rom_sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd",
+        "gst": "captures/analysis/hard_5be8_s21_entry_turn1_entry.gst",
+        "gst_sha256": "2afa5e5af0f8a292b6b191224ef434d922c65ae2ae2c871ffeb4bee691f7835b",
+        "manifest_gst_sha256": "2afa5e5af0f8a292b6b191224ef434d922c65ae2ae2c871ffeb4bee691f7835b",
+        "player_group_count": 8
+      },
+      "opening_capture": "captures/run/hard_mode_current_candidate_first_turn_s21_command.png",
+      "opening_capture_sha256": "2320465203f22636579a89f70004e02cedf00f55449e71cef262c4cd0d4854be",
+      "endpoint_capture": "captures/run/hard_mode_current_candidate_first_turn_s21_endpoint.png",
+      "endpoint_capture_sha256": "8ab471265250145126b4a71cc6f8e097d586d241afffa69bd1f2c23998ea698b",
+      "endpoint_gst": "captures/analysis/hard_mode_current_candidate_first_turn_s21_endpoint.gst",
+      "endpoint_gst_sha256": "a069eb66ab74a5b2d775550a241319bbd40e2311a47b88b7ca06141a0d702725"
     }
   ],
   "coverage": {
@@ -694,11 +730,11 @@
       17,
       18,
       19,
-      20
+      20,
+      21
     ],
     "missing_scenarios": [
       1,
-      21,
       22,
       23,
       24,
