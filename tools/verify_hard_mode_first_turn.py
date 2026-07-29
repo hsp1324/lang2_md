@@ -272,11 +272,13 @@ def prepare_running_runtime(
 def retain_endpoint_gst(
     scenario_number: int,
     gst_bytes: bytes,
+    *,
+    evidence_prefix: str = "hard_first_turn",
 ) -> Path:
     destination = (
         ROOT
         / "captures/analysis"
-        / f"hard_first_turn_s{scenario_number:02d}_endpoint.gst"
+        / f"{evidence_prefix}_s{scenario_number:02d}_endpoint.gst"
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(".gst.tmp")
@@ -598,6 +600,13 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
         env=env,
         expected_row=4,
     )
+    print(
+        "Start menu cursor: "
+        f"initial={initial_cursor_row}, "
+        f"moves={navigation_count}, "
+        f"final={final_cursor_row}",
+        flush=True,
+    )
     run_command(
         [
             sys.executable,
@@ -609,6 +618,14 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
         ],
         env=env,
     )
+    turn_end_dismiss_checks = wait_for_surface(
+        env=env,
+        predicate=lambda path: (
+            sequence_runner.battle_map_surface_visible(path)
+            and not start_menu_visible(path)
+        ),
+        label="battle map after selecting turn end",
+    )
     return {
         "map_checks": map_checks,
         "start_menu_checks": start_menu_checks,
@@ -617,6 +634,7 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
         "navigation_count": navigation_count,
         "final_cursor_row": final_cursor_row,
         "final_cursor_checks": final_cursor_checks,
+        "turn_end_dismiss_checks": turn_end_dismiss_checks,
     }
 
 
@@ -867,6 +885,7 @@ def verify_scenario(
     retain_detector_frames: bool,
     emulator_speed: int,
     resume_running: bool,
+    evidence_prefix: str = "hard_first_turn",
 ) -> dict:
     evidence = entry_evidence(
         scenario_number,
@@ -957,7 +976,7 @@ def verify_scenario(
             delay=delay,
             capture_prefix=(
                 CAPTURE_ROOT
-                / f"hard_first_turn_s{scenario_number:02d}_opening.png"
+                / f"{evidence_prefix}_s{scenario_number:02d}_opening.png"
                 if retain_detector_frames
                 else None
             ),
@@ -969,7 +988,7 @@ def verify_scenario(
 
         opening_capture = (
             CAPTURE_ROOT
-            / f"hard_first_turn_s{scenario_number:02d}_command.png"
+            / f"{evidence_prefix}_s{scenario_number:02d}_command.png"
         )
         capture(opening_capture, env=env)
         turn_end_selection = select_turn_end(env=env)
@@ -989,14 +1008,14 @@ def verify_scenario(
             delay=delay,
             capture_prefix=(
                 CAPTURE_ROOT
-                / f"hard_first_turn_s{scenario_number:02d}_phase.png"
+                / f"{evidence_prefix}_s{scenario_number:02d}_phase.png"
                 if retain_detector_frames
                 else None
             ),
         )
         endpoint_capture = (
             CAPTURE_ROOT
-            / f"hard_first_turn_s{scenario_number:02d}_endpoint.png"
+            / f"{evidence_prefix}_s{scenario_number:02d}_endpoint.png"
         )
         capture(endpoint_capture, env=env)
         run_command(
@@ -1016,7 +1035,11 @@ def verify_scenario(
             counter,
             expected=approved_endpoint,
         )
-        endpoint_gst = retain_endpoint_gst(scenario_number, gst_bytes)
+        endpoint_gst = retain_endpoint_gst(
+            scenario_number,
+            gst_bytes,
+            evidence_prefix=evidence_prefix,
+        )
         return {
             "number": scenario_number,
             "status": "first_turn_runtime_verified",
@@ -1114,6 +1137,13 @@ def parse_args() -> argparse.Namespace:
         help="keep every opening and phase detector frame for diagnosis",
     )
     parser.add_argument(
+        "--evidence-prefix",
+        help=(
+            "capture/GST filename prefix; defaults to hard_first_turn for "
+            "the release manifest and the results filename stem otherwise"
+        ),
+    )
+    parser.add_argument(
         "--emulator-speed",
         type=int,
         choices=tuple(EMULATOR_SPEED_PERCENT),
@@ -1131,6 +1161,16 @@ def main() -> int:
         raise ValueError("--confirmation-delay must be non-negative")
     rom = args.rom.resolve()
     results_path = args.results.resolve()
+    evidence_prefix = args.evidence_prefix or (
+        "hard_first_turn"
+        if results_path == DEFAULT_RESULTS.resolve()
+        else results_path.stem
+    )
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", evidence_prefix):
+        raise ValueError(
+            "--evidence-prefix may contain only letters, digits, dot, "
+            "underscore, and hyphen"
+        )
     results = load_results(results_path, rom)
     result = verify_scenario(
         args.scenario,
@@ -1147,6 +1187,7 @@ def main() -> int:
         retain_detector_frames=args.retain_detector_frames,
         emulator_speed=args.emulator_speed,
         resume_running=args.resume_running,
+        evidence_prefix=evidence_prefix,
     )
     save_result(results_path, results, result)
     if args.documentation is not None:

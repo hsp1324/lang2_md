@@ -1,3 +1,4 @@
+import hashlib
 import json
 import tempfile
 import unittest
@@ -174,6 +175,24 @@ class HardModeFirstTurnTests(unittest.TestCase):
             finally:
                 first_turn.ROOT = original_root
 
+    def test_retain_endpoint_gst_separates_candidate_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            original_root = first_turn.ROOT
+            try:
+                first_turn.ROOT = Path(directory)
+                destination = first_turn.retain_endpoint_gst(
+                    20,
+                    b"candidate",
+                    evidence_prefix="hard_candidate_first_turn",
+                )
+                self.assertEqual(
+                    destination.name,
+                    "hard_candidate_first_turn_s20_endpoint.gst",
+                )
+                self.assertEqual(destination.read_bytes(), b"candidate")
+            finally:
+                first_turn.ROOT = original_root
+
     def test_endpoint_classification_requires_turn_two_command(self):
         self.assertEqual(
             first_turn.classify_endpoint("turn_command", 2),
@@ -291,6 +310,31 @@ class HardModeFirstTurnTests(unittest.TestCase):
             "`localization/hard_mode_current_candidate_first_turn.json`",
             document,
         )
+
+    def test_current_candidate_scenarios_19_and_20_use_isolated_evidence(self):
+        manifest = (
+            first_turn.ROOT
+            / "localization/hard_mode_current_candidate_first_turn.json"
+        )
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+        by_number = {
+            int(row["number"]): row for row in data["scenarios"]
+        }
+        prefix = "hard_mode_current_candidate_first_turn_"
+        for number in (19, 20):
+            row = by_number[number]
+            for path_key, digest_key in (
+                ("opening_capture", "opening_capture_sha256"),
+                ("endpoint_capture", "endpoint_capture_sha256"),
+                ("endpoint_gst", "endpoint_gst_sha256"),
+            ):
+                with self.subTest(number=number, path_key=path_key):
+                    path = first_turn.ROOT / row[path_key]
+                    self.assertTrue(path.name.startswith(prefix))
+                    self.assertEqual(
+                        hashlib.sha256(path.read_bytes()).hexdigest(),
+                        row[digest_key],
+                    )
 
 
 if __name__ == "__main__":
