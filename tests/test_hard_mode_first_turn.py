@@ -311,7 +311,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
             document,
         )
 
-    def test_current_candidate_scenarios_19_through_27_use_isolated_evidence(self):
+    def test_current_candidate_scenarios_19_through_28_use_isolated_evidence(self):
         manifest = (
             first_turn.ROOT
             / "localization/hard_mode_current_candidate_first_turn.json"
@@ -321,7 +321,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
             int(row["number"]): row for row in data["scenarios"]
         }
         prefix = "hard_mode_current_candidate_first_turn_"
-        for number in (19, 20, 21, 22, 23, 24, 25, 26, 27):
+        for number in (19, 20, 21, 22, 23, 24, 25, 26, 27, 28):
             row = by_number[number]
             for path_key, digest_key in (
                 ("opening_capture", "opening_capture_sha256"),

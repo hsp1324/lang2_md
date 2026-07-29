@@ -593,13 +593,13 @@
         7,
         15
       ],
-      "seed": "captures/runtime/hard-8674-s27/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
-      "seed_sha256": "481cc5dbbe7911ee06db256fcee07ff1e78d8e59b3dbe0442053a1470bd4cd0e",
-      "gst": "captures/analysis/hard_8674_s28_entry_turn1_entry.gst",
-      "gst_sha256": "3ef850385b8d0a7e0191e9fb93e3501540a05f6debe05a4fb1b7009da5789b4b",
-      "runtime_gst": "captures/runtime/hard-8674-s28/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
-      "runtime_name": "hard-8674-s28",
-      "capture": "captures/run/hard_8674_s28_entry.png",
+      "seed": "captures/analysis/hard_5be8_s27_entry_turn1_entry.gst",
+      "seed_sha256": "c044cad7c04e312e49bf6b80dca39530028c09cf527286730b27248d06fa526a",
+      "gst": "captures/analysis/hard_5be8_s28_entry_turn1_entry.gst",
+      "gst_sha256": "c7ece6f4f9dbf8369de697327856be066f5e12ecf2aed0be9e103a29189e79fe",
+      "runtime_gst": "captures/runtime/hard-matrix-s28/.local/share/blastem/Langrisser II (Korean Hard T1.0.0 B1.0.0)/quicksave.gst",
+      "runtime_name": "hard-matrix-s28",
+      "capture": "captures/run/hard_5be8_s28_entry.png",
       "capture_sha256": "40eaef200abbbccf1cc68e89c1fbf16f483565ec20754b5023b4f654de8c7736"
     },
     {
