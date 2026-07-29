@@ -430,17 +430,67 @@ def start_menu_visible(path: Path) -> bool:
         ) / (image.width * image.height)
 
     menu = crop((40, 30, 105, 165))
-    map_side = crop((110, 30, 280, 155))
+    right_border = crop((162, 30, 170, 166))
+    border_pixels = list(right_border.get_flattened_data())
+    right_border_gold_ratio = sum(
+        1
+        for red, green, blue in border_pixels
+        if red > 100
+        and green > 70
+        and blue < 80
+        and red > blue * 1.5
+    ) / len(border_pixels)
+    right_border_white_ratio = sum(
+        1
+        for red, green, blue in border_pixels
+        if red > 160 and green > 160 and blue > 160
+    ) / len(border_pixels)
     # The five-row Start menu fills the narrow left panel while leaving the
-    # map visible to its right. A unit command panel shares the left origin
-    # but also opens the large commander/status panel on the right.
+    # map visible to its right. Its right gold frame is fixed near source
+    # x=166. A unit command panel shares the left origin but ends near x=105;
+    # the x=166 band then contains commander/status text instead.
     return (
         dark_blue_ratio(menu) > 0.67
-        # Scenario 10's blue terrain raises this crop to about 35.5%.
-        # Commander/status panels measured here remain above 49%.
-        and dark_blue_ratio(map_side) < 0.45
+        and right_border_gold_ratio > 0.10
+        and right_border_white_ratio < 0.08
         and sequence_runner.battle_map_surface_visible(path)
     )
+
+
+def start_menu_cursor_row(path: Path) -> int | None:
+    if not start_menu_visible(path):
+        return None
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+    candidates: list[tuple[int, int]] = []
+    for row, top in enumerate((48, 72, 96, 120, 144)):
+        cursor = frame.crop(
+            (
+                round(46 * scale_x),
+                round(top * scale_y),
+                round(57 * scale_x),
+                round((top + 17) * scale_y),
+            )
+        )
+        pixels = list(cursor.get_flattened_data())
+        white = sum(
+            1
+            for red, green, blue in pixels
+            if red > 140 and green > 140 and blue > 140
+        )
+        black = sum(
+            1
+            for red, green, blue in pixels
+            if red < 40 and green < 40 and blue < 40
+        )
+        # The flashing triangle has both a white fill and black shadow. Text
+        # or frame noise in the same narrow band lacks the black component.
+        if white > 15 * scale_x * scale_y and black > 10 * scale_x * scale_y:
+            candidates.append((white + black, row))
+    if not candidates:
+        return None
+    return max(candidates)[1]
 
 
 def wait_for_surface(
@@ -462,6 +512,37 @@ def wait_for_surface(
     finally:
         probe.unlink(missing_ok=True)
     raise RuntimeError(f"{label} was not detected within {max_checks} checks")
+
+
+def wait_for_start_menu_cursor(
+    *,
+    env: dict[str, str],
+    expected_row: int | None = None,
+    max_checks: int = 30,
+    delay: float = 0.1,
+) -> tuple[int, int]:
+    probe = Path("/tmp") / f"lang2_first_turn_cursor_{os.getpid()}.png"
+    try:
+        for step in range(max_checks + 1):
+            capture(probe, env=env)
+            row = start_menu_cursor_row(probe)
+            if row is not None and (
+                expected_row is None or row == expected_row
+            ):
+                return row, step
+            if step < max_checks:
+                time.sleep(delay)
+    finally:
+        probe.unlink(missing_ok=True)
+    suffix = (
+        ""
+        if expected_row is None
+        else f" on expected row {expected_row}"
+    )
+    raise RuntimeError(
+        f"Start menu cursor was not detected{suffix} within "
+        f"{max_checks} checks"
+    )
 
 
 def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
@@ -496,22 +577,26 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
         predicate=start_menu_visible,
         label="Start menu",
     )
-    run_command(
-        [
-            sys.executable,
-            str(KEY_SENDER),
-            "--send-event",
-            "down:0.5",
-            "down:0.5",
-            "down:0.5",
-            "down:0.8",
-        ],
+    initial_cursor_row, initial_cursor_checks = wait_for_start_menu_cursor(
         env=env,
     )
-    turn_end_checks = wait_for_surface(
+    navigation_count = (4 - initial_cursor_row) % 5
+    if navigation_count:
+        run_command(
+            [
+                sys.executable,
+                str(KEY_SENDER),
+                "--send-event",
+                *(
+                    ["down:0.5"] * (navigation_count - 1)
+                    + ["down:0.8"]
+                ),
+            ],
+            env=env,
+        )
+    final_cursor_row, final_cursor_checks = wait_for_start_menu_cursor(
         env=env,
-        predicate=start_menu_visible,
-        label="Start menu after selecting turn end",
+        expected_row=4,
     )
     run_command(
         [
@@ -527,7 +612,11 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
     return {
         "map_checks": map_checks,
         "start_menu_checks": start_menu_checks,
-        "turn_end_checks": turn_end_checks,
+        "initial_cursor_row": initial_cursor_row,
+        "initial_cursor_checks": initial_cursor_checks,
+        "navigation_count": navigation_count,
+        "final_cursor_row": final_cursor_row,
+        "final_cursor_checks": final_cursor_checks,
     }
 
 

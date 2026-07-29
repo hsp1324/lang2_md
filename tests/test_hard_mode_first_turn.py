@@ -151,6 +151,18 @@ class HardModeFirstTurnTests(unittest.TestCase):
         )
         self.assertTrue(first_turn.start_menu_visible(start_menu))
 
+    def test_start_menu_cursor_detector_reads_first_and_last_rows(self):
+        first_row = (
+            first_turn.ROOT
+            / "captures/run/1ab2_s22_current_start_menu_turn2.png"
+        )
+        last_row = (
+            first_turn.ROOT
+            / "captures/run/hard_8674_s03_turn_end_cursor.png"
+        )
+        self.assertEqual(first_turn.start_menu_cursor_row(first_row), 0)
+        self.assertEqual(first_turn.start_menu_cursor_row(last_row), 4)
+
     def test_retain_endpoint_gst_replaces_snapshot_atomically(self):
         with tempfile.TemporaryDirectory() as directory:
             original_root = first_turn.ROOT
