@@ -1995,6 +1995,15 @@
     "0x07B4",
     "0x07B5"
   ],
+  "preparation_extra_cache_tiles": [
+    "0x07AA",
+    "0x07AB",
+    "0x07AC",
+    "0x07B6",
+    "0x07B7",
+    "0x07B9",
+    "0x07BB"
+  ],
   "preparation_dynamic_slots": [
     {
       "slot": 0,
@@ -2090,6 +2099,48 @@
       "slot": 15,
       "vram_tile": "0x07B5",
       "char": "제",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 16,
+      "vram_tile": "0x07AA",
+      "char": "샤",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 17,
+      "vram_tile": "0x07AB",
+      "char": "먼",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 18,
+      "vram_tile": "0x07AC",
+      "char": "안",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 19,
+      "vram_tile": "0x07B6",
+      "char": "께",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 20,
+      "vram_tile": "0x07B7",
+      "char": "울",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 21,
+      "vram_tile": "0x07B9",
+      "char": "끼",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 22,
+      "vram_tile": "0x07BB",
+      "char": "의",
       "reason": "preparation graphics overwrite the final static font segment"
     }
   ]

@@ -110,8 +110,8 @@ release ROM. This does not indicate that the remap regressed:
 - released predecessor checksum `1011`, SHA-256
   `c46249fdc50db4010115e5509c173de007761f5a42562345eca747506b43227b`
   still contains the stock bytes `02 80 00 00 FF FF` at `0x011DD8`;
-- current build checksum `8674`, SHA-256
-  `142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27`
+- current build checksum `5BE8`, SHA-256
+  `227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd`
   contains the jump `4E F9 00 2B 8D 40`;
 - the current build's complete hook, routine, and 53-entry table are
   byte-identical to the live-verified gray-remap candidate.
@@ -138,7 +138,7 @@ ID `0x37`. The current build therefore fixes the reported active -> gray ->
 active sequence; the still-published checksum-`1011` release does not contain
 this fix.
 
-The same exact-current ROM was also re-entered from a valid Scenario 2 save,
+The checksum-`8674` predecessor was also re-entered from a valid Scenario 2 save,
 then taken through the Scenario 3 preparation shop, item purchase list, return
 to preparation, automatic deployment, and opening dialogue. The post-shop map
 status rows remain intact:
@@ -150,10 +150,43 @@ status rows remain intact:
 - `captures/run/hard_8674_s03_pike_after_shop_status.png`:
   `적군 / 파이크`.
 
+The current checksum-`5BE8` candidate was then started from a valid manual
+slot, entered Scenario 3, and set Hein's class to Shaman before entry. Hein
+was selected normally, moved one tile left through the in-game movement
+command, and committed the post-move standby state:
+
+| State | Class/commander | Acted | Capture |
+| --- | --- | ---: | --- |
+| active command panel | `0A/05` | `00` | `captures/run/hard_5be8_s03_shaman_hein_command.png` |
+| actual movement complete | `0A/05` | `01` | `captures/run/hard_5be8_s03_shaman_inactive_actual.png` |
+
+The matching
+`captures/analysis/hard_5be8_s03_shaman_inactive_actual.gst` has a complete
+gray payload at VRAM `0x9680`. Its 128-byte SHA-256 is
+`10f15f0c4b9860e2b19cbe717c142b57be31d7bd5fe7bae5dca1e9741b51ea55`,
+byte-identical to the previously verified Shaman silhouette. The remap table
+also covers every commander-specific Shaman ID, including Sherry's; the
+focused test enumerates all of them rather than checking only Hein.
+
+The user also reported the same failure for Sherry specifically. A second
+exact-current Scenario 5 run selected Sherry as Shaman and committed a normal
+one-tile move:
+
+| State | Class/commander | Acted | Position | Capture |
+| --- | --- | ---: | --- | --- |
+| active command panel | `0A/04` | `00` | `(15,53)` | `captures/run/hard_5be8_s05_sherry_shaman_command.png` |
+| actual movement complete | `0A/04` | `01` | `(16,53)` | `captures/run/hard_5be8_s05_sherry_shaman_inactive_actual.png` |
+
+The inactive sprite remains a coherent gray Shaman. The matching
+`captures/analysis/hard_5be8_s05_sherry_shaman_inactive_actual.gst` locks
+class `0x0A`, name ID `0x04`, acted flag `0x01`, and the final position.
+
 This separates two previously conflated reports. The checksum-`1011` release
-really lacks the inactive-frame remap, while the checksum-`8674` candidate
-retains both the remap and the map-status glyphs after the shop renderer has
-run.
+really lacks the inactive-frame remap. The checksum-`8674` predecessor
+retained both the remap and the map-status glyphs after the shop renderer ran,
+and the current checksum-`5BE8` candidate retains the same semantic hook,
+generated routine, complete 53-entry table, and newly replayed Shaman gray
+state.
 
 Do not load a GST captured from another ROM hash as live proof, and do not
 change an acted flag inside a paused GST and treat its cached frame as proof.

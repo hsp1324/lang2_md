@@ -438,13 +438,13 @@ SOUND_TEST_TILE_TABLE_LIMIT = 0x2C0000
 BYTE_UI_DYNAMIC_GLYPH_TABLE = 0x2BD000
 BYTE_UI_DYNAMIC_GLYPH_TABLE_LIMIT = 0x2BE800
 BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE = 0x2BE800
-BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT = 0x2BE840
-BYTE_UI_DYNAMIC_TILE_ID_TABLE = 0x2BE840
-BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT = 0x2BE860
-BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE = 0x2BE860
-BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT = 0x2BE960
-BYTE_UI_PREP_DYNAMIC_SLOT_TABLE = 0x2BE960
-BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT = 0x2BEA60
+BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT = 0x2BE880
+BYTE_UI_DYNAMIC_TILE_ID_TABLE = 0x2BE880
+BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT = 0x2BE8C0
+BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE = 0x2BE8C0
+BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT = 0x2BE9C0
+BYTE_UI_PREP_DYNAMIC_SLOT_TABLE = 0x2BE9C0
+BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT = 0x2BEAC0
 # These patterns are a transient map-status cache, not a persistent font bank.
 # They occupy noncontiguous cells in the unused tail of the full-screen
 # H-scroll table and avoid every retained Plane/SAT reference. The stock
@@ -452,9 +452,20 @@ BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT = 0x2BEA60
 # cell; the line-scroll writer remains source-identical for scripted effects.
 # The old 0x05D8..0x05E7 and experimental 0x04D8..0x04E7 caches collided with
 # live map graphics in later scenarios.
-BYTE_UI_DYNAMIC_TILE_IDS = (
+BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
     0x07A1, 0x07A2, 0x07A3, 0x07A4, 0x07A5, 0x07A6, 0x07A7, 0x07A8,
     0x07A9, 0x07AD, 0x07AF, 0x07B0, 0x07B1, 0x07B3, 0x07B4, 0x07B5,
+)
+# These additional H-scroll-tail patterns are not needed by the two eight-cell
+# map fields. They are reserved for preparation/status glyphs that must remain
+# visible together. Runtime-state scans found no retained Plane A, Plane B,
+# window, or SAT reference to any of these tile IDs before assignment.
+BYTE_UI_PREP_EXTRA_TILE_IDS = (
+    0x07AA, 0x07AB, 0x07AC,
+    0x07B6, 0x07B7, 0x07B9, 0x07BB,
+)
+BYTE_UI_DYNAMIC_TILE_IDS = (
+    BYTE_UI_DYNAMIC_MAP_TILE_IDS + BYTE_UI_PREP_EXTRA_TILE_IDS
 )
 BYTE_UI_DYNAMIC_NAME_SLOT = 0
 BYTE_UI_DYNAMIC_CLASS_SLOT = 8
@@ -472,6 +483,7 @@ BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
 BYTE_UI_PREP_DYNAMIC_CHARS = (
     "라", "론", "쉐", "카", "코", "키", "록", "적",
     "가", "스", "럴", "슬", "임", "비", "크", "제",
+    "샤", "먼", "안", "께", "울", "끼", "의",
 )
 BYTE_UI_RESULT_DYNAMIC_CODE = 0xA6
 BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR = {

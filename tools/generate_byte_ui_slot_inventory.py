@@ -122,7 +122,10 @@ def build_inventory(source_rom: bytes) -> dict[str, object]:
             for code, reason in sorted(builder.BYTE_UI_UNSAFE_CODE_REASON.items())
         ],
         "dynamic_map_cache_tiles": [
-            hex_word(tile) for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS
+            hex_word(tile) for tile in builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS
+        ],
+        "preparation_extra_cache_tiles": [
+            hex_word(tile) for tile in builder.BYTE_UI_PREP_EXTRA_TILE_IDS
         ],
         "preparation_dynamic_slots": [
             {

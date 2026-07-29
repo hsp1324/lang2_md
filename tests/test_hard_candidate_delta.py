@@ -27,7 +27,7 @@ class HardCandidateDeltaTests(unittest.TestCase):
             hashlib.sha256(self.hard).hexdigest(),
             self.model["after"]["sha256"],
         )
-        self.assertEqual(self.model["after"]["md_checksum"], "8674")
+        self.assertEqual(self.model["after"]["md_checksum"], "5BE8")
 
     def test_current_build_contains_inactive_sprite_remap(self) -> None:
         mapping = builder.custom_map_sprite_gray_source_map(
@@ -72,7 +72,7 @@ class HardCandidateDeltaTests(unittest.TestCase):
             self.model["status"],
             "verified_ui_sprite_only_delta",
         )
-        self.assertEqual(delta["changed_byte_count"], 365)
+        self.assertEqual(delta["changed_byte_count"], 578)
         self.assertEqual(delta["outside_owned_ranges"], 0)
         self.assertEqual(delta["unexpected_offsets"], [])
         self.assertEqual(delta["balance_event_ai_changed_bytes"], 0)

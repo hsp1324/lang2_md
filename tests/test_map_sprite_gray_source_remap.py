@@ -1,6 +1,37 @@
+import hashlib
+from pathlib import Path
 import unittest
 
 from scripts import build_korean_jp_probe as builder
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CURRENT_SHAMAN_INACTIVE_CAPTURE = (
+    ROOT / "captures/run/hard_5be8_s03_shaman_inactive_actual.png"
+)
+CURRENT_SHAMAN_INACTIVE_GST = (
+    ROOT / "captures/analysis/hard_5be8_s03_shaman_inactive_actual.gst"
+)
+CURRENT_SHERRY_SHAMAN_COMMAND_CAPTURE = (
+    ROOT / "captures/run/hard_5be8_s05_sherry_shaman_command.png"
+)
+CURRENT_SHERRY_SHAMAN_INACTIVE_CAPTURE = (
+    ROOT / "captures/run/hard_5be8_s05_sherry_shaman_inactive_actual.png"
+)
+CURRENT_SHERRY_SHAMAN_INACTIVE_GST = (
+    ROOT
+    / "captures/analysis/hard_5be8_s05_sherry_shaman_inactive_actual.gst"
+)
+GST_WORK_RAM_OFFSET = 0x2478
+GST_VRAM_OFFSET = 0x12478
+RUNTIME_GROUP_BASE = 0x603C
+RUNTIME_GROUP_SIZE = 0x60
+SHERRY_RUNTIME_GROUP = 4
+SHAMAN_GRAY_VRAM_OFFSET = 0x9680
+SHAMAN_GRAY_BYTES = 0x80
+SHAMAN_GRAY_PAYLOAD_SHA256 = (
+    "10f15f0c4b9860e2b19cbe717c142b57be31d7bd5fe7bae5dca1e9741b51ea55"
+)
 
 
 class MapSpriteGraySourceRemapTests(unittest.TestCase):
@@ -27,13 +58,21 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
             set(range(first, last + 1)),
         )
 
-    def test_shaman_and_lord_restore_their_stock_gray_sources(self) -> None:
-        hein_shaman = builder.SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS[5]
+    def test_every_commander_shaman_restores_its_stock_gray_source(self) -> None:
         self.assertEqual(
-            self.mapping[hein_shaman],
-            builder.SHAMAN_COMMANDER_SOURCE_SPRITE_IDS[5],
+            set(builder.SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS),
+            set(builder.SHAMAN_COMMANDER_SOURCE_SPRITE_IDS),
         )
+        for commander_id, custom_sprite_id in (
+            builder.SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS.items()
+        ):
+            with self.subTest(commander_id=commander_id):
+                self.assertEqual(
+                    self.mapping[custom_sprite_id],
+                    builder.SHAMAN_COMMANDER_SOURCE_SPRITE_IDS[commander_id],
+                )
 
+    def test_hein_lord_restores_its_stock_gray_source(self) -> None:
         hein_lord = next(
             custom_sprite_id
             for commander_id, class_id, custom_sprite_id in (
@@ -48,6 +87,55 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
             self.mapping[hein_lord],
             builder.be16(self.original, source_record + 1),
         )
+
+    def test_current_hard_shaman_inactive_runtime_is_hash_locked(self) -> None:
+        self.assertEqual(
+            hashlib.sha256(
+                CURRENT_SHAMAN_INACTIVE_CAPTURE.read_bytes()
+            ).hexdigest(),
+            "07be9b8a6dd63b2af53fbdcb732f505df8865ebba33e8bcba57f27bcadcf1de0",
+        )
+        state = CURRENT_SHAMAN_INACTIVE_GST.read_bytes()
+        self.assertEqual(
+            hashlib.sha256(state).hexdigest(),
+            "a4e6f397730364549c1fb2c63ab51cf686d4274519e524bf55288cc91396eb77",
+        )
+        start = GST_VRAM_OFFSET + SHAMAN_GRAY_VRAM_OFFSET
+        payload = state[start:start + SHAMAN_GRAY_BYTES]
+        self.assertEqual(len(payload), SHAMAN_GRAY_BYTES)
+        self.assertEqual(
+            hashlib.sha256(payload).hexdigest(),
+            SHAMAN_GRAY_PAYLOAD_SHA256,
+        )
+
+    def test_current_hard_sherry_shaman_actual_move_is_hash_locked(self) -> None:
+        self.assertEqual(
+            hashlib.sha256(
+                CURRENT_SHERRY_SHAMAN_COMMAND_CAPTURE.read_bytes()
+            ).hexdigest(),
+            "bf5199a6690a455b7da5b925db8d081c47e97185a34b15d2eaab5efda8478e08",
+        )
+        self.assertEqual(
+            hashlib.sha256(
+                CURRENT_SHERRY_SHAMAN_INACTIVE_CAPTURE.read_bytes()
+            ).hexdigest(),
+            "7680d7ff90bc9d0944101786552ea1ef1537ad1ae82b5e220f289d0e6d6e9a1e",
+        )
+        state = CURRENT_SHERRY_SHAMAN_INACTIVE_GST.read_bytes()
+        self.assertEqual(
+            hashlib.sha256(state).hexdigest(),
+            "c739109a1458a281b5c6f7da886042821b5f06ada4f6b31b518e308228753458",
+        )
+        start = (
+            GST_WORK_RAM_OFFSET
+            + RUNTIME_GROUP_BASE
+            + SHERRY_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+        )
+        record = state[start:start + RUNTIME_GROUP_SIZE]
+        self.assertEqual(record[0], builder.SHAMAN_CLASS_ID)
+        self.assertEqual(record[1], 0x04)
+        self.assertEqual(record[2], 0x01)
+        self.assertEqual(tuple(record[6:8]), (16, 53))
 
     def test_remap_table_contains_each_stock_silhouette_id(self) -> None:
         first = min(self.mapping)

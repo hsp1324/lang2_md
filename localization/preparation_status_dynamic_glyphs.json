@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "status": "verified_current_hard_candidate",
+  "candidate": {
+    "path": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "md_checksum": "5BE8",
+    "sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd"
+  },
+  "scope": {
+    "map_cache_slots_unchanged": 16,
+    "preparation_extra_slots": 7,
+    "preparation_extra_chars": [
+      "샤",
+      "먼",
+      "안",
+      "께",
+      "울",
+      "끼",
+      "의"
+    ],
+    "preparation_extra_tiles": [
+      "0x07AA",
+      "0x07AB",
+      "0x07AC",
+      "0x07B6",
+      "0x07B7",
+      "0x07B9",
+      "0x07BB"
+    ]
+  },
+  "runtime": [
+    {
+      "surface": "scenario_3_commander_status",
+      "expected": "헤인 / 샤먼",
+      "capture": "captures/run/hard_5be8_s03_shaman_hein_command.png",
+      "sha256": "2050c4444943abe24ffac0f6597fff0029ed8cd31427aaee2145fada6f54a568",
+      "result": "pass"
+    },
+    {
+      "surface": "scenario_5_commander_arrangement",
+      "expected": "쉐리",
+      "capture": "captures/run/hard_5be8_s05_prep_detect_16.png",
+      "sha256": "4d301dab02dd4f53a543f381be64625088620bdc4fa1a303422b82ec5d831a01",
+      "result": "pass"
+    },
+    {
+      "surface": "scenario_5_enemy_deployment",
+      "expected": "웨어울프 / 울프맨",
+      "capture": "captures/run/hard_5be8_s05_enemy_roster.png",
+      "sha256": "2e0f629c8c7e1bc6dcd3cea9a28a4f8b0a5737aa187a9824f32cca9386c3eeff",
+      "result": "pass"
+    },
+    {
+      "surface": "scenario_3_map_allied_subordinate",
+      "expected": "리아나 / 가드맨",
+      "capture": "captures/run/hard_5be8_s03_guardman_status.png",
+      "sha256": "98f31e342fd53486310f9532553a38a85002cf6bc32cda066d3fe2163ef6c34e",
+      "result": "pass"
+    },
+    {
+      "surface": "scenario_3_map_enemy_pike",
+      "expected": "제국지휘관 / 파이크",
+      "capture": "captures/run/hard_5be8_s03_pike_status.png",
+      "sha256": "8ec93a4bd06a4776012242a02cca947530c44d98c5ce0351c31f4d6e689be4ee",
+      "result": "pass"
+    }
+  ],
+  "notes": [
+    "The user confirmed that 워록 and 바바리안 were already correct in the map-bottom field; the reported failure was preparation/deployment-only.",
+    "The earlier 21B9 candidate verified 워록, 바바리안, and 파이크 on the Scenario 4 deployment surface before the same slot table was carried into 5BE8.",
+    "A read-only scan of 696 retained GST files found no Plane A, Plane B, window, or map-SAT references to the seven added tile IDs.",
+    "The hard-candidate delta verifier reports zero changed balance, event, or AI bytes."
+  ]
+}

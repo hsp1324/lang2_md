@@ -491,6 +491,7 @@ class NameEntryResourceTests(unittest.TestCase):
             (
                 "라", "론", "쉐", "카", "코", "키", "록", "적",
                 "가", "스", "럴", "슬", "임", "비", "크", "제",
+                "샤", "먼", "안", "께", "울", "끼", "의",
             ),
         )
         self.assertLessEqual(
@@ -593,10 +594,19 @@ class NameEntryResourceTests(unittest.TestCase):
             builder.BYTE_UI_DYNAMIC_NAME_SLOT + builder.BYTE_UI_DYNAMIC_FIELD_WIDTH,
         )
         self.assertEqual(builder.BYTE_UI_DYNAMIC_NAME_SLOT, 0)
-        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 16)
-        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 16)
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS), 16)
+        self.assertEqual(
+            builder.BYTE_UI_DYNAMIC_TILE_IDS[:16],
+            builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS,
+        )
+        self.assertEqual(
+            builder.BYTE_UI_PREP_EXTRA_TILE_IDS,
+            (0x07AA, 0x07AB, 0x07AC, 0x07B6, 0x07B7, 0x07B9, 0x07BB),
+        )
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 23)
+        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 23)
         self.assertTrue(
-            all(0x07A1 <= tile <= 0x07B5 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
+            all(0x07A1 <= tile <= 0x07BB for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
         )
 
         restore = builder._build_byte_ui_map_info_scratch_restore()
@@ -616,6 +626,16 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertNotIn(0x07A0, builder.BYTE_UI_DYNAMIC_TILE_IDS)
         self.assertNotIn(0x07BE, builder.BYTE_UI_DYNAMIC_TILE_IDS)
         self.assertNotIn(0x07BF, builder.BYTE_UI_DYNAMIC_TILE_IDS)
+        self.assertGreaterEqual(
+            builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT
+            - builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE,
+            len(builder.BYTE_UI_DYNAMIC_TILE_IDS) * 4,
+        )
+        self.assertGreaterEqual(
+            builder.BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT
+            - builder.BYTE_UI_DYNAMIC_TILE_ID_TABLE,
+            len(builder.BYTE_UI_DYNAMIC_TILE_IDS) * 2,
+        )
 
     def test_dynamic_name_class_glyph_table_and_vdp_commands_are_exact(self):
         data = bytearray(self.rom)
@@ -660,6 +680,7 @@ class NameEntryResourceTests(unittest.TestCase):
             (
                 "라", "론", "쉐", "카", "코", "키", "록", "적",
                 "가", "스", "럴", "슬", "임", "비", "크", "제",
+                "샤", "먼", "안", "께", "울", "끼", "의",
             ),
         )
         self.assertLessEqual(

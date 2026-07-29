@@ -76,8 +76,23 @@ def owned_ranges() -> dict[str, tuple[tuple[int, int], ...]]:
             builder.MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE,
             builder.MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT,
         ),),
-        "dynamic_glyph_slot_table": ((
-            builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE,
+        "dynamic_legacy_lookup_routine": ((
+            builder.BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE,
+            builder.BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE
+            + len(builder._build_byte_ui_dynamic_legacy_lookup()),
+        ),),
+        "dynamic_glyph_render_routine": ((
+            builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE,
+            builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE
+            + len(builder._build_byte_ui_dynamic_glyph_renderer()),
+        ),),
+        "prep_dynamic_lookup_routine": ((
+            builder.BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE,
+            builder.BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE
+            + len(builder._build_byte_ui_prep_local_tile_lookup()),
+        ),),
+        "dynamic_glyph_tables": ((
+            builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE,
             builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT,
         ),),
         "loren_map_frames": loren_frames,
