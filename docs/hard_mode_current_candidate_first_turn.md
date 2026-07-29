@@ -14,15 +14,16 @@ BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Newl
 
 ## Coverage
 
-- Status: `in_progress`
-- Verified: 30/31
-- Verified scenarios: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
-- Missing scenarios: 1
+- Status: `all_scenarios_first_turn_verified`
+- Verified: 31/31
+- Verified scenarios: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+- Missing scenarios: none
 
 ## Results
 
 | Scenario | Endpoint | Opening confirmations | Phase confirmations | Speed | Elapsed |
 |---:|---|---:|---:|---:|---:|
+| 1 | `turn_2_command` | 4 | 39 | 400% | 103.2s |
 | 2 | `turn_2_command` | 36 | 4 | 100% | 201.6s |
 | 3 | `turn_2_command` | 12 | 3 | 100% | 108.7s |
 | 4 | `turn_2_command` | 16 | 16 | 100% | 215.7s |
