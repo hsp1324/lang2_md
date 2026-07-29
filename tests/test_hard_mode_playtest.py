@@ -41,6 +41,60 @@ class HardModePlaytestTests(unittest.TestCase):
             "verified_ui_sprite_only_delta",
         )
         self.assertEqual(lineage["current_class_spot_checks_passed"], 6)
+        readiness = manifest["hard_release"]["implementation_readiness"]
+        self.assertFalse(readiness["complete"])
+        self.assertEqual(
+            readiness["pending_features"],
+            ["late_summon_unit_replacements"],
+        )
+        features = {
+            feature["id"]: feature
+            for feature in readiness["features"]
+        }
+        self.assertTrue(
+            features["scenario_curve_and_commander_stats"]["applied"]
+        )
+        self.assertTrue(features["enemy_soldier_corrections"]["applied"])
+        self.assertEqual(
+            features["stronger_mercenary_replacements"][
+                "applied_slot_count"
+            ],
+            304,
+        )
+        self.assertFalse(
+            features["late_summon_unit_replacements"]["applied"]
+        )
+        self.assertFalse(manifest["coverage"]["implementation_complete"])
+        self.assertFalse(manifest["coverage"]["complete"])
+
+    def test_all_clears_do_not_bypass_a_pending_approved_feature(self):
+        manifest = playtest.initial_manifest(self.identity)
+        digest = self.identity["sha256"]
+        for row in manifest["scenarios"]:
+            row["attempts"].append({
+                "candidate_sha256": digest,
+                "result": "cleared",
+                "difficulty": "target",
+                "evidence": [{"path": "unused", "sha256": "unused"}],
+            })
+        playtest.refresh(manifest)
+        self.assertTrue(manifest["coverage"]["scenario_clear_complete"])
+        self.assertFalse(manifest["coverage"]["implementation_complete"])
+        self.assertFalse(manifest["coverage"]["complete"])
+        self.assertEqual(
+            manifest["status"],
+            "approved_features_incomplete",
+        )
+
+    def test_implementation_audit_rejects_a_missing_approval_decision(self):
+        build = playtest.load_json(playtest.DEFAULT_BUILD)
+        plan = playtest.load_json(playtest.DEFAULT_PLAN)
+        approval = playtest.load_json(playtest.DEFAULT_APPROVAL)
+        approval["approval"]["decisions"][
+            "late_summon_unit_start_and_ratio"
+        ] = None
+        with self.assertRaisesRegex(ValueError, "missing decisions"):
+            playtest.implementation_readiness(build, plan, approval)
 
     def test_cleared_attempt_requires_rating_and_evidence(self):
         manifest = playtest.initial_manifest(self.identity)

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Build a non-distribution probe for fixed-enemy summon compatibility.
 
-This is not a hard-mode build. It changes two existing enemy mercenary slots
-in an exact clone of the immutable Korean release so emulator testing can
-determine whether summon classes remain safe when loaded as fixed soldiers.
+This is not a hard-mode build. It changes existing enemy mercenary slots in
+an exact clone of the retained 99FD Korean baseline used by the checked-in
+runtime evidence. New hard-candidate probes must use a separate builder and
+must not relabel the retained A205/9A15 evidence.
 """
 
 from __future__ import annotations
@@ -19,7 +20,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import hard_mode_baseline
 from tools.scenario_data import (
     FIELD_OFFSETS,
     FIXED_RECORD_SIZE,
@@ -29,10 +29,17 @@ from tools.scenario_data import (
 )
 
 
-DEFAULT_SOURCE = hard_mode_baseline.DEFAULT_NORMAL_ROM
+DEFAULT_SOURCE = (
+    ROOT / "roms/releases/Langrisser II (Korean ko-99fd).md"
+)
 DEFAULT_OUTPUT = ROOT / "tmp/fixed_enemy_summon_probe.md"
 
 CHECKSUM_OFFSETS = frozenset((0x18E, 0x18F))
+PROBE_SOURCE_SIZE = 0x400000
+PROBE_SOURCE_CHECKSUM = "99FD"
+PROBE_SOURCE_SHA256 = (
+    "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+)
 
 
 @dataclass(frozen=True)
@@ -100,18 +107,18 @@ PROBE_CLASS_ID = DEFAULT_CASE.class_id
 
 
 def _verify_immutable_source(source: bytes) -> None:
-    if len(source) != hard_mode_baseline.NORMAL_SIZE:
+    if len(source) != PROBE_SOURCE_SIZE:
         raise ValueError(
-            "probe source must be the immutable 4 MiB Korean release"
+            "probe source must be the retained 4 MiB 99FD Korean baseline"
         )
     digest = hashlib.sha256(source).hexdigest()
-    if digest != hard_mode_baseline.NORMAL_SHA256:
+    if digest != PROBE_SOURCE_SHA256:
         raise ValueError(
-            "probe source SHA-256 does not match the immutable Korean release"
+            "probe source SHA-256 does not match the retained 99FD baseline"
         )
-    if source[0x18E:0x190].hex().upper() != hard_mode_baseline.NORMAL_CHECKSUM:
+    if source[0x18E:0x190].hex().upper() != PROBE_SOURCE_CHECKSUM:
         raise ValueError(
-            "probe source header checksum does not match the immutable release"
+            "probe source header checksum does not match the retained 99FD baseline"
         )
 
 
@@ -186,7 +193,7 @@ def patch_probe(
         "status": "diagnostic_only_not_for_distribution",
         "case": case.name,
         "purpose": case.purpose,
-        "source_sha256": hard_mode_baseline.NORMAL_SHA256,
+        "source_sha256": PROBE_SOURCE_SHA256,
         "scenario": case.scenario,
         "record_index": case.record_index,
         "record_offset": f"0x{record_offset:06X}",

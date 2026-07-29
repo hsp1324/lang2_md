@@ -16,6 +16,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BUILD = ROOT / "localization/hard_mode_build.json"
 DEFAULT_PLAN = ROOT / "localization/hard_mode_plan.json"
+DEFAULT_APPROVAL = ROOT / "localization/hard_mode_approval.json"
 DEFAULT_RUNTIME = (
     ROOT / "localization/hard_mode_current_candidate_runtime.json"
 )
@@ -51,6 +52,13 @@ DIFFICULTY_LABELS = {
     "hard": "어려움",
     "too_hard": "너무 어려움",
 }
+APPROVED_DECISION_KEYS = (
+    "scenario_band_target_difficulty",
+    "enemy_commander_at_df_formula_and_caps",
+    "stronger_mercenary_start_and_replacement_ratio",
+    "late_summon_unit_start_and_ratio",
+    "boss_reinforcement_branch_ending_exceptions",
+)
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -73,9 +81,124 @@ def scenario_display(number: int) -> str:
     raise ValueError(f"scenario must be between 1 and {SCENARIO_COUNT}")
 
 
+def implementation_readiness(
+    build: dict[str, Any],
+    plan: dict[str, Any],
+    approval: dict[str, Any],
+) -> dict[str, Any]:
+    decisions = approval["approval"]["decisions"]
+    missing_decisions = [
+        key for key in APPROVED_DECISION_KEYS if not decisions.get(key)
+    ]
+    if missing_decisions:
+        raise ValueError(
+            "hard approval is missing decisions: "
+            + ", ".join(missing_decisions)
+        )
+    if approval.get("status") != "approved":
+        raise ValueError("hard balance proposal is not approved")
+    if plan["approval"]["status"] != "approved":
+        raise ValueError("hard balance plan is not approved")
+    if (
+        plan["approval"]["proposal_sha256"]
+        != approval["proposal_sha256"]
+    ):
+        raise ValueError("hard balance plan uses a different approval proposal")
+
+    summary = plan["summary"]
+    implementation = build["implementation"]
+    target_count = int(summary["target_record_count"])
+    features = [
+        {
+            "id": "scenario_curve_and_commander_stats",
+            "approved_decision": "scenario_band_target_difficulty",
+            "applied": (
+                int(summary["scenario_count"]) == SCENARIO_COUNT
+                and int(summary["commander_change_record_count"])
+                == target_count
+                and int(implementation["commander_change_record_count"])
+                == target_count
+            ),
+            "applied_record_count": int(
+                implementation["commander_change_record_count"]
+            ),
+            "required_record_count": target_count,
+        },
+        {
+            "id": "enemy_soldier_corrections",
+            "approved_decision": "enemy_commander_at_df_formula_and_caps",
+            "applied": (
+                int(summary["soldier_correction_record_count"])
+                == target_count
+                and int(implementation["soldier_correction_record_count"])
+                == target_count
+            ),
+            "applied_record_count": int(
+                implementation["soldier_correction_record_count"]
+            ),
+            "required_record_count": target_count,
+        },
+        {
+            "id": "stronger_mercenary_replacements",
+            "approved_decision": (
+                "stronger_mercenary_start_and_replacement_ratio"
+            ),
+            "applied": (
+                int(summary["mercenary_replacement_slot_count"]) > 0
+                and int(summary["mercenary_replacement_slot_count"])
+                == int(implementation["mercenary_replacement_slot_count"])
+            ),
+            "applied_slot_count": int(
+                implementation["mercenary_replacement_slot_count"]
+            ),
+        },
+        {
+            "id": "late_summon_unit_replacements",
+            "approved_decision": "late_summon_unit_start_and_ratio",
+            "applied": (
+                bool(plan["implementation_policy"]["summon_units_applied"])
+                and int(summary["summon_replacement_slot_count"]) > 0
+            ),
+            "applied_slot_count": int(
+                summary["summon_replacement_slot_count"]
+            ),
+            "approved_scenarios": [26, 27],
+            "deferred_runtime_guards": [
+                "fixed_enemy_ordinary_attack",
+                "fixed_enemy_natural_magic_ownership",
+            ],
+        },
+        {
+            "id": "scenario_exceptions",
+            "approved_decision": (
+                "boss_reinforcement_branch_ending_exceptions"
+            ),
+            "applied": bool(
+                plan["implementation_policy"]["runtime_exception_manifest"]
+            ),
+            "manifest": plan["implementation_policy"][
+                "runtime_exception_manifest"
+            ],
+        },
+    ]
+    pending = [
+        str(feature["id"])
+        for feature in features
+        if not feature["applied"]
+    ]
+    return {
+        "approved_proposal": approval["proposal_id"],
+        "approved_proposal_sha256": approval["proposal_sha256"],
+        "features": features,
+        "pending_features": pending,
+        "complete": not pending,
+    }
+
+
 def current_identity(
     build_path: Path = DEFAULT_BUILD,
     plan_path: Path = DEFAULT_PLAN,
+    approval_path: Path = DEFAULT_APPROVAL,
     runtime_path: Path = DEFAULT_RUNTIME,
     first_turn_path: Path = DEFAULT_FIRST_TURN,
     cosmetic_delta_path: Path = DEFAULT_COSMETIC_DELTA,
@@ -83,6 +206,8 @@ def current_identity(
     class_spot_check_path: Path = DEFAULT_CLASS_SPOT_CHECK,
 ) -> dict[str, Any]:
     build = load_json(build_path)
+    plan = load_json(plan_path)
+    approval = load_json(approval_path)
     rom_path = ROOT / build["release"]["output"]
     payload = rom_path.read_bytes()
     digest = sha256_bytes(payload)
@@ -176,6 +301,12 @@ def current_identity(
         "header_checksum": checksum,
         "sha256": digest,
         "plan_sha256": sha256_path(plan_path),
+        "approval_sha256": sha256_path(approval_path),
+        "implementation_readiness": implementation_readiness(
+            build,
+            plan,
+            approval,
+        ),
         "runtime_manifest_sha256": sha256_path(runtime_path),
         "first_turn_manifest_sha256": sha256_path(first_turn_path),
         "runtime_verified_scenarios": runtime_verified,
@@ -220,6 +351,7 @@ def initial_manifest(identity: dict[str, Any] | None = None) -> dict[str, Any]:
             "difficulty_rating_required": True,
             "hash_locked_evidence_required": True,
             "candidate_sha256_must_match": True,
+            "approved_balance_features_must_be_applied": True,
             "scope": (
                 "complete each scenario on the unmodified Standard Hard "
                 "candidate, including its normal victory transition"
@@ -258,6 +390,7 @@ def effective_result(
 def coverage(
     scenarios: list[dict[str, Any]],
     candidate_sha256: str,
+    implementation_complete: bool,
 ) -> dict[str, Any]:
     cleared = []
     in_progress = []
@@ -274,6 +407,7 @@ def coverage(
             "stale": stale,
             "pending": pending,
         }[result].append(number)
+    scenario_clear_complete = len(cleared) == SCENARIO_COUNT
     return {
         "cleared_count": len(cleared),
         "required_count": SCENARIO_COUNT,
@@ -282,22 +416,32 @@ def coverage(
         "blocked_scenarios": blocked,
         "stale_scenarios": stale,
         "pending_scenarios": pending,
-        "complete": len(cleared) == SCENARIO_COUNT,
+        "scenario_clear_complete": scenario_clear_complete,
+        "implementation_complete": implementation_complete,
+        "complete": scenario_clear_complete and implementation_complete,
     }
 
 
 def refresh(manifest: dict[str, Any]) -> dict[str, Any]:
     digest = manifest["hard_release"]["sha256"]
+    implementation_complete = bool(
+        manifest["hard_release"]["implementation_readiness"]["complete"]
+    )
     manifest["scenarios"] = sorted(
         manifest["scenarios"],
         key=lambda row: int(row["number"]),
     )
-    manifest["coverage"] = coverage(manifest["scenarios"], digest)
-    manifest["status"] = (
-        "all_scenarios_player_cleared"
-        if manifest["coverage"]["complete"]
-        else "awaiting_player_clear_verification"
+    manifest["coverage"] = coverage(
+        manifest["scenarios"],
+        digest,
+        implementation_complete,
     )
+    if manifest["coverage"]["complete"]:
+        manifest["status"] = "all_requirements_verified"
+    elif manifest["coverage"]["scenario_clear_complete"]:
+        manifest["status"] = "approved_features_incomplete"
+    else:
+        manifest["status"] = "awaiting_player_clear_verification"
     return manifest
 
 
@@ -346,14 +490,19 @@ def validate_manifest(
                     raise ValueError(f"missing playtest evidence: {path}")
                 if sha256_path(path) != evidence["sha256"]:
                     raise ValueError(f"changed playtest evidence: {path}")
-    expected = coverage(rows, identity["sha256"])
+    expected = coverage(
+        rows,
+        identity["sha256"],
+        bool(identity["implementation_readiness"]["complete"]),
+    )
     if manifest.get("coverage") != expected:
         raise ValueError("hard playtest coverage summary is stale")
-    expected_status = (
-        "all_scenarios_player_cleared"
-        if expected["complete"]
-        else "awaiting_player_clear_verification"
-    )
+    if expected["complete"]:
+        expected_status = "all_requirements_verified"
+    elif expected["scenario_clear_complete"]:
+        expected_status = "approved_features_incomplete"
+    else:
+        expected_status = "awaiting_player_clear_verification"
     if manifest.get("status") != expected_status:
         raise ValueError("hard playtest status is stale")
 
@@ -443,6 +592,7 @@ def _cell(value: object) -> str:
 def render_markdown(manifest: dict[str, Any]) -> str:
     identity = manifest["hard_release"]
     summary = manifest["coverage"]
+    readiness = identity["implementation_readiness"]
     lines = [
         "# 표준 하드 실제 플레이 검수",
         "",
@@ -476,17 +626,46 @@ def render_markdown(manifest: dict[str, Any]) -> str:
             f"{identity['verification_lineage']['current_class_spot_checks_passed']}/6"
         ),
         "",
+        "## 승인 기능 구현",
+        "",
+        (
+            f"- 승인안: `{readiness['approved_proposal']}` "
+            f"(`{readiness['approved_proposal_sha256']}`)"
+        ),
+    ]
+    for feature in readiness["features"]:
+        state = "적용" if feature["applied"] else "보류"
+        detail = ""
+        if "applied_record_count" in feature:
+            detail = (
+                f" ({feature['applied_record_count']}/"
+                f"{feature['required_record_count']}개 레코드)"
+            )
+        elif "applied_slot_count" in feature:
+            detail = f" ({feature['applied_slot_count']}칸)"
+        lines.append(f"- `{feature['id']}`: {state}{detail}")
+    lines.extend([
+        (
+            "- 미적용 승인 기능: "
+            f"{_cell(readiness['pending_features'])}"
+        ),
+        "",
         "## 완료 조건",
         "",
         "- 수정하지 않은 동일 후보 ROM으로 31개 장을 각각 클리어한다.",
         "- 승리 뒤 결과·저장·다음 장 또는 정상 종료까지 확인한다.",
         "- 각 클리어에는 체감 난이도와 화면·저장 증거를 반드시 기록한다.",
+        "- 승인된 밸런스 기능이 모두 ROM에 적용돼 있어야 한다.",
         "- 후보 SHA-256이 바뀌면 이전 결과는 자동으로 완료 수에서 제외한다.",
-        "- 31/31 클리어 전에는 최종 릴리스로 판정하지 않는다.",
+        "- 위 조건이 하나라도 남으면 최종 릴리스로 판정하지 않는다.",
         "",
         "## 진행률",
         "",
         f"- 실제 클리어: {summary['cleared_count']}/{summary['required_count']}",
+        (
+            "- 승인 기능 구현 완료: "
+            f"{'예' if summary['implementation_complete'] else '아니오'}"
+        ),
         f"- 진행 중: {_cell(summary['in_progress_scenarios'])}",
         f"- 진행 불가: {_cell(summary['blocked_scenarios'])}",
         f"- 이전 후보 결과: {_cell(summary['stale_scenarios'])}",
@@ -496,7 +675,7 @@ def render_markdown(manifest: dict[str, Any]) -> str:
         "",
         "| 장 | 상태 | 난이도 | 턴 | 재시도 | 기록자 | 문제 | 메모 |",
         "|---:|---|---|---:|---:|---|---|---|",
-    ]
+    ])
     candidate = identity["sha256"]
     for row in manifest["scenarios"]:
         result = effective_result(row, candidate)

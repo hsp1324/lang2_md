@@ -4,13 +4,12 @@ import unittest
 from unittest import mock
 
 from tools import build_fixed_enemy_summon_probe_rom as probe_builder
-from tools import hard_mode_baseline
 from tools import verify_fixed_enemy_summon_probe_evidence as evidence_verifier
 from tools.scenario_data import FIELD_OFFSETS, scenario_layout
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NORMAL_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+NORMAL_ROM = probe_builder.DEFAULT_SOURCE
 
 
 def md_checksum(data: bytes) -> int:
@@ -114,11 +113,11 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
                 self.assertEqual(current, self.normal)
                 self.assertEqual(
                     hashlib.sha256(current).hexdigest(),
-                    hard_mode_baseline.NORMAL_SHA256,
+                    probe_builder.PROBE_SOURCE_SHA256,
                 )
                 self.assertNotEqual(
                     report["output_sha256"],
-                    hard_mode_baseline.NORMAL_SHA256,
+                    probe_builder.PROBE_SOURCE_SHA256,
                 )
 
     def test_probe_rejects_non_release_source(self):
@@ -136,8 +135,8 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
         damaged[mercenary_offset] ^= 0x01
         damaged_bytes = bytes(damaged)
         with mock.patch.object(
-            hard_mode_baseline,
-            "NORMAL_SHA256",
+            probe_builder,
+            "PROBE_SOURCE_SHA256",
             hashlib.sha256(damaged_bytes).hexdigest(),
         ):
             with self.assertRaisesRegex(ValueError, "mercenary layout"):

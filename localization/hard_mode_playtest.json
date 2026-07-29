@@ -9,6 +9,57 @@
     "header_checksum": "5BE8",
     "sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd",
     "plan_sha256": "ee1e10bb80c6d36513b07826aaf03b6da9c443800b1005bd5ec4e8b8364ec133",
+    "approval_sha256": "fdd7ca553e6580e76e3778820d17ab84a5f4251811167fadf40df98f0b80e1b9",
+    "implementation_readiness": {
+      "approved_proposal": "standard_hard_runestone_v1",
+      "approved_proposal_sha256": "8e6fec9bbf7e975988832676a593960dd140b75a643c24498639ccdac36c0933",
+      "features": [
+        {
+          "id": "scenario_curve_and_commander_stats",
+          "approved_decision": "scenario_band_target_difficulty",
+          "applied": true,
+          "applied_record_count": 300,
+          "required_record_count": 300
+        },
+        {
+          "id": "enemy_soldier_corrections",
+          "approved_decision": "enemy_commander_at_df_formula_and_caps",
+          "applied": true,
+          "applied_record_count": 300,
+          "required_record_count": 300
+        },
+        {
+          "id": "stronger_mercenary_replacements",
+          "approved_decision": "stronger_mercenary_start_and_replacement_ratio",
+          "applied": true,
+          "applied_slot_count": 304
+        },
+        {
+          "id": "late_summon_unit_replacements",
+          "approved_decision": "late_summon_unit_start_and_ratio",
+          "applied": false,
+          "applied_slot_count": 0,
+          "approved_scenarios": [
+            26,
+            27
+          ],
+          "deferred_runtime_guards": [
+            "fixed_enemy_ordinary_attack",
+            "fixed_enemy_natural_magic_ownership"
+          ]
+        },
+        {
+          "id": "scenario_exceptions",
+          "approved_decision": "boss_reinforcement_branch_ending_exceptions",
+          "applied": true,
+          "manifest": "localization/hard_mode_runtime_exceptions.json"
+        }
+      ],
+      "pending_features": [
+        "late_summon_unit_replacements"
+      ],
+      "complete": false
+    },
     "runtime_manifest_sha256": "c8c532c4b1d4337c98514baeb6df0464ca609aeef0e877468d05d0ddb87abae5",
     "first_turn_manifest_sha256": "bc564607f4eb726d2584bc62e4de161cfc51cfb47dd33f06b3e9b81bd361e9d2",
     "runtime_verified_scenarios": [
@@ -328,6 +379,8 @@
       30,
       31
     ],
+    "scenario_clear_complete": false,
+    "implementation_complete": false,
     "complete": false
   }
 }

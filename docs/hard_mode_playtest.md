@@ -15,17 +15,29 @@
 - 최신 UI/스프라이트 전이: `verified_ui_sprite_only_delta`
 - 승격 클래스 실기 표본(직전 후보): 6/6
 
+## 승인 기능 구현
+
+- 승인안: `standard_hard_runestone_v1` (`8e6fec9bbf7e975988832676a593960dd140b75a643c24498639ccdac36c0933`)
+- `scenario_curve_and_commander_stats`: 적용 (300/300개 레코드)
+- `enemy_soldier_corrections`: 적용 (300/300개 레코드)
+- `stronger_mercenary_replacements`: 적용 (304칸)
+- `late_summon_unit_replacements`: 보류 (0칸)
+- `scenario_exceptions`: 적용
+- 미적용 승인 기능: ['late_summon_unit_replacements']
+
 ## 완료 조건
 
 - 수정하지 않은 동일 후보 ROM으로 31개 장을 각각 클리어한다.
 - 승리 뒤 결과·저장·다음 장 또는 정상 종료까지 확인한다.
 - 각 클리어에는 체감 난이도와 화면·저장 증거를 반드시 기록한다.
+- 승인된 밸런스 기능이 모두 ROM에 적용돼 있어야 한다.
 - 후보 SHA-256이 바뀌면 이전 결과는 자동으로 완료 수에서 제외한다.
-- 31/31 클리어 전에는 최종 릴리스로 판정하지 않는다.
+- 위 조건이 하나라도 남으면 최종 릴리스로 판정하지 않는다.
 
 ## 진행률
 
 - 실제 클리어: 0/31
+- 승인 기능 구현 완료: 아니오
 - 진행 중: []
 - 진행 불가: []
 - 이전 후보 결과: []
