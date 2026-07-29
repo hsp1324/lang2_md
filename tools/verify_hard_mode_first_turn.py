@@ -14,6 +14,8 @@ import subprocess
 import sys
 import time
 
+from PIL import Image
+
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -54,6 +56,8 @@ EMULATOR_SPEED_PERCENT = {
     6: 50,
     7: 75,
 }
+DETECTOR_RETRY_ATTEMPTS = 12
+DETECTOR_RETRY_DELAY = 0.5
 
 
 def sha256(path: Path) -> str:
@@ -120,6 +124,10 @@ def entry_evidence(
                 "path": ROOT / row["gst"],
                 "sha256": row["gst_sha256"],
                 "hash_locked": "runtime_gst" in row,
+                "manifest_path": loader_results_path.resolve(),
+                "manifest_rom_sha256": loader.get(
+                    "hard_rom", {}
+                ).get("sha256"),
             }
     deep = load_json(deep_results_path)
     for row in deep.get("scenarios", []):
@@ -132,6 +140,10 @@ def entry_evidence(
                 "path": ROOT / row["gst"],
                 "sha256": row["gst_sha256"],
                 "hash_locked": True,
+                "manifest_path": deep_results_path.resolve(),
+                "manifest_rom_sha256": deep.get(
+                    "hard_rom", {}
+                ).get("sha256"),
             }
     raise ValueError(
         f"Scenario {scenario_number} has no verified hard-mode entry GST"
@@ -164,6 +176,27 @@ def validate_entry_evidence(
             scenario_number,
         )
     return path, actual, player_group_count
+
+
+def validate_entry_rom_lineage(
+    evidence: dict,
+    rom_digest: str,
+    *,
+    required: bool,
+) -> None:
+    if not required:
+        return
+    manifest_digest = evidence.get("manifest_rom_sha256")
+    if manifest_digest is None:
+        raise ValueError(
+            f"entry manifest {evidence['manifest_path']} has no "
+            "hard-ROM SHA-256"
+        )
+    if manifest_digest != rom_digest:
+        raise ValueError(
+            f"entry manifest ROM hash {manifest_digest} does not match "
+            f"selected ROM {rom_digest}"
+        )
 
 
 def runtime_quicksave(runtime_name: str, rom: Path) -> Path:
@@ -301,15 +334,36 @@ def run_detector(
     ]
     if capture_prefix is not None:
         command.extend(["--capture-prefix", str(capture_prefix)])
-    for attempt in range(4):
+    for attempt in range(DETECTOR_RETRY_ATTEMPTS):
         completed = run_command(command, allowed={0, 1, 2, 3})
         if completed.returncode != 1:
             break
-        if (
+        dialogue_advanced = (
             "dialogue disappeared before its text stabilized"
-            not in completed.stdout
-            or attempt == 3
+            in completed.stdout
+        )
+        window_recreated = (
+            "could not find BlastEm window" in completed.stdout
+            or (
+                "capture_blastem_window.py" in completed.stdout
+                and "CalledProcessError" in completed.stdout
+            )
+        )
+        if window_recreated and sequence_runner.running_blastem_pids(
+            display=display
         ):
+            if attempt + 1 == DETECTOR_RETRY_ATTEMPTS:
+                raise RuntimeError(
+                    "BlastEm window did not stabilize after state load"
+                )
+            print(
+                "BlastEm window is being recreated after state load; "
+                "resuming detection",
+                flush=True,
+            )
+            time.sleep(DETECTOR_RETRY_DELAY)
+            continue
+        if not dialogue_advanced or attempt + 1 == DETECTOR_RETRY_ATTEMPTS:
             raise RuntimeError(
                 "screen detector failed while the emulator was running"
             )
@@ -345,6 +399,176 @@ def capture(path: Path, *, env: dict[str, str]) -> None:
             "--xlib-only",
         ],
         env=env,
+    )
+
+
+def start_menu_visible(path: Path) -> bool:
+    frame = Image.open(path).convert("RGB")
+    scale_x = frame.width / 320
+    scale_y = frame.height / 240
+
+    def crop(box: tuple[int, int, int, int]) -> Image.Image:
+        left, top, right, bottom = box
+        return frame.crop(
+            (
+                round(left * scale_x),
+                round(top * scale_y),
+                round(right * scale_x),
+                round(bottom * scale_y),
+            )
+        )
+
+    def dark_blue_ratio(image: Image.Image) -> float:
+        return sum(
+            1
+            for red, green, blue in image.get_flattened_data()
+            if 35 <= blue <= 180
+            and red < 45
+            and green < 65
+            and blue > red * 2
+            and blue > green * 1.8
+        ) / (image.width * image.height)
+
+    menu = crop((40, 30, 105, 165))
+    map_side = crop((110, 30, 280, 155))
+    # The five-row Start menu fills the narrow left panel while leaving the
+    # map visible to its right. A unit command panel shares the left origin
+    # but also opens the large commander/status panel on the right.
+    return (
+        dark_blue_ratio(menu) > 0.67
+        and dark_blue_ratio(map_side) < 0.35
+        and sequence_runner.battle_map_surface_visible(path)
+    )
+
+
+def wait_for_surface(
+    *,
+    env: dict[str, str],
+    predicate,
+    label: str,
+    max_checks: int = 20,
+    delay: float = 0.15,
+) -> int:
+    probe = Path("/tmp") / f"lang2_first_turn_surface_{os.getpid()}.png"
+    try:
+        for step in range(max_checks + 1):
+            capture(probe, env=env)
+            if predicate(probe):
+                return step
+            if step < max_checks:
+                time.sleep(delay)
+    finally:
+        probe.unlink(missing_ok=True)
+    raise RuntimeError(f"{label} was not detected within {max_checks} checks")
+
+
+def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
+    run_command(
+        [
+            sys.executable,
+            str(KEY_SENDER),
+            "--send-event",
+            "b:0.8",
+        ],
+        env=env,
+    )
+    map_checks = wait_for_surface(
+        env=env,
+        predicate=lambda path: (
+            sequence_runner.battle_map_surface_visible(path)
+            and not sequence_runner.battle_command_menu_visible(path)
+        ),
+        label="battle map after closing the unit menu",
+    )
+    run_command(
+        [
+            sys.executable,
+            str(KEY_SENDER),
+            "--send-event",
+            "start:1.0",
+        ],
+        env=env,
+    )
+    start_menu_checks = wait_for_surface(
+        env=env,
+        predicate=start_menu_visible,
+        label="Start menu",
+    )
+    run_command(
+        [
+            sys.executable,
+            str(KEY_SENDER),
+            "--send-event",
+            "down:0.5",
+            "down:0.5",
+            "down:0.5",
+            "down:0.8",
+        ],
+        env=env,
+    )
+    turn_end_checks = wait_for_surface(
+        env=env,
+        predicate=start_menu_visible,
+        label="Start menu after selecting turn end",
+    )
+    run_command(
+        [
+            sys.executable,
+            str(KEY_SENDER),
+            "--send-event",
+            # Start detection promptly. A hard-mode defeat can show and leave
+            # GAME OVER during a long fixed wait.
+            "c:0.6",
+        ],
+        env=env,
+    )
+    return {
+        "map_checks": map_checks,
+        "start_menu_checks": start_menu_checks,
+        "turn_end_checks": turn_end_checks,
+    }
+
+
+def wait_for_title_screen(
+    *,
+    display: str,
+    env: dict[str, str],
+    max_checks: int,
+    delay: float,
+) -> int:
+    probe = Path("/tmp") / f"lang2_first_turn_title_{os.getpid()}.png"
+    try:
+        for step in range(max_checks + 1):
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(CAPTURE),
+                    str(probe),
+                    "--xlib-only",
+                ],
+                cwd=ROOT,
+                env=env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                check=False,
+            )
+            if completed.returncode:
+                if sequence_runner.running_blastem_pids(display=display):
+                    time.sleep(DETECTOR_RETRY_DELAY)
+                    continue
+                raise RuntimeError(
+                    "BlastEm exited while waiting for its title screen\n"
+                    f"{completed.stdout}"
+                )
+            if sequence_runner.title_screen_visible(probe):
+                return step
+            if step < max_checks:
+                time.sleep(delay)
+    finally:
+        probe.unlink(missing_ok=True)
+    raise RuntimeError(
+        f"title screen was not detected within {max_checks} checks"
     )
 
 
@@ -440,7 +664,11 @@ def save_result(path: Path, results: dict, result: dict) -> None:
     temporary.replace(path)
 
 
-def render_document(results: dict) -> str:
+def render_document(
+    results: dict,
+    *,
+    source: Path = DEFAULT_RESULTS,
+) -> str:
     coverage = results.get("coverage", {})
     verified = coverage.get("verified_scenarios", [])
     missing = coverage.get("missing_scenarios", list(range(1, 32)))
@@ -449,7 +677,7 @@ def render_document(results: dict) -> str:
         "",
         "This document records no-action first-turn playback on the separate "
         "Standard Hard ROM. It is generated from "
-        "`localization/hard_mode_first_turn_smoke.json`.",
+        f"`{relative(source)}`.",
         "",
         "## Method",
         "",
@@ -459,9 +687,10 @@ def render_document(results: dict) -> str:
         "Continue the live process when a scenario entry is not safely "
         "resumable after a BlastEm relaunch; otherwise copy the source into "
         "an isolated `hard-first-turn-sXX` runtime.",
-        "- Advance completed dialogue one page at a time, choose the stock "
-        "`턴 종료` command, and wait through event, AI, movement, and battle "
-        "animation frames.",
+        "- Advance completed dialogue one page at a time. Confirm the battle "
+        "map after closing the unit panel, confirm the Start menu after "
+        "opening it, choose the stock `턴 종료` command, and wait through "
+        "event, AI, movement, and battle animation frames.",
         "- Accept only a real Turn 2 command menu or the scenario's normal "
         "defeat path. A title return is accepted only when the immutable "
         "normal ROM reproduces the same route and the scenario is listed in "
@@ -516,10 +745,18 @@ def render_document(results: dict) -> str:
     return "\n".join(lines)
 
 
-def save_document(path: Path, results: dict) -> None:
+def save_document(
+    path: Path,
+    results: dict,
+    *,
+    source: Path = DEFAULT_RESULTS,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(render_document(results), encoding="utf-8")
+    temporary.write_text(
+        render_document(results, source=source),
+        encoding="utf-8",
+    )
     temporary.replace(path)
 
 
@@ -527,6 +764,9 @@ def verify_scenario(
     scenario_number: int,
     *,
     rom: Path,
+    loader_results_path: Path,
+    deep_results_path: Path,
+    require_entry_rom_match: bool,
     display: str,
     opening_checks: int,
     phase_checks: int,
@@ -537,7 +777,23 @@ def verify_scenario(
     emulator_speed: int,
     resume_running: bool,
 ) -> dict:
-    evidence = entry_evidence(scenario_number)
+    evidence = entry_evidence(
+        scenario_number,
+        loader_results_path=loader_results_path,
+        deep_results_path=deep_results_path,
+    )
+    rom_digest = sha256(rom)
+    validate_entry_rom_lineage(
+        evidence,
+        rom_digest,
+        required=require_entry_rom_match,
+    )
+    if not resume_running:
+        existing_pids = sequence_runner.running_blastem_pids(
+            display=display
+        )
+        if existing_pids:
+            sequence_runner.terminate_blastem_processes(display=display)
     if resume_running:
         (
             runtime_name,
@@ -582,11 +838,24 @@ def verify_scenario(
                 "--initial-delay",
                 str(initial_delay),
             ])
+            checks = wait_for_title_screen(
+                display=display,
+                env=env,
+                max_checks=opening_checks,
+                delay=delay,
+            )
+            print(
+                "title screen ready for entry-state load after "
+                f"{checks} checks",
+                flush=True,
+            )
             run_command(
                 [
                     sys.executable,
                     str(KEY_SENDER),
                     "--send-event",
+                    "--ready-delay",
+                    "1.0",
                     "load:2.0",
                 ],
                 env=env,
@@ -612,23 +881,7 @@ def verify_scenario(
             / f"hard_first_turn_s{scenario_number:02d}_command.png"
         )
         capture(opening_capture, env=env)
-        run_command(
-            [
-                sys.executable,
-                str(KEY_SENDER),
-                "--send-event",
-                "b:0.8",
-                "start:1.0",
-                "down:0.5",
-                "down:0.5",
-                "down:0.5",
-                "down:0.8",
-                # Start detection promptly. A hard-mode defeat can show and
-                # leave GAME OVER during the former three-second wait.
-                "c:0.6",
-            ],
-            env=env,
-        )
+        turn_end_selection = select_turn_end(env=env)
         if emulator_speed != 0:
             run_command(
                 [
@@ -680,6 +933,7 @@ def verify_scenario(
             "turn_counter": counter,
             "opening_confirmations": opening_confirmations,
             "phase_dialogue_confirmations": phase_confirmations,
+            "turn_end_selection": turn_end_selection,
             "elapsed_seconds": round(time.monotonic() - started, 1),
             "emulator_speed_percent": EMULATOR_SPEED_PERCENT[
                 emulator_speed
@@ -691,6 +945,10 @@ def verify_scenario(
             ),
             "entry_evidence": {
                 "kind": evidence["kind"],
+                "manifest": relative(Path(evidence["manifest_path"])),
+                "manifest_rom_sha256": evidence.get(
+                    "manifest_rom_sha256"
+                ),
                 "gst": relative(Path(evidence["path"])),
                 "gst_sha256": entry_digest,
                 "manifest_gst_sha256": evidence["sha256"],
@@ -717,6 +975,34 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scenario", type=int, required=True)
     parser.add_argument("--rom", type=Path, default=DEFAULT_ROM)
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
+    parser.add_argument(
+        "--documentation",
+        type=Path,
+        help=(
+            "write the rendered verification document here; the legacy "
+            "default results file still updates its default document"
+        ),
+    )
+    parser.add_argument(
+        "--loader-results",
+        type=Path,
+        default=LOADER_SMOKE_RESULTS,
+        help="loader manifest used to select the Turn 1 entry GST",
+    )
+    parser.add_argument(
+        "--deep-results",
+        type=Path,
+        default=DEEP_RESULTS,
+        help="fallback deep-runtime manifest for missing loader rows",
+    )
+    parser.add_argument(
+        "--require-entry-rom-match",
+        action="store_true",
+        help=(
+            "reject entry evidence unless its manifest names the selected "
+            "ROM SHA-256"
+        ),
+    )
     parser.add_argument("--virtual-display", default=":114")
     parser.add_argument("--opening-checks", type=int, default=240)
     parser.add_argument("--phase-checks", type=int, default=700)
@@ -758,6 +1044,9 @@ def main() -> int:
     result = verify_scenario(
         args.scenario,
         rom=rom,
+        loader_results_path=args.loader_results.resolve(),
+        deep_results_path=args.deep_results.resolve(),
+        require_entry_rom_match=args.require_entry_rom_match,
         display=args.virtual_display,
         opening_checks=args.opening_checks,
         phase_checks=args.phase_checks,
@@ -769,8 +1058,18 @@ def main() -> int:
         resume_running=args.resume_running,
     )
     save_result(results_path, results, result)
-    if results_path == DEFAULT_RESULTS.resolve():
-        save_document(DEFAULT_DOCUMENTATION, results)
+    if args.documentation is not None:
+        save_document(
+            args.documentation.resolve(),
+            results,
+            source=results_path,
+        )
+    elif results_path == DEFAULT_RESULTS.resolve():
+        save_document(
+            DEFAULT_DOCUMENTATION,
+            results,
+            source=results_path,
+        )
     print(
         f"Scenario {args.scenario}: {result['endpoint']} after "
         f"{result['phase_dialogue_confirmations']} phase confirmations",

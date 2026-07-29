@@ -62,10 +62,87 @@ class HardModeFirstTurnTests(unittest.TestCase):
             self.assertEqual(first_turn.sha256(path), digest)
             self.assertEqual(player_group_count, 10)
 
+    def test_custom_loader_manifest_retains_rom_lineage(self):
+        source = first_turn.entry_evidence(3)
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = Path(directory) / "loader.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "hard_rom": {"sha256": "candidate-sha256"},
+                        "scenarios": [
+                            {
+                                "number": 3,
+                                "gst": str(
+                                    Path(source["path"]).relative_to(
+                                        first_turn.ROOT
+                                    )
+                                ),
+                                "gst_sha256": source["sha256"],
+                                "runtime_gst": "runtime/quicksave.gst",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            evidence = first_turn.entry_evidence(
+                3,
+                loader_results_path=manifest,
+            )
+            self.assertEqual(
+                evidence["manifest_path"],
+                manifest.resolve(),
+            )
+            self.assertEqual(
+                evidence["manifest_rom_sha256"],
+                "candidate-sha256",
+            )
+            self.assertTrue(evidence["hash_locked"])
+
+            first_turn.validate_entry_rom_lineage(
+                evidence,
+                "candidate-sha256",
+                required=True,
+            )
+            with self.assertRaisesRegex(
+                ValueError,
+                "does not match selected ROM",
+            ):
+                first_turn.validate_entry_rom_lineage(
+                    evidence,
+                    "different-sha256",
+                    required=True,
+                )
+
+            no_rom_hash = dict(evidence)
+            no_rom_hash["manifest_rom_sha256"] = None
+            with self.assertRaisesRegex(
+                ValueError,
+                "has no hard-ROM SHA-256",
+            ):
+                first_turn.validate_entry_rom_lineage(
+                    no_rom_hash,
+                    "candidate-sha256",
+                    required=True,
+                )
+
     def test_turn_counter_reads_work_ram_byte(self):
         data = bytearray(first_turn.TURN_COUNTER_FILE_OFFSET + 1)
         data[first_turn.TURN_COUNTER_FILE_OFFSET] = 2
         self.assertEqual(first_turn.turn_counter(bytes(data)), 2)
+
+    def test_start_menu_detector_separates_unit_command_panel(self):
+        start_menu = (
+            first_turn.ROOT
+            / "captures/run/1ab2_s22_current_start_menu_turn2.png"
+        )
+        command_menu = (
+            first_turn.ROOT
+            / "captures/run/1ab2_s22_current_jessica_command.png"
+        )
+        self.assertTrue(first_turn.start_menu_visible(start_menu))
+        self.assertFalse(first_turn.start_menu_visible(command_menu))
 
     def test_retain_endpoint_gst_replaces_snapshot_atomically(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -181,6 +258,20 @@ class HardModeFirstTurnTests(unittest.TestCase):
             document,
         )
         self.assertIn("Missing scenarios: 1, 2", document)
+
+    def test_document_names_custom_results_manifest(self):
+        source = (
+            first_turn.ROOT
+            / "localization/hard_mode_current_candidate_first_turn.json"
+        )
+        document = first_turn.render_document(
+            {"coverage": {}},
+            source=source,
+        )
+        self.assertIn(
+            "`localization/hard_mode_current_candidate_first_turn.json`",
+            document,
+        )
 
 
 if __name__ == "__main__":
