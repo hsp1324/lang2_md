@@ -15,9 +15,9 @@ BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Newl
 ## Coverage
 
 - Status: `in_progress`
-- Verified: 15/31
-- Verified scenarios: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
-- Missing scenarios: 1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+- Verified: 17/31
+- Verified scenarios: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+- Missing scenarios: 1, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
 
 ## Results
 
@@ -38,5 +38,7 @@ BlastEm rewrites its mutable runtime `quicksave.gst` when a process closes. Newl
 | 14 | `turn_2_command` | 22 | 7 | 100% | 203.1s |
 | 15 | `turn_2_command` | 5 | 4 | 100% | 121.6s |
 | 16 | `turn_2_command` | 5 | 2 | 100% | 115.1s |
+| 17 | `turn_2_command` | 13 | 6 | 100% | 199.4s |
+| 18 | `turn_2_command` | 13 | 2 | 100% | 186.8s |
 
 `turn_2_command` proves that the stock first-turn event and faction phases returned to a playable command state. `game_over_turn_1` is accepted only where the no-action route naturally defeats the party. `defeat_return_title_turn_1` requires a matching immutable-normal-ROM defeat trace. Neither defeat endpoint claims a successful scenario clear.
