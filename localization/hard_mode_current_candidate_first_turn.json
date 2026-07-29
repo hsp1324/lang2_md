@@ -129,6 +129,73 @@
       "endpoint_capture_sha256": "03369bc9300b8d6b6585c0dad16df9d4a47cf30854989b247fcafdd3d1bb155d",
       "endpoint_gst": "captures/analysis/hard_first_turn_s05_endpoint.gst",
       "endpoint_gst_sha256": "35bd2b4dff9ae50335695d1bda84632e4df3894bed0a7372e7ad53a103ecb478"
+    },
+    {
+      "number": 6,
+      "status": "first_turn_runtime_verified",
+      "endpoint": "defeat_return_title_turn_1",
+      "turn_counter": 1,
+      "opening_confirmations": 11,
+      "phase_dialogue_confirmations": 10,
+      "turn_end_selection": {
+        "map_checks": 0,
+        "start_menu_checks": 0,
+        "turn_end_checks": 0
+      },
+      "elapsed_seconds": 184.3,
+      "emulator_speed_percent": 100,
+      "expected_endpoint_evidence": {
+        "number": 6,
+        "endpoint": "defeat_return_title_turn_1",
+        "reason": "무행동 시 헤인이 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
+        "normal_rom": {
+          "path": "roms/releases/Langrisser II (Korean ko-99fd).md",
+          "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+        },
+        "normal_evidence": [
+          {
+            "path": "captures/analysis/normal_ko99fd_s06_first_turn_defeat_battle.png",
+            "sha256": "d18cc0d93f60e1482c6da5054c3b1dfb2739ef7564fedbcdcf9546f558c4979d"
+          },
+          {
+            "path": "captures/analysis/normal_ko99fd_s06_first_turn_defeat_map.png",
+            "sha256": "67800f946dcdae90989c8b0318b5d06a414b3e9c8ccaf68851c91ecaca38a2ce"
+          },
+          {
+            "path": "captures/analysis/normal_ko99fd_s06_first_turn_defeat_title.png",
+            "sha256": "4f7985b3f7e79eaed2f6deb8f4162003718b88e32fc7bee8468d03e731feae61"
+          }
+        ],
+        "hard_evidence": [
+          {
+            "path": "captures/analysis/hard_s06_first_turn_defeat_battle.png",
+            "sha256": "1843c62d27cd2307e54a8b2b615d8995bc6e555e9bbfe5b1f526d27d2830d3ad"
+          },
+          {
+            "path": "captures/analysis/hard_s06_first_turn_defeat_map.png",
+            "sha256": "a927d8ad4532ca87bdbf6b7ea0d988370c6a932e31a3cc826ff8b7cb86d55e1d"
+          },
+          {
+            "path": "captures/analysis/hard_s06_first_turn_defeat_title.png",
+            "sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b"
+          }
+        ]
+      },
+      "entry_evidence": {
+        "kind": "loader_smoke",
+        "manifest": "localization/hard_mode_current_candidate_runtime.json",
+        "manifest_rom_sha256": "142580f8ff9021f011ae5da186c7685f9ed7f7bd01d1ebdb9959148f9691cd27",
+        "gst": "captures/analysis/hard_8674_s06_entry_turn1_entry.gst",
+        "gst_sha256": "2ab66de2b9b9787e0cf4388736c6eb69fbb5dc291bc935dd24acf1396010fe2b",
+        "manifest_gst_sha256": "2ab66de2b9b9787e0cf4388736c6eb69fbb5dc291bc935dd24acf1396010fe2b",
+        "player_group_count": 5
+      },
+      "opening_capture": "captures/run/hard_first_turn_s06_command.png",
+      "opening_capture_sha256": "1b098dfbe965ac038bc4d577eb72ec7261138eb2f1364ce2c513dc283f90c02b",
+      "endpoint_capture": "captures/run/hard_first_turn_s06_endpoint.png",
+      "endpoint_capture_sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b",
+      "endpoint_gst": "captures/analysis/hard_first_turn_s06_endpoint.gst",
+      "endpoint_gst_sha256": "952debe2c57492912fa789fa5e3e87968007c020803196b8f783ab61dba53fca"
     }
   ],
   "coverage": {
@@ -137,11 +204,11 @@
       2,
       3,
       4,
-      5
+      5,
+      6
     ],
     "missing_scenarios": [
       1,
-      6,
       7,
       8,
       9,
