@@ -21,14 +21,14 @@ VRAM `0xF400..0xF7FF`. Every former dynamic tile `0x07A1..0x07BC` resolves
 inside that exact byte range. Five populated ranges contain 192 nonzero bytes
 of Hangul patterns. The old cache was not an unused pattern bank.
 
-The builder probe replaces all 24 cache cells with noncontiguous ordinary
+The builder probe replaces all 25 cache cells with noncontiguous ordinary
 pattern tiles:
 
 `0359 035B 0360 0361 036C 036D 0370 0371`
 
 `037D 037F 03B0 03BD 03C0 03C1 03C4 03C9`
 
-`03CA 03D0 03D1 03D4 03D5 03D7 03D8 03DA`
+`03CA 03D0 03D1 03D4 03D5 03D7 03D8 03DA 03DF`
 
 Their byte addresses are below `0xC000`. A read-only ownership scan of the 384
 pre-replacement GST files found no Plane A, Plane B, Window, SAT, or VDP-table
@@ -41,12 +41,17 @@ full-screen H-scroll initializer at `0x0090A6` again keeps its original
 historical collision, ownership scan, and runtime comparison. Its checked
 report is `localization/preparation_vram_ownership.json`.
 
-Non-release probes only:
+The first full normal Scenario 1 run against the 24-cell probe found one real
+missed glyph: `로얄호스` used static `얄` tile `0x03AC`, and only that 8x8
+pattern changed after the shop. `얄` is now preparation slot 24 at audited
+ordinary pattern tile `0x03DF`. The original 3203/7B41 probes are superseded.
 
-- normal checksum `3203`, SHA-256
-  `01cb379c494bf1bcf3324ddd5b11505d7e3648c2817a6a3802bf113802b223cd`;
-- hard checksum `7B41`, SHA-256
-  `059900b4b95a023bb95d4cd75197a0aabd7f7244cb4db2fc782fda3557a4cdf7`.
+Current non-release probes only:
+
+- normal checksum `B0DF`, SHA-256
+  `f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a`;
+- hard checksum `FA1D`, SHA-256
+  `1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32`.
 
 Scenario 9 completed a real preparation -> arrangement/enemy detail -> shop
 item list -> preparation -> arrangement/enemy detail round trip in each probe.
@@ -61,6 +66,26 @@ This is targeted replacement-pool acceptance only. It is not a Scenario 6 or
 class, hiring page, gray acted sprite, and result screen has not yet been
 enumerated. Scenarios 1 through 27 in both profiles remain mandatory.
 
+Scenario 1 now has a reviewed preparation-only partial pass in both current
+probes. Normal run `normal/s01/yal02` and hard run `hard/s01/yal01` under
+`captures/run/preparation_surface_matrix` each produce 14/14 byte-identical
+full-screen pairs across every allied status/hiring page, the arrangement
+roster/minimap, all six visible fixed records, and a real shop item-list round
+trip. Commander, class, mercenary, sprite, minimap, border, and numeric fields
+were visually reviewed.
+
+Both runs automatically save pre/post `로얄호스` GST checkpoints. In all four
+states, tile `0x03DF` exactly matches the candidate-ROM `얄` bitmap, Plane A
+cell `(7,8)` contains tile word `0x83DF`, and H-scroll
+`0xF400..0xF7FF` contains zero nonzero bytes. The checked report is
+`localization/preparation_surface_matrix.json`; it is reproduced by
+`tools/verify_preparation_surface_evidence.py`.
+
+Scenario 1 is not fully accepted yet. The preserved seed exposes status and
+hiring but no live class-change choice, and a separate battle run is still
+required for gray acted sprites and the result screen. The machine-readable
+matrix therefore keeps zero fully accepted scenarios.
+
 Failed attempts retained for future work:
 
 - the hard-mode builder rejected an output directly under `/tmp`, then rejected
@@ -70,10 +95,17 @@ Failed attempts retained for future work:
 - a debugger breakpoint at `0x2B7300` did stop immediately before the first
   dynamic write, but the direct debugger used the default native state format
   and produced `quicksave.state`, not the required GST. It is not acceptance
-  evidence. The retained pre/post GSTs bracket the complete shop transition,
-  while an exact first-draw before/after GST pair remains pending.
+  evidence;
+- normal Scenario 1 attempts `canonical01..canonical10` were rejected for
+  incomplete pairs, focus/arrangement navigation failures, one accidental
+  Soldier hire, repeated fixed records, or mismatched screens. `canonical10`
+  is the useful failure that exposed the missing `얄` ownership;
+- a later attempt to load `pre_shop.gst` and manually recreate the Leon
+  checkpoint unexpectedly deployed. It produced no accepted pre-checkpoint.
+  The clean normal `yal02` and hard `yal01` runs replace that attempt by
+  saving both checkpoints inline without loading state.
 
-Validation for this stable unit:
+Validation for the original 24-cell stable unit:
 
 - the focused preparation/ownership/inventory suite passes 46/46, including
   the Scenario 6 evidence hash lock;
@@ -87,6 +119,15 @@ Validation for this stable unit:
   generated runtime documentation. They are not promoted to passes here.
 
 No release ROM or version was changed to silence those remaining gates.
+
+Validation for the 25-cell Scenario 1 evidence unit currently passes 59/59
+focused tests covering the builder allocation, byte inventory, ownership
+report, matrix plan/navigation, candidate hashes, exact screenshot pairs,
+human-review state, and all four GST checkpoint proofs. Full discovery runs
+1,453 tests and remains at the same 44 failures plus 3 errors as the preceding
+stable unit. No new checksum cascade was introduced; the remaining failures
+are the existing experimental-sprite, hard-runtime/plan/generated-document,
+release-promotion, and inventory gates.
 
 The preparation, hiring, shop, commander-status, and result paths do not keep
 the same static 8x8 font tiles alive as the map-bottom status renderer. Their

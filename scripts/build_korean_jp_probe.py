@@ -465,7 +465,7 @@ BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
 # visible together and passed the same retained-state ownership scan.
 BYTE_UI_PREP_EXTRA_TILE_IDS = (
     0x03CA, 0x03D0, 0x03D1,
-    0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA,
+    0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF,
 )
 BYTE_UI_DYNAMIC_TILE_IDS = (
     BYTE_UI_DYNAMIC_MAP_TILE_IDS + BYTE_UI_PREP_EXTRA_TILE_IDS
@@ -486,7 +486,7 @@ BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
 BYTE_UI_PREP_DYNAMIC_CHARS = (
     "라", "론", "쉐", "카", "코", "키", "록", "적",
     "가", "스", "럴", "슬", "임", "비", "크", "제",
-    "샤", "먼", "안", "께", "울", "끼", "의", "글",
+    "샤", "먼", "안", "께", "울", "끼", "의", "글", "얄",
 )
 BYTE_UI_RESULT_DYNAMIC_CODE = 0xA6
 BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR = {

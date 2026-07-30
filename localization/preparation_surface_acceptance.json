@@ -89,28 +89,69 @@
     }
   ],
   "current_replacement_probe": {
-    "status": "partial_not_scenario_acceptance",
+    "status": "scenario_1_preparation_partial_pass_battle_pending",
     "ownership_report": "localization/preparation_vram_ownership.json",
+    "scenario_matrix_report": "localization/preparation_surface_matrix.json",
     "normal_probe": {
-      "md_checksum": "3203",
-      "sha256": "01cb379c494bf1bcf3324ddd5b11505d7e3648c2817a6a3802bf113802b223cd"
+      "md_checksum": "B0DF",
+      "sha256": "f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a"
     },
     "hard_probe": {
-      "md_checksum": "7B41",
-      "sha256": "059900b4b95a023bb95d4cd75197a0aabd7f7244cb4db2fc782fda3557a4cdf7"
+      "md_checksum": "FA1D",
+      "sha256": "1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32"
     },
     "verified_targeted_checks": [
       "Scenario 9 normal preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before/after a real shop item-list round trip.",
       "Scenario 9 hard preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before/after the same route.",
       "Hard Scenario 9 pre/post and normal Scenario 9 post GST states keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
-      "Hard Scenario 6 completed the targeted preparation/shop/arrangement/enemy-detail regression."
+      "Hard Scenario 6 completed the targeted preparation/shop/arrangement/enemy-detail regression.",
+      "Scenario 1 normal and hard each pass 14/14 exact preparation, hiring, arrangement, fixed-record, and real shop item-list before/after pairs.",
+      "Scenario 1 normal and hard pre/post 로얄호스 checkpoints render 얄 from ordinary pattern tile 0x03DF, reference it from Plane A, and keep H-scroll VRAM 0xF400..0xF7FF entirely zero."
     ],
     "not_yet_covered": [
-      "all commander and class pages",
-      "all hiring pages and offered mercenary rows",
-      "class-change and commander-status pages",
-      "gray acted sprites and result screens",
-      "the complete Scenario 1 through 27 normal/hard matrix"
+      "Scenario 1 gray acted sprites and battle-result surfaces in normal and hard",
+      "live class-change choices where a scenario/seed exposes them",
+      "the complete Scenario 2 through 27 normal/hard matrix"
     ]
+  },
+  "scenario_progress": [
+    {
+      "scenario": 1,
+      "profile": "normal_korean",
+      "status": "preparation_partial_pass_battle_pending",
+      "report": "localization/preparation_surface_matrix.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
+        "complete_screen_integrity": "preparation_pass_gray_acted_and_result_pending"
+      },
+      "not_applicable_reason": "The preserved Scenario 1 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    },
+    {
+      "scenario": 1,
+      "profile": "hard_korean",
+      "status": "preparation_partial_pass_battle_pending",
+      "report": "localization/preparation_surface_matrix.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
+        "complete_screen_integrity": "preparation_pass_gray_acted_and_result_pending"
+      },
+      "not_applicable_reason": "The preserved Scenario 1 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    }
+  ],
+  "matrix_summary": {
+    "required_profile_scenario_runs": 54,
+    "preparation_surface_runs_reviewed": 2,
+    "fully_accepted_scenarios": 0,
+    "release_gate_status": "pending"
   }
 }

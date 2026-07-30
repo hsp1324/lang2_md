@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "status": "scenario_1_preparation_partial_pass_battle_pending",
+  "review": {
+    "path": "localization/preparation_surface_review.json",
+    "sha256": "a4674fe67ce67afb5c9216c2187d8270d181ee3da69db9782217c3f61b3dc4bc",
+    "reviewed_on": "2026-07-31",
+    "scope": "Scenario 1 preparation, hiring, arrangement, fixed-record, and real shop item-list surfaces only",
+    "class_change": {
+      "status": "not_applicable_in_this_seed",
+      "reason": "The preserved manual-slot seed exposes commander status and hiring pages but no live class-change choice in Scenario 1."
+    },
+    "acceptance_effect": "This review records check-level preparation progress only. Scenario 1 remains pending in both profiles until gray acted sprites and battle-result surfaces pass."
+  },
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s01/yal02",
+      "status": "preparation_surface_pass_battle_pending",
+      "plan": {
+        "path": "captures/run/preparation_surface_matrix/normal/s01/yal02/plan.json",
+        "sha256": "a5c00a0e9fa954f397c90804b84c5b9d440c206dfe66a5d878bc65d3fa326873"
+      },
+      "capture_status": "recomputed_exact_reviewed",
+      "candidate": {
+        "path": "tmp/Langrisser II (Korean prep-pattern-pool-yal probe).md",
+        "md_checksum": "B0DF",
+        "sha256": "f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a"
+      },
+      "scenario": 1,
+      "allied_commander_count": 2,
+      "visible_fixed_record_indexes": [
+        0,
+        1,
+        8,
+        9,
+        10,
+        11
+      ],
+      "checkpoint_record_indexes": [
+        9
+      ],
+      "expected_pair_count": 14,
+      "actual_pair_count": 14,
+      "capture_pairs": [
+        {
+          "surface": "allied/commander_01_hire_page_01.png",
+          "pre_sha256": "b271b675c4ee8c4ee338984fdaa91bc2f3e864b524d7f3e3e1950142c7f530bc",
+          "post_sha256": "b271b675c4ee8c4ee338984fdaa91bc2f3e864b524d7f3e3e1950142c7f530bc",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_01_root.png",
+          "pre_sha256": "7e042c66c04d3134467449dbb444171724a10044ba1b0889b2aee195abd13dac",
+          "post_sha256": "7e042c66c04d3134467449dbb444171724a10044ba1b0889b2aee195abd13dac",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_hire_page_01.png",
+          "pre_sha256": "7a549511728b0904526d3243947c2daedc56416bae1a49590d9dd663c601127e",
+          "post_sha256": "7a549511728b0904526d3243947c2daedc56416bae1a49590d9dd663c601127e",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_root.png",
+          "pre_sha256": "54fa219b0d031c52cc32ce1dda08bf3e291f2aa2e0e65ac0bf678892fa3519ac",
+          "post_sha256": "54fa219b0d031c52cc32ce1dda08bf3e291f2aa2e0e65ac0bf678892fa3519ac",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/menu.png",
+          "pre_sha256": "d1acb48522eb3ff36407382464d816ea99b46f9984a54d8dc60fa0f703e2ebb5",
+          "post_sha256": "d1acb48522eb3ff36407382464d816ea99b46f9984a54d8dc60fa0f703e2ebb5",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/returned_menu.png",
+          "pre_sha256": "b918e72398490aa5c3da352fb3b16d3b5398e20b4c7055396003289cbb965cc7",
+          "post_sha256": "b918e72398490aa5c3da352fb3b16d3b5398e20b4c7055396003289cbb965cc7",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_01.png",
+          "pre_sha256": "7a83e3a96ae8bcaceebf3133db1a826d59435292f029d47305d4df1ceebd9866",
+          "post_sha256": "7a83e3a96ae8bcaceebf3133db1a826d59435292f029d47305d4df1ceebd9866",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/map_entry.png",
+          "pre_sha256": "ee26420c0e962af788f0c26b4cc1852bf160e97052cdcfcb79f50679f1c28531",
+          "post_sha256": "ee26420c0e962af788f0c26b4cc1852bf160e97052cdcfcb79f50679f1c28531",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_00.png",
+          "pre_sha256": "166728023470e0da0b6d3a4e4137c16d51ae5b0c245e6368d9a35d8ec566bae1",
+          "post_sha256": "166728023470e0da0b6d3a4e4137c16d51ae5b0c245e6368d9a35d8ec566bae1",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_01.png",
+          "pre_sha256": "e9757b8539dfc2bb48d52fb73496feef42e5e92ae590d115173db3898a156409",
+          "post_sha256": "e9757b8539dfc2bb48d52fb73496feef42e5e92ae590d115173db3898a156409",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_08.png",
+          "pre_sha256": "06cad47bfdbd19d900c5a8855a0a60122536666501645161861882fd4da84e8a",
+          "post_sha256": "06cad47bfdbd19d900c5a8855a0a60122536666501645161861882fd4da84e8a",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_09.png",
+          "pre_sha256": "6ebe7392918a2f212ed269cfda958191212acb7c6792636eb9815b19af99592b",
+          "post_sha256": "6ebe7392918a2f212ed269cfda958191212acb7c6792636eb9815b19af99592b",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_10.png",
+          "pre_sha256": "fc2c1a38f035c73e70c6e2bffcb4e7fe34b4f5e3e9706422194927d5c060c7bc",
+          "post_sha256": "fc2c1a38f035c73e70c6e2bffcb4e7fe34b4f5e3e9706422194927d5c060c7bc",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_11.png",
+          "pre_sha256": "3e5b5affb8e1fabacb4000b645aa8d67bf1130be55f7385de7cf7085bede25f4",
+          "post_sha256": "3e5b5affb8e1fabacb4000b645aa8d67bf1130be55f7385de7cf7085bede25f4",
+          "byte_identical": true
+        }
+      ],
+      "shop_captures": [
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s01/yal02/shop/menu.png",
+          "sha256": "8e4620df6360a44185382bfe31e051588a22d60e1edd0264da044d1ad444fd8b"
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s01/yal02/shop/item_list.png",
+          "sha256": "7eafbaa8d0802fb5d52bf919e5f100e2668847dd0cca958856580d5631547d7e"
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s01/yal02/shop/returned_unfocused.png",
+          "sha256": "2da8577a148672e13ccd09d6dc048d8e6e1e152cf2e78c216daf105529ecb60a"
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s01/yal02/shop/returned_focused.png",
+          "sha256": "7e042c66c04d3134467449dbb444171724a10044ba1b0889b2aee195abd13dac"
+        }
+      ],
+      "runtime_checkpoint": {
+        "char": "얄",
+        "local_index": "0x3F",
+        "dynamic_slot": 24,
+        "vram_tile": "0x03DF",
+        "pre_shop": {
+          "gst": "captures/run/preparation_surface_matrix/normal/s01/yal02/states/pre_fixed_record_09.gst",
+          "gst_sha256": "6935c89a2745938bfa74bf71d06394ec9044a32440709c743f5ca199090164ec",
+          "vdp_register_11": "0x00",
+          "vdp_register_13": "0x3D",
+          "hscroll_base": "0xF400",
+          "hscroll_nonzero_bytes": 0,
+          "tile_payload_sha256": "6c59f87070c2a152b86721c379e0a0aeb3be728c9468971c690370ce0c967ef8",
+          "matches_candidate_rom_glyph": true,
+          "plane_references": [
+            {
+              "plane": "plane_a",
+              "x": 7,
+              "y": 8,
+              "tile_word": "0x83DF"
+            }
+          ]
+        },
+        "post_shop": {
+          "gst": "captures/run/preparation_surface_matrix/normal/s01/yal02/states/post_fixed_record_09.gst",
+          "gst_sha256": "0aad1ddbe07087fdccba9ffd7ed946b6076def17c27bc3dc486a8eb917f350ee",
+          "vdp_register_11": "0x00",
+          "vdp_register_13": "0x3D",
+          "hscroll_base": "0xF400",
+          "hscroll_nonzero_bytes": 0,
+          "tile_payload_sha256": "6c59f87070c2a152b86721c379e0a0aeb3be728c9468971c690370ce0c967ef8",
+          "matches_candidate_rom_glyph": true,
+          "plane_references": [
+            {
+              "plane": "plane_a",
+              "x": 7,
+              "y": 8,
+              "tile_word": "0x83DF"
+            }
+          ]
+        }
+      },
+      "human_review": {
+        "run": "captures/run/preparation_surface_matrix/normal/s01/yal02",
+        "status": "preparation_surface_pass_battle_pending",
+        "checks": {
+          "all_korean_commander_class_and_mercenary_labels": "pass",
+          "commander_and_mercenary_sprites": "pass",
+          "arrangement_minimap_and_rows": "pass",
+          "borders_and_numeric_fields": "pass",
+          "real_shop_item_list_round_trip": "pass",
+          "gray_acted_sprites_and_battle_result": "pending_separate_battle_run"
+        }
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s01/yal01",
+      "status": "preparation_surface_pass_battle_pending",
+      "plan": {
+        "path": "captures/run/preparation_surface_matrix/hard/s01/yal01/plan.json",
+        "sha256": "0fd06424c7ff4a574d27610df192dfa5e4e8c13acf30b5611d511ad9c7705bd1"
+      },
+      "capture_status": "recomputed_exact_reviewed",
+      "candidate": {
+        "path": "tmp/Langrisser II (Korean Hard prep-pattern-pool-yal probe).md",
+        "md_checksum": "FA1D",
+        "sha256": "1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32"
+      },
+      "scenario": 1,
+      "allied_commander_count": 2,
+      "visible_fixed_record_indexes": [
+        0,
+        1,
+        8,
+        9,
+        10,
+        11
+      ],
+      "checkpoint_record_indexes": [
+        9
+      ],
+      "expected_pair_count": 14,
+      "actual_pair_count": 14,
+      "capture_pairs": [
+        {
+          "surface": "allied/commander_01_hire_page_01.png",
+          "pre_sha256": "b271b675c4ee8c4ee338984fdaa91bc2f3e864b524d7f3e3e1950142c7f530bc",
+          "post_sha256": "b271b675c4ee8c4ee338984fdaa91bc2f3e864b524d7f3e3e1950142c7f530bc",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_01_root.png",
+          "pre_sha256": "7e042c66c04d3134467449dbb444171724a10044ba1b0889b2aee195abd13dac",
+          "post_sha256": "7e042c66c04d3134467449dbb444171724a10044ba1b0889b2aee195abd13dac",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_hire_page_01.png",
+          "pre_sha256": "7a549511728b0904526d3243947c2daedc56416bae1a49590d9dd663c601127e",
+          "post_sha256": "7a549511728b0904526d3243947c2daedc56416bae1a49590d9dd663c601127e",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_root.png",
+          "pre_sha256": "54fa219b0d031c52cc32ce1dda08bf3e291f2aa2e0e65ac0bf678892fa3519ac",
+          "post_sha256": "54fa219b0d031c52cc32ce1dda08bf3e291f2aa2e0e65ac0bf678892fa3519ac",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/menu.png",
+          "pre_sha256": "d1acb48522eb3ff36407382464d816ea99b46f9984a54d8dc60fa0f703e2ebb5",
+          "post_sha256": "d1acb48522eb3ff36407382464d816ea99b46f9984a54d8dc60fa0f703e2ebb5",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/returned_menu.png",
+          "pre_sha256": "b918e72398490aa5c3da352fb3b16d3b5398e20b4c7055396003289cbb965cc7",
+          "post_sha256": "b918e72398490aa5c3da352fb3b16d3b5398e20b4c7055396003289cbb965cc7",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_01.png",
+          "pre_sha256": "7a83e3a96ae8bcaceebf3133db1a826d59435292f029d47305d4df1ceebd9866",
+          "post_sha256": "7a83e3a96ae8bcaceebf3133db1a826d59435292f029d47305d4df1ceebd9866",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/map_entry.png",
+          "pre_sha256": "ee26420c0e962af788f0c26b4cc1852bf160e97052cdcfcb79f50679f1c28531",
+          "post_sha256": "ee26420c0e962af788f0c26b4cc1852bf160e97052cdcfcb79f50679f1c28531",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_00.png",
+          "pre_sha256": "166728023470e0da0b6d3a4e4137c16d51ae5b0c245e6368d9a35d8ec566bae1",
+          "post_sha256": "166728023470e0da0b6d3a4e4137c16d51ae5b0c245e6368d9a35d8ec566bae1",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_01.png",
+          "pre_sha256": "e9757b8539dfc2bb48d52fb73496feef42e5e92ae590d115173db3898a156409",
+          "post_sha256": "e9757b8539dfc2bb48d52fb73496feef42e5e92ae590d115173db3898a156409",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_08.png",
+          "pre_sha256": "d7a243e48c1e3dffe0a21d94d2acee3bf2c8cf4241b2d41b3faaddbf91188718",
+          "post_sha256": "d7a243e48c1e3dffe0a21d94d2acee3bf2c8cf4241b2d41b3faaddbf91188718",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_09.png",
+          "pre_sha256": "6ebe7392918a2f212ed269cfda958191212acb7c6792636eb9815b19af99592b",
+          "post_sha256": "6ebe7392918a2f212ed269cfda958191212acb7c6792636eb9815b19af99592b",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_10.png",
+          "pre_sha256": "fc2c1a38f035c73e70c6e2bffcb4e7fe34b4f5e3e9706422194927d5c060c7bc",
+          "post_sha256": "fc2c1a38f035c73e70c6e2bffcb4e7fe34b4f5e3e9706422194927d5c060c7bc",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_11.png",
+          "pre_sha256": "6557a488e75232e55ab72c2b0228b9b7afc2645bb8009d0c09429edfc697ee3b",
+          "post_sha256": "6557a488e75232e55ab72c2b0228b9b7afc2645bb8009d0c09429edfc697ee3b",
+          "byte_identical": true
+        }
+      ],
+      "shop_captures": [
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s01/yal01/shop/menu.png",
+          "sha256": "8e4620df6360a44185382bfe31e051588a22d60e1edd0264da044d1ad444fd8b"
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s01/yal01/shop/item_list.png",
+          "sha256": "7eafbaa8d0802fb5d52bf919e5f100e2668847dd0cca958856580d5631547d7e"
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s01/yal01/shop/returned_unfocused.png",
+          "sha256": "2da8577a148672e13ccd09d6dc048d8e6e1e152cf2e78c216daf105529ecb60a"
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s01/yal01/shop/returned_focused.png",
+          "sha256": "7e042c66c04d3134467449dbb444171724a10044ba1b0889b2aee195abd13dac"
+        }
+      ],
+      "runtime_checkpoint": {
+        "char": "얄",
+        "local_index": "0x3F",
+        "dynamic_slot": 24,
+        "vram_tile": "0x03DF",
+        "pre_shop": {
+          "gst": "captures/run/preparation_surface_matrix/hard/s01/yal01/states/pre_fixed_record_09.gst",
+          "gst_sha256": "d28480dfc178119f1580488955d85032392b4b5e2e0e15d59cfc5a3ea94df139",
+          "vdp_register_11": "0x00",
+          "vdp_register_13": "0x3D",
+          "hscroll_base": "0xF400",
+          "hscroll_nonzero_bytes": 0,
+          "tile_payload_sha256": "6c59f87070c2a152b86721c379e0a0aeb3be728c9468971c690370ce0c967ef8",
+          "matches_candidate_rom_glyph": true,
+          "plane_references": [
+            {
+              "plane": "plane_a",
+              "x": 7,
+              "y": 8,
+              "tile_word": "0x83DF"
+            }
+          ]
+        },
+        "post_shop": {
+          "gst": "captures/run/preparation_surface_matrix/hard/s01/yal01/states/post_fixed_record_09.gst",
+          "gst_sha256": "2c1164e8bab6e7dcec782891c184c4cb06ceb6de7d52cb842ff2ed1d733feb20",
+          "vdp_register_11": "0x00",
+          "vdp_register_13": "0x3D",
+          "hscroll_base": "0xF400",
+          "hscroll_nonzero_bytes": 0,
+          "tile_payload_sha256": "6c59f87070c2a152b86721c379e0a0aeb3be728c9468971c690370ce0c967ef8",
+          "matches_candidate_rom_glyph": true,
+          "plane_references": [
+            {
+              "plane": "plane_a",
+              "x": 7,
+              "y": 8,
+              "tile_word": "0x83DF"
+            }
+          ]
+        }
+      },
+      "human_review": {
+        "run": "captures/run/preparation_surface_matrix/hard/s01/yal01",
+        "status": "preparation_surface_pass_battle_pending",
+        "checks": {
+          "all_korean_commander_class_and_mercenary_labels": "pass",
+          "commander_and_mercenary_sprites": "pass",
+          "arrangement_minimap_and_rows": "pass",
+          "borders_and_numeric_fields": "pass",
+          "real_shop_item_list_round_trip": "pass",
+          "gray_acted_sprites_and_battle_result": "pending_separate_battle_run"
+        }
+      }
+    }
+  },
+  "matrix_progress": {
+    "required_profile_scenario_runs": 54,
+    "preparation_surface_runs_reviewed": 2,
+    "fully_accepted_scenarios": 0,
+    "remaining_requirement": "Scenario 1 gray acted sprites and battle result in both profiles, then complete Scenarios 2 through 27."
+  },
+  "rejected_normal_scenario_1_attempts": [
+    {
+      "run_id": "canonical01",
+      "result": "13/14 pairs; equipment/focus state was captured as commander detail"
+    },
+    {
+      "run_id": "canonical02",
+      "result": "first fixed-record detail detector failure"
+    },
+    {
+      "run_id": "canonical03",
+      "result": "hire END/focus error; an unintended Soldier hire changed money"
+    },
+    {
+      "run_id": "canonical04",
+      "result": "preparation focus state was not restored"
+    },
+    {
+      "run_id": "canonical05",
+      "result": "commander scan passed but arrangement focus was wrong"
+    },
+    {
+      "run_id": "canonical06",
+      "result": "arrangement focus/navigation failure"
+    },
+    {
+      "run_id": "canonical07",
+      "result": "arrangement action-list focus detector failure"
+    },
+    {
+      "run_id": "canonical08",
+      "result": "arrangement focus failure; retained GST proved B transfers focus"
+    },
+    {
+      "run_id": "canonical09",
+      "result": "14 pairs but only four distinct fixed details; popup-close input was ignored"
+    },
+    {
+      "run_id": "canonical10",
+      "result": "13/14 exact; post-shop 로얄호스 exposed static 얄 tile corruption"
+    }
+  ],
+  "rejected_checkpoint_attempt": {
+    "result": "Loading pre_shop.gst into the later runtime unexpectedly deployed instead of reopening Leon; no pre-checkpoint state from that attempt is accepted.",
+    "replacement": "The clean yal02 and hard yal01 runs save both pre/post checkpoints automatically without loading a state."
+  }
+}

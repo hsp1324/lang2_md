@@ -147,3 +147,52 @@ Validation after the replacement:
   cascade from this builder change. Remaining failures belong to concurrent
   hard-runtime/plan state, experimental sprites, intentionally unchanged
   release artifacts/inventories, and generated runtime documentation.
+
+## Continuation update: Scenario 1 matrix and `얄` slot
+
+The preparation matrix is now automated by
+`tools/run_preparation_surface_matrix.py`. It uses an isolated runtime and
+the preserved Scenario 27 manual-slot GST, enters Scenario 1 through the real
+selector, visits both allied status and actual hiring pages, the arrangement
+roster, every visible fixed record in source order, a real shop item list, and
+then repeats every page in the same process.
+
+Normal attempts `canonical01..canonical10` were retained as rejected
+diagnostics. They exposed missed input/focus transitions, one accidental
+Soldier hire, repeated fixed-record captures, and finally a real rendering
+regression: `canonical10` was 13/14 exact because the static `얄` pattern in
+`로얄호스` changed after the shop.
+
+The builder now adds `얄` as preparation slot 24 at ordinary pattern tile
+`0x03DF`, bringing the pool to 25 tiles. A read-only scan over 384 retained
+GSTs found no Plane/Window/SAT reference or VDP-table ownership for the cell;
+31 preparation-like states kept one stable pre-assignment payload. Current
+non-release probes are:
+
+- normal B0DF,
+  `f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a`;
+- hard FA1D,
+  `1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32`.
+
+Clean accepted preparation runs are
+`captures/run/preparation_surface_matrix/normal/s01/yal02` and
+`captures/run/preparation_surface_matrix/hard/s01/yal01`. Each has 14/14
+byte-identical full-screen pairs and passed visual review for all Korean
+commander/class/mercenary labels, sprites, minimap rows, borders, and numeric
+fields. Both automatically retain pre/post Leon GST states. All four states
+match the candidate-ROM `얄` payload at `0x03DF`, reference `0x83DF` from
+Plane A `(7,8)`, and keep H-scroll `0xF400..0xF7FF` entirely zero.
+
+`localization/preparation_surface_matrix.json` is the checked evidence report
+and `localization/preparation_surface_review.json` records the human review.
+The acceptance file marks only check-level preparation progress. Scenario 1
+normal/hard remain pending because gray acted sprites and battle-result
+screens need a separate battle run; the seed has no live class-change choice.
+No release ROM/version was changed.
+
+Focused validation passes 59/59. Full discovery runs 1,453 tests and ends at
+44 failures plus 3 errors, exactly the same failure/error counts as the
+preceding 24-cell stable unit. The remaining failures are in concurrently
+dirty experimental sprites, hard runtime/plan/generated documentation,
+unpromoted release/report gates, and item/shop inventory; the `얄` addition
+introduced no new checksum cascade.

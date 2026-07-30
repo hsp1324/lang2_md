@@ -12254,3 +12254,51 @@ contains 57 safe syllables as documented below and in
   errors in concurrent hard-runtime/plan data, experimental sprites,
   intentionally unchanged release artifacts/inventories, and generated
   runtime documentation. The pre-rebase run had 92 failures plus 3 errors.
+
+### Scenario 1 Preparation Matrix And `얄` Follow-Up (2026-07-31)
+
+- `tools/run_preparation_surface_matrix.py` now plans and captures every
+  allied status/hiring page, arrangement roster, preparation-visible fixed
+  record, and a real same-process shop item-list round trip for Scenarios
+  1..27 in normal and hard profiles. It never updates acceptance
+  automatically.
+- Normal Scenario 1 attempts `canonical01..canonical10` are rejected
+  diagnostics. Failures included 13/14 coverage, wrong commander/equipment
+  focus, fixed-detail detection, arrangement focus, one accidental Soldier
+  hire, ignored popup-close input, and repeated fixed records. `canonical10`
+  reached all six distinct fixed records but changed only
+  `fixed/record_09.png`: the static `얄` tile in Leon's `로얄호스` was
+  shop-overwritten.
+- The builder adds `얄` as preparation dynamic slot 24 on audited ordinary
+  pattern tile `0x03DF`; the pool now has 25 cells. The retained-state scan
+  still covers 384 GSTs and 31 preparation-like states with no Plane A/B,
+  Window, SAT, or VDP-table ownership before assignment.
+- Current non-release probes are normal B0DF
+  (`f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a`)
+  and hard FA1D
+  (`1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32`).
+  No release ROM/version was replaced.
+- Clean normal `normal/s01/yal02` and hard `hard/s01/yal01` runs under
+  `captures/run/preparation_surface_matrix` each pass 14/14 byte-identical
+  full-screen pre/post pairs. Visual review covers every Korean
+  commander/class/hiring/fixed-record label, commander and mercenary sprites,
+  arrangement/minimap rows, borders, numeric fields, and the real shop item
+  list.
+- Both runs automatically save pre/post `로얄호스` checkpoints. All four GST
+  states contain the candidate-ROM `얄` payload at tile `0x03DF`, reference
+  tile word `0x83DF` from Plane A `(7,8)`, and have zero nonzero H-scroll
+  bytes at `0xF400..0xF7FF`.
+- `tools/verify_preparation_surface_evidence.py`,
+  `localization/preparation_surface_matrix.json`, and
+  `tests/test_preparation_surface_evidence.py` reproduce and lock this proof.
+  The focused preparation suite passes 59/59. Full discovery runs 1,453 tests
+  and remains at 44 failures plus 3 errors, exactly the prior stable-unit
+  counts; the new slot/evidence code adds no checksum cascade.
+- Scenario 1 remains pending in both profiles. The preserved seed has no live
+  class-change choice, and gray acted sprites plus the battle-result screen
+  require a separate battle run. `localization/preparation_surface_acceptance.json`
+  records two preparation-only partial runs, zero fully accepted scenarios,
+  and an active release gate.
+- A manual attempt to create a pre-Leon checkpoint by loading `pre_shop.gst`
+  unexpectedly deployed and produced no accepted state. Only the automatic
+  clean-run checkpoints above are evidence.

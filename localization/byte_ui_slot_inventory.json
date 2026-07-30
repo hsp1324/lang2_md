@@ -2003,7 +2003,8 @@
     "0x03D5",
     "0x03D7",
     "0x03D8",
-    "0x03DA"
+    "0x03DA",
+    "0x03DF"
   ],
   "preparation_dynamic_slots": [
     {
@@ -2148,6 +2149,12 @@
       "slot": 23,
       "vram_tile": "0x03DA",
       "char": "글",
+      "reason": "preparation graphics overwrite the final static font segment"
+    },
+    {
+      "slot": 24,
+      "vram_tile": "0x03DF",
+      "char": "얄",
       "reason": "preparation graphics overwrite the final static font segment"
     }
   ]

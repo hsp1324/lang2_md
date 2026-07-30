@@ -165,3 +165,35 @@ test fails. The authoritative machine-readable state is
 `LV`, `AT`, `DF`, `MP`, and `HP` may remain as standard game abbreviations. Large
 English labels may remain only when they are conventional, space-constrained, and
 explicitly recorded as intentional rather than missed Japanese text.
+## Mandatory per-scenario preparation regression gate
+
+Completion now requires a recorded pass for every Scenario 1 through 27 in
+both the normal Korean and hard Korean profiles. The machine-readable source
+of truth is `localization/preparation_surface_acceptance.json`.
+
+For each scenario, validation must use one uninterrupted run and cover:
+
+1. Before visiting the shop, page through all allied, NPC, and enemy
+   commanders and verify every commander name and class.
+2. Before visiting the shop, open every available hiring page and verify every
+   offered mercenary name.
+3. Enter the shop, open at least one purchase or item-detail surface, leave,
+   and return to preparation without restarting or loading a state.
+4. Repeat every commander-name, class-name, and mercenary-name check after
+   that shop round trip.
+5. Where available, verify class-change choices and commander status labels.
+6. Inspect the complete screen in every proof image. A readable text crop does
+   not pass if sprites, acted-gray sprites, minimap rows, borders, or numeric
+   fields are damaged.
+
+A missing surface may be marked not applicable only with a written reason.
+No release is considered verified while any scenario or required check is
+pending or failed.
+
+Current checkpoint (2026-07-31): Scenario 1 normal and hard each have a
+reviewed preparation-only partial pass with 14/14 exact before/after pairs.
+Their commander/class/hiring pages, arrangement/minimap, all visible fixed
+records, and real shop item-list round trip are intact. Gray acted sprites and
+the battle-result surface are still pending, so Scenario 1 is not a complete
+pass and the number of fully accepted scenarios remains zero. See
+`localization/preparation_surface_matrix.json`.

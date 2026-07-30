@@ -61,6 +61,8 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
             scope["preparation_extra_tiles"],
             [f"0x{tile:04X}" for tile in builder.BYTE_UI_PREP_EXTRA_TILE_IDS],
         )
+        self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_CHARS[-1], "얄")
+        self.assertEqual(builder.BYTE_UI_PREP_EXTRA_TILE_IDS[-1], 0x03DF)
 
     def test_shop_roundtrip_contract_covers_shared_labels_and_both_builds(self) -> None:
         contract = self.model["transition_contract"]
@@ -96,6 +98,7 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
                 "슬라임",
                 "서펜나이트",
                 "리자드맨",
+                "로얄호스",
             },
         )
         self.assertEqual(
@@ -148,7 +151,7 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
             )
         )
 
-    def test_replacement_probes_are_not_promoted_to_scenario_acceptance(self) -> None:
+    def test_replacement_probes_remain_partial_scenario_evidence(self) -> None:
         self.assertEqual(
             {
                 (row["build"], row["scenario"])
@@ -157,14 +160,28 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
             {
                 ("hard_candidate", 6),
                 ("hard_candidate", 9),
+                ("hard_candidate", 1),
                 ("normal_candidate", 9),
+                ("normal_candidate", 1),
             },
         )
         self.assertTrue(
             all(
-                row["result"] == "partial_surface_pass_not_scenario_acceptance"
+                row["result"]
+                in {
+                    "partial_surface_pass_not_scenario_acceptance",
+                    "preparation_surface_pass_battle_pending",
+                }
                 for row in self.model["replacement_runtime"]
             )
+        )
+        self.assertEqual(
+            {
+                row["result"]
+                for row in self.model["replacement_runtime"]
+                if row["scenario"] == 1
+            },
+            {"preparation_surface_pass_battle_pending"},
         )
         self.assertEqual(
             self.model["ownership_report"]["status"],

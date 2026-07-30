@@ -62,7 +62,8 @@
       "0x03D5",
       "0x03D7",
       "0x03D8",
-      "0x03DA"
+      "0x03DA",
+      "0x03DF"
     ],
     "all_pattern_addresses_below_0xC000": true,
     "stock_full_scroll_fill_restored": true,
@@ -94,7 +95,8 @@
       "0x03D5": 1,
       "0x03D7": 1,
       "0x03D8": 1,
-      "0x03DA": 1
+      "0x03DA": 1,
+      "0x03DF": 1
     }
   },
   "scenario_9_shop_roundtrip": {

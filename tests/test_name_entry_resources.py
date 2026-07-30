@@ -491,7 +491,7 @@ class NameEntryResourceTests(unittest.TestCase):
             (
                 "라", "론", "쉐", "카", "코", "키", "록", "적",
                 "가", "스", "럴", "슬", "임", "비", "크", "제",
-                "샤", "먼", "안", "께", "울", "끼", "의", "글",
+                "샤", "먼", "안", "께", "울", "끼", "의", "글", "얄",
             ),
         )
         self.assertLessEqual(
@@ -603,11 +603,11 @@ class NameEntryResourceTests(unittest.TestCase):
             builder.BYTE_UI_PREP_EXTRA_TILE_IDS,
             (
                 0x03CA, 0x03D0, 0x03D1, 0x03D4,
-                0x03D5, 0x03D7, 0x03D8, 0x03DA,
+                0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF,
             ),
         )
-        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 24)
-        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 24)
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 25)
+        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 25)
         self.assertTrue(
             all(tile * 32 < 0xC000 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
         )
@@ -686,7 +686,7 @@ class NameEntryResourceTests(unittest.TestCase):
             (
                 "라", "론", "쉐", "카", "코", "키", "록", "적",
                 "가", "스", "럴", "슬", "임", "비", "크", "제",
-                "샤", "먼", "안", "께", "울", "끼", "의", "글",
+                "샤", "먼", "안", "께", "울", "끼", "의", "글", "얄",
             ),
         )
         self.assertLessEqual(

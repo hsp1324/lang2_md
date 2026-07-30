@@ -1,15 +1,15 @@
 {
   "schema_version": 2,
-  "status": "replacement_probe_partial_acceptance",
+  "status": "replacement_probe_scenario1_preparation_partial_pass",
   "candidate": {
-    "path": "tmp/Langrisser II (Korean Hard prep-pattern-pool probe).md",
-    "md_checksum": "7B41",
-    "sha256": "059900b4b95a023bb95d4cd75197a0aabd7f7244cb4db2fc782fda3557a4cdf7"
+    "path": "tmp/Langrisser II (Korean Hard prep-pattern-pool-yal probe).md",
+    "md_checksum": "FA1D",
+    "sha256": "1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32"
   },
   "normal_candidate": {
-    "path": "tmp/Langrisser II (Korean prep-pattern-pool probe).md",
-    "md_checksum": "3203",
-    "sha256": "01cb379c494bf1bcf3324ddd5b11505d7e3648c2817a6a3802bf113802b223cd"
+    "path": "tmp/Langrisser II (Korean prep-pattern-pool-yal probe).md",
+    "md_checksum": "B0DF",
+    "sha256": "f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a"
   },
   "ownership_report": {
     "path": "localization/preparation_vram_ownership.json",
@@ -18,7 +18,7 @@
   },
   "scope": {
     "map_cache_slots_unchanged": 16,
-    "preparation_extra_slots": 8,
+    "preparation_extra_slots": 9,
     "preparation_extra_chars": [
       "샤",
       "먼",
@@ -27,7 +27,8 @@
       "울",
       "끼",
       "의",
-      "글"
+      "글",
+      "얄"
     ],
     "preparation_extra_tiles": [
       "0x03CA",
@@ -37,7 +38,8 @@
       "0x03D5",
       "0x03D7",
       "0x03D8",
-      "0x03DA"
+      "0x03DA",
+      "0x03DF"
     ]
   },
   "transition_contract": {
@@ -68,7 +70,8 @@
       "그레이트슬라임",
       "슬라임",
       "서펜나이트",
-      "리자드맨"
+      "리자드맨",
+      "로얄호스"
     ],
     "required_runtime_surfaces": [
       "deployment_commander_name_after_shop_roundtrip",
@@ -134,6 +137,22 @@
       "ownership_report": "localization/preparation_vram_ownership.json",
       "result": "partial_surface_pass_not_scenario_acceptance",
       "reason": "All three complete-screen pairs are byte-identical and the post-shop H-scroll table is clean, but the mandatory all-page commander/class/hiring matrix remains pending."
+    },
+    {
+      "build": "normal_candidate",
+      "scenario": 1,
+      "sequence": "all allied status/hiring pages -> arrangement roster -> all visible fixed details -> shop item list -> repeat all pages",
+      "evidence_report": "localization/preparation_surface_matrix.json",
+      "result": "preparation_surface_pass_battle_pending",
+      "reason": "All 14 full-screen pairs are byte-identical and visually intact. Pre/post 로얄호스 checkpoints use 얄 at tile 0x03DF with a clean H-scroll table. Gray acted sprites and battle-result surfaces remain pending."
+    },
+    {
+      "build": "hard_candidate",
+      "scenario": 1,
+      "sequence": "all allied status/hiring pages -> arrangement roster -> all visible fixed details -> shop item list -> repeat all pages",
+      "evidence_report": "localization/preparation_surface_matrix.json",
+      "result": "preparation_surface_pass_battle_pending",
+      "reason": "All 14 full-screen pairs are byte-identical and visually intact. Pre/post 로얄호스 checkpoints use 얄 at tile 0x03DF with a clean H-scroll table. Gray acted sprites and battle-result surfaces remain pending."
     }
   ],
   "historical_evidence_status": {
@@ -253,7 +272,7 @@
   },
   "notes": [
     "The former 0x07A1..0x07BC pool is retired. Retained FBE2 VDP registers place the H-scroll table at 0xF400..0xF7FF, and the old state contains 192 nonzero glyph bytes in that table.",
-    "The replacement pool uses 24 noncontiguous ordinary pattern tiles from 0x0359 through 0x03DA. A 384-GST ownership scan found no Plane A/B, Window, SAT, or VDP-table ownership before assignment; all 31 preparation-like states retained one stable payload per selected tile.",
+    "The replacement pool now uses 25 noncontiguous ordinary pattern tiles from 0x0359 through 0x03DF. A 384-GST ownership scan found no Plane A/B, Window, SAT, or VDP-table ownership before assignment; all 31 preparation-like states retained one stable payload per selected tile.",
     "The stock full-screen H-scroll fill count 0x00B7 is restored. The old 0x0007 shortening is no longer emitted.",
     "Scenario 9 normal 3203 and hard 7B41 preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before and after a real shop item-list round trip. These are targeted replacement-pool probes, not full per-scenario acceptance.",
     "The user confirmed that 워록 and 바바리안 were already correct in the map-bottom field; the reported failure was preparation/deployment-only.",
@@ -264,6 +283,8 @@
     "Normal and hard candidates preserve 쉐리 plus 메이지, 엘프, and 글래디에이터 on the same-run post-shop class-change surface. Only the dedicated mercenary-hiring 글래디에이터 row remains pending in each build.",
     "The hard Scenario 7 candidate preserves 기남, 제국지휘관, 네크로맨서, and 좀비 after an actual shop round trip. The distant 그레이트슬라임 and 서펜나이트 records still require fresh coordinate captures.",
     "Scenario 7 mercenaries appearing on the first enemy turn are original event timing, not a placement defect.",
-    "The hard-candidate delta verifier reports zero bytes outside declared UI, sprite, and the two separately approved hard-mode summon slots."
+    "The hard-candidate delta verifier reports zero bytes outside declared UI, sprite, and the two separately approved hard-mode summon slots.",
+    "The first complete normal Scenario 1 matrix found that the static 얄 tile in 로얄호스 changed after the shop round trip. 얄 is therefore assigned preparation slot 24 at audited pattern tile 0x03DF; the original 3203/7B41 probes are superseded.",
+    "Rebuilt normal B0DF and hard FA1D Scenario 1 preparation runs each pass 14/14 exact pre/post pairs. Their automatic pre/post 로얄호스 GST checkpoints match the candidate-ROM 얄 bitmap at tile 0x03DF, reference word 0x83DF from Plane A (7,8), and keep H-scroll entirely zero."
   ]
 }
