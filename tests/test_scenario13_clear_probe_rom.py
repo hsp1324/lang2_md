@@ -304,7 +304,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x850B,
+            0x9DB2,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -312,7 +312,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x660E,
+            0x7EB5,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -321,7 +321,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x90CC,
+            0xA973,
         )
 
     def test_completion_layout_rejects_changed_start_entry(self):

@@ -467,7 +467,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xA845,
+            0xC0EC,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -475,7 +475,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xA857,
+            0xC0FE,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -484,14 +484,14 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x90CC,
+            0xA973,
         )
         for target_turn, checksum in (
-            (2, 0xC7C4),
-            (3, 0xC7C8),
-            (6, 0xC7CC),
-            (7, 0xC7CE),
-            (8, 0xC7D0),
+            (2, 0xE06B),
+            (3, 0xE06F),
+            (6, 0xE073),
+            (7, 0xE075),
+            (8, 0xE077),
         ):
             with self.subTest(target_turn=target_turn):
                 data = bytearray(self.production)
@@ -511,7 +511,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                 turn_event=3,
                 turn_event_branch="imperial-soldier",
             ),
-                0xC7F2,
+            0xE099,
         )
 
     def test_preserves_imelda_and_hidden_enemy_identities(self):

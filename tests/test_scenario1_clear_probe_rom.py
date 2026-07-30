@@ -193,7 +193,7 @@ class Scenario1ClearProbeRomTests(unittest.TestCase):
             builder.be16(data, offset) for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(builder.be16(data, 0x18E), expected)
-        self.assertEqual(expected, 0x90CC)
+        self.assertEqual(expected, 0xA973)
 
     def test_runtime_defeat_wrapper_targets_only_live_bald_group(self):
         data = self.patched(runtime_defeat_bald=True)

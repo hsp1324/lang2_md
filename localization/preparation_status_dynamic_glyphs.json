@@ -1,14 +1,24 @@
 {
-  "schema_version": 1,
-  "status": "verified_current_hard_candidate",
+  "schema_version": 2,
+  "status": "replacement_probe_partial_acceptance",
   "candidate": {
-    "path": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
-    "md_checksum": "5BE8",
-    "sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd"
+    "path": "tmp/Langrisser II (Korean Hard prep-pattern-pool probe).md",
+    "md_checksum": "7B41",
+    "sha256": "059900b4b95a023bb95d4cd75197a0aabd7f7244cb4db2fc782fda3557a4cdf7"
+  },
+  "normal_candidate": {
+    "path": "tmp/Langrisser II (Korean prep-pattern-pool probe).md",
+    "md_checksum": "3203",
+    "sha256": "01cb379c494bf1bcf3324ddd5b11505d7e3648c2817a6a3802bf113802b223cd"
+  },
+  "ownership_report": {
+    "path": "localization/preparation_vram_ownership.json",
+    "status": "verified_static_and_scenario_9_roundtrip",
+    "scenario_acceptance_status": "partial_only"
   },
   "scope": {
     "map_cache_slots_unchanged": 16,
-    "preparation_extra_slots": 7,
+    "preparation_extra_slots": 8,
     "preparation_extra_chars": [
       "샤",
       "먼",
@@ -16,19 +26,121 @@
       "께",
       "울",
       "끼",
-      "의"
+      "의",
+      "글"
     ],
     "preparation_extra_tiles": [
-      "0x07AA",
-      "0x07AB",
-      "0x07AC",
-      "0x07B6",
-      "0x07B7",
-      "0x07B9",
-      "0x07BB"
+      "0x03CA",
+      "0x03D0",
+      "0x03D1",
+      "0x03D4",
+      "0x03D5",
+      "0x03D7",
+      "0x03D8",
+      "0x03DA"
     ]
   },
-  "runtime": [
+  "transition_contract": {
+    "name": "shop_roundtrip_preserves_shared_korean_labels",
+    "sequence": [
+      "preparation",
+      "shop",
+      "item_list",
+      "preparation",
+      "deployment",
+      "hiring",
+      "class_change",
+      "commander_status",
+      "map_status"
+    ],
+    "protected_categories": [
+      "commander_names",
+      "class_names",
+      "mercenary_names"
+    ],
+    "required_examples": [
+      "쉐리",
+      "글래디에이터",
+      "기남",
+      "제국지휘관",
+      "네크로맨서",
+      "좀비",
+      "그레이트슬라임",
+      "슬라임",
+      "서펜나이트",
+      "리자드맨"
+    ],
+    "required_runtime_surfaces": [
+      "deployment_commander_name_after_shop_roundtrip",
+      "hiring_mercenary_name_after_shop_roundtrip",
+      "class_change_commander_name_after_shop_roundtrip",
+      "class_change_class_name_after_shop_roundtrip",
+      "class_change_mercenary_name_after_shop_roundtrip"
+    ],
+    "applies_to": [
+      "normal_candidate",
+      "hard_candidate"
+    ],
+    "acceptance": "Every protected label must render identically before and after the shop transition in both candidates; deployment-only evidence or a single-word patch is not sufficient."
+  },
+  "pending_runtime_acceptance": [
+    {
+      "build": "normal_candidate",
+      "surface": "hiring_mercenary_name_after_shop_roundtrip",
+      "required_text": "글래디에이터",
+      "status": "pending_same_run_before_after_capture"
+    },
+    {
+      "build": "hard_candidate",
+      "surface": "hiring_mercenary_name_after_shop_roundtrip",
+      "required_text": "글래디에이터",
+      "status": "pending_same_run_before_after_capture"
+    }
+  ],
+  "replacement_runtime": [
+    {
+      "build": "hard_candidate",
+      "scenario": 6,
+      "sequence": "preparation -> shop item list -> preparation -> commander arrangement -> enemy detail",
+      "captures": [
+        "captures/run/hard_7b41_s06_pre_shop_prep.png",
+        "captures/run/hard_7b41_s06_post_shop_prep.png",
+        "captures/run/hard_7b41_s06_post_shop_arrangement.png",
+        "captures/run/hard_7b41_s06_post_shop_enemy_detail.png"
+      ],
+      "capture_sha256": {
+        "captures/run/hard_7b41_s06_pre_shop_prep.png": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+        "captures/run/hard_7b41_s06_post_shop_prep.png": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+        "captures/run/hard_7b41_s06_post_shop_arrangement.png": "d62d422722962f2f5b26fde6ff7d97d24a5b55ae70787d957c907b9e63c7c709",
+        "captures/run/hard_7b41_s06_post_shop_enemy_detail.png": "f38ff18e1496930a04e0e35a6674dd4651ad084a0ceee0d79e814e913a0fd940"
+      },
+      "gst": "captures/analysis/hard_7b41_s06_post_shop_enemy_detail.gst",
+      "gst_sha256": "0f1a449e5d9b57ef9e732666630773d7914aee400eb665ad0021ac609e1a818d",
+      "result": "partial_surface_pass_not_scenario_acceptance",
+      "reason": "The root preparation frame is byte-identical before/after and the complete arrangement/enemy-detail screens are intact, but every commander, class, and hiring page was not enumerated."
+    },
+    {
+      "build": "hard_candidate",
+      "scenario": 9,
+      "sequence": "preparation -> arrangement/enemy detail -> shop item list -> preparation -> arrangement/enemy detail",
+      "ownership_report": "localization/preparation_vram_ownership.json",
+      "result": "partial_surface_pass_not_scenario_acceptance",
+      "reason": "All three complete-screen pairs are byte-identical and H-scroll is clean before/after, but the mandatory all-page commander/class/hiring matrix remains pending."
+    },
+    {
+      "build": "normal_candidate",
+      "scenario": 9,
+      "sequence": "preparation -> arrangement/enemy detail -> shop item list -> preparation -> arrangement/enemy detail",
+      "ownership_report": "localization/preparation_vram_ownership.json",
+      "result": "partial_surface_pass_not_scenario_acceptance",
+      "reason": "All three complete-screen pairs are byte-identical and the post-shop H-scroll table is clean, but the mandatory all-page commander/class/hiring matrix remains pending."
+    }
+  ],
+  "historical_evidence_status": {
+    "status": "superseded_incomplete_screen_evidence",
+    "reason": "FBE2/B2A4 and earlier captures remain hash-locked history but cannot prove acceptance because their dynamic tiles physically overlap H-scroll and complete-screen integrity was not checked."
+  },
+  "historical_runtime": [
     {
       "surface": "scenario_3_commander_status",
       "expected": "헤인 / 샤먼",
@@ -63,12 +175,95 @@
       "capture": "captures/run/hard_5be8_s03_pike_status.png",
       "sha256": "8ec93a4bd06a4776012242a02cca947530c44d98c5ce0351c31f4d6e689be4ee",
       "result": "pass"
+    },
+    {
+      "surface": "normal_scenario_6_enemy_deployment_after_shop_roundtrip",
+      "expected": "글래디에이터 x3 using dynamic tile 0x07BC after shop overwrites static tile 0x04AE",
+      "capture": "captures/run/normal_b2a4_s06_enemy_detail_after_shop.png",
+      "sha256": "00c784df3a2d8db4a54c65a7d07bd33d38ffc5f41778aa071fbc8ad62dc2e11d",
+      "gst": "captures/analysis/normal_b2a4_s06_after_shop_enemy_detail.gst",
+      "gst_sha256": "d6fb29485b2dc8a48a84950639d9e5e67be92b028f994c0e7bd1c7421637d98c",
+      "result": "pass"
+    },
+    {
+      "surface": "hard_scenario_6_enemy_deployment_after_shop_roundtrip",
+      "expected": "글래디에이터 x3 using dynamic tile 0x07BC after shop overwrites static tile 0x04AE",
+      "capture": "captures/run/hard_fbe2_s06_enemy_detail_after_shop.png",
+      "sha256": "f38ff18e1496930a04e0e35a6674dd4651ad084a0ceee0d79e814e913a0fd940",
+      "gst": "captures/analysis/hard_fbe2_s06_after_shop_enemy_detail.gst",
+      "gst_sha256": "df73d96bd6b99671245777938252806e02f64af5cbe47623a3d8e114aa78be31",
+      "result": "pass"
+    },
+    {
+      "surface": "normal_scenario_6_preparation_commander_after_shop_roundtrip",
+      "expected": "쉐리",
+      "capture": "captures/run/normal_b2a4_class_probe_after_shop_return.png",
+      "sha256": "1b36e6a03b5db0a98fe851fc8fddf25502100f7770220ba084b44c8de0a242e0",
+      "result": "pass"
+    },
+    {
+      "surface": "normal_scenario_6_class_change_after_shop_roundtrip",
+      "expected": "쉐리 / 메이지 / 엘프 / 글래디에이터",
+      "capture": "captures/run/normal_b2a4_class_change_candidate1_after_shop.png",
+      "sha256": "0c70df01ac2d8b149567a508fc63f95ec6e37d3b43f9ac7acad03fcde6715714",
+      "gst": "captures/analysis/normal_b2a4_class_change_after_shop.gst",
+      "gst_sha256": "2a9d1a88b99cdd652a926506c42eef6ba92f8a21a6d8efe75ae9dedccbcf2a6d",
+      "result": "pass"
+    },
+    {
+      "surface": "hard_scenario_6_preparation_commander_after_shop_roundtrip",
+      "expected": "쉐리",
+      "capture": "captures/run/hard_fbe2_class_probe_sherry_after_shop.png",
+      "sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+      "result": "pass"
+    },
+    {
+      "surface": "hard_scenario_6_class_change_after_shop_roundtrip",
+      "expected": "쉐리 / 메이지 / 엘프 / 글래디에이터",
+      "capture": "captures/run/hard_fbe2_class_probe_candidate1_after_shop.png",
+      "sha256": "2f01cde177f5406d44ab88dd533ee25ddf172440117f6cafd2ef91257ea4a04f",
+      "gst": "captures/analysis/hard_fbe2_class_change_after_shop.gst",
+      "gst_sha256": "1eb100e595465aab8fa6ca2c6710f3bdef4ecb5a5f7cb1a43350544033aa9b2f",
+      "result": "pass"
+    },
+    {
+      "surface": "hard_scenario_7_ginam_after_shop_roundtrip",
+      "expected": "기남 / 네크로맨서 / 좀비",
+      "capture": "captures/run/hard_fbe2_s07_ginam_after_shop.png",
+      "sha256": "af19eb086f02833c7c38a939b5f8bb6bb232248172ef9a6600d2c21a648fe137",
+      "gst": "captures/analysis/hard_fbe2_s07_after_shop_enemy_detail.gst",
+      "gst_sha256": "c52e773a4be9169ececa30d442e92d4b230b943e4c67ae6627c5856345bc2734",
+      "result": "pass"
+    },
+    {
+      "surface": "hard_scenario_7_imperial_necromancer_after_shop_roundtrip",
+      "expected": "제국지휘관 / 네크로맨서 / 좀비",
+      "capture": "captures/run/hard_fbe2_s07_imperial_necromancer_after_shop.png",
+      "sha256": "124ae7ffb24385120e72c72b4b908f3d7b77ceebce09a5593c10bb310f1c374e",
+      "gst": "captures/analysis/hard_fbe2_s07_after_shop_enemy_detail.gst",
+      "gst_sha256": "c52e773a4be9169ececa30d442e92d4b230b943e4c67ae6627c5856345bc2734",
+      "result": "pass"
     }
   ],
+  "scenario_7_expected_behavior": {
+    "first_enemy_turn_mercenary_spawn": "stock_expected",
+    "description": "Scenario 7 deployment records can list mercenaries that are not visible at the opening player turn. They materialize during the first enemy turn by the original event script.",
+    "reported_by_user": "2026-07-30",
+    "defect_scope": "excluded"
+  },
   "notes": [
+    "The former 0x07A1..0x07BC pool is retired. Retained FBE2 VDP registers place the H-scroll table at 0xF400..0xF7FF, and the old state contains 192 nonzero glyph bytes in that table.",
+    "The replacement pool uses 24 noncontiguous ordinary pattern tiles from 0x0359 through 0x03DA. A 384-GST ownership scan found no Plane A/B, Window, SAT, or VDP-table ownership before assignment; all 31 preparation-like states retained one stable payload per selected tile.",
+    "The stock full-screen H-scroll fill count 0x00B7 is restored. The old 0x0007 shortening is no longer emitted.",
+    "Scenario 9 normal 3203 and hard 7B41 preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before and after a real shop item-list round trip. These are targeted replacement-pool probes, not full per-scenario acceptance.",
     "The user confirmed that 워록 and 바바리안 were already correct in the map-bottom field; the reported failure was preparation/deployment-only.",
     "The earlier 21B9 candidate verified 워록, 바바리안, and 파이크 on the Scenario 4 deployment surface before the same slot table was carried into 5BE8.",
-    "A read-only scan of 696 retained GST files found no Plane A, Plane B, window, or map-SAT references to the seven added tile IDs.",
-    "The hard-candidate delta verifier reports zero changed balance, event, or AI bytes."
+    "The earlier 750-GST 0x07BC reference scan is historical only; it did not inspect VDP H-scroll ownership and cannot establish safety.",
+    "The shared word renderer used by preparation/deployment rows now resolves local markers through the preparation dynamic lookup instead of the static byte-UI lookup.",
+    "The old FBE2/B2A4 states show that static tile 0x04AE was shop-overwritten and Plane A referenced 글 tile 0x07BC, but that tile is inside H-scroll and is no longer accepted.",
+    "Normal and hard candidates preserve 쉐리 plus 메이지, 엘프, and 글래디에이터 on the same-run post-shop class-change surface. Only the dedicated mercenary-hiring 글래디에이터 row remains pending in each build.",
+    "The hard Scenario 7 candidate preserves 기남, 제국지휘관, 네크로맨서, and 좀비 after an actual shop round trip. The distant 그레이트슬라임 and 서펜나이트 records still require fresh coordinate captures.",
+    "Scenario 7 mercenaries appearing on the first enemy turn are original event timing, not a placement defect.",
+    "The hard-candidate delta verifier reports zero bytes outside declared UI, sprite, and the two separately approved hard-mode summon slots."
   ]
 }

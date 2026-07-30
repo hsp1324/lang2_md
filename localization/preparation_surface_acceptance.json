@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "purpose": "Mandatory per-scenario regression gate for Korean preparation, shop, hiring, class, and commander labels",
+  "status": "pending",
+  "release_profiles": [
+    "normal_korean",
+    "hard_korean"
+  ],
+  "required_scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "required_checks_per_scenario": [
+    {
+      "id": "pre_shop_commander_roster",
+      "description": "Before entering the shop, inspect every page of the allied, NPC, and enemy commander roster; verify every commander name and class label."
+    },
+    {
+      "id": "pre_shop_hiring",
+      "description": "Before entering the shop, inspect every commander hiring page and every offered mercenary row; verify every mercenary name and the surrounding commander/class labels."
+    },
+    {
+      "id": "shop_round_trip",
+      "description": "Enter the shop, open at least one buy or item-detail surface, leave the shop, and return to preparation without restarting or loading a state."
+    },
+    {
+      "id": "post_shop_commander_roster",
+      "description": "After the same-run shop round trip, inspect every page of the allied, NPC, and enemy commander roster again; verify every commander name and class label."
+    },
+    {
+      "id": "post_shop_hiring",
+      "description": "After the same-run shop round trip, inspect every commander hiring page and every offered mercenary row again; verify every mercenary name."
+    },
+    {
+      "id": "class_change_and_status",
+      "description": "Where available, inspect class-change choices and commander status labels for all visible characters and classes."
+    },
+    {
+      "id": "complete_screen_integrity",
+      "description": "For every capture, verify the full screen: Korean text, unit sprites, gray acted sprites, minimap, tile rows, borders, and numerical fields must all remain intact."
+    }
+  ],
+  "evidence_rules": {
+    "same_run_before_after_required": true,
+    "text_crop_alone_is_insufficient": true,
+    "full_screen_capture_required": true,
+    "normal_and_hard_profiles_required": true,
+    "not_applicable_requires_written_reason": true,
+    "scenario_pass_requires_all_visible_pages": true,
+    "release_gate": "No localization or hard-mode release may be declared verified while any required scenario/check remains pending or failed."
+  },
+  "known_failure_evidence": [
+    {
+      "scenario": 9,
+      "profile": "hard_korean_1.0.0",
+      "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 022045.png",
+      "failure": "Gray Hangul-like blocks overwrite result/summary sprites."
+    },
+    {
+      "scenario": 9,
+      "profile": "hard_korean_1.0.0",
+      "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 022141.png",
+      "failure": "Commander and mercenary labels contain gray blocks and the right minimap is row-shifted."
+    }
+  ],
+  "current_replacement_probe": {
+    "status": "partial_not_scenario_acceptance",
+    "ownership_report": "localization/preparation_vram_ownership.json",
+    "normal_probe": {
+      "md_checksum": "3203",
+      "sha256": "01cb379c494bf1bcf3324ddd5b11505d7e3648c2817a6a3802bf113802b223cd"
+    },
+    "hard_probe": {
+      "md_checksum": "7B41",
+      "sha256": "059900b4b95a023bb95d4cd75197a0aabd7f7244cb4db2fc782fda3557a4cdf7"
+    },
+    "verified_targeted_checks": [
+      "Scenario 9 normal preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before/after a real shop item-list round trip.",
+      "Scenario 9 hard preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before/after the same route.",
+      "Hard Scenario 9 pre/post and normal Scenario 9 post GST states keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
+      "Hard Scenario 6 completed the targeted preparation/shop/arrangement/enemy-detail regression."
+    ],
+    "not_yet_covered": [
+      "all commander and class pages",
+      "all hiring pages and offered mercenary rows",
+      "class-change and commander-status pages",
+      "gray acted sprites and result screens",
+      "the complete Scenario 1 through 27 normal/hard matrix"
+    ]
+  }
+}

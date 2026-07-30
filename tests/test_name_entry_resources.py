@@ -491,7 +491,7 @@ class NameEntryResourceTests(unittest.TestCase):
             (
                 "라", "론", "쉐", "카", "코", "키", "록", "적",
                 "가", "스", "럴", "슬", "임", "비", "크", "제",
-                "샤", "먼", "안", "께", "울", "끼", "의",
+                "샤", "먼", "안", "께", "울", "끼", "의", "글",
             ),
         )
         self.assertLessEqual(
@@ -601,12 +601,15 @@ class NameEntryResourceTests(unittest.TestCase):
         )
         self.assertEqual(
             builder.BYTE_UI_PREP_EXTRA_TILE_IDS,
-            (0x07AA, 0x07AB, 0x07AC, 0x07B6, 0x07B7, 0x07B9, 0x07BB),
+            (
+                0x03CA, 0x03D0, 0x03D1, 0x03D4,
+                0x03D5, 0x03D7, 0x03D8, 0x03DA,
+            ),
         )
-        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 23)
-        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 23)
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 24)
+        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 24)
         self.assertTrue(
-            all(0x07A1 <= tile <= 0x07BB for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
+            all(tile * 32 < 0xC000 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
         )
 
         restore = builder._build_byte_ui_map_info_scratch_restore()
@@ -623,9 +626,12 @@ class NameEntryResourceTests(unittest.TestCase):
             builder.BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE + len(restore),
             builder.BYTE_UI_ROSTER_RENDER_ROUTINE,
         )
-        self.assertNotIn(0x07A0, builder.BYTE_UI_DYNAMIC_TILE_IDS)
-        self.assertNotIn(0x07BE, builder.BYTE_UI_DYNAMIC_TILE_IDS)
-        self.assertNotIn(0x07BF, builder.BYTE_UI_DYNAMIC_TILE_IDS)
+        self.assertTrue(
+            all(
+                not 0x07A0 <= tile <= 0x07FF
+                for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS
+            )
+        )
         self.assertGreaterEqual(
             builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT
             - builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE,
@@ -680,7 +686,7 @@ class NameEntryResourceTests(unittest.TestCase):
             (
                 "라", "론", "쉐", "카", "코", "키", "록", "적",
                 "가", "스", "럴", "슬", "임", "비", "크", "제",
-                "샤", "먼", "안", "께", "울", "끼", "의",
+                "샤", "먼", "안", "께", "울", "끼", "의", "글",
             ),
         )
         self.assertLessEqual(
@@ -714,6 +720,7 @@ class NameEntryResourceTests(unittest.TestCase):
             + builder.BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
         )
         for renderer in (
+            builder._build_byte_ui_word_renderer(),
             builder._build_byte_ui_prep_roster_renderer(),
             builder._build_byte_ui_panel_renderer(),
             builder._build_byte_ui_roster_renderer(),
@@ -785,7 +792,7 @@ class NameEntryResourceTests(unittest.TestCase):
                 builder.BYTE_UI_MAP_GRAPHICS_LOAD_HOOK_ORIGINAL,
             )
 
-    def test_full_scroll_fill_preserves_dynamic_cache_without_vblank_hook(self):
+    def test_full_scroll_fill_remains_stock_with_pattern_region_cache(self):
         data = bytearray(self.rom)
         builder.expand_rom(data)
         builder.patch_byte_ui_strings(data)
@@ -801,7 +808,7 @@ class NameEntryResourceTests(unittest.TestCase):
                 builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL :
                 builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
             ],
-            builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED,
+            builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL,
         )
         self.assertEqual(
             data[0x0090EE : 0x0090F2],

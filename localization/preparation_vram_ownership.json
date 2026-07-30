@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "historical_collision": {
+    "gst": "captures/analysis/hard_fbe2_s06_after_shop_enemy_detail.gst",
+    "gst_sha256": "df73d96bd6b99671245777938252806e02f64af5cbe47623a3d8e114aa78be31",
+    "vdp_register_11": "0x00",
+    "vdp_register_13": "0x3D",
+    "hscroll_base": "0xF400",
+    "hscroll_end": "0xF7FF",
+    "historical_tiles_inside_hscroll": true,
+    "nonzero_hscroll_bytes": 192,
+    "nonzero_hscroll_ranges": [
+      {
+        "start": "0xF440",
+        "end": "0xF47F",
+        "bytes": 64
+      },
+      {
+        "start": "0xF4A0",
+        "end": "0xF4BF",
+        "bytes": 32
+      },
+      {
+        "start": "0xF4E0",
+        "end": "0xF4FF",
+        "bytes": 32
+      },
+      {
+        "start": "0xF5A0",
+        "end": "0xF5BF",
+        "bytes": 32
+      },
+      {
+        "start": "0xF780",
+        "end": "0xF79F",
+        "bytes": 32
+      }
+    ]
+  },
+  "replacement_pool": {
+    "tiles": [
+      "0x0359",
+      "0x035B",
+      "0x0360",
+      "0x0361",
+      "0x036C",
+      "0x036D",
+      "0x0370",
+      "0x0371",
+      "0x037D",
+      "0x037F",
+      "0x03B0",
+      "0x03BD",
+      "0x03C0",
+      "0x03C1",
+      "0x03C4",
+      "0x03C9",
+      "0x03CA",
+      "0x03D0",
+      "0x03D1",
+      "0x03D4",
+      "0x03D5",
+      "0x03D7",
+      "0x03D8",
+      "0x03DA"
+    ],
+    "all_pattern_addresses_below_0xC000": true,
+    "stock_full_scroll_fill_restored": true,
+    "retained_gst_count": 384,
+    "preparation_like_gst_count": 31,
+    "pool_has_no_retained_plane_window_sat_reference": true,
+    "pool_is_outside_all_retained_vdp_tables": true,
+    "preparation_payload_variant_counts_before_assignment": {
+      "0x0359": 1,
+      "0x035B": 1,
+      "0x0360": 1,
+      "0x0361": 1,
+      "0x036C": 1,
+      "0x036D": 1,
+      "0x0370": 1,
+      "0x0371": 1,
+      "0x037D": 1,
+      "0x037F": 1,
+      "0x03B0": 1,
+      "0x03BD": 1,
+      "0x03C0": 1,
+      "0x03C1": 1,
+      "0x03C4": 1,
+      "0x03C9": 1,
+      "0x03CA": 1,
+      "0x03D0": 1,
+      "0x03D1": 1,
+      "0x03D4": 1,
+      "0x03D5": 1,
+      "0x03D7": 1,
+      "0x03D8": 1,
+      "0x03DA": 1
+    }
+  },
+  "scenario_9_shop_roundtrip": {
+    "hard": {
+      "pre_gst": "captures/analysis/hard_7b41_s09_pre_shop_enemy_detail.gst",
+      "pre_gst_sha256": "6c1431558d03490d28e4ee50a09ad2257b0fd71e8eec8f766e9905d1f4f08fd7",
+      "post_gst": "captures/analysis/hard_7b41_s09_post_shop_enemy_detail.gst",
+      "post_gst_sha256": "a851bc9c8d03b7d571c390702e18e600d5fa049e68a36386735b684e38811717",
+      "vdp_register_11": "0x00",
+      "vdp_register_13": "0x3D",
+      "hscroll_base": "0xF400",
+      "pre_hscroll_nonzero_bytes": 0,
+      "post_hscroll_nonzero_bytes": 0,
+      "pool_payloads_identical_before_after": true,
+      "capture_pairs": [
+        {
+          "before": "captures/run/hard_7b41_s09_pre_shop_prep.png",
+          "before_sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+          "after": "captures/run/hard_7b41_s09_post_shop_prep.png",
+          "after_sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+          "byte_identical": true
+        },
+        {
+          "before": "captures/run/hard_7b41_s09_pre_shop_arrangement.png",
+          "before_sha256": "d3e2e08b10642bcb5c8f10cd0c846c48e3d3ee27dd765cbedebf4579fc96e6c1",
+          "after": "captures/run/hard_7b41_s09_post_shop_arrangement.png",
+          "after_sha256": "d3e2e08b10642bcb5c8f10cd0c846c48e3d3ee27dd765cbedebf4579fc96e6c1",
+          "byte_identical": true
+        },
+        {
+          "before": "captures/run/hard_7b41_s09_pre_shop_enemy_detail.png",
+          "before_sha256": "1abf596c440c735b375ff842806db4ad305cbc1d307b244b64bf4b3597ea5da7",
+          "after": "captures/run/hard_7b41_s09_post_shop_enemy_detail.png",
+          "after_sha256": "1abf596c440c735b375ff842806db4ad305cbc1d307b244b64bf4b3597ea5da7",
+          "byte_identical": true
+        }
+      ]
+    },
+    "normal": {
+      "post_gst": "captures/analysis/normal_3203_s09_post_shop_enemy_detail.gst",
+      "post_gst_sha256": "e8106651cdce7116c627940cb0d79d8f8903e5e66cf0dbe146575b479bbbe2f3",
+      "vdp_register_11": "0x00",
+      "vdp_register_13": "0x3D",
+      "hscroll_base": "0xF400",
+      "post_hscroll_nonzero_bytes": 0,
+      "capture_pairs": [
+        {
+          "before": "captures/run/normal_3203_s09_pre_shop_prep.png",
+          "before_sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+          "after": "captures/run/normal_3203_s09_post_shop_prep.png",
+          "after_sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+          "byte_identical": true
+        },
+        {
+          "before": "captures/run/normal_3203_s09_pre_shop_arrangement.png",
+          "before_sha256": "d3e2e08b10642bcb5c8f10cd0c846c48e3d3ee27dd765cbedebf4579fc96e6c1",
+          "after": "captures/run/normal_3203_s09_post_shop_arrangement.png",
+          "after_sha256": "d3e2e08b10642bcb5c8f10cd0c846c48e3d3ee27dd765cbedebf4579fc96e6c1",
+          "byte_identical": true
+        },
+        {
+          "before": "captures/run/normal_3203_s09_pre_shop_enemy_detail.png",
+          "before_sha256": "1abf596c440c735b375ff842806db4ad305cbc1d307b244b64bf4b3597ea5da7",
+          "after": "captures/run/normal_3203_s09_post_shop_enemy_detail.png",
+          "after_sha256": "1abf596c440c735b375ff842806db4ad305cbc1d307b244b64bf4b3597ea5da7",
+          "byte_identical": true
+        }
+      ]
+    }
+  }
+}

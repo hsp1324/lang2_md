@@ -372,7 +372,7 @@ class Scenario29ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0x4FE3)
+        self.assertEqual(expected, 0x688A)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
 

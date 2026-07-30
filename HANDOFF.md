@@ -12129,3 +12129,128 @@ contains 57 safe syllables as documented below and in
   probe-checksum or ignored production-ROM/report baseline assertions. Do not
   rewrite those expected values as part of localization; the owning design and
   probe-baseline work must reconcile them separately.
+
+### Shop Round-Trip Hiring/Class-Change Follow-Up (2026-07-30)
+
+- The user reports that `글래디에이터`, `쉐리`, and related labels are
+  initially readable, then become damaged only after entering and leaving the
+  shop. This matches the known shared VRAM tile-lifetime failure rather than
+  bad unit/name records.
+- Current FBE2/B2A4 evidence proves the deployment `글래디에이터` rows survive
+  the shop round trip through dynamic `글` tile `0x07BC`, and the shared word
+  renderer now calls the preparation-aware lookup.
+- The normal same run retains `쉐리` in
+  `normal_b2a4_class_probe_after_shop_return.png` and retains
+  `쉐리 / 메이지 / 엘프 / 글래디에이터` in
+  `normal_b2a4_class_change_candidate1_after_shop.png`. Its state is
+  `normal_b2a4_class_change_after_shop.gst`.
+- The hard same run retains `쉐리` in
+  `hard_fbe2_class_probe_sherry_after_shop.png` and retains
+  `쉐리 / 메이지 / 엘프 / 글래디에이터` in
+  `hard_fbe2_class_probe_candidate1_after_shop.png`. Its state is
+  `hard_fbe2_class_change_after_shop.gst`.
+- Only the dedicated mercenary-hiring `글래디에이터` row remains pending in
+  each build. Do not treat the class-change row as proof of the distinct hiring
+  renderer.
+
+### Scenario 7 Post-Shop Labels And First-Turn Spawn Timing (2026-07-30)
+
+- The FBE2 hard candidate followed the real preparation -> shop -> item list
+  -> preparation -> enemy-view path on isolated display `:116`.
+  `hard_fbe2_s07_ginam_after_shop.png` retains
+  `기남 / 네크로맨서 / 좀비`; the next fixed record,
+  `hard_fbe2_s07_imperial_necromancer_after_shop.png`, retains
+  `제국지휘관 / 네크로맨서 / 좀비`.
+- The retained post-shop state is
+  `captures/analysis/hard_fbe2_s07_after_shop_enemy_detail.gst`, SHA-256
+  `c52e773a4be9169ececa30d442e92d4b230b943e4c67ae6627c5856345bc2734`.
+  The two capture hashes are respectively
+  `af19eb086f02833c7c38a939b5f8bb6bb232248172ef9a6600d2c21a648fe137`
+  and
+  `124ae7ffb24385120e72c72b4b908f3d7b77ceebce09a5593c10bb310f1c374e`.
+- Directional input later stopped moving the minimap cursor even though B/C
+  input still worked. Repeated resident records and the rejected automatic
+  name-entry routes are not acceptance evidence. Fresh captures remain needed
+  for the distant `그레이트슬라임` and
+  `서펜나이트 / 리자드맨` records.
+- Scenario 7 mercenaries listed in deployment but absent on the opening player
+  turn are spawned by the original event during the first enemy turn. The user
+  confirmed this behavior. It is normal and must not be re-filed as a hard-mode
+  placement defect.
+
+### Paused Handoff: Preparation H-Scroll Collision (2026-07-31)
+
+- Scenario 9 reproduces the systemic preparation/deployment failure:
+  `/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 022045.png` contains gray
+  Hangul-like blocks over summary sprites, and
+  `/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 022141.png` contains vertical
+  gray blocks over commander/mercenary labels plus a split and row-shifted
+  right-side minimap.
+- The minimap damage invalidates the assumption that dynamic glyph tile IDs
+  `0x07A1..0x07BC` occupy an unused H-scroll tail. Static Plane A/B/window/SAT
+  scans cannot prove H-scroll cells safe because the VDP consumes those words
+  outside ordinary tile references. Previous FBE2/B2A4 text captures are
+  downgraded: they prove sampled glyph visibility only, not complete-screen
+  integrity.
+- Do not add another `0x07xx` slot. First capture before/after GST states,
+  decode the live VDP H-scroll mode/base, compare full VRAM, and migrate the
+  preparation cache to a proven pattern/font region or a proven surface-local
+  pool. Re-test the full screen through a real shop round trip on normal and
+  hard probes.
+- Scenario 7 first-enemy-turn mercenary appearance is confirmed stock timing
+  and is excluded from defect scope.
+- The active Goal is intentionally paused, no release was replaced, and no
+  version was bumped. Full continuation details are in
+  `docs/session_handoff_2026-07-31.md`.
+- The Goal acceptance gate now explicitly requires Scenario 1 through 27 in
+  both normal and hard profiles. For every scenario, inspect all commander
+  names, class names, and hiring mercenary names before a shop visit, perform
+  a same-run shop round trip, and repeat the same checks afterward. A pass
+  also requires intact sprites, gray acted sprites, minimap rows, borders, and
+  numeric fields. The machine-readable checklist is
+  `localization/preparation_surface_acceptance.json`.
+
+### Preparation Pattern-Pool Replacement Probe (2026-07-31)
+
+- GST decoding proves the old collision. Retained FBE2 has VDP register 11
+  `00`, register 13 `3D`, and H-scroll at VRAM `F400..F7FF`. All former
+  dynamic tiles `07A1..07BC` are inside it; five populated ranges contain 192
+  nonzero Hangul-pattern bytes.
+- The builder now uses 24 audited ordinary-pattern cells
+  `0359,035B,0360,0361,036C,036D,0370,0371,037D,037F,03B0,03BD,03C0,03C1,03C4,03C9,03CA,03D0,03D1,03D4,03D5,03D7,03D8,03DA`.
+  A 384-GST scan found no retained Plane A/B, Window, SAT, or VDP-table
+  ownership before assignment; all 31 preparation-like states had one stable
+  payload per selected cell.
+- The `MOVE.W #$0007,D1` H-scroll-fill shortening is removed. Production source
+  behavior `MOVE.W #$00B7,D1` is restored. Do not reintroduce an H-scroll-tail
+  cache.
+- Non-release normal `3203`
+  (`01cb379c494bf1bcf3324ddd5b11505d7e3648c2817a6a3802bf113802b223cd`)
+  and hard `7B41`
+  (`059900b4b95a023bb95d4cd75197a0aabd7f7244cb4db2fc782fda3557a4cdf7`)
+  probes were built. No release ROM or version changed.
+- Scenario 9 normal and hard each completed the real preparation ->
+  arrangement/enemy detail -> shop item list -> preparation ->
+  arrangement/enemy detail path. Preparation, arrangement/minimap, and
+  enemy-detail full-screen PNG pairs are byte-identical before/after. Hard
+  pre/post GST and normal post GST keep the entire H-scroll allocation zero;
+  hard pool payloads are byte-identical. Hard Scenario 6 also passed this
+  targeted surface regression.
+- This is not per-scenario acceptance. The full all-page commander/class/hiring,
+  gray-sprite, minimap, character-sprite, and result checks for Scenarios 1..27
+  in both profiles remain pending.
+- `tools/analyze_preparation_vram_ownership.py`,
+  `localization/preparation_vram_ownership.json`, and
+  `tests/test_preparation_vram_ownership.py` reproduce and lock the ownership
+  proof.
+- Two hard-builder attempts failed because the manifest rejects `/tmp` output
+  and relative repository output paths; an absolute repository-local `tmp`
+  path succeeded. A direct debugger breakpoint reached `0x2B7300` immediately
+  before the first dynamic write, but its default native `quicksave.state` is
+  not GST evidence. Exact first-draw before/after GST capture remains pending.
+- Focused preparation/ownership/inventory tests pass 46/46, and the 422
+  diagnostic-ROM checksum tests pass after rebasing the common builder delta
+  by `+0x18A7`. Full discovery runs 1,440 tests and leaves 44 failures plus 3
+  errors in concurrent hard-runtime/plan data, experimental sprites,
+  intentionally unchanged release artifacts/inventories, and generated
+  runtime documentation. The pre-rebase run had 92 failures plus 3 errors.

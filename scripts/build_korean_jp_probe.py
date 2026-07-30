@@ -445,24 +445,27 @@ BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE = 0x2BE8C0
 BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT = 0x2BE9C0
 BYTE_UI_PREP_DYNAMIC_SLOT_TABLE = 0x2BE9C0
 BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT = 0x2BEAC0
-# These patterns are a transient map-status cache, not a persistent font bank.
-# They occupy noncontiguous cells in the unused tail of the full-screen
-# H-scroll table and avoid every retained Plane/SAT reference. The stock
-# full-scroll writer is shortened below so it stops before the first cache
-# cell; the line-scroll writer remains source-identical for scripted effects.
-# The old 0x05D8..0x05E7 and experimental 0x04D8..0x04E7 caches collided with
-# live map graphics in later scenarios.
+# These patterns are a transient map-status/preparation cache, not a persistent
+# font bank. They occupy noncontiguous cells in the ordinary pattern region,
+# below every retained Plane/Window/SAT/H-scroll table. A read-only scan of all
+# 384 retained GST states found no reference to any selected tile, and the 31
+# preparation-like states kept their original payload stable before assignment.
+#
+# Do not move this cache back to 0x07xx. The former 0x07A1..0x07BC allocation
+# was physically inside the live H-scroll table at VRAM 0xF400..0xF7FF. It
+# forced the full-scroll initializer to stop early and corrupted preparation
+# graphics/minimap state. The old 0x05D8..0x05E7 and experimental
+# 0x04D8..0x04E7 caches also collided with live map graphics in later scenarios.
 BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
-    0x07A1, 0x07A2, 0x07A3, 0x07A4, 0x07A5, 0x07A6, 0x07A7, 0x07A8,
-    0x07A9, 0x07AD, 0x07AF, 0x07B0, 0x07B1, 0x07B3, 0x07B4, 0x07B5,
+    0x0359, 0x035B, 0x0360, 0x0361, 0x036C, 0x036D, 0x0370, 0x0371,
+    0x037D, 0x037F, 0x03B0, 0x03BD, 0x03C0, 0x03C1, 0x03C4, 0x03C9,
 )
-# These additional H-scroll-tail patterns are not needed by the two eight-cell
+# These additional pattern-region cells are not needed by the two eight-cell
 # map fields. They are reserved for preparation/status glyphs that must remain
-# visible together. Runtime-state scans found no retained Plane A, Plane B,
-# window, or SAT reference to any of these tile IDs before assignment.
+# visible together and passed the same retained-state ownership scan.
 BYTE_UI_PREP_EXTRA_TILE_IDS = (
-    0x07AA, 0x07AB, 0x07AC,
-    0x07B6, 0x07B7, 0x07B9, 0x07BB,
+    0x03CA, 0x03D0, 0x03D1,
+    0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA,
 )
 BYTE_UI_DYNAMIC_TILE_IDS = (
     BYTE_UI_DYNAMIC_MAP_TILE_IDS + BYTE_UI_PREP_EXTRA_TILE_IDS
@@ -483,7 +486,7 @@ BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
 BYTE_UI_PREP_DYNAMIC_CHARS = (
     "라", "론", "쉐", "카", "코", "키", "록", "적",
     "가", "스", "럴", "슬", "임", "비", "크", "제",
-    "샤", "먼", "안", "께", "울", "끼", "의",
+    "샤", "먼", "안", "께", "울", "끼", "의", "글",
 )
 BYTE_UI_RESULT_DYNAMIC_CODE = 0xA6
 BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR = {
@@ -491,7 +494,6 @@ BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR = {
 }
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL = 0x0090A6
 BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL = bytes.fromhex("32 3C 00 B7")
-BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED = bytes.fromhex("32 3C 00 07")
 BYTE_UI_CLASS_STRING_RELOC_BASE = 0x2B9000
 BYTE_UI_CLASS_STRING_RELOC_LIMIT = 0x2BA000
 BYTE_UI_NAME_STRING_RELOC_BASE = 0x2BA000
@@ -6149,7 +6151,10 @@ def _build_byte_ui_word_renderer() -> bytes:
     code.emit("0C 00 00 00")
     code.branch_word(0x6600, "legacy")  # bne.w
     code.emit("42 40 10 18")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
     code.branch_word(0x6000, "store")
     code.label("legacy")
     code.emit("0C 00 00 F0")
@@ -6457,8 +6462,8 @@ def _build_byte_ui_map_info_scratch_restore() -> bytes:
     # A62C owns the selected subordinate while A628 owns its commander. Mirror
     # the stock command-builder selection rule at 0x020CF2 so opening a
     # mercenary command panel cannot redraw its class as the commander's class.
-    # The scratch patterns overlap the unused tail of the H-scroll table and
-    # are safe only while VDP register 11 is in full-screen scroll mode.
+    # The scratch patterns use the separately audited ordinary pattern pool;
+    # no VDP scroll-mode assumption is required.
     code = _M68KCode()
     code.emit("48 E7 FF FE")
     code.emit("4A 79 FF FF 90 5A")
@@ -7693,10 +7698,6 @@ def install_byte_ui_extension(
         BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
     ] != BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL:
         raise ValueError("full-screen H-scroll fill instruction changed")
-    data[
-        BYTE_UI_FULL_SCROLL_HSCROLL_FILL :
-        BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
-    ] = BYTE_UI_FULL_SCROLL_HSCROLL_FILL_PATCHED
     if data[
         BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
     ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:
