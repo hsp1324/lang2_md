@@ -1,0 +1,1935 @@
+{
+  "schema_version": 1,
+  "status": "captured_exact_unreviewed",
+  "acceptance_updated": false,
+  "profile": "normal",
+  "scenario": 2,
+  "run_id": "s02a02",
+  "elapsed_seconds": 238.123,
+  "expected_pair_count": 18,
+  "actual_pair_count": 18,
+  "distinct_pre_fixed_detail_count": 8,
+  "capture_pairs": [
+    {
+      "surface": "allied/commander_01_hire_page_01.png",
+      "pre_sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+      "post_sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+      "byte_identical": true
+    },
+    {
+      "surface": "allied/commander_01_root.png",
+      "pre_sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "post_sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "byte_identical": true
+    },
+    {
+      "surface": "allied/commander_02_hire_page_01.png",
+      "pre_sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+      "post_sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+      "byte_identical": true
+    },
+    {
+      "surface": "allied/commander_02_root.png",
+      "pre_sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "post_sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "byte_identical": true
+    },
+    {
+      "surface": "allied/commander_03_hire_page_01.png",
+      "pre_sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+      "post_sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+      "byte_identical": true
+    },
+    {
+      "surface": "allied/commander_03_root.png",
+      "pre_sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "post_sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "byte_identical": true
+    },
+    {
+      "surface": "arrangement/menu.png",
+      "pre_sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "post_sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "byte_identical": true
+    },
+    {
+      "surface": "arrangement/returned_menu.png",
+      "pre_sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+      "post_sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+      "byte_identical": true
+    },
+    {
+      "surface": "arrangement/roster_page_01.png",
+      "pre_sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+      "post_sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/map_entry.png",
+      "pre_sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+      "post_sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_00.png",
+      "pre_sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+      "post_sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_01.png",
+      "pre_sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+      "post_sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_02.png",
+      "pre_sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+      "post_sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_03.png",
+      "pre_sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+      "post_sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_04.png",
+      "pre_sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+      "post_sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_05.png",
+      "pre_sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+      "post_sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_06.png",
+      "pre_sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+      "post_sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+      "byte_identical": true
+    },
+    {
+      "surface": "fixed/record_07.png",
+      "pre_sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+      "post_sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+      "byte_identical": true
+    }
+  ],
+  "captures": [
+    {
+      "path": "pre/root.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/allied/commander_01_root.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_01_hire_attempt_1.png",
+      "sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+      "bytes": 8261,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/allied/commander_01_hire_page_01.png",
+      "sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+      "bytes": 8261,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_01_exit_attempt_1.png",
+      "sha256": "1b0161ee5fc2a6ae4378384ff9e557b60a2ed7373de6c3607ce85099a224d329",
+      "bytes": 8094,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_01_exit_attempt_2.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_02_select_attempt_1.png",
+      "sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "bytes": 7757,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/allied/commander_02_root.png",
+      "sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "bytes": 7757,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_02_hire_attempt_1.png",
+      "sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+      "bytes": 7985,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/allied/commander_02_hire_page_01.png",
+      "sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+      "bytes": 7985,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_02_exit_attempt_1.png",
+      "sha256": "b84598763ba64519867af66ffe3621c271abd8f6da9c0b770682f11f737659df",
+      "bytes": 7902,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_02_exit_attempt_2.png",
+      "sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "bytes": 7757,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_03_select_attempt_1.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/allied/commander_03_root.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_03_hire_attempt_1.png",
+      "sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+      "bytes": 7585,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/allied/commander_03_hire_page_01.png",
+      "sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+      "bytes": 7585,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_03_exit_attempt_1.png",
+      "sha256": "908af9b75fe74ca88d293648f9f8294941974800dd62fd13f5fd252e8a778a9d",
+      "bytes": 7505,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/commander_03_exit_attempt_2.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre_arrangement/action_focus_attempt_1.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre_arrangement/action_focus_attempt_2.png",
+      "sha256": "908af9b75fe74ca88d293648f9f8294941974800dd62fd13f5fd252e8a778a9d",
+      "bytes": 7505,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre_arrangement/action_row_move_1_blink_1.png",
+      "sha256": "d1c25b6f8fa54c9b168639eb774886c0b43e1e848cb7bbf427968e901a180785",
+      "bytes": 7510,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre_arrangement/action_row_move_2_blink_1.png",
+      "sha256": "f0cd8f83d35281a404c28ffb0d8abbaf4444a398d04e6257db3c45fe446c9f6b",
+      "bytes": 7516,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre_arrangement/action_row_move_3_blink_1.png",
+      "sha256": "db0d7d1c4a1bdb91fd2834be100742d5668d473b5aff6d9e374447dee96b0f8d",
+      "bytes": 7508,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/arrangement_open_attempt_1.png",
+      "sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "bytes": 7950,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/arrangement/menu.png",
+      "sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "bytes": 7950,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/roster_open_attempt_1.png",
+      "sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+      "bytes": 8976,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/arrangement/roster_page_01.png",
+      "sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+      "bytes": 8976,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/roster_return_attempt_1.png",
+      "sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "bytes": 7950,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/map_entry.png",
+      "sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+      "bytes": 7134,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_00_open_attempt_1.png",
+      "sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+      "bytes": 9027,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_00.png",
+      "sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+      "bytes": 9027,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_00_close_attempt_1.png",
+      "sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+      "bytes": 7134,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_01_open_attempt_1.png",
+      "sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_01.png",
+      "sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_01_close_attempt_1.png",
+      "sha256": "e5f8c34a23def46f3eb47ce6738261ea02b5c0608a531f109219f91be45387b3",
+      "bytes": 7128,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_02_open_attempt_1.png",
+      "sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_02.png",
+      "sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_02_close_attempt_1.png",
+      "sha256": "7a94dfdc4963b22c73b463a1f23a66a9d3db1023df478fd993dc5f1bdf941a79",
+      "bytes": 7128,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_03_open_attempt_1.png",
+      "sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+      "bytes": 8200,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_03.png",
+      "sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+      "bytes": 8200,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_03_close_attempt_1.png",
+      "sha256": "5a36b824d57bcbb15d6f64273a0a38aee2a3de94362666866f4e62ca42fe541a",
+      "bytes": 7121,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_04_open_attempt_1.png",
+      "sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+      "bytes": 8803,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_04.png",
+      "sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+      "bytes": 8803,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_04_close_attempt_1.png",
+      "sha256": "a3f165435422cc4aee71e0198a05b7a03579d217c5c105b82d0e771ebe21941b",
+      "bytes": 7128,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_05_open_attempt_1.png",
+      "sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+      "bytes": 8562,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_05.png",
+      "sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+      "bytes": 8562,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_05_close_attempt_1.png",
+      "sha256": "0ccbcbe2101b671b8f68389972c11f8aaa03b0ee916fb268abb39f52145fda1d",
+      "bytes": 7088,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_06_open_attempt_1.png",
+      "sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+      "bytes": 8428,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_06.png",
+      "sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+      "bytes": 8428,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_06_close_attempt_1.png",
+      "sha256": "338301a69ebfba6ae2a35f8d80e54c95490d2087d514a4889e413feb81429c63",
+      "bytes": 7088,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_07_open_attempt_1.png",
+      "sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+      "bytes": 8564,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/fixed/record_07.png",
+      "sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+      "bytes": 8564,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/record_07_close_attempt_1.png",
+      "sha256": "9721f8c2d71028e97d5498d8c95ce97b1c2b3c2199ac0728719c87bf73e2bb7e",
+      "bytes": 7090,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/pre/arrangement_return_attempt_1.png",
+      "sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+      "bytes": 8000,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "pre/arrangement/returned_menu.png",
+      "sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+      "bytes": 8000,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/shop/action_focus_attempt_1.png",
+      "sha256": "a0f95e01803f3bdc5638fc0b49ff0fe3ed7e6970630000f79ca48b567e6446e1",
+      "bytes": 8039,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/shop/action_row_move_1_blink_1.png",
+      "sha256": "fd9769d8ffd73330639d9a477088fae57e0d2a94d53c2865e4a2348d2ae8e091",
+      "bytes": 8043,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/shop/action_row_move_2_blink_1.png",
+      "sha256": "d95e62148d3808d7c645571c915543ac4278b9995dcb829c223fe03dd8f05e8a",
+      "bytes": 8048,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "shop/menu.png",
+      "sha256": "306e0ad7b788f54b3d13cbfbcc7ff4560b856330c18fed858ed9047d110ad722",
+      "bytes": 7562,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "shop/item_list.png",
+      "sha256": "deaaa30273a6d2fe71d4c4baa979691273a85bb62032d1f24334d949f22e6a61",
+      "bytes": 5952,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/shop/return_attempt_1.png",
+      "sha256": "a0f95e01803f3bdc5638fc0b49ff0fe3ed7e6970630000f79ca48b567e6446e1",
+      "bytes": 8039,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "shop/returned_unfocused.png",
+      "sha256": "a0f95e01803f3bdc5638fc0b49ff0fe3ed7e6970630000f79ca48b567e6446e1",
+      "bytes": 8039,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/shop/focus_attempt_1.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "shop/returned_focused.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/allied/commander_01_root.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_01_hire_attempt_1.png",
+      "sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+      "bytes": 8261,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/allied/commander_01_hire_page_01.png",
+      "sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+      "bytes": 8261,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_01_exit_attempt_1.png",
+      "sha256": "1b0161ee5fc2a6ae4378384ff9e557b60a2ed7373de6c3607ce85099a224d329",
+      "bytes": 8094,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_01_exit_attempt_2.png",
+      "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+      "bytes": 8019,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_02_select_attempt_1.png",
+      "sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "bytes": 7757,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/allied/commander_02_root.png",
+      "sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "bytes": 7757,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_02_hire_attempt_1.png",
+      "sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+      "bytes": 7985,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/allied/commander_02_hire_page_01.png",
+      "sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+      "bytes": 7985,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_02_exit_attempt_1.png",
+      "sha256": "b84598763ba64519867af66ffe3621c271abd8f6da9c0b770682f11f737659df",
+      "bytes": 7902,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_02_exit_attempt_2.png",
+      "sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+      "bytes": 7757,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_03_select_attempt_1.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/allied/commander_03_root.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_03_hire_attempt_1.png",
+      "sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+      "bytes": 7585,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/allied/commander_03_hire_page_01.png",
+      "sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+      "bytes": 7585,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_03_exit_attempt_1.png",
+      "sha256": "908af9b75fe74ca88d293648f9f8294941974800dd62fd13f5fd252e8a778a9d",
+      "bytes": 7505,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/commander_03_exit_attempt_2.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post_arrangement/action_focus_attempt_1.png",
+      "sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+      "bytes": 7332,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post_arrangement/action_focus_attempt_2.png",
+      "sha256": "908af9b75fe74ca88d293648f9f8294941974800dd62fd13f5fd252e8a778a9d",
+      "bytes": 7505,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post_arrangement/action_row_move_1_blink_1.png",
+      "sha256": "d1c25b6f8fa54c9b168639eb774886c0b43e1e848cb7bbf427968e901a180785",
+      "bytes": 7510,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post_arrangement/action_row_move_2_blink_1.png",
+      "sha256": "f0cd8f83d35281a404c28ffb0d8abbaf4444a398d04e6257db3c45fe446c9f6b",
+      "bytes": 7516,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post_arrangement/action_row_move_3_blink_1.png",
+      "sha256": "db0d7d1c4a1bdb91fd2834be100742d5668d473b5aff6d9e374447dee96b0f8d",
+      "bytes": 7508,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/arrangement_open_attempt_1.png",
+      "sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "bytes": 7950,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/arrangement/menu.png",
+      "sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "bytes": 7950,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/roster_open_attempt_1.png",
+      "sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+      "bytes": 8976,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/arrangement/roster_page_01.png",
+      "sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+      "bytes": 8976,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/roster_return_attempt_1.png",
+      "sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+      "bytes": 7950,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/map_entry.png",
+      "sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+      "bytes": 7134,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_00_open_attempt_1.png",
+      "sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+      "bytes": 9027,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_00.png",
+      "sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+      "bytes": 9027,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_00_close_attempt_1.png",
+      "sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+      "bytes": 7134,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_01_open_attempt_1.png",
+      "sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_01.png",
+      "sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_01_close_attempt_1.png",
+      "sha256": "e5f8c34a23def46f3eb47ce6738261ea02b5c0608a531f109219f91be45387b3",
+      "bytes": 7128,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_02_open_attempt_1.png",
+      "sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_02.png",
+      "sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+      "bytes": 8722,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_02_close_attempt_1.png",
+      "sha256": "7a94dfdc4963b22c73b463a1f23a66a9d3db1023df478fd993dc5f1bdf941a79",
+      "bytes": 7128,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_03_open_attempt_1.png",
+      "sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+      "bytes": 8200,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_03.png",
+      "sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+      "bytes": 8200,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_03_close_attempt_1.png",
+      "sha256": "5a36b824d57bcbb15d6f64273a0a38aee2a3de94362666866f4e62ca42fe541a",
+      "bytes": 7121,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_04_open_attempt_1.png",
+      "sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+      "bytes": 8803,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_04.png",
+      "sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+      "bytes": 8803,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_04_close_attempt_1.png",
+      "sha256": "a3f165435422cc4aee71e0198a05b7a03579d217c5c105b82d0e771ebe21941b",
+      "bytes": 7128,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_05_open_attempt_1.png",
+      "sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+      "bytes": 8562,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_05.png",
+      "sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+      "bytes": 8562,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_05_close_attempt_1.png",
+      "sha256": "0ccbcbe2101b671b8f68389972c11f8aaa03b0ee916fb268abb39f52145fda1d",
+      "bytes": 7088,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_06_open_attempt_1.png",
+      "sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+      "bytes": 8428,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_06.png",
+      "sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+      "bytes": 8428,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_06_close_attempt_1.png",
+      "sha256": "338301a69ebfba6ae2a35f8d80e54c95490d2087d514a4889e413feb81429c63",
+      "bytes": 7088,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_07_open_attempt_1.png",
+      "sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+      "bytes": 8564,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/fixed/record_07.png",
+      "sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+      "bytes": 8564,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/record_07_close_attempt_1.png",
+      "sha256": "9721f8c2d71028e97d5498d8c95ce97b1c2b3c2199ac0728719c87bf73e2bb7e",
+      "bytes": 7090,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "transitions/post/arrangement_return_attempt_1.png",
+      "sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+      "bytes": 8000,
+      "dimensions": [
+        320,
+        240
+      ]
+    },
+    {
+      "path": "post/arrangement/returned_menu.png",
+      "sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+      "bytes": 8000,
+      "dimensions": [
+        320,
+        240
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "up"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "left",
+        "down"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "up"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "left",
+        "down"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "up"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down",
+        "down",
+        "down"
+      ],
+      "delay_seconds": 0.9,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 2.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "save:1.0"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.2,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 2.5,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 2.5,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.5,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "up"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "left",
+        "down"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "up"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "left",
+        "down"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "up"
+      ],
+      "delay_seconds": 1.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down@0.2:0.9"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "down",
+        "down",
+        "down"
+      ],
+      "delay_seconds": 0.9,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "right@0.2:0.8"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    },
+    {
+      "keys": [
+        "c"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 1.1,
+      "batched": false
+    },
+    {
+      "keys": [
+        "b"
+      ],
+      "delay_seconds": 2.0,
+      "batched": false
+    },
+    {
+      "keys": [
+        "save:1.0"
+      ],
+      "delay_seconds": 0.75,
+      "batched": false
+    }
+  ],
+  "required_human_review": [
+    "all Korean commander, class, and offered mercenary labels",
+    "full minimap and tile-row integrity",
+    "all commander and mercenary sprites",
+    "gray acted sprites and result screens in a separate battle run"
+  ],
+  "limitations": [
+    "class-change choices are only applicable when the live seed exposes them",
+    "hidden or (255,255) fixed records are source-not-applicable here",
+    "gray acted sprites and battle result screens are not exercised by this preparation run"
+  ]
+}

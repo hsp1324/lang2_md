@@ -1,0 +1,1292 @@
+{
+  "schema_version": 1,
+  "status": "scenario_2_complete_pass",
+  "review": {
+    "path": "localization/preparation_surface_scenario_02_review.json",
+    "sha256": "94a5b90032a82b107627b0b513f77d2b6da1092088b617d23a69f3be6b0b7498",
+    "reviewed_on": "2026-07-31",
+    "scope": "Scenario 2 preparation, hiring, arrangement, fixed-record, real shop item-list, gray acted-sprite, and battle-result surfaces",
+    "class_change": {
+      "status": "not_applicable_in_this_seed",
+      "reason": "The preserved manual-slot seed exposes commander status and hiring pages but no live class-change choice in Scenario 2."
+    },
+    "acceptance_effect": "Scenario 2 passes every required visible surface in both profiles. Scenarios 3 through 27 remain pending, so the overall release gate remains pending."
+  },
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s02/s02a02",
+      "status": "scenario_2_surface_pass",
+      "plan": {
+        "path": "captures/run/preparation_surface_matrix/normal/s02/s02a02/plan.json",
+        "sha256": "33cdeb1a6f582b0c14cebee61ee97a994e3975c413d2de02b24f1452313c930b"
+      },
+      "captured_evidence": {
+        "path": "captures/run/preparation_surface_matrix/normal/s02/s02a02/evidence.json",
+        "sha256": "35bf21378d54f9f1c63c731d05d8955c687e7875421aa816d29aa56c34ee0936",
+        "original_status": "captured_exact_unreviewed",
+        "elapsed_seconds": 238.123
+      },
+      "capture_status": "recomputed_exact_reviewed",
+      "candidate": {
+        "path": "tmp/Langrisser II (Korean prep-pattern-pool-yal probe).md",
+        "md_checksum": "B0DF",
+        "sha256": "f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a"
+      },
+      "scenario": 2,
+      "allied_commander_count": 3,
+      "allied_seed_records": [
+        {
+          "commander_id": 1,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 1,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1
+        },
+        {
+          "commander_id": 2,
+          "class_id": 2,
+          "class_id_hex": "0x02",
+          "class_korean": "클레릭",
+          "level": 3,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1
+        },
+        {
+          "commander_id": 3,
+          "class_id": 2,
+          "class_id_hex": "0x02",
+          "class_korean": "클레릭",
+          "level": 1,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1
+        }
+      ],
+      "fixed_record_count": 10,
+      "visible_fixed_record_indexes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "not_applicable_fixed_records": [
+        {
+          "index": 8,
+          "name_korean": "제국지휘관",
+          "class_korean": "파이터",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        },
+        {
+          "index": 9,
+          "name_korean": "제국지휘관",
+          "class_korean": "파이터",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        }
+      ],
+      "expected_pair_count": 18,
+      "actual_pair_count": 18,
+      "distinct_pre_fixed_detail_count": 8,
+      "capture_pairs": [
+        {
+          "surface": "allied/commander_01_hire_page_01.png",
+          "pre_sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+          "post_sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_01_root.png",
+          "pre_sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+          "post_sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_hire_page_01.png",
+          "pre_sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+          "post_sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_root.png",
+          "pre_sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+          "post_sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_hire_page_01.png",
+          "pre_sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+          "post_sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_root.png",
+          "pre_sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+          "post_sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/menu.png",
+          "pre_sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+          "post_sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/returned_menu.png",
+          "pre_sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+          "post_sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_01.png",
+          "pre_sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+          "post_sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/map_entry.png",
+          "pre_sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+          "post_sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_00.png",
+          "pre_sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+          "post_sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_01.png",
+          "pre_sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+          "post_sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_02.png",
+          "pre_sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+          "post_sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_03.png",
+          "pre_sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+          "post_sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_04.png",
+          "pre_sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+          "post_sha256": "3081b2d7bdaf91bc7ac7ceb69fa5c35af7dfc7600a869432edd354254b715b1d",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_05.png",
+          "pre_sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+          "post_sha256": "e4f105535d7684354fc3a08e4ca8ccaf9823fcb79c05f4cfab782c675be84670",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_06.png",
+          "pre_sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+          "post_sha256": "b8ffd8ab0d274ecdb0e72a30a90ac6ee52c6b094fac727db442da2f638babb42",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_07.png",
+          "pre_sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+          "post_sha256": "112a7e4caf49b0590edfbb97c6393403ff6f05b7053330e4be69d3aa8674b143",
+          "byte_identical": true
+        }
+      ],
+      "shop_captures": [
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s02/s02a02/shop/menu.png",
+          "sha256": "306e0ad7b788f54b3d13cbfbcc7ff4560b856330c18fed858ed9047d110ad722",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s02/s02a02/shop/item_list.png",
+          "sha256": "deaaa30273a6d2fe71d4c4baa979691273a85bb62032d1f24334d949f22e6a61",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s02/s02a02/shop/returned_unfocused.png",
+          "sha256": "a0f95e01803f3bdc5638fc0b49ff0fe3ed7e6970630000f79ca48b567e6446e1",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s02/s02a02/shop/returned_focused.png",
+          "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+          "dimensions": [
+            320,
+            240
+          ]
+        }
+      ],
+      "battle_evidence": {
+        "status": "pass",
+        "run_root": "captures/run/preparation_battle_surface/normal/s02",
+        "gray_acted_sprite": {
+          "active_capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s02/gray01/active_command.png",
+            "sha256": "27f28ad2d02b5090f0d1b062eeb5f06e2fb8be5da6c2e8a1613d115025c4ff9c",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "acted_capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s02/gray01/acted_gray.png",
+            "sha256": "40c11e8e421787e43798e8dc842ac2558217e77b7a0e40721942866429d98fb0",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/normal/s02/gray01/states/acted_gray.gst",
+          "gst_sha256": "5988f7cc4f1dbf54d7ce625424a541c0f3e9fe2fbc45a96b873db702c2470de5",
+          "runtime_group_zero": {
+            "class_id": 1,
+            "commander_id": 1,
+            "acted_flag": 1,
+            "hp": 10,
+            "x": 5,
+            "y": 17,
+            "record_prefix": "0101010a00000511000000006401000a"
+          },
+          "source_commander_id": 1,
+          "source_class_id": 1,
+          "source_record_offset": "0x05DBA8",
+          "source_silhouette_id": "0x001E",
+          "vram_range": "0x9600..0x967F",
+          "vram_sha256": "74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22",
+          "matches_stock_fighter_silhouette_expansion": true,
+          "plane_references": [
+            {
+              "tile": "0x04B0",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 17,
+                  "y": 8,
+                  "tile_word": "0xA4B0"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B1",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 17,
+                  "y": 9,
+                  "tile_word": "0xA4B1"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B2",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 18,
+                  "y": 8,
+                  "tile_word": "0xA4B2"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B3",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 18,
+                  "y": 9,
+                  "tile_word": "0xA4B3"
+                }
+              ]
+            }
+          ],
+          "scope_note": "The normal gray-only diagnostic accidentally hired Soldiers; the accepted clean preparation run separately covers hiring names and unchanged before/after state. The acted-sprite proof uses only runtime group 0, its Plane A references, and its stock Fighter silhouette payload."
+        },
+        "battle_result": {
+          "capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s02/result01/battle_result.png",
+            "sha256": "0d14f98e924d76d441a99e1710b032a50384b8630fc988ef633f7fb3229a5fbe",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/normal/s02/result01/states/battle_result.gst",
+          "gst_sha256": "97df1aa64ee5d4a3dc9837af5007fad64a617d2d9d313aaa875bac13ed2d4a54",
+          "header_text": "전과보고",
+          "header_vram_range": "0xA000..0xA1FF",
+          "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+          "header_plane_cells": [
+            {
+              "x": 17,
+              "y": 1,
+              "tile_word": "0x8500",
+              "expected_tile": "0x0500",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 1,
+              "tile_word": "0x8501",
+              "expected_tile": "0x0501",
+              "matches": true
+            },
+            {
+              "x": 17,
+              "y": 2,
+              "tile_word": "0x8502",
+              "expected_tile": "0x0502",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 2,
+              "tile_word": "0x8503",
+              "expected_tile": "0x0503",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 1,
+              "tile_word": "0x8504",
+              "expected_tile": "0x0504",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 1,
+              "tile_word": "0x8505",
+              "expected_tile": "0x0505",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 2,
+              "tile_word": "0x8506",
+              "expected_tile": "0x0506",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 2,
+              "tile_word": "0x8507",
+              "expected_tile": "0x0507",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 1,
+              "tile_word": "0x8508",
+              "expected_tile": "0x0508",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 1,
+              "tile_word": "0x8509",
+              "expected_tile": "0x0509",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 2,
+              "tile_word": "0x850A",
+              "expected_tile": "0x050A",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 2,
+              "tile_word": "0x850B",
+              "expected_tile": "0x050B",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 1,
+              "tile_word": "0x850C",
+              "expected_tile": "0x050C",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 1,
+              "tile_word": "0x850D",
+              "expected_tile": "0x050D",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 2,
+              "tile_word": "0x850E",
+              "expected_tile": "0x050E",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 2,
+              "tile_word": "0x850F",
+              "expected_tile": "0x050F",
+              "matches": true
+            }
+          ],
+          "diagnostic_lineage": {
+            "mode": "enemy_annihilation",
+            "md_checksum": "5C26",
+            "sha256": "8c746b9617f5d3f2d8b86be7e8ef7871f4828df98c1fe5151f9d734599072a73",
+            "changed_offset_count": 118,
+            "changed_offsets": [
+              "0x00018E",
+              "0x00018F",
+              "0x00F2E1",
+              "0x00F2E2",
+              "0x00F2E3",
+              "0x3FEF00",
+              "0x3FEF01",
+              "0x3FEF02",
+              "0x3FEF03",
+              "0x3FEF06",
+              "0x3FEF07",
+              "0x3FEF08",
+              "0x3FEF09",
+              "0x3FEF0A",
+              "0x3FEF0E",
+              "0x3FEF0F",
+              "0x3FEF10",
+              "0x3FEF11",
+              "0x3FEF12",
+              "0x3FEF13",
+              "0x3FEF16",
+              "0x3FEF17",
+              "0x3FEF18",
+              "0x3FEF19",
+              "0x3FEF1A",
+              "0x3FEF1B",
+              "0x3FEF1E",
+              "0x3FEF1F",
+              "0x3FEF20",
+              "0x3FEF21",
+              "0x3FEF22",
+              "0x3FEF26",
+              "0x3FEF27",
+              "0x3FEF28",
+              "0x3FEF29",
+              "0x3FEF2A",
+              "0x3FEF2B",
+              "0x3FEF2E",
+              "0x3FEF2F",
+              "0x3FEF30",
+              "0x3FEF31",
+              "0x3FEF32",
+              "0x3FEF33",
+              "0x3FEF36",
+              "0x3FEF37",
+              "0x3FEF38",
+              "0x3FEF39",
+              "0x3FEF3A",
+              "0x3FEF3E",
+              "0x3FEF3F",
+              "0x3FEF40",
+              "0x3FEF41",
+              "0x3FEF42",
+              "0x3FEF43",
+              "0x3FEF46",
+              "0x3FEF47",
+              "0x3FEF48",
+              "0x3FEF49",
+              "0x3FEF4A",
+              "0x3FEF4B",
+              "0x3FEF4E",
+              "0x3FEF4F",
+              "0x3FEF50",
+              "0x3FEF51",
+              "0x3FEF52",
+              "0x3FEF56",
+              "0x3FEF57",
+              "0x3FEF58",
+              "0x3FEF59",
+              "0x3FEF5A",
+              "0x3FEF5B",
+              "0x3FEF5E",
+              "0x3FEF60",
+              "0x3FEF61",
+              "0x3FEF62",
+              "0x3FEF63",
+              "0x3FEF66",
+              "0x3FEF67",
+              "0x3FEF68",
+              "0x3FEF69",
+              "0x3FEF6A",
+              "0x3FEF6E",
+              "0x3FEF6F",
+              "0x3FEF70",
+              "0x3FEF71",
+              "0x3FEF72",
+              "0x3FEF73",
+              "0x3FEF76",
+              "0x3FEF77",
+              "0x3FEF78",
+              "0x3FEF79",
+              "0x3FEF7A",
+              "0x3FEF7B",
+              "0x3FEF7E",
+              "0x3FEF7F",
+              "0x3FEF80",
+              "0x3FEF81",
+              "0x3FEF82",
+              "0x3FEF86",
+              "0x3FEF87",
+              "0x3FEF88",
+              "0x3FEF89",
+              "0x3FEF8A",
+              "0x3FEF8B",
+              "0x3FEF8E",
+              "0x3FEF8F",
+              "0x3FEF90",
+              "0x3FEF91",
+              "0x3FEF92",
+              "0x3FEF93",
+              "0x3FEF94",
+              "0x3FEF95",
+              "0x3FEF96",
+              "0x3FEF97",
+              "0x3FEF98",
+              "0x3FEF99",
+              "0x3FEF9A",
+              "0x3FEF9B"
+            ],
+            "allowed_change_ranges": [
+              "ROM checksum 0x00018E..0x00018F",
+              "Start-menu entry operand 0x00F2E0..0x00F2E3",
+              "unused wrapper 0x3FEF00..0x3FEF9B"
+            ],
+            "changed_only_checksum_start_operand_and_wrapper": true,
+            "scenario_layout_validated_against_source": true,
+            "scenario_deployments_unchanged": true,
+            "scenario_fixed_records_unchanged": true,
+            "scenario_result_events_unchanged": true,
+            "korean_battle_result_header_unchanged": true,
+            "enemy_runtime_groups_marked_defeated": [
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "matches_expected_checksum": true,
+            "matches_expected_sha256": true
+          }
+        }
+      },
+      "human_review": {
+        "run": "captures/run/preparation_surface_matrix/normal/s02/s02a02",
+        "status": "scenario_2_surface_pass",
+        "battle_runs": {
+          "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s02/gray01",
+          "battle_result": "captures/run/preparation_battle_surface/normal/s02/result01"
+        },
+        "checks": {
+          "all_korean_commander_class_and_mercenary_labels": "pass",
+          "commander_and_mercenary_sprites": "pass",
+          "arrangement_minimap_and_rows": "pass",
+          "borders_and_numeric_fields": "pass",
+          "real_shop_item_list_round_trip": "pass",
+          "gray_acted_sprites_and_battle_result": "pass"
+        }
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s02/s02a01",
+      "status": "scenario_2_surface_pass",
+      "plan": {
+        "path": "captures/run/preparation_surface_matrix/hard/s02/s02a01/plan.json",
+        "sha256": "d699c24f1fe438970f734f742cd9cc1e0b39e49b1d213e65e1bbaf62d394a1df"
+      },
+      "captured_evidence": {
+        "path": "captures/run/preparation_surface_matrix/hard/s02/s02a01/evidence.json",
+        "sha256": "defe52bd3f3bd7c4f0b9297b0fec69a33c9ec9be81fc953611c0db7fdb06a011",
+        "original_status": "captured_exact_unreviewed",
+        "elapsed_seconds": 231.735
+      },
+      "capture_status": "recomputed_exact_reviewed",
+      "candidate": {
+        "path": "tmp/Langrisser II (Korean Hard prep-pattern-pool-yal probe).md",
+        "md_checksum": "FA1D",
+        "sha256": "1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32"
+      },
+      "scenario": 2,
+      "allied_commander_count": 3,
+      "allied_seed_records": [
+        {
+          "commander_id": 1,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 1,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1
+        },
+        {
+          "commander_id": 2,
+          "class_id": 2,
+          "class_id_hex": "0x02",
+          "class_korean": "클레릭",
+          "level": 3,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1
+        },
+        {
+          "commander_id": 3,
+          "class_id": 2,
+          "class_id_hex": "0x02",
+          "class_korean": "클레릭",
+          "level": 1,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1
+        }
+      ],
+      "fixed_record_count": 10,
+      "visible_fixed_record_indexes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "not_applicable_fixed_records": [
+        {
+          "index": 8,
+          "name_korean": "제국지휘관",
+          "class_korean": "파이터",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        },
+        {
+          "index": 9,
+          "name_korean": "제국지휘관",
+          "class_korean": "파이터",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        }
+      ],
+      "expected_pair_count": 18,
+      "actual_pair_count": 18,
+      "distinct_pre_fixed_detail_count": 8,
+      "capture_pairs": [
+        {
+          "surface": "allied/commander_01_hire_page_01.png",
+          "pre_sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+          "post_sha256": "de5807b4665f032775cb4b936ebe9f069dc1686318d565b15b6e0bb28262789c",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_01_root.png",
+          "pre_sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+          "post_sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_hire_page_01.png",
+          "pre_sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+          "post_sha256": "d013cf33bde1fb5b1ce183cbf6aa62fa4954311e77afffedb7fe8fa8a2328e75",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_root.png",
+          "pre_sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+          "post_sha256": "8fa0f37a7e2f7ecd169d8294b08c6d6bc727ee3e6fdbdb0f572652f56d10626e",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_hire_page_01.png",
+          "pre_sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+          "post_sha256": "01cf7afa4caf0cf87342ad293de7185e58683e1598f7b9a56e8c82bfc39094d5",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_root.png",
+          "pre_sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+          "post_sha256": "b099ef06af0176fab9a2e7a745ad95a0c8170e7133f37f1056d7822dc33bd81d",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/menu.png",
+          "pre_sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+          "post_sha256": "2a8f0db7cb258c59f2c8012fc0b588184359d321d45475cc651af2d19b5bde68",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/returned_menu.png",
+          "pre_sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+          "post_sha256": "47470676fe9a468fc25f141c6f6db8e2fa8cd12d0c7e38363ec67776c34e6c4e",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_01.png",
+          "pre_sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+          "post_sha256": "683861b6334d7cecacba9a528f647a5fd70979ba1748b52aa11d7e47eb4ca6e3",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/map_entry.png",
+          "pre_sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+          "post_sha256": "f19d9d0f3f45b090466493b133c56784f80220d37f17c3ecc5756cb184305e50",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_00.png",
+          "pre_sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+          "post_sha256": "3302d8e718a87e3b0d69d077612d1bceaf0452b82865b67f08a43b9cdbfc49ba",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_01.png",
+          "pre_sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+          "post_sha256": "c7b715cdb3714120e0c7fd1685809cd3afeb4aea7988ab767d1a1e6027a916db",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_02.png",
+          "pre_sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+          "post_sha256": "c02ff2eb01d306f8b498cd8b7a222ed7dbd41c82f78e953041d3d145682495e2",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_03.png",
+          "pre_sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+          "post_sha256": "4fb5b0472be593e9c5d2441edecb49dff78be02bcbe057eab415ef5881a02c62",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_04.png",
+          "pre_sha256": "de1ad29cd2f416a196ba6d91e61ace04d803db40a10021344f4ca52000222af9",
+          "post_sha256": "de1ad29cd2f416a196ba6d91e61ace04d803db40a10021344f4ca52000222af9",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_05.png",
+          "pre_sha256": "2dac0cadbfad15b4678ab0a5b43eeb3d49d35e08d080c308bdfe34bd61457a03",
+          "post_sha256": "2dac0cadbfad15b4678ab0a5b43eeb3d49d35e08d080c308bdfe34bd61457a03",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_06.png",
+          "pre_sha256": "9af695e4beb42aa1c6e98425d6af5cade5af0a57626e88a18265b560a4cfb23c",
+          "post_sha256": "9af695e4beb42aa1c6e98425d6af5cade5af0a57626e88a18265b560a4cfb23c",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_07.png",
+          "pre_sha256": "cb08b7868d8875d8d23d90d6d97e2020db3aa672497ef943ac3ab587cd7da176",
+          "post_sha256": "cb08b7868d8875d8d23d90d6d97e2020db3aa672497ef943ac3ab587cd7da176",
+          "byte_identical": true
+        }
+      ],
+      "shop_captures": [
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s02/s02a01/shop/menu.png",
+          "sha256": "306e0ad7b788f54b3d13cbfbcc7ff4560b856330c18fed858ed9047d110ad722",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s02/s02a01/shop/item_list.png",
+          "sha256": "deaaa30273a6d2fe71d4c4baa979691273a85bb62032d1f24334d949f22e6a61",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s02/s02a01/shop/returned_unfocused.png",
+          "sha256": "a0f95e01803f3bdc5638fc0b49ff0fe3ed7e6970630000f79ca48b567e6446e1",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s02/s02a01/shop/returned_focused.png",
+          "sha256": "0040b0080d8a55e5af050e398f923a19a1bb87ef2b25679ec674f98d074d5327",
+          "dimensions": [
+            320,
+            240
+          ]
+        }
+      ],
+      "battle_evidence": {
+        "status": "pass",
+        "run_root": "captures/run/preparation_battle_surface/hard/s02",
+        "gray_acted_sprite": {
+          "active_capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s02/gray01/active_command.png",
+            "sha256": "dfd7b07597eb0fb153d0e42815e0def108e446d5405eac085f2720183b1ad997",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "acted_capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s02/gray01/acted_gray.png",
+            "sha256": "60ea3983a06c191ed6ed0f32c422efc3233dec6649496e846fcfc90ba5305f2f",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/hard/s02/gray01/states/acted_gray.gst",
+          "gst_sha256": "7c9d1f87e10d5c98141f8e310a62d915973650e72d8d0659637d682d259f8473",
+          "runtime_group_zero": {
+            "class_id": 1,
+            "commander_id": 1,
+            "acted_flag": 1,
+            "hp": 10,
+            "x": 5,
+            "y": 18,
+            "record_prefix": "0101010a0000051200000000ff01000a"
+          },
+          "source_commander_id": 1,
+          "source_class_id": 1,
+          "source_record_offset": "0x05DBA8",
+          "source_silhouette_id": "0x001E",
+          "vram_range": "0x9600..0x967F",
+          "vram_sha256": "74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22",
+          "matches_stock_fighter_silhouette_expansion": true,
+          "plane_references": [
+            {
+              "tile": "0x04B0",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 17,
+                  "y": 11,
+                  "tile_word": "0xA4B0"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B1",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 17,
+                  "y": 12,
+                  "tile_word": "0xA4B1"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B2",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 18,
+                  "y": 11,
+                  "tile_word": "0xA4B2"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B3",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 18,
+                  "y": 12,
+                  "tile_word": "0xA4B3"
+                }
+              ]
+            }
+          ],
+          "scope_note": "The hard gray diagnostic used the preserved seed without additional hires."
+        },
+        "battle_result": {
+          "capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s02/result01/battle_result.png",
+            "sha256": "d06c9237354a6cfd7b8cd7ef0fcd23569722fb7861abf748f28bff49e4929f6a",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/hard/s02/result01/states/battle_result.gst",
+          "gst_sha256": "f28bff469c4b75b2d80ef9ea8dfb2bec9a21a838c3a15acdcbbd11548d130175",
+          "header_text": "전과보고",
+          "header_vram_range": "0xA000..0xA1FF",
+          "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+          "header_plane_cells": [
+            {
+              "x": 17,
+              "y": 1,
+              "tile_word": "0x8500",
+              "expected_tile": "0x0500",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 1,
+              "tile_word": "0x8501",
+              "expected_tile": "0x0501",
+              "matches": true
+            },
+            {
+              "x": 17,
+              "y": 2,
+              "tile_word": "0x8502",
+              "expected_tile": "0x0502",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 2,
+              "tile_word": "0x8503",
+              "expected_tile": "0x0503",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 1,
+              "tile_word": "0x8504",
+              "expected_tile": "0x0504",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 1,
+              "tile_word": "0x8505",
+              "expected_tile": "0x0505",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 2,
+              "tile_word": "0x8506",
+              "expected_tile": "0x0506",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 2,
+              "tile_word": "0x8507",
+              "expected_tile": "0x0507",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 1,
+              "tile_word": "0x8508",
+              "expected_tile": "0x0508",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 1,
+              "tile_word": "0x8509",
+              "expected_tile": "0x0509",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 2,
+              "tile_word": "0x850A",
+              "expected_tile": "0x050A",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 2,
+              "tile_word": "0x850B",
+              "expected_tile": "0x050B",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 1,
+              "tile_word": "0x850C",
+              "expected_tile": "0x050C",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 1,
+              "tile_word": "0x850D",
+              "expected_tile": "0x050D",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 2,
+              "tile_word": "0x850E",
+              "expected_tile": "0x050E",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 2,
+              "tile_word": "0x850F",
+              "expected_tile": "0x050F",
+              "matches": true
+            }
+          ],
+          "diagnostic_lineage": {
+            "mode": "enemy_annihilation",
+            "md_checksum": "A564",
+            "sha256": "ecc89fe092546f3bbf786ee3532d66d9bec5922574a101e3e290a449a2060e79",
+            "changed_offset_count": 118,
+            "changed_offsets": [
+              "0x00018E",
+              "0x00018F",
+              "0x00F2E1",
+              "0x00F2E2",
+              "0x00F2E3",
+              "0x3FEF00",
+              "0x3FEF01",
+              "0x3FEF02",
+              "0x3FEF03",
+              "0x3FEF06",
+              "0x3FEF07",
+              "0x3FEF08",
+              "0x3FEF09",
+              "0x3FEF0A",
+              "0x3FEF0E",
+              "0x3FEF0F",
+              "0x3FEF10",
+              "0x3FEF11",
+              "0x3FEF12",
+              "0x3FEF13",
+              "0x3FEF16",
+              "0x3FEF17",
+              "0x3FEF18",
+              "0x3FEF19",
+              "0x3FEF1A",
+              "0x3FEF1B",
+              "0x3FEF1E",
+              "0x3FEF1F",
+              "0x3FEF20",
+              "0x3FEF21",
+              "0x3FEF22",
+              "0x3FEF26",
+              "0x3FEF27",
+              "0x3FEF28",
+              "0x3FEF29",
+              "0x3FEF2A",
+              "0x3FEF2B",
+              "0x3FEF2E",
+              "0x3FEF2F",
+              "0x3FEF30",
+              "0x3FEF31",
+              "0x3FEF32",
+              "0x3FEF33",
+              "0x3FEF36",
+              "0x3FEF37",
+              "0x3FEF38",
+              "0x3FEF39",
+              "0x3FEF3A",
+              "0x3FEF3E",
+              "0x3FEF3F",
+              "0x3FEF40",
+              "0x3FEF41",
+              "0x3FEF42",
+              "0x3FEF43",
+              "0x3FEF46",
+              "0x3FEF47",
+              "0x3FEF48",
+              "0x3FEF49",
+              "0x3FEF4A",
+              "0x3FEF4B",
+              "0x3FEF4E",
+              "0x3FEF4F",
+              "0x3FEF50",
+              "0x3FEF51",
+              "0x3FEF52",
+              "0x3FEF56",
+              "0x3FEF57",
+              "0x3FEF58",
+              "0x3FEF59",
+              "0x3FEF5A",
+              "0x3FEF5B",
+              "0x3FEF5E",
+              "0x3FEF60",
+              "0x3FEF61",
+              "0x3FEF62",
+              "0x3FEF63",
+              "0x3FEF66",
+              "0x3FEF67",
+              "0x3FEF68",
+              "0x3FEF69",
+              "0x3FEF6A",
+              "0x3FEF6E",
+              "0x3FEF6F",
+              "0x3FEF70",
+              "0x3FEF71",
+              "0x3FEF72",
+              "0x3FEF73",
+              "0x3FEF76",
+              "0x3FEF77",
+              "0x3FEF78",
+              "0x3FEF79",
+              "0x3FEF7A",
+              "0x3FEF7B",
+              "0x3FEF7E",
+              "0x3FEF7F",
+              "0x3FEF80",
+              "0x3FEF81",
+              "0x3FEF82",
+              "0x3FEF86",
+              "0x3FEF87",
+              "0x3FEF88",
+              "0x3FEF89",
+              "0x3FEF8A",
+              "0x3FEF8B",
+              "0x3FEF8E",
+              "0x3FEF8F",
+              "0x3FEF90",
+              "0x3FEF91",
+              "0x3FEF92",
+              "0x3FEF93",
+              "0x3FEF94",
+              "0x3FEF95",
+              "0x3FEF96",
+              "0x3FEF97",
+              "0x3FEF98",
+              "0x3FEF99",
+              "0x3FEF9A",
+              "0x3FEF9B"
+            ],
+            "allowed_change_ranges": [
+              "ROM checksum 0x00018E..0x00018F",
+              "Start-menu entry operand 0x00F2E0..0x00F2E3",
+              "unused wrapper 0x3FEF00..0x3FEF9B"
+            ],
+            "changed_only_checksum_start_operand_and_wrapper": true,
+            "scenario_layout_validated_against_source": true,
+            "scenario_deployments_unchanged": true,
+            "scenario_fixed_records_unchanged": true,
+            "scenario_result_events_unchanged": true,
+            "korean_battle_result_header_unchanged": true,
+            "enemy_runtime_groups_marked_defeated": [
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "matches_expected_checksum": true,
+            "matches_expected_sha256": true
+          }
+        }
+      },
+      "human_review": {
+        "run": "captures/run/preparation_surface_matrix/hard/s02/s02a01",
+        "status": "scenario_2_surface_pass",
+        "battle_runs": {
+          "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s02/gray01",
+          "battle_result": "captures/run/preparation_battle_surface/hard/s02/result01"
+        },
+        "checks": {
+          "all_korean_commander_class_and_mercenary_labels": "pass",
+          "commander_and_mercenary_sprites": "pass",
+          "arrangement_minimap_and_rows": "pass",
+          "borders_and_numeric_fields": "pass",
+          "real_shop_item_list_round_trip": "pass",
+          "gray_acted_sprites_and_battle_result": "pass"
+        }
+      }
+    }
+  },
+  "matrix_progress_after_acceptance": {
+    "required_profile_scenario_runs": 54,
+    "preparation_surface_runs_reviewed": 4,
+    "battle_surface_runs_reviewed": 4,
+    "fully_accepted_profile_scenario_runs": 4,
+    "fully_accepted_scenarios": 2,
+    "remaining_requirement": "Complete every required surface in Scenarios 3 through 27 for both profiles."
+  },
+  "rejected_attempts": [
+    {
+      "profile": "normal",
+      "run_id": "s02a01",
+      "result": "The long foreground parent was terminated around 70 seconds; its orphaned BlastEm process was stopped and no capture from the attempt is accepted.",
+      "replacement": "s02a02 completed 18/18 exact pairs and passed review."
+    }
+  ],
+  "diagnostic_disclosures": [
+    {
+      "profile": "normal",
+      "surface": "gray_acted_sprite",
+      "result": "An obsolete deployment sequence hired Soldiers before the gray-only movement capture. The accepted clean s02a02 preparation run covers hiring; gray01 is accepted only for runtime group 0 acted state, Plane A references, and exact stock Fighter silhouette expansion."
+    }
+  ]
+}

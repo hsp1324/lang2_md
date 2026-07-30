@@ -89,9 +89,10 @@
     }
   ],
   "current_replacement_probe": {
-    "status": "scenario_1_complete_pass_scenarios_2_to_27_pending",
+    "status": "scenarios_1_and_2_complete_pass_scenarios_3_to_27_pending",
     "ownership_report": "localization/preparation_vram_ownership.json",
     "scenario_matrix_report": "localization/preparation_surface_matrix.json",
+    "scenario_2_report": "localization/preparation_surface_scenario_02.json",
     "normal_probe": {
       "md_checksum": "B0DF",
       "sha256": "f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a"
@@ -108,11 +109,14 @@
       "Scenario 1 normal and hard each pass 14/14 exact preparation, hiring, arrangement, fixed-record, and real shop item-list before/after pairs.",
       "Scenario 1 normal and hard pre/post 로얄호스 checkpoints render 얄 from ordinary pattern tile 0x03DF, reference it from Plane A, and keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
       "Scenario 1 normal and hard actual movement produces an intact gray Elwin/Fighter sprite whose VRAM payload exactly expands stock silhouette ID 0x001E.",
-      "Scenario 1 normal and hard traverse the stock victory path to byte-identical full-screen 전과보고 captures with intact Korean names, sprites, POINT, borders, rows, and numerical fields."
+      "Scenario 1 normal and hard traverse the stock victory path to byte-identical full-screen 전과보고 captures with intact Korean names, sprites, POINT, borders, rows, and numerical fields.",
+      "Scenario 2 normal and hard each pass 18/18 exact preparation, hiring, arrangement, eight visible fixed-record, and real shop item-list before/after pairs; hidden records 8 and 9 are explicitly N/A at source coordinates (255,255).",
+      "Scenario 2 normal and hard actual movement produces an intact gray Elwin/Fighter sprite whose VRAM payload exactly expands stock silhouette ID 0x001E.",
+      "Scenario 2 normal and hard traverse the unmodified source victory event after a narrowly scoped enemy-runtime diagnostic wrapper to full-screen 전과보고 captures with intact Korean names, sprites, POINT, borders, rows, and numerical fields."
     ],
     "not_yet_covered": [
       "live class-change choices where a scenario/seed exposes them",
-      "the complete Scenario 2 through 27 normal/hard matrix"
+      "the complete Scenario 3 through 27 normal/hard matrix"
     ]
   },
   "scenario_progress": [
@@ -147,14 +151,46 @@
         "complete_screen_integrity": "pass"
       },
       "not_applicable_reason": "The preserved Scenario 1 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    },
+    {
+      "scenario": 2,
+      "profile": "normal_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_02.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
+        "complete_screen_integrity": "pass"
+      },
+      "not_applicable_reason": "The preserved Scenario 2 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    },
+    {
+      "scenario": 2,
+      "profile": "hard_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_02.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
+        "complete_screen_integrity": "pass"
+      },
+      "not_applicable_reason": "The preserved Scenario 2 manual-slot seed exposes status and hiring pages but no live class-change choice."
     }
   ],
   "matrix_summary": {
     "required_profile_scenario_runs": 54,
-    "preparation_surface_runs_reviewed": 2,
-    "battle_surface_runs_reviewed": 2,
-    "fully_accepted_profile_scenario_runs": 2,
-    "fully_accepted_scenarios": 1,
+    "preparation_surface_runs_reviewed": 4,
+    "battle_surface_runs_reviewed": 4,
+    "fully_accepted_profile_scenario_runs": 4,
+    "fully_accepted_scenarios": 2,
     "release_gate_status": "pending"
   }
 }

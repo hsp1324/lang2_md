@@ -28,7 +28,7 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
             cwd=ROOT,
         )
 
-    def test_scenario_one_is_the_only_complete_scenario_pass(self) -> None:
+    def test_scenario_one_report_and_cumulative_acceptance_are_current(self) -> None:
         self.assertEqual(
             self.model["status"],
             "scenario_1_complete_pass_scenarios_2_to_27_pending",
@@ -44,10 +44,10 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
             self.acceptance["matrix_summary"],
             {
                 "required_profile_scenario_runs": 54,
-                "preparation_surface_runs_reviewed": 2,
-                "battle_surface_runs_reviewed": 2,
-                "fully_accepted_profile_scenario_runs": 2,
-                "fully_accepted_scenarios": 1,
+                "preparation_surface_runs_reviewed": 4,
+                "battle_surface_runs_reviewed": 4,
+                "fully_accepted_profile_scenario_runs": 4,
+                "fully_accepted_scenarios": 2,
                 "release_gate_status": "pending",
             },
         )
@@ -59,6 +59,8 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
             {
                 (1, "normal_korean", "pass"),
                 (1, "hard_korean", "pass"),
+                (2, "normal_korean", "pass"),
+                (2, "hard_korean", "pass"),
             },
         )
 

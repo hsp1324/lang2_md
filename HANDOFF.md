@@ -12331,3 +12331,57 @@ contains 57 safe syllables as documented below and in
 - Focused preparation/battle validation passes 61/61. The full suite was split
   into groups of 277, 413, 395, and 370 tests: 1,455 total with the unchanged
   44 failures plus 3 errors. No release ROM or version was changed.
+
+### Scenario 2 Preparation And Battle-Surface Completion (2026-07-31)
+
+- Clean normal `normal/s02/s02a02` and hard `hard/s02/s02a01` runs under
+  `captures/run/preparation_surface_matrix` each pass 18/18 byte-identical
+  full-screen pre/post pairs around a real same-process shop item-list round
+  trip. They cover three allied status panels, the offered `솔저` and
+  `가드맨` hiring rows, one arrangement roster page, and all eight
+  preparation-visible fixed records. Fixed records 8 and 9 are explicitly
+  not applicable because their source coordinates are `(255,255)`.
+- Human review covers every Korean commander/class/mercenary label, all
+  commander and mercenary sprites, the arrangement minimap, tile rows,
+  borders, numerical fields, and the real shop surfaces. Fourteen of the
+  eighteen hard pairs are byte-identical to normal; only enemy fixed records
+  4..7 differ because of the hard candidate's intended stats, and those four
+  screens also pass complete-screen review.
+- Normal attempt `s02a01` is rejected because its long foreground parent was
+  terminated at about 70 seconds. Its orphaned BlastEm process was stopped
+  and no capture from it is accepted; `s02a02` is the replacement.
+- Separate normal and hard actual Move runs retain Elwin/Fighter as runtime
+  group 0 with acted flag 1 at `(5,17)` and `(5,18)`. In both, gray VRAM
+  `0x9600..0x967F` is byte-exact to the stock expansion of silhouette
+  `0x001E`, and tiles `0x04B0..0x04B3` are referenced by Plane A.
+  The normal gray-only diagnostic accidentally hired Soldiers through an
+  obsolete deployment sequence; its scope is therefore limited to the acted
+  runtime group and gray-rendering proof. The clean `s02a02` run separately
+  proves hiring names and unchanged preparation state.
+- Scenario 2 result diagnostics preserve every deployment, all ten fixed
+  records, the Korean result header, and all source result-event code. Their
+  only candidate changes are the MD checksum, the Start-menu entry operand,
+  and a 156-byte wrapper in unused `0x3FEF00..0x3FEF9B` space that marks only
+  enemy runtime groups 7..12 defeated before returning to the stock Start
+  handler. Normal diagnostic checksum/hash are `5C26` /
+  `8c746b9617f5d3f2d8b86be7e8ef7871f4828df98c1fe5151f9d734599072a73`;
+  hard are `A564` /
+  `ecc89fe092546f3bbf786ee3532d66d9bec5922574a101e3e290a449a2060e79`.
+- Both profiles traverse the unmodified Scenario 2 victory event to intact
+  full-screen `전과보고` captures. Normal shows `1020P`, while the clean hard
+  runtime shows `1310P`; both retain `아론/엘윈/헤인/리아나`, result
+  sprites, borders, rows, and numerical fields.
+- `tools/verify_preparation_surface_scenario_02.py`,
+  `localization/preparation_surface_scenario_02.json`, its review record, and
+  `tests/test_preparation_surface_scenario_02.py` recompute and lock the
+  preparation pairs, hidden-record reasons, capture/GST hashes, runtime group,
+  stock gray expansion, Plane A references, result-header cells, and exact
+  diagnostic lineage. Scenarios 1 and 2 are fully accepted in both profiles;
+  Scenarios 3..27 remain pending. The release gate remains active, and no
+  release ROM or version was changed.
+- The focused preparation/matrix/Scenario 2 builder suite passes 29/29. One
+  preliminary invocation used a nonexistent test-module name and produced an
+  import error; the corrected module set is the accepted run. Full discovery
+  runs 1,459 tests and retains exactly the previous 44 failures plus 3 errors
+  in unrelated experimental sprites, concurrent hard-runtime plan/docs, and
+  intentionally unchanged release artifacts.
