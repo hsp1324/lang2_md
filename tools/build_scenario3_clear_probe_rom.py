@@ -96,6 +96,7 @@ RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
 LIANA_RUNTIME_GROUP = 3
 ZORUM_RUNTIME_GROUP = 5
+ANNIHILATION_RUNTIME_GROUPS = tuple(range(ZORUM_RUNTIME_GROUP, 13))
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -126,6 +127,25 @@ def runtime_death_wrapper_code(target_groups: tuple[int, ...]) -> bytes:
         code.extend((target + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
         code.extend(bytes.fromhex("13 FC 00 FF"))
         code.extend((target + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def enemy_annihilation_wrapper_code() -> bytes:
+    code = bytearray()
+    for group in ANNIHILATION_RUNTIME_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -224,15 +244,29 @@ def patch_probe(
     probe: bytearray,
     source: bytes,
     *,
+    enemy_annihilation: bool = False,
     liana_death: bool = False,
     liana_death_zorum_defeated: bool = False,
     protagonist_death: bool = False,
 ) -> int:
     if sum(
-        (liana_death, liana_death_zorum_defeated, protagonist_death)
+        (
+            enemy_annihilation,
+            liana_death,
+            liana_death_zorum_defeated,
+            protagonist_death,
+        )
     ) > 1:
         raise ValueError("Scenario 3 diagnostic modes are mutually exclusive")
     validate_layout(probe, source)
+    if enemy_annihilation:
+        install_start_wrapper(
+            probe,
+            source,
+            enemy_annihilation_wrapper_code(),
+            label="enemy-annihilation",
+        )
+        return builder.update_md_checksum(probe)
     if protagonist_death:
         install_start_wrapper(
             probe,
@@ -285,6 +319,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-rom", type=Path, default=DEFAULT_OUTPUT_ROM)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument(
+        "--enemy-annihilation",
+        action="store_true",
+        help=(
+            "preserve all Scenario 3 records and mark only enemy runtime "
+            "groups 5..12 defeated through Start"
+        ),
+    )
+    mode.add_argument(
         "--protagonist-death",
         action="store_true",
         help=(
@@ -318,13 +360,23 @@ def main() -> int:
     checksum = patch_probe(
         probe,
         source,
+        enemy_annihilation=args.enemy_annihilation,
         liana_death=args.liana_death,
         liana_death_zorum_defeated=args.liana_death_zorum_defeated,
         protagonist_death=args.protagonist_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    if args.protagonist_death:
+    if args.enemy_annihilation:
+        print(
+            "Scenario 3 enemy-annihilation mode: all deployments and fixed "
+            "records remain source-identical"
+        )
+        print(
+            "Start marks only enemy runtime groups 5..12 defeated, then "
+            "returns to the stock Start handler"
+        )
+    elif args.protagonist_death:
         print(
             "Scenario 3 protagonist-death mode: all deployments and fixed "
             "records remain source-identical"

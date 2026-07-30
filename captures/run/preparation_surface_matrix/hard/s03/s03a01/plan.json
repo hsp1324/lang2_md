@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "scenario": 3,
+  "rom": {
+    "path": "tmp/Langrisser II (Korean Hard prep-pattern-pool-yal probe).md",
+    "md_checksum": "FA1D",
+    "sha256": "1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32"
+  },
+  "seed_gst": {
+    "path": "captures/analysis/hard_mode_current_candidate_first_turn_s27_endpoint.gst",
+    "sha256": "7f3e8e181b230497be7d6c30aac4457dbc40370b35f5c48102f179f0417ca649",
+    "policy": "preserve the seed's actual class and offered-hire masks; do not OR diagnostic FFFF masks into acceptance runs"
+  },
+  "allied_commanders": {
+    "count": 3,
+    "roster_page_count": 1,
+    "seed_records": [
+      {
+        "commander_id": 1,
+        "class_id": 1,
+        "class_id_hex": "0x01",
+        "class_korean": "파이터",
+        "level": 1,
+        "hire_mask": "0x0004",
+        "hire_rows": [
+          {
+            "bit": 2,
+            "class_id": 100,
+            "class_id_hex": "0x64",
+            "korean": "솔저"
+          }
+        ],
+        "hire_page_count": 1
+      },
+      {
+        "commander_id": 2,
+        "class_id": 2,
+        "class_id_hex": "0x02",
+        "class_korean": "클레릭",
+        "level": 3,
+        "hire_mask": "0x0800",
+        "hire_rows": [
+          {
+            "bit": 11,
+            "class_id": 109,
+            "class_id_hex": "0x6D",
+            "korean": "가드맨"
+          }
+        ],
+        "hire_page_count": 1
+      },
+      {
+        "commander_id": 3,
+        "class_id": 2,
+        "class_id_hex": "0x02",
+        "class_korean": "클레릭",
+        "level": 1,
+        "hire_mask": "0x0800",
+        "hire_rows": [
+          {
+            "bit": 11,
+            "class_id": 109,
+            "class_id_hex": "0x6D",
+            "korean": "가드맨"
+          }
+        ],
+        "hire_page_count": 1
+      }
+    ]
+  },
+  "fixed_records": {
+    "count": 10,
+    "visible_count": 5,
+    "route": [
+      {
+        "index": 0,
+        "name_korean": "리아나",
+        "class_korean": "클레릭",
+        "mercenary_classes_korean": [
+          "가드맨"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x03",
+        "x": 17,
+        "y": 18
+      },
+      {
+        "index": 2,
+        "name_korean": "조름",
+        "class_korean": "로드",
+        "mercenary_classes_korean": [
+          "솔저",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 9,
+        "y": 12
+      },
+      {
+        "index": 3,
+        "name_korean": "제국지휘관",
+        "class_korean": "파이터",
+        "mercenary_classes_korean": [
+          "바바리안",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 24,
+        "y": 12
+      },
+      {
+        "index": 4,
+        "name_korean": "제국지휘관",
+        "class_korean": "파이터",
+        "mercenary_classes_korean": [
+          "바바리안",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 25,
+        "y": 22
+      },
+      {
+        "index": 5,
+        "name_korean": "제국지휘관",
+        "class_korean": "파이터",
+        "mercenary_classes_korean": [
+          "바바리안",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 16,
+        "y": 26
+      }
+    ],
+    "not_applicable": [
+      {
+        "index": 1,
+        "name_korean": "수수께끼의 기사",
+        "class_korean": "파이터",
+        "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+      },
+      {
+        "index": 6,
+        "name_korean": "제국지휘관",
+        "class_korean": "파이터",
+        "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+      },
+      {
+        "index": 7,
+        "name_korean": "제국지휘관",
+        "class_korean": "파이터",
+        "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+      },
+      {
+        "index": 8,
+        "name_korean": "제국지휘관",
+        "class_korean": "파이터",
+        "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+      },
+      {
+        "index": 9,
+        "name_korean": "발가스",
+        "class_korean": "제너럴",
+        "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+      }
+    ],
+    "route_assumption": "The arrangement detail cursor begins on the first visible source record; after explicitly closing its popup, one held Right advances to the next visible source record.",
+    "navigation": "right_cycle_source_record_order"
+  },
+  "required_runtime_checks": [
+    "every allied commander root/status panel before and after shop",
+    "every offered hire row before and after shop",
+    "every arrangement roster page before and after shop",
+    "every preparation-visible fixed commander detail before and after shop",
+    "real shop item-list round trip in the same emulator process",
+    "full-screen byte comparison plus human sprite/minimap/text review"
+  ],
+  "acceptance_policy": "This plan and its runtime captures never change localization/preparation_surface_acceptance.json automatically."
+}

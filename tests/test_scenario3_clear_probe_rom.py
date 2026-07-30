@@ -19,6 +19,7 @@ class Scenario3ClearProbeRomTests(unittest.TestCase):
     def patched(
         self,
         *,
+        enemy_annihilation: bool = False,
         liana_death: bool = False,
         liana_death_zorum_defeated: bool = False,
         protagonist_death: bool = False,
@@ -27,6 +28,7 @@ class Scenario3ClearProbeRomTests(unittest.TestCase):
         probe_builder.patch_probe(
             data,
             self.source,
+            enemy_annihilation=enemy_annihilation,
             liana_death=liana_death,
             liana_death_zorum_defeated=liana_death_zorum_defeated,
             protagonist_death=protagonist_death,
@@ -169,6 +171,7 @@ class Scenario3ClearProbeRomTests(unittest.TestCase):
         deployment_start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
         deployment_end = deployment_start + probe_builder.PLAYER_DEPLOYMENT_COUNT * 4
         for mode in (
+            {"enemy_annihilation": True},
             {"protagonist_death": True},
             {"liana_death": True},
             {"liana_death_zorum_defeated": True},
@@ -228,8 +231,32 @@ class Scenario3ClearProbeRomTests(unittest.TestCase):
                 + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
             )
 
+    def test_enemy_annihilation_wrapper_targets_only_groups_5_through_12(self):
+        code = probe_builder.enemy_annihilation_wrapper_code()
+        for group in range(13):
+            target = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            hp_address = (
+                target + probe_builder.RUNTIME_HP_OFFSET
+            ).to_bytes(4, "big")
+            if group in probe_builder.ANNIHILATION_RUNTIME_GROUPS:
+                self.assertIn(hp_address, code)
+            else:
+                self.assertNotIn(hp_address, code)
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
     def test_death_modes_change_only_wrapper_operand_and_checksum(self):
         modes = (
+            (
+                {"enemy_annihilation": True},
+                probe_builder.ANNIHILATION_RUNTIME_GROUPS,
+            ),
             (
                 {"protagonist_death": True},
                 (probe_builder.PROTAGONIST_RUNTIME_GROUP,),
@@ -248,7 +275,11 @@ class Scenario3ClearProbeRomTests(unittest.TestCase):
         )
         for mode, groups in modes:
             data = self.patched(**mode)
-            wrapper = probe_builder.runtime_death_wrapper_code(groups)
+            wrapper = (
+                probe_builder.enemy_annihilation_wrapper_code()
+                if mode.get("enemy_annihilation")
+                else probe_builder.runtime_death_wrapper_code(groups)
+            )
             allowed = {
                 0x18E,
                 0x18F,
@@ -273,6 +304,7 @@ class Scenario3ClearProbeRomTests(unittest.TestCase):
             probe_builder.patch_probe(
                 bytearray(self.built),
                 self.source,
+                enemy_annihilation=True,
                 liana_death=True,
                 protagonist_death=True,
             )

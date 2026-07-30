@@ -190,15 +190,20 @@ A missing surface may be marked not applicable only with a written reason.
 No release is considered verified while any scenario or required check is
 pending or failed.
 
-Current checkpoint (2026-07-31): Scenarios 1 and 2 normal and hard each pass
-all required visible surfaces. Scenario 1 retains 14/14 and Scenario 2 retains
-18/18 exact preparation-before/after pairs, intact commander/class/hiring
-pages, arrangement/minimap, all preparation-visible fixed records, and a real
-shop item-list round trip. Scenario 2 source records 8 and 9 are hidden at
-`(255,255)` and are recorded as not applicable. Separate battle runs verify
-actual gray acted Elwin/Fighter sprites and the stock victory path through the
-complete `전과보고` screen in both profiles. The preserved seed has no live
-class-change choice in either scenario, which is recorded as not applicable
-with a reason. Scenarios 1 and 2 are fully accepted; Scenarios 3 through 27
-remain pending. See `localization/preparation_surface_matrix.json` and
-`localization/preparation_surface_scenario_02.json`.
+Current checkpoint (2026-07-31): Scenarios 1 through 3 normal and hard each
+pass all required visible surfaces. Scenario 1 retains 14/14, Scenario 2
+18/18, and Scenario 3 15/15 exact preparation-before/after pairs, intact
+commander/class/hiring pages, arrangement/minimap, all preparation-visible
+fixed records, and a real shop item-list round trip. Scenario 2 source records
+8 and 9 and Scenario 3 source records 1 and 6 through 9 are hidden at
+`(255,255)` and recorded as not applicable. Separate battle runs verify actual
+gray acted Elwin/Fighter sprites and stock victory paths through complete
+`전과보고` screens in both profiles. The preserved seeds expose no live
+class-change choice, which is recorded as not applicable with a reason.
+Scenarios 1 through 3 are fully accepted; Scenarios 4 through 27 remain
+pending. The two user-provided Scenario 9 corruption screens remain explicit
+failure evidence for the retired H-scroll-backed glyph cache; the current
+non-release probes keep the full H-scroll allocation clean across the same
+shop round trip. See `localization/preparation_surface_matrix.json`,
+`localization/preparation_surface_scenario_02.json`, and
+`localization/preparation_surface_scenario_03.json`.

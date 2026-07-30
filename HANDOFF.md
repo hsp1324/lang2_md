@@ -12385,3 +12385,54 @@ contains 57 safe syllables as documented below and in
   runs 1,459 tests and retains exactly the previous 44 failures plus 3 errors
   in unrelated experimental sprites, concurrent hard-runtime plan/docs, and
   intentionally unchanged release artifacts.
+
+### Scenario 3 Preparation And Battle-Surface Completion (2026-07-31)
+
+- User-provided Scenario 9 mobile captures were rechecked before Scenario 3
+  acceptance. They are the exact historical H-scroll failure already recorded
+  above: the former `0x07A1..0x07BC` Hangul cache wrote 192 pattern bytes into
+  live H-scroll `0xF400..0xF7FF`, causing vertical gray label blocks, result
+  sprite damage, and minimap row shifts. The released normal checksum `2979`
+  and hard checksum `63F0` have not been replaced; the non-release B0DF/FA1D
+  probes contain the replacement-pool fix. Current Scenario 9 normal/hard
+  preparation, arrangement/minimap, and fixed-detail pairs remain exact across
+  a real shop round trip, with retained H-scroll evidence entirely zero.
+- Clean normal and hard `s03a01` preparation runs each pass 15/15 exact
+  full-screen pre/post pairs. They cover Elwin/Fighter/Soldier,
+  Liana/Cleric/Guardman, Sherry/Cleric/Guardman, one arrangement roster page,
+  the real shop item list, and visible fixed records
+  `0,2,3,4,5`. Hidden records `1,6,7,8,9` are explicitly not applicable at
+  source coordinates `(255,255)`. All names, classes, mercenary rows, sprites,
+  minimap rows, borders, and numerical fields pass visual review.
+- Separate actual Move runs retain Elwin/Fighter as runtime group 0 with acted
+  flag 1 at `(17,15)`. In both profiles, gray VRAM
+  `0x9600..0x967F` has SHA-256
+  `74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22`,
+  exactly matches stock silhouette `0x001E`, and is referenced as tiles
+  `0x04B0..0x04B3` by Plane A at `(20,8)..(21,9)`.
+- The accepted result diagnostics preserve all three player deployments, all
+  ten fixed records, the complete `0x1881AE..0x189BA5` event block, and the
+  Korean `전과보고` header. Their only candidate changes are the checksum,
+  Start-menu operand, and a 204-byte unused-space wrapper that marks runtime
+  enemy groups `5..12` defeated before returning to the stock Start handler.
+  Only 152 byte values differ because bytes already equal to wrapper values do
+  not count as changes. Normal checksum/hash are `FD76` /
+  `52e22ee6247800843587ffa5aae85142f1d059c98c0ae061d7a4ac9ee0d3a0b8`;
+  hard are `46B4` /
+  `dbf129e24bae3d165a37d49e1939b1613167a90ebbb1836db287013e4b626c1e`.
+- Both result runs reach intact full-screen `전과보고` with
+  `아론/엘윈/헤인/리아나`, result sprites, `1250P`, borders, rows, and
+  numerical fields. The header VRAM and all 16 Plane A header cells match the
+  established stock-path proof.
+- Rejected attempts are recorded in
+  `localization/preparation_surface_scenario_03.json`: relative plan paths,
+  an unconfirmed move preview, normal result01 at the load screen, the first
+  hard diagnostic source mismatch, missing Auto Deploy, a missed hard selector
+  cheat, and an open status pane before the Start menu. None is acceptance
+  evidence.
+- `tools/verify_preparation_surface_scenario_03.py`, its review JSON, checked
+  report, and `tests/test_preparation_surface_scenario_03.py` recompute the
+  preparation pairs, hidden-record reasons, capture/GST hashes, runtime group,
+  exact gray expansion and Plane references, result header, and diagnostic
+  lineage. Scenarios 1 through 3 are accepted in both profiles; Scenarios
+  4..27 remain pending. No release ROM or version changed.
