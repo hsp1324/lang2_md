@@ -66,8 +66,8 @@ This is targeted replacement-pool acceptance only. It is not a Scenario 6 or
 class, hiring page, gray acted sprite, and result screen has not yet been
 enumerated. Scenarios 1 through 27 in both profiles remain mandatory.
 
-Scenario 1 now has a reviewed preparation-only partial pass in both current
-probes. Normal run `normal/s01/yal02` and hard run `hard/s01/yal01` under
+Scenario 1 has a reviewed preparation pass in both current probes. Normal run
+`normal/s01/yal02` and hard run `hard/s01/yal01` under
 `captures/run/preparation_surface_matrix` each produce 14/14 byte-identical
 full-screen pairs across every allied status/hiring page, the arrangement
 roster/minimap, all six visible fixed records, and a real shop item-list round
@@ -81,10 +81,24 @@ cell `(7,8)` contains tile word `0x83DF`, and H-scroll
 `localization/preparation_surface_matrix.json`; it is reproduced by
 `tools/verify_preparation_surface_evidence.py`.
 
-Scenario 1 is not fully accepted yet. The preserved seed exposes status and
-hiring but no live class-change choice, and a separate battle run is still
-required for gray acted sprites and the result screen. The machine-readable
-matrix therefore keeps zero fully accepted scenarios.
+Separate normal/hard battle runs under
+`captures/run/preparation_battle_surface` complete Scenario 1. After an actual
+Move command, runtime group 0 is Elwin/Fighter with acted flag 1 at `(12,17)`.
+VRAM `0x9600..0x967F` has SHA-256
+`74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22`
+and exactly matches the stock Fighter silhouette ID `0x001E` expanded by the
+original two-bit renderer. Plane A references its four tiles at
+`(20,11)..(21,12)`.
+
+Both profiles also traverse the stock victory event into the full
+`전과보고` surface. The two result PNGs are byte-identical, retain the Korean
+header, `아론/엘윈/헤인/리아나`, all result sprites, POINT, borders, rows,
+and numerical fields. The normal/hard result diagnostics change only Bald's
+AT/DF, coordinate, mercenary setup, and the checksum; the result header and
+event code remain candidate-identical. The preserved seed exposes no live
+class-change choice, so that surface is explicitly not applicable with a
+written reason. Scenario 1 is now the sole fully accepted scenario; Scenarios
+2 through 27 remain mandatory.
 
 Failed attempts retained for future work:
 
@@ -120,14 +134,16 @@ Validation for the original 24-cell stable unit:
 
 No release ROM or version was changed to silence those remaining gates.
 
-Validation for the 25-cell Scenario 1 evidence unit currently passes 59/59
+Validation for the 25-cell Scenario 1 evidence unit currently passes 61/61
 focused tests covering the builder allocation, byte inventory, ownership
 report, matrix plan/navigation, candidate hashes, exact screenshot pairs,
-human-review state, and all four GST checkpoint proofs. Full discovery runs
-1,453 tests and remains at the same 44 failures plus 3 errors as the preceding
-stable unit. No new checksum cascade was introduced; the remaining failures
-are the existing experimental-sprite, hard-runtime/plan/generated-document,
-release-promotion, and inventory gates.
+human-review state, all four preparation GST checkpoints, the acted runtime
+record and gray-payload expansion, and the battle-result header/delta proof.
+Full discovery runs 1,455 tests in four time-bounded groups and remains at the
+same 44 failures plus 3 errors as the preceding stable unit. No new checksum
+cascade was introduced; the remaining failures are the existing
+experimental-sprite, hard-runtime/plan/generated-document, release-promotion,
+and inventory gates.
 
 The preparation, hiring, shop, commander-status, and result paths do not keep
 the same static 8x8 font tiles alive as the map-bottom status renderer. Their

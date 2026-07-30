@@ -7,12 +7,15 @@ import json
 from pathlib import Path
 import sys
 
+from PIL import Image
+
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts import build_korean_jp_probe as builder
+from tools import build_scenario1_clear_probe_rom as clear_probe
 from tools import run_preparation_surface_matrix as matrix
 from tools.analyze_preparation_vram_ownership import (
     HSCROLL_TABLE_BYTES,
@@ -31,6 +34,13 @@ DEFAULT_RUNS = {
         / "captures/run/preparation_surface_matrix/hard/s01/yal01"
     ),
 }
+DEFAULT_BATTLE_RUNS = {
+    profile: (
+        ROOT
+        / f"captures/run/preparation_battle_surface/{profile}/s01"
+    )
+    for profile in ("normal", "hard")
+}
 DEFAULT_REVIEW = ROOT / "localization/preparation_surface_review.json"
 DEFAULT_INVENTORY = ROOT / "localization/byte_ui_slot_inventory.json"
 DEFAULT_OUTPUT = ROOT / "localization/preparation_surface_matrix.json"
@@ -42,6 +52,60 @@ SHOP_CAPTURE_PATHS = (
     "shop/returned_unfocused.png",
     "shop/returned_focused.png",
 )
+GST_WORK_RAM_OFFSET = 0x2478
+RUNTIME_GROUP_BASE = 0x603C
+RUNTIME_GROUP_SIZE = 0x60
+GRAY_VRAM_START = 0x9600
+GRAY_VRAM_BYTES = 0x80
+GRAY_TILE_START = GRAY_VRAM_START // TILE_BYTES
+GRAY_SOURCE_MASK_BASE = 0x0510C0
+RESULT_HEADER_VRAM_START = 0xA000
+RESULT_HEADER_VRAM_BYTES = 0x200
+RESULT_HEADER_TILE_START = RESULT_HEADER_VRAM_START // TILE_BYTES
+EXPECTED_RESULT_CAPTURE_SHA256 = (
+    "55ccde344035d7bf5696a9f0b83c2ae6ac696ec1fa1f60cc2246d42d3565c825"
+)
+EXPECTED_RESULT_HEADER_VRAM_SHA256 = (
+    "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6"
+)
+EXPECTED_BATTLE_HASHES = {
+    "normal": {
+        "active_capture": (
+            "9b01d3b03c48916661628f0af93867b83b5b0cc7c70402dbbf0c16a7f92a7aa9"
+        ),
+        "acted_capture": (
+            "1054f6c2738bf2e6a6e6c60120d2f3dfdaf294f6636e717860a31aa1409749ce"
+        ),
+        "acted_gst": (
+            "a5985c9872271ca1988a0633c1ef2e179984e37582f2f92952fe3619c3ae77be"
+        ),
+        "result_gst": (
+            "481c01f74a25521b01f0d1aae8272429fcf9bb1fdcfd0b4ae4df2a06d25963db"
+        ),
+        "result_probe_checksum": "4B7D",
+        "result_probe_sha256": (
+            "66b9a4cb7944a506ff10b333a533d3be8d9d9c5fdc542c9bac4ec092de60b9e3"
+        ),
+    },
+    "hard": {
+        "active_capture": (
+            "9b01d3b03c48916661628f0af93867b83b5b0cc7c70402dbbf0c16a7f92a7aa9"
+        ),
+        "acted_capture": (
+            "bc6fc30ccb8a9cfa140a1f8184ed539398e519d0fd5cb1aa7d4f7c50d26a54ed"
+        ),
+        "acted_gst": (
+            "9c32bdb5c589f1ded4e6af8678325c0543666835f52aa3267a7a19f50514e025"
+        ),
+        "result_gst": (
+            "e13c1e8e70149c8adf690231b55f11ed894cd14069a1560a959bd62d99aae3eb"
+        ),
+        "result_probe_checksum": "92BA",
+        "result_probe_sha256": (
+            "4702bacfb7dc3ed80a6bbf8016dfde2edf46f1e210c6d6149f8cc9d3bfa49dd5"
+        ),
+    },
+}
 
 
 def sha256_path(path: Path) -> str:
@@ -93,6 +157,209 @@ def plane_tile_hits(state: object, tile: int) -> list[dict[str, object]]:
     return hits
 
 
+def image_report(path: Path) -> dict[str, object]:
+    with Image.open(path) as image:
+        dimensions = [image.width, image.height]
+    return {
+        "path": relative(path),
+        "sha256": sha256_path(path),
+        "dimensions": dimensions,
+    }
+
+
+def expand_gray_source_mask(payload: bytes) -> bytes:
+    if len(payload) != 0x40:
+        raise ValueError(
+            f"gray source mask must contain 0x40 bytes, got 0x{len(payload):X}"
+        )
+    expanded = bytearray()
+    for offset in range(0, len(payload), 2):
+        high_plane, low_plane = payload[offset : offset + 2]
+        pixels = [
+            2 * ((high_plane >> bit) & 1) + ((low_plane >> bit) & 1)
+            for bit in range(7, -1, -1)
+        ]
+        expanded.extend(
+            (pixels[index] << 4) | pixels[index + 1]
+            for index in range(0, len(pixels), 2)
+        )
+    return bytes(expanded)
+
+
+def expected_gray_payload() -> tuple[int, int, bytes]:
+    original = (ROOT / builder.IN_ROM).read_bytes()
+    record_offset = builder.commander_sprite_record_offset(original, 1, 1)
+    sprite_id = builder.be16(original, record_offset + 1)
+    source_start = GRAY_SOURCE_MASK_BASE + sprite_id * 0x40
+    return (
+        record_offset,
+        sprite_id,
+        expand_gray_source_mask(original[source_start : source_start + 0x40]),
+    )
+
+
+def runtime_group_zero(path: Path) -> dict[str, object]:
+    data = path.read_bytes()
+    start = GST_WORK_RAM_OFFSET + RUNTIME_GROUP_BASE
+    record = data[start : start + RUNTIME_GROUP_SIZE]
+    if len(record) != RUNTIME_GROUP_SIZE:
+        raise ValueError(f"{path} has a truncated runtime group 0")
+    return {
+        "class_id": record[0],
+        "commander_id": record[1],
+        "acted_flag": record[2],
+        "hp": record[3],
+        "x": record[6],
+        "y": record[7],
+        "record_prefix": record[:16].hex(),
+    }
+
+
+def result_header_plane_cells(state: object) -> list[dict[str, object]]:
+    base = state.plane_bases["plane_a"]
+    cells = []
+    for glyph_index in range(4):
+        tile = RESULT_HEADER_TILE_START + glyph_index * 4
+        x = 17 + glyph_index * 2
+        for y_offset, tile_offsets in enumerate(((0, 1), (2, 3))):
+            for x_offset, tile_offset in enumerate(tile_offsets):
+                offset = (
+                    base
+                    + ((1 + y_offset) * state.plane_width + x + x_offset) * 2
+                )
+                word = int.from_bytes(
+                    state.vram[offset : offset + 2], "big"
+                )
+                cells.append(
+                    {
+                        "x": x + x_offset,
+                        "y": 1 + y_offset,
+                        "tile_word": f"0x{word:04X}",
+                        "expected_tile": f"0x{tile + tile_offset:04X}",
+                        "matches": (word & 0x07FF) == tile + tile_offset,
+                    }
+                )
+    return cells
+
+
+def result_probe_report(
+    candidate: bytes,
+    expected: dict[str, str],
+) -> dict[str, object]:
+    diagnostic = bytearray(candidate)
+    checksum = clear_probe.patch_probe(diagnostic, candidate)
+    changed_offsets = [
+        offset
+        for offset, (before, after) in enumerate(zip(candidate, diagnostic))
+        if before != after
+    ]
+    bald = clear_probe.BALD_RECORD_OFFSET
+    allowed_offsets = {
+        0x18E,
+        0x18F,
+        bald + clear_probe.FIELD_OFFSETS["at"],
+        bald + clear_probe.FIELD_OFFSETS["df"],
+        bald + clear_probe.FIELD_OFFSETS["x"],
+        bald + clear_probe.FIELD_OFFSETS["y"],
+        *(
+            bald + clear_probe.FIELD_OFFSETS["mercenaries"] + index
+            for index in range(6)
+        ),
+    }
+    return {
+        "md_checksum": f"{checksum:04X}",
+        "sha256": hashlib.sha256(diagnostic).hexdigest(),
+        "changed_offsets": [
+            f"0x{offset:06X}" for offset in changed_offsets
+        ],
+        "changed_only_bald_setup_and_checksum": (
+            bool(changed_offsets) and set(changed_offsets) <= allowed_offsets
+        ),
+        "battle_result_header_and_event_code_unchanged": not any(
+            builder.BATTLE_RESULT_HEADER_GLYPH_LIST
+            <= offset
+            < (
+                builder.BATTLE_RESULT_HEADER_GLYPH_LIST
+                + len(builder.BATTLE_RESULT_HEADER_EXPECTED_GLYPHS) * 2
+                + 2
+            )
+            for offset in changed_offsets
+        ),
+        "matches_expected_checksum": (
+            f"{checksum:04X}" == expected["result_probe_checksum"]
+        ),
+        "matches_expected_sha256": (
+            hashlib.sha256(diagnostic).hexdigest()
+            == expected["result_probe_sha256"]
+        ),
+    }
+
+
+def battle_evidence_report(
+    profile: str,
+    root: Path,
+    candidate: bytes,
+) -> dict[str, object]:
+    expected = EXPECTED_BATTLE_HASHES[profile]
+    active_capture = root / "gray01/active_command.png"
+    acted_capture = root / "gray01/acted_gray.png"
+    acted_gst = root / "gray01/states/acted_gray.gst"
+    result_capture = root / "result01/battle_result.png"
+    result_gst = root / "result01/states/battle_result.gst"
+
+    acted_state = load_gst(acted_gst)
+    result_state = load_gst(result_gst)
+    source_record, source_sprite_id, expected_gray = expected_gray_payload()
+    gray_payload = acted_state.vram[
+        GRAY_VRAM_START : GRAY_VRAM_START + GRAY_VRAM_BYTES
+    ]
+    result_header_payload = result_state.vram[
+        RESULT_HEADER_VRAM_START :
+        RESULT_HEADER_VRAM_START + RESULT_HEADER_VRAM_BYTES
+    ]
+    return {
+        "status": "pass",
+        "run_root": relative(root),
+        "gray_acted_sprite": {
+            "active_capture": image_report(active_capture),
+            "acted_capture": image_report(acted_capture),
+            "gst": relative(acted_gst),
+            "gst_sha256": sha256_path(acted_gst),
+            "runtime_group_zero": runtime_group_zero(acted_gst),
+            "source_commander_id": 1,
+            "source_class_id": 1,
+            "source_record_offset": f"0x{source_record:06X}",
+            "source_silhouette_id": f"0x{source_sprite_id:04X}",
+            "vram_range": "0x9600..0x967F",
+            "vram_sha256": hashlib.sha256(gray_payload).hexdigest(),
+            "matches_stock_fighter_silhouette_expansion": (
+                gray_payload == expected_gray
+            ),
+            "plane_references": [
+                {
+                    "tile": f"0x{tile:04X}",
+                    "hits": plane_tile_hits(acted_state, tile),
+                }
+                for tile in range(GRAY_TILE_START, GRAY_TILE_START + 4)
+            ],
+        },
+        "battle_result": {
+            "capture": image_report(result_capture),
+            "gst": relative(result_gst),
+            "gst_sha256": sha256_path(result_gst),
+            "header_text": builder.DIRECT_WORD_SEQUENCE_PATCHES[
+                builder.BATTLE_RESULT_HEADER_GLYPH_LIST
+            ][1],
+            "header_vram_range": "0xA000..0xA1FF",
+            "header_vram_sha256": hashlib.sha256(
+                result_header_payload
+            ).hexdigest(),
+            "header_plane_cells": result_header_plane_cells(result_state),
+            "diagnostic_lineage": result_probe_report(candidate, expected),
+        },
+    }
+
+
 def checkpoint_report(
     run: Path,
     phase: str,
@@ -126,6 +393,7 @@ def checkpoint_report(
 def run_report(
     profile: str,
     run: Path,
+    battle_run: Path,
     review: dict[str, object],
     local_index: int,
 ) -> dict[str, object]:
@@ -195,6 +463,9 @@ def run_report(
                 run, "post", rom, local_index
             ),
         },
+        "battle_evidence": battle_evidence_report(
+            profile, battle_run, rom
+        ),
         "human_review": review,
     }
     validate_run_report(profile, result, plan)
@@ -233,14 +504,14 @@ def validate_run_report(
         "candidate hash matches plan": (
             report["candidate"]["sha256"] == plan["rom"]["sha256"]
         ),
-        "review records preparation-only pass": (
-            report["status"] == "preparation_surface_pass_battle_pending"
+        "review records complete Scenario 1 pass": (
+            report["status"] == "scenario_1_surface_pass"
         ),
-        "gray/result review remains pending": (
+        "gray/result review passes": (
             report["human_review"]["checks"][
                 "gray_acted_sprites_and_battle_result"
             ]
-            == "pending_separate_battle_run"
+            == "pass"
         ),
     }
     for phase in ("pre_shop", "post_shop"):
@@ -263,6 +534,129 @@ def validate_run_report(
                 }
             ]
         )
+    battle = report["battle_evidence"]
+    gray = battle["gray_acted_sprite"]
+    result = battle["battle_result"]
+    expected_hashes = EXPECTED_BATTLE_HASHES[profile]
+    checks.update(
+        {
+            "battle evidence passes": battle["status"] == "pass",
+            "active capture hash is locked": (
+                gray["active_capture"]["sha256"]
+                == expected_hashes["active_capture"]
+            ),
+            "acted capture hash is locked": (
+                gray["acted_capture"]["sha256"]
+                == expected_hashes["acted_capture"]
+            ),
+            "acted GST hash is locked": (
+                gray["gst_sha256"] == expected_hashes["acted_gst"]
+            ),
+            "battle captures are full screen": (
+                gray["active_capture"]["dimensions"] == [320, 240]
+                and gray["acted_capture"]["dimensions"] == [320, 240]
+                and result["capture"]["dimensions"] == [320, 240]
+            ),
+            "runtime group records acted Elwin Fighter": (
+                gray["runtime_group_zero"]["class_id"] == 1
+                and gray["runtime_group_zero"]["commander_id"] == 1
+                and gray["runtime_group_zero"]["acted_flag"] == 1
+                and [
+                    gray["runtime_group_zero"]["x"],
+                    gray["runtime_group_zero"]["y"],
+                ]
+                == [12, 17]
+            ),
+            "gray source is stock Fighter silhouette": (
+                gray["source_record_offset"] == "0x05DBA8"
+                and gray["source_silhouette_id"] == "0x001E"
+                and gray["matches_stock_fighter_silhouette_expansion"]
+                and gray["vram_sha256"]
+                == (
+                    "74e404c1c9dad9a31578fcdf25c61158a"
+                    "de1fdb43221941c7b2c3f6e19313b22"
+                )
+            ),
+            "gray tiles are the visible Plane A unit": (
+                gray["plane_references"]
+                == [
+                    {
+                        "tile": "0x04B0",
+                        "hits": [
+                            {
+                                "plane": "plane_a",
+                                "x": 20,
+                                "y": 11,
+                                "tile_word": "0xA4B0",
+                            }
+                        ],
+                    },
+                    {
+                        "tile": "0x04B1",
+                        "hits": [
+                            {
+                                "plane": "plane_a",
+                                "x": 20,
+                                "y": 12,
+                                "tile_word": "0xA4B1",
+                            }
+                        ],
+                    },
+                    {
+                        "tile": "0x04B2",
+                        "hits": [
+                            {
+                                "plane": "plane_a",
+                                "x": 21,
+                                "y": 11,
+                                "tile_word": "0xA4B2",
+                            }
+                        ],
+                    },
+                    {
+                        "tile": "0x04B3",
+                        "hits": [
+                            {
+                                "plane": "plane_a",
+                                "x": 21,
+                                "y": 12,
+                                "tile_word": "0xA4B3",
+                            }
+                        ],
+                    },
+                ]
+            ),
+            "result capture hash is locked": (
+                result["capture"]["sha256"]
+                == EXPECTED_RESULT_CAPTURE_SHA256
+            ),
+            "result GST hash is locked": (
+                result["gst_sha256"] == expected_hashes["result_gst"]
+            ),
+            "result header is Korean and present in VRAM": (
+                result["header_text"] == "전과보고"
+                and result["header_vram_sha256"]
+                == EXPECTED_RESULT_HEADER_VRAM_SHA256
+                and all(
+                    cell["matches"] for cell in result["header_plane_cells"]
+                )
+            ),
+            "result diagnostic changes only setup": (
+                result["diagnostic_lineage"][
+                    "changed_only_bald_setup_and_checksum"
+                ]
+                and result["diagnostic_lineage"][
+                    "battle_result_header_and_event_code_unchanged"
+                ]
+                and result["diagnostic_lineage"][
+                    "matches_expected_checksum"
+                ]
+                and result["diagnostic_lineage"][
+                    "matches_expected_sha256"
+                ]
+            ),
+        }
+    )
     failed = [name for name, passed in checks.items() if not passed]
     if failed:
         raise ValueError(
@@ -273,6 +667,7 @@ def validate_run_report(
 
 def build_report(
     runs: dict[str, Path] = DEFAULT_RUNS,
+    battle_runs: dict[str, Path] = DEFAULT_BATTLE_RUNS,
     review_path: Path = DEFAULT_REVIEW,
     inventory_path: Path = DEFAULT_INVENTORY,
 ) -> dict[str, object]:
@@ -282,14 +677,15 @@ def build_report(
         profile: run_report(
             profile,
             runs[profile],
+            battle_runs[profile],
             review["profiles"][profile],
             local_index,
         )
         for profile in ("normal", "hard")
     }
     return {
-        "schema_version": 1,
-        "status": "scenario_1_preparation_partial_pass_battle_pending",
+        "schema_version": 2,
+        "status": "scenario_1_complete_pass_scenarios_2_to_27_pending",
         "review": {
             "path": relative(review_path),
             "sha256": sha256_path(review_path),
@@ -302,10 +698,12 @@ def build_report(
         "matrix_progress": {
             "required_profile_scenario_runs": 54,
             "preparation_surface_runs_reviewed": 2,
-            "fully_accepted_scenarios": 0,
+            "battle_surface_runs_reviewed": 2,
+            "fully_accepted_profile_scenario_runs": 2,
+            "fully_accepted_scenarios": 1,
             "remaining_requirement": (
-                "Scenario 1 gray acted sprites and battle result in both "
-                "profiles, then complete Scenarios 2 through 27."
+                "Complete every required surface in Scenarios 2 through 27 "
+                "for both profiles."
             ),
         },
         "rejected_normal_scenario_1_attempts": [
@@ -365,20 +763,31 @@ def build_report(
 
 
 def validate_report(report: dict[str, object]) -> None:
-    if report["status"] != "scenario_1_preparation_partial_pass_battle_pending":
-        raise ValueError("matrix status must remain partial until battle evidence passes")
+    if report["status"] != "scenario_1_complete_pass_scenarios_2_to_27_pending":
+        raise ValueError("Scenario 1 matrix status must record its complete pass")
     progress = report["matrix_progress"]
     if progress["preparation_surface_runs_reviewed"] != 2:
         raise ValueError("expected exactly two reviewed Scenario 1 preparation runs")
-    if progress["fully_accepted_scenarios"] != 0:
-        raise ValueError("Scenario 1 must not be fully accepted yet")
+    if progress["battle_surface_runs_reviewed"] != 2:
+        raise ValueError("expected exactly two reviewed Scenario 1 battle runs")
+    if progress["fully_accepted_scenarios"] != 1:
+        raise ValueError("Scenario 1 must be the sole fully accepted scenario")
+    normal_result = report["profiles"]["normal"]["battle_evidence"][
+        "battle_result"
+    ]["capture"]["sha256"]
+    hard_result = report["profiles"]["hard"]["battle_evidence"][
+        "battle_result"
+    ]["capture"]["sha256"]
+    if normal_result != hard_result:
+        raise ValueError("normal/hard Scenario 1 result captures differ")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Verify the reviewed normal/hard Scenario 1 preparation matrix, "
-            "including the post-shop 얄 VRAM checkpoint."
+            "Verify the reviewed normal/hard Scenario 1 preparation and "
+            "battle matrix, including the post-shop 얄 VRAM checkpoint, gray "
+            "acted sprite, and battle-result header."
         )
     )
     parser.add_argument("--normal-run", type=Path, default=DEFAULT_RUNS["normal"])
@@ -394,6 +803,7 @@ def main() -> int:
     args = parse_args()
     report = build_report(
         {"normal": args.normal_run, "hard": args.hard_run},
+        DEFAULT_BATTLE_RUNS,
         args.review,
         args.inventory,
     )

@@ -190,10 +190,12 @@ A missing surface may be marked not applicable only with a written reason.
 No release is considered verified while any scenario or required check is
 pending or failed.
 
-Current checkpoint (2026-07-31): Scenario 1 normal and hard each have a
-reviewed preparation-only partial pass with 14/14 exact before/after pairs.
-Their commander/class/hiring pages, arrangement/minimap, all visible fixed
-records, and real shop item-list round trip are intact. Gray acted sprites and
-the battle-result surface are still pending, so Scenario 1 is not a complete
-pass and the number of fully accepted scenarios remains zero. See
-`localization/preparation_surface_matrix.json`.
+Current checkpoint (2026-07-31): Scenario 1 normal and hard each pass all
+required visible surfaces. Both retain 14/14 exact preparation-before/after
+pairs, intact commander/class/hiring pages, arrangement/minimap, all visible
+fixed records, and a real shop item-list round trip. Separate battle runs
+verify an actual gray acted Elwin/Fighter sprite and the stock victory path
+through the complete `전과보고` screen in both profiles. The preserved seed
+has no live class-change choice, which is recorded as not applicable with a
+reason. Scenario 1 is the sole fully accepted scenario; Scenarios 2 through
+27 remain pending. See `localization/preparation_surface_matrix.json`.

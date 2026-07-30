@@ -28,22 +28,26 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
             cwd=ROOT,
         )
 
-    def test_scenario_one_is_only_preparation_partial_pass(self) -> None:
+    def test_scenario_one_is_the_only_complete_scenario_pass(self) -> None:
         self.assertEqual(
             self.model["status"],
-            "scenario_1_preparation_partial_pass_battle_pending",
+            "scenario_1_complete_pass_scenarios_2_to_27_pending",
         )
         progress = self.model["matrix_progress"]
         self.assertEqual(progress["required_profile_scenario_runs"], 54)
         self.assertEqual(progress["preparation_surface_runs_reviewed"], 2)
-        self.assertEqual(progress["fully_accepted_scenarios"], 0)
+        self.assertEqual(progress["battle_surface_runs_reviewed"], 2)
+        self.assertEqual(progress["fully_accepted_profile_scenario_runs"], 2)
+        self.assertEqual(progress["fully_accepted_scenarios"], 1)
         self.assertEqual(self.acceptance["status"], "pending")
         self.assertEqual(
             self.acceptance["matrix_summary"],
             {
                 "required_profile_scenario_runs": 54,
                 "preparation_surface_runs_reviewed": 2,
-                "fully_accepted_scenarios": 0,
+                "battle_surface_runs_reviewed": 2,
+                "fully_accepted_profile_scenario_runs": 2,
+                "fully_accepted_scenarios": 1,
                 "release_gate_status": "pending",
             },
         )
@@ -53,8 +57,8 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
                 for row in self.acceptance["scenario_progress"]
             },
             {
-                (1, "normal_korean", "preparation_partial_pass_battle_pending"),
-                (1, "hard_korean", "preparation_partial_pass_battle_pending"),
+                (1, "normal_korean", "pass"),
+                (1, "hard_korean", "pass"),
             },
         )
 
@@ -64,7 +68,7 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
                 run = self.model["profiles"][profile]
                 self.assertEqual(
                     run["status"],
-                    "preparation_surface_pass_battle_pending",
+                    "scenario_1_surface_pass",
                 )
                 self.assertEqual(run["actual_pair_count"], 14)
                 self.assertEqual(run["expected_pair_count"], 14)
@@ -75,8 +79,69 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
                     run["human_review"]["checks"][
                         "gray_acted_sprites_and_battle_result"
                     ],
-                    "pending_separate_battle_run",
+                    "pass",
                 )
+
+    def test_gray_acted_sprite_matches_stock_fighter_silhouette(self) -> None:
+        for profile in ("normal", "hard"):
+            with self.subTest(profile=profile):
+                gray = self.model["profiles"][profile]["battle_evidence"][
+                    "gray_acted_sprite"
+                ]
+                self.assertEqual(
+                    gray["runtime_group_zero"]["class_id"], 1
+                )
+                self.assertEqual(
+                    gray["runtime_group_zero"]["commander_id"], 1
+                )
+                self.assertEqual(
+                    gray["runtime_group_zero"]["acted_flag"], 1
+                )
+                self.assertEqual(
+                    [
+                        gray["runtime_group_zero"]["x"],
+                        gray["runtime_group_zero"]["y"],
+                    ],
+                    [12, 17],
+                )
+                self.assertEqual(gray["source_silhouette_id"], "0x001E")
+                self.assertTrue(
+                    gray["matches_stock_fighter_silhouette_expansion"]
+                )
+                self.assertEqual(
+                    gray["vram_sha256"],
+                    (
+                        "74e404c1c9dad9a31578fcdf25c61158a"
+                        "de1fdb43221941c7b2c3f6e19313b22"
+                    ),
+                )
+
+    def test_battle_result_is_identical_and_keeps_korean_header(self) -> None:
+        results = [
+            self.model["profiles"][profile]["battle_evidence"][
+                "battle_result"
+            ]
+            for profile in ("normal", "hard")
+        ]
+        self.assertEqual(
+            results[0]["capture"]["sha256"],
+            results[1]["capture"]["sha256"],
+        )
+        for result in results:
+            self.assertEqual(result["header_text"], "전과보고")
+            self.assertTrue(
+                all(cell["matches"] for cell in result["header_plane_cells"])
+            )
+            self.assertTrue(
+                result["diagnostic_lineage"][
+                    "changed_only_bald_setup_and_checksum"
+                ]
+            )
+            self.assertTrue(
+                result["diagnostic_lineage"][
+                    "battle_result_header_and_event_code_unchanged"
+                ]
+            )
 
     def test_yal_uses_clean_ordinary_pattern_tile_before_and_after_shop(self) -> None:
         for profile in ("normal", "hard"):

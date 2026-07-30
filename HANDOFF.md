@@ -12302,3 +12302,32 @@ contains 57 safe syllables as documented below and in
 - A manual attempt to create a pre-Leon checkpoint by loading `pre_shop.gst`
   unexpectedly deployed and produced no accepted state. Only the automatic
   clean-run checkpoints above are evidence.
+
+### Scenario 1 Gray Sprite And Battle Result Completion (2026-07-31)
+
+- Normal and hard actual Move commands produced accepted gray Elwin/Fighter
+  evidence under
+  `captures/run/preparation_battle_surface/{normal,hard}/s01/gray01`.
+  The retained runtime group is class 1, commander 1, acted flag 1, coordinate
+  `(12,17)`.
+- Gray VRAM `0x9600..0x967F` has SHA-256
+  `74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22`
+  in both profiles. It exactly equals the stock two-bit expansion of
+  Elwin/Fighter silhouette ID `0x001E`; Plane A references tiles
+  `0x04B0..0x04B3` at `(20,11)..(21,12)`.
+- Adjacent unguarded-Bald diagnostics use normal checksum `4B7D` and hard
+  checksum `92BA`. Their only candidate deltas are Bald AT/DF, coordinate,
+  six mercenary bytes, and the checksum. The result header and event code are
+  untouched.
+- Both profiles traverse the stock victory path to byte-identical full-screen
+  `전과보고` PNGs. `아론/엘윈/헤인/리아나`, all result sprites, POINT,
+  borders, rows, and numerical fields are intact. Result GSTs are retained
+  beside the PNGs.
+- `tools/verify_preparation_surface_evidence.py` now recomputes the acted
+  runtime record, exact gray expansion, Plane A references, result-header
+  cells, capture/GST hashes, and diagnostic delta. Scenario 1 is the sole
+  fully accepted scenario. Scenarios 2..27 normal/hard remain pending, so the
+  release gate and Goal remain active.
+- Focused preparation/battle validation passes 61/61. The full suite was split
+  into groups of 277, 413, 395, and 370 tests: 1,455 total with the unchanged
+  44 failures plus 3 errors. No release ROM or version was changed.

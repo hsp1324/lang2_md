@@ -1,21 +1,21 @@
 {
-  "schema_version": 1,
-  "status": "scenario_1_preparation_partial_pass_battle_pending",
+  "schema_version": 2,
+  "status": "scenario_1_complete_pass_scenarios_2_to_27_pending",
   "review": {
     "path": "localization/preparation_surface_review.json",
-    "sha256": "a4674fe67ce67afb5c9216c2187d8270d181ee3da69db9782217c3f61b3dc4bc",
+    "sha256": "730c333f54f18b3cee32f2c76631dbbe10d09715d87f2532bedd781360e4e5d1",
     "reviewed_on": "2026-07-31",
-    "scope": "Scenario 1 preparation, hiring, arrangement, fixed-record, and real shop item-list surfaces only",
+    "scope": "Scenario 1 preparation, hiring, arrangement, fixed-record, real shop item-list, gray acted-sprite, and battle-result surfaces",
     "class_change": {
       "status": "not_applicable_in_this_seed",
       "reason": "The preserved manual-slot seed exposes commander status and hiring pages but no live class-change choice in Scenario 1."
     },
-    "acceptance_effect": "This review records check-level preparation progress only. Scenario 1 remains pending in both profiles until gray acted sprites and battle-result surfaces pass."
+    "acceptance_effect": "Scenario 1 passes every required visible surface in both profiles. Scenarios 2 through 27 remain pending, so the overall release gate remains pending."
   },
   "profiles": {
     "normal": {
       "run": "captures/run/preparation_surface_matrix/normal/s01/yal02",
-      "status": "preparation_surface_pass_battle_pending",
+      "status": "scenario_1_surface_pass",
       "plan": {
         "path": "captures/run/preparation_surface_matrix/normal/s01/yal02/plan.json",
         "sha256": "a5c00a0e9fa954f397c90804b84c5b9d440c206dfe66a5d878bc65d3fa326873"
@@ -187,22 +187,263 @@
           ]
         }
       },
+      "battle_evidence": {
+        "status": "pass",
+        "run_root": "captures/run/preparation_battle_surface/normal/s01",
+        "gray_acted_sprite": {
+          "active_capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s01/gray01/active_command.png",
+            "sha256": "9b01d3b03c48916661628f0af93867b83b5b0cc7c70402dbbf0c16a7f92a7aa9",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "acted_capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s01/gray01/acted_gray.png",
+            "sha256": "1054f6c2738bf2e6a6e6c60120d2f3dfdaf294f6636e717860a31aa1409749ce",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/normal/s01/gray01/states/acted_gray.gst",
+          "gst_sha256": "a5985c9872271ca1988a0633c1ef2e179984e37582f2f92952fe3619c3ae77be",
+          "runtime_group_zero": {
+            "class_id": 1,
+            "commander_id": 1,
+            "acted_flag": 1,
+            "hp": 10,
+            "x": 12,
+            "y": 17,
+            "record_prefix": "0101010a00000c1100000000ff01000a"
+          },
+          "source_commander_id": 1,
+          "source_class_id": 1,
+          "source_record_offset": "0x05DBA8",
+          "source_silhouette_id": "0x001E",
+          "vram_range": "0x9600..0x967F",
+          "vram_sha256": "74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22",
+          "matches_stock_fighter_silhouette_expansion": true,
+          "plane_references": [
+            {
+              "tile": "0x04B0",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 11,
+                  "tile_word": "0xA4B0"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B1",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 12,
+                  "tile_word": "0xA4B1"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B2",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 11,
+                  "tile_word": "0xA4B2"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B3",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 12,
+                  "tile_word": "0xA4B3"
+                }
+              ]
+            }
+          ]
+        },
+        "battle_result": {
+          "capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s01/result01/battle_result.png",
+            "sha256": "55ccde344035d7bf5696a9f0b83c2ae6ac696ec1fa1f60cc2246d42d3565c825",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/normal/s01/result01/states/battle_result.gst",
+          "gst_sha256": "481c01f74a25521b01f0d1aae8272429fcf9bb1fdcfd0b4ae4df2a06d25963db",
+          "header_text": "전과보고",
+          "header_vram_range": "0xA000..0xA1FF",
+          "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+          "header_plane_cells": [
+            {
+              "x": 17,
+              "y": 1,
+              "tile_word": "0x8500",
+              "expected_tile": "0x0500",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 1,
+              "tile_word": "0x8501",
+              "expected_tile": "0x0501",
+              "matches": true
+            },
+            {
+              "x": 17,
+              "y": 2,
+              "tile_word": "0x8502",
+              "expected_tile": "0x0502",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 2,
+              "tile_word": "0x8503",
+              "expected_tile": "0x0503",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 1,
+              "tile_word": "0x8504",
+              "expected_tile": "0x0504",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 1,
+              "tile_word": "0x8505",
+              "expected_tile": "0x0505",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 2,
+              "tile_word": "0x8506",
+              "expected_tile": "0x0506",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 2,
+              "tile_word": "0x8507",
+              "expected_tile": "0x0507",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 1,
+              "tile_word": "0x8508",
+              "expected_tile": "0x0508",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 1,
+              "tile_word": "0x8509",
+              "expected_tile": "0x0509",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 2,
+              "tile_word": "0x850A",
+              "expected_tile": "0x050A",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 2,
+              "tile_word": "0x850B",
+              "expected_tile": "0x050B",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 1,
+              "tile_word": "0x850C",
+              "expected_tile": "0x050C",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 1,
+              "tile_word": "0x850D",
+              "expected_tile": "0x050D",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 2,
+              "tile_word": "0x850E",
+              "expected_tile": "0x050E",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 2,
+              "tile_word": "0x850F",
+              "expected_tile": "0x050F",
+              "matches": true
+            }
+          ],
+          "diagnostic_lineage": {
+            "md_checksum": "4B7D",
+            "sha256": "66b9a4cb7944a506ff10b333a533d3be8d9d9c5fdc542c9bac4ec092de60b9e3",
+            "changed_offsets": [
+              "0x00018E",
+              "0x00018F",
+              "0x1802EA",
+              "0x1802EB",
+              "0x1802F0",
+              "0x1802F1",
+              "0x1802F6",
+              "0x1802F7",
+              "0x1802F8",
+              "0x1802F9",
+              "0x1802FA",
+              "0x1802FB"
+            ],
+            "changed_only_bald_setup_and_checksum": true,
+            "battle_result_header_and_event_code_unchanged": true,
+            "matches_expected_checksum": true,
+            "matches_expected_sha256": true
+          }
+        }
+      },
       "human_review": {
         "run": "captures/run/preparation_surface_matrix/normal/s01/yal02",
-        "status": "preparation_surface_pass_battle_pending",
+        "status": "scenario_1_surface_pass",
+        "battle_runs": {
+          "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s01/gray01",
+          "battle_result": "captures/run/preparation_battle_surface/normal/s01/result01"
+        },
         "checks": {
           "all_korean_commander_class_and_mercenary_labels": "pass",
           "commander_and_mercenary_sprites": "pass",
           "arrangement_minimap_and_rows": "pass",
           "borders_and_numeric_fields": "pass",
           "real_shop_item_list_round_trip": "pass",
-          "gray_acted_sprites_and_battle_result": "pending_separate_battle_run"
+          "gray_acted_sprites_and_battle_result": "pass"
         }
       }
     },
     "hard": {
       "run": "captures/run/preparation_surface_matrix/hard/s01/yal01",
-      "status": "preparation_surface_pass_battle_pending",
+      "status": "scenario_1_surface_pass",
       "plan": {
         "path": "captures/run/preparation_surface_matrix/hard/s01/yal01/plan.json",
         "sha256": "0fd06424c7ff4a574d27610df192dfa5e4e8c13acf30b5611d511ad9c7705bd1"
@@ -374,16 +615,257 @@
           ]
         }
       },
+      "battle_evidence": {
+        "status": "pass",
+        "run_root": "captures/run/preparation_battle_surface/hard/s01",
+        "gray_acted_sprite": {
+          "active_capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s01/gray01/active_command.png",
+            "sha256": "9b01d3b03c48916661628f0af93867b83b5b0cc7c70402dbbf0c16a7f92a7aa9",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "acted_capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s01/gray01/acted_gray.png",
+            "sha256": "bc6fc30ccb8a9cfa140a1f8184ed539398e519d0fd5cb1aa7d4f7c50d26a54ed",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/hard/s01/gray01/states/acted_gray.gst",
+          "gst_sha256": "9c32bdb5c589f1ded4e6af8678325c0543666835f52aa3267a7a19f50514e025",
+          "runtime_group_zero": {
+            "class_id": 1,
+            "commander_id": 1,
+            "acted_flag": 1,
+            "hp": 10,
+            "x": 12,
+            "y": 17,
+            "record_prefix": "0101010a00000c1100000000ff01000a"
+          },
+          "source_commander_id": 1,
+          "source_class_id": 1,
+          "source_record_offset": "0x05DBA8",
+          "source_silhouette_id": "0x001E",
+          "vram_range": "0x9600..0x967F",
+          "vram_sha256": "74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22",
+          "matches_stock_fighter_silhouette_expansion": true,
+          "plane_references": [
+            {
+              "tile": "0x04B0",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 11,
+                  "tile_word": "0xA4B0"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B1",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 12,
+                  "tile_word": "0xA4B1"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B2",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 11,
+                  "tile_word": "0xA4B2"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B3",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 12,
+                  "tile_word": "0xA4B3"
+                }
+              ]
+            }
+          ]
+        },
+        "battle_result": {
+          "capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s01/result01/battle_result.png",
+            "sha256": "55ccde344035d7bf5696a9f0b83c2ae6ac696ec1fa1f60cc2246d42d3565c825",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/hard/s01/result01/states/battle_result.gst",
+          "gst_sha256": "e13c1e8e70149c8adf690231b55f11ed894cd14069a1560a959bd62d99aae3eb",
+          "header_text": "전과보고",
+          "header_vram_range": "0xA000..0xA1FF",
+          "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+          "header_plane_cells": [
+            {
+              "x": 17,
+              "y": 1,
+              "tile_word": "0x8500",
+              "expected_tile": "0x0500",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 1,
+              "tile_word": "0x8501",
+              "expected_tile": "0x0501",
+              "matches": true
+            },
+            {
+              "x": 17,
+              "y": 2,
+              "tile_word": "0x8502",
+              "expected_tile": "0x0502",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 2,
+              "tile_word": "0x8503",
+              "expected_tile": "0x0503",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 1,
+              "tile_word": "0x8504",
+              "expected_tile": "0x0504",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 1,
+              "tile_word": "0x8505",
+              "expected_tile": "0x0505",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 2,
+              "tile_word": "0x8506",
+              "expected_tile": "0x0506",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 2,
+              "tile_word": "0x8507",
+              "expected_tile": "0x0507",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 1,
+              "tile_word": "0x8508",
+              "expected_tile": "0x0508",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 1,
+              "tile_word": "0x8509",
+              "expected_tile": "0x0509",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 2,
+              "tile_word": "0x850A",
+              "expected_tile": "0x050A",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 2,
+              "tile_word": "0x850B",
+              "expected_tile": "0x050B",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 1,
+              "tile_word": "0x850C",
+              "expected_tile": "0x050C",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 1,
+              "tile_word": "0x850D",
+              "expected_tile": "0x050D",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 2,
+              "tile_word": "0x850E",
+              "expected_tile": "0x050E",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 2,
+              "tile_word": "0x850F",
+              "expected_tile": "0x050F",
+              "matches": true
+            }
+          ],
+          "diagnostic_lineage": {
+            "md_checksum": "92BA",
+            "sha256": "4702bacfb7dc3ed80a6bbf8016dfde2edf46f1e210c6d6149f8cc9d3bfa49dd5",
+            "changed_offsets": [
+              "0x00018E",
+              "0x00018F",
+              "0x1802EA",
+              "0x1802EB",
+              "0x1802F0",
+              "0x1802F1",
+              "0x1802F6",
+              "0x1802F7",
+              "0x1802F8",
+              "0x1802F9",
+              "0x1802FA",
+              "0x1802FB"
+            ],
+            "changed_only_bald_setup_and_checksum": true,
+            "battle_result_header_and_event_code_unchanged": true,
+            "matches_expected_checksum": true,
+            "matches_expected_sha256": true
+          }
+        }
+      },
       "human_review": {
         "run": "captures/run/preparation_surface_matrix/hard/s01/yal01",
-        "status": "preparation_surface_pass_battle_pending",
+        "status": "scenario_1_surface_pass",
+        "battle_runs": {
+          "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s01/gray01",
+          "battle_result": "captures/run/preparation_battle_surface/hard/s01/result01"
+        },
         "checks": {
           "all_korean_commander_class_and_mercenary_labels": "pass",
           "commander_and_mercenary_sprites": "pass",
           "arrangement_minimap_and_rows": "pass",
           "borders_and_numeric_fields": "pass",
           "real_shop_item_list_round_trip": "pass",
-          "gray_acted_sprites_and_battle_result": "pending_separate_battle_run"
+          "gray_acted_sprites_and_battle_result": "pass"
         }
       }
     }
@@ -391,8 +873,10 @@
   "matrix_progress": {
     "required_profile_scenario_runs": 54,
     "preparation_surface_runs_reviewed": 2,
-    "fully_accepted_scenarios": 0,
-    "remaining_requirement": "Scenario 1 gray acted sprites and battle result in both profiles, then complete Scenarios 2 through 27."
+    "battle_surface_runs_reviewed": 2,
+    "fully_accepted_profile_scenario_runs": 2,
+    "fully_accepted_scenarios": 1,
+    "remaining_requirement": "Complete every required surface in Scenarios 2 through 27 for both profiles."
   },
   "rejected_normal_scenario_1_attempts": [
     {

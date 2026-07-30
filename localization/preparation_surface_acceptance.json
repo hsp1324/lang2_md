@@ -89,7 +89,7 @@
     }
   ],
   "current_replacement_probe": {
-    "status": "scenario_1_preparation_partial_pass_battle_pending",
+    "status": "scenario_1_complete_pass_scenarios_2_to_27_pending",
     "ownership_report": "localization/preparation_vram_ownership.json",
     "scenario_matrix_report": "localization/preparation_surface_matrix.json",
     "normal_probe": {
@@ -106,10 +106,11 @@
       "Hard Scenario 9 pre/post and normal Scenario 9 post GST states keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
       "Hard Scenario 6 completed the targeted preparation/shop/arrangement/enemy-detail regression.",
       "Scenario 1 normal and hard each pass 14/14 exact preparation, hiring, arrangement, fixed-record, and real shop item-list before/after pairs.",
-      "Scenario 1 normal and hard pre/post 로얄호스 checkpoints render 얄 from ordinary pattern tile 0x03DF, reference it from Plane A, and keep H-scroll VRAM 0xF400..0xF7FF entirely zero."
+      "Scenario 1 normal and hard pre/post 로얄호스 checkpoints render 얄 from ordinary pattern tile 0x03DF, reference it from Plane A, and keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
+      "Scenario 1 normal and hard actual movement produces an intact gray Elwin/Fighter sprite whose VRAM payload exactly expands stock silhouette ID 0x001E.",
+      "Scenario 1 normal and hard traverse the stock victory path to byte-identical full-screen 전과보고 captures with intact Korean names, sprites, POINT, borders, rows, and numerical fields."
     ],
     "not_yet_covered": [
-      "Scenario 1 gray acted sprites and battle-result surfaces in normal and hard",
       "live class-change choices where a scenario/seed exposes them",
       "the complete Scenario 2 through 27 normal/hard matrix"
     ]
@@ -118,7 +119,7 @@
     {
       "scenario": 1,
       "profile": "normal_korean",
-      "status": "preparation_partial_pass_battle_pending",
+      "status": "pass",
       "report": "localization/preparation_surface_matrix.json",
       "checks": {
         "pre_shop_commander_roster": "pass",
@@ -127,14 +128,14 @@
         "post_shop_commander_roster": "pass",
         "post_shop_hiring": "pass",
         "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
-        "complete_screen_integrity": "preparation_pass_gray_acted_and_result_pending"
+        "complete_screen_integrity": "pass"
       },
       "not_applicable_reason": "The preserved Scenario 1 manual-slot seed exposes status and hiring pages but no live class-change choice."
     },
     {
       "scenario": 1,
       "profile": "hard_korean",
-      "status": "preparation_partial_pass_battle_pending",
+      "status": "pass",
       "report": "localization/preparation_surface_matrix.json",
       "checks": {
         "pre_shop_commander_roster": "pass",
@@ -143,7 +144,7 @@
         "post_shop_commander_roster": "pass",
         "post_shop_hiring": "pass",
         "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
-        "complete_screen_integrity": "preparation_pass_gray_acted_and_result_pending"
+        "complete_screen_integrity": "pass"
       },
       "not_applicable_reason": "The preserved Scenario 1 manual-slot seed exposes status and hiring pages but no live class-change choice."
     }
@@ -151,7 +152,9 @@
   "matrix_summary": {
     "required_profile_scenario_runs": 54,
     "preparation_surface_runs_reviewed": 2,
-    "fully_accepted_scenarios": 0,
+    "battle_surface_runs_reviewed": 2,
+    "fully_accepted_profile_scenario_runs": 2,
+    "fully_accepted_scenarios": 1,
     "release_gate_status": "pending"
   }
 }

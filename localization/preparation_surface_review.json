@@ -1,30 +1,38 @@
 {
   "schema_version": 1,
   "reviewed_on": "2026-07-31",
-  "scope": "Scenario 1 preparation, hiring, arrangement, fixed-record, and real shop item-list surfaces only",
+  "scope": "Scenario 1 preparation, hiring, arrangement, fixed-record, real shop item-list, gray acted-sprite, and battle-result surfaces",
   "profiles": {
     "normal": {
       "run": "captures/run/preparation_surface_matrix/normal/s01/yal02",
-      "status": "preparation_surface_pass_battle_pending",
+      "status": "scenario_1_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s01/gray01",
+        "battle_result": "captures/run/preparation_battle_surface/normal/s01/result01"
+      },
       "checks": {
         "all_korean_commander_class_and_mercenary_labels": "pass",
         "commander_and_mercenary_sprites": "pass",
         "arrangement_minimap_and_rows": "pass",
         "borders_and_numeric_fields": "pass",
         "real_shop_item_list_round_trip": "pass",
-        "gray_acted_sprites_and_battle_result": "pending_separate_battle_run"
+        "gray_acted_sprites_and_battle_result": "pass"
       }
     },
     "hard": {
       "run": "captures/run/preparation_surface_matrix/hard/s01/yal01",
-      "status": "preparation_surface_pass_battle_pending",
+      "status": "scenario_1_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s01/gray01",
+        "battle_result": "captures/run/preparation_battle_surface/hard/s01/result01"
+      },
       "checks": {
         "all_korean_commander_class_and_mercenary_labels": "pass",
         "commander_and_mercenary_sprites": "pass",
         "arrangement_minimap_and_rows": "pass",
         "borders_and_numeric_fields": "pass",
         "real_shop_item_list_round_trip": "pass",
-        "gray_acted_sprites_and_battle_result": "pending_separate_battle_run"
+        "gray_acted_sprites_and_battle_result": "pass"
       }
     }
   },
@@ -32,5 +40,5 @@
     "status": "not_applicable_in_this_seed",
     "reason": "The preserved manual-slot seed exposes commander status and hiring pages but no live class-change choice in Scenario 1."
   },
-  "acceptance_effect": "This review records check-level preparation progress only. Scenario 1 remains pending in both profiles until gray acted sprites and battle-result surfaces pass."
+  "acceptance_effect": "Scenario 1 passes every required visible surface in both profiles. Scenarios 2 through 27 remain pending, so the overall release gate remains pending."
 }

@@ -196,3 +196,35 @@ preceding 24-cell stable unit. The remaining failures are in concurrently
 dirty experimental sprites, hard runtime/plan/generated documentation,
 unpromoted release/report gates, and item/shop inventory; the `얄` addition
 introduced no new checksum cascade.
+
+## Continuation update: Scenario 1 battle surfaces
+
+Scenario 1 is now complete in both current non-release profiles. Actual Move
+commands produced gray Elwin/Fighter captures and GSTs under
+`captures/run/preparation_battle_surface/{normal,hard}/s01/gray01`. Runtime
+group 0 has class 1, commander 1, acted flag 1, and coordinate `(12,17)`.
+VRAM `0x9600..0x967F` exactly matches the software expansion of source
+silhouette ID `0x001E`; the four tiles are referenced from Plane A.
+
+Separate adjacent, unguarded Bald diagnostics preserve the result header and
+event code and change only the fixed Bald AT/DF, coordinate, mercenary bytes,
+and ROM checksum. Normal checksum `4B7D` and hard checksum `92BA` both traverse
+the stock victory event to the same full-screen `전과보고` PNG. The Korean
+header, `아론/엘윈/헤인/리아나`, all result sprites, POINT, borders, rows,
+and numerical fields are visually intact. Result GSTs are retained beside
+each capture.
+
+`tools/verify_preparation_surface_evidence.py` now proves the battle-capture
+hashes, acted runtime record, exact gray-payload expansion, Plane A tile
+references, result header tile cells, and diagnostic ROM delta. Its checked
+report marks Scenario 1 as the sole fully accepted scenario in
+`localization/preparation_surface_matrix.json`. The overall release gate
+remains pending because Scenarios 2 through 27 still require both profiles.
+No release ROM or version was changed.
+
+Focused Scenario 1 preparation/battle validation passes 61/61. Full discovery
+was split into four groups to stay within the command runtime limit: 277,
+413, 395, and 370 tests, or 1,455 total. The result remains exactly 44
+failures plus 3 errors. All 44/3 are the pre-existing experimental-sprite,
+hard-runtime/plan/generated-document, release-promotion, and inventory gates;
+the two new battle-evidence tests pass.
