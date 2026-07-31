@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-07-31",
+  "scope": "Scenario 7 preparation, hiring, arrangement, every visible allied/NPC/enemy fixed record, real shop item-list, gray acted-sprite, civilian-safe natural Sherry class change, and battle-result surfaces",
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s07/current01",
+      "status": "scenario_7_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s07/gray01",
+        "class_change": "captures/run/preparation_battle_surface/normal/s07/result01",
+        "battle_result": "captures/run/preparation_battle_surface/normal/s07/result01"
+      },
+      "checks": {
+        "all_six_allied_commander_and_class_labels": "pass",
+        "all_six_hiring_pages_and_mercenary_rows": "pass",
+        "all_ten_visible_npc_and_enemy_records": "pass",
+        "all_visible_fixed_record_mercenary_names": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "same_run_pre_post_identity": "pass",
+        "gray_acted_sprite": "pass",
+        "natural_three_choice_class_change": "pass",
+        "battle_result": "pass"
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s07/current01",
+      "status": "scenario_7_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s07/gray01",
+        "class_change": "captures/run/preparation_battle_surface/hard/s07/result01",
+        "battle_result": "captures/run/preparation_battle_surface/hard/s07/result01"
+      },
+      "checks": {
+        "all_six_allied_commander_and_class_labels": "pass",
+        "all_six_hiring_pages_and_mercenary_rows": "pass",
+        "all_ten_visible_npc_and_enemy_records": "pass",
+        "all_visible_fixed_record_mercenary_names": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "same_run_pre_post_identity": "pass",
+        "gray_acted_sprite": "pass",
+        "natural_three_choice_class_change": "pass",
+        "battle_result": "pass"
+      }
+    }
+  },
+  "allied_scope": [
+    "엘윈 / 파이터 / 솔저",
+    "헤인 / 워록 / 가드맨",
+    "스코트 / 파이터 / 솔저",
+    "리아나 / 클레릭 / 가드맨",
+    "쉐리 / 파이터 / 솔저",
+    "아론 / 파이터 / 솔저"
+  ],
+  "fixed_record_scope": [
+    "주민 records 0..2 / 클레릭 / 시민",
+    "기남 / 네크로맨서 / 좀비",
+    "제국지휘관 records 5..6 / 네크로맨서 / 스켈톤",
+    "그레이트슬라임 records 7..8 / 그레이트슬라임 / 슬라임",
+    "제국지휘관 / 호크나이트 / 그리폰",
+    "제국지휘관 / 서펜나이트 / 리자드맨"
+  ],
+  "shop_scope": [
+    "라지실드",
+    "그레이트소드",
+    "갑옷",
+    "체인메일",
+    "로브"
+  ],
+  "class_change": {
+    "status": "pass",
+    "trigger": "Sherry naturally levels during the stock Scenario 7 civilian-safe victory aftermath.",
+    "reviewed_choices": [
+      "로드: 파이크, 솔저; 힐, 프로텍션",
+      "호크나이트: 그리폰; 토네이도",
+      "세인트: 가드맨, 파이크; 썬더, 일루전"
+    ],
+    "screen_integrity": "All three full-screen choice frames are byte-identical between normal and hard. Every Korean class, mercenary, and magic label, sprite, statistic, border, and map pixel is intact."
+  },
+  "not_applicable": [
+    {
+      "fixed_record": 3,
+      "reason": "The source 키스 / 호크나이트 record is hidden during preparation at coordinates (255,255)."
+    },
+    {
+      "fixed_record": 11,
+      "reason": "The source 제국지휘관 / 어새신 record is hidden during preparation at coordinates (255,255)."
+    }
+  ],
+  "acceptance_effect": "Scenario 7 passes every required visible surface in both profiles. Scenarios 8, 10, and 12 through 27 remain pending, so the overall release gate remains pending."
+}

@@ -12498,3 +12498,65 @@ contains 57 safe syllables as documented below and in
   Scenario 6 test is in that set. The cumulative gate accepts Scenarios 1, 2,
   3, 4, 5, 6, 9, and 11 in both profiles; Scenarios 7, 8, 10, and 12 through
   27 remain pending.
+
+### Scenario 7 Complete Preparation And Battle-Surface Verification (2026-07-31)
+
+- The accepted non-release candidates remain normal checksum `76D1` /
+  SHA-256
+  `db8f2c12e97896aabadd9e216baf98d755adfba6edb89ebb8a4d163053723a44`
+  and hard checksum `D9B2` / SHA-256
+  `12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b`.
+  No release ROM or version was promoted.
+- Normal and hard `s07/current01` runs each pass 27/27 exact full-screen
+  pre/post pairs around one real same-process shop item-list round trip. They
+  enumerate six allied status/hiring pages, two allied roster pages, the
+  arrangement/minimap, and all ten preparation-visible fixed records. Every
+  corresponding normal/hard preparation and shop PNG is byte-identical.
+- Complete visual review covers 엘윈, 헤인, 스코트, 리아나, 쉐리, 아론,
+  three 주민, 기남, every visible 제국지휘관, both 그레이트슬라임 rows,
+  and every visible 파이터/워록/클레릭/네크로맨서/호크나이트/
+  서펜나이트, 솔저/가드맨/시민/좀비/스켈톤/슬라임/그리폰/리자드맨
+  row. All commander and mercenary sprites, names/classes, minimap cells,
+  borders, and numerical fields remain intact before and after shop. Hidden
+  fixed records 3 (키스/호크나이트) and 11 (제국지휘관/어새신) are
+  source `(255,255)` records and explicitly not applicable in preparation.
+- The shop item list keeps 라지실드, 그레이트소드, 갑옷, 체인메일, and
+  로브 intact. Actual movement changes Elwin/Fighter runtime group 0 to acted
+  flag 1 at `(8,20)`. Both profiles retain the stock silhouette-`0x001E`
+  payload in VRAM `0x9600..0x967F`; tiles `0x04B0..0x04B3` are referenced
+  from Plane A at `(20,11),(20,12),(21,11),(21,12)`.
+- The existing source-validated Scenario 7 clear diagnostic changes only
+  Ginam's AT/DF, six mercenary slots, and coordinates `(6,6)->(7,19)`.
+  It preserves every player deployment, all eleven non-Ginam fixed records,
+  resident-death events, the scheduled-turn table/handlers, and the Korean
+  result header. Normal diagnostic checksum/hash are `D145` /
+  `11340bd58e362475ebacc22ad99dd53a331582707ab73afeb026bed587acd123`;
+  hard are `3426` /
+  `eac2e200843e2f866b06eecbfb45d68b84f71f4822e836f5f1af713b188a91b4`.
+  A real Elwin Attack enters the unchanged civilian-safe stock aftermath.
+- The aftermath naturally exposes Sherry's three choices. Normal and hard
+  choice PNGs are pairwise byte-identical for
+  `로드 / 파이크 / 솔저 / 힐 / 프로텍션`,
+  `호크나이트 / 그리폰 / 토네이도`, and
+  `세인트 / 가드맨 / 파이크 / 썬더 / 일루전`. Normal continued with
+  Saint and hard with Lord; both reach intact `전과보고 / POINT 1650P`
+  whose header VRAM and all 16 Plane A cells match.
+- The first normal detector omitted `--open-map-command` and stopped on the
+  Scenario 7 banner without input. The first attack target attempt left the
+  cursor on Elwin and returned to his command menu. Their diagnostic frames
+  are excluded. Accepted evidence uses normal/hard `gray01` and `result01`,
+  with explicit Up target movement to Ginam.
+- `tools/verify_preparation_surface_scenario_07.py`,
+  `localization/preparation_surface_scenario_07.json`, its review JSON, and
+  `tests/test_preparation_surface_scenario_07.py` lock the complete matrix,
+  fixed-record accounting, capture/GST hashes, gray VRAM/Plane references,
+  all three class choices, result-header cells, and diagnostic lineage. The
+  cumulative gate accepts Scenarios 1, 2, 3, 4, 5, 6, 7, 9, and 11 in both
+  profiles; Scenarios 8, 10, and 12 through 27 remain pending.
+- Focused Scenario 7 and cumulative acceptance tests pass 38/38. Full
+  discovery runs 1,514 tests with 50 failures and 3 errors; none belongs to
+  Scenario 7. Relative to the prior 1,508-test baseline (44 failures and 3
+  errors), normalized test names show seven new failures and one resolved
+  failure, all in the concurrently modified
+  `test_experimental_class_sprite_assets` module. Candidate and Scenario 7
+  diagnostic hashes remain unchanged after the run.

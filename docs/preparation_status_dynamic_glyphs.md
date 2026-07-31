@@ -549,3 +549,70 @@ the cumulative Scenario 6 plus acceptance set passes 39/39. Split full
 discovery runs 1,508 tests and retains exactly the established 44 failures
 plus 3 errors. The nine newly added Scenario 6 tests account for the increase
 from 1,499, and no Scenario 6 test appears in the failure/error set.
+
+## Scenario 7 current-candidate closure
+
+Normal `76D1` and hard-profile `D9B2` were replayed through the complete
+Scenario 7 preparation surface. Each profile passes 27/27 exact full-screen
+before/after pairs around one uninterrupted real shop item-list visit. The
+matrix covers all six allied commander status and hiring pages, both allied
+roster pages, arrangement/minimap, and every preparation-visible fixed
+record. Every corresponding preparation and shop PNG is also byte-identical
+between normal and hard.
+
+The allied rows are 엘윈/파이터/솔저, 헤인/워록/가드맨,
+스코트/파이터/솔저, 리아나/클레릭/가드맨, 쉐리/파이터/솔저, and
+아론/파이터/솔저. The ten visible fixed records cover three
+주민/클레릭/시민 rows, 기남/네크로맨서/좀비, two
+제국지휘관/네크로맨서/스켈톤 rows, two
+그레이트슬라임/그레이트슬라임/슬라임 rows,
+제국지휘관/호크나이트/그리폰, and
+제국지휘관/서펜나이트/리자드맨. Every name, class, commander and
+mercenary sprite, minimap cell, border, and number is intact. Fixed records 3
+and 11 are hidden at source coordinates `(255,255)` and are explicitly
+recorded as preparation-time not applicable.
+
+The shop page renders 라지실드, 그레이트소드, 갑옷, 체인메일, and 로브
+without any glyph or row corruption. The same-run post-shop scans remain
+byte-exact to the pre-shop scans.
+
+Actual movement changes Elwin/Fighter to acted flag 1 at `(8,20)`. Both
+profiles retain the exact stock Fighter silhouette expansion in gray VRAM
+`0x9600..0x967F`; tiles `0x04B0..0x04B3` are referenced from Plane A at the
+expected map cells. The action-menu PNG is byte-identical between profiles,
+and the runtime record plus gray VRAM match exactly.
+
+For completion, the existing source-validated Scenario 7 diagnostic moves only
+Ginam from `(6,6)` to `(7,19)`, sets his AT/DF to zero, and removes his six
+mercenaries. It preserves all player deployments, every non-Ginam fixed
+record, resident-death events, the scheduled-turn table and handlers, and the
+Korean result header. A real Elwin Attack then enters the unchanged
+civilian-safe stock aftermath.
+
+That aftermath naturally levels Sherry and exposes all three choices.
+Normal and hard frames are byte-identical for `로드` with `파이크 / 솔저`
+and `힐 / 프로텍션`, `호크나이트` with `그리폰` and `토네이도`, and
+`세인트` with `가드맨 / 파이크` and `썬더 / 일루전`. Normal continued
+with Saint and hard with Lord; both reach intact `전과보고 / POINT 1650P`
+screens whose result-header VRAM and all 16 Plane A cells match.
+
+The first normal command detector omitted its map-aware option and stopped on
+the Scenario 7 banner without sending input. A later first attack attempt left
+the target cursor on Elwin and returned to the command menu. Both attempts are
+excluded. The accepted route uses the screen-detected selector, automatic
+placement, map-aware command detection, and an explicit Up target movement to
+Ginam. All input was sent directly to the isolated Xvfb `:104` window.
+
+The checked report is
+`localization/preparation_surface_scenario_07.json`. The cumulative gate now
+accepts Scenarios 1, 2, 3, 4, 5, 6, 7, 9, and 11 in both profiles. Scenarios
+8, 10, and 12 through 27 remain pending. No release ROM or version was
+promoted.
+
+Focused Scenario 7 diagnostic-builder, complete-surface, and cumulative
+acceptance checks pass 38/38. Full discovery runs 1,514 tests with 50 failures
+and 3 errors; no Scenario 7 test appears in that set. After normalizing test
+module names against the prior 1,508-test baseline (44 failures and 3 errors),
+the only name-set change is seven new failures and one resolved failure in the
+concurrently modified `test_experimental_class_sprite_assets` module. The
+Scenario 7 candidate/probe hashes remain byte-exact after the full run.

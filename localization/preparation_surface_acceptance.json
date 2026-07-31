@@ -107,7 +107,7 @@
     }
   ],
   "current_replacement_probe": {
-    "status": "scenarios_1_2_3_4_5_6_9_11_complete_pass_remaining_scenarios_pending",
+    "status": "scenarios_1_2_3_4_5_6_7_9_11_complete_pass_remaining_scenarios_pending",
     "ownership_report": "localization/preparation_vram_ownership.json",
     "scenario_matrix_report": "localization/preparation_surface_matrix.json",
     "scenario_2_report": "localization/preparation_surface_scenario_02.json",
@@ -115,6 +115,7 @@
     "scenario_4_report": "localization/preparation_surface_scenario_04.json",
     "scenario_5_report": "localization/preparation_surface_scenario_05.json",
     "scenario_6_report": "localization/preparation_surface_scenario_06.json",
+    "scenario_7_report": "localization/preparation_surface_scenario_07.json",
     "scenario_9_report": "localization/preparation_surface_scenario_09.json",
     "scenario_11_report": "localization/preparation_surface_scenario_11.json",
     "item_shop_overflow_report": "localization/item_shop_overflow_regression.json",
@@ -155,6 +156,10 @@
       "Scenario 6 normal and hard actual movement produces an intact gray Elwin/Fighter sprite with acted flag 1 at (5,26); both profiles use the stock silhouette payload and identical Plane A references.",
       "Scenario 6 naturally exposes all three Sherry class choices in both profiles. 로드 / 호크나이트 / 세인트 plus 파이크 / 솔저 / 그리폰 / 가드맨 and 힐 / 프로텍션 / 토네이도 / 썬더 / 일루전 render in byte-identical full-screen frames.",
       "Scenario 6 result diagnostics preserve every deployment, all thirteen fixed records, the scheduled turn table/handlers, and the Korean result header while marking only runtime enemy groups 9 through 17 defeated before the stock civilian-safe victory path reaches intact 전과보고 screens.",
+      "Scenario 7 normal and hard each pass 27/27 exact preparation, hiring, two-page arrangement, all ten visible NPC/enemy fixed-detail, and real shop item-list before/after pairs; hidden Keith and Assassin records 3 and 11 are explicitly N/A at source coordinates (255,255).",
+      "Scenario 7 enumerates all six allied commanders and every preparation-visible NPC/enemy record. 엘윈 / 헤인 / 스코트 / 리아나 / 쉐리 / 아론, all three 주민, 기남, every 제국지휘관, both 그레이트슬라임 rows, and every 파이터 / 워록 / 클레릭 / 네크로맨서 / 호크나이트 / 서펜나이트 / 솔저 / 가드맨 / 시민 / 좀비 / 스켈톤 / 슬라임 / 그리폰 / 리자드맨 row, sprite, minimap tile, border, and number remain intact before and after shop in both profiles.",
+      "Scenario 7 normal and hard actual movement produces an intact gray Elwin/Fighter sprite with acted flag 1 at (8,20); both profiles use the exact stock silhouette payload and identical Plane A references.",
+      "Scenario 7 civilian-safe completion naturally exposes all three Sherry class choices in both profiles. 로드 / 호크나이트 / 세인트 plus every mercenary and magic label render in byte-identical full-screen frames, and a real Elwin Attack against the record-isolated Ginam diagnostic reaches intact 전과보고 screens with identical header VRAM.",
       "Scenario 11 normal and hard each pass 27/27 exact preparation, hiring, arrangement, ten visible fixed-detail, and real shop item-list before/after pairs; the only preparation-hidden record is explicitly N/A at source coordinates (255,255).",
       "Scenario 11 enumerates all six allied commanders plus every preparation-visible NPC and enemy record, including 제시카/소서러/솔저, 에그베르트/자베라/아머솔저, both 메이지/다크엘프/파이크 rows, and every repeated imperial sprite/name row. The three user-reported gray-block failures are closed on both current candidates.",
       "Scenario 11 normal and hard actual movement produces an intact gray Elwin/Fighter sprite whose VRAM payload exactly expands stock silhouette ID 0x001E.",
@@ -163,7 +168,7 @@
     ],
     "not_yet_covered": [
       "additional live class-change choices beyond the Scenario 5 natural Sherry choices and the explicit 팔랑크스 / 발리스타 regression where later scenario seeds expose them",
-      "the complete Scenario 7, Scenario 8, Scenario 10, and Scenario 12 through 27 normal/hard matrix"
+      "the complete Scenario 8, Scenario 10, and Scenario 12 through 27 normal/hard matrix"
     ]
   },
   "scenario_progress": [
@@ -356,6 +361,36 @@
       }
     },
     {
+      "scenario": 7,
+      "profile": "normal_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_07.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "pass",
+        "complete_screen_integrity": "pass"
+      }
+    },
+    {
+      "scenario": 7,
+      "profile": "hard_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_07.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "pass",
+        "complete_screen_integrity": "pass"
+      }
+    },
+    {
       "scenario": 9,
       "profile": "normal_korean",
       "status": "pass",
@@ -422,10 +457,10 @@
   ],
   "matrix_summary": {
     "required_profile_scenario_runs": 54,
-    "preparation_surface_runs_reviewed": 16,
-    "battle_surface_runs_reviewed": 16,
-    "fully_accepted_profile_scenario_runs": 16,
-    "fully_accepted_scenarios": 8,
+    "preparation_surface_runs_reviewed": 18,
+    "battle_surface_runs_reviewed": 18,
+    "fully_accepted_profile_scenario_runs": 18,
+    "fully_accepted_scenarios": 9,
     "release_gate_status": "pending"
   }
 }

@@ -1,0 +1,1729 @@
+{
+  "schema_version": 1,
+  "status": "scenario_7_complete_pass",
+  "review": {
+    "path": "localization/preparation_surface_scenario_07_review.json",
+    "sha256": "857d52ae2ce19d3a0a72816aef1117efca9bee91b8398b927db978fa4a02b7a8",
+    "reviewed_on": "2026-07-31",
+    "scope": "Scenario 7 preparation, hiring, arrangement, every visible allied/NPC/enemy fixed record, real shop item-list, gray acted-sprite, civilian-safe natural Sherry class change, and battle-result surfaces",
+    "allied_scope": [
+      "엘윈 / 파이터 / 솔저",
+      "헤인 / 워록 / 가드맨",
+      "스코트 / 파이터 / 솔저",
+      "리아나 / 클레릭 / 가드맨",
+      "쉐리 / 파이터 / 솔저",
+      "아론 / 파이터 / 솔저"
+    ],
+    "fixed_record_scope": [
+      "주민 records 0..2 / 클레릭 / 시민",
+      "기남 / 네크로맨서 / 좀비",
+      "제국지휘관 records 5..6 / 네크로맨서 / 스켈톤",
+      "그레이트슬라임 records 7..8 / 그레이트슬라임 / 슬라임",
+      "제국지휘관 / 호크나이트 / 그리폰",
+      "제국지휘관 / 서펜나이트 / 리자드맨"
+    ],
+    "shop_scope": [
+      "라지실드",
+      "그레이트소드",
+      "갑옷",
+      "체인메일",
+      "로브"
+    ],
+    "class_change": {
+      "status": "pass",
+      "trigger": "Sherry naturally levels during the stock Scenario 7 civilian-safe victory aftermath.",
+      "reviewed_choices": [
+        "로드: 파이크, 솔저; 힐, 프로텍션",
+        "호크나이트: 그리폰; 토네이도",
+        "세인트: 가드맨, 파이크; 썬더, 일루전"
+      ],
+      "screen_integrity": "All three full-screen choice frames are byte-identical between normal and hard. Every Korean class, mercenary, and magic label, sprite, statistic, border, and map pixel is intact."
+    },
+    "not_applicable": [
+      {
+        "fixed_record": 3,
+        "reason": "The source 키스 / 호크나이트 record is hidden during preparation at coordinates (255,255)."
+      },
+      {
+        "fixed_record": 11,
+        "reason": "The source 제국지휘관 / 어새신 record is hidden during preparation at coordinates (255,255)."
+      }
+    ],
+    "acceptance_effect": "Scenario 7 passes every required visible surface in both profiles. Scenarios 8, 10, and 12 through 27 remain pending, so the overall release gate remains pending."
+  },
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s07/current01",
+      "status": "scenario_7_surface_pass",
+      "plan": {
+        "path": "captures/run/preparation_surface_matrix/normal/s07/current01/plan.json",
+        "sha256": "2a9429a04fdc656c51e12abaa485cb0688f5591b9ebff923494d806a9f3a43d4"
+      },
+      "captured_evidence": {
+        "path": "captures/run/preparation_surface_matrix/normal/s07/current01/evidence.json",
+        "sha256": "ee0dc9094c5145d13c6fa3d0c64dbec0c24aeea63655091c82be816a8afcb098",
+        "original_status": "captured_exact_unreviewed",
+        "elapsed_seconds": 284.806
+      },
+      "capture_status": "recomputed_exact_reviewed",
+      "candidate": {
+        "path": "tmp/Langrisser II (Korean class-merc-prep-lookup probe).md",
+        "md_checksum": "76D1",
+        "sha256": "db8f2c12e97896aabadd9e216baf98d755adfba6edb89ebb8a4d163053723a44"
+      },
+      "scenario": 7,
+      "allied_commander_count": 6,
+      "allied_seed_records": [
+        {
+          "commander_id": 1,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 1,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 1
+        },
+        {
+          "commander_id": 5,
+          "class_id": 3,
+          "class_id_hex": "0x03",
+          "class_korean": "워록",
+          "level": 1,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 2
+        },
+        {
+          "commander_id": 6,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 1,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 3
+        },
+        {
+          "commander_id": 2,
+          "class_id": 2,
+          "class_id_hex": "0x02",
+          "class_korean": "클레릭",
+          "level": 3,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 4
+        },
+        {
+          "commander_id": 4,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 9,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 5
+        },
+        {
+          "commander_id": 8,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 8,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 6
+        }
+      ],
+      "fixed_record_count": 12,
+      "visible_fixed_record_indexes": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "visible_fixed_records": [
+        {
+          "index": 0,
+          "name_korean": "주민",
+          "class_korean": "클레릭",
+          "mercenary_classes_korean": [
+            "시민"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x03",
+          "x": 4,
+          "y": 17
+        },
+        {
+          "index": 1,
+          "name_korean": "주민",
+          "class_korean": "클레릭",
+          "mercenary_classes_korean": [
+            "시민"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x03",
+          "x": 22,
+          "y": 26
+        },
+        {
+          "index": 2,
+          "name_korean": "주민",
+          "class_korean": "클레릭",
+          "mercenary_classes_korean": [
+            "시민"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x03",
+          "x": 21,
+          "y": 19
+        },
+        {
+          "index": 4,
+          "name_korean": "기남",
+          "class_korean": "네크로맨서",
+          "mercenary_classes_korean": [
+            "좀비"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "index": 5,
+          "name_korean": "제국지휘관",
+          "class_korean": "네크로맨서",
+          "mercenary_classes_korean": [
+            "스켈톤"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 9,
+          "y": 9
+        },
+        {
+          "index": 6,
+          "name_korean": "제국지휘관",
+          "class_korean": "네크로맨서",
+          "mercenary_classes_korean": [
+            "스켈톤"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 3,
+          "y": 9
+        },
+        {
+          "index": 7,
+          "name_korean": "그레이트슬라임",
+          "class_korean": "그레이트슬라임",
+          "mercenary_classes_korean": [
+            "슬라임"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 4,
+          "y": 13
+        },
+        {
+          "index": 8,
+          "name_korean": "그레이트슬라임",
+          "class_korean": "그레이트슬라임",
+          "mercenary_classes_korean": [
+            "슬라임"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 8,
+          "y": 13
+        },
+        {
+          "index": 9,
+          "name_korean": "제국지휘관",
+          "class_korean": "호크나이트",
+          "mercenary_classes_korean": [
+            "그리폰"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 29,
+          "y": 26
+        },
+        {
+          "index": 10,
+          "name_korean": "제국지휘관",
+          "class_korean": "서펜나이트",
+          "mercenary_classes_korean": [
+            "리자드맨"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 28,
+          "y": 18
+        }
+      ],
+      "not_applicable_fixed_records": [
+        {
+          "index": 3,
+          "name_korean": "키스",
+          "class_korean": "호크나이트",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        },
+        {
+          "index": 11,
+          "name_korean": "제국지휘관",
+          "class_korean": "어새신",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        }
+      ],
+      "expected_pair_count": 27,
+      "actual_pair_count": 27,
+      "capture_pairs": [
+        {
+          "surface": "allied/commander_01_hire_page_01.png",
+          "pre_sha256": "4e341fa4abc309a7ddc249e92bfea93387fbbd695f7f07660613b37270dc2499",
+          "post_sha256": "4e341fa4abc309a7ddc249e92bfea93387fbbd695f7f07660613b37270dc2499",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_01_root.png",
+          "pre_sha256": "c54bfe2cbab4b81d4d25d80ec830f576f621c159e7e714d996713855b4290a26",
+          "post_sha256": "c54bfe2cbab4b81d4d25d80ec830f576f621c159e7e714d996713855b4290a26",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_hire_page_01.png",
+          "pre_sha256": "5cb12c29918ed05cd23fbba11348fdb07326fb7bcb1f043f8829eac974d69607",
+          "post_sha256": "5cb12c29918ed05cd23fbba11348fdb07326fb7bcb1f043f8829eac974d69607",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_root.png",
+          "pre_sha256": "d55b0b3c5c73dcd4f6facc2cf5fcaf3b8a740931e6e84b23ea16116eed3b0277",
+          "post_sha256": "d55b0b3c5c73dcd4f6facc2cf5fcaf3b8a740931e6e84b23ea16116eed3b0277",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_hire_page_01.png",
+          "pre_sha256": "ef870177b77fbbc899976c195f494358f92ef2ac1e2e17517bc448b26f5d5f46",
+          "post_sha256": "ef870177b77fbbc899976c195f494358f92ef2ac1e2e17517bc448b26f5d5f46",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_root.png",
+          "pre_sha256": "de98991a1b1e4a2285732fd9a9f7966ae8dc0bb7f1b93188b0b3d13e74df159b",
+          "post_sha256": "de98991a1b1e4a2285732fd9a9f7966ae8dc0bb7f1b93188b0b3d13e74df159b",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_04_hire_page_01.png",
+          "pre_sha256": "f666a84a0b412d9f904e995196457e352da4a66b1c6894c0a3f90b0f5c44b313",
+          "post_sha256": "f666a84a0b412d9f904e995196457e352da4a66b1c6894c0a3f90b0f5c44b313",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_04_root.png",
+          "pre_sha256": "d540fa4ddb4faef4acb0e196e12408ebbc1bf8c4c41546019c6e75f7ff1a43ff",
+          "post_sha256": "d540fa4ddb4faef4acb0e196e12408ebbc1bf8c4c41546019c6e75f7ff1a43ff",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_05_hire_page_01.png",
+          "pre_sha256": "c1cea5238d4033a0039edd19f3d1db4fae15b521e9599474ac0378bd8beaf9f0",
+          "post_sha256": "c1cea5238d4033a0039edd19f3d1db4fae15b521e9599474ac0378bd8beaf9f0",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_05_root.png",
+          "pre_sha256": "004f53e1ddef842af432638a2baa1f20afeeda24fa29e53a6b9e0a9db5f49e54",
+          "post_sha256": "004f53e1ddef842af432638a2baa1f20afeeda24fa29e53a6b9e0a9db5f49e54",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_06_hire_page_01.png",
+          "pre_sha256": "9aef905be423b3a9e2c4c79b32fccf898d7266b485f1a4c0bfa05aa4aa16e70f",
+          "post_sha256": "9aef905be423b3a9e2c4c79b32fccf898d7266b485f1a4c0bfa05aa4aa16e70f",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_06_root.png",
+          "pre_sha256": "1de3bc9eb62a544ddd02ae1dcc2816ed0d243832aaa329335e99ced55a923e4c",
+          "post_sha256": "1de3bc9eb62a544ddd02ae1dcc2816ed0d243832aaa329335e99ced55a923e4c",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/menu.png",
+          "pre_sha256": "9249f41aa81f0bff8e4e3ca107976fda37b9d72ff075156502fcd17ee3c69cff",
+          "post_sha256": "9249f41aa81f0bff8e4e3ca107976fda37b9d72ff075156502fcd17ee3c69cff",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/returned_menu.png",
+          "pre_sha256": "22f06ffa68390e043357dd973ee4f1a24028a25cd734d383238edf281400ee54",
+          "post_sha256": "22f06ffa68390e043357dd973ee4f1a24028a25cd734d383238edf281400ee54",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_01.png",
+          "pre_sha256": "2764d2a0835c4aa10ab62c1d293f91b04a8b340d0cef225ae598ef6aebbd7de4",
+          "post_sha256": "2764d2a0835c4aa10ab62c1d293f91b04a8b340d0cef225ae598ef6aebbd7de4",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_02.png",
+          "pre_sha256": "47fbeec6c848acbda913b72e97715abb650563f1a5705a34cbdab44ed84d1020",
+          "post_sha256": "47fbeec6c848acbda913b72e97715abb650563f1a5705a34cbdab44ed84d1020",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/map_entry.png",
+          "pre_sha256": "26fa06f9bd6112ed795ddc72962da595e7717550518f18fcbfd52db995defdee",
+          "post_sha256": "26fa06f9bd6112ed795ddc72962da595e7717550518f18fcbfd52db995defdee",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_00.png",
+          "pre_sha256": "6b5b19e53c8ba2aa2a39e7db142be3993d330836868fb8ceab0fb40bc58e8fe6",
+          "post_sha256": "6b5b19e53c8ba2aa2a39e7db142be3993d330836868fb8ceab0fb40bc58e8fe6",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_01.png",
+          "pre_sha256": "8d065a5528550599d0a7d205a342db9ea3c5e30e66fde55e5708172adf39a6f7",
+          "post_sha256": "8d065a5528550599d0a7d205a342db9ea3c5e30e66fde55e5708172adf39a6f7",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_02.png",
+          "pre_sha256": "547f131c0d4c4d76873c3b07df86ecf6a33f93f306d9d2c7caf782bd6f04deb7",
+          "post_sha256": "547f131c0d4c4d76873c3b07df86ecf6a33f93f306d9d2c7caf782bd6f04deb7",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_04.png",
+          "pre_sha256": "65c84588a4b391a423260b9ad5b969521b753d658e4a7d80622694213032ac6c",
+          "post_sha256": "65c84588a4b391a423260b9ad5b969521b753d658e4a7d80622694213032ac6c",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_05.png",
+          "pre_sha256": "09f5828831ed0c80b9abe922b7c697b36f153c9035fee3a5910782cf7f2affd1",
+          "post_sha256": "09f5828831ed0c80b9abe922b7c697b36f153c9035fee3a5910782cf7f2affd1",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_06.png",
+          "pre_sha256": "1fa5ca677d52579a7882011ca5e8c18cb76c60b93bb7bf3bf1f4ec03f410d6b1",
+          "post_sha256": "1fa5ca677d52579a7882011ca5e8c18cb76c60b93bb7bf3bf1f4ec03f410d6b1",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_07.png",
+          "pre_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "post_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_08.png",
+          "pre_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "post_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_09.png",
+          "pre_sha256": "925bb77110a93fab4c5b80cbdde1bed03b23e92720a7c5e19c70c13ac77e5212",
+          "post_sha256": "925bb77110a93fab4c5b80cbdde1bed03b23e92720a7c5e19c70c13ac77e5212",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_10.png",
+          "pre_sha256": "9454859c88a3138dd304e505934acca4913e979d48ad5bd472645a1ffb87878d",
+          "post_sha256": "9454859c88a3138dd304e505934acca4913e979d48ad5bd472645a1ffb87878d",
+          "byte_identical": true
+        }
+      ],
+      "shop_captures": [
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s07/current01/shop/menu.png",
+          "sha256": "a42829f56b3ae1bb7f2b92af5074555a6f5172130979c1edf1f1de97afbcbb0f",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s07/current01/shop/item_list.png",
+          "sha256": "b98f0153ed5698975d7c1daea496efe971314944a3f6a12e95af7318448daf52",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s07/current01/shop/returned_unfocused.png",
+          "sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/normal/s07/current01/shop/returned_focused.png",
+          "sha256": "c54bfe2cbab4b81d4d25d80ec830f576f621c159e7e714d996713855b4290a26",
+          "dimensions": [
+            320,
+            240
+          ]
+        }
+      ],
+      "battle_evidence": {
+        "status": "pass",
+        "gray_acted_sprite": {
+          "run_root": "captures/run/preparation_battle_surface/normal/s07/gray01",
+          "active_capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s07/gray01/active_command.png",
+            "sha256": "8645189263e1677c2e13b7c22b2f68df4832620fcc2e0691670b27e5ea0cfbee",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "acted_capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s07/gray01/acted_gray.png",
+            "sha256": "cd001ad62ab4687d74faeda1606a4b82b6a2f17842705cd92f7d22cea9dbd77d",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/normal/s07/gray01/states/acted_gray.gst",
+          "gst_sha256": "7b2490295db8408face05326f9de5484733099a97ea8c8c94916569acb24971d",
+          "runtime_group_zero": {
+            "class_id": 1,
+            "commander_id": 1,
+            "acted_flag": 1,
+            "hp": 10,
+            "x": 8,
+            "y": 20,
+            "record_prefix": "0101010a0000081400000000ff01000a"
+          },
+          "source_commander_id": 1,
+          "source_class_id": 1,
+          "source_record_offset": "0x05DBA8",
+          "source_silhouette_id": "0x001E",
+          "vram_range": "0x9600..0x967F",
+          "vram_sha256": "74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22",
+          "matches_stock_fighter_silhouette_expansion": true,
+          "plane_references": [
+            {
+              "tile": "0x04B0",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 11,
+                  "tile_word": "0xA4B0"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B1",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 12,
+                  "tile_word": "0xA4B1"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B2",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 11,
+                  "tile_word": "0xA4B2"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B3",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 12,
+                  "tile_word": "0xA4B3"
+                }
+              ]
+            }
+          ]
+        },
+        "class_change": {
+          "trigger": "Natural Sherry level-up during the stock Scenario 7 civilian-safe victory aftermath",
+          "status": "pass",
+          "choices": [
+            {
+              "choice": 1,
+              "class_name": "로드",
+              "mercenary_names": [
+                "파이크",
+                "솔저"
+              ],
+              "magic_names": [
+                "힐",
+                "프로텍션"
+              ],
+              "capture": {
+                "path": "captures/run/preparation_battle_surface/normal/s07/result01/class_change_choice_01_lord.png",
+                "sha256": "c5d6c1de3e29a2127c4a8600e0a636ac0905c9f53f4c01a2b7fe58f990f56ba9",
+                "dimensions": [
+                  320,
+                  240
+                ]
+              },
+              "gst": "captures/run/preparation_battle_surface/normal/s07/result01/states/class_change_choice_01_lord.gst",
+              "gst_sha256": "c1f0ded5e4dd88cc86f1e51e59225612499e3e0233b788596e6c2a50ca1d439b"
+            },
+            {
+              "choice": 2,
+              "class_name": "호크나이트",
+              "mercenary_names": [
+                "그리폰"
+              ],
+              "magic_names": [
+                "토네이도"
+              ],
+              "capture": {
+                "path": "captures/run/preparation_battle_surface/normal/s07/result01/class_change_choice_02_hawk_knight.png",
+                "sha256": "15979a50e70afe54001034e37ad2b71bca983d3845c1a778e1f748bf389b34e7",
+                "dimensions": [
+                  320,
+                  240
+                ]
+              },
+              "gst": "captures/run/preparation_battle_surface/normal/s07/result01/states/class_change_choice_02_hawk_knight.gst",
+              "gst_sha256": "96c6addc036f11fb6f024d8579daa042175927d95db0865bea949c38b34cc231"
+            },
+            {
+              "choice": 3,
+              "class_name": "세인트",
+              "mercenary_names": [
+                "가드맨",
+                "파이크"
+              ],
+              "magic_names": [
+                "썬더",
+                "일루전"
+              ],
+              "capture": {
+                "path": "captures/run/preparation_battle_surface/normal/s07/result01/class_change_choice_03_saint.png",
+                "sha256": "57d4a5e914ba98310717e9b20dd292bd5d7971fbc2d1e0a70385bf637c4d0fb5",
+                "dimensions": [
+                  320,
+                  240
+                ]
+              },
+              "gst": "captures/run/preparation_battle_surface/normal/s07/result01/states/class_change_choice_03_saint.gst",
+              "gst_sha256": "d793905836bb3aa5c9ddd59e23fed6ca71d28a4fd11bb18d151a34a108823ce8"
+            }
+          ]
+        },
+        "battle_result": {
+          "run_root": "captures/run/preparation_battle_surface/normal/s07/result01",
+          "capture": {
+            "path": "captures/run/preparation_battle_surface/normal/s07/result01/battle_result.png",
+            "sha256": "cf53872a75ca3eb2d583a1f4e0085b430ec5cbaaa79c808f211ec195acc6383d",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/normal/s07/result01/states/battle_result.gst",
+          "gst_sha256": "e2fb131c6cad9cc8e22d839551cc68b17e0ca35a7f441eed4ab093c27bafba92",
+          "selected_sherry_class": "세인트",
+          "header_text": "전과보고",
+          "header_vram_range": "0xA000..0xA1FF",
+          "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+          "header_plane_cells": [
+            {
+              "x": 17,
+              "y": 1,
+              "tile_word": "0x8500",
+              "expected_tile": "0x0500",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 1,
+              "tile_word": "0x8501",
+              "expected_tile": "0x0501",
+              "matches": true
+            },
+            {
+              "x": 17,
+              "y": 2,
+              "tile_word": "0x8502",
+              "expected_tile": "0x0502",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 2,
+              "tile_word": "0x8503",
+              "expected_tile": "0x0503",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 1,
+              "tile_word": "0x8504",
+              "expected_tile": "0x0504",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 1,
+              "tile_word": "0x8505",
+              "expected_tile": "0x0505",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 2,
+              "tile_word": "0x8506",
+              "expected_tile": "0x0506",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 2,
+              "tile_word": "0x8507",
+              "expected_tile": "0x0507",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 1,
+              "tile_word": "0x8508",
+              "expected_tile": "0x0508",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 1,
+              "tile_word": "0x8509",
+              "expected_tile": "0x0509",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 2,
+              "tile_word": "0x850A",
+              "expected_tile": "0x050A",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 2,
+              "tile_word": "0x850B",
+              "expected_tile": "0x050B",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 1,
+              "tile_word": "0x850C",
+              "expected_tile": "0x050C",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 1,
+              "tile_word": "0x850D",
+              "expected_tile": "0x050D",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 2,
+              "tile_word": "0x850E",
+              "expected_tile": "0x050E",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 2,
+              "tile_word": "0x850F",
+              "expected_tile": "0x050F",
+              "matches": true
+            }
+          ],
+          "diagnostic_lineage": {
+            "mode": "source_record_isolated_real_attack_then_stock_victory",
+            "validation_source": "Japanese source ROM",
+            "md_checksum": "D145",
+            "sha256": "11340bd58e362475ebacc22ad99dd53a331582707ab73afeb026bed587acd123",
+            "changed_offset_count": 12,
+            "changed_offsets_within_declared_ranges": true,
+            "ginam_source_coordinates": [
+              6,
+              6
+            ],
+            "ginam_probe_coordinates": [
+              7,
+              19
+            ],
+            "ginam_probe_at_df": [
+              0,
+              0
+            ],
+            "ginam_probe_mercenaries_removed": true,
+            "all_player_deployments_unchanged": true,
+            "all_non_ginam_fixed_records_unchanged": true,
+            "resident_death_events_unchanged": true,
+            "scheduled_turn_table_unchanged": true,
+            "scheduled_turn_handlers_unchanged": true,
+            "korean_battle_result_header_unchanged": true,
+            "matches_expected_checksum": true,
+            "matches_expected_sha256": true
+          }
+        }
+      },
+      "human_review": {
+        "run": "captures/run/preparation_surface_matrix/normal/s07/current01",
+        "status": "scenario_7_surface_pass",
+        "battle_runs": {
+          "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s07/gray01",
+          "class_change": "captures/run/preparation_battle_surface/normal/s07/result01",
+          "battle_result": "captures/run/preparation_battle_surface/normal/s07/result01"
+        },
+        "checks": {
+          "all_six_allied_commander_and_class_labels": "pass",
+          "all_six_hiring_pages_and_mercenary_rows": "pass",
+          "all_ten_visible_npc_and_enemy_records": "pass",
+          "all_visible_fixed_record_mercenary_names": "pass",
+          "commander_and_mercenary_sprites": "pass",
+          "arrangement_minimap_and_rows": "pass",
+          "borders_and_numeric_fields": "pass",
+          "real_shop_item_list_round_trip": "pass",
+          "same_run_pre_post_identity": "pass",
+          "gray_acted_sprite": "pass",
+          "natural_three_choice_class_change": "pass",
+          "battle_result": "pass"
+        }
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s07/current01",
+      "status": "scenario_7_surface_pass",
+      "plan": {
+        "path": "captures/run/preparation_surface_matrix/hard/s07/current01/plan.json",
+        "sha256": "79e4896e3ceef98a2ebfaf3ac0ac16dbd227aa705e6d1e9266a4e4a027250db2"
+      },
+      "captured_evidence": {
+        "path": "captures/run/preparation_surface_matrix/hard/s07/current01/evidence.json",
+        "sha256": "2811c9aeae54083364607c667b4f2b7316b7935b34e67ba94c02550318be0471",
+        "original_status": "captured_exact_unreviewed",
+        "elapsed_seconds": 285.307
+      },
+      "capture_status": "recomputed_exact_reviewed",
+      "candidate": {
+        "path": "tmp/Langrisser II (Korean Hard profile class-merc-prep-lookup probe).md",
+        "md_checksum": "D9B2",
+        "sha256": "12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b"
+      },
+      "scenario": 7,
+      "allied_commander_count": 6,
+      "allied_seed_records": [
+        {
+          "commander_id": 1,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 1,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 1
+        },
+        {
+          "commander_id": 5,
+          "class_id": 3,
+          "class_id_hex": "0x03",
+          "class_korean": "워록",
+          "level": 1,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 2
+        },
+        {
+          "commander_id": 6,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 1,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 3
+        },
+        {
+          "commander_id": 2,
+          "class_id": 2,
+          "class_id_hex": "0x02",
+          "class_korean": "클레릭",
+          "level": 3,
+          "hire_mask": "0x0800",
+          "hire_rows": [
+            {
+              "bit": 11,
+              "class_id": 109,
+              "class_id_hex": "0x6D",
+              "korean": "가드맨"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 4
+        },
+        {
+          "commander_id": 4,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 9,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 5
+        },
+        {
+          "commander_id": 8,
+          "class_id": 1,
+          "class_id_hex": "0x01",
+          "class_korean": "파이터",
+          "level": 8,
+          "hire_mask": "0x0004",
+          "hire_rows": [
+            {
+              "bit": 2,
+              "class_id": 100,
+              "class_id_hex": "0x64",
+              "korean": "솔저"
+            }
+          ],
+          "hire_page_count": 1,
+          "position": 6
+        }
+      ],
+      "fixed_record_count": 12,
+      "visible_fixed_record_indexes": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "visible_fixed_records": [
+        {
+          "index": 0,
+          "name_korean": "주민",
+          "class_korean": "클레릭",
+          "mercenary_classes_korean": [
+            "시민"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x03",
+          "x": 4,
+          "y": 17
+        },
+        {
+          "index": 1,
+          "name_korean": "주민",
+          "class_korean": "클레릭",
+          "mercenary_classes_korean": [
+            "시민"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x03",
+          "x": 22,
+          "y": 26
+        },
+        {
+          "index": 2,
+          "name_korean": "주민",
+          "class_korean": "클레릭",
+          "mercenary_classes_korean": [
+            "시민"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x03",
+          "x": 21,
+          "y": 19
+        },
+        {
+          "index": 4,
+          "name_korean": "기남",
+          "class_korean": "네크로맨서",
+          "mercenary_classes_korean": [
+            "좀비"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "index": 5,
+          "name_korean": "제국지휘관",
+          "class_korean": "네크로맨서",
+          "mercenary_classes_korean": [
+            "스켈톤"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 9,
+          "y": 9
+        },
+        {
+          "index": 6,
+          "name_korean": "제국지휘관",
+          "class_korean": "네크로맨서",
+          "mercenary_classes_korean": [
+            "스켈톤"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 3,
+          "y": 9
+        },
+        {
+          "index": 7,
+          "name_korean": "그레이트슬라임",
+          "class_korean": "그레이트슬라임",
+          "mercenary_classes_korean": [
+            "슬라임"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 4,
+          "y": 13
+        },
+        {
+          "index": 8,
+          "name_korean": "그레이트슬라임",
+          "class_korean": "그레이트슬라임",
+          "mercenary_classes_korean": [
+            "슬라임"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 8,
+          "y": 13
+        },
+        {
+          "index": 9,
+          "name_korean": "제국지휘관",
+          "class_korean": "호크나이트",
+          "mercenary_classes_korean": [
+            "그리폰"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 29,
+          "y": 26
+        },
+        {
+          "index": 10,
+          "name_korean": "제국지휘관",
+          "class_korean": "서펜나이트",
+          "mercenary_classes_korean": [
+            "리자드맨"
+          ],
+          "runtime_checkpoint_chars": [],
+          "side_id": "0x04",
+          "x": 28,
+          "y": 18
+        }
+      ],
+      "not_applicable_fixed_records": [
+        {
+          "index": 3,
+          "name_korean": "키스",
+          "class_korean": "호크나이트",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        },
+        {
+          "index": 11,
+          "name_korean": "제국지휘관",
+          "class_korean": "어새신",
+          "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+        }
+      ],
+      "expected_pair_count": 27,
+      "actual_pair_count": 27,
+      "capture_pairs": [
+        {
+          "surface": "allied/commander_01_hire_page_01.png",
+          "pre_sha256": "4e341fa4abc309a7ddc249e92bfea93387fbbd695f7f07660613b37270dc2499",
+          "post_sha256": "4e341fa4abc309a7ddc249e92bfea93387fbbd695f7f07660613b37270dc2499",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_01_root.png",
+          "pre_sha256": "c54bfe2cbab4b81d4d25d80ec830f576f621c159e7e714d996713855b4290a26",
+          "post_sha256": "c54bfe2cbab4b81d4d25d80ec830f576f621c159e7e714d996713855b4290a26",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_hire_page_01.png",
+          "pre_sha256": "5cb12c29918ed05cd23fbba11348fdb07326fb7bcb1f043f8829eac974d69607",
+          "post_sha256": "5cb12c29918ed05cd23fbba11348fdb07326fb7bcb1f043f8829eac974d69607",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_02_root.png",
+          "pre_sha256": "d55b0b3c5c73dcd4f6facc2cf5fcaf3b8a740931e6e84b23ea16116eed3b0277",
+          "post_sha256": "d55b0b3c5c73dcd4f6facc2cf5fcaf3b8a740931e6e84b23ea16116eed3b0277",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_hire_page_01.png",
+          "pre_sha256": "ef870177b77fbbc899976c195f494358f92ef2ac1e2e17517bc448b26f5d5f46",
+          "post_sha256": "ef870177b77fbbc899976c195f494358f92ef2ac1e2e17517bc448b26f5d5f46",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_03_root.png",
+          "pre_sha256": "de98991a1b1e4a2285732fd9a9f7966ae8dc0bb7f1b93188b0b3d13e74df159b",
+          "post_sha256": "de98991a1b1e4a2285732fd9a9f7966ae8dc0bb7f1b93188b0b3d13e74df159b",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_04_hire_page_01.png",
+          "pre_sha256": "f666a84a0b412d9f904e995196457e352da4a66b1c6894c0a3f90b0f5c44b313",
+          "post_sha256": "f666a84a0b412d9f904e995196457e352da4a66b1c6894c0a3f90b0f5c44b313",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_04_root.png",
+          "pre_sha256": "d540fa4ddb4faef4acb0e196e12408ebbc1bf8c4c41546019c6e75f7ff1a43ff",
+          "post_sha256": "d540fa4ddb4faef4acb0e196e12408ebbc1bf8c4c41546019c6e75f7ff1a43ff",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_05_hire_page_01.png",
+          "pre_sha256": "c1cea5238d4033a0039edd19f3d1db4fae15b521e9599474ac0378bd8beaf9f0",
+          "post_sha256": "c1cea5238d4033a0039edd19f3d1db4fae15b521e9599474ac0378bd8beaf9f0",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_05_root.png",
+          "pre_sha256": "004f53e1ddef842af432638a2baa1f20afeeda24fa29e53a6b9e0a9db5f49e54",
+          "post_sha256": "004f53e1ddef842af432638a2baa1f20afeeda24fa29e53a6b9e0a9db5f49e54",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_06_hire_page_01.png",
+          "pre_sha256": "9aef905be423b3a9e2c4c79b32fccf898d7266b485f1a4c0bfa05aa4aa16e70f",
+          "post_sha256": "9aef905be423b3a9e2c4c79b32fccf898d7266b485f1a4c0bfa05aa4aa16e70f",
+          "byte_identical": true
+        },
+        {
+          "surface": "allied/commander_06_root.png",
+          "pre_sha256": "1de3bc9eb62a544ddd02ae1dcc2816ed0d243832aaa329335e99ced55a923e4c",
+          "post_sha256": "1de3bc9eb62a544ddd02ae1dcc2816ed0d243832aaa329335e99ced55a923e4c",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/menu.png",
+          "pre_sha256": "9249f41aa81f0bff8e4e3ca107976fda37b9d72ff075156502fcd17ee3c69cff",
+          "post_sha256": "9249f41aa81f0bff8e4e3ca107976fda37b9d72ff075156502fcd17ee3c69cff",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/returned_menu.png",
+          "pre_sha256": "22f06ffa68390e043357dd973ee4f1a24028a25cd734d383238edf281400ee54",
+          "post_sha256": "22f06ffa68390e043357dd973ee4f1a24028a25cd734d383238edf281400ee54",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_01.png",
+          "pre_sha256": "2764d2a0835c4aa10ab62c1d293f91b04a8b340d0cef225ae598ef6aebbd7de4",
+          "post_sha256": "2764d2a0835c4aa10ab62c1d293f91b04a8b340d0cef225ae598ef6aebbd7de4",
+          "byte_identical": true
+        },
+        {
+          "surface": "arrangement/roster_page_02.png",
+          "pre_sha256": "47fbeec6c848acbda913b72e97715abb650563f1a5705a34cbdab44ed84d1020",
+          "post_sha256": "47fbeec6c848acbda913b72e97715abb650563f1a5705a34cbdab44ed84d1020",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/map_entry.png",
+          "pre_sha256": "26fa06f9bd6112ed795ddc72962da595e7717550518f18fcbfd52db995defdee",
+          "post_sha256": "26fa06f9bd6112ed795ddc72962da595e7717550518f18fcbfd52db995defdee",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_00.png",
+          "pre_sha256": "6b5b19e53c8ba2aa2a39e7db142be3993d330836868fb8ceab0fb40bc58e8fe6",
+          "post_sha256": "6b5b19e53c8ba2aa2a39e7db142be3993d330836868fb8ceab0fb40bc58e8fe6",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_01.png",
+          "pre_sha256": "8d065a5528550599d0a7d205a342db9ea3c5e30e66fde55e5708172adf39a6f7",
+          "post_sha256": "8d065a5528550599d0a7d205a342db9ea3c5e30e66fde55e5708172adf39a6f7",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_02.png",
+          "pre_sha256": "547f131c0d4c4d76873c3b07df86ecf6a33f93f306d9d2c7caf782bd6f04deb7",
+          "post_sha256": "547f131c0d4c4d76873c3b07df86ecf6a33f93f306d9d2c7caf782bd6f04deb7",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_04.png",
+          "pre_sha256": "65c84588a4b391a423260b9ad5b969521b753d658e4a7d80622694213032ac6c",
+          "post_sha256": "65c84588a4b391a423260b9ad5b969521b753d658e4a7d80622694213032ac6c",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_05.png",
+          "pre_sha256": "09f5828831ed0c80b9abe922b7c697b36f153c9035fee3a5910782cf7f2affd1",
+          "post_sha256": "09f5828831ed0c80b9abe922b7c697b36f153c9035fee3a5910782cf7f2affd1",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_06.png",
+          "pre_sha256": "1fa5ca677d52579a7882011ca5e8c18cb76c60b93bb7bf3bf1f4ec03f410d6b1",
+          "post_sha256": "1fa5ca677d52579a7882011ca5e8c18cb76c60b93bb7bf3bf1f4ec03f410d6b1",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_07.png",
+          "pre_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "post_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_08.png",
+          "pre_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "post_sha256": "d7d3ae7b531489c09fe57f73f5f3736c6da225a477eec2852ff8f13cec94a929",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_09.png",
+          "pre_sha256": "925bb77110a93fab4c5b80cbdde1bed03b23e92720a7c5e19c70c13ac77e5212",
+          "post_sha256": "925bb77110a93fab4c5b80cbdde1bed03b23e92720a7c5e19c70c13ac77e5212",
+          "byte_identical": true
+        },
+        {
+          "surface": "fixed/record_10.png",
+          "pre_sha256": "9454859c88a3138dd304e505934acca4913e979d48ad5bd472645a1ffb87878d",
+          "post_sha256": "9454859c88a3138dd304e505934acca4913e979d48ad5bd472645a1ffb87878d",
+          "byte_identical": true
+        }
+      ],
+      "shop_captures": [
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s07/current01/shop/menu.png",
+          "sha256": "a42829f56b3ae1bb7f2b92af5074555a6f5172130979c1edf1f1de97afbcbb0f",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s07/current01/shop/item_list.png",
+          "sha256": "b98f0153ed5698975d7c1daea496efe971314944a3f6a12e95af7318448daf52",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s07/current01/shop/returned_unfocused.png",
+          "sha256": "a7ae2b93ea63ad646a1fdbad3d5f49e1c6b2c1effdb5a22ca02be35322e3b2ec",
+          "dimensions": [
+            320,
+            240
+          ]
+        },
+        {
+          "path": "captures/run/preparation_surface_matrix/hard/s07/current01/shop/returned_focused.png",
+          "sha256": "c54bfe2cbab4b81d4d25d80ec830f576f621c159e7e714d996713855b4290a26",
+          "dimensions": [
+            320,
+            240
+          ]
+        }
+      ],
+      "battle_evidence": {
+        "status": "pass",
+        "gray_acted_sprite": {
+          "run_root": "captures/run/preparation_battle_surface/hard/s07/gray01",
+          "active_capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s07/gray01/active_command.png",
+            "sha256": "8645189263e1677c2e13b7c22b2f68df4832620fcc2e0691670b27e5ea0cfbee",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "acted_capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s07/gray01/acted_gray.png",
+            "sha256": "5b85829721606ec2c35424cbb905b19f0d266f2b3accf17e86aff6ba9ef6c9ee",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/hard/s07/gray01/states/acted_gray.gst",
+          "gst_sha256": "d73086edf9e15e3b6337a17651de5a8f0afc715cc42a5c7f60065f851eb8f3fe",
+          "runtime_group_zero": {
+            "class_id": 1,
+            "commander_id": 1,
+            "acted_flag": 1,
+            "hp": 10,
+            "x": 8,
+            "y": 20,
+            "record_prefix": "0101010a0000081400000000ff01000a"
+          },
+          "source_commander_id": 1,
+          "source_class_id": 1,
+          "source_record_offset": "0x05DBA8",
+          "source_silhouette_id": "0x001E",
+          "vram_range": "0x9600..0x967F",
+          "vram_sha256": "74e404c1c9dad9a31578fcdf25c61158ade1fdb43221941c7b2c3f6e19313b22",
+          "matches_stock_fighter_silhouette_expansion": true,
+          "plane_references": [
+            {
+              "tile": "0x04B0",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 11,
+                  "tile_word": "0xA4B0"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B1",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 20,
+                  "y": 12,
+                  "tile_word": "0xA4B1"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B2",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 11,
+                  "tile_word": "0xA4B2"
+                }
+              ]
+            },
+            {
+              "tile": "0x04B3",
+              "hits": [
+                {
+                  "plane": "plane_a",
+                  "x": 21,
+                  "y": 12,
+                  "tile_word": "0xA4B3"
+                }
+              ]
+            }
+          ]
+        },
+        "class_change": {
+          "trigger": "Natural Sherry level-up during the stock Scenario 7 civilian-safe victory aftermath",
+          "status": "pass",
+          "choices": [
+            {
+              "choice": 1,
+              "class_name": "로드",
+              "mercenary_names": [
+                "파이크",
+                "솔저"
+              ],
+              "magic_names": [
+                "힐",
+                "프로텍션"
+              ],
+              "capture": {
+                "path": "captures/run/preparation_battle_surface/hard/s07/result01/class_change_choice_01_lord.png",
+                "sha256": "c5d6c1de3e29a2127c4a8600e0a636ac0905c9f53f4c01a2b7fe58f990f56ba9",
+                "dimensions": [
+                  320,
+                  240
+                ]
+              },
+              "gst": "captures/run/preparation_battle_surface/hard/s07/result01/states/class_change_choice_01_lord.gst",
+              "gst_sha256": "30103a0ee5c435a4411e1ad524eb287055684ecb671d16d7098469faed573bb9"
+            },
+            {
+              "choice": 2,
+              "class_name": "호크나이트",
+              "mercenary_names": [
+                "그리폰"
+              ],
+              "magic_names": [
+                "토네이도"
+              ],
+              "capture": {
+                "path": "captures/run/preparation_battle_surface/hard/s07/result01/class_change_choice_02_hawk_knight.png",
+                "sha256": "15979a50e70afe54001034e37ad2b71bca983d3845c1a778e1f748bf389b34e7",
+                "dimensions": [
+                  320,
+                  240
+                ]
+              },
+              "gst": "captures/run/preparation_battle_surface/hard/s07/result01/states/class_change_choice_02_hawk_knight.gst",
+              "gst_sha256": "d730a026c50aebe4a7d2ed07426c51bdcef2cbbda3bdd6f20ce727eb17dffe78"
+            },
+            {
+              "choice": 3,
+              "class_name": "세인트",
+              "mercenary_names": [
+                "가드맨",
+                "파이크"
+              ],
+              "magic_names": [
+                "썬더",
+                "일루전"
+              ],
+              "capture": {
+                "path": "captures/run/preparation_battle_surface/hard/s07/result01/class_change_choice_03_saint.png",
+                "sha256": "57d4a5e914ba98310717e9b20dd292bd5d7971fbc2d1e0a70385bf637c4d0fb5",
+                "dimensions": [
+                  320,
+                  240
+                ]
+              },
+              "gst": "captures/run/preparation_battle_surface/hard/s07/result01/states/class_change_choice_03_saint.gst",
+              "gst_sha256": "02819c763ecb84c41e279d33e0029b186f9fed9536e578897b8910f911a629a9"
+            }
+          ]
+        },
+        "battle_result": {
+          "run_root": "captures/run/preparation_battle_surface/hard/s07/result01",
+          "capture": {
+            "path": "captures/run/preparation_battle_surface/hard/s07/result01/battle_result.png",
+            "sha256": "ee2f5672df941b51ec32bfb4bb3057570d62ba359d16752c68f766f6fe7e6f72",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          "gst": "captures/run/preparation_battle_surface/hard/s07/result01/states/battle_result.gst",
+          "gst_sha256": "cf9b604a271c72f4776170f2d24280ff47b1aabc923d1d00f30fae331edc2d31",
+          "selected_sherry_class": "로드",
+          "header_text": "전과보고",
+          "header_vram_range": "0xA000..0xA1FF",
+          "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+          "header_plane_cells": [
+            {
+              "x": 17,
+              "y": 1,
+              "tile_word": "0x8500",
+              "expected_tile": "0x0500",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 1,
+              "tile_word": "0x8501",
+              "expected_tile": "0x0501",
+              "matches": true
+            },
+            {
+              "x": 17,
+              "y": 2,
+              "tile_word": "0x8502",
+              "expected_tile": "0x0502",
+              "matches": true
+            },
+            {
+              "x": 18,
+              "y": 2,
+              "tile_word": "0x8503",
+              "expected_tile": "0x0503",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 1,
+              "tile_word": "0x8504",
+              "expected_tile": "0x0504",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 1,
+              "tile_word": "0x8505",
+              "expected_tile": "0x0505",
+              "matches": true
+            },
+            {
+              "x": 19,
+              "y": 2,
+              "tile_word": "0x8506",
+              "expected_tile": "0x0506",
+              "matches": true
+            },
+            {
+              "x": 20,
+              "y": 2,
+              "tile_word": "0x8507",
+              "expected_tile": "0x0507",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 1,
+              "tile_word": "0x8508",
+              "expected_tile": "0x0508",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 1,
+              "tile_word": "0x8509",
+              "expected_tile": "0x0509",
+              "matches": true
+            },
+            {
+              "x": 21,
+              "y": 2,
+              "tile_word": "0x850A",
+              "expected_tile": "0x050A",
+              "matches": true
+            },
+            {
+              "x": 22,
+              "y": 2,
+              "tile_word": "0x850B",
+              "expected_tile": "0x050B",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 1,
+              "tile_word": "0x850C",
+              "expected_tile": "0x050C",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 1,
+              "tile_word": "0x850D",
+              "expected_tile": "0x050D",
+              "matches": true
+            },
+            {
+              "x": 23,
+              "y": 2,
+              "tile_word": "0x850E",
+              "expected_tile": "0x050E",
+              "matches": true
+            },
+            {
+              "x": 24,
+              "y": 2,
+              "tile_word": "0x850F",
+              "expected_tile": "0x050F",
+              "matches": true
+            }
+          ],
+          "diagnostic_lineage": {
+            "mode": "source_record_isolated_real_attack_then_stock_victory",
+            "validation_source": "Japanese source ROM",
+            "md_checksum": "3426",
+            "sha256": "eac2e200843e2f866b06eecbfb45d68b84f71f4822e836f5f1af713b188a91b4",
+            "changed_offset_count": 12,
+            "changed_offsets_within_declared_ranges": true,
+            "ginam_source_coordinates": [
+              6,
+              6
+            ],
+            "ginam_probe_coordinates": [
+              7,
+              19
+            ],
+            "ginam_probe_at_df": [
+              0,
+              0
+            ],
+            "ginam_probe_mercenaries_removed": true,
+            "all_player_deployments_unchanged": true,
+            "all_non_ginam_fixed_records_unchanged": true,
+            "resident_death_events_unchanged": true,
+            "scheduled_turn_table_unchanged": true,
+            "scheduled_turn_handlers_unchanged": true,
+            "korean_battle_result_header_unchanged": true,
+            "matches_expected_checksum": true,
+            "matches_expected_sha256": true
+          }
+        }
+      },
+      "human_review": {
+        "run": "captures/run/preparation_surface_matrix/hard/s07/current01",
+        "status": "scenario_7_surface_pass",
+        "battle_runs": {
+          "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s07/gray01",
+          "class_change": "captures/run/preparation_battle_surface/hard/s07/result01",
+          "battle_result": "captures/run/preparation_battle_surface/hard/s07/result01"
+        },
+        "checks": {
+          "all_six_allied_commander_and_class_labels": "pass",
+          "all_six_hiring_pages_and_mercenary_rows": "pass",
+          "all_ten_visible_npc_and_enemy_records": "pass",
+          "all_visible_fixed_record_mercenary_names": "pass",
+          "commander_and_mercenary_sprites": "pass",
+          "arrangement_minimap_and_rows": "pass",
+          "borders_and_numeric_fields": "pass",
+          "real_shop_item_list_round_trip": "pass",
+          "same_run_pre_post_identity": "pass",
+          "gray_acted_sprite": "pass",
+          "natural_three_choice_class_change": "pass",
+          "battle_result": "pass"
+        }
+      }
+    }
+  },
+  "cross_profile_identity": {
+    "all_preparation_and_shop_frames_identical": true,
+    "active_command_frame_identical": true,
+    "gray_runtime_record_and_vram_identical": true,
+    "all_three_class_change_frames_identical": true,
+    "result_header_vram_identical": true
+  },
+  "matrix_progress_after_acceptance": {
+    "required_profile_scenario_runs": 54,
+    "preparation_surface_runs_reviewed": 18,
+    "battle_surface_runs_reviewed": 18,
+    "fully_accepted_profile_scenario_runs": 18,
+    "fully_accepted_scenarios": 9,
+    "remaining_requirement": "Complete every required surface in Scenarios 8, 10, and 12 through 27 for both profiles."
+  },
+  "rejected_attempts": [
+    {
+      "profile": "normal",
+      "surface": "battle command detection",
+      "result": "The first detector invocation omitted --open-map-command and stopped on the Scenario 7 banner without sending any confirmation. It changed no game state and its detector frames are excluded; the accepted run resumed with the map-aware detector."
+    },
+    {
+      "profile": "normal",
+      "surface": "attack target navigation",
+      "result": "The first target attempt left the cursor on Elwin and returned to his command menu. It is excluded. The accepted attempt explicitly moved Up to Ginam before confirming."
+    }
+  ],
+  "navigation_disclosures": [
+    "The accepted selector path is scenario-select, detect-prep, automatic arrangement, deploy, then map-aware detect-command. All X11 input was sent directly to the isolated :104 window.",
+    "The result diagnostic changes only Ginam's source AT/DF, six mercenary slots, and coordinates, placing him directly above the stock Elwin deployment. A real Elwin Attack then enters the unchanged civilian-safe stock victory aftermath.",
+    "Normal result evidence continues with Saint and hard result evidence with Lord, so the final sprite grids legitimately differ. Both retain identical 전과보고 VRAM and intact full screen content; all three choice frames are byte-identical.",
+    "Fixed records 3 and 11 are explicitly N/A in preparation because both source records are hidden at coordinates (255,255)."
+  ]
+}
