@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "status": "reviewed_pass",
+  "surface": "class_change_candidate_mercenary_rows",
+  "reported_capture": {
+    "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 132324.png",
+    "sha256": "3104afb2a8a6878504d1a5687602f3e970cffa61362271d2a906b970a49926ad",
+    "visible_failure": [
+      "팔랑크스",
+      "발리스타"
+    ],
+    "shared_corrupted_glyph": "스"
+  },
+  "reproduction": {
+    "commander_id": 1,
+    "current_class_id": "0x13",
+    "current_class": "메이지",
+    "candidate_ids": [
+      "0x1C",
+      "0x1D",
+      "0x14"
+    ],
+    "candidates": [
+      "그랑나이트",
+      "실버나이트",
+      "아크메이지"
+    ],
+    "affected_candidate": "아크메이지",
+    "failing_capture": {
+      "path": "captures/run/preparation_class_change_surface/normal/c1_s13/current_candidate3.png",
+      "sha256": "344a7e44a16fb9ffa9ff14189a643f51245ca91c823ecd63856561db5d37a7b3"
+    }
+  },
+  "root_cause": {
+    "renderer": "_build_byte_ui_tile_renderer",
+    "class_change_calls": [
+      "0x02C004",
+      "0x02C040"
+    ],
+    "old_lookup": "BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE",
+    "explanation": "The two class-change mercenary rows bypassed the preparation scratch lookup and kept static extension tiles after candidate graphics reused those patterns."
+  },
+  "fix": {
+    "new_lookup": "BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE",
+    "scope": "local-pair glyph lookup inside the existing tile renderer",
+    "release_promoted": false
+  },
+  "candidate_roms": {
+    "normal": {
+      "header_checksum": "76D1",
+      "sha256": "db8f2c12e97896aabadd9e216baf98d755adfba6edb89ebb8a4d163053723a44"
+    },
+    "hard": {
+      "header_checksum": "D9B2",
+      "sha256": "12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b"
+    }
+  },
+  "runtime_evidence": {
+    "normal": [
+      {
+        "candidate": "그랑나이트",
+        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/lookup_candidate1.png",
+        "sha256": "21b455b22a8012f25f127dad11255c1d5917ed74f62b22507b1b0df1a9d97400"
+      },
+      {
+        "candidate": "실버나이트",
+        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/lookup_candidate2.png",
+        "sha256": "7dd5a7d760d360415fe69964e3ac28f23ff8c07d4dfee1f267b43e3237153f60"
+      },
+      {
+        "candidate": "아크메이지",
+        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/lookup_candidate3.png",
+        "sha256": "9e32401e04d2e79af9716795dc0b679ddf2505311257a65a43e37c7ede48254a"
+      }
+    ],
+    "hard": [
+      {
+        "candidate": "그랑나이트",
+        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/lookup_candidate1.png",
+        "sha256": "21b455b22a8012f25f127dad11255c1d5917ed74f62b22507b1b0df1a9d97400"
+      },
+      {
+        "candidate": "실버나이트",
+        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/lookup_candidate2.png",
+        "sha256": "7dd5a7d760d360415fe69964e3ac28f23ff8c07d4dfee1f267b43e3237153f60"
+      },
+      {
+        "candidate": "아크메이지",
+        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/lookup_candidate3.png",
+        "sha256": "9e32401e04d2e79af9716795dc0b679ddf2505311257a65a43e37c7ede48254a"
+      }
+    ],
+    "normal_hard_pairs_byte_identical": true,
+    "review": "All three candidate rows, class sprites, stats, magic rows, 팔랑크스, and 발리스타 are visually intact in both profiles."
+  },
+  "validation": {
+    "focused_tests": "105/105 passed",
+    "full_suite": "1478 tests; unchanged baseline of 44 failures and 3 errors",
+    "new_failures": 0
+  }
+}

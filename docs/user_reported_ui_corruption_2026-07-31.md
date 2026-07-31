@@ -65,3 +65,25 @@ The shop-specific report is:
 
 Its root cause and accepted runtime captures are recorded in
 `localization/item_shop_overflow_regression.json`.
+
+## Class-change mercenary-row `스`
+
+The later capture `화면 캡처 2026-07-31 132324.png` exposed one more member of
+the same static-extension lifetime family. On Elwin's
+`메이지 -> 그랑나이트 / 실버나이트 / 아크메이지` class-change screen, the
+two Arch Mage mercenary rows lost the shared final/third syllable in
+`팔랑크스` and `발리스타`.
+
+The class and mercenary records were correct. Class-change calls `0x02C004`
+and `0x02C040` used the shared tile renderer, but that renderer still resolved
+localized pair records through the ordinary static tile table. Candidate
+graphics had already reused those static patterns. The tile renderer now uses
+`BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE`, matching the other preparation and
+class-change paths.
+
+Fresh non-release normal and hard probes captured all three candidate rows.
+The corresponding pairs are byte-identical, and the Arch Mage detail renders
+both `팔랑크스` and `발리스타` intact along with the class sprite, statistics,
+and magic rows. The failure and six passing frames are hash-locked by
+`localization/class_change_mercenary_glyph_regression.json`. This remains a
+candidate-only fix; no release ROM or version was promoted.

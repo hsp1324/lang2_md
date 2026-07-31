@@ -60,6 +60,23 @@ Current combined non-release probes only:
 - hard checksum `D902`, SHA-256
   `fe6c710cfc671c0fc08badb7a1a486e5b33a93fe9c55632f3ebda3c2f6912e78`.
 
+### Class-change mercenary tile-renderer correction
+
+A later user capture showed `팔랑크스` and `발리스타` losing their shared
+`스` on the Arch Mage class-change detail. The conflict-colored slot plan
+already included `스`; the missed path was the tile renderer used by
+class-change mercenary calls `0x02C004` and `0x02C040`. It still used the
+ordinary static local-tile lookup after candidate graphics had reused those
+patterns.
+
+`_build_byte_ui_tile_renderer()` now calls the preparation local-tile lookup.
+Fresh normal and hard `메이지 -> 그랑나이트 / 실버나이트 / 아크메이지`
+probes render all three choices and both Arch Mage mercenary rows intact. The
+six passing frames are byte-identical across profiles and are recorded in
+`localization/class_change_mercenary_glyph_regression.json`. The replacement
+normal and hard-profile probes are checksums `76D1` and `D9B2`. Neither is a
+release promotion.
+
 Scenario 9 now has complete acceptance evidence in both profiles. Each run
 passes 32/32 same-run pre/post shop full-screen pairs: seven allied commanders
 over two roster pages, all hiring pages, both arrangement pages, and all 13

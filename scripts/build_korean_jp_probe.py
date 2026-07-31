@@ -6261,7 +6261,16 @@ def _build_byte_ui_tile_renderer() -> bytes:
     code.emit("0C 00 00 00")
     code.branch_word(0x6600, "legacy")
     code.emit("42 40 10 18")
-    code.emit(bytes.fromhex("4E B9") + BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big"))
+    # Every caller is a preparation/class-change detail surface. In
+    # particular, 0x2C004/0x2C040 draw the two class-change mercenary rows
+    # after the candidate graphics have reused the static extension banks.
+    # Resolve local-pair glyphs through the preparation scratch pool just like
+    # the shared word renderer, otherwise PALANX/BALLISTA can leave `스` as a
+    # graphics fragment even though the underlying class records are intact.
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE.to_bytes(4, "big")
+    )
     code.branch_word(0x6000, "store")
     code.label("legacy")
     code.emit("0C 00 00 F0")

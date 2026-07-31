@@ -746,6 +746,7 @@ class NameEntryResourceTests(unittest.TestCase):
         )
         for renderer in (
             builder._build_byte_ui_word_renderer(),
+            builder._build_byte_ui_tile_renderer(),
             builder._build_byte_ui_prep_roster_renderer(),
             builder._build_byte_ui_panel_renderer(),
             builder._build_byte_ui_roster_renderer(),
