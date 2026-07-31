@@ -12560,3 +12560,72 @@ contains 57 safe syllables as documented below and in
   failure, all in the concurrently modified
   `test_experimental_class_sprite_assets` module. Candidate and Scenario 7
   diagnostic hashes remain unchanged after the run.
+
+### Scenario 8 Complete Preparation, Reinforcement, And Battle Verification (2026-07-31)
+
+- The accepted non-release candidates remain normal checksum `76D1` /
+  SHA-256
+  `db8f2c12e97896aabadd9e216baf98d755adfba6edb89ebb8a4d163053723a44`
+  and hard checksum `D9B2` / SHA-256
+  `12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b`.
+  No release ROM or version was promoted.
+- Normal and hard `s08/current01` runs each pass 28/28 exact full-screen
+  pre/post pairs around one real same-process shop item-list round trip. They
+  enumerate all seven allied status/hiring pages, both allied roster pages,
+  arrangement/minimap, and all nine preparation-visible enemy fixed records.
+  Every corresponding normal/hard preparation and shop PNG is byte-identical.
+- Complete review covers 엘윈/파이터/솔저, 헤인/워록/가드맨,
+  스코트/파이터/솔저, 리아나/클레릭/가드맨, 쉐리/파이터/솔저,
+  아론/파이터/솔저, 키스/호크나이트/솔저/그리폰, 크레이머/하이로드/
+  솔저/파이크, and every 제국지휘관, 호크나이트/그리폰,
+  메이지/다크엘프/솔저, and 매직나이트/호스맨 row. The real shop keeps
+  대거 and 로브 intact. All sprites, names/classes, minimap cells, borders,
+  and numerical fields remain intact before and after shop.
+- Hidden source records 9 and 10 are not dismissed as preparation-only N/A.
+  A source-isolated Kramer-survival diagnostic uses DF 14, and a real Elwin
+  Attack leaves Kramer at HP 1 before the unchanged stock event places
+  `발가스/제너럴` as runtime group 16 at `(2,11)` and `조름/로드` as group
+  17 at `(3,8)`. Both unchanged source records have intact dialogue, portraits,
+  names, classes, map sprites, status values, and borders in normal and hard.
+  Their complete runtime records are identical across profiles.
+- Actual movement separately changes Elwin/Fighter runtime group 0 to acted
+  flag 1 at `(3,7)`. Gray VRAM `0x9600..0x967F` exactly expands stock
+  silhouette `0x001E`; Plane A references tiles `0x04B0..0x04B3` at
+  `(18,13),(18,14),(19,13),(19,14)` in both profiles.
+- The clear and survival diagnostics modify only Kramer's AT/DF, coordinates,
+  six mercenary slots, and checksum. Every deployment, all ten non-Kramer
+  fixed records, both hidden reinforcement records, the scheduled-turn
+  table/handlers, and the Korean result header remain source-identical.
+  Clear checksum/hash are normal `CA44` /
+  `37b6fb0dd9051d79570698af656d0e015490106bafab7bb51fc86a48c04f8ec8`
+  and hard `2D25` /
+  `9a73fd3d15c8a8c92fd3a4ae15d97e66dafebb7c6c21a2f26fff9f910f1609f6`;
+  survival checksum/hash are normal `CA52` /
+  `ec033cabd835f9f384394aa812f207dd4804658e58ab36124dd7798e6bb934ea`
+  and hard `2D33` /
+  `e90a6d1306fa49eb1c1ee6845bcde872be28caee9d9bbbb39ad9927b0d9b6481`.
+- Stock completion naturally exposes Sherry's three class choices. All normal
+  and hard choice frames are pairwise byte-identical for
+  `로드 / 파이크 / 솔저 / 힐 / 프로텍션`,
+  `호크나이트 / 그리폰 / 토네이도`, and
+  `세인트 / 가드맨 / 파이크 / 썬더 / 일루전`. Normal continued with
+  Saint and hard with Lord; both reach intact `전과보고 / POINT 1760P`
+  with identical result-header VRAM and all 16 expected Plane A cells.
+- Normal `result01` lost its accepted result state before a load reset to
+  title, hard `result01` missed the selector and entered name entry, and
+  normal `reinforcement01` used DF 0 and killed Kramer. They are rejected.
+  Accepted battle evidence uses normal/hard `gray01`, `result02`, and
+  `reinforcement02`.
+- `tools/verify_preparation_surface_scenario_08.py`,
+  `localization/preparation_surface_scenario_08.json`, its review JSON, and
+  `tests/test_preparation_surface_scenario_08.py` lock all 28 pairs, every
+  allied/enemy record, both runtime reinforcements, capture/GST hashes, gray
+  VRAM/Plane references, class choices, result cells, and both diagnostic
+  lineages. The cumulative gate accepts Scenarios 1 through 9 and Scenario 11
+  in both profiles; Scenario 10 and Scenarios 12 through 27 remain pending.
+- Focused Scenario 8 builder, status-probe, complete-surface, and cumulative
+  acceptance checks pass 50/50. Full discovery runs 1,523 tests with 51
+  failures and 3 errors; no Scenario 8 test appears in that set. The failures
+  remain in concurrently modified experimental sprite, hard-mode/runtime
+  inventory, and unchanged release-gate modules. The normal/hard candidate
+  hashes and checked Scenario 8 report remain byte-exact after the full run.

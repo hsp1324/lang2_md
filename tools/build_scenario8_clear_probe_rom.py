@@ -57,6 +57,7 @@ PROBE_KRAMER_X = 2
 PROBE_KRAMER_Y = 6
 PROBE_KRAMER_AT = 0
 PROBE_KRAMER_DF = 0
+PROBE_KRAMER_SURVIVAL_DF = 14
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 RUNTIME_WRAPPER = 0x3FEF00
@@ -412,6 +413,7 @@ def patch_probe(
     probe: bytearray,
     source: bytes,
     *,
+    boss_survival: bool = False,
     protagonist_death: bool = False,
     timeout: bool = False,
     turn_event: int | None = None,
@@ -421,6 +423,7 @@ def patch_probe(
     validate_layout(probe, source)
     if sum(
         (
+            boss_survival,
             protagonist_death,
             timeout,
             turn_event is not None,
@@ -473,7 +476,11 @@ def patch_probe(
     else:
         base = KRAMER_RECORD_OFFSET
         probe[base + FIELD_OFFSETS["at"]] = PROBE_KRAMER_AT
-        probe[base + FIELD_OFFSETS["df"]] = PROBE_KRAMER_DF
+        probe[base + FIELD_OFFSETS["df"]] = (
+            PROBE_KRAMER_SURVIVAL_DF
+            if boss_survival
+            else PROBE_KRAMER_DF
+        )
         probe[base + FIELD_OFFSETS["x"]] = PROBE_KRAMER_X
         probe[base + FIELD_OFFSETS["y"]] = PROBE_KRAMER_Y
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
@@ -492,6 +499,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-rom", type=Path)
     mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--boss-survival",
+        action="store_true",
+        help=(
+            "keep the relocated unguarded Kramer at DF 14 so the current "
+            "canonical Elwin deals nine damage and exercises the stock "
+            "HP-1 reinforcement branch"
+        ),
+    )
     mode.add_argument(
         "--protagonist-death",
         action="store_true",
@@ -545,6 +561,7 @@ def main() -> int:
     checksum = patch_probe(
         probe,
         source,
+        boss_survival=args.boss_survival,
         protagonist_death=args.protagonist_death,
         timeout=args.timeout,
         turn_event=args.turn_event,
@@ -569,7 +586,13 @@ def main() -> int:
         output_rom = DEFAULT_OUTPUT_ROM
     output_rom.parent.mkdir(parents=True, exist_ok=True)
     output_rom.write_bytes(probe)
-    if args.protagonist_death:
+    if args.boss_survival:
+        print(
+            f"Scenario 8 Kramer survival branch: "
+            f"({PROBE_KRAMER_X},{PROBE_KRAMER_Y}), AT 0, "
+            f"DF {PROBE_KRAMER_SURVIVAL_DF}, no mercenaries"
+        )
+    elif args.protagonist_death:
         print(
             "Scenario 8 protagonist-death mode: all deployments and fixed "
             "records remain source-identical"

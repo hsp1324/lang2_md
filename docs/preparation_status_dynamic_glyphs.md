@@ -616,3 +616,76 @@ module names against the prior 1,508-test baseline (44 failures and 3 errors),
 the only name-set change is seven new failures and one resolved failure in the
 concurrently modified `test_experimental_class_sprite_assets` module. The
 Scenario 7 candidate/probe hashes remain byte-exact after the full run.
+
+## Scenario 8 current-candidate closure
+
+Normal `76D1` and hard-profile `D9B2` were replayed through the complete
+Scenario 8 preparation surface. Each profile passes 28/28 exact full-screen
+before/after pairs around one uninterrupted real shop item-list visit. The
+matrix covers all seven allied status and hiring pages, both allied roster
+pages, arrangement/minimap, and all nine preparation-visible enemy records.
+Every corresponding normal/hard preparation and shop PNG is byte-identical.
+
+The allied rows are 엘윈/파이터/솔저, 헤인/워록/가드맨,
+스코트/파이터/솔저, 리아나/클레릭/가드맨, 쉐리/파이터/솔저,
+아론/파이터/솔저, and 키스/호크나이트/솔저/그리폰. The visible enemy
+rows cover 호크나이트/그리폰, 메이지/다크엘프/솔저,
+매직나이트/호스맨, 크레이머/하이로드/솔저/파이크, and every repeated
+제국지휘관 row. The shop keeps 대거 and 로브 intact. Every name, class,
+commander and mercenary sprite, minimap cell, border, and numerical field
+remains intact before and after shop.
+
+Fixed records 9 and 10 begin hidden at source coordinates `(255,255)`, so
+preparation alone is not treated as sufficient coverage. A second
+source-validated diagnostic changes only Kramer's AT/DF, six mercenary bytes,
+and coordinates, using DF 14. A real Elwin attack leaves Kramer at HP 1 and
+enters the unchanged stock reinforcement event. It places unchanged source
+record 9 as runtime group 16, `발가스/제너럴`, at `(2,11)`, and unchanged
+source record 10 as runtime group 17, `조름/로드`, at `(3,8)`. Both profiles
+show intact dialogue, portraits, names, classes, map sprites, status values,
+and borders. Their runtime records are byte-identical across profiles.
+
+Actual movement separately changes Elwin/Fighter to acted flag 1 at `(3,7)`.
+Both profiles retain the exact stock Fighter silhouette expansion in gray
+VRAM `0x9600..0x967F`; tiles `0x04B0..0x04B3` are referenced from Plane A at
+`(18,13),(18,14),(19,13),(19,14)`.
+
+For completion, the clear diagnostic uses the same isolated Kramer record with
+DF 0. Normal checksum/hash are `CA44` /
+`37b6fb0dd9051d79570698af656d0e015490106bafab7bb51fc86a48c04f8ec8`;
+hard are `2D25` /
+`9a73fd3d15c8a8c92fd3a4ae15d97e66dafebb7c6c21a2f26fff9f910f1609f6`.
+The survival variants are `CA52` /
+`ec033cabd835f9f384394aa812f207dd4804658e58ab36124dd7798e6bb934ea`
+and `2D33` /
+`e90a6d1306fa49eb1c1ee6845bcde872be28caee9d9bbbb39ad9927b0d9b6481`.
+Both modes preserve every player deployment, every non-Kramer fixed record,
+both hidden reinforcement records, the scheduled-turn table/handlers, and the
+Korean result header.
+
+The stock victory aftermath naturally exposes Sherry's three choices. Normal
+and hard frames are pairwise byte-identical for
+`로드 / 파이크 / 솔저 / 힐 / 프로텍션`,
+`호크나이트 / 그리폰 / 토네이도`, and
+`세인트 / 가드맨 / 파이크 / 썬더 / 일루전`. Normal continued with
+Saint and hard with Lord; both reach intact `전과보고 / POINT 1760P` whose
+header VRAM and all 16 Plane A cells match.
+
+Normal `result01` is rejected because no accepted result GST survived before
+a quicksave load reset to title. Hard `result01` missed the selector and
+entered name entry. Normal `reinforcement01` used the DF-0 clear probe, killed
+Kramer, and could not open the reinforcement branch. Accepted evidence uses
+normal/hard `gray01`, `result02`, and `reinforcement02`.
+
+The checked report is
+`localization/preparation_surface_scenario_08.json`. The cumulative gate now
+accepts Scenarios 1 through 9 and Scenario 11 in both profiles. Scenario 10
+and Scenarios 12 through 27 remain pending. No release ROM or version was
+promoted.
+
+Focused Scenario 8 builder, status-probe, complete-surface, and cumulative
+acceptance checks pass 50/50. Full discovery runs 1,523 tests with 51 failures
+and 3 errors; no Scenario 8 test is in that set. The failures remain in
+concurrently modified experimental sprite, hard-mode/runtime inventory, and
+unchanged release-gate modules. Both accepted candidate hashes and the checked
+Scenario 8 report remain byte-exact after the full run.

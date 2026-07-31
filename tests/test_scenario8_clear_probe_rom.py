@@ -24,6 +24,15 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
         )
         return data
 
+    def boss_survival_patched(self) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            boss_survival=True,
+        )
+        return data
+
     def timeout_patched(self) -> bytearray:
         data = bytearray(self.built)
         probe_builder.patch_probe(
@@ -101,6 +110,29 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
         self.assertEqual(data[base + FIELD_OFFSETS["y"]], 6)
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         self.assertEqual(data[mercenary_offset : mercenary_offset + 6], b"\xFF" * 6)
+
+    def test_boss_survival_probe_changes_only_isolated_kramer_fields(self):
+        data = self.boss_survival_patched()
+        base = probe_builder.KRAMER_RECORD_OFFSET
+        self.assertEqual(data[base + FIELD_OFFSETS["at"]], 0)
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["df"]],
+            probe_builder.PROBE_KRAMER_SURVIVAL_DF,
+        )
+        self.assertEqual(data[base + FIELD_OFFSETS["x"]], 2)
+        self.assertEqual(data[base + FIELD_OFFSETS["y"]], 6)
+        mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
+        self.assertEqual(
+            data[mercenary_offset : mercenary_offset + 6],
+            b"\xFF" * 6,
+        )
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            if index == probe_builder.KRAMER_RECORD_INDEX:
+                continue
+            start = layout.records_offset + index * FIXED_RECORD_SIZE
+            end = start + FIXED_RECORD_SIZE
+            self.assertEqual(data[start:end], self.source[start:end])
 
     def test_probe_rejects_changed_kramer_record(self):
         data = bytearray(self.built)

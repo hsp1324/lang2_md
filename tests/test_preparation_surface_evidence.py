@@ -44,10 +44,10 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
             self.acceptance["matrix_summary"],
             {
                 "required_profile_scenario_runs": 54,
-                "preparation_surface_runs_reviewed": 18,
-                "battle_surface_runs_reviewed": 18,
-                "fully_accepted_profile_scenario_runs": 18,
-                "fully_accepted_scenarios": 9,
+                "preparation_surface_runs_reviewed": 20,
+                "battle_surface_runs_reviewed": 20,
+                "fully_accepted_profile_scenario_runs": 20,
+                "fully_accepted_scenarios": 10,
                 "release_gate_status": "pending",
             },
         )
@@ -71,6 +71,8 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
                 (6, "hard_korean", "pass"),
                 (7, "normal_korean", "pass"),
                 (7, "hard_korean", "pass"),
+                (8, "normal_korean", "pass"),
+                (8, "hard_korean", "pass"),
                 (9, "normal_korean", "pass"),
                 (9, "hard_korean", "pass"),
                 (11, "normal_korean", "pass"),
