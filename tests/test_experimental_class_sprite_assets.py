@@ -6,7 +6,10 @@ import unittest
 
 from PIL import Image
 
-from editor.server import normalize_ai_design_pixels
+from editor.server import (
+    normalize_ai_design_pixels,
+    preserve_locked_ai_design_pixels,
+)
 from tools.build_class_sprite_assets import (
     DEFAULT_ROM,
     render_sprite,
@@ -26,6 +29,8 @@ from tools.polish_jessica_swordmaster import POLISH_PIXELS
 from tools.build_ai_class_sprite_assets import (
     ELWIN_SWORDMASTER_CAPE_POINTS,
     MEGA_DRIVE_CHANNEL_LEVELS,
+    ROM_INK,
+    SHARED_DARK_BOUNDARY_REFERENCE_POINTS,
     accent_hues,
     identity_locked_character_sprite,
     load_mount_mask_overrides,
@@ -51,6 +56,28 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         cls.ai_manifest = json.loads(
             (AI_ASSET_DIR / "manifest.json").read_text(encoding="utf-8")
         )
+
+    def assert_template_plus_dark_boundaries(
+        self,
+        actual: Image.Image,
+        template: Image.Image,
+        class_id: int,
+    ) -> None:
+        changed = {
+            (x, y)
+            for y in range(16)
+            for x in range(16)
+            if actual.getpixel((x, y)) != template.getpixel((x, y))
+        }
+        self.assertTrue(changed)
+        self.assertTrue(
+            changed.issubset(
+                SHARED_DARK_BOUNDARY_REFERENCE_POINTS[class_id]
+            )
+        )
+        for point in changed:
+            self.assertEqual(template.getpixel(point), (0, 0, 0, 0))
+            self.assertEqual(actual.getpixel(point), ROM_INK)
 
     def test_test_change_assets_are_preview_only_and_complete(self):
         manifest = self.test_manifest
@@ -295,10 +322,45 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             (AI_ASSET_DIR / "1/1A.png").read_bytes(),
             (protected_dir / "01-1A-elwin-swordmaster.png").read_bytes(),
         )
-        self.assertEqual(
-            (AI_ASSET_DIR / "5/1A.png").read_bytes(),
-            (protected_dir / "05-1A-hein-swordmaster.png").read_bytes(),
+        self.assert_template_plus_dark_boundaries(
+            Image.open(AI_ASSET_DIR / "5/1A.png").convert("RGBA"),
+            Image.open(
+                protected_dir / "05-1A-hein-swordmaster.png"
+            ).convert("RGBA"),
+            0x1A,
         )
+
+    def test_shared_classes_close_unlocked_transparent_boundaries(self):
+        for commander_id, commander in self.ai_manifest[
+            "commanders"
+        ].items():
+            if commander_id == "1":
+                continue
+            for class_id, points in (
+                SHARED_DARK_BOUNDARY_REFERENCE_POINTS.items()
+            ):
+                row = commander["classes"].get(str(class_id))
+                if not row or not row["redesigned"]:
+                    continue
+                locked = {
+                    tuple(point)
+                    for point in (
+                        row["identity_lock_points"]
+                        + row["mount_lock_points"]
+                    )
+                }
+                image = Image.open(
+                    AI_ASSET_DIR / row["file"]
+                ).convert("RGBA")
+                for point in points - locked:
+                    self.assertTrue(
+                        image.getpixel(point)[3],
+                        f"{commander_id}:{class_id:02X} leaks at {point}",
+                    )
+                self.assertIn(
+                    "맵 배경 누수 방지용 원작형 짙은 경계",
+                    row["feature"],
+                )
 
     def test_hein_martial_templates_apply_to_selected_commanders(self):
         policy = json.loads(
@@ -452,12 +514,11 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                     elwin_row["design_revision"],
                     elwin_row["superseded_design_revision"],
                 )
-                self.assertTrue(
+                self.assertFalse(
                     elwin_row["design_override_superseded"]
                 )
-                self.assertGreater(
-                    elwin_row["superseded_design_revision"],
-                    0,
+                self.assertEqual(
+                    elwin_row["superseded_design_revision"], 0
                 )
             else:
                 self.assertNotIn(
@@ -489,8 +550,8 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         self.assertFalse(
             row["identity_translation_applied_in_override"]
         )
-        self.assertEqual(row["identity_lock_pixel_count"], 73)
-        self.assertFalse(row["design_override"])
+        self.assertEqual(row["identity_lock_pixel_count"], 0)
+        self.assertTrue(row["design_override"])
         self.assertTrue(row["design_override_superseded"])
         self.assertIn("하늘색", row["feature"])
         self.assertIn("오른쪽 1칸", row["feature"])
@@ -653,7 +714,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         actual = Image.open(
             AI_ASSET_DIR / "5/14.png"
         ).convert("RGBA")
-        self.assertEqual(actual.tobytes(), expected.tobytes())
+        self.assert_template_plus_dark_boundaries(actual, expected, 0x14)
 
     def test_aaron_lord_separates_ochre_cape_from_blue_shield(self):
         image = Image.open(
@@ -697,51 +758,26 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             / "docs/assets/ai-class-source/latest/"
             "shared-lord-elwin-high-lord-v1/logical16/08-04.png"
         ).convert("RGBA")
-        self.assertEqual(image.tobytes(), expected.tobytes())
+        self.assert_template_plus_dark_boundaries(image, expected, 0x04)
 
     def test_elwin_lord_uses_high_lord_style_shield(self):
         image = Image.open(
             AI_ASSET_DIR / "1/04.png"
         ).convert("RGBA")
-        palette = {
-            "G": (255, 182, 0, 255),
-            "B": (36, 73, 219, 255),
-            "T": (219, 182, 109, 255),
-            " ": (0, 0, 0, 0),
+        shield_colors = {
+            image.getpixel((x, y))
+            for y in range(9, 15)
+            for x in range(11, 16)
+            if image.getpixel((x, y))[3]
         }
-        pattern = (
-            " GBG ",
-            "GBGBG",
-            "TGBGT",
-            "GBGBG",
-            "TBBBT",
-            " TBT ",
-        )
-        self.assertEqual(
-            [
-                image.getpixel((11 + x, 9 + y))
-                for y in range(6)
-                for x in range(5)
-                if (11 + x, 9 + y) != (11, 14)
-            ],
-            [
-                palette[symbol]
-                for y, row in enumerate(pattern)
-                for x, symbol in enumerate(row)
-                if (11 + x, 9 + y) != (11, 14)
-            ],
-        )
-        self.assertEqual(
-            image.getpixel((11, 14)),
-            (219, 0, 0, 255),
-        )
-        self.assertEqual(
-            image.getpixel((11, 8)),
-            (0, 0, 0, 0),
-        )
-        self.assertEqual(
-            image.getpixel((13, 8)),
-            (255, 182, 0, 255),
+        self.assertIn((36, 73, 219, 255), shield_colors)
+        self.assertIn((255, 182, 0, 255), shield_colors)
+        self.assertIn((219, 182, 109, 255), shield_colors)
+        self.assertTrue(
+            all(
+                image.getpixel(point) == ROM_INK
+                for point in SHARED_DARK_BOUNDARY_REFERENCE_POINTS[0x04]
+            )
         )
         self.assertTrue(
             (
@@ -843,7 +879,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             / "docs/assets/ai-class-source/latest/"
             "shared-archmage-lester-v1/logical16/08-14.png"
         ).convert("RGBA")
-        self.assertEqual(image.tobytes(), expected.tobytes())
+        self.assert_template_plus_dark_boundaries(image, expected, 0x14)
 
     def test_aaron_high_lord_uses_knight_shield_blue(self):
         image = Image.open(
@@ -1141,10 +1177,12 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 )
                 if (
                     not generated_identity
+                    and lock_points
                     and not row.get(
                         "identity_translation_applied_in_override",
                         False,
                     )
+                    and row["file"] != "1/1A.png"
                 ):
                     self.assertTrue(
                         manifest_eye_points.issubset(lock_points)
@@ -1436,7 +1474,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
     def test_elwin_and_logical16_commanders_change_only_upper_classes(self):
         self.assertEqual(
             self.ai_manifest["asset_version"],
-            "jessica-swordmaster-polish-v63",
+            "shared-dark-boundaries-v64",
         )
         source_paths = self.ai_manifest["ai_source_images"]
         self.assertEqual(len(source_paths), 102)
@@ -2047,6 +2085,20 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         )
         self.assertEqual(normalized[0], [73, 36, 109, 255])
         self.assertEqual(normalized[1], [0, 0, 0, 0])
+
+        current = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+        current.putpixel((7, 6), (219, 182, 109, 255))
+        requested = [[0, 0, 0, 0] for _ in range(256)]
+        requested[6 * 16 + 7] = [73, 109, 255, 255]
+        preserve_locked_ai_design_pixels(
+            requested,
+            current,
+            [[7, 6]],
+        )
+        self.assertEqual(
+            requested[6 * 16 + 7],
+            [219, 182, 109, 255],
+        )
         for commander in self.ai_manifest["commanders"].values():
             for row in commander["classes"].values():
                 self.assertIsInstance(row["design_override"], bool)
@@ -2063,7 +2115,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             )
             self.assertEqual(
                 pixels.count((109, 0, 0, 255)),
-                8,
+                5,
             )
             self.assertEqual(
                 image.getpixel((7, 0)),
@@ -2121,16 +2173,16 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             0x16,
             0x18,
             0x19,
-            0x1A,
             0x26,
         ):
             self.assertEqual(
                 masks[f"10:{class_id:02X}"],
                 jessica_sorcerer,
             )
-        # High Lord now reuses Jessica's complete source-coordinate identity
-        # mask; the final composition moves those visible pixels right once.
-        self.assertEqual(masks["10:0B"], jessica_sorcerer)
+        # These two translated, user-finalized designs carry their complete
+        # head pixels directly and intentionally keep an empty mask document.
+        self.assertEqual(masks["10:0B"], [])
+        self.assertEqual(masks["10:1A"], [])
         self.assertTrue(
             all(
                 0 <= x < 16 and 0 <= y < 16
@@ -2176,24 +2228,23 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             )
 
         mage_path = AI_ASSET_DIR / "1/13.png"
-        shared_mage_path = (
-            ROOT
-            / "docs/assets/ai-class-source/latest/"
-            "shared-hein-classes-v1/logical16/01-13.png"
-        )
-        self.assertEqual(
-            mage_path.read_bytes(),
-            shared_mage_path.read_bytes(),
-        )
         row = self.ai_manifest["commanders"]["1"]["classes"]["19"]
         self.assertIn("공통 16×16 클래스 템플릿", row["ai_source_kind"])
-        self.assertFalse(row["design_override"])
-        self.assertTrue(row["design_override_superseded"])
-        self.assertGreater(row["superseded_design_revision"], 0)
+        self.assertTrue(row["design_override"])
+        self.assertFalse(row["design_override_superseded"])
+        self.assertEqual(row["superseded_design_revision"], 0)
         with Image.open(mage_path) as mage:
             colors = Counter(mage.getdata())
             self.assertGreaterEqual(colors[(219, 0, 0, 255)], 10)
             self.assertGreaterEqual(colors[(0, 0, 219, 255)], 10)
+            self.assertTrue(
+                all(
+                    mage.getpixel(point) == ROM_INK
+                    for point in (
+                        SHARED_DARK_BOUNDARY_REFERENCE_POINTS[0x13]
+                    )
+                )
+            )
 
     def test_all_stock_multi_hidden_classes_are_editable_in_ai_manifest(self):
         expected = {

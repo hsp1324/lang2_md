@@ -1,5 +1,17 @@
 # 최신 AI 클래스 작업물
 
+## 공통 클래스 어두운 경계 보정 v64
+
+엘윈에서 직접 편집한 로드 `04`, 하이로드 `0B`, 메이지 `13`,
+아크메이지 `14`, 소드마스터 `1A`를 기준으로 투명하게 뚫려 맵
+배경이 통과하던 목·팔·몸통·얼굴·장비 경계를 원작 윤곽색
+`#242424`으로 막았다. 같은 클래스 템플릿을 쓰는 AI 재디자인 30개에
+같은 구조를 적용했으며, 원본 유지 클래스와 이미 채워진 머리·갑옷·무기
+픽셀은 변경하지 않았다. 엘윈 5개의 직접 편집은
+`editor/ai_class_design_overrides.json`에, 다른 지휘관의 공통 경계는
+`tools/build_ai_class_sprite_assets.py`의 잠긴 머리·탈것 제외 규칙에 저장되어
+전체 AI 자산을 다시 빌드해도 유지된다.
+
 현재 적용 중인 최신 작업물은
 [`latest/elwin-hero-v2`](latest/elwin-hero-v2),
 [`latest/elwin-mounted-v2`](latest/elwin-mounted-v2),

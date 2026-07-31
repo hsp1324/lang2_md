@@ -254,6 +254,23 @@ def design_palette(
     ]
 
 
+def preserve_locked_ai_design_pixels(
+    pixels: list[list[int]],
+    current: Image.Image,
+    lock_points: list[list[int]],
+) -> None:
+    """Keep the exact pixels displayed before a design save.
+
+    Some shared classes translate the final head or allow equipment beneath
+    transparent identity-mask cells. Restoring from the uncomposed ROM sprite
+    here would undo those final-layout decisions, so locked cells come from
+    the current 16x16 design instead.
+    """
+
+    for x, y in lock_points:
+        pixels[y * 16 + x] = list(current.getpixel((x, y)))
+
+
 def write_ai_design_document(document: dict[str, object]) -> None:
     temporary = AI_DESIGN_FILE.with_suffix(".json.tmp")
     temporary.write_text(
@@ -402,11 +419,11 @@ class Handler(SimpleHTTPRequestHandler):
                         row.get("identity_lock_points", [])
                         + row.get("mount_lock_points", [])
                     )
-                    for raw_point in lock_points:
-                        x, y = raw_point
-                        pixels[y * 16 + x] = list(
-                            original.getpixel((x, y))
-                        )
+                    preserve_locked_ai_design_pixels(
+                        pixels,
+                        current,
+                        lock_points,
+                    )
                     colors = visible_design_colors(pixels)
                     if len(colors) > 15:
                         raise ValueError(

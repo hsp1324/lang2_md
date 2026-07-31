@@ -111,13 +111,81 @@ AI_ASSET_BUILD_LOCK_PATH = (
 )
 GRID_COLUMNS = 5
 GRID_ROWS = 10
-ASSET_VERSION = "jessica-swordmaster-polish-v63"
+ASSET_VERSION = "shared-dark-boundaries-v64"
 
 ROM_INK = (36, 36, 36, 255)
 ROM_WHITE = (255, 255, 255, 255)
 ROM_SKIN = (219, 182, 109, 255)
 ROM_BLUE_EYE = (0, 0, 219, 255)
 MEGA_DRIVE_CHANNEL_LEVELS = (0, 36, 73, 109, 146, 182, 219, 255)
+
+# The user finalized these transparent-to-ink boundary positions on Elwin's
+# five shared class designs.  Other commanders reuse the same equipment
+# grammar, but keep their own visible identity and mount pixels.  Filling only
+# transparent, unlocked positions prevents the map background from leaking
+# through neck, arm, torso, face, and equipment seams.
+SHARED_DARK_BOUNDARY_REFERENCE_POINTS = {
+    0x04: {
+        (3, 5),
+        (3, 6), (10, 6), (12, 6),
+        (3, 7), (4, 7), (10, 7), (11, 7), (12, 7),
+        (5, 8), (10, 8), (12, 8),
+        (6, 9), (7, 9), (8, 9), (9, 9),
+    },
+    0x0B: {
+        (5, 0), (10, 0), (11, 0),
+        (4, 1), (12, 1), (13, 1),
+        (4, 2),
+        (1, 3), (2, 3),
+        (2, 4), (13, 4), (15, 4),
+        (2, 5), (3, 5),
+        (3, 6), (10, 6), (12, 6), (13, 6),
+        (4, 7), (10, 7), (11, 7), (13, 7),
+        (5, 8), (10, 8),
+        (6, 9), (7, 9), (8, 9), (9, 9),
+        (0, 13),
+        (0, 14), (1, 14),
+        (0, 15), (1, 15),
+    },
+    0x13: {
+        (2, 3),
+        (2, 4),
+        (2, 5), (3, 5),
+        (2, 6), (3, 6), (10, 6), (12, 6),
+        (2, 7), (3, 7), (4, 7), (10, 7), (11, 7), (12, 7),
+        (1, 8), (5, 8), (10, 8),
+        (1, 9), (5, 9), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9),
+        (0, 10),
+    },
+    0x14: {
+        (1, 3), (2, 3),
+        (2, 4),
+        (2, 5), (3, 5),
+        (10, 6), (12, 6), (13, 6),
+        (3, 7), (11, 7), (13, 7),
+        (2, 9),
+        (2, 10),
+        (10, 12),
+        (10, 13), (11, 13),
+        (11, 14),
+    },
+    0x1A: {
+        (13, 2),
+        (2, 3), (13, 3),
+        (2, 4), (13, 4),
+        (2, 5), (3, 5), (13, 5),
+        (2, 6), (3, 6), (10, 6), (12, 6),
+        (1, 7), (2, 7), (3, 7), (4, 7),
+        (11, 7), (12, 7), (13, 7), (14, 7),
+        (0, 8), (1, 8), (14, 8), (15, 8),
+        (0, 9),
+        (13, 10),
+        (1, 11), (2, 11), (5, 11),
+        (13, 11), (14, 11), (15, 11),
+        (0, 12), (1, 12), (14, 12), (15, 12),
+        (0, 13), (15, 13),
+    },
+}
 
 RESAMPLING = getattr(Image, "Resampling", Image)
 QUANTIZE = getattr(Image, "Quantize", Image)
@@ -434,6 +502,11 @@ SHARED_TEMPLATE_SUPERSEDES_DESIGN_OVERRIDES = {
 SHARED_TEMPLATE_SUPERSEDED_DESIGN_REVISION_MAX = {
     # A newer editor save is an explicit decision made after the template
     # remap and must win on later rebuilds.
+    (1, 0x0B): 1785226614151445208,
+    (1, 0x13): 1785226570917742985,
+    (3, 0x0B): 1785227477665587123,
+    (5, 0x0B): 1785045436288669236,
+    (5, 0x14): 1785044647857633284,
     (10, 0x0B): 1785226835415926630,
     (10, 0x13): 1785223392722184076,
 }
@@ -1925,6 +1998,14 @@ def _build_assets_unlocked(
             | set(direct_stages)
             | set(character_ai_classes)
         )
+        # A hidden destination without a dedicated AI source is added later
+        # as an editable stock 16x16 baseline.  It can share a physical sprite
+        # with another class, but it is not a missing native-source input.
+        eligible_class_ids -= {
+            route.candidates[0]
+            for route in hidden_class_routes(commander_id)
+            if route.candidates[0] not in provided_class_ids
+        }
         if provided_class_ids != eligible_class_ids:
             raise ValueError(
                 f"commander {commander_id} native sources must contain "
@@ -2763,6 +2844,26 @@ def _build_assets_unlocked(
                 image.putpixel(point, color)
             if key in FINAL_PIXEL_OVERRIDES:
                 feature += "·사용자 망토를 원작형 진홍색으로 보정"
+            dark_boundary_points: set[tuple[int, int]] = set()
+            if redesigned and commander_id != 1:
+                protected_boundary_points = (
+                    manifest_identity_lock_points | mount_lock_points
+                )
+                for point in SHARED_DARK_BOUNDARY_REFERENCE_POINTS.get(
+                    class_id,
+                    set(),
+                ):
+                    if (
+                        point not in protected_boundary_points
+                        and not image.getpixel(point)[3]
+                    ):
+                        image.putpixel(point, ROM_INK)
+                        dark_boundary_points.add(point)
+            if dark_boundary_points:
+                feature += (
+                    "·맵 배경 누수 방지용 원작형 짙은 경계 "
+                    f"{len(dark_boundary_points)}픽셀"
+                )
             changed_pixel_count = sum(
                 image.getpixel((x, y)) != rom_face.getpixel((x, y))
                 for y in range(16)
