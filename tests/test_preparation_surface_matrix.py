@@ -175,6 +175,23 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
         self.assertTrue(matrix.arrangement_menu_visible(menu))
         self.assertFalse(matrix.arrangement_menu_visible(detail))
 
+    def test_scenario_five_arrangement_menu_uses_panel_width_not_detail_shape(self):
+        menu = (
+            ROOT
+            / "captures/run/preparation_surface_matrix/normal/s05/current03/"
+            "pre/arrangement/menu.png"
+        )
+        detail = (
+            ROOT
+            / "captures/run/preparation_surface_matrix/normal/s05/current03/"
+            "pre/fixed/record_00.png"
+        )
+        # The five-row menu also satisfies the broad legacy detail detector.
+        # Its blue panel ends before x=145, while a real detail panel does not.
+        self.assertTrue(matrix.fixed_detail_visible(menu))
+        self.assertTrue(matrix.arrangement_menu_visible(menu))
+        self.assertFalse(matrix.arrangement_menu_visible(detail))
+
     def test_arrangement_roster_detector_accepts_five_visible_rows(self):
         roster = (
             ROOT

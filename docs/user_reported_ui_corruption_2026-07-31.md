@@ -22,8 +22,8 @@ profiles also pass the gray acted-sprite and real stock-victory result checks.
 The `크로스`/`넥클리스` shop page was separately reviewed with each item
 selected and both rows intact.
 
-This is candidate evidence, not a release promotion. Scenarios 1–4 and 9 now
-pass the complete normal/hard surface gate. Scenarios 5–8 and 10–27 still
+This is candidate evidence, not a release promotion. Scenarios 1–5 and 9 now
+pass the complete normal/hard surface gate. Scenarios 6–8 and 10–27 still
 require the same runtime matrix before the overall release gate can pass.
 
 ## Reported captures
@@ -129,3 +129,46 @@ dialogue batch hit the 60-second host limit but resumed in the same emulator;
 and the incomplete `classfix01` matrix hit the foreground 120-second host
 limit. The accepted `classfix04` runs use an isolated background session and
 completed normally. No release ROM or version was changed.
+
+## Scenario 5 full current-candidate verification
+
+The normal `76D1` and hard-profile `D9B2` candidates each pass 19/19 exact
+same-run preparation/shop pairs in Scenario 5. The matrix covers all five
+allied commanders and hiring pages, roster and arrangement/minimap surfaces,
+and all five visible fixed records. The other four source records are hidden
+at `(255,255)` and are explicitly accounted for as not applicable.
+
+This closes the earlier `쉐리`, `웨어울프`, and `울프맨` symptoms on the
+current candidates rather than on an older build. Actual movement also
+produces the correct gray Fighter sprite. A narrowly scoped deployment-only
+escape diagnostic reaches the stock north-escape completion and naturally
+opens Sherry's three class choices. `로드`, `호크나이트`, `세인트`, their
+mercenaries and magic rows, all sprites and statistics, and the final
+`전과보고` are intact in both profiles. The diagnostic preserves every fixed
+record and Scenario 5 event byte.
+
+## Scenario 11 user-reported recurrence
+
+Three later captures show that the user's currently running build still
+reproduces the same preparation graphics/text ownership family in Scenario
+11:
+
+- `화면 캡처 2026-07-31 154702.png` — the Soldier and Armor Soldier
+  mercenary rows are overwritten by sprite fragments and gray blocks;
+- `화면 캡처 2026-07-31 154737.png` — the Mage detail has repeated gray
+  blocks over Dark Elf and other mercenary rows;
+- `화면 캡처 2026-07-31 154915.png` — the Crusader commander/class area and
+  all repeated mercenary sprite/name rows are overwritten.
+
+These are registered as failure evidence, not as the set of records to sample.
+Scenario 11 will pass only after the latest candidates enumerate every allied
+commander and hiring page plus every preparation-visible allied, NPC, and
+enemy fixed record before and after a same-run shop visit. Hidden source
+records may be marked not applicable only with their source coordinates.
+Gray acted sprites, minimap, characters, borders, numerical fields, live
+class changes where present, and the result surface remain mandatory.
+
+The Scenario 5 focused gate passes 37/37. Full discovery runs 1,493 tests with
+the same 44 failures plus 3 errors and the exact same sorted failing/error
+test-name set as the Scenario 4 baseline. No release ROM or version was
+promoted.

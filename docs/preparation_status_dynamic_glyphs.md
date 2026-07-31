@@ -380,3 +380,56 @@ discovery runs 1,486 tests and retains exactly the preceding 44 failures plus
 pre-existing experimental-sprite, hard-runtime/plan/generated-document,
 item-inventory-current-ROM, and release-promotion gates rather than new
 Scenario 4 regressions.
+
+## Scenario 5 current-candidate closure
+
+Normal `76D1` and hard-profile `D9B2` were replayed through Scenario 5 on the
+class-change-fixed candidates. The accepted runs cover all five allied
+commander/status pages, all five hiring pages, the allied roster, arrangement
+and minimap, and every preparation-visible fixed record before and after one
+real same-run shop item-list visit. Both profiles pass 19/19 exact full-screen
+pairs. Every important preparation and shop frame is byte-identical between
+the two profiles.
+
+The source has nine fixed records. Records 0 through 4 are visible and were
+each captured; records 5 through 8 are hidden at source coordinates
+`(255,255)` and are individually recorded as not applicable. The accepted
+frames keep Elwin, Hein, Scott, Liana, `쉐리`, every class and hired
+mercenary, `웨어울프`, `울프맨`, Morgan, all imperial commanders, every
+sprite, minimap row, border, and number intact before and after shop.
+
+The battle-side gate also passes. Actual movement sets Elwin/Fighter to acted
+flag 1 at `(14,51)`, and gray VRAM `0x9600..0x967F` exactly expands the stock
+Fighter silhouette `0x001E` with all four tiles referenced from Plane A. For
+the result path, the diagnostic changes only the checksum and Elwin's first
+deployment Y from 50 to 1. A real Move Up crosses the stock north-escape
+threshold; all nine fixed records, the other four player deployments, every
+Scenario 5 event byte, and the Korean result header remain unchanged.
+
+The stock completion naturally levels Sherry and opens all three class
+choices. Both profiles have byte-identical frames for `로드` with
+`파이크 / 솔저`, `호크나이트` with `그리폰`, and `세인트` with
+`가드맨 / 파이크`; the corresponding magic rows, sprites, statistics, map,
+and borders are intact. Both profiles then reach the same byte-identical
+full-screen `전과보고`. The hard run has one additional Hein level-up page
+before the same Sherry choices.
+
+Rejected evidence is retained in the generated report. `current01` exposed a
+detector bug where the five-row arrangement menu matched the broad
+fixed-detail shape; the detector now distinguishes the panels by their right
+edge and has a Scenario 5 regression test. `current02` and three gray launches
+missed selector/title timing. One normal rightward move targeted a red-X tile
+and left acted flag 0, so only the later southeast-move state is accepted. The
+hard file named `class_candidate_01` is the extra Hein level-up page and is
+explicitly rejected; `class_choice_01..03` are the accepted Sherry frames.
+
+The checked report is
+`localization/preparation_surface_scenario_05.json`. The cumulative gate now
+accepts Scenarios 1, 2, 3, 4, 5, and 9 in both profiles. Scenarios 6–8 and
+10–27 remain pending, including fresh complete verification of the
+user-reported Scenario 11 corruption. No release ROM or version was promoted.
+
+Focused Scenario 5, preparation, shop, class-change, and cumulative checks
+pass 37/37. Full discovery runs 1,493 tests and retains exactly 44 failures
+plus 3 errors. The sorted set of all 47 failing/error test names is identical
+to the Scenario 4 baseline; no Scenario 5 test is in that set.

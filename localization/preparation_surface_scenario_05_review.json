@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-07-31",
+  "scope": "Scenario 5 preparation, hiring, arrangement, every visible fixed record, real shop item-list, gray acted-sprite, natural three-choice class change, and battle-result surfaces",
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s05/current03",
+      "status": "scenario_5_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s05/gray03/acted_gray_final",
+        "class_change_and_result": "captures/run/preparation_result_surface/normal/s05/result01"
+      },
+      "checks": {
+        "all_korean_commander_class_and_mercenary_labels": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "sherry_name_after_shop": "pass",
+        "werewolf_and_ulffman_rows": "pass",
+        "gray_acted_sprite": "pass",
+        "natural_three_choice_class_change": "pass",
+        "battle_result": "pass"
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s05/current01",
+      "status": "scenario_5_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s05/gray02/acted_gray",
+        "class_change_and_result": "captures/run/preparation_result_surface/hard/s05/result01"
+      },
+      "checks": {
+        "all_korean_commander_class_and_mercenary_labels": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "sherry_name_after_shop": "pass",
+        "werewolf_and_ulffman_rows": "pass",
+        "gray_acted_sprite": "pass",
+        "natural_three_choice_class_change": "pass",
+        "battle_result": "pass"
+      }
+    }
+  },
+  "class_change": {
+    "status": "pass",
+    "trigger": "Sherry naturally levels on the stock Scenario 5 north-escape completion path.",
+    "reviewed_choices": [
+      "로드: 파이크, 솔저; 힐, 프로텍션",
+      "호크나이트: 그리폰; 토네이도",
+      "세인트: 가드맨, 파이크; 썬더, 일루전"
+    ],
+    "screen_integrity": "All Korean class, mercenary, and magic labels, sprites, statistics, borders, and map pixels are intact in all three choices in both profiles."
+  },
+  "acceptance_effect": "Scenario 5 passes every required visible surface in both profiles, including a live class change. Scenarios 6 through 8 and 10 through 27 remain pending, so the overall release gate remains pending."
+}

@@ -488,22 +488,27 @@ def hire_screen_visible(path: Path) -> bool:
 def arrangement_menu_visible(path: Path) -> bool:
     map_blue, _, _ = crop_ratios(path, (192, 30, 315, 200))
     panel_blue, panel_white, _ = crop_ratios(path, (8, 30, 142, 140))
+    detail_tail_blue, _, _ = crop_ratios(path, (145, 30, 185, 125))
     return (
         map_blue < 0.10
         and 0.55 < panel_blue < 0.70
         and panel_white > 0.10
-        and not fixed_detail_visible(path)
+        # Arrangement panels end near x=142. Fixed-record detail boxes extend
+        # through this tail even when their left-side color ratios happen to
+        # match a five-row Scenario 5 arrangement menu.
+        and detail_tail_blue < 0.10
     )
 
 
 def arrangement_roster_visible(path: Path) -> bool:
     map_blue, _, _ = crop_ratios(path, (192, 30, 315, 200))
     panel_blue, panel_white, _ = crop_ratios(path, (8, 30, 142, 140))
+    detail_tail_blue, _, _ = crop_ratios(path, (145, 30, 185, 125))
     return (
         map_blue < 0.10
         and 0.75 < panel_blue < 0.90
         and 0.015 < panel_white < 0.085
-        and not fixed_detail_visible(path)
+        and detail_tail_blue < 0.10
     )
 
 
