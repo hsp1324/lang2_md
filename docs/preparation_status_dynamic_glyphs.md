@@ -21,14 +21,14 @@ VRAM `0xF400..0xF7FF`. Every former dynamic tile `0x07A1..0x07BC` resolves
 inside that exact byte range. Five populated ranges contain 192 nonzero bytes
 of Hangul patterns. The old cache was not an unused pattern bank.
 
-The builder probe replaces all 25 cache cells with noncontiguous ordinary
+The builder probe replaces all 26 cache cells with noncontiguous ordinary
 pattern tiles:
 
 `0359 035B 0360 0361 036C 036D 0370 0371`
 
 `037D 037F 03B0 03BD 03C0 03C1 03C4 03C9`
 
-`03CA 03D0 03D1 03D4 03D5 03D7 03D8 03DA 03DF`
+`03CA 03D0 03D1 03D4 03D5 03D7 03D8 03DA 03DF 03E0`
 
 Their byte addresses are below `0xC000`. A read-only ownership scan of the 384
 pre-replacement GST files found no Plane A, Plane B, Window, SAT, or VDP-table
@@ -46,25 +46,27 @@ missed glyph: `로얄호스` used static `얄` tile `0x03AC`, and only that 8x8
 pattern changed after the shop. `얄` is now preparation slot 24 at audited
 ordinary pattern tile `0x03DF`. The original 3203/7B41 probes are superseded.
 
-Current non-release probes only:
+The later all-scenario surface inventory showed that every static Hangul
+extension range can also be occupied by commander or mercenary graphics.
+Preparation therefore loads only the stock byte font and routes 121 unsafe
+characters through 26 conflict-colored slots. Characters share a slot only
+when the Scenario 1–27 commander, hiring, fixed-detail, and class-change
+inventory proves that they never appear on the same surface.
 
-- normal checksum `B0DF`, SHA-256
-  `f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a`;
-- hard checksum `FA1D`, SHA-256
-  `1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32`.
+Current combined non-release probes only:
 
-Scenario 9 completed a real preparation -> arrangement/enemy detail -> shop
-item list -> preparation -> arrangement/enemy detail round trip in each probe.
-The complete preparation, arrangement/minimap, and enemy-detail PNG pairs are
-byte-identical before/after for both profiles. The hard pre/post GSTs and the
-normal post GST keep all `0x400` H-scroll bytes zero; the hard replacement-pool
-payloads are also byte-identical before/after. Scenario 6 hard completed the
-same targeted preparation/shop/arrangement/enemy-detail regression.
+- normal checksum `7621`, SHA-256
+  `4abcfaaab868739f60d8c2ff13f9c462169e6c318285fecb7889688d22c7f03c`;
+- hard checksum `D902`, SHA-256
+  `fe6c710cfc671c0fc08badb7a1a486e5b33a93fe9c55632f3ebda3c2f6912e78`.
 
-This is targeted replacement-pool acceptance only. It is not a Scenario 6 or
-9 pass in `localization/preparation_surface_acceptance.json`: every commander,
-class, hiring page, gray acted sprite, and result screen has not yet been
-enumerated. Scenarios 1 through 27 in both profiles remain mandatory.
+Scenario 9 now has complete acceptance evidence in both profiles. Each run
+passes 32/32 same-run pre/post shop full-screen pairs: seven allied commanders
+over two roster pages, all hiring pages, both arrangement pages, and all 13
+visible fixed details. Normal and hard also have intact gray acted-sprite
+captures and actual Elwin/Hein attacks that invoke the stock death/victory
+path and reach intact result screens. The checked evidence is
+`localization/preparation_surface_scenario_09.json`.
 
 Scenario 1 has a reviewed preparation pass in both current probes. Normal run
 `normal/s01/yal02` and hard run `hard/s01/yal01` under
@@ -97,8 +99,8 @@ and numerical fields. The normal/hard result diagnostics change only Bald's
 AT/DF, coordinate, mercenary setup, and the checksum; the result header and
 event code remain candidate-identical. The preserved seed exposes no live
 class-change choice, so that surface is explicitly not applicable with a
-written reason. Scenario 1 is now the sole fully accepted scenario; Scenarios
-2 through 27 remain mandatory.
+written reason. Scenarios 1, 2, 3, and 9 are now fully accepted; Scenarios
+4–8 and 10–27 remain mandatory.
 
 Failed attempts retained for future work:
 

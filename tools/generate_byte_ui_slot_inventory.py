@@ -131,10 +131,15 @@ def build_inventory(source_rom: bytes) -> dict[str, object]:
             {
                 "slot": slot,
                 "vram_tile": hex_word(builder.BYTE_UI_DYNAMIC_TILE_IDS[slot]),
-                "char": char,
-                "reason": "preparation graphics overwrite the final static font segment",
+                "chars": list(group),
+                "reason": (
+                    "conflict-colored preparation characters that never "
+                    "appear simultaneously share this ownership-audited tile"
+                ),
             }
-            for slot, char in enumerate(builder.BYTE_UI_PREP_DYNAMIC_CHARS)
+            for slot, group in enumerate(
+                builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS
+            )
         ],
     }
 

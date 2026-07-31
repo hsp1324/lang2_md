@@ -50,19 +50,27 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
             len(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS),
         )
         self.assertEqual(
-            scope["preparation_extra_chars"],
-            list(
-                builder.BYTE_UI_PREP_DYNAMIC_CHARS[
-                    -len(builder.BYTE_UI_PREP_EXTRA_TILE_IDS):
-                ]
-            ),
+            scope["preparation_slot_groups"],
+            list(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS),
+        )
+        self.assertEqual(
+            scope["preparation_dynamic_slot_count"],
+            len(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS),
+        )
+        self.assertEqual(
+            scope["preparation_dynamic_char_count"],
+            len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
+        )
+        self.assertEqual(
+            scope["preparation_extra_slots"],
+            len(builder.BYTE_UI_PREP_EXTRA_TILE_IDS),
         )
         self.assertEqual(
             scope["preparation_extra_tiles"],
             [f"0x{tile:04X}" for tile in builder.BYTE_UI_PREP_EXTRA_TILE_IDS],
         )
-        self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_CHARS[-1], "얄")
-        self.assertEqual(builder.BYTE_UI_PREP_EXTRA_TILE_IDS[-1], 0x03DF)
+        self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_CHARS[-1], "더")
+        self.assertEqual(builder.BYTE_UI_PREP_EXTRA_TILE_IDS[-1], 0x03E0)
 
     def test_shop_roundtrip_contract_covers_shared_labels_and_both_builds(self) -> None:
         contract = self.model["transition_contract"]

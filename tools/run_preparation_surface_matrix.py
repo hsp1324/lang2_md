@@ -63,7 +63,7 @@ PROFILE_ROMS = {
         ROOT / "tmp/Langrisser II (Korean Hard prep-pattern-pool-yal probe).md"
     ),
 }
-RUNTIME_CHECKPOINT_CHARS = ("얄",)
+RUNTIME_CHECKPOINT_CHARS = ("얄", "실")
 SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
 RUN_SEQUENCE = ROOT / "tools/run_blastem_sequence.py"
@@ -92,6 +92,28 @@ def player_commander_count(data: bytes, scenario_number: int) -> int:
             f"Scenario {scenario_number} has invalid player commander count {count}"
         )
     return count
+
+
+def player_commander_ids(data: bytes, scenario_number: int) -> list[int]:
+    layout = scenario_layout(data, scenario_number)
+    count = player_commander_count(data, scenario_number)
+    start = layout.header_offset + PLAYER_COMMANDER_COUNT_OFFSET + 2
+    commander_ids = [
+        be16(data, start + index * 2)
+        for index in range(count)
+    ]
+    if any(
+        not 1 <= commander_id <= MANUAL_SLOT_COMMANDER_COUNT
+        for commander_id in commander_ids
+    ):
+        raise ValueError(
+            f"Scenario {scenario_number} has an invalid player commander ID"
+        )
+    if len(set(commander_ids)) != len(commander_ids):
+        raise ValueError(
+            f"Scenario {scenario_number} repeats a player commander ID"
+        )
+    return commander_ids
 
 
 def manual_slot_record_from_gst(gst_path: Path) -> bytes:
@@ -239,6 +261,17 @@ def build_plan(
     reference = reference_rom_path.read_bytes()
     commander_count = player_commander_count(data, scenario_number)
     seed_roster = manual_slot_roster(seed_gst)
+    seed_by_commander_id = {
+        int(row["commander_id"]): row for row in seed_roster
+    }
+    commander_ids = player_commander_ids(data, scenario_number)
+    commander_rows = [
+        {
+            **seed_by_commander_id[commander_id],
+            "position": position,
+        }
+        for position, commander_id in enumerate(commander_ids, 1)
+    ]
     model = read_scenario(data, reference, scenario_number)
     visible = visible_fixed_records(model)
     # The in-game 적군보기 surface advances preparation-visible fixed records
@@ -265,7 +298,7 @@ def build_plan(
             "roster_page_count": math.ceil(
                 commander_count / COMMANDER_ROSTER_PAGE_SIZE
             ),
-            "seed_records": seed_roster[:commander_count],
+            "seed_records": commander_rows,
         },
         "fixed_records": {
             "count": model["record_count"],
@@ -469,7 +502,7 @@ def arrangement_roster_visible(path: Path) -> bool:
     return (
         map_blue < 0.10
         and 0.75 < panel_blue < 0.90
-        and 0.015 < panel_white < 0.060
+        and 0.015 < panel_white < 0.085
         and not fixed_detail_visible(path)
     )
 
@@ -687,9 +720,10 @@ def scan_allied(
         )
     previous_status: tuple[bool, ...] | None = None
     for index, commander in enumerate(commander_rows):
+        position = int(commander["position"])
         commander_id = int(commander["commander_id"])
         root = recorder.capture(
-            f"{phase}/allied/commander_{commander_id:02d}_root.png"
+            f"{phase}/allied/commander_{position:02d}_root.png"
         )
         current_status = status_dhash(root)
         if previous_status is not None and hash_distance(
@@ -703,13 +737,13 @@ def scan_allied(
         for attempt in range(1, 4):
             recorder.send(["c"], delay=1.1)
             probe = recorder.capture(
-                f"transitions/{phase}/commander_{commander_id:02d}_"
+                f"transitions/{phase}/commander_{position:02d}_"
                 f"hire_attempt_{attempt}.png"
             )
             if hire_screen_visible(probe):
                 page = recorder.capture(
                     f"{phase}/allied/"
-                    f"commander_{commander_id:02d}_hire_page_01.png"
+                    f"commander_{position:02d}_hire_page_01.png"
                 )
                 break
         if page is None:
@@ -729,7 +763,7 @@ def scan_allied(
         for attempt in range(1, 4):
             recorder.send(["c"], delay=1.1)
             probe = recorder.capture(
-                f"transitions/{phase}/commander_{commander_id:02d}_"
+                f"transitions/{phase}/commander_{position:02d}_"
                 f"exit_attempt_{attempt}.png"
             )
             if not hire_screen_visible(probe):
@@ -744,9 +778,12 @@ def scan_allied(
         if index + 1 < len(commander_rows):
             selected = False
             for attempt in range(1, 4):
-                recorder.send(["left", "down"], delay=1.0)
+                recorder.send(
+                    allied_next_navigation(position, len(commander_rows)),
+                    delay=1.0,
+                )
                 probe = recorder.capture(
-                    f"transitions/{phase}/commander_{commander_id + 1:02d}_"
+                    f"transitions/{phase}/commander_{position + 1:02d}_"
                     f"select_attempt_{attempt}.png"
                 )
                 if hash_distance(current_status, status_dhash(probe)) >= 15:
@@ -754,8 +791,20 @@ def scan_allied(
                     break
             if not selected:
                 raise RuntimeError(
-                    f"{phase}: commander {commander_id + 1} could not be selected"
+                    f"{phase}: commander position {position + 1} could not be selected"
                 )
+
+
+def allied_next_navigation(position: int, commander_count: int) -> list[str]:
+    if position < 1 or commander_count <= position:
+        raise ValueError("commander navigation requires a following position")
+    if position % COMMANDER_ROSTER_PAGE_SIZE == 0:
+        next_page_rows = min(
+            COMMANDER_ROSTER_PAGE_SIZE,
+            commander_count - position,
+        )
+        return ["right"] + ["up"] * (next_page_rows - 1)
+    return ["down"]
 
 
 def open_arrangement(recorder: RuntimeRecorder, phase: str) -> None:

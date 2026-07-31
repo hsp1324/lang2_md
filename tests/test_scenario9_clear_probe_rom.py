@@ -23,13 +23,15 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             npc_annihilation=mode == "npc",
             protagonist_death=mode == "protagonist",
             turn_event=mode == "turn",
+            runtime_clear=mode == "clear",
         )
         return data
 
-    def test_probe_only_changes_laird_combat_fields_coordinates_and_checksum(self):
+    def test_probe_only_changes_laird_setup_wrapper_and_checksum(self):
         data = bytearray(self.built)
         probe_builder.patch_probe(data, self.source)
         base = probe_builder.LAIRD_RECORD_OFFSET
+        wrapper = probe_builder.completion_wrapper_code()
         expected_changes = {
             0x18E,
             0x18F,
@@ -38,6 +40,14 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             base + FIELD_OFFSETS["x"],
             base + FIELD_OFFSETS["y"],
             *(base + FIELD_OFFSETS["mercenaries"] + slot for slot in range(6)),
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            ),
         }
         changed = {
             index
@@ -45,6 +55,33 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             if before != after
         }
         self.assertLessEqual(changed, expected_changes)
+
+    def test_completion_wrapper_sets_only_runtime_laird_hp_to_one(self):
+        code = probe_builder.completion_wrapper_code()
+        laird = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.LAIRD_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (laird + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        for group in range(20):
+            if group == probe_builder.LAIRD_RUNTIME_GROUP:
+                continue
+            other_hp = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+                + probe_builder.RUNTIME_HP_OFFSET
+            )
+            self.assertNotIn(other_hp.to_bytes(4, "big"), code)
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
 
     def test_probe_preserves_every_other_fixed_record(self):
         data = bytearray(self.built)
@@ -76,6 +113,30 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         self.assertEqual(data[mercenary_offset : mercenary_offset + 6], b"\xFF" * 6)
 
+    def test_hein_completion_moves_only_the_same_laird_setup(self):
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            hein_completion=True,
+        )
+        base = probe_builder.LAIRD_RECORD_OFFSET
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["x"]],
+            probe_builder.HEIN_PROBE_LAIRD_X,
+        )
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["y"]],
+            probe_builder.HEIN_PROBE_LAIRD_Y,
+        )
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.RUNTIME_WRAPPER.to_bytes(4, "big"),
+        )
+
     def test_probe_rejects_changed_laird_record(self):
         data = bytearray(self.built)
         data[probe_builder.LAIRD_RECORD_OFFSET] ^= 1
@@ -90,7 +151,6 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0x93A0)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_diagnostic_modes_change_only_wrapper_and_checksum(self):
@@ -98,6 +158,7 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             ("npc", probe_builder.npc_annihilation_wrapper_code()),
             ("protagonist", probe_builder.protagonist_death_wrapper_code()),
             ("turn", probe_builder.turn_event_wrapper_code()),
+            ("clear", probe_builder.runtime_clear_wrapper_code()),
         ):
             with self.subTest(mode=mode):
                 data = self.diagnostic_patched(mode)
@@ -122,7 +183,7 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
 
     def test_diagnostic_modes_preserve_all_scenario_fixed_records(self):
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
-        for mode in ("npc", "protagonist", "turn"):
+        for mode in ("npc", "protagonist", "turn", "clear"):
             data = self.diagnostic_patched(mode)
             for index in range(layout.record_count):
                 start = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -173,6 +234,35 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
             (
                 probe_builder.RUNTIME_GROUP_BASE
                 + 7 * probe_builder.RUNTIME_GROUP_SIZE
+                + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+
+    def test_runtime_clear_marks_only_runtime_laird_group_ten(self):
+        code = probe_builder.runtime_clear_wrapper_code()
+        laird = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.LAIRD_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("00 39 00 80")
+            + (
+                laird + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 00")
+            + (laird + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertNotIn(
+            (
+                probe_builder.RUNTIME_GROUP_BASE
+                + probe_builder.PROTAGONIST_RUNTIME_GROUP
+                * probe_builder.RUNTIME_GROUP_SIZE
                 + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
             ).to_bytes(4, "big"),
             code,

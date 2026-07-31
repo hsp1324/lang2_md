@@ -18,17 +18,36 @@
   },
   "scope": {
     "map_cache_slots_unchanged": 16,
-    "preparation_extra_slots": 9,
-    "preparation_extra_chars": [
-      "샤",
-      "먼",
-      "안",
-      "께",
-      "울",
-      "끼",
-      "의",
+    "preparation_extra_slots": 10,
+    "preparation_dynamic_slot_count": 26,
+    "preparation_dynamic_char_count": 121,
+    "preparation_slot_groups": [
+      "간갈거께끼남녀님대렌루릴문빌빙새스안야언와요웨의임주켄택템폴해형화",
+      "고본슬울츠치큐크헬",
+      "머모뱀번보선우좀케탈퍼",
+      "건네몬운일적조타",
+      "렘름멘배비엠",
+      "가노데커톤",
+      "골다래켈",
+      "라멜미",
+      "디럴",
+      "폰",
+      "곤론린서전킹히",
+      "팔",
+      "랑",
+      "젤",
+      "랜쉐제",
+      "엔",
+      "몽",
       "글",
-      "얄"
+      "너록숍얄자",
+      "소코콘",
+      "버샤유카",
+      "딘러",
+      "니메키",
+      "세펜힐",
+      "먼실",
+      "더"
     ],
     "preparation_extra_tiles": [
       "0x03CA",
@@ -39,7 +58,8 @@
       "0x03D7",
       "0x03D8",
       "0x03DA",
-      "0x03DF"
+      "0x03DF",
+      "0x03E0"
     ]
   },
   "transition_contract": {
@@ -272,7 +292,8 @@
   },
   "notes": [
     "The former 0x07A1..0x07BC pool is retired. Retained FBE2 VDP registers place the H-scroll table at 0xF400..0xF7FF, and the old state contains 192 nonzero glyph bytes in that table.",
-    "The replacement pool now uses 25 noncontiguous ordinary pattern tiles from 0x0359 through 0x03DF. A 384-GST ownership scan found no Plane A/B, Window, SAT, or VDP-table ownership before assignment; all 31 preparation-like states retained one stable payload per selected tile.",
+    "The replacement pool now uses 26 noncontiguous ordinary pattern tiles from 0x0359 through 0x03E0. A 384-GST ownership scan found no Plane A/B, Window, SAT, or VDP-table ownership before assignment; all 31 preparation-like states retained one stable payload per selected tile.",
+    "Every unsafe preparation character is assigned to one of 26 conflict-colored slots. The 121 characters may share a slot only when the Scenario 1..27 surface inventory proves they never appear simultaneously.",
     "The stock full-screen H-scroll fill count 0x00B7 is restored. The old 0x0007 shortening is no longer emitted.",
     "Scenario 9 normal 3203 and hard 7B41 preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before and after a real shop item-list round trip. These are targeted replacement-pool probes, not full per-scenario acceptance.",
     "The user confirmed that 워록 and 바바리안 were already correct in the map-bottom field; the reported failure was preparation/deployment-only.",

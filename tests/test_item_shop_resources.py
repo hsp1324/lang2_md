@@ -1,13 +1,13 @@
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
 
 from scripts import build_korean_jp_probe as builder
 
 
 ROOT = Path(__file__).resolve().parents[1]
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
-
-
 def token_stream(data: bytes, offset: int) -> list[int]:
     return builder.read_word_list(data, offset)
 
@@ -15,7 +15,25 @@ def token_stream(data: bytes, offset: int) -> list[int]:
 class ItemShopResourceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = KO_ROM.read_bytes()
+        cls.tempdir = tempfile.TemporaryDirectory()
+        output = Path(cls.tempdir.name) / "item-shop-current-builder.md"
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/build_korean_jp_probe.py"),
+                "--out",
+                str(output),
+            ],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        cls.data = output.read_bytes()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tempdir.cleanup()
 
     def test_all_item_name_tokens_are_inside_loaded_glyph_window(self):
         glyphs = builder.read_word_list(
@@ -35,19 +53,25 @@ class ItemShopResourceTests(unittest.TestCase):
                 max(tokens), len(glyphs), f"item {item_index} name exceeds loader"
             )
 
-    def test_item_name_vram_load_is_split_before_the_icon_bank(self):
+    def test_item_name_overflow_follows_the_compact_description_bank(self):
         glyphs = builder.read_word_list(
             self.data, builder.ITEM_NAME_GLYPH_LIST_RELOC_BASE
         )
         overflow_count = len(glyphs) - builder.ITEM_NAME_GLYPH_PRIMARY_COUNT
         self.assertGreater(overflow_count, 0)
         self.assertLessEqual(overflow_count, builder.ITEM_NAME_OVERFLOW_CAPACITY)
-        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT, 0xBF00)
-        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT // 32, 0x5F8)
-        self.assertEqual(builder.ITEM_NAME_OVERFLOW_CAPACITY, 22)
+        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_BASE, 0xA700)
+        self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT, 0xB400)
+        self.assertEqual(builder.ITEM_NAME_OVERFLOW_CAPACITY, 26)
         self.assertLessEqual(
-            builder.ITEM_NAME_OVERFLOW_VRAM_BASE + overflow_count * 0x80,
+            builder.ITEM_NAME_OVERFLOW_VRAM_BASE
+            + overflow_count * builder.ITEM_GLYPH_VRAM_BYTES,
             builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT,
+        )
+        self.assertLess(
+            builder.ITEM_NAME_OVERFLOW_VRAM_BASE
+            + overflow_count * builder.ITEM_GLYPH_VRAM_BYTES,
+            0xB600,
         )
 
         hook_end = (
@@ -158,6 +182,37 @@ class ItemShopResourceTests(unittest.TestCase):
                 max(tokens), len(glyphs),
                 f"item {item_index} description exceeds loader",
             )
+        runtime_count = int.from_bytes(
+            self.data[
+                builder.ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET :
+                builder.ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET + 4
+            ],
+            "big",
+        )
+        self.assertEqual(runtime_count, len(glyphs))
+        self.assertEqual(
+            builder.ITEM_DESCRIPTION_VRAM_BASE
+            + runtime_count * builder.ITEM_GLYPH_VRAM_BYTES,
+            builder.ITEM_NAME_OVERFLOW_VRAM_BASE,
+        )
+
+    def test_necklace_cluster_glyph_no_longer_uses_shop_arrow_vram(self):
+        pointers = builder.read_pointer_table_until(
+            self.data, builder.ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90
+        )
+        necklace_index = builder.ITEM_NAME_PATCHES.index("넥클리스")
+        necklace_tokens = token_stream(
+            self.data, pointers[necklace_index]
+        )
+        cluster_token = necklace_tokens[1]
+        self.assertEqual(cluster_token, 68)
+        cluster_vram = (
+            builder.ITEM_NAME_OVERFLOW_VRAM_BASE
+            + (cluster_token - builder.ITEM_NAME_GLYPH_PRIMARY_COUNT)
+            * builder.ITEM_GLYPH_VRAM_BYTES
+        )
+        self.assertEqual(cluster_vram, 0xA900)
+        self.assertNotEqual(cluster_vram, 0xB600)
 
     def test_relocated_item_glyph_ranges_do_not_overlap(self):
         name_glyphs = builder.read_word_list(

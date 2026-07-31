@@ -60,6 +60,53 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
             all(row["hire_page_count"] == 1 for row in roster)
         )
 
+    def test_player_commander_ids_follow_each_scenario_name_table(self):
+        self.assertEqual(matrix.player_commander_ids(self.data, 1), [1, 5])
+        self.assertEqual(
+            matrix.player_commander_ids(self.data, 9),
+            [1, 5, 6, 2, 4, 8, 7],
+        )
+
+    def test_plan_looks_up_seed_progress_by_commander_id(self):
+        plan = matrix.build_plan(NORMAL_ROM, REFERENCE_ROM, SEED_GST, 9)
+        rows = plan["allied_commanders"]["seed_records"]
+        self.assertEqual(
+            [row["commander_id"] for row in rows],
+            [1, 5, 6, 2, 4, 8, 7],
+        )
+        self.assertEqual(
+            [row["class_korean"] for row in rows],
+            [
+                "파이터", "워록", "파이터", "클레릭",
+                "파이터", "파이터", "호크나이트",
+            ],
+        )
+        self.assertEqual(
+            [[hire["korean"] for hire in row["hire_rows"]] for row in rows],
+            [
+                ["솔저"], ["가드맨"], ["솔저"], ["가드맨"],
+                ["솔저"], ["솔저"], ["솔저", "그리폰"],
+            ],
+        )
+
+    def test_allied_navigation_turns_the_page_after_fifth_commander(self):
+        self.assertEqual(
+            matrix.allied_next_navigation(4, 7),
+            ["down"],
+        )
+        self.assertEqual(
+            matrix.allied_next_navigation(5, 7),
+            ["right", "up"],
+        )
+        self.assertEqual(
+            matrix.allied_next_navigation(6, 7),
+            ["down"],
+        )
+        self.assertEqual(
+            matrix.allied_next_navigation(5, 10),
+            ["right", "up", "up", "up", "up"],
+        )
+
     def test_scenario_one_route_covers_each_visible_record_once(self):
         plan = matrix.build_plan(NORMAL_ROM, REFERENCE_ROM, SEED_GST, 1)
         fixed = plan["fixed_records"]
@@ -127,6 +174,15 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
         detail = ROOT / "captures/run/normal_3203_s09_pre_shop_enemy_detail.png"
         self.assertTrue(matrix.arrangement_menu_visible(menu))
         self.assertFalse(matrix.arrangement_menu_visible(detail))
+
+    def test_arrangement_roster_detector_accepts_five_visible_rows(self):
+        roster = (
+            ROOT
+            / "captures/run/preparation_surface_matrix/normal/s09/s09a02/"
+            "pre/arrangement/roster_page_01.png"
+        )
+        self.assertTrue(matrix.arrangement_roster_visible(roster))
+        self.assertFalse(matrix.arrangement_menu_visible(roster))
 
     def test_plan_cli_emits_machine_readable_unreviewed_policy(self):
         output = subprocess.check_output(

@@ -54,8 +54,11 @@ SOURCE_LAIRD_NAME_ID = 0x11
 SOURCE_LAIRD_CLASS_ID = 0x43
 PROBE_LAIRD_X = 8
 PROBE_LAIRD_Y = 27
+HEIN_PROBE_LAIRD_X = 10
+HEIN_PROBE_LAIRD_Y = 25
 PROBE_LAIRD_AT = 0
 PROBE_LAIRD_DF = 0
+PROBE_LAIRD_RUNTIME_HP = 1
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 RUNTIME_WRAPPER = 0x3FEF00
@@ -63,6 +66,7 @@ RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
 FIRST_FIXED_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
+LAIRD_RUNTIME_GROUP = FIRST_FIXED_RUNTIME_GROUP + LAIRD_RECORD_INDEX
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -147,6 +151,23 @@ def npc_annihilation_wrapper_code() -> bytes:
 
 def protagonist_death_wrapper_code() -> bytes:
     return mark_runtime_groups_defeated_code((PROTAGONIST_RUNTIME_GROUP,))
+
+
+def runtime_clear_wrapper_code() -> bytes:
+    return mark_runtime_groups_defeated_code((LAIRD_RUNTIME_GROUP,))
+
+
+def completion_wrapper_code() -> bytes:
+    record = RUNTIME_GROUP_BASE + LAIRD_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    return (
+        bytes.fromhex("13 FC")
+        + PROBE_LAIRD_RUNTIME_HP.to_bytes(2, "big")
+        + (record + RUNTIME_HP_OFFSET).to_bytes(4, "big")
+        + bytes.fromhex("41 F9")
+        + START_MENU_ENTRY.to_bytes(4, "big")
+        + bytes.fromhex("4E F9")
+        + START_MENU_ENTRY.to_bytes(4, "big")
+    )
 
 
 def turn_event_wrapper_code() -> bytes:
@@ -275,11 +296,21 @@ def patch_probe(
     npc_annihilation: bool = False,
     protagonist_death: bool = False,
     turn_event: bool = False,
+    runtime_clear: bool = False,
+    hein_completion: bool = False,
 ) -> int:
     validate_layout(probe, source)
-    if sum((npc_annihilation, protagonist_death, turn_event)) > 1:
+    if sum(
+        (
+            npc_annihilation,
+            protagonist_death,
+            turn_event,
+            runtime_clear,
+            hein_completion,
+        )
+    ) > 1:
         raise ValueError("Scenario 9 diagnostic modes conflict")
-    if npc_annihilation or protagonist_death or turn_event:
+    if npc_annihilation or protagonist_death or turn_event or runtime_clear:
         layout = scenario_layout(source, SCENARIO_NUMBER)
         for index in range(layout.record_count):
             start = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -294,7 +325,11 @@ def patch_probe(
             else (
                 protagonist_death_wrapper_code()
                 if protagonist_death
-                else turn_event_wrapper_code()
+                else (
+                    turn_event_wrapper_code()
+                    if turn_event
+                    else runtime_clear_wrapper_code()
+                )
             )
         )
         install_start_wrapper(probe, source, wrapper)
@@ -302,10 +337,15 @@ def patch_probe(
         base = LAIRD_RECORD_OFFSET
         probe[base + FIELD_OFFSETS["at"]] = PROBE_LAIRD_AT
         probe[base + FIELD_OFFSETS["df"]] = PROBE_LAIRD_DF
-        probe[base + FIELD_OFFSETS["x"]] = PROBE_LAIRD_X
-        probe[base + FIELD_OFFSETS["y"]] = PROBE_LAIRD_Y
+        probe[base + FIELD_OFFSETS["x"]] = (
+            HEIN_PROBE_LAIRD_X if hein_completion else PROBE_LAIRD_X
+        )
+        probe[base + FIELD_OFFSETS["y"]] = (
+            HEIN_PROBE_LAIRD_Y if hein_completion else PROBE_LAIRD_Y
+        )
         mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
         probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+        install_start_wrapper(probe, source, completion_wrapper_code())
     return builder.update_md_checksum(probe)
 
 
@@ -345,6 +385,22 @@ def parse_args() -> argparse.Namespace:
             "through the turn-1 end and turn-2 entry dialogue"
         ),
     )
+    mode.add_argument(
+        "--runtime-clear",
+        action="store_true",
+        help=(
+            "preserve every Scenario 9 fixed record and mark only runtime "
+            "Laird group 10 defeated through Start"
+        ),
+    )
+    mode.add_argument(
+        "--hein-completion",
+        action="store_true",
+        help=(
+            "place weakened Laird directly above stock Hein and let Start set "
+            "only runtime Laird HP to 1 for a normal-command clear"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -358,6 +414,8 @@ def main() -> int:
         npc_annihilation=args.npc_annihilation,
         protagonist_death=args.protagonist_death,
         turn_event=args.turn_event,
+        runtime_clear=args.runtime_clear,
+        hein_completion=args.hein_completion,
     )
     output_rom = args.output_rom or (
         DEFAULT_TURN_EVENT_OUTPUT_ROM
@@ -393,10 +451,32 @@ def main() -> int:
             "Start protects runtime player/NPC groups 0..9 and raises the "
             "turn counter only to 1"
         )
+    elif args.runtime_clear:
+        print(
+            "Scenario 9 runtime-clear mode: all deployments and fixed records "
+            "remain source-identical"
+        )
+        print(
+            "Start marks only runtime Laird group 10 defeated, then returns "
+            "to the stock Start handler"
+        )
+    elif args.hein_completion:
+        print(
+            f"Scenario 9 Laird: ({HEIN_PROBE_LAIRD_X},"
+            f"{HEIN_PROBE_LAIRD_Y}), AT 0, DF 0, no mercenaries"
+        )
+        print(
+            "Start sets only runtime Laird HP to 1 before returning to the "
+            "stock Start handler"
+        )
     else:
         print(
             f"Scenario 9 Laird: ({PROBE_LAIRD_X},{PROBE_LAIRD_Y}), "
             "AT 0, DF 0, no mercenaries"
+        )
+        print(
+            "Start sets only runtime Laird HP to 1 before returning to the "
+            "stock Start handler"
         )
     print(f"checksum: {checksum:04X}")
     print(output_rom)

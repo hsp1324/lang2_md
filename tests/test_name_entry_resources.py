@@ -276,9 +276,14 @@ class NameEntryResourceTests(unittest.TestCase):
             6,
         )
         for offset in builder.BYTE_UI_FONT_LOAD_CALLS:
+            routine = (
+                builder.BYTE_UI_PREP_FONT_LOAD_ROUTINE
+                if offset in builder.BYTE_UI_PREP_FONT_LOAD_CALLS
+                else builder.BYTE_UI_FONT_LOAD_ROUTINE
+            )
             self.assertEqual(
                 data[offset : offset + 6],
-                bytes.fromhex("4E B9") + builder.BYTE_UI_FONT_LOAD_ROUTINE.to_bytes(4, "big"),
+                bytes.fromhex("4E B9") + routine.to_bytes(4, "big"),
             )
         for offset in builder.BYTE_UI_PLANE_RENDER_CALLS:
             self.assertEqual(
@@ -473,6 +478,24 @@ class NameEntryResourceTests(unittest.TestCase):
                 + bytes.fromhex("4E B9 00 00 99 B2")
             )
             self.assertIn(call, loader)
+        self.assertIn(bytes.fromhex("0C 38 00 FD A6 DA"), loader)
+        self.assertIn(bytes.fromhex("0C 38 00 FE A6 DA"), loader)
+        final_rts = len(loader) - 2
+        for branch_offset in (12, 20):
+            self.assertEqual(loader[branch_offset], 0x67)
+            self.assertEqual(
+                branch_offset + 2
+                + int.from_bytes(
+                    loader[branch_offset + 1 : branch_offset + 2],
+                    "big",
+                    signed=True,
+                ),
+                final_rts,
+            )
+        self.assertEqual(
+            builder._build_byte_ui_prep_font_loader(),
+            bytes.fromhex("4E B9 00 00 99 B2 4E 75"),
+        )
 
     def test_loren_second_syllable_uses_runtime_stable_final_segment(self):
         data = bytearray(self.rom)
@@ -485,32 +508,39 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertLessEqual(final_start + final_count, 0x05F8)
         self.assertEqual(tile_by_index[index_by_char["렌"]], 0x05E9)
 
-    def test_prep_dynamic_slots_cover_shop_overwritten_escape_glyphs(self):
+    def test_prep_dynamic_slots_cover_conflict_colored_glyph_groups(self):
         self.assertEqual(
-            builder.BYTE_UI_PREP_DYNAMIC_CHARS,
-            (
-                "라", "론", "쉐", "카", "코", "키", "록", "적",
-                "가", "스", "럴", "슬", "임", "비", "크", "제",
-                "샤", "먼", "안", "께", "울", "끼", "의", "글", "얄",
-            ),
-        )
-        self.assertLessEqual(
-            len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
+            len(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS),
             len(builder.BYTE_UI_DYNAMIC_TILE_IDS),
+        )
+        self.assertEqual(
+            tuple(
+                char
+                for group in builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS
+                for char in group
+            ),
+            builder.BYTE_UI_PREP_DYNAMIC_CHARS,
+        )
+        self.assertEqual(
+            len(set(builder.BYTE_UI_PREP_DYNAMIC_CHARS)),
+            len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
         )
 
         data = bytearray(self.rom)
         builder.expand_rom(data)
         codes = builder.patch_byte_ui_strings(data)
         index_by_char, _ = builder.build_byte_ui_local_mapping(codes)
-        for slot, char in enumerate(builder.BYTE_UI_PREP_DYNAMIC_CHARS):
-            self.assertEqual(
-                data[
-                    builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE
-                    + index_by_char[char]
-                ],
-                slot,
-            )
+        for slot, group in enumerate(
+            builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS
+        ):
+            for char in group:
+                self.assertEqual(
+                    data[
+                        builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE
+                        + index_by_char[char]
+                    ],
+                    slot,
+                )
 
     def test_battle_result_enemy_label_uses_final_local_bank_for_jeok(self):
         data = bytearray(self.rom)
@@ -603,11 +633,11 @@ class NameEntryResourceTests(unittest.TestCase):
             builder.BYTE_UI_PREP_EXTRA_TILE_IDS,
             (
                 0x03CA, 0x03D0, 0x03D1, 0x03D4,
-                0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF,
+                0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF, 0x03E0,
             ),
         )
-        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 25)
-        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 25)
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 26)
+        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 26)
         self.assertTrue(
             all(tile * 32 < 0xC000 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
         )
@@ -682,15 +712,7 @@ class NameEntryResourceTests(unittest.TestCase):
 
     def test_preparation_overwritten_glyphs_use_fixed_dynamic_slots(self):
         self.assertEqual(
-            builder.BYTE_UI_PREP_DYNAMIC_CHARS,
-            (
-                "라", "론", "쉐", "카", "코", "키", "록", "적",
-                "가", "스", "럴", "슬", "임", "비", "크", "제",
-                "샤", "먼", "안", "께", "울", "끼", "의", "글", "얄",
-            ),
-        )
-        self.assertLessEqual(
-            len(builder.BYTE_UI_PREP_DYNAMIC_CHARS),
+            len(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS),
             len(builder.BYTE_UI_DYNAMIC_TILE_IDS),
         )
 
@@ -702,8 +724,11 @@ class NameEntryResourceTests(unittest.TestCase):
             builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE :
             builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT
         ]
-        for slot, char in enumerate(builder.BYTE_UI_PREP_DYNAMIC_CHARS):
-            self.assertEqual(table[index_by_char[char]], slot)
+        for slot, group in enumerate(
+            builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS
+        ):
+            for char in group:
+                self.assertEqual(table[index_by_char[char]], slot)
         self.assertTrue(
             all(
                 value == 0xFF

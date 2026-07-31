@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "reviewed_pass",
+  "reported_on": "2026-07-31",
+  "failure_capture": {
+    "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 111759.png",
+    "sha256": "96ffd6689faad53a1e3068446c74308bad93a9e8a94d4b2b8938445ed0a3e5f0",
+    "observed": "크로스 is intact while the 클 in 넥클리스 is replaced by a green shop graphic"
+  },
+  "root_cause": {
+    "item": "넥클리스",
+    "glyph": "클",
+    "token": 68,
+    "old_vram": "0xB600",
+    "collision_owner": "green shop page-arrow graphics",
+    "description": "The former item-name overflow bank began at 0xB400, so token 68 landed exactly at 0xB600."
+  },
+  "fix": {
+    "description_glyph_count": 166,
+    "description_vram": "0x5400..0xA6FF",
+    "item_name_overflow_vram": "0xA700..0xB3FF",
+    "new_cluster_vram": "0xA900",
+    "shop_graphics_start": "0xB400"
+  },
+  "runtime_evidence": [
+    {
+      "item_id": 27,
+      "selected": "크로스",
+      "visible_rows": ["크로스", "넥클리스"],
+      "path": "captures/run/shop_overflow_necklace/current_id27.png",
+      "sha256": "d3821f6ca8952cf811c1a0fc660e9eb5769e69feb8228d9bfdf1f6cf76207625",
+      "review": "pass"
+    },
+    {
+      "item_id": 28,
+      "selected": "넥클리스",
+      "visible_rows": ["크로스", "넥클리스"],
+      "path": "captures/run/shop_overflow_necklace/current_id28.png",
+      "sha256": "a2d886f9b9519513966b7ef7f4c0a93391cae54c48a4796fe02b11bd1119bb87",
+      "review": "pass"
+    }
+  ],
+  "candidate_builds": {
+    "normal": {
+      "path": "tmp/Langrisser II (Korean shop-overflow+prep-guarded probe).md",
+      "md_checksum": "7621",
+      "sha256": "4abcfaaab868739f60d8c2ff13f9c462169e6c318285fecb7889688d22c7f03c"
+    },
+    "hard": {
+      "path": "tmp/Langrisser II (Korean Hard shop-overflow+prep-guarded probe).md",
+      "md_checksum": "D902",
+      "sha256": "fe6c710cfc671c0fc08badb7a1a486e5b33a93fe9c55632f3ebda3c2f6912e78"
+    }
+  },
+  "release_status": "candidate_only_not_promoted"
+}

@@ -89,23 +89,26 @@
     }
   ],
   "current_replacement_probe": {
-    "status": "scenarios_1_through_3_complete_pass_scenarios_4_to_27_pending",
+    "status": "scenarios_1_2_3_9_complete_pass_remaining_scenarios_pending",
     "ownership_report": "localization/preparation_vram_ownership.json",
     "scenario_matrix_report": "localization/preparation_surface_matrix.json",
     "scenario_2_report": "localization/preparation_surface_scenario_02.json",
     "scenario_3_report": "localization/preparation_surface_scenario_03.json",
+    "scenario_9_report": "localization/preparation_surface_scenario_09.json",
+    "item_shop_overflow_report": "localization/item_shop_overflow_regression.json",
     "normal_probe": {
-      "md_checksum": "B0DF",
-      "sha256": "f141cc13efbf14a421876c520cca7d788b843bd382e52801ad0c989de5d7ce9a"
+      "md_checksum": "7621",
+      "sha256": "4abcfaaab868739f60d8c2ff13f9c462169e6c318285fecb7889688d22c7f03c"
     },
     "hard_probe": {
-      "md_checksum": "FA1D",
-      "sha256": "1d0ffd02e90dcf3b704934aa09d2336bdc65b8968ae0ed49db89bc400a35df32"
+      "md_checksum": "D902",
+      "sha256": "fe6c710cfc671c0fc08badb7a1a486e5b33a93fe9c55632f3ebda3c2f6912e78"
     },
     "verified_targeted_checks": [
-      "Scenario 9 normal preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before/after a real shop item-list round trip.",
-      "Scenario 9 hard preparation, arrangement/minimap, and enemy-detail full screens are byte-identical before/after the same route.",
+      "Scenario 9 normal and hard each pass 32/32 exact preparation, seven-commander/two-page hiring and roster, all 13 fixed-detail, and real shop item-list before/after pairs.",
+      "Scenario 9 normal and hard actual movement produces an intact gray acted sprite and actual Elwin/Hein attacks traverse the stock death/victory path to intact full-screen results.",
       "Hard Scenario 9 pre/post and normal Scenario 9 post GST states keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
+      "The Cross/Necklace shop page renders 크로스 and 넥클리스 intact with either item selected; 넥클리스 token 68 now uses 0xA900 instead of the green-arrow address 0xB600.",
       "Hard Scenario 6 completed the targeted preparation/shop/arrangement/enemy-detail regression.",
       "Scenario 1 normal and hard each pass 14/14 exact preparation, hiring, arrangement, fixed-record, and real shop item-list before/after pairs.",
       "Scenario 1 normal and hard pre/post 로얄호스 checkpoints render 얄 from ordinary pattern tile 0x03DF, reference it from Plane A, and keep H-scroll VRAM 0xF400..0xF7FF entirely zero.",
@@ -120,7 +123,7 @@
     ],
     "not_yet_covered": [
       "live class-change choices where a scenario/seed exposes them",
-      "the complete Scenario 4 through 27 normal/hard matrix"
+      "the complete Scenario 4 through 8 and 10 through 27 normal/hard matrix"
     ]
   },
   "scenario_progress": [
@@ -219,14 +222,46 @@
         "complete_screen_integrity": "pass"
       },
       "not_applicable_reason": "The preserved Scenario 3 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    },
+    {
+      "scenario": 9,
+      "profile": "normal_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_09.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
+        "complete_screen_integrity": "pass"
+      },
+      "not_applicable_reason": "The preserved Scenario 9 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    },
+    {
+      "scenario": 9,
+      "profile": "hard_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_09.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_preserved_seed",
+        "complete_screen_integrity": "pass"
+      },
+      "not_applicable_reason": "The preserved Scenario 9 manual-slot seed exposes status and hiring pages but no live class-change choice."
     }
   ],
   "matrix_summary": {
     "required_profile_scenario_runs": 54,
-    "preparation_surface_runs_reviewed": 6,
-    "battle_surface_runs_reviewed": 6,
-    "fully_accepted_profile_scenario_runs": 6,
-    "fully_accepted_scenarios": 3,
+    "preparation_surface_runs_reviewed": 8,
+    "battle_surface_runs_reviewed": 8,
+    "fully_accepted_profile_scenario_runs": 8,
+    "fully_accepted_scenarios": 4,
     "release_gate_status": "pending"
   }
 }

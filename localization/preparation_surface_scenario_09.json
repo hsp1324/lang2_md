@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "scenario_9_complete_pass",
+  "review": {
+    "path": "localization/preparation_surface_scenario_09_review.json",
+    "status": "reviewed_pass"
+  },
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s09/shared07",
+      "plan_sha256": "dfdb369e0ba47c4dd82cb3253b69daf0fd8c7a2ea044f34ca6c6bb758363be0f",
+      "evidence_sha256": "05e213260ae5e12e07ac9589ea20435b8c83140b6a993a1142d2941d1245040e",
+      "expected_pair_count": 32,
+      "actual_pair_count": 32,
+      "commander_ids_in_runtime_order": [1, 5, 6, 2, 4, 8, 7],
+      "commander_page_count": 2,
+      "visible_fixed_record_count": 13,
+      "battle": {
+        "gray_active": {
+          "path": "captures/run/preparation_battle_surface/normal/s09/gray01/active_command.png",
+          "sha256": "60de2d6da04d9b88506ca9580680f5dcb6f3e85013c3162960d0d251603bcdad"
+        },
+        "gray_acted": {
+          "path": "captures/run/preparation_battle_surface/normal/s09/gray01/acted_gray.png",
+          "sha256": "0cef3d6412bfbb081f8a25b3864016a9b6fd42c805e980dfbd1bcd92e1e32ab2"
+        },
+        "gray_gst": {
+          "path": "captures/run/preparation_battle_surface/normal/s09/gray01/states/acted_gray.gst",
+          "sha256": "b588919001b42684cb1a00fbf4e7300a70cb265c2c8c9f43e9c3ce2bc5d2b5a1"
+        },
+        "result": {
+          "path": "captures/run/preparation_battle_surface/normal/s09/result01/battle_result.png",
+          "sha256": "9016ffc2de5560a9e0dffb12ace2cb4e5129d6c1bb0435c48fdf201ccaa49962",
+          "point": 2200
+        },
+        "result_gst": {
+          "path": "captures/run/preparation_battle_surface/normal/s09/result01/states/battle_result.gst",
+          "sha256": "ab84d089f0fc3df95176dcb0630d55f75a0c37f3b5362265137cd85eb5302086"
+        },
+        "result_probe": {
+          "path": "tmp/Langrisser II (Korean shop-overflow+prep-guarded S09 result probe).md",
+          "md_checksum": "7B73",
+          "sha256": "c58d2b01af225bb2edf9f5c1cbdf22714a63dd3e16bc2b83af6a8bd5150e5a44",
+          "completion": "actual Elwin attack invokes the stock death and victory path"
+        }
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s09/shared02",
+      "plan_sha256": "ec488fd3d4609d581f2ef0efbe9686270295185ed1e5ac65662a63600eec159f",
+      "evidence_sha256": "c49befb59707f4040144d08c7cc71bc06200179cad23fed05d22f62c6212c50c",
+      "expected_pair_count": 32,
+      "actual_pair_count": 32,
+      "commander_ids_in_runtime_order": [1, 5, 6, 2, 4, 8, 7],
+      "commander_page_count": 2,
+      "visible_fixed_record_count": 13,
+      "battle": {
+        "gray_active": {
+          "path": "captures/run/preparation_battle_surface/hard/s09/gray01/active_command.png",
+          "sha256": "60de2d6da04d9b88506ca9580680f5dcb6f3e85013c3162960d0d251603bcdad"
+        },
+        "gray_acted": {
+          "path": "captures/run/preparation_battle_surface/hard/s09/gray01/acted_gray.png",
+          "sha256": "ab3f528d40e6f193380fca4eb1b09592a453bd2c318cf60adea897511e91517e"
+        },
+        "gray_gst": {
+          "path": "captures/run/preparation_battle_surface/hard/s09/gray01/states/acted_gray.gst",
+          "sha256": "6cf19afb0502c4a8b42faa1903285940481d618f7da5d3c6b118de89ad8242fd"
+        },
+        "result": {
+          "path": "captures/run/preparation_battle_surface/hard/s09/result01/battle_result.png",
+          "sha256": "9d2aa09d147dcf850bc8f3da09b2df7abfee54840f7b5476dd6dcd403793655c",
+          "point": 1700
+        },
+        "result_gst": {
+          "path": "captures/run/preparation_battle_surface/hard/s09/result01/states/battle_result.gst",
+          "sha256": "60277718fb19089ddb21044625e3bf7419da31b20e2d0a37b61c21daa402ac6d"
+        },
+        "result_probe": {
+          "path": "tmp/Langrisser II (Korean Hard shop-overflow+prep-guarded S09 Hein result probe).md",
+          "md_checksum": "E052",
+          "sha256": "fefa7bb34e3b56c6d03bd22dbbf3bdc8f9837ddb84c7bcbd3f2413d3c15b2b0c",
+          "completion": "actual Hein attack invokes the stock death and victory path"
+        }
+      }
+    }
+  },
+  "human_review": {
+    "status": "reviewed_pass",
+    "result": "No gray Hangul blocks, character or mercenary sprite replacement, broken commander/class/mercenary labels, shifted minimap rows, or damaged result rows were visible."
+  }
+}

@@ -46,6 +46,7 @@ DEFAULT_INVENTORY = ROOT / "localization/byte_ui_slot_inventory.json"
 DEFAULT_OUTPUT = ROOT / "localization/preparation_surface_matrix.json"
 CHECKPOINT_CHAR = "얄"
 CHECKPOINT_TILE = 0x03DF
+CHECKPOINT_DYNAMIC_SLOT = 24
 SHOP_CAPTURE_PATHS = (
     "shop/menu.png",
     "shop/item_list.png",
@@ -452,9 +453,11 @@ def run_report(
         "runtime_checkpoint": {
             "char": CHECKPOINT_CHAR,
             "local_index": f"0x{local_index:02X}",
-            "dynamic_slot": builder.BYTE_UI_PREP_DYNAMIC_CHARS.index(
-                CHECKPOINT_CHAR
-            ),
+            # This report hash-locks the accepted Scenario 1 yal01/yal02
+            # candidate, where 얄 occupied slot 24. Later conflict coloring
+            # may assign the character to another slot; it must not rewrite
+            # historical runtime evidence.
+            "dynamic_slot": CHECKPOINT_DYNAMIC_SLOT,
             "vram_tile": f"0x{CHECKPOINT_TILE:04X}",
             "pre_shop": checkpoint_report(
                 run, "pre", rom, local_index

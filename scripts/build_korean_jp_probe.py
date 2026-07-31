@@ -399,14 +399,21 @@ ITEM_DISCARD_LIST_RENDER_HOOK = 0x017F08
 ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("36 78 90 4C 36 3C")
 ITEM_DISCARD_LIST_RENDER_ROUTINE = 0x2B8600
 ITEM_DISCARD_LIST_RENDER_ROUTINE_LIMIT = 0x2B8800
-ITEM_NAME_OVERFLOW_VRAM_BASE = 0xB400
-# The generic window selector occupies tiles 0x5F8..0x5FF (VRAM byte address
-# 0xBF00..0xBFFF). Loading item-name overflow glyphs there turns its triangle
-# into the last item-name syllables on preparation and arrangement menus.
-ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xBF00
+ITEM_DESCRIPTION_VRAM_BASE = 0x5400
+ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET = 0x0272C2
+ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_SOURCE = 0x000000C0
+# The stock description loader reserves 192 glyphs at 0x5400..0xB3FF even
+# though the compact Korean description bank uses only 166. Load only the
+# actual bank, then keep item-name overflow in the newly free tail below
+# 0xB400. The former 0xB400..0xBEFF allocation collided at 0xB600 with the
+# green shop page-arrow graphics: in the Cross/Necklace list it replaced only
+# the "클" in "넥클리스" while the preceding "크로스" remained intact.
+ITEM_NAME_OVERFLOW_VRAM_BASE = 0xA700
+ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xB400
+ITEM_GLYPH_VRAM_BYTES = 0x80
 ITEM_NAME_OVERFLOW_CAPACITY = (
     ITEM_NAME_OVERFLOW_VRAM_LIMIT - ITEM_NAME_OVERFLOW_VRAM_BASE
-) // 0x80
+) // ITEM_GLYPH_VRAM_BYTES
 ITEM_NAME_GLYPH_LOAD_MAX = ITEM_NAME_GLYPH_PRIMARY_COUNT + ITEM_NAME_OVERFLOW_CAPACITY
 ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
 ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
@@ -465,7 +472,7 @@ BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
 # visible together and passed the same retained-state ownership scan.
 BYTE_UI_PREP_EXTRA_TILE_IDS = (
     0x03CA, 0x03D0, 0x03D1,
-    0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF,
+    0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF, 0x03E0,
 )
 BYTE_UI_DYNAMIC_TILE_IDS = (
     BYTE_UI_DYNAMIC_MAP_TILE_IDS + BYTE_UI_PREP_EXTRA_TILE_IDS
@@ -479,14 +486,52 @@ BYTE_UI_DYNAMIC_FIELD_WIDTH = 8
 BYTE_UI_BATTLE_DIRECT_RETURN_ADDRESS = 0x01B54C
 BYTE_UI_BATTLE_RETURN_STACK_OFFSET = 60
 BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
-# Preparation, hiring, and shop graphics overwrite both the escape bank at
-# 0x03F0..0x03FE and the final static font segment at 0x05D8..0x05F5. Give the
-# affected glyphs fixed scratch slots so multiple visible rows can share them
-# after returning from those screens.
-BYTE_UI_PREP_DYNAMIC_CHARS = (
-    "라", "론", "쉐", "카", "코", "키", "록", "적",
-    "가", "스", "럴", "슬", "임", "비", "크", "제",
-    "샤", "먼", "안", "께", "울", "끼", "의", "글", "얄",
+# Preparation, hiring, class-change, and deployment-detail graphics reuse
+# every static extension segment as character/soldier patterns. Loading those
+# Hangul banks makes the sprites turn into gray glyph blocks; keeping the
+# sprites makes the static Hangul turn into sprite fragments. Route every
+# localized character assigned outside the original 0x00..0xFF font, plus the
+# two historically overwritten low-font characters, through a scratch slot.
+#
+# Characters in one group share a slot. The groups are a deterministic
+# coloring of the simultaneous preparation surfaces: every Scenario 1..27
+# fixed detail, every five-name roster page, every three-row hiring page, and
+# every playable/hidden class-change transition. Characters that can appear
+# together never share a group. This keeps all 121 unsafe characters inside
+# 26 ownership-audited pattern cells rather than allocating one cell per
+# character.
+BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS = (
+    "간갈거께끼남녀님대렌루릴문빌빙새스안야언와요웨의임주켄택템폴해형화",
+    "고본슬울츠치큐크헬",
+    "머모뱀번보선우좀케탈퍼",
+    "건네몬운일적조타",
+    "렘름멘배비엠",
+    "가노데커톤",
+    "골다래켈",
+    "라멜미",
+    "디럴",
+    "폰",
+    "곤론린서전킹히",
+    "팔",
+    "랑",
+    "젤",
+    "랜쉐제",
+    "엔",
+    "몽",
+    "글",
+    "너록숍얄자",
+    "소코콘",
+    "버샤유카",
+    "딘러",
+    "니메키",
+    "세펜힐",
+    "먼실",
+    "더",
+)
+BYTE_UI_PREP_DYNAMIC_CHARS = tuple(
+    char
+    for group in BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS
+    for char in group
 )
 BYTE_UI_RESULT_DYNAMIC_CODE = 0xA6
 BYTE_UI_RESULT_LOCAL_TILE_BY_CHAR = {
@@ -814,6 +859,7 @@ BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE = 0x2B7900
 BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE = 0x2B7A00
 BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE = 0x2B7B00
 BYTE_UI_FINAL_BANK_LOAD_ROUTINE = 0x2B7C00
+BYTE_UI_PREP_FONT_LOAD_ROUTINE = 0x2B7C40
 BYTE_UI_ENDING_RESULT_RENDER_ROUTINE = 0x2B7D00
 BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE = 0x2B7D80
 BYTE_UI_PORTRAIT_FONT_RESTORE_ROUTINE = 0x2B7DA0
@@ -1067,6 +1113,7 @@ BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK = 0x022AFC
 BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK_ORIGINAL = bytes.fromhex(
     "36 3C 00 07 70 00"
 )
+BYTE_UI_PREP_FONT_LOAD_CALLS = (0x029D8E,)
 
 BYTE_UI_PLAYABLE_NAME_SOURCES = {
     0x061AC5: "ｴﾙｳｨﾝ",
@@ -5739,10 +5786,9 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         raise ValueError(f"relocated item glyph list overflow: 0x{end:06X}")
 
     # VRAM 0x2000..0x3FFF holds exactly 64 16x16 glyphs; item icons begin at
-    # 0x4000. Keep the stock window intact and load later name glyphs into the
-    # 22 safe slots at 0xB400..0xBEFF after the item-description bank. Tiles
-    # 0x5F8..0x5FF at 0xBF00 hold the generic window selector and must survive.
-    # The purchase popup explicitly selects the matching bank for every token.
+    # 0x4000. Load later name glyphs into the compact description bank's free
+    # tail at 0xA700..0xB3FF. The purchase popup explicitly selects the
+    # matching bank for every token.
     loader = _build_item_name_glyph_load_routine(len(item_glyphs))
     popup_builder = _build_item_name_popup_stream_routine()
     list_renderers = [
@@ -5887,6 +5933,34 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
             f"item description glyph list needs {len(desc_glyphs)} slots, "
             f"stock loader supports {ITEM_DESCRIPTION_GLYPH_LOAD_COUNT}"
         )
+    expected_load_count = ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_SOURCE.to_bytes(
+        4, "big"
+    )
+    load_count_end = ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET + 4
+    if (
+        bytes(
+            data[
+                ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET:load_count_end
+            ]
+        )
+        != expected_load_count
+    ):
+        raise ValueError("item description glyph-load count changed")
+    compact_vram_end = (
+        ITEM_DESCRIPTION_VRAM_BASE
+        + len(desc_glyphs) * ITEM_GLYPH_VRAM_BYTES
+    )
+    if compact_vram_end > ITEM_NAME_OVERFLOW_VRAM_BASE:
+        raise ValueError(
+            "compact item description bank overlaps item-name overflow: "
+            f"0x{compact_vram_end:04X} > "
+            f"0x{ITEM_NAME_OVERFLOW_VRAM_BASE:04X}"
+        )
+    put32(
+        data,
+        ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET,
+        len(desc_glyphs),
+    )
     end = write_word_list_exact(data, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE, desc_glyphs)
     if end >= EXPANDED_ROM_SIZE:
         raise ValueError(f"relocated item description glyph list overflow: 0x{end:06X}")
@@ -6964,6 +7038,10 @@ def relocate_byte_ui_name_and_class_tables(
 def _build_byte_ui_font_loader() -> bytes:
     loader = bytearray(bytes.fromhex(
         "4E B9 00 00 99 B2"      # load the original 256-tile byte font
+        "0C 38 00 FD A6 DA"      # preparation/shop state after initial fade
+        "67 00"                  # skip static extension loads in preparation
+        "0C 38 00 FE A6 DA"      # preparation/shop initial fade state
+        "67 00"                  # skip static extension loads in preparation
         "48 E7 80 40"            # preserve d0/a1
         "30 3C 81 AD"            # extension resource 429, queued DMA
         "32 7C 7E 00"            # VRAM byte address for tile 3F0
@@ -6975,8 +7053,26 @@ def _build_byte_ui_font_loader() -> bytes:
         loader.extend(bytes.fromhex("30 3C") + request.to_bytes(2, "big"))
         loader.extend(bytes.fromhex("32 7C") + (tile_start * 32).to_bytes(2, "big"))
         loader.extend(bytes.fromhex("4E B9 00 00 99 B2"))
-    loader.extend(bytes.fromhex("4C DF 02 01 4E 75"))
+    loader.extend(bytes.fromhex("4C DF 02 01"))
+    return_offset = len(loader)
+    loader.extend(bytes.fromhex("4E 75"))
+    for branch_offset in (12, 20):
+        displacement = return_offset - (branch_offset + 2)
+        if not -128 <= displacement <= 127:
+            raise ValueError("preparation font-loader branch is out of range")
+        loader[branch_offset + 1] = displacement & 0xFF
     return bytes(loader)
+
+
+def _build_byte_ui_prep_font_loader() -> bytes:
+    # Deployment/status graphics own all six static extension ranges. Keep the
+    # stock 0x00..0xFF byte font for ASCII and stable low-font Korean, while
+    # the preparation lookup renders every unsafe localized glyph into the
+    # conflict-colored scratch pool.
+    return bytes.fromhex(
+        "4E B9 00 00 99 B2"  # load the original 256-tile byte font
+        "4E 75"
+    )
 
 
 def _build_byte_ui_final_bank_loader() -> bytes:
@@ -7338,8 +7434,9 @@ def install_byte_ui_extension(
     ] = dynamic_legacy_indexes
 
     prep_dynamic_slots = bytearray([0xFF] * 0x100)
-    for slot, char in enumerate(BYTE_UI_PREP_DYNAMIC_CHARS):
-        prep_dynamic_slots[index_by_char[char]] = slot
+    for slot, group in enumerate(BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS):
+        for char in group:
+            prep_dynamic_slots[index_by_char[char]] = slot
     prep_dynamic_slot_end = (
         BYTE_UI_PREP_DYNAMIC_SLOT_TABLE + len(prep_dynamic_slots)
     )
@@ -7389,6 +7486,7 @@ def install_byte_ui_extension(
     prep_selected_panel_renderer = _build_byte_ui_prep_selected_panel_renderer()
     prep_hire_class_renderer = _build_byte_ui_prep_hire_class_renderer()
     final_bank_loader = _build_byte_ui_final_bank_loader()
+    prep_font_loader = _build_byte_ui_prep_font_loader()
     ending_result_renderer = _build_byte_ui_ending_result_renderer()
     ending_result_glyph_renderer = _build_byte_ui_ending_result_glyph_renderer()
     ending_result_final_bank_loader = (
@@ -7437,6 +7535,7 @@ def install_byte_ui_extension(
         BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE: prep_selected_panel_renderer,
         BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE: prep_hire_class_renderer,
         BYTE_UI_FINAL_BANK_LOAD_ROUTINE: final_bank_loader,
+        BYTE_UI_PREP_FONT_LOAD_ROUTINE: prep_font_loader,
         BYTE_UI_ENDING_RESULT_RENDER_ROUTINE: ending_result_renderer,
         BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE: ending_result_final_bank_loader,
         TITLE_CREDIT_FONT_LOAD_ROUTINE: title_credit_font_loader,
@@ -7581,7 +7680,12 @@ def install_byte_ui_extension(
     for offset in BYTE_UI_FONT_LOAD_CALLS:
         if data[offset : offset + 6] != BYTE_UI_FONT_LOAD_CALL_ORIGINAL:
             raise ValueError(f"byte-font load call changed at 0x{offset:06X}")
-        data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_FONT_LOAD_ROUTINE.to_bytes(4, "big")
+        routine = (
+            BYTE_UI_PREP_FONT_LOAD_ROUTINE
+            if offset in BYTE_UI_PREP_FONT_LOAD_CALLS
+            else BYTE_UI_FONT_LOAD_ROUTINE
+        )
+        data[offset : offset + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
     title_credit_record_end = TITLE_CREDIT_TEXT_RECORD + len(TITLE_CREDIT_RECORD_BYTES)
     if any(
         value != 0xFF

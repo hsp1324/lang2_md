@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "reviewed_pass",
+  "reviewed_on": "2026-07-31",
+  "reviewer": "Codex visual review",
+  "scope": "Scenario 9 normal/hard preparation, all allied commander and hiring pages, both roster pages, all 13 fixed details, same-run shop round trip, gray acted sprite, and stock victory result",
+  "checks": {
+    "all_korean_commander_class_and_mercenary_labels": "pass",
+    "all_character_and_mercenary_sprites": "pass",
+    "roster_page_two_aaron_and_keith": "pass",
+    "arrangement_minimap_and_borders": "pass",
+    "same_run_pre_post_shop_full_screen_pairs": "pass",
+    "gray_acted_sprite": "pass",
+    "battle_result_full_screen": "pass"
+  },
+  "class_change": {
+    "status": "not_applicable_in_this_seed",
+    "reason": "The preserved Scenario 9 manual-slot seed exposes commander status and hiring pages but no live class-change choice."
+  },
+  "acceptance_effect": "Scenario 9 passes both profiles. Scenarios 4 through 8 and 10 through 27 remain pending, so the release gate remains pending."
+}

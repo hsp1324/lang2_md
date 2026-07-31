@@ -2004,158 +2004,312 @@
     "0x03D7",
     "0x03D8",
     "0x03DA",
-    "0x03DF"
+    "0x03DF",
+    "0x03E0"
   ],
   "preparation_dynamic_slots": [
     {
       "slot": 0,
       "vram_tile": "0x0359",
-      "char": "라",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "간",
+        "갈",
+        "거",
+        "께",
+        "끼",
+        "남",
+        "녀",
+        "님",
+        "대",
+        "렌",
+        "루",
+        "릴",
+        "문",
+        "빌",
+        "빙",
+        "새",
+        "스",
+        "안",
+        "야",
+        "언",
+        "와",
+        "요",
+        "웨",
+        "의",
+        "임",
+        "주",
+        "켄",
+        "택",
+        "템",
+        "폴",
+        "해",
+        "형",
+        "화"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 1,
       "vram_tile": "0x035B",
-      "char": "론",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "고",
+        "본",
+        "슬",
+        "울",
+        "츠",
+        "치",
+        "큐",
+        "크",
+        "헬"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 2,
       "vram_tile": "0x0360",
-      "char": "쉐",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "머",
+        "모",
+        "뱀",
+        "번",
+        "보",
+        "선",
+        "우",
+        "좀",
+        "케",
+        "탈",
+        "퍼"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 3,
       "vram_tile": "0x0361",
-      "char": "카",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "건",
+        "네",
+        "몬",
+        "운",
+        "일",
+        "적",
+        "조",
+        "타"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 4,
       "vram_tile": "0x036C",
-      "char": "코",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "렘",
+        "름",
+        "멘",
+        "배",
+        "비",
+        "엠"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 5,
       "vram_tile": "0x036D",
-      "char": "키",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "가",
+        "노",
+        "데",
+        "커",
+        "톤"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 6,
       "vram_tile": "0x0370",
-      "char": "록",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "골",
+        "다",
+        "래",
+        "켈"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 7,
       "vram_tile": "0x0371",
-      "char": "적",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "라",
+        "멜",
+        "미"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 8,
       "vram_tile": "0x037D",
-      "char": "가",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "디",
+        "럴"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 9,
       "vram_tile": "0x037F",
-      "char": "스",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "폰"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 10,
       "vram_tile": "0x03B0",
-      "char": "럴",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "곤",
+        "론",
+        "린",
+        "서",
+        "전",
+        "킹",
+        "히"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 11,
       "vram_tile": "0x03BD",
-      "char": "슬",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "팔"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 12,
       "vram_tile": "0x03C0",
-      "char": "임",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "랑"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 13,
       "vram_tile": "0x03C1",
-      "char": "비",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "젤"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 14,
       "vram_tile": "0x03C4",
-      "char": "크",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "랜",
+        "쉐",
+        "제"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 15,
       "vram_tile": "0x03C9",
-      "char": "제",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "엔"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 16,
       "vram_tile": "0x03CA",
-      "char": "샤",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "몽"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 17,
       "vram_tile": "0x03D0",
-      "char": "먼",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "글"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 18,
       "vram_tile": "0x03D1",
-      "char": "안",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "너",
+        "록",
+        "숍",
+        "얄",
+        "자"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 19,
       "vram_tile": "0x03D4",
-      "char": "께",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "소",
+        "코",
+        "콘"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 20,
       "vram_tile": "0x03D5",
-      "char": "울",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "버",
+        "샤",
+        "유",
+        "카"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 21,
       "vram_tile": "0x03D7",
-      "char": "끼",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "딘",
+        "러"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 22,
       "vram_tile": "0x03D8",
-      "char": "의",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "니",
+        "메",
+        "키"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 23,
       "vram_tile": "0x03DA",
-      "char": "글",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "세",
+        "펜",
+        "힐"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 24,
       "vram_tile": "0x03DF",
-      "char": "얄",
-      "reason": "preparation graphics overwrite the final static font segment"
+      "chars": [
+        "먼",
+        "실"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
+    },
+    {
+      "slot": 25,
+      "vram_tile": "0x03E0",
+      "chars": [
+        "더"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     }
   ]
 }
