@@ -12436,3 +12436,65 @@ contains 57 safe syllables as documented below and in
   exact gray expansion and Plane references, result header, and diagnostic
   lineage. Scenarios 1 through 3 are accepted in both profiles; Scenarios
   4..27 remain pending. No release ROM or version changed.
+
+### Scenario 6 Complete Preparation And Battle-Surface Verification (2026-07-31)
+
+- The accepted current candidates remain the non-release normal checksum
+  `76D1` / SHA-256
+  `db8f2c12e97896aabadd9e216baf98d755adfba6edb89ebb8a4d163053723a44`
+  and hard-profile checksum `D9B2` / SHA-256
+  `12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b`.
+  No release ROM or version was promoted.
+- Normal and hard `s06/current01` preparation runs each pass 26/26
+  byte-identical full-screen pre/post pairs around one real same-process shop
+  item-list round trip. They enumerate all five allied status/hiring pages,
+  the allied roster, arrangement/minimap, and fixed records 0 through 11.
+  Fixed record 12 is explicitly not applicable because the source
+  호크나이트 is hidden at `(255,255)`.
+- Complete visual review covers 엘윈/파이터/솔저, 헤인/워록/가드맨,
+  스코트/파이터/솔저, 리아나/클레릭/가드맨,
+  쉐리/파이터/솔저, 아론/글래디에이터, all three 주민/시민 rows,
+  모건, every visible 제국지휘관, and every visible 소서러/샤먼/나이트/
+  파이터, 바바리안/파이크/다크엘프/호스맨 row. All commander and
+  mercenary sprites, names/classes, minimap cells, borders, and numerical
+  fields remain intact before and after shop in both profiles.
+- Correct screen-detected Scenario 6 movement changes Elwin/Fighter runtime
+  group 0 to acted flag 1 at `(5,26)`. Both profiles retain the exact stock
+  silhouette-`0x001E` gray payload in VRAM `0x9600..0x967F`; tiles
+  `0x04B0..0x04B3` are referenced from Plane A at
+  `(54,27),(54,28),(55,27),(55,28)`.
+- The stock civilian-safe victory aftermath naturally levels Sherry and opens
+  three class choices. Normal and hard choice PNGs are pairwise byte-identical:
+  `로드 / 파이크 / 솔저 / 힐 / 프로텍션`,
+  `호크나이트 / 그리폰 / 토네이도`, and
+  `세인트 / 가드맨 / 파이크 / 썬더 / 일루전`. Candidate-specific GSTs
+  are retained for all six profile/choice combinations.
+- `tools/build_scenario6_clear_probe_rom.py --enemy-annihilation` adds a
+  guarded diagnostic mode. It preserves every player deployment, all thirteen
+  fixed records, the scheduled-turn table and handlers, and the Korean result
+  header. Opening Start marks only runtime enemy groups 9 through 17 defeated
+  before returning to the stock Start handler. Normal diagnostic checksum/hash
+  are `4500` /
+  `41aa35eee176ac51d46c52b18a2a0cf0ddb755c164dd8d37ab485e066055fb08`;
+  hard are `A7E1` /
+  `05d07c56ba2b8e6ee90224311adb006422ca76143a14f6cdec6fcef21288bb5e`.
+  Both traverse the stock successful aftermath to intact full-screen
+  `전과보고`; normal continued with Lord and hard with Saint, so their lower
+  sprite grids legitimately differ while the result-header VRAM is identical.
+- The legacy `battle-command` preset ignores `--scenario-number`; rejected
+  `gray01` and normal `result01` therefore entered Scenario 1 and are not
+  accepted evidence. Normal `result03` missed the selector and entered name
+  entry, `result04` selected the default class before cycling, and later hard
+  quicksave-replay files reset. Accepted evidence uses normal/hard `gray02`,
+  normal `result02` plus `result05`, and hard `result02`.
+- `tools/verify_preparation_surface_scenario_06.py`,
+  `localization/preparation_surface_scenario_06.json`, its review JSON, and
+  `tests/test_preparation_surface_scenario_06.py` lock the matrix pairs,
+  complete allied/NPC/enemy accounting, capture/GST hashes, acted runtime
+  record, gray VRAM/Plane references, all three class choices, result-header
+  cells, and diagnostic lineage. Focused Scenario 6 tests pass 33/33, and the
+  cumulative Scenario 6 plus acceptance set passes 39/39. Split full discovery
+  runs 1,508 tests with exactly the established 44 failures plus 3 errors; no
+  Scenario 6 test is in that set. The cumulative gate accepts Scenarios 1, 2,
+  3, 4, 5, 6, 9, and 11 in both profiles; Scenarios 7, 8, 10, and 12 through
+  27 remain pending.

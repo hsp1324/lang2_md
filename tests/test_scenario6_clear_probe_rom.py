@@ -34,6 +34,15 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
         )
         return data
 
+    def enemy_annihilation_patched(self) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            enemy_annihilation=True,
+        )
+        return data
+
     def turn_event_patched(self, target_turn: int) -> bytearray:
         data = bytearray(self.built)
         probe_builder.patch_probe(
@@ -379,6 +388,62 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
         )
         self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
 
+    def test_enemy_annihilation_changes_only_start_wrapper_and_checksum(self):
+        data = self.enemy_annihilation_patched()
+        wrapper = probe_builder.enemy_annihilation_wrapper_code()
+        allowed = {0x18E, 0x18F}
+        allowed.update(
+            range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.PARTIAL_LOSS_WRAPPER,
+                probe_builder.PARTIAL_LOSS_WRAPPER + len(wrapper),
+            )
+        )
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.built, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+
+    def test_enemy_annihilation_preserves_all_scenario_fixed_records(self):
+        data = self.enemy_annihilation_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        start = layout.records_offset
+        end = start + layout.record_count * FIXED_RECORD_SIZE
+        self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_enemy_annihilation_wrapper_marks_only_enemy_runtime_groups(self):
+        code = probe_builder.enemy_annihilation_wrapper_code()
+        for group in probe_builder.ENEMY_ANNIHILATION_RUNTIME_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("00 39 00 80")
+                + (
+                    record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                ).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
     def test_turn_event_wrappers_use_the_required_stock_counter_state(self):
         self.assertEqual(
             probe_builder.TURN_EVENT_COUNTER_VALUES,
@@ -551,6 +616,9 @@ class Scenario6ClearProbeRomTests(unittest.TestCase):
     def test_probe_rejects_conflicting_runtime_modes(self):
         for options in (
             {"civilian_loss": True, "protagonist_death": True},
+            {"civilian_loss": True, "enemy_annihilation": True},
+            {"protagonist_death": True, "enemy_annihilation": True},
+            {"enemy_annihilation": True, "turn_event": 7},
             {"civilian_loss": True, "turn_event": 3},
             {"protagonist_death": True, "turn_event": 7},
         ):

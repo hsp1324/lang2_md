@@ -486,3 +486,66 @@ class-change, and diagnostic-builder checks pass 57/57. Full discovery runs
 1,499 tests and retains exactly 44 failures plus 3 errors. The sorted set of
 all 47 failing/error test names is identical to the established baseline; no
 Scenario 11 test is in that set.
+
+## Scenario 6 current-candidate closure
+
+Normal `76D1` and hard-profile `D9B2` were replayed through the complete
+Scenario 6 preparation surface with the screen-detected scenario selector.
+Each profile passes 26/26 exact full-screen before/after pairs in one
+uninterrupted shop round trip. The matrix covers all five allied commander
+status and hiring pages, the allied roster, arrangement/minimap, and every
+preparation-visible fixed record.
+
+This is a complete allied/NPC/enemy enumeration. The allied rows are
+엘윈/파이터/솔저, 헤인/워록/가드맨, 스코트/파이터/솔저,
+리아나/클레릭/가드맨, and 쉐리/파이터/솔저. Fixed records 0 through 11
+cover 아론/파이터/글래디에이터/솔저, three 주민/클레릭/시민 rows,
+모건, every visible 제국지휘관, and all visible 소서러/샤먼/나이트/
+파이터, 바바리안/파이크/다크엘프/호스맨 rows. Every name, class,
+mercenary sprite, commander sprite, minimap cell, border, and numerical field
+is intact before and after shop in both profiles. Fixed record 12 is the only
+exception: the source 호크나이트 is hidden at `(255,255)` and is explicitly
+recorded as not applicable during preparation.
+
+Actual Move Right changes Elwin/Fighter to acted flag 1 at `(5,26)`. Both
+profiles retain the stock Fighter gray-silhouette expansion hash at
+`0x9600..0x967F`, and all four tiles are referenced from Plane A at the
+expected map cells. The action-menu frame is byte-identical between profiles;
+the post-action PNG animation phase differs, while the runtime record and gray
+VRAM are identical.
+
+The civilian-safe stock victory aftermath naturally levels Sherry and exposes
+all three class choices. Both profiles have byte-identical full-screen frames
+for `로드` with `파이크 / 솔저` and `힐 / 프로텍션`, `호크나이트` with
+`그리폰` and `토네이도`, and `세인트` with `가드맨 / 파이크` and
+`썬더 / 일루전`. Every class, mercenary, and magic label, sprite, statistic,
+border, and background map pixel is intact.
+
+The result diagnostic preserves every player deployment, all thirteen fixed
+records, the scheduled-turn table and handlers, and the Korean result header.
+Opening Start marks only runtime enemy groups 9 through 17 defeated; the stock
+turn-end victory checks, complete civilian-safe aftermath, class change, and
+`전과보고` renderer remain in control. Normal continued with Lord and hard
+with Saint, so their final unit grids legitimately differ, but both retain the
+same intact result-header VRAM and Plane A cells.
+
+The legacy `battle-command` preset was discovered to ignore
+`--scenario-number` and enter Scenario 1. The resulting `gray01` and
+normal `result01` files are explicitly rejected and are not used by the
+checked report. A normal selector miss that entered name entry (`result03`),
+an overshot default class selection (`result04`), and later hard quicksave
+reload attempts that reset are also retained as rejected attempts. Accepted
+evidence uses `gray02`, normal `result02` plus `result05`, and hard
+`result02`.
+
+The checked report is
+`localization/preparation_surface_scenario_06.json`. The cumulative gate now
+accepts Scenarios 1, 2, 3, 4, 5, 6, 9, and 11 in both profiles. Scenarios 7,
+8, 10, and 12 through 27 remain pending. No release ROM or version was
+promoted.
+
+Focused Scenario 6 diagnostic-builder and complete-surface checks pass 33/33;
+the cumulative Scenario 6 plus acceptance set passes 39/39. Split full
+discovery runs 1,508 tests and retains exactly the established 44 failures
+plus 3 errors. The nine newly added Scenario 6 tests account for the increase
+from 1,499, and no Scenario 6 test appears in the failure/error set.

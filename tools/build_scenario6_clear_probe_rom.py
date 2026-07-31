@@ -56,6 +56,12 @@ RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
 FIRST_FIXED_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
+ENEMY_ANNIHILATION_RUNTIME_GROUPS = tuple(
+    range(
+        FIRST_FIXED_RUNTIME_GROUP + FIRST_ENEMY_RECORD_INDEX,
+        FIRST_FIXED_RUNTIME_GROUP + LAST_ENEMY_RECORD_INDEX + 1,
+    )
+)
 DEFAULT_LOST_CIVILIAN_RECORDS = (1,)
 VALID_CIVILIAN_RECORDS = (1, 2, 3)
 PARTIAL_LOSS_TARGET_RUNTIME_GROUP = (
@@ -243,6 +249,25 @@ def protagonist_death_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def enemy_annihilation_wrapper_code() -> bytes:
+    code = bytearray()
+    for group in ENEMY_ANNIHILATION_RUNTIME_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def turn_event_wrapper_code(target_turn: int) -> bytes:
     if target_turn not in TURN_EVENT_COUNTER_VALUES:
         raise ValueError(
@@ -347,11 +372,19 @@ def patch_probe(
     civilian_loss: bool = False,
     lost_civilian_records: tuple[int, ...] = DEFAULT_LOST_CIVILIAN_RECORDS,
     protagonist_death: bool = False,
+    enemy_annihilation: bool = False,
     turn_event: int | None = None,
     turn_event_branch: str = "stock",
 ) -> int:
     validate_layout(probe, source)
-    if sum((civilian_loss, protagonist_death, turn_event is not None)) > 1:
+    if sum(
+        (
+            civilian_loss,
+            protagonist_death,
+            enemy_annihilation,
+            turn_event is not None,
+        )
+    ) > 1:
         raise ValueError("Scenario 6 diagnostic modes conflict")
     if turn_event is not None and turn_event not in TURN_EVENT_COUNTER_VALUES:
         raise ValueError(
@@ -370,7 +403,11 @@ def patch_probe(
     if civilian_loss:
         validate_lost_civilian_records(lost_civilian_records)
     layout = scenario_layout(source, SCENARIO_NUMBER)
-    if not protagonist_death and turn_event is None:
+    if (
+        not protagonist_death
+        and not enemy_annihilation
+        and turn_event is None
+    ):
         for index in range(
             FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1
         ):
@@ -407,6 +444,13 @@ def patch_probe(
             source,
             protagonist_death_wrapper_code(),
             label="protagonist-death",
+        )
+    elif enemy_annihilation:
+        install_start_wrapper(
+            probe,
+            source,
+            enemy_annihilation_wrapper_code(),
+            label="enemy-annihilation",
         )
     elif turn_event is not None:
         if turn_event_branch != "stock":
@@ -461,6 +505,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     mode.add_argument(
+        "--enemy-annihilation",
+        action="store_true",
+        help=(
+            "preserve every Scenario 6 fixed record and mark only runtime "
+            "enemy groups 9..17 defeated through Start"
+        ),
+    )
+    mode.add_argument(
         "--turn-event",
         type=int,
         choices=tuple(TURN_EVENT_HANDLERS),
@@ -497,6 +549,7 @@ def main() -> int:
         civilian_loss=args.civilian_loss,
         lost_civilian_records=lost_civilian_records,
         protagonist_death=args.protagonist_death,
+        enemy_annihilation=args.enemy_annihilation,
         turn_event=args.turn_event,
         turn_event_branch=args.turn_event_branch,
     )
@@ -539,6 +592,15 @@ def main() -> int:
         print(
             "Start marks only runtime player group 0 defeated, then returns "
             "to the stock Start handler"
+        )
+    elif args.enemy_annihilation:
+        print(
+            "Scenario 6 enemy-annihilation mode: all deployments and fixed "
+            "records remain source-identical"
+        )
+        print(
+            "Start marks only runtime enemy groups 9..17 defeated, then "
+            "returns to the stock Start handler"
         )
     elif args.turn_event is not None:
         if args.turn_event_branch != "stock":

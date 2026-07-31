@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-07-31",
+  "scope": "Scenario 6 preparation, hiring, arrangement, every visible allied/NPC/enemy fixed record, real shop item-list, gray acted-sprite, natural three-choice Sherry class change, and battle-result surfaces",
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s06/current01",
+      "status": "scenario_6_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s06/gray02",
+        "class_change": "captures/run/preparation_battle_surface/normal/s06/result05",
+        "battle_result": "captures/run/preparation_battle_surface/normal/s06/result02"
+      },
+      "checks": {
+        "all_five_allied_commander_and_class_labels": "pass",
+        "all_five_hiring_pages_and_mercenary_rows": "pass",
+        "all_twelve_visible_npc_and_enemy_records": "pass",
+        "all_visible_fixed_record_mercenary_names": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "same_run_pre_post_identity": "pass",
+        "gray_acted_sprite": "pass",
+        "natural_three_choice_class_change": "pass",
+        "battle_result": "pass"
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s06/current01",
+      "status": "scenario_6_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s06/gray02",
+        "class_change": "captures/run/preparation_battle_surface/hard/s06/result02",
+        "battle_result": "captures/run/preparation_battle_surface/hard/s06/result02"
+      },
+      "checks": {
+        "all_five_allied_commander_and_class_labels": "pass",
+        "all_five_hiring_pages_and_mercenary_rows": "pass",
+        "all_twelve_visible_npc_and_enemy_records": "pass",
+        "all_visible_fixed_record_mercenary_names": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "same_run_pre_post_identity": "pass",
+        "gray_acted_sprite": "pass",
+        "natural_three_choice_class_change": "pass",
+        "battle_result": "pass"
+      }
+    }
+  },
+  "allied_scope": [
+    "엘윈 / 파이터 / 솔저",
+    "헤인 / 워록 / 가드맨",
+    "스코트 / 파이터 / 솔저",
+    "리아나 / 클레릭 / 가드맨",
+    "쉐리 / 파이터 / 솔저"
+  ],
+  "fixed_record_scope": [
+    "아론 / 파이터 / 글래디에이터 / 솔저",
+    "주민 records 1..3 / 클레릭 / 시민",
+    "제국지휘관 / 소서러 / 바바리안 / 파이크",
+    "모건 / 소서러 / 다크엘프 / 호스맨",
+    "제국지휘관 / 샤먼 / 바바리안",
+    "제국지휘관 / 나이트 / 호스맨",
+    "제국지휘관 / 파이터 / 파이크"
+  ],
+  "class_change": {
+    "status": "pass",
+    "trigger": "Sherry naturally levels during the stock Scenario 6 civilian-safe victory aftermath.",
+    "reviewed_choices": [
+      "로드: 파이크, 솔저; 힐, 프로텍션",
+      "호크나이트: 그리폰; 토네이도",
+      "세인트: 가드맨, 파이크; 썬더, 일루전"
+    ],
+    "screen_integrity": "All three full-screen choice frames are byte-identical between normal and hard. Every Korean class, mercenary, and magic label, sprite, statistic, border, and map pixel is intact."
+  },
+  "not_applicable": [
+    {
+      "fixed_record": 12,
+      "reason": "The source 호크나이트 record is hidden during preparation at coordinates (255,255)."
+    }
+  ],
+  "acceptance_effect": "Scenario 6 passes every required visible surface in both profiles. Scenarios 7, 8, 10, and 12 through 27 remain pending, so the overall release gate remains pending."
+}
