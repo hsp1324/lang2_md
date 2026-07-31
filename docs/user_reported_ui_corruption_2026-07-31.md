@@ -172,3 +172,37 @@ The Scenario 5 focused gate passes 37/37. Full discovery runs 1,493 tests with
 the same 44 failures plus 3 errors and the exact same sorted failing/error
 test-name set as the Scenario 4 baseline. No release ROM or version was
 promoted.
+
+## Scenario 11 current-candidate verification result
+
+The Scenario 11 recurrence is closed on the current normal `76D1` and
+hard-profile `D9B2` candidates. Both profiles pass 27/27 exact full-screen
+same-run shop pairs.
+
+Coverage includes all six allied commanders, every hiring page, both roster
+pages, arrangement/minimap, the 제시카 NPC record, all nine
+preparation-visible enemy records, and the one source-hidden reinforcement
+record explicitly accounted for at `(255,255)`. In particular:
+
+- the reported 솔저 and 아머솔저 rows and sprites are intact;
+- both 메이지 records retain 다크엘프 / 파이크 without gray blocks;
+- every repeated 제국지휘관 row, class, mercenary name, and sprite is intact;
+- all allied names/classes/hiring rows remain intact after the same-run shop
+  visit.
+
+The battle-side checks also pass. A real move produces the correct gray
+Elwin/Fighter sprite. An unchanged stock pre-final-battle state was resumed
+under freshly rebuilt current-candidate diagnostics, and a real Sherry attack
+defeated the final reinforcement. Both profiles render the complete victory
+dialogue and the same intact `전과보고 / POINT 3770P`.
+
+The detailed checked report is
+`localization/preparation_surface_scenario_11.json`. The three screenshots
+remain retained as historical failure evidence; they no longer describe the
+current candidates. The overall release gate is still pending because
+Scenarios 6–8, 10, and 12–27 have not yet completed the same full matrix.
+
+Focused Scenario 11 and related preparation regressions pass 57/57. Full
+discovery runs 1,499 tests with the same 44 failures plus 3 errors and the
+exact same sorted failing/error test-name set as the established baseline. No
+release ROM or version was promoted.

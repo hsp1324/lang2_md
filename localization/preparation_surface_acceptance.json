@@ -107,7 +107,7 @@
     }
   ],
   "current_replacement_probe": {
-    "status": "scenarios_1_2_3_4_5_9_complete_pass_remaining_scenarios_pending",
+    "status": "scenarios_1_2_3_4_5_9_11_complete_pass_remaining_scenarios_pending",
     "ownership_report": "localization/preparation_vram_ownership.json",
     "scenario_matrix_report": "localization/preparation_surface_matrix.json",
     "scenario_2_report": "localization/preparation_surface_scenario_02.json",
@@ -115,6 +115,7 @@
     "scenario_4_report": "localization/preparation_surface_scenario_04.json",
     "scenario_5_report": "localization/preparation_surface_scenario_05.json",
     "scenario_9_report": "localization/preparation_surface_scenario_09.json",
+    "scenario_11_report": "localization/preparation_surface_scenario_11.json",
     "item_shop_overflow_report": "localization/item_shop_overflow_regression.json",
     "class_change_mercenary_report": "localization/class_change_mercenary_glyph_regression.json",
     "normal_probe": {
@@ -148,11 +149,15 @@
       "Scenario 5 normal and hard keep all five allied names and classes intact, including 쉐리 after the same-run shop round trip, and keep 웨어울프 / 울프맨 plus every visible enemy commander, class, mercenary, sprite, minimap row, border, and number intact.",
       "Scenario 5 normal and hard actual movement produces an intact gray Elwin/Fighter sprite, then Move Up crosses the stock north-escape threshold after a diagnostic that changes only Elwin's first deployment Y coordinate and checksum while preserving all nine fixed records and every event byte.",
       "Scenario 5 naturally exposes all three Sherry class choices in both profiles; 로드 / 호크나이트 / 세인트 and every visible 파이크 / 솔저 / 그리폰 / 가드맨, magic label, sprite, statistic, and border are intact, and both profiles reach a byte-identical full-screen 전과보고.",
+      "Scenario 11 normal and hard each pass 27/27 exact preparation, hiring, arrangement, ten visible fixed-detail, and real shop item-list before/after pairs; the only preparation-hidden record is explicitly N/A at source coordinates (255,255).",
+      "Scenario 11 enumerates all six allied commanders plus every preparation-visible NPC and enemy record, including 제시카/소서러/솔저, 에그베르트/자베라/아머솔저, both 메이지/다크엘프/파이크 rows, and every repeated imperial sprite/name row. The three user-reported gray-block failures are closed on both current candidates.",
+      "Scenario 11 normal and hard actual movement produces an intact gray Elwin/Fighter sprite whose VRAM payload exactly expands stock silhouette ID 0x001E.",
+      "Scenario 11 result evidence loads an unchanged stock pre-final-battle GST under freshly rebuilt current-candidate safe-clear diagnostics, uses a real Sherry normal attack against the source final reinforcement, renders all victory dialogue intact, and reaches byte-identical 전과보고 / POINT 3770P in both profiles.",
       "A separate current-candidate class-change regression renders all three choices and keeps 팔랑크스 and 발리스타 intact in normal and hard profiles."
     ],
     "not_yet_covered": [
       "additional live class-change choices beyond the Scenario 5 natural Sherry choices and the explicit 팔랑크스 / 발리스타 regression where later scenario seeds expose them",
-      "the complete Scenario 6 through 8 and 10 through 27 normal/hard matrix, including the user-reported Scenario 11 failures"
+      "the complete Scenario 6 through 8, Scenario 10, and Scenario 12 through 27 normal/hard matrix"
     ]
   },
   "scenario_progress": [
@@ -345,14 +350,46 @@
         "complete_screen_integrity": "pass"
       },
       "not_applicable_reason": "The preserved Scenario 9 manual-slot seed exposes status and hiring pages but no live class-change choice."
+    },
+    {
+      "scenario": 11,
+      "profile": "normal_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_11.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_retained_final_battle_state",
+        "complete_screen_integrity": "pass"
+      },
+      "not_applicable_reason": "The retained stock Scenario 11 pre-final-battle state has already progressed all six allied commanders beyond a class-choice boundary; the real final attack exposes no class selection."
+    },
+    {
+      "scenario": 11,
+      "profile": "hard_korean",
+      "status": "pass",
+      "report": "localization/preparation_surface_scenario_11.json",
+      "checks": {
+        "pre_shop_commander_roster": "pass",
+        "pre_shop_hiring": "pass",
+        "shop_round_trip": "pass",
+        "post_shop_commander_roster": "pass",
+        "post_shop_hiring": "pass",
+        "class_change_and_status": "status_pass_class_change_not_applicable_in_retained_final_battle_state",
+        "complete_screen_integrity": "pass"
+      },
+      "not_applicable_reason": "The retained stock Scenario 11 pre-final-battle state has already progressed all six allied commanders beyond a class-choice boundary; the real final attack exposes no class selection."
     }
   ],
   "matrix_summary": {
     "required_profile_scenario_runs": 54,
-    "preparation_surface_runs_reviewed": 12,
-    "battle_surface_runs_reviewed": 12,
-    "fully_accepted_profile_scenario_runs": 12,
-    "fully_accepted_scenarios": 6,
+    "preparation_surface_runs_reviewed": 14,
+    "battle_surface_runs_reviewed": 14,
+    "fully_accepted_profile_scenario_runs": 14,
+    "fully_accepted_scenarios": 7,
     "release_gate_status": "pending"
   }
 }

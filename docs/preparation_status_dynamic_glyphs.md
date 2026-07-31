@@ -433,3 +433,56 @@ Focused Scenario 5, preparation, shop, class-change, and cumulative checks
 pass 37/37. Full discovery runs 1,493 tests and retains exactly 44 failures
 plus 3 errors. The sorted set of all 47 failing/error test names is identical
 to the Scenario 4 baseline; no Scenario 5 test is in that set.
+
+## Scenario 11 current-candidate closure
+
+Normal `76D1` and hard-profile `D9B2` were replayed through the complete
+Scenario 11 preparation surface. Each profile passes 27/27 exact full-screen
+before/after pairs in one uninterrupted shop round trip. The matrix covers all
+six allied commanders and hiring pages, both allied roster pages,
+arrangement/minimap, and all ten preparation-visible fixed records. Fixed
+record 10 is the only preparation-time exception and is source-locked at
+`(255,255)`; it is recorded as not applicable in preparation and later appears
+as the stock final reinforcement.
+
+This is a complete allied/NPC/enemy enumeration, not a sample of the reported
+screens. The visible fixed records are 제시카/소서러/솔저,
+에그베르트/자베라/아머솔저, 호크나이트/그리폰,
+어새신/버서커/파이크, both 메이지/다크엘프/파이크 rows,
+소드맨/버서커, both 매직나이트/호스맨 rows, and
+서펜나이트/리자드맨. Every commander and mercenary sprite, name/class row,
+minimap cell, border, and numerical field remains intact before and after
+shop in both profiles. This closes all three user-reported Scenario 11
+gray-block screenshots on the current candidates.
+
+Actual Move Down changes Elwin/Fighter to acted flag 1 at `(14,11)`. Gray
+VRAM `0x9600..0x967F` exactly expands stock Fighter silhouette `0x001E`, and
+all four gray tiles are referenced from Plane A in both profiles.
+
+For result evidence, freshly rebuilt current-candidate safe-clear derivatives
+retain the source scenario events and fixed side/name identities. The
+unchanged D091 pre-final-battle GST from the previously verified stock
+turn-event route was loaded without mutation under each derivative. A real
+Sherry normal attack defeated source runtime group 16, rendered its
+`제국군지휘관: 어째서…` line, all 18 captured victory transitions/dialogues,
+and `전과보고 / POINT 3770P`. The final report is byte-identical between
+normal and hard. Attempts that directly altered defeated flags, HP, position,
+or GST battle bookkeeping reset and were rejected; no such experimental code
+remains.
+
+No class-choice selection occurs in the retained pre-final-battle state
+because its six allied commanders have already passed the relevant class
+boundary. Status/class rows are covered by the preparation matrix, while live
+class-choice glyphs remain covered by Scenario 5 and the dedicated 팔랑크스 /
+발리스타 regression.
+
+The checked report is
+`localization/preparation_surface_scenario_11.json`. The cumulative gate now
+accepts Scenarios 1, 2, 3, 4, 5, 9, and 11 in both profiles. Scenarios 6–8,
+10, and 12–27 remain pending. No release ROM or version was promoted.
+
+Focused Scenario 11, Scenario 5, cumulative preparation, matrix, shop-overflow,
+class-change, and diagnostic-builder checks pass 57/57. Full discovery runs
+1,499 tests and retains exactly 44 failures plus 3 errors. The sorted set of
+all 47 failing/error test names is identical to the established baseline; no
+Scenario 11 test is in that set.

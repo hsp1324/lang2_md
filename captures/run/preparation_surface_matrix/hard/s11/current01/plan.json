@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "scenario": 11,
+  "rom": {
+    "path": "tmp/Langrisser II (Korean Hard profile class-merc-prep-lookup probe).md",
+    "md_checksum": "D9B2",
+    "sha256": "12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b"
+  },
+  "seed_gst": {
+    "path": "captures/analysis/hard_mode_current_candidate_first_turn_s27_endpoint.gst",
+    "sha256": "7f3e8e181b230497be7d6c30aac4457dbc40370b35f5c48102f179f0417ca649",
+    "policy": "preserve the seed's actual class and offered-hire masks; do not OR diagnostic FFFF masks into acceptance runs"
+  },
+  "allied_commanders": {
+    "count": 6,
+    "roster_page_count": 2,
+    "seed_records": [
+      {
+        "commander_id": 1,
+        "class_id": 1,
+        "class_id_hex": "0x01",
+        "class_korean": "파이터",
+        "level": 1,
+        "hire_mask": "0x0004",
+        "hire_rows": [
+          {
+            "bit": 2,
+            "class_id": 100,
+            "class_id_hex": "0x64",
+            "korean": "솔저"
+          }
+        ],
+        "hire_page_count": 1,
+        "position": 1
+      },
+      {
+        "commander_id": 5,
+        "class_id": 3,
+        "class_id_hex": "0x03",
+        "class_korean": "워록",
+        "level": 1,
+        "hire_mask": "0x0800",
+        "hire_rows": [
+          {
+            "bit": 11,
+            "class_id": 109,
+            "class_id_hex": "0x6D",
+            "korean": "가드맨"
+          }
+        ],
+        "hire_page_count": 1,
+        "position": 2
+      },
+      {
+        "commander_id": 4,
+        "class_id": 1,
+        "class_id_hex": "0x01",
+        "class_korean": "파이터",
+        "level": 9,
+        "hire_mask": "0x0004",
+        "hire_rows": [
+          {
+            "bit": 2,
+            "class_id": 100,
+            "class_id_hex": "0x64",
+            "korean": "솔저"
+          }
+        ],
+        "hire_page_count": 1,
+        "position": 3
+      },
+      {
+        "commander_id": 8,
+        "class_id": 1,
+        "class_id_hex": "0x01",
+        "class_korean": "파이터",
+        "level": 8,
+        "hire_mask": "0x0004",
+        "hire_rows": [
+          {
+            "bit": 2,
+            "class_id": 100,
+            "class_id_hex": "0x64",
+            "korean": "솔저"
+          }
+        ],
+        "hire_page_count": 1,
+        "position": 4
+      },
+      {
+        "commander_id": 7,
+        "class_id": 6,
+        "class_id_hex": "0x06",
+        "class_korean": "호크나이트",
+        "level": 1,
+        "hire_mask": "0x2004",
+        "hire_rows": [
+          {
+            "bit": 2,
+            "class_id": 100,
+            "class_id_hex": "0x64",
+            "korean": "솔저"
+          },
+          {
+            "bit": 13,
+            "class_id": 111,
+            "class_id_hex": "0x6F",
+            "korean": "그리폰"
+          }
+        ],
+        "hire_page_count": 1,
+        "position": 5
+      },
+      {
+        "commander_id": 9,
+        "class_id": 7,
+        "class_id_hex": "0x07",
+        "class_korean": "크로코나이트",
+        "level": 7,
+        "hire_mask": "0x1004",
+        "hire_rows": [
+          {
+            "bit": 2,
+            "class_id": 100,
+            "class_id_hex": "0x64",
+            "korean": "솔저"
+          },
+          {
+            "bit": 12,
+            "class_id": 110,
+            "class_id_hex": "0x6E",
+            "korean": "머맨"
+          }
+        ],
+        "hire_page_count": 1,
+        "position": 6
+      }
+    ]
+  },
+  "fixed_records": {
+    "count": 11,
+    "visible_count": 10,
+    "route": [
+      {
+        "index": 0,
+        "name_korean": "제시카",
+        "class_korean": "소서러",
+        "mercenary_classes_korean": [
+          "솔저"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x03",
+        "x": 18,
+        "y": 6
+      },
+      {
+        "index": 1,
+        "name_korean": "에그베르트",
+        "class_korean": "자베라",
+        "mercenary_classes_korean": [
+          "아머솔저"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 2,
+        "y": 13
+      },
+      {
+        "index": 2,
+        "name_korean": "제국지휘관",
+        "class_korean": "호크나이트",
+        "mercenary_classes_korean": [
+          "그리폰"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 5,
+        "y": 14
+      },
+      {
+        "index": 3,
+        "name_korean": "제국지휘관",
+        "class_korean": "어새신",
+        "mercenary_classes_korean": [
+          "버서커",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 10,
+        "y": 20
+      },
+      {
+        "index": 4,
+        "name_korean": "제국지휘관",
+        "class_korean": "메이지",
+        "mercenary_classes_korean": [
+          "다크엘프",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 13,
+        "y": 22
+      },
+      {
+        "index": 5,
+        "name_korean": "제국지휘관",
+        "class_korean": "소드맨",
+        "mercenary_classes_korean": [
+          "버서커"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 17,
+        "y": 20
+      },
+      {
+        "index": 6,
+        "name_korean": "제국지휘관",
+        "class_korean": "매직나이트",
+        "mercenary_classes_korean": [
+          "호스맨"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 20,
+        "y": 27
+      },
+      {
+        "index": 7,
+        "name_korean": "제국지휘관",
+        "class_korean": "매직나이트",
+        "mercenary_classes_korean": [
+          "호스맨"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 12,
+        "y": 28
+      },
+      {
+        "index": 8,
+        "name_korean": "제국지휘관",
+        "class_korean": "메이지",
+        "mercenary_classes_korean": [
+          "다크엘프",
+          "파이크"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 17,
+        "y": 30
+      },
+      {
+        "index": 9,
+        "name_korean": "제국지휘관",
+        "class_korean": "서펜나이트",
+        "mercenary_classes_korean": [
+          "리자드맨"
+        ],
+        "runtime_checkpoint_chars": [],
+        "side_id": "0x04",
+        "x": 11,
+        "y": 34
+      }
+    ],
+    "not_applicable": [
+      {
+        "index": 10,
+        "name_korean": "제국지휘관",
+        "class_korean": "호크나이트",
+        "reason": "source record is hidden at preparation time; source coordinates are (255,255)"
+      }
+    ],
+    "route_assumption": "The arrangement detail cursor begins on the first visible source record; after explicitly closing its popup, one held Right advances to the next visible source record.",
+    "navigation": "right_cycle_source_record_order"
+  },
+  "required_runtime_checks": [
+    "every allied commander root/status panel before and after shop",
+    "every offered hire row before and after shop",
+    "every arrangement roster page before and after shop",
+    "every preparation-visible fixed commander detail before and after shop",
+    "real shop item-list round trip in the same emulator process",
+    "full-screen byte comparison plus human sprite/minimap/text review"
+  ],
+  "acceptance_policy": "This plan and its runtime captures never change localization/preparation_surface_acceptance.json automatically."
+}

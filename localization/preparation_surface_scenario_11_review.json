@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-07-31",
+  "scope": "Scenario 11 preparation, hiring, arrangement, all six allied commanders, all ten preparation-visible allied/NPC/enemy fixed records, real shop item-list round trip, actual-move gray acted sprite, stock final-reinforcement battle, all victory dialogue, and battle result in normal and hard profiles",
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s11/current01",
+      "status": "scenario_11_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s11/gray01/acted_gray",
+        "stock_final_battle_and_result": "captures/run/preparation_result_surface/normal/s11/result01"
+      },
+      "checks": {
+        "all_six_allied_names_classes_hiring_rows": "pass",
+        "all_ten_visible_fixed_names_classes_mercenary_rows": "pass",
+        "all_allied_npc_enemy_commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "gray_acted_sprite": "pass",
+        "objective_defeat_and_all_victory_dialogue": "pass",
+        "battle_result": "pass"
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s11/current01",
+      "status": "scenario_11_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s11/gray01/acted_gray",
+        "stock_final_battle_and_result": "captures/run/preparation_result_surface/hard/s11/result01"
+      },
+      "checks": {
+        "all_six_allied_names_classes_hiring_rows": "pass",
+        "all_ten_visible_fixed_names_classes_mercenary_rows": "pass",
+        "all_allied_npc_enemy_commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "gray_acted_sprite": "pass",
+        "objective_defeat_and_all_victory_dialogue": "pass",
+        "battle_result": "pass"
+      }
+    }
+  },
+  "reported_failures_closed": [
+    {
+      "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 154702.png",
+      "current_candidate_result": "pass",
+      "coverage": "Every visible fixed detail is enumerated; 솔저 and 아머솔저 rows and sprites are intact."
+    },
+    {
+      "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 154737.png",
+      "current_candidate_result": "pass",
+      "coverage": "Both 메이지 records and every 다크엘프 / 파이크 row and sprite are intact."
+    },
+    {
+      "path": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-07-31 154915.png",
+      "current_candidate_result": "pass",
+      "coverage": "All visible enemy records were checked, including repeated commander and mercenary rows; no gray glyph blocks remain."
+    }
+  ],
+  "class_change": {
+    "status": "not_applicable",
+    "reason": "The retained stock final-reinforcement state has already progressed the six allied commanders beyond a class-choice boundary, and the final normal attack exposes no class-change selection. Class/status rows are fully covered in the preparation matrix; live class-choice glyphs remain covered by Scenario 5 and the dedicated 팔랑크스 / 발리스타 regression."
+  },
+  "result_lineage": {
+    "status": "pass",
+    "description": "The original D091 pre-final-battle GST, obtained through the stock Scenario 11 turn events and final reinforcement, was loaded without modification under newly rebuilt normal and hard safe-clear derivatives of the current candidates. A real Sherry normal attack defeated the source final reinforcement; current ROM code then rendered the source defeat line, all victory dialogue, and 전과보고 3770P.",
+    "state_was_modified": false,
+    "stock_battle_and_victory_events_used": true
+  },
+  "acceptance_effect": "Scenario 11 passes every required visible surface in both profiles. The user-reported deployment corruption is closed on the current candidates for all allies, NPCs, and enemies rather than only the photographed records. Scenarios 6 through 8, 10, and 12 through 27 remain pending, so the overall release gate remains pending."
+}
