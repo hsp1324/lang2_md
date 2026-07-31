@@ -52,5 +52,26 @@
       "sha256": "fe6c710cfc671c0fc08badb7a1a486e5b33a93fe9c55632f3ebda3c2f6912e78"
     }
   },
+  "current_candidate_applicability": {
+    "normal": {
+      "path": "tmp/Langrisser II (Korean class-merc-prep-lookup probe).md",
+      "md_checksum": "76D1",
+      "sha256": "db8f2c12e97896aabadd9e216baf98d755adfba6edb89ebb8a4d163053723a44",
+      "changed_from_runtime_evidence_candidate": [
+        "0x00018F",
+        "0x2B7121"
+      ]
+    },
+    "hard": {
+      "path": "tmp/Langrisser II (Korean Hard profile class-merc-prep-lookup probe).md",
+      "md_checksum": "D9B2",
+      "sha256": "12a39e5c1076e3e1641cbc2d8d7c7bb2037ded4ceb51a1563ab9077dd3fcef2b",
+      "changed_from_runtime_evidence_candidate": [
+        "0x00018F",
+        "0x2B7121"
+      ]
+    },
+    "lineage": "The only differences are one checksum byte and the isolated class-change mercenary renderer dispatch byte. All item-name glyph data, item renderer code, and shop graphics are byte-identical to the two accepted live captures."
+  },
   "release_status": "candidate_only_not_promoted"
 }

@@ -47,6 +47,39 @@ class ItemShopOverflowEvidenceTests(unittest.TestCase):
                 self.assertEqual(sha256(ROOT / row["path"]), row["sha256"])
                 self.assertEqual(row["visible_rows"], ["크로스", "넥클리스"])
 
+        old = self.model["candidate_builds"]
+        current = self.model["current_candidate_applicability"]
+        for profile in ("normal", "hard"):
+            with self.subTest(profile=profile):
+                previous_path = ROOT / old[profile]["path"]
+                current_path = ROOT / current[profile]["path"]
+                previous = previous_path.read_bytes()
+                candidate = current_path.read_bytes()
+                changed = [
+                    f"0x{offset:06X}"
+                    for offset, (before, after) in enumerate(
+                        zip(previous, candidate)
+                    )
+                    if before != after
+                ]
+                self.assertEqual(
+                    changed,
+                    current[profile][
+                        "changed_from_runtime_evidence_candidate"
+                    ],
+                )
+                self.assertEqual(changed, ["0x00018F", "0x2B7121"])
+                self.assertEqual(
+                    sha256(current_path),
+                    current[profile]["sha256"],
+                )
+                self.assertEqual(
+                    f"{builder.be16(candidate, 0x18E):04X}",
+                    current[profile]["md_checksum"],
+                )
+                self.assertEqual(previous[0x2B7121], 0x00)
+                self.assertEqual(candidate[0x2B7121], 0xB0)
+
     def test_release_was_not_promoted(self) -> None:
         self.assertEqual(
             self.model["release_status"], "candidate_only_not_promoted"

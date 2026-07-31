@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-07-31",
+  "scope": "Scenario 4 preparation, hiring, arrangement, fixed-record, real shop item-list, gray acted-sprite, and battle-result surfaces",
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s04/classfix04",
+      "status": "scenario_4_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s04/gray02",
+        "battle_result": "captures/run/preparation_result_surface/normal/s04/result02"
+      },
+      "checks": {
+        "all_korean_commander_class_and_mercenary_labels": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "gray_acted_sprites_and_battle_result": "pass"
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s04/classfix04",
+      "status": "scenario_4_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s04/gray01",
+        "battle_result": "captures/run/preparation_result_surface/hard/s04/result01"
+      },
+      "checks": {
+        "all_korean_commander_class_and_mercenary_labels": "pass",
+        "commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "gray_acted_sprites_and_battle_result": "pass"
+      }
+    }
+  },
+  "class_change": {
+    "status": "not_applicable_in_this_seed",
+    "reason": "The preserved manual-slot seed exposes commander status and hiring pages but no live class-change choice in Scenario 4. The separate current-candidate class-change regression verifies all three candidate rows and intact 팔랑크스 / 발리스타 labels in both profiles."
+  },
+  "acceptance_effect": "Scenario 4 passes every required visible surface in both profiles. Scenarios 5 through 8 and 10 through 27 remain pending, so the overall release gate remains pending."
+}

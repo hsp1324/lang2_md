@@ -333,3 +333,50 @@ The first 16 map cache slots retain their original order, so this preparation
 expansion does not alter the independent map-bottom name/class fields.
 The focused unit test separately locks the `적군` result record to its
 dedicated dynamic result tile, covering the remaining reported `적` glyph.
+
+## Scenario 4 acceptance on the class-change-fixed candidate
+
+The renderer dispatch fix for the class-change mercenary rows changes one
+non-checksum ROM byte at `0x2B7121`. Because that produces new normal and hard
+candidate checksums, Scenario 4 was replayed on normal `76D1` and hard-profile
+`D9B2`.
+
+Both `classfix04` runs completed the real preparation -> shop item list ->
+preparation sequence with 20/20 byte-identical full-screen pairs. They cover
+three allied commander/status pages, three hiring pages, the allied roster,
+arrangement and minimap screens, and all ten visible fixed-record detail
+pages. All accepted preparation/shop frames match the already reviewed
+pre-fix Scenario 4 pixels, and the normal/hard accepted frames match each
+other. The hidden masked-knight record remains explicitly not applicable at
+source coordinates `(255,255)`.
+
+The battle-side gate also passes:
+
+- actual movement sets Elwin/Fighter runtime group 0 to acted flag 1 at
+  `(8,38)`;
+- gray VRAM `0x9600..0x967F` exactly expands the stock Fighter silhouette
+  `0x001E` and is referenced from Plane A;
+- a stock Attack against Morgan reaches the same full-screen `전과보고`
+  pixels in both profiles;
+- result-header VRAM `0xA000..0xA1FF` has the expected hash and all 16 Plane A
+  cells reference tiles `0x0500..0x050F`;
+- the clear diagnostic changes only checksum, Elwin placement, and Morgan
+  AT/DF/mercenaries while preserving the other deployments, all non-Morgan
+  records, Morgan identity/coordinates, every Scenario 4 event byte, and the
+  Korean result header.
+
+The accepted report is
+`localization/preparation_surface_scenario_04.json`. Its rejected-attempt
+section records the missed scenario-selector window, the overshot result
+capture, the resumable 60-second dialogue command limit, the incomplete
+foreground `classfix01` run, and the two background-launch setup failures.
+The cumulative gate now accepts Scenarios 1, 2, 3, 4, and 9 in both profiles;
+Scenarios 5–8 and 10–27 remain pending. This is candidate validation only:
+no release ROM or version was promoted.
+
+Focused Scenario 4, preparation, shop, and class-change checks pass. Full
+discovery runs 1,486 tests and retains exactly the preceding 44 failures plus
+3 errors; the sorted failing/error test names are unchanged. They remain the
+pre-existing experimental-sprite, hard-runtime/plan/generated-document,
+item-inventory-current-ROM, and release-promotion gates rather than new
+Scenario 4 regressions.

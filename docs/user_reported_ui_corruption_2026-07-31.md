@@ -22,9 +22,9 @@ profiles also pass the gray acted-sprite and real stock-victory result checks.
 The `크로스`/`넥클리스` shop page was separately reviewed with each item
 selected and both rows intact.
 
-This is candidate evidence, not a release promotion. Scenarios 4–8 and 10–27
-still require the same complete normal/hard runtime matrix before the overall
-release gate can pass.
+This is candidate evidence, not a release promotion. Scenarios 1–4 and 9 now
+pass the complete normal/hard surface gate. Scenarios 5–8 and 10–27 still
+require the same runtime matrix before the overall release gate can pass.
 
 ## Reported captures
 
@@ -65,6 +65,11 @@ The shop-specific report is:
 
 Its root cause and accepted runtime captures are recorded in
 `localization/item_shop_overflow_regression.json`.
+The later class-change-fixed candidates differ from those two accepted shop
+builds only at one checksum byte and the isolated class-change renderer
+dispatch byte `0x2B7121`; all item glyphs, shop renderer code, and shop
+graphics remain byte-identical. Thus both `크로스` and `넥클리스` evidence
+applies unchanged to current normal `76D1` and hard-profile `D9B2`.
 
 ## Class-change mercenary-row `스`
 
@@ -87,3 +92,40 @@ both `팔랑크스` and `발리스타` intact along with the class sprite, stati
 and magic rows. The failure and six passing frames are hash-locked by
 `localization/class_change_mercenary_glyph_regression.json`. This remains a
 candidate-only fix; no release ROM or version was promoted.
+
+## Scenario 4 current-candidate closure
+
+The class-change renderer change produced normal checksum `76D1` and hard
+profile checksum `D9B2`. Both current candidates were therefore replayed
+through the complete Scenario 4 preparation -> real shop item list ->
+preparation sequence instead of relying only on the earlier candidate:
+
+- normal `classfix04`: 20/20 byte-identical pre/post full-screen pairs;
+- hard `classfix04`: 20/20 byte-identical pre/post full-screen pairs;
+- all 40 accepted surfaces in each profile are also byte-identical to the
+  previously reviewed Scenario 4 frames;
+- the 44 current-candidate preparation/shop frames are byte-identical between
+  normal and hard profiles.
+
+The reviewed matrix includes all three allied commander/status pages, all
+three offered hiring pages, the complete allied roster, the arrangement
+minimap, and all ten preparation-visible fixed records. It keeps `워록`,
+`바바리안`, `샤먼`, `파이크`, `다크엘프`, `호스맨`, every commander name,
+all sprites, and every minimap row intact before and after the same-run shop
+visit. The hidden masked-knight source record is explicitly not applicable
+because its preparation coordinates are `(255,255)`.
+
+Actual movement in both profiles produces the stock gray Elwin/Fighter
+silhouette with runtime acted flag 1. A real stock Attack against Morgan then
+reaches byte-identical `전과보고` frames with intact names, sprites, POINT,
+borders, and numerical fields. The result probe changes only Elwin's
+deployment coordinate and Morgan's AT/DF/mercenary fields; every Scenario 4
+event byte is preserved.
+
+Rejected attempts are retained in the generated Scenario 4 report: the first
+normal gray run missed the scenario-selector timing and entered name entry;
+the first result capture advanced to the save menu without a result GST; one
+dialogue batch hit the 60-second host limit but resumed in the same emulator;
+and the incomplete `classfix01` matrix hit the foreground 120-second host
+limit. The accepted `classfix04` runs use an isolated background session and
+completed normally. No release ROM or version was changed.
