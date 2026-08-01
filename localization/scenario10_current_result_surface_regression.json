@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Current normal/hard Scenario 10 stock reward, class-choice, and battle-result surfaces reached through an input-preserving runtime-only diagnostic",
+  "release_promoted": false,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "header_checksum": "0xCB53"
+        },
+        "probe": {
+          "path": "tmp/rebuilt-current-s10-result-normal.md",
+          "sha256": "12ce073248bf30270bec6e8a958f779bba8a4ca83d46bc220fbff4e24ce86dbc",
+          "header_checksum": "0xECFA",
+          "computed_checksum": "0xECFA"
+        },
+        "same_size": true,
+        "actual_changed_byte_count": 186,
+        "changes_limited_to_checksum_operand_and_wrapper": true,
+        "scenario_fixed_records_identical": true,
+        "start_operand_points_to_wrapper": true,
+        "wrapper_matches_builder": true,
+        "checksum_valid": true
+      },
+      "runtime": {
+        "battle_result": {
+          "path": "captures/run/current_s10_result_retry/normal/battle/battle_result.png",
+          "sha256": "5226af3f225ebbaf767aaabdee45404903539cba30491ad37972d67293b25a19",
+          "dimensions": [
+            320,
+            240
+          ],
+          "result_frame_detected": true
+        },
+        "gst": {
+          "path": "captures/run/current_s10_result_retry/normal/states/battle_result.gst",
+          "sha256": "55895007963467e9fdb73a6da86bd480b02039653b0a0f635389ba0006b09ce3",
+          "bytes": 140408
+        },
+        "header_text": "전과보고",
+        "header_vram_range": "0xA000..0xA1FF",
+        "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+        "header_plane_cells": [
+          {
+            "x": 17,
+            "y": 1,
+            "tile_word": "0x8500",
+            "expected_tile": "0x0500",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 1,
+            "tile_word": "0x8501",
+            "expected_tile": "0x0501",
+            "matches": true
+          },
+          {
+            "x": 17,
+            "y": 2,
+            "tile_word": "0x8502",
+            "expected_tile": "0x0502",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 2,
+            "tile_word": "0x8503",
+            "expected_tile": "0x0503",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 1,
+            "tile_word": "0x8504",
+            "expected_tile": "0x0504",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 1,
+            "tile_word": "0x8505",
+            "expected_tile": "0x0505",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 2,
+            "tile_word": "0x8506",
+            "expected_tile": "0x0506",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 2,
+            "tile_word": "0x8507",
+            "expected_tile": "0x0507",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 1,
+            "tile_word": "0x8508",
+            "expected_tile": "0x0508",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 1,
+            "tile_word": "0x8509",
+            "expected_tile": "0x0509",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 2,
+            "tile_word": "0x850A",
+            "expected_tile": "0x050A",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 2,
+            "tile_word": "0x850B",
+            "expected_tile": "0x050B",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 1,
+            "tile_word": "0x850C",
+            "expected_tile": "0x050C",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 1,
+            "tile_word": "0x850D",
+            "expected_tile": "0x050D",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 2,
+            "tile_word": "0x850E",
+            "expected_tile": "0x050E",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 2,
+            "tile_word": "0x850F",
+            "expected_tile": "0x050F",
+            "matches": true
+          }
+        ],
+        "all_header_plane_cells_match": true
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "header_checksum": "0xE15E"
+        },
+        "probe": {
+          "path": "tmp/rebuilt-current-s10-result-hard.md",
+          "sha256": "465be025743232a807e4b0e7ad8bfe101d71c1b9c6e92db1536b9807d7fc1d95",
+          "header_checksum": "0x0305",
+          "computed_checksum": "0x0305"
+        },
+        "same_size": true,
+        "actual_changed_byte_count": 186,
+        "changes_limited_to_checksum_operand_and_wrapper": true,
+        "scenario_fixed_records_identical": true,
+        "start_operand_points_to_wrapper": true,
+        "wrapper_matches_builder": true,
+        "checksum_valid": true
+      },
+      "runtime": {
+        "battle_result": {
+          "path": "captures/run/current_s10_result_retry/hard/battle/battle_result.png",
+          "sha256": "5226af3f225ebbaf767aaabdee45404903539cba30491ad37972d67293b25a19",
+          "dimensions": [
+            320,
+            240
+          ],
+          "result_frame_detected": true
+        },
+        "gst": {
+          "path": "captures/run/current_s10_result_retry/hard/states/battle_result.gst",
+          "sha256": "302ab6d2c47440dd9ea5fc2704f1913ffd616fe356f5fd87890ea661d0c51b73",
+          "bytes": 140408
+        },
+        "header_text": "전과보고",
+        "header_vram_range": "0xA000..0xA1FF",
+        "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+        "header_plane_cells": [
+          {
+            "x": 17,
+            "y": 1,
+            "tile_word": "0x8500",
+            "expected_tile": "0x0500",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 1,
+            "tile_word": "0x8501",
+            "expected_tile": "0x0501",
+            "matches": true
+          },
+          {
+            "x": 17,
+            "y": 2,
+            "tile_word": "0x8502",
+            "expected_tile": "0x0502",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 2,
+            "tile_word": "0x8503",
+            "expected_tile": "0x0503",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 1,
+            "tile_word": "0x8504",
+            "expected_tile": "0x0504",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 1,
+            "tile_word": "0x8505",
+            "expected_tile": "0x0505",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 2,
+            "tile_word": "0x8506",
+            "expected_tile": "0x0506",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 2,
+            "tile_word": "0x8507",
+            "expected_tile": "0x0507",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 1,
+            "tile_word": "0x8508",
+            "expected_tile": "0x0508",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 1,
+            "tile_word": "0x8509",
+            "expected_tile": "0x0509",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 2,
+            "tile_word": "0x850A",
+            "expected_tile": "0x050A",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 2,
+            "tile_word": "0x850B",
+            "expected_tile": "0x050B",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 1,
+            "tile_word": "0x850C",
+            "expected_tile": "0x050C",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 1,
+            "tile_word": "0x850D",
+            "expected_tile": "0x050D",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 2,
+            "tile_word": "0x850E",
+            "expected_tile": "0x050E",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 2,
+            "tile_word": "0x850F",
+            "expected_tile": "0x050F",
+            "matches": true
+          }
+        ],
+        "all_header_plane_cells_match": true
+      }
+    }
+  },
+  "supporting_surfaces": {
+    "necklace_acquisition": {
+      "path": "captures/run/current_s10_result_retry/hard/battle/clear_path_43.png",
+      "sha256": "5f604816aef0bfba2c2d907fb460262fa2f9d73629c0a7ee8c40d8ac19742d3f",
+      "dimensions": [
+        320,
+        240
+      ],
+      "manual_review": "pass",
+      "observed_text": "넥클리스를 얻었다!"
+    },
+    "class_change_choice": {
+      "path": "captures/run/current_s10_result_retry/hard/battle/clear_path_50.png",
+      "sha256": "2148c850fa504c2075296a157ee51834791337f368fb3dc1f05c17b578e7b304",
+      "dimensions": [
+        320,
+        240
+      ],
+      "manual_review": "pass",
+      "observed_text": [
+        "클래스체인지",
+        "쉐리",
+        "로드",
+        "호크나이트",
+        "세인트",
+        "용병",
+        "파이크",
+        "천사",
+        "마법 힐",
+        "프로텍션"
+      ]
+    }
+  },
+  "cross_profile": {
+    "battle_result_frame_identical": true,
+    "result_header_vram_identical": true
+  },
+  "limitations": [
+    "The probe is diagnostic-only and is never a release candidate.",
+    "Scenario 10 TURN 3 event timing is covered by separate current-candidate event evidence; this probe intentionally isolates only the completion surfaces."
+  ]
+}
