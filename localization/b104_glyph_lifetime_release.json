@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "B1.0.4 production rebase, desktop delivery, and reported Pike/Monk glyph-lifetime sprite regressions",
+  "release": {
+    "source_rom": "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.3).md",
+    "source_rom_sha256": "bc742e5c4c3964af9371feeb1203a9f2417fcea31d58a6dc0df0b1643101cb50",
+    "patch_reference_rom": "tmp/current-glyph-lifetime-fix-hard.md",
+    "patch_reference_sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+    "rom": "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.4).md",
+    "rom_sha256": "a5495934196ea94ac850d88745b7d0a673c8996bfffe7059c815f4c3fb7b26c8",
+    "rebuilt_rom_sha256": "a5495934196ea94ac850d88745b7d0a673c8996bfffe7059c815f4c3fb7b26c8",
+    "desktop_rom": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.4).md",
+    "desktop_rom_sha256": "a5495934196ea94ac850d88745b7d0a673c8996bfffe7059c815f4c3fb7b26c8",
+    "rom_size": 4194304,
+    "md_checksum": "1991",
+    "header_title": "LANGRISSER II KOREAN T1.0.1 B1.0.4 BY HSP1324",
+    "translation_title": "번역:1.0.1",
+    "translation_title_matches": true,
+    "balance_title": "하드:1.0.4",
+    "balance_title_matches": true
+  },
+  "source_delta": {
+    "changed_byte_count": 660,
+    "all_changes_classified": true,
+    "glyph_fix_ranges": [
+      {
+        "start": "0x0112DC",
+        "end_exclusive": "0x0112E2",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x01155C",
+        "end_exclusive": "0x011562",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2B7FCC",
+        "end_exclusive": "0x2B7FCE",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2B8E80",
+        "end_exclusive": "0x2B8EDE",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2BE800",
+        "end_exclusive": "0x2BE880",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2BE880",
+        "end_exclusive": "0x2BE8C0",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2BE9C0",
+        "end_exclusive": "0x2BEAC0",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2BEAC0",
+        "end_exclusive": "0x2BEB40",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2BEB40",
+        "end_exclusive": "0x2BEB80",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2BEBC0",
+        "end_exclusive": "0x2BEC40",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2F1900",
+        "end_exclusive": "0x2F1A00",
+        "matches_proven_reference": true
+      },
+      {
+        "start": "0x2F7200",
+        "end_exclusive": "0x2F7300",
+        "matches_proven_reference": true
+      }
+    ],
+    "preserved_hard_balance_ranges": [
+      {
+        "start": "0x181832",
+        "end_exclusive": "0x181834",
+        "matches_b103_source": true
+      },
+      {
+        "start": "0x1818E6",
+        "end_exclusive": "0x1818E8",
+        "matches_b103_source": true
+      },
+      {
+        "start": "0x181CEA",
+        "end_exclusive": "0x181CEC",
+        "matches_b103_source": true
+      }
+    ],
+    "save_format_header_range": "0x0001B0..0x0001BB",
+    "save_format_header_preserved": true
+  },
+  "desktop_saves": {
+    "sram": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.4).srm",
+    "sram_sha256": "43ccc5d676cfdd0c53c3a9234988b93493e897c0216072f8ff2db3451c077fdf",
+    "sram_size": 65536,
+    "source_sram": "/mnt/c/Users/hsp13/Downloads/Mobile Devices/Langrisser II (Korean Hard T1.0.1 B1.0.2).srm",
+    "source_sram_sha256": "43ccc5d676cfdd0c53c3a9234988b93493e897c0216072f8ff2db3451c077fdf",
+    "sram_byte_identical_to_source": true,
+    "state4": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.4).state4",
+    "state4_sha256": "a80b842718b9d841c3c1bbfc564d86fcd822c1f280adc48125b23e12d34fcd00",
+    "state4_size": 42345,
+    "source_state4": "/mnt/c/Users/hsp13/Downloads/Mobile Devices/Langrisser II (Korean Hard T1.0.1 B1.0.2).state4",
+    "source_state4_sha256": "a80b842718b9d841c3c1bbfc564d86fcd822c1f280adc48125b23e12d34fcd00",
+    "state4_byte_identical_to_source": true,
+    "state4_embeds_legacy_runtime_vram": true,
+    "acceptance_test_method": "cold boot B1.0.4 ROM and load the in-game SRAM save; use state4 only to recover position, then save in-game and reboot"
+  },
+  "pike_runtime": {
+    "evidence": "captures/run/pike_acted_surface_probe/b104-release-pike01/evidence.json",
+    "evidence_sha256": "7c108b677ba8eec980136de58bc0d981ad35baed1a793e868acc308221fef9c4",
+    "status": "pass",
+    "rom_sha256": "a5495934196ea94ac850d88745b7d0a673c8996bfffe7059c815f4c3fb7b26c8",
+    "scenario": 12,
+    "commander_id": 4,
+    "hired_class": "파이크",
+    "hired_class_id": "0x62",
+    "hired_count": 6,
+    "acted_flag_before": 0,
+    "acted_flag_after": 1,
+    "coordinate_changed": true,
+    "active_frame_sha256": [
+      "4791772d88be223e79fea1a603351588c4faba225b428a648b1b27be1ee440a7",
+      "57282c0f388ef82ba2bdadcc642e999204437baab892e6c07cbeb64f80ad1471"
+    ],
+    "both_active_frames_match_rom_source": true,
+    "gray_sha256": "0fe0987d6d93be4842ad899ae0dedbf85f1342b86efc6957e53fde7f76aee0a8",
+    "gray_matches_stock_silhouette_expansion": true,
+    "all_four_gray_tiles_visible": true,
+    "all_ordinary_gray_before_move_match_stock": true,
+    "all_ordinary_gray_after_move_match_stock": true,
+    "active_capture": "captures/run/pike_acted_surface_probe/b104-release-pike01/battle/active_command.png",
+    "active_capture_sha256": "b2da4e7af4549e4563ca39de3fe828af4150f5470db39e8592e792a63c232f78",
+    "acted_capture": "captures/run/pike_acted_surface_probe/b104-release-pike01/battle/mercenary_acted_gray.png",
+    "acted_capture_sha256": "c9b970cdce936ee26dbbb48d3abd3c2a3670f2bbd2c0e566d1d826291bb158da",
+    "visual_review": "pass_no_hangul_fragment_or_sprite_corruption"
+  },
+  "monk_runtime": {
+    "evidence": "captures/run/pike_acted_surface_probe/b104-release-monk01/evidence.json",
+    "evidence_sha256": "ac07b2f39bb5390828322d675d490f3873c8e837abba56b1b71884f0601d3ccc",
+    "status": "pass",
+    "rom_sha256": "0278c066a979f84e42091a495901b5f663e391d6aaff675154c76477d20a45c6",
+    "scenario": 12,
+    "commander_id": 4,
+    "hired_class": "몽크",
+    "hired_class_id": "0x6C",
+    "hired_count": 1,
+    "acted_flag_before": 0,
+    "acted_flag_after": 1,
+    "coordinate_changed": true,
+    "active_frame_sha256": [
+      "c73bc44f8eaccb97d9ac9a52ac4de704ab3dd19ce2658415ec6a67cd902311be",
+      "fd335ef32b49328d74c7086dfec918ab7500fbb19e89592fff04285974b42f64"
+    ],
+    "both_active_frames_match_rom_source": true,
+    "gray_sha256": "b27c631ffbe055f066317d4975bf97c3012a7e59c461e98a91b9d60cd194fdd4",
+    "gray_matches_stock_silhouette_expansion": true,
+    "all_four_gray_tiles_visible": true,
+    "all_ordinary_gray_before_move_match_stock": true,
+    "all_ordinary_gray_after_move_match_stock": true,
+    "active_capture": "captures/run/pike_acted_surface_probe/b104-release-monk01/battle/active_command.png",
+    "active_capture_sha256": "b2da4e7af4549e4563ca39de3fe828af4150f5470db39e8592e792a63c232f78",
+    "acted_capture": "captures/run/pike_acted_surface_probe/b104-release-monk01/battle/mercenary_acted_gray.png",
+    "acted_capture_sha256": "10176ba7b14aa85a79e97e468162c4f1f2f840df6c0ca4347fdf142f1ad9c4ef",
+    "visual_review": "pass_no_hangul_fragment_or_sprite_corruption",
+    "diagnostic_rom": "tmp/diagnostic/b104-release-monk-probe.md",
+    "diagnostic_rom_sha256": "0278c066a979f84e42091a495901b5f663e391d6aaff675154c76477d20a45c6",
+    "diagnostic_md_checksum": "2191",
+    "non_checksum_changed_offsets": [
+      "0x05EE12"
+    ],
+    "hire_unlock_before": 2,
+    "hire_unlock_after": 10,
+    "release_rom_modified_by_probe": false
+  },
+  "limitations": [
+    "This report closes the reported Pike/Monk sprite/glyph family on B1.0.4; it does not claim the still-pending full battle-result gate for Scenarios 12 through 27.",
+    "The renamed state4 contains B1.0.2 emulator runtime state and must not be used as proof that B1.0.4 initialized VRAM."
+  ]
+}
