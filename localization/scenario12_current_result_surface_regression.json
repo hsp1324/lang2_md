@@ -1,0 +1,1157 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Current normal/hard Scenario 12 final Living Armor battle, stock aftermath, dynamic dialogue names, result roster, Scenario 13 save, route, and title",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "source_state": {
+    "path": "captures/runtime/s12-load-old-40bc/.local/share/blastem/Langrisser II (Scenario 12 Compact Clear Probe)/quicksave.gst",
+    "sha256": "ac2958e056561b4c8345805b351f5b45ac55453c8e89db94ba787317d7588878",
+    "bytes": 140408,
+    "identity_matches": true,
+    "method": "historical Scenario 12 battle continuation loaded without file or RAM edits; only post-final-attack current-renderer surfaces are accepted"
+  },
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact Scenario 12 compact clear-probe builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "bytes": 4194304,
+          "header_checksum": "CB53",
+          "computed_checksum": "CB53",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s12.md",
+          "sha256": "f8748183072e750d3827e7531477cc2fd1eca55e8a7cc2fb1847d5e6e25ba239",
+          "bytes": 4194304,
+          "header_checksum": "15CA",
+          "computed_checksum": "15CA",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 108,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_builder_rebuild": true,
+        "complete_event_block_preserved": true,
+        "event_block": [
+          "0x198DE0",
+          "0x19A964"
+        ]
+      },
+      "runtime": {
+        "sequence": {
+          "frame_count": 27,
+          "all_dimensions_320x240": true,
+          "captures": [
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_01.png",
+              "sha256": "469f3edf3da750f4f8ea0e9272020a8b0037dedec1ea05858bc53d233692274e",
+              "bytes": 16977,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_02.png",
+              "sha256": "5d96f3a143d2cd50cc6b03a335c6153f093bd5179f3a5e13c284dd7770b70f5f",
+              "bytes": 14335,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_03.png",
+              "sha256": "41fadcb3be6121081e607ddc23a950063da7cc1c8640ca82dd17cd960f0edd41",
+              "bytes": 12542,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_04.png",
+              "sha256": "654a4595f400e0579641ac2d4284686142591044b284f06ca6ddde9b26d7701e",
+              "bytes": 12676,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_05.png",
+              "sha256": "b46f093392cc1dd6636b539da4834d83524db1051fbf6e9fc473f86618d5e610",
+              "bytes": 12458,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_06.png",
+              "sha256": "f7bc0b1a0b98e7187ee177432e2c6324523296f172defd45f6b8cc33af8b0911",
+              "bytes": 17201,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_07.png",
+              "sha256": "0d954d7e9b9bebfeed2b0ad7dd24d527c5a9ef54f6402e2a78ad0d591c725630",
+              "bytes": 15532,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_08.png",
+              "sha256": "84f1568057a4b4486f99fd6d519a11a2f0b130bb4f0ead33bb5268f3c197381a",
+              "bytes": 12803,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_09.png",
+              "sha256": "c28c9ae16e01268e27fd910b04f0360675fadca2280f48c76ca17bc0ac8005b0",
+              "bytes": 12747,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_10.png",
+              "sha256": "3be9dfc469e4af68a5c175fb0e53a38f949b37e369aba136580ef8a8a13c9167",
+              "bytes": 13003,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_11.png",
+              "sha256": "4a917cf5b9866219b801586144b6b39cbbab915899e1277cc7ddffc989f1e3a0",
+              "bytes": 13055,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_12.png",
+              "sha256": "1657ca0e57f746599a9c437b90974b084c9b1f27b7dc89aa6515a23a464e53cd",
+              "bytes": 13102,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_13.png",
+              "sha256": "8e226728df841310c03fc162f1e307a20ddc6b0a6b0d9e5ce4bd429c36bbdbc6",
+              "bytes": 12863,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_14.png",
+              "sha256": "67ceb292eae5f57a9f712649d23c4c7c95d4764e3928c5fe3a3684bd3b67f462",
+              "bytes": 12753,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_15.png",
+              "sha256": "ab2bb755529399e04eac0dfdbc7a083303ebc5c5fb38d391c392a7ec713c849c",
+              "bytes": 12354,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_16.png",
+              "sha256": "f99791e8f93cfc0cf5eb95638fe26b4fb5469d2469670862377ace3b68a3fcf2",
+              "bytes": 12357,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_17.png",
+              "sha256": "c2324d0e1c0fe6bf92f0305f1cded61c9dafa50faea231dcfa5c168660e72bd9",
+              "bytes": 12444,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_18.png",
+              "sha256": "6901cc3ed8029ae48012a9da790e4b4fd90164eecf7c669e9ad01d32f9102bb1",
+              "bytes": 12820,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_19.png",
+              "sha256": "e88519d0fe6065d1a30601638a66a10286f3f8ee66a34f5c6700c19acf29c151",
+              "bytes": 12483,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_20.png",
+              "sha256": "a56e6da234db90ea7f6c78a9e07d78c0c01dae2437ff3b41f3f9e54b0df2c7da",
+              "bytes": 12731,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_21.png",
+              "sha256": "9a3abca26fdce3b6340b783e33f7d214eadef9e99d91fddab08169d1460e5640",
+              "bytes": 12776,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_22.png",
+              "sha256": "5554ef78b54d9aac9911c0c1634e1831a7dd445489e79de9e55a8708f8e9f512",
+              "bytes": 12883,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_23.png",
+              "sha256": "4641b23fc9042c34628298d45c0bdad28f47e8bdd6f0b609e039435a13db67b5",
+              "bytes": 19011,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_24.png",
+              "sha256": "695307c69102865a47182b7f3f094ad6a5769b979eca5f0a0f63c519813f29ab",
+              "bytes": 13067,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_25.png",
+              "sha256": "eded70d219e56990d17e91673d3d8c4b97f398e1c7c211c8a651b6a4090396a3",
+              "bytes": 8357,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_26.png",
+              "sha256": "da64f42f01cf3360813a24e7ed55dff6c166d7f8fdf6af44843921127972cb1b",
+              "bytes": 8356,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            {
+              "path": "captures/run/current_s12_result/normal/s12_current_27.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu"
+            }
+          ]
+        },
+        "last_living_armor": {
+          "hp10_target": {
+            "path": "captures/run/current_s12_result/normal/target_hp10.png",
+            "sha256": "d36b4da487239fc19ce10864f5b518be6ec291eb28bd424f5ab292211d9e6aba",
+            "bytes": 20528,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "d36b4da487239fc19ce10864f5b518be6ec291eb28bd424f5ab292211d9e6aba",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "리빙아머",
+              "HP10"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "ordinary_attack_hp9": {
+            "path": "captures/run/current_s12_result/normal/target_hp9.png",
+            "sha256": "53101d527a8a457c3b743d4efef5265b30126755cf20bda3a19f7c7ae6dc886b",
+            "bytes": 19663,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "53101d527a8a457c3b743d4efef5265b30126755cf20bda3a19f7c7ae6dc886b",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "쉐리",
+              "리빙아머",
+              "HP9"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "defeat_dialogue_hp0": {
+            "path": "captures/run/current_s12_result/normal/target_hp0_dialogue.png",
+            "sha256": "dd9214f470106ab3f90614982fb088563c5fb51d50751b504e15b94f59944405",
+            "bytes": 16704,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "dd9214f470106ab3f90614982fb088563c5fb51d50751b504e15b94f59944405",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "리빙아머",
+              "HP0",
+              "……"
+            ],
+            "observed_sprite_state": "clean"
+          }
+        },
+        "critical_surfaces": {
+          "elwin_clear": {
+            "path": "captures/run/current_s12_result/normal/s12_current_02.png",
+            "sha256": "5d96f3a143d2cd50cc6b03a335c6153f093bd5179f3a5e13c284dd7770b70f5f",
+            "bytes": 14335,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "5d96f3a143d2cd50cc6b03a335c6153f093bd5179f3a5e13c284dd7770b70f5f",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "엘윈",
+              "모두 쓰러뜨린 것 같군…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_apology": {
+            "path": "captures/run/current_s12_result/normal/s12_current_08.png",
+            "sha256": "84f1568057a4b4486f99fd6d519a11a2f0b130bb4f0ead33bb5268f3c197381a",
+            "bytes": 12803,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "84f1568057a4b4486f99fd6d519a11a2f0b130bb4f0ead33bb5268f3c197381a",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카",
+              "미안해…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "aaron_reply": {
+            "path": "captures/run/current_s12_result/normal/s12_current_10.png",
+            "sha256": "3be9dfc469e4af68a5c175fb0e53a38f949b37e369aba136580ef8a8a13c9167",
+            "bytes": 13003,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "3be9dfc469e4af68a5c175fb0e53a38f949b37e369aba136580ef8a8a13c9167",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "아론",
+              "그도 자기 생각으로 행동한 한 사람입니다."
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_to_hein": {
+            "path": "captures/run/current_s12_result/normal/s12_current_16.png",
+            "sha256": "f99791e8f93cfc0cf5eb95638fe26b4fb5469d2469670862377ace3b68a3fcf2",
+            "bytes": 12357,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "f99791e8f93cfc0cf5eb95638fe26b4fb5469d2469670862377ace3b68a3fcf2",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카",
+              "헤인… 내 제자가 되고 싶다고 했지?"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "hein_liana": {
+            "path": "captures/run/current_s12_result/normal/s12_current_20.png",
+            "sha256": "a56e6da234db90ea7f6c78a9e07d78c0c01dae2437ff3b41f3f9e54b0df2c7da",
+            "bytes": 12731,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "a56e6da234db90ea7f6c78a9e07d78c0c01dae2437ff3b41f3f9e54b0df2c7da",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "헤인",
+              "리아나가 납치됐다면"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "hein_level": {
+            "path": "captures/run/current_s12_result/normal/s12_current_22.png",
+            "sha256": "5554ef78b54d9aac9911c0c1634e1831a7dd445489e79de9e55a8708f8e9f512",
+            "bytes": 12883,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "5554ef78b54d9aac9911c0c1634e1831a7dd445489e79de9e55a8708f8e9f512",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "헤인의",
+              "레벨이 올랐다!",
+              "MP가 1 상승"
+            ],
+            "observed_sprite_state": "clean"
+          }
+        },
+        "battle_result": {
+          "path": "captures/run/current_s12_result/normal/s12_current_26.png",
+          "sha256": "da64f42f01cf3360813a24e7ed55dff6c166d7f8fdf6af44843921127972cb1b",
+          "bytes": 8356,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "battle_result",
+          "expected_reviewed_sha256": "da64f42f01cf3360813a24e7ed55dff6c166d7f8fdf6af44843921127972cb1b",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "전과보고",
+            "아론",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "키스",
+            "레스터",
+            "제시카",
+            "POINT 4920P"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "save_menu": {
+          "path": "captures/run/current_s12_result/normal/s12_current_27.png",
+          "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+          "bytes": 5961,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu",
+          "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "저장",
+            "데이터 없음",
+            "다음 시나리오"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "next_scenario_selected": {
+          "path": "captures/run/current_s12_result/normal/next_selected.png",
+          "sha256": "342ced51ec1d1d8b915cc5a55b5235173303dc4fa48b23280c86918e42aa3742",
+          "bytes": 6058,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu",
+          "expected_reviewed_sha256": "342ced51ec1d1d8b915cc5a55b5235173303dc4fa48b23280c86918e42aa3742",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "시나리오 13",
+            "다음 시나리오"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "scenario13_route": {
+          "path": "captures/run/current_s12_result/normal/route.png",
+          "sha256": "ee4e666dc175da14d6eb9f0a6eb3bfdd042af3372a42f8377c237935f3be7287",
+          "bytes": 20292,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "expected_reviewed_sha256": "ee4e666dc175da14d6eb9f0a6eb3bfdd042af3372a42f8377c237935f3be7287",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "진군루트"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "scenario13_title": {
+          "path": "captures/run/current_s12_result/normal/scenario13_title.png",
+          "sha256": "66c740defa9e7235c00ba75ac982bd180b77b26c74be7356a2c60c395f16d9de",
+          "bytes": 10000,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "expected_reviewed_sha256": "66c740defa9e7235c00ba75ac982bd180b77b26c74be7356a2c60c395f16d9de",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "시나리오 13",
+            "염룡병단과의 결전"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "scope_limit": "the untouched historical work RAM is used only to continue the final ordinary battle into the current ROM's aftermath, result, save, route, and next-title renderers; it is not a fresh current deployment-to-clear replay and is not hard-mode balance evidence"
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "apply the exact normal compact diagnostic delta to the hard candidate, then recalculate only the Mega Drive checksum",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "bytes": 4194304,
+          "header_checksum": "E15E",
+          "computed_checksum": "E15E",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s12.md",
+          "sha256": "7d51d06a78f438531db880c7f0e8b3a13b48dbe0a632e01250cd447c46bd571d",
+          "bytes": 4194304,
+          "header_checksum": "02C2",
+          "computed_checksum": "02C2",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 108,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 30,
+        "exact_three_way_overlay": true,
+        "complete_event_block_preserved": true,
+        "event_block": [
+          "0x198DE0",
+          "0x19A964"
+        ]
+      },
+      "runtime": {
+        "sequence": {
+          "frame_count": 27,
+          "all_dimensions_320x240": true,
+          "captures": [
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_01.png",
+              "sha256": "0fda1360f56d6dce36d757db5ffc74ab5d74af07502fa3f9aed0d5304063d139",
+              "bytes": 16825,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_02.png",
+              "sha256": "5d96f3a143d2cd50cc6b03a335c6153f093bd5179f3a5e13c284dd7770b70f5f",
+              "bytes": 14335,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_03.png",
+              "sha256": "41fadcb3be6121081e607ddc23a950063da7cc1c8640ca82dd17cd960f0edd41",
+              "bytes": 12542,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_04.png",
+              "sha256": "654a4595f400e0579641ac2d4284686142591044b284f06ca6ddde9b26d7701e",
+              "bytes": 12676,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_05.png",
+              "sha256": "b46f093392cc1dd6636b539da4834d83524db1051fbf6e9fc473f86618d5e610",
+              "bytes": 12458,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_06.png",
+              "sha256": "f7bc0b1a0b98e7187ee177432e2c6324523296f172defd45f6b8cc33af8b0911",
+              "bytes": 17201,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_07.png",
+              "sha256": "0d954d7e9b9bebfeed2b0ad7dd24d527c5a9ef54f6402e2a78ad0d591c725630",
+              "bytes": 15532,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_08.png",
+              "sha256": "84f1568057a4b4486f99fd6d519a11a2f0b130bb4f0ead33bb5268f3c197381a",
+              "bytes": 12803,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_09.png",
+              "sha256": "c28c9ae16e01268e27fd910b04f0360675fadca2280f48c76ca17bc0ac8005b0",
+              "bytes": 12747,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_10.png",
+              "sha256": "3be9dfc469e4af68a5c175fb0e53a38f949b37e369aba136580ef8a8a13c9167",
+              "bytes": 13003,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_11.png",
+              "sha256": "4a917cf5b9866219b801586144b6b39cbbab915899e1277cc7ddffc989f1e3a0",
+              "bytes": 13055,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_12.png",
+              "sha256": "1657ca0e57f746599a9c437b90974b084c9b1f27b7dc89aa6515a23a464e53cd",
+              "bytes": 13102,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_13.png",
+              "sha256": "8e226728df841310c03fc162f1e307a20ddc6b0a6b0d9e5ce4bd429c36bbdbc6",
+              "bytes": 12863,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_14.png",
+              "sha256": "67ceb292eae5f57a9f712649d23c4c7c95d4764e3928c5fe3a3684bd3b67f462",
+              "bytes": 12753,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_15.png",
+              "sha256": "ab2bb755529399e04eac0dfdbc7a083303ebc5c5fb38d391c392a7ec713c849c",
+              "bytes": 12354,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_16.png",
+              "sha256": "f99791e8f93cfc0cf5eb95638fe26b4fb5469d2469670862377ace3b68a3fcf2",
+              "bytes": 12357,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_17.png",
+              "sha256": "c2324d0e1c0fe6bf92f0305f1cded61c9dafa50faea231dcfa5c168660e72bd9",
+              "bytes": 12444,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_18.png",
+              "sha256": "6901cc3ed8029ae48012a9da790e4b4fd90164eecf7c669e9ad01d32f9102bb1",
+              "bytes": 12820,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_19.png",
+              "sha256": "e88519d0fe6065d1a30601638a66a10286f3f8ee66a34f5c6700c19acf29c151",
+              "bytes": 12483,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_20.png",
+              "sha256": "a56e6da234db90ea7f6c78a9e07d78c0c01dae2437ff3b41f3f9e54b0df2c7da",
+              "bytes": 12731,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_21.png",
+              "sha256": "9a3abca26fdce3b6340b783e33f7d214eadef9e99d91fddab08169d1460e5640",
+              "bytes": 12776,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_22.png",
+              "sha256": "5554ef78b54d9aac9911c0c1634e1831a7dd445489e79de9e55a8708f8e9f512",
+              "bytes": 12883,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_23.png",
+              "sha256": "92fcd20c4dc56b86c89ca26acab01b48118627c36cd534c6bca2824e6df0d18b",
+              "bytes": 16932,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_24.png",
+              "sha256": "695307c69102865a47182b7f3f094ad6a5769b979eca5f0a0f63c519813f29ab",
+              "bytes": 13067,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_25.png",
+              "sha256": "3ea704f14cab99c38c57ab613e2fc26efdea2b84198c35a8051cb12a76a4421d",
+              "bytes": 8397,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_26.png",
+              "sha256": "da64f42f01cf3360813a24e7ed55dff6c166d7f8fdf6af44843921127972cb1b",
+              "bytes": 8356,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            {
+              "path": "captures/run/current_s12_result/hard/s12_after_second_27.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu"
+            }
+          ]
+        },
+        "last_living_armor": {
+          "first_attack_hp1": {
+            "path": "captures/run/current_s12_result/hard/first_attack_hp1_dialogue.png",
+            "sha256": "2a6643947fbc72ef998454e97c4e609697b7cc1dd353f0ad03ce59f492a23cad",
+            "bytes": 16674,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "2a6643947fbc72ef998454e97c4e609697b7cc1dd353f0ad03ce59f492a23cad",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "리빙아머",
+              "HP1",
+              "first ordinary attack"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "second_attack_hp0": {
+            "path": "captures/run/current_s12_result/hard/second_attack_hp0_dialogue.png",
+            "sha256": "c3059f51680a1869ae60c4138c8b4418906bd121ab8f45926b519e692f81a341",
+            "bytes": 16745,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "c3059f51680a1869ae60c4138c8b4418906bd121ab8f45926b519e692f81a341",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "리빙아머",
+              "HP0",
+              "second ordinary attack"
+            ],
+            "observed_sprite_state": "clean"
+          }
+        },
+        "critical_surfaces": {
+          "elwin_clear": {
+            "path": "captures/run/current_s12_result/hard/s12_after_second_02.png",
+            "sha256": "5d96f3a143d2cd50cc6b03a335c6153f093bd5179f3a5e13c284dd7770b70f5f",
+            "bytes": 14335,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "5d96f3a143d2cd50cc6b03a335c6153f093bd5179f3a5e13c284dd7770b70f5f",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "엘윈",
+              "모두 쓰러뜨린 것 같군…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_apology": {
+            "path": "captures/run/current_s12_result/hard/s12_after_second_08.png",
+            "sha256": "84f1568057a4b4486f99fd6d519a11a2f0b130bb4f0ead33bb5268f3c197381a",
+            "bytes": 12803,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "84f1568057a4b4486f99fd6d519a11a2f0b130bb4f0ead33bb5268f3c197381a",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카",
+              "미안해…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "aaron_reply": {
+            "path": "captures/run/current_s12_result/hard/s12_after_second_10.png",
+            "sha256": "3be9dfc469e4af68a5c175fb0e53a38f949b37e369aba136580ef8a8a13c9167",
+            "bytes": 13003,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "3be9dfc469e4af68a5c175fb0e53a38f949b37e369aba136580ef8a8a13c9167",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "아론",
+              "그도 자기 생각으로 행동한 한 사람입니다."
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_to_hein": {
+            "path": "captures/run/current_s12_result/hard/s12_after_second_16.png",
+            "sha256": "f99791e8f93cfc0cf5eb95638fe26b4fb5469d2469670862377ace3b68a3fcf2",
+            "bytes": 12357,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "f99791e8f93cfc0cf5eb95638fe26b4fb5469d2469670862377ace3b68a3fcf2",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카",
+              "헤인… 내 제자가 되고 싶다고 했지?"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "hein_liana": {
+            "path": "captures/run/current_s12_result/hard/s12_after_second_20.png",
+            "sha256": "a56e6da234db90ea7f6c78a9e07d78c0c01dae2437ff3b41f3f9e54b0df2c7da",
+            "bytes": 12731,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "a56e6da234db90ea7f6c78a9e07d78c0c01dae2437ff3b41f3f9e54b0df2c7da",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "헤인",
+              "리아나가 납치됐다면"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "hein_level": {
+            "path": "captures/run/current_s12_result/hard/s12_after_second_22.png",
+            "sha256": "5554ef78b54d9aac9911c0c1634e1831a7dd445489e79de9e55a8708f8e9f512",
+            "bytes": 12883,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "5554ef78b54d9aac9911c0c1634e1831a7dd445489e79de9e55a8708f8e9f512",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "헤인의",
+              "레벨이 올랐다!",
+              "MP가 1 상승"
+            ],
+            "observed_sprite_state": "clean"
+          }
+        },
+        "battle_result": {
+          "path": "captures/run/current_s12_result/hard/s12_after_second_26.png",
+          "sha256": "da64f42f01cf3360813a24e7ed55dff6c166d7f8fdf6af44843921127972cb1b",
+          "bytes": 8356,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "battle_result",
+          "expected_reviewed_sha256": "da64f42f01cf3360813a24e7ed55dff6c166d7f8fdf6af44843921127972cb1b",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "전과보고",
+            "아론",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "키스",
+            "레스터",
+            "제시카",
+            "POINT 4920P"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "save_menu": {
+          "path": "captures/run/current_s12_result/hard/s12_after_second_27.png",
+          "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+          "bytes": 5961,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu",
+          "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "저장",
+            "데이터 없음",
+            "다음 시나리오"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "next_scenario_selected": {
+          "path": "captures/run/current_s12_result/hard/next_selected.png",
+          "sha256": "342ced51ec1d1d8b915cc5a55b5235173303dc4fa48b23280c86918e42aa3742",
+          "bytes": 6058,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu",
+          "expected_reviewed_sha256": "342ced51ec1d1d8b915cc5a55b5235173303dc4fa48b23280c86918e42aa3742",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "시나리오 13",
+            "다음 시나리오"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "scenario13_route": {
+          "path": "captures/run/current_s12_result/hard/route.png",
+          "sha256": "ee4e666dc175da14d6eb9f0a6eb3bfdd042af3372a42f8377c237935f3be7287",
+          "bytes": 20292,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "expected_reviewed_sha256": "ee4e666dc175da14d6eb9f0a6eb3bfdd042af3372a42f8377c237935f3be7287",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "진군루트"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "scenario13_title": {
+          "path": "captures/run/current_s12_result/hard/scenario13_title.png",
+          "sha256": "08f9b05ee774f858eaeeee7ed0704eb9d27759986cf199128b4e2ca7ef822f69",
+          "bytes": 10046,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "expected_reviewed_sha256": "08f9b05ee774f858eaeeee7ed0704eb9d27759986cf199128b4e2ca7ef822f69",
+          "reviewed_hash_matches": true,
+          "manual_review": "pass",
+          "observed_text": [
+            "시나리오 13",
+            "염룡병단과의 결전"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "scope_limit": "the untouched historical work RAM is used only to continue the final ordinary battle into the current ROM's aftermath, result, save, route, and next-title renderers; it is not a fresh current deployment-to-clear replay and is not hard-mode balance evidence"
+      }
+    }
+  },
+  "cross_profile": {
+    "battle_result_frame_identical": true,
+    "result_header_roster_and_points_identical": true,
+    "manual_difference_review": "pass"
+  }
+}
