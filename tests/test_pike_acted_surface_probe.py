@@ -39,6 +39,32 @@ class PikeActedSurfaceProbeTests(unittest.TestCase):
             pike_tiles.isdisjoint(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
         )
 
+    def test_reported_monk_uses_its_exact_ordinary_cache_cells(self) -> None:
+        self.assertEqual(probe.MONK_CLASS_ID, 0x6C)
+        self.assertEqual(builder.KOREAN_CLASS_LABELS[probe.MONK_CLASS_ID], "몽크")
+        self.assertEqual(
+            probe.ordinary_gray_tile_start(probe.MONK_CLASS_ID),
+            0x03D8,
+        )
+        monk_gray = set(range(0x03D8, 0x03DC))
+        self.assertTrue(
+            monk_gray.isdisjoint(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
+        )
+        monk_active = set(range(0x0370, 0x0374))
+        monk_active_second = set(range(0x0470, 0x0474))
+        self.assertEqual(
+            probe.ORDINARY_ACTIVE_TILE_START
+            + (probe.MONK_CLASS_ID - 0x62)
+            * probe.ORDINARY_ACTIVE_TILES_PER_CLASS,
+            0x0370,
+        )
+        self.assertTrue(
+            monk_active.isdisjoint(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
+        )
+        self.assertTrue(
+            monk_active_second.isdisjoint(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
+        )
+
     def test_coordinate_navigation_is_deterministic(self) -> None:
         self.assertEqual(
             probe.move_keys((10, 12), (8, 15)),

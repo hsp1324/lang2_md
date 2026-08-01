@@ -137,6 +137,10 @@ debugger saved native `quicksave.state` rather than GST. Do not treat it as
 acceptance evidence; an exact first-draw before/after GST pair remains pending.
 No release ROM was replaced and no version was changed.
 
+This paragraph is historical and is superseded by the 2026-08-01 continuation
+below. The current preparation-specific renderer is `0x2BEBC0`, not the old
+map renderer at `0x2B7300`.
+
 Validation after the replacement:
 
 - focused preparation/ownership/inventory checks: 46/46 pass;
@@ -228,3 +232,42 @@ was split into four groups to stay within the command runtime limit: 277,
 failures plus 3 errors. All 44/3 are the pre-existing experimental-sprite,
 hard-runtime/plan/generated-document, release-promotion, and inventory gates;
 the two new battle-evidence tests pass.
+
+## 2026-08-01 continuation: current first-draw and full H-scroll matrix
+
+The old `0x2B7300` native-state attempt is superseded. Current preparation
+dynamic rendering uses `0x2BEBC0..0x2BEC31`. Entry/final-RTS debugger stops
+produced normal and hard GST pairs under
+`captures/analysis/preparation_first_draw_current`. BlastEm services a queued
+save at its next 68K synchronization boundary, so the before GST PC is
+`0x2BEBF4`, but its complete VRAM still contains the full pre-draw tile.
+
+Across each before/after pair, exactly one aligned 32-byte tile changes in all
+64KiB VRAM: normal writes `쉐` only to tile `0x03C9`; hard writes `록` only to
+tile `0x07D1`. All other VRAM, all VDP registers, H-scroll
+`0xF400..0xF7FF`, and mercenary icon cache `0x6900..0x70FF` are unchanged.
+`localization/preparation_first_draw_current_candidate.json` records the exact
+GST hashes and is reproduced by `tools/verify_preparation_first_draw.py`.
+
+The all-scenario gate is now direct rather than inferred from the sampled
+Scenario 1/9 states. `tools/verify_preparation_hscroll_matrix.py` checks the
+hash-bound pre-shop, real shop item-list, and post-shop GST for all Scenario 1
+through 27 normal/hard runs: 54 runs and 162 states. Every state has VDP
+register 11 `0x00`, register 13 `0x3D`, H-scroll base `0xF400`, zero nonzero
+H-scroll bytes, and no current dynamic tile inside the table. Checked report:
+`localization/preparation_hscroll_current_candidate.json`.
+
+The later Pike/Monk cache correction supersedes that checkpoint. The current
+candidate is now normal
+`CB53` / hard `E15E`; its full `pike-safe-full01` Scenario 1..27 matrix,
+162-state H-scroll gate, fresh first-draw debugger pairs, six-Pike probes, and
+exact Monk active/acted probe are summarized in
+`localization/current_candidate_surface_regression.json`. The current first
+draws are normal `론` at `0x03CA` and hard `쉐` at `0x07DB`; the older
+`0x03C9` / `0x07D1` pairs are retained under
+`captures/analysis/preparation_first_draw_pre_pike` as historical evidence.
+
+This closes the preparation glyph/H-scroll ownership work. It does not close
+the separate cumulative release gate: battle-result coverage for Scenario 10
+and Scenarios 12 through 27 is still pending. No release ROM or version was
+changed.

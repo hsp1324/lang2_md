@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "reported_failure": {
+    "profile": "hard",
+    "release": "T1.0.1 B1.0.2",
+    "rom": "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.2).md",
+    "rom_sha256": "b160e2e703a78b43b7f1e3a39d51225c7bd9e3bf8dff92ecdd17e1e07efaa132",
+    "screenshot": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-08-01 125202.png",
+    "screenshot_sha256": "61aabea17f1cd77ffc377078cccf49b0915e896422fdbd590e6f84dd15593190",
+    "symptom": "An active Monk mercenary shows Hangul fragments in the upper-left of its 2x2 map sprite."
+  },
+  "root_cause": {
+    "class_id": "0x6C",
+    "class_korean": "몽크",
+    "active_frame_0_tiles": "0x0370..0x0373",
+    "active_frame_1_tiles": "0x0470..0x0473",
+    "acted_gray_tiles": "0x03D8..0x03DB",
+    "released_b102_battle_dynamic_tiles": [
+      "0x0359",
+      "0x035B",
+      "0x0795",
+      "0x079C",
+      "0x036C",
+      "0x036D",
+      "0x0370",
+      "0x0371",
+      "0x079D",
+      "0x07E0",
+      "0x03B0",
+      "0x03BD",
+      "0x03C0",
+      "0x03C1",
+      "0x03C4",
+      "0x03C9"
+    ],
+    "collision": "Released battle glyph slots 6 and 7 overwrite Monk active-frame tiles 0x0370 and 0x0371 exactly."
+  },
+  "current_candidates": {
+    "normal": {
+      "rom": "tmp/current-glyph-lifetime-fix-normal.md",
+      "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+      "md_checksum": "CB53"
+    },
+    "hard": {
+      "rom": "tmp/current-glyph-lifetime-fix-hard.md",
+      "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+      "md_checksum": "E15E"
+    },
+    "battle_dynamic_tiles": [
+      "0x07CA",
+      "0x07CB",
+      "0x0795",
+      "0x079C",
+      "0x07D0",
+      "0x07F0",
+      "0x07D1",
+      "0x07E1",
+      "0x079D",
+      "0x07E0",
+      "0x07D5",
+      "0x07D6",
+      "0x07D8",
+      "0x07D9",
+      "0x07DA",
+      "0x07DB"
+    ],
+    "cache_disjoint": true
+  },
+  "runtime_probe_derivation": {
+    "purpose": "Expose Monk in Scenario 12 without altering any sprite, glyph, cache, scenario, or battle code.",
+    "only_non_checksum_delta": {
+      "offset": "0x05EE12",
+      "candidate_value": "0x02",
+      "probe_value": "0x0A",
+      "meaning": "Fighter class hire-unlock index changes from Soldier to Monk for this diagnostic ROM only."
+    },
+    "normal_probe_rom": {
+      "path": "tmp/diagnostic/current-glyph-lifetime-fix-normal-monk-probe.md",
+      "sha256": "80bd65292978cfcf2e989a7c46e519b5880d2964b683c3c000481c7ce383908d",
+      "md_checksum": "D353"
+    },
+    "hard_probe_rom": {
+      "path": "tmp/diagnostic/current-glyph-lifetime-fix-hard-monk-probe.md",
+      "sha256": "b01fd8758dd38d0d12881d032076759a0e7329073d8ab28fa3851e13c2117102",
+      "md_checksum": "E95E"
+    }
+  },
+  "runtime_results": {
+    "normal": {
+      "status": "pass",
+      "evidence": "captures/run/pike_acted_surface_probe/monk-active-cache-normal07/evidence.json",
+      "evidence_sha256": "ef42d6e332410c6ef763e349e4f260f93a3beb93e4dcba6ce07de95036c9346c",
+      "active_capture": "captures/run/pike_acted_surface_probe/monk-active-cache-normal07/battle/active_command.png",
+      "active_capture_sha256": "b2da4e7af4549e4563ca39de3fe828af4150f5470db39e8592e792a63c232f78",
+      "acted_capture": "captures/run/pike_acted_surface_probe/monk-active-cache-normal07/battle/mercenary_acted_gray.png",
+      "acted_capture_sha256": "98e6551add7224154fba83bb7e94c8fcf80e6f9d0757c473f8387ef6b2134eb2"
+    },
+    "hard": {
+      "status": "pass",
+      "evidence": "captures/run/pike_acted_surface_probe/monk-active-cache-hard01/evidence.json",
+      "evidence_sha256": "ff92b3ecafc75f5daacbc7751486d03dfc1feae608c514b06b801f9c85e1b351",
+      "active_capture": "captures/run/pike_acted_surface_probe/monk-active-cache-hard01/battle/active_command.png",
+      "active_capture_sha256": "b2da4e7af4549e4563ca39de3fe828af4150f5470db39e8592e792a63c232f78",
+      "acted_capture": "captures/run/pike_acted_surface_probe/monk-active-cache-hard01/battle/mercenary_acted_gray.png",
+      "acted_capture_sha256": "e963590d81146017ae30b1ca98ae4e71f3fd8828b1b426d153faf4423e72cb0b"
+    }
+  },
+  "verified_payloads": {
+    "active_frame_0_sha256": "c73bc44f8eaccb97d9ac9a52ac4de704ab3dd19ce2658415ec6a67cd902311be",
+    "active_frame_1_sha256": "fd335ef32b49328d74c7086dfec918ab7500fbb19e89592fff04285974b42f64",
+    "acted_gray_sha256": "b27c631ffbe055f066317d4975bf97c3012a7e59c461e98a91b9d60cd194fdd4",
+    "both_profiles_match_rom_sources": true,
+    "both_profiles_moved_mercenary": true,
+    "both_profiles_changed_acted_flag_0_to_1": true
+  }
+}

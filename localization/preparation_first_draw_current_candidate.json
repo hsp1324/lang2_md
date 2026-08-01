@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "preparation_dynamic_glyph_first_draw_vram_delta",
+  "debugger_breakpoints": {
+    "renderer_entry": "0x2BEBC0",
+    "renderer_final_rts": "0x2BEC30"
+  },
+  "gst_serialization_note": "The save request was issued at the entry/final-RTS breakpoints. BlastEm serializes a queued GST at the next 68K synchronization boundary; the recorded before PC is therefore inside the renderer while its full VRAM still contains the complete pre-draw tile payload.",
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "rom": {
+        "path": "tmp/current-glyph-lifetime-fix-normal.md",
+        "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+        "md_checksum": "CB53"
+      },
+      "before": {
+        "path": "captures/analysis/preparation_first_draw_current/normal/before.gst",
+        "sha256": "c97c2480ce67812383c1ca9436eaca5477427da3ace95a1165ebc312e2c63062",
+        "m68k_pc": "0x2BEBF4",
+        "hscroll_nonzero_bytes": 0
+      },
+      "after": {
+        "path": "captures/analysis/preparation_first_draw_current/normal/after.gst",
+        "sha256": "5adb3d2cc596839a74ba3dd5b0bbd497e49b94b86cc4c25da3a48831c9c33a10",
+        "m68k_pc": "0x0224D4",
+        "hscroll_nonzero_bytes": 0
+      },
+      "vdp_registers_unchanged": true,
+      "full_vram_changed_bytes": 31,
+      "changed_range": "0x7940..0x795F",
+      "changed_offsets_within_tile": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "verified_tile_payload_bytes": 32,
+      "changed_tile": "0x03CA",
+      "dynamic_slot": 16,
+      "rendered_character": "론",
+      "after_payload_sha256": "44d027555acd30ffcf71849281b095dfe869cd9810c83d2e59a130287c42bc1a",
+      "hscroll_unchanged_and_zero": true,
+      "mercenary_icon_cache_unchanged": true,
+      "all_other_vram_bytes_unchanged": true
+    },
+    "hard": {
+      "status": "pass",
+      "rom": {
+        "path": "tmp/current-glyph-lifetime-fix-hard.md",
+        "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+        "md_checksum": "E15E"
+      },
+      "before": {
+        "path": "captures/analysis/preparation_first_draw_current/hard/before.gst",
+        "sha256": "f5efe34f18c010a7a602247b1a8197434d4f0ed27492072187aa068fde17347c",
+        "m68k_pc": "0x2BEBF4",
+        "hscroll_nonzero_bytes": 0
+      },
+      "after": {
+        "path": "captures/analysis/preparation_first_draw_current/hard/after.gst",
+        "sha256": "0fc5a4585a0fe06c73f05994e2a1878ef97dd216e6ab215602c88677e7fa75dd",
+        "m68k_pc": "0x02251A",
+        "hscroll_nonzero_bytes": 0
+      },
+      "vdp_registers_unchanged": true,
+      "full_vram_changed_bytes": 32,
+      "changed_range": "0xFB60..0xFB7F",
+      "changed_offsets_within_tile": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "verified_tile_payload_bytes": 32,
+      "changed_tile": "0x07DB",
+      "dynamic_slot": 15,
+      "rendered_character": "쉐",
+      "after_payload_sha256": "7c01a9d925286dcba10320c65b477dd54a9a110f9f781b73ef17a5d9161cd0ef",
+      "hscroll_unchanged_and_zero": true,
+      "mercenary_icon_cache_unchanged": true,
+      "all_other_vram_bytes_unchanged": true
+    }
+  },
+  "summary": {
+    "profiles_checked": 2,
+    "gst_states_checked": 4,
+    "changed_vram_bytes_by_profile": {
+      "normal": 31,
+      "hard": 32
+    },
+    "maximum_changed_vram_bytes_per_profile": 32,
+    "changed_tiles_per_profile": 1,
+    "hscroll_nonzero_states": 0,
+    "mercenary_icon_cache_changes": 0,
+    "status": "pass"
+  }
+}

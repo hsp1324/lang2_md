@@ -1,5 +1,118 @@
 # Preparation/status dynamic glyph ownership
 
+## Current Pike/Monk-safe full candidate (2026-08-01)
+
+The current non-release candidates are normal checksum `CB53`, SHA-256
+`00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371`,
+and hard checksum `E15E`, SHA-256
+`f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad`.
+They keep the old visible title/version and are not release artifacts.
+
+The user-reported B1.0.2 Monk fragment has an exact collision: released
+battle slots 6 and 7 were `0x0370` and `0x0371`, the upper two cells of
+Monk active frame 0 (`0x0370..0x0373`). The current battle pool is entirely
+outside every ordinary mercenary active frame 0 (`0x0348..0x0387`), active
+frame 1 (`0x0448..0x0487`), and acted-gray frame (`0x03B0..0x03EF`).
+
+`tools/run_pike_acted_surface_probe.py` now verifies both colored animation
+frames and the acted-gray frame for any ordinary mercenary. A diagnostic ROM
+whose only non-checksum delta changes Fighter's hire unlock at `0x05EE12`
+from Soldier to Monk exposes a real Monk without touching sprite, glyph,
+cache, scenario, or battle code. Normal and hard both match the original ROM
+sources for Monk tiles `0x0370..0x0373`, `0x0470..0x0473`, and
+`0x03D8..0x03DB`, then perform a real move and change acted flag `0 -> 1`.
+The exact report is `localization/monk_sprite_cache_regression.json`.
+
+The full `pike-safe-full01` matrix passes all 54 Scenario 1..27 normal/hard
+preparation runs, all 54 scenario identities, all 54 real gray movements,
+both battle animation frames in 27/27 scenarios per profile, all 16 hireable
+mercenaries on six pages, and pixel-exact `크로스`/`넥클리스`. Every new
+preparation source and same-run pre/post-shop pair is SHA-256 identical to its
+prior passed manual review. The current H-scroll gate passes 162/162 states.
+Fresh debugger pairs around `0x2BEBC0..0x2BEC30` change only normal tile
+`0x03CA` (`론`) or hard tile `0x07DB` (`쉐`), with zero H-scroll,
+mercenary-cache, or other VRAM changes. The combined report is
+`localization/current_candidate_surface_regression.json`.
+
+The separate cumulative release gate remains pending for complete battle
+results in Scenario 10 and Scenarios 12 through 27. No release/version
+promotion is implied.
+
+## Actual Pike acted-gray correction (2026-08-01)
+
+The latest user correction identifies the affected unit precisely as the
+hireable mercenary class `파이크` (`0x62`), not a generic spearman label. The
+reported top-left Hangul fragment has an exact ownership explanation: Pike is
+the first ordinary mercenary gray silhouette and owns tiles
+`0x03B0..0x03B3` (VRAM `0x7600..0x767F`), while the prior battle dynamic
+class/name pool also assigned slot 10 to `0x03B0`.
+
+The non-release candidate now keeps all 16 battle name/class destinations out
+of all three ordinary mercenary caches: active frame 0
+`0x0348..0x0387`, active frame 1 `0x0448..0x0487`, and acted-gray
+`0x03B0..0x03EF`. The destinations also avoid H-scroll
+`0x07A0..0x07BF`. Preparation-only coloring cells may be used before sortie,
+but the stock battle loader restores the complete gray cache before the map
+is accepted.
+
+`tools/run_pike_acted_surface_probe.py` reproduces the exact lifetime. It
+enters Scenario 12, makes Sherry hire six real Pikes, automatically deploys,
+moves member 1 from `(9,27)` to `(8,27)`, and verifies its acted flag changes
+from 0 to 1. Normal checksum `CB53` and hard checksum `E15E` both produce the
+same intact acted frame. Pike VRAM matches the original expanded silhouette
+at SHA-256
+`0fe0987d6d93be4842ad899ae0dedbf85f1342b86efc6957e53fde7f76aee0a8`,
+and all four Pike tiles have live Plane A references.
+
+The same two runtime states verify all 16 ordinary hireable gray silhouettes,
+not only Pike. Every class in `0x62..0x71` matches its original source across
+the full `0x03B0..0x03EF` cache both immediately after sortie and after the
+Pike action. Hashes and exact state paths are recorded in
+`localization/pike_acted_surface_regression.json`. These are candidates only;
+no release/version promotion is made.
+
+## Previous pre-Pike full-matrix and first-draw proof (2026-08-01)
+
+The earlier non-release normal checksum `6693` / SHA-256
+`3028bc7ab75240fdab35d7a09e5c147684173a04c6f9377f2496d72a796a7c05`
+and hard checksum `19BD` / SHA-256
+`16f496f887d0abfa2866081224d14870801532f283280aab303ff3a5a002fc14`
+replaced still older probe hashes for that verification pass. The later Pike
+cache correction above changes the dynamic destination table again, so these
+hashes and first-draw tile positions are retained historical evidence rather
+than acceptance for checksums `CB53`/`E15E`. They do not change the visible
+release version and are not promoted release ROMs.
+
+`tools/verify_preparation_hscroll_matrix.py` now validates all current
+Scenario 1 through 27 preparation runs in both profiles. It checks the
+hash-bound `pre_shop`, real `shop_item_list`, and `post_shop` GST for each
+profile/scenario: 54 runs and 162 states total. Every state decodes VDP
+register 11 as `0x00`, register 13 as `0x3D`, full-screen H-scroll base
+`0xF400`, and zero nonzero bytes in `0xF400..0xF7FF`. All 26 current dynamic
+tile addresses are outside that allocation. The checked report is
+`localization/preparation_hscroll_current_candidate.json`.
+
+The exact first preparation dynamic draw is also retained in normal and hard
+GST pairs under `captures/analysis/preparation_first_draw_current`. Debugger
+breakpoints bracket the preparation renderer entry `0x2BEBC0` and its final
+`RTS` at `0x2BEC30`. BlastEm queues a requested GST until its next 68K
+synchronization boundary, so the stored before PC is `0x2BEBF4`; its full
+VRAM still contains the complete pre-draw tile. Across each before/after pair,
+the complete 64KiB VRAM differs in exactly one aligned 32-byte tile:
+
+- normal renders `쉐` only into owned tile `0x03C9` (`0x7920..0x793F`);
+- hard renders `록` only into owned tile `0x07D1` (`0xFA20..0xFA3F`).
+
+All other VRAM bytes and all VDP registers are identical. H-scroll remains
+zero and byte-identical, and the fixed mercenary icon cache
+`0x6900..0x70FF` is unchanged. The exact state hashes and reproducible checks
+are in `localization/preparation_first_draw_current_candidate.json`, generated
+by `tools/verify_preparation_first_draw.py`.
+
+These results close the former preparation-glyph/H-scroll ownership question.
+The overall release acceptance file intentionally remains pending only for its
+separate battle-result coverage gaps; no release/version promotion is implied.
+
 > **2026-07-31 correction:** the ownership claim below is no longer accepted.
 > User captures from Scenario 9 show both gray Hangul-like blocks and severe
 > right-side minimap row shifts on the preparation/deployment surface. These
@@ -21,21 +134,40 @@ VRAM `0xF400..0xF7FF`. Every former dynamic tile `0x07A1..0x07BC` resolves
 inside that exact byte range. Five populated ranges contain 192 nonzero bytes
 of Hangul patterns. The old cache was not an unused pattern bank.
 
-The builder probe replaces all 26 cache cells with noncontiguous ordinary
-pattern tiles:
+The B1.0.2 correction keeps 22 proven cache cells and relocates the four map
+slots that a supplied Scenario 11 Genesis Plus GX state showed were also used
+by visible unit graphics:
 
-`0359 035B 0360 0361 036C 036D 0370 0371`
+`0359 035B 0795 079C 036C 036D 0370 0371`
 
-`037D 037F 03B0 03BD 03C0 03C1 03C4 03C9`
+`079D 07E0 03B0 03BD 03C0 03C1 03C4 03C9`
 
 `03CA 03D0 03D1 03D4 03D5 03D7 03D8 03DA 03DF 03E0`
 
-Their byte addresses are below `0xC000`. A read-only ownership scan of the 384
-pre-replacement GST files found no Plane A, Plane B, Window, SAT, or VDP-table
-ownership for any selected tile. Across the 31 preparation-like retained
-states, every selected cell had one stable pre-assignment payload. The stock
-full-screen H-scroll initializer at `0x0090A6` again keeps its original
-`MOVE.W #$00B7,D1`; the rejected `#$0007` shortening is no longer emitted.
+Tiles `0x0795`, `0x079C`, and `0x079D` are in the physical gap between the SAT
+and H-scroll tables; `0x07E0` is above H-scroll. None is inside live H-scroll
+VRAM `0xF400..0xF7FF`. A recursive scan of 1,146 retained GST states found no
+Plane A/B, Window, SAT, or VDP-table reference to those four replacements, and
+the 31 pre-assignment preparation-like states retained one stable payload for
+each. The stock full-screen H-scroll initializer at `0x0090A6` keeps its
+original `MOVE.W #$00B7,D1`; the rejected `#$0007` shortening is not emitted.
+
+The supplied B1.0.1 state reproduces the failure only after a cursor or menu
+update. Its Plane A contains unit cells that reference `0x0360`, `0x0361`,
+`0x037D`, and `0x037F`; the dynamic Hangul upload therefore replaced their
+graphics with gray syllable blocks. The same state and twelve independent
+controller-input probes remain intact after relocating only the four
+corresponding cache slots. B1.0.2 deliberately leaves every other text,
+design, and balance byte unchanged apart from its ROM header and checksum.
+
+The B1.0.2 playtest then exposed the same ownership error on hiring screens:
+dynamic slot 5 uploaded `가` to `0x036D`, which is also the left pattern of the
+Ballista mercenary icon. B1.0.3 relocates that one slot to `0x07F0`. A recursive
+scan of 1,151 retained GST states found no Plane A/B, Window, SAT, or VDP-table
+reference to `0x07F0`; all 51 preparation-like states also retained one stable
+pre-assignment payload there. B1.0.3 additionally corrects the independently
+stored visible hard-build title from `1.0.1` to `1.0.3` while leaving the
+translation version at `1.0.1`.
 
 `tools/analyze_preparation_vram_ownership.py` reproduces the register decode,
 historical collision, ownership scan, and runtime comparison. Its checked
@@ -689,3 +821,67 @@ and 3 errors; no Scenario 8 test is in that set. The failures remain in
 concurrently modified experimental sprite, hard-mode/runtime inventory, and
 unchanged release-gate modules. Both accepted candidate hashes and the checked
 Scenario 8 report remain byte-exact after the full run.
+
+## 2026-08-01 glyph-lifetime candidate: complete preparation review
+
+The released 1.0.2 build still reproduces the later user reports: `쉐리` can
+initially appear as `제리`, `키스` can initially appear as `메스`, and the
+`몽크` / `발리스타` hire rows can display Hangul-shaped blocks until another
+selection redraws the surface. Those observations are release evidence, not a
+failure of the replacement candidate described here.
+
+The common cause was scratch-glyph lifetime, not incorrect commander or class
+data. Tile references written by an earlier preparation page can remain live
+while a later page uploads another glyph to the same pattern. The replacement
+allocation colors 121 preparation-visible characters into 26 slots over
+64,890 modeled surface contexts. It gives `쉐/제` and `키/메` distinct slots
+and moves preparation scratch patterns away from the fixed mercenary icon
+cache at tiles `0x0348..0x0387`. The checked static report has zero missing
+characters and zero conflicts.
+
+The current non-release candidates are:
+
+- normal checksum `6693`, SHA-256
+  `3028bc7ab75240fdab35d7a09e5c147684173a04c6f9377f2496d72a796a7c05`;
+- hard checksum `19BD`, SHA-256
+  `16f496f887d0abfa2866081224d14870801532f283280aab303ff3a5a002fc14`.
+
+Every Scenario 1 through 27 preparation run was freshly bound to its runtime
+scenario identity and reviewed in both profiles. The aggregate report
+`localization/preparation_manual_review_current_candidate.json` passes 27/27
+normal and 27/27 hard runs. It verifies every available allied status/hiring
+page, arrangement roster/minimap, and preparation-visible allied, NPC, and
+enemy fixed-detail page. All same-run pre/post-shop pairs are byte-identical;
+the contact sheets, source captures, evidence files, and accepted gray-sprite
+captures are SHA-256 bound. Scenario 3 uses the corrected run
+`glyph-lifetime-s03-corrected01`; the verifier rejects the earlier run that
+actually entered Scenario 1.
+
+Direct inspection confirms that Scenario 5 first displays `쉐리` and Scenario
+8 first displays `키스` without a corrective cursor move. A synthetic isolated
+commander separately exposes every one of the 16 mercenary hire rows across
+six pages. Both profiles pass, their pages are byte-identical, and no fixed
+mercenary icon tile contains a dynamic Hangul payload. In particular,
+`팔랑크스`, `발리스타`, and `몽크` plus their sprites are intact.
+
+Fresh shop probes are pixel-exact to the accepted `크로스` / `넥클리스`
+frames in normal and hard. Fresh class-change captures cover all three
+`메이지 -> 그랑나이트 / 실버나이트 / 아크메이지` candidates and retain
+both `팔랑크스` and `발리스타`; corresponding normal/hard frames are
+byte-identical. The updated evidence is hash-locked in
+`localization/class_change_mercenary_glyph_regression.json`.
+
+Actual movement in all 54 Scenario 1..27 profile runs changes the unit
+coordinate and acted flag, then produces the stock gray silhouette rather
+than a Hangul block. The independent battle-cache check covers Scenarios
+1..31 in both profiles and matches both animation frames of every cached
+mercenary against the candidate ROM source.
+
+This closes the currently reported preparation/name/mercenary/shop/gray-sprite
+corruption on the candidate. It does not promote a release or version. The
+formal cumulative release gate remains pending because complete battle-result
+acceptance for Scenario 10 and Scenarios 12 through 27 is separate from this
+complete preparation-surface review. The expanded related focused suite,
+including the 162-state H-scroll matrix and first-draw GST delta gates, passes
+114/114. The five added cache-reuse checks lock the ordinary enemy mercenary
+path used by the all-scenario gray/battle-sprite regression.

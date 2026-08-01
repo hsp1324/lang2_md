@@ -1,0 +1,2906 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "scenario_1_to_27_pre_shop_shop_and_post_shop_hscroll_ownership",
+  "requirements": {
+    "profiles": [
+      "normal",
+      "hard"
+    ],
+    "scenarios": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "states_per_scenario": [
+      "pre_shop",
+      "shop_item_list",
+      "post_shop"
+    ],
+    "expected_hscroll_mode": 0,
+    "expected_hscroll_base": "0xF400",
+    "expected_hscroll_end": "0xF7FF",
+    "expected_nonzero_hscroll_bytes": 0
+  },
+  "dynamic_tile_pool": {
+    "tile_count": 26,
+    "all_outside_hscroll": true,
+    "tiles": [
+      {
+        "tile": "0x07CA",
+        "vram_start": "0xF940",
+        "vram_end": "0xF95F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07CB",
+        "vram_start": "0xF960",
+        "vram_end": "0xF97F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x0795",
+        "vram_start": "0xF2A0",
+        "vram_end": "0xF2BF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x079C",
+        "vram_start": "0xF380",
+        "vram_end": "0xF39F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07D0",
+        "vram_start": "0xFA00",
+        "vram_end": "0xFA1F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07F0",
+        "vram_start": "0xFE00",
+        "vram_end": "0xFE1F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07D1",
+        "vram_start": "0xFA20",
+        "vram_end": "0xFA3F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07E1",
+        "vram_start": "0xFC20",
+        "vram_end": "0xFC3F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x079D",
+        "vram_start": "0xF3A0",
+        "vram_end": "0xF3BF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07E0",
+        "vram_start": "0xFC00",
+        "vram_end": "0xFC1F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07D5",
+        "vram_start": "0xFAA0",
+        "vram_end": "0xFABF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07D6",
+        "vram_start": "0xFAC0",
+        "vram_end": "0xFADF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07D8",
+        "vram_start": "0xFB00",
+        "vram_end": "0xFB1F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07D9",
+        "vram_start": "0xFB20",
+        "vram_end": "0xFB3F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07DA",
+        "vram_start": "0xFB40",
+        "vram_end": "0xFB5F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x07DB",
+        "vram_start": "0xFB60",
+        "vram_end": "0xFB7F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03CA",
+        "vram_start": "0x7940",
+        "vram_end": "0x795F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03D0",
+        "vram_start": "0x7A00",
+        "vram_end": "0x7A1F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03D1",
+        "vram_start": "0x7A20",
+        "vram_end": "0x7A3F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03D4",
+        "vram_start": "0x7A80",
+        "vram_end": "0x7A9F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03D5",
+        "vram_start": "0x7AA0",
+        "vram_end": "0x7ABF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03D7",
+        "vram_start": "0x7AE0",
+        "vram_end": "0x7AFF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03D8",
+        "vram_start": "0x7B00",
+        "vram_end": "0x7B1F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03DA",
+        "vram_start": "0x7B40",
+        "vram_end": "0x7B5F",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03DF",
+        "vram_start": "0x7BE0",
+        "vram_end": "0x7BFF",
+        "outside_hscroll": true
+      },
+      {
+        "tile": "0x03E0",
+        "vram_start": "0x7C00",
+        "vram_end": "0x7C1F",
+        "outside_hscroll": true
+      }
+    ]
+  },
+  "historical_collision_reference": {
+    "path": "localization/preparation_vram_ownership.json",
+    "sha256": "9882511686347bb5f1bc7a0107ef985365dea91013e999940b7d81ec64bae897",
+    "hscroll_base": "0xF400",
+    "hscroll_end": "0xF7FF",
+    "nonzero_hscroll_bytes": 192,
+    "historical_tiles_inside_hscroll": true
+  },
+  "identity_report": {
+    "path": "tmp/full_surface_regression/pike-safe-full01/preparation-scenario-identity.json",
+    "sha256": "1538e7f1b17e8868267ad20dfa000b34b5892c497eafa39476f26c82cfb403f3"
+  },
+  "manual_review_report": {
+    "path": "localization/preparation_manual_review_current_candidate.json",
+    "sha256": "87bebbacc19eb7a5061b036b69e10f4e42067de29bcd66555a796fcc22f944d1"
+  },
+  "total_profile_scenario_runs": 54,
+  "total_states_checked": 162,
+  "total_nonzero_hscroll_states": 0,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "rom": {
+        "path": "tmp/current-glyph-lifetime-fix-normal.md",
+        "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+        "md_checksum": "CB53"
+      },
+      "passed_scenarios": 27,
+      "total_scenarios": 27,
+      "states_checked": 81,
+      "nonzero_hscroll_states": 0,
+      "scenarios": [
+        {
+          "scenario": 1,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 1,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s01/pike-safe-full01/evidence.json",
+          "evidence_sha256": "469ce4e17b1d73a590bbca64a552809d76cf03b453c2cbe902637116fc83c9a4",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s01/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "d321cdfa1697be7d56dda223ed23735f8a28a3b48509fde18209c69a9f25e834",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s01/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "65758e66f2bb3b52a605e49ba7f3ddda2e5e065de1ee5d2b4a5040bb3c59be5d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s01/pike-safe-full01/states/post_shop.gst",
+              "sha256": "d8e68b4ab47b50c81933400a879ac69326ca435098af292b7049835b09fc4d3d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 2,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 2,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s02/pike-safe-full01/evidence.json",
+          "evidence_sha256": "9030c00b6fd1417107f52b67247dc4095cd4aa9ae27c0946e425816a3b9313d8",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s02/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "fca44abba0c99496b7d01be2441ee2d4a500bffd327811769b5e7b5840b46bcc",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s02/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "7bdef332c69aef5a3aaeffb369fdccddbdee7a4798b4ac72534bcfee8de12323",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s02/pike-safe-full01/states/post_shop.gst",
+              "sha256": "a8bd1d539a842f8235c1bc0a863c940cb7481102bd8a176709ffee341957a0dd",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 3,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 3,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s03/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a4210b0cbc86c76b9c6039a755610f5937189112b2c5435782e5d41421e9f20b",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s03/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "71917eb595858c44805423b0f84c89cceb5df54206b3def9933b3f87861e4a80",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s03/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "87e7ea027cf90f50451d053ac12ad607fa74b8137771253767686c5f84e73f98",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s03/pike-safe-full01/states/post_shop.gst",
+              "sha256": "afa7e93a1b8a4776eacc27e7be836ee7d99754e6fee1cdb7eac0f16218eedecd",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 4,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 4,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s04/pike-safe-full01/evidence.json",
+          "evidence_sha256": "c5cfc0976b2229ad61b1ba8f5f85c64a3f2c8208c4de61f0b2cb421e7854785a",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s04/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "23846abe8f6e3d0e880e35b22c78e1fdfea71ea3fe86e64898e3671b04610091",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s04/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "1f5caa3509373f9e11b6e348676477f37f10a1371990c5f8c5b28722de91bc42",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s04/pike-safe-full01/states/post_shop.gst",
+              "sha256": "79e86caef659a8a303e61ae1520101927c45461b0b0249f7edc60dacd2480b72",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 5,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 5,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s05/pike-safe-full01/evidence.json",
+          "evidence_sha256": "67bbe1be8022981a40e7c36c77445c15c0b2599b3af2efa40009460ba1175917",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s05/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "b0a124ec3d2f07c601588bd60cf4e40387f654548b84f0261c672b4b824f87eb",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s05/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "1c11bfa4ce2627b0aa961bed6508c1a3c6c477eeb84d244b40b936bf1e8673d0",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s05/pike-safe-full01/states/post_shop.gst",
+              "sha256": "22988fbda40beebad073e340d8eecba70e283714af463eb79c1b363f0a31a994",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 6,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 6,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s06/pike-safe-full01/evidence.json",
+          "evidence_sha256": "ae165a3cf40649b21cc1f2cfa8beba232a5bc3e58554e68365d3c0c3d852c915",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s06/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "c0eef3ba221e6546daea0837778cebf112fa434ef26f3efccb5a7cda67ce7dc3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s06/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "81a4132050982409611809974931388293eea82ab6278c14b6a6603c1d23528e",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s06/pike-safe-full01/states/post_shop.gst",
+              "sha256": "9d8cc163360c6d0f508aac60e52e3bccb77092e1e95a2fd17cdba0c5f3ebb1a6",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 7,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 7,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s07/pike-safe-full01/evidence.json",
+          "evidence_sha256": "cdfada1502d5498c9e88bdbddd0260d7b191631373cfbec6a854aa0aef81b307",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s07/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "485c34fda66c8ab597ae0eb40a77eddd6b9d1c42be6111f60f659659fb7e8b07",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s07/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "6db6d4eeb452bd3ddd4d1a49a12781742606bd64e584608e0f010a35ab1470b4",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s07/pike-safe-full01/states/post_shop.gst",
+              "sha256": "e27b344c39a2c1c5972cdbb53df2fdc828654d7f5096434e8388ab24cf3a7c49",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 8,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 8,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s08/pike-safe-full01/evidence.json",
+          "evidence_sha256": "4bef38d72c10ce73a07803b8b536705adf3443afd5f08f632d0af1b443b5c21f",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s08/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "3913f40f5506956a6acc45d179a15af428aa42d7b234fd4e3cedf83daa941e06",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s08/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "57cdb78756685eba455b3b51fcc805eadba3ab8ca191607166aad373bdd8e9a3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s08/pike-safe-full01/states/post_shop.gst",
+              "sha256": "5b7cce38d9142c93cb4330f5346421903c9c8558139aa67ac67141aeabe061dc",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 9,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s09/pike-safe-full01/evidence.json",
+          "evidence_sha256": "744362e04aa692e9a52808f0714411b855c8f2d906c7976a5d957ac6615521d7",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s09/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "4cca87bd028165382fcaa5347a0663f8053364d8c8de8c4f5631a4a1a0baa106",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s09/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "dc1ceb9dda2b8311021e1842d7787f883507007fbfe992113d523df7059f4970",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s09/pike-safe-full01/states/post_shop.gst",
+              "sha256": "98b17733e604f3f5a6f648275a5c3b855e661adfd19e7f8d267979a1a48b36f1",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 10,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 10,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s10/pike-safe-full01/evidence.json",
+          "evidence_sha256": "633f1534906367bd4d78872f1f10f3e50e473ff5b428af35e7700efd7610d157",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s10/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "c0f5ae463c41ea33477520b5660c317f9540f9b1102c41a9d043b01b7d7e833b",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s10/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "317607547b4f038e56072e8d72f28bef83b50d4784661c6b74c0fa6c0376fe93",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s10/pike-safe-full01/states/post_shop.gst",
+              "sha256": "6219b540309c07d3740ed0a9654eca706f2a3dc8952710938ab43df22a2d4282",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 11,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 11,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s11/pike-safe-full01/evidence.json",
+          "evidence_sha256": "43df25a86a156a76d2dc84951786c5873abc88ad70dd43e880d069eef36949c8",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s11/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "20a2131d4d21886f7eadc13341bea1d0af0e45883790b0348d9e051562969632",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s11/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "979ab2b668384e1078ab61d80a90c8480a5bf107253c182d877c89094a0cc879",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s11/pike-safe-full01/states/post_shop.gst",
+              "sha256": "33412739afd75066c076248260231b9d5bad56ea875707b3bb1d56d318f75280",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 12,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 12,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s12/pike-safe-full01/evidence.json",
+          "evidence_sha256": "516930772ad57e28d98ae54418965fcf4034ad1155fbe1b130e368ebca8de1ce",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s12/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "1e6e3002807b39aa5246ac6ee00ceffa478aa643d2dc02215046f81d7f149100",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s12/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "2a6d06b8fae853e7f1b5009fe70971330de89c676274ffe8d621b19274e8d32f",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s12/pike-safe-full01/states/post_shop.gst",
+              "sha256": "0e35738a737083ddac9e9cb3164609e6175387aabbe5f8eca1fff0ca212bdb7b",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 13,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 13,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s13/pike-safe-full01/evidence.json",
+          "evidence_sha256": "fefd905690d62b6897080152319ea32649dd0e87c3c5b0781704d8af76b75a27",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s13/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "9aeec4b24a7eb9a96a068bcda162e70fd5841cc8c8d086741b1f74a7c71b3abd",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s13/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "60531e5136fd49b579a7de6141d5309aa355ce7e6b75ad051e2cd8df08ac07dd",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s13/pike-safe-full01/states/post_shop.gst",
+              "sha256": "79ceb9031bbc60dd693cb64c7d36c1d99f9fb96f43d7ac38af1645e97ad81262",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 14,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 14,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s14/pike-safe-full01/evidence.json",
+          "evidence_sha256": "3f52a4059bb045355dae44bf6f6d3853425cbe5896aced6d946dbe9af280d8e8",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s14/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "a40e2c5795c7b8e676889911229716a72471fed0bee1a4fdc78ed0e602f2b2d2",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s14/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "856d1717f11c9e5ad4b56c1a2e509d43d28c3cc4715d44d0a2d86d42dc5badb7",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s14/pike-safe-full01/states/post_shop.gst",
+              "sha256": "fd2434a10430d8458e57ad641dfe170e706e00964a246220dd41ff85975df558",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 15,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 15,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s15/pike-safe-full01/evidence.json",
+          "evidence_sha256": "f9acaaf4c5976db6e85fedc2916056d13cb415179df069defdfde84dfe0c9cba",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s15/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "2abbf462a12218b57b26a9550d7f9a8ab0bd2c54e485bd898dcabb02ab1dcea9",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s15/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "28fb148f61dd900d3447b78e06f592323dedd139641c62e45a223d1f94d41a7f",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s15/pike-safe-full01/states/post_shop.gst",
+              "sha256": "c554a343f1ac070dd46ca3b6fe79e89f5947a714681f66a2a5a51d944e57e8d3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 16,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 16,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s16/pike-safe-full01/evidence.json",
+          "evidence_sha256": "6879f16e52f941b2f197851238be711a773e75b88ab28dde31f0d00662ffd4bb",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s16/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "41b3cfd9cdda215cce7cfd45d59ff03b7a8e4074d93958d752fec6281afbe6e1",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s16/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "474feeb3ce5afa46369f296e37bc14b559fafe10828eddf860a032fc8b7b20b5",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s16/pike-safe-full01/states/post_shop.gst",
+              "sha256": "9e215dbe910cf77fde35696dc95100a9981bbbb822c9a35fe69ad027daaa9309",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 17,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 17,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s17/pike-safe-full01/evidence.json",
+          "evidence_sha256": "b3ca00f8ac9d3acedde9e8350fa482341838d13edd77481336780c69543ac6ce",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s17/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "9853df40548c884fd46bdb74ef3062111f5828610659be098e07df6924b23b0e",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s17/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "5114265eb6bebccfd4aa7ec93aad99b370ed83fd4c7c6f2f1745a02fb0636112",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s17/pike-safe-full01/states/post_shop.gst",
+              "sha256": "a7e66763bdd29b9013ad7fc8d04d140461fbf06a6cb89564d61447a6ec41e245",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 18,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 18,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s18/pike-safe-full01/evidence.json",
+          "evidence_sha256": "82f1c463194a9781a762121586a32a648b5cfe071e32dbf35655c61287ff5550",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s18/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "a1015a48accdc405b7c21db194bef5cfc2877f716e9e52f47e3be075321dbb26",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s18/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "f506d9765dab4edd61c4f13e82dabde537af7f1333db17210240609d95564158",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s18/pike-safe-full01/states/post_shop.gst",
+              "sha256": "834bf087f705e3d2b5b603ac29710f5f8b5bd419401bf6b211185c0401189d62",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 19,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 19,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s19/pike-safe-full01/evidence.json",
+          "evidence_sha256": "193252fe8f0c6275ecd87d14bf8116f60c02c3d29b53c9861f7dd358199cdc2a",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s19/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "bd6edd731229fa5ee6d9efc57ddac90a28d95590e8eb3157c70cc0d07af3f028",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s19/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "00525fafceb5da7d0b1ef1457417e806f69c9752152f7f5ca40db8f5524f4877",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s19/pike-safe-full01/states/post_shop.gst",
+              "sha256": "2bb2c0b469c15ca7d2547fae49a1dcb9e22aa6f21a1493ee336cfe8404c8f454",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 20,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 20,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s20/pike-safe-full01/evidence.json",
+          "evidence_sha256": "bf77877d6907e109a2feda0c3defd8921e021aa95e00d8369e3af0d6cdd2b706",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s20/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "ddcac2698ad7cb17942ed1180ac7f58cb213301925c349cca28e793315ac1d59",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s20/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "fe55db55c54d1438be04e6eed3b0d2b4456718f4b9d2b74caeb962cccf0e515d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s20/pike-safe-full01/states/post_shop.gst",
+              "sha256": "79741363ba2b74de60a9e02c88fd8a8a606536f22d28a7799599dfb5f0692b6e",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 21,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 21,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s21/pike-safe-full01/evidence.json",
+          "evidence_sha256": "75e8fdecd0c20c693cfdf0be83e1f36ee12a3e29541dfc0a3cac33cfa42152c2",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s21/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "105fa95a028ded0bc5409041f2e3376d7a67383140d7390aa2ed16201a1eafcc",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s21/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "e324f98e2a027cd47d677799b8dd6279f9c8321697adbf30f0ff65acc4624ed9",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s21/pike-safe-full01/states/post_shop.gst",
+              "sha256": "aebb2cb007e764887e7855adb2aa277ab49f2242187dd268be266e561a258b03",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 22,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 22,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s22/pike-safe-full01/evidence.json",
+          "evidence_sha256": "ede9d578c7766dce021c76eb6dcd777d54785b7bc99918004d80afa2a14318d8",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s22/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "cb29b873878a2327d0276e765a3b11fe47879d6f7592dff3fbe3ca1b3192b857",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s22/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "c3797384907c1ec95bf7649bc5c09fa4081fbafb2ab5d3b3111358cbeb1ee291",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s22/pike-safe-full01/states/post_shop.gst",
+              "sha256": "c8b881438e56109667a722ee5fde1be3b796a5b3cf437d4fb3717085053692c3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 23,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 23,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s23/pike-safe-full01/evidence.json",
+          "evidence_sha256": "768410092495843e58fcff031803a56a5cfae23215ab2b13f212c14f2931e91a",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s23/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "5881d3ec6fff18666f0a31c0fdecfd38de3f8207aa350ced15ab29a4a036bdf4",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s23/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "824a6c50ceffd7bf2a217efa7089cb7bb7bcb98966b17b78c77842df86c4428b",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s23/pike-safe-full01/states/post_shop.gst",
+              "sha256": "b3ba87bfd4728d22f40d211b6ae525591a13916263a406bf52e084cbf4e81e2f",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 24,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 24,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s24/pike-safe-full01/evidence.json",
+          "evidence_sha256": "05d6f5d6ceb689e4a6eb8d39d99523a5dca1f09c5752d08e5993d6db5d65ca4f",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s24/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "47e4e31a027d1bb44eeac17d3801cee23448c73dfd9577c61e0df9a33f4a191d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s24/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "48b0ec67f28584da4d399e8074766d251876890e037726ea56ee0d80898b082a",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s24/pike-safe-full01/states/post_shop.gst",
+              "sha256": "ba821b09ed68a79cf81abe7063866222a39d7c39e5fc8dfc7a9c4198387f0357",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 25,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 25,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s25/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a0dfe5d52ae5ab0ad846b929f4fa4a5027f66c95e02c189549d56add7bae6fd3",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s25/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "d0e7af11a73fd5490722e9051097cd07b554a3f60d70e379c61e24b968eeffba",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s25/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "36f6f54e7fa5ee27530d1d130b88c2c1240327cc4669d48f7486ea4c10249d88",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s25/pike-safe-full01/states/post_shop.gst",
+              "sha256": "5d510a587900b7ab0d4e74659eacec6c502f0109196c9ad92c44f1958cafefe6",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 26,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 26,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s26/pike-safe-full01/evidence.json",
+          "evidence_sha256": "efd4c7eb7823f0039d654596d438a59c94b767ddba2e29a2415cb468cd0728a2",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s26/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "a1f0f361f163e33ed8933810189b61efce1b8260a73802206eb9bad1f6bc7287",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s26/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "bfcc1e56a371d1cf028952c3f9ea525843ef9aab0843444af10fbb7ce8c3d50a",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s26/pike-safe-full01/states/post_shop.gst",
+              "sha256": "0248d22a7cb68a309ca9ffcb3433cd762edbeff87f361776e1845c8d2ec8a5df",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 27,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 27,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s27/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a84422d7a0b81bd818df07ab5ea8f690781bc8fbaaf0a358f2bc8b71d10cabe2",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s27/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "b80df108f5b135ed842596138defc680c488a1eef7d5b02c5e0b1732e2bbad7d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/normal/s27/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "87cc327c92df72d2d909d7aa6962f3b3e1b950473369ccdce274a471d23091d2",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/normal/s27/pike-safe-full01/states/post_shop.gst",
+              "sha256": "7695671bc67578354ee07747423a788ea8cd4457bf0482b7a380e5d75ffd4bb3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        }
+      ]
+    },
+    "hard": {
+      "status": "pass",
+      "rom": {
+        "path": "tmp/current-glyph-lifetime-fix-hard.md",
+        "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+        "md_checksum": "E15E"
+      },
+      "passed_scenarios": 27,
+      "total_scenarios": 27,
+      "states_checked": 81,
+      "nonzero_hscroll_states": 0,
+      "scenarios": [
+        {
+          "scenario": 1,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 1,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s01/pike-safe-full01/evidence.json",
+          "evidence_sha256": "e990ffb5c07570c9ca2c1a9b3f329f7c3150af08fc698226fd79c31c943a8868",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s01/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "ee30c9b3c4e4d204a0ae56d60df3fdb0b32a92a9ae1ce74610d0dedcc3212436",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s01/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "1064d6df18f843ef8d81ac0253ce296ffc32de7b99305c25032e24716f0bd875",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s01/pike-safe-full01/states/post_shop.gst",
+              "sha256": "b842afba8f9a0b6d900aec01590a789a6060bd40b4226c32c3d699191135b222",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 2,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 2,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s02/pike-safe-full01/evidence.json",
+          "evidence_sha256": "537f969f3e8a46d0d3ce312d18e72ae6f542eb4b8893d52bdd548591d6da5f4b",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s02/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "c9851661486d8fa3b46709b36679205b766a280231c9efe10ebedcbf615e5699",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s02/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "1ad41777c178c7313fbcbde128f2a1f2a156b326754870b192515e79d5460d71",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s02/pike-safe-full01/states/post_shop.gst",
+              "sha256": "a81c91f1cdd374b5efbfd37fc2fd51d3e004bb878ef7d6736203a2548a2febbb",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 3,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 3,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s03/pike-safe-full01/evidence.json",
+          "evidence_sha256": "fc844b8a38b05099f660dc2b9243fa939d56f3274e340e9843f85eb51a8eeee7",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s03/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "f394c8947b428d0cab60815534cc61072f4ecd2c88e819c1d21abe5ee7492803",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s03/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "0e13055e3c2f1b2a1fe37ab8ff686a8075d6b7aa10ae73fbf417fc42b3640990",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s03/pike-safe-full01/states/post_shop.gst",
+              "sha256": "0da770e2bee3527eb1460b79104a1a576a1253867c3bbcb66570309d3f2a8a23",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 4,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 4,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s04/pike-safe-full01/evidence.json",
+          "evidence_sha256": "1454921bf40bdbea80bd0899f5272cd262772d8f382d70af6c723e368f0c1254",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s04/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "09aed4fa6f800490cdc05228c38bfe8ba175c40b50851ec03f449b3749ee9850",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s04/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "78b41a498c16694f0337c31f4cf24460126f6e68c1c2aacd3445c493b8e5d491",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s04/pike-safe-full01/states/post_shop.gst",
+              "sha256": "f3eb8d4e8ca73cb30fadce4ea09e7b903c0fca8ee6f728536b7ddcdd3fc4e071",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 5,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 5,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s05/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a58c2eb493f14b9df77988831b8f564cbbfb3b4e3291dbcc1e4a1faf524145c0",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s05/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "88e75f3798c2840c353f4fdc39efb1400d45813c014203261f267548dce865c8",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s05/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "dcba4ac6924b6a9ab7fb9ce64043ac0e3fb371255bcd059f0024e96a2fbb9de6",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s05/pike-safe-full01/states/post_shop.gst",
+              "sha256": "519d28afd1098998fc5eef9ae7e13764a8781cb1ae4fd018f6441f3aa2f8045c",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 6,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 6,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s06/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a4cdca2e7e2a19990c711565631d40a6d96ffc063c245c85efc7b658799cb5c7",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s06/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "ae14c611ca178fc8b50ec2d9d7c4e2b1f3f46bb43b7095ba8d8335ffdaf913bc",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s06/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "e5a0b5499357f4873a371c855c1c4df5cbc30ce0f94ebe4df61e0344e487c720",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s06/pike-safe-full01/states/post_shop.gst",
+              "sha256": "5900281121423a4f59cb0395547cf70caf1b1e8a5da0c1e38d4e291eae216f53",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 7,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 7,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s07/pike-safe-full01/evidence.json",
+          "evidence_sha256": "cb605dd888f5f1a5f940e7d6e971e59a0b70b7d76198e7c1eb72bf6bc6237176",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s07/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "c04a1035ea209621d1e41d39fa3bb9467cd8dd297f1ec366051efdda0af0dcaf",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s07/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "1199d3c619cabb13ef3a274b98246d78d261ae8b19a490cd7d7d60c9b0caadde",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s07/pike-safe-full01/states/post_shop.gst",
+              "sha256": "c157004670fd90a6560c0c94101e103feb63258b94ee414a96199f832212c52d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 8,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 8,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s08/pike-safe-full01/evidence.json",
+          "evidence_sha256": "ec19ed2c49aff5108e3fe2fc4208d009e9ebd11df68497519d830b8478f3807f",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s08/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "fd5baeb1e6a25e755b667bbaa43ac3466b302b4e57d402aa041f20643d0036fa",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s08/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "feded3cc9819b9e5f1c706cb47976b4463acbf3b4026fc0966bab6e46d4bf6e5",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s08/pike-safe-full01/states/post_shop.gst",
+              "sha256": "a13fcf8cd5cdf277a0e3163e19e9155213b5919d29f07fc5e3bf815bfa773e02",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 9,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s09/pike-safe-full01/evidence.json",
+          "evidence_sha256": "61f40ccc553220b38585f77b8a066d6012984acc1c7c3e1abbc7db9496da1f2e",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s09/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "6b142c524dcd330158723d149c43ed04e1bec5698d4042ad4d8980033bb7ea08",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s09/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "2cd6fe32820ea1adb057e8fe1a6f8674c65f22db455f82e1ca633f25fddfd722",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s09/pike-safe-full01/states/post_shop.gst",
+              "sha256": "9186cebe69678d627d016d6e5fa8ef8ca2e24c79bab25ba3c34a99c7e23b2864",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 10,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 10,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s10/pike-safe-full01/evidence.json",
+          "evidence_sha256": "5fdc67cca83e5995631c7267119dae6adde11c50712fe2e1f5b07612c30813b5",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s10/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "d47ae6330ba1c02b51e68370ec9eb11423a318ac6785cfc4b42858ae2a527d9b",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s10/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "7e7e36d0e6321bf5dc4c14e7b55b66f5dc427a1073e2c3cb000de4e9937b0155",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s10/pike-safe-full01/states/post_shop.gst",
+              "sha256": "d171e6b580cb93f19e33662c48f5b32b36f789948012806a227d5cd67bda925d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 11,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 11,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s11/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a739d733692dc36e7dae394200666793d86c2c4843bb8c5de173274e264fcacc",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s11/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "a67fd055f4256942e20ae4552d1033890d146fe5f1e1c4ca668244be0428990f",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s11/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "0335d7911f6c08d8ef3c5a3b93910262f0fa7db15fa7820c191fbb6347f6c958",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s11/pike-safe-full01/states/post_shop.gst",
+              "sha256": "f0724d4520191c58f60305e0353c963b99f44f95682ba8fda00bdde7f94e806a",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 12,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 12,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s12/pike-safe-full01/evidence.json",
+          "evidence_sha256": "3ea1809b484c19086cef63ae96950eeb32ec21fdceab570043aeb4c9678bb0db",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s12/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "cd4329b5780f3c1040a152842057f609432b43d0ee177839d7b5f80c66d2c77e",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s12/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "2218ac953bf86c343bfdadb447417f4a6cfd8b4689cf687acb093b76610dc5b2",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s12/pike-safe-full01/states/post_shop.gst",
+              "sha256": "b02f8363ecf237a38fdc658bf9b04cd096ba4873ed73efb603504237daffa9e4",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 13,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 13,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s13/pike-safe-full01/evidence.json",
+          "evidence_sha256": "8a7596e90599a98ee0e810bc8e679685a33fc54b7efa7c2acacb65d4a8d2b139",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s13/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "575e89ee7a14a00c14bb92b15feb48770026519e0f6af80fd79f742698236193",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s13/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "1849149acacb020986711cd5814461b763bccd204c5372e3df5831beeb47c74e",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s13/pike-safe-full01/states/post_shop.gst",
+              "sha256": "067741f7da865c4302fba9ced7e84c71fde05484a46da9cf07e2aa3998a37c71",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 14,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 14,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s14/pike-safe-full01/evidence.json",
+          "evidence_sha256": "6989c470a6ebcb9ec07b0ef1cb37bacc83d85966589541282cccd328c1234592",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s14/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "e7efedaeeb6dee64863827a93d4b95c9403bf41d1935f5328025dfafa0b49884",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s14/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "b884b98a064134285880921c8eb4273590dfefaf3347f121de962510694108d4",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s14/pike-safe-full01/states/post_shop.gst",
+              "sha256": "600950e7549bbeadeb5b8e5306b0420946cbe1156f71543fa217ccc19eb96b74",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 15,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 15,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s15/pike-safe-full01/evidence.json",
+          "evidence_sha256": "baaec2342bc7bb80ffc27ac278d43e4f7a5caef0a974c4ab592bec2552aaa30e",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s15/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "510e53f5cb48aa3c5850ca620f2fdc1a303aa9d73a94570e5fed6b68f6c69c8d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s15/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "d58e3908acd36cb2a8995ff30d8b0ead5b917449139c731a7fe945ddc429a714",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s15/pike-safe-full01/states/post_shop.gst",
+              "sha256": "9123145a1f739ea4d26a6297f58f93ded64292863de7de8808ffed00da690084",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 16,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 16,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s16/pike-safe-full01/evidence.json",
+          "evidence_sha256": "11818281c2834d827791ef9fb22d527be2d5091fe5221380b32521021da528f4",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s16/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "092499a50da17c618bdef32e50d734f9ac8c434c416fd8363e8cd6f114c2cb87",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s16/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "f2d9ca978b8cbf06177b629fe62ea7390dbe1e14b9ff3f3d4be232f48f823b23",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s16/pike-safe-full01/states/post_shop.gst",
+              "sha256": "b314f746f1710bb8487bfd95a2423f67aec75b31814784617f340349683439e6",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 17,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 17,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s17/pike-safe-full01/evidence.json",
+          "evidence_sha256": "bcc7e21be919d585ea2c1512ba8b5f113b03f972283f5f7d01138779e0985e0e",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s17/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "a6dac9498c123389e8dcc4436880df5a1076123ae7afc225a99925c5a8862ca3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s17/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "807c6a3f66bdc29768f06392225dfd6037c3ef83cc5332727a963147ed477d24",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s17/pike-safe-full01/states/post_shop.gst",
+              "sha256": "99d9cc50d8fdbd95488150659f015282b6c05057200431d19068373d76c5276d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 18,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 18,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s18/pike-safe-full01/evidence.json",
+          "evidence_sha256": "933864fcf65c935df8a23edb2f15615efa1ea04a0a217e870183b0eff399ee03",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s18/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "96aeed19df8989746567d85ad3e3e3f010cf94c6d2f2fe8811302f921f4e8432",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s18/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "a5fbd158f0b869e751d3b9dcb6ab572296e025e902f64526185d2c9ef54f1538",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s18/pike-safe-full01/states/post_shop.gst",
+              "sha256": "19d7ad073c915abd383723c7f910dc22a93694d6d8af586eb64008dfb8b2cf0f",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 19,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 19,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s19/pike-safe-full01/evidence.json",
+          "evidence_sha256": "f403f17e70765a961c70455039f697a8e3006a8121f44a306fe3b5fe8143d87b",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s19/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "d16c861bde8fa6b0818883d2b8fd406e55d731831b9ff570647542f8b757491a",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s19/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "7d418a2445e1e020378d89ecb6724deddba2d80c6b3472769a05279b560ce65d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s19/pike-safe-full01/states/post_shop.gst",
+              "sha256": "64e7a1a6fcd6cf0522abdf870eb0607f28ba7a0a6d3b3524fe11f0cd0cf87b14",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 20,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 20,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s20/pike-safe-full01/evidence.json",
+          "evidence_sha256": "37cb74225173dbc3163c6642d52145ff8aecb64135e43380c769b4a9f0024eca",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s20/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "b3e612d79829c8140ad6101b2fc96b1cca36a00316677b4cf05c6559d181634d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s20/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "cdeb0c24da6baa55afa1400f0444993f530f1fb5e184556d319229c4e6f849c1",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s20/pike-safe-full01/states/post_shop.gst",
+              "sha256": "3f0c6b1139778b262bf0c4f9c1c7de10f6d98ff5484ba55a34dd4ba00b2f9add",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 21,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 21,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s21/pike-safe-full01/evidence.json",
+          "evidence_sha256": "c172a1b2249842ade9efd628100314e049d7953a9d1c4849fef753f111c1c526",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s21/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "9b4281c83327b117ef46992b2bceaba4fd120744df21901e9eb27f36a2efb510",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s21/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "dbc462c44fec0ba0bc29025fac5a061b4cb7ed7cd2b2212f2846b2afb1f9ba3b",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s21/pike-safe-full01/states/post_shop.gst",
+              "sha256": "04423b6cfe2bbd5e7e124a21215c1351ff54f043c48590654c816e596337802e",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 22,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 22,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s22/pike-safe-full01/evidence.json",
+          "evidence_sha256": "ea76bf4f7bce28ba5ce9dfe2a981ef13bb84981834832002697b8b61ed601075",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s22/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "c1db750afcf9c3fa793a7149048ebc37aa53eff83566fa40b7cd4858c77fd7d5",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s22/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "7c4a4a6eeedbe783a769aa1b90d3f7fe68bca69ce6157387138492465146aaf9",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s22/pike-safe-full01/states/post_shop.gst",
+              "sha256": "a3def872ac0106d425e18ecfa4e9bd10ecbcbf9440ec28f8ea829fea60c93c79",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 23,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 23,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s23/pike-safe-full01/evidence.json",
+          "evidence_sha256": "a9782591fb1cac81add3c6c1b15d88de26890cd279223ae39fc692430b63612c",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s23/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "76f8812c5f5f1b4f77b024f838145bd07d00761959b5bfb75c1d83e938602e49",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s23/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "01cff7ecf3aebfd5496b9e24376209ffb1169f91ba7f5186334e9cdb706a3b4d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s23/pike-safe-full01/states/post_shop.gst",
+              "sha256": "cb5a2d25ee9b42b0ca8537379ffc25b79fe373a9bdea7ee6676cf295c9bf77e6",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 24,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 24,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s24/pike-safe-full01/evidence.json",
+          "evidence_sha256": "746d47b139d4d995c13438910be387db689399b9100b2d73c74cf7ee250db3ee",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s24/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "29f50f4cea0a6170bba63be68fdd1b9254bfcf75ef8bf230e1daa9f4dbd6c4a4",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s24/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "ba72ffc9594f48a39e4bfe9ed5c78ed4b51a8bdcbed9ad4ee60ac9156cfa47d3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s24/pike-safe-full01/states/post_shop.gst",
+              "sha256": "61609b333eb77dbb9502bf1f4026a1884e88e513e7dbfbef5c113c5fca0721cc",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 25,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 25,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s25/pike-safe-full01/evidence.json",
+          "evidence_sha256": "6f20fc8237f86e487b71ba78eb7ecf0925b12f0e0b30025ac367fab15a135b6c",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s25/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "5787fbc4a9b2a868ccd949990f84c9ba82e7e8777e71d45886ad6b18210c2560",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s25/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "32fac2d224c8376aaf96723de2a5e5fb67ed7c45cb1645dfdbbc6534dbf0809d",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s25/pike-safe-full01/states/post_shop.gst",
+              "sha256": "69960087003942e4ae309fcecda0c42541b204916c9bb66c760a643b29fb04ab",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 26,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 26,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s26/pike-safe-full01/evidence.json",
+          "evidence_sha256": "8ea868123be6bbc4eed8dcca32d07ac5661ed8c80afc51ad0ecae4780d84da61",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s26/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "53ae534bc1bc68bd5bafa16c31134efc307c089873eb8a3fec4814e173a6160a",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s26/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "58c0c88924ac7ac1fc1d552dad2a64283130f996e83880e0bdc9e15c88ebb189",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s26/pike-safe-full01/states/post_shop.gst",
+              "sha256": "16b7044edf5483c86b9e8b37cb5b2e3fd2619a2b4419cdd464aecc985000492c",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        },
+        {
+          "scenario": 27,
+          "run_id": "pike-safe-full01",
+          "status": "pass",
+          "identified_scenario": 27,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s27/pike-safe-full01/evidence.json",
+          "evidence_sha256": "ecd221022edd2cfc5203fd9f8f91bfb75a625c34e658d963753f510a6629b39b",
+          "states": {
+            "pre_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s27/pike-safe-full01/states/pre_shop.gst",
+              "sha256": "b23d664459161602d8702cb514a40f59b293e21bcabb827584c31304b0168414",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "shop_item_list": {
+              "path": "captures/run/preparation_surface_matrix/hard/s27/pike-safe-full01/states/shop_item_list.gst",
+              "sha256": "ef9a2654abc0f2d2196073e3d851ad5acfe4d847ac5e5d8de068c44112c2104b",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            },
+            "post_shop": {
+              "path": "captures/run/preparation_surface_matrix/hard/s27/pike-safe-full01/states/post_shop.gst",
+              "sha256": "29d808e4153c47374a5457b7b02a960a834220af13c3ab874a62964bb8a5abd3",
+              "vdp_register_11": "0x00",
+              "vdp_register_13": "0x3D",
+              "hscroll_mode": 0,
+              "hscroll_base": "0xF400",
+              "hscroll_end": "0xF7FF",
+              "hscroll_sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+              "nonzero_hscroll_bytes": 0,
+              "dynamic_tiles_inside_hscroll": [],
+              "status": "pass"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "current_non_release_normal_and_hard_surface_regression_scenarios_1_to_27",
+  "candidate_roms": {
+    "normal": {
+      "path": "tmp/current-glyph-lifetime-fix-normal.md",
+      "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+      "md_checksum": "CB53"
+    },
+    "hard": {
+      "path": "tmp/current-glyph-lifetime-fix-hard.md",
+      "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+      "md_checksum": "E15E"
+    },
+    "release_roms_modified": false,
+    "version_bumped": false
+  },
+  "preparation_surfaces": {
+    "status": "pass",
+    "profile_scenario_runs": 54,
+    "passed_profile_scenario_runs": 54,
+    "source_captures_per_profile": 679,
+    "same_run_shop_pre_post_pairs_per_profile": 733,
+    "manual_review_method": "Every new source and pre/post-pair SHA-256 is identical to the prior passed manual review for the same surface key; each transferred review is rebound to the new scenario-identity and gray-movement evidence.",
+    "report": "localization/preparation_manual_review_current_candidate.json",
+    "report_sha256": "87bebbacc19eb7a5061b036b69e10f4e42067de29bcd66555a796fcc22f944d1"
+  },
+  "scenario_identity": {
+    "status": "pass",
+    "normal": "27/27",
+    "hard": "27/27",
+    "report": "tmp/full_surface_regression/pike-safe-full01/preparation-scenario-identity.json",
+    "report_sha256": "1538e7f1b17e8868267ad20dfa000b34b5892c497eafa39476f26c82cfb403f3"
+  },
+  "glyph_lifetime_conflicts": {
+    "status": "pass",
+    "surface_contexts": 64890,
+    "dynamic_characters": 121,
+    "slots": 26,
+    "conflicts": 0,
+    "report": "tmp/full_surface_regression/pike-safe-full01/preparation-glyph-conflicts.json",
+    "report_sha256": "c5e97e90b1bff2e6503697707c08e6e54610a0ef37724f01b4c1cea5dbc65516"
+  },
+  "hscroll": {
+    "status": "pass",
+    "profile_scenario_runs": 54,
+    "states": 162,
+    "nonzero_hscroll_states": 0,
+    "report": "localization/preparation_hscroll_current_candidate.json",
+    "report_sha256": "caad085591afdb4622f77aca8fc555d394420f5ec6411c703b22f2aa921b19de"
+  },
+  "first_dynamic_draw": {
+    "status": "pass",
+    "normal": {
+      "character": "론",
+      "tile": "0x03CA",
+      "different_bytes_inside_owned_tile": 31
+    },
+    "hard": {
+      "character": "쉐",
+      "tile": "0x07DB",
+      "different_bytes_inside_owned_tile": 32
+    },
+    "changed_tiles_per_profile": 1,
+    "hscroll_changes": 0,
+    "mercenary_icon_cache_changes": 0,
+    "other_vram_changes": 0,
+    "report": "localization/preparation_first_draw_current_candidate.json",
+    "report_sha256": "37c04bbd161cee027cba02958f3eeb1e7fa662c91538e647fac3efa3148bc5a1"
+  },
+  "acted_gray_matrix": {
+    "status": "pass",
+    "normal": {
+      "scenarios": "27/27",
+      "report": "tmp/full_surface_regression/pike-safe-full01/gray-normal.json",
+      "report_sha256": "f6344c124fd99c6dcac30787fb3943b1ce406fc60988d33d18789c18331648a7"
+    },
+    "hard": {
+      "scenarios": "27/27",
+      "report": "tmp/full_surface_regression/pike-safe-full01/gray-hard.json",
+      "report_sha256": "b44c9d8d4a2e9df54d68ab34e09810bca730e036da78d925fee64b5daaeb3bbd"
+    }
+  },
+  "battle_mercenary_cache": {
+    "status": "pass",
+    "normal": "27/27",
+    "hard": "27/27",
+    "both_active_animation_frames_checked": true,
+    "report": "tmp/full_surface_regression/pike-safe-full01/battle-cache.json",
+    "report_sha256": "8d72bfe02131b9e7300e7a22c8ee876de116a24939dcfc1ac19586c2d90c00a4"
+  },
+  "all_mercenary_hire_pages": {
+    "status": "pass",
+    "mercenary_classes": 16,
+    "pages_per_profile": 6,
+    "normal": {
+      "evidence": "captures/run/all_mercenary_hire_probe/pike-safe-full01-normal/evidence.json",
+      "evidence_sha256": "c81e449a23b898ea825c5a732e1b56f6c54c3c51c4ad56b9087b5274c8c17442"
+    },
+    "hard": {
+      "evidence": "captures/run/all_mercenary_hire_probe/pike-safe-full01-hard/evidence.json",
+      "evidence_sha256": "c99163dfede783549819c3d2d5689ee4f27d1e906e785ca6a013cb982e48bf04"
+    }
+  },
+  "pike_active_and_acted": {
+    "status": "pass",
+    "hired_per_profile": 6,
+    "normal": {
+      "evidence": "captures/run/pike_acted_surface_probe/pike-safe-final-normal01/evidence.json",
+      "evidence_sha256": "c4d2dc58dce0e8c00ff847705b69731408c916f96c80d896fc211ed7cf11f0ae"
+    },
+    "hard": {
+      "evidence": "captures/run/pike_acted_surface_probe/pike-safe-final-hard01/evidence.json",
+      "evidence_sha256": "bc5e25866d5a77e435e48469b74671beac5a999e268155c7ac737c57553f24bc"
+    }
+  },
+  "monk_active_and_acted": {
+    "status": "pass",
+    "active_frame_0": "0x0370..0x0373",
+    "active_frame_1": "0x0470..0x0473",
+    "acted_gray": "0x03D8..0x03DB",
+    "both_profiles_match_original_sprite_sources": true,
+    "report": "localization/monk_sprite_cache_regression.json",
+    "report_sha256": "be206ad1f005207713c3a79dfa59ef146a763f0212626984aba8a0abafb67bdc"
+  },
+  "shop_items": {
+    "status": "pass",
+    "items": [
+      "크로스",
+      "넥클리스"
+    ],
+    "normal": {
+      "evidence": "captures/run/shop_necklace_probe/pike-safe-full01-normal/evidence.json",
+      "evidence_sha256": "c03fd171a2c8e9a0ad162b85a54e6644a6e24423d322c12e1a69ba332a5fd659"
+    },
+    "hard": {
+      "evidence": "captures/run/shop_necklace_probe/pike-safe-full01-hard/evidence.json",
+      "evidence_sha256": "da7e7b67263a8b56710ca03d1772102fb58ba8f2217966ecae6a13ba65f66a09"
+    }
+  },
+  "orchestration_note": {
+    "initial_summary": "tmp/full_surface_regression/pike-safe-full01/summary.json",
+    "initial_summary_sha256": "9beebeb7864ce3e5285caf95be8eed910e6a8b165982ca7eb586ff97acf27ca0",
+    "initial_status": "fail",
+    "reason": "The parent run launched the Pike probe while its cursor-normalization code was being edited, so both Pike subprocesses used an intermediate version. All other phases passed. The final script then passed the exact normal and hard candidates with six Pikes each, and those rerun evidence hashes are bound above.",
+    "combined_corrected_status": "pass"
+  },
+  "remaining_release_gate": {
+    "status": "pending",
+    "reason": "The cumulative release gate still lacks complete battle-result acceptance for Scenario 10 and Scenarios 12 through 27.",
+    "release_or_version_promotion_authorized": false
+  }
+}
