@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "rejected_diagnostics_only",
+  "checked_on": "2026-08-01",
+  "scope": "Scenario 10 current-candidate battle-result revalidation",
+  "candidate_roms": {
+    "normal": {
+      "path": "tmp/current-glyph-lifetime-fix-normal.md",
+      "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+      "md_checksum": "CB53"
+    },
+    "hard": {
+      "path": "tmp/current-glyph-lifetime-fix-hard.md",
+      "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+      "md_checksum": "E15E"
+    }
+  },
+  "attempts": [
+    {
+      "id": "scheduled_start_callback",
+      "diagnostic_rom": "tmp/current-s10-runtime-finish-normal.md",
+      "diagnostic_rom_sha256": "a14022600a74730b2d61a8ae70a493243d7d2c492312a0ec4841b334d4488d7f",
+      "method": "Replace the callback scheduled at ROM 0x00F2E0 with a guarded wrapper at 0x3FEF00.",
+      "result": "rejected",
+      "reason": "The callback is scheduled during battle-map initialization, when Scenario 10 monster group 8 still has hidden X=0xFF. It returns to the stock handler and is not scheduled again after the TURN 3 reveal.",
+      "runtime_state": "captures/run/current_s10_result/normal/states/current_after_wrapper.gst",
+      "runtime_state_sha256": "3188ab4d799d5350471d6ec57c2b74b36f0e43f3ad604faed500d10375d094d8",
+      "runtime_observation": "Groups 8..17 remain at HP 10 with live coordinates; no group has defeated bit 0x80 set. The visible Start menu alone is not evidence that the wrapper ran after reveal."
+    },
+    {
+      "id": "temporary_start_entry_jump",
+      "diagnostic_rom": "tmp/current-s10-runtime-finish-normal-v2.md",
+      "diagnostic_rom_sha256": "2588ab26ab7c98adb7782b611fe4321813002c48456766233be0161fa03f503a",
+      "method": "Temporary, uncommitted six-byte jump at Start-menu entry 0x022C1E, restoring the displaced prologue before resuming at 0x022C24.",
+      "result": "rejected_and_removed",
+      "reason": "The entry is also part of the cached initialization callback chain rather than a per-Start invocation. Opening the menu after the stock monster reveal did not execute the runtime writes.",
+      "runtime_state": "captures/run/current_s10_result_v2/normal/states/after_runtime_finish_hook.gst",
+      "runtime_state_sha256": "dda2299ece14cb3b3828a8119cd7569fff9fddb7b0c413c717ab79b9eecf1d3d",
+      "runtime_observation": "Groups 8..17 remain at HP 10 and retain their live coordinates. The temporary source changes were removed and are not part of a commit."
+    }
+  ],
+  "accepted_effect": {
+    "scenario_10_current_result": "pending",
+    "hard_profile_started": false,
+    "release_or_version_promotion_authorized": false,
+    "preparation_surface_regression_status_unchanged": "pass"
+  },
+  "next_safe_direction": "Use a proven per-frame or phase-transition hook, or complete the weakened stock monster battles, and require a retained current-candidate battle-result GST before changing Scenario 10 acceptance."
+}
