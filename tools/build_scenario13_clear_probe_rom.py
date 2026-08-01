@@ -42,6 +42,7 @@ COMPLETION_HIDDEN_RECORD_INDICES = (*range(0, 8), 9)
 COMPLETION_VARGAS_CLASS = 45  # Enemy-palette Fighter; completion probe only.
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
+START_MENU_ENTRY_PATCH_SIZE = 6
 COMPLETION_HP_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
@@ -102,6 +103,32 @@ def completion_hp_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def completion_continuation_wrapper_code(source: bytes) -> bytes:
+    """Return an inline trampoline for already-running battle continuations.
+
+    A battle savestate can retain the stock Start-menu callback address in
+    work RAM.  Redirecting only the callback initializer therefore does not
+    affect that continuation.  This diagnostic trampoline hooks the retained
+    stock entry itself, conditionally lowers only a live Vargas, replays the
+    displaced stock instruction, and resumes at the next stock instruction.
+    """
+    displaced = source[
+        START_MENU_ENTRY : START_MENU_ENTRY + START_MENU_ENTRY_PATCH_SIZE
+    ]
+    expected = bytes.fromhex("31 FC 00 00 BE AC")
+    if displaced != expected:
+        raise ValueError("Japanese Start-menu entry prologue changed")
+    code = bytearray(bytes.fromhex("0C 39 00 0F"))
+    code.extend((VARGAS_RUNTIME_RECORD + RUNTIME_NAME_ID_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 08"))
+    code.extend(bytes.fromhex("13 FC 00 01"))
+    code.extend((VARGAS_RUNTIME_RECORD + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(displaced)
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend((START_MENU_ENTRY + START_MENU_ENTRY_PATCH_SIZE).to_bytes(4, "big"))
+    return bytes(code)
+
+
 def protagonist_death_wrapper_code() -> bytes:
     record = (
         RUNTIME_GROUP_BASE
@@ -147,6 +174,24 @@ def install_start_wrapper(
     probe[COMPLETION_HP_WRAPPER:wrapper_end] = wrapper
 
 
+def install_continuation_start_wrapper(
+    probe: bytearray,
+    source: bytes,
+) -> None:
+    wrapper = completion_continuation_wrapper_code(source)
+    entry_end = START_MENU_ENTRY + START_MENU_ENTRY_PATCH_SIZE
+    expected_entry = source[START_MENU_ENTRY:entry_end]
+    if probe[START_MENU_ENTRY:entry_end] != expected_entry:
+        raise ValueError("input Start-menu entry prologue changed")
+    wrapper_end = COMPLETION_HP_WRAPPER + len(wrapper)
+    if probe[COMPLETION_HP_WRAPPER:wrapper_end] != b"\xFF" * len(wrapper):
+        raise ValueError("input diagnostic wrapper region is not empty")
+    probe[START_MENU_ENTRY:entry_end] = (
+        bytes.fromhex("4E F9") + COMPLETION_HP_WRAPPER.to_bytes(4, "big")
+    )
+    probe[COMPLETION_HP_WRAPPER:wrapper_end] = wrapper
+
+
 def validate_layout(probe: bytes, source: bytes) -> None:
     source_layout = scenario_layout(source, SCENARIO_NUMBER)
     probe_layout = scenario_layout(probe, SCENARIO_NUMBER)
@@ -183,9 +228,14 @@ def patch_probe(
     source: bytes,
     *,
     completion_layout: bool = False,
+    completion_continuation: bool = False,
     protagonist_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
+    if completion_continuation and not completion_layout:
+        raise ValueError(
+            "completion-continuation requires completion-layout"
+        )
     if completion_layout and protagonist_death:
         raise ValueError(
             "protagonist-death conflicts with completion-layout"
@@ -226,8 +276,11 @@ def patch_probe(
             FIRST_PLAYER_DEPLOYMENT_OFFSET :
             FIRST_PLAYER_DEPLOYMENT_OFFSET + len(completion_deployments)
         ] = completion_deployments
-        wrapper = completion_hp_wrapper_code()
-        install_start_wrapper(probe, source, wrapper)
+        if completion_continuation:
+            install_continuation_start_wrapper(probe, source)
+        else:
+            wrapper = completion_hp_wrapper_code()
+            install_start_wrapper(probe, source, wrapper)
     return builder.update_md_checksum(probe)
 
 
@@ -252,6 +305,15 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--completion-continuation",
+        action="store_true",
+        help=(
+            "with --completion-layout, hook the stock Start-menu entry so "
+            "an already-running battle continuation that cached the stock "
+            "callback still reaches the Vargas HP diagnostic"
+        ),
+    )
+    parser.add_argument(
         "--protagonist-death",
         action="store_true",
         help=(
@@ -270,6 +332,7 @@ def main() -> int:
         probe,
         source,
         completion_layout=args.completion_layout,
+        completion_continuation=args.completion_continuation,
         protagonist_death=args.protagonist_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
@@ -289,7 +352,13 @@ def main() -> int:
             "completion layout: generic records hidden, players by Vargas lane, "
             "Vargas changed to Fighter"
         )
-        print("Start conditionally lowers live Vargas HP to 1 before stock menu")
+        if args.completion_continuation:
+            print(
+                "continuation Start trampoline conditionally lowers live "
+                "Vargas HP to 1 before resuming the stock menu"
+            )
+        else:
+            print("Start conditionally lowers live Vargas HP to 1 before stock menu")
         print("identities, levels, reinforcement flags, and events preserved")
     else:
         print("Zorum moved from (19,27) to (16,4), beside stock Elwin at (16,3)")

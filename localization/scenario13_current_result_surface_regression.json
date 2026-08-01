@@ -1,0 +1,1692 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Current normal/hard Scenario 13 stock Vargas aftermath, dynamic dialogue names, result roster, Scenario 14 save, route, and title",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "source_state": {
+    "path": "captures/runtime/s13-completion-0ce6/.local/share/blastem/Langrisser II (Scenario 13 Completion Probe)/quicksave.gst",
+    "sha256": "11af030d8cf45a61502a60c1fde7811a3c256e92fcfd751944da739feacad658",
+    "bytes": 140408,
+    "identity_matches": true,
+    "method": "historical 0CE6 battle continuation loaded without RAM edits; the current diagnostic ROM changed only the declared completion layout and the identity-guarded Start-entry trampoline"
+  },
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact Scenario 13 continuation-layout builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "bytes": 4194304,
+          "header_checksum": "CB53",
+          "computed_checksum": "CB53",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s13-continuation.md",
+          "sha256": "e181b1a3b3519b0a54ae80484ac7ef3da9158c4c2f5b48e7f4d69241e6f4435d",
+          "bytes": 4194304,
+          "header_checksum": "A46A",
+          "computed_checksum": "A46A",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 177,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_builder_rebuild": true,
+        "complete_event_block_preserved": true,
+        "event_block": [
+          "0x19A964",
+          "0x19C736"
+        ],
+        "inline_start_trampoline_installed": true
+      },
+      "runtime": {
+        "sequence": {
+          "frame_count": 48,
+          "all_dimensions_320x240": true,
+          "captures": [
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_01.png",
+              "sha256": "ea812d0b5a8c22ae9689e3b31120efef827f615b704a0f7192025dfa4f7732c0",
+              "bytes": 14764,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_02.png",
+              "sha256": "a02caf2cd498199548123cc7161d153473db5f3576d2c7f6edba7f191f9f0238",
+              "bytes": 18159,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_03.png",
+              "sha256": "8c9e411e88eda2312a0c79ef747f87a6d20c5d8e83b5350d855d7fd9186032df",
+              "bytes": 15736,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_04.png",
+              "sha256": "01df0ebab4722f827527e41264aaf882cea80e8ff958a41ac6e3c8d61b875197",
+              "bytes": 16261,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_05.png",
+              "sha256": "a3d9cda1fc1d983401112f7e5feee4bd8104aa1531ffb7fdc65059b72f051051",
+              "bytes": 15708,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_06.png",
+              "sha256": "730f930d3b6977f5181218aa79a636380401b245b47e73c9a2c61297c25ba4a4",
+              "bytes": 15607,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_07.png",
+              "sha256": "35e66deb4026751af6862c52ace70e691567e0bae3df530d27252424199d12ea",
+              "bytes": 15723,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_08.png",
+              "sha256": "85824c394df9e16ecb0695ecfdd56596fb8f87fcf62d72e3b60bb22f781b7f2d",
+              "bytes": 16087,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_09.png",
+              "sha256": "df0238dec1de8b238fd2c5b3f2d3b71798994bd39d4a11b16ebb0aef7dcdcc08",
+              "bytes": 15659,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_10.png",
+              "sha256": "0b8e3a8d19018b68261d7a3a3cac743f7064e14c673e93a0501bf79d29da5b05",
+              "bytes": 15720,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_11.png",
+              "sha256": "8f52db1d7912341b8debdd6d09376c47cdd4fe56dc910873e7469a8a262a61a3",
+              "bytes": 15247,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_12.png",
+              "sha256": "4655a9e2d8a4ff5cc1d05e738cb4ffa44d908ef906adb4f63bd83339a0c9490c",
+              "bytes": 16646,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_13.png",
+              "sha256": "211e153b910120c1c544d04531a3d5978234fb7c0238f851cb6d45cc4b21a77f",
+              "bytes": 15353,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_14.png",
+              "sha256": "387828836889e3e350832520b5086c5e2492cfa44f0c0352d1229453baba027b",
+              "bytes": 15769,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_15.png",
+              "sha256": "a8e3f2fb76e7ae7e68b4ed966e5790161b3c7687737855065fb3fb571b33410b",
+              "bytes": 15808,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_16.png",
+              "sha256": "b5fdc57026db7d7586b914b2a5974ff821d48e5739a7a66cebb19e0229cd169a",
+              "bytes": 15490,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_17.png",
+              "sha256": "fe415b09f5d39bd7cd6b2bb4055c666c20b80cbf621493551e95a2479c1e8348",
+              "bytes": 16212,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_18.png",
+              "sha256": "6966ced8d89065bddee4334da2360f99009d262850a39f1b587809a2bbc519cb",
+              "bytes": 15737,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_19.png",
+              "sha256": "7fb7be173a346960c0a3f2df6e1a749c4eb0f8e74ca82c9686f0a329095af36b",
+              "bytes": 15368,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_20.png",
+              "sha256": "538e439ca29c528ee98f98b0269856a969f70a5ae139ed7f4501ada65844b743",
+              "bytes": 16153,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_21.png",
+              "sha256": "3a1662438e87baddc53c071ffa750b49065ebc9da2104bd7624baa9e4f5b15fe",
+              "bytes": 15777,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_22.png",
+              "sha256": "4eb4e36b25ec4e01927ea08f47145c6553e93da0d8168a52d17275cf8b57738d",
+              "bytes": 14922,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_23.png",
+              "sha256": "6e32129f6760ffebfb60d5273a4015b1902577ae7ece7a08ff683f92a7cb0349",
+              "bytes": 15322,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_24.png",
+              "sha256": "50f83f2076c789e0855e00888b4c663d0c7f9eecf4a31e1fe50f9ffe45aff26d",
+              "bytes": 15841,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_25.png",
+              "sha256": "40d6d9074282f6a94e31fd3b587e062a9399e4f929f560424cc1eb95793eac88",
+              "bytes": 14997,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_26.png",
+              "sha256": "4cba6a8378e900826dee56e8892bc78374ba8eea665bb5e20558432b8b6658d5",
+              "bytes": 15062,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_27.png",
+              "sha256": "0d6ce72334fd80b87250935086f7a7754c76ece9a57c53f0e776049735db19a6",
+              "bytes": 15560,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_28.png",
+              "sha256": "b40ac05d5b3f75bd7225668e953a38aa44f45330b26439d3b8c4764193d2546e",
+              "bytes": 15217,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_29.png",
+              "sha256": "4e82398ccd699a9d679727234f82d1be71c57909215d7fb1bb775b18ecfabd4e",
+              "bytes": 15660,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_30.png",
+              "sha256": "0d360209e37382d6592f8e8c53bc3c72d980635235cf54c403fd5625e68b9828",
+              "bytes": 15169,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_31.png",
+              "sha256": "4815c96018f66324a2c7b9edcf68dd79eaebdb817d020b4f1ae14e28bb9e7bbf",
+              "bytes": 15416,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_32.png",
+              "sha256": "3da495608a7e4accdc8d710bd426fee20f0c5d031308017561cb81a1132b9cfe",
+              "bytes": 15560,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_33.png",
+              "sha256": "3e8e75591054ebd6d1720ea2582f89449df4c7754d6afe16c5abeb86e8da6f1f",
+              "bytes": 15350,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_34.png",
+              "sha256": "f5432b655ebd4cd48c3082296387c3711c5a865a1ad1060c9c82716f80c8880c",
+              "bytes": 15810,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_35.png",
+              "sha256": "406d7812fed525232026a09f19a2d42b69fa82d999b87eccd06ff7ea1f2b98bd",
+              "bytes": 14942,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_36.png",
+              "sha256": "1ca6399e3c9e72e1fb3bdc02191d6644c7c10fa8617c306844de921798a20f29",
+              "bytes": 15043,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_37.png",
+              "sha256": "1705cfe2059005dfb046eda0d8c2c47a82ce423407cec97e67bf3966c5b9d0df",
+              "bytes": 15465,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_38.png",
+              "sha256": "fed2de4160dc021b33cb8b684053b45713404afb67f30cb485a21aa55f744ea9",
+              "bytes": 15634,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_39.png",
+              "sha256": "c0ea8af4efd6fa275866fafc569964a32488532c26e6363445a5bdb827fab3e7",
+              "bytes": 15613,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_40.png",
+              "sha256": "dc1d3cf8faf3242de6775bc0abc9df2ed382dc6c5a0d1c77d56e23ddaac87d25",
+              "bytes": 15881,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_41.png",
+              "sha256": "c046e3d8646e7721ad8cfbbb10b72ba8ae2d3b22c448339e089056cf585c7f4e",
+              "bytes": 15586,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_42.png",
+              "sha256": "e9d923f8cee275847567f45662b79235f9acedd126607fe8210826880d3e242b",
+              "bytes": 15673,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_43.png",
+              "sha256": "1a74607bc6789a6192cf2d5b870d0048ac739c73d93e7ae255f95142d6733631",
+              "bytes": 15876,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_44.png",
+              "sha256": "ebe58833ec38c7e765f3cc3aae3c737a7b0b4c069e446762759ff657e69e279b",
+              "bytes": 15070,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_45.png",
+              "sha256": "466100cf7a0f4fd56759262ea727e22c20fae89493e93cb3c479c40c4169542e",
+              "bytes": 15520,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_46.png",
+              "sha256": "56832449d94e48f93a193e16771b9afee0af861f566eca658528f644dad4c9dd",
+              "bytes": 7731,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_47.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_48.png",
+              "sha256": "94c083c254344ccdaea7d145cade42510d725e2ba95d955247151cb1c41e6bc6",
+              "bytes": 6083,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu"
+            }
+          ]
+        },
+        "vargas_hp_one_target": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02_target_vargas.png",
+          "sha256": "1b00dd946bba36d6a8745cd0f9473d964a613f1da13db345d32ba7e58844bb1e",
+          "bytes": 17230,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "발가스",
+            "파이터",
+            "HP1"
+          ]
+        },
+        "devil_axe_and_vargas_hp_zero": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02_after_attack.png",
+          "sha256": "83558a151f5e118422bb3e91ad31a8afaab9455970f335ff0fb7740840f968bb",
+          "bytes": 11970,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "데빌액스 획득!",
+            "발가스 HP0"
+          ]
+        },
+        "critical_surfaces": {
+          "vargas_departure": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_01.png",
+            "sha256": "ea812d0b5a8c22ae9689e3b31120efef827f615b704a0f7192025dfa4f7732c0",
+            "bytes": 14764,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "ea812d0b5a8c22ae9689e3b31120efef827f615b704a0f7192025dfa4f7732c0",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "발가스",
+              "드디어 내 차례인가…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "leon_reveal": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_15.png",
+            "sha256": "a8e3f2fb76e7ae7e68b4ed966e5790161b3c7687737855065fb3fb571b33410b",
+            "bytes": 15808,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "a8e3f2fb76e7ae7e68b4ed966e5790161b3c7687737855065fb3fb571b33410b",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "레온",
+              "내 이름은 레온이다!"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "aaron_report": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_20.png",
+            "sha256": "538e439ca29c528ee98f98b0269856a969f70a5ae139ed7f4501ada65844b743",
+            "bytes": 16153,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "538e439ca29c528ee98f98b0269856a969f70a5ae139ed7f4501ada65844b743",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "아론",
+              "칼자스 성으로 돌아가라"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "elwin_order": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_21.png",
+            "sha256": "3a1662438e87baddc53c071ffa750b49065ebc9da2104bd7624baa9e4f5b15fe",
+            "bytes": 15777,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "3a1662438e87baddc53c071ffa750b49065ebc9da2104bd7624baa9e4f5b15fe",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "엘윈",
+              "바로 칼자스로 돌아가자!"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "commander_reply": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_25.png",
+            "sha256": "40d6d9074282f6a94e31fd3b587e062a9399e4f929f560424cc1eb95793eac88",
+            "bytes": 14997,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "40d6d9074282f6a94e31fd3b587e062a9399e4f929f560424cc1eb95793eac88",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제국지휘관",
+              "면목 없습니다."
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "keith_reaction": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_30.png",
+            "sha256": "0d360209e37382d6592f8e8c53bc3c72d980635235cf54c403fd5625e68b9828",
+            "bytes": 15169,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "0d360209e37382d6592f8e8c53bc3c72d980635235cf54c403fd5625e68b9828",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "키스",
+              "공주님…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_reaction": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_35.png",
+            "sha256": "406d7812fed525232026a09f19a2d42b69fa82d999b87eccd06ff7ea1f2b98bd",
+            "bytes": 14942,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "406d7812fed525232026a09f19a2d42b69fa82d999b87eccd06ff7ea1f2b98bd",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카",
+              "설마…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "elwin_resolve": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_40.png",
+            "sha256": "dc1d3cf8faf3242de6775bc0abc9df2ed382dc6c5a0d1c77d56e23ddaac87d25",
+            "bytes": 15881,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "dc1d3cf8faf3242de6775bc0abc9df2ed382dc6c5a0d1c77d56e23ddaac87d25",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "엘윈",
+              "리아나를 구할 수 있어?"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "keith_skill": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_44.png",
+            "sha256": "ebe58833ec38c7e765f3cc3aae3c737a7b0b4c069e446762759ff657e69e279b",
+            "bytes": 15070,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "ebe58833ec38c7e765f3cc3aae3c737a7b0b4c069e446762759ff657e69e279b",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "키스",
+              "스킬 습득!"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_level": {
+            "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_45.png",
+            "sha256": "466100cf7a0f4fd56759262ea727e22c20fae89493e93cb3c479c40c4169542e",
+            "bytes": 15520,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "466100cf7a0f4fd56759262ea727e22c20fae89493e93cb3c479c40c4169542e",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카의",
+              "레벨이 올랐다!",
+              "MP가 1 상승"
+            ],
+            "observed_sprite_state": "clean"
+          }
+        },
+        "battle_result": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_46.png",
+          "sha256": "56832449d94e48f93a193e16771b9afee0af861f566eca658528f644dad4c9dd",
+          "bytes": 7731,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "battle_result",
+          "manual_review": "pass",
+          "observed_roster": [
+            "전과보고",
+            "아론",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "키스",
+            "레스터",
+            "제시카",
+            "POINT",
+            "6450P"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "save_menu_before_write": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_47.png",
+          "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+          "bytes": 5961,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu"
+        },
+        "scenario14_save_written": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/advance_48.png",
+          "sha256": "94c083c254344ccdaea7d145cade42510d725e2ba95d955247151cb1c41e6bc6",
+          "bytes": 6083,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu",
+          "manual_review": "pass",
+          "observed_text": [
+            "저장",
+            "시나리오 14",
+            "다음 시나리오"
+          ]
+        },
+        "scenario14_route": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/next_selected.png",
+          "sha256": "4db89eb270e18349d6782cf80d00acf34bc14a983e8c4fb7fb1cc38b4da8c323",
+          "bytes": 20407,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "진군루트"
+          ]
+        },
+        "scenario14_title": {
+          "path": "captures/run/current_s13_result_debug/normal/continuation-hook02/scenario14_title.png",
+          "sha256": "92d5de7442b2a04a1bab9b439f90801e36a5a02c773a070bfda4496a4aebec4b",
+          "bytes": 9898,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "시나리오 14",
+            "성검 랑그릿사"
+          ]
+        },
+        "scope_limit": "the cross-checksum continuation proves the current ROM's stock Vargas aftermath, result, save, route, and next-title surfaces; pre-result map sprites are covered by the independent current preparation/gray-sprite matrices and are not claimed here"
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "apply the exact normal continuation diagnostic delta to the hard candidate, then recalculate only the Mega Drive checksum",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "bytes": 4194304,
+          "header_checksum": "E15E",
+          "computed_checksum": "E15E",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s13-continuation.md",
+          "sha256": "ed95b5eda14a92c605dc76351cdf91aee3dde85385be6036037244c54bff06fa",
+          "bytes": 4194304,
+          "header_checksum": "9065",
+          "computed_checksum": "9065",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 177,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 44,
+        "exact_three_way_overlay": true,
+        "complete_event_block_preserved": true,
+        "event_block": [
+          "0x19A964",
+          "0x19C736"
+        ],
+        "inline_start_trampoline_installed": true
+      },
+      "runtime": {
+        "sequence": {
+          "frame_count": 48,
+          "all_dimensions_320x240": true,
+          "captures": [
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_01.png",
+              "sha256": "ea812d0b5a8c22ae9689e3b31120efef827f615b704a0f7192025dfa4f7732c0",
+              "bytes": 14764,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_02.png",
+              "sha256": "31fcee3f0b758a5a828d1b1a2963c54b7af82d2bc92a72f2bb91ed211647d179",
+              "bytes": 18460,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_03.png",
+              "sha256": "f077d54428f828ee5353aed3ae103cd87a723a0b3c33fd4bf0cb93963c856685",
+              "bytes": 15789,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_04.png",
+              "sha256": "3ce38b4a650a55a765a7017aaf853f6d08bba7a0bc1cba2d99e48fd2e17df984",
+              "bytes": 16296,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_05.png",
+              "sha256": "888dd6a97718ad6ba4a7925154e4352638bac071da92fbf044c44914bd83b441",
+              "bytes": 15740,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_06.png",
+              "sha256": "59bb0714d5511b71632df46fc57106161fe5ed22bd2593729fd5fcff63ad9c6b",
+              "bytes": 15638,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_07.png",
+              "sha256": "03ad56283d8bdaea03893f8f76ae11569ebe451f654406435c17837a95b44194",
+              "bytes": 15754,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_08.png",
+              "sha256": "a88ac1467a8dfe725cdae04b0bdebeae92f3068af382abaa158afd6a4265fc9d",
+              "bytes": 16125,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_09.png",
+              "sha256": "15e863be55f972f36559b2ff048fb0f27ac1a8f5caceb24491ebb9eb299630d8",
+              "bytes": 15691,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_10.png",
+              "sha256": "5c55a9f754f7bbe1ff1b109f5f8379ee703fd76661becdf041f3808f57ab9708",
+              "bytes": 15800,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_11.png",
+              "sha256": "9060a0db33cfa1086ed0418894d0f7a57df822dc88d84a2f6e0fa91d96210027",
+              "bytes": 15313,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_12.png",
+              "sha256": "8bb787e2a516d03c5413de123bcc2afc5930295ea9f11299216490e87994b4ca",
+              "bytes": 16693,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_13.png",
+              "sha256": "6b31f3a646b5b1e17c48c24e5d9306af7dcbcb7ef1a72e6a066c730fab57e830",
+              "bytes": 15419,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_14.png",
+              "sha256": "71fa6d2221c9bc97254f300c5d1cbf5ebb740b4fa453bda4a971e71d6bc9f232",
+              "bytes": 15816,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_15.png",
+              "sha256": "c6ac23d2bff101e05100eee81594fb323977c7f34952f9f3d8cc33a07e5ecf6e",
+              "bytes": 15855,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_16.png",
+              "sha256": "b5fdc57026db7d7586b914b2a5974ff821d48e5739a7a66cebb19e0229cd169a",
+              "bytes": 15490,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_17.png",
+              "sha256": "fe415b09f5d39bd7cd6b2bb4055c666c20b80cbf621493551e95a2479c1e8348",
+              "bytes": 16212,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_18.png",
+              "sha256": "6966ced8d89065bddee4334da2360f99009d262850a39f1b587809a2bbc519cb",
+              "bytes": 15737,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_19.png",
+              "sha256": "7fb7be173a346960c0a3f2df6e1a749c4eb0f8e74ca82c9686f0a329095af36b",
+              "bytes": 15368,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_20.png",
+              "sha256": "538e439ca29c528ee98f98b0269856a969f70a5ae139ed7f4501ada65844b743",
+              "bytes": 16153,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_21.png",
+              "sha256": "3a1662438e87baddc53c071ffa750b49065ebc9da2104bd7624baa9e4f5b15fe",
+              "bytes": 15777,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_22.png",
+              "sha256": "4eb4e36b25ec4e01927ea08f47145c6553e93da0d8168a52d17275cf8b57738d",
+              "bytes": 14922,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_23.png",
+              "sha256": "6e32129f6760ffebfb60d5273a4015b1902577ae7ece7a08ff683f92a7cb0349",
+              "bytes": 15322,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_24.png",
+              "sha256": "50f83f2076c789e0855e00888b4c663d0c7f9eecf4a31e1fe50f9ffe45aff26d",
+              "bytes": 15841,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_25.png",
+              "sha256": "40d6d9074282f6a94e31fd3b587e062a9399e4f929f560424cc1eb95793eac88",
+              "bytes": 14997,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_26.png",
+              "sha256": "3d24a0dcc8989c90325c33dfa70509502e9a0b05532776eac43d777e3ad435fb",
+              "bytes": 15073,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_27.png",
+              "sha256": "0d6ce72334fd80b87250935086f7a7754c76ece9a57c53f0e776049735db19a6",
+              "bytes": 15560,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_28.png",
+              "sha256": "b40ac05d5b3f75bd7225668e953a38aa44f45330b26439d3b8c4764193d2546e",
+              "bytes": 15217,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_29.png",
+              "sha256": "4e82398ccd699a9d679727234f82d1be71c57909215d7fb1bb775b18ecfabd4e",
+              "bytes": 15660,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_30.png",
+              "sha256": "f94fc457605296ba7953115ed0ad0cc3d2b5d17a30b79dbca6d59212e56164d8",
+              "bytes": 15180,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_31.png",
+              "sha256": "4815c96018f66324a2c7b9edcf68dd79eaebdb817d020b4f1ae14e28bb9e7bbf",
+              "bytes": 15416,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_32.png",
+              "sha256": "3da495608a7e4accdc8d710bd426fee20f0c5d031308017561cb81a1132b9cfe",
+              "bytes": 15560,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_33.png",
+              "sha256": "3e8e75591054ebd6d1720ea2582f89449df4c7754d6afe16c5abeb86e8da6f1f",
+              "bytes": 15350,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_34.png",
+              "sha256": "f5432b655ebd4cd48c3082296387c3711c5a865a1ad1060c9c82716f80c8880c",
+              "bytes": 15810,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_35.png",
+              "sha256": "406d7812fed525232026a09f19a2d42b69fa82d999b87eccd06ff7ea1f2b98bd",
+              "bytes": 14942,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_36.png",
+              "sha256": "1ca6399e3c9e72e1fb3bdc02191d6644c7c10fa8617c306844de921798a20f29",
+              "bytes": 15043,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_37.png",
+              "sha256": "1705cfe2059005dfb046eda0d8c2c47a82ce423407cec97e67bf3966c5b9d0df",
+              "bytes": 15465,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_38.png",
+              "sha256": "fed2de4160dc021b33cb8b684053b45713404afb67f30cb485a21aa55f744ea9",
+              "bytes": 15634,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_39.png",
+              "sha256": "c0ea8af4efd6fa275866fafc569964a32488532c26e6363445a5bdb827fab3e7",
+              "bytes": 15613,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_40.png",
+              "sha256": "dc1d3cf8faf3242de6775bc0abc9df2ed382dc6c5a0d1c77d56e23ddaac87d25",
+              "bytes": 15881,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_41.png",
+              "sha256": "c046e3d8646e7721ad8cfbbb10b72ba8ae2d3b22c448339e089056cf585c7f4e",
+              "bytes": 15586,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_42.png",
+              "sha256": "e9d923f8cee275847567f45662b79235f9acedd126607fe8210826880d3e242b",
+              "bytes": 15673,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_43.png",
+              "sha256": "abed8c3d6b0f3268798997b3ce7ab1171e409472478ad63a10da8d470eb7cb5d",
+              "bytes": 15888,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_44.png",
+              "sha256": "dccb7cf24dc8d396cf590a29949eadaadd960f2e69e523de67bb913a5b855109",
+              "bytes": 15083,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_45.png",
+              "sha256": "466100cf7a0f4fd56759262ea727e22c20fae89493e93cb3c479c40c4169542e",
+              "bytes": 15520,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "other"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_46.png",
+              "sha256": "17780c1aea7dab2e9fd49f895fe8e7e4c8db3682dcd26cea61c9a63628584ab2",
+              "bytes": 7730,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_47.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu"
+            },
+            {
+              "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_48.png",
+              "sha256": "94c083c254344ccdaea7d145cade42510d725e2ba95d955247151cb1c41e6bc6",
+              "bytes": 6083,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu"
+            }
+          ]
+        },
+        "vargas_hp_one_target": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01_target_vargas.png",
+          "sha256": "1b00dd946bba36d6a8745cd0f9473d964a613f1da13db345d32ba7e58844bb1e",
+          "bytes": 17230,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "발가스",
+            "파이터",
+            "HP1"
+          ]
+        },
+        "devil_axe_and_vargas_hp_zero": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01_after_attack.png",
+          "sha256": "83558a151f5e118422bb3e91ad31a8afaab9455970f335ff0fb7740840f968bb",
+          "bytes": 11970,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "데빌액스 획득!",
+            "발가스 HP0"
+          ]
+        },
+        "critical_surfaces": {
+          "vargas_departure": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_01.png",
+            "sha256": "ea812d0b5a8c22ae9689e3b31120efef827f615b704a0f7192025dfa4f7732c0",
+            "bytes": 14764,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "ea812d0b5a8c22ae9689e3b31120efef827f615b704a0f7192025dfa4f7732c0",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "발가스",
+              "드디어 내 차례인가…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "leon_reveal": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_15.png",
+            "sha256": "c6ac23d2bff101e05100eee81594fb323977c7f34952f9f3d8cc33a07e5ecf6e",
+            "bytes": 15855,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "c6ac23d2bff101e05100eee81594fb323977c7f34952f9f3d8cc33a07e5ecf6e",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "레온",
+              "내 이름은 레온이다!"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "aaron_report": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_20.png",
+            "sha256": "538e439ca29c528ee98f98b0269856a969f70a5ae139ed7f4501ada65844b743",
+            "bytes": 16153,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "538e439ca29c528ee98f98b0269856a969f70a5ae139ed7f4501ada65844b743",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "아론",
+              "칼자스 성으로 돌아가라"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "elwin_order": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_21.png",
+            "sha256": "3a1662438e87baddc53c071ffa750b49065ebc9da2104bd7624baa9e4f5b15fe",
+            "bytes": 15777,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "3a1662438e87baddc53c071ffa750b49065ebc9da2104bd7624baa9e4f5b15fe",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "엘윈",
+              "바로 칼자스로 돌아가자!"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "commander_reply": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_25.png",
+            "sha256": "40d6d9074282f6a94e31fd3b587e062a9399e4f929f560424cc1eb95793eac88",
+            "bytes": 14997,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "40d6d9074282f6a94e31fd3b587e062a9399e4f929f560424cc1eb95793eac88",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제국지휘관",
+              "면목 없습니다."
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "keith_reaction": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_30.png",
+            "sha256": "f94fc457605296ba7953115ed0ad0cc3d2b5d17a30b79dbca6d59212e56164d8",
+            "bytes": 15180,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "f94fc457605296ba7953115ed0ad0cc3d2b5d17a30b79dbca6d59212e56164d8",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "키스",
+              "공주님…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_reaction": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_35.png",
+            "sha256": "406d7812fed525232026a09f19a2d42b69fa82d999b87eccd06ff7ea1f2b98bd",
+            "bytes": 14942,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "406d7812fed525232026a09f19a2d42b69fa82d999b87eccd06ff7ea1f2b98bd",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카",
+              "설마…"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "elwin_resolve": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_40.png",
+            "sha256": "dc1d3cf8faf3242de6775bc0abc9df2ed382dc6c5a0d1c77d56e23ddaac87d25",
+            "bytes": 15881,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "dc1d3cf8faf3242de6775bc0abc9df2ed382dc6c5a0d1c77d56e23ddaac87d25",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "엘윈",
+              "리아나를 구할 수 있어?"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "keith_skill": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_44.png",
+            "sha256": "dccb7cf24dc8d396cf590a29949eadaadd960f2e69e523de67bb913a5b855109",
+            "bytes": 15083,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "dccb7cf24dc8d396cf590a29949eadaadd960f2e69e523de67bb913a5b855109",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "키스",
+              "스킬 습득!"
+            ],
+            "observed_sprite_state": "clean"
+          },
+          "jessica_level": {
+            "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_45.png",
+            "sha256": "466100cf7a0f4fd56759262ea727e22c20fae89493e93cb3c479c40c4169542e",
+            "bytes": 15520,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other",
+            "expected_reviewed_sha256": "466100cf7a0f4fd56759262ea727e22c20fae89493e93cb3c479c40c4169542e",
+            "reviewed_hash_matches": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카의",
+              "레벨이 올랐다!",
+              "MP가 1 상승"
+            ],
+            "observed_sprite_state": "clean"
+          }
+        },
+        "battle_result": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_46.png",
+          "sha256": "17780c1aea7dab2e9fd49f895fe8e7e4c8db3682dcd26cea61c9a63628584ab2",
+          "bytes": 7730,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "battle_result",
+          "manual_review": "pass",
+          "observed_roster": [
+            "전과보고",
+            "아론",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "키스",
+            "레스터",
+            "제시카",
+            "POINT",
+            "6420P"
+          ],
+          "observed_sprite_state": "clean"
+        },
+        "save_menu_before_write": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_47.png",
+          "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+          "bytes": 5961,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu"
+        },
+        "scenario14_save_written": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/advance_48.png",
+          "sha256": "94c083c254344ccdaea7d145cade42510d725e2ba95d955247151cb1c41e6bc6",
+          "bytes": 6083,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "save_menu",
+          "manual_review": "pass",
+          "observed_text": [
+            "저장",
+            "시나리오 14",
+            "다음 시나리오"
+          ]
+        },
+        "scenario14_route": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/next_selected.png",
+          "sha256": "4db89eb270e18349d6782cf80d00acf34bc14a983e8c4fb7fb1cc38b4da8c323",
+          "bytes": 20407,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "진군루트"
+          ]
+        },
+        "scenario14_title": {
+          "path": "captures/run/current_s13_result_debug/hard/continuation-hook01/scenario14_title.png",
+          "sha256": "52fb26c88a7361e931913bf408c2d74a952688958e0fce1833d35b23fe0bd28b",
+          "bytes": 9854,
+          "dimensions": [
+            320,
+            240
+          ],
+          "surface": "other",
+          "manual_review": "pass",
+          "observed_text": [
+            "시나리오 14",
+            "성검 랑그릿사"
+          ]
+        },
+        "scope_limit": "the cross-checksum continuation proves the current ROM's stock Vargas aftermath, result, save, route, and next-title surfaces; pre-result map sprites are covered by the independent current preparation/gray-sprite matrices and are not claimed here"
+      }
+    }
+  },
+  "cross_profile": {
+    "battle_result_frame_identical": false,
+    "difference_bbox": [
+      272,
+      97,
+      279,
+      105
+    ],
+    "difference_is_points_digit_only": true,
+    "result_header_and_roster_top_identical": true,
+    "manual_difference_review": "pass"
+  },
+  "rejected_attempts": {
+    "status": "rejected",
+    "attempts": {
+      "fresh_southern_layout_before_zorum": {
+        "path": "captures/run/current_s13_result_debug/normal/attack-zorum02/advance_20.png",
+        "sha256": "5a3c802520f96d737b7a16bc74f7eaa75e35807063fcb08b8e77b9f3aedc7aaa",
+        "bytes": 16624,
+        "dimensions": [
+          320,
+          240
+        ],
+        "surface": "other",
+        "expected_sha256": "5a3c802520f96d737b7a16bc74f7eaa75e35807063fcb08b8e77b9f3aedc7aaa",
+        "hash_matches": true,
+        "reason": "players already occupied the southern arrival lane before the Zorum event completed; the attempted attack reset to the title",
+        "accepted": false
+      },
+      "cached_callback_initializer_only": {
+        "path": "captures/run/current_s13_result_debug/normal/legacy-0ce6-current-c_start.png",
+        "sha256": "31981832d52bb19920326e00db7a7e99b215fd75f244af04375cbbca2e6b109f",
+        "bytes": 17561,
+        "dimensions": [
+          320,
+          240
+        ],
+        "surface": "other",
+        "expected_sha256": "31981832d52bb19920326e00db7a7e99b215fd75f244af04375cbbca2e6b109f",
+        "hash_matches": true,
+        "reason": "the loaded battle had already cached the stock Start callback, so changing only its initializer did not invoke the HP wrapper",
+        "accepted": false
+      }
+    },
+    "acceptance_updated": false
+  }
+}

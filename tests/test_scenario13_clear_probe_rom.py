@@ -14,6 +14,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
         self,
         *,
         completion_layout: bool = False,
+        completion_continuation: bool = False,
         protagonist_death: bool = False,
     ) -> bytearray:
         data = bytearray(self.production)
@@ -21,6 +22,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
             data,
             self.source,
             completion_layout=completion_layout,
+            completion_continuation=completion_continuation,
             protagonist_death=protagonist_death,
         )
         return data
@@ -80,6 +82,40 @@ class Scenario13ClearProbeTests(unittest.TestCase):
             allowed.add(vargas + FIELD_OFFSETS["class_id"])
         return allowed
 
+    def continuation_allowed_offsets(self) -> set[int]:
+        allowed = self.allowed_offsets(completion_layout=True)
+        ordinary_wrapper = probe_builder.completion_hp_wrapper_code()
+        allowed.difference_update(
+            range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            )
+        )
+        allowed.difference_update(
+            range(
+                probe_builder.COMPLETION_HP_WRAPPER,
+                probe_builder.COMPLETION_HP_WRAPPER + len(ordinary_wrapper),
+            )
+        )
+        continuation_wrapper = (
+            probe_builder.completion_continuation_wrapper_code(self.source)
+        )
+        allowed.update(
+            range(
+                probe_builder.START_MENU_ENTRY,
+                probe_builder.START_MENU_ENTRY
+                + probe_builder.START_MENU_ENTRY_PATCH_SIZE,
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.COMPLETION_HP_WRAPPER,
+                probe_builder.COMPLETION_HP_WRAPPER
+                + len(continuation_wrapper),
+            )
+        )
+        return allowed
+
     def test_changes_only_declared_combat_fields_zorum_position_and_checksum(self):
         data = self.patched()
         changed = {
@@ -100,6 +136,22 @@ class Scenario13ClearProbeTests(unittest.TestCase):
             changed,
             self.allowed_offsets(completion_layout=True),
         )
+
+    def test_completion_continuation_changes_only_declared_fields(self):
+        data = self.patched(
+            completion_layout=True,
+            completion_continuation=True,
+        )
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, self.continuation_allowed_offsets())
+
+    def test_completion_continuation_requires_completion_layout(self):
+        with self.assertRaisesRegex(ValueError, "requires completion-layout"):
+            self.patched(completion_continuation=True)
 
     def test_protagonist_death_changes_only_wrapper_and_checksum(self):
         data = self.patched(protagonist_death=True)
@@ -297,6 +349,43 @@ class Scenario13ClearProbeTests(unittest.TestCase):
         self.assertIn(
             (probe_builder.VARGAS_RUNTIME_RECORD + 3).to_bytes(4, "big"),
             wrapper,
+        )
+
+    def test_completion_continuation_hooks_stock_entry_and_replays_prologue(self):
+        data = self.patched(
+            completion_layout=True,
+            completion_continuation=True,
+        )
+        wrapper = probe_builder.completion_continuation_wrapper_code(self.source)
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY :
+                probe_builder.START_MENU_ENTRY
+                + probe_builder.START_MENU_ENTRY_PATCH_SIZE
+            ],
+            bytes.fromhex("4E F9")
+            + probe_builder.COMPLETION_HP_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.COMPLETION_HP_WRAPPER :
+                probe_builder.COMPLETION_HP_WRAPPER + len(wrapper)
+            ],
+            wrapper,
+        )
+        displaced = self.source[
+            probe_builder.START_MENU_ENTRY :
+            probe_builder.START_MENU_ENTRY
+            + probe_builder.START_MENU_ENTRY_PATCH_SIZE
+        ]
+        self.assertIn(displaced, wrapper)
+        self.assertEqual(
+            wrapper[-6:],
+            bytes.fromhex("4E F9")
+            + (
+                probe_builder.START_MENU_ENTRY
+                + probe_builder.START_MENU_ENTRY_PATCH_SIZE
+            ).to_bytes(4, "big"),
         )
 
     def test_default_and_completion_checksums_are_locked(self):
