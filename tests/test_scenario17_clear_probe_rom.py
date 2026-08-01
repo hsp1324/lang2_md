@@ -15,6 +15,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
         *,
         completion_layout: bool = False,
         protagonist_death: bool = False,
+        two_hit_attacker: bool = False,
     ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
@@ -22,6 +23,7 @@ class Scenario17ClearProbeTests(unittest.TestCase):
             self.source,
             completion_layout=completion_layout,
             protagonist_death=protagonist_death,
+            two_hit_attacker=two_hit_attacker,
         )
         return data
 
@@ -190,6 +192,67 @@ class Scenario17ClearProbeTests(unittest.TestCase):
                 completion_layout=True,
                 protagonist_death=True,
             )
+        with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                protagonist_death=True,
+                two_hit_attacker=True,
+            )
+
+    def test_two_hit_attacker_wrapper_is_scoped_and_completion_only(self):
+        with self.assertRaisesRegex(ValueError, "requires completion layout"):
+            self.patched(two_hit_attacker=True)
+
+        data = self.patched(completion_layout=True, two_hit_attacker=True)
+        code = probe_builder.two_hit_attacker_wrapper_code()
+        attack = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+            + probe_builder.RUNTIME_AT_OFFSET
+        )
+        acted = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+            + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+        )
+        self.assertEqual(code[:4], bytes.fromhex("0C 39 00 00"))
+        self.assertEqual(code[4:8], acted.to_bytes(4, "big"))
+        self.assertEqual(code[8:10], bytes.fromhex("66 0A"))
+        self.assertEqual(code[10:14], bytes.fromhex("13 FC 00 05"))
+        self.assertEqual(code[14:18], attack.to_bytes(4, "big"))
+        self.assertEqual(code[18:20], bytes.fromhex("60 08"))
+        self.assertEqual(code[20:24], bytes.fromhex("13 FC 00 17"))
+        self.assertEqual(code[24:28], attack.to_bytes(4, "big"))
+        self.assertEqual(
+            data[
+                probe_builder.START_MENU_ENTRY_OPERAND :
+                probe_builder.START_MENU_ENTRY_OPERAND + 4
+            ],
+            probe_builder.RUNTIME_WRAPPER.to_bytes(4, "big"),
+        )
+        self.assertEqual(
+            data[
+                probe_builder.RUNTIME_WRAPPER :
+                probe_builder.RUNTIME_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            for offset in (
+                0,
+                FIELD_OFFSETS["level"],
+                FIELD_OFFSETS["name_id"],
+                FIELD_OFFSETS["class_id"],
+                FIELD_OFFSETS["x"],
+                FIELD_OFFSETS["y"],
+            ):
+                self.assertEqual(data[base + offset], self.source[base + offset])
 
     def test_protagonist_death_event_is_locked(self):
         start = probe_builder.PROTAGONIST_DEATH_EVENT
@@ -228,6 +291,18 @@ class Scenario17ClearProbeTests(unittest.TestCase):
                 protagonist_death=True,
             ),
             0xA973,
+        )
+
+        two_hit = bytearray(self.production)
+        two_hit_checksum = probe_builder.patch_probe(
+            two_hit,
+            self.source,
+            completion_layout=True,
+            two_hit_attacker=True,
+        )
+        self.assertEqual(
+            two_hit_checksum,
+            int.from_bytes(two_hit[0x18E:0x190], "big"),
         )
 
     def test_preserves_bosses_and_hidden_reinforcements(self):

@@ -55,9 +55,13 @@ RUNTIME_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
+BERNHARDT_RUNTIME_GROUP = 8
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
+RUNTIME_AT_OFFSET = 0x3A
+TWO_HIT_ELWIN_AT = 5
+TWO_HIT_ELWIN_RESTORE_AT = 23
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -84,6 +88,42 @@ def protagonist_death_wrapper_code() -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def two_hit_attacker_wrapper_code() -> bytes:
+    """Lower only Elwin's runtime AT before the completion-probe attacks.
+
+    The current selector roster gives Elwin AT23, so the source-preserving
+    completion layout defeats the deliberately DF0 Bernhardt in one attack
+    and takes Scenario 17's early-ending branch.  Opening Start sets only
+    runtime player group 0's displayed AT to 5.  Bernhardt remains within the
+    stock HP0..10 range.  Opening Start again after Elwin has acted restores
+    the current selector roster's AT23, so the turn-2 ordinary attack reaches
+    the normal result path.  No battle stat change enters a distributable ROM.
+    This wrapper exists only in the ignored diagnostic ROM.
+    """
+    record = RUNTIME_GROUP_BASE + PROTAGONIST_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    acted = record + RUNTIME_DEFEATED_FLAG_OFFSET
+    attack = record + RUNTIME_AT_OFFSET
+    code = bytearray()
+    # CMPI.B #0,(acted).L ; BNE.S restore ; MOVE.B #5,(AT).L
+    code.extend(bytes.fromhex("0C 39 00 00"))
+    code.extend(acted.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 0A"))
+    code.extend(bytes.fromhex("13 FC"))
+    code.extend(TWO_HIT_ELWIN_AT.to_bytes(2, "big"))
+    code.extend(attack.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("60 08"))
+    # restore: MOVE.B #23,(AT).L
+    code.extend(bytes.fromhex("13 FC"))
+    code.extend(TWO_HIT_ELWIN_RESTORE_AT.to_bytes(2, "big"))
+    code.extend(attack.to_bytes(4, "big"))
+    # Preserve the stock Start entry's expected A0 setup and tail-call it.
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -158,10 +198,13 @@ def patch_probe(
     *,
     completion_layout: bool = False,
     protagonist_death: bool = False,
+    two_hit_attacker: bool = False,
 ) -> int:
     validate_layout(probe, source)
-    if completion_layout and protagonist_death:
+    if protagonist_death and (completion_layout or two_hit_attacker):
         raise ValueError("Scenario 17 diagnostic modes conflict")
+    if two_hit_attacker and not completion_layout:
+        raise ValueError("two-hit attacker mode requires completion layout")
     if protagonist_death:
         install_start_wrapper(
             probe,
@@ -182,6 +225,12 @@ def patch_probe(
             FIRST_PLAYER_DEPLOYMENT_OFFSET :
             FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
         ] = elwin
+    if two_hit_attacker:
+        install_start_wrapper(
+            probe,
+            source,
+            two_hit_attacker_wrapper_code(),
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -212,6 +261,15 @@ def parse_args() -> argparse.Namespace:
             "mark only runtime player group 0 defeated through Start"
         ),
     )
+    parser.add_argument(
+        "--two-hit-attacker",
+        action="store_true",
+        help=(
+            "with --completion-layout, lower only runtime Elwin AT23 to AT5 "
+            "before his first attack, then restore AT23 after he has acted so "
+            "the turn-2 attack reaches the normal completion branch"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -224,6 +282,7 @@ def main() -> int:
         source,
         completion_layout=args.completion_layout,
         protagonist_death=args.protagonist_death,
+        two_hit_attacker=args.two_hit_attacker,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -238,6 +297,11 @@ def main() -> int:
     if args.completion_layout:
         print("completion layout: Elwin moved from (12,25) to (15,5)")
         print("Bernhardt remains at the source throne position (15,4)")
+        if args.two_hit_attacker:
+            print(
+                "first Start: runtime Elwin AT23 -> 5; post-action Start: "
+                "AT5 -> 23; Bernhardt remains within stock HP0..10"
+            )
     elif not args.protagonist_death:
         print(
             "stock deployments, identities, classes, levels, hidden events, "

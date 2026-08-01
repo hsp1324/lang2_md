@@ -1,0 +1,579 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Fresh current normal/hard Scenario 17 preparation-to-result path, dynamic commander roster, and save menu",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal two-hit-attacker builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "bytes": 4194304,
+          "header_checksum": "CB53",
+          "computed_checksum": "CB53",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s17-two-hit.md",
+          "sha256": "9f116adabba8ce064ae20392bdbb1c464d745849b0c75180bc1e7fa6f15bcdb7",
+          "bytes": 4194304,
+          "header_checksum": "6642",
+          "computed_checksum": "6642",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 129,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "scope_limit": "diagnostic only: enemy AT/DF and mercenaries, Elwin deployment, and the isolated Start wrapper; no production candidate mutation"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s17_result/normal/result10",
+        "evidence_json": {
+          "path": "captures/run/current_s17_result/normal/result10/evidence.json",
+          "sha256": "7e324494fc27eb621032f31a3840d3a4b686652fa524f78fdd43290855d773fc",
+          "expected_sha256": "7e324494fc27eb621032f31a3840d3a4b686652fa524f78fdd43290855d773fc",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 17,
+          "identified_scenario": 17,
+          "best_match": {
+            "scenario": 17,
+            "matched_records": 11,
+            "total_records": 11,
+            "match_ratio": 1.0
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s17_result/normal/result10/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s17_result/normal/result10/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s17_result/normal/result10/battle/turn1_command.png",
+            "sha256": "26856cb8c29a928267b0a30a4591dfda26eaebd4ac97ab8c9efe6cecbdd1d308",
+            "expected_sha256": "26856cb8c29a928267b0a30a4591dfda26eaebd4ac97ab8c9efe6cecbdd1d308",
+            "hash_matches": true,
+            "bytes": 16388,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "first_start": {
+            "path": "captures/run/current_s17_result/normal/result10/battle/first_start_menu.png",
+            "sha256": "809f5bc18eaac77c11b5b221d7d39054ac54643091c072a82c4c2f412ab95cb8",
+            "expected_sha256": "809f5bc18eaac77c11b5b221d7d39054ac54643091c072a82c4c2f412ab95cb8",
+            "hash_matches": true,
+            "bytes": 14120,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_return": {
+            "path": "captures/run/current_s17_result/normal/result10/battle/turn1_return_017.png",
+            "sha256": "5529ccf96bdae746880ff205207238b433f50cb9834749ac0403fcacc6a039a5",
+            "expected_sha256": "5529ccf96bdae746880ff205207238b433f50cb9834749ac0403fcacc6a039a5",
+            "hash_matches": true,
+            "bytes": 15257,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "post_start": {
+            "path": "captures/run/current_s17_result/normal/result10/battle/post_action_start_menu.png",
+            "sha256": "a7650a8cd8da6933b08b38f22a84693532206104433b3248c3a4785497776607",
+            "expected_sha256": "a7650a8cd8da6933b08b38f22a84693532206104433b3248c3a4785497776607",
+            "hash_matches": true,
+            "bytes": 14138,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn2_command": {
+            "path": "captures/run/current_s17_result/normal/result10/battle/turn2_command.png",
+            "sha256": "28ed5c9e31c093c62f2d2df92f534fa083342dd75fce1cf6d45972564142ebae",
+            "expected_sha256": "28ed5c9e31c093c62f2d2df92f534fa083342dd75fce1cf6d45972564142ebae",
+            "hash_matches": true,
+            "bytes": 16009,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s17_result/normal/result10/battle/battle_result.png",
+            "sha256": "6d4f7edb41ff246b01e3a14857ffae9b258711b5b6b52ca5b8986399ab83ec3d",
+            "expected_sha256": "6d4f7edb41ff246b01e3a14857ffae9b258711b5b6b52ca5b8986399ab83ec3d",
+            "hash_matches": true,
+            "bytes": 8851,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s17_result/normal/result10/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "first_start": {
+            "path": "captures/run/current_s17_result/normal/result10/states/first_start_menu.gst",
+            "sha256": "7ba78cd87a5afc01e29fc2e0d02da849dea9d22a328737c10e0c4365bc518735",
+            "expected_sha256": "7ba78cd87a5afc01e29fc2e0d02da849dea9d22a328737c10e0c4365bc518735",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 0,
+              "elwin_hp": 10,
+              "elwin_at": 5,
+              "bernhardt_hp": 10
+            }
+          },
+          "turn1_return": {
+            "path": "captures/run/current_s17_result/normal/result10/states/turn1_return_017.gst",
+            "sha256": "a5dd71b9dc62167fe2ab532444dfb3706b979ab42c552ce4843964cf189af51c",
+            "expected_sha256": "a5dd71b9dc62167fe2ab532444dfb3706b979ab42c552ce4843964cf189af51c",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 9,
+              "elwin_at": 5,
+              "bernhardt_hp": 4
+            }
+          },
+          "post_start": {
+            "path": "captures/run/current_s17_result/normal/result10/states/post_action_start_menu.gst",
+            "sha256": "46016aadb953ec6d994c1d40d89d6ef68663e3320b781675f835d7b437428a91",
+            "expected_sha256": "46016aadb953ec6d994c1d40d89d6ef68663e3320b781675f835d7b437428a91",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 9,
+              "elwin_at": 23,
+              "bernhardt_hp": 4
+            }
+          },
+          "turn2_command": {
+            "path": "captures/run/current_s17_result/normal/result10/states/turn2_command.gst",
+            "sha256": "7ae352bb49e21d60fee28e07e5a2b4d047332462daa4138ad3b21eee8d62c466",
+            "expected_sha256": "7ae352bb49e21d60fee28e07e5a2b4d047332462daa4138ad3b21eee8d62c466",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 0,
+              "elwin_hp": 9,
+              "elwin_at": 23,
+              "bernhardt_hp": 7
+            }
+          },
+          "battle_result": {
+            "path": "captures/run/current_s17_result/normal/result10/states/battle_result.gst",
+            "sha256": "716998842cae1d0796aaf750ffcb4dd6c8cd9bb69d78051df107d1a98cb4eb78",
+            "expected_sha256": "716998842cae1d0796aaf750ffcb4dd6c8cd9bb69d78051df107d1a98cb4eb78",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 9,
+              "elwin_at": 23,
+              "bernhardt_hp": 0
+            }
+          },
+          "save_menu": {
+            "path": "captures/run/current_s17_result/normal/result10/states/save_menu.gst",
+            "sha256": "bdae9731cd12626dec1b8b4f8a03643d8b4b24ed1e4c6683d60db6f186ff7cd0",
+            "expected_sha256": "bdae9731cd12626dec1b8b4f8a03643d8b4b24ed1e4c6683d60db6f186ff7cd0",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 9,
+              "elwin_at": 23,
+              "bernhardt_hp": 0
+            }
+          }
+        },
+        "state_sequence_valid": true,
+        "manual_review": {
+          "status": "pass",
+          "battle_result_text": [
+            "전과보고",
+            "키스",
+            "레스터",
+            "제시카",
+            "스코트",
+            "POINT 4200P"
+          ],
+          "save_text": [
+            "저장",
+            "1 시나리오 27",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "bytes": 4194304,
+          "header_checksum": "E15E",
+          "computed_checksum": "E15E",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s17-two-hit.md",
+          "sha256": "0d5aa7d104127d70cbd6d6001c77c545f6fa24d14e914c38c25b8740210c9296",
+          "bytes": 4194304,
+          "header_checksum": "250C",
+          "computed_checksum": "250C",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 129,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 44,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "scope_limit": "diagnostic only: enemy AT/DF and mercenaries, Elwin deployment, and the isolated Start wrapper; no production candidate mutation"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s17_result/hard/result02",
+        "evidence_json": {
+          "path": "captures/run/current_s17_result/hard/result02/evidence.json",
+          "sha256": "e1a0c986fc0bfd1a065bcc4e8e9ca1fc98c8eb77f2f5ac86124a633f08b74d3d",
+          "expected_sha256": "e1a0c986fc0bfd1a065bcc4e8e9ca1fc98c8eb77f2f5ac86124a633f08b74d3d",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 17,
+          "identified_scenario": 17,
+          "best_match": {
+            "scenario": 17,
+            "matched_records": 11,
+            "total_records": 11,
+            "match_ratio": 1.0
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s17_result/hard/result02/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s17_result/hard/result02/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s17_result/hard/result02/battle/turn1_command.png",
+            "sha256": "26856cb8c29a928267b0a30a4591dfda26eaebd4ac97ab8c9efe6cecbdd1d308",
+            "expected_sha256": "26856cb8c29a928267b0a30a4591dfda26eaebd4ac97ab8c9efe6cecbdd1d308",
+            "hash_matches": true,
+            "bytes": 16388,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "first_start": {
+            "path": "captures/run/current_s17_result/hard/result02/battle/first_start_menu.png",
+            "sha256": "809f5bc18eaac77c11b5b221d7d39054ac54643091c072a82c4c2f412ab95cb8",
+            "expected_sha256": "809f5bc18eaac77c11b5b221d7d39054ac54643091c072a82c4c2f412ab95cb8",
+            "hash_matches": true,
+            "bytes": 14120,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_return": {
+            "path": "captures/run/current_s17_result/hard/result02/battle/turn1_return_017.png",
+            "sha256": "7bb0f18a0a37995f9b1d2c5295ab75f85cdf6dbc00b9b5dffe0f11a35d8366e3",
+            "expected_sha256": "7bb0f18a0a37995f9b1d2c5295ab75f85cdf6dbc00b9b5dffe0f11a35d8366e3",
+            "hash_matches": true,
+            "bytes": 15345,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "post_start": {
+            "path": "captures/run/current_s17_result/hard/result02/battle/turn1_post_action_start_menu.png",
+            "sha256": "3d20195c04beb2eabe7d3547cf1c290de4af339af26b14b515b6c8e00062600d",
+            "expected_sha256": "3d20195c04beb2eabe7d3547cf1c290de4af339af26b14b515b6c8e00062600d",
+            "hash_matches": true,
+            "bytes": 14121,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn2_command": {
+            "path": "captures/run/current_s17_result/hard/result02/battle/turn2_command.png",
+            "sha256": "0c74afa2ef23183817d3d48fdec15ed61360dcbc9880fde8d9504a9f93f945f7",
+            "expected_sha256": "0c74afa2ef23183817d3d48fdec15ed61360dcbc9880fde8d9504a9f93f945f7",
+            "hash_matches": true,
+            "bytes": 16036,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s17_result/hard/result02/battle/battle_result.png",
+            "sha256": "2c3bd6c9e3246c554908f49c45beb3af3ec17fd76014695ca67b265b7ed8cd91",
+            "expected_sha256": "2c3bd6c9e3246c554908f49c45beb3af3ec17fd76014695ca67b265b7ed8cd91",
+            "hash_matches": true,
+            "bytes": 8628,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s17_result/hard/result02/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "first_start": {
+            "path": "captures/run/current_s17_result/hard/result02/states/first_start_menu.gst",
+            "sha256": "66643cfe37605fb125b7a08e2107c22c7a49c1676ae778a0929d7e84af1833a9",
+            "expected_sha256": "66643cfe37605fb125b7a08e2107c22c7a49c1676ae778a0929d7e84af1833a9",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 0,
+              "elwin_hp": 10,
+              "elwin_at": 5,
+              "bernhardt_hp": 10
+            }
+          },
+          "turn1_return": {
+            "path": "captures/run/current_s17_result/hard/result02/states/turn1_return_017.gst",
+            "sha256": "a54d249b560c99e10c97385018eb7c19c5c8e0182ef269a157bd570c4281f6ad",
+            "expected_sha256": "a54d249b560c99e10c97385018eb7c19c5c8e0182ef269a157bd570c4281f6ad",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 10,
+              "elwin_at": 5,
+              "bernhardt_hp": 6
+            }
+          },
+          "post_start": {
+            "path": "captures/run/current_s17_result/hard/result02/states/turn1_post_action_start_menu.gst",
+            "sha256": "74bbec5962b0fca24d8b03b178c8c81f281b8a4f39180de41f6fbff67240b999",
+            "expected_sha256": "74bbec5962b0fca24d8b03b178c8c81f281b8a4f39180de41f6fbff67240b999",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 10,
+              "elwin_at": 23,
+              "bernhardt_hp": 6
+            }
+          },
+          "turn2_command": {
+            "path": "captures/run/current_s17_result/hard/result02/states/turn2_command.gst",
+            "sha256": "ac336a3ca3dc4a8ba014e5eeff4a053aa2ace66b3496cf16ca5b505963cdd604",
+            "expected_sha256": "ac336a3ca3dc4a8ba014e5eeff4a053aa2ace66b3496cf16ca5b505963cdd604",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 0,
+              "elwin_hp": 10,
+              "elwin_at": 23,
+              "bernhardt_hp": 9
+            }
+          },
+          "battle_result": {
+            "path": "captures/run/current_s17_result/hard/result02/states/battle_result.gst",
+            "sha256": "5047d1c19de285e5f51dbc93d304bbe4d8742905ee77b0f31523640b7e5a5355",
+            "expected_sha256": "5047d1c19de285e5f51dbc93d304bbe4d8742905ee77b0f31523640b7e5a5355",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 9,
+              "elwin_at": 23,
+              "bernhardt_hp": 0
+            }
+          },
+          "save_menu": {
+            "path": "captures/run/current_s17_result/hard/result02/states/save_menu.gst",
+            "sha256": "d54d1d3169f2ed2028e8bca766af2cf5e64f5e310174603ecb075eeea2648d81",
+            "expected_sha256": "d54d1d3169f2ed2028e8bca766af2cf5e64f5e310174603ecb075eeea2648d81",
+            "hash_matches": true,
+            "bytes": 140408,
+            "runtime": {
+              "elwin_acted": 1,
+              "elwin_hp": 9,
+              "elwin_at": 23,
+              "bernhardt_hp": 0
+            }
+          }
+        },
+        "state_sequence_valid": true,
+        "manual_review": {
+          "status": "pass",
+          "battle_result_text": [
+            "전과보고",
+            "키스",
+            "레스터",
+            "제시카",
+            "스코트",
+            "POINT 4200P"
+          ],
+          "save_text": [
+            "저장",
+            "1 시나리오 27",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    }
+  },
+  "cross_profile": {
+    "preparation_pixel_identical": true,
+    "turn1_command_pixel_identical": true,
+    "save_menu_pixel_identical": true,
+    "result_manual_content_identical": true,
+    "result_frames_have_different_animation_phase": true
+  },
+  "rejected_attempts": [
+    {
+      "attempt": "result01",
+      "result": "HP1 edit entered Scenario 17's early-ending path",
+      "classification": "rejected diagnostic"
+    },
+    {
+      "attempt": "result02",
+      "result": "input timing lost the Attack selection",
+      "classification": "rejected input trace"
+    },
+    {
+      "attempt": "input_probe03/input_probe04",
+      "result": "unsafe offline GST reload reset or booted",
+      "classification": "rejected state manipulation"
+    },
+    {
+      "attempt": "result04",
+      "result": "omitted Up and retained Elwin as target",
+      "classification": "rejected input trace"
+    },
+    {
+      "attempt": "result05",
+      "result": "Start was sent during the pre-battle dialogue",
+      "classification": "rejected input timing"
+    },
+    {
+      "attempt": "result06",
+      "result": "stock AT23 turn-1 attack took the early-ending branch",
+      "classification": "rejected completion path"
+    },
+    {
+      "attempt": "result07",
+      "result": "invalid HP19 exceeded the stock HP10 range and froze battle animation",
+      "classification": "rejected diagnostic; removed"
+    },
+    {
+      "attempt": "result08",
+      "result": "transient post-battle map was mistaken for command-ready return",
+      "classification": "rejected detector timing"
+    },
+    {
+      "attempt": "result09",
+      "result": "stock turn-start regeneration was incorrectly rejected",
+      "classification": "rejected over-strict assertion"
+    },
+    {
+      "attempt": "hard/result01",
+      "result": "fixed two-attack assumption waited on the live map",
+      "classification": "rejected runner assumption"
+    }
+  ],
+  "savestate_policy": "These GSTs are isolated verification fixtures. Player migration continues through in-game SRM load and then a fresh savestate."
+}
