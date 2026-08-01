@@ -33,6 +33,11 @@ class Scenario23ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def runtime_clear_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(data, self.source, runtime_clear=True)
+        return data
+
     def defeat_patched(self, mode: str) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
@@ -357,6 +362,67 @@ class Scenario23ClearProbeTests(unittest.TestCase):
                 data,
                 self.source,
                 completion_layout=True,
+                completion_target_only=True,
+            )
+
+    def test_runtime_clear_preserves_all_fixed_records_and_deployments(self):
+        data = self.runtime_clear_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        records_end = layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+        self.assertEqual(
+            data[layout.record_list_offset:records_end],
+            self.source[layout.record_list_offset:records_end],
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        size = len(
+            probe_builder.deployment_bytes(probe_builder.SOURCE_PLAYER_DEPLOYMENTS)
+        )
+        self.assertEqual(data[start:start + size], self.source[start:start + size])
+
+    def test_runtime_clear_marks_only_hostile_runtime_groups_defeated(self):
+        code = probe_builder.runtime_clear_wrapper_code()
+        self.assertEqual(probe_builder.RUNTIME_CLEAR_GROUPS, tuple(range(9, 20)))
+        for group in probe_builder.RUNTIME_CLEAR_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("00 39 00 80")
+                + (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                    4, "big"
+                ),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        for group in range(9):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertNotIn(
+                (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                    4, "big"
+                ),
+                code,
+            )
+        self.assertTrue(code.endswith(bytes.fromhex("4E F9 00 02 2C 1E")))
+
+    def test_runtime_clear_conflicts_with_other_diagnostic_modes(self):
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                runtime_clear=True,
                 completion_target_only=True,
             )
 
