@@ -1,0 +1,1386 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Current normal/hard Scenario 18, 19, and 20 boss defeat, stock aftermath names/classes, class-change pages, result rosters, sprites, and save menus",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "savestate_policy": "player migration uses in-game SRM load under the current ROM and then creates a fresh savestate; historical GSTs here are isolated renderer-continuation fixtures only",
+  "scenarios": {
+    "18": {
+      "status": "pass",
+      "source_state": {
+        "path": "captures/runtime/s18_completion_17f2/.local/share/blastem/Langrisser II (Scenario 18 Completion Probe)/quicksave.gst",
+        "sha256": "7705afdf02ad178b589c74dbd59998279759f8eb68014b0fe74271a8741d01d3",
+        "bytes": 140408,
+        "identity_matches": true,
+        "normal_method": "historical completion continuation loaded unchanged"
+      },
+      "profiles": {
+        "normal": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact current-normal completion-layout builder replay",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-normal.md",
+              "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+              "bytes": 4194304,
+              "header_checksum": "CB53",
+              "computed_checksum": "CB53",
+              "checksum_valid": true
+            },
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/normal/s18.md",
+              "sha256": "c118c30250bceb0ed9f23ea7da20427b1513637b858fa284ad80d8123d3fc1ba",
+              "bytes": 4194304,
+              "header_checksum": "04CD",
+              "computed_checksum": "04CD",
+              "checksum_valid": true
+            },
+            "probe_identity_matches": true,
+            "diagnostic_changed_byte_count": 66,
+            "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+            "exact_rebuild": true
+          },
+          "runtime": {
+            "status": "pass",
+            "evidence_count": 8,
+            "evidence": {
+              "s18_boss_defeat.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_boss_defeat.png",
+                "sha256": "fe8448ae76713f3c2a549d7d7cf406894faecddcc56005a82241e891a8619e60",
+                "bytes": 15159,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "fe8448ae76713f3c2a549d7d7cf406894faecddcc56005a82241e891a8619e60",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "그레이트드래곤",
+                  "격파"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_scott_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_scott_dialogue.png",
+                "sha256": "4f80f82e3ba3269de120f55733c541217ef7a7e1c365b575797aabd286bec0d5",
+                "bytes": 19008,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "4f80f82e3ba3269de120f55733c541217ef7a7e1c365b575797aabd286bec0d5",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "스코트"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_resident_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_resident_dialogue.png",
+                "sha256": "4d6718e90bca3c76cdbde898223d84a5dc252c5c1756166b7d35eb231a6697d0",
+                "bytes": 15753,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "4d6718e90bca3c76cdbde898223d84a5dc252c5c1756166b7d35eb231a6697d0",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "주민"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_elwin_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_elwin_dialogue.png",
+                "sha256": "d730dd0dc60e59ff86c1be94bbecfebd1483057b551a345b03c7b6c7702e1396",
+                "bytes": 11244,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "d730dd0dc60e59ff86c1be94bbecfebd1483057b551a345b03c7b6c7702e1396",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_elwin_level.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_elwin_level.png",
+                "sha256": "e32b86958e2b73d2ae7492e13c02a17189f07be947373cee773259a11c1efdf7",
+                "bytes": 11316,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "e32b86958e2b73d2ae7492e13c02a17189f07be947373cee773259a11c1efdf7",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_class_change.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_class_change.png",
+                "sha256": "298b4e8498c99185220477ebd05f8224463be6282e9fb45738c163aabbf06bda",
+                "bytes": 15273,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "298b4e8498c99185220477ebd05f8224463be6282e9fb45738c163aabbf06bda",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "클래스체인지",
+                  "스코트",
+                  "세인트"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_result.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_result.png",
+                "sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+                "bytes": 9138,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "battle_result",
+                "expected_surface": "battle_result",
+                "expected_reviewed_sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "전과보고",
+                  "POINT 12500P"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_save.png": {
+                "path": "captures/run/current_s18_20_result/normal/s18_save.png",
+                "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "bytes": 5961,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "save_menu",
+                "expected_surface": "save_menu",
+                "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "저장",
+                  "다음 시나리오"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s18_20_result/normal/s18_result.png",
+              "sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+              "bytes": 9138,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result",
+              "expected_surface": "battle_result",
+              "expected_reviewed_sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "전과보고",
+                "POINT 12500P"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "save_menu": {
+              "path": "captures/run/current_s18_20_result/normal/s18_save.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu",
+              "expected_surface": "save_menu",
+              "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "저장",
+                "다음 시나리오"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "scope_limit": "historical work RAM continues directly into current ROM result renderers; this is not a fresh deployment-to-clear replay or hard-mode balance evidence"
+          }
+        },
+        "hard": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-hard.md",
+              "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+              "bytes": 4194304,
+              "header_checksum": "E15E",
+              "computed_checksum": "E15E",
+              "checksum_valid": true
+            },
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/hard/s18.md",
+              "sha256": "1fcc0e36ce7589bd27f1f29eef662e5719f43f3f7ad21dc35d423b9330253afe",
+              "bytes": 4194304,
+              "header_checksum": "EEBE",
+              "computed_checksum": "EEBE",
+              "checksum_valid": true
+            },
+            "probe_identity_matches": true,
+            "diagnostic_changed_byte_count": 66,
+            "hard_bytes_replaced_inside_diagnostic_envelope": 34,
+            "exact_rebuild": true
+          },
+          "runtime": {
+            "status": "pass",
+            "evidence_count": 8,
+            "evidence": {
+              "s18_boss_defeat.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_boss_defeat.png",
+                "sha256": "4986ef9d2ee64c2442bf182e3f2965b82c8747c503c915a2b7c006d49cc0c4b2",
+                "bytes": 11589,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "4986ef9d2ee64c2442bf182e3f2965b82c8747c503c915a2b7c006d49cc0c4b2",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "그레이트드래곤",
+                  "격파"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_scott_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_scott_dialogue.png",
+                "sha256": "305cac7c8a059069d33414330c3c4f766012ce93010324ddeff7deb97162e76f",
+                "bytes": 18914,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "305cac7c8a059069d33414330c3c4f766012ce93010324ddeff7deb97162e76f",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "스코트"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_resident_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_resident_dialogue.png",
+                "sha256": "c3e09d6334551beb5211b5169050bf71d85149ae770117e89145d96b53239cc3",
+                "bytes": 15585,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "c3e09d6334551beb5211b5169050bf71d85149ae770117e89145d96b53239cc3",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "주민"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_elwin_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_elwin_dialogue.png",
+                "sha256": "0aabbab3e83c6eb3241c7871d91614aa464b1e4cf326d855cedb85f9568690ac",
+                "bytes": 11486,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "0aabbab3e83c6eb3241c7871d91614aa464b1e4cf326d855cedb85f9568690ac",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_elwin_level.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_elwin_level.png",
+                "sha256": "aee117a051318dcc061e737efc0b43665b4bde631ecbb602d2c07cefd615f436",
+                "bytes": 11799,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "aee117a051318dcc061e737efc0b43665b4bde631ecbb602d2c07cefd615f436",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_class_change.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_class_change.png",
+                "sha256": "cd43294328dcab9f4d82ba7d7a554db330155008b93c48726e2ee2872060c614",
+                "bytes": 18098,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "cd43294328dcab9f4d82ba7d7a554db330155008b93c48726e2ee2872060c614",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "클래스체인지",
+                  "스코트"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_result.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_result.png",
+                "sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+                "bytes": 9138,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "battle_result",
+                "expected_surface": "battle_result",
+                "expected_reviewed_sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "전과보고",
+                  "POINT 12500P"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s18_save.png": {
+                "path": "captures/run/current_s18_20_result/hard/s18_save.png",
+                "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "bytes": 5961,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "save_menu",
+                "expected_surface": "save_menu",
+                "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "저장",
+                  "다음 시나리오"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s18_20_result/hard/s18_result.png",
+              "sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+              "bytes": 9138,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result",
+              "expected_surface": "battle_result",
+              "expected_reviewed_sha256": "2bb0a355e3796dee86d3f93322e95ccbee1f5539d9d4b1cb63216a0e4127d343",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "전과보고",
+                "POINT 12500P"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "save_menu": {
+              "path": "captures/run/current_s18_20_result/hard/s18_save.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu",
+              "expected_surface": "save_menu",
+              "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "저장",
+                "다음 시나리오"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "scope_limit": "historical work RAM continues directly into current ROM result renderers; this is not a fresh deployment-to-clear replay or hard-mode balance evidence"
+          }
+        }
+      }
+    },
+    "19": {
+      "status": "pass",
+      "source_state": {
+        "path": "captures/runtime/s19_completion_2829_strong/.local/share/blastem/Langrisser II (Scenario 19 Completion Probe)/quicksave.gst",
+        "sha256": "b7ea024e1332febd6dd00cd79224d99abc1543b830d9f2957189fd446956597d",
+        "bytes": 140408,
+        "identity_matches": true,
+        "normal_method": "historical completion continuation loaded unchanged",
+        "hard_diagnostic": {
+          "path": "captures/runtime/current-s19-hard-result06/.local/share/blastem/s19/quicksave.gst",
+          "sha256": "da46cf9718c0c93d9d643eb41fb385e394847beaa287c72c994a3700813ba54b",
+          "bytes": 140408,
+          "identity_matches": true,
+          "exact_changed_offsets": [
+            "0x8877"
+          ],
+          "exact_one_byte_hp_edit": true,
+          "edit": "runtime Imelda current HP 10 -> 1",
+          "scope_limit": "deterministically enters the stock Imelda-defeat result path; not battle-balance evidence and not a distributable savestate"
+        }
+      },
+      "profiles": {
+        "normal": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact current-normal completion-layout builder replay",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-normal.md",
+              "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+              "bytes": 4194304,
+              "header_checksum": "CB53",
+              "computed_checksum": "CB53",
+              "checksum_valid": true
+            },
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/normal/s19.md",
+              "sha256": "28d3c110182fde302ad842d700241af64f81caf420fa08236c62b23912a02e8e",
+              "bytes": 4194304,
+              "header_checksum": "1504",
+              "computed_checksum": "1504",
+              "checksum_valid": true
+            },
+            "probe_identity_matches": true,
+            "diagnostic_changed_byte_count": 84,
+            "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+            "exact_rebuild": true
+          },
+          "runtime": {
+            "status": "pass",
+            "evidence_count": 6,
+            "evidence": {
+              "s19_imelda_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s19_imelda_dialogue.png",
+                "sha256": "6fd5ca173a88c539f9c01735a1317aded1019678cab9b24d674d469804375a13",
+                "bytes": 16861,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "6fd5ca173a88c539f9c01735a1317aded1019678cab9b24d674d469804375a13",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "이멜다",
+                  "제너럴"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_elwin_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s19_elwin_dialogue.png",
+                "sha256": "991b74c772f648cf2838bef5a21a8c7fa2ac1d8835df2f8b1692baa475bab870",
+                "bytes": 16867,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "991b74c772f648cf2838bef5a21a8c7fa2ac1d8835df2f8b1692baa475bab870",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_elwin_level.png": {
+                "path": "captures/run/current_s18_20_result/normal/s19_elwin_level.png",
+                "sha256": "74385e7969d26ccaebe59b1eb81efe5e6a33d3c981416381b5f0431fe43b77fb",
+                "bytes": 16617,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "74385e7969d26ccaebe59b1eb81efe5e6a33d3c981416381b5f0431fe43b77fb",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_aaron_level.png": {
+                "path": "captures/run/current_s18_20_result/normal/s19_aaron_level.png",
+                "sha256": "69b47aba867403cf22fb13875efc109fed76a64124b11cf837723be19f22c33f",
+                "bytes": 14297,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "69b47aba867403cf22fb13875efc109fed76a64124b11cf837723be19f22c33f",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "아론의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_result.png": {
+                "path": "captures/run/current_s18_20_result/normal/s19_result.png",
+                "sha256": "bfb7feead8e5636e83cc9c7f590181269682877d06631b88bc4eb3d979ee57ce",
+                "bytes": 9058,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "battle_result",
+                "expected_surface": "battle_result",
+                "expected_reviewed_sha256": "bfb7feead8e5636e83cc9c7f590181269682877d06631b88bc4eb3d979ee57ce",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "전과보고",
+                  "POINT 14600P"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_save.png": {
+                "path": "captures/run/current_s18_20_result/normal/s19_save.png",
+                "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "bytes": 5961,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "save_menu",
+                "expected_surface": "save_menu",
+                "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "저장",
+                  "다음 시나리오"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s18_20_result/normal/s19_result.png",
+              "sha256": "bfb7feead8e5636e83cc9c7f590181269682877d06631b88bc4eb3d979ee57ce",
+              "bytes": 9058,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result",
+              "expected_surface": "battle_result",
+              "expected_reviewed_sha256": "bfb7feead8e5636e83cc9c7f590181269682877d06631b88bc4eb3d979ee57ce",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "전과보고",
+                "POINT 14600P"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "save_menu": {
+              "path": "captures/run/current_s18_20_result/normal/s19_save.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu",
+              "expected_surface": "save_menu",
+              "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "저장",
+                "다음 시나리오"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "scope_limit": "historical work RAM continues directly into current ROM result renderers; this is not a fresh deployment-to-clear replay or hard-mode balance evidence"
+          }
+        },
+        "hard": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-hard.md",
+              "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+              "bytes": 4194304,
+              "header_checksum": "E15E",
+              "computed_checksum": "E15E",
+              "checksum_valid": true
+            },
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/hard/s19.md",
+              "sha256": "27a6d3cea3f50f0c0bd0ef5a9df11a29e47028f79e051f7966b6a50608631b2f",
+              "bytes": 4194304,
+              "header_checksum": "C6BF",
+              "computed_checksum": "C6BF",
+              "checksum_valid": true
+            },
+            "probe_identity_matches": true,
+            "diagnostic_changed_byte_count": 84,
+            "hard_bytes_replaced_inside_diagnostic_envelope": 28,
+            "exact_rebuild": true
+          },
+          "runtime": {
+            "status": "pass",
+            "evidence_count": 5,
+            "evidence": {
+              "s19_imelda_hp0.png": {
+                "path": "captures/run/current_s18_20_result/hard/s19_imelda_hp0.png",
+                "sha256": "5d42dd3a940164588851579d1043c20122941e6d75bd81313021a57bc7c37486",
+                "bytes": 12014,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "5d42dd3a940164588851579d1043c20122941e6d75bd81313021a57bc7c37486",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "이멜다",
+                  "HP0"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_elwin_level.png": {
+                "path": "captures/run/current_s18_20_result/hard/s19_elwin_level.png",
+                "sha256": "477f6995727a485f1eaa2e4f4ae9164aafdc9601ed6b30c236101f8ca66f02e2",
+                "bytes": 16595,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "477f6995727a485f1eaa2e4f4ae9164aafdc9601ed6b30c236101f8ca66f02e2",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_aaron_level.png": {
+                "path": "captures/run/current_s18_20_result/hard/s19_aaron_level.png",
+                "sha256": "69b47aba867403cf22fb13875efc109fed76a64124b11cf837723be19f22c33f",
+                "bytes": 14297,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "69b47aba867403cf22fb13875efc109fed76a64124b11cf837723be19f22c33f",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "아론의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_result.png": {
+                "path": "captures/run/current_s18_20_result/hard/s19_result.png",
+                "sha256": "bb8e04d61a44b60b2d765f8dd3be4d28c331ac1b34cff68dd5c99709a1636647",
+                "bytes": 9081,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "battle_result",
+                "expected_surface": "battle_result",
+                "expected_reviewed_sha256": "bb8e04d61a44b60b2d765f8dd3be4d28c331ac1b34cff68dd5c99709a1636647",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "전과보고",
+                  "POINT 15500P"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s19_save.png": {
+                "path": "captures/run/current_s18_20_result/hard/s19_save.png",
+                "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "bytes": 5961,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "save_menu",
+                "expected_surface": "save_menu",
+                "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "저장",
+                  "다음 시나리오"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s18_20_result/hard/s19_result.png",
+              "sha256": "bb8e04d61a44b60b2d765f8dd3be4d28c331ac1b34cff68dd5c99709a1636647",
+              "bytes": 9081,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result",
+              "expected_surface": "battle_result",
+              "expected_reviewed_sha256": "bb8e04d61a44b60b2d765f8dd3be4d28c331ac1b34cff68dd5c99709a1636647",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "전과보고",
+                "POINT 15500P"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "save_menu": {
+              "path": "captures/run/current_s18_20_result/hard/s19_save.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu",
+              "expected_surface": "save_menu",
+              "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "저장",
+                "다음 시나리오"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "scope_limit": "historical work RAM continues directly into current ROM result renderers; this is not a fresh deployment-to-clear replay or hard-mode balance evidence"
+          }
+        }
+      }
+    },
+    "20": {
+      "status": "pass",
+      "source_state": {
+        "path": "captures/runtime/s20_completion_d2f9_hidden/.local/share/blastem/Langrisser II (Scenario 20 Completion Probe)/quicksave.gst",
+        "sha256": "595c32d434bb3d79d0dd8513256c77a38c2191bedea95730c3eca1e23d3b3bc2",
+        "bytes": 140408,
+        "identity_matches": true,
+        "normal_method": "historical completion continuation loaded unchanged"
+      },
+      "profiles": {
+        "normal": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact current-normal completion-layout builder replay",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-normal.md",
+              "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+              "bytes": 4194304,
+              "header_checksum": "CB53",
+              "computed_checksum": "CB53",
+              "checksum_valid": true
+            },
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/normal/s20.md",
+              "sha256": "4d6cd94dba1f0d23340543c8f787a4dc8de6e70e32173e9c3ea4598e6e0bdc1b",
+              "bytes": 4194304,
+              "header_checksum": "C6B0",
+              "computed_checksum": "C6B0",
+              "checksum_valid": true
+            },
+            "probe_identity_matches": true,
+            "diagnostic_changed_byte_count": 90,
+            "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+            "exact_rebuild": true
+          },
+          "runtime": {
+            "status": "pass",
+            "evidence_count": 8,
+            "evidence": {
+              "s20_fias_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_fias_dialogue.png",
+                "sha256": "1ea0e3e9c84d94b9d8a00f5a7b7b74df056e4bc7cfe5a47b47dcfa08a2589693",
+                "bytes": 13907,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "1ea0e3e9c84d94b9d8a00f5a7b7b74df056e4bc7cfe5a47b47dcfa08a2589693",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "파이어스",
+                  "데몬로드"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_elwin_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_elwin_dialogue.png",
+                "sha256": "fecab6fff196f93ef6e3a9e116975d3d23f0ade52e1c6ef9195bf8ed3a32bf93",
+                "bytes": 13414,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "fecab6fff196f93ef6e3a9e116975d3d23f0ade52e1c6ef9195bf8ed3a32bf93",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_jessica_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_jessica_dialogue.png",
+                "sha256": "accaa2e11e57a3f5fd7ddbb844d6252bc016e9a8123f5de680147d8c7cdfa0b4",
+                "bytes": 14730,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "accaa2e11e57a3f5fd7ddbb844d6252bc016e9a8123f5de680147d8c7cdfa0b4",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "제시카"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_keith_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_keith_dialogue.png",
+                "sha256": "8fe01239ed276083c6a171bbeaa8a7b31cb96468a764e9e42a40df0bcc95376f",
+                "bytes": 13903,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "8fe01239ed276083c6a171bbeaa8a7b31cb96468a764e9e42a40df0bcc95376f",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "키스"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_elwin_level.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_elwin_level.png",
+                "sha256": "233cc711b169192ca0d9631b9a7a1d9b73766239f1bd843e6743377f3db34ef9",
+                "bytes": 14699,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "233cc711b169192ca0d9631b9a7a1d9b73766239f1bd843e6743377f3db34ef9",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_class_change.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_class_change.png",
+                "sha256": "118a31908656e9a247dda268d2bd096f09370265709cb15fdf8801adc0a4fcea",
+                "bytes": 15786,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "118a31908656e9a247dda268d2bd096f09370265709cb15fdf8801adc0a4fcea",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "클래스체인지",
+                  "스코트"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_result.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_result.png",
+                "sha256": "99d9906f9ac03e21a83e77787a15fd6e9bf3f17e86565fb1e7c8819b0d8b0e4c",
+                "bytes": 8227,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "battle_result",
+                "expected_surface": "battle_result",
+                "expected_reviewed_sha256": "99d9906f9ac03e21a83e77787a15fd6e9bf3f17e86565fb1e7c8819b0d8b0e4c",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "전과보고",
+                  "POINT 0P"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_save.png": {
+                "path": "captures/run/current_s18_20_result/normal/s20_save.png",
+                "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "bytes": 5961,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "save_menu",
+                "expected_surface": "save_menu",
+                "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "저장",
+                  "다음 시나리오"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s18_20_result/normal/s20_result.png",
+              "sha256": "99d9906f9ac03e21a83e77787a15fd6e9bf3f17e86565fb1e7c8819b0d8b0e4c",
+              "bytes": 8227,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result",
+              "expected_surface": "battle_result",
+              "expected_reviewed_sha256": "99d9906f9ac03e21a83e77787a15fd6e9bf3f17e86565fb1e7c8819b0d8b0e4c",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "전과보고",
+                "POINT 0P"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "save_menu": {
+              "path": "captures/run/current_s18_20_result/normal/s20_save.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu",
+              "expected_surface": "save_menu",
+              "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "저장",
+                "다음 시나리오"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "scope_limit": "historical work RAM continues directly into current ROM result renderers; this is not a fresh deployment-to-clear replay or hard-mode balance evidence"
+          }
+        },
+        "hard": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-hard.md",
+              "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+              "bytes": 4194304,
+              "header_checksum": "E15E",
+              "computed_checksum": "E15E",
+              "checksum_valid": true
+            },
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/hard/s20.md",
+              "sha256": "212561e2af4411db771f0dcaf37b036861fdd3c5e2c71a71c8c89f5c74a73def",
+              "bytes": 4194304,
+              "header_checksum": "A89B",
+              "computed_checksum": "A89B",
+              "checksum_valid": true
+            },
+            "probe_identity_matches": true,
+            "diagnostic_changed_byte_count": 90,
+            "hard_bytes_replaced_inside_diagnostic_envelope": 36,
+            "exact_rebuild": true
+          },
+          "runtime": {
+            "status": "pass",
+            "evidence_count": 8,
+            "evidence": {
+              "s20_fias_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_fias_dialogue.png",
+                "sha256": "49fedb261935c700d7e0a67a5ae8cb48b5ae082b400f9eab0d75aa8dfe59a178",
+                "bytes": 13537,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "49fedb261935c700d7e0a67a5ae8cb48b5ae082b400f9eab0d75aa8dfe59a178",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "파이어스",
+                  "데몬로드"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_elwin_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_elwin_dialogue.png",
+                "sha256": "5158dad3e1dd9d0db983820cf0147e3f525a02e1c4dbc45617d05be5b60fbbc5",
+                "bytes": 13414,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "5158dad3e1dd9d0db983820cf0147e3f525a02e1c4dbc45617d05be5b60fbbc5",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_jessica_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_jessica_dialogue.png",
+                "sha256": "90b3891a20473e3194e23f923586ab6447f325f229b49bbb9025330fdad3cd8b",
+                "bytes": 14755,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "90b3891a20473e3194e23f923586ab6447f325f229b49bbb9025330fdad3cd8b",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "제시카"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_keith_dialogue.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_keith_dialogue.png",
+                "sha256": "0d700be9d37b2ba62b8a82c987303d78fe401219d8b60951c062793dd1d1ae7b",
+                "bytes": 14745,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "0d700be9d37b2ba62b8a82c987303d78fe401219d8b60951c062793dd1d1ae7b",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "키스"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_elwin_level.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_elwin_level.png",
+                "sha256": "9243680d9f5fe7dfef3d5bcbe620959170a19eaa929b730d09795136493afe17",
+                "bytes": 14216,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "9243680d9f5fe7dfef3d5bcbe620959170a19eaa929b730d09795136493afe17",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈의",
+                  "레벨이 올랐다"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_class_change.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_class_change.png",
+                "sha256": "216e60b57af0b2286558cbabacab8643422020ff151337d6a7690cd6205b8948",
+                "bytes": 14508,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "expected_surface": "other",
+                "expected_reviewed_sha256": "216e60b57af0b2286558cbabacab8643422020ff151337d6a7690cd6205b8948",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "클래스체인지",
+                  "스코트"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_result.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_result.png",
+                "sha256": "8d27d664940a1653b4c93dfaa01d13448ad9bf3a2eb22e3262a07deeb1849e53",
+                "bytes": 8300,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "battle_result",
+                "expected_surface": "battle_result",
+                "expected_reviewed_sha256": "8d27d664940a1653b4c93dfaa01d13448ad9bf3a2eb22e3262a07deeb1849e53",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "전과보고",
+                  "POINT 18050P"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "s20_save.png": {
+                "path": "captures/run/current_s18_20_result/hard/s20_save.png",
+                "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "bytes": 5961,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "save_menu",
+                "expected_surface": "save_menu",
+                "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+                "reviewed_hash_matches": true,
+                "surface_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "저장",
+                  "다음 시나리오"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s18_20_result/hard/s20_result.png",
+              "sha256": "8d27d664940a1653b4c93dfaa01d13448ad9bf3a2eb22e3262a07deeb1849e53",
+              "bytes": 8300,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result",
+              "expected_surface": "battle_result",
+              "expected_reviewed_sha256": "8d27d664940a1653b4c93dfaa01d13448ad9bf3a2eb22e3262a07deeb1849e53",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "전과보고",
+                "POINT 18050P"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "save_menu": {
+              "path": "captures/run/current_s18_20_result/hard/s20_save.png",
+              "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "bytes": 5961,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "save_menu",
+              "expected_surface": "save_menu",
+              "expected_reviewed_sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+              "reviewed_hash_matches": true,
+              "surface_matches": true,
+              "manual_review": "pass",
+              "observed_text": [
+                "저장",
+                "다음 시나리오"
+              ],
+              "observed_sprite_state": "clean"
+            },
+            "scope_limit": "historical work RAM continues directly into current ROM result renderers; this is not a fresh deployment-to-clear replay or hard-mode balance evidence"
+          }
+        }
+      }
+    }
+  },
+  "cross_profile": {
+    "scenario18_result_pixel_identical": true,
+    "all_save_menu_frames_pixel_identical": true,
+    "scenario19_and_20_point_totals_intentionally_differ": true,
+    "manual_roster_and_sprite_review": "pass"
+  },
+  "rejected_attempts": [
+    {
+      "scenario": 19,
+      "profile": "hard",
+      "attempt": "HP10 continuation with short repeated confirms",
+      "result": "ordinary damage left Imelda at HP1; later confirms selected Laird's status panel instead of proving completion",
+      "classification": "input/timing and incomplete battle, not a renderer failure"
+    },
+    {
+      "scenario": 19,
+      "profile": "hard",
+      "attempt": "end turn after the incomplete HP1 branch",
+      "result": "reached GAME OVER rather than battle result",
+      "classification": "rejected completion evidence"
+    },
+    {
+      "scenario": 19,
+      "profile": "hard",
+      "attempt": "runtime Imelda HP9",
+      "result": "ordinary damage was 8 and again left HP1",
+      "classification": "rejected nondeterministic completion evidence"
+    },
+    {
+      "scenario": 19,
+      "profile": "hard",
+      "attempt": "temporary Start-menu MP guard checksum A2BC",
+      "result": "not needed for the accepted run and removed from source",
+      "classification": "rejected diagnostic ROM"
+    }
+  ]
+}
