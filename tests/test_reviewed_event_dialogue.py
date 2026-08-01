@@ -734,12 +734,14 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(len(continuations), 25)
         self.assertEqual(primary[0]["address"], "0x199344")
         self.assertEqual(primary[-1]["address"], "0x19A93E")
-        # English 95 closes Scenario 11. The opening 28 Japanese records align
-        # with English 200..227; later death and route branches diverge in
-        # order, including source-only illness and Liana-return variants.
+        # English 95 closes Scenario 11. Japanese page 0x199854 is the short
+        # implicit {0014}! page for English record 215, so it remains a
+        # physical continuation while the following primary pages resume at
+        # English 216. Later death and route branches diverge in order,
+        # including source-only illness and Liana-return variants.
         self.assertEqual(
             [row["english_record"] for row in primary[:28]],
-            list(range(200, 228)),
+            [*range(200, 215), *range(216, 229)],
         )
         self.assertTrue(primary[30]["japanese_only"])
         self.assertTrue(primary[86]["japanese_only"])
@@ -747,6 +749,12 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertTrue(all("\n" not in row["text"] for row in rows))
 
         text_by_address = {row["address"]: row["text"] for row in rows}
+        self.assertEqual(text_by_address["0x199854"], "{0014}!")
+        self.assertEqual(
+            text_by_address["0x199ABA"],
+            "근육 신전 입구? 무슨 뜻이지… 뭐, 나중에 보자.",
+        )
+        self.assertEqual(text_by_address["0x199AF8"], "카벙클을 발견했다!")
         self.assertEqual(
             text_by_address["0x199B88"],
             "크윽! 여기까지인가…",
