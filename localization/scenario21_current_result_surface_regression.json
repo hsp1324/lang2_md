@@ -1,0 +1,612 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Fresh current normal/hard Scenario 21 preparation, source-preserving runtime completion, all aftermath frames, battle result, and save menu",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal runtime-clear builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "bytes": 4194304,
+          "header_checksum": "CB53",
+          "computed_checksum": "CB53",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s21-runtime-clear.md",
+          "sha256": "7b16954a5cf601f36867eaffaf815cde532da524070f84c3a5c23076f218e672",
+          "bytes": 4194304,
+          "header_checksum": "F4DA",
+          "computed_checksum": "F4DA",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 185,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "fixed_records_input_exact": true,
+        "normal_fixed_records_source_exact": true,
+        "player_deployments_input_exact": true,
+        "normal_player_deployments_source_exact": true,
+        "scope_limit": "diagnostic only: Start marks hostile runtime groups defeated; all fixed records, deployments, events, identities, and combat values remain byte-identical to the input candidate"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s21_result/normal/runtime01",
+        "evidence_json": {
+          "path": "captures/run/current_s21_result/normal/runtime01/evidence.json",
+          "sha256": "64f2a69882a38ec4a8624c4378b72631eb0010c9869e9460f8c46230cffc38e3",
+          "expected_sha256": "64f2a69882a38ec4a8624c4378b72631eb0010c9869e9460f8c46230cffc38e3",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 21,
+          "identified_scenario": 21,
+          "best_match": {
+            "scenario": 21,
+            "matched_records": 11,
+            "total_records": 11,
+            "match_ratio": 1.0
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s21_result/normal/runtime01/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s21_result/normal/runtime01/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s21_result/normal/runtime01/battle/turn1_command.png",
+            "sha256": "e1a68e4595077f5c06ffd806034c03ba125172e0f4b14693aa609c305319ab51",
+            "expected_sha256": "e1a68e4595077f5c06ffd806034c03ba125172e0f4b14693aa609c305319ab51",
+            "hash_matches": true,
+            "bytes": 16757,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s21_result/normal/runtime01/battle/runtime_clear_start_menu.png",
+            "sha256": "6bdb17d1624a42d57934deb92d31e55219ece16144e0c7c07ec34f27f8278710",
+            "expected_sha256": "6bdb17d1624a42d57934deb92d31e55219ece16144e0c7c07ec34f27f8278710",
+            "hash_matches": true,
+            "bytes": 12901,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s21_result/normal/runtime01/aftermath/battle_result.png",
+            "sha256": "c29063158456ce72f39bb0de6cd7477f23cd9c2a0a00877234ae6fdbf74d6dba",
+            "expected_sha256": "c29063158456ce72f39bb0de6cd7477f23cd9c2a0a00877234ae6fdbf74d6dba",
+            "hash_matches": true,
+            "bytes": 12806,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s21_result/normal/runtime01/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "runtime_clear_start": {
+            "path": "captures/run/current_s21_result/normal/runtime01/states/runtime_clear_start_menu.gst",
+            "sha256": "659af65cd58d1c66548653bbeb940f8031d93ab55abd2381e83b227e753d1181",
+            "expected_sha256": "659af65cd58d1c66548653bbeb940f8031d93ab55abd2381e83b227e753d1181",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "battle_result": {
+            "path": "captures/run/current_s21_result/normal/runtime01/states/battle_result.gst",
+            "sha256": "399156d7620f94137ce4e78ae2650bfd2a7d8b14c47d1a144f67dc1d4573906d",
+            "expected_sha256": "399156d7620f94137ce4e78ae2650bfd2a7d8b14c47d1a144f67dc1d4573906d",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "save_menu": {
+            "path": "captures/run/current_s21_result/normal/runtime01/states/save_menu.gst",
+            "sha256": "50fb0bb5388fc66a6095f9d402df1bab6dfe244275f9d64b036db97c1f3f951a",
+            "expected_sha256": "50fb0bb5388fc66a6095f9d402df1bab6dfe244275f9d64b036db97c1f3f951a",
+            "hash_matches": true,
+            "bytes": 140408
+          }
+        },
+        "runtime_clear_state": {
+          "groups": {
+            "8": {
+              "class_id": 90,
+              "name_id": 99,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 2
+            },
+            "9": {
+              "class_id": 89,
+              "name_id": 72,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 10
+            },
+            "10": {
+              "class_id": 88,
+              "name_id": 69,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 7
+            },
+            "11": {
+              "class_id": 96,
+              "name_id": 12,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 37,
+              "y": 11
+            },
+            "12": {
+              "class_id": 90,
+              "name_id": 100,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 19
+            },
+            "13": {
+              "class_id": 88,
+              "name_id": 70,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 27
+            },
+            "14": {
+              "class_id": 89,
+              "name_id": 73,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 28
+            },
+            "15": {
+              "class_id": 91,
+              "name_id": 96,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "16": {
+              "class_id": 91,
+              "name_id": 97,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "17": {
+              "class_id": 91,
+              "name_id": 98,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "18": {
+              "class_id": 66,
+              "name_id": 42,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            }
+          },
+          "hostiles_defeated": true,
+          "lana_untouched_by_wrapper": true
+        },
+        "hostile_state_valid": true,
+        "battle_result_frame": 36,
+        "save_menu_frame": 3,
+        "manual_review": {
+          "status": "pass",
+          "reviewed_aftermath_frames": 36,
+          "dialogue_names": [
+            "리빙아머",
+            "서큐버스",
+            "리치",
+            "크라켄",
+            "제국군지휘관",
+            "헤인",
+            "엘윈",
+            "제시카",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "스코트"
+          ],
+          "battle_result_text": [
+            "전과보고",
+            "아군",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "제시카",
+            "스코트",
+            "POINT 31100P"
+          ],
+          "clarification": "the first left-column label is the faction heading 아군, not a duplicate 아론 commander row",
+          "class_change_text": [
+            "클래스체인지 가능",
+            "로드",
+            "호크나이트"
+          ],
+          "save_text": [
+            "저장",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "bytes": 4194304,
+          "header_checksum": "E15E",
+          "computed_checksum": "E15E",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s21-runtime-clear.md",
+          "sha256": "eb41d394502e55ebcd86ea4cc2d5b603faa69a194df2773f49b0ff1a3c61d46e",
+          "bytes": 4194304,
+          "header_checksum": "0AE5",
+          "computed_checksum": "0AE5",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 185,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "fixed_records_input_exact": true,
+        "normal_fixed_records_source_exact": true,
+        "player_deployments_input_exact": true,
+        "normal_player_deployments_source_exact": true,
+        "scope_limit": "diagnostic only: Start marks hostile runtime groups defeated; all fixed records, deployments, events, identities, and combat values remain byte-identical to the input candidate"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s21_result/hard/runtime01",
+        "evidence_json": {
+          "path": "captures/run/current_s21_result/hard/runtime01/evidence.json",
+          "sha256": "af9a996da1ae9a09c22e43e39d6f1de51c53eadcf0d60fbeb3b3cd12c4234eea",
+          "expected_sha256": "af9a996da1ae9a09c22e43e39d6f1de51c53eadcf0d60fbeb3b3cd12c4234eea",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 21,
+          "identified_scenario": 21,
+          "best_match": {
+            "scenario": 21,
+            "matched_records": 11,
+            "total_records": 11,
+            "match_ratio": 1.0
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s21_result/hard/runtime01/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s21_result/hard/runtime01/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s21_result/hard/runtime01/battle/turn1_command.png",
+            "sha256": "e1a68e4595077f5c06ffd806034c03ba125172e0f4b14693aa609c305319ab51",
+            "expected_sha256": "e1a68e4595077f5c06ffd806034c03ba125172e0f4b14693aa609c305319ab51",
+            "hash_matches": true,
+            "bytes": 16757,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s21_result/hard/runtime01/battle/runtime_clear_start_menu.png",
+            "sha256": "6bdb17d1624a42d57934deb92d31e55219ece16144e0c7c07ec34f27f8278710",
+            "expected_sha256": "6bdb17d1624a42d57934deb92d31e55219ece16144e0c7c07ec34f27f8278710",
+            "hash_matches": true,
+            "bytes": 12901,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s21_result/hard/runtime01/aftermath/battle_result.png",
+            "sha256": "9c62d41a22ae2a6584b161285570bfd424d6c5f2b2961b4e77bc573020d830c1",
+            "expected_sha256": "9c62d41a22ae2a6584b161285570bfd424d6c5f2b2961b4e77bc573020d830c1",
+            "hash_matches": true,
+            "bytes": 12498,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s21_result/hard/runtime01/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "runtime_clear_start": {
+            "path": "captures/run/current_s21_result/hard/runtime01/states/runtime_clear_start_menu.gst",
+            "sha256": "949276d1379b1222e6f2f26f5bce0d8dad4c7607f6fc69274aed415fab9eb21c",
+            "expected_sha256": "949276d1379b1222e6f2f26f5bce0d8dad4c7607f6fc69274aed415fab9eb21c",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "battle_result": {
+            "path": "captures/run/current_s21_result/hard/runtime01/states/battle_result.gst",
+            "sha256": "ee08bdf362a3c0aab56f3ae24e39e5f733cc5eb8bab21c69b954d428f5688230",
+            "expected_sha256": "ee08bdf362a3c0aab56f3ae24e39e5f733cc5eb8bab21c69b954d428f5688230",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "save_menu": {
+            "path": "captures/run/current_s21_result/hard/runtime01/states/save_menu.gst",
+            "sha256": "a74bff19e28aecfa78f27b7760c51aa0d47de11c92eb18766714b44812d3eb50",
+            "expected_sha256": "a74bff19e28aecfa78f27b7760c51aa0d47de11c92eb18766714b44812d3eb50",
+            "hash_matches": true,
+            "bytes": 140408
+          }
+        },
+        "runtime_clear_state": {
+          "groups": {
+            "8": {
+              "class_id": 90,
+              "name_id": 99,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 2
+            },
+            "9": {
+              "class_id": 89,
+              "name_id": 72,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 10
+            },
+            "10": {
+              "class_id": 88,
+              "name_id": 69,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 7
+            },
+            "11": {
+              "class_id": 96,
+              "name_id": 12,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 37,
+              "y": 11
+            },
+            "12": {
+              "class_id": 90,
+              "name_id": 100,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 19
+            },
+            "13": {
+              "class_id": 88,
+              "name_id": 70,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 27
+            },
+            "14": {
+              "class_id": 89,
+              "name_id": 73,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 28
+            },
+            "15": {
+              "class_id": 91,
+              "name_id": 96,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "16": {
+              "class_id": 91,
+              "name_id": 97,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "17": {
+              "class_id": 91,
+              "name_id": 98,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "18": {
+              "class_id": 66,
+              "name_id": 42,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            }
+          },
+          "hostiles_defeated": true,
+          "lana_untouched_by_wrapper": true
+        },
+        "hostile_state_valid": true,
+        "battle_result_frame": 36,
+        "save_menu_frame": 3,
+        "manual_review": {
+          "status": "pass",
+          "reviewed_aftermath_frames": 36,
+          "dialogue_names": [
+            "리빙아머",
+            "서큐버스",
+            "리치",
+            "크라켄",
+            "제국군지휘관",
+            "헤인",
+            "엘윈",
+            "제시카",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "스코트"
+          ],
+          "battle_result_text": [
+            "전과보고",
+            "아군",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "제시카",
+            "스코트",
+            "POINT 31100P"
+          ],
+          "clarification": "the first left-column label is the faction heading 아군, not a duplicate 아론 commander row",
+          "class_change_text": [
+            "클래스체인지 가능",
+            "로드",
+            "호크나이트"
+          ],
+          "save_text": [
+            "저장",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    }
+  },
+  "cross_profile": {
+    "preparation_pixel_identical": true,
+    "turn1_command_pixel_identical": true,
+    "runtime_clear_start_pixel_identical": true,
+    "aftermath_frames_1_through_35_pixel_identical": true,
+    "save_menu_pixel_identical": true,
+    "result_manual_content_identical": true,
+    "result_frames_have_different_animation_phase": true
+  },
+  "rejected_attempts": [
+    {
+      "attempt": "historical s21_completion_8a18_fresh GST",
+      "result": "current-ROM load black-wiped and crashed",
+      "classification": "rejected cross-build savestate continuation"
+    },
+    {
+      "attempt": "Japanese runtime-clear preparation automation",
+      "result": "Korean-specific preparation cursor detector did not identify the Japanese surface",
+      "classification": "rejected detector mismatch; no Japanese result claim"
+    },
+    {
+      "attempt": "result roster first-row duplicate suspicion",
+      "result": "manual zoom and comparison identify the row as the faction heading 아군, followed by the real 아론 row",
+      "classification": "resolved as correct UI, not a defect"
+    }
+  ],
+  "savestate_policy": "These GSTs are isolated verification fixtures. Player migration continues through in-game SRM load and then a fresh savestate."
+}

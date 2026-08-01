@@ -63,6 +63,12 @@ FIRST_ENEMY_RECORD_INDEX = 0
 LAST_ENEMY_RECORD_INDEX = 10
 LANA_RECORD_INDEX = 3
 HIDDEN_ENEMY_RECORD_INDEXES = (7, 8, 9, 10)
+LANA_RUNTIME_GROUP = FIRST_ENEMY_RUNTIME_GROUP + LANA_RECORD_INDEX
+RUNTIME_CLEAR_GROUPS = tuple(
+    group
+    for group in range(FIRST_ENEMY_RUNTIME_GROUP, LAST_ENEMY_RUNTIME_GROUP + 1)
+    if group != LANA_RUNTIME_GROUP
+)
 PROBE_AT = 0
 PROBE_DF = 0
 
@@ -112,6 +118,33 @@ def protagonist_death_wrapper_code() -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def runtime_clear_wrapper_code() -> bytes:
+    """Mark every hostile runtime group defeated while preserving Lana.
+
+    Scenario 21's visible monsters and hidden reinforcements retain their
+    source-owned fixed records and event handlers.  The wrapper is only a
+    deterministic result-renderer entry point: opening Start applies the
+    runtime state reached after those hostile groups have been defeated, then
+    returns to the untouched Start handler.
+    """
+    code = bytearray()
+    for group in RUNTIME_CLEAR_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -195,15 +228,23 @@ def patch_probe(
     *,
     completion_layout: bool = False,
     protagonist_death: bool = False,
+    runtime_clear: bool = False,
 ) -> int:
     validate_layout(probe, source)
-    if completion_layout and protagonist_death:
+    if sum((completion_layout, protagonist_death, runtime_clear)) > 1:
         raise ValueError("Scenario 21 diagnostic modes conflict")
     if protagonist_death:
         install_start_wrapper(
             probe,
             source,
             protagonist_death_wrapper_code(),
+        )
+        return builder.update_md_checksum(probe)
+    if runtime_clear:
+        install_start_wrapper(
+            probe,
+            source,
+            runtime_clear_wrapper_code(),
         )
         return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
@@ -256,6 +297,14 @@ def parse_args() -> argparse.Namespace:
             "mark only runtime player group 0 defeated through Start"
         ),
     )
+    parser.add_argument(
+        "--runtime-clear",
+        action="store_true",
+        help=(
+            "preserve every Scenario 21 deployment and fixed record, then "
+            "mark only the hostile runtime groups defeated through Start"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -268,6 +317,7 @@ def main() -> int:
         source,
         completion_layout=args.completion_layout,
         protagonist_death=args.protagonist_death,
+        runtime_clear=args.runtime_clear,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -277,6 +327,15 @@ def main() -> int:
             "records, events, identities, and combat values preserved"
         )
         print("Start marks only runtime player group 0 defeated")
+    elif args.runtime_clear:
+        print(
+            "Scenario 21 runtime-clear mode: stock deployments, fixed "
+            "records, events, identities, and combat values preserved"
+        )
+        print(
+            "Start marks only hostile runtime groups 8..10 and 12..18 "
+            "defeated; source Lana group 11 remains untouched"
+        )
     else:
         print("Scenario 21 enemy records 0..10: AT 0, DF 0, no mercenaries")
     if args.completion_layout:
@@ -290,7 +349,7 @@ def main() -> int:
             "source record 3 Lana and hidden records 7-10 retain source "
             "coordinates, sides, identities, and event ownership"
         )
-    elif not args.protagonist_death:
+    elif not args.protagonist_death and not args.runtime_clear:
         print(
             "stock deployments, identities, classes, levels, hidden events, "
             "coordinates, and handlers preserved"
