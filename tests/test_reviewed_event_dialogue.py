@@ -370,12 +370,17 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             "다시… 태어날 수 있다면… 한 번 더… 스승님과…",
         )
         self.assertEqual(
+            rows["0x1B35B4"],
+            "{0014}는 {0010}과 싸울 강대한 힘이 급히 필요했죠…",
+        )
+        self.assertEqual(
             rows["0x1B2EFC"],
             "잘 싸웠다. 하지만 끝이다.\n제국에 맞선 것부터 무모했군",
         )
         self.assertNotIn("대륙 규모", rows["0x1B2A48"])
         self.assertNotIn("저승", rows["0x1B34FC"])
         self.assertNotIn("스승님께", rows["0x1B3538"])
+        self.assertNotIn("{0010}와 싸울", rows["0x1B35B4"])
 
     def test_scenario_16_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 16]
