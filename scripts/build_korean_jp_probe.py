@@ -277,6 +277,29 @@ MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE_LIMIT = 0x2B8E00
 MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE = 0x2B8E00
 MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT = 0x2B8E80
 
+# The stock battle map always preloads ordinary hireable mercenary classes
+# 0x62..0x71 into the fixed cache at WRAM 0xA84E.  Enemy-side lookup ignores
+# that cache, however, and loads the same graphics again into the ten-entry
+# dynamic cache at 0xA88E.  A hard-mode formation with an eleventh distinct
+# dynamic class then writes its second animation frame over the first allied
+# commander's gray frame at VRAM 0x9600.  Reuse the already loaded fixed cache
+# for ordinary enemy mercenaries so cache-aware hard-mode substitutions do not
+# consume a dynamic slot.
+ENEMY_ORDINARY_MERCENARY_CACHE_LOADER_HOOK = 0x0112DC
+ENEMY_ORDINARY_MERCENARY_CACHE_LOOKUP_HOOK = 0x01155C
+ENEMY_ORDINARY_MERCENARY_CACHE_HOOK_ORIGINAL = bytes.fromhex(
+    "72 00 12 29 00 00"
+)
+ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE = 0x2B8E80
+ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE_LIMIT = 0x2B9000
+ENEMY_ORDINARY_MERCENARY_FIRST_CLASS = 0x62
+ENEMY_ORDINARY_MERCENARY_LAST_CLASS = 0x71
+ENEMY_ORDINARY_MERCENARY_FIXED_TABLE = 0xFFFFA84E
+ENEMY_ORDINARY_MERCENARY_DYNAMIC_LOOKUP_RESUME = 0x011562
+ENEMY_ORDINARY_MERCENARY_FIXED_LOOKUP_SCAN = 0x011526
+ENEMY_ORDINARY_MERCENARY_LOADER_RESUME = 0x0112F4
+ENEMY_ORDINARY_MERCENARY_LOADER_SKIP = 0x011358
+
 
 def custom_map_sprite_gray_source_map(
     source_data: bytes | bytearray,
@@ -452,30 +475,68 @@ BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE = 0x2BE8C0
 BYTE_UI_DYNAMIC_LEGACY_INDEX_TABLE_LIMIT = 0x2BE9C0
 BYTE_UI_PREP_DYNAMIC_SLOT_TABLE = 0x2BE9C0
 BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT = 0x2BEAC0
-# These patterns are a transient map-status/preparation cache, not a persistent
-# font bank. They occupy noncontiguous cells in the ordinary pattern region,
-# below every retained Plane/Window/SAT/H-scroll table. A read-only scan of all
-# 384 retained GST states found no reference to any selected tile, and the 31
-# preparation-like states kept their original payload stable before assignment.
+BYTE_UI_PREP_DYNAMIC_VDP_COMMAND_TABLE = 0x2BEAC0
+BYTE_UI_PREP_DYNAMIC_VDP_COMMAND_TABLE_LIMIT = 0x2BEB40
+BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE = 0x2BEB40
+BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE_LIMIT = 0x2BEB80
+BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE = 0x2BEBC0
+BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT = 0x2BEC40
+# These patterns are transient map-status/preparation caches, not a persistent
+# font bank.  The battle map renderer has exactly two eight-cell fields (name
+# and class), so all sixteen of its destinations live in audited gaps around
+# the live VDP tables:
+# 0x0795/0x079C/0x079D are between SAT and H-scroll, while
+# 0x07CA/0x07CB/0x07D0/0x07D1/0x07D5/0x07D6/0x07D8..0x07DB/
+# 0x07E0/0x07E1/0x07F0 are above H-scroll.
+# None is inside the H-scroll table at 0x07A0..0x07BF.
 #
-# Do not move this cache back to 0x07xx. The former 0x07A1..0x07BC allocation
-# was physically inside the live H-scroll table at VRAM 0xF400..0xF7FF. It
-# forced the full-scroll initializer to stop early and corrupted preparation
-# graphics/minimap state. The old 0x05D8..0x05E7 and experimental
+# Do not move this cache into 0x07A0..0x07BF. The former 0x07A1..0x07BC
+# allocation was physically inside the live H-scroll table at VRAM
+# 0xF400..0xF7FF. It forced the full-scroll initializer to stop early and
+# corrupted preparation graphics/minimap state. The old 0x05D8..0x05E7 and experimental
 # 0x04D8..0x04E7 caches also collided with live map graphics in later scenarios.
+# Do not restore map slots 2, 3, 8, or 9 to 0x0360, 0x0361, 0x037D, or 0x037F:
+# a supplied Genesis Plus GX Scenario 11 state proves that those four patterns
+# are simultaneously referenced by visible allied/enemy/NPC map-unit cells.
+# Do not restore slot 5 to 0x036D either: a B1.0.2 Arch Mage hiring capture
+# proves that the Ballista icon also owns that pattern when the dynamic `가`
+# glyph is uploaded.
+# Do not put any battle-map slot in 0x0348..0x0387 (ordinary frame 0),
+# 0x0448..0x0487 (ordinary frame 1), or 0x03B0..0x03EF (ordinary acted-gray
+# silhouettes).  A reported moved Pike proved why the third range matters:
+# class 0x62 owns 0x03B0..0x03B3, and the former map slot 10 rewrote 0x03B0
+# with a Hangul glyph when a class field was drawn.  The sixteen battle
+# destinations below have no valid retained Plane/Window/SAT owner and sit
+# outside Plane A/B, Window, SAT, and H-scroll.
 BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
-    0x0359, 0x035B, 0x0360, 0x0361, 0x036C, 0x036D, 0x0370, 0x0371,
-    0x037D, 0x037F, 0x03B0, 0x03BD, 0x03C0, 0x03C1, 0x03C4, 0x03C9,
+    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07D0, 0x07F0, 0x07D1, 0x07E1,
+    0x079D, 0x07E0, 0x07D5, 0x07D6, 0x07D8, 0x07D9, 0x07DA, 0x07DB,
 )
+# The preparation/hiring surfaces also draw ordinary mercenary icons from the
+# 0x0348..0x0387 pattern cache.  B1.0.2 screenshots proved that putting
+# preparation glyphs back at 0x0359/0x035B/0x036C/0x0370/0x0371 writes Hangul
+# directly over Monk, Ballista, and related icons.  Preparation therefore uses
+# the same ownership-audited destinations as battle.  It keeps a separate
+# command table and renderer so the two surface contracts can still be audited
+# independently.
+BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS = BYTE_UI_DYNAMIC_MAP_TILE_IDS
 # These additional pattern-region cells are not needed by the two eight-cell
 # map fields. They are reserved for preparation/status glyphs that must remain
-# visible together and passed the same retained-state ownership scan.
+# visible together and passed the same retained-state ownership scan. Some are
+# inside the later battle-only acted-gray cache. That overlap is preparation
+# lifetime only: the stock sortie loader restores all sixteen ordinary gray
+# silhouettes at 0x03B0..0x03EF before battle. The Pike acted-surface probe
+# byte-compares the entire restored cache before and after a real move.
 BYTE_UI_PREP_EXTRA_TILE_IDS = (
     0x03CA, 0x03D0, 0x03D1,
     0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF, 0x03E0,
 )
-BYTE_UI_DYNAMIC_TILE_IDS = (
-    BYTE_UI_DYNAMIC_MAP_TILE_IDS + BYTE_UI_PREP_EXTRA_TILE_IDS
+# The live battle renderer can address only slots 0..15.  Do not append the
+# ten preparation-only coloring slots here: doing so previously made battle
+# class positions 10..15 alias the ordinary acted-mercenary cache.
+BYTE_UI_DYNAMIC_TILE_IDS = BYTE_UI_DYNAMIC_MAP_TILE_IDS
+BYTE_UI_PREP_DYNAMIC_TILE_IDS = (
+    BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS + BYTE_UI_PREP_EXTRA_TILE_IDS
 )
 BYTE_UI_DYNAMIC_NAME_SLOT = 0
 BYTE_UI_DYNAMIC_CLASS_SLOT = 8
@@ -494,39 +555,43 @@ BYTE_UI_BATTLE_SIDE_STACK_OFFSET = 64
 # two historically overwritten low-font characters, through a scratch slot.
 #
 # Characters in one group share a slot. The groups are a deterministic
-# coloring of the simultaneous preparation surfaces: every Scenario 1..27
-# fixed detail, every five-name roster page, every three-row hiring page, and
-# every playable/hidden class-change transition. Characters that can appear
-# together never share a group. This keeps all 121 unsafe characters inside
-# 26 ownership-audited pattern cells rather than allocating one cell per
-# character.
+# coloring of the simultaneous preparation surfaces: every Scenario 1..31
+# fixed detail, every complete allied roster (including latent roster pages),
+# every three-row hiring page with every playable class, every hard-mode fixed
+# record, and every playable/hidden class-change transition.  The complete
+# roster lifetime matters even when only five names are currently visible:
+# the game renders later-page names into the same scratch bank.  That was why
+# Scenario 12 could initially show 쉐리 as 제리 until the cursor redrew 쉐리.
+# Characters that can share a surface lifetime never share a group. This keeps
+# all 121 unsafe characters inside 26 ownership-audited pattern cells rather
+# than allocating one cell per character.
 BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS = (
-    "간갈거께끼남녀님대렌루릴문빌빙새스안야언와요웨의임주켄택템폴해형화",
-    "고본슬울츠치큐크헬",
-    "머모뱀번보선우좀케탈퍼",
-    "건네몬운일적조타",
-    "렘름멘배비엠",
-    "가노데커톤",
-    "골다래켈",
-    "라멜미",
-    "디럴",
-    "폰",
-    "곤론린서전킹히",
-    "팔",
+    "갈남녀대렌루릴새스안야언요웨의일주켄택템폴해",
+    "거고끼문본빌슬울츠치큐크",
+    "간께머모뱀선와우좀케탈퍼",
+    "네다래미번빙운적조형",
+    "건름배임젤타톤",
+    "님렘보엠제",
+    "곤록린멜서전킹히",
+    "노멘비",
+    "골라럴켈",
+    "가디몬엔커",
+    "데팔",
     "랑",
-    "젤",
-    "랜쉐제",
-    "엔",
-    "몽",
+    "키",
+    "코",
+    "카",
+    "쉐",
+    "론",
+    "몽폰",
+    "너니랜러버자",
+    "샤세콘펜",
+    "메소얄유",
+    "더딘먼",
     "글",
-    "너록숍얄자",
-    "소코콘",
-    "버샤유카",
-    "딘러",
-    "니메키",
-    "세펜힐",
-    "먼실",
-    "더",
+    "숍실힐",
+    "화",
+    "헬",
 )
 BYTE_UI_PREP_DYNAMIC_CHARS = tuple(
     char
@@ -3246,6 +3311,108 @@ def patch_map_sprite_gray_source_remap(
         bytes.fromhex("4E F9")
         + MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE.to_bytes(4, "big")
     )
+
+
+def _build_enemy_ordinary_mercenary_cache_loader_routine() -> bytes:
+    code = _M68KCode()
+    code.emit("72 00 12 29 00 00")  # moveq #0,d1; move.b 0(a1),d1
+    code.emit("0C 01 00 FF")  # cmpi.b #$ff,d1
+    code.branch_word(0x6700, "skip")  # beq.w
+    code.emit("08 29 00 06 00 02")  # btst.b #6,2(a1)
+    code.branch_word(0x6600, "skip")  # bne.w
+    code.emit(
+        bytes.fromhex("0C 41")
+        + ENEMY_ORDINARY_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
+    )
+    code.branch_word(0x6500, "resume")  # bcs.w
+    code.emit(
+        bytes.fromhex("0C 41")
+        + ENEMY_ORDINARY_MERCENARY_LAST_CLASS.to_bytes(2, "big")
+    )
+    code.branch_word(0x6200, "resume")  # bhi.w
+    code.label("skip")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + ENEMY_ORDINARY_MERCENARY_LOADER_SKIP.to_bytes(4, "big")
+    )
+    code.label("resume")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + ENEMY_ORDINARY_MERCENARY_LOADER_RESUME.to_bytes(4, "big")
+    )
+    return code.finish()
+
+
+def _build_enemy_ordinary_mercenary_cache_lookup_routine() -> bytes:
+    code = _M68KCode()
+    code.emit("72 00 12 29 00 00")  # moveq #0,d1; move.b 0(a1),d1
+    code.emit(
+        bytes.fromhex("0C 41")
+        + ENEMY_ORDINARY_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
+    )
+    code.branch_word(0x6500, "dynamic")  # bcs.w
+    code.emit(
+        bytes.fromhex("0C 41")
+        + ENEMY_ORDINARY_MERCENARY_LAST_CLASS.to_bytes(2, "big")
+    )
+    code.branch_word(0x6200, "dynamic")  # bhi.w
+    code.emit(
+        bytes.fromhex("41 F9")
+        + ENEMY_ORDINARY_MERCENARY_FIXED_TABLE.to_bytes(4, "big")
+    )  # lea.l fixed table,a0
+    code.emit("70 0F")  # moveq #15,d0
+    code.emit(
+        bytes.fromhex("4E F9")
+        + ENEMY_ORDINARY_MERCENARY_FIXED_LOOKUP_SCAN.to_bytes(4, "big")
+    )
+    code.label("dynamic")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + ENEMY_ORDINARY_MERCENARY_DYNAMIC_LOOKUP_RESUME.to_bytes(4, "big")
+    )
+    return code.finish()
+
+
+def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
+    loader = _build_enemy_ordinary_mercenary_cache_loader_routine()
+    lookup = _build_enemy_ordinary_mercenary_cache_lookup_routine()
+    lookup_start = ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE + len(loader)
+    routine_end = lookup_start + len(lookup)
+    if routine_end > ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE_LIMIT:
+        raise ValueError("enemy ordinary mercenary cache routines exceed reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE:routine_end
+        ]
+    ):
+        raise ValueError("enemy ordinary mercenary cache routine area is not blank")
+    data[
+        ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE:lookup_start
+    ] = loader
+    data[lookup_start:routine_end] = lookup
+
+    for hook, target in (
+        (
+            ENEMY_ORDINARY_MERCENARY_CACHE_LOADER_HOOK,
+            ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE,
+        ),
+        (
+            ENEMY_ORDINARY_MERCENARY_CACHE_LOOKUP_HOOK,
+            lookup_start,
+        ),
+    ):
+        hook_end = hook + len(ENEMY_ORDINARY_MERCENARY_CACHE_HOOK_ORIGINAL)
+        if (
+            bytes(data[hook:hook_end])
+            != ENEMY_ORDINARY_MERCENARY_CACHE_HOOK_ORIGINAL
+        ):
+            raise ValueError(
+                f"enemy ordinary mercenary cache hook changed at 0x{hook:06X}"
+            )
+        data[hook:hook_end] = bytes.fromhex("4E F9") + target.to_bytes(
+            4, "big"
+        )
 
 
 def relocate_sram(data: bytearray) -> None:
@@ -6472,10 +6639,13 @@ def _build_byte_ui_map_info_wrapper(slot: int, *, restore_final_bank: bool) -> b
     return bytes(wrapper)
 
 
-def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
+def _build_byte_ui_dynamic_glyph_renderer(
+    command_table: int = BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE,
+    tile_id_table: int = BYTE_UI_DYNAMIC_TILE_ID_TABLE,
+) -> bytes:
     # D0 is a localized table index and D6 is the destination slot. The command
-    # and tile-ID tables map that slot onto noncontiguous animation-safe VRAM
-    # patterns.
+    # and tile-ID tables map that slot onto the caller surface's noncontiguous
+    # VRAM patterns. Battle and preparation pass different destination tables.
     code = bytearray(bytes.fromhex("48 E7 60 A0"))  # preserve d1-d2/a0/a2
     code.extend(bytes.fromhex("34 00 C4 FC 00 20"))
     code.extend(
@@ -6486,7 +6656,7 @@ def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
     code.extend(bytes.fromhex("E5 49"))
     code.extend(
         bytes.fromhex("45 F9")
-        + BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE.to_bytes(4, "big")
+        + command_table.to_bytes(4, "big")
     )
     code.extend(bytes.fromhex("24 32 10 00"))
     code.extend(bytes.fromhex("33 FC 8F 02 00 C0 00 04"))
@@ -6495,7 +6665,7 @@ def _build_byte_ui_dynamic_glyph_renderer() -> bytes:
     code.extend(bytes.fromhex("32 06 D2 41"))
     code.extend(
         bytes.fromhex("45 F9")
-        + BYTE_UI_DYNAMIC_TILE_ID_TABLE.to_bytes(4, "big")
+        + tile_id_table.to_bytes(4, "big")
     )
     code.extend(bytes.fromhex("30 32 10 00 4C DF 05 06 4E 75"))
     return bytes(code)
@@ -6525,7 +6695,7 @@ def _build_byte_ui_prep_local_tile_lookup() -> bytes:
     code.branch_word(0x6700, "static")
     code.emit(
         bytes.fromhex("4E B9")
-        + BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+        + BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
     )
     code.branch_word(0x6000, "done")
     code.label("static")
@@ -7386,33 +7556,53 @@ def install_byte_ui_extension(
         raise ValueError("dynamic name/class glyph table area is not blank")
     data[BYTE_UI_DYNAMIC_GLYPH_TABLE:dynamic_glyph_end] = dynamic_glyphs
 
-    dynamic_commands = bytearray()
-    for tile in BYTE_UI_DYNAMIC_TILE_IDS:
-        address = tile * 32
-        command = ((0x4000 | (address & 0x3FFF)) << 16) | ((address >> 14) & 3)
-        dynamic_commands.extend(command.to_bytes(4, "big"))
-    command_end = BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE + len(dynamic_commands)
-    if command_end > BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT:
-        raise ValueError("dynamic name/class VDP command table exceeds reserved bank")
-    if any(
-        value != 0xFF
-        for value in data[BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE:command_end]
-    ):
-        raise ValueError("dynamic name/class VDP command table area is not blank")
-    data[BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE:command_end] = dynamic_commands
+    def install_dynamic_destination_tables(
+        tiles: tuple[int, ...],
+        command_table: int,
+        command_limit: int,
+        tile_id_table: int,
+        tile_id_limit: int,
+        label: str,
+    ) -> None:
+        commands = bytearray()
+        for tile in tiles:
+            address = tile * 32
+            command = (
+                ((0x4000 | (address & 0x3FFF)) << 16)
+                | ((address >> 14) & 3)
+            )
+            commands.extend(command.to_bytes(4, "big"))
+        command_end = command_table + len(commands)
+        if command_end > command_limit:
+            raise ValueError(f"{label} VDP command table exceeds reserved bank")
+        if any(value != 0xFF for value in data[command_table:command_end]):
+            raise ValueError(f"{label} VDP command table area is not blank")
+        data[command_table:command_end] = commands
 
-    dynamic_tile_ids = b"".join(
-        tile.to_bytes(2, "big") for tile in BYTE_UI_DYNAMIC_TILE_IDS
+        tile_ids = b"".join(tile.to_bytes(2, "big") for tile in tiles)
+        tile_id_end = tile_id_table + len(tile_ids)
+        if tile_id_end > tile_id_limit:
+            raise ValueError(f"{label} tile-ID table exceeds reserved bank")
+        if any(value != 0xFF for value in data[tile_id_table:tile_id_end]):
+            raise ValueError(f"{label} tile-ID table area is not blank")
+        data[tile_id_table:tile_id_end] = tile_ids
+
+    install_dynamic_destination_tables(
+        BYTE_UI_DYNAMIC_TILE_IDS,
+        BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE,
+        BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE_LIMIT,
+        BYTE_UI_DYNAMIC_TILE_ID_TABLE,
+        BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT,
+        "dynamic map name/class",
     )
-    tile_id_end = BYTE_UI_DYNAMIC_TILE_ID_TABLE + len(dynamic_tile_ids)
-    if tile_id_end > BYTE_UI_DYNAMIC_TILE_ID_TABLE_LIMIT:
-        raise ValueError("dynamic name/class tile-ID table exceeds reserved bank")
-    if any(
-        value != 0xFF
-        for value in data[BYTE_UI_DYNAMIC_TILE_ID_TABLE:tile_id_end]
-    ):
-        raise ValueError("dynamic name/class tile-ID table area is not blank")
-    data[BYTE_UI_DYNAMIC_TILE_ID_TABLE:tile_id_end] = dynamic_tile_ids
+    install_dynamic_destination_tables(
+        BYTE_UI_PREP_DYNAMIC_TILE_IDS,
+        BYTE_UI_PREP_DYNAMIC_VDP_COMMAND_TABLE,
+        BYTE_UI_PREP_DYNAMIC_VDP_COMMAND_TABLE_LIMIT,
+        BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE,
+        BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE_LIMIT,
+        "dynamic preparation name/class",
+    )
 
     dynamic_legacy_indexes = bytearray([0xFF] * 0x100)
     for char, code in code_by_char.items():
@@ -7488,6 +7678,10 @@ def install_byte_ui_extension(
         BYTE_UI_DYNAMIC_CLASS_SLOT, restore_final_bank=False
     )
     dynamic_glyph_renderer = _build_byte_ui_dynamic_glyph_renderer()
+    prep_dynamic_glyph_renderer = _build_byte_ui_dynamic_glyph_renderer(
+        BYTE_UI_PREP_DYNAMIC_VDP_COMMAND_TABLE,
+        BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE,
+    )
     dynamic_legacy_lookup = _build_byte_ui_dynamic_legacy_lookup()
     direct_map_renderer = _build_byte_ui_direct_map_renderer()
     dynamic_direct_map_renderer = _build_byte_ui_dynamic_direct_map_renderer()
@@ -7559,6 +7753,27 @@ def install_byte_ui_extension(
         if any(value != 0xFF for value in data[offset : offset + len(payload)]):
             raise ValueError(f"byte UI routine area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
+
+    prep_dynamic_renderer_end = (
+        BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE
+        + len(prep_dynamic_glyph_renderer)
+    )
+    if (
+        prep_dynamic_renderer_end
+        > BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT
+    ):
+        raise ValueError("preparation dynamic glyph renderer exceeds reserved area")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE:
+            prep_dynamic_renderer_end
+        ]
+    ):
+        raise ValueError("preparation dynamic glyph renderer area is not blank")
+    data[
+        BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE:prep_dynamic_renderer_end
+    ] = prep_dynamic_glyph_renderer
 
     result_glyph_renderer_end = (
         BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE
@@ -8468,6 +8683,7 @@ def main() -> None:
     patch_paired_npc_map_sprites(data)
     patch_ai_class_map_sprites(data)
     patch_map_sprite_gray_source_remap(data, IN_ROM.read_bytes())
+    patch_enemy_ordinary_mercenary_cache_reuse(data)
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()

@@ -32,13 +32,20 @@ class PreparationVramOwnershipTests(unittest.TestCase):
         replacement = self.report["replacement_pool"]
         self.assertEqual(
             replacement["tiles"],
-            [f"0x{tile:04X}" for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS],
+            [f"0x{tile:04X}" for tile in builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS],
         )
         self.assertTrue(
             all(
-                tile * ownership.TILE_BYTES < 0xC000
-                for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS
+                not 0xF400
+                <= tile * ownership.TILE_BYTES
+                < 0xF800
+                for tile in builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS
             )
+        )
+        self.assertTrue(
+            replacement[
+                "battle_map_avoids_ordinary_mercenary_active_second_and_gray"
+            ]
         )
 
     def test_historical_gst_decodes_the_physical_hscroll_collision(self) -> None:

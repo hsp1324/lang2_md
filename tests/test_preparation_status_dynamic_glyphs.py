@@ -46,8 +46,15 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
     def test_runtime_model_matches_builder_slot_ownership(self) -> None:
         scope = self.model["scope"]
         self.assertEqual(
-            scope["map_cache_slots_unchanged"],
+            scope["battle_map_cache_slots"],
             len(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS),
+        )
+        self.assertEqual(
+            scope["battle_map_tile_ids"],
+            [
+                f"0x{tile:04X}"
+                for tile in builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS
+            ],
         )
         self.assertEqual(
             scope["preparation_slot_groups"],
@@ -69,7 +76,7 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
             scope["preparation_extra_tiles"],
             [f"0x{tile:04X}" for tile in builder.BYTE_UI_PREP_EXTRA_TILE_IDS],
         )
-        self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_CHARS[-1], "더")
+        self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_CHARS[-1], "헬")
         self.assertEqual(builder.BYTE_UI_PREP_EXTRA_TILE_IDS[-1], 0x03E0)
 
     def test_shop_roundtrip_contract_covers_shared_labels_and_both_builds(self) -> None:

@@ -511,7 +511,7 @@ class NameEntryResourceTests(unittest.TestCase):
     def test_prep_dynamic_slots_cover_conflict_colored_glyph_groups(self):
         self.assertEqual(
             len(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS),
-            len(builder.BYTE_UI_DYNAMIC_TILE_IDS),
+            len(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS),
         )
         self.assertEqual(
             tuple(
@@ -626,7 +626,7 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(builder.BYTE_UI_DYNAMIC_NAME_SLOT, 0)
         self.assertEqual(len(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS), 16)
         self.assertEqual(
-            builder.BYTE_UI_DYNAMIC_TILE_IDS[:16],
+            builder.BYTE_UI_DYNAMIC_TILE_IDS,
             builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS,
         )
         self.assertEqual(
@@ -636,10 +636,18 @@ class NameEntryResourceTests(unittest.TestCase):
                 0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF, 0x03E0,
             ),
         )
-        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 26)
-        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 26)
-        self.assertTrue(
-            all(tile * 32 < 0xC000 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS)
+        self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 16)
+        self.assertEqual(len(set(builder.BYTE_UI_DYNAMIC_TILE_IDS)), 16)
+        self.assertEqual(len(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS), 26)
+        self.assertEqual(len(set(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS)), 26)
+        self.assertEqual(
+            builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[2:4],
+            (0x0795, 0x079C),
+        )
+        self.assertEqual(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[5], 0x07F0)
+        self.assertEqual(
+            builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[8:10],
+            (0x079D, 0x07E0),
         )
 
         restore = builder._build_byte_ui_map_info_scratch_restore()
@@ -658,7 +666,7 @@ class NameEntryResourceTests(unittest.TestCase):
         )
         self.assertTrue(
             all(
-                not 0x07A0 <= tile <= 0x07FF
+                not 0xF400 <= tile * 32 < 0xF800
                 for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS
             )
         )
@@ -713,7 +721,7 @@ class NameEntryResourceTests(unittest.TestCase):
     def test_preparation_overwritten_glyphs_use_fixed_dynamic_slots(self):
         self.assertEqual(
             len(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS),
-            len(builder.BYTE_UI_DYNAMIC_TILE_IDS),
+            len(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS),
         )
 
         data = bytearray(self.rom)
@@ -765,7 +773,9 @@ class NameEntryResourceTests(unittest.TestCase):
         )
         self.assertIn(
             bytes.fromhex("4E B9")
-            + builder.BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(4, "big"),
+            + builder.BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE.to_bytes(
+                4, "big"
+            ),
             lookup,
         )
         self.assertIn(

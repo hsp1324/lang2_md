@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "reported_defect": {
+    "capture": "/mnt/c/Users/hsp13/Desktop/화면 캡처 2026-08-01 120402.png",
+    "exact_class": "파이크",
+    "class_id": "0x62",
+    "symptom": "행동 완료 후 회색 파이크 아이콘의 좌상단에 한글 조각이 표시됨"
+  },
+  "root_cause": {
+    "former_dynamic_slot": 10,
+    "former_dynamic_tile": "0x03B0",
+    "pike_gray_tile_range": "0x03B0..0x03B3",
+    "pike_gray_vram_range": "0x7600..0x767F",
+    "explanation": "전투 이름/클래스용 동적 글자 슬롯 10이 파이크의 행동 완료 회색 스프라이트 좌상단 타일과 같아서, 상태 문자열을 그린 뒤 파이크 타일이 한글 비트맵으로 바뀌었다."
+  },
+  "fix": {
+    "battle_dynamic_slot_count": 16,
+    "battle_dynamic_tiles": [
+      "0x07CA",
+      "0x07CB",
+      "0x0795",
+      "0x079C",
+      "0x07D0",
+      "0x07F0",
+      "0x07D1",
+      "0x07E1",
+      "0x079D",
+      "0x07E0",
+      "0x07D5",
+      "0x07D6",
+      "0x07D8",
+      "0x07D9",
+      "0x07DA",
+      "0x07DB"
+    ],
+    "avoids_active_frame_zero": "0x0348..0x0387",
+    "avoids_active_frame_one": "0x0448..0x0487",
+    "avoids_all_ordinary_acted_gray": "0x03B0..0x03EF",
+    "avoids_hscroll": "0x07A0..0x07BF"
+  },
+  "runtime": {
+    "scenario": 12,
+    "commander": "셰리",
+    "hired_class": "파이크",
+    "hired_count": 6,
+    "movement": {
+      "member_index": 1,
+      "before": {
+        "class_id": "0x62",
+        "acted_flag": 0,
+        "x": 9,
+        "y": 27
+      },
+      "after": {
+        "class_id": "0x62",
+        "acted_flag": 1,
+        "x": 8,
+        "y": 27
+      }
+    },
+    "pike_gray_expected_and_actual_sha256": "0fe0987d6d93be4842ad899ae0dedbf85f1342b86efc6957e53fde7f76aee0a8",
+    "all_ordinary_gray_class_count": 16,
+    "all_ordinary_gray_tiles": "0x03B0..0x03EF",
+    "all_ordinary_gray_vram": "0x7600..0x7DFF",
+    "all_ordinary_gray_match_before_move": true,
+    "all_ordinary_gray_match_after_move": true,
+    "all_ordinary_gray_hash_list_sha256": "da83f7a99b22d86da2ed6312341aa491aefdafb93b278f6cbce411227520e910"
+  },
+  "candidates": {
+    "normal": {
+      "path": "tmp/current-glyph-lifetime-fix-normal.md",
+      "md_checksum": "CB53",
+      "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+      "active_gst": "captures/run/pike_acted_surface_probe/pike-cache-relocation01/states/active_command.gst",
+      "active_gst_sha256": "326896cf39a0db111c982abed1c8630671ec6a5fbf05a784a75ed46e480dcb5d",
+      "acted_gst": "captures/run/pike_acted_surface_probe/pike-cache-relocation01/states/pike_acted_gray.gst",
+      "acted_gst_sha256": "2ec48acc3ba75d40fde0288d90619d87cc71651aeadcf31b4841429417a0e256",
+      "acted_capture": "captures/run/pike_acted_surface_probe/pike-cache-relocation01/battle/pike_acted_gray.png",
+      "acted_capture_sha256": "6a1d0e3212b5ff711286f7c34a096b094160b27b0867a5580ede32db02c4ea1f"
+    },
+    "hard": {
+      "path": "tmp/current-glyph-lifetime-fix-hard.md",
+      "md_checksum": "E15E",
+      "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+      "active_gst": "captures/run/pike_acted_surface_probe/pike-cache-relocation-hard01/states/active_command.gst",
+      "active_gst_sha256": "f83d2222299db95278bb7c91167b96b593a65214b0f30a66e77569caba998255",
+      "acted_gst": "captures/run/pike_acted_surface_probe/pike-cache-relocation-hard01/states/pike_acted_gray.gst",
+      "acted_gst_sha256": "1799289394991b84f5308c219f4a46a49ec70d8c285a57161524b5da9d7e1f61",
+      "acted_capture": "captures/run/pike_acted_surface_probe/pike-cache-relocation-hard01/battle/pike_acted_gray.png",
+      "acted_capture_sha256": "6a1d0e3212b5ff711286f7c34a096b094160b27b0867a5580ede32db02c4ea1f"
+    }
+  },
+  "release_promoted": false,
+  "version_bumped": false
+}

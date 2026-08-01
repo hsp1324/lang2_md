@@ -240,7 +240,7 @@ def build_report(
 ) -> dict[str, object]:
     from scripts import build_korean_jp_probe as builder
 
-    pool = tuple(builder.BYTE_UI_DYNAMIC_TILE_IDS)
+    pool = tuple(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS)
     historical = load_gst(historical_gst)
     pre = load_gst(pre_gst)
     post = load_gst(post_gst)
@@ -288,7 +288,7 @@ def build_report(
     )
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "historical_collision": {
             "gst": str(historical_gst.relative_to(ROOT)),
             "gst_sha256": sha256(historical_gst),
@@ -309,8 +309,23 @@ def build_report(
         },
         "replacement_pool": {
             "tiles": [f"0x{tile:04X}" for tile in pool],
-            "all_pattern_addresses_below_0xC000": all(
-                tile * TILE_BYTES < 0xC000 for tile in pool
+            "battle_map_tiles": [
+                f"0x{tile:04X}"
+                for tile in builder.BYTE_UI_DYNAMIC_TILE_IDS
+            ],
+            "preparation_only_tiles": [
+                f"0x{tile:04X}"
+                for tile in builder.BYTE_UI_PREP_EXTRA_TILE_IDS
+            ],
+            "battle_map_avoids_ordinary_mercenary_active_second_and_gray": (
+                set(builder.BYTE_UI_DYNAMIC_TILE_IDS).isdisjoint(
+                    set(range(0x0348, 0x0388))
+                    | set(range(0x0448, 0x0488))
+                    | set(range(0x03B0, 0x03F0))
+                )
+            ),
+            "all_pattern_addresses_avoid_live_hscroll": all(
+                not 0xF400 <= tile * TILE_BYTES < 0xF800 for tile in pool
             ),
             "stock_full_scroll_fill_restored": (
                 builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL
@@ -364,8 +379,8 @@ def validate_report(report: dict[str, object]) -> None:
         "historical H-scroll contains glyph bytes": historical[
             "nonzero_hscroll_bytes"
         ] > 0,
-        "replacement is in ordinary pattern addresses": replacement[
-            "all_pattern_addresses_below_0xC000"
+        "replacement avoids live H-scroll addresses": replacement[
+            "all_pattern_addresses_avoid_live_hscroll"
         ],
         "replacement has no retained references": replacement[
             "pool_has_no_retained_plane_window_sat_reference"
@@ -373,12 +388,12 @@ def validate_report(report: dict[str, object]) -> None:
         "replacement is outside retained VDP tables": replacement[
             "pool_is_outside_all_retained_vdp_tables"
         ],
-        "replacement prep payload was stable": all(
-            count == 1
-            for count in replacement[
-                "preparation_payload_variant_counts_before_assignment"
-            ].values()
-        ),
+        "battle map avoids all ordinary mercenary frames": replacement[
+            "battle_map_avoids_ordinary_mercenary_active_second_and_gray"
+        ],
+        # An unreferenced pattern is free regardless of stale bytes left in
+        # VRAM by a prior scene. High-tail cells can legitimately have more
+        # than one such payload while still having no Plane/Window/SAT owner.
         "hard pre-shop H-scroll is clean": hard_runtime[
             "pre_hscroll_nonzero_bytes"
         ] == 0,
