@@ -64,6 +64,12 @@ RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
 FIRST_FIXED_RUNTIME_GROUP = 10
+FIRST_ENEMY_RUNTIME_GROUP = FIRST_FIXED_RUNTIME_GROUP
+LAST_ENEMY_RUNTIME_GROUP = 19
+PRESERVED_RUNTIME_GROUPS = tuple(range(FIRST_FIXED_RUNTIME_GROUP))
+RUNTIME_CLEAR_GROUPS = tuple(
+    range(FIRST_ENEMY_RUNTIME_GROUP, LAST_ENEMY_RUNTIME_GROUP + 1)
+)
 COMPLETION_TARGET_RUNTIME_GROUP = 19
 COMPLETION_HIDDEN_RUNTIME_GROUPS = tuple(range(10, 19))
 BATTLE_UI_TARGET_RUNTIME_GROUP = 10
@@ -148,6 +154,24 @@ def protagonist_death_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def runtime_clear_wrapper_code() -> bytes:
+    """Defeat all fixed enemies while preserving all ten player groups."""
+    code = bytearray()
+    for group in RUNTIME_CLEAR_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend((record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def install_start_wrapper(
     probe: bytearray,
     source: bytes,
@@ -224,12 +248,14 @@ def patch_probe(
     completion_target_only: bool = False,
     battle_ui_target_only: bool = False,
     protagonist_death: bool = False,
+    runtime_clear: bool = False,
 ) -> int:
     selected_modes = sum(
         (
             completion_target_only,
             battle_ui_target_only,
             protagonist_death,
+            runtime_clear,
         )
     )
     if selected_modes > 1:
@@ -241,6 +267,9 @@ def patch_probe(
             source,
             protagonist_death_wrapper_code(),
         )
+        return builder.update_md_checksum(probe)
+    if runtime_clear:
+        install_start_wrapper(probe, source, runtime_clear_wrapper_code())
         return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
@@ -295,6 +324,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--runtime-clear",
+        action="store_true",
+        help=(
+            "preserve every Scenario 26 deployment, fixed record, and event, "
+            "then mark only hostile runtime groups 10..19 defeated through Start"
+        ),
+    )
+    parser.add_argument(
         "--protagonist-death",
         action="store_true",
         help=(
@@ -316,10 +353,12 @@ def main() -> int:
         completion_target_only=args.completion_target_only,
         battle_ui_target_only=args.battle_ui_target_only,
         protagonist_death=args.protagonist_death,
+        runtime_clear=args.runtime_clear,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
-    print("Scenario 26 enemy records 0..9: AT 0, DF 0, no mercenaries")
+    if not args.runtime_clear:
+        print("Scenario 26 enemy records 0..9: AT 0, DF 0, no mercenaries")
     print(
         "stock deployments, sides, identities, classes, levels, coordinates, "
         "and all handlers preserved"
@@ -358,6 +397,15 @@ def main() -> int:
         print(
             "stock protagonist-death trigger, three dialogue pointers, and "
             "GAME OVER event preserved"
+        )
+    if args.runtime_clear:
+        print(
+            "runtime-clear mode: all ten player deployments, ten fixed "
+            "records, and source events remain unchanged"
+        )
+        print(
+            "Start preserves player groups 0..9 and marks only hostile "
+            "runtime groups 10..19 defeated"
         )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
