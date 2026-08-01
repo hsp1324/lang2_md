@@ -33,6 +33,11 @@ class Scenario24ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def runtime_clear_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(data, self.source, runtime_clear=True)
+        return data
+
     def allowed_offsets(
         self,
         *,
@@ -419,6 +424,99 @@ class Scenario24ClearProbeTests(unittest.TestCase):
                 completion_target_only=True,
                 protagonist_death=True,
             )
+
+    def test_runtime_clear_changes_only_wrapper_and_checksum(self):
+        data = self.runtime_clear_patched()
+        wrapper = probe_builder.runtime_clear_wrapper_code()
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        expected_changes = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.COMPLETION_HP_WRAPPER,
+                probe_builder.COMPLETION_HP_WRAPPER + len(wrapper),
+            ),
+        }
+        self.assertLessEqual(changed, expected_changes)
+
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        records_end = layout.records_offset + layout.record_count * FIXED_RECORD_SIZE
+        self.assertEqual(
+            data[layout.records_offset:records_end],
+            self.source[layout.records_offset:records_end],
+        )
+        start = probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+        deployments = probe_builder.deployment_bytes(
+            probe_builder.SOURCE_PLAYER_DEPLOYMENTS
+        )
+        self.assertEqual(data[start:start + len(deployments)], deployments)
+
+    def test_runtime_clear_marks_exactly_all_hostile_runtime_groups(self):
+        self.assertEqual(
+            probe_builder.FIRST_ENEMY_RUNTIME_GROUP,
+            probe_builder.FIRST_FIXED_RUNTIME_GROUP,
+        )
+        self.assertEqual(
+            probe_builder.LAST_ENEMY_RUNTIME_GROUP,
+            probe_builder.LAST_FIXED_RUNTIME_GROUP,
+        )
+        code = probe_builder.runtime_clear_wrapper_code()
+        for group in probe_builder.RUNTIME_CLEAR_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            for offset in (
+                probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET,
+                probe_builder.RUNTIME_HP_OFFSET,
+                probe_builder.RUNTIME_X_OFFSET,
+            ):
+                self.assertIn((record + offset).to_bytes(4, "big"), code)
+        for group in range(probe_builder.FIRST_FIXED_RUNTIME_GROUP):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            for offset in (
+                probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET,
+                probe_builder.RUNTIME_HP_OFFSET,
+                probe_builder.RUNTIME_X_OFFSET,
+            ):
+                self.assertNotIn((record + offset).to_bytes(4, "big"), code)
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+        data = self.runtime_clear_patched()
+        self.assertEqual(
+            data[
+                probe_builder.COMPLETION_HP_WRAPPER:
+                probe_builder.COMPLETION_HP_WRAPPER + len(code)
+            ],
+            code,
+        )
+
+    def test_all_scenario24_diagnostic_modes_are_mutually_exclusive(self):
+        for arguments in (
+            {"completion_target_only": True, "runtime_clear": True},
+            {"protagonist_death": True, "runtime_clear": True},
+        ):
+            with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+                probe_builder.patch_probe(
+                    bytearray(self.production),
+                    self.source,
+                    **arguments,
+                )
 
     def test_current_probe_checksums_are_locked(self):
         self.assertEqual(self.patched()[0x18E:0x190], bytes.fromhex("68 B9"))

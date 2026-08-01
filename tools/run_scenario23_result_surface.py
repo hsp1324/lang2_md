@@ -83,7 +83,10 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
     if output.exists():
         raise FileExistsError(f"result output already exists: {output}")
     output.mkdir(parents=True)
-    runtime_name = f"s23-result-{args.profile}-{args.run_id}"
+    runtime_name = (
+        f"s{probe_builder.SCENARIO_NUMBER:02d}-result-"
+        f"{args.profile}-{args.run_id}"
+    )
     recorder = matrix.RuntimeRecorder(
         output,
         args.display,
@@ -228,7 +231,8 @@ def main() -> int:
     args.runtime_root = args.runtime_root.resolve()
     report = run_capture(args)
     print(
-        f"{report['status']}: {args.profile} Scenario 23 result at "
+        f"{report['status']}: {args.profile} Scenario "
+        f"{report['scenario']} result at "
         f"frame {report['battle_result_frame']}"
     )
     return 0
