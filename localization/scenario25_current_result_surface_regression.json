@@ -1,0 +1,1247 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Fresh current normal/hard Scenario 25 preparation, allied-Jessica-preserving runtime completion, all 42 aftermath frames, result, and save",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal runtime-clear builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "bytes": 4194304,
+          "header_checksum": "CB53",
+          "computed_checksum": "CB53",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s25-runtime-clear.md",
+          "sha256": "8bf91cb6c7c5c9aaf325f4b20acf42406ace3dedfe47d9ddf049a1dd5aad9e34",
+          "bytes": 4194304,
+          "header_checksum": "6472",
+          "computed_checksum": "6472",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 202,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "fixed_records_input_exact": true,
+        "normal_fixed_records_source_exact": true,
+        "player_deployments_input_exact": true,
+        "normal_player_deployments_source_exact": true,
+        "scope_limit": "diagnostic only: Start marks hostile runtime groups 9..19 defeated; all fixed records, deployments, events, identities, and combat values remain byte-identical to the input candidate"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s25_result/normal/runtime01",
+        "evidence_json": {
+          "path": "captures/run/current_s25_result/normal/runtime01/evidence.json",
+          "sha256": "046b293aacf55d49d23f8f0ea13db8cbb247c7856b4f9ae2c34a2a844754f255",
+          "expected_sha256": "046b293aacf55d49d23f8f0ea13db8cbb247c7856b4f9ae2c34a2a844754f255",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 25,
+          "identified_scenario": 25,
+          "best_match": {
+            "scenario": 25,
+            "matched_records": 11,
+            "total_records": 12,
+            "match_ratio": 0.9166666666666666
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s25_result/normal/runtime01/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "identity_note": "11 of 12 fixed records match at runtime; source record 0 is correctly replaced by event-spawned allied Jessica",
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s25_result/normal/runtime01/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s25_result/normal/runtime01/battle/turn1_command.png",
+            "sha256": "47c9b3712f46eb6d24b90b01e4b74903daf54772f76b85ae84520fdcee7a9d11",
+            "expected_sha256": "47c9b3712f46eb6d24b90b01e4b74903daf54772f76b85ae84520fdcee7a9d11",
+            "hash_matches": true,
+            "bytes": 16140,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s25_result/normal/runtime01/battle/runtime_clear_start_menu.png",
+            "sha256": "92bef4ff2098839a600dd322bdea8cd1ab3b02fa1a81c9c026cd3c3845f6afbb",
+            "expected_sha256": "92bef4ff2098839a600dd322bdea8cd1ab3b02fa1a81c9c026cd3c3845f6afbb",
+            "hash_matches": true,
+            "bytes": 12682,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s25_result/normal/runtime01/aftermath/battle_result.png",
+            "sha256": "265203b8c8d9f7b4a66c8b1c6af4a7c16b1d95ddd52558d2a28eb3c4ee945c50",
+            "expected_sha256": "265203b8c8d9f7b4a66c8b1c6af4a7c16b1d95ddd52558d2a28eb3c4ee945c50",
+            "hash_matches": true,
+            "bytes": 13190,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s25_result/normal/runtime01/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "before_runtime_clear": {
+            "path": "captures/run/current_s25_result/normal/runtime01/states/before_runtime_clear.gst",
+            "sha256": "288bd512c92f6ce3f9800edba2097fa74a2712e88f87b25733f6631c3a625f5a",
+            "expected_sha256": "288bd512c92f6ce3f9800edba2097fa74a2712e88f87b25733f6631c3a625f5a",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s25_result/normal/runtime01/states/runtime_clear_start_menu.gst",
+            "sha256": "98b8fc9c27e437908b0dc4fcf0cf153d1ff09d7eca843c1a926d2cc1c1583ccd",
+            "expected_sha256": "98b8fc9c27e437908b0dc4fcf0cf153d1ff09d7eca843c1a926d2cc1c1583ccd",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "battle_result": {
+            "path": "captures/run/current_s25_result/normal/runtime01/states/battle_result.gst",
+            "sha256": "aa1befd7e744f82b5ae2c84742c0ac4323eee26d42b078dc03a25d3e263dc55b",
+            "expected_sha256": "aa1befd7e744f82b5ae2c84742c0ac4323eee26d42b078dc03a25d3e263dc55b",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "save_menu": {
+            "path": "captures/run/current_s25_result/normal/runtime01/states/save_menu.gst",
+            "sha256": "228ac1cdf2bb94d18ab3e1f3f1d448b51ac6dbfdfd65bbb79f2143bd555f7158",
+            "expected_sha256": "228ac1cdf2bb94d18ab3e1f3f1d448b51ac6dbfdfd65bbb79f2143bd555f7158",
+            "hash_matches": true,
+            "bytes": 140408
+          }
+        },
+        "aftermath": {
+          "frame_count": 42,
+          "sequence_sha256": "a7bb49aefc3f3299ec96000afd4d041f4b8e105a1f96d2af1f801d9d286b1411",
+          "expected_sequence_sha256": "a7bb49aefc3f3299ec96000afd4d041f4b8e105a1f96d2af1f801d9d286b1411",
+          "sequence_hash_matches": true,
+          "total_bytes": 556588,
+          "expected_total_bytes": 556588,
+          "total_bytes_match": true,
+          "unique_frame_hashes": 42,
+          "all_dimensions_320x240": true,
+          "hashes": [
+            "9362fba438995ebf455877223f1d9f0487065b241dc0005c95652f6f0e3ace6d",
+            "89e971b160410c37899242e0f28ef1c7bee073eb5a17e973a8df7c9e38a424cb",
+            "c7cc0d23617a6bd2530b6cbb8d8ae82f63542b3171b4afa01f2bd7c5e152a21c",
+            "26d2ca9bf166dffff13a68b9e785dc626bfca647062727e0024f7fd516fc0596",
+            "891b82ed556114192cf673cb21919b97b934b292284cfd387d9357781298db51",
+            "c0b3741d2f913d337ee98bfa28ba9391c8aa42ec6a8b4e80dcb14e20b98bbe00",
+            "bac11a1dbba11aae9da791e2c455e99ec8261f54808bbba1393f6830de16d43c",
+            "227077943c4d93fb75d9b379b8b314154f3018bf4903909a25e5baa3d8583c15",
+            "5bcb97b7f54b22087a602e5a0b65b84f7bfd172cba4a54aaa8ef1c65cb6fdd0d",
+            "e58e023a36043b2edf49888f8d59582a3793f20617cabc5809c195fcf9ae35b1",
+            "b86f770824efe361b963877a3f2817fef083d4acfb36a159177150d5f1a814ec",
+            "d5aefd7308c022a4cd1083513e3e8197c69cca6e617a43936912ff0fd493a8d6",
+            "bde2c8efcbb18bb920f2120e7eb2aac2f4d2b51f105ea1923c1c1699c6c7e6c0",
+            "ff5b39b8913e2305d2455492937e9cb74653b63881a544d04ef6764d28ef988a",
+            "0455a1a54921e2fdd98843f7ae14dcd74dcf384362f7afd33fd83809c2cb423f",
+            "02c2e5898343051312ba526507f09d285e37a5880fed88ea7e91caea7d8cd64f",
+            "1f9feba91440a5d8f94ed63c7933a66e9ef89c84042697e99e85484546058218",
+            "5bf916594b6b0efe94a383430399971980cc4786d047720b36799eea8b817b9f",
+            "d73141ed56ce46482d13a014b83a4907978ab3c84cf0e4ed954d5a923fd4fab8",
+            "5bc030b977fb186324dede927d18907be46648e11c9c3fe3b162d0a85eded6e0",
+            "04e11650dddb0e33ca16f7f4e1e252c49a6607f82cac2f19351582ce5efaf986",
+            "f67ca62d1261365789c8d46446a98bc22e28df713fbdd511818e66812ab56f52",
+            "943c02ed32691a235a46147b3b694cbe91818425332ff88402638b34ffe3f023",
+            "bd9b19821c8a7bc1dd0d871fc857990777fd999e833dc9ca5fe185e7eaa34a5c",
+            "741b7db49ad44680c8bf2614924b57efb6c439ccf76cfed29a6f9e2a78e9315e",
+            "f48b2faf53c9c3219d6eb1140317e25690e31634ec68d5e3b90c0a9f161c9b27",
+            "0ff5182b7cffef1fabf58cd00258e1e8af6dac6bf3cb187ad9fcbe38ba923b58",
+            "2697ddea7d97132b05655899faa03a09f49d954d82082c0abb90078680f07a81",
+            "79ca0c32617f853d742656337345050e4d803d3ff9705b1c98c6605cb1fcc228",
+            "dfc38a65f1a36f9595597f05c1bb16944ccec8f138cd53c1e5bafb1a97627533",
+            "f58ab05a75785e97a5e85a56e2389315ff2d782a031cc94e5fc9b68d0b0a9f7f",
+            "7549aac66ad2c20fccf38d0e22870560b3fa8e95c87126e410200c271fc376a4",
+            "6b0c0986129c7897caf9c19d09c8230d7a0c30e7a6fd1659ac3aec44283add2c",
+            "e7bea595d0f17bbe21e6cc5d60c00ed1d1431512d684d139bb306ad42ceb2472",
+            "d9fb2bbad8c0fc6053af00536e34803b5f6720093507815378caee36417c45e0",
+            "428b2bf8cf481f7dc0e9f2182d0594e61d7e9da5997c46fa40e9886861e5af1e",
+            "bd0d9f1db49088537f9d8310ad98577f7e2f4d0de22b3559d8f7d43d919b3381",
+            "0b0bcbaba1997731dda8461ccd675e8803c675cc5f7376fc6e490e5e36725241",
+            "ffb5e536c4739dcff93ebeb87a08aba1ae267631a3c87eaa41522ba91284ad6f",
+            "05ef3f22f1135bcf40000ff6b72a8066ab842d81fb2098d2a355899855f86fb2",
+            "abca2a99d09ec2f0d9ab07a16d2fb71b0fd4ba2c72c69ed2f24126b21ff6236c",
+            "265203b8c8d9f7b4a66c8b1c6af4a7c16b1d95ddd52558d2a28eb3c4ee945c50"
+          ]
+        },
+        "runtime_clear_state": {
+          "groups": {
+            "0": {
+              "class_id": 1,
+              "name_id": 1,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 6,
+              "y": 25
+            },
+            "1": {
+              "class_id": 3,
+              "name_id": 5,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 11,
+              "y": 24
+            },
+            "2": {
+              "class_id": 1,
+              "name_id": 4,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 24
+            },
+            "3": {
+              "class_id": 1,
+              "name_id": 8,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 21,
+              "y": 24
+            },
+            "4": {
+              "class_id": 6,
+              "name_id": 7,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 26,
+              "y": 25
+            },
+            "5": {
+              "class_id": 7,
+              "name_id": 9,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 9,
+              "y": 28
+            },
+            "6": {
+              "class_id": 1,
+              "name_id": 6,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 13,
+              "y": 27
+            },
+            "7": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 19,
+              "y": 27
+            },
+            "8": {
+              "class_id": 2,
+              "name_id": 3,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 23,
+              "y": 28
+            },
+            "9": {
+              "class_id": 9,
+              "name_id": 10,
+              "defeated_flag": 1,
+              "hp": 10,
+              "x": 16,
+              "y": 28
+            },
+            "10": {
+              "class_id": 77,
+              "name_id": 13,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "11": {
+              "class_id": 67,
+              "name_id": 17,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 15
+            },
+            "12": {
+              "class_id": 70,
+              "name_id": 42,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 15
+            },
+            "13": {
+              "class_id": 65,
+              "name_id": 43,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 19
+            },
+            "14": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 11
+            },
+            "15": {
+              "class_id": 65,
+              "name_id": 44,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 19
+            },
+            "16": {
+              "class_id": 71,
+              "name_id": 45,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "17": {
+              "class_id": 71,
+              "name_id": 46,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 13
+            },
+            "18": {
+              "class_id": 71,
+              "name_id": 47,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 13
+            },
+            "19": {
+              "class_id": 71,
+              "name_id": 48,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "20": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            }
+          },
+          "groups_before_start": {
+            "0": {
+              "class_id": 1,
+              "name_id": 1,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 6,
+              "y": 25
+            },
+            "1": {
+              "class_id": 3,
+              "name_id": 5,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 11,
+              "y": 24
+            },
+            "2": {
+              "class_id": 1,
+              "name_id": 4,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 24
+            },
+            "3": {
+              "class_id": 1,
+              "name_id": 8,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 21,
+              "y": 24
+            },
+            "4": {
+              "class_id": 6,
+              "name_id": 7,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 26,
+              "y": 25
+            },
+            "5": {
+              "class_id": 7,
+              "name_id": 9,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 9,
+              "y": 28
+            },
+            "6": {
+              "class_id": 1,
+              "name_id": 6,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 13,
+              "y": 27
+            },
+            "7": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 19,
+              "y": 27
+            },
+            "8": {
+              "class_id": 2,
+              "name_id": 3,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 23,
+              "y": 28
+            },
+            "9": {
+              "class_id": 9,
+              "name_id": 10,
+              "defeated_flag": 1,
+              "hp": 10,
+              "x": 16,
+              "y": 28
+            },
+            "10": {
+              "class_id": 77,
+              "name_id": 13,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 14
+            },
+            "11": {
+              "class_id": 67,
+              "name_id": 17,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 10,
+              "y": 15
+            },
+            "12": {
+              "class_id": 70,
+              "name_id": 42,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 22,
+              "y": 15
+            },
+            "13": {
+              "class_id": 65,
+              "name_id": 43,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 24,
+              "y": 19
+            },
+            "14": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 11
+            },
+            "15": {
+              "class_id": 65,
+              "name_id": 44,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 8,
+              "y": 19
+            },
+            "16": {
+              "class_id": 71,
+              "name_id": 45,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 7,
+              "y": 14
+            },
+            "17": {
+              "class_id": 71,
+              "name_id": 46,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 12,
+              "y": 13
+            },
+            "18": {
+              "class_id": 71,
+              "name_id": 47,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 20,
+              "y": 13
+            },
+            "19": {
+              "class_id": 71,
+              "name_id": 48,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 25,
+              "y": 14
+            },
+            "20": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 0,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            }
+          },
+          "player_groups_untouched_by_wrapper": true,
+          "hostile_groups_defeated": true
+        },
+        "combat_state_valid": true,
+        "battle_result_frame": 42,
+        "save_menu_frame": 3,
+        "manual_review": {
+          "status": "pass",
+          "reviewed_normal_aftermath_frames": 42,
+          "reviewed_hard_differing_frames": 26,
+          "dialogue_and_level_names": [
+            "레온",
+            "제국병",
+            "제국군지휘관",
+            "레아드",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "라나",
+            "리아나"
+          ],
+          "battle_result_text": [
+            "전과보고",
+            "아군",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "스코트",
+            "리아나",
+            "라나",
+            "POINT 5200P"
+          ],
+          "save_text": [
+            "저장",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "bytes": 4194304,
+          "header_checksum": "E15E",
+          "computed_checksum": "E15E",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s25-runtime-clear.md",
+          "sha256": "e705f51c1c64d3fd58466e6d8b74946e44be8f041398fdff1d00a9534501801a",
+          "bytes": 4194304,
+          "header_checksum": "7A7D",
+          "computed_checksum": "7A7D",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 202,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "fixed_records_input_exact": true,
+        "normal_fixed_records_source_exact": true,
+        "player_deployments_input_exact": true,
+        "normal_player_deployments_source_exact": true,
+        "scope_limit": "diagnostic only: Start marks hostile runtime groups 9..19 defeated; all fixed records, deployments, events, identities, and combat values remain byte-identical to the input candidate"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s25_result/hard/runtime01",
+        "evidence_json": {
+          "path": "captures/run/current_s25_result/hard/runtime01/evidence.json",
+          "sha256": "5d8430b10c969a0ab29059138bc0464baf277c827de23818898c60df9fc7e680",
+          "expected_sha256": "5d8430b10c969a0ab29059138bc0464baf277c827de23818898c60df9fc7e680",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 25,
+          "identified_scenario": 25,
+          "best_match": {
+            "scenario": 25,
+            "matched_records": 11,
+            "total_records": 12,
+            "match_ratio": 0.9166666666666666
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s25_result/hard/runtime01/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "identity_note": "11 of 12 fixed records match at runtime; source record 0 is correctly replaced by event-spawned allied Jessica",
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s25_result/hard/runtime01/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s25_result/hard/runtime01/battle/turn1_command.png",
+            "sha256": "5b74af6eb1b90168df2aff2d2405205765404bc4a220d0df0071f29acaacc185",
+            "expected_sha256": "5b74af6eb1b90168df2aff2d2405205765404bc4a220d0df0071f29acaacc185",
+            "hash_matches": true,
+            "bytes": 16134,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s25_result/hard/runtime01/battle/runtime_clear_start_menu.png",
+            "sha256": "c13f087e1e238ba12765c0c9fa3b895d61e06041cd34e25151c7a7fc9c41f68d",
+            "expected_sha256": "c13f087e1e238ba12765c0c9fa3b895d61e06041cd34e25151c7a7fc9c41f68d",
+            "hash_matches": true,
+            "bytes": 12774,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s25_result/hard/runtime01/aftermath/battle_result.png",
+            "sha256": "2eb2af2d9a40087e34903bc4591ec057d081e50eb0335ba7a04c9a3b06e4b9c5",
+            "expected_sha256": "2eb2af2d9a40087e34903bc4591ec057d081e50eb0335ba7a04c9a3b06e4b9c5",
+            "hash_matches": true,
+            "bytes": 13103,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s25_result/hard/runtime01/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "before_runtime_clear": {
+            "path": "captures/run/current_s25_result/hard/runtime01/states/before_runtime_clear.gst",
+            "sha256": "4577208ba84d99ff24b33ab6bc825a47ae91dac9b5fa1835258c5c59029bbf47",
+            "expected_sha256": "4577208ba84d99ff24b33ab6bc825a47ae91dac9b5fa1835258c5c59029bbf47",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s25_result/hard/runtime01/states/runtime_clear_start_menu.gst",
+            "sha256": "1f575c3c82f9649751c62f4f08a25b582265bc9e9ab498baabe1764abd291504",
+            "expected_sha256": "1f575c3c82f9649751c62f4f08a25b582265bc9e9ab498baabe1764abd291504",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "battle_result": {
+            "path": "captures/run/current_s25_result/hard/runtime01/states/battle_result.gst",
+            "sha256": "e67a122b1f90a4ad3b38842026929862892db5a4203bfc18144c35d34267dfeb",
+            "expected_sha256": "e67a122b1f90a4ad3b38842026929862892db5a4203bfc18144c35d34267dfeb",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "save_menu": {
+            "path": "captures/run/current_s25_result/hard/runtime01/states/save_menu.gst",
+            "sha256": "5c480cb0531594e9977559b9d0c9647212ee77487fd33c7203d537e7d986ebac",
+            "expected_sha256": "5c480cb0531594e9977559b9d0c9647212ee77487fd33c7203d537e7d986ebac",
+            "hash_matches": true,
+            "bytes": 140408
+          }
+        },
+        "aftermath": {
+          "frame_count": 42,
+          "sequence_sha256": "b4b0080df8cdf49103feb8f9dc511106e316772b5e5baad2c8bf44348c444ce9",
+          "expected_sequence_sha256": "b4b0080df8cdf49103feb8f9dc511106e316772b5e5baad2c8bf44348c444ce9",
+          "sequence_hash_matches": true,
+          "total_bytes": 557802,
+          "expected_total_bytes": 557802,
+          "total_bytes_match": true,
+          "unique_frame_hashes": 42,
+          "all_dimensions_320x240": true,
+          "hashes": [
+            "e5f08d1d522b175bcc62596e047efd4cb7acae10d956334726761fc451aae787",
+            "4786f0f66633e015ed2ce19b867aa495a1c714ccb66c05aa3fa487da6c6ee47a",
+            "1e966ee4594c7efb4a34032bf73df15ed41119a88a131113b1bc3f845aa612ea",
+            "ce99abe25e42217d1a786bb56db429b50d43ce094f7eee312c29312af0bbe9bf",
+            "4d065a828b7d711c61e74bc3ce4fb4fd6c15ac13ccf1cfd0bd5e8cc3d1e60cab",
+            "d930048ca1a50b2bdbfb5b62b845423467dc49a8f17cc2f5bf00e7455b5b2ddc",
+            "09a5e9718ccaac63cf16d3871bcef1e46d47b4d33c62ded833598295426e1069",
+            "56533f71caaf98aed44a43e08fe07a6b8fa74a0ba112d0dcea2a9e47f8a2eeb4",
+            "8c5b6d26ce9cd2de132da0ae768a08ece3f8dc02865e3dcd775ac6636b715c84",
+            "0a5ad0cbcdc1c85a5175e1f71886d3962861cb64061870c043554d7ad42aaac6",
+            "5a944bd5996860276e957ed19648e8b336f1f3cde799309d3bc1e0cf6eb8c581",
+            "499cfb384cf7ec96dc0cb50d177e328219f9e17b2c1d9ff3878fe4522f7874e4",
+            "dd58aee3357c44318408f3b43333dddaf8d48221fa70d7bc5a0170ab5c55b5e5",
+            "8be10f5ed2b42867f6c5428953342a476c514b0a21a3c786dc092555db0645e9",
+            "96336a65b34de7f5579da2127e0d001bd824f044d6094ddfb1826b0f704dae84",
+            "26d8e4c211685c54eefc7fa9f588b1c0d4c5c70e882060444a35075e6982f219",
+            "760714940fe424a870a02d8d0dbc4a23121361894fdd777f631d31070f533087",
+            "1f82358e94519bc23b0a3d4722f549c0172e55d4b2fe0554762097f4d00c1228",
+            "249f415bf5438428deaf423ab747fdcebbd7e5c00dd010b582b2f58754fc267b",
+            "35782ce4df2f5252d8f86434757cec40257dc6aba9b9c15827bc9ddbd076200b",
+            "398ffe3525f19240a6cf657d5f127cd040c1273006de427e19c8e190f008fdb6",
+            "0f873184b40bf1418f5c97b12964757962f097c0e5ae027d2f6ccd42e3d4dc66",
+            "d8e1a17f37a6a5a4acdffebbe309516a504eefefc2c954d8eae07d93ed988cee",
+            "16b0a20ed4458f59282a6c090b3448be1c63da8a337cbf95a6138cbadeea536f",
+            "741b7db49ad44680c8bf2614924b57efb6c439ccf76cfed29a6f9e2a78e9315e",
+            "f48b2faf53c9c3219d6eb1140317e25690e31634ec68d5e3b90c0a9f161c9b27",
+            "0ff5182b7cffef1fabf58cd00258e1e8af6dac6bf3cb187ad9fcbe38ba923b58",
+            "2697ddea7d97132b05655899faa03a09f49d954d82082c0abb90078680f07a81",
+            "0ad9d60e8e97075a4c9119490e9e214037be8ae5da459aa36b6e816173bf618f",
+            "dfc38a65f1a36f9595597f05c1bb16944ccec8f138cd53c1e5bafb1a97627533",
+            "f58ab05a75785e97a5e85a56e2389315ff2d782a031cc94e5fc9b68d0b0a9f7f",
+            "7549aac66ad2c20fccf38d0e22870560b3fa8e95c87126e410200c271fc376a4",
+            "6b0c0986129c7897caf9c19d09c8230d7a0c30e7a6fd1659ac3aec44283add2c",
+            "e7bea595d0f17bbe21e6cc5d60c00ed1d1431512d684d139bb306ad42ceb2472",
+            "d9fb2bbad8c0fc6053af00536e34803b5f6720093507815378caee36417c45e0",
+            "428b2bf8cf481f7dc0e9f2182d0594e61d7e9da5997c46fa40e9886861e5af1e",
+            "bd0d9f1db49088537f9d8310ad98577f7e2f4d0de22b3559d8f7d43d919b3381",
+            "0b0bcbaba1997731dda8461ccd675e8803c675cc5f7376fc6e490e5e36725241",
+            "ffb5e536c4739dcff93ebeb87a08aba1ae267631a3c87eaa41522ba91284ad6f",
+            "05ef3f22f1135bcf40000ff6b72a8066ab842d81fb2098d2a355899855f86fb2",
+            "abca2a99d09ec2f0d9ab07a16d2fb71b0fd4ba2c72c69ed2f24126b21ff6236c",
+            "2eb2af2d9a40087e34903bc4591ec057d081e50eb0335ba7a04c9a3b06e4b9c5"
+          ]
+        },
+        "runtime_clear_state": {
+          "groups": {
+            "0": {
+              "class_id": 1,
+              "name_id": 1,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 6,
+              "y": 25
+            },
+            "1": {
+              "class_id": 3,
+              "name_id": 5,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 11,
+              "y": 24
+            },
+            "2": {
+              "class_id": 1,
+              "name_id": 4,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 24
+            },
+            "3": {
+              "class_id": 1,
+              "name_id": 8,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 21,
+              "y": 24
+            },
+            "4": {
+              "class_id": 6,
+              "name_id": 7,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 26,
+              "y": 25
+            },
+            "5": {
+              "class_id": 7,
+              "name_id": 9,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 9,
+              "y": 28
+            },
+            "6": {
+              "class_id": 1,
+              "name_id": 6,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 13,
+              "y": 27
+            },
+            "7": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 19,
+              "y": 27
+            },
+            "8": {
+              "class_id": 2,
+              "name_id": 3,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 23,
+              "y": 28
+            },
+            "9": {
+              "class_id": 9,
+              "name_id": 10,
+              "defeated_flag": 1,
+              "hp": 10,
+              "x": 16,
+              "y": 28
+            },
+            "10": {
+              "class_id": 77,
+              "name_id": 13,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "11": {
+              "class_id": 67,
+              "name_id": 17,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 15
+            },
+            "12": {
+              "class_id": 70,
+              "name_id": 42,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 15
+            },
+            "13": {
+              "class_id": 65,
+              "name_id": 43,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 19
+            },
+            "14": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 11
+            },
+            "15": {
+              "class_id": 65,
+              "name_id": 44,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 19
+            },
+            "16": {
+              "class_id": 71,
+              "name_id": 45,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "17": {
+              "class_id": 71,
+              "name_id": 46,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 13
+            },
+            "18": {
+              "class_id": 71,
+              "name_id": 47,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 13
+            },
+            "19": {
+              "class_id": 71,
+              "name_id": 48,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "20": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            }
+          },
+          "groups_before_start": {
+            "0": {
+              "class_id": 1,
+              "name_id": 1,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 6,
+              "y": 25
+            },
+            "1": {
+              "class_id": 3,
+              "name_id": 5,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 11,
+              "y": 24
+            },
+            "2": {
+              "class_id": 1,
+              "name_id": 4,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 24
+            },
+            "3": {
+              "class_id": 1,
+              "name_id": 8,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 21,
+              "y": 24
+            },
+            "4": {
+              "class_id": 6,
+              "name_id": 7,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 26,
+              "y": 25
+            },
+            "5": {
+              "class_id": 7,
+              "name_id": 9,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 9,
+              "y": 28
+            },
+            "6": {
+              "class_id": 1,
+              "name_id": 6,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 13,
+              "y": 27
+            },
+            "7": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 19,
+              "y": 27
+            },
+            "8": {
+              "class_id": 2,
+              "name_id": 3,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 23,
+              "y": 28
+            },
+            "9": {
+              "class_id": 9,
+              "name_id": 10,
+              "defeated_flag": 1,
+              "hp": 10,
+              "x": 16,
+              "y": 28
+            },
+            "10": {
+              "class_id": 77,
+              "name_id": 13,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 14
+            },
+            "11": {
+              "class_id": 67,
+              "name_id": 17,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 10,
+              "y": 15
+            },
+            "12": {
+              "class_id": 70,
+              "name_id": 42,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 22,
+              "y": 15
+            },
+            "13": {
+              "class_id": 65,
+              "name_id": 43,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 24,
+              "y": 19
+            },
+            "14": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 11
+            },
+            "15": {
+              "class_id": 65,
+              "name_id": 44,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 8,
+              "y": 19
+            },
+            "16": {
+              "class_id": 71,
+              "name_id": 45,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 7,
+              "y": 14
+            },
+            "17": {
+              "class_id": 71,
+              "name_id": 46,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 12,
+              "y": 13
+            },
+            "18": {
+              "class_id": 71,
+              "name_id": 47,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 20,
+              "y": 13
+            },
+            "19": {
+              "class_id": 71,
+              "name_id": 48,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 25,
+              "y": 14
+            },
+            "20": {
+              "class_id": 75,
+              "name_id": 49,
+              "defeated_flag": 0,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            }
+          },
+          "player_groups_untouched_by_wrapper": true,
+          "hostile_groups_defeated": true
+        },
+        "combat_state_valid": true,
+        "battle_result_frame": 42,
+        "save_menu_frame": 3,
+        "manual_review": {
+          "status": "pass",
+          "reviewed_normal_aftermath_frames": 42,
+          "reviewed_hard_differing_frames": 26,
+          "dialogue_and_level_names": [
+            "레온",
+            "제국병",
+            "제국군지휘관",
+            "레아드",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "라나",
+            "리아나"
+          ],
+          "battle_result_text": [
+            "전과보고",
+            "아군",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "스코트",
+            "리아나",
+            "라나",
+            "POINT 5200P"
+          ],
+          "save_text": [
+            "저장",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    }
+  },
+  "cross_profile": {
+    "preparation_pixel_identical": true,
+    "turn1_command_pixel_identical": false,
+    "runtime_clear_start_pixel_identical": false,
+    "aftermath_pixel_identical_frames": 16,
+    "aftermath_differing_frames": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      29,
+      42
+    ],
+    "aftermath_differences_match_reviewed_set": true,
+    "differing_frames_manual_classification": "frames 1..24 and the command/Start surfaces differ only in a 64x32 top-map unit animation box; frame 29 is dialogue typewriter phase; frame 42 is result-unit animation. No text tile, name, class, mercenary, commander, portrait, or UI glyph is corrupt.",
+    "save_menu_pixel_identical": true,
+    "result_manual_content_identical": true,
+    "turn1_command_difference_bbox": [
+      88,
+      9,
+      152,
+      41
+    ],
+    "runtime_clear_start_difference_bbox": [
+      88,
+      9,
+      152,
+      41
+    ],
+    "command_and_start_animation_only": true
+  },
+  "savestate_policy": "These GSTs are isolated verification fixtures. Player migration continues through in-game SRM load and then a fresh savestate."
+}

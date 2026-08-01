@@ -147,6 +147,9 @@ RUNS = {
 }
 AFTERMATH_FRAMES = 47
 EXPECTED_CROSS_PROFILE_DIFFERENCES = [31, 38, 40, 43, 47]
+EXPECTED_IDENTITY_MATCHED_RECORDS = 11
+EXPECTED_IDENTITY_TOTAL_RECORDS = 11
+IDENTITY_NOTE = "all 11 fixed enemy records match at runtime"
 
 
 def lineage_report(profile: str) -> dict[str, object]:
@@ -303,8 +306,10 @@ def runtime_report(profile: str) -> dict[str, object]:
         and identity["requested_scenario"]
         == identity["identified_scenario"]
         == probe_builder.SCENARIO_NUMBER
-        and identity["best_match"]["matched_records"] == 11
-        and identity["best_match"]["total_records"] == 11
+        and identity["best_match"]["matched_records"]
+        == EXPECTED_IDENTITY_MATCHED_RECORDS
+        and identity["best_match"]["total_records"]
+        == EXPECTED_IDENTITY_TOTAL_RECORDS
         and all(row["hash_matches"] for row in images.values())
         and all(row["dimensions"] == [320, 240] for row in images.values())
         and all(row["hash_matches"] for row in gsts.values())
@@ -328,7 +333,7 @@ def runtime_report(profile: str) -> dict[str, object]:
             == definition["evidence_sha256"],
         },
         "scenario_identity": identity,
-        "identity_note": "all 11 fixed enemy records match at runtime",
+        "identity_note": IDENTITY_NOTE,
         "images": images,
         "gsts": gsts,
         "aftermath": aftermath,

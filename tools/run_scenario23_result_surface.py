@@ -28,6 +28,14 @@ FIRST_PLAYER_RUNTIME_GROUP = 0
 LAST_PLAYER_RUNTIME_GROUP = 8
 
 
+def preserved_runtime_groups() -> tuple[int, ...]:
+    return getattr(
+        probe_builder,
+        "PRESERVED_RUNTIME_GROUPS",
+        tuple(range(FIRST_PLAYER_RUNTIME_GROUP, LAST_PLAYER_RUNTIME_GROUP + 1)),
+    )
+
+
 def runtime_groups(path: Path) -> dict[str, dict[str, int]]:
     payload = path.read_bytes()
     ram = payload[GST_WORK_RAM_OFFSET:GST_WORK_RAM_OFFSET + WORK_RAM_BYTES]
@@ -56,7 +64,7 @@ def runtime_groups(path: Path) -> dict[str, dict[str, int]]:
 def runtime_clear_state(path: Path, before_path: Path) -> dict[str, object]:
     groups = runtime_groups(path)
     before = runtime_groups(before_path)
-    players = range(FIRST_PLAYER_RUNTIME_GROUP, LAST_PLAYER_RUNTIME_GROUP + 1)
+    players = preserved_runtime_groups()
     hostiles = probe_builder.RUNTIME_CLEAR_GROUPS
     return {
         "groups": groups,

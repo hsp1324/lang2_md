@@ -66,6 +66,12 @@ PROTAGONIST_RUNTIME_GROUP = 0
 JESSICA_RUNTIME_GROUP = 9
 COMPLETION_TARGET_RUNTIME_GROUP = 10
 LAST_FIXED_RUNTIME_GROUP = 20
+FIRST_ENEMY_RUNTIME_GROUP = COMPLETION_TARGET_RUNTIME_GROUP
+LAST_ENEMY_RUNTIME_GROUP = LAST_FIXED_RUNTIME_GROUP
+PRESERVED_RUNTIME_GROUPS = tuple(range(JESSICA_RUNTIME_GROUP + 1))
+RUNTIME_CLEAR_GROUPS = tuple(
+    range(FIRST_ENEMY_RUNTIME_GROUP, LAST_ENEMY_RUNTIME_GROUP + 1)
+)
 COMPLETION_HIDDEN_RUNTIME_GROUPS = tuple(range(11, 21))
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
@@ -123,6 +129,24 @@ def protagonist_death_wrapper_code() -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def runtime_clear_wrapper_code() -> bytes:
+    """Defeat every hostile while preserving players and allied Jessica."""
+    code = bytearray()
+    for group in RUNTIME_CLEAR_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend((record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -205,9 +229,10 @@ def patch_probe(
     *,
     completion_target_only: bool = False,
     protagonist_death: bool = False,
+    runtime_clear: bool = False,
 ) -> int:
     validate_layout(probe, source)
-    if completion_target_only and protagonist_death:
+    if sum((completion_target_only, protagonist_death, runtime_clear)) > 1:
         raise ValueError("Scenario 25 diagnostic modes conflict")
     if protagonist_death:
         install_start_wrapper(
@@ -215,6 +240,9 @@ def patch_probe(
             source,
             protagonist_death_wrapper_code(),
         )
+        return builder.update_md_checksum(probe)
+    if runtime_clear:
+        install_start_wrapper(probe, source, runtime_clear_wrapper_code())
         return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
@@ -256,6 +284,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--runtime-clear",
+        action="store_true",
+        help=(
+            "preserve every Scenario 25 deployment, fixed record, and event, "
+            "then mark only hostile runtime groups 10..20 defeated through Start"
+        ),
+    )
+    parser.add_argument(
         "--protagonist-death",
         action="store_true",
         help=(
@@ -275,6 +311,7 @@ def main() -> int:
         source,
         completion_target_only=args.completion_target_only,
         protagonist_death=args.protagonist_death,
+        runtime_clear=args.runtime_clear,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -283,7 +320,7 @@ def main() -> int:
             "protagonist-death diagnostic: stock deployments and fixed "
             "records preserved; runtime player group 0 marked defeated"
         )
-    else:
+    elif not args.runtime_clear:
         print("Scenario 25 enemy records 1..11: AT 0, DF 0, no mercenaries")
     print(
         "allied Jessica, stock deployments, sides, identities, classes, "
@@ -306,6 +343,15 @@ def main() -> int:
         print(
             "Start hides and defeats runtime groups 11..20, then lowers only "
             "present, living group 10 Leon to one HP"
+        )
+    elif args.runtime_clear:
+        print(
+            "runtime-clear mode: all nine player deployments, twelve fixed "
+            "records, and source events remain unchanged"
+        )
+        print(
+            "Start preserves players 0..8 and allied Jessica 9, then marks "
+            "only hostile runtime groups 10..20 defeated"
         )
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
