@@ -1,0 +1,1080 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Current normal/hard Scenario 16 stock castle-gate completion, dynamic status names, class choice, and battle result",
+  "release_promoted": false,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact Scenario 16 completion-layout builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "header_checksum": "0xCB53",
+          "computed_checksum": "0xCB53",
+          "checksum_valid": true
+        },
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s16.md",
+          "sha256": "54750e7593ca3784896cb7abd641adf68f5326cb7d9272377daafa20531f05dd",
+          "header_checksum": "0xA163",
+          "computed_checksum": "0xA163",
+          "checksum_valid": true
+        },
+        "actual_changed_byte_count": 80,
+        "exact_builder_rebuild": true,
+        "event_triggers_preserved": true
+      },
+      "runtime": {
+        "sequence": {
+          "frame_count": 27,
+          "all_dimensions_320x240": true,
+          "captures": [
+            {
+              "path": "captures/run/current_s16_result/normal/battle/gate_event_00.png",
+              "sha256": "84724dccc824481b8e9cd91bfc1f6a1733f2deba4caf556ccbfd58927930df14",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_001.png",
+              "sha256": "b12b50f7f068021da588983e22ca8741c98b239eb16af11828dddc60703cbef2",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_002.png",
+              "sha256": "26174a27f1e4c7ca1569bc161ac8e15946d5995c8b25a8e0e3bfda52194eb337",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_003.png",
+              "sha256": "33f30cd8a45ec6c99b72760f14b1533b57df8f004800ea38cb5099b601f69038",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_004.png",
+              "sha256": "5c4b5c56fe73f69cd0c273fca5b4350e14d7d2e35a47921f2e5da5b6eafb9618",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_005.png",
+              "sha256": "7c0bdca02a00dc1b31887f46dbe68a480cd5978ace22bcb62a701f5cc4a77a00",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_006.png",
+              "sha256": "4aaf42f47765ec86a1d4de06035e8d03b8fdeacdc42a604710b56628d89028e4",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_007.png",
+              "sha256": "f39c81b4522fa912f98555cf6b5d344ed82188abf9b2bd870bb236d6985738c1",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_008.png",
+              "sha256": "d2b2ede698d3238527d110f93fe8da9a2cd456d6712f0780beca5c6fcfa82009",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_009.png",
+              "sha256": "723f8ab66a9713d26faccb9340524ec598e3d6e7d981fe1f50cc9f820df2282e",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_010.png",
+              "sha256": "81c14d8d07c304796ae246ce519c7a8cd96ecef4e0977e9ef0b1253f36870945",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_011.png",
+              "sha256": "5bb6399fad217d0f473fa54e819ea284f55a9fc1d93038d9cf4bd538fb555c16",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_012.png",
+              "sha256": "e4bca658dc9163dba9e5c4f8500c4b70e67e01bbee5584d648388b3ffcf3835e",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_013.png",
+              "sha256": "60446f0ad6993f66a6f68dd8361f5343a170befd840be0c8caddfb87953a97c5",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_014.png",
+              "sha256": "2945c304feffecc8b2d767876ac2577995aaca493f50aabdae71159dbaae9927",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_015.png",
+              "sha256": "fe49d3eb83e8ea7d6bb4200e0ca596b3c4f1a28a9d6c98f97863ceacc780a086",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_016.png",
+              "sha256": "3b51494681027f3a09dc4f421505463b610ad841afd3cd92a99e69ace42fb92d",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_017.png",
+              "sha256": "b2492c510154de3ed32a730a74f4353c3f8f1ff28566cb9a2d651e28ad137801",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_018.png",
+              "sha256": "d6e9cb7bbc23ff43776560a31a7d7389cb5f3c26764c095b5facba6eebc61044",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_019.png",
+              "sha256": "314d56eb577e46950cf9c001e81152d833a0ee4215aec8bb3bed437094c1afdb",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_020.png",
+              "sha256": "30c2acc2bfa4fa8d066a6b897fe0ef1b041bdb6cb118ce834b8c8016b3bec0b9",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_021.png",
+              "sha256": "03a235c2c5dd7c16e85f0388c6b16eb74a408581f9d8e109f1a1b1156861f606",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_022.png",
+              "sha256": "3df245067d3452d19eaf704230b80a321c28fb17ce8164ed94e941034330af5d",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_023.png",
+              "sha256": "6326adc157ec2ca389d2d91e5c9e3d3cbcb785d9539180b8dbe2e84512b2f448",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_024.png",
+              "sha256": "15d2fb7a765f547d3a4dadf0bd639ba8f0bb5eeadeab1a2f92f332ea8021fd4b",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_025.png",
+              "sha256": "1f21e6cd1f8f3178c87c402541e512157f9d23b5825fc97b65752063765c2d59",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/normal/battle/clear_path_026.png",
+              "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": true
+            }
+          ]
+        },
+        "critical_surfaces": {
+          "scott_status_bar": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_008.png",
+            "sha256": "d2b2ede698d3238527d110f93fe8da9a2cd456d6712f0780beca5c6fcfa82009",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "스코트"
+            ]
+          },
+          "jessica_status_bar": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_010.png",
+            "sha256": "81c14d8d07c304796ae246ce519c7a8cd96ecef4e0977e9ef0b1253f36870945",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카"
+            ]
+          },
+          "sherry_level_up": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_018.png",
+            "sha256": "d6e9cb7bbc23ff43776560a31a7d7389cb5f3c26764c095b5facba6eebc61044",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "쉐리",
+              "레벨이 올랐다."
+            ]
+          },
+          "class_change_choice": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_020.png",
+            "sha256": "30c2acc2bfa4fa8d066a6b897fe0ef1b041bdb6cb118ce834b8c8016b3bec0b9",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "클래스체인지",
+              "쉐리",
+              "로드",
+              "호크나이트",
+              "세인트",
+              "파이크",
+              "천사",
+              "힐",
+              "프로텍션"
+            ]
+          },
+          "aaron_level_up": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_021.png",
+            "sha256": "03a235c2c5dd7c16e85f0388c6b16eb74a408581f9d8e109f1a1b1156861f606",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "아론",
+              "레벨이 올랐다."
+            ]
+          },
+          "lester_level_up": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_022.png",
+            "sha256": "3df245067d3452d19eaf704230b80a321c28fb17ce8164ed94e941034330af5d",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "레스터",
+              "레벨"
+            ]
+          },
+          "scott_level_up": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_024.png",
+            "sha256": "15d2fb7a765f547d3a4dadf0bd639ba8f0bb5eeadeab1a2f92f332ea8021fd4b",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "스코트",
+              "레벨이 올랐다."
+            ]
+          },
+          "battle_result_roster": {
+            "path": "captures/run/current_s16_result/normal/battle/clear_path_026.png",
+            "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "전과보고",
+              "키스",
+              "레스터",
+              "제시카",
+              "스코트",
+              "POINT",
+              "2500P"
+            ]
+          }
+        },
+        "battle_result": {
+          "path": "captures/run/current_s16_result/normal/battle/battle_result.png",
+          "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+          "dimensions": [
+            320,
+            240
+          ],
+          "result_frame_detected": true
+        },
+        "result_alias_matches": true,
+        "gst": {
+          "path": "captures/run/current_s16_result/normal/states/battle_result.gst",
+          "sha256": "92bf64e0ea201419cf8d38f80c774f054e009f66bcdc07203352577494d02f12",
+          "bytes": 140408
+        },
+        "header_text": "전과보고",
+        "header_vram_range": "0xA000..0xA1FF",
+        "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+        "header_plane_cells": [
+          {
+            "x": 17,
+            "y": 1,
+            "tile_word": "0x8500",
+            "expected_tile": "0x0500",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 1,
+            "tile_word": "0x8501",
+            "expected_tile": "0x0501",
+            "matches": true
+          },
+          {
+            "x": 17,
+            "y": 2,
+            "tile_word": "0x8502",
+            "expected_tile": "0x0502",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 2,
+            "tile_word": "0x8503",
+            "expected_tile": "0x0503",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 1,
+            "tile_word": "0x8504",
+            "expected_tile": "0x0504",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 1,
+            "tile_word": "0x8505",
+            "expected_tile": "0x0505",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 2,
+            "tile_word": "0x8506",
+            "expected_tile": "0x0506",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 2,
+            "tile_word": "0x8507",
+            "expected_tile": "0x0507",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 1,
+            "tile_word": "0x8508",
+            "expected_tile": "0x0508",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 1,
+            "tile_word": "0x8509",
+            "expected_tile": "0x0509",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 2,
+            "tile_word": "0x850A",
+            "expected_tile": "0x050A",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 2,
+            "tile_word": "0x850B",
+            "expected_tile": "0x050B",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 1,
+            "tile_word": "0x850C",
+            "expected_tile": "0x050C",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 1,
+            "tile_word": "0x850D",
+            "expected_tile": "0x050D",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 2,
+            "tile_word": "0x850E",
+            "expected_tile": "0x050E",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 2,
+            "tile_word": "0x850F",
+            "expected_tile": "0x050F",
+            "matches": true
+          }
+        ],
+        "all_header_plane_cells_match": true
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "apply the exact normal diagnostic delta to the hard candidate, then recalculate only the Mega Drive checksum",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "header_checksum": "0xE15E",
+          "computed_checksum": "0xE15E",
+          "checksum_valid": true
+        },
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s16.md",
+          "sha256": "126b272a1ab47f6cd14cd0867d18980fea3ce1ee2d18ab5a7e91b08b14b50c13",
+          "header_checksum": "0x6C37",
+          "computed_checksum": "0x6C37",
+          "checksum_valid": true
+        },
+        "normal_diagnostic_changed_byte_count": 80,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 38,
+        "actual_changed_byte_count": 80,
+        "exact_three_way_overlay": true,
+        "event_triggers_preserved": true
+      },
+      "runtime": {
+        "sequence": {
+          "frame_count": 27,
+          "all_dimensions_320x240": true,
+          "captures": [
+            {
+              "path": "captures/run/current_s16_result/hard/battle/gate_event_00.png",
+              "sha256": "84724dccc824481b8e9cd91bfc1f6a1733f2deba4caf556ccbfd58927930df14",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_001.png",
+              "sha256": "b12b50f7f068021da588983e22ca8741c98b239eb16af11828dddc60703cbef2",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_002.png",
+              "sha256": "860c7705c650266b3b3a56d7ad1b9b7fe5aa104e609d0664298239d4b7f79111",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_003.png",
+              "sha256": "42597c2822e6312978ed273831e1e4b96d5860ed5593525b40ec08e4dda23536",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_004.png",
+              "sha256": "5c4b5c56fe73f69cd0c273fca5b4350e14d7d2e35a47921f2e5da5b6eafb9618",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_005.png",
+              "sha256": "c284245ecc1e6ebc942e9b9381dd8ee8ef7adaff2fb94640d9fe18d9ffb876a7",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_006.png",
+              "sha256": "4aaf42f47765ec86a1d4de06035e8d03b8fdeacdc42a604710b56628d89028e4",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_007.png",
+              "sha256": "459bfd3704ffb6400ee205275cab4dd772000d520e322c1c916c919811e7e9d6",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_008.png",
+              "sha256": "d2b2ede698d3238527d110f93fe8da9a2cd456d6712f0780beca5c6fcfa82009",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_009.png",
+              "sha256": "723f8ab66a9713d26faccb9340524ec598e3d6e7d981fe1f50cc9f820df2282e",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_010.png",
+              "sha256": "81c14d8d07c304796ae246ce519c7a8cd96ecef4e0977e9ef0b1253f36870945",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_011.png",
+              "sha256": "087b6aac5a66ce056da79358642832c13b1e093b0039618b80971fc28f319203",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_012.png",
+              "sha256": "0ce594426a53d23d1cd89196c7d4c1d006483a08df6627284bec3d7e74f82e16",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_013.png",
+              "sha256": "60446f0ad6993f66a6f68dd8361f5343a170befd840be0c8caddfb87953a97c5",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_014.png",
+              "sha256": "2945c304feffecc8b2d767876ac2577995aaca493f50aabdae71159dbaae9927",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_015.png",
+              "sha256": "fe49d3eb83e8ea7d6bb4200e0ca596b3c4f1a28a9d6c98f97863ceacc780a086",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_016.png",
+              "sha256": "3b51494681027f3a09dc4f421505463b610ad841afd3cd92a99e69ace42fb92d",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_017.png",
+              "sha256": "b2492c510154de3ed32a730a74f4353c3f8f1ff28566cb9a2d651e28ad137801",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_018.png",
+              "sha256": "d6e9cb7bbc23ff43776560a31a7d7389cb5f3c26764c095b5facba6eebc61044",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_019.png",
+              "sha256": "314d56eb577e46950cf9c001e81152d833a0ee4215aec8bb3bed437094c1afdb",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_020.png",
+              "sha256": "30c2acc2bfa4fa8d066a6b897fe0ef1b041bdb6cb118ce834b8c8016b3bec0b9",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_021.png",
+              "sha256": "03a235c2c5dd7c16e85f0388c6b16eb74a408581f9d8e109f1a1b1156861f606",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_022.png",
+              "sha256": "3df245067d3452d19eaf704230b80a321c28fb17ce8164ed94e941034330af5d",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_023.png",
+              "sha256": "6326adc157ec2ca389d2d91e5c9e3d3cbcb785d9539180b8dbe2e84512b2f448",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_024.png",
+              "sha256": "15d2fb7a765f547d3a4dadf0bd639ba8f0bb5eeadeab1a2f92f332ea8021fd4b",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_025.png",
+              "sha256": "1f21e6cd1f8f3178c87c402541e512157f9d23b5825fc97b65752063765c2d59",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": false
+            },
+            {
+              "path": "captures/run/current_s16_result/hard/battle/clear_path_026.png",
+              "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+              "dimensions": [
+                320,
+                240
+              ],
+              "result_frame_detected": true
+            }
+          ]
+        },
+        "critical_surfaces": {
+          "scott_status_bar": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_008.png",
+            "sha256": "d2b2ede698d3238527d110f93fe8da9a2cd456d6712f0780beca5c6fcfa82009",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "스코트"
+            ]
+          },
+          "jessica_status_bar": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_010.png",
+            "sha256": "81c14d8d07c304796ae246ce519c7a8cd96ecef4e0977e9ef0b1253f36870945",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "제시카"
+            ]
+          },
+          "sherry_level_up": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_018.png",
+            "sha256": "d6e9cb7bbc23ff43776560a31a7d7389cb5f3c26764c095b5facba6eebc61044",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "쉐리",
+              "레벨이 올랐다."
+            ]
+          },
+          "class_change_choice": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_020.png",
+            "sha256": "30c2acc2bfa4fa8d066a6b897fe0ef1b041bdb6cb118ce834b8c8016b3bec0b9",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "클래스체인지",
+              "쉐리",
+              "로드",
+              "호크나이트",
+              "세인트",
+              "파이크",
+              "천사",
+              "힐",
+              "프로텍션"
+            ]
+          },
+          "aaron_level_up": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_021.png",
+            "sha256": "03a235c2c5dd7c16e85f0388c6b16eb74a408581f9d8e109f1a1b1156861f606",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "아론",
+              "레벨이 올랐다."
+            ]
+          },
+          "lester_level_up": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_022.png",
+            "sha256": "3df245067d3452d19eaf704230b80a321c28fb17ce8164ed94e941034330af5d",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "레스터",
+              "레벨"
+            ]
+          },
+          "scott_level_up": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_024.png",
+            "sha256": "15d2fb7a765f547d3a4dadf0bd639ba8f0bb5eeadeab1a2f92f332ea8021fd4b",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": false,
+            "manual_review": "pass",
+            "observed_text": [
+              "스코트",
+              "레벨이 올랐다."
+            ]
+          },
+          "battle_result_roster": {
+            "path": "captures/run/current_s16_result/hard/battle/clear_path_026.png",
+            "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+            "dimensions": [
+              320,
+              240
+            ],
+            "result_frame_detected": true,
+            "manual_review": "pass",
+            "observed_text": [
+              "전과보고",
+              "키스",
+              "레스터",
+              "제시카",
+              "스코트",
+              "POINT",
+              "2500P"
+            ]
+          }
+        },
+        "battle_result": {
+          "path": "captures/run/current_s16_result/hard/battle/battle_result.png",
+          "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+          "dimensions": [
+            320,
+            240
+          ],
+          "result_frame_detected": true
+        },
+        "result_alias_matches": true,
+        "gst": {
+          "path": "captures/run/current_s16_result/hard/states/battle_result.gst",
+          "sha256": "19404dad0dcb6e3533ebb08dbfe1e54cb1bdf80ddf3f37d6bda9f11e0faa57c5",
+          "bytes": 140408
+        },
+        "header_text": "전과보고",
+        "header_vram_range": "0xA000..0xA1FF",
+        "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+        "header_plane_cells": [
+          {
+            "x": 17,
+            "y": 1,
+            "tile_word": "0x8500",
+            "expected_tile": "0x0500",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 1,
+            "tile_word": "0x8501",
+            "expected_tile": "0x0501",
+            "matches": true
+          },
+          {
+            "x": 17,
+            "y": 2,
+            "tile_word": "0x8502",
+            "expected_tile": "0x0502",
+            "matches": true
+          },
+          {
+            "x": 18,
+            "y": 2,
+            "tile_word": "0x8503",
+            "expected_tile": "0x0503",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 1,
+            "tile_word": "0x8504",
+            "expected_tile": "0x0504",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 1,
+            "tile_word": "0x8505",
+            "expected_tile": "0x0505",
+            "matches": true
+          },
+          {
+            "x": 19,
+            "y": 2,
+            "tile_word": "0x8506",
+            "expected_tile": "0x0506",
+            "matches": true
+          },
+          {
+            "x": 20,
+            "y": 2,
+            "tile_word": "0x8507",
+            "expected_tile": "0x0507",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 1,
+            "tile_word": "0x8508",
+            "expected_tile": "0x0508",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 1,
+            "tile_word": "0x8509",
+            "expected_tile": "0x0509",
+            "matches": true
+          },
+          {
+            "x": 21,
+            "y": 2,
+            "tile_word": "0x850A",
+            "expected_tile": "0x050A",
+            "matches": true
+          },
+          {
+            "x": 22,
+            "y": 2,
+            "tile_word": "0x850B",
+            "expected_tile": "0x050B",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 1,
+            "tile_word": "0x850C",
+            "expected_tile": "0x050C",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 1,
+            "tile_word": "0x850D",
+            "expected_tile": "0x050D",
+            "matches": true
+          },
+          {
+            "x": 23,
+            "y": 2,
+            "tile_word": "0x850E",
+            "expected_tile": "0x050E",
+            "matches": true
+          },
+          {
+            "x": 24,
+            "y": 2,
+            "tile_word": "0x850F",
+            "expected_tile": "0x050F",
+            "matches": true
+          }
+        ],
+        "all_header_plane_cells_match": true
+      }
+    }
+  },
+  "cross_profile": {
+    "battle_result_frame_identical": true,
+    "result_header_vram_identical": true
+  },
+  "limitations": [
+    "The weakened-enemy completion ROMs are diagnostic-only and are never release candidates.",
+    "Manual text review is hash-bound to the checked captures; later byte changes make --check fail."
+  ]
+}
