@@ -226,6 +226,32 @@ def protagonist_death_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def runtime_clear_wrapper_code() -> bytes:
+    """Defeat only the live Ginam group through Start.
+
+    This keeps every Scenario 7 deployment and fixed record source-identical.
+    It is used to reach the stock recruitment/class-change result path without
+    changing Keith, the residents, or any scheduled event data.
+    """
+    code = bytearray()
+    target = (
+        RUNTIME_GROUP_BASE + GINAM_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code.extend(bytes.fromhex("00 39 00 80"))
+    code.extend(
+        (target + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("13 FC 00 00"))
+    code.extend((target + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("13 FC 00 FF"))
+    code.extend((target + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def turn_event_wrapper_code(target_turn: int) -> bytes:
     if target_turn not in TURN_EVENT_COUNTER_VALUES:
         raise ValueError(
@@ -372,11 +398,19 @@ def patch_probe(
     civilian_loss: bool = False,
     lost_civilian_records: tuple[int, ...] = DEFAULT_LOST_CIVILIAN_RECORDS,
     protagonist_death: bool = False,
+    runtime_clear: bool = False,
     turn_event: int | None = None,
     turn_event_branch: str = "stock",
 ) -> int:
     validate_layout(probe, source)
-    if sum((civilian_loss, protagonist_death, turn_event is not None)) > 1:
+    if sum(
+        (
+            civilian_loss,
+            protagonist_death,
+            runtime_clear,
+            turn_event is not None,
+        )
+    ) > 1:
         raise ValueError("Scenario 7 diagnostic modes conflict")
     if turn_event is not None and turn_event not in TURN_EVENT_COUNTER_VALUES:
         raise ValueError(
@@ -394,7 +428,7 @@ def patch_probe(
         )
     if civilian_loss:
         validate_lost_civilian_records(lost_civilian_records)
-    if not protagonist_death and turn_event is None:
+    if not protagonist_death and not runtime_clear and turn_event is None:
         base = GINAM_RECORD_OFFSET
         probe[base + FIELD_OFFSETS["at"]] = PROBE_GINAM_AT
         probe[base + FIELD_OFFSETS["df"]] = PROBE_GINAM_DF
@@ -415,6 +449,13 @@ def patch_probe(
             source,
             protagonist_death_wrapper_code(),
             label="protagonist-death",
+        )
+    elif runtime_clear:
+        install_start_wrapper(
+            probe,
+            source,
+            runtime_clear_wrapper_code(),
+            label="runtime-clear",
         )
     elif turn_event is not None:
         if turn_event_branch != "stock":
@@ -456,6 +497,14 @@ def parse_args() -> argparse.Namespace:
         help=(
             "preserve every Scenario 7 fixed record and mark only runtime "
             "player group 0 defeated through Start"
+        ),
+    )
+    mode.add_argument(
+        "--runtime-clear",
+        action="store_true",
+        help=(
+            "preserve every Scenario 7 fixed record and mark only runtime "
+            "Ginam defeated through Start"
         ),
     )
     parser.add_argument(
@@ -503,6 +552,7 @@ def main() -> int:
         civilian_loss=args.civilian_loss,
         lost_civilian_records=lost_civilian_records,
         protagonist_death=args.protagonist_death,
+        runtime_clear=args.runtime_clear,
         turn_event=args.turn_event,
         turn_event_branch=args.turn_event_branch,
     )
@@ -541,6 +591,16 @@ def main() -> int:
         print(
             "Start marks only runtime player group 0 defeated, then returns "
             "to the stock Start handler"
+        )
+    elif args.runtime_clear:
+        print(
+            "Scenario 7 runtime-clear mode: all deployments and fixed "
+            "records remain source-identical"
+        )
+        print(
+            f"Start marks only runtime Ginam group "
+            f"{GINAM_RUNTIME_GROUP} defeated, then returns to the stock "
+            "Start handler"
         )
     elif args.turn_event is not None:
         print(

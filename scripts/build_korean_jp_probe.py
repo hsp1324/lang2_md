@@ -1591,6 +1591,53 @@ CLASS_CHANGE_EXPECTED_GLYPHS = (
     0x0007, 0x0028, 0x000C, 0x0010, 0x004E, 0x0027, 0x0033,
     0x0074, 0x0072, 0x0092, 0x00A9, 0x039B, 0x0147, 0x0088, 0x008F,
 )
+
+# Keith, Lester, and Jessica are initialized in the persistent ten-commander
+# roster before they become available to the player.  The Japanese data starts
+# them in a tier-2 class, which makes the other two tier-2 branches unreachable
+# without a Runestone.  Keep their original MP, residual EXP, AT/DF, and
+# identity sprite, but start them at the tier-1 LV10 class-change boundary.
+# When each commander first becomes runtime-active, the stock progression
+# handler sees LV10, opens that commander's ordinary tier-2 candidate screen,
+# and resets the chosen class to LV1.  Residual EXP and the original base
+# combat stats remain intact.
+INITIAL_COMMANDER_ROSTER_TABLE = 0x05E64A
+INITIAL_COMMANDER_RECORD_SIZE = 0x0E
+JOIN_CLASS_CHOICE_RECORDS = {
+    7: {
+        "name": "Keith",
+        "source": bytes.fromhex(
+            "06 01 01 05 16 14 00 00 00 00 20 04 00 21"
+        ),
+        "target": bytes.fromhex(
+            "01 01 0A 05 16 14 00 00 00 00 00 04 00 21"
+        ),
+        "tier1_class": 0x01,
+        "tier2_candidates": (0x04, 0x06, 0x08),
+    },
+    9: {
+        "name": "Lester",
+        "source": bytes.fromhex(
+            "07 02 07 0F 1A 16 00 00 00 10 10 04 00 1D"
+        ),
+        "target": bytes.fromhex(
+            "01 02 0A 0F 1A 16 00 00 00 00 00 04 00 1D"
+        ),
+        "tier1_class": 0x01,
+        "tier2_candidates": (0x05, 0x07, 0x0A),
+    },
+    10: {
+        "name": "Jessica",
+        "source": bytes.fromhex(
+            "09 11 05 00 1D 11 00 12 00 13 09 00 00 19"
+        ),
+        "target": bytes.fromhex(
+            "03 11 0A 00 1D 11 00 00 00 03 08 00 00 19"
+        ),
+        "tier1_class": 0x03,
+        "tier2_candidates": (0x08, 0x09, 0x04),
+    },
+}
 # Scenario 1 event pages use both FFFF (page end) and FFFD (event end).
 # Older suffix-only patches left the beginning of these pages in Japanese.
 # Keep the original terminator at its fixed address and replace the whole body.
@@ -5255,6 +5302,34 @@ def patch_class_change_glyph_list(data: bytearray, glyph_by_char: dict[str, int]
         put16(data, CLASS_CHANGE_GLYPH_LIST + index * 2, glyph)
 
 
+def patch_join_class_choice_progression(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
+        offset = (
+            INITIAL_COMMANDER_ROSTER_TABLE
+            + (commander_id - 1) * INITIAL_COMMANDER_RECORD_SIZE
+        )
+        end = offset + INITIAL_COMMANDER_RECORD_SIZE
+        expected = row["source"]
+        if source[offset:end] != expected:
+            raise ValueError(
+                f"Japanese initial roster record for {row['name']} changed"
+            )
+        if data[offset:end] != expected:
+            raise ValueError(
+                f"input initial roster record for {row['name']} changed"
+            )
+        target = row["target"]
+        if len(target) != INITIAL_COMMANDER_RECORD_SIZE:
+            raise ValueError(
+                f"initial roster target for {row['name']} must be "
+                f"{INITIAL_COMMANDER_RECORD_SIZE} bytes"
+            )
+        data[offset:end] = target
+
+
 def patch_direct_token_streams(data: bytearray) -> None:
     for offset, tokens in DIRECT_TOKEN_STREAM_PATCHES.items():
         capacity = direct_string_capacity_words(data, offset)
@@ -8677,6 +8752,7 @@ def main() -> None:
 
     data = bytearray(IN_ROM.read_bytes())
     expand_rom(data)
+    patch_join_class_choice_progression(data, IN_ROM.read_bytes())
     patch_bald_map_sprite(data)
     patch_shaman_map_sprite(data)
     patch_loren_map_sprite(data)
