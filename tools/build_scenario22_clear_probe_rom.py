@@ -62,6 +62,9 @@ PROTAGONIST_RUNTIME_GROUP = 0
 JESSICA_RUNTIME_GROUP = 6
 FIRST_ENEMY_RUNTIME_GROUP = 9
 LAST_ENEMY_RUNTIME_GROUP = 19
+RUNTIME_CLEAR_GROUPS = tuple(
+    range(FIRST_ENEMY_RUNTIME_GROUP, LAST_ENEMY_RUNTIME_GROUP + 1)
+)
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -111,6 +114,26 @@ def mark_runtime_group_defeated_code(group: int) -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def runtime_clear_wrapper_code() -> bytes:
+    """Mark all combat runtime groups defeated without changing fixed data."""
+    code = bytearray()
+    for group in RUNTIME_CLEAR_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -205,6 +228,7 @@ def patch_probe(
     completion_layout: bool = False,
     protagonist_death: bool = False,
     jessica_death: bool = False,
+    runtime_clear: bool = False,
 ) -> int:
     validate_layout(probe, source)
     death_modes = int(protagonist_death) + int(jessica_death)
@@ -212,10 +236,12 @@ def patch_probe(
         raise ValueError(
             "Scenario 22 protagonist-death and Jessica-death modes conflict"
         )
-    if death_modes and (completion_hp or completion_layout):
+    if death_modes and (completion_hp or completion_layout or runtime_clear):
         raise ValueError(
             "Scenario 22 death modes conflict with completion options"
         )
+    if runtime_clear and (completion_hp or completion_layout):
+        raise ValueError("Scenario 22 completion modes conflict")
     if death_modes:
         group = (
             PROTAGONIST_RUNTIME_GROUP
@@ -226,6 +252,13 @@ def patch_probe(
             probe,
             source,
             mark_runtime_group_defeated_code(group),
+        )
+        return builder.update_md_checksum(probe)
+    if runtime_clear:
+        install_start_wrapper(
+            probe,
+            source,
+            runtime_clear_wrapper_code(),
         )
         return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
@@ -283,6 +316,14 @@ def parse_args() -> argparse.Namespace:
             "mark only runtime player group 0 defeated through Start"
         ),
     )
+    parser.add_argument(
+        "--runtime-clear",
+        action="store_true",
+        help=(
+            "preserve every Scenario 22 deployment and fixed record, then "
+            "mark only runtime combat groups 9..19 defeated through Start"
+        ),
+    )
     death_mode.add_argument(
         "--jessica-death",
         action="store_true",
@@ -305,6 +346,7 @@ def main() -> int:
         completion_layout=args.completion_layout,
         protagonist_death=args.protagonist_death,
         jessica_death=args.jessica_death,
+        runtime_clear=args.runtime_clear,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -319,6 +361,15 @@ def main() -> int:
             "events, identities, and combat values remain source-identical"
         )
         print(f"Start marks only runtime {target} defeated")
+    elif args.runtime_clear:
+        print(
+            "Scenario 22 runtime-clear mode: all deployments, fixed records, "
+            "events, identities, and combat values remain source-identical"
+        )
+        print(
+            "Start marks only runtime combat groups 9..19 defeated; player "
+            "groups 0..7 and allied Liana group 8 remain untouched"
+        )
     else:
         print("Scenario 22 combat records 1..11: AT 0, DF 0, no mercenaries")
         print(

@@ -1,0 +1,1238 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Fresh current normal/hard Scenario 22 preparation, source-preserving runtime completion, all 167 aftermath frames, result, and save menu",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal runtime-clear builder replay",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-normal.md",
+          "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+          "bytes": 4194304,
+          "header_checksum": "CB53",
+          "computed_checksum": "CB53",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/normal/s22-runtime-clear.md",
+          "sha256": "2fddd78d8ecc366ca8909aa8ced6d495c4b0b649fc5a157d57dc9e1f5a089032",
+          "bytes": 4194304,
+          "header_checksum": "5812",
+          "computed_checksum": "5812",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 202,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "fixed_records_input_exact": true,
+        "normal_fixed_records_source_exact": true,
+        "player_deployments_input_exact": true,
+        "normal_player_deployments_source_exact": true,
+        "scope_limit": "diagnostic only: Start marks combat runtime groups 9..19 defeated; all fixed records, deployments, events, identities, and combat values remain byte-identical to the input candidate"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s22_result/normal/runtime02",
+        "evidence_json": {
+          "path": "captures/run/current_s22_result/normal/runtime02/evidence.json",
+          "sha256": "39b882cb67f02d003c4a91acaf0ae9ea03d6037da04ddc05ad409f1d278b9788",
+          "expected_sha256": "39b882cb67f02d003c4a91acaf0ae9ea03d6037da04ddc05ad409f1d278b9788",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 22,
+          "identified_scenario": 22,
+          "best_match": {
+            "scenario": 22,
+            "matched_records": 11,
+            "total_records": 12,
+            "match_ratio": 0.9166666666666666
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s22_result/normal/runtime02/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "identity_note": "11/12 runtime records match because source class 97 for allied Liana is normalized to playable runtime Cleric class 02",
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s22_result/normal/runtime02/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s22_result/normal/runtime02/battle/turn1_command.png",
+            "sha256": "b6babd6c9066308fe27d917cc4c3162a2fb956094169160763631e07a29bee0f",
+            "expected_sha256": "b6babd6c9066308fe27d917cc4c3162a2fb956094169160763631e07a29bee0f",
+            "hash_matches": true,
+            "bytes": 19494,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s22_result/normal/runtime02/battle/runtime_clear_start_menu.png",
+            "sha256": "1709e88fcfe3734849936927e053da65619abfffb051757b8c5ccec2225bd3d8",
+            "expected_sha256": "1709e88fcfe3734849936927e053da65619abfffb051757b8c5ccec2225bd3d8",
+            "hash_matches": true,
+            "bytes": 14632,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s22_result/normal/runtime02/aftermath/battle_result.png",
+            "sha256": "a52a25ff38028df9d272ad1eff0b2f45d2f3f11a7ba2384c29174e5a9300620e",
+            "expected_sha256": "a52a25ff38028df9d272ad1eff0b2f45d2f3f11a7ba2384c29174e5a9300620e",
+            "hash_matches": true,
+            "bytes": 13063,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s22_result/normal/runtime02/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "before_runtime_clear": {
+            "path": "captures/run/current_s22_result/normal/runtime02/states/before_runtime_clear.gst",
+            "sha256": "2f29c6e425a0c50e4e867789ffd7d9c66e5f010a79d33c9114dcb44abd2a38a3",
+            "expected_sha256": "2f29c6e425a0c50e4e867789ffd7d9c66e5f010a79d33c9114dcb44abd2a38a3",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s22_result/normal/runtime02/states/runtime_clear_start_menu.gst",
+            "sha256": "8f2af91d59ab0eb73347cd888e79613b36f83a492c07349127a217a9a61a347d",
+            "expected_sha256": "8f2af91d59ab0eb73347cd888e79613b36f83a492c07349127a217a9a61a347d",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "battle_result": {
+            "path": "captures/run/current_s22_result/normal/runtime02/states/battle_result.gst",
+            "sha256": "12aeb0ff985e29ae24806fe7501164431b7b96c78b33f2730acd019c183d92ff",
+            "expected_sha256": "12aeb0ff985e29ae24806fe7501164431b7b96c78b33f2730acd019c183d92ff",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "save_menu": {
+            "path": "captures/run/current_s22_result/normal/runtime02/states/save_menu.gst",
+            "sha256": "63a5cc1c4a7aa41523af6f4abfaa6c5dec0c6783b5a32cdc6c3f7b8bed6ac686",
+            "expected_sha256": "63a5cc1c4a7aa41523af6f4abfaa6c5dec0c6783b5a32cdc6c3f7b8bed6ac686",
+            "hash_matches": true,
+            "bytes": 140408
+          }
+        },
+        "aftermath": {
+          "frame_count": 167,
+          "sequence_sha256": "2a751baa67402cab662468cdffe60e8c38c5e4578ce8d2a12d1c4fdc7d5ed15b",
+          "expected_sequence_sha256": "2a751baa67402cab662468cdffe60e8c38c5e4578ce8d2a12d1c4fdc7d5ed15b",
+          "sequence_hash_matches": true,
+          "total_bytes": 2883406,
+          "expected_total_bytes": 2883406,
+          "total_bytes_match": true,
+          "unique_frame_hashes": 158,
+          "all_dimensions_320x240": true,
+          "hashes": [
+            "0cb82f6a02f11e2b5118c9750cdb0d185320ad7ac1d1cec82f2b10e4e4ba10f1",
+            "465b939539e6ae77026d5985fb4f6ab403d2ef7daf0f4b0fed9ec62a2b8aa2b3",
+            "e0c0ce825616f5caceb6a787809ee2dc7eb6fa48c38c2118103658a57a5aa4ac",
+            "542d5bc1b5cd5e5862877a97500c6f786f5b97e99acfa9c3f67395f498434b4b",
+            "72d92c9b0b778a0236855432bee938595f93d45b125921f9d5a1266f0dd00c1b",
+            "b5d38f7c24ca5feaaf09f853625e1d8ee9c3ba06337ce9b2a7251465af6c80a8",
+            "3c2c62713d4f119fae533a48d10f6eb24a725bd922c2e65287cb4142a9e6ceeb",
+            "b3414e09a8af11b3081165934e4e058676deb865830a15ce02fb23ac78360aba",
+            "15de2cc9104730f380f474c95307fc48fa217df537047b9735117771c2fcf5cb",
+            "5b3241248d903d406aa522c3fd1ef6e107d5d4d7838873ef1bfcd1617e3331f1",
+            "61b3a3ae7cf1da3e0e6935a1072ad3feea292053e70152c571ddb44068a1cf10",
+            "4e52ec1ece769ffcba2d55764f2cd3f9230b687c02b46b74a3fe2129ecdd0faf",
+            "aec765bf7654053c49300158e3ed4ad57b16f976914852ca9981f06b0bd6ae3c",
+            "cc754407343978be9869ec2858278929d5a25983356ad758c3b0109568c4d84c",
+            "9fc224fb80463a53f7e28d3bec1b28c436c8e3949f64c799075229bbec8ae641",
+            "d5fcf4d0f028419faf739d36ff7ce08c177a84ad5088e4bf43f9cf3fec0058dc",
+            "615785e6b4c6b3f536acc93b728152eefa26c599386b8acabcbdc7a0eda31dd4",
+            "da1bcb117cfd4e72d076215c9928e5aefd4d6bb790d0b27c061aff30c52aa9bb",
+            "821529656a054e841274bbfa5bd2cc84a5bd0d077ee2713d1e78a52ca3bec5f0",
+            "738731c40d03f0815f7c2ff0c5f82f529c12d7514828672c0a07f654014bd6ff",
+            "726e6ed3f48c02ea8621decf6063eba4458bb48b284a2a333037f26e08a4a401",
+            "c79a36e0995374fa3a77b98b98fa84e13a1aa74dbc7787b9e8a342f49080277c",
+            "ec2b334a20f46ab10a37019b05e14e54520908e83f4a008ea2e7c8aa23ce31cc",
+            "c8fa0dd93b5b99443a837cbdd719ecd9c4b56f2db31560cf13b1ecf7c73ec802",
+            "cbc3a70cadeaadf52af55edf9936d5c53eb9e665288a14bb35d80e2fcdf7490d",
+            "244d5c999f91374c53d3e8163a2b454b1203ffafebac552ad71e670f8a9f0b1c",
+            "6c3abefe356af5842aaf8daa8b4d9f4d512bc0c7f2adf9e223e4e9c396226df1",
+            "36deda2e2c7504cca98a11b5a2541a72640ce61ae70344bc74d5b88b70693b94",
+            "36deda2e2c7504cca98a11b5a2541a72640ce61ae70344bc74d5b88b70693b94",
+            "411aa98dbc924269aeafc832f6f473f59e16d925b50871062e97dc5b2f297a4f",
+            "e23ddb8a3c60ba5baae853bc6d6e9e291fd2e89cd8e4863d51526a80c6ba9ce0",
+            "d3e47a2adf90e9255b68024a85d06a28cdd6bf23a4e89b9d2ef43498f64efa55",
+            "be82459826a83401ea9e35a99c8fa2990193d949ce72d8588ece9cab7bbc87d9",
+            "732ecb4a8e35c174a433d2fd056c6dfd20dd02efcfcc1f5d151c12c7bc134c2b",
+            "f10733eb1a9a0d187cbf3e48d76bcf174ba4c2d7f582edb7b41d8ec5b3de8166",
+            "fdad7f619093bc88bb6a5a9cdaac75e632b86b932cc4f61bbe4a8c707351c072",
+            "bb71a530c27a581411c51f809d74b5db159bff08f45c0accd494151303ee131f",
+            "0b3f00d88829b59b0a4800ef0379a0756956bf412ad6d7433a28f904ac4fd9a7",
+            "dfaf24155164b5c7acd75b931955842f3af5968f787a349ded99dbd2d3950e76",
+            "b5264c7a2396f3ebba662156b4bea1bff5ab7a06073b53513982abb2b8ba8743",
+            "d615a7172a8cec45fd26ae2863fa73f1d9de761c2701f0f4d156fa3fe1cbad88",
+            "f75170e259719b470414b3710a83c31c6d7e780670dd99d6aec5fd424f5554fc",
+            "b24c8a49bc7e2e514af4d14f2548cf636fb51658e747764d9cd68840ae98b8ef",
+            "0688acc9ae500125e91960a20136d7cc61144c034f329e049848d65c32c51017",
+            "d2018d368adf6f71e35906748cec3641321b801f9fcaef0aacbd00ded29a7615",
+            "f643534931f6409ec4af1fc3224205813594819510b252326f89c224b3d740c7",
+            "fe6bff7557822019388f73a53e1c02dd09bb0a2cbb7b42533df0f362a7dfc676",
+            "51a8433ffd401c693911abbfd26cb5a77a601d770b440f8b64fa77e4d666219f",
+            "6d5bdfa01062b09980073117e1591a4ef159545df7ff4cedd1201b144f87d243",
+            "ef90c248f99f4bf86fc717a1d5f53f278e1492058288cd107f51760f6f5a2b15",
+            "0ac17a04dcc0d8622c80f2a77218845af95cf7d96905e198e90f4ea76565a897",
+            "a318ed93ec621d22f5c5daf1ea2cee13cb9414816cd610370e3ffd456907f05f",
+            "8fc4cbc92b3b093f8bfe512bc304eeafee944df65a16aeab6cb2ec60b0c18381",
+            "5e7da6109855d88afba54287e9be2be969fbf2658a6f0d06a1045e47b7042c69",
+            "4d573dee3ce3c18780d7bec6bd9e798ab8ab3d65f9cee1268b6b0f767062b53d",
+            "dc9192e7b9b20e9ebf441112b986b05cd8963a604b9cc694a893e8250fdb30d1",
+            "fd37927c2535b4afab2e983db57258e188ff0c4c704f0237a01dc70cff47460c",
+            "d7724252b74a76c4e3d119aa857f89846352c1af575721d098ec9de8309d78e5",
+            "3776bfa9fd639024526eec1c634a35b40fef60cdff181273983e866994df7c9f",
+            "93efe81269b93d36a255712e6353bdd6a9841777a31b293473af947a449e3f77",
+            "5265c72fb4ab4809e2cf2ff1d96ad5bf332271fa314e8c89a4002bda5775a4c5",
+            "b38c0cf8018f1d3436efb4f8cd0f4eb327f68bca0e312138fa98d6710898a6be",
+            "5b951f3775b73d77f7337154c429358894587c045ed45b46536db786ec177768",
+            "ffbba30462f1eb7a8fa08524c4623a721486f56c61f2d8723a1c7bf8ff530bf7",
+            "97cf28bac2765e4309011ffafd1be98c0b25d4f630226ae31c82eca4a294d535",
+            "5f3624d723464a5e756c779805928c5a1f29c17193e6084914e2ff94c4c70dd5",
+            "398d26808f3a8f959776c0c6defbb0e4e5ebeec96c00545c8edd7580ecae494e",
+            "c23430c8a7d0a864057a057aff9f9016bbc2257735743d558de68b6e810bbc66",
+            "4215f34ed653ffa0c39966c2dc96aa1ed4170ebe3bee2e9caacb498021c688d9",
+            "cb2d15082930d215308e3059f35c8ccb676c5c3542e59a3f8d5ccb4ea30c5a36",
+            "d3e8ae6e15f8e29650fa63be79595342f9020156671b07c843e19d8e3a160ea0",
+            "7af1a88c0ee18a8d519415d510409dfe4806f20be4377709425f7566ed3b5a42",
+            "9b0f48a676249e1c8c51d23dec5d2ecfefb35fbd4409dd5201a95032527842fa",
+            "6844607e376bc1e7e4a09f40aa81e2a940d98a5c438c94de84bc4849170d4805",
+            "b3b6a0b179dd191dd4c108a136152ac0e72118d6f069062e69c7753520fd46be",
+            "927c3d1121d65fec8612c1a98d9686413a6bfc860167dc40dc9cd844187183bc",
+            "0b7951fffd43150cb758282aa97da5d630d6e26811bbf25d4c554478e5104e2c",
+            "1b17e4bb1d7b0fb8e5aa3bbb082aa9a86adfaf18cb72b6d786f54a362aad87cf",
+            "d310611ccab60257f8bf6d84818c32377c1840179b808662a0fcd558faee70e8",
+            "2d96422edadd7d175c973663d51a3bdf1f20e1645e6d7b786595582df182237c",
+            "4381c4da6f2e020c01b2301eaa1e20692406138a792a754b2ba90fb862fd9f77",
+            "bacc7c6692e51b24308a4e6e9ad81edb46e776e99173145e54efce0953413bcb",
+            "b339e7969121f6285389ce097eb4c5777fea05c93bc2077ca0b43ce29a7099ff",
+            "57c7451f0bf28cc5a4027fe7db3ea2f658c2d51f930c8dd733dc7dd97697314a",
+            "6350866c682042fcb1cde8c2dbda8ad42ec2de2018de8c58ddbfc4443912dcd2",
+            "9c68b0187e68c48b17cdbbf09b883ae9bb17b90a3d076d9765089fd211541057",
+            "566281c106941ff5e26e1150bd9344897d954d672dd48fd832404b8001b8c82c",
+            "1c2e0b6751a6f5fbb8c972b340c72404e0a421f9a57afe1f5a0eb6270c277461",
+            "b20416fb117b113794c6e2c6160e5a80b4cfe03e9ebe5e34bc14c316b052b5d2",
+            "b20416fb117b113794c6e2c6160e5a80b4cfe03e9ebe5e34bc14c316b052b5d2",
+            "8fa8986d43abeac7db973326229d372745beb0466fecac858cffbe57e946ca90",
+            "be5690dabea373f44b71da46f0e488041f21f294f95b6257bb652102b0088c20",
+            "1eff18ed69c70f7e6bdaf88dc70f03d7e13eb6efa1ca00d4108952088d112da3",
+            "b4f97e4f2996aa72a1f057dab6445176c28d11ba4eb6f639fca415ee3ec38b1e",
+            "1a050773ed02357bbb39baad684fc4138b442e7bcdee1b986eb28e564e994eb3",
+            "26f79db3252b54e30bdb4b9db8f94fdda207fbdb391e6fb812616a94e4f9b1b8",
+            "bc940ba93341a92029c507bf9d00559bf393e9069db3249b2801c8dad94e1953",
+            "6ca7ea8b3b3dd5b8eeb8d7bf79fcb51d866fc110495e1894abb669478b9e626d",
+            "566281c106941ff5e26e1150bd9344897d954d672dd48fd832404b8001b8c82c",
+            "1a30ffe01bc96de61dfaab6d60df8fd52adaa091d4d25dda57def42ad5290be9",
+            "09a3c39421359f709d53a00285d37ae329ca8f06a99d98bb67c5b6223614c2a7",
+            "f0a443382d97798f24f852eb93c78a62a98fadb5cc86a48b7e02c4cb46ef830f",
+            "6350866c682042fcb1cde8c2dbda8ad42ec2de2018de8c58ddbfc4443912dcd2",
+            "17e546adbb3cd4ee63d103c5d507f30b9fcb3098e9fadeb1ea72bc6e4c5d5e9b",
+            "a76e37c8e97790546998c91c5af135da3074c255799cf00d37f1fa78b5c60666",
+            "7f51cf2715f6d53112a12b2329ae57f8a37c55529c729f6df66617c275e1ab32",
+            "ab10a8a03dc327e579a01233c2a2c50382b92cd36d088c96f95afc842c838321",
+            "685e506ce726d12df272b4130d532e37c58a59cac17029f2e8bbfa936d21019b",
+            "e8c716287a041d84ce5f61c03abab5b7f7a5af2d7687ed95210e28421cd312f1",
+            "616bcf75fe83ff52fdd49718b1826eebff6d793a56b46d02dc8e8c16e7c44817",
+            "26f79db3252b54e30bdb4b9db8f94fdda207fbdb391e6fb812616a94e4f9b1b8",
+            "e8c716287a041d84ce5f61c03abab5b7f7a5af2d7687ed95210e28421cd312f1",
+            "6ca7ea8b3b3dd5b8eeb8d7bf79fcb51d866fc110495e1894abb669478b9e626d",
+            "df0b70d9969021342a05706eeffdb7b923efe75abe328ebd36c544a8b8324c44",
+            "6ca7ea8b3b3dd5b8eeb8d7bf79fcb51d866fc110495e1894abb669478b9e626d",
+            "d4667238df50f24118c689ac2ce3b3b25f9765aada413b16cf774e3af38381bf",
+            "9c8f0d6573f3120de169eac99b4b6b76b6a35abaec179d19da60823a333baa3b",
+            "a17f49012d0e068cfc728cfa0303a0149114e1b2cc24f12ab8c13fb93c7f484d",
+            "d4667238df50f24118c689ac2ce3b3b25f9765aada413b16cf774e3af38381bf",
+            "9c795a86cb8f512ce509a0c4f81963e72bb5f60e6894bffffd71cd6817ca35ec",
+            "6ba3c11db908cd2e6ade4c04d1a6b4159fc6dd05a6f0b7145093a17d30db86ad",
+            "a9f57fb59a2f55511fc391aa4ff9d1c60fb18cc8a1082fbcb4a35878b43b0a18",
+            "b21c6e412e30c88d41ed26817cfbe66600e9ecf09015e661d23f389553cac098",
+            "3ad9133d494725294df203d464254510e1210223b751baa6a71d3f0a146cd511",
+            "ddb3ce53254192e0b0cae698ce4af0def7173e2b6acc384a80960e2fb1392492",
+            "4661cf36c420784804d70bc969998211dfeace14ba91d9463654474959d6398e",
+            "3c1ca43fd7c7e055e9288f03498b8f815660faba2733f3101f6858722ec6193b",
+            "e9f9f94a1da6d78c7b82973cd3da3ee5cb30c41146e163baf4185c821ba75135",
+            "ada2fa588379393582ae02f4974c47fac7075d4ddc83036343cb3feb92d4c1cc",
+            "e5a1df856b73acabcbdc59b4437902aaa4920da4a2b8628eb591f5896c33ba78",
+            "10c06da2ba9bf094578e7b93aef129255a5df0d3da288e36d3321ea090999aaa",
+            "b7df07e1d35f22e65a9830d79cc7ba9b72d12cd7c41ac90656f74709d79ff5ac",
+            "fa806e06a6c321346af4137b7b70bbc3d502754ec523e24e759c6c86be740ce2",
+            "1b50ac5d7eba4981e405079e5f492c16285c0666f0479fce2f38b37cf717240f",
+            "ec9872493114ca9cdc7f4d4d4115f42b25b4fd06c1da0678186b1283b19d2aa0",
+            "46bc67f9cead3bdc41fae7c10d28cf43ab671ea51584552528b2847146c50894",
+            "2fdb2beeb05740d4c258b5c64a5cc1873cc341354e46b3d2db09dcfe364f0c63",
+            "f0bb505f915b7813bbe5e1365f7f19bbbe5e907a52902dfafc3f23f2f2667721",
+            "7e3644b94c021f4ea27b63c2ec4a4ccfa06876a9b62e311da6c9fae983a541c6",
+            "88d4ece764f833034ef8fecc3079d507ad23e91a375650fb876abc6d7e45f73e",
+            "179485a0a4cfd73653caa6b2197eaedd3c3dfa3cff31349b67418dbc12aa33bc",
+            "be6977db243a4ab871f2bec128b628af620724a3387ab532b433343017cbf460",
+            "ea316a9fcf55e17a18708aff26d30b9cf43f58f2b6737357433a18b45b9fdf5c",
+            "f8c48a2ed1cf7e948403da6d3f1d5717c0c9962c7165946a8b75f3430c07429b",
+            "f889a460bf48f69ab64a0142cecfcced56ee1d49f62e2017445a1825f9ecc840",
+            "586f0fa5635ad228533072f83b4965189504634c6d277aaef809c0e3834d18e7",
+            "b0117b38694cedab2a19aecee18ecb497502fea7305e5a0eaa880bacc2f69dbb",
+            "ab25394e53fa9ec0ee7bb2384a22a3cb1526e987d598425d5c8c94e0e59d9ca9",
+            "c59b6342151b6a3e859eca4fadcf70744cc33e977925ec475315465ac7011316",
+            "b4cc2da88a4e4f2c828883dda9b7c851d13ebee5332310b06f05a512e7e65e39",
+            "48a60510fa2180b7563049cdf8d046f053809f8542616c92022d60da872c745c",
+            "898eb372dc785f79939a6948151238191b86a05b318245088e6cbb12db75d68e",
+            "a28da917bec9296832e7fba604289bfd36e092deb4aea9d823f6d4a0663d03d9",
+            "4480254e7ccc8b3a1caab0f3d8432bfb50776b5286a0cea1b51580e8f7d6a5c8",
+            "578a6ff8ffdeaabd20b1d70da34edb72cd7a478fe90dbdd223ff86626e16e540",
+            "6a9a4e70db2092cd4fd52c56a5fb6a7ee7ce226860b5317eb8a1534d22e299f8",
+            "1ce35dd90df766255e55588be546f5d4d0edb8352903bb6997d780a1b61383bf",
+            "4f62214af79865e5d5495abe7dfbc8e9462d1a108dc047f26ca11da5b05db4a5",
+            "2c254b092659b62a2fa7c9b70fdb5fe570fa4e82c0954bfb035928bb0ddadb7a",
+            "b2526c11e460367b8db8734e855abf2b92a6e51aa28ba81ac92868e88f065499",
+            "2578166c4182a452257462f333449ea7c09ba2ef75147bdcd8c2eb982f35b132",
+            "757cdd4aeaeffd2b72e4b31723b24f2fe59e92c77d37413bb5a600f0c359cb66",
+            "9d7d7e6bb40ed4e65adeb70b56e35f882756b3ea67e4e69617582f5a7f5e1e76",
+            "0fedabf5dcd24d65920360110a219f7d5106a11c2588096bd7b8e125e7c319d6",
+            "f8cddf8e327098d9c220a58f81e8cebf2b881783b80f80b3a8484e94ba170639",
+            "746b9083379cc08d51db2929080561d26476d246d915eafde54e3dba46c415ba",
+            "a52a25ff38028df9d272ad1eff0b2f45d2f3f11a7ba2384c29174e5a9300620e"
+          ]
+        },
+        "runtime_clear_state": {
+          "groups": {
+            "8": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 14,
+              "y": 4
+            },
+            "9": {
+              "class_id": 96,
+              "name_id": 12,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 4
+            },
+            "10": {
+              "class_id": 97,
+              "name_id": 16,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 5
+            },
+            "11": {
+              "class_id": 78,
+              "name_id": 14,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "12": {
+              "class_id": 66,
+              "name_id": 42,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 7
+            },
+            "13": {
+              "class_id": 66,
+              "name_id": 43,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 10
+            },
+            "14": {
+              "class_id": 72,
+              "name_id": 44,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 13
+            },
+            "15": {
+              "class_id": 79,
+              "name_id": 20,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "16": {
+              "class_id": 87,
+              "name_id": 67,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 21
+            },
+            "17": {
+              "class_id": 87,
+              "name_id": 68,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 20
+            },
+            "18": {
+              "class_id": 88,
+              "name_id": 69,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 29
+            },
+            "19": {
+              "class_id": 88,
+              "name_id": 70,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 27
+            }
+          },
+          "groups_before_start": {
+            "8": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 14,
+              "y": 4
+            },
+            "9": {
+              "class_id": 96,
+              "name_id": 12,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 17,
+              "y": 4
+            },
+            "10": {
+              "class_id": 97,
+              "name_id": 16,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 15,
+              "y": 5
+            },
+            "11": {
+              "class_id": 78,
+              "name_id": 14,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 255,
+              "y": 255
+            },
+            "12": {
+              "class_id": 66,
+              "name_id": 42,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 7
+            },
+            "13": {
+              "class_id": 66,
+              "name_id": 43,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 15,
+              "y": 10
+            },
+            "14": {
+              "class_id": 72,
+              "name_id": 44,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 13
+            },
+            "15": {
+              "class_id": 79,
+              "name_id": 20,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 2,
+              "y": 14
+            },
+            "16": {
+              "class_id": 87,
+              "name_id": 67,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 11,
+              "y": 21
+            },
+            "17": {
+              "class_id": 87,
+              "name_id": 68,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 20,
+              "y": 20
+            },
+            "18": {
+              "class_id": 88,
+              "name_id": 69,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 18,
+              "y": 29
+            },
+            "19": {
+              "class_id": 88,
+              "name_id": 70,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 14,
+              "y": 27
+            }
+          },
+          "combat_groups_defeated": true,
+          "liana_untouched_by_wrapper": true,
+          "liana_runtime_identity_valid": true
+        },
+        "combat_state_valid": true,
+        "battle_result_frame": 167,
+        "save_menu_frame": 3,
+        "manual_review": {
+          "status": "pass",
+          "reviewed_normal_aftermath_frames": 167,
+          "reviewed_hard_differing_frames": 23,
+          "dialogue_names": [
+            "보젤",
+            "라나",
+            "베른하르트",
+            "제국군지휘관",
+            "리치",
+            "아이언골렘",
+            "제시카",
+            "쉐리",
+            "레스터",
+            "헤인",
+            "엘윈",
+            "리아나",
+            "아론",
+            "스코트"
+          ],
+          "battle_result_text": [
+            "전과보고",
+            "아군",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "제시카",
+            "스코트",
+            "POINT 4480P"
+          ],
+          "class_change_text": [
+            "클래스체인지 가능",
+            "서먼",
+            "힐러",
+            "로드",
+            "메이지",
+            "매직나이트",
+            "프리스트",
+            "아크메이지",
+            "엘프나이트",
+            "팔라딘",
+            "호크나이트",
+            "샤먼"
+          ],
+          "save_text": [
+            "저장",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "diagnostic_lineage": {
+        "method": "exact current-normal diagnostic delta over the current hard candidate, followed only by checksum recalculation",
+        "candidate": {
+          "path": "tmp/current-glyph-lifetime-fix-hard.md",
+          "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+          "bytes": 4194304,
+          "header_checksum": "E15E",
+          "computed_checksum": "E15E",
+          "checksum_valid": true
+        },
+        "candidate_identity_matches": true,
+        "probe": {
+          "path": "tmp/current-result-probes/hard/s22-runtime-clear.md",
+          "sha256": "2c64319555ccff6b1d9b77ff0cfa18e73e54ad99406426f6cd2eed0e43cbbe50",
+          "bytes": 4194304,
+          "header_checksum": "6E1D",
+          "computed_checksum": "6E1D",
+          "checksum_valid": true
+        },
+        "probe_identity_matches": true,
+        "diagnostic_changed_byte_count": 202,
+        "hard_bytes_replaced_inside_diagnostic_envelope": 0,
+        "exact_rebuild": true,
+        "wrapper_exact": true,
+        "start_entry_targets_wrapper": true,
+        "fixed_records_input_exact": true,
+        "normal_fixed_records_source_exact": true,
+        "player_deployments_input_exact": true,
+        "normal_player_deployments_source_exact": true,
+        "scope_limit": "diagnostic only: Start marks combat runtime groups 9..19 defeated; all fixed records, deployments, events, identities, and combat values remain byte-identical to the input candidate"
+      },
+      "runtime": {
+        "status": "pass",
+        "run_root": "captures/run/current_s22_result/hard/runtime01",
+        "evidence_json": {
+          "path": "captures/run/current_s22_result/hard/runtime01/evidence.json",
+          "sha256": "6e41e0bccec9708999dc1e70f7bce25dee12ada6f68f526b26f57f6e0a37e3e7",
+          "expected_sha256": "6e41e0bccec9708999dc1e70f7bce25dee12ada6f68f526b26f57f6e0a37e3e7",
+          "hash_matches": true
+        },
+        "scenario_identity": {
+          "status": "pass",
+          "requested_scenario": 22,
+          "identified_scenario": 22,
+          "best_match": {
+            "scenario": 22,
+            "matched_records": 11,
+            "total_records": 12,
+            "match_ratio": 0.9166666666666666
+          },
+          "runner_up": {
+            "scenario": 1,
+            "matched_records": 0,
+            "total_records": 12,
+            "match_ratio": 0.0
+          },
+          "gst": "/home/hong/lang2_md/captures/run/current_s22_result/hard/runtime01/briefing/attempt_1/scenario_identity.gst",
+          "attempt": 1
+        },
+        "identity_note": "11/12 runtime records match because source class 97 for allied Liana is normalized to playable runtime Cleric class 02",
+        "images": {
+          "preparation": {
+            "path": "captures/run/current_s22_result/hard/runtime01/preparation.png",
+            "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+            "hash_matches": true,
+            "bytes": 8129,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "turn1_command": {
+            "path": "captures/run/current_s22_result/hard/runtime01/battle/turn1_command.png",
+            "sha256": "b6babd6c9066308fe27d917cc4c3162a2fb956094169160763631e07a29bee0f",
+            "expected_sha256": "b6babd6c9066308fe27d917cc4c3162a2fb956094169160763631e07a29bee0f",
+            "hash_matches": true,
+            "bytes": 19494,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s22_result/hard/runtime01/battle/runtime_clear_start_menu.png",
+            "sha256": "1709e88fcfe3734849936927e053da65619abfffb051757b8c5ccec2225bd3d8",
+            "expected_sha256": "1709e88fcfe3734849936927e053da65619abfffb051757b8c5ccec2225bd3d8",
+            "hash_matches": true,
+            "bytes": 14632,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "other"
+          },
+          "battle_result": {
+            "path": "captures/run/current_s22_result/hard/runtime01/aftermath/battle_result.png",
+            "sha256": "1f5a01060b15ad4e6f3d7e27658dfaef7e01c5581fd883d413ec432a40f7f604",
+            "expected_sha256": "1f5a01060b15ad4e6f3d7e27658dfaef7e01c5581fd883d413ec432a40f7f604",
+            "hash_matches": true,
+            "bytes": 13369,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "battle_result"
+          },
+          "save_menu": {
+            "path": "captures/run/current_s22_result/hard/runtime01/save/save_menu.png",
+            "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "expected_sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+            "hash_matches": true,
+            "bytes": 6089,
+            "dimensions": [
+              320,
+              240
+            ],
+            "surface": "save_menu"
+          }
+        },
+        "gsts": {
+          "before_runtime_clear": {
+            "path": "captures/run/current_s22_result/hard/runtime01/states/before_runtime_clear.gst",
+            "sha256": "fa5566733d57ab3a805cefa93d2f7a9ec291e70b0c3457192add0452386f6f0f",
+            "expected_sha256": "fa5566733d57ab3a805cefa93d2f7a9ec291e70b0c3457192add0452386f6f0f",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "runtime_clear_start": {
+            "path": "captures/run/current_s22_result/hard/runtime01/states/runtime_clear_start_menu.gst",
+            "sha256": "10e50acb43d72e70432c4a2197414bd14099beee21e632828189a1f3356b9b79",
+            "expected_sha256": "10e50acb43d72e70432c4a2197414bd14099beee21e632828189a1f3356b9b79",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "battle_result": {
+            "path": "captures/run/current_s22_result/hard/runtime01/states/battle_result.gst",
+            "sha256": "d8cea085b274a912ac6b178ddf9ab0d5bec1170409c4af52159595fea20a959a",
+            "expected_sha256": "d8cea085b274a912ac6b178ddf9ab0d5bec1170409c4af52159595fea20a959a",
+            "hash_matches": true,
+            "bytes": 140408
+          },
+          "save_menu": {
+            "path": "captures/run/current_s22_result/hard/runtime01/states/save_menu.gst",
+            "sha256": "ad9de6b08416781bbe6106765d31f14e6dd2d9f3e10d2ab6c1547459f2de8b63",
+            "expected_sha256": "ad9de6b08416781bbe6106765d31f14e6dd2d9f3e10d2ab6c1547459f2de8b63",
+            "hash_matches": true,
+            "bytes": 140408
+          }
+        },
+        "aftermath": {
+          "frame_count": 167,
+          "sequence_sha256": "c947621ff726a09cf0c0ee804d63d1d5b3efc08a0edd367ea3cbd154388c0b50",
+          "expected_sequence_sha256": "c947621ff726a09cf0c0ee804d63d1d5b3efc08a0edd367ea3cbd154388c0b50",
+          "sequence_hash_matches": true,
+          "total_bytes": 2884895,
+          "expected_total_bytes": 2884895,
+          "total_bytes_match": true,
+          "unique_frame_hashes": 158,
+          "all_dimensions_320x240": true,
+          "hashes": [
+            "0cb82f6a02f11e2b5118c9750cdb0d185320ad7ac1d1cec82f2b10e4e4ba10f1",
+            "465b939539e6ae77026d5985fb4f6ab403d2ef7daf0f4b0fed9ec62a2b8aa2b3",
+            "e0c0ce825616f5caceb6a787809ee2dc7eb6fa48c38c2118103658a57a5aa4ac",
+            "542d5bc1b5cd5e5862877a97500c6f786f5b97e99acfa9c3f67395f498434b4b",
+            "72d92c9b0b778a0236855432bee938595f93d45b125921f9d5a1266f0dd00c1b",
+            "b5d38f7c24ca5feaaf09f853625e1d8ee9c3ba06337ce9b2a7251465af6c80a8",
+            "722bdcd1abba1aea2403d2dbcbf9d0b5c334b9c5a0359eadd95bb26fc0304657",
+            "b3414e09a8af11b3081165934e4e058676deb865830a15ce02fb23ac78360aba",
+            "15de2cc9104730f380f474c95307fc48fa217df537047b9735117771c2fcf5cb",
+            "5b3241248d903d406aa522c3fd1ef6e107d5d4d7838873ef1bfcd1617e3331f1",
+            "61b3a3ae7cf1da3e0e6935a1072ad3feea292053e70152c571ddb44068a1cf10",
+            "4e52ec1ece769ffcba2d55764f2cd3f9230b687c02b46b74a3fe2129ecdd0faf",
+            "aec765bf7654053c49300158e3ed4ad57b16f976914852ca9981f06b0bd6ae3c",
+            "b62a4063e9cd10c998e9f0d2e82c51918dc4068fcee8f81e8501e86ec5b43686",
+            "9fc224fb80463a53f7e28d3bec1b28c436c8e3949f64c799075229bbec8ae641",
+            "d5fcf4d0f028419faf739d36ff7ce08c177a84ad5088e4bf43f9cf3fec0058dc",
+            "615785e6b4c6b3f536acc93b728152eefa26c599386b8acabcbdc7a0eda31dd4",
+            "da1bcb117cfd4e72d076215c9928e5aefd4d6bb790d0b27c061aff30c52aa9bb",
+            "821529656a054e841274bbfa5bd2cc84a5bd0d077ee2713d1e78a52ca3bec5f0",
+            "738731c40d03f0815f7c2ff0c5f82f529c12d7514828672c0a07f654014bd6ff",
+            "726e6ed3f48c02ea8621decf6063eba4458bb48b284a2a333037f26e08a4a401",
+            "c79a36e0995374fa3a77b98b98fa84e13a1aa74dbc7787b9e8a342f49080277c",
+            "ec2b334a20f46ab10a37019b05e14e54520908e83f4a008ea2e7c8aa23ce31cc",
+            "c8fa0dd93b5b99443a837cbdd719ecd9c4b56f2db31560cf13b1ecf7c73ec802",
+            "cbc3a70cadeaadf52af55edf9936d5c53eb9e665288a14bb35d80e2fcdf7490d",
+            "244d5c999f91374c53d3e8163a2b454b1203ffafebac552ad71e670f8a9f0b1c",
+            "6c3abefe356af5842aaf8daa8b4d9f4d512bc0c7f2adf9e223e4e9c396226df1",
+            "36deda2e2c7504cca98a11b5a2541a72640ce61ae70344bc74d5b88b70693b94",
+            "36deda2e2c7504cca98a11b5a2541a72640ce61ae70344bc74d5b88b70693b94",
+            "411aa98dbc924269aeafc832f6f473f59e16d925b50871062e97dc5b2f297a4f",
+            "e23ddb8a3c60ba5baae853bc6d6e9e291fd2e89cd8e4863d51526a80c6ba9ce0",
+            "d3e47a2adf90e9255b68024a85d06a28cdd6bf23a4e89b9d2ef43498f64efa55",
+            "f6366dd5197ca2a72dfae7800bc631bf3f5e3ce7fce352c46fcd2b6d3aa38b19",
+            "732ecb4a8e35c174a433d2fd056c6dfd20dd02efcfcc1f5d151c12c7bc134c2b",
+            "f10733eb1a9a0d187cbf3e48d76bcf174ba4c2d7f582edb7b41d8ec5b3de8166",
+            "fdad7f619093bc88bb6a5a9cdaac75e632b86b932cc4f61bbe4a8c707351c072",
+            "bb71a530c27a581411c51f809d74b5db159bff08f45c0accd494151303ee131f",
+            "0b3f00d88829b59b0a4800ef0379a0756956bf412ad6d7433a28f904ac4fd9a7",
+            "dfaf24155164b5c7acd75b931955842f3af5968f787a349ded99dbd2d3950e76",
+            "b5264c7a2396f3ebba662156b4bea1bff5ab7a06073b53513982abb2b8ba8743",
+            "d615a7172a8cec45fd26ae2863fa73f1d9de761c2701f0f4d156fa3fe1cbad88",
+            "d92cf896e55a848da8bbe4726ccbc0f869b5c02f04c4261d0bec3753358c4719",
+            "90b1b399ff23b7e9bfe71b1e42cc0456c35208d9b895a577b311ca120a7efe2a",
+            "5c01add6ce6ccdc149d8bee9b5054063737c4fe786ed8bc777543c38759934f4",
+            "d2018d368adf6f71e35906748cec3641321b801f9fcaef0aacbd00ded29a7615",
+            "f643534931f6409ec4af1fc3224205813594819510b252326f89c224b3d740c7",
+            "6d3675584a6dbf97e7bb4d8dedd6af61e138c27c5c69baeeeb394c18fcfeb1e0",
+            "51a8433ffd401c693911abbfd26cb5a77a601d770b440f8b64fa77e4d666219f",
+            "6d5bdfa01062b09980073117e1591a4ef159545df7ff4cedd1201b144f87d243",
+            "ef90c248f99f4bf86fc717a1d5f53f278e1492058288cd107f51760f6f5a2b15",
+            "0ac17a04dcc0d8622c80f2a77218845af95cf7d96905e198e90f4ea76565a897",
+            "a318ed93ec621d22f5c5daf1ea2cee13cb9414816cd610370e3ffd456907f05f",
+            "8fc4cbc92b3b093f8bfe512bc304eeafee944df65a16aeab6cb2ec60b0c18381",
+            "5e7da6109855d88afba54287e9be2be969fbf2658a6f0d06a1045e47b7042c69",
+            "4d573dee3ce3c18780d7bec6bd9e798ab8ab3d65f9cee1268b6b0f767062b53d",
+            "dc9192e7b9b20e9ebf441112b986b05cd8963a604b9cc694a893e8250fdb30d1",
+            "fd37927c2535b4afab2e983db57258e188ff0c4c704f0237a01dc70cff47460c",
+            "d7724252b74a76c4e3d119aa857f89846352c1af575721d098ec9de8309d78e5",
+            "3776bfa9fd639024526eec1c634a35b40fef60cdff181273983e866994df7c9f",
+            "93efe81269b93d36a255712e6353bdd6a9841777a31b293473af947a449e3f77",
+            "5265c72fb4ab4809e2cf2ff1d96ad5bf332271fa314e8c89a4002bda5775a4c5",
+            "b38c0cf8018f1d3436efb4f8cd0f4eb327f68bca0e312138fa98d6710898a6be",
+            "5b951f3775b73d77f7337154c429358894587c045ed45b46536db786ec177768",
+            "ffbba30462f1eb7a8fa08524c4623a721486f56c61f2d8723a1c7bf8ff530bf7",
+            "97cf28bac2765e4309011ffafd1be98c0b25d4f630226ae31c82eca4a294d535",
+            "5f3624d723464a5e756c779805928c5a1f29c17193e6084914e2ff94c4c70dd5",
+            "398d26808f3a8f959776c0c6defbb0e4e5ebeec96c00545c8edd7580ecae494e",
+            "c23430c8a7d0a864057a057aff9f9016bbc2257735743d558de68b6e810bbc66",
+            "4215f34ed653ffa0c39966c2dc96aa1ed4170ebe3bee2e9caacb498021c688d9",
+            "cb2d15082930d215308e3059f35c8ccb676c5c3542e59a3f8d5ccb4ea30c5a36",
+            "d3e8ae6e15f8e29650fa63be79595342f9020156671b07c843e19d8e3a160ea0",
+            "7af1a88c0ee18a8d519415d510409dfe4806f20be4377709425f7566ed3b5a42",
+            "9b0f48a676249e1c8c51d23dec5d2ecfefb35fbd4409dd5201a95032527842fa",
+            "6844607e376bc1e7e4a09f40aa81e2a940d98a5c438c94de84bc4849170d4805",
+            "a399c73e37bf98db79102a07b8577c8c38b062ab1f1e6528349e9d865c85fd21",
+            "927c3d1121d65fec8612c1a98d9686413a6bfc860167dc40dc9cd844187183bc",
+            "557092cd4799ecf9228ad5ded083a6ef468e1f61ca4e934b468d1aaa6e6a544d",
+            "1b17e4bb1d7b0fb8e5aa3bbb082aa9a86adfaf18cb72b6d786f54a362aad87cf",
+            "e0cb8c90f08409d0d1d37a66f586cee832e57cff0e76323f4b4e24de38fec819",
+            "2d96422edadd7d175c973663d51a3bdf1f20e1645e6d7b786595582df182237c",
+            "f05976d13f29ba66bc1e6dd0f8bf4033ec86158725a6ef22641770f1d4d0b82d",
+            "bacc7c6692e51b24308a4e6e9ad81edb46e776e99173145e54efce0953413bcb",
+            "b339e7969121f6285389ce097eb4c5777fea05c93bc2077ca0b43ce29a7099ff",
+            "57c7451f0bf28cc5a4027fe7db3ea2f658c2d51f930c8dd733dc7dd97697314a",
+            "6350866c682042fcb1cde8c2dbda8ad42ec2de2018de8c58ddbfc4443912dcd2",
+            "9c68b0187e68c48b17cdbbf09b883ae9bb17b90a3d076d9765089fd211541057",
+            "566281c106941ff5e26e1150bd9344897d954d672dd48fd832404b8001b8c82c",
+            "1c2e0b6751a6f5fbb8c972b340c72404e0a421f9a57afe1f5a0eb6270c277461",
+            "b20416fb117b113794c6e2c6160e5a80b4cfe03e9ebe5e34bc14c316b052b5d2",
+            "b20416fb117b113794c6e2c6160e5a80b4cfe03e9ebe5e34bc14c316b052b5d2",
+            "1730f5a626225068738a62416b69648c4f8a10a4bd66f5a14de022756e1f7628",
+            "06ad475a81348ab2547d63d52eb992ccdb2f0708981eb352e811107e3edc7f14",
+            "1eff18ed69c70f7e6bdaf88dc70f03d7e13eb6efa1ca00d4108952088d112da3",
+            "b4f97e4f2996aa72a1f057dab6445176c28d11ba4eb6f639fca415ee3ec38b1e",
+            "1a050773ed02357bbb39baad684fc4138b442e7bcdee1b986eb28e564e994eb3",
+            "26f79db3252b54e30bdb4b9db8f94fdda207fbdb391e6fb812616a94e4f9b1b8",
+            "bc940ba93341a92029c507bf9d00559bf393e9069db3249b2801c8dad94e1953",
+            "6ca7ea8b3b3dd5b8eeb8d7bf79fcb51d866fc110495e1894abb669478b9e626d",
+            "57c7451f0bf28cc5a4027fe7db3ea2f658c2d51f930c8dd733dc7dd97697314a",
+            "1a30ffe01bc96de61dfaab6d60df8fd52adaa091d4d25dda57def42ad5290be9",
+            "09a3c39421359f709d53a00285d37ae329ca8f06a99d98bb67c5b6223614c2a7",
+            "f0a443382d97798f24f852eb93c78a62a98fadb5cc86a48b7e02c4cb46ef830f",
+            "6350866c682042fcb1cde8c2dbda8ad42ec2de2018de8c58ddbfc4443912dcd2",
+            "17e546adbb3cd4ee63d103c5d507f30b9fcb3098e9fadeb1ea72bc6e4c5d5e9b",
+            "a76e37c8e97790546998c91c5af135da3074c255799cf00d37f1fa78b5c60666",
+            "7f51cf2715f6d53112a12b2329ae57f8a37c55529c729f6df66617c275e1ab32",
+            "ab10a8a03dc327e579a01233c2a2c50382b92cd36d088c96f95afc842c838321",
+            "685e506ce726d12df272b4130d532e37c58a59cac17029f2e8bbfa936d21019b",
+            "e8c716287a041d84ce5f61c03abab5b7f7a5af2d7687ed95210e28421cd312f1",
+            "616bcf75fe83ff52fdd49718b1826eebff6d793a56b46d02dc8e8c16e7c44817",
+            "26f79db3252b54e30bdb4b9db8f94fdda207fbdb391e6fb812616a94e4f9b1b8",
+            "e8c716287a041d84ce5f61c03abab5b7f7a5af2d7687ed95210e28421cd312f1",
+            "6ca7ea8b3b3dd5b8eeb8d7bf79fcb51d866fc110495e1894abb669478b9e626d",
+            "df0b70d9969021342a05706eeffdb7b923efe75abe328ebd36c544a8b8324c44",
+            "6ca7ea8b3b3dd5b8eeb8d7bf79fcb51d866fc110495e1894abb669478b9e626d",
+            "d4667238df50f24118c689ac2ce3b3b25f9765aada413b16cf774e3af38381bf",
+            "9c8f0d6573f3120de169eac99b4b6b76b6a35abaec179d19da60823a333baa3b",
+            "a17f49012d0e068cfc728cfa0303a0149114e1b2cc24f12ab8c13fb93c7f484d",
+            "d4667238df50f24118c689ac2ce3b3b25f9765aada413b16cf774e3af38381bf",
+            "9c795a86cb8f512ce509a0c4f81963e72bb5f60e6894bffffd71cd6817ca35ec",
+            "6ba3c11db908cd2e6ade4c04d1a6b4159fc6dd05a6f0b7145093a17d30db86ad",
+            "a9f57fb59a2f55511fc391aa4ff9d1c60fb18cc8a1082fbcb4a35878b43b0a18",
+            "9b1d86345acb26c373393beb6fa6ab0b7e817dc94ae346b83cdf7548f082cd00",
+            "e1ce4299ea27d8bf58dd45ea24727fb282961b324d43734ed033db5b90bf2f59",
+            "ddb3ce53254192e0b0cae698ce4af0def7173e2b6acc384a80960e2fb1392492",
+            "4661cf36c420784804d70bc969998211dfeace14ba91d9463654474959d6398e",
+            "066f9ba16c219bc3df9cfd2ec3a649259cdbaf547d1229cddcb2008dd325ecb5",
+            "e9f9f94a1da6d78c7b82973cd3da3ee5cb30c41146e163baf4185c821ba75135",
+            "ada2fa588379393582ae02f4974c47fac7075d4ddc83036343cb3feb92d4c1cc",
+            "e5a1df856b73acabcbdc59b4437902aaa4920da4a2b8628eb591f5896c33ba78",
+            "10c06da2ba9bf094578e7b93aef129255a5df0d3da288e36d3321ea090999aaa",
+            "b7df07e1d35f22e65a9830d79cc7ba9b72d12cd7c41ac90656f74709d79ff5ac",
+            "fa806e06a6c321346af4137b7b70bbc3d502754ec523e24e759c6c86be740ce2",
+            "1b50ac5d7eba4981e405079e5f492c16285c0666f0479fce2f38b37cf717240f",
+            "ec9872493114ca9cdc7f4d4d4115f42b25b4fd06c1da0678186b1283b19d2aa0",
+            "46bc67f9cead3bdc41fae7c10d28cf43ab671ea51584552528b2847146c50894",
+            "2ef17083c7815cf9c0c9bd9a36589b8fc0817425c8d4c3c0c31ff2266a519b03",
+            "f0bb505f915b7813bbe5e1365f7f19bbbe5e907a52902dfafc3f23f2f2667721",
+            "7e3644b94c021f4ea27b63c2ec4a4ccfa06876a9b62e311da6c9fae983a541c6",
+            "f3a58622fd60e65524770e9efc9ce3d77b04f5e6711a8f5a49d6357b13f9bac6",
+            "179485a0a4cfd73653caa6b2197eaedd3c3dfa3cff31349b67418dbc12aa33bc",
+            "be6977db243a4ab871f2bec128b628af620724a3387ab532b433343017cbf460",
+            "ea316a9fcf55e17a18708aff26d30b9cf43f58f2b6737357433a18b45b9fdf5c",
+            "f8c48a2ed1cf7e948403da6d3f1d5717c0c9962c7165946a8b75f3430c07429b",
+            "f889a460bf48f69ab64a0142cecfcced56ee1d49f62e2017445a1825f9ecc840",
+            "586f0fa5635ad228533072f83b4965189504634c6d277aaef809c0e3834d18e7",
+            "246441327564667baac1ef192575b981ef949a2d6ed11163d7341adb0a61ed67",
+            "82cfa1415c40a8eb2017f61844e223222093ef305b5a9cb2d59d36a1b12b6c67",
+            "c59b6342151b6a3e859eca4fadcf70744cc33e977925ec475315465ac7011316",
+            "b4cc2da88a4e4f2c828883dda9b7c851d13ebee5332310b06f05a512e7e65e39",
+            "48a60510fa2180b7563049cdf8d046f053809f8542616c92022d60da872c745c",
+            "3bc1e8c399dd349c74ff7b2732c44763d894ea47375e9a839235ddf81c2540b8",
+            "a28da917bec9296832e7fba604289bfd36e092deb4aea9d823f6d4a0663d03d9",
+            "4480254e7ccc8b3a1caab0f3d8432bfb50776b5286a0cea1b51580e8f7d6a5c8",
+            "578a6ff8ffdeaabd20b1d70da34edb72cd7a478fe90dbdd223ff86626e16e540",
+            "6a9a4e70db2092cd4fd52c56a5fb6a7ee7ce226860b5317eb8a1534d22e299f8",
+            "1ce35dd90df766255e55588be546f5d4d0edb8352903bb6997d780a1b61383bf",
+            "4f62214af79865e5d5495abe7dfbc8e9462d1a108dc047f26ca11da5b05db4a5",
+            "2c254b092659b62a2fa7c9b70fdb5fe570fa4e82c0954bfb035928bb0ddadb7a",
+            "b2526c11e460367b8db8734e855abf2b92a6e51aa28ba81ac92868e88f065499",
+            "2578166c4182a452257462f333449ea7c09ba2ef75147bdcd8c2eb982f35b132",
+            "757cdd4aeaeffd2b72e4b31723b24f2fe59e92c77d37413bb5a600f0c359cb66",
+            "9d7d7e6bb40ed4e65adeb70b56e35f882756b3ea67e4e69617582f5a7f5e1e76",
+            "0fedabf5dcd24d65920360110a219f7d5106a11c2588096bd7b8e125e7c319d6",
+            "f8cddf8e327098d9c220a58f81e8cebf2b881783b80f80b3a8484e94ba170639",
+            "746b9083379cc08d51db2929080561d26476d246d915eafde54e3dba46c415ba",
+            "1f5a01060b15ad4e6f3d7e27658dfaef7e01c5581fd883d413ec432a40f7f604"
+          ]
+        },
+        "runtime_clear_state": {
+          "groups": {
+            "8": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 14,
+              "y": 4
+            },
+            "9": {
+              "class_id": 96,
+              "name_id": 12,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 4
+            },
+            "10": {
+              "class_id": 97,
+              "name_id": 16,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 5
+            },
+            "11": {
+              "class_id": 78,
+              "name_id": 14,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 255
+            },
+            "12": {
+              "class_id": 66,
+              "name_id": 42,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 7
+            },
+            "13": {
+              "class_id": 66,
+              "name_id": 43,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 10
+            },
+            "14": {
+              "class_id": 72,
+              "name_id": 44,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 13
+            },
+            "15": {
+              "class_id": 79,
+              "name_id": 20,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 14
+            },
+            "16": {
+              "class_id": 87,
+              "name_id": 67,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 21
+            },
+            "17": {
+              "class_id": 87,
+              "name_id": 68,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 20
+            },
+            "18": {
+              "class_id": 88,
+              "name_id": 69,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 29
+            },
+            "19": {
+              "class_id": 88,
+              "name_id": 70,
+              "defeated_flag": 128,
+              "hp": 0,
+              "x": 255,
+              "y": 27
+            }
+          },
+          "groups_before_start": {
+            "8": {
+              "class_id": 2,
+              "name_id": 2,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 14,
+              "y": 4
+            },
+            "9": {
+              "class_id": 96,
+              "name_id": 12,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 17,
+              "y": 4
+            },
+            "10": {
+              "class_id": 97,
+              "name_id": 16,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 15,
+              "y": 5
+            },
+            "11": {
+              "class_id": 78,
+              "name_id": 14,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 255,
+              "y": 255
+            },
+            "12": {
+              "class_id": 66,
+              "name_id": 42,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 7
+            },
+            "13": {
+              "class_id": 66,
+              "name_id": 43,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 15,
+              "y": 10
+            },
+            "14": {
+              "class_id": 72,
+              "name_id": 44,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 16,
+              "y": 13
+            },
+            "15": {
+              "class_id": 79,
+              "name_id": 20,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 2,
+              "y": 14
+            },
+            "16": {
+              "class_id": 87,
+              "name_id": 67,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 11,
+              "y": 21
+            },
+            "17": {
+              "class_id": 87,
+              "name_id": 68,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 20,
+              "y": 20
+            },
+            "18": {
+              "class_id": 88,
+              "name_id": 69,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 18,
+              "y": 29
+            },
+            "19": {
+              "class_id": 88,
+              "name_id": 70,
+              "defeated_flag": 0,
+              "hp": 10,
+              "x": 14,
+              "y": 27
+            }
+          },
+          "combat_groups_defeated": true,
+          "liana_untouched_by_wrapper": true,
+          "liana_runtime_identity_valid": true
+        },
+        "combat_state_valid": true,
+        "battle_result_frame": 167,
+        "save_menu_frame": 2,
+        "manual_review": {
+          "status": "pass",
+          "reviewed_normal_aftermath_frames": 167,
+          "reviewed_hard_differing_frames": 23,
+          "dialogue_names": [
+            "보젤",
+            "라나",
+            "베른하르트",
+            "제국군지휘관",
+            "리치",
+            "아이언골렘",
+            "제시카",
+            "쉐리",
+            "레스터",
+            "헤인",
+            "엘윈",
+            "리아나",
+            "아론",
+            "스코트"
+          ],
+          "battle_result_text": [
+            "전과보고",
+            "아군",
+            "엘윈",
+            "헤인",
+            "쉐리",
+            "아론",
+            "키스",
+            "레스터",
+            "제시카",
+            "스코트",
+            "POINT 4480P"
+          ],
+          "class_change_text": [
+            "클래스체인지 가능",
+            "서먼",
+            "힐러",
+            "로드",
+            "메이지",
+            "매직나이트",
+            "프리스트",
+            "아크메이지",
+            "엘프나이트",
+            "팔라딘",
+            "호크나이트",
+            "샤먼"
+          ],
+          "save_text": [
+            "저장",
+            "다음 시나리오"
+          ],
+          "broken_dynamic_glyphs_or_sprites": false
+        }
+      }
+    }
+  },
+  "cross_profile": {
+    "preparation_pixel_identical": true,
+    "turn1_command_pixel_identical": true,
+    "runtime_clear_start_pixel_identical": true,
+    "aftermath_pixel_identical_frames": 144,
+    "aftermath_differing_frames": [
+      7,
+      14,
+      33,
+      42,
+      43,
+      44,
+      47,
+      75,
+      77,
+      79,
+      81,
+      91,
+      92,
+      99,
+      123,
+      124,
+      127,
+      137,
+      140,
+      147,
+      148,
+      152,
+      167
+    ],
+    "aftermath_differences_match_reviewed_set": true,
+    "differing_frames_manual_classification": "animation/capture phase and hard-profile numeric differences; no name, class, mercenary, commander, or UI glyph corruption",
+    "save_menu_pixel_identical": true,
+    "result_manual_content_identical": true
+  },
+  "rejected_attempts": [
+    {
+      "attempt": "normal/runtime01 Liana assertion",
+      "result": "wrapper correctly preserved Liana, but the verifier expected source class 97 instead of normalized runtime Cleric class 02",
+      "classification": "rejected over-strict verifier; runtime02 compares the complete allied record before and after Start"
+    }
+  ],
+  "savestate_policy": "These GSTs are isolated verification fixtures. Player migration continues through in-game SRM load and then a fresh savestate."
+}
