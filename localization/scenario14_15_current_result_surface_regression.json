@@ -1,0 +1,3993 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "Current normal/hard Scenario 14 and 15 stock completion paths, dynamic dialogue/status names, level-up/class-change messages, battle-result rosters, and sprites",
+  "release_promoted": false,
+  "acceptance_updated": false,
+  "profiles": {
+    "normal": {
+      "scenarios": {
+        "14": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact Scenario 14 completion-layout builder replay",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-normal.md",
+              "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+              "bytes": 4194304,
+              "header_checksum": "CB53",
+              "computed_checksum": "CB53",
+              "checksum_valid": true
+            },
+            "candidate_expected_sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+            "candidate_expected_checksum": "CB53",
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/normal/s14.md",
+              "sha256": "9194cc9114cfa7497845fc2d1b2048e7b1f92a2c44834fb13d7a41189357feac",
+              "bytes": 4194304,
+              "header_checksum": "40EF",
+              "computed_checksum": "40EF",
+              "checksum_valid": true
+            },
+            "diagnostic_changed_byte_count": 82,
+            "hard_conflicts_inside_diagnostic_envelope": 0,
+            "actual_changed_byte_count": 82,
+            "exact_builder_rebuild": true,
+            "event_triggers_preserved": true
+          },
+          "runtime": {
+            "root": "captures/run/current_s14_s15_result_retry/normal/s14/stable01",
+            "evidence": {
+              "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/evidence.json",
+              "sha256": "b6eff4b4ca071d53e50e8445500d49f4fab32d6b8bb5a71d0dbf4a70dd4eb869",
+              "integrity": {
+                "status_pass": true,
+                "profile_matches": true,
+                "scenario_matches": true,
+                "probe_sha256_matches": true,
+                "scenario_identity_pass": true,
+                "completion_move_matches": true,
+                "result_frame_matches": true,
+                "all_observation_hashes_match": true
+              }
+            },
+            "scenario_identity": {
+              "status": "pass",
+              "requested_scenario": 14,
+              "identified_scenario": 14,
+              "best_match": {
+                "scenario": 14,
+                "matched_records": 11,
+                "total_records": 11,
+                "match_ratio": 1.0
+              },
+              "runner_up": {
+                "scenario": 1,
+                "matched_records": 0,
+                "total_records": 12,
+                "match_ratio": 0.0
+              },
+              "gst": "/home/hong/lang2_md/captures/run/current_s14_s15_result_retry/normal/s14/stable01/briefing/attempt_1/scenario_identity.gst",
+              "attempt": 1
+            },
+            "completion_move": "up",
+            "sequence": {
+              "frame_count": 32,
+              "expected_frame_count": 32,
+              "all_dimensions_320x240": true,
+              "all_evidence_hashes_match": true,
+              "captures": [
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_001.png",
+                  "sha256": "25a7ecc72a935b53d3fa4bcc3593ab97d3d926bd49ef3903de78cf0958ff8d53",
+                  "bytes": 15252,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 1,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_002.png",
+                  "sha256": "754b1991d0e41de3edfb383889734eddfa21b67e015adfa83333c58bde84ffc0",
+                  "bytes": 12753,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 2,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_003.png",
+                  "sha256": "ef9d78c064da698edbf5649167c4c20616e2e1273ca05ca599cf7f1b28e4e80c",
+                  "bytes": 14355,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 3,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_004.png",
+                  "sha256": "efe59dd3bb7d4a9ee14bc99f08c6eebadb35432ef7f81ad958e90366facd4c0c",
+                  "bytes": 18840,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 4,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_005.png",
+                  "sha256": "6524e7ba0a7dca1c78b07a21cb70019c5f0e1a76408da1da4759cc86abcd9729",
+                  "bytes": 16950,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 5,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_006.png",
+                  "sha256": "788d1125f68aecad2ab3696e263cf7b957307acddf7043b33e28e95da8e260fe",
+                  "bytes": 17337,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 6,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_007.png",
+                  "sha256": "c96825515757fc2aeac0cef1796e207c0d0c5ad66792bf241edc8fee55ec8055",
+                  "bytes": 16383,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 7,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_008.png",
+                  "sha256": "09753d7fcf9ad638449dd2d41de8e8ea269ad09487224d1f0554730724a8d2a7",
+                  "bytes": 16518,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 8,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_009.png",
+                  "sha256": "e4891db6b662fafc87a3ed2604c6aea7806af2f54a177f8e70c166dc7312f701",
+                  "bytes": 13653,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 9,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_010.png",
+                  "sha256": "1efeb5351c30b43b4f49c570ef4531385a6b76ba059e6a02abee1b18b86bcb07",
+                  "bytes": 18096,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 10,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_011.png",
+                  "sha256": "fef4ff8d5ec0bc87017ac220c1292d5f4f0b1a03ca8f5ccab4fe3bf1c2501939",
+                  "bytes": 15175,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 11,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_012.png",
+                  "sha256": "1bd07e025ee2858207d2fbeeee2aa191d522dd1de8937a648012ccbdee586ae1",
+                  "bytes": 14747,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 12,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_013.png",
+                  "sha256": "e7f4dd6fbc1bad52544950965bec5e3792d8fb06101a73ae2ae3214f7586dc87",
+                  "bytes": 16073,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 13,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_014.png",
+                  "sha256": "51eeb997ba2a20838b2de1b34ecdc978ca89027a2cbd04c769d163c9905b390a",
+                  "bytes": 16530,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 14,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_015.png",
+                  "sha256": "b4f5677b8121c2ee29bb3a12589d8774eaf971c3e54f09ff152643d69f1f3c13",
+                  "bytes": 18862,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 15,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_016.png",
+                  "sha256": "8d5c2680653ddb39c780a583268995a4ec8a265ec287702db3e0714221022cf1",
+                  "bytes": 19040,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 16,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_017.png",
+                  "sha256": "07f711a2b152398c066ce01ce8be8ae896c193d3597bfa65e3a28d989594848c",
+                  "bytes": 19506,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 17,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_018.png",
+                  "sha256": "48b627d7164b8e8d0605d103b1fc447d8e18b005d9f623cfe97ff9c687b45e58",
+                  "bytes": 18824,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 18,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_019.png",
+                  "sha256": "b0d99cef7f2277a80af10ad1c9091ecbd49e82d1a835299817630b7938ee31ab",
+                  "bytes": 17338,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 19,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_020.png",
+                  "sha256": "f900610ad562e91e9b41c607729ed92d8ccaa113ef5829381867784c5c91b7b9",
+                  "bytes": 15485,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 20,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_021.png",
+                  "sha256": "42e610ab34ef4178a9fa029d732277f60bac2b25820157f7fa2e036754ec368f",
+                  "bytes": 15044,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 21,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_022.png",
+                  "sha256": "c58baba0388dbcdb360e8ec40c644533517bb29e6045d0204f0e8468f773dc82",
+                  "bytes": 15319,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 22,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_023.png",
+                  "sha256": "7ec8bd90c4ee05ec69f7f8c1430e650dee543b6f2c6a9751cc5e2525bef95bf1",
+                  "bytes": 14223,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 23,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_024.png",
+                  "sha256": "66b5068bba84170993e4b81040fe163f4bfd88aa1a79400b7c3f2ac9f00f5b67",
+                  "bytes": 15975,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 24,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_025.png",
+                  "sha256": "e3828585e999156aee19f57d326986280bfbefa5efb08af74ea690c30289a508",
+                  "bytes": 15458,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 25,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_026.png",
+                  "sha256": "c56f31d026c8c897517a68a00e87d4cca30d59f1b09c12a00c610734f65b7d82",
+                  "bytes": 15925,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 26,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_027.png",
+                  "sha256": "c04f90e6eb326347bcda1a6301589e0fcaa214f5c24fcc679dde95d63dc82d47",
+                  "bytes": 17574,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 27,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_028.png",
+                  "sha256": "b54dd6ae53be858725c98f149d7086c64dad4c9cf82189de63367156941e4a3c",
+                  "bytes": 15013,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 28,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_029.png",
+                  "sha256": "5026b71c5abf558c7ce0e181e6758385fdfa8e81010a206fb0979da226f8daa6",
+                  "bytes": 18930,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 29,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_030.png",
+                  "sha256": "b617fc3661b37cbe77a8bb1cc6945fdfc7acebc7e69e89bdc1e541351e853ebb",
+                  "bytes": 17772,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 30,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_031.png",
+                  "sha256": "82b3c6f88d0af2c16352bac72cd077b63bd22386571b13de0693c45525847c8f",
+                  "bytes": 17428,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 31,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_032.png",
+                  "sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+                  "bytes": 8770,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "battle_result",
+                  "frame": 32,
+                  "evidence_surface": "battle_result",
+                  "evidence_hash_matches": true
+                }
+              ]
+            },
+            "critical_surfaces": {
+              "leon_withdrawal": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_006.png",
+                "sha256": "788d1125f68aecad2ab3696e263cf7b957307acddf7043b33e28e95da8e260fe",
+                "bytes": 17337,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 6,
+                "expected_reviewed_sha256": "788d1125f68aecad2ab3696e263cf7b957307acddf7043b33e28e95da8e260fe",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "레온",
+                  "퇴각한다!"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "sherry_langrisser_dialogue": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_014.png",
+                "sha256": "51eeb997ba2a20838b2de1b34ecdc978ca89027a2cbd04c769d163c9905b390a",
+                "bytes": 16530,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 14,
+                "expected_reviewed_sha256": "51eeb997ba2a20838b2de1b34ecdc978ca89027a2cbd04c769d163c9905b390a",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "쉐리",
+                  "검이 암흑검에 맞설 유일한 무기인가?"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "elwin_escape_dialogue": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_021.png",
+                "sha256": "42e610ab34ef4178a9fa029d732277f60bac2b25820157f7fa2e036754ec368f",
+                "bytes": 15044,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 21,
+                "expected_reviewed_sha256": "42e610ab34ef4178a9fa029d732277f60bac2b25820157f7fa2e036754ec368f",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈",
+                  "무슨 일이든 일어나도 우리는 물러설 수 없다!"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "escape_instruction": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/clear_path_022.png",
+                "sha256": "c58baba0388dbcdb360e8ec40c644533517bb29e6045d0204f0e8468f773dc82",
+                "bytes": 15319,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 22,
+                "expected_reviewed_sha256": "c58baba0388dbcdb360e8ec40c644533517bb29e6045d0204f0e8468f773dc82",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "성문 오른쪽의 가호 아래 빠져!",
+                  "리아나를 구해 내자!"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/battle/battle_result.png",
+              "sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+              "bytes": 8770,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            "expected_result_sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+            "result_hash_matches": true,
+            "result_alias_matches": true,
+            "observed_result_roster": [
+              "전과보고",
+              "아론",
+              "엘윈",
+              "헤인",
+              "쉐리",
+              "키스",
+              "레스터",
+              "제시카",
+              "POINT",
+              "2200P"
+            ],
+            "observed_result_sprites": "clean",
+            "gst": {
+              "path": "captures/run/current_s14_s15_result_retry/normal/s14/stable01/states/battle_result.gst",
+              "sha256": "57087a753b72fcdc5dab6a012b8bb6cdb72f7b7a10903e9d11c9ad4dfef5c0e4",
+              "bytes": 140408
+            },
+            "header_text": "전과보고",
+            "header_vram_range": "0xA000..0xA1FF",
+            "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+            "header_vram_matches_expected": true,
+            "header_plane_cells": [
+              {
+                "x": 17,
+                "y": 1,
+                "tile_word": "0x8500",
+                "expected_tile": "0x0500",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 1,
+                "tile_word": "0x8501",
+                "expected_tile": "0x0501",
+                "matches": true
+              },
+              {
+                "x": 17,
+                "y": 2,
+                "tile_word": "0x8502",
+                "expected_tile": "0x0502",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 2,
+                "tile_word": "0x8503",
+                "expected_tile": "0x0503",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 1,
+                "tile_word": "0x8504",
+                "expected_tile": "0x0504",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 1,
+                "tile_word": "0x8505",
+                "expected_tile": "0x0505",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 2,
+                "tile_word": "0x8506",
+                "expected_tile": "0x0506",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 2,
+                "tile_word": "0x8507",
+                "expected_tile": "0x0507",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 1,
+                "tile_word": "0x8508",
+                "expected_tile": "0x0508",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 1,
+                "tile_word": "0x8509",
+                "expected_tile": "0x0509",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 2,
+                "tile_word": "0x850A",
+                "expected_tile": "0x050A",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 2,
+                "tile_word": "0x850B",
+                "expected_tile": "0x050B",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 1,
+                "tile_word": "0x850C",
+                "expected_tile": "0x050C",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 1,
+                "tile_word": "0x850D",
+                "expected_tile": "0x050D",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 2,
+                "tile_word": "0x850E",
+                "expected_tile": "0x050E",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 2,
+                "tile_word": "0x850F",
+                "expected_tile": "0x050F",
+                "matches": true
+              }
+            ],
+            "all_header_plane_cells_match": true
+          }
+        },
+        "15": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "exact Scenario 15 completion-layout builder replay",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-normal.md",
+              "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+              "bytes": 4194304,
+              "header_checksum": "CB53",
+              "computed_checksum": "CB53",
+              "checksum_valid": true
+            },
+            "candidate_expected_sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+            "candidate_expected_checksum": "CB53",
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/normal/s15.md",
+              "sha256": "feac9d73e37d1f7d292ffecb67c9ed789ac8cc3df5de0d0f4c34214d3481270d",
+              "bytes": 4194304,
+              "header_checksum": "D9AD",
+              "computed_checksum": "D9AD",
+              "checksum_valid": true
+            },
+            "diagnostic_changed_byte_count": 85,
+            "hard_conflicts_inside_diagnostic_envelope": 0,
+            "actual_changed_byte_count": 85,
+            "exact_builder_rebuild": true,
+            "event_triggers_preserved": true
+          },
+          "runtime": {
+            "root": "captures/run/current_s14_s15_result_retry/normal/s15/stable01",
+            "evidence": {
+              "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/evidence.json",
+              "sha256": "b37953e1866ce49f488c682bb6e2221f9a551cde54874233ea36cea4ae60cb3a",
+              "integrity": {
+                "status_pass": true,
+                "profile_matches": true,
+                "scenario_matches": true,
+                "probe_sha256_matches": true,
+                "scenario_identity_pass": true,
+                "completion_move_matches": true,
+                "result_frame_matches": true,
+                "all_observation_hashes_match": true
+              }
+            },
+            "scenario_identity": {
+              "status": "pass",
+              "requested_scenario": 15,
+              "identified_scenario": 15,
+              "best_match": {
+                "scenario": 15,
+                "matched_records": 11,
+                "total_records": 12,
+                "match_ratio": 0.9166666666666666
+              },
+              "runner_up": {
+                "scenario": 1,
+                "matched_records": 0,
+                "total_records": 12,
+                "match_ratio": 0.0
+              },
+              "gst": "/home/hong/lang2_md/captures/run/current_s14_s15_result_retry/normal/s15/stable01/briefing/attempt_1/scenario_identity.gst",
+              "attempt": 1
+            },
+            "completion_move": "down",
+            "sequence": {
+              "frame_count": 71,
+              "expected_frame_count": 71,
+              "all_dimensions_320x240": true,
+              "all_evidence_hashes_match": true,
+              "captures": [
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_001.png",
+                  "sha256": "0002a811ba308fdff017f39bfdb9dccce93cf1adc1cc1fd8d7ca269536132cb8",
+                  "bytes": 15700,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 1,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_002.png",
+                  "sha256": "c4b89d5d511950471eb0b2a2da0e5fece6b067bd8766b5a6a0480347e6f71592",
+                  "bytes": 16346,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 2,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_003.png",
+                  "sha256": "5f1266212cfbda816381abb064de732ddb54b8dfa1ec6d8b208b7a36a13531f0",
+                  "bytes": 13395,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 3,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_004.png",
+                  "sha256": "edf6bbc8bd4a27673912f30921021997d93284240d1b20ccb7e3370394cd8461",
+                  "bytes": 14746,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 4,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_005.png",
+                  "sha256": "aed3d003e3c54951e316403d5be3c0be7096e9d3cc1e2b8d9f25cc183c03d246",
+                  "bytes": 15818,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 5,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_006.png",
+                  "sha256": "0f34a3f87e4387184a8970c2ca2ef364229eda1c30ca3e433458c11e79b1846d",
+                  "bytes": 15525,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 6,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_007.png",
+                  "sha256": "5f1266212cfbda816381abb064de732ddb54b8dfa1ec6d8b208b7a36a13531f0",
+                  "bytes": 13395,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 7,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_008.png",
+                  "sha256": "82df32d03c767e3198eefb4b580c0ae49e8fc36adc419b622aaee524de1d8246",
+                  "bytes": 15040,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 8,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_009.png",
+                  "sha256": "33e4f29cd91aa2088af8c70a49378b26a66a7e0b6465145af926c64de6f7216a",
+                  "bytes": 14793,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 9,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_010.png",
+                  "sha256": "cf3cb1b9299b715445ae9f2ca686eb92bb56367417a557985606f7d3c4b77776",
+                  "bytes": 16029,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 10,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_011.png",
+                  "sha256": "0a5bb9561e62e51a4c48419c06fe8e75d7197c9210fbfc81a3183eb9c1f92d7d",
+                  "bytes": 15863,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 11,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_012.png",
+                  "sha256": "b5bd23602ce5ff4211733c7f13ad7c9887a43cd7f39bcd3af8e99841309990c3",
+                  "bytes": 21597,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 12,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_013.png",
+                  "sha256": "c7ce2c7a04eef58b16b1c3d8e04a4ea183384a2f3150e49d9aac8ab813f96344",
+                  "bytes": 17966,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 13,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_014.png",
+                  "sha256": "9412c999788e95d8950a5cccec87e7a15f65152cc1328fddcd1f580d71f1cac4",
+                  "bytes": 24911,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 14,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_015.png",
+                  "sha256": "61d8af3acb8f7af2e7fe068bf5fc36824422d611aaeb55cc7d422dc2f939ff99",
+                  "bytes": 15236,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 15,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_016.png",
+                  "sha256": "84ccd5c3605f17f5dbb23ccdb20a3960167399591ddc24ef3ef40c98e0076dda",
+                  "bytes": 16622,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 16,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_017.png",
+                  "sha256": "332bccb456ae82c5dc789b29e314bfd8dfefdd3cb925c2799d87f75e3cd9c20c",
+                  "bytes": 16751,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 17,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_018.png",
+                  "sha256": "b628a29a741e320e0c240a9a04fa44fbad448ee4d5961bfacb048465cc71c47b",
+                  "bytes": 15271,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 18,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_019.png",
+                  "sha256": "4f7b6fa08a85d6d5718e3efe79dbc12704500b0dd99b3418aab0f82757129fd3",
+                  "bytes": 13465,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 19,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_020.png",
+                  "sha256": "924b5bfb1d81ecf786638d2983ac9787a784d00daa2be35d5e531dec14ef0e74",
+                  "bytes": 14598,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 20,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_021.png",
+                  "sha256": "afe0db705ed09a96c828acb04243a39d38eb744833ba2f56c45b16bf83f9e5c3",
+                  "bytes": 13303,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 21,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_022.png",
+                  "sha256": "6bede037393faddea52f97cdd4aea859fba30727ca274d5fc265528342a5badc",
+                  "bytes": 16676,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 22,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_023.png",
+                  "sha256": "8731f413115f6933599fdc19235b716b376b2cf3e24869dd6decb92b189c8bbf",
+                  "bytes": 13307,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 23,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_024.png",
+                  "sha256": "7ef0db48c46ecf05495413802ba7f7046e699036bdc6986b4de7c2a35f8482bb",
+                  "bytes": 21678,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 24,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_025.png",
+                  "sha256": "f3ad6ccdaede0574b1293472c70a2da217cda9cf771609adf2ad0888aea13249",
+                  "bytes": 21756,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 25,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_026.png",
+                  "sha256": "b72116aabaa242b82dc59a79c5c147b8f0575d5a18a28f775b6627a93e49db1d",
+                  "bytes": 20339,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 26,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_027.png",
+                  "sha256": "00b62eadfb80b3be97980e22cb3744923f73c19a60362fd41d7368ae38d082da",
+                  "bytes": 20446,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 27,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_028.png",
+                  "sha256": "66f32902c3107c6308f9bd4134556faf45a2bc2bd7107f3c57db9f677445903a",
+                  "bytes": 16134,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 28,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_029.png",
+                  "sha256": "4f691b228744df52f092a95eb9cc9a241815bf0fe153d4420833fc6cbbdd0b61",
+                  "bytes": 16578,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 29,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_030.png",
+                  "sha256": "2af1ec7e5252e993526b64a8d48c8a4a18aafb9a1f07e2807d89437fc9daf331",
+                  "bytes": 13863,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 30,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_031.png",
+                  "sha256": "c982d01cfe1e6bbdfb8851cd67a3531c837c62bfcca08d73383c5479c304a6fc",
+                  "bytes": 20891,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 31,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_032.png",
+                  "sha256": "99f4a1b1e696a54c8cca2c490bfaca893df9b82f94b4490db1e8f8a25358e773",
+                  "bytes": 20479,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 32,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_033.png",
+                  "sha256": "ce9915ef7079337b8a166d8686eda5abc28acb7e77ebeb3d2df36f41141cd5b8",
+                  "bytes": 20441,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 33,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_034.png",
+                  "sha256": "4b5eb81e396eae55f3d8e8ffb962aa20f9b698a317c63e833653926482b86e47",
+                  "bytes": 20779,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 34,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_035.png",
+                  "sha256": "d3a4f5ca7f1af87110d8ed09d722fc490af895733869f360ea57212699ba978a",
+                  "bytes": 20469,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 35,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_036.png",
+                  "sha256": "ff86946839e9e830c3c48e7a15c885ea3c1ead56e5fd3a7dc0a4f74ef8e1c427",
+                  "bytes": 20849,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 36,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_037.png",
+                  "sha256": "0dae4e3b1ddc1a0adcfad58f586752deb2c66567ed9b57ad95e10b544dbda7dd",
+                  "bytes": 20387,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 37,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_038.png",
+                  "sha256": "b81d47bf5437fd29fddc886ee2b2215de000f2d74de88eb3ac5c6f9f06354f44",
+                  "bytes": 20450,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 38,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_039.png",
+                  "sha256": "5ce4f43ce219ac862956166c86c6e182a109dc6e306cb7d1369f1e1dcb25b661",
+                  "bytes": 20747,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 39,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_040.png",
+                  "sha256": "066624453394ea66c15be9e3953350484ff42e387c72d17603e9242bd9f52bea",
+                  "bytes": 20416,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 40,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_041.png",
+                  "sha256": "968d0069ae2f0c4eb0c897876559d4d3cba81e2f6c22495a9cb02656bf76b6de",
+                  "bytes": 20406,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 41,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_042.png",
+                  "sha256": "2ee8de8932d7cbe69cb882d05d182b4456c9a4054478c6856cbfcf5b1b8b9045",
+                  "bytes": 20195,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 42,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_043.png",
+                  "sha256": "d40b20d4fd8ba31883e9c8062254380fb069fd93e84656037c3b9f87580400b1",
+                  "bytes": 17693,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 43,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_044.png",
+                  "sha256": "37141b4df144506daa92e843f025982f44019468f53b3478f789843c278d8661",
+                  "bytes": 20748,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 44,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_045.png",
+                  "sha256": "1758edb5b3f4ecb1abdcd5bcea117afba675b200a9f3947ac880e6522824e5f1",
+                  "bytes": 20212,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 45,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_046.png",
+                  "sha256": "b4cfd0fe57dc479181eb2f1404193261c25cda76683aebf2ef02644d69b6029e",
+                  "bytes": 20830,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 46,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_047.png",
+                  "sha256": "b07bcb2bd9f2bcdc6193eb119b7aa13cd01c472d145cb61a7d1286104085209c",
+                  "bytes": 20791,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 47,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_048.png",
+                  "sha256": "34883b3b99a3ede8935a8e57c152377573d213d1efb10c0ca6d5ebeadaac4e02",
+                  "bytes": 20786,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 48,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_049.png",
+                  "sha256": "f6319baeab0dde0a9e3084c4624600ce5e5f03e0ecb6161a14effbbfa75a48a2",
+                  "bytes": 20778,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 49,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_050.png",
+                  "sha256": "27742a59d73262b386fcac9fc2fd09aa9520aea1c21e9226a9c31fea57acd4a0",
+                  "bytes": 18167,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 50,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_051.png",
+                  "sha256": "3d0ce22930a88f35de594887e570f187a1e036b4665a1b80255cc41d77d5acfc",
+                  "bytes": 15833,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 51,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_052.png",
+                  "sha256": "c94584dda00f05cf286dde1566c7b78b1b95d2502c76c3edcc7b4ffeff7ecf1f",
+                  "bytes": 16315,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 52,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_053.png",
+                  "sha256": "b300b178d74e567052c3bffe8de59d0332b735983a3851dad2c95869f53e9094",
+                  "bytes": 20570,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 53,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_054.png",
+                  "sha256": "5b38ac944c290a4d8a51e36e142f42dc4a3d4e67909be465a0efc7f5f5bd1109",
+                  "bytes": 17316,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 54,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_055.png",
+                  "sha256": "7e8de3e7596ce760f44040ce84a0862147af9ec264bd030841bd8f5d123864e4",
+                  "bytes": 17059,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 55,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_056.png",
+                  "sha256": "6517e1cb1131c3a5142b6ecbc1133dc33145a9064584f3f75ec1928236458a2c",
+                  "bytes": 20537,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 56,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_057.png",
+                  "sha256": "4927e1bb2efc2899c1ae9f54de0ea4e385db003dc5e7d8498d980fa059af7890",
+                  "bytes": 20665,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 57,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_058.png",
+                  "sha256": "d627a54bdf2b43ea892a915cc186c6b666311475afffb638fab077219b3b040f",
+                  "bytes": 20005,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 58,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_059.png",
+                  "sha256": "a921ec28f4a9a904a8023b02d76dfb7b22bdc66eca1dd18a87eb0ca89761abbe",
+                  "bytes": 14903,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 59,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_060.png",
+                  "sha256": "d3dff9c37abbaa3e72bd9bb36c9b88e360d9e9098f9468f11aebabc1816f39af",
+                  "bytes": 16905,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 60,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_061.png",
+                  "sha256": "076e31aa23e12eef14e9be34d42877e6f56351e1f3e0abece12fc0f0208729af",
+                  "bytes": 16704,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 61,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_062.png",
+                  "sha256": "3985ffee40e359fd91994749cc11b4d1f2de9e445e6dc39fa2b80182938f7dc4",
+                  "bytes": 16936,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 62,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_063.png",
+                  "sha256": "f7ae47abab2df409aa46fc88f03d1037776d80b323f4acf499e0cf8c60b72ea2",
+                  "bytes": 18604,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 63,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_064.png",
+                  "sha256": "05da05285897bdd30665ec9bfdf24f0217ea988204ddb5a3547c74543b842f5b",
+                  "bytes": 18210,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 64,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_065.png",
+                  "sha256": "fa14f0fea2b53501f12fc32c0b3f622684ebac0f90dc12f158f7661e11c09f54",
+                  "bytes": 17446,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 65,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_066.png",
+                  "sha256": "9bf15dae520bf85aab6df3a8ff109dde9cab5d76997c47b678c18ffe58bad33a",
+                  "bytes": 16885,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 66,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_067.png",
+                  "sha256": "e1de2d8569a07517521be75787b714c785c82add8ad0d499d77c78da42df8540",
+                  "bytes": 15230,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 67,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_068.png",
+                  "sha256": "21128809858a47bebadcef2135ba25dec8f6c85f66146597cf020123bbd19bdb",
+                  "bytes": 21430,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 68,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_069.png",
+                  "sha256": "72fec020f760288f68efd5f716ecdc86807727d4e3f4ada5ccf18778ab125a6a",
+                  "bytes": 20959,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 69,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_070.png",
+                  "sha256": "1a6550a57f18b407f559581e59a2519f12339d3fc043970e76c6830c350c822b",
+                  "bytes": 20317,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 70,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_071.png",
+                  "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+                  "bytes": 9277,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "battle_result",
+                  "frame": 71,
+                  "evidence_surface": "battle_result",
+                  "evidence_hash_matches": true
+                }
+              ]
+            },
+            "critical_surfaces": {
+              "scott_df_level_up": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_039.png",
+                "sha256": "5ce4f43ce219ac862956166c86c6e182a109dc6e306cb7d1369f1e1dcb25b661",
+                "bytes": 20747,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 39,
+                "expected_reviewed_sha256": "5ce4f43ce219ac862956166c86c6e182a109dc6e306cb7d1369f1e1dcb25b661",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "스코트의",
+                  "레벨이 올랐다!",
+                  "DF가 1 상승"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "scott_at_level_up": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_049.png",
+                "sha256": "f6319baeab0dde0a9e3084c4624600ce5e5f03e0ecb6161a14effbbfa75a48a2",
+                "bytes": 20778,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 49,
+                "expected_reviewed_sha256": "f6319baeab0dde0a9e3084c4624600ce5e5f03e0ecb6161a14effbbfa75a48a2",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "스코트의",
+                  "레벨이 올랐다!",
+                  "AT가 1 상승"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "class_change_available": {
+                "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/clear_path_065.png",
+                "sha256": "fa14f0fea2b53501f12fc32c0b3f622684ebac0f90dc12f158f7661e11c09f54",
+                "bytes": 17446,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 65,
+                "expected_reviewed_sha256": "fa14f0fea2b53501f12fc32c0b3f622684ebac0f90dc12f158f7661e11c09f54",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "클래스체인지 가능"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/battle/battle_result.png",
+              "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+              "bytes": 9277,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            "expected_result_sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+            "result_hash_matches": true,
+            "result_alias_matches": true,
+            "observed_result_roster": [
+              "전과보고",
+              "아론",
+              "엘윈",
+              "헤인",
+              "쉐리",
+              "키스",
+              "레스터",
+              "제시카",
+              "스코트",
+              "POINT",
+              "2300P"
+            ],
+            "observed_result_sprites": "clean",
+            "gst": {
+              "path": "captures/run/current_s14_s15_result_retry/normal/s15/stable01/states/battle_result.gst",
+              "sha256": "a642b63e2c2f45d30e252af90b48930e1056f95ad188e1982dccc39bf6ff531d",
+              "bytes": 140408
+            },
+            "header_text": "전과보고",
+            "header_vram_range": "0xA000..0xA1FF",
+            "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+            "header_vram_matches_expected": true,
+            "header_plane_cells": [
+              {
+                "x": 17,
+                "y": 1,
+                "tile_word": "0x8500",
+                "expected_tile": "0x0500",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 1,
+                "tile_word": "0x8501",
+                "expected_tile": "0x0501",
+                "matches": true
+              },
+              {
+                "x": 17,
+                "y": 2,
+                "tile_word": "0x8502",
+                "expected_tile": "0x0502",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 2,
+                "tile_word": "0x8503",
+                "expected_tile": "0x0503",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 1,
+                "tile_word": "0x8504",
+                "expected_tile": "0x0504",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 1,
+                "tile_word": "0x8505",
+                "expected_tile": "0x0505",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 2,
+                "tile_word": "0x8506",
+                "expected_tile": "0x0506",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 2,
+                "tile_word": "0x8507",
+                "expected_tile": "0x0507",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 1,
+                "tile_word": "0x8508",
+                "expected_tile": "0x0508",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 1,
+                "tile_word": "0x8509",
+                "expected_tile": "0x0509",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 2,
+                "tile_word": "0x850A",
+                "expected_tile": "0x050A",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 2,
+                "tile_word": "0x850B",
+                "expected_tile": "0x050B",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 1,
+                "tile_word": "0x850C",
+                "expected_tile": "0x050C",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 1,
+                "tile_word": "0x850D",
+                "expected_tile": "0x050D",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 2,
+                "tile_word": "0x850E",
+                "expected_tile": "0x050E",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 2,
+                "tile_word": "0x850F",
+                "expected_tile": "0x050F",
+                "matches": true
+              }
+            ],
+            "all_header_plane_cells_match": true
+          }
+        }
+      }
+    },
+    "hard": {
+      "scenarios": {
+        "14": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "apply exact Scenario 14 normal diagnostic delta to the hard candidate, then recalculate only the Mega Drive checksum",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-hard.md",
+              "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+              "bytes": 4194304,
+              "header_checksum": "E15E",
+              "computed_checksum": "E15E",
+              "checksum_valid": true
+            },
+            "candidate_expected_sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+            "candidate_expected_checksum": "E15E",
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/hard/s14.md",
+              "sha256": "818076b8e6735ee34038b81b160ddc7ead269888e348cd364ad7bd5b6d501c76",
+              "bytes": 4194304,
+              "header_checksum": "16D0",
+              "computed_checksum": "16D0",
+              "checksum_valid": true
+            },
+            "diagnostic_changed_byte_count": 82,
+            "hard_conflicts_inside_diagnostic_envelope": 30,
+            "actual_changed_byte_count": 82,
+            "exact_three_way_overlay": true,
+            "event_triggers_preserved": true
+          },
+          "runtime": {
+            "root": "captures/run/current_s14_s15_result_retry/hard/s14/stable01",
+            "evidence": {
+              "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/evidence.json",
+              "sha256": "6e5485f5f45d772891e8df760617cfd48e7667a51a957ec608c3e1b7bf744c05",
+              "integrity": {
+                "status_pass": true,
+                "profile_matches": true,
+                "scenario_matches": true,
+                "probe_sha256_matches": true,
+                "scenario_identity_pass": true,
+                "completion_move_matches": true,
+                "result_frame_matches": true,
+                "all_observation_hashes_match": true
+              }
+            },
+            "scenario_identity": {
+              "status": "pass",
+              "requested_scenario": 14,
+              "identified_scenario": 14,
+              "best_match": {
+                "scenario": 14,
+                "matched_records": 11,
+                "total_records": 11,
+                "match_ratio": 1.0
+              },
+              "runner_up": {
+                "scenario": 1,
+                "matched_records": 0,
+                "total_records": 12,
+                "match_ratio": 0.0
+              },
+              "gst": "/home/hong/lang2_md/captures/run/current_s14_s15_result_retry/hard/s14/stable01/briefing/attempt_1/scenario_identity.gst",
+              "attempt": 1
+            },
+            "completion_move": "up",
+            "sequence": {
+              "frame_count": 32,
+              "expected_frame_count": 32,
+              "all_dimensions_320x240": true,
+              "all_evidence_hashes_match": true,
+              "captures": [
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_001.png",
+                  "sha256": "25a7ecc72a935b53d3fa4bcc3593ab97d3d926bd49ef3903de78cf0958ff8d53",
+                  "bytes": 15252,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 1,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_002.png",
+                  "sha256": "754b1991d0e41de3edfb383889734eddfa21b67e015adfa83333c58bde84ffc0",
+                  "bytes": 12753,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 2,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_003.png",
+                  "sha256": "ef9d78c064da698edbf5649167c4c20616e2e1273ca05ca599cf7f1b28e4e80c",
+                  "bytes": 14355,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 3,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_004.png",
+                  "sha256": "efe59dd3bb7d4a9ee14bc99f08c6eebadb35432ef7f81ad958e90366facd4c0c",
+                  "bytes": 18840,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 4,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_005.png",
+                  "sha256": "6524e7ba0a7dca1c78b07a21cb70019c5f0e1a76408da1da4759cc86abcd9729",
+                  "bytes": 16950,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 5,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_006.png",
+                  "sha256": "5a7c534f907ef9908df40d7935116b6713215b86e731f208845cb893d7e71e8d",
+                  "bytes": 17229,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 6,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_007.png",
+                  "sha256": "c96825515757fc2aeac0cef1796e207c0d0c5ad66792bf241edc8fee55ec8055",
+                  "bytes": 16383,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 7,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_008.png",
+                  "sha256": "98435cfd50448f66d1be3cc63cefb67a9d9269bf5a0d28b810eb2624af0161ec",
+                  "bytes": 16411,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 8,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_009.png",
+                  "sha256": "2974dc580f0846fc2d55a2acdc8009aebb5f335480b56ea2ec3795335d165028",
+                  "bytes": 13704,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 9,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_010.png",
+                  "sha256": "2ab83fb7137d4e2eb6822ef6e3bc832447eca3c51b6025182a55e184235a1d13",
+                  "bytes": 18083,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 10,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_011.png",
+                  "sha256": "80fa2a919d643b073bf0006273dfee1d018b1ae74a6bce1091f2871824db72f1",
+                  "bytes": 15023,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 11,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_012.png",
+                  "sha256": "1bd07e025ee2858207d2fbeeee2aa191d522dd1de8937a648012ccbdee586ae1",
+                  "bytes": 14747,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 12,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_013.png",
+                  "sha256": "1e11024991e60ca7b4b206cc85758c30a3944acbbde79917cb6f0fc007eca54e",
+                  "bytes": 16337,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 13,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_014.png",
+                  "sha256": "cbe789bbe98fece88fb0bb00cabb9ab96c08effda4dde3400fe3a6e25d98e09e",
+                  "bytes": 16174,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 14,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_015.png",
+                  "sha256": "b4f5677b8121c2ee29bb3a12589d8774eaf971c3e54f09ff152643d69f1f3c13",
+                  "bytes": 18862,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 15,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_016.png",
+                  "sha256": "8d5c2680653ddb39c780a583268995a4ec8a265ec287702db3e0714221022cf1",
+                  "bytes": 19040,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 16,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_017.png",
+                  "sha256": "07f711a2b152398c066ce01ce8be8ae896c193d3597bfa65e3a28d989594848c",
+                  "bytes": 19506,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 17,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_018.png",
+                  "sha256": "48b627d7164b8e8d0605d103b1fc447d8e18b005d9f623cfe97ff9c687b45e58",
+                  "bytes": 18824,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 18,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_019.png",
+                  "sha256": "b0d99cef7f2277a80af10ad1c9091ecbd49e82d1a835299817630b7938ee31ab",
+                  "bytes": 17338,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 19,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_020.png",
+                  "sha256": "dc64c2a1d92ebc2ee54ed0a5c153bb627601c8336733dfb6c9e94e7a58d5cb4a",
+                  "bytes": 15412,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 20,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_021.png",
+                  "sha256": "88251ec3c5ca2eceed33585b382c54072eb630f57842b6413865af3ac7be7f51",
+                  "bytes": 15012,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 21,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_022.png",
+                  "sha256": "245fa581b91c304570c56dd77c39418af23d58d5ab96214f9fa30489fad65346",
+                  "bytes": 15305,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 22,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_023.png",
+                  "sha256": "fd160d842b206578dd21eeaa7b06ffabcfea36c026bff3427dd7702166a8869d",
+                  "bytes": 14187,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 23,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_024.png",
+                  "sha256": "66b5068bba84170993e4b81040fe163f4bfd88aa1a79400b7c3f2ac9f00f5b67",
+                  "bytes": 15975,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 24,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_025.png",
+                  "sha256": "e3828585e999156aee19f57d326986280bfbefa5efb08af74ea690c30289a508",
+                  "bytes": 15458,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 25,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_026.png",
+                  "sha256": "c56f31d026c8c897517a68a00e87d4cca30d59f1b09c12a00c610734f65b7d82",
+                  "bytes": 15925,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 26,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_027.png",
+                  "sha256": "c04f90e6eb326347bcda1a6301589e0fcaa214f5c24fcc679dde95d63dc82d47",
+                  "bytes": 17574,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 27,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_028.png",
+                  "sha256": "b54dd6ae53be858725c98f149d7086c64dad4c9cf82189de63367156941e4a3c",
+                  "bytes": 15013,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 28,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_029.png",
+                  "sha256": "5026b71c5abf558c7ce0e181e6758385fdfa8e81010a206fb0979da226f8daa6",
+                  "bytes": 18930,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 29,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_030.png",
+                  "sha256": "b617fc3661b37cbe77a8bb1cc6945fdfc7acebc7e69e89bdc1e541351e853ebb",
+                  "bytes": 17772,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 30,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_031.png",
+                  "sha256": "82b3c6f88d0af2c16352bac72cd077b63bd22386571b13de0693c45525847c8f",
+                  "bytes": 17428,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 31,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_032.png",
+                  "sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+                  "bytes": 8770,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "battle_result",
+                  "frame": 32,
+                  "evidence_surface": "battle_result",
+                  "evidence_hash_matches": true
+                }
+              ]
+            },
+            "critical_surfaces": {
+              "leon_withdrawal": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_006.png",
+                "sha256": "5a7c534f907ef9908df40d7935116b6713215b86e731f208845cb893d7e71e8d",
+                "bytes": 17229,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 6,
+                "expected_reviewed_sha256": "5a7c534f907ef9908df40d7935116b6713215b86e731f208845cb893d7e71e8d",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "레온",
+                  "퇴각한다!"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "sherry_langrisser_dialogue": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_014.png",
+                "sha256": "cbe789bbe98fece88fb0bb00cabb9ab96c08effda4dde3400fe3a6e25d98e09e",
+                "bytes": 16174,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 14,
+                "expected_reviewed_sha256": "cbe789bbe98fece88fb0bb00cabb9ab96c08effda4dde3400fe3a6e25d98e09e",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "쉐리",
+                  "검이 암흑검에 맞설 유일한 무기인가?"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "elwin_escape_dialogue": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_021.png",
+                "sha256": "88251ec3c5ca2eceed33585b382c54072eb630f57842b6413865af3ac7be7f51",
+                "bytes": 15012,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 21,
+                "expected_reviewed_sha256": "88251ec3c5ca2eceed33585b382c54072eb630f57842b6413865af3ac7be7f51",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "엘윈",
+                  "무슨 일이든 일어나도 우리는 물러설 수 없다!"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "escape_instruction": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/clear_path_022.png",
+                "sha256": "245fa581b91c304570c56dd77c39418af23d58d5ab96214f9fa30489fad65346",
+                "bytes": 15305,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 22,
+                "expected_reviewed_sha256": "245fa581b91c304570c56dd77c39418af23d58d5ab96214f9fa30489fad65346",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "성문 오른쪽의 가호 아래 빠져!",
+                  "리아나를 구해 내자!"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/battle/battle_result.png",
+              "sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+              "bytes": 8770,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            "expected_result_sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+            "result_hash_matches": true,
+            "result_alias_matches": true,
+            "observed_result_roster": [
+              "전과보고",
+              "아론",
+              "엘윈",
+              "헤인",
+              "쉐리",
+              "키스",
+              "레스터",
+              "제시카",
+              "POINT",
+              "2200P"
+            ],
+            "observed_result_sprites": "clean",
+            "gst": {
+              "path": "captures/run/current_s14_s15_result_retry/hard/s14/stable01/states/battle_result.gst",
+              "sha256": "17eeee80376453e772914da6d55bf1a6a8e8de223a7dd98911ecf9eb4ac3c2c0",
+              "bytes": 140408
+            },
+            "header_text": "전과보고",
+            "header_vram_range": "0xA000..0xA1FF",
+            "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+            "header_vram_matches_expected": true,
+            "header_plane_cells": [
+              {
+                "x": 17,
+                "y": 1,
+                "tile_word": "0x8500",
+                "expected_tile": "0x0500",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 1,
+                "tile_word": "0x8501",
+                "expected_tile": "0x0501",
+                "matches": true
+              },
+              {
+                "x": 17,
+                "y": 2,
+                "tile_word": "0x8502",
+                "expected_tile": "0x0502",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 2,
+                "tile_word": "0x8503",
+                "expected_tile": "0x0503",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 1,
+                "tile_word": "0x8504",
+                "expected_tile": "0x0504",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 1,
+                "tile_word": "0x8505",
+                "expected_tile": "0x0505",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 2,
+                "tile_word": "0x8506",
+                "expected_tile": "0x0506",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 2,
+                "tile_word": "0x8507",
+                "expected_tile": "0x0507",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 1,
+                "tile_word": "0x8508",
+                "expected_tile": "0x0508",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 1,
+                "tile_word": "0x8509",
+                "expected_tile": "0x0509",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 2,
+                "tile_word": "0x850A",
+                "expected_tile": "0x050A",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 2,
+                "tile_word": "0x850B",
+                "expected_tile": "0x050B",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 1,
+                "tile_word": "0x850C",
+                "expected_tile": "0x050C",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 1,
+                "tile_word": "0x850D",
+                "expected_tile": "0x050D",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 2,
+                "tile_word": "0x850E",
+                "expected_tile": "0x050E",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 2,
+                "tile_word": "0x850F",
+                "expected_tile": "0x050F",
+                "matches": true
+              }
+            ],
+            "all_header_plane_cells_match": true
+          }
+        },
+        "15": {
+          "status": "pass",
+          "diagnostic_lineage": {
+            "method": "apply exact Scenario 15 normal diagnostic delta to the hard candidate, then recalculate only the Mega Drive checksum",
+            "candidate": {
+              "path": "tmp/current-glyph-lifetime-fix-hard.md",
+              "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+              "bytes": 4194304,
+              "header_checksum": "E15E",
+              "computed_checksum": "E15E",
+              "checksum_valid": true
+            },
+            "candidate_expected_sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+            "candidate_expected_checksum": "E15E",
+            "candidate_identity_matches": true,
+            "probe": {
+              "path": "tmp/current-result-probes/hard/s15.md",
+              "sha256": "93b40bd73986fe71e555528b03cc59cb2c5825bba0caee6fb9b7dd44acf34aa2",
+              "bytes": 4194304,
+              "header_checksum": "C3A2",
+              "computed_checksum": "C3A2",
+              "checksum_valid": true
+            },
+            "diagnostic_changed_byte_count": 85,
+            "hard_conflicts_inside_diagnostic_envelope": 28,
+            "actual_changed_byte_count": 85,
+            "exact_three_way_overlay": true,
+            "event_triggers_preserved": true
+          },
+          "runtime": {
+            "root": "captures/run/current_s14_s15_result_retry/hard/s15/stable01",
+            "evidence": {
+              "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/evidence.json",
+              "sha256": "b9882677094ddfb440a7f07ba5bf47898f662629d337f877e3d1fee268a4a2a0",
+              "integrity": {
+                "status_pass": true,
+                "profile_matches": true,
+                "scenario_matches": true,
+                "probe_sha256_matches": true,
+                "scenario_identity_pass": true,
+                "completion_move_matches": true,
+                "result_frame_matches": true,
+                "all_observation_hashes_match": true
+              }
+            },
+            "scenario_identity": {
+              "status": "pass",
+              "requested_scenario": 15,
+              "identified_scenario": 15,
+              "best_match": {
+                "scenario": 15,
+                "matched_records": 11,
+                "total_records": 12,
+                "match_ratio": 0.9166666666666666
+              },
+              "runner_up": {
+                "scenario": 1,
+                "matched_records": 0,
+                "total_records": 12,
+                "match_ratio": 0.0
+              },
+              "gst": "/home/hong/lang2_md/captures/run/current_s14_s15_result_retry/hard/s15/stable01/briefing/attempt_1/scenario_identity.gst",
+              "attempt": 1
+            },
+            "completion_move": "down",
+            "sequence": {
+              "frame_count": 71,
+              "expected_frame_count": 71,
+              "all_dimensions_320x240": true,
+              "all_evidence_hashes_match": true,
+              "captures": [
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_001.png",
+                  "sha256": "0002a811ba308fdff017f39bfdb9dccce93cf1adc1cc1fd8d7ca269536132cb8",
+                  "bytes": 15700,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 1,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_002.png",
+                  "sha256": "c9ed09a24cd19875743ccdc64bb488d100530bf6ab7cf1eab1856b925193e64d",
+                  "bytes": 17175,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 2,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_003.png",
+                  "sha256": "5f1266212cfbda816381abb064de732ddb54b8dfa1ec6d8b208b7a36a13531f0",
+                  "bytes": 13395,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 3,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_004.png",
+                  "sha256": "edf6bbc8bd4a27673912f30921021997d93284240d1b20ccb7e3370394cd8461",
+                  "bytes": 14746,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 4,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_005.png",
+                  "sha256": "aed3d003e3c54951e316403d5be3c0be7096e9d3cc1e2b8d9f25cc183c03d246",
+                  "bytes": 15818,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 5,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_006.png",
+                  "sha256": "0f34a3f87e4387184a8970c2ca2ef364229eda1c30ca3e433458c11e79b1846d",
+                  "bytes": 15525,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 6,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_007.png",
+                  "sha256": "e5f0059d2f82a18c35019ab50944329c915b68c5c6d927069f507e4e0f724e94",
+                  "bytes": 13228,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 7,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_008.png",
+                  "sha256": "82df32d03c767e3198eefb4b580c0ae49e8fc36adc419b622aaee524de1d8246",
+                  "bytes": 15040,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 8,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_009.png",
+                  "sha256": "33e4f29cd91aa2088af8c70a49378b26a66a7e0b6465145af926c64de6f7216a",
+                  "bytes": 14793,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 9,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_010.png",
+                  "sha256": "d4371018ee4dd7c9a27ac26242cb28d309c610fa8809f6660a4a37ec46214997",
+                  "bytes": 16129,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 10,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_011.png",
+                  "sha256": "0a5bb9561e62e51a4c48419c06fe8e75d7197c9210fbfc81a3183eb9c1f92d7d",
+                  "bytes": 15863,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 11,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_012.png",
+                  "sha256": "d50d78682eb8666648bc53cc1e4541effc47640629bf670b49e5e61c2fcafc3b",
+                  "bytes": 20872,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 12,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_013.png",
+                  "sha256": "c7ce2c7a04eef58b16b1c3d8e04a4ea183384a2f3150e49d9aac8ab813f96344",
+                  "bytes": 17966,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 13,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_014.png",
+                  "sha256": "9412c999788e95d8950a5cccec87e7a15f65152cc1328fddcd1f580d71f1cac4",
+                  "bytes": 24911,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 14,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_015.png",
+                  "sha256": "30a6d63cc48884de03a0292b3f3b68149272d8c527f35d2506d9bbb6cea88827",
+                  "bytes": 15903,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 15,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_016.png",
+                  "sha256": "84ccd5c3605f17f5dbb23ccdb20a3960167399591ddc24ef3ef40c98e0076dda",
+                  "bytes": 16622,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 16,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_017.png",
+                  "sha256": "332bccb456ae82c5dc789b29e314bfd8dfefdd3cb925c2799d87f75e3cd9c20c",
+                  "bytes": 16751,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 17,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_018.png",
+                  "sha256": "b628a29a741e320e0c240a9a04fa44fbad448ee4d5961bfacb048465cc71c47b",
+                  "bytes": 15271,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 18,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_019.png",
+                  "sha256": "4f7b6fa08a85d6d5718e3efe79dbc12704500b0dd99b3418aab0f82757129fd3",
+                  "bytes": 13465,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 19,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_020.png",
+                  "sha256": "924b5bfb1d81ecf786638d2983ac9787a784d00daa2be35d5e531dec14ef0e74",
+                  "bytes": 14598,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 20,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_021.png",
+                  "sha256": "afe0db705ed09a96c828acb04243a39d38eb744833ba2f56c45b16bf83f9e5c3",
+                  "bytes": 13303,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 21,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_022.png",
+                  "sha256": "6bede037393faddea52f97cdd4aea859fba30727ca274d5fc265528342a5badc",
+                  "bytes": 16676,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 22,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_023.png",
+                  "sha256": "8731f413115f6933599fdc19235b716b376b2cf3e24869dd6decb92b189c8bbf",
+                  "bytes": 13307,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 23,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_024.png",
+                  "sha256": "7ef0db48c46ecf05495413802ba7f7046e699036bdc6986b4de7c2a35f8482bb",
+                  "bytes": 21678,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 24,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_025.png",
+                  "sha256": "f3ad6ccdaede0574b1293472c70a2da217cda9cf771609adf2ad0888aea13249",
+                  "bytes": 21756,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 25,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_026.png",
+                  "sha256": "b72116aabaa242b82dc59a79c5c147b8f0575d5a18a28f775b6627a93e49db1d",
+                  "bytes": 20339,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 26,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_027.png",
+                  "sha256": "00b62eadfb80b3be97980e22cb3744923f73c19a60362fd41d7368ae38d082da",
+                  "bytes": 20446,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 27,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_028.png",
+                  "sha256": "66f32902c3107c6308f9bd4134556faf45a2bc2bd7107f3c57db9f677445903a",
+                  "bytes": 16134,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 28,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_029.png",
+                  "sha256": "4f691b228744df52f092a95eb9cc9a241815bf0fe153d4420833fc6cbbdd0b61",
+                  "bytes": 16578,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 29,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_030.png",
+                  "sha256": "49883fe977061c397ac0573d5f3f2c292c373f10d84e126e502b7fa54c3303b4",
+                  "bytes": 13484,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 30,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_031.png",
+                  "sha256": "c982d01cfe1e6bbdfb8851cd67a3531c837c62bfcca08d73383c5479c304a6fc",
+                  "bytes": 20891,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 31,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_032.png",
+                  "sha256": "99f4a1b1e696a54c8cca2c490bfaca893df9b82f94b4490db1e8f8a25358e773",
+                  "bytes": 20479,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 32,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_033.png",
+                  "sha256": "ce9915ef7079337b8a166d8686eda5abc28acb7e77ebeb3d2df36f41141cd5b8",
+                  "bytes": 20441,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 33,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_034.png",
+                  "sha256": "4b5eb81e396eae55f3d8e8ffb962aa20f9b698a317c63e833653926482b86e47",
+                  "bytes": 20779,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 34,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_035.png",
+                  "sha256": "d3a4f5ca7f1af87110d8ed09d722fc490af895733869f360ea57212699ba978a",
+                  "bytes": 20469,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 35,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_036.png",
+                  "sha256": "ff86946839e9e830c3c48e7a15c885ea3c1ead56e5fd3a7dc0a4f74ef8e1c427",
+                  "bytes": 20849,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 36,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_037.png",
+                  "sha256": "0dae4e3b1ddc1a0adcfad58f586752deb2c66567ed9b57ad95e10b544dbda7dd",
+                  "bytes": 20387,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 37,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_038.png",
+                  "sha256": "b81d47bf5437fd29fddc886ee2b2215de000f2d74de88eb3ac5c6f9f06354f44",
+                  "bytes": 20450,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 38,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_039.png",
+                  "sha256": "44f7a5af3de3785f5fac7d990c71dab7224217473ce82eccb0df4190803bafb7",
+                  "bytes": 20715,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 39,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_040.png",
+                  "sha256": "066624453394ea66c15be9e3953350484ff42e387c72d17603e9242bd9f52bea",
+                  "bytes": 20416,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 40,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_041.png",
+                  "sha256": "968d0069ae2f0c4eb0c897876559d4d3cba81e2f6c22495a9cb02656bf76b6de",
+                  "bytes": 20406,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 41,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_042.png",
+                  "sha256": "2ee8de8932d7cbe69cb882d05d182b4456c9a4054478c6856cbfcf5b1b8b9045",
+                  "bytes": 20195,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 42,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_043.png",
+                  "sha256": "d40b20d4fd8ba31883e9c8062254380fb069fd93e84656037c3b9f87580400b1",
+                  "bytes": 17693,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 43,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_044.png",
+                  "sha256": "37141b4df144506daa92e843f025982f44019468f53b3478f789843c278d8661",
+                  "bytes": 20748,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 44,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_045.png",
+                  "sha256": "1758edb5b3f4ecb1abdcd5bcea117afba675b200a9f3947ac880e6522824e5f1",
+                  "bytes": 20212,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 45,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_046.png",
+                  "sha256": "b4cfd0fe57dc479181eb2f1404193261c25cda76683aebf2ef02644d69b6029e",
+                  "bytes": 20830,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 46,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_047.png",
+                  "sha256": "b07bcb2bd9f2bcdc6193eb119b7aa13cd01c472d145cb61a7d1286104085209c",
+                  "bytes": 20791,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 47,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_048.png",
+                  "sha256": "34883b3b99a3ede8935a8e57c152377573d213d1efb10c0ca6d5ebeadaac4e02",
+                  "bytes": 20786,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 48,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_049.png",
+                  "sha256": "07e1d315d6309f1edf042d2914dd5656abff0c1009f7c276e5bf252796d13697",
+                  "bytes": 20597,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 49,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_050.png",
+                  "sha256": "5dee21d7511a5c218ebb71120b27d5fe71eaefd3237d8676d721c797851af41d",
+                  "bytes": 18029,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 50,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_051.png",
+                  "sha256": "3d0ce22930a88f35de594887e570f187a1e036b4665a1b80255cc41d77d5acfc",
+                  "bytes": 15833,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 51,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_052.png",
+                  "sha256": "c94584dda00f05cf286dde1566c7b78b1b95d2502c76c3edcc7b4ffeff7ecf1f",
+                  "bytes": 16315,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 52,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_053.png",
+                  "sha256": "b300b178d74e567052c3bffe8de59d0332b735983a3851dad2c95869f53e9094",
+                  "bytes": 20570,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 53,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_054.png",
+                  "sha256": "5b38ac944c290a4d8a51e36e142f42dc4a3d4e67909be465a0efc7f5f5bd1109",
+                  "bytes": 17316,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 54,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_055.png",
+                  "sha256": "7e8de3e7596ce760f44040ce84a0862147af9ec264bd030841bd8f5d123864e4",
+                  "bytes": 17059,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 55,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_056.png",
+                  "sha256": "6517e1cb1131c3a5142b6ecbc1133dc33145a9064584f3f75ec1928236458a2c",
+                  "bytes": 20537,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 56,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_057.png",
+                  "sha256": "4927e1bb2efc2899c1ae9f54de0ea4e385db003dc5e7d8498d980fa059af7890",
+                  "bytes": 20665,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 57,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_058.png",
+                  "sha256": "d627a54bdf2b43ea892a915cc186c6b666311475afffb638fab077219b3b040f",
+                  "bytes": 20005,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 58,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_059.png",
+                  "sha256": "a921ec28f4a9a904a8023b02d76dfb7b22bdc66eca1dd18a87eb0ca89761abbe",
+                  "bytes": 14903,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 59,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_060.png",
+                  "sha256": "d3dff9c37abbaa3e72bd9bb36c9b88e360d9e9098f9468f11aebabc1816f39af",
+                  "bytes": 16905,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 60,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_061.png",
+                  "sha256": "076e31aa23e12eef14e9be34d42877e6f56351e1f3e0abece12fc0f0208729af",
+                  "bytes": 16704,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 61,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_062.png",
+                  "sha256": "3985ffee40e359fd91994749cc11b4d1f2de9e445e6dc39fa2b80182938f7dc4",
+                  "bytes": 16936,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 62,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_063.png",
+                  "sha256": "f7ae47abab2df409aa46fc88f03d1037776d80b323f4acf499e0cf8c60b72ea2",
+                  "bytes": 18604,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 63,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_064.png",
+                  "sha256": "05da05285897bdd30665ec9bfdf24f0217ea988204ddb5a3547c74543b842f5b",
+                  "bytes": 18210,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 64,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_065.png",
+                  "sha256": "6f83957a5f37b950fcd7dc9ef0c412c9649cbf1f66ca0173380174cc123ac6d3",
+                  "bytes": 17449,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 65,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_066.png",
+                  "sha256": "9bf15dae520bf85aab6df3a8ff109dde9cab5d76997c47b678c18ffe58bad33a",
+                  "bytes": 16885,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 66,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_067.png",
+                  "sha256": "e1de2d8569a07517521be75787b714c785c82add8ad0d499d77c78da42df8540",
+                  "bytes": 15230,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 67,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_068.png",
+                  "sha256": "21128809858a47bebadcef2135ba25dec8f6c85f66146597cf020123bbd19bdb",
+                  "bytes": 21430,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 68,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_069.png",
+                  "sha256": "72fec020f760288f68efd5f716ecdc86807727d4e3f4ada5ccf18778ab125a6a",
+                  "bytes": 20959,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 69,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_070.png",
+                  "sha256": "1a6550a57f18b407f559581e59a2519f12339d3fc043970e76c6830c350c822b",
+                  "bytes": 20317,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "other",
+                  "frame": 70,
+                  "evidence_surface": "other",
+                  "evidence_hash_matches": true
+                },
+                {
+                  "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_071.png",
+                  "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+                  "bytes": 9277,
+                  "dimensions": [
+                    320,
+                    240
+                  ],
+                  "surface": "battle_result",
+                  "frame": 71,
+                  "evidence_surface": "battle_result",
+                  "evidence_hash_matches": true
+                }
+              ]
+            },
+            "critical_surfaces": {
+              "scott_df_level_up": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_039.png",
+                "sha256": "44f7a5af3de3785f5fac7d990c71dab7224217473ce82eccb0df4190803bafb7",
+                "bytes": 20715,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 39,
+                "expected_reviewed_sha256": "44f7a5af3de3785f5fac7d990c71dab7224217473ce82eccb0df4190803bafb7",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "스코트의",
+                  "레벨이 올랐다!",
+                  "DF가 1 상승"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "scott_at_level_up": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_049.png",
+                "sha256": "07e1d315d6309f1edf042d2914dd5656abff0c1009f7c276e5bf252796d13697",
+                "bytes": 20597,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 49,
+                "expected_reviewed_sha256": "07e1d315d6309f1edf042d2914dd5656abff0c1009f7c276e5bf252796d13697",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "스코트의",
+                  "레벨이 올랐다!",
+                  "AT가 1 상승"
+                ],
+                "observed_sprite_state": "clean"
+              },
+              "class_change_available": {
+                "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/clear_path_065.png",
+                "sha256": "6f83957a5f37b950fcd7dc9ef0c412c9649cbf1f66ca0173380174cc123ac6d3",
+                "bytes": 17449,
+                "dimensions": [
+                  320,
+                  240
+                ],
+                "surface": "other",
+                "frame": 65,
+                "expected_reviewed_sha256": "6f83957a5f37b950fcd7dc9ef0c412c9649cbf1f66ca0173380174cc123ac6d3",
+                "reviewed_hash_matches": true,
+                "manual_review": "pass",
+                "observed_text": [
+                  "클래스체인지 가능"
+                ],
+                "observed_sprite_state": "clean"
+              }
+            },
+            "battle_result": {
+              "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/battle/battle_result.png",
+              "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+              "bytes": 9277,
+              "dimensions": [
+                320,
+                240
+              ],
+              "surface": "battle_result"
+            },
+            "expected_result_sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+            "result_hash_matches": true,
+            "result_alias_matches": true,
+            "observed_result_roster": [
+              "전과보고",
+              "아론",
+              "엘윈",
+              "헤인",
+              "쉐리",
+              "키스",
+              "레스터",
+              "제시카",
+              "스코트",
+              "POINT",
+              "2300P"
+            ],
+            "observed_result_sprites": "clean",
+            "gst": {
+              "path": "captures/run/current_s14_s15_result_retry/hard/s15/stable01/states/battle_result.gst",
+              "sha256": "b2d6086912db73d807331fe80794bc47f1df11093f97e8de1b9b36e8ce78d4fa",
+              "bytes": 140408
+            },
+            "header_text": "전과보고",
+            "header_vram_range": "0xA000..0xA1FF",
+            "header_vram_sha256": "6b11a3261d70c91d8bb4e6bd8a637ac88172c16ad39948925a769ba127fe28b6",
+            "header_vram_matches_expected": true,
+            "header_plane_cells": [
+              {
+                "x": 17,
+                "y": 1,
+                "tile_word": "0x8500",
+                "expected_tile": "0x0500",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 1,
+                "tile_word": "0x8501",
+                "expected_tile": "0x0501",
+                "matches": true
+              },
+              {
+                "x": 17,
+                "y": 2,
+                "tile_word": "0x8502",
+                "expected_tile": "0x0502",
+                "matches": true
+              },
+              {
+                "x": 18,
+                "y": 2,
+                "tile_word": "0x8503",
+                "expected_tile": "0x0503",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 1,
+                "tile_word": "0x8504",
+                "expected_tile": "0x0504",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 1,
+                "tile_word": "0x8505",
+                "expected_tile": "0x0505",
+                "matches": true
+              },
+              {
+                "x": 19,
+                "y": 2,
+                "tile_word": "0x8506",
+                "expected_tile": "0x0506",
+                "matches": true
+              },
+              {
+                "x": 20,
+                "y": 2,
+                "tile_word": "0x8507",
+                "expected_tile": "0x0507",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 1,
+                "tile_word": "0x8508",
+                "expected_tile": "0x0508",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 1,
+                "tile_word": "0x8509",
+                "expected_tile": "0x0509",
+                "matches": true
+              },
+              {
+                "x": 21,
+                "y": 2,
+                "tile_word": "0x850A",
+                "expected_tile": "0x050A",
+                "matches": true
+              },
+              {
+                "x": 22,
+                "y": 2,
+                "tile_word": "0x850B",
+                "expected_tile": "0x050B",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 1,
+                "tile_word": "0x850C",
+                "expected_tile": "0x050C",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 1,
+                "tile_word": "0x850D",
+                "expected_tile": "0x050D",
+                "matches": true
+              },
+              {
+                "x": 23,
+                "y": 2,
+                "tile_word": "0x850E",
+                "expected_tile": "0x050E",
+                "matches": true
+              },
+              {
+                "x": 24,
+                "y": 2,
+                "tile_word": "0x850F",
+                "expected_tile": "0x050F",
+                "matches": true
+              }
+            ],
+            "all_header_plane_cells_match": true
+          }
+        }
+      }
+    }
+  },
+  "cross_profile": {
+    "14": {
+      "battle_result_frame_identical": true,
+      "result_header_vram_identical": true,
+      "observed_sequence_mismatch_frames": [
+        6,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        20,
+        21,
+        22,
+        23
+      ],
+      "expected_sequence_mismatch_frames": [
+        6,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        20,
+        21,
+        22,
+        23
+      ],
+      "sequence_mismatches_match_review": true,
+      "manual_mismatch_review": "pass",
+      "mismatch_observation": "Only selection blink, movement animation, map scroll, and normal/hard status timing differ; reviewed text, names, classes, and sprites are clean."
+    },
+    "15": {
+      "battle_result_frame_identical": true,
+      "result_header_vram_identical": true,
+      "observed_sequence_mismatch_frames": [
+        2,
+        7,
+        10,
+        12,
+        15,
+        30,
+        39,
+        49,
+        50,
+        65
+      ],
+      "expected_sequence_mismatch_frames": [
+        2,
+        7,
+        10,
+        12,
+        15,
+        30,
+        39,
+        49,
+        50,
+        65
+      ],
+      "sequence_mismatches_match_review": true,
+      "manual_mismatch_review": "pass",
+      "mismatch_observation": "Only selection blink, movement animation, map scroll, and normal/hard status timing differ; reviewed text, names, classes, and sprites are clean."
+    }
+  },
+  "rejected_first_attempt": {
+    "status": "rejected",
+    "reason": "The first loop sent C before taking each stable capture. Three runs crossed the result screen and ended at the save menu; only hard Scenario 15 happened to retain a result frame.",
+    "captures": {
+      "normal_s14": {
+        "path": "captures/run/current_s14_s15_result/normal/s14/battle/clear_path_120.png",
+        "sha256": "3772947dfb83d50e379d1aa6604d10fe04a161e02669b39da1d44a144316dbb0",
+        "bytes": 6080,
+        "dimensions": [
+          320,
+          240
+        ],
+        "surface": "save_menu"
+      },
+      "hard_s14": {
+        "path": "captures/run/current_s14_s15_result/hard/s14/battle/clear_path_120.png",
+        "sha256": "3772947dfb83d50e379d1aa6604d10fe04a161e02669b39da1d44a144316dbb0",
+        "bytes": 6080,
+        "dimensions": [
+          320,
+          240
+        ],
+        "surface": "save_menu"
+      },
+      "normal_s15": {
+        "path": "captures/run/current_s14_s15_result/normal/s15/battle/clear_path_120.png",
+        "sha256": "c0fd9988cd86d3bdb3fdc67298afab5d1349e939c9a47d43a88b6af320a7b423",
+        "bytes": 6072,
+        "dimensions": [
+          320,
+          240
+        ],
+        "surface": "save_menu"
+      },
+      "hard_s15_retained_result": {
+        "path": "captures/run/current_s14_s15_result/hard/s15/battle/battle_result.png",
+        "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+        "bytes": 9277,
+        "dimensions": [
+          320,
+          240
+        ],
+        "surface": "battle_result"
+      }
+    },
+    "three_runs_ended_at_save_menu": true,
+    "one_result_was_retained": true,
+    "acceptance_updated": false
+  },
+  "limitations": [
+    "The weakened-enemy completion ROMs are diagnostic-only and are never release candidates.",
+    "Manual review is bound to the recorded critical and sequence capture hashes; later changes make --check fail.",
+    "This result gate does not replace the already separate preparation, shop-return, minimap, and acted-sprite gates."
+  ]
+}
