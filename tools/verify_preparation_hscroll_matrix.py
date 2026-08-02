@@ -22,13 +22,13 @@ from tools import verify_preparation_manual_reviews as manual
 
 DEFAULT_CAPTURE_ROOT = ROOT / "captures/run/preparation_surface_matrix"
 DEFAULT_IDENTITY_REPORT = (
-    ROOT / "tmp/full_surface_regression/pike-safe-full01/"
+    ROOT / "tmp/full_surface_regression/current-source-20260802-01/"
     "preparation-scenario-identity.json"
 )
 DEFAULT_MANUAL_REPORT = ROOT / "localization/preparation_manual_review_current_candidate.json"
 DEFAULT_OWNERSHIP_REPORT = ROOT / "localization/preparation_vram_ownership.json"
-DEFAULT_NORMAL_ROM = ROOT / "tmp/current-glyph-lifetime-fix-normal.md"
-DEFAULT_HARD_ROM = ROOT / "tmp/current-glyph-lifetime-fix-hard.md"
+DEFAULT_NORMAL_ROM = ROOT / "tmp/current-source-audit-normal.md"
+DEFAULT_HARD_ROM = ROOT / "tmp/current-source-audit-hard.md"
 DEFAULT_OUTPUT = ROOT / "localization/preparation_hscroll_current_candidate.json"
 PROFILES = ("normal", "hard")
 SCENARIOS = tuple(range(1, 28))

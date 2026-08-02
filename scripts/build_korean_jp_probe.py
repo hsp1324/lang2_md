@@ -486,8 +486,8 @@ BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT = 0x2BEC40
 # and class), so all sixteen of its destinations live in audited gaps around
 # the live VDP tables:
 # 0x0795/0x079C/0x079D are between SAT and H-scroll, while
-# 0x07CA/0x07CB/0x07D0/0x07D1/0x07D5/0x07D6/0x07D8..0x07DB/
-# 0x07E0/0x07E1/0x07F0 are above H-scroll.
+# 0x07CA/0x07CB/0x07D5/0x07D6/0x07D8..0x07DB/
+# 0x07E0/0x07E1/0x07EA/0x07EC/0x07F0 are above H-scroll.
 # None is inside the H-scroll table at 0x07A0..0x07BF.
 #
 # Do not move this cache into 0x07A0..0x07BF. The former 0x07A1..0x07BC
@@ -508,8 +508,15 @@ BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT = 0x2BEC40
 # with a Hangul glyph when a class field was drawn.  The sixteen battle
 # destinations below have no valid retained Plane/Window/SAT owner and sit
 # outside Plane A/B, Window, SAT, and H-scroll.
+#
+# The magic/attack/movement target cursor is a transient 2x2 SAT sprite at
+# 0x07CE..0x07D1.  B1.0.4 put battle slots 4 and 6 at 0x07D0/0x07D1, so the
+# fifth and seventh status glyphs replaced the cursor's right half with gray
+# Hangul blocks.  Battle now uses 0x07EA/0x07EC for those slots.  Preparation
+# retains 0x07D0/0x07D1 because its independently audited class-change and
+# hiring lifetime does not display the battle target cursor.
 BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
-    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07D0, 0x07F0, 0x07D1, 0x07E1,
+    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07EA, 0x07F0, 0x07EC, 0x07E1,
     0x079D, 0x07E0, 0x07D5, 0x07D6, 0x07D8, 0x07D9, 0x07DA, 0x07DB,
 )
 # The preparation/hiring surfaces also draw ordinary mercenary icons from the
@@ -519,7 +526,10 @@ BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
 # the same ownership-audited destinations as battle.  It keeps a separate
 # command table and renderer so the two surface contracts can still be audited
 # independently.
-BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS = BYTE_UI_DYNAMIC_MAP_TILE_IDS
+BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS = (
+    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07D0, 0x07F0, 0x07D1, 0x07E1,
+    0x079D, 0x07E0, 0x07D5, 0x07D6, 0x07D8, 0x07D9, 0x07DA, 0x07DB,
+)
 # These additional pattern-region cells are not needed by the two eight-cell
 # map fields. They are reserved for preparation/status glyphs that must remain
 # visible together and passed the same retained-state ownership scan. Some are

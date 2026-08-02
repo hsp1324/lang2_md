@@ -21,15 +21,15 @@ DEFAULT_REVIEW_ROOT = ROOT / "tmp/preparation_review_contact_sheets"
 DEFAULT_PREPARATION_ROOT = ROOT / "captures/run/preparation_surface_matrix"
 DEFAULT_GRAY_ROOT = ROOT / "captures/run/gray_acted_surface_matrix"
 DEFAULT_IDENTITY_REPORT = (
-    ROOT / "tmp/full_surface_regression/pike-safe-full01/"
+    ROOT / "tmp/full_surface_regression/current-source-20260802-01/"
     "preparation-scenario-identity.json"
 )
 DEFAULT_OUTPUT = ROOT / "localization/preparation_manual_review_current_candidate.json"
-DEFAULT_NORMAL_ROM = ROOT / "tmp/current-glyph-lifetime-fix-normal.md"
-DEFAULT_HARD_ROM = ROOT / "tmp/current-glyph-lifetime-fix-hard.md"
+DEFAULT_NORMAL_ROM = ROOT / "tmp/current-source-audit-normal.md"
+DEFAULT_HARD_ROM = ROOT / "tmp/current-source-audit-hard.md"
 PROFILES = ("normal", "hard")
 SCENARIOS = tuple(range(1, 28))
-DEFAULT_RUN_ID = "pike-safe-full01"
+DEFAULT_RUN_ID = "current-source-20260802-01"
 
 
 def run_id_for(scenario: int) -> str:
@@ -246,6 +246,11 @@ def main() -> int:
     parser.add_argument("--normal-rom", type=Path, default=DEFAULT_NORMAL_ROM)
     parser.add_argument("--hard-rom", type=Path, default=DEFAULT_HARD_ROM)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="fail if the existing aggregate report is stale",
+    )
     args = parser.parse_args()
     for name in (
         "review_root",
@@ -258,11 +263,15 @@ def main() -> int:
     ):
         setattr(args, name, getattr(args, name).resolve())
     report = build_report(args)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps(report, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    serialized = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    if args.check:
+        if not args.output.is_file():
+            raise ValueError(f"missing aggregate report: {args.output}")
+        if args.output.read_text(encoding="utf-8") != serialized:
+            raise ValueError(f"checked aggregate report is stale: {args.output}")
+    else:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(serialized, encoding="utf-8")
     for profile in PROFILES:
         summary = report["profiles"][profile]
         print(f"{profile}: {summary['passed']}/{summary['required']} pass")

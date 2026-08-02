@@ -130,24 +130,25 @@
     "current_manual_review_report": "localization/preparation_manual_review_current_candidate.json",
     "current_hscroll_matrix_report": "localization/preparation_hscroll_current_candidate.json",
     "current_first_draw_report": "localization/preparation_first_draw_current_candidate.json",
-    "current_glyph_conflict_report": "tmp/preparation-glyph-conflicts-current-candidate.json",
-    "current_battle_cache_report": "tmp/battle-cache-current-candidate.json",
+    "current_first_draw_applicability_report": "localization/preparation_first_draw_current_applicability.json",
+    "current_glyph_conflict_report": "tmp/full_surface_regression/current-source-20260802-01/preparation-glyph-conflicts.json",
+    "current_battle_cache_report": "tmp/full_surface_regression/current-source-20260802-01/battle-cache.json",
     "normal_probe": {
-      "md_checksum": "CB53",
-      "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371"
+      "md_checksum": "015C",
+      "sha256": "eaee0b0443140776a6ad7ae4542a9b41a132ac7c19c4b4b127a61de8b8d74c27"
     },
     "hard_probe": {
-      "md_checksum": "E15E",
-      "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad"
+      "md_checksum": "1767",
+      "sha256": "5b391ad132553427d2ededf01651d6215a71ce60dc8e1f0cacb1e45419a17f8a"
     },
     "verified_targeted_checks": [
       "The current normal and hard candidates each pass hash-bound manual review for every Scenario 1 through 27 preparation surface. Each run is independently identified as the requested scenario and covers all visible allied hiring/status, arrangement/minimap, and fixed allied/NPC/enemy detail pages.",
       "All 733 same-run preparation capture pairs per profile are byte-identical before and after a real shop visit; every reviewed contact sheet and source capture is SHA-256 bound.",
-      "Actual movement in every Scenario 1 through 27 run produces a stock-matching gray acted sprite in both profiles, while the all-scenario battle-cache verifier passes both mercenary animation frames in 31/31 scenarios.",
+      "Actual movement in every Scenario 1 through 27 run produces a stock-matching gray acted sprite in both profiles, while the current-source battle-cache verifier passes both mercenary animation frames in 27/27 scenarios per profile.",
       "A synthetic isolated commander renders all 16 mercenary hire rows on six pages with no dynamic-glyph payload in the fixed icon cache; normal and hard pages are byte-identical, including 몽크 and 발리스타.",
       "Static lifetime analysis covers 64,890 surface contexts with 26 scratch slots and zero conflicts; 쉐/제 and 키/메 occupy distinct slots, closing first-display 쉐리/키스 substitutions.",
       "The current all-scenario H-scroll gate decodes 162 hash-bound GST states: pre-shop, real shop item list, and post-shop for every Scenario 1 through 27 in normal and hard profiles. Every state has VDP register 11 0x00, register 13 0x3D, H-scroll base 0xF400, and zero nonzero H-scroll bytes; all 26 preparation dynamic tiles remain outside 0xF400..0xF7FF.",
-      "Fresh debugger captures around the preparation renderer at 0x2BEBC0..0x2BEC31 prove the first dynamic draw in both profiles changes only one owned tile and no other VRAM byte. The normal pair renders 론 at tile 0x03CA and the hard pair renders 쉐 at tile 0x07DB; VDP registers, H-scroll, and the fixed mercenary icon cache 0x6900..0x70FF are unchanged.",
+      "Retained debugger captures around the preparation renderer at 0x2BEBC0..0x2BEC31 prove the first dynamic draw in both profiles changes only one owned tile and no other VRAM byte. A separate current-ROM applicability gate verifies the recorded source ROM/GST hashes and byte-identical dynamic glyph payloads, preparation slot table, VDP commands, tile IDs, and renderer in both current targets; VDP registers, H-scroll, and the fixed mercenary icon cache 0x6900..0x70FF remain unchanged.",
       "Exact normal/hard probes hire and move six Pikes, while an isolated one-byte hire-unlock diagnostic exposes Monk without changing sprite/cache code. Pike and both Monk active frames plus their acted-gray frames match the original ROM sources, with no dynamic-glyph collision.",
       "Fresh current-candidate shop probes are pixel-exact for 크로스 and 넥클리스 in both profiles, and current class-change captures keep 팔랑크스 and 발리스타 intact in all three candidate panels.",
       "Scenario 9 normal and hard each pass 32/32 exact preparation, seven-commander/two-page hiring and roster, all 13 fixed-detail, and real shop item-list before/after pairs.",

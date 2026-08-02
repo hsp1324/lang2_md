@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "preparation_first_draw_hash_exact_rom_applicability",
+  "source_report": {
+    "path": "localization/preparation_first_draw_current_candidate.json",
+    "sha256": "37c04bbd161cee027cba02958f3eeb1e7fa662c91538e647fac3efa3148bc5a1"
+  },
+  "policy": "Retained debugger GST evidence applies to a target ROM only when the recorded source ROM and GST hashes still match and every preparation-owned glyph payload, slot table, VDP command table, tile-ID table, and renderer byte is identical. Battle-only tables are outside this lifetime contract.",
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "source_rom": {
+        "path": "tmp/current-glyph-lifetime-fix-normal.md",
+        "sha256": "00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371",
+        "md_checksum": "CB53"
+      },
+      "target_rom": {
+        "path": "tmp/current-source-audit-normal.md",
+        "sha256": "eaee0b0443140776a6ad7ae4542a9b41a132ac7c19c4b4b127a61de8b8d74c27",
+        "md_checksum": "015C"
+      },
+      "retained_capture": {
+        "before": {
+          "path": "captures/analysis/preparation_first_draw_current/normal/before.gst",
+          "sha256": "c97c2480ce67812383c1ca9436eaca5477427da3ace95a1165ebc312e2c63062",
+          "m68k_pc": "0x2BEBF4",
+          "hscroll_nonzero_bytes": 0
+        },
+        "after": {
+          "path": "captures/analysis/preparation_first_draw_current/normal/after.gst",
+          "sha256": "5adb3d2cc596839a74ba3dd5b0bbd497e49b94b86cc4c25da3a48831c9c33a10",
+          "m68k_pc": "0x0224D4",
+          "hscroll_nonzero_bytes": 0
+        },
+        "rendered_character": "론",
+        "changed_tile": "0x03CA",
+        "full_vram_changed_bytes": 31,
+        "hscroll_unchanged_and_zero": true,
+        "mercenary_icon_cache_unchanged": true,
+        "all_other_vram_bytes_unchanged": true
+      },
+      "preparation_owned_ranges": [
+        {
+          "name": "dynamic_glyph_payloads",
+          "start": "0x2BD000",
+          "end_exclusive": "0x2BE800",
+          "bytes": 6144,
+          "sha256": "5fed7738f3a59a2d5f696a6f33801366055a3e839f02d8aad4999353a2038f2b",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_slot_table",
+          "start": "0x2BE9C0",
+          "end_exclusive": "0x2BEAC0",
+          "bytes": 256,
+          "sha256": "85a9360363f1e4ac1f67021d9333b11ef23ab89693fe4380a63d95fdfb325e24",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_vdp_commands",
+          "start": "0x2BEAC0",
+          "end_exclusive": "0x2BEB40",
+          "bytes": 128,
+          "sha256": "31304ce77a8f96bc7e5fceb33c228fb43532cef7f5a7c307e96acad09b60f5fd",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_tile_ids",
+          "start": "0x2BEB40",
+          "end_exclusive": "0x2BEB80",
+          "bytes": 64,
+          "sha256": "ab62ef0417c72b059f80f2558584a1bce65fc443cf64b50a41b1b50e513c425c",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_renderer",
+          "start": "0x2BEBC0",
+          "end_exclusive": "0x2BEC40",
+          "bytes": 128,
+          "sha256": "18f6c614c8f7e1f2adc2f0082a180f0c230af7f1f2a7c329504ad0fd55d9735b",
+          "byte_identical": true
+        }
+      ],
+      "all_preparation_owned_ranges_byte_identical": true
+    },
+    "hard": {
+      "status": "pass",
+      "source_rom": {
+        "path": "tmp/current-glyph-lifetime-fix-hard.md",
+        "sha256": "f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad",
+        "md_checksum": "E15E"
+      },
+      "target_rom": {
+        "path": "tmp/current-source-audit-hard.md",
+        "sha256": "5b391ad132553427d2ededf01651d6215a71ce60dc8e1f0cacb1e45419a17f8a",
+        "md_checksum": "1767"
+      },
+      "retained_capture": {
+        "before": {
+          "path": "captures/analysis/preparation_first_draw_current/hard/before.gst",
+          "sha256": "f5efe34f18c010a7a602247b1a8197434d4f0ed27492072187aa068fde17347c",
+          "m68k_pc": "0x2BEBF4",
+          "hscroll_nonzero_bytes": 0
+        },
+        "after": {
+          "path": "captures/analysis/preparation_first_draw_current/hard/after.gst",
+          "sha256": "0fc5a4585a0fe06c73f05994e2a1878ef97dd216e6ab215602c88677e7fa75dd",
+          "m68k_pc": "0x02251A",
+          "hscroll_nonzero_bytes": 0
+        },
+        "rendered_character": "쉐",
+        "changed_tile": "0x07DB",
+        "full_vram_changed_bytes": 32,
+        "hscroll_unchanged_and_zero": true,
+        "mercenary_icon_cache_unchanged": true,
+        "all_other_vram_bytes_unchanged": true
+      },
+      "preparation_owned_ranges": [
+        {
+          "name": "dynamic_glyph_payloads",
+          "start": "0x2BD000",
+          "end_exclusive": "0x2BE800",
+          "bytes": 6144,
+          "sha256": "5fed7738f3a59a2d5f696a6f33801366055a3e839f02d8aad4999353a2038f2b",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_slot_table",
+          "start": "0x2BE9C0",
+          "end_exclusive": "0x2BEAC0",
+          "bytes": 256,
+          "sha256": "85a9360363f1e4ac1f67021d9333b11ef23ab89693fe4380a63d95fdfb325e24",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_vdp_commands",
+          "start": "0x2BEAC0",
+          "end_exclusive": "0x2BEB40",
+          "bytes": 128,
+          "sha256": "31304ce77a8f96bc7e5fceb33c228fb43532cef7f5a7c307e96acad09b60f5fd",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_tile_ids",
+          "start": "0x2BEB40",
+          "end_exclusive": "0x2BEB80",
+          "bytes": 64,
+          "sha256": "ab62ef0417c72b059f80f2558584a1bce65fc443cf64b50a41b1b50e513c425c",
+          "byte_identical": true
+        },
+        {
+          "name": "preparation_renderer",
+          "start": "0x2BEBC0",
+          "end_exclusive": "0x2BEC40",
+          "bytes": 128,
+          "sha256": "18f6c614c8f7e1f2adc2f0082a180f0c230af7f1f2a7c329504ad0fd55d9735b",
+          "byte_identical": true
+        }
+      ],
+      "all_preparation_owned_ranges_byte_identical": true
+    }
+  },
+  "summary": {
+    "profiles_checked": 2,
+    "owned_ranges_per_profile": 5,
+    "changed_preparation_owned_ranges": 0,
+    "retained_gst_states": 4,
+    "hscroll_nonzero_states": 0,
+    "mercenary_icon_cache_changes": 0,
+    "status": "pass"
+  }
+}

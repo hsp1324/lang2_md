@@ -885,3 +885,43 @@ complete preparation-surface review. The expanded related focused suite,
 including the 162-state H-scroll matrix and first-draw GST delta gates, passes
 114/114. The five added cache-reuse checks lock the ordinary enemy mercenary
 path used by the all-scenario gray/battle-sprite regression.
+
+## 2026-08-02 current-source revalidation
+
+The late-ally tier-1/LV10 progression change and the battle target-cursor tile
+separation landed after the prior preparation candidate was captured. Separate
+non-release audit ROMs were therefore rebuilt from the current working source:
+
+- normal checksum `015C`, SHA-256
+  `eaee0b0443140776a6ad7ae4542a9b41a132ac7c19c4b4b127a61de8b8d74c27`;
+- hard checksum `1767`, SHA-256
+  `5b391ad132553427d2ededf01651d6215a71ce60dc8e1f0cacb1e45419a17f8a`.
+
+`tools/run_full_surface_regression.py` used six isolated workers per profile,
+up to twelve simultaneous BlastEm instances, for Scenarios 1 through 27. All
+54 preparation runs and all 54 real-movement gray-acted runs passed. The
+preparation runs contain 733 same-run pre/post-shop pairs per profile; every
+one of the 1,466 new pairs is byte-identical and every source surface is
+SHA-256 identical to its previously reviewed counterpart. The hash-exact
+review transfer therefore passed all 27 scenarios in both profiles and is
+recorded in `localization/preparation_manual_review_current_candidate.json`.
+
+The same current-source run passes all 16 mercenary hire rows, both Pike
+profiles with six hired Pikes and a real move, both isolated Monk active/acted
+profiles, Cross/Necklace shop rows, both mercenary animation frames in all
+27 scenarios per profile, the 64,890-context zero-conflict allocation, and all
+162 H-scroll GST states with zero nonzero bytes. The consolidated evidence is
+`localization/current_candidate_surface_regression.json` and the orchestrator
+summary is
+`tmp/full_surface_regression/current-source-20260802-01/summary.json`.
+
+The retained first-draw debugger GSTs are not relabeled as fresh current-ROM
+captures. Instead,
+`localization/preparation_first_draw_current_applicability.json` verifies the
+recorded source ROM/GST hashes and proves that the dynamic glyph payloads,
+preparation slot table, preparation VDP commands, preparation tile IDs, and
+preparation renderer are byte-identical in both current audit ROMs. The
+battle-only cursor-table change is outside that preparation lifetime contract.
+No release ROM, save, version, or desktop artifact was changed. Full
+battle-result acceptance for Scenario 10 and Scenarios 12 through 27 remains
+the separate pending release gate.
