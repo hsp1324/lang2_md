@@ -29,6 +29,7 @@ DEFAULT_SUMMARY_ROOT = ROOT / "tmp/current_source_result_revalidation"
 RUNNERS: dict[int, str] = {
     10: "run_scenario10_result_surface.py",
     12: "run_scenario12_result_surface.py",
+    13: "run_scenario13_result_surface.py",
     14: "run_scenario14_15_result_surface.py",
     15: "run_scenario14_15_result_surface.py",
     16: "run_scenario14_15_result_surface.py",
@@ -47,6 +48,11 @@ SCENARIO_SEED_OVERRIDES = {
         ROOT
         / "captures/runtime/s12-load-old-40bc/.local/share/blastem/"
         "Langrisser II (Scenario 12 Compact Clear Probe)/quicksave.gst"
+    ),
+    13: (
+        ROOT
+        / "captures/runtime/s13-completion-0ce6/.local/share/blastem/"
+        "Langrisser II (Scenario 13 Completion Probe)/quicksave.gst"
     ),
 }
 

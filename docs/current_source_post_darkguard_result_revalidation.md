@@ -43,6 +43,7 @@ Normal and hard profiles were tested separately.
 | Scenarios | Run ID | Profiles passed | Summary |
 | --- | --- | ---: | --- |
 | 12 | `post-darkguard-20260802-08` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s12-safe-summary.json` |
+| 13 | `post-darkguard-20260802-15` normal; `post-darkguard-20260802-14` hard | 2/2 | profile `evidence.json` files under `captures/run/current_source_result_revalidation/s13` |
 | 14, 15, 17, 21-26 | `post-darkguard-20260802-02` | 18/18 | `tmp/current-source-post-darkguard-result-probes/supported-summary.json` |
 | 10 | `post-darkguard-20260802-04` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s10-summary.json` |
 | 16 | `post-darkguard-20260802-05` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s16-summary.json` |
@@ -65,6 +66,26 @@ visibly clean. The first hard attempt
 allowed only the formerly observed HP 1 continuation. That was a harness
 assumption failure, not ROM evidence.
 
+Scenario 13 also resumes its byte-exact historical final-Vargas GST. The
+diagnostic-only current-candidate ROM checks Vargas's runtime identity and
+changes only his live HP from 8 to 1 through the retained stock Start entry.
+Ordinary Attack can miss, so every retry terminates the emulator and launches
+the untouched continuation again; no mid-turn GST is restored and no later
+turn is synthesized. Normal hit on fresh launch 4 and hard on fresh launch 5.
+Both profiles reached the battle-result surface at aftermath frame 46 and the
+save menu at frame 1. Their result PNGs are byte-identical with SHA-256
+`f5ed2f149611f260eb808dd732d3ef108cdaa2e15a84d89b3a265e6ab933008a`;
+their save-menu PNGs are also byte-identical with SHA-256
+`cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a`.
+
+The rejected `post-darkguard-20260802-13` runner tried to continue after a
+miss by ending the turn. Scenario events reinitialized Vargas and the command
+focus selected Elwin instead of Keith, so that route is harness-invalid. The
+normal half of `post-darkguard-20260802-14` failed before any game input when
+BlastEm exited during window creation with a JIT address-displacement error;
+the clean normal rerun above distinguishes that emulator failure from ROM
+evidence.
+
 Scenario 16 now uses the same one-tile stock completion runner as Scenarios 14
 and 15. Elwin moves from `(13, 6)` to the stock completion gate `(13, 5)`.
 Both profiles reached a clean battle-result screen; the normal result capture is
@@ -85,6 +106,6 @@ failure; the passing run proves the current-source ROM's ordinary ending path.
 
 ## Pending coverage
 
-Current-source battle-result runners are still missing for Scenarios 13 and
-18-20. Consequently this report is evidence for the rows above, not full
-release acceptance.
+Current-source battle-result runners are still missing for Scenarios 18-20.
+Consequently this report is evidence for the rows above, not full release
+acceptance.

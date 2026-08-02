@@ -54,6 +54,35 @@ The machine-readable evidence is
 `localization/scenario13_current_result_surface_regression.json`; the verifier
 is `tools/verify_scenario13_current_result_surface.py`.
 
+## 2026-08-02 current-source rerun
+
+The post-DarkGuard current candidates were rerun with
+`tools/run_scenario13_result_surface.py` through the parallel result
+orchestrator. The diagnostic probes were:
+
+- normal checksum `F79A`, SHA-256
+  `f8b811dc63d39095ebc0b147198f61052f8a368b89d81a59d6261fe2d2b5b904`
+- hard checksum `E395`, SHA-256
+  `3d9b85a085b673780e955c98ec91f1cf5b95ca49adfebbaf8c81715bc78f298c`
+
+Each miss now causes a completely fresh emulator launch from the untouched
+continuation GST. This avoids both a mid-turn restore and Scenario 13's
+later-turn event reinitialization. Normal hit on attempt 4 after misses at
+idle delays 0.00, 0.11, and 0.22 seconds; hard hit on attempt 5 after one
+additional miss at 0.33 seconds. Both profiles then reached the battle result
+at aftermath frame 46 and the save menu at frame 1. The normal and hard result
+captures are byte-identical (SHA-256
+`f5ed2f149611f260eb808dd732d3ef108cdaa2e15a84d89b3a265e6ab933008a`),
+as are their save-menu captures (SHA-256
+`cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a`).
+
+Evidence:
+
+- normal:
+  `captures/run/current_source_result_revalidation/s13/normal/post-darkguard-20260802-15/evidence.json`
+- hard:
+  `captures/run/current_source_result_revalidation/s13/hard/post-darkguard-20260802-14/evidence.json`
+
 ## Rejected attempts
 
 - The fresh southern completion layout placed players in Vargas's arrival
@@ -66,6 +95,13 @@ is `tools/verify_scenario13_current_result_surface.py`.
   `31981832d52bb19920326e00db7a7e99b215fd75f244af04375cbbca2e6b109f`.
 - An older `0AD7` cross-checksum state terminated BlastEm before a stable
   capture and is not accepted as current evidence.
+- A later-turn retry after a miss reinitialized Vargas and selected Elwin,
+  rather than preserving the identity-guarded HP-1 Keith attack. That route is
+  rejected as a harness error; the accepted rerun always starts from the
+  untouched continuation.
+- One normal-profile launch exited before creating a window because of a
+  BlastEm JIT address-displacement error. A new isolated-display launch passed,
+  so the failed launch is emulator infrastructure evidence, not ROM evidence.
 - Pre-result map tiles inherited from the historical cross-checksum state are
   not used to claim current sprite integrity. Current preparation, minimap,
   battle-cache, and gray acted-sprite evidence remains owned by the separate

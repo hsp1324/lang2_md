@@ -92,6 +92,13 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
             command,
         )
         self.assertNotIn(str(args.seed_gst), command)
+        command = runner.task_command(args, "normal", 13, ":605")
+        self.assertTrue(command[1].endswith("run_scenario13_result_surface.py"))
+        self.assertIn(
+            str(runner.SCENARIO_SEED_OVERRIDES[13]),
+            command,
+        )
+        self.assertNotIn(str(args.seed_gst), command)
 
 
 if __name__ == "__main__":
