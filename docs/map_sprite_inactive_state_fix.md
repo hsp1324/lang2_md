@@ -85,6 +85,36 @@ acted `0x01`, position `(16,3)`. Plane A references all four tiles
 
 The candidate is diagnostic only. It does not bump or replace a release ROM.
 
+### Released B1.0.5 cold-boot revalidation (2026-08-02)
+
+After B1.0.5 was distributed, the user supplied a screen where Elwin appeared
+as red enemy infantry and two hired Phalanx appeared as Royal Horse. The exact
+Desktop B1.0.5 ROM (`F296`, SHA-256 `fcb38e37...a770d`) and its 64 KiB user
+SRAM were then replayed from a fresh isolated emulator rather than a state.
+Slot 1 is Scenario 13 and retains Elwin as Arch Mage `0x14`.
+
+The replay hired two real Phalanx, used automatic deployment, entered battle,
+and closed the command window. Both Phalanx visibly use the correct on-foot
+sprite. Their active frame-1 cache at `0x8980..0x89FF` matches ROM sprite ID
+`0x0002`, and all four tiles `0x044C..0x044F` have two complete Plane A
+occurrences. Acted Elwin uses all four private gray tiles
+`0x04B0..0x04B3`; VRAM `0x9600..0x967F` still has SHA-256
+`0f7f922b...e3c398a` and matches his private mask.
+
+A second formal probe against the released ROM hired two Phalanx, closed the
+command window before inspecting the map, then moved one Phalanx and observed
+acted flag `0 -> 1`. It passes at
+`captures/run/pike_acted_surface_probe/b105-s13-elwin-phalanx-linkage-20260802-03/evidence.json`.
+The verifier now counts only complete four-tile Plane A occurrences; Window/UI
+hits and sprites partly hidden by the command window cannot pass.
+
+The attached wrong-colored screen therefore does not reproduce from the exact
+ROM/SRAM cold-boot path and is consistent with an older RetroArch state or
+automatic state restoring pre-B1.0.5 VRAM and Plane A references. Cross-build
+savestates remain invalid migration data. Fully restart the core and use the
+game's `START -> load` path. If that exact path reproduces again, retain the
+new B1.0.5 state so its VRAM and tile map can be compared directly.
+
 ## Verification
 
 Fresh Scenario 3 playback on isolated Xvfb display `:115` moved each commander

@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 from scripts import build_korean_jp_probe as builder
 from tools import run_pike_acted_surface_probe as probe
@@ -70,6 +71,43 @@ class PikeActedSurfaceProbeTests(unittest.TestCase):
             probe.move_keys((10, 12), (8, 15)),
             ["left", "left", "down", "down", "down"],
         )
+
+    def test_active_sprite_linkage_counts_only_complete_plane_a_units(self) -> None:
+        references = [
+            {
+                "tile": f"0x{0x44C + index:04X}",
+                "hits": (
+                    [{"plane": "plane_a"}, {"plane": "plane_a"}]
+                    if index != 2
+                    else [
+                        {"plane": "plane_a"},
+                        {"plane": "window"},
+                    ]
+                ),
+            }
+            for index in range(4)
+        ]
+        self.assertEqual(
+            probe.complete_plane_a_sprite_occurrences(references),
+            1,
+        )
+
+    def test_ui_only_tile_hits_do_not_prove_an_active_map_sprite(self) -> None:
+        references = [
+            {
+                "tile": f"0x{0x44C + index:04X}",
+                "hits": [{"plane": "window"}],
+            }
+            for index in range(4)
+        ]
+        self.assertEqual(
+            probe.complete_plane_a_sprite_occurrences(references),
+            0,
+        )
+
+    def test_external_release_rom_path_remains_reportable(self) -> None:
+        external = Path("/mnt/c/example/release.md")
+        self.assertEqual(probe.relative(external), str(external))
 
 
 if __name__ == "__main__":

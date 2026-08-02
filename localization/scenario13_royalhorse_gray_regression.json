@@ -62,8 +62,50 @@
       "gray_vram_sha256": "40b66c0d25aa7ce59146364c7b6c090ddef34e5026af3333aa5e774e80e1c36c",
       "matches_stock_silhouette_expansion": true,
       "all_four_plane_a_tiles_referenced": true,
-      "probe_status_note": "The source evidence reports fail only because its active-frame visibility heuristic did not observe a complete animation frame; the acted move, cache bytes, and plane references all passed."
+      "probe_status_note": "Historical evidence only. Its command window covered part of the active sprite, so it did not prove that a complete on-map unit referenced all four verified active-cache tiles. The B1.0.5 cold-boot probe below supersedes that visibility claim."
     }
+  },
+  "release_b105_cold_boot_revalidation": {
+    "reported_screen": "C:/Users/hsp13/Desktop/KakaoTalk_20260802_133720740.jpg",
+    "reported_symptom": "Elwin appeared as red enemy infantry and his Phalanx mercenaries appeared as Royal Horse while the user identified the running ROM as B1.0.5.",
+    "release_rom": {
+      "path": "C:/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.5).md",
+      "md_checksum": "F296",
+      "sha256": "fcb38e375f410715f026453230319b6a4329605edecfa191e91d601d348a770d"
+    },
+    "user_sram": {
+      "path": "C:/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.5).srm",
+      "sha256": "dd135b054055e0c0fa6d9b9209e9d1180b206079c2fd1f105d1ffff873c6e6e9",
+      "slot_1_scenario": 13,
+      "elwin_class_id": "0x14"
+    },
+    "exact_user_sram_cold_boot": {
+      "route": "Fresh isolated emulator, import the 64 KiB user SRAM, in-game load slot 1, Scenario 13, hire two Phalanx, automatic deployment, close the command window.",
+      "capture": "captures/run/scenario13_royalhorse_regression/b105-real-user-hire-20260802-01/battle/map_closed.png",
+      "capture_sha256": "e2552729a737e97f522a3b616b6f88f969234f2df9839f481c20e131ad3c4760",
+      "gst": "captures/run/scenario13_royalhorse_regression/b105-real-user-hire-20260802-01/states/map_closed.gst",
+      "gst_sha256": "41a03a4f3b0642675c34e6cd9ffcf018cb5c948f2421ecf7de53139f73e5fe14",
+      "elwin_acted_private_gray_vram_matches": true,
+      "elwin_complete_plane_a_tile_range": "0x04B0..0x04B3",
+      "phalanx_count": 2,
+      "phalanx_active_frame_1_vram_matches": true,
+      "phalanx_complete_plane_a_tile_range": "0x044C..0x044F",
+      "visual_result": "pass"
+    },
+    "strengthened_formal_probe": {
+      "evidence": "captures/run/pike_acted_surface_probe/b105-s13-elwin-phalanx-linkage-20260802-03/evidence.json",
+      "evidence_sha256": "a938d02201990ef4a510d3ef1eddcc065616c1bd11271d4186dd81f81ff419ba",
+      "status": "pass",
+      "hired_class": "팔랑크스",
+      "hired_class_id": "0x63",
+      "hired_count": 2,
+      "both_active_frames_match_rom_source": true,
+      "complete_plane_a_sprite_occurrences": 2,
+      "real_move_acted_flag_transition": "0->1",
+      "acted_gray_vram_matches": true,
+      "validation_change": "The active-map verifier now closes the command window and requires all four tiles of at least one actual Plane A sprite. Window/UI tile hits and partial sprites cannot satisfy the gate."
+    },
+    "diagnosis": "The exact B1.0.5 ROM and SRAM do not reproduce the attached wrong colored sprites after a cold boot. The screenshot is consistent with loading an older emulator savestate or automatic state whose VRAM and Plane A tile references predate B1.0.5. Savestates are not compatible evidence across ROM builds; use a full core restart and the in-game START -> load path."
   },
   "static_verification": {
     "custom_sprite_count": 53,
@@ -71,5 +113,5 @@
     "focused_test_count": 62,
     "focused_tests_passed": 62
   },
-  "remaining_gate": "Capture Hein after a real committed move and repeat the Phalanx move under this exact EC96 candidate before marking the regression fully passed."
+  "remaining_gate": "Capture Hein after a real committed move under the exact released B1.0.5 ROM. If the user can reproduce the wrong colored Elwin/Phalanx after a full RetroArch core restart and in-game SRAM load with no state or auto-state load, retain that exact B1.0.5 state for comparison; the current cold-boot B1.0.5 replay passes."
 }

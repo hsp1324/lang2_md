@@ -55,7 +55,14 @@ def sha256(path: Path) -> str:
 
 
 def relative(path: Path) -> str:
-    return str(path.resolve().relative_to(ROOT))
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        # Release/user ROMs can intentionally live on the Windows-mounted
+        # Desktop.  Keep their absolute path in diagnostic evidence instead
+        # of failing after the complete emulator run has finished.
+        return str(resolved)
 
 
 def work_ram(path: Path) -> bytes:
@@ -136,6 +143,18 @@ def expected_mercenary_gray(
     return sprite_id, source, expand_gray_source_mask(mask)
 
 
+def complete_plane_a_sprite_occurrences(
+    references: list[dict[str, object]],
+) -> int:
+    """Count complete four-tile sprites backed by one cache frame."""
+    if len(references) != ORDINARY_ACTIVE_TILES_PER_CLASS:
+        raise ValueError("active mercenary frame must reference four tiles")
+    return min(
+        sum(hit["plane"] == "plane_a" for hit in row["hits"])
+        for row in references
+    )
+
+
 def mercenary_active_report(
     rom: bytes,
     gst: Path,
@@ -175,6 +194,9 @@ def mercenary_active_report(
                 frame_tile + ORDINARY_ACTIVE_TILES_PER_CLASS,
             )
         ]
+        complete_occurrences = complete_plane_a_sprite_occurrences(
+            references
+        )
         frames.append({
             "frame": frame,
             "source": f"0x{source:06X}..0x{source + 0x7F:06X}",
@@ -187,6 +209,12 @@ def mercenary_active_report(
             "actual_sha256": hashlib.sha256(actual).hexdigest(),
             "matches_rom_source": actual == expected,
             "plane_references": references,
+            # A complete 16x16 unit contributes one Plane A reference to
+            # each of its four tiles.  Taking the minimum count therefore
+            # proves that at least this many on-map units actually point at
+            # the verified cache payload; unrelated Window/UI references do
+            # not satisfy the check.
+            "complete_plane_a_sprite_occurrences": complete_occurrences,
         })
     return {
         "class_id": f"0x{class_id:02X}",
@@ -197,8 +225,11 @@ def mercenary_active_report(
             row["matches_rom_source"] for row in frames
         ),
         "one_animation_frame_visible": any(
-            all(tile["hits"] for tile in row["plane_references"])
+            row["complete_plane_a_sprite_occurrences"] > 0
             for row in frames
+        ),
+        "max_complete_plane_a_sprite_occurrences": max(
+            row["complete_plane_a_sprite_occurrences"] for row in frames
         ),
     }
 
@@ -475,8 +506,19 @@ def run_probe(args: argparse.Namespace) -> dict[str, object]:
     try:
         hired_gst = launch_and_hire(recorder, args, output, runtime_name)
         enter_battle_command(recorder, args.rom, output)
-        active_capture = recorder.capture("battle/active_command.png")
-        active_gst = recorder.save_gst("states/active_command.gst")
+        active_command_capture = recorder.capture(
+            "battle/active_command.png"
+        )
+        active_command_gst = recorder.save_gst(
+            "states/active_command.gst"
+        )
+        # The command window can cover half of a 16x16 mercenary and made the
+        # old verifier accept a correct cache payload without proving that an
+        # actual unit used all four tiles.  Close it before taking the active
+        # sprite evidence so the map linkage is observable.
+        recorder.send(["b"], delay=0.8)
+        active_capture = recorder.capture("battle/active_map.png")
+        active_gst = recorder.save_gst("states/active_map.gst")
         groups_before = runtime_groups(active_gst)
         target_group_before = commander_group(active_gst, args.commander_id)
         active_report = mercenary_active_report(
@@ -499,9 +541,9 @@ def run_probe(args: argparse.Namespace) -> dict[str, object]:
         mercenary_before, direction = candidates[0]
         commander_before = groups_before[0]["members"][0]
 
-        # detect-command leaves the command menu open on group 0. Close it,
-        # move the map cursor to the chosen Pike, then apply Move and Standby.
-        recorder.send(["b"], delay=0.8)
+        # The command menu was closed for the active-map linkage proof above.
+        # Move the map cursor to the chosen mercenary, then apply Move and
+        # Standby.
         navigation = move_keys(
             (commander_before["x"], commander_before["y"]),
             (mercenary_before["x"], mercenary_before["y"]),
@@ -559,6 +601,12 @@ def run_probe(args: argparse.Namespace) -> dict[str, object]:
             "hired_count": args.hired_count,
             "hired_gst": relative(hired_gst),
             "hired_gst_sha256": sha256(hired_gst),
+            "active_command_capture": relative(active_command_capture),
+            "active_command_capture_sha256": sha256(
+                active_command_capture
+            ),
+            "active_command_gst": relative(active_command_gst),
+            "active_command_gst_sha256": sha256(active_command_gst),
             "active_capture": relative(active_capture),
             "active_capture_sha256": sha256(active_capture),
             "active_gst": relative(active_gst),
