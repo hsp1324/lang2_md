@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "partial_pass",
+  "date": "2026-08-02",
+  "report_correction": {
+    "wrong_enemy_cavalry_name": "로얄호스",
+    "class_id": "0x7B",
+    "scenario_13_dynamic_enemy_cache_position": "last of 10 entries"
+  },
+  "candidate": {
+    "path": "tmp/s13-custom-gray-fix-20260802-01/candidate-hard.md",
+    "md_checksum": "EC96",
+    "sha256": "fff955d9c2549a8ac06ae2182e1aee93aed6296861aa309109d8074ae77417e2",
+    "release_version_changed": false,
+    "distributed": false
+  },
+  "root_cause": {
+    "vram_collision": false,
+    "description": "The former custom-ID remap loaded the obsolete stock silhouette for redesigned commanders. Scenario 13's Royal Horse cache was adjacent but did not overwrite Elwin or Hein.",
+    "fix": "Every dense custom sprite ID 0x53AD..0x53E1 now indexes a private 0x40-byte gray source. Redesigned shapes derive a three-tone mask from the accepted custom active frame; pure recolors retain their stock hand-authored mask."
+  },
+  "runtime": {
+    "source_save": "C:/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.4).srm",
+    "save_format": "Genesis Plus GX 64 KiB interleaved SRAM",
+    "scenario": 13,
+    "elwin_archmage": {
+      "custom_sprite_id": "0x53BD",
+      "runtime_record": {
+        "class_id": "0x14",
+        "commander_id": 1,
+        "acted_flag": 1,
+        "position": [16, 3]
+      },
+      "gray_vram": "0x9600..0x967F",
+      "gray_vram_sha256": "0f7f922b9191785b112b3f8dd955f2c79c4538b5c39ea0531d6994f7ae3c398a",
+      "matches_private_custom_mask_expansion": true,
+      "all_four_plane_a_tiles_referenced": true,
+      "capture": "captures/run/scenario13_royalhorse_regression/custom-gray-fix-20260802-01/elwin-acted-map.png",
+      "capture_sha256": "706af821944b271ce4d4e50dbf3bf3c3918a9cfd677d98d985a6acbd99450bd6",
+      "gst": "captures/run/scenario13_royalhorse_regression/custom-gray-fix-20260802-01/states/elwin-acted.gst",
+      "gst_sha256": "8a14543d1e5e0ebc1bf7389cf95ad997ade0e5dfa520597cf52ea4e06efd97f5"
+    },
+    "hein_archmage": {
+      "custom_sprite_id": "0x53CF",
+      "gray_vram": "0x9680..0x96FF",
+      "gray_vram_sha256": "15bdc88349ba29abf40ef484488c13d1da33a204c4a708cb5b76c483c0d261c1",
+      "matches_private_custom_mask_expansion": true,
+      "acted_move_capture_complete": false
+    },
+    "royal_horse": {
+      "class_id": "0x7B",
+      "frame_1_vram": "0x9580..0x95FF",
+      "frame_1_vram_sha256": "447995f80937ba10effd646362a4d20527bb34c41a506711182f1e3dc5ade903",
+      "overlaps_elwin_or_hein_gray_vram": false
+    },
+    "phalanx": {
+      "class_id": "0x63",
+      "prior_current_source_probe": "captures/run/scenario13_royalhorse_regression/current-source-elwin-hero-phalanx-20260802-02/evidence.json",
+      "real_move_acted_flag": 1,
+      "coordinate_changed": true,
+      "gray_vram": "0x7680..0x76FF",
+      "gray_vram_sha256": "40b66c0d25aa7ce59146364c7b6c090ddef34e5026af3333aa5e774e80e1c36c",
+      "matches_stock_silhouette_expansion": true,
+      "all_four_plane_a_tiles_referenced": true,
+      "probe_status_note": "The source evidence reports fail only because its active-frame visibility heuristic did not observe a complete animation frame; the acted move, cache bytes, and plane references all passed."
+    }
+  },
+  "static_verification": {
+    "custom_sprite_count": 53,
+    "redesigned_gray_occupancy_matches_active_sprite": true,
+    "focused_test_count": 62,
+    "focused_tests_passed": 62
+  },
+  "remaining_gate": "Capture Hein after a real committed move and repeat the Phalanx move under this exact EC96 candidate before marking the regression fully passed."
+}

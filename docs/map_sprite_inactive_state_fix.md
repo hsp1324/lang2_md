@@ -22,7 +22,7 @@ The map loader at `0x0110A8` loads normal frames from:
 - frame 1: `0x058280 + sprite_id * 0x80`
 
 It also calls `0x011DD8` with base `0x0510C0` to expand a separate
-`0x40`-byte 1bpp silhouette into the gray `0x80`-byte inactive frame. Stock
+`0x40`-byte 2bpp silhouette into the gray `0x80`-byte inactive frame. Stock
 code executes `LSL.W #6,D0`, so expansion sprite IDs `0x53AD..0x53E1` wrap in
 16 bits and address unrelated ROM bytes.
 
@@ -30,9 +30,25 @@ code executes `LSL.W #6,D0`, so expansion sprite IDs `0x53AD..0x53E1` wrap in
 
 `scripts/build_korean_jp_probe.py` replaces the entry at `0x011DD8` with a
 jump to `0x2B8D40`. Stock IDs pass through. All 53 dense custom IDs
-`0x53AD..0x53E1` are translated through the word table at `0x2B8E00` to the
-silhouette ID from the original class record, then execution resumes at
-`0x011DDE`.
+`0x53AD..0x53E1` index private `0x40`-byte gray masks at `0x2F8000`, then
+execution resumes at the stock expansion loop at `0x011DE2`.
+
+The first implementation translated each custom ID back to the silhouette ID
+from the original class record. That prevented ROM-address wrap and Hangul
+fragments, but it was only correct while the redesigned active sprite retained
+the stock silhouette. Scenario 13 exposed the remaining error: acted Elwin and
+Hein Archmage loaded their obsolete stock infantry/cavalry shapes, which could
+look like the enemy Armor Soldier successor or Royal Horse even though their
+VRAM slots had not collided with those enemies.
+
+The current implementation therefore treats recolors and redesigns
+differently:
+
+- a pure recolor whose active occupancy still matches the stock active and
+  gray masks retains the hand-authored stock gray mask;
+- a redesigned sprite derives a deterministic three-tone gray mask from its
+  accepted custom active frame, preserving every occupied pixel of the new
+  silhouette.
 
 The mapping covers:
 
@@ -41,7 +57,33 @@ The mapping covers:
 - paired NPC sprites
 - all 40 redesigned commander/class sprites
 
-Normal custom animation frames are unchanged.
+Normal custom animation frames are unchanged. Ordinary mercenary active,
+second-frame, and gray caches are also unchanged; the separate fixed-cache
+reuse test remains responsible for Pike, Monk, Phalanx, and the other ordinary
+mercenaries when Scenario 13 fills all ten dynamic enemy slots through Royal
+Horse.
+
+### Scenario 13 redesign regression (2026-08-02)
+
+The user's real 64 KiB Genesis Plus GX save was imported without changing its
+roster, loaded into Scenario 13, and Elwin Archmage was moved through the real
+in-game command. The acted runtime record is class `0x14`, commander `0x01`,
+acted `0x01`, position `(16,3)`. Plane A references all four tiles
+`0x04B0..0x04B3`, and VRAM `0x9600..0x967F` is byte-identical to custom sprite
+`0x53BD`'s new private gray mask expansion.
+
+- ROM: `tmp/s13-custom-gray-fix-20260802-01/candidate-hard.md`
+- ROM checksum: `EC96`
+- ROM SHA-256:
+  `fff955d9c2549a8ac06ae2182e1aee93aed6296861aa309109d8074ae77417e2`
+- capture:
+  `captures/run/scenario13_royalhorse_regression/custom-gray-fix-20260802-01/elwin-acted-map.png`
+- GST:
+  `captures/run/scenario13_royalhorse_regression/custom-gray-fix-20260802-01/states/elwin-acted.gst`
+- acted gray VRAM SHA-256:
+  `0f7f922b9191785b112b3f8dd955f2c79c4538b5c39ea0531d6994f7ae3c398a`
+
+The candidate is diagnostic only. It does not bump or replace a release ROM.
 
 ## Verification
 

@@ -40,6 +40,14 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
         cls.original = builder.IN_ROM.read_bytes()
         cls.patched = bytearray(cls.original)
         builder.expand_rom(cls.patched)
+        builder.patch_bald_map_sprite(cls.patched)
+        builder.patch_shaman_map_sprite(cls.patched)
+        builder.patch_loren_map_sprite(cls.patched)
+        builder.patch_paired_npc_map_sprites(cls.patched)
+        builder.patch_ai_class_map_sprites(cls.patched)
+        cls.expected_masks = builder.custom_map_sprite_gray_masks(
+            cls.patched, cls.original
+        )
         builder.patch_map_sprite_gray_source_remap(
             cls.patched, cls.original
         )
@@ -137,16 +145,22 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
         self.assertEqual(record[2], 0x01)
         self.assertEqual(tuple(record[6:8]), (16, 53))
 
-    def test_remap_table_contains_each_stock_silhouette_id(self) -> None:
+    def test_custom_mask_table_contains_every_dense_sprite_mask(self) -> None:
         first = min(self.mapping)
-        for custom_sprite_id, source_sprite_id in self.mapping.items():
+        for custom_sprite_id, expected in self.expected_masks.items():
             offset = (
-                builder.MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE
-                + (custom_sprite_id - first) * 2
+                builder.MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE
+                + (custom_sprite_id - first)
+                * builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
             )
             self.assertEqual(
-                builder.be16(self.patched, offset),
-                source_sprite_id,
+                bytes(
+                    self.patched[
+                        offset :
+                        offset + builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+                    ]
+                ),
+                expected,
             )
 
     def test_gray_source_entry_redirects_to_expansion_routine(self) -> None:
@@ -158,7 +172,7 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
                 4, "big"
             ),
         )
-        routine = builder._build_map_sprite_gray_source_remap_routine(
+        routine = builder._build_map_sprite_gray_custom_mask_routine(
             min(self.mapping), max(self.mapping)
         )
         start = builder.MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE
@@ -169,6 +183,121 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
         self.assertLessEqual(
             start + len(routine),
             builder.MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE_LIMIT,
+        )
+        self.assertIn(
+            builder.MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE.to_bytes(4, "big"),
+            routine,
+        )
+        self.assertIn((0x011DE2).to_bytes(4, "big"), routine)
+
+    def test_redesigned_elwin_and_hein_gray_shapes_match_active_sprites(self) -> None:
+        for commander_id, class_id in ((1, 0x14), (5, 0x14)):
+            custom_sprite_id = next(
+                sprite_id
+                for candidate_commander, candidate_class, sprite_id in (
+                    builder.AI_CLASS_MAP_SPRITE_SPECS
+                )
+                if (candidate_commander, candidate_class)
+                == (commander_id, class_id)
+            )
+            active_start = (
+                builder.MAP_SPRITE_FRAME_BASES[0]
+                + custom_sprite_id * builder.MAP_SPRITE_BYTES
+            )
+            active_pixels = builder._decode_map_sprite_pixels(
+                bytes(
+                    self.patched[
+                        active_start : active_start + builder.MAP_SPRITE_BYTES
+                    ]
+                )
+            )
+            mask = self.expected_masks[custom_sprite_id]
+            expanded = []
+            for offset in range(0, len(mask), 2):
+                high_plane, low_plane = mask[offset : offset + 2]
+                expanded.extend(
+                    2 * ((high_plane >> bit) & 1)
+                    + ((low_plane >> bit) & 1)
+                    for bit in range(7, -1, -1)
+                )
+            with self.subTest(commander_id=commander_id):
+                self.assertEqual(
+                    [value != 0 for value in expanded],
+                    [value != 0 for value in active_pixels],
+                )
+
+    def test_every_redesigned_custom_gray_shape_matches_its_active_sprite(self) -> None:
+        for custom_sprite_id, source_sprite_id in self.mapping.items():
+            custom_start = (
+                builder.MAP_SPRITE_FRAME_BASES[0]
+                + custom_sprite_id * builder.MAP_SPRITE_BYTES
+            )
+            source_start = (
+                builder.MAP_SPRITE_FRAME_BASES[0]
+                + source_sprite_id * builder.MAP_SPRITE_BYTES
+            )
+            stock_mask_start = (
+                0x0510C0
+                + source_sprite_id
+                * builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+            )
+            active_pixels = builder._decode_map_sprite_pixels(
+                bytes(
+                    self.patched[
+                        custom_start : custom_start + builder.MAP_SPRITE_BYTES
+                    ]
+                )
+            )
+            source_pixels = builder._decode_map_sprite_pixels(
+                bytes(
+                    self.original[
+                        source_start : source_start + builder.MAP_SPRITE_BYTES
+                    ]
+                )
+            )
+
+            def decode_mask(mask: bytes) -> list[int]:
+                return [
+                    2 * ((mask[offset] >> bit) & 1)
+                    + ((mask[offset + 1] >> bit) & 1)
+                    for offset in range(0, len(mask), 2)
+                    for bit in range(7, -1, -1)
+                ]
+
+            stock_pixels = decode_mask(
+                bytes(
+                    self.original[
+                        stock_mask_start :
+                        stock_mask_start
+                        + builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+                    ]
+                )
+            )
+            if (
+                [value != 0 for value in active_pixels]
+                == [value != 0 for value in source_pixels]
+                == [value != 0 for value in stock_pixels]
+            ):
+                continue
+            with self.subTest(custom_sprite_id=f"0x{custom_sprite_id:04X}"):
+                self.assertEqual(
+                    [value != 0 for value in decode_mask(
+                        self.expected_masks[custom_sprite_id]
+                    )],
+                    [value != 0 for value in active_pixels],
+                )
+
+    def test_pure_recolor_keeps_its_hand_authored_stock_gray_mask(self) -> None:
+        source_sprite_id = self.mapping[builder.LOREN_CUSTOM_SPRITE_ID]
+        start = (
+            0x0510C0
+            + source_sprite_id * builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+        )
+        self.assertEqual(
+            self.expected_masks[builder.LOREN_CUSTOM_SPRITE_ID],
+            self.original[
+                start : start + builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+            ],
         )
 
     def test_unpatched_word_multiply_would_read_unrelated_data(self) -> None:
@@ -186,7 +315,12 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
     def test_patch_rejects_occupied_remap_area(self) -> None:
         data = bytearray(self.original)
         builder.expand_rom(data)
-        data[builder.MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE] = 0
+        builder.patch_bald_map_sprite(data)
+        builder.patch_shaman_map_sprite(data)
+        builder.patch_loren_map_sprite(data)
+        builder.patch_paired_npc_map_sprites(data)
+        builder.patch_ai_class_map_sprites(data)
+        data[builder.MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE] = 0
         with self.assertRaisesRegex(ValueError, "table is not blank"):
             builder.patch_map_sprite_gray_source_remap(
                 data, self.original

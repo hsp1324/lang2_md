@@ -261,12 +261,11 @@ AI_CLASS_MAP_SPRITE_SPECS = tuple(
 )
 
 # The stock inactive-unit renderer does not recolor the two 0x80-byte map
-# frames directly. It expands a separate 1bpp silhouette at
+# frames directly. It expands a separate 2bpp silhouette at
 # 0x0510C0 + sprite_id * 0x40. The original 68000 routine performs that
 # multiplication in a word, so expansion-backed sprite IDs wrap into
 # unrelated ROM data when a unit becomes gray after acting. Keep the compact
-# expansion IDs for the normal frames, but translate every one back to the
-# stock silhouette that belonged to its source sprite.
+# expansion IDs for the normal frames and route them to private gray masks.
 MAP_SPRITE_GRAY_SOURCE_HOOK = 0x011DD8
 MAP_SPRITE_GRAY_SOURCE_HOOK_ORIGINAL = bytes.fromhex(
     "02 80 00 00 FF FF"
@@ -274,8 +273,18 @@ MAP_SPRITE_GRAY_SOURCE_HOOK_ORIGINAL = bytes.fromhex(
 MAP_SPRITE_GRAY_SOURCE_RESUME = 0x011DDE
 MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE = 0x2B8D40
 MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE_LIMIT = 0x2B8E00
+# Retained for the legacy stock-silhouette remap builder and historical ROM
+# verification. New builds use MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE below.
 MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE = 0x2B8E00
 MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT = 0x2B8E80
+# Redesigned expansion sprites can have a different silhouette from the stock
+# sprite that previously occupied the same commander/class record.  Keep a
+# private 2bpp gray source for every dense custom ID so the acted frame follows
+# the accepted active sprite rather than turning back into an unrelated stock
+# infantry or cavalry shape.
+MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE = 0x2F8000
+MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE_LIMIT = 0x2F9000
+MAP_SPRITE_GRAY_SOURCE_MASK_BYTES = 0x40
 
 # The stock battle map always preloads ordinary hireable mercenary classes
 # 0x62..0x71 into the fixed cache at WRAM 0xA84E.  Enemy-side lookup ignores
@@ -3309,6 +3318,133 @@ def _build_map_sprite_gray_source_remap_routine(
     return code.finish()
 
 
+def _decode_map_sprite_pixels(payload: bytes) -> list[int]:
+    if len(payload) != MAP_SPRITE_BYTES:
+        raise ValueError(
+            f"map sprite must contain 0x{MAP_SPRITE_BYTES:X} bytes"
+        )
+    return [
+        nibble
+        for packed in payload
+        for nibble in (packed >> 4, packed & 0x0F)
+    ]
+
+
+def _encode_gray_source_mask(indexes: list[int]) -> bytes:
+    if len(indexes) != 16 * 16:
+        raise ValueError("gray map-sprite source must contain 256 pixels")
+    if any(not 0 <= index <= 3 for index in indexes):
+        raise ValueError("gray map-sprite indexes must be 0..3")
+    encoded = bytearray()
+    for offset in range(0, len(indexes), 8):
+        high_plane = 0
+        low_plane = 0
+        for pixel_index, value in enumerate(indexes[offset : offset + 8]):
+            bit = 7 - pixel_index
+            high_plane |= ((value >> 1) & 1) << bit
+            low_plane |= (value & 1) << bit
+        encoded.extend((high_plane, low_plane))
+    if len(encoded) != MAP_SPRITE_GRAY_SOURCE_MASK_BYTES:
+        raise AssertionError("gray map-sprite source encoding size changed")
+    return bytes(encoded)
+
+
+def _ai_palette_gray_index(color_index: int) -> int:
+    if color_index == 0:
+        return 0
+    red, green, blue, _ = AI_CLASS_MAP_PALETTE[color_index]
+    luminance = (red * 299 + green * 587 + blue * 114) // 1000
+    if luminance < 96:
+        return 1
+    if luminance < 176:
+        return 2
+    return 3
+
+
+def custom_map_sprite_gray_masks(
+    data: bytes | bytearray,
+    source_data: bytes | bytearray,
+) -> dict[int, bytes]:
+    mapping = custom_map_sprite_gray_source_map(source_data)
+    masks: dict[int, bytes] = {}
+    for custom_sprite_id, source_sprite_id in mapping.items():
+        custom_start = (
+            MAP_SPRITE_FRAME_BASES[0]
+            + custom_sprite_id * MAP_SPRITE_BYTES
+        )
+        source_start = (
+            MAP_SPRITE_FRAME_BASES[0]
+            + source_sprite_id * MAP_SPRITE_BYTES
+        )
+        custom_pixels = _decode_map_sprite_pixels(
+            bytes(data[custom_start : custom_start + MAP_SPRITE_BYTES])
+        )
+        source_pixels = _decode_map_sprite_pixels(
+            bytes(
+                source_data[source_start : source_start + MAP_SPRITE_BYTES]
+            )
+        )
+        stock_mask_start = (
+            0x0510C0
+            + source_sprite_id * MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+        )
+        stock_mask = bytes(
+            source_data[
+                stock_mask_start :
+                stock_mask_start + MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+            ]
+        )
+        if len(stock_mask) != MAP_SPRITE_GRAY_SOURCE_MASK_BYTES:
+            raise ValueError(
+                f"stock gray source 0x{source_sprite_id:04X} is truncated"
+            )
+        stock_gray_pixels = [
+            2 * ((stock_mask[offset] >> bit) & 1)
+            + ((stock_mask[offset + 1] >> bit) & 1)
+            for offset in range(0, len(stock_mask), 2)
+            for bit in range(7, -1, -1)
+        ]
+        custom_shape = [value != 0 for value in custom_pixels]
+        source_shape = [value != 0 for value in source_pixels]
+        stock_gray_shape = [value != 0 for value in stock_gray_pixels]
+        if custom_shape == source_shape == stock_gray_shape:
+            # Pure recolors retain the original hand-authored gray shading.
+            masks[custom_sprite_id] = stock_mask
+        else:
+            # Redesigned silhouettes derive a deterministic three-tone gray
+            # frame from the accepted active sprite's fixed map palette.
+            masks[custom_sprite_id] = _encode_gray_source_mask(
+                [_ai_palette_gray_index(value) for value in custom_pixels]
+            )
+    return masks
+
+
+def _build_map_sprite_gray_custom_mask_routine(
+    first_custom_id: int,
+    last_custom_id: int,
+) -> bytes:
+    code = _M68KCode()
+    code.emit("02 80 00 00 FF FF")  # andi.l #$ffff,d0
+    code.emit(bytes.fromhex("0C 40") + first_custom_id.to_bytes(2, "big"))
+    code.branch_word(0x6500, "stock")  # bcs.w
+    code.emit(bytes.fromhex("0C 40") + last_custom_id.to_bytes(2, "big"))
+    code.branch_word(0x6200, "stock")  # bhi.w
+    code.emit(bytes.fromhex("04 40") + first_custom_id.to_bytes(2, "big"))
+    code.emit("ED 88")  # lsl.l #6,d0
+    code.emit(
+        bytes.fromhex("41 F9")
+        + MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE.to_bytes(4, "big")
+    )  # lea.l custom masks,a0
+    code.emit("D1 C0")  # adda.l d0,a0
+    code.emit(bytes.fromhex("4E F9") + (0x011DE2).to_bytes(4, "big"))
+    code.label("stock")
+    code.emit(
+        bytes.fromhex("4E F9")
+        + MAP_SPRITE_GRAY_SOURCE_RESUME.to_bytes(4, "big")
+    )
+    return code.finish()
+
+
 def patch_map_sprite_gray_source_remap(
     data: bytearray,
     source_data: bytes | bytearray,
@@ -3324,23 +3460,24 @@ def patch_map_sprite_gray_source_remap(
             + ", ".join(f"0x{sprite_id:04X}" for sprite_id in missing)
         )
 
+    masks_by_sprite_id = custom_map_sprite_gray_masks(data, source_data)
     table = b"".join(
-        mapping[sprite_id].to_bytes(2, "big")
+        masks_by_sprite_id[sprite_id]
         for sprite_id in range(first_custom_id, last_custom_id + 1)
     )
-    table_end = MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE + len(table)
-    if table_end > MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT:
-        raise ValueError("map-sprite gray-source remap table exceeds reserve")
+    table_end = MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE + len(table)
+    if table_end > MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE_LIMIT:
+        raise ValueError("map-sprite gray custom-mask table exceeds reserve")
     if any(
         value != 0xFF
         for value in data[
-            MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE:table_end
+            MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE:table_end
         ]
     ):
-        raise ValueError("map-sprite gray-source remap table is not blank")
-    data[MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE:table_end] = table
+        raise ValueError("map-sprite gray custom-mask table is not blank")
+    data[MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE:table_end] = table
 
-    routine = _build_map_sprite_gray_source_remap_routine(
+    routine = _build_map_sprite_gray_custom_mask_routine(
         first_custom_id, last_custom_id
     )
     routine_end = MAP_SPRITE_GRAY_SOURCE_REMAP_ROUTINE + len(routine)
