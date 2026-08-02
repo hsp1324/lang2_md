@@ -42,6 +42,7 @@ Normal and hard profiles were tested separately.
 
 | Scenarios | Run ID | Profiles passed | Summary |
 | --- | --- | ---: | --- |
+| 12 | `post-darkguard-20260802-08` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s12-safe-summary.json` |
 | 14, 15, 17, 21-26 | `post-darkguard-20260802-02` | 18/18 | `tmp/current-source-post-darkguard-result-probes/supported-summary.json` |
 | 10 | `post-darkguard-20260802-04` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s10-summary.json` |
 | 16 | `post-darkguard-20260802-05` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s16-summary.json` |
@@ -51,6 +52,18 @@ The Scenario 10 runner marks only the ten runtime monster groups defeated,
 checks those group records, then completes the ordinary End Turn path. Both
 profiles reached the battle-result screen at frame 32 and the save menu at
 frame 1. Reaching the save menu does not overwrite a save slot.
+
+Scenario 12 resumes the byte-exact historical final-battle GST without editing
+the file or its work RAM. The normal candidate defeated the final Living Armor
+in one ordinary attack. The hard candidate reduced it to HP 2, used the stock
+End Turn path, and defeated it with Sherry's second ordinary attack. Both
+profiles reached the battle-result surface at aftermath frame 26 and the save
+menu at frame 1. Their result captures differ only inside the bottom-left
+16x16 animated fire-icon cell; all text, portraits, roster rows, and points are
+visibly clean. The first hard attempt
+`post-darkguard-20260802-07` rejected HP 2 because the new runner initially
+allowed only the formerly observed HP 1 continuation. That was a harness
+assumption failure, not ROM evidence.
 
 Scenario 16 now uses the same one-tile stock completion runner as Scenarios 14
 and 15. Elwin moves from `(13, 6)` to the stock completion gate `(13, 5)`.
@@ -72,6 +85,6 @@ failure; the passing run proves the current-source ROM's ordinary ending path.
 
 ## Pending coverage
 
-Current-source battle-result runners are still missing for Scenarios 12, 13,
-and 18-20. Consequently this report is evidence for the rows above, not full
+Current-source battle-result runners are still missing for Scenarios 13 and
+18-20. Consequently this report is evidence for the rows above, not full
 release acceptance.

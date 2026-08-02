@@ -14,7 +14,7 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
     def args(self) -> argparse.Namespace:
         return argparse.Namespace(
             profiles=["normal", "hard"],
-            scenarios=[14, 17, 27],
+            scenarios=[12, 14, 17, 27],
             workers=4,
             probe_root=ROOT / "tmp/current-source-result-probes-20260802-01",
             seed_gst=ROOT / "captures/analysis/scenario27_preparation_current.gst",
@@ -27,13 +27,13 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         report = runner.build_plan(self.args())
         self.assertEqual(report["status"], "pass")
         self.assertEqual(report["workers"], 4)
-        self.assertEqual(len(report["tasks"]), 6)
+        self.assertEqual(len(report["tasks"]), 8)
         self.assertEqual(
             {(row["profile"], row["scenario"]) for row in report["tasks"]},
             {
                 (profile, scenario)
                 for profile in ("normal", "hard")
-                for scenario in (14, 17, 27)
+                for scenario in (12, 14, 17, 27)
             },
         )
 
@@ -49,7 +49,11 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
             for profile in args.profiles
             for scenario in args.scenarios
         }
-        self.assertEqual(len(paths), 6)
+        self.assertEqual(len(paths), 8)
+        self.assertIn(
+            args.output_root / "s12/normal/unit-test",
+            paths,
+        )
         self.assertIn(
             args.output_root / "normal/s14/unit-test",
             paths,
@@ -81,6 +85,13 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
             command,
         )
         self.assertNotIn("--scenario", command)
+        command = runner.task_command(args, "hard", 12, ":604")
+        self.assertTrue(command[1].endswith("run_scenario12_result_surface.py"))
+        self.assertIn(
+            str(runner.SCENARIO_SEED_OVERRIDES[12]),
+            command,
+        )
+        self.assertNotIn(str(args.seed_gst), command)
 
 
 if __name__ == "__main__":

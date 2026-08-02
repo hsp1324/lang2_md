@@ -53,6 +53,25 @@ The machine-readable evidence is
 `localization/scenario12_current_result_surface_regression.json`; the verifier
 is `tools/verify_scenario12_current_result_surface.py`.
 
+## Post-DarkGuard current-source rerun
+
+The same untouched continuation was automated and replayed against the
+2026-08-02 post-DarkGuard current-source normal/hard probes. Run
+`post-darkguard-20260802-08` passed 2/2 profiles:
+
+- normal: one ordinary Sherry attack, Living Armor HP 10 to HP 0;
+- hard: first attack HP 10 to HP 2, stock End Turn, second attack to HP 0;
+- both: battle result at aftermath frame 26 and save menu at frame 1;
+- both result captures are text/portrait clean and differ only in the
+  bottom-left 16x16 animated fire-icon phase.
+
+The summary is
+`tmp/current-source-post-darkguard-result-probes/s12-safe-summary.json`; the
+profile evidence is under
+`captures/run/current_source_result_revalidation/s12/{profile}/post-darkguard-20260802-08/evidence.json`.
+This remains continuation/rendering evidence, not a fresh deployment-to-clear
+or hard-mode balance run.
+
 ## Input pitfall retained from the run
 
 The attack selector initially rests on Sherry's own cell. Pressing confirm

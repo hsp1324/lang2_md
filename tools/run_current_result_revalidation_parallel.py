@@ -28,6 +28,7 @@ DEFAULT_SUMMARY_ROOT = ROOT / "tmp/current_source_result_revalidation"
 
 RUNNERS: dict[int, str] = {
     10: "run_scenario10_result_surface.py",
+    12: "run_scenario12_result_surface.py",
     14: "run_scenario14_15_result_surface.py",
     15: "run_scenario14_15_result_surface.py",
     16: "run_scenario14_15_result_surface.py",
@@ -41,6 +42,13 @@ RUNNERS: dict[int, str] = {
     27: "run_scenario27_ending_surface.py",
 }
 SCENARIOS = tuple(RUNNERS)
+SCENARIO_SEED_OVERRIDES = {
+    12: (
+        ROOT
+        / "captures/runtime/s12-load-old-40bc/.local/share/blastem/"
+        "Langrisser II (Scenario 12 Compact Clear Probe)/quicksave.gst"
+    ),
+}
 
 
 def relative(path: Path) -> str:
@@ -76,6 +84,7 @@ def task_command(
     scenario: int,
     display: str,
 ) -> list[str]:
+    seed_gst = SCENARIO_SEED_OVERRIDES.get(scenario, args.seed_gst)
     command = [
         sys.executable,
         str(ROOT / "tools" / RUNNERS[scenario]),
@@ -84,7 +93,7 @@ def task_command(
         "--rom",
         str(task_rom(args.probe_root, profile, scenario)),
         "--seed-gst",
-        str(args.seed_gst),
+        str(seed_gst),
         "--display",
         display,
         "--output-root",
@@ -318,6 +327,11 @@ def main() -> int:
     ):
         if not path.exists():
             raise FileNotFoundError(f"{label} does not exist: {path}")
+    for scenario, path in SCENARIO_SEED_OVERRIDES.items():
+        if scenario in args.scenarios and not path.is_file():
+            raise FileNotFoundError(
+                f"Scenario {scenario} continuation GST does not exist: {path}"
+            )
 
     report = build_plan(args) if args.command == "plan" else run_parallel(args)
     encoded = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
