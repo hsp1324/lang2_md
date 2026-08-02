@@ -26,7 +26,7 @@ class Scenario1415ResultRunnerTests(unittest.TestCase):
     def test_completion_moves_use_stock_trigger_directions(self) -> None:
         self.assertEqual(
             runner.SCENARIO_MOVE_DIRECTIONS,
-            {14: "up", 15: "down"},
+            {14: "up", 15: "down", 16: "up"},
         )
 
     def test_parallel_task_roms_are_profile_and_scenario_specific(self) -> None:

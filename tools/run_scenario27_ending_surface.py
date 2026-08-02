@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import shutil
 import sys
 import time
 
@@ -25,6 +26,9 @@ from tools import run_scenario21_result_surface as shared
 
 
 DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/current_s27_ending"
+DEFAULT_ATTACK_ATTEMPTS = 8
+DEFAULT_RETRY_RNG_DELAY = 0.11
+DEFAULT_MAX_ENDING_FRAMES = 3400
 FIN_REFERENCE = ROOT / "captures/run/e93e_s27_ending_watch/875.png"
 GST_WORK_RAM_OFFSET = 0x2478
 WORK_RAM_BYTES = 0x10000
@@ -105,6 +109,56 @@ def bernhardt_runtime_state(path: Path) -> dict[str, int | bool]:
     }
 
 
+def restore_quicksave(
+    recorder: matrix.RuntimeRecorder,
+    checkpoint: Path,
+    *,
+    load_delay: float,
+) -> None:
+    """Restore a retained pre-attack GST into the isolated BlastEm runtime."""
+    candidates = sorted(
+        recorder.runtime_home.rglob("quicksave.gst"),
+        key=lambda path: path.stat().st_mtime_ns,
+    )
+    if not candidates:
+        raise RuntimeError("BlastEm runtime has no quicksave.gst to restore")
+    shutil.copy2(checkpoint, candidates[-1])
+    recorder.send(["load"], delay=load_delay)
+
+
+def advance_battle_until_defeated(
+    recorder: matrix.RuntimeRecorder,
+    *,
+    attempt: int,
+    max_frames: int,
+    battle_delay: float,
+) -> tuple[list[dict[str, object]], Path, dict[str, int | bool], int]:
+    """Advance stock combat, stopping confirmations as soon as HP reaches zero."""
+    frames = []
+    checkpoint = None
+    state = None
+    for frame in range(1, max_frames + 1):
+        battle = recorder.capture(
+            f"battle/attempt_{attempt:02d}_advance_{frame:03d}.png"
+        )
+        frames.append(shared.image_report(battle))
+        # Bernhardt selection first opens the stock Elwin/Bernhardt
+        # confrontation. Confirm those pages one at a time, then inspect the
+        # runtime record. Once HP reaches zero no further confirmation may be
+        # sent: one extra key can skip result, epilogue, or the stable Fin page.
+        recorder.send(["c"], delay=battle_delay)
+        checkpoint = recorder.save_gst(
+            f"states/attempt_{attempt:02d}_battle_frame_{frame:03d}.gst"
+        )
+        state = bernhardt_runtime_state(checkpoint)
+        if state["hp"] == 0:
+            return frames, checkpoint, state, frame
+
+    assert checkpoint is not None
+    assert state is not None
+    return frames, checkpoint, state, max_frames
+
+
 def wait_for_fin(
     recorder: matrix.RuntimeRecorder,
     *,
@@ -167,23 +221,65 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
         preparation = recorder.capture("preparation.png")
         gray.enter_battle_command(recorder, args.rom, output)
         command = recorder.capture("battle/turn1_command.png")
+        pre_attack_gst = recorder.save_gst("states/pre_bernhardt_attack.gst")
 
-        recorder.send(["down"], delay=0.45)
-        recorder.send(["c"], delay=0.65)
-        recorder.send(["up"], delay=0.45)
-        target = recorder.capture("battle/bernhardt_target.png")
-        recorder.send(["c"], delay=0.25)
-
+        target = None
+        post_battle_gst = None
+        bernhardt = None
         battle_frames = []
-        for frame in range(1, args.battle_frames + 1):
-            battle = recorder.capture(f"battle/advance_{frame:03d}.png")
-            battle_frames.append(shared.image_report(battle))
-            # Bernhardt selection first opens the stock Elwin/Bernhardt
-            # confrontation. Confirmations advance those pages; once the
-            # ordinary battle starts they are harmless until control returns.
-            recorder.send(["c"], delay=args.battle_delay)
-        post_battle_gst = recorder.save_gst("states/post_bernhardt_battle.gst")
-        bernhardt = bernhardt_runtime_state(post_battle_gst)
+        attack_attempts = []
+        for attempt in range(1, args.attack_attempts + 1):
+            if attempt > 1:
+                restore_quicksave(
+                    recorder,
+                    pre_attack_gst,
+                    load_delay=args.load_delay,
+                )
+
+            recorder.send(["down"], delay=0.45)
+            recorder.send(["c"], delay=0.65)
+            recorder.send(["up"], delay=0.45)
+            target = recorder.capture(
+                f"battle/attempt_{attempt:02d}_bernhardt_target.png"
+            )
+            # AT/DF zero does not eliminate the stock combat variance.  The
+            # retained command-menu state is replayed after a miss and this
+            # extra idle interval advances the untouched battle RNG.
+            time.sleep(args.retry_rng_delay * (attempt - 1))
+            recorder.send(["c"], delay=0.25)
+
+            (
+                attempt_frames,
+                post_battle_gst,
+                bernhardt,
+                stop_frame,
+            ) = advance_battle_until_defeated(
+                recorder,
+                attempt=attempt,
+                max_frames=args.battle_frames,
+                battle_delay=args.battle_delay,
+            )
+            battle_frames.extend(attempt_frames)
+            attack_attempts.append(
+                {
+                    "attempt": attempt,
+                    "rng_idle_delay_seconds": round(
+                        args.retry_rng_delay * (attempt - 1), 3
+                    ),
+                    "target": shared.image_report(target),
+                    "battle_frames": attempt_frames,
+                    "stop_frame": stop_frame,
+                    "post_battle_gst": shared.relative(post_battle_gst),
+                    "post_battle_gst_sha256": shared.sha256(post_battle_gst),
+                    "bernhardt_runtime_state": bernhardt,
+                }
+            )
+            if bernhardt["hp"] == 0:
+                break
+
+        assert target is not None
+        assert post_battle_gst is not None
+        assert bernhardt is not None
         # The stock death handler sets HP to zero before the white-fade phase
         # completes and before the defeated flag is committed.  HP zero here
         # proves the ordinary battle succeeded; the ending loop then advances
@@ -216,6 +312,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
             "preparation": shared.image_report(preparation),
             "turn1_command": shared.image_report(command),
             "bernhardt_target": shared.image_report(target),
+            "pre_attack_gst": shared.relative(pre_attack_gst),
+            "pre_attack_gst_sha256": shared.sha256(pre_attack_gst),
+            "attack_attempts": attack_attempts,
             "battle_frames": battle_frames,
             "post_battle_gst": shared.relative(post_battle_gst),
             "post_battle_gst_sha256": shared.sha256(post_battle_gst),
@@ -278,12 +377,39 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT_ROOT)
     parser.add_argument("--runtime-root", type=Path, default=matrix.DEFAULT_RUNTIME_ROOT)
     parser.add_argument("--run-id", type=matrix.validate_run_id, required=True)
+    parser.add_argument(
+        "--attack-attempts",
+        type=int,
+        default=DEFAULT_ATTACK_ATTEMPTS,
+    )
+    parser.add_argument(
+        "--retry-rng-delay",
+        type=float,
+        default=DEFAULT_RETRY_RNG_DELAY,
+    )
+    parser.add_argument("--load-delay", type=float, default=0.8)
     parser.add_argument("--battle-frames", type=int, default=36)
     parser.add_argument("--battle-delay", type=float, default=0.2)
-    parser.add_argument("--max-ending-frames", type=int, default=3200)
+    parser.add_argument(
+        "--max-ending-frames",
+        type=int,
+        default=DEFAULT_MAX_ENDING_FRAMES,
+        help=(
+            "bounded ending-capture limit; 3400 leaves one complete timed "
+            "epilogue interval beyond the former 3200-frame boundary"
+        ),
+    )
     parser.add_argument("--settle-delay", type=float, default=0.08)
     parser.add_argument("--confirmation-delay", type=float, default=0.14)
     args = parser.parse_args()
+    if args.attack_attempts < 1:
+        parser.error("--attack-attempts must be at least 1")
+    if args.retry_rng_delay < 0:
+        parser.error("--retry-rng-delay must not be negative")
+    if args.load_delay < 0:
+        parser.error("--load-delay must not be negative")
+    if args.max_ending_frames < 1:
+        parser.error("--max-ending-frames must be at least 1")
     args.rom = args.rom.resolve()
     args.seed_gst = args.seed_gst.resolve()
     args.output_root = args.output_root.resolve()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture Scenario 14/15 completion and result surfaces without skipping them."""
+"""Capture Scenario 14-16 completion and result surfaces without skipping them."""
 
 from __future__ import annotations
 
@@ -26,6 +26,7 @@ DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/current_s14_s15_result_retry"
 SCENARIO_MOVE_DIRECTIONS = {
     14: "up",
     15: "down",
+    16: "up",
 }
 RESULT_POINTS = {
     (160, 10): (206, 174, 119),

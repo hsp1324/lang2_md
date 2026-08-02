@@ -224,6 +224,27 @@ If the result is HP 1, load that state, wait a different number of frames to
 advance the battle RNG, and retry. Do not change the production ROM or a normal
 user SRAM to force the result.
 
+`tools/run_scenario27_ending_surface.py` now performs that diagnostic-only
+retry automatically.  It retains the command-menu GST, allows up to eight
+attempts, and adds a progressively longer idle interval before each repeated
+confirmation.  Its bounded Fin search is 3400 captured frames; this covers the
+last timed epilogue that a 3200-frame current-source run reached exactly at the
+former cutoff.
+
+The battle loop also retains a GST after each confirmation and stops sending
+buttons on the first checkpoint where Bernhardt's HP is zero.  Continuing the
+old fixed 36-confirmation loop after that point could skip the untouched result
+and ending pages and land at the title screen; such a title loop is a probe
+failure, not ROM evidence.
+
+The current-source normal/hard run `post-darkguard-20260802-06` passed on
+2026-08-02. Both profiles reached Bernhardt HP 0 on attempt 1, battle frame 6.
+Normal reached `Fin` at ending frame 3301 and hard at frame 3312; the two final
+captures share SHA-256
+`4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0`.
+The parallel summary is
+`tmp/current-source-post-darkguard-result-probes/s27-safe-summary.json`.
+
 ```bash
 python3 tools/build_epilogue_probe_rom.py --record-index 78 --start-slot 14
 python3 tools/build_scenario27_ending_probe_rom.py \

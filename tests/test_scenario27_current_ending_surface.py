@@ -1,6 +1,9 @@
 from pathlib import Path
+from unittest import mock
 import subprocess
 import sys
+import tempfile
+from types import SimpleNamespace
 import unittest
 
 from tools import run_scenario27_ending_surface as runner
@@ -19,6 +22,81 @@ class Scenario27CurrentEndingSurfaceTests(unittest.TestCase):
         self.assertEqual(self.report["status"], "pass")
         self.assertFalse(self.report["release_promoted"])
         self.assertFalse(self.report["acceptance_updated"])
+
+    def test_runner_bound_covers_the_observed_final_timed_epilogue(self):
+        self.assertGreaterEqual(runner.DEFAULT_MAX_ENDING_FRAMES, 3400)
+
+    def test_runner_retries_stock_combat_variance_from_retained_quicksave(self):
+        self.assertGreaterEqual(runner.DEFAULT_ATTACK_ATTEMPTS, 4)
+        self.assertGreater(runner.DEFAULT_RETRY_RNG_DELAY, 0)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            runtime = root / "runtime"
+            quicksave = runtime / ".local/share/blastem/probe/quicksave.gst"
+            quicksave.parent.mkdir(parents=True)
+            quicksave.write_bytes(b"miss-state")
+            checkpoint = root / "pre-attack.gst"
+            checkpoint.write_bytes(b"pre-attack-state")
+            calls = []
+            recorder = SimpleNamespace(
+                runtime_home=runtime,
+                send=lambda keys, delay: calls.append((keys, delay)),
+            )
+
+            runner.restore_quicksave(recorder, checkpoint, load_delay=0.25)
+
+            self.assertEqual(quicksave.read_bytes(), b"pre-attack-state")
+            self.assertEqual(calls, [(["load"], 0.25)])
+
+    def test_battle_confirmations_stop_on_first_zero_hp_checkpoint(self):
+        captures = []
+        sends = []
+        checkpoints = []
+
+        class Recorder:
+            def capture(self, relative):
+                captures.append(relative)
+                return Path(relative)
+
+            def send(self, keys, delay):
+                sends.append((keys, delay))
+
+            def save_gst(self, relative):
+                path = Path(relative)
+                checkpoints.append(path)
+                return path
+
+        states = [
+            {"hp": 10},
+            {"hp": 1},
+            {"hp": 0},
+            {"hp": 0},
+        ]
+        with mock.patch.object(
+            runner.shared,
+            "image_report",
+            side_effect=lambda path: {"path": str(path)},
+        ), mock.patch.object(
+            runner,
+            "bernhardt_runtime_state",
+            side_effect=states,
+        ):
+            frames, checkpoint, state, stop_frame = (
+                runner.advance_battle_until_defeated(
+                    Recorder(),
+                    attempt=2,
+                    max_frames=8,
+                    battle_delay=0.2,
+                )
+            )
+
+        self.assertEqual(stop_frame, 3)
+        self.assertEqual(state["hp"], 0)
+        self.assertEqual(len(frames), 3)
+        self.assertEqual(len(captures), 3)
+        self.assertEqual(len(sends), 3)
+        self.assertEqual(len(checkpoints), 3)
+        self.assertEqual(checkpoint, checkpoints[-1])
 
     def test_checked_report_is_current(self):
         subprocess.check_call(
