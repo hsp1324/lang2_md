@@ -27,7 +27,17 @@ DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/current_source_result_revalidation"
 DEFAULT_SUMMARY_ROOT = ROOT / "tmp/current_source_result_revalidation"
 
 RUNNERS: dict[int, str] = {
+    1: "run_scenario01_09_result_surface.py",
+    2: "run_scenario01_09_result_surface.py",
+    3: "run_scenario01_09_result_surface.py",
+    4: "run_scenario01_09_result_surface.py",
+    5: "run_scenario01_09_result_surface.py",
+    6: "run_scenario01_09_result_surface.py",
+    7: "run_scenario01_09_result_surface.py",
+    8: "run_scenario01_09_result_surface.py",
+    9: "run_scenario01_09_result_surface.py",
     10: "run_scenario10_result_surface.py",
+    11: "run_scenario11_result_surface.py",
     12: "run_scenario12_result_surface.py",
     13: "run_scenario13_result_surface.py",
     14: "run_scenario14_15_result_surface.py",
@@ -47,6 +57,11 @@ RUNNERS: dict[int, str] = {
 }
 SCENARIOS = tuple(RUNNERS)
 SCENARIO_SEED_OVERRIDES = {
+    11: (
+        ROOT
+        / "captures/runtime/s11-safe-jessica-d091/.local/share/blastem/"
+        "Langrisser II (Scenario 11 Safe Jessica Clear Probe)/quicksave.gst"
+    ),
     12: (
         ROOT
         / "captures/runtime/s12-load-old-40bc/.local/share/blastem/"
@@ -64,8 +79,8 @@ SCENARIO_SEED_OVERRIDES = {
     ),
     19: (
         ROOT
-        / "captures/runtime/s19_completion_2829_strong/.local/share/blastem/"
-        "Langrisser II (Scenario 19 Completion Probe)/quicksave.gst"
+        / "captures/runtime/current-s19-hard-result06/.local/share/blastem/"
+        "s19/quicksave.gst"
     ),
     20: (
         ROOT
@@ -73,13 +88,7 @@ SCENARIO_SEED_OVERRIDES = {
         "Langrisser II (Scenario 20 Completion Probe)/quicksave.gst"
     ),
 }
-SCENARIO_PROFILE_SEED_OVERRIDES = {
-    (19, "hard"): (
-        ROOT
-        / "captures/runtime/current-s19-hard-result06/.local/share/blastem/"
-        "s19/quicksave.gst"
-    ),
-}
+SCENARIO_PROFILE_SEED_OVERRIDES = {}
 
 
 def relative(path: Path) -> str:
@@ -92,7 +101,7 @@ def task_rom(probe_root: Path, profile: str, scenario: int) -> Path:
 
 
 def runner_output_root(output_root: Path, scenario: int) -> Path:
-    if scenario in (14, 15, 16, 18, 19, 20):
+    if scenario in (*range(1, 10), 11, 14, 15, 16, 18, 19, 20):
         return output_root
     return output_root / f"s{scenario:02d}"
 
@@ -104,7 +113,7 @@ def task_output(
     run_id: str,
 ) -> Path:
     root = runner_output_root(output_root, scenario)
-    if scenario in (14, 15, 16, 18, 19, 20):
+    if scenario in (*range(1, 10), 11, 14, 15, 16, 18, 19, 20):
         return root / profile / f"s{scenario:02d}" / run_id
     return root / profile / run_id
 
@@ -137,7 +146,7 @@ def task_command(
         "--run-id",
         args.run_id,
     ]
-    if scenario in (14, 15, 16, 18, 19, 20):
+    if scenario in (*range(1, 10), 14, 15, 16, 18, 19, 20):
         command.extend(("--scenario", str(scenario)))
     return command
 

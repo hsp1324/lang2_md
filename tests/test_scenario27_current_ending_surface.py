@@ -185,6 +185,30 @@ class Scenario27CurrentEndingSurfaceTests(unittest.TestCase):
         self.assertFalse(runner.ending_caption_visible(current_fin))
         self.assertFalse(runner.ending_caption_visible(epilogue))
 
+    def test_moving_cinematic_caption_match_is_not_confirmed(self):
+        for stable_frames in range(runner.STATIC_CAPTION_CONFIRM_FRAMES):
+            self.assertFalse(
+                runner.should_confirm_ending_surface(
+                    dialogue=False,
+                    caption=True,
+                    stable_caption_frames=stable_frames,
+                )
+            )
+        self.assertTrue(
+            runner.should_confirm_ending_surface(
+                dialogue=False,
+                caption=True,
+                stable_caption_frames=runner.STATIC_CAPTION_CONFIRM_FRAMES,
+            )
+        )
+        self.assertTrue(
+            runner.should_confirm_ending_surface(
+                dialogue=True,
+                caption=False,
+                stable_caption_frames=0,
+            )
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

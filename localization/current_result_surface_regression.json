@@ -1,0 +1,1349 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "exact_current_result_and_ending_surfaces_scenarios_1_to_27",
+  "candidate_roms": {
+    "normal": {
+      "path": "tmp/current-source-audit-normal.md",
+      "sha256": "eaee0b0443140776a6ad7ae4542a9b41a132ac7c19c4b4b127a61de8b8d74c27",
+      "bytes": 4194304,
+      "md_checksum": "015C",
+      "checksum_valid": true
+    },
+    "hard": {
+      "path": "tmp/current-source-audit-hard.md",
+      "sha256": "5b391ad132553427d2ededf01651d6215a71ce60dc8e1f0cacb1e45419a17f8a",
+      "bytes": 4194304,
+      "md_checksum": "1767",
+      "checksum_valid": true
+    },
+    "release_roms_modified": false,
+    "version_bumped": false
+  },
+  "profile_scenario_runs": 54,
+  "passed_profile_scenario_runs": 54,
+  "scenario_1_to_26_result_runs": 52,
+  "scenario_27_terminal_runs": 2,
+  "scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "profiles": [
+    "normal",
+    "hard"
+  ],
+  "probe_manifests": [
+    {
+      "path": "tmp/current-source-result-probes-full01/manifest.json",
+      "sha256": "a47d8fcef9a451dad9fed21133d251bcc2e80ed0fab1de0b64fdafdf771a7e40"
+    },
+    {
+      "path": "tmp/current-source-result-probes-full02/manifest.json",
+      "sha256": "d7aa3c1fe50d9d8dbab24f24e8b4190d969b4543d1c0bec24d4aa19f309d6e67"
+    },
+    {
+      "path": "tmp/current-source-result-probes-retry02/manifest.json",
+      "sha256": "90a976f69276e8c9f42a471a0be2cd89f00ae1bed3694bd305215f6f9b002f04"
+    }
+  ],
+  "manual_visual_review": {
+    "status": "pass",
+    "reviewed_profile_scenario_runs": 54,
+    "result_frames": 52,
+    "terminal_fin_frames": 2,
+    "method": "Every retained normal/hard result frame was inspected for Korean names, portraits, result sprites, POINT, borders, rows, and numeric fields."
+  },
+  "runs": [
+    {
+      "scenario": 1,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s01/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "4a24bb6fce3f7b13bbf08d1a779f7810cb43678ea3ea2253088dc741af5936bc",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s01-runtime-clear.md",
+        "sha256": "35fa65352aea22b61f52f9b07dc9085f5179fcccf954b1faf0c8c5f5d591ffc1",
+        "md_checksum": "9E09"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s01/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "55ccde344035d7bf5696a9f0b83c2ae6ac696ec1fa1f60cc2246d42d3565c825",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s01/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 2,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s02/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "50829c34c087aaaeb2ce8a0be64224126d0864abcdb92f29ee660720628502cf",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s02-runtime-clear.md",
+        "sha256": "b4c8a91188a7d7b863c84cca38de54bd6a07890ae612df6567100d0c307b0d4f",
+        "md_checksum": "ACA3"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s02/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "9d743b2edde4366c36a463caa7a32a0e839d706cb0fc485eea9827fb121c3048",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s02/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 3,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s03/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "6f6fb57ea9670a65d6814cce60164e392e3749d056e3201fd6c1d7fcb22b5321",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s03-runtime-clear.md",
+        "sha256": "314fbfbeb6374124b9524480e16d0a0bf9844d94e43ab4d31eb8cf00d64ef92f",
+        "md_checksum": "4DF3"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s03/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "a971a4b4f5ea34c40fd7adb5e51767bfd3957073d09617c289bd80e163b4e7bc",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s03/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 4,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-19",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s04/post-darkguard-20260802-19/evidence.json",
+      "evidence_sha256": "9d5b7cd20f75958a87946e1584aeaedfdf30547d89255e006edb4abf5f0407b2",
+      "probe": {
+        "path": "tmp/current-source-result-probes-retry02/normal/s04-runtime-clear.md",
+        "sha256": "c5b7e7aa23cdd5ddb1acac915792cb2176f0392a41af989fb024ad825d85455b",
+        "md_checksum": "036B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s04/post-darkguard-20260802-19/aftermath/battle_result.png",
+        "sha256": "caf006045e611fcd7139ceb21af40565d5b89b32ec5633e2965f6638094a747b",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s04/post-darkguard-20260802-19/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 5,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s05/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "aaec9799757ebb3db674daee42794473335d087fddf6c361d5484db5b6617ad0",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s05.md",
+        "sha256": "12344f75339c6578ebc87c9c9a44bcfdf00977ab1c640499f2fd25f127d5caa6",
+        "md_checksum": "012B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s05/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "c0f18ebaadd6f3dd3334826d046c2f612f6676cb8a4479e800b5f315b33d2ed3",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s05/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 6,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s06/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "deecfedd91cde564bc10729a6a9cd7f21bb2bf2947e4df1e4f72a603a27438d6",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s06-runtime-clear.md",
+        "sha256": "fa51dce90036e6cbedd0dc942a72f90d909a5572b85cb0a0149538dd9cd8ea5a",
+        "md_checksum": "CF8B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s06/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "bc7480274cc5fb6049e6b73833475856560c12df2e6838625ef67a1a46fefd58",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s06/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 7,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s07/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "b1a46d2c37bb04714b78d21fed28afdfc34bf3725baa99efd40ca2d4ac291f73",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s07-runtime-clear.md",
+        "sha256": "c5b7e7aa23cdd5ddb1acac915792cb2176f0392a41af989fb024ad825d85455b",
+        "md_checksum": "036B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s07/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "ba56292be786e627803dcf872bbdbe66bfca22d3d9b1c6491709a16f4a637cb1",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s07/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 8,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-19",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s08/post-darkguard-20260802-19/evidence.json",
+      "evidence_sha256": "9ffcab8b074aa94b49b4d1da427d41fc4a2c618840490e4819729d079cb4e875",
+      "probe": {
+        "path": "tmp/current-source-result-probes-retry02/normal/s08-runtime-clear.md",
+        "sha256": "88f278f55d5d1419a1bca63ac99831689e9f1a68ede14af350cfb230918f0da5",
+        "md_checksum": "05AB"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s08/post-darkguard-20260802-19/aftermath/battle_result.png",
+        "sha256": "f3fa9466e1ca5e46ff193c05504deac685d8eb6f30b889d4187907308c1f01e1",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s08/post-darkguard-20260802-19/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 9,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s09/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "20577dbae9995a225145d7383b0f5856d7604a99c2e08c0a968efae8f19a28d5",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/normal/s09-runtime-clear.md",
+        "sha256": "c5b7e7aa23cdd5ddb1acac915792cb2176f0392a41af989fb024ad825d85455b",
+        "md_checksum": "036B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s09/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "aa5ba419b74ef672085b97eaf41fb2a4666c5e3afe38aca28cee4d3eb7b1b211",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s09/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 10,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/s10/normal/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "a773a74c9a287d87ea7283c4009bbc0112e43c434e303fba7c72c6c910dbb011",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s10.md",
+        "sha256": "538e9ec1edf0c219ba4b9b14ad3d76a4a8335b7b7401598285057ff825659b8e",
+        "md_checksum": "2303"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s10/normal/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "5226af3f225ebbaf767aaabdee45404903539cba30491ad37972d67293b25a19",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s10/normal/current-source-20260802-20/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 11,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-19",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s11/post-darkguard-20260802-19/evidence.json",
+      "evidence_sha256": "5fd39f612827ed00e012229f81e97b7483fc10b88468245bf02f8ed0989d5f45",
+      "probe": {
+        "path": "tmp/current-source-result-probes-retry02/normal/s11-continuation.md",
+        "sha256": "2aeb1fa9a0ff11b8e0cac90ab9d710336a9cfe1ac4c07e311f6ed78f72c1fac4",
+        "md_checksum": "9DFE"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s11/post-darkguard-20260802-19/aftermath/battle_result.png",
+        "sha256": "fccdcf0d015e4957f7d979f4da0df466b55f8c0bf5273e5046dd100f2c5bfddd",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s11/post-darkguard-20260802-19/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 12,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/s12/normal/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "44c087fd82bc7e5a787cd4ab947757dcaef40407afeb716879918d5611e80da0",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s12.md",
+        "sha256": "b991ba62003e91be3be36a31207cf05fca21d89718c725d76f686ebdd6aca1b8",
+        "md_checksum": "4BD3"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s12/normal/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "e535454761871467b4d4d2e1113b5c04598b62e230a7ccb1a080436033176d8d",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s12/normal/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 13,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/s13/normal/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "eff85bab9b5d2ecccd854761d864e71a90b8bfd37c57c2cef3b3d8f289b9472f",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s13-continuation.md",
+        "sha256": "50a28794fc59a1881cdee9d16ee5801f1bfd79e9d6a943650ae05a37a5b25c83",
+        "md_checksum": "DA73"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s13/normal/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "d218a71ee0ec8a830e6fb34c70bdbd479175a0bf8edae955892d492e704a0c2c",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s13/normal/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 14,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s14/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "05c1436136d981c16c53883742a27bd781e5196a1e6b84692fecf7c7b012fa2e",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s14.md",
+        "sha256": "1d57c629ef233aebfcaae75b5641b98cfd1d34eb1a29886acb1916e0877d688c",
+        "md_checksum": "76F8"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s14/current-source-20260802-20/battle/battle_result.png",
+        "sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+        "surface": "battle_result"
+      }
+    },
+    {
+      "scenario": 15,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s15/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "0984d9db09e5ebc29c1fd2dbd30d447afff408ef0ebb563339b068210bbe9b30",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s15.md",
+        "sha256": "4f921e08d55653315a4d04e9dc57e00bb6a0bd898c10ede13ad55011dcff0e68",
+        "md_checksum": "0FB6"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s15/current-source-20260802-20/battle/battle_result.png",
+        "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+        "surface": "battle_result"
+      }
+    },
+    {
+      "scenario": 16,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s16/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "5b6baf0277a9ea9558bb962e993cf8d22c41d606f31b2f3dc8628345f4eacdb9",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s16.md",
+        "sha256": "f9bc52010e9909cd02fa172bebef68dce6a232bcd08ab6c8cd09885dbf1e9581",
+        "md_checksum": "D76C"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s16/current-source-20260802-20/battle/battle_result.png",
+        "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+        "surface": "battle_result"
+      }
+    },
+    {
+      "scenario": 17,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s17/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "44d28ffb636ce72bcf813eba1051f4fff412b467eb84b30f872c45673a37382c",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s17-two-hit.md",
+        "sha256": "3e17e56df86df208340ebb7caf59c533b644ac3a4f89a003bf7e1af5609933bb",
+        "md_checksum": "9C4B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s17/normal/current-source-20260802-22/battle/battle_result.png",
+        "sha256": "2c3bd6c9e3246c554908f49c45beb3af3ec17fd76014695ca67b265b7ed8cd91",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s17/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 18,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s18/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "6a7db13c64069d7ed219d8ce66344522cffd586eb4d9951867a953cf353ce788",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s18.md",
+        "sha256": "4ee143eb50c3427f6012d54ba81e2e33d334120ea982b89e13aa6963131f2b08",
+        "md_checksum": "3AD6"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s18/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "36a961e6c48ff7b6b041e4f9aa43e358e7cbae6d0172a795a4bea61eb9d8b688",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s18/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 19,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-21",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s19/current-source-20260802-21/evidence.json",
+      "evidence_sha256": "74c2531eb60e565996369e686e3abaf2676f3a28ac19315864e95bba29831b8a",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s19.md",
+        "sha256": "b728b96a3032c272abf9df5e9ee693ab730d23167fb7f47b84f7436b6ebfeff9",
+        "md_checksum": "4B0D"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s19/current-source-20260802-21/aftermath/battle_result.png",
+        "sha256": "e68f1f5fa620871bcd3614dbbac7374a923f8b6c04d65d491737ccf2906be2fc",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s19/current-source-20260802-21/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 20,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/normal/s20/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "be60163f44baec52bd56e646ab7918666d4db5896e0a6b7eb113339c5aed30c3",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s20.md",
+        "sha256": "d2a191e9673bbd03747f0667f4ed645ebfd2b78d08da4647e716308dd6427ba9",
+        "md_checksum": "FCB9"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/normal/s20/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "e30c1dbaa6b5ba2ad32ab010eff6fdcc936ed779ab8de2841e9ef632dc62e227",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/normal/s20/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 21,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s21/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "4b3a50a0d852ed28e4914ab7c2a648f01b67d52931b69561e6d975a2181bbc69",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s21-runtime-clear.md",
+        "sha256": "2ba62d04801b932bf567fa33400ec52118b2d0277ae95aaeb7f50b59e31c7ba2",
+        "md_checksum": "2AE3"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s21/normal/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "da8d692a5f645dd4c02fecbd6f8aa4b4c122f1303c2203214faf4028bf81d310",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s21/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 22,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s22/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "f23741f8536971a2186353da76823c55880d39676992d0dd2502795a5d645484",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s22-runtime-clear.md",
+        "sha256": "0a8a1957cdc5af0c7394e071e3d2c9e6371bfcf5f1467d4bd417fc0da11ce12f",
+        "md_checksum": "8E1B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s22/normal/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "67b5085f50b711b9aae194d84b334797a73b8d4f7856b05555a5cb3706811659",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s22/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 23,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s23/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "fe67a68869a5027f912dec5034dd5b4ec29ef80b45f5676bcf5935b14357cea0",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s23-runtime-clear.md",
+        "sha256": "0a8a1957cdc5af0c7394e071e3d2c9e6371bfcf5f1467d4bd417fc0da11ce12f",
+        "md_checksum": "8E1B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s23/normal/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "96a161c3506c035d5d2f06c044fbe83fada5313b2bc410e20d74e8f31d3da457",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s23/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 24,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s24/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "17999695df169e79db16e4b9a66d4066da6dae3f41864523de98776cac6fe33c",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s24-runtime-clear.md",
+        "sha256": "0a8a1957cdc5af0c7394e071e3d2c9e6371bfcf5f1467d4bd417fc0da11ce12f",
+        "md_checksum": "8E1B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s24/normal/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "63da3e603663afe4561dbba490267f957c5cf3d529ef7dfff229eac88156f360",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s24/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 25,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s25/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "1b80b409fae0443d4c8f58d4ea47c7b8a8b836d6d815f0e5d9bb86969055759f",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s25-runtime-clear.md",
+        "sha256": "fc20fee7cd6e582700ca11bfa01e4917bee5e2efac6e76161cfef65ccb8fabc1",
+        "md_checksum": "9A7B"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s25/normal/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "eb7a04c6a06f7de9e14c487e8ba55df88093871f684b9b1efe7275bd8d3ec857",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s25/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 26,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s26/normal/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "6f4b9b4e8b84c13a86667cbffc898d9e92573621172af1e22e671804ea59a2b9",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s26-runtime-clear.md",
+        "sha256": "aebb8d45dc0b4d4104c5b6010a731ab54b6170367c3ac37b9bc441ed4560dbef",
+        "md_checksum": "3983"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s26/normal/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "440f720113c8fab552b248c62eed6af125db65c5b3c09d7936ff8370af554184",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s26/normal/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 27,
+      "profile": "normal",
+      "status": "pass",
+      "run_id": "current-source-20260802-23",
+      "evidence": "captures/run/current_source_result_revalidation/s27/normal/current-source-20260802-23/evidence.json",
+      "evidence_sha256": "507cf1e0d198e1f889c380e5595578c6e67110c1e64d19e607cca92977ed0509",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/normal/s27-ending.md",
+        "sha256": "9637b54fd1af23cd93b5ecd5e8ed2c42b0a8930903eca8618beb828a820b3ffc",
+        "md_checksum": "4CCA"
+      },
+      "scenario_identity": "pass",
+      "terminal_surface": {
+        "path": "captures/run/current_source_result_revalidation/s27/normal/current-source-20260802-23/ending/advance_3217.png",
+        "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+        "surface": "fin"
+      },
+      "boss_hp_zero": true,
+      "ending_observation_frames": 3217,
+      "battle_observation_frames": 6
+    },
+    {
+      "scenario": 1,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s01/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "b888ce16837d7799df61b15ea163cc5c05792280297c529043ef636f10302912",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s01-runtime-clear.md",
+        "sha256": "5b94e571867dd3dd54666faa6229bb92a4a9a25706873a32f603ce530e7e51bb",
+        "md_checksum": "B213"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s01/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "55ccde344035d7bf5696a9f0b83c2ae6ac696ec1fa1f60cc2246d42d3565c825",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s01/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 2,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s02/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "a9fbcd340e38f0bdd5bf05b56ed0ad0a694094f58c4cce46322640d1824cc6cc",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s02-runtime-clear.md",
+        "sha256": "607651a9a0fb1c9d40c140b75bb6d831aa218e1b077d3b1017f414e6d58bc38f",
+        "md_checksum": "C2AE"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s02/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "aa248790969723d39e6f2a935553d30233517a6fcc00fec8213d093b6ff20023",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s02/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 3,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s03/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "e5d8eaeda03fc4c1256c5674a5a57c987e3f608e7f649ebdcd95ed9d920a4174",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s03-runtime-clear.md",
+        "sha256": "3ba7cb41b3bda93dc0ecd7805ce57595c9b032ea4e393c1d082d556ec0070fb7",
+        "md_checksum": "63FE"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s03/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "3430660c030f431e6d41b976a0a89afd3a151f1fdbd55c7b842f6d811e2e2bd4",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s03/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 4,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-19",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s04/post-darkguard-20260802-19/evidence.json",
+      "evidence_sha256": "f74bf0d090cdd5a34f5420fd0819f3ea455c0c2db2ab8e6077a21137073c8f8c",
+      "probe": {
+        "path": "tmp/current-source-result-probes-retry02/hard/s04-runtime-clear.md",
+        "sha256": "e3ca25fcc509fb56a85c5d0cd14c321f84c847a694b218ce02f651f527df4832",
+        "md_checksum": "1976"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s04/post-darkguard-20260802-19/aftermath/battle_result.png",
+        "sha256": "caf006045e611fcd7139ceb21af40565d5b89b32ec5633e2965f6638094a747b",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s04/post-darkguard-20260802-19/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 5,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s05/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "c234926c5a2ff310af0e0336b3db2c039db22b749969ae91eb0018461b31066c",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s05.md",
+        "sha256": "2a048c40bfc0c672464952f90305772df8e50dfc7471d81131a819116a92c068",
+        "md_checksum": "1736"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s05/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "c0f18ebaadd6f3dd3334826d046c2f612f6676cb8a4479e800b5f315b33d2ed3",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s05/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 6,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s06/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "1d12e5dfb79348480329d87ca9a32ffb1497160ddb34ae84bf6a7fdac53131ae",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s06-runtime-clear.md",
+        "sha256": "bd4fbd4d08af68a651852e38f4d5f6af3e56e0ef8262beaaa6820d5a646e0b96",
+        "md_checksum": "E596"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s06/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "c524a75cc9fc740fa51d9493e1cb65c2e99513d5f1aff653883ae167cc905b19",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s06/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 7,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s07/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "d3b841e1f197042ed8ff9b02d798e7aabcc6ec8c1a974a00395db91e89e89ac9",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s07-runtime-clear.md",
+        "sha256": "e3ca25fcc509fb56a85c5d0cd14c321f84c847a694b218ce02f651f527df4832",
+        "md_checksum": "1976"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s07/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "fe0343f597b75e19b2cf3da39f5c583f18010627e2db52006d5dd2b81bb5bbd5",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s07/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 8,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-19",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s08/post-darkguard-20260802-19/evidence.json",
+      "evidence_sha256": "2184364c7e215fbd56253a9e3ecf0e6bdf47e886f946d3ecf99f80abc94dec36",
+      "probe": {
+        "path": "tmp/current-source-result-probes-retry02/hard/s08-runtime-clear.md",
+        "sha256": "8dbcc44a3046ba05f48a61e99fd63773ce3359fda2c3c8fd5beddd3fcabd7f49",
+        "md_checksum": "1BB6"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s08/post-darkguard-20260802-19/aftermath/battle_result.png",
+        "sha256": "844e7af7f70080803caef8fd032c305a3f78d1e13550ea7b9c0f81497fb94499",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s08/post-darkguard-20260802-19/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 9,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-18",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s09/post-darkguard-20260802-18/evidence.json",
+      "evidence_sha256": "f58f5c8e1ff6e20133bf3bdb052428ea17d4711d8905182a8ed645a740b5966e",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full01/hard/s09-runtime-clear.md",
+        "sha256": "e3ca25fcc509fb56a85c5d0cd14c321f84c847a694b218ce02f651f527df4832",
+        "md_checksum": "1976"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s09/post-darkguard-20260802-18/aftermath/battle_result.png",
+        "sha256": "c0ce4bd42f168a59b0dea056c079376c618d15563c2c468c0a334c74ae26ac9e",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s09/post-darkguard-20260802-18/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 10,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/s10/hard/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "a0de34e2dc1e7ef0bdf6e91151700acb6563e0617fdf567370bf2e744bedef4d",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s10.md",
+        "sha256": "16a1e1881bcd4b7ff716035501befdf4c689d812ffb05b919cc8e1e53124a918",
+        "md_checksum": "390E"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s10/hard/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "5226af3f225ebbaf767aaabdee45404903539cba30491ad37972d67293b25a19",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s10/hard/current-source-20260802-20/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 11,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "post-darkguard-20260802-19",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s11/post-darkguard-20260802-19/evidence.json",
+      "evidence_sha256": "08a8fc3f864a8505f55da9e895d589f12912b8ffc140b2913e291dbc80377517",
+      "probe": {
+        "path": "tmp/current-source-result-probes-retry02/hard/s11-continuation.md",
+        "sha256": "8a18d26528041883140943c894d9b9227c5382deadc2048bf4cea3016bf2a011",
+        "md_checksum": "76E0"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s11/post-darkguard-20260802-19/aftermath/battle_result.png",
+        "sha256": "e8aa12b73605196e0093b2eea211ec1d49b57262b3c66e88bbbf0104b8a179f1",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s11/post-darkguard-20260802-19/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 12,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/s12/hard/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "6b6850dc632f0e4a6056d71aae1b1af628f97bde9f8f666504cae88be0911da7",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s12.md",
+        "sha256": "6b6125400ae002f6bff2e51c6cf8f2e1cc8ac862cabbcbb88b4fa343f04fb667",
+        "md_checksum": "38CB"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s12/hard/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "3cf945d8b58e981e0800e5ae0f73d1d2a84f98a6046d9d4b80efb30cba683ed8",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s12/hard/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 13,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/s13/hard/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "59f494a0a564126b09d5528df486d4b717253319345b05cad4c9cc998a710114",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s13-continuation.md",
+        "sha256": "0ee0ff97e4cf4b2af2f46099b913530eccf55400772160bffd7e0693938c1de2",
+        "md_checksum": "C66E"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s13/hard/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "d218a71ee0ec8a830e6fb34c70bdbd479175a0bf8edae955892d492e704a0c2c",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s13/hard/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 14,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s14/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "962fc3dfae08ae2066f69b7ece77015d0e9c89633bbc72a0e35071573f7e420e",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s14.md",
+        "sha256": "c4e4979d34112808f4bb981f253a3b78f999742de2ab23ece9dc5f7621be640b",
+        "md_checksum": "4CD9"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s14/current-source-20260802-20/battle/battle_result.png",
+        "sha256": "fc8ebaba0a37631e5ffa6f9543ef83402c11bdd40cbbb08a93672e0d2ec218af",
+        "surface": "battle_result"
+      }
+    },
+    {
+      "scenario": 15,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s15/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "ce79395f3786eb613dc66dc22b448bb92ee456b62537fb39ef2fe65e98c59bb2",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s15.md",
+        "sha256": "b6ce7fd0adc4bbf4d4aad17408337504f9f02a7e8acdf122f92a632ad34edf76",
+        "md_checksum": "F9AB"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s15/current-source-20260802-20/battle/battle_result.png",
+        "sha256": "679bb7ea0f8ae6d6050c1cf71e2b7cdde44e4f087faecd1a1964a6e3e0baa3dc",
+        "surface": "battle_result"
+      }
+    },
+    {
+      "scenario": 16,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s16/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "49a654cdf0098666fe754d4892a892ba60735773dce14d72d07ba9d0fb2193ae",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s16.md",
+        "sha256": "76e1504996f9b0b81ae5d7987ef7f31e13c9fdaf9b44796a21f15c487b8340da",
+        "md_checksum": "A240"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s16/current-source-20260802-20/battle/battle_result.png",
+        "sha256": "98b07a5118c44b3104880eddbb5a8352826b4f8c056a1ffe18b3f65dbd4fac25",
+        "surface": "battle_result"
+      }
+    },
+    {
+      "scenario": 17,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s17/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "b7a408a5292610c0b282d4496319d4f614358cd7ff43f7cc465bcb46d83d19c8",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s17-two-hit.md",
+        "sha256": "215c17b023976ad686b90c7cc563e46065c1bc9ebdb1d60374d67aff2c528c5c",
+        "md_checksum": "5B15"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s17/hard/current-source-20260802-22/battle/battle_result.png",
+        "sha256": "2c3bd6c9e3246c554908f49c45beb3af3ec17fd76014695ca67b265b7ed8cd91",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s17/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 18,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s18/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "c721c551bec127d1d293498b7e70860c4062d08fcf6db208d1ebb042b3c75ffc",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s18.md",
+        "sha256": "af766b75f4fc6e130f11480c401d9c7428d8fb4c7ebd035350839515c3e0e359",
+        "md_checksum": "24C7"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s18/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "36a961e6c48ff7b6b041e4f9aa43e358e7cbae6d0172a795a4bea61eb9d8b688",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s18/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 19,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-21",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s19/current-source-20260802-21/evidence.json",
+      "evidence_sha256": "31486f55bff63e73d36b0e60c4ca0a25aecddd7b6819fe70be9d9adeb5484fd7",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s19.md",
+        "sha256": "d9c44dcd1d2d81b748fafd4a52c4902534ff06b3ede209432d793c719146543f",
+        "md_checksum": "FCC8"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s19/current-source-20260802-21/aftermath/battle_result.png",
+        "sha256": "911bfe3d5abf6b7a8beba9d66721d5c3c70a457f320bb18acec005f413e89c98",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s19/current-source-20260802-21/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 20,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-20",
+      "evidence": "captures/run/current_source_result_revalidation/hard/s20/current-source-20260802-20/evidence.json",
+      "evidence_sha256": "713b617ad5a948a26a4e61a7bac6b8c4a4ffc4e5ab9868f8d2458720ce29e6fb",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s20.md",
+        "sha256": "7f70ed5cac267c9fe51a343b1b3e2eea2f0a0aee216e76248cf053ade7ba3133",
+        "md_checksum": "DEA4"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/hard/s20/current-source-20260802-20/aftermath/battle_result.png",
+        "sha256": "e30c1dbaa6b5ba2ad32ab010eff6fdcc936ed779ab8de2841e9ef632dc62e227",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/hard/s20/current-source-20260802-20/save/save_menu.png",
+        "sha256": "cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 21,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s21/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "d6ec50bc908533ce38674db5cd97343589d1cbc6d416fc9a6e424a7f711444d6",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s21-runtime-clear.md",
+        "sha256": "d751180a3c25689b688ab223b76c6aba60b83ee1e7b1427b1db9c8ca39b60fd2",
+        "md_checksum": "40EE"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s21/hard/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "01bb231b2c9054bdd246d64c1216c03c3f378ba906c3da7a35c0f6c937bfb5f0",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s21/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 22,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s22/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "e0a01edd9f319f0e5ca3f67d0f066bd9accf764eaabad0a509a29b241ef51805",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s22-runtime-clear.md",
+        "sha256": "8e3624db7ab10076b49ea6b17037aebb37053f36a87cf2403e6a3f93fa23cb40",
+        "md_checksum": "A426"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s22/hard/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "03216fc136241a6f161172e5dcd9dd685b8a277eea274813270cded5c09c62e2",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s22/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 23,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s23/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "5335b58d204031222fdeacd18628a5817917350f63dfc73532c0ca7fe14477bf",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s23-runtime-clear.md",
+        "sha256": "8e3624db7ab10076b49ea6b17037aebb37053f36a87cf2403e6a3f93fa23cb40",
+        "md_checksum": "A426"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s23/hard/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "48cbf123c5ff00baaa571d8862c0e72a2705c7d88646cd6d2a8c17db101b2be3",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s23/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 24,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s24/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "e35b9846e576df0a3bba07617b15a38a56a61177e625659a47e0ca4bb0eb4750",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s24-runtime-clear.md",
+        "sha256": "8e3624db7ab10076b49ea6b17037aebb37053f36a87cf2403e6a3f93fa23cb40",
+        "md_checksum": "A426"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s24/hard/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "dbcb1039dcfea41669964c665527e74f8c9044ed0542bd553aa783c9aa6388fa",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s24/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 25,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s25/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "73dcec1d5cb556305a2852f0c73da59661e771a633a26279d0e7acef78d89f4c",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s25-runtime-clear.md",
+        "sha256": "335d53a2c0f0a1a281b61c1d13134ce420c7f7ad0403e647dae9382d315c01f3",
+        "md_checksum": "B086"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s25/hard/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "2eb2af2d9a40087e34903bc4591ec057d081e50eb0335ba7a04c9a3b06e4b9c5",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s25/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 26,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-22",
+      "evidence": "captures/run/current_source_result_revalidation/s26/hard/current-source-20260802-22/evidence.json",
+      "evidence_sha256": "6708feae5d3b5f3d57bb730a8b3ed7ce7107a53818bf8e24becfbed815abe9df",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s26-runtime-clear.md",
+        "sha256": "eb373587b40e8e563ab02ff8140ba827474907f8964da8a5e525a8ea722189da",
+        "md_checksum": "4F8E"
+      },
+      "scenario_identity": "pass",
+      "battle_result": {
+        "path": "captures/run/current_source_result_revalidation/s26/hard/current-source-20260802-22/aftermath/battle_result.png",
+        "sha256": "8fc7186e3d9c2ef0caf019c565b9be517f63a19b127b0d7dbdc6d0a8de923cbb",
+        "surface": "battle_result"
+      },
+      "save_menu": {
+        "path": "captures/run/current_source_result_revalidation/s26/hard/current-source-20260802-22/save/save_menu.png",
+        "sha256": "5dbfa653b0ff475125c524957f3c5196b40c867523f011c9ae9ee86e72b5b20c",
+        "surface": "save_menu"
+      }
+    },
+    {
+      "scenario": 27,
+      "profile": "hard",
+      "status": "pass",
+      "run_id": "current-source-20260802-24",
+      "evidence": "captures/run/current_source_result_revalidation/s27/hard/current-source-20260802-24/evidence.json",
+      "evidence_sha256": "fe489fc3c950ada0a57db1244ca349478b5ca6095918405b2519a46425994fe9",
+      "probe": {
+        "path": "tmp/current-source-result-probes-full02/hard/s27-ending.md",
+        "sha256": "47fc19c01c9e7922bafdfa39d225043658490d2f8a57c6434ae0ecddb2f1e9b1",
+        "md_checksum": "51C8"
+      },
+      "scenario_identity": "pass",
+      "terminal_surface": {
+        "path": "captures/run/current_source_result_revalidation/s27/hard/current-source-20260802-24/ending/advance_3549.png",
+        "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+        "surface": "fin"
+      },
+      "boss_hp_zero": true,
+      "ending_observation_frames": 3549,
+      "battle_observation_frames": 6
+    }
+  ],
+  "release_gate": {
+    "status": "complete",
+    "release_or_version_promotion_authorized": false
+  }
+}

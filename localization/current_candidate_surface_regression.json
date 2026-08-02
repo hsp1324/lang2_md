@@ -151,6 +151,16 @@
       "evidence_sha256": "5224e0770a3c7260f038d71b0ad2456277c6441a02043f1b5d4b700cbeba0770"
     }
   },
+  "battle_result_and_ending_surfaces": {
+    "status": "pass",
+    "profile_scenario_runs": 54,
+    "passed_profile_scenario_runs": 54,
+    "scenario_1_to_26_result_runs": 52,
+    "scenario_27_terminal_runs": 2,
+    "manual_visual_review": "pass",
+    "report": "localization/current_result_surface_regression.json",
+    "report_sha256": "d5d2dfa035453016631c37636ee0e263bd2bbc59b43903ff3108d342ac1f93fb"
+  },
   "orchestration_note": {
     "summary": "tmp/full_surface_regression/current-source-20260802-01/summary.json",
     "summary_sha256": "45529feba62df7eccef7b4135f3f7c9a3abeaea15afd7afdb1ce49d45504a936",
@@ -160,8 +170,8 @@
     "elapsed_seconds": 3096.497
   },
   "remaining_release_gate": {
-    "status": "pending",
-    "reason": "The cumulative release gate still lacks complete battle-result acceptance for Scenario 10 and Scenarios 12 through 27.",
+    "status": "complete",
+    "reason": "Exact-current normal/hard result evidence passes Scenario 1 through 26 and both Scenario 27 terminal paths reach Fin after Bernhardt HP reaches zero.",
     "release_or_version_promotion_authorized": false
   }
 }

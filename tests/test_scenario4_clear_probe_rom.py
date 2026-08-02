@@ -445,6 +445,26 @@ class Scenario4ClearProbeRomTests(unittest.TestCase):
                 protagonist_death=True,
             )
 
+    def test_runtime_clear_targets_only_morgan_and_preserves_scenario_data(self):
+        data = bytearray(self.built)
+        probe_builder.patch_probe(data, self.source, runtime_clear=True)
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        start = layout.records_offset
+        end = start + layout.record_count * FIXED_RECORD_SIZE
+        self.assertEqual(data[start:end], self.source[start:end])
+        wrapper = probe_builder.runtime_death_wrapper_code(
+            (probe_builder.MORGAN_RUNTIME_GROUP,)
+        )
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.MORGAN_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

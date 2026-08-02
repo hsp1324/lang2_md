@@ -28,7 +28,8 @@ from tools import run_scenario21_result_surface as shared
 DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/current_s27_ending"
 DEFAULT_ATTACK_ATTEMPTS = 8
 DEFAULT_RETRY_RNG_DELAY = 0.11
-DEFAULT_MAX_ENDING_FRAMES = 3400
+DEFAULT_MAX_ENDING_FRAMES = 4200
+STATIC_CAPTION_CONFIRM_FRAMES = 3
 FIN_REFERENCE = ROOT / "captures/run/e93e_s27_ending_watch/875.png"
 GST_WORK_RAM_OFFSET = 0x2478
 WORK_RAM_BYTES = 0x10000
@@ -86,6 +87,17 @@ def ending_caption_visible(path: Path) -> bool:
         for red, green, blue in pixels
     ) / len(pixels)
     return white > 0.01 and black > 0.85
+
+
+def should_confirm_ending_surface(
+    *,
+    dialogue: bool,
+    caption: bool,
+    stable_caption_frames: int,
+) -> bool:
+    return dialogue or (
+        caption and stable_caption_frames >= STATIC_CAPTION_CONFIRM_FRAMES
+    )
 
 
 def bernhardt_runtime_state(path: Path) -> dict[str, int | bool]:
@@ -167,12 +179,22 @@ def wait_for_fin(
     confirmation_delay: float,
 ) -> tuple[Path, int, list[dict[str, object]]]:
     observations = []
+    previous_sha256 = None
+    confirmed_caption_sha256 = None
+    stable_caption_frames = 0
     for frame in range(1, max_frames + 1):
         time.sleep(settle_delay)
         capture = recorder.capture(f"ending/advance_{frame:04d}.png")
         fin = fin_visible(capture)
         dialogue = portrait_dialogue_visible(capture)
         caption = ending_caption_visible(capture)
+        capture_sha256 = shared.sha256(capture)
+        if caption and capture_sha256 == previous_sha256:
+            stable_caption_frames += 1
+        elif caption:
+            stable_caption_frames = 1
+        else:
+            stable_caption_frames = 0
         observations.append(
             {
                 "frame": frame,
@@ -180,7 +202,8 @@ def wait_for_fin(
                 "dialogue": dialogue,
                 "caption": caption,
                 "capture": shared.relative(capture),
-                "sha256": shared.sha256(capture),
+                "sha256": capture_sha256,
+                "stable_caption_frames": stable_caption_frames,
             }
         )
         if fin:
@@ -189,11 +212,23 @@ def wait_for_fin(
         # panel.  That surface can satisfy the generic title-screen heuristic,
         # so Scenario 27 must use the positive Fin template as its endpoint.
         # max_frames remains the bounded failure condition.
-        # Dialogue/result pages need confirmation, while credits and the final
-        # cinematic advance on their own. Sending C into the cinematic skips
-        # the stable Fin surface and returns directly to the title screen.
-        if dialogue or caption:
+        # Dialogue pages need confirmation, while credits and the final
+        # cinematic advance on their own.  The broad caption heuristic can
+        # also match a bright scanline at the bottom edge of a moving
+        # cinematic.  Confirm a caption-only surface only after the full frame
+        # remains byte-identical for three captures; sending C into a moving
+        # cinematic skips the stable Fin surface and returns to the title.
+        caption_ready = should_confirm_ending_surface(
+            dialogue=False,
+            caption=caption,
+            stable_caption_frames=stable_caption_frames,
+        ) and capture_sha256 != confirmed_caption_sha256
+        if dialogue or caption_ready:
             recorder.send(["c"], delay=confirmation_delay)
+            if caption_ready:
+                confirmed_caption_sha256 = capture_sha256
+            stable_caption_frames = 0
+        previous_sha256 = capture_sha256
     raise RuntimeError("Scenario 27 Fin screen did not appear")
 
 
@@ -395,8 +430,8 @@ def main() -> int:
         type=int,
         default=DEFAULT_MAX_ENDING_FRAMES,
         help=(
-            "bounded ending-capture limit; 3400 leaves one complete timed "
-            "epilogue interval beyond the former 3200-frame boundary"
+            "bounded ending-capture limit; 4200 allows stable-frame caption "
+            "confirmation without truncating the terminal cinematic"
         ),
     )
     parser.add_argument("--settle-delay", type=float, default=0.08)

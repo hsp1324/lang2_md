@@ -17,11 +17,11 @@ class Scenario18To20ResultSurfaceRunnerTests(unittest.TestCase):
                     runner.expected_seed_sha256(scenario, profile),
                 )
 
-    def test_scenario19_hard_uses_one_hp_continuation(self) -> None:
+    def test_scenario19_both_profiles_use_one_hp_continuation(self) -> None:
         normal = runner.default_seed(19, "normal")
         hard = runner.default_seed(19, "hard")
-        self.assertNotEqual(normal, hard)
-        self.assertEqual(runner.runtime_group(normal, 10)["hp"], 10)
+        self.assertEqual(normal, hard)
+        self.assertEqual(runner.runtime_group(normal, 10)["hp"], 1)
         self.assertEqual(runner.runtime_group(hard, 10)["hp"], 1)
 
     def test_runtime_group_reads_boss_record(self) -> None:

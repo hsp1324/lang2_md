@@ -63,6 +63,17 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
             paths,
         )
 
+    def test_early_and_scenario11_output_layouts_are_profile_scoped(self):
+        args = self.args()
+        self.assertEqual(
+            runner.task_output(args.output_root, "normal", 1, args.run_id),
+            args.output_root / "normal/s01/unit-test",
+        )
+        self.assertEqual(
+            runner.task_output(args.output_root, "hard", 11, args.run_id),
+            args.output_root / "hard/s11/unit-test",
+        )
+
     def test_commands_select_the_correct_runner_and_probe(self):
         args = self.args()
         command = runner.task_command(args, "hard", 27, ":600")
@@ -111,10 +122,22 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         )
         self.assertEqual(command[-2:], ["--scenario", "19"])
         self.assertIn(
-            str(runner.SCENARIO_PROFILE_SEED_OVERRIDES[(19, "hard")]),
+            str(runner.SCENARIO_SEED_OVERRIDES[19]),
             command,
         )
-        self.assertNotIn(str(runner.SCENARIO_SEED_OVERRIDES[19]), command)
+        command = runner.task_command(args, "normal", 4, ":608")
+        self.assertTrue(
+            command[1].endswith("run_scenario01_09_result_surface.py")
+        )
+        self.assertIn(
+            str(args.probe_root / "normal/s04-runtime-clear.md"),
+            command,
+        )
+        self.assertEqual(command[-2:], ["--scenario", "4"])
+        command = runner.task_command(args, "hard", 11, ":609")
+        self.assertTrue(command[1].endswith("run_scenario11_result_surface.py"))
+        self.assertIn(str(runner.SCENARIO_SEED_OVERRIDES[11]), command)
+        self.assertNotIn("--scenario", command)
 
 
 if __name__ == "__main__":

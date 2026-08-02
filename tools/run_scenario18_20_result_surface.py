@@ -61,7 +61,7 @@ SCENARIOS: dict[int, dict[str, object]] = {
         "boss_class": 0x4A,
         "boss_name": 0x15,
         "boss_position": (37, 23),
-        "initial_hp": {"normal": 10, "hard": 1},
+        "initial_hp": {"normal": 1, "hard": 1},
     },
     20: {
         "seed": (
@@ -108,14 +108,14 @@ def runtime_group(path: Path, group: int) -> dict[str, int]:
 
 def default_seed(scenario: int, profile: str) -> Path:
     definition = SCENARIOS[scenario]
-    if scenario == 19 and profile == "hard":
+    if scenario == 19:
         return Path(definition["hard_seed"])
     return Path(definition["seed"])
 
 
 def expected_seed_sha256(scenario: int, profile: str) -> str:
     definition = SCENARIOS[scenario]
-    if scenario == 19 and profile == "hard":
+    if scenario == 19:
         return str(definition["hard_seed_sha256"])
     return str(definition["seed_sha256"])
 

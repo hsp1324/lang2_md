@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build current-source normal/hard result probes for Scenarios 10 and 12..27."""
+"""Build current-source normal/hard result probes for Scenarios 1..27."""
 
 from __future__ import annotations
 
@@ -16,7 +16,17 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts import build_korean_jp_probe as korean_builder
+from tools import build_scenario1_clear_probe_rom as scenario1
+from tools import build_scenario2_escape_probe_rom as scenario2
+from tools import build_scenario3_clear_probe_rom as scenario3
+from tools import build_scenario4_clear_probe_rom as scenario4
+from tools import build_scenario5_escape_probe_rom as scenario5
+from tools import build_scenario6_clear_probe_rom as scenario6
+from tools import build_scenario7_clear_probe_rom as scenario7
+from tools import build_scenario8_clear_probe_rom as scenario8
+from tools import build_scenario9_clear_probe_rom as scenario9
 from tools import build_scenario10_result_surface_probe_rom as scenario10
+from tools import build_scenario11_clear_probe_rom as scenario11
 from tools import build_scenario12_clear_probe_rom as scenario12
 from tools import build_scenario13_clear_probe_rom as scenario13
 from tools import build_scenario14_clear_probe_rom as scenario14
@@ -42,7 +52,53 @@ DEFAULT_SOURCE_ROM = ROOT / korean_builder.IN_ROM
 
 
 PROBE_DEFINITIONS: dict[int, dict[str, object]] = {
+    1: {
+        "module": scenario1,
+        "filename": "s01-runtime-clear.md",
+        "kwargs": {"runtime_defeat_bald": True},
+    },
+    2: {
+        "module": scenario2,
+        "filename": "s02-runtime-clear.md",
+        "kwargs": {"enemy_annihilation": True},
+    },
+    3: {
+        "module": scenario3,
+        "filename": "s03-runtime-clear.md",
+        "kwargs": {"enemy_annihilation": True},
+    },
+    4: {
+        "module": scenario4,
+        "filename": "s04-runtime-clear.md",
+        "kwargs": {"runtime_clear": True},
+    },
+    5: {"module": scenario5, "filename": "s05.md", "kwargs": {}},
+    6: {
+        "module": scenario6,
+        "filename": "s06-runtime-clear.md",
+        "kwargs": {"enemy_annihilation": True},
+    },
+    7: {
+        "module": scenario7,
+        "filename": "s07-runtime-clear.md",
+        "kwargs": {"runtime_clear": True},
+    },
+    8: {
+        "module": scenario8,
+        "filename": "s08-runtime-clear.md",
+        "kwargs": {"runtime_clear": True},
+    },
+    9: {
+        "module": scenario9,
+        "filename": "s09-runtime-clear.md",
+        "kwargs": {"runtime_clear": True},
+    },
     10: {"module": scenario10, "filename": "s10.md", "kwargs": {}},
+    11: {
+        "module": scenario11,
+        "filename": "s11-continuation.md",
+        "kwargs": {"safe_clear_layout": True, "safe_jessica": True},
+    },
     12: {
         "module": scenario12,
         "filename": "s12.md",
@@ -304,7 +360,7 @@ def main() -> int:
         "--scenarios",
         type=parse_scenarios,
         default=SCENARIOS,
-        help="comma-separated subset of 10,12..27",
+        help="comma-separated subset of 1..27",
     )
     args = parser.parse_args()
     for name in ("normal_rom", "hard_rom", "source_rom", "output_root"):

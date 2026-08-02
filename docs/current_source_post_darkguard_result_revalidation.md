@@ -140,3 +140,55 @@ This current-source post-DarkGuard runtime matrix now covers Scenarios 10 and
 still needs a consolidated applicability audit against the present source
 candidate before the cumulative Scenario 1-27 release gate can be marked
 complete. No release ROM or displayed version was changed by this work.
+
+## Exact-current cumulative closure
+
+The preceding coverage boundary describes the earlier post-DarkGuard candidate
+and is superseded by this exact-current rebuild. The final audit candidates are
+normal checksum `015C`, SHA-256
+`eaee0b0443140776a6ad7ae4542a9b41a132ac7c19c4b4b127a61de8b8d74c27`,
+and hard checksum `1767`, SHA-256
+`5b391ad132553427d2ededf01651d6215a71ce60dc8e1f0cacb1e45419a17f8a`.
+The accepted manifests
+`tmp/current-source-result-probes-full01/manifest.json`,
+`tmp/current-source-result-probes-retry02/manifest.json`, and the complete
+rebuild `tmp/current-source-result-probes-full02/manifest.json` are all bound
+to that same candidate pair.
+
+| Exact-current scenarios | Run ID | Passed profiles |
+| --- | --- | ---: |
+| 1, 2, 3, 5, 6, 7, 9 | `post-darkguard-20260802-18` | 14/14 |
+| 4, 8, 11 | `post-darkguard-20260802-19` | 6/6 |
+| 10, 12-16, 18, 20 | `current-source-20260802-20` | 16/16 |
+| 19 | `current-source-20260802-21` | 2/2 |
+| 17, 21-26 | `current-source-20260802-22` | 14/14 |
+| 27 | `current-source-20260802-23` normal; `current-source-20260802-24` hard | 2/2 |
+
+Fresh exact-current runtime evidence now covers all 27 scenarios in both
+profiles, 54/54 profile-scenario runs. Scenarios 1-9 and 11 were rebuilt and
+replayed instead of inheriting historical acceptance. Scenarios 4 and 8 use a
+deterministic Start-entry runtime-group clear so their result proof does not
+depend on combat RNG; this changes only ignored diagnostic probes. Scenario 11
+loads the SHA-256-locked stock pre-final-battle continuation, validates both
+reinforcement groups, performs a real Sherry attack, and reaches the stock
+result and save surfaces. Scenario 19 uses the same one-HP continuation in both
+profiles to remove the last profile-specific retry assumption.
+
+All retained normal/hard result frames were visually inspected for Korean
+commander names, portraits, result sprites, `POINT`, borders, rows, and numeric
+fields. Scenario 27 additionally starts fresh from the selector, verifies
+Bernhardt HP reaches zero through ordinary battle, and traverses the complete
+stock ending through `Fin`. The aggregate hash-bound report is
+`localization/current_result_surface_regression.json`.
+
+The first exact-current hard Scenario 27 playback is rejected: the broad
+caption heuristic matched a bright scanline in the moving terminal cinematic,
+sent an extra confirmation, and returned to the title without retaining
+`Fin`. The corrected runner confirms caption-only surfaces only after three
+byte-identical captures, while dialogue panels still advance immediately. The
+normal run remains `current-source-20260802-23`; the corrected hard run is
+`current-source-20260802-24`.
+
+This completes the exact-current cumulative Scenario 1-27 result/ending gate.
+It does not authorize a release promotion: no release ROM, save, displayed
+version, or Desktop artifact was changed by this verification.

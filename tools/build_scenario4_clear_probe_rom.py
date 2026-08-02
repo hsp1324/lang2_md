@@ -115,6 +115,7 @@ LIANA_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
 PRIEST_RUNTIME_GROUPS = tuple(
     range(PLAYER_DEPLOYMENT_COUNT + 1, PLAYER_DEPLOYMENT_COUNT + 4)
 )
+MORGAN_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT + MORGAN_RECORD_INDEX
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -135,6 +136,7 @@ def runtime_death_wrapper_code(target_groups: tuple[int, ...]) -> bytes:
         (PROTAGONIST_RUNTIME_GROUP,),
         (LIANA_RUNTIME_GROUP,),
         PRIEST_RUNTIME_GROUPS,
+        (MORGAN_RUNTIME_GROUP,),
     }
     if target_groups not in allowed:
         raise ValueError("unsupported Scenario 4 death target groups")
@@ -297,8 +299,22 @@ def validate_all_records(probe: bytes, source: bytes) -> None:
             )
 
 
-def patch_probe(probe: bytearray, source: bytes) -> int:
+def patch_probe(
+    probe: bytearray,
+    source: bytes,
+    *,
+    runtime_clear: bool = False,
+) -> int:
     validate_layout(probe, source)
+    if runtime_clear:
+        validate_all_records(probe, source)
+        install_start_wrapper(
+            probe,
+            source,
+            runtime_death_wrapper_code((MORGAN_RUNTIME_GROUP,)),
+            label="Morgan-clear",
+        )
+        return builder.update_md_checksum(probe)
     probe[
         FIRST_PLAYER_DEPLOYMENT_OFFSET : FIRST_PLAYER_DEPLOYMENT_OFFSET + 4
     ] = bytes.fromhex(

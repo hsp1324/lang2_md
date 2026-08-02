@@ -65,6 +65,7 @@ RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
 FIRST_FIXED_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT
+BOSS_RUNTIME_GROUP = FIRST_FIXED_RUNTIME_GROUP + KRAMER_RECORD_INDEX
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -209,24 +210,28 @@ def be32(data: bytes | bytearray, offset: int) -> int:
     return int.from_bytes(data[offset : offset + 4], "big")
 
 
-def protagonist_death_wrapper_code() -> bytes:
-    protagonist = (
-        RUNTIME_GROUP_BASE + PROTAGONIST_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
-    )
+def runtime_defeat_group_wrapper_code(group: int) -> bytes:
+    if group not in (PROTAGONIST_RUNTIME_GROUP, BOSS_RUNTIME_GROUP):
+        raise ValueError("unsupported Scenario 8 runtime defeat group")
+    target = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
     code = bytearray()
     code.extend(bytes.fromhex("00 39 00 80"))
     code.extend(
-        (protagonist + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        (target + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
     )
     code.extend(bytes.fromhex("13 FC 00 00"))
-    code.extend((protagonist + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend((target + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
-    code.extend((protagonist + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend((target + RUNTIME_X_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     return bytes(code)
+
+
+def protagonist_death_wrapper_code() -> bytes:
+    return runtime_defeat_group_wrapper_code(PROTAGONIST_RUNTIME_GROUP)
 
 
 def timeout_wrapper_code() -> bytes:
@@ -414,6 +419,7 @@ def patch_probe(
     source: bytes,
     *,
     boss_survival: bool = False,
+    runtime_clear: bool = False,
     protagonist_death: bool = False,
     timeout: bool = False,
     turn_event: int | None = None,
@@ -424,6 +430,7 @@ def patch_probe(
     if sum(
         (
             boss_survival,
+            runtime_clear,
             protagonist_death,
             timeout,
             turn_event is not None,
@@ -439,6 +446,7 @@ def patch_probe(
         )
     if (
         protagonist_death
+        or runtime_clear
         or timeout
         or turn_event is not None
         or turn_event_sequence
@@ -456,18 +464,20 @@ def patch_probe(
             protagonist_death_wrapper_code()
             if protagonist_death
             else (
-                timeout_wrapper_code()
-                if timeout
+                runtime_defeat_group_wrapper_code(BOSS_RUNTIME_GROUP)
+                if runtime_clear
                 else (
-                    turn_event_wrapper_code(turn_event)
-                    if turn_event is not None
+                    timeout_wrapper_code()
+                    if timeout
                     else (
-                        turn_event_sequence_wrapper_code()
-                        if turn_event_sequence
+                        turn_event_wrapper_code(turn_event)
+                        if turn_event is not None
                         else turn_event_wrapper_code(
                             23,
                             unavailable_runtime_group=SCOTT_RUNTIME_GROUP,
                         )
+                        if turn_23_no_scott
+                        else turn_event_sequence_wrapper_code()
                     )
                 )
             )

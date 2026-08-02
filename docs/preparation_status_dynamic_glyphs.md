@@ -925,3 +925,24 @@ battle-only cursor-table change is outside that preparation lifetime contract.
 No release ROM, save, version, or desktop artifact was changed. Full
 battle-result acceptance for Scenario 10 and Scenarios 12 through 27 remains
 the separate pending release gate.
+
+### Exact-current result/ending gate closure
+
+The pending statement immediately above is superseded by the completed
+exact-current matrix. The same normal `015C` and hard `1767` audit ROMs were
+used to build scenario-specific, non-release result probes for every Scenario
+1 through 27. The 52 normal/hard Scenario 1-26 runs reached intact result
+surfaces. The Scenario 27 pair instead traversed its stock terminal route to
+`Fin` after verifying Bernhardt's runtime HP was zero.
+
+Every retained result frame was manually checked for Korean commander names,
+portraits, unit/result sprites, `POINT`, borders, rows, and numeric fields. The
+hash-bound aggregate is
+`localization/current_result_surface_regression.json`. Together with the
+already complete 54/54 preparation/shop, gray-acted, H-scroll, glyph-lifetime,
+mercenary-cache, all-hire-row, Pike, Monk, Cross/Necklace, and class-change
+checks, the current non-release candidate surface gate is complete.
+
+This verification does not promote a build. Release ROMs, saves, displayed
+version strings, and Desktop artifacts remain untouched until the user
+explicitly authorizes another release.

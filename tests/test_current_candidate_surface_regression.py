@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 import unittest
@@ -26,6 +27,7 @@ class CurrentCandidateSurfaceRegressionTests(unittest.TestCase):
             "pike_active_and_acted",
             "monk_active_and_acted",
             "shop_items",
+            "battle_result_and_ending_surfaces",
         ):
             self.assertEqual(self.report[key]["status"], "pass", key)
 
@@ -38,6 +40,12 @@ class CurrentCandidateSurfaceRegressionTests(unittest.TestCase):
         self.assertEqual(self.report["acted_gray_matrix"]["normal"]["scenarios"], "27/27")
         self.assertEqual(self.report["acted_gray_matrix"]["hard"]["scenarios"], "27/27")
         self.assertEqual(self.report["all_mercenary_hire_pages"]["mercenary_classes"], 16)
+        self.assertEqual(
+            self.report["battle_result_and_ending_surfaces"][
+                "passed_profile_scenario_runs"
+            ],
+            54,
+        )
 
     def test_exact_reported_pike_and_monk_caches_pass(self) -> None:
         self.assertEqual(self.report["pike_active_and_acted"]["hired_per_profile"], 6)
@@ -50,9 +58,17 @@ class CurrentCandidateSurfaceRegressionTests(unittest.TestCase):
     def test_report_does_not_promote_a_release(self) -> None:
         self.assertFalse(self.report["candidate_roms"]["release_roms_modified"])
         self.assertFalse(self.report["candidate_roms"]["version_bumped"])
-        self.assertEqual(self.report["remaining_release_gate"]["status"], "pending")
+        self.assertEqual(self.report["remaining_release_gate"]["status"], "complete")
         self.assertFalse(
             self.report["remaining_release_gate"]["release_or_version_promotion_authorized"]
+        )
+
+    def test_cumulative_result_report_hash_is_bound(self) -> None:
+        result = self.report["battle_result_and_ending_surfaces"]
+        path = ROOT / result["report"]
+        self.assertEqual(
+            hashlib.sha256(path.read_bytes()).hexdigest(),
+            result["report_sha256"],
         )
 
 

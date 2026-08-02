@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -28,7 +29,7 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
             cwd=ROOT,
         )
 
-    def test_scenario_one_report_and_cumulative_acceptance_are_current(self) -> None:
+    def test_legacy_scenario_one_report_and_current_cumulative_acceptance(self) -> None:
         self.assertEqual(
             self.model["status"],
             "scenario_1_complete_pass_scenarios_2_to_27_pending",
@@ -39,16 +40,38 @@ class PreparationSurfaceEvidenceTests(unittest.TestCase):
         self.assertEqual(progress["battle_surface_runs_reviewed"], 2)
         self.assertEqual(progress["fully_accepted_profile_scenario_runs"], 2)
         self.assertEqual(progress["fully_accepted_scenarios"], 1)
-        self.assertEqual(self.acceptance["status"], "pending")
+        self.assertEqual(self.acceptance["status"], "pass")
+        self.assertFalse(
+            self.acceptance["release_or_version_promotion_authorized"]
+        )
+        self.assertEqual(
+            self.acceptance["current_replacement_probe"]["status"],
+            "current_candidate_complete_pass",
+        )
+        self.assertEqual(
+            self.acceptance["current_replacement_probe"][
+                "current_result_surface_report"
+            ],
+            "localization/current_result_surface_regression.json",
+        )
+        result_report = ROOT / self.acceptance["current_replacement_probe"][
+            "current_result_surface_report"
+        ]
+        self.assertEqual(
+            hashlib.sha256(result_report.read_bytes()).hexdigest(),
+            self.acceptance["current_replacement_probe"][
+                "current_result_surface_report_sha256"
+            ],
+        )
         self.assertEqual(
             self.acceptance["matrix_summary"],
             {
                 "required_profile_scenario_runs": 54,
-                "preparation_surface_runs_reviewed": 20,
-                "battle_surface_runs_reviewed": 20,
-                "fully_accepted_profile_scenario_runs": 20,
-                "fully_accepted_scenarios": 10,
-                "release_gate_status": "pending",
+                "preparation_surface_runs_reviewed": 54,
+                "battle_surface_runs_reviewed": 54,
+                "fully_accepted_profile_scenario_runs": 54,
+                "fully_accepted_scenarios": 27,
+                "release_gate_status": "complete",
             },
         )
         self.assertEqual(

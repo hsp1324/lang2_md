@@ -33,6 +33,11 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
         )
         return data
 
+    def runtime_clear_patched(self) -> bytearray:
+        data = bytearray(self.built)
+        probe_builder.patch_probe(data, self.source, runtime_clear=True)
+        return data
+
     def timeout_patched(self) -> bytearray:
         data = bytearray(self.built)
         probe_builder.patch_probe(
@@ -229,6 +234,34 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
         self.assertEqual(expected, 0xA973)
+
+    def test_runtime_clear_targets_only_kramer_and_preserves_fixed_records(self):
+        data = self.runtime_clear_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            start = layout.records_offset + index * FIXED_RECORD_SIZE
+            end = start + FIXED_RECORD_SIZE
+            self.assertEqual(data[start:end], self.source[start:end])
+        code = probe_builder.runtime_defeat_group_wrapper_code(
+            probe_builder.BOSS_RUNTIME_GROUP
+        )
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.BOSS_RUNTIME_GROUP * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        protagonist = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.PROTAGONIST_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertNotIn(
+            (protagonist + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            code,
+        )
 
     def test_timeout_changes_only_start_wrapper_and_checksum(self):
         data = self.timeout_patched()
