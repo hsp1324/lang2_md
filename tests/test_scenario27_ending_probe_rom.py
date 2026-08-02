@@ -60,6 +60,56 @@ class Scenario27EndingProbeRomTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Bernhardt record differs"):
             probe_builder.patch_probe(data, self.source)
 
+    def test_balanced_input_allows_only_fields_overwritten_by_probe(self):
+        data = bytearray(self.built)
+        base = probe_builder.BERNHARDT_RECORD_OFFSET
+        data[base + FIELD_OFFSETS["at"]] ^= 0x11
+        data[base + FIELD_OFFSETS["df"]] ^= 0x22
+        data[base + probe_builder.BALANCE_RECORD_TAG_OFFSET] = 0x42
+        data[base + FIELD_OFFSETS["mercenaries"]] = 0x42
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            allow_balanced_input=True,
+        )
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["at"]],
+            probe_builder.PROBE_BERNHARDT_AT_MODIFIER & 0xFF,
+        )
+        self.assertEqual(
+            data[base + FIELD_OFFSETS["df"]],
+            probe_builder.PROBE_BERNHARDT_DF_MODIFIER & 0xFF,
+        )
+        self.assertEqual(
+            data[
+                base + FIELD_OFFSETS["mercenaries"]:
+                base + FIELD_OFFSETS["mercenaries"] + 6
+            ],
+            b"\xFF" * 6,
+        )
+        self.assertEqual(
+            data[base + probe_builder.BALANCE_RECORD_TAG_OFFSET],
+            0x42,
+        )
+
+    def test_balanced_input_still_rejects_identity_or_position_changes(self):
+        for offset in (
+            0,
+            FIELD_OFFSETS["name_id"],
+            FIELD_OFFSETS["class_id"],
+            FIELD_OFFSETS["level"],
+            FIELD_OFFSETS["x"],
+            FIELD_OFFSETS["y"],
+        ):
+            data = bytearray(self.built)
+            data[probe_builder.BERNHARDT_RECORD_OFFSET + offset] ^= 1
+            with self.assertRaisesRegex(ValueError, "protected fields"):
+                probe_builder.patch_probe(
+                    data,
+                    self.source,
+                    allow_balanced_input=True,
+                )
+
     def test_probe_updates_megadrive_checksum(self):
         data = self.patched()
         expected = sum(

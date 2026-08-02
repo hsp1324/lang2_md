@@ -1,0 +1,373 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scenario": 27,
+  "scope": "Fresh selector entry, preparation, automatic deployment, ordinary Elwin/Bernhardt battle, complete stock ending, epilogues, credits, and Fin",
+  "profiles": {
+    "normal": {
+      "status": "pass",
+      "candidate": {
+        "path": "tmp/current-s26-particle-fix-normal.md",
+        "sha256": "178e70487d4defc3e801abeb37cee43066db0ab5f8685c4c300ea0431336bb70",
+        "expected_sha256": "178e70487d4defc3e801abeb37cee43066db0ab5f8685c4c300ea0431336bb70",
+        "hash_matches": true,
+        "bytes": 4194304,
+        "checksum": "CAF3",
+        "checksum_matches": true
+      },
+      "diagnostic_probe": {
+        "path": "tmp/current-result-probes/normal/s27-particle-ending.md",
+        "sha256": "8806c387ad486f1b870045db80d411c01f3f5f05a57c43f0b30c6f47ccc6ef50",
+        "expected_sha256": "8806c387ad486f1b870045db80d411c01f3f5f05a57c43f0b30c6f47ccc6ef50",
+        "hash_matches": true,
+        "bytes": 4194304,
+        "checksum": "1661",
+        "checksum_matches": true,
+        "exact_rebuild": true,
+        "changed_byte_count_including_checksum": 11
+      },
+      "evidence_json": {
+        "path": "captures/run/current_s27_ending/normal/runtime08/evidence.json",
+        "sha256": "26c75b8dd9881b95390d98cc9488d6ed82b4dc3228ed23ca8af3564fdc3e642f",
+        "expected_sha256": "26c75b8dd9881b95390d98cc9488d6ed82b4dc3228ed23ca8af3564fdc3e642f",
+        "hash_matches": true,
+        "bytes": 1645459
+      },
+      "evidence_bytes_match": true,
+      "run_checks": {
+        "status": true,
+        "profile": true,
+        "scenario": true,
+        "run_id": true,
+        "acceptance_not_updated": true,
+        "rom_hash": true,
+        "rom_checksum": true,
+        "scenario_identity": true,
+        "bernhardt_runtime_state": true,
+        "post_battle_gst": true,
+        "fin_gst": true,
+        "fin_frame": true,
+        "fin_detector": true
+      },
+      "images": {
+        "preparation": {
+          "path": "captures/run/current_s27_ending/normal/runtime08/preparation.png",
+          "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+          "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+          "hash_matches": true,
+          "bytes": 8129
+        },
+        "turn1_command": {
+          "path": "captures/run/current_s27_ending/normal/runtime08/battle/turn1_command.png",
+          "sha256": "a242a0ef129eed4026a2f0d00dc52e0bbef0a5f8f2b67c3219ad4c5e24a95010",
+          "expected_sha256": "a242a0ef129eed4026a2f0d00dc52e0bbef0a5f8f2b67c3219ad4c5e24a95010",
+          "hash_matches": true,
+          "bytes": 20586
+        },
+        "bernhardt_target": {
+          "path": "captures/run/current_s27_ending/normal/runtime08/battle/bernhardt_target.png",
+          "sha256": "14c090c2258e687b45a6e80603337c2ba94a6dc4c7d162ff2c5fb47af263d7c1",
+          "expected_sha256": "14c090c2258e687b45a6e80603337c2ba94a6dc4c7d162ff2c5fb47af263d7c1",
+          "hash_matches": true,
+          "bytes": 24161
+        },
+        "fin": {
+          "path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_2957.png",
+          "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+          "expected_sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+          "hash_matches": true,
+          "bytes": 6727
+        }
+      },
+      "sequences": {
+        "battle": {
+          "frame_count": 36,
+          "unique_frame_hashes": 34,
+          "sequence_digest": "f4aba24a18d2a12b26c051c6cf387b2e9ff07754beddbb5ddd1e9b59bf5d6ed2",
+          "total_bytes": 597313,
+          "all_recorded_hashes_match_files": true,
+          "expected_frame_count": 36,
+          "expected_unique_frame_hashes": 34,
+          "expected_sequence_digest": "f4aba24a18d2a12b26c051c6cf387b2e9ff07754beddbb5ddd1e9b59bf5d6ed2",
+          "expected_total_bytes": 597313
+        },
+        "ending": {
+          "frame_count": 2957,
+          "unique_frame_hashes": 1124,
+          "sequence_digest": "ef02ac73e56125239408bc6304e426c0d9892b1c8a255e03850df368384e87e9",
+          "total_bytes": 35171068,
+          "all_recorded_hashes_match_files": true,
+          "expected_frame_count": 2957,
+          "expected_unique_frame_hashes": 1124,
+          "expected_sequence_digest": "ef02ac73e56125239408bc6304e426c0d9892b1c8a255e03850df368384e87e9",
+          "expected_total_bytes": 35171068
+        }
+      },
+      "historical_pixel_matches": {
+        "montage": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/100.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_0224.png",
+          "sha256": "0e9e02c2636667098be11c3dd48cf7ea6f9b542081bff69fe6fc5b3eb3e50265",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "scott": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/225.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_0767.png",
+          "sha256": "2fcfb72fc90c5f4ec040362c95245de0c53fff70055eacbce98997d3fc13f1ce",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "lana": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/400.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_1222.png",
+          "sha256": "78d4c84d076cf6e4bba5e794c26ea59145af4df7342ec86c695615df4adc92ae",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "bozel": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/575.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_1932.png",
+          "sha256": "ad013a95bcd1d258e2dca78982d34ab7d7437be6a3ec1124faebb64efba5e307",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "leon": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/650.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_2207.png",
+          "sha256": "612a042329ce427419896bf736bd04a106824510f17bfe52d3ee47bdbb86ba90",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "liana": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/800.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_2700.png",
+          "sha256": "e14bc69eeb74e34be38aa740ccc6eafc34002706de84df395dac7165af79e8d2",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "elwin": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/825.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_2805.png",
+          "sha256": "ee69e166d2327f5f218325164cd8bc6ca116763bfe59a3396b48158bf21fc3b2",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "fin": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/875.png",
+          "current_path": "captures/run/current_s27_ending/normal/runtime08/ending/advance_2957.png",
+          "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        }
+      }
+    },
+    "hard": {
+      "status": "pass",
+      "candidate": {
+        "path": "tmp/current-s26-particle-fix-hard.md",
+        "sha256": "9c6282c7f31f8ad0569944a4fdab0929b53a28b1c5308777eb199c278ecc5f56",
+        "expected_sha256": "9c6282c7f31f8ad0569944a4fdab0929b53a28b1c5308777eb199c278ecc5f56",
+        "hash_matches": true,
+        "bytes": 4194304,
+        "checksum": "E0FE",
+        "checksum_matches": true
+      },
+      "diagnostic_probe": {
+        "path": "tmp/current-result-probes/hard/s27-particle-ending.md",
+        "sha256": "1a7d3c65b36cd8ca68d6c08a482a49d5bc133596019d51921af4fc88f3e92707",
+        "expected_sha256": "1a7d3c65b36cd8ca68d6c08a482a49d5bc133596019d51921af4fc88f3e92707",
+        "hash_matches": true,
+        "bytes": 4194304,
+        "checksum": "1B5F",
+        "checksum_matches": true,
+        "exact_rebuild": true,
+        "changed_byte_count_including_checksum": 11
+      },
+      "evidence_json": {
+        "path": "captures/run/current_s27_ending/hard/runtime01/evidence.json",
+        "sha256": "df93b15dc2d4c32890d9bc47c65eae0071c3cdb78a3a73f0b46c2be64105b45e",
+        "expected_sha256": "df93b15dc2d4c32890d9bc47c65eae0071c3cdb78a3a73f0b46c2be64105b45e",
+        "hash_matches": true,
+        "bytes": 1640823
+      },
+      "evidence_bytes_match": true,
+      "run_checks": {
+        "status": true,
+        "profile": true,
+        "scenario": true,
+        "run_id": true,
+        "acceptance_not_updated": true,
+        "rom_hash": true,
+        "rom_checksum": true,
+        "scenario_identity": true,
+        "bernhardt_runtime_state": true,
+        "post_battle_gst": true,
+        "fin_gst": true,
+        "fin_frame": true,
+        "fin_detector": true
+      },
+      "images": {
+        "preparation": {
+          "path": "captures/run/current_s27_ending/hard/runtime01/preparation.png",
+          "sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+          "expected_sha256": "77de0c40fb053bdb261d0226128e9a450388fe40fc6099429e1edc29dd530437",
+          "hash_matches": true,
+          "bytes": 8129
+        },
+        "turn1_command": {
+          "path": "captures/run/current_s27_ending/hard/runtime01/battle/turn1_command.png",
+          "sha256": "a242a0ef129eed4026a2f0d00dc52e0bbef0a5f8f2b67c3219ad4c5e24a95010",
+          "expected_sha256": "a242a0ef129eed4026a2f0d00dc52e0bbef0a5f8f2b67c3219ad4c5e24a95010",
+          "hash_matches": true,
+          "bytes": 20586
+        },
+        "bernhardt_target": {
+          "path": "captures/run/current_s27_ending/hard/runtime01/battle/bernhardt_target.png",
+          "sha256": "14c090c2258e687b45a6e80603337c2ba94a6dc4c7d162ff2c5fb47af263d7c1",
+          "expected_sha256": "14c090c2258e687b45a6e80603337c2ba94a6dc4c7d162ff2c5fb47af263d7c1",
+          "hash_matches": true,
+          "bytes": 24161
+        },
+        "fin": {
+          "path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2960.png",
+          "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+          "expected_sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+          "hash_matches": true,
+          "bytes": 6727
+        }
+      },
+      "sequences": {
+        "battle": {
+          "frame_count": 36,
+          "unique_frame_hashes": 34,
+          "sequence_digest": "904a6387da0a448908563daf7c5ffa3167f2387e132c522f226c5bf4a55d4c5a",
+          "total_bytes": 595785,
+          "all_recorded_hashes_match_files": true,
+          "expected_frame_count": 36,
+          "expected_unique_frame_hashes": 34,
+          "expected_sequence_digest": "904a6387da0a448908563daf7c5ffa3167f2387e132c522f226c5bf4a55d4c5a",
+          "expected_total_bytes": 595785
+        },
+        "ending": {
+          "frame_count": 2960,
+          "unique_frame_hashes": 1126,
+          "sequence_digest": "3bb8a32643fd83b39e1e04b2d459bd5820d7e747c5801429e0fba46c80343b9d",
+          "total_bytes": 35174483,
+          "all_recorded_hashes_match_files": true,
+          "expected_frame_count": 2960,
+          "expected_unique_frame_hashes": 1126,
+          "expected_sequence_digest": "3bb8a32643fd83b39e1e04b2d459bd5820d7e747c5801429e0fba46c80343b9d",
+          "expected_total_bytes": 35174483
+        }
+      },
+      "historical_pixel_matches": {
+        "montage": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/100.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_0220.png",
+          "sha256": "0e9e02c2636667098be11c3dd48cf7ea6f9b542081bff69fe6fc5b3eb3e50265",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "scott": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/225.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_0761.png",
+          "sha256": "2fcfb72fc90c5f4ec040362c95245de0c53fff70055eacbce98997d3fc13f1ce",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "lana": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/400.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_1217.png",
+          "sha256": "78d4c84d076cf6e4bba5e794c26ea59145af4df7342ec86c695615df4adc92ae",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "bozel": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/575.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_1927.png",
+          "sha256": "ad013a95bcd1d258e2dca78982d34ab7d7437be6a3ec1124faebb64efba5e307",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "leon": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/650.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2203.png",
+          "sha256": "612a042329ce427419896bf736bd04a106824510f17bfe52d3ee47bdbb86ba90",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "liana": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/800.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2700.png",
+          "sha256": "e14bc69eeb74e34be38aa740ccc6eafc34002706de84df395dac7165af79e8d2",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "elwin": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/825.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2804.png",
+          "sha256": "ee69e166d2327f5f218325164cd8bc6ca116763bfe59a3396b48158bf21fc3b2",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        },
+        "fin": {
+          "historical_path": "captures/run/e93e_s27_ending_watch/875.png",
+          "current_path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2960.png",
+          "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+          "historical_hash_matches": true,
+          "current_hash_matches": true
+        }
+      }
+    }
+  },
+  "manual_hard_review": {
+    "keith": {
+      "path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_1050.png",
+      "sha256": "998e576be73b224d1ce3571c425d8af4e365a6e9b3c27503d33e8ef6de0cdb4e",
+      "expected_sha256": "998e576be73b224d1ce3571c425d8af4e365a6e9b3c27503d33e8ef6de0cdb4e",
+      "hash_matches": true,
+      "bytes": 10694,
+      "review": "clean Korean text, portrait, class/status graphics, and background"
+    },
+    "egbert": {
+      "path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2360.png",
+      "sha256": "0099abb3c0b115ed549aae7d737fd02f17c763b37838cc8eda6218453276548d",
+      "expected_sha256": "0099abb3c0b115ed549aae7d737fd02f17c763b37838cc8eda6218453276548d",
+      "hash_matches": true,
+      "bytes": 11277,
+      "review": "clean Korean text, portrait, class/status graphics, and background"
+    },
+    "bernhardt": {
+      "path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2460.png",
+      "sha256": "08366b6db6bedf2d783408340607f8cd90fc78d1f0c162ab410099de2dd4d961",
+      "expected_sha256": "08366b6db6bedf2d783408340607f8cd90fc78d1f0c162ab410099de2dd4d961",
+      "hash_matches": true,
+      "bytes": 10131,
+      "review": "clean Korean text, portrait, class/status graphics, and background"
+    },
+    "fin": {
+      "path": "captures/run/current_s27_ending/hard/runtime01/ending/advance_2960.png",
+      "sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+      "expected_sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+      "hash_matches": true,
+      "bytes": 6727,
+      "review": "clean Korean text, portrait, class/status graphics, and background"
+    }
+  },
+  "cross_profile": {
+    "preparation_pixel_identical": true,
+    "turn1_command_pixel_identical": true,
+    "bernhardt_target_pixel_identical": true,
+    "fin_pixel_identical": true,
+    "timing_note": "Normal and hard frame indices differ slightly because autonomous animation timing differs; accepted historical surfaces and Fin are compared by content hash instead of index."
+  },
+  "automation": {
+    "fresh_uninterrupted_runs_only": true,
+    "savestate_resume_accepted": false,
+    "savestate_resume_note": "Same-run GST continuation was rejected after BlastEm returned to Sega/title; accepted evidence always starts from the selector.",
+    "fin_bound_frames": 3200
+  },
+  "release_promoted": false,
+  "acceptance_updated": false
+}
