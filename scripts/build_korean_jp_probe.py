@@ -300,14 +300,49 @@ ENEMY_ORDINARY_MERCENARY_CACHE_HOOK_ORIGINAL = bytes.fromhex(
     "72 00 12 29 00 00"
 )
 ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE = 0x2B8E80
-ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE_LIMIT = 0x2B9000
+ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE_LIMIT = 0x2B8FF0
+ENEMY_MERCENARY_FALLBACK_CLASS_TABLE = 0x2B8FF0
+ENEMY_MERCENARY_FALLBACK_CLASS_TABLE_LIMIT = 0x2B9000
 ENEMY_ORDINARY_MERCENARY_FIRST_CLASS = 0x62
 ENEMY_ORDINARY_MERCENARY_LAST_CLASS = 0x71
 ENEMY_ORDINARY_MERCENARY_FIXED_TABLE = 0xFFFFA84E
+ENEMY_ORDINARY_MERCENARY_FIXED_COUNT = 16
+ENEMY_ORDINARY_MERCENARY_FIXED_LAST_ROW = 0xFFFFA88A
+ENEMY_DYNAMIC_MERCENARY_TABLE = 0xFFFFA88E
+ENEMY_DYNAMIC_MERCENARY_COUNT = 10
+ENEMY_DYNAMIC_MERCENARY_TABLE_END = 0xFFFFA8B6
+ENEMY_MERCENARY_RUNTIME_GROUPS = 20
+ENEMY_MERCENARY_RUNTIME_SUBORDINATES_PER_GROUP = 7
+ENEMY_MERCENARY_RUNTIME_BASE = 0xFFFF603C
 ENEMY_ORDINARY_MERCENARY_DYNAMIC_LOOKUP_RESUME = 0x011562
 ENEMY_ORDINARY_MERCENARY_FIXED_LOOKUP_SCAN = 0x011526
 ENEMY_ORDINARY_MERCENARY_LOADER_RESUME = 0x0112F4
 ENEMY_ORDINARY_MERCENARY_LOADER_SKIP = 0x011358
+ENEMY_ORDINARY_MERCENARY_LOADER_LOAD = 0x011316
+ENEMY_MERCENARY_LOOKUP_RETURN = 0x01157A
+# If all sixteen fixed ordinary slots are genuinely live, an overflow enemy
+# cannot borrow one safely.  The lookup then falls back to the closest
+# ordinary silhouette instead of interpreting the following WRAM table as a
+# tile number.  In normal play the allocator finds an unused fixed slot and
+# preserves the exact advanced sprite; this table is the corruption-proof
+# last resort for deliberately exhaustive/debug rosters.
+ENEMY_ADVANCED_MERCENARY_FIRST_CLASS = 0x72
+ENEMY_ADVANCED_MERCENARY_FALLBACK_CLASSES = bytes((
+    0x64,  # 0x72 Soldier -> ordinary Soldier
+    0x66,  # 0x73 Armor Soldier -> ordinary Armor Soldier
+    0x65,  # 0x74 Berserker -> Gladiator
+    0x65,  # 0x75 Barbarian -> Gladiator
+    0x6A,  # 0x76 Dark Elf -> Elf
+    0x6B,  # 0x77 Ballista -> ordinary Ballista
+    0x6E,  # 0x78 Lizardman -> Merman
+    0x67,  # 0x79 Horseman -> ordinary Horseman
+    0x68,  # 0x7A Heavy Horseman -> ordinary Heavy Horseman
+    0x69,  # 0x7B Royal Horse -> Dragoon
+    0x6D,  # 0x7C Dark Guard -> Guardman
+    0x6F,  # 0x7D Griffin -> ordinary Griffin
+    0x62,  # 0x7E Pike -> ordinary Pike
+    0x63,  # 0x7F Phalanx -> ordinary Phalanx
+))
 
 
 def custom_map_sprite_gray_source_map(
@@ -3514,6 +3549,40 @@ def _build_enemy_ordinary_mercenary_cache_loader_routine() -> bytes:
     code.branch_word(0x6700, "skip")  # beq.w
     code.emit("08 29 00 06 00 02")  # btst.b #6,2(a1)
     code.branch_word(0x6600, "skip")  # bne.w
+
+    # A save made by an older build can contain more than ten distinct enemy
+    # mercenary classes even when the current Scenario record was normalized
+    # to the ten-entry dynamic-cache budget.  First recognize an advanced
+    # class already assigned to a borrowed fixed slot.
+    code.emit(
+        bytes.fromhex("49 F9")
+        + ENEMY_ORDINARY_MERCENARY_FIXED_TABLE.to_bytes(4, "big")
+    )  # lea.l fixed table,a4
+    code.emit("76 0F")  # moveq #15,d3
+    code.label("fixed_existing_loop")
+    code.emit("B2 54")  # cmp.w (a4),d1
+    code.branch_word(0x6700, "skip")  # beq.w
+    code.emit("D8 FC 00 04")  # adda.w #4,a4
+    code.emit("51 CB")
+    code.fixups.append((len(code.code), "fixed_existing_loop"))
+    code.emit("00 00")  # dbra d3,fixed_existing_loop
+
+    # Once the table is full, later records still repeat classes that were
+    # loaded in its first ten rows.  Recognize those before considering a
+    # borrowed fixed slot; otherwise every repeat would consume another row.
+    code.emit(
+        bytes.fromhex("49 F9")
+        + ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
+    )  # lea.l dynamic table,a4
+    code.emit("76 09")  # moveq #9,d3
+    code.label("dynamic_existing_loop")
+    code.emit("B2 54")  # cmp.w (a4),d1
+    code.branch_word(0x6700, "skip")  # beq.w
+    code.emit("D8 FC 00 04")  # adda.w #4,a4
+    code.emit("51 CB")
+    code.fixups.append((len(code.code), "dynamic_existing_loop"))
+    code.emit("00 00")  # dbra d3,dynamic_existing_loop
+
     code.emit(
         bytes.fromhex("0C 41")
         + ENEMY_ORDINARY_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
@@ -3523,7 +3592,85 @@ def _build_enemy_ordinary_mercenary_cache_loader_routine() -> bytes:
         bytes.fromhex("0C 41")
         + ENEMY_ORDINARY_MERCENARY_LAST_CLASS.to_bytes(2, "big")
     )
-    code.branch_word(0x6200, "resume")  # bhi.w
+    code.branch_word(0x6300, "skip")  # bls.w: ordinary class uses fixed cache
+
+    # The stock dynamic table has ten rows and is immediately followed by a
+    # different four-row cache.  Never let a migrated battle write row 11 over
+    # that owner.  If capacity remains, use the original loader unchanged.
+    code.emit(
+        bytes.fromhex("49 F9")
+        + ENEMY_DYNAMIC_MERCENARY_TABLE_END.to_bytes(4, "big")
+    )  # lea.l dynamic table end,a4
+    code.emit("B9 CA")  # cmpa.l a2,a4
+    code.branch_word(0x6200, "resume")  # bhi.w: insertion pointer below end
+
+    # Borrow the highest unused ordinary cache row.  All 20 runtime groups,
+    # including hidden reinforcements and every faction, are scanned before a
+    # row is selected, so no live ordinary silhouette can be displaced.
+    code.emit(
+        bytes.fromhex("49 F9")
+        + ENEMY_ORDINARY_MERCENARY_FIXED_LAST_ROW.to_bytes(4, "big")
+    )  # lea.l last fixed row,a4
+    code.emit("76 0F")  # moveq #15,d3
+    code.label("fixed_candidate_loop")
+    code.emit("34 14")  # move.w (a4),d2
+    code.emit(
+        bytes.fromhex("0C 42")
+        + ENEMY_ORDINARY_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
+    )
+    code.branch_word(0x6500, "next_fixed_candidate")  # bcs.w
+    code.emit(
+        bytes.fromhex("0C 42")
+        + ENEMY_ORDINARY_MERCENARY_LAST_CLASS.to_bytes(2, "big")
+    )
+    code.branch_word(0x6200, "next_fixed_candidate")  # bhi.w
+    # The fixed active cache is only referenced by player/NPC ordinary
+    # mercenaries.  Scan the seven subordinate records of the first twenty
+    # runtime groups (the same range consumed by the stock enemy loader), and
+    # ignore inactive groups and commanders.  Scanning the surrounding WRAM as
+    # one flat record array can encounter unrelated bytes after the live group
+    # area and falsely mark every ordinary cache row as occupied.
+    code.emit(
+        bytes.fromhex("47 F9")
+        + ENEMY_MERCENARY_RUNTIME_BASE.to_bytes(4, "big")
+    )  # lea.l runtime groups,a3
+    code.emit(bytes((0x78, ENEMY_MERCENARY_RUNTIME_GROUPS - 1)))
+    # moveq #19,d4: stock runtime group count
+    code.label("runtime_group_loop")
+    code.emit("0C 13 00 FF")  # cmpi.b #$ff,(a3): inactive group
+    code.branch_word(0x6700, "next_runtime_group")  # beq.w
+    code.emit("4B EB 00 0C")  # lea.l $c(a3),a5: first subordinate
+    code.emit(bytes((
+        0x7A,
+        ENEMY_MERCENARY_RUNTIME_SUBORDINATES_PER_GROUP - 1,
+    )))  # moveq #6,d5: seven subordinates
+    code.label("runtime_member_loop")
+    code.emit("B4 15")  # cmp.b (a5),d2
+    code.branch_word(0x6700, "next_fixed_candidate")  # beq.w
+    code.emit("DA FC 00 0C")  # adda.w #$c,a5
+    code.emit("51 CD")
+    code.fixups.append((len(code.code), "runtime_member_loop"))
+    code.emit("00 00")  # dbra d5,runtime_member_loop
+    code.label("next_runtime_group")
+    code.emit("D6 FC 00 60")  # adda.w #$60,a3
+    code.emit("51 CC")
+    code.fixups.append((len(code.code), "runtime_group_loop"))
+    code.emit("00 00")  # dbra d4,runtime_group_loop
+    code.emit("38 81")  # move.w d1,(a4)
+    code.emit("34 2C 00 02")  # move.w 2(a4),d2
+    code.emit("EB 4A")  # lsl.w #5,d2
+    code.emit("30 42")  # movea.w d2,a0
+    code.emit(
+        bytes.fromhex("4E F9")
+        + ENEMY_ORDINARY_MERCENARY_LOADER_LOAD.to_bytes(4, "big")
+    )
+    code.label("next_fixed_candidate")
+    code.emit("49 EC FF FC")  # lea.l -4(a4),a4
+    code.emit("51 CB")
+    code.fixups.append((len(code.code), "fixed_candidate_loop"))
+    code.emit("00 00")  # dbra d3,fixed_candidate_loop
+    # An intentionally exhaustive roster can occupy every fixed class.  Do
+    # not corrupt the following cache; lookup has a coherent ordinary fallback.
     code.label("skip")
     code.emit(
         bytes.fromhex("4E F9")
@@ -3540,29 +3687,85 @@ def _build_enemy_ordinary_mercenary_cache_loader_routine() -> bytes:
 def _build_enemy_ordinary_mercenary_cache_lookup_routine() -> bytes:
     code = _M68KCode()
     code.emit("72 00 12 29 00 00")  # moveq #0,d1; move.b 0(a1),d1
-    code.emit(
-        bytes.fromhex("0C 41")
-        + ENEMY_ORDINARY_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
-    )
-    code.branch_word(0x6500, "dynamic")  # bcs.w
-    code.emit(
-        bytes.fromhex("0C 41")
-        + ENEMY_ORDINARY_MERCENARY_LAST_CLASS.to_bytes(2, "big")
-    )
-    code.branch_word(0x6200, "dynamic")  # bhi.w
+
+    # Scan the fixed table first.  Besides ordinary classes it can contain an
+    # exact advanced-class entry borrowed by the overflow-safe loader above.
     code.emit(
         bytes.fromhex("41 F9")
         + ENEMY_ORDINARY_MERCENARY_FIXED_TABLE.to_bytes(4, "big")
     )  # lea.l fixed table,a0
     code.emit("70 0F")  # moveq #15,d0
+    code.label("fixed_loop")
+    code.emit("B2 58")  # cmp.w (a0)+,d1
+    code.branch_word(0x6700, "found")  # beq.w
+    code.emit("D0 FC 00 02")  # adda.w #2,a0
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "fixed_loop"))
+    code.emit("00 00")  # dbra d0,fixed_loop
+
     code.emit(
-        bytes.fromhex("4E F9")
-        + ENEMY_ORDINARY_MERCENARY_FIXED_LOOKUP_SCAN.to_bytes(4, "big")
+        bytes.fromhex("41 F9")
+        + ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
+    )  # lea.l dynamic table,a0
+    code.emit("70 09")  # moveq #9,d0
+    code.label("dynamic_loop")
+    code.emit("B2 58")  # cmp.w (a0)+,d1
+    code.branch_word(0x6700, "found")  # beq.w
+    code.emit("D0 FC 00 02")  # adda.w #2,a0
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "dynamic_loop"))
+    code.emit("00 00")  # dbra d0,dynamic_loop
+
+    # With no unused fixed slot available, map the known advanced class to its
+    # closest intact ordinary silhouette.  This path is deliberately visual
+    # fallback only; class stats and localized name remain unchanged.
+    code.emit(
+        bytes.fromhex("0C 41")
+        + ENEMY_ADVANCED_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
     )
-    code.label("dynamic")
+    code.branch_word(0x6500, "safe_default")  # bcs.w
+    code.emit(
+        bytes.fromhex("0C 41")
+        + (
+            ENEMY_ADVANCED_MERCENARY_FIRST_CLASS
+            + len(ENEMY_ADVANCED_MERCENARY_FALLBACK_CLASSES)
+            - 1
+        ).to_bytes(2, "big")
+    )
+    code.branch_word(0x6200, "safe_default")  # bhi.w
+    code.emit(
+        bytes.fromhex("04 41")
+        + ENEMY_ADVANCED_MERCENARY_FIRST_CLASS.to_bytes(2, "big")
+    )  # subi.w #first,d1
+    code.emit(
+        bytes.fromhex("41 F9")
+        + ENEMY_MERCENARY_FALLBACK_CLASS_TABLE.to_bytes(4, "big")
+    )  # lea.l fallback classes,a0
+    code.emit("12 30 10 00")  # move.b (a0,d1.w),d1
+    code.branch_word(0x6000, "fallback_scan")
+    code.label("safe_default")
+    code.emit("72 71")  # moveq #$71,d1: coherent Citizen fallback
+    code.label("fallback_scan")
+    code.emit(
+        bytes.fromhex("41 F9")
+        + ENEMY_ORDINARY_MERCENARY_FIXED_TABLE.to_bytes(4, "big")
+    )
+    code.emit("70 0F")  # moveq #15,d0
+    code.label("fallback_loop")
+    code.emit("B2 58")  # cmp.w (a0)+,d1
+    code.branch_word(0x6700, "found")  # beq.w
+    code.emit("D0 FC 00 02")  # adda.w #2,a0
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "fallback_loop"))
+    code.emit("00 00")  # dbra d0,fallback_loop
+    code.emit("72 71")  # moveq #$71,d1
+    code.emit("41 F9 FF FF A8 8A")  # lea.l Citizen row,a0
+    code.emit("D0 FC 00 02")  # adda.w #2,a0
+    code.label("found")
+    code.emit("32 10")  # move.w (a0),d1
     code.emit(
         bytes.fromhex("4E F9")
-        + ENEMY_ORDINARY_MERCENARY_DYNAMIC_LOOKUP_RESUME.to_bytes(4, "big")
+        + ENEMY_MERCENARY_LOOKUP_RETURN.to_bytes(4, "big")
     )
     return code.finish()
 
@@ -3585,6 +3788,23 @@ def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
         ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE:lookup_start
     ] = loader
     data[lookup_start:routine_end] = lookup
+
+    fallback_end = (
+        ENEMY_MERCENARY_FALLBACK_CLASS_TABLE
+        + len(ENEMY_ADVANCED_MERCENARY_FALLBACK_CLASSES)
+    )
+    if fallback_end > ENEMY_MERCENARY_FALLBACK_CLASS_TABLE_LIMIT:
+        raise ValueError("enemy mercenary fallback table exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            ENEMY_MERCENARY_FALLBACK_CLASS_TABLE:fallback_end
+        ]
+    ):
+        raise ValueError("enemy mercenary fallback table area is not blank")
+    data[
+        ENEMY_MERCENARY_FALLBACK_CLASS_TABLE:fallback_end
+    ] = ENEMY_ADVANCED_MERCENARY_FALLBACK_CLASSES
 
     for hook, target in (
         (
