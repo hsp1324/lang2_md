@@ -47,6 +47,8 @@ Normal and hard profiles were tested separately.
 | 14, 15, 17, 21-26 | `post-darkguard-20260802-02` | 18/18 | `tmp/current-source-post-darkguard-result-probes/supported-summary.json` |
 | 10 | `post-darkguard-20260802-04` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s10-summary.json` |
 | 16 | `post-darkguard-20260802-05` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s16-summary.json` |
+| 18, 19 | `post-darkguard-20260802-16` | 4/4 | `tmp/current-source-post-darkguard-result-probes/s18-20-summary.json` plus profile `evidence.json` files |
+| 20 | `post-darkguard-20260802-17` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s20-corrected-summary.json` |
 | 27 | `post-darkguard-20260802-06` | 2/2 | `tmp/current-source-post-darkguard-result-probes/s27-safe-summary.json` |
 
 The Scenario 10 runner marks only the ten runtime monster groups defeated,
@@ -91,6 +93,33 @@ and 15. Elwin moves from `(13, 6)` to the stock completion gate `(13, 5)`.
 Both profiles reached a clean battle-result screen; the normal result capture is
 `captures/run/current_source_result_revalidation/normal/s16/post-darkguard-20260802-05/battle/battle_result.png`.
 
+Scenarios 18-20 resume SHA-256-locked historical final-boss continuations and
+verify the requested scenario identity plus the boss class, name, position, and
+initial HP before accepting any input. Scenario 18 defeated Great Dragon from
+HP 9, Scenario 19 defeated Imelda from HP 10 normal/HP 1 hard, and Scenario 20
+defeated Fias from HP 10. Every resulting GST records boss HP 0. Normal and hard
+produced byte-identical result PNGs for each scenario:
+
+- Scenario 18: frame 40 normal/frame 41 hard, SHA-256
+  `36a961e6c48ff7b6b041e4f9aa43e358e7cbae6d0172a795a4bea61eb9d8b688`
+- Scenario 19: frame 23, SHA-256
+  `911bfe3d5abf6b7a8beba9d66721d5c3c70a457f320bb18acec005f413e89c98`
+- Scenario 20: frame 36, SHA-256
+  `08c028f063b438093474ab002bdd7ef6678f2186918d1f836bcbed8fb13eb350`
+
+All six runs reached the same clean save-menu PNG, SHA-256
+`cd36d6691dcd0cae1c3458ad5a7c8869cb123245dec5ac982a9cd7a304288d9a`.
+The retained dialogue, level-up, and class-change frames include clean names
+for Scott, Elwin, Aaron, Fias, Jessica, and Keith and clean class labels and
+sprites. Key completed frames either byte-match the previously manually
+reviewed Scenario 18-20 evidence or were manually rechecked in this run.
+
+The first Scenario 20 run in `post-darkguard-20260802-16` pressed C as though
+the historical continuation already held an Attack target. It actually held an
+enemy-inspection cursor, so the run opened Fias's status page and stalled. The
+corrected runner explicitly returns to Elwin, opens Attack, selects Fias, and
+then confirms battle. This was an input-harness failure and is not ROM evidence.
+
 The Scenario 27 runner stopped battle confirmations at the first retained GST
 where Bernhardt had HP 0 (attempt 1, battle frame 6 in both profiles). It then
 traversed the untouched result, ending, history, and character epilogue path.
@@ -104,8 +133,10 @@ An earlier retry experiment continued a fixed confirmation loop after HP 0 and
 eventually entered the title/attract loop. That rejected run was a probe-input
 failure; the passing run proves the current-source ROM's ordinary ending path.
 
-## Pending coverage
+## Coverage boundary
 
-Current-source battle-result runners are still missing for Scenarios 18-20.
-Consequently this report is evidence for the rows above, not full release
-acceptance.
+This current-source post-DarkGuard runtime matrix now covers Scenarios 10 and
+12-27 in both profiles. The older accepted Scenario 1-9 and 11 result evidence
+still needs a consolidated applicability audit against the present source
+candidate before the cumulative Scenario 1-27 release gate can be marked
+complete. No release ROM or displayed version was changed by this work.

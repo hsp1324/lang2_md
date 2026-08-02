@@ -99,6 +99,22 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
             command,
         )
         self.assertNotIn(str(args.seed_gst), command)
+        command = runner.task_command(args, "normal", 18, ":606")
+        self.assertTrue(
+            command[1].endswith("run_scenario18_20_result_surface.py")
+        )
+        self.assertEqual(command[-2:], ["--scenario", "18"])
+        self.assertIn(str(runner.SCENARIO_SEED_OVERRIDES[18]), command)
+        command = runner.task_command(args, "hard", 19, ":607")
+        self.assertTrue(
+            command[1].endswith("run_scenario18_20_result_surface.py")
+        )
+        self.assertEqual(command[-2:], ["--scenario", "19"])
+        self.assertIn(
+            str(runner.SCENARIO_PROFILE_SEED_OVERRIDES[(19, "hard")]),
+            command,
+        )
+        self.assertNotIn(str(runner.SCENARIO_SEED_OVERRIDES[19]), command)
 
 
 if __name__ == "__main__":

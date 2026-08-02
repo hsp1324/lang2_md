@@ -34,6 +34,9 @@ RUNNERS: dict[int, str] = {
     15: "run_scenario14_15_result_surface.py",
     16: "run_scenario14_15_result_surface.py",
     17: "run_scenario17_result_surface.py",
+    18: "run_scenario18_20_result_surface.py",
+    19: "run_scenario18_20_result_surface.py",
+    20: "run_scenario18_20_result_surface.py",
     21: "run_scenario21_result_surface.py",
     22: "run_scenario22_result_surface.py",
     23: "run_scenario23_result_surface.py",
@@ -54,6 +57,28 @@ SCENARIO_SEED_OVERRIDES = {
         / "captures/runtime/s13-completion-0ce6/.local/share/blastem/"
         "Langrisser II (Scenario 13 Completion Probe)/quicksave.gst"
     ),
+    18: (
+        ROOT
+        / "captures/runtime/s18_completion_17f2/.local/share/blastem/"
+        "Langrisser II (Scenario 18 Completion Probe)/quicksave.gst"
+    ),
+    19: (
+        ROOT
+        / "captures/runtime/s19_completion_2829_strong/.local/share/blastem/"
+        "Langrisser II (Scenario 19 Completion Probe)/quicksave.gst"
+    ),
+    20: (
+        ROOT
+        / "captures/runtime/s20_completion_d2f9_hidden/.local/share/blastem/"
+        "Langrisser II (Scenario 20 Completion Probe)/quicksave.gst"
+    ),
+}
+SCENARIO_PROFILE_SEED_OVERRIDES = {
+    (19, "hard"): (
+        ROOT
+        / "captures/runtime/current-s19-hard-result06/.local/share/blastem/"
+        "s19/quicksave.gst"
+    ),
 }
 
 
@@ -67,7 +92,7 @@ def task_rom(probe_root: Path, profile: str, scenario: int) -> Path:
 
 
 def runner_output_root(output_root: Path, scenario: int) -> Path:
-    if scenario in (14, 15, 16):
+    if scenario in (14, 15, 16, 18, 19, 20):
         return output_root
     return output_root / f"s{scenario:02d}"
 
@@ -79,7 +104,7 @@ def task_output(
     run_id: str,
 ) -> Path:
     root = runner_output_root(output_root, scenario)
-    if scenario in (14, 15, 16):
+    if scenario in (14, 15, 16, 18, 19, 20):
         return root / profile / f"s{scenario:02d}" / run_id
     return root / profile / run_id
 
@@ -90,7 +115,10 @@ def task_command(
     scenario: int,
     display: str,
 ) -> list[str]:
-    seed_gst = SCENARIO_SEED_OVERRIDES.get(scenario, args.seed_gst)
+    seed_gst = SCENARIO_PROFILE_SEED_OVERRIDES.get(
+        (scenario, profile),
+        SCENARIO_SEED_OVERRIDES.get(scenario, args.seed_gst),
+    )
     command = [
         sys.executable,
         str(ROOT / "tools" / RUNNERS[scenario]),
@@ -109,7 +137,7 @@ def task_command(
         "--run-id",
         args.run_id,
     ]
-    if scenario in (14, 15, 16):
+    if scenario in (14, 15, 16, 18, 19, 20):
         command.extend(("--scenario", str(scenario)))
     return command
 
