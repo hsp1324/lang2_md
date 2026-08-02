@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "built",
+  "release": {
+    "translation_version": "1.0.1",
+    "build_version": "1.0.5",
+    "filename": "Langrisser II (Korean Hard T1.0.1 B1.0.5).md",
+    "rom": "/home/hong/lang2_md/roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.5).md",
+    "desktop_rom": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.5).md",
+    "rom_size": 4194304,
+    "md_checksum": "F296",
+    "sha256": "fcb38e375f410715f026453230319b6a4329605edecfa191e91d601d348a770d",
+    "header_title": "LANGRISSER II KOREAN T1.0.1 B1.0.5 BY HSP1324"
+  },
+  "source_candidate": {
+    "rom": "tmp/s13-custom-gray-fix-20260802-01/candidate-hard.md",
+    "md_checksum": "EC96",
+    "sha256": "fff955d9c2549a8ac06ae2182e1aee93aed6296861aa309109d8074ae77417e2",
+    "runtime_evidence": "localization/scenario13_royalhorse_gray_regression.json"
+  },
+  "included_fix": {
+    "scenario_13_royal_horse_cache_isolated": true,
+    "redesigned_custom_acted_gray_masks": true,
+    "custom_sprite_count": 53,
+    "ordinary_mercenary_cache_fix_retained": true
+  },
+  "save_compatibility": {
+    "save_format": "lang2-ko-sram-v1",
+    "sram_compatible": true,
+    "save_state_compatibility_guaranteed": false,
+    "source_sram": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.4).srm",
+    "desktop_sram": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.5).srm",
+    "sram_size": 65536,
+    "sram_sha256": "dd135b054055e0c0fa6d9b9209e9d1180b206079c2fd1f105d1ffff873c6e6e9",
+    "sram_byte_identical_to_b104_source": true
+  }
+}
