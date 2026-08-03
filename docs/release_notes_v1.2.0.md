@@ -8,8 +8,8 @@ BPS 패치도 함께 제공합니다. Windows 패처에는 Python 설치가 필�
 않습니다.
 
 ```text
-Langrisser II (Korean v1.2.0).md
-Langrisser II (Korean Hard T1.2.0 B1.2.0).md
+Langrisser.II.Korean.v1.2.0.md
+Langrisser.II.Korean.Hard.T1.2.0.B1.2.0.md
 ```
 
 ## 사용법

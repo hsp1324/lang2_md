@@ -69,8 +69,8 @@ patches/
 `v1.2.0` Release에는 다음 파일을 올린다.
 
 ```text
-Langrisser II (Korean v1.2.0).md
-Langrisser II (Korean Hard T1.2.0 B1.2.0).md
+Langrisser.II.Korean.v1.2.0.md
+Langrisser.II.Korean.Hard.T1.2.0.B1.2.0.md
 Langrisser-II-Korean-Patcher-v1.2.0.exe
 SHA256SUMS.txt
 ```

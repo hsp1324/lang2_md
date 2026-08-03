@@ -11,8 +11,8 @@
 
 원하는 버전을 받아 에뮬레이터에서 바로 실행합니다.
 
-- [일반판 v1.2.0 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser%20II%20%28Korean%20v1.2.0%29.md)
-- [하드판 T1.2.0 B1.2.0 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser%20II%20%28Korean%20Hard%20T1.2.0%20B1.2.0%29.md)
+- [일반판 v1.2.0 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser.II.Korean.v1.2.0.md)
+- [하드판 T1.2.0 B1.2.0 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser.II.Korean.Hard.T1.2.0.B1.2.0.md)
 
 두 파일과 패처·BPS·검증값은 [v1.2.0 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.2.0)에서 한꺼번에 볼 수 있습니다.
 
