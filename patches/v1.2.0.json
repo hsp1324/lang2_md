@@ -1,0 +1,33 @@
+{
+  "game": "Langrisser II",
+  "release": "v1.2.0",
+  "schema_version": 1,
+  "source": {
+    "headered_size": 2097664,
+    "label": "Langrisser II (Japan)",
+    "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
+    "size": 2097152
+  },
+  "targets": [
+    {
+      "id": "normal",
+      "label_ko": "일반판",
+      "output_filename": "Langrisser II (Korean v1.2.0).md",
+      "output_sha256": "1934476c9719cba1b4a53869aa2af3b1345a70456045f9d6ea2ce243eefb6d80",
+      "output_size": 4194304,
+      "patch_filename": "normal-v1.2.0.bps",
+      "patch_sha256": "6957f6f20c732cc08315e5a7410eeb9d50cf7e19e3635fb018b23996d164759e",
+      "patch_size": 2285930
+    },
+    {
+      "id": "hard",
+      "label_ko": "하드판",
+      "output_filename": "Langrisser II (Korean Hard T1.2.0 B1.2.0).md",
+      "output_sha256": "a6b4cb1fbad2d22fda9e8393fe80682d171ed5a6c817e6004f2edd05886e3a62",
+      "output_size": 4194304,
+      "patch_filename": "hard-t1.2.0-b1.2.0.bps",
+      "patch_sha256": "1078084eebbf1c229594a3d077b9570a3d892619d2d8cc25a9c50297d5c53377",
+      "patch_size": 2288432
+    }
+  ]
+}

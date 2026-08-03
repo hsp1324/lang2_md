@@ -1,0 +1,64 @@
+name: Build v1.2.0 Windows patcher
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-patcher:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install builder
+        run: python -m pip install --disable-pip-version-check pyinstaller==6.11.1
+
+      - name: Verify packaged assets
+        run: >-
+          python -c "from patcher.langrisser_ii_korean_patcher import
+          load_release_manifest; m=load_release_manifest();
+          assert m['release']=='v1.2.0'; assert len(m['targets'])==2"
+
+      - name: Build single-file GUI patcher
+        shell: pwsh
+        run: |
+          pyinstaller `
+            --noconfirm `
+            --clean `
+            --onefile `
+            --windowed `
+            --name "Langrisser-II-Korean-Patcher-v1.2.0" `
+            --paths "." `
+            --add-data "patches;patches" `
+            "patcher/langrisser_ii_korean_patcher.py"
+
+      - name: Verify executable and write checksum
+        shell: pwsh
+        run: |
+          $exe = "dist/Langrisser-II-Korean-Patcher-v1.2.0.exe"
+          if (-not (Test-Path $exe)) { throw "Patcher executable is missing" }
+          $bytes = [System.IO.File]::ReadAllBytes($exe)
+          if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
+            throw "Patcher is not a Windows PE executable"
+          }
+          $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
+          "$hash  Langrisser-II-Korean-Patcher-v1.2.0.exe" |
+            Set-Content -Encoding ascii "dist/SHA256SUMS.txt"
+          Get-Content "dist/SHA256SUMS.txt"
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: Langrisser-II-Korean-Patcher-v1.2.0
+          if-no-files-found: error
+          path: |
+            dist/Langrisser-II-Korean-Patcher-v1.2.0.exe
+            dist/SHA256SUMS.txt

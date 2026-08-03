@@ -6,10 +6,10 @@ Windows 사용자는 GitHub Releases에서 단일 패처를 내려받아 일본�
 같은 폴더에서 한 번 실행하는 것을 기본 흐름으로 삼는다.
 
 1. `Langrisser-II-Korean-Patcher-v1.2.0.exe`를 내려받는다.
-2. 일본판 `Langrisser II` ROM과 같은 폴더에 둔다.
+2. 일본판 `Langrisser II` ROM 또는 해당 ROM이 든 ZIP과 같은 폴더에 둔다.
 3. 패처를 실행한다.
 4. 폴더에서 지원 원본을 자동으로 찾지 못했을 때만 파일 선택창으로 ROM을
-   지정한다.
+   지정한다. 512바이트 헤더가 붙은 덤프와 ZIP 내부 파일도 검증한다.
 5. 패처가 일반판과 하드판을 각각 새 파일로 만든다.
 
 ```text
@@ -61,8 +61,7 @@ patcher/
 patches/
   normal-v1.2.0.bps
   hard-t1.2.0-b1.2.0.bps
-LICENSE
-THIRD_PARTY_NOTICES.md
+.github/workflows/build-v1.2-patcher.yml
 ```
 
 `v1.2.0` Release에는 다음 파일을 올린다.
@@ -73,7 +72,7 @@ SHA256SUMS.txt
 ```
 
 BPS를 직접 적용하려는 고급 사용자용으로 두 `.bps` 파일을 별도 자산으로
-제공할 수 있다. 전체 일본판 ROM, 완성 ROM, 개인 `.srm`, `.sav`, `.state`,
+제공한다. 전체 일본판 ROM, 완성 ROM, 개인 `.srm`, `.sav`, `.state`,
 `.gst` 파일은 Release에 포함하지 않는다.
 
 ## 단일 실행 패처 요구사항
@@ -82,6 +81,7 @@ BPS를 직접 적용하려는 고급 사용자용으로 두 `.bps` 파일을 별
 실행 파일로 만든다. 다음 동작을 한 번의 실행에 포함한다.
 
 - 실행 파일 옆에서 지원 원본을 자동 탐색하고, 없으면 파일 선택창을 연다.
+- ZIP을 선택하면 지원 원본을 메모리에서 검증하며 ROM을 따로 추출하지 않는다.
 - 원본 크기와 SHA-256을 검사한다.
 - 원본을 덮어쓰지 않고 일반판과 하드판 BPS를 각각 적용한다.
 - 출력 크기와 SHA-256을 확인한다.
@@ -91,12 +91,13 @@ BPS를 직접 적용하려는 고급 사용자용으로 두 `.bps` 파일을 별
 - 기존 한국어판 `.srm`을 선택하면 원본 저장을 보존한 채 새 ROM 이름으로
   검증 복사한다. 대상 이름에 다른 저장이 있으면 덮어쓰지 않는다.
 
+`patcher/langrisser_ii_korean_patcher.py`가 이 사용자 흐름을 구현한다.
 현재 `tools/rom_update.py`에는 BPS 생성·적용과 CRC 검증 코드가 있고,
 `tools/build_rom_update_package.py`에는 manifest와 업데이트 ZIP 생성 경로가
 있다. 같은 모듈의 `migrate-save` 명령은 기존 게임 내 저장을 새 ROM
 파일명으로 원자적 복사하고 원본 해시를 재검증한다. 단일 실행 배포기는
-이 검증 로직을 독립 실행 파일로 감싸되 일본판 2 MiB 원본에서 4 MiB
-일반판·하드판 두 결과를 생성하도록 구성한다.
+이 검증 로직을 PyInstaller 단일 실행 파일로 감싸 일본판 2 MiB 원본에서
+4 MiB 일반판·하드판 두 결과를 생성한다.
 
 ## 저장 파일 안내
 
