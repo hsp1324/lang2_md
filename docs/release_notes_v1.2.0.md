@@ -2,8 +2,15 @@
 
 ## 다운로드
 
-Windows 사용자는 `Langrisser-II-Korean-Patcher-v1.2.0.exe` 하나만
-내려받으면 됩니다. Python 설치는 필요하지 않습니다.
+일반판 또는 하드판 완성 ROM을 내려받아 에뮬레이터에서 바로 실행할 수
+있습니다. 일본판 ROM에 직접 적용하려는 사용자를 위해 Windows 패처와
+BPS 패치도 함께 제공합니다. Windows 패처에는 Python 설치가 필요하지
+않습니다.
+
+```text
+Langrisser II (Korean v1.2.0).md
+Langrisser II (Korean Hard T1.2.0 B1.2.0).md
+```
 
 ## 사용법
 
@@ -47,4 +54,5 @@ a6b4cb1fbad2d22fda9e8393fe80682d171ed5a6c817e6004f2edd05886e3a62
 있습니다. `.state`, `.state*`, `.gst` 같은 에뮬레이터 상태 저장은 버전 간
 호환을 보장하지 않으므로 새 ROM에서는 게임 안의 `불러오기`를 사용하세요.
 
-이 Release에는 원본 ROM과 패치 완료 ROM이 포함되지 않습니다.
+이 Release에는 완성된 일반판·하드판 ROM, Windows 패처, 일반판·하드판
+BPS와 SHA-256 검증값이 포함됩니다.

@@ -2,8 +2,9 @@
 
 ## 권장 사용자 흐름
 
-Windows 사용자는 GitHub Releases에서 단일 패처를 내려받아 일본판 ROM과
-같은 폴더에서 한 번 실행하는 것을 기본 흐름으로 삼는다.
+일반 사용자는 GitHub Releases에서 완성된 일반판 또는 하드판 ROM을
+내려받아 바로 실행하는 것을 기본 흐름으로 삼는다. 일본판 ROM에 직접
+적용하려는 사용자는 단일 Windows 패처 또는 BPS를 사용한다.
 
 1. `Langrisser-II-Korean-Patcher-v1.2.0.exe`를 내려받는다.
 2. 일본판 `Langrisser II` ROM 또는 해당 ROM이 든 ZIP과 같은 폴더에 둔다.
@@ -52,8 +53,9 @@ SHA-256: a6b4cb1fbad2d22fda9e8393fe80682d171ed5a6c817e6004f2edd05886e3a62
 
 ## GitHub 저장소와 Release 구성
 
-저장소에는 원본 또는 패치 완료 ROM을 커밋하지 않는다. 패처 소스, BPS,
-사용법, 라이선스와 검증값만 관리한다.
+저장소 Git 이력에는 원본 또는 패치 완료 ROM을 커밋하지 않는다. 패처 소스,
+BPS, 사용법과 검증값을 관리하고, 배포 허락을 받은 완성 한국어판 ROM은
+GitHub Release 자산으로만 제공한다.
 
 ```text
 README.md
@@ -67,13 +69,15 @@ patches/
 `v1.2.0` Release에는 다음 파일을 올린다.
 
 ```text
+Langrisser II (Korean v1.2.0).md
+Langrisser II (Korean Hard T1.2.0 B1.2.0).md
 Langrisser-II-Korean-Patcher-v1.2.0.exe
 SHA256SUMS.txt
 ```
 
 BPS를 직접 적용하려는 고급 사용자용으로 두 `.bps` 파일을 별도 자산으로
-제공한다. 전체 일본판 ROM, 완성 ROM, 개인 `.srm`, `.sav`, `.state`,
-`.gst` 파일은 Release에 포함하지 않는다.
+제공한다. 일본판 원본 ROM과 개인 `.srm`, `.sav`, `.state`, `.gst` 파일은
+Release에 포함하지 않는다.
 
 ## 단일 실행 패처 요구사항
 

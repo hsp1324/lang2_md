@@ -4,12 +4,21 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.2.0`입니다. Windows 패처 하나로 일반판과
-> 하드판을 모두 만들 수 있습니다.
+> 최신 공개 버전은 `v1.2.0`입니다. 완성된 일반판과 하드판 ROM을
+> 바로 내려받을 수 있으며, 직접 패치하는 방식도 함께 제공합니다.
 
-## 가장 간단한 적용 방법
+## 가장 간단한 다운로드
 
-Windows에서는 다음 순서로 적용합니다.
+원하는 버전을 받아 에뮬레이터에서 바로 실행합니다.
+
+- [일반판 v1.2.0 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser%20II%20%28Korean%20v1.2.0%29.md)
+- [하드판 T1.2.0 B1.2.0 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser%20II%20%28Korean%20Hard%20T1.2.0%20B1.2.0%29.md)
+
+두 파일과 패처·BPS·검증값은 [v1.2.0 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.2.0)에서 한꺼번에 볼 수 있습니다.
+
+## 일본판 ROM에 직접 패치하기
+
+완성 ROM 대신 직접 패치하려면 다음 순서로 적용합니다.
 
 1. [Langrisser-II-Korean-Patcher-v1.2.0.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.2.0/Langrisser-II-Korean-Patcher-v1.2.0.exe)를 받습니다.
 2. 패처를 일본판 ROM 또는 그 ROM이 든 ZIP과 같은 폴더에 둡니다.
@@ -24,12 +33,11 @@ Langrisser II (Korean Hard T1.2.0 B1.2.0).md
 
 패처는 원본 ROM과 ZIP을 덮어쓰지 않으며, 올바른 일본판인지 확인한 뒤
 새 파일을 만듭니다. Python 설치는 필요하지 않습니다. macOS·Linux·Android에서는
-[Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.2.0)에 함께 제공되는
-BPS 패치를 호환 패처로 적용할 수 있습니다.
+Release에 함께 제공되는 BPS 패치를 호환 패처로 적용할 수도 있습니다.
 
 ## 필요한 원본 ROM
 
-사용자가 직접 보유한 메가드라이브판 `Langrisser II (Japan)` ROM이 필요합니다. ROM 파일은 이 저장소와 Release에 포함되지 않습니다.
+패처나 BPS로 직접 만들 때는 메가드라이브판 `Langrisser II (Japan)` ROM이 필요합니다.
 
 지원하는 원본의 검증값은 다음과 같습니다.
 
@@ -100,4 +108,4 @@ Langrisser II (Korean v1.2.0).srm
 
 ## 주의
 
-이 프로젝트는 원작 게임이나 원본 ROM을 배포하지 않습니다. 패치는 사용자가 적법하게 보유한 일본판 ROM에만 적용해야 합니다.
+이 프로젝트의 한국어판은 원작 회사의 공식 제품이 아닌 비공식 한국어화판입니다.

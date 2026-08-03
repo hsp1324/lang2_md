@@ -19,7 +19,9 @@ jobs:
           python-version: "3.12"
 
       - name: Install builder
-        run: python -m pip install --disable-pip-version-check pyinstaller==6.11.1
+        run: >-
+          python -m pip install --disable-pip-version-check
+          pyinstaller==6.21.0 pefile==2024.8.26
 
       - name: Verify packaged assets
         run: >-
@@ -27,14 +29,15 @@ jobs:
           load_release_manifest; m=load_release_manifest();
           assert m['release']=='v1.2.0'; assert len(m['targets'])==2"
 
-      - name: Build single-file GUI patcher
+      - name: Build single-file Windows patcher
         shell: pwsh
         run: |
           pyinstaller `
             --noconfirm `
             --clean `
             --onefile `
-            --windowed `
+            --console `
+            --hide-console hide-early `
             --name "Langrisser-II-Korean-Patcher-v1.2.0" `
             --paths "." `
             --add-data "patches;patches" `
@@ -49,6 +52,27 @@ jobs:
           if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
             throw "Patcher is not a Windows PE executable"
           }
+          @'
+          from pathlib import Path
+          import pefile
+
+          path = Path("dist/Langrisser-II-Korean-Patcher-v1.2.0.exe")
+          pe = pefile.PE(str(path), fast_load=True)
+          pe.parse_data_directories(
+              directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"]]
+          )
+          imports = [
+              (entry.dll.decode("ascii", errors="replace").lower(), symbol.ordinal)
+              for entry in getattr(pe, "DIRECTORY_ENTRY_IMPORT", ())
+              for symbol in entry.imports
+          ]
+          if ("comctl32.dll", 380) in imports:
+              raise SystemExit(
+                  "Unsafe PyInstaller windowed bootloader import detected: "
+                  "COMCTL32.dll ordinal 380"
+              )
+          print("PE import check passed: COMCTL32.dll ordinal 380 is absent")
+          '@ | python -
           $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
           $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.2.0.exe`n"
           [System.IO.File]::WriteAllText(
