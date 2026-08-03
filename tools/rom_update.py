@@ -31,6 +31,8 @@ BPS_MAGIC = b"BPS1"
 BPS_FOOTER_SIZE = 12
 MAX_PATCHED_ROM_SIZE = 64 * 1024 * 1024
 MAX_PACKAGE_MEMBER_SIZE = 128 * 1024 * 1024
+MAX_SAVE_FILE_SIZE = 8 * 1024 * 1024
+SUPPORTED_SAVE_SUFFIXES = frozenset({".srm", ".sram", ".sav"})
 MD_HEADER_CHECKSUM_OFFSET = 0x18E
 MD_CHECKSUM_DATA_OFFSET = 0x200
 MD_SRAM_DESCRIPTOR_START = 0x1B0
@@ -59,6 +61,16 @@ class UpdateResult:
     backup_path: Path | None
     old_sha256: str
     new_sha256: str
+    dry_run: bool
+
+
+@dataclass(frozen=True)
+class SaveMigrationResult:
+    status: str
+    source_path: Path
+    destination_path: Path
+    backup_path: Path | None
+    save_sha256: str
     dry_run: bool
 
 
@@ -597,6 +609,19 @@ def _next_backup_path(rom_path: Path, target_release: str) -> Path:
     return candidate
 
 
+def _next_save_backup_path(save_path: Path) -> Path:
+    candidate = save_path.with_name(
+        f"{save_path.name}.before-save-migration.bak"
+    )
+    sequence = 2
+    while candidate.exists():
+        candidate = save_path.with_name(
+            f"{save_path.name}.before-save-migration.{sequence}.bak"
+        )
+        sequence += 1
+    return candidate
+
+
 def _fsync_file(path: Path) -> None:
     with path.open("rb") as handle:
         os.fsync(handle.fileno())
@@ -629,6 +654,27 @@ def _write_verified_temp(
             os.fsync(handle.fileno())
         mode = stat.S_IMODE(rom_path.stat().st_mode)
         os.chmod(temp_path, mode)
+        return temp_path
+    except BaseException:
+        temp_path.unlink(missing_ok=True)
+        raise
+
+
+def _write_save_temp(destination_path: Path, payload: bytes, mode: int) -> Path:
+    descriptor, name = tempfile.mkstemp(
+        prefix=f".{destination_path.name}.migration-",
+        suffix=".tmp",
+        dir=destination_path.parent,
+    )
+    temp_path = Path(name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(temp_path, mode)
+        if sha256_bytes(temp_path.read_bytes()) != sha256_bytes(payload):
+            raise UpdateError("temporary save copy verification failed")
         return temp_path
     except BaseException:
         temp_path.unlink(missing_ok=True)
@@ -764,6 +810,160 @@ def apply_update(
     )
 
 
+def migrate_save(
+    save_path: Path,
+    target_rom_path: Path,
+    *,
+    destination_dir: Path | None = None,
+    dry_run: bool = False,
+    force: bool = False,
+) -> SaveMigrationResult:
+    """Copy an in-game save to the basename used by a new ROM.
+
+    The source save is never renamed or modified. Existing destination saves
+    are rejected unless they are byte-identical or ``force`` is requested.
+    Emulator save states are intentionally unsupported.
+    """
+
+    save_path = save_path.resolve()
+    target_rom_path = target_rom_path.resolve()
+    if not save_path.is_file():
+        raise UpdateError(f"save file not found: {save_path}")
+    suffix = save_path.suffix.lower()
+    if suffix not in SUPPORTED_SAVE_SUFFIXES:
+        raise UpdateError(
+            "only in-game SRAM saves are supported "
+            f"({', '.join(sorted(SUPPORTED_SAVE_SUFFIXES))}); "
+            "save states cannot be migrated"
+        )
+    size = save_path.stat().st_size
+    if size <= 0:
+        raise UpdateError("save file is empty")
+    if size > MAX_SAVE_FILE_SIZE:
+        raise UpdateError(
+            f"save file is too large: {size} bytes "
+            f"(maximum {MAX_SAVE_FILE_SIZE})"
+        )
+    if not target_rom_path.is_file():
+        raise UpdateError(f"target ROM not found: {target_rom_path}")
+    validate_md_rom(target_rom_path.read_bytes(), "target")
+
+    if destination_dir is None:
+        destination_dir = save_path.parent
+    else:
+        destination_dir = destination_dir.resolve()
+    if not destination_dir.is_dir():
+        raise UpdateError(
+            f"save destination directory not found: {destination_dir}"
+        )
+    destination_path = destination_dir / (
+        f"{target_rom_path.stem}{suffix}"
+    )
+    payload = save_path.read_bytes()
+    source_hash = sha256_bytes(payload)
+
+    if destination_path.resolve() == save_path:
+        return SaveMigrationResult(
+            status="already_named",
+            source_path=save_path,
+            destination_path=destination_path,
+            backup_path=None,
+            save_sha256=source_hash,
+            dry_run=dry_run,
+        )
+
+    destination_exists = destination_path.exists()
+    if destination_exists:
+        if not destination_path.is_file():
+            raise UpdateError(
+                f"save destination is not a file: {destination_path}"
+            )
+        destination_hash = sha256_bytes(destination_path.read_bytes())
+        if destination_hash == source_hash:
+            return SaveMigrationResult(
+                status="already_copied",
+                source_path=save_path,
+                destination_path=destination_path,
+                backup_path=None,
+                save_sha256=source_hash,
+                dry_run=dry_run,
+            )
+        if not force:
+            raise UpdateError(
+                "a different save already exists for the target ROM; "
+                "use --force only after checking which save to keep: "
+                f"{destination_path}"
+            )
+
+    planned_status = "would_replace" if destination_exists else "would_copy"
+    if dry_run:
+        return SaveMigrationResult(
+            status=planned_status,
+            source_path=save_path,
+            destination_path=destination_path,
+            backup_path=None,
+            save_sha256=source_hash,
+            dry_run=True,
+        )
+
+    source_mode = stat.S_IMODE(save_path.stat().st_mode)
+    temp_path = _write_save_temp(destination_path, payload, source_mode)
+    backup_path: Path | None = None
+    installed = False
+    try:
+        if sha256_bytes(save_path.read_bytes()) != source_hash:
+            raise UpdateError(
+                "source save changed while migration was being prepared"
+            )
+        if destination_exists:
+            backup_path = _next_save_backup_path(destination_path)
+            shutil.copy2(destination_path, backup_path)
+            _fsync_file(backup_path)
+            if (
+                sha256_bytes(backup_path.read_bytes())
+                != sha256_bytes(destination_path.read_bytes())
+            ):
+                backup_path.unlink(missing_ok=True)
+                backup_path = None
+                raise UpdateError(
+                    "existing save backup verification failed; "
+                    "migration aborted"
+                )
+        os.replace(temp_path, destination_path)
+        installed = True
+        _fsync_directory(destination_path.parent)
+        if sha256_bytes(destination_path.read_bytes()) != source_hash:
+            raise UpdateError("migrated save verification failed")
+    except BaseException:
+        if installed:
+            if backup_path is not None:
+                restore_path = _write_save_temp(
+                    destination_path,
+                    backup_path.read_bytes(),
+                    stat.S_IMODE(backup_path.stat().st_mode),
+                )
+                try:
+                    os.replace(restore_path, destination_path)
+                    _fsync_directory(destination_path.parent)
+                finally:
+                    restore_path.unlink(missing_ok=True)
+            else:
+                destination_path.unlink(missing_ok=True)
+                _fsync_directory(destination_path.parent)
+        raise
+    finally:
+        temp_path.unlink(missing_ok=True)
+
+    return SaveMigrationResult(
+        status="replaced" if destination_exists else "copied",
+        source_path=save_path,
+        destination_path=destination_path,
+        backup_path=backup_path,
+        save_sha256=source_hash,
+        dry_run=False,
+    )
+
+
 def _default_package_path() -> Path:
     return Path(__file__).resolve().parent
 
@@ -814,11 +1014,51 @@ def build_parser() -> argparse.ArgumentParser:
                 action="store_true",
                 help="확인 질문 없이 적용합니다",
             )
+    migration = subparsers.add_parser(
+        "migrate-save",
+        help="기존 게임 내 저장을 새 ROM 파일명으로 안전하게 복사합니다",
+    )
+    migration.add_argument("--save", type=Path, required=True)
+    migration.add_argument("--target-rom", type=Path, required=True)
+    migration.add_argument("--destination-dir", type=Path)
+    migration.add_argument("--dry-run", action="store_true")
+    migration.add_argument(
+        "--force",
+        action="store_true",
+        help="다른 대상 저장을 백업한 뒤 교체합니다",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == "migrate-save":
+        try:
+            result = migrate_save(
+                args.save,
+                args.target_rom,
+                destination_dir=args.destination_dir,
+                dry_run=args.dry_run,
+                force=args.force,
+            )
+        except (OSError, UpdateError) as exc:
+            print(f"오류: {exc}", file=sys.stderr)
+            return 2
+        if result.status in {"would_copy", "would_replace"}:
+            print("검증 완료: 실제 세이브 파일은 변경하지 않았습니다")
+            print(f"생성 예정: {result.destination_path}")
+        elif result.status == "already_named":
+            print("세이브 파일명이 이미 새 ROM과 일치합니다")
+        elif result.status == "already_copied":
+            print("같은 세이브가 이미 새 ROM 이름으로 존재합니다")
+        else:
+            print(f"세이브 연결 완료: {result.destination_path}")
+            print(f"기존 세이브 보존: {result.source_path}")
+            if result.backup_path is not None:
+                print(f"교체 전 대상 세이브 백업: {result.backup_path}")
+        print(f"세이브 SHA-256: {result.save_sha256}")
+        print("상태 저장이 아닌 게임 안의 불러오기를 사용하세요")
+        return 0
     try:
         inspection = inspect_update(args.package, args.rom)
         if args.command == "inspect":

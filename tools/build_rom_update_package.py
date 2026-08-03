@@ -105,6 +105,47 @@ def unix_launcher() -> bytes:
     ).encode("utf-8")
 
 
+def windows_save_launcher() -> bytes:
+    return (
+        "@echo off\r\n"
+        "setlocal\r\n"
+        "chcp 65001 >nul\r\n"
+        "cd /d \"%~dp0\"\r\n"
+        "set \"SAVE=%~1\"\r\n"
+        "set \"ROM=%~2\"\r\n"
+        "if not defined SAVE set /p \"SAVE=기존 SRM 파일 경로: \"\r\n"
+        "if not defined ROM set /p \"ROM=새 한국어판 ROM 경로: \"\r\n"
+        "where py >nul 2>nul\r\n"
+        "if %ERRORLEVEL% EQU 0 (\r\n"
+        "  py -3 apply_update.py migrate-save --save \"%SAVE%\" --target-rom \"%ROM%\"\r\n"
+        ") else (\r\n"
+        "  python apply_update.py migrate-save --save \"%SAVE%\" --target-rom \"%ROM%\"\r\n"
+        ")\r\n"
+        "set \"RESULT=%ERRORLEVEL%\"\r\n"
+        "pause\r\n"
+        "exit /b %RESULT%\r\n"
+    ).encode("utf-8")
+
+
+def unix_save_launcher() -> bytes:
+    return (
+        "#!/bin/sh\n"
+        "set -eu\n"
+        "cd \"$(dirname \"$0\")\"\n"
+        "save=${1-}\n"
+        "rom=${2-}\n"
+        "if [ -z \"$save\" ]; then\n"
+        "  printf '기존 SRM 파일 경로: '\n"
+        "  IFS= read -r save\n"
+        "fi\n"
+        "if [ -z \"$rom\" ]; then\n"
+        "  printf '새 한국어판 ROM 경로: '\n"
+        "  IFS= read -r rom\n"
+        "fi\n"
+        "python3 apply_update.py migrate-save --save \"$save\" --target-rom \"$rom\"\n"
+    ).encode("utf-8")
+
+
 def player_readme(target_release: str) -> bytes:
     return f"""랑그릿사 II 한국어판 ROM 업데이트 ({target_release})
 
@@ -120,8 +161,15 @@ Windows
 - 업데이트 전 ROM은 같은 폴더에 .bak로 백업됩니다.
 - ROM 경로와 파일명은 그대로 유지되므로 기존 SRAM 저장명이 바뀌지 않습니다.
 
+새 파일명으로 배포된 ROM에서 기존 저장 이어하기
+- migrate_save.bat를 실행합니다.
+- 기존 .srm 파일과 새 ROM 파일을 차례로 지정합니다.
+- 기존 .srm은 그대로 두고 같은 저장 폴더에 새 ROM 이름의 .srm을 만듭니다.
+- 다른 저장이 이미 있으면 덮어쓰지 않고 중단합니다.
+
 Linux/macOS
 - ./apply_update.sh "/path/to/Langrisser II (Korean).md"
+- ./migrate_save.sh "/path/to/old.srm" "/path/to/new.md"
 
 Android/RetroArch
 - patches 폴더에서 자신의 이전 버전에 맞는 .bps 파일을 BPS 패처로 적용합니다.
@@ -259,6 +307,8 @@ def build_package(
         ),
         "apply_update.bat": (windows_launcher(), 0o644),
         "apply_update.sh": (unix_launcher(), 0o755),
+        "migrate_save.bat": (windows_save_launcher(), 0o644),
+        "migrate_save.sh": (unix_save_launcher(), 0o755),
         "README_KO.txt": (player_readme(target_release), 0o644),
     }
     if release_notes:

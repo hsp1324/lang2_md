@@ -5,8 +5,11 @@
 한국어 오탈자나 글리프 문제를 수정한 새 ROM을 배포할 때 플레이어의
 게임 내 저장을 유지하기 위한 절차다.
 
-- 업데이트 도구는 ROM 파일만 읽고 교체한다.
-- `.srm`, `.sram`, `.sav`, `.state*`, `.gst` 파일은 열거나 수정하지 않는다.
+- ROM 업데이트 도구는 ROM 파일만 읽고 교체한다.
+- ROM 업데이트 도구는 `.srm`, `.sram`, `.sav`, `.state*`, `.gst` 파일을
+  열거나 수정하지 않는다.
+- 별도 `migrate-save` 명령을 사용했을 때만 사용자가 지정한 게임 내 저장을
+  새 ROM 파일명으로 복사한다. 원본 저장은 이름 변경하거나 수정하지 않는다.
 - 기존 ROM과 정확히 같은 경로와 파일명을 유지한다. 파일명으로 SRAM을
   연결하는 RetroArch 등의 에뮬레이터가 기존 저장을 그대로 찾을 수 있다.
 - 교체 전 ROM은 같은 폴더의
@@ -33,6 +36,38 @@ CPU, RAM, 실행 중인 코드 주소를 포함할 수 있으므로 새 ROM과�
 검증된 SRAM 변환기를 먼저 만들어야 한다.
 
 ## 플레이어 사용법
+
+### 새 ROM 파일명으로 기존 저장 연결
+
+새 ROM을 기존 ROM과 다른 파일명으로 둘 때는 배포 패키지의
+`migrate_save.bat`를 실행한다.
+
+1. 게임 안에서 저장하고 에뮬레이터를 완전히 종료한다.
+2. 기존 `.srm` 파일을 지정한다.
+3. 새 한국어판 ROM을 지정한다.
+4. 기존 `.srm`과 같은 폴더에 `새 ROM 기본 이름.srm`이 생성됐는지
+   확인한다.
+5. 새 ROM을 실행하고 게임 안의 `불러오기`를 사용한다.
+
+RetroArch의 ROM 폴더와 저장 폴더가 달라도 된다. 새 `.srm`은 기존
+`.srm`이 있던 저장 폴더에 만들어진다. 대상 이름에 바이트가 다른 저장이
+이미 있으면 기본적으로 중단하며, 원본 저장은 항상 그대로 남는다.
+
+명령줄에서는 다음과 같이 실행한다.
+
+```powershell
+py -3 apply_update.py migrate-save `
+  --save "C:\RetroArch\saves\Langrisser II (Korean old).srm" `
+  --target-rom "C:\Games\Langrisser II (Korean v1.2.0).md"
+```
+
+쓰기 없이 경로와 파일을 먼저 검사하려면 `--dry-run`을 붙인다. 대상
+이름에 다른 저장이 있을 때만 내용을 확인하고 백업할 준비를 한 뒤
+`--force`를 사용할 수 있다. 이 경우 기존 대상 저장은
+`.before-save-migration.bak`으로 검증 백업된다.
+
+`.state`, `.state*`, `.gst`는 이 명령이 거부한다. 새 ROM에서는 반드시
+게임 안의 `불러오기`를 사용한다.
 
 ### Windows
 
@@ -118,6 +153,8 @@ patches/*.bps
 apply_update.py
 apply_update.bat
 apply_update.sh
+migrate_save.bat
+migrate_save.sh
 README_KO.txt
 RELEASE_NOTES_KO.txt  # --release-notes를 지정한 경우
 ```
@@ -151,4 +188,5 @@ python3 -m unittest tests.test_rom_update -v
 
 테스트는 BPS 네 동작의 해석, 잘못된 원본·손상 패치 거부, dry-run,
 중복 적용, SRAM 헤더 변경 거부, 원자적 같은 이름 교체, ROM 백업,
-`.srm/.sav/.state/.gst` 바이트 불변, 현재 릴리스 등록값을 검사한다.
+ROM 업데이트 중 `.srm/.sav/.state/.gst` 바이트 불변, 별도 저장 복사의
+원본 보존·이름 연결·충돌 거부·백업, 현재 릴리스 등록값을 검사한다.

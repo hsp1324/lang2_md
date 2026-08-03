@@ -150,6 +150,8 @@ class RomUpdatePackageTests(unittest.TestCase):
                 self.assertIn("apply_update.py", names)
                 self.assertIn("apply_update.bat", names)
                 self.assertIn("apply_update.sh", names)
+                self.assertIn("migrate_save.bat", names)
+                self.assertIn("migrate_save.sh", names)
                 self.assertIn("README_KO.txt", names)
                 self.assertNotIn("old-release.md", names)
                 self.assertNotIn("new-release.md", names)
@@ -195,6 +197,108 @@ class RomUpdatePackageTests(unittest.TestCase):
                     ).hexdigest()
                     for name in save_payloads
                 },
+            )
+
+    def test_save_migration_copies_srm_to_target_rom_basename(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            source_save = directory / "Langrisser II (Korean old).srm"
+            target_rom = directory / "Langrisser II (Korean v1.2.0).md"
+            save_payload = bytes(range(256)) * 256
+            source_save.write_bytes(save_payload)
+            target_rom.write_bytes(make_md_rom(7))
+
+            result = rom_update.migrate_save(source_save, target_rom)
+
+            destination = directory / "Langrisser II (Korean v1.2.0).srm"
+            self.assertEqual(result.status, "copied")
+            self.assertEqual(result.destination_path, destination)
+            self.assertEqual(destination.read_bytes(), save_payload)
+            self.assertEqual(source_save.read_bytes(), save_payload)
+            self.assertIsNone(result.backup_path)
+
+            repeated = rom_update.migrate_save(source_save, target_rom)
+            self.assertEqual(repeated.status, "already_copied")
+            self.assertEqual(destination.read_bytes(), save_payload)
+
+    def test_save_migration_can_target_retroarch_save_directory(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            old_save_dir = root / "RetroArch" / "saves"
+            rom_dir = root / "roms"
+            old_save_dir.mkdir(parents=True)
+            rom_dir.mkdir()
+            source_save = old_save_dir / "old-hard.srm"
+            target_rom = rom_dir / "new-hard.md"
+            source_save.write_bytes(b"SRAM" * 16384)
+            target_rom.write_bytes(make_md_rom(8))
+
+            result = rom_update.migrate_save(
+                source_save,
+                target_rom,
+                destination_dir=old_save_dir,
+            )
+
+            self.assertEqual(
+                result.destination_path,
+                old_save_dir / "new-hard.srm",
+            )
+            self.assertEqual(
+                result.destination_path.read_bytes(),
+                source_save.read_bytes(),
+            )
+
+    def test_save_migration_dry_run_and_state_rejection_never_write(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            source_save = directory / "old.srm"
+            state = directory / "old.state4"
+            target_rom = directory / "new.md"
+            source_save.write_bytes(b"valid save")
+            state.write_bytes(b"emulator state")
+            target_rom.write_bytes(make_md_rom(10))
+
+            result = rom_update.migrate_save(
+                source_save,
+                target_rom,
+                dry_run=True,
+            )
+            self.assertEqual(result.status, "would_copy")
+            self.assertFalse((directory / "new.srm").exists())
+            self.assertEqual(source_save.read_bytes(), b"valid save")
+
+            with self.assertRaisesRegex(
+                rom_update.UpdateError, "save states cannot be migrated"
+            ):
+                rom_update.migrate_save(state, target_rom)
+            self.assertFalse((directory / "new.state4").exists())
+
+    def test_save_migration_conflict_requires_force_and_creates_backup(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            source_save = directory / "old.srm"
+            target_rom = directory / "new.md"
+            destination = directory / "new.srm"
+            source_save.write_bytes(b"new progress")
+            target_rom.write_bytes(make_md_rom(11))
+            destination.write_bytes(b"existing progress")
+
+            with self.assertRaisesRegex(
+                rom_update.UpdateError, "different save already exists"
+            ):
+                rom_update.migrate_save(source_save, target_rom)
+            self.assertEqual(destination.read_bytes(), b"existing progress")
+
+            result = rom_update.migrate_save(
+                source_save,
+                target_rom,
+                force=True,
+            )
+            self.assertEqual(result.status, "replaced")
+            self.assertEqual(destination.read_bytes(), b"new progress")
+            self.assertIsNotNone(result.backup_path)
+            self.assertEqual(
+                result.backup_path.read_bytes(), b"existing progress"
             )
 
     def test_dry_run_and_unsupported_rom_never_write(self):
