@@ -24,11 +24,7 @@ from tools import rom_update
 from tools.rom_version import get_profile
 
 
-DEFAULT_OUTPUT = (
-    ROOT
-    / "roms/builds"
-    / "Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
-)
+DEFAULT_OUTPUT = ROOT / "roms/builds" / get_profile("hard")["rom_filename"]
 DEFAULT_BUILD_MANIFEST = ROOT / "localization/hard_mode_build.json"
 
 FIXED_RECORD_SIZE = 0x24
@@ -164,6 +160,7 @@ def apply_hard_mode(
     commander_changes = 0
     soldier_changes = 0
     mercenary_changes = 0
+    summon_changes = 0
     for scenario_number, record in _planned_records(plan):
         offset = int(str(record["offset"]), 16)
         if offset in target_offsets:
@@ -172,6 +169,7 @@ def apply_hard_mode(
         commander = record["commander"]
         soldier = record["enemy_soldier_correction"]
         mercenaries = record["mercenaries"]
+        summon_replacement = record["summon_replacement"]
 
         expected_at = int(commander["at"]["original"])
         expected_df = int(commander["df"]["original"])
@@ -210,6 +208,46 @@ def apply_hard_mode(
             int(soldier["df"]["planned"]),
         )
         planned_mercenaries = bytes(mercenaries["planned"])
+        conventional_rows = list(mercenaries["changes"])
+        summon_rows = list(summon_replacement["changes"])
+        declared_rows = conventional_rows + summon_rows
+        declared_slots: set[int] = set()
+        for change in declared_rows:
+            slot = int(change["slot"])
+            source_id = int(change["source_class_id"])
+            target_id = int(change["target_class_id"])
+            if not 0 <= slot < MERCENARY_COUNT:
+                raise ValueError(
+                    f"Scenario {scenario_number} invalid mercenary slot "
+                    f"{slot} at 0x{offset:06X}"
+                )
+            if slot in declared_slots:
+                raise ValueError(
+                    f"Scenario {scenario_number} duplicate mercenary slot "
+                    f"{slot} at 0x{offset:06X}"
+                )
+            declared_slots.add(slot)
+            if (
+                expected_mercenaries[slot] != source_id
+                or planned_mercenaries[slot] != target_id
+            ):
+                raise ValueError(
+                    f"Scenario {scenario_number} declared mercenary change "
+                    f"does not match slot {slot} at 0x{offset:06X}"
+                )
+        actual_slots = {
+            slot
+            for slot, (before, after) in enumerate(
+                zip(expected_mercenaries, planned_mercenaries)
+            )
+            if before != after
+        }
+        if actual_slots != declared_slots:
+            raise ValueError(
+                f"Scenario {scenario_number} undeclared mercenary changes "
+                f"at 0x{offset:06X}: actual={sorted(actual_slots)!r}, "
+                f"declared={sorted(declared_slots)!r}"
+            )
         data[offset + COMMANDER_AT_OFFSET] = _encoded_byte(planned_at)
         data[offset + COMMANDER_DF_OFFSET] = _encoded_byte(planned_df)
         data[offset + HARD_CORRECTION_INDEX_OFFSET] = pair_index[correction]
@@ -224,12 +262,8 @@ def apply_hard_mode(
             int(soldier["at"]["original"]),
             int(soldier["df"]["original"]),
         )
-        mercenary_changes += sum(
-            before != after
-            for before, after in zip(
-                expected_mercenaries, planned_mercenaries
-            )
-        )
+        mercenary_changes += len(conventional_rows)
+        summon_changes += len(summon_rows)
 
     routine = correction_routine()
     hook = correction_hook()
@@ -282,6 +316,10 @@ def apply_hard_mode(
             "commander_change_record_count": commander_changes,
             "soldier_correction_record_count": soldier_changes,
             "mercenary_replacement_slot_count": mercenary_changes,
+            "summon_replacement_slot_count": summon_changes,
+            "total_mercenary_slot_change_count": (
+                mercenary_changes + summon_changes
+            ),
             "correction_pair_count": len(pairs),
             "record_tag_offset": f"0x{HARD_CORRECTION_INDEX_OFFSET:02X}",
             "loader_hook": f"0x{SOLDIER_CORRECTION_HOOK:06X}",

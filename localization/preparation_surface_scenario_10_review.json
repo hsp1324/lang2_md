@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-08-01",
+  "scope": "Scenario 10 preparation, hiring, arrangement, all five allied commanders, all three preparation-visible enemy fixed records, all ten stock TURN 3 hidden monster groups, real shop item-list round trip, actual-move gray acted sprite, stock monster battles and victory result, Necklace acquisition text, and natural class-choice surfaces in normal and hard profiles",
+  "profiles": {
+    "normal": {
+      "run": "captures/run/preparation_surface_matrix/normal/s10/current03",
+      "status": "scenario_10_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/normal/s10/gray01",
+        "hidden_monsters": "captures/run/preparation_battle_surface/normal/s10/hidden01",
+        "battle_result_and_class_change": "captures/run/preparation_battle_surface/normal/s10/result02"
+      },
+      "checks": {
+        "all_five_allied_names_classes_hiring_rows": "pass",
+        "all_three_visible_enemy_names_classes_mercenary_rows": "pass",
+        "all_ten_hidden_monster_groups_after_stock_turn_3_reveal": "pass",
+        "all_commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "same_run_pre_post_identity": "pass",
+        "gray_acted_sprite": "pass",
+        "battle_result_and_necklace_text": "pass",
+        "natural_class_choice_default_surface": "pass"
+      }
+    },
+    "hard": {
+      "run": "captures/run/preparation_surface_matrix/hard/s10/current01",
+      "status": "scenario_10_surface_pass",
+      "battle_runs": {
+        "gray_acted_sprite": "captures/run/preparation_battle_surface/hard/s10/gray02",
+        "hidden_monsters": "captures/run/preparation_battle_surface/hard/s10/hidden01",
+        "battle_result_and_class_change": "captures/run/preparation_battle_surface/hard/s10/result02"
+      },
+      "checks": {
+        "all_five_allied_names_classes_hiring_rows": "pass",
+        "all_three_visible_enemy_names_classes_mercenary_rows": "pass",
+        "all_ten_hidden_monster_groups_after_stock_turn_3_reveal": "pass",
+        "all_commander_and_mercenary_sprites": "pass",
+        "arrangement_minimap_and_rows": "pass",
+        "borders_and_numeric_fields": "pass",
+        "real_shop_item_list_round_trip": "pass",
+        "same_run_pre_post_identity": "pass",
+        "gray_acted_sprite": "pass",
+        "stock_monster_battles_and_result": "pass",
+        "battle_result_vram_and_necklace_text": "pass",
+        "all_three_natural_class_choices": "pass"
+      }
+    }
+  },
+  "allied_scope": [
+    "엘윈 / 파이터 / 솔저",
+    "헤인 / 워록 / 가드맨",
+    "쉐리 / 파이터 / 솔저",
+    "아론 / 파이터 / 솔저",
+    "키스 / 호크나이트 / 솔저 / 그리폰"
+  ],
+  "visible_fixed_record_scope": [
+    "해적 / 파이레츠 / 머맨",
+    "레스터 / 크로코나이트 / 머맨",
+    "해적 / 파이레츠 / 머맨"
+  ],
+  "hidden_fixed_record_scope": [
+    "스큐라 records 3..7 / runtime groups 8..12",
+    "그레이트슬라임 records 8, 10, 12 / runtime groups 13, 15, 17",
+    "웨어울프 records 9, 11 / runtime groups 14, 16"
+  ],
+  "shop_scope": [
+    "육중한 워해머",
+    "그레이트소드",
+    "완드",
+    "체인메일",
+    "로브"
+  ],
+  "class_change": {
+    "status": "pass",
+    "normal_evidence": "The natural continuation retained the default 로드 choice with 파이크 / 솔저 and 힐 / 프로텍션 intact.",
+    "hard_evidence": "The same natural class boundary retained all three choices: 로드, 호크나이트, 샤먼. Every visible mercenary, magic label, sprite, statistic, border, and map pixel is intact.",
+    "reviewed_choices": [
+      "로드: 파이크, 솔저; 힐, 프로텍션",
+      "호크나이트: 그리폰; 토네이도",
+      "샤먼: 가드맨, 파이크; 썬더, 일루전"
+    ]
+  },
+  "result_lineage": {
+    "normal": "A narrow source-record diagnostic changes only AT, DF, and mercenary slots for hidden fixed records 3..12. Stock TURN 3 reveal, battles, victory events, 전과보고 2420P, 넥크리스를 얻었다!, and the natural default class choice were retained. No result GST was retained, so the normal result is explicitly image-reviewed rather than claimed as a saved-state VRAM check.",
+    "hard": "A guarded runtime wrapper remains inert while the first monster is hidden, allows the unchanged stock TURN 3 reveal and real monster battles, then marks only already-revealed runtime groups 8..17 defeated from Start. Every deployment, fixed record, and event remains source-identical. The stock result reaches 전과보고 3550P, and the retained GST verifies the complete Korean result-header VRAM."
+  },
+  "preparation_not_applicable_but_runtime_covered": [
+    {
+      "fixed_records": "3..12",
+      "reason": "All ten source records begin at preparation coordinates (255,255). Both profiles retain a spawned GST after the unchanged stock TURN 3 reveal; runtime groups 8..17 prove every source name/class identity and living placed monster. Hard battle frames additionally cover 스큐라, 그레이트슬라임, and 웨어울프 portraits and animations."
+    }
+  ],
+  "reported_failures_closed": [
+    {
+      "failure": "Preparation commander/class/mercenary labels and sprites were overwritten by gray Hangul-like blocks.",
+      "current_candidate_result": "pass",
+      "coverage": "All five allied commanders, all offered hire rows, every preparation-visible enemy record, the minimap, and all ten hidden monster groups are covered in both current candidates."
+    },
+    {
+      "failure": "A moved commander became a broken gray or plaster-like sprite.",
+      "current_candidate_result": "pass",
+      "coverage": "Normal and hard acted Elwin states both contain the exact expanded stock Fighter silhouette payload and the expected four Plane A references."
+    },
+    {
+      "failure": "The 크 glyph could corrupt in Necklace-related shop or acquisition text while Cross remained intact.",
+      "current_candidate_result": "pass",
+      "coverage": "Both normal and hard stock acquisition captures render 넥크리스를 얻었다! with 크 intact; the separate item/shop regression covers 크로스 and 넥클리스 together."
+    }
+  ],
+  "acceptance_effect": "Scenario 10 passes every required preparation, shop, visible and hidden enemy, gray-sprite, result, Necklace-text, and available class-choice surface in both profiles. Scenarios 12 through 27 remain pending, so the overall release gate remains pending."
+}

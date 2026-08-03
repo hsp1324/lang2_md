@@ -1,0 +1,28 @@
+{
+  "commander_id": 5,
+  "commander_name": "헤인",
+  "class_id": "09",
+  "class_name": "SORCERER",
+  "file": "logical16/05-09.png",
+  "identity_match": 68,
+  "identity_pixel_count": 68,
+  "visible_color_count": 13,
+  "palette": [
+    "#242424",
+    "#49496d",
+    "#24b624",
+    "#924924",
+    "#6ddb92",
+    "#496dff",
+    "#6ddbff",
+    "#dbb66d",
+    "#ffb600",
+    "#ffffff",
+    "#246d00",
+    "#929292",
+    "#24db24"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "accepted": true
+}

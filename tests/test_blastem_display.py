@@ -35,6 +35,7 @@ class BlastEmDisplayTests(unittest.TestCase):
         ):
             self.assertTrue(blastem_display.configure_display(args))
             self.assertEqual(os.environ["DISPLAY"], ":104")
+            self.assertEqual(os.environ["BLASTEM_VIRTUAL_DISPLAY"], ":104")
             self.assertNotIn("WAYLAND_DISPLAY", os.environ)
             self.assertEqual(os.environ["SDL_VIDEODRIVER"], "x11")
 

@@ -184,19 +184,149 @@ class HardModePlanTests(unittest.TestCase):
                     if before == 0xFF:
                         self.assertEqual(after, 0xFF)
 
-    def test_summons_remain_deferred_until_runtime_guards_pass(self):
+    def test_enemy_mercenary_sprite_cache_never_exceeds_engine_capacity(self):
+        self.assertTrue(
+            self.plan["implementation_policy"][
+                "enemy_ordinary_mercenary_cache_reused"
+            ]
+        )
+        self.assertEqual(
+            self.plan["implementation_policy"][
+                "enemy_dynamic_mercenary_cache_capacity"
+            ],
+            hard_mode_plan.MAX_DYNAMIC_ENEMY_MERCENARY_CLASSES,
+        )
+        for scenario in self.plan["scenarios"]:
+            cache = scenario["enemy_mercenary_cache"]
+            with self.subTest(scenario=scenario["number"]):
+                self.assertTrue(
+                    cache["ordinary_classes_reuse_fixed_cache"]
+                )
+                self.assertEqual(
+                    cache["dynamic_class_count"],
+                    len(cache["dynamic_class_ids"]),
+                )
+                self.assertLessEqual(
+                    cache["dynamic_class_count"],
+                    cache["dynamic_capacity"],
+                )
+        scenario_31 = next(
+            row for row in self.plan["scenarios"] if row["number"] == 31
+        )
+        self.assertEqual(
+            scenario_31["enemy_mercenary_cache"]["dynamic_class_ids"],
+            [0x77, 0x7B, 0x7C, 0x88, 0x89],
+        )
+
+    def test_scenario_13_and_15_use_cache_safe_same_family_fallbacks(self):
+        by_number = {
+            row["number"]: row for row in self.plan["scenarios"]
+        }
+        scenario_13 = {
+            row["offset"]: row for row in by_number[13]["records"]
+        }
+        self.assertEqual(
+            scenario_13["0x181814"]["mercenaries"]["planned"],
+            [0x63, 0x63, 0x7E, 0x7E, 0x7E, 0x7E],
+        )
+        self.assertEqual(
+            scenario_13["0x1818C8"]["mercenaries"]["planned"],
+            [0x73, 0x73, 0x73, 0x73, 0x7A, 0x7A],
+        )
+        scenario_15 = {
+            row["offset"]: row for row in by_number[15]["records"]
+        }
+        self.assertEqual(
+            scenario_15["0x181CCC"]["mercenaries"]["planned"],
+            [0x6F, 0x6F, 0x82, 0x82, 0xFF, 0xFF],
+        )
+        self.assertEqual(
+            by_number[13]["enemy_mercenary_cache"][
+                "dynamic_class_count"
+            ],
+            10,
+        )
+        self.assertEqual(
+            by_number[15]["enemy_mercenary_cache"][
+                "dynamic_class_count"
+            ],
+            10,
+        )
+
+        catalog = {
+            int(row["class_id"], 16): row
+            for row in hard_mode_baseline.build_inventory(
+                SOURCE_ROM,
+                NORMAL_ROM,
+            )["source_model"]["combat_class_catalog"]
+        }
+        for source_id, target_id in ((0x7E, 0x63), (0x82, 0x6F)):
+            with self.subTest(
+                source=f"0x{source_id:02X}",
+                target=f"0x{target_id:02X}",
+            ):
+                source = catalog[source_id]
+                target = catalog[target_id]
+                self.assertEqual(
+                    target["family_code"],
+                    source["family_code"],
+                )
+                self.assertGreaterEqual(target["base_at"], source["base_at"])
+                self.assertGreaterEqual(target["base_df"], source["base_df"])
+
+    def test_summon_safe_fallback_changes_only_two_scenario_27_slots(self):
         self.assertEqual(
             self.plan["summary"]["summon_replacement_slot_count"],
-            0,
+            2,
+        )
+        self.assertTrue(
+            self.plan["implementation_policy"]["summon_units_applied"]
         )
         self.assertFalse(
-            self.plan["implementation_policy"]["summon_units_applied"]
+            self.plan["implementation_policy"][
+                "fixed_summon_natural_magic_required"
+            ]
+        )
+        changed = [
+            (scenario["number"], record)
+            for scenario in self.plan["scenarios"]
+            for record in scenario["records"]
+            if record["summon_replacement"]["planned"]
+        ]
+        self.assertEqual(len(changed), 1)
+        scenario_number, record = changed[0]
+        self.assertEqual(scenario_number, 27)
+        self.assertEqual(record["offset"], "0x18321A")
+        self.assertEqual(
+            record["summon_replacement"]["changes"],
+            [
+                {
+                    "slot": 4,
+                    "source_class_id": 0x87,
+                    "target_class_id": 0x8F,
+                },
+                {
+                    "slot": 5,
+                    "source_class_id": 0x87,
+                    "target_class_id": 0x8F,
+                },
+            ],
+        )
+        self.assertEqual(
+            record["mercenaries"]["original"],
+            [0x89, 0x89, 0x89, 0x89, 0x87, 0x87],
+        )
+        self.assertEqual(
+            record["mercenaries"]["planned"],
+            [0x89, 0x89, 0x89, 0x89, 0x8F, 0x8F],
+        )
+        scenario_26 = next(
+            row for row in self.plan["scenarios"] if row["number"] == 26
         )
         self.assertTrue(
             all(
                 not record["summon_replacement"]["planned"]
-                for scenario in self.plan["scenarios"]
-                for record in scenario["records"]
+                for record in scenario_26["records"]
             )
         )
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass
+import hashlib
 from pathlib import Path
 
 
@@ -17,6 +18,17 @@ DEFAULT_AI_PRE_GST = (
 DEFAULT_AI_POST_GST = (
     ROOT
     / "captures/analysis/9a15_s26_fixed_white_dragon_post_gameover.gst"
+)
+DEFAULT_ATTACK_CAPTURE = (
+    ROOT
+    / "captures/run/d947_s26_fixed_white_dragon_direct_attack.png"
+)
+ATTACK_CAPTURE_SHA256 = (
+    "b3b3880f9246529465ea7044d90d35a5a14bd1ab6421d0d1e57ed9fe28d4cf27"
+)
+ATTACK_PROBE_CHECKSUM = "D947"
+ATTACK_PROBE_SHA256 = (
+    "b4b2023243f001d13df16d8b3cc8c5e764de914be00d4ace9985ee6a41505a7c"
 )
 
 GST_WORK_RAM_FILE_OFFSET = 0x2478
@@ -181,6 +193,17 @@ def verify_ordinary_ai_evidence(
         raise ValueError("fixed White Dragon did not move under ordinary AI")
 
 
+def verify_attack_capture(path: Path = DEFAULT_ATTACK_CAPTURE) -> None:
+    if not path.is_file():
+        raise ValueError(f"fixed White Dragon attack capture is missing: {path}")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    if digest != ATTACK_CAPTURE_SHA256:
+        raise ValueError(
+            "fixed White Dragon attack capture changed: "
+            f"{digest} != {ATTACK_CAPTURE_SHA256}"
+        )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gst", type=Path, default=DEFAULT_GST)
@@ -193,6 +216,11 @@ def parse_args() -> argparse.Namespace:
         "--ai-post-gst",
         type=Path,
         default=DEFAULT_AI_POST_GST,
+    )
+    parser.add_argument(
+        "--attack-capture",
+        type=Path,
+        default=DEFAULT_ATTACK_CAPTURE,
     )
     return parser.parse_args()
 
@@ -210,11 +238,13 @@ def main() -> int:
         AI_RUNTIME_GROUP,
     )
     verify_ordinary_ai_evidence(before, after)
+    verify_attack_capture(args.attack_capture)
     print(
         "verified Scenario 27 runtime group 17: "
         "Vampire Lord with four Arc Demons and two fixed White Dragons; "
         "verified Scenario 26 runtime group 10: fixed White Dragon moved "
-        "from (25,19) to (24,21) under ordinary enemy AI"
+        "from (25,19) to (24,21) under ordinary enemy AI; "
+        "verified D947 direct-attack capture"
     )
     return 0
 

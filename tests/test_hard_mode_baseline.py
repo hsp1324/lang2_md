@@ -442,20 +442,23 @@ class HardModeBaselineTests(unittest.TestCase):
             (1445, 971, 440, []),
         )
 
-    def test_summon_replacement_options_are_unapproved_and_source_bounded(self):
+    def test_summon_safe_fallback_runtime_guards_are_source_bounded(self):
         discussion = self.inventory["balance_discussion"][
             "summon_replacement_discussion"
         ]
-        self.assertEqual(discussion["status"], "unapproved_discussion_only")
+        self.assertEqual(
+            discussion["status"],
+            "runtime_guards_completed_for_approved_fallback",
+        )
         self.assertFalse(discussion["rom_values_applied"])
         self.assertTrue(discussion["natural_summon_application_verified"])
-        self.assertFalse(
+        self.assertTrue(
             discussion["fixed_enemy_mercenary_runtime_behavior_verified"]
         )
         self.assertTrue(
             discussion["fixed_enemy_loading_and_command_menu_verified"]
         )
-        self.assertFalse(
+        self.assertTrue(
             discussion["fixed_enemy_ai_and_event_behavior_verified"]
         )
         self.assertTrue(
@@ -464,11 +467,14 @@ class HardModeBaselineTests(unittest.TestCase):
         self.assertTrue(
             discussion["fixed_enemy_first_turn_event_path_verified"]
         )
-        self.assertFalse(
+        self.assertTrue(
             discussion["fixed_enemy_ordinary_attack_verified"]
         )
         self.assertFalse(
             discussion["fixed_enemy_natural_magic_ownership_verified"]
+        )
+        self.assertFalse(
+            discussion["fixed_enemy_natural_magic_required_for_fallback"]
         )
         evidence = discussion["runtime_evidence"]
         self.assertEqual(evidence["fixed_enemy_probe_checksum"], "A205")
@@ -493,6 +499,26 @@ class HardModeBaselineTests(unittest.TestCase):
         )
         self.assertEqual(
             evidence["ordinary_ai_probe_target_class"],
+            "8F",
+        )
+        self.assertEqual(
+            evidence["ordinary_attack_probe_checksum"],
+            "D947",
+        )
+        self.assertEqual(
+            evidence["ordinary_attack_probe_scenario"],
+            26,
+        )
+        self.assertEqual(
+            evidence["ordinary_attack_probe_record_offset"],
+            "0x182F64",
+        )
+        self.assertEqual(
+            evidence["ordinary_attack_probe_slots"],
+            [0, 1, 2, 3, 4, 5],
+        )
+        self.assertEqual(
+            evidence["ordinary_attack_probe_target_class"],
             "8F",
         )
         self.assertEqual(

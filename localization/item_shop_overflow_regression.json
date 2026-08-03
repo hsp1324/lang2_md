@@ -27,16 +27,16 @@
       "item_id": 27,
       "selected": "크로스",
       "visible_rows": ["크로스", "넥클리스"],
-      "path": "captures/run/shop_overflow_necklace/current_id27.png",
-      "sha256": "d3821f6ca8952cf811c1a0fc660e9eb5769e69feb8228d9bfdf1f6cf76207625",
+      "path": "captures/run/shop_overflow_necklace/corrected_id27.png",
+      "sha256": "a2d886f9b9519513966b7ef7f4c0a93391cae54c48a4796fe02b11bd1119bb87",
       "review": "pass"
     },
     {
       "item_id": 28,
       "selected": "넥클리스",
       "visible_rows": ["크로스", "넥클리스"],
-      "path": "captures/run/shop_overflow_necklace/current_id28.png",
-      "sha256": "a2d886f9b9519513966b7ef7f4c0a93391cae54c48a4796fe02b11bd1119bb87",
+      "path": "captures/run/shop_overflow_necklace/corrected_id28.png",
+      "sha256": "ddfe81f821aabb7200b2045b1ce3e978e67fad1b702403a0e9875d73168dbfea",
       "review": "pass"
     }
   ],

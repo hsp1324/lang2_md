@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "source": "docs/assets/ai-class-source/latest/shared-high-master-elwin-swordmaster-v1/logical16/04-23.png",
+  "target": "04-21",
+  "identity_match": 74,
+  "identity_pixel_count": 74,
+  "visible_color_count": 12,
+  "palette": [
+    "#242424",
+    "#ffffff",
+    "#006d92",
+    "#49496d",
+    "#6ddbff",
+    "#929292",
+    "#246d92",
+    "#924924",
+    "#dbb66d",
+    "#ffb600",
+    "#002449",
+    "#0000db"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "pure_black_pixels": 0,
+  "accepted": true
+}

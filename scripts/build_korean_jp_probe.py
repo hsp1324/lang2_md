@@ -525,13 +525,58 @@ BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE = 0x2BEB40
 BYTE_UI_PREP_DYNAMIC_TILE_ID_TABLE_LIMIT = 0x2BEB80
 BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE = 0x2BEBC0
 BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT = 0x2BEC40
+# The item-description renderer owns a large temporary Hangul bank at
+# VRAM 0x5400..0xA6FF.  Returning from the preparation shop leaves that bank
+# in place even though the preparation detail icons and every active/acted
+# commander/mercenary cache normally occupy the same range.  The stale cache
+# metadata then makes deployment and the following battle interpret Hangul
+# patterns as Soldier, Pike, Armor Soldier, Berserker, Royal Horse, and many
+# other unit graphics.  Restore the stock preparation icon resource and rerun
+# the stock all-faction map-sprite cache builder on the exact shop-return
+# caller, after that screen's displaced graphics loaders have completed.
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE = 0x2BEC40
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER = 0x2BECF8
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION = 0x2FB000
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION_LIMIT = 0x2FB200
+BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE = 0x2FB200
+BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE_LIMIT = 0x2FB400
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE = 0x2FB400
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE_LIMIT = 0x2FB500
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_A = 0x2FB500
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_B = 0x2FB520
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_LIMIT = 0x2FB540
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_A = 0x022672
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_A_ORIGINAL = bytes.fromhex(
+    "31 FC 00 01 BE 38"
+)
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_B = 0x026A1C
+BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_B_ORIGINAL = bytes.fromhex(
+    "31 FC 00 00 BE 50"
+)
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE_LIMIT = 0x2BED80
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK = 0x02D2E8
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL = bytes.fromhex(
+    "61 00 03 72 61 00 03 DA"
+)
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_1 = 0x02D65C
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_2 = 0x02D6C8
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK = 0x02D32C
+BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL = bytes.fromhex(
+    "43 F8 94 A2 45 F9 00 0A 3D 44"
+)
+BYTE_UI_PREP_STATIC_ICON_RESOURCE = 0x8187
+BYTE_UI_PREP_STATIC_ICON_VRAM = 0x4000
+BYTE_UI_PREP_RESOURCE_LOADER = 0x0099B2
+BYTE_UI_PREP_STATIC_ICON_RAW = 0x2F9000
+BYTE_UI_PREP_STATIC_ICON_RAW_LIMIT = 0x2FB000
+BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE = 0x0110A8
 # These patterns are transient map-status/preparation caches, not a persistent
 # font bank.  The battle map renderer has exactly two eight-cell fields (name
 # and class), so all sixteen of its destinations live in audited gaps around
 # the live VDP tables:
 # 0x0795/0x079C/0x079D are between SAT and H-scroll, while
-# 0x07CA/0x07CB/0x07D5/0x07D6/0x07D8..0x07DB/
-# 0x07E0/0x07E1/0x07EA/0x07EC/0x07F0 are above H-scroll.
+# 0x07CA/0x07CB/0x07D2/0x07D3/0x07E0..0x07E5/
+# 0x07EA..0x07EC/0x07F0/0x07F1 are above H-scroll.
 # None is inside the H-scroll table at 0x07A0..0x07BF.
 #
 # Do not move this cache into 0x07A0..0x07BF. The former 0x07A1..0x07BC
@@ -556,12 +601,23 @@ BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT = 0x2BEC40
 # The magic/attack/movement target cursor is a transient 2x2 SAT sprite at
 # 0x07CE..0x07D1.  B1.0.4 put battle slots 4 and 6 at 0x07D0/0x07D1, so the
 # fifth and seventh status glyphs replaced the cursor's right half with gray
-# Hangul blocks.  Battle now uses 0x07EA/0x07EC for those slots.  Preparation
-# retains 0x07D0/0x07D1 because its independently audited class-change and
-# hiring lifetime does not display the battle target cursor.
+# Hangul blocks.  The invalid-destination marker is a separate eight-cell SAT
+# graphic at 0x07D5..0x07DC.  B1.1.0 still put battle slots 10..15 in six of
+# those cells, which left a red X surrounded by gray Hangul blocks.  Battle
+# keeps both complete cursor ranges free.  Preparation retains its old cells
+# because its independently audited class-change and hiring lifetime displays
+# neither battle cursor.
+BATTLE_TARGET_CURSOR_TILES = tuple(range(0x07CE, 0x07D2))
+BATTLE_INVALID_TARGET_CURSOR_TILES = tuple(range(0x07D5, 0x07DD))
+# These cells have occasional retained Window-plane references only in rows
+# above the active battle window (or on preparation/dialogue lifetimes).  No
+# retained linked SAT entry or live VDP table owns them during battle.
+BATTLE_DYNAMIC_STALE_WINDOW_TILES = (
+    0x07D2, 0x07D3, 0x07E4, 0x07E5, 0x07EA, 0x07EB, 0x07EC, 0x07F1,
+)
 BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
     0x07CA, 0x07CB, 0x0795, 0x079C, 0x07EA, 0x07F0, 0x07EC, 0x07E1,
-    0x079D, 0x07E0, 0x07D5, 0x07D6, 0x07D8, 0x07D9, 0x07DA, 0x07DB,
+    0x079D, 0x07E0, 0x07D2, 0x07D3, 0x07E4, 0x07E5, 0x07EB, 0x07F1,
 )
 # The preparation/hiring surfaces also draw ordinary mercenary icons from the
 # 0x0348..0x0387 pattern cache.  B1.0.2 screenshots proved that putting
@@ -574,16 +630,18 @@ BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS = (
     0x07CA, 0x07CB, 0x0795, 0x079C, 0x07D0, 0x07F0, 0x07D1, 0x07E1,
     0x079D, 0x07E0, 0x07D5, 0x07D6, 0x07D8, 0x07D9, 0x07DA, 0x07DB,
 )
-# These additional pattern-region cells are not needed by the two eight-cell
-# map fields. They are reserved for preparation/status glyphs that must remain
-# visible together and passed the same retained-state ownership scan. Some are
-# inside the later battle-only acted-gray cache. That overlap is preparation
-# lifetime only: the stock sortie loader restores all sixteen ordinary gray
-# silhouettes at 0x03B0..0x03EF before battle. The Pike acted-surface probe
-# byte-compares the entire restored cache before and after a real move.
+# These additional cells are needed by preparation/status glyphs that must
+# remain visible together.  The former 0x03CA..0x03E0 destinations were inside
+# the ordinary/acted unit pattern cache.  Scenario 1 Soldier and Scenario 16
+# Armor Soldier/Berserker enemy-detail captures proved that preparation itself
+# can draw those unit patterns, so the old "battle-only gray" lifetime
+# assumption was false.  Use cells owned only by battle movement/target cursor
+# lifetimes, which preparation, hiring, class-change, and enemy-detail screens
+# never display.  The retained preparation-state scan also keeps these cells
+# outside every live VDP table and linked SAT entry.
 BYTE_UI_PREP_EXTRA_TILE_IDS = (
-    0x03CA, 0x03D0, 0x03D1,
-    0x03D4, 0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF, 0x03E0,
+    0x0796, 0x07C2, 0x07C4, 0x07C5, 0x07CE,
+    0x07CF, 0x07D2, 0x07E4, 0x07EB, 0x07ED,
 )
 # The live battle renderer can address only slots 0..15.  Do not append the
 # ten preparation-only coloring slots here: doing so previously made battle
@@ -3770,6 +3828,272 @@ def _build_enemy_ordinary_mercenary_cache_lookup_routine() -> bytes:
     return code.finish()
 
 
+def _build_preparation_mercenary_cache_restore_routine() -> bytes:
+    """Requeue every retained mercenary cache row after a shop round trip.
+
+    The preparation shop overwrites the active map-sprite patterns but leaves
+    the class/tile cache tables intact.  Rebuilding the two animation frames
+    from the class-to-sprite table makes both the deployment detail and the
+    following battle independent of that stale VRAM lifetime.
+    """
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
+
+    def emit_table(
+        label: str,
+        table: int,
+        count: int,
+        *,
+        stop_at_blank: bool,
+    ) -> None:
+        code.emit(bytes.fromhex("41 F9") + table.to_bytes(4, "big"))
+        code.emit(bytes((0x7C, count - 1)))  # moveq #(count-1),d6
+        code.label(f"{label}_loop")
+        code.emit("32 10")  # move.w (a0),d1: class ID
+        if stop_at_blank:
+            code.emit("4A 41")  # tst.w d1
+            code.branch_word(0x6700, f"{label}_done")
+        code.emit("36 28 00 02")  # move.w 2(a0),d3: base tile
+        code.emit("4E B9 00 01 14 90")  # generic class -> sprite ID
+        code.emit("EF 89")  # lsl.l #7,d1: 0x80 bytes per sprite
+        code.emit("EB 4B")  # lsl.w #5,d3: tile -> VRAM byte address
+        code.emit("28 78 81 C4")  # a4 = queued-VRAM command cursor
+
+        code.emit("24 01 06 82 00 05 29 80")  # frame 0 ROM source
+        code.emit("38 FC FF F9 38 C3 28 C2 38 FC 00 40")
+
+        code.emit("24 01 06 82 00 05 82 80")  # frame 1 ROM source
+        code.emit("06 43 20 00")  # second-frame VRAM bank
+        code.emit("38 FC FF F9 38 C3 28 C2 38 FC 00 40")
+        code.emit("21 CC 81 C4")  # commit queued-VRAM command cursor
+        code.emit("41 E8 00 04")  # next class/tile cache row
+        code.emit("51 CE")
+        code.fixups.append((len(code.code), f"{label}_loop"))
+        code.emit("00 00")  # dbra d6,label_loop
+        code.label(f"{label}_done")
+
+    emit_table(
+        "fixed",
+        ENEMY_ORDINARY_MERCENARY_FIXED_TABLE,
+        ENEMY_ORDINARY_MERCENARY_FIXED_COUNT,
+        stop_at_blank=False,
+    )
+    emit_table(
+        "dynamic",
+        ENEMY_DYNAMIC_MERCENARY_TABLE,
+        ENEMY_DYNAMIC_MERCENARY_COUNT,
+        stop_at_blank=True,
+    )
+    code.emit("4C DF 7F FF 4E 75")
+    return code.finish()
+
+
+def _build_preparation_mercenary_cache_restore_shop_finalizer() -> bytes:
+    """Finish the shop return before its asynchronous continuation."""
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
+    for target in (
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_1,
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_2,
+    ):
+        code.emit(bytes.fromhex("4E B9") + target.to_bytes(4, "big"))
+    # $2D6C8 deliberately leaves its final two transfers queued.  Drain them
+    # before the synchronous sprite/icon repair so they cannot win afterward.
+    code.emit("4E B9 00 00 8A 6C")
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("47 F9 00 C0 00 04")  # lea.l VDP control port,a3
+    code.emit("49 F9 00 C0 00 00")  # lea.l VDP data port,a4
+    code.emit("36 BC 8F 02")  # VDP autoincrement = 2 bytes
+    code.emit("26 BC 54 00 00 01")  # VRAM write command for $5400
+    code.emit(
+        bytes.fromhex("41 F9")
+        + (BYTE_UI_PREP_STATIC_ICON_RAW + 0x1400).to_bytes(4, "big")
+    )
+    code.emit("30 3C 05 FF")  # 0x600 words = 0x0C00 bytes
+    code.label("copy_static_icons")
+    code.emit("38 98")  # move.w (a0)+,(a4)
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "copy_static_icons"))
+    code.emit("00 00")  # dbra d0,copy_static_icons
+    code.emit("4C DF 7F FF 4E 75")
+    return code.finish()
+
+
+def _build_preparation_mercenary_cache_direct_restore_routine() -> bytes:
+    """Synchronously restore every retained mercenary sprite-cache row."""
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
+    code.emit("47 F9 00 C0 00 04")  # lea.l VDP control port,a3
+    code.emit("49 F9 00 C0 00 00")  # lea.l VDP data port,a4
+    code.emit("36 BC 8F 02")  # VDP autoincrement = 2 bytes
+
+    def emit_table(
+        label: str,
+        table: int,
+        count: int,
+        *,
+        stop_at_blank: bool,
+    ) -> None:
+        code.emit(bytes.fromhex("41 F9") + table.to_bytes(4, "big"))
+        code.emit(bytes((0x7C, count - 1)))  # moveq #(count-1),d6
+        code.label(f"{label}_loop")
+        code.emit("32 10")  # move.w (a0),d1: class ID
+        if stop_at_blank:
+            code.emit("4A 41")  # tst.w d1
+            code.branch_word(0x6700, f"{label}_done")
+        code.emit("36 28 00 02")  # move.w 2(a0),d3: base tile
+        code.emit("4E B9 00 01 14 90")  # generic class -> sprite ID
+        code.emit("EF 89")  # lsl.l #7,d1: 0x80 bytes per sprite
+        code.emit("EB 4B")  # lsl.w #5,d3: tile -> VRAM byte address
+
+        code.emit("24 01 06 82 00 05 29 80")  # frame 0 ROM source
+        code.branch_word(0x6100, "copy_frame")  # bsr.w
+        code.emit("24 01 06 82 00 05 82 80")  # frame 1 ROM source
+        code.emit("06 43 20 00")  # second-frame VRAM bank
+        code.branch_word(0x6100, "copy_frame")  # bsr.w
+
+        code.emit("41 E8 00 04")  # next class/tile cache row
+        code.emit("51 CE")
+        code.fixups.append((len(code.code), f"{label}_loop"))
+        code.emit("00 00")  # dbra d6,label_loop
+        code.label(f"{label}_done")
+
+    emit_table(
+        "direct_fixed",
+        ENEMY_ORDINARY_MERCENARY_FIXED_TABLE,
+        ENEMY_ORDINARY_MERCENARY_FIXED_COUNT,
+        stop_at_blank=False,
+    )
+    emit_table(
+        "direct_dynamic",
+        ENEMY_DYNAMIC_MERCENARY_TABLE,
+        ENEMY_DYNAMIC_MERCENARY_COUNT,
+        stop_at_blank=True,
+    )
+    code.emit("4C DF 7F FF 4E 75")
+
+    code.label("copy_frame")
+    code.emit("22 42")  # movea.l d2,a1
+    code.emit("38 03 02 44 3F FF 00 44 40 00")
+    # d4 high word = $4000 | (destination & $3fff)
+    code.emit("48 44")  # swap d4
+    code.emit("3A 03 02 45 C0 00 E5 5D 38 05")
+    # d4 low word = rol.w #2,(destination & $c000)
+    code.emit("26 84")  # move.l d4,(a3)
+    code.emit("7A 3F")  # 64 words = one 16x16 sprite
+    code.label("copy_frame_words")
+    code.emit("38 99")  # move.w (a1)+,(a4)
+    code.emit("51 CD")
+    code.fixups.append((len(code.code), "copy_frame_words"))
+    code.emit("00 00")  # dbra d5,copy_frame_words
+    code.emit("4E 75")
+    return code.finish()
+
+
+def _build_preparation_entry_cache_restore_routine() -> bytes:
+    """Restore the cache tail on both preparation-menu entry variants."""
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("47 F9 00 C0 00 04")  # lea.l VDP control port,a3
+    code.emit("49 F9 00 C0 00 00")  # lea.l VDP data port,a4
+    code.emit("36 BC 8F 02")  # VDP autoincrement = 2 bytes
+    code.emit("26 BC 54 00 00 01")  # VRAM write command for $5400
+    code.emit(
+        bytes.fromhex("41 F9")
+        + (BYTE_UI_PREP_STATIC_ICON_RAW + 0x1400).to_bytes(4, "big")
+    )
+    code.emit("30 3C 05 FF")  # 0x600 words = 0x0C00 bytes
+    code.label("copy_static_icons")
+    code.emit("38 98")  # move.w (a0)+,(a4)
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "copy_static_icons"))
+    code.emit("00 00")  # dbra d0,copy_static_icons
+    code.emit("4C DF 7F FF 4E 75")
+    return code.finish()
+
+
+def _build_preparation_entry_cache_restore_wrapper(original: bytes) -> bytes:
+    return (
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE.to_bytes(4, "big")
+        + original
+        + bytes.fromhex("4E 75")
+    )
+
+
+def _build_preparation_mercenary_cache_restore_shop_completion() -> bytes:
+    """Rebuild sprites after the shop-to-preparation transition completes."""
+    code = _M68KCode()
+    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
+    # $2D32C is not a shared callback: its only owner is installed at $2D2FE
+    # in the exact shop-return chain.  Runtime screen bytes are still in an
+    # intermediate state here, so guarding on them incorrectly skipped the
+    # repair.  Execute unconditionally on this unique continuation.
+    # The expansion overflow guard deliberately recognizes classes already in
+    # all ten dynamic rows.  That is correct during one map initialization,
+    # but on a shop return those rows are stale metadata for overwritten VRAM.
+    # Clear exactly the dynamic table so the stock cache initializer at
+    # $110A8 must reload every live dynamic mercenary.  Fixed rows are rebuilt
+    # unconditionally by that initializer.
+    code.emit(
+        bytes.fromhex("41 F9")
+        + ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
+    )  # lea.l dynamic table,a0
+    code.emit(bytes((0x70, ENEMY_DYNAMIC_MERCENARY_COUNT - 1)))
+    code.label("clear_dynamic")
+    code.emit("42 98")  # clr.l (a0)+
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "clear_dynamic"))
+    code.emit("00 00")  # dbra d0,clear_dynamic
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE.to_bytes(4, "big")
+    )
+
+    # The stock initializer has now rebuilt the class-to-tile tables, but its
+    # dynamic sprite loads still use the shared decompression buffer.  A later
+    # load can overwrite that buffer before the queued VDP DMA consumes it.
+    # Rewrite both frames synchronously from immutable raw sprite ROM tables.
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(4, "big")
+    )
+
+    # The compressed loader stages resource $8187 in $FF1000.  Later
+    # transition work reuses that staging buffer before its queued DMA owns
+    # VRAM, so the item-description glyphs win again.  Copy only the static
+    # icon tail ($5400-$5FFF) synchronously from the build-time decompressed
+    # ROM copy.  A direct VDP-port loop also prevents any already queued shop
+    # transfer from outliving this repair.
+    code.emit("47 F9 00 C0 00 04")  # lea.l VDP control port,a3
+    code.emit("49 F9 00 C0 00 00")  # lea.l VDP data port,a4
+    code.emit("36 BC 8F 02")  # VDP autoincrement = 2 bytes
+    code.emit("26 BC 54 00 00 01")  # VRAM write command for $5400
+    code.emit(
+        bytes.fromhex("41 F9")
+        + (BYTE_UI_PREP_STATIC_ICON_RAW + 0x1400).to_bytes(4, "big")
+    )
+    code.emit("30 3C 05 FF")  # 0x600 words = 0x0C00 bytes
+    code.label("copy_static_icons")
+    code.emit("38 98")  # move.w (a0)+,(a4)
+    code.emit("51 C8")
+    code.fixups.append((len(code.code), "copy_static_icons"))
+    code.emit("00 00")  # dbra d0,copy_static_icons
+    code.emit("4C DF 7F FF")  # restore d0-d7/a0-a6
+    # Recreate the displaced first two instructions at $2D32C only after the
+    # repair, so the following stock copy sees its required a1/a2 arguments.
+    code.emit(BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL)
+    code.emit("4E 75")
+    return code.finish()
+
+
 def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
     loader = _build_enemy_ordinary_mercenary_cache_loader_routine()
     lookup = _build_enemy_ordinary_mercenary_cache_lookup_routine()
@@ -3805,6 +4129,192 @@ def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
     data[
         ENEMY_MERCENARY_FALLBACK_CLASS_TABLE:fallback_end
     ] = ENEMY_ADVANCED_MERCENARY_FALLBACK_CLASSES
+
+    static_icon_index = BYTE_UI_PREP_STATIC_ICON_RESOURCE & 0x7FFF
+    static_icon_pointer = be32(
+        data,
+        BYTE_UI_FONT_RESOURCE_TABLE + static_icon_index * 4,
+    ) & 0x00FFFFFF
+    if data[static_icon_pointer] != 3:
+        raise ValueError("preparation static-icon resource type changed")
+    static_icon_raw = decompress_9dfe(data, static_icon_pointer + 1)
+    if len(static_icon_raw) != (
+        BYTE_UI_PREP_STATIC_ICON_RAW_LIMIT - BYTE_UI_PREP_STATIC_ICON_RAW
+    ):
+        raise ValueError("preparation static-icon resource size changed")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_STATIC_ICON_RAW:BYTE_UI_PREP_STATIC_ICON_RAW_LIMIT
+        ]
+    ):
+        raise ValueError("preparation static-icon raw area is not blank")
+    data[
+        BYTE_UI_PREP_STATIC_ICON_RAW:BYTE_UI_PREP_STATIC_ICON_RAW_LIMIT
+    ] = static_icon_raw
+
+    prep_restore = _build_preparation_mercenary_cache_restore_routine()
+    prep_restore_end = (
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE + len(prep_restore)
+    )
+    if prep_restore_end > BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE_LIMIT:
+        raise ValueError("preparation mercenary-cache restore routine exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE:prep_restore_end
+        ]
+    ):
+        raise ValueError("preparation mercenary-cache restore area is not blank")
+    data[
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE:prep_restore_end
+    ] = prep_restore
+
+    shop_finalizer = (
+        _build_preparation_mercenary_cache_restore_shop_finalizer()
+    )
+    shop_finalizer_end = (
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER
+        + len(shop_finalizer)
+    )
+    if shop_finalizer_end > BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE_LIMIT:
+        raise ValueError("preparation shop cache finalizer exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER:
+            shop_finalizer_end
+        ]
+    ):
+        raise ValueError("preparation shop cache finalizer area is not blank")
+    data[
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER:
+        shop_finalizer_end
+    ] = shop_finalizer
+
+    shop_completion = (
+        _build_preparation_mercenary_cache_restore_shop_completion()
+    )
+    shop_completion_end = (
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION
+        + len(shop_completion)
+    )
+    if (
+        shop_completion_end
+        > BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION_LIMIT
+    ):
+        raise ValueError("preparation shop cache completion exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION:
+            shop_completion_end
+        ]
+    ):
+        raise ValueError("preparation shop cache completion area is not blank")
+    data[
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION:
+        shop_completion_end
+    ] = shop_completion
+
+    direct_restore = _build_preparation_mercenary_cache_direct_restore_routine()
+    direct_restore_end = (
+        BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE
+        + len(direct_restore)
+    )
+    if (
+        direct_restore_end
+        > BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE_LIMIT
+    ):
+        raise ValueError("preparation direct cache restore exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE:
+            direct_restore_end
+        ]
+    ):
+        raise ValueError("preparation direct cache restore area is not blank")
+    data[
+        BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE:
+        direct_restore_end
+    ] = direct_restore
+
+    entry_restore = _build_preparation_entry_cache_restore_routine()
+    entry_restore_end = (
+        BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE + len(entry_restore)
+    )
+    if entry_restore_end > BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE_LIMIT:
+        raise ValueError("preparation entry cache restore exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE:entry_restore_end
+        ]
+    ):
+        raise ValueError("preparation entry cache restore area is not blank")
+    data[
+        BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE:entry_restore_end
+    ] = entry_restore
+
+    wrapper_cursor = BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_A
+    entry_hooks = (
+        (
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_A,
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_A_ORIGINAL,
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_A,
+        ),
+        (
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_B,
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_B_ORIGINAL,
+            BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_B,
+        ),
+    )
+    for hook, original, wrapper in entry_hooks:
+        if wrapper < wrapper_cursor:
+            raise ValueError("preparation entry cache wrappers overlap")
+        wrapper_code = _build_preparation_entry_cache_restore_wrapper(original)
+        wrapper_end = wrapper + len(wrapper_code)
+        if wrapper_end > BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_LIMIT:
+            raise ValueError("preparation entry cache wrapper exceeds reserve")
+        if any(value != 0xFF for value in data[wrapper:wrapper_end]):
+            raise ValueError("preparation entry cache wrapper area is not blank")
+        data[wrapper:wrapper_end] = wrapper_code
+        wrapper_cursor = wrapper_end
+
+        hook_end = hook + len(original)
+        if bytes(data[hook:hook_end]) != original:
+            raise ValueError("preparation entry cache hook changed")
+        data[hook:hook_end] = bytes.fromhex("4E B9") + wrapper.to_bytes(4, "big")
+
+    shop_hook = BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK
+    shop_hook_end = (
+        shop_hook
+        + len(BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL)
+    )
+    if (
+        bytes(data[shop_hook:shop_hook_end])
+        != BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL
+    ):
+        raise ValueError("preparation shop cache finalizer hook changed")
+    data[shop_hook:shop_hook_end] = (
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER.to_bytes(4, "big")
+        + bytes.fromhex("4E 71")
+    )
+
+    completion_hook = BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK
+    completion_original = (
+        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL
+    )
+    completion_hook_end = completion_hook + len(completion_original)
+    if bytes(data[completion_hook:completion_hook_end]) != completion_original:
+        raise ValueError("preparation shop cache completion hook changed")
+    data[completion_hook:completion_hook_end] = (
+        bytes.fromhex("4E B9")
+        + BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION.to_bytes(4, "big")
+        + bytes.fromhex("4E 71 4E 71")
+    )
 
     for hook, target in (
         (
@@ -6051,16 +6561,35 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
     for offset, tokens in config_rows:
         put_tokens(offset, tokens)
 
-    # Load uses its own loader at 0x2301E. Preserve slots 34..43 because the
-    # loader routine writes save numbers through that digit range.
+    # Load uses its own loader at 0x2301E. It uploads to the same VRAM pattern
+    # indices as the main Start menu while its window begins one cell farther
+    # to the right.  The five first characters of the underlying rows
+    # therefore remain visible.  Preserve those characters in the same five
+    # slots so opening Load cannot turn 저/불/승/게/턴 into unrelated
+    # syllables.  Also preserve slots 34..43 because the loader routine writes
+    # save numbers there.
     load_chars = "불러올데이터를선택하세요장턴손상된없음"
-    load_slot_by_char: dict[str, int] = {}
+    load_slot_by_char: dict[str, int] = {
+        "턴": 0,
+        "불": 14,
+    }
+    load_background_slot_chars = {
+        0: "턴",
+        6: "승",
+        10: "저",
+        14: "불",
+        19: "게",
+    }
+    for slot, char in load_background_slot_chars.items():
+        put16(data, LOAD_MENU_GLYPH_LIST + slot * 2, glyph_by_char[char])
+
+    reserved_load_slots = set(load_background_slot_chars) | set(range(34, 44))
     next_slot = 0
     for char in load_chars:
         if char in load_slot_by_char:
             continue
-        while 34 <= next_slot <= 43:
-            next_slot = 44
+        while next_slot in reserved_load_slots:
+            next_slot += 1
         load_slot_by_char[char] = next_slot
         put16(data, LOAD_MENU_GLYPH_LIST + next_slot * 2, glyph_by_char[char])
         next_slot += 1

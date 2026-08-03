@@ -35,6 +35,38 @@ SECRET_STEP_SOURCE = {
     31: 27,
 }
 
+CURATED_SUMMON_REPLACEMENTS = {
+    (27, "0x18321A"): (
+        {
+            "slot": 4,
+            "source_class_id": 0x87,
+            "target_class_id": 0x8F,
+        },
+        {
+            "slot": 5,
+            "source_class_id": 0x87,
+            "target_class_id": 0x8F,
+        },
+    ),
+}
+
+# The stock enemy-variant mercenary cache has ten entries.  The Korean build
+# reuses the always-preloaded ordinary-hireable cache for 0x62..0x71, so these
+# substitutions keep the approved same-family upgrades without allocating a
+# new dynamic entry.  Scenario 13's Dark Guard promotion is omitted because
+# no same-family ordinary fallback is stronger than Armor Soldier.
+MAX_DYNAMIC_ENEMY_MERCENARY_CLASSES = 10
+ENEMY_ORDINARY_MERCENARY_FIRST_CLASS = 0x62
+ENEMY_ORDINARY_MERCENARY_LAST_CLASS = 0x71
+CACHE_SAFE_MERCENARY_OVERRIDES = {
+    (13, "0x181814", 0): 0x63,  # Pike 7E -> ordinary Phalanx 63
+    (13, "0x181814", 1): 0x63,
+    (13, "0x1818C8", 0): None,  # Armor Soldier 73 stays 73
+    (13, "0x1818C8", 1): None,
+    (15, "0x181CCC", 0): 0x6F,  # Gargoyle 82 -> ordinary Griffon 6F
+    (15, "0x181CCC", 1): 0x6F,
+}
+
 
 def proposal_steps() -> dict[int, dict[str, Any]]:
     steps = {
@@ -103,11 +135,107 @@ def proposed_mercenaries(
     return result, changes
 
 
+def proposed_summon_replacements(
+    scenario: int,
+    offset: str,
+    original: list[int],
+    planned: list[int],
+) -> tuple[list[int], list[dict[str, int]]]:
+    changes = CURATED_SUMMON_REPLACEMENTS.get((scenario, offset), ())
+    result = list(planned)
+    for change in changes:
+        slot = int(change["slot"])
+        source_id = int(change["source_class_id"])
+        target_id = int(change["target_class_id"])
+        if original[slot] != source_id:
+            raise ValueError(
+                f"Scenario {scenario} summon source changed at {offset} "
+                f"slot {slot}: expected {source_id:02X}, "
+                f"got {original[slot]:02X}"
+            )
+        if result[slot] != source_id:
+            raise ValueError(
+                f"Scenario {scenario} conventional mercenary upgrade "
+                f"overlaps summon slot {slot} at {offset}"
+            )
+        result[slot] = target_id
+    return result, [dict(change) for change in changes]
+
+
+def apply_cache_safe_mercenary_overrides(
+    scenario: int,
+    offset: str,
+    original: list[int],
+    planned: list[int],
+    changes: list[dict[str, int]],
+) -> tuple[list[int], list[dict[str, int]]]:
+    result = list(planned)
+    updated_changes = [dict(change) for change in changes]
+    for slot in range(len(original)):
+        key = (scenario, offset, slot)
+        if key not in CACHE_SAFE_MERCENARY_OVERRIDES:
+            continue
+        target = CACHE_SAFE_MERCENARY_OVERRIDES[key]
+        matching = [
+            change for change in updated_changes
+            if int(change["slot"]) == slot
+        ]
+        if len(matching) != 1:
+            raise ValueError(
+                f"cache-safe mercenary override lost its planned change: "
+                f"Scenario {scenario} {offset} slot {slot}"
+            )
+        if target is None:
+            result[slot] = original[slot]
+            updated_changes.remove(matching[0])
+        else:
+            result[slot] = target
+            matching[0]["target_class_id"] = target
+    return result, updated_changes
+
+
 def _record_mercenary_ids(record: dict[str, Any]) -> list[int]:
     return [
         0xFF if row is None else int(row["class_id"], 16)
         for row in record["mercenaries"]
     ]
+
+
+def dynamic_enemy_mercenary_class_ids(
+    scenario: dict[str, Any],
+    planned_records: list[dict[str, Any]],
+) -> list[int]:
+    """Return every non-ordinary fixed-record class loaded by the map cache.
+
+    The stock loader does not restrict this cache to side 0x04 enemies. NPC
+    side 0x03 and special side 0x08 records share it as well; Scenario 31's
+    side 0x08 Ballista is the retained proof. Counting only hostile records
+    can therefore understate the ten-row hardware/runtime capacity.
+    """
+    planned_by_offset = {
+        str(record["offset"]): record["mercenaries"]["planned"]
+        for record in planned_records
+    }
+    classes: set[int] = set()
+    for record in scenario["records"]:
+        offset = str(record["offset"])
+        if record["side_id"] == "00":
+            continue
+        mercenaries = planned_by_offset.get(
+            offset,
+            _record_mercenary_ids(record),
+        )
+        classes.update(
+            class_id
+            for class_id in mercenaries
+            if class_id != 0xFF
+            and not (
+                ENEMY_ORDINARY_MERCENARY_FIRST_CLASS
+                <= class_id
+                <= ENEMY_ORDINARY_MERCENARY_LAST_CLASS
+            )
+        )
+    return sorted(classes)
 
 
 def build_plan(
@@ -127,6 +255,7 @@ def build_plan(
     commander_change_count = 0
     soldier_correction_count = 0
     mercenary_replacement_count = 0
+    summon_replacement_count = 0
     for scenario in baseline["scenarios"]:
         number = int(scenario["number"])
         step = steps[number]
@@ -161,6 +290,21 @@ def build_plan(
                 original_mercenaries,
                 int(step["stronger_mercenary_slots_per_six"]),
             )
+            mercenaries, mercenary_changes = (
+                apply_cache_safe_mercenary_overrides(
+                    number,
+                    str(record["offset"]),
+                    original_mercenaries,
+                    mercenaries,
+                    mercenary_changes,
+                )
+            )
+            mercenaries, summon_changes = proposed_summon_replacements(
+                number,
+                str(record["offset"]),
+                original_mercenaries,
+                mercenaries,
+            )
             commander_changed = (
                 proposed_at != original_at or proposed_df != original_df
             )
@@ -171,6 +315,7 @@ def build_plan(
             commander_change_count += commander_changed
             soldier_correction_count += soldier_changed
             mercenary_replacement_count += len(mercenary_changes)
+            summon_replacement_count += len(summon_changes)
             record_count += 1
             records.append({
                 "index": int(record["index"]),
@@ -205,13 +350,34 @@ def build_plan(
                     "changes": mercenary_changes,
                 },
                 "summon_replacement": {
-                    "planned": False,
+                    "planned": bool(summon_changes),
+                    "changes": summon_changes,
                     "reason": (
-                        "deferred until ordinary fixed-enemy attack and "
-                        "natural-magic runtime guards pass"
+                        (
+                            "runtime-guarded safe fallback: same-family "
+                            "Vampire Bat 87 -> White Dragon 8F; fixed units "
+                            "do not rely on natural magic ownership"
+                        )
+                        if summon_changes
+                        else (
+                            "keep original: outside the approved Scenario "
+                            "26/27 scope or no same-family nondecreasing "
+                            "AT/DF candidate passed every runtime guard"
+                        )
                     ),
                 },
             })
+        dynamic_classes = dynamic_enemy_mercenary_class_ids(
+            scenario,
+            records,
+        )
+        if len(dynamic_classes) > MAX_DYNAMIC_ENEMY_MERCENARY_CLASSES:
+            raise ValueError(
+                f"Scenario {number} needs {len(dynamic_classes)} dynamic "
+                "enemy mercenary classes; the battle cache holds only "
+                f"{MAX_DYNAMIC_ENEMY_MERCENARY_CLASSES}: "
+                + ", ".join(f"0x{value:02X}" for value in dynamic_classes)
+            )
         scenarios.append({
             "number": number,
             "label": step["label"],
@@ -233,6 +399,12 @@ def build_plan(
                 ),
             },
             "target_record_count": len(records),
+            "enemy_mercenary_cache": {
+                "dynamic_capacity": MAX_DYNAMIC_ENEMY_MERCENARY_CLASSES,
+                "dynamic_class_ids": dynamic_classes,
+                "dynamic_class_count": len(dynamic_classes),
+                "ordinary_classes_reuse_fixed_cache": True,
+            },
             "records": records,
         })
 
@@ -263,10 +435,23 @@ def build_plan(
             "shared_class_records_modified": False,
             "mercenary_policy": (
                 "conservative same-family replacements first, left-to-right "
-                "up to the per-commander quota; empty slots stay empty"
+                "up to the per-commander quota; empty slots stay empty; "
+                "every scenario stays within the ten-entry dynamic battle "
+                "sprite cache"
+            ),
+            "enemy_ordinary_mercenary_cache_reused": True,
+            "enemy_dynamic_mercenary_cache_capacity": (
+                MAX_DYNAMIC_ENEMY_MERCENARY_CLASSES
             ),
             "conditional_mercenary_pairs_applied": False,
-            "summon_units_applied": False,
+            "summon_units_applied": True,
+            "summon_policy": (
+                "Scenario 26 keeps the original formation; Scenario 27 "
+                "record 0x18321A slots 4-5 replace Vampire Bat 87 with "
+                "White Dragon 8F after fixed loading, ordinary movement, "
+                "direct attack, and first-turn event verification"
+            ),
+            "fixed_summon_natural_magic_required": False,
             "runtime_exception_manifest": str(
                 DEFAULT_RUNTIME_EXCEPTIONS.relative_to(ROOT)
             ),
@@ -287,7 +472,7 @@ def build_plan(
             "commander_change_record_count": commander_change_count,
             "soldier_correction_record_count": soldier_correction_count,
             "mercenary_replacement_slot_count": mercenary_replacement_count,
-            "summon_replacement_slot_count": 0,
+            "summon_replacement_slot_count": summon_replacement_count,
         },
         "automatic_exclusions": [
             {
@@ -398,7 +583,11 @@ def render_markdown(plan: dict[str, Any]) -> str:
         f"- 지휘관 AT/DF 변경: {summary['commander_change_record_count']}개",
         f"- 적 전용 병사 A+/D+ 변경: {summary['soldier_correction_record_count']}개",
         f"- 보수적 용병 승급: {summary['mercenary_replacement_slot_count']}칸",
-        "- 소환물 교체: 0칸 (고정 적의 일반 공격·자연 마법 검증 전 보류)",
+        (
+            "- 소환물 교체: "
+            f"{summary['summon_replacement_slot_count']}칸 "
+            "(27장 뱀파이어배트 → 화이트드래곤 안전 대체)"
+        ),
         "",
         "## 구현 원칙",
         "",
@@ -406,6 +595,9 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "- 병사 A+/D+는 공용 클래스 표를 수정하지 않는다. 확장 ROM의",
         "  적 전용 레코드 표와 로더 훅으로만 적용한다.",
         "- 용병은 채워진 칸만 같은 역할의 보수적 상위 병종으로 바꾼다.",
+        "- 고정 소환물은 일반 적 AI의 이동·직접 공격·이벤트 진행을 모두",
+        "  통과한 같은 계열 비감소 후보만 사용한다. 고정 레코드에는 자연",
+        "  마법 권한이 붙지 않으므로 마법 사용을 전제로 편성하지 않는다.",
         "- 이벤트 진영 전환, 아군 지원, 연출용 강적은 자동 강화에서 뺀다.",
         "- 모든 변경은 주소와 전후 값을 아래 표 및 JSON 원장에 남긴다.",
         "",
@@ -467,6 +659,9 @@ def render_markdown(plan: dict[str, Any]) -> str:
         mercenary = sum(
             len(row["mercenaries"]["changes"]) for row in records
         )
+        summons = sum(
+            len(row["summon_replacement"]["changes"]) for row in records
+        )
         verification = runtime_scenarios.get(int(scenario["number"]))
         smoke = smoke_scenarios.get(int(scenario["number"]))
         if (
@@ -484,7 +679,7 @@ def render_markdown(plan: dict[str, Any]) -> str:
         lines.append(
             f"| {scenario['number']} | {scenario['label']} | "
             f"{len(records)} | {commander} | {soldier} | {mercenary} | "
-            f"0 | {verification_label} |"
+            f"{summons} | {verification_label} |"
         )
 
     lines.extend([

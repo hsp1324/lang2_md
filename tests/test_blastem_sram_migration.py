@@ -13,6 +13,7 @@ from tools.run_blastem_sequence import (
     MANUAL_SLOT_COMMANDER_CLASS_OFFSET,
     MANUAL_SLOT_COMMANDER_DF_OFFSET,
     MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET,
+    MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET,
     MANUAL_SLOT_COMMANDER_LEVEL_OFFSET,
     MANUAL_SLOT_COMMANDER_RECORD_SIZE,
     MANUAL_SLOT_COMMANDER_ROSTER_OFFSET,
@@ -287,6 +288,48 @@ class BlastEmSramMigrationTests(unittest.TestCase):
     def test_commander_progress_uses_24_byte_roster_records(self):
         self.assertEqual(MANUAL_SLOT_COMMANDER_RECORD_SIZE, 0x18)
 
+    def test_patches_commander_hire_mask_without_replacing_existing_bits(self):
+        data, base = self.make_sram()
+        data[base : base + 2] = (6).to_bytes(2, "big")
+        record = base + MANUAL_SLOT_COMMANDER_ROSTER_OFFSET
+        data[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET] = 1
+        data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET] = 1
+        data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET] = 0
+        mask_offset = record + MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET
+        data[mask_offset : mask_offset + 2] = (0x0004).to_bytes(2, "big")
+        data[
+            SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+        ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            patch_manual_slot_commander_progress(
+                path,
+                1,
+                1,
+                0,
+                expected_class=1,
+                hire_mask_or=0x0008,
+            )
+            patched = path.read_bytes()
+
+        self.assertEqual(
+            int.from_bytes(patched[mask_offset : mask_offset + 2], "big"),
+            0x000C,
+        )
+        self.assertEqual(
+            int.from_bytes(patched[checksum_offset : checksum_offset + 2], "big"),
+            manual_slot_checksum(patched, base),
+        )
+
     def test_patches_valid_commander_class_and_updates_checksum(self):
         data, base = self.make_sram()
         data[base : base + 2] = (2).to_bytes(2, "big")
@@ -394,30 +437,34 @@ class BlastEmScenarioSelectTests(unittest.TestCase):
 
     def test_selector_entry_stops_before_movement_or_confirmation(self):
         keys = scenario_select_entry_keys()
-        self.assertNotIn("down:0.08", keys)
-        self.assertNotIn("up:0.08", keys)
+        self.assertNotIn("down@0.12:0.12", keys)
+        self.assertNotIn("up@0.12:0.12", keys)
         self.assertNotEqual(keys[-1], "c:4.0")
 
     def test_selector_target_adds_movement_and_confirmation(self):
         keys = scenario_select_keys(27)
-        self.assertEqual(keys.count("down:0.08"), 26)
+        self.assertEqual(keys.count("down@0.12:0.12"), 26)
         self.assertEqual(keys[-1], "c:4.0")
 
     def test_selector_movement_starts_at_saved_scenario_and_wraps(self):
-        self.assertNotIn("down:0.08", scenario_select_keys(1))
-        self.assertEqual(scenario_select_keys(2).count("down:0.08"), 1)
-        self.assertEqual(scenario_select_keys(4).count("down:0.08"), 3)
-        self.assertNotIn("up:0.08", scenario_select_keys(31))
+        self.assertNotIn("down@0.12:0.12", scenario_select_keys(1))
         self.assertEqual(
-            scenario_select_keys(26, 26).count("down:0.08"),
+            scenario_select_keys(2).count("down@0.12:0.12"), 1
+        )
+        self.assertEqual(
+            scenario_select_keys(4).count("down@0.12:0.12"), 3
+        )
+        self.assertNotIn("up@0.12:0.12", scenario_select_keys(31))
+        self.assertEqual(
+            scenario_select_keys(26, 26).count("down@0.12:0.12"),
             0,
         )
         self.assertEqual(
-            scenario_select_keys(1, 26).count("down:0.08"),
+            scenario_select_keys(1, 26).count("down@0.12:0.12"),
             6,
         )
         self.assertEqual(
-            scenario_select_keys(20, 26).count("down:0.08"),
+            scenario_select_keys(20, 26).count("down@0.12:0.12"),
             25,
         )
 

@@ -1978,102 +1978,95 @@
     }
   ],
   "dynamic_map_cache_tiles": [
-    "0x0359",
-    "0x035B",
-    "0x0360",
-    "0x0361",
-    "0x036C",
-    "0x036D",
-    "0x0370",
-    "0x0371",
-    "0x037D",
-    "0x037F",
-    "0x03B0",
-    "0x03BD",
-    "0x03C0",
-    "0x03C1",
-    "0x03C4",
-    "0x03C9"
+    "0x07CA",
+    "0x07CB",
+    "0x0795",
+    "0x079C",
+    "0x07EA",
+    "0x07F0",
+    "0x07EC",
+    "0x07E1",
+    "0x079D",
+    "0x07E0",
+    "0x07D2",
+    "0x07D3",
+    "0x07E4",
+    "0x07E5",
+    "0x07EB",
+    "0x07F1"
   ],
   "preparation_extra_cache_tiles": [
-    "0x03CA",
-    "0x03D0",
-    "0x03D1",
-    "0x03D4",
-    "0x03D5",
-    "0x03D7",
-    "0x03D8",
-    "0x03DA",
-    "0x03DF",
-    "0x03E0"
+    "0x0796",
+    "0x07C2",
+    "0x07C4",
+    "0x07C5",
+    "0x07CE",
+    "0x07CF",
+    "0x07D2",
+    "0x07E4",
+    "0x07EB",
+    "0x07ED"
   ],
   "preparation_dynamic_slots": [
     {
       "slot": 0,
-      "vram_tile": "0x0359",
+      "vram_tile": "0x07CA",
       "chars": [
-        "간",
         "갈",
-        "거",
-        "께",
-        "끼",
         "남",
         "녀",
-        "님",
         "대",
         "렌",
         "루",
         "릴",
-        "문",
-        "빌",
-        "빙",
         "새",
         "스",
         "안",
         "야",
         "언",
-        "와",
         "요",
         "웨",
         "의",
-        "임",
+        "일",
         "주",
         "켄",
         "택",
         "템",
         "폴",
-        "해",
-        "형",
-        "화"
+        "해"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 1,
-      "vram_tile": "0x035B",
+      "vram_tile": "0x07CB",
       "chars": [
+        "거",
         "고",
+        "끼",
+        "문",
         "본",
+        "빌",
         "슬",
         "울",
         "츠",
         "치",
         "큐",
-        "크",
-        "헬"
+        "크"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 2,
-      "vram_tile": "0x0360",
+      "vram_tile": "0x0795",
       "chars": [
+        "간",
+        "께",
         "머",
         "모",
         "뱀",
-        "번",
-        "보",
         "선",
+        "와",
         "우",
         "좀",
         "케",
@@ -2084,89 +2077,55 @@
     },
     {
       "slot": 3,
-      "vram_tile": "0x0361",
+      "vram_tile": "0x079C",
       "chars": [
-        "건",
         "네",
-        "몬",
+        "다",
+        "래",
+        "미",
+        "번",
+        "빙",
         "운",
-        "일",
         "적",
         "조",
-        "타"
+        "형"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 4,
-      "vram_tile": "0x036C",
+      "vram_tile": "0x07D0",
       "chars": [
-        "렘",
+        "건",
         "름",
-        "멘",
         "배",
-        "비",
-        "엠"
-      ],
-      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
-    },
-    {
-      "slot": 5,
-      "vram_tile": "0x036D",
-      "chars": [
-        "가",
-        "노",
-        "데",
-        "커",
+        "임",
+        "젤",
+        "타",
         "톤"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
+      "slot": 5,
+      "vram_tile": "0x07F0",
+      "chars": [
+        "님",
+        "렘",
+        "보",
+        "엠",
+        "제"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
+    },
+    {
       "slot": 6,
-      "vram_tile": "0x0370",
-      "chars": [
-        "골",
-        "다",
-        "래",
-        "켈"
-      ],
-      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
-    },
-    {
-      "slot": 7,
-      "vram_tile": "0x0371",
-      "chars": [
-        "라",
-        "멜",
-        "미"
-      ],
-      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
-    },
-    {
-      "slot": 8,
-      "vram_tile": "0x037D",
-      "chars": [
-        "디",
-        "럴"
-      ],
-      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
-    },
-    {
-      "slot": 9,
-      "vram_tile": "0x037F",
-      "chars": [
-        "폰"
-      ],
-      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
-    },
-    {
-      "slot": 10,
-      "vram_tile": "0x03B0",
+      "vram_tile": "0x07D1",
       "chars": [
         "곤",
-        "론",
+        "록",
         "린",
+        "멜",
         "서",
         "전",
         "킹",
@@ -2175,139 +2134,180 @@
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
-      "slot": 11,
-      "vram_tile": "0x03BD",
+      "slot": 7,
+      "vram_tile": "0x07E1",
       "chars": [
+        "노",
+        "멘",
+        "비"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
+    },
+    {
+      "slot": 8,
+      "vram_tile": "0x079D",
+      "chars": [
+        "골",
+        "라",
+        "럴",
+        "켈"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
+    },
+    {
+      "slot": 9,
+      "vram_tile": "0x07E0",
+      "chars": [
+        "가",
+        "디",
+        "몬",
+        "엔",
+        "커"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
+    },
+    {
+      "slot": 10,
+      "vram_tile": "0x07D5",
+      "chars": [
+        "데",
         "팔"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
-      "slot": 12,
-      "vram_tile": "0x03C0",
+      "slot": 11,
+      "vram_tile": "0x07D6",
       "chars": [
         "랑"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
-      "slot": 13,
-      "vram_tile": "0x03C1",
+      "slot": 12,
+      "vram_tile": "0x07D8",
       "chars": [
-        "젤"
+        "키"
+      ],
+      "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
+    },
+    {
+      "slot": 13,
+      "vram_tile": "0x07D9",
+      "chars": [
+        "코"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 14,
-      "vram_tile": "0x03C4",
+      "vram_tile": "0x07DA",
       "chars": [
-        "랜",
-        "쉐",
-        "제"
+        "카"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 15,
-      "vram_tile": "0x03C9",
+      "vram_tile": "0x07DB",
       "chars": [
-        "엔"
+        "쉐"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 16,
-      "vram_tile": "0x03CA",
+      "vram_tile": "0x0796",
       "chars": [
-        "몽"
+        "론"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 17,
-      "vram_tile": "0x03D0",
+      "vram_tile": "0x07C2",
       "chars": [
-        "글"
+        "몽",
+        "폰"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 18,
-      "vram_tile": "0x03D1",
+      "vram_tile": "0x07C4",
       "chars": [
         "너",
-        "록",
-        "숍",
-        "얄",
+        "니",
+        "랜",
+        "러",
+        "버",
         "자"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 19,
-      "vram_tile": "0x03D4",
+      "vram_tile": "0x07C5",
       "chars": [
-        "소",
-        "코",
-        "콘"
+        "샤",
+        "세",
+        "콘",
+        "펜"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 20,
-      "vram_tile": "0x03D5",
+      "vram_tile": "0x07CE",
       "chars": [
-        "버",
-        "샤",
-        "유",
-        "카"
+        "메",
+        "소",
+        "얄",
+        "유"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 21,
-      "vram_tile": "0x03D7",
+      "vram_tile": "0x07CF",
       "chars": [
+        "더",
         "딘",
-        "러"
+        "먼"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 22,
-      "vram_tile": "0x03D8",
+      "vram_tile": "0x07D2",
       "chars": [
-        "니",
-        "메",
-        "키"
+        "글"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 23,
-      "vram_tile": "0x03DA",
+      "vram_tile": "0x07E4",
       "chars": [
-        "세",
-        "펜",
+        "숍",
+        "실",
         "힐"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 24,
-      "vram_tile": "0x03DF",
+      "vram_tile": "0x07EB",
       "chars": [
-        "먼",
-        "실"
+        "화"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     },
     {
       "slot": 25,
-      "vram_tile": "0x03E0",
+      "vram_tile": "0x07ED",
       "chars": [
-        "더"
+        "헬"
       ],
       "reason": "conflict-colored preparation characters that never appear simultaneously share this ownership-audited tile"
     }

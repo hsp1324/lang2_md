@@ -1,0 +1,25 @@
+{
+  "size": [
+    16,
+    16
+  ],
+  "identity_match": 73,
+  "identity_pixel_count": 73,
+  "visible_color_count": 10,
+  "palette": [
+    "#ffffff",
+    "#929292",
+    "#6d0000",
+    "#924924",
+    "#242424",
+    "#db9200",
+    "#920000",
+    "#0049b6",
+    "#dbb66d",
+    "#b6dbdb"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "pure_black": false,
+  "accepted": true
+}

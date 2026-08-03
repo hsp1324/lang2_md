@@ -3623,17 +3623,18 @@
       }
     },
     "summon_replacement_discussion": {
-      "status": "unapproved_discussion_only",
+      "status": "runtime_guards_completed_for_approved_fallback",
       "rom_values_applied": false,
       "recommended_interpretation": "curated_per_record_after_fixed_mercenary_runtime_probe",
       "natural_summon_application_verified": true,
-      "fixed_enemy_mercenary_runtime_behavior_verified": false,
+      "fixed_enemy_mercenary_runtime_behavior_verified": true,
       "fixed_enemy_loading_and_command_menu_verified": true,
-      "fixed_enemy_ai_and_event_behavior_verified": false,
+      "fixed_enemy_ai_and_event_behavior_verified": true,
       "fixed_enemy_ordinary_ai_movement_verified": true,
       "fixed_enemy_first_turn_event_path_verified": true,
-      "fixed_enemy_ordinary_attack_verified": false,
+      "fixed_enemy_ordinary_attack_verified": true,
       "fixed_enemy_natural_magic_ownership_verified": false,
+      "fixed_enemy_natural_magic_required_for_fallback": false,
       "runtime_evidence": {
         "inventory": "localization/runtime_verification.json:summon_targeting_results",
         "fixed_enemy_probe_checksum": "A205",
@@ -3665,7 +3666,27 @@
           "captures/run/9a15_s26_fixed_white_dragon_event.png",
           "captures/run/9a15_s26_fixed_white_dragon_gameover.png"
         ],
-        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces. Diagnostic A205 further proves that Scenario 27 fixed enemy slots load two class 8F White Dragons at the expected coordinates and expose Move/Attack/Magic under the stock all-factions command. Diagnostic 9A15 uses no all-factions command and proves that a fixed class 8F White Dragon moves from (25,19) to (24,21) during Scenario 26's ordinary enemy phase, while the source first-turn event and GAME OVER path complete normally. It does not yet prove a fixed summon personally attacks or receives natural magic ownership"
+        "ordinary_attack_probe_checksum": "D947",
+        "ordinary_attack_probe_sha256": "b4b2023243f001d13df16d8b3cc8c5e764de914be00d4ace9985ee6a41505a7c",
+        "ordinary_attack_probe_scenario": 26,
+        "ordinary_attack_probe_record_offset": "0x182F64",
+        "ordinary_attack_probe_slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "ordinary_attack_probe_target_class": "8F",
+        "ordinary_attack_probe_commander_position": [
+          13,
+          20
+        ],
+        "ordinary_attack_probe_manual_slot_df": 99,
+        "ordinary_attack_probe_capture": "captures/run/d947_s26_fixed_white_dragon_direct_attack.png",
+        "ordinary_attack_probe_capture_sha256": "b3b3880f9246529465ea7044d90d35a5a14bd1ab6421d0d1e57ed9fe28d4cf27",
+        "meaning": "stock summon application creates classes 8D-93 and their Korean status surfaces. Diagnostic A205 further proves that Scenario 27 fixed enemy slots load two class 8F White Dragons at the expected coordinates and expose Move/Attack/Magic under the stock all-factions command. Diagnostic 9A15 uses no all-factions command and proves that a fixed class 8F White Dragon moves from (25,19) to (24,21) during Scenario 26's ordinary enemy phase, while the source first-turn event and GAME OVER path complete normally. Diagnostic D947 places the same ordinary enemy group near a diagnostic Elwin with DF99; a fixed White Dragon then initiates a stock direct battle under ordinary enemy AI. Fixed records still do not receive natural magic ownership, so the approved fallback does not rely on magic"
       },
       "candidate_classes": [
         {
@@ -4231,7 +4252,7 @@
           ]
         }
       ],
-      "decision_warning": "the proposed scenario 26/27 ratios cannot be treated as strict stat upgrades: scenario 26 has zero and scenario 27 has only two same-family slots whose summon candidate does not reduce either base AT or base DF"
+      "decision_warning": "the approved runtime-guarded fallback keeps Scenario 26 unchanged and applies only Scenario 27's two same-family slots whose White Dragon candidate does not reduce base AT or base DF"
     }
   },
   "normal_release": {

@@ -1105,19 +1105,20 @@ def build_inventory(
                 ),
             },
             "summon_replacement_discussion": {
-                "status": "unapproved_discussion_only",
+                "status": "runtime_guards_completed_for_approved_fallback",
                 "rom_values_applied": False,
                 "recommended_interpretation": (
                     "curated_per_record_after_fixed_mercenary_runtime_probe"
                 ),
                 "natural_summon_application_verified": True,
-                "fixed_enemy_mercenary_runtime_behavior_verified": False,
+                "fixed_enemy_mercenary_runtime_behavior_verified": True,
                 "fixed_enemy_loading_and_command_menu_verified": True,
-                "fixed_enemy_ai_and_event_behavior_verified": False,
+                "fixed_enemy_ai_and_event_behavior_verified": True,
                 "fixed_enemy_ordinary_ai_movement_verified": True,
                 "fixed_enemy_first_turn_event_path_verified": True,
-                "fixed_enemy_ordinary_attack_verified": False,
+                "fixed_enemy_ordinary_attack_verified": True,
                 "fixed_enemy_natural_magic_ownership_verified": False,
+                "fixed_enemy_natural_magic_required_for_fallback": False,
                 "runtime_evidence": {
                     "inventory": (
                         "localization/runtime_verification.json:"
@@ -1161,6 +1162,25 @@ def build_inventory(
                         "captures/run/"
                         "9a15_s26_fixed_white_dragon_gameover.png",
                     ],
+                    "ordinary_attack_probe_checksum": "D947",
+                    "ordinary_attack_probe_sha256": (
+                        "b4b2023243f001d13df16d8b3cc8c5e764de914be00d4ace"
+                        "9985ee6a41505a7c"
+                    ),
+                    "ordinary_attack_probe_scenario": 26,
+                    "ordinary_attack_probe_record_offset": "0x182F64",
+                    "ordinary_attack_probe_slots": [0, 1, 2, 3, 4, 5],
+                    "ordinary_attack_probe_target_class": "8F",
+                    "ordinary_attack_probe_commander_position": [13, 20],
+                    "ordinary_attack_probe_manual_slot_df": 99,
+                    "ordinary_attack_probe_capture": (
+                        "captures/run/"
+                        "d947_s26_fixed_white_dragon_direct_attack.png"
+                    ),
+                    "ordinary_attack_probe_capture_sha256": (
+                        "b3b3880f9246529465ea7044d90d35a5a14bd1ab6421d0d1"
+                        "e57ed9fe28d4cf27"
+                    ),
                     "meaning": (
                         "stock summon application creates classes 8D-93 and "
                         "their Korean status surfaces. Diagnostic A205 further "
@@ -1172,8 +1192,12 @@ def build_inventory(
                         "8F White Dragon moves from (25,19) to (24,21) during "
                         "Scenario 26's ordinary enemy phase, while the source "
                         "first-turn event and GAME OVER path complete normally. "
-                        "It does not yet prove a fixed summon personally "
-                        "attacks or receives natural magic ownership"
+                        "Diagnostic D947 places the same ordinary enemy group "
+                        "near a diagnostic Elwin with DF99; a fixed White "
+                        "Dragon then initiates a stock direct battle under "
+                        "ordinary enemy AI. Fixed records still do not receive "
+                        "natural magic ownership, so the approved fallback "
+                        "does not rely on magic"
                     ),
                 },
                 "candidate_classes": summon_candidates,
@@ -1183,10 +1207,10 @@ def build_inventory(
                     summon_candidates,
                 ),
                 "decision_warning": (
-                    "the proposed scenario 26/27 ratios cannot be treated as "
-                    "strict stat upgrades: scenario 26 has zero and scenario "
-                    "27 has only two same-family slots whose summon candidate "
-                    "does not reduce either base AT or base DF"
+                    "the approved runtime-guarded fallback keeps Scenario 26 "
+                    "unchanged and applies only Scenario 27's two same-family "
+                    "slots whose White Dragon candidate does not reduce base "
+                    "AT or base DF"
                 ),
             },
         },
@@ -1670,8 +1694,9 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "",
         "### 후반 소환물 편성 감사",
         "",
-        "> 상태: **미승인 제안**. 원본 후보와 위험만 정리했으며 ROM에는",
-        "> 적용하지 않았다.",
+        "> 상태: **승인된 안전 대체의 런타임 가드 완료**. 이 기준 문서",
+        "> 자체는 ROM을 쓰지 않으며 실제 두 칸 변경은 하드 계획·빌더에서",
+        ">만 적용한다.",
         "",
     ])
     summon_discussion = inventory["balance_discussion"][
@@ -1695,15 +1720,22 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "  이동했고, 원본 첫 턴 이벤트·전투·게임오버가 재시작이나 멈춤 없이",
         "  정상 완료됐다.",
         "- 따라서 고정 소환물의 일반 적 이동 AI와 첫 턴 이벤트 호환성은",
-        "  검증됐다. 이 배치에서는 화이트드래곤 본인의 공격이 발생하지",
-        "  않았으므로 직접 공격과 자연 마법 사용은 계속 미확인이다.",
+        "  검증됐다.",
+        "- 비배포 진단본 `D947`은 같은 26장 적 그룹을 `(13,20)`으로 옮기고",
+        "  여섯 용병을 화이트드래곤으로 바꿨다. 진단용 세이브의 엘윈 DF만",
+        "  `99`로 높여 선행 공격의 즉사를 막았으며, 일반 적 AI 순서에서",
+        "  화이트드래곤이 직접 전투를 시작하는 화면을 확인했다. ROM의 AI,",
+        "  이벤트, 플레이어 좌표는 런타임 GST로 바꾸지 않았다.",
+        "- 고정 레코드의 클래스 ID 변경은 자연 마법 권한을 부여하지 않는다.",
+        "  따라서 안전 대체는 마법 사용을 전제로 하지 않는다.",
         "- 권장 방식은 일괄 N/6 변환이 아니라, 진단 통과 뒤 지휘관별로",
         "  후보를 골라 넣는 방식이다.",
         "- 재현 도구는 `tools/build_fixed_enemy_summon_probe_rom.py`,",
         "  런타임 증거 검증기는",
         "  `tools/verify_fixed_enemy_summon_probe_evidence.py`다. 진단 ROM은",
-        "  `loading`(`A205`)과 `ordinary-ai`(`9A15`) 케이스를 `tmp/`에만",
-        "  만들며 배포·커밋하지 않는다. 런타임 클래스 바이트를 GST에서",
+        "  `loading`(`A205`), `ordinary-ai`(`9A15`),",
+        "  `ordinary-ai-attack`(`D947`) 케이스를 `tmp/`에만 만들며",
+        "  배포·커밋하지 않는다. 런타임 클래스 바이트를 GST에서",
         "  직접 바꾼 시도는 다음 입력에서 타이틀로 재시작되어 증거에서",
         "  제외했으며 반복하지 않는다.",
         "",
@@ -1740,9 +1772,10 @@ def render_markdown(inventory: dict[str, object]) -> str:
         "  만족하는 칸은 0개다.",
         "- 27장은 같은 family 후보가 12칸이며, 뱀파이어배트 2칸을",
         "  화이트드래곤으로 바꾸는 경우만 AT/DF 비감소를 함께 만족한다.",
-        "- 그러므로 기존 초안의 26장 1/6과 27장 주요 지휘관 4/6은",
-        "  순수 상위 승급이 아니다. 그 비율을 원하면 역할 변경과 마법 AI",
-        "  위험까지 포함한 별도 선택으로 승인받아야 한다.",
+        "- 승인된 런타임 가드형 안전 대체는 26장을 원본 편성으로 두고,",
+        "  27장 뱀파이어로드 `0x18321A`의 뱀파이어배트 두 칸만",
+        "  화이트드래곤으로 바꾼다. 기존 최대 비율보다 적지만 같은 family,",
+        "  AT/DF 비감소, 이동·직접 공격·첫 턴 이벤트 조건을 모두 지킨다.",
         "",
         "### 제안된 예외",
         "",

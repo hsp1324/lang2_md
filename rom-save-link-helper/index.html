@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>ROM 업데이트 · 저장 연결 도우미</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>ROM 업데이트 · 저장 연결 도우미</h1>
+        <p>Langrisser II Korean</p>
+      </div>
+      <span class="format-badge">SRAM v1</span>
+    </header>
+
+    <main>
+      <section class="file-band" aria-labelledby="rom-heading">
+        <h2 id="rom-heading">ROM 선택</h2>
+        <div class="file-grid">
+          <div class="file-field" id="currentField">
+            <div>
+              <strong>현재 플레이 ROM</strong>
+              <span id="currentMeta">선택되지 않음</span>
+            </div>
+            <label class="file-button">
+              파일 선택
+              <input id="currentRom" type="file" accept=".md,.bin,.gen">
+            </label>
+          </div>
+          <div class="file-field" id="latestField">
+            <div>
+              <strong>최신 ROM</strong>
+              <span id="latestMeta">선택되지 않음</span>
+            </div>
+            <label class="file-button">
+              파일 선택
+              <input id="latestRom" type="file" accept=".md,.bin,.gen">
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="file-band" aria-labelledby="save-heading">
+        <div class="section-heading">
+          <h2 id="save-heading">저장 연결</h2>
+          <span id="saveState" class="state neutral">선택 사항</span>
+        </div>
+        <div class="save-actions">
+          <label class="file-button secondary">
+            저장 파일 선택
+            <input id="saveFile" type="file" accept=".srm,.sav,.sram">
+          </label>
+          <label class="file-button secondary">
+            저장 폴더 검색
+            <input
+              id="saveDirectory"
+              type="file"
+              webkitdirectory
+              directory
+              multiple
+            >
+          </label>
+          <span id="saveMeta">기존 ROM 이름을 유지하면 선택하지 않아도 됩니다</span>
+        </div>
+      </section>
+
+      <section class="mode-band" aria-labelledby="mode-heading">
+        <h2 id="mode-heading">설치 이름</h2>
+        <div class="segmented" role="radiogroup" aria-label="설치 이름">
+          <label>
+            <input type="radio" name="mode" value="current" checked>
+            <span>기존 ROM 이름 유지</span>
+          </label>
+          <label>
+            <input type="radio" name="mode" value="latest">
+            <span>최신 ROM 이름 사용</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="verification-band" aria-labelledby="verify-heading">
+        <div class="section-heading">
+          <h2 id="verify-heading">호환성 검사</h2>
+          <span id="compatibilityState" class="state neutral">대기</span>
+        </div>
+        <dl>
+          <div>
+            <dt>ROM 크기</dt>
+            <dd id="sizeValue">-</dd>
+          </div>
+          <div>
+            <dt>SRAM 형식</dt>
+            <dd id="sramValue">-</dd>
+          </div>
+          <div>
+            <dt>출력 ROM</dt>
+            <dd id="outputValue">-</dd>
+          </div>
+          <div>
+            <dt>출력 저장</dt>
+            <dd id="saveOutputValue">기존 파일 유지</dd>
+          </div>
+        </dl>
+      </section>
+
+      <div id="message" class="message" role="status" aria-live="polite">
+        현재 플레이 ROM과 최신 ROM을 선택하세요
+      </div>
+
+      <div class="command-bar">
+        <button id="downloadRom" class="primary-command" disabled>
+          연결 ROM 저장
+        </button>
+        <button id="downloadSave" class="secondary-command" hidden disabled>
+          연결 저장 파일 저장
+        </button>
+      </div>
+    </main>
+
+    <script src="core.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

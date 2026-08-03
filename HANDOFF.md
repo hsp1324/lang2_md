@@ -105,6 +105,47 @@ Active work, in order:
 4. Keep editor work limited to fields with proven ROM/runtime ownership; current
    localization completion remains the priority.
 
+### Current non-release preparation glyph-lifetime candidate (2026-08-01)
+
+- Do not diagnose the 1.0.2 screenshots as current-candidate failures. That
+  released build still shows the reported first-display `제리/메스` and
+  `몽크/발리스타` block artifacts. The replacement candidates are normal
+  checksum `CB53`, SHA-256
+  `00f0dec38c01db6489d061476648504164b206d1ef73d57bcb9ec7b63e14d371`
+  and hard checksum `E15E`, SHA-256
+  `f3d5e050eb84999571c9b575f9236ef01076bbba67542e8af183bf62223bf7ad`.
+  They retain old title/version metadata and are not release files.
+- The fix models full preparation-surface lifetime: 121 dynamic characters,
+  26 slots, 64,890 contexts, zero conflicts. `쉐/제` and `키/메` are
+  separated, and preparation scratch tiles no longer overlap the fixed
+  mercenary cache `0x0348..0x0387`.
+- `localization/preparation_manual_review_current_candidate.json` is the
+  checked aggregate. Normal and hard each pass all 27 Scenario 1..27 runs.
+  Every run has a real scenario-identity match, complete visible
+  status/hiring/arrangement/fixed-detail review, exact same-run pre/post-shop
+  pairs, and a real-movement stock gray acted silhouette. The current run ID
+  is `pike-safe-full01`; all 54 reviews were transferred only after every new
+  source and pair hash matched its already reviewed predecessor exactly.
+- Fresh isolated checks pass all 16 mercenaries on six pages in both profiles,
+  including clean `몽크` and `발리스타`; fresh shop checks pass pixel-exact
+  `크로스` and `넥클리스`; fresh class-change frames keep `팔랑크스` and
+  `발리스타`; and the battle cache matches both animation frames in 27/27
+  scenarios per profile. Exact six-Pike active/acted probes pass both profiles.
+  An isolated one-byte hire-unlock diagnostic also proves both Monk active
+  frames (`0x0370..0x0373`, `0x0470..0x0473`) and its acted-gray frame
+  (`0x03D8..0x03DB`) match the original sprite sources in both profiles.
+- `tools/verify_preparation_manual_reviews.py` revalidates every recorded
+  capture/evidence hash. The current H-scroll matrix passes all 162 GST states.
+  Fresh entry/final-RTS debugger pairs change only owned tile `0x03CA` (`론`)
+  in normal and `0x07DB` (`쉐`) in hard, with no H-scroll, mercenary-cache, or
+  other VRAM change. The combined checked gate is
+  `localization/current_candidate_surface_regression.json`. No release build
+  was run at this checkpoint.
+- The complete preparation-surface bug family is closed on this candidate.
+  Formal release acceptance remains pending for complete battle-result paths
+  in Scenario 10 and Scenarios 12 through 27. Do not bump the version or copy a
+  ROM to the desktop until the user explicitly approves release.
+
 Before new work, run `git status --short`, `git log --oneline -5`, and the focused
 tests for the surface being changed. After a coherent unit, regenerate the
 inventories, run the full suite, update this dashboard only if its counts or
@@ -8685,31 +8726,85 @@ contains 57 safe syllables as documented below and in
 
 ### AI Class Design Replacement And Mask Editor (2026-07-25)
 
-- This section supersedes the 2026-07-24 AI-input notes above. The accepted
-  Elwin main infantry line now uses stages 2-5 of
-  `docs/assets/direct_16x16_01_elwin.png` for Lord, High Lord, Sword Master,
-  and Hero. Stage 1 remains reference-only, so Fighter stays byte-exact to
-  the ROM. Elwin Mage and Archmage use
-  `character-ai-v3/elwin/elwin-mage-archmage-source-v3.png`.
+- This section supersedes the 2026-07-24 AI-input notes above. The current
+  Elwin upper-class source is
+  `docs/assets/ai-class-source/elwin-native16-v14`. Swordmaster now has paired
+  2-3-pixel gold/yellow pauldrons inspired by High Lord, as explicitly
+  requested, while keeping one sword per hand. Its accepted raw output matches
+  64/69 identity pixels (92.8%), has 72 connected body/equipment pixels, and
+  retains nine pixels in each sword region. Hero was regenerated from
+  only its original full sprite and user mask with a complete sword connected
+  through blade, guard, grip, hand, and forearm. Both hands have side margin;
+  its raw output matches all 73 mask pixels, and ten AI-derived fill pixels
+  keep the connected body/equipment at 84. Swordmaster was likewise generated
+  from original+mask only and now has one distinct sword per visible hand,
+  with 69/69 raw mask pixels and eight retained pixels in each sword region.
+  Mage, Highlander, and
+  Knight Master were conservatively regenerated with only each class's
+  original full sprite and user mask as image inputs. Earlier AI outputs were
+  excluded for those three. Their original pose, body/mount silhouette,
+  equipment layout, and main color family were prioritized over novel shapes.
+  v14 additionally gives Archmage a small royal-blue/violet mantle and gold
+  trim pass while retaining its v13 body, staff, green gem, and 66/69 raw
+  identity pixels. The other accepted sources remain retained. The direct five-stage
+  and Mage/Archmage v3 sheets remain reference history only. Fighter and every
+  other rank-zero/base class stay byte-exact to the ROM.
 - Commanders 2-10 no longer use `identity-locked-class-boards` as the final
   source or identity reference. Their new per-commander sheets live below
   `docs/assets/ai-class-source/character-ai-v3`. Every sheet was regenerated
   with `references/XX-original.png` as the authoritative face/hair input.
-  Sherry has the original short bob; Aaron and Lester retain the original
+  Sherry and Hein now use newer per-class sources described below; the other
+  commanders continue to use these sheets. Sherry has the original short bob;
+  Aaron and Lester retain the original
   larger head-to-body ratio. The earlier AI boards remain only as history.
 - The final conversion keeps each new AI class silhouette, fits it to 16x16,
   snaps it to the commander's ROM palette, and restores an editable set of
   exact ROM head/face pixels. Rank-zero/base classes remain byte-exact.
   `editor/ai_identity_masks.json` stores only user overrides.
+- Elwin v14 retains the v12 Hero and v13 Swordmaster with paired gold
+  shoulder armor, while retaining the v10 Mage, Highlander, and Knight Master.
+  All five use the corresponding original full-ratio sprite and user-masked
+  identity image; Swordmaster additionally uses High Lord only as the
+  user-requested equipment-style reference.
+  Raw generations must match at least 90% of mask pixels and have at least 45
+  connected lower-body/equipment pixels. Accepted logical16 sources restore
+  all mask coordinates exactly. It also keeps the correction to the mistaken
+  assumption that the mask's top
+  nine rows were all head pixels. Those rows include weapon and transparent
+  identity pixels.
+  Each new generation instead follows the original full 16x16 proportion:
+  visible hair/face is 5-6 logical pixels, while the complete body, equipment,
+  or mount fills 15-16 rows. Lord, High Lord, Bishop, Mage, Archmage,
+  Swordmaster, and Hero are on foot; only Highlander, Knight Master, and Silver
+  Knight are mounted. The final conversion keeps each v14 AI silhouette, maps
+  it to the ROM palette, and restores all 59-73 user-mask pixels byte-exactly.
 - The AI inspector now contains a 16x16 purple mask canvas. Click toggles one
   original-locked pixel; dragging paints or erases continuously. Saving posts
-  to `/api/ai-class-mask`, rebuilds all preview assets, and reloads the
-  manifest. Resetting to the automatic mask removes the override. This is
-  still preview-only and is excluded from `/api/build`.
+  to `/api/ai-class-mask` and persists only that class's mask coordinates.
+  It does not rebuild 170 preview PNGs or comparison sheets. The saved mask
+  is consumed by the next explicit AI-asset build. Resetting to the automatic
+  mask removes the override. This is still preview-only and is excluded from
+  `/api/build`.
 - `tools/build_character_ai_comparison_sheets.py` writes one
   `<character>-ai-and-16x16.png` per commander, containing the generated
   source, converted 16x16, and ROM original side by side. These ten files live
   in the corresponding `character-ai-v3/<character>` directories.
+- Sherry's current source is
+  `docs/assets/ai-class-source/sherry-native16-v1`. It uses only each class's
+  ROM full-ratio image and user mask as image-generation inputs; the previous
+  Sherry AI sheet was excluded. All eleven upper duplicate classes retain the
+  large head, eye/white-eye pixels, and jaw-length short silver bob. Raw
+  identity match is at least 90%, including the final user-edited 74-pixel
+  High Master mask. `sherry-v1-contact-sheet.png` collects all accepted
+  logical16 designs, and `sherry-v1-ai-final-rom.png` compares AI source,
+  converted sprite, and ROM original.
+- Hein's current source is
+  `docs/assets/ai-class-source/latest/hein`. All eleven upper duplicate
+  classes were generated anew from only their ROM originals and user masks;
+  prior AI art is archived under `docs/assets/ai-class-source/archive/hein`.
+  Final sprites preserve the locked identity pixels and use every row and
+  column of the logical 16×16 canvas.
+- The active preview asset version is `hein-full-square-v31`.
 
 ### Scenario 26 Battle And Completion Verification (2026-07-24)
 
@@ -10148,6 +10243,7 @@ contains 57 safe syllables as documented below and in
   name/class/status glyphs, unexpected GAME OVER, reset, or freeze. Scenario
   16 `turn_events` is now `verified_probe`. The runtime matrix is 247/248
   (99.6%); only Scenario 19 `turn_events` remains below a verified state.
+
 ### Scenario 19 Scheduled Turn Events And Live Rewraps (2026-07-26)
 
 - The Japanese Scenario 19 player-name table at `0x182252`, all eight player
@@ -12130,6 +12226,52 @@ contains 57 safe syllables as documented below and in
   rewrite those expected values as part of localization; the owning design and
   probe-baseline work must reconcile them separately.
 
+### Expansion Map-Sprite Inactive-State Fix (2026-07-29)
+
+- The reported Shaman and redesigned Lord corruption is specific to the gray
+  inactive sprite shown after a commander moves or completes an action. The
+  normal two-frame animation remains correct, and the same commander becomes
+  correct again at the start of the next player turn. Accepted Scenario 3
+  before/after states proved that Hein's runtime record changes only at `+02`
+  (`00 -> 01`, acted flag) and `+07` (`14 -> 13`, map position); the normal
+  sprite cache and `0x6000..0xA000` normal-frame VRAM were unchanged.
+- The map loader at `0x0110A8` loads the normal `0x80`-byte frames from
+  `0x052980 + sprite_id * 0x80` and `0x058280 + sprite_id * 0x80`. It also
+  calls `0x011DD8` with base `0x0510C0` to expand a separate `0x40`-byte 1bpp
+  silhouette into the gray `0x80`-byte frame cached at normal slot `+0x3600`.
+  Stock code masks the ID and then executes `LSL.W #6,D0`; custom IDs in the
+  `0x53AD..0x53E1` expansion range therefore wrap in 16 bits and read unrelated
+  ROM bytes. This produced the apparent Hangul fragments after movement. It
+  was not corruption of the redesigned normal animation.
+- `scripts/build_korean_jp_probe.py` now hooks `0x011DD8` with a jump to
+  `0x2B8D40`. The wrapper passes stock IDs through and remaps every one of the
+  53 dense custom IDs `0x53AD..0x53E1` through the word table at
+  `0x2B8E00..0x2B8E69`, then resumes the stock expander at `0x011DDE`.
+  Bald, Loren, generic and commander-specific Shamans, paired NPC sprites, and
+  all 40 redesigned commander/class sprites map back to the silhouette ID from
+  their original class record. Normal custom frames remain unchanged.
+- Fresh isolated Scenario 3 playback on Xvfb `:115` verified three affected
+  paths after an actual one-tile move:
+  `gray_remap_s03_move_confirmed.png` / custom Shaman `53B4 -> 37`,
+  `gray_remap_lord_s03_after_move.png` / Hein High Lord `53CC -> 3A`, and
+  `gray_remap_elwin_lord_s03_after_move.png` / Elwin Lord `53BA -> 1E`.
+  Their saved states are respectively
+  `regression_s03_shaman_gray_remap_after_move.gst`,
+  `regression_s03_high_lord_gray_remap_after_move.gst`, and
+  `regression_s03_elwin_lord_gray_remap_after_move.gst` under
+  `captures/analysis`. In each state, the complete gray VRAM payload at
+  `0x9680`, `0x9680`, or `0x9600` is byte-exact to the stock routine's
+  software-expanded source mask.
+- Candidate
+  `tmp/current-regression-fix/Langrisser II (Korean regression-fix
+  gray-remap).md` is 4 MiB, checksum `A9FE`, SHA-256
+  `4ff67d01332a46145b7f5dc26ff65202781618e5ee0210abc9ab01a57fa12a80`.
+  It has not replaced either 1.0.0 release ROM and does not bump a release
+  version. The focused gray-map/Bald/AI-map/hard-build/byte-UI suite passes
+  68/68. `tests/test_map_sprite_gray_source_remap.py` locks the dense mapping,
+  hook, table, Shaman/Lord sources, blank-space ownership, and the old
+  16-bit-wrap failure.
+
 ### Shop Round-Trip Hiring/Class-Change Follow-Up (2026-07-30)
 
 - The user reports that `글래디에이터`, `쉐리`, and related labels are
@@ -12247,7 +12389,8 @@ contains 57 safe syllables as documented below and in
   and relative repository output paths; an absolute repository-local `tmp`
   path succeeded. A direct debugger breakpoint reached `0x2B7300` immediately
   before the first dynamic write, but its default native `quicksave.state` is
-  not GST evidence. Exact first-draw before/after GST capture remains pending.
+  not GST evidence. This historical pending item is superseded by the
+  current preparation-renderer GST proof recorded below.
 - Focused preparation/ownership/inventory tests pass 46/46, and the 422
   diagnostic-ROM checksum tests pass after rebasing the common builder delta
   by `+0x18A7`. Full discovery runs 1,440 tests and leaves 44 failures plus 3
@@ -12629,3 +12772,79 @@ contains 57 safe syllables as documented below and in
   remain in concurrently modified experimental sprite, hard-mode/runtime
   inventory, and unchanged release-gate modules. The normal/hard candidate
   hashes and checked Scenario 8 report remain byte-exact after the full run.
+
+### Current Preparation Glyph Lifetime Closure (2026-08-01)
+
+- Continue from the current non-release normal checksum `6693` / SHA-256
+  `3028bc7ab75240fdab35d7a09e5c147684173a04c6f9377f2496d72a796a7c05`
+  and hard checksum `19BD` / SHA-256
+  `16f496f887d0abfa2866081224d14870801532f283280aab303ff3a5a002fc14`.
+  Their paths are `tmp/current-glyph-lifetime-fix-normal.md` and
+  `tmp/current-glyph-lifetime-fix-hard.md`. They retain the old visible title
+  and are not release artifacts.
+- The conflict-colored preparation allocation covers 121 unsafe characters in
+  26 owned slots. Static analysis checks 64,890 surface contexts with zero
+  collisions; `쉐/제` and `키/메` no longer share a live surface slot.
+- Hash-bound manual review covers all Scenario 1 through 27 preparation runs
+  in normal and hard profiles. Every allied hiring/status page,
+  arrangement/minimap page, preparation-visible allied/NPC/enemy fixed record,
+  real shop round trip, post-shop repeat, and actual gray acted movement passes.
+  Scenario 3 uses corrected run ID `glyph-lifetime-s03-corrected01`; the other
+  scenarios use `glyph-lifetime-full01`.
+- `tools/verify_preparation_hscroll_matrix.py` checks `pre_shop`, real
+  `shop_item_list`, and `post_shop` GST states for every profile/scenario: 54
+  runs and 162 states. All decode register 11 `00`, register 13 `3D`, H-scroll
+  `F400..F7FF`, and zero nonzero H-scroll bytes. All 26 dynamic slots are
+  outside that allocation. Checked output:
+  `localization/preparation_hscroll_current_candidate.json`.
+- Exact current preparation-renderer first-draw GST pairs are retained under
+  `captures/analysis/preparation_first_draw_current`. Breakpoints bracket
+  entry `0x2BEBC0` and final `RTS` `0x2BEC30`. BlastEm serializes the queued
+  before state at the next 68K synchronization boundary (`PC 0x2BEBF4`), while
+  its full VRAM remains the complete pre-draw payload. Normal changes only
+  tile `0x03C9` (`쉐`); hard changes only tile `0x07D1` (`록`). Each full
+  64KiB comparison changes exactly 32 bytes. VDP registers, all other VRAM,
+  H-scroll, and mercenary icon cache `0x6900..0x70FF` are identical.
+  `tools/verify_preparation_first_draw.py` generates and checks
+  `localization/preparation_first_draw_current_candidate.json`.
+- The all-mercenary probe covers all 16 hire rows over six pages in both
+  profiles; normal/hard pages are byte-identical and `몽크`/`발리스타` retain
+  clean icons. The current three-panel class-change regression keeps
+  `팔랑크스` and `발리스타` intact. Current shop probes keep both `크로스`
+  and `넥클리스` pixel-exact.
+- The preparation/H-scroll ownership defect is closed by current evidence.
+  The cumulative release acceptance remains `pending` because complete battle
+  result coverage is still absent for Scenario 10 and Scenarios 12 through 27.
+  Do not promote a release or bump a version from this checkpoint.
+
+### Current-source preparation revalidation (2026-08-02)
+
+- Rebuilt non-release current-source audit ROMs after the Keith/Lester/Jessica
+  tier-1 LV10 change and the battle target-cursor tile split. Normal is checksum
+  `015C`, SHA-256
+  `eaee0b0443140776a6ad7ae4542a9b41a132ac7c19c4b4b127a61de8b8d74c27`;
+  hard is checksum `1767`, SHA-256
+  `5b391ad132553427d2ededf01651d6215a71ce60dc8e1f0cacb1e45419a17f8a`.
+  Paths are `tmp/current-source-audit-normal.md` and
+  `tmp/current-source-audit-hard.md`; neither is a release artifact.
+- `tools/run_full_surface_regression.py` ran Scenarios 1..27 with six isolated
+  workers per profile (twelve simultaneous emulators). Preparation is 54/54,
+  real gray-acted movement is 54/54, and there are no failed attempts. All 733
+  pre/post-shop pairs per profile and all source surfaces are hash-identical to
+  the prior manually reviewed run, so all 54 reviews transferred through the
+  hash-exact gate.
+- Current-source all-mercenary, Pike, Monk, Cross/Necklace, battle-cache,
+  scenario-identity, 64,890-context glyph-conflict, and 162-state H-scroll
+  phases all pass. The combined summary is
+  `tmp/full_surface_regression/current-source-20260802-01/summary.json`; the
+  tracked aggregate is
+  `localization/current_candidate_surface_regression.json`.
+- Retained first-draw debugger GSTs remain explicitly source evidence. The new
+  `tools/verify_preparation_first_draw_applicability.py` gate verifies their
+  source ROM/GST hashes and exact equality of all five preparation-owned ROM
+  ranges in both current targets. Checked output is
+  `localization/preparation_first_draw_current_applicability.json`.
+- Focused verification passes 31/31 plus all three report `--check` gates.
+  No release ROM, SRAM, save state, title version, or desktop file changed.
+  Complete battle-result acceptance for Scenario 10 and Scenarios 12..27 is
+  still pending, so do not promote a release or version from this checkpoint.

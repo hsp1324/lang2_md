@@ -195,9 +195,9 @@ def role_mapping(
     if commander_id == 5:
         if class_id == 0x0B:
             return {
-                # Match Hein's bright green Lord/Archmage cloth instead of
-                # keeping the red cape from the protected design master.
-                (146, 36, 0, 255): (36, 219, 36, 255),
+                # Use the same restrained green as Hein Mage/Archmage rather
+                # than the former near-neon lime cape.
+                (146, 36, 0, 255): (36, 182, 36, 255),
             }
         return {}
     scheme = COMMANDER_SCHEMES[commander_id]
@@ -217,7 +217,7 @@ def role_mapping(
             }
         if commander_id == 8:
             # Reuse Aaron Knight's blue shield ramp only on High Lord.
-            # Swordmaster keeps the user's existing silver palette.
+            # Swordmaster has its own blue progression mapping below.
             scheme = {
                 **scheme,
                 "dark": (73, 109, 255, 255),
@@ -228,6 +228,15 @@ def role_mapping(
             (73, 73, 109, 255): scheme["dark"],
             (73, 109, 255, 255): scheme["main"],
             (146, 36, 0, 255): scheme["accent"],
+        }
+    if commander_id == 8:
+        # Aaron Swordmaster sits visually between his blue High Lord and
+        # High Master. Keep the silver blades, but give the cloth and light
+        # armor three separated blue roles instead of the former flat gray.
+        return {
+            (73, 73, 109, 255): (36, 73, 219, 255),
+            (73, 36, 36, 255): (73, 109, 255, 255),
+            (146, 36, 36, 255): (109, 219, 255, 255),
         }
     return {
         (73, 73, 109, 255): scheme["dark"],

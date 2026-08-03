@@ -261,6 +261,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--runtime-name")
     parser.add_argument("--capture-prefix", type=Path)
     parser.add_argument("--gst-output", type=Path)
+    parser.add_argument(
+        "--target-gst-output",
+        type=Path,
+        help=(
+            "copy a quicksave made while the magic target overlay is visible; "
+            "used to audit transient battle-marker VRAM ownership"
+        ),
+    )
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--confirmation-delay", type=float, default=0.9)
     parser.add_argument(
@@ -387,6 +395,10 @@ def main() -> int:
             if target_movement:
                 send_steps(target_movement)
             target_path = capture(Path(f"{prefix}_target.png"))
+            if args.target_gst_output is not None:
+                target_state, _, _ = save_and_read_mp(runtime_name)
+                args.target_gst_output.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(target_state, args.target_gst_output)
             if args.final_confirmations < 1:
                 raise ValueError("final confirmations must be at least one")
             for index in range(args.final_confirmations):

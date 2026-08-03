@@ -23,18 +23,18 @@
       "0x07CB",
       "0x0795",
       "0x079C",
-      "0x07D0",
+      "0x07EA",
       "0x07F0",
-      "0x07D1",
+      "0x07EC",
       "0x07E1",
       "0x079D",
       "0x07E0",
-      "0x07D5",
-      "0x07D6",
-      "0x07D8",
-      "0x07D9",
-      "0x07DA",
-      "0x07DB"
+      "0x07D2",
+      "0x07D3",
+      "0x07E4",
+      "0x07E5",
+      "0x07EB",
+      "0x07F1"
     ],
     "preparation_extra_slots": 10,
     "preparation_dynamic_slot_count": 26,
@@ -68,16 +68,16 @@
       "헬"
     ],
     "preparation_extra_tiles": [
-      "0x03CA",
-      "0x03D0",
-      "0x03D1",
-      "0x03D4",
-      "0x03D5",
-      "0x03D7",
-      "0x03D8",
-      "0x03DA",
-      "0x03DF",
-      "0x03E0"
+      "0x0796",
+      "0x07C2",
+      "0x07C4",
+      "0x07C5",
+      "0x07CE",
+      "0x07CF",
+      "0x07D2",
+      "0x07E4",
+      "0x07EB",
+      "0x07ED"
     ]
   },
   "transition_contract": {

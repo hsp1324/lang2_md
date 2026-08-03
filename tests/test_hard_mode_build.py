@@ -16,17 +16,16 @@ BASE_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 UPDATE_REGISTRY = (
     ROOT / "localization/hard_mode_update_releases.json"
 )
-PLAYTEST_ROM = (
-    ROOT / "roms/releases/"
-    "Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
-)
-PLAYTEST_BUILD = (
-    ROOT / "roms/builds/"
-    "Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
-)
+CURRENT_HARD_PROFILE = rom_version.get_profile("hard")
+PLAYTEST_ROM = ROOT / "roms/builds" / CURRENT_HARD_PROFILE["rom_filename"]
+PLAYTEST_BUILD = PLAYTEST_ROM
 SUPERSEDED_PLAYTEST_ROM = (
     ROOT / "roms/releases/archive/"
     "Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md"
+)
+SUPERSEDED_5BE8_PLAYTEST_ROM = (
+    ROOT / "roms/releases/archive/"
+    "Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-5BE8).md"
 )
 
 
@@ -203,7 +202,7 @@ class HardModeBuildTests(unittest.TestCase):
         )
         self.assertEqual(
             registry["current_release"],
-            "ko-hard-t1.0.0-b1.0.0",
+            CURRENT_HARD_PROFILE["release_id"],
         )
         self.assertTrue(
             registry["version_policy"][
@@ -235,7 +234,7 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 1)
+        self.assertEqual(len(history), 2)
         predecessor = history[0]
         payload = SUPERSEDED_PLAYTEST_ROM.read_bytes()
         self.assertEqual(predecessor["md_checksum"], "1011")
@@ -249,6 +248,21 @@ class HardModeBuildTests(unittest.TestCase):
         )
         self.assertEqual(
             predecessor["superseded_by"],
+            history[1]["sha256"],
+        )
+        predecessor_5be8 = history[1]
+        payload_5be8 = SUPERSEDED_5BE8_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor_5be8["md_checksum"], "5BE8")
+        self.assertEqual(
+            predecessor_5be8["sha256"],
+            hashlib.sha256(payload_5be8).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor_5be8["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload_5be8).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor_5be8["superseded_by"],
             registry["releases"][0]["sha256"],
         )
 

@@ -632,8 +632,8 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(
             builder.BYTE_UI_PREP_EXTRA_TILE_IDS,
             (
-                0x03CA, 0x03D0, 0x03D1, 0x03D4,
-                0x03D5, 0x03D7, 0x03D8, 0x03DA, 0x03DF, 0x03E0,
+                0x0796, 0x07C2, 0x07C4, 0x07C5, 0x07CE,
+                0x07CF, 0x07D2, 0x07E4, 0x07EB, 0x07ED,
             ),
         )
         self.assertEqual(len(builder.BYTE_UI_DYNAMIC_TILE_IDS), 16)

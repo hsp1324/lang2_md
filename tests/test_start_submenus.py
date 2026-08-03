@@ -69,6 +69,41 @@ class StartSubmenuTests(unittest.TestCase):
         self.assertEqual(len(self.words(0x9B09C, 9)), 9)
         self.assertEqual(len(self.words(0x9B0AE, 9)), 9)
 
+    def test_load_loader_preserves_visible_main_menu_first_characters(self):
+        chars = builder.collect_chars(
+            *builder.START_MENU_TEXTS,
+            *builder.START_SUBMENU_TEXTS,
+        )
+        glyph_by_char = {
+            char: 0x7000 + index for index, char in enumerate(chars)
+        }
+        patched = bytearray(self.jp)
+        builder.patch_start_menu(patched, glyph_by_char)
+        builder.patch_start_submenus(patched, glyph_by_char)
+
+        expected = {
+            0: "턴",
+            6: "승",
+            10: "저",
+            14: "불",
+            19: "게",
+        }
+        for slot, char in expected.items():
+            with self.subTest(slot=slot, char=char):
+                self.assertEqual(
+                    builder.be16(
+                        patched,
+                        builder.LOAD_MENU_GLYPH_LIST + slot * 2,
+                    ),
+                    glyph_by_char[char],
+                )
+
+        # The load prompt still starts with 불 and its two dynamic status rows
+        # still address 장/턴 after reserving the five background slots.
+        self.assertEqual(builder.be16(patched, 0x9B066), 14)
+        self.assertEqual(builder.be16(patched, 0x9B092), 0)
+        self.assertNotEqual(builder.be16(patched, 0x9B084), 0x3F)
+
     def test_config_entry_describes_the_control_settings_screen(self):
         self.assertIn("조작설정", builder.START_SUBMENU_TEXTS)
         self.assertNotIn("설정완료", builder.START_SUBMENU_TEXTS)

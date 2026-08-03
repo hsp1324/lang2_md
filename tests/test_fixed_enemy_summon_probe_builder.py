@@ -102,6 +102,43 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
         self.assertEqual(report["header_checksum"], "9A15")
         self.assertEqual(report["output_sha256"], case.expected_sha256)
 
+    def test_ordinary_ai_attack_probe_stages_adjacent_white_dragons(self):
+        probe, report = probe_builder.patch_probe(
+            self.normal,
+            "ordinary-ai-attack",
+        )
+        case = probe_builder.PROBE_CASES["ordinary-ai-attack"]
+        record = case.record_offset
+        mercenary_offset = record + FIELD_OFFSETS["mercenaries"]
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.normal, probe))
+            if before != after
+        }
+        target_offsets = {
+            mercenary_offset + slot for slot in range(6)
+        } | {record + FIELD_OFFSETS["x"]}
+
+        self.assertEqual(
+            probe[mercenary_offset : mercenary_offset + 6],
+            bytes((0x8F,) * 6),
+        )
+        self.assertEqual(
+            (
+                probe[record + FIELD_OFFSETS["x"]],
+                probe[record + FIELD_OFFSETS["y"]],
+            ),
+            (13, 20),
+        )
+        self.assertEqual(
+            changed - set(probe_builder.CHECKSUM_OFFSETS),
+            target_offsets,
+        )
+        self.assertEqual(report["source_position"], [24, 20])
+        self.assertEqual(report["target_position"], [13, 20])
+        self.assertEqual(report["header_checksum"], "D947")
+        self.assertEqual(report["output_sha256"], case.expected_sha256)
+
     def test_probe_keeps_normal_release_immutable(self):
         for case_name in probe_builder.PROBE_CASES:
             with self.subTest(case=case_name):
@@ -213,6 +250,24 @@ class FixedEnemySummonProbeBuilderTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "post-event members"):
             evidence_verifier.verify_ordinary_ai_evidence(before, before)
+
+    def test_retained_direct_attack_capture_is_hash_locked(self):
+        evidence_verifier.verify_attack_capture()
+        self.assertEqual(
+            hashlib.sha256(
+                evidence_verifier.DEFAULT_ATTACK_CAPTURE.read_bytes()
+            ).hexdigest(),
+            evidence_verifier.ATTACK_CAPTURE_SHA256,
+        )
+        case = probe_builder.PROBE_CASES["ordinary-ai-attack"]
+        self.assertEqual(
+            f"{case.expected_checksum:04X}",
+            evidence_verifier.ATTACK_PROBE_CHECKSUM,
+        )
+        self.assertEqual(
+            case.expected_sha256,
+            evidence_verifier.ATTACK_PROBE_SHA256,
+        )
 
 
 if __name__ == "__main__":

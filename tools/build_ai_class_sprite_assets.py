@@ -43,7 +43,7 @@ ELWIN_LORD_SOURCE_DIR = (
     ROOT / "docs/assets/ai-class-source/latest/elwin-lord-v2"
 )
 ELWIN_HERO_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/elwin-hero-v2"
+    ROOT / "docs/assets/ai-class-source/latest/elwin-hero-v3"
 )
 ELWIN_MOUNTED_SOURCE_DIR = (
     ROOT / "docs/assets/ai-class-source/latest/elwin-mounted-v2"
@@ -70,6 +70,40 @@ LIANA_LANA_PAIRED_SOURCE_ROOT = (
 SHARED_ARCHMAGE_SOURCE_DIR = (
     ROOT
     / "docs/assets/ai-class-source/latest/shared-archmage-lester-v1"
+    / "logical16"
+)
+SHARED_ELWIN_MAGIC_SOURCE_DIR = (
+    ROOT
+    / "docs/assets/ai-class-source/latest/shared-elwin-magic-v1"
+    / "logical16"
+)
+SHARED_HEIN_WIZARD_SOURCE_DIR = (
+    ROOT
+    / "docs/assets/ai-class-source/latest/shared-wizard-hein-v1"
+    / "logical16"
+)
+SHARED_ELWIN_SWORDMASTER_HIGH_MASTER_SOURCE_DIR = (
+    ROOT
+    / "docs/assets/ai-class-source/latest/"
+    "shared-high-master-elwin-swordmaster-v1"
+    / "logical16"
+)
+SHARED_AARON_SAINT_SOURCE_DIR = (
+    ROOT
+    / "docs/assets/ai-class-source/latest/shared-saint-aaron-v1"
+    / "logical16"
+)
+SHERRY_RANGER_V3_SOURCE_DIR = (
+    ROOT / "docs/assets/ai-class-source/latest/sherry-ranger-v3"
+)
+HEIN_WARLOCK_SORCERER_SOURCE_DIR = (
+    ROOT
+    / "docs/assets/ai-class-source/latest/hein-warlock-sorcerer-v1"
+    / "logical16"
+)
+HEIN_MAGIC_KNIGHT_PALADIN_SOURCE_DIR = (
+    ROOT
+    / "docs/assets/ai-class-source/latest/hein-magic-knight-paladin-v1"
     / "logical16"
 )
 SHARED_HEIN_CLASS_SOURCE_DIR = (
@@ -111,7 +145,7 @@ AI_ASSET_BUILD_LOCK_PATH = (
 )
 GRID_COLUMNS = 5
 GRID_ROWS = 10
-ASSET_VERSION = "shared-dark-boundaries-v64"
+ASSET_VERSION = "class-role-and-mask-polish-v80"
 
 ROM_INK = (36, 36, 36, 255)
 ROM_WHITE = (255, 255, 255, 255)
@@ -461,11 +495,15 @@ SHARED_CLASS_TEMPLATE_SOURCES = {
         for commander_id in (5, 7, 8, 10)
     },
     **{
-        (commander_id, 0x14): (
-            SHARED_ARCHMAGE_SOURCE_DIR
-            / f"{commander_id:02d}-14.png",
-            "레스터 사용자 편집 아크메이지",
+        (commander_id, class_id): (
+            SHARED_ELWIN_MAGIC_SOURCE_DIR
+            / f"{commander_id:02d}-{class_id:02X}.png",
+            {
+                0x13: "엘윈 사용자 리터칭 메이지",
+                0x14: "엘윈 사용자 리터칭 아크메이지",
+            }[class_id],
         )
+        for class_id in (0x13, 0x14)
         for commander_id in (1, 2, 3, 4, 5, 8, 9, 10)
     },
     **{
@@ -480,11 +518,73 @@ SHARED_CLASS_TEMPLATE_SOURCES = {
         )
         for class_id, commander_ids in {
             0x11: (2, 3, 5, 7, 10),
-            0x13: (1, 2, 3, 4, 5, 8, 9, 10),
             0x16: (2, 3, 5, 7, 10),
         }.items()
         for commander_id in commander_ids
     },
+    **{
+        (commander_id, 0x15): (
+            SHARED_HEIN_WIZARD_SOURCE_DIR
+            / f"{commander_id:02d}-15.png",
+            "헤인 위저드 복장 기반 위저드",
+        )
+        for commander_id in (2, 3, 4, 7, 9, 10)
+    },
+    (4, 0x23): (
+        SHARED_ELWIN_SWORDMASTER_HIGH_MASTER_SOURCE_DIR / "04-23.png",
+        "엘윈 소드마스터 장비 기반 쉐리 하이마스터",
+    ),
+    (8, 0x23): (
+        SHARED_ELWIN_SWORDMASTER_HIGH_MASTER_SOURCE_DIR / "08-23.png",
+        "엘윈 소드마스터 장비 기반 아론 하이마스터",
+    ),
+    **{
+        (commander_id, 0x17): (
+            SHARED_AARON_SAINT_SOURCE_DIR
+            / f"{commander_id:02d}-17.png",
+            "아론 사용자 편집 세인트 기반 공통 세인트",
+        )
+        for commander_id in (1, 2, 3, 4, 5, 6, 7, 8, 10)
+    },
+    (4, 0x21): (
+        SHERRY_RANGER_V3_SOURCE_DIR / "04-21.png",
+        "쉐리 하이마스터 계열 기반 경량 레인저",
+    ),
+    (5, 0x09): (
+        HEIN_WARLOCK_SORCERER_SOURCE_DIR / "05-09.png",
+        "헤인 비-AI 워록 원본 기반 소서러",
+    ),
+    (5, 0x19): (
+        HEIN_MAGIC_KNIGHT_PALADIN_SOURCE_DIR / "05-19.png",
+        "헤인 비-AI 매직나이트 원본 기반 팔라딘",
+    ),
+}
+
+# These sources are already target-specific, identity-locked, validated
+# native 16x16 sprites. Re-quantizing them during the aggregate build can
+# collapse intentional colors (notably Jessica's purple) into gray. Preserve
+# their palette byte-for-byte and only refresh visible identity pixels.
+EXACT_SHARED_TEMPLATE_SOURCE_KEYS = {
+    (commander_id, class_id)
+    for class_id in (0x13, 0x14)
+    for commander_id in (1, 2, 3, 4, 5, 8, 9, 10)
+} | {
+    (5, 0x09),
+    (5, 0x19),
+    (4, 0x15),
+    (4, 0x23),
+    (4, 0x21),
+    (8, 0x1A),
+    *{
+        (commander_id, 0x17)
+        for commander_id in (1, 2, 3, 4, 5, 6, 7, 8, 10)
+    },
+    (7, 0x15),
+    (2, 0x15),
+    (3, 0x15),
+    (9, 0x15),
+    (10, 0x15),
+    (8, 0x23),
 }
 
 # Keep editor history on disk, but let an explicitly remapped shared template
@@ -493,22 +593,34 @@ SHARED_CLASS_TEMPLATE_SOURCES = {
 SHARED_TEMPLATE_SUPERSEDES_DESIGN_OVERRIDES = {
     (1, 0x0B),
     (1, 0x13),
+    (4, 0x13),
     (3, 0x0B),
     (5, 0x0B),
     (5, 0x14),
+    (5, 0x13),
+    (9, 0x14),
+    (9, 0x15),
     (10, 0x0B),
     (10, 0x13),
+    (5, 0x19),
+    (8, 0x1A),
 }
 SHARED_TEMPLATE_SUPERSEDED_DESIGN_REVISION_MAX = {
     # A newer editor save is an explicit decision made after the template
     # remap and must win on later rebuilds.
     (1, 0x0B): 1785226614151445208,
     (1, 0x13): 1785226570917742985,
+    (4, 0x13): 1785499435423588529,
     (3, 0x0B): 1785227477665587123,
     (5, 0x0B): 1785045436288669236,
     (5, 0x14): 1785044647857633284,
+    (5, 0x13): 1785044335964980169,
+    (9, 0x14): 1785048405916033984,
+    (9, 0x15): 1785048630530125564,
     (10, 0x0B): 1785226835415926630,
     (10, 0x13): 1785223392722184076,
+    (5, 0x19): 1785506345095324852,
+    (8, 0x1A): 1785120727826534811,
 }
 
 # Jessica's shared High Lord and Swordmaster bodies sit one logical pixel to
@@ -516,7 +628,17 @@ SHARED_TEMPLATE_SUPERSEDED_DESIGN_REVISION_MAX = {
 # the final composition stage so armor, weapons, and user designs stay fixed.
 IDENTITY_PIXEL_TRANSLATIONS = {
     (10, 0x0B): (1, 0),
+    (10, 0x13): (1, 0),
+    (10, 0x14): (1, 0),
     (10, 0x1A): (1, 0),
+}
+
+# Jessica's freshly repainted High Lord mask marks the destination head
+# coordinates (x+1). Read each locked color from the ROM pixel immediately to
+# its left; sampling the ROM at the destination itself shears the eye/hair by
+# one pixel even though the mask box looks correctly shifted.
+IDENTITY_OVERRIDE_SOURCE_OFFSETS = {
+    (10, 0x0B): (-1, 0),
 }
 
 # Preserve the user's newly painted Elwin Swordmaster cape pixels, but use the
@@ -538,12 +660,108 @@ ELWIN_SWORDMASTER_CAPE_POINTS = {
     (12, 15),
     (13, 15),
 }
+JESSICA_HIGH_LORD_CAPE_DARK_POINTS = {
+    (5, 11),
+    (11, 12),
+    (4, 13),
+    (12, 14),
+    (3, 15),
+}
+JESSICA_HIGH_LORD_CAPE_POINTS = {
+    (5, 10),
+    (11, 10),
+    (11, 11),
+    (5, 11),
+    (11, 12),
+    (12, 12),
+    (4, 13),
+    (12, 13),
+    (13, 13),
+    (3, 14),
+    (4, 14),
+    (12, 14),
+    (13, 14),
+    (2, 15),
+    (3, 15),
+    (6, 15),
+    (7, 15),
+    (8, 15),
+    (9, 15),
+    (13, 15),
+}
 FINAL_PIXEL_OVERRIDES = {
     (1, 0x1A): {
         point: (219, 0, 0, 255)
         for point in ELWIN_SWORDMASTER_CAPE_POINTS
     },
+    (10, 0x0B): {
+        point: (
+            (109, 0, 0, 255)
+            if point in JESSICA_HIGH_LORD_CAPE_DARK_POINTS
+            else (219, 0, 0, 255)
+        )
+        for point in JESSICA_HIGH_LORD_CAPE_POINTS
+    },
 }
+
+# All AI-redrawn upper cavalry classes now return to their exact stock ROM
+# rider/horse silhouette. The shared manual mount masks limit recoloring to
+# the mount, while these two-color ramps keep each character and tier distinct.
+# Pure white sword/highlight pixels, dark outlines, skin, and overlapping face
+# pixels are never included in the color map.
+MOUNT_SHADE_VARIANTS = {
+    (1, 0x0C): ((109, 0, 0, 255), (219, 0, 0, 255)),
+    (1, 0x1B): ((0, 36, 109, 255), (36, 109, 219, 255)),
+    (1, 0x1D): ((73, 73, 109, 255), (146, 146, 219, 255)),
+    (1, 0x29): ((109, 73, 0, 255), (255, 182, 0, 255)),
+    (2, 0x19): ((109, 0, 0, 255), (219, 36, 36, 255)),
+    (2, 0x1D): ((146, 0, 109, 255), (255, 73, 146, 255)),
+    (3, 0x19): ((0, 36, 109, 255), (36, 109, 219, 255)),
+    (3, 0x1D): ((0, 109, 146, 255), (73, 219, 255, 255)),
+    (4, 0x19): ((36, 36, 109, 255), (73, 109, 182, 255)),
+    (4, 0x1D): ((73, 73, 109, 255), (146, 146, 219, 255)),
+    (5, 0x19): ((36, 109, 0, 255), (109, 219, 146, 255)),
+    (6, 0x0C): ((36, 109, 0, 255), (146, 146, 146, 255)),
+    (6, 0x19): ((36, 109, 0, 255), (182, 182, 182, 255)),
+    (6, 0x1B): ((109, 0, 0, 255), (219, 0, 0, 255)),
+    (6, 0x1D): ((0, 0, 219, 255), (0, 109, 255, 255)),
+    (6, 0x29): ((109, 73, 36, 255), (255, 219, 109, 255)),
+    (7, 0x19): ((0, 36, 109, 255), (255, 146, 0, 255)),
+    (7, 0x1D): ((36, 73, 109, 255), (182, 146, 146, 255)),
+    (8, 0x0C): ((73, 73, 109, 255), (182, 182, 182, 255)),
+    (8, 0x19): ((109, 109, 109, 255), (182, 182, 182, 255)),
+    (8, 0x1B): ((36, 36, 109, 255), (146, 146, 146, 255)),
+    (9, 0x0C): ((109, 73, 36, 255), (182, 182, 182, 255)),
+    (9, 0x19): ((109, 73, 36, 255), (146, 146, 146, 255)),
+    (9, 0x1B): ((146, 73, 36, 255), (182, 182, 146, 255)),
+    (9, 0x1D): ((73, 73, 109, 255), (182, 182, 182, 255)),
+    (10, 0x19): ((0, 0, 219, 255), (73, 109, 255, 255)),
+}
+MOUNT_COLOR_VARIANTS = {
+    key: {
+        (73, 73, 109, 255): shades[0],
+        (146, 146, 146, 255): shades[1],
+        (146, 73, 36, 255): shades[0],
+        (219, 182, 109, 255): shades[1],
+    }
+    for key, shades in MOUNT_SHADE_VARIANTS.items()
+}
+
+# Lester's three stock Serpent sprites share the same 16x16 geometry. Keep the
+# original blue Serpent Knight as the readable base tier, then recolor only
+# the user's 9:1F mount-mask pixels for increasingly forceful upper tiers.
+MOUNT_COLOR_VARIANTS.update({
+    (9, 0x1F): {
+        (73, 109, 255, 255): (73, 0, 146, 255),
+        (109, 219, 255, 255): (146, 73, 182, 255),
+        (219, 0, 0, 255): (219, 36, 109, 255),
+    },
+    (9, 0x2A): {
+        (73, 109, 255, 255): (146, 0, 0, 255),
+        (109, 219, 255, 255): (219, 36, 36, 255),
+        (219, 0, 0, 255): (255, 109, 109, 255),
+    },
+})
 
 ELWIN_EQUIPMENT_FEATURES = {
     0x04: (
@@ -623,7 +841,6 @@ HEIN_LATEST_SOURCE_FILES = {
 }
 
 AI_SOURCE_ORIGINAL_FILES = {
-    (5, 0x09): HEIN_SORCERER_V2_CLEAN_SOURCE,
     (5, 0x11): (
         SHARED_HEIN_CLASS_SOURCE_DIR.parent
         / "master/hein-11-priest-user-approved.png"
@@ -634,8 +851,46 @@ AI_SOURCE_ORIGINAL_FILES = {
     ),
 }
 
-AI_GENERATED_IDENTITY_KEYS = {
-    (5, 0x09),
+AI_NATIVE_LOGICAL_SOURCE_KEYS: set[tuple[int, int]] = set()
+
+# These classes deliberately keep their stock ROM silhouette. Sherry's Dragon
+# Lord retains its editor palette override; Scott's cavalry and dragon, plus
+# Keith's dragons, use the current AI concept only as a color reference.
+ROM_BASE_DESIGN_KEYS = {
+    (4, 0x1E),
+    (4, 0x24),
+    (6, 0x1E),
+    (7, 0x1E),
+    (7, 0x24),
+    (10, 0x09),
+} | set(MOUNT_COLOR_VARIANTS)
+
+ROM_RECOLOR_VARIANTS = {
+    # Jessica Sorcerer: stock ROM geometry with the same purple/lavender
+    # family used by her shared Mage and Archmage.
+    (10, 0x09): {
+        (109, 0, 0, 255): (73, 36, 109, 255),
+        (219, 0, 0, 255): (146, 73, 182, 255),
+    },
+    # Scott Dragon Lord: keep ROM dragon/rider coordinates and use Sherry's
+    # clearly separated golden-dragon ramp instead of another blue tier.
+    (6, 0x1E): {
+        (73, 109, 255, 255): (182, 109, 36, 255),
+        (109, 219, 255, 255): (219, 146, 36, 255),
+        (109, 0, 0, 255): (146, 0, 0, 255),
+    },
+    # Keith's blue Dragon Knight progresses into royal purple and then a
+    # stronger crimson/gold Dragon Master. The geometry remains stock ROM.
+    (7, 0x1E): {
+        (73, 109, 255, 255): (73, 0, 109, 255),
+        (109, 219, 255, 255): (146, 36, 219, 255),
+        (109, 0, 0, 255): (182, 0, 0, 255),
+    },
+    (7, 0x24): {
+        (73, 109, 255, 255): (109, 0, 36, 255),
+        (109, 219, 255, 255): (219, 36, 109, 255),
+        (109, 0, 0, 255): (219, 146, 0, 255),
+    },
 }
 
 LIANA_LANA_PAIRED_SOURCE_FILES = {
@@ -1844,13 +2099,18 @@ def _build_assets_unlocked(
                 HEIN_LATEST_SOURCE_FILES.items()
             ):
                 key = (commander_id, class_id)
+                if key in {(5, 0x09), (5, 0x19)}:
+                    # These now come from stock ROM class silhouettes through
+                    # the shared-template pass below, not Hein's former AI
+                    # source sheet.
+                    continue
                 source_path = (
                     HEIN_SORCERER_V2_CLEAN_SOURCE
-                    if key in AI_GENERATED_IDENTITY_KEYS
+                    if key in AI_NATIVE_LOGICAL_SOURCE_KEYS
                     else HEIN_LATEST_SOURCE_DIR / filename
                 )
                 targeted_native_source_paths.append(source_path)
-                if key in AI_GENERATED_IDENTITY_KEYS:
+                if key in AI_NATIVE_LOGICAL_SOURCE_KEYS:
                     targeted_native_source_paths.append(
                         HEIN_SORCERER_V2_LOGICAL_SOURCE
                     )
@@ -1874,18 +2134,22 @@ def _build_assets_unlocked(
                     / f"{commander_id}-{class_id:02X}.png"
                 )
                 preview_source.save(target, optimize=True)
-                if key in AI_GENERATED_IDENTITY_KEYS:
+                if key in AI_NATIVE_LOGICAL_SOURCE_KEYS:
                     generated_16 = Image.open(
                         HEIN_SORCERER_V2_LOGICAL_SOURCE
                     ).convert("RGBA")
-                    converted = generated_16.copy()
-                    changed = sum(
-                        converted.getpixel((x, y))
-                        != originals[class_id].getpixel((x, y))
-                        for y in range(16)
-                        for x in range(16)
+                    converted, changed, lock_box, automatic_points = (
+                        identity_locked_character_sprite(
+                            generated_16,
+                            originals[class_id],
+                            palette,
+                            identity_mask_overrides.get(key),
+                            additional_locked_points=(
+                                mount_mask_overrides.get(key)
+                            ),
+                            preserve_generated_palette=True,
+                        )
                     )
-                    automatic_points: set[tuple[int, int]] = set()
                     generated_bbox = converted.getchannel("A").getbbox()
                     if (
                         generated_bbox is None
@@ -1896,7 +2160,6 @@ def _build_assets_unlocked(
                             "Hein Sorcerer AI logical source must use "
                             "all 16 rows"
                         )
-                    lock_box = None
                 else:
                     generated_16 = fill_subject_across_16_columns(
                         isolated,
@@ -2256,6 +2519,29 @@ def _build_assets_unlocked(
                 restore_transparent_locked_points=False,
             )
         )
+        if key in EXACT_SHARED_TEMPLATE_SOURCE_KEYS:
+            converted = generated_16.copy()
+            visible_identity_points = (
+                set(identity_mask_overrides.get(key, automatic_points))
+                | protected_eye_points(original)
+                | set(mount_mask_overrides.get(key, set()))
+            )
+            for point in visible_identity_points:
+                if original.getpixel(point)[3]:
+                    converted.putpixel(point, original.getpixel(point))
+            visible_colors = {
+                color for color in converted.getdata() if color[3]
+            }
+            if len(visible_colors) > 15:
+                raise ValueError(
+                    f"exact shared source exceeds 15 colors: {key}"
+                )
+            changed = sum(
+                converted.getpixel((x, y))
+                != original.getpixel((x, y))
+                for y in range(16)
+                for x in range(16)
+            )
         require_full_16_canvas(
             converted,
             label=(
@@ -2355,26 +2641,31 @@ def _build_assets_unlocked(
                 face_pixel_count = 0
                 source_image = board_subjects[key]
                 source_cell_file = source_cell_files[key]
+                if key in ROM_BASE_DESIGN_KEYS:
+                    image = rom_face.copy()
+                    source_image = rom_face.resize(
+                        (512, 512),
+                        RESAMPLING.NEAREST,
+                    )
+                    source_image.save(
+                        output_dir / source_cell_file,
+                        optimize=True,
+                    )
                 automatic_mask_points = (
                     native_automatic_mask_points[key]
                     if key in native_automatic_mask_points
                     else set(eye_points)
                 )
-                if key in AI_GENERATED_IDENTITY_KEYS:
-                    automatic_mask_points = set()
-                    identity_lock_points = set()
-                    identity_lock_mode = "generated"
-                else:
-                    identity_lock_points = (
-                        set(identity_mask_overrides[key]) | eye_points
-                        if key in identity_mask_overrides
-                        else automatic_mask_points
-                    )
-                    identity_lock_mode = (
-                        "custom"
-                        if key in identity_mask_overrides
-                        else "automatic"
-                    )
+                identity_lock_points = (
+                    set(identity_mask_overrides[key]) | eye_points
+                    if key in identity_mask_overrides
+                    else automatic_mask_points
+                )
+                identity_lock_mode = (
+                    "custom"
+                    if key in identity_mask_overrides
+                    else "automatic"
+                )
                 mount_lock_points = set(
                     mount_mask_overrides.get(key, set())
                 )
@@ -2383,7 +2674,30 @@ def _build_assets_unlocked(
                     if key in mount_mask_overrides
                     else "none"
                 )
-                if key in AI_GENERATED_IDENTITY_KEYS:
+                if key in ROM_BASE_DESIGN_KEYS:
+                    source_kind = (
+                        "원작 ROM 16×16 기반 클래스 색상 편집"
+                    )
+                    source_position = (
+                        "class-sprites/commanders/"
+                        f"{commander_id}/{class_id:02X}-p1.png"
+                    )
+                    if key in MOUNT_COLOR_VARIANTS:
+                        feature = (
+                            "AI 생성 기마 실루엣 폐기·원작 ROM 기수·말 "
+                            "16×16 픽셀 배치 완전 유지·사용자 공유 탈것 "
+                            "마스크 안의 말 명암만 캐릭터·클래스별로 "
+                            "변형·흰 검날·창날·갑옷·얼굴 유지·실제 ROM "
+                            "미적용"
+                        )
+                    else:
+                        feature = (
+                            "AI 생성 드래곤 실루엣 폐기·원작 ROM 기수·"
+                            "드래곤 16×16 픽셀 배치 완전 유지·드래곤 "
+                            "몸·날개 색상만 클래스별로 변형·흰 무기·"
+                            "갑옷·얼굴 유지·실제 ROM 미적용"
+                        )
+                elif key in AI_NATIVE_LOGICAL_SOURCE_KEYS:
                     source_kind = (
                         "OpenAI 신규 헤인 소서러 전용 네이티브 "
                         "논리16 원화"
@@ -2399,7 +2713,8 @@ def _build_assets_unlocked(
                         "신규 AI 생성·생성 단계에서 헤인 얼굴·머리 "
                         "형태 유지·남청색 소서러 로브·목제 지팡이·"
                         "정확한 16×16 논리 격자·메가드라이브 15색·"
-                        "원본 얼굴 덮어쓰기 없음·실제 ROM 미적용"
+                        f"사용자 얼굴 마스크 {len(identity_lock_points)}"
+                        "픽셀과 원본 눈 완전 복원·실제 ROM 미적용"
                     )
                 elif key in supplemental_hidden_keys:
                     source_kind = (
@@ -2420,8 +2735,23 @@ def _build_assets_unlocked(
                 elif key in shared_template_labels:
                     template_label = shared_template_labels[key]
                     template_root = (
-                        "latest/shared-archmage-lester-v1"
-                        if class_id == 0x14
+                        "latest/shared-elwin-magic-v1"
+                        if class_id in {0x13, 0x14}
+                        else "latest/shared-wizard-hein-v1"
+                        if class_id == 0x15
+                        else (
+                            "latest/shared-high-master-"
+                            "elwin-swordmaster-v1"
+                        )
+                        if key in {(4, 0x23), (8, 0x23)}
+                        else "latest/shared-saint-aaron-v1"
+                        if class_id == 0x17
+                        else "latest/sherry-ranger-v3"
+                        if key == (4, 0x21)
+                        else "latest/hein-warlock-sorcerer-v1"
+                        if key == (5, 0x09)
+                        else "latest/hein-magic-knight-paladin-v1"
+                        if key == (5, 0x19)
                         else "latest/shared-lord-elwin-high-lord-v1"
                         if class_id == 0x04
                         else "latest/shared-high-lord-hein-v1"
@@ -2448,6 +2778,32 @@ def _build_assets_unlocked(
                         "메가드라이브 4bpp·"
                         f"변경 {native_changed_pixels[key]}픽셀"
                     )
+                    if key in {(10, 0x13), (10, 0x14)}:
+                        feature += (
+                            "·제시카 하이로드에서 다시 저장한 얼굴 마스크 "
+                            "공유·머리·얼굴 오른쪽 1칸 정렬·자주색 망토·"
+                            "남보라 안감·은보라 로브·연보라 테두리로 "
+                            "장비 면 분리"
+                        )
+                    elif key == (8, 0x04):
+                        feature += (
+                            "·사용자가 정리한 머리 앞 검날 유지·"
+                            "엘윈 로드형 파랑·하늘색 격자 방패"
+                        )
+                    elif key in {(5, 0x13), (5, 0x14)}:
+                        feature += (
+                            "·헤인 공통 짙은 초록·중간 연두·백색 명암"
+                        )
+                    elif key == (5, 0x09):
+                        feature += (
+                            "·AI 실루엣 미사용·워록 ROM 원본 좌표·"
+                            "연두색 망토"
+                        )
+                    elif key == (5, 0x19):
+                        feature += (
+                            "·AI 실루엣 미사용·매직나이트 ROM 원본 "
+                            "기마 좌표·초록 장비·마갑"
+                        )
                 elif commander_id in native_specs:
                     native_spec = native_specs[commander_id]
                     if commander_id == 1 and class_id == 0x04:
@@ -2470,19 +2826,19 @@ def _build_assets_unlocked(
                         )
                     elif commander_id == 1 and class_id == 0x22:
                         source_kind = (
-                            "OpenAI 신규 엘윈 히어로 엄격 논리16 원화"
+                            "엘윈 히어로 네이티브 16×16 직접 리터칭 원화"
                         )
                         source_position = (
-                            "latest/elwin-hero-v2/22-hero.png"
+                            "latest/elwin-hero-v3/22-hero.png"
                         )
                         feature = (
-                            "원작 전체와 현재 73픽셀 얼굴 마스크만 "
-                            "정체성 기준으로 사용해 신규 생성·외소하지 "
-                            "않은 넓은 백은·왕청 중갑 몸통·금장 견갑·"
-                            "짧은 진홍 망토·손과 손잡이에 연결된 대형 "
-                            "히어로 검·보병·16개 행·열 전부 사용·"
-                            "보라색 배경 오염과 완전 검정 제거·"
-                            "메가드라이브 4bpp·원본 머리·얼굴·눈 "
+                            "기존 히어로 v2의 원본 머리·얼굴·눈 "
+                            "73픽셀과 대형 검 실루엣 유지·하체의 "
+                            "백은 견갑·왕청 흉갑·금장·진홍 망토를 "
+                            "큰 픽셀 면으로 단순화·불필요한 단색 "
+                            "노이즈와 장비 경계 정리·보병·16개 행·열 "
+                            "전부 사용·보라색 배경 오염과 완전 검정 "
+                            "제거·메가드라이브 4bpp·원본 머리·얼굴·눈 "
                             f"{len(identity_lock_points)}픽셀 완전 잠금·"
                             f"변경 {native_changed_pixels[key]}픽셀"
                         )
@@ -2735,7 +3091,7 @@ def _build_assets_unlocked(
             if redesigned:
                 if (
                     key not in native_lock_boxes
-                    and key not in AI_GENERATED_IDENTITY_KEYS
+                    and key not in AI_NATIVE_LOGICAL_SOURCE_KEYS
                 ):
                     reserved_eye_colors = {
                         rom_face.getpixel(point)
@@ -2751,11 +3107,7 @@ def _build_assets_unlocked(
                 lock_restore_points = (
                     identity_lock_points | mount_lock_points
                 )
-                identity_lock_transparency_mode = (
-                    "generated"
-                    if key in AI_GENERATED_IDENTITY_KEYS
-                    else "exact"
-                )
+                identity_lock_transparency_mode = "exact"
                 if key in shared_template_labels:
                     lock_restore_points = {
                         point
@@ -2779,6 +3131,24 @@ def _build_assets_unlocked(
                     image = override_image
                     for point in lock_restore_points:
                         image.putpixel(point, rom_face.getpixel(point))
+                    identity_source_offset = (
+                        IDENTITY_OVERRIDE_SOURCE_OFFSETS.get(key)
+                    )
+                    if identity_source_offset is not None:
+                        source_dx, source_dy = identity_source_offset
+                        for x, y in lock_restore_points:
+                            source_point = (
+                                x + source_dx,
+                                y + source_dy,
+                            )
+                            if (
+                                0 <= source_point[0] < 16
+                                and 0 <= source_point[1] < 16
+                            ):
+                                image.putpixel(
+                                    (x, y),
+                                    rom_face.getpixel(source_point),
+                                )
                     feature += "·사용자 16×16 디자인 편집 적용"
                 elif design_override_superseded:
                     feature += (
@@ -2796,11 +3166,7 @@ def _build_assets_unlocked(
                 identity_translation is not None
                 and design_override is not None
             )
-            manifest_eye_points = (
-                set()
-                if key in AI_GENERATED_IDENTITY_KEYS
-                else set(eye_points)
-            )
+            manifest_eye_points = set(eye_points)
             manifest_identity_lock_points = set(identity_lock_points)
             if (
                 identity_translation is not None
@@ -2833,9 +3199,43 @@ def _build_assets_unlocked(
                     f"오른쪽 {dx}칸 이동"
                 )
             elif identity_translation_applied_in_override:
+                dx, dy = identity_translation
+                manifest_eye_points = translate_points(
+                    set(eye_points),
+                    dx,
+                    dy,
+                )
                 feature += (
-                    "·머리·얼굴 오른쪽 1칸 이동을 사용자 최종 "
-                    "디자인에 고정"
+                    "·머리·얼굴은 오른쪽 1칸 목적지 마스크에 "
+                    "ROM 왼쪽 원본 픽셀을 대응해 고정"
+                )
+            rom_color_variant = ROM_RECOLOR_VARIANTS.get(key)
+            if rom_color_variant is not None:
+                for y in range(16):
+                    for x in range(16):
+                        point = (x, y)
+                        if point in manifest_identity_lock_points:
+                            continue
+                        color = image.getpixel(point)
+                        if color in rom_color_variant:
+                            image.putpixel(point, rom_color_variant[color])
+                feature += (
+                    "·원작 소서러 실루엣에서 붉은 로브만 "
+                    "제시카 자주·연보라 계열로 변형"
+                    if key == (10, 0x09)
+                    else "·원작 드래곤 색상 역할만 변형"
+                )
+            mount_color_variant = MOUNT_COLOR_VARIANTS.get(key)
+            if mount_color_variant is not None:
+                for point in (
+                    mount_lock_points - manifest_identity_lock_points
+                ):
+                    color = image.getpixel(point)
+                    if color in mount_color_variant:
+                        image.putpixel(point, mount_color_variant[color])
+                feature += (
+                    "·공유 탈것 마스크 안의 회색 명암만 캐릭터별 "
+                    "색으로 변형·흰 검날·흰 하이라이트 유지"
                 )
             for point, color in FINAL_PIXEL_OVERRIDES.get(
                 key,
@@ -2920,9 +3320,7 @@ def _build_assets_unlocked(
                     identity_lock_transparency_mode
                 ),
                 "identity_mask_pending_rebuild": False,
-                "identity_mask_superseded": (
-                    key in AI_GENERATED_IDENTITY_KEYS
-                ),
+                "identity_mask_superseded": False,
                 "identity_translation": (
                     list(identity_translation)
                     if identity_translation is not None
@@ -3007,10 +3405,12 @@ def _build_assets_unlocked(
             "anisotropic resize; Sherry uses eleven new class-specific AI "
             "sources with each current short-bob face mask locked before "
             "whole-canvas native16 sampling; Lester's user-edited Archmage "
-            "and Hein's approved Mage/Priest/High Priest are shared as "
-            "same-class silhouettes with commander-specific recolors; Hein's "
-            "Sorcerer uses its new generated-identity source without a pasted "
-            "ROM face, and explicit source originals are copied for editor "
+            "Elwin's latest user-retouched Mage/Archmage and Hein's approved "
+            "Priest/High Priest are shared as same-class silhouettes with "
+            "commander-specific recolors; Hein Sorcerer and Paladin use the "
+            "stock Warlock and Magic Knight ROM silhouettes with restrained "
+            "green class recolors and current identity masks restored; "
+            "explicit source originals are copied for editor "
             "comparison) -> connected "
             "full-sprite recovery across nominal cell borders -> nearest "
             "16x16 sample -> adaptive 15-color 4bpp "

@@ -17,7 +17,31 @@ follow this status table so a resume does not repeat already accepted work.
 | 4. Scenarios 11-20 | Runtime matrix complete | All eight cells per scenario are `verified_current` or `verified_probe`; preserve the distinction between natural and diagnostic evidence. |
 | 5. Scenarios 21-31 and endings | Runtime and ending inventory complete | The 90 epilogues, 23 ending visits, 12 montage records, 16 credit groups, and all 61 production credit records are structurally inventoried and renderer-verified through `Fin`. |
 | 6. Full regression and release | Complete | Current source reproduces checksum `99FD`. All 35 release-acceptance checks and 1,199 non-experimental localization/ROM/editor regression tests pass. The inventory links all eight Goal criteria, the `1AB2` runtime matrix, the `5ED9` full-game baseline, and the fully owned `99FD` delta. |
-| 7. Separate hard-mode build | Deferred for balance discussion | Start only after the normal Korean ROM passes Stage 6. Agree on stat scaling, stronger mercenary timing, summon-unit composition, and scenario exceptions with the user before changing any balance value. |
+| 7. Separate hard-mode build | Active candidate regression | The user approved the standard-hard rules and candidate builds exist. Do not promote a release until every scenario entry/first-turn check and the shared-UI transition gates below pass. |
+
+### Current candidate regression gates
+
+- Entering and leaving the shop must not change any Korean character, commander
+  name, class name, or mercenary name in preparation, deployment, hiring,
+  class-change, status, or map-bottom panels.
+- The exact Scenario 6 preparation -> shop -> item list -> preparation -> enemy
+  deployment round trip must retain `쉐리` and all visible
+  `글래디에이터` rows in both the normal and hard candidates.
+- Same-run post-shop preparation and class-change evidence is complete in both
+  candidates: `쉐리`, `메이지`, `엘프`, and `글래디에이터` remain intact.
+  The dedicated mercenary-hiring `글래디에이터` row remains pending in both
+  candidates and must be captured on that exact surface.
+- Hard Scenario 7 post-shop deployment retains `기남`, `제국지휘관`,
+  `네크로맨서`, and `좀비`. Fresh coordinate captures are still required for
+  `그레이트슬라임` and `서펜나이트 / 리자드맨`.
+- Scenario 7 deployment mercenaries appearing on the first enemy turn are
+  stock event timing, not a hard-mode placement defect. Do not repeat this
+  investigation unless the event fails to spawn them.
+- A fix that only makes one captured word readable is insufficient. All shared
+  preparation word renderers must resolve protected Hangul through the
+  preparation dynamic-tile lookup, and their source/evidence checks must pass.
+- Any later font, shop, preparation, class, mercenary, or sprite change reopens
+  this transition gate before a ROM can be promoted.
 
 Stage 2 complete-item checkpoint is closed. Accepted item checkpoint `6C85` splits
 the 86 item-name glyphs at the stock 64-slot VRAM boundary: slots `0..63` stay
@@ -146,21 +170,15 @@ test fails. The authoritative machine-readable state is
 
 ## Stage 7: Separate Hard-Mode Build
 
-- Status: pending user balance discussion. This remains a required follow-up
-  stage of the active project goal, but implementation must not begin merely
-  because the normal Korean build is ready.
+- Status: active candidate regression. The user selected the standard-hard
+  profile; the earlier balance-discussion gate is satisfied.
 - Preserve the normal Korean ROM's Japanese balance and emit hard mode under a
   separate build profile and filename.
-- Before implementation, discuss and agree with the user on scenario-band
-  difficulty targets, enemy commander and mercenary AT/DF scaling, caps,
-  stronger mercenary replacement ratios, late-game summon-unit composition,
-  and boss/support/branch exceptions.
-- Do not choose provisional balance values or patch the normal ROM while that
-  discussion is pending.
-- Treat the completed balance discussion as an explicit approval gate: do not
-  generate or publish a hard-mode ROM until the user accepts the chosen rules.
 - Apply accepted changes through the documented scenario placement/editor data
   model and regression-test each scenario independently.
+- Keep the normal release immutable. Candidate fixes must pass the shared-UI
+  transition gates, including the shop round trip, in both normal and hard
+  builds before the hard release is promoted.
 
 `LV`, `AT`, `DF`, `MP`, and `HP` may remain as standard game abbreviations. Large
 English labels may remain only when they are conventional, space-constrained, and

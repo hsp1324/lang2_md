@@ -130,7 +130,9 @@ def build_inventory(source_rom: bytes) -> dict[str, object]:
         "preparation_dynamic_slots": [
             {
                 "slot": slot,
-                "vram_tile": hex_word(builder.BYTE_UI_DYNAMIC_TILE_IDS[slot]),
+                "vram_tile": hex_word(
+                    builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS[slot]
+                ),
                 "chars": list(group),
                 "reason": (
                     "conflict-colored preparation characters that never "

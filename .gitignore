@@ -13,6 +13,14 @@
 /run*/
 /analysis_tiles/
 /captures/
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+/*.bin
+/vram[0-9]*
+/tmp/
+/editor/static/.ai-class-sprites-build-*/
 *.xwd
 *.log
 

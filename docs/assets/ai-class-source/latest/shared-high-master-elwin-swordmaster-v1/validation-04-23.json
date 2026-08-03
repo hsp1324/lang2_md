@@ -1,0 +1,25 @@
+{
+  "label": "Elwin Swordmaster equipment -> Sherry High Master",
+  "source": "01-1A",
+  "target": "04-23",
+  "identity_match": 74,
+  "identity_pixel_count": 74,
+  "visible_color_count": 12,
+  "palette": [
+    "#242424",
+    "#ffffff",
+    "#49496d",
+    "#006d92",
+    "#ffb600",
+    "#929292",
+    "#924924",
+    "#dbb66d",
+    "#246d92",
+    "#6ddbff",
+    "#002449",
+    "#0000db"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "accepted": true
+}

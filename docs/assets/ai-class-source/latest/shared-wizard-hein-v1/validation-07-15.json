@@ -1,0 +1,24 @@
+{
+  "label": "Hein Wizard outfit -> Keith Wizard",
+  "source": "05-15",
+  "target": "07-15",
+  "identity_match": 61,
+  "identity_pixel_count": 61,
+  "visible_color_count": 11,
+  "palette": [
+    "#242424",
+    "#ffffff",
+    "#924924",
+    "#db9200",
+    "#dbb66d",
+    "#49496d",
+    "#0024b6",
+    "#ff2424",
+    "#929292",
+    "#b69292",
+    "#2449ff"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "accepted": true
+}

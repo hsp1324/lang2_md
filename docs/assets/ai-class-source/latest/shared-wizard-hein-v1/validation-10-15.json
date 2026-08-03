@@ -1,0 +1,26 @@
+{
+  "label": "Hein Wizard outfit -> Jessica Wizard",
+  "source": "05-15",
+  "target": "10-15",
+  "identity_match": 73,
+  "identity_pixel_count": 73,
+  "visible_color_count": 13,
+  "palette": [
+    "#242424",
+    "#ffffff",
+    "#924924",
+    "#496dff",
+    "#0000db",
+    "#db92ff",
+    "#9249b6",
+    "#ff2424",
+    "#dbb66d",
+    "#6ddbff",
+    "#49496d",
+    "#b69292",
+    "#2449ff"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "accepted": true
+}

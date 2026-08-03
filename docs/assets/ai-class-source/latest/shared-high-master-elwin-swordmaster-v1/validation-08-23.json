@@ -1,0 +1,24 @@
+{
+  "label": "Elwin Swordmaster equipment -> Aaron High Master",
+  "source": "01-1A",
+  "target": "08-23",
+  "identity_match": 71,
+  "identity_pixel_count": 71,
+  "visible_color_count": 11,
+  "palette": [
+    "#242424",
+    "#ffffff",
+    "#496dff",
+    "#929292",
+    "#dbb66d",
+    "#924924",
+    "#ffb600",
+    "#49496d",
+    "#6ddbff",
+    "#246d92",
+    "#2449db"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "accepted": true
+}

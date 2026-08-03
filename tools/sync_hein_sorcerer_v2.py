@@ -22,9 +22,13 @@ from tools.build_ai_class_sprite_assets import (  # noqa: E402
     ASSET_VERSION,
     HEIN_SORCERER_V2_CLEAN_SOURCE,
     HEIN_SORCERER_V2_LOGICAL_SOURCE,
+    IDENTITY_MASK_OVERRIDES,
     RESAMPLING,
     SHARED_HEIN_CLASS_SOURCE_DIR,
     dominant_colors,
+    identity_locked_character_sprite,
+    load_pixel_mask_overrides,
+    protected_eye_points,
 )
 from tools.build_class_sprite_assets import render_sprite  # noqa: E402
 
@@ -70,14 +74,16 @@ def sync() -> None:
         if not source.is_file():
             raise FileNotFoundError(source)
 
-    logical = Image.open(HEIN_SORCERER_V2_LOGICAL_SOURCE).convert("RGBA")
-    if logical.size != (16, 16):
+    generated = Image.open(
+        HEIN_SORCERER_V2_LOGICAL_SOURCE
+    ).convert("RGBA")
+    if generated.size != (16, 16):
         raise ValueError("Hein Sorcerer logical source must be 16x16")
-    bbox = logical.getchannel("A").getbbox()
+    bbox = generated.getchannel("A").getbbox()
     if bbox is None or bbox[1] != 0 or bbox[3] != 16:
         raise ValueError("Hein Sorcerer must occupy all 16 logical rows")
     visible_colors = {
-        color for color in logical.getdata() if color[3]
+        color for color in generated.getdata() if color[3]
     }
     if len(visible_colors) > 15:
         raise ValueError("Hein Sorcerer exceeds 15 visible colors")
@@ -97,11 +103,6 @@ def sync() -> None:
         sorcerer_source,
         ASSET_DIR / "source-cells/5-09.png",
     )
-    shutil.copyfile(
-        HEIN_SORCERER_V2_LOGICAL_SOURCE,
-        ASSET_DIR / "5/09.png",
-    )
-
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     manifest["asset_version"] = ASSET_VERSION
     rows = manifest["commanders"]["5"]["classes"]
@@ -113,6 +114,22 @@ def sync() -> None:
         int(row["face_source_sprite_id"]),
         1,
     )
+    identity_masks = load_pixel_mask_overrides(
+        IDENTITY_MASK_OVERRIDES,
+        label="identity",
+    )
+    identity_points = (
+        set(identity_masks[(5, 0x09)])
+        | protected_eye_points(rom_face)
+    )
+    logical, _, _, _ = identity_locked_character_sprite(
+        generated,
+        rom_face,
+        [],
+        identity_masks[(5, 0x09)],
+        preserve_generated_palette=True,
+    )
+    logical.save(ASSET_DIR / "5/09.png", optimize=True)
     changed_pixel_count = sum(
         logical.getpixel((x, y)) != rom_face.getpixel((x, y))
         for y in range(16)
@@ -131,15 +148,20 @@ def sync() -> None:
         ),
         "source_palette": dominant_colors(sorcerer_source),
         "pixel_palette": dominant_colors(logical),
-        "eye_lock_points": [],
-        "eye_lock_pixel_count": 0,
+        "eye_lock_points": [
+            list(point)
+            for point in sorted(protected_eye_points(rom_face))
+        ],
+        "eye_lock_pixel_count": len(protected_eye_points(rom_face)),
         "identity_lock_default_points": [],
-        "identity_lock_points": [],
-        "identity_lock_pixel_count": 0,
-        "identity_lock_mode": "generated",
-        "identity_lock_transparency_mode": "generated",
+        "identity_lock_points": [
+            list(point) for point in sorted(identity_points)
+        ],
+        "identity_lock_pixel_count": len(identity_points),
+        "identity_lock_mode": "custom",
+        "identity_lock_transparency_mode": "exact",
         "identity_mask_pending_rebuild": False,
-        "identity_mask_superseded": True,
+        "identity_mask_superseded": False,
         "identity_lock_box": None,
         "changed_pixel_count": changed_pixel_count,
         "feature": (
@@ -147,7 +169,8 @@ def sync() -> None:
             "헤인 메이지 장비 문법을 레퍼런스로 신규 AI 생성·"
             "생성 단계에서 헤인 얼굴·머리 형태 유지·남청색 "
             "소서러 로브·목제 지팡이·정확한 16×16 논리 격자·"
-            "메가드라이브 15색·원본 얼굴 덮어쓰기 없음·"
+            f"메가드라이브 15색·사용자 얼굴 마스크 "
+            f"{len(identity_points)}픽셀과 원본 눈 완전 복원·"
             "실제 ROM 미적용"
         ),
         "design_override": False,

@@ -51,6 +51,10 @@ def configure_display(args: argparse.Namespace) -> bool:
             "to the physical desktop"
         )
     os.environ["DISPLAY"] = display
+    # Nested capture helpers parse their own --virtual-display default from
+    # this variable.  Keep it synchronized so a caller using :105 does not
+    # silently launch its child sequence on the global :104 default.
+    os.environ["BLASTEM_VIRTUAL_DISPLAY"] = display
     os.environ.pop("WAYLAND_DISPLAY", None)
     os.environ["SDL_VIDEODRIVER"] = "x11"
     return True

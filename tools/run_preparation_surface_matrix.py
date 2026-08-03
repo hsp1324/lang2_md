@@ -42,7 +42,7 @@ from tools.scenario_data import (
 
 
 SCENARIO_MIN = 1
-SCENARIO_MAX = 27
+SCENARIO_MAX = 31
 PLAYER_COMMANDER_COUNT_OFFSET = 0x10
 MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET = 0x0A
 COMMANDER_ROSTER_PAGE_SIZE = 5
@@ -55,6 +55,10 @@ DEFAULT_SEED_GST = (
 )
 DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/preparation_surface_matrix"
 DEFAULT_RUNTIME_ROOT = ROOT / "captures/runtime"
+PREPARATION_LAUNCH_ATTEMPTS = 3
+RUNTIME_GROUP_BASE = 0x603C
+RUNTIME_GROUP_SIZE = 0x60
+RUNTIME_MEMBER_SIZE = 0x0C
 PROFILE_ROMS = {
     "normal": (
         ROOT / "tmp/Langrisser II (Korean prep-pattern-pool-yal probe).md"
@@ -82,6 +86,104 @@ def md_checksum(path: Path) -> str:
     if len(data) < 0x190:
         raise ValueError(f"ROM is too short: {path}")
     return f"{int.from_bytes(data[0x18E:0x190], 'big'):04X}"
+
+
+def runtime_fixed_record_signature(gst: bytes, group_index: int) -> tuple:
+    start = (
+        GST_WORK_RAM_FILE_OFFSET
+        + RUNTIME_GROUP_BASE
+        + group_index * RUNTIME_GROUP_SIZE
+    )
+    end = start + RUNTIME_GROUP_SIZE
+    if len(gst) < end:
+        raise ValueError(
+            f"GST is too short to contain runtime group {group_index}"
+        )
+    record = gst[start:end]
+    return (
+        record[0],
+        record[1],
+        tuple(
+            record[index * RUNTIME_MEMBER_SIZE]
+            for index in range(1, 7)
+        ),
+    )
+
+
+def verify_runtime_scenario_identity(
+    gst_path: Path,
+    rom_path: Path,
+    scenario_number: int,
+) -> dict[str, object]:
+    """Identify the selected scenario from its loaded fixed-record groups.
+
+    A few opening events legitimately alter one or two source records before
+    preparation.  Comparing every scenario and selecting the strongest match
+    is therefore more robust than requiring every byte of the target records
+    to remain unchanged.
+    """
+    gst = gst_path.read_bytes()
+    rom = rom_path.read_bytes()
+    reference = DEFAULT_REFERENCE_ROM.read_bytes()
+    scores = []
+    for candidate in range(SCENARIO_MIN, SCENARIO_MAX + 1):
+        model = read_scenario(rom, reference, candidate)
+        player_groups = player_commander_count(rom, candidate)
+        matched = 0
+        for row in model["records"]:
+            actual = runtime_fixed_record_signature(
+                gst,
+                player_groups + int(row["index"]),
+            )
+            expected = (
+                int(row["class_id"]),
+                int(row["name"]["id"]),
+                tuple(int(value) for value in row["mercenaries"]),
+            )
+            matched += actual == expected
+        total = len(model["records"])
+        scores.append({
+            "scenario": candidate,
+            "matched_records": matched,
+            "total_records": total,
+            "match_ratio": matched / total,
+        })
+    scores.sort(
+        key=lambda row: (
+            float(row["match_ratio"]),
+            int(row["matched_records"]),
+        ),
+        reverse=True,
+    )
+    best = scores[0]
+    runner_up = scores[1]
+    passed = (
+        int(best["scenario"]) == scenario_number
+        and float(best["match_ratio"]) >= 0.75
+        and (
+            float(best["match_ratio"]),
+            int(best["matched_records"]),
+        )
+        > (
+            float(runner_up["match_ratio"]),
+            int(runner_up["matched_records"]),
+        )
+    )
+    result = {
+        "status": "pass" if passed else "fail",
+        "requested_scenario": scenario_number,
+        "identified_scenario": int(best["scenario"]),
+        "best_match": best,
+        "runner_up": runner_up,
+        "gst": str(gst_path),
+    }
+    if not passed:
+        raise RuntimeError(
+            "scenario selector identity mismatch: requested "
+            f"{scenario_number}, identified {best['scenario']} "
+            f"({best['matched_records']}/{best['total_records']} records)"
+        )
+    return result
 
 
 def player_commander_count(data: bytes, scenario_number: int) -> int:
@@ -427,7 +529,9 @@ def fixed_detail_visible(path: Path) -> bool:
     return (
         white / len(pixels) > 0.025
         and map_blue / len(map_pixels) < 0.10
-        and border_gold / len(border_pixels) > 0.10
+        # Late-scenario one-row detail panels have the same valid gold edge,
+        # but only part of it falls inside this fixed-width probe box.
+        and border_gold / len(border_pixels) > 0.05
     )
 
 
@@ -653,6 +757,52 @@ class RuntimeRecorder:
         )
         return path
 
+    def capture_brightest(
+        self,
+        relative: str,
+        *,
+        attempts: int = 10,
+        interval: float = 0.25,
+    ) -> Path:
+        """Capture a deterministic bright phase of a blinking status panel."""
+        if attempts < 1:
+            raise ValueError("bright-phase capture needs at least one attempt")
+        destination = Path(relative)
+        candidates: list[tuple[int, Path]] = []
+        for attempt in range(1, attempts + 1):
+            candidate_relative = (
+                Path("transitions/blink")
+                / destination.parent
+                / f"{destination.stem}_candidate_{attempt:02d}{destination.suffix}"
+            )
+            candidate = self.capture(str(candidate_relative))
+            with Image.open(candidate) as source:
+                pixels = source.convert("RGB").get_flattened_data()
+                score = sum(
+                    red * 299 + green * 587 + blue * 114
+                    for red, green, blue in pixels
+                )
+            candidates.append((score, candidate))
+            if attempt < attempts:
+                time.sleep(interval)
+
+        _, selected = max(candidates, key=lambda row: row[0])
+        path = self.output / destination
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(selected, path)
+        with Image.open(path) as image:
+            dimensions = [image.width, image.height]
+        self.captures.append(
+            {
+                "path": str(destination),
+                "sha256": sha256_path(path),
+                "bytes": path.stat().st_size,
+                "dimensions": dimensions,
+                "blink_phase": "brightest_of_ten",
+            }
+        )
+        return path
+
     def save_gst(self, relative: str) -> Path:
         self.send(["save:1.0"])
         candidates = sorted(
@@ -713,6 +863,41 @@ def ensure_action_row(
         )
 
 
+def ensure_commander_column_focus(
+    recorder: RuntimeRecorder,
+    phase: str,
+) -> None:
+    """Normalize the preparation root to the left commander column.
+
+    Scenario entry can leave the right action list focused, while returning
+    from the shop leaves the left commander column focused.  Both states are
+    valid and render every label correctly, but comparing them produces a
+    full-panel mismatch. Confirming the selected action transfers focus to
+    the commander column without opening a hire/arrangement sub-screen yet.
+    """
+    last_side: str | None = None
+    for attempt in range(1, 5):
+        # The cursor and selected-commander palette share a blink cycle. A
+        # single fixed-delay capture can repeatedly land on the invisible
+        # phase and make menu text look like right-side focus. Sample a full
+        # cycle before deciding whether B is needed.
+        probe = recorder.capture_brightest(
+            f"transitions/{phase}/commander_focus_attempt_{attempt}.png",
+            attempts=10,
+            interval=0.25,
+        )
+        last_side = preparation_focus_side(probe)
+        if last_side == "left":
+            return
+        if last_side == "right":
+            recorder.send(["c"], delay=1.1)
+        else:
+            time.sleep(0.35)
+    raise RuntimeError(
+        f"{phase}: could not focus commander column (last {last_side})"
+    )
+
+
 def scan_allied(
     recorder: RuntimeRecorder,
     phase: str,
@@ -723,12 +908,20 @@ def scan_allied(
             "the preserved canonical seed unexpectedly needs multi-page "
             "hire navigation"
         )
+    ensure_commander_column_focus(recorder, phase)
     previous_status: tuple[bool, ...] | None = None
     for index, commander in enumerate(commander_rows):
         position = int(commander["position"])
         commander_id = int(commander["commander_id"])
-        root = recorder.capture(
-            f"{phase}/allied/commander_{position:02d}_root.png"
+        relative = f"{phase}/allied/commander_{position:02d}_root.png"
+        # The first root can be captured immediately after a long briefing or
+        # shop return. Its roster arrows and selected commander palette share
+        # a roughly two-second blink cycle, so sample a full cycle. Later rows
+        # already have a one-second navigation delay and remain deterministic.
+        root = (
+            recorder.capture_brightest(relative)
+            if position == 1
+            else recorder.capture(relative)
         )
         current_status = status_dhash(root)
         if previous_status is not None and hash_distance(
@@ -911,7 +1104,10 @@ def save_fixed_detail_checkpoint(
     phase: str,
     record: dict[str, object],
 ) -> Path | None:
-    if not record.get("runtime_checkpoint_chars"):
+    if (
+        not record.get("runtime_checkpoint_chars")
+        and os.environ.get("LANG2_SAVE_ALL_FIXED_DETAIL_GST") != "1"
+    ):
         return None
     return recorder.save_gst(
         f"states/{phase}_fixed_{record_slug(record)}.gst"
@@ -979,6 +1175,7 @@ def shop_round_trip(recorder: RuntimeRecorder) -> None:
     item_list = recorder.capture("shop/item_list.png")
     if bright_ratio(item_list, (8, 24, 312, 215)) < 0.01:
         raise RuntimeError("shop item list was captured before it finished drawing")
+    recorder.save_gst("states/shop_item_list.gst")
 
     returned: Path | None = None
     for attempt in range(1, 4):
@@ -1044,47 +1241,66 @@ def launch_to_preparation(
     scenario_number: int,
     runtime_name: str,
     output: Path,
-) -> None:
-    recorder.run_command(
-        [
-            sys.executable,
-            str(RUN_SEQUENCE),
-            "scenario-select",
-            "--rom",
-            str(rom),
-            "--scenario-number",
-            str(scenario_number),
-            "--runtime-name",
-            runtime_name,
-            "--manual-slot-gst",
-            str(seed_gst),
-            "--initial-delay",
-            "6.0",
-            "--virtual-display",
-            recorder.display,
-            "--replace-existing",
-            "--send-event",
-        ]
-    )
-    recorder.run_command(
-        [
-            sys.executable,
-            str(RUN_SEQUENCE),
-            "detect-prep",
-            "--rom",
-            str(rom),
-            "--no-launch",
-            "--confirmation-delay",
-            "0.8",
-            "--max-confirmations",
-            "80",
-            "--capture-prefix",
-            str(output / "briefing/detect.png"),
-            "--virtual-display",
-            recorder.display,
-            "--send-event",
-        ]
-    )
+) -> dict[str, object]:
+    last_error: Exception | None = None
+    for attempt in range(1, PREPARATION_LAUNCH_ATTEMPTS + 1):
+        recorder.run_command(
+            [
+                sys.executable,
+                str(RUN_SEQUENCE),
+                "scenario-select",
+                "--rom",
+                str(rom),
+                "--scenario-number",
+                str(scenario_number),
+                "--runtime-name",
+                runtime_name,
+                "--manual-slot-gst",
+                str(seed_gst),
+                "--initial-delay",
+                "6.0",
+                "--virtual-display",
+                recorder.display,
+                "--replace-existing",
+                "--send-event",
+            ]
+        )
+        try:
+            recorder.run_command(
+                [
+                    sys.executable,
+                    str(RUN_SEQUENCE),
+                    "detect-prep",
+                    "--rom",
+                    str(rom),
+                    "--no-launch",
+                    "--confirmation-delay",
+                    "0.8",
+                    "--max-confirmations",
+                    "80",
+                    "--capture-prefix",
+                    str(output / f"briefing/attempt_{attempt}/detect.png"),
+                    "--virtual-display",
+                    recorder.display,
+                    "--send-event",
+                ]
+            )
+            identity_gst = recorder.save_gst(
+                f"briefing/attempt_{attempt}/scenario_identity.gst"
+            )
+            identity = verify_runtime_scenario_identity(
+                identity_gst,
+                rom,
+                scenario_number,
+            )
+            identity["attempt"] = attempt
+            return identity
+        except (subprocess.CalledProcessError, RuntimeError, ValueError) as exc:
+            last_error = exc
+            terminate_blastem_processes(display=recorder.display)
+    if last_error is None:
+        raise AssertionError("preparation launch retry loop did not run")
+    raise last_error
 
 
 def run_matrix_capture(
@@ -1121,7 +1337,7 @@ def run_matrix_capture(
     roster_pages = int(plan["allied_commanders"]["roster_page_count"])
     started = time.time()
     try:
-        launch_to_preparation(
+        scenario_identity = launch_to_preparation(
             recorder,
             rom,
             seed_gst,
@@ -1137,6 +1353,7 @@ def run_matrix_capture(
         recorder.save_gst("states/pre_shop.gst")
 
         shop_round_trip(recorder)
+        recorder.save_gst("states/shop_returned.gst")
 
         scan_allied(recorder, "post", commander_rows)
         open_arrangement(recorder, "post")
@@ -1174,6 +1391,7 @@ def run_matrix_capture(
             "scenario": scenario_number,
             "run_id": run_id,
             "elapsed_seconds": round(time.time() - started, 3),
+            "scenario_identity": scenario_identity,
             "expected_pair_count": expected_pair_count,
             "actual_pair_count": len(pairs),
             "distinct_pre_fixed_detail_count": len(fixed_hashes),

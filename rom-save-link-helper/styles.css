@@ -1,0 +1,351 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  background: #111412;
+  color: #edf1ed;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #111412;
+}
+
+.topbar {
+  min-height: 76px;
+  padding: 14px clamp(16px, 4vw, 44px);
+  border-bottom: 1px solid #394039;
+  background: #1b201c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.topbar p {
+  margin-top: 2px;
+  color: #a7b0a8;
+  font-size: 0.82rem;
+}
+
+.format-badge {
+  flex: none;
+  padding: 5px 8px;
+  border: 1px solid #58705f;
+  border-radius: 4px;
+  color: #9ddcb1;
+  font: 700 0.75rem/1 monospace;
+}
+
+main {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 28px clamp(16px, 4vw, 44px) 36px;
+}
+
+section {
+  padding: 0 0 26px;
+  margin: 0 0 26px;
+  border-bottom: 1px solid #303630;
+}
+
+h2 {
+  margin-bottom: 12px;
+  color: #cfd6cf;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.file-field {
+  min-height: 92px;
+  padding: 16px;
+  border: 1px solid #454c45;
+  border-radius: 6px;
+  background: #202520;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.file-field.valid {
+  border-color: #4d9f6a;
+}
+
+.file-field.invalid {
+  border-color: #ba625b;
+}
+
+.file-field strong,
+.file-field span {
+  display: block;
+}
+
+.file-field strong {
+  margin-bottom: 7px;
+  font-size: 0.95rem;
+}
+
+.file-field span,
+.save-actions > span {
+  color: #aeb6ae;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.file-button,
+button {
+  min-height: 40px;
+  border: 1px solid #5c675e;
+  border-radius: 5px;
+  background: #2a312b;
+  color: #f2f5f2;
+  font: 650 0.85rem/1 inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.file-button {
+  padding: 0 13px;
+}
+
+.file-button:hover,
+button:hover:not(:disabled) {
+  background: #343c35;
+  border-color: #819083;
+}
+
+.file-button input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.state {
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.state.neutral {
+  color: #aeb6ae;
+}
+
+.state.pass {
+  color: #75d592;
+}
+
+.state.warn {
+  color: #e4bc64;
+}
+
+.state.fail {
+  color: #ed8077;
+}
+
+.save-actions {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.file-button.secondary {
+  background: transparent;
+}
+
+.segmented {
+  width: min(100%, 520px);
+  padding: 3px;
+  border: 1px solid #454c45;
+  border-radius: 6px;
+  background: #1d221e;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.segmented label {
+  position: relative;
+  cursor: pointer;
+}
+
+.segmented input {
+  position: absolute;
+  opacity: 0;
+}
+
+.segmented span {
+  min-height: 38px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  color: #aeb6ae;
+  font-size: 0.82rem;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.segmented input:checked + span {
+  background: #385844;
+  color: #f0f7f2;
+}
+
+dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: #303630;
+}
+
+dl div {
+  min-width: 0;
+  min-height: 66px;
+  padding: 12px 14px;
+  background: #1c211d;
+}
+
+dt {
+  margin-bottom: 7px;
+  color: #8f9a90;
+  font-size: 0.73rem;
+}
+
+dd {
+  margin: 0;
+  color: #e0e6e1;
+  font: 600 0.8rem/1.4 monospace;
+  overflow-wrap: anywhere;
+}
+
+.message {
+  min-height: 48px;
+  padding: 12px 14px;
+  border-left: 3px solid #687269;
+  background: #1c211d;
+  color: #cdd4ce;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.message.pass {
+  border-color: #4caf6b;
+}
+
+.message.fail {
+  border-color: #d16059;
+}
+
+.message.warn {
+  border-color: #d2a84f;
+}
+
+.command-bar {
+  min-height: 64px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+button {
+  padding: 0 17px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.primary-command {
+  border-color: #4b9865;
+  background: #2f7449;
+}
+
+.primary-command:hover:not(:disabled) {
+  background: #388657;
+}
+
+.secondary-command {
+  background: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .file-grid,
+  dl {
+    grid-template-columns: 1fr;
+  }
+
+  .file-field {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .file-button {
+    width: 100%;
+  }
+
+  .save-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .segmented {
+    width: 100%;
+  }
+
+  .command-bar {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}

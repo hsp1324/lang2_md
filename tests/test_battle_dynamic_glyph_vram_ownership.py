@@ -6,6 +6,7 @@ from tools.analyze_preparation_vram_ownership import (
     load_gst,
     referenced_tiles,
     reserved_table_tiles,
+    sprite_referenced_tiles,
 )
 
 
@@ -37,22 +38,52 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
             set(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS).isdisjoint(occupied)
         )
 
-    def test_preparation_only_gray_slots_are_never_battle_destinations(self) -> None:
+    def test_preparation_extra_slots_avoid_all_unit_sprite_caches(self) -> None:
         gray = set(range(0x03B0, 0x03F0))
-        prep_gray = set(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS) & gray
-        self.assertEqual(prep_gray, set(builder.BYTE_UI_PREP_EXTRA_TILE_IDS))
-        self.assertTrue(
-            set(builder.BYTE_UI_DYNAMIC_TILE_IDS).isdisjoint(prep_gray)
-        )
+        ordinary = self.ordinary_mercenary_tiles(include_gray=True)
+        extras = set(builder.BYTE_UI_PREP_EXTRA_TILE_IDS)
+        self.assertTrue(extras.isdisjoint(gray))
+        self.assertTrue(extras.isdisjoint(ordinary))
 
     def test_pike_gray_tile_is_not_a_battle_glyph_destination(self) -> None:
         self.assertNotIn(0x03B0, builder.BYTE_UI_DYNAMIC_TILE_IDS)
         self.assertEqual(builder.KOREAN_CLASS_LABELS[0x62], "파이크")
 
-    def test_preparation_uses_the_audited_battle_map_destinations(self) -> None:
+    def test_preparation_keeps_its_independent_audited_destinations(self) -> None:
+        differences = {
+            index
+            for index, (battle, preparation) in enumerate(
+                zip(
+                    builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS,
+                    builder.BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS,
+                )
+            )
+            if battle != preparation
+        }
+        self.assertEqual(differences, {4, 6, 10, 11, 12, 13, 14, 15})
         self.assertEqual(
-            builder.BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS,
-            builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS,
+            tuple(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[index] for index in (4, 6)),
+            (0x07EA, 0x07EC),
+        )
+        self.assertEqual(
+            tuple(
+                builder.BYTE_UI_PREP_DYNAMIC_MAP_TILE_IDS[index]
+                for index in (4, 6)
+            ),
+            (0x07D0, 0x07D1),
+        )
+
+    def test_battle_slots_preserve_both_target_cursor_graphics(self) -> None:
+        destinations = set(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
+        self.assertTrue(
+            destinations.isdisjoint(builder.BATTLE_TARGET_CURSOR_TILES)
+        )
+        self.assertTrue(
+            destinations.isdisjoint(builder.BATTLE_INVALID_TARGET_CURSOR_TILES)
+        )
+        self.assertEqual(
+            builder.BATTLE_INVALID_TARGET_CURSOR_TILES,
+            tuple(range(0x07D5, 0x07DD)),
         )
 
     def test_preparation_lookup_calls_its_own_destination_renderer(self) -> None:
@@ -87,7 +118,18 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
             state = load_gst(path)
             used.update(referenced_tiles(state))
             reserved.update(reserved_table_tiles(state))
-        self.assertTrue(relocated.isdisjoint(used))
+        # Slots 4/6 deliberately reuse two blank cells whose only retained
+        # Plane references belong to non-battle class-change/dialogue layouts.
+        # Every other battle slot remains fully absent from the old retained
+        # owner set, and all battle slots stay clear of linked SAT sprites.
+        battle_only_blank = set(builder.BATTLE_DYNAMIC_STALE_WINDOW_TILES)
+        self.assertTrue((relocated - battle_only_blank).isdisjoint(used))
+        for path in sorted((ROOT / "captures/analysis").glob("*.gst")):
+            self.assertTrue(
+                battle_only_blank.isdisjoint(
+                    sprite_referenced_tiles(load_gst(path))
+                )
+            )
         self.assertTrue(relocated.isdisjoint(reserved))
 
     def test_map_slots_avoid_all_live_vdp_tables_in_current_battle_states(self) -> None:

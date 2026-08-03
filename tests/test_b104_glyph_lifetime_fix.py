@@ -7,6 +7,10 @@ from tools import build_b104_glyph_lifetime_fix as release
 
 
 ROOT = Path(__file__).resolve().parents[1]
+B104_BATTLE_TILES = (
+    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07D0, 0x07F0, 0x07D1, 0x07E1,
+    0x079D, 0x07E0, 0x07D5, 0x07D6, 0x07D8, 0x07D9, 0x07DA, 0x07DB,
+)
 
 
 class B104GlyphLifetimeFixTests(unittest.TestCase):
@@ -79,7 +83,7 @@ class B104GlyphLifetimeFixTests(unittest.TestCase):
         self.assertEqual(len(self.output), len(self.source))
 
     def test_battle_destinations_avoid_all_ordinary_sprite_caches(self):
-        battle_tiles = set(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
+        battle_tiles = set(B104_BATTLE_TILES)
         ordinary = (
             set(range(0x0348, 0x0388))
             | set(range(0x0448, 0x0488))
@@ -90,7 +94,7 @@ class B104GlyphLifetimeFixTests(unittest.TestCase):
         table = builder.BYTE_UI_DYNAMIC_TILE_ID_TABLE
         encoded = b"".join(
             tile.to_bytes(2, "big")
-            for tile in builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS
+            for tile in B104_BATTLE_TILES
         )
         self.assertEqual(self.output[table : table + len(encoded)], encoded)
 

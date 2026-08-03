@@ -31,10 +31,13 @@ FIRST_MONSTER_RECORD_INDEX = 3
 LAST_MONSTER_RECORD_INDEX = 12
 PROBE_AT = 0
 PROBE_DF = 0
+FIRST_MONSTER_RUNTIME_GROUP = 8
+LAST_MONSTER_RUNTIME_GROUP = 17
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 RUNTIME_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
+RUNTIME_GROUP_SIZE = 0x60
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -94,6 +97,46 @@ def protagonist_death_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def runtime_finish_wrapper_code() -> bytes:
+    code = bytearray()
+    first_monster_x = (
+        RUNTIME_GROUP_BASE
+        + FIRST_MONSTER_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+        + RUNTIME_X_OFFSET
+    )
+    # Hidden Scenario 10 monster records keep X=$FF until the stock TURN 3
+    # reveal places them. Earlier Start presses must remain completely inert.
+    code.extend(bytes.fromhex("0C 39 00 FF"))
+    code.extend(first_monster_x.to_bytes(4, "big"))
+    branch_offset = len(code)
+    code.extend(bytes.fromhex("67 00 00 00"))
+    for group in range(
+        FIRST_MONSTER_RUNTIME_GROUP,
+        LAST_MONSTER_RUNTIME_GROUP + 1,
+    ):
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    return_offset = len(code)
+    displacement = return_offset - (branch_offset + 4)
+    code[branch_offset + 2 : branch_offset + 4] = displacement.to_bytes(
+        2,
+        "big",
+        signed=True,
+    )
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def install_start_wrapper(
     probe: bytearray,
     source: bytes,
@@ -120,10 +163,15 @@ def patch_probe(
     source: bytes,
     *,
     protagonist_death: bool = False,
+    runtime_finish: bool = False,
 ) -> int:
+    if protagonist_death and runtime_finish:
+        raise ValueError(
+            "protagonist-death and runtime-finish modes are mutually exclusive"
+        )
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
-    if protagonist_death:
+    if protagonist_death or runtime_finish:
         for index in range(layout.record_count):
             start = layout.records_offset + index * FIXED_RECORD_SIZE
             end = start + FIXED_RECORD_SIZE
@@ -131,7 +179,12 @@ def patch_probe(
                 raise ValueError(
                     f"input Scenario 10 fixed record {index} differs from Japanese source"
                 )
-        install_start_wrapper(probe, source, protagonist_death_wrapper_code())
+        wrapper = (
+            protagonist_death_wrapper_code()
+            if protagonist_death
+            else runtime_finish_wrapper_code()
+        )
+        install_start_wrapper(probe, source, wrapper)
     else:
         for index in range(
             FIRST_MONSTER_RECORD_INDEX,
@@ -163,6 +216,14 @@ def parse_args() -> argparse.Namespace:
             "player group 0 defeated through Start"
         ),
     )
+    parser.add_argument(
+        "--runtime-finish",
+        action="store_true",
+        help=(
+            "preserve every Scenario 10 record and event, then let Start hide "
+            "and defeat only the ten already-revealed runtime monster groups"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -174,6 +235,7 @@ def main() -> int:
         probe,
         source,
         protagonist_death=args.protagonist_death,
+        runtime_finish=args.runtime_finish,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -185,6 +247,15 @@ def main() -> int:
         print(
             "Start marks only runtime player group 0 defeated, then returns "
             "to the stock Start handler"
+        )
+    elif args.runtime_finish:
+        print(
+            "Scenario 10 runtime-finish mode: all deployments, fixed records, "
+            "and events remain source-identical"
+        )
+        print(
+            "Start hides and defeats only runtime monster groups 8..17, then "
+            "returns to the stock Start handler"
         )
     else:
         print(

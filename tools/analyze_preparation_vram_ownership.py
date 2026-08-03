@@ -147,6 +147,13 @@ def referenced_tiles(state: GstVdpState) -> set[int]:
         for offset in range(base, end, 2):
             tiles.add(int.from_bytes(state.vram[offset : offset + 2], "big") & 0x07FF)
 
+    tiles.update(sprite_referenced_tiles(state))
+    return tiles
+
+
+def sprite_referenced_tiles(state: GstVdpState) -> set[int]:
+    """Return every pattern cell owned by the live linked SAT entries."""
+    tiles: set[int] = set()
     index = 0
     seen: set[int] = set()
     while (
@@ -197,10 +204,8 @@ def retained_ownership_scan(pool: tuple[int, ...]) -> dict[str, object]:
         if not path.name.startswith(("hard_7b41_", "normal_3203_"))
     )
     states = [load_gst(path) for path in paths]
-    used: set[int] = set()
     reserved: set[int] = set()
     for state in states:
-        used.update(referenced_tiles(state))
         reserved.update(reserved_table_tiles(state))
 
     prep_states = [
@@ -211,6 +216,9 @@ def retained_ownership_scan(pool: tuple[int, ...]) -> dict[str, object]:
             for marker in ("prep", "arrang", "roster", "hire", "class_change")
         )
     ]
+    preparation_used: set[int] = set()
+    for state in prep_states:
+        preparation_used.update(referenced_tiles(state))
     variants = {
         tile: {
             state.vram[tile * TILE_BYTES : (tile + 1) * TILE_BYTES]
@@ -221,8 +229,8 @@ def retained_ownership_scan(pool: tuple[int, ...]) -> dict[str, object]:
     return {
         "retained_gst_count": len(states),
         "preparation_like_gst_count": len(prep_states),
-        "pool_has_no_retained_plane_window_sat_reference": all(
-            tile not in used for tile in pool
+        "pool_has_no_retained_preparation_plane_window_sat_reference": all(
+            tile not in preparation_used for tile in pool
         ),
         "pool_is_outside_all_retained_vdp_tables": all(
             tile not in reserved for tile in pool
@@ -382,8 +390,8 @@ def validate_report(report: dict[str, object]) -> None:
         "replacement avoids live H-scroll addresses": replacement[
             "all_pattern_addresses_avoid_live_hscroll"
         ],
-        "replacement has no retained references": replacement[
-            "pool_has_no_retained_plane_window_sat_reference"
+        "replacement has no retained preparation references": replacement[
+            "pool_has_no_retained_preparation_plane_window_sat_reference"
         ],
         "replacement is outside retained VDP tables": replacement[
             "pool_is_outside_all_retained_vdp_tables"

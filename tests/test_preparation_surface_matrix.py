@@ -3,6 +3,7 @@ import json
 import subprocess
 import sys
 import unittest
+from unittest import mock
 
 from tools import run_preparation_surface_matrix as matrix
 
@@ -22,16 +23,17 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.data = NORMAL_ROM.read_bytes()
 
-    def test_player_commander_counts_for_scenarios_one_through_twenty_seven(self):
+    def test_player_commander_counts_for_all_scenarios(self):
         self.assertEqual(
             [
                 matrix.player_commander_count(self.data, number)
-                for number in range(1, 28)
+                for number in range(1, 32)
             ],
             [
                 2, 3, 3, 3, 5, 5, 6, 7, 7,
                 5, 6, 7, 7, 7, 7, 8, 8, 8,
                 8, 8, 8, 8, 9, 9, 9, 10, 10,
+                7, 8, 9, 10,
             ],
         )
 
@@ -157,6 +159,112 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
         self.assertEqual(matrix.preparation_focus_side(frame), "right")
         self.assertEqual(matrix.preparation_action_row(frame), 0)
 
+    def test_first_commander_focus_is_normalized_from_right_to_left(self):
+        right = (
+            ROOT
+            / "captures/run/preparation_surface_matrix/hard/s03/"
+            "b103parallel-full01/pre/allied/commander_01_root.png"
+        )
+        left = (
+            ROOT
+            / "captures/run/preparation_surface_matrix/hard/s03/"
+            "b103parallel-recheck01/pre/allied/commander_01_root.png"
+        )
+
+        class Recorder:
+            def __init__(self):
+                self.frames = [right, left]
+                self.captures = []
+                self.sends = []
+
+            def capture(self, relative):
+                self.captures.append(relative)
+                return self.frames.pop(0)
+
+            def capture_brightest(self, relative, **kwargs):
+                return self.capture(relative)
+
+            def send(self, keys, *, delay=0.75, batched=False):
+                self.sends.append((keys, delay, batched))
+
+        recorder = Recorder()
+        matrix.ensure_commander_column_focus(recorder, "pre")
+        self.assertEqual(
+            recorder.sends,
+            [(["c"], 1.1, False)],
+        )
+        self.assertEqual(len(recorder.captures), 2)
+
+    def test_preparation_launch_retries_a_failed_secret_scenario_detection(self):
+        class Recorder:
+            display = ":998"
+
+            def __init__(self):
+                self.commands = []
+                self.detect_attempts = 0
+
+            def run_command(self, command):
+                self.commands.append(command)
+                if "detect-prep" in command:
+                    self.detect_attempts += 1
+                    if self.detect_attempts == 1:
+                        raise subprocess.CalledProcessError(1, command)
+
+            def save_gst(self, relative):
+                return ROOT / "tmp/retry-test" / relative
+
+        recorder = Recorder()
+        with (
+            mock.patch.object(matrix, "terminate_blastem_processes") as stop,
+            mock.patch.object(
+                matrix,
+                "verify_runtime_scenario_identity",
+                return_value={"status": "pass"},
+            ),
+        ):
+            matrix.launch_to_preparation(
+                recorder,
+                NORMAL_ROM,
+                SEED_GST,
+                31,
+                "retry-test",
+                ROOT / "tmp/retry-test",
+            )
+        self.assertEqual(recorder.detect_attempts, 2)
+        self.assertEqual(
+            sum("scenario-select" in command for command in recorder.commands),
+            2,
+        )
+        stop.assert_called_once_with(display=recorder.display)
+
+    def test_runtime_identity_rejects_the_mislabeled_scenario_three_capture(self):
+        evidence = json.loads(
+            (
+                ROOT
+                / "captures/run/gray_acted_surface_matrix/normal/s03/"
+                "glyph-lifetime-full01/evidence.json"
+            ).read_text(encoding="utf-8")
+        )
+        gst = ROOT / evidence["accepted_attempt"]["active_gst"]
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "requested 3, identified 1",
+        ):
+            matrix.verify_runtime_scenario_identity(gst, NORMAL_ROM, 3)
+
+    def test_runtime_identity_accepts_a_correct_scenario_four_capture(self):
+        evidence = json.loads(
+            (
+                ROOT
+                / "captures/run/gray_acted_surface_matrix/normal/s04/"
+                "glyph-lifetime-full01/evidence.json"
+            ).read_text(encoding="utf-8")
+        )
+        gst = ROOT / evidence["accepted_attempt"]["active_gst"]
+        result = matrix.verify_runtime_scenario_identity(gst, NORMAL_ROM, 4)
+        self.assertEqual(result["status"], "pass")
+        self.assertEqual(result["identified_scenario"], 4)
+
     def test_fixed_detail_detector_rejects_arrangement_and_equipment_shapes(self):
         self.assertTrue(
             matrix.fixed_detail_visible(
@@ -200,6 +308,16 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
         )
         self.assertTrue(matrix.arrangement_roster_visible(roster))
         self.assertFalse(matrix.arrangement_menu_visible(roster))
+
+    def test_late_scenario_single_row_fixed_details_are_detected(self):
+        for scenario in (22, 25):
+            detail = (
+                ROOT
+                / "captures/run/preparation_surface_matrix/hard"
+                / f"s{scenario:02d}/b103parallel-full01/transitions/pre/"
+                "record_00_open_attempt_1.png"
+            )
+            self.assertTrue(matrix.fixed_detail_visible(detail))
 
     def test_plan_cli_emits_machine_readable_unreviewed_policy(self):
         output = subprocess.check_output(

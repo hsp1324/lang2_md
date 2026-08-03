@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "status": "verified_source_behavior",
+  "scenario": 6,
+  "secret_item": {
+    "item": "룬스톤",
+    "guide_coordinate_one_based": [
+      5,
+      4
+    ],
+    "event_trigger_range": "0x18D768..0x18D778",
+    "event_trigger_bytes": "D8AC08F00000050405040018D8D8FFFF",
+    "event_trigger_sha256": "3df45e685c1ac62a7696e3565bb0f79c00edcee654bdb3559eb01f8845b255ae",
+    "handler_range": "0x18D8D8..0x18D8F0",
+    "handler_bytes": "0A020018D8EE13FF0200FF000018E1C8031A0B0002FFFFFF",
+    "handler_sha256": "1c4b5970fe77008fb07f954c15d315da400349ee60352ca00d49ad5ca135aff1",
+    "dialogue_address": "0x18E1C8",
+    "dialogue": "룬스톤을 찾았다!"
+  },
+  "roms": [
+    {
+      "role": "japanese_reference",
+      "path": "roms/original/Langrisser II (Japan).md",
+      "md_checksum": "D79F",
+      "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
+    },
+    {
+      "role": "normal_candidate",
+      "path": "roms/builds/Langrisser II (Korean v1.0.0).md",
+      "md_checksum": "B2A4",
+      "sha256": "78d6ee610b44eb2b657998d112b45c7bebbe91ba11e20a1976dea18bcb384776"
+    },
+    {
+      "role": "hard_candidate",
+      "path": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+      "md_checksum": "FBE2",
+      "sha256": "99a518338269e971bcdbf65b354be5d0109556967afe87b4161dfbd6448800a9"
+    }
+  ],
+  "source_locked_npc_records": [
+    {
+      "fixed_record": 0,
+      "name": "아론",
+      "coordinate": [
+        14,
+        10
+      ]
+    },
+    {
+      "fixed_record": 1,
+      "name": "주민",
+      "coordinate": [
+        5,
+        5
+      ]
+    },
+    {
+      "fixed_record": 2,
+      "name": "주민",
+      "coordinate": [
+        14,
+        4
+      ]
+    },
+    {
+      "fixed_record": 3,
+      "name": "주민",
+      "coordinate": [
+        22,
+        5
+      ]
+    }
+  ],
+  "all_factions_cheat": {
+    "input": [
+      "UP",
+      "LEFT",
+      "UP",
+      "RIGHT",
+      "A",
+      "LEFT",
+      "DOWN",
+      "B",
+      "DOWN",
+      "RIGHT",
+      "A",
+      "B",
+      "DOWN",
+      "RIGHT",
+      "A"
+    ],
+    "input_hold_seconds": 0.05,
+    "input_gap_seconds": 0.05,
+    "hard_candidate_result": "pass",
+    "visual_result": "적 지휘관에서 이동/공격 명령 메뉴가 열림",
+    "capture": "captures/run/hard_fbe2_s06_all_factions_enemy_command.png",
+    "capture_sha256": "65a546640539d6c02b7bafc5475f81d8c9bc43b52de893442baaf1d0340b1a90",
+    "gst": "captures/analysis/hard_fbe2_s06_all_factions_enemy_command.gst",
+    "gst_sha256": "e64d86cc857129a908a9a899764ae17d1096807ab3b1d32bc780f56c4f554abe"
+  },
+  "verdict": [
+    "시나리오 6 룬스톤 트리거와 주민 초기 좌표는 일본 원판, 일반 한국어판, 하드판에서 동일하다.",
+    "주민이 우물 접근을 막는 상황은 원판에도 있는 공략 요소이며 하드판의 좌표 변경이 아니다.",
+    "하드판에서도 원본 전 진영 조작 비기가 작동하므로 비기를 새로 구현하거나 NPC 좌표를 바꾸지 않는다."
+  ]
+}

@@ -77,7 +77,7 @@ class PreparationStatusDynamicGlyphTests(unittest.TestCase):
             [f"0x{tile:04X}" for tile in builder.BYTE_UI_PREP_EXTRA_TILE_IDS],
         )
         self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_CHARS[-1], "헬")
-        self.assertEqual(builder.BYTE_UI_PREP_EXTRA_TILE_IDS[-1], 0x03E0)
+        self.assertEqual(builder.BYTE_UI_PREP_EXTRA_TILE_IDS[-1], 0x07ED)
 
     def test_shop_roundtrip_contract_covers_shared_labels_and_both_builds(self) -> None:
         contract = self.model["transition_contract"]

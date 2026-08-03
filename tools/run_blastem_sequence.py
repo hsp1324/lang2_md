@@ -42,6 +42,7 @@ MANUAL_SLOT_COMMANDER_LEVEL_OFFSET = 0x02
 MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET = 0x03
 MANUAL_SLOT_COMMANDER_AT_OFFSET = 0x04
 MANUAL_SLOT_COMMANDER_DF_OFFSET = 0x05
+MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET = 0x0A
 GST_WORK_RAM_FILE_OFFSET = 0x2478
 MANUAL_SLOT_WORK_RAM_SEGMENTS = (
     (0xA49C, 0x154),
@@ -51,6 +52,9 @@ MANUAL_SLOT_WORK_RAM_SEGMENTS = (
 SRAM_VALID_FLAGS_OFFSET = 0x1FF0
 SRAM_FORMAT_MARKER_OFFSET = 0x1FEE
 SRAM_FORMAT_MARKER = 0x07CA
+BLASTEM_SRAM_SIZE = 0x2000
+GENESIS_PLUS_GX_SRM_SIZE = 0x10000
+GENESIS_PLUS_GX_USED_END = 0x4000
 JP_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 B3 A8 DD FF")
 KO_DEFAULT_HERO_NAME = bytes.fromhex("B4 D9 FF FF FF FF")
 JP_DEFAULT_HERO_DIALOGUE_NAME = bytes.fromhex(
@@ -239,7 +243,11 @@ def scenario_select_keys(
     # 31. Earlier automation incorrectly added target-1 moves, so a Scenario
     # 26 save plus 25 Down presses entered Scenario 20.
     movement_count = (scenario_number - current_scenario_number) % 31
-    movement = ["down:0.08"] * movement_count
+    # A bare 80 ms tap is occasionally lost while the selector is still
+    # settling.  That made an automated Scenario 3 run enter Scenario 1 while
+    # still producing an otherwise valid preparation screen.  Use an explicit
+    # press/release and a short post-key gap so every row movement is observed.
+    movement = ["down@0.12:0.12"] * movement_count
     return [
         *scenario_select_entry_keys(),
         *movement,
@@ -344,6 +352,73 @@ def manual_slot_checksum(data: bytes | bytearray, base: int) -> int:
     ) & 0xFFFF
 
 
+def genesis_plus_gx_srm_to_blastem(payload: bytes) -> bytes:
+    """Extract the 8 KiB cartridge SRAM from a Genesis Plus GX .srm.
+
+    Genesis Plus GX stores this ROM's odd-addressed SRAM bytes in a 64 KiB
+    interleaved image: every even byte and the unused tail are 0xFF.  BlastEm
+    expects the contiguous 8 KiB payload instead.
+    """
+    if len(payload) == BLASTEM_SRAM_SIZE:
+        return payload
+    if len(payload) != GENESIS_PLUS_GX_SRM_SIZE:
+        raise ValueError(
+            "Genesis Plus GX SRAM must be exactly 65536 bytes "
+            f"(got {len(payload)})"
+        )
+    if any(value != 0xFF for value in payload[0:GENESIS_PLUS_GX_USED_END:2]):
+        raise ValueError("Genesis Plus GX SRAM has data in even-byte padding")
+    if any(value != 0xFF for value in payload[GENESIS_PLUS_GX_USED_END:]):
+        raise ValueError("Genesis Plus GX SRAM has data beyond its used range")
+    result = payload[1:GENESIS_PLUS_GX_USED_END:2]
+    if len(result) != BLASTEM_SRAM_SIZE:
+        raise AssertionError("Genesis Plus GX SRAM extraction size changed")
+    marker = int.from_bytes(
+        result[SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2],
+        "big",
+    )
+    if marker != SRAM_FORMAT_MARKER:
+        raise ValueError(
+            "Genesis Plus GX SRAM has invalid format marker "
+            f"0x{marker:04X} != 0x{SRAM_FORMAT_MARKER:04X}"
+        )
+    return result
+
+
+def import_manual_slot_srm(source: Path, destination: Path) -> None:
+    payload = genesis_plus_gx_srm_to_blastem(source.read_bytes())
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(payload)
+
+
+def copy_manual_slot(
+    sram_path: Path,
+    source_index: int,
+    destination_index: int = 0,
+) -> None:
+    """Copy one validated in-game slot, including its stored checksum."""
+    for label, index in (
+        ("source", source_index),
+        ("destination", destination_index),
+    ):
+        if not 0 <= index < len(MANUAL_SLOT_BASES):
+            raise ValueError(f"manual slot {label} index must be 0..3")
+    manual_slot_scenario_number(sram_path, source_index)
+    data = bytearray(sram_path.read_bytes())
+    source = MANUAL_SLOT_BASES[source_index]
+    destination = MANUAL_SLOT_BASES[destination_index]
+    size = MANUAL_SLOT_CHECKSUM_OFFSET + 2
+    data[destination : destination + size] = data[source : source + size]
+    flags = int.from_bytes(
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2], "big"
+    )
+    flags |= 1 << (destination_index + 1)
+    data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = flags.to_bytes(
+        2, "big"
+    )
+    sram_path.write_bytes(data)
+
+
 def manual_slot_scenario_number(
     sram_path: Path,
     slot_index: int = 0,
@@ -395,6 +470,7 @@ def patch_manual_slot_commander_progress(
     new_class: int | None = None,
     new_at: int | None = None,
     new_df: int | None = None,
+    hire_mask_or: int | None = None,
 ) -> tuple[int, int, int]:
     if not 1 <= commander_id <= MANUAL_SLOT_COMMANDER_COUNT:
         raise ValueError(
@@ -409,6 +485,8 @@ def patch_manual_slot_commander_progress(
     for label, value in (("AT", new_at), ("DF", new_df)):
         if value is not None and not 0 <= value <= 99:
             raise ValueError(f"commander {label} must be 0..99")
+    if hire_mask_or is not None and not 0 <= hire_mask_or <= 0xFFFF:
+        raise ValueError("commander hire mask must fit one word")
 
     # This validates the format marker, slot flag, checksum, and scenario before
     # any byte is changed.
@@ -434,6 +512,12 @@ def patch_manual_slot_commander_progress(
         data[record + MANUAL_SLOT_COMMANDER_AT_OFFSET] = new_at
     if new_df is not None:
         data[record + MANUAL_SLOT_COMMANDER_DF_OFFSET] = new_df
+    if hire_mask_or is not None:
+        mask_offset = record + MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET
+        hire_mask = int.from_bytes(data[mask_offset : mask_offset + 2], "big")
+        data[mask_offset : mask_offset + 2] = (
+            hire_mask | hire_mask_or
+        ).to_bytes(2, "big")
     data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET] = level
     data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET] = experience
     checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
@@ -1148,6 +1232,21 @@ def main() -> int:
         help="recover isolated manual slot 1 from a BlastEm GST work-RAM record",
     )
     parser.add_argument(
+        "--manual-slot-srm",
+        type=Path,
+        help=(
+            "seed the isolated runtime from an 8 KiB BlastEm SRAM or a "
+            "64 KiB interleaved Genesis Plus GX .srm"
+        ),
+    )
+    parser.add_argument(
+        "--manual-slot-copy-from",
+        type=int,
+        choices=range(1, len(MANUAL_SLOT_BASES) + 1),
+        metavar="1..4",
+        help="copy this one-based saved slot over slot 1 before launch",
+    )
+    parser.add_argument(
         "--runtime-name",
         help="override the isolated runtime directory name for a diagnostic run",
     )
@@ -1164,6 +1263,14 @@ def main() -> int:
     )
     parser.add_argument("--manual-slot-at", type=int)
     parser.add_argument("--manual-slot-df", type=int)
+    parser.add_argument(
+        "--manual-slot-hire-mask-or",
+        type=lambda value: int(value, 0),
+        help=(
+            "OR a 16-bit mercenary-unlock mask into the selected commander's "
+            "recovered manual-slot roster record"
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--capture-prefix",
@@ -1171,6 +1278,8 @@ def main() -> int:
         help="retain each screen-detection frame as PREFIX_NN.png",
     )
     args = parser.parse_args()
+    if args.manual_slot_gst is not None and args.manual_slot_srm is not None:
+        parser.error("--manual-slot-gst and --manual-slot-srm are mutually exclusive")
     isolated_display = blastem_display.configure_display(args)
     if isolated_display:
         args.xlib_capture = True
@@ -1237,9 +1346,17 @@ def main() -> int:
             / args.rom.stem
             / "save.sram"
         )
+        if args.manual_slot_srm is not None:
+            import_manual_slot_srm(args.manual_slot_srm, sram_path)
+            print(f"imported manual slots from {args.manual_slot_srm}")
         if args.manual_slot_gst is not None:
             recover_manual_slot_from_gst(args.manual_slot_gst, sram_path)
             print(f"recovered cached manual slot 1 from {args.manual_slot_gst}")
+        if args.manual_slot_copy_from is not None:
+            copy_manual_slot(sram_path, args.manual_slot_copy_from - 1)
+            print(
+                f"copied manual slot {args.manual_slot_copy_from} over slot 1"
+            )
         if (
             args.sequence in scenario_selector_sequences
             and args.rom.resolve() == DEFAULT_ROM.resolve()
@@ -1258,6 +1375,7 @@ def main() -> int:
                     new_class=args.manual_slot_class,
                     new_at=args.manual_slot_at,
                     new_df=args.manual_slot_df,
+                    hire_mask_or=args.manual_slot_hire_mask_or,
                 )
             )
             class_summary = (
@@ -1278,6 +1396,11 @@ def main() -> int:
                 + (
                     f", DF {args.manual_slot_df}"
                     if args.manual_slot_df is not None
+                    else ""
+                )
+                + (
+                    f", hire mask OR 0x{args.manual_slot_hire_mask_or:04X}"
+                    if args.manual_slot_hire_mask_or is not None
                     else ""
                 )
             )

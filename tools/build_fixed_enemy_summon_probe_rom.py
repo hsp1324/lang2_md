@@ -53,6 +53,8 @@ class ProbeCase:
     expected_mercenaries: bytes
     slots: tuple[int, ...]
     class_id: int
+    expected_position: tuple[int, int] | None
+    target_position: tuple[int, int] | None
     expected_checksum: int
     expected_sha256: str
 
@@ -70,6 +72,8 @@ PROBE_CASES = {
         ),
         slots=(4, 5),
         class_id=0x8F,
+        expected_position=None,
+        target_position=None,
         expected_checksum=0xA205,
         expected_sha256=(
             "17b1f11927187d093db5b2c72de0b22f602ceb5dd67bcc22363743eeafddfa24"
@@ -87,9 +91,32 @@ PROBE_CASES = {
         ),
         slots=(5,),
         class_id=0x8F,
+        expected_position=None,
+        target_position=None,
         expected_checksum=0x9A15,
         expected_sha256=(
             "66e3b730740c1cd71125eef9cfe9987c2b81050aa63bb5cad02b91eaeec2d39c"
+        ),
+    ),
+    "ordinary-ai-attack": ProbeCase(
+        name="ordinary-ai-attack",
+        purpose=(
+            "ordinary enemy direct-attack compatibility with fixed summons"
+        ),
+        scenario=26,
+        record_index=0,
+        record_offset=0x182F64,
+        side=0x04,
+        expected_mercenaries=bytes(
+            (0x76, 0x76, 0x76, 0x76, 0x77, 0x77)
+        ),
+        slots=(0, 1, 2, 3, 4, 5),
+        class_id=0x8F,
+        expected_position=(24, 20),
+        target_position=(13, 20),
+        expected_checksum=0xD947,
+        expected_sha256=(
+            "b4b2023243f001d13df16d8b3cc8c5e764de914be00d4ace9985ee6a41505a7c"
         ),
     ),
 }
@@ -162,6 +189,21 @@ def patch_probe(
     )
     for offset in target_offsets:
         output[offset] = case.class_id
+    position_offsets: frozenset[int] = frozenset()
+    if case.target_position is not None:
+        if case.expected_position is None:
+            raise AssertionError("probe target position has no source guard")
+        x_offset = record_offset + FIELD_OFFSETS["x"]
+        y_offset = record_offset + FIELD_OFFSETS["y"]
+        current_position = (source[x_offset], source[y_offset])
+        if current_position != case.expected_position:
+            raise ValueError(
+                "probe target position changed: "
+                f"expected {case.expected_position!r}, "
+                f"got {current_position!r}"
+            )
+        output[x_offset], output[y_offset] = case.target_position
+        position_offsets = frozenset((x_offset, y_offset))
     checksum = update_checksum(output)
     output_sha256 = hashlib.sha256(output).hexdigest()
 
@@ -170,7 +212,7 @@ def patch_probe(
         for index, (before, after) in enumerate(zip(source, output))
         if before != after
     )
-    allowed_offsets = target_offsets | CHECKSUM_OFFSETS
+    allowed_offsets = target_offsets | position_offsets | CHECKSUM_OFFSETS
     if not target_offsets.issubset(changed_offsets):
         raise AssertionError("probe did not change every requested soldier slot")
     if changed_offsets - allowed_offsets:
@@ -203,8 +245,19 @@ def patch_probe(
         ],
         "patched_slots": list(case.slots),
         "patched_class_id": f"{case.class_id:02X}",
+        "source_position": (
+            list(case.expected_position)
+            if case.expected_position is not None
+            else None
+        ),
+        "target_position": (
+            list(case.target_position)
+            if case.target_position is not None
+            else None
+        ),
         "target_offsets": [
-            f"0x{offset:06X}" for offset in sorted(target_offsets)
+            f"0x{offset:06X}"
+            for offset in sorted(target_offsets | position_offsets)
         ],
         "changed_offsets": [
             f"0x{offset:06X}" for offset in sorted(changed_offsets)

@@ -20,9 +20,13 @@
     "commander_stats": "fixed scenario records",
     "enemy_soldier_corrections": "expanded-ROM per-record table and loader hook",
     "shared_class_records_modified": false,
-    "mercenary_policy": "conservative same-family replacements first, left-to-right up to the per-commander quota; empty slots stay empty",
+    "mercenary_policy": "conservative same-family replacements first, left-to-right up to the per-commander quota; empty slots stay empty; every scenario stays within the ten-entry dynamic battle sprite cache",
+    "enemy_ordinary_mercenary_cache_reused": true,
+    "enemy_dynamic_mercenary_cache_capacity": 10,
     "conditional_mercenary_pairs_applied": false,
-    "summon_units_applied": false,
+    "summon_units_applied": true,
+    "summon_policy": "Scenario 26 keeps the original formation; Scenario 27 record 0x18321A slots 4-5 replace Vampire Bat 87 with White Dragon 8F after fixed loading, ordinary movement, direct attack, and first-turn event verification",
+    "fixed_summon_natural_magic_required": false,
     "runtime_exception_manifest": "localization/hard_mode_runtime_exceptions.json",
     "runestone_expectation": {
       "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
@@ -44,8 +48,8 @@
     "target_record_count": 300,
     "commander_change_record_count": 300,
     "soldier_correction_record_count": 300,
-    "mercenary_replacement_slot_count": 304,
-    "summon_replacement_slot_count": 0
+    "mercenary_replacement_slot_count": 302,
+    "summon_replacement_slot_count": 2
   },
   "automatic_exclusions": [
     {
@@ -93,6 +97,16 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 2,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          122,
+          123
+        ],
+        "dynamic_class_count": 3,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 8,
@@ -145,7 +159,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -199,7 +214,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -217,6 +233,15 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 6,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          117
+        ],
+        "dynamic_class_count": 2,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 4,
@@ -269,7 +294,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -323,7 +349,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -377,7 +404,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -431,7 +459,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -485,7 +514,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -539,7 +569,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -557,6 +588,17 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 8,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          117,
+          121,
+          126
+        ],
+        "dynamic_class_count": 4,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 2,
@@ -609,7 +651,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -663,7 +706,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -717,7 +761,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -771,7 +816,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -825,7 +871,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -879,7 +926,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -933,7 +981,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -987,7 +1036,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -1005,6 +1055,18 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 6,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          117,
+          118,
+          121,
+          126
+        ],
+        "dynamic_class_count": 5,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 5,
@@ -1057,7 +1119,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1111,7 +1174,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1165,7 +1229,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1219,7 +1284,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1273,7 +1339,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1327,7 +1394,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -1345,6 +1413,18 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 9,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          118,
+          121,
+          126,
+          131
+        ],
+        "dynamic_class_count": 5,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -1397,7 +1477,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1451,7 +1532,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1505,7 +1587,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1559,7 +1642,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1613,7 +1697,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1667,7 +1752,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1721,7 +1807,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1775,7 +1862,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1829,7 +1917,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -1847,6 +1936,21 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 9,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          117,
+          118,
+          121,
+          122,
+          125,
+          126,
+          127
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 4,
@@ -1905,7 +2009,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -1965,7 +2070,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2025,7 +2131,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2085,7 +2192,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2145,7 +2253,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2205,7 +2314,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2265,7 +2375,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2325,7 +2436,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2379,7 +2491,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -2397,6 +2510,20 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 8,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          116,
+          120,
+          125,
+          128,
+          129,
+          140
+        ],
+        "dynamic_class_count": 7,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 4,
@@ -2449,7 +2576,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2509,7 +2637,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2569,7 +2698,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2623,7 +2753,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2677,7 +2808,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2731,7 +2863,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2785,7 +2918,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2845,7 +2979,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -2863,6 +2998,21 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          116,
+          118,
+          121,
+          122,
+          125,
+          126,
+          127
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -2915,7 +3065,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -2969,7 +3120,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3029,7 +3181,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3089,7 +3242,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3149,7 +3303,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3209,7 +3364,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3263,7 +3419,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3317,7 +3474,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3371,7 +3529,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3431,7 +3590,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3491,7 +3651,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -3509,6 +3670,21 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          115,
+          116,
+          118,
+          121,
+          122,
+          123,
+          125
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 3,
@@ -3567,7 +3743,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3621,7 +3798,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3675,7 +3853,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3729,7 +3908,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3783,7 +3963,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3843,7 +4024,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3903,7 +4085,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -3963,7 +4146,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4023,7 +4207,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4083,7 +4268,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -4101,6 +4287,16 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 13,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          120,
+          131,
+          140
+        ],
+        "dynamic_class_count": 3,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -4153,7 +4349,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4207,7 +4404,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4261,7 +4459,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4315,7 +4514,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4369,7 +4569,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4423,7 +4624,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4477,7 +4679,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4531,7 +4734,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4585,7 +4789,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4639,7 +4844,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4693,7 +4899,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4747,7 +4954,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4801,7 +5009,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -4819,6 +5028,23 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          115,
+          116,
+          118,
+          120,
+          121,
+          122,
+          124,
+          125,
+          126,
+          127
+        ],
+        "dynamic_class_count": 10,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 1,
@@ -4882,7 +5108,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -4936,7 +5163,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5001,7 +5229,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5066,7 +5295,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5131,7 +5361,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5196,7 +5427,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5261,7 +5493,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5326,7 +5559,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5380,7 +5614,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5434,7 +5669,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -5452,6 +5688,20 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          125,
+          130,
+          132,
+          136,
+          138,
+          139,
+          140
+        ],
+        "dynamic_class_count": 7,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -5515,7 +5765,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5580,7 +5831,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5645,7 +5897,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5699,7 +5952,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5753,7 +6007,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5807,7 +6062,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5872,7 +6128,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5926,7 +6183,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -5980,7 +6238,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6034,7 +6293,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6088,7 +6348,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -6106,6 +6367,23 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 13,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          115,
+          116,
+          118,
+          119,
+          121,
+          122,
+          123,
+          125,
+          126
+        ],
+        "dynamic_class_count": 10,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -6169,7 +6447,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6234,7 +6513,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6299,7 +6579,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6364,7 +6645,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6429,7 +6711,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6472,8 +6755,8 @@
               126
             ],
             "planned": [
-              127,
-              127,
+              99,
+              99,
               126,
               126,
               126,
@@ -6483,18 +6766,19 @@
               {
                 "slot": 0,
                 "source_class_id": 126,
-                "target_class_id": 127
+                "target_class_id": 99
               },
               {
                 "slot": 1,
                 "source_class_id": 126,
-                "target_class_id": 127
+                "target_class_id": 99
               }
             ]
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6559,7 +6843,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6613,7 +6898,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6678,7 +6964,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6732,7 +7019,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6775,29 +7063,19 @@
               122
             ],
             "planned": [
-              124,
-              124,
+              115,
+              115,
               115,
               115,
               122,
               122
             ],
-            "changes": [
-              {
-                "slot": 0,
-                "source_class_id": 115,
-                "target_class_id": 124
-              },
-              {
-                "slot": 1,
-                "source_class_id": 115,
-                "target_class_id": 124
-              }
-            ]
+            "changes": []
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6851,7 +7129,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -6916,7 +7195,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -6934,6 +7214,22 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          115,
+          116,
+          118,
+          119,
+          120,
+          123,
+          124,
+          125
+        ],
+        "dynamic_class_count": 9,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -6986,7 +7282,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7040,7 +7337,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7094,7 +7392,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7148,7 +7447,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7202,7 +7502,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7256,7 +7557,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7321,7 +7623,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7386,7 +7689,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7440,7 +7744,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7505,7 +7810,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7570,7 +7876,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -7588,6 +7895,23 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          115,
+          116,
+          118,
+          119,
+          120,
+          122,
+          124,
+          130,
+          133,
+          135
+        ],
+        "dynamic_class_count": 10,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 1,
@@ -7640,7 +7964,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7694,7 +8019,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7759,7 +8085,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7813,7 +8140,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7867,7 +8195,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7932,7 +8261,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -7986,7 +8316,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8040,7 +8371,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8094,7 +8426,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8148,7 +8481,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8191,8 +8525,8 @@
               255
             ],
             "planned": [
-              125,
-              125,
+              111,
+              111,
               130,
               130,
               255,
@@ -8202,18 +8536,19 @@
               {
                 "slot": 0,
                 "source_class_id": 130,
-                "target_class_id": 125
+                "target_class_id": 111
               },
               {
                 "slot": 1,
                 "source_class_id": 130,
-                "target_class_id": 125
+                "target_class_id": 111
               }
             ]
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -8231,6 +8566,21 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          115,
+          116,
+          118,
+          119,
+          123,
+          125,
+          127,
+          136
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -8283,7 +8633,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8337,7 +8688,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8412,7 +8764,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8466,7 +8819,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8531,7 +8885,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8606,7 +8961,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8660,7 +9016,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8735,7 +9092,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8789,7 +9147,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8864,7 +9223,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -8882,6 +9242,19 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          115,
+          119,
+          122,
+          123,
+          124,
+          127
+        ],
+        "dynamic_class_count": 6,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -8934,7 +9307,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -8988,7 +9362,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9042,7 +9417,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9107,7 +9483,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9161,7 +9538,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9226,7 +9604,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9301,7 +9680,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9376,7 +9756,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9441,7 +9822,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9516,7 +9898,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9591,7 +9974,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -9609,6 +9993,18 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 9,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          125,
+          130,
+          132,
+          133,
+          136
+        ],
+        "dynamic_class_count": 5,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 2,
@@ -9682,7 +10078,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9736,7 +10133,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9811,7 +10209,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9886,7 +10285,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9940,7 +10340,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -9994,7 +10395,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10069,7 +10471,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10123,7 +10526,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10177,7 +10581,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -10195,6 +10600,22 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          115,
+          116,
+          118,
+          119,
+          120,
+          123,
+          124,
+          125,
+          127
+        ],
+        "dynamic_class_count": 9,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -10268,7 +10689,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10322,7 +10744,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10376,7 +10799,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10430,7 +10854,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10484,7 +10909,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10538,7 +10964,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10592,7 +11019,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10667,7 +11095,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10721,7 +11150,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10775,7 +11205,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -10793,6 +11224,21 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          119,
+          125,
+          130,
+          132,
+          133,
+          134,
+          136,
+          137
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -10845,7 +11291,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10899,7 +11346,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -10974,7 +11422,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11028,7 +11477,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11103,7 +11553,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11157,7 +11608,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11211,7 +11663,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11286,7 +11739,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11340,7 +11794,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11415,7 +11870,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -11433,6 +11889,20 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          119,
+          124,
+          132,
+          133,
+          134,
+          135,
+          136
+        ],
+        "dynamic_class_count": 7,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -11485,7 +11955,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11539,7 +12010,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11604,7 +12076,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11658,7 +12131,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11712,7 +12186,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11777,7 +12252,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11831,7 +12307,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11885,7 +12362,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11939,7 +12417,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -11993,7 +12472,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12068,7 +12548,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -12086,6 +12567,20 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          118,
+          119,
+          124,
+          127,
+          134,
+          136,
+          138
+        ],
+        "dynamic_class_count": 7,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 1,
@@ -12138,7 +12633,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12192,7 +12688,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12246,7 +12743,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12300,7 +12798,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12365,7 +12864,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12435,7 +12935,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12489,7 +12990,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12543,7 +13045,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12597,7 +13100,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12677,7 +13181,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12757,7 +13262,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -12775,6 +13281,19 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          115,
+          118,
+          119,
+          123,
+          127,
+          136
+        ],
+        "dynamic_class_count": 6,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -12827,7 +13346,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12892,7 +13412,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -12957,7 +13478,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13011,7 +13533,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13065,7 +13588,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13130,7 +13654,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13205,7 +13730,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13259,7 +13785,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13324,7 +13851,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13399,7 +13927,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13453,7 +13982,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -13471,6 +14001,19 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          119,
+          134,
+          135,
+          136,
+          137,
+          139
+        ],
+        "dynamic_class_count": 6,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 1,
@@ -13523,7 +14066,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13577,7 +14121,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13631,7 +14176,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13685,7 +14231,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13739,7 +14286,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13793,7 +14341,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13847,7 +14396,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13901,7 +14451,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -13955,7 +14506,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14009,7 +14561,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -14027,6 +14580,16 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          123,
+          124,
+          125
+        ],
+        "dynamic_class_count": 3,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 1,
@@ -14079,7 +14642,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14133,7 +14697,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14187,7 +14752,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14272,7 +14838,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14326,7 +14893,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14411,7 +14979,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14496,7 +15065,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14581,7 +15151,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14666,7 +15237,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14751,7 +15323,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14805,7 +15378,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -14823,6 +15397,18 @@
         "summon_slots_per_six": 1
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          118,
+          119,
+          123,
+          124,
+          136
+        ],
+        "dynamic_class_count": 5,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -14875,7 +15461,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -14950,7 +15537,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15035,7 +15623,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15089,7 +15678,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15143,7 +15733,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15197,7 +15788,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15272,7 +15864,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15357,7 +15950,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15432,7 +16026,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15486,7 +16081,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -15504,6 +16100,21 @@
         "summon_slots_per_six": 4
       },
       "target_record_count": 10,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          118,
+          119,
+          123,
+          124,
+          127,
+          136,
+          137,
+          143
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -15556,7 +16167,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15610,7 +16222,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15664,7 +16277,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15718,7 +16332,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15772,7 +16387,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15826,7 +16442,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15880,7 +16497,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -15927,14 +16545,26 @@
               137,
               137,
               137,
-              135,
-              135
+              143,
+              143
             ],
             "changes": []
           },
           "summon_replacement": {
-            "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "planned": true,
+            "changes": [
+              {
+                "slot": 4,
+                "source_class_id": 135,
+                "target_class_id": 143
+              },
+              {
+                "slot": 5,
+                "source_class_id": 135,
+                "target_class_id": 143
+              }
+            ],
+            "reason": "runtime-guarded safe fallback: same-family Vampire Bat 87 -> White Dragon 8F; fixed units do not rely on natural magic ownership"
           }
         },
         {
@@ -15988,7 +16618,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16042,7 +16673,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -16060,6 +16692,21 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 9,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          114,
+          115,
+          116,
+          117,
+          119,
+          134,
+          136,
+          138
+        ],
+        "dynamic_class_count": 8,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -16123,7 +16770,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16188,7 +16836,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16253,7 +16902,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16318,7 +16968,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16383,7 +17034,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16448,7 +17100,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16513,7 +17166,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16578,7 +17232,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16643,7 +17298,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -16661,6 +17317,15 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 9,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          120,
+          125
+        ],
+        "dynamic_class_count": 2,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -16713,7 +17378,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16767,7 +17433,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16821,7 +17488,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16875,7 +17543,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16929,7 +17598,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -16983,7 +17653,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17037,7 +17708,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17091,7 +17763,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17145,7 +17818,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -17163,6 +17837,19 @@
         "summon_slots_per_six": 0
       },
       "target_record_count": 11,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          125,
+          132,
+          134,
+          135,
+          136,
+          140
+        ],
+        "dynamic_class_count": 6,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -17215,7 +17902,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17290,7 +17978,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17365,7 +18054,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17419,7 +18109,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17473,7 +18164,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17527,7 +18219,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17602,7 +18295,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17677,7 +18371,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17731,7 +18426,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17785,7 +18481,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -17839,7 +18536,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]
@@ -17857,6 +18555,18 @@
         "summon_slots_per_six": 4
       },
       "target_record_count": 9,
+      "enemy_mercenary_cache": {
+        "dynamic_capacity": 10,
+        "dynamic_class_ids": [
+          119,
+          123,
+          124,
+          136,
+          137
+        ],
+        "dynamic_class_count": 5,
+        "ordinary_classes_reuse_fixed_cache": true
+      },
       "records": [
         {
           "index": 0,
@@ -17940,7 +18650,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18025,7 +18736,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18079,7 +18791,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18133,7 +18846,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18187,7 +18901,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18241,7 +18956,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18295,7 +19011,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18349,7 +19066,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         },
         {
@@ -18403,7 +19121,8 @@
           },
           "summon_replacement": {
             "planned": false,
-            "reason": "deferred until ordinary fixed-enemy attack and natural-magic runtime guards pass"
+            "changes": [],
+            "reason": "keep original: outside the approved Scenario 26/27 scope or no same-family nondecreasing AT/DF candidate passed every runtime guard"
           }
         }
       ]

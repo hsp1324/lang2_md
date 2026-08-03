@@ -24,23 +24,23 @@ class CaptureItemShopInventoryTests(unittest.TestCase):
         self.assertEqual(item_position(37), (7, 1))
 
     def test_page_transition_returns_to_first_row_before_moving_right(self):
-        self.assertEqual(movement_after(1, 0.1), ["down@0.02:0.1"])
+        self.assertEqual(movement_after(1, 0.1), ["down@0.12:0.1"])
         self.assertEqual(
             movement_after(5, 0.1),
-            ["right@0.02:0.1"] + ["up@0.02:0.1"] * 4,
+            ["right@0.12:0.1"] + ["up@0.12:0.1"] * 4,
         )
         self.assertEqual(
             movement_after(35, 0.1),
-            ["right@0.02:0.1", "up@0.02:0.1"],
+            ["right@0.12:0.1", "up@0.12:0.1"],
         )
         self.assertEqual(movement_after(ITEM_COUNT), [])
 
     def test_movement_to_page_two_first_row_is_deterministic(self):
         self.assertEqual(
             movement_to(6, 0.2),
-            ["down@0.02:0.2"] * 4
-            + ["right@0.02:0.2"]
-            + ["up@0.02:0.2"] * 4,
+            ["down@0.12:0.2"] * 4
+            + ["right@0.12:0.2"]
+            + ["up@0.12:0.2"] * 4,
         )
 
     def test_artifact_names_are_stable_and_ascii(self):

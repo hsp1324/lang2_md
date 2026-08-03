@@ -41,3 +41,15 @@ python3 tools/apply_liana_lana_sage_face_mask.py \
 `archive/liana-lana/before-sage-face-v39`에 보관했다. 직전 v37 작업은
 `archive/liana-lana/before-strict16-v38/liana-lana-paired-v37`에
 보관했다.
+
+## 최신 세이지 전용 얼굴 갱신
+
+리아나 세이지에서 다시 저장한 91픽셀 머리 마스크를 라나 세이지에도
+복사했다. 이번 갱신은 `18` 세이지 두 장에만 적용하며 나머지 클래스의
+장비와 얼굴은 변경하지 않는다.
+
+```bash
+python3 tools/sync_liana_lana_sage_mask.py
+```
+
+검증 결과는 `sage-only-face-refresh-report.json`에 기록한다.

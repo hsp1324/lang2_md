@@ -25,6 +25,15 @@ class Scenario10ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def runtime_finish_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            runtime_finish=True,
+        )
+        return data
+
     def test_changes_only_monster_combat_fields(self):
         data = self.patched()
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
@@ -185,6 +194,103 @@ class Scenario10ClearProbeTests(unittest.TestCase):
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
         self.assertEqual(expected, 0xA973)
+
+    def test_runtime_finish_changes_only_wrapper_and_checksum(self):
+        data = self.runtime_finish_patched()
+        wrapper = probe_builder.runtime_finish_wrapper_code()
+        expected_changes = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            ),
+        }
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, expected_changes)
+
+    def test_runtime_finish_preserves_every_scenario_record(self):
+        data = self.runtime_finish_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            start = layout.records_offset + index * FIXED_RECORD_SIZE
+            end = start + FIXED_RECORD_SIZE
+            self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_runtime_finish_marks_only_revealed_monster_groups(self):
+        code = probe_builder.runtime_finish_wrapper_code()
+        first_monster_x = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.FIRST_MONSTER_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+            + probe_builder.RUNTIME_X_OFFSET
+        )
+        self.assertEqual(
+            code[:8],
+            bytes.fromhex("0C 39 00 FF") + first_monster_x.to_bytes(4, "big"),
+        )
+        self.assertEqual(code[8:10], bytes.fromhex("67 00"))
+        branch_displacement = int.from_bytes(code[10:12], "big", signed=True)
+        branch_target = 12 + branch_displacement
+        self.assertEqual(code[branch_target : branch_target + 2], bytes.fromhex("41 F9"))
+        for group in range(
+            probe_builder.FIRST_MONSTER_RUNTIME_GROUP,
+            probe_builder.LAST_MONSTER_RUNTIME_GROUP + 1,
+        ):
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("00 39 00 80")
+                + (
+                    record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+                ).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 FF")
+                + (record + probe_builder.RUNTIME_X_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        first_pirate = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + 5 * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertNotIn(
+            (
+                first_pirate + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET
+            ).to_bytes(4, "big"),
+            code,
+        )
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_runtime_finish_and_protagonist_death_are_mutually_exclusive(self):
+        data = bytearray(self.production)
+        with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+            probe_builder.patch_probe(
+                data,
+                self.source,
+                protagonist_death=True,
+                runtime_finish=True,
+            )
 
 
 if __name__ == "__main__":

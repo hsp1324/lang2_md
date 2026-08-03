@@ -40,10 +40,10 @@ def movement_after(item_id: int, wait: float = 0.45) -> list[str]:
         raise ValueError(f"item ID must be 1..{ITEM_COUNT}")
     _, row = item_position(item_id)
     if row + 1 < ROWS_PER_PAGE:
-        return [f"down@0.02:{wait}"]
+        return [f"down@0.12:{wait}"]
     next_page_rows = min(ROWS_PER_PAGE, ITEM_COUNT - item_id)
-    return [f"right@0.02:{wait}"] + [
-        f"up@0.02:{wait}"
+    return [f"right@0.12:{wait}"] + [
+        f"up@0.12:{wait}"
     ] * (next_page_rows - 1)
 
 
