@@ -50,8 +50,12 @@ jobs:
             throw "Patcher is not a Windows PE executable"
           }
           $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
-          "$hash  Langrisser-II-Korean-Patcher-v1.2.0.exe" |
-            Set-Content -Encoding ascii "dist/SHA256SUMS.txt"
+          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.2.0.exe`n"
+          [System.IO.File]::WriteAllText(
+            "dist/SHA256SUMS.txt",
+            $checksum,
+            [System.Text.Encoding]::ASCII
+          )
           Get-Content "dist/SHA256SUMS.txt"
 
       - name: Upload release assets
