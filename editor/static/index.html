@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>랑그릿사 II 게임 데이터 편집기</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=mobile-class-picker-v1">
 </head>
 <body>
   <header class="topbar">
@@ -29,8 +29,8 @@
       <button class="tab active" type="button" data-tab="scenario">시나리오</button>
       <button class="tab" type="button" data-tab="items">아이템</button>
       <button class="tab" type="button" data-tab="classes">클래스 체인지</button>
-      <button class="tab" type="button" data-tab="testClasses">테스트 체인지</button>
-      <button class="tab" type="button" data-tab="aiClasses">AI 클래스</button>
+      <button class="tab" type="button" data-tab="aiClasses">New 클래스</button>
+      <button class="tab" type="button" data-tab="sampleClasses">샘플 클래스</button>
     </nav>
     <div id="notice" class="notice" hidden></div>
 
@@ -156,11 +156,22 @@
         </aside>
       </div>
     </section>
+
+    <section id="sampleClassesPanel" class="tabPanel">
+      <header class="sampleClassIntro">
+        <div>
+          <h2>클래스별 디자인 샘플</h2>
+          <p>클래스별 한 줄에 16×16 디자인 10개를 나란히 비교하고, 누르면 New 클래스 편집기로 불러옵니다.</p>
+        </div>
+        <span id="sampleClassSummary" class="summary">샘플을 읽는 중</span>
+      </header>
+      <div id="sampleClassGroups" class="sampleClassGroups" aria-live="polite"></div>
+    </section>
   </main>
   <div id="assetPicker" class="assetPicker" hidden>
     <input id="assetPickerSearch" type="search" placeholder="ID 또는 이름 검색">
     <div id="assetPickerOptions" class="assetPickerOptions"></div>
   </div>
-  <script src="/app.js?v=paired-npc-and-pirates-v11"></script>
+  <script src="/app.js?v=mobile-class-picker-v1"></script>
 </body>
 </html>

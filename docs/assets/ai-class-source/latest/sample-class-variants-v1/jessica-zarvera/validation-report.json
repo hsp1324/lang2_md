@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "mode": "fresh built-in imagegen concepts; hand-repixelled native logical16",
+  "inputs": [
+    "jessica-zarvera-summoner-ai-v1-fresh/references/10-26-zarvera-rom-original-32x.png",
+    "jessica-zarvera-summoner-ai-v1-fresh/references/10-26-jessica-identity-only-32x.png"
+  ],
+  "previous_ai_inputs": [],
+  "identity_pixel_count": 73,
+  "aggregate_identity_translation": [
+    1,
+    0
+  ],
+  "all_accepted": true,
+  "variants": [
+    {
+      "variant": "01",
+      "ai_source": "ai/01.png",
+      "logical16": "logical16/01.png",
+      "preview_16x": "previews/01.png",
+      "identity_coordinates": "unshifted; aggregate applies +1 x later",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "visible_color_count": 13,
+      "palette": [
+        "#242424",
+        "#9224b6",
+        "#496dff",
+        "#0000db",
+        "#929292",
+        "#ffffff",
+        "#ffb600",
+        "#6d4924",
+        "#dbb66d",
+        "#49006d",
+        "#6ddbff",
+        "#924924",
+        "#db6dff"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "center_holes": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "connected_components": [
+        210
+      ],
+      "accepted": true
+    },
+    {
+      "variant": "02",
+      "ai_source": "ai/02.png",
+      "logical16": "logical16/02.png",
+      "preview_16x": "previews/02.png",
+      "identity_coordinates": "unshifted; aggregate applies +1 x later",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#0000db",
+        "#929292",
+        "#ffffff",
+        "#9224b6",
+        "#ffb600",
+        "#dbb66d",
+        "#6ddbff",
+        "#6d4924",
+        "#49006d",
+        "#924924"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "center_holes": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "connected_components": [
+        171
+      ],
+      "accepted": true
+    },
+    {
+      "variant": "03",
+      "ai_source": "ai/03.png",
+      "logical16": "logical16/03.png",
+      "preview_16x": "previews/03.png",
+      "identity_coordinates": "unshifted; aggregate applies +1 x later",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "visible_color_count": 13,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#0000db",
+        "#9224b6",
+        "#ffffff",
+        "#929292",
+        "#49006d",
+        "#ffb600",
+        "#db6dff",
+        "#dbb66d",
+        "#6ddbff",
+        "#924924",
+        "#6d4924"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "center_holes": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "connected_components": [
+        180
+      ],
+      "accepted": true
+    },
+    {
+      "variant": "04",
+      "ai_source": "ai/04.png",
+      "logical16": "logical16/04.png",
+      "preview_16x": "previews/04.png",
+      "identity_coordinates": "unshifted; aggregate applies +1 x later",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "visible_color_count": 13,
+      "palette": [
+        "#242424",
+        "#49006d",
+        "#496dff",
+        "#0000db",
+        "#929292",
+        "#ffffff",
+        "#9224b6",
+        "#ffb600",
+        "#dbb66d",
+        "#6ddbff",
+        "#6d4924",
+        "#924924",
+        "#db6dff"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "center_holes": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "connected_components": [
+        210
+      ],
+      "accepted": true
+    },
+    {
+      "variant": "05",
+      "ai_source": "ai/05.png",
+      "logical16": "logical16/05.png",
+      "preview_16x": "previews/05.png",
+      "identity_coordinates": "unshifted; aggregate applies +1 x later",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "visible_color_count": 13,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#9224b6",
+        "#0000db",
+        "#929292",
+        "#6d4924",
+        "#49006d",
+        "#ffffff",
+        "#ffb600",
+        "#dbb66d",
+        "#6ddbff",
+        "#924924",
+        "#db6dff"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "center_holes": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "connected_components": [
+        201
+      ],
+      "accepted": true
+    }
+  ]
+}

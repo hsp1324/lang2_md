@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: Mega Drive Langrisser II logical-16x16 map sprite concept
+
+Primary request: Fresh variant 2 for Jessica Zarvera, generated only from the two supplied references: diagonal throwing spear plus compact light armor. This must be a squat chibi tactical-map sprite, not a tall anime character. The first reference defines the original Zarvera sprite's coarse Mega Drive rendering and full-square scale. The second reference defines Jessica's identity only. Preserve her eyes, face, blue hair silhouette, hair volume, and the original large-head balance; do not copy any former AI design.
+
+Make the head very large, roughly 5 to 6 logical pixels high and about 38 percent of the sprite. Compress the body beneath it: broad shoulders, short closed torso, clearly separated hands, and very short sturdy legs. Route one complete throwing spear diagonally from lower image-left to upper image-right without covering the eyes. Its stepped shaft, metal spearhead, gold collar, grip hand, and bottom end must all remain readable. Use the available outer columns and rows, but do not crop the weapon or body.
+
+Create true coarse logical-16x16 pixel art with large deliberate pixel clusters. No antialiasing, soft shading, micro-detail, or smooth anime rendering. Limit the sprite to roughly 15 visible colors: Jessica's original blue hair and skin, silver/white light armor, royal-purple accents, restrained gold, brown spear shaft, and dark charcoal separations. No hollow center; neck, shoulders, torso, arms, and legs must connect as one readable sprite.
+
+Background: perfectly flat #00ff00 only, with no shadow, border, glow, checkerboard, vignette, or halo. Do not borrow background green for the sprite. Avoid pure black, magenta edge pixels, a small head, an elongated body, a detached face, cropped limbs, extra weapons, mount, text, or UI.

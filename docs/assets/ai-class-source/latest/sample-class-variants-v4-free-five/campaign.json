@@ -1,0 +1,102 @@
+{
+  "asset_version": "sample-classes-v6-elwin-purple-ornament",
+  "expected_group_count": 5,
+  "expected_candidate_count": 25,
+  "excluded_approved_classes": [
+    {
+      "class_id": "08",
+      "class_name": "힐러"
+    },
+    {
+      "class_id": "15",
+      "class_name": "위저드"
+    },
+    {
+      "class_id": "16",
+      "class_name": "하이프리스트"
+    },
+    {
+      "class_id": "25",
+      "class_name": "에이전트"
+    },
+    {
+      "class_id": "26",
+      "class_name": "자베러"
+    },
+    {
+      "class_id": "28",
+      "class_name": "서머너"
+    }
+  ],
+  "catalog_policy": "Only unfinished Elwin Hero and Liana/Lana/Hein/Jessica Sage remain visible in the sample editor",
+  "hard_constraints": [
+    "16x16",
+    "15 visible colors",
+    "expanded identity exact"
+  ],
+  "removed_constraints": [
+    "ROM preservation percentage",
+    "ROM bounding box",
+    "ROM-first equipment palette",
+    "pose and weapon side",
+    "helmet and mount ban",
+    "class-equipment-only changes"
+  ],
+  "groups": [
+    {
+      "id": "01-elwin-22-hero",
+      "commander_id": 1,
+      "commander_name": "엘윈",
+      "class_id": 34,
+      "class_hex": "22",
+      "class_name": "히어로",
+      "title": "엘윈 · 히어로",
+      "expected_samples": 10,
+      "preserved_samples": []
+    },
+    {
+      "id": "02-liana-18-sage",
+      "commander_id": 2,
+      "commander_name": "리아나",
+      "class_id": 24,
+      "class_hex": "18",
+      "class_name": "세이지",
+      "title": "리아나 · 세이지",
+      "expected_samples": 10,
+      "preserved_samples": []
+    },
+    {
+      "id": "03-lana-18-sage",
+      "commander_id": 3,
+      "commander_name": "라나",
+      "class_id": 24,
+      "class_hex": "18",
+      "class_name": "세이지",
+      "title": "라나 · 세이지",
+      "expected_samples": 10,
+      "preserved_samples": []
+    },
+    {
+      "id": "05-hein-18-sage",
+      "commander_id": 5,
+      "commander_name": "헤인",
+      "class_id": 24,
+      "class_hex": "18",
+      "class_name": "세이지",
+      "title": "헤인 · 세이지",
+      "expected_samples": 10,
+      "preserved_samples": []
+    },
+    {
+      "id": "10-jessica-18-sage",
+      "commander_id": 10,
+      "commander_name": "제시카",
+      "class_id": 24,
+      "class_hex": "18",
+      "class_name": "세이지",
+      "title": "제시카 · 세이지",
+      "expected_samples": 10,
+      "preserved_samples": []
+    }
+  ]
+}

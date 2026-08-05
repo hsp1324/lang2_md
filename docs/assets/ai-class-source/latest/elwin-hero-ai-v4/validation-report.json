@@ -1,0 +1,38 @@
+{
+  "source": "docs/assets/ai-class-source/latest/elwin-hero-ai-v4/candidates/variant-02-selected-concept.png",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "native_size": [
+    16,
+    16
+  ],
+  "mode": "whole-canvas fixed 16-cell majority sampling",
+  "grid_uniformity": 0.771302,
+  "identity_match": 73,
+  "identity_pixel_count": 73,
+  "visible_color_count": 15,
+  "palette": [
+    "#242424",
+    "#6d0000",
+    "#ffffff",
+    "#924924",
+    "#929292",
+    "#920000",
+    "#dbb66d",
+    "#002492",
+    "#246ddb",
+    "#002449",
+    "#b6b6b6",
+    "#dbb649",
+    "#926d24",
+    "#db9224",
+    "#002424"
+  ],
+  "palette_remapped_pixels": 8,
+  "empty_rows": [],
+  "empty_columns": [],
+  "pure_black": false,
+  "accepted": true
+}

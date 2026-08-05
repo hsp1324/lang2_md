@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "master": "docs/assets/ai-class-source/latest/shared-scott-keith-lord-elwin-lord-v1/master/01-04-current-elwin-lord.png",
+  "rule": "copy current Elwin Lord shield roles and body coordinates; Sherry teal/cyan, Scott green/gold, Keith blue/cyan",
+  "shield_points": [
+    [
+      11,
+      8
+    ],
+    [
+      11,
+      9
+    ],
+    [
+      11,
+      10
+    ],
+    [
+      11,
+      11
+    ],
+    [
+      11,
+      12
+    ],
+    [
+      11,
+      13
+    ],
+    [
+      11,
+      14
+    ],
+    [
+      11,
+      15
+    ],
+    [
+      12,
+      8
+    ],
+    [
+      12,
+      9
+    ],
+    [
+      12,
+      10
+    ],
+    [
+      12,
+      11
+    ],
+    [
+      12,
+      12
+    ],
+    [
+      12,
+      13
+    ],
+    [
+      12,
+      14
+    ],
+    [
+      12,
+      15
+    ],
+    [
+      13,
+      8
+    ],
+    [
+      13,
+      9
+    ],
+    [
+      13,
+      10
+    ],
+    [
+      13,
+      11
+    ],
+    [
+      13,
+      12
+    ],
+    [
+      13,
+      13
+    ],
+    [
+      13,
+      14
+    ],
+    [
+      13,
+      15
+    ],
+    [
+      14,
+      8
+    ],
+    [
+      14,
+      9
+    ],
+    [
+      14,
+      10
+    ],
+    [
+      14,
+      11
+    ],
+    [
+      14,
+      12
+    ],
+    [
+      14,
+      13
+    ],
+    [
+      14,
+      14
+    ],
+    [
+      14,
+      15
+    ],
+    [
+      15,
+      8
+    ],
+    [
+      15,
+      9
+    ],
+    [
+      15,
+      10
+    ],
+    [
+      15,
+      11
+    ],
+    [
+      15,
+      12
+    ],
+    [
+      15,
+      13
+    ],
+    [
+      15,
+      14
+    ],
+    [
+      15,
+      15
+    ]
+  ],
+  "all_accepted": true,
+  "classes": [
+    {
+      "commander_id": 4,
+      "class_id": "04",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "shield_role_match": 40,
+      "shield_pixel_count": 40,
+      "outside_shield_shape_match": 143,
+      "outside_shield_shape_total": 143,
+      "body_recolored_pixels": 33,
+      "palette_family": "navy/teal/cyan/gold",
+      "visible_color_count": 11,
+      "palette": [
+        "#242424",
+        "#49496d",
+        "#929292",
+        "#ffffff",
+        "#006d92",
+        "#002449",
+        "#ffb600",
+        "#dbb66d",
+        "#924924",
+        "#6ddbff",
+        "#0000db"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black_pixels": 0,
+      "accepted": true
+    },
+    {
+      "commander_id": 6,
+      "class_id": "04",
+      "identity_match": 66,
+      "identity_pixel_count": 66,
+      "shield_role_match": 40,
+      "shield_pixel_count": 40,
+      "outside_shield_shape_match": 150,
+      "outside_shield_shape_total": 150,
+      "body_recolored_pixels": 27,
+      "palette_family": "forest-green/lime/gold",
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#246d00",
+        "#dbb66d",
+        "#ffffff",
+        "#ffb600",
+        "#244924",
+        "#929292",
+        "#24b624",
+        "#924924",
+        "#24db24",
+        "#0000db",
+        "#49496d"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black_pixels": 0,
+      "accepted": true
+    },
+    {
+      "commander_id": 7,
+      "class_id": "04",
+      "identity_match": 61,
+      "identity_pixel_count": 61,
+      "shield_role_match": 40,
+      "shield_pixel_count": 40,
+      "outside_shield_shape_match": 155,
+      "outside_shield_shape_total": 155,
+      "body_recolored_pixels": 33,
+      "palette_family": "navy/blue/cyan",
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#2449db",
+        "#ffffff",
+        "#24246d",
+        "#dbb66d",
+        "#929292",
+        "#6ddbff",
+        "#49496d",
+        "#92b6ff",
+        "#924924",
+        "#ffb600",
+        "#496dff"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black_pixels": 0,
+      "accepted": true
+    }
+  ]
+}

@@ -23,6 +23,8 @@ const aiCommanderSelect = $("#aiCommanderSelect");
 const aiClassSummary = $("#aiClassSummary");
 const aiClassTree = $("#aiClassTree");
 const aiClassInspector = $("#aiClassInspector");
+const sampleClassSummary = $("#sampleClassSummary");
+const sampleClassGroups = $("#sampleClassGroups");
 const assetPicker = $("#assetPicker");
 const assetPickerSearch = $("#assetPickerSearch");
 const assetPickerOptions = $("#assetPickerOptions");
@@ -32,6 +34,7 @@ let itemModel = null;
 let classModel = null;
 let testClassSpriteModel = null;
 let aiClassSpriteModel = null;
+let sampleClassSpriteModel = null;
 let scenarioModels = new Map();
 let activeCommanderId = null;
 let selectedTreeClassId = null;
@@ -148,6 +151,12 @@ function aiSpriteImage(commanderId, classId) {
     commanderId,
     classId
   )}" data-fallback="${fallback}" alt="${escapeHtml(label)}">`;
+}
+
+function sampleClassAssetPath(path) {
+  const normalized = String(path || "").replace(/^\/+/, "");
+  const version = sampleClassSpriteModel?.asset_version || "sample-classes-v1";
+  return `/${normalized}?v=${encodeURIComponent(version)}`;
 }
 
 function classOptions(selected, allowEmpty = false) {
@@ -698,9 +707,12 @@ function aiClassRow(commanderId, classId) {
 function aiClassNode(classId, level, commander, nextClassIds) {
   const info = classInfo(classId);
   const row = aiClassRow(commander.commander_id, classId);
+  const displayClassName = row.class_name || info.ko;
   const selected = selectedAiClassId === classId ? " selected" : "";
   const nextCandidate = nextClassIds.includes(classId) ? " nextCandidate" : "";
-  const generated = row.redesigned ? " aiGenerated" : "";
+  const generated = row.redesigned && row.ai_generated !== false
+    ? " aiGenerated"
+    : "";
   const pending = row.pending_redesign ? " aiPending" : "";
   return `
     <button class="classNode${generated}${pending}${selected}${nextCandidate}" type="button"
@@ -708,7 +720,7 @@ function aiClassNode(classId, level, commander, nextClassIds) {
       <span class="nodeSprite">
         ${aiSpriteImage(commander.commander_id, classId)}
       </span>
-      <span><strong>${escapeHtml(info.ko)}</strong>
+      <span><strong>${escapeHtml(displayClassName)}</strong>
         <small>${hexId(classId)} · ${escapeHtml(info.jp)}${
           isHiddenClass(commander, classId) ? " · 히든" : ""
         }</small>
@@ -1527,6 +1539,7 @@ function renderAiClassInspector() {
   }
   const info = classInfo(classId);
   const row = aiClassRow(commander.commander_id, classId);
+  const displayClassName = row.class_name || info.ko;
   const pending = Boolean(row.pending_redesign);
   const identityLockedAi16 = Boolean(
     row.redesigned && row.identity_lock_box
@@ -1577,7 +1590,7 @@ function renderAiClassInspector() {
       <span class="inspectorSprite">
         ${aiSpriteImage(commander.commander_id, classId)}
       </span>
-      <div><h2>${escapeHtml(info.ko)}</h2>
+      <div><h2>${escapeHtml(displayClassName)}</h2>
         <p>${hexId(classId)} · ${escapeHtml(info.jp)} · ${row.tier}단계</p>
       </div>
     </div>
@@ -1599,7 +1612,7 @@ function renderAiClassInspector() {
             ? `<img src="/ai-class-sprites/${aiOriginalFile}?v=${encodeURIComponent(
                 aiClassSpriteModel.asset_version
               )}"
-                alt="${escapeHtml(commander.name)} ${escapeHtml(info.ko)} AI 원화">`
+                alt="${escapeHtml(commander.name)} ${escapeHtml(displayClassName)} AI 원화">`
             : spriteImage(classId, {commanderId: commander.commander_id})}
         </span>
       </div>
@@ -1675,7 +1688,7 @@ function renderAiClassInspector() {
           <div class="aiDesignWorkspace">
             <div class="aiDesignPixelPane">
               <canvas id="aiDesignCanvas" width="320" height="320"
-                aria-label="${escapeHtml(info.ko)} 16×16 디자인 편집"></canvas>
+                aria-label="${escapeHtml(displayClassName)} 16×16 디자인 편집"></canvas>
               <div class="aiDesignTools">
                 <button type="button" data-ai-design-tool="pencil">연필</button>
                 <button type="button" data-ai-design-tool="eraser">지우개</button>
@@ -1828,6 +1841,186 @@ function renderAiClassRoutes() {
   ));
 }
 
+function sampleClassCard(group, sample) {
+  const aiSourcePath = sampleClassAssetPath(
+    sample.ai_source || sample.ai_thumbnail
+  );
+  const spritePath = sampleClassAssetPath(sample.logical16);
+  const previewPath = sample.preview
+    ? sampleClassAssetPath(sample.preview)
+    : spritePath;
+  const detail = `${sample.label} · ${sample.description}`;
+  const preservedClass = sample.preserved ? " preserved" : "";
+  return `
+    <article class="sampleClassCard${preservedClass}" title="${escapeHtml(detail)}">
+      <button type="button" class="sampleLoadButton sampleCompactChoice"
+        data-sample-group="${escapeHtml(group.id)}"
+        data-sample-id="${escapeHtml(sample.id)}">
+        <span class="sampleClassNumber">${escapeHtml(sample.id)}</span>
+        ${sample.preserved
+          ? '<span class="samplePreservedBadge" aria-label="사용자 확정 보존안">고정</span>'
+          : ""}
+        <img src="${previewPath}" loading="lazy"
+          data-logical16="${spritePath}"
+          alt="${escapeHtml(group.title)} ${escapeHtml(sample.label)} 16×16 디자인">
+        <strong>${escapeHtml(sample.label)}</strong>
+      </button>
+      <a class="sampleAiLink" href="${aiSourcePath}" target="_blank"
+        rel="noopener" aria-label="${escapeHtml(group.title)} ${escapeHtml(sample.label)} AI 원안 보기">
+        AI 원안
+      </a>
+    </article>`;
+}
+
+function renderSampleClasses() {
+  if (!sampleClassGroups || !sampleClassSummary) return;
+  const groups = sampleClassSpriteModel?.groups || [];
+  if (!groups.length) {
+    sampleClassGroups.innerHTML = `
+      <p class="sampleClassEmpty">아직 표시할 샘플이 없습니다.</p>`;
+    sampleClassSummary.textContent = "0개";
+    return;
+  }
+  sampleClassGroups.innerHTML = groups.map(group => `
+    <section class="sampleClassGroup">
+      <header class="sampleClassGroupHeader">
+        <div>
+          <h2>${escapeHtml(group.title)}</h2>
+          <p>${escapeHtml(group.description)}</p>
+        </div>
+        <span>${group.samples.length}안</span>
+      </header>
+      <div class="sampleClassGrid" aria-label="${escapeHtml(group.title)} 디자인 후보">
+        ${group.samples.map(sample => sampleClassCard(group, sample)).join("")}
+      </div>
+    </section>
+  `).join("");
+  const sampleCount = groups.reduce(
+    (total, group) => total + group.samples.length,
+    0,
+  );
+  sampleClassSummary.textContent =
+    `${groups.length}개 클래스 · 총 ${sampleCount}개 디자인`;
+}
+
+function imagePixels16(image) {
+  const buffer = document.createElement("canvas");
+  buffer.width = 16;
+  buffer.height = 16;
+  const context = buffer.getContext("2d");
+  context.imageSmoothingEnabled = false;
+  context.clearRect(0, 0, 16, 16);
+  context.drawImage(image, 0, 0, 16, 16);
+  const data = context.getImageData(0, 0, 16, 16).data;
+  return Array.from({length: 256}, (_, index) => [
+    data[index * 4],
+    data[index * 4 + 1],
+    data[index * 4 + 2],
+    data[index * 4 + 3],
+  ]);
+}
+
+function loadSampleImage(path) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener("load", () => resolve(image), {once: true});
+    image.addEventListener(
+      "error",
+      () => reject(new Error("샘플 16×16 이미지를 읽지 못했습니다")),
+      {once: true},
+    );
+    image.src = sampleClassAssetPath(path);
+  });
+}
+
+async function waitForAiDesignEditor(commanderId, classId) {
+  for (let attempt = 0; attempt < 240; attempt += 1) {
+    const state = aiDesignEditorState;
+    if (
+      state?.commanderId === commanderId &&
+      state.classId === classId &&
+      state.pixels &&
+      state.savedPixels
+    ) {
+      return state;
+    }
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  }
+  throw new Error("New 클래스 편집기를 준비하지 못했습니다");
+}
+
+async function loadClassSample(group, sample) {
+  const commanderId = Number(group.commander_id);
+  const classId = Number(group.class_id);
+  aiCommanderSelect.value = String(commanderId);
+  selectedAiClassId = classId;
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.tab === "aiClasses");
+  });
+  document.querySelectorAll(".tabPanel").forEach(panel => {
+    panel.classList.toggle("active", panel.id === "aiClassesPanel");
+  });
+  renderAiClassRoutes();
+  const [state, image] = await Promise.all([
+    waitForAiDesignEditor(commanderId, classId),
+    loadSampleImage(sample.logical16),
+  ]);
+  if (aiDesignEditorState !== state) {
+    throw new Error("편집 클래스가 바뀌어 샘플 불러오기를 취소했습니다");
+  }
+  pushAiDesignHistory();
+  const imported = imagePixels16(image);
+  const [identityDx, identityDy] = group.identity_translation || [0, 0];
+  if (identityDx || identityDy) {
+    const targetPoints = new Set(state.lockPoints);
+    const sourcePoints = new Set();
+    for (const key of targetPoints) {
+      const [x, y] = key.split(",").map(Number);
+      const sourceX = x - identityDx;
+      const sourceY = y - identityDy;
+      if (sourceX >= 0 && sourceX < 16 && sourceY >= 0 && sourceY < 16) {
+        sourcePoints.add(`${sourceX},${sourceY}`);
+      }
+    }
+    for (const key of sourcePoints) {
+      if (targetPoints.has(key)) continue;
+      const [x, y] = key.split(",").map(Number);
+      imported[y * 16 + x] = [0, 0, 0, 0];
+    }
+  }
+  for (const key of state.lockPoints) {
+    const [x, y] = key.split(",").map(Number);
+    const index = y * 16 + x;
+    imported[index] = [...state.savedPixels[index]];
+  }
+  for (const point of group.identity_seam_points || []) {
+    const [x, y] = point.map(Number);
+    const index = y * 16 + x;
+    if (!imported[index][3]) imported[index] = [36, 36, 36, 255];
+  }
+  state.pixels = imported;
+  state.dirty = true;
+  const colors = designVisibleColors(state.pixels);
+  if (colors.length) state.selectedColor = [...colors[0]];
+  $("#aiDesignColor").value = hexDesignColor(state.selectedColor);
+  const reference = $("#aiDesignReferenceImage");
+  if (state.referenceObjectUrl) {
+    URL.revokeObjectURL(state.referenceObjectUrl);
+    state.referenceObjectUrl = null;
+  }
+  reference.src = sampleClassAssetPath(
+    sample.ai_source || sample.ai_thumbnail
+  );
+  $("#aiDesignReferenceName").textContent =
+    `${group.title} · ${sample.label}`;
+  drawAiDesignEditor();
+  aiClassInspector.scrollIntoView({behavior: "smooth", block: "start"});
+  showNotice(
+    `${group.title} ${sample.id}안 불러오기 완료 · 저장 전까지 기존 디자인은 바뀌지 않습니다`,
+    true,
+  );
+}
+
 function collectClassEdits() {
   // Class tree and hire controls update classModel immediately.
 }
@@ -1859,23 +2052,55 @@ function renderPickerOptions() {
   installSpriteFallbacks(assetPickerOptions);
 }
 
+function pickerViewport() {
+  const viewport = window.visualViewport;
+  return {
+    left: viewport?.offsetLeft || 0,
+    top: viewport?.offsetTop || 0,
+    width: viewport?.width || window.innerWidth,
+    height: viewport?.height || window.innerHeight,
+  };
+}
+
+function positionPicker(anchor) {
+  if (!anchor?.isConnected || assetPicker.hidden) return;
+  const viewport = pickerViewport();
+  const height = Math.max(180, Math.min(520, viewport.height - 24));
+  assetPicker.style.height = `${height}px`;
+  const rect = anchor.getBoundingClientRect();
+  const left = Math.min(
+    viewport.left + viewport.width - assetPicker.offsetWidth - 12,
+    Math.max(viewport.left + 12, rect.left)
+  );
+  const top = Math.min(
+    viewport.top + viewport.height - height - 12,
+    rect.bottom + 6
+  );
+  assetPicker.style.left = `${Math.max(viewport.left + 12, left)}px`;
+  assetPicker.style.top = `${Math.max(viewport.top + 12, top)}px`;
+}
+
+function shouldAutoFocusPickerSearch() {
+  // On phones, focusing immediately opens the virtual keyboard. That changes
+  // the visual viewport before the initiating tap has settled and used to
+  // close the picker through the global resize handler. Keep the keyboard
+  // opt-in on coarse/touch pointers; desktop users retain keyboard search.
+  return window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+}
+
 function openPicker(anchor, options) {
-  pickerState = options;
+  pickerState = {...options, anchor};
   assetPickerSearch.value = "";
   renderPickerOptions();
   assetPicker.hidden = false;
-  const rect = anchor.getBoundingClientRect();
-  const left = Math.min(
-    window.innerWidth - assetPicker.offsetWidth - 12,
-    Math.max(12, rect.left)
-  );
-  const top = Math.min(
-    window.innerHeight - assetPicker.offsetHeight - 12,
-    rect.bottom + 6
-  );
-  assetPicker.style.left = `${left}px`;
-  assetPicker.style.top = `${Math.max(12, top)}px`;
-  assetPickerSearch.focus();
+  positionPicker(anchor);
+  if (shouldAutoFocusPickerSearch()) {
+    requestAnimationFrame(() => {
+      if (!assetPicker.hidden && pickerState?.anchor === anchor) {
+        assetPickerSearch.focus({preventScroll: true});
+      }
+    });
+  }
 }
 
 function closePicker() {
@@ -1896,6 +2121,7 @@ async function loadAll() {
       classesResponse,
       testSpritesResponse,
       aiSpritesResponse,
+      sampleSpritesResponse,
     ] = await Promise.all([
       fetch(`/api/items?rom=${rom}`),
       fetch(`/api/class-changes?rom=${rom}`),
@@ -1904,11 +2130,16 @@ async function loadAll() {
         `/ai-class-sprites/manifest.json?reload=${Date.now()}`,
         {cache: "no-store"}
       ),
+      fetch(
+        `/sample-class-sprites/manifest.json?reload=${Date.now()}`,
+        {cache: "no-store"}
+      ),
     ]);
     itemModel = await itemsResponse.json();
     classModel = await classesResponse.json();
     testClassSpriteModel = await testSpritesResponse.json();
     aiClassSpriteModel = await aiSpritesResponse.json();
+    sampleClassSpriteModel = await sampleSpritesResponse.json();
     if (!itemsResponse.ok) throw new Error(itemModel.error);
     if (!classesResponse.ok) throw new Error(classModel.error);
     if (!testSpritesResponse.ok) {
@@ -1916,6 +2147,9 @@ async function loadAll() {
     }
     if (!aiSpritesResponse.ok) {
       throw new Error("AI 클래스 디자인을 읽지 못했습니다");
+    }
+    if (!sampleSpritesResponse.ok) {
+      throw new Error("샘플 클래스 디자인을 읽지 못했습니다");
     }
     await loadScenario();
     sourcePath.textContent = itemModel.rom_path;
@@ -1929,6 +2163,7 @@ async function loadAll() {
     renderClassRoutes();
     renderTestClassRoutes();
     renderAiClassRoutes();
+    renderSampleClasses();
   } catch (error) {
     showNotice(error.message);
   } finally {
@@ -1995,8 +2230,32 @@ document.querySelectorAll(".tab").forEach(tab => {
       requestAnimationFrame(renderTestClassRoutes);
     } else if (tab.dataset.tab === "aiClasses") {
       requestAnimationFrame(renderAiClassRoutes);
+    } else if (tab.dataset.tab === "sampleClasses") {
+      requestAnimationFrame(renderSampleClasses);
     }
   });
+});
+
+sampleClassGroups?.addEventListener("click", async event => {
+  const button = event.target.closest("[data-sample-group][data-sample-id]");
+  if (!button) return;
+  const group = sampleClassSpriteModel?.groups?.find(
+    entry => entry.id === button.dataset.sampleGroup
+  );
+  const sample = group?.samples?.find(
+    entry => entry.id === button.dataset.sampleId
+  );
+  if (!group || !sample) {
+    showNotice("선택한 샘플 정보를 찾지 못했습니다");
+    return;
+  }
+  button.disabled = true;
+  try {
+    await loadClassSample(group, sample);
+  } catch (error) {
+    showNotice(error.message);
+    button.disabled = false;
+  }
 });
 
 recordsBody.addEventListener("click", event => {
@@ -2103,7 +2362,15 @@ document.addEventListener("pointerdown", event => {
     closePicker();
   }
 });
-window.addEventListener("resize", closePicker);
+function repositionOpenPicker() {
+  if (!assetPicker.hidden && pickerState?.anchor) {
+    positionPicker(pickerState.anchor);
+  }
+}
+
+window.addEventListener("resize", repositionOpenPicker);
+window.visualViewport?.addEventListener("resize", repositionOpenPicker);
+window.visualViewport?.addEventListener("scroll", repositionOpenPicker);
 window.addEventListener("resize", () => {
   if (activeCommanderId !== null) renderClassRoutes();
   if (testClassSpriteModel) renderTestClassRoutes();

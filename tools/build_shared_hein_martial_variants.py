@@ -3,9 +3,11 @@
 
 from __future__ import annotations
 
+import argparse
 from collections import Counter
 import json
 from pathlib import Path
+import time
 import sys
 
 from PIL import Image, ImageDraw, ImageFont
@@ -16,11 +18,15 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.build_ai_class_sprite_assets import (
+    ASSET_VERSION,
+    SHARED_DARK_BOUNDARY_REFERENCE_POINTS,
     identity_locked_character_sprite,
 )
 
 
 MANIFEST_PATH = ROOT / "editor/static/ai-class-sprites/manifest.json"
+LIVE_ROOT = ROOT / "editor/static/ai-class-sprites"
+OVERRIDES_PATH = ROOT / "editor/ai_class_design_overrides.json"
 SPRITE_DIR = ROOT / "editor/static/class-sprites/commanders"
 TRANSPARENT = (0, 0, 0, 0)
 INK = (36, 36, 36, 255)
@@ -91,10 +97,10 @@ COMMANDER_SCHEMES = {
         "accent": (146, 73, 36, 255),
     },
     7: {
-        "dark": (109, 73, 0, 255),
-        "main": (219, 146, 36, 255),
-        "light": (255, 219, 109, 255),
-        "accent": (146, 36, 0, 255),
+        "dark": (0, 36, 182, 255),
+        "main": (73, 109, 255, 255),
+        "light": (109, 219, 255, 255),
+        "accent": (109, 219, 255, 255),
     },
     8: {
         "dark": (73, 73, 109, 255),
@@ -188,6 +194,10 @@ def visible_palette(image: Image.Image) -> list[str]:
     ]
 
 
+def flat_pixels(image: Image.Image) -> list[list[int]]:
+    return [list(color) for color in image.get_flattened_data()]
+
+
 def role_mapping(
     class_id: int,
     commander_id: int,
@@ -198,6 +208,13 @@ def role_mapping(
                 # Use the same restrained green as Hein Mage/Archmage rather
                 # than the former near-neon lime cape.
                 (146, 36, 0, 255): (36, 182, 36, 255),
+            }
+        if class_id == 0x1A:
+            return {
+                # Tie Hein's Swordmaster cape and cloth to the restrained
+                # green progression already used by his Lord/High Lord.
+                (73, 36, 36, 255): (36, 109, 0, 255),
+                (146, 36, 36, 255): (36, 182, 36, 255),
             }
         return {}
     scheme = COMMANDER_SCHEMES[commander_id]
@@ -237,6 +254,15 @@ def role_mapping(
             (73, 73, 109, 255): (36, 73, 219, 255),
             (73, 36, 36, 255): (73, 109, 255, 255),
             (146, 36, 36, 255): (109, 219, 255, 255),
+        }
+    if commander_id == 7:
+        # Keith's Lord and Saint already use a dark-blue -> sky-blue ramp.
+        # Carry that same family into Swordmaster while retaining white blades.
+        return {
+            (73, 73, 109, 255): scheme["dark"],
+            (73, 36, 36, 255): scheme["dark"],
+            (146, 36, 36, 255): scheme["main"],
+            (146, 146, 182, 255): scheme["light"],
         }
     return {
         (73, 73, 109, 255): scheme["dark"],
@@ -530,8 +556,109 @@ def build_variants() -> dict[str, object]:
     }
 
 
+def apply_live_variant(
+    commander_id: int,
+    class_id: int,
+    feature: str,
+) -> None:
+    """Publish one generated shared-class result without touching peers."""
+    source = (
+        CLASS_SPECS[class_id]["source_dir"]
+        / f"logical16/{commander_id:02d}-{class_id:02X}.png"
+    )
+    result = Image.open(source).convert("RGBA")
+    live_path = LIVE_ROOT / str(commander_id) / f"{class_id:02X}.png"
+    before = Image.open(live_path).convert("RGBA")
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    overrides = json.loads(OVERRIDES_PATH.read_text(encoding="utf-8"))
+    row = manifest["commanders"][str(commander_id)]["classes"][str(class_id)]
+    protected = {
+        tuple(point)
+        for point in row.get("identity_lock_points", [])
+        + row.get("mount_lock_points", [])
+    }
+    for point in SHARED_DARK_BOUNDARY_REFERENCE_POINTS.get(class_id, set()):
+        if point not in protected and not result.getpixel(point)[3]:
+            result.putpixel(point, INK)
+
+    revision = time.time_ns()
+    result.save(live_path, optimize=True)
+    result.resize((512, 512), Image.Resampling.NEAREST).save(
+        LIVE_ROOT / f"source-cells/{commander_id}-{class_id:02X}.png",
+        optimize=True,
+    )
+    key = f"{commander_id}:{class_id:02X}"
+    overrides["designs"][key] = {
+        "revision": revision,
+        "pixels": flat_pixels(result),
+        "base_pixels": flat_pixels(before),
+    }
+    row["design_override"] = True
+    row["design_revision"] = revision
+    row["design_override_superseded"] = False
+    row["superseded_design_revision"] = 0
+    row["ai_source_kind"] = (
+        f"헤인 사용자 편집 {CLASS_SPECS[class_id]['name']} "
+        "공통 16×16 클래스 템플릿"
+    )
+    row["ai_source_position"] = (
+        "latest/"
+        + (
+            "shared-high-lord-hein-v1"
+            if class_id == 0x0B
+            else "shared-swordmaster-hein-v1"
+        )
+        + f"/logical16/{commander_id:02d}-{class_id:02X}.png"
+    )
+    row["source_palette"] = visible_palette(result)[:6]
+    row["pixel_palette"] = visible_palette(result)[:6]
+    row["feature"] = feature
+    manifest["asset_version"] = ASSET_VERSION
+    MANIFEST_PATH.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    OVERRIDES_PATH.write_text(
+        json.dumps(overrides, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def apply_hein_swordmaster_live() -> None:
+    apply_live_variant(
+        5,
+        0x1A,
+        "헤인 사용자 편집 소드마스터의 쌍검·갑옷·실루엣 유지·"
+        "로드·하이로드와 같은 짙은 초록·연두 망토 명암 적용·"
+        "청색 머리·얼굴·흰 검날 유지·메가드라이브 15색 이하",
+    )
+
+
+def apply_keith_blue_live() -> None:
+    apply_live_variant(
+        7,
+        0x0B,
+        "헤인 하이로드 장비·방패·검 실루엣 유지·키스 로드·세인트와 "
+        "같은 진청·파랑·하늘색 단계색 적용·얼굴·머리·흰 검날 유지",
+    )
+    apply_live_variant(
+        7,
+        0x1A,
+        "헤인 소드마스터 쌍검·견갑 실루엣 유지·키스 로드·세인트와 "
+        "같은 진청·파랑·하늘색 단계색 적용·얼굴·머리·흰 쌍검 유지",
+    )
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--apply-hein-swordmaster", action="store_true")
+    parser.add_argument("--apply-keith-blue", action="store_true")
+    args = parser.parse_args()
     report = build_variants()
+    if report["all_accepted"] and args.apply_hein_swordmaster:
+        apply_hein_swordmaster_live()
+    if report["all_accepted"] and args.apply_keith_blue:
+        apply_keith_blue_live()
     print(json.dumps(report, ensure_ascii=False))
     return 0 if report["all_accepted"] else 1
 

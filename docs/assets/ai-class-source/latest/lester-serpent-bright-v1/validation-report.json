@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "rule": "keep approved serpent geometry and black outline; brighten only mount color surfaces",
+  "all_accepted": true,
+  "classes": [
+    {
+      "commander_id": 9,
+      "class_id": "10",
+      "name": "서펜나이트 원본 청색",
+      "file": "logical16/09-10.png",
+      "changed_mount_pixel_count": 0,
+      "identity_match": 0,
+      "identity_pixel_count": 0,
+      "outside_mount_match": 130,
+      "outside_mount_total": 130,
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#0000db",
+        "#496dff",
+        "#ffffff",
+        "#dbb66d",
+        "#6ddbff",
+        "#929292",
+        "#49496d",
+        "#ffb600",
+        "#924924",
+        "#6d0000",
+        "#db0000"
+      ],
+      "accepted": true
+    },
+    {
+      "commander_id": 9,
+      "class_id": "1F",
+      "name": "서펜로드 밝은 보라·연보라·청색",
+      "file": "logical16/09-1F.png",
+      "changed_mount_pixel_count": 75,
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "outside_mount_match": 130,
+      "outside_mount_total": 130,
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#6d24db",
+        "#ffffff",
+        "#dbb66d",
+        "#b66dff",
+        "#929292",
+        "#49496d",
+        "#ffb600",
+        "#924924",
+        "#6d0000",
+        "#ff4992"
+      ],
+      "accepted": true
+    },
+    {
+      "commander_id": 9,
+      "class_id": "2A",
+      "name": "서펜마스터 밝은 적색·주홍·청색",
+      "file": "logical16/09-2A.png",
+      "changed_mount_pixel_count": 75,
+      "identity_match": 64,
+      "identity_pixel_count": 64,
+      "outside_mount_match": 130,
+      "outside_mount_total": 130,
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#db0000",
+        "#ffffff",
+        "#dbb66d",
+        "#ff4949",
+        "#929292",
+        "#49496d",
+        "#ffb600",
+        "#924924",
+        "#6d0000",
+        "#ff926d"
+      ],
+      "accepted": true
+    }
+  ]
+}

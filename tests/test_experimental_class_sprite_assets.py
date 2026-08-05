@@ -321,13 +321,36 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             (AI_ASSET_DIR / "1/1A.png").read_bytes(),
             (protected_dir / "01-1A-elwin-swordmaster.png").read_bytes(),
         )
+        hein_swordmaster = Image.open(
+            AI_ASSET_DIR / "5/1A.png"
+        ).convert("RGBA")
+        green_expected = Image.open(
+            protected_dir / "05-1A-hein-swordmaster.png"
+        ).convert("RGBA")
+        green_ramp = {
+            (73, 36, 36, 255): (36, 109, 0, 255),
+            (146, 36, 36, 255): (36, 182, 36, 255),
+        }
+        for y in range(16):
+            for x in range(16):
+                point = (x, y)
+                color = green_expected.getpixel(point)
+                green_expected.putpixel(point, green_ramp.get(color, color))
         self.assert_template_plus_dark_boundaries(
-            Image.open(AI_ASSET_DIR / "5/1A.png").convert("RGBA"),
-            Image.open(
-                protected_dir / "05-1A-hein-swordmaster.png"
-            ).convert("RGBA"),
+            hein_swordmaster,
+            green_expected,
             0x1A,
         )
+        hein_swordmaster_colors = Counter(
+            color
+            for color in hein_swordmaster.get_flattened_data()
+            if color[3]
+        )
+        self.assertGreaterEqual(
+            hein_swordmaster_colors[(36, 182, 36, 255)],
+            20,
+        )
+        self.assertNotIn((146, 36, 36, 255), hein_swordmaster_colors)
 
     def test_shared_classes_close_unlocked_transparent_boundaries(self):
         for commander_id, commander in self.ai_manifest[
@@ -539,7 +562,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         self.assertGreaterEqual(colors[(36, 182, 36, 255)], 20)
         self.assertNotIn((146, 36, 0, 255), colors)
 
-    def test_jessica_high_lord_reuses_hein_design_with_blue_cape(self):
+    def test_jessica_high_lord_reuses_hein_design_with_purple_cape(self):
         row = self.ai_manifest["commanders"]["10"]["classes"][
             str(0x0B)
         ]
@@ -550,7 +573,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         self.assertGreater(row["identity_lock_pixel_count"], 0)
         self.assertTrue(row["design_override"])
         self.assertFalse(row["design_override_superseded"])
-        self.assertIn("진홍색", row["feature"])
+        self.assertIn("자주·보라·연보라", row["feature"])
         self.assertIn("오른쪽 1칸", row["feature"])
 
         source = Image.open(
@@ -575,10 +598,14 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             final.getpixel(point)
             for point in JESSICA_HIGH_LORD_CAPE_POINTS
         }
-        self.assertEqual(
-            final_cape_colors,
-            {(219, 0, 0, 255), (109, 0, 0, 255)},
+        self.assertTrue(
+            {
+                (73, 0, 109, 255),
+                (182, 73, 219, 255),
+                (219, 109, 255, 255),
+            }.issubset(final_cape_colors)
         )
+        self.assertFalse(final_cape_colors & cape_colors)
 
     def test_lana_high_lord_uses_original_cyan_armor_and_blue_cape(self):
         row = self.ai_manifest["commanders"]["3"]["classes"][
@@ -628,7 +655,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         }.issubset(colors))
         self.assertIn((0, 0, 219, 255), colors)
 
-    def test_jessica_swordmaster_polish_only_bridges_saved_gaps(self):
+    def test_jessica_swordmaster_keeps_bridges_with_purple_equipment(self):
         before = Image.open(
             ROOT
             / "docs/assets/ai-class-source/archive/"
@@ -643,12 +670,13 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             if before.getpixel((x, y)) != after.getpixel((x, y))
         }
         self.assertGreaterEqual(len(changed), len(POLISH_PIXELS))
-        self.assertGreaterEqual(
-            sum(
-                after.getpixel(point) == color
-                for point, color in POLISH_PIXELS.items()
-            ),
-            12,
+        visible_colors = {
+            color for color in after.getdata() if color[3]
+        }
+        self.assertTrue(
+            {(73, 0, 109, 255), (182, 73, 219, 255)}.issubset(
+                visible_colors
+            )
         )
         self.assertGreaterEqual(
             sum(after.getpixel((x, 9))[3] != 0 for x in range(4, 13)),
@@ -996,7 +1024,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 )
             self.assertTrue(archive.is_file())
 
-        for commander_id in (2, 3, 5, 10):
+        for commander_id in (2, 3, 5):
             row = self.ai_manifest["commanders"][
                 str(commander_id)
             ]["classes"][str(0x04)]
@@ -1012,6 +1040,12 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 AI_ASSET_DIR / str(commander_id) / "04.png"
             ).convert("RGBA")
             self.assertEqual(actual.tobytes(), original.tobytes())
+
+        jessica_lord = self.ai_manifest["commanders"]["10"]["classes"][
+            str(0x04)
+        ]
+        self.assertTrue(jessica_lord["redesigned"])
+        self.assertIn("자주·보라·연보라", jessica_lord["feature"])
 
     def test_lowest_duplicate_class_stays_byte_exact(self):
         for commander in self.test_manifest["commanders"].values():
@@ -1094,7 +1128,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
         )
         self.assertEqual(manifest["commander_count"], 10)
         self.assertEqual(manifest["asset_count"], 180)
-        self.assertEqual(manifest["redesigned_count"], 120)
+        self.assertEqual(manifest["redesigned_count"], 131)
         self.assertEqual(manifest["pending_redesign_count"], 0)
         self.assertIn("preview PNG assets only", manifest["rom_effect"])
         source_cells = set()
@@ -1214,6 +1248,8 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         "공통 16×16 클래스 템플릿"
                         in row["ai_source_kind"]
                         or "원작 ROM 16×16" in row["ai_source_kind"]
+                        or "전용 네이티브 논리16 원화"
+                        in row["ai_source_kind"]
                     )
                 source_cells.add(row["ai_source_cell_file"])
                 self.assertEqual(row["face_pixel_count"], 0)
@@ -1222,6 +1258,11 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         self.assertNotEqual(image.tobytes(), source.tobytes())
                     else:
                         self.assertEqual(image.tobytes(), source.tobytes())
+                elif (
+                    row.get("ai_generated") is False
+                    and row["class_name"] in {"호크나이트", "크로코나이트"}
+                ):
+                    self.assertEqual(image.tobytes(), source.tobytes())
                 else:
                     self.assertNotEqual(
                         image.tobytes(),
@@ -1245,7 +1286,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         )
                     }.issubset({0, 255})
                 )
-        self.assertEqual(len(source_cells), 120)
+        self.assertEqual(len(source_cells), 131)
         for filename in source_cells:
             self.assertTrue((AI_ASSET_DIR / filename).is_file(), filename)
 
@@ -1455,13 +1496,184 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
             "Liana Wizard's generated red cape was lost",
         )
 
+    def test_v87_hero_anatomy_and_jessica_fresh_sources_are_validated(self):
+        hero_root = (
+            ROOT
+            / "docs/assets/ai-class-source/latest/elwin-hero-ai-v7-anatomy"
+        )
+        hero_report = json.loads(
+            (hero_root / "validation-report.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertTrue(hero_report["accepted"])
+        self.assertEqual(hero_report["identity_match"], 73)
+        self.assertEqual(hero_report["identity_pixel_count"], 73)
+        self.assertEqual(len(hero_report["connected_components"]), 1)
+        self.assertFalse(hero_report["empty_rows"])
+        self.assertFalse(hero_report["empty_columns"])
+        self.assertFalse(hero_report["center_holes"])
+        self.assertTrue(all(hero_report["semantic_checks"].values()))
+        self.assertEqual(
+            list(Image.open(hero_root / "22-hero.png").convert("RGBA").getdata()),
+            list(Image.open(AI_ASSET_DIR / "1/22.png").convert("RGBA").getdata()),
+        )
+        final_hero = Image.open(AI_ASSET_DIR / "1/22.png").convert("RGBA")
+        self.assertEqual(final_hero.getpixel((7, 15)), (36, 36, 36, 255))
+        self.assertEqual(final_hero.getpixel((8, 15)), (0, 0, 0, 0))
+        self.assertEqual(final_hero.getpixel((9, 15)), (36, 36, 36, 255))
+        hero_manifest = self.ai_manifest["commanders"]["1"]["classes"][
+            str(0x22)
+        ]
+        self.assertIn("elwin-hero-ai-v7-anatomy", hero_manifest["ai_source_position"])
+        self.assertIn("검날→금색 가드→피부색 손→은색 팔", hero_manifest["feature"])
+        self.assertIn("견갑→팔→손", hero_manifest["feature"])
+        selected_hero = hero_root / "selected-sources/22-hero-ai.png"
+        copied_hero = AI_ASSET_DIR / str(hero_manifest["ai_source_original_file"])
+        self.assertEqual(
+            list(Image.open(selected_hero).convert("RGBA").getdata()),
+            list(Image.open(copied_hero).convert("RGBA").getdata()),
+        )
+
+        refined_root = (
+            ROOT
+            / "docs/assets/ai-class-source/latest/"
+            "shared-new-classes-v2-refined"
+        )
+        report = json.loads(
+            (refined_root / "validation-report.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertTrue(report["all_accepted"])
+        self.assertEqual(len(report["classes"]), 33)
+        refined_classes = {"15", "16", "18", "28", "25", "26"}
+        self.assertEqual(
+            sum(row["class_id"] in refined_classes for row in report["classes"]),
+            29,
+        )
+        for row in report["classes"]:
+            commander_id = int(row["commander_id"])
+            class_id = str(row["class_id"])
+            source = Image.open(refined_root / str(row["file"])).convert("RGBA")
+            editor = Image.open(
+                AI_ASSET_DIR / f"{commander_id}/{class_id}.png"
+            ).convert("RGBA")
+            if (commander_id, class_id) not in {(10, "26"), (10, "28")}:
+                self.assertEqual(list(source.getdata()), list(editor.getdata()))
+            if class_id in {"15", "18", "28", "25", "26"}:
+                self.assertFalse(row["center_holes"])
+
+        fresh_root = (
+            ROOT
+            / "docs/assets/ai-class-source/latest/"
+            "jessica-zarvera-summoner-ai-v1-fresh"
+        )
+        fresh_report = json.loads(
+            (fresh_root / "validation-report.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertTrue(fresh_report["all_accepted"])
+        self.assertEqual(len(fresh_report["classes"]), 2)
+        self.assertEqual(
+            {row["class_id"] for row in fresh_report["classes"]},
+            {"26", "28"},
+        )
+        for row in fresh_report["classes"]:
+            class_id = str(row["class_id"])
+            self.assertEqual(row["identity_pixel_count"], 73)
+            self.assertEqual(row["identity_match"], 73)
+            self.assertLessEqual(row["visible_color_count"], 15)
+            self.assertEqual(len(row["connected_components"]), 1)
+            self.assertFalse(row["empty_rows"])
+            self.assertFalse(row["empty_columns"])
+            self.assertFalse(row["center_holes"])
+            self.assertFalse(row["pure_black"])
+            self.assertFalse(row["magenta_contamination"])
+            self.assertIn(
+                "no earlier AI or shared class template",
+                row["input_policy"],
+            )
+
+            manifest_row = self.ai_manifest["commanders"]["10"][
+                "classes"
+            ][str(int(class_id, 16))]
+            self.assertIn("OpenAI 신규 제시카", manifest_row["ai_source_kind"])
+            self.assertIn(
+                "latest/jessica-zarvera-summoner-ai-v1-fresh/",
+                manifest_row["ai_source_position"],
+            )
+            selected = ROOT / str(row["generative_source"])
+            copied = (
+                AI_ASSET_DIR / str(manifest_row["ai_source_original_file"])
+            )
+            self.assertEqual(
+                list(Image.open(selected).convert("RGBA").getdata()),
+                list(Image.open(copied).convert("RGBA").getdata()),
+            )
+
+            # The dedicated native source stores the ROM head at x1..11;
+            # aggregate composition moves exactly those 73 colors to x2..12.
+            original = Image.open(
+                ROOT
+                / "editor/static/class-sprites/commanders/10/"
+                f"{class_id}-p1.png"
+            ).convert("RGBA")
+            final = Image.open(
+                AI_ASSET_DIR / f"10/{class_id}.png"
+            ).convert("RGBA")
+            translated_identity = {
+                tuple(point) for point in manifest_row["identity_lock_points"]
+            }
+            self.assertEqual(len(translated_identity), 73)
+            for x, y in translated_identity:
+                self.assertEqual(
+                    final.getpixel((x, y)),
+                    original.getpixel((x - 1, y)),
+                )
+            self.assertEqual(final.getpixel((6, 8)), (36, 36, 36, 255))
+            self.assertIn(
+                "목 경계 투명 1픽셀 폐쇄",
+                manifest_row["feature"],
+            )
+
+        # Jessica's face is intentionally placed one cell to the right of each
+        # dedicated fresh body. Both classes expose that destination mask.
+        for class_id in (0x26, 0x28):
+            manifest_row = self.ai_manifest["commanders"]["10"]["classes"][
+                str(class_id)
+            ]
+            self.assertEqual(
+                min(x for x, _ in manifest_row["identity_lock_points"]),
+                2,
+            )
+            self.assertEqual(
+                max(x for x, _ in manifest_row["identity_lock_points"]),
+                12,
+            )
+            self.assertIn("오른쪽 1칸 이동", manifest_row["feature"])
+
+        # The user explicitly kept Healer unchanged.
+        for commander_id in (2, 3, 7, 10):
+            old = Image.open(
+                ROOT
+                / "docs/assets/ai-class-source/latest/"
+                "shared-new-classes-v1/logical16"
+                / f"{commander_id:02d}-08.png"
+            ).convert("RGBA")
+            new = Image.open(
+                refined_root / f"logical16/{commander_id:02d}-08.png"
+            ).convert("RGBA")
+            self.assertEqual(list(old.getdata()), list(new.getdata()))
+
     def test_elwin_and_logical16_commanders_change_only_upper_classes(self):
         self.assertEqual(
             self.ai_manifest["asset_version"],
-            "class-role-and-mask-polish-v80",
+            "elwin-hero-anatomy-v87",
         )
         source_paths = self.ai_manifest["ai_source_images"]
-        self.assertEqual(len(source_paths), 119)
+        self.assertEqual(len(source_paths), 148)
         self.assertEqual(
             sum(
                 path.startswith(
@@ -1479,6 +1691,41 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 for path in source_paths
             ),
             10,
+        )
+        self.assertEqual(
+            sum(
+                "latest/shared-new-classes-v2-refined/logical16/" in path
+                for path in source_paths
+            ),
+            31,
+        )
+        self.assertEqual(
+            sum(
+                "latest/jessica-zarvera-summoner-ai-v1-fresh/" in path
+                for path in source_paths
+            ),
+            4,
+        )
+        self.assertEqual(
+            sum(
+                "latest/elwin-hero-ai-v7-anatomy/" in path
+                for path in source_paths
+            ),
+            2,
+        )
+        self.assertEqual(
+            sum(
+                "latest/elwin-hero-ai-v6-fresh/" in path
+                for path in source_paths
+            ),
+            0,
+        )
+        self.assertEqual(
+            sum(
+                "latest/keith-lester-tier1-mounted-v1/logical16/" in path
+                for path in source_paths
+            ),
+            4,
         )
         self.assertEqual(
             sum("latest/hein-sorcerer-v2/" in path for path in source_paths),
@@ -1528,7 +1775,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 )
                 for path in source_paths
             ),
-            10,
+            5,
         )
         self.assertEqual(
             sum(
@@ -1933,8 +2180,12 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                 0x11,
                 0x13,
                 0x14,
+                0x15,
                 0x16,
+                0x18,
                 0x1A,
+                0x26,
+                0x28,
             }:
                 self.assertIn(
                     "공통 16×16 클래스 템플릿",
@@ -2295,7 +2546,7 @@ class ExperimentalClassSpriteAssetTests(unittest.TestCase):
                         self.assertIn("원작 ROM 16×16", row["ai_source_kind"])
                     else:
                         self.assertIn("히든 클래스", row["ai_source_kind"])
-        self.assertEqual(supplemental_count, 10)
+        self.assertEqual(supplemental_count, 3)
 
     def test_liana_lana_share_one_full_canvas_design_with_blue_red_contrast(
         self,

@@ -79,7 +79,7 @@ MAP_SPRITE_FRAME_BASES = (0x052980, 0x058280)
 MAP_SPRITE_BYTES = 0x80
 BALD_CLASS_ID = 0x2E
 BALD_SOURCE_SPRITE_ID = 0x007E
-BALD_CUSTOM_SPRITE_ID = 0x53AD
+BALD_CUSTOM_SPRITE_ID = 0x57AD
 BALD_CUSTOM_FRAME_OFFSETS = tuple(
     base + BALD_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
@@ -97,7 +97,7 @@ BALD_SPRITE_COLOR_INDEX_REMAP = {
 
 SHAMAN_CLASS_ID = 0x0A
 SHAMAN_SOURCE_SPRITE_ID = 0x001D
-SHAMAN_CUSTOM_SPRITE_ID = 0x53AF
+SHAMAN_CUSTOM_SPRITE_ID = 0x57AF
 SHAMAN_CUSTOM_FRAME_OFFSETS = tuple(
     base + SHAMAN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
@@ -112,7 +112,7 @@ SHAMAN_COMMANDER_SOURCE_SPRITE_IDS = {
     9: 0x0047,
 }
 SHAMAN_COMMANDER_CUSTOM_SPRITE_IDS = {
-    commander_id: 0x53B0 + index
+    commander_id: 0x57B0 + index
     for index, commander_id in enumerate(
         SHAMAN_COMMANDER_SOURCE_SPRITE_IDS
     )
@@ -149,7 +149,7 @@ SHAMAN_COMMANDER_COLOR_INDEX_REMAPS = {
 
 LOREN_CLASS_ID = 0x9B
 LOREN_SOURCE_SPRITE_ID = 0x001C
-LOREN_CUSTOM_SPRITE_ID = 0x53AE
+LOREN_CUSTOM_SPRITE_ID = 0x57AE
 LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     base + LOREN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
@@ -197,7 +197,7 @@ PAIRED_NPC_MAP_SPRITES = {
     0x99: {
         "label": "Militia",
         "source_sprite_id": 0x001C,
-        "custom_sprite_id": 0x53B7,
+        "custom_sprite_id": 0x57B7,
         "color_index_remap": {0x1: 0x6, 0xE: 0x7},
         "protected_coords": LOREN_BLADE_COORDS_BY_FRAME,
     },
@@ -205,7 +205,7 @@ PAIRED_NPC_MAP_SPRITES = {
     0x9A: {
         "label": "Pirates",
         "source_sprite_id": 0x001C,
-        "custom_sprite_id": 0x53B8,
+        "custom_sprite_id": 0x57B8,
         "color_index_remap": {0x1: 0xF},
         "protected_coords": LOREN_BLADE_COORDS_BY_FRAME,
     },
@@ -213,7 +213,7 @@ PAIRED_NPC_MAP_SPRITES = {
     0x9C: {
         "label": "Priest",
         "source_sprite_id": 0x001D,
-        "custom_sprite_id": 0x53B9,
+        "custom_sprite_id": 0x57B9,
         "color_index_remap": {
             0x1: 0x6,
             0x4: 0x3,
@@ -230,18 +230,49 @@ PAIRED_NPC_MAP_SPRITES = {
 # Each commander/class pair gets a private expansion-backed sprite so changing
 # one class cannot overwrite another commander's face or equipment.
 AI_CLASS_MAP_SPRITE_ASSET_ROOT = Path("editor/static/ai-class-sprites")
-AI_CLASS_MAP_SPRITE_START_ID = 0x53BA
+AI_CLASS_MAP_SPRITE_START_ID = 0x57BA
 AI_CLASS_MAP_SPRITE_CLASSES_BY_COMMANDER = {
-    1: (0x04, 0x0B, 0x13, 0x14),
-    2: (0x0B, 0x11, 0x13, 0x14, 0x16),
-    3: (0x0B, 0x11, 0x13, 0x14, 0x16),
-    4: (0x04, 0x0B, 0x13, 0x14),
-    5: (0x0B, 0x11, 0x13, 0x14, 0x16),
-    6: (0x04, 0x0B),
-    7: (0x04, 0x0B, 0x11, 0x16),
-    8: (0x04, 0x0B, 0x13, 0x14),
-    9: (0x13, 0x14),
-    10: (0x0B, 0x11, 0x13, 0x14, 0x16),
+    1: (
+        0x04, 0x0B, 0x0C, 0x12, 0x13, 0x14,
+        0x17, 0x1A, 0x1B, 0x1D, 0x22, 0x29,
+    ),
+    2: (
+        0x08, 0x0B, 0x11, 0x13, 0x14, 0x15, 0x16,
+        0x17, 0x18, 0x19, 0x1D, 0x25, 0x26, 0x28,
+    ),
+    3: (
+        0x08, 0x0B, 0x11, 0x13, 0x14, 0x15, 0x16,
+        0x17, 0x18, 0x19, 0x1D, 0x25, 0x26, 0x28,
+    ),
+    4: (
+        0x04, 0x0B, 0x13, 0x14, 0x15, 0x17, 0x19,
+        0x1D, 0x1E, 0x21, 0x23, 0x24, 0x27,
+    ),
+    5: (
+        0x09, 0x0A, 0x0B, 0x11, 0x13, 0x14, 0x15,
+        0x16, 0x17, 0x18, 0x19, 0x1A, 0x26, 0x28,
+    ),
+    6: (
+        0x04, 0x0B, 0x0C, 0x17, 0x18,
+        0x19, 0x1B, 0x1D, 0x1E, 0x29,
+    ),
+    7: (
+        0x01, 0x04, 0x06, 0x08, 0x0B, 0x11, 0x15,
+        0x16, 0x17, 0x19, 0x1A, 0x1D, 0x1E, 0x24,
+    ),
+    8: (
+        0x04, 0x0B, 0x0C, 0x13, 0x14, 0x16,
+        0x17, 0x19, 0x1A, 0x1B, 0x23,
+    ),
+    9: (
+        0x01, 0x07, 0x0C, 0x13, 0x14, 0x15,
+        0x19, 0x1B, 0x1D, 0x1F, 0x26, 0x2A,
+    ),
+    10: (
+        0x04, 0x08, 0x09, 0x0B, 0x0D, 0x11, 0x12,
+        0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,
+        0x1A, 0x26, 0x28,
+    ),
 }
 AI_CLASS_MAP_SPRITE_SPECS = tuple(
     (
@@ -259,6 +290,12 @@ AI_CLASS_MAP_SPRITE_SPECS = tuple(
         )
     )
 )
+AI_CLASS_MAP_SPRITE_SOURCE_CLASS_OVERRIDES = {
+    # These tier-1 records intentionally use the corresponding mounted stock
+    # class as their gray-source reference.
+    (7, 0x01): 0x06,
+    (9, 0x01): 0x07,
+}
 
 # The stock inactive-unit renderer does not recolor the two 0x80-byte map
 # frames directly. It expands a separate 2bpp silhouette at
@@ -282,8 +319,8 @@ MAP_SPRITE_GRAY_SOURCE_REMAP_TABLE_LIMIT = 0x2B8E80
 # private 2bpp gray source for every dense custom ID so the acted frame follows
 # the accepted active sprite rather than turning back into an unrelated stock
 # infantry or cavalry shape.
-MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE = 0x2F8000
-MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE_LIMIT = 0x2F9000
+MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE = 0x31B000
+MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE_LIMIT = 0x31E000
 MAP_SPRITE_GRAY_SOURCE_MASK_BYTES = 0x40
 
 # The stock battle map always preloads ordinary hireable mercenary classes
@@ -367,8 +404,12 @@ def custom_map_sprite_gray_source_map(
     for commander_id, class_id, custom_sprite_id in (
         AI_CLASS_MAP_SPRITE_SPECS
     ):
+        source_class_id = AI_CLASS_MAP_SPRITE_SOURCE_CLASS_OVERRIDES.get(
+            (commander_id, class_id),
+            class_id,
+        )
         record_offset = commander_sprite_record_offset(
-            source_data, commander_id, class_id
+            source_data, commander_id, source_class_id
         )
         mapping[custom_sprite_id] = be16(source_data, record_offset + 1)
     return mapping

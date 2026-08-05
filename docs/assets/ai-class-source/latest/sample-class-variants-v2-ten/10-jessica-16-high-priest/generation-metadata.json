@@ -1,0 +1,97 @@
+{
+  "group": "10-jessica-16-high-priest",
+  "tool": "built-in image_gen",
+  "mode": "independent imagegen call per new candidate",
+  "generated_candidates": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10"
+  ],
+  "preserved_candidates": [],
+  "generation_inputs_only": [
+    "editor/static/class-sprites/commanders/10/16-p1.png",
+    "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-16-high-priest/references/identity-only-32x.png"
+  ],
+  "previous_ai_equipment_reference": false,
+  "cross_character_template_or_recolor": false,
+  "native_conversion": "manual logical-16 repixel guided by each candidate motif; identity restored from current editor pixels",
+  "samples": [
+    {
+      "candidate": "01",
+      "preserved": false,
+      "ai_sha256": "b92b91cec7e6b2f023248e8a201f2ef4d36ed7044b8569c8f2c4dc6a8ff9145f",
+      "prompt_sha256": "93289e2e7afbabf906df64cb568a00f2592d9722dcd3b41bea4ed514d3abb328",
+      "logical16_sha256": "7e374a80d7d4256de40f4dd720cf894bb75cabd7552748e31366b23653432c84"
+    },
+    {
+      "candidate": "02",
+      "preserved": false,
+      "ai_sha256": "8c4450d2945d79a9b88f3905462681bffc7a3102773c26509908b62b89f821ff",
+      "prompt_sha256": "f24dd2ad144df705c87830a2b3f4d280d78cecf972e5c27a424812a209ec3c52",
+      "logical16_sha256": "e096c12deee078c62fcef9c36d092596a3c749295f56b8722947815ac83d526b"
+    },
+    {
+      "candidate": "03",
+      "preserved": false,
+      "ai_sha256": "f639218db15a94c5bc2cac4ee5e35dc0844918b7de1b5f908a00d0c6a715902b",
+      "prompt_sha256": "b55800badbf98f6a37226c29779762347c23c4db8298bb44d9d5335326675ffa",
+      "logical16_sha256": "b1f68897a44854918dc7f3f4c2284ad438ad763828d976ca4c9cf924dcaa6ab6"
+    },
+    {
+      "candidate": "04",
+      "preserved": false,
+      "ai_sha256": "c754b6147b0ba1fdbfc60dcaeabf8a22a9a654150bf354b2b0f93e5580f148fc",
+      "prompt_sha256": "5a6bc0d289d9f36f7d71149693cc433c1c4fc856a673c27dd8a150d489b29edd",
+      "logical16_sha256": "a1be3097834494365437484150491e908667947c855c67de1db2655a637cca43"
+    },
+    {
+      "candidate": "05",
+      "preserved": false,
+      "ai_sha256": "0192b8faba765ae93821c60aa8795086b27937c82411a10b1769a8bb996f26a8",
+      "prompt_sha256": "028947a6c3bdd929238da87599b5a26b3e9ebb929474d9c0b5ae5667c68222ae",
+      "logical16_sha256": "141d99f807e5f0eb34a664eb75eae3caac99c97f897cd76e6f6dcbd3bc948973"
+    },
+    {
+      "candidate": "06",
+      "preserved": false,
+      "ai_sha256": "91806d865e2efabd8ff37d02fb11c99169022378ba2bf27365d8d742629937d9",
+      "prompt_sha256": "06710d54ac788f41e2437317f24a2b928c55d7d7ab4272029381b3782d870963",
+      "logical16_sha256": "8d81f6ebc54acfc2dd03c3fb02ccf34ef24cf30f692c05468feeee0e55e023d1"
+    },
+    {
+      "candidate": "07",
+      "preserved": false,
+      "ai_sha256": "7905c68b139fe23be0cc61237507fde483c486c7dae1ae18c313b5724e1affe5",
+      "prompt_sha256": "80197e4314ee43691891fa7697bf63ef3d6bf7312197b62ac2df36ddf5c67106",
+      "logical16_sha256": "5c497eb53b7e6fd8da5c66623b5cf59c43b9cbe77e6eb0e688c57944efaebd39"
+    },
+    {
+      "candidate": "08",
+      "preserved": false,
+      "ai_sha256": "0fdf3830311dd98e8bc5f3671fecc5a55c2c0846e4f268e8702b1e89e3fcc825",
+      "prompt_sha256": "4692f1352ee53bd6e2afccbe256c91aa3e2db7da347763c1dd4cae12cc58f5ab",
+      "logical16_sha256": "aa2f5824f6e3901b3ff77b59623af668e6598110c9ae78a2bc85914cc324fec4"
+    },
+    {
+      "candidate": "09",
+      "preserved": false,
+      "ai_sha256": "5319626e0ffbff9ec241d630f02e168c0bbd93c04c2196cd00f1b5fd551bd451",
+      "prompt_sha256": "e577c46034a9c25b3f27e5c333d0d87daf249a87dd513858a7443b5816c7a5d8",
+      "logical16_sha256": "883229d51ac49c92a4ae45a503cd8e4d61d8596b1d59e4184dfbf8a7e860b4ac"
+    },
+    {
+      "candidate": "10",
+      "preserved": false,
+      "ai_sha256": "97668280d0c3edb3069f07ad0830cfb21f0b05a9ea74ccd1ad62de68131b5d7d",
+      "prompt_sha256": "21c64461094b033fa29b97c567a2d31b678d1624e6798a5f621d45fd2b73adaa",
+      "logical16_sha256": "3c57591f776deb66b5adbda67d014ec8203bfb5a865bfd7b2f9cf70dd4f8d7ec"
+    }
+  ]
+}

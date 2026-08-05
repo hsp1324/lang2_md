@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "mode": "stock mounted geometry; stronger tier-2 mount-only recolor",
+  "classes": [
+    {
+      "commander_id": 7,
+      "class_id": "01",
+      "source_class_id": "06",
+      "name": "호크나이트",
+      "strong_mount": false,
+      "identity_pixel_count": 56,
+      "mount_pixel_count": 120,
+      "same_geometry_as_source": true,
+      "file": "logical16/07-01.png"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "06",
+      "source_class_id": "06",
+      "name": "호크로드",
+      "strong_mount": true,
+      "identity_pixel_count": 56,
+      "mount_pixel_count": 120,
+      "same_geometry_as_source": true,
+      "file": "logical16/07-06.png"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "01",
+      "source_class_id": "07",
+      "name": "크로코나이트",
+      "strong_mount": false,
+      "identity_pixel_count": 70,
+      "mount_pixel_count": 107,
+      "same_geometry_as_source": true,
+      "file": "logical16/09-01.png"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "07",
+      "source_class_id": "07",
+      "name": "크로코로드",
+      "strong_mount": true,
+      "identity_pixel_count": 70,
+      "mount_pixel_count": 107,
+      "same_geometry_as_source": true,
+      "file": "logical16/09-07.png"
+    }
+  ],
+  "all_same_geometry": true
+}

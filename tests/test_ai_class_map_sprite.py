@@ -22,7 +22,22 @@ class AiClassMapSpriteTests(unittest.TestCase):
         )
 
     def test_reviewed_target_inventory_is_stable(self) -> None:
-        self.assertEqual(len(builder.AI_CLASS_MAP_SPRITE_SPECS), 40)
+        reviewed = {
+            (int(commander_id), int(class_id))
+            for commander_id, commander in self.manifest[
+                "commanders"
+            ].items()
+            for class_id, row in commander["classes"].items()
+            if row["redesigned"] and not row["pending_redesign"]
+        }
+        promoted = {
+            (commander_id, class_id)
+            for commander_id, class_id, _ in (
+                builder.AI_CLASS_MAP_SPRITE_SPECS
+            )
+        }
+        self.assertEqual(len(builder.AI_CLASS_MAP_SPRITE_SPECS), 131)
+        self.assertEqual(promoted, reviewed)
         self.assertEqual(
             len(
                 {
@@ -32,14 +47,7 @@ class AiClassMapSpriteTests(unittest.TestCase):
                     )
                 }
             ),
-            40,
-        )
-        self.assertEqual(
-            {
-                class_id
-                for _, class_id, _ in builder.AI_CLASS_MAP_SPRITE_SPECS
-            },
-            {0x04, 0x0B, 0x11, 0x13, 0x14, 0x16},
+            131,
         )
 
     def test_every_promoted_asset_is_reviewed_as_redesigned(self) -> None:
@@ -132,7 +140,7 @@ class AiClassMapSpriteTests(unittest.TestCase):
                 promoted.add(offset)
                 self.assertLessEqual(
                     offset + builder.MAP_SPRITE_BYTES,
-                    0x300000,
+                    builder.MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE,
                 )
                 self.assertTrue(
                     all(
@@ -142,7 +150,11 @@ class AiClassMapSpriteTests(unittest.TestCase):
                         ]
                     )
                 )
-        self.assertEqual(len(promoted), 80)
+        self.assertEqual(
+            len(promoted),
+            len(builder.AI_CLASS_MAP_SPRITE_SPECS)
+            * len(builder.MAP_SPRITE_FRAME_BASES),
+        )
         self.assertTrue(promoted.isdisjoint(existing))
 
     def test_patch_rejects_occupied_destination(self) -> None:

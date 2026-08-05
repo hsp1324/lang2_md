@@ -96,10 +96,11 @@ COLOR_SCHEMES = {
         ELWIN_GREEN: (36, 182, 36, 255),
     },
     (0x13, 4): {
-        ELWIN_RED: (0, 36, 73, 255),
-        # Keep the cape shadow distinguishable from the editor/map darkness;
-        # #242424 remains reserved for actual sprite outlines and seams.
-        ELWIN_DARK_RED: (0, 36, 73, 255),
+        # Use the bright side of Sherry Princess's cyan/teal ramp on the
+        # cloak.  Medium teal is only the fold shadow; #242424 remains the
+        # actual outline and seam color.
+        ELWIN_RED: (109, 219, 255, 255),
+        ELWIN_DARK_RED: (0, 109, 146, 255),
         ELWIN_BLUE: (0, 109, 146, 255),
         ELWIN_LIGHT_BLUE: (36, 109, 146, 255),
         ELWIN_CYAN: (109, 219, 255, 255),
@@ -167,8 +168,8 @@ COLOR_SCHEMES = {
     (0x14, 4): {
         # Continue Sherry Mage's Princess-like navy/cyan ramp instead of
         # switching the upgraded Archmage back to red.
-        ELWIN_RED: (0, 36, 73, 255),
-        ELWIN_DARK_RED: (0, 36, 73, 255),
+        ELWIN_RED: (109, 219, 255, 255),
+        ELWIN_DARK_RED: (0, 109, 146, 255),
         ELWIN_BLUE: (0, 109, 146, 255),
         ELWIN_LIGHT_BLUE: (36, 109, 146, 255),
         ELWIN_CYAN: (109, 219, 255, 255),

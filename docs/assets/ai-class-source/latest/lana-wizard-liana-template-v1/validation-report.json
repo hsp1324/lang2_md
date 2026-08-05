@@ -1,0 +1,27 @@
+{
+  "source": "2:15 Liana Wizard current approved design",
+  "target": "3:15 Lana Wizard",
+  "source_mask_pixels": 104,
+  "target_mask_pixels": 104,
+  "identity_matches": 95,
+  "identity_visible": 95,
+  "visible_color_count": 13,
+  "palette": [
+    "#924924",
+    "#242424",
+    "#ffb600",
+    "#ffffff",
+    "#496dff",
+    "#dbb66d",
+    "#929292",
+    "#49496d",
+    "#0024b6",
+    "#b69292",
+    "#00006d",
+    "#0049db",
+    "#2449ff"
+  ],
+  "empty_rows": [],
+  "empty_columns": [],
+  "accepted": true
+}

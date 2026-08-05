@@ -1,0 +1,97 @@
+{
+  "group": "10-jessica-08-healer",
+  "tool": "built-in image_gen",
+  "mode": "independent imagegen call per new candidate",
+  "generated_candidates": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10"
+  ],
+  "preserved_candidates": [],
+  "generation_inputs_only": [
+    "editor/static/class-sprites/commanders/10/08-p1.png",
+    "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-08-healer/references/identity-only-32x.png"
+  ],
+  "previous_ai_equipment_reference": false,
+  "cross_character_template_or_recolor": false,
+  "native_conversion": "manual logical-16 repixel guided by each candidate motif; identity restored from current editor pixels",
+  "samples": [
+    {
+      "candidate": "01",
+      "preserved": false,
+      "ai_sha256": "e95455f0b1d27484cb0a89aad802c054abdd67e741a12920fbafd50089cd4ec5",
+      "prompt_sha256": "0635df870e19161e304d90005a3c247594b455d451c35a425343adfcba812866",
+      "logical16_sha256": "7d1c39c652ecaa76d643b469a2154dfd5e55842f476c3e4d97fa909d39ca939d"
+    },
+    {
+      "candidate": "02",
+      "preserved": false,
+      "ai_sha256": "0ef11630b3c666dcef3fe6c6e34476df4a2a2e9896f2e92026f09be72328abe0",
+      "prompt_sha256": "780098ae3d07634fa4b7f3d6b53a12be861bfb711367033cf837d24a9d0ef89a",
+      "logical16_sha256": "4fc34b08182c15c144a0fdf8f82171d8894fea9fc2d09aaf3434be1fd02d444f"
+    },
+    {
+      "candidate": "03",
+      "preserved": false,
+      "ai_sha256": "6375fbaa6e0b3f4462078d71b730f6d92f7aae4bb449b9563a1ae9e2a330d2e4",
+      "prompt_sha256": "8a05e66244f5a26aed4a527cd6f06762372f0a87e84b8290d7cd99a5c1a5b78a",
+      "logical16_sha256": "e5b51eeb000ddfb10635daea0cb88de32614408b7c9daf8aea9b6cc8d1683557"
+    },
+    {
+      "candidate": "04",
+      "preserved": false,
+      "ai_sha256": "de4db7969d42e6a1d2e8d21c8b312ed4dc24926ac47577f51b779880dacf687c",
+      "prompt_sha256": "2882369c6a63d7d0462d4acdd7574dfb0b3655c1b4dbadc43f1c391f42f432a3",
+      "logical16_sha256": "6ddeaffb67354029729c31029ee6e1645d29212c5b70bd4eca2ac0407f509ba3"
+    },
+    {
+      "candidate": "05",
+      "preserved": false,
+      "ai_sha256": "463cc6580a4c0f3174716f3268af66810232be35f0d7a0d535d3ce3ba7d2a232",
+      "prompt_sha256": "6d5a57e7dc76f2b60594fd9e40378927bc1c02fe0790bc1bc25b9757aa2e2dc0",
+      "logical16_sha256": "14c7b52fbd77a9f7790656d827b1281dcf60517e5783e4d849fafa286d02f7b2"
+    },
+    {
+      "candidate": "06",
+      "preserved": false,
+      "ai_sha256": "9bd3062642a93fa3010d6dc11f91b490d73cfb3225efca036a368e8636dfbdba",
+      "prompt_sha256": "cd8b98254da4202bf5e165af170918a347bc8e8d512529d1ebaa9c834d1e7ef7",
+      "logical16_sha256": "9a219de8caa5b16901903f971fd2201d9e4bd2c4d7b75e862e23ba29b8388fb4"
+    },
+    {
+      "candidate": "07",
+      "preserved": false,
+      "ai_sha256": "6fab77ff9f55f371c06c777c753a917b4968fc6c3cbdb30d2aa97efbde157440",
+      "prompt_sha256": "cfc731addaa7ccf3c33e4402f231d7d2050984c9483fe7557c6f2ba3d2118089",
+      "logical16_sha256": "e81e010faa267bec5df65a5472b3aadff31ec454f419103090eef3cbc9b060a7"
+    },
+    {
+      "candidate": "08",
+      "preserved": false,
+      "ai_sha256": "2aa23689597a3f55086f16363beac9f5a9f2b307ccb60f934bd258229446cab4",
+      "prompt_sha256": "55ca7aad4bb2a5cb4ea3667178efaf6614ebccbe032ac9a221a01b236f1d0273",
+      "logical16_sha256": "844dad4ffa4effbf68aebf5f9b36f82e2ab0e7d1fafe0d963689ad12db8d72ff"
+    },
+    {
+      "candidate": "09",
+      "preserved": false,
+      "ai_sha256": "0f50df9f00027a12835c9975f69db047641d026589b0a74f9cb66c8852df21b2",
+      "prompt_sha256": "d17f81d373a29fe3da793dd63358b7db5a31f140a5f0dce28e4f4490eb81bb36",
+      "logical16_sha256": "225fc1a4462ec4b5c4e7904c3164bbfa014f0b024c95e370171c82f832ab9020"
+    },
+    {
+      "candidate": "10",
+      "preserved": false,
+      "ai_sha256": "38d53e810046baf3d6c2d0ed1eb62bb571127565ce317c9cc28ba4637d3efbc5",
+      "prompt_sha256": "b5044b6468d9c35d256376697fd9d18c50ec26e9b6b82dd55cc113e6ce13f9db",
+      "logical16_sha256": "ad302a12e9345b20f0b3c7d3a57809bc7820a176f6f631a9c753c05a36209681"
+    }
+  ]
+}

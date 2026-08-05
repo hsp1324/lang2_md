@@ -1,0 +1,299 @@
+{
+  "asset_version": "sample-classes-v6-elwin-purple-ornament",
+  "layout": "vertical-groups-horizontal-five",
+  "partial": false,
+  "ready_group_count": 5,
+  "expected_group_count": 5,
+  "ready_candidate_count": 25,
+  "expected_candidate_count": 25,
+  "groups": [
+    {
+      "id": "01-elwin-22-hero",
+      "commander_id": 1,
+      "class_id": 34,
+      "title": "엘윈 · 히어로",
+      "description": "엘윈 킹의 동일한 형태에 서로 다른 장비색을 적용한 히어로 5안",
+      "expected_sample_count": 5,
+      "complete": true,
+      "samples": [
+        {
+          "id": "01",
+          "label": "킹 기반 히어로 색상 01",
+          "description": "엘윈 킹 형태와 히어로 얼굴을 그대로 유지한 장비 색상안",
+          "ai_source": "sample-class-sprites/01-elwin-22-hero/ai/01.png",
+          "logical16": "sample-class-sprites/01-elwin-22-hero/logical16/01.png",
+          "preview": "sample-class-sprites/01-elwin-22-hero/previews/01.png",
+          "preserved": false
+        },
+        {
+          "id": "02",
+          "label": "킹 기반 히어로 색상 02",
+          "description": "엘윈 킹 형태와 히어로 얼굴을 그대로 유지한 장비 색상안",
+          "ai_source": "sample-class-sprites/01-elwin-22-hero/ai/02.png",
+          "logical16": "sample-class-sprites/01-elwin-22-hero/logical16/02.png",
+          "preview": "sample-class-sprites/01-elwin-22-hero/previews/02.png",
+          "preserved": false
+        },
+        {
+          "id": "03",
+          "label": "킹 기반 히어로 색상 03",
+          "description": "엘윈 킹 형태와 히어로 얼굴을 그대로 유지한 장비 색상안",
+          "ai_source": "sample-class-sprites/01-elwin-22-hero/ai/03.png",
+          "logical16": "sample-class-sprites/01-elwin-22-hero/logical16/03.png",
+          "preview": "sample-class-sprites/01-elwin-22-hero/previews/03.png",
+          "preserved": false
+        },
+        {
+          "id": "04",
+          "label": "킹 기반 히어로 · 보라 머리 장식",
+          "description": "붉은 머리는 그대로 두고 흰·회색 머리 장식 6픽셀만 보라·연보라로 맞춘 비교안",
+          "ai_source": "sample-class-sprites/01-elwin-22-hero/ai/04.png",
+          "logical16": "sample-class-sprites/01-elwin-22-hero/logical16/04.png",
+          "preview": "sample-class-sprites/01-elwin-22-hero/previews/04.png",
+          "preserved": false
+        },
+        {
+          "id": "05",
+          "label": "킹 기반 히어로 색상 05",
+          "description": "엘윈 킹 형태와 히어로 얼굴을 그대로 유지한 장비 색상안",
+          "ai_source": "sample-class-sprites/01-elwin-22-hero/ai/05.png",
+          "logical16": "sample-class-sprites/01-elwin-22-hero/logical16/05.png",
+          "preview": "sample-class-sprites/01-elwin-22-hero/previews/05.png",
+          "preserved": false
+        }
+      ]
+    },
+    {
+      "id": "02-liana-18-sage",
+      "commander_id": 2,
+      "class_id": 24,
+      "title": "리아나 · 세이지",
+      "description": "캐릭터별 아크메이지 실루엣 기반 세이지 전용 색상 5안",
+      "expected_sample_count": 5,
+      "complete": true,
+      "samples": [
+        {
+          "id": "01",
+          "label": "아크메이지 기반 01",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/02-liana-18-sage/ai/01.png",
+          "logical16": "sample-class-sprites/02-liana-18-sage/logical16/01.png",
+          "preview": "sample-class-sprites/02-liana-18-sage/previews/01.png",
+          "preserved": false
+        },
+        {
+          "id": "02",
+          "label": "아크메이지 기반 02",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/02-liana-18-sage/ai/02.png",
+          "logical16": "sample-class-sprites/02-liana-18-sage/logical16/02.png",
+          "preview": "sample-class-sprites/02-liana-18-sage/previews/02.png",
+          "preserved": false
+        },
+        {
+          "id": "03",
+          "label": "아크메이지 기반 03",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/02-liana-18-sage/ai/03.png",
+          "logical16": "sample-class-sprites/02-liana-18-sage/logical16/03.png",
+          "preview": "sample-class-sprites/02-liana-18-sage/previews/03.png",
+          "preserved": false
+        },
+        {
+          "id": "04",
+          "label": "아크메이지 기반 04",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/02-liana-18-sage/ai/04.png",
+          "logical16": "sample-class-sprites/02-liana-18-sage/logical16/04.png",
+          "preview": "sample-class-sprites/02-liana-18-sage/previews/04.png",
+          "preserved": false
+        },
+        {
+          "id": "05",
+          "label": "아크메이지 기반 05",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/02-liana-18-sage/ai/05.png",
+          "logical16": "sample-class-sprites/02-liana-18-sage/logical16/05.png",
+          "preview": "sample-class-sprites/02-liana-18-sage/previews/05.png",
+          "preserved": false
+        }
+      ]
+    },
+    {
+      "id": "03-lana-18-sage",
+      "commander_id": 3,
+      "class_id": 24,
+      "title": "라나 · 세이지",
+      "description": "캐릭터별 아크메이지 실루엣 기반 세이지 전용 색상 5안",
+      "expected_sample_count": 5,
+      "complete": true,
+      "samples": [
+        {
+          "id": "01",
+          "label": "아크메이지 기반 01",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/03-lana-18-sage/ai/01.png",
+          "logical16": "sample-class-sprites/03-lana-18-sage/logical16/01.png",
+          "preview": "sample-class-sprites/03-lana-18-sage/previews/01.png",
+          "preserved": false
+        },
+        {
+          "id": "02",
+          "label": "아크메이지 기반 02",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/03-lana-18-sage/ai/02.png",
+          "logical16": "sample-class-sprites/03-lana-18-sage/logical16/02.png",
+          "preview": "sample-class-sprites/03-lana-18-sage/previews/02.png",
+          "preserved": false
+        },
+        {
+          "id": "03",
+          "label": "아크메이지 기반 03",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/03-lana-18-sage/ai/03.png",
+          "logical16": "sample-class-sprites/03-lana-18-sage/logical16/03.png",
+          "preview": "sample-class-sprites/03-lana-18-sage/previews/03.png",
+          "preserved": false
+        },
+        {
+          "id": "04",
+          "label": "아크메이지 기반 04",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/03-lana-18-sage/ai/04.png",
+          "logical16": "sample-class-sprites/03-lana-18-sage/logical16/04.png",
+          "preview": "sample-class-sprites/03-lana-18-sage/previews/04.png",
+          "preserved": false
+        },
+        {
+          "id": "05",
+          "label": "아크메이지 기반 05",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/03-lana-18-sage/ai/05.png",
+          "logical16": "sample-class-sprites/03-lana-18-sage/logical16/05.png",
+          "preview": "sample-class-sprites/03-lana-18-sage/previews/05.png",
+          "preserved": false
+        }
+      ]
+    },
+    {
+      "id": "05-hein-18-sage",
+      "commander_id": 5,
+      "class_id": 24,
+      "title": "헤인 · 세이지",
+      "description": "캐릭터별 아크메이지 실루엣 기반 세이지 전용 색상 5안",
+      "expected_sample_count": 5,
+      "complete": true,
+      "samples": [
+        {
+          "id": "01",
+          "label": "아크메이지 기반 01",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/05-hein-18-sage/ai/01.png",
+          "logical16": "sample-class-sprites/05-hein-18-sage/logical16/01.png",
+          "preview": "sample-class-sprites/05-hein-18-sage/previews/01.png",
+          "preserved": false
+        },
+        {
+          "id": "02",
+          "label": "아크메이지 기반 02",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/05-hein-18-sage/ai/02.png",
+          "logical16": "sample-class-sprites/05-hein-18-sage/logical16/02.png",
+          "preview": "sample-class-sprites/05-hein-18-sage/previews/02.png",
+          "preserved": false
+        },
+        {
+          "id": "03",
+          "label": "아크메이지 기반 03",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/05-hein-18-sage/ai/03.png",
+          "logical16": "sample-class-sprites/05-hein-18-sage/logical16/03.png",
+          "preview": "sample-class-sprites/05-hein-18-sage/previews/03.png",
+          "preserved": false
+        },
+        {
+          "id": "04",
+          "label": "아크메이지 기반 04",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/05-hein-18-sage/ai/04.png",
+          "logical16": "sample-class-sprites/05-hein-18-sage/logical16/04.png",
+          "preview": "sample-class-sprites/05-hein-18-sage/previews/04.png",
+          "preserved": false
+        },
+        {
+          "id": "05",
+          "label": "아크메이지 기반 05",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/05-hein-18-sage/ai/05.png",
+          "logical16": "sample-class-sprites/05-hein-18-sage/logical16/05.png",
+          "preview": "sample-class-sprites/05-hein-18-sage/previews/05.png",
+          "preserved": false
+        }
+      ]
+    },
+    {
+      "id": "10-jessica-18-sage",
+      "commander_id": 10,
+      "class_id": 24,
+      "title": "제시카 · 세이지",
+      "description": "캐릭터별 아크메이지 실루엣 기반 세이지 전용 색상 5안",
+      "expected_sample_count": 5,
+      "complete": true,
+      "samples": [
+        {
+          "id": "01",
+          "label": "아크메이지 기반 01",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/10-jessica-18-sage/ai/01.png",
+          "logical16": "sample-class-sprites/10-jessica-18-sage/logical16/01.png",
+          "preview": "sample-class-sprites/10-jessica-18-sage/previews/01.png",
+          "preserved": false
+        },
+        {
+          "id": "02",
+          "label": "아크메이지 기반 02",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/10-jessica-18-sage/ai/02.png",
+          "logical16": "sample-class-sprites/10-jessica-18-sage/logical16/02.png",
+          "preview": "sample-class-sprites/10-jessica-18-sage/previews/02.png",
+          "preserved": false
+        },
+        {
+          "id": "03",
+          "label": "아크메이지 기반 03",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/10-jessica-18-sage/ai/03.png",
+          "logical16": "sample-class-sprites/10-jessica-18-sage/logical16/03.png",
+          "preview": "sample-class-sprites/10-jessica-18-sage/previews/03.png",
+          "preserved": false
+        },
+        {
+          "id": "04",
+          "label": "아크메이지 기반 04",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/10-jessica-18-sage/ai/04.png",
+          "logical16": "sample-class-sprites/10-jessica-18-sage/logical16/04.png",
+          "preview": "sample-class-sprites/10-jessica-18-sage/previews/04.png",
+          "preserved": false
+        },
+        {
+          "id": "05",
+          "label": "아크메이지 기반 05",
+          "description": "세이지: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+          "ai_source": "sample-class-sprites/10-jessica-18-sage/ai/05.png",
+          "logical16": "sample-class-sprites/10-jessica-18-sage/logical16/05.png",
+          "preview": "sample-class-sprites/10-jessica-18-sage/previews/05.png",
+          "preserved": false
+        }
+      ]
+    }
+  ],
+  "review_sheets": {
+    "all": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/all-ai-and-logical16.png",
+    "commander_1": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/01-elwin.png",
+    "commander_2": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/02-liana.png",
+    "commander_3": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/03-lana.png",
+    "commander_5": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/05-hein.png",
+    "commander_10": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/10-jessica.png"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "expected_group_count": 11,
+  "completed_group_count": 11,
+  "expected_candidate_count": 110,
+  "completed_candidate_count": 110,
+  "unique_raw_ai_count": 110,
+  "unique_logical16_count": 110,
+  "all_groups_accepted": true,
+  "groups": [
+    {
+      "key": "03-lana-08-healer",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "03-lana-15-wizard",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "03-lana-16-high-priest",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "03-lana-18-sage",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "03-lana-25-agent",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "03-lana-26-zarvera",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "03-lana-28-summoner",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "09-lester-15-wizard",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "09-lester-26-zarvera",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "04-sherry-15-wizard",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    },
+    {
+      "key": "06-scott-18-sage",
+      "candidate_count": 10,
+      "all_accepted": true,
+      "unique_raw_ai_count": 10,
+      "unique_logical16_count": 10
+    }
+  ]
+}

@@ -1,0 +1,319 @@
+{
+  "version": 1,
+  "mode": "five independent built-in imagegen concepts repixelled as review-only logical16 samples",
+  "input_policy": "only ROM Summoner and Jessica identity references; no prior AI input",
+  "identity_coordinates": "unshifted source coordinates; editor final +1 translation intentionally not applied",
+  "all_accepted": true,
+  "variants": [
+    {
+      "variant": 1,
+      "ai_source": "ai/01.png",
+      "logical16": "logical16/01.png",
+      "preview_16x": "previews/01.png",
+      "identity_pixel_count": 73,
+      "identity_match": 73,
+      "visible_color_count": 11,
+      "palette": [
+        "#242424",
+        "#49006d",
+        "#496dff",
+        "#0000db",
+        "#9224b6",
+        "#ffb600",
+        "#924924",
+        "#dbb66d",
+        "#db6dff",
+        "#ffffff",
+        "#6ddbff"
+      ],
+      "connected_components": [
+        191
+      ],
+      "enclosed_holes": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "center_holes": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "published_final_space": {
+        "translation": [
+          1,
+          0
+        ],
+        "identity_match": 73,
+        "connected_components": [
+          188
+        ],
+        "empty_rows": [],
+        "empty_columns": [],
+        "accepted": true
+      },
+      "accepted": true
+    },
+    {
+      "variant": 2,
+      "ai_source": "ai/02.png",
+      "logical16": "logical16/02.png",
+      "preview_16x": "previews/02.png",
+      "identity_pixel_count": 73,
+      "identity_match": 73,
+      "visible_color_count": 12,
+      "palette": [
+        "#242424",
+        "#49006d",
+        "#496dff",
+        "#0000db",
+        "#924924",
+        "#dbb66d",
+        "#6ddbff",
+        "#ffffff",
+        "#db6dff",
+        "#9224b6",
+        "#ffb600",
+        "#242449"
+      ],
+      "connected_components": [
+        189
+      ],
+      "enclosed_holes": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "center_holes": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "published_final_space": null,
+      "accepted": true
+    },
+    {
+      "variant": 3,
+      "ai_source": "ai/03.png",
+      "logical16": "logical16/03.png",
+      "preview_16x": "previews/03.png",
+      "identity_pixel_count": 73,
+      "identity_match": 73,
+      "visible_color_count": 11,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#0000db",
+        "#49006d",
+        "#924924",
+        "#dbb66d",
+        "#db6dff",
+        "#ffb600",
+        "#6ddbff",
+        "#9224b6",
+        "#ffffff"
+      ],
+      "connected_components": [
+        186
+      ],
+      "enclosed_holes": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "center_holes": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "published_final_space": null,
+      "accepted": true
+    },
+    {
+      "variant": 4,
+      "ai_source": "ai/04.png",
+      "logical16": "logical16/04.png",
+      "preview_16x": "previews/04.png",
+      "identity_pixel_count": 73,
+      "identity_match": 73,
+      "visible_color_count": 11,
+      "palette": [
+        "#242424",
+        "#49006d",
+        "#496dff",
+        "#0000db",
+        "#dbb66d",
+        "#9224b6",
+        "#db6dff",
+        "#ffb600",
+        "#6ddbff",
+        "#924924",
+        "#ffffff"
+      ],
+      "connected_components": [
+        164
+      ],
+      "enclosed_holes": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "center_holes": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "published_final_space": {
+        "translation": [
+          1,
+          0
+        ],
+        "identity_match": 73,
+        "connected_components": [
+          161
+        ],
+        "empty_rows": [],
+        "empty_columns": [],
+        "accepted": true
+      },
+      "accepted": true
+    },
+    {
+      "variant": 5,
+      "ai_source": "ai/05.png",
+      "logical16": "logical16/05.png",
+      "preview_16x": "previews/05.png",
+      "identity_pixel_count": 73,
+      "identity_match": 73,
+      "visible_color_count": 10,
+      "palette": [
+        "#242424",
+        "#496dff",
+        "#49006d",
+        "#0000db",
+        "#ffffff",
+        "#924924",
+        "#dbb66d",
+        "#6ddbff",
+        "#db6dff",
+        "#ffb600"
+      ],
+      "connected_components": [
+        168
+      ],
+      "enclosed_holes": [
+        [
+          6,
+          6
+        ]
+      ],
+      "center_holes": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black": false,
+      "magenta_contamination": false,
+      "published_final_space": null,
+      "accepted": true
+    }
+  ]
+}

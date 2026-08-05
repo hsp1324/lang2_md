@@ -1,0 +1,97 @@
+{
+  "group": "10-jessica-15-wizard",
+  "tool": "built-in image_gen",
+  "mode": "independent imagegen call per new candidate",
+  "generated_candidates": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10"
+  ],
+  "preserved_candidates": [],
+  "generation_inputs_only": [
+    "editor/static/class-sprites/commanders/10/15-p1.png",
+    "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-15-wizard/references/identity-only-32x.png"
+  ],
+  "previous_ai_equipment_reference": false,
+  "cross_character_template_or_recolor": false,
+  "native_conversion": "manual logical-16 repixel guided by each candidate motif; identity restored from current editor pixels",
+  "samples": [
+    {
+      "candidate": "01",
+      "preserved": false,
+      "ai_sha256": "eced0524ff9307692d3b27c9c12594641236beb87d9103a3ea83dd6dc631c426",
+      "prompt_sha256": "41b82efe275a1e86bce8c9f32895c855dca94ed93d40c4a472a406d60f761bfc",
+      "logical16_sha256": "c3b82dc882ca6e5c942efc5b0cfc3151cd45a94cf66c678ffa6f7cbaff9244f5"
+    },
+    {
+      "candidate": "02",
+      "preserved": false,
+      "ai_sha256": "555fd25c4a16a1328641185261752be497bdb133b6a8419acb6ef9da6533b562",
+      "prompt_sha256": "30fcbde3ac5bc4ac92f536b08c2af466ecd077339f0a85f4c027bf21b62eb51a",
+      "logical16_sha256": "703bd48417ba1d6f7ced9c98e292c552b0d2966c2bf56d7c86a59792d873b9ef"
+    },
+    {
+      "candidate": "03",
+      "preserved": false,
+      "ai_sha256": "d55c1815780c3b314ab8a7cad324077844881fc952fe220b45e1dad88b26b474",
+      "prompt_sha256": "62c76c7c5084efcf2568f348d3dc5fcfc05bf857a6061faa937efd06acc5d435",
+      "logical16_sha256": "342ed8f4a834579a482997d2beb23c012f36d9fff75763d82066cadd3ef2d06e"
+    },
+    {
+      "candidate": "04",
+      "preserved": false,
+      "ai_sha256": "9de4dbd3efc0f9abcc45ad0b0b7404509628442b6a09d7ce5c7371ea7365fe80",
+      "prompt_sha256": "4ce29da53a049c42aa529c85714ed8e04ba846cb36d333fa174548e1a8bd2b76",
+      "logical16_sha256": "5f0ef9fd2d94dddd8e2e7d9c8858bbc94eb749b38fbf328f6c947ade8b8117f1"
+    },
+    {
+      "candidate": "05",
+      "preserved": false,
+      "ai_sha256": "1528ce1c7202ed489d8221ba0db97c05f43c4f0407a5f23b05665c24e96a80a9",
+      "prompt_sha256": "d70610fd0bdcfe321c025afb1bbbf552c1b725b8d590ee7cff20a62b9c512b1b",
+      "logical16_sha256": "b72ab23b9601677213de50501cecd4618d31b70a0e006acd68ba80534547e140"
+    },
+    {
+      "candidate": "06",
+      "preserved": false,
+      "ai_sha256": "9535360d42fb330835719c9c9861690b5bf60e5c6292228e2650ee8770f61d6e",
+      "prompt_sha256": "d17ff413fa5adb9ff06aa5c7f602dbee802401325297e1664c3b93655b381225",
+      "logical16_sha256": "f3987ab32f183a0e80b5433e7ccdbb211c28c6ab0329c2893b23e0801f55d4a5"
+    },
+    {
+      "candidate": "07",
+      "preserved": false,
+      "ai_sha256": "e2b0cc85dede28e80e73bb626c9a1362b94872d53b404918a1100647e07bef53",
+      "prompt_sha256": "03f6317a6cd1dd0432a232163dd80dc0d712ecb13bf9a037641250c1cda0c7e2",
+      "logical16_sha256": "7c03713948904d07dfce9411e88501e1765b67fa93b0641a630fa9abcb114f8b"
+    },
+    {
+      "candidate": "08",
+      "preserved": false,
+      "ai_sha256": "54bf8e9c3207676adcc95af582e8a73e7a77e51b54ec56b1c5b4f2d5a18b62ad",
+      "prompt_sha256": "a68e61b652dc6fca4ab5803310688ae1a3d9cb01df3a78f8d24760a3e0300679",
+      "logical16_sha256": "f30fc49fe95fe624b29b1e7d05828c7567cfdf24556101a15a443a2b30216466"
+    },
+    {
+      "candidate": "09",
+      "preserved": false,
+      "ai_sha256": "2c0118ec017a67e080f73700c8c31a619e5d2ea25578f01aa0feb269bc74dfbf",
+      "prompt_sha256": "5072b88eeb8a08111d9507effbc89227a1c0ce788820b1630d635f3ae0b09e6a",
+      "logical16_sha256": "79bda19afcf70bdfe069ff9755e824727e4ab52cb3111c88196a476d6eb967f8"
+    },
+    {
+      "candidate": "10",
+      "preserved": false,
+      "ai_sha256": "908e8e677b3b558a27cea44601a468390bec5e49520004f48efd50cf2354ef39",
+      "prompt_sha256": "339f0f12f3ca56442c901f260d7290621b98da6c135867b5db45ede7939b995c",
+      "logical16_sha256": "52acf2142aa93b23435be39f656aa9f582295af18469c00e717e967bb0b956d6"
+    }
+  ]
+}

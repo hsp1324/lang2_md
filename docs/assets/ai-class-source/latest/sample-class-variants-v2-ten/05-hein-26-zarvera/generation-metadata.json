@@ -1,0 +1,97 @@
+{
+  "group": "05-hein-26-zarvera",
+  "tool": "built-in image_gen",
+  "mode": "independent imagegen call per new candidate",
+  "generated_candidates": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10"
+  ],
+  "preserved_candidates": [],
+  "generation_inputs_only": [
+    "editor/static/class-sprites/commanders/5/26-p1.png",
+    "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/05-hein-26-zarvera/references/identity-only-32x.png"
+  ],
+  "previous_ai_equipment_reference": false,
+  "cross_character_template_or_recolor": false,
+  "native_conversion": "manual logical-16 repixel guided by each candidate motif; identity restored from current editor pixels",
+  "samples": [
+    {
+      "candidate": "01",
+      "preserved": false,
+      "ai_sha256": "96c8f45f079d2b988e56f3c6819d8df869d57aff9d81f383f08c2c5864d254f9",
+      "prompt_sha256": "640a205d839841745bb15117ac6dfee41ca6a367a50ac7cb9eb97724b6bcb942",
+      "logical16_sha256": "3ed6ab73fe39af663723aa4b186dd4ad4becccddec3efa435b6fdba682984821"
+    },
+    {
+      "candidate": "02",
+      "preserved": false,
+      "ai_sha256": "bb1777863ba9958217edf81fee10cfbc9f161a46a3604798190ad67d28cd3332",
+      "prompt_sha256": "ba9846efcfcd2727b3c5c634339c1e89d669ee914baa9f08902660780a1a9707",
+      "logical16_sha256": "e2499e89d4da134236c84d2efad3c8827defaf64f777f60d8b7dfb7b705677f5"
+    },
+    {
+      "candidate": "03",
+      "preserved": false,
+      "ai_sha256": "4784a11fc3ed5ca338d06a40e7ec2e03e6367d8b4545c87a53e20ec057aba3bb",
+      "prompt_sha256": "58952b75aeeafe34f0a58ff76f357d07a0443ae16fd9561e940175f19789dda0",
+      "logical16_sha256": "eaee6c5c285a6cf6b952217f106274c42e0af1678902d900cfe0ee8b0cc88f1d"
+    },
+    {
+      "candidate": "04",
+      "preserved": false,
+      "ai_sha256": "6d71b7c71e0379306209af35d3576b83a0731744f4516146552e416f022936ed",
+      "prompt_sha256": "108c9e3754b031469018f9111f664b755be3ea16278b202f73e62b2458695176",
+      "logical16_sha256": "1eecdaf94c7650ef80fdb8edd173858c9459276c60aefe5b638ba87edd9697fa"
+    },
+    {
+      "candidate": "05",
+      "preserved": false,
+      "ai_sha256": "b8d2f601b0dc115e96ab27c538c779aee3a5cab99d1dd76e9cbdb2f583b8762e",
+      "prompt_sha256": "5917cf085e671d0b115e7a031203695f26db19925adc7df17c4b038d3d332747",
+      "logical16_sha256": "619d8e68c615a0c2f2572e19acfbc46975fa6060e1d4b397bb46340f514b28dc"
+    },
+    {
+      "candidate": "06",
+      "preserved": false,
+      "ai_sha256": "43f43baa72ef91cb790da64d1c0287ecc82e86fb0b0609000756e11ba202f31b",
+      "prompt_sha256": "e6502779d6a426b085042607fa253ae7a05b8d4e076d8c0130c781e5de034de1",
+      "logical16_sha256": "7c01c6da7761e54f0151e91f9efcce1db639e9c981270c936bd5e8b45647f325"
+    },
+    {
+      "candidate": "07",
+      "preserved": false,
+      "ai_sha256": "630d2d2b1f4ef5f478008276b9ac67430ccbd643e290a5f08f6d2d51636e1bb6",
+      "prompt_sha256": "e3ba9c8424498a2aae49f3cf2097b2a5f651f79fc582578ceb2cdd8cfe6c2b6a",
+      "logical16_sha256": "aefae2429626b3917d10b185881caf9f0adad2043c926bdb8d6f4c083e5e5574"
+    },
+    {
+      "candidate": "08",
+      "preserved": false,
+      "ai_sha256": "bcca888793fa7d872a9c18b9f7106c23db2e22b378a057e658979f33afce92f5",
+      "prompt_sha256": "73a122665b5fd2c83be14e07024bbbb5f2c2327f5a7cc830e2feaf3a2e5050d5",
+      "logical16_sha256": "dcf8021a3cc227a214cc71cba337df5cc7eddb186435eaa2e2a5d3f10341f426"
+    },
+    {
+      "candidate": "09",
+      "preserved": false,
+      "ai_sha256": "8cc8b5495ac7f14d16d0e684c0189e828cdaa5cdc294ae031a23d6a81bcc007a",
+      "prompt_sha256": "9e4efb03a85bfbd43351157a3962c1cd62bb56f52231651308a43d27455464df",
+      "logical16_sha256": "2d881d1512c8c256b1503350dda2b263940b7eb6394bcfdf2edbf1ad0cbe460e"
+    },
+    {
+      "candidate": "10",
+      "preserved": false,
+      "ai_sha256": "8fd104cea37e4b91f3dc5eda346aa78dbb26cd02cb0799a0efaf2bc77cbd69ea",
+      "prompt_sha256": "a65295534888e0e7b8821635aa54aee31111f3313416874a2bc7c8184cf6564c",
+      "logical16_sha256": "6d517ac723638394eaf9d2b438939974b7b77228628d4962ed4de90f926b32eb"
+    }
+  ]
+}

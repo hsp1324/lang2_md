@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "rule": "keep latest geometry and identity; brighten only selected dark interior material cells",
+  "all_accepted": true,
+  "classes": [
+    {
+      "commander_id": 2,
+      "class_id": "18",
+      "name": "리아나 세이지 밝은 적색·장미색 몸통 갑옷",
+      "file": "logical16/02-18.png",
+      "identity_match": 109,
+      "identity_pixel_count": 109,
+      "shape_match": 256,
+      "changed_dark_pixel_count": 21,
+      "dark_pixels_before": 85,
+      "dark_pixels_after": 64,
+      "visible_color_count": 14,
+      "palette": [
+        "#242424",
+        "#922449",
+        "#924924",
+        "#ffb600",
+        "#929292",
+        "#ffffff",
+        "#db0000",
+        "#dbb66d",
+        "#6d4924",
+        "#49496d",
+        "#b60000",
+        "#242449",
+        "#6d0000",
+        "#494949"
+      ],
+      "accepted": true
+    },
+    {
+      "commander_id": 4,
+      "class_id": "15",
+      "name": "쉐리 메이지·아크메이지 계열 청록·하늘색 위저드",
+      "file": "logical16/04-15.png",
+      "identity_match": 76,
+      "identity_pixel_count": 76,
+      "shape_match": 256,
+      "changed_dark_pixel_count": 31,
+      "dark_pixels_before": 64,
+      "dark_pixels_after": 33,
+      "visible_color_count": 13,
+      "palette": [
+        "#00496d",
+        "#929292",
+        "#242424",
+        "#006d92",
+        "#49496d",
+        "#ffffff",
+        "#6ddbff",
+        "#924924",
+        "#dbb66d",
+        "#ffb600",
+        "#24246d",
+        "#0000db",
+        "#004949"
+      ],
+      "accepted": true
+    }
+  ]
+}

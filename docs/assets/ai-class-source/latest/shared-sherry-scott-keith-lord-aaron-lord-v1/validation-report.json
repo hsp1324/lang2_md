@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "master": "docs/assets/ai-class-source/latest/shared-sherry-scott-keith-lord-aaron-lord-v1/master/08-04-current-user-edited.png",
+  "rule": "copy the latest user-edited Aaron Lord equipment coordinates; restore each target identity; recolor only equipment roles",
+  "all_accepted": true,
+  "classes": [
+    {
+      "commander_id": 4,
+      "class_id": "04",
+      "identity_match": 73,
+      "identity_pixel_count": 73,
+      "equipment_role_match": 178,
+      "equipment_pixel_count": 178,
+      "master_equipment_override_points": [
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "palette_family": "navy/teal/cyan/gold",
+      "visible_color_count": 11,
+      "palette": [
+        "#929292",
+        "#242424",
+        "#ffffff",
+        "#49496d",
+        "#dbb66d",
+        "#ffb600",
+        "#006d92",
+        "#6ddbff",
+        "#924924",
+        "#246d92",
+        "#0000db"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black_pixels": 0,
+      "accepted": true
+    },
+    {
+      "commander_id": 6,
+      "class_id": "04",
+      "identity_match": 66,
+      "identity_pixel_count": 66,
+      "equipment_role_match": 186,
+      "equipment_pixel_count": 186,
+      "master_equipment_override_points": [
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "palette_family": "forest-green/lime/gold",
+      "visible_color_count": 10,
+      "palette": [
+        "#242424",
+        "#929292",
+        "#dbb66d",
+        "#ffffff",
+        "#24b624",
+        "#ffb600",
+        "#246d00",
+        "#24db24",
+        "#924924",
+        "#0000db"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black_pixels": 0,
+      "accepted": true
+    },
+    {
+      "commander_id": 7,
+      "class_id": "04",
+      "identity_match": 61,
+      "identity_pixel_count": 61,
+      "equipment_role_match": 187,
+      "equipment_pixel_count": 187,
+      "master_equipment_override_points": [
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "palette_family": "navy/blue/cyan",
+      "visible_color_count": 10,
+      "palette": [
+        "#242424",
+        "#929292",
+        "#ffffff",
+        "#dbb66d",
+        "#2449db",
+        "#92b6ff",
+        "#49496d",
+        "#6ddbff",
+        "#924924",
+        "#496dff"
+      ],
+      "empty_rows": [],
+      "empty_columns": [],
+      "pure_black_pixels": 0,
+      "accepted": true
+    }
+  ]
+}

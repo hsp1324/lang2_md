@@ -1,0 +1,37 @@
+[
+  {
+    "sample": "01",
+    "source_bbox_width": 274,
+    "source_bbox_height": 351,
+    "center_offset_x": 0.0,
+    "center_offset_y": 0.0
+  },
+  {
+    "sample": "02",
+    "source_bbox_width": 274,
+    "source_bbox_height": 348,
+    "center_offset_x": 0.5,
+    "center_offset_y": 0.0
+  },
+  {
+    "sample": "03",
+    "source_bbox_width": 288,
+    "source_bbox_height": 429,
+    "center_offset_x": 0.0,
+    "center_offset_y": 0.0
+  },
+  {
+    "sample": "04",
+    "source_bbox_width": 326,
+    "source_bbox_height": 345,
+    "center_offset_x": -0.5,
+    "center_offset_y": 0.0
+  },
+  {
+    "sample": "05",
+    "source_bbox_width": 321,
+    "source_bbox_height": 347,
+    "center_offset_x": 0.0,
+    "center_offset_y": 0.0
+  }
+]

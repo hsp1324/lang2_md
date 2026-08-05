@@ -1,0 +1,357 @@
+{
+  "hero": {
+    "group": "01-elwin-22-hero",
+    "samples": [
+      {
+        "sample": "01",
+        "palette_name": "왕도 진홍·금장",
+        "visible_colors": 10,
+        "equipment_palette": [
+          "#db0000",
+          "#ffb600"
+        ]
+      },
+      {
+        "sample": "02",
+        "palette_name": "청색·빙은",
+        "visible_colors": 12,
+        "equipment_palette": [
+          "#006ddb",
+          "#244992",
+          "#49b6ff",
+          "#b6dbff"
+        ]
+      },
+      {
+        "sample": "03",
+        "palette_name": "비취·금장",
+        "visible_colors": 12,
+        "equipment_palette": [
+          "#00b649",
+          "#246d49",
+          "#b6db6d",
+          "#dbb600"
+        ]
+      },
+      {
+        "sample": "04",
+        "palette_name": "자주·은장",
+        "visible_colors": 12,
+        "equipment_palette": [
+          "#49246d",
+          "#b66dff"
+        ]
+      },
+      {
+        "sample": "05",
+        "palette_name": "진홍·장미은",
+        "visible_colors": 12,
+        "equipment_palette": [
+          "#6d2449",
+          "#db0049",
+          "#ff6d92",
+          "#ffb6b6"
+        ]
+      }
+    ]
+  },
+  "magic_groups": [
+    {
+      "group": "02-liana-18-sage",
+      "source_commander": 2,
+      "samples": [
+        {
+          "sample": "01",
+          "accent": "#922449",
+          "visible_colors": 14,
+          "opaque_pixels": 212
+        },
+        {
+          "sample": "02",
+          "accent": "#246db6",
+          "visible_colors": 14,
+          "opaque_pixels": 212
+        },
+        {
+          "sample": "03",
+          "accent": "#24b624",
+          "visible_colors": 14,
+          "opaque_pixels": 212
+        },
+        {
+          "sample": "04",
+          "accent": "#b624db",
+          "visible_colors": 14,
+          "opaque_pixels": 212
+        },
+        {
+          "sample": "05",
+          "accent": "#ffdb24",
+          "visible_colors": 14,
+          "opaque_pixels": 212
+        }
+      ]
+    },
+    {
+      "group": "03-lana-18-sage",
+      "source_commander": 3,
+      "samples": [
+        {
+          "sample": "01",
+          "accent": "#922449",
+          "visible_colors": 14,
+          "opaque_pixels": 214
+        },
+        {
+          "sample": "02",
+          "accent": "#246db6",
+          "visible_colors": 14,
+          "opaque_pixels": 214
+        },
+        {
+          "sample": "03",
+          "accent": "#24b624",
+          "visible_colors": 14,
+          "opaque_pixels": 214
+        },
+        {
+          "sample": "04",
+          "accent": "#b624db",
+          "visible_colors": 14,
+          "opaque_pixels": 214
+        },
+        {
+          "sample": "05",
+          "accent": "#ffdb24",
+          "visible_colors": 14,
+          "opaque_pixels": 214
+        }
+      ]
+    },
+    {
+      "group": "05-hein-18-sage",
+      "source_commander": 5,
+      "samples": [
+        {
+          "sample": "01",
+          "accent": "#922449",
+          "visible_colors": 9,
+          "opaque_pixels": 201
+        },
+        {
+          "sample": "02",
+          "accent": "#246db6",
+          "visible_colors": 9,
+          "opaque_pixels": 201
+        },
+        {
+          "sample": "03",
+          "accent": "#24b649",
+          "visible_colors": 9,
+          "opaque_pixels": 201
+        },
+        {
+          "sample": "04",
+          "accent": "#b624db",
+          "visible_colors": 9,
+          "opaque_pixels": 201
+        },
+        {
+          "sample": "05",
+          "accent": "#ffdb24",
+          "visible_colors": 9,
+          "opaque_pixels": 201
+        }
+      ]
+    },
+    {
+      "group": "10-jessica-18-sage",
+      "source_commander": 10,
+      "samples": [
+        {
+          "sample": "01",
+          "accent": "#922449",
+          "visible_colors": 10,
+          "opaque_pixels": 221
+        },
+        {
+          "sample": "02",
+          "accent": "#246db6",
+          "visible_colors": 10,
+          "opaque_pixels": 221
+        },
+        {
+          "sample": "03",
+          "accent": "#24b624",
+          "visible_colors": 10,
+          "opaque_pixels": 221
+        },
+        {
+          "sample": "04",
+          "accent": "#b624db",
+          "visible_colors": 10,
+          "opaque_pixels": 221
+        },
+        {
+          "sample": "05",
+          "accent": "#ffdb24",
+          "visible_colors": 10,
+          "opaque_pixels": 221
+        }
+      ]
+    }
+  ],
+  "removed_from_sample_catalog": "all groups except Elwin Hero and four Sage rows",
+  "active_identity_sync": [
+    {
+      "group": "01-elwin-22-hero",
+      "samples": [
+        {
+          "sample": "01",
+          "identity_pixels": 82,
+          "visible_colors": 10
+        },
+        {
+          "sample": "02",
+          "identity_pixels": 82,
+          "visible_colors": 12
+        },
+        {
+          "sample": "03",
+          "identity_pixels": 82,
+          "visible_colors": 12
+        },
+        {
+          "sample": "04",
+          "identity_pixels": 82,
+          "visible_colors": 12
+        },
+        {
+          "sample": "05",
+          "identity_pixels": 82,
+          "visible_colors": 12
+        }
+      ]
+    },
+    {
+      "group": "02-liana-18-sage",
+      "samples": [
+        {
+          "sample": "01",
+          "identity_pixels": 122,
+          "visible_colors": 14
+        },
+        {
+          "sample": "02",
+          "identity_pixels": 122,
+          "visible_colors": 14
+        },
+        {
+          "sample": "03",
+          "identity_pixels": 122,
+          "visible_colors": 14
+        },
+        {
+          "sample": "04",
+          "identity_pixels": 122,
+          "visible_colors": 14
+        },
+        {
+          "sample": "05",
+          "identity_pixels": 122,
+          "visible_colors": 14
+        }
+      ]
+    },
+    {
+      "group": "03-lana-18-sage",
+      "samples": [
+        {
+          "sample": "01",
+          "identity_pixels": 130,
+          "visible_colors": 14
+        },
+        {
+          "sample": "02",
+          "identity_pixels": 130,
+          "visible_colors": 14
+        },
+        {
+          "sample": "03",
+          "identity_pixels": 130,
+          "visible_colors": 14
+        },
+        {
+          "sample": "04",
+          "identity_pixels": 130,
+          "visible_colors": 14
+        },
+        {
+          "sample": "05",
+          "identity_pixels": 130,
+          "visible_colors": 14
+        }
+      ]
+    },
+    {
+      "group": "05-hein-18-sage",
+      "samples": [
+        {
+          "sample": "01",
+          "identity_pixels": 76,
+          "visible_colors": 9
+        },
+        {
+          "sample": "02",
+          "identity_pixels": 76,
+          "visible_colors": 9
+        },
+        {
+          "sample": "03",
+          "identity_pixels": 76,
+          "visible_colors": 9
+        },
+        {
+          "sample": "04",
+          "identity_pixels": 76,
+          "visible_colors": 9
+        },
+        {
+          "sample": "05",
+          "identity_pixels": 76,
+          "visible_colors": 9
+        }
+      ]
+    },
+    {
+      "group": "10-jessica-18-sage",
+      "samples": [
+        {
+          "sample": "01",
+          "identity_pixels": 97,
+          "visible_colors": 10
+        },
+        {
+          "sample": "02",
+          "identity_pixels": 97,
+          "visible_colors": 10
+        },
+        {
+          "sample": "03",
+          "identity_pixels": 97,
+          "visible_colors": 10
+        },
+        {
+          "sample": "04",
+          "identity_pixels": 97,
+          "visible_colors": 10
+        },
+        {
+          "sample": "05",
+          "identity_pixels": 97,
+          "visible_colors": 10
+        }
+      ]
+    }
+  ]
+}

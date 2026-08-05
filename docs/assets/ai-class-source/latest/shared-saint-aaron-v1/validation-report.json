@@ -10,8 +10,8 @@
       "class_id": "17",
       "class_name": "SAINT",
       "file": "logical16/01-17.png",
-      "identity_match": 83,
-      "identity_pixel_count": 83,
+      "identity_match": 86,
+      "identity_pixel_count": 86,
       "visible_color_count": 10,
       "palette": [
         "#242424",
@@ -22,8 +22,8 @@
         "#924924",
         "#ff6d6d",
         "#db0000",
-        "#ffdb6d",
-        "#49496d"
+        "#49496d",
+        "#ffdb6d"
       ],
       "empty_rows": [],
       "empty_columns": [],

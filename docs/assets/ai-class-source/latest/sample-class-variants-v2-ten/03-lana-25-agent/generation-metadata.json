@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "group": {
+    "key": "03-lana-25-agent",
+    "commander": 3,
+    "character": "Lana",
+    "class_id": 37,
+    "class_name": "Agent",
+    "slug": "agent"
+  },
+  "generation_mode": "built-in imagegen; one independent call per candidate",
+  "generation_inputs": [
+    "editor/static/class-sprites/commanders/3/25-p1.png",
+    "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/03-lana-25-agent/references/identity-only-32x.png"
+  ],
+  "derived_reference_preview": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/03-lana-25-agent/references/rom-original-32x.png",
+  "previous_ai_inputs": [],
+  "identity_mask_source": "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined/identity-masks.json",
+  "identity_pixel_source": "editor/static/ai-class-sprites/3/25.png",
+  "identity_pixel_count": 82,
+  "candidate_count": 10
+}

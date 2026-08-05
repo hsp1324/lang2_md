@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: Mega Drive Langrisser II-style native logical-16x16 map sprite
+
+Primary request: Create an independent fresh Jessica Zarvera design, variant 3: a closed ceremonial robe with a large complete spearhead projecting toward image-right. Use only the two supplied references. The original Zarvera reference controls coarse scale and game silhouette; the Jessica identity reference controls her face, eyes, blue hairstyle, hair volume, and large head. Do not reference any previously generated image.
+
+One standing female character only, no mount. Keep the head about one third of the full height and connect it to a compact broad-shouldered body. Give her a solid closed robe and tabard, a broad purple cape filling image-left, two visible hands, and separated feet. One hand grips a horizontal or slightly rising spear shaft while the other supports it. The full leaf-shaped spear point must project to image-right and remain inside the canvas, with metal light and shade, a gold socket, and a readable shaft.
+
+Treat the image as true sixteen-by-sixteen design, using hard square pixels and large clusters that will not disappear when reduced. Fill every row and column intentionally, maintain one connected silhouette, and avoid empty holes through the torso. Use no more than about 15 colors: Jessica's original blue hair and skin, silver/white, royal purple through lavender, modest gold, brown wood, and charcoal outline. No antialiasing, smooth gradients, noise, or tiny decorations.
+
+Background: uniform solid #00ff00 chroma key, no shadow, outline around the canvas, glow, border, or vignette. Do not include pure #000000 or accidental magenta/purple background edging. Avoid small head, tall body, detached head, open center, cropped spear, extra character, text, and UI.

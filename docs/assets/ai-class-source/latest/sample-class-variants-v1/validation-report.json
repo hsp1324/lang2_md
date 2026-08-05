@@ -1,0 +1,232 @@
+{
+  "asset_version": "sample-classes-v1",
+  "sample_count": 15,
+  "all_accepted": true,
+  "samples": [
+    {
+      "group": "elwin-hero",
+      "sample": "01",
+      "visible_colors": 10,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        191
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "elwin-hero",
+      "sample": "02",
+      "visible_colors": 10,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        187
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "elwin-hero",
+      "sample": "03",
+      "visible_colors": 9,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        190
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "elwin-hero",
+      "sample": "04",
+      "visible_colors": 10,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        195
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "elwin-hero",
+      "sample": "05",
+      "visible_colors": 10,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        201
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-zarvera",
+      "sample": "01",
+      "visible_colors": 13,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        207
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-zarvera",
+      "sample": "02",
+      "visible_colors": 12,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        169
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-zarvera",
+      "sample": "03",
+      "visible_colors": 13,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        177
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-zarvera",
+      "sample": "04",
+      "visible_colors": 13,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        203
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-zarvera",
+      "sample": "05",
+      "visible_colors": 13,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        197
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-summoner",
+      "sample": "01",
+      "visible_colors": 11,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        189
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-summoner",
+      "sample": "02",
+      "visible_colors": 12,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        187
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-summoner",
+      "sample": "03",
+      "visible_colors": 11,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        184
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-summoner",
+      "sample": "04",
+      "visible_colors": 11,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        162
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    },
+    {
+      "group": "jessica-summoner",
+      "sample": "05",
+      "visible_colors": 10,
+      "forbidden_colors": [],
+      "empty_rows": [],
+      "empty_columns": [],
+      "connected_components": [
+        168
+      ],
+      "center_holes": [],
+      "identity_matches": 73,
+      "identity_total": 73,
+      "accepted": true
+    }
+  ]
+}

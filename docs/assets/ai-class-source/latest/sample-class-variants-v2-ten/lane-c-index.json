@@ -1,0 +1,186 @@
+{
+  "version": 2,
+  "lane": "C",
+  "built_in_imagegen_calls": 119,
+  "groups": [
+    {
+      "slug": "10-jessica-08-healer",
+      "commander_id": 10,
+      "class_id": "08",
+      "identity_pixel_count": 73,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/10/08-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-08-healer/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "10-jessica-15-wizard",
+      "commander_id": 10,
+      "class_id": "15",
+      "identity_pixel_count": 73,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/10/15-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-15-wizard/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "10-jessica-16-high-priest",
+      "commander_id": 10,
+      "class_id": "16",
+      "identity_pixel_count": 73,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/10/16-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-16-high-priest/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "10-jessica-18-sage",
+      "commander_id": 10,
+      "class_id": "18",
+      "identity_pixel_count": 73,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/10/18-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-18-sage/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "10-jessica-26-zarvera",
+      "commander_id": 10,
+      "class_id": "26",
+      "identity_pixel_count": 73,
+      "identity_translation": [
+        1,
+        0
+      ],
+      "rom_input": "editor/static/class-sprites/commanders/10/26-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-26-zarvera/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        2,
+        10
+      ],
+      "preserved_candidate_01_hashes": {
+        "ai/01.png": "8c9a965e29e24b277cdc31f5de113976aa71d1c23874063b8978b3b6df0c7db6",
+        "prompts/01.txt": "3845d8bdab1a74cf642448a5f5be688825b7f0684cb8faffae5d5a550254bb3c",
+        "logical16/01.png": "965e9063c0dc21f25b4ba34b08c4eff15fe2f21145a67bc8f56f94dd99c7ddfb",
+        "previews/01.png": "4e2c791b737479b5845970cb5b1aeaf285c726dd441b8feaeb19fb8bd57b94f3"
+      }
+    },
+    {
+      "slug": "10-jessica-28-summoner",
+      "commander_id": 10,
+      "class_id": "28",
+      "identity_pixel_count": 73,
+      "identity_translation": [
+        1,
+        0
+      ],
+      "rom_input": "editor/static/class-sprites/commanders/10/28-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/10-jessica-28-summoner/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "05-hein-15-wizard",
+      "commander_id": 5,
+      "class_id": "15",
+      "identity_pixel_count": 71,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/5/15-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/05-hein-15-wizard/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "05-hein-16-high-priest",
+      "commander_id": 5,
+      "class_id": "16",
+      "identity_pixel_count": 63,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/5/16-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/05-hein-16-high-priest/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "05-hein-18-sage",
+      "commander_id": 5,
+      "class_id": "18",
+      "identity_pixel_count": 67,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/5/18-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/05-hein-18-sage/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "05-hein-26-zarvera",
+      "commander_id": 5,
+      "class_id": "26",
+      "identity_pixel_count": 69,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/5/26-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/05-hein-26-zarvera/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "05-hein-28-summoner",
+      "commander_id": 5,
+      "class_id": "28",
+      "identity_pixel_count": 66,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/5/28-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/05-hein-28-summoner/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    },
+    {
+      "slug": "01-elwin-22-hero",
+      "commander_id": 1,
+      "class_id": "22",
+      "identity_pixel_count": 73,
+      "identity_translation": null,
+      "rom_input": "editor/static/class-sprites/commanders/1/22-p1.png",
+      "identity_input": "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/01-elwin-22-hero/references/identity-only-32x.png",
+      "generated_candidate_range": [
+        1,
+        10
+      ],
+      "preserved_candidate_01_hashes": null
+    }
+  ]
+}

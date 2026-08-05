@@ -1,0 +1,67 @@
+{
+  "commander_id": 2,
+  "character": "liana",
+  "class_id": 24,
+  "class_hex": "18",
+  "class_slug": "sage",
+  "class_name": "Sage",
+  "rom_reference": "editor/static/class-sprites/commanders/2/18-p1.png",
+  "identity_source": "editor/static/ai-class-sprites/2/18.png",
+  "identity_lock_pixel_count": 91,
+  "imagegen_references": [
+    "refs/rom-original-neutral-32x.png",
+    "refs/identity-only-neutral-32x.png"
+  ],
+  "variants": [
+    {
+      "index": 1,
+      "direction": "tall straight staff image-right and closed book image-left",
+      "prompt": "prompts/01.txt"
+    },
+    {
+      "index": 2,
+      "direction": "rune tablet image-left and short wisdom rod image-right",
+      "prompt": "prompts/02.txt"
+    },
+    {
+      "index": 3,
+      "direction": "orb wand image-right with a broad asymmetric scholarly mantle",
+      "prompt": "prompts/03.txt"
+    },
+    {
+      "index": 4,
+      "direction": "gnarled staff image-left and a compact layered robe",
+      "prompt": "prompts/04.txt"
+    },
+    {
+      "index": 5,
+      "direction": "crescent staff image-right and long opposite scroll case",
+      "prompt": "prompts/05.txt"
+    },
+    {
+      "index": 6,
+      "direction": "unrolled scroll image-left and short casting wand image-right",
+      "prompt": "prompts/06.txt"
+    },
+    {
+      "index": 7,
+      "direction": "long straight staff image-left with a square authoritative mantle",
+      "prompt": "prompts/07.txt"
+    },
+    {
+      "index": 8,
+      "direction": "short rod image-right and wide stepped robe hem",
+      "prompt": "prompts/08.txt"
+    },
+    {
+      "index": 9,
+      "direction": "double-ended staff diagonally across the lower body",
+      "prompt": "prompts/09.txt"
+    },
+    {
+      "index": 10,
+      "direction": "astrolabe-ring staff image-left with a narrow central stole",
+      "prompt": "prompts/10.txt"
+    }
+  ]
+}

@@ -7,9 +7,11 @@
       "master": "1:0B",
       "master_class_name": "엘윈 하이로드",
       "targets": ["1:04", "4:04", "6:04", "7:04", "8:04"],
+      "previous_elwin_lord_shield_targets": ["4:04", "6:04", "7:04"],
+      "latest_aaron_lord_targets": ["4:04", "6:04", "7:04"],
       "excluded_rom_base_classes": ["2:04", "3:04", "5:04", "10:04"],
       "missing_class_commanders": ["9"],
-      "policy": "high_lord_equipment_to_fighter_branch_lord_original_class_palette_visible_identity_only_equipment_priority"
+      "policy": "latest_user_edited_aaron_lord_equipment_to_sherry_scott_keith_character_palette_visible_identity_priority"
     },
     {
       "class_id": "0B",
@@ -57,12 +59,44 @@
     {
       "class_id": "16",
       "class_name": "하이프리스트",
-      "master": "5:16",
-      "master_name": "헤인 하이프리스트",
-      "targets": ["2:16", "3:16", "5:16", "7:16", "10:16"],
+      "master": "8:16",
+      "master_name": "아론 사용자 편집 하이프리스트",
+      "targets": ["2:16", "3:16", "5:16", "7:16", "8:16", "10:16"],
       "policy": "same_equipment_coordinates_original_class_palette_visible_identity_only_equipment_priority"
+    },
+    {
+      "class_id": "25",
+      "class_name": "에이전트",
+      "master": "7:15",
+      "master_name": "키스 사용자 편집 위저드",
+      "targets": ["2:25", "3:25"],
+      "policy": "cross_class_same_equipment_coordinates_character_and_class_specific_palette_visible_identity"
+    },
+    {
+      "class_id": "26",
+      "class_name": "자베러",
+      "master": "7:15",
+      "master_name": "키스 사용자 편집 위저드",
+      "targets": ["2:26", "3:26", "5:26", "9:26", "10:26"],
+      "policy": "cross_class_same_equipment_coordinates_character_and_class_specific_palette_visible_identity"
+    },
+    {
+      "class_id": "28",
+      "class_name": "서머너",
+      "master": "7:15",
+      "master_name": "키스 사용자 편집 위저드",
+      "targets": ["2:28", "3:28", "5:28", "10:28"],
+      "policy": "cross_class_same_equipment_coordinates_character_and_class_specific_palette_visible_identity"
+    },
+    {
+      "class_ids": ["25", "26", "28"],
+      "class_names": ["에이전트", "자베라", "서머너"],
+      "masters": {"28": "2:28", "25": "2:25 적용 전 보존본"},
+      "master_name": "리아나 서머너·에이전트 클래스별 별도 기준형",
+      "targets": ["2:28", "2:25", "2:26", "3:28", "3:25", "3:26"],
+      "policy": "latest_summoner_center_alignment_distinct_class_outer_equipment_twins_share_class_palette_variants"
     }
   ],
   "reserved_split_templates": [],
-  "protected_master_keys": ["1:0B", "5:0B", "1:1A", "5:1A"]
+  "protected_master_keys": ["1:0B", "5:0B", "1:1A", "5:1A", "7:15"]
 }

@@ -1,0 +1,67 @@
+{
+  "commander_id": 2,
+  "character": "liana",
+  "class_id": 37,
+  "class_hex": "25",
+  "class_slug": "agent",
+  "class_name": "Agent",
+  "rom_reference": "editor/static/class-sprites/commanders/2/25-p1.png",
+  "identity_source": "editor/static/ai-class-sprites/2/25.png",
+  "identity_lock_pixel_count": 82,
+  "imagegen_references": [
+    "refs/rom-original-neutral-32x.png",
+    "refs/identity-only-neutral-32x.png"
+  ],
+  "variants": [
+    {
+      "index": 1,
+      "direction": "single dagger extended image-right and short cape image-left",
+      "prompt": "prompts/01.txt"
+    },
+    {
+      "index": 2,
+      "direction": "slender rapier image-left with the free hand drawn back",
+      "prompt": "prompts/02.txt"
+    },
+    {
+      "index": 3,
+      "direction": "compact hand crossbow image-right and fitted opposite sleeve",
+      "prompt": "prompts/03.txt"
+    },
+    {
+      "index": 4,
+      "direction": "single throwing disc image-left with a forward lean",
+      "prompt": "prompts/04.txt"
+    },
+    {
+      "index": 5,
+      "direction": "short spear image-right held diagonally outside the torso",
+      "prompt": "prompts/05.txt"
+    },
+    {
+      "index": 6,
+      "direction": "straight baton image-left and broad angular shoulder guard image-right",
+      "prompt": "prompts/06.txt"
+    },
+    {
+      "index": 7,
+      "direction": "hook blade image-right with a compact split coat",
+      "prompt": "prompts/07.txt"
+    },
+    {
+      "index": 8,
+      "direction": "small one-hand bow image-left and quiver shape image-right",
+      "prompt": "prompts/08.txt"
+    },
+    {
+      "index": 9,
+      "direction": "chain-dart handle image-right with only one short readable chain arc",
+      "prompt": "prompts/09.txt"
+    },
+    {
+      "index": 10,
+      "direction": "short sabre image-left with a long narrow rear coat panel",
+      "prompt": "prompts/10.txt"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "commander_id": 7,
+  "character": "keith",
+  "class_id": 21,
+  "class_hex": "15",
+  "class_slug": "wizard",
+  "class_name": "Wizard",
+  "rom_reference": "editor/static/class-sprites/commanders/7/15-p1.png",
+  "identity_source": "editor/static/ai-class-sprites/7/15.png",
+  "identity_lock_pixel_count": 61,
+  "imagegen_references": [
+    "refs/rom-original-neutral-32x.png",
+    "refs/identity-only-neutral-32x.png"
+  ],
+  "variants": [
+    {
+      "index": 1,
+      "direction": "tall crystal staff on image-right with cape mass on image-left",
+      "prompt": "prompts/01.txt"
+    },
+    {
+      "index": 2,
+      "direction": "long diagonal magic rod from image-left floor toward image-right shoulder",
+      "prompt": "prompts/02.txt"
+    },
+    {
+      "index": 3,
+      "direction": "open grimoire on image-left and short wand on image-right",
+      "prompt": "prompts/03.txt"
+    },
+    {
+      "index": 4,
+      "direction": "crescent staff upright on image-left with narrow opposite sleeve",
+      "prompt": "prompts/04.txt"
+    },
+    {
+      "index": 5,
+      "direction": "single-orb staff on image-right with asymmetric robe panels",
+      "prompt": "prompts/05.txt"
+    },
+    {
+      "index": 6,
+      "direction": "fork-topped staff on image-left with one forward casting hand",
+      "prompt": "prompts/06.txt"
+    },
+    {
+      "index": 7,
+      "direction": "short wand extended to image-right with cape flowing image-left",
+      "prompt": "prompts/07.txt"
+    },
+    {
+      "index": 8,
+      "direction": "serpent-curved staff on image-right with a compact squared mantle",
+      "prompt": "prompts/08.txt"
+    },
+    {
+      "index": 9,
+      "direction": "two-handed horizontal staff crossing below the locked head",
+      "prompt": "prompts/09.txt"
+    },
+    {
+      "index": 10,
+      "direction": "rune baton on image-left and a broad tiered robe on image-right",
+      "prompt": "prompts/10.txt"
+    }
+  ]
+}

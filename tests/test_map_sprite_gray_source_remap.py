@@ -60,7 +60,7 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
         last = max(self.mapping)
         self.assertEqual(first, builder.BALD_CUSTOM_SPRITE_ID)
         self.assertEqual(last, builder.AI_CLASS_MAP_SPRITE_SPECS[-1][2])
-        self.assertEqual(len(self.mapping), 53)
+        self.assertEqual(len(self.mapping), 144)
         self.assertEqual(
             set(self.mapping),
             set(range(first, last + 1)),
@@ -95,6 +95,29 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
             self.mapping[hein_lord],
             builder.be16(self.original, source_record + 1),
         )
+
+    def test_mounted_tier_one_aliases_restore_mounted_gray_sources(self) -> None:
+        for commander_id, target_class, source_class in (
+            (7, 0x01, 0x06),
+            (9, 0x01, 0x07),
+        ):
+            custom_sprite_id = next(
+                sprite_id
+                for row_commander, row_class, sprite_id in (
+                    builder.AI_CLASS_MAP_SPRITE_SPECS
+                )
+                if (row_commander, row_class)
+                == (commander_id, target_class)
+            )
+            source_record = builder.commander_sprite_record_offset(
+                self.original,
+                commander_id,
+                source_class,
+            )
+            self.assertEqual(
+                self.mapping[custom_sprite_id],
+                builder.be16(self.original, source_record + 1),
+            )
 
     def test_current_hard_shaman_inactive_runtime_is_hash_locked(self) -> None:
         self.assertEqual(

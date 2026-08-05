@@ -1,0 +1,137 @@
+{
+  "version": 2,
+  "donors": {
+    "2:08": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/02-08.png",
+      "reason": "사용자 승인 힐러 그대로 유지"
+    },
+    "3:08": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/03-08.png",
+      "reason": "사용자 승인 힐러 그대로 유지"
+    },
+    "7:08": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/07-08.png",
+      "reason": "사용자 승인 힐러 그대로 유지"
+    },
+    "10:08": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/10-08.png",
+      "reason": "사용자 승인 힐러 그대로 유지"
+    },
+    "2:15": {
+      "source": "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16/02-15.png",
+      "reason": "사용자 승인 헤인 위저드 캐릭터별 변형"
+    },
+    "3:15": {
+      "source": "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16/03-15.png",
+      "reason": "사용자 승인 헤인 위저드 캐릭터별 변형"
+    },
+    "4:15": {
+      "source": "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16/04-15.png",
+      "reason": "사용자 승인 헤인 위저드 캐릭터별 변형"
+    },
+    "5:15": {
+      "source": "docs/assets/ai-class-source/latest/hein/logical16/15-wizard.png",
+      "reason": "사용자 승인 헤인 위저드"
+    },
+    "7:15": {
+      "source": "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16/07-15.png",
+      "reason": "사용자 승인 헤인 위저드 캐릭터별 변형"
+    },
+    "9:15": {
+      "source": "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16/09-15.png",
+      "reason": "사용자 승인 헤인 위저드 캐릭터별 변형"
+    },
+    "10:15": {
+      "source": "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16/10-15.png",
+      "reason": "사용자 승인 헤인 위저드 캐릭터별 변형"
+    },
+    "2:16": {
+      "source": "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/02-16.png",
+      "reason": "사용자 승인 헤인 하이프리스트 캐릭터별 변형"
+    },
+    "3:16": {
+      "source": "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/03-16.png",
+      "reason": "사용자 승인 헤인 하이프리스트 캐릭터별 변형"
+    },
+    "5:16": {
+      "source": "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/05-16.png",
+      "reason": "사용자 승인 헤인 하이프리스트 캐릭터별 변형"
+    },
+    "7:16": {
+      "source": "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/07-16.png",
+      "reason": "사용자 승인 헤인 하이프리스트 캐릭터별 변형"
+    },
+    "8:16": {
+      "source": "ROM original",
+      "reason": "아론 고유 원본 하이프리스트 유지"
+    },
+    "10:16": {
+      "source": "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/10-16.png",
+      "reason": "사용자 승인 헤인 하이프리스트 캐릭터별 변형"
+    },
+    "2:18": {
+      "source": "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-red/18.png",
+      "reason": "리아나·라나 승인 세이지 논리16"
+    },
+    "3:18": {
+      "source": "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-blue/18.png",
+      "reason": "리아나·라나 승인 세이지 논리16"
+    },
+    "5:18": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/05-18.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "6:18": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/06-18.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "10:18": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/10-18.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "2:28": {
+      "source": "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-red/28.png",
+      "reason": "리아나·라나 승인 서머너 논리16"
+    },
+    "3:28": {
+      "source": "docs/assets/ai-class-source/latest/liana-lana-strict16-v1/native16-blue/28.png",
+      "reason": "리아나·라나 승인 서머너 논리16"
+    },
+    "5:28": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/05-28.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "10:28": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/10-28.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "2:25": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/02-25.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "3:25": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/03-25.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "2:26": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/02-26.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "3:26": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/03-26.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "5:26": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/05-26.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "9:26": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/09-26.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    },
+    "10:26": {
+      "source": "docs/assets/ai-class-source/latest/shared-new-classes-v1/logical16/10-26.png",
+      "reason": "v1 캐릭터별 결과 중 최적 실루엣"
+    }
+  }
+}

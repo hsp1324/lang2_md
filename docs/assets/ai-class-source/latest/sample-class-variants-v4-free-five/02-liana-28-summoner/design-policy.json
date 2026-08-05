@@ -1,0 +1,19 @@
+{
+  "mode": "archmage-derived-palette-study",
+  "source_archmage": "editor/static/ai-class-sprites/2/14.png",
+  "target_commander": 2,
+  "target_class": "28",
+  "sample_label": "아크메이지 기반",
+  "sample_description": "서머너: 아크메이지 형태와 캐릭터 얼굴을 유지한 전용 비중복 장비색",
+  "group_description": "캐릭터별 아크메이지 실루엣 기반 서머너 전용 색상 5안",
+  "diversity_mode": "palette-study",
+  "equipment_accents": [
+    "#6d2492",
+    "#9224b6",
+    "#b624b6",
+    "#b624db",
+    "#ff24ff"
+  ],
+  "cloak_visibility": "near-black fill removed; #242424 retained only as separating outline",
+  "cloak_palette": "bright crimson/magenta"
+}
