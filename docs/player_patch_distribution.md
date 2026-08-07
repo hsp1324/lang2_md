@@ -2,11 +2,11 @@
 
 ## 권장 사용자 흐름
 
-일반 사용자는 GitHub Releases에서 완성된 일반판 또는 하드판 ROM을
-내려받아 바로 실행하는 것을 기본 흐름으로 삼는다. 일본판 ROM에 직접
-적용하려는 사용자는 단일 Windows 패처 또는 BPS를 사용한다.
+일반 사용자는 GitHub Releases에서 단일 Windows 패처를 받아
+일본판 ROM에 적용하는 것을 기본 흐름으로 삼는다. 원하면 BPS를 직접
+적용할 수도 있다.
 
-1. `Langrisser-II-Korean-Patcher-v1.2.0.exe`를 내려받는다.
+1. `Langrisser-II-Korean-Patcher-v1.3.1.exe`를 내려받는다.
 2. 일본판 `Langrisser II` ROM 또는 해당 ROM이 든 ZIP과 같은 폴더에 둔다.
 3. 패처를 실행한다.
 4. 폴더에서 지원 원본을 자동으로 찾지 못했을 때만 파일 선택창으로 ROM을
@@ -14,8 +14,8 @@
 5. 패처가 일반판과 하드판을 각각 새 파일로 만든다.
 
 ```text
-Langrisser II (Korean v1.2.0).md
-Langrisser II (Korean Hard T1.2.0 B1.2.0).md
+Langrisser II (Korean v1.3.1).md
+Langrisser II (Korean Hard T1.3.1 B1.3.1).md
 ```
 
 원본 ROM, SRAM 저장, 에뮬레이터 상태 저장은 수정하지 않는다. 결과를 쓰기
@@ -24,7 +24,7 @@ Langrisser II (Korean Hard T1.2.0 B1.2.0).md
 
 ## 지원 원본
 
-현재 1.2.0 결과를 만들 때 사용한 일본판 원본은 다음과 같다.
+현재 1.3.1 결과를 만들 때 사용한 일본판 원본은 다음과 같다.
 
 ```text
 크기:    2,097,152 bytes
@@ -36,16 +36,16 @@ SHA-256: a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b
 있는 덤프를 지원하려면 헤더를 제외한 내용이 위 해시와 일치할 때만 자동으로
 정규화한다.
 
-## 1.2.0 결과 검증값
+## 1.3.1 결과 검증값
 
 ```text
 일반판
 크기:    4,194,304 bytes
-SHA-256: 1934476c9719cba1b4a53869aa2af3b1345a70456045f9d6ea2ce243eefb6d80
+SHA-256: e603287d92e50f0724d69395bfcdbf9215104bb052f02c3112f9c9886f44adea
 
 하드판
 크기:    4,194,304 bytes
-SHA-256: a6b4cb1fbad2d22fda9e8393fe80682d171ed5a6c817e6004f2edd05886e3a62
+SHA-256: 0b2ae6394b723aef4599a4cc8ad60c76d7f1b78e8170de17e43b49c6f61b8df1
 ```
 
 패처는 두 결과를 각각 검증한다. 한 결과라도 다르면 생성된 임시 파일을 최종
@@ -61,17 +61,17 @@ GitHub Release 자산으로만 제공한다.
 README.md
 patcher/
 patches/
-  normal-v1.2.0.bps
-  hard-t1.2.0-b1.2.0.bps
-.github/workflows/build-v1.2-patcher.yml
+  normal-v1.3.1.bps
+  hard-t1.3.1-b1.3.1.bps
+  .github/workflows/build-v1.3-patcher.yml
 ```
 
-`v1.2.0` Release에는 다음 파일을 올린다.
+`v1.3.1` Release에는 다음 파일을 올린다.
 
 ```text
-Langrisser.II.Korean.v1.2.0.md
-Langrisser.II.Korean.Hard.T1.2.0.B1.2.0.md
-Langrisser-II-Korean-Patcher-v1.2.0.exe
+Langrisser II (Korean v1.3.1).md
+Langrisser II (Korean Hard T1.3.1 B1.3.1).md
+Langrisser-II-Korean-Patcher-v1.3.1.exe
 SHA256SUMS.txt
 ```
 

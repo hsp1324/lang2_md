@@ -4,36 +4,35 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.2.1`입니다. 완성된 일반판과 하드판 ROM을
-> 바로 내려받을 수 있습니다.
+> 최신 공개 버전은 `v1.3.1`입니다. 완성된 일반판과 하드판은
+> GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.
 
 ## 가장 간단한 다운로드
 
-원하는 버전을 받아 에뮬레이터에서 바로 실행합니다.
+원하는 버전은 다음 패처를 받아 일본판 ROM에 적용합니다.
 
-- [일반판 v1.2.1 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.1/Langrisser.II.Korean.v1.2.1.md)
-- [하드판 T1.2.1 B1.2.1 ROM](https://github.com/hsp1324/lang2_md/releases/download/v1.2.1/Langrisser.II.Korean.Hard.T1.2.1.B1.2.1.md)
+- [Langrisser-II-Korean-Patcher-v1.3.1.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.1/Langrisser-II-Korean-Patcher-v1.3.1.exe)
 
-두 파일과 검증값은 [v1.2.1 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.2.1)에서 한꺼번에 볼 수 있습니다.
+검증값은 [v1.3.1 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.1)에서 확인할 수 있습니다.
 
 ## 일반판과 하드판
 
 - **일반판**: 원작에 가까운 난이도로 한국어화를 적용한 버전입니다.
 - **하드판**: 같은 한국어화를 바탕으로 적 지휘관과 용병의 능력 및 구성을 강화한 버전입니다.
 
-`v1.2.1`은 시나리오 1~27과 비밀 시나리오 X1~X4의 준비·출격·첫 턴 및
+`v1.3.1`은 시나리오 1~27과 비밀 시나리오 X1~X4의 준비·출격·첫 턴 및
 행동 완료 화면을 전면 재검증하고, 최신 클래스 스프라이트와 안전한 회색
 스프라이트 매핑을 반영한 버전입니다. 게임 밸런스 수치는 `v1.2.0`과
 같으며 기존 `.srm` 저장도 그대로 사용할 수 있습니다.
 
-`v1.2.1` 결과 ROM의 검증값은 다음과 같습니다.
+`v1.3.1` 결과 ROM의 검증값은 다음과 같습니다.
 
 ```text
 일반판 SHA-256
-441d86a04e209b1bc0971a37315bc7c13f60b1fc028032247508fb8274877fa6
+e603287d92e50f0724d69395bfcdbf9215104bb052f02c3112f9c9886f44adea
 
 하드판 SHA-256
-7c955c09069a56260702104a3587b8e362eede5d4c7fc55bbad259e616f2f123
+0b2ae6394b723aef4599a4cc8ad60c76d7f1b78e8170de17e43b49c6f61b8df1
 ```
 
 ## 게임 데이터 에디터 사용법
@@ -97,11 +96,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser.II.Korean.v1.2.1.md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Korean v1.3.1).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser.II.Korean.v1.2.1.srm
+Langrisser II (Korean v1.3.1).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.

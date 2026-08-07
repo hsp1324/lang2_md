@@ -2085,7 +2085,14 @@ function shouldAutoFocusPickerSearch() {
   // the visual viewport before the initiating tap has settled and used to
   // close the picker through the global resize handler. Keep the keyboard
   // opt-in on coarse/touch pointers; desktop users retain keyboard search.
-  return window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+  if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) {
+    return false;
+  }
+  const userAgent = (navigator?.userAgent || "").toLowerCase();
+  const isTouchPhoneOrTablet = /iphone|ipad|ipod|android|mobile|blackberry|bb10|windows phone/.test(
+    userAgent,
+  );
+  return !isTouchPhoneOrTablet;
 }
 
 function openPicker(anchor, options) {
@@ -2357,7 +2364,8 @@ document.addEventListener("pointerdown", event => {
   if (!assetPicker.hidden &&
       !assetPicker.contains(event.target) &&
       !event.target.closest(
-        "[data-class-picker], [data-merc-picker], [data-hire-picker]"
+        "[data-class-picker], [data-current-class-picker], " +
+          "[data-next-class-picker], [data-merc-picker], [data-hire-picker]"
       )) {
     closePicker();
   }

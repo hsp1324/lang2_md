@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Windows GUI and command-line patcher for Langrisser II Korean v1.2.0."""
+"""Windows GUI and command-line patcher for Langrisser II Korean v1.3.1."""
 
 from __future__ import annotations
 
@@ -28,8 +28,9 @@ from tools.rom_update import (
 )
 
 
-APP_TITLE = "랑그릿사 II 한국어 패처 v1.2.0"
-MANIFEST_FILENAME = "v1.2.0.json"
+APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.1"
+MANIFEST_FILENAME = "v1.3.1.json"
+PATCHER_RELEASE = "v1.3.1"
 ROM_SUFFIXES = frozenset({".md", ".bin", ".gen", ".smd", ".zip"})
 
 
@@ -64,7 +65,7 @@ def load_release_manifest() -> dict[str, object]:
         raise UpdateError(f"패처 manifest를 읽을 수 없습니다: {path}") from exc
     if manifest.get("schema_version") != 1:
         raise UpdateError("지원하지 않는 패처 manifest입니다")
-    if manifest.get("release") != "v1.2.0":
+    if manifest.get("release") != PATCHER_RELEASE:
         raise UpdateError("패처 버전과 manifest 버전이 다릅니다")
     source = manifest.get("source")
     targets = manifest.get("targets")
@@ -150,11 +151,11 @@ def _safe_asset_name(value: object, label: str) -> str:
 
 
 def _next_backup_path(path: Path) -> Path:
-    candidate = path.with_name(f"{path.name}.before-v1.2.0.bak")
+    candidate = path.with_name(f"{path.name}.before-{PATCHER_RELEASE}.bak")
     sequence = 2
     while candidate.exists():
         candidate = path.with_name(
-            f"{path.name}.before-v1.2.0.{sequence}.bak"
+            f"{path.name}.before-{PATCHER_RELEASE}.{sequence}.bak"
         )
         sequence += 1
     return candidate
