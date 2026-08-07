@@ -190,6 +190,30 @@ def normalized_korean_range(
             )
         relative = offset - start
         normalized[relative : relative + 4] = source[offset : offset + 4]
+    for offset in (
+        builder.JOIN_CLASS_CHOICE_LEVEL_CONTINUATION,
+        builder.JOIN_CLASS_CHOICE_APPLY_CONTINUATION,
+    ):
+        if not start <= offset < end:
+            continue
+        if offset + 4 > end:
+            raise ValueError(
+                f"join target-level hook at 0x{offset:06X} crosses range boundary"
+            )
+        source_value = source[offset : offset + 4]
+        korean_value = korean[offset : offset + 4]
+        declared_value = builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER.to_bytes(4, "big")
+        # Older retained Korean evidence predates this declared continuation
+        # wrapper.  New production builds must contain either the stock value
+        # or the exact declared target; no other control-flow mutation is
+        # normalized.
+        if korean_value not in (source_value, declared_value):
+            raise ValueError(
+                f"unexpected join target-level hook at 0x{offset:06X}: "
+                f"{korean_value.hex().upper()}"
+            )
+        relative = offset - start
+        normalized[relative : relative + 4] = source_value
     return bytes(normalized)
 
 

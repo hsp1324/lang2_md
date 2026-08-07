@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "released_for_user_playtest",
+  "scope": "Scenario 11 map-unit and preparation/hiring dynamic Hangul VRAM collision",
+  "source_rom": {
+    "path": "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.1).md",
+    "sha256": "0cec6d3d786d2adfe1be79ac0d861c975fa6b4eb7f44288e1c1f9a0d7b2638c5",
+    "md_checksum": "197D"
+  },
+  "output_rom": {
+    "path": "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.2).md",
+    "desktop_path": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.2).md",
+    "sha256": "b160e2e703a78b43b7f1e3a39d51225c7bd9e3bf8dff92ecdd17e1e07efaa132",
+    "md_checksum": "4896",
+    "header_title": "LANGRISSER II KOREAN T1.0.1 B1.0.2 BY HSP1324"
+  },
+  "save": {
+    "source_path": "/mnt/c/Users/hsp13/Downloads/Mobile Devices/Langrisser II (Korean Hard T1.0.0 B1.0.0) (1).srm",
+    "desktop_path": "/mnt/c/Users/hsp13/Desktop/Langrisser II (Korean Hard T1.0.1 B1.0.2).srm",
+    "bytes": 65536,
+    "sha256": "fe1001788d55851cdb0e9e36f56b49b06f18d2d35af2e0fa58923f3a92b84f4d"
+  },
+  "reproduction_state": {
+    "path": "/mnt/c/Users/hsp13/Downloads/Mobile Devices/Langrisser II (Korean Hard T1.0.1 B1.0.1).state21",
+    "sha256": "26105c9cddf3edfe4f7c742722b1bce85296ffef414a79b29242bfa99e7ef55c",
+    "core_state_version": "GENPLUS-GX 1.7.6"
+  },
+  "collision": {
+    "old_tiles": [
+      "0x0360",
+      "0x0361",
+      "0x037D",
+      "0x037F"
+    ],
+    "replacement_tiles": [
+      "0x0795",
+      "0x079C",
+      "0x079D",
+      "0x07E0"
+    ],
+    "map_slots": [2, 3, 8, 9],
+    "plane_a_references_in_supplied_state": {
+      "0x0360": [[8, 9], [5, 12], [14, 18], [63, 21]],
+      "0x0361": [[8, 10], [5, 13], [14, 19], [63, 22]],
+      "0x037D": [[11, 13], [5, 16]],
+      "0x037F": [[12, 13], [6, 16]]
+    }
+  },
+  "delta": {
+    "changed_byte_count": 22,
+    "allowed_regions": [
+      "ROM header build digit and checksum",
+      "dynamic VDP command entries for slots 2, 3, 8, and 9",
+      "dynamic tile-ID entries for slots 2, 3, 8, and 9"
+    ],
+    "design_bytes_changed": 0,
+    "balance_bytes_changed": 0
+  },
+  "runtime_verification": {
+    "core": "Genesis Plus GX 1.7.6 libretro",
+    "independent_input_probes": 12,
+    "idle_frames_after_each_input": 180,
+    "result": "no gray Hangul blocks or unit-pattern corruption observed"
+  }
+}

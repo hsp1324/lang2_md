@@ -42,10 +42,10 @@ class HardModePlaytestTests(unittest.TestCase):
         )
         self.assertEqual(lineage["current_class_spot_checks_passed"], 6)
         readiness = manifest["hard_release"]["implementation_readiness"]
-        self.assertFalse(readiness["complete"])
+        self.assertTrue(readiness["complete"])
         self.assertEqual(
             readiness["pending_features"],
-            ["late_summon_unit_replacements"],
+            [],
         )
         features = {
             feature["id"]: feature
@@ -61,13 +61,19 @@ class HardModePlaytestTests(unittest.TestCase):
             ],
             304,
         )
-        self.assertFalse(
+        self.assertTrue(
             features["late_summon_unit_replacements"]["applied"]
         )
-        self.assertFalse(manifest["coverage"]["implementation_complete"])
+        self.assertEqual(
+            features["late_summon_unit_replacements"][
+                "applied_slot_count"
+            ],
+            2,
+        )
+        self.assertTrue(manifest["coverage"]["implementation_complete"])
         self.assertFalse(manifest["coverage"]["complete"])
 
-    def test_all_clears_do_not_bypass_a_pending_approved_feature(self):
+    def test_all_clears_complete_when_every_approved_feature_is_applied(self):
         manifest = playtest.initial_manifest(self.identity)
         digest = self.identity["sha256"]
         for row in manifest["scenarios"]:
@@ -79,11 +85,11 @@ class HardModePlaytestTests(unittest.TestCase):
             })
         playtest.refresh(manifest)
         self.assertTrue(manifest["coverage"]["scenario_clear_complete"])
-        self.assertFalse(manifest["coverage"]["implementation_complete"])
-        self.assertFalse(manifest["coverage"]["complete"])
+        self.assertTrue(manifest["coverage"]["implementation_complete"])
+        self.assertTrue(manifest["coverage"]["complete"])
         self.assertEqual(
             manifest["status"],
-            "approved_features_incomplete",
+            "complete",
         )
 
     def test_implementation_audit_rejects_a_missing_approval_decision(self):

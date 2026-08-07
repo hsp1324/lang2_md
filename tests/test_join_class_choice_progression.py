@@ -1,8 +1,12 @@
 import unittest
 from pathlib import Path
 
+from capstone import Cs, CS_ARCH_M68K, CS_MODE_BIG_ENDIAN
+
 from scripts import build_korean_jp_probe as builder
 from tools.class_change_data import transition_for_class
+from tools.class_hire_data import CLASS_RECORD_SIZE, CLASS_RECORD_TABLE
+from tools.scenario_data import be16, scenario_layout
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,14 +67,39 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                     row["tier2_candidates"],
                 )
 
-    def test_original_combat_stats_and_residual_experience_are_preserved(self) -> None:
+    def test_identity_and_residual_experience_are_preserved(self) -> None:
         for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
             with self.subTest(commander_id=commander_id):
                 source = row["source"]
                 target = row["target"]
-                self.assertEqual(target[1], source[1])
-                self.assertEqual(target[3:6], source[3:6])
+                self.assertEqual(target[3], source[3])
                 self.assertEqual(target[12:14], source[12:14])
+
+    def test_starting_stats_are_back_calculated_from_original_join_progress(self) -> None:
+        growth_table = 0x082922
+        for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
+            with self.subTest(commander_id=commander_id):
+                class_id = row["original_tier2_class"]
+                class_record = (
+                    CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
+                )
+                growth_codes = self.source[class_record + 0x0A:class_record + 0x0D]
+                total_growth = []
+                for growth_code in growth_codes:
+                    total_growth.append(
+                        sum(
+                            self.source[growth_table + growth_code * 10 + level - 1]
+                            for level in range(2, row["original_tier2_level"] + 1)
+                        )
+                    )
+                # Initial roster bytes 1/4/5 are MP/AT/DF.  Replaying the
+                # original class's levels must reproduce the Japanese join row.
+                adjusted = (row["target"][1], row["target"][4], row["target"][5])
+                original = (row["source"][1], row["source"][4], row["source"][5])
+                self.assertEqual(
+                    tuple(value + growth for value, growth in zip(adjusted, total_growth)),
+                    original,
+                )
 
     def test_tier_one_hire_masks_replace_promoted_unlocks(self) -> None:
         self.assertEqual(
@@ -97,6 +126,200 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
             self.source[0x014C36:0x014C40],
             bytes.fromhex("11 40 00 00 11 7C 00 01 00 2E"),
         )
+
+    def test_level_ten_gate_is_wrapped_with_real_join_visibility(self) -> None:
+        patched = bytearray(self.source)
+        builder.expand_rom(patched)
+        builder.patch_join_class_choice_visibility_guard(
+            patched,
+            self.source,
+        )
+        self.assertEqual(
+            patched[
+                builder.JOIN_CLASS_CHOICE_VISIBILITY_HOOK:
+                builder.JOIN_CLASS_CHOICE_VISIBILITY_HOOK + 6
+            ],
+            bytes.fromhex("4E B9")
+            + builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD.to_bytes(4, "big"),
+        )
+
+        routine = builder.build_join_class_choice_visibility_guard()
+        decoder = Cs(CS_ARCH_M68K, CS_MODE_BIG_ENDIAN)
+        instructions = list(
+            decoder.disasm(
+                routine,
+                builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD,
+            )
+        )
+        self.assertEqual(sum(item.size for item in instructions), len(routine))
+        self.assertEqual(instructions[-1].mnemonic, "rts")
+        self.assertIn(bytes.fromhex("0C 28 00 FF 00 06"), routine)
+        self.assertIn(bytes.fromhex("0C 28 00 FF 00 07"), routine)
+        self.assertIn(bytes.fromhex("4A 28 00 06"), routine)
+        self.assertIn(bytes.fromhex("4A 28 00 07"), routine)
+        for commander_id in builder.JOIN_CLASS_CHOICE_RECORDS:
+            self.assertIn(
+                bytes.fromhex("0C 28 00")
+                + bytes((commander_id, 0x00, 0x01)),
+                routine,
+            )
+            first_scenario = builder.JOIN_CLASS_CHOICE_RECORDS[commander_id][
+                "first_player_scenario"
+            ]
+            self.assertIn(
+                bytes.fromhex("0C 78")
+                + first_scenario.to_bytes(2, "big")
+                + builder.JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big"),
+                routine,
+            )
+
+    def test_join_scenario_is_each_commanders_first_player_roster(self) -> None:
+        for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
+            appearances = []
+            for scenario_number in range(1, 32):
+                layout = scenario_layout(self.source, scenario_number)
+                count = be16(self.source, layout.header_offset + 0x10)
+                ids = [
+                    be16(
+                        self.source,
+                        layout.header_offset + 0x12 + index * 2,
+                    )
+                    for index in range(count)
+                ]
+                if commander_id in ids:
+                    appearances.append(scenario_number)
+            with self.subTest(commander_id=commander_id):
+                self.assertTrue(appearances)
+                self.assertEqual(
+                    row["first_player_scenario"],
+                    appearances[0],
+                )
+
+    def test_join_gate_truth_table_matches_preparation_npc_and_battle_states(self) -> None:
+        def allowed(commander_id: int, scenario: int, x: int, y: int) -> bool:
+            row = builder.JOIN_CLASS_CHOICE_RECORDS[commander_id]
+            return (
+                scenario >= row["first_player_scenario"]
+                and x != 0xFF
+                and y != 0xFF
+                and (x != 0 or y != 0)
+            )
+
+        # Preparation records are zeroed even when the scenario's player-name
+        # table already contains the incoming commander.
+        self.assertFalse(allowed(7, 8, 0, 0))
+        self.assertFalse(allowed(9, 11, 0, 0))
+        self.assertFalse(allowed(10, 12, 0, 0))
+        # Jessica is already a visible allied NPC in Scenario 11, but is not a
+        # selectable player commander until Scenario 12.
+        self.assertFalse(allowed(10, 11, 18, 6))
+        # The reinforcement wait position remains blocked, while a genuine
+        # map edge or ordinary map position is accepted after joining.
+        self.assertFalse(allowed(7, 8, 0xFF, 0xFF))
+        self.assertTrue(allowed(7, 8, 6, 18))
+        self.assertTrue(allowed(9, 11, 0, 12))
+        self.assertTrue(allowed(10, 12, 15, 0))
+
+    def test_visibility_guard_does_not_overlap_experience_wrapper(self) -> None:
+        level_end = (
+            builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER
+            + len(builder.build_join_class_choice_level_wrapper())
+        )
+        self.assertLessEqual(
+            level_end,
+            builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD,
+        )
+        guard_end = (
+            builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD
+            + len(builder.build_join_class_choice_visibility_guard())
+        )
+        self.assertLessEqual(
+            guard_end,
+            builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT,
+        )
+
+    def test_tier_two_target_is_original_join_level_plus_three(self) -> None:
+        expected = {7: 4, 9: 10, 10: 8}
+        for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
+            with self.subTest(commander_id=commander_id):
+                self.assertEqual(row["join_level_bonus"], 3)
+                self.assertEqual(
+                    row["target_tier2_level"],
+                    row["original_tier2_level"] + 3,
+                )
+                self.assertEqual(row["target_tier2_level"], expected[commander_id])
+
+    def test_target_level_wrapper_is_installed_at_both_stock_continuations(self) -> None:
+        patched = bytearray(self.source)
+        builder.expand_rom(patched)
+        builder.patch_join_class_choice_target_levels(patched, self.source)
+        target = builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER.to_bytes(4, "big")
+        self.assertEqual(
+            patched[
+                builder.JOIN_CLASS_CHOICE_LEVEL_CONTINUATION:
+                builder.JOIN_CLASS_CHOICE_LEVEL_CONTINUATION + 4
+            ],
+            target,
+        )
+        self.assertEqual(
+            patched[
+                builder.JOIN_CLASS_CHOICE_APPLY_CONTINUATION:
+                builder.JOIN_CLASS_CHOICE_APPLY_CONTINUATION + 4
+            ],
+            target,
+        )
+
+    def test_target_level_wrapper_uses_stock_handler_and_all_candidate_classes(self) -> None:
+        routine = builder.build_join_class_choice_level_wrapper()
+        decoder = Cs(CS_ARCH_M68K, CS_MODE_BIG_ENDIAN)
+        instructions = list(
+            decoder.disasm(routine, builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER)
+        )
+        self.assertEqual(sum(item.size for item in instructions), len(routine))
+        self.assertEqual(instructions[-1].mnemonic, "bra.w")
+        self.assertIn(
+            bytes.fromhex("4E F9 00 01 48 0C"),
+            routine,
+        )
+        for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
+            with self.subTest(commander_id=commander_id):
+                self.assertIn(
+                    bytes.fromhex("13 FC 00 5A")
+                    + row["active_marker_address"].to_bytes(4, "big"),
+                    routine,
+                )
+                self.assertIn(
+                    bytes.fromhex("11 7C 00")
+                    + bytes((row["residual_experience"],))
+                    + bytes.fromhex("00 2F"),
+                    routine,
+                )
+                for class_id in row["tier2_candidates"]:
+                    self.assertIn(
+                        bytes.fromhex("0C 02 00") + bytes((class_id,)),
+                        routine,
+                    )
+
+    def test_experience_cap_is_refilled_until_every_target_level(self) -> None:
+        needs_more_than_one_stored_byte = False
+        for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
+            for class_id in row["tier2_candidates"]:
+                with self.subTest(commander_id=commander_id, class_id=class_id):
+                    record = CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
+                    threshold = self.source[record + 0x14] << 3
+                    required = threshold * (row["target_tier2_level"] - 1)
+                    needs_more_than_one_stored_byte |= required > 0xFF
+                    level = 1
+                    experience = row["residual_experience"]
+                    while level < row["target_tier2_level"]:
+                        experience = 0xFF
+                        self.assertGreaterEqual(experience, threshold)
+                        experience -= threshold
+                        level += 1
+                    experience = row["residual_experience"]
+                    self.assertEqual(level, row["target_tier2_level"])
+                    self.assertEqual(experience, row["residual_experience"])
+        self.assertTrue(needs_more_than_one_stored_byte)
 
 
 if __name__ == "__main__":

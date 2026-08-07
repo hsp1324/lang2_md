@@ -27,6 +27,22 @@ SUPERSEDED_5BE8_PLAYTEST_ROM = (
     ROOT / "roms/releases/archive/"
     "Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-5BE8).md"
 )
+SUPERSEDED_120_PLAYTEST_ROM = (
+    ROOT / "roms/releases/"
+    "Langrisser II (Korean Hard T1.2.0 B1.2.0).md"
+)
+SUPERSEDED_121_PLAYTEST_ROM = (
+    ROOT / "roms/builds/"
+    "Langrisser II (Korean Hard T1.2.1 B1.2.1).md"
+)
+SUPERSEDED_122_PLAYTEST_ROM = (
+    ROOT / "roms/builds/"
+    "Langrisser II (Korean Hard T1.2.2 B1.2.2).md"
+)
+SUPERSEDED_123_PLAYTEST_ROM = (
+    ROOT / "roms/builds/"
+    "Langrisser II (Korean Hard T1.2.3 B1.2.3).md"
+)
 
 
 class HardModeBuildTests(unittest.TestCase):
@@ -234,7 +250,7 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 2)
+        self.assertEqual(len(history), 6)
         predecessor = history[0]
         payload = SUPERSEDED_PLAYTEST_ROM.read_bytes()
         self.assertEqual(predecessor["md_checksum"], "1011")
@@ -263,6 +279,66 @@ class HardModeBuildTests(unittest.TestCase):
         )
         self.assertEqual(
             predecessor_5be8["superseded_by"],
+            history[2]["sha256"],
+        )
+        predecessor_120 = history[2]
+        payload_120 = SUPERSEDED_120_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor_120["md_checksum"], "98BA")
+        self.assertEqual(
+            predecessor_120["sha256"],
+            hashlib.sha256(payload_120).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor_120["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload_120).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor_120["superseded_by"],
+            history[3]["sha256"],
+        )
+        predecessor_121 = history[3]
+        payload_121 = SUPERSEDED_121_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor_121["md_checksum"], "C9BA")
+        self.assertEqual(
+            predecessor_121["sha256"],
+            hashlib.sha256(payload_121).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor_121["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload_121).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor_121["superseded_by"],
+            history[4]["sha256"],
+        )
+        predecessor_122 = history[4]
+        payload_122 = SUPERSEDED_122_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor_122["md_checksum"], "2D37")
+        self.assertEqual(
+            predecessor_122["sha256"],
+            hashlib.sha256(payload_122).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor_122["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload_122).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor_122["superseded_by"],
+            history[5]["sha256"],
+        )
+        predecessor_123 = history[5]
+        payload_123 = SUPERSEDED_123_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor_123["md_checksum"], "709E")
+        self.assertEqual(
+            predecessor_123["sha256"],
+            hashlib.sha256(payload_123).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor_123["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload_123).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor_123["superseded_by"],
             registry["releases"][0]["sha256"],
         )
 

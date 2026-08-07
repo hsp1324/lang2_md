@@ -67,9 +67,11 @@ def _validate_profile(
     release_id = profile.get("release_id")
     if not isinstance(release_id, str) or not release_id:
         raise ValueError(f"ROM version profile {name!r} has no release ID")
-    if name == "normal":
+    if name in {"pure", "normal"}:
         if balance_version is not None:
-            raise ValueError("normal ROM profile must not have a balance version")
+            raise ValueError(
+                f"{name} ROM profile must not have a balance version"
+            )
     elif (
         not isinstance(balance_version, str)
         or not VERSION_PATTERN.fullmatch(balance_version)
@@ -93,7 +95,7 @@ def _title_text(
     translation_version: str,
     balance_version: str | None,
 ) -> str:
-    if name == "normal":
+    if name in {"pure", "normal"}:
         return f"번역:{translation_version}"
     if balance_version is None:
         raise ValueError(f"ROM version profile {name!r} has no balance version")
@@ -105,6 +107,8 @@ def _rom_filename(
     translation_version: str,
     balance_version: str | None,
 ) -> str:
+    if name == "pure":
+        return f"Langrisser II (Korean Pure v{translation_version}).md"
     if name == "normal":
         return f"Langrisser II (Korean v{translation_version}).md"
     if balance_version is None:
@@ -121,8 +125,11 @@ def _header_title(
     balance_version: str | None,
     creator: str,
 ) -> str:
-    text = f"LANGRISSER II KOREAN T{translation_version}"
-    if name != "normal":
+    text = "LANGRISSER II KOREAN"
+    if name == "pure":
+        text += " PURE"
+    text += f" T{translation_version}"
+    if name not in {"pure", "normal"}:
         if balance_version is None:
             raise ValueError(
                 f"ROM version profile {name!r} has no balance version"

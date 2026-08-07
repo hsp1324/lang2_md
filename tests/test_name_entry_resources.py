@@ -647,7 +647,7 @@ class NameEntryResourceTests(unittest.TestCase):
         self.assertEqual(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[5], 0x07F0)
         self.assertEqual(
             builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[8:10],
-            (0x079D, 0x07E0),
+            (0x079D, 0x07F2),
         )
 
         restore = builder._build_byte_ui_map_info_scratch_restore()

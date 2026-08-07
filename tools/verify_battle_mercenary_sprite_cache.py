@@ -165,6 +165,19 @@ def verify_cache_row(
     }
 
 
+def accepted_gray_attempt_is_valid(accepted: dict[str, object]) -> bool:
+    """Accept both the legacy and current gray-evidence schemas."""
+    legacy = accepted.get("matches_stock_fighter_silhouette_expansion")
+    if legacy is not None:
+        return bool(legacy)
+    return bool(
+        accepted.get("status") == "pass"
+        and accepted.get("coordinate_changed")
+        and accepted.get("matching_gray_ranges")
+        and accepted.get("linked_gray_ranges")
+    )
+
+
 def profile_report(
     *,
     profile: str,
@@ -230,9 +243,7 @@ def profile_report(
         )
         passed = (
             evidence["status"] == "pass"
-            and accepted[
-                "matches_stock_fighter_silhouette_expansion"
-            ]
+            and accepted_gray_attempt_is_valid(accepted)
             and [row["class_id"] for row in fixed] == expected_fixed_ids
             and {row["class_id"] for row in dynamic}
             == set(expected_dynamic)

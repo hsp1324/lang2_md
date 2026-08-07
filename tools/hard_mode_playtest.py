@@ -158,15 +158,20 @@ def implementation_readiness(
             "applied": (
                 bool(plan["implementation_policy"]["summon_units_applied"])
                 and int(summary["summon_replacement_slot_count"]) > 0
+                and int(summary["summon_replacement_slot_count"])
+                == int(implementation["summon_replacement_slot_count"])
             ),
             "applied_slot_count": int(
-                summary["summon_replacement_slot_count"]
+                implementation["summon_replacement_slot_count"]
             ),
             "approved_scenarios": [26, 27],
-            "deferred_runtime_guards": [
+            "passed_runtime_guards": [
+                "fixed_enemy_loading",
+                "fixed_enemy_ordinary_movement",
                 "fixed_enemy_ordinary_attack",
-                "fixed_enemy_natural_magic_ownership",
+                "fixed_enemy_first_turn_event",
             ],
+            "natural_magic_required": False,
         },
         {
             "id": "scenario_exceptions",
@@ -257,10 +262,12 @@ def current_identity(
         )
     candidate_change = candidate_delta["delta"]
     if (
-        candidate_delta["status"] != "verified_ui_sprite_only_delta"
+        candidate_delta["status"]
+        != "verified_ui_sprite_and_approved_balance_delta"
         or candidate_delta["after"]["sha256"] != digest
         or candidate_change["outside_owned_ranges"] != 0
-        or candidate_change["balance_event_ai_changed_bytes"] != 0
+        or candidate_change["balance_event_ai_changed_bytes"] != 2
+        or candidate_change["categories"]["approved_summon_slots"] != 2
     ):
         raise ValueError(
             "hard runtime evidence cannot cross the post-release candidate "

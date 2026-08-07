@@ -98,8 +98,14 @@ class AiClassMapSpriteTests(unittest.TestCase):
                 / str(commander_id)
                 / f"{class_id:02X}.png"
             )
+            source_image = Image.open(asset)
             expected = builder.encode_ai_class_map_sprite(
-                Image.open(asset)
+                source_image,
+                palette_index_overrides=(
+                    builder.ai_class_map_palette_index_overrides(
+                        source_image
+                    )
+                ),
             )
             self.assertTrue(any(expected))
             for frame_base in builder.MAP_SPRITE_FRAME_BASES:

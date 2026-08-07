@@ -8,6 +8,7 @@ from tools.run_blastem_sequence import (
     blastem_command,
     detection_capture_path,
     disable_host_gamepad_bindings,
+    process_detection_probe,
 )
 
 
@@ -29,6 +30,12 @@ class BlastEmProbeRuntimeTests(unittest.TestCase):
             detection_capture_path(args, Path("fallback.png"), 7),
             Path("captures/run/s03_brief_07.png"),
         )
+
+    def test_default_detection_probe_is_isolated_by_process(self):
+        probe = process_detection_probe("battle_command_probe")
+        self.assertEqual(probe.parent, ROOT / "captures/run")
+        self.assertTrue(probe.name.startswith("battle_command_probe_"))
+        self.assertEqual(probe.suffix, ".png")
 
     def test_software_renderer_flag_precedes_rom_path(self):
         rom = ROOT / "roms/builds/Langrisser II (Korean).md"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the post-release hard candidate changes only owned UI/sprite bytes."""
+"""Verify the hard candidate changes only owned UI/sprite/balance bytes."""
 
 from __future__ import annotations
 
@@ -92,11 +92,17 @@ def owned_ranges() -> dict[str, tuple[tuple[int, int], ...]]:
             builder.BYTE_UI_PREP_LOCAL_TILE_LOOKUP_ROUTINE
             + len(builder._build_byte_ui_prep_local_tile_lookup()),
         ),),
+        "word_renderer": ((
+            builder.BYTE_UI_WORD_RENDER_ROUTINE,
+            builder.BYTE_UI_WORD_RENDER_ROUTINE
+            + len(builder._build_byte_ui_word_renderer()),
+        ),),
         "dynamic_glyph_tables": ((
             builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE,
             builder.BYTE_UI_PREP_DYNAMIC_SLOT_TABLE_LIMIT,
         ),),
         "loren_map_frames": loren_frames,
+        "approved_summon_slots": ((0x18323C, 0x18323E),),
     }
 
 
@@ -165,7 +171,7 @@ def build_model(before_path: Path, after_path: Path) -> dict[str, Any]:
 
     return {
         "schema_version": 1,
-        "status": "verified_ui_sprite_only_delta",
+        "status": "verified_ui_sprite_and_approved_balance_delta",
         "before": before_identity,
         "after": after_identity,
         "ownership": {
@@ -185,18 +191,19 @@ def build_model(before_path: Path, after_path: Path) -> dict[str, Any]:
             "unexpected_offsets": [
                 f"0x{offset:06X}" for offset in sorted(unexpected)
             ],
-            "balance_event_ai_changed_bytes": 0,
+            "balance_event_ai_changed_bytes": categories[
+                "approved_summon_slots"
+            ],
             "sram_descriptor_unchanged": True,
         },
         "evidence_inheritance": {
-            "source_runtime_rom_sha256": (
-                "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac"
-            ),
-            "runtime_loader_scenarios": 31,
-            "first_turn_scenarios": 31,
+            "runtime_source_required_sha256": after_identity["sha256"],
+            "runtime_loader_scenarios": 0,
+            "first_turn_scenarios": 0,
             "scope": (
-                "Only loader/first-turn balance evidence is inherited. "
-                "UI and sprite behavior must use current-candidate captures."
+                "The two approved Scenario 27 balance bytes invalidate "
+                "inherited loader and first-turn evidence. Both matrices "
+                "must be regenerated against the exact current candidate."
             ),
         },
     }

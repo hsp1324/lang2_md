@@ -198,6 +198,7 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
     def test_preparation_launch_retries_a_failed_secret_scenario_detection(self):
         class Recorder:
             display = ":998"
+            runtime_home = ROOT / "tmp/custom-runtime/retry-test"
 
             def __init__(self):
                 self.commands = []
@@ -235,7 +236,57 @@ class PreparationSurfaceMatrixTests(unittest.TestCase):
             sum("scenario-select" in command for command in recorder.commands),
             2,
         )
+        scenario_command = next(
+            command
+            for command in recorder.commands
+            if "scenario-select" in command
+        )
+        runtime_root_index = scenario_command.index("--runtime-root") + 1
+        self.assertEqual(
+            scenario_command[runtime_root_index],
+            str(recorder.runtime_home.parent),
+        )
         stop.assert_called_once_with(display=recorder.display)
+
+    def test_preparation_launch_forwards_manual_slot_overrides(self):
+        class Recorder:
+            display = ":997"
+            runtime_home = ROOT / "tmp/custom-runtime/manual-slot-forward-test"
+
+            def __init__(self):
+                self.commands = []
+
+            def run_command(self, command):
+                self.commands.append(command)
+
+            def save_gst(self, relative):
+                return ROOT / "tmp/manual-slot-forward-test" / relative
+
+        recorder = Recorder()
+        overrides = [
+            "--manual-slot-commander-id", "5",
+            "--manual-slot-class", "0x14",
+        ]
+        with mock.patch.object(
+            matrix,
+            "verify_runtime_scenario_identity",
+            return_value={"status": "pass"},
+        ):
+            matrix.launch_to_preparation(
+                recorder,
+                NORMAL_ROM,
+                SEED_GST,
+                13,
+                "manual-slot-forward-test",
+                ROOT / "tmp/manual-slot-forward-test",
+                overrides,
+            )
+        scenario_command = next(
+            command
+            for command in recorder.commands
+            if "scenario-select" in command
+        )
+        self.assertEqual(scenario_command[-len(overrides):], overrides)
 
     def test_runtime_identity_rejects_the_mislabeled_scenario_three_capture(self):
         evidence = json.loads(

@@ -27,7 +27,7 @@ class HardCandidateDeltaTests(unittest.TestCase):
             hashlib.sha256(self.hard).hexdigest(),
             self.model["after"]["sha256"],
         )
-        self.assertEqual(self.model["after"]["md_checksum"], "5BE8")
+        self.assertEqual(self.model["after"]["md_checksum"], "FBE2")
 
     def test_current_build_contains_inactive_sprite_remap(self) -> None:
         mapping = builder.custom_map_sprite_gray_source_map(
@@ -66,16 +66,21 @@ class HardCandidateDeltaTests(unittest.TestCase):
             expected_table,
         )
 
-    def test_delta_is_ui_and_sprite_only(self) -> None:
+    def test_delta_is_owned_ui_sprite_and_approved_balance_only(self) -> None:
         delta = self.model["delta"]
         self.assertEqual(
             self.model["status"],
-            "verified_ui_sprite_only_delta",
+            "verified_ui_sprite_and_approved_balance_delta",
         )
-        self.assertEqual(delta["changed_byte_count"], 578)
+        self.assertEqual(delta["changed_byte_count"], 584)
         self.assertEqual(delta["outside_owned_ranges"], 0)
         self.assertEqual(delta["unexpected_offsets"], [])
-        self.assertEqual(delta["balance_event_ai_changed_bytes"], 0)
+        self.assertEqual(delta["balance_event_ai_changed_bytes"], 2)
+        self.assertEqual(
+            delta["categories"]["approved_summon_slots"],
+            2,
+        )
+        self.assertEqual(delta["categories"]["word_renderer"], 1)
         self.assertTrue(delta["sram_descriptor_unchanged"])
         self.assertEqual(
             sum(delta["categories"].values()),

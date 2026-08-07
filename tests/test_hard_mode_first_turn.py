@@ -2,12 +2,22 @@ import hashlib
 import json
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from tools import verify_hard_mode_first_turn as first_turn
 
 
 class HardModeFirstTurnTests(unittest.TestCase):
+    @staticmethod
+    def current_entry_evidence(number):
+        return first_turn.entry_evidence(
+            number,
+            loader_results_path=(
+                first_turn.CURRENT_CANDIDATE_LOADER_RESULTS
+            ),
+        )
+
     def test_entry_evidence_uses_loader_and_deep_manifests(self):
         self.assertEqual(first_turn.entry_evidence(2)["kind"], "loader_smoke")
         self.assertEqual(first_turn.entry_evidence(1)["kind"], "loader_smoke")
@@ -15,7 +25,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
 
     def test_retained_entry_hashes_match_manifests(self):
         for number in (1, 2, 16, 25, 27):
-            evidence = first_turn.entry_evidence(number)
+            evidence = self.current_entry_evidence(number)
             path, digest, _ = first_turn.validate_entry_evidence(
                 number,
                 evidence,
@@ -31,7 +41,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 )
 
     def test_mutable_loader_entry_is_validated_by_runtime_data(self):
-        source = first_turn.entry_evidence(31)
+        source = self.current_entry_evidence(31)
         with tempfile.TemporaryDirectory() as directory:
             manifest = Path(directory) / "loader.json"
             manifest.write_text(
@@ -64,7 +74,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
             self.assertEqual(player_group_count, 10)
 
     def test_custom_loader_manifest_retains_rom_lineage(self):
-        source = first_turn.entry_evidence(3)
+        source = self.current_entry_evidence(3)
         with tempfile.TemporaryDirectory() as directory:
             manifest = Path(directory) / "loader.json"
             manifest.write_text(
@@ -100,6 +110,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 "candidate-sha256",
             )
             self.assertTrue(evidence["hash_locked"])
+            self.assertIsNone(evidence["runtime_name"])
 
             first_turn.validate_entry_rom_lineage(
                 evidence,
@@ -128,10 +139,64 @@ class HardModeFirstTurnTests(unittest.TestCase):
                     required=True,
                 )
 
+    def test_direct_entry_is_hash_locked_to_selected_rom(self):
+        source = self.current_entry_evidence(3)["path"]
+        evidence = first_turn.direct_entry_evidence(
+            Path(source),
+            rom_digest="fresh-rom-sha256",
+        )
+        self.assertEqual(evidence["kind"], "direct_current_rom")
+        self.assertTrue(evidence["hash_locked"])
+        self.assertIsNone(evidence["manifest_path"])
+        self.assertEqual(
+            evidence["manifest_rom_sha256"],
+            "fresh-rom-sha256",
+        )
+        path, digest, player_group_count = (
+            first_turn.validate_entry_evidence(3, evidence)
+        )
+        self.assertEqual(path, Path(source).resolve())
+        self.assertEqual(digest, evidence["sha256"])
+        self.assertIsNone(player_group_count)
+
+    def test_current_candidate_entry_retains_versioned_runtime_name(self):
+        evidence = self.current_entry_evidence(6)
+        self.assertEqual(evidence["runtime_name"], "hard-fbe2-s06")
+
     def test_turn_counter_reads_work_ram_byte(self):
         data = bytearray(first_turn.TURN_COUNTER_FILE_OFFSET + 1)
         data[first_turn.TURN_COUNTER_FILE_OFFSET] = 2
         self.assertEqual(first_turn.turn_counter(bytes(data)), 2)
+
+    @mock.patch.object(
+        first_turn,
+        "wait_for_title_screen",
+        return_value=7,
+    )
+    @mock.patch.object(first_turn, "run_command")
+    def test_game_over_dismissal_confirms_before_title_wait(
+        self,
+        run_command,
+        wait_for_title_screen,
+    ):
+        env = {"DISPLAY": ":104"}
+        self.assertEqual(
+            first_turn.dismiss_game_over_and_wait_for_title(
+                display=":104",
+                env=env,
+                max_checks=20,
+                delay=0.3,
+            ),
+            7,
+        )
+        self.assertEqual(run_command.call_args.kwargs["env"], env)
+        self.assertEqual(run_command.call_args.args[0][-1], "c:1.0")
+        wait_for_title_screen.assert_called_once_with(
+            display=":104",
+            env=env,
+            max_checks=20,
+            delay=0.3,
+        )
 
     def test_start_menu_detector_separates_unit_command_panel(self):
         start_menu = (
@@ -200,8 +265,17 @@ class HardModeFirstTurnTests(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             first_turn.classify_endpoint("turn_command", 1)
+        with self.assertRaisesRegex(
+            ValueError,
+            "not an approved first-turn endpoint",
+        ):
+            first_turn.classify_endpoint("game_over", 1)
         self.assertEqual(
-            first_turn.classify_endpoint("game_over", 1),
+            first_turn.classify_endpoint(
+                "game_over",
+                1,
+                expected={"endpoint": "game_over_turn_1"},
+            ),
             "game_over_turn_1",
         )
         with self.assertRaises(ValueError):
@@ -239,14 +313,18 @@ class HardModeFirstTurnTests(unittest.TestCase):
     def test_save_result_replaces_scenario_and_updates_coverage(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "results.json"
+            rom_digest = "current-candidate"
             results = {
                 "schema_version": 1,
                 "status": "in_progress",
-                "hard_rom": {},
+                "hard_rom": {"sha256": rom_digest},
                 "scenarios": [
                     {
                         "number": 2,
                         "status": "first_turn_runtime_verified",
+                        "entry_evidence": {
+                            "manifest_rom_sha256": rom_digest,
+                        },
                     },
                     {"number": 3, "status": "old"},
                 ],
@@ -257,6 +335,9 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 {
                     "number": 3,
                     "status": "first_turn_runtime_verified",
+                    "entry_evidence": {
+                        "manifest_rom_sha256": rom_digest,
+                    },
                 },
             )
             written = json.loads(path.read_text(encoding="utf-8"))
@@ -269,6 +350,84 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 [2, 3],
             )
             self.assertIn(1, written["coverage"]["missing_scenarios"])
+
+    def test_load_results_drops_rows_from_other_rom_candidates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            directory_path = Path(directory)
+            rom = directory_path / "candidate.md"
+            rom.write_bytes(b"current hard candidate")
+            rom_digest = hashlib.sha256(rom.read_bytes()).hexdigest()
+            results_path = directory_path / "results.json"
+            results_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "status": "all_scenarios_first_turn_verified",
+                        "hard_rom": {"sha256": "stale-candidate"},
+                        "scenarios": [
+                            {
+                                "number": 1,
+                                "status": "first_turn_runtime_verified",
+                                "entry_evidence": {
+                                    "manifest_rom_sha256": rom_digest,
+                                },
+                            },
+                            {
+                                "number": 12,
+                                "status": "first_turn_runtime_verified",
+                                "entry_evidence": {
+                                    "manifest_rom_sha256": "stale-candidate",
+                                },
+                            },
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with mock.patch.object(
+                first_turn,
+                "relative",
+                return_value="candidate.md",
+            ):
+                results = first_turn.load_results(results_path, rom)
+
+            self.assertEqual(
+                [row["number"] for row in results["scenarios"]],
+                [1],
+            )
+            self.assertEqual(
+                results["coverage"]["verified_scenarios"],
+                [1],
+            )
+            self.assertIn(12, results["coverage"]["missing_scenarios"])
+            self.assertEqual(results["status"], "in_progress")
+
+    def test_update_coverage_ignores_mixed_candidate_lineage(self):
+        results = {
+            "hard_rom": {"sha256": "current-candidate"},
+            "scenarios": [
+                {
+                    "number": 1,
+                    "status": "first_turn_runtime_verified",
+                    "entry_evidence": {
+                        "manifest_rom_sha256": "current-candidate",
+                    },
+                },
+                {
+                    "number": 2,
+                    "status": "first_turn_runtime_verified",
+                    "entry_evidence": {
+                        "manifest_rom_sha256": "older-candidate",
+                    },
+                },
+            ],
+        }
+
+        first_turn.update_coverage(results)
+
+        self.assertEqual(results["coverage"]["verified_scenarios"], [1])
+        self.assertIn(2, results["coverage"]["missing_scenarios"])
 
     def test_document_reports_verified_and_missing_scenarios(self):
         results = {
@@ -311,7 +470,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
             document,
         )
 
-    def test_current_candidate_scenario_one_and_19_through_31_use_isolated_evidence(self):
+    def test_current_candidate_scenarios_use_checksum_isolated_evidence(self):
         manifest = (
             first_turn.ROOT
             / "localization/hard_mode_current_candidate_first_turn.json"
@@ -320,12 +479,12 @@ class HardModeFirstTurnTests(unittest.TestCase):
         by_number = {
             int(row["number"]): row for row in data["scenarios"]
         }
-        prefix = "hard_mode_current_candidate_first_turn_"
-        for number in (
-            1, 19, 20, 21, 22, 23, 24,
-            25, 26, 27, 28, 29, 30, 31,
-        ):
-            row = by_number[number]
+        prefix = "hard_fbe2_first_turn_"
+        self.assertEqual(
+            sorted(by_number),
+            data["coverage"]["verified_scenarios"],
+        )
+        for number, row in sorted(by_number.items()):
             for path_key, digest_key in (
                 ("opening_capture", "opening_capture_sha256"),
                 ("endpoint_capture", "endpoint_capture_sha256"),

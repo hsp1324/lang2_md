@@ -1,0 +1,19 @@
+{
+  "release_ready": true,
+  "record_counts": {
+    "condition": 32,
+    "scenario_description": 31,
+    "event": 3214
+  },
+  "expected_record_counts": {
+    "condition": 32,
+    "scenario_description": 31,
+    "event": 3214
+  },
+  "review_status_counts": {
+    "human reviewed": 3277
+  },
+  "issue_counts": {},
+  "issue_count": 0,
+  "issues": []
+}

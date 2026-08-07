@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import argparse
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 import colorsys
 import fcntl
 import json
@@ -219,7 +219,7 @@ AI_ASSET_BUILD_LOCK_PATH = (
 )
 GRID_COLUMNS = 5
 GRID_ROWS = 10
-ASSET_VERSION = "liana-lana-healer-shared-v106"
+ASSET_VERSION = "identity-mask-and-silhouette-closure-v107"
 
 ROM_INK = (36, 36, 36, 255)
 ROM_WHITE = (255, 255, 255, 255)
@@ -359,6 +359,79 @@ def translate_points(
     ):
         raise ValueError("translated mask point exceeds 16x16 canvas")
     return translated
+
+
+def enclosed_empty_points(
+    occupied_points: set[tuple[int, int]],
+    *,
+    width: int = 16,
+    height: int = 16,
+) -> set[tuple[int, int]]:
+    """Return empty pixels that cannot reach the canvas edge.
+
+    Four-way connectivity matches the logical Mega Drive pixel grid. A
+    diagonal one-pixel crack therefore counts as a closed pinhole, which is
+    exactly the kind of background leak that is visible in-game.
+    """
+
+    outside: set[tuple[int, int]] = set()
+    pending: deque[tuple[int, int]] = deque()
+
+    def add_outside(point: tuple[int, int]) -> None:
+        if point not in occupied_points and point not in outside:
+            outside.add(point)
+            pending.append(point)
+
+    for x in range(width):
+        add_outside((x, 0))
+        add_outside((x, height - 1))
+    for y in range(height):
+        add_outside((0, y))
+        add_outside((width - 1, y))
+
+    while pending:
+        x, y = pending.popleft()
+        for neighbor in (
+            (x - 1, y),
+            (x + 1, y),
+            (x, y - 1),
+            (x, y + 1),
+        ):
+            neighbor_x, neighbor_y = neighbor
+            if (
+                0 <= neighbor_x < width
+                and 0 <= neighbor_y < height
+            ):
+                add_outside(neighbor)
+
+    return {
+        (x, y)
+        for y in range(height)
+        for x in range(width)
+        if (x, y) not in occupied_points and (x, y) not in outside
+    }
+
+
+def close_internal_transparency(
+    image: Image.Image,
+    color: tuple[int, int, int, int] = ROM_INK,
+) -> set[tuple[int, int]]:
+    """Paint enclosed transparent sprite pinholes with stock ROM ink."""
+
+    occupied_points = {
+        (x, y)
+        for y in range(image.height)
+        for x in range(image.width)
+        if image.getpixel((x, y))[3]
+    }
+    closed_points = enclosed_empty_points(
+        occupied_points,
+        width=image.width,
+        height=image.height,
+    )
+    for point in closed_points:
+        image.putpixel(point, color)
+    return closed_points
 
 
 def load_identity_mask_overrides(
@@ -3821,6 +3894,15 @@ def _build_assets_unlocked(
                 if not image.getpixel(seam_point)[3]:
                     image.putpixel(seam_point, ROM_INK)
                     feature += "·얼굴 이동 뒤 목 경계 투명 1픽셀 폐쇄"
+            closed_transparent_points: set[tuple[int, int]] = set()
+            if redesigned:
+                closed_transparent_points = close_internal_transparency(image)
+            if closed_transparent_points:
+                feature += (
+                    "·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 "
+                    f"{len(closed_transparent_points)}픽셀을 원작형 "
+                    "짙은 먹색으로 폐쇄"
+                )
             changed_pixel_count = sum(
                 image.getpixel((x, y)) != rom_face.getpixel((x, y))
                 for y in range(16)

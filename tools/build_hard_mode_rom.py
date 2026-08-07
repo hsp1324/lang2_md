@@ -369,16 +369,24 @@ def apply_hard_mode(
     return payload, model
 
 
-def _build_localized_hard_base(output: Path) -> None:
+def _build_localized_hard_base(
+    output: Path,
+    version_registry: Path | None = None,
+) -> None:
+    command = [
+        sys.executable,
+        str(ROOT / "scripts/build_korean_jp_probe.py"),
+        "--rom-profile",
+        "hard",
+        "--out",
+        str(output),
+    ]
+    if version_registry is not None:
+        command.extend(
+            ["--rom-version-registry", str(version_registry.resolve())]
+        )
     subprocess.run(
-        [
-            sys.executable,
-            str(ROOT / "scripts/build_korean_jp_probe.py"),
-            "--rom-profile",
-            "hard",
-            "--out",
-            str(output),
-        ],
+        command,
         cwd=ROOT,
         check=True,
     )
@@ -388,14 +396,23 @@ def build_hard_rom(
     output: Path = DEFAULT_OUTPUT,
     manifest_path: Path = DEFAULT_BUILD_MANIFEST,
     base_rom: Path | None = None,
+    version_registry: Path | None = None,
 ) -> dict[str, Any]:
+    output = output.resolve()
+    manifest_path = manifest_path.resolve()
+    if base_rom is not None:
+        base_rom = base_rom.resolve()
     approval = hard_mode_approval.require_approved()
     plan = hard_mode_plan.build_plan()
-    profile = get_profile("hard")
+    profile = (
+        get_profile("hard")
+        if version_registry is None
+        else get_profile("hard", version_registry.resolve())
+    )
     with tempfile.TemporaryDirectory(prefix="lang2-hard-") as directory:
         if base_rom is None:
             base_path = Path(directory) / "localized-hard-base.md"
-            _build_localized_hard_base(base_path)
+            _build_localized_hard_base(base_path, version_registry)
         else:
             base_path = base_rom
         payload, model = apply_hard_mode(
@@ -436,12 +453,22 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="use an already localized hard-profile ROM",
     )
+    parser.add_argument(
+        "--rom-version-registry",
+        type=Path,
+        help="alternate version registry for preview or release builds",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    model = build_hard_rom(args.out, args.manifest, args.base_rom)
+    model = build_hard_rom(
+        args.out,
+        args.manifest,
+        args.base_rom,
+        args.rom_version_registry,
+    )
     print(args.out)
     print(args.manifest)
     print(

@@ -198,6 +198,29 @@ def require_effect_settled(path: Path, confirmation_limit: int) -> None:
         )
 
 
+def prepare_probe(
+    input_data: bytes,
+    source_data: bytes | None,
+    *,
+    prebuilt: bool,
+    stock_magic: bool,
+) -> tuple[bytearray, int]:
+    """Return the diagnostic ROM and checksum without writing either input."""
+
+    probe = bytearray(input_data)
+    if prebuilt:
+        return probe, production_builder.be16(probe, 0x18E)
+    if source_data is None:
+        raise ValueError("source ROM data is required for a generated probe")
+    checksum = probe_builder.patch_probe(
+        probe,
+        source_data,
+        place_target=True,
+        enable_all_magic=not stock_magic,
+    )
+    return probe, checksum
+
+
 def run(command: list[str]) -> None:
     subprocess.run(command, cwd=ROOT, check=True)
 
@@ -258,6 +281,22 @@ def parse_args() -> argparse.Namespace:
         "--source-rom", type=Path, default=probe_builder.DEFAULT_SOURCE_ROM
     )
     parser.add_argument("--output-rom", type=Path)
+    parser.add_argument(
+        "--prebuilt-probe",
+        action="store_true",
+        help=(
+            "copy and run input-rom without applying the stock-layout probe "
+            "patch; the caller must provide an already prepared diagnostic ROM"
+        ),
+    )
+    parser.add_argument(
+        "--target-only",
+        action="store_true",
+        help=(
+            "capture and save the live target overlay, then exit successfully "
+            "without confirming or resolving the spell"
+        ),
+    )
     parser.add_argument("--runtime-name")
     parser.add_argument("--capture-prefix", type=Path)
     parser.add_argument("--gst-output", type=Path)
@@ -267,6 +306,14 @@ def parse_args() -> argparse.Namespace:
         help=(
             "copy a quicksave made while the magic target overlay is visible; "
             "used to audit transient battle-marker VRAM ownership"
+        ),
+    )
+    parser.add_argument(
+        "--confirmed-gst-output",
+        type=Path,
+        help=(
+            "copy a quicksave made after the first target confirmation; "
+            "this is the blue-staff confirmation lifetime"
         ),
     )
     parser.add_argument("--initial-delay", type=float, default=12.0)
@@ -320,19 +367,20 @@ def main() -> int:
         )
     if args.stock_magic and args.magic_id != 0:
         raise ValueError("stock Hein magic verification supports only magic ID 0")
+    if args.target_only and args.immediate:
+        raise ValueError("target-only verification needs a targeted spell")
     page, row = magic_position(args.magic_id)
     output_rom = args.output_rom or (
         ROOT
         / "roms/builds"
         / f"Langrisser II (Korean Magic Apply M{args.magic_id:02d}).md"
     )
-    source = args.source_rom.read_bytes()
-    probe = bytearray(args.input_rom.read_bytes())
-    checksum = probe_builder.patch_probe(
-        probe,
+    source = None if args.prebuilt_probe else args.source_rom.read_bytes()
+    probe, checksum = prepare_probe(
+        args.input_rom.read_bytes(),
         source,
-        place_target=True,
-        enable_all_magic=not args.stock_magic,
+        prebuilt=args.prebuilt_probe,
+        stock_magic=args.stock_magic,
     )
     output_rom.parent.mkdir(parents=True, exist_ok=True)
     output_rom.write_bytes(probe)
@@ -395,10 +443,20 @@ def main() -> int:
             if target_movement:
                 send_steps(target_movement)
             target_path = capture(Path(f"{prefix}_target.png"))
-            if args.target_gst_output is not None:
+            target_gst_output = args.target_gst_output
+            if args.target_only and target_gst_output is None:
+                target_gst_output = (
+                    ROOT / "captures/analysis" / f"{stem}-target.gst"
+                )
+            if target_gst_output is not None:
                 target_state, _, _ = save_and_read_mp(runtime_name)
-                args.target_gst_output.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(target_state, args.target_gst_output)
+                target_gst_output.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(target_state, target_gst_output)
+            if args.target_only:
+                print("verified live magic target overlay", flush=True)
+                if target_gst_output is not None:
+                    print(target_gst_output, flush=True)
+                return 0
             if args.final_confirmations < 1:
                 raise ValueError("final confirmations must be at least one")
             for index in range(args.final_confirmations):
@@ -410,6 +468,16 @@ def main() -> int:
                 send_keys(f"c@0.12:{delay}")
                 if index + 1 < args.final_confirmations:
                     capture(Path(f"{prefix}_target_confirmed_{index + 1:02d}.png"))
+                    if index == 0 and args.confirmed_gst_output is not None:
+                        confirmed_state, _, _ = save_and_read_mp(runtime_name)
+                        args.confirmed_gst_output.parent.mkdir(
+                            parents=True,
+                            exist_ok=True,
+                        )
+                        shutil.copy2(
+                            confirmed_state,
+                            args.confirmed_gst_output,
+                        )
 
         state, current_mp, max_mp = save_and_read_mp(runtime_name)
         if current_mp >= max_mp:

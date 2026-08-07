@@ -36,6 +36,10 @@ def run_one(args: argparse.Namespace, scenario: int, display: str) -> dict[str, 
         "--runtime-root", str(args.runtime_root),
         "--run-id", args.run_id,
         "--directions", ",".join(args.directions),
+        "--commander-id", str(args.commander_id),
+        "--commander-class", f"0x{args.commander_class:02X}",
+        "--commander-level", str(args.commander_level),
+        "--commander-experience", str(args.commander_experience),
     ]
     completed = subprocess.run(
         command,
@@ -134,6 +138,8 @@ def run_parallel(args: argparse.Namespace) -> dict[str, object]:
         "display_base": args.display_base,
         "scenarios": args.scenarios,
         "directions": args.directions,
+        "commander_id": args.commander_id,
+        "commander_class_id": f"0x{args.commander_class:02X}",
         "elapsed_seconds": round(time.monotonic() - started, 3),
         "passed_scenarios": len(passed),
         "total_scenarios": len(rows),
@@ -156,6 +162,12 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, default=gray.DEFAULT_OUTPUT_ROOT)
     parser.add_argument("--runtime-root", type=Path, default=matrix.DEFAULT_RUNTIME_ROOT)
     parser.add_argument("--run-id", type=matrix.validate_run_id, required=True)
+    parser.add_argument("--commander-id", type=int, default=1)
+    parser.add_argument(
+        "--commander-class", type=lambda value: int(value, 0), default=1
+    )
+    parser.add_argument("--commander-level", type=int, default=1)
+    parser.add_argument("--commander-experience", type=int, default=0)
     parser.add_argument("--summary", type=Path)
     args = parser.parse_args()
     args.rom = args.rom.resolve()
@@ -168,6 +180,10 @@ def main() -> int:
         parser.error(f"--workers must be 1..{parallel.MAX_WORKERS}")
     if not 1 <= args.display_base <= 999 - args.workers:
         parser.error("--display-base does not leave room for every worker")
+    if not 1 <= args.commander_id <= matrix.MANUAL_SLOT_COMMANDER_COUNT:
+        parser.error("--commander-id is outside the saved roster")
+    if not 0 <= args.commander_class < len(gray.builder.KOREAN_CLASS_LABELS):
+        parser.error("--commander-class is outside the class table")
     for label, path in (("ROM", args.rom), ("seed GST", args.seed_gst)):
         if not path.is_file():
             raise FileNotFoundError(f"{label} does not exist: {path}")
@@ -185,6 +201,8 @@ def main() -> int:
             ],
             "scenarios": args.scenarios,
             "directions": args.directions,
+            "commander_id": args.commander_id,
+            "commander_class_id": f"0x{args.commander_class:02X}",
             "run_id": args.run_id,
         }
     else:

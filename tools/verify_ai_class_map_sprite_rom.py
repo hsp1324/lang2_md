@@ -47,8 +47,12 @@ def verify(rom_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
             / f"{class_id:02X}.png"
         )
         asset_payload = asset_path.read_bytes()
+        source_image = Image.open(asset_path)
         expected = builder.encode_ai_class_map_sprite(
-            Image.open(asset_path)
+            source_image,
+            palette_index_overrides=(
+                builder.ai_class_map_palette_index_overrides(source_image)
+            ),
         )
         record_offset = builder.commander_sprite_record_offset(
             rom, commander_id, class_id

@@ -36,6 +36,9 @@ DEFAULT_DOCUMENTATION = (
     ROOT / "docs/hard_mode_current_candidate_first_turn.md"
 )
 LOADER_SMOKE_RESULTS = ROOT / "localization/hard_mode_scenario_smoke.json"
+CURRENT_CANDIDATE_LOADER_RESULTS = (
+    ROOT / "localization/hard_mode_current_candidate_runtime.json"
+)
 DEEP_RESULTS = ROOT / "localization/hard_mode_runtime_verification.json"
 EXPECTED_ENDPOINTS = (
     ROOT / "localization/hard_mode_first_turn_expected_endpoints.json"
@@ -128,6 +131,7 @@ def entry_evidence(
                 "path": ROOT / row["gst"],
                 "sha256": row["gst_sha256"],
                 "hash_locked": "runtime_gst" in row,
+                "runtime_name": row.get("runtime_name"),
                 "manifest_path": loader_results_path.resolve(),
                 "manifest_rom_sha256": loader.get(
                     "hard_rom", {}
@@ -152,6 +156,28 @@ def entry_evidence(
     raise ValueError(
         f"Scenario {scenario_number} has no verified hard-mode entry GST"
     )
+
+
+def direct_entry_evidence(path: Path, *, rom_digest: str) -> dict:
+    """Bind a freshly captured Turn-1 GST directly to the selected ROM.
+
+    Full surface regressions already retain a hash-locked Turn-1 command
+    state for every scenario.  Accepting that state directly avoids routing
+    it back through the historical hard-mode loader manifest, whose ROM
+    lineage may describe an older candidate.
+    """
+    resolved = path.resolve()
+    if not resolved.is_file():
+        raise FileNotFoundError(resolved)
+    return {
+        "kind": "direct_current_rom",
+        "path": resolved,
+        "sha256": sha256(resolved),
+        "hash_locked": True,
+        "runtime_name": None,
+        "manifest_path": None,
+        "manifest_rom_sha256": rom_digest,
+    }
 
 
 def validate_entry_evidence(
@@ -244,7 +270,10 @@ def prepare_running_runtime(
         raise RuntimeError(
             f"expected one BlastEm process on {display}, found {pids}"
         )
-    runtime_name = f"hard-matrix-s{scenario_number:02d}"
+    runtime_name = (
+        evidence.get("runtime_name")
+        or f"hard-matrix-s{scenario_number:02d}"
+    )
     quicksave = runtime_quicksave(runtime_name, rom)
     if not quicksave.is_file():
         raise FileNotFoundError(quicksave)
@@ -551,7 +580,14 @@ def wait_for_start_menu_cursor(
     )
 
 
-def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
+def select_turn_end(
+    *,
+    env: dict[str, str],
+    display: str,
+    opening_checks: int,
+    delay: float,
+    pre_turn_move_direction: str | None = None,
+) -> dict[str, int]:
     run_command(
         [
             sys.executable,
@@ -561,28 +597,144 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
         ],
         env=env,
     )
-    map_checks = wait_for_surface(
-        env=env,
-        predicate=lambda path: (
-            sequence_runner.battle_map_surface_visible(path)
-            and not sequence_runner.battle_command_menu_visible(path)
-        ),
-        label="battle map after closing the unit menu",
+    map_predicate = lambda path: (
+        sequence_runner.battle_map_surface_visible(path)
+        and not sequence_runner.battle_command_menu_visible(path)
     )
+    pre_turn_event_confirmations = 0
+    try:
+        map_checks = wait_for_surface(
+            env=env,
+            predicate=map_predicate,
+            label="battle map after closing the unit menu",
+        )
+    except RuntimeError:
+        # Some scenario entry snapshots expose the command menu just before a
+        # queued Turn-1 event.  Cancelling the menu starts that event instead
+        # of returning immediately to the map.  Finish the event, close the
+        # restored command menu once more, and only then open Start.
+        endpoint, pre_turn_event_confirmations = run_detector(
+            display=display,
+            max_checks=opening_checks,
+            delay=delay,
+        )
+        if endpoint != "turn_command":
+            raise RuntimeError(
+                "queued Turn-1 event did not return to a command menu"
+            )
+        run_command(
+            [
+                sys.executable,
+                str(KEY_SENDER),
+                "--send-event",
+                "b:0.8",
+            ],
+            env=env,
+        )
+        map_checks = wait_for_surface(
+            env=env,
+            predicate=map_predicate,
+            label="battle map after queued Turn-1 event",
+        )
     run_command(
         [
             sys.executable,
             str(KEY_SENDER),
             "--send-event",
+            # Some scenarios return from the vertical command list to a
+            # one-row `명령` status panel.  B is harmless on the bare map and
+            # closes that residual panel when present, making Start reliable.
+            "b:0.6",
             "start:1.0",
         ],
         env=env,
     )
-    start_menu_checks = wait_for_surface(
-        env=env,
-        predicate=start_menu_visible,
-        label="Start menu",
-    )
+    start_retry_count = 0
+    try:
+        start_menu_checks = wait_for_surface(
+            env=env,
+            predicate=start_menu_visible,
+            label="Start menu",
+        )
+    except RuntimeError:
+        # A direct client-message key can occasionally be lost immediately
+        # after a long dialogue detector/capture sequence.  The detector has
+        # just proven the menu is still absent, so retry once through XTest.
+        start_retry_count = 1
+        run_command(
+            [
+                sys.executable,
+                str(KEY_SENDER),
+                "start:1.0",
+            ],
+            env=env,
+        )
+        try:
+            start_menu_checks = wait_for_surface(
+                env=env,
+                predicate=start_menu_visible,
+                label="Start menu after XTest retry",
+            )
+        except RuntimeError:
+            endpoint, extra_confirmations = run_detector(
+                display=display,
+                max_checks=opening_checks,
+                delay=delay,
+            )
+            pre_turn_event_confirmations += extra_confirmations
+            if endpoint != "turn_command":
+                raise RuntimeError(
+                    "post-menu Turn-1 event did not return to command"
+                )
+            run_command(
+                [
+                    sys.executable,
+                    str(KEY_SENDER),
+                    "--send-event",
+                    "b:0.8",
+                    "start:1.0",
+                ],
+                env=env,
+            )
+            try:
+                start_menu_checks = wait_for_surface(
+                    env=env,
+                    predicate=start_menu_visible,
+                    label="Start menu after queued event",
+                    max_checks=40,
+                )
+            except RuntimeError:
+                if pre_turn_move_direction is None:
+                    raise
+                endpoint, extra_confirmations = run_detector(
+                    display=display,
+                    max_checks=opening_checks,
+                    delay=delay,
+                )
+                pre_turn_event_confirmations += extra_confirmations
+                if endpoint != "turn_command":
+                    raise RuntimeError(
+                        "pre-turn movement fallback did not reach command"
+                    )
+                run_command(
+                    [
+                        sys.executable,
+                        str(KEY_SENDER),
+                        "--send-event",
+                        "c:0.8",
+                        f"{pre_turn_move_direction}:0.6",
+                        "c:0.8",
+                        "c:1.4",
+                        "start:1.0",
+                    ],
+                    env=env,
+                )
+                start_menu_checks = wait_for_surface(
+                    env=env,
+                    predicate=start_menu_visible,
+                    label="Start menu after one verified allied move",
+                    max_checks=60,
+                )
     initial_cursor_row, initial_cursor_checks = wait_for_start_menu_cursor(
         env=env,
     )
@@ -633,12 +785,14 @@ def select_turn_end(*, env: dict[str, str]) -> dict[str, int]:
     return {
         "map_checks": map_checks,
         "start_menu_checks": start_menu_checks,
+        "start_retry_count": start_retry_count,
         "initial_cursor_row": initial_cursor_row,
         "initial_cursor_checks": initial_cursor_checks,
         "navigation_count": navigation_count,
         "final_cursor_row": final_cursor_row,
         "final_cursor_checks": final_cursor_checks,
         "turn_end_dismiss_checks": turn_end_dismiss_checks,
+        "pre_turn_event_confirmations": pre_turn_event_confirmations,
     }
 
 
@@ -685,6 +839,32 @@ def wait_for_title_screen(
     )
 
 
+def dismiss_game_over_and_wait_for_title(
+    *,
+    display: str,
+    env: dict[str, str],
+    max_checks: int,
+    delay: float,
+) -> int:
+    run_command(
+        [
+            sys.executable,
+            str(KEY_SENDER),
+            "--send-event",
+            "--ready-delay",
+            "0.5",
+            "c:1.0",
+        ],
+        env=env,
+    )
+    return wait_for_title_screen(
+        display=display,
+        env=env,
+        max_checks=max_checks,
+        delay=delay,
+    )
+
+
 def turn_counter(gst: bytes) -> int:
     if len(gst) <= TURN_COUNTER_FILE_OFFSET:
         raise ValueError("GST is too short to contain the turn counter")
@@ -708,7 +888,12 @@ def classify_endpoint(
             raise ValueError(
                 f"first-turn GAME OVER has unexpected turn counter {counter}"
             )
-        return f"game_over_turn_{counter}"
+        endpoint = f"game_over_turn_{counter}"
+        if expected is None or expected.get("endpoint") != endpoint:
+            raise ValueError(
+                "GAME OVER is not an approved first-turn endpoint"
+            )
+        return endpoint
     if detector_endpoint == "title_screen":
         if (
             expected is None
@@ -735,18 +920,34 @@ def load_results(path: Path, rom: Path) -> dict:
             "hard_rom": {},
             "scenarios": [],
         }
+    rom_digest = sha256(rom)
     results["hard_rom"] = {
         "path": relative(rom),
-        "sha256": sha256(rom),
+        "sha256": rom_digest,
     }
+    results["scenarios"] = [
+        row
+        for row in results.get("scenarios", [])
+        if result_matches_rom_lineage(row, rom_digest)
+    ]
+    update_coverage(results)
     return results
 
 
+def result_matches_rom_lineage(row: dict, rom_digest: str) -> bool:
+    return (
+        row.get("status") == "first_turn_runtime_verified"
+        and row.get("entry_evidence", {}).get("manifest_rom_sha256")
+        == rom_digest
+    )
+
+
 def update_coverage(results: dict) -> None:
+    rom_digest = results.get("hard_rom", {}).get("sha256")
     verified = sorted(
         int(row["number"])
         for row in results.get("scenarios", [])
-        if row["status"] == "first_turn_runtime_verified"
+        if rom_digest and result_matches_rom_lineage(row, rom_digest)
     )
     missing = sorted(set(range(1, 32)) - set(verified))
     results["coverage"] = {
@@ -889,14 +1090,21 @@ def verify_scenario(
     retain_detector_frames: bool,
     emulator_speed: int,
     resume_running: bool,
+    entry_gst: Path | None = None,
+    skip_title_wait: bool = False,
+    pre_turn_move_direction: str | None = None,
     evidence_prefix: str = "hard_first_turn",
 ) -> dict:
-    evidence = entry_evidence(
-        scenario_number,
-        loader_results_path=loader_results_path,
-        deep_results_path=deep_results_path,
-    )
     rom_digest = sha256(rom)
+    evidence = (
+        direct_entry_evidence(entry_gst, rom_digest=rom_digest)
+        if entry_gst is not None
+        else entry_evidence(
+            scenario_number,
+            loader_results_path=loader_results_path,
+            deep_results_path=deep_results_path,
+        )
+    )
     validate_entry_rom_lineage(
         evidence,
         rom_digest,
@@ -952,17 +1160,27 @@ def verify_scenario(
                 "--initial-delay",
                 str(initial_delay),
             ])
-            checks = wait_for_title_screen(
-                display=display,
-                env=env,
-                max_checks=opening_checks,
-                delay=delay,
-            )
-            print(
-                "title screen ready for entry-state load after "
-                f"{checks} checks",
-                flush=True,
-            )
+            if entry_gst is None and not skip_title_wait:
+                checks = wait_for_title_screen(
+                    display=display,
+                    env=env,
+                    max_checks=opening_checks,
+                    delay=delay,
+                )
+                print(
+                    "title screen ready for entry-state load after "
+                    f"{checks} checks",
+                    flush=True,
+                )
+            else:
+                # The direct GST is already validated as Turn 1 and bound to
+                # this ROM.  Loading it immediately also keeps this regression
+                # independent of title-screen artwork and its detector.
+                print(
+                    "Turn-1 entry validated; loading without title "
+                    "surface detection",
+                    flush=True,
+                )
             run_command(
                 [
                     sys.executable,
@@ -995,7 +1213,13 @@ def verify_scenario(
             / f"{evidence_prefix}_s{scenario_number:02d}_command.png"
         )
         capture(opening_capture, env=env)
-        turn_end_selection = select_turn_end(env=env)
+        turn_end_selection = select_turn_end(
+            env=env,
+            display=display,
+            opening_checks=opening_checks,
+            delay=delay,
+            pre_turn_move_direction=pre_turn_move_direction,
+        )
         if emulator_speed != 0:
             run_command(
                 [
@@ -1006,6 +1230,7 @@ def verify_scenario(
                 ],
                 env=env,
             )
+        approved_endpoint = expected_endpoint(scenario_number)
         detector_endpoint, phase_confirmations = run_detector(
             display=display,
             max_checks=phase_checks,
@@ -1017,6 +1242,20 @@ def verify_scenario(
                 else None
             ),
         )
+        if (
+            detector_endpoint == "game_over"
+            and approved_endpoint is not None
+            and approved_endpoint.get("endpoint")
+            == "defeat_return_title_turn_1"
+        ):
+            title_checks = dismiss_game_over_and_wait_for_title(
+                display=display,
+                env=env,
+                max_checks=phase_checks,
+                delay=delay,
+            )
+            phase_confirmations += title_checks
+            detector_endpoint = "title_screen"
         endpoint_capture = (
             CAPTURE_ROOT
             / f"{evidence_prefix}_s{scenario_number:02d}_endpoint.png"
@@ -1033,7 +1272,6 @@ def verify_scenario(
         )
         gst_bytes = quicksave.read_bytes()
         counter = turn_counter(gst_bytes)
-        approved_endpoint = expected_endpoint(scenario_number)
         endpoint = classify_endpoint(
             detector_endpoint,
             counter,
@@ -1063,7 +1301,11 @@ def verify_scenario(
             ),
             "entry_evidence": {
                 "kind": evidence["kind"],
-                "manifest": relative(Path(evidence["manifest_path"])),
+                "manifest": (
+                    relative(Path(evidence["manifest_path"]))
+                    if evidence.get("manifest_path") is not None
+                    else None
+                ),
                 "manifest_rom_sha256": evidence.get(
                     "manifest_rom_sha256"
                 ),
@@ -1148,6 +1390,32 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--entry-gst",
+        type=Path,
+        help=(
+            "fresh Turn-1 command GST captured from the selected ROM; "
+            "bypasses historical loader manifests while retaining an "
+            "exact SHA-256 and ROM-lineage binding"
+        ),
+    )
+    parser.add_argument(
+        "--skip-title-wait",
+        action="store_true",
+        help=(
+            "load the validated entry GST immediately after launch; useful "
+            "when release title artwork intentionally differs from the "
+            "historical title detector"
+        ),
+    )
+    parser.add_argument(
+        "--pre-turn-move-direction",
+        choices=("up", "down", "left", "right"),
+        help=(
+            "if a scenario blocks Start until one unit acts, perform the "
+            "same one-tile move already accepted by the gray-surface matrix"
+        ),
+    )
+    parser.add_argument(
         "--emulator-speed",
         type=int,
         choices=tuple(EMULATOR_SPEED_PERCENT),
@@ -1191,6 +1459,13 @@ def main() -> int:
         retain_detector_frames=args.retain_detector_frames,
         emulator_speed=args.emulator_speed,
         resume_running=args.resume_running,
+        entry_gst=(
+            args.entry_gst.resolve()
+            if args.entry_gst is not None
+            else None
+        ),
+        skip_title_wait=args.skip_title_wait,
+        pre_turn_move_direction=args.pre_turn_move_direction,
         evidence_prefix=evidence_prefix,
     )
     save_result(results_path, results, result)

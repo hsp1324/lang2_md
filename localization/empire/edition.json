@@ -1,0 +1,25 @@
+{
+  "edition_id": "empire-v2.0-96-ko",
+  "display_name": "Langrisser II Empire V2.0 (96%) Korean",
+  "status": "work-in-progress",
+  "source_rom": {
+    "filename": "Langrisser2帝国篇V2.0(96%).BIN",
+    "size": 2097152,
+    "sha256": "7004ad55f28340144f3248d7386d4bbc76a076491899af5e872f5854802be179"
+  },
+  "separate_from": [
+    "normal",
+    "hard"
+  ],
+  "policy": {
+    "localization_only": true,
+    "preserve_empire_balance_and_scenario_data": true,
+    "reuse_common_korean_ui_terms": true,
+    "reuse_normal_story_by_address": false
+  },
+  "references": [
+    "https://m.blog.naver.com/jjongxx/220823287630",
+    "https://m.blog.naver.com/jjongxx/220823317347?recommendTrackingCode=2",
+    "https://langrisser.org/download/4.htm"
+  ]
+}

@@ -60,7 +60,10 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
             )
             if battle != preparation
         }
-        self.assertEqual(differences, {4, 6, 10, 11, 12, 13, 14, 15})
+        self.assertEqual(
+            differences,
+            {4, 6, 7, 9, 10, 11, 12, 13, 14, 15},
+        )
         self.assertEqual(
             tuple(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[index] for index in (4, 6)),
             (0x07EA, 0x07EC),
@@ -73,7 +76,7 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
             (0x07D0, 0x07D1),
         )
 
-    def test_battle_slots_preserve_both_target_cursor_graphics(self) -> None:
+    def test_battle_slots_preserve_all_target_cursor_graphics(self) -> None:
         destinations = set(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
         self.assertTrue(
             destinations.isdisjoint(builder.BATTLE_TARGET_CURSOR_TILES)
@@ -81,9 +84,23 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
         self.assertTrue(
             destinations.isdisjoint(builder.BATTLE_INVALID_TARGET_CURSOR_TILES)
         )
+        self.assertTrue(
+            destinations.isdisjoint(builder.BATTLE_MAGIC_CONFIRM_CURSOR_TILES)
+        )
         self.assertEqual(
             builder.BATTLE_INVALID_TARGET_CURSOR_TILES,
             tuple(range(0x07D5, 0x07DD)),
+        )
+        self.assertEqual(
+            builder.BATTLE_MAGIC_CONFIRM_CURSOR_TILES,
+            tuple(range(0x07DD, 0x07E5)),
+        )
+        self.assertEqual(
+            tuple(
+                builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS[index]
+                for index in (7, 9, 12)
+            ),
+            (0x07ED, 0x07F2, 0x07FA),
         )
 
     def test_preparation_lookup_calls_its_own_destination_renderer(self) -> None:

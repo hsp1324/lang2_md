@@ -9,6 +9,10 @@ from tools import run_gray_acted_surface_matrix as gray
 
 
 ROOT = Path(__file__).resolve().parents[1]
+HARD_V120_ROM = (
+    ROOT
+    / "roms/builds/Langrisser II (Korean Hard T1.2.0 B1.2.0).md"
+)
 
 
 class GrayActedSurfaceMatrixTests(unittest.TestCase):
@@ -49,6 +53,10 @@ class GrayActedSurfaceMatrixTests(unittest.TestCase):
                 "--workers", "2",
                 "--display-base", "150",
                 "--run-id", "unit-plan",
+                "--commander-id", "5",
+                "--commander-class", "0x14",
+                "--commander-level", "10",
+                "--commander-experience", "7",
             ],
             cwd=ROOT,
             text=True,
@@ -57,6 +65,26 @@ class GrayActedSurfaceMatrixTests(unittest.TestCase):
         self.assertEqual(plan["scenarios"], [12, 13, 14])
         self.assertEqual(plan["displays"], [":150", ":151"])
         self.assertEqual(plan["directions"], ["down", "right", "left", "up"])
+        self.assertEqual(plan["commander_id"], 5)
+        self.assertEqual(plan["commander_class_id"], "0x14")
+
+    def test_custom_archmage_gray_payload_comes_from_release_rom_mask(self) -> None:
+        data = HARD_V120_ROM.read_bytes()
+        mask_offset, sprite_id, payload, source_kind = (
+            gray.expected_commander_gray_payload(data, 1, 0x14)
+        )
+        self.assertEqual(source_kind, "custom")
+        self.assertEqual(len(payload), gray.GRAY_VRAM_BYTES)
+        self.assertTrue(any(payload))
+        source_mask = data[
+            mask_offset:
+            mask_offset + gray.builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+        ]
+        self.assertEqual(payload, gray.expand_gray_source_mask(source_mask))
+        self.assertIn(
+            (1, 0x14, sprite_id),
+            gray.builder.AI_CLASS_MAP_SPRITE_SPECS,
+        )
 
 
 if __name__ == "__main__":

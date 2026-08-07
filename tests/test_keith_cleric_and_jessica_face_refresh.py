@@ -6,7 +6,10 @@ import unittest
 
 from PIL import Image
 
-from tools.build_ai_class_sprite_assets import IDENTITY_PIXEL_TRANSLATIONS
+from tools.build_ai_class_sprite_assets import (
+    IDENTITY_PIXEL_TRANSLATIONS,
+    close_internal_transparency,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +33,7 @@ class KeithClericSkyPaletteTests(unittest.TestCase):
         for class_id, source_path in sources.items():
             with self.subTest(class_id=f"{class_id:02X}"):
                 source = Image.open(source_path).convert("RGBA")
+                close_internal_transparency(source)
                 live = Image.open(
                     LIVE / f"7/{class_id:02X}.png"
                 ).convert("RGBA")
@@ -78,6 +82,7 @@ class JessicaFaceMaskRefreshTests(unittest.TestCase):
             source = Image.open(
                 JESSICA_REFRESH / row["file"]
             ).convert("RGBA")
+            close_internal_transparency(source)
             original = Image.open(
                 ROOT
                 / "editor/static/class-sprites/commanders/10"
@@ -117,7 +122,7 @@ class JessicaFaceMaskRefreshTests(unittest.TestCase):
         )
         self.assertEqual(
             manifest["asset_version"],
-            "liana-lana-healer-shared-v106",
+            "identity-mask-and-silhouette-closure-v107",
         )
         overrides = json.loads(
             (ROOT / "editor/ai_class_design_overrides.json").read_text(
@@ -128,8 +133,16 @@ class JessicaFaceMaskRefreshTests(unittest.TestCase):
             live = Image.open(
                 LIVE / f"10/{class_id:02X}.png"
             ).convert("RGBA")
+            expected = Image.new("RGBA", (16, 16))
+            expected.putdata(
+                [
+                    tuple(color)
+                    for color in overrides[f"10:{class_id:02X}"]["pixels"]
+                ]
+            )
+            close_internal_transparency(expected)
             self.assertEqual(
-                overrides[f"10:{class_id:02X}"]["pixels"],
+                [list(color) for color in expected.get_flattened_data()],
                 [list(color) for color in live.get_flattened_data()],
             )
 

@@ -1241,11 +1241,11 @@ def launch_to_preparation(
     scenario_number: int,
     runtime_name: str,
     output: Path,
+    manual_slot_args: list[str] | None = None,
 ) -> dict[str, object]:
     last_error: Exception | None = None
     for attempt in range(1, PREPARATION_LAUNCH_ATTEMPTS + 1):
-        recorder.run_command(
-            [
+        command = [
                 sys.executable,
                 str(RUN_SEQUENCE),
                 "scenario-select",
@@ -1255,6 +1255,8 @@ def launch_to_preparation(
                 str(scenario_number),
                 "--runtime-name",
                 runtime_name,
+                "--runtime-root",
+                str(recorder.runtime_home.parent),
                 "--manual-slot-gst",
                 str(seed_gst),
                 "--initial-delay",
@@ -1264,7 +1266,9 @@ def launch_to_preparation(
                 "--replace-existing",
                 "--send-event",
             ]
-        )
+        if manual_slot_args:
+            command.extend(manual_slot_args)
+        recorder.run_command(command)
         try:
             recorder.run_command(
                 [

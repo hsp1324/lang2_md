@@ -146,17 +146,17 @@ roms/builds/Langrisser II (Korean).md
 ```
 
 배포용 버전 ROM은 `localization/rom_versions.json`을 단일 기준으로
-빌드합니다. 현재 일반판은 타이틀에 `번역:1.2.0`, 하드판은 아래쪽
-왼쪽과 오른쪽에 `번역:1.2.0`, `하드:1.2.0`을 나눠 표시합니다.
+빌드합니다. 현재 일반판은 타이틀에 `번역:1.2.1`, 하드판은 아래쪽
+왼쪽과 오른쪽에 `번역:1.2.1`, `하드:1.2.1`을 나눠 표시합니다.
 일반판 배포 파일명은
-`Langrisser II (Korean v1.2.0).md`이며 ROM 영문 게임명 헤더에도
-`LANGRISSER II KOREAN T1.2.0 BY HSP1324`가 기록됩니다. 일본어 게임명,
+`Langrisser II (Korean v1.2.1).md`이며 ROM 영문 게임명 헤더에도
+`LANGRISSER II KOREAN T1.2.1 BY HSP1324`가 기록됩니다. 일본어 게임명,
 제품 코드와 SRAM 헤더는 바꾸지 않습니다.
 
 ```bash
 python3 scripts/build_korean_jp_probe.py \
   --rom-profile normal \
-  --out "roms/builds/Langrisser II (Korean v1.2.0).md"
+  --out "roms/builds/Langrisser II (Korean v1.2.1).md"
 python3 tools/rom_version.py --profile normal --json
 ```
 
@@ -172,9 +172,9 @@ python3 tools/build_hard_mode_rom.py
 현재 하드 빌드:
 
 ```text
-roms/builds/Langrisser II (Korean Hard T1.2.0 B1.2.0).md
-MD checksum: 98BA
-SHA-256: a6b4cb1fbad2d22fda9e8393fe80682d171ed5a6c817e6004f2edd05886e3a62
+roms/builds/Langrisser II (Korean Hard T1.2.1 B1.2.1).md
+MD checksum: C9BA
+SHA-256: 7c955c09069a56260702104a3587b8e362eede5d4c7fc55bbad259e616f2f123
 ```
 
 실제 난이도와 클리어 가능성은 사용자 플레이로 검증한다. 이후 수정본도

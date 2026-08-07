@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "verified_ui_sprite_only_delta",
+  "status": "verified_ui_sprite_and_approved_balance_delta",
   "before": {
     "path": "roms/releases/archive/Langrisser II (Korean Hard T1.0.0 B1.0.0 checksum-1011).md",
     "size": 4194304,
@@ -11,8 +11,8 @@
   "after": {
     "path": "roms/builds/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
     "size": 4194304,
-    "md_checksum": "5BE8",
-    "sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd",
+    "md_checksum": "FBE2",
+    "sha256": "99a518338269e971bcdbf65b354be5d0109556967afe87b4161dfbd6448800a9",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "ownership": {
@@ -76,6 +76,12 @@
         "end_exclusive": "0x2B7FDE"
       }
     ],
+    "word_renderer": [
+      {
+        "start": "0x2B7000",
+        "end_exclusive": "0x2B706A"
+      }
+    ],
     "dynamic_glyph_tables": [
       {
         "start": "0x2BE800",
@@ -91,10 +97,16 @@
         "start": "0x2F5980",
         "end_exclusive": "0x2F5A00"
       }
+    ],
+    "approved_summon_slots": [
+      {
+        "start": "0x18323C",
+        "end_exclusive": "0x18323E"
+      }
     ]
   },
   "delta": {
-    "changed_byte_count": 578,
+    "changed_byte_count": 584,
     "categories": {
       "header_checksum": 2,
       "result_label_record": 3,
@@ -106,18 +118,20 @@
       "dynamic_legacy_lookup_routine": 1,
       "dynamic_glyph_render_routine": 1,
       "prep_dynamic_lookup_routine": 1,
-      "dynamic_glyph_tables": 226,
-      "loren_map_frames": 75
+      "word_renderer": 1,
+      "dynamic_glyph_tables": 229,
+      "loren_map_frames": 75,
+      "approved_summon_slots": 2
     },
     "outside_owned_ranges": 0,
     "unexpected_offsets": [],
-    "balance_event_ai_changed_bytes": 0,
+    "balance_event_ai_changed_bytes": 2,
     "sram_descriptor_unchanged": true
   },
   "evidence_inheritance": {
-    "source_runtime_rom_sha256": "18f1203c32e66f660b84897cebe372c89e3c7d7787690abc5b62a84f470554ac",
-    "runtime_loader_scenarios": 31,
-    "first_turn_scenarios": 31,
-    "scope": "Only loader/first-turn balance evidence is inherited. UI and sprite behavior must use current-candidate captures."
+    "runtime_source_required_sha256": "99a518338269e971bcdbf65b354be5d0109556967afe87b4161dfbd6448800a9",
+    "runtime_loader_scenarios": 0,
+    "first_turn_scenarios": 0,
+    "scope": "The two approved Scenario 27 balance bytes invalidate inherited loader and first-turn evidence. Both matrices must be regenerated against the exact current candidate."
   }
 }

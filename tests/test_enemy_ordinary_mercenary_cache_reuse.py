@@ -35,6 +35,9 @@ class EnemyOrdinaryMercenaryCacheReuseTests(unittest.TestCase):
         cls.entry_restore = (
             builder._build_preparation_entry_cache_restore_routine()
         )
+        cls.dynamic_reset = (
+            builder._build_map_sprite_cache_dynamic_reset_wrapper()
+        )
         cls.lookup_start = (
             builder.ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE
             + len(cls.loader)
@@ -82,6 +85,43 @@ class EnemyOrdinaryMercenaryCacheReuseTests(unittest.TestCase):
         self.assertLessEqual(
             self.lookup_start + len(self.lookup),
             builder.ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE_LIMIT,
+        )
+
+    def test_every_map_cache_rebuild_clears_all_stale_dynamic_rows(self) -> None:
+        hook = builder.MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK
+        original = builder.MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK_ORIGINAL
+        self.assertEqual(self.original[hook:hook + len(original)], original)
+        self.assertEqual(
+            self.patched[hook:hook + len(original)],
+            bytes.fromhex("4E F9")
+            + builder.MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER.to_bytes(4, "big"),
+        )
+
+        wrapper = builder.MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER
+        self.assertEqual(
+            self.patched[wrapper:wrapper + len(self.dynamic_reset)],
+            self.dynamic_reset,
+        )
+        self.assertLessEqual(
+            wrapper + len(self.dynamic_reset),
+            builder.MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER_LIMIT,
+        )
+        self.assertTrue(self.dynamic_reset.startswith(bytes.fromhex("48 E7 FA F8")))
+        clear_all_rows = (
+            bytes.fromhex("41 F9")
+            + builder.ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
+            + bytes((0x70, builder.ENEMY_DYNAMIC_MERCENARY_COUNT - 1))
+            + bytes.fromhex("42 98 51 C8 FF FC")
+        )
+        self.assertIn(clear_all_rows, self.dynamic_reset)
+        self.assertIn(bytes.fromhex("45 F9 FF FF A7 FE"), self.dynamic_reset)
+        self.assertTrue(
+            self.dynamic_reset.endswith(
+                bytes.fromhex("4E F9")
+                + builder.MAP_SPRITE_CACHE_DYNAMIC_RESET_RESUME.to_bytes(
+                    4, "big"
+                )
+            )
         )
 
     def test_preparation_restore_requeues_both_frames_for_both_tables(

@@ -5,13 +5,13 @@
   "approval_confirmation": "표준 하드로 해줘",
   "base": {
     "size": 4194304,
-    "sha256": "fc931779823fda96960e70c4abce432e942423d21cde5cc013ab1374f67a46e2",
+    "sha256": "1c7d89475cbbe4a54779cf6322f8e8803e397ebb81002ea5d5d44c6770f1299e",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "hard": {
     "size": 4194304,
-    "header_checksum": "98BA",
-    "sha256": "a6b4cb1fbad2d22fda9e8393fe80682d171ed5a6c817e6004f2edd05886e3a62",
+    "header_checksum": "D57F",
+    "sha256": "fa74efb5e709deb81f7c3ada131e539929e170926afddc0aad7358e06ea21c1f",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "implementation": {
@@ -28,18 +28,46 @@
     "correction_table": "0x300080",
     "shared_class_records_modified": false,
     "custom_class_map_sprites": {
-      "count": 40,
+      "count": 131,
       "class_ids": [
+        "0x01",
         "0x04",
+        "0x06",
+        "0x07",
+        "0x08",
+        "0x09",
+        "0x0A",
         "0x0B",
+        "0x0C",
+        "0x0D",
         "0x11",
+        "0x12",
         "0x13",
         "0x14",
-        "0x16"
+        "0x15",
+        "0x16",
+        "0x17",
+        "0x18",
+        "0x19",
+        "0x1A",
+        "0x1B",
+        "0x1D",
+        "0x1E",
+        "0x1F",
+        "0x21",
+        "0x22",
+        "0x23",
+        "0x24",
+        "0x25",
+        "0x26",
+        "0x27",
+        "0x28",
+        "0x29",
+        "0x2A"
       ],
       "sprite_id_range": [
-        "0x53BA",
-        "0x53E1"
+        "0x57BA",
+        "0x583C"
       ],
       "animation_frames": 2,
       "source": "editor/static/ai-class-sprites"
@@ -58,11 +86,11 @@
     "save_states_supported": false
   },
   "release": {
-    "release_id": "ko-hard-t1.2.0-b1.2.0",
-    "translation_version": "1.2.0",
-    "balance_version": "1.2.0",
-    "rom_filename": "Langrisser II (Korean Hard T1.2.0 B1.2.0).md",
-    "header_title": "LANGRISSER II KOREAN T1.2.0 B1.2.0 BY HSP1324",
-    "output": "roms/builds/Langrisser II (Korean Hard T1.2.0 B1.2.0).md"
+    "release_id": "ko-hard-t1.3.0-b1.3.0",
+    "translation_version": "1.3.0",
+    "balance_version": "1.3.0",
+    "rom_filename": "Langrisser II (Korean Hard T1.3.0 B1.3.0).md",
+    "header_title": "LANGRISSER II KOREAN T1.3.0 B1.3.0 BY HSP1324",
+    "output": "roms/builds/Langrisser II (Korean Hard T1.3.0 B1.3.0).md"
   }
 }

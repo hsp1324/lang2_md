@@ -1081,8 +1081,18 @@ def detection_capture_path(args: argparse.Namespace, fallback: Path, step: int) 
     return prefix.with_name(f"{stem}_{step:02d}{suffix}")
 
 
+def process_detection_probe(name: str) -> Path:
+    """Return a detector scratch path isolated from parallel workers."""
+    return LOG_ROOT / f"{name}_{os.getpid()}.png"
+
+
 def advance_to_preparation_screen(args: argparse.Namespace) -> int:
-    probe = LOG_ROOT / "preparation_probe.png"
+    # Parallel scenario verification launches one detector process per Xvfb
+    # display.  A fixed probe name lets those processes overwrite the same
+    # PNG while another process is opening it, which intermittently produces
+    # a truncated image.  Keep the ordinary single-file overwrite behaviour,
+    # but isolate it per detector process.
+    probe = process_detection_probe("preparation_probe")
     for step in range(args.max_confirmations + 1):
         frame = detection_capture_path(args, probe, step)
         capture_window(frame, xlib_only=args.xlib_capture)
@@ -1107,7 +1117,7 @@ def advance_to_battle_command(
     *,
     open_map_command: bool = False,
 ) -> int:
-    probe = LOG_ROOT / "battle_command_probe.png"
+    probe = process_detection_probe("battle_command_probe")
     confirmations = 0
     map_confirmations = 0
     for step in range(args.max_confirmations + 1):
@@ -1250,6 +1260,12 @@ def main() -> int:
         "--runtime-name",
         help="override the isolated runtime directory name for a diagnostic run",
     )
+    parser.add_argument(
+        "--runtime-root",
+        type=Path,
+        default=RUNTIME_ROOT,
+        help="parent directory for the isolated BlastEm runtime",
+    )
     parser.add_argument("--manual-slot-commander-id", type=int)
     parser.add_argument("--manual-slot-level", type=int)
     parser.add_argument("--manual-slot-experience", type=int)
@@ -1334,7 +1350,7 @@ def main() -> int:
             if args.sequence in scenario_selector_sequences | {"launch-only"}
             else args.sequence
         )
-        runtime_home = RUNTIME_ROOT / runtime_name
+        runtime_home = args.runtime_root / runtime_name
         # The scenario selector requires a valid manual save slot. Preserve its
         # dedicated runtime by default; recreating it requires an in-game save.
         if not args.reuse_runtime_state and runtime_name != "load-screen":

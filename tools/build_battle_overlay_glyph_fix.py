@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Relocate the two battle glyph slots that collide with target cursors."""
+"""Relocate battle glyph slots that can still collide with target cursors."""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ DEFAULT_OUTPUT = ROOT / "tmp/current-battle-overlay-fix-normal.md"
 RELOCATIONS = (
     (4, 0x07D0, 0x07EA),
     (6, 0x07D1, 0x07EC),
+    (9, 0x07E0, 0x07F2),
 )
 
 
@@ -37,10 +38,13 @@ def patch(data: bytearray) -> int:
     for slot, old_tile, new_tile in RELOCATIONS:
         command = builder.BYTE_UI_DYNAMIC_VDP_COMMAND_TABLE + slot * 4
         tile_id = builder.BYTE_UI_DYNAMIC_TILE_ID_TABLE + slot * 2
+        current_tile = builder.be16(data, tile_id)
+        if current_tile == new_tile:
+            continue
+        if current_tile != old_tile:
+            raise ValueError(f"battle slot {slot} tile ID changed")
         if builder.be32(data, command) != vdp_write_command(old_tile):
             raise ValueError(f"battle slot {slot} VDP command changed")
-        if builder.be16(data, tile_id) != old_tile:
-            raise ValueError(f"battle slot {slot} tile ID changed")
         builder.put32(data, command, vdp_write_command(new_tile))
         builder.put16(data, tile_id, new_tile)
     return builder.update_md_checksum(data)

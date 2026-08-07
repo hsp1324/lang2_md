@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-from collections import OrderedDict
+from collections import Counter, OrderedDict, defaultdict
 import ast
 import argparse
+import colorsys
 import json
 import hashlib
 from pathlib import Path
@@ -155,12 +156,13 @@ LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     for base in MAP_SPRITE_FRAME_BASES
 )
 # The editor's paired NPC design uses a soft lavender ramp for Loren. The live
-# map palette cannot add per-class CRAM colors, so reuse the same muted-violet
-# and charcoal-violet indexes as Shaman while preserving the stock shield,
-# trim, and blade pixels.
+# map palette cannot add per-class CRAM colors, so use both of its purple
+# entries: bright violet for the armor face and muted violet for its shadow.
+# The former muted-violet/charcoal pairing looked gray in actual gameplay.
+# Preserve the stock shield, trim, and blade pixels.
 LOREN_SPRITE_COLOR_INDEX_REMAP = {
-    0x1: 0xE,  # gray armor shade -> muted violet
-    0xE: 0x2,  # dark gray armor shade -> charcoal violet
+    0x1: 0xD,  # gray armor shade -> bright violet
+    0xE: 0xD,  # dark gray armor shade -> bright violet (softer lavender tone in map)
 }
 LOREN_BLADE_COORDS_BY_FRAME = (
     frozenset(
@@ -436,6 +438,144 @@ AI_CLASS_MAP_PALETTE = (
     (109, 219, 255, 255),
 )
 
+# The live map shares this single 15-colour row between every unit. Accepted
+# editor sprites deliberately contain additional Mega Drive-step shades, so
+# plain nearest-RGB matching can merge blue, deep purple, and pale purple into
+# one blue index (or merge mint into gray). Partition the fixed live row into
+# semantic colour ramps. Each class sprite is then fitted inside those ramps,
+# preserving every available shade before an unavoidable collision is
+# allowed. The six disjoint ramps consume all 15 visible indexes, so colours
+# from different roles can never collapse into one another.
+AI_CLASS_MAP_SEMANTIC_PALETTE_RAMPS = {
+    "neutral": (0x2, 0x1, 0x3),       # charcoal, gray, white
+    "blue": (0x5, 0x4, 0xF),          # navy, blue, cyan
+    "purple": (0xE, 0xD),             # dark violet, bright magenta
+    "green": (0x9, 0x8),              # dark green, bright green
+    "warm": (0x7, 0x6, 0xA),          # brown, pale gold, gold
+    "red": (0xC, 0xB),                # dark red, bright red
+}
+AI_CLASS_MAP_PALETTE_EXACT_INDEX = {
+    color: index
+    for index, color in enumerate(AI_CLASS_MAP_PALETTE)
+    if index
+}
+AI_CLASS_MAP_PALETTE_INDEX_FAMILY = {
+    index: family
+    for family, indexes in AI_CLASS_MAP_SEMANTIC_PALETTE_RAMPS.items()
+    for index in indexes
+}
+
+
+def _ai_class_map_color_family(color: tuple[int, int, int, int]) -> str:
+    exact_index = AI_CLASS_MAP_PALETTE_EXACT_INDEX.get(color)
+    if exact_index is not None:
+        return AI_CLASS_MAP_PALETTE_INDEX_FAMILY[exact_index]
+
+    red, green, blue, _ = color
+    if max(red, green, blue) - min(red, green, blue) < 36:
+        return "neutral"
+    hue = colorsys.rgb_to_hsv(
+        red / 255,
+        green / 255,
+        blue / 255,
+    )[0] * 360
+    if 20 <= hue < 80:
+        return "warm"
+    if 80 <= hue < 170:
+        return "green"
+    if 170 <= hue < 250:
+        return "blue"
+    if 250 <= hue < 345:
+        return "purple"
+    return "red"
+
+
+def ai_class_map_palette_index_overrides(
+    image: Image.Image,
+) -> dict[tuple[int, int, int, int], int]:
+    """Fit one reviewed class sprite into the shared live map palette.
+
+    Exact live-palette colours are locked to their original index. For each
+    remaining semantic family, a tiny dynamic program minimizes weighted RGB
+    error while requiring every available ramp step to be used until that
+    ramp's capacity is exhausted. Pixel counts weight the error so a large
+    costume or mount region wins over a one-pixel accent. This removes every
+    *avoidable* same-family shade collapse without changing CRAM or sprite
+    geometry.
+    """
+
+    visible_colors = Counter(
+        color
+        for color in image.convert("RGBA").get_flattened_data()
+        if color[3] >= 128
+    )
+    colors_by_family: dict[
+        str,
+        list[tuple[tuple[int, int, int, int], int]],
+    ] = defaultdict(list)
+    for color, count in visible_colors.items():
+        colors_by_family[_ai_class_map_color_family(color)].append(
+            (color, count)
+        )
+
+    overrides: dict[tuple[int, int, int, int], int] = {}
+    for family, rows in colors_by_family.items():
+        ramp = AI_CLASS_MAP_SEMANTIC_PALETTE_RAMPS[family]
+        # mask -> (weighted error, assigned indexes)
+        states: dict[int, tuple[int, tuple[int, ...]]] = {
+            0: (0, ()),
+        }
+        for color, count in rows:
+            exact_index = AI_CLASS_MAP_PALETTE_EXACT_INDEX.get(color)
+            allowed_indexes = (
+                (exact_index,)
+                if exact_index is not None
+                else ramp
+            )
+            next_states: dict[int, tuple[int, tuple[int, ...]]] = {}
+            for used_mask, (cost, assigned) in states.items():
+                for palette_index in allowed_indexes:
+                    bit = 1 << ramp.index(palette_index)
+                    color_error = count * sum(
+                        (
+                            color[channel]
+                            - AI_CLASS_MAP_PALETTE[palette_index][channel]
+                        )
+                        ** 2
+                        for channel in range(3)
+                    )
+                    candidate = (
+                        cost + color_error,
+                        assigned + (palette_index,),
+                    )
+                    candidate_mask = used_mask | bit
+                    previous = next_states.get(candidate_mask)
+                    if previous is None or candidate < previous:
+                        next_states[candidate_mask] = candidate
+            states = next_states
+
+        required_steps = min(len(rows), len(ramp))
+        candidates = [
+            value
+            for mask, value in states.items()
+            if mask.bit_count() >= required_steps
+        ]
+        if not candidates:
+            # Exact-index locks can only make this path reachable when the
+            # source itself lacks enough distinct live ramp colours. Retain
+            # the maximum achievable separation in that case.
+            maximum_steps = max(mask.bit_count() for mask in states)
+            candidates = [
+                value
+                for mask, value in states.items()
+                if mask.bit_count() == maximum_steps
+            ]
+        _, assigned_indexes = min(candidates)
+        for (color, _), palette_index in zip(rows, assigned_indexes):
+            overrides[color] = palette_index
+
+    return overrides
+
 JP_FONT_BASE = 0x40000
 GLYPH_BYTES = 64
 
@@ -586,6 +726,21 @@ BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE_LIMIT = 0x2FB500
 BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_A = 0x2FB500
 BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_B = 0x2FB520
 BYTE_UI_PREP_ENTRY_CACHE_RESTORE_WRAPPER_LIMIT = 0x2FB540
+# The stock all-faction sprite-cache builder overwrites its fixed rows on
+# every invocation, but it leaves the ten dynamic class-to-VRAM rows intact.
+# Its own loader only scans rows allocated during the current invocation.  Our
+# overflow-safe enemy loader deliberately scans all ten rows, so a direct
+# Scenario N -> N+1 transition could mistake stale class metadata for live
+# graphics and skip the new scenario's DMA.  A cold boot/SRAM reload masked
+# the problem because WRAM was cleared.  Reset just those dynamic rows at the
+# common cache-builder entry so every transition has the same clean state.
+MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK = 0x0110A8
+MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK_ORIGINAL = bytes.fromhex(
+    "48 E7 FA F8 45 F9"
+)
+MAP_SPRITE_CACHE_DYNAMIC_RESET_RESUME = 0x0110B2
+MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER = 0x2FB540
+MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER_LIMIT = 0x2FB580
 BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_A = 0x022672
 BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_A_ORIGINAL = bytes.fromhex(
     "31 FC 00 01 BE 38"
@@ -616,8 +771,8 @@ BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE = 0x0110A8
 # and class), so all sixteen of its destinations live in audited gaps around
 # the live VDP tables:
 # 0x0795/0x079C/0x079D are between SAT and H-scroll, while
-# 0x07CA/0x07CB/0x07D2/0x07D3/0x07E0..0x07E5/
-# 0x07EA..0x07EC/0x07F0/0x07F1 are above H-scroll.
+# 0x07CA/0x07CB/0x07D2/0x07D3/0x07E5/
+# 0x07EA..0x07ED/0x07F0..0x07F2/0x07FA are above H-scroll.
 # None is inside the H-scroll table at 0x07A0..0x07BF.
 #
 # Do not move this cache into 0x07A0..0x07BF. The former 0x07A1..0x07BC
@@ -645,20 +800,26 @@ BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE = 0x0110A8
 # Hangul blocks.  The invalid-destination marker is a separate eight-cell SAT
 # graphic at 0x07D5..0x07DC.  B1.1.0 still put battle slots 10..15 in six of
 # those cells, which left a red X surrounded by gray Hangul blocks.  Battle
-# keeps both complete cursor ranges free.  Preparation retains its old cells
-# because its independently audited class-change and hiring lifetime displays
-# neither battle cursor.
+# keeps both complete cursor ranges free.  A targeted spell's second
+# confirmation uses four 2x2 corner sprites at 0x07DD..0x07E0 plus the blue
+# 2x2 staff at 0x07E1..0x07E4.  T1.2.5 moved only the two staff collisions;
+# slot 9 remained at 0x07E0 and therefore still drew a Hangul tile into the
+# lower-right confirmation corner.  Keep the complete eight-cell range free.
+# Preparation retains its old cells because its independently audited
+# class-change and hiring lifetime displays none of the battle cursors.
 BATTLE_TARGET_CURSOR_TILES = tuple(range(0x07CE, 0x07D2))
 BATTLE_INVALID_TARGET_CURSOR_TILES = tuple(range(0x07D5, 0x07DD))
+BATTLE_MAGIC_CONFIRM_CURSOR_TILES = tuple(range(0x07DD, 0x07E5))
 # These cells have occasional retained Window-plane references only in rows
 # above the active battle window (or on preparation/dialogue lifetimes).  No
 # retained linked SAT entry or live VDP table owns them during battle.
 BATTLE_DYNAMIC_STALE_WINDOW_TILES = (
-    0x07D2, 0x07D3, 0x07E4, 0x07E5, 0x07EA, 0x07EB, 0x07EC, 0x07F1,
+    0x07CA, 0x07CB, 0x07D2, 0x07D3, 0x07E5, 0x07EA, 0x07EB, 0x07EC, 0x07ED,
+    0x07F1, 0x07F2, 0x07FA, 0x079D,
 )
 BYTE_UI_DYNAMIC_MAP_TILE_IDS = (
-    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07EA, 0x07F0, 0x07EC, 0x07E1,
-    0x079D, 0x07E0, 0x07D2, 0x07D3, 0x07E4, 0x07E5, 0x07EB, 0x07F1,
+    0x07CA, 0x07CB, 0x0795, 0x079C, 0x07EA, 0x07F0, 0x07EC, 0x07ED,
+    0x079D, 0x07F2, 0x07D2, 0x07D3, 0x07FA, 0x07E5, 0x07EB, 0x07F1,
 )
 # The preparation/hiring surfaces also draw ordinary mercenary icons from the
 # 0x0348..0x0387 pattern cache.  B1.0.2 screenshots proved that putting
@@ -1463,20 +1624,23 @@ BYTE_UI_WORD_STRING_PATCHES = {
     # six-word patch overwrote it and pulled A+ onto the label row.
     0x09AB8C: (5, "수정"),
     0x09ACF0: (5, "수정"),
-    # Status abbreviations in the two prep/shop panel variants.
+    # Status abbreviations in the two prep/shop panel variants.  Lock MP/MV to
+    # the original word tiles: 0x25,0x28 is MP and 0x25,0x26 is MV (the LV
+    # label immediately above proves that tile 0x26 is V).  These used to be
+    # swapped in the Korean patch even though the numeric fields were correct.
     # These compact stat abbreviations are conventional in this game and keep
     # the byte-font patch inside the safe half-width-kana tile window. ASCII
     # lowercase and punctuation tiles are live faction/terrain graphics.
     0x09AB22: (2, "AT"),
     0x09AB2C: (2, "DF"),
     0x09AB5E: (2, "LV"),
-    0x09AB6C: (2, "MV"),
-    0x09AB7E: (2, "MP"),
+    0x09AB6C: (2, "MP"),
+    0x09AB7E: (2, "MV"),
     0x09AC8E: (2, "AT"),
     0x09AC98: (2, "DF"),
     0x09ACC8: (2, "LV"),
-    0x09ACD2: (2, "MV"),
-    0x09ACE0: (2, "MP"),
+    0x09ACD2: (2, "MP"),
+    0x09ACE0: (2, "MV"),
     # Money label in the prep and shop layouts. Preserve the leading 0x2F
     # currency icon and replace only the five-letter POINT field.
     0x09ABC2: (5, "소지금"),
@@ -1748,14 +1912,39 @@ CLASS_CHANGE_EXPECTED_GLYPHS = (
 # Keith, Lester, and Jessica are initialized in the persistent ten-commander
 # roster before they become available to the player.  The Japanese data starts
 # them in a tier-2 class, which makes the other two tier-2 branches unreachable
-# without a Runestone.  Keep their original MP, residual EXP, AT/DF, and
-# identity sprite, but start them at the tier-1 LV10 class-change boundary.
+# without a Runestone.  Keep residual EXP and identity data, but back-calculate
+# MP/AT/DF so normal growth in the original tier-2 class reproduces the exact
+# Japanese joining stats at the original joining level.  Start each record at
+# the tier-1 LV10 class-change boundary.
 # When each commander first becomes runtime-active, the stock progression
 # handler sees LV10, opens that commander's ordinary tier-2 candidate screen,
-# and resets the chosen class to LV1.  Residual EXP and the original base
-# combat stats remain intact.
+# and resets the chosen class to LV1.  A continuation wrapper then feeds EXP
+# back through the stock level-up state machine until the selected tier-2
+# class reaches the commander's original joining level plus three.  This keeps
+# every ordinary level-up/stat-growth message and does not synthesize stats.
 INITIAL_COMMANDER_ROSTER_TABLE = 0x05E64A
 INITIAL_COMMANDER_RECORD_SIZE = 0x0E
+JOIN_CLASS_CHOICE_LEVEL_CONTINUATION = 0x014ABA
+JOIN_CLASS_CHOICE_APPLY_CONTINUATION = 0x014D0C
+JOIN_CLASS_CHOICE_CONTINUATION_ORIGINAL = bytes.fromhex("00 01 48 0C")
+JOIN_CLASS_CHOICE_LEVEL_WRAPPER = 0x31E000
+JOIN_CLASS_CHOICE_LEVEL_WRAPPER_LIMIT = 0x31E400
+# The stock progression scan checks every allocated runtime record, including
+# preparation records parked at (0,0), reinforcements parked at (255,255), and
+# visible NPC records that have not joined the player yet.  Without this guard
+# the three LV10 tier-one records enter class choice at scenario start, before
+# the characters actually appear.  Preserve the stock compare for every other
+# commander and defer only these three until their first player scenario and
+# a genuine on-map coordinate.  $FFFFA612 is the live scenario number copied
+# by the stock scenario loader (1..31).
+JOIN_CLASS_CHOICE_VISIBILITY_HOOK = 0x014848
+JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL = bytes.fromhex(
+    "0C 28 00 0A 00 2E"
+)
+JOIN_CLASS_CHOICE_VISIBILITY_GUARD = 0x31E200
+JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT = 0x31E400
+JOIN_CLASS_CHOICE_CURRENT_SCENARIO = 0xA612
+JOIN_CLASS_CHOICE_ACTIVE_MARKER = 0x5A
 JOIN_CLASS_CHOICE_RECORDS = {
     7: {
         "name": "Keith",
@@ -1763,10 +1952,17 @@ JOIN_CLASS_CHOICE_RECORDS = {
             "06 01 01 05 16 14 00 00 00 00 20 04 00 21"
         ),
         "target": bytes.fromhex(
-            "01 01 0A 05 16 14 00 00 00 00 00 04 00 21"
+            "06 01 0A 05 16 14 00 00 00 00 00 04 00 21"
         ),
-        "tier1_class": 0x01,
+        "tier1_class": 0x06,
         "tier2_candidates": (0x04, 0x06, 0x08),
+        "original_tier2_class": 0x06,
+        "original_tier2_level": 1,
+        "join_level_bonus": 3,
+        "target_tier2_level": 4,
+        "residual_experience": 5,
+        "first_player_scenario": 8,
+        "active_marker_address": 0x00403FE7,
     },
     9: {
         "name": "Lester",
@@ -1774,10 +1970,17 @@ JOIN_CLASS_CHOICE_RECORDS = {
             "07 02 07 0F 1A 16 00 00 00 10 10 04 00 1D"
         ),
         "target": bytes.fromhex(
-            "01 02 0A 0F 1A 16 00 00 00 00 00 04 00 1D"
+            "07 01 0A 0F 16 14 00 00 00 00 00 04 00 1D"
         ),
-        "tier1_class": 0x01,
+        "tier1_class": 0x07,
         "tier2_candidates": (0x05, 0x07, 0x0A),
+        "original_tier2_class": 0x07,
+        "original_tier2_level": 7,
+        "join_level_bonus": 3,
+        "target_tier2_level": 10,
+        "residual_experience": 15,
+        "first_player_scenario": 11,
+        "active_marker_address": 0x00403FE9,
     },
     10: {
         "name": "Jessica",
@@ -1785,10 +1988,17 @@ JOIN_CLASS_CHOICE_RECORDS = {
             "09 11 05 00 1D 11 00 12 00 13 09 00 00 19"
         ),
         "target": bytes.fromhex(
-            "03 11 0A 00 1D 11 00 00 00 03 08 00 00 19"
+            "03 0E 0A 00 1B 0F 00 00 00 03 08 00 00 19"
         ),
         "tier1_class": 0x03,
         "tier2_candidates": (0x08, 0x09, 0x04),
+        "original_tier2_class": 0x09,
+        "original_tier2_level": 5,
+        "join_level_bonus": 3,
+        "target_tier2_level": 8,
+        "residual_experience": 0,
+        "first_player_scenario": 12,
+        "active_marker_address": 0x00403FEB,
     },
 }
 # Scenario 1 event pages use both FFFF (page end) and FFFD (event end).
@@ -3143,7 +3353,11 @@ def commander_sprite_record_offset(
     )
 
 
-def encode_ai_class_map_sprite(image: Image.Image) -> bytes:
+def encode_ai_class_map_sprite(
+    image: Image.Image,
+    *,
+    palette_index_overrides: dict[tuple[int, int, int, int], int] | None = None,
+) -> bytes:
     rgba = image.convert("RGBA")
     if rgba.size != (16, 16):
         raise ValueError(
@@ -3156,16 +3370,25 @@ def encode_ai_class_map_sprite(image: Image.Image) -> bytes:
             pixel = rgba.getpixel((x, y))
             if pixel[3] < 128:
                 continue
-            indexes[y][x] = min(
-                range(1, len(AI_CLASS_MAP_PALETTE)),
-                key=lambda index: sum(
-                    (
-                        pixel[channel]
-                        - AI_CLASS_MAP_PALETTE[index][channel]
-                    )
-                    ** 2
-                    for channel in range(3)
-                ),
+            forced_index = (
+                palette_index_overrides.get(pixel)
+                if palette_index_overrides is not None
+                else None
+            )
+            indexes[y][x] = (
+                forced_index
+                if forced_index is not None
+                else min(
+                    range(1, len(AI_CLASS_MAP_PALETTE)),
+                    key=lambda index: sum(
+                        (
+                            pixel[channel]
+                            - AI_CLASS_MAP_PALETTE[index][channel]
+                        )
+                        ** 2
+                        for channel in range(3)
+                    ),
+                )
             )
 
     encoded = bytearray()
@@ -3195,7 +3418,13 @@ def patch_ai_class_map_sprites(data: bytearray) -> None:
             raise ValueError(
                 f"missing accepted AI class map sprite: {asset_path}"
             )
-        payload = encode_ai_class_map_sprite(Image.open(asset_path))
+        source_image = Image.open(asset_path)
+        payload = encode_ai_class_map_sprite(
+            source_image,
+            palette_index_overrides=(
+                ai_class_map_palette_index_overrides(source_image)
+            ),
+        )
         if not any(payload):
             raise ValueError(f"empty AI class map sprite: {asset_path}")
 
@@ -4069,6 +4298,31 @@ def _build_preparation_entry_cache_restore_wrapper(original: bytes) -> bytes:
     )
 
 
+def _build_map_sprite_cache_dynamic_reset_wrapper() -> bytes:
+    code = _M68KCode()
+    # Recreate the displaced stock prologue before borrowing d0/a0.  They are
+    # now protected by the same MOVEM frame the original routine restores.
+    code.emit("48 E7 FA F8")  # movem.l d0-d4/d6/a0-a4,-(a7)
+    code.emit(
+        bytes.fromhex("41 F9")
+        + ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
+    )  # lea.l dynamic table,a0
+    code.emit(bytes((0x70, ENEMY_DYNAMIC_MERCENARY_COUNT - 1)))
+    code.label("clear_dynamic_rows")
+    code.emit("42 98")  # clr.l (a0)+
+    code.emit("51 C8")  # dbra d0,clear_dynamic_rows
+    code.fixups.append((len(code.code), "clear_dynamic_rows"))
+    code.emit("00 00")
+    # Recreate the displaced LEA in full, then resume at the first untouched
+    # stock instruction (moveq #$17,d0).
+    code.emit("45 F9 FF FF A7 FE")  # lea.l $ffffa7fe,a2
+    code.emit(
+        bytes.fromhex("4E F9")
+        + MAP_SPRITE_CACHE_DYNAMIC_RESET_RESUME.to_bytes(4, "big")
+    )
+    return code.finish()
+
+
 def _build_preparation_mercenary_cache_restore_shop_completion() -> bytes:
     """Rebuild sprites after the shop-to-preparation transition completes."""
     code = _M68KCode()
@@ -4136,6 +4390,43 @@ def _build_preparation_mercenary_cache_restore_shop_completion() -> bytes:
 
 
 def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
+    dynamic_reset = _build_map_sprite_cache_dynamic_reset_wrapper()
+    dynamic_reset_end = (
+        MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER + len(dynamic_reset)
+    )
+    if dynamic_reset_end > MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER_LIMIT:
+        raise ValueError("map-sprite dynamic-cache reset wrapper exceeds reserve")
+    if any(
+        value != 0xFF
+        for value in data[
+            MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER:dynamic_reset_end
+        ]
+    ):
+        raise ValueError("map-sprite dynamic-cache reset area is not blank")
+    data[
+        MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER:dynamic_reset_end
+    ] = dynamic_reset
+
+    dynamic_reset_hook_end = (
+        MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK
+        + len(MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK_ORIGINAL)
+    )
+    if (
+        bytes(
+            data[
+                MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK:dynamic_reset_hook_end
+            ]
+        )
+        != MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK_ORIGINAL
+    ):
+        raise ValueError("map-sprite dynamic-cache reset hook changed")
+    data[
+        MAP_SPRITE_CACHE_DYNAMIC_RESET_HOOK:dynamic_reset_hook_end
+    ] = (
+        bytes.fromhex("4E F9")
+        + MAP_SPRITE_CACHE_DYNAMIC_RESET_WRAPPER.to_bytes(4, "big")
+    )
+
     loader = _build_enemy_ordinary_mercenary_cache_loader_routine()
     lookup = _build_enemy_ordinary_mercenary_cache_lookup_routine()
     lookup_start = ENEMY_ORDINARY_MERCENARY_CACHE_ROUTINE + len(loader)
@@ -5365,6 +5656,8 @@ def patch_title_logo_resource(
     data: bytearray,
     *,
     hard_mode: bool = False,
+    layout_record_offset: int = TITLE_LOGO_LAYOUT_RECORD,
+    layout_original_sha256: str = TITLE_LOGO_LAYOUT_ORIGINAL_SHA256,
 ) -> None:
     original_entry = BYTE_UI_FONT_RESOURCE_TABLE + TITLE_LOGO_RESOURCE_INDEX * 4
     extended_entry = BYTE_UI_EXT_RESOURCE_TABLE + TITLE_LOGO_RESOURCE_INDEX * 4
@@ -5386,12 +5679,12 @@ def patch_title_logo_resource(
     if hashlib.sha256(source).hexdigest() != TITLE_LOGO_RESOURCE_ORIGINAL_SHA256:
         raise ValueError("title logo decoded source changed")
 
-    layout_end = TITLE_LOGO_LAYOUT_RECORD + TITLE_LOGO_LAYOUT_RECORD_SIZE
-    original_layout = bytes(data[TITLE_LOGO_LAYOUT_RECORD:layout_end])
-    if hashlib.sha256(original_layout).hexdigest() != TITLE_LOGO_LAYOUT_ORIGINAL_SHA256:
+    layout_end = layout_record_offset + TITLE_LOGO_LAYOUT_RECORD_SIZE
+    original_layout = bytes(data[layout_record_offset:layout_end])
+    if hashlib.sha256(original_layout).hexdigest() != layout_original_sha256:
         raise ValueError("title logo layout record changed")
 
-    tile_payload, layout_record = build_title_logo_assets()
+    tile_payload, localized_layout_record = build_title_logo_assets()
     resource = bytes([0x03]) + compress_9dfe_literals(tile_payload)
     resource_end = TITLE_LOGO_RESOURCE_RELOC_BASE + len(resource)
     if resource_end > TITLE_LOGO_RESOURCE_RELOC_LIMIT:
@@ -5404,7 +5697,7 @@ def patch_title_logo_resource(
     data[TITLE_LOGO_RESOURCE_RELOC_BASE:resource_end] = resource
     put32(data, original_entry, TITLE_LOGO_RESOURCE_RELOC_BASE)
     put32(data, extended_entry, TITLE_LOGO_RESOURCE_RELOC_BASE)
-    data[TITLE_LOGO_LAYOUT_RECORD:layout_end] = layout_record
+    data[layout_record_offset:layout_end] = localized_layout_record
     if hard_mode:
         actual_palette = tuple(
             be16(data, TITLE_LOGO_PALETTE_ROW + index * 2)
@@ -5416,7 +5709,12 @@ def patch_title_logo_resource(
             put16(data, TITLE_LOGO_PALETTE_ROW + index * 2, color)
 
 
-def patch_battle_ui_terrain_resource(data: bytearray) -> None:
+def patch_battle_ui_terrain_resource(
+    data: bytearray,
+    *,
+    source_pointer: int = BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER,
+    source_sha256: str = BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SHA256,
+) -> None:
     original_entry = (
         BYTE_UI_FONT_RESOURCE_TABLE + BATTLE_UI_TERRAIN_RESOURCE_INDEX * 4
     )
@@ -5425,12 +5723,12 @@ def patch_battle_ui_terrain_resource(data: bytearray) -> None:
     )
     original_pointer = be32(data, original_entry) & 0x00FFFFFF
     extended_pointer = be32(data, extended_entry) & 0x00FFFFFF
-    if original_pointer != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER:
+    if original_pointer != source_pointer:
         raise ValueError(
             "battle UI terrain resource pointer changed: "
             f"0x{original_pointer:06X}"
         )
-    if extended_pointer != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_POINTER:
+    if extended_pointer != source_pointer:
         raise ValueError(
             "extended battle UI terrain resource pointer changed: "
             f"0x{extended_pointer:06X}"
@@ -5443,7 +5741,7 @@ def patch_battle_ui_terrain_resource(data: bytearray) -> None:
         raise ValueError("battle UI terrain decoded size changed")
     if (
         hashlib.sha256(source).hexdigest()
-        != BATTLE_UI_TERRAIN_RESOURCE_ORIGINAL_SHA256
+        != source_sha256
     ):
         raise ValueError("battle UI terrain decoded source changed")
 
@@ -5511,7 +5809,11 @@ def install_custom_glyphs(data: bytearray, chars: list[str]) -> dict[str, int]:
     return mapping
 
 
-def patch_magic_list_names(data: bytearray) -> None:
+def patch_magic_list_names(
+    data: bytearray,
+    *,
+    glyph_source_sha256: str = MAGIC_LIST_GLYPH_SOURCE_SHA256,
+) -> None:
     length_end = MAGIC_LIST_LENGTH_TABLE + len(MAGIC_LIST_NAMES)
     original_lengths = bytes(data[MAGIC_LIST_LENGTH_TABLE:length_end])
     length_digest = hashlib.sha256(original_lengths).hexdigest()
@@ -5525,10 +5827,10 @@ def patch_magic_list_names(data: bytearray) -> None:
     glyph_end = glyph_start + MAGIC_LIST_GLYPH_CAPACITY * GLYPH_BYTES
     original_glyphs = bytes(data[glyph_start:glyph_end])
     glyph_digest = hashlib.sha256(original_glyphs).hexdigest()
-    if glyph_digest != MAGIC_LIST_GLYPH_SOURCE_SHA256:
+    if glyph_digest != glyph_source_sha256:
         raise ValueError(
             "magic-list glyph source changed: "
-            f"{glyph_digest} != {MAGIC_LIST_GLYPH_SOURCE_SHA256}"
+            f"{glyph_digest} != {glyph_source_sha256}"
         )
 
     lengths = [len(name) for name in MAGIC_LIST_NAMES]
@@ -6248,6 +6550,230 @@ def patch_join_class_choice_progression(
         data[offset:end] = target
 
 
+def profile_includes_user_patches(profile_name: str) -> bool:
+    """Return whether an edition includes reviewed gameplay/design changes.
+
+    ``pure`` deliberately retains the Japanese roster, progression, event
+    mechanics, class sprites, palettes, and sprite-cache code.  ``normal`` is
+    the original-balance user-patch edition, while ``hard`` layers its balance
+    changes on top of that same user-patch base.
+    """
+    if profile_name == "pure":
+        return False
+    if profile_name in {"normal", "hard"}:
+        return True
+    raise ValueError(f"unknown ROM customization profile: {profile_name}")
+
+
+def patch_profile_user_customizations(
+    data: bytearray,
+    source: bytes,
+    *,
+    profile_name: str,
+) -> None:
+    if not profile_includes_user_patches(profile_name):
+        return
+    patch_join_class_choice_progression(data, source)
+    patch_join_class_choice_visibility_guard(data, source)
+    patch_join_class_choice_target_levels(data, source)
+    patch_bald_map_sprite(data)
+    patch_shaman_map_sprite(data)
+    patch_loren_map_sprite(data)
+    patch_paired_npc_map_sprites(data)
+    patch_ai_class_map_sprites(data)
+    patch_map_sprite_gray_source_remap(data, source)
+    patch_enemy_ordinary_mercenary_cache_reuse(data)
+
+
+def patch_profile_scenario18_resident_loss(
+    data: bytearray,
+    source: bytes,
+    *,
+    profile_name: str,
+) -> None:
+    if profile_includes_user_patches(profile_name):
+        patch_scenario18_resident_loss(data, source)
+
+
+def build_join_class_choice_visibility_guard() -> bytes:
+    """Return a stock-compatible LV10 compare with a real-join gate.
+
+    The caller branches on the Z flag immediately after this routine returns.
+    An active player target and every non-target commander therefore reproduce
+    ``cmpi.b #10,$2E(a0)`` exactly.  A target before its first player scenario,
+    in preparation at (0,0), or waiting off-map at an FF coordinate returns Z
+    clear.  A later stock progression pass can then open class choice after the
+    reinforcement has appeared and the player selects it.
+    """
+    code = _M68KCode()
+    code.emit("0C 28 00 0A 00 2E")  # cmpi.b #10,$2E(a0)
+    code.branch_word(0x6600, "return")  # bne.w return
+    for commander_id in JOIN_CLASS_CHOICE_RECORDS:
+        code.emit(bytes.fromhex("0C 28 00") + bytes((commander_id, 0x00, 0x01)))
+        code.branch_word(0x6700, f"target_{commander_id}")
+
+    # A non-target LV10 commander keeps the stock comparison result (Z set).
+    code.emit("0C 28 00 0A 00 2E")
+    code.branch_word(0x6000, "return")
+
+    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
+        code.label(f"target_{commander_id}")
+        first_scenario = int(row["first_player_scenario"])
+        code.emit(
+            bytes.fromhex("0C 78")
+            + first_scenario.to_bytes(2, "big")
+            + JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big")
+        )  # cmpi.w #first_player_scenario,$A612.w
+        code.branch_word(0x6500, "hidden")  # bcs.w hidden
+        code.branch_word(0x6000, "coordinates")
+
+    code.label("coordinates")
+    code.emit("0C 28 00 FF 00 06")  # cmpi.b #$FF,6(a0) -- map X
+    code.branch_word(0x6700, "hidden")
+    code.emit("0C 28 00 FF 00 07")  # cmpi.b #$FF,7(a0) -- map Y
+    code.branch_word(0x6700, "hidden")
+    code.emit("4A 28 00 06")        # tst.b 6(a0)
+    code.branch_word(0x6600, "visible")  # nonzero X is a live coordinate
+    code.emit("4A 28 00 07")        # X=0: reject only when Y is also zero
+    code.branch_word(0x6700, "hidden")
+    code.label("visible")
+    code.emit("0C 28 00 0A 00 2E")  # visible: restore stock Z flag
+    code.branch_word(0x6000, "return")
+
+    code.label("hidden")
+    code.emit("4A 28 00 2E")  # tst.b $2E(a0); LV10 is nonzero, so Z clears
+    code.label("return")
+    code.emit("4E 75")
+    result = code.finish()
+    if (
+        JOIN_CLASS_CHOICE_VISIBILITY_GUARD + len(result)
+        > JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT
+    ):
+        raise ValueError("join class-choice visibility guard exceeds reserved area")
+    return result
+
+
+def patch_join_class_choice_visibility_guard(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    hook = JOIN_CLASS_CHOICE_VISIBILITY_HOOK
+    end = hook + len(JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL)
+    if source[hook:end] != JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL:
+        raise ValueError("Japanese join class-choice visibility hook changed")
+    if data[hook:end] != JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL:
+        raise ValueError("input join class-choice visibility hook changed")
+
+    routine = build_join_class_choice_visibility_guard()
+    routine_end = JOIN_CLASS_CHOICE_VISIBILITY_GUARD + len(routine)
+    if (
+        data[JOIN_CLASS_CHOICE_VISIBILITY_GUARD:routine_end]
+        != b"\xFF" * len(routine)
+    ):
+        raise ValueError("join class-choice visibility guard area is not blank")
+    data[JOIN_CLASS_CHOICE_VISIBILITY_GUARD:routine_end] = routine
+    data[hook:end] = (
+        bytes.fromhex("4E B9")
+        + JOIN_CLASS_CHOICE_VISIBILITY_GUARD.to_bytes(4, "big")
+    )
+
+
+def build_join_class_choice_level_wrapper() -> bytes:
+    code = _M68KCode()
+    code.emit("41 F9 00 FF 60 3C")  # lea $FF603C.l,a0
+    code.emit("70 13")              # moveq #19,d0
+    code.label("scan")
+    code.emit("72 00")              # moveq #0,d1
+    code.emit("12 28 00 01")        # move.b 1(a0),d1
+    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
+        code.emit(bytes.fromhex("0C 01 00") + bytes((commander_id,)))
+        code.branch_word(0x6700, f"commander_{commander_id}")
+    code.label("next")
+    code.emit("D0 FC 00 60")        # adda.w #$60,a0
+    code.branch_word(0x51C8, "scan")  # dbra d0,scan
+    code.emit("4E F9 00 01 48 0C")  # jmp $01480C.l
+
+    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
+        candidates = tuple(int(value) for value in row["tier2_candidates"])
+        target_level = int(row["target_tier2_level"])
+        residual_exp = int(row["residual_experience"])
+        marker_address = int(row["active_marker_address"])
+        code.label(f"commander_{commander_id}")
+        code.emit("74 00")           # moveq #0,d2
+        code.emit("14 28 00 00")     # move.b 0(a0),d2
+        for candidate in candidates:
+            code.emit(bytes.fromhex("0C 02 00") + bytes((candidate,)))
+            code.branch_word(0x6700, f"class_ok_{commander_id}")
+        code.emit(bytes.fromhex("42 39") + marker_address.to_bytes(4, "big"))
+        code.branch_word(0x6000, "next")
+
+        code.label(f"class_ok_{commander_id}")
+        code.emit(
+            bytes.fromhex("0C 28 00")
+            + bytes((target_level,))
+            + bytes.fromhex("00 2E")
+        )
+        code.branch_word(0x6400, f"target_reached_{commander_id}")
+        code.emit(
+            bytes.fromhex("13 FC 00")
+            + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
+            + marker_address.to_bytes(4, "big")
+        )
+        code.emit("11 7C 00 FF 00 2F")  # move.b #$FF,$2F(a0)
+        code.branch_word(0x6000, "next")
+
+        code.label(f"target_reached_{commander_id}")
+        code.emit(
+            bytes.fromhex("0C 39 00")
+            + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
+            + marker_address.to_bytes(4, "big")
+        )
+        code.branch_word(0x6600, "next")
+        code.emit(
+            bytes.fromhex("11 7C 00")
+            + bytes((residual_exp,))
+            + bytes.fromhex("00 2F")
+        )
+        code.emit(bytes.fromhex("42 39") + marker_address.to_bytes(4, "big"))
+        code.branch_word(0x6000, "next")
+
+    result = code.finish()
+    if JOIN_CLASS_CHOICE_LEVEL_WRAPPER + len(result) > JOIN_CLASS_CHOICE_LEVEL_WRAPPER_LIMIT:
+        raise ValueError("join class-choice level wrapper exceeds reserved ROM area")
+    return result
+
+
+def patch_join_class_choice_target_levels(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    for offset in (
+        JOIN_CLASS_CHOICE_LEVEL_CONTINUATION,
+        JOIN_CLASS_CHOICE_APPLY_CONTINUATION,
+    ):
+        end = offset + len(JOIN_CLASS_CHOICE_CONTINUATION_ORIGINAL)
+        if source[offset:end] != JOIN_CLASS_CHOICE_CONTINUATION_ORIGINAL:
+            raise ValueError(
+                f"Japanese class-choice continuation changed at 0x{offset:06X}"
+            )
+        if data[offset:end] != JOIN_CLASS_CHOICE_CONTINUATION_ORIGINAL:
+            raise ValueError(
+                f"input class-choice continuation changed at 0x{offset:06X}"
+            )
+
+    routine = build_join_class_choice_level_wrapper()
+    routine_end = JOIN_CLASS_CHOICE_LEVEL_WRAPPER + len(routine)
+    if data[JOIN_CLASS_CHOICE_LEVEL_WRAPPER:routine_end] != b"\xFF" * len(routine):
+        raise ValueError("join class-choice level wrapper area is not blank")
+    data[JOIN_CLASS_CHOICE_LEVEL_WRAPPER:routine_end] = routine
+    target = JOIN_CLASS_CHOICE_LEVEL_WRAPPER.to_bytes(4, "big")
+    for offset in (
+        JOIN_CLASS_CHOICE_LEVEL_CONTINUATION,
+        JOIN_CLASS_CHOICE_APPLY_CONTINUATION,
+    ):
+        data[offset : offset + 4] = target
+
+
 def patch_direct_token_streams(data: bytearray) -> None:
     for offset, tokens in DIRECT_TOKEN_STREAM_PATCHES.items():
         capacity = direct_string_capacity_words(data, offset)
@@ -6278,26 +6804,55 @@ def patch_prep_menu_trailing_cells(data: bytearray) -> None:
         cursor += 4
 
 
-def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+def patch_shop_title_glyph_loaders(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    *,
+    notice_glyph_list: int = ITEM_DISCARD_NOTICE_GLYPH_LIST,
+    notice_glyph_source: tuple[int, ...] = ITEM_DISCARD_NOTICE_GLYPH_SOURCE,
+    notice_glyph_pointer: int = ITEM_DISCARD_NOTICE_GLYPH_POINTER,
+    notice_glyph_pointer_source: int = ITEM_DISCARD_NOTICE_GLYPH_POINTER_SOURCE,
+    notice_token_pointer: int = ITEM_DISCARD_NOTICE_TOKEN_POINTER,
+    notice_token_pointer_source: int = ITEM_DISCARD_NOTICE_TOKEN_POINTER_SOURCE,
+    notice_token_stream: int = ITEM_DISCARD_NOTICE_TOKEN_STREAM,
+    notice_source_tokens: tuple[int, ...] = ITEM_DISCARD_NOTICE_SOURCE_TOKENS,
+    confirm_glyph_list: int = ITEM_DISCARD_CONFIRM_GLYPH_LIST,
+    confirm_glyph_source: tuple[int, ...] = ITEM_DISCARD_CONFIRM_GLYPH_SOURCE,
+    confirm_token_stream: int = ITEM_DISCARD_CONFIRM_TOKEN_STREAM,
+    confirm_source_tokens: tuple[int, ...] = ITEM_DISCARD_CONFIRM_SOURCE_TOKENS,
+    confirm_token_pointer: int | None = None,
+    confirm_token_pointer_source: int | None = None,
+    confirm_token_reloc: int | None = None,
+    confirm_token_reloc_limit: int | None = None,
+    validate_confirm_source: bool = False,
+    possession_glyph_list: int = SHOP_INVENTORY_FULL_GLYPH_LIST,
+    inventory_full_token_stream: int = SHOP_INVENTORY_FULL_TOKEN_STREAM,
+    inventory_full_source_tokens: tuple[int, ...] = SHOP_INVENTORY_FULL_SOURCE_TOKENS,
+    sell_glyph_list: int = SHOP_SELL_GLYPH_LIST,
+    selection_token_stream: int = SHOP_ITEM_SELECTION_TOKEN_STREAM,
+    selection_source_tokens: tuple[int, ...] = SHOP_ITEM_SELECTION_SOURCE_TOKENS,
+    sell_title_token_stream: int = SHOP_SELL_TITLE_TOKEN_STREAM,
+    sell_title_source_tokens: tuple[int, ...] = (0, 1, 2, 3, 6, 7),
+) -> None:
     notice_glyphs = tuple(
-        be16(data, ITEM_DISCARD_NOTICE_GLYPH_LIST + index * 2)
-        for index in range(len(ITEM_DISCARD_NOTICE_GLYPH_SOURCE))
+        be16(data, notice_glyph_list + index * 2)
+        for index in range(len(notice_glyph_source))
     )
-    if notice_glyphs != ITEM_DISCARD_NOTICE_GLYPH_SOURCE:
+    if notice_glyphs != notice_glyph_source:
         raise ValueError(
             f"unexpected item-discard notice glyph list: {notice_glyphs!r}"
         )
     notice_source = tuple(
-        be16(data, ITEM_DISCARD_NOTICE_TOKEN_STREAM + index * 2)
-        for index in range(len(ITEM_DISCARD_NOTICE_SOURCE_TOKENS))
+        be16(data, notice_token_stream + index * 2)
+        for index in range(len(notice_source_tokens))
     )
-    if notice_source != ITEM_DISCARD_NOTICE_SOURCE_TOKENS:
+    if notice_source != notice_source_tokens:
         raise ValueError(
             f"unexpected item-discard notice token stream: {notice_source!r}"
         )
-    if be32(data, ITEM_DISCARD_NOTICE_GLYPH_POINTER) != ITEM_DISCARD_NOTICE_GLYPH_POINTER_SOURCE:
+    if be32(data, notice_glyph_pointer) != notice_glyph_pointer_source:
         raise ValueError("unexpected item-discard notice glyph-list pointer")
-    if be32(data, ITEM_DISCARD_NOTICE_TOKEN_POINTER) != ITEM_DISCARD_NOTICE_TOKEN_POINTER_SOURCE:
+    if be32(data, notice_token_pointer) != notice_token_pointer_source:
         raise ValueError("unexpected item-discard notice token-stream pointer")
     notice_chars = collect_chars(*ITEM_DISCARD_NOTICE_LINES)
     notice_glyphs = [SPACE_GLYPH]
@@ -6333,8 +6888,8 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
         notice_tokens,
         (ITEM_DISCARD_NOTICE_RELOC_LIMIT - ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM) // 2,
     )
-    put32(data, ITEM_DISCARD_NOTICE_GLYPH_POINTER, ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST)
-    put32(data, ITEM_DISCARD_NOTICE_TOKEN_POINTER, ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM)
+    put32(data, notice_glyph_pointer, ITEM_DISCARD_NOTICE_RELOC_GLYPH_LIST)
+    put32(data, notice_token_pointer, ITEM_DISCARD_NOTICE_RELOC_TOKEN_STREAM)
 
     # The stock list at 0xA16F2 is loaded as a 17-slot glyph bank. Its token
     # stream owns two records: a five-cell suffix plus continuation row, then
@@ -6354,30 +6909,71 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
     ]
     confirm_glyphs.extend(
         [SPACE_GLYPH] * (
-            len(ITEM_DISCARD_CONFIRM_GLYPH_SOURCE) - len(confirm_glyphs)
+        len(confirm_glyph_source) - len(confirm_glyphs)
         )
     )
+    if validate_confirm_source:
+        actual_confirm_glyphs = tuple(
+            be16(data, confirm_glyph_list + slot * 2)
+            for slot in range(len(confirm_glyph_source))
+        )
+        if actual_confirm_glyphs != confirm_glyph_source:
+            raise ValueError(
+                "unexpected item-discard confirmation glyph list: "
+                f"{actual_confirm_glyphs!r}"
+            )
     for slot, glyph in enumerate(confirm_glyphs):
-        put16(data, ITEM_DISCARD_CONFIRM_GLYPH_LIST + slot * 2, glyph)
+        put16(data, confirm_glyph_list + slot * 2, glyph)
     put16(
         data,
-        ITEM_DISCARD_CONFIRM_GLYPH_LIST
-        + len(ITEM_DISCARD_CONFIRM_GLYPH_SOURCE) * 2,
+        confirm_glyph_list + len(confirm_glyph_source) * 2,
         0xFFFF,
     )
+    if validate_confirm_source:
+        actual_confirm_tokens = tuple(
+            be16(data, confirm_token_stream + index * 2)
+            for index in range(len(confirm_source_tokens))
+        )
+        if actual_confirm_tokens != confirm_source_tokens:
+            raise ValueError(
+                "unexpected item-discard confirmation token stream: "
+                f"{actual_confirm_tokens!r}"
+            )
     confirm_tokens = (
         0, 1, 2, 3, 4, 0xFFFE,
         0, 0, 0, 0, 0, 0, 0, 0xFFFF,
         5, 0, 0, 0xFFFE, 6, 7, 0xFFFF,
     )
+    confirm_target = confirm_token_stream
+    if confirm_token_reloc is not None:
+        if (
+            confirm_token_pointer is None
+            or confirm_token_pointer_source is None
+            or confirm_token_reloc_limit is None
+        ):
+            raise ValueError("item-discard confirmation relocation is incomplete")
+        if be32(data, confirm_token_pointer) != confirm_token_pointer_source:
+            raise ValueError("unexpected item-discard confirmation token pointer")
+        byte_length = len(confirm_tokens) * 2
+        if confirm_token_reloc + byte_length > confirm_token_reloc_limit:
+            raise ValueError("item-discard confirmation relocation overflowed")
+        if any(
+            value != 0xFF
+            for value in data[confirm_token_reloc:confirm_token_reloc_limit]
+        ):
+            raise ValueError("item-discard confirmation relocation area is occupied")
+        put32(data, confirm_token_pointer, confirm_token_reloc)
+        confirm_target = confirm_token_reloc
+    elif len(confirm_tokens) > len(confirm_source_tokens):
+        raise ValueError("localized item-discard confirmation does not fit")
     for index, token in enumerate(confirm_tokens):
-        put16(data, ITEM_DISCARD_CONFIRM_TOKEN_STREAM + index * 2, token)
+        put16(data, confirm_target + index * 2, token)
 
     # Routine 0x272A6 loads all 31 glyphs at 0xA1716 into VRAM 0xD000. The
     # purchase title uses slots 0..5, while the completion suffixes at 0xA17C8
     # and 0xA17D8 use slots 6..12. Preserve the rest of the shared list so later
     # shop messages never read missing/uninitialized tile data.
-    possession_glyphs = read_word_list(data, 0xA1716)
+    possession_glyphs = read_word_list(data, possession_glyph_list)
     if len(possession_glyphs) != 31:
         raise ValueError(
             f"shop possession glyph list has {len(possession_glyphs)} slots, expected 31"
@@ -6400,29 +6996,29 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
         14: glyph_by_char["가"],
     }
     for slot, value in purchase_values_by_slot.items():
-        put16(data, 0xA1716 + slot * 2, value)
+        put16(data, possession_glyph_list + slot * 2, value)
 
     actual_full_tokens = tuple(
-        be16(data, SHOP_INVENTORY_FULL_TOKEN_STREAM + index * 2)
-        for index in range(len(SHOP_INVENTORY_FULL_SOURCE_TOKENS))
+        be16(data, inventory_full_token_stream + index * 2)
+        for index in range(len(inventory_full_source_tokens))
     )
-    if actual_full_tokens != SHOP_INVENTORY_FULL_SOURCE_TOKENS:
+    if actual_full_tokens != inventory_full_source_tokens:
         raise ValueError(
             "unexpected shop inventory-full token stream: "
-            f"{actual_full_tokens!r} != {SHOP_INVENTORY_FULL_SOURCE_TOKENS!r}"
+            f"{actual_full_tokens!r} != {inventory_full_source_tokens!r}"
         )
     # The first word is the argument to the preceding FFF9 control; the
     # remaining nine words are the visible fixed-width message cells.
     full_tokens = (1, 0, 1, 2, 3, 4, 5, 3, 13, 14)
     for index, token in enumerate(full_tokens):
-        put16(data, SHOP_INVENTORY_FULL_TOKEN_STREAM + index * 2, token)
+        put16(data, inventory_full_token_stream + index * 2, token)
 
     # The sell path at 0x26256 initially loads the 14-glyph list at 0xA16D4
     # into VRAM 0xD000. Item handling later reloads 0xD000 from the shared list
     # at 0xA1716, however, while the title renderer at 0x2792E keeps using the
     # sell token stream at 0xA17B8. Slots 11 and 12 are available in both lists,
     # so use that stable pair for "판매" instead of the original 6 and 7.
-    sell_glyphs = read_word_list(data, SHOP_SELL_GLYPH_LIST)
+    sell_glyphs = read_word_list(data, sell_glyph_list)
     if len(sell_glyphs) != 14:
         raise ValueError(f"shop sell glyph list has {len(sell_glyphs)} slots, expected 14")
     sell_values_by_slot = {
@@ -6434,13 +7030,13 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
         12: glyph_by_char["매"],
     }
     for slot, value in sell_values_by_slot.items():
-        put16(data, SHOP_SELL_GLYPH_LIST + slot * 2, value)
+        put16(data, sell_glyph_list + slot * 2, value)
 
     selection_source = tuple(
-        be16(data, SHOP_ITEM_SELECTION_TOKEN_STREAM + index * 2)
-        for index in range(len(SHOP_ITEM_SELECTION_SOURCE_TOKENS))
+        be16(data, selection_token_stream + index * 2)
+        for index in range(len(selection_source_tokens))
     )
-    if selection_source != SHOP_ITEM_SELECTION_SOURCE_TOKENS:
+    if selection_source != selection_source_tokens:
         raise ValueError(
             f"unexpected shop item-selection token stream: {selection_source!r}"
         )
@@ -6453,7 +7049,7 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
         9: glyph_by_char["요"],
     }
     for slot, value in selection_values_by_slot.items():
-        put16(data, SHOP_SELL_GLYPH_LIST + slot * 2, value)
+        put16(data, sell_glyph_list + slot * 2, value)
     selection_slot = {
         "아": 0,
         "이": 1,
@@ -6472,14 +7068,14 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
     )
     write_token_stream(
         data,
-        SHOP_ITEM_SELECTION_TOKEN_STREAM,
+        selection_token_stream,
         selection_tokens,
-        len(SHOP_ITEM_SELECTION_SOURCE_TOKENS),
+        len(selection_source_tokens),
     )
 
-    original_title_tokens = [0, 1, 2, 3, 6, 7]
+    original_title_tokens = list(sell_title_source_tokens)
     actual_title_tokens = [
-        be16(data, SHOP_SELL_TITLE_TOKEN_STREAM + slot * 2)
+        be16(data, sell_title_token_stream + slot * 2)
         for slot in range(len(original_title_tokens))
     ]
     if actual_title_tokens != original_title_tokens:
@@ -6488,7 +7084,7 @@ def patch_shop_title_glyph_loaders(data: bytearray, glyph_by_char: dict[str, int
             f"{actual_title_tokens!r} != {original_title_tokens!r}"
         )
     for slot, token in enumerate([0, 1, 2, 3, 11, 12]):
-        put16(data, SHOP_SELL_TITLE_TOKEN_STREAM + slot * 2, token)
+        put16(data, sell_title_token_stream + slot * 2, token)
 
 
 def patch_start_menu(data: bytearray, glyph_by_char: dict[str, int]) -> None:
@@ -6654,12 +7250,17 @@ def patch_start_submenus(data: bytearray, glyph_by_char: dict[str, int]) -> None
 def patch_control_settings_screen(
     data: bytearray,
     glyph_by_char: dict[str, int],
+    *,
+    original_glyphs: tuple[int, ...] = CONTROL_SETTINGS_ORIGINAL_GLYPHS,
+    rows: tuple[tuple[int, tuple[int, ...], tuple[int, ...]], ...] = (
+        CONTROL_SETTINGS_ROWS
+    ),
 ) -> None:
     actual_glyphs = tuple(
         be16(data, CONTROL_SETTINGS_GLYPH_LIST + index * 2)
-        for index in range(len(CONTROL_SETTINGS_ORIGINAL_GLYPHS))
+        for index in range(len(original_glyphs))
     )
-    if actual_glyphs != CONTROL_SETTINGS_ORIGINAL_GLYPHS:
+    if actual_glyphs != original_glyphs:
         raise ValueError("control-settings glyph list changed")
 
     for slot, char in CONTROL_SETTINGS_GLYPH_SLOT_CHARS.items():
@@ -6674,7 +7275,7 @@ def patch_control_settings_screen(
         SPACE_GLYPH,
     )
 
-    for offset, original, replacement in CONTROL_SETTINGS_ROWS:
+    for offset, original, replacement in rows:
         actual = tuple(
             be16(data, offset + index * 2)
             for index in range(len(original))
@@ -6690,31 +7291,45 @@ def patch_control_settings_screen(
             put16(data, offset + index * 2, token)
 
 
-def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> None:
+def patch_title_load_screen(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    *,
+    glyph_list_offset: int = TITLE_LOAD_GLYPH_LIST,
+    glyph_list_original: tuple[int, ...] = TITLE_LOAD_GLYPH_LIST_ORIGINAL,
+    records: dict[int, tuple[int, str]] = TITLE_LOAD_RECORDS,
+    record_originals: dict[int, tuple[int, ...]] = TITLE_LOAD_RECORD_ORIGINALS,
+    save_header_record: int = TITLE_SAVE_HEADER_RECORD,
+    save_header_original: tuple[int, ...] = TITLE_SAVE_HEADER_ORIGINAL,
+    load_header_record: int = TITLE_LOAD_HEADER_RECORD,
+    load_header_original: tuple[int, ...] = TITLE_LOAD_HEADER_ORIGINAL,
+    load_header_lea: int = TITLE_LOAD_HEADER_LEA,
+    load_header_lea_original: bytes = TITLE_LOAD_HEADER_LEA_ORIGINAL,
+) -> None:
     original_glyphs = tuple(
-        be16(data, TITLE_LOAD_GLYPH_LIST + index * 2)
+        be16(data, glyph_list_offset + index * 2)
         for index in range(TITLE_LOAD_GLYPH_COUNT)
     )
-    if original_glyphs != TITLE_LOAD_GLYPH_LIST_ORIGINAL:
+    if original_glyphs != glyph_list_original:
         raise ValueError("title LOAD glyph list source changed")
-    if be16(data, TITLE_LOAD_GLYPH_LIST + TITLE_LOAD_GLYPH_COUNT * 2) != 0xFFFF:
+    if be16(data, glyph_list_offset + TITLE_LOAD_GLYPH_COUNT * 2) != 0xFFFF:
         raise ValueError("title LOAD glyph list terminator changed")
 
-    for offset, (capacity, _) in TITLE_LOAD_RECORDS.items():
+    for offset, (capacity, _) in records.items():
         original = tuple(be16(data, offset + index * 2) for index in range(capacity))
-        if original != TITLE_LOAD_RECORD_ORIGINALS[offset]:
+        if original != record_originals[offset]:
             raise ValueError(f"title LOAD record source changed at 0x{offset:06X}")
         if be16(data, offset + capacity * 2) != 0xFFFF:
             raise ValueError(f"title LOAD record terminator changed at 0x{offset:06X}")
 
     for offset, expected in (
-        (TITLE_SAVE_HEADER_RECORD, TITLE_SAVE_HEADER_ORIGINAL),
-        (TITLE_LOAD_HEADER_RECORD, TITLE_LOAD_HEADER_ORIGINAL),
+        (save_header_record, save_header_original),
+        (load_header_record, load_header_original),
     ):
         actual = tuple(be16(data, offset + index * 2) for index in range(len(expected)))
         if actual != expected:
             raise ValueError(f"title LOAD header source changed at 0x{offset:06X}")
-    if data[TITLE_LOAD_HEADER_LEA : TITLE_LOAD_HEADER_LEA + 6] != TITLE_LOAD_HEADER_LEA_ORIGINAL:
+    if data[load_header_lea : load_header_lea + 6] != load_header_lea_original:
         raise ValueError("title LOAD header LEA source changed")
 
     unique_chars = list(dict.fromkeys("".join(TITLE_LOAD_TEXTS) + " "))
@@ -6729,10 +7344,10 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
     # the remaining source-only Japanese glyphs are replaced as one bank.
     for index, char in enumerate(unique_chars, start=11):
         glyph = SPACE_GLYPH if char == " " else glyph_by_char[char]
-        put16(data, TITLE_LOAD_GLYPH_LIST + index * 2, glyph)
+        put16(data, glyph_list_offset + index * 2, glyph)
     for index in range(11 + len(unique_chars), TITLE_LOAD_GLYPH_COUNT):
-        put16(data, TITLE_LOAD_GLYPH_LIST + index * 2, SPACE_GLYPH)
-    put16(data, TITLE_LOAD_GLYPH_LIST + TITLE_LOAD_GLYPH_COUNT * 2, 0xFFFF)
+        put16(data, glyph_list_offset + index * 2, SPACE_GLYPH)
+    put16(data, glyph_list_offset + TITLE_LOAD_GLYPH_COUNT * 2, 0xFFFF)
 
     def tokens(text: str, width: int) -> list[int]:
         values = [slot_by_char[char] for char in text]
@@ -6740,7 +7355,7 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
             raise ValueError(f"title LOAD text is too long for {width} cells: {text!r}")
         return values + [slot_by_char[" "]] * (width - len(values))
 
-    for offset, (capacity, text) in TITLE_LOAD_RECORDS.items():
+    for offset, (capacity, text) in records.items():
         for index, token in enumerate(tokens(text, capacity)):
             put16(data, offset + index * 2, token)
         put16(data, offset + capacity * 2, 0xFFFF)
@@ -6750,10 +7365,10 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
     # natural four-cell Korean label is not abbreviated.
     save_header = [0x0011, 0x0006] + tokens("저장", 3) + [0xFFFF]
     for index, value in enumerate(save_header):
-        put16(data, TITLE_SAVE_HEADER_RECORD + index * 2, value)
+        put16(data, save_header_record + index * 2, value)
     fallback_header = [0x0011, 0x0006] + tokens("로드", 3) + [0xFFFF]
     for index, value in enumerate(fallback_header):
-        put16(data, TITLE_LOAD_HEADER_RECORD + index * 2, value)
+        put16(data, load_header_record + index * 2, value)
 
     # The scenario-select cheat draws its dynamic number in the fifth 16-pixel
     # cell of this header box. Start the four-cell Korean label at the first
@@ -6768,7 +7383,7 @@ def patch_title_load_screen(data: bytearray, glyph_by_char: dict[str, int]) -> N
         raise ValueError("title LOAD relocated header range is not free")
     for index, value in enumerate(relocated_header):
         put16(data, TITLE_LOAD_HEADER_RELOC + index * 2, value)
-    data[TITLE_LOAD_HEADER_LEA : TITLE_LOAD_HEADER_LEA + 6] = (
+    data[load_header_lea : load_header_lea + 6] = (
         bytes.fromhex("41 F9") + TITLE_LOAD_HEADER_RELOC.to_bytes(4, "big")
     )
 
@@ -6805,22 +7420,29 @@ def patch_title_main_menu(
     data: bytearray,
     *,
     hard_mode: bool = False,
+    record_offset: int = TITLE_MAIN_MENU_RECORD,
+    record_original: tuple[int, ...] = TITLE_MAIN_MENU_RECORD_ORIGINAL,
+    start_offset: int = TITLE_MAIN_MENU_START_OFFSET,
+    load_offset: int = TITLE_MAIN_MENU_LOAD_OFFSET,
+    record_lea: int = TITLE_MAIN_MENU_RECORD_LEA,
+    record_lea_original: bytes = TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL,
+    window_width_offsets: tuple[int, ...] = TITLE_MAIN_MENU_WINDOW_WIDTH_OFFSETS,
 ) -> None:
     actual = tuple(
-        be16(data, TITLE_MAIN_MENU_RECORD + index * 2)
-        for index in range(len(TITLE_MAIN_MENU_RECORD_ORIGINAL))
+        be16(data, record_offset + index * 2)
+        for index in range(len(record_original))
     )
-    if actual != TITLE_MAIN_MENU_RECORD_ORIGINAL:
+    if actual != record_original:
         raise ValueError("title main-menu source record changed")
 
     if hard_mode:
         hook_end = (
-            TITLE_MAIN_MENU_RECORD_LEA
-            + len(TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL)
+            record_lea
+            + len(record_lea_original)
         )
         if (
-            bytes(data[TITLE_MAIN_MENU_RECORD_LEA:hook_end])
-            != TITLE_MAIN_MENU_RECORD_LEA_ORIGINAL
+            bytes(data[record_lea:hook_end])
+            != record_lea_original
         ):
             raise ValueError("title main-menu record LEA source changed")
         record = build_hard_title_main_menu_record()
@@ -6833,11 +7455,11 @@ def patch_title_main_menu(
         ):
             raise ValueError("hard title main-menu record area is not blank")
         data[TITLE_HARD_MAIN_MENU_RECORD:record_end] = record
-        data[TITLE_MAIN_MENU_RECORD_LEA:hook_end] = (
+        data[record_lea:hook_end] = (
             bytes.fromhex("41 F9")
             + TITLE_HARD_MAIN_MENU_RECORD.to_bytes(4, "big")
         )
-        for width_offset in TITLE_MAIN_MENU_WINDOW_WIDTH_OFFSETS:
+        for width_offset in window_width_offsets:
             if (
                 be16(data, width_offset)
                 != TITLE_MAIN_MENU_WINDOW_WIDTH_ORIGINAL
@@ -6858,28 +7480,52 @@ def patch_title_main_menu(
         put16(data, offset + capacity * 2, terminator)
 
     write_text(
-        TITLE_MAIN_MENU_START_OFFSET,
+        start_offset,
         TITLE_MAIN_MENU_START_CAPACITY,
         TITLE_MAIN_MENU_START_TEXT,
         0xFFFE,
     )
     write_text(
-        TITLE_MAIN_MENU_LOAD_OFFSET,
+        load_offset,
         TITLE_MAIN_MENU_LOAD_CAPACITY,
         TITLE_MAIN_MENU_LOAD_TEXT,
         0xFFFF,
     )
 
 
-def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    ptrs = read_pointer_table_until(data, ITEM_NAME_POINTER_TABLE, 0xA1990, 0xA1B90)
+def patch_item_names(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    *,
+    pointer_table: int = ITEM_NAME_POINTER_TABLE,
+    pointer_min: int = 0x0A1990,
+    pointer_max: int = 0x0A1B90,
+    glyph_list_base: int = ITEM_GLYPH_LIST_BASE,
+    glyph_list_source_count: int = 0x40,
+    glyph_list_refs: tuple[int, ...] = ITEM_GLYPH_LIST_REFS,
+    glyph_load_hook: int = ITEM_NAME_GLYPH_LOAD_HOOK,
+    glyph_load_target: int = 0x02C2C4,
+    popup_build_hook: int = ITEM_NAME_POPUP_BUILD_HOOK,
+    popup_return_target: int = 0x027916,
+    list_render_hooks: tuple[tuple[int, int, int, int], ...] = (
+        ITEM_NAME_LIST_RENDER_HOOKS
+    ),
+    discard_list_render_hook: int = ITEM_DISCARD_LIST_RENDER_HOOK,
+    token_reloc_base: int | None = None,
+    token_reloc_limit: int | None = None,
+) -> None:
+    ptrs = read_pointer_table_until(
+        data, pointer_table, pointer_min, pointer_max
+    )
     if len(ptrs) != len(ITEM_NAME_PATCHES):
         raise ValueError(f"expected {len(ITEM_NAME_PATCHES)} item name pointers, got {len(ptrs)}")
 
-    original_item_glyphs = read_word_list(data, ITEM_GLYPH_LIST_BASE)
-    if len(original_item_glyphs) != 0x40:
+    original_item_glyphs = read_word_list(data, glyph_list_base)
+    if len(original_item_glyphs) != glyph_list_source_count:
         raise ValueError(
-            f"item name glyph source has {len(original_item_glyphs)} slots, expected 64"
+            "item name glyph source has "
+            f"{len(original_item_glyphs)} slots, expected "
+            f"{glyph_list_source_count}"
         )
     # Every item-name token stream is rewritten below, so retaining the 55
     # unused Japanese slots only wastes the stock VRAM load window. Keep the
@@ -6914,8 +7560,16 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         local_index(char) for char in INLINE_DISCARD_PROMPT_TEXT
     ]
 
+    token_cursor = token_reloc_base
+    if token_cursor is not None:
+        if token_reloc_limit is None:
+            raise ValueError("item name token relocation needs a limit")
+        if any(
+            value != 0xFF
+            for value in data[token_cursor:token_reloc_limit]
+        ):
+            raise ValueError("item name token relocation area is not blank")
     for index, (ptr, text) in enumerate(zip(ptrs, ITEM_NAME_PATCHES)):
-        capacity = direct_string_capacity_words(data, ptr)
         if index == 0:
             # The original Japanese name has three glyphs, but Korean "단검"
             # has two. Ending here also lets popup suffixes attach the particle
@@ -6923,11 +7577,20 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             tokens = [6, 7]
         else:
             tokens = [local_index(char) for char in text if char != " "]
-        if len(tokens) + 1 > capacity:
-            raise ValueError(
-                f"item name at 0x{ptr:06X} needs {len(tokens) + 1} words, only {capacity}: {text!r}"
-            )
-        write_token_stream(data, ptr, tokens, capacity)
+        if token_cursor is None:
+            capacity = direct_string_capacity_words(data, ptr)
+            if len(tokens) + 1 > capacity:
+                raise ValueError(
+                    f"item name at 0x{ptr:06X} needs {len(tokens) + 1} "
+                    f"words, only {capacity}: {text!r}"
+                )
+            write_token_stream(data, ptr, tokens, capacity)
+        else:
+            byte_length = (len(tokens) + 1) * 2
+            if token_cursor + byte_length > token_reloc_limit:
+                raise ValueError("item name token relocation overflowed")
+            put32(data, pointer_table + index * 4, token_cursor)
+            token_cursor = write_word_list_exact(data, token_cursor, tokens)
 
     discard_prompt_bytes = (len(discard_prompt_tokens) + 1) * 2
     if (
@@ -6953,7 +7616,7 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
         // 2,
     )
 
-    for ref in ITEM_GLYPH_LIST_REFS:
+    for ref in glyph_list_refs:
         put32(data, ref, ITEM_NAME_GLYPH_LIST_RELOC_BASE)
     if len(item_glyphs) > ITEM_NAME_GLYPH_LOAD_MAX:
         raise ValueError(
@@ -6968,13 +7631,20 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
     # 0x4000. Load later name glyphs into the compact description bank's free
     # tail at 0xA700..0xB3FF. The purchase popup explicitly selects the
     # matching bank for every token.
-    loader = _build_item_name_glyph_load_routine(len(item_glyphs))
-    popup_builder = _build_item_name_popup_stream_routine()
+    loader = _build_item_name_glyph_load_routine(
+        len(item_glyphs), glyph_load_target=glyph_load_target
+    )
+    popup_builder = _build_item_name_popup_stream_routine(
+        pointer_table=pointer_table,
+        return_target=popup_return_target,
+    )
     list_renderers = [
         (routine, _build_item_name_list_render_routine(terminator, store))
-        for _, terminator, store, routine in ITEM_NAME_LIST_RENDER_HOOKS
+        for _, terminator, store, routine in list_render_hooks
     ]
-    discard_list_renderer = _build_item_discard_list_render_routine()
+    discard_list_renderer = _build_item_discard_list_render_routine(
+        pointer_table=pointer_table
+    )
     for offset, payload in (
         (ITEM_NAME_GLYPH_LOAD_ROUTINE, loader),
         (ITEM_NAME_POPUP_BUILD_ROUTINE, popup_builder),
@@ -6990,56 +7660,78 @@ def patch_item_names(data: bytearray, glyph_by_char: dict[str, int]) -> None:
             raise ValueError(f"item name extension area at 0x{offset:06X} is not blank")
         data[offset : offset + len(payload)] = payload
 
-    load_hook_end = ITEM_NAME_GLYPH_LOAD_HOOK + len(ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL)
-    if bytes(data[ITEM_NAME_GLYPH_LOAD_HOOK:load_hook_end]) != ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL:
+    glyph_load_hook_original = (
+        bytes.fromhex("41 F9")
+        + glyph_list_base.to_bytes(4, "big")
+        + bytes.fromhex("70 40 22 3C 00 00 20 00 4E B9")
+        + glyph_load_target.to_bytes(4, "big")
+    )
+    load_hook_end = glyph_load_hook + len(glyph_load_hook_original)
+    if bytes(data[glyph_load_hook:load_hook_end]) != glyph_load_hook_original:
         raise ValueError("item name glyph-load hook changed")
     load_hook = (
         bytes.fromhex("4E B9")
         + ITEM_NAME_GLYPH_LOAD_ROUTINE.to_bytes(4, "big")
         + bytes.fromhex("4E 71") * 7
     )
-    if len(load_hook) != len(ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL):
+    if len(load_hook) != len(glyph_load_hook_original):
         raise AssertionError("item name glyph-load hook size changed")
-    data[ITEM_NAME_GLYPH_LOAD_HOOK:load_hook_end] = load_hook
+    data[glyph_load_hook:load_hook_end] = load_hook
 
-    popup_hook_end = ITEM_NAME_POPUP_BUILD_HOOK + len(ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL)
-    if bytes(data[ITEM_NAME_POPUP_BUILD_HOOK:popup_hook_end]) != ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL:
+    popup_build_hook_original = (
+        bytes.fromhex("41 F9") + pointer_table.to_bytes(4, "big")
+    )
+    popup_hook_end = popup_build_hook + len(popup_build_hook_original)
+    if bytes(data[popup_build_hook:popup_hook_end]) != popup_build_hook_original:
         raise ValueError("item name popup-build hook changed")
-    data[ITEM_NAME_POPUP_BUILD_HOOK:popup_hook_end] = (
+    data[popup_build_hook:popup_hook_end] = (
         bytes.fromhex("4E F9") + ITEM_NAME_POPUP_BUILD_ROUTINE.to_bytes(4, "big")
     )
-    for hook, _, _, routine in ITEM_NAME_LIST_RENDER_HOOKS:
+    for hook, _, _, routine in list_render_hooks:
         hook_end = hook + len(ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL)
         if bytes(data[hook:hook_end]) != ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL:
             raise ValueError(f"item name list-render hook changed at 0x{hook:06X}")
         data[hook:hook_end] = bytes.fromhex("4E F9") + routine.to_bytes(4, "big")
     discard_hook_end = (
-        ITEM_DISCARD_LIST_RENDER_HOOK
+        discard_list_render_hook
         + len(ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL)
     )
     if (
-        bytes(data[ITEM_DISCARD_LIST_RENDER_HOOK:discard_hook_end])
+        bytes(data[discard_list_render_hook:discard_hook_end])
         != ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL
     ):
         raise ValueError("item discard-list render hook changed")
-    data[ITEM_DISCARD_LIST_RENDER_HOOK:discard_hook_end] = (
+    data[discard_list_render_hook:discard_hook_end] = (
         bytes.fromhex("4E F9")
         + ITEM_DISCARD_LIST_RENDER_ROUTINE.to_bytes(4, "big")
     )
 
 
-def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    ptrs = read_pointer_table_until(data, ITEM_DESCRIPTION_POINTER_TABLE, 0xA1E10, 0xA2C00)
+def patch_item_descriptions(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    *,
+    pointer_table: int = ITEM_DESCRIPTION_POINTER_TABLE,
+    pointer_min: int = 0x0A1E10,
+    pointer_max: int = 0x0A2C00,
+    glyph_list_base: int = ITEM_DESCRIPTION_GLYPH_LIST_BASE,
+    glyph_list_source_count: int = ITEM_DESCRIPTION_GLYPH_LOAD_COUNT,
+    glyph_list_ref: int = ITEM_DESCRIPTION_GLYPH_LIST_REF,
+    glyph_load_count_offset: int = ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET,
+) -> None:
+    ptrs = read_pointer_table_until(
+        data, pointer_table, pointer_min, pointer_max
+    )
     if len(ptrs) != len(ITEM_DESCRIPTION_PATCHES):
         raise ValueError(
             f"expected {len(ITEM_DESCRIPTION_PATCHES)} item description pointers, got {len(ptrs)}"
         )
 
-    original_desc_glyphs = read_word_list(data, ITEM_DESCRIPTION_GLYPH_LIST_BASE)
-    if len(original_desc_glyphs) != ITEM_DESCRIPTION_GLYPH_LOAD_COUNT:
+    original_desc_glyphs = read_word_list(data, glyph_list_base)
+    if len(original_desc_glyphs) != glyph_list_source_count:
         raise ValueError(
             f"item description glyph source has {len(original_desc_glyphs)} slots, "
-            f"expected {ITEM_DESCRIPTION_GLYPH_LOAD_COUNT}"
+            f"expected {glyph_list_source_count}"
         )
     # Slots 0..14 have runtime meaning: the first description, its dedicated
     # blank, numeric status glyphs, and the price tail. All remaining Japanese
@@ -7106,7 +7798,7 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
             )
         write_token_stream(data, ptr, tokens, capacity)
 
-    put32(data, ITEM_DESCRIPTION_GLYPH_LIST_REF, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE)
+    put32(data, glyph_list_ref, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE)
     if len(desc_glyphs) > ITEM_DESCRIPTION_GLYPH_LOAD_COUNT:
         raise ValueError(
             f"item description glyph list needs {len(desc_glyphs)} slots, "
@@ -7115,11 +7807,11 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
     expected_load_count = ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_SOURCE.to_bytes(
         4, "big"
     )
-    load_count_end = ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET + 4
+    load_count_end = glyph_load_count_offset + 4
     if (
         bytes(
             data[
-                ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET:load_count_end
+                glyph_load_count_offset:load_count_end
             ]
         )
         != expected_load_count
@@ -7137,7 +7829,7 @@ def patch_item_descriptions(data: bytearray, glyph_by_char: dict[str, int]) -> N
         )
     put32(
         data,
-        ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET,
+        glyph_load_count_offset,
         len(desc_glyphs),
     )
     end = write_word_list_exact(data, ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE, desc_glyphs)
@@ -7255,7 +7947,11 @@ class _M68KCode:
         return bytes(self.code)
 
 
-def _build_item_name_glyph_load_routine(glyph_count: int) -> bytes:
+def _build_item_name_glyph_load_routine(
+    glyph_count: int,
+    *,
+    glyph_load_target: int = 0x02C2C4,
+) -> bytes:
     if not ITEM_NAME_GLYPH_PRIMARY_COUNT < glyph_count <= ITEM_NAME_GLYPH_LOAD_MAX:
         raise ValueError(f"item name glyph count cannot use split VRAM loader: {glyph_count}")
     overflow_count = glyph_count - ITEM_NAME_GLYPH_PRIMARY_COUNT
@@ -7263,20 +7959,29 @@ def _build_item_name_glyph_load_routine(glyph_count: int) -> bytes:
         bytes.fromhex("41 F9")
         + ITEM_NAME_GLYPH_LIST_RELOC_BASE.to_bytes(4, "big")
         + bytes((0x70, ITEM_NAME_GLYPH_PRIMARY_COUNT))
-        + bytes.fromhex("22 3C 00 00 20 00 4E B9 00 02 C2 C4 41 F9")
+        + bytes.fromhex("22 3C 00 00 20 00 4E B9")
+        + glyph_load_target.to_bytes(4, "big")
+        + bytes.fromhex("41 F9")
         + (ITEM_NAME_GLYPH_LIST_RELOC_BASE + ITEM_NAME_GLYPH_PRIMARY_COUNT * 2).to_bytes(
             4, "big"
         )
         + bytes((0x70, overflow_count))
         + bytes.fromhex("22 3C")
         + ITEM_NAME_OVERFLOW_VRAM_BASE.to_bytes(4, "big")
-        + bytes.fromhex("4E B9 00 02 C2 C4 4E 75")
+        + bytes.fromhex("4E B9")
+        + glyph_load_target.to_bytes(4, "big")
+        + bytes.fromhex("4E 75")
     )
 
 
-def _build_item_name_popup_stream_routine() -> bytes:
+def _build_item_name_popup_stream_routine(
+    *,
+    pointer_table: int = ITEM_NAME_POINTER_TABLE,
+    return_target: int = 0x027916,
+) -> bytes:
     code = _M68KCode()
-    code.emit("41 F9 00 0A 19 02 30 06 D0 40 D0 40 20 70 00 00")
+    code.emit(bytes.fromhex("41 F9") + pointer_table.to_bytes(4, "big"))
+    code.emit("30 06 D0 40 D0 40 20 70 00 00")
     code.label("loop")
     code.emit("30 18 0C 40 FF FF")
     code.branch_word(0x6700, "done")
@@ -7291,7 +7996,7 @@ def _build_item_name_popup_stream_routine() -> bytes:
     code.emit("32 C0")
     code.branch_word(0x6000, "loop")
     code.label("done")
-    code.emit("4E F9 00 02 79 16")
+    code.emit(bytes.fromhex("4E F9") + return_target.to_bytes(4, "big"))
     return code.finish()
 
 
@@ -7316,7 +8021,10 @@ def _build_item_name_list_render_routine(
     return code.finish()
 
 
-def _build_item_discard_list_render_routine() -> bytes:
+def _build_item_discard_list_render_routine(
+    *,
+    pointer_table: int = ITEM_NAME_POINTER_TABLE,
+) -> bytes:
     code = _M68KCode()
     # The dormant stock discard screen draws five 8x8 Japanese item-name rows.
     # Rebuild its sprite list with the localized 16x16 item-name glyph banks.
@@ -7341,7 +8049,7 @@ def _build_item_discard_list_render_routine() -> bytes:
     code.emit("41 F9 FF FF AA FC 30 39 FF FF AE 5E D0 40")
     code.emit("32 30 00 00 53 41")
     code.emit("41 F9 FF FF AA 34")
-    code.emit(bytes.fromhex("43 F9") + ITEM_NAME_POINTER_TABLE.to_bytes(4, "big"))
+    code.emit(bytes.fromhex("43 F9") + pointer_table.to_bytes(4, "big"))
     code.emit("34 39 FF FF AE 5E C4 FC 00 05 D4 42 D4 42 54 42")
     code.emit("36 3C 00 D0")
     code.label("item_loop")
@@ -8118,9 +8826,37 @@ def validate_byte_ui_name_and_class_tables(data: bytes | bytearray) -> None:
 
 def build_byte_ui_local_mapping(
     code_by_char: dict[str, int],
+    class_labels: list[str] | tuple[str, ...] | None = None,
+    name_labels: list[str] | tuple[str, ...] | None = None,
 ) -> tuple[dict[str, int], list[int]]:
-    texts = [KOREAN_CLASS_LABELS[index] for index in range(CLASS_BYTE_RECORD_COUNT)]
-    texts.extend(KOREAN_NAME_BY_ID[index] for index in range(NAME_BYTE_RECORD_COUNT))
+    normal_class_labels = tuple(
+        KOREAN_CLASS_LABELS[index]
+        for index in range(CLASS_BYTE_RECORD_COUNT)
+    )
+    normal_name_labels = tuple(
+        KOREAN_NAME_BY_ID[index]
+        for index in range(NAME_BYTE_RECORD_COUNT)
+    )
+    if class_labels is None:
+        class_labels = normal_class_labels
+    if name_labels is None:
+        name_labels = normal_name_labels
+    if len(class_labels) != CLASS_BYTE_RECORD_COUNT:
+        raise ValueError(
+            f"byte UI class labels need {CLASS_BYTE_RECORD_COUNT} entries, "
+            f"got {len(class_labels)}"
+        )
+    if len(name_labels) != NAME_BYTE_RECORD_COUNT:
+        raise ValueError(
+            f"byte UI name labels need {NAME_BYTE_RECORD_COUNT} entries, "
+            f"got {len(name_labels)}"
+        )
+    # Keep the proven normal-edition ordering first.  Edition-specific tables
+    # may reorder identical labels by ID; letting that reorder the glyph pool
+    # would also move battle-stable extension tiles.  Append only the edition
+    # labels through aliases after allocating the stable baseline below.
+    texts = list(normal_class_labels)
+    texts.extend(normal_name_labels)
     # Append this exceptional label after the established tables so adding its
     # unique `일` glyph cannot renumber any proven commander/class tile.
     texts.append(ILLUSION_CLASS_LABEL)
@@ -8176,24 +8912,77 @@ def build_byte_ui_local_mapping(
                 ) from exc
         index_by_char[char] = len(tile_by_index)
         tile_by_index.append(tile)
+    edition_chars = set("".join(class_labels) + "".join(name_labels))
+    missing_edition_chars = [
+        char
+        for char in collect_chars("".join(class_labels), "".join(name_labels))
+        if char not in index_by_char
+    ]
+    if missing_edition_chars:
+        full_extension_tiles = {
+            tile
+            for start, count in BYTE_UI_FULL_EXT_VRAM_SEGMENTS
+            for tile in range(start, start + count)
+        }
+        reusable_chars = [
+            char
+            for char, index in index_by_char.items()
+            if char not in edition_chars
+            and char != " "
+            and tile_by_index[index] in full_extension_tiles
+        ]
+        if len(reusable_chars) < len(missing_edition_chars):
+            raise ValueError(
+                "edition-specific byte UI needs "
+                f"{len(missing_edition_chars)} new glyphs but only "
+                f"{len(reusable_chars)} unused table glyphs can be reused"
+            )
+        # Aliasing an unused normal-edition character preserves every proven
+        # local index and VRAM tile.  The edition glyph is inserted later and
+        # therefore becomes the bitmap rendered for that shared index.
+        for char, replaced_char in zip(missing_edition_chars, reusable_chars):
+            index_by_char[char] = index_by_char[replaced_char]
     if len(tile_by_index) > 0x100:
         raise ValueError(f"full byte UI mapping needs {len(tile_by_index)} byte indexes")
     return index_by_char, tile_by_index
 
 
 def relocate_byte_ui_name_and_class_tables(
-    data: bytearray, index_by_char: dict[str, int]
+    data: bytearray,
+    index_by_char: dict[str, int],
+    class_labels: list[str] | tuple[str, ...] | None = None,
+    name_labels: list[str] | tuple[str, ...] | None = None,
 ) -> None:
+    if class_labels is None:
+        class_labels = tuple(
+            KOREAN_CLASS_LABELS[index]
+            for index in range(CLASS_BYTE_RECORD_COUNT)
+        )
+    if name_labels is None:
+        name_labels = tuple(
+            KOREAN_NAME_BY_ID[index]
+            for index in range(NAME_BYTE_RECORD_COUNT)
+        )
+    if len(class_labels) != CLASS_BYTE_RECORD_COUNT:
+        raise ValueError(
+            f"byte UI class labels need {CLASS_BYTE_RECORD_COUNT} entries, "
+            f"got {len(class_labels)}"
+        )
+    if len(name_labels) != NAME_BYTE_RECORD_COUNT:
+        raise ValueError(
+            f"byte UI name labels need {NAME_BYTE_RECORD_COUNT} entries, "
+            f"got {len(name_labels)}"
+        )
     tables = (
         (
             CLASS_BYTE_POINTER_TABLE,
-            [KOREAN_CLASS_LABELS[index] for index in range(CLASS_BYTE_RECORD_COUNT)],
+            list(class_labels),
             BYTE_UI_CLASS_STRING_RELOC_BASE,
             BYTE_UI_CLASS_STRING_RELOC_LIMIT,
         ),
         (
             NAME_BYTE_POINTER_TABLE,
-            [KOREAN_NAME_BY_ID[index] for index in range(NAME_BYTE_RECORD_COUNT)],
+            list(name_labels),
             BYTE_UI_NAME_STRING_RELOC_BASE,
             BYTE_UI_NAME_STRING_RELOC_LIMIT,
         ),
@@ -8403,6 +9192,8 @@ def _build_title_credit_font_loader() -> bytes:
 
 def _build_title_credit_renderer(
     title_version_text: str = TITLE_VERSION_TEXT,
+    text_render_routine: int = 0x02D986,
+    copyright_text_record: int | None = 0x0A44F8,
 ) -> bytes:
     def render_record(d2: int, record: int) -> bytes:
         return (
@@ -8413,15 +9204,16 @@ def _build_title_credit_renderer(
             + bytes.fromhex("45 F9")
             + record.to_bytes(4, "big")
             + bytes.fromhex("48 E7 9F 9E")
-            + bytes.fromhex("4E B9 00 02 D9 86")
+            + bytes.fromhex("4E B9")
+            + text_render_routine.to_bytes(4, "big")
             + bytes.fromhex("4C DF 79 F9")
             + bytes.fromhex("21 C9 81 C4")
         )
 
-    records = (
-        render_record(0xCB18, 0x0A44F8)
-        + render_record(0xCC1C, TITLE_CREDIT_TEXT_RECORD)
-    )
+    records = b""
+    if copyright_text_record is not None:
+        records += render_record(0xCB18, copyright_text_record)
+    records += render_record(0xCC1C, TITLE_CREDIT_TEXT_RECORD)
     hard_version_lines = split_hard_title_version_text(title_version_text)
     if hard_version_lines is None:
         records += render_record(
@@ -8453,14 +9245,39 @@ def install_byte_ui_extension(
     tile_by_index: list[int],
     font_tiles: bytes | bytearray,
     title_version_text: str = TITLE_VERSION_TEXT,
+    validate_resource_table: bool = True,
+    inline_discard_prompt_source: int = INLINE_DISCARD_PROMPT_SOURCE,
+    inline_discard_prompt_render_hook: int = INLINE_DISCARD_PROMPT_RENDER_HOOK,
+    sound_test_source_table: int = SOUND_TEST_SOURCE_TABLE,
+    sound_test_source_sha256: str = SOUND_TEST_SOURCE_SHA256,
+    sound_test_labels: tuple[str, ...] = SOUND_TEST_LABELS,
+    sound_test_render_hook: int = SOUND_TEST_RENDER_HOOK,
+    byte_ui_font_load_calls: tuple[int, ...] = BYTE_UI_FONT_LOAD_CALLS,
+    byte_ui_prep_font_load_calls: frozenset[int] = frozenset(
+        BYTE_UI_PREP_FONT_LOAD_CALLS
+    ),
+    source_offset_map: dict[int, int] | None = None,
+    source_bytes_by_offset: dict[int, bytes] | None = None,
+    install_title_credit_hooks: bool = True,
+    title_credit_text_render_routine: int = 0x02D986,
+    title_credit_copyright_record: int | None = 0x0A44F8,
 ) -> None:
-    first_pointer = be32(data, BYTE_UI_FONT_RESOURCE_TABLE) & 0x00FFFFFF
-    table_size = first_pointer - BYTE_UI_FONT_RESOURCE_TABLE
-    if table_size != BYTE_UI_RESOURCE_COUNT * 4:
-        raise ValueError(
-            f"compressed resource table changed: expected {BYTE_UI_RESOURCE_COUNT} entries, "
-            f"got {table_size // 4}"
-        )
+    source_offset_map = source_offset_map or {}
+    source_bytes_by_offset = source_bytes_by_offset or {}
+
+    def mapped(offset: int) -> int:
+        return source_offset_map.get(offset, offset)
+
+    def expected(offset: int, original: bytes) -> bytes:
+        return source_bytes_by_offset.get(offset, original)
+    if validate_resource_table:
+        first_pointer = be32(data, BYTE_UI_FONT_RESOURCE_TABLE) & 0x00FFFFFF
+        table_size = first_pointer - BYTE_UI_FONT_RESOURCE_TABLE
+        if table_size != BYTE_UI_RESOURCE_COUNT * 4:
+            raise ValueError(
+                f"compressed resource table changed: expected {BYTE_UI_RESOURCE_COUNT} entries, "
+                f"got {table_size // 4}"
+            )
 
     resource_count = BYTE_UI_RESOURCE_COUNT + 2 + len(BYTE_UI_FULL_EXT_VRAM_SEGMENTS)
     table_end = BYTE_UI_EXT_RESOURCE_TABLE + resource_count * 4
@@ -8554,9 +9371,14 @@ def install_byte_ui_extension(
     for index, tile in enumerate(tile_by_index):
         put16(data, BYTE_UI_LOCAL_TILE_TABLE + index * 2, tile)
 
+    char_by_index = {
+        index: char for char, index in index_by_char.items()
+    }
+    if set(char_by_index) != set(range(len(tile_by_index))):
+        raise ValueError("dynamic name/class glyph indexes are not contiguous")
     dynamic_glyphs = b"".join(
-        render_byte_ui_tile(char, font)
-        for char, _ in sorted(index_by_char.items(), key=lambda item: item[1])
+        render_byte_ui_tile(char_by_index[index], font)
+        for index in range(len(tile_by_index))
     )
     dynamic_glyph_end = BYTE_UI_DYNAMIC_GLYPH_TABLE + len(dynamic_glyphs)
     if dynamic_glyph_end > BYTE_UI_DYNAMIC_GLYPH_TABLE_LIMIT:
@@ -8708,7 +9530,11 @@ def install_byte_ui_extension(
         _build_byte_ui_ending_result_final_bank_loader()
     )
     title_credit_font_loader = _build_title_credit_font_loader()
-    title_credit_renderer = _build_title_credit_renderer(title_version_text)
+    title_credit_renderer = _build_title_credit_renderer(
+        title_version_text,
+        text_render_routine=title_credit_text_render_routine,
+        copyright_text_record=title_credit_copyright_record,
+    )
     hard_version_lines = split_hard_title_version_text(title_version_text)
     title_credit_renderer_address = (
         TITLE_HARD_CREDIT_RENDER_ROUTINE
@@ -8839,8 +9665,8 @@ def install_byte_ui_extension(
 
     if len(INLINE_DISCARD_PROMPT_SOURCE_BYTES) != INLINE_DISCARD_PROMPT_WIDTH:
         raise AssertionError("discard prompt source width constant is wrong")
-    source_end = INLINE_DISCARD_PROMPT_SOURCE + INLINE_DISCARD_PROMPT_WIDTH
-    if bytes(data[INLINE_DISCARD_PROMPT_SOURCE:source_end]) != INLINE_DISCARD_PROMPT_SOURCE_BYTES:
+    source_end = inline_discard_prompt_source + INLINE_DISCARD_PROMPT_WIDTH
+    if bytes(data[inline_discard_prompt_source:source_end]) != INLINE_DISCARD_PROMPT_SOURCE_BYTES:
         raise ValueError("inline discard prompt source changed")
     if data[source_end] != 0xFF:
         raise ValueError("inline discard prompt terminator changed")
@@ -8863,29 +9689,27 @@ def install_byte_ui_extension(
     data[
         INLINE_DISCARD_PROMPT_RECORD : INLINE_DISCARD_PROMPT_RECORD + len(record)
     ] = record
-    hook_end = (
-        INLINE_DISCARD_PROMPT_RENDER_HOOK
-        + len(INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL)
-    )
-    if bytes(data[INLINE_DISCARD_PROMPT_RENDER_HOOK:hook_end]) != INLINE_DISCARD_PROMPT_RENDER_HOOK_ORIGINAL:
+    hook_original = bytes.fromhex("45 F9") + inline_discard_prompt_source.to_bytes(4, "big")
+    hook_end = inline_discard_prompt_render_hook + len(hook_original)
+    if bytes(data[inline_discard_prompt_render_hook:hook_end]) != hook_original:
         raise ValueError("inline discard prompt render hook changed")
-    data[INLINE_DISCARD_PROMPT_RENDER_HOOK:hook_end] = (
+    data[inline_discard_prompt_render_hook:hook_end] = (
         bytes.fromhex("4E F9")
         + INLINE_DISCARD_PROMPT_RENDER_ROUTINE.to_bytes(4, "big")
     )
 
-    source_end = SOUND_TEST_SOURCE_TABLE + SOUND_TEST_ROW_COUNT * SOUND_TEST_ROW_SIZE
-    source = bytes(data[SOUND_TEST_SOURCE_TABLE:source_end])
-    if hashlib.sha256(source).hexdigest() != SOUND_TEST_SOURCE_SHA256:
+    source_end = sound_test_source_table + SOUND_TEST_ROW_COUNT * SOUND_TEST_ROW_SIZE
+    source = bytes(data[sound_test_source_table:source_end])
+    if hashlib.sha256(source).hexdigest() != sound_test_source_sha256:
         raise ValueError("sound-test source table changed")
     if data[source_end] != 0xFF:
         raise ValueError("sound-test table terminator changed")
-    if len(SOUND_TEST_LABELS) != SOUND_TEST_ROW_COUNT:
+    if len(sound_test_labels) != SOUND_TEST_ROW_COUNT:
         raise ValueError(
-            f"sound-test label count is {len(SOUND_TEST_LABELS)}, expected {SOUND_TEST_ROW_COUNT}"
+            f"sound-test label count is {len(sound_test_labels)}, expected {SOUND_TEST_ROW_COUNT}"
         )
     tile_rows = bytearray()
-    for row, label in enumerate(SOUND_TEST_LABELS):
+    for row, label in enumerate(sound_test_labels):
         if len(label) > SOUND_TEST_LABEL_WIDTH:
             raise ValueError(f"sound-test label {row} exceeds 15 cells: {label!r}")
         padded = label.ljust(SOUND_TEST_LABEL_WIDTH)
@@ -8906,19 +9730,19 @@ def install_byte_ui_extension(
     if any(value != 0xFF for value in data[SOUND_TEST_TILE_TABLE:table_end]):
         raise ValueError("localized sound-test tile table area is not blank")
     data[SOUND_TEST_TILE_TABLE:table_end] = tile_rows
-    sound_hook_end = SOUND_TEST_RENDER_HOOK + len(SOUND_TEST_RENDER_HOOK_ORIGINAL)
-    if bytes(data[SOUND_TEST_RENDER_HOOK:sound_hook_end]) != SOUND_TEST_RENDER_HOOK_ORIGINAL:
+    sound_hook_end = sound_test_render_hook + len(SOUND_TEST_RENDER_HOOK_ORIGINAL)
+    if bytes(data[sound_test_render_hook:sound_hook_end]) != SOUND_TEST_RENDER_HOOK_ORIGINAL:
         raise ValueError("sound-test render hook changed")
-    data[SOUND_TEST_RENDER_HOOK:sound_hook_end] = (
+    data[sound_test_render_hook:sound_hook_end] = (
         bytes.fromhex("4E F9") + SOUND_TEST_RENDER_ROUTINE.to_bytes(4, "big")
     )
 
-    for offset in BYTE_UI_FONT_LOAD_CALLS:
+    for offset in byte_ui_font_load_calls:
         if data[offset : offset + 6] != BYTE_UI_FONT_LOAD_CALL_ORIGINAL:
             raise ValueError(f"byte-font load call changed at 0x{offset:06X}")
         routine = (
             BYTE_UI_PREP_FONT_LOAD_ROUTINE
-            if offset in BYTE_UI_PREP_FONT_LOAD_CALLS
+            if offset in byte_ui_prep_font_load_calls
             else BYTE_UI_FONT_LOAD_ROUTINE
         )
         data[offset : offset + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
@@ -8967,49 +9791,62 @@ def install_byte_ui_extension(
         ):
             raise ValueError("title version text record area is not blank")
         data[record_offset:title_version_record_end] = title_version_record
-    if data[
-        TITLE_CREDIT_FONT_LOAD_HOOK :
-        TITLE_CREDIT_FONT_LOAD_HOOK + len(TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL)
-    ] != TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL:
-        raise ValueError("title credit font-load hook source changed")
-    data[
-        TITLE_CREDIT_FONT_LOAD_HOOK :
-        TITLE_CREDIT_FONT_LOAD_HOOK + len(TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL)
-    ] = (
-        bytes.fromhex("4E B9")
-        + TITLE_CREDIT_FONT_LOAD_ROUTINE.to_bytes(4, "big")
-        + bytes.fromhex("4E 71")
-    )
-    if data[
-        TITLE_COPYRIGHT_RENDER_HOOK :
-        TITLE_COPYRIGHT_RENDER_HOOK + len(TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL)
-    ] != TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL:
-        raise ValueError("title copyright renderer hook source changed")
-    data[
-        TITLE_COPYRIGHT_RENDER_HOOK :
-        TITLE_COPYRIGHT_RENDER_HOOK + len(TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL)
-    ] = (
-        bytes.fromhex("4E F9")
-        + title_credit_renderer_address.to_bytes(4, "big")
-        + bytes.fromhex("4E 71")
-    )
+    if install_title_credit_hooks:
+        title_font_hook = mapped(TITLE_CREDIT_FONT_LOAD_HOOK)
+        title_font_original = expected(
+            TITLE_CREDIT_FONT_LOAD_HOOK, TITLE_CREDIT_FONT_LOAD_HOOK_ORIGINAL
+        )
+        if data[
+            title_font_hook : title_font_hook + len(title_font_original)
+        ] != title_font_original:
+            raise ValueError("title credit font-load hook source changed")
+        data[
+            title_font_hook : title_font_hook + len(title_font_original)
+        ] = (
+            bytes.fromhex("4E B9")
+            + TITLE_CREDIT_FONT_LOAD_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 71")
+        )
+        title_render_hook = mapped(TITLE_COPYRIGHT_RENDER_HOOK)
+        title_render_original = expected(
+            TITLE_COPYRIGHT_RENDER_HOOK, TITLE_COPYRIGHT_RENDER_HOOK_ORIGINAL
+        )
+        if data[
+            title_render_hook : title_render_hook + len(title_render_original)
+        ] != title_render_original:
+            raise ValueError("title copyright renderer hook source changed")
+        data[
+            title_render_hook : title_render_hook + len(title_render_original)
+        ] = (
+            bytes.fromhex("4E F9")
+            + title_credit_renderer_address.to_bytes(4, "big")
+            + bytes.fromhex("4E 71")
+        )
     for offset in BYTE_UI_WORD_RENDER_CALLS:
-        if data[offset : offset + 6] != BYTE_UI_WORD_RENDER_CALL_ORIGINAL:
+        target = mapped(offset)
+        source_bytes = expected(offset, BYTE_UI_WORD_RENDER_CALL_ORIGINAL)
+        if data[target : target + 6] != source_bytes:
             raise ValueError(f"byte word-render call changed at 0x{offset:06X}")
-        data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_WORD_RENDER_ROUTINE.to_bytes(4, "big")
+        data[target : target + 6] = bytes.fromhex("4E B9") + BYTE_UI_WORD_RENDER_ROUTINE.to_bytes(4, "big")
     for offset in BYTE_UI_TILE_RENDER_CALLS:
-        if data[offset : offset + 6] != BYTE_UI_TILE_RENDER_CALL_ORIGINAL:
+        target = mapped(offset)
+        source_bytes = expected(offset, BYTE_UI_TILE_RENDER_CALL_ORIGINAL)
+        if data[target : target + 6] != source_bytes:
             raise ValueError(f"byte tile-render call changed at 0x{offset:06X}")
-        data[offset : offset + 6] = bytes.fromhex("4E B9") + BYTE_UI_TILE_RENDER_ROUTINE.to_bytes(4, "big")
+        data[target : target + 6] = bytes.fromhex("4E B9") + BYTE_UI_TILE_RENDER_ROUTINE.to_bytes(4, "big")
     for offset in BYTE_UI_MAP_INFO_RENDER_CALLS:
-        if data[offset : offset + 6] != BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL:
+        target = mapped(offset)
+        source_bytes = expected(offset, BYTE_UI_MAP_INFO_RENDER_CALL_ORIGINAL)
+        if data[target : target + 6] != source_bytes:
             raise ValueError(f"map-info byte render call changed at 0x{offset:06X}")
-        data[offset : offset + 6] = (
+        data[target : target + 6] = (
             bytes.fromhex("4E B9")
             + BYTE_UI_MAP_INFO_RENDER_ROUTINE_BY_CALL[offset].to_bytes(4, "big")
         )
     for offset in BYTE_UI_DIRECT_MAP_RENDER_CALLS:
-        if data[offset : offset + 6] != BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL:
+        target = mapped(offset)
+        source_bytes = expected(offset, BYTE_UI_DIRECT_MAP_RENDER_CALL_ORIGINAL)
+        if data[target : target + 6] != source_bytes:
             raise ValueError(f"direct-map byte render call changed at 0x{offset:06X}")
         routine = (
             BYTE_UI_ENDING_RESULT_RENDER_ROUTINE
@@ -9020,125 +9857,175 @@ def install_byte_ui_extension(
                 else BYTE_UI_DIRECT_MAP_RENDER_ROUTINE
             )
         )
-        data[offset : offset + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
-    if data[
-        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK :
-        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK + 6
-    ] != BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL:
+        data[target : target + 6] = bytes.fromhex("4E B9") + routine.to_bytes(4, "big")
+    final_bank_hook = mapped(BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK)
+    final_bank_original = expected(
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK,
+        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK_ORIGINAL,
+    )
+    if data[final_bank_hook : final_bank_hook + 6] != final_bank_original:
         raise ValueError("ending-result final bank hook source changed")
-    data[
-        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK :
-        BYTE_UI_ENDING_RESULT_FINAL_BANK_HOOK + 6
-    ] = (
+    data[final_bank_hook : final_bank_hook + 6] = (
         bytes.fromhex("4E B9")
         + BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big")
     )
-    if data[
-        BYTE_UI_FULL_SCROLL_HSCROLL_FILL :
-        BYTE_UI_FULL_SCROLL_HSCROLL_FILL + 4
-    ] != BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL:
+    hscroll_fill = mapped(BYTE_UI_FULL_SCROLL_HSCROLL_FILL)
+    hscroll_original = expected(
+        BYTE_UI_FULL_SCROLL_HSCROLL_FILL,
+        BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL,
+    )
+    if data[hscroll_fill : hscroll_fill + 4] != hscroll_original:
         raise ValueError("full-screen H-scroll fill instruction changed")
-    if data[
-        BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
-    ] != BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL:
+    direct_hook = mapped(BYTE_UI_DIRECT_MAP_RENDER_HOOK)
+    direct_hook_original = expected(
+        BYTE_UI_DIRECT_MAP_RENDER_HOOK, BYTE_UI_DIRECT_MAP_RENDER_HOOK_ORIGINAL
+    )
+    if data[direct_hook : direct_hook + 6] != direct_hook_original:
         raise ValueError("direct-map byte renderer entry changed")
-    data[
-        BYTE_UI_DIRECT_MAP_RENDER_HOOK : BYTE_UI_DIRECT_MAP_RENDER_HOOK + 6
-    ] = (
+    data[direct_hook : direct_hook + 6] = (
         bytes.fromhex("4E F9")
         + BYTE_UI_DYNAMIC_DIRECT_MAP_RENDER_ROUTINE.to_bytes(4, "big")
     )
-    if data[
-        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK :
-        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK + 6
-    ] != BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL:
+    prep_name_hook = mapped(BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK)
+    prep_name_original = expected(
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK,
+        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK_ORIGINAL,
+    )
+    if data[prep_name_hook : prep_name_hook + 6] != prep_name_original:
         raise ValueError("prep selected-name renderer entry changed")
-    data[
-        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK :
-        BYTE_UI_PREP_SELECTED_NAME_RENDER_HOOK + 6
-    ] = (
+    data[prep_name_hook : prep_name_hook + 6] = (
         bytes.fromhex("4E F9")
         + BYTE_UI_PREP_SELECTED_NAME_RENDER_ROUTINE.to_bytes(4, "big")
     )
-    if data[
-        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK :
-        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK + 6
-    ] != BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK_ORIGINAL:
+    prep_panel_hook = mapped(BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK)
+    prep_panel_original = expected(
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK,
+        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK_ORIGINAL,
+    )
+    if data[prep_panel_hook : prep_panel_hook + 6] != prep_panel_original:
         raise ValueError("prep selected-panel renderer entry changed")
-    data[
-        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK :
-        BYTE_UI_PREP_SELECTED_PANEL_RENDER_HOOK + 6
-    ] = (
+    data[prep_panel_hook : prep_panel_hook + 6] = (
         bytes.fromhex("4E F9")
         + BYTE_UI_PREP_SELECTED_PANEL_RENDER_ROUTINE.to_bytes(4, "big")
     )
-    if data[
-        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK :
-        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK + 6
-    ] != BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK_ORIGINAL:
+    prep_hire_hook = mapped(BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK)
+    prep_hire_original = expected(
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK,
+        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK_ORIGINAL,
+    )
+    if data[prep_hire_hook : prep_hire_hook + 6] != prep_hire_original:
         raise ValueError("prep hire-class renderer entry changed")
-    data[
-        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK :
-        BYTE_UI_PREP_HIRE_CLASS_RENDER_HOOK + 6
-    ] = (
+    data[prep_hire_hook : prep_hire_hook + 6] = (
         bytes.fromhex("4E F9")
         + BYTE_UI_PREP_HIRE_CLASS_RENDER_ROUTINE.to_bytes(4, "big")
     )
     for offset in BYTE_UI_PLANE_RENDER_CALLS:
-        if data[offset : offset + 6] != BYTE_UI_PLANE_RENDER_CALL_ORIGINAL:
+        target = mapped(offset)
+        source_bytes = expected(offset, BYTE_UI_PLANE_RENDER_CALL_ORIGINAL)
+        if data[target : target + 6] != source_bytes:
             raise ValueError(f"byte plane-render call changed at 0x{offset:06X}")
-        data[offset : offset + 6] = (
+        data[target : target + 6] = (
             bytes.fromhex("4E B9")
             + BYTE_UI_PLANE_RENDER_ROUTINE.to_bytes(4, "big")
         )
     for offset in BYTE_UI_PANEL_RENDER_HOOKS:
-        hook_end = offset + len(BYTE_UI_PANEL_RENDER_ORIGINAL)
-        if data[offset:hook_end] != BYTE_UI_PANEL_RENDER_ORIGINAL:
+        target = mapped(offset)
+        source_bytes = expected(offset, BYTE_UI_PANEL_RENDER_ORIGINAL)
+        hook_end = target + len(source_bytes)
+        if data[target:hook_end] != source_bytes:
             raise ValueError(f"byte panel-render hook changed at 0x{offset:06X}")
-        data[offset:hook_end] = (
+        data[target:hook_end] = (
             bytes.fromhex("4E B9")
             + BYTE_UI_PANEL_RENDER_ROUTINE.to_bytes(4, "big")
             + bytes.fromhex("4E 71")
         )
-    prep_roster_hook_end = BYTE_UI_PREP_ROSTER_HOOK + len(BYTE_UI_PREP_ROSTER_ORIGINAL)
-    if data[BYTE_UI_PREP_ROSTER_HOOK:prep_roster_hook_end] != BYTE_UI_PREP_ROSTER_ORIGINAL:
+    prep_roster_hook = mapped(BYTE_UI_PREP_ROSTER_HOOK)
+    prep_roster_original = expected(
+        BYTE_UI_PREP_ROSTER_HOOK, BYTE_UI_PREP_ROSTER_ORIGINAL
+    )
+    prep_roster_hook_end = prep_roster_hook + len(prep_roster_original)
+    if data[prep_roster_hook:prep_roster_hook_end] != prep_roster_original:
         raise ValueError("prep commander roster hook changed")
-    data[BYTE_UI_PREP_ROSTER_HOOK:prep_roster_hook_end] = (
+    data[prep_roster_hook:prep_roster_hook_end] = (
         bytes.fromhex("4E B9")
         + BYTE_UI_PREP_ROSTER_ROUTINE.to_bytes(4, "big")
         + bytes.fromhex("4E 71")
     )
 
-    if data[
-        BYTE_UI_ROSTER_RENDER_HOOK : BYTE_UI_ROSTER_RENDER_HOOK + 6
-    ] != BYTE_UI_ROSTER_RENDER_ORIGINAL:
+    roster_hook = mapped(BYTE_UI_ROSTER_RENDER_HOOK)
+    roster_original = expected(
+        BYTE_UI_ROSTER_RENDER_HOOK, BYTE_UI_ROSTER_RENDER_ORIGINAL
+    )
+    if data[roster_hook : roster_hook + 6] != roster_original:
         raise ValueError("prep roster renderer hook changed")
-    data[BYTE_UI_ROSTER_RENDER_HOOK : BYTE_UI_ROSTER_RENDER_HOOK + 6] = (
+    data[roster_hook : roster_hook + 6] = (
         bytes.fromhex("4E B9") + BYTE_UI_ROSTER_RENDER_ROUTINE.to_bytes(4, "big")
     )
-    status_hook_end = BYTE_UI_STATUS_RENDER_HOOK + len(BYTE_UI_STATUS_RENDER_ORIGINAL)
-    if data[BYTE_UI_STATUS_RENDER_HOOK:status_hook_end] != BYTE_UI_STATUS_RENDER_ORIGINAL:
+    status_hook = mapped(BYTE_UI_STATUS_RENDER_HOOK)
+    status_original = expected(
+        BYTE_UI_STATUS_RENDER_HOOK, BYTE_UI_STATUS_RENDER_ORIGINAL
+    )
+    status_hook_end = status_hook + len(status_original)
+    if data[status_hook:status_hook_end] != status_original:
         raise ValueError("commander status renderer hook changed")
-    status_hook = bytes.fromhex("4E B9") + BYTE_UI_STATUS_RENDER_ROUTINE.to_bytes(4, "big")
-    status_hook += bytes.fromhex("4E 71") * ((len(BYTE_UI_STATUS_RENDER_ORIGINAL) - 6) // 2)
-    data[BYTE_UI_STATUS_RENDER_HOOK:status_hook_end] = status_hook
+    status_patch = bytes.fromhex("4E B9") + BYTE_UI_STATUS_RENDER_ROUTINE.to_bytes(4, "big")
+    status_patch += bytes.fromhex("4E 71") * ((len(status_original) - 6) // 2)
+    data[status_hook:status_hook_end] = status_patch
 
 
 def patch_byte_ui_strings(
     data: bytearray,
     title_version_text: str = TITLE_VERSION_TEXT,
+    class_labels: list[str] | tuple[str, ...] | None = None,
+    name_labels: list[str] | tuple[str, ...] | None = None,
+    validate_sources: bool = True,
+    inline_discard_prompt_source: int = INLINE_DISCARD_PROMPT_SOURCE,
+    inline_discard_prompt_render_hook: int = INLINE_DISCARD_PROMPT_RENDER_HOOK,
+    sound_test_source_table: int = SOUND_TEST_SOURCE_TABLE,
+    sound_test_source_sha256: str = SOUND_TEST_SOURCE_SHA256,
+    sound_test_labels: tuple[str, ...] = SOUND_TEST_LABELS,
+    sound_test_render_hook: int = SOUND_TEST_RENDER_HOOK,
+    byte_ui_font_load_calls: tuple[int, ...] = BYTE_UI_FONT_LOAD_CALLS,
+    byte_ui_prep_font_load_calls: frozenset[int] = frozenset(
+        BYTE_UI_PREP_FONT_LOAD_CALLS
+    ),
+    source_offset_map: dict[int, int] | None = None,
+    source_bytes_by_offset: dict[int, bytes] | None = None,
+    byte_ui_string_patches: dict[int, str] | None = None,
+    byte_ui_fixed_string_patches: dict[int, tuple[int, str]] | None = None,
+    byte_ui_word_string_patches: dict[int, tuple[int, str]] | None = None,
+    install_title_credit_hooks: bool = True,
+    title_credit_text_render_routine: int = 0x02D986,
+    title_credit_copyright_record: int | None = 0x0A44F8,
 ) -> dict[str, int]:
     # Keep localized class names tied to the Japanese source table rather than
     # inferred unit appearance or generic cavalry/infantry descriptions.
-    validate_scenario1_class_sources(data)
-    validate_byte_ui_playable_name_sources(data)
-    validate_byte_ui_name_and_class_tables(data)
-    fixed_texts = [text for _, text in BYTE_UI_FIXED_STRING_PATCHES.values()]
-    word_texts = [text for _, text in BYTE_UI_WORD_STRING_PATCHES.values()]
+    if validate_sources:
+        validate_scenario1_class_sources(data)
+        validate_byte_ui_playable_name_sources(data)
+        validate_byte_ui_name_and_class_tables(data)
+    string_patches = (
+        BYTE_UI_STRING_PATCHES
+        if byte_ui_string_patches is None
+        else byte_ui_string_patches
+    )
+    fixed_patches = (
+        BYTE_UI_FIXED_STRING_PATCHES
+        if byte_ui_fixed_string_patches is None
+        else byte_ui_fixed_string_patches
+    )
+    word_patches = (
+        BYTE_UI_WORD_STRING_PATCHES
+        if byte_ui_word_string_patches is None
+        else byte_ui_word_string_patches
+    )
+    offset_map = source_offset_map or {}
+    fixed_texts = [text for _, text in fixed_patches.values()]
+    word_texts = [text for _, text in word_patches.values()]
     chars = [
         char
         for char in collect_chars(
-            *BYTE_UI_STRING_PATCHES.values(),
+            *string_patches.values(),
             *BYTE_UI_SCENARIO1_CLASS_LABELS.values(),
             *fixed_texts,
             *word_texts,
@@ -9194,7 +10081,11 @@ def patch_byte_ui_strings(
         BYTE_UI_FONT_RESOURCE_RELOC_BASE : BYTE_UI_FONT_RESOURCE_RELOC_BASE + len(relocated_resource)
     ] = relocated_resource
     put32(data, resource_table_entry, BYTE_UI_FONT_RESOURCE_RELOC_BASE)
-    local_index_by_char, local_tile_by_index = build_byte_ui_local_mapping(code_by_char)
+    local_index_by_char, local_tile_by_index = build_byte_ui_local_mapping(
+        code_by_char,
+        class_labels=class_labels,
+        name_labels=name_labels,
+    )
     install_byte_ui_extension(
         data,
         font,
@@ -9203,18 +10094,41 @@ def patch_byte_ui_strings(
         local_tile_by_index,
         font_tiles,
         title_version_text,
+        validate_resource_table=validate_sources,
+        inline_discard_prompt_source=inline_discard_prompt_source,
+        inline_discard_prompt_render_hook=inline_discard_prompt_render_hook,
+        sound_test_source_table=sound_test_source_table,
+        sound_test_source_sha256=sound_test_source_sha256,
+        sound_test_labels=sound_test_labels,
+        sound_test_render_hook=sound_test_render_hook,
+        byte_ui_font_load_calls=byte_ui_font_load_calls,
+        byte_ui_prep_font_load_calls=byte_ui_prep_font_load_calls,
+        source_offset_map=source_offset_map,
+        source_bytes_by_offset=source_bytes_by_offset,
+        install_title_credit_hooks=install_title_credit_hooks,
+        title_credit_text_render_routine=(
+            title_credit_text_render_routine
+        ),
+        title_credit_copyright_record=(
+            title_credit_copyright_record
+        ),
     )
 
-    for offset, text in BYTE_UI_STRING_PATCHES.items():
+    for source_offset, text in string_patches.items():
+        offset = offset_map.get(source_offset, source_offset)
         capacity = byte_string_capacity(data, offset)
         values = [ord(char) if ord(char) < 0x80 else code_by_char[char] for char in text]
         write_byte_string(data, offset, values, capacity)
-    for offset, (width, text) in BYTE_UI_FIXED_STRING_PATCHES.items():
+    for source_offset, (width, text) in fixed_patches.items():
+        offset = offset_map.get(source_offset, source_offset)
         values: list[int] = []
         for char in text:
             if char == " ":
                 continue
-            if offset == 0x0A2E63 and char in BYTE_UI_RESULT_LOCAL_CHARS:
+            if (
+                source_offset == 0x0A2E63
+                and char in BYTE_UI_RESULT_LOCAL_CHARS
+            ):
                 values.extend((BYTE_UI_LOCAL_MARKER, local_index_by_char[char]))
             else:
                 values.append(
@@ -9223,7 +10137,8 @@ def patch_byte_ui_strings(
         if len(values) > width:
             raise ValueError(f"byte fixed string at 0x{offset:06X} needs {len(values)} bytes, only {width}")
         data[offset : offset + width] = bytes(values + [0x20] * (width - len(values)))
-    for offset, (width, text) in BYTE_UI_WORD_STRING_PATCHES.items():
+    for source_offset, (width, text) in word_patches.items():
+        offset = offset_map.get(source_offset, source_offset)
         values = [
             0x0020
             if char == " "
@@ -9235,7 +10150,12 @@ def patch_byte_ui_strings(
         values.extend([0x0020] * (width - len(values)))
         for i, value in enumerate(values):
             put16(data, offset + i * 2, value)
-    relocate_byte_ui_name_and_class_tables(data, local_index_by_char)
+    relocate_byte_ui_name_and_class_tables(
+        data,
+        local_index_by_char,
+        class_labels=class_labels,
+        name_labels=name_labels,
+    )
     return code_by_char
 
 
@@ -9527,15 +10447,28 @@ def patch_opening_glyph_probe(data: bytearray) -> None:
         data[offset : offset + GLYPH_BYTES] = blank_template
 
 
-def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    if set(OPENING_TEXT_LIST_PATCHES) != set(
+def patch_opening_text_lists(
+    data: bytearray,
+    glyph_by_char: dict[str, int],
+    *,
+    offset_delta: int = 0,
+    patches: OrderedDict[int, tuple[int, str]] | None = None,
+    overlaps: dict[tuple[int, int], int] | None = None,
+    source_terminator_indices: dict[int, int | None] | None = None,
+) -> None:
+    active_patches = OPENING_TEXT_LIST_PATCHES if patches is None else patches
+    active_overlaps = OPENING_TEXT_LIST_OVERLAPS if overlaps is None else overlaps
+    active_terminators = (
         OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES
-    ):
+        if source_terminator_indices is None
+        else source_terminator_indices
+    )
+    if set(active_patches) != set(active_terminators):
         raise ValueError("opening text source-layout table does not match patches")
 
-    for (earlier, later), overlap in OPENING_TEXT_LIST_OVERLAPS.items():
-        earlier_count, earlier_text = OPENING_TEXT_LIST_PATCHES[earlier]
-        later_count, later_text = OPENING_TEXT_LIST_PATCHES[later]
+    for (earlier, later), overlap in active_overlaps.items():
+        earlier_count, earlier_text = active_patches[earlier]
+        later_count, later_text = active_patches[later]
         if later != earlier + (earlier_count - overlap) * 2:
             raise ValueError("opening text overlap geometry changed")
         if len(earlier_text) != earlier_count or len(later_text) != later_count:
@@ -9545,10 +10478,12 @@ def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> 
 
     # Validate every source boundary before writing because several renderer
     # counts overlap the next record even though an earlier FFFF stops reading.
-    for offset, (renderer_count, _) in OPENING_TEXT_LIST_PATCHES.items():
-        terminator_index = OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES[offset]
+    for offset, (renderer_count, _) in active_patches.items():
+        target_offset = offset + offset_delta
+        terminator_index = active_terminators[offset]
         source_words = [
-            be16(data, offset + index * 2) for index in range(renderer_count)
+            be16(data, target_offset + index * 2)
+            for index in range(renderer_count)
         ]
         if terminator_index is None:
             if 0xFFFF in source_words:
@@ -9561,14 +10496,15 @@ def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> 
                 f"opening text terminator at 0x{offset:06X} exceeds renderer count"
             )
         if 0xFFFF in source_words[:terminator_index] or be16(
-            data, offset + terminator_index * 2
+            data, target_offset + terminator_index * 2
         ) != 0xFFFF:
             raise ValueError(
                 f"opening text source terminator changed at 0x{offset:06X}"
             )
 
-    for offset, (capacity, text) in OPENING_TEXT_LIST_PATCHES.items():
-        terminator_index = OPENING_TEXT_LIST_SOURCE_TERMINATOR_INDICES[offset]
+    for offset, (capacity, text) in active_patches.items():
+        target_offset = offset + offset_delta
+        terminator_index = active_terminators[offset]
         storage_capacity = capacity if terminator_index is None else terminator_index
         values = [OPENING_SPACE_GLYPH if char == " " else glyph_by_char[char] for char in text]
         if len(values) > storage_capacity:
@@ -9578,9 +10514,9 @@ def patch_opening_text_lists(data: bytearray, glyph_by_char: dict[str, int]) -> 
             )
         values.extend([OPENING_SPACE_GLYPH] * (storage_capacity - len(values)))
         for i, value in enumerate(values):
-            put16(data, offset + i * 2, value)
+            put16(data, target_offset + i * 2, value)
         if terminator_index is not None:
-            put16(data, offset + terminator_index * 2, 0xFFFF)
+            put16(data, target_offset + terminator_index * 2, 0xFFFF)
 
 
 def update_md_checksum(data: bytearray) -> int:
@@ -9687,16 +10623,14 @@ def main() -> None:
         else get_rom_version_profile(args.rom_profile)
     )
 
-    data = bytearray(IN_ROM.read_bytes())
+    source_rom = IN_ROM.read_bytes()
+    data = bytearray(source_rom)
     expand_rom(data)
-    patch_join_class_choice_progression(data, IN_ROM.read_bytes())
-    patch_bald_map_sprite(data)
-    patch_shaman_map_sprite(data)
-    patch_loren_map_sprite(data)
-    patch_paired_npc_map_sprites(data)
-    patch_ai_class_map_sprites(data)
-    patch_map_sprite_gray_source_remap(data, IN_ROM.read_bytes())
-    patch_enemy_ordinary_mercenary_cache_reuse(data)
+    patch_profile_user_customizations(
+        data,
+        source_rom,
+        profile_name=str(rom_version_profile["profile"]),
+    )
     install_blank_custom_space(data)
     scenario_texts = load_scenario_texts()
     reviewed_event_rows = load_reviewed_event_translations()
@@ -9893,7 +10827,11 @@ def main() -> None:
         patch_direct_strings(data, glyph_by_char, direct_patches, fixed_patches, prefix_patches)
         patch_scenario1_event_pages(data, glyph_by_char)
         patch_reviewed_event_pages(data, IN_ROM.read_bytes(), glyph_by_char, reviewed_event_rows)
-        patch_scenario18_resident_loss(data, IN_ROM.read_bytes())
+        patch_profile_scenario18_resident_loss(
+            data,
+            source_rom,
+            profile_name=str(rom_version_profile["profile"]),
+        )
         patch_relocated_ending_dialogue_records(
             data, IN_ROM.read_bytes(), glyph_by_char, ending_dialogue_rows
         )

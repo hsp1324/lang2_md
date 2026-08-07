@@ -1,6 +1,8 @@
 import json
+import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from tools import verify_hard_mode_scenario_runtime as scenario_runtime
@@ -21,6 +23,55 @@ class HardModeScenarioRuntimeTests(unittest.TestCase):
                 self.assertFalse(destination.with_suffix(".gst.tmp").exists())
             finally:
                 scenario_runtime.RETAINED_ENTRY_ROOT = original_root
+
+    def test_evidence_prefix_separates_candidate_artifacts(self):
+        calls = []
+        original_argv = sys.argv
+        try:
+            sys.argv = [
+                "verify_hard_mode_scenario_runtime.py",
+                "--scenario",
+                "3",
+                "--scenario",
+                "6",
+                "--evidence-prefix",
+                "hard_fbe2",
+            ]
+            with (
+                mock.patch.object(
+                    scenario_runtime,
+                    "load_results",
+                    return_value={
+                        "schema_version": 1,
+                        "status": "in_progress",
+                        "hard_rom": {},
+                        "scenarios": [],
+                    },
+                ),
+                mock.patch.object(
+                    scenario_runtime,
+                    "verify_scenario",
+                    side_effect=lambda number, **kwargs: calls.append(
+                        (number, kwargs["runtime_name"], kwargs["evidence_tag"])
+                    )
+                    or {
+                        "number": number,
+                        "target_record_count": 1,
+                        "runtime_group_range": [1, 1],
+                    },
+                ),
+                mock.patch.object(scenario_runtime, "save_result"),
+            ):
+                self.assertEqual(scenario_runtime.main(), 0)
+        finally:
+            sys.argv = original_argv
+        self.assertEqual(
+            calls,
+            [
+                (3, "hard-fbe2-s03", "hard_fbe2_s03_entry"),
+                (6, "hard-fbe2-s06", "hard_fbe2_s06_entry"),
+            ],
+        )
 
     def test_matching_player_group_count_finds_retained_scenario_sixteen(self):
         gst = scenario_runtime.runtime_evidence.SCENARIO_SIXTEEN_GST.read_bytes()

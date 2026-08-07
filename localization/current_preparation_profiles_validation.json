@@ -1,0 +1,622 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "candidate_preparation_and_shop_surfaces_only",
+  "dynamic_tile_ids": [
+    "0x07CA",
+    "0x07CB",
+    "0x0795",
+    "0x079C",
+    "0x07EA",
+    "0x07F0",
+    "0x07EC",
+    "0x07ED",
+    "0x079D",
+    "0x07F2",
+    "0x07D2",
+    "0x07D3",
+    "0x07FA",
+    "0x07E5",
+    "0x07EB",
+    "0x07F1"
+  ],
+  "preparation_dynamic_tile_ids": [
+    "0x07CA",
+    "0x07CB",
+    "0x0795",
+    "0x079C",
+    "0x07D0",
+    "0x07F0",
+    "0x07D1",
+    "0x07E1",
+    "0x079D",
+    "0x07E0",
+    "0x07D5",
+    "0x07D6",
+    "0x07D8",
+    "0x07D9",
+    "0x07DA",
+    "0x07DB",
+    "0x0796",
+    "0x07C2",
+    "0x07C4",
+    "0x07C5",
+    "0x07CE",
+    "0x07CF",
+    "0x07D2",
+    "0x07E4",
+    "0x07EB",
+    "0x07ED"
+  ],
+  "profiles": {
+    "normal": {
+      "rom": "tmp/current-preparation-b103-common-normal.md",
+      "rom_sha256": "3a10c9d9b82f5bc5767a11e3f5b3d5c2e1009fdbe5a4c5ecc96699345caf3031",
+      "md_checksum": "50E7",
+      "scenarios": [
+        {
+          "scenario": 1,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 14,
+          "expected_pair_count": 14,
+          "distinct_pre_fixed_detail_count": 6,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s01/current-b103common-full01/evidence.json",
+          "evidence_sha256": "2077268e8fe515113637d0d5635314a78684117835059ce592e385873c870d6f"
+        },
+        {
+          "scenario": 2,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 18,
+          "expected_pair_count": 18,
+          "distinct_pre_fixed_detail_count": 8,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s02/current-b103common-full01/evidence.json",
+          "evidence_sha256": "36706b995a6551b9d756d9337c1f3e08bcfad9374d010f01bd9c14f80c583407"
+        },
+        {
+          "scenario": 3,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 15,
+          "expected_pair_count": 15,
+          "distinct_pre_fixed_detail_count": 5,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s03/current-b103common-full01/evidence.json",
+          "evidence_sha256": "de0c62befa015d5b0cb813aac85d30e99003deeb261e557431d1268561362526"
+        },
+        {
+          "scenario": 4,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 20,
+          "expected_pair_count": 20,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s04/current-b103common-full01/evidence.json",
+          "evidence_sha256": "1737e4876136205147c8707be9c4b838d61f79c125edf0dbe5afeb1829d61f57"
+        },
+        {
+          "scenario": 5,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 19,
+          "expected_pair_count": 19,
+          "distinct_pre_fixed_detail_count": 5,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s05/current-b103common-full01/evidence.json",
+          "evidence_sha256": "a01a69d0bee1e76886ce0b9fe49f10d8924e9d097c7e68cf35d32312c5cea2ae"
+        },
+        {
+          "scenario": 6,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 26,
+          "expected_pair_count": 26,
+          "distinct_pre_fixed_detail_count": 12,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s06/current-b103common-full01/evidence.json",
+          "evidence_sha256": "e430745ced38008ad4b8db579ac4c4326d9176e77616364e3f70adc6b9985008"
+        },
+        {
+          "scenario": 7,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 27,
+          "expected_pair_count": 27,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s07/current-b103common-full01/evidence.json",
+          "evidence_sha256": "4b4d68d50a04ff6b42e6c1404ea94b377bd54fc34f0cbea971fd931f4136885f"
+        },
+        {
+          "scenario": 8,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s08/current-b103common-focus01/evidence.json",
+          "evidence_sha256": "6708cbd41c6ece607181c35a64ce0f6a32fa6d57436ff9e919b1abd3c85e5c62"
+        },
+        {
+          "scenario": 9,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 32,
+          "expected_pair_count": 32,
+          "distinct_pre_fixed_detail_count": 13,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s09/current-b103common-full01/evidence.json",
+          "evidence_sha256": "406a83398ad5cba26af7fdbc0f1a48a06bc1605aa43ed01dd8631afc56ba16e3"
+        },
+        {
+          "scenario": 10,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 17,
+          "expected_pair_count": 17,
+          "distinct_pre_fixed_detail_count": 3,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s10/current-b103common-full01/evidence.json",
+          "evidence_sha256": "6b49f292ef2b276dd3b05a6dfaeee2445773fc174bfc3f1e6889f08723a1ae78"
+        },
+        {
+          "scenario": 11,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 27,
+          "expected_pair_count": 27,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s11/current-b103common-full01/evidence.json",
+          "evidence_sha256": "afc3b9742165e93d2be09f87c21e7e6bdedb979ea05e050ae80afebe6addef28"
+        },
+        {
+          "scenario": 12,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 29,
+          "expected_pair_count": 29,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s12/current-b103common-full01/evidence.json",
+          "evidence_sha256": "df3b6aee612e1e2bbf3684209a0b20b281570dc88d9e4e02099474536af68f89"
+        },
+        {
+          "scenario": 13,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 29,
+          "expected_pair_count": 29,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s13/current-b103common-full01/evidence.json",
+          "evidence_sha256": "4879a9610d368ae5a3df9d4abd3b1844c317ffd45f7fcfbd8176bcf5dd816bfb"
+        },
+        {
+          "scenario": 14,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 29,
+          "expected_pair_count": 29,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s14/current-b103common-full01/evidence.json",
+          "evidence_sha256": "01fbb1d00e6d98f70fec029811ead063a0273157ecc76cfc0c21961e32fc8be5"
+        },
+        {
+          "scenario": 15,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 26,
+          "expected_pair_count": 26,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s15/current-b103common-full01/evidence.json",
+          "evidence_sha256": "7b2166ff87a81a46f2874d8e3ec9a3efce65d82935cc119867e5dec70111b24d"
+        },
+        {
+          "scenario": 16,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s16/current-b103common-focus01/evidence.json",
+          "evidence_sha256": "2fc6a713083146a3cc849164fccdfd71d1a601a525a994a4dc29e7be4444f7a9"
+        },
+        {
+          "scenario": 17,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 30,
+          "expected_pair_count": 30,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s17/current-b103common-full01/evidence.json",
+          "evidence_sha256": "4daaaca734d85b5d2ee967af11562a652945b92fcc0d1e55ca90e519660bdb9a"
+        },
+        {
+          "scenario": 18,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 32,
+          "expected_pair_count": 32,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s18/current-b103common-full01/evidence.json",
+          "evidence_sha256": "bb92fffd234e8f6a1c7c9e02afb206c4f2c3986c5f1ab4a4af1d75c052eb2607"
+        },
+        {
+          "scenario": 19,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s19/current-b103common-full01/evidence.json",
+          "evidence_sha256": "3be19ca7d6bc7a5e82befcd767bd825e4e09eac21a864545d2c370c2c5ff41b1"
+        },
+        {
+          "scenario": 20,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s20/current-b103common-full01/evidence.json",
+          "evidence_sha256": "6adaa6fb8cf9ccfe829a5cc45eaa06c219386f4c55819f7eb380286b5bd012d3"
+        },
+        {
+          "scenario": 21,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s21/current-b103common-full01/evidence.json",
+          "evidence_sha256": "5ecdaceac899373b8e2042ef4252a22c609551c59c10ef3db4dea0281e0118ec"
+        },
+        {
+          "scenario": 22,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 32,
+          "expected_pair_count": 32,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s22/current-b103common-full01/evidence.json",
+          "evidence_sha256": "87aa6c37a4639cad5d034fed2ddbe4021f6087f6bde9c0512f93096a01059f0a"
+        },
+        {
+          "scenario": 23,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s23/current-b103common-full01/evidence.json",
+          "evidence_sha256": "f2258ba48cc23a71cc84ea492ffa9874e03f529846b5818ea38947b5328b20b3"
+        },
+        {
+          "scenario": 24,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s24/current-b103common-focus01/evidence.json",
+          "evidence_sha256": "5d4cbd05a77a0b5a2762e5369718b3054e7bac5886ed5190a0266ed39928bfe2"
+        },
+        {
+          "scenario": 25,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s25/current-b103common-full01/evidence.json",
+          "evidence_sha256": "8188f4c394e47a75630d3498ff7d67440f9aa3e6b48f26860314e3ccea6dbc53"
+        },
+        {
+          "scenario": 26,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 35,
+          "expected_pair_count": 35,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s26/current-b103common-full01/evidence.json",
+          "evidence_sha256": "d79c77b05616d0b04260719e53a1d5994013d8d083ba5e9dc4b0c28d96f09750"
+        },
+        {
+          "scenario": 27,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/normal/s27/current-b103common-full01/evidence.json",
+          "evidence_sha256": "d8c68cb3c56b1052d0107dbfb1690d642c95ea3e1c76a93e321714fc88046cb1"
+        }
+      ],
+      "passed_scenarios": 27,
+      "total_scenarios": 27,
+      "total_pre_post_pairs": 733,
+      "total_distinct_fixed_details": 236
+    },
+    "hard": {
+      "rom": "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.3).md",
+      "rom_sha256": "bc742e5c4c3964af9371feeb1203a9f2417fcea31d58a6dc0df0b1643101cb50",
+      "md_checksum": "5F7B",
+      "scenarios": [
+        {
+          "scenario": 1,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 14,
+          "expected_pair_count": 14,
+          "distinct_pre_fixed_detail_count": 6,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s01/b103parallel-full01/evidence.json",
+          "evidence_sha256": "e48f688adf45fdd835882bffcb177f7193154d77d0339e5df1184798484fd1a0"
+        },
+        {
+          "scenario": 2,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 18,
+          "expected_pair_count": 18,
+          "distinct_pre_fixed_detail_count": 8,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s02/b103parallel-full01/evidence.json",
+          "evidence_sha256": "b7ebfe0a61015b97c9fa0294e16e2feccd8f1bcb4dad5ead35b7abcb6d7b354a"
+        },
+        {
+          "scenario": 3,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 15,
+          "expected_pair_count": 15,
+          "distinct_pre_fixed_detail_count": 5,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s03/b103parallel-recheck01/evidence.json",
+          "evidence_sha256": "c32f2a4a55013d00a588d2cebcbf435cfea6fcfe6ef220e84c2cd37237217f91"
+        },
+        {
+          "scenario": 4,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 20,
+          "expected_pair_count": 20,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s04/b103parallel-full01/evidence.json",
+          "evidence_sha256": "6d1a35200a75a4fa96223bc28d73ddd826824f96b1846432617f8e78534ec608"
+        },
+        {
+          "scenario": 5,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 19,
+          "expected_pair_count": 19,
+          "distinct_pre_fixed_detail_count": 5,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s05/b103parallel-full01/evidence.json",
+          "evidence_sha256": "9a8e9185eacd36d07ce7146851eb7fb4c389e8fb6666b870d6fc77241fb609c8"
+        },
+        {
+          "scenario": 6,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 26,
+          "expected_pair_count": 26,
+          "distinct_pre_fixed_detail_count": 12,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s06/b103parallel-full01/evidence.json",
+          "evidence_sha256": "5c358e613aa72f1ab71be2de994d03c76aa8b5f898de6b0f3ea051d7244bd0e1"
+        },
+        {
+          "scenario": 7,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 27,
+          "expected_pair_count": 27,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s07/b103parallel-full01/evidence.json",
+          "evidence_sha256": "babe3a6878df4b8b3c64d2271203dd04db432fd7a77b2cd305f36d646e80a79b"
+        },
+        {
+          "scenario": 8,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s08/b103parallel-full01/evidence.json",
+          "evidence_sha256": "c476720374c32790d6183029532c972cd92e4316eca7835a3ef1d3014ff38395"
+        },
+        {
+          "scenario": 9,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 32,
+          "expected_pair_count": 32,
+          "distinct_pre_fixed_detail_count": 13,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s09/b103parallel-full01/evidence.json",
+          "evidence_sha256": "8e282a7d1774513daf8d9abfd051238654c08ea529755713a2d4ffea3fa808fc"
+        },
+        {
+          "scenario": 10,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 17,
+          "expected_pair_count": 17,
+          "distinct_pre_fixed_detail_count": 3,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s10/b103parallel-full01/evidence.json",
+          "evidence_sha256": "a607dfd76232c044fb6c10452ea44c96e08e86be19cfea02a0b4a4558adfaf5c"
+        },
+        {
+          "scenario": 11,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 27,
+          "expected_pair_count": 27,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s11/b103parallel-recheck01/evidence.json",
+          "evidence_sha256": "a807b06b58fd026c748a6f2b239de938eef9046a686e0a057680c9ffef23b795"
+        },
+        {
+          "scenario": 12,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 29,
+          "expected_pair_count": 29,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s12/b103parallel-full01/evidence.json",
+          "evidence_sha256": "ef37249d0e6dff434a5e75c1754d317e8d0916a82d4c3ef10a008ab130906f3a"
+        },
+        {
+          "scenario": 13,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 29,
+          "expected_pair_count": 29,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s13/b103parallel-full01/evidence.json",
+          "evidence_sha256": "24536ccd7fe6fd4f38343cf52a5303b5ce97f241add446dd3ecc57f8c51caa66"
+        },
+        {
+          "scenario": 14,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 29,
+          "expected_pair_count": 29,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s14/b103parallel-full01/evidence.json",
+          "evidence_sha256": "030e465b0c61b2c985b59679d4685fc844044e7a1601069882343e810e5959c7"
+        },
+        {
+          "scenario": 15,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 26,
+          "expected_pair_count": 26,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s15/b103parallel-full01/evidence.json",
+          "evidence_sha256": "0ddd9133726df6f674d666c8ba73cc8ea195ece3bae6db95c43129a1d1d463a9"
+        },
+        {
+          "scenario": 16,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s16/b103parallel-full01/evidence.json",
+          "evidence_sha256": "f7d0fec72c7c73dfec6d072f7238ddd810bcf59bfa806376db33c29d6d2a779e"
+        },
+        {
+          "scenario": 17,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 30,
+          "expected_pair_count": 30,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s17/b103parallel-full01/evidence.json",
+          "evidence_sha256": "d92683baa885d93f75e89448f596dea3b0b13cd09a4f797cb15a38071e909c0a"
+        },
+        {
+          "scenario": 18,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 32,
+          "expected_pair_count": 32,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s18/b103parallel-full01/evidence.json",
+          "evidence_sha256": "bd1abd8f4d01306efb457b041b1fe272472932bedccb89d87b65f99df91774b7"
+        },
+        {
+          "scenario": 19,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s19/b103parallel-full01/evidence.json",
+          "evidence_sha256": "438626ccc2293d438dd1a1156d518f801b69a388996daca4e1ca6649947a525f"
+        },
+        {
+          "scenario": 20,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s20/b103parallel-recheck01/evidence.json",
+          "evidence_sha256": "4a444f2d2f64b5fe61a3686fba1e4c5675f6695db5eb377cfa350ca346caa3b7"
+        },
+        {
+          "scenario": 21,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 28,
+          "expected_pair_count": 28,
+          "distinct_pre_fixed_detail_count": 7,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s21/b103parallel-full01/evidence.json",
+          "evidence_sha256": "a1d69d6906a3c1743a7cdb0cfa109266ef9d2bf367afcdc2da4c172c2f448578"
+        },
+        {
+          "scenario": 22,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 32,
+          "expected_pair_count": 32,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s22/b103parallel-recheck01/evidence.json",
+          "evidence_sha256": "5ff04881092c1432b7de5ff5aef6c6680456f1b101e67e987fc43136454b9dff"
+        },
+        {
+          "scenario": 23,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s23/b103parallel-recheck01/evidence.json",
+          "evidence_sha256": "8eb28e330fd571ccf40ca70c17b034a2b70d704cbf31fd70c0562170226fbf48"
+        },
+        {
+          "scenario": 24,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s24/b103parallel-full01/evidence.json",
+          "evidence_sha256": "6fbc10e7f63cc9ae4243bca064670c4fc2b00b241d1e1532ff208df7ee3bfeed"
+        },
+        {
+          "scenario": 25,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 11,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s25/b103parallel-recheck02/evidence.json",
+          "evidence_sha256": "4d781ce3b63d7c010e3be43d358ab7286d9c2ac4aa909aac79f9bdce0d2610fd"
+        },
+        {
+          "scenario": 26,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 35,
+          "expected_pair_count": 35,
+          "distinct_pre_fixed_detail_count": 10,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s26/b103parallel-full01/evidence.json",
+          "evidence_sha256": "d7f37f29af67d27ad687c8d1ae5042712f2aa881d8504e0f82e0bd8b31e89728"
+        },
+        {
+          "scenario": 27,
+          "status": "captured_exact_unreviewed",
+          "actual_pair_count": 34,
+          "expected_pair_count": 34,
+          "distinct_pre_fixed_detail_count": 9,
+          "evidence": "captures/run/preparation_surface_matrix/hard/s27/b103parallel-full01/evidence.json",
+          "evidence_sha256": "036e7480c0d9afb44cefe368f3dd42ce5ac8bb430c72bcebfd518e15a17610e2"
+        }
+      ],
+      "passed_scenarios": 27,
+      "total_scenarios": 27,
+      "total_pre_post_pairs": 733,
+      "total_distinct_fixed_details": 236
+    }
+  },
+  "all_mercenary_probes": [
+    {
+      "profile": "normal",
+      "status": "pass",
+      "mercenary_count": 16,
+      "page_count": 6,
+      "release_rom_modified": false,
+      "ballista_icon_cell_restored": true,
+      "evidence": "captures/run/all_mercenary_hire_probe/normal-current-b103common01/evidence.json",
+      "evidence_sha256": "6c5eaf84484b7a8714db7d47ad4cfd355999f635dc33738131c02bfa2709347c",
+      "page_capture_sha256": [
+        "333cd2ca8928886cf0af35fd7d5979e37a78847d5cee6c421bfca5e397d56549",
+        "d110a92870245c90760168cf39851db0172230c4018cbeb35c643adc084ce608",
+        "d3743705efba07bd25084b922a6256c617da609fe52a23d1040a3123a82d80b6",
+        "d99228e50f28314d757d081569de7acbe9c5ff0bc02dfe0294d899a0395c31a8",
+        "957872fa007f7b2844787643b89580712fcd4f7034ba5fda0f70aa3630686099",
+        "55233a31b541c657ccf0cf4fb85a0c23729c2bc1f26ad9ea276cd71c2c10f5be"
+      ]
+    },
+    {
+      "profile": "hard",
+      "status": "pass",
+      "mercenary_count": 16,
+      "page_count": 6,
+      "release_rom_modified": false,
+      "ballista_icon_cell_restored": true,
+      "evidence": "captures/run/all_mercenary_hire_probe/b103-release01/evidence.json",
+      "evidence_sha256": "587c216ac9206d8ce9a3740a51919ee65c6bb0855c67dff2e92a0d456b2e27e3",
+      "page_capture_sha256": [
+        "333cd2ca8928886cf0af35fd7d5979e37a78847d5cee6c421bfca5e397d56549",
+        "d110a92870245c90760168cf39851db0172230c4018cbeb35c643adc084ce608",
+        "d3743705efba07bd25084b922a6256c617da609fe52a23d1040a3123a82d80b6",
+        "d99228e50f28314d757d081569de7acbe9c5ff0bc02dfe0294d899a0395c31a8",
+        "957872fa007f7b2844787643b89580712fcd4f7034ba5fda0f70aa3630686099",
+        "55233a31b541c657ccf0cf4fb85a0c23729c2bc1f26ad9ea276cd71c2c10f5be"
+      ]
+    }
+  ],
+  "normal_focus_regression": {
+    "affected_first_run_scenarios": [
+      8,
+      16,
+      24
+    ],
+    "cause": "pre-shop right action focus versus post-shop left commander focus",
+    "rom_defect": false,
+    "recheck_status": "pass"
+  },
+  "coverage": [
+    "all allied commander root and offered hire pages",
+    "all arrangement roster pages and minimaps",
+    "all preparation-visible allied/NPC/enemy fixed details",
+    "real item-shop round trip in the same emulator process",
+    "all 16 mercenary names and icons through an isolated synthetic SRAM"
+  ],
+  "limitations": [
+    "full preparation captures are exact before/after but remain visually unreviewed unless separately recorded",
+    "battle movement, gray acted sprites, and result screens are not exercised by this report",
+    "class-change choices require separate live seeds where applicable",
+    "no release ROM or version is changed by this report"
+  ]
+}

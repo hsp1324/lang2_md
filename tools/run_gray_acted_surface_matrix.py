@@ -19,20 +19,71 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools import run_preparation_surface_matrix as matrix
+from tools.run_pike_acted_surface_probe import (
+    commander_group,
+    move_keys,
+    runtime_groups,
+)
 from tools.verify_preparation_surface_evidence import (
     GRAY_TILE_START,
     GRAY_VRAM_BYTES,
     GRAY_VRAM_START,
     expected_gray_payload,
+    expand_gray_source_mask,
     load_gst,
     plane_tile_hits,
     runtime_group_zero,
 )
+from scripts import build_korean_jp_probe as builder
 
 
 DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/gray_acted_surface_matrix"
 DEFAULT_DIRECTIONS = ("down", "right", "left", "up")
 VALID_DIRECTIONS = frozenset(DEFAULT_DIRECTIONS)
+
+
+def expected_commander_gray_payload(
+    rom_data: bytes,
+    commander_id: int,
+    class_id: int,
+) -> tuple[int, int, bytes, str]:
+    custom_sprite_id = next(
+        (
+            sprite_id
+            for candidate_commander, candidate_class, sprite_id in (
+                builder.AI_CLASS_MAP_SPRITE_SPECS
+            )
+            if (candidate_commander, candidate_class)
+            == (commander_id, class_id)
+        ),
+        None,
+    )
+    if custom_sprite_id is None:
+        source_record, source_sprite_id, payload = expected_gray_payload()
+        if (commander_id, class_id) != (1, 1):
+            original = builder.IN_ROM.read_bytes()
+            source_record = builder.commander_sprite_record_offset(
+                original, commander_id, class_id
+            )
+            source_sprite_id = builder.be16(original, source_record + 1)
+            start = 0x0510C0 + source_sprite_id * 0x40
+            payload = expand_gray_source_mask(original[start:start + 0x40])
+        return source_record, source_sprite_id, payload, "stock"
+
+    first_custom_id = min(
+        builder.custom_map_sprite_gray_source_map(builder.IN_ROM.read_bytes())
+    )
+    mask_start = (
+        builder.MAP_SPRITE_GRAY_CUSTOM_MASK_TABLE
+        + (custom_sprite_id - first_custom_id)
+        * builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+    )
+    mask = rom_data[
+        mask_start : mask_start + builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES
+    ]
+    if len(mask) != builder.MAP_SPRITE_GRAY_SOURCE_MASK_BYTES:
+        raise ValueError("custom commander gray mask is truncated")
+    return mask_start, custom_sprite_id, expand_gray_source_mask(mask), "custom"
 
 
 def sha256(path: Path) -> str:
@@ -113,6 +164,10 @@ def run_direction_attempt(
     run_id: str,
     direction: str,
     attempt: int,
+    commander_id: int,
+    commander_class: int,
+    commander_level: int,
+    commander_experience: int,
 ) -> dict[str, object]:
     runtime_name = (
         f"gray-acted-{profile}-s{scenario:02d}-{run_id}-"
@@ -131,12 +186,36 @@ def run_direction_attempt(
             scenario,
             runtime_name,
             output,
+            [
+                "--manual-slot-commander-id", str(commander_id),
+                "--manual-slot-level", str(commander_level),
+                "--manual-slot-experience", str(commander_experience),
+                "--manual-slot-class", f"0x{commander_class:02X}",
+            ],
         )
         recorder.capture("preparation.png")
         enter_battle_command(recorder, rom, output)
+        initial_gst = recorder.save_gst("states/initial_command.gst")
+        groups = runtime_groups(initial_gst)
+        initial_commander = groups[0]["members"][0]
+        target_commander = commander_group(
+            initial_gst, commander_id
+        )["members"][0]
+        if commander_id != initial_commander["commander_id"]:
+            recorder.send(["b"], delay=0.6)
+            recorder.send(
+                move_keys(
+                    (initial_commander["x"], initial_commander["y"]),
+                    (target_commander["x"], target_commander["y"]),
+                ),
+                delay=0.18,
+            )
+            recorder.send(["c"], delay=0.8)
         active = recorder.capture("active_command.png")
         active_gst = recorder.save_gst("states/active_command.gst")
-        before = runtime_group_zero(active_gst)
+        before = commander_group(
+            active_gst, commander_id
+        )["members"][0]
 
         # First C chooses Move, the directional key changes the destination,
         # and the two final confirmations apply the preview and end the action.
@@ -146,31 +225,54 @@ def run_direction_attempt(
         recorder.send(["c"], delay=1.4)
         acted = recorder.capture("acted_gray.png")
         acted_gst = recorder.save_gst("states/acted_gray.gst")
-        after = runtime_group_zero(acted_gst)
+        after = commander_group(
+            acted_gst, commander_id
+        )["members"][0]
 
         state = load_gst(acted_gst)
-        source_record, source_sprite_id, stock_gray = expected_gray_payload()
-        gray_payload = state.vram[
-            GRAY_VRAM_START : GRAY_VRAM_START + GRAY_VRAM_BYTES
-        ]
-        plane_references = [
-            {
-                "tile": f"0x{tile:04X}",
-                "hits": plane_tile_hits(state, tile),
-            }
-            for tile in range(GRAY_TILE_START, GRAY_TILE_START + 4)
+        rom_data = rom.read_bytes()
+        source_record, source_sprite_id, expected_gray, source_kind = (
+            expected_commander_gray_payload(
+                rom_data, commander_id, commander_class
+            )
+        )
+        matching_gray_ranges = []
+        for start in range(0, len(state.vram) - GRAY_VRAM_BYTES + 1, 0x20):
+            if state.vram[start:start + GRAY_VRAM_BYTES] != expected_gray:
+                continue
+            tile_start = start // 0x20
+            references = [
+                {
+                    "tile": f"0x{tile:04X}",
+                    "hits": plane_tile_hits(state, tile),
+                }
+                for tile in range(tile_start, tile_start + 4)
+            ]
+            matching_gray_ranges.append(
+                {
+                    "vram_start": f"0x{start:04X}",
+                    "tile_start": f"0x{tile_start:04X}",
+                    "plane_references": references,
+                    "all_four_tiles_referenced": all(
+                        row["hits"] for row in references
+                    ),
+                }
+            )
+        linked_gray_ranges = [
+            row
+            for row in matching_gray_ranges
+            if row["all_four_tiles_referenced"]
         ]
         coordinate_changed = (before["x"], before["y"]) != (
             after["x"], after["y"]
         )
         passed = (
-            before["commander_id"] == after["commander_id"] == 1
-            and before["class_id"] == after["class_id"] == 1
+            before["commander_id"] == after["commander_id"] == commander_id
+            and before["class_id"] == after["class_id"] == commander_class
             and before["acted_flag"] == 0
             and after["acted_flag"] == 1
             and coordinate_changed
-            and gray_payload == stock_gray
-            and all(row["hits"] for row in plane_references)
+            and bool(linked_gray_ranges)
         )
         return {
             "status": "pass" if passed else "fail",
@@ -188,10 +290,10 @@ def run_direction_attempt(
             "coordinate_changed": coordinate_changed,
             "source_record_offset": f"0x{source_record:06X}",
             "source_silhouette_id": f"0x{source_sprite_id:04X}",
-            "gray_vram_range": "0x9600..0x967F",
-            "gray_vram_sha256": hashlib.sha256(gray_payload).hexdigest(),
-            "matches_stock_fighter_silhouette_expansion": gray_payload == stock_gray,
-            "plane_references": plane_references,
+            "source_kind": source_kind,
+            "expected_gray_sha256": hashlib.sha256(expected_gray).hexdigest(),
+            "matching_gray_ranges": matching_gray_ranges,
+            "linked_gray_ranges": linked_gray_ranges,
             "captures": recorder.captures,
             "actions": recorder.actions,
         }
@@ -224,6 +326,10 @@ def run_matrix(args: argparse.Namespace) -> dict[str, object]:
                 run_id=args.run_id,
                 direction=direction,
                 attempt=attempt,
+                commander_id=args.commander_id,
+                commander_class=args.commander_class,
+                commander_level=args.commander_level,
+                commander_experience=args.commander_experience,
             )
         except Exception as exc:
             matrix.terminate_blastem_processes(display=args.display)
@@ -242,6 +348,8 @@ def run_matrix(args: argparse.Namespace) -> dict[str, object]:
         "status": "pass" if accepted is not None else "fail",
         "profile": args.profile,
         "scenario": args.scenario,
+        "commander_id": args.commander_id,
+        "commander_class_id": f"0x{args.commander_class:02X}",
         "run_id": args.run_id,
         "rom": {
             "path": relative(args.rom),
@@ -254,7 +362,7 @@ def run_matrix(args: argparse.Namespace) -> dict[str, object]:
         "attempts": attempts,
         "acceptance_updated": False,
         "limitations": [
-            "This run covers a real Elwin/Fighter move and gray acted sprite only.",
+            "This run covers one selected commander's real move and gray acted sprite only.",
             "Preparation/shop surfaces and non-Fighter custom silhouettes are separate gates.",
         ],
     }
@@ -275,6 +383,12 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT_ROOT)
     parser.add_argument("--runtime-root", type=Path, default=matrix.DEFAULT_RUNTIME_ROOT)
     parser.add_argument("--run-id", type=matrix.validate_run_id, required=True)
+    parser.add_argument("--commander-id", type=int, default=1)
+    parser.add_argument(
+        "--commander-class", type=lambda value: int(value, 0), default=1
+    )
+    parser.add_argument("--commander-level", type=int, default=1)
+    parser.add_argument("--commander-experience", type=int, default=0)
     parser.add_argument(
         "--directions",
         type=parse_directions,
@@ -288,6 +402,10 @@ def main() -> int:
     for label, path in (("ROM", args.rom), ("seed GST", args.seed_gst)):
         if not path.is_file():
             raise FileNotFoundError(f"{label} does not exist: {path}")
+    if not 1 <= args.commander_id <= matrix.MANUAL_SLOT_COMMANDER_COUNT:
+        parser.error("--commander-id is outside the saved roster")
+    if not 0 <= args.commander_class < len(builder.KOREAN_CLASS_LABELS):
+        parser.error("--commander-class is outside the class table")
     result = run_matrix(args)
     print(
         f"scenario {args.scenario:02d}: {result['status']} "

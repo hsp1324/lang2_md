@@ -335,6 +335,13 @@ def parse_args() -> argparse.Namespace:
         help="capture/GST filename stem; defaults to hard_matrix_sNN",
     )
     parser.add_argument(
+        "--evidence-prefix",
+        help=(
+            "candidate-specific capture/GST prefix; expands to "
+            "PREFIX_sNN_entry and may be used with multiple scenarios"
+        ),
+    )
+    parser.add_argument(
         "--entry-source-gst",
         type=Path,
         help="GST used to recover the saved slot for this scenario entry",
@@ -360,22 +367,40 @@ def main() -> int:
         raise ValueError(
             "--runtime-name and --evidence-tag require exactly one --scenario"
         )
+    if args.evidence_tag and args.evidence_prefix:
+        raise ValueError(
+            "--evidence-tag and --evidence-prefix are mutually exclusive"
+        )
     if args.evidence_tag and (
         "/" in args.evidence_tag or "\\" in args.evidence_tag
     ):
         raise ValueError("--evidence-tag must be a filename stem")
+    if args.evidence_prefix and (
+        "/" in args.evidence_prefix or "\\" in args.evidence_prefix
+    ):
+        raise ValueError("--evidence-prefix must be a filename prefix")
     rom = args.rom.resolve()
     results_path = args.results.resolve()
     results = load_results(results_path, rom)
     for scenario_number in scenarios:
+        evidence_tag = args.evidence_tag
+        runtime_name = args.runtime_name
+        if args.evidence_prefix:
+            evidence_tag = (
+                f"{args.evidence_prefix}_s{scenario_number:02d}_entry"
+            )
+            runtime_name = (
+                f"{args.evidence_prefix.replace('_', '-')}"
+                f"-s{scenario_number:02d}"
+            )
         result = verify_scenario(
             scenario_number,
             rom=rom,
             display=args.virtual_display,
             resume_running=args.resume_running,
             record_existing=args.record_existing,
-            runtime_name=args.runtime_name,
-            evidence_tag=args.evidence_tag,
+            runtime_name=runtime_name,
+            evidence_tag=evidence_tag,
             entry_source_gst=args.entry_source_gst,
         )
         save_result(results_path, results, result)

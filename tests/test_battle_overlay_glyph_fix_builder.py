@@ -37,6 +37,10 @@ class BattleOverlayGlyphFixBuilderTests(unittest.TestCase):
             for index, (before, after) in enumerate(zip(source, output))
             if before != after
         }
+        self.assertEqual(len(overlay_fix.RELOCATIONS), 3)
+        self.assertEqual(overlay_fix.RELOCATIONS[0][0], 4)
+        self.assertEqual(overlay_fix.RELOCATIONS[1][0], 6)
+        self.assertEqual(overlay_fix.RELOCATIONS[2][0], 9)
         self.assertTrue(changed <= allowed)
 
     def test_patch_leaves_preparation_destinations_unchanged(self) -> None:
