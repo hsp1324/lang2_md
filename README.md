@@ -5,7 +5,9 @@
 프로젝트 개발자: **hsp1324**
 
 > 최신 공개 버전은 `v1.3.1`입니다. 완성된 일반판과 하드판은
-> GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.
+> GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.  
+> 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
+> `RetroArch` 사용을 권장합니다.
 
 ## 가장 간단한 다운로드
 
