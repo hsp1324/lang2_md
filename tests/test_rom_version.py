@@ -10,9 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class RomVersionTests(unittest.TestCase):
-    def test_pure_profile_is_translation_only_release_candidate(self):
+    def test_pure_profile_is_translation_only_release(self):
         profile = rom_version.get_profile("pure")
-        self.assertEqual(profile["status"], "release_candidate")
+        self.assertEqual(profile["status"], "released")
         self.assertEqual(profile["release_id"], "ko-original-1.3.3")
         self.assertEqual(profile["translation_version"], "1.3.3")
         self.assertIsNone(profile["balance_version"])
@@ -28,9 +28,9 @@ class RomVersionTests(unittest.TestCase):
         self.assertEqual(profile["base_release"], "jp-original")
         self.assertEqual(profile["save_format"], "lang2-ko-sram-v1")
 
-    def test_normal_profile_is_latest_release_candidate(self):
+    def test_normal_profile_is_latest_release(self):
         profile = rom_version.get_profile("normal")
-        self.assertEqual(profile["status"], "release_candidate")
+        self.assertEqual(profile["status"], "released")
         self.assertEqual(profile["release_id"], "ko-normal-1.3.3")
         self.assertEqual(profile["translation_version"], "1.3.3")
         self.assertIsNone(profile["balance_version"])
@@ -47,9 +47,9 @@ class RomVersionTests(unittest.TestCase):
         self.assertEqual(profile["base_release"], "ko-1.3.2")
         self.assertEqual(profile["save_format"], "lang2-ko-sram-v1")
 
-    def test_hard_profile_is_the_standard_hard_release_candidate(self):
+    def test_hard_profile_is_the_standard_hard_release(self):
         hard = rom_version.get_profile("hard")
-        self.assertEqual(hard["status"], "release_candidate")
+        self.assertEqual(hard["status"], "released")
         self.assertEqual(
             hard["release_id"],
             "ko-hard-1.3.3",

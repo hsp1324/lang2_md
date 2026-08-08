@@ -4,7 +4,7 @@
   "current_profile": "normal",
   "profiles": {
     "pure": {
-      "status": "release_candidate",
+      "status": "released",
       "release_id": "ko-original-1.3.3",
       "translation_version": "1.3.3",
       "balance_version": null,
@@ -12,7 +12,7 @@
       "save_format": "lang2-ko-sram-v1"
     },
     "normal": {
-      "status": "release_candidate",
+      "status": "released",
       "release_id": "ko-normal-1.3.3",
       "translation_version": "1.3.3",
       "balance_version": null,
@@ -20,7 +20,7 @@
       "save_format": "lang2-ko-sram-v1"
     },
     "hard": {
-      "status": "release_candidate",
+      "status": "released",
       "release_id": "ko-hard-1.3.3",
       "translation_version": "1.3.3",
       "balance_version": "1.3.3",

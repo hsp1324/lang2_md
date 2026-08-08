@@ -4,7 +4,7 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.3.2`입니다. 세 가지 완성판은
+> 최신 공개 버전은 `v1.3.3`입니다. 세 가지 완성판은
 > GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.  
 > 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
 > `RetroArch` 사용을 권장합니다.
@@ -13,9 +13,9 @@
 
 원하는 버전은 다음 패처를 받아 일본판 ROM에 적용합니다.
 
-- [Langrisser-II-Korean-Patcher-v1.3.2.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.2/Langrisser-II-Korean-Patcher-v1.3.2.exe)
+- [Langrisser-II-Korean-Patcher-v1.3.3.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.3/Langrisser-II-Korean-Patcher-v1.3.3.exe)
 
-검증값은 [v1.3.2 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.2)에서 확인할 수 있습니다.
+검증값은 [v1.3.3 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.3)에서 확인할 수 있습니다.
 
 ## 세 가지 버전
 
@@ -24,6 +24,12 @@
 - **최신 디자인 하드판**: 최신 사용자 디자인과 한국어화에 적 지휘관·용병 강화 밸런스를 더합니다.
 
 Windows 패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
+
+```text
+Langrisser II (Korean Original v1.3.3).md
+Langrisser II (Korean Normal v1.3.3).md
+Langrisser II (Korean Hard v1.3.3).md
+```
 
 ## macOS에서 패치하기
 
@@ -124,11 +130,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser II (Normal v1.3.2).md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.3).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser II (Normal v1.3.2).srm
+Langrisser II (Korean Normal v1.3.3).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.
