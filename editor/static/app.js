@@ -15,6 +15,10 @@ const commanderSelect = $("#commanderSelect");
 const classSummary = $("#classSummary");
 const classTree = $("#classTree");
 const classInspector = $("#classInspector");
+const commanderStartEditor = $("#commanderStartEditor");
+const classStatsSelect = $("#classStatsSelect");
+const classStatsSummary = $("#classStatsSummary");
+const classStatsEditor = $("#classStatsEditor");
 const testCommanderSelect = $("#testCommanderSelect");
 const testClassSummary = $("#testClassSummary");
 const testClassTree = $("#testClassTree");
@@ -32,6 +36,7 @@ const assetPickerOptions = $("#assetPickerOptions");
 let scenarioModel = null;
 let itemModel = null;
 let classModel = null;
+let classProgressionModel = null;
 let testClassSpriteModel = null;
 let aiClassSpriteModel = null;
 let sampleClassSpriteModel = null;
@@ -344,6 +349,7 @@ function unique(values) {
 function buildClassGraph(commander) {
   const levels = [[], [], [], [], []];
   const edges = [];
+  levels[0].push(commander.starting_class_id);
   commander.transitions.forEach(transition => {
     const sourceLevel = transition.source_tier - 1;
     levels[sourceLevel].push(transition.current_class);
@@ -372,6 +378,37 @@ function buildClassGraph(commander) {
     uniqueEdges.push(edge);
   });
   return {levels: levels.map(unique), edges: uniqueEdges};
+}
+
+function recomputeCommanderTiers(commander) {
+  const byCurrent = new Map(
+    commander.transitions.map(transition => [
+      transition.current_class,
+      transition,
+    ])
+  );
+  const tiers = new Map([[commander.starting_class_id, 1]]);
+  const pending = [commander.starting_class_id];
+  while (pending.length) {
+    const current = pending.shift();
+    const transition = byCurrent.get(current);
+    if (!transition) continue;
+    const nextTier = tiers.get(current) + 1;
+    transition.candidates.forEach(candidate => {
+      if (!byCurrent.has(candidate)) return;
+      if (!tiers.has(candidate) || nextTier < tiers.get(candidate)) {
+        tiers.set(candidate, nextTier);
+        pending.push(candidate);
+      }
+    });
+  }
+  commander.transitions.forEach((transition, index) => {
+    const fallback = index === 0 ? 1 : index <= 3 ? 2 : index <= 8 ? 3 : 4;
+    transition.source_tier = Math.min(
+      4,
+      tiers.get(transition.current_class) || fallback,
+    );
+  });
 }
 
 function isHiddenClass(commander, classId) {
@@ -459,6 +496,31 @@ function hirePickerButton(classId, slot) {
     </button>`;
 }
 
+function renderCommanderStartEditor() {
+  const commander = activeCommander();
+  const classId = commander.starting_class_id;
+  const hasProgression = commander.transitions.some(
+    transition => transition.current_class === classId
+  );
+  commanderStartEditor.innerHTML = `
+    <div>
+      <strong>실제 시작 클래스</strong>
+      <p>새 게임이나 해당 지휘관의 최초 합류 때 사용하는 초기 로스터입니다.</p>
+    </div>
+    ${classPickerButton(
+      classId,
+      "data-starting-class-picker",
+      {commanderId: commander.commander_id}
+    )}
+    <span class="startClassMeta">LV${commander.starting_level} · EXP${
+      commander.starting_experience
+    } · ROM 0x${commander.starting_class_offset.toString(16).toUpperCase()}</span>
+    ${hasProgression ? "" : `
+      <p class="startClassWarning">이 클래스는 현재 전직 경로의 출발 레코드가 없어
+      LV10에 도달해도 다음 클래스 선택지가 열리지 않습니다.</p>`}`;
+  installSpriteFallbacks(commanderStartEditor);
+}
+
 function renderClassInspector() {
   const commander = activeCommander();
   const classId = selectedTreeClassId;
@@ -513,7 +575,11 @@ function renderClassInspector() {
     </div>
     ${transition ? `
       <div class="currentClassEditor">
-        <h3>현재 클래스</h3>
+        <h3>경로 출발 클래스${
+          classId === commander.starting_class_id
+            ? " · 실제 시작 클래스"
+            : ""
+        }</h3>
         ${classPickerButton(
           classId,
           "data-current-class-picker",
@@ -540,6 +606,7 @@ function renderClassInspector() {
 
 function renderClassRoutes() {
   const commander = activeCommander();
+  recomputeCommanderTiers(commander);
   const graph = buildClassGraph(commander);
   if (selectedTreeClassId === null ||
       !graph.levels.some(level => level.includes(selectedTreeClassId))) {
@@ -566,11 +633,114 @@ function renderClassRoutes() {
   installSpriteFallbacks(classTree);
   activeCommanderId = commander.commander_id;
   classSummary.textContent =
-    `${commander.name} · 실제 성장 최대 5단계 · 히든 ${
+    `${commander.name} · 시작 ${classInfo(commander.starting_class_id).ko} · ` +
+    `실제 성장 최대 5단계 · 히든 ${
       (commander.hidden_class_routes || []).length
     }개 · ROM 분기 레코드 10개`;
+  renderCommanderStartEditor();
   renderClassInspector();
   requestAnimationFrame(() => drawClassEdges(graph.edges));
+}
+
+function activeClassProgression() {
+  return classProgressionModel.classes.find(
+    row => row.class_id === Number(classStatsSelect.value)
+  );
+}
+
+function abilityDefinition(abilityId) {
+  return classProgressionModel.abilities.find(
+    row => row.ability_id === Number(abilityId)
+  );
+}
+
+function abilityOptions(selected) {
+  const empty = classProgressionModel.empty_ability_id;
+  return `<option value="${empty}" ${selected === empty ? "selected" : ""}>` +
+    "없음</option>" + classProgressionModel.abilities.map(ability =>
+      `<option value="${ability.ability_id}" ${
+        selected === ability.ability_id ? "selected" : ""
+      }>${hexId(ability.ability_id)} ${escapeHtml(ability.name)} · ${
+        ability.kind === "summon" ? "소환" : "마법"
+      }</option>`
+    ).join("");
+}
+
+function renderClassStatsEditor() {
+  if (!classProgressionModel) return;
+  const row = activeClassProgression();
+  if (!row) return;
+  classStatsSummary.textContent =
+    `${hexId(row.class_id)} ${row.name} · ROM 0x${
+      row.record_offset.toString(16).toUpperCase()
+    }`;
+  classStatsEditor.innerHTML = `
+    <header class="classStatsHeader">
+      <span class="inspectorSprite">${spriteImage(row.class_id)}</span>
+      <div>
+        <h2>${escapeHtml(row.name)}</h2>
+        <p>${hexId(row.class_id)} · ${escapeHtml(row.original_name)}</p>
+      </div>
+    </header>
+    <section class="classStatCard">
+      <h3>클래스 기본값</h3>
+      <div class="classStatInputs">
+        <label>MV
+          <input data-class-stat="movement" type="number" min="0" max="255"
+            value="${row.movement}">
+        </label>
+        <label>용병 수정 AT (A+)
+          <input data-class-stat="soldier_at_correction" type="number"
+            min="0" max="255" value="${row.soldier_at_correction}">
+        </label>
+        <label>용병 수정 DF (D+)
+          <input data-class-stat="soldier_df_correction" type="number"
+            min="0" max="255" value="${row.soldier_df_correction}">
+        </label>
+      </div>
+      <p>같은 클래스 ID를 쓰는 아군·적군·NPC에 공통 적용됩니다.</p>
+    </section>
+    <section class="classStatCard">
+      <h3>LV1~10 성장</h3>
+      <p>선택한 지휘관 클래스만 쓰는 독립 성장표입니다. 일반 레벨업에서는
+        도달한 레벨의 칸이 더해지며 LV1 칸은 원작 표의 시작 기준값입니다.</p>
+      <div class="tableWrap compactTableWrap">
+        <table class="growthTable">
+          <thead><tr><th>도달 LV</th><th>MP</th><th>AT</th><th>DF</th></tr></thead>
+          <tbody>${Array.from({length: 10}, (_, index) => `
+            <tr><th>${index + 1}</th>${["mp", "at", "df"].map(stat => `
+              <td><input data-growth-stat="${stat}" data-growth-level="${index}"
+                type="number" min="0" max="99"
+                value="${row.growth[stat][index]}"></td>`).join("")}
+            </tr>`).join("")}</tbody>
+        </table>
+      </div>
+      <p class="offset">원본 패턴 MP/AT/DF: ${row.growth_codes.map(
+        value => `0x${hexId(value)}`
+      ).join(" / ")}</p>
+    </section>
+    <section class="classStatCard">
+      <h3>레벨업 마법·소환 습득</h3>
+      <p>한 클래스에 최대 4개를 지정합니다. 습득 레벨은 마법 자체의 공통값이라
+        여기서 바꾸면 그 마법을 가진 모든 클래스에 같이 적용됩니다.</p>
+      <div class="abilitySlotGrid">${row.ability_ids.map((abilityId, slot) => {
+        const ability = abilityId === classProgressionModel.empty_ability_id
+          ? null
+          : abilityDefinition(abilityId);
+        return `<div class="abilitySlot">
+          <label>슬롯 ${slot + 1}
+            <select data-ability-slot="${slot}">${abilityOptions(abilityId)}</select>
+          </label>
+          ${ability ? `<label>공통 습득 LV
+            <input data-ability-level="${ability.ability_id}" type="number"
+              min="1" max="10" value="${ability.required_level}">
+          </label>` : ""}
+        </div>`;
+      }).join("")}</div>
+      <p>‘소환’은 소환 명령을 습득시킵니다. 실제 소환물 목록은 장비와 원작의
+        별도 소환 테이블이 결정합니다.</p>
+    </section>`;
+  installSpriteFallbacks(classStatsEditor);
 }
 
 function activeTestCommander() {
@@ -2025,6 +2195,27 @@ function collectClassEdits() {
   // Class tree and hire controls update classModel immediately.
 }
 
+function changeTransitionCurrentClass(commander, transition, classId) {
+  const oldClassId = transition.current_class;
+  const duplicate = commander.transitions.find(
+    entry => entry !== transition && entry.current_class === classId
+  );
+  if (commander.starting_class_id === oldClassId && duplicate) {
+    // Starting at an existing class should use that class's real next-stage
+    // record. Replacing both labels would preserve uniqueness but can create
+    // a self-loop when the chosen class was one of the old tier-two options.
+    commander.starting_class_id = classId;
+    selectedTreeClassId = classId;
+    return;
+  }
+  if (duplicate) duplicate.current_class = oldClassId;
+  transition.current_class = classId;
+  if (commander.starting_class_id === oldClassId) {
+    commander.starting_class_id = classId;
+  }
+  selectedTreeClassId = classId;
+}
+
 function renderPickerOptions() {
   if (!pickerState) return;
   const query = assetPickerSearch.value.trim().toLowerCase();
@@ -2126,12 +2317,14 @@ async function loadAll() {
     const [
       itemsResponse,
       classesResponse,
+      classProgressionResponse,
       testSpritesResponse,
       aiSpritesResponse,
       sampleSpritesResponse,
     ] = await Promise.all([
       fetch(`/api/items?rom=${rom}`),
       fetch(`/api/class-changes?rom=${rom}`),
+      fetch(`/api/class-progression?rom=${rom}`),
       fetch("/test-class-sprites/manifest.json"),
       fetch(
         `/ai-class-sprites/manifest.json?reload=${Date.now()}`,
@@ -2144,11 +2337,15 @@ async function loadAll() {
     ]);
     itemModel = await itemsResponse.json();
     classModel = await classesResponse.json();
+    classProgressionModel = await classProgressionResponse.json();
     testClassSpriteModel = await testSpritesResponse.json();
     aiClassSpriteModel = await aiSpritesResponse.json();
     sampleClassSpriteModel = await sampleSpritesResponse.json();
     if (!itemsResponse.ok) throw new Error(itemModel.error);
     if (!classesResponse.ok) throw new Error(classModel.error);
+    if (!classProgressionResponse.ok) {
+      throw new Error(classProgressionModel.error);
+    }
     if (!testSpritesResponse.ok) {
       throw new Error("테스트 클래스 디자인을 읽지 못했습니다");
     }
@@ -2167,7 +2364,12 @@ async function loadAll() {
     ).join("");
     testCommanderSelect.innerHTML = commanderSelect.innerHTML;
     aiCommanderSelect.innerHTML = commanderSelect.innerHTML;
+    classStatsSelect.innerHTML = classProgressionModel.classes.map(row =>
+      `<option value="${row.class_id}">${hexId(row.class_id)} ` +
+      `${escapeHtml(row.name)}</option>`
+    ).join("");
     renderClassRoutes();
+    renderClassStatsEditor();
     renderTestClassRoutes();
     renderAiClassRoutes();
     renderSampleClasses();
@@ -2195,7 +2397,13 @@ async function buildRom() {
         })),
         items: itemModel.items,
         class_changes: classModel.commanders,
+        commander_starts: classModel.commanders.map(commander => ({
+          commander_id: commander.commander_id,
+          starting_class_id: commander.starting_class_id,
+        })),
         class_hires: classModel.class_hires,
+        class_progressions: classProgressionModel.classes,
+        ability_requirements: classProgressionModel.abilities,
       }),
     });
     const data = await response.json();
@@ -2233,6 +2441,8 @@ document.querySelectorAll(".tab").forEach(tab => {
     });
     if (tab.dataset.tab === "classes") {
       requestAnimationFrame(renderClassRoutes);
+    } else if (tab.dataset.tab === "classStats") {
+      requestAnimationFrame(renderClassStatsEditor);
     } else if (tab.dataset.tab === "testClasses") {
       requestAnimationFrame(renderTestClassRoutes);
     } else if (tab.dataset.tab === "aiClasses") {
@@ -2314,8 +2524,7 @@ classInspector.addEventListener("click", event => {
       palette: 1,
       commanderId: commander.commander_id,
       onSelect: classId => {
-        transition.current_class = classId;
-        selectedTreeClassId = classId;
+        changeTransitionCurrentClass(commander, transition, classId);
         closePicker();
         renderClassRoutes();
       },
@@ -2353,6 +2562,47 @@ classInspector.addEventListener("click", event => {
   });
 });
 
+commanderStartEditor.addEventListener("click", event => {
+  const button = event.target.closest("[data-starting-class-picker]");
+  if (!button) return;
+  const commander = activeCommander();
+  openPicker(button, {
+    allowedIds: classModel.classes.map(row => row.id),
+    allowEmpty: false,
+    palette: 1,
+    commanderId: commander.commander_id,
+    onSelect: classId => {
+      commander.starting_class_id = classId;
+      selectedTreeClassId = classId;
+      closePicker();
+      renderClassRoutes();
+    },
+  });
+});
+
+classStatsEditor.addEventListener("input", event => {
+  const row = activeClassProgression();
+  if (!row) return;
+  if (event.target.matches("[data-class-stat]")) {
+    row[event.target.dataset.classStat] = Number(event.target.value);
+  } else if (event.target.matches("[data-growth-stat]")) {
+    row.growth[event.target.dataset.growthStat][
+      Number(event.target.dataset.growthLevel)
+    ] = Number(event.target.value);
+  } else if (event.target.matches("[data-ability-level]")) {
+    abilityDefinition(Number(event.target.dataset.abilityLevel)).required_level =
+      Number(event.target.value);
+  }
+});
+
+classStatsEditor.addEventListener("change", event => {
+  if (!event.target.matches("[data-ability-slot]")) return;
+  const row = activeClassProgression();
+  row.ability_ids[Number(event.target.dataset.abilitySlot)] =
+    Number(event.target.value);
+  renderClassStatsEditor();
+});
+
 assetPickerSearch.addEventListener("input", renderPickerOptions);
 assetPickerOptions.addEventListener("click", event => {
   const option = event.target.closest("[data-picker-value]");
@@ -2365,7 +2615,8 @@ document.addEventListener("pointerdown", event => {
       !assetPicker.contains(event.target) &&
       !event.target.closest(
         "[data-class-picker], [data-current-class-picker], " +
-          "[data-next-class-picker], [data-merc-picker], [data-hire-picker]"
+          "[data-next-class-picker], [data-merc-picker], [data-hire-picker], " +
+          "[data-starting-class-picker]"
       )) {
     closePicker();
   }
@@ -2413,5 +2664,6 @@ aiCommanderSelect.addEventListener("change", () => {
   selectedAiClassId = null;
   renderAiClassRoutes();
 });
+classStatsSelect.addEventListener("change", renderClassStatsEditor);
 buildButton.addEventListener("click", buildRom);
 loadAll();

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>랑그릿사 II 게임 데이터 편집기</title>
-  <link rel="stylesheet" href="/styles.css?v=mobile-class-picker-v1">
+  <link rel="stylesheet" href="/styles.css?v=class-progression-v1">
 </head>
 <body>
   <header class="topbar">
@@ -29,6 +29,7 @@
       <button class="tab active" type="button" data-tab="scenario">시나리오</button>
       <button class="tab" type="button" data-tab="items">아이템</button>
       <button class="tab" type="button" data-tab="classes">클래스 체인지</button>
+      <button class="tab" type="button" data-tab="classStats">클래스 수정</button>
       <button class="tab" type="button" data-tab="aiClasses">New 클래스</button>
       <button class="tab" type="button" data-tab="sampleClasses">샘플 클래스</button>
     </nav>
@@ -95,6 +96,7 @@
         </label>
         <span id="classSummary" class="summary"></span>
       </div>
+      <div id="commanderStartEditor" class="commanderStartEditor"></div>
       <div class="classWorkspace">
         <div class="classTreeWrap" aria-label="클래스 체인지 트리">
           <div class="tierLabels">
@@ -109,6 +111,16 @@
           <h2>클래스를 선택하세요</h2>
         </aside>
       </div>
+    </section>
+
+    <section id="classStatsPanel" class="tabPanel">
+      <div class="controls">
+        <label>지휘관 클래스
+          <select id="classStatsSelect"></select>
+        </label>
+        <span id="classStatsSummary" class="summary"></span>
+      </div>
+      <div id="classStatsEditor" class="classStatsEditor"></div>
     </section>
 
     <section id="testClassesPanel" class="tabPanel">
@@ -172,6 +184,6 @@
     <input id="assetPickerSearch" type="search" placeholder="ID 또는 이름 검색">
     <div id="assetPickerOptions" class="assetPickerOptions"></div>
   </div>
-  <script src="/app.js?v=mobile-class-picker-v2"></script>
+  <script src="/app.js?v=class-progression-v1"></script>
 </body>
 </html>

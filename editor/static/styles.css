@@ -193,6 +193,90 @@ td select { width: 138px; }
   min-height: calc(100vh - 235px);
   border: 1px solid #424741;
 }
+.commanderStartEditor {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 190px auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 11px 13px;
+  border: 1px solid #49634f;
+  background: #202820;
+}
+.commanderStartEditor strong { color: #dcebdd; }
+.commanderStartEditor p {
+  margin: 4px 0 0;
+  color: #9daa9b;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.commanderStartEditor .classChoice { width: 190px; }
+.startClassMeta {
+  color: #a9b6a6;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+}
+.commanderStartEditor .startClassWarning {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #e0b86e;
+}
+.classStatsEditor {
+  display: grid;
+  grid-template-columns: minmax(260px, .7fr) minmax(360px, 1fr) minmax(380px, 1.15fr);
+  gap: 12px;
+  align-items: start;
+}
+.classStatsHeader {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid #424b43;
+  background: #202420;
+}
+.classStatsHeader h2 { margin: 0; font-size: 18px; }
+.classStatsHeader p {
+  margin: 4px 0 0;
+  color: #9ca79a;
+  font-size: 11px;
+}
+.classStatCard {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #424b43;
+  background: #202420;
+}
+.classStatCard h3 { margin: 0 0 10px; font-size: 15px; }
+.classStatCard > p {
+  margin: 8px 0 0;
+  color: #9fa99d;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.classStatInputs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.classStatInputs input,
+.abilitySlot input { width: 100%; padding: 0 8px; }
+.compactTableWrap { max-height: 520px; }
+.growthTable { min-width: 300px; }
+.growthTable th,
+.growthTable td { text-align: center; }
+.growthTable input { width: 64px; text-align: center; }
+.abilitySlotGrid { display: grid; gap: 8px; }
+.abilitySlot {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 100px;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid #3c453d;
+  background: #282d28;
+}
+.abilitySlot select { width: 100%; }
 .aiClassWorkspace {
   grid-template-columns: minmax(0, 1fr);
   min-height: 0;
@@ -942,6 +1026,13 @@ td select { width: 138px; }
     display: block;
     min-height: 0;
   }
+  .commanderStartEditor {
+    grid-template-columns: 1fr;
+  }
+  .commanderStartEditor .classChoice { width: 100%; }
+  .classStatsEditor { grid-template-columns: 1fr; }
+  .classStatInputs { grid-template-columns: 1fr; }
+  .abilitySlot { grid-template-columns: 1fr; }
   .classTreeWrap {
     max-height: 58vh;
     border-right: 0;

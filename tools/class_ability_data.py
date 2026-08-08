@@ -62,7 +62,7 @@ def read_ability_definitions(
                 f"ability {ability_id} mask changed: "
                 f"0x{runtime_mask:08X} != 0x{expected_mask:08X}"
             )
-        if not 1 <= required_level <= 9:
+        if not 1 <= required_level <= 10:
             raise ValueError(
                 f"ability {ability_id} has invalid requirement "
                 f"{required_level}"
@@ -109,8 +109,8 @@ def learned_runtime_mask(
     class_id: int,
     level: int,
 ) -> int:
-    if not 1 <= level <= 9:
-        raise ValueError("level must be 1..9")
+    if not 1 <= level <= 10:
+        raise ValueError("level must be 1..10")
     definitions = read_ability_definitions(source)
     result = 0
     for ability_id in read_class_ability_unlocks(source, class_id).ability_ids:

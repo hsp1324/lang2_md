@@ -15,9 +15,18 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from editor.model import class_change_editor_model, item_editor_model
+from editor.model import (
+    class_change_editor_model,
+    class_progression_editor_model,
+    item_editor_model,
+)
 from tools.class_change_data import patch_class_change_chains
 from tools.class_hire_data import patch_class_hire_unlocks
+from tools.class_progression_data import (
+    patch_ability_requirements,
+    patch_class_progressions,
+    patch_commander_starting_classes,
+)
 from tools.item_data import patch_items
 from tools.scenario_data import (
     SCENARIO_COUNT,
@@ -328,6 +337,19 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json(result)
             except (KeyError, OSError, ValueError) as exc:
                 return self.send_json({"error": str(exc)}, 400)
+        if parsed.path == "/api/class-progression":
+            try:
+                rom_key = parse_qs(parsed.query).get("rom", ["korean"])[0]
+                rom_path = ROM_CHOICES[rom_key]
+                result = class_progression_editor_model(
+                    rom_path.read_bytes(),
+                    REFERENCE_ROM.read_bytes(),
+                )
+                result["rom"] = rom_key
+                result["rom_path"] = str(rom_path.relative_to(ROOT))
+                return self.send_json(result)
+            except (KeyError, OSError, ValueError) as exc:
+                return self.send_json({"error": str(exc)}, 400)
         if parsed.path.startswith("/api/scenarios/"):
             try:
                 number = int(parsed.path.rsplit("/", 1)[1])
@@ -629,13 +651,28 @@ class Handler(SimpleHTTPRequestHandler):
                 patch_items(data, request["items"])
             if "class_changes" in request:
                 patch_class_change_chains(data, request["class_changes"])
+            if "commander_starts" in request:
+                patch_commander_starting_classes(
+                    data,
+                    request["commander_starts"],
+                )
             if "class_hires" in request:
                 patch_class_hire_unlocks(data, request["class_hires"])
+            if "class_progressions" in request:
+                patch_class_progressions(data, request["class_progressions"])
+            if "ability_requirements" in request:
+                patch_ability_requirements(
+                    data,
+                    request["ability_requirements"],
+                )
             if (
                 not scenarios
                 and "items" not in request
                 and "class_changes" not in request
                 and "class_hires" not in request
+                and "commander_starts" not in request
+                and "class_progressions" not in request
+                and "ability_requirements" not in request
             ):
                 raise ValueError("build request contains no editable data")
             checksum = update_checksum(data)
