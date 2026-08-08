@@ -23,12 +23,6 @@ class EnemyOrdinaryMercenaryCacheReuseTests(unittest.TestCase):
         cls.prep_restore = (
             builder._build_preparation_mercenary_cache_restore_routine()
         )
-        cls.shop_finalizer = (
-            builder._build_preparation_mercenary_cache_restore_shop_finalizer()
-        )
-        cls.shop_completion = (
-            builder._build_preparation_mercenary_cache_restore_shop_completion()
-        )
         cls.direct_restore = (
             builder._build_preparation_mercenary_cache_direct_restore_routine()
         )
@@ -164,57 +158,16 @@ class EnemyOrdinaryMercenaryCacheReuseTests(unittest.TestCase):
         )
 
     def test_shop_return_rebuilds_static_icons_and_all_unit_caches(self) -> None:
-        hook = builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK
-        original = builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL
+        # This shared state-machine step is also used by the opening and title.
+        # It must stay stock or preparation graphics overwrite both title
+        # backgrounds, including the Cho Aniki cheat variant.
+        hook = builder.BYTE_UI_SHARED_TITLE_GRAPHICS_HOOK
+        original = builder.BYTE_UI_SHARED_TITLE_GRAPHICS_ORIGINAL
         self.assertEqual(self.original[hook:hook + len(original)], original)
-        self.assertEqual(
-            self.patched[hook:hook + len(original)],
-            bytes.fromhex("4E B9")
-            + builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER.to_bytes(
-                4, "big"
-            )
-            + bytes.fromhex("4E 71"),
-        )
-        finalizer = builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER
-        self.assertEqual(
-            self.patched[finalizer:finalizer + len(self.shop_finalizer)],
-            self.shop_finalizer,
-        )
-        self.assertTrue(
-            self.shop_finalizer.startswith(bytes.fromhex("48 E7 FF FE"))
-        )
-        self.assertTrue(
-            self.shop_finalizer.endswith(bytes.fromhex("4C DF 7F FF 4E 75"))
-        )
-        for target in (
-            builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_1,
-            builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_2,
-            builder.BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE,
-        ):
-            self.assertIn(
-                bytes.fromhex("4E B9") + target.to_bytes(4, "big"),
-                self.shop_finalizer,
-            )
-        self.assertIn(
-            bytes.fromhex("26 BC 54 00 00 01"),
-            self.shop_finalizer,
-        )
-        self.assertLess(
-            self.shop_finalizer.index(bytes.fromhex("4E B9 00 00 8A 6C")),
-            self.shop_finalizer.index(
-                bytes.fromhex("4E B9")
-                + builder.BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(
-                    4, "big"
-                )
-            ),
-        )
+        self.assertEqual(self.patched[hook:hook + len(original)], original)
 
-        completion_hook = (
-            builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK
-        )
-        completion_original = (
-            builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL
-        )
+        completion_hook = builder.BYTE_UI_SHARED_TITLE_COMPLETION_HOOK
+        completion_original = builder.BYTE_UI_SHARED_TITLE_COMPLETION_ORIGINAL
         self.assertEqual(
             self.original[
                 completion_hook:completion_hook + len(completion_original)
@@ -225,82 +178,7 @@ class EnemyOrdinaryMercenaryCacheReuseTests(unittest.TestCase):
             self.patched[
                 completion_hook:completion_hook + len(completion_original)
             ],
-            bytes.fromhex("4E B9")
-            + builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION.to_bytes(
-                4, "big"
-            )
-            + bytes.fromhex("4E 71 4E 71"),
-        )
-        completion = builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION
-        self.assertEqual(
-            self.patched[completion:completion + len(self.shop_completion)],
-            self.shop_completion,
-        )
-        self.assertTrue(self.shop_completion.startswith(bytes.fromhex("48 E7 FF FE")))
-        self.assertTrue(
-            self.shop_completion.endswith(completion_original + bytes.fromhex("4E 75"))
-        )
-        self.assertNotIn(
-            bytes.fromhex("0C 39 00 FE FF FF A6 DA"),
-            self.shop_completion,
-        )
-        self.assertNotIn(
-            bytes.fromhex("0C 39 00 FD FF FF A6 DA"),
-            self.shop_completion,
-        )
-        stable_cache_rebuild = (
-            bytes.fromhex("4E B9")
-            + builder.BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(
-                4, "big"
-            )
-        )
-        self.assertIn(stable_cache_rebuild, self.shop_completion)
-        direct_icon_copy = (
-            bytes.fromhex(
-                "47 F9 00 C0 00 04 49 F9 00 C0 00 00 "
-                "36 BC 8F 02 26 BC 54 00 00 01 41 F9"
-            )
-            + (builder.BYTE_UI_PREP_STATIC_ICON_RAW + 0x1400).to_bytes(
-                4, "big"
-            )
-            + bytes.fromhex("30 3C 05 FF 38 98 51 C8")
-        )
-        self.assertIn(direct_icon_copy, self.shop_completion)
-        self.assertEqual(
-            self.shop_completion.count(
-                bytes.fromhex("4E B9")
-                + builder.BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE.to_bytes(
-                    4, "big"
-                )
-            ),
-            1,
-        )
-        clear_dynamic = (
-            bytes.fromhex("41 F9")
-            + builder.ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
-            + bytes((0x70, builder.ENEMY_DYNAMIC_MERCENARY_COUNT - 1))
-        )
-        self.assertIn(clear_dynamic, self.shop_completion)
-        rebuild = (
-            bytes.fromhex("4E B9")
-            + builder.BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE.to_bytes(4, "big")
-        )
-        resource = stable_cache_rebuild
-        self.assertLess(
-            self.shop_completion.index(clear_dynamic),
-            self.shop_completion.index(rebuild),
-        )
-        self.assertLess(
-            self.shop_completion.index(rebuild),
-            self.shop_completion.index(resource),
-        )
-        self.assertLess(
-            self.shop_completion.index(resource),
-            self.shop_completion.index(direct_icon_copy),
-        )
-        self.assertLessEqual(
-            completion + len(self.shop_completion),
-            builder.BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION_LIMIT,
+            completion_original,
         )
         direct = builder.BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE
         self.assertEqual(

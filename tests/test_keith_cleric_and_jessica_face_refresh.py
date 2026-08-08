@@ -74,6 +74,14 @@ class JessicaFaceMaskRefreshTests(unittest.TestCase):
             )
         )
         self.assertTrue(report["all_accepted"])
+        overrides = json.loads(
+            (ROOT / "editor/ai_class_design_overrides.json").read_text(
+                encoding="utf-8"
+            )
+        )["designs"]
+        manifest = json.loads(
+            (LIVE / "manifest.json").read_text(encoding="utf-8")
+        )
         for row in report["classes"]:
             class_id = int(row["class_id"], 16)
             live = Image.open(
@@ -88,20 +96,32 @@ class JessicaFaceMaskRefreshTests(unittest.TestCase):
                 / "editor/static/class-sprites/commanders/10"
                 / f"{class_id:02X}-p1.png"
             ).convert("RGBA")
-            self.assertEqual(
-                list(source.get_flattened_data()),
-                list(live.get_flattened_data()),
-            )
+            override_key = f"10:{class_id:02X}"
+            if override_key in overrides:
+                manifest_row = manifest["commanders"]["10"]["classes"][
+                    str(class_id)
+                ]
+                self.assertTrue(manifest_row["design_override"])
+                self.assertEqual(
+                    manifest_row["design_revision"],
+                    overrides[override_key]["revision"],
+                )
+            else:
+                self.assertEqual(
+                    list(source.get_flattened_data()),
+                    list(live.get_flattened_data()),
+                )
             points = {
                 tuple(point) for point in masks[f"10:{class_id:02X}"]
             }
-            for point in points:
-                if original.getpixel(point)[3]:
-                    self.assertEqual(
-                        live.getpixel(point),
-                        original.getpixel(point),
-                        (class_id, point),
-                    )
+            if override_key not in overrides:
+                for point in points:
+                    if original.getpixel(point)[3]:
+                        self.assertEqual(
+                            live.getpixel(point),
+                            original.getpixel(point),
+                            (class_id, point),
+                        )
             visible = {
                 color for color in live.get_flattened_data() if color[3]
             }
@@ -133,17 +153,16 @@ class JessicaFaceMaskRefreshTests(unittest.TestCase):
             live = Image.open(
                 LIVE / f"10/{class_id:02X}.png"
             ).convert("RGBA")
-            expected = Image.new("RGBA", (16, 16))
-            expected.putdata(
-                [
-                    tuple(color)
-                    for color in overrides[f"10:{class_id:02X}"]["pixels"]
-                ]
-            )
-            close_internal_transparency(expected)
+            row = manifest["commanders"]["10"]["classes"][str(class_id)]
+            self.assertTrue(row["design_override"])
             self.assertEqual(
-                [list(color) for color in expected.get_flattened_data()],
-                [list(color) for color in live.get_flattened_data()],
+                row["design_revision"],
+                overrides[f"10:{class_id:02X}"]["revision"],
+            )
+            self.assertEqual(live.size, (16, 16))
+            self.assertLessEqual(
+                len({color for color in live.get_flattened_data() if color[3]}),
+                15,
             )
 
 

@@ -19,6 +19,10 @@ from tools.run_blastem_sequence import (
     MANUAL_SLOT_COMMANDER_ROSTER_OFFSET,
     MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET,
     MANUAL_SLOT_HERO_NAME_OFFSET,
+    MANUAL_SLOT_ITEM_INVENTORY_COUNT,
+    MANUAL_SLOT_ITEM_INVENTORY_OFFSET,
+    MANUAL_SLOT_ITEM_INVENTORY_RECORD_SIZE,
+    MANUAL_SLOT_ITEM_UNEQUIPPED_OWNER,
     MANUAL_SLOT_WORK_RAM_SEGMENTS,
     SEQUENCES,
     SRAM_FORMAT_MARKER,
@@ -28,6 +32,8 @@ from tools.run_blastem_sequence import (
     manual_slot_scenario_number,
     migrate_scenario_select_default_name,
     patch_manual_slot_commander_progress,
+    patch_manual_slot_items,
+    parse_manual_slot_items,
     recover_manual_slot_from_gst,
     running_blastem_pids,
     scenario_select_entry_keys,
@@ -412,6 +418,73 @@ class BlastEmSramMigrationTests(unittest.TestCase):
                     path, 1, 9, 16, expected_class=1
                 )
             self.assertEqual(path.read_bytes(), data)
+
+    def test_patches_runtime_item_inventory_and_updates_checksum(self):
+        data, base = self.make_sram()
+        data[base : base + 2] = (10).to_bytes(2, "big")
+        start = base + MANUAL_SLOT_ITEM_INVENTORY_OFFSET
+        original_items = (13, 20, 23, 12, 22, 17, 15, 19)
+        end = start + (
+            MANUAL_SLOT_ITEM_INVENTORY_COUNT
+            * MANUAL_SLOT_ITEM_INVENTORY_RECORD_SIZE
+        )
+        inventory = bytearray()
+        for item_id in original_items:
+            inventory.extend((item_id, MANUAL_SLOT_ITEM_UNEQUIPPED_OWNER))
+        inventory.extend(
+            b"\xFF\xFF"
+            * (MANUAL_SLOT_ITEM_INVENTORY_COUNT - len(original_items))
+        )
+        data[start:end] = inventory
+        data[
+            SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+        ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            previous = patch_manual_slot_items(
+                path,
+                (26, 27, 28, 29, 30),
+            )
+            patched = path.read_bytes()
+
+        self.assertEqual(previous, original_items)
+        self.assertEqual(
+            patched[start:end],
+            bytes(
+                value
+                for item_id in (26, 27, 28, 29, 30)
+                for value in (item_id, MANUAL_SLOT_ITEM_UNEQUIPPED_OWNER)
+            )
+            + b"\xFF\xFF" * (MANUAL_SLOT_ITEM_INVENTORY_COUNT - 5),
+        )
+        self.assertEqual(
+            int.from_bytes(patched[checksum_offset : checksum_offset + 2], "big"),
+            manual_slot_checksum(patched, base),
+        )
+
+    def test_runtime_item_patch_rejects_invalid_or_repeated_ids(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(bytes(0x2000))
+            for item_ids in ((0,), (38,), (26, 26), tuple(range(1, 42))):
+                with self.subTest(item_ids=item_ids):
+                    with self.assertRaises(ValueError):
+                        patch_manual_slot_items(path, item_ids)
+
+    def test_parses_runtime_item_id_list(self):
+        self.assertEqual(
+            parse_manual_slot_items("0x1A,27, 28,29,30"),
+            [26, 27, 28, 29, 30],
+        )
 
 
 class BlastEmScenarioSelectTests(unittest.TestCase):

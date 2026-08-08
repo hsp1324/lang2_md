@@ -13,6 +13,14 @@ class AiClassMapSpriteTests(unittest.TestCase):
         cls.expanded = bytearray(cls.original)
         builder.expand_rom(cls.expanded)
         cls.patched = bytearray(cls.expanded)
+        # The production build repurposes Keith/Lester's obsolete Fighter
+        # map records for the new Hawk Lord and Croco Lord classes before it
+        # attaches the reviewed commander-specific sprite set.
+        builder.patch_join_class_choice_class_data(
+            cls.patched,
+            cls.original,
+        )
+        cls.class_data_patched = bytearray(cls.patched)
         builder.patch_ai_class_map_sprites(cls.patched)
         cls.manifest = json.loads(
             (
@@ -71,6 +79,14 @@ class AiClassMapSpriteTests(unittest.TestCase):
                 builder.AI_CLASS_MAP_SPRITE_SPECS
             )
         }
+        repurposed = {
+            (7, 0x01): builder.JOIN_CLASS_CHOICE_HAWK_LORD,
+            (9, 0x01): builder.JOIN_CLASS_CHOICE_CROCO_LORD,
+        }
+        repurposed_design = {
+            (7, 0x01): 0x0F,
+            (9, 0x01): 0x10,
+        }
         for commander_id in range(1, 11):
             pointer = builder.be32(
                 self.original,
@@ -80,8 +96,34 @@ class AiClassMapSpriteTests(unittest.TestCase):
             while self.original[pointer] != 0xFF:
                 class_id = self.original[pointer]
                 before = builder.be16(self.original, pointer + 1)
+                after_class_id = self.patched[pointer]
                 after = builder.be16(self.patched, pointer + 1)
-                expected = target.get((commander_id, class_id), before)
+                expected_class_id = repurposed.get(
+                    (commander_id, class_id),
+                    class_id,
+                )
+                expected = target.get(
+                    (commander_id, expected_class_id),
+                    before,
+                )
+                design_class_id = repurposed_design.get(
+                    (commander_id, class_id)
+                )
+                if design_class_id is not None:
+                    design_record = builder.commander_sprite_record_offset(
+                        self.class_data_patched,
+                        commander_id,
+                        design_class_id,
+                    )
+                    expected = builder.be16(
+                        self.class_data_patched,
+                        design_record + 1,
+                    )
+                self.assertEqual(
+                    after_class_id,
+                    expected_class_id,
+                    (commander_id, class_id),
+                )
                 self.assertEqual(
                     after,
                     expected,

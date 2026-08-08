@@ -13,17 +13,17 @@ class RomVersionTests(unittest.TestCase):
     def test_pure_profile_is_translation_only_release_candidate(self):
         profile = rom_version.get_profile("pure")
         self.assertEqual(profile["status"], "release_candidate")
-        self.assertEqual(profile["release_id"], "ko-pure-1.3.0")
-        self.assertEqual(profile["translation_version"], "1.3.0")
+        self.assertEqual(profile["release_id"], "ko-pure-1.3.2")
+        self.assertEqual(profile["translation_version"], "1.3.2")
         self.assertIsNone(profile["balance_version"])
-        self.assertEqual(profile["title_text"], "번역:1.3.0")
+        self.assertEqual(profile["title_text"], "번역:1.3.2")
         self.assertEqual(
             profile["rom_filename"],
-            "Langrisser II (Korean Pure v1.3.0).md",
+            "Langrisser II (Korean Pure v1.3.2).md",
         )
         self.assertEqual(
             profile["header_title"],
-            "LANGRISSER II KOREAN PURE T1.3.0 BY HSP1324",
+            "LANGRISSER II KOREAN PURE T1.3.2 BY HSP1324",
         )
         self.assertEqual(profile["base_release"], "jp-original")
         self.assertEqual(profile["save_format"], "lang2-ko-sram-v1")
@@ -31,20 +31,20 @@ class RomVersionTests(unittest.TestCase):
     def test_normal_profile_is_latest_release_candidate(self):
         profile = rom_version.get_profile("normal")
         self.assertEqual(profile["status"], "release_candidate")
-        self.assertEqual(profile["release_id"], "ko-1.3.0")
-        self.assertEqual(profile["translation_version"], "1.3.0")
+        self.assertEqual(profile["release_id"], "ko-1.3.2")
+        self.assertEqual(profile["translation_version"], "1.3.2")
         self.assertIsNone(profile["balance_version"])
-        self.assertEqual(profile["title_text"], "번역:1.3.0")
+        self.assertEqual(profile["title_text"], "번역:1.3.2")
         self.assertEqual(
             profile["rom_filename"],
-            "Langrisser II (Korean v1.3.0).md",
+            "Langrisser II (Korean v1.3.2).md",
         )
         self.assertEqual(
             profile["header_title"],
-            "LANGRISSER II KOREAN T1.3.0 BY HSP1324",
+            "LANGRISSER II KOREAN T1.3.2 BY HSP1324",
         )
         self.assertEqual(profile["creator"], "hsp1324")
-        self.assertEqual(profile["base_release"], "ko-1.2.2")
+        self.assertEqual(profile["base_release"], "ko-1.3.1")
         self.assertEqual(profile["save_format"], "lang2-ko-sram-v1")
 
     def test_hard_profile_is_the_standard_hard_release_candidate(self):
@@ -52,21 +52,21 @@ class RomVersionTests(unittest.TestCase):
         self.assertEqual(hard["status"], "release_candidate")
         self.assertEqual(
             hard["release_id"],
-            "ko-hard-t1.3.0-b1.3.0",
+            "ko-hard-t1.3.2-b1.3.2",
         )
-        self.assertEqual(hard["translation_version"], "1.3.0")
-        self.assertEqual(hard["balance_version"], "1.3.0")
+        self.assertEqual(hard["translation_version"], "1.3.2")
+        self.assertEqual(hard["balance_version"], "1.3.2")
         self.assertEqual(
             hard["title_text"],
-            "번역/밸런스:1.3.0/1.3.0",
+            "번역/밸런스:1.3.2/1.3.2",
         )
         self.assertEqual(
             hard["rom_filename"],
-            "Langrisser II (Korean Hard T1.3.0 B1.3.0).md",
+            "Langrisser II (Korean Hard T1.3.2 B1.3.2).md",
         )
         self.assertEqual(
             hard["header_title"],
-            "LANGRISSER II KOREAN T1.3.0 B1.3.0 BY HSP1324",
+            "LANGRISSER II KOREAN T1.3.2 B1.3.2 BY HSP1324",
         )
 
     def test_released_hard_profile_uses_dual_version_title(self):
@@ -87,15 +87,15 @@ class RomVersionTests(unittest.TestCase):
             profile = rom_version.get_profile("hard", path)
         self.assertEqual(
             profile["title_text"],
-            "번역/밸런스:1.3.0/1.0.0",
+            "번역/밸런스:1.3.2/1.0.0",
         )
         self.assertEqual(
             profile["rom_filename"],
-            "Langrisser II (Korean Hard T1.3.0 B1.0.0).md",
+            "Langrisser II (Korean Hard T1.3.2 B1.0.0).md",
         )
         self.assertEqual(
             profile["header_title"],
-            "LANGRISSER II KOREAN T1.3.0 B1.0.0 BY HSP1324",
+            "LANGRISSER II KOREAN T1.3.2 B1.0.0 BY HSP1324",
         )
 
     def test_invalid_or_overlong_version_is_rejected(self):

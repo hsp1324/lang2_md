@@ -1,0 +1,46 @@
+{
+  "game": "Langrisser II",
+  "release": "v1.3.2",
+  "schema_version": 1,
+  "source": {
+    "headered_size": 2097664,
+    "label": "Langrisser II (Japan)",
+    "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
+    "size": 2097152
+  },
+  "targets": [
+    {
+      "description_ko": "원작 맵 디자인과 밸런스에 한국어화 및 공통 진행 수정 적용",
+      "id": "pure",
+      "label_ko": "원작 디자인판",
+      "output_filename": "Langrisser II (Korean Original Design v1.3.2).md",
+      "output_sha256": "289ca7d5b5c335f0284bd5e88edb48395726b915c37b0d3dfac6252d3a3a97ea",
+      "output_size": 4194304,
+      "patch_filename": "original-design-v1.3.2.bps",
+      "patch_sha256": "7687cbb2704581747efcdcd188d956b1b7437f3605aa63a693587914a26cfba9",
+      "patch_size": 2286050
+    },
+    {
+      "description_ko": "최신 New 클래스 디자인과 한국어화 적용",
+      "id": "normal",
+      "label_ko": "최신 디자인 일반판",
+      "output_filename": "Langrisser II (Korean New Design v1.3.2).md",
+      "output_sha256": "ad66810801cf0e08dbc4be7aae0e96d71509327724ef2bdedd7245395652c88c",
+      "output_size": 4194304,
+      "patch_filename": "new-design-normal-v1.3.2.bps",
+      "patch_sha256": "b34522e1842a81da76fbb2e506941173e119e52d4648113cbe53f230a78e4c60",
+      "patch_size": 2286575
+    },
+    {
+      "description_ko": "최신 New 클래스 디자인·한국어화·하드 밸런스 적용",
+      "id": "hard",
+      "label_ko": "최신 디자인 하드판",
+      "output_filename": "Langrisser II (Korean New Design Hard T1.3.2 B1.3.2).md",
+      "output_sha256": "df4d40b9f9f1832fd42f49f495d85aafb1e9544732cac9bbc448a774f2e18608",
+      "output_size": 4194304,
+      "patch_filename": "new-design-hard-t1.3.2-b1.3.2.bps",
+      "patch_sha256": "824a70a791d80ae8c39a563e778532ea2c7193ebc659d9aaa0bdc0969f43fe1e",
+      "patch_size": 2289077
+    }
+  ]
+}

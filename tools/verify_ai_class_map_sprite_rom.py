@@ -20,10 +20,7 @@ from tools.build_class_sprite_assets import render_sprite
 from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
 
 
-DEFAULT_ROM = (
-    ROOT
-    / "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md"
-)
+DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 DEFAULT_JSON = ROOT / "localization/ai_class_map_sprite_rom.json"
 DEFAULT_IMAGE = (
     ROOT / "docs/assets/ai_class_map_sprite_rom_contact_sheet.png"
@@ -32,6 +29,14 @@ DEFAULT_IMAGE = (
 
 def sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
+
+
+def display_path(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(resolved)
 
 
 def verify(rom_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
@@ -54,16 +59,26 @@ def verify(rom_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
                 builder.ai_class_map_palette_index_overrides(source_image)
             ),
         )
-        record_offset = builder.commander_sprite_record_offset(
-            rom, commander_id, class_id
-        )
-        actual_sprite_id = builder.be16(rom, record_offset + 1)
-        if actual_sprite_id != custom_sprite_id:
-            raise ValueError(
-                f"commander {commander_id} class 0x{class_id:02X}: "
-                f"sprite 0x{actual_sprite_id:04X} != "
-                f"0x{custom_sprite_id:04X}"
+        try:
+            record_offset = builder.commander_sprite_record_offset(
+                rom, commander_id, class_id
             )
+        except ValueError:
+            if (commander_id, class_id) not in {(7, 0x01), (9, 0x01)}:
+                raise
+            # Keith/Lester's obsolete Fighter records are repurposed for the
+            # new Hawk/Croco Lord choices. Their accepted tier-1 assets keep
+            # their reserved expansion IDs for stable allocation and audit,
+            # but are deliberately no longer attached to a class-table row.
+            record_offset = None
+        if record_offset is not None:
+            actual_sprite_id = builder.be16(rom, record_offset + 1)
+            if actual_sprite_id != custom_sprite_id:
+                raise ValueError(
+                    f"commander {commander_id} class 0x{class_id:02X}: "
+                    f"sprite 0x{actual_sprite_id:04X} != "
+                    f"0x{custom_sprite_id:04X}"
+                )
         frame_offsets = []
         for frame_base in builder.MAP_SPRITE_FRAME_BASES:
             offset = (
@@ -80,7 +95,16 @@ def verify(rom_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
             "commander_id": commander_id,
             "class_id": f"0x{class_id:02X}",
             "class_name": KOREAN_CLASS_LABELS[class_id],
-            "mapping_record": f"0x{record_offset:06X}",
+            "mapping_record": (
+                f"0x{record_offset:06X}"
+                if record_offset is not None
+                else None
+            ),
+            "mapping_status": (
+                "attached"
+                if record_offset is not None
+                else "reserved_unattached_after_lord_record_repurpose"
+            ),
             "sprite_id": f"0x{custom_sprite_id:04X}",
             "frame_offsets": frame_offsets,
             "asset": str(asset_path.relative_to(ROOT)),
@@ -92,7 +116,7 @@ def verify(rom_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
         "schema_version": 1,
         "status": "all_promoted_class_map_sprites_verified",
         "rom": {
-            "path": str(rom_path.relative_to(ROOT)),
+            "path": display_path(rom_path),
             "size": len(rom),
             "md_checksum": rom[0x18E:0x190].hex().upper(),
             "sha256": sha256(rom),

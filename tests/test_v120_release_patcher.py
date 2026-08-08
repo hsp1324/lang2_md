@@ -5,7 +5,7 @@ import unittest
 import zipfile
 
 from patcher import langrisser_ii_korean_patcher as patcher
-from tools.build_v120_release_patches import (
+from tools.build_v132_release_patches import (
     SOURCE_PATH,
     TARGETS,
     build,
@@ -15,7 +15,7 @@ from tools.build_v120_release_patches import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class V120ReleasePatcherTests(unittest.TestCase):
+class V132ReleasePatcherTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if not SOURCE_PATH.is_file():
@@ -23,13 +23,13 @@ class V120ReleasePatcherTests(unittest.TestCase):
 
     def test_committed_bps_assets_are_reproducible(self):
         manifest = build(check=True)
-        self.assertEqual(manifest["release"], "v1.2.0")
+        self.assertEqual(manifest["release"], "v1.3.2")
         self.assertEqual(
             {record["id"] for record in manifest["targets"]},
-            {"normal", "hard"},
+            {"pure", "normal", "hard"},
         )
 
-    def test_patcher_builds_both_verified_roms_without_source_overwrite(self):
+    def test_patcher_builds_all_three_verified_roms_without_source_overwrite(self):
         source_before = hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest()
         with TemporaryDirectory() as temp:
             output_dir = Path(temp)
@@ -38,14 +38,15 @@ class V120ReleasePatcherTests(unittest.TestCase):
                 output_dir=output_dir,
             )
             self.assertEqual(
-                {result.target_id for result in results}, {"normal", "hard"}
+                {result.target_id for result in results},
+                {"pure", "normal", "hard"},
             )
             for spec in TARGETS:
                 output = output_dir / str(spec["output_filename"])
-                self.assertEqual(output.stat().st_size, spec["size"])
+                self.assertEqual(output.stat().st_size, 4_194_304)
                 self.assertEqual(
                     hashlib.sha256(output.read_bytes()).hexdigest(),
-                    spec["sha256"],
+                    hashlib.sha256(Path(spec["rom_path"]).read_bytes()).hexdigest(),
                 )
             repeated = patcher.apply_release(
                 SOURCE_PATH,

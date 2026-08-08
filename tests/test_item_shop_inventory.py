@@ -52,10 +52,10 @@ class ItemShopInventoryTests(unittest.TestCase):
 
     def test_runtime_acceptance_is_bound_to_the_item_surface_fingerprint(self):
         self.assertEqual(
-            self.result["runtime_probe"]["accepted_capture_checksum"], "C80E"
+            self.result["runtime_probe"]["accepted_capture_checksum"], "1098"
         )
         self.assertEqual(
-            self.result["runtime_probe"]["runtime_derivative_checksum"], "9607"
+            self.result["runtime_probe"]["runtime_derivative_checksum"], "DE91"
         )
         self.assertEqual(self.result["runtime_probe"]["status"], "accepted")
         self.assertEqual(

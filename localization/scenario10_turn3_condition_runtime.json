@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "verified_current_candidate",
+  "scenario": 10,
+  "requirement": "TURN 3 종료 후 레스터가 아군으로 전환되고 몬스터가 등장했을 때 바뀌는 승리조건이 일본어가 아니라 한국어로 표시되어야 한다.",
+  "condition_record": {
+    "physical_record_one_based": 32,
+    "logical_use": "Scenario 10 alternate condition after the stock TURN 3 end event",
+    "glyph_pointer_table": "0x0986C6",
+    "token_pointer_table": "0x098D7A",
+    "glyph_pointer": "0x098D58",
+    "token_pointer": "0x09A958",
+    "glyph_payload_sha256": "265a1ed2a53c9faf8e95d02f9fc859673a1d923e4d4153b85bf416ed2c09d75f",
+    "token_payload_sha256": "53682a036da332174ac0c5c6a432cc9ca28c8bfa95c1c6da23993072742f2346",
+    "rendered_lines": [
+      "승리조건",
+      "- 적 전멸",
+      "패배조건",
+      "- 주인공 사망"
+    ]
+  },
+  "roms": [
+    {
+      "role": "v1.3.2_normal_candidate",
+      "path": "roms/builds/Langrisser II (Korean).md",
+      "md_checksum": "B50F",
+      "sha256": "ad66810801cf0e08dbc4be7aae0e96d71509327724ef2bdedd7245395652c88c"
+    },
+    {
+      "role": "turn3_runtime_probe",
+      "path": "/tmp/Langrisser II (v132 Scenario 10 TURN3 Condition Probe).md",
+      "md_checksum": "E2DA",
+      "sha256": "bdeb7445834b77bc12339e34787e034efd68f5ec74c83fcb317e0ffa8f8577d2"
+    }
+  ],
+  "probe_delta": {
+    "changed_byte_count": 79,
+    "allowed_ranges": [
+      "0x00018E..0x000190 Mega Drive checksum",
+      "0x00F2E0..0x00F2E4 Start-menu callback operand",
+      "0x3FEF00 diagnostic runtime wrapper"
+    ],
+    "scenario_records_and_events": "source-identical",
+    "runtime_effect": "Start protects only runtime groups 0..7 with DF 99 and raises the turn counter to 3 without rewinding a later turn. The stock TURN 3 end event remains responsible for Lester conversion, monster placement, dialogue, and alternate-condition selection."
+  },
+  "runtime_evidence": {
+    "selector_identity": {
+      "requested_scenario": 10,
+      "identified_scenario": 10,
+      "matched_fixed_records": "13/13"
+    },
+    "turn_counter_after_event": 4,
+    "spawned_monster_runtime_groups": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "spawned_monsters_alive_and_placed": "10/10",
+    "capture": "captures/run/v132_s10_turn3_condition/v132-20260808-03/battle/turn3_conditions.png",
+    "capture_sha256": "f4a83a09ea743bede928a04e92f408779446c8775352bbb65bf59164352ee79b",
+    "gst": "captures/run/v132_s10_turn3_condition/v132-20260808-03/states/turn3_conditions.gst",
+    "gst_sha256": "983a43c898b0e2f947edbb60d191979047c889dcd3dfb8cb48f8bc4abb89b395",
+    "visual_review": "pass: 승리조건 - 적 전멸 / 패배조건 - 주인공 사망이 온전한 한글로 표시되며 일본어 잔여와 깨진 글자가 없다."
+  },
+  "verdict": "v1.3.2의 32번째 물리 조건 레코드는 실제 Scenario 10 TURN 3 종료 이벤트 뒤 선택되며, BlastEm 실기 화면에서 `- 적 전멸`로 정상 표시된다."
+}

@@ -22,15 +22,38 @@ class PureKoreanProfileTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown ROM"):
             builder.profile_includes_user_patches("unexpected")
 
-    def test_pure_profile_keeps_all_pre_translation_game_data(self):
+    def test_pure_profile_includes_progression_and_accessibility_but_not_designs(self):
         data = self.expanded_source()
-        expected = bytes(data)
         builder.patch_profile_user_customizations(
             data,
             self.source,
             profile_name="pure",
         )
-        self.assertEqual(bytes(data), expected)
+        self.assertNotEqual(
+            data[
+                builder.INITIAL_COMMANDER_ROSTER_TABLE:
+                builder.INITIAL_COMMANDER_ROSTER_TABLE
+                + 10 * builder.INITIAL_COMMANDER_RECORD_SIZE
+            ],
+            self.source[
+                builder.INITIAL_COMMANDER_ROSTER_TABLE:
+                builder.INITIAL_COMMANDER_ROSTER_TABLE
+                + 10 * builder.INITIAL_COMMANDER_RECORD_SIZE
+            ],
+        )
+        start = builder.SCENARIO6_RUNESTONE_TRIGGER
+        end = start + len(builder.SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE)
+        self.assertEqual(
+            data[start:end], builder.SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE
+        )
+        self.assertEqual(
+            builder.be16(
+                data,
+                builder.GENERIC_CLASS_SPRITE_TABLE
+                + builder.LOREN_CLASS_ID * 2,
+            ),
+            builder.LOREN_SOURCE_SPRITE_ID,
+        )
 
     def test_pure_profile_keeps_original_scenario18_mechanics(self):
         data = self.expanded_source()

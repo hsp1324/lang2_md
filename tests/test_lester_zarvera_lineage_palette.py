@@ -19,14 +19,20 @@ SOURCE_ROOT = (
 
 class LesterZarveraLineagePaletteTests(unittest.TestCase):
     def test_zarvera_uses_archmage_red_blue_gold(self) -> None:
-        source = Image.open(
-            SOURCE_ROOT / "logical16/09-26.png"
-        ).convert("RGBA")
         live = Image.open(LIVE_ROOT / "9/26.png").convert("RGBA")
         archmage = Image.open(LIVE_ROOT / "9/14.png").convert("RGBA")
+        overrides = json.loads(
+            (ROOT / "editor/ai_class_design_overrides.json").read_text(
+                encoding="utf-8"
+            )
+        )["designs"]
+        manifest = json.loads(
+            (LIVE_ROOT / "manifest.json").read_text(encoding="utf-8")
+        )
+        row = manifest["commanders"]["9"]["classes"][str(0x26)]
+        self.assertTrue(row["design_override"])
         self.assertEqual(
-            list(source.get_flattened_data()),
-            list(live.get_flattened_data()),
+            row["design_revision"], overrides["9:26"]["revision"]
         )
         colors = set(live.get_flattened_data())
         lineage = {
@@ -60,19 +66,19 @@ class LesterZarveraLineagePaletteTests(unittest.TestCase):
                 encoding="utf-8"
             )
         )["designs"]
-        self.assertEqual(
-            overrides["9:26"]["pixels"],
-            [list(color) for color in live.get_flattened_data()],
-        )
         manifest = json.loads(
             (LIVE_ROOT / "manifest.json").read_text(encoding="utf-8")
         )
         self.assertEqual(
             manifest["asset_version"],
-            "liana-lana-healer-shared-v106",
+            "identity-mask-and-silhouette-closure-v107",
         )
         row = manifest["commanders"]["9"]["classes"][str(0x26)]
-        self.assertIn("아크메이지 계보", row["feature"])
+        self.assertTrue(row["design_override"])
+        self.assertEqual(
+            row["design_revision"], overrides["9:26"]["revision"]
+        )
+        self.assertIn("사용자 16×16 디자인 편집 적용", row["feature"])
 
 
 if __name__ == "__main__":

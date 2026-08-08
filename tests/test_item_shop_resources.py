@@ -114,13 +114,95 @@ class ItemShopResourceTests(unittest.TestCase):
             popup_routine,
         )
 
-        for hook, terminator, store, routine in builder.ITEM_NAME_LIST_RENDER_HOOKS:
+        for index, (hook, terminator, store, routine) in enumerate(
+            builder.ITEM_NAME_LIST_RENDER_HOOKS
+        ):
             self.assertEqual(
                 self.data[hook : hook + len(builder.ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL)],
                 bytes.fromhex("4E F9") + routine.to_bytes(4, "big"),
             )
-            payload = builder._build_item_name_list_render_routine(terminator, store)
+            payload = builder._build_item_name_list_render_routine(
+                terminator,
+                store,
+                overflow_vram_base=(
+                    builder.ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE
+                    if index == 0
+                    else builder.ITEM_NAME_OVERFLOW_VRAM_BASE
+                ),
+            )
             self.assertEqual(self.data[routine : routine + len(payload)], payload)
+
+    def test_equipment_list_uses_its_post_graphics_overflow_copy(self):
+        self.assertEqual(
+            builder.ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE,
+            builder.ITEM_DESCRIPTION_VRAM_BASE,
+        )
+        self.assertLessEqual(
+            builder.ITEM_NAME_GLYPH_LOAD_ROUTINE
+            + len(
+                builder._build_item_name_glyph_load_routine(
+                    len(
+                        builder.read_word_list(
+                            self.data,
+                            builder.ITEM_NAME_GLYPH_LIST_RELOC_BASE,
+                        )
+                    )
+                )
+            ),
+            builder.ITEM_NAME_POPUP_BUILD_ROUTINE,
+        )
+        equipment = builder.ITEM_NAME_LIST_RENDER_HOOKS[0]
+        shop = builder.ITEM_NAME_LIST_RENDER_HOOKS[1]
+        equipment_payload = builder._build_item_name_list_render_routine(
+            equipment[1],
+            equipment[2],
+            overflow_vram_base=(
+                builder.ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE
+            ),
+        )
+        shop_payload = builder._build_item_name_list_render_routine(
+            shop[1],
+            shop[2],
+        )
+        self.assertIn(
+            builder.ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE.to_bytes(2, "big"),
+            equipment_payload,
+        )
+        self.assertIn(
+            builder.ITEM_NAME_OVERFLOW_VRAM_BASE.to_bytes(2, "big"),
+            shop_payload,
+        )
+        hook = builder.ITEM_NAME_EQUIPMENT_RELOAD_HOOK
+        hook_end = hook + len(
+            builder.ITEM_NAME_EQUIPMENT_RELOAD_HOOK_ORIGINAL
+        )
+        self.assertEqual(
+            self.data[hook:hook_end],
+            bytes.fromhex("4E F9")
+            + builder.ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 71 4E 71"),
+        )
+        overflow_count = (
+            len(
+                builder.read_word_list(
+                    self.data,
+                    builder.ITEM_NAME_GLYPH_LIST_RELOC_BASE,
+                )
+            )
+            - builder.ITEM_NAME_GLYPH_PRIMARY_COUNT
+        )
+        reload_payload = (
+            builder._build_item_name_equipment_reload_routine(
+                overflow_count
+            )
+        )
+        reload_offset = builder.ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE
+        self.assertEqual(
+            self.data[
+                reload_offset : reload_offset + len(reload_payload)
+            ],
+            reload_payload,
+        )
 
     def test_discard_list_uses_localized_item_name_banks(self):
         hook_end = (

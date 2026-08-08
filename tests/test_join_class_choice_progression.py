@@ -4,7 +4,7 @@ from pathlib import Path
 from capstone import Cs, CS_ARCH_M68K, CS_MODE_BIG_ENDIAN
 
 from scripts import build_korean_jp_probe as builder
-from tools.class_change_data import transition_for_class
+from tools.class_change_data import read_class_change_chain, transition_for_class
 from tools.class_hire_data import CLASS_RECORD_SIZE, CLASS_RECORD_TABLE
 from tools.scenario_data import be16, scenario_layout
 
@@ -54,17 +54,83 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                 self.assertEqual(target[0], row["tier1_class"])
                 self.assertEqual(target[2], 10)
 
-    def test_stock_chains_offer_the_requested_tier_two_branches(self) -> None:
+    def test_patched_chains_offer_the_requested_tier_two_branches(self) -> None:
+        patched = bytearray(self.source)
+        builder.patch_join_class_choice_class_data(patched, self.source)
         for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
             with self.subTest(commander_id=commander_id):
                 transition = transition_for_class(
-                    self.source,
+                    patched,
                     commander_id,
                     row["tier1_class"],
                 )
                 self.assertEqual(
                     transition.candidates,
                     row["tier2_candidates"],
+                )
+
+    def test_custom_hawk_and_croco_lord_class_records_use_tier_movement(self) -> None:
+        patched = bytearray(self.source)
+        builder.patch_join_class_choice_class_data(patched, self.source)
+        for custom_class, source_class in (
+            builder.JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES.items()
+        ):
+            with self.subTest(custom_class=custom_class):
+                custom = CLASS_RECORD_TABLE + custom_class * CLASS_RECORD_SIZE
+                source = CLASS_RECORD_TABLE + source_class * CLASS_RECORD_SIZE
+                self.assertEqual(
+                    patched[custom:custom + CLASS_RECORD_SIZE],
+                    self.source[source:source + CLASS_RECORD_SIZE],
+                )
+        self.assertEqual(
+            builder.KOREAN_CLASS_LABELS[builder.JOIN_CLASS_CHOICE_HAWK_LORD],
+            "호크로드",
+        )
+        self.assertEqual(
+            builder.KOREAN_CLASS_LABELS[builder.JOIN_CLASS_CHOICE_CROCO_LORD],
+            "크로코로드",
+        )
+
+    def test_custom_class_slots_are_unused_by_stock_scenarios_and_rosters(self) -> None:
+        custom_classes = set(builder.JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES)
+        for commander_id in range(1, 11):
+            roster = (
+                builder.INITIAL_COMMANDER_ROSTER_TABLE
+                + (commander_id - 1) * builder.INITIAL_COMMANDER_RECORD_SIZE
+            )
+            self.assertNotIn(self.source[roster], custom_classes)
+            for transition in read_class_change_chain(self.source, commander_id):
+                self.assertNotIn(transition.current_class, custom_classes)
+                self.assertTrue(custom_classes.isdisjoint(transition.candidates))
+        for scenario_number in range(1, 32):
+            layout = scenario_layout(self.source, scenario_number)
+            for index in range(layout.record_count):
+                record = layout.records_offset + index * 0x24
+                self.assertNotIn(self.source[record + 0x1B], custom_classes)
+
+    def test_custom_lord_transitions_continue_to_original_promoted_routes(self) -> None:
+        patched = bytearray(self.source)
+        builder.patch_join_class_choice_class_data(patched, self.source)
+        for commander_id, starter, custom in (
+            (7, 0x06, builder.JOIN_CLASS_CHOICE_HAWK_LORD),
+            (9, 0x07, builder.JOIN_CLASS_CHOICE_CROCO_LORD),
+        ):
+            with self.subTest(commander_id=commander_id):
+                original_next = transition_for_class(
+                    self.source, commander_id, starter
+                ).candidates
+                custom_next = transition_for_class(
+                    patched, commander_id, custom
+                ).candidates
+                self.assertEqual(custom_next, original_next)
+                self.assertNotIn(
+                    0x01,
+                    tuple(
+                        transition.current_class
+                        for transition in read_class_change_chain(
+                            patched, commander_id
+                        )
+                    ),
                 )
 
     def test_identity_and_residual_experience_are_preserved(self) -> None:
@@ -163,6 +229,19 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                 + bytes((commander_id, 0x00, 0x01)),
                 routine,
             )
+            row = builder.JOIN_CLASS_CHOICE_RECORDS[commander_id]
+            legacy_class = row.get("legacy_tier1_class")
+            if legacy_class is not None:
+                self.assertIn(
+                    bytes.fromhex("0C 28 00")
+                    + bytes((legacy_class, 0x00, 0x00)),
+                    routine,
+                )
+                self.assertIn(
+                    bytes.fromhex("11 7C 00")
+                    + bytes((row["tier1_class"], 0x00, 0x00)),
+                    routine,
+                )
             first_scenario = builder.JOIN_CLASS_CHOICE_RECORDS[commander_id][
                 "first_player_scenario"
             ]
@@ -239,7 +318,7 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
         )
 
     def test_tier_two_target_is_original_join_level_plus_three(self) -> None:
-        expected = {7: 4, 9: 10, 10: 8}
+        expected = {7: 4, 10: 8}
         for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
             with self.subTest(commander_id=commander_id):
                 self.assertEqual(row["join_level_bonus"], 3)
@@ -247,7 +326,10 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                     row["target_tier2_level"],
                     row["original_tier2_level"] + 3,
                 )
-                self.assertEqual(row["target_tier2_level"], expected[commander_id])
+                if row["experience_policy"] == "target_level":
+                    self.assertEqual(
+                        row["target_tier2_level"], expected[commander_id]
+                    )
 
     def test_target_level_wrapper_is_installed_at_both_stock_continuations(self) -> None:
         patched = bytearray(self.source)
@@ -288,12 +370,21 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                     + row["active_marker_address"].to_bytes(4, "big"),
                     routine,
                 )
-                self.assertIn(
-                    bytes.fromhex("11 7C 00")
-                    + bytes((row["residual_experience"],))
-                    + bytes.fromhex("00 2F"),
-                    routine,
-                )
+                if row["experience_policy"] == "target_level":
+                    self.assertIn(
+                        bytes.fromhex("11 7C 00")
+                        + bytes((row["residual_experience"],))
+                        + bytes.fromhex("00 2F"),
+                        routine,
+                    )
+                else:
+                    for experience in row["fixed_experience_by_class"].values():
+                        self.assertIn(
+                            bytes.fromhex("11 7C 00")
+                            + bytes((experience,))
+                            + bytes.fromhex("00 2F"),
+                            routine,
+                        )
                 for class_id in row["tier2_candidates"]:
                     self.assertIn(
                         bytes.fromhex("0C 02 00") + bytes((class_id,)),
@@ -301,14 +392,13 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                     )
 
     def test_experience_cap_is_refilled_until_every_target_level(self) -> None:
-        needs_more_than_one_stored_byte = False
         for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
+            if row["experience_policy"] != "target_level":
+                continue
             for class_id in row["tier2_candidates"]:
                 with self.subTest(commander_id=commander_id, class_id=class_id):
                     record = CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
                     threshold = self.source[record + 0x14] << 3
-                    required = threshold * (row["target_tier2_level"] - 1)
-                    needs_more_than_one_stored_byte |= required > 0xFF
                     level = 1
                     experience = row["residual_experience"]
                     while level < row["target_tier2_level"]:
@@ -319,7 +409,26 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                     experience = row["residual_experience"]
                     self.assertEqual(level, row["target_tier2_level"])
                     self.assertEqual(experience, row["residual_experience"])
-        self.assertTrue(needs_more_than_one_stored_byte)
+
+    def test_lester_fixed_grants_naturally_end_at_branch_specific_levels(self) -> None:
+        patched = bytearray(self.source)
+        builder.patch_join_class_choice_class_data(patched, self.source)
+        row = builder.JOIN_CLASS_CHOICE_RECORDS[9]
+        expected_levels = {
+            0x05: 8,
+            builder.JOIN_CLASS_CHOICE_CROCO_LORD: 8,
+            0x0A: 9,
+        }
+        for class_id, grant in row["fixed_experience_by_class"].items():
+            with self.subTest(class_id=class_id):
+                record = CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
+                threshold = patched[record + 0x14] << 3
+                level = 1
+                experience = grant
+                while experience >= threshold:
+                    experience -= threshold
+                    level += 1
+                self.assertEqual(level, expected_levels[class_id])
 
 
 if __name__ == "__main__":

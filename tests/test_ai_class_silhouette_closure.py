@@ -42,10 +42,22 @@ class AiClassSilhouetteClosureTests(unittest.TestCase):
         manifest = json.loads(
             (ASSET_ROOT / "manifest.json").read_text(encoding="utf-8")
         )
+        overrides = json.loads(
+            (ROOT / "editor/ai_class_design_overrides.json").read_text(
+                encoding="utf-8"
+            )
+        )["designs"]
         failures = {}
-        for commander in manifest["commanders"].values():
-            for row in commander["classes"].values():
+        for commander_id, commander in manifest["commanders"].items():
+            for class_id, row in commander["classes"].items():
                 if not row["redesigned"]:
+                    continue
+                # A saved New-class editor override is the user's authoritative
+                # 16x16 design. Negative space inside equipment is therefore
+                # allowed even when the generated-base closure policy would
+                # fill it.
+                override_key = row["file"].removesuffix(".png").replace("/", ":")
+                if override_key in overrides:
                     continue
                 image = Image.open(ASSET_ROOT / row["file"]).convert("RGBA")
                 occupied = {

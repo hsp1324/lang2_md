@@ -34,6 +34,15 @@ class Scenario10ClearProbeTests(unittest.TestCase):
         )
         return data
 
+    def turn3_event_patched(self) -> bytearray:
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            turn3_event=True,
+        )
+        return data
+
     def test_changes_only_monster_combat_fields(self):
         data = self.patched()
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
@@ -193,7 +202,7 @@ class Scenario10ClearProbeTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0xA973)
+        self.assertEqual(expected, 0xABDE)
 
     def test_runtime_finish_changes_only_wrapper_and_checksum(self):
         data = self.runtime_finish_patched()
@@ -291,6 +300,91 @@ class Scenario10ClearProbeTests(unittest.TestCase):
                 protagonist_death=True,
                 runtime_finish=True,
             )
+
+    def test_turn3_event_changes_only_wrapper_and_checksum(self):
+        data = self.turn3_event_patched()
+        wrapper = probe_builder.turn3_event_wrapper_code()
+        expected_changes = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            ),
+        }
+        changed = {
+            index
+            for index, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, expected_changes)
+
+    def test_turn3_event_preserves_every_scenario_record(self):
+        data = self.turn3_event_patched()
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            start = layout.records_offset + index * FIXED_RECORD_SIZE
+            end = start + FIXED_RECORD_SIZE
+            self.assertEqual(data[start:end], self.source[start:end])
+
+    def test_turn3_event_protects_only_pre_reveal_groups_and_raises_counter(self):
+        code = probe_builder.turn3_event_wrapper_code()
+        for group in probe_builder.TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+            record = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC")
+                + probe_builder.TURN_EVENT_PROTECTED_DF.to_bytes(2, "big")
+                + (record + probe_builder.RUNTIME_DF_OFFSET).to_bytes(4, "big"),
+                code,
+            )
+        first_monster = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.FIRST_MONSTER_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertNotIn(
+            (first_monster + probe_builder.RUNTIME_DF_OFFSET).to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("0C 39")
+            + probe_builder.TURN3_COUNTER_VALUE.to_bytes(2, "big")
+            + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+            code,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC")
+            + probe_builder.TURN3_COUNTER_VALUE.to_bytes(2, "big")
+            + probe_builder.RUNTIME_TURN_COUNTER.to_bytes(4, "big"),
+            code,
+        )
+        self.assertEqual(
+            code[-6:],
+            bytes.fromhex("4E F9")
+            + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
+        )
+
+    def test_all_runtime_modes_are_mutually_exclusive(self):
+        for first, second in (
+            ({"protagonist_death": True}, {"runtime_finish": True}),
+            ({"protagonist_death": True}, {"turn3_event": True}),
+            ({"runtime_finish": True}, {"turn3_event": True}),
+        ):
+            data = bytearray(self.production)
+            with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+                probe_builder.patch_probe(
+                    data,
+                    self.source,
+                    **first,
+                    **second,
+                )
 
 
 if __name__ == "__main__":

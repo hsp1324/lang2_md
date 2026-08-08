@@ -14301,12 +14301,12 @@
             "#b60024"
           ],
           "pixel_palette": [
+            "#242424",
             "#924924",
             "#ffb600",
             "#ffffff",
-            "#ff2424",
-            "#dbb66d",
-            "#929292"
+            "#49496d",
+            "#ff2424"
           ],
           "face_source_sprite_id": 38,
           "face_pixel_count": 0,
@@ -14545,48 +14545,16 @@
           ],
           "identity_lock_points": [
             [
-              0,
-              10
-            ],
-            [
-              0,
-              11
-            ],
-            [
-              0,
-              12
-            ],
-            [
-              0,
-              13
-            ],
-            [
               1,
               1
             ],
             [
               1,
-              9
-            ],
-            [
-              1,
-              10
-            ],
-            [
-              1,
               11
             ],
             [
               1,
               12
-            ],
-            [
-              1,
-              13
-            ],
-            [
-              1,
-              14
             ],
             [
               2,
@@ -14615,22 +14583,6 @@
             [
               2,
               10
-            ],
-            [
-              2,
-              11
-            ],
-            [
-              2,
-              12
-            ],
-            [
-              2,
-              13
-            ],
-            [
-              2,
-              14
             ],
             [
               3,
@@ -14965,7 +14917,7 @@
               4
             ]
           ],
-          "identity_lock_pixel_count": 105,
+          "identity_lock_pixel_count": 93,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -14976,8 +14928,8 @@
           "mount_lock_pixel_count": 0,
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
-          "design_override": false,
-          "design_revision": 0,
+          "design_override": true,
+          "design_revision": 1786123544653274306,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -15000,8 +14952,8 @@
             11,
             11
           ],
-          "changed_pixel_count": 107,
-          "feature": "캐릭터별 승인 기준형 기반 위저드 논리16의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 107픽셀·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 11픽셀을 원작형 짙은 먹색으로 폐쇄",
+          "changed_pixel_count": 113,
+          "feature": "캐릭터별 승인 기준형 기반 위저드 논리16의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 107픽셀·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 11픽셀을 원작형 짙은 먹색으로 폐쇄·사용자 16×16 디자인 편집 적용",
           "file": "2/15.png"
         },
         "22": {
@@ -15023,12 +14975,12 @@
             "#dbb66d"
           ],
           "pixel_palette": [
+            "#242424",
             "#ffb600",
-            "#ffffff",
             "#924924",
+            "#ffffff",
             "#db0000",
-            "#929292",
-            "#dbb66d"
+            "#929292"
           ],
           "face_source_sprite_id": 37,
           "face_pixel_count": 0,
@@ -15267,32 +15219,8 @@
           ],
           "identity_lock_points": [
             [
-              0,
-              10
-            ],
-            [
-              0,
-              11
-            ],
-            [
-              0,
-              13
-            ],
-            [
-              0,
-              14
-            ],
-            [
               1,
               1
-            ],
-            [
-              1,
-              8
-            ],
-            [
-              1,
-              10
             ],
             [
               1,
@@ -15305,10 +15233,6 @@
             [
               1,
               13
-            ],
-            [
-              1,
-              14
             ],
             [
               2,
@@ -15663,7 +15587,7 @@
               5
             ]
           ],
-          "identity_lock_pixel_count": 99,
+          "identity_lock_pixel_count": 92,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -15675,7 +15599,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785859775626847439,
+          "design_revision": 1786123573456999670,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -15698,7 +15622,7 @@
             11,
             11
           ],
-          "changed_pixel_count": 117,
+          "changed_pixel_count": 116,
           "feature": "아론 사용자 편집 하이프리스트 기반 공통 하이프리스트의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 117픽셀·사용자 16×16 디자인 편집 적용·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 5픽셀을 원작형 짙은 먹색으로 폐쇄",
           "file": "2/16.png"
         },
@@ -16335,11 +16259,11 @@
             "#db0000"
           ],
           "pixel_palette": [
+            "#242424",
             "#922449",
             "#924924",
             "#ffb600",
             "#929292",
-            "#ffffff",
             "#db0000"
           ],
           "face_source_sprite_id": 39,
@@ -16519,32 +16443,8 @@
           ],
           "identity_lock_points": [
             [
-              0,
-              10
-            ],
-            [
               1,
               1
-            ],
-            [
-              1,
-              9
-            ],
-            [
-              1,
-              10
-            ],
-            [
-              1,
-              11
-            ],
-            [
-              1,
-              12
-            ],
-            [
-              1,
-              13
             ],
             [
               2,
@@ -16573,14 +16473,6 @@
             [
               2,
               10
-            ],
-            [
-              2,
-              11
-            ],
-            [
-              2,
-              14
             ],
             [
               3,
@@ -16963,7 +16855,7 @@
               5
             ]
           ],
-          "identity_lock_pixel_count": 111,
+          "identity_lock_pixel_count": 103,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "approved_full_sprite_template",
           "identity_mask_pending_rebuild": false,
@@ -16975,7 +16867,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785921813729803260,
+          "design_revision": 1786123512174233902,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -16996,7 +16888,7 @@
             16,
             9
           ],
-          "changed_pixel_count": 103,
+          "changed_pixel_count": 100,
           "feature": "리아나 세이지·쉐리 위저드 사용자 편집형 밝은 재료색 보정의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 90픽셀·사용자 16×16 디자인 편집 적용·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 1픽셀을 원작형 짙은 먹색으로 폐쇄",
           "file": "2/18.png"
         },
@@ -19087,10 +18979,10 @@
           "pixel_palette": [
             "#920049",
             "#924924",
+            "#242424",
             "#dbb66d",
             "#ffffff",
-            "#ffb600",
-            "#490049"
+            "#ffb600"
           ],
           "face_source_sprite_id": 37,
           "face_pixel_count": 0,
@@ -19329,44 +19221,8 @@
           ],
           "identity_lock_points": [
             [
-              1,
-              1
-            ],
-            [
-              2,
-              2
-            ],
-            [
-              2,
-              3
-            ],
-            [
-              2,
-              4
-            ],
-            [
-              2,
-              5
-            ],
-            [
               2,
               8
-            ],
-            [
-              3,
-              2
-            ],
-            [
-              3,
-              3
-            ],
-            [
-              3,
-              4
-            ],
-            [
-              3,
-              5
             ],
             [
               3,
@@ -19665,7 +19521,7 @@
               4
             ]
           ],
-          "identity_lock_pixel_count": 84,
+          "identity_lock_pixel_count": 75,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "approved_full_sprite_template",
           "identity_mask_pending_rebuild": false,
@@ -19677,7 +19533,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785915921796242623,
+          "design_revision": 1786123426861675189,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -19700,7 +19556,7 @@
             11,
             11
           ],
-          "changed_pixel_count": 128,
+          "changed_pixel_count": 132,
           "feature": "최신 리아나 서머너 정렬 기반 서머너·에이전트·자베라의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 126픽셀·사용자 16×16 디자인 편집 적용·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 10픽셀을 원작형 짙은 먹색으로 폐쇄",
           "file": "2/25.png"
         },
@@ -19725,10 +19581,10 @@
           "pixel_palette": [
             "#9224b6",
             "#924924",
-            "#ffb600",
+            "#242424",
             "#dbb66d",
-            "#ffffff",
-            "#db6dff"
+            "#ffb600",
+            "#ffffff"
           ],
           "face_source_sprite_id": 39,
           "face_pixel_count": 0,
@@ -20259,7 +20115,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785921800779913703,
+          "design_revision": 1786123440199549627,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -24157,12 +24013,12 @@
             "#929292"
           ],
           "pixel_palette": [
+            "#242424",
             "#924924",
-            "#ffb600",
             "#ffffff",
-            "#496dff",
-            "#dbb66d",
-            "#929292"
+            "#ffb600",
+            "#49496d",
+            "#496dff"
           ],
           "face_source_sprite_id": 44,
           "face_pixel_count": 0,
@@ -24401,48 +24257,8 @@
           ],
           "identity_lock_points": [
             [
-              0,
-              10
-            ],
-            [
-              0,
-              11
-            ],
-            [
-              0,
-              12
-            ],
-            [
-              0,
-              13
-            ],
-            [
               1,
               1
-            ],
-            [
-              1,
-              9
-            ],
-            [
-              1,
-              10
-            ],
-            [
-              1,
-              11
-            ],
-            [
-              1,
-              12
-            ],
-            [
-              1,
-              13
-            ],
-            [
-              1,
-              14
             ],
             [
               2,
@@ -24471,22 +24287,6 @@
             [
               2,
               10
-            ],
-            [
-              2,
-              11
-            ],
-            [
-              2,
-              12
-            ],
-            [
-              2,
-              13
-            ],
-            [
-              2,
-              14
             ],
             [
               3,
@@ -24786,10 +24586,6 @@
             ],
             [
               12,
-              1
-            ],
-            [
-              12,
               2
             ],
             [
@@ -24798,30 +24594,10 @@
             ],
             [
               12,
-              4
-            ],
-            [
-              13,
-              2
-            ],
-            [
-              13,
-              3
-            ],
-            [
-              13,
-              4
-            ],
-            [
-              14,
-              3
-            ],
-            [
-              14,
               4
             ]
           ],
-          "identity_lock_pixel_count": 105,
+          "identity_lock_pixel_count": 85,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -24833,7 +24609,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785921846946831995,
+          "design_revision": 1786123733423491251,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -24856,7 +24632,7 @@
             11,
             11
           ],
-          "changed_pixel_count": 106,
+          "changed_pixel_count": 112,
           "feature": "리아나 위저드 장비 기반 라나 청색 위저드의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 107픽셀·사용자 16×16 디자인 편집 적용·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 12픽셀을 원작형 짙은 먹색으로 폐쇄",
           "file": "3/15.png"
         },
@@ -26199,12 +25975,12 @@
             "#6d4924"
           ],
           "pixel_palette": [
-            "#246db6",
+            "#242424",
             "#924924",
+            "#246db6",
             "#ffb600",
             "#929292",
-            "#ffffff",
-            "#dbb66d"
+            "#ffffff"
           ],
           "face_source_sprite_id": 45,
           "face_pixel_count": 0,
@@ -26383,20 +26159,8 @@
           ],
           "identity_lock_points": [
             [
-              0,
-              10
-            ],
-            [
               1,
               1
-            ],
-            [
-              1,
-              9
-            ],
-            [
-              1,
-              10
             ],
             [
               1,
@@ -26407,10 +26171,6 @@
               12
             ],
             [
-              1,
-              13
-            ],
-            [
               2,
               1
             ],
@@ -26441,10 +26201,6 @@
             [
               2,
               11
-            ],
-            [
-              2,
-              14
             ],
             [
               3,
@@ -26800,10 +26556,6 @@
             ],
             [
               13,
-              1
-            ],
-            [
-              13,
               2
             ],
             [
@@ -26813,29 +26565,9 @@
             [
               13,
               4
-            ],
-            [
-              13,
-              5
-            ],
-            [
-              14,
-              1
-            ],
-            [
-              14,
-              2
-            ],
-            [
-              14,
-              4
-            ],
-            [
-              14,
-              5
             ]
           ],
-          "identity_lock_pixel_count": 113,
+          "identity_lock_pixel_count": 102,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -26847,7 +26579,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785862832424298351,
+          "design_revision": 1786123700798333916,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -26868,7 +26600,7 @@
             16,
             9
           ],
-          "changed_pixel_count": 96,
+          "changed_pixel_count": 94,
           "feature": "캐릭터별 승인 기준형 기반 세이지 논리16의 장비·무기·실루엣 좌표를 동일 클래스 공통 기준으로 유지·캐릭터별 고유 주색·보조색으로만 재배색·현재 원작 머리·얼굴·눈의 보이는 픽셀 유지·머리 마스크의 투명 좌표에서는 방패·견갑·무기 디자인 우선·원본 클래스 팔레트 기반 재배색·16개 행·열 모두 사용·메가드라이브 4bpp·변경 124픽셀·사용자 16×16 디자인 편집 적용·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 1픽셀을 원작형 짙은 먹색으로 폐쇄",
           "file": "3/18.png"
         },
@@ -101145,11 +100877,11 @@
           ],
           "pixel_palette": [
             "#4949db",
+            "#242424",
             "#dbb66d",
             "#496dff",
             "#0000db",
-            "#ffffff",
-            "#b692ff"
+            "#ffffff"
           ],
           "face_source_sprite_id": 49,
           "face_pixel_count": 0,
@@ -101408,14 +101140,6 @@
           ],
           "identity_lock_points": [
             [
-              0,
-              9
-            ],
-            [
-              0,
-              10
-            ],
-            [
               1,
               1
             ],
@@ -101460,38 +101184,6 @@
               1
             ],
             [
-              2,
-              2
-            ],
-            [
-              2,
-              3
-            ],
-            [
-              2,
-              4
-            ],
-            [
-              2,
-              5
-            ],
-            [
-              2,
-              6
-            ],
-            [
-              2,
-              7
-            ],
-            [
-              2,
-              8
-            ],
-            [
-              2,
-              9
-            ],
-            [
               3,
               0
             ],
@@ -101510,10 +101202,6 @@
             [
               3,
               4
-            ],
-            [
-              3,
-              5
             ],
             [
               4,
@@ -101741,10 +101429,6 @@
             ],
             [
               11,
-              0
-            ],
-            [
-              11,
               1
             ],
             [
@@ -101753,22 +101437,10 @@
             ],
             [
               11,
-              3
-            ],
-            [
-              11,
-              4
-            ],
-            [
-              12,
-              1
-            ],
-            [
-              12,
               3
             ]
           ],
-          "identity_lock_pixel_count": 90,
+          "identity_lock_pixel_count": 75,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
           "identity_mask_pending_rebuild": false,
@@ -101780,7 +101452,7 @@
           "mount_lock_mode": "none",
           "mount_mask_pending_rebuild": false,
           "design_override": true,
-          "design_revision": 1785919131361296651,
+          "design_revision": 1786123976110506559,
           "design_override_superseded": false,
           "superseded_design_revision": 0,
           "duplicate_group": [
@@ -101804,7 +101476,7 @@
             10,
             11
           ],
-          "changed_pixel_count": 125,
+          "changed_pixel_count": 132,
           "feature": "이전 AI 원화·공통 클래스 템플릿·기존 장비 가이드를 생성 입력에서 제외·제시카 ROM 원본 얼굴·청색 머리와 현재 73픽셀 마스크만 참조해 자베라 전용 원화를 새로 생성·선정 원화의 큰 장비 군집과 실루엣을 네이티브 16×16으로 재픽셀화·제시카 얼굴·머리·눈 73픽셀 원본 복원·최종 합성에서 오른쪽 1칸 정렬·15색 이하·빈 행·열과 몸통 투명 구멍 없음·실제 ROM 미적용·사용자 16×16 디자인 편집 적용·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 9픽셀을 원작형 짙은 먹색으로 폐쇄",
           "file": "10/26.png"
         },
@@ -102103,6 +101775,14 @@
           ],
           "identity_lock_points": [
             [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
               3,
               0
             ],
@@ -102145,6 +101825,10 @@
             [
               4,
               5
+            ],
+            [
+              4,
+              6
             ],
             [
               5,
@@ -102173,6 +101857,10 @@
             [
               5,
               6
+            ],
+            [
+              5,
+              7
             ],
             [
               6,
@@ -102205,6 +101893,10 @@
             [
               6,
               7
+            ],
+            [
+              6,
+              8
             ],
             [
               7,
@@ -102331,42 +102023,26 @@
               3
             ],
             [
-              11,
-              0
-            ],
-            [
-              11,
-              1
-            ],
-            [
-              11,
-              2
-            ],
-            [
-              11,
-              3
-            ],
-            [
-              11,
+              10,
               4
             ],
             [
-              12,
+              11,
               1
             ],
             [
-              12,
+              11,
               2
             ],
             [
-              12,
+              11,
               3
             ]
           ],
-          "identity_lock_pixel_count": 65,
+          "identity_lock_pixel_count": 66,
           "identity_lock_mode": "custom",
           "identity_lock_transparency_mode": "equipment_priority",
-          "identity_mask_pending_rebuild": false,
+          "identity_mask_pending_rebuild": true,
           "identity_mask_superseded": false,
           "identity_translation": [
             1,

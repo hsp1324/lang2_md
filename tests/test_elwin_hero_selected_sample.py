@@ -58,7 +58,7 @@ class ElwinHeroSelectedSampleTests(unittest.TestCase):
         row = manifest["commanders"]["1"]["classes"][str(0x22)]
         self.assertEqual(
             manifest["asset_version"],
-            "liana-lana-healer-shared-v106",
+            "identity-mask-and-silhouette-closure-v107",
         )
         self.assertIn("샘플 클래스 선정", row["ai_source_kind"])
         self.assertTrue(row["ai_source_position"].endswith("logical16/04.png"))

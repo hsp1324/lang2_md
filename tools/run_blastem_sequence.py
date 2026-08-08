@@ -43,6 +43,11 @@ MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET = 0x03
 MANUAL_SLOT_COMMANDER_AT_OFFSET = 0x04
 MANUAL_SLOT_COMMANDER_DF_OFFSET = 0x05
 MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET = 0x0A
+MANUAL_SLOT_ITEM_INVENTORY_OFFSET = 0x156
+MANUAL_SLOT_ITEM_INVENTORY_COUNT = 40
+MANUAL_SLOT_ITEM_INVENTORY_RECORD_SIZE = 2
+MANUAL_SLOT_ITEM_UNEQUIPPED_OWNER = 0xFF
+MANUAL_SLOT_ITEM_MAX_ID = 37
 GST_WORK_RAM_FILE_OFFSET = 0x2478
 MANUAL_SLOT_WORK_RAM_SEGMENTS = (
     (0xA49C, 0x154),
@@ -526,6 +531,86 @@ def patch_manual_slot_commander_progress(
     ).to_bytes(2, "big")
     sram_path.write_bytes(data)
     return current_class, old_level, old_experience
+
+
+def patch_manual_slot_items(
+    sram_path: Path,
+    item_ids: list[int] | tuple[int, ...],
+    slot_index: int = 0,
+) -> tuple[int, ...]:
+    """Replace the saved 40-entry item inventory for a runtime-only UI probe.
+
+    The separately serialized WRAM ``C7F2`` table stores one item ID and one
+    owner byte per record.  ``0xFF`` means that an item is unequipped; an all-
+    ``0xFFFF`` record is empty.  The earlier A4AA guess was the scenario-item
+    acquisition ledger and therefore could not populate the equipment menu.
+    """
+    if len(item_ids) > MANUAL_SLOT_ITEM_INVENTORY_COUNT:
+        raise ValueError(
+            "manual slot accepts at most "
+            f"{MANUAL_SLOT_ITEM_INVENTORY_COUNT} item IDs"
+        )
+    if any(not 1 <= item_id <= MANUAL_SLOT_ITEM_MAX_ID for item_id in item_ids):
+        raise ValueError(
+            f"manual-slot item IDs must be 1..{MANUAL_SLOT_ITEM_MAX_ID}"
+        )
+    if len(set(item_ids)) != len(item_ids):
+        raise ValueError("manual-slot item IDs must not repeat")
+
+    manual_slot_scenario_number(sram_path, slot_index)
+    data = bytearray(sram_path.read_bytes())
+    base = MANUAL_SLOT_BASES[slot_index]
+    start = base + MANUAL_SLOT_ITEM_INVENTORY_OFFSET
+    end = start + (
+        MANUAL_SLOT_ITEM_INVENTORY_COUNT
+        * MANUAL_SLOT_ITEM_INVENTORY_RECORD_SIZE
+    )
+    previous = tuple(
+        data[offset]
+        for offset in range(
+            start,
+            end,
+            MANUAL_SLOT_ITEM_INVENTORY_RECORD_SIZE,
+        )
+        if data[offset] != 0xFF
+    )
+    replacement = bytearray()
+    for item_id in item_ids:
+        replacement.extend((item_id, MANUAL_SLOT_ITEM_UNEQUIPPED_OWNER))
+    replacement.extend(
+        b"\xFF\xFF"
+        * (MANUAL_SLOT_ITEM_INVENTORY_COUNT - len(item_ids))
+    )
+    data[start:end] = replacement
+    checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+    data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+        data, base
+    ).to_bytes(2, "big")
+    sram_path.write_bytes(data)
+    return previous
+
+
+def parse_manual_slot_items(value: str) -> list[int]:
+    try:
+        values = [int(part.strip(), 0) for part in value.split(",") if part.strip()]
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(
+            "manual-slot items must be comma-separated numeric IDs"
+        ) from exc
+    if not values:
+        raise argparse.ArgumentTypeError("manual-slot items must not be empty")
+    if len(values) > MANUAL_SLOT_ITEM_INVENTORY_COUNT:
+        raise argparse.ArgumentTypeError(
+            "manual slot accepts at most "
+            f"{MANUAL_SLOT_ITEM_INVENTORY_COUNT} item IDs"
+        )
+    if any(not 1 <= item_id <= MANUAL_SLOT_ITEM_MAX_ID for item_id in values):
+        raise argparse.ArgumentTypeError(
+            f"manual-slot item IDs must be 1..{MANUAL_SLOT_ITEM_MAX_ID}"
+        )
+    if len(set(values)) != len(values):
+        raise argparse.ArgumentTypeError("manual-slot item IDs must not repeat")
+    return values
 
 
 def recover_manual_slot_from_gst(
@@ -1287,6 +1372,14 @@ def main() -> int:
             "recovered manual-slot roster record"
         ),
     )
+    parser.add_argument(
+        "--manual-slot-items",
+        type=parse_manual_slot_items,
+        help=(
+            "replace the 40 saved item slots with comma-separated IDs; "
+            "runtime probe only"
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--capture-prefix",
@@ -1372,6 +1465,17 @@ def main() -> int:
             copy_manual_slot(sram_path, args.manual_slot_copy_from - 1)
             print(
                 f"copied manual slot {args.manual_slot_copy_from} over slot 1"
+            )
+        if args.manual_slot_items is not None:
+            previous_items = patch_manual_slot_items(
+                sram_path,
+                args.manual_slot_items,
+            )
+            print(
+                "patched manual-slot items "
+                + ",".join(str(item_id) for item_id in previous_items)
+                + " -> "
+                + ",".join(str(item_id) for item_id in args.manual_slot_items)
             )
         if (
             args.sequence in scenario_selector_sequences

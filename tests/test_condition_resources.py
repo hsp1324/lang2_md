@@ -41,7 +41,7 @@ class ConditionResourceTests(unittest.TestCase):
             self.assertEqual(len(tokens[:-1]), 7 * 16)
             self.assertTrue(all(token < len(glyphs) for token in tokens[:-1]))
 
-    def test_final_shared_record_is_untouched(self):
+    def test_final_scenario10_alternate_record_is_localized_in_place(self):
         index = 31
         glyph_pointer_offset = builder.CONDITION_GLYPH_LIST_TABLE + index * 4
         token_pointer_offset = builder.CONDITION_POINTER_TABLE + index * 4
@@ -53,15 +53,19 @@ class ConditionResourceTests(unittest.TestCase):
         glyph_capacity = builder.glyph_list_capacity_words(
             self.jp, builder.CONDITION_GLYPH_LIST_TABLE, index, 32
         )
-        self.assertEqual(
+        self.assertNotEqual(
             self.ko[glyph_pointer:glyph_pointer + glyph_capacity * 2],
             self.jp[glyph_pointer:glyph_pointer + glyph_capacity * 2],
         )
         token_pointer = builder.be32(self.jp, token_pointer_offset)
         token_capacity = 113
-        self.assertEqual(
+        self.assertNotEqual(
             self.ko[token_pointer:token_pointer + token_capacity * 2],
             self.jp[token_pointer:token_pointer + token_capacity * 2],
+        )
+        self.assertEqual(
+            builder.CONDITION_SCREENS[index],
+            ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
         )
 
     def test_original_turn_limits_and_long_objectives_are_preserved(self):

@@ -1,4 +1,4 @@
-name: Build v1.3.1 Windows patcher
+name: Build v1.3.2 Windows patcher
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
         run: >-
           python -c "from patcher.langrisser_ii_korean_patcher import
           load_release_manifest; m=load_release_manifest();
-          assert m['release']=='v1.3.1'; assert len(m['targets'])==2"
+          assert m['release']=='v1.3.2'; assert len(m['targets'])==3"
 
       - name: Build single-file Windows patcher
         shell: pwsh
@@ -38,7 +38,7 @@ jobs:
             --onefile `
             --console `
             --hide-console hide-early `
-            --name "Langrisser-II-Korean-Patcher-v1.3.1" `
+            --name "Langrisser-II-Korean-Patcher-v1.3.2" `
             --paths "." `
             --add-data "patches;patches" `
             "patcher/langrisser_ii_korean_patcher.py"
@@ -46,7 +46,7 @@ jobs:
       - name: Verify executable and write checksum
         shell: pwsh
         run: |
-          $exe = "dist/Langrisser-II-Korean-Patcher-v1.3.1.exe"
+          $exe = "dist/Langrisser-II-Korean-Patcher-v1.3.2.exe"
           if (-not (Test-Path $exe)) { throw "Patcher executable is missing" }
           $bytes = [System.IO.File]::ReadAllBytes($exe)
           if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
@@ -56,7 +56,7 @@ jobs:
           from pathlib import Path
           import pefile
 
-          path = Path("dist/Langrisser-II-Korean-Patcher-v1.3.1.exe")
+          path = Path("dist/Langrisser-II-Korean-Patcher-v1.3.2.exe")
           pe = pefile.PE(str(path), fast_load=True)
           pe.parse_data_directories(
               directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"]]
@@ -74,7 +74,7 @@ jobs:
           print("PE import check passed: COMCTL32.dll ordinal 380 is absent")
           '@ | python -
           $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
-          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.3.1.exe`n"
+          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.3.2.exe`n"
           [System.IO.File]::WriteAllText(
             "dist/SHA256SUMS.txt",
             $checksum,
@@ -85,8 +85,8 @@ jobs:
       - name: Upload release assets
         uses: actions/upload-artifact@v4
         with:
-          name: Langrisser-II-Korean-Patcher-v1.3.1
+          name: Langrisser-II-Korean-Patcher-v1.3.2
           if-no-files-found: error
           path: |
-            dist/Langrisser-II-Korean-Patcher-v1.3.1.exe
+            dist/Langrisser-II-Korean-Patcher-v1.3.2.exe
             dist/SHA256SUMS.txt

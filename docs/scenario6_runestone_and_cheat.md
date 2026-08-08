@@ -10,8 +10,9 @@ record at `0x18E1C8`:
 
 `룬스톤을 찾았다!`
 
-The trigger and handler bytes are identical in the Japanese ROM, current normal
-candidate, and current hard candidate.
+In v1.3.2 the handler and dialogue remain source-identical, while the trigger's
+horizontal end coordinate is extended from `5` to `7`. The accepted rectangle
+is therefore `(5,4)..(7,4)`.
 
 ## NPC Occupancy
 
@@ -26,10 +27,21 @@ coordinates remain source-identical:
 | 3 | 주민 | `(22,5)` |
 
 The stock resident AI can move onto or obstruct access to the nearby well.
-Contemporary Japanese and English Mega Drive guides explicitly warn that the
-NPC can block this Rune Stone and recommend Teleport, the all-factions cheat,
-or waiting for the NPC to be defeated. Moving the NPC's fixed record in the
-hard build would change source gameplay and is therefore rejected.
+Earlier builds preserved that source behaviour, which could make the item
+unobtainable during ordinary play. v1.3.2 keeps every NPC record unchanged and
+adds the reachable right approach `(7,4)` to the same hidden-item trigger.
+
+The first adjacent experiment stopped at `(6,4)`, but live play proved that
+cell cannot be entered through the ordinary movement UI. The accepted build
+therefore uses `(7,4)`, not the unverified adjacent-cell shortcut.
+
+The live probe changed only Elwin's Scenario 6 deployment from `(4,26)` to
+`(6,4)`. An ordinary rightward move to `(7,4)` rendered:
+
+`룬스톤을 찾았다!`
+
+The accepted screen is `captures/run/v132_s06_runestone_reachable.png`; the
+matching GST is recorded in `localization/scenario6_runestone_runtime.json`.
 
 ## Hard-Mode Cheat Check
 

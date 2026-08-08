@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "verified_current_candidate",
+  "surface": "preparation equipment item list",
+  "rom": {
+    "path": "roms/builds/Langrisser II (Korean).md",
+    "md_checksum": "B50F",
+    "sha256": "ad66810801cf0e08dbc4be7aae0e96d71509327724ef2bdedd7245395652c88c"
+  },
+  "expected_rows": [
+    {
+      "item_id": 26,
+      "name": "룬스톤"
+    },
+    {
+      "item_id": 27,
+      "name": "크로스"
+    },
+    {
+      "item_id": 28,
+      "name": "넥클리스"
+    },
+    {
+      "item_id": 29,
+      "name": "오브"
+    },
+    {
+      "item_id": 30,
+      "name": "스피드부츠"
+    }
+  ],
+  "accepted_capture": {
+    "path": "captures/run/v132_equipment_item_names/v132-20260808-11/equipment/cycle_02.png",
+    "sha256": "d966e78fe5c5f8beec1390f190afe427b5e01faf276d24a3a43a9f1d5a872d72",
+    "visual_review": "pass: five rows render exactly as 룬스톤, 크로스, 넥클리스, 오브, 스피드부츠 without broken glyphs"
+  },
+  "accepted_gst": {
+    "path": "captures/run/v132_equipment_item_names/v132-20260808-11/states/equipment_item_names.gst",
+    "sha256": "40e6658f748f252aaa5029b27df062af984e5dc787964df7b46bdb6306271990"
+  },
+  "rejected_before_fix": {
+    "path": "captures/run/v132_equipment_item_names/v132-20260808-09/equipment/cycle_02.png",
+    "sha256": "be22ad7a000e43f7c19eacc23c3b7fdabbf709311f0541e1d7e68386b5e98f2e",
+    "reason": "equipment graphics overwrote the shared item-name overflow glyph bank"
+  },
+  "implementation": {
+    "equipment_overflow_vram": "0x5400",
+    "shop_overflow_vram": "0xA700",
+    "reload_hook": "0x026F04",
+    "reload_timing": "immediately before the equipment list is constructed"
+  }
+}

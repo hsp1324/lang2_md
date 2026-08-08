@@ -15,6 +15,12 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
+from tools.class_change_data import (
+    ClassTransition,
+    patch_class_change_chain,
+    read_class_change_chain,
+)
+from tools.class_hire_data import CLASS_RECORD_SIZE, CLASS_RECORD_TABLE
 from tools.jp_byte_table_analyzer import KOREAN_CLASS_LABELS
 from tools.rom_version import (
     TITLE_TEXT_MAX_CELLS,
@@ -155,14 +161,12 @@ LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     base + LOREN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
 )
-# The editor's paired NPC design uses a soft lavender ramp for Loren. The live
-# map palette cannot add per-class CRAM colors, so use both of its purple
-# entries: bright violet for the armor face and muted violet for its shadow.
-# The former muted-violet/charcoal pairing looked gray in actual gameplay.
-# Preserve the stock shield, trim, and blade pixels.
+# Loren's approved map design is ivory, not the saturated violet introduced in
+# v1.3.1.  Use the same pale-gold/brown live-palette ramp as the paired Scenario
+# 1 militia while preserving the stock shield, trim, and blade pixels.
 LOREN_SPRITE_COLOR_INDEX_REMAP = {
-    0x1: 0xD,  # gray armor shade -> bright violet
-    0xE: 0xD,  # dark gray armor shade -> bright violet (softer lavender tone in map)
+    0x1: 0x6,  # gray armor face -> ivory
+    0xE: 0x7,  # dark gray armor shade -> warm brown
 }
 LOREN_BLADE_COORDS_BY_FRAME = (
     frozenset(
@@ -643,6 +647,13 @@ ITEM_NAME_LIST_RENDER_HOOKS = (
     (0x279DE, 0x27A1C, 0x279F4, 0x2B8540),
 )
 ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("30 18 0C 40 FF FF")
+ITEM_NAME_EQUIPMENT_RELOAD_HOOK = 0x026F04
+ITEM_NAME_EQUIPMENT_RELOAD_HOOK_ORIGINAL = bytes.fromhex(
+    "4D F8 C7 EC 2C FC 00 00 00 00"
+)
+ITEM_NAME_EQUIPMENT_RELOAD_RESUME = 0x026F0E
+ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE = 0x2B8580
+ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE_LIMIT = 0x2B8600
 ITEM_DISCARD_LIST_RENDER_HOOK = 0x017F08
 ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("36 78 90 4C 36 3C")
 ITEM_DISCARD_LIST_RENDER_ROUTINE = 0x2B8600
@@ -658,6 +669,12 @@ ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_SOURCE = 0x000000C0
 # the "클" in "넥클리스" while the preceding "크로스" remained intact.
 ITEM_NAME_OVERFLOW_VRAM_BASE = 0xA700
 ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xB400
+# The equipment screen loads commander/category graphics over 0xA700 after
+# the shared preparation font pass. Keep a second copy of the same overflow
+# glyphs in the otherwise shop-description-only 0x5400 bank. The equipment
+# list renderer selects this copy; the shop list and purchase popup continue
+# to use 0xA700, where they coexist with the compact description bank.
+ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE = ITEM_DESCRIPTION_VRAM_BASE
 ITEM_GLYPH_VRAM_BYTES = 0x80
 ITEM_NAME_OVERFLOW_CAPACITY = (
     ITEM_NAME_OVERFLOW_VRAM_LIMIT - ITEM_NAME_OVERFLOW_VRAM_BASE
@@ -716,9 +733,6 @@ BYTE_UI_PREP_DYNAMIC_GLYPH_RENDER_ROUTINE_LIMIT = 0x2BEC40
 # the stock all-faction map-sprite cache builder on the exact shop-return
 # caller, after that screen's displaced graphics loaders have completed.
 BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE = 0x2BEC40
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER = 0x2BECF8
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION = 0x2FB000
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION_LIMIT = 0x2FB200
 BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE = 0x2FB200
 BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE_LIMIT = 0x2FB400
 BYTE_UI_PREP_ENTRY_CACHE_RESTORE_ROUTINE = 0x2FB400
@@ -750,14 +764,18 @@ BYTE_UI_PREP_ENTRY_CACHE_RESTORE_HOOK_B_ORIGINAL = bytes.fromhex(
     "31 FC 00 00 BE 50"
 )
 BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE_LIMIT = 0x2BED80
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK = 0x02D2E8
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL = bytes.fromhex(
+# 0x02D2E8 is part of the shared title/opening graphics state machine, not a
+# preparation-shop-only continuation.  An older cache repair replaced its two
+# stock BSRs and synchronously uploaded preparation icons there.  That painted
+# map-sprite patterns across the ordinary and Cho Aniki title backgrounds.
+# Keep those stock instructions untouched; the exact shop-return completion
+# below and both preparation-entry hooks perform the required cache rebuild.
+BYTE_UI_SHARED_TITLE_GRAPHICS_HOOK = 0x02D2E8
+BYTE_UI_SHARED_TITLE_GRAPHICS_ORIGINAL = bytes.fromhex(
     "61 00 03 72 61 00 03 DA"
 )
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_1 = 0x02D65C
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_2 = 0x02D6C8
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK = 0x02D32C
-BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL = bytes.fromhex(
+BYTE_UI_SHARED_TITLE_COMPLETION_HOOK = 0x02D32C
+BYTE_UI_SHARED_TITLE_COMPLETION_ORIGINAL = bytes.fromhex(
     "43 F8 94 A2 45 F9 00 0A 3D 44"
 )
 BYTE_UI_PREP_STATIC_ICON_RESOURCE = 0x8187
@@ -765,7 +783,6 @@ BYTE_UI_PREP_STATIC_ICON_VRAM = 0x4000
 BYTE_UI_PREP_RESOURCE_LOADER = 0x0099B2
 BYTE_UI_PREP_STATIC_ICON_RAW = 0x2F9000
 BYTE_UI_PREP_STATIC_ICON_RAW_LIMIT = 0x2FB000
-BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE = 0x0110A8
 # These patterns are transient map-status/preparation caches, not a persistent
 # font bank.  The battle map renderer has exactly two eight-cell fields (name
 # and class), so all sixteen of its destinations live in audited gaps around
@@ -1945,6 +1962,12 @@ JOIN_CLASS_CHOICE_VISIBILITY_GUARD = 0x31E200
 JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT = 0x31E400
 JOIN_CLASS_CHOICE_CURRENT_SCENARIO = 0xA612
 JOIN_CLASS_CHOICE_ACTIVE_MARKER = 0x5A
+JOIN_CLASS_CHOICE_HAWK_LORD = 0x2B
+JOIN_CLASS_CHOICE_CROCO_LORD = 0x2C
+JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES = {
+    JOIN_CLASS_CHOICE_HAWK_LORD: 0x0F,   # Dragon Knight: flying tier movement
+    JOIN_CLASS_CHOICE_CROCO_LORD: 0x10,  # Serpent Knight: naval tier movement
+}
 JOIN_CLASS_CHOICE_RECORDS = {
     7: {
         "name": "Keith",
@@ -1955,12 +1978,15 @@ JOIN_CLASS_CHOICE_RECORDS = {
             "06 01 0A 05 16 14 00 00 00 00 00 04 00 21"
         ),
         "tier1_class": 0x06,
-        "tier2_candidates": (0x04, 0x06, 0x08),
+        "legacy_tier1_class": 0x01,
+        "tier2_candidates": (0x04, JOIN_CLASS_CHOICE_HAWK_LORD, 0x08),
         "original_tier2_class": 0x06,
         "original_tier2_level": 1,
         "join_level_bonus": 3,
         "target_tier2_level": 4,
         "residual_experience": 5,
+        "experience_policy": "target_level",
+        "first_appearance_scenario": 7,
         "first_player_scenario": 8,
         "active_marker_address": 0x00403FE7,
     },
@@ -1973,12 +1999,24 @@ JOIN_CLASS_CHOICE_RECORDS = {
             "07 01 0A 0F 16 14 00 00 00 00 00 04 00 1D"
         ),
         "tier1_class": 0x07,
-        "tier2_candidates": (0x05, 0x07, 0x0A),
+        "legacy_tier1_class": 0x01,
+        "tier2_candidates": (0x05, JOIN_CLASS_CHOICE_CROCO_LORD, 0x0A),
         "original_tier2_class": 0x07,
         "original_tier2_level": 7,
         "join_level_bonus": 3,
         "target_tier2_level": 10,
         "residual_experience": 15,
+        # Lester receives one finite post-choice EXP grant per branch.  These
+        # byte-sized grants produce the requested natural branch difference:
+        # Knight/Croco Lord reach LV8 and Shaman reaches LV9, without refilling
+        # EXP until a forced target level is reached.
+        "experience_policy": "fixed_grant",
+        "fixed_experience_by_class": {
+            0x05: 0xE0,
+            JOIN_CLASS_CHOICE_CROCO_LORD: 0xE0,
+            0x0A: 0xC0,
+        },
+        "first_appearance_scenario": 10,
         "first_player_scenario": 11,
         "active_marker_address": 0x00403FE9,
     },
@@ -1997,6 +2035,8 @@ JOIN_CLASS_CHOICE_RECORDS = {
         "join_level_bonus": 3,
         "target_tier2_level": 8,
         "residual_experience": 0,
+        "experience_policy": "target_level",
+        "first_appearance_scenario": 11,
         "first_player_scenario": 12,
         "active_marker_address": 0x00403FEB,
     },
@@ -3037,6 +3077,10 @@ CONDITION_SCREENS = [
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-마녀 격파", "", "패배조건", "-주인공 사망"],
     ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
+    # Scenario 10 switches to this shared alternate condition after the TURN 3
+    # monster reveal.  It is the 32nd physical condition record, not an unused
+    # preparation-menu record.
+    ["승리조건", "-적 전멸", "", "패배조건", "-주인공 사망"],
 ]
 
 ITEM_NAME_PATCHES = [
@@ -3428,15 +3472,25 @@ def patch_ai_class_map_sprites(data: bytearray) -> None:
         if not any(payload):
             raise ValueError(f"empty AI class map sprite: {asset_path}")
 
-        record_offset = commander_sprite_record_offset(
-            data, commander_id, class_id
-        )
-        source_sprite_id = be16(data, record_offset + 1)
-        if source_sprite_id >= AI_CLASS_MAP_SPRITE_START_ID:
-            raise ValueError(
-                f"commander {commander_id} class 0x{class_id:02X} "
-                f"already uses expansion sprite 0x{source_sprite_id:04X}"
+        try:
+            record_offset = commander_sprite_record_offset(
+                data, commander_id, class_id
             )
+        except ValueError:
+            if (commander_id, class_id) not in {(7, 0x01), (9, 0x01)}:
+                raise
+            # Their obsolete Fighter sprite-table records are repurposed for
+            # Hawk/Croco Lord. Keep encoding these accepted assets into their
+            # reserved expansion slots so the stable sprite-ID allocation and
+            # asset audit remain unchanged, but do not attach them to a class.
+            record_offset = None
+        if record_offset is not None:
+            source_sprite_id = be16(data, record_offset + 1)
+            if source_sprite_id >= AI_CLASS_MAP_SPRITE_START_ID:
+                raise ValueError(
+                    f"commander {commander_id} class 0x{class_id:02X} "
+                    f"already uses expansion sprite 0x{source_sprite_id:04X}"
+                )
 
         # Use the same accepted design for both animation frames. This avoids
         # inventing pixels that were not reviewed while retaining the stock
@@ -3457,7 +3511,24 @@ def patch_ai_class_map_sprites(data: bytearray) -> None:
                 )
             data[target : target + MAP_SPRITE_BYTES] = payload
 
-        put16(data, record_offset + 1, custom_sprite_id)
+        if record_offset is not None:
+            put16(data, record_offset + 1, custom_sprite_id)
+
+    # The dedicated Hawk/Croco Lord class IDs share the accepted map designs
+    # of Keith's Dragon Knight and Lester's Serpent Knight.  Their classic
+    # profile records keep the stock sprites; only custom-design profiles copy
+    # the already-installed expansion sprite IDs here.
+    for commander_id, custom_class, design_class in (
+        (7, JOIN_CLASS_CHOICE_HAWK_LORD, 0x0F),
+        (9, JOIN_CLASS_CHOICE_CROCO_LORD, 0x10),
+    ):
+        custom_record = commander_sprite_record_offset(
+            data, commander_id, custom_class
+        )
+        design_record = commander_sprite_record_offset(
+            data, commander_id, design_class
+        )
+        put16(data, custom_record + 1, be16(data, design_record + 1))
 
 
 def write_shaman_custom_sprite(
@@ -4158,40 +4229,6 @@ def _build_preparation_mercenary_cache_restore_routine() -> bytes:
     return code.finish()
 
 
-def _build_preparation_mercenary_cache_restore_shop_finalizer() -> bytes:
-    """Finish the shop return before its asynchronous continuation."""
-    code = _M68KCode()
-    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
-    for target in (
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_1,
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_GRAPHICS_2,
-    ):
-        code.emit(bytes.fromhex("4E B9") + target.to_bytes(4, "big"))
-    # $2D6C8 deliberately leaves its final two transfers queued.  Drain them
-    # before the synchronous sprite/icon repair so they cannot win afterward.
-    code.emit("4E B9 00 00 8A 6C")
-    code.emit(
-        bytes.fromhex("4E B9")
-        + BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(4, "big")
-    )
-    code.emit("47 F9 00 C0 00 04")  # lea.l VDP control port,a3
-    code.emit("49 F9 00 C0 00 00")  # lea.l VDP data port,a4
-    code.emit("36 BC 8F 02")  # VDP autoincrement = 2 bytes
-    code.emit("26 BC 54 00 00 01")  # VRAM write command for $5400
-    code.emit(
-        bytes.fromhex("41 F9")
-        + (BYTE_UI_PREP_STATIC_ICON_RAW + 0x1400).to_bytes(4, "big")
-    )
-    code.emit("30 3C 05 FF")  # 0x600 words = 0x0C00 bytes
-    code.label("copy_static_icons")
-    code.emit("38 98")  # move.w (a0)+,(a4)
-    code.emit("51 C8")
-    code.fixups.append((len(code.code), "copy_static_icons"))
-    code.emit("00 00")  # dbra d0,copy_static_icons
-    code.emit("4C DF 7F FF 4E 75")
-    return code.finish()
-
-
 def _build_preparation_mercenary_cache_direct_restore_routine() -> bytes:
     """Synchronously restore every retained mercenary sprite-cache row."""
     code = _M68KCode()
@@ -4323,72 +4360,6 @@ def _build_map_sprite_cache_dynamic_reset_wrapper() -> bytes:
     return code.finish()
 
 
-def _build_preparation_mercenary_cache_restore_shop_completion() -> bytes:
-    """Rebuild sprites after the shop-to-preparation transition completes."""
-    code = _M68KCode()
-    code.emit("48 E7 FF FE")  # preserve d0-d7/a0-a6
-    # $2D32C is not a shared callback: its only owner is installed at $2D2FE
-    # in the exact shop-return chain.  Runtime screen bytes are still in an
-    # intermediate state here, so guarding on them incorrectly skipped the
-    # repair.  Execute unconditionally on this unique continuation.
-    # The expansion overflow guard deliberately recognizes classes already in
-    # all ten dynamic rows.  That is correct during one map initialization,
-    # but on a shop return those rows are stale metadata for overwritten VRAM.
-    # Clear exactly the dynamic table so the stock cache initializer at
-    # $110A8 must reload every live dynamic mercenary.  Fixed rows are rebuilt
-    # unconditionally by that initializer.
-    code.emit(
-        bytes.fromhex("41 F9")
-        + ENEMY_DYNAMIC_MERCENARY_TABLE.to_bytes(4, "big")
-    )  # lea.l dynamic table,a0
-    code.emit(bytes((0x70, ENEMY_DYNAMIC_MERCENARY_COUNT - 1)))
-    code.label("clear_dynamic")
-    code.emit("42 98")  # clr.l (a0)+
-    code.emit("51 C8")
-    code.fixups.append((len(code.code), "clear_dynamic"))
-    code.emit("00 00")  # dbra d0,clear_dynamic
-    code.emit(
-        bytes.fromhex("4E B9")
-        + BYTE_UI_MAP_SPRITE_CACHE_REBUILD_ROUTINE.to_bytes(4, "big")
-    )
-
-    # The stock initializer has now rebuilt the class-to-tile tables, but its
-    # dynamic sprite loads still use the shared decompression buffer.  A later
-    # load can overwrite that buffer before the queued VDP DMA consumes it.
-    # Rewrite both frames synchronously from immutable raw sprite ROM tables.
-    code.emit(
-        bytes.fromhex("4E B9")
-        + BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE.to_bytes(4, "big")
-    )
-
-    # The compressed loader stages resource $8187 in $FF1000.  Later
-    # transition work reuses that staging buffer before its queued DMA owns
-    # VRAM, so the item-description glyphs win again.  Copy only the static
-    # icon tail ($5400-$5FFF) synchronously from the build-time decompressed
-    # ROM copy.  A direct VDP-port loop also prevents any already queued shop
-    # transfer from outliving this repair.
-    code.emit("47 F9 00 C0 00 04")  # lea.l VDP control port,a3
-    code.emit("49 F9 00 C0 00 00")  # lea.l VDP data port,a4
-    code.emit("36 BC 8F 02")  # VDP autoincrement = 2 bytes
-    code.emit("26 BC 54 00 00 01")  # VRAM write command for $5400
-    code.emit(
-        bytes.fromhex("41 F9")
-        + (BYTE_UI_PREP_STATIC_ICON_RAW + 0x1400).to_bytes(4, "big")
-    )
-    code.emit("30 3C 05 FF")  # 0x600 words = 0x0C00 bytes
-    code.label("copy_static_icons")
-    code.emit("38 98")  # move.w (a0)+,(a4)
-    code.emit("51 C8")
-    code.fixups.append((len(code.code), "copy_static_icons"))
-    code.emit("00 00")  # dbra d0,copy_static_icons
-    code.emit("4C DF 7F FF")  # restore d0-d7/a0-a6
-    # Recreate the displaced first two instructions at $2D32C only after the
-    # repair, so the following stock copy sees its required a1/a2 arguments.
-    code.emit(BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL)
-    code.emit("4E 75")
-    return code.finish()
-
-
 def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
     dynamic_reset = _build_map_sprite_cache_dynamic_reset_wrapper()
     dynamic_reset_end = (
@@ -4502,53 +4473,6 @@ def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
         BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE:prep_restore_end
     ] = prep_restore
 
-    shop_finalizer = (
-        _build_preparation_mercenary_cache_restore_shop_finalizer()
-    )
-    shop_finalizer_end = (
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER
-        + len(shop_finalizer)
-    )
-    if shop_finalizer_end > BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_ROUTINE_LIMIT:
-        raise ValueError("preparation shop cache finalizer exceeds reserve")
-    if any(
-        value != 0xFF
-        for value in data[
-            BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER:
-            shop_finalizer_end
-        ]
-    ):
-        raise ValueError("preparation shop cache finalizer area is not blank")
-    data[
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER:
-        shop_finalizer_end
-    ] = shop_finalizer
-
-    shop_completion = (
-        _build_preparation_mercenary_cache_restore_shop_completion()
-    )
-    shop_completion_end = (
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION
-        + len(shop_completion)
-    )
-    if (
-        shop_completion_end
-        > BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION_LIMIT
-    ):
-        raise ValueError("preparation shop cache completion exceeds reserve")
-    if any(
-        value != 0xFF
-        for value in data[
-            BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION:
-            shop_completion_end
-        ]
-    ):
-        raise ValueError("preparation shop cache completion area is not blank")
-    data[
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION:
-        shop_completion_end
-    ] = shop_completion
-
     direct_restore = _build_preparation_mercenary_cache_direct_restore_routine()
     direct_restore_end = (
         BYTE_UI_PREP_MERCENARY_CACHE_DIRECT_RESTORE_ROUTINE
@@ -4619,34 +4543,29 @@ def patch_enemy_ordinary_mercenary_cache_reuse(data: bytearray) -> None:
             raise ValueError("preparation entry cache hook changed")
         data[hook:hook_end] = bytes.fromhex("4E B9") + wrapper.to_bytes(4, "big")
 
-    shop_hook = BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK
-    shop_hook_end = (
-        shop_hook
-        + len(BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL)
+    shared_title_hook_end = (
+        BYTE_UI_SHARED_TITLE_GRAPHICS_HOOK
+        + len(BYTE_UI_SHARED_TITLE_GRAPHICS_ORIGINAL)
     )
     if (
-        bytes(data[shop_hook:shop_hook_end])
-        != BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_HOOK_ORIGINAL
+        bytes(data[BYTE_UI_SHARED_TITLE_GRAPHICS_HOOK:shared_title_hook_end])
+        != BYTE_UI_SHARED_TITLE_GRAPHICS_ORIGINAL
     ):
-        raise ValueError("preparation shop cache finalizer hook changed")
-    data[shop_hook:shop_hook_end] = (
-        bytes.fromhex("4E B9")
-        + BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_FINALIZER.to_bytes(4, "big")
-        + bytes.fromhex("4E 71")
-    )
+        raise ValueError("shared title/opening graphics instructions changed")
 
-    completion_hook = BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK
-    completion_original = (
-        BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_COMPLETION_HOOK_ORIGINAL
+    shared_completion_end = (
+        BYTE_UI_SHARED_TITLE_COMPLETION_HOOK
+        + len(BYTE_UI_SHARED_TITLE_COMPLETION_ORIGINAL)
     )
-    completion_hook_end = completion_hook + len(completion_original)
-    if bytes(data[completion_hook:completion_hook_end]) != completion_original:
-        raise ValueError("preparation shop cache completion hook changed")
-    data[completion_hook:completion_hook_end] = (
-        bytes.fromhex("4E B9")
-        + BYTE_UI_PREP_MERCENARY_CACHE_RESTORE_SHOP_COMPLETION.to_bytes(4, "big")
-        + bytes.fromhex("4E 71 4E 71")
-    )
+    if (
+        bytes(
+            data[
+                BYTE_UI_SHARED_TITLE_COMPLETION_HOOK:shared_completion_end
+            ]
+        )
+        != BYTE_UI_SHARED_TITLE_COMPLETION_ORIGINAL
+    ):
+        raise ValueError("shared title completion instructions changed")
 
     for hook, target in (
         (
@@ -5420,6 +5339,10 @@ def capacity_words(data: bytes | bytearray, table_offset: int, index: int, recor
     if index + 1 < record_count:
         end = be32(data, table_offset + (index + 1) * 4)
     elif table_offset == SCENARIO_POINTER_TABLE:
+        return direct_string_capacity_words(data, start)
+    elif table_offset == CONDITION_POINTER_TABLE:
+        # The final alternate Scenario 10 condition is followed immediately by
+        # preparation control records, not another pointer-table entry.
         return direct_string_capacity_words(data, start)
     else:
         end = start + 0x400
@@ -6234,12 +6157,13 @@ def patch_condition(
 
 
 def patch_conditions(data: bytearray, glyph_by_char: dict[str, int]) -> None:
-    if len(CONDITION_SCREENS) != 31:
-        raise ValueError(f"expected 31 condition screens, got {len(CONDITION_SCREENS)}")
-    # The tables have 32 entries, but the game has 31 scenarios. Entry 32 is
-    # shared by the preparation renderer; patching it blanks the large prep
-    # menu. Every translated scenario record fits its original glyph list, so
-    # patch entries 1-31 in place and leave the final shared record untouched.
+    if len(CONDITION_SCREENS) != 32:
+        raise ValueError(f"expected 32 condition screens, got {len(CONDITION_SCREENS)}")
+    # Records 1..31 are the ordinary scenario conditions. Record 32 is the
+    # alternate Scenario 10 condition selected after the TURN 3 monster reveal.
+    # Keep every pointer in place; the old preparation regression came from
+    # relocating the table above the original 2 MiB window, not from translating
+    # this final in-place record.
     for index, lines in enumerate(CONDITION_SCREENS):
         patch_condition(data, index, lines, glyph_by_char)
 
@@ -6550,13 +6474,127 @@ def patch_join_class_choice_progression(
         data[offset:end] = target
 
 
-def profile_includes_user_patches(profile_name: str) -> bool:
-    """Return whether an edition includes reviewed gameplay/design changes.
+def _replace_join_class_transition(
+    transitions: list[ClassTransition],
+    *,
+    current_class: int,
+    replacement: ClassTransition,
+) -> None:
+    matches = [
+        index
+        for index, transition in enumerate(transitions)
+        if transition.current_class == current_class
+    ]
+    if len(matches) != 1:
+        raise ValueError(
+            f"expected one class transition from 0x{current_class:02X}, "
+            f"got {len(matches)}"
+        )
+    transitions[matches[0]] = replacement
 
-    ``pure`` deliberately retains the Japanese roster, progression, event
-    mechanics, class sprites, palettes, and sprite-cache code.  ``normal`` is
-    the original-balance user-patch edition, while ``hard`` layers its balance
-    changes on top of that same user-patch base.
+
+def patch_join_class_choice_class_data(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    """Install the dedicated Hawk/Croco first and second tier lineages."""
+
+    for custom_class, source_class in JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES.items():
+        custom_offset = CLASS_RECORD_TABLE + custom_class * CLASS_RECORD_SIZE
+        source_offset = CLASS_RECORD_TABLE + source_class * CLASS_RECORD_SIZE
+        if data[custom_offset : custom_offset + CLASS_RECORD_SIZE] != source[
+            custom_offset : custom_offset + CLASS_RECORD_SIZE
+        ]:
+            raise ValueError(
+                f"input custom class slot 0x{custom_class:02X} changed"
+            )
+        data[custom_offset : custom_offset + CLASS_RECORD_SIZE] = source[
+            source_offset : source_offset + CLASS_RECORD_SIZE
+        ]
+
+    lineage_specs = {
+        7: {
+            "starter": 0x06,
+            "custom": JOIN_CLASS_CHOICE_HAWK_LORD,
+            "starter_candidates": (0x04, JOIN_CLASS_CHOICE_HAWK_LORD, 0x08),
+        },
+        9: {
+            "starter": 0x07,
+            "custom": JOIN_CLASS_CHOICE_CROCO_LORD,
+            "starter_candidates": (0x05, JOIN_CLASS_CHOICE_CROCO_LORD, 0x0A),
+        },
+    }
+    for commander_id, spec in lineage_specs.items():
+        source_transitions = list(read_class_change_chain(source, commander_id))
+        current_transitions = read_class_change_chain(data, commander_id)
+        if current_transitions != tuple(source_transitions):
+            raise ValueError(
+                f"input class-change chain for commander {commander_id} changed"
+            )
+        starter = int(spec["starter"])
+        custom = int(spec["custom"])
+        promoted_candidates = next(
+            transition.candidates
+            for transition in source_transitions
+            if transition.current_class == starter
+        )
+        _replace_join_class_transition(
+            source_transitions,
+            current_class=0x01,
+            replacement=ClassTransition(custom, promoted_candidates),
+        )
+        _replace_join_class_transition(
+            source_transitions,
+            current_class=starter,
+            replacement=ClassTransition(
+                starter,
+                tuple(int(value) for value in spec["starter_candidates"]),
+            ),
+        )
+        patch_class_change_chain(data, commander_id, tuple(source_transitions))
+
+        legacy_sprite_record = commander_sprite_record_offset(data, commander_id, 0x01)
+        promoted_sprite_record = commander_sprite_record_offset(
+            data,
+            commander_id,
+            int(JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES[custom]),
+        )
+        data[legacy_sprite_record] = custom
+        data[legacy_sprite_record + 1 : legacy_sprite_record + 3] = data[
+            promoted_sprite_record + 1 : promoted_sprite_record + 3
+        ]
+
+
+SCENARIO6_RUNESTONE_TRIGGER = 0x18D768
+SCENARIO6_RUNESTONE_TRIGGER_SOURCE = bytes.fromhex(
+    "D8 AC 08 F0 00 00 05 04 05 04 00 18 D8 D8 FF FF"
+)
+SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE = bytes.fromhex(
+    "D8 AC 08 F0 00 00 05 04 07 04 00 18 D8 D8 FF FF"
+)
+
+
+def patch_scenario6_runestone_accessibility(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    """Extend the blocked well trigger through its reachable right approach."""
+
+    start = SCENARIO6_RUNESTONE_TRIGGER
+    end = start + len(SCENARIO6_RUNESTONE_TRIGGER_SOURCE)
+    if source[start:end] != SCENARIO6_RUNESTONE_TRIGGER_SOURCE:
+        raise ValueError("Japanese Scenario 6 Rune Stone trigger changed")
+    if data[start:end] != SCENARIO6_RUNESTONE_TRIGGER_SOURCE:
+        raise ValueError("input Scenario 6 Rune Stone trigger changed")
+    data[start:end] = SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE
+
+
+def profile_includes_user_patches(profile_name: str) -> bool:
+    """Return whether an edition includes the custom map-design layer.
+
+    ``pure`` retains the Japanese map designs while receiving the shared
+    Korean/gameplay corrections. ``normal`` uses the reviewed custom designs,
+    while ``hard`` layers balance changes on that same custom-design base.
     """
     if profile_name == "pure":
         return False
@@ -6571,11 +6609,15 @@ def patch_profile_user_customizations(
     *,
     profile_name: str,
 ) -> None:
-    if not profile_includes_user_patches(profile_name):
-        return
+    if profile_name not in {"pure", "normal", "hard"}:
+        raise ValueError(f"unknown ROM customization profile: {profile_name}")
     patch_join_class_choice_progression(data, source)
+    patch_join_class_choice_class_data(data, source)
     patch_join_class_choice_visibility_guard(data, source)
     patch_join_class_choice_target_levels(data, source)
+    patch_scenario6_runestone_accessibility(data, source)
+    if not profile_includes_user_patches(profile_name):
+        return
     patch_bald_map_sprite(data)
     patch_shaman_map_sprite(data)
     patch_loren_map_sprite(data)
@@ -6618,6 +6660,36 @@ def build_join_class_choice_visibility_guard() -> bytes:
 
     for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
         code.label(f"target_{commander_id}")
+        legacy_class = row.get("legacy_tier1_class")
+        if legacy_class is not None:
+            first_appearance = int(row["first_appearance_scenario"])
+            first_player = int(row["first_player_scenario"])
+            # Saves created before v1.3.2 can still contain Fighter here even
+            # though the ROM's initial roster is fixed. Migrate only during the
+            # character's join window so a later intentional Runestone Fighter
+            # is never rewritten.
+            code.emit(
+                bytes.fromhex("0C 78")
+                + first_appearance.to_bytes(2, "big")
+                + JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big")
+            )
+            code.branch_word(0x6500, f"migration_done_{commander_id}")
+            code.emit(
+                bytes.fromhex("0C 78")
+                + first_player.to_bytes(2, "big")
+                + JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big")
+            )
+            code.branch_word(0x6200, f"migration_done_{commander_id}")
+            code.emit(
+                bytes.fromhex("0C 28 00")
+                + bytes((int(legacy_class), 0x00, 0x00))
+            )
+            code.branch_word(0x6600, f"migration_done_{commander_id}")
+            code.emit(
+                bytes.fromhex("11 7C 00")
+                + bytes((int(row["tier1_class"]), 0x00, 0x00))
+            )
+            code.label(f"migration_done_{commander_id}")
         first_scenario = int(row["first_player_scenario"])
         code.emit(
             bytes.fromhex("0C 78")
@@ -6695,18 +6767,59 @@ def build_join_class_choice_level_wrapper() -> bytes:
 
     for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
         candidates = tuple(int(value) for value in row["tier2_candidates"])
-        target_level = int(row["target_tier2_level"])
-        residual_exp = int(row["residual_experience"])
         marker_address = int(row["active_marker_address"])
         code.label(f"commander_{commander_id}")
         code.emit("74 00")           # moveq #0,d2
         code.emit("14 28 00 00")     # move.b 0(a0),d2
         for candidate in candidates:
             code.emit(bytes.fromhex("0C 02 00") + bytes((candidate,)))
-            code.branch_word(0x6700, f"class_ok_{commander_id}")
+            code.branch_word(0x6700, f"class_{commander_id}_{candidate}")
         code.emit(bytes.fromhex("42 39") + marker_address.to_bytes(4, "big"))
         code.branch_word(0x6000, "next")
 
+        policy = str(row["experience_policy"])
+        if policy == "fixed_grant":
+            grants = {
+                int(class_id): int(experience)
+                for class_id, experience in dict(
+                    row["fixed_experience_by_class"]
+                ).items()
+            }
+            if set(grants) != set(candidates):
+                raise ValueError(
+                    f"fixed EXP classes for commander {commander_id} do not "
+                    "match its class choices"
+                )
+            for candidate in candidates:
+                code.label(f"class_{commander_id}_{candidate}")
+                code.emit(
+                    bytes.fromhex("0C 39 00")
+                    + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
+                    + marker_address.to_bytes(4, "big")
+                )
+                code.branch_word(0x6700, "next")
+                code.emit(
+                    bytes.fromhex("13 FC 00")
+                    + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
+                    + marker_address.to_bytes(4, "big")
+                )
+                code.emit(
+                    bytes.fromhex("11 7C 00")
+                    + bytes((grants[candidate],))
+                    + bytes.fromhex("00 2F")
+                )
+                code.branch_word(0x6000, "next")
+            continue
+        if policy != "target_level":
+            raise ValueError(
+                f"unknown join EXP policy for commander {commander_id}: {policy}"
+            )
+
+        target_level = int(row["target_tier2_level"])
+        residual_exp = int(row["residual_experience"])
+        for candidate in candidates:
+            code.label(f"class_{commander_id}_{candidate}")
+            code.branch_word(0x6000, f"class_ok_{commander_id}")
         code.label(f"class_ok_{commander_id}")
         code.emit(
             bytes.fromhex("0C 28 00")
@@ -7510,6 +7623,8 @@ def patch_item_names(
     list_render_hooks: tuple[tuple[int, int, int, int], ...] = (
         ITEM_NAME_LIST_RENDER_HOOKS
     ),
+    equipment_reload_hook: int | None = ITEM_NAME_EQUIPMENT_RELOAD_HOOK,
+    equipment_reload_resume: int = ITEM_NAME_EQUIPMENT_RELOAD_RESUME,
     discard_list_render_hook: int = ITEM_DISCARD_LIST_RENDER_HOOK,
     token_reloc_base: int | None = None,
     token_reloc_limit: int | None = None,
@@ -7639,16 +7754,39 @@ def patch_item_names(
         return_target=popup_return_target,
     )
     list_renderers = [
-        (routine, _build_item_name_list_render_routine(terminator, store))
-        for _, terminator, store, routine in list_render_hooks
+        (
+            routine,
+            _build_item_name_list_render_routine(
+                terminator,
+                store,
+                overflow_vram_base=(
+                    ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE
+                    if index == 0
+                    else ITEM_NAME_OVERFLOW_VRAM_BASE
+                ),
+            ),
+        )
+        for index, (_, terminator, store, routine) in enumerate(
+            list_render_hooks
+        )
     ]
     discard_list_renderer = _build_item_discard_list_render_routine(
         pointer_table=pointer_table
+    )
+    equipment_reloader = _build_item_name_equipment_reload_routine(
+        len(item_glyphs) - ITEM_NAME_GLYPH_PRIMARY_COUNT,
+        glyph_load_target=glyph_load_target,
+        return_target=equipment_reload_resume,
     )
     for offset, payload in (
         (ITEM_NAME_GLYPH_LOAD_ROUTINE, loader),
         (ITEM_NAME_POPUP_BUILD_ROUTINE, popup_builder),
         *list_renderers,
+        *(
+            ((ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE, equipment_reloader),)
+            if equipment_reload_hook is not None
+            else ()
+        ),
         (ITEM_DISCARD_LIST_RENDER_ROUTINE, discard_list_renderer),
     ):
         if (
@@ -7692,6 +7830,21 @@ def patch_item_names(
         if bytes(data[hook:hook_end]) != ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL:
             raise ValueError(f"item name list-render hook changed at 0x{hook:06X}")
         data[hook:hook_end] = bytes.fromhex("4E F9") + routine.to_bytes(4, "big")
+    if equipment_reload_hook is not None:
+        equipment_hook_end = (
+            equipment_reload_hook
+            + len(ITEM_NAME_EQUIPMENT_RELOAD_HOOK_ORIGINAL)
+        )
+        if (
+            bytes(data[equipment_reload_hook:equipment_hook_end])
+            != ITEM_NAME_EQUIPMENT_RELOAD_HOOK_ORIGINAL
+        ):
+            raise ValueError("equipment item-name reload hook changed")
+        data[equipment_reload_hook:equipment_hook_end] = (
+            bytes.fromhex("4E F9")
+            + ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE.to_bytes(4, "big")
+            + bytes.fromhex("4E 71 4E 71")
+        )
     discard_hook_end = (
         discard_list_render_hook
         + len(ITEM_DISCARD_LIST_RENDER_HOOK_ORIGINAL)
@@ -7974,6 +8127,38 @@ def _build_item_name_glyph_load_routine(
     )
 
 
+def _build_item_name_equipment_reload_routine(
+    overflow_count: int,
+    *,
+    glyph_load_target: int = 0x02C2C4,
+    return_target: int = ITEM_NAME_EQUIPMENT_RELOAD_RESUME,
+) -> bytes:
+    if not 0 < overflow_count <= ITEM_NAME_OVERFLOW_CAPACITY:
+        raise ValueError(
+            f"equipment item-name overflow count is invalid: {overflow_count}"
+        )
+    payload = (
+        bytes.fromhex("41 F9")
+        + (
+            ITEM_NAME_GLYPH_LIST_RELOC_BASE
+            + ITEM_NAME_GLYPH_PRIMARY_COUNT * 2
+        ).to_bytes(4, "big")
+        + bytes((0x70, overflow_count))
+        + bytes.fromhex("22 3C")
+        + ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE.to_bytes(4, "big")
+        + bytes.fromhex("4E B9")
+        + glyph_load_target.to_bytes(4, "big")
+        + bytes.fromhex("4D F8 C7 EC 2C FC 00 00 00 00 4E F9")
+        + return_target.to_bytes(4, "big")
+    )
+    if (
+        ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE + len(payload)
+        > ITEM_NAME_EQUIPMENT_RELOAD_ROUTINE_LIMIT
+    ):
+        raise ValueError("equipment item-name reload routine exceeds reserved bank")
+    return payload
+
+
 def _build_item_name_popup_stream_routine(
     *,
     pointer_table: int = ITEM_NAME_POINTER_TABLE,
@@ -8001,7 +8186,10 @@ def _build_item_name_popup_stream_routine(
 
 
 def _build_item_name_list_render_routine(
-    terminator_target: int, store_target: int
+    terminator_target: int,
+    store_target: int,
+    *,
+    overflow_vram_base: int = ITEM_NAME_OVERFLOW_VRAM_BASE,
 ) -> bytes:
     code = _M68KCode()
     code.emit("30 18 0C 40 FF FF")
@@ -8011,7 +8199,7 @@ def _build_item_name_list_render_routine(
     code.emit("0C 40 00 40")
     code.branch_word(0x6500, "primary")
     code.emit("04 40 00 40 EF 48 06 40")
-    code.emit(ITEM_NAME_OVERFLOW_VRAM_BASE.to_bytes(2, "big"))
+    code.emit(overflow_vram_base.to_bytes(2, "big"))
     code.branch_word(0x6000, "finish")
     code.label("primary")
     code.emit("EF 48 06 40 20 00")
@@ -8829,16 +9017,25 @@ def build_byte_ui_local_mapping(
     class_labels: list[str] | tuple[str, ...] | None = None,
     name_labels: list[str] | tuple[str, ...] | None = None,
 ) -> tuple[dict[str, int], list[int]]:
-    normal_class_labels = tuple(
+    # Preserve the v1.3.1 allocation order even though the two formerly unused
+    # labels now expose Hawk/Croco Lord. Reordering this baseline would move
+    # battle-stable extension tiles used by unrelated names and UI strings.
+    stable_class_labels = list(
         KOREAN_CLASS_LABELS[index]
         for index in range(CLASS_BYTE_RECORD_COUNT)
     )
+    stable_class_labels[JOIN_CLASS_CHOICE_HAWK_LORD] = "라이더"
+    stable_class_labels[JOIN_CLASS_CHOICE_CROCO_LORD] = "뱀파이어"
+    normal_class_labels = tuple(stable_class_labels)
     normal_name_labels = tuple(
         KOREAN_NAME_BY_ID[index]
         for index in range(NAME_BYTE_RECORD_COUNT)
     )
     if class_labels is None:
-        class_labels = normal_class_labels
+        class_labels = tuple(
+            KOREAN_CLASS_LABELS[index]
+            for index in range(CLASS_BYTE_RECORD_COUNT)
+        )
     if name_labels is None:
         name_labels = normal_name_labels
     if len(class_labels) != CLASS_BYTE_RECORD_COUNT:

@@ -4,7 +4,7 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.3.1`입니다. 완성된 일반판과 하드판은
+> 최신 공개 버전은 `v1.3.2`입니다. 세 가지 완성판은
 > GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.  
 > 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
 > `RetroArch` 사용을 권장합니다.
@@ -13,14 +13,44 @@
 
 원하는 버전은 다음 패처를 받아 일본판 ROM에 적용합니다.
 
-- [Langrisser-II-Korean-Patcher-v1.3.1.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.1/Langrisser-II-Korean-Patcher-v1.3.1.exe)
+- [Langrisser-II-Korean-Patcher-v1.3.2.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.2/Langrisser-II-Korean-Patcher-v1.3.2.exe)
 
-검증값은 [v1.3.1 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.1)에서 확인할 수 있습니다.
+검증값은 [v1.3.2 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.2)에서 확인할 수 있습니다.
 
-## 일반판과 하드판
+## 세 가지 버전
 
-- **일반판**: 원작에 가까운 난이도로 한국어화를 적용한 버전입니다.
-- **하드판**: 같은 한국어화를 바탕으로 적 지휘관과 용병의 능력 및 구성을 강화한 버전입니다.
+- **원작 디자인판**: 원작의 맵 캐릭터 디자인과 밸런스를 유지하고 한국어화와 키스·레스터·제시카 합류 진행 수정을 적용합니다.
+- **최신 디자인 일반판**: `New 클래스`의 최신 사용자 디자인과 한국어화를 적용하며 난이도는 원작 기준입니다.
+- **최신 디자인 하드판**: 최신 사용자 디자인과 한국어화에 적 지휘관·용병 강화 밸런스를 더합니다.
+
+Windows 패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
+
+## macOS에서 패치하기
+
+macOS에서는 EXE 대신 저장소의 Python 패처를 바로 실행할 수 있습니다. 별도
+Python 패키지는 필요하지 않습니다.
+
+```bash
+git clone https://github.com/hsp1324/lang2_md.git
+cd lang2_md
+python3 patcher/langrisser_ii_korean_patcher.py \
+  --rom "/path/to/Langrisser II (Japan).md" \
+  --output-dir "/path/to/output"
+```
+
+일본판 ROM이 ZIP 안에 있어도 `--rom`에 ZIP 경로를 지정하면 됩니다. 기존
+게임 내 저장도 함께 연결하려면 `--save`와 연결할 버전을 지정합니다.
+
+```bash
+python3 patcher/langrisser_ii_korean_patcher.py \
+  --rom "/path/to/Langrisser II (Japan).zip" \
+  --output-dir "/path/to/output" \
+  --save "/path/to/old-save.srm" \
+  --save-target normal
+```
+
+`--save-target`은 `pure`, `normal`, `hard` 중 하나입니다. 상태 저장 파일이
+아니라 게임 안에서 저장한 `.srm`을 사용해야 합니다.
 
 ## 게임 데이터 에디터 사용법
 
@@ -83,11 +113,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser II (Korean v1.3.1).md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Korean New Design v1.3.2).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser II (Korean v1.3.1).srm
+Langrisser II (Korean New Design v1.3.2).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.

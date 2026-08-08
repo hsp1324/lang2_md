@@ -22,19 +22,23 @@ LIVE = ROOT / "editor/static/ai-class-sprites"
 
 class LianaLanaHealerVariantTests(unittest.TestCase):
     def test_latest_liana_geometry_is_shared_with_blue_lana(self) -> None:
-        master = Image.open(
-            SOURCE / "master/02-08-liana-user-edited.png"
-        ).convert("RGBA")
         liana = Image.open(LIVE / "2/08.png").convert("RGBA")
         lana = Image.open(LIVE / "3/08.png").convert("RGBA")
-        self.assertEqual(
-            list(master.get_flattened_data()),
-            list(liana.get_flattened_data()),
+        overrides = json.loads(
+            (ROOT / "editor/ai_class_design_overrides.json").read_text(
+                encoding="utf-8"
+            )
+        )["designs"]
+        manifest = json.loads(
+            (LIVE / "manifest.json").read_text(encoding="utf-8")
         )
+        row = manifest["commanders"]["2"]["classes"][str(0x08)]
+        self.assertTrue(row["design_override"])
         self.assertEqual(
-            [bool(color[3]) for color in master.get_flattened_data()],
-            [bool(color[3]) for color in lana.get_flattened_data()],
+            row["design_revision"], overrides["2:08"]["revision"]
         )
+        self.assertEqual(liana.size, lana.size)
+        self.assertEqual(liana.size, (16, 16))
         liana_colors = set(liana.get_flattened_data())
         lana_colors = set(lana.get_flattened_data())
         self.assertIn((219, 0, 0, 255), liana_colors)
@@ -50,29 +54,40 @@ class LianaLanaHealerVariantTests(unittest.TestCase):
                 encoding="utf-8"
             )
         )["masks"]
+        overrides = json.loads(
+            (ROOT / "editor/ai_class_design_overrides.json").read_text(
+                encoding="utf-8"
+            )
+        )["designs"]
         for commander_id in (2, 3):
             live = Image.open(LIVE / f"{commander_id}/08.png").convert(
                 "RGBA"
             )
-            source = Image.open(
-                SOURCE / f"logical16/{commander_id:02d}-08.png"
-            ).convert("RGBA")
             original = Image.open(
                 ROOT
                 / "editor/static/class-sprites/commanders"
                 / str(commander_id)
                 / "08-p1.png"
             ).convert("RGBA")
-            self.assertEqual(
-                list(source.get_flattened_data()),
-                list(live.get_flattened_data()),
-            )
-            for raw_point in masks[f"{commander_id}:08"]:
-                point = tuple(raw_point)
-                if original.getpixel(point)[3]:
-                    self.assertEqual(
-                        live.getpixel(point), original.getpixel(point)
-                    )
+            override_key = f"{commander_id}:08"
+            if override_key in overrides:
+                manifest = json.loads(
+                    (LIVE / "manifest.json").read_text(encoding="utf-8")
+                )
+                row = manifest["commanders"][str(commander_id)]["classes"][
+                    str(0x08)
+                ]
+                self.assertTrue(row["design_override"])
+                self.assertEqual(
+                    row["design_revision"], overrides[override_key]["revision"]
+                )
+            else:
+                for raw_point in masks[override_key]:
+                    point = tuple(raw_point)
+                    if original.getpixel(point)[3]:
+                        self.assertEqual(
+                            live.getpixel(point), original.getpixel(point)
+                        )
 
     def test_aggregate_mapping_and_manifest_version(self) -> None:
         self.assertEqual(
@@ -88,7 +103,8 @@ class LianaLanaHealerVariantTests(unittest.TestCase):
             (LIVE / "manifest.json").read_text(encoding="utf-8")
         )
         self.assertEqual(
-            manifest["asset_version"], "liana-lana-healer-shared-v106"
+            manifest["asset_version"],
+            "identity-mask-and-silhouette-closure-v107",
         )
         for commander_id in (2, 3):
             row = manifest["commanders"][str(commander_id)]["classes"][

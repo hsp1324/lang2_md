@@ -210,8 +210,37 @@ def main() -> int:
             blastem_display.sequence_display_args(args.desktop_display)
         )
         run(sequence_command)
-        capture(entry_path, xlib_only=args.xlib_only)
-        if not shop_detail_visible(entry_path):
+        entry_visible = False
+        for recovery_attempt in range(4):
+            capture(entry_path, xlib_only=args.xlib_only)
+            if shop_detail_visible(entry_path):
+                entry_visible = True
+                break
+            if recovery_attempt == 3:
+                break
+            # The ordinary build retains the full opening.  Depending on the
+            # exact frame at which the first Start lands, the fixed startup
+            # sequence can finish on a black opening frame even though the
+            # emulator is healthy.  Replay the same navigation in the live
+            # window instead of restarting the ROM and hitting the identical
+            # timing again.  Hard mode normally reaches the shop on the first
+            # pass, so this recovery path is inert there.
+            recovery_command = [
+                sys.executable,
+                str(RUN_SEQUENCE),
+                "shop-buy-list",
+                "--rom",
+                str(args.output_rom),
+                "--no-launch",
+                "--send-event",
+                "--initial-delay",
+                "1.0",
+            ]
+            recovery_command.extend(
+                blastem_display.sequence_display_args(args.desktop_display)
+            )
+            run(recovery_command)
+        if not entry_visible:
             raise RuntimeError(
                 "complete-item shop detail panel was not detected; no row was accepted"
             )

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Windows GUI and command-line patcher for Langrisser II Korean v1.3.1."""
+"""Windows GUI and command-line patcher for Langrisser II Korean v1.3.2."""
 
 from __future__ import annotations
 
@@ -28,9 +28,9 @@ from tools.rom_update import (
 )
 
 
-APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.1"
-MANIFEST_FILENAME = "v1.3.1.json"
-PATCHER_RELEASE = "v1.3.1"
+APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.2"
+MANIFEST_FILENAME = "v1.3.2.json"
+PATCHER_RELEASE = "v1.3.2"
 ROM_SUFFIXES = frozenset({".md", ".bin", ".gen", ".smd", ".zip"})
 
 
@@ -71,8 +71,15 @@ def load_release_manifest() -> dict[str, object]:
     targets = manifest.get("targets")
     if not isinstance(source, dict) or not isinstance(targets, list):
         raise UpdateError("패처 manifest 구조가 잘못되었습니다")
-    if len(targets) != 2:
-        raise UpdateError("일반판·하드판 패치 정보가 완전하지 않습니다")
+    if len(targets) != 3:
+        raise UpdateError(
+            "원작 디자인판·최신 디자인 일반판·하드판 정보가 완전하지 않습니다"
+        )
+    target_ids = {
+        value.get("id") for value in targets if isinstance(value, dict)
+    }
+    if target_ids != {"pure", "normal", "hard"}:
+        raise UpdateError("패처 대상 ID가 완전하지 않습니다")
     return manifest
 
 
@@ -364,7 +371,7 @@ def run_gui() -> int:
                 f"{result.output_path.name}\nSHA-256: {result.sha256}"
                 for result in results
             ]
-            status_var.set("완료: 일반판과 하드판을 생성하고 검증했습니다.")
+            status_var.set("완료: 세 가지 한국어판 ROM을 생성하고 검증했습니다.")
             messagebox.showinfo(
                 "패치 완료",
                 "\n\n".join(lines)
@@ -392,10 +399,13 @@ def run_gui() -> int:
     save_frame.grid(row=3, column=1, sticky="w", **padding)
     ttk.Label(save_frame, text="세이브 연결 대상:").pack(side="left")
     ttk.Radiobutton(
+        save_frame, text="원작 디자인판", variable=save_target_var, value="pure"
+    ).pack(side="left", padx=8)
+    ttk.Radiobutton(
         save_frame, text="하드판", variable=save_target_var, value="hard"
     ).pack(side="left", padx=8)
     ttk.Radiobutton(
-        save_frame, text="일반판", variable=save_target_var, value="normal"
+        save_frame, text="최신 디자인 일반판", variable=save_target_var, value="normal"
     ).pack(side="left")
     ttk.Label(root, textvariable=status_var, wraplength=620).grid(
         row=4, column=0, columnspan=3, sticky="w", **padding
@@ -413,7 +423,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--save", type=Path)
     parser.add_argument(
-        "--save-target", choices=("normal", "hard"), default="hard"
+        "--save-target", choices=("pure", "normal", "hard"), default="hard"
     )
     parser.add_argument(
         "--yes", action="store_true", help="다른 결과 ROM 교체를 허용합니다"

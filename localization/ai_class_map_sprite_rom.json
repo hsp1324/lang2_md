@@ -2,20 +2,48 @@
   "schema_version": 1,
   "status": "all_promoted_class_map_sprites_verified",
   "rom": {
-    "path": "roms/releases/Langrisser II (Korean Hard T1.0.0 B1.0.0).md",
+    "path": "roms/builds/Langrisser II (Korean).md",
     "size": 4194304,
-    "md_checksum": "5BE8",
-    "sha256": "227e7a25818860ebd674d62bda3ca748901aaa45f0919c3eb1ae4340157742bd"
+    "md_checksum": "B50F",
+    "sha256": "ad66810801cf0e08dbc4be7aae0e96d71509327724ef2bdedd7245395652c88c"
   },
   "scope": {
-    "sprite_count": 40,
+    "sprite_count": 131,
     "class_ids": [
+      "0x01",
       "0x04",
+      "0x06",
+      "0x07",
+      "0x08",
+      "0x09",
+      "0x0A",
       "0x0B",
+      "0x0C",
+      "0x0D",
       "0x11",
+      "0x12",
       "0x13",
       "0x14",
-      "0x16"
+      "0x15",
+      "0x16",
+      "0x17",
+      "0x18",
+      "0x19",
+      "0x1A",
+      "0x1B",
+      "0x1D",
+      "0x1E",
+      "0x1F",
+      "0x21",
+      "0x22",
+      "0x23",
+      "0x24",
+      "0x25",
+      "0x26",
+      "0x27",
+      "0x28",
+      "0x29",
+      "0x2A"
     ],
     "animation_policy": "the reviewed 16x16 design is stored in both stock-timed map animation frame slots",
     "runtime_execution": "outside this static verifier; see localization/ai_class_runtime_spot_check.json"
@@ -26,560 +54,1965 @@
       "class_id": "0x04",
       "class_name": "로드",
       "mapping_record": "0x05DBAB",
-      "sprite_id": "0x53BA",
+      "mapping_status": "attached",
+      "sprite_id": "0x57BA",
       "frame_offsets": [
-        "0x2F0680",
-        "0x2F5F80"
+        "0x310680",
+        "0x315F80"
       ],
       "asset": "editor/static/ai-class-sprites/1/04.png",
-      "asset_sha256": "9b32c9a6c9e8ba0dfc9c28c2877a3926c17fc7f0a855696fca9cbfb7268578c7",
-      "encoded_sha256": "77b974fcf3ab26bdffbfaeab9054fb96f58b53bc8c241d10a39fd10f8cdcffdf"
+      "asset_sha256": "cd661c9f99a0f80bf620ec86c4151950e37a53c2fcaf7f7d54d7443a483aac0d",
+      "encoded_sha256": "0e1987dcff930fc52bbe968faf5e40c25ca2ce75623354753c843e26b64a7a26"
     },
     {
       "commander_id": 1,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DBB7",
-      "sprite_id": "0x53BB",
+      "mapping_status": "attached",
+      "sprite_id": "0x57BB",
       "frame_offsets": [
-        "0x2F0700",
-        "0x2F6000"
+        "0x310700",
+        "0x316000"
       ],
       "asset": "editor/static/ai-class-sprites/1/0B.png",
-      "asset_sha256": "3539801c4e2416ec38f8e3cf6fd54c372a6b103d980bbc9a2ee2d8b5908d0691",
-      "encoded_sha256": "16fb01ac3c0bd7bcd9b43527c43d96d5ac3dbea55351311ac57a5d85286d9c5f"
+      "asset_sha256": "f6ef143685aa2f0ff6de194d5a739d92a9268c0068909a37d8035387679ed779",
+      "encoded_sha256": "3a95b712a678dfd0f9f18062140feff3aa780cfaed4b1c74ed088475243ed6a0"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x0C",
+      "class_name": "하이랜더",
+      "mapping_record": "0x05DBBA",
+      "mapping_status": "attached",
+      "sprite_id": "0x57BC",
+      "frame_offsets": [
+        "0x310780",
+        "0x316080"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/0C.png",
+      "asset_sha256": "fb33d436af08984b891ee600f9d1cee1ed12937a7f22540854582e308c0ee17e",
+      "encoded_sha256": "c3f36462e9fe4e0e0ff7b47fb42b684903351f2ebc48945df2c5d20ae32537c1"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x12",
+      "class_name": "비숍",
+      "mapping_record": "0x05DBB4",
+      "mapping_status": "attached",
+      "sprite_id": "0x57BD",
+      "frame_offsets": [
+        "0x310800",
+        "0x316100"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/12.png",
+      "asset_sha256": "3cb68616d7198b1cc0f1d48ce6e44c4b93d1e32233382babf43c6fd1de598118",
+      "encoded_sha256": "bb806515b200936e48fe21ca960cb8ade6866ce7a3f56fab38f5149617f12c72"
     },
     {
       "commander_id": 1,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DBC0",
-      "sprite_id": "0x53BC",
+      "mapping_status": "attached",
+      "sprite_id": "0x57BE",
       "frame_offsets": [
-        "0x2F0780",
-        "0x2F6080"
+        "0x310880",
+        "0x316180"
       ],
       "asset": "editor/static/ai-class-sprites/1/13.png",
-      "asset_sha256": "203ae340138f0f0794891237ae8e667095b7d3fc2100c22a90b1f23e3d55882c",
-      "encoded_sha256": "01d4ffbe49d993c19976e254542797f6aeaf40f20f8aee6a0c2f2e97a2be1ee7"
+      "asset_sha256": "6ccde352821b0d81c2d903685760e3bddde57066a260f6a245b1e17331132f19",
+      "encoded_sha256": "d26d2d1c1be2c7997ccccab580c3e5262be04118357b8498a25292c9a651c4e8"
     },
     {
       "commander_id": 1,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DBD5",
-      "sprite_id": "0x53BD",
+      "mapping_status": "attached",
+      "sprite_id": "0x57BF",
       "frame_offsets": [
-        "0x2F0800",
-        "0x2F6100"
+        "0x310900",
+        "0x316200"
       ],
       "asset": "editor/static/ai-class-sprites/1/14.png",
-      "asset_sha256": "78bbcb0b7d95852d7b3c18b4e85a6777006da0b1c8d64f2d437f37787a86fb43",
-      "encoded_sha256": "628d4338c971bde96b496b72c26453a501b590319388b3689369eb0be317e167"
+      "asset_sha256": "8c7fcbba6f68133d399a29b5b9efb6d27b6b913755204115b6f660e153c603b8",
+      "encoded_sha256": "7a0600374b512373d606660ae1719f1e734d081f5fb183f9e0e262fefa5ee9a7"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DBC3",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C0",
+      "frame_offsets": [
+        "0x310980",
+        "0x316280"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/17.png",
+      "asset_sha256": "75142c37a3ff2022b38e73787864877a9ace4c96919b927fbcf680674fd7eddc",
+      "encoded_sha256": "910fd63e422da410e2beb251c033f64dda3dd30f2e2b7e46c67adf918622f1cf"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x1A",
+      "class_name": "소드마스터",
+      "mapping_record": "0x05DBC9",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C1",
+      "frame_offsets": [
+        "0x310A00",
+        "0x316300"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/1A.png",
+      "asset_sha256": "4e2e028837f782af97c226c83f4275a38fc518d48446596a37306040caef511b",
+      "encoded_sha256": "239ff72981e37226d107f934706e5a8c9590ed95b3074d7eefd9df4fb40e17f4"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x1B",
+      "class_name": "나이트마스터",
+      "mapping_record": "0x05DBCC",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C2",
+      "frame_offsets": [
+        "0x310A80",
+        "0x316380"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/1B.png",
+      "asset_sha256": "273f538cfe4ca95936a7e25463ffa608c74082ce689a38a535cd4ac0c0860db8",
+      "encoded_sha256": "650ea288c3a88833e9ed58100643078d3c6a642fc939b0f9f5203c3fe67d5ee8"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DBD2",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C3",
+      "frame_offsets": [
+        "0x310B00",
+        "0x316400"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/1D.png",
+      "asset_sha256": "50acd044b52faa704547b616e65bf4f51a3f8f693744089f9f437f13e1a8b267",
+      "encoded_sha256": "14bc17734ae7fdda1c7f24669a9b0f89cb0908ee7faa684abbcfaff458f34627"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x22",
+      "class_name": "히어로",
+      "mapping_record": "0x05DBD8",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C4",
+      "frame_offsets": [
+        "0x310B80",
+        "0x316480"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/22.png",
+      "asset_sha256": "7afec78abe1c91eac3f414eca88f1fa70535d1f45748dd0cd392824dbbedd996",
+      "encoded_sha256": "a510e171bd7e9adcbb7b5e2ce02c29c886c53604756732dea1ef0305bc72a759"
+    },
+    {
+      "commander_id": 1,
+      "class_id": "0x29",
+      "class_name": "로얄나이트",
+      "mapping_record": "0x05DBDB",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C5",
+      "frame_offsets": [
+        "0x310C00",
+        "0x316500"
+      ],
+      "asset": "editor/static/ai-class-sprites/1/29.png",
+      "asset_sha256": "1c49849d4b9d47c7b80d0134ff207bfd914c25533d5181f37935f1dfdf85ca65",
+      "encoded_sha256": "ee915c0464991c62d59e0dc883a55bbb23ecfa1d5f600196651c224718803732"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x08",
+      "class_name": "힐러",
+      "mapping_record": "0x05DBE8",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C6",
+      "frame_offsets": [
+        "0x310C80",
+        "0x316580"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/08.png",
+      "asset_sha256": "eee54e67b3b915a45547b5e3725c67f52a35f72e4a84e7828d64625e0b497f7d",
+      "encoded_sha256": "509ad5dcb7a59b730cdf4f8cd3bd4f23edbf1f3b749ae363028de1b765aad272"
     },
     {
       "commander_id": 2,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DBFA",
-      "sprite_id": "0x53BE",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C7",
       "frame_offsets": [
-        "0x2F0880",
-        "0x2F6180"
+        "0x310D00",
+        "0x316600"
       ],
       "asset": "editor/static/ai-class-sprites/2/0B.png",
-      "asset_sha256": "29b369e3dacddff54df9bac2b172102400c1b4ae07518518a36d11c145e8c907",
-      "encoded_sha256": "49e4bdffb6c05da54b1157df5f638996b271f7ed9e1f6a89053baf9158f212db"
+      "asset_sha256": "cd66e901ac564cc1cb4ab94000c08555590a005dbccb5cc3e7920f977dfc8c43",
+      "encoded_sha256": "7d9d99c3bc73057dbe4ef1d49c102df92d03c6662ebbf6f5a6ac1197d5e5a4d2"
     },
     {
       "commander_id": 2,
       "class_id": "0x11",
       "class_name": "프리스트",
       "mapping_record": "0x05DBF4",
-      "sprite_id": "0x53BF",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C8",
       "frame_offsets": [
-        "0x2F0900",
-        "0x2F6200"
+        "0x310D80",
+        "0x316680"
       ],
       "asset": "editor/static/ai-class-sprites/2/11.png",
-      "asset_sha256": "f5355b92e423b858427e632ef7059bc7b21f11548f5b96050477ca3683874dc2",
-      "encoded_sha256": "29b8407cc9fd6007acd19d61c8e9dc12166a714947172a4ea104df3e92637027"
+      "asset_sha256": "6ed6a4abba71845eb6a127aa0f26c7909be9ce6733b62872ab0a718d1c7dde26",
+      "encoded_sha256": "2d7a6d7879ef2aa513088d9726e9eba83202a78176d7f6f1158fdbfe3232d758"
     },
     {
       "commander_id": 2,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DBEE",
-      "sprite_id": "0x53C0",
+      "mapping_status": "attached",
+      "sprite_id": "0x57C9",
       "frame_offsets": [
-        "0x2F0980",
-        "0x2F6280"
+        "0x310E00",
+        "0x316700"
       ],
       "asset": "editor/static/ai-class-sprites/2/13.png",
-      "asset_sha256": "6c25bab006bc1ce63290d698a3251855a36e74e624e918143316a41e91f2dfd6",
-      "encoded_sha256": "fe67047fec21cb2361bc8c7b5778372a57b56a6999878dd08d17127462b33789"
+      "asset_sha256": "297cb568c8fb75aafeb1dc5587ca5be78ad9bbcdf82bd3b0c7001efa80cfa459",
+      "encoded_sha256": "1053a5715b5d6fc29c1db5be139c8448fdc177db28bd909924d7901e6bdfbce6"
     },
     {
       "commander_id": 2,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DBFD",
-      "sprite_id": "0x53C1",
+      "mapping_status": "attached",
+      "sprite_id": "0x57CA",
       "frame_offsets": [
-        "0x2F0A00",
-        "0x2F6300"
+        "0x310E80",
+        "0x316780"
       ],
       "asset": "editor/static/ai-class-sprites/2/14.png",
-      "asset_sha256": "bdc54bab11a7e54803c96692abe40a7c5d280fcd58308f00391cab3da69a3f9e",
-      "encoded_sha256": "1142e109e34de140e4e77dc87f21e800dcbbe53790a6cc9055e2991944ec55c1"
+      "asset_sha256": "94fa22e074a3c915d3ab64ce4bb3aebf4734c8e9a3b49307cd9f7b105529d2ba",
+      "encoded_sha256": "c53c1aeb82224a7ab537b7b7187d9dbdfd98da8504f5c8d97ffd14d4fadf68f2"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DC09",
+      "mapping_status": "attached",
+      "sprite_id": "0x57CB",
+      "frame_offsets": [
+        "0x310F00",
+        "0x316800"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/15.png",
+      "asset_sha256": "5d5264f8d394f9fd3bd1d0de309310dc94fa87d353c37aaa02a61c6e01def9d0",
+      "encoded_sha256": "e3dee78e416be4dd26e79f2203321f549f0284c33081fb3cd2068a24f14fbee1"
     },
     {
       "commander_id": 2,
       "class_id": "0x16",
       "class_name": "하이프리스트",
       "mapping_record": "0x05DC06",
-      "sprite_id": "0x53C2",
+      "mapping_status": "attached",
+      "sprite_id": "0x57CC",
       "frame_offsets": [
-        "0x2F0A80",
-        "0x2F6380"
+        "0x310F80",
+        "0x316880"
       ],
       "asset": "editor/static/ai-class-sprites/2/16.png",
-      "asset_sha256": "bb899bb45ca75f0a5b22af81fde8ff157297c25a19f0877a73b2f54b48444f2a",
-      "encoded_sha256": "f604b196b244b6172be648123544d5af6e33b7777c3fee93fafc1aac1396d775"
+      "asset_sha256": "0212107bceeb50c3a66b31039fb61f30646ece13fcc73beb53015db09a011851",
+      "encoded_sha256": "57bce7dbd3f402c0bfb5b78383e1f241bed68e7f9658111ade25ec6ddb0c983d"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DC0F",
+      "mapping_status": "attached",
+      "sprite_id": "0x57CD",
+      "frame_offsets": [
+        "0x311000",
+        "0x316900"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/17.png",
+      "asset_sha256": "bf17dcc7e77e2c020b098c68bedd3bd967baf25c05f221759298ab34191f8d60",
+      "encoded_sha256": "bc77761841e9cac3af8219be4b698a8fa31e4edba41aa1a4391d22234eee4c89"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x18",
+      "class_name": "세이지",
+      "mapping_record": "0x05DC0C",
+      "mapping_status": "attached",
+      "sprite_id": "0x57CE",
+      "frame_offsets": [
+        "0x311080",
+        "0x316980"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/18.png",
+      "asset_sha256": "044b9beafefdc87adc38487c025d844e58accf05fc18ab1f3a983d9639001639",
+      "encoded_sha256": "8ed7a14ebcd34bd9cb3c1d2c60d8780a73aedde4ead3ee9afc32c56a252af23d"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DC03",
+      "mapping_status": "attached",
+      "sprite_id": "0x57CF",
+      "frame_offsets": [
+        "0x311100",
+        "0x316A00"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/19.png",
+      "asset_sha256": "526a4f226a66ed12c2f8fda369765fe433261bc618e88a7543f5ec00a4e78a11",
+      "encoded_sha256": "cf431c9d2c0959948a7c7be85b8fa690a00b9cb2eea564a4f754017fd14ddfe1"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DC00",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D0",
+      "frame_offsets": [
+        "0x311180",
+        "0x316A80"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/1D.png",
+      "asset_sha256": "a7e7ef4a5c0cdbf401f9a6c04b588d14fefa046d45c615e6594f568869f1b977",
+      "encoded_sha256": "22cd179a76b4030efc8bd2da92ceee9b686c102cb0fda7ec99e7ae4045f1807f"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x25",
+      "class_name": "에이전트",
+      "mapping_record": "0x05DC15",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D1",
+      "frame_offsets": [
+        "0x311200",
+        "0x316B00"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/25.png",
+      "asset_sha256": "3eae885f767482b84e27c7a486d51348e44195d0fde89c9099b13fb846086e70",
+      "encoded_sha256": "bbd6f63901a182ca3dff8c42c68354a9c40c1659ba2ee54c0ea24af3a08a3ca8"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x26",
+      "class_name": "자베라",
+      "mapping_record": "0x05DC18",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D2",
+      "frame_offsets": [
+        "0x311280",
+        "0x316B80"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/26.png",
+      "asset_sha256": "c2e68b54a1420a4666623e7ac56bc175589561b007015bf65c7ad58dcf20091c",
+      "encoded_sha256": "68d71b677a6296e416741d9d639681383073b01b55800e1eb4873f3b2eab69e0"
+    },
+    {
+      "commander_id": 2,
+      "class_id": "0x28",
+      "class_name": "서머너",
+      "mapping_record": "0x05DC12",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D3",
+      "frame_offsets": [
+        "0x311300",
+        "0x316C00"
+      ],
+      "asset": "editor/static/ai-class-sprites/2/28.png",
+      "asset_sha256": "883d0e51500f296ff362619b4c315a1e3e07ea495388c9d11e5630f5cd570588",
+      "encoded_sha256": "0517438f66e11e3a94ca907ce98fed6cb41cf86ce71e11236d36446e941a5250"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x08",
+      "class_name": "힐러",
+      "mapping_record": "0x05DC24",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D4",
+      "frame_offsets": [
+        "0x311380",
+        "0x316C80"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/08.png",
+      "asset_sha256": "fc2b2b0c90f5d1912631390219598508b76a3000b6fbba2fbf7a1b7c16f9b507",
+      "encoded_sha256": "6841185423394bfbe73d84842598f7d14261a1e837cce7c2bba99d75fcda2635"
     },
     {
       "commander_id": 3,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DC36",
-      "sprite_id": "0x53C3",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D5",
       "frame_offsets": [
-        "0x2F0B00",
-        "0x2F6400"
+        "0x311400",
+        "0x316D00"
       ],
       "asset": "editor/static/ai-class-sprites/3/0B.png",
-      "asset_sha256": "c68bd9f9035a579e2b3c9843f24a07678a64cabea3ebab8e7db93caa69c19dd2",
-      "encoded_sha256": "2790abc5a280377d0fa79b6341f8441e09720c2249da21defc8e941a2bbe748b"
+      "asset_sha256": "51d3eb3cc97666f76917c629b18acdc7ba18d16f702bee5acf29edc121949585",
+      "encoded_sha256": "a981e8d985833dbc62397ce108be4323cde76aeab1781ace4086847c00566e40"
     },
     {
       "commander_id": 3,
       "class_id": "0x11",
       "class_name": "프리스트",
       "mapping_record": "0x05DC30",
-      "sprite_id": "0x53C4",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D6",
       "frame_offsets": [
-        "0x2F0B80",
-        "0x2F6480"
+        "0x311480",
+        "0x316D80"
       ],
       "asset": "editor/static/ai-class-sprites/3/11.png",
-      "asset_sha256": "cd2b63fe4b129b4551ddff22f5b95693d8df88e8bfb6589af9b70f5d4968b611",
-      "encoded_sha256": "35d477387737022fe66a737d77388c3b8b066192eddfed7a0358f70b5d7d3541"
+      "asset_sha256": "e8dcbdef5228c486352a10bf8e4c304139a1fabacbf3582882a6f2a308ebfe75",
+      "encoded_sha256": "34599efa168d77731c699cc18792d83f9d6c79bd9008de0c4af6c88bd312e669"
     },
     {
       "commander_id": 3,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DC2A",
-      "sprite_id": "0x53C5",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D7",
       "frame_offsets": [
-        "0x2F0C00",
-        "0x2F6500"
+        "0x311500",
+        "0x316E00"
       ],
       "asset": "editor/static/ai-class-sprites/3/13.png",
-      "asset_sha256": "6b24e89d6788e2dbdda0998222e15df998539e930f336120cc7f82366278eb08",
-      "encoded_sha256": "c585a1777d38a7417244d794f27faf19068348342a6ae4a9ff8146c39ad3d43b"
+      "asset_sha256": "cefe22cbf40b6fa9f3b8bc4bae39f176a3bc4fecd74234b2dc892fc2bf0a6c68",
+      "encoded_sha256": "edc5eb53926446bde7500f751e9887ee55221aa2f06309779a429d40c66c1ccd"
     },
     {
       "commander_id": 3,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DC39",
-      "sprite_id": "0x53C6",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D8",
       "frame_offsets": [
-        "0x2F0C80",
-        "0x2F6580"
+        "0x311580",
+        "0x316E80"
       ],
       "asset": "editor/static/ai-class-sprites/3/14.png",
-      "asset_sha256": "48da044fa77dc6fabe59aa77daaeb2e08d9618f4a8a4cd75c7ff4e8466eb7595",
-      "encoded_sha256": "036fb3c087fd8c08ef66075e433a4dfdc6ef46526d515a53efe5e7196a80ad53"
+      "asset_sha256": "e10cb3995589b37832f6359bb1132c7578f43d39501575b8fa15e000ce10d3f8",
+      "encoded_sha256": "48a481d87a806efabb774638051b086c1c3e3d92469b64de324df3c68d6bf7a6"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DC45",
+      "mapping_status": "attached",
+      "sprite_id": "0x57D9",
+      "frame_offsets": [
+        "0x311600",
+        "0x316F00"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/15.png",
+      "asset_sha256": "05f3871aad9f7f702351a0efe8035dc8528e34c8e6d257a11f84017f9f667ebd",
+      "encoded_sha256": "dc9205853899841d4309824bc1ee3e8f3002ac9ba443276b7b8b4d59a81bd465"
     },
     {
       "commander_id": 3,
       "class_id": "0x16",
       "class_name": "하이프리스트",
       "mapping_record": "0x05DC42",
-      "sprite_id": "0x53C7",
+      "mapping_status": "attached",
+      "sprite_id": "0x57DA",
       "frame_offsets": [
-        "0x2F0D00",
-        "0x2F6600"
+        "0x311680",
+        "0x316F80"
       ],
       "asset": "editor/static/ai-class-sprites/3/16.png",
-      "asset_sha256": "16c3ab6671da168ae550b296794ccb8de3dc770c1d2f153e642486471c08d892",
-      "encoded_sha256": "bde5c2b3d0d2a1d21036cc16b60580e90f02c2c61c84e4909930720f09b4198a"
+      "asset_sha256": "dd7ea4167d5772326c585a0109f739204ef9696833cf6b1817db9dc78c086d0b",
+      "encoded_sha256": "04df4171de8061b2474acc3912e5b98094099e96fba17cab50db2b7e28d72562"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DC4B",
+      "mapping_status": "attached",
+      "sprite_id": "0x57DB",
+      "frame_offsets": [
+        "0x311700",
+        "0x317000"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/17.png",
+      "asset_sha256": "682d1afe4e3b7e9a9dd6c3c0e49dacedb63c43d1813c54e44f1874d0743c9cb0",
+      "encoded_sha256": "4529a8f2125e15e4d6ed5312db1d9a5550e8dd7e9d55bd355812b1ed2c7b7e16"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x18",
+      "class_name": "세이지",
+      "mapping_record": "0x05DC48",
+      "mapping_status": "attached",
+      "sprite_id": "0x57DC",
+      "frame_offsets": [
+        "0x311780",
+        "0x317080"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/18.png",
+      "asset_sha256": "64ff1a417ec6983f8d523fd046288ef16de02be543d5ca569027ae923bcde077",
+      "encoded_sha256": "856f04f240ed59a2e7d166cce0d607f95d8e596fe0b32603dc758aebae22122d"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DC3F",
+      "mapping_status": "attached",
+      "sprite_id": "0x57DD",
+      "frame_offsets": [
+        "0x311800",
+        "0x317100"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/19.png",
+      "asset_sha256": "7f3c92375fb4d3daa1c24085e5fe65240377c32f0fb1e0864fb5e5511041f77c",
+      "encoded_sha256": "28fa1de76f513951ce72438d46249815be118539ec9d34ce132cd6e32c175919"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DC3C",
+      "mapping_status": "attached",
+      "sprite_id": "0x57DE",
+      "frame_offsets": [
+        "0x311880",
+        "0x317180"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/1D.png",
+      "asset_sha256": "bc0663a18fe85db5fa06a33d0e856cf586e3bfc4e6e2490a0416a1641678a82d",
+      "encoded_sha256": "3e8e1d89e3866607a5bfbffef19f8286dd29d9e34c4c22dc11404f94eec8d3da"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x25",
+      "class_name": "에이전트",
+      "mapping_record": "0x05DC51",
+      "mapping_status": "attached",
+      "sprite_id": "0x57DF",
+      "frame_offsets": [
+        "0x311900",
+        "0x317200"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/25.png",
+      "asset_sha256": "aa7f44e331a44879c65ae8a3616e5a309959b603b1e171e74e8169a0a796112e",
+      "encoded_sha256": "6c3ee23ba7eb3ab37073449a3fd39b831e0f8bc3c733844989da71af57e913fd"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x26",
+      "class_name": "자베라",
+      "mapping_record": "0x05DC54",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E0",
+      "frame_offsets": [
+        "0x311980",
+        "0x317280"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/26.png",
+      "asset_sha256": "7d4ca2de6138aa6c9e11db8d9d5974956fc92e9f1fb58cde0451f8b8fc875bdb",
+      "encoded_sha256": "06fb7dd61487c741e93160a2e5d7fcf91468a33b5e7def180337f5910f23c285"
+    },
+    {
+      "commander_id": 3,
+      "class_id": "0x28",
+      "class_name": "서머너",
+      "mapping_record": "0x05DC4E",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E1",
+      "frame_offsets": [
+        "0x311A00",
+        "0x317300"
+      ],
+      "asset": "editor/static/ai-class-sprites/3/28.png",
+      "asset_sha256": "fb4a3bf6a0904bbd38f62a45151bb2ea90f51cc1f96800945325b9044c71a3e1",
+      "encoded_sha256": "43a08b966402dd217ed00ae0d1f0dec1aa6670b239dce34b6f87a87413cd2766"
     },
     {
       "commander_id": 4,
       "class_id": "0x04",
       "class_name": "로드",
       "mapping_record": "0x05DC5D",
-      "sprite_id": "0x53C8",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E2",
       "frame_offsets": [
-        "0x2F0D80",
-        "0x2F6680"
+        "0x311A80",
+        "0x317380"
       ],
       "asset": "editor/static/ai-class-sprites/4/04.png",
-      "asset_sha256": "f7e725bac0d83fbecb384dfc114bb0ea6c01aa54f0f4d856693864f97a7d82d0",
-      "encoded_sha256": "6aa28a22ffc32ba037cd69cc829250dcec811b6936410ccdf471826048555f31"
+      "asset_sha256": "d4b9d8678d17a6665d9539dcdd0f98b5ce0cbf9d6d954e52825db279c269d69c",
+      "encoded_sha256": "d3dbce8d8fac00dbf6456cc762713de432fc941bc9db283770159b8ae89b1792"
     },
     {
       "commander_id": 4,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DC66",
-      "sprite_id": "0x53C9",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E3",
       "frame_offsets": [
-        "0x2F0E00",
-        "0x2F6700"
+        "0x311B00",
+        "0x317400"
       ],
       "asset": "editor/static/ai-class-sprites/4/0B.png",
-      "asset_sha256": "94f1f6d959875e8878d0de6536633d555c44908678d1f9abd893d909251feba9",
-      "encoded_sha256": "1e7ff243e784ac52157dfdd27f026a0af46c37a6e228a1c6f7c7d8752e5f258a"
+      "asset_sha256": "3fd61c7c1fd89cd897219a4621575340161e25c963306e42f6e0c44c67407d42",
+      "encoded_sha256": "52689c805cd75a234d1b5b13cc1ffb8d0186cacf70b36703058616cf1b7bc094"
     },
     {
       "commander_id": 4,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DC72",
-      "sprite_id": "0x53CA",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E4",
       "frame_offsets": [
-        "0x2F0E80",
-        "0x2F6780"
+        "0x311B80",
+        "0x317480"
       ],
       "asset": "editor/static/ai-class-sprites/4/13.png",
-      "asset_sha256": "daa23bdb0d6123e49d83b5b16407795d2cea1376bd7e3b6919026287e04fabc7",
-      "encoded_sha256": "972de9aa418232d04b31054c7a9c81671259682d36138fe0d98265d23de93d07"
+      "asset_sha256": "188278274e1b028ad6f63cbc52bf33a77a5932b1b7daedcc2b2b4dd2b66cba76",
+      "encoded_sha256": "c26cca72ef509ce03c83656f3dd79ee2d2d96af8c35a0b93a2e7071209820622"
     },
     {
       "commander_id": 4,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DC87",
-      "sprite_id": "0x53CB",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E5",
       "frame_offsets": [
-        "0x2F0F00",
-        "0x2F6800"
+        "0x311C00",
+        "0x317500"
       ],
       "asset": "editor/static/ai-class-sprites/4/14.png",
-      "asset_sha256": "a0912025f5803d37c6ccafb4c83e4473b9bfbf95a71bd29472044339a45efb62",
-      "encoded_sha256": "c359173acd5e7befd2d67418444d7b6bb521212fc0fd9aaae6351f1604d51fd7"
+      "asset_sha256": "188e524168bc6d7f60f7a07d4ea0bad4057fe6a1a348ce3d89d887911d87486f",
+      "encoded_sha256": "7525591626c1134e4cb97f22663c62fb8fbb78e98464aec83ef1741fa1fa2594"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DC84",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E6",
+      "frame_offsets": [
+        "0x311C80",
+        "0x317580"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/15.png",
+      "asset_sha256": "6333a8a3057cf8f2dc96c09d5bd8b66a7a2c81d48f27fdd264fdbd78f54e7dd6",
+      "encoded_sha256": "c5754603eb5720f43194cae36b9a161c04c3fcc8792b3df4441b1b6625e9e111"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DC75",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E7",
+      "frame_offsets": [
+        "0x311D00",
+        "0x317600"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/17.png",
+      "asset_sha256": "f83db3d71cd69970e48a1ba373770bba8620210b54897d195adf99836fae6ba8",
+      "encoded_sha256": "aa61162e896bd03f4130405eab1bf33de1d65e3b336e9e60ed8676adfbf94b93"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DC7B",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E8",
+      "frame_offsets": [
+        "0x311D80",
+        "0x317680"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/19.png",
+      "asset_sha256": "46ee7da7e6bd7248e8b995baadd5c1d094bb8fe3684452c09d3945c25dff7163",
+      "encoded_sha256": "854beb49e2bab14b692009924c083448318f541c0f98b15ef3b08e92835210cf"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DC81",
+      "mapping_status": "attached",
+      "sprite_id": "0x57E9",
+      "frame_offsets": [
+        "0x311E00",
+        "0x317700"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/1D.png",
+      "asset_sha256": "c9e52acea1cd6fe3c8069ea125e3879758db31ddc844439e4ca49e49110b3695",
+      "encoded_sha256": "d36e4c7b5dfb46f88289f13e9c55ff1395bd34a86f0399efe733cacfdc1b6c29"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x1E",
+      "class_name": "드래곤로드",
+      "mapping_record": "0x05DC7E",
+      "mapping_status": "attached",
+      "sprite_id": "0x57EA",
+      "frame_offsets": [
+        "0x311E80",
+        "0x317780"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/1E.png",
+      "asset_sha256": "0cc9eb9b3e5bb283cb83dc89c289179244120e6e4c60bd44586d6ce820754ec5",
+      "encoded_sha256": "aa16d2ba66b870aa2861a8ec5fb04409987f78e0977d2321756613747f37746d"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x21",
+      "class_name": "레인저",
+      "mapping_record": "0x05DC78",
+      "mapping_status": "attached",
+      "sprite_id": "0x57EB",
+      "frame_offsets": [
+        "0x311F00",
+        "0x317800"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/21.png",
+      "asset_sha256": "4c7ac878f47e15c6571b98853d281540b9a7f9d939cd1f31d07d9b2f5f29a49a",
+      "encoded_sha256": "b4aeb4ab1ecf21c5096d7ca8892e21544bd041b0e143a5af51d3ad15368349d3"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x23",
+      "class_name": "하이마스터",
+      "mapping_record": "0x05DC8A",
+      "mapping_status": "attached",
+      "sprite_id": "0x57EC",
+      "frame_offsets": [
+        "0x311F80",
+        "0x317880"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/23.png",
+      "asset_sha256": "eb4c7f4af0c45549ce50e0e8df9e63bdfff1bfb7b936e44a47b54238eba50b8e",
+      "encoded_sha256": "d3e694c5c0703834f26e33da7294a99710ed6a8fbd3ed3283c81f2580748ee10"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x24",
+      "class_name": "드래곤마스터",
+      "mapping_record": "0x05DC8D",
+      "mapping_status": "attached",
+      "sprite_id": "0x57ED",
+      "frame_offsets": [
+        "0x312000",
+        "0x317900"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/24.png",
+      "asset_sha256": "ae2d8c116f69a10d18b0a8ad4925cfd832427dfd3a3b5b0c0732de2b79698e9b",
+      "encoded_sha256": "c6ad0f1ec19f326c7a8b02c569ea9a548ec6dc808dc35af203fe05714a3e6b81"
+    },
+    {
+      "commander_id": 4,
+      "class_id": "0x27",
+      "class_name": "프린세스",
+      "mapping_record": "0x05DC90",
+      "mapping_status": "attached",
+      "sprite_id": "0x57EE",
+      "frame_offsets": [
+        "0x312080",
+        "0x317980"
+      ],
+      "asset": "editor/static/ai-class-sprites/4/27.png",
+      "asset_sha256": "3c51333ade3f9b54556b2f1d8b25a6e682ad23691addcc107e24306586a081e9",
+      "encoded_sha256": "7366ec7198a51e7a25863b6ec80e00f106a50a0bf97017c22719ebb21b3add79"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x09",
+      "class_name": "소서러",
+      "mapping_record": "0x05DC9C",
+      "mapping_status": "attached",
+      "sprite_id": "0x57EF",
+      "frame_offsets": [
+        "0x312100",
+        "0x317A00"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/09.png",
+      "asset_sha256": "dfba091b0a5a09941e6b18ec9611106ef4329b05ba20e45538559fa1aa361285",
+      "encoded_sha256": "ec4780f9580a0c7f15cdd897177ceaac3dc24dc75dda0a4d5b865389c452d95a"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x0A",
+      "class_name": "샤먼",
+      "mapping_record": "0x05DC99",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F0",
+      "frame_offsets": [
+        "0x312180",
+        "0x317A80"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/0A.png",
+      "asset_sha256": "86d9ad4625f6f42105b006af2afb8ddbb1c40cb86a3eeac9d1f310beff7a51d9",
+      "encoded_sha256": "fc8311b031b6e702e6b187cc8d68482cb418d9ca371b5cafe62b316a8b1b7755"
     },
     {
       "commander_id": 5,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DCAE",
-      "sprite_id": "0x53CC",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F1",
       "frame_offsets": [
-        "0x2F0F80",
-        "0x2F6880"
+        "0x312200",
+        "0x317B00"
       ],
       "asset": "editor/static/ai-class-sprites/5/0B.png",
-      "asset_sha256": "6730fb02608c33102782ca256e9e4481194c99c8e118f4d4d4e7e8e04959aaf3",
-      "encoded_sha256": "2ad909990a2ce50769b38c0b7744dc95750f0ef7884fb46000aa935c15a5c738"
+      "asset_sha256": "0127b3eec0f3473a8b884a838a90eacc8df702b83af3a45653c9517328890fd0",
+      "encoded_sha256": "993607b61034b064db0385cb53aa3c09c2c758e629ad8a53c14d907ffe89ec17"
     },
     {
       "commander_id": 5,
       "class_id": "0x11",
       "class_name": "프리스트",
       "mapping_record": "0x05DCA2",
-      "sprite_id": "0x53CD",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F2",
       "frame_offsets": [
-        "0x2F1000",
-        "0x2F6900"
+        "0x312280",
+        "0x317B80"
       ],
       "asset": "editor/static/ai-class-sprites/5/11.png",
-      "asset_sha256": "6107d8269117397ecd9d6f8762d788e7593323a1f1a3a694c8a66ec23156c50e",
-      "encoded_sha256": "e09c0243a455f0c0ea865ad646a1e32a0829ab293f887606c91466c573c979ff"
+      "asset_sha256": "6d3a00bf200888d712d01413b1e0655451587835fa2fd61a0ca4bd137bbfdf9d",
+      "encoded_sha256": "8028fed1ef3e825c077544f812ddaf887efb8be722379c542ef2cc7a46ba0d30"
     },
     {
       "commander_id": 5,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DCA8",
-      "sprite_id": "0x53CE",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F3",
       "frame_offsets": [
-        "0x2F1080",
-        "0x2F6980"
+        "0x312300",
+        "0x317C00"
       ],
       "asset": "editor/static/ai-class-sprites/5/13.png",
-      "asset_sha256": "f2a5e5bfbda7ab2a7f2cb4d9b813a260ac2fed55bcb9f7aca63112c1d9ecc878",
-      "encoded_sha256": "c04ced1a054ec2ec5e23f979ee38c620c6776216df821a0368c7291bfc1f4f0d"
+      "asset_sha256": "aba08c76de06d2866afc1d19688747ac8ce966c3cfb263887dc8f306f21981ac",
+      "encoded_sha256": "ec735d1dda286071d642a60d2c9ce9ced585b3389a96eaa80a5423b9a4faecad"
     },
     {
       "commander_id": 5,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DCBA",
-      "sprite_id": "0x53CF",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F4",
       "frame_offsets": [
-        "0x2F1100",
-        "0x2F6A00"
+        "0x312380",
+        "0x317C80"
       ],
       "asset": "editor/static/ai-class-sprites/5/14.png",
-      "asset_sha256": "a4133bbc32a48248f1e622277f2342307025291eb137bcfd655a97e35b2b670d",
-      "encoded_sha256": "6abb50a4f314811c0c3430fec2f47a0a7e766624ff0ca83a2a80d8d2a04ce3b2"
+      "asset_sha256": "a111a62fbed24b8f46f0176231a9ab2afb4ce04965cbb2a4c80c7a0a63a93b15",
+      "encoded_sha256": "d6ab3218d29e7d5d378f96e9a1600304f953598fa8e901f3fe6a5b776b16a89d"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DCB7",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F5",
+      "frame_offsets": [
+        "0x312400",
+        "0x317D00"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/15.png",
+      "asset_sha256": "77d2f63fbd266cce1ff552f204940bd8d187d27ff774ad2d6b68c385103ca854",
+      "encoded_sha256": "76b685a44b1ef7616e1b4599891c7160ebd73655cebe83c6feb5c89f6d948986"
     },
     {
       "commander_id": 5,
       "class_id": "0x16",
       "class_name": "하이프리스트",
       "mapping_record": "0x05DCB1",
-      "sprite_id": "0x53D0",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F6",
       "frame_offsets": [
-        "0x2F1180",
-        "0x2F6A80"
+        "0x312480",
+        "0x317D80"
       ],
       "asset": "editor/static/ai-class-sprites/5/16.png",
-      "asset_sha256": "a6b9c0997875953556fad963dc1fe314e7d74502f75a9a747347f4acd84b4452",
-      "encoded_sha256": "f74d9019a81f3d1a4c0be25b91e79545ced569f9df5e6f78bd7ad1d0075768b4"
+      "asset_sha256": "37ec93521d617487e0f869d7541d9f1a5a05082558801db12c647af2615e37a4",
+      "encoded_sha256": "81717b16f6103544bf8f04ff26bc95f57d6e9ef8ec48278177d5548dbf953261"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DCB4",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F7",
+      "frame_offsets": [
+        "0x312500",
+        "0x317E00"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/17.png",
+      "asset_sha256": "0b004f6bb283102be12b99c925da1cde60132746bd3080e1d5e2d8fefbda2eec",
+      "encoded_sha256": "5ed8ef937181cd57012f7d1338c1c538f2271ab2107b22fa3f4c9c0559942cc1"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x18",
+      "class_name": "세이지",
+      "mapping_record": "0x05DCBD",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F8",
+      "frame_offsets": [
+        "0x312580",
+        "0x317E80"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/18.png",
+      "asset_sha256": "159d92104cead154868f4703185eb3fe910d23b9b773ea97b76c2b8999b5911a",
+      "encoded_sha256": "3fb941076ecab413951dae9ab35a711dc10334b9d57a9941c530bb604ccfff0f"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DCC0",
+      "mapping_status": "attached",
+      "sprite_id": "0x57F9",
+      "frame_offsets": [
+        "0x312600",
+        "0x317F00"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/19.png",
+      "asset_sha256": "3c6a57b572f9fd27b968d91d46de00fd8c4d7ab80fb8068483546857a9450438",
+      "encoded_sha256": "81e5cd7749624e257777245b48c0e4863d074768ab1340635f1af81e4e34a80c"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x1A",
+      "class_name": "소드마스터",
+      "mapping_record": "0x05DCC3",
+      "mapping_status": "attached",
+      "sprite_id": "0x57FA",
+      "frame_offsets": [
+        "0x312680",
+        "0x317F80"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/1A.png",
+      "asset_sha256": "2b5d8ebbf3e1d13bbcf497c0b27af978ef9b833300b4e8aaaea3bf3f5f13fde4",
+      "encoded_sha256": "c948393af5947354576bc20cee61e83963893d6ddf9fed0abcc89603fb770b13"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x26",
+      "class_name": "자베라",
+      "mapping_record": "0x05DCC9",
+      "mapping_status": "attached",
+      "sprite_id": "0x57FB",
+      "frame_offsets": [
+        "0x312700",
+        "0x318000"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/26.png",
+      "asset_sha256": "5e10601a91b7a4df267093e67a4420aee0fe832c8cc672112b22e43b946cca44",
+      "encoded_sha256": "9969b0770d3ef517d3ac8092c16ad467e9a916af9b134763fc1e2e8af17c175a"
+    },
+    {
+      "commander_id": 5,
+      "class_id": "0x28",
+      "class_name": "서머너",
+      "mapping_record": "0x05DCC6",
+      "mapping_status": "attached",
+      "sprite_id": "0x57FC",
+      "frame_offsets": [
+        "0x312780",
+        "0x318080"
+      ],
+      "asset": "editor/static/ai-class-sprites/5/28.png",
+      "asset_sha256": "c93f4b82ef3b20b80293ca4f4ceddb3e834c1ccb5e20613d0aea6d9f580f8e77",
+      "encoded_sha256": "56e7d6075ab23263abeba98becc048fd20ef9609ace6426fd38ff1305dd24997"
     },
     {
       "commander_id": 6,
       "class_id": "0x04",
       "class_name": "로드",
       "mapping_record": "0x05DCD9",
-      "sprite_id": "0x53D1",
+      "mapping_status": "attached",
+      "sprite_id": "0x57FD",
       "frame_offsets": [
-        "0x2F1200",
-        "0x2F6B00"
+        "0x312800",
+        "0x318100"
       ],
       "asset": "editor/static/ai-class-sprites/6/04.png",
-      "asset_sha256": "09fa04b6b52ed5a168eb2fbd88517e0aed0da3cc601c4c127b13983e0d9a8145",
-      "encoded_sha256": "9109accb6296de0fdb14d3ab9e65896c97cc8fe0abd4d313e41920143bbf5967"
+      "asset_sha256": "458cdb94b43b5dc582f430055d8960c91a0e3d2a47f6f7a7b963c945d5e43219",
+      "encoded_sha256": "38ea7630e0238bf94ad6fdfdddee61d614bf082a70d86c89b09e1bdf6413b353"
     },
     {
       "commander_id": 6,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DCE8",
-      "sprite_id": "0x53D2",
+      "mapping_status": "attached",
+      "sprite_id": "0x57FE",
       "frame_offsets": [
-        "0x2F1280",
-        "0x2F6B80"
+        "0x312880",
+        "0x318180"
       ],
       "asset": "editor/static/ai-class-sprites/6/0B.png",
-      "asset_sha256": "7ff49dedf20226735e03ca6a697e9a49e691ed44a094c0446db23e8bb5f7aec1",
-      "encoded_sha256": "7f62a0a3de6090e8304a7f725e7bb81f28372fc267faceaa24f4167e821755e3"
+      "asset_sha256": "f5c992134708d314e791072a7a9475b6048b8e41c6ddd7573eae10629d2d782b",
+      "encoded_sha256": "cc17f97fa78967edb789a201be83c91a241d98fca1aee3e35d372fb7ede108b2"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x0C",
+      "class_name": "하이랜더",
+      "mapping_record": "0x05DCE2",
+      "mapping_status": "attached",
+      "sprite_id": "0x57FF",
+      "frame_offsets": [
+        "0x312900",
+        "0x318200"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/0C.png",
+      "asset_sha256": "4ae924f441dbcf94475d1f5dd07ed8081e3c931eb9b2f8f16fb3039968b94bd7",
+      "encoded_sha256": "7e779759edfb33ba2e8c0c24a5ba5d24160d9f3698efa3ba1c4a4e11f2c75e33"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DCFD",
+      "mapping_status": "attached",
+      "sprite_id": "0x5800",
+      "frame_offsets": [
+        "0x312980",
+        "0x318280"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/17.png",
+      "asset_sha256": "af74d842048021eafea1bdfcbc57f34074da9faa81648768aa9bb22ce0be2d3f",
+      "encoded_sha256": "e7526f3773c456144ec3f090da235d5841d6d8ed02adea6233de04388de6ff51"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x18",
+      "class_name": "세이지",
+      "mapping_record": "0x05DCFA",
+      "mapping_status": "attached",
+      "sprite_id": "0x5801",
+      "frame_offsets": [
+        "0x312A00",
+        "0x318300"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/18.png",
+      "asset_sha256": "46de2931ab53ce58a00825eaf9de0637a235939254b53256acda4b33893ab696",
+      "encoded_sha256": "957d93515da9f2be9397b94916637af038557a2caeadbd6a329eced66ed0bc8e"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DCF7",
+      "mapping_status": "attached",
+      "sprite_id": "0x5802",
+      "frame_offsets": [
+        "0x312A80",
+        "0x318380"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/19.png",
+      "asset_sha256": "f5ce4a6370cd88cedbbcf3c870deb8dbcdbdc11a537253dc1c10d073da7b3a71",
+      "encoded_sha256": "c68e50e54bb72cd83616dd0bfaf3aafa7013e2b37dece9aa2daec6bb7312e321"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x1B",
+      "class_name": "나이트마스터",
+      "mapping_record": "0x05DCF4",
+      "mapping_status": "attached",
+      "sprite_id": "0x5803",
+      "frame_offsets": [
+        "0x312B00",
+        "0x318400"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/1B.png",
+      "asset_sha256": "5fe82c51dc44f818e8e6f0b5984514bfffe7a9d6543a9aa9a22e94b2e184e8e1",
+      "encoded_sha256": "a0b55c9ef82cd9d6d5f04a8c62203bc2133f298076e3ad94d8239ce4200ae980"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DCEE",
+      "mapping_status": "attached",
+      "sprite_id": "0x5804",
+      "frame_offsets": [
+        "0x312B80",
+        "0x318480"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/1D.png",
+      "asset_sha256": "64fa891d31043e2eacadbdadd2ab83a11e10b6245d36467748dbd7dd868e9496",
+      "encoded_sha256": "21b4277b29463a343b8c0488889f865c01c9a69bb81a310b303f8ba2e35a1f5c"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x1E",
+      "class_name": "드래곤로드",
+      "mapping_record": "0x05DCEB",
+      "mapping_status": "attached",
+      "sprite_id": "0x5805",
+      "frame_offsets": [
+        "0x312C00",
+        "0x318500"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/1E.png",
+      "asset_sha256": "259b549f3ddc5003fd0d4a37cf96b5a3a2418c33c163e59484c430e9e42cbcde",
+      "encoded_sha256": "82f3e6d35fb09d99d7fe54fc2fab5f3f255b3d96e979c4564815c2188587fecd"
+    },
+    {
+      "commander_id": 6,
+      "class_id": "0x29",
+      "class_name": "로얄나이트",
+      "mapping_record": "0x05DD00",
+      "mapping_status": "attached",
+      "sprite_id": "0x5806",
+      "frame_offsets": [
+        "0x312C80",
+        "0x318580"
+      ],
+      "asset": "editor/static/ai-class-sprites/6/29.png",
+      "asset_sha256": "15c0072b1d9591e74b1c996b0c3707b9be8f01ea9997012299a83bbe5721553e",
+      "encoded_sha256": "f04260c9297c5084636d1bef84eb167e97dced45336c591daa571475bb6eac02"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x01",
+      "class_name": "파이터",
+      "mapping_record": null,
+      "mapping_status": "reserved_unattached_after_lord_record_repurpose",
+      "sprite_id": "0x5807",
+      "frame_offsets": [
+        "0x312D00",
+        "0x318600"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/01.png",
+      "asset_sha256": "51b9ba8942cb0ccd4783fe6f6062311d22caa9c9890652b49b45319938157849",
+      "encoded_sha256": "c508dcfb9a93619f33b12e54dff66b186807114d07dc2ed31555e52b25dcf31b"
     },
     {
       "commander_id": 7,
       "class_id": "0x04",
       "class_name": "로드",
       "mapping_record": "0x05DD09",
-      "sprite_id": "0x53D3",
+      "mapping_status": "attached",
+      "sprite_id": "0x5808",
       "frame_offsets": [
-        "0x2F1300",
-        "0x2F6C00"
+        "0x312D80",
+        "0x318680"
       ],
       "asset": "editor/static/ai-class-sprites/7/04.png",
-      "asset_sha256": "3192c79867c603293c57d5863e8e2a02f93c7619dcb22956265419737ad0fac4",
-      "encoded_sha256": "772aa2547e9c112fc0de2b0972c37f9293b252257ae1c22f1e817307fd369579"
+      "asset_sha256": "282fac10dd8c0cd3e4935d4a59baa9114eaed10b21933f653690cd78aa8ee94e",
+      "encoded_sha256": "673d91d473d7ad223f87af9e3cd558236d78347e495de4e54357e43d171a03b9"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x06",
+      "class_name": "호크나이트",
+      "mapping_record": "0x05DD0C",
+      "mapping_status": "attached",
+      "sprite_id": "0x5809",
+      "frame_offsets": [
+        "0x312E00",
+        "0x318700"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/06.png",
+      "asset_sha256": "7163046e59dda74c92fd7db23909f226b6f86d8e731e69c4254f2c9ec35c96b6",
+      "encoded_sha256": "f69b6eed187e43aee92f79402d41f94119a9f6f39d15a891e0725ba3d581de10"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x08",
+      "class_name": "힐러",
+      "mapping_record": "0x05DD0F",
+      "mapping_status": "attached",
+      "sprite_id": "0x580A",
+      "frame_offsets": [
+        "0x312E80",
+        "0x318780"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/08.png",
+      "asset_sha256": "c7ed6d5e9c3cc4ecdef49f2814ccb2a6ad5803c9e0e873f17110b584243ba850",
+      "encoded_sha256": "7c903e53837392d78808ede6c0c651ed8e751497b1d0ea30c6e23a5066a00168"
     },
     {
       "commander_id": 7,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DD12",
-      "sprite_id": "0x53D4",
+      "mapping_status": "attached",
+      "sprite_id": "0x580B",
       "frame_offsets": [
-        "0x2F1380",
-        "0x2F6C80"
+        "0x312F00",
+        "0x318800"
       ],
       "asset": "editor/static/ai-class-sprites/7/0B.png",
-      "asset_sha256": "9de0efe83b169707570d3c4b0e401ee434a554e25d84461370e607a554492959",
-      "encoded_sha256": "0a747fe60c439d41ce3a61cab843363d5b177fdb3ad72d694d9fe8cb797f5fec"
+      "asset_sha256": "441db9a5d951a6593768b63c47b2852062afedb9850607fe9106eac47e5d46e8",
+      "encoded_sha256": "bce86afef47de3976722404a105ba8455f698f3044db6433140e823bb225196a"
     },
     {
       "commander_id": 7,
       "class_id": "0x11",
       "class_name": "프리스트",
       "mapping_record": "0x05DD1E",
-      "sprite_id": "0x53D5",
+      "mapping_status": "attached",
+      "sprite_id": "0x580C",
       "frame_offsets": [
-        "0x2F1400",
-        "0x2F6D00"
+        "0x312F80",
+        "0x318880"
       ],
       "asset": "editor/static/ai-class-sprites/7/11.png",
-      "asset_sha256": "36c865d90055bbed4af1bd4aaab0c2e9e054149a94de91ba6024607e52a609c2",
-      "encoded_sha256": "9d4371831a5fa7bfcb0f8896f0de09a484fa6fcff9772484b540e1499166946f"
+      "asset_sha256": "064b84239bd378f4fd506ec37a2a897d3b793d64a43694cd5cd1669d3e3762bd",
+      "encoded_sha256": "4cff8ca70c16f4c1fb1922c3b07f681eda7b0af9a1fd182a2bd88d33bd21a3c0"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DD30",
+      "mapping_status": "attached",
+      "sprite_id": "0x580D",
+      "frame_offsets": [
+        "0x313000",
+        "0x318900"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/15.png",
+      "asset_sha256": "679f30955c27e1fd6fb2d84d5e5ec79c7b3c9614917af5e0607f2b2025713d90",
+      "encoded_sha256": "2126a2a6d95fd1279dcc2881cb22d2ff91f1477122c3d12b0b376658cbb89c43"
     },
     {
       "commander_id": 7,
       "class_id": "0x16",
       "class_name": "하이프리스트",
       "mapping_record": "0x05DD33",
-      "sprite_id": "0x53D6",
+      "mapping_status": "attached",
+      "sprite_id": "0x580E",
       "frame_offsets": [
-        "0x2F1480",
-        "0x2F6D80"
+        "0x313080",
+        "0x318980"
       ],
       "asset": "editor/static/ai-class-sprites/7/16.png",
-      "asset_sha256": "6c88f4e1ea625114abf745edd30337b75ad5437b5bff57cac4caa58a2702b8a7",
-      "encoded_sha256": "42579cd8893c5e3b6a7b2feeb1499ba3b20358b1e5e855cd29122e326d81e568"
+      "asset_sha256": "b2dd0177ca9026d9dcac753ece7dcbc234926bb08c09767ca9c320437d87a5fa",
+      "encoded_sha256": "43041199fa797aa47996d2eaa955eb281de4873ed5bd232ebfff2e172721351a"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DD21",
+      "mapping_status": "attached",
+      "sprite_id": "0x580F",
+      "frame_offsets": [
+        "0x313100",
+        "0x318A00"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/17.png",
+      "asset_sha256": "42488200148037de7057bc923f18378784a2ef83183b37ca474441bb5dd86d22",
+      "encoded_sha256": "2b6095f6960c9287e51e7f3b0c8f6f918a62b06d1facb952b8ba258b038457a6"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DD27",
+      "mapping_status": "attached",
+      "sprite_id": "0x5810",
+      "frame_offsets": [
+        "0x313180",
+        "0x318A80"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/19.png",
+      "asset_sha256": "60f8d2a65caf8f785b9cd2e3a7cddd29222928e27f771a81572f77e2e7eacd33",
+      "encoded_sha256": "c4afc1669001fe9eaa50ac12de04e085295f6984ecae9bdd3992a48edcdcbd3b"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x1A",
+      "class_name": "소드마스터",
+      "mapping_record": "0x05DD24",
+      "mapping_status": "attached",
+      "sprite_id": "0x5811",
+      "frame_offsets": [
+        "0x313200",
+        "0x318B00"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/1A.png",
+      "asset_sha256": "c9784f596377f5fc3d019744b89d38bb489f4be7701ccf3274d0f1c62446a1a3",
+      "encoded_sha256": "1879b60927ebccfce493f6fb058ace1a2e5e149d27f525d490621407cfccb500"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DD2D",
+      "mapping_status": "attached",
+      "sprite_id": "0x5812",
+      "frame_offsets": [
+        "0x313280",
+        "0x318B80"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/1D.png",
+      "asset_sha256": "68f8d5e5027bdc2c38f5811740e6b1f570c1183a53904ad6b688263d0143e769",
+      "encoded_sha256": "d7a50b990f3e508a1536d28777ecd99c471341ddb45346e04c1a82db8bea0294"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x1E",
+      "class_name": "드래곤로드",
+      "mapping_record": "0x05DD2A",
+      "mapping_status": "attached",
+      "sprite_id": "0x5813",
+      "frame_offsets": [
+        "0x313300",
+        "0x318C00"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/1E.png",
+      "asset_sha256": "445207fe04abc0c3440946560626ddd0c2eccedc652386b2ce2b81a7f13b48ac",
+      "encoded_sha256": "8da618e97f79eacff0d0aecf703a4d62b72d63d302ef3ecd0cb30dd819e43e4f"
+    },
+    {
+      "commander_id": 7,
+      "class_id": "0x24",
+      "class_name": "드래곤마스터",
+      "mapping_record": "0x05DD36",
+      "mapping_status": "attached",
+      "sprite_id": "0x5814",
+      "frame_offsets": [
+        "0x313380",
+        "0x318C80"
+      ],
+      "asset": "editor/static/ai-class-sprites/7/24.png",
+      "asset_sha256": "9c2b9ecbf329215ec2e4838cb36ddcd08ff1e1c3ae24bb004179de08bebd71df",
+      "encoded_sha256": "ef896a5e2cb526232bda7ff37e8f91ea75355a973b078e2033c2db0f687eacf9"
     },
     {
       "commander_id": 8,
       "class_id": "0x04",
       "class_name": "로드",
       "mapping_record": "0x05DD3F",
-      "sprite_id": "0x53D7",
+      "mapping_status": "attached",
+      "sprite_id": "0x5815",
       "frame_offsets": [
-        "0x2F1500",
-        "0x2F6E00"
+        "0x313400",
+        "0x318D00"
       ],
       "asset": "editor/static/ai-class-sprites/8/04.png",
-      "asset_sha256": "7ae2ecccf005b3d28d0fdd0ab7b05d86536649bac6171db4f8ac079e4c147440",
-      "encoded_sha256": "e1402640cf71b829d485ab9306f6a0b2f3b8224f92fec02261bf687e4473c7e6"
+      "asset_sha256": "de4d06ed133077e9eb40559eb848de0f20e2de5f2ba4eb4d62e0df5faa37291d",
+      "encoded_sha256": "515f5e141ebd69d7317ea36bb185c30137d3be4b8c431cb0e4b7d4e32ea27f00"
     },
     {
       "commander_id": 8,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DD4B",
-      "sprite_id": "0x53D8",
+      "mapping_status": "attached",
+      "sprite_id": "0x5816",
       "frame_offsets": [
-        "0x2F1580",
-        "0x2F6E80"
+        "0x313480",
+        "0x318D80"
       ],
       "asset": "editor/static/ai-class-sprites/8/0B.png",
-      "asset_sha256": "d7eece0bc91a5667ca734f46729d677d9c6a81211d039066210ae9b044274d0c",
-      "encoded_sha256": "2a97361f53c72a814cb4ddf0ece982471251e7a256ea08305ad9e247f61ad4ab"
+      "asset_sha256": "6ceb2101f7515c8ccb8f2d72542139e213d6852d437ead4cc218436995a88a4e",
+      "encoded_sha256": "3edf54e23df49490bc2610a5d30e42623a38e0ab80085f4fb9eb4077415662ce"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x0C",
+      "class_name": "하이랜더",
+      "mapping_record": "0x05DD4E",
+      "mapping_status": "attached",
+      "sprite_id": "0x5817",
+      "frame_offsets": [
+        "0x313500",
+        "0x318E00"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/0C.png",
+      "asset_sha256": "61dfbc55eb4b10a5714ea0ac67e59267e9ec784bba2e5f7d33cb10f32d6eafc3",
+      "encoded_sha256": "057f089fa564de4bd97fa394797bd59bf6cf499216f69967cf0b02b745652dfb"
     },
     {
       "commander_id": 8,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DD54",
-      "sprite_id": "0x53D9",
+      "mapping_status": "attached",
+      "sprite_id": "0x5818",
       "frame_offsets": [
-        "0x2F1600",
-        "0x2F6F00"
+        "0x313580",
+        "0x318E80"
       ],
       "asset": "editor/static/ai-class-sprites/8/13.png",
-      "asset_sha256": "d578968869c2595f5d2e9e9170699677c22c342f3efe9d8ed3f509b92e224de6",
-      "encoded_sha256": "6489b1f33e1dbfab26699ce6eb5fbc74409311f087e6b45183d87eddc1afeae2"
+      "asset_sha256": "104ca7ef9339a48a2168a080d381d27fe36dc4b1df9768d0a3589c5f57249f3a",
+      "encoded_sha256": "70c8f5124f042b21e2aa9242005c3210227fc93fdef6ccbb1f49e0935448c024"
     },
     {
       "commander_id": 8,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DD69",
-      "sprite_id": "0x53DA",
+      "mapping_status": "attached",
+      "sprite_id": "0x5819",
       "frame_offsets": [
-        "0x2F1680",
-        "0x2F6F80"
+        "0x313600",
+        "0x318F00"
       ],
       "asset": "editor/static/ai-class-sprites/8/14.png",
-      "asset_sha256": "f0f8ccfc3a27977f8ffd2aa9c1b5157627e11aeea385eb6ac7b8b83d300efe70",
-      "encoded_sha256": "537d16f597e0ed99c0e9ad23dbbcd8fc7b1b3218db207acf47ca8171af205da4"
+      "asset_sha256": "163d3aeae390f8099357a8c149f9d7d50e24fc34ee744bc19b6e33e537ebcb04",
+      "encoded_sha256": "a73854cd433a42eb4faa8d1743ca14b5d57a6cf4cc57cf7ebd84d3c22ff2103a"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x16",
+      "class_name": "하이프리스트",
+      "mapping_record": "0x05DD57",
+      "mapping_status": "attached",
+      "sprite_id": "0x581A",
+      "frame_offsets": [
+        "0x313680",
+        "0x318F80"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/16.png",
+      "asset_sha256": "205d2b1ab0d34d9218ad0248fdd19dcc6247ee20a20ab65ce6ca332b4dd5db57",
+      "encoded_sha256": "6f6863ac6e5f3f53821355e7e8c420ddad57bda0104e1c265ac4037fd5597ec2"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DD5A",
+      "mapping_status": "attached",
+      "sprite_id": "0x581B",
+      "frame_offsets": [
+        "0x313700",
+        "0x319000"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/17.png",
+      "asset_sha256": "764f3340a6c47ecaed207b51940470fe5b205a5e5e561cd12cdb05dde5b99b06",
+      "encoded_sha256": "0dc62e2a13c6cfcd5229e4ab3464ef0f6e3b5171874af3b13cfbab77b73c40f7"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DD60",
+      "mapping_status": "attached",
+      "sprite_id": "0x581C",
+      "frame_offsets": [
+        "0x313780",
+        "0x319080"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/19.png",
+      "asset_sha256": "d69d54aff0bee37a4c6e5499a2b4c1097f1ba2cf2a966ebf441dc36d09b1c65a",
+      "encoded_sha256": "acb13ed886d0f13fcc33db32fa3b421a798fbd7712bca2f4bbc2d4f7a4b2eb22"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x1A",
+      "class_name": "소드마스터",
+      "mapping_record": "0x05DD5D",
+      "mapping_status": "attached",
+      "sprite_id": "0x581D",
+      "frame_offsets": [
+        "0x313800",
+        "0x319100"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/1A.png",
+      "asset_sha256": "3133d1bcf13c1f55a402057ff5e249853f4595be9db67403b068afa8918141f9",
+      "encoded_sha256": "e44f66713432a1a95f07d16932f7d60f2839277ee6542968e8d5a7d11cf30e5a"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x1B",
+      "class_name": "나이트마스터",
+      "mapping_record": "0x05DD63",
+      "mapping_status": "attached",
+      "sprite_id": "0x581E",
+      "frame_offsets": [
+        "0x313880",
+        "0x319180"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/1B.png",
+      "asset_sha256": "0a969b524d128e6554c70676fb0edaa939d0b48917c564dd677817d88530e6b2",
+      "encoded_sha256": "a01dc17d3a91134aa62789737219b43633bd8f3d92e7b6bb445373795951cd70"
+    },
+    {
+      "commander_id": 8,
+      "class_id": "0x23",
+      "class_name": "하이마스터",
+      "mapping_record": "0x05DD6C",
+      "mapping_status": "attached",
+      "sprite_id": "0x581F",
+      "frame_offsets": [
+        "0x313900",
+        "0x319200"
+      ],
+      "asset": "editor/static/ai-class-sprites/8/23.png",
+      "asset_sha256": "00c2d9c1090147df4c92983c43a406fb8aa780a395830c62794adf23af00bc3a",
+      "encoded_sha256": "998d488d4fc5194dbf0fbf6962e52e0131d268ba4a98ebbaae90a238963699d4"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x01",
+      "class_name": "파이터",
+      "mapping_record": null,
+      "mapping_status": "reserved_unattached_after_lord_record_repurpose",
+      "sprite_id": "0x5820",
+      "frame_offsets": [
+        "0x313980",
+        "0x319280"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/01.png",
+      "asset_sha256": "4b028ac7b2343c88fe317786a8f1cbb6545148e9cd43badcf4973ff59e922919",
+      "encoded_sha256": "bd23e99f6bea033dba4d7065b684b758fed7158dcd137210b79cbcc8ff02c57e"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x07",
+      "class_name": "크로코나이트",
+      "mapping_record": "0x05DD78",
+      "mapping_status": "attached",
+      "sprite_id": "0x5821",
+      "frame_offsets": [
+        "0x313A00",
+        "0x319300"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/07.png",
+      "asset_sha256": "6421e6a56c3004fbaad34ded8dc508b33c1be44fbd659c126eed57b2208672f5",
+      "encoded_sha256": "406da3d2606459556a17242aa06af5f35cb7587e56e0636b7d5839847810d610"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x0C",
+      "class_name": "하이랜더",
+      "mapping_record": "0x05DD7E",
+      "mapping_status": "attached",
+      "sprite_id": "0x5822",
+      "frame_offsets": [
+        "0x313A80",
+        "0x319380"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/0C.png",
+      "asset_sha256": "726f8648314f4935d705071a979b51f363bf5c180a83ba6e131cc751f3aeb3b6",
+      "encoded_sha256": "3516b211a287ea63f2e03a68e630072e6a4cd7e325d6208a73c58f29964d0df2"
     },
     {
       "commander_id": 9,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DD8A",
-      "sprite_id": "0x53DB",
+      "mapping_status": "attached",
+      "sprite_id": "0x5823",
       "frame_offsets": [
-        "0x2F1700",
-        "0x2F7000"
+        "0x313B00",
+        "0x319400"
       ],
       "asset": "editor/static/ai-class-sprites/9/13.png",
-      "asset_sha256": "859ac9213ab1aad4dcb171ad34a444fbf73ae7993c2144fd4f1e4f522e4b1830",
-      "encoded_sha256": "d29bec8477074ce8d7c332db9d434df32b69113c81d89bd3136cab21a28af8b9"
+      "asset_sha256": "7369b9895bb9437afbf19de3c513a14db7410f0bda06f79479d1667458d53682",
+      "encoded_sha256": "3f6f26abebb9cf40b3937548fa3cc8f0725cf59b12234b53ecbc3c188babd3b2"
     },
     {
       "commander_id": 9,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DD9F",
-      "sprite_id": "0x53DC",
+      "mapping_status": "attached",
+      "sprite_id": "0x5824",
       "frame_offsets": [
-        "0x2F1780",
-        "0x2F7080"
+        "0x313B80",
+        "0x319480"
       ],
       "asset": "editor/static/ai-class-sprites/9/14.png",
-      "asset_sha256": "c5d1f691fa958eb5b4465969262f065564fb74becae814bca9583724b067aa5b",
-      "encoded_sha256": "32a4f9195198ac1b684e69bae72ea4459b2a6d03e827ca4db1a9ee59f3e4445b"
+      "asset_sha256": "07e01549bfecac56c16c0a515cde2b999387e33c49f6a5430140458c79fa4388",
+      "encoded_sha256": "14415a158cc21e688cc4a048c09f2878d41b6a46d39fece2f446159bf8b7df76"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DD9C",
+      "mapping_status": "attached",
+      "sprite_id": "0x5825",
+      "frame_offsets": [
+        "0x313C00",
+        "0x319500"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/15.png",
+      "asset_sha256": "28321d33c15488384b0a4d6dcd08af84f32f7da863a5d244fe7472c37481b2aa",
+      "encoded_sha256": "8c22975d7b27fe552bbcaaca96ac0e69538fe7a62e1b00cbc3a4f1d2da2acee0"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DD99",
+      "mapping_status": "attached",
+      "sprite_id": "0x5826",
+      "frame_offsets": [
+        "0x313C80",
+        "0x319580"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/19.png",
+      "asset_sha256": "bc84fb635e50d985ee875fa1dc833bfb5c63f854493964902aee8723b2cfb9b2",
+      "encoded_sha256": "1059c6c33f470f7d3b20cc10faafe3f8434517a601ade81ae91f8ef2495dca6d"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x1B",
+      "class_name": "나이트마스터",
+      "mapping_record": "0x05DD8D",
+      "mapping_status": "attached",
+      "sprite_id": "0x5827",
+      "frame_offsets": [
+        "0x313D00",
+        "0x319600"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/1B.png",
+      "asset_sha256": "193fc32adf73f61cd1af640eb0af084f4f1450aa8169f7b23e293136448cdca1",
+      "encoded_sha256": "7d69d5b8bbeb78c4ed9bb06370116c65fac6ac8e041143ab6687641c9d51a03f"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x1D",
+      "class_name": "실버나이트",
+      "mapping_record": "0x05DD93",
+      "mapping_status": "attached",
+      "sprite_id": "0x5828",
+      "frame_offsets": [
+        "0x313D80",
+        "0x319680"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/1D.png",
+      "asset_sha256": "e316028b7b4b6fa3816264361616b287ec1e4df44b534bb96abb1164e91a2dd3",
+      "encoded_sha256": "6e50c2eeb91dcc5104cfabdfd3ac52587389b5548782053d2d670c215e150867"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x1F",
+      "class_name": "서펜로드",
+      "mapping_record": "0x05DD96",
+      "mapping_status": "attached",
+      "sprite_id": "0x5829",
+      "frame_offsets": [
+        "0x313E00",
+        "0x319700"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/1F.png",
+      "asset_sha256": "64360fb5d9826c18d5129fc44a2fbb47c612963109f0db39c9596ac8ae407640",
+      "encoded_sha256": "fc8b75ece95b2edc5e9ea91eda309649d30808c195e77cdee216bf55659a78ac"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x26",
+      "class_name": "자베라",
+      "mapping_record": "0x05DDA5",
+      "mapping_status": "attached",
+      "sprite_id": "0x582A",
+      "frame_offsets": [
+        "0x313E80",
+        "0x319780"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/26.png",
+      "asset_sha256": "badedb00bd28f1ae861273dc0269560e5088131bad13408a858df9517975bfb2",
+      "encoded_sha256": "1a7b45f3d3d6ec7da44986a58024c51d64c034736f3f354483bdeca9509aea33"
+    },
+    {
+      "commander_id": 9,
+      "class_id": "0x2A",
+      "class_name": "서펜마스터",
+      "mapping_record": "0x05DDA2",
+      "mapping_status": "attached",
+      "sprite_id": "0x582B",
+      "frame_offsets": [
+        "0x313F00",
+        "0x319800"
+      ],
+      "asset": "editor/static/ai-class-sprites/9/2A.png",
+      "asset_sha256": "2a742a5df67ccf911aa8bc00c1a28997e016dcefdcac587a2cb73ff01a12d038",
+      "encoded_sha256": "4bad6197b440395bdc008ee66bded5517e0ffec7abf088fc54dd65ac3309832c"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x04",
+      "class_name": "로드",
+      "mapping_record": "0x05DDB5",
+      "mapping_status": "attached",
+      "sprite_id": "0x582C",
+      "frame_offsets": [
+        "0x313F80",
+        "0x319880"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/04.png",
+      "asset_sha256": "fb185e3c3e39f6093f684d9979cff829fabf24523cbc053bcbb8c71d857afedb",
+      "encoded_sha256": "3992db8e3841d03ebf42dcc20e3dc5fa6736f3e04de8b5ca639a8274865e9da3"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x08",
+      "class_name": "힐러",
+      "mapping_record": "0x05DDAF",
+      "mapping_status": "attached",
+      "sprite_id": "0x582D",
+      "frame_offsets": [
+        "0x314000",
+        "0x319900"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/08.png",
+      "asset_sha256": "044b2b5d4109df72f661206cf0922fe383c2602cea9fc276a502b44ed9d9073a",
+      "encoded_sha256": "f0ddbdf0c4fe6e22e6e04a6e14487eb632d71e523068b6ebf308e970abb96f63"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x09",
+      "class_name": "소서러",
+      "mapping_record": "0x05DDB2",
+      "mapping_status": "attached",
+      "sprite_id": "0x582E",
+      "frame_offsets": [
+        "0x314080",
+        "0x319980"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/09.png",
+      "asset_sha256": "70f9f9ac8ed57561655ce472ea2679f27a7aac6bb0addf92fa6733ef0a1fdc86",
+      "encoded_sha256": "7b005f909e1de20a84bbf4b9f260b75f23ff3934f6094b376574a68d6d1a8dd8"
     },
     {
       "commander_id": 10,
       "class_id": "0x0B",
       "class_name": "하이로드",
       "mapping_record": "0x05DDC4",
-      "sprite_id": "0x53DD",
+      "mapping_status": "attached",
+      "sprite_id": "0x582F",
       "frame_offsets": [
-        "0x2F1800",
-        "0x2F7100"
+        "0x314100",
+        "0x319A00"
       ],
       "asset": "editor/static/ai-class-sprites/10/0B.png",
-      "asset_sha256": "29abeeb0f30c9023abfba80d8f30275cea71cd0310a8f24231ea99525fb4f13d",
-      "encoded_sha256": "800e6609bc91143f326499c6435ee884f0572de5d5e9fcf8aa96d84ab9dfe504"
+      "asset_sha256": "b1493900c8201832ec68210f9b3966acc74c5e9351e90c59d31d818c8fc8c13d",
+      "encoded_sha256": "aa3b39cc0c8c794cd7debe274c200377654ae40ef2b24c305c0471720f7a16b7"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x0D",
+      "class_name": "매직나이트",
+      "mapping_record": "0x05DDC1",
+      "mapping_status": "attached",
+      "sprite_id": "0x5830",
+      "frame_offsets": [
+        "0x314180",
+        "0x319A80"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/0D.png",
+      "asset_sha256": "fc7d0e1014a09efdaaf9e8ee73d40d370558f1681c542f08d0c75bd7bfad7d1c",
+      "encoded_sha256": "996006c8a439386d1bfdf9d94623900277875fc80d78cd1d3d2e1d3882f173e5"
     },
     {
       "commander_id": 10,
       "class_id": "0x11",
       "class_name": "프리스트",
       "mapping_record": "0x05DDB8",
-      "sprite_id": "0x53DE",
+      "mapping_status": "attached",
+      "sprite_id": "0x5831",
       "frame_offsets": [
-        "0x2F1880",
-        "0x2F7180"
+        "0x314200",
+        "0x319B00"
       ],
       "asset": "editor/static/ai-class-sprites/10/11.png",
-      "asset_sha256": "2249494a905e8041508c46cfa32e94a26c53c16c41ef21405b4637ba7917103a",
-      "encoded_sha256": "46c553d7dddd7a0116f00b5000dbd6345b501b554ef1dadb324031d3fedc7c9e"
+      "asset_sha256": "b2c03adbd78adf9a3cef33f0348d12af542bdddcb59376d0dbd671f61b3dd3bd",
+      "encoded_sha256": "9da5cd42ae91544eb502268f7a2f9d91ea548a787b09d0d3c93d954499242310"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x12",
+      "class_name": "비숍",
+      "mapping_record": "0x05DDBB",
+      "mapping_status": "attached",
+      "sprite_id": "0x5832",
+      "frame_offsets": [
+        "0x314280",
+        "0x319B80"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/12.png",
+      "asset_sha256": "828c3e985deb5670c658b3675a2c77871072588d233fc5b96c34f880f93aaf3e",
+      "encoded_sha256": "10855b877800b714b7dc80edc8a5b9d218ecd8118b1cc2f5910b904f5da24512"
     },
     {
       "commander_id": 10,
       "class_id": "0x13",
       "class_name": "메이지",
       "mapping_record": "0x05DDBE",
-      "sprite_id": "0x53DF",
+      "mapping_status": "attached",
+      "sprite_id": "0x5833",
       "frame_offsets": [
-        "0x2F1900",
-        "0x2F7200"
+        "0x314300",
+        "0x319C00"
       ],
       "asset": "editor/static/ai-class-sprites/10/13.png",
-      "asset_sha256": "8e28af728e4807c18473dd6dba9a8afcefb661996a08342d61a013aed2b7bb70",
-      "encoded_sha256": "f4d8b0d731c68111ea2b30411504ead5839f58e3e22e7294cf0c9b82e69ec66b"
+      "asset_sha256": "14b25e906d7246bf8d7c522571efc05004746918140c6790380e45e330fd0143",
+      "encoded_sha256": "69f589a2ad258fe120db1776adc964b36d43d769441f7c5573eb471d7bf12049"
     },
     {
       "commander_id": 10,
       "class_id": "0x14",
       "class_name": "아크메이지",
       "mapping_record": "0x05DDD0",
-      "sprite_id": "0x53E0",
+      "mapping_status": "attached",
+      "sprite_id": "0x5834",
       "frame_offsets": [
-        "0x2F1980",
-        "0x2F7280"
+        "0x314380",
+        "0x319C80"
       ],
       "asset": "editor/static/ai-class-sprites/10/14.png",
-      "asset_sha256": "c8f6d324ebaf7fe68f843eefda5d732e097040f5c33a160a6605f4434bf2cfa3",
-      "encoded_sha256": "0e90e04958315ca745f9e2897f6426b3d55fd1ae2ec6332592ac159e57de304b"
+      "asset_sha256": "706541fd4aeb2830c68d401bbed07db2fc6a28903d071c4792079b3b4c13dfdb",
+      "encoded_sha256": "14d3b7a570488581e26d50aa8b44fe6a441e6ab8cc79eb1a59d7af80969f52d6"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x15",
+      "class_name": "위저드",
+      "mapping_record": "0x05DDCD",
+      "mapping_status": "attached",
+      "sprite_id": "0x5835",
+      "frame_offsets": [
+        "0x314400",
+        "0x319D00"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/15.png",
+      "asset_sha256": "7caf517ae25febb75d7dd0b7465b25945b90aa5b3087a78b7225568bd7875298",
+      "encoded_sha256": "e5e57e81eac69397cce7c34df66e1bef8e16f0f702562e4447ed69636a583ed9"
     },
     {
       "commander_id": 10,
       "class_id": "0x16",
       "class_name": "하이프리스트",
       "mapping_record": "0x05DDC7",
-      "sprite_id": "0x53E1",
+      "mapping_status": "attached",
+      "sprite_id": "0x5836",
       "frame_offsets": [
-        "0x2F1A00",
-        "0x2F7300"
+        "0x314480",
+        "0x319D80"
       ],
       "asset": "editor/static/ai-class-sprites/10/16.png",
-      "asset_sha256": "8dac392bfdfff3dbff27c3f68cdc84def79626d7e368b9ea24317d5f1e7ebea5",
-      "encoded_sha256": "549cd5c16d740bc7c1a6c0761835f144c831d6e154d2947c473598bcf683c55d"
+      "asset_sha256": "81fb1c511a978457ea781761e96fbdda8f3039000a32a2c8faf9071b053e473e",
+      "encoded_sha256": "d513025ef15d253a8389e4afc94a704f1a5546df93782cb8c959aad78b7d026e"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x17",
+      "class_name": "세인트",
+      "mapping_record": "0x05DDCA",
+      "mapping_status": "attached",
+      "sprite_id": "0x5837",
+      "frame_offsets": [
+        "0x314500",
+        "0x319E00"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/17.png",
+      "asset_sha256": "7f6e2b38c2d0f5396ea6ee7acd308b37776394b0b963d4cf18c115ee5edfa100",
+      "encoded_sha256": "47f37e41e19ef94ea66edef39ac212e06265ddc9409f309524c4c2b737d5ace7"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x18",
+      "class_name": "세이지",
+      "mapping_record": "0x05DDD3",
+      "mapping_status": "attached",
+      "sprite_id": "0x5838",
+      "frame_offsets": [
+        "0x314580",
+        "0x319E80"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/18.png",
+      "asset_sha256": "e930aa3eabdbbf1415e58dad00820dbb51280c3704b2070005dec1ad29bf678b",
+      "encoded_sha256": "564f0626e9a63957f2a17bbd18b4f49ef8b0c8a768ac89f4e4d3f849422675b0"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x19",
+      "class_name": "팔라딘",
+      "mapping_record": "0x05DDD6",
+      "mapping_status": "attached",
+      "sprite_id": "0x5839",
+      "frame_offsets": [
+        "0x314600",
+        "0x319F00"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/19.png",
+      "asset_sha256": "c8a5f7b53c33139a2c75b5cd725b8dbbaa6e80879fdcb76c76800fe882bc10e1",
+      "encoded_sha256": "d75ef93df4109128cf11bf951d8a615d09fd3fb8b011f244cf55a15575d4d69a"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x1A",
+      "class_name": "소드마스터",
+      "mapping_record": "0x05DDD9",
+      "mapping_status": "attached",
+      "sprite_id": "0x583A",
+      "frame_offsets": [
+        "0x314680",
+        "0x319F80"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/1A.png",
+      "asset_sha256": "33b48b0eb632f2d0814e0291026e7469c2031f22c416c5f5e322e6c55a116425",
+      "encoded_sha256": "f9f4b4530b871695be9c5f3db1ddb99a7c87304cd17a0c9139d54ac3337fc610"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x26",
+      "class_name": "자베라",
+      "mapping_record": "0x05DDDC",
+      "mapping_status": "attached",
+      "sprite_id": "0x583B",
+      "frame_offsets": [
+        "0x314700",
+        "0x31A000"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/26.png",
+      "asset_sha256": "df9b55522fca6811ca005140103266ab59f584809345217c111a8f525186ad87",
+      "encoded_sha256": "2fa99a96bb1a5ea5d51dc43ae13fa5e5e9e3802bfe2dbccbd2cce145339f34a5"
+    },
+    {
+      "commander_id": 10,
+      "class_id": "0x28",
+      "class_name": "서머너",
+      "mapping_record": "0x05DDDF",
+      "mapping_status": "attached",
+      "sprite_id": "0x583C",
+      "frame_offsets": [
+        "0x314780",
+        "0x31A080"
+      ],
+      "asset": "editor/static/ai-class-sprites/10/28.png",
+      "asset_sha256": "0ed08ab6d53b0666d1ddeb99c9f70202a35b778493cc430e4a70324f2d47daa4",
+      "encoded_sha256": "ce2547fb884d58a1a77fe2a372975b6aa45870586335b2058549b789c2c3ea11"
     }
   ]
 }

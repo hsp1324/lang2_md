@@ -916,6 +916,9 @@ def patch_empire_items(
         popup_build_hook=EMPIRE_ITEM_NAME_POPUP_BUILD_HOOK,
         popup_return_target=EMPIRE_ITEM_NAME_POPUP_RETURN_TARGET,
         list_render_hooks=EMPIRE_ITEM_NAME_LIST_RENDER_HOOKS,
+        # Empire has a shifted preparation-equipment state machine. Its
+        # separate runtime repair is intentionally outside the v1.3.2 goal.
+        equipment_reload_hook=None,
         discard_list_render_hook=EMPIRE_ITEM_DISCARD_LIST_RENDER_HOOK,
         token_reloc_base=EMPIRE_ITEM_NAME_TOKEN_RELOC_BASE,
         token_reloc_limit=EMPIRE_ITEM_NAME_TOKEN_RELOC_LIMIT,

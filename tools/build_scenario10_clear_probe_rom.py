@@ -41,6 +41,13 @@ RUNTIME_GROUP_SIZE = 0x60
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
+RUNTIME_DF_OFFSET = 0x3B
+RUNTIME_TURN_COUNTER = 0xFFFFA5F1
+TURN3_COUNTER_VALUE = 3
+TURN_EVENT_PROTECTED_RUNTIME_GROUPS = tuple(
+    range(FIRST_MONSTER_RUNTIME_GROUP)
+)
+TURN_EVENT_PROTECTED_DF = 99
 
 
 def be32(data: bytes | bytearray, offset: int) -> int:
@@ -137,6 +144,37 @@ def runtime_finish_wrapper_code() -> bytes:
     return bytes(code)
 
 
+def turn3_event_wrapper_code() -> bytes:
+    """Raise an ordinary Scenario 10 run only to the TURN 3 end state.
+
+    Runtime groups 0..7 are the five deployed players plus the three fixed
+    pirate/Lester records that exist before the hidden monster records.  A
+    no-action enemy phase can otherwise kill one of them before the source
+    TURN 3 entry event is reached.  The wrapper changes only their live DF and
+    the global turn counter; every Scenario 10 ROM record and event remains
+    byte-identical to the Japanese source.
+    """
+    code = bytearray()
+    for runtime_group in TURN_EVENT_PROTECTED_RUNTIME_GROUPS:
+        record = RUNTIME_GROUP_BASE + runtime_group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("13 FC"))
+        code.extend(TURN_EVENT_PROTECTED_DF.to_bytes(2, "big"))
+        code.extend((record + RUNTIME_DF_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("0C 39"))
+    code.extend(TURN3_COUNTER_VALUE.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    # Raise an earlier save once, but never rewind a later turn.
+    code.extend(bytes.fromhex("64 08"))
+    code.extend(bytes.fromhex("13 FC"))
+    code.extend(TURN3_COUNTER_VALUE.to_bytes(2, "big"))
+    code.extend(RUNTIME_TURN_COUNTER.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
 def install_start_wrapper(
     probe: bytearray,
     source: bytes,
@@ -164,14 +202,16 @@ def patch_probe(
     *,
     protagonist_death: bool = False,
     runtime_finish: bool = False,
+    turn3_event: bool = False,
 ) -> int:
-    if protagonist_death and runtime_finish:
+    if sum((protagonist_death, runtime_finish, turn3_event)) > 1:
         raise ValueError(
-            "protagonist-death and runtime-finish modes are mutually exclusive"
+            "protagonist-death, runtime-finish, and turn3-event modes are "
+            "mutually exclusive"
         )
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
-    if protagonist_death or runtime_finish:
+    if protagonist_death or runtime_finish or turn3_event:
         for index in range(layout.record_count):
             start = layout.records_offset + index * FIXED_RECORD_SIZE
             end = start + FIXED_RECORD_SIZE
@@ -179,11 +219,12 @@ def patch_probe(
                 raise ValueError(
                     f"input Scenario 10 fixed record {index} differs from Japanese source"
                 )
-        wrapper = (
-            protagonist_death_wrapper_code()
-            if protagonist_death
-            else runtime_finish_wrapper_code()
-        )
+        if protagonist_death:
+            wrapper = protagonist_death_wrapper_code()
+        elif runtime_finish:
+            wrapper = runtime_finish_wrapper_code()
+        else:
+            wrapper = turn3_event_wrapper_code()
         install_start_wrapper(probe, source, wrapper)
     else:
         for index in range(
@@ -224,6 +265,15 @@ def parse_args() -> argparse.Namespace:
             "and defeat only the ten already-revealed runtime monster groups"
         ),
     )
+    parser.add_argument(
+        "--turn3-event",
+        action="store_true",
+        help=(
+            "preserve every Scenario 10 record and event, protect only the "
+            "five players plus three pre-reveal fixed groups, and raise the "
+            "runtime counter to the TURN 3 end state through Start"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -236,6 +286,7 @@ def main() -> int:
         source,
         protagonist_death=args.protagonist_death,
         runtime_finish=args.runtime_finish,
+        turn3_event=args.turn3_event,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -256,6 +307,15 @@ def main() -> int:
         print(
             "Start hides and defeats only runtime monster groups 8..17, then "
             "returns to the stock Start handler"
+        )
+    elif args.turn3_event:
+        print(
+            "Scenario 10 TURN 3 event mode: all deployments, fixed records, "
+            "and events remain source-identical"
+        )
+        print(
+            "Start protects runtime groups 0..7 and raises the turn counter "
+            "only to 3, then returns to the stock Start handler"
         )
     else:
         print(

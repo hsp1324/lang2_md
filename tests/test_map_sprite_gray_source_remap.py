@@ -40,6 +40,10 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
         cls.original = builder.IN_ROM.read_bytes()
         cls.patched = bytearray(cls.original)
         builder.expand_rom(cls.patched)
+        builder.patch_join_class_choice_class_data(
+            cls.patched,
+            cls.original,
+        )
         builder.patch_bald_map_sprite(cls.patched)
         builder.patch_shaman_map_sprite(cls.patched)
         builder.patch_loren_map_sprite(cls.patched)
@@ -338,6 +342,7 @@ class MapSpriteGraySourceRemapTests(unittest.TestCase):
     def test_patch_rejects_occupied_remap_area(self) -> None:
         data = bytearray(self.original)
         builder.expand_rom(data)
+        builder.patch_join_class_choice_class_data(data, self.original)
         builder.patch_bald_map_sprite(data)
         builder.patch_shaman_map_sprite(data)
         builder.patch_loren_map_sprite(data)
