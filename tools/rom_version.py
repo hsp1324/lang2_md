@@ -108,11 +108,13 @@ def _rom_filename(
     balance_version: str | None,
 ) -> str:
     if name == "pure":
-        return f"Langrisser II (Korean Pure v{translation_version}).md"
+        return f"Langrisser II (Korean Original v{translation_version}).md"
     if name == "normal":
-        return f"Langrisser II (Korean v{translation_version}).md"
+        return f"Langrisser II (Korean Normal v{translation_version}).md"
     if balance_version is None:
         raise ValueError(f"ROM version profile {name!r} has no balance version")
+    if balance_version == translation_version:
+        return f"Langrisser II (Korean Hard v{translation_version}).md"
     return (
         "Langrisser II (Korean Hard "
         f"T{translation_version} B{balance_version}).md"

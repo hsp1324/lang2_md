@@ -34,6 +34,59 @@ class BattleOverlayVramOwnershipTests(unittest.TestCase):
             0x07D1,
         )
 
+    def test_class_change_exit_restores_every_shared_battle_overlay_tile(self) -> None:
+        source = (ROOT / "roms/original/Langrisser II (Japan).md").read_bytes()
+        production = (ROOT / "roms/builds/Langrisser II (Korean).md").read_bytes()
+        payload = builder.battle_overlay_source_payload(source)
+        self.assertEqual(len(payload), 0x04E0)
+        restored_tiles = set()
+        for tile_id, source_offset, tile_count in builder.BATTLE_OVERLAY_SOURCE_SEGMENTS:
+            self.assertNotEqual(
+                payload[source_offset : source_offset + tile_count * 32],
+                b"\x00" * (tile_count * 32),
+            )
+            restored_tiles.update(range(tile_id, tile_id + tile_count))
+        self.assertEqual(
+            restored_tiles,
+            set(builder.BATTLE_TARGET_CURSOR_TILES)
+            | set(builder.BATTLE_INVALID_TARGET_CURSOR_TILES)
+            | set(builder.BATTLE_MAGIC_CONFIRM_CURSOR_TILES),
+        )
+        self.assertTrue(
+            restored_tiles
+            & set(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS),
+            "the regression requires preparation glyphs to share overlay VRAM",
+        )
+
+        routine = builder.build_battle_overlay_restore_routine()
+        self.assertTrue(routine.startswith(bytes.fromhex("48 E7 FF FE")))
+        self.assertTrue(routine.endswith(bytes.fromhex("4C DF 7F FF 4E 75")))
+        expected_raw = b"".join(
+            payload[source_offset : source_offset + tile_count * 32]
+            for _tile_id, source_offset, tile_count
+            in builder.BATTLE_OVERLAY_SOURCE_SEGMENTS
+        )
+        self.assertEqual(
+            production[
+                builder.BATTLE_OVERLAY_RAW_DATA :
+                builder.BATTLE_OVERLAY_RAW_DATA + len(expected_raw)
+            ],
+            expected_raw,
+        )
+        self.assertEqual(
+            production[
+                builder.BATTLE_OVERLAY_RESTORE_ROUTINE :
+                builder.BATTLE_OVERLAY_RESTORE_ROUTINE + len(routine)
+            ],
+            routine,
+        )
+        wrapper = builder.build_join_class_choice_level_wrapper()
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BATTLE_OVERLAY_RESTORE_ROUTINE.to_bytes(4, "big"),
+            wrapper,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

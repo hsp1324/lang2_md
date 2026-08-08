@@ -103,7 +103,7 @@ class ItemDiscardUiTests(unittest.TestCase):
             (
                 0, 1, 2, 3, 4, 0xFFFE,
                 0, 0, 0, 0, 0, 0, 0, 0xFFFF,
-                5, 0, 0, 0xFFFE, 6, 7, 0xFFFF,
+                0, 0, 5, 0xFFFE, 6, 7, 0xFFFF,
             ),
         )
 

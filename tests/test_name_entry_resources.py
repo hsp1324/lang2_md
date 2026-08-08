@@ -837,7 +837,15 @@ class NameEntryResourceTests(unittest.TestCase):
                 builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK :
                 builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK + 6
             ],
-            builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL,
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE.to_bytes(4, "big"),
+        )
+        restore = builder._build_byte_ui_vblank_dynamic_restore_wrapper()
+        self.assertIn(bytes.fromhex("0C 39 00 FE FF FF A6 DA"), restore)
+        self.assertIn(
+            bytes.fromhex("4E B9")
+            + builder.BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE.to_bytes(4, "big"),
+            restore,
         )
         self.assertEqual(
             data[

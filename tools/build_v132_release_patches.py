@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the public v1.3.2 Japanese-ROM BPS patches."""
+"""Build and verify the public v1.3.3 Japanese-ROM BPS patches."""
 
 from __future__ import annotations
 
@@ -16,14 +16,14 @@ if str(ROOT) not in sys.path:
 from tools.rom_update import bps_apply, bps_create, sha256_bytes
 
 
-VERSION = "v1.3.2"
+VERSION = "v1.3.3"
 SOURCE_PATH = ROOT / "roms/original/Langrisser II (Japan).md"
 SOURCE_SIZE = 2_097_152
 SOURCE_SHA256 = (
     "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
 )
 PATCH_DIR = ROOT / "patches"
-MANIFEST_PATH = PATCH_DIR / "v1.3.2.json"
+MANIFEST_PATH = PATCH_DIR / "v1.3.3.json"
 
 TARGETS = (
     {
@@ -33,24 +33,24 @@ TARGETS = (
             "원작 맵 디자인과 밸런스에 한국어화 및 공통 진행 수정 적용"
         ),
         "rom_path": ROOT
-        / "roms/builds/Langrisser II (Korean Pure v1.3.2).md",
-        "output_filename": "Langrisser II (Original v1.3.2).md",
-        "patch_filename": "original-design-v1.3.2.bps",
+        / "roms/builds/Langrisser II (Korean Original v1.3.3).md",
+        "output_filename": "Langrisser II (Korean Original v1.3.3).md",
+        "patch_filename": "original-v1.3.3.bps",
         "size": 4_194_304,
         "sha256": (
-            "289ca7d5b5c335f0284bd5e88edb48395726b915c37b0d3dfac6252d3a3a97ea"
+            "b090a4cef0940211cea412c972f872927f6dbebea3b297583592b06ddc24ad77"
         ),
     },
     {
         "id": "normal",
         "label_ko": "최신 디자인 일반판",
         "description_ko": "최신 New 클래스 디자인과 한국어화 적용",
-        "rom_path": ROOT / "roms/builds/Langrisser II (Korean).md",
-        "output_filename": "Langrisser II (Normal v1.3.2).md",
-        "patch_filename": "new-design-normal-v1.3.2.bps",
+        "rom_path": ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.3).md",
+        "output_filename": "Langrisser II (Korean Normal v1.3.3).md",
+        "patch_filename": "normal-v1.3.3.bps",
         "size": 4_194_304,
         "sha256": (
-            "ad66810801cf0e08dbc4be7aae0e96d71509327724ef2bdedd7245395652c88c"
+            "085c65fed8c2de286e3a6b3260173a573cae0d6e4102afba0ee7debfc6bc04a5"
         ),
     },
     {
@@ -58,12 +58,12 @@ TARGETS = (
         "label_ko": "최신 디자인 하드판",
         "description_ko": "최신 New 클래스 디자인·한국어화·하드 밸런스 적용",
         "rom_path": ROOT
-        / "roms/builds/Langrisser II (Korean Hard T1.3.2 B1.3.2).md",
-        "output_filename": "Langrisser II (Hard v1.3.2).md",
-        "patch_filename": "new-design-hard-t1.3.2-b1.3.2.bps",
+        / "roms/builds/Langrisser II (Korean Hard v1.3.3).md",
+        "output_filename": "Langrisser II (Korean Hard v1.3.3).md",
+        "patch_filename": "hard-v1.3.3.bps",
         "size": 4_194_304,
         "sha256": (
-            "df4d40b9f9f1832fd42f49f495d85aafb1e9544732cac9bbc448a774f2e18608"
+            "15b07113d00c993fd79fded4add0f1dbdca913f1de9dd5f6eb8219de232a146c"
         ),
     },
 )

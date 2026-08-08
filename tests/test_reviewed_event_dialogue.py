@@ -268,7 +268,17 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertIsNone(primary[-1]["english_record"])
         self.assertTrue(primary[-1]["japanese_only"])
-        self.assertTrue(all("\n" not in row["text"] for row in rows))
+        wrapped = [row for row in rows if "\n" in row["text"]]
+        self.assertEqual(
+            [(row["address"], row["text"]) for row in wrapped],
+            [
+                (
+                    "0x1ACF52",
+                    "벨제리아 성 지하엔\n혼돈의 신이 잠들어 있습니다.\n"
+                    "알하자드도 그곳에 있을 겁니다.",
+                )
+            ],
+        )
 
     def test_scenario_22_opening_preserves_japanese_meaning(self):
         rows = {
@@ -487,7 +497,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertEqual(
             [row["address"] for row in rows if "\n" in row["text"]],
-            ["0x1A2852", "0x1A296C", "0x1A2A98"],
+            ["0x1A2852", "0x1A296C"],
         )
         self.assertEqual(
             by_address["0x1A296C"],
@@ -495,7 +505,58 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertEqual(
             by_address["0x1A2A98"],
-            "원하는 대로 해 주지.\n간다, 모두!",
+            "잡담할 여유가 있다면 싸움으로 보여 줘라!",
+        )
+        self.assertEqual(
+            by_address["0x1A2A0C"],
+            "결국 그 검에 지배당하고 말 것입니다!",
+        )
+        self.assertEqual(
+            by_address["0x1A2A54"],
+            "아무리 저주받은 마검이라도 그 힘은 내가 지배해 보이겠다.",
+        )
+        self.assertEqual(by_address["0x1A2AE6"], "좋아! 간다, 모두!")
+        self.assertEqual(by_address["0x1A2B08"], "폐하! 무사하오")
+        self.assertEqual(
+            by_address["0x1A2B1A"],
+            "음, 잘 왔다. 적의 측면을 공격하라!",
+        )
+
+    def test_ending_player_feedback_particle_and_context_fixes(self):
+        by_address = {row["address"]: row["text"] for row in self.rows}
+        self.assertEqual(
+            by_address["0x18D5C4"],
+            "좋아! {0016}이 마을에 닿기 전에 잡자!",
+        )
+        self.assertEqual(
+            by_address["0x18ED7C"],
+            "그러고 보니 {0016}은 이 마을에서 무언가 찾는 듯했는데…",
+        )
+        self.assertEqual(
+            by_address["0x193810"],
+            "원군이라고!? {0018}가 당했나!",
+        )
+        self.assertEqual(by_address["0x192964"], "걱정 마.")
+        self.assertEqual(by_address["0x192992"], "걱정 마.")
+        self.assertEqual(
+            by_address["0x199982"],
+            "힘에 도취된 당신은 더는 내 제자가 아닙니다.",
+        )
+        self.assertEqual(
+            by_address["0x1A3A66"],
+            "알하자드 부활을 위해 {000E} 황제는 {0010}에게 조종당했을 거야.",
+        )
+        self.assertEqual(
+            by_address["0x1AE9B6"],
+            "이끄는 건 {000D}이 아니라 부단장 {0011}인 듯해!",
+        )
+        self.assertEqual(by_address["0x1AC066"], "이긴다!")
+        self.assertFalse(
+            any(
+                bad in row["text"]
+                for row in self.rows
+                for bad in ("{0010}가", "{0010}를", "{0010}는", "{0010}와")
+            )
         )
 
     def test_scenario_18_has_all_reviewed_physical_pages(self):
@@ -688,7 +749,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertTrue(all("\n" not in row["text"] for row in rows))
         corrected = next(row for row in rows if row["address"] == "0x195DF6")
-        self.assertEqual(corrected["text"], "산적인가? 저 정도로는 못 막아. 가자!")
+        self.assertEqual(corrected["text"], "해적인가? 저 정도로는 못 막아. 가자!")
         corrected_text = {row["address"]: row["text"] for row in rows}
         self.assertEqual(
             corrected_text["0x19611A"],
@@ -696,7 +757,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         )
         self.assertEqual(
             corrected_text["0x196162"],
-            "이놈들은 못 지나간다! 가자, 이놈들아!",
+            "이 녀석들은 못 지나간다! 가자, 얘들아!",
         )
         self.assertEqual(corrected_text["0x1961A8"], "두목! 저놈들 꽤 강합니다!")
         self.assertEqual(corrected_text["0x1961D4"], "맞아요! 조심하는 게 좋겠어요.")

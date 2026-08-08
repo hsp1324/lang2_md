@@ -15,7 +15,7 @@ from tools.build_v132_release_patches import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class V132ReleasePatcherTests(unittest.TestCase):
+class V133ReleasePatcherTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if not SOURCE_PATH.is_file():
@@ -23,7 +23,7 @@ class V132ReleasePatcherTests(unittest.TestCase):
 
     def test_committed_bps_assets_are_reproducible(self):
         manifest = build(check=True)
-        self.assertEqual(manifest["release"], "v1.3.2")
+        self.assertEqual(manifest["release"], "v1.3.3")
         self.assertEqual(
             {record["id"] for record in manifest["targets"]},
             {"pure", "normal", "hard"},
@@ -40,6 +40,14 @@ class V132ReleasePatcherTests(unittest.TestCase):
             self.assertEqual(
                 {result.target_id for result in results},
                 {"pure", "normal", "hard"},
+            )
+            self.assertEqual(
+                {result.output_path.name for result in results},
+                {
+                    "Langrisser II (Korean Original v1.3.3).md",
+                    "Langrisser II (Korean Normal v1.3.3).md",
+                    "Langrisser II (Korean Hard v1.3.3).md",
+                },
             )
             for spec in TARGETS:
                 output = output_dir / str(spec["output_filename"])

@@ -1265,7 +1265,8 @@ TITLE_CREDIT_TEXT_RECORD = 0x2B7EC0
 BYTE_UI_LOCAL_TILE_LOOKUP_ROUTINE = 0x2B7F00
 BYTE_UI_DYNAMIC_GLYPH_RENDER_ROUTINE = 0x2B7300
 BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE = 0x2B7374
-BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE = 0x2B7280
+BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE = 0x2F8400
+BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE_LIMIT = 0x2F8500
 BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE = 0x2B7290
 BYTE_UI_MAP_GRAPHICS_LOAD_ROUTINE = 0x2B72A0
 INLINE_DISCARD_PROMPT_RENDER_ROUTINE = 0x2B7F20
@@ -1946,6 +1947,25 @@ JOIN_CLASS_CHOICE_APPLY_CONTINUATION = 0x014D0C
 JOIN_CLASS_CHOICE_CONTINUATION_ORIGINAL = bytes.fromhex("00 01 48 0C")
 JOIN_CLASS_CHOICE_LEVEL_WRAPPER = 0x31E000
 JOIN_CLASS_CHOICE_LEVEL_WRAPPER_LIMIT = 0x31E400
+# Preparation and class-change Korean glyphs deliberately reuse the stock
+# battle cursor cells because the two surfaces are never visible at the same
+# instant.  Their VRAM contents do survive the transition, however: after a
+# class change, Move/Attack/Magic can therefore display the stale Hangul
+# patterns instead of the stock cursor, invalid-X, and blue-staff graphics.
+# Resource #2 contains the original contiguous overlay patterns.  Keep a raw
+# copy in expanded ROM and synchronously restore the three live ranges when
+# the common class-change/level continuation returns to the map.
+BATTLE_OVERLAY_SOURCE_RESOURCE_INDEX = 2
+BATTLE_OVERLAY_SOURCE_DECOMPRESSED_SIZE = 0x04E0
+BATTLE_OVERLAY_SOURCE_SEGMENTS = (
+    (0x07CE, 0x0200, 4),
+    (0x07D5, 0x02E0, 8),
+    (0x07DD, 0x03E0, 8),
+)
+BATTLE_OVERLAY_RAW_DATA = 0x2F8000
+BATTLE_OVERLAY_RAW_DATA_LIMIT = 0x2F8300
+BATTLE_OVERLAY_RESTORE_ROUTINE = 0x2F8300
+BATTLE_OVERLAY_RESTORE_ROUTINE_LIMIT = 0x2F8400
 # The stock progression scan checks every allocated runtime record, including
 # preparation records parked at (0,0), reinforcements parked at (255,255), and
 # visible NPC records that have not joined the player yet.  Without this guard
@@ -6752,6 +6772,10 @@ def patch_join_class_choice_visibility_guard(
 
 def build_join_class_choice_level_wrapper() -> bytes:
     code = _M68KCode()
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BATTLE_OVERLAY_RESTORE_ROUTINE.to_bytes(4, "big")
+    )
     code.emit("41 F9 00 FF 60 3C")  # lea $FF603C.l,a0
     code.emit("70 13")              # moveq #19,d0
     code.label("scan")
@@ -6856,6 +6880,78 @@ def build_join_class_choice_level_wrapper() -> bytes:
     return result
 
 
+def battle_overlay_source_payload(source: bytes) -> bytes:
+    entry = (
+        BYTE_UI_FONT_RESOURCE_TABLE
+        + BATTLE_OVERLAY_SOURCE_RESOURCE_INDEX * 4
+    )
+    resource_offset = be32(source, entry) & 0x00FFFFFF
+    if source[resource_offset] != 0x03:
+        raise ValueError(
+            "battle-overlay source resource uses an unsupported compression type"
+        )
+    payload = decompress_9dfe(source, resource_offset + 1)
+    if len(payload) != BATTLE_OVERLAY_SOURCE_DECOMPRESSED_SIZE:
+        raise ValueError(
+            "battle-overlay source resource decompressed size changed: "
+            f"0x{len(payload):X}"
+        )
+    return payload
+
+
+def build_battle_overlay_restore_routine(
+    raw_base: int = BATTLE_OVERLAY_RAW_DATA,
+) -> bytes:
+    code = bytearray(bytes.fromhex("48 E7 FF FE"))  # preserve d0-d7/a0-a6
+    code.extend(bytes.fromhex("47 F9 00 C0 00 04"))  # a3 = VDP control
+    code.extend(bytes.fromhex("49 F9 00 C0 00 00"))  # a4 = VDP data
+    source_cursor = raw_base
+    for tile_id, _source_offset, tile_count in BATTLE_OVERLAY_SOURCE_SEGMENTS:
+        vram_address = tile_id * 32
+        command = (
+            ((0x4000 | (vram_address & 0x3FFF)) << 16)
+            | ((vram_address >> 14) & 3)
+        )
+        code.extend(bytes.fromhex("26 BC") + command.to_bytes(4, "big"))
+        code.extend(bytes.fromhex("41 F9") + source_cursor.to_bytes(4, "big"))
+        code.extend(
+            bytes.fromhex("30 3C")
+            + (tile_count * 16 - 1).to_bytes(2, "big")
+        )
+        loop = len(code)
+        code.extend(bytes.fromhex("38 98"))  # move.w (a0)+,(a4)
+        displacement = loop - (len(code) + 2)
+        code.extend(bytes.fromhex("51 C8") + displacement.to_bytes(2, "big", signed=True))
+        source_cursor += tile_count * 32
+    code.extend(bytes.fromhex("4C DF 7F FF 4E 75"))
+    return bytes(code)
+
+
+def install_battle_overlay_restore(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    payload = battle_overlay_source_payload(source)
+    raw = b"".join(
+        payload[source_offset : source_offset + tile_count * 32]
+        for _tile_id, source_offset, tile_count in BATTLE_OVERLAY_SOURCE_SEGMENTS
+    )
+    raw_end = BATTLE_OVERLAY_RAW_DATA + len(raw)
+    if raw_end > BATTLE_OVERLAY_RAW_DATA_LIMIT:
+        raise ValueError("battle-overlay raw patterns exceed reserved ROM area")
+    if data[BATTLE_OVERLAY_RAW_DATA:raw_end] != b"\xFF" * len(raw):
+        raise ValueError("battle-overlay raw pattern area is not blank")
+    data[BATTLE_OVERLAY_RAW_DATA:raw_end] = raw
+
+    routine = build_battle_overlay_restore_routine()
+    routine_end = BATTLE_OVERLAY_RESTORE_ROUTINE + len(routine)
+    if routine_end > BATTLE_OVERLAY_RESTORE_ROUTINE_LIMIT:
+        raise ValueError("battle-overlay restore routine exceeds reserved ROM area")
+    if data[BATTLE_OVERLAY_RESTORE_ROUTINE:routine_end] != b"\xFF" * len(routine):
+        raise ValueError("battle-overlay restore routine area is not blank")
+    data[BATTLE_OVERLAY_RESTORE_ROUTINE:routine_end] = routine
+
+
 def patch_join_class_choice_target_levels(
     data: bytearray,
     source: bytes,
@@ -6874,6 +6970,7 @@ def patch_join_class_choice_target_levels(
                 f"input class-choice continuation changed at 0x{offset:06X}"
             )
 
+    install_battle_overlay_restore(data, source)
     routine = build_join_class_choice_level_wrapper()
     routine_end = JOIN_CLASS_CHOICE_LEVEL_WRAPPER + len(routine)
     if data[JOIN_CLASS_CHOICE_LEVEL_WRAPPER:routine_end] != b"\xFF" * len(routine):
@@ -7009,7 +7106,9 @@ def patch_shop_title_glyph_loaders(
     # compact three/two-cell confirmation choices. Treating the glyph list as
     # one direct string left the Japanese token indexes pointing beyond the
     # shortened Korean list. Keep the fixed geometry and use 네/취소, since
-    # 아니오 cannot fit the stock two-cell second choice.
+    # 아니오 cannot fit the stock two-cell second choice. The first choice is
+    # right-aligned in its three cells so a long item name does not visually
+    # join the suffix and choice as `버릴까요네`.
     confirm_glyphs = [
         SPACE_GLYPH,
         glyph_by_char["버"],
@@ -7055,7 +7154,7 @@ def patch_shop_title_glyph_loaders(
     confirm_tokens = (
         0, 1, 2, 3, 4, 0xFFFE,
         0, 0, 0, 0, 0, 0, 0, 0xFFFF,
-        5, 0, 0, 0xFFFE, 6, 7, 0xFFFF,
+        0, 0, 5, 0xFFFE, 6, 7, 0xFFFF,
     )
     confirm_target = confirm_token_stream
     if confirm_token_reloc is not None:
@@ -8678,15 +8777,31 @@ def _build_byte_ui_map_graphics_load_wrapper() -> bytes:
 
 
 def _build_byte_ui_vblank_dynamic_restore_wrapper() -> bytes:
-    # The stock VBlank path refreshes the full H-scroll buffer even while the
-    # VDP uses full-screen scrolling. Dynamic map-status patterns live in the
-    # unused tail of that buffer, so redraw them after all queued VRAM work.
-    return (
-        BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL
-        + bytes.fromhex("4E B9")
-        + BYTE_UI_MAP_INFO_SCRATCH_RESTORE_ROUTINE.to_bytes(4, "big")
-        + bytes.fromhex("4E 75")
+    # The result renderer restores `적` after character graphics are queued,
+    # but a later queued transfer can still replace low-font tile $A6 before
+    # the frame is shown.  State $FE covers the preparation/result lifetime;
+    # redraw this one stable low-font glyph after the stock VBlank queue has
+    # drained.  Preparation also maps `적` to $A6, so the guarded refresh is
+    # safe there and avoids touching unrelated gameplay/title states.
+    code = _M68KCode()
+    code.emit(BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL)
+    code.emit("0C 39 00 FE FF FF A6 DA")  # cmpi.b #$FE,$FFFFA6DA
+    code.branch_word(0x6600, "done")
+    code.emit("48 E7 FF FE")
+    code.emit("42 40 10 3C 00")
+    code.emit(bytes((BYTE_UI_RESULT_DYNAMIC_CODE,)))
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_DYNAMIC_LEGACY_LOOKUP_ROUTINE.to_bytes(4, "big")
     )
+    code.emit(
+        bytes.fromhex("4E B9")
+        + BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE.to_bytes(4, "big")
+    )
+    code.emit("4C DF 7F FF")
+    code.label("done")
+    code.emit("4E 75")
+    return code.finish()
 
 
 def _build_byte_ui_direct_map_renderer() -> bytes:
@@ -9726,6 +9841,7 @@ def install_byte_ui_extension(
     ending_result_final_bank_loader = (
         _build_byte_ui_ending_result_final_bank_loader()
     )
+    vblank_dynamic_restore = _build_byte_ui_vblank_dynamic_restore_wrapper()
     title_credit_font_loader = _build_title_credit_font_loader()
     title_credit_renderer = _build_title_credit_renderer(
         title_version_text,
@@ -9826,6 +9942,23 @@ def install_byte_ui_extension(
     data[
         BYTE_UI_ENDING_RESULT_GLYPH_RENDER_ROUTINE:result_glyph_renderer_end
     ] = ending_result_glyph_renderer
+
+    vblank_restore_end = (
+        BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE
+        + len(vblank_dynamic_restore)
+    )
+    if vblank_restore_end > BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE_LIMIT:
+        raise ValueError("VBlank dynamic restore exceeds reserved ROM area")
+    if any(
+        value != 0xFF
+        for value in data[
+            BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE:vblank_restore_end
+        ]
+    ):
+        raise ValueError("VBlank dynamic restore area is not blank")
+    data[
+        BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE:vblank_restore_end
+    ] = vblank_dynamic_restore
 
     title_credit_renderer_end = (
         title_credit_renderer_address + len(title_credit_renderer)
@@ -10065,6 +10198,17 @@ def install_byte_ui_extension(
     data[final_bank_hook : final_bank_hook + 6] = (
         bytes.fromhex("4E B9")
         + BYTE_UI_ENDING_RESULT_FINAL_BANK_ROUTINE.to_bytes(4, "big")
+    )
+    vblank_hook = mapped(BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK)
+    vblank_original = expected(
+        BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK,
+        BYTE_UI_VBLANK_DYNAMIC_RESTORE_HOOK_ORIGINAL,
+    )
+    if data[vblank_hook : vblank_hook + 6] != vblank_original:
+        raise ValueError("VBlank dynamic restore hook source changed")
+    data[vblank_hook : vblank_hook + 6] = (
+        bytes.fromhex("4E B9")
+        + BYTE_UI_VBLANK_DYNAMIC_RESTORE_ROUTINE.to_bytes(4, "big")
     )
     hscroll_fill = mapped(BYTE_UI_FULL_SCROLL_HSCROLL_FILL)
     hscroll_original = expected(
