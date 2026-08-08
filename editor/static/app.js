@@ -19,6 +19,9 @@ const commanderStartEditor = $("#commanderStartEditor");
 const classStatsSelect = $("#classStatsSelect");
 const classStatsSummary = $("#classStatsSummary");
 const classStatsEditor = $("#classStatsEditor");
+const classModeButtons = document.querySelectorAll("[data-class-mode]");
+const originalClassesMode = $("#originalClassesMode");
+const newClassesMode = $("#newClassesMode");
 const testCommanderSelect = $("#testCommanderSelect");
 const testClassSummary = $("#testClassSummary");
 const testClassTree = $("#testClassTree");
@@ -27,8 +30,6 @@ const aiCommanderSelect = $("#aiCommanderSelect");
 const aiClassSummary = $("#aiClassSummary");
 const aiClassTree = $("#aiClassTree");
 const aiClassInspector = $("#aiClassInspector");
-const sampleClassSummary = $("#sampleClassSummary");
-const sampleClassGroups = $("#sampleClassGroups");
 const assetPicker = $("#assetPicker");
 const assetPickerSearch = $("#assetPickerSearch");
 const assetPickerOptions = $("#assetPickerOptions");
@@ -39,7 +40,6 @@ let classModel = null;
 let classProgressionModel = null;
 let testClassSpriteModel = null;
 let aiClassSpriteModel = null;
-let sampleClassSpriteModel = null;
 let scenarioModels = new Map();
 let activeCommanderId = null;
 let selectedTreeClassId = null;
@@ -156,12 +156,6 @@ function aiSpriteImage(commanderId, classId) {
     commanderId,
     classId
   )}" data-fallback="${fallback}" alt="${escapeHtml(label)}">`;
-}
-
-function sampleClassAssetPath(path) {
-  const normalized = String(path || "").replace(/^\/+/, "");
-  const version = sampleClassSpriteModel?.asset_version || "sample-classes-v1";
-  return `/${normalized}?v=${encodeURIComponent(version)}`;
 }
 
 function classOptions(selected, allowEmpty = false) {
@@ -340,6 +334,27 @@ function activeCommander() {
   return classModel.commanders.find(
     entry => entry.commander_id === Number(commanderSelect.value)
   );
+}
+
+function setClassMode(mode) {
+  const showNewDesign = mode === "new";
+  classModeButtons.forEach(button => {
+    const active = button.dataset.classMode === mode;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+  originalClassesMode.hidden = showNewDesign;
+  newClassesMode.hidden = !showNewDesign;
+
+  if (showNewDesign) {
+    aiCommanderSelect.value = commanderSelect.value;
+    selectedAiClassId = selectedTreeClassId;
+    requestAnimationFrame(renderAiClassRoutes);
+  } else {
+    commanderSelect.value = aiCommanderSelect.value;
+    selectedTreeClassId = selectedAiClassId;
+    requestAnimationFrame(renderClassRoutes);
+  }
 }
 
 function unique(values) {
@@ -589,6 +604,8 @@ function renderClassInspector() {
       <div class="nextClassEditor">
         <h3>다음 클래스 ${transition.candidates.length}개</h3>
         <div class="nextClassGrid">${choices}</div>
+        <p>다음 클래스를 바꾸면 클래스만 교체되고, 그 뒤의 기존 전직
+          선택지는 그대로 유지됩니다.</p>
       </div>
       <p class="offset">경로 ROM 0x${transition.offset.toString(16).toUpperCase()}</p>
     ` : choices}
@@ -2011,188 +2028,32 @@ function renderAiClassRoutes() {
   ));
 }
 
-function sampleClassCard(group, sample) {
-  const aiSourcePath = sampleClassAssetPath(
-    sample.ai_source || sample.ai_thumbnail
-  );
-  const spritePath = sampleClassAssetPath(sample.logical16);
-  const previewPath = sample.preview
-    ? sampleClassAssetPath(sample.preview)
-    : spritePath;
-  const detail = `${sample.label} · ${sample.description}`;
-  const preservedClass = sample.preserved ? " preserved" : "";
-  return `
-    <article class="sampleClassCard${preservedClass}" title="${escapeHtml(detail)}">
-      <button type="button" class="sampleLoadButton sampleCompactChoice"
-        data-sample-group="${escapeHtml(group.id)}"
-        data-sample-id="${escapeHtml(sample.id)}">
-        <span class="sampleClassNumber">${escapeHtml(sample.id)}</span>
-        ${sample.preserved
-          ? '<span class="samplePreservedBadge" aria-label="사용자 확정 보존안">고정</span>'
-          : ""}
-        <img src="${previewPath}" loading="lazy"
-          data-logical16="${spritePath}"
-          alt="${escapeHtml(group.title)} ${escapeHtml(sample.label)} 16×16 디자인">
-        <strong>${escapeHtml(sample.label)}</strong>
-      </button>
-      <a class="sampleAiLink" href="${aiSourcePath}" target="_blank"
-        rel="noopener" aria-label="${escapeHtml(group.title)} ${escapeHtml(sample.label)} AI 원안 보기">
-        AI 원안
-      </a>
-    </article>`;
-}
-
-function renderSampleClasses() {
-  if (!sampleClassGroups || !sampleClassSummary) return;
-  const groups = sampleClassSpriteModel?.groups || [];
-  if (!groups.length) {
-    sampleClassGroups.innerHTML = `
-      <p class="sampleClassEmpty">아직 표시할 샘플이 없습니다.</p>`;
-    sampleClassSummary.textContent = "0개";
-    return;
-  }
-  sampleClassGroups.innerHTML = groups.map(group => `
-    <section class="sampleClassGroup">
-      <header class="sampleClassGroupHeader">
-        <div>
-          <h2>${escapeHtml(group.title)}</h2>
-          <p>${escapeHtml(group.description)}</p>
-        </div>
-        <span>${group.samples.length}안</span>
-      </header>
-      <div class="sampleClassGrid" aria-label="${escapeHtml(group.title)} 디자인 후보">
-        ${group.samples.map(sample => sampleClassCard(group, sample)).join("")}
-      </div>
-    </section>
-  `).join("");
-  const sampleCount = groups.reduce(
-    (total, group) => total + group.samples.length,
-    0,
-  );
-  sampleClassSummary.textContent =
-    `${groups.length}개 클래스 · 총 ${sampleCount}개 디자인`;
-}
-
-function imagePixels16(image) {
-  const buffer = document.createElement("canvas");
-  buffer.width = 16;
-  buffer.height = 16;
-  const context = buffer.getContext("2d");
-  context.imageSmoothingEnabled = false;
-  context.clearRect(0, 0, 16, 16);
-  context.drawImage(image, 0, 0, 16, 16);
-  const data = context.getImageData(0, 0, 16, 16).data;
-  return Array.from({length: 256}, (_, index) => [
-    data[index * 4],
-    data[index * 4 + 1],
-    data[index * 4 + 2],
-    data[index * 4 + 3],
-  ]);
-}
-
-function loadSampleImage(path) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.addEventListener("load", () => resolve(image), {once: true});
-    image.addEventListener(
-      "error",
-      () => reject(new Error("샘플 16×16 이미지를 읽지 못했습니다")),
-      {once: true},
-    );
-    image.src = sampleClassAssetPath(path);
-  });
-}
-
-async function waitForAiDesignEditor(commanderId, classId) {
-  for (let attempt = 0; attempt < 240; attempt += 1) {
-    const state = aiDesignEditorState;
-    if (
-      state?.commanderId === commanderId &&
-      state.classId === classId &&
-      state.pixels &&
-      state.savedPixels
-    ) {
-      return state;
-    }
-    await new Promise(resolve => requestAnimationFrame(resolve));
-  }
-  throw new Error("New 클래스 편집기를 준비하지 못했습니다");
-}
-
-async function loadClassSample(group, sample) {
-  const commanderId = Number(group.commander_id);
-  const classId = Number(group.class_id);
-  aiCommanderSelect.value = String(commanderId);
-  selectedAiClassId = classId;
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.classList.toggle("active", tab.dataset.tab === "aiClasses");
-  });
-  document.querySelectorAll(".tabPanel").forEach(panel => {
-    panel.classList.toggle("active", panel.id === "aiClassesPanel");
-  });
-  renderAiClassRoutes();
-  const [state, image] = await Promise.all([
-    waitForAiDesignEditor(commanderId, classId),
-    loadSampleImage(sample.logical16),
-  ]);
-  if (aiDesignEditorState !== state) {
-    throw new Error("편집 클래스가 바뀌어 샘플 불러오기를 취소했습니다");
-  }
-  pushAiDesignHistory();
-  const imported = imagePixels16(image);
-  const [identityDx, identityDy] = group.identity_translation || [0, 0];
-  if (identityDx || identityDy) {
-    const targetPoints = new Set(state.lockPoints);
-    const sourcePoints = new Set();
-    for (const key of targetPoints) {
-      const [x, y] = key.split(",").map(Number);
-      const sourceX = x - identityDx;
-      const sourceY = y - identityDy;
-      if (sourceX >= 0 && sourceX < 16 && sourceY >= 0 && sourceY < 16) {
-        sourcePoints.add(`${sourceX},${sourceY}`);
-      }
-    }
-    for (const key of sourcePoints) {
-      if (targetPoints.has(key)) continue;
-      const [x, y] = key.split(",").map(Number);
-      imported[y * 16 + x] = [0, 0, 0, 0];
-    }
-  }
-  for (const key of state.lockPoints) {
-    const [x, y] = key.split(",").map(Number);
-    const index = y * 16 + x;
-    imported[index] = [...state.savedPixels[index]];
-  }
-  for (const point of group.identity_seam_points || []) {
-    const [x, y] = point.map(Number);
-    const index = y * 16 + x;
-    if (!imported[index][3]) imported[index] = [36, 36, 36, 255];
-  }
-  state.pixels = imported;
-  state.dirty = true;
-  const colors = designVisibleColors(state.pixels);
-  if (colors.length) state.selectedColor = [...colors[0]];
-  $("#aiDesignColor").value = hexDesignColor(state.selectedColor);
-  const reference = $("#aiDesignReferenceImage");
-  if (state.referenceObjectUrl) {
-    URL.revokeObjectURL(state.referenceObjectUrl);
-    state.referenceObjectUrl = null;
-  }
-  reference.src = sampleClassAssetPath(
-    sample.ai_source || sample.ai_thumbnail
-  );
-  $("#aiDesignReferenceName").textContent =
-    `${group.title} · ${sample.label}`;
-  drawAiDesignEditor();
-  aiClassInspector.scrollIntoView({behavior: "smooth", block: "start"});
-  showNotice(
-    `${group.title} ${sample.id}안 불러오기 완료 · 저장 전까지 기존 디자인은 바뀌지 않습니다`,
-    true,
-  );
-}
-
 function collectClassEdits() {
   // Class tree and hire controls update classModel immediately.
+}
+
+function replaceNextClassInRoute(commander, transition, slot, classId) {
+  const oldClassId = transition.candidates[slot];
+  if (oldClassId === classId) return;
+
+  const classAlreadyUsed =
+    commander.starting_class_id === classId ||
+    commander.transitions.some(row =>
+      row.current_class === classId || row.candidates.includes(classId)
+    );
+  const replaceClassId = value => {
+    if (value === oldClassId) return classId;
+    if (classAlreadyUsed && value === classId) return oldClassId;
+    return value;
+  };
+
+  commander.starting_class_id = replaceClassId(
+    commander.starting_class_id
+  );
+  commander.transitions.forEach(row => {
+    row.current_class = replaceClassId(row.current_class);
+    row.candidates = row.candidates.map(replaceClassId);
+  });
 }
 
 function changeTransitionCurrentClass(commander, transition, classId) {
@@ -2320,7 +2181,6 @@ async function loadAll() {
       classProgressionResponse,
       testSpritesResponse,
       aiSpritesResponse,
-      sampleSpritesResponse,
     ] = await Promise.all([
       fetch(`/api/items?rom=${rom}`),
       fetch(`/api/class-changes?rom=${rom}`),
@@ -2330,17 +2190,12 @@ async function loadAll() {
         `/ai-class-sprites/manifest.json?reload=${Date.now()}`,
         {cache: "no-store"}
       ),
-      fetch(
-        `/sample-class-sprites/manifest.json?reload=${Date.now()}`,
-        {cache: "no-store"}
-      ),
     ]);
     itemModel = await itemsResponse.json();
     classModel = await classesResponse.json();
     classProgressionModel = await classProgressionResponse.json();
     testClassSpriteModel = await testSpritesResponse.json();
     aiClassSpriteModel = await aiSpritesResponse.json();
-    sampleClassSpriteModel = await sampleSpritesResponse.json();
     if (!itemsResponse.ok) throw new Error(itemModel.error);
     if (!classesResponse.ok) throw new Error(classModel.error);
     if (!classProgressionResponse.ok) {
@@ -2351,9 +2206,6 @@ async function loadAll() {
     }
     if (!aiSpritesResponse.ok) {
       throw new Error("AI 클래스 디자인을 읽지 못했습니다");
-    }
-    if (!sampleSpritesResponse.ok) {
-      throw new Error("샘플 클래스 디자인을 읽지 못했습니다");
     }
     await loadScenario();
     sourcePath.textContent = itemModel.rom_path;
@@ -2372,7 +2224,6 @@ async function loadAll() {
     renderClassStatsEditor();
     renderTestClassRoutes();
     renderAiClassRoutes();
-    renderSampleClasses();
   } catch (error) {
     showNotice(error.message);
   } finally {
@@ -2440,39 +2291,22 @@ document.querySelectorAll(".tab").forEach(tab => {
       );
     });
     if (tab.dataset.tab === "classes") {
-      requestAnimationFrame(renderClassRoutes);
+      requestAnimationFrame(
+        newClassesMode.hidden ? renderClassRoutes : renderAiClassRoutes
+      );
     } else if (tab.dataset.tab === "classStats") {
       requestAnimationFrame(renderClassStatsEditor);
     } else if (tab.dataset.tab === "testClasses") {
       requestAnimationFrame(renderTestClassRoutes);
-    } else if (tab.dataset.tab === "aiClasses") {
-      requestAnimationFrame(renderAiClassRoutes);
-    } else if (tab.dataset.tab === "sampleClasses") {
-      requestAnimationFrame(renderSampleClasses);
     }
   });
 });
 
-sampleClassGroups?.addEventListener("click", async event => {
-  const button = event.target.closest("[data-sample-group][data-sample-id]");
-  if (!button) return;
-  const group = sampleClassSpriteModel?.groups?.find(
-    entry => entry.id === button.dataset.sampleGroup
-  );
-  const sample = group?.samples?.find(
-    entry => entry.id === button.dataset.sampleId
-  );
-  if (!group || !sample) {
-    showNotice("선택한 샘플 정보를 찾지 못했습니다");
-    return;
-  }
-  button.disabled = true;
-  try {
-    await loadClassSample(group, sample);
-  } catch (error) {
-    showNotice(error.message);
-    button.disabled = false;
-  }
+classModeButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    if (button.classList.contains("active")) return;
+    setClassMode(button.dataset.classMode);
+  });
 });
 
 recordsBody.addEventListener("click", event => {
@@ -2539,7 +2373,13 @@ classInspector.addEventListener("click", event => {
       palette: 1,
       commanderId: commander.commander_id,
       onSelect: classId => {
-        transition.candidates[Number(nextButton.dataset.slot)] = classId;
+        replaceNextClassInRoute(
+          commander,
+          transition,
+          Number(nextButton.dataset.slot),
+          classId,
+        );
+        selectedTreeClassId = transition.current_class;
         closePicker();
         renderClassRoutes();
       },
@@ -2653,6 +2493,7 @@ itemFilter.addEventListener("change", () => {
 });
 commanderSelect.addEventListener("change", () => {
   activeCommanderId = Number(commanderSelect.value);
+  aiCommanderSelect.value = commanderSelect.value;
   selectedTreeClassId = null;
   renderClassRoutes();
 });
@@ -2661,6 +2502,7 @@ testCommanderSelect.addEventListener("change", () => {
   renderTestClassRoutes();
 });
 aiCommanderSelect.addEventListener("change", () => {
+  commanderSelect.value = aiCommanderSelect.value;
   selectedAiClassId = null;
   renderAiClassRoutes();
 });

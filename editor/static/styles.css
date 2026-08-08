@@ -62,6 +62,28 @@ select { padding: 0 30px 0 9px; }
   min-height: 42px;
 }
 .tab.active { color: #fff; border-bottom-color: #5bb778; }
+.classModeTabs {
+  display: inline-flex;
+  gap: 3px;
+  margin-bottom: 14px;
+  padding: 3px;
+  border: 1px solid #424b43;
+  border-radius: 6px;
+  background: #202420;
+}
+.classModeTab {
+  min-height: 34px;
+  padding: 0 18px;
+  border-color: transparent;
+  background: transparent;
+  color: #aeb6ab;
+}
+.classModeTab.active {
+  border-color: #57976a;
+  background: #315d3d;
+  color: #fff;
+}
+.classModePanel[hidden] { display: none; }
 .notice {
   margin-bottom: 12px;
   padding: 10px 12px;
@@ -839,167 +861,6 @@ td select { width: 138px; }
   margin-bottom: 0;
   color: #8e978d;
 }
-.sampleClassIntro {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 16px;
-}
-.sampleClassIntro h2,
-.sampleClassGroupHeader h2,
-.sampleClassCard h3 {
-  margin: 0;
-}
-.sampleClassIntro p,
-.sampleClassGroupHeader p,
-.sampleClassCardHeading p {
-  margin: 5px 0 0;
-  color: #aeb6ab;
-  font-size: 12px;
-  line-height: 1.5;
-}
-.sampleClassGroups {
-  display: grid;
-  gap: 8px;
-}
-.sampleClassGroup {
-  display: grid;
-  grid-template-columns: 170px minmax(0, 1fr);
-  align-items: stretch;
-  min-width: 0;
-  padding: 7px;
-  border: 1px solid #424d46;
-  background: #1d211e;
-}
-.sampleClassGroupHeader {
-  display: grid;
-  align-content: center;
-  gap: 4px;
-  min-width: 0;
-  margin: 0 7px 0 0;
-  padding: 5px 9px 5px 4px;
-  border-right: 1px solid #3e4741;
-}
-.sampleClassGroupHeader h2 {
-  overflow: hidden;
-  font-size: 13px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.sampleClassGroupHeader p { display: none; }
-.sampleClassGroupHeader > span {
-  justify-self: start;
-  padding: 1px 5px;
-  border: 0;
-  color: #bde3c8;
-  font-size: 10px;
-}
-.sampleClassGrid {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(66px, 1fr);
-  gap: 5px;
-  min-width: 0;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scrollbar-width: thin;
-}
-.sampleClassCard {
-  display: grid;
-  grid-template-rows: 1fr auto;
-  min-width: 0;
-  padding: 3px;
-  border: 1px solid #3f4a42;
-  background: #252a26;
-}
-.sampleClassNumber {
-  display: grid;
-  place-items: center;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background: #356447;
-  color: #fff;
-  font-size: 8px;
-  font-weight: 700;
-}
-.samplePreservedBadge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  padding: 1px 3px;
-  border-radius: 2px;
-  background: #8b6230;
-  color: #fff1cf;
-  font-size: 7px;
-  line-height: 1.35;
-}
-.sampleClassCard.preserved {
-  border-color: #9a773d;
-  box-shadow: inset 0 0 0 1px #9a773d44;
-}
-.sampleCompactChoice img {
-  display: block;
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  image-rendering: pixelated;
-}
-.sampleLoadButton {
-  width: 100%;
-  min-width: 0;
-  padding: 3px;
-  background: #2d6b48;
-  border-color: #55956b;
-  font-size: 9px;
-}
-.sampleCompactChoice {
-  display: grid;
-  position: relative;
-  justify-items: center;
-  gap: 2px;
-  background: #171b18;
-  border-color: #3d5143;
-}
-.sampleCompactChoice:hover,
-.sampleCompactChoice:focus-visible {
-  background: #254d35;
-  border-color: #70c98b;
-}
-.sampleCompactChoice strong {
-  display: block;
-  max-width: 62px;
-  overflow: hidden;
-  color: #e4eee6;
-  font-size: 9px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.sampleAiLink {
-  display: block;
-  padding: 2px 1px 1px;
-  color: #9ca7a0;
-  font-size: 8px;
-  line-height: 1.2;
-  text-align: center;
-  text-decoration: none;
-}
-.sampleAiLink:hover { color: #d6e0d8; }
-.sampleClassCard:has(.sampleCompactChoice:disabled) {
-  opacity: .62;
-}
-.sampleClassEmpty {
-  padding: 28px;
-  border: 1px dashed #4a554d;
-  color: #9ba49d;
-  text-align: center;
-}
 @media (min-width: 1900px) {
   .aiClassWorkspace {
     grid-template-columns: minmax(1100px, 1fr) minmax(560px, 640px);
@@ -1042,20 +903,4 @@ td select { width: 138px; }
   .nextClassGrid { grid-template-columns: 1fr; }
   .aiSpriteComparison { grid-template-columns: 1fr; }
   .aiDesignWorkspace { grid-template-columns: 1fr; }
-  .sampleClassIntro { display: block; }
-  .sampleClassIntro .summary {
-    display: block;
-    margin-top: 7px;
-  }
-  .sampleClassGroup {
-    grid-template-columns: 126px minmax(0, 1fr);
-    padding: 5px;
-  }
-  .sampleClassGroupHeader {
-    margin-right: 5px;
-    padding-right: 6px;
-  }
-  .sampleClassGrid {
-    grid-auto-columns: 66px;
-  }
 }

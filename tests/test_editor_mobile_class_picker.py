@@ -23,4 +23,5 @@ def test_picker_tracks_visual_viewport_and_uses_dynamic_height() -> None:
     assert "const viewport = window.visualViewport" in APP
     assert "positionPicker(pickerState.anchor)" in APP
     assert "100dvh" in CSS
-    assert "mobile-class-picker-v1" in HTML
+    assert '<link rel="stylesheet" href="/styles.css?v=' in HTML
+    assert '<script src="/app.js?v=' in HTML

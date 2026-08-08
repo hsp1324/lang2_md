@@ -216,30 +216,17 @@ class SampleClassSpriteAssetTests(unittest.TestCase):
                         )
             self.assertEqual(len(set(candidate_alpha)), 1, group["id"])
 
-    def test_editor_exposes_sample_tab_and_non_saving_import(self) -> None:
+    def test_editor_does_not_expose_retired_sample_tab(self) -> None:
         html = (ROOT / "editor/static/index.html").read_text(encoding="utf-8")
         script = (ROOT / "editor/static/app.js").read_text(encoding="utf-8")
         styles = (ROOT / "editor/static/styles.css").read_text(
             encoding="utf-8"
         )
-        self.assertIn(
-            'data-tab="aiClasses">New 클래스</button>\n'
-            '      <button class="tab" type="button" '
-            'data-tab="sampleClasses">샘플 클래스</button>',
-            html,
-        )
-        self.assertIn('id="sampleClassesPanel"', html)
-        self.assertIn("async function loadClassSample(group, sample)", script)
-        self.assertIn("state.pixels = imported", script)
-        self.assertIn("저장 전까지 기존 디자인은 바뀌지 않습니다", script)
-        self.assertIn('class="sampleLoadButton sampleCompactChoice"', script)
-        self.assertIn("grid-template-columns: 170px minmax(0, 1fr)", styles)
-        self.assertIn("grid-auto-flow: column", styles)
-        self.assertIn("width: 48px", styles)
-        loader = script.split(
-            "async function loadClassSample(group, sample)", 1
-        )[1].split("function collectClassEdits", 1)[0]
-        self.assertNotIn('fetch("/api/ai-class-design"', loader)
+        self.assertNotIn('data-tab="sampleClasses"', html)
+        self.assertNotIn('id="sampleClassesPanel"', html)
+        self.assertNotIn("sampleClassSpriteModel", script)
+        self.assertNotIn("loadClassSample", script)
+        self.assertNotIn("sampleClassGroup", styles)
 
 
 if __name__ == "__main__":

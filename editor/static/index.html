@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>랑그릿사 II 게임 데이터 편집기</title>
-  <link rel="stylesheet" href="/styles.css?v=class-progression-v1">
+  <link rel="stylesheet" href="/styles.css?v=class-progression-v3">
 </head>
 <body>
   <header class="topbar">
@@ -30,8 +30,6 @@
       <button class="tab" type="button" data-tab="items">아이템</button>
       <button class="tab" type="button" data-tab="classes">클래스 체인지</button>
       <button class="tab" type="button" data-tab="classStats">클래스 수정</button>
-      <button class="tab" type="button" data-tab="aiClasses">New 클래스</button>
-      <button class="tab" type="button" data-tab="sampleClasses">샘플 클래스</button>
     </nav>
     <div id="notice" class="notice" hidden></div>
 
@@ -90,26 +88,62 @@
     </section>
 
     <section id="classesPanel" class="tabPanel">
-      <div class="controls">
-        <label>지휘관
-          <select id="commanderSelect"></select>
-        </label>
-        <span id="classSummary" class="summary"></span>
+      <div class="classModeTabs" role="tablist" aria-label="클래스 디자인 선택">
+        <button class="classModeTab active" type="button"
+          data-class-mode="original" role="tab" aria-selected="true">
+          오리지널
+        </button>
+        <button class="classModeTab" type="button"
+          data-class-mode="new" role="tab" aria-selected="false">
+          New 디자인
+        </button>
       </div>
-      <div id="commanderStartEditor" class="commanderStartEditor"></div>
-      <div class="classWorkspace">
-        <div class="classTreeWrap" aria-label="클래스 체인지 트리">
-          <div class="tierLabels">
-            <span>1단계</span><span>2단계</span><span>3단계</span>
-            <span>4단계</span><span>숨은 5단계</span>
-          </div>
-          <div id="classTree" class="classTree">
-            <svg id="classEdges" class="classEdges" aria-hidden="true"></svg>
-          </div>
+
+      <div id="originalClassesMode" class="classModePanel">
+        <div class="controls">
+          <label>지휘관
+            <select id="commanderSelect"></select>
+          </label>
+          <span id="classSummary" class="summary"></span>
         </div>
-        <aside id="classInspector" class="classInspector">
-          <h2>클래스를 선택하세요</h2>
-        </aside>
+        <div id="commanderStartEditor" class="commanderStartEditor"></div>
+        <div class="classWorkspace">
+          <div class="classTreeWrap" aria-label="클래스 체인지 트리">
+            <div class="tierLabels">
+              <span>1단계</span><span>2단계</span><span>3단계</span>
+              <span>4단계</span><span>숨은 5단계</span>
+            </div>
+            <div id="classTree" class="classTree">
+              <svg id="classEdges" class="classEdges" aria-hidden="true"></svg>
+            </div>
+          </div>
+          <aside id="classInspector" class="classInspector">
+            <h2>클래스를 선택하세요</h2>
+          </aside>
+        </div>
+      </div>
+
+      <div id="newClassesMode" class="classModePanel" hidden>
+        <div class="controls">
+          <label>지휘관
+            <select id="aiCommanderSelect"></select>
+          </label>
+          <span id="aiClassSummary" class="summary"></span>
+        </div>
+        <div class="classWorkspace aiClassWorkspace">
+          <div class="classTreeWrap" aria-label="New 디자인 클래스 체인지 트리">
+            <div class="tierLabels">
+              <span>1단계</span><span>2단계</span><span>3단계</span>
+              <span>4단계</span><span>숨은 5단계</span>
+            </div>
+            <div id="aiClassTree" class="classTree">
+              <svg id="aiClassEdges" class="classEdges" aria-hidden="true"></svg>
+            </div>
+          </div>
+          <aside id="aiClassInspector" class="classInspector">
+            <h2>클래스를 선택하세요</h2>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -146,44 +180,11 @@
       </div>
     </section>
 
-    <section id="aiClassesPanel" class="tabPanel">
-      <div class="controls">
-        <label>지휘관
-          <select id="aiCommanderSelect"></select>
-        </label>
-        <span id="aiClassSummary" class="summary"></span>
-      </div>
-      <div class="classWorkspace aiClassWorkspace">
-        <div class="classTreeWrap" aria-label="AI 클래스 디자인 비교 트리">
-          <div class="tierLabels">
-            <span>1단계</span><span>2단계</span><span>3단계</span>
-            <span>4단계</span><span>숨은 5단계</span>
-          </div>
-          <div id="aiClassTree" class="classTree">
-            <svg id="aiClassEdges" class="classEdges" aria-hidden="true"></svg>
-          </div>
-        </div>
-        <aside id="aiClassInspector" class="classInspector">
-          <h2>클래스를 선택하세요</h2>
-        </aside>
-      </div>
-    </section>
-
-    <section id="sampleClassesPanel" class="tabPanel">
-      <header class="sampleClassIntro">
-        <div>
-          <h2>클래스별 디자인 샘플</h2>
-          <p>클래스별 한 줄에 16×16 디자인 10개를 나란히 비교하고, 누르면 New 클래스 편집기로 불러옵니다.</p>
-        </div>
-        <span id="sampleClassSummary" class="summary">샘플을 읽는 중</span>
-      </header>
-      <div id="sampleClassGroups" class="sampleClassGroups" aria-live="polite"></div>
-    </section>
   </main>
   <div id="assetPicker" class="assetPicker" hidden>
     <input id="assetPickerSearch" type="search" placeholder="ID 또는 이름 검색">
     <div id="assetPickerOptions" class="assetPickerOptions"></div>
   </div>
-  <script src="/app.js?v=class-progression-v1"></script>
+  <script src="/app.js?v=class-progression-v3"></script>
 </body>
 </html>
