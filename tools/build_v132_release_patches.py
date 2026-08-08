@@ -34,7 +34,7 @@ TARGETS = (
         ),
         "rom_path": ROOT
         / "roms/builds/Langrisser II (Korean Pure v1.3.2).md",
-        "output_filename": "Langrisser II (Korean Original Design v1.3.2).md",
+        "output_filename": "Langrisser II (Original v1.3.2).md",
         "patch_filename": "original-design-v1.3.2.bps",
         "size": 4_194_304,
         "sha256": (
@@ -46,7 +46,7 @@ TARGETS = (
         "label_ko": "최신 디자인 일반판",
         "description_ko": "최신 New 클래스 디자인과 한국어화 적용",
         "rom_path": ROOT / "roms/builds/Langrisser II (Korean).md",
-        "output_filename": "Langrisser II (Korean New Design v1.3.2).md",
+        "output_filename": "Langrisser II (Normal v1.3.2).md",
         "patch_filename": "new-design-normal-v1.3.2.bps",
         "size": 4_194_304,
         "sha256": (
@@ -59,9 +59,7 @@ TARGETS = (
         "description_ko": "최신 New 클래스 디자인·한국어화·하드 밸런스 적용",
         "rom_path": ROOT
         / "roms/builds/Langrisser II (Korean Hard T1.3.2 B1.3.2).md",
-        "output_filename": (
-            "Langrisser II (Korean New Design Hard T1.3.2 B1.3.2).md"
-        ),
+        "output_filename": "Langrisser II (Hard v1.3.2).md",
         "patch_filename": "new-design-hard-t1.3.2-b1.3.2.bps",
         "size": 4_194_304,
         "sha256": (

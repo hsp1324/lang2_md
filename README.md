@@ -113,11 +113,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser II (Korean New Design v1.3.2).md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Normal v1.3.2).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser II (Korean New Design v1.3.2).srm
+Langrisser II (Normal v1.3.2).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.
